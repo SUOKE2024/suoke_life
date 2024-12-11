@@ -1,0 +1,32 @@
+settings:
+  default_cache_expiration_ms: 3600000  # 1 hour
+  max_cache_size: 104857600  # 100MB
+  encrypt_data: false
+  encryption_key: ""
+
+providers:
+  file:
+    path: storage/files
+    name: file_storage
+    enabled: true
+    options: {}
+
+  secure:
+    path: storage/secure
+    name: secure_storage
+    enabled: true
+    options: {}
+
+  cache:
+    path: storage/cache
+    name: cache_storage
+    enabled: true
+    options: {}
+
+  nas:
+    path: storage/nas
+    name: nas_storage
+    enabled: true
+    options:
+      base_url: http://nas.example.com
+      timeout_ms: 5000 

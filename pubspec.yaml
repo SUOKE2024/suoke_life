@@ -1,0 +1,82 @@
+name: suoke_life
+description: SuoKe Life Application - A modern Flutter application
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # 状态管理
+  get: ^4.6.6
+  
+  # 网络
+  dio: ^5.0.0
+  connectivity_plus: ^6.1.0
+  
+  # 存储
+  hive: ^2.2.3
+  path_provider: ^2.0.15
+  
+  # 工具
+  uuid: ^4.5.1
+  intl: ^0.20.1
+  logger: ^2.5.0
+  
+  # UI组件
+  flutter_screenutil: ^5.8.4
+  cached_network_image: ^3.4.1
+  flutter_svg: ^2.0.7
+  
+  # 功能组件
+  image_picker: ^1.0.1
+  file_picker: ^8.1.4
+  url_launcher: ^6.1.12
+  package_info_plus: ^8.1.1
+  device_info_plus: ^11.1.1
+  flutter_dotenv: ^5.1.0
+  path: ^1.9.1
+  crypto: ^3.0.3
+  battery_plus: ^5.0.2
+  disk_space: ^0.2.1
+  system_resources: ^1.4.0
+  network_info_plus: ^5.0.2
+  shared_preferences: ^2.2.2
+  sqflite: ^2.3.2
+  mysql1: ^0.20.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+    
+  # 开发工具
+  flutter_lints: ^5.0.0
+  build_runner: ^2.4.6
+  json_serializable: ^6.7.1
+  mockito: ^5.4.2
+  
+  # 测试
+  test: ^1.24.9
+  integration_test:
+    sdk: flutter
+  flutter_driver:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/fonts/
+    
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: lib/assets/fonts/Roboto-Regular.ttf
+        - asset: lib/assets/fonts/Roboto-Medium.ttf
+          weight: 500
+        - asset: lib/assets/fonts/Roboto-Bold.ttf
+          weight: 700
