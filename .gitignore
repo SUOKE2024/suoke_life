@@ -89,3 +89,19 @@ app.*.map.json
 .env
 *.log
 coverage/
+# Cleanup ignored files
+test_ai_services/
+tests/
+test_reports/
+test/integration/
+test/unit/
+server/
+scripts/
+project/
+config/
+*.bak
+temp_key.*
+mypy.ini
+pyproject.toml
+requirements.txt
+setup.sh
