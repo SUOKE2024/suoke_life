@@ -2,151 +2,143 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import '../core/di/service_locator.dart';
 import '../core/network/http_client.dart';
+import 'package:dio/dio.dart';
+import '../data/remote/mysql/knowledge_database.dart';
+import 'dart:convert';
 
 enum PaymentMethod {
-  wechat,
-  alipay,
-  bankCard,
+  alipay,    // 支付宝
+  wechat,    // 微信支付
+  unionpay,  // 银联
+  balance,   // 余额支付
 }
 
 enum PaymentStatus {
-  pending,
-  processing,
-  success,
-  failed,
-  cancelled,
+  pending,    // 待支付
+  processing, // 处理中
+  success,    // 支付成功
+  failed,     // 支付失败
+  refunding,  // 退款中
+  refunded,   // 已退款
 }
 
 class PaymentService {
-  final HttpClient _httpClient = serviceLocator<HttpClient>();
-  final _paymentStatusController = StreamController<PaymentStatus>.broadcast();
+  final KnowledgeDatabase _knowledgeDb;
+  final Dio _dio;
 
-  Stream<PaymentStatus> get paymentStatusStream => _paymentStatusController.stream;
+  PaymentService(this._knowledgeDb) : _dio = Dio();
 
-  Future<String> createPaymentOrder({
-    required String orderId,
-    required double amount,
-    required PaymentMethod method,
-    String? description,
-  }) async {
+  // 处理支付
+  Future<Map<String, dynamic>> processPayment(
+    String orderId,
+    double amount,
+    String paymentMethod,
+  ) async {
     try {
-      // TODO: 调用后端API创建支付订单
-      final response = await _httpClient.post(
-        '/api/payments',
-        body: {
-          'order_id': orderId,
-          'amount': amount,
-          'method': method.name,
-          'description': description,
-        },
+      // 记录支付请求
+      final paymentId = await _createPaymentRecord(
+        orderId,
+        amount,
+        paymentMethod,
       );
 
-      return response['payment_id'];
+      // 调用支付网关
+      final response = await _callPaymentGateway(
+        paymentId,
+        amount,
+        paymentMethod,
+      );
+
+      // 更新支付记录
+      await _updatePaymentRecord(
+        paymentId,
+        response['success'] ? PaymentStatus.success : PaymentStatus.failed,
+        response,
+      );
+
+      return response;
     } catch (e) {
-      debugPrint('Failed to create payment order: $e');
-      rethrow;
+      print('支付处理失败: $e');
+      return {'success': false, 'error': e.toString()};
     }
   }
 
-  Future<void> processPayment({
-    required String paymentId,
-    required PaymentMethod method,
-  }) async {
+  // 处理退款
+  Future<Map<String, dynamic>> processRefund(
+    String orderId,
+    double amount,
+    String reason,
+  ) async {
     try {
-      _paymentStatusController.add(PaymentStatus.processing);
-
-      switch (method) {
-        case PaymentMethod.wechat:
-          await _processWechatPay(paymentId);
-          break;
-        case PaymentMethod.alipay:
-          await _processAlipay(paymentId);
-          break;
-        case PaymentMethod.bankCard:
-          await _processBankCardPay(paymentId);
-          break;
+      // 获取原支付记录
+      final paymentRecord = await _getPaymentRecord(orderId);
+      if (paymentRecord == null) {
+        return {'success': false, 'error': '未找到支付记录'};
       }
 
-      _paymentStatusController.add(PaymentStatus.success);
+      // 创建退款记录
+      final refundId = await _createRefundRecord(
+        orderId,
+        amount,
+        reason,
+      );
+
+      // 调用退款接口
+      final response = await _callRefundGateway(
+        refundId,
+        amount,
+        paymentRecord['payment_method'],
+      );
+
+      // 更新退款记录
+      await _updateRefundRecord(
+        refundId,
+        response['success'] ? PaymentStatus.refunded : PaymentStatus.failed,
+        response,
+      );
+
+      return response;
     } catch (e) {
-      _paymentStatusController.add(PaymentStatus.failed);
-      debugPrint('Payment failed: $e');
-      rethrow;
+      print('退款处理失败: $e');
+      return {'success': false, 'error': e.toString()};
     }
   }
 
-  Future<void> _processWechatPay(String paymentId) async {
-    // TODO: 实现微信支付
-    await Future.delayed(const Duration(seconds: 2));
+  // 内部方法
+  Future<String> _createPaymentRecord(
+    String orderId,
+    double amount,
+    String paymentMethod,
+  ) async {
+    final paymentId = DateTime.now().millisecondsSinceEpoch.toString();
+    await _knowledgeDb._conn.query('''
+      INSERT INTO payments (
+        id, order_id, amount, payment_method, status, created_at
+      ) VALUES (?, ?, ?, ?, ?, NOW())
+    ''', [paymentId, orderId, amount, paymentMethod, PaymentStatus.pending.name]);
+    return paymentId;
   }
 
-  Future<void> _processAlipay(String paymentId) async {
-    // TODO: 实现支付宝支付
-    await Future.delayed(const Duration(seconds: 2));
-  }
-
-  Future<void> _processBankCardPay(String paymentId) async {
-    // TODO: 实现银行卡支付
-    await Future.delayed(const Duration(seconds: 2));
-  }
-
-  Future<PaymentStatus> checkPaymentStatus(String paymentId) async {
-    try {
-      final response = await _httpClient.get('/api/payments/$paymentId/status');
-      return PaymentStatus.values.byName(response['status']);
-    } catch (e) {
-      debugPrint('Failed to check payment status: $e');
-      rethrow;
-    }
-  }
-
-  Future<void> cancelPayment(String paymentId) async {
-    try {
-      await _httpClient.post('/api/payments/$paymentId/cancel');
-      _paymentStatusController.add(PaymentStatus.cancelled);
-    } catch (e) {
-      debugPrint('Failed to cancel payment: $e');
-      rethrow;
-    }
-  }
-
-  void dispose() {
-    _paymentStatusController.close();
-  }
-}
-
-class PaymentResult {
-  final String paymentId;
-  final PaymentStatus status;
-  final String? transactionId;
-  final DateTime timestamp;
-  final Map<String, dynamic>? extraData;
-
-  const PaymentResult({
-    required this.paymentId,
-    required this.status,
-    this.transactionId,
-    required this.timestamp,
-    this.extraData,
-  });
-
-  factory PaymentResult.fromJson(Map<String, dynamic> json) {
-    return PaymentResult(
-      paymentId: json['payment_id'],
-      status: PaymentStatus.values.byName(json['status']),
-      transactionId: json['transaction_id'],
-      timestamp: DateTime.parse(json['timestamp']),
-      extraData: json['extra_data'],
+  Future<Map<String, dynamic>?> _getPaymentRecord(String orderId) async {
+    final results = await _knowledgeDb._conn.query(
+      'SELECT * FROM payments WHERE order_id = ? ORDER BY created_at DESC LIMIT 1',
+      [orderId],
     );
+    if (results.isEmpty) return null;
+    return results.first.fields;
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'payment_id': paymentId,
-      'status': status.name,
-      'transaction_id': transactionId,
-      'timestamp': timestamp.toIso8601String(),
-      'extra_data': extraData,
-    };
+  Future<void> _updatePaymentRecord(
+    String paymentId,
+    PaymentStatus status,
+    Map<String, dynamic> response,
+  ) async {
+    await _knowledgeDb._conn.query('''
+      UPDATE payments 
+      SET status = ?, response_data = ?, updated_at = NOW()
+      WHERE id = ?
+    ''', [status.name, jsonEncode(response), paymentId]);
   }
+
+  // ... 其他内部方法实现
 } 

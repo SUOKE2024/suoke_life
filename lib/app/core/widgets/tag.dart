@@ -1,15 +1,18 @@
+import 'package:flutter/material.dart';
+
 /// 标签组件
 class AppTag extends StatelessWidget {
   final String text;
-  final Color? color;
   final Color? backgroundColor;
-  final TextStyle? textStyle;
+  final Color? textColor;
   final double? fontSize;
   final EdgeInsets? padding;
-  final BorderRadius? borderRadius;
+  final double? borderRadius;
   final VoidCallback? onTap;
-  final Widget? icon;
   final bool outlined;
+  final Color? borderColor;
+  final double? borderWidth;
+  final Widget? icon;
   final bool closable;
   final VoidCallback? onClose;
 

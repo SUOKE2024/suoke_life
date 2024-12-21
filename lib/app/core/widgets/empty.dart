@@ -1,88 +1,51 @@
+import 'package:flutter/material.dart';
+
 /// 空状态组件
 class AppEmpty extends StatelessWidget {
   final String? message;
-  final String? description;
-  final Widget? icon;
   final Widget? image;
-  final List<Widget>? actions;
-  final EdgeInsets? padding;
-  final double? spacing;
-  final MainAxisAlignment alignment;
-  final TextStyle? messageStyle;
-  final TextStyle? descriptionStyle;
-
+  final Widget? action;
+  final EdgeInsets padding;
+  
   const AppEmpty({
     super.key,
     this.message,
-    this.description,
-    this.icon,
     this.image,
-    this.actions,
-    this.padding,
-    this.spacing,
-    this.alignment = MainAxisAlignment.center,
-    this.messageStyle,
-    this.descriptionStyle,
+    this.action,
+    this.padding = const EdgeInsets.all(32),
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final defaultSpacing = spacing ?? 16.0;
+    final defaultColor = theme.disabledColor;
+    final defaultStyle = theme.textTheme.bodyLarge?.copyWith(
+      color: theme.disabledColor,
+    );
 
-    return Container(
-      padding: padding ?? const EdgeInsets.all(24),
-      child: Column(
-        mainAxisAlignment: alignment,
-        children: [
-          if (image != null)
-            Padding(
-              padding: EdgeInsets.only(bottom: defaultSpacing),
-              child: image,
-            )
-          else if (icon != null)
-            Padding(
-              padding: EdgeInsets.only(bottom: defaultSpacing),
-              child: icon,
-            )
-          else
-            Padding(
-              padding: EdgeInsets.only(bottom: defaultSpacing),
-              child: Icon(
-                Icons.inbox_outlined,
-                size: 64,
-                color: theme.disabledColor,
-              ),
-            ),
-          if (message != null)
-            Padding(
-              padding: EdgeInsets.only(bottom: defaultSpacing / 2),
-              child: Text(
+    return Center(
+      child: Padding(
+        padding: padding,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (image != null) ...[
+              image!,
+              const SizedBox(height: 16),
+            ],
+            if (message != null) ...[
+              Text(
                 message!,
-                style: messageStyle ??
-                    theme.textTheme.titleMedium?.copyWith(
-                      color: theme.disabledColor,
-                    ),
+                style: defaultStyle,
                 textAlign: TextAlign.center,
               ),
-            ),
-          if (description != null)
-            Padding(
-              padding: EdgeInsets.only(bottom: defaultSpacing),
-              child: Text(
-                description!,
-                style: descriptionStyle ??
-                    theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.disabledColor,
-                    ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          if (actions != null) ...[
-            SizedBox(height: defaultSpacing),
-            ...actions!,
+              const SizedBox(height: 16),
+            ],
+            if (action != null) ...[
+              action!,
+            ],
           ],
-        ],
+        ),
       ),
     );
   }

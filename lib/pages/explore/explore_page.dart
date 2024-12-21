@@ -3,6 +3,31 @@ import 'package:get/get.dart';
 import '../../core/routes/route_paths.dart';
 
 class ExplorePage extends StatelessWidget {
+  final List<ExploreItem> channels = [
+    ExploreItem(
+      title: '知识岛',
+      icon: Icons.school,
+      page: KnowledgeIslandPage(),
+    ),
+    ExploreItem(
+      title: '咖啡时光',
+      icon: Icons.coffee,
+      page: CoffeeTimePage(), 
+    ),
+    ExploreItem(
+      title: '美食探店',
+      icon: Icons.restaurant,
+      page: FoodExplorePage(),
+    ),
+    // ... 其他探索频道
+  ];
+
+  // 右下角老克助手气泡
+  Widget buildAIAssistant() => AIAssistantBubble(
+    avatar: 'laoke.png',
+    onTap: () => Get.to(LaokeAssistantPage()),
+  );
+
   const ExplorePage({Key? key}) : super(key: key);
 
   @override
@@ -39,7 +64,7 @@ class ExplorePage extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  '点击右下角��克图标开始探索',
+                  '点击右下角克图标开始探索',
                   style: TextStyle(
                     fontSize: 14,
                     color: Colors.grey[500],

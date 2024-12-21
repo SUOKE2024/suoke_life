@@ -1,126 +1,110 @@
-/// 折叠面板组件
-class AppExpansionPanel extends StatefulWidget {
+import 'package:flutter/material.dart';
+
+class ExpansionPanelItem {
   final String title;
-  final Widget? subtitle;
-  final Widget child;
-  final bool initiallyExpanded;
-  final bool enabled;
-  final Color? backgroundColor;
-  final Color? textColor;
-  final EdgeInsets? padding;
-  final EdgeInsets? childPadding;
-  final BorderRadius? borderRadius;
-  final BoxBorder? border;
-  final Widget? leading;
-  final Widget? trailing;
-  final ValueChanged<bool>? onExpansionChanged;
+  final Widget content;
+  bool isExpanded;
 
-  const AppExpansionPanel({
-    super.key,
+  ExpansionPanelItem({
     required this.title,
-    this.subtitle,
-    required this.child,
-    this.initiallyExpanded = false,
-    this.enabled = true,
-    this.backgroundColor,
-    this.textColor,
-    this.padding,
-    this.childPadding,
-    this.borderRadius,
-    this.border,
-    this.leading,
-    this.trailing,
-    this.onExpansionChanged,
+    required this.content,
+    this.isExpanded = false,
   });
-
-  @override
-  State<AppExpansionPanel> createState() => _AppExpansionPanelState();
 }
 
-class _AppExpansionPanelState extends State<AppExpansionPanel> {
-  bool _isExpanded = false;
+class CustomExpansionPanelList extends StatefulWidget {
+  final List<ExpansionPanelItem> items;
+  final bool allowMultiple;
+  final ValueChanged<int>? onExpansionChanged;
+
+  const CustomExpansionPanelList({
+    Key? key,
+    required this.items,
+    this.allowMultiple = false,
+    this.onExpansionChanged,
+  }) : super(key: key);
 
   @override
-  void initState() {
-    super.initState();
-    _isExpanded = widget.initiallyExpanded;
-  }
+  State<CustomExpansionPanelList> createState() => _CustomExpansionPanelListState();
+}
 
-  void _handleTap() {
-    if (!widget.enabled) return;
-    setState(() {
-      _isExpanded = !_isExpanded;
-      widget.onExpansionChanged?.call(_isExpanded);
-    });
+class _CustomExpansionPanelListState extends State<CustomExpansionPanelList> {
+  @override
+  Widget build(BuildContext context) {
+    return ExpansionPanelList(
+      expansionCallback: (index, isExpanded) {
+        setState(() {
+          if (!widget.allowMultiple) {
+            // 如果不允许多个展开，先关闭其他面板
+            for (var i = 0; i < widget.items.length; i++) {
+              if (i != index) {
+                widget.items[i].isExpanded = false;
+              }
+            }
+          }
+          widget.items[index].isExpanded = !isExpanded;
+        });
+        widget.onExpansionChanged?.call(index);
+      },
+      children: widget.items.map<ExpansionPanel>((item) {
+        return ExpansionPanel(
+          headerBuilder: (context, isExpanded) {
+            return ListTile(
+              title: Text(
+                item.title,
+                style: TextStyle(
+                  fontWeight: isExpanded ? FontWeight.bold : FontWeight.normal,
+                ),
+              ),
+            );
+          },
+          body: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 8.0,
+            ),
+            child: item.content,
+          ),
+          isExpanded: item.isExpanded,
+          canTapOnHeader: true,
+        );
+      }).toList(),
+    );
   }
+}
+
+// 使用示例：
+class ExpansionPanelDemo extends StatelessWidget {
+  final List<ExpansionPanelItem> items = [
+    ExpansionPanelItem(
+      title: '基本信息',
+      content: Column(
+        children: [
+          ListTile(title: Text('姓名：张三')),
+          ListTile(title: Text('年龄：25')),
+          ListTile(title: Text('性别：男')),
+        ],
+      ),
+    ),
+    ExpansionPanelItem(
+      title: '联系方式',
+      content: Column(
+        children: [
+          ListTile(title: Text('电话：123456789')),
+          ListTile(title: Text('邮箱：zhangsan@example.com')),
+        ],
+      ),
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final defaultBackgroundColor = widget.backgroundColor ?? theme.cardColor;
-    final defaultTextColor = widget.textColor ?? theme.textTheme.titleMedium?.color;
-
-    return Container(
-      decoration: BoxDecoration(
-        color: defaultBackgroundColor,
-        borderRadius: widget.borderRadius,
-        border: widget.border,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          InkWell(
-            onTap: _handleTap,
-            child: Padding(
-              padding: widget.padding ?? const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  if (widget.leading != null) ...[
-                    widget.leading!,
-                    const SizedBox(width: 16),
-                  ],
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.title,
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            color: defaultTextColor,
-                          ),
-                        ),
-                        if (widget.subtitle != null) ...[
-                          const SizedBox(height: 4),
-                          DefaultTextStyle(
-                            style: theme.textTheme.bodySmall ?? const TextStyle(),
-                            child: widget.subtitle!,
-                          ),
-                        ],
-                      ],
-                    ),
-                  ),
-                  widget.trailing ??
-                      Icon(
-                        _isExpanded ? Icons.expand_less : Icons.expand_more,
-                        color: theme.iconTheme.color,
-                      ),
-                ],
-              ),
-            ),
-          ),
-          AnimatedCrossFade(
-            firstChild: const SizedBox(height: 0),
-            secondChild: Padding(
-              padding: widget.childPadding ?? const EdgeInsets.all(16),
-              child: widget.child,
-            ),
-            crossFadeState: _isExpanded
-                ? CrossFadeState.showSecond
-                : CrossFadeState.showFirst,
-            duration: const Duration(milliseconds: 200),
-          ),
-        ],
-      ),
+    return CustomExpansionPanelList(
+      items: items,
+      allowMultiple: true,
+      onExpansionChanged: (index) {
+        print('Panel $index was toggled');
+      },
     );
   }
 } 

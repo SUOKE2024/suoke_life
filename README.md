@@ -1,54 +1,64 @@
-# SuoKe Life
+# 索克生活 (SuoKe Life)
 
-索克生活应用 - 基于 Flutter 的现代化应用程序
-
-## 开发环境
-
-- Flutter: 3.16.0
-- Dart: 3.2.0
-- IDE: VS Code / Android Studio
-
-## 快速开始
-
-1. 克隆项目
-```bash
-git clone https://github.com/your-username/suoke_life.git
-cd suoke_life
-```
-
-2. 安装依赖
-```bash
-flutter pub get
-```
-
-3. 运行测试
-```bash
-flutter test
-```
-
-4. 运行应用
-```bash
-flutter run
-```
+一个基于Flutter的生活服务应用。
 
 ## 项目结构
 
 ```
 lib/
-├── app/          # 应用核心代码
-├── features/     # 功能模块
-├── core/         # 核心功能
-└── presentation/ # UI 层
+  ├── app/
+  │   ├── core/           # 核心功能
+  │   ├── modules/        # 功能模块
+  │   ├── services/       # 服务层
+  │   └── utils/          # 工具类
+  ├── config/             # 配置文件
+  ├── constants/          # 常量定义
+  └── main.dart           # 入口文件
 ```
 
-## 文档
+## 功能特性
 
-详细文档请查看 [docs/](docs/README.md)
+- 健康管理
+- 生活记录
+- 社交互动
+- 智能助手
+
+## 开发环境
+
+- Flutter: 3.x
+- Dart: 3.x
+- GetX: 最新版
+
+## 安装与运行
+
+1. 克隆项目:
+```bash
+git clone https://github.com/SUOKE2024/suoke_life.git
+```
+
+2. 安装依赖:
+```bash
+flutter pub get
+```
+
+3. 运行项目:
+```bash
+flutter run
+```
 
 ## 贡献指南
 
-请查看 [CONTRIBUTING.md](CONTRIBUTING.md)
+1. Fork 项目
+2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 打开 Pull Request
 
 ## 许可证
 
-[MIT License](LICENSE)
+本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情
+
+## 联系我们
+
+- 项目负责人: [Your Name]
+- 邮箱: [Your Email]

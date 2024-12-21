@@ -1,108 +1,82 @@
-/// 徽章组件
+import 'package:flutter/material.dart';
+
+/// 徽标组件
 class AppBadge extends StatelessWidget {
-  final Widget? child;
+  final Widget child;
   final String? text;
-  final Color? color;
+  final Widget? content;
+  final Color? backgroundColor;
   final Color? textColor;
+  final TextStyle? textStyle;
   final double? size;
   final EdgeInsets? padding;
   final BorderRadius? borderRadius;
+  final Alignment alignment;
   final bool dot;
-  final bool showZero;
-  final int? count;
-  final int? maxCount;
-  final TextStyle? textStyle;
-  final AlignmentGeometry alignment;
-  final bool visible;
-
+  final bool hidden;
+  
   const AppBadge({
     super.key,
-    this.child,
+    required this.child,
     this.text,
-    this.color,
+    this.content,
+    this.backgroundColor,
     this.textColor,
+    this.textStyle,
     this.size,
     this.padding,
     this.borderRadius,
+    this.alignment = Alignment.topRight,
     this.dot = false,
-    this.showZero = false,
-    this.count,
-    this.maxCount = 99,
-    this.textStyle,
-    this.alignment = const Alignment(1, -1),
-    this.visible = true,
-  });
+    this.hidden = false,
+  }) : assert(dot || text != null || content != null);
 
   @override
   Widget build(BuildContext context) {
-    if (!visible) return child ?? const SizedBox();
-
-    final theme = Theme.of(context);
-    final defaultColor = color ?? theme.colorScheme.error;
-    final defaultTextColor = textColor ?? Colors.white;
-    final defaultSize = size ?? (dot ? 8.0 : 16.0);
-
-    Widget badge;
-    if (dot) {
-      badge = Container(
-        width: defaultSize,
-        height: defaultSize,
-        decoration: BoxDecoration(
-          color: defaultColor,
-          shape: BoxShape.circle,
-        ),
-      );
-    } else if (text != null || count != null) {
-      final showText = text ?? _formatCount(count!, maxCount!);
-      if (!showZero && showText == '0') {
-        return child ?? const SizedBox();
-      }
-
-      badge = Container(
-        padding: padding ??
-            EdgeInsets.symmetric(
-              horizontal: showText.length == 1 ? 4 : 6,
-              vertical: 2,
-            ),
-        decoration: BoxDecoration(
-          color: defaultColor,
-          borderRadius: borderRadius ?? BorderRadius.circular(defaultSize / 2),
-        ),
-        child: Text(
-          showText,
-          style: textStyle?.copyWith(color: defaultTextColor) ??
-              TextStyle(
-                color: defaultTextColor,
-                fontSize: defaultSize * 0.75,
-                fontWeight: FontWeight.bold,
-              ),
-        ),
-      );
-    } else {
-      return child ?? const SizedBox();
+    if (hidden) {
+      return child;
     }
 
-    if (child == null) return badge;
+    final theme = Theme.of(context);
+    final defaultBackgroundColor = backgroundColor ?? theme.colorScheme.error;
+    final defaultTextColor = textColor ?? Colors.white;
+    final defaultSize = size ?? (dot ? 8 : 16);
+
+    Widget badge = Container(
+      width: dot ? defaultSize : null,
+      height: dot ? defaultSize : null,
+      padding: dot ? null : (padding ?? const EdgeInsets.symmetric(
+        horizontal: 6,
+        vertical: 2,
+      )),
+      decoration: BoxDecoration(
+        color: defaultBackgroundColor,
+        borderRadius: borderRadius ?? BorderRadius.circular(defaultSize / 2),
+      ),
+      child: dot ? null : Center(
+        child: content ?? Text(
+          text!,
+          style: textStyle?.copyWith(
+            color: defaultTextColor,
+          ) ?? TextStyle(
+            color: defaultTextColor,
+            fontSize: 12,
+          ),
+        ),
+      ),
+    );
 
     return Stack(
       clipBehavior: Clip.none,
       children: [
-        child!,
+        child,
         Positioned.fill(
           child: Align(
             alignment: alignment,
-            child: Transform.translate(
-              offset: Offset(defaultSize / 2, -defaultSize / 2),
-              child: badge,
-            ),
+            child: badge,
           ),
         ),
       ],
     );
-  }
-
-  String _formatCount(int count, int maxCount) {
-    if (count <= maxCount) return count.toString();
-    return '$maxCount+';
   }
 } 

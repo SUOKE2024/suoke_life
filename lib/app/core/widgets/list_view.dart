@@ -1,102 +1,129 @@
+import 'package:flutter/material.dart';
+
 /// 列表组件
 class AppListView extends StatelessWidget {
-  final List<ListItem> items;
-  final bool showDivider;
-  final EdgeInsets? padding;
+  final List<Widget> children;
   final ScrollController? controller;
-  final Widget? emptyWidget;
-  final Widget? loadingWidget;
-  final bool isLoading;
-  final bool hasMore;
-  final VoidCallback? onLoadMore;
-  final Widget Function(BuildContext, ListItem)? itemBuilder;
-
+  final bool shrinkWrap;
+  final ScrollPhysics? physics;
+  final EdgeInsets? padding;
+  final bool primary;
+  final bool reverse;
+  final double? itemExtent;
+  final bool addAutomaticKeepAlives;
+  final bool addRepaintBoundaries;
+  final bool addSemanticIndexes;
+  final double? cacheExtent;
+  final int? semanticChildCount;
+  final DragStartBehavior dragStartBehavior;
+  final ScrollViewKeyboardDismissBehavior keyboardDismissBehavior;
+  final String? restorationId;
+  final Clip clipBehavior;
+  
   const AppListView({
     super.key,
-    required this.items,
-    this.showDivider = true,
-    this.padding,
+    required this.children,
     this.controller,
-    this.emptyWidget,
-    this.loadingWidget,
-    this.isLoading = false,
-    this.hasMore = false,
-    this.onLoadMore,
-    this.itemBuilder,
+    this.shrinkWrap = false,
+    this.physics,
+    this.padding,
+    this.primary,
+    this.reverse = false,
+    this.itemExtent,
+    this.addAutomaticKeepAlives = true,
+    this.addRepaintBoundaries = true,
+    this.addSemanticIndexes = true,
+    this.cacheExtent,
+    this.semanticChildCount,
+    this.dragStartBehavior = DragStartBehavior.start,
+    this.keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.manual,
+    this.restorationId,
+    this.clipBehavior = Clip.hardEdge,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (isLoading && items.isEmpty) {
-      return loadingWidget ?? const Center(child: CircularProgressIndicator());
-    }
-
-    if (items.isEmpty) {
-      return emptyWidget ??
-          const Center(
-            child: Text('暂无数据'),
-          );
-    }
-
-    return NotificationListener<ScrollNotification>(
-      onNotification: (notification) {
-        if (notification is ScrollEndNotification) {
-          if (notification.metrics.pixels >= notification.metrics.maxScrollExtent) {
-            if (hasMore && !isLoading) {
-              onLoadMore?.call();
-            }
-          }
-        }
-        return false;
-      },
-      child: ListView.separated(
-        controller: controller,
-        padding: padding,
-        itemCount: items.length + (hasMore ? 1 : 0),
-        separatorBuilder: (_, __) =>
-            showDivider ? const Divider(height: 1) : const SizedBox(),
-        itemBuilder: (context, index) {
-          if (index == items.length) {
-            return Container(
-              padding: const EdgeInsets.all(16),
-              alignment: Alignment.center,
-              child: isLoading
-                  ? const CircularProgressIndicator()
-                  : const Text('加载更多...'),
-            );
-          }
-
-          final item = items[index];
-          if (itemBuilder != null) {
-            return itemBuilder!(context, item);
-          }
-
-          return ListTile(
-            leading: item.leading,
-            title: Text(item.title),
-            subtitle: item.subtitle != null ? Text(item.subtitle!) : null,
-            trailing: item.trailing,
-            onTap: item.onTap,
-          );
-        },
-      ),
+    return ListView(
+      controller: controller,
+      shrinkWrap: shrinkWrap,
+      physics: physics,
+      padding: padding,
+      primary: primary,
+      reverse: reverse,
+      itemExtent: itemExtent,
+      addAutomaticKeepAlives: addAutomaticKeepAlives,
+      addRepaintBoundaries: addRepaintBoundaries,
+      addSemanticIndexes: addSemanticIndexes,
+      cacheExtent: cacheExtent,
+      semanticChildCount: semanticChildCount,
+      dragStartBehavior: dragStartBehavior,
+      keyboardDismissBehavior: keyboardDismissBehavior,
+      restorationId: restorationId,
+      clipBehavior: clipBehavior,
+      children: children,
     );
   }
 }
 
-/// 列表项
-class ListItem {
-  final String title;
-  final String? subtitle;
-  final Widget? leading;
-  final Widget? trailing;
-  final VoidCallback? onTap;
-
-  const ListItem({
-    required this.title,
-    this.subtitle,
-    this.leading,
-    this.trailing,
-    this.onTap,
+/// 分隔列表组件
+class AppListViewSeparated extends StatelessWidget {
+  final List<Widget> children;
+  final Widget separator;
+  final ScrollController? controller;
+  final bool shrinkWrap;
+  final ScrollPhysics? physics;
+  final EdgeInsets? padding;
+  final bool primary;
+  final bool reverse;
+  final bool addAutomaticKeepAlives;
+  final bool addRepaintBoundaries;
+  final bool addSemanticIndexes;
+  final double? cacheExtent;
+  final DragStartBehavior dragStartBehavior;
+  final ScrollViewKeyboardDismissBehavior keyboardDismissBehavior;
+  final String? restorationId;
+  final Clip clipBehavior;
+  
+  const AppListViewSeparated({
+    super.key,
+    required this.children,
+    required this.separator,
+    this.controller,
+    this.shrinkWrap = false,
+    this.physics,
+    this.padding,
+    this.primary,
+    this.reverse = false,
+    this.addAutomaticKeepAlives = true,
+    this.addRepaintBoundaries = true,
+    this.addSemanticIndexes = true,
+    this.cacheExtent,
+    this.dragStartBehavior = DragStartBehavior.start,
+    this.keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.manual,
+    this.restorationId,
+    this.clipBehavior = Clip.hardEdge,
   });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      itemCount: children.length,
+      separatorBuilder: (_, __) => separator,
+      itemBuilder: (_, index) => children[index],
+      controller: controller,
+      shrinkWrap: shrinkWrap,
+      physics: physics,
+      padding: padding,
+      primary: primary,
+      reverse: reverse,
+      addAutomaticKeepAlives: addAutomaticKeepAlives,
+      addRepaintBoundaries: addRepaintBoundaries,
+      addSemanticIndexes: addSemanticIndexes,
+      cacheExtent: cacheExtent,
+      dragStartBehavior: dragStartBehavior,
+      keyboardDismissBehavior: keyboardDismissBehavior,
+      restorationId: restorationId,
+      clipBehavior: clipBehavior,
+    );
+  }
 } 

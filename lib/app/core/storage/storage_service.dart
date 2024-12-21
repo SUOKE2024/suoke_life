@@ -1,116 +1,63 @@
-/// 存储服务接口
-abstract class StorageService extends BaseService {
-  /// 获取值
-  Future<T?> get<T>(String key);
+import 'package:get/get.dart';
+import '../config/app_config.dart';
+
+abstract class StorageService extends GetxService {
+  // 本地存储
+  Future<void> saveLocal(String key, dynamic value);
+  Future<dynamic> getLocal(String key);
+  Future<void> removeLocal(String key);
   
-  /// 设置值
-  Future<void> set<T>(String key, T value);
+  // 远程存储
+  Future<void> saveRemote(String key, dynamic value);
+  Future<dynamic> getRemote(String key);
+  Future<void> removeRemote(String key);
   
-  /// 删除值
-  Future<void> remove(String key);
-  
-  /// 清空存储
-  Future<void> clear();
-  
-  /// 获取所有键
-  Future<Set<String>> getKeys();
-  
-  /// 是否包含键
-  Future<bool> containsKey(String key);
-  
-  /// 获取存储大小
-  Future<int> size();
+  // 数据同步
+  Future<void> sync();
 }
 
-/// 存储异常
-class StorageException implements Exception {
-  final String message;
-  final dynamic cause;
-
-  StorageException(this.message, [this.cause]);
+class StorageServiceImpl extends StorageService {
+  final _localCache = <String, dynamic>{};
+  final _remoteCache = <String, dynamic>{};
 
   @override
-  String toString() => 'StorageException: $message';
-}
-
-/// 存储配置
-class StorageOptions {
-  /// 是否加密
-  final bool encrypt;
-  
-  /// 缓存大小限制(bytes)
-  final int maxSize;
-  
-  /// 过期时间
-  final Duration? expireAfter;
-
-  const StorageOptions({
-    this.encrypt = false,
-    this.maxSize = 104857600, // 100MB
-    this.expireAfter,
-  });
-}
-
-/// 存储项
-class StorageItem<T> {
-  /// 键
-  final String key;
-  
-  /// 值
-  final T value;
-  
-  /// 创建时间
-  final DateTime createTime;
-  
-  /// 过期时间
-  final DateTime? expireTime;
-
-  StorageItem({
-    required this.key,
-    required this.value,
-    DateTime? createTime,
-    this.expireTime,
-  }) : createTime = createTime ?? DateTime.now();
-
-  /// 是否过期
-  bool get isExpired {
-    if (expireTime == null) return false;
-    return DateTime.now().isAfter(expireTime!);
+  Future<void> saveLocal(String key, dynamic value) async {
+    _localCache[key] = value;
+    // 实现SQLite/Redis存储
   }
 
-  /// 转换为JSON
-  Map<String, dynamic> toJson() => {
-    'key': key,
-    'value': value,
-    'createTime': createTime.toIso8601String(),
-    'expireTime': expireTime?.toIso8601String(),
-  };
+  @override
+  Future<dynamic> getLocal(String key) async {
+    return _localCache[key];
+    // 实现SQLite/Redis读取
+  }
 
-  /// 从JSON创建
-  factory StorageItem.fromJson(Map<String, dynamic> json) => StorageItem(
-    key: json['key'] as String,
-    value: json['value'] as T,
-    createTime: DateTime.parse(json['createTime'] as String),
-    expireTime: json['expireTime'] != null 
-      ? DateTime.parse(json['expireTime'] as String)
-      : null,
-  );
-}
+  @override
+  Future<void> removeLocal(String key) async {
+    _localCache.remove(key);
+    // 实现SQLite/Redis删除
+  }
 
-/// 存储提供者接口
-abstract class StorageProvider {
-  /// 读取数据
-  Future<Map<String, dynamic>?> read(String key);
-  
-  /// 写入数据
-  Future<void> write(String key, Map<String, dynamic> value);
-  
-  /// 删除数据
-  Future<void> delete(String key);
-  
-  /// 清空数据
-  Future<void> clear();
-  
-  /// 获取所有键
-  Future<Set<String>> getKeys();
+  @override
+  Future<void> saveRemote(String key, dynamic value) async {
+    _remoteCache[key] = value;
+    // 实现MySQL/OSS存储
+  }
+
+  @override
+  Future<dynamic> getRemote(String key) async {
+    return _remoteCache[key];
+    // 实现MySQL/OSS读取
+  }
+
+  @override
+  Future<void> removeRemote(String key) async {
+    _remoteCache.remove(key);
+    // 实现MySQL/OSS删除
+  }
+
+  @override
+  Future<void> sync() async {
+    // 实现数据同步逻辑
+  }
 } 

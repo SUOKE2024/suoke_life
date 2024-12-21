@@ -1,29 +1,37 @@
+import 'package:get/get.dart';
+
 /// 基础控制器
 abstract class BaseController extends GetxController {
-  final _loading = false.obs;
-  final _error = Rxn<String>();
+  final isLoading = false.obs;
+  final errorMessage = ''.obs;
   
-  bool get loading => _loading.value;
-  String? get error => _error.value;
-
-  /// 执行异步操作
-  Future<T> runAsync<T>(
-    Future<T> Function() action, {
-    String? loadingMessage,
-    bool showError = true,
-  }) async {
-    try {
-      _loading.value = true;
-      _error.value = null;
-      return await action();
-    } catch (e) {
-      _error.value = e.toString();
-      if (showError) {
-        Get.snackbar('Error', e.toString());
-      }
-      rethrow;
-    } finally {
-      _loading.value = false;
-    }
+  void showLoading() => isLoading.value = true;
+  void hideLoading() => isLoading.value = false;
+  
+  void showError(String message) {
+    errorMessage.value = message;
+    Get.snackbar(
+      '错误',
+      message,
+      snackPosition: SnackPosition.BOTTOM,
+    );
+  }
+  
+  void showSuccess(String message) {
+    Get.snackbar(
+      '成功',
+      message,
+      snackPosition: SnackPosition.BOTTOM,
+    );
+  }
+  
+  @override
+  void onInit() {
+    super.onInit();
+  }
+  
+  @override
+  void onClose() {
+    super.onClose();
   }
 } 

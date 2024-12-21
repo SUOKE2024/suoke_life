@@ -3,6 +3,30 @@ import 'package:get/get.dart';
 import '../../core/routes/route_paths.dart';
 
 class ProfilePage extends StatelessWidget {
+  final List<SettingItem> settings = [
+    SettingItem(
+      title: '数据集上传',
+      icon: Icons.cloud_upload,
+      page: DatasetUploadPage(),
+    ),
+    SettingItem(
+      title: '设备管理',
+      icon: Icons.devices,
+      page: DeviceManagementPage(),
+    ),
+    SettingItem(
+      title: '本地语言识别',
+      icon: Icons.language,
+      page: LocalLanguagePage(),
+    ),
+    SettingItem(
+      title: '头像库',
+      icon: Icons.face,
+      page: AvatarLibraryPage(),
+    ),
+    // ... 其他设置项
+  ];
+
   const ProfilePage({Key? key}) : super(key: key);
 
   @override

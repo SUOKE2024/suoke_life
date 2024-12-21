@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'app/core/di/dependency_manager.dart';
-import 'app/core/base/app_module.dart';
-import 'app/core/services/logger_service.dart';
+import 'app/routes/app_pages.dart';
+import 'app/core/theme/app_theme.dart';
 
 void main() async {
-  try {
-    WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // 初始化服务
+  await initServices();
+  
+  runApp(const MyApp());
+}
 
-    // Initialize app modules
-    await initializeApp();
-
-    // Run app
-    runApp(const MyApp());
-  } catch (e) {
-    LoggerService.error('Failed to start application', error: e);
-    runApp(const ErrorApp()); // 显示错误页面
-  }
+Future<void> initServices() async {
+  // 初始化核心服务
+  await Get.putAsync(() => StorageService().init());
+  await Get.putAsync(() => AiService().init());
+  // 其他服务初始化
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,15 +28,10 @@ class MyApp extends StatelessWidget {
       title: 'SuoKe Life',
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
-      initialRoute: AppPages.initial,
+      initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
-      initialBinding: AppBinding(),
-      locale: TranslationService.locale,
-      fallbackLocale: TranslationService.fallbackLocale,
-      translations: TranslationService(),
-      onInit: () {
-        LoggerService.info('Application UI initialized');
-      },
+      locale: const Locale('zh', 'CN'),
+      fallbackLocale: const Locale('en', 'US'),
     );
   }
 }

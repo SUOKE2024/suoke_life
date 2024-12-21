@@ -1,55 +1,36 @@
-/// Base interface for all storage implementations
-abstract class BaseStorage {
-  /// Initialize storage
-  static Future<BaseStorage> initialize();
+import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 
-  /// Get a value from storage
-  Future<T?> get<T>(String key, {T? defaultValue});
-
-  /// Set a value in storage
-  Future<void> set<T>(String key, T value);
-
-  /// Remove a value from storage
-  Future<void> remove(String key);
-
-  /// Clear all values in storage
-  Future<void> clear();
-
-  /// Check if key exists
-  Future<bool> containsKey(String key);
-
-  /// Get all keys
-  Future<List<String>> getKeys();
-
-  /// Dispose storage resources
-  Future<void> dispose();
-}
-
-/// Storage configuration
-class StorageConfig {
-  final String path;
-  final String name;
-  final Map<String, dynamic> options;
-
-  const StorageConfig({
-    required this.path,
-    required this.name,
-    this.options = const {},
-  });
-}
-
-/// Storage exception
-class StorageException implements Exception {
-  final String message;
-  final StorageType type;
-  final dynamic error;
-
-  StorageException(
-    this.message, {
-    required this.type,
-    this.error,
-  });
-
-  @override
-  String toString() => 'StorageException(${type.name}): $message';
+abstract class BaseStorage<T> extends GetxService {
+  late Box<T> _box;
+  
+  // 初始化存储
+  Future<void> init(String boxName) async {
+    _box = await Hive.openBox<T>(boxName);
+  }
+  
+  // 获取所有数据
+  List<T> getAll() {
+    return _box.values.toList();
+  }
+  
+  // 添加数据
+  Future<void> add(T item) async {
+    await _box.add(item);
+  }
+  
+  // 更新数据
+  Future<void> update(int index, T item) async {
+    await _box.putAt(index, item);
+  }
+  
+  // 删除数据
+  Future<void> delete(int index) async {
+    await _box.deleteAt(index);
+  }
+  
+  // 清空数据
+  Future<void> clear() async {
+    await _box.clear();
+  }
 } 

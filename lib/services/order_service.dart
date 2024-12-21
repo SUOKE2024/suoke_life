@@ -3,6 +3,8 @@ import 'package:flutter/foundation.dart';
 import '../core/di/service_locator.dart';
 import '../core/network/http_client.dart';
 import '../services/cart_service.dart';
+import '../data/remote/mysql/knowledge_database.dart';
+import 'payment_service.dart';
 
 enum OrderStatus {
   pending,    // 待付款
@@ -122,6 +124,10 @@ class AfterSale {
 class OrderService extends GetxController {
   final HttpClient _httpClient = serviceLocator<HttpClient>();
   final _orderStatusController = StreamController<OrderStatusUpdate>.broadcast();
+  final KnowledgeDatabase _knowledgeDb;
+  final PaymentService _paymentService;
+
+  OrderService(this._knowledgeDb, this._paymentService);
 
   Stream<OrderStatusUpdate> get orderStatusStream => _orderStatusController.stream;
 
@@ -409,6 +415,79 @@ class OrderService extends GetxController {
 
   void dispose() {
     _orderStatusController.close();
+  }
+
+  // 创建订单
+  Future<String> createOrder(Map<String, dynamic> orderData) async {
+    final orderId = DateTime.now().millisecondsSinceEpoch.toString();
+    
+    await _knowledgeDb._conn.query('''
+      INSERT INTO orders (
+        id, user_id, product_id, quantity, amount, status
+      ) VALUES (?, ?, ?, ?, ?, ?)
+    ''', [
+      orderId,
+      orderData['user_id'],
+      orderData['product_id'],
+      orderData['quantity'],
+      orderData['amount'],
+      'pending',
+    ]);
+
+    return orderId;
+  }
+
+  // 农产品定制订单
+  Future<String> createCustomOrder(Map<String, dynamic> customization) async {
+    final orderId = DateTime.now().millisecondsSinceEpoch.toString();
+    
+    await _knowledgeDb._conn.query('''
+      INSERT INTO custom_orders (
+        id, user_id, product_type, specifications, delivery_date
+      ) VALUES (?, ?, ?, ?, ?)
+    ''', [
+      orderId,
+      customization['user_id'],
+      customization['product_type'],
+      jsonEncode(customization['specifications']),
+      customization['delivery_date'],
+    ]);
+
+    return orderId;
+  }
+
+  // 订单支付
+  Future<bool> payOrder(String orderId, String paymentMethod) async {
+    try {
+      // 获取订单信息
+      final orderResult = await _knowledgeDb._conn.query(
+        'SELECT * FROM orders WHERE id = ?',
+        [orderId],
+      );
+      
+      if (orderResult.isEmpty) return false;
+      
+      // 调用支付服务
+      final paymentResult = await _paymentService.processPayment(
+        orderId,
+        orderResult.first['amount'] as double,
+        paymentMethod,
+      );
+
+      if (paymentResult['success']) {
+        // 更新订单状态
+        await _knowledgeDb._conn.query(
+          'UPDATE orders SET status = ? WHERE id = ?',
+          ['paid', orderId],
+        );
+        return true;
+      }
+      
+      return false;
+    } catch (e) {
+      print('支付失败: $e');
+      return false;
+    }
   }
 }
 

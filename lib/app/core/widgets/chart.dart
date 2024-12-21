@@ -1,124 +1,57 @@
-/// 简单图表组件
-class SimpleChart extends StatelessWidget {
+import 'package:flutter/material.dart';
+
+/// 图表组件
+class AppChart extends StatelessWidget {
   final List<ChartData> data;
   final String? title;
   final double? height;
-  final Color? barColor;
-  final Color? gridColor;
+  final Color? lineColor;
+  final Color? fillColor;
+  final bool showDots;
   final bool showLabels;
-  final bool showValues;
   final bool showGrid;
-  final int gridLines;
-  final EdgeInsets? padding;
-  final TextStyle? labelStyle;
-  final TextStyle? valueStyle;
-
-  const SimpleChart({
+  
+  const AppChart({
     super.key,
     required this.data,
     this.title,
     this.height = 200,
-    this.barColor,
-    this.gridColor,
+    this.lineColor,
+    this.fillColor,
+    this.showDots = true,
     this.showLabels = true,
-    this.showValues = true,
     this.showGrid = true,
-    this.gridLines = 5,
-    this.padding,
-    this.labelStyle,
-    this.valueStyle,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final defaultBarColor = barColor ?? theme.primaryColor;
-    final defaultGridColor = gridColor ?? theme.dividerColor;
-
-    if (data.isEmpty) return const SizedBox();
-
-    final maxValue = data.map((e) => e.value).reduce(max);
-    final gridStep = maxValue / (gridLines - 1);
+    final defaultLineColor = lineColor ?? theme.primaryColor;
+    final defaultFillColor = fillColor ?? defaultLineColor.withOpacity(0.1);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (title != null) ...[
-          Text(
-            title!,
-            style: theme.textTheme.titleMedium,
+        if (title != null)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 16),
+            child: Text(
+              title!,
+              style: theme.textTheme.titleMedium,
+            ),
           ),
-          const SizedBox(height: 16),
-        ],
-        Container(
+        SizedBox(
           height: height,
-          padding: padding ?? const EdgeInsets.all(16),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              if (showValues)
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: List.generate(gridLines, (index) {
-                    final value = (gridStep * (gridLines - 1 - index));
-                    return Text(
-                      value.toStringAsFixed(1),
-                      style: valueStyle ?? theme.textTheme.bodySmall,
-                    );
-                  }),
-                ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Stack(
-                  children: [
-                    if (showGrid)
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: List.generate(
-                          gridLines,
-                          (index) => Container(
-                            height: 1,
-                            color: defaultGridColor,
-                          ),
-                        ),
-                      ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: data.map((item) {
-                        final height = item.value / maxValue * 100;
-                        return Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Container(
-                                height: height * 1.5,
-                                margin: const EdgeInsets.symmetric(horizontal: 4),
-                                decoration: BoxDecoration(
-                                  color: defaultBarColor,
-                                  borderRadius: const BorderRadius.vertical(
-                                    top: Radius.circular(4),
-                                  ),
-                                ),
-                              ),
-                              if (showLabels) ...[
-                                const SizedBox(height: 8),
-                                Text(
-                                  item.label,
-                                  style: labelStyle ?? theme.textTheme.bodySmall,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ],
-                            ],
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+          child: CustomPaint(
+            size: Size.infinite,
+            painter: _ChartPainter(
+              data: data,
+              lineColor: defaultLineColor,
+              fillColor: defaultFillColor,
+              showDots: showDots,
+              showLabels: showLabels,
+              showGrid: showGrid,
+            ),
           ),
         ),
       ],
@@ -126,13 +59,162 @@ class SimpleChart extends StatelessWidget {
   }
 }
 
-/// 图表数据
 class ChartData {
-  final String label;
-  final double value;
-
+  final double x;
+  final double y;
+  final String? label;
+  
   const ChartData({
-    required this.label,
-    required this.value,
+    required this.x,
+    required this.y,
+    this.label,
   });
+}
+
+class _ChartPainter extends CustomPainter {
+  final List<ChartData> data;
+  final Color lineColor;
+  final Color fillColor;
+  final bool showDots;
+  final bool showLabels;
+  final bool showGrid;
+
+  _ChartPainter({
+    required this.data,
+    required this.lineColor,
+    required this.fillColor,
+    required this.showDots,
+    required this.showLabels,
+    required this.showGrid,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = lineColor
+      ..strokeWidth = 2
+      ..style = PaintingStyle.stroke;
+
+    final path = Path();
+    final points = _getPoints(size);
+
+    // Draw grid
+    if (showGrid) {
+      _drawGrid(canvas, size);
+    }
+
+    // Draw line
+    path.moveTo(points[0].dx, points[0].dy);
+    for (var i = 1; i < points.length; i++) {
+      path.lineTo(points[i].dx, points[i].dy);
+    }
+    canvas.drawPath(path, paint);
+
+    // Draw fill
+    final fillPath = Path.from(path)
+      ..lineTo(size.width, size.height)
+      ..lineTo(0, size.height)
+      ..close();
+    canvas.drawPath(
+      fillPath,
+      Paint()
+        ..color = fillColor
+        ..style = PaintingStyle.fill,
+    );
+
+    // Draw dots
+    if (showDots) {
+      for (final point in points) {
+        canvas.drawCircle(
+          point,
+          4,
+          Paint()
+            ..color = lineColor
+            ..style = PaintingStyle.fill,
+        );
+      }
+    }
+
+    // Draw labels
+    if (showLabels) {
+      _drawLabels(canvas, size, points);
+    }
+  }
+
+  List<Offset> _getPoints(Size size) {
+    if (data.isEmpty) return [];
+
+    final xMin = data.map((e) => e.x).reduce(min);
+    final xMax = data.map((e) => e.x).reduce(max);
+    final yMin = data.map((e) => e.y).reduce(min);
+    final yMax = data.map((e) => e.y).reduce(max);
+
+    return data.map((point) {
+      final dx = size.width * (point.x - xMin) / (xMax - xMin);
+      final dy = size.height * (1 - (point.y - yMin) / (yMax - yMin));
+      return Offset(dx, dy);
+    }).toList();
+  }
+
+  void _drawGrid(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.grey.withOpacity(0.2)
+      ..strokeWidth = 1;
+
+    // Draw horizontal lines
+    for (var i = 0; i <= 4; i++) {
+      final y = size.height * i / 4;
+      canvas.drawLine(
+        Offset(0, y),
+        Offset(size.width, y),
+        paint,
+      );
+    }
+
+    // Draw vertical lines
+    for (var i = 0; i <= 4; i++) {
+      final x = size.width * i / 4;
+      canvas.drawLine(
+        Offset(x, 0),
+        Offset(x, size.height),
+        paint,
+      );
+    }
+  }
+
+  void _drawLabels(Canvas canvas, Size size, List<Offset> points) {
+    final textPainter = TextPainter(
+      textDirection: TextDirection.ltr,
+    );
+
+    for (var i = 0; i < data.length; i++) {
+      if (data[i].label != null) {
+        textPainter.text = TextSpan(
+          text: data[i].label,
+          style: const TextStyle(
+            color: Colors.grey,
+            fontSize: 12,
+          ),
+        );
+        textPainter.layout();
+        textPainter.paint(
+          canvas,
+          Offset(
+            points[i].dx - textPainter.width / 2,
+            size.height + 4,
+          ),
+        );
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(_ChartPainter oldDelegate) {
+    return data != oldDelegate.data ||
+        lineColor != oldDelegate.lineColor ||
+        fillColor != oldDelegate.fillColor ||
+        showDots != oldDelegate.showDots ||
+        showLabels != oldDelegate.showLabels ||
+        showGrid != oldDelegate.showGrid;
+  }
 } 

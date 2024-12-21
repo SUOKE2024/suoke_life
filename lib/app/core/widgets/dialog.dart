@@ -1,221 +1,217 @@
+import 'package:flutter/material.dart';
+
 /// 对话框组件
 class AppDialog extends StatelessWidget {
   final String? title;
-  final String? message;
-  final Widget? content;
-  final List<DialogAction>? actions;
-  final bool barrierDismissible;
+  final Widget? titleWidget;
+  final String? content;
+  final Widget? contentWidget;
+  final List<Widget>? actions;
+  final EdgeInsets? padding;
   final EdgeInsets? contentPadding;
   final EdgeInsets? actionsPadding;
-  final MainAxisAlignment actionsAlignment;
-  final bool showCloseButton;
-  final double? maxWidth;
-  final double? maxHeight;
-
+  final Color? backgroundColor;
+  final double? elevation;
+  final BorderRadius? borderRadius;
+  final bool barrierDismissible;
+  
   const AppDialog({
     super.key,
     this.title,
-    this.message,
+    this.titleWidget,
     this.content,
+    this.contentWidget,
     this.actions,
-    this.barrierDismissible = true,
+    this.padding,
     this.contentPadding,
     this.actionsPadding,
-    this.actionsAlignment = MainAxisAlignment.end,
-    this.showCloseButton = true,
-    this.maxWidth,
-    this.maxHeight,
+    this.backgroundColor,
+    this.elevation,
+    this.borderRadius,
+    this.barrierDismissible = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          maxWidth: maxWidth ?? 400,
-          maxHeight: maxHeight ?? MediaQuery.of(context).size.height * 0.8,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _buildHeader(context),
-            if (message != null || content != null)
-              Flexible(
-                child: SingleChildScrollView(
-                  padding: contentPadding ?? const EdgeInsets.all(24),
-                  child: content ?? Text(message!),
-                ),
-              ),
-            if (actions != null)
-              Padding(
-                padding: actionsPadding ??
-                    const EdgeInsets.fromLTRB(24, 0, 24, 24),
-                child: Row(
-                  mainAxisAlignment: actionsAlignment,
-                  children: actions!
-                      .map((action) => Padding(
-                            padding: const EdgeInsets.only(left: 16),
-                            child: _buildAction(context, action),
-                          ))
-                      .toList(),
-                ),
-              ),
-          ],
-        ),
+    return AlertDialog(
+      title: titleWidget ?? (title != null ? Text(title!) : null),
+      content: contentWidget ?? (content != null ? Text(content!) : null),
+      actions: actions,
+      contentPadding: contentPadding ?? const EdgeInsets.fromLTRB(24, 20, 24, 24),
+      actionsPadding: actionsPadding ?? const EdgeInsets.fromLTRB(24, 0, 24, 16),
+      backgroundColor: backgroundColor,
+      elevation: elevation,
+      shape: RoundedRectangleBorder(
+        borderRadius: borderRadius ?? BorderRadius.circular(8),
       ),
     );
-  }
-
-  Widget _buildHeader(BuildContext context) {
-    if (title == null && !showCloseButton) return const SizedBox();
-
-    return Container(
-      padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
-      child: Row(
-        children: [
-          if (title != null)
-            Expanded(
-              child: Text(
-                title!,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-            ),
-          if (showCloseButton)
-            IconButton(
-              icon: const Icon(Icons.close),
-              onPressed: () => Navigator.of(context).pop(),
-              padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(),
-            ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAction(BuildContext context, DialogAction action) {
-    switch (action.style) {
-      case DialogActionStyle.primary:
-        return ElevatedButton(
-          onPressed: () {
-            if (action.onPressed != null) {
-              action.onPressed!();
-            }
-            if (action.closeOnPressed) {
-              Navigator.of(context).pop();
-            }
-          },
-          child: Text(action.text),
-        );
-      case DialogActionStyle.secondary:
-        return OutlinedButton(
-          onPressed: () {
-            if (action.onPressed != null) {
-              action.onPressed!();
-            }
-            if (action.closeOnPressed) {
-              Navigator.of(context).pop();
-            }
-          },
-          child: Text(action.text),
-        );
-      case DialogActionStyle.text:
-        return TextButton(
-          onPressed: () {
-            if (action.onPressed != null) {
-              action.onPressed!();
-            }
-            if (action.closeOnPressed) {
-              Navigator.of(context).pop();
-            }
-          },
-          child: Text(action.text),
-        );
-    }
   }
 
   /// 显示对话框
-  static Future<T?> show<T>(
-    BuildContext context, {
+  static Future<T?> show<T>({
+    required BuildContext context,
     String? title,
-    String? message,
-    Widget? content,
-    List<DialogAction>? actions,
-    bool barrierDismissible = true,
+    Widget? titleWidget,
+    String? content,
+    Widget? contentWidget,
+    List<Widget>? actions,
+    EdgeInsets? padding,
     EdgeInsets? contentPadding,
     EdgeInsets? actionsPadding,
-    MainAxisAlignment actionsAlignment = MainAxisAlignment.end,
-    bool showCloseButton = true,
-    double? maxWidth,
-    double? maxHeight,
+    Color? backgroundColor,
+    double? elevation,
+    BorderRadius? borderRadius,
+    bool barrierDismissible = true,
   }) {
     return showDialog<T>(
       context: context,
       barrierDismissible: barrierDismissible,
-      builder: (_) => AppDialog(
+      builder: (context) => AppDialog(
         title: title,
-        message: message,
+        titleWidget: titleWidget,
         content: content,
+        contentWidget: contentWidget,
         actions: actions,
-        barrierDismissible: barrierDismissible,
+        padding: padding,
         contentPadding: contentPadding,
         actionsPadding: actionsPadding,
-        actionsAlignment: actionsAlignment,
-        showCloseButton: showCloseButton,
-        maxWidth: maxWidth,
-        maxHeight: maxHeight,
+        backgroundColor: backgroundColor,
+        elevation: elevation,
+        borderRadius: borderRadius,
+        barrierDismissible: barrierDismissible,
       ),
+    );
+  }
+}
+
+/// 确认对话框组件
+class AppConfirmDialog extends StatelessWidget {
+  final String? title;
+  final Widget? titleWidget;
+  final String? content;
+  final Widget? contentWidget;
+  final String? confirmText;
+  final String? cancelText;
+  final VoidCallback? onConfirm;
+  final VoidCallback? onCancel;
+  final Color? confirmColor;
+  final Color? cancelColor;
+  final EdgeInsets? padding;
+  final EdgeInsets? contentPadding;
+  final EdgeInsets? actionsPadding;
+  final Color? backgroundColor;
+  final double? elevation;
+  final BorderRadius? borderRadius;
+  final bool barrierDismissible;
+  
+  const AppConfirmDialog({
+    super.key,
+    this.title,
+    this.titleWidget,
+    this.content,
+    this.contentWidget,
+    this.confirmText,
+    this.cancelText,
+    this.onConfirm,
+    this.onCancel,
+    this.confirmColor,
+    this.cancelColor,
+    this.padding,
+    this.contentPadding,
+    this.actionsPadding,
+    this.backgroundColor,
+    this.elevation,
+    this.borderRadius,
+    this.barrierDismissible = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
+    return AppDialog(
+      title: title,
+      titleWidget: titleWidget,
+      content: content,
+      contentWidget: contentWidget,
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+            onCancel?.call();
+          },
+          child: Text(
+            cancelText ?? '取消',
+            style: TextStyle(color: cancelColor),
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+            onConfirm?.call();
+          },
+          child: Text(
+            confirmText ?? '确定',
+            style: TextStyle(
+              color: confirmColor ?? theme.primaryColor,
+            ),
+          ),
+        ),
+      ],
+      padding: padding,
+      contentPadding: contentPadding,
+      actionsPadding: actionsPadding,
+      backgroundColor: backgroundColor,
+      elevation: elevation,
+      borderRadius: borderRadius,
+      barrierDismissible: barrierDismissible,
     );
   }
 
   /// 显示确认对话框
-  static Future<bool?> confirm(
-    BuildContext context, {
+  static Future<bool> show({
+    required BuildContext context,
     String? title,
-    required String message,
+    Widget? titleWidget,
+    String? content,
+    Widget? contentWidget,
     String? confirmText,
     String? cancelText,
-    DialogActionStyle confirmStyle = DialogActionStyle.primary,
-    DialogActionStyle cancelStyle = DialogActionStyle.text,
-  }) {
-    return show<bool>(
-      context,
-      title: title,
-      message: message,
-      actions: [
-        DialogAction(
-          text: cancelText ?? '取消',
-          style: cancelStyle,
-          onPressed: () => Navigator.of(context).pop(false),
-        ),
-        DialogAction(
-          text: confirmText ?? '确定',
-          style: confirmStyle,
-          onPressed: () => Navigator.of(context).pop(true),
-        ),
-      ],
+    VoidCallback? onConfirm,
+    VoidCallback? onCancel,
+    Color? confirmColor,
+    Color? cancelColor,
+    EdgeInsets? padding,
+    EdgeInsets? contentPadding,
+    EdgeInsets? actionsPadding,
+    Color? backgroundColor,
+    double? elevation,
+    BorderRadius? borderRadius,
+    bool barrierDismissible = true,
+  }) async {
+    final result = await showDialog<bool>(
+      context: context,
+      barrierDismissible: barrierDismissible,
+      builder: (context) => AppConfirmDialog(
+        title: title,
+        titleWidget: titleWidget,
+        content: content,
+        contentWidget: contentWidget,
+        confirmText: confirmText,
+        cancelText: cancelText,
+        onConfirm: onConfirm,
+        onCancel: onCancel,
+        confirmColor: confirmColor,
+        cancelColor: cancelColor,
+        padding: padding,
+        contentPadding: contentPadding,
+        actionsPadding: actionsPadding,
+        backgroundColor: backgroundColor,
+        elevation: elevation,
+        borderRadius: borderRadius,
+        barrierDismissible: barrierDismissible,
+      ),
     );
+    return result ?? false;
   }
-}
-
-/// 对话框按钮样式
-enum DialogActionStyle {
-  primary,
-  secondary,
-  text,
-}
-
-/// 对话框按钮
-class DialogAction {
-  final String text;
-  final VoidCallback? onPressed;
-  final DialogActionStyle style;
-  final bool closeOnPressed;
-
-  const DialogAction({
-    required this.text,
-    this.onPressed,
-    this.style = DialogActionStyle.text,
-    this.closeOnPressed = true,
-  });
 } 

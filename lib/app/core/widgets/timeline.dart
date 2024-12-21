@@ -1,6 +1,8 @@
-/// 时间轴组件
-class Timeline extends StatelessWidget {
-  final List<TimelineItem> items;
+import 'package:flutter/material.dart';
+
+/// 时间线组件
+class AppTimeline extends StatelessWidget {
+  final List<AppTimelineItem> items;
   final bool reverse;
   final ScrollController? controller;
   final EdgeInsets? padding;
@@ -8,9 +10,9 @@ class Timeline extends StatelessWidget {
   final double lineWidth;
   final Color? indicatorColor;
   final double indicatorSize;
-  final Widget Function(BuildContext, TimelineItem)? itemBuilder;
-
-  const Timeline({
+  final Widget Function(BuildContext, AppTimelineItem)? itemBuilder;
+  
+  const AppTimeline({
     super.key,
     required this.items,
     this.reverse = false,
@@ -39,21 +41,38 @@ class Timeline extends StatelessWidget {
         final isFirst = index == 0;
         final isLast = index == items.length - 1;
 
-        if (itemBuilder != null) {
-          return itemBuilder!(context, item);
-        }
+        Widget child = itemBuilder?.call(context, item) ?? Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (item.title != null)
+              Text(
+                item.title!,
+                style: theme.textTheme.titleMedium,
+              ),
+            if (item.subtitle != null) ...[
+              const SizedBox(height: 4),
+              Text(
+                item.subtitle!,
+                style: theme.textTheme.bodySmall,
+              ),
+            ],
+            if (item.content != null) ...[
+              const SizedBox(height: 8),
+              item.content!,
+            ],
+          ],
+        );
 
         return IntrinsicHeight(
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SizedBox(
-                width: 32,
+                width: indicatorSize * 2,
                 child: Column(
                   children: [
                     if (!isFirst)
                       Expanded(
-                        flex: 1,
                         child: Container(
                           width: lineWidth,
                           color: defaultLineColor,
@@ -63,13 +82,12 @@ class Timeline extends StatelessWidget {
                       width: indicatorSize,
                       height: indicatorSize,
                       decoration: BoxDecoration(
-                        shape: BoxShape.circle,
                         color: defaultIndicatorColor,
+                        shape: BoxShape.circle,
                       ),
                     ),
                     if (!isLast)
                       Expanded(
-                        flex: 3,
                         child: Container(
                           width: lineWidth,
                           color: defaultLineColor,
@@ -79,39 +97,7 @@ class Timeline extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          item.title,
-                          style: theme.textTheme.titleMedium,
-                        ),
-                        const Spacer(),
-                        if (item.time != null)
-                          Text(
-                            item.time!,
-                            style: theme.textTheme.bodySmall,
-                          ),
-                      ],
-                    ),
-                    if (item.subtitle != null) ...[
-                      const SizedBox(height: 4),
-                      Text(
-                        item.subtitle!,
-                        style: theme.textTheme.bodySmall,
-                      ),
-                    ],
-                    if (item.content != null) ...[
-                      const SizedBox(height: 8),
-                      item.content!,
-                    ],
-                    const SizedBox(height: 16),
-                  ],
-                ),
-              ),
+              Expanded(child: child),
             ],
           ),
         );
@@ -120,17 +106,15 @@ class Timeline extends StatelessWidget {
   }
 }
 
-/// 时间轴项
-class TimelineItem {
-  final String title;
+/// 时间线项
+class AppTimelineItem {
+  final String? title;
   final String? subtitle;
-  final String? time;
   final Widget? content;
-
-  const TimelineItem({
-    required this.title,
+  
+  const AppTimelineItem({
+    this.title,
     this.subtitle,
-    this.time,
     this.content,
   });
 } 

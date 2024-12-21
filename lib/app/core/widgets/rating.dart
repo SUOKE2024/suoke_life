@@ -1,20 +1,19 @@
+import 'package:flutter/material.dart';
+
 /// 评分组件
-class Rating extends StatelessWidget {
+class AppRating extends StatelessWidget {
   final double value;
   final int count;
   final double size;
   final Color? activeColor;
   final Color? inactiveColor;
   final ValueChanged<double>? onChanged;
-  final bool allowHalfRating;
-  final bool readOnly;
-  final Widget? activeIcon;
-  final Widget? inactiveIcon;
-  final Widget? halfIcon;
-  final MainAxisAlignment alignment;
-  final double spacing;
-
-  const Rating({
+  final IconData activeIcon;
+  final IconData inactiveIcon;
+  final bool allowHalf;
+  final bool readonly;
+  
+  const AppRating({
     super.key,
     required this.value,
     this.count = 5,
@@ -22,85 +21,38 @@ class Rating extends StatelessWidget {
     this.activeColor,
     this.inactiveColor,
     this.onChanged,
-    this.allowHalfRating = true,
-    this.readOnly = false,
-    this.activeIcon,
-    this.inactiveIcon,
-    this.halfIcon,
-    this.alignment = MainAxisAlignment.start,
-    this.spacing = 4,
+    this.activeIcon = Icons.star,
+    this.inactiveIcon = Icons.star_border,
+    this.allowHalf = true,
+    this.readonly = false,
   }) : assert(value >= 0 && value <= count);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final defaultActiveColor = activeColor ?? theme.primaryColor;
-    final defaultInactiveColor = inactiveColor ?? theme.disabledColor;
-
-    Widget buildIcon(int index) {
-      final active = value >= index + 1;
-      final half = allowHalfRating && value > index && value < index + 1;
-
-      Widget icon;
-      if (active) {
-        icon = activeIcon ??
-            Icon(
-              Icons.star,
-              size: size,
-              color: defaultActiveColor,
-            );
-      } else if (half) {
-        icon = halfIcon ??
-            Icon(
-              Icons.star_half,
-              size: size,
-              color: defaultActiveColor,
-            );
-      } else {
-        icon = inactiveIcon ??
-            Icon(
-              Icons.star_border,
-              size: size,
-              color: defaultInactiveColor,
-            );
-      }
-
-      if (readOnly) return icon;
-
-      return GestureDetector(
-        onTapDown: (details) {
-          final box = context.findRenderObject() as RenderBox;
-          final localPosition = box.globalToLocal(details.globalPosition);
-          final rating = _calculateRating(index, localPosition.dx, box.size.width);
-          onChanged?.call(rating);
-        },
-        child: icon,
-      );
-    }
+    final defaultInactiveColor = inactiveColor ?? Colors.grey;
 
     return Row(
-      mainAxisAlignment: alignment,
       mainAxisSize: MainAxisSize.min,
-      children: List.generate(
-        count * 2 - 1,
-        (index) {
-          if (index.isOdd) return SizedBox(width: spacing);
-          return buildIcon(index ~/ 2);
-        },
-      ),
+      children: List.generate(count, (index) {
+        final active = value > index;
+        final half = allowHalf && value > index && value < index + 1;
+
+        return GestureDetector(
+          onTapDown: readonly ? null : (details) {
+            final box = context.findRenderObject() as RenderBox;
+            final pos = box.globalToLocal(details.globalPosition);
+            final i = index + (pos.dx % size > size / 2 ? 1 : 0.5);
+            onChanged?.call(i.clamp(0, count).toDouble());
+          },
+          child: Icon(
+            half ? Icons.star_half : (active ? activeIcon : inactiveIcon),
+            size: size,
+            color: active ? defaultActiveColor : defaultInactiveColor,
+          ),
+        );
+      }),
     );
-  }
-
-  double _calculateRating(int index, double dx, double width) {
-    final itemWidth = (width - spacing * (count - 1)) / count;
-    final itemIndex = index * (itemWidth + spacing);
-    final position = dx - itemIndex;
-
-    if (allowHalfRating) {
-      if (position < itemWidth / 2) {
-        return index + 0.5;
-      }
-    }
-    return index + 1.0;
   }
 } 

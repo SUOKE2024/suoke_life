@@ -6,12 +6,16 @@ import 'doubao_api_service.dart';
 import 'biometric_analysis_service.dart';
 import 'voice_service.dart';
 import 'video_service.dart';
+import '../data/local/database/app_database.dart';
+import 'ai_service.dart';
 
 class ChatService extends GetxController {
   final DoubaoApiService _apiService;
   final BiometricAnalysisService _biometricService;
   final VoiceService _voiceService;
   final VideoService _videoService;
+  final AppDatabase _localDb;
+  final AIService _aiService;
   
   final List<ChatMessage> _messages = [];
   bool _isLoading = false;
@@ -25,6 +29,8 @@ class ChatService extends GetxController {
     BiometricAnalysisService? biometricService,
     VoiceService? voiceService,
     VideoService? videoService,
+    AppDatabase? localDb,
+    AIService? aiService,
   }) : _apiService = apiService ?? DoubaoApiService(),
        _biometricService = biometricService ?? BiometricAnalysisService(
          httpClient: HttpClient(),
@@ -32,7 +38,9 @@ class ChatService extends GetxController {
          dataCollectionService: RealtimeDataCollectionService(),
        ),
        _voiceService = voiceService ?? VoiceService(),
-       _videoService = videoService ?? VideoService() {
+       _videoService = videoService ?? VideoService(),
+       _localDb = localDb ?? AppDatabase(),
+       _aiService = aiService ?? AIService(_localDb) {
     _initializeServices();
   }
 
@@ -79,7 +87,7 @@ class ChatService extends GetxController {
         },
       );
       
-      // 更新消息
+      // 更新消���
       _messages[_messages.length - 1] = enrichedMessage;
       _messageController.add(enrichedMessage);
       update();
@@ -191,5 +199,38 @@ class ChatService extends GetxController {
     _messageController.close();
     _biometricController.close();
     super.dispose();
+  }
+
+  // 发送消息
+  Future<void> sendMessage(Map<String, dynamic> message) async {
+    final db = await _localDb.database;
+    
+    // 存储消息
+    await db.insert('chat_messages', {
+      'id': DateTime.now().millisecondsSinceEpoch.toString(),
+      'content': message['content'],
+      'type': message['type'],
+      'timestamp': DateTime.now().millisecondsSinceEpoch,
+    });
+
+    // 如果是多模态内容，进行处理
+    if (message['content_type'] != 'text') {
+      await _aiService.processMultiModalContent(
+        message['content'],
+        message['content_type'],
+        message['metadata'] ?? {},
+      );
+    }
+  }
+
+  // 获取聊天历史
+  Future<List<Map<String, dynamic>>> getChatHistory(String chatType) async {
+    final db = await _localDb.database;
+    return await db.query(
+      'chat_messages',
+      where: 'type = ?',
+      whereArgs: [chatType],
+      orderBy: 'timestamp DESC',
+    );
   }
 } 

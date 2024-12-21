@@ -1,51 +1,57 @@
+import 'package:get/get.dart';
+
+enum MessageType {
+  text,
+  image,
+  voice,
+  video,
+  file,
+}
+
 class Message {
+  final String id;
+  final MessageType type;
   final String content;
-  final String role;
+  final bool isFromUser;
   final DateTime timestamp;
-  final Map<String, dynamic>? context;
-  final Map<String, dynamic>? metadata;
-  final dynamic voiceData;
+  final int? duration; // 语音/视频时长(秒)
+  final String? thumbnail; // 视频缩略图
+  final Map<String, dynamic>? metadata; // 额外数据
 
   Message({
+    required this.id,
+    required this.type,
     required this.content,
-    required this.role,
-    DateTime? timestamp,
-    this.context,
+    required this.isFromUser,
+    required this.timestamp,
+    this.duration,
+    this.thumbnail,
     this.metadata,
-    this.voiceData,
-  }) : timestamp = timestamp ?? DateTime.now();
+  });
 
-  Map<String, dynamic> toJson() => {
-    'content': content,
-    'role': role,
-    'timestamp': timestamp.toIso8601String(),
-    'context': context,
-    'metadata': metadata,
-    'voiceData': voiceData,
-  };
+  factory Message.fromJson(Map<String, dynamic> json) {
+    return Message(
+      id: json['id'],
+      type: MessageType.values[json['type']],
+      content: json['content'],
+      isFromUser: json['isFromUser'],
+      timestamp: DateTime.parse(json['timestamp']),
+      duration: json['duration'],
+      thumbnail: json['thumbnail'],
+      metadata: json['metadata'],
+    );
+  }
 
-  factory Message.fromJson(Map<String, dynamic> json) => Message(
-    content: json['content'] as String,
-    role: json['role'] as String,
-    timestamp: DateTime.parse(json['timestamp'] as String),
-    context: json['context'] as Map<String, dynamic>?,
-    metadata: json['metadata'] as Map<String, dynamic>?,
-    voiceData: json['voiceData'],
-  );
-
-  Message copyWith({
-    String? content,
-    String? role,
-    DateTime? timestamp,
-    Map<String, dynamic>? context,
-    Map<String, dynamic>? metadata,
-    dynamic voiceData,
-  }) => Message(
-    content: content ?? this.content,
-    role: role ?? this.role,
-    timestamp: timestamp ?? this.timestamp,
-    context: context ?? this.context,
-    metadata: metadata ?? this.metadata,
-    voiceData: voiceData ?? this.voiceData,
-  );
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'type': type.index,
+      'content': content,
+      'isFromUser': isFromUser,
+      'timestamp': timestamp.toIso8601String(),
+      'duration': duration,
+      'thumbnail': thumbnail,
+      'metadata': metadata,
+    };
+  }
 } 

@@ -1,177 +1,76 @@
-/// Service that handles local data storage.
-/// 
-/// Features:
-/// - Key-value storage
-/// - Secure storage
-/// - Cache management
-/// - Data encryption
-class StorageService extends BaseService {
-  static final instance = StorageService._();
-  StorageService._();
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get/get.dart';
 
-  late final Box _box;
-  late final FlutterSecureStorage _secureStorage;
-  bool _initialized = false;
+class StorageService extends GetxService {
+  late SharedPreferences _prefs;
 
-  @override
-  List<Type> get dependencies => [];
-
-  @override
-  Future<void> initialize() async {
-    if (_initialized) return;
-
-    try {
-      // Initialize Hive
-      final appDir = await getApplicationDocumentsDirectory();
-      await Hive.initFlutter(appDir.path);
-      
-      // Open default box
-      _box = await Hive.openBox('app_storage');
-      
-      // Initialize secure storage
-      _secureStorage = const FlutterSecureStorage(
-        aOptions: AndroidOptions(
-          encryptedSharedPreferences: true,
-        ),
-        iOptions: IOSOptions(
-          accessibility: KeychainAccessibility.first_unlock,
-        ),
-      );
-
-      _initialized = true;
-      LoggerService.info('Storage service initialized');
-    } catch (e) {
-      LoggerService.error('Failed to initialize storage service', error: e);
-      rethrow;
-    }
+  Future<StorageService> init() async {
+    _prefs = await SharedPreferences.getInstance();
+    return this;
   }
 
-  /// Get a value from storage
-  Future<T?> get<T>(
-    String key, {
-    T? defaultValue,
-    bool secure = false,
-  }) async {
-    try {
-      if (secure) {
-        final value = await _secureStorage.read(key: key);
-        if (value == null) return defaultValue;
-        return _deserialize<T>(value);
-      } else {
-        return _box.get(key, defaultValue: defaultValue);
-      }
-    } catch (e) {
-      LoggerService.error('Failed to get value for key: $key', error: e);
-      return defaultValue;
-    }
+  // String 操作
+  Future<bool> setString(String key, String value) async {
+    return await _prefs.setString(key, value);
   }
 
-  /// Set a value in storage
-  Future<void> set<T>(
-    String key,
-    T value, {
-    bool secure = false,
-  }) async {
-    try {
-      if (secure) {
-        final serialized = _serialize(value);
-        await _secureStorage.write(key: key, value: serialized);
-      } else {
-        await _box.put(key, value);
-      }
-    } catch (e) {
-      LoggerService.error('Failed to set value for key: $key', error: e);
-      rethrow;
-    }
+  String? getString(String key) {
+    return _prefs.getString(key);
   }
 
-  /// Remove a value from storage
-  Future<void> remove(String key, {bool secure = false}) async {
-    try {
-      if (secure) {
-        await _secureStorage.delete(key: key);
-      } else {
-        await _box.delete(key);
-      }
-    } catch (e) {
-      LoggerService.error('Failed to remove value for key: $key', error: e);
-      rethrow;
-    }
+  // bool 操作
+  Future<bool> setBool(String key, bool value) async {
+    return await _prefs.setBool(key, value);
   }
 
-  /// Remove multiple values matching a pattern
-  Future<void> removeWhere(bool Function(String key) test) async {
-    try {
-      final keys = _box.keys.where(test).cast<String>().toList();
-      await _box.deleteAll(keys);
-    } catch (e) {
-      LoggerService.error('Failed to remove values', error: e);
-      rethrow;
-    }
+  bool? getBool(String key) {
+    return _prefs.getBool(key);
   }
 
-  /// Clear all storage
-  Future<void> clear({bool secure = false}) async {
-    try {
-      if (secure) {
-        await _secureStorage.deleteAll();
-      } else {
-        await _box.clear();
-      }
-    } catch (e) {
-      LoggerService.error('Failed to clear storage', error: e);
-      rethrow;
-    }
+  // int 操作
+  Future<bool> setInt(String key, int value) async {
+    return await _prefs.setInt(key, value);
   }
 
-  /// Check if a key exists
-  Future<bool> containsKey(String key, {bool secure = false}) async {
-    try {
-      if (secure) {
-        final value = await _secureStorage.read(key: key);
-        return value != null;
-      } else {
-        return _box.containsKey(key);
-      }
-    } catch (e) {
-      LoggerService.error('Failed to check key: $key', error: e);
-      return false;
-    }
+  int? getInt(String key) {
+    return _prefs.getInt(key);
   }
 
-  /// Get all keys
-  List<String> get keys => _box.keys.cast<String>().toList();
-
-  /// Get all values
-  List<T> getAll<T>() => _box.values.whereType<T>().toList();
-
-  /// Serialize value for secure storage
-  String _serialize(dynamic value) {
-    if (value == null) return '';
-    return json.encode(value);
+  // double 操作
+  Future<bool> setDouble(String key, double value) async {
+    return await _prefs.setDouble(key, value);
   }
 
-  /// Deserialize value from secure storage
-  T? _deserialize<T>(String value) {
-    if (value.isEmpty) return null;
-    final dynamic decoded = json.decode(value);
-    if (decoded is T) return decoded;
-    return null;
+  double? getDouble(String key) {
+    return _prefs.getDouble(key);
   }
 
-  @override
-  Future<void> dispose() async {
-    if (!_initialized) return;
-    await _box.close();
-    _initialized = false;
+  // List<String> 操作
+  Future<bool> setStringList(String key, List<String> value) async {
+    return await _prefs.setStringList(key, value);
   }
-}
 
-/// Storage exception
-class StorageException implements Exception {
-  final String message;
-  StorageException(this.message);
+  List<String>? getStringList(String key) {
+    return _prefs.getStringList(key);
+  }
 
-  @override
-  String toString() => 'StorageException: $message';
+  // 删除指定key
+  Future<bool> remove(String key) async {
+    return await _prefs.remove(key);
+  }
+
+  // 清空所有数据
+  Future<bool> clear() async {
+    return await _prefs.clear();
+  }
+
+  // 获取所有key
+  Set<String> getKeys() {
+    return _prefs.getKeys();
+  }
+
+  // 判断是否存在某个key
+  bool containsKey(String key) {
+    return _prefs.containsKey(key);
+  }
 } 

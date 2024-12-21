@@ -1,28 +1,30 @@
+import 'package:flutter/material.dart';
+
 /// 底部弹出组件
 class AppBottomSheet extends StatelessWidget {
+  final Widget child;
   final String? title;
-  final Widget? child;
-  final List<BottomSheetAction>? actions;
+  final Widget? titleWidget;
+  final List<Widget>? actions;
   final EdgeInsets? padding;
-  final double? maxHeight;
-  final bool showCloseButton;
+  final double? height;
   final bool showDragHandle;
-  final bool isDismissible;
-  final bool enableDrag;
+  final bool showCloseButton;
+  final VoidCallback? onClose;
   final Color? backgroundColor;
-  final BorderRadius? borderRadius;
-
+  final double? borderRadius;
+  
   const AppBottomSheet({
     super.key,
+    required this.child,
     this.title,
-    this.child,
+    this.titleWidget,
     this.actions,
     this.padding,
-    this.maxHeight,
-    this.showCloseButton = true,
+    this.height,
     this.showDragHandle = true,
-    this.isDismissible = true,
-    this.enableDrag = true,
+    this.showCloseButton = true,
+    this.onClose,
     this.backgroundColor,
     this.borderRadius,
   });
@@ -30,15 +32,14 @@ class AppBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
+    
     return Container(
-      constraints: BoxConstraints(
-        maxHeight: maxHeight ?? MediaQuery.of(context).size.height * 0.85,
-      ),
+      height: height,
       decoration: BoxDecoration(
         color: backgroundColor ?? theme.scaffoldBackgroundColor,
-        borderRadius: borderRadius ??
-            const BorderRadius.vertical(top: Radius.circular(16)),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(borderRadius ?? 16),
+        ),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -47,158 +48,88 @@ class AppBottomSheet extends StatelessWidget {
             Container(
               width: 32,
               height: 4,
-              margin: const EdgeInsets.symmetric(vertical: 8),
+              margin: const EdgeInsets.symmetric(vertical: 12),
               decoration: BoxDecoration(
                 color: theme.dividerColor,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
-          if (title != null || showCloseButton)
+          if (title != null || titleWidget != null || showCloseButton)
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              padding: const EdgeInsets.fromLTRB(16, 0, 8, 8),
               child: Row(
                 children: [
-                  if (title != null)
-                    Expanded(
-                      child: Text(
-                        title!,
-                        style: theme.textTheme.titleLarge,
-                      ),
+                  Expanded(
+                    child: DefaultTextStyle(
+                      style: theme.textTheme.titleLarge!,
+                      child: titleWidget ?? Text(title ?? ''),
                     ),
+                  ),
                   if (showCloseButton)
                     IconButton(
                       icon: const Icon(Icons.close),
-                      onPressed: () => Navigator.of(context).pop(),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        onClose?.call();
+                      },
                     ),
                 ],
               ),
             ),
-          if (child != null)
-            Flexible(
-              child: SingleChildScrollView(
-                padding: padding ?? const EdgeInsets.all(16),
-                child: child,
+          Expanded(
+            child: Padding(
+              padding: padding ?? const EdgeInsets.all(16),
+              child: child,
+            ),
+          ),
+          if (actions != null)
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: actions!,
               ),
             ),
-          if (actions != null) ...[
-            const Divider(height: 1),
-            SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: actions!
-                      .map((action) => Padding(
-                            padding: const EdgeInsets.only(left: 16),
-                            child: _buildAction(context, action),
-                          ))
-                      .toList(),
-                ),
-              ),
-            ),
-          ],
         ],
       ),
     );
   }
 
-  Widget _buildAction(BuildContext context, BottomSheetAction action) {
-    switch (action.style) {
-      case BottomSheetActionStyle.primary:
-        return ElevatedButton(
-          onPressed: () {
-            if (action.onPressed != null) {
-              action.onPressed!();
-            }
-            if (action.closeOnPressed) {
-              Navigator.of(context).pop();
-            }
-          },
-          child: Text(action.text),
-        );
-      case BottomSheetActionStyle.secondary:
-        return OutlinedButton(
-          onPressed: () {
-            if (action.onPressed != null) {
-              action.onPressed!();
-            }
-            if (action.closeOnPressed) {
-              Navigator.of(context).pop();
-            }
-          },
-          child: Text(action.text),
-        );
-      case BottomSheetActionStyle.text:
-        return TextButton(
-          onPressed: () {
-            if (action.onPressed != null) {
-              action.onPressed!();
-            }
-            if (action.closeOnPressed) {
-              Navigator.of(context).pop();
-            }
-          },
-          child: Text(action.text),
-        );
-    }
-  }
-
-  /// 显示底部弹出框
-  static Future<T?> show<T>(
-    BuildContext context, {
+  /// 显示底部弹出
+  static Future<T?> show<T>({
+    required BuildContext context,
+    required Widget child,
     String? title,
-    Widget? child,
-    List<BottomSheetAction>? actions,
+    Widget? titleWidget,
+    List<Widget>? actions,
     EdgeInsets? padding,
-    double? maxHeight,
-    bool showCloseButton = true,
+    double? height,
     bool showDragHandle = true,
+    bool showCloseButton = true,
+    VoidCallback? onClose,
+    Color? backgroundColor,
+    double? borderRadius,
     bool isDismissible = true,
     bool enableDrag = true,
-    Color? backgroundColor,
-    BorderRadius? borderRadius,
   }) {
     return showModalBottomSheet<T>(
       context: context,
       isDismissible: isDismissible,
       enableDrag: enableDrag,
       backgroundColor: Colors.transparent,
-      isScrollControlled: true,
-      builder: (_) => AppBottomSheet(
-        title: title,
+      builder: (context) => AppBottomSheet(
         child: child,
+        title: title,
+        titleWidget: titleWidget,
         actions: actions,
         padding: padding,
-        maxHeight: maxHeight,
-        showCloseButton: showCloseButton,
+        height: height,
         showDragHandle: showDragHandle,
-        isDismissible: isDismissible,
-        enableDrag: enableDrag,
+        showCloseButton: showCloseButton,
+        onClose: onClose,
         backgroundColor: backgroundColor,
         borderRadius: borderRadius,
       ),
     );
   }
-}
-
-/// 底部弹出框按钮样式
-enum BottomSheetActionStyle {
-  primary,
-  secondary,
-  text,
-}
-
-/// 底部弹出框按钮
-class BottomSheetAction {
-  final String text;
-  final VoidCallback? onPressed;
-  final BottomSheetActionStyle style;
-  final bool closeOnPressed;
-
-  const BottomSheetAction({
-    required this.text,
-    this.onPressed,
-    this.style = BottomSheetActionStyle.text,
-    this.closeOnPressed = true,
-  });
 } 

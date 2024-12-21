@@ -1,71 +1,138 @@
+import 'package:flutter/material.dart';
+
 /// 卡片组件
 class AppCard extends StatelessWidget {
-  final String? title;
-  final String? subtitle;
-  final Widget? leading;
-  final Widget? trailing;
-  final Widget? child;
-  final EdgeInsets? padding;
-  final EdgeInsets? margin;
+  final Widget child;
   final Color? color;
+  final Color? shadowColor;
   final double? elevation;
+  final EdgeInsets? margin;
+  final EdgeInsets? padding;
+  final ShapeBorder? shape;
   final BorderRadius? borderRadius;
+  final Clip? clipBehavior;
+  final bool semanticContainer;
   final VoidCallback? onTap;
-  final bool showDivider;
-
+  
   const AppCard({
     super.key,
-    this.title,
-    this.subtitle,
-    this.leading,
-    this.trailing,
-    this.child,
-    this.padding,
-    this.margin,
+    required this.child,
     this.color,
+    this.shadowColor,
     this.elevation,
+    this.margin,
+    this.padding,
+    this.shape,
     this.borderRadius,
+    this.clipBehavior,
+    this.semanticContainer = true,
     this.onTap,
-    this.showDivider = true,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    
+    Widget card = Card(
+      color: color,
+      shadowColor: shadowColor,
+      elevation: elevation,
+      margin: margin,
+      shape: shape ?? (borderRadius != null
+          ? RoundedRectangleBorder(
+              borderRadius: borderRadius!,
+            )
+          : null),
+      clipBehavior: clipBehavior,
+      semanticContainer: semanticContainer,
+      child: Padding(
+        padding: padding ?? EdgeInsets.zero,
+        child: child,
+      ),
+    );
 
-    Widget? header;
-    if (title != null || subtitle != null || leading != null || trailing != null) {
-      header = ListTile(
-        leading: leading,
-        title: title != null ? Text(title!) : null,
-        subtitle: subtitle != null ? Text(subtitle!) : null,
-        trailing: trailing,
+    if (onTap != null) {
+      card = InkWell(
+        onTap: onTap,
+        borderRadius: borderRadius,
+        child: card,
       );
     }
 
+    return card;
+  }
+}
+
+/// 可展开卡片组件
+class AppExpandableCard extends StatefulWidget {
+  final Widget title;
+  final Widget child;
+  final bool initiallyExpanded;
+  final EdgeInsets? padding;
+  final EdgeInsets? margin;
+  final Color? color;
+  final double? elevation;
+  final ShapeBorder? shape;
+  final BorderRadius? borderRadius;
+  
+  const AppExpandableCard({
+    super.key,
+    required this.title,
+    required this.child,
+    this.initiallyExpanded = false,
+    this.padding,
+    this.margin,
+    this.color,
+    this.elevation,
+    this.shape,
+    this.borderRadius,
+  });
+
+  @override
+  State<AppExpandableCard> createState() => _AppExpandableCardState();
+}
+
+class _AppExpandableCardState extends State<AppExpandableCard> {
+  late bool _expanded;
+
+  @override
+  void initState() {
+    super.initState();
+    _expanded = widget.initiallyExpanded;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Card(
-      margin: margin ?? const EdgeInsets.all(8),
-      color: color,
-      elevation: elevation,
-      shape: RoundedRectangleBorder(
-        borderRadius: borderRadius ?? BorderRadius.circular(8),
+      margin: widget.margin ?? const EdgeInsets.all(8),
+      color: widget.color,
+      elevation: widget.elevation,
+      shape: widget.shape ?? RoundedRectangleBorder(
+        borderRadius: widget.borderRadius ?? BorderRadius.circular(8),
       ),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: borderRadius ?? BorderRadius.circular(8),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (header != null) header,
-            if (header != null && showDivider && child != null)
-              const Divider(height: 1),
-            if (child != null)
-              Padding(
-                padding: padding ?? const EdgeInsets.all(16),
-                child: child,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          InkWell(
+            onTap: () => setState(() => _expanded = !_expanded),
+            child: Padding(
+              padding: widget.padding ?? const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  Expanded(child: widget.title),
+                  Icon(
+                    _expanded ? Icons.expand_less : Icons.expand_more,
+                  ),
+                ],
               ),
-          ],
-        ),
+            ),
+          ),
+          if (_expanded)
+            Padding(
+              padding: widget.padding ?? const EdgeInsets.all(16),
+              child: widget.child,
+            ),
+        ],
       ),
     );
   }

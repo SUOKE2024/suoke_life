@@ -48,7 +48,7 @@ class SubscriptionFeatures {
   });
 }
 
-class SubscriptionService extends GetxController {
+class SubscriptionService extends GetxService {
   static const String _kProMonthlyId = 'pro_subscription_monthly';
   static const String _kProYearlyId = 'pro_subscription_yearly';
   static const String _kPremiumMonthlyId = 'premium_subscription_monthly';
@@ -86,6 +86,21 @@ class SubscriptionService extends GetxController {
       expertMatching: true,
       customService: true,
     ),
+  };
+
+  static const Map<SubscriptionPlan, Map<String, dynamic>> _planConfig = {
+    SubscriptionPlan.basic: {
+      'price': 0,
+      'name': '基础版',
+      'description': '适合个人用户的基础AI助手功能',
+      'features': {
+        'max_sessions': 1,
+        'max_messages_per_day': 50,
+        'max_tokens': 1000,
+        // ... 其他特性
+      },
+    },
+    // ... 其他计划
   };
 
   SubscriptionService() {

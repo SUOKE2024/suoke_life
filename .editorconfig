@@ -1,0 +1,62 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+# top-most EditorConfig file
+root = true
+
+# Unix-style newlines with a newline ending every file
+[*]
+end_of_line = lf
+insert_final_newline = true
+charset = utf-8
+trim_trailing_whitespace = true
+
+# Python files
+[*.{py,pyi}]
+indent_style = space
+indent_size = 4
+max_line_length = 88
+
+# JavaScript/TypeScript files
+[*.{js,ts,jsx,tsx}]
+indent_style = space
+indent_size = 2
+max_line_length = 80
+
+# Dart files
+[*.dart]
+indent_style = space
+indent_size = 2
+max_line_length = 80
+
+# YAML files
+[*.{yml,yaml}]
+indent_style = space
+indent_size = 2
+
+# JSON files
+[*.json]
+indent_style = space
+indent_size = 2
+
+# Markdown files
+[*.md]
+trim_trailing_whitespace = false
+max_line_length = off
+
+# Documentation
+[*.rst]
+indent_style = space
+indent_size = 4
+
+# Makefiles
+[Makefile]
+indent_style = tab
+
+# Git config files
+[.git*]
+indent_style = tab
+
+# Don't check indentation for generated files and dependencies
+[{**.min.js,node_modules/**,dist/**,build/**,venv/**}]
+indent_style = ignore
+indent_size = ignore 

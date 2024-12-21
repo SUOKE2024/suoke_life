@@ -6,22 +6,28 @@ import '../games/games_page.dart';
 import '../community/community_page.dart';
 import '../profile/profile_page.dart';
 
-class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
-
-  @override
-  State<MainScreen> createState() => _MainScreenState();
-}
-
-class _MainScreenState extends State<MainScreen> {
-  int _currentIndex = 0;
-
-  final List<Widget> _pages = [
-    const ChatListPage(),    // 聊天列表页面
-    const ServicePage(),     // 服务页面
-    const GamesPage(),       // 游戏页面
-    const CommunityPage(),   // 社群页面
-    const ProfilePage(),     // 我的页面
+class MainScreen extends StatelessWidget {
+  final List<BottomNavigationBarItem> navigationItems = [
+    BottomNavigationBarItem(
+      icon: Icon(Icons.chat),
+      label: '首页',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.medical_services),
+      label: 'SUOKE',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.explore),
+      label: '探索',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.lifestyle),
+      label: 'LIFE',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.person),
+      label: '我的',
+    ),
   ];
 
   @override
