@@ -1,0 +1,42 @@
+# Flutter/Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+build/
+coverage/
+*.lcov
+
+# IDE
+.idea/
+.vscode/
+*.iml
+.metadata
+
+# OS
+.DS_Store
+.Trash/
+Documents/
+Downloads/
+Library/
+Movies/
+Music/
+Pictures/
+Public/
+
+# Project specific
+*.env
+*.p12
+*.pem
+temp_key.pub
+*.log
+/server/node_modules/
+/server/dist/
+
+# Documentation
+/doc/api/
+/docs/**/*.bak
+
+# Test
+/coverage/
+.test_coverage.dart 

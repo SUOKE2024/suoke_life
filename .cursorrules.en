@@ -1,0 +1,1640 @@
+{
+    "name": "SuoKe Life Development Guide",
+    "version": "1.0.0",
+    "description": "Development standards and guidelines for SuoKe Life project",
+    
+    "development_workflow": {
+        "planning": {
+            "design_tools": ["Figma", "V0"],
+            "documentation": ["PRD", "Design Specs", "API Documentation"],
+            "review_process": ["Design Review", "Technical Review", "AI Assistant Review"]
+        },
+        "tool_chain": {
+            "ui_prototype": "V0",
+            "code_organization": "Claude",
+            "development": "Cursor",
+            "version_control": "Git"
+        }
+    },
+
+    "cursor_settings": {
+        "editor": {
+            "tab_size": 2,
+            "insert_spaces": true,
+            "format_on_save": true,
+            "default_formatter": "dart-format",
+            "line_numbers": true,
+            "word_wrap": "on",
+            "auto_closing_brackets": true
+        },
+        "ai_features": {
+            "code_completion": true,
+            "inline_chat": true,
+            "command_palette": true,
+            "context_awareness": true
+        },
+        "keyboard_shortcuts": {
+            "quick_fix": "cmd+.",
+            "format_document": "shift+alt+f",
+            "rename_symbol": "f2",
+            "go_to_definition": "f12",
+            "find_all_references": "shift+f12"
+        },
+        "git_integration": {
+            "enabled": true,
+            "show_gutter_changes": true,
+            "auto_fetch": true,
+            "smart_commit": true
+        },
+        "terminal": {
+            "integrated": true,
+            "shell": "/bin/zsh",
+            "working_directory": "${workspaceFolder}"
+        }
+    },
+
+    "flutter_development": {
+        "architecture": {
+            "pattern": "Clean Architecture",
+            "layers": {
+                "presentation": {
+                    "widgets": "UI Components",
+                    "pages": "Screens",
+                    "controllers": "State Management with Riverpod"
+                },
+                "domain": {
+                    "entities": "Business Entities",
+                    "repositories": "Repository Interfaces",
+                    "use_cases": "Use Cases"
+                },
+                "data": {
+                    "repositories": "Repository Implementations",
+                    "data_sources": "Data Sources",
+                    "models": "Data Models"
+                }
+            }
+        },
+        "state_management": {
+            "riverpod": {
+                "providers": {
+                    "prefer": ["AsyncNotifierProvider", "NotifierProvider"],
+                    "avoid": ["StateProvider", "StateNotifierProvider", "ChangeNotifierProvider"]
+                },
+                "annotations": "@riverpod for generating providers",
+                "updates": "Use ref.invalidate() for manual updates"
+            }
+        },
+        "code_style": {
+            "general": {
+                "language": "English",
+                "line_length": 80,
+                "trailing_commas": true
+            },
+            "naming": {
+                "files": "snake_case",
+                "classes": "PascalCase",
+                "variables": "camelCase",
+                "constants": "UPPERCASE",
+                "boolean_vars": "isX, hasX, canX"
+            },
+            "functions": {
+                "max_length": "20 instructions",
+                "naming": "verb + noun",
+                "parameters": "Use objects for multiple params",
+                "return": "Prefer immutable objects"
+            }
+        },
+        "widgets": {
+            "principles": {
+                "composition": "Prefer composition over inheritance",
+                "immutability": "Use const constructors",
+                "state": "Prefer stateless widgets"
+            },
+            "best_practices": {
+                "size": "Keep widgets small and focused",
+                "nesting": "Avoid deep nesting",
+                "reusability": "Create reusable components",
+                "performance": "Use const where possible"
+            }
+        }
+    },
+
+    "api_development": {
+        "go_api": {
+            "version": "Go 1.22+",
+            "framework": "net/http",
+            "architecture": {
+                "routing": "New ServeMux",
+                "handlers": "Standard http.HandlerFunc",
+                "middleware": ["Logging", "Authentication", "Rate Limiting"]
+            },
+            "best_practices": {
+                "error_handling": {
+                    "custom_types": true,
+                    "proper_status_codes": true,
+                    "validation": "Request input validation"
+                },
+                "response": {
+                    "format": "JSON",
+                    "status_codes": "RESTful standards",
+                    "headers": "Appropriate Content-Type"
+                },
+                "security": {
+                    "rate_limiting": true,
+                    "authentication": true,
+                    "input_sanitization": true
+                },
+                "performance": {
+                    "concurrency": "Proper goroutine usage",
+                    "connection_pooling": true
+                }
+            },
+            "testing": {
+                "framework": "testing package",
+                "coverage": "80%",
+                "types": ["Unit Tests", "Integration Tests", "Performance Tests"]
+            }
+        },
+        "typescript_api": {
+            "framework": "NestJS",
+            "architecture": {
+                "pattern": "Modular Architecture",
+                "structure": {
+                    "modules": {
+                        "description": "Domain-driven modules",
+                        "components": [
+                            "controllers",
+                            "services",
+                            "models",
+                            "dtos"
+                        ]
+                    },
+                    "core": {
+                        "description": "Core functionality",
+                        "components": [
+                            "filters",
+                            "guards",
+                            "interceptors",
+                            "middlewares"
+                        ]
+                    },
+                    "shared": {
+                        "description": "Shared functionality",
+                        "components": [
+                            "utils",
+                            "constants",
+                            "interfaces"
+                        ]
+                    }
+                }
+            },
+            "code_style": {
+                "general": {
+                    "language": "English",
+                    "types": {
+                        "strict": true,
+                        "avoid_any": true
+                    },
+                    "documentation": "JSDoc for public APIs"
+                },
+                "naming": {
+                    "files": "kebab-case",
+                    "classes": "PascalCase",
+                    "functions": "camelCase",
+                    "constants": "UPPERCASE",
+                    "boolean": "isX, hasX, canX"
+                },
+                "functions": {
+                    "size": "< 20 instructions",
+                    "parameters": "RORO pattern",
+                    "abstraction": "Single level of abstraction"
+                }
+            },
+            "testing": {
+                "framework": "Jest",
+                "types": {
+                    "unit": "Controllers and Services",
+                    "e2e": "API Module Integration",
+                    "smoke": "Admin/Test Endpoints"
+                },
+                "conventions": {
+                    "structure": "Arrange-Act-Assert",
+                    "naming": "inputX, mockX, actualX, expectedX"
+                }
+            }
+        },
+        "python_flask": {
+            "core_principles": {
+                "coding_style": {
+                    "functional": "Prefer functional and declarative programming",
+                    "modular": "Use iteration and modularization",
+                    "naming": {
+                        "variables": "Descriptive with auxiliary verbs (is_active, has_permission)",
+                        "files": "snake_case (blueprints/user_routes.py)"
+                    },
+                    "patterns": {
+                        "roro": "Receive Object Return Object pattern",
+                        "exports": "Prefer named exports"
+                    }
+                },
+                "python_guidelines": {
+                    "functions": {
+                        "definition": "Use def for function definitions",
+                        "type_hints": "Use type hints where possible",
+                        "return_early": "Use early return pattern"
+                    },
+                    "conditionals": {
+                        "style": "Concise statements, avoid unnecessary braces",
+                        "single_line": "Use one-line syntax for simple conditions"
+                    }
+                }
+            },
+            "error_handling": {
+                "principles": {
+                    "early_handling": "Handle errors at function start",
+                    "guard_clauses": "Use guard clauses for preconditions",
+                    "happy_path": "Place normal flow last",
+                    "avoid_else": "Use if-return pattern"
+                },
+                "implementation": {
+                    "logging": "Proper error logging",
+                    "messages": "User-friendly error messages",
+                    "types": "Custom error types or factories"
+                }
+            },
+            "flask_architecture": {
+                "application": {
+                    "factory": "Use application factory pattern",
+                    "blueprints": "Organize routes with blueprints",
+                    "extensions": "Utilize Flask extensions",
+                    "config": "Use config object for environments"
+                },
+                "request_lifecycle": {
+                    "hooks": [
+                        "before_request",
+                        "after_request",
+                        "teardown_request"
+                    ],
+                    "context": {
+                        "app_context": "Proper application context usage",
+                        "request_context": "Proper request context usage"
+                    }
+                }
+            },
+            "database": {
+                "orm": {
+                    "tool": "Flask-SQLAlchemy",
+                    "migrations": "Flask-Migrate",
+                    "sessions": {
+                        "management": "Proper session management",
+                        "pooling": "Connection pooling"
+                    },
+                    "optimization": {
+                        "eager_loading": "Use eager loading",
+                        "indexing": "Proper indexing"
+                    }
+                }
+            },
+            "api_features": {
+                "serialization": {
+                    "tool": "Marshmallow",
+                    "schemas": "Schema per model"
+                },
+                "authentication": {
+                    "jwt": {
+                        "tool": "Flask-JWT-Extended",
+                        "protection": "Route protection decorators"
+                    }
+                },
+                "caching": {
+                    "tool": "Flask-Caching",
+                    "strategy": "Cache frequent data"
+                },
+                "documentation": {
+                    "tools": [
+                        "Flask-RESTX",
+                        "Flasgger"
+                    ],
+                    "requirements": "Document all endpoints"
+                }
+            }
+        },
+        "fastapi_microservices": {
+            "core_principles": {
+                "stateless_design": {
+                    "description": "Design services to be stateless",
+                    "state_management": {
+                        "external_storage": ["Redis", "Memcached"],
+                        "caching": "Redis for state persistence"
+                    }
+                },
+                "api_gateway": {
+                    "solutions": ["NGINX", "Traefik", "Kong", "AWS API Gateway"],
+                    "features": {
+                        "rate_limiting": true,
+                        "request_transformation": true,
+                        "security_filtering": true
+                    }
+                },
+                "resilience": {
+                    "circuit_breakers": true,
+                    "retries": "Implement retry mechanisms",
+                    "fault_tolerance": "Service mesh integration"
+                }
+            },
+            "architecture": {
+                "deployment": {
+                    "preferred": "Serverless",
+                    "environments": ["AWS Lambda", "Azure Functions"],
+                    "optimization": {
+                        "cold_start": "Minimize cold start times",
+                        "packaging": ["Lightweight containers", "Standalone binary"]
+                    }
+                },
+                "communication": {
+                    "inter_service": {
+                        "message_brokers": ["RabbitMQ", "Kafka"],
+                        "pattern": "Event-driven architecture"
+                    },
+                    "service_mesh": {
+                        "technologies": ["Istio", "Linkerd"],
+                        "features": ["Load balancing", "Service discovery"]
+                    }
+                }
+            },
+            "middleware_security": {
+                "custom_middleware": {
+                    "logging": "Detailed request logging",
+                    "tracing": "OpenTelemetry integration",
+                    "monitoring": "Request monitoring"
+                },
+                "security": {
+                    "authentication": "OAuth2",
+                    "headers": ["CORS", "CSP"],
+                    "protection": {
+                        "rate_limiting": true,
+                        "ddos": true,
+                        "content_validation": "OWASP Zap"
+                    }
+                }
+            },
+            "performance": {
+                "async_capabilities": {
+                    "connections": "Handle large volumes efficiently",
+                    "workers": ["Celery", "RQ"]
+                },
+                "database": {
+                    "optimization": {
+                        "read_heavy": "Elasticsearch",
+                        "managed_services": ["AWS DynamoDB", "Azure Cosmos DB"]
+                    },
+                    "caching": {
+                        "layers": ["Redis", "Memcached"],
+                        "purpose": "Reduce primary database load"
+                    }
+                },
+                "scaling": {
+                    "automatic": true,
+                    "load_balancing": true,
+                    "variable_loads": "Serverless functions"
+                }
+            },
+            "monitoring_logging": {
+                "tools": {
+                    "metrics": ["Prometheus", "Grafana"],
+                    "logging": {
+                        "structured": true,
+                        "centralized": ["ELK Stack", "AWS CloudWatch"]
+                    }
+                },
+                "observability": {
+                    "tracing": "Distributed tracing",
+                    "alerts": "Metric-based alerting",
+                    "analysis": "Log aggregation and analysis"
+                }
+            },
+            "best_practices": {
+                "microservices": {
+                    "separation": "Clear separation of concerns",
+                    "scalability": "Independent service scaling",
+                    "maintainability": "Service isolation"
+                },
+                "cloud_native": {
+                    "infrastructure": "Reduced overhead",
+                    "managed_services": "Prefer cloud services",
+                    "deployment": "Container orchestration"
+                },
+                "documentation": {
+                    "api_specs": "OpenAPI/Swagger",
+                    "deployment": "Infrastructure as Code",
+                    "monitoring": "Runbooks and alerts"
+                }
+            }
+        }
+    },
+
+    "ui_ux_design": {
+        "visual_design": {
+            "hierarchy": {
+                "principles": [
+                    "Clear visual hierarchy for attention guidance",
+                    "Brand-consistent color scheme",
+                    "Typography for readability",
+                    "WCAG 2.1 AA compliant contrast"
+                ],
+                "style_consistency": "Maintain consistent app style"
+            },
+            "typography": {
+                "units": "Use relative units (em, rem)",
+                "readability": {
+                    "line_height": "Screen-adaptive line height",
+                    "letter_spacing": "Appropriate tracking",
+                    "scale": "Modular type scale"
+                }
+            },
+            "color_system": {
+                "primary": "Primary color definition",
+                "secondary": "Secondary palette",
+                "semantic": {
+                    "success": "Success state color",
+                    "warning": "Warning state color",
+                    "error": "Error state color",
+                    "info": "Info state color"
+                }
+            }
+        },
+        "interaction_design": {
+            "navigation": {
+                "patterns": "Intuitive navigation patterns",
+                "components": "Familiar UI components",
+                "calls_to_action": "Clear action guidance",
+                "mobile": {
+                    "menu": "Mobile-friendly navigation",
+                    "sticky_header": "Fixed header navigation",
+                    "keyboard_access": "Keyboard accessibility"
+                }
+            },
+            "responsive": {
+                "layout": {
+                    "units": "Relative units (%, em, rem)",
+                    "grid": "CSS Grid layout",
+                    "flexbox": "Flexbox layout"
+                },
+                "breakpoints": {
+                    "strategy": "Content-driven breakpoints",
+                    "testing": "Cross-device and orientation testing"
+                }
+            }
+        },
+        "performance": {
+            "optimization": {
+                "assets": {
+                    "images": {
+                        "format": "Context-appropriate formats",
+                        "compression": "Balance quality and size",
+                        "responsive": "srcset and sizes attributes",
+                        "lazy_loading": "Lazy load non-critical images"
+                    },
+                    "media": {
+                        "video": "Video optimization",
+                        "audio": "Audio optimization",
+                        "iframe": "Responsive embedded media"
+                    }
+                },
+                "code": {
+                    "splitting": "Code splitting",
+                    "critical_css": "Inline critical CSS",
+                    "animations": "Prefer CSS animations",
+                    "minification": "Code minification"
+                }
+            },
+            "metrics": {
+                "core_web_vitals": {
+                    "lcp": "Largest Contentful Paint",
+                    "fid": "First Input Delay",
+                    "cls": "Cumulative Layout Shift"
+                },
+                "monitoring": {
+                    "tools": "Performance monitoring tools",
+                    "alerts": "Performance alert thresholds",
+                    "reporting": "Performance reporting"
+                }
+            }
+        }
+    },
+
+    "data_science": {
+        "python_development": {
+            "environment": {
+                "python_version": ">=3.10",
+                "virtual_env": {
+                    "creation": "python -m venv venv",
+                    "activation": {
+                        "unix": "source venv/bin/activate",
+                        "windows": "venv\\Scripts\\activate"
+                    }
+                },
+                "package_management": {
+                    "base": "requirements/base.txt",
+                    "dev": "requirements/dev.txt",
+                    "test": "requirements/test.txt",
+                    "prod": "requirements/prod.txt"
+                }
+            },
+            "code_style": {
+                "formatting": {
+                    "black": {
+                        "line_length": 88,
+                        "target_version": ["py310", "py311"]
+                    },
+                    "isort": {
+                        "profile": "black",
+                        "multi_line_output": 3
+                    }
+                },
+                "linting": {
+                    "flake8": ">=6.1.0",
+                    "mypy": {
+                        "version": ">=1.7.1",
+                        "strict_mode": true,
+                        "type_checking": {
+                            "warn_return_any": true,
+                            "disallow_untyped_defs": true,
+                            "check_untyped_defs": true
+                        }
+                    }
+                }
+            },
+            "testing": {
+                "framework": {
+                    "pytest": ">=7.4.3",
+                    "pytest_asyncio": ">=0.21.1",
+                    "pytest_cov": ">=4.1.0"
+                },
+                "conventions": {
+                    "test_location": "tests/",
+                    "naming": "*_test.py",
+                    "coverage_target": "80%"
+                }
+            },
+            "documentation": {
+                "docstring_style": "Google",
+                "tools": {
+                    "mkdocs": ">=1.5.3",
+                    "mkdocs_material": ">=9.4.14"
+                }
+            }
+        },
+        "data_analysis": {
+            "principles": {
+                "readability": "Prioritize readability and reproducibility",
+                "functional": "Use functional programming where appropriate",
+                "vectorization": "Prefer vectorized operations over loops",
+                "naming": "Use descriptive variable names reflecting data content",
+                "style": "Follow PEP 8 guidelines"
+            },
+            "jupyter_practices": {
+                "structure": {
+                    "sections": "Clear sections with markdown cells",
+                    "execution": "Meaningful cell execution order",
+                    "documentation": "Explanatory text in markdown cells"
+                },
+                "code_cells": {
+                    "focus": "Keep cells focused and modular",
+                    "magic": "Use magic commands appropriately",
+                    "debugging": "Easy understanding and debugging"
+                }
+            },
+            "pandas_usage": {
+                "operations": {
+                    "method_chaining": "Prefer method chaining for transformations",
+                    "selection": "Use loc and iloc for explicit data selection",
+                    "aggregation": "Utilize groupby for efficient aggregation"
+                },
+                "best_practices": {
+                    "data_types": "Use efficient data types (e.g., categorical)",
+                    "memory": "Monitor and optimize memory usage",
+                    "performance": "Use vectorized operations",
+                    "validation": "Implement data quality checks",
+                    "missing_data": "Handle missing data appropriately"
+                }
+            },
+            "visualization": {
+                "matplotlib": {
+                    "usage": "Low-level plotting control",
+                    "customization": "Detailed plot customization"
+                },
+                "seaborn": {
+                    "usage": "Statistical visualizations",
+                    "defaults": "Aesthetically pleasing defaults"
+                },
+                "best_practices": {
+                    "labels": "Clear labels, titles, and legends",
+                    "colors": "Accessible color schemes",
+                    "documentation": "Document plot parameters",
+                    "reusability": "Create reusable plotting functions"
+                }
+            },
+            "optimization": {
+                "performance": {
+                    "vectorization": "Use vectorized operations in pandas/numpy",
+                    "data_structures": "Utilize efficient data types",
+                    "large_data": "Consider dask for big datasets",
+                    "profiling": "Identify and optimize bottlenecks"
+                },
+                "version_control": {
+                    "git": "Track changes in notebooks and scripts",
+                    "documentation": "Document sources and assumptions"
+                }
+            }
+        },
+        "machine_learning": {
+            "jax_development": {
+                "principles": {
+                    "functional": "Use functional programming patterns",
+                    "vectorization": "Prefer vectorized operations",
+                    "pure_functions": "Write pure functions for JAX transformations",
+                    "immutability": "Avoid in-place mutations, JAX arrays are immutable"
+                },
+                "best_practices": {
+                    "jit": "Use jax.jit for compilation",
+                    "vmap": "Use jax.vmap for vectorization",
+                    "grad": "Use jax.grad for gradients",
+                    "random": "Manage PRNG keys explicitly",
+                    "control_flow": "Use jax.lax for control flow operations"
+                },
+                "optimization": {
+                    "memory": "Optimize memory usage",
+                    "data_types": "Use appropriate data types",
+                    "profiling": "Profile code for bottlenecks",
+                    "compilation": "Minimize recompilation overhead",
+                    "batching": "Implement efficient batch processing"
+                },
+                "error_handling": {
+                    "validation": "Validate input shapes and types",
+                    "debugging": "Use jax.debug.print for debugging",
+                    "assertions": "Implement shape and value assertions"
+                },
+                "testing": {
+                    "unit": "Write comprehensive unit tests",
+                    "numerical": "Test numerical stability",
+                    "gradients": "Verify gradient computations"
+                }
+            },
+            "deep_learning": {
+                "pytorch": {
+                    "principles": {
+                        "modules": "Implement custom nn.Module classes",
+                        "autograd": "Utilize automatic differentiation",
+                        "gpu": "Proper GPU utilization"
+                    },
+                    "training": {
+                        "dataloaders": "Efficient data loading",
+                        "optimization": "Proper loss functions and optimizers",
+                        "validation": "Implement validation procedures"
+                    }
+                },
+                "transformers": {
+                    "usage": {
+                        "models": "Pre-trained model usage",
+                        "tokenizers": "Proper tokenization",
+                        "fine_tuning": "Efficient fine-tuning techniques"
+                    },
+                    "best_practices": {
+                        "memory": "Memory optimization",
+                        "batching": "Proper batch processing",
+                        "evaluation": "Model evaluation procedures"
+                    }
+                },
+                "diffusion": {
+                    "principles": {
+                        "process": "Forward and reverse diffusion",
+                        "scheduling": "Noise scheduling",
+                        "sampling": "Proper sampling methods"
+                    },
+                    "implementation": {
+                        "pipeline": "Use appropriate pipelines",
+                        "optimization": "Performance optimization",
+                        "inference": "Efficient inference"
+                    }
+                }
+            }
+        },
+        "julia_development": {
+            "core_principles": {
+                "style": {
+                    "naming": {
+                        "functions": "snake_case for functions",
+                        "types": "PascalCase for types",
+                        "files": "lowercase with underscores"
+                    },
+                    "documentation": {
+                        "docstrings": "Add to all functions and types",
+                        "examples": "Include usage examples",
+                        "signatures": "Reflect function types"
+                    }
+                },
+                "patterns": {
+                    "dispatch": "Leverage multiple dispatch",
+                    "immutability": "Prefer immutable structs",
+                    "functional": "Use functional features"
+                }
+            },
+            "code_structure": {
+                "functions": {
+                    "definitions": "Clear purpose and signature",
+                    "docstrings": "One-sentence description",
+                    "returns": "Document return values"
+                },
+                "structs": {
+                    "kwdef": "Use @kwdef for constructors",
+                    "fields": "Document type and purpose",
+                    "show": "Implement custom show methods"
+                },
+                "modules": {
+                    "organization": "Group related functionality",
+                    "includes": "Split large modules",
+                    "exports": "Control namespace"
+                }
+            },
+            "error_handling": {
+                "exceptions": {
+                    "custom": "Create specific error types",
+                    "guards": "Use guard clauses early",
+                    "messages": "User-friendly error messages"
+                },
+                "validation": {
+                    "types": "Use type annotations",
+                    "preconditions": "Check input validity",
+                    "logging": "Implement error logging"
+                }
+            },
+            "optimization": {
+                "performance": {
+                    "types": "Avoid type instabilities",
+                    "arrays": "Use static arrays when possible",
+                    "views": "Avoid unnecessary copies",
+                    "parallel": "Use built-in parallelism"
+                },
+                "benchmarking": {
+                    "tools": "Use BenchmarkTools.jl",
+                    "profiling": "Identify bottlenecks",
+                    "optimization": "Improve critical paths"
+                }
+            },
+            "testing": {
+                "structure": {
+                    "testsets": "One top-level per file",
+                    "cases": "Increasing difficulty",
+                    "assertions": "Individual @test calls"
+                },
+                "coverage": {
+                    "unit": "Test basic functionality",
+                    "edge": "Test edge cases",
+                    "types": "Test type stability"
+                }
+            }
+        },
+        "julia": {
+            "version": "1.9+",
+            "packages": {
+                "data": ["DataFrames", "CSV"],
+                "viz": ["Plots", "Makie"],
+                "ml": ["Flux", "MLJ"]
+            },
+            "style": {
+                "naming": "snake_case",
+                "modules": "Modular functionality",
+                "types": "Type annotations"
+            }
+        },
+        "jax": {
+            "usage": {
+                "computation": "Automatic differentiation",
+                "acceleration": "GPU/TPU optimization",
+                "parallelism": "Batch processing"
+            },
+            "practices": {
+                "functional": "Pure functions first",
+                "vectorization": "Avoid loops",
+                "memory": "Gradient checkpointing"
+            }
+        }
+    },
+
+    "web_development": {
+        "cross_platform": {
+            "core_principles": {
+                "architecture": {
+                    "monorepo": "Use Turbo for monorepo management",
+                    "structure": {
+                        "apps": "Next.js and Expo applications",
+                        "packages": "Shared code and components",
+                        "ui": "Cross-platform UI components"
+                    }
+                },
+                "code_style": {
+                    "naming": {
+                        "components": "kebab-case (e.g., auth-wizard.tsx)",
+                        "variables": "Descriptive with auxiliary verbs",
+                        "booleans": "isX, hasX, shouldX format"
+                    },
+                    "patterns": {
+                        "functional": "Use functional and declarative patterns",
+                        "exports": "Favor named exports",
+                        "typescript": "Use TypeScript for all code"
+                    }
+                }
+            },
+            "ui_components": {
+                "tamagui": {
+                    "usage": "Cross-platform UI components",
+                    "theming": "Consistent design across platforms",
+                    "responsive": "Mobile-first approach"
+                },
+                "navigation": {
+                    "solito": "Cross-platform navigation",
+                    "platform": "Platform-specific implementations"
+                }
+            },
+            "state_management": {
+                "zustand": "Global state management",
+                "tanstack": "Data fetching and caching",
+                "derived": "Prefer derived state over effects"
+            }
+        },
+        "nextjs": {
+            "core_principles": {
+                "server_components": "Prefer React Server Components",
+                "minimization": {
+                    "client": "Minimize use client usage",
+                    "effects": "Minimize useEffect usage"
+                },
+                "data_fetching": {
+                    "ssr": "Utilize Next.js SSR features",
+                    "preload": "Implement preload pattern"
+                }
+            },
+            "error_handling": {
+                "boundaries": {
+                    "error": "error.tsx implementation",
+                    "global": "global-error.tsx usage"
+                },
+                "actions": {
+                    "safe": "Use next-safe-action",
+                    "validation": "Implement proper validation"
+                }
+            },
+            "features": {
+                "routing": "App Router",
+                "rendering": "Server Components First",
+                "styling": "Tailwind CSS",
+                "state": "Zustand"
+            },
+            "optimization": {
+                "images": "Next Image optimization",
+                "fonts": "Local font optimization",
+                "loading": "Skeleton loading"
+            }
+        },
+        "sveltekit": {
+            "core_principles": {
+                "ssr": "Favor SvelteKit SSR features",
+                "components": "Minimize client-side components",
+                "stores": "Utilize Svelte stores for state"
+            },
+            "data_handling": {
+                "loading": "Implement loading states",
+                "errors": "Handle errors gracefully",
+                "typescript": "Use TypeScript for safety"
+            }
+        },
+        "backend_integration": {
+            "supabase": {
+                "features": {
+                    "auth": "Authentication management",
+                    "storage": "File storage and management",
+                    "realtime": "Real-time subscriptions"
+                },
+                "security": {
+                    "rls": "Row Level Security policies",
+                    "edge": "Edge Functions implementation"
+                }
+            },
+            "stripe": {
+                "integration": {
+                    "payments": "Payment processing setup",
+                    "subscriptions": "Subscription management",
+                    "webhooks": "Event handling implementation"
+                },
+                "security": {
+                    "keys": "Secure API key management",
+                    "validation": "Payment data validation"
+                }
+            }
+        },
+        "quality_assurance": {
+            "testing": {
+                "unit": "Component and utility testing",
+                "integration": "Feature integration testing",
+                "e2e": "Critical flow testing"
+            },
+            "accessibility": {
+                "keyboard": "Keyboard navigation support",
+                "aria": "ARIA labels and roles",
+                "contrast": "WCAG compliance"
+            },
+            "performance": {
+                "vitals": "Web Vitals optimization",
+                "loading": "Dynamic and lazy loading",
+                "images": "Image optimization strategies"
+            }
+        },
+        "wordpress_woocommerce": {
+            "core_principles": {
+                "php_standards": {
+                    "version": "PHP 7.4+ features",
+                    "typing": "Use strict typing when possible",
+                    "style": "Follow WordPress PHP Coding Standards"
+                },
+                "architecture": {
+                    "structure": {
+                        "themes": "Follow WordPress theme structure",
+                        "plugins": "Follow plugin directory conventions",
+                        "naming": "lowercase-with-hyphens for directories"
+                    },
+                    "modularity": {
+                        "hooks": "Use actions and filters",
+                        "functions": "Modular function design",
+                        "oop": "Object-oriented when appropriate"
+                    }
+                }
+            },
+            "best_practices": {
+                "wordpress": {
+                    "core": {
+                        "hooks": "Use WordPress hooks system",
+                        "functions": "Utilize WordPress core functions",
+                        "roles": "Use built-in user roles system"
+                    },
+                    "development": {
+                        "i18n": "Implement internationalization",
+                        "testing": "Use WP_UnitTestCase",
+                        "caching": "Use transients API"
+                    },
+                    "security": {
+                        "nonces": "Implement nonce verification",
+                        "sanitization": "Use WordPress sanitization",
+                        "validation": "Proper data validation"
+                    }
+                },
+                "woocommerce": {
+                    "integration": {
+                        "hooks": "Use WooCommerce hooks",
+                        "templates": "Override in plugin directory",
+                        "settings": "Use WooCommerce Settings API"
+                    },
+                    "data": {
+                        "crud": "Use CRUD classes",
+                        "session": "WooCommerce session handling",
+                        "products": "Use wc_get_product()"
+                    },
+                    "features": {
+                        "email": "Extend WC_Email class",
+                        "api": "Follow REST API conventions",
+                        "notices": "Use WooCommerce notice system"
+                    }
+                }
+            },
+            "database": {
+                "queries": {
+                    "wpdb": "Use WordPress database abstraction",
+                    "prepare": "Use prepared statements",
+                    "schema": "Use dbDelta for changes"
+                },
+                "optimization": {
+                    "caching": "Implement proper caching",
+                    "queries": "Optimize database queries",
+                    "indexes": "Use proper database indexes"
+                }
+            },
+            "performance": {
+                "assets": {
+                    "enqueue": "Proper script/style enqueuing",
+                    "optimization": "Minimize and combine assets",
+                    "loading": "Implement lazy loading"
+                },
+                "caching": {
+                    "transients": "Use WordPress transients",
+                    "object": "Object caching implementation",
+                    "page": "Page caching strategies"
+                },
+                "background": {
+                    "cron": "Use wp_cron for tasks",
+                    "processing": "Background task handling",
+                    "queues": "Implement job queues"
+                }
+            }
+        }
+    },
+
+    "game_development": {
+        "unity_csharp": {
+            "core_principles": {
+                "architecture": {
+                    "components": "Use MonoBehaviour for GameObject scripts",
+                    "scriptable_objects": "Use for data containers",
+                    "modularity": "Component-based architecture"
+                },
+                "conventions": {
+                    "naming": {
+                        "public": "PascalCase for public members",
+                        "private": "camelCase for private members",
+                        "constants": "c_ConstantName format",
+                        "statics": "s_StaticName format"
+                    },
+                    "organization": {
+                        "regions": "Use #regions for code sections",
+                        "editor": "Wrap with #if UNITY_EDITOR",
+                        "serialization": "Use [SerializeField] for inspector"
+                    }
+                }
+            },
+            "best_practices": {
+                "components": {
+                    "references": "Use TryGetComponent over Find",
+                    "text": "Always use TextMeshPro",
+                    "pooling": "Implement object pooling"
+                },
+                "optimization": {
+                    "draw_calls": "Optimize through batching",
+                    "lod": "Implement Level of Detail systems",
+                    "jobs": "Use Job System for CPU tasks"
+                }
+            },
+            "error_handling": {
+                "debugging": {
+                    "logging": "Use Unity Debug class",
+                    "profiler": "Utilize Unity Profiler",
+                    "assertions": "Implement Debug.Assert"
+                }
+            }
+        },
+        "pixijs_typescript": {
+            "core_principles": {
+                "architecture": {
+                    "structure": "Feature-based directories",
+                    "patterns": "Functional and declarative",
+                    "organization": "Modular components"
+                },
+                "naming": {
+                    "files": "kebab-case.ts",
+                    "functions": "camelCase",
+                    "classes": "PascalCase",
+                    "booleans": "isX, hasX, shouldX"
+                }
+            },
+            "optimization": {
+                "rendering": {
+                    "batching": "Use sprite batching",
+                    "atlases": "Implement texture atlases",
+                    "culling": "Implement off-screen culling"
+                },
+                "performance": {
+                    "pooling": "Object pooling for sprites",
+                    "memory": "Minimize object creation",
+                    "assets": "Progressive loading"
+                }
+            },
+            "mobile": {
+                "optimization": {
+                    "touch": "Optimize touch controls",
+                    "responsive": "Adapt UI for screens",
+                    "power": "Implement power management"
+                },
+                "deployment": {
+                    "capacitor": "Use Ionic Capacitor",
+                    "assets": "Optimize asset sizes",
+                    "caching": "Implement proper caching"
+                }
+            }
+        },
+        "lua": {
+            "core_principles": {
+                "style": {
+                    "naming": {
+                        "variables": "snake_case",
+                        "classes": "PascalCase",
+                        "private": "_prefix"
+                    },
+                    "organization": {
+                        "modules": "Group related functions",
+                        "scope": "Use local for better performance"
+                    }
+                },
+                "patterns": {
+                    "tables": "Effective table usage",
+                    "metatables": "Appropriate metamethods",
+                    "coroutines": "Concurrent operations"
+                }
+            },
+            "optimization": {
+                "performance": {
+                    "locals": "Use local variables",
+                    "tables": "Pre-allocate when possible",
+                    "strings": "Use table.concat"
+                },
+                "memory": {
+                    "cleanup": "Implement proper cleanup",
+                    "references": "Avoid circular references",
+                    "weak_tables": "Use when appropriate"
+                }
+            },
+            "error_handling": {
+                "protection": {
+                    "calls": "Use pcall/xpcall",
+                    "validation": "Implement assertions",
+                    "logging": "Proper error messages"
+                },
+                "debugging": {
+                    "tools": "Use debugging tools",
+                    "logging": "Strategic print statements",
+                    "monitoring": "Track performance metrics"
+                }
+            }
+        }
+    },
+
+    "response_evaluation": {
+        "core_principles": {
+            "evaluation_criteria": {
+                "accuracy": "Correctly addresses question or task",
+                "completeness": "Covers all aspects of question or task",
+                "clarity": "Easy to understand",
+                "conciseness": "Appropriately detailed without redundancy",
+                "relevance": "Stays on topic without tangents"
+            },
+            "scoring": {
+                "scale": "0-10 scale for quality assessment",
+                "normalization": "Convert to float between 0 and 1",
+                "solution_flag": "Boolean indicating complete solution"
+            }
+        },
+        "reflection_structure": {
+            "fields": {
+                "reflections": "Critique and quality analysis",
+                "score": "Quality score (0-10)",
+                "found_solution": "Solution completeness flag"
+            },
+            "methods": {
+                "as_message": "Convert reflection to message format",
+                "normalized_score": "Get normalized score (0-1)"
+            }
+        },
+        "best_practices": {
+            "evaluation": {
+                "objectivity": "Maintain unbiased assessment",
+                "thoroughness": "Consider all evaluation criteria",
+                "consistency": "Use consistent scoring standards"
+            },
+            "feedback": {
+                "constructive": "Provide actionable insights",
+                "specific": "Reference concrete aspects",
+                "balanced": "Note both strengths and areas for improvement"
+            }
+        }
+    },
+
+    "infrastructure_as_code": {
+        "terraform": {
+            "core_principles": {
+                "organization": {
+                    "structure": {
+                        "files": {
+                            "main": "Primary resource definitions",
+                            "variables": "Input variable declarations",
+                            "outputs": "Output value definitions",
+                            "versions": "Provider and module versions"
+                        },
+                        "modules": "Reusable infrastructure components",
+                        "environments": "Separate workspaces per environment"
+                    },
+                    "naming": {
+                        "resources": "Descriptive, domain-specific names",
+                        "variables": "Clear purpose indicators",
+                        "outputs": "Value-describing names"
+                    }
+                },
+                "state_management": {
+                    "backend": {
+                        "remote": ["S3", "Azure Blob", "GCS"],
+                        "features": {
+                            "locking": "Enable state locking",
+                            "encryption": "Enable state encryption"
+                        }
+                    },
+                    "workspaces": {
+                        "usage": "Environment separation",
+                        "naming": ["dev", "staging", "prod"]
+                    }
+                }
+            },
+            "best_practices": {
+                "code_quality": {
+                    "formatting": {
+                        "tool": "terraform fmt",
+                        "style": "Consistent HCL formatting"
+                    },
+                    "validation": {
+                        "static": "terraform validate",
+                        "linting": ["tflint", "terrascan"]
+                    }
+                },
+                "security": {
+                    "secrets": {
+                        "storage": ["Vault", "AWS Secrets Manager", "Azure Key Vault"],
+                        "practices": "No hardcoded sensitive values"
+                    },
+                    "encryption": {
+                        "data": "Encrypt data at rest",
+                        "transit": "Secure data in transit"
+                    },
+                    "access": {
+                        "principle": "Least privilege access",
+                        "controls": "Resource-specific policies"
+                    }
+                }
+            },
+            "module_development": {
+                "structure": {
+                    "organization": "Domain-specific modules",
+                    "versioning": "Semantic versioning",
+                    "documentation": "README with examples"
+                },
+                "interfaces": {
+                    "inputs": {
+                        "validation": "Input variable validation",
+                        "defaults": "Sensible default values"
+                    },
+                    "outputs": {
+                        "essential": "Only necessary outputs",
+                        "description": "Clear output documentation"
+                    }
+                }
+            },
+            "testing_deployment": {
+                "ci_cd": {
+                    "integration": {
+                        "tools": ["GitHub Actions", "GitLab CI"],
+                        "stages": {
+                            "plan": "Automated terraform plan",
+                            "apply": "Controlled terraform apply"
+                        }
+                    },
+                    "testing": {
+                        "unit": "Terratest for modules",
+                        "integration": "Infrastructure testing"
+                    }
+                },
+                "performance": {
+                    "optimization": {
+                        "targeting": "Resource-specific changes",
+                        "caching": "Provider plugin caching",
+                        "parallelism": "Concurrent operations"
+                    },
+                    "monitoring": {
+                        "costs": "Resource cost tracking",
+                        "usage": "Resource utilization"
+                    }
+                }
+            }
+        },
+        "cloud_specific": {
+            "aws": {
+                "best_practices": {
+                    "networking": "VPC design patterns",
+                    "security": "AWS security guidelines",
+                    "scaling": "Auto-scaling patterns"
+                }
+            },
+            "azure": {
+                "best_practices": {
+                    "networking": "VNET architecture",
+                    "security": "Azure security standards",
+                    "scaling": "Scale set patterns"
+                }
+            },
+            "gcp": {
+                "best_practices": {
+                    "networking": "VPC network design",
+                    "security": "GCP security rules",
+                    "scaling": "Instance group patterns"
+                }
+            }
+        }
+    },
+
+    "version_control": {
+        "git": {
+            "workflow": {
+                "branching": {
+                    "main": "生产环境分支",
+                    "develop": "开发环境分支",
+                    "feature": "feature/* 功能分支",
+                    "release": "release/* 发布分支",
+                    "hotfix": "hotfix/* 紧急修复分支"
+                },
+                "commits": {
+                    "style": "Conventional Commits",
+                    "format": "<type>(<scope>): <description>",
+                    "types": [
+                        "feat", "fix", "docs", "style", 
+                        "refactor", "test", "chore", "ci"
+                    ]
+                }
+            },
+            "hooks": {
+                "pre_commit": [
+                    "代码格式化",
+                    "Lint 检查",
+                    "类型检查"
+                ],
+                "pre_push": [
+                    "单元测试",
+                    "构建检查"
+                ]
+            }
+        },
+        "releases": {
+            "versioning": "语义化版本 (SemVer)",
+            "changelog": "自动生成变更日志",
+            "tags": "版本标签管理"
+        }
+    },
+
+    "ci_cd": {
+        "pipelines": {
+            "development": {
+                "triggers": ["push to develop", "PR to develop"],
+                "steps": [
+                    "代码检查",
+                    "单元测试",
+                    "构建",
+                    "部署到开发环境"
+                ]
+            },
+            "staging": {
+                "triggers": ["push to release/*"],
+                "steps": [
+                    "代码检查",
+                    "全套测试",
+                    "构建",
+                    "部署到预发布环境",
+                    "自动化测试"
+                ]
+            },
+            "production": {
+                "triggers": ["push to main"],
+                "steps": [
+                    "代码检查",
+                    "全套测试",
+                    "构建",
+                    "部署到生产环境",
+                    "健康检查"
+                ]
+            }
+        },
+        "environments": {
+            "development": {
+                "auto_deploy": true,
+                "monitoring": "基本监控"
+            },
+            "staging": {
+                "auto_deploy": true,
+                "monitoring": "完整监控",
+                "rollback": "自动回滚"
+            },
+            "production": {
+                "auto_deploy": false,
+                "approval": "需要手动审批",
+                "monitoring": "完整监控",
+                "rollback": "手动回滚"
+            }
+        }
+    },
+
+    "code_review": {
+        "process": {
+            "pull_requests": {
+                "template": "使用PR模板",
+                "size": "每个PR不超过300行更改",
+                "description": "清晰描述更改内容和原因"
+            },
+            "reviewers": {
+                "required": 2,
+                "roles": ["技术负责人", "同��开发者"]
+            }
+        },
+        "checklist": {
+            "functionality": [
+                "功能完整性",
+                "边界情况处理",
+                "错误处理"
+            ],
+            "code_quality": [
+                "代码风格",
+                "命名规范",
+                "注释完整性"
+            ],
+            "testing": [
+                "测试覆盖率",
+                "测试用例质量",
+                "边界测试"
+            ],
+            "security": [
+                "安全漏洞",
+                "数据验证",
+                "权限控制"
+            ]
+        }
+    },
+
+    "documentation": {
+        "project": {
+            "readme": {
+                "sections": [
+                    "项目简介",
+                    "技术栈",
+                    "环境要求",
+                    "安装步骤",
+                    "使用说明",
+                    "贡献指南"
+                ],
+                "maintenance": "及时更新"
+            },
+            "architecture": {
+                "diagrams": "使用 PlantUML 或 Mermaid",
+                "decisions": "记录架构决策",
+                "components": "组件说明"
+            }
+        },
+        "api": {
+            "specification": "OpenAPI/Swagger",
+            "versioning": "API版本控制",
+            "endpoints": {
+                "description": "详细的端点说明",
+                "parameters": "参数说明",
+                "responses": "响应示例",
+                "errors": "错误码说明"
+            }
+        },
+        "code": {
+            "inline": {
+                "style": "清晰简洁",
+                "necessity": "解释复杂逻辑",
+                "todos": "标记待办事项"
+            },
+            "generated": {
+                "api": "API文档自动生成",
+                "coverage": "测试覆盖率报告",
+                "dependencies": "依赖关系图"
+            }
+        }
+    },
+
+    "backend_development": {
+        "python": {
+            "version": "3.11+",
+            "style": {
+                "guide": "PEP 8",
+                "formatter": "black",
+                "linter": "flake8",
+                "type_checker": "mypy"
+            },
+            "testing": {
+                "framework": "pytest",
+                "coverage": "pytest-cov",
+                "minimum_coverage": 80
+            }
+        },
+        "django": {
+            "architecture": {
+                "apps": "Modular functionality",
+                "models": "Domain-driven design",
+                "views": "Class-based views",
+                "api": "REST framework"
+            },
+            "best_practices": {
+                "settings": "Environment variables",
+                "security": "Middleware protection",
+                "caching": "Redis caching",
+                "async": "Asynchronous task processing"
+            }
+        }
+    },
+
+    "frontend_development": {
+        "typescript": {
+            "version": "5.0+",
+            "config": {
+                "strict": true,
+                "esModuleInterop": true,
+                "isolatedModules": true
+            },
+            "style": {
+                "prettier": "Unified code format",
+                "eslint": "Code quality check"
+            }
+        },
+        "nextjs": {
+            "features": {
+                "routing": "App Router",
+                "rendering": "Server Components First",
+                "styling": "Tailwind CSS",
+                "state": "Zustand"
+            },
+            "optimization": {
+                "images": "Next Image optimization",
+                "fonts": "Local font optimization",
+                "loading": "Skeleton loading"
+            }
+        }
+    },
+
+    "ai_development": {
+        "models": {
+            "chat": ["ChatGLM", "Qwen"],
+            "embedding": ["BGE", "BAAI"],
+            "vision": ["Qwen-VL"]
+        },
+        "deployment": {
+            "inference": "vLLM acceleration",
+            "quantization": "INT4/INT8 optimization",
+            "monitoring": "Performance monitoring"
+        },
+        "integration": {
+            "api": "Unified interface",
+            "fallback": "Model degradation",
+            "rate_limit": "Access control"
+        }
+    },
+
+    "security": {
+        "authentication": {
+            "jwt": "Stateless tokens",
+            "refresh": "Token refresh",
+            "mfa": "Two-factor authentication"
+        },
+        "data": {
+            "encryption": "Sensitive data encryption",
+            "masking": "Data masking",
+            "backup": "Regular backups"
+        },
+        "api": {
+            "rate_limit": "Rate limiting",
+            "cors": "Cross-Origin Resource Sharing",
+            "validation": "Input validation"
+        },
+        "monitoring": {
+            "logging": "Security logs",
+            "alerts": "Anomaly alerts",
+            "audit": "Operation auditing"
+        }
+    },
+
+    "testing": {
+        "unit": {
+            "scope": "Function level",
+            "coverage": "80%+ line coverage",
+            "mocking": "Dependency mocking"
+        },
+        "integration": {
+            "scope": "Module interaction",
+            "environment": "Isolated environment",
+            "data": "Test datasets"
+        },
+        "e2e": {
+            "scope": "User flows",
+            "tools": ["Cypress", "Playwright"],
+            "reporting": "Test reports"
+        }
+    },
+
+    "performance": {
+        "frontend": {
+            "loading": "Lazy loading",
+            "caching": "State caching",
+            "rendering": "Selective rendering"
+        },
+        "backend": {
+            "database": "Query optimization",
+            "caching": "Multi-level caching",
+            "async": "Asynchronous processing"
+        },
+        "monitoring": {
+            "metrics": ["Response time", "Resource usage"],
+            "profiling": "Performance profiling",
+            "optimization": "Continuous optimization"
+        }
+    }
+} 

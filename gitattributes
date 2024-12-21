@@ -1,0 +1,35 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Dart files
+*.dart text
+*.dart.js text
+*.dart.js.map text
+
+# Flutter/Dart specific
+*.freezed.dart linguist-generated=true
+*.g.dart linguist-generated=true
+*.mocks.dart linguist-generated=true
+
+# Documentation
+*.md text diff=markdown
+*.mdx text diff=markdown
+
+# Assets
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary
+*.mov binary
+*.mp4 binary
+*.mp3 binary
+*.flv binary
+*.fla binary
+*.swf binary
+*.gz binary
+*.zip binary
+*.7z binary
+*.ttf binary
+*.eot binary
+*.woff binary
+*.woff2 binary 

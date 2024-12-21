@@ -12,7 +12,7 @@ import 'package:suoke_life/main.dart';
 
 void main() {
   testWidgets('App smoke test', (WidgetTester tester) async {
-    await tester.pumpWidget(const App());
-    expect(find.byType(App), findsOneWidget);
+    await tester.pumpWidget(const MyApp());
+    expect(find.byType(MyApp), findsOneWidget);
   });
 }
