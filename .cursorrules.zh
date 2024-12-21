@@ -1,0 +1,453 @@
+{
+    "name": "索客生活开发指南",
+    "version": "1.0.0",
+    "description": "索客生活项目的开发标准和指南",
+    
+    "development_workflow": {
+        "planning": {
+            "design_tools": ["Figma", "V0"],
+            "documentation": ["产品需求文档", "设计规范", "API文档"],
+            "review_process": ["设计评审", "技术评审", "AI助手评审"]
+        },
+        "tool_chain": {
+            "ui_prototype": "V0",
+            "code_organization": "Claude",
+            "development": "Cursor",
+            "version_control": "Git"
+        }
+    },
+
+    "cursor_settings": {
+        "editor": {
+            "tab_size": 2,
+            "insert_spaces": true,
+            "format_on_save": true,
+            "default_formatter": "dart-format",
+            "line_numbers": true,
+            "word_wrap": "on",
+            "auto_closing_brackets": true
+        },
+        "ai_features": {
+            "code_completion": true,
+            "inline_chat": true,
+            "command_palette": true,
+            "context_awareness": true
+        },
+        "keyboard_shortcuts": {
+            "quick_fix": "cmd+.",
+            "format_document": "shift+alt+f",
+            "rename_symbol": "f2",
+            "go_to_definition": "f12",
+            "find_all_references": "shift+f12"
+        },
+        "git_integration": {
+            "enabled": true,
+            "show_gutter_changes": true,
+            "auto_fetch": true,
+            "smart_commit": true
+        },
+        "terminal": {
+            "integrated": true,
+            "shell": "/bin/zsh",
+            "working_directory": "${workspaceFolder}"
+        }
+    },
+
+    "flutter_development": {
+        "architecture": {
+            "pattern": "清洁架构",
+            "layers": {
+                "presentation": {
+                    "widgets": "UI组件",
+                    "pages": "页面",
+                    "controllers": "使用Riverpod的状态管理"
+                },
+                "domain": {
+                    "entities": "业务实体",
+                    "repositories": "仓库接口",
+                    "use_cases": "用例"
+                },
+                "data": {
+                    "repositories": "仓库实现",
+                    "data_sources": "数据源",
+                    "models": "数据模型"
+                }
+            }
+        },
+        "state_management": {
+            "riverpod": {
+                "providers": {
+                    "prefer": ["AsyncNotifierProvider", "NotifierProvider"],
+                    "avoid": ["StateProvider", "StateNotifierProvider", "ChangeNotifierProvider"]
+                },
+                "annotations": "使用@riverpod生成providers",
+                "updates": "使用ref.invalidate()进行手动更新"
+            }
+        },
+        "code_style": {
+            "general": {
+                "language": "英文",
+                "line_length": 80,
+                "trailing_commas": true
+            },
+            "naming": {
+                "files": "蛇形命名法",
+                "classes": "帕斯卡命名法",
+                "variables": "驼峰命名法",
+                "constants": "大写",
+                "boolean_vars": "isX, hasX, canX格式"
+            },
+            "functions": {
+                "max_length": "20条指令",
+                "naming": "动词+名词",
+                "parameters": "多参数使用对象",
+                "return": "优先使用不可变对象"
+            }
+        },
+        "widgets": {
+            "principles": {
+                "composition": "优先使用组合而非继承",
+                "immutability": "使用const构造函数",
+                "state": "优先使用无状态组件"
+            },
+            "best_practices": {
+                "size": "保持组件小而专注",
+                "nesting": "避免深层嵌套",
+                "reusability": "创建可重用组件",
+                "performance": "尽可能使用const"
+            }
+        }
+    },
+
+    "version_control": {
+        "git": {
+            "workflow": {
+                "branching": {
+                    "main": "生产环境分支",
+                    "develop": "开发环境分支",
+                    "feature": "feature/* 功能分支",
+                    "release": "release/* 发布分支",
+                    "hotfix": "hotfix/* 紧急修复分支"
+                },
+                "commits": {
+                    "style": "约定式提交",
+                    "format": "<类型>(<范围>): <描述>",
+                    "types": [
+                        "feat", "fix", "docs", "style", 
+                        "refactor", "test", "chore", "ci"
+                    ]
+                }
+            },
+            "hooks": {
+                "pre_commit": [
+                    "代码格式化",
+                    "Lint检查",
+                    "类型检查"
+                ],
+                "pre_push": [
+                    "单元测试",
+                    "构建检查"
+                ]
+            }
+        },
+        "releases": {
+            "versioning": "语义化版本",
+            "changelog": "自动生成变更日志",
+            "tags": "版本标签管理"
+        }
+    },
+
+    "ci_cd": {
+        "pipelines": {
+            "development": {
+                "triggers": ["推送到develop", "向develop提交PR"],
+                "steps": [
+                    "代码检查",
+                    "单元测试",
+                    "构建",
+                    "部署到开发环境"
+                ]
+            },
+            "staging": {
+                "triggers": ["推送到release/*"],
+                "steps": [
+                    "代码检查",
+                    "全套测试",
+                    "构建",
+                    "部署到预发布环境",
+                    "自动化测试"
+                ]
+            },
+            "production": {
+                "triggers": ["推送到main"],
+                "steps": [
+                    "代码检查",
+                    "全套测试",
+                    "构建",
+                    "部署到生产环境",
+                    "健康检查"
+                ]
+            }
+        },
+        "environments": {
+            "development": {
+                "auto_deploy": true,
+                "monitoring": "基本监控"
+            },
+            "staging": {
+                "auto_deploy": true,
+                "monitoring": "完整监控",
+                "rollback": "自动回滚"
+            },
+            "production": {
+                "auto_deploy": false,
+                "approval": "需要手动审批",
+                "monitoring": "完整监控",
+                "rollback": "手动回滚"
+            }
+        }
+    },
+
+    "code_review": {
+        "process": {
+            "pull_requests": {
+                "template": "使用PR模板",
+                "size": "每个PR不超过300行更改",
+                "description": "清晰描述更改内容和原因"
+            },
+            "reviewers": {
+                "required": 2,
+                "roles": ["技术负责人", "同级开发者"]
+            }
+        },
+        "checklist": {
+            "functionality": [
+                "功能���整性",
+                "边界情况处理",
+                "错误处理"
+            ],
+            "code_quality": [
+                "代码风格",
+                "命名规范",
+                "注释完整性"
+            ],
+            "testing": [
+                "测试覆盖率",
+                "测试用例质量",
+                "边界测试"
+            ],
+            "security": [
+                "安全漏洞",
+                "数据验证",
+                "权限控制"
+            ]
+        }
+    },
+
+    "documentation": {
+        "project": {
+            "readme": {
+                "sections": [
+                    "项目简介",
+                    "技术栈",
+                    "环境要求",
+                    "安装步骤",
+                    "使用说明",
+                    "贡献指南"
+                ],
+                "maintenance": "及时更新"
+            },
+            "architecture": {
+                "diagrams": "使用PlantUML或Mermaid",
+                "decisions": "记录架构决策",
+                "components": "组件说明"
+            }
+        },
+        "api": {
+            "specification": "OpenAPI/Swagger",
+            "versioning": "API版本控制",
+            "endpoints": {
+                "description": "详细的端点说明",
+                "parameters": "参数说明",
+                "responses": "响应示例",
+                "errors": "错误码说明"
+            }
+        },
+        "code": {
+            "inline": {
+                "style": "清晰简洁",
+                "necessity": "解释复杂逻辑",
+                "todos": "标记待办事项"
+            },
+            "generated": {
+                "api": "API文档自动生成",
+                "coverage": "测试覆盖率报告",
+                "dependencies": "依赖关系图"
+            }
+        }
+    },
+
+    "backend_development": {
+        "python": {
+            "version": "3.11+",
+            "style": {
+                "guide": "PEP 8",
+                "formatter": "black",
+                "linter": "flake8",
+                "type_checker": "mypy"
+            },
+            "testing": {
+                "framework": "pytest",
+                "coverage": "pytest-cov",
+                "minimum_coverage": 80
+            }
+        },
+        "django": {
+            "architecture": {
+                "apps": "功能模块化",
+                "models": "领域驱动设计",
+                "views": "基于类的视图",
+                "api": "REST框架"
+            },
+            "best_practices": {
+                "settings": "环境变量配置",
+                "security": "中间件防护",
+                "caching": "Redis缓存",
+                "async": "异步任务处理"
+            }
+        }
+    },
+
+    "frontend_development": {
+        "typescript": {
+            "version": "5.0+",
+            "config": {
+                "strict": true,
+                "esModuleInterop": true,
+                "isolatedModules": true
+            },
+            "style": {
+                "prettier": "统一代码格式",
+                "eslint": "代码质量检查"
+            }
+        },
+        "nextjs": {
+            "features": {
+                "routing": "App Router",
+                "rendering": "服务器组件优先",
+                "styling": "Tailwind CSS",
+                "state": "Zustand"
+            },
+            "optimization": {
+                "images": "Next Image优化",
+                "fonts": "本地字体优化",
+                "loading": "骨架屏加载"
+            }
+        }
+    },
+
+    "data_science": {
+        "julia": {
+            "version": "1.9+",
+            "packages": {
+                "data": ["DataFrames", "CSV"],
+                "viz": ["Plots", "Makie"],
+                "ml": ["Flux", "MLJ"]
+            },
+            "style": {
+                "naming": "蛇形命名法",
+                "modules": "功能模块化",
+                "types": "类型注解"
+            }
+        },
+        "jax": {
+            "usage": {
+                "computation": "自动微分",
+                "acceleration": "GPU/TPU优化",
+                "parallelism": "批处理优化"
+            },
+            "practices": {
+                "functional": "纯函数优先",
+                "vectorization": "避免循环",
+                "memory": "梯度检查点"
+            }
+        }
+    },
+
+    "ai_development": {
+        "models": {
+            "chat": ["ChatGLM", "Qwen"],
+            "embedding": ["BGE", "BAAI"],
+            "vision": ["Qwen-VL"]
+        },
+        "deployment": {
+            "inference": "vLLM加速",
+            "quantization": "INT4/INT8优化",
+            "monitoring": "性能监控"
+        },
+        "integration": {
+            "api": "统一接口",
+            "fallback": "模型降级",
+            "rate_limit": "访问控制"
+        }
+    },
+
+    "security": {
+        "authentication": {
+            "jwt": "无状态令牌",
+            "refresh": "令牌刷新",
+            "mfa": "双因素认证"
+        },
+        "data": {
+            "encryption": "敏感数据加密",
+            "masking": "数据脱敏",
+            "backup": "定期备份"
+        },
+        "api": {
+            "rate_limit": "访问频率限制",
+            "cors": "跨域资源共享",
+            "validation": "输入验证"
+        },
+        "monitoring": {
+            "logging": "安全日志",
+            "alerts": "异常告警",
+            "audit": "操作审计"
+        }
+    },
+
+    "testing": {
+        "unit": {
+            "scope": "函数级别",
+            "coverage": "行覆盖率80%+",
+            "mocking": "依赖模拟"
+        },
+        "integration": {
+            "scope": "模块交互",
+            "environment": "隔离环境",
+            "data": "测试数据集"
+        },
+        "e2e": {
+            "scope": "用户流程",
+            "tools": ["Cypress", "Playwright"],
+            "reporting": "测试报告"
+        }
+    },
+
+    "performance": {
+        "frontend": {
+            "loading": "延迟加载",
+            "caching": "状态缓存",
+            "rendering": "选择性渲染"
+        },
+        "backend": {
+            "database": "查询优化",
+            "caching": "多级缓存",
+            "async": "异步处理"
+        },
+        "monitoring": {
+            "metrics": ["响应时间", "资源使用"],
+            "profiling": "性能分析",
+            "optimization": "持续优化"
+        }
+    }
+} 
