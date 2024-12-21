@@ -1,64 +1,80 @@
-# 索克生活 (SuoKe Life)
+# SuoKe Life
 
-一个基于Flutter的生活服务应用。
+SuoKe Life 是一个基于 Flutter 开发的智能生活助手应用。
 
-## 项目结构
+## 功能特点
 
-```
-lib/
-  ├── app/
-  │   ├── core/           # 核心功能
-  │   ├── modules/        # 功能模块
-  │   ├── services/       # 服务层
-  │   └── utils/          # 工具类
-  ├── config/             # 配置文件
-  ├── constants/          # 常量定义
-  └── main.dart           # 入口文件
-```
+- 🤖 AI 助手
+  - 生活管家(小艾)
+  - 知识顾问(老克)
+  - 商务助手(小克)
 
-## 功能特性
+- 🏥 健康管理
+  - 健康数据记录
+  - 健康状态分析
+  - 健康建议生成
 
-- 健康管理
-- 生活记录
-- 社交互动
-- 智能助手
+- 📝 生活记录
+  - 日常记录
+  - 数据统计
+  - 智能分析
 
-## 开发环境
+- 👥 社交功能
+  - 好友互动
+  - 群组交流
+  - 活动组织
 
-- Flutter: 3.x
-- Dart: 3.x
-- GetX: 最新版
+## 技术架构
 
-## 安装与运行
+- 💻 前端
+  - Flutter
+  - GetX 状态管理
+  - Material Design 3
 
-1. 克隆项目:
-```bash
-git clone https://github.com/SUOKE2024/suoke_life.git
-```
+- 🧠 AI 能力
+  - 豆包大模型
+  - 知识图谱
+  - 智能对话
 
-2. 安装依赖:
+- 📱 多平台支持
+  - iOS
+  - Android
+  - Web
+  - Desktop (Windows/macOS/Linux)
+
+## 开发指南
+
+### 环境配置
+
+1. 安装依赖:
 ```bash
 flutter pub get
 ```
 
-3. 运行项目:
+2. 运行应用:
 ```bash
 flutter run
 ```
 
+### 项目结构
+
+```
+lib/
+├── app/
+│   ├── core/          # 核心功能
+│   ├── data/          # 数据层
+│   ├── modules/       # 功能模块
+│   ├── presentation/  # 界面层
+│   ├── routes/        # 路由配置
+│   └── services/      # 服务层
+├── generated/         # 生成的代码
+└── main.dart         # 入口文件
+```
+
 ## 贡献指南
 
-1. Fork 项目
-2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 打开 Pull Request
+请查看 [CONTRIBUTING.md](CONTRIBUTING.md) 了解如何参与项目开发。
 
 ## 许可证
 
-本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情
-
-## 联系我们
-
-- 项目负责人: [Your Name]
-- 邮箱: [Your Email]
+本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 了解详情。
