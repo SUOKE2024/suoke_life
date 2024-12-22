@@ -6,10 +6,9 @@ class PrivacyService extends GetxService {
   late final IV _iv;
   late final Encrypter _encrypter;
 
-  @override
-  void onInit() {
-    super.onInit();
+  Future<PrivacyService> init() async {
     _initEncryption();
+    return this;
   }
 
   void _initEncryption() {

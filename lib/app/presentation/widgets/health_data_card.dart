@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import '../../data/models/health_record.dart';
 
 class HealthDataCard extends StatelessWidget {
-  final HealthRecord data;
+  final HealthRecord? data;
   final VoidCallback onTap;
 
   const HealthDataCard({
     Key? key,
-    required this.data,
+    this.data,
     required this.onTap,
   }) : super(key: key);
 
@@ -22,26 +22,30 @@ class HealthDataCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    data.type,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    _formatDate(data.recordedAt),
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                ],
+              const Text(
+                '健康数据',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 16),
-              _buildDataGrid(),
+              if (data != null)
+                Column(
+                  children: [
+                    _buildDataRow('身高', '${data!.height} cm'),
+                    _buildDataRow('体重', '${data!.weight} kg'),
+                    _buildDataRow('血压', '${data!.bloodPressure} mmHg'),
+                    _buildDataRow('心率', '${data!.heartRate} bpm'),
+                  ],
+                )
+              else
+                const Center(
+                  child: Text(
+                    '暂无健康数据',
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ),
             ],
           ),
         ),
@@ -49,40 +53,26 @@ class HealthDataCard extends StatelessWidget {
     );
   }
 
-  Widget _buildDataGrid() {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 2,
+  Widget _buildDataRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+              color: Colors.grey,
+            ),
+          ),
+          Text(
+            value,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
       ),
-      itemCount: data.data.length,
-      itemBuilder: (context, index) {
-        final entry = data.data.entries.elementAt(index);
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              entry.value.toString(),
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              entry.key,
-              style: TextStyle(
-                color: Colors.grey[600],
-              ),
-            ),
-          ],
-        );
-      },
     );
-  }
-
-  String _formatDate(DateTime date) {
-    return '${date.year}-${date.month}-${date.day}';
   }
 } 

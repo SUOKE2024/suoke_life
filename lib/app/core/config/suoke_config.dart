@@ -1,21 +1,21 @@
 class SuokeConfig {
   // 健康服务 API
-  static const String healthApiUrl = 'https://api.suoke.health/v1';
+  static const String healthApiUrl = 'https://api.suoke.com/health';
   static const String healthApiKey = 'your_health_api_key';
   
   // 农产品服务 API
-  static const String agriApiUrl = 'https://api.suoke.agri/v1';
+  static const String agriApiUrl = 'https://api.suoke.com/agri';
   static const String agriApiKey = 'your_agri_api_key';
   
   // 第三方 API 服务
   static const Map<String, Map<String, String>> thirdPartyApis = {
     'ali_health': {
-      'url': 'https://api.alihealth.cn/v1',
-      'key': 'your_ali_health_key',
+      'url': 'https://api.alihealth.com',
+      'key': 'your_ali_health_api_key',
     },
     'tcm_diagnosis': {
-      'url': 'https://api.tcm.cn/v1',
-      'key': 'your_tcm_key',
+      'url': 'https://api.tcm.com',
+      'key': 'your_tcm_api_key',
     },
   };
 

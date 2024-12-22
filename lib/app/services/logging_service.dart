@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
-import '../core/storage/storage_service.dart';
 import 'package:logger/logger.dart';
+import '../core/storage/storage_service.dart';
 
 class LoggingService extends GetxService {
   final StorageService _storageService = Get.find();
@@ -9,11 +9,10 @@ class LoggingService extends GetxService {
   final logs = <Map<String, dynamic>>[].obs;
   final logLevel = 'info'.obs;
 
-  @override
-  void onInit() {
-    super.onInit();
+  Future<LoggingService> init() async {
     _initLogger();
-    _loadLogs();
+    await _loadLogs();
+    return this;
   }
 
   void _initLogger() {
@@ -29,9 +28,27 @@ class LoggingService extends GetxService {
     );
   }
 
-  // 记录日志
   Future<void> log(String level, String message, {Map<String, dynamic>? data}) async {
     try {
+      // 记录日志
+      switch (level.toLowerCase()) {
+        case 'debug':
+          _logger.d(message);
+          break;
+        case 'info':
+          _logger.i(message);
+          break;
+        case 'warning':
+          _logger.w(message);
+          break;
+        case 'error':
+          _logger.e(message);
+          break;
+        default:
+          _logger.i(message);
+      }
+
+      // 构建日志条目
       final logEntry = {
         'level': level,
         'message': message,
@@ -39,52 +56,44 @@ class LoggingService extends GetxService {
         'timestamp': DateTime.now().toIso8601String(),
       };
 
-      // 添加到内存
+      // 添加到日志列表
       logs.insert(0, logEntry);
 
       // 保存到本地
       await _saveLogs();
-
-      // 打印日志
-      _printLog(level, message, data);
-
-      // 检查是否需要上传
-      await _checkUploadLogs();
     } catch (e) {
       print('Error logging: $e');
     }
   }
 
-  // 设置日志级别
   Future<void> setLogLevel(String level) async {
     try {
       logLevel.value = level;
       await _storageService.saveLocal('log_level', level);
     } catch (e) {
-      rethrow;
+      print('Error setting log level: $e');
     }
   }
 
-  // 清理日志
   Future<void> clearLogs() async {
     try {
       logs.clear();
       await _storageService.removeLocal('app_logs');
     } catch (e) {
-      rethrow;
+      print('Error clearing logs: $e');
     }
   }
 
-  // 导出日志
-  Future<String> exportLogs() async {
+  Future<Map<String, dynamic>> exportLogs() async {
     try {
       final exportData = {
         'logs': logs,
         'exported_at': DateTime.now().toIso8601String(),
       };
-      return _formatLogsForExport(exportData);
+      return exportData;
     } catch (e) {
-      rethrow;
+      print('Error exporting logs: $e');
+      return {};
     }
   }
 
@@ -100,7 +109,7 @@ class LoggingService extends GetxService {
         logLevel.value = level;
       }
     } catch (e) {
-      // 处理错误
+      print('Error loading logs: $e');
     }
   }
 
@@ -114,57 +123,5 @@ class LoggingService extends GetxService {
     } catch (e) {
       print('Error saving logs: $e');
     }
-  }
-
-  void _printLog(String level, String message, Map<String, dynamic>? data) {
-    switch (level) {
-      case 'debug':
-        _logger.d(message, data);
-        break;
-      case 'info':
-        _logger.i(message, data);
-        break;
-      case 'warning':
-        _logger.w(message, data);
-        break;
-      case 'error':
-        _logger.e(message, data);
-        break;
-    }
-  }
-
-  Future<void> _checkUploadLogs() async {
-    try {
-      // 检查是否需要上传日志
-      final lastUpload = await _storageService.getLocal('last_log_upload');
-      if (lastUpload == null || _shouldUploadLogs(lastUpload)) {
-        await _uploadLogs();
-      }
-    } catch (e) {
-      print('Error checking logs upload: $e');
-    }
-  }
-
-  bool _shouldUploadLogs(String lastUpload) {
-    final lastUploadTime = DateTime.parse(lastUpload);
-    final now = DateTime.now();
-    return now.difference(lastUploadTime).inHours >= 24;
-  }
-
-  Future<void> _uploadLogs() async {
-    try {
-      // TODO: 实现日志上传逻辑
-      await _storageService.saveLocal(
-        'last_log_upload',
-        DateTime.now().toIso8601String(),
-      );
-    } catch (e) {
-      print('Error uploading logs: $e');
-    }
-  }
-
-  String _formatLogsForExport(Map<String, dynamic> data) {
-    // TODO: 实现日志格式化
-    return '';
   }
 } 

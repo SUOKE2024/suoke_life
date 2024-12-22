@@ -10,10 +10,9 @@ class AuthService extends GetxService {
   final currentUser = Rx<User?>(null);
   final isLoggedIn = false.obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-    _loadSavedUser();
+  Future<AuthService> init() async {
+    await _loadSavedUser();
+    return this;
   }
 
   Future<void> _loadSavedUser() async {

@@ -13,9 +13,11 @@ class MainController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // 检查登录状态
-    if (!_authService.isLoggedIn.value) {
-      Get.offAllNamed('/login');
-    }
+    // 延迟检查登录状态
+    Future.delayed(Duration.zero, () {
+      if (!_authService.isLoggedIn.value) {
+        Get.offAllNamed('/login');
+      }
+    });
   }
 } 

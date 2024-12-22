@@ -6,22 +6,35 @@ part 'ai_chat.g.dart';
 class AiChat {
   final String id;
   final String userId;
-  final String assistantType; // xiaoi, laoke, xiaoke
+  final String assistantType;
   final String message;
-  final String? response;
   final DateTime createdAt;
-  final bool isProcessed;
 
   AiChat({
     required this.id,
     required this.userId,
     required this.assistantType,
     required this.message,
-    this.response,
     required this.createdAt,
-    this.isProcessed = false,
   });
 
-  factory AiChat.fromJson(Map<String, dynamic> json) => _$AiChatFromJson(json);
-  Map<String, dynamic> toJson() => _$AiChatToJson(this);
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'user_id': userId,
+      'assistant_type': assistantType,
+      'message': message,
+      'created_at': createdAt.toIso8601String(),
+    };
+  }
+
+  factory AiChat.fromMap(Map<String, dynamic> map) {
+    return AiChat(
+      id: map['id'],
+      userId: map['user_id'],
+      assistantType: map['assistant_type'],
+      message: map['message'],
+      createdAt: DateTime.parse(map['created_at']),
+    );
+  }
 } 

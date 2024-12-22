@@ -1,115 +1,134 @@
 import 'package:get/get.dart';
-import '../data/models/chat.dart';
-import '../data/models/message.dart';
-import '../core/network/api_client.dart';
-import 'dart:async';
+import 'package:sqflite/sqflite.dart';
+import '../data/models/chat_message.dart';
+import '../data/models/chat_conversation.dart';
+import '../data/database/database_helper.dart';
+import 'doubao_service.dart';
 
 class ChatService extends GetxService {
-  final ApiClient _apiClient;
-  
-  ChatService({required ApiClient apiClient}) : _apiClient = apiClient;
+  final DatabaseHelper _db = DatabaseHelper();
+  final DouBaoService _douBaoService = Get.find();
 
-  // 聊天更新流
-  final _chatUpdateController = StreamController<Chat>.broadcast();
-  Stream<Chat> get onChatUpdated => _chatUpdateController.stream;
-
-  // 新聊天流
-  final _newChatController = StreamController<Chat>.broadcast();
-  Stream<Chat> get onNewChat => _newChatController.stream;
-
-  // 获取聊天列表
-  Future<List<Chat>> getChatList() async {
-    try {
-      final response = await _apiClient.get('/chats');
-      return (response['chats'] as List)
-          .map((json) => Chat.fromJson(json))
-          .toList();
-    } catch (e) {
-      rethrow;
-    }
+  ChatService() {
+    print('ChatService initialized');
   }
 
-  // 获取聊天详情
-  Future<Chat> getChat(String chatId) async {
-    try {
-      final response = await _apiClient.get('/chats/$chatId');
-      return Chat.fromJson(response);
-    } catch (e) {
-      rethrow;
-    }
+  Future<List<ChatMessage>> getMessages(int conversationId) async {
+    final db = await _db.database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'messages',
+      where: 'conversation_id = ?',
+      whereArgs: [conversationId],
+      orderBy: 'created_at DESC',
+    );
+    return List.generate(maps.length, (i) => ChatMessage.fromJson(maps[i]));
   }
 
-  // 获取��天消息
-  Future<List<Message>> getMessages(String chatId, {int? limit, String? before}) async {
-    try {
-      final response = await _apiClient.get(
-        '/chats/$chatId/messages',
-        queryParameters: {
-          if (limit != null) 'limit': limit,
-          if (before != null) 'before': before,
-        },
-      );
-      return (response['messages'] as List)
-          .map((json) => Message.fromJson(json))
-          .toList();
-    } catch (e) {
-      rethrow;
-    }
+  Future<ChatMessage> sendMessage({
+    required int conversationId,
+    required String content,
+    required String senderId,
+    required String senderAvatar,
+    required String messageType,
+  }) async {
+    final db = await _db.database;
+    final message = ChatMessage(
+      id: DateTime.now().toString(),
+      conversationId: conversationId,
+      content: content,
+      type: messageType,
+      senderId: senderId,
+      senderAvatar: senderAvatar,
+      createdAt: DateTime.now(),
+      isRead: true,
+    );
+
+    await db.insert(
+      'messages',
+      message.toJson(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+
+    return message;
   }
 
-  // 发送消息
-  Future<Message> sendMessage(String chatId, String content, {String type = 'text'}) async {
-    try {
-      final response = await _apiClient.post('/chats/$chatId/messages', data: {
-        'content': content,
-        'type': type,
-      });
-      return Message.fromJson(response);
-    } catch (e) {
-      rethrow;
-    }
+  Future<String> getAiResponse(String message, String model) async {
+    return await _douBaoService.sendMessage(message, model);
   }
 
-  // 置顶/取消置顶聊天
-  Future<void> togglePin(String chatId) async {
-    try {
-      await _apiClient.post('/chats/$chatId/pin');
-    } catch (e) {
-      rethrow;
-    }
+  Future<void> markMessageAsRead(String messageId) async {
+    final db = await _db.database;
+    await db.update(
+      'messages',
+      {'is_read': 1},
+      where: 'id = ?',
+      whereArgs: [messageId],
+    );
   }
 
-  // 开启/关闭通知
-  Future<void> toggleMute(String chatId) async {
-    try {
-      await _apiClient.post('/chats/$chatId/mute');
-    } catch (e) {
-      rethrow;
-    }
+  Future<void> deleteMessage(String messageId) async {
+    final db = await _db.database;
+    await db.delete(
+      'messages',
+      where: 'id = ?',
+      whereArgs: [messageId],
+    );
   }
 
-  // 删除聊天
-  Future<void> deleteChat(String chatId) async {
-    try {
-      await _apiClient.delete('/chats/$chatId');
-    } catch (e) {
-      rethrow;
-    }
+  Future<List<ChatConversation>> getConversations() async {
+    final db = await _db.database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'conversations',
+      orderBy: 'updated_at DESC',
+    );
+    return List.generate(maps.length, (i) => ChatConversation.fromJson(maps[i]));
   }
 
-  // 标记消息已读
-  Future<void> markAsRead(String chatId) async {
-    try {
-      await _apiClient.post('/chats/$chatId/read');
-    } catch (e) {
-      rethrow;
-    }
+  Future<ChatConversation> createConversation({
+    required String title,
+    required String model,
+    required String avatar,
+  }) async {
+    final db = await _db.database;
+    final conversation = ChatConversation(
+      id: DateTime.now().millisecondsSinceEpoch,
+      title: title,
+      model: model,
+      avatar: avatar,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+    );
+
+    await db.insert(
+      'conversations',
+      conversation.toJson(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+
+    return conversation;
   }
 
-  @override
-  void onClose() {
-    _chatUpdateController.close();
-    _newChatController.close();
-    super.onClose();
+  Future<void> updateConversation(ChatConversation conversation) async {
+    final db = await _db.database;
+    await db.update(
+      'conversations',
+      conversation.toJson(),
+      where: 'id = ?',
+      whereArgs: [conversation.id],
+    );
+  }
+
+  Future<void> deleteConversation(int conversationId) async {
+    final db = await _db.database;
+    await db.delete(
+      'conversations',
+      where: 'id = ?',
+      whereArgs: [conversationId],
+    );
+    await db.delete(
+      'messages',
+      where: 'conversation_id = ?',
+      whereArgs: [conversationId],
+    );
   }
 } 

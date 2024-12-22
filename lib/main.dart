@@ -2,21 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'app/routes/app_pages.dart';
 import 'app/core/theme/app_theme.dart';
+import 'app/core/di/dependency_injection.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // 初始化服务
-  await initServices();
+  // 设置 Get 测试模式
+  Get.testMode = true;
+  
+  // 初始化依赖
+  await DependencyInjection.init();
   
   runApp(const MyApp());
-}
-
-Future<void> initServices() async {
-  // 初始化核心服务
-  await Get.putAsync(() => StorageService().init());
-  await Get.putAsync(() => AiService().init());
-  // 其他服务初始化
 }
 
 class MyApp extends StatelessWidget {
@@ -32,6 +29,8 @@ class MyApp extends StatelessWidget {
       getPages: AppPages.routes,
       locale: const Locale('zh', 'CN'),
       fallbackLocale: const Locale('en', 'US'),
+      defaultTransition: Transition.fade,
+      debugShowCheckedModeBanner: false,
     );
   }
 }

@@ -1,25 +1,36 @@
 import 'package:get/get.dart';
+import 'package:record/record.dart';
 
 class VoiceService extends GetxService {
+  final _record = Record();
   bool _isRecording = false;
 
-  bool get isRecording => _isRecording;
+  Future<VoiceService> init() async {
+    return this;
+  }
 
   Future<void> startRecording() async {
     try {
-      // TODO: 实现语音录制
-      _isRecording = true;
+      if (await _record.hasPermission()) {
+        await _record.start();
+        _isRecording = true;
+      }
     } catch (e) {
+      print('Error starting recording: $e');
       rethrow;
     }
   }
 
-  Future<void> stopRecording() async {
+  Future<String> stopRecording() async {
     try {
-      // TODO: 停止录制并返回结果
+      if (!_isRecording) return '';
+      
+      final path = await _record.stop();
       _isRecording = false;
+      return path ?? '';
     } catch (e) {
-      rethrow;
+      print('Error stopping recording: $e');
+      return '';
     }
   }
 

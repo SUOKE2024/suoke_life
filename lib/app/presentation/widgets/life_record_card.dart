@@ -27,16 +27,11 @@ class LifeRecordCard extends StatelessWidget {
                 children: [
                   Text(
                     record.title,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                   Text(
                     _formatDate(record.createdAt),
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                    ),
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],
               ),
@@ -45,14 +40,21 @@ class LifeRecordCard extends StatelessWidget {
                 record.content,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 8,
-                children: record.tags.map((tag) => Chip(
-                  label: Text(tag),
-                )).toList(),
-              ),
+              if (record.tags.isNotEmpty) ...[
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 8,
+                  children: record.tags
+                      .map((tag) => Chip(
+                            label: Text(tag),
+                            materialTapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
+                          ))
+                      .toList(),
+                ),
+              ],
             ],
           ),
         ),
@@ -61,6 +63,6 @@ class LifeRecordCard extends StatelessWidget {
   }
 
   String _formatDate(DateTime date) {
-    return '${date.year}-${date.month}-${date.day}';
+    return '${date.month}-${date.day}';
   }
 } 

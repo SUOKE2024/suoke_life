@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../widgets/ai_assistant_card.dart';
+import '../../controllers/home_controller.dart';
+import '../../widgets/chat/chat_list.dart';
+import '../../widgets/navigation/custom_bottom_nav_bar.dart';
 
 class HomePage extends GetView<HomeController> {
   const HomePage({Key? key}) : super(key: key);
@@ -12,49 +13,126 @@ class HomePage extends GetView<HomeController> {
       appBar: AppBar(
         title: const Text('索克生活'),
         actions: [
+          // 添加朋友等快捷操作
           IconButton(
-            icon: const Icon(Icons.notifications),
-            onPressed: () => Get.toNamed('/notifications'),
+            icon: const Icon(Icons.add_circle_outline),
+            onPressed: () => _showQuickActions(context),
+          ),
+          // 会员注册等
+          IconButton(
+            icon: const Icon(Icons.person_add_outlined),
+            onPressed: () => _showRegistrationOptions(context),
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // AI助手卡片
-            AiAssistantCard(
-              title: '小艾',
-              subtitle: '生活管家和健康服务',
-              onTap: () => Get.toNamed('/ai/xiaoi'),
-            ),
-            AiAssistantCard(
-              title: '老克',
-              subtitle: '知识顾问',
-              onTap: () => Get.toNamed('/ai/laoke'),
-            ),
-            AiAssistantCard(
-              title: '小克',
-              subtitle: '商务助手',
-              onTap: () => Get.toNamed('/ai/xiaoke'),
-            ),
-
-            // 健康数据卡片
-            Obx(() => HealthDataCard(
-              data: controller.healthData.value,
-              onTap: () => Get.toNamed('/health/details'),
-            )),
-
-            // 生活记录卡片
-            Obx(() => LifeRecordCard(
-              records: controller.lifeRecords,
-              onTap: () => Get.toNamed('/life/records'),
-            )),
-          ],
-        ),
-      ),
+      body: Obx(() {
+        final conversations = controller.conversations;
+        if (conversations.isEmpty) {
+          return const Center(
+            child: Text('暂无聊天记录'),
+          );
+        }
+        return ChatList(
+          conversations: conversations,
+          onTap: controller.openChat,
+        );
+      }),
       bottomNavigationBar: CustomBottomNavBar(
         currentIndex: 0,
-        onTap: (index) => controller.changePage(index),
+        onTap: (index) {
+          switch (index) {
+            case 1:
+              Get.toNamed('/suoke');
+              break;
+            case 2:
+              Get.toNamed('/explore');
+              break;
+            case 3:
+              Get.toNamed('/life');
+              break;
+            case 4:
+              Get.toNamed('/profile');
+              break;
+          }
+        },
+      ),
+    );
+  }
+
+  void _showQuickActions(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+            leading: const Icon(Icons.person_add),
+            title: const Text('添加朋友'),
+            onTap: () {
+              Get.back();
+              controller.addFriend();
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.group_add),
+            title: const Text('发起群聊'),
+            onTap: () {
+              Get.back();
+              controller.createGroup();
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.calendar_today),
+            title: const Text('预约咨询'),
+            onTap: () {
+              Get.back();
+              controller.bookConsultation();
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.qr_code_scanner),
+            title: const Text('扫一扫'),
+            onTap: () {
+              Get.back();
+              controller.scanQRCode();
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.payment),
+            title: const Text('收付款'),
+            onTap: () {
+              Get.back();
+              controller.showPayment();
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showRegistrationOptions(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+            leading: const Icon(Icons.card_membership),
+            title: const Text('会员注册'),
+            onTap: () {
+              Get.back();
+              controller.registerMember();
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.psychology),
+            title: const Text('专家注册'),
+            onTap: () {
+              Get.back();
+              controller.registerExpert();
+            },
+          ),
+        ],
       ),
     );
   }

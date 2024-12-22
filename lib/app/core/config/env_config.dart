@@ -1,49 +1,56 @@
+import 'package:get/get.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-enum Environment {
-  dev,
-  staging,
-  prod,
-}
+class EnvConfig extends GetxService {
+  static EnvConfig get to => Get.find();
+  
+  late final String apiKey;
+  late final String baseUrl;
+  late final String environment;
 
-class EnvConfig {
-  static Environment environment = Environment.dev;
-
-  static Future<void> load() async {
-    final envFile = _getEnvFileName();
-    await dotenv.load(fileName: envFile);
+  Future<EnvConfig> init() async {
+    // 加载环境变量
+    await dotenv.load(fileName: ".env");
+    
+    // 初始化配置
+    environment = dotenv.env['ENVIRONMENT'] ?? 'development';
+    apiKey = dotenv.env['API_KEY'] ?? '';
+    baseUrl = dotenv.env['BASE_URL'] ?? 'https://api.doubao.com';
+    
+    print('EnvConfig initialized: $environment');
+    return this;
   }
 
-  static String _getEnvFileName() {
-    switch (environment) {
-      case Environment.dev:
-        return '.env.dev';
-      case Environment.staging:
-        return '.env.staging';
-      case Environment.prod:
-        return '.env.prod';
-    }
+  // 获取环境变量的方法
+  String getString(String key) {
+    return dotenv.env[key] ?? '';
   }
 
-  // HTTP 配置
-  static bool get enableHttp2 => dotenv.get('ENABLE_HTTP2', fallback: 'false') == 'true';
-  static bool get allowSelfSigned => dotenv.get('ALLOW_SELF_SIGNED', fallback: 'false') == 'true';
-  static Duration get timeout => Duration(
-    seconds: int.parse(dotenv.get('TIMEOUT', fallback: '30'))
-  );
+  int? getInt(String key) {
+    final value = dotenv.env[key];
+    return value != null ? int.tryParse(value) : null;
+  }
 
-  // API 配置
-  static String get apiUrl => dotenv.get('API_URL');
-  static String get aiEndpoint => dotenv.get('AI_ENDPOINT');
-  static String get doubaoApiUrl => dotenv.get('DOUBAO_API_URL');
-  static String get doubaoApiKey => dotenv.get('DOUBAO_API_KEY');
+  double? getDouble(String key) {
+    final value = dotenv.env[key];
+    return value != null ? double.tryParse(value) : null;
+  }
 
-  // Agent 配置
-  static bool get enableAgent => dotenv.get('ENABLE_AGENT', fallback: 'false') == 'true';
-  static String get agentEndpoint => dotenv.get('AGENT_ENDPOINT');
-  static String get agentMode => dotenv.get('AGENT_MODE', fallback: 'production');
+  bool getBool(String key) {
+    final value = dotenv.env[key];
+    return value?.toLowerCase() == 'true';
+  }
 
-  // 日志配置
-  static bool get enableLogging => dotenv.get('ENABLE_LOGGING', fallback: 'false') == 'true';
-  static bool get enableNetworkLogging => dotenv.get('ENABLE_NETWORK_LOGGING', fallback: 'false') == 'true';
+  // 环境判断
+  bool get isDevelopment => environment == 'development';
+  bool get isProduction => environment == 'production';
+  bool get isStaging => environment == 'staging';
+
+  // 常用配置获取
+  String get doubaoApiKey => getString('DOUBAO_API_KEY');
+  String get doubaoApiUrl => getString('DOUBAO_API_URL');
+  String get doubaoPro32kEp => getString('DOUBAO_PRO_32K_EP');
+  String get doubaoPro128kEp => getString('DOUBAO_PRO_128K_EP');
+  String get doubaoEmbeddingKey => getString('DOUBAO_EMBEDDING_KEY');
+  String get doubaoAccessToken => getString('DOUBAO_ACCESS_TOKEN');
 } 

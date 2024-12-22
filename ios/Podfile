@@ -1,13 +1,17 @@
-# 使用清华源加速
-source 'https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git'
+# 使用 trunk 源
+source 'https://cdn.cocoapods.org/'
 
-# 设置平台版本 - 修改为 13.0 以支持 camera_avfoundation
-platform :ios, '13.0'
+platform :ios, '12.0'
 
-# 禁用统计
+# CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
-# 配置项目
+project 'Runner', {
+  'Debug' => :debug,
+  'Profile' => :release,
+  'Release' => :release,
+}
+
 def flutter_root
   generated_xcode_build_settings_path = File.expand_path(File.join('..', 'Flutter', 'Generated.xcconfig'), __FILE__)
   unless File.exist?(generated_xcode_build_settings_path)
@@ -29,33 +33,62 @@ target 'Runner' do
   use_frameworks!
   use_modular_headers!
 
+  # 使用本地缓存
+  pod 'DKImagePickerController', '4.3.4'
+  pod 'libwebp', '1.2.4'
+  pod 'CropViewController', '2.5.5'
+  
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 
-  # 移除 DKImagePickerController 依赖，因为我们使用 wechat_assets_picker
-  # pod 'DKImagePickerController', :path => './DKImagePickerController'
-end
+  post_install do |installer|
+    installer.pods_project.targets.each do |target|
+      flutter_additional_ios_build_settings(target)
+      
+      target.build_configurations.each do |config|
+        # 添加权限配置
+        config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= [
+          '$(inherited)',
+          'PERMISSION_CAMERA=1',
+          'PERMISSION_MICROPHONE=1',
+          'PERMISSION_PHOTOS=1',
+          'PERMISSION_NOTIFICATIONS=1',
+          'PERMISSION_MEDIA_LIBRARY=1',
+          'PERMISSION_SPEECH_RECOGNIZER=1',
+        ]
 
-post_install do |installer|
-  installer.pods_project.targets.each do |target|
-    flutter_additional_ios_build_settings(target)
+        # 设置最低部署版本
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
+        
+        # 禁用 bitcode
+        config.build_settings['ENABLE_BITCODE'] = 'NO'
+        
+        # 添加架构支持
+        config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
+        
+        # 禁用一些警告
+        config.build_settings['CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS'] = 'NO'
+        config.build_settings['CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF'] = 'NO'
+        config.build_settings['CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER'] = 'NO'
+        config.build_settings['CLANG_WARN_STRICT_PROTOTYPES'] = 'NO'
+        config.build_settings['GCC_WARN_UNUSED_VARIABLE'] = 'NO'
+        config.build_settings['GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS'] = 'NO'
+        
+        # 添加编译选项
+        config.build_settings['OTHER_CFLAGS'] = '$(inherited) -fmodules'
+        config.build_settings['SWIFT_VERSION'] = '5.0'
+        config.build_settings['CLANG_ENABLE_MODULES'] = 'YES'
+        
+        # 清理构建目录
+        config.build_settings['SYMROOT'] = File.join(Dir.pwd, 'build')
+        config.build_settings['CONFIGURATION_BUILD_DIR'] = '$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)'
+      end
+    end
     
-    target.build_configurations.each do |config|
-      # 配置最低iOS版本
-      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
-      
-      # 禁用 bitcode
-      config.build_settings['ENABLE_BITCODE'] = 'NO'
-      
-      # 添加权限描述
-      config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= [
-        '$(inherited)',
-        'PERMISSION_CAMERA=1',
-        'PERMISSION_PHOTOS=1',
-        'PERMISSION_PHOTOS_ADD_ONLY=1',
-        'PERMISSION_MICROPHONE=1',
-        'PERMISSION_NOTIFICATIONS=1',
-        'PERMISSION_MEDIA_LIBRARY=1',
-      ]
+    # 删除过时文件
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings['CONFIGURATION_TEMP_DIR'] = '$(PROJECT_TEMP_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)'
+      end
     end
   end
 end

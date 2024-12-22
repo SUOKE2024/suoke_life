@@ -1,204 +1,107 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../data/models/chat.dart';
-import '../../data/models/message.dart';
+import '../../data/models/chat_message.dart';
+import '../../data/models/chat_conversation.dart';
 import '../../services/chat_service.dart';
-import '../../core/base/base_controller.dart';
 
-class ChatDetailController extends BaseController {
-  final _chatService = Get.find<ChatService>();
+class ChatDetailController extends GetxController {
+  final ChatService _chatService = Get.find();
   
-  final chat = Rxn<Chat>();
-  final messages = <Message>[].obs;
-  final isLoading = false.obs;
-  final hasMore = true.obs;
-  
-  final inputController = TextEditingController();
-  String? _lastMessageId;
+  late final ChatConversation conversation;
+  final messages = <ChatMessage>[].obs;
+  final isTyping = false.obs;
 
   @override
   void onInit() {
     super.onInit();
-    final chatId = Get.parameters['id'];
-    if (chatId != null) {
-      loadChat(chatId);
-      loadMessages(chatId);
-    }
+    conversation = Get.arguments as ChatConversation;
+    _loadMessages();
   }
 
-  @override
-  void onClose() {
-    inputController.dispose();
-    super.onClose();
-  }
-
-  Future<void> loadChat(String chatId) async {
+  Future<void> _loadMessages() async {
     try {
-      final result = await _chatService.getChat(chatId);
-      chat.value = result;
+      final loadedMessages = await _chatService.getMessages(conversation.id);
+      messages.assignAll(loadedMessages);
     } catch (e) {
-      showError('加载聊天信息失败');
+      print('Error loading messages: $e');
     }
   }
 
-  Future<void> loadMessages(String chatId) async {
-    if (isLoading.value || !hasMore.value) return;
-    
+  Future<void> sendMessage(String content) async {
     try {
-      isLoading.value = true;
-      final result = await _chatService.getMessages(
-        chatId,
-        limit: 20,
-        before: _lastMessageId,
+      isTyping.value = true;
+
+      // 发送用户消息
+      final userMessage = await _chatService.sendMessage(
+        conversationId: conversation.id,
+        content: content,
+        senderId: ChatMessage.senderUser,
+        senderAvatar: 'https://via.placeholder.com/100',
+        messageType: ChatMessage.typeText,
       );
-      
-      if (result.isEmpty) {
-        hasMore.value = false;
-      } else {
-        messages.addAll(result);
-        _lastMessageId = result.last.id;
-      }
+      messages.insert(0, userMessage);
+
+      // 获取AI回复
+      final response = await _chatService.getAiResponse(content, conversation.model);
+
+      // 添加AI回复
+      final aiMessage = await _chatService.sendMessage(
+        conversationId: conversation.id,
+        content: response,
+        senderId: ChatMessage.senderAi,
+        senderAvatar: conversation.avatar,
+        messageType: ChatMessage.typeText,
+      );
+      messages.insert(0, aiMessage);
     } catch (e) {
-      showError('加载消息失败');
+      print('Error sending message: $e');
     } finally {
-      isLoading.value = false;
+      isTyping.value = false;
     }
   }
 
-  Future<void> loadMoreMessages() async {
-    if (chat.value != null) {
-      await loadMessages(chat.value!.id);
-    }
+  void onTapAvatar(String userId) {
+    Get.toNamed('/profile/$userId');
   }
 
-  Future<void> sendTextMessage(String text) async {
-    if (text.isEmpty || chat.value == null) return;
-    
-    try {
-      final message = await _chatService.sendMessage(
-        chat.value!.id,
-        text,
-        type: 'text',
-      );
-      messages.insert(0, message);
-      inputController.clear();
-    } catch (e) {
-      showError('发送失败');
-    }
-  }
-
-  Future<void> sendVoiceMessage(String voicePath) async {
-    // 实现语音消息发送
-  }
-
-  Future<void> sendImageMessage(String imagePath) async {
-    // 实现图片消息发送
-  }
-
-  Future<void> sendFileMessage(String filePath) async {
-    // 实现文件消息发送
-  }
-
-  void showUserProfile() {
-    if (chat.value != null) {
-      Get.toNamed('/user/${chat.value!.id}');
-    }
-  }
-
-  void showChatOptions() {
+  void onLongPressMessage(ChatMessage message) {
     Get.bottomSheet(
       Container(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.search),
-              title: const Text('搜索聊天记录'),
-              onTap: () {
-                Get.back();
-                // 实现搜索功能
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.delete_outline),
-              title: const Text('清空聊天记录'),
-              onTap: () {
-                Get.back();
-                _showClearConfirmDialog();
-              },
-            ),
-          ],
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(20),
+          ),
+        ),
+        child: SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.copy),
+                title: const Text('复制'),
+                onTap: () {
+                  // TODO: 实现复制功能
+                  Get.back();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.delete),
+                title: const Text('删除'),
+                onTap: () async {
+                  await _chatService.deleteMessage(message.id);
+                  messages.remove(message);
+                  Get.back();
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  void _showClearConfirmDialog() {
-    Get.dialog(
-      AlertDialog(
-        title: const Text('清空聊天记录'),
-        content: const Text('确定要清空所有聊天记录吗？此操作不可恢复。'),
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('取消'),
-          ),
-          TextButton(
-            onPressed: () {
-              Get.back();
-              // 实现清空功能
-            },
-            style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: const Text('清空'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void showMessageOptions(Message message) {
-    Get.bottomSheet(
-      Container(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.copy),
-              title: const Text('复制'),
-              onTap: () {
-                Get.back();
-                // 实现复制功能
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.reply),
-              title: const Text('回复'),
-              onTap: () {
-                Get.back();
-                // 实现回复功能
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.delete_outline),
-              title: const Text('删除'),
-              onTap: () {
-                Get.back();
-                // 实现删除功能
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void startVoiceCall() {
-    // 实现语音通话功能
-  }
-
-  void startVideoCall() {
-    // 实现视频通话功能
+  void showSettings() {
+    Get.toNamed('/settings/chat');
   }
 } 

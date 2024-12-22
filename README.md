@@ -1,33 +1,39 @@
 # 索克生活 (SuoKe Life)
 
-一个基于Flutter的生活服务应用。
+一个基于 Flutter 的现代化生活服务应用。
 
 ## 项目结构
 
 ```
 lib/
   ├── app/
-  │   ├── core/           # 核心功能
-  │   ├── modules/        # 功能模块
-  │   ├── services/       # 服务层
-  │   └── utils/          # 工具类
-  ├── config/             # 配置文件
-  ├── constants/          # 常量定义
-  └── main.dart           # 入口文件
+  │   ├── core/           # 核心功能（配置、依赖注入等）
+  │   ├── data/          # 数据层（模型、数据库等）
+  │   ├── services/      # 服务层（API、本地存储等）
+  │   └── presentation/  # 表现层（页面、控制器等）
+  └── main.dart          # 入口文件
 ```
 
 ## 功能特性
 
-- 健康管理
-- 生活记录
-- 社交互动
 - 智能助手
+  - 小艾：生活管家
+  - 老克：知识顾问
+  - 小克：商务助手
+- 聊天系统
+  - 文本消息
+  - 语音消息
+  - 图片消息
+- 数据存储
+  - SQLite 本地数据库
+  - 环境变量配置
 
 ## 开发环境
 
 - Flutter: 3.x
 - Dart: 3.x
 - GetX: 最新版
+- SQLite: 最新版
 
 ## 安装与运行
 
@@ -41,7 +47,13 @@ git clone https://github.com/SUOKE2024/suoke_life.git
 flutter pub get
 ```
 
-3. 运行项目:
+3. 配置环境变量:
+```bash
+cp .env.example .env
+# 编辑 .env 文件，填入必要的配置
+```
+
+4. 运行项目:
 ```bash
 flutter run
 ```

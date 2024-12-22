@@ -1,49 +1,63 @@
 import 'package:get/get.dart';
-import '../../data/models/health_record.dart';
-import '../../data/models/life_record.dart';
-import '../../services/life_service.dart';
+import '../../data/models/chat_conversation.dart';
+import '../../services/chat_service.dart';
+import '../../routes/app_pages.dart';
 
 class HomeController extends GetxController {
-  final LifeService _lifeService = Get.find();
-  
-  final currentIndex = 0.obs;
-  final healthData = Rx<HealthRecord?>(null);
-  final lifeRecords = <LifeRecord>[].obs;
+  final ChatService _chatService = Get.find();
+  final conversations = <ChatConversation>[].obs;
 
   @override
   void onInit() {
     super.onInit();
-    loadData();
+    ever(conversations, (_) => print('Conversations updated: ${conversations.length}'));
+    _loadConversations();
   }
 
-  Future<void> loadData() async {
+  Future<void> _loadConversations() async {
     try {
-      final records = await _lifeService.getLifeRecords();
-      lifeRecords.value = records;
-      
-      // TODO: 加载健康数据
+      final list = await _chatService.getConversations();
+      print('Loaded conversations: ${list.length}');
+      conversations.assignAll(list);
     } catch (e) {
-      Get.snackbar('错误', '加载数据失败');
+      print('Error loading conversations: $e');
     }
   }
 
-  void changePage(int index) {
-    currentIndex.value = index;
-    switch (index) {
-      case 0: // 首页
-        break;
-      case 1: // SUOKE
-        Get.toNamed('/suoke');
-        break;
-      case 2: // 探索
-        Get.toNamed('/explore');
-        break;
-      case 3: // LIFE
-        Get.toNamed('/life');
-        break;
-      case 4: // 我的
-        Get.toNamed('/profile');
-        break;
-    }
+  void openChat(ChatConversation conversation) {
+    Get.toNamed(
+      Routes.CHAT_DETAIL,
+      arguments: conversation,
+    );
+  }
+
+  // 快捷操作方法
+  void addFriend() {
+    Get.toNamed('/contacts/add');
+  }
+
+  void createGroup() {
+    Get.toNamed('/chat/create_group');
+  }
+
+  void bookConsultation() {
+    Get.toNamed('/consultation/book');
+  }
+
+  void scanQRCode() {
+    Get.toNamed('/scan');
+  }
+
+  void showPayment() {
+    Get.toNamed('/payment');
+  }
+
+  // 注册相关方法
+  void registerMember() {
+    Get.toNamed('/register/member');
+  }
+
+  void registerExpert() {
+    Get.toNamed('/register/expert');
   }
 } 

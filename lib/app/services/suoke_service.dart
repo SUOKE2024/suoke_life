@@ -10,13 +10,12 @@ class SuokeService extends GetxService {
   final _agriClient = http.Client();
   final Map<String, http.Client> _thirdPartyClients = {};
 
-  @override
-  void onInit() {
-    super.onInit();
+  Future<SuokeService> init() async {
     // 初始化第三方 API 客户端
     for (final api in SuokeConfig.thirdPartyApis.keys) {
       _thirdPartyClients[api] = http.Client();
     }
+    return this;
   }
 
   // 健康问卷服务
@@ -32,34 +31,31 @@ class SuokeService extends GetxService {
       );
 
       if (response.statusCode == 200) {
-        return HealthSurvey.fromJson(jsonDecode(response.body));
+        return HealthSurvey.fromMap(jsonDecode(response.body));
       } else {
-        throw Exception('Failed to submit survey: ${response.statusCode}');
+        throw Exception('Failed to submit health survey: ${response.statusCode}');
       }
     } catch (e) {
       rethrow;
     }
   }
 
-  // 体质检测服务
-  Future<TCMConstitution> checkTCMConstitution(Map<String, dynamic> data) async {
+  // 中医体质辨识
+  Future<TcmConstitution> analyzeTcmConstitution(Map<String, dynamic> data) async {
     try {
-      final client = _thirdPartyClients['tcm_diagnosis'];
-      final apiConfig = SuokeConfig.thirdPartyApis['tcm_diagnosis']!;
-
-      final response = await client!.post(
-        Uri.parse('${apiConfig['url']}/constitution/check'),
+      final response = await _healthClient.post(
+        Uri.parse('${SuokeConfig.healthApiUrl}/tcm/analysis'),
         headers: {
           'Content-Type': 'application/json',
-          'X-API-Key': apiConfig['key'],
+          'X-API-Key': SuokeConfig.healthApiKey,
         },
         body: jsonEncode(data),
       );
 
       if (response.statusCode == 200) {
-        return TCMConstitution.fromJson(jsonDecode(response.body));
+        return TcmConstitution.fromMap(jsonDecode(response.body));
       } else {
-        throw Exception('Failed to check constitution: ${response.statusCode}');
+        throw Exception('Failed to analyze TCM constitution: ${response.statusCode}');
       }
     } catch (e) {
       rethrow;
@@ -90,12 +86,15 @@ class SuokeService extends GetxService {
   Future<Map<String, dynamic>> getHealthAdvice(String userId) async {
     try {
       final client = _thirdPartyClients['ali_health'];
-      final apiConfig = SuokeConfig.thirdPartyApis['ali_health']!;
+      final apiConfig = SuokeConfig.thirdPartyApis['ali_health'];
+      if (client == null || apiConfig == null) {
+        throw Exception('Ali health API not configured');
+      }
 
-      final response = await client!.get(
-        Uri.parse('${apiConfig['url']}/advice/$userId'),
+      final response = await client.get(
+        Uri.parse('${apiConfig['url'] ?? ''}/advice/$userId'),
         headers: {
-          'X-API-Key': apiConfig['key'],
+          'X-API-Key': apiConfig['key'] ?? '',
         },
       );
 
