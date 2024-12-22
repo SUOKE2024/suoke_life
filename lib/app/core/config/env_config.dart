@@ -13,44 +13,20 @@ class EnvConfig extends GetxService {
     await dotenv.load(fileName: ".env");
     
     // 初始化配置
-    environment = dotenv.env['ENVIRONMENT'] ?? 'development';
-    apiKey = dotenv.env['API_KEY'] ?? '';
-    baseUrl = dotenv.env['BASE_URL'] ?? 'https://api.doubao.com';
+    environment = dotenv.env['ENV'] ?? 'development';
+    apiKey = dotenv.env['DOUBAO_API_KEY'] ?? '';
+    baseUrl = dotenv.env['DOUBAO_API_URL'] ?? 'https://ark.cn-beijing.volces.com/api/v3';
     
     print('EnvConfig initialized: $environment');
     return this;
   }
 
-  // 获取环境变量的方法
-  String getString(String key) {
-    return dotenv.env[key] ?? '';
-  }
-
-  int? getInt(String key) {
-    final value = dotenv.env[key];
-    return value != null ? int.tryParse(value) : null;
-  }
-
-  double? getDouble(String key) {
-    final value = dotenv.env[key];
-    return value != null ? double.tryParse(value) : null;
-  }
-
-  bool getBool(String key) {
-    final value = dotenv.env[key];
-    return value?.toLowerCase() == 'true';
-  }
-
-  // 环境判断
-  bool get isDevelopment => environment == 'development';
-  bool get isProduction => environment == 'production';
-  bool get isStaging => environment == 'staging';
-
-  // 常用配置获取
-  String get doubaoApiKey => getString('DOUBAO_API_KEY');
-  String get doubaoApiUrl => getString('DOUBAO_API_URL');
-  String get doubaoPro32kEp => getString('DOUBAO_PRO_32K_EP');
-  String get doubaoPro128kEp => getString('DOUBAO_PRO_128K_EP');
-  String get doubaoEmbeddingKey => getString('DOUBAO_EMBEDDING_KEY');
-  String get doubaoAccessToken => getString('DOUBAO_ACCESS_TOKEN');
+  // API 相关配置
+  String get doubaoApiKey => dotenv.env['DOUBAO_API_KEY'] ?? '';
+  String get doubaoApiUrl => dotenv.env['DOUBAO_API_URL'] ?? '';
+  
+  // 模型配置
+  String get doubaoPro32kEp => dotenv.env['DOUBAO_PRO_32K_EP'] ?? '';
+  String get doubaoPro128kEp => dotenv.env['DOUBAO_PRO_128K_EP'] ?? '';
+  String get doubaoEmbeddingEp => dotenv.env['DOUBAO_EMBEDDING_EP'] ?? '';
 } 

@@ -5,6 +5,8 @@ import '../presentation/bindings/home_binding.dart';
 import '../presentation/bindings/chat_binding.dart';
 import '../presentation/pages/ai/ai_chat_page.dart';
 import '../presentation/bindings/ai_chat_binding.dart';
+import '../presentation/pages/ai/assistant_select_page.dart';
+import '../presentation/pages/ai/assistant_chat_page.dart';
 
 part 'app_routes.dart';
 
@@ -26,6 +28,16 @@ class AppPages {
       name: Routes.CHAT_DETAIL,
       page: () => const ChatDetailPage(),
       binding: ChatBinding(),
+    ),
+    GetPage(
+      name: '/assistants',
+      page: () => const AssistantSelectPage(),
+    ),
+    GetPage(
+      name: '/chat/detail',
+      page: () => AssistantChatPage(
+        conversation: Get.arguments as ChatConversation,
+      ),
     ),
   ];
 } 

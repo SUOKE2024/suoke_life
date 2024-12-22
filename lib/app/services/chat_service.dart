@@ -8,6 +8,8 @@ import 'doubao_service.dart';
 class ChatService extends GetxService {
   final DatabaseHelper _db = DatabaseHelper();
   final DouBaoService _douBaoService = Get.find();
+  final conversations = <ChatConversation>[].obs;
+  final messages = <ChatMessage>[].obs;
 
   ChatService() {
     print('ChatService initialized');
@@ -24,32 +26,38 @@ class ChatService extends GetxService {
     return List.generate(maps.length, (i) => ChatMessage.fromJson(maps[i]));
   }
 
-  Future<ChatMessage> sendMessage({
-    required int conversationId,
-    required String content,
-    required String senderId,
-    required String senderAvatar,
-    required String messageType,
-  }) async {
-    final db = await _db.database;
-    final message = ChatMessage(
-      id: DateTime.now().toString(),
-      conversationId: conversationId,
-      content: content,
-      type: messageType,
-      senderId: senderId,
-      senderAvatar: senderAvatar,
-      createdAt: DateTime.now(),
-      isRead: true,
-    );
+  Future<String> sendMessage(String message, String assistantType) async {
+    try {
+      final response = await _douBaoService.chatWithAssistant(message, assistantType);
+      
+      final newMessage = ChatMessage(
+        id: DateTime.now().toString(),
+        conversationId: 1,
+        content: message,
+        type: ChatMessage.typeText,
+        senderId: ChatMessage.senderUser,
+        senderAvatar: 'assets/images/default_avatar.png',
+        createdAt: DateTime.now(),
+        isRead: true,
+      );
+      
+      await _saveMessage(newMessage);
+      messages.add(newMessage);
+      
+      return response;
+    } catch (e) {
+      print('Error in ChatService.sendMessage: $e');
+      return '发送失败';
+    }
+  }
 
+  Future<void> _saveMessage(ChatMessage message) async {
+    final db = await _db.database;
     await db.insert(
       'messages',
       message.toJson(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-
-    return message;
   }
 
   Future<String> getAiResponse(String message, String model) async {

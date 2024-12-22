@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../data/models/chat_message.dart';
 import '../../data/models/chat_conversation.dart';
 import '../../services/chat_service.dart';
+import '../../core/config/assistant_config.dart';
 
 class ChatDetailController extends GetxController {
   final ChatService _chatService = Get.find();
@@ -14,7 +15,14 @@ class ChatDetailController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    conversation = Get.arguments as ChatConversation;
+    conversation = Get.arguments as ChatConversation? ?? ChatConversation(
+      id: 1,
+      title: '测试会话',
+      model: 'xiaoai',
+      avatar: AssistantConfig.xiaoai['avatar']!,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+    );
     _loadMessages();
   }
 
@@ -31,28 +39,35 @@ class ChatDetailController extends GetxController {
     try {
       isTyping.value = true;
 
-      // 发送用户消息
-      final userMessage = await _chatService.sendMessage(
+      // 添加用户消息
+      final userMessage = ChatMessage(
+        id: DateTime.now().toString(),
         conversationId: conversation.id,
         content: content,
+        type: ChatMessage.typeText,
         senderId: ChatMessage.senderUser,
-        senderAvatar: 'https://via.placeholder.com/100',
-        messageType: ChatMessage.typeText,
+        senderAvatar: 'assets/images/default_avatar.png',
+        createdAt: DateTime.now(),
+        isRead: true,
       );
-      messages.insert(0, userMessage);
+      messages.add(userMessage);
 
       // 获取AI回复
-      final response = await _chatService.getAiResponse(content, conversation.model);
-
+      final response = await _chatService.sendMessage(content, conversation.model);
+      
       // 添加AI回复
-      final aiMessage = await _chatService.sendMessage(
+      final aiMessage = ChatMessage(
+        id: DateTime.now().toString(),
         conversationId: conversation.id,
         content: response,
+        type: ChatMessage.typeText,
         senderId: ChatMessage.senderAi,
         senderAvatar: conversation.avatar,
-        messageType: ChatMessage.typeText,
+        createdAt: DateTime.now(),
+        isRead: true,
       );
-      messages.insert(0, aiMessage);
+      
+      messages.add(aiMessage);
     } catch (e) {
       print('Error sending message: $e');
     } finally {

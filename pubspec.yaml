@@ -57,19 +57,23 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  integration_test:
+    sdk: flutter
+  mockito: ^5.4.2
   flutter_lints: ^2.0.1
   build_runner: ^2.4.4
   json_serializable: ^6.7.0
   flutter_gen_runner: ^5.3.1
   flutter_native_splash: ^2.3.1
   flutter_launcher_icons: ^0.13.1
+  sqflite_common_ffi: ^2.3.2
 
 flutter:
   uses-material-design: true
   assets:
-    - assets/images/
-    - assets/icons/
-    - assets/animations/
+    - assets/images/default_avatar.png
     - assets/images/xiaoai_avatar.png
     - assets/images/laoke_avatar.png
     - assets/images/xiaoke_avatar.png
+    - assets/icons/
+    - assets/animations/

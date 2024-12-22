@@ -6,8 +6,12 @@ import '../../services/ai_service.dart';
 import '../../services/voice_service.dart';
 import '../../core/config/doubao_config.dart';
 import '../../data/database/database_helper.dart';
+import '../../services/chat_service.dart';
+import '../../services/doubao_service.dart';
 
 class AiChatController extends GetxController {
+  final ChatService _chatService = Get.find<ChatService>();
+  final DouBaoService _douBaoService = Get.find<DouBaoService>();
   final AiService _aiService = Get.find();
   final VoiceService _voiceService = Get.find();
   

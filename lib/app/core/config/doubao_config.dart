@@ -1,28 +1,22 @@
 class DouBaoConfig {
-  static const String baseUrl = 'https://api.doubao.com';
-  static const String apiKey = 'your_api_key_here';
-  
-  // 模型配置
+  static const String baseUrl = 'https://ark.cn-beijing.volces.com/api/v3';
+  static const String defaultModel = 'xiaoai';
+
   static const Map<String, String> models = {
-    'xiaoai': '小艾',
-    'laoke': '老克', 
-    'xiaoke': '小克',
-  };
-  
-  // 助手类型配置
-  static const Map<String, String> assistants = {
-    'xiaoai': 'assistant-xiaoai-v1',
-    'laoke': 'assistant-laoke-v1',
-    'xiaoke': 'assistant-xiaoke-v1',
+    'xiaoai': '小艾 (128K)',
+    'laoke': '老克 (Embedding)',
+    'xiaoke': '小克 (32K)',
   };
 
-  // 系统提示语配置
   static const Map<String, String> systemPrompts = {
-    'xiaoai': '你是一个生活管家，帮助用户解决日常生活问题。',
-    'laoke': '你是一个知识顾问，帮助用户解答学习和工作中的问题。',
-    'xiaoke': '你是一个商务助手，帮助用户处理商务相关事务。',
+    'xiaoai': '你是小艾，一个生活管家助手。',
+    'laoke': '你是老克，一个知识顾问助手。',
+    'xiaoke': '你是小克，一个商务助手。',
   };
-  
-  // 默认模型
-  static const String defaultModel = 'xiaoai';
+
+  static const Map<String, String> modelEndpoints = {
+    'xiaoai': 'ep-20241212093835-bl92q',  // 128K
+    'laoke': 'ep-20241207124339-rh46z',   // Embedding
+    'xiaoke': 'ep-20241024122905-r8xsl',  // 32K
+  };
 } 

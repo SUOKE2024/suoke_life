@@ -1,130 +1,63 @@
 import 'package:dio/dio.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:get/get.dart';
 import '../core/config/doubao_config.dart';
 import '../core/config/env_config.dart';
-import 'package:get/get.dart';
+import '../core/config/assistant_config.dart';
 
 class DouBaoService extends GetxService {
-  final _dio = Dio(BaseOptions(
-    baseUrl: DouBaoConfig.baseUrl,
-    headers: {
-      'Authorization': 'Bearer ${DouBaoConfig.apiKey}',
-      'Content-Type': 'application/json',
-    },
-  ));
+  final _dio = Dio();
+  final isTest = false.obs;
 
-  // 不需要异步初始化
   DouBaoService() {
-    print('DouBaoService initialized');
+    _dio.options.baseUrl = DouBaoConfig.apiUrl;
+    _dio.options.headers = {
+      'Authorization': 'Bearer ${DouBaoConfig.apiKey}',
+    };
   }
 
-  Future<String> chat(String message, String assistantType) async {
+  Future<String> chatWithAssistant(String message, String assistantType) async {
+    if (isTest.value) {
+      return '这是一个测试回复';
+    }
+
     try {
+      // 获取助手配置
+      final config = _getAssistantConfig(assistantType);
+      
       final response = await _dio.post(
         '/chat/completions',
         data: {
-          'model': DouBaoConfig.assistants[assistantType],
+          'model': config['model'],
           'messages': [
             {
               'role': 'system',
-              'content': DouBaoConfig.systemPrompts[assistantType],
+              'content': config['prompt'],
             },
             {
               'role': 'user',
               'content': message,
-            },
+            }
           ],
         },
       );
-
+      
       return response.data['choices'][0]['message']['content'];
     } catch (e) {
-      print('Error calling DouBao API: $e');
-      rethrow;
+      print('Error calling API: $e');
+      return '抱歉，我现在无法回答，请稍后再试';
     }
   }
 
-  Future<List<double>> getEmbeddings(String text) async {
-    try {
-      final response = await _dio.post(
-        '/embeddings',
-        data: {
-          'model': DouBaoConfig.assistants['laoke'],
-          'input': [text],
-        },
-      );
-
-      return List<double>.from(response.data['data'][0]['embedding']);
-    } catch (e) {
-      print('Error getting embeddings: $e');
-      rethrow;
-    }
-  }
-
-  Future<String> sendMessage(String message, String model) async {
-    try {
-      String endpoint;
-      Map<String, dynamic> data;
-      
-      switch (model) {
-        case 'xiaoai':
-          endpoint = '/chat/completions';
-          data = {
-            'model': EnvConfig.to.doubaoPro32kEp,
-            'messages': [
-              {
-                'role': 'system',
-                'content': DouBaoConfig.systemPrompts[model],
-              },
-              {
-                'role': 'user',
-                'content': message,
-              },
-            ],
-          };
-          break;
-        case 'laoke':
-          endpoint = '/chat/completions';
-          data = {
-            'model': EnvConfig.to.doubaoPro128kEp,
-            'messages': [
-              {
-                'role': 'system',
-                'content': DouBaoConfig.systemPrompts[model],
-              },
-              {
-                'role': 'user',
-                'content': message,
-              },
-            ],
-          };
-          break;
-        case 'xiaoke':
-          endpoint = '/embeddings';
-          data = {
-            'model': EnvConfig.to.doubaoEmbeddingKey,
-            'input': [message],
-          };
-          break;
-        default:
-          throw Exception('Unknown model: $model');
-      }
-
-      final response = await _dio.post(endpoint, data: data);
-      
-      if (model == 'xiaoke') {
-        // 处理 embeddings 响应
-        final embeddings = List<double>.from(response.data['data'][0]['embedding']);
-        // TODO: 使用 embeddings 进行相似度搜索等操作
-        return '这是小克的回复...';
-      } else {
-        // 处理普通聊天响应
-        return response.data['choices'][0]['message']['content'];
-      }
-    } catch (e) {
-      print('Error calling DouBao API: $e');
-      rethrow;
+  Map<String, String> _getAssistantConfig(String assistantType) {
+    switch (assistantType) {
+      case 'xiaoai':
+        return AssistantConfig.xiaoai;
+      case 'laoke':
+        return AssistantConfig.laoke;
+      case 'xiaoke':
+        return AssistantConfig.xiaoke;
+      default:
+        return AssistantConfig.xiaoai;
     }
   }
 } 

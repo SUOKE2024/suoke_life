@@ -15,72 +15,50 @@ class ChatMessageItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isMe = message.senderId == 'current_user';
+    final isFromUser = message.isFromUser;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (!isMe) ...[
-            GestureDetector(
-              onTap: onTapAvatar,
-              child: CircleAvatar(
-                backgroundImage: NetworkImage(message.senderAvatar),
-                radius: 20,
+    return GestureDetector(
+      onLongPress: onLongPress,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Row(
+          mainAxisAlignment:
+              isFromUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (!isFromUser) ...[
+              GestureDetector(
+                onTap: onTapAvatar,
+                child: CircleAvatar(
+                  backgroundImage: NetworkImage(message.senderAvatar),
+                  radius: 20,
+                ),
               ),
-            ),
-            const SizedBox(width: 8),
-          ],
-          Flexible(
-            child: GestureDetector(
-              onLongPress: onLongPress,
+              const SizedBox(width: 8),
+            ],
+            Flexible(
               child: Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: isMe ? Colors.blue[100] : Colors.grey[200],
+                  color: isFromUser ? Colors.blue[100] : Colors.grey[200],
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: _buildMessageContent(),
+                child: Text(message.content),
               ),
             ),
-          ),
-          if (isMe) ...[
-            const SizedBox(width: 8),
-            GestureDetector(
-              onTap: onTapAvatar,
-              child: CircleAvatar(
-                backgroundImage: NetworkImage(message.senderAvatar),
-                radius: 20,
+            if (isFromUser) ...[
+              const SizedBox(width: 8),
+              GestureDetector(
+                onTap: onTapAvatar,
+                child: CircleAvatar(
+                  backgroundImage: NetworkImage(message.senderAvatar),
+                  radius: 20,
+                ),
               ),
-            ),
+            ],
           ],
-        ],
+        ),
       ),
     );
-  }
-
-  Widget _buildMessageContent() {
-    switch (message.type) {
-      case 'text':
-        return Text(message.content);
-      case 'image':
-        return Image.network(message.content);
-      case 'voice':
-        return Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.play_arrow,
-              color: Colors.grey[600],
-            ),
-            const SizedBox(width: 4),
-            Text('${message.duration}″'),
-          ],
-        );
-      default:
-        return const Text('不支持的消息类型');
-    }
   }
 } 

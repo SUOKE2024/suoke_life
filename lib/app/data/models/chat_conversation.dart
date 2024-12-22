@@ -2,21 +2,33 @@ import 'package:json_annotation/json_annotation.dart';
 import '../../core/config/doubao_config.dart';
 
 class ChatConversation {
-  final int id;
-  final String title;
-  final String model;
-  final String avatar;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  int id;
+  String title;
+  String model;
+  String avatar;
+  String type;
+  int unreadCount;
+  DateTime lastMessageAt;
+  DateTime createdAt;
+  DateTime updatedAt;
 
   ChatConversation({
     required this.id,
     required this.title,
     required this.model,
     required this.avatar,
+    this.type = 'ai',
+    this.unreadCount = 0,
+    DateTime? lastMessageAt,
     required this.createdAt,
     required this.updatedAt,
-  });
+  }) : this.lastMessageAt = lastMessageAt ?? DateTime.now();
+
+  set setModel(String value) => model = value;
+  set setTitle(String value) => title = value;
+  set setAvatar(String value) => avatar = value;
+  set setUnreadCount(int value) => unreadCount = value;
+  set setLastMessageAt(DateTime value) => lastMessageAt = value;
 
   factory ChatConversation.fromJson(Map<String, dynamic> json) {
     return ChatConversation(
