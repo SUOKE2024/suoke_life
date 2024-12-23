@@ -1,25 +1,44 @@
-/// 应用颜色
-abstract class AppColors {
-  // 主色调
-  static const primary = Color(0xFF2196F3);
-  static const primaryDark = Color(0xFF1976D2);
-  static const secondary = Color(0xFF4CAF50);
-  static const accent = Color(0xFFFFC107);
-  
-  // 背景色
-  static const background = Color(0xFFF5F5F5);
-  static const backgroundDark = Color(0xFF121212);
-  static const surface = Colors.white;
-  static const surfaceDark = Color(0xFF1E1E1E);
-  
-  // 文本色
-  static const onPrimary = Colors.white;
-  static const onBackground = Colors.black;
-  static const onBackgroundDark = Colors.white;
-  
-  // 状态色
-  static const error = Color(0xFFD32F2F);
-  static const warning = Color(0xFFFFA000);
-  static const success = Color(0xFF388E3C);
-  static const info = Color(0xFF1976D2);
+import 'package:flutter/material.dart';
+
+class AppColors {
+  // 主题色
+  static const Color primary = Color(0xFF2196F3);
+  static const Color primaryDark = Color(0xFF1976D2);
+  static const Color primaryLight = Color(0xFFBBDEFB);
+  static const Color accent = Color(0xFFFF4081);
+
+  // 文本颜色
+  static const Color textPrimary = Color(0xFF212121);
+  static const Color textSecondary = Color(0xFF757575);
+  static const Color textHint = Color(0xFFBDBDBD);
+
+  // 背景颜色
+  static const Color background = Color(0xFFFFFFFF);
+  static const Color surface = Color(0xFFFFFFFF);
+  static const Color error = Color(0xFFD32F2F);
+
+  // 聊天气泡颜色
+  static const Color userBubble = primary;
+  static const Color assistantBubble = Color(0xFFEEEEEE);
+  static const Color userText = Colors.white;
+  static const Color assistantText = textPrimary;
+
+  // 分割线颜色
+  static const Color divider = Color(0xFFE0E0E0);
+
+  // 图标颜色
+  static const Color icon = Color(0xFF757575);
+  static const Color iconActive = primary;
+
+  // 状态颜色
+  static const Color success = Color(0xFF4CAF50);
+  static const Color warning = Color(0xFFFFC107);
+  static const Color info = Color(0xFF2196F3);
+
+  // 渐变色
+  static const LinearGradient primaryGradient = LinearGradient(
+    colors: [primary, primaryDark],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
 } 

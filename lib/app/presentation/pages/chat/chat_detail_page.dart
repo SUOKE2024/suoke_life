@@ -10,15 +10,23 @@ class ChatDetailPage extends GetView<ChatDetailController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(controller.conversation.title)),
+      appBar: AppBar(
+        title: Text(controller.conversation.title),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: controller.showSettings,
+          ),
+        ],
+      ),
       body: Column(
         children: [
           Expanded(
-            child: ChatMessageList(
+            child: Obx(() => ChatMessageList(
               messages: controller.messages,
+              onLongPress: controller.onLongPressMessage,
               onTapAvatar: controller.onTapAvatar,
-              onLongPressMessage: controller.onLongPressMessage,
-            ),
+            )),
           ),
           ChatInputBar(
             onSendText: controller.sendMessage,

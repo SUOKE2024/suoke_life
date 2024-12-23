@@ -7,6 +7,7 @@ import '../presentation/pages/ai/ai_chat_page.dart';
 import '../presentation/bindings/ai_chat_binding.dart';
 import '../presentation/pages/ai/assistant_select_page.dart';
 import '../presentation/pages/ai/assistant_chat_page.dart';
+import '../data/models/chat_conversation.dart';
 
 part 'app_routes.dart';
 

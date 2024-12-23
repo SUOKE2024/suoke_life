@@ -1,76 +1,130 @@
-# 索克生活 (SuoKe Life)
+# SuoKe Life App
 
-一个基于 Flutter 的现代化生活服务应用。
+一个基于 Flutter + GetX 开发的智能生活助手应用，集成多个专业AI助手。
 
-## 项目结构
+## 特色功能
 
-```
-lib/
-  ├── app/
-  │   ├── core/           # 核心功能（配置、依赖注入等）
-  │   ├── data/          # 数据层（模型、数据库等）
-  │   ├── services/      # 服务层（API、本地存储等）
-  │   └── presentation/  # 表现层（页面、控制器等）
-  └── main.dart          # 入口文件
-```
+### 智能助手团队
 
-## 功能特性
+1. 小艾 - 生活助理
+- 用户互动与数据分析专家
+- 基于 doubao-pro-128k + embedding 模型
+- 主要功能：
+  * 生活建议和解决方案
+  * 多维数据采集和分析
+  * 实时行为分析和场景识别
+  * LIFE频道数据管理
+- 第三方集成：
+  * 天气服务 (OpenWeather)
+  * 日历管理 (Google Calendar)
+  * 健康数据 (Apple HealthKit)
 
-- 智能助手
-  - 小艾：生活管家
-  - 老克：知识顾问
-  - 小克：商务助手
-- 聊天系统
-  - 文本消息
-  - 语音消息
-  - 图片消息
-- 数据存储
-  - SQLite 本地数据库
-  - 环境变量配置
+2. 老克 - 知识助理
+- 技术架构与知识服务专家
+- 基于 doubao-pro-128k + embedding 模型
+- 主要功能：
+  * 技术架构咨询
+  * 专业知识库管理
+  * 算法优化和模型管理
+  * 技术问题解答
+- 知识管理：
+  * 技术文档 (Git)
+  * 研究论文 (Document DB)
+  * 代码示例 (Code Repo)
+  * 数据集管理
+
+3. 小克 - 商务助理
+- 商业决策与市场分析专家
+- 基于 doubao-pro-32k 模型
+- 主要功能：
+  * 市场趋势分析
+  * 供应链管理
+  * 商业决策支持
+  * 商业推广策略
+- 农业特色：
+  * 农产品预制管理
+  * 农事活动安排
+  * 产品上架服务
+
+### 协作场景
+
+1. 产品开发流程
+- 商务主导
+- 用户需求分析 → 技术方案设计 → 商业可行性评估
+
+2. 技术咨询流程
+- 技术主导
+- 技术问题诊断 → 用户场景分析 → 解决方案成本评估
+
+3. 用户服务流程
+- 服务主导
+- 需求识别分类 → 专业知识支持 → 增值服务推荐
+
+4. 农产品上市流程
+- 商务主导
+- 消费者需求分析 → 农业技术指导 → 供应链规划 → 用户反馈收集 → 市场投放策略
+
+5. 知识库更新流程
+- 技术主导
+- 知识更新审核 → 用户理解度评估 → 商业价值评估 → 知识整合发布
+
+## 技术特点
+
+1. 架构设计
+- 基于 GetX 的状态管理
+- MVVM 架构模式
+- 模块化服务设计
+
+2. 数据存储
+- SQLite 本地数据库
+- SharedPreferences 配置存储
+- 数据加密保护
+
+3. 网络通信
+- RESTful API 封装
+- WebSocket 实时通信
+- 错误处理机制
+
+4. AI 集成
+- 豆包 API 集成
+- 多模型协同
+- 场景化调度
 
 ## 开发环境
 
-- Flutter: 3.x
-- Dart: 3.x
-- GetX: 最新版
-- SQLite: 最新版
+- Flutter: 3.0.0+
+- Dart: 3.0.0+
+- GetX: 4.6.5+
+- 豆包 API: v3
 
-## 安装与运行
+## 安装和运行
 
-1. 克隆项目:
+1. 克隆项目
 ```bash
 git clone https://github.com/SUOKE2024/suoke_life.git
 ```
 
-2. 安装依赖:
+2. 安装依赖
 ```bash
 flutter pub get
 ```
 
-3. 配置环境变量:
-```bash
-cp .env.example .env
-# 编辑 .env 文件，填入必要的配置
-```
-
-4. 运行项目:
+3. 运行项目
 ```bash
 flutter run
 ```
 
+## 测试
+
+运行测试用例：
+```bash
+flutter test
+```
+
 ## 贡献指南
 
-1. Fork 项目
-2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 打开 Pull Request
+欢迎提交 Issue 和 Pull Request。
 
 ## 许可证
 
-本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情
-
-## 联系我们
-
-- 项目负责人: [Your Name]
-- 邮箱: [Your Email]
+MIT License

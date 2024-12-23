@@ -1,3 +1,9 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../../../data/models/chat_conversation.dart';
+import '../../../core/config/assistant_config.dart';
+import './assistant_chat_page.dart';
+
 class AssistantSelectPage extends StatelessWidget {
   const AssistantSelectPage({Key? key}) : super(key: key);
 

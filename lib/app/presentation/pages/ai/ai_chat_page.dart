@@ -11,22 +11,30 @@ class AiChatPage extends GetView<AiChatController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(),
+      appBar: AppBar(
+        title: const Text('AI助手'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: controller.showSettings,
+          ),
+        ],
+      ),
       body: Column(
         children: [
           Expanded(
             child: Obx(() => ChatMessageList(
               messages: controller.messages,
+              onLongPress: controller.onLongPressMessage,
               onTapAvatar: controller.onTapAvatar,
-              onLongPressMessage: controller.onLongPressMessage,
             )),
           ),
           ChatInputBar(
-            onSendText: controller.sendTextMessage,
-            onVoiceStart: controller.startVoiceRecord,
-            onVoiceEnd: controller.stopVoiceRecord,
-            onVoiceCancel: controller.cancelVoiceRecord,
-            onTapExtra: () => _showExtraActions(context),
+            onSendText: controller.sendMessage,
+            onVoiceStart: controller.startVoiceInput,
+            onVoiceEnd: controller.stopVoiceInput,
+            onVoiceCancel: controller.cancelVoiceInput,
+            onTapExtra: controller.showExtraOptions,
           ),
         ],
       ),
