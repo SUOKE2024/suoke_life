@@ -1,0 +1,2 @@
+rm lib/app/controllers/home_controller.dart
+rm lib/app/presentation/pages/ai/assistant_chat_list_page.dart 

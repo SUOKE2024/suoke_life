@@ -1,68 +1,23 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  // Light Theme
   static final ThemeData light = ThemeData(
-    useMaterial3: true,
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: Colors.blue,
-      brightness: Brightness.light,
-    ),
+    primaryColor: AppColors.primary,
+    scaffoldBackgroundColor: AppColors.background,
     appBarTheme: const AppBarTheme(
-      centerTitle: true,
+      backgroundColor: Colors.white,
       elevation: 0,
-      scrolledUnderElevation: 2,
-    ),
-    cardTheme: CardTheme(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      clipBehavior: Clip.antiAlias,
-    ),
-    inputDecorationTheme: InputDecorationTheme(
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 12,
-      ),
-      filled: true,
-    ),
-    chipTheme: ChipThemeData(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 12,
-        vertical: 4,
-      ),
-    ),
-    navigationBarTheme: NavigationBarThemeData(
-      elevation: 4,
-      labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-      height: 72,
-      indicatorShape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+      centerTitle: true,
+      iconTheme: IconThemeData(color: AppColors.primary),
+      titleTextStyle: TextStyle(
+        color: AppColors.text,
+        fontSize: 18,
+        fontWeight: FontWeight.w500,
       ),
     ),
   );
 
-  // Dark Theme  
-  static final ThemeData dark = ThemeData(
-    useMaterial3: true,
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: Colors.blue,
-      brightness: Brightness.dark,
-    ),
-    // 继承 light 主题的其他配置
-    appBarTheme: light.appBarTheme,
-    cardTheme: light.cardTheme,
-    inputDecorationTheme: light.inputDecorationTheme.copyWith(
-      fillColor: Colors.grey[800],
-    ),
-    chipTheme: light.chipTheme,
-    navigationBarTheme: light.navigationBarTheme,
+  static final ThemeData dark = ThemeData.dark().copyWith(
+    primaryColor: AppColors.primaryDark,
   );
 } 

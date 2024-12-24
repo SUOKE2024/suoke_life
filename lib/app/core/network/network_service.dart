@@ -50,7 +50,7 @@ abstract class NetworkService extends BaseService {
     ProgressCallback? onProgress,
   });
 
-  /// 取消���求
+  /// 取消请求
   void cancelRequest([String? tag]);
 
   /// 添加拦截器
@@ -183,4 +183,23 @@ class MultipartFile {
       contentType: contentType,
     );
   }
+}
+
+class NetworkService extends GetxService {
+  late final Dio _dio;
+  
+  void init() {
+    _dio = Dio(BaseOptions(
+      baseUrl: AppConfig.baseUrl,
+      connectTimeout: const Duration(seconds: 30),
+    ));
+    
+    _dio.interceptors.addAll([
+      AuthInterceptor(),
+      LoggingInterceptor(),
+    ]);
+  }
+
+  Future<Response> get(String path) => _dio.get(path);
+  Future<Response> post(String path, dynamic data) => _dio.post(path, data: data);
 } 
