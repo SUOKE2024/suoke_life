@@ -9,29 +9,17 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  get: ^4.6.5
-  dio: ^5.0.0
+  get: ^4.6.6
+  dio: ^5.4.0
   shared_preferences: ^2.2.2
+  json_annotation: ^4.8.1
+  timeago: ^3.6.0
+  image_picker: ^1.0.7
+  path: ^1.8.3
+  http_parser: ^4.0.2
   cached_network_image: ^3.2.3
   flutter_svg: ^2.0.5
-  timeago: ^3.3.0
   intl: ^0.18.0
-  file_picker: ^5.3.0
-  path_provider: ^2.0.15
-  open_file: ^3.3.2
-  permission_handler: ^10.2.0
-  fl_chart: ^0.62.0
-  photo_view: ^0.14.0
-  video_player: ^2.6.1
-  chewie: ^1.5.0
-  record: ^4.4.4
-  agora_rtc_engine: ^6.1.0
-  flutter_local_notifications: ^14.1.0
-  package_info_plus: ^4.0.0
-  url_launcher: ^6.1.11
-  wechat_assets_picker: ^8.9.0-dev.1
-  wechat_camera_picker: ^4.2.0-dev.1
-  flutter_image_compress: ^2.0.3
   flutter_screenutil: ^5.8.4
   flutter_easyloading: ^3.0.5
   flutter_spinkit: ^5.2.0
@@ -45,14 +33,31 @@ dependencies:
   flutter_html: ^3.0.0-beta.2
   webview_flutter: ^4.2.0
   connectivity_plus: ^5.0.2
-  json_annotation: ^4.8.1
   sqflite: ^2.3.0
-  path: ^1.8.3
   encrypt: ^5.0.3
   crypto: ^3.0.3
   flutter_secure_storage: ^9.0.0
   logger: ^2.0.2+1
   flutter_dotenv: ^5.1.0
+  wechat_assets_picker: ^8.9.0-dev.1
+  wechat_camera_picker: ^4.2.0-dev.1
+  flutter_image_compress: ^2.0.3
+  video_player: ^2.6.1
+  record: ^4.4.4
+  agora_rtc_engine: ^6.1.0
+  flutter_local_notifications: ^14.1.0
+  package_info_plus: ^4.0.0
+  url_launcher: ^6.1.11
+  path_provider: ^2.0.15
+  open_file: ^3.3.2
+  permission_handler: ^11.0.1
+  fl_chart: ^0.62.0
+  photo_view: ^0.14.0
+  chewie: ^1.5.0
+  flutter_gen_runner: ^5.3.1
+  flutter_native_splash: ^2.3.1
+  flutter_launcher_icons: ^0.13.1
+  sqflite_common_ffi: ^2.3.2
 
 dev_dependencies:
   flutter_test:
@@ -60,9 +65,9 @@ dev_dependencies:
   integration_test:
     sdk: flutter
   mockito: ^5.4.2
-  flutter_lints: ^2.0.1
-  build_runner: ^2.4.4
-  json_serializable: ^6.7.0
+  flutter_lints: ^2.0.0
+  build_runner: ^2.4.8
+  json_serializable: ^6.7.1
   flutter_gen_runner: ^5.3.1
   flutter_native_splash: ^2.3.1
   flutter_launcher_icons: ^0.13.1
