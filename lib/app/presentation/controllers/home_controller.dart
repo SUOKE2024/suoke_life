@@ -1,37 +1,33 @@
 import 'package:get/get.dart';
-import '../../data/models/chat_conversation.dart';
-import '../../services/chat_service.dart';
 
 class HomeController extends GetxController {
-  final ChatService _chatService = Get.find();
-  final conversations = <ChatConversation>[].obs;
+  final title = 'Home'.obs;
+  final isLoading = false.obs;
+  final messages = <String>[].obs;
+  final currentIndex = 0.obs;
 
   @override
   void onInit() {
     super.onInit();
-    loadConversations();
+    loadMessages();
   }
 
-  Future<void> loadConversations() async {
+  Future<void> loadMessages() async {
+    isLoading.value = true;
     try {
-      final list = await _chatService.getConversations();
-      conversations.assignAll(list);
-    } catch (e) {
-      print('Error loading conversations: $e');
+      // TODO: 加载消息列表
+      messages.value = ['Message 1', 'Message 2', 'Message 3'];
+    } finally {
+      isLoading.value = false;
     }
   }
 
-  void openChat(ChatConversation chat) {
-    Get.toNamed('/chat', arguments: chat);
+  void sendMessage(String message) {
+    if (message.trim().isEmpty) return;
+    messages.add(message);
   }
 
-  Future<void> createNewChat() async {
-    final conversation = await _chatService.createConversation(
-      title: '新对话',
-      model: 'xiaoai',
-      avatar: 'assets/images/xiaoai_avatar.png',
-    );
-    conversations.insert(0, conversation);
-    openChat(conversation);
+  void changeTab(int index) {
+    currentIndex.value = index;
   }
 } 

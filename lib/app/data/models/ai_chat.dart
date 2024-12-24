@@ -1,40 +1,27 @@
-import 'package:json_annotation/json_annotation.dart';
-
-part 'ai_chat.g.dart';
-
-@JsonSerializable()
 class AiChat {
   final String id;
-  final String userId;
-  final String assistantType;
-  final String message;
-  final DateTime createdAt;
+  final String role;
+  final String content;
+  final DateTime time;
 
   AiChat({
     required this.id,
-    required this.userId,
-    required this.assistantType,
-    required this.message,
-    required this.createdAt,
+    required this.role,
+    required this.content,
+    required this.time,
   });
 
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'user_id': userId,
-      'assistant_type': assistantType,
-      'message': message,
-      'created_at': createdAt.toIso8601String(),
-    };
-  }
+  Map<String, dynamic> toMap() => {
+    'id': id,
+    'role': role,
+    'content': content,
+    'time': time.toIso8601String(),
+  };
 
-  factory AiChat.fromMap(Map<String, dynamic> map) {
-    return AiChat(
-      id: map['id'],
-      userId: map['user_id'],
-      assistantType: map['assistant_type'],
-      message: map['message'],
-      createdAt: DateTime.parse(map['created_at']),
-    );
-  }
+  factory AiChat.fromMap(Map<String, dynamic> map) => AiChat(
+    id: map['id'],
+    role: map['role'],
+    content: map['content'],
+    time: DateTime.parse(map['time']),
+  );
 } 

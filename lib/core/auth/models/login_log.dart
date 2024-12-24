@@ -1,8 +1,5 @@
-import 'package:json_annotation/json_annotation.dart';
 
-part 'login_log.g.dart';
 
-@JsonSerializable()
 class LoginLog {
   final String id;
   final String userId;

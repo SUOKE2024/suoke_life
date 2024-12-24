@@ -1,38 +1,24 @@
-import 'package:hive/hive.dart';
-import 'package:suoke_life/data/models/hive_type_ids.dart';
 
-part 'life_record.g.dart';
 
-@HiveType(typeId: HiveTypeIds.lifeRecord)
 class LifeRecord extends HiveObject {
-  @HiveField(0)
   final String id;
 
-  @HiveField(1)
   final String title;
 
-  @HiveField(2)
   final String? content;
 
-  @HiveField(3)
   final String time;
 
-  @HiveField(4)
   final List<String> tags;
 
-  @HiveField(5)
   final String? location;
 
-  @HiveField(6)
   final List<String>? images;
 
-  @HiveField(7)
   final Map<String, dynamic>? metadata;
 
-  @HiveField(8)
   final DateTime createdAt;
 
-  @HiveField(9)
   final DateTime? updatedAt;
 
   LifeRecord({

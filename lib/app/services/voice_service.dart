@@ -1,54 +1,43 @@
 import 'package:get/get.dart';
 import 'package:record/record.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
 class VoiceService extends GetxService {
-  final _record = Record();
-  bool _isRecording = false;
+  late final AudioRecorder _recorder;
+  final isRecording = false.obs;
 
   Future<VoiceService> init() async {
+    _recorder = AudioRecorder();
     return this;
   }
 
   Future<void> startRecording() async {
-    try {
-      if (await _record.hasPermission()) {
-        await _record.start();
-        _isRecording = true;
-      }
-    } catch (e) {
-      print('Error starting recording: $e');
-      rethrow;
-    }
-  }
-
-  Future<String> stopRecording() async {
-    try {
-      if (!_isRecording) return '';
+    if (await _recorder.hasPermission()) {
+      final dir = await getTemporaryDirectory();
+      final filePath = path.join(dir.path, '${DateTime.now().millisecondsSinceEpoch}.m4a');
       
-      final path = await _record.stop();
-      _isRecording = false;
-      return path ?? '';
-    } catch (e) {
-      print('Error stopping recording: $e');
-      return '';
+      await _recorder.start(
+        const RecordConfig(
+          encoder: AudioEncoder.aacLc,
+          bitRate: 128000,
+          sampleRate: 44100,
+        ),
+        path: filePath,
+      );
+      isRecording.value = true;
     }
   }
 
-  Future<String> speechToText(List<int> audioData) async {
-    try {
-      // TODO: 实现语音转文字
-      return '';
-    } catch (e) {
-      rethrow;
-    }
+  Future<String?> stopRecording() async {
+    final path = await _recorder.stop();
+    isRecording.value = false;
+    return path;
   }
 
-  Future<List<int>> textToSpeech(String text) async {
-    try {
-      // TODO: 实现文字转语音
-      return [];
-    } catch (e) {
-      rethrow;
-    }
+  @override
+  void onClose() {
+    _recorder.dispose();
+    super.onClose();
   }
 } 

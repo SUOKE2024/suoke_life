@@ -1,20 +1,12 @@
-import 'package:hive/hive.dart';
-import 'package:suoke_life/data/models/hive_type_ids.dart';
 
-part 'sync_config.g.dart';
 
-@HiveType(typeId: HiveTypeIds.syncConfig)
 class SyncConfig extends HiveObject {
-  @HiveField(0)
   final bool autoSync;
 
-  @HiveField(1)
   final bool wifiOnlySync;
 
-  @HiveField(2)
   final List<String> syncRanges;
 
-  @HiveField(3)
   final DateTime? lastSyncTime;
 
   SyncConfig({

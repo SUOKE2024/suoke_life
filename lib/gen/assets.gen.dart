@@ -32,29 +32,25 @@ class $AssetsIconsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
-  /// File path: assets/images/Claude.jpeg
-  AssetGenImage get claude => const AssetGenImage('assets/images/Claude.jpeg');
+  /// File path: assets/images/default_avatar.png
+  AssetGenImage get defaultAvatar =>
+      const AssetGenImage('assets/images/default_avatar.png');
 
-  /// File path: assets/images/Soer.jpg
-  AssetGenImage get soer => const AssetGenImage('assets/images/Soer.jpg');
+  /// File path: assets/images/laoke_avatar.png
+  AssetGenImage get laokeAvatar =>
+      const AssetGenImage('assets/images/laoke_avatar.png');
 
-  /// File path: assets/images/app_icon.jpg
-  AssetGenImage get appIcon =>
-      const AssetGenImage('assets/images/app_icon.jpg');
+  /// File path: assets/images/xiaoai_avatar.png
+  AssetGenImage get xiaoaiAvatar =>
+      const AssetGenImage('assets/images/xiaoai_avatar.png');
 
-  /// File path: assets/images/logo.png
-  AssetGenImage get logo => const AssetGenImage('assets/images/logo.png');
-
-  /// File path: assets/images/placeholder.png
-  AssetGenImage get placeholder =>
-      const AssetGenImage('assets/images/placeholder.png');
-
-  /// File path: assets/images/suoke.JPG
-  AssetGenImage get suoke => const AssetGenImage('assets/images/suoke.JPG');
+  /// File path: assets/images/xiaoke_avatar.png
+  AssetGenImage get xiaokeAvatar =>
+      const AssetGenImage('assets/images/xiaoke_avatar.png');
 
   /// List of all assets
   List<AssetGenImage> get values =>
-      [claude, soer, appIcon, logo, placeholder, suoke];
+      [defaultAvatar, laokeAvatar, xiaoaiAvatar, xiaokeAvatar];
 }
 
 class Assets {

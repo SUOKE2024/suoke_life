@@ -11,44 +11,71 @@ dependencies:
     sdk: flutter
   get: ^4.6.6
   dio: ^5.4.0
-  get_storage: ^2.1.1
-  flutter_dotenv: ^5.1.0
-  json_annotation: ^4.8.1
+  shared_preferences: ^2.2.2
+  sqflite: ^2.3.2
+  path: ^1.8.3
   path_provider: ^2.1.2
-  permission_handler: ^11.2.0
-  package_info_plus: ^5.0.1
-  device_info_plus: ^9.1.2
-  flutter_local_notifications: ^16.3.2
+  json_annotation: ^4.8.1
+  equatable: ^2.0.5
+  flutter_secure_storage: ^9.0.0
+  permission_handler: ^11.1.0
+  connectivity_plus: ^5.0.2
+  device_info_plus: ^9.1.1
+  package_info_plus: ^4.2.0
+  flutter_local_notifications: ^16.2.0
   encrypt: ^5.0.3
   logger: ^2.0.2
-  connectivity_plus: ^5.0.2
-  flutter_secure_storage: ^9.0.0
-  timeago: ^3.6.1
   record: ^5.0.4
+  speech_to_text: ^6.5.1
   flutter_tts: ^3.8.5
-  speech_to_text: ^6.6.0
-  sqflite: ^2.3.2
+  local_auth: ^2.1.7
+  share_plus: ^7.2.1
+  image_picker: ^1.0.5
+  timeago: ^3.6.0
+  flutter_dotenv: ^5.1.0
+  synchronized: ^3.1.0
+  cupertino_icons: ^1.0.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   integration_test:
     sdk: flutter
-  mockito: ^5.4.2
-  flutter_lints: ^2.0.1
-  build_runner: ^2.4.4
-  json_serializable: ^6.7.0
-  flutter_gen_runner: ^5.3.1
-  flutter_native_splash: ^2.3.1
+  flutter_lints: ^2.0.3
+  build_runner: ^2.4.8
+  json_serializable: ^6.7.1
+  mockito: ^5.4.4
+  flutter_native_splash: ^2.3.8
   flutter_launcher_icons: ^0.13.1
-  sqflite_common_ffi: ^2.3.2
+  sqflite_common_ffi: ^2.3.0
 
 flutter:
   uses-material-design: true
+
   assets:
-    - assets/images/default_avatar.png
-    - assets/images/xiaoai_avatar.png
-    - assets/images/laoke_avatar.png
-    - assets/images/xiaoke_avatar.png
+    - assets/images/
     - assets/icons/
-    - assets/animations/
+    - .env
+
+  # 暂时注释掉字体配置,直到我们添加字体文件
+  # fonts:
+  #   - family: Roboto
+  #     fonts:
+  #       - asset: assets/fonts/Roboto-Regular.ttf
+  #       - asset: assets/fonts/Roboto-Medium.ttf
+  #         weight: 500
+  #       - asset: assets/fonts/Roboto-Bold.ttf
+  #         weight: 700
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/app_icon.png"
+  adaptive_icon_background: "assets/icons/app_icon_background.png"
+  adaptive_icon_foreground: "assets/icons/app_icon_foreground.png"
+
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: assets/images/splash.png
+  android: true
+  ios: true

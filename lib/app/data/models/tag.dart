@@ -3,31 +3,29 @@ import 'package:flutter/material.dart';
 class Tag {
   final String id;
   final String name;
-  final Color color;
   final DateTime createdAt;
+  final DateTime? updatedAt;
 
-  const Tag({
+  Tag({
     required this.id,
     required this.name,
-    required this.color,
     required this.createdAt,
+    this.updatedAt,
   });
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'color': color.value.toRadixString(16),
-      'created_at': createdAt.toIso8601String(),
-    };
-  }
+  Map<String, dynamic> toMap() => {
+    'id': id,
+    'name': name,
+    'created_at': createdAt.toIso8601String(),
+    'updated_at': updatedAt?.toIso8601String(),
+  };
 
-  factory Tag.fromJson(Map<String, dynamic> json) {
-    return Tag(
-      id: json['id'],
-      name: json['name'],
-      color: Color(int.parse(json['color'], radix: 16)),
-      createdAt: DateTime.parse(json['created_at']),
-    );
-  }
+  factory Tag.fromMap(Map<String, dynamic> map) => Tag(
+    id: map['id'],
+    name: map['name'],
+    createdAt: DateTime.parse(map['created_at']),
+    updatedAt: map['updated_at'] != null 
+        ? DateTime.parse(map['updated_at'])
+        : null,
+  );
 } 

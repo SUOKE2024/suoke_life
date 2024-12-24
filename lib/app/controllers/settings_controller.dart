@@ -1,20 +1,16 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../core/services/storage_service.dart';
-import '../core/constants/storage_keys.dart';
 
 class SettingsController extends GetxController {
-  final _storage = Get.find<StorageService>();
-  
+  final themeMode = ThemeMode.system.obs;
   final fontSize = 16.0.obs;
-  
-  @override
-  void onInit() {
-    super.onInit();
-    fontSize.value = _storage.getDouble(StorageKeys.fontSize) ?? 16.0;
+
+  void setThemeMode(ThemeMode mode) {
+    themeMode.value = mode;
+    Get.changeThemeMode(mode);
   }
-  
-  Future<void> setFontSize(double size) async {
-    await _storage.setDouble(StorageKeys.fontSize, size);
+
+  void setFontSize(double size) {
     fontSize.value = size;
   }
 } 
