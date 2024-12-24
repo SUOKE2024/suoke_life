@@ -1,0 +1,56 @@
+# Cursor Rules Configuration
+version: 1.0
+
+# Project structure rules
+structure:
+  root_dirs:
+    - lib
+    - test
+    - docs
+    - assets
+    - scripts
+    
+  required_files:
+    - README.md
+    - pubspec.yaml
+    - analysis_options.yaml
+    - .gitignore
+    
+  ignored_dirs:
+    - build
+    - .dart_tool
+    - .idea
+    - .vscode
+
+# Code style rules
+style:
+  dart:
+    line_length: 80
+    prefer_single_quotes: true
+    always_specify_types: false
+    
+  flutter:
+    use_key_in_widget_constructors: true
+    prefer_const_constructors: true
+    avoid_print: true
+
+# Documentation rules
+docs:
+  required:
+    - README.md
+    - CHANGELOG.md
+    - LICENSE
+    
+  recommended:
+    - CONTRIBUTING.md
+    - CODE_OF_CONDUCT.md
+
+# Security rules
+security:
+  env_files:
+    - .env.example
+    
+  secrets:
+    - .env
+    - google-services.json
+    - GoogleService-Info.plist 

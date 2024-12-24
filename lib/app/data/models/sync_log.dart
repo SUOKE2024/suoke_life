@@ -2,45 +2,36 @@ import 'dart:convert';
 
 class SyncLog {
   final String id;
-  final DateTime timestamp;
+  final DateTime time;
   final String type;
-  final String status;
-  final String details;
-  final int recordCount;
+  final bool success;
+  final String? error;
+  final Map<String, dynamic>? details;
 
-  const SyncLog({
+  SyncLog({
     required this.id,
-    required this.timestamp,
+    required this.time,
     required this.type,
-    required this.status,
-    required this.details,
-    required this.recordCount,
+    required this.success,
+    this.error,
+    this.details,
   });
 
-  factory SyncLog.fromJson(Map<String, dynamic> json) {
-    return SyncLog(
-      id: json['id'],
-      timestamp: DateTime.parse(json['timestamp']),
-      type: json['type'],
-      status: json['status'],
-      details: json['details'],
-      recordCount: json['record_count'],
-    );
-  }
+  Map<String, dynamic> toMap() => {
+    'id': id,
+    'time': time.toIso8601String(),
+    'type': type,
+    'success': success ? 1 : 0,
+    'error': error,
+    'details': details != null ? json.encode(details) : null,
+  };
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'timestamp': timestamp.toIso8601String(),
-      'type': type,
-      'status': status,
-      'details': details,
-      'record_count': recordCount,
-    };
-  }
-
-  @override
-  String toString() {
-    return const JsonEncoder.withIndent('  ').convert(toJson());
-  }
+  factory SyncLog.fromMap(Map<String, dynamic> map) => SyncLog(
+    id: map['id'],
+    time: DateTime.parse(map['time']),
+    type: map['type'],
+    success: map['success'] == 1,
+    error: map['error'],
+    details: map['details'] != null ? json.decode(map['details']) : null,
+  );
 } 

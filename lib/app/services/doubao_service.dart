@@ -5,51 +5,33 @@ import '../core/config/env_config.dart';
 import '../core/config/assistant_config.dart';
 
 class DouBaoService extends GetxService {
-  final _dio = Dio();
-  final isTest = false.obs;
+  late final Dio _dio;
 
-  DouBaoService() {
-    _dio.options.baseUrl = DouBaoConfig.apiUrl;
-    _dio.options.headers = {
-      'Authorization': 'Bearer ${DouBaoConfig.apiKey}',
-    };
+  @override
+  void onInit() {
+    super.onInit();
+    _dio = Dio(BaseOptions(
+      baseUrl: DouBaoConfig.baseUrl,
+      headers: {
+        'Authorization': 'Bearer ${EnvConfig.to.doubaoApiKey}',
+      },
+    ));
   }
 
-  Future<String> chatWithAssistant(String message, String assistantType) async {
-    if (isTest.value) {
-      return '这是一个测试回复';
-    }
-
+  Future<String> chat(String message, String model) async {
     try {
-      // 获取助手配置
-      final config = _getAssistantConfig(assistantType);
-      
-      final response = await _dio.post(
-        '/chat/completions',
-        data: {
-          'model': config['model'],
-          'messages': [
-            {
-              'role': 'system',
-              'content': config['prompt'],
-            },
-            {
-              'role': 'user',
-              'content': message,
-            }
-          ],
-        },
-      );
-      
-      return response.data['choices'][0]['message']['content'];
+      final response = await _dio.post('/chat', data: {
+        'message': message,
+        'model': model,
+      });
+      return response.data['response'];
     } catch (e) {
-      print('Error calling API: $e');
-      return '抱歉，我现在无法回答，请稍后再试';
+      rethrow;
     }
   }
 
-  Map<String, String> _getAssistantConfig(String assistantType) {
-    switch (assistantType) {
+  Map<String, dynamic> _getAssistantConfig(String type) {
+    switch (type) {
       case 'xiaoai':
         return AssistantConfig.xiaoai;
       case 'laoke':

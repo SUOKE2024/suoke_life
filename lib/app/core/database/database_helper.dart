@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import '../constants/database_tables.dart';
+import '../constants/database_constants.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._();
@@ -9,80 +9,86 @@ class DatabaseHelper {
   DatabaseHelper._();
 
   Future<Database> get database async {
-    _database ??= await _initDatabase();
+    if (_database != null) return _database!;
+    _database = await _initDatabase();
     return _database!;
   }
 
   Future<Database> _initDatabase() async {
-    final dbPath = await getDatabasesPath();
-    final path = join(dbPath, 'suoke.db');
+    if (databaseFactory == null) {
+      throw StateError('Database factory not initialized');
+    }
+    
+    final path = await getDatabasesPath();
+    final dbPath = join(path, 'suoke.db');
 
     return await openDatabase(
-      path,
+      dbPath,
       version: 1,
       onCreate: _onCreate,
-      onUpgrade: _onUpgrade,
     );
   }
 
   Future<void> _onCreate(Database db, int version) async {
-    // 创建生活记录表
-    await db.execute('''
-      CREATE TABLE IF NOT EXISTS life_records (
-        id TEXT PRIMARY KEY,
-        user_id TEXT NOT NULL,
-        type TEXT NOT NULL,
-        title TEXT NOT NULL,
-        content TEXT NOT NULL,
-        tags TEXT NOT NULL,
-        created_at TEXT NOT NULL,
-        is_sync INTEGER NOT NULL DEFAULT 0
-      )
-    ''');
+    await db.execute(DatabaseConstants.createTableSyncLogs);
+    await db.execute(DatabaseConstants.createTableTags);
+    await db.execute(DatabaseConstants.createTableSyncConfigs);
+    await db.execute(DatabaseConstants.createTableAiChats);
 
-    // 创建探索内容表
     await db.execute('''
-      CREATE TABLE IF NOT EXISTS explore_items (
+      CREATE TABLE IF NOT EXISTS test_table (
         id TEXT PRIMARY KEY,
-        title TEXT NOT NULL,
-        subtitle TEXT NOT NULL,
-        image_url TEXT,
-        type TEXT NOT NULL,
-        metadata TEXT,
-        created_at TEXT NOT NULL
-      )
-    ''');
-
-    // 创建健康记录表
-    await db.execute('''
-      CREATE TABLE IF NOT EXISTS health_records (
-        id TEXT PRIMARY KEY,
-        user_id TEXT NOT NULL,
-        height REAL NOT NULL,
-        weight REAL NOT NULL,
-        blood_pressure TEXT NOT NULL,
-        heart_rate INTEGER NOT NULL,
-        recorded_at TEXT NOT NULL
-      )
-    ''');
-
-    // 创建AI聊天记录表
-    await db.execute('''
-      CREATE TABLE IF NOT EXISTS ai_chats (
-        id TEXT PRIMARY KEY,
-        user_id TEXT NOT NULL,
-        assistant_type TEXT NOT NULL,
-        message TEXT NOT NULL,
-        created_at TEXT NOT NULL
+        name TEXT
       )
     ''');
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     // 处理数据库升级
-    if (oldVersion < 2) {
-      // 添加新表或修改现有表
-    }
+  }
+
+  Future<void> insert(String table, Map<String, dynamic> data) async {
+    final db = await database;
+    await db.insert(
+      table,
+      data,
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<Map<String, dynamic>?> get(String table, String id) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      table,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+    if (maps.isEmpty) return null;
+    return maps.first;
+  }
+
+  Future<List<Map<String, dynamic>>> getAll(String table) async {
+    final db = await database;
+    return await db.query(table);
+  }
+
+  Future<int> update(String table, Map<String, dynamic> data, String id) async {
+    final db = await database;
+    return await db.update(
+      table,
+      data,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  Future<int> delete(String table, String id) async {
+    final db = await database;
+    return await db.delete(
+      table,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
   }
 
   Future<void> close() async {

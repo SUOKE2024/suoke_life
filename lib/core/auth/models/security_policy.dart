@@ -1,8 +1,5 @@
-import 'package:json_annotation/json_annotation.dart';
 
-part 'security_policy.g.dart';
 
-@JsonSerializable()
 class SecurityPolicy {
   // 密码策略
   final int minPasswordLength;

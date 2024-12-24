@@ -1,68 +1,91 @@
 import 'package:flutter/material.dart';
+import 'app_colors.dart';
 
 class AppTheme {
-  // Light Theme
-  static final ThemeData light = ThemeData(
-    useMaterial3: true,
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: Colors.blue,
-      brightness: Brightness.light,
-    ),
+  static ThemeData get light => ThemeData(
+    primaryColor: AppColors.primary,
+    scaffoldBackgroundColor: AppColors.background,
     appBarTheme: const AppBarTheme(
-      centerTitle: true,
+      backgroundColor: AppColors.primary,
+      foregroundColor: Colors.white,
       elevation: 0,
-      scrolledUnderElevation: 2,
+      centerTitle: true,
     ),
     cardTheme: CardTheme(
       elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
-      clipBehavior: Clip.antiAlias,
     ),
-    inputDecorationTheme: InputDecorationTheme(
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
+    textTheme: const TextTheme(
+      titleLarge: TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+        color: AppColors.text,
       ),
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 12,
+      bodyLarge: TextStyle(
+        fontSize: 16,
+        color: AppColors.text,
       ),
-      filled: true,
+      bodyMedium: TextStyle(
+        fontSize: 14,
+        color: AppColors.textLight,
+      ),
     ),
-    chipTheme: ChipThemeData(
+    buttonTheme: ButtonThemeData(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
       ),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 12,
-        vertical: 4,
-      ),
+      buttonColor: AppColors.primary,
     ),
-    navigationBarTheme: NavigationBarThemeData(
-      elevation: 4,
-      labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-      height: 72,
-      indicatorShape: RoundedRectangleBorder(
+    colorScheme: ColorScheme.light(
+      primary: AppColors.primary,
+      secondary: AppColors.primary.withOpacity(0.8),
+    ),
+    fontFamily: null,
+  );
+
+  static ThemeData get dark => ThemeData(
+    primaryColor: AppColors.primaryDark,
+    scaffoldBackgroundColor: Colors.black,
+    brightness: Brightness.dark,
+    appBarTheme: const AppBarTheme(
+      backgroundColor: AppColors.primaryDark,
+      foregroundColor: Colors.white,
+      elevation: 0,
+      centerTitle: true,
+    ),
+    cardTheme: CardTheme(
+      elevation: 2,
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
     ),
-  );
-
-  // Dark Theme  
-  static final ThemeData dark = ThemeData(
-    useMaterial3: true,
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: Colors.blue,
-      brightness: Brightness.dark,
+    textTheme: const TextTheme(
+      titleLarge: TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+      ),
+      bodyLarge: TextStyle(
+        fontSize: 16,
+        color: Colors.white,
+      ),
+      bodyMedium: TextStyle(
+        fontSize: 14,
+        color: Colors.white70,
+      ),
     ),
-    // 继承 light 主题的其他配置
-    appBarTheme: light.appBarTheme,
-    cardTheme: light.cardTheme,
-    inputDecorationTheme: light.inputDecorationTheme.copyWith(
-      fillColor: Colors.grey[800],
+    buttonTheme: ButtonThemeData(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      buttonColor: AppColors.primaryDark,
     ),
-    chipTheme: light.chipTheme,
-    navigationBarTheme: light.navigationBarTheme,
+    colorScheme: ColorScheme.dark(
+      primary: AppColors.primaryDark,
+      secondary: AppColors.primaryDark.withOpacity(0.8),
+    ),
+    fontFamily: null,
   );
 } 

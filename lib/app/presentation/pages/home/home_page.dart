@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controllers/home_controller.dart';
-import '../../widgets/chat/chat_list_item.dart';
 
 class HomePage extends GetView<HomeController> {
   const HomePage({Key? key}) : super(key: key);
@@ -10,24 +9,38 @@ class HomePage extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('聊天'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () => controller.createNewChat(),
-          ),
-        ],
+        title: Obx(() => Text(controller.title.value)),
       ),
-      body: Obx(() => ListView.builder(
-        itemCount: controller.conversations.length,
-        itemBuilder: (context, index) {
-          final chat = controller.conversations[index];
-          return ChatListItem(
-            chat: chat,
-            onTap: () => controller.openChat(chat),
-          );
-        },
-      )),
+      body: Obx(() {
+        return IndexedStack(
+          index: controller.currentIndex.value,
+          children: const [
+            Center(child: Text('Home Content')),
+            Center(child: Text('Chat Content')),
+            Center(child: Text('Profile Content')),
+          ],
+        );
+      }),
+      bottomNavigationBar: Obx(() {
+        return BottomNavigationBar(
+          currentIndex: controller.currentIndex.value,
+          onTap: controller.changeTab,
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.chat),
+              label: 'Chat',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: 'Profile',
+            ),
+          ],
+        );
+      }),
     );
   }
 } 

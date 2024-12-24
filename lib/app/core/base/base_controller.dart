@@ -2,28 +2,12 @@ import 'package:get/get.dart';
 
 /// 基础控制器
 abstract class BaseController extends GetxController {
-  final isLoading = false.obs;
-  final errorMessage = ''.obs;
+  final RxBool isLoading = false.obs;
+  final RxString error = ''.obs;
   
-  void showLoading() => isLoading.value = true;
-  void hideLoading() => isLoading.value = false;
-  
-  void showError(String message) {
-    errorMessage.value = message;
-    Get.snackbar(
-      '错误',
-      message,
-      snackPosition: SnackPosition.BOTTOM,
-    );
-  }
-  
-  void showSuccess(String message) {
-    Get.snackbar(
-      '成功',
-      message,
-      snackPosition: SnackPosition.BOTTOM,
-    );
-  }
+  void setLoading(bool value) => isLoading.value = value;
+  void setError(String message) => error.value = message;
+  void clearError() => error.value = '';
   
   @override
   void onInit() {
