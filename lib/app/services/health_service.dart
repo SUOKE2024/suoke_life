@@ -1,60 +1,42 @@
 import 'package:get/get.dart';
-import '../core/storage/storage_service.dart';
+import '../data/repositories/api_client.dart';
+import '../core/config/api_config.dart';
 
 class HealthService extends GetxService {
-  final StorageService _storageService = Get.find();
-  
-  final healthData = <String, dynamic>{}.obs;
-  final healthMetrics = <String, List<Map<String, dynamic>>>{}.obs;
-  final healthGoals = <String, Map<String, dynamic>>{}.obs;
+  final ApiClient _apiClient;
 
-  Future<HealthService> init() async {
-    await _initHealth();
-    return this;
-  }
+  HealthService(this._apiClient);
 
-  Future<void> _initHealth() async {
+  Future<Map<String, dynamic>> getUserHealth(String userId) async {
     try {
-      await Future.wait([
-        _loadHealthData(),
-        _loadHealthMetrics(),
-        _loadHealthGoals(),
-      ]);
+      final response = await _apiClient.get(
+        '${ApiConfig.endpoints['health']}/users/$userId',
+      );
+      return response.data;
     } catch (e) {
-      print('Error initializing health: $e');
+      rethrow;
     }
   }
 
-  Future<void> _loadHealthData() async {
+  Future<void> updateHealthData(String userId, Map<String, dynamic> data) async {
     try {
-      final data = await _storageService.getLocal('health_data');
-      if (data != null) {
-        healthData.value = Map<String, dynamic>.from(data);
-      }
+      await _apiClient.put(
+        '${ApiConfig.endpoints['health']}/users/$userId',
+        data: data,
+      );
     } catch (e) {
-      print('Error loading health data: $e');
+      rethrow;
     }
   }
 
-  Future<void> _loadHealthMetrics() async {
+  Future<List<Map<String, dynamic>>> getHealthAdvices(String userId) async {
     try {
-      final metrics = await _storageService.getLocal('health_metrics');
-      if (metrics != null) {
-        healthMetrics.value = Map<String, List<Map<String, dynamic>>>.from(metrics);
-      }
+      final response = await _apiClient.get(
+        '${ApiConfig.endpoints['health']}/users/$userId/advices',
+      );
+      return List<Map<String, dynamic>>.from(response.data['advices']);
     } catch (e) {
-      print('Error loading health metrics: $e');
-    }
-  }
-
-  Future<void> _loadHealthGoals() async {
-    try {
-      final goals = await _storageService.getLocal('health_goals');
-      if (goals != null) {
-        healthGoals.value = Map<String, Map<String, dynamic>>.from(goals);
-      }
-    } catch (e) {
-      print('Error loading health goals: $e');
+      rethrow;
     }
   }
 } 

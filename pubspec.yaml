@@ -1,5 +1,5 @@
 name: suoke_app
-description: SuoKe Life App
+description: A new Flutter project.
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -9,16 +9,17 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  get: ^4.6.6
+  get: ^4.6.5
   dio: ^5.4.0
   shared_preferences: ^2.2.2
-  sqflite: ^2.3.2
+  sqflite: ^2.3.0
+  sqflite_common_ffi: ^2.3.2+1
   path: ^1.8.3
   path_provider: ^2.1.2
-  json_annotation: ^4.8.1
+  json_annotation: ^4.9.0
   equatable: ^2.0.5
   flutter_secure_storage: ^9.0.0
-  permission_handler: ^11.1.0
+  permission_handler: ^10.0.0
   connectivity_plus: ^5.0.2
   device_info_plus: ^9.1.1
   package_info_plus: ^4.2.0
@@ -35,6 +36,10 @@ dependencies:
   flutter_dotenv: ^5.1.0
   synchronized: ^3.1.0
   cupertino_icons: ^1.0.2
+  flutter_bloc: ^8.1.6
+  flutter_riverpod: ^2.6.1
+  get_it: ^8.0.3
+  injectable: ^2.5.0
 
 dev_dependencies:
   flutter_test:
@@ -42,12 +47,14 @@ dev_dependencies:
   integration_test:
     sdk: flutter
   flutter_lints: ^2.0.3
-  build_runner: ^2.4.8
-  json_serializable: ^6.7.1
+  build_runner: ^2.4.14
+  json_serializable: ^6.7.0
   mockito: ^5.4.4
   flutter_native_splash: ^2.3.8
   flutter_launcher_icons: ^0.13.1
-  sqflite_common_ffi: ^2.3.0
+  sqflite_common_ffi: ^2.3.2+1
+  injectable_generator: ^2.6.2
+  bloc_test: ^9.1.7
 
 flutter:
   uses-material-design: true

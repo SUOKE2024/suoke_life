@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:suoke_app/app/core/storage/storage_service.dart';
 
@@ -16,7 +15,7 @@ void main() {
   });
 
   tearDown(() async {
-    await storageService.clear();
+    await storageService.clearLocal();
   });
 
   test('should save and get data from database', () async {

@@ -1,95 +1,104 @@
 import 'package:flutter/material.dart';
-import '../../../core/base/base_page.dart';
-import 'chat_controller.dart';
+import 'package:get/get.dart';
+import '../../controllers/chat/chat_controller.dart';
+import '../../widgets/chat/chat_list.dart';
 
-class ChatPage extends BasePage<ChatController> {
+class ChatPage extends GetView<ChatController> {
   const ChatPage({Key? key}) : super(key: key);
 
   @override
-  PreferredSizeWidget buildAppBar(BuildContext context) {
-    return AppBar(
-      title: const Text('Chat'),
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.search),
-          onPressed: () => controller.searchChats(),
-        ),
-      ],
-    );
-  }
-
-  @override
-  Widget buildBody(BuildContext context) {
-    return Obx(() {
-      if (controller.isLoading.value) {
-        return const Center(child: CircularProgressIndicator());
-      }
-      
-      if (controller.chatList.isEmpty) {
-        return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.chat_bubble_outline,
-                size: 64,
-                color: Colors.grey[400],
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'No chats yet',
-                style: Get.textTheme.titleMedium?.copyWith(
-                  color: Colors.grey[600],
-                ),
-              ),
-            ],
-          ),
-        );
-      }
-
-      return ListView.separated(
-        itemCount: controller.chatList.length,
-        separatorBuilder: (context, index) => const Divider(height: 1),
-        itemBuilder: (context, index) {
-          final chat = controller.chatList[index];
-          return ListTile(
-            leading: CircleAvatar(
-              backgroundImage: NetworkImage(chat.avatar),
-            ),
-            title: Text(chat.name),
-            subtitle: Text(
-              chat.lastMessage ?? '',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            trailing: chat.unreadCount > 0
-              ? Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    color: Get.theme.colorScheme.primary,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Text(
-                    '${chat.unreadCount}',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('消息'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              // 显示添加菜单
+              showModalBottomSheet(
+                context: context,
+                builder: (context) => Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ListTile(
+                      leading: const Icon(Icons.person_add),
+                      title: const Text('添加朋友'),
+                      onTap: () {
+                        Navigator.pop(context);
+                        // TODO: 实现添加朋友功能
+                      },
                     ),
-                  ),
-                )
-              : null,
-            onTap: () => controller.openChat(chat.id),
+                    ListTile(
+                      leading: const Icon(Icons.group_add),
+                      title: const Text('发起群聊'),
+                      onTap: () {
+                        Navigator.pop(context);
+                        // TODO: 实现发起群聊功能
+                      },
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.calendar_today),
+                      title: const Text('预约咨询'),
+                      onTap: () {
+                        Navigator.pop(context);
+                        // TODO: 实现预约咨询功能
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+      body: GetBuilder<ChatController>(
+        builder: (_) => ChatList(
+          messages: controller.messages,
+          onTap: (roomId) => Get.toNamed('/chat/detail', arguments: roomId),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // 显示 AI 助手选择界面
+          showModalBottomSheet(
+            context: context,
+            builder: (context) => Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  leading: const CircleAvatar(child: Text('小艾')),
+                  title: const Text('小艾'),
+                  subtitle: const Text('生活服务助手'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Get.toNamed('/chat/xiaoi');
+                  },
+                ),
+                ListTile(
+                  leading: const CircleAvatar(child: Text('老克')),
+                  title: const Text('老克'),
+                  subtitle: const Text('知识探索助手'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Get.toNamed('/chat/laoke');
+                  },
+                ),
+                ListTile(
+                  leading: const CircleAvatar(child: Text('小克')),
+                  title: const Text('小克'),
+                  subtitle: const Text('商务助手'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Get.toNamed('/chat/xiaoke');
+                  },
+                ),
+              ],
+            ),
           );
         },
-      );
-    });
-  }
-
-  @override
-  Widget? buildFloatingActionButton(BuildContext context) {
-    return FloatingActionButton(
-      onPressed: () => controller.startNewChat(),
-      child: const Icon(Icons.add),
+        child: const Icon(Icons.chat),
+      ),
     );
   }
 } 

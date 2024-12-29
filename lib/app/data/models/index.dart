@@ -1,0 +1,3 @@
+export 'life_record.dart';
+export 'chat_message.dart';
+// 导出其他模型... 

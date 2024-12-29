@@ -2,58 +2,8 @@ PODS:
   - connectivity_plus (0.0.1):
     - Flutter
     - ReachabilitySwift
-  - CropViewController (2.5.5)
   - device_info_plus (0.0.1):
     - Flutter
-  - DKCamera (1.6.7)
-  - DKImagePickerController (4.3.4):
-    - DKImagePickerController/Camera (= 4.3.4)
-    - DKImagePickerController/Core (= 4.3.4)
-    - DKImagePickerController/ImageDataManager (= 4.3.4)
-    - DKImagePickerController/InlineCamera (= 4.3.4)
-    - DKImagePickerController/PhotoEditor (= 4.3.4)
-    - DKImagePickerController/PhotoGallery (= 4.3.4)
-    - DKImagePickerController/Resource (= 4.3.4)
-  - DKImagePickerController/Camera (4.3.4):
-    - DKCamera
-    - DKImagePickerController/Core
-  - DKImagePickerController/Core (4.3.4):
-    - DKImagePickerController/ImageDataManager
-    - DKImagePickerController/Resource
-  - DKImagePickerController/ImageDataManager (4.3.4)
-  - DKImagePickerController/InlineCamera (4.3.4):
-    - DKCamera
-    - DKImagePickerController/Core
-  - DKImagePickerController/PhotoEditor (4.3.4):
-    - CropViewController (~> 2.5)
-    - DKImagePickerController/Core
-  - DKImagePickerController/PhotoGallery (4.3.4):
-    - DKImagePickerController/Core
-    - DKPhotoGallery
-  - DKImagePickerController/Resource (4.3.4)
-  - DKPhotoGallery (0.0.19):
-    - DKPhotoGallery/Core (= 0.0.19)
-    - DKPhotoGallery/Model (= 0.0.19)
-    - DKPhotoGallery/Preview (= 0.0.19)
-    - DKPhotoGallery/Resource (= 0.0.19)
-    - SDWebImage
-    - SwiftyGif
-  - DKPhotoGallery/Core (0.0.19):
-    - DKPhotoGallery/Model
-    - DKPhotoGallery/Preview
-    - SDWebImage
-    - SwiftyGif
-  - DKPhotoGallery/Model (0.0.19):
-    - SDWebImage
-    - SwiftyGif
-  - DKPhotoGallery/Preview (0.0.19):
-    - DKPhotoGallery/Model
-    - DKPhotoGallery/Resource
-    - SDWebImage
-    - SwiftyGif
-  - DKPhotoGallery/Resource (0.0.19):
-    - SDWebImage
-    - SwiftyGif
   - Flutter (1.0.0)
   - flutter_local_notifications (0.0.1):
     - Flutter
@@ -67,15 +17,6 @@ PODS:
     - Flutter
   - integration_test (0.0.1):
     - Flutter
-  - libwebp (1.2.4):
-    - libwebp/demux (= 1.2.4)
-    - libwebp/mux (= 1.2.4)
-    - libwebp/webp (= 1.2.4)
-  - libwebp/demux (1.2.4):
-    - libwebp/webp
-  - libwebp/mux (1.2.4):
-    - libwebp/demux
-  - libwebp/webp (1.2.4)
   - local_auth_darwin (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -84,14 +25,11 @@ PODS:
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - permission_handler_apple (9.3.0):
+  - permission_handler_apple (9.1.1):
     - Flutter
   - ReachabilitySwift (5.2.4)
   - record_darwin (1.0.0):
     - Flutter
-  - SDWebImage (5.20.0):
-    - SDWebImage/Core (= 5.20.0)
-  - SDWebImage/Core (5.20.0)
   - share_plus (0.0.1):
     - Flutter
   - shared_preferences_foundation (0.0.1):
@@ -103,14 +41,11 @@ PODS:
   - sqflite_darwin (0.0.4):
     - Flutter
     - FlutterMacOS
-  - SwiftyGif (5.4.5)
   - Try (2.1.1)
 
 DEPENDENCIES:
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
-  - CropViewController (= 2.5.5)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
-  - DKImagePickerController (= 4.3.4)
   - Flutter (from `Flutter`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
@@ -118,7 +53,6 @@ DEPENDENCIES:
   - flutter_tts (from `.symlinks/plugins/flutter_tts/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
-  - libwebp (= 1.2.4)
   - local_auth_darwin (from `.symlinks/plugins/local_auth_darwin/darwin`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
@@ -130,15 +64,8 @@ DEPENDENCIES:
   - sqflite_darwin (from `.symlinks/plugins/sqflite_darwin/darwin`)
 
 SPEC REPOS:
-  trunk:
-    - CropViewController
-    - DKCamera
-    - DKImagePickerController
-    - DKPhotoGallery
-    - libwebp
+  https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git:
     - ReachabilitySwift
-    - SDWebImage
-    - SwiftyGif
     - Try
 
 EXTERNAL SOURCES:
@@ -181,11 +108,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   connectivity_plus: bf0076dd84a130856aa636df1c71ccaff908fa1d
-  CropViewController: bd3ff11eeeaadc1e267bb9c3f3e9ee67a52d3285
   device_info_plus: c6fb39579d0f423935b0c9ce7ee2f44b71b9fce6
-  DKCamera: a902b66921fca14b7a75266feb8c7568aa7caa71
-  DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
-  DKPhotoGallery: b3834fecb755ee09a593d7c9e389d8b5d6deed60
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_local_notifications: 4cde75091f6327eb8517fa068a0a5950212d2086
   flutter_native_splash: e8a1e01082d97a8099d973f919f57904c925008a
@@ -193,21 +116,18 @@ SPEC CHECKSUMS:
   flutter_tts: 0f492aab6accf87059b72354fcb4ba934304771d
   image_picker_ios: c560581cceedb403a6ff17f2f816d7fea1421fc1
   integration_test: 252f60fa39af5e17c3aa9899d35d908a0721b573
-  libwebp: f62cb61d0a484ba548448a4bd52aabf150ff6eef
   local_auth_darwin: 66e40372f1c29f383a314c738c7446e2f7fdadc3
   package_info_plus: 115f4ad11e0698c8c1c5d8a689390df880f47e85
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
-  permission_handler_apple: 9878588469a2b0d0fc1e048d9f43605f92e6cec2
+  permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
   ReachabilitySwift: 32793e867593cfc1177f5d16491e3a197d2fccda
   record_darwin: 3b1a8e7d5c0cbf45ad6165b4d83a6ca643d929c3
-  SDWebImage: 73c6079366fea25fa4bb9640d5fb58f0893facd8
   share_plus: c3fef564749587fc939ef86ffb283ceac0baf9f5
   shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
   speech_to_text: b43a7d99aef037bd758ed8e45d79bbac035d2dfe
   sqflite_darwin: 5a7236e3b501866c1c9befc6771dfd73ffb8702d
-  SwiftyGif: 706c60cf65fa2bc5ee0313beece843c8eb8194d4
   Try: 5ef669ae832617b3cee58cb2c6f99fb767a4ff96
 
-PODFILE CHECKSUM: 576b0536c0a499a454117febfe7efbf5a0b5d57d
+PODFILE CHECKSUM: 4a70c7a0745e4a4a5b394b60809fbd0dee36be3d
 
 COCOAPODS: 1.16.2

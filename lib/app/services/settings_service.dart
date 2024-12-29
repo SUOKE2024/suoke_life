@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../core/storage/storage_service.dart';
 import 'logging_service.dart';
@@ -44,7 +45,12 @@ class SettingsService extends GetxService {
   @override
   void onInit() {
     super.onInit();
-    _initSettings();
+  }
+
+  @override
+  Future<void> onReady() async {
+    super.onReady();
+    await _initSettings();
   }
 
   Future<void> _initSettings() async {
@@ -187,11 +193,11 @@ class SettingsService extends GetxService {
       final templateValue = template[key];
       final currentValue = current[key];
 
-      if (templateValue is Map) {
+      if (templateValue is Map<String, dynamic>) {
         if (currentValue is! Map) {
           current[key] = Map<String, dynamic>.from(templateValue);
         } else {
-          _validateSettingTypes(currentValue, templateValue);
+          _validateSettingTypes(currentValue as Map<String, dynamic>, templateValue);
         }
       } else {
         if (currentValue.runtimeType != templateValue.runtimeType) {
@@ -201,12 +207,28 @@ class SettingsService extends GetxService {
     }
   }
 
+  void updateLocale(String language) {
+    Get.updateLocale(Locale(language));
+  }
+
+  void updateThemeMode(String mode) {
+    switch (mode) {
+      case 'light':
+        Get.changeThemeMode(ThemeMode.light);
+        break;
+      case 'dark':
+        Get.changeThemeMode(ThemeMode.dark);
+        break;
+      default:
+        Get.changeThemeMode(ThemeMode.system);
+    }
+  }
+
   Future<void> _applySettings() async {
     try {
-      // 应用语言设置
       final language = getSetting<String>('general.language');
       if (language != null) {
-        Get.updateLocale(Locale(language));
+        await Get.updateLocale(Locale(language));
       }
 
       // 应用主题设置

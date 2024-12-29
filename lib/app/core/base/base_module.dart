@@ -87,4 +87,10 @@ class ModuleFailedEvent extends ModuleEvent {
 
 class ModuleDisabledEvent extends ModuleEvent {
   ModuleDisabledEvent(super.moduleName);
+}
+
+abstract class FeatureModule extends BaseModule {
+  String get featureKey;
+  BaseService? get service;
+  BaseController? get controller;
 } 

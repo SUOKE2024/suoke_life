@@ -1,42 +1,57 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:suoke_app/app/services/ai/ai_service.dart';
-import 'package:suoke_app/app/services/doubao_service.dart';
-import '../../helpers/test_helper.dart';
+import 'package:suoke_app/app/core/services/network/network_service.dart';
+import 'package:suoke_app/app/services/features/ai/assistants/xiaoi_service.dart';
 
-@GenerateMocks([DouBaoService])
 import 'ai_service_test.mocks.dart';
 
+@GenerateMocks([NetworkService])
 void main() {
-  late AiService aiService;
-  late MockDouBaoService mockDouBaoService;
-
-  setUpAll(() {
-    TestHelper.setupTest();
-  });
+  late XiaoiService xiaoiService;
+  late MockNetworkService mockNetwork;
 
   setUp(() {
-    mockDouBaoService = MockDouBaoService();
-    aiService = AiService(douBaoService: mockDouBaoService);
+    mockNetwork = MockNetworkService();
+    xiaoiService = XiaoiService(mockNetwork);
   });
 
-  test('chat should throw exception when chat fails', () async {
-    const message = 'test message';
-    const model = 'test_model';
+  group('XiaoiService', () {
+    test('should send chat message and get response', () async {
+      // arrange
+      final testMessage = 'Hello';
+      final testResponse = {'reply': 'Hi there!'};
+      
+      when(mockNetwork.post(
+        any,
+        data: anyNamed('data'),
+      )).thenAnswer((_) async => testResponse);
 
-    when(mockDouBaoService.chat(message, model))
-        .thenThrow(Exception('Chat failed'));
+      // act
+      final result = await xiaoiService.chat(testMessage);
 
-    expect(() => aiService.chat(message, model: model), throwsException);
-    verify(mockDouBaoService.chat(message, model)).called(1);
-  });
+      // assert
+      expect(result, equals('Hi there!'));
+      verify(mockNetwork.post(
+        'https://api.xiaoi.com/chat',
+        data: {'message': testMessage},
+      )).called(1);
+    });
 
-  tearDown(() {
-    reset(mockDouBaoService);
-  });
+    test('should handle error when chat fails', () async {
+      // arrange
+      final testMessage = 'Hello';
+      
+      when(mockNetwork.post(
+        any,
+        data: anyNamed('data'),
+      )).thenThrow(Exception('Network error'));
 
-  tearDownAll(() {
-    TestHelper.clearTest();
+      // act & assert
+      expect(
+        () => xiaoiService.chat(testMessage),
+        throwsException,
+      );
+    });
   });
 } 

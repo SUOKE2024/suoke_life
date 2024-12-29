@@ -1,0 +1,26 @@
+class AccessibilityManager {
+  final _config = <String, dynamic>{}.obs;
+  
+  Future<void> initialize() async {
+    // 加载无障碍配置
+    _config.value = await Get.find<StorageService>().get('accessibility_config');
+    
+    // 设置默认值
+    _config['screen_reader_enabled'] ??= false;
+    _config['high_contrast'] ??= false;
+    _config['font_scale'] ??= 1.0;
+  }
+
+  bool get isScreenReaderEnabled => _config['screen_reader_enabled'];
+  bool get isHighContrastEnabled => _config['high_contrast'];
+  double get fontScale => _config['font_scale'];
+
+  Future<void> toggleScreenReader(bool value) async {
+    _config['screen_reader_enabled'] = value;
+    await _saveConfig();
+  }
+
+  Future<void> _saveConfig() async {
+    await Get.find<StorageService>().set('accessibility_config', _config);
+  }
+} 

@@ -1,45 +1,49 @@
-
-
 class User {
   final String id;
   final String name;
-  final String email;
-  final String phone;
-  final Map<String, dynamic> settings;
+  final String? avatar;
+  final String? email;
+  final String? phone;
+  final String? role;
+  final Map<String, dynamic>? settings;
   final DateTime createdAt;
-  final DateTime updatedAt;
 
   User({
     required this.id,
     required this.name,
-    required this.email,
-    required this.phone,
-    required this.settings,
-    required this.createdAt,
-    required this.updatedAt,
-  });
+    this.avatar,
+    this.email,
+    this.phone,
+    this.role,
+    this.settings,
+    DateTime? createdAt,
+  }) : createdAt = createdAt ?? DateTime.now();
 
-  factory User.fromJson(Map<String, dynamic> json) {
+  factory User.fromMap(Map<String, dynamic> map) {
     return User(
-      id: json['id'],
-      name: json['name'],
-      email: json['email'],
-      phone: json['phone'],
-      settings: json['settings'],
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: DateTime.parse(json['updated_at']),
+      id: map['id'] as String,
+      name: map['name'] as String,
+      avatar: map['avatar'] as String?,
+      email: map['email'] as String?,
+      phone: map['phone'] as String?,
+      role: map['role'] as String?,
+      settings: map['settings'] != null 
+          ? Map<String, dynamic>.from(map['settings'] as Map)
+          : null,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(map['created_at'] as int),
     );
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toMap() {
     return {
       'id': id,
       'name': name,
+      'avatar': avatar,
       'email': email,
       'phone': phone,
+      'role': role,
       'settings': settings,
-      'created_at': createdAt.toIso8601String(),
-      'updated_at': updatedAt.toIso8601String(),
+      'created_at': createdAt.millisecondsSinceEpoch,
     };
   }
 } 

@@ -54,3 +54,136 @@ security:
     - .env
     - google-services.json
     - GoogleService-Info.plist 
+
+# Service Layer Rules
+services:
+  architecture: layered
+  pattern: repository
+  cache_strategy: multi_level
+  storage:
+    local:
+      type: sqlite
+      encryption: true
+    remote:
+      type: redis
+      replication: true
+  
+  security:
+    encryption: aes_256
+    key_management: secure_storage
+    data_masking: required
+    
+  sync:
+    strategy: incremental
+    priority: high
+    offline_support: true
+    conflict_resolution: last_write_wins
+    
+  cache:
+    levels:
+      - memory
+      - sqlite
+      - redis
+    policy: lru
+    ttl: enabled
+    preload: true
+    
+  network:
+    retry: true
+    timeout: 5s
+    interceptors:
+      - auth
+      - cache
+      - encryption
+      - retry
+
+# Analytics Rules
+analytics:
+  data_collection:
+    local_data:
+      behavior_tracking: required
+      performance_monitoring: required
+      error_logging: required
+    
+    anonymization:
+      user_id: sha256_hash
+      location: city_level
+      device_info: platform_only
+    
+    retention:
+      raw_data: 30d
+      anonymized_data: 365d
+      aggregated_data: unlimited
+  
+  processing:
+    anonymization:
+      required: true
+      rules:
+        - personal_info_removal
+        - id_hashing
+        - location_generalization
+    
+    aggregation:
+      min_group_size: 10
+      time_window: 24h
+      metrics:
+        - usage_patterns
+        - performance_stats
+        - error_rates
+    
+  usage:
+    allowed:
+      - system_optimization
+      - knowledge_enhancement
+      - feature_improvement
+    prohibited:
+      - user_identification
+      - personal_tracking
+      - data_sharing
+
+1.首页
+•  顶部导航栏：右上角依次为加号图标1：展开添加朋友、发起群聊、预约咨询、扫一扫、收付款等快捷操作菜单；加号图标2：会员注册、专家注册。
+•  中部聊天列表（类似微信）：展示小艾、老克、小克，以及用户和专家的聊天列表，点击进入对应的聊天界面。
+•  聊天界面（类似豆包）：左上角从左到右为返回图标、用户头像及昵称；右上角为三点图标，点击进入设置界面：包括头像（形象）、声音（包括对方语言识别）等；底部右边为发消息，或按住说话按键；以及加号图标，点击后在（下）底部顺序显示相机、相册、文件和打电话按键。支持交互过程中多源数据采集、数据库录入功能。
+2. SUOKE
+•  以卡片形式展示服务内容，如健康问卷、第三方API服务、农产品预制等，点击跳转至相应服务页面。每个卡片有封面图、简短描述，点击进入详情页。
+•  AI助手小艾：常驻聊天界面，提供语音交互服务，包括第三方API接入、供应链入口服务。支持残障人士使用，提供语音识别、语音合成和多源数据采集、数据库录入功能。
+3. 探索
+•  知识探索区：
+•  以瀑布流形式展示探索项目，支持无限滚动。
+•  每个项目有图片、标题和简介，点击跳转到详细信息页面。
+•  AI助手老克：
+•  以气泡形式出现在页面右下角，点击展开更多探索选项。
+•  提供知识图谱和GraphRAG分析结果。
+4. LIFE
+•  用户画像和健康建议：
+•  展示个性化的用户画像和健康建议。
+•  点击建议可查看详细信息或进行购买。
+•  生活记录：
+•  提供日历视图，用户可以标记重要事件或健康打卡。
+•  支持添加文字、图片和视频记录。
+•  AI客服小克：
+•  常驻聊天界面，提供商务助手服务。
+•  支持语音交互，提供工作安排和决策支持。
+5. 我的
+•  系统设置：
+•  提供账号管理、隐私设置、帮助与反馈等选项。
+•  支持系统管理员功能：比如专家审核、服务审核、产品审核，以及大模型、第三方API 集成等功能。
+•  设备管理：
+•  展示已连接设备列表，支持设备数据同步和设置。
+•  提供设备搜索和添加功能。
+交互设计描述
+•  滑动手势：
+•  在聊天列表和探索频道中，支持左右滑动切换聊天卡片或探索项目。
+•  点击反馈：
+•  所有可点击元素（如按钮、链接、卡片）在点击时都有视觉反馈，如变色或水波纹效果。
+•  模态弹窗：
+•  在需要用户进行选择或确认时，使用模态弹窗提供额外信息或选项。
+•  动态加载：
+•  内容较多的页面（如聊天历史、生活记录）采用动态加载，提高页面加载速度。
+•  语音交互：
+•  在AI助手小艾、老克、小克的聊天界面中，提供语音输入和输出功能，方便用户快速交互。
+•  无障碍设计：
+•  支持屏幕阅读器，为视障用户提供语音提示和屏幕操作。
+•  个性化推荐：
+•  根据用户的行为和偏好，动态调整首页推荐内容和服务卡片。

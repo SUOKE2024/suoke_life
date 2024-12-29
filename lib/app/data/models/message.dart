@@ -1,48 +1,64 @@
+import 'package:get/get.dart';
 
+enum MessageType {
+  text,
+  image,
+  voice,
+  video,
+  file,
+  system,
+}
 
 class Message {
   final String id;
-  final String chatId;
-  final String senderId;
-  final String? content;
-  final String type; // text, image, video, audio, file
+  final String content;
+  final String sender;
   final DateTime timestamp;
+  final MessageType type;
   final bool isRead;
-  final Map<String, dynamic>? extra;
+  final Map<String, dynamic>? metadata;
 
   Message({
     required this.id,
-    required this.chatId,
-    required this.senderId,
-    this.content,
-    required this.type,
+    required this.content,
+    required this.sender,
     required this.timestamp,
+    this.type = MessageType.text,
     this.isRead = false,
-    this.extra,
+    this.metadata,
   });
 
-  factory Message.fromJson(Map<String, dynamic> json) => _$MessageFromJson(json);
-  Map<String, dynamic> toJson() => _$MessageToJson(this);
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'content': content,
+    'sender': sender,
+    'timestamp': timestamp.toIso8601String(),
+    'type': type.index,
+    'isRead': isRead,
+    'metadata': metadata,
+  };
+
+  factory Message.fromJson(Map<String, dynamic> json) => Message(
+    id: json['id'],
+    content: json['content'],
+    sender: json['sender'],
+    timestamp: DateTime.parse(json['timestamp']),
+    type: MessageType.values[json['type'] ?? 0],
+    isRead: json['isRead'] ?? false,
+    metadata: json['metadata'],
+  );
 
   Message copyWith({
-    String? id,
-    String? chatId,
-    String? senderId,
     String? content,
-    String? type,
-    DateTime? timestamp,
     bool? isRead,
-    Map<String, dynamic>? extra,
-  }) {
-    return Message(
-      id: id ?? this.id,
-      chatId: chatId ?? this.chatId,
-      senderId: senderId ?? this.senderId,
-      content: content ?? this.content,
-      type: type ?? this.type,
-      timestamp: timestamp ?? this.timestamp,
-      isRead: isRead ?? this.isRead,
-      extra: extra ?? this.extra,
-    );
-  }
+    Map<String, dynamic>? metadata,
+  }) => Message(
+    id: id,
+    content: content ?? this.content,
+    sender: sender,
+    timestamp: timestamp,
+    type: type,
+    isRead: isRead ?? this.isRead,
+    metadata: metadata ?? this.metadata,
+  );
 } 

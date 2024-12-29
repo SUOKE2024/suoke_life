@@ -1,30 +1,22 @@
 import 'package:get/get.dart';
-import 'package:shared_preferences.dart';
-import '../core/network/api_client.dart';
-import '../core/utils/token_manager.dart';
-import '../services/auth_service.dart';
-import '../services/user_service.dart';
-import '../services/message_service.dart';
-import '../services/session_manager_service.dart';
-import '../services/storage_service.dart';
-import '../services/network_service.dart';
-import '../services/ai_service.dart';
-import '../services/settings_service.dart';
-import '../services/analytics_service.dart';
+import '../controllers/home/home_controller.dart';
+import '../services/features/suoke/suoke_service.dart';
+import '../services/features/ai/doubao_service.dart';
+import '../services/features/ai/assistants/xiaoi_service.dart';
+import '../services/features/chat/chat_service.dart';
 
 class InitialBinding extends Bindings {
   @override
   void dependencies() {
     // 核心服务
-    Get.put(StorageService());
-    Get.put(NetworkService());
-    Get.put(AuthService());
+    Get.put<SuokeService>(SuokeServiceImpl());
     
-    // AI服务
-    Get.put(AiService());
-    
-    // 其他基础服务
-    Get.put(SettingsService());
-    Get.put(AnalyticsService());
+    // 控制器
+    Get.put<HomeController>(HomeController());
+    Get.lazyPut<ChatController>(() => ChatController());
+    Get.lazyPut<SuokeController>(() => SuokeController());
+    Get.lazyPut<ExploreController>(() => ExploreController());
+    Get.lazyPut<LifeController>(() => LifeController());
+    Get.lazyPut<ProfileController>(() => ProfileController());
   }
 } 

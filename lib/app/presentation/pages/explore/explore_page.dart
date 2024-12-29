@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../controllers/explore_controller.dart';
-import '../../widgets/explore_card.dart';
+import '../../controllers/explore/explore_controller.dart';
+import '../../widgets/explore/topic_card.dart';
+import '../../widgets/explore/knowledge_graph.dart';
 
 class ExplorePage extends GetView<ExploreController> {
   const ExplorePage({Key? key}) : super(key: key);
@@ -14,34 +15,73 @@ class ExplorePage extends GetView<ExploreController> {
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
-            onPressed: () => Get.toNamed('/explore/search'),
+            onPressed: () => controller.showSearch(),
           ),
         ],
       ),
-      body: Obx(() => ListView(
-        children: [
-          // 知识岛探秘
-          ExploreCard(
-            title: '知识岛探秘',
-            subtitle: '探索前沿知识',
-            onTap: () => Get.toNamed('/explore/knowledge'),
-          ),
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-          // 咖啡时光
-          ExploreCard(
-            title: '咖啡时光',
-            subtitle: '轻松交流分享',
-            onTap: () => Get.toNamed('/explore/coffee'),
-          ),
-
-          // 其他探索内容
-          ...controller.exploreItems.map((item) => ExploreCard(
-            title: item.title,
-            subtitle: item.subtitle,
-            onTap: () => Get.toNamed('/explore/detail/${item.id}'),
-          )),
-        ],
-      )),
+        return ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            // 知识图谱
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      '知识图谱',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    KnowledgeGraph(data: controller.graphData.value),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            // 探索主题
+            const Text(
+              '探索主题',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 16,
+                crossAxisSpacing: 16,
+                childAspectRatio: 1.2,
+              ),
+              itemCount: controller.topics.length,
+              itemBuilder: (context, index) {
+                final topic = controller.topics[index];
+                return TopicCard(
+                  topic: topic,
+                  onTap: () => controller.openTopic(topic),
+                );
+              },
+            ),
+          ],
+        );
+      }),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => controller.showLaoKe(),
+        child: const Icon(Icons.chat),
+      ),
     );
   }
 } 

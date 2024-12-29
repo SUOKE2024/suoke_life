@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import '../../data/models/life_record.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class LifeRecordCard extends StatelessWidget {
   final LifeRecord record;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   const LifeRecordCard({
     Key? key,
     required this.record,
-    required this.onTap,
+    this.onTap,
   }) : super(key: key);
+
+  String _formatDate(DateTime date) {
+    return timeago.format(date, locale: 'zh');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +35,7 @@ class LifeRecordCard extends StatelessWidget {
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   Text(
-                    _formatDate(record.createdAt),
+                    _formatDate(record.timestamp),
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],
@@ -38,31 +43,14 @@ class LifeRecordCard extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 record.content,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.bodyMedium,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
               ),
-              if (record.tags.isNotEmpty) ...[
-                const SizedBox(height: 8),
-                Wrap(
-                  spacing: 8,
-                  children: record.tags
-                      .map((tag) => Chip(
-                            label: Text(tag),
-                            materialTapTargetSize:
-                                MaterialTapTargetSize.shrinkWrap,
-                          ))
-                      .toList(),
-                ),
-              ],
             ],
           ),
         ),
       ),
     );
-  }
-
-  String _formatDate(DateTime date) {
-    return '${date.month}-${date.day}';
   }
 } 

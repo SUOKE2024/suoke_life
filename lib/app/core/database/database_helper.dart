@@ -1,12 +1,8 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import '../constants/database_constants.dart';
 
 class DatabaseHelper {
-  static final DatabaseHelper instance = DatabaseHelper._();
   static Database? _database;
-
-  DatabaseHelper._();
 
   Future<Database> get database async {
     if (_database != null) return _database!;
@@ -15,10 +11,6 @@ class DatabaseHelper {
   }
 
   Future<Database> _initDatabase() async {
-    if (databaseFactory == null) {
-      throw StateError('Database factory not initialized');
-    }
-    
     final path = await getDatabasesPath();
     final dbPath = join(path, 'suoke.db');
 
@@ -26,19 +18,60 @@ class DatabaseHelper {
       dbPath,
       version: 1,
       onCreate: _onCreate,
+      onUpgrade: _onUpgrade,
     );
   }
 
-  Future<void> _onCreate(Database db, int version) async {
-    await db.execute(DatabaseConstants.createTableSyncLogs);
-    await db.execute(DatabaseConstants.createTableTags);
-    await db.execute(DatabaseConstants.createTableSyncConfigs);
-    await db.execute(DatabaseConstants.createTableAiChats);
+  Future<void> init() async {
+    await database;
+  }
 
+  Future<void> _onCreate(Database db, int version) async {
+    // 创建用户表
     await db.execute('''
-      CREATE TABLE IF NOT EXISTS test_table (
+      CREATE TABLE users (
         id TEXT PRIMARY KEY,
-        name TEXT
+        name TEXT NOT NULL,
+        avatar TEXT,
+        role TEXT,
+        specialty TEXT,
+        description TEXT,
+        created_at INTEGER NOT NULL
+      )
+    ''');
+
+    // 创建消息表
+    await db.execute('''
+      CREATE TABLE messages (
+        id TEXT PRIMARY KEY,
+        room_id TEXT NOT NULL,
+        content TEXT NOT NULL,
+        type TEXT NOT NULL,
+        sender_id TEXT NOT NULL,
+        timestamp INTEGER NOT NULL
+      )
+    ''');
+
+    // 创建服务表
+    await db.execute('''
+      CREATE TABLE services (
+        id TEXT PRIMARY KEY,
+        title TEXT NOT NULL,
+        description TEXT,
+        type TEXT NOT NULL,
+        image_url TEXT,
+        status TEXT,
+        created_at INTEGER NOT NULL
+      )
+    ''');
+
+    // 创建健康调查表
+    await db.execute('''
+      CREATE TABLE surveys (
+        id TEXT PRIMARY KEY,
+        user_id TEXT NOT NULL,
+        content TEXT NOT NULL,
+        created_at INTEGER NOT NULL
       )
     ''');
   }
@@ -47,52 +80,68 @@ class DatabaseHelper {
     // 处理数据库升级
   }
 
-  Future<void> insert(String table, Map<String, dynamic> data) async {
+  Future<List<Map<String, dynamic>>> query(
+    String table, {
+    bool? distinct,
+    List<String>? columns,
+    String? where,
+    List<Object?>? whereArgs,
+    String? groupBy,
+    String? having,
+    String? orderBy,
+    int? limit,
+    int? offset,
+  }) async {
     final db = await database;
-    await db.insert(
+    return db.query(
       table,
-      data,
-      conflictAlgorithm: ConflictAlgorithm.replace,
+      distinct: distinct,
+      columns: columns,
+      where: where,
+      whereArgs: whereArgs,
+      groupBy: groupBy,
+      having: having,
+      orderBy: orderBy,
+      limit: limit,
+      offset: offset,
     );
   }
 
-  Future<Map<String, dynamic>?> get(String table, String id) async {
+  Future<int> insert(String table, Map<String, Object?> values) async {
     final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query(
-      table,
-      where: 'id = ?',
-      whereArgs: [id],
-    );
-    if (maps.isEmpty) return null;
-    return maps.first;
+    return db.insert(table, values);
   }
 
-  Future<List<Map<String, dynamic>>> getAll(String table) async {
+  Future<int> update(
+    String table,
+    Map<String, Object?> values, {
+    String? where,
+    List<Object?>? whereArgs,
+  }) async {
     final db = await database;
-    return await db.query(table);
-  }
-
-  Future<int> update(String table, Map<String, dynamic> data, String id) async {
-    final db = await database;
-    return await db.update(
+    return db.update(
       table,
-      data,
-      where: 'id = ?',
-      whereArgs: [id],
+      values,
+      where: where,
+      whereArgs: whereArgs,
     );
   }
 
-  Future<int> delete(String table, String id) async {
+  Future<int> delete(
+    String table, {
+    String? where,
+    List<Object?>? whereArgs,
+  }) async {
     final db = await database;
-    return await db.delete(
+    return db.delete(
       table,
-      where: 'id = ?',
-      whereArgs: [id],
+      where: where,
+      whereArgs: whereArgs,
     );
   }
 
-  Future<void> close() async {
+  Future<void> execute(String sql) async {
     final db = await database;
-    await db.close();
+    await db.execute(sql);
   }
 } 

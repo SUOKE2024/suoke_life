@@ -1,43 +1,39 @@
 class ExploreItem {
   final String id;
   final String title;
-  final String subtitle;
+  final String content;
   final String? imageUrl;
-  final String type;
-  final Map<String, dynamic>? metadata;
+  final String? type;
   final DateTime createdAt;
 
   ExploreItem({
     required this.id,
     required this.title,
-    required this.subtitle,
+    required this.content,
     this.imageUrl,
-    required this.type,
-    this.metadata,
-    required this.createdAt,
-  });
+    this.type,
+    DateTime? createdAt,
+  }) : createdAt = createdAt ?? DateTime.now();
+
+  factory ExploreItem.fromMap(Map<String, dynamic> map) {
+    return ExploreItem(
+      id: map['id'] as String,
+      title: map['title'] as String,
+      content: map['content'] as String,
+      imageUrl: map['image_url'] as String?,
+      type: map['type'] as String?,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(map['created_at'] as int),
+    );
+  }
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'title': title,
-      'subtitle': subtitle,
+      'content': content,
       'image_url': imageUrl,
       'type': type,
-      'metadata': metadata,
-      'created_at': createdAt.toIso8601String(),
+      'created_at': createdAt.millisecondsSinceEpoch,
     };
-  }
-
-  factory ExploreItem.fromMap(Map<String, dynamic> map) {
-    return ExploreItem(
-      id: map['id'],
-      title: map['title'],
-      subtitle: map['subtitle'],
-      imageUrl: map['image_url'],
-      type: map['type'],
-      metadata: map['metadata'],
-      createdAt: DateTime.parse(map['created_at']),
-    );
   }
 } 

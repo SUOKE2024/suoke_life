@@ -1,28 +1,23 @@
 class ModuleRegistry {
-  static final _modules = <String, BaseModule>{};
+  static final Map<String, BaseModule> _modules = {};
   
-  static void registerModules() {
-    // 核心模块
-    _register([
-      CoreModule(),
-      NetworkModule(),
-      StorageModule(),
-    ]);
-    
-    // 功能模块
-    _register([
-      ChatModule(),
-      AIModule(),
-      GamesModule(),
-    ]);
-  }
-  
-  static void _register(List<BaseModule> modules) {
-    for (final module in modules) {
-      if (_modules.containsKey(module.name)) {
-        throw ModuleAlreadyRegisteredException(module.name);
-      }
+  static void registerModule(BaseModule module) {
+    if (!_modules.containsKey(module.name)) {
       _modules[module.name] = module;
     }
+  }
+
+  static Future<void> initializeModules() async {
+    for (final module in _modules.values) {
+      await module.init();
+    }
+  }
+
+  static List<GetPage> get pages {
+    return _modules.values.expand((m) => m.pages).toList();
+  }
+
+  static List<Bindings> get bindings {
+    return _modules.values.expand((m) => m.bindings).toList();
   }
 } 

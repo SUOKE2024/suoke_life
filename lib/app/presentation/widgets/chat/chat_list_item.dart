@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../../data/models/chat_conversation.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import '../../../data/models/chat.dart';
 
 class ChatListItem extends StatelessWidget {
-  final ChatConversation chat;
+  final Chat chat;
   final VoidCallback onTap;
 
   const ChatListItem({
@@ -15,13 +15,11 @@ class ChatListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: onTap,
       leading: Stack(
         children: [
           CircleAvatar(
-            backgroundImage: NetworkImage(chat.avatar),
-            radius: 25,
-            child: chat.type == 'ai' ? const Icon(Icons.smart_toy) : null,
+            backgroundImage: NetworkImage(chat.avatar ?? ''),
+            child: chat.isAI ? const Icon(Icons.smart_toy) : null,
           ),
           if (chat.unreadCount > 0)
             Positioned(
@@ -49,60 +47,13 @@ class ChatListItem extends StatelessWidget {
             ),
         ],
       ),
-      title: Row(
-        children: [
-          Text(
-            chat.title,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          if (chat.type == 'ai')
-            Container(
-              margin: const EdgeInsets.only(left: 8),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 6,
-                vertical: 2,
-              ),
-              decoration: BoxDecoration(
-                color: Colors.blue[100],
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Text(
-                _getAiType(chat.title),
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.blue[800],
-                ),
-              ),
-            ),
-        ],
+      title: Text(chat.title),
+      subtitle: Text(chat.lastMessage ?? ''),
+      trailing: Text(
+        timeago.format(chat.lastMessageTime ?? DateTime.now(), locale: 'zh'),
+        style: Theme.of(context).textTheme.bodySmall,
       ),
-      subtitle: Text(
-        _getLastMessageTime(chat.lastMessageAt),
-        style: TextStyle(
-          color: Colors.grey[600],
-          fontSize: 12,
-        ),
-      ),
+      onTap: onTap,
     );
-  }
-
-  String _getAiType(String title) {
-    switch (title) {
-      case '小艾':
-        return '生活管家';
-      case '老克':
-        return '知识顾问';
-      case '小克':
-        return '商务助手';
-      default:
-        return 'AI助手';
-    }
-  }
-
-  String _getLastMessageTime(DateTime? time) {
-    if (time == null) return '';
-    return timeago.format(time, locale: 'zh');
   }
 } 

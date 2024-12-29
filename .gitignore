@@ -1,45 +1,77 @@
-# Generated files
-*.g.dart
-*.freezed.dart
-*.mocks.dart
-*.config.dart
-
-# Build
-/build/
+# Flutter/Dart specific
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
 .packages
-pubspec.lock
-
-# IDE
+.pub-cache/
+.pub/
+build/
+*.iml
+*.iws
+*.ipr
 .idea/
 .vscode/
-*.iml
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
 
-# iOS
+# iOS specific
 ios/Pods/
-ios/.symlinks/
+ios/Podfile.lock
+ios/*.xcworkspace
+ios/*.mode1v3
+ios/*.mode2v3
+ios/*.moved-aside
+ios/*.pbxuser
+ios/*.perspectivev3
+ios/DerivedData/
+ios/.generated/
+ios/Flutter/App.framework
+ios/Flutter/Flutter.framework
 ios/Flutter/Flutter.podspec
 ios/Flutter/Generated.xcconfig
+ios/Flutter/ephemeral/
 ios/Flutter/flutter_export_environment.sh
 
-# Android
-android/.gradle/
+# Android specific
+android/gradle-wrapper.jar
+android/.gradle
+android/captures/
+android/gradlew
+android/gradlew.bat
 android/local.properties
-android/app/debug/
-android/app/profile/
-android/app/release/
+android/GeneratedPluginRegistrant.java
+android/key.properties
+android/*.keystore
+android/app/debug
+android/app/profile
+android/app/release
 
-# Environment
+# Environment files
 .env
-.env.development
-.env.production
-.env.staging
-
-# Keep example file
+.env.*
 !.env.example
 
-# Logs
-*.log
+# Generated files
+*.g.dart
+*.freezed.dart
+*.mocks.dart
+
+# Coverage
 coverage/
+test/coverage_helper_test.dart
+
+# Database
+*.db
+*.db-journal
+
+# Temporary files
+*.tmp
+*.temp
+*.bak

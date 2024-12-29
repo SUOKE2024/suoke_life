@@ -1,16 +1,35 @@
 import 'package:get/get.dart';
-import '../config/app_config.dart';
-import '../storage/storage_manager.dart';
-import '../device/device_manager.dart';
-import '../analytics/analytics_manager.dart';
+import '../database/database_helper.dart';
+import '../../services/features/chat/chat_service.dart';
+import '../../services/features/suoke/suoke_service.dart';
+import '../../presentation/controllers/home/home_controller.dart';
 
 class AppBindings extends Bindings {
   @override
   void dependencies() {
-    // Core Services
-    Get.put(AppConfig(), permanent: true);
-    Get.put(StorageManager(), permanent: true);
-    Get.put(DeviceManager(), permanent: true);
-    Get.put(AnalyticsManager.instance, permanent: true);
+    // 注册数据库
+    Get.put<DatabaseHelper>(
+      DatabaseHelper(),
+      permanent: true,
+    );
+
+    // 注册 SuokeService
+    Get.put<SuokeService>(
+      SuokeServiceImpl(),
+      permanent: true,
+    );
+
+    // 注册 ChatService
+    Get.put<ChatService>(
+      ChatService(),
+      permanent: true,
+    );
+
+    // 注册 HomeController
+    Get.lazyPut<HomeController>(
+      () => HomeController(
+        suokeService: Get.find<SuokeService>(),
+      ),
+    );
   }
 } 

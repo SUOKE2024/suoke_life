@@ -1,15 +1,22 @@
 import 'package:get/get.dart';
-import '../controllers/ai_chat_controller.dart';
-import '../../services/chat_service.dart';
-import '../../services/doubao_service.dart';
-import '../../services/voice_service.dart';
+import '../core/services/ai_service.dart';
+import '../presentation/controllers/ai_chat_controller.dart';
 
-class AiChatBinding implements Bindings {
+class AIChatBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(() => ChatService());
-    Get.lazyPut(() => DouBaoService());
-    Get.lazyPut(() => VoiceService());
-    Get.lazyPut(() => AiChatController());
+    // 获取路由参数中的 AI ID
+    final aiId = Get.parameters['id'] ?? '';
+    
+    // 注入 AI 服务
+    Get.lazyPut<AIService>(() => AIService(
+      apiClient: Get.find(),
+    ));
+    
+    // 注入 AI 聊天控制器
+    Get.lazyPut<AIChatController>(() => AIChatController(
+      aiService: Get.find(),
+      aiId: aiId,
+    ));
   }
 } 

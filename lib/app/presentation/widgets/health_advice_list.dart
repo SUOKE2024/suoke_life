@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../data/models/health_advice.dart';
-import 'health_advice_list_item.dart';
-import 'package:get/get.dart';
-import '../controllers/health_advice_controller.dart';
-import 'health_advice_list_header.dart';
 
 class HealthAdviceList extends StatelessWidget {
-  final List<HealthAdvice> advices;
-  final Function(HealthAdvice) onTap;
+  final List<Map<String, dynamic>> advices;
+  final Function(Map<String, dynamic>) onTap;
 
   const HealthAdviceList({
     Key? key,
@@ -17,32 +12,47 @@ class HealthAdviceList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<HealthAdviceController>();
-
-    return RefreshIndicator(
-      onRefresh: controller.refreshAdvices,
-      child: CustomScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        slivers: [
-          SliverToBoxAdapter(
-            child: HealthAdviceListHeader(advices: displayAdvices),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  return HealthAdviceListItem(
-                    advice: displayAdvices[index],
-                    onTap: () => onTap(displayAdvices[index]),
-                  );
-                },
-                childCount: displayAdvices.length,
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: advices.length,
+      itemBuilder: (context, index) {
+        final advice = advices[index];
+        return Card(
+          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: ListTile(
+            leading: CircleAvatar(
+              backgroundColor: Theme.of(context).primaryColor,
+              child: Icon(
+                _getIconData(advice['type']),
+                color: Colors.white,
               ),
             ),
+            title: Text(advice['title'] ?? ''),
+            subtitle: Text(
+              advice['content'] ?? '',
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+            onTap: () => onTap(advice),
           ),
-        ],
-      ),
+        );
+      },
     );
+  }
+
+  IconData _getIconData(String? type) {
+    switch (type) {
+      case 'diet':
+        return Icons.restaurant;
+      case 'exercise':
+        return Icons.fitness_center;
+      case 'sleep':
+        return Icons.bedtime;
+      case 'medicine':
+        return Icons.medical_services;
+      default:
+        return Icons.health_and_safety;
+    }
   }
 } 

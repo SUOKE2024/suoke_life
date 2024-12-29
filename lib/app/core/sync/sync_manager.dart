@@ -1,85 +1,33 @@
 class SyncManager {
-  static final instance = SyncManager._();
-  SyncManager._();
-
-  final _syncQueue = Queue<SyncTask>();
-  final _syncInProgress = false.obs;
-  final _lastSyncTime = Rxn<DateTime>();
+  final StorageService _storage;
+  final NetworkService _network;
+  final _syncQueue = <SyncTask>[];
   
-  Timer? _syncTimer;
-  final _eventBus = Get.find<EventBus>();
+  bool _isSyncing = false;
 
-  Future<void> initialize() async {
-    await _loadLastSyncTime();
-    _startPeriodicSync();
-  }
-
-  Future<void> _loadLastSyncTime() async {
-    final storage = Get.find<StorageManager>();
-    final timestamp = await storage.get<int>('last_sync_time');
-    if (timestamp != null) {
-      _lastSyncTime.value = DateTime.fromMillisecondsSinceEpoch(timestamp);
+  Future<void> scheduleSync(SyncTask task) async {
+    _syncQueue.add(task);
+    if (!_isSyncing) {
+      await _processQueue();
     }
   }
 
-  void _startPeriodicSync() {
-    _syncTimer = Timer.periodic(const Duration(minutes: 15), (_) {
-      scheduleSync();
-    });
-  }
-
-  Future<void> scheduleSync({bool immediate = false}) async {
-    if (immediate) {
-      await _performSync();
-    } else {
-      _syncQueue.add(SyncTask());
-      _processSyncQueue();
+  Future<void> _processQueue() async {
+    if (_syncQueue.isEmpty) {
+      _isSyncing = false;
+      return;
     }
-  }
 
-  Future<void> _processSyncQueue() async {
-    if (_syncInProgress.value || _syncQueue.isEmpty) return;
+    _isSyncing = true;
+    final task = _syncQueue.removeAt(0);
 
-    _syncInProgress.value = true;
     try {
-      while (_syncQueue.isNotEmpty) {
-        final task = _syncQueue.removeFirst();
-        await _performSync(task);
-      }
-    } finally {
-      _syncInProgress.value = false;
-    }
-  }
-
-  Future<void> _performSync([SyncTask? task]) async {
-    try {
-      // 执行同步逻辑
-      await _syncUserData();
-      await _syncAppSettings();
-      await _syncGameData();
-      
-      _lastSyncTime.value = DateTime.now();
-      await _saveLastSyncTime();
-      
-      _eventBus.fire(SyncCompletedEvent());
+      await task.execute();
     } catch (e) {
-      _eventBus.fire(SyncFailedEvent(error: e));
-      rethrow;
+      // 失败后重新加入队列
+      _syncQueue.add(task);
     }
-  }
 
-  Future<void> _saveLastSyncTime() async {
-    final storage = Get.find<StorageManager>();
-    await storage.set('last_sync_time', _lastSyncTime.value!.millisecondsSinceEpoch);
+    await _processQueue();
   }
-
-  void dispose() {
-    _syncTimer?.cancel();
-    _syncQueue.clear();
-  }
-}
-
-class SyncTask {
-  final DateTime createdAt = DateTime.now();
-  final String id = const Uuid().v4();
 } 

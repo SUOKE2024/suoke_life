@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
 
 class ChatInputBar extends StatefulWidget {
-  final void Function(String) onSendText;
-  final VoidCallback? onVoiceStart;
-  final VoidCallback? onVoiceEnd;
-  final VoidCallback? onVoiceCancel;
-  final VoidCallback? onTapExtra;
+  final Function(String) onSend;
+  final VoidCallback onVoice;
+  final VoidCallback onAttachment;
 
   const ChatInputBar({
     Key? key,
-    required this.onSendText,
-    this.onVoiceStart,
-    this.onVoiceEnd,
-    this.onVoiceCancel,
-    this.onTapExtra,
+    required this.onSend,
+    required this.onVoice,
+    required this.onAttachment,
   }) : super(key: key);
 
   @override
@@ -21,92 +17,80 @@ class ChatInputBar extends StatefulWidget {
 }
 
 class _ChatInputBarState extends State<ChatInputBar> {
-  final TextEditingController _textController = TextEditingController();
+  final _controller = TextEditingController();
   bool _isVoiceMode = false;
 
   @override
   void dispose() {
-    _textController.dispose();
+    _controller.dispose();
     super.dispose();
-  }
-
-  void _handleSend() {
-    final text = _textController.text.trim();
-    if (text.isNotEmpty) {
-      widget.onSendText(text);
-      _textController.clear();
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 4,
+            color: Colors.black12,
             offset: const Offset(0, -1),
+            blurRadius: 4,
           ),
         ],
       ),
-      child: SafeArea(
-        child: Row(
-          children: [
-            // 语音/键盘切换按钮
-            if (widget.onVoiceStart != null)
-              IconButton(
-                icon: Icon(_isVoiceMode ? Icons.keyboard : Icons.mic),
-                onPressed: () {
-                  setState(() {
-                    _isVoiceMode = !_isVoiceMode;
-                  });
-                },
-              ),
-            // 输入区域
+      child: Row(
+        children: [
+          IconButton(
+            icon: Icon(_isVoiceMode ? Icons.keyboard : Icons.mic),
+            onPressed: () {
+              setState(() {
+                _isVoiceMode = !_isVoiceMode;
+              });
+            },
+          ),
+          if (_isVoiceMode)
             Expanded(
-              child: _isVoiceMode
-                  ? GestureDetector(
-                      onTapDown: (_) => widget.onVoiceStart?.call(),
-                      onTapUp: (_) => widget.onVoiceEnd?.call(),
-                      onTapCancel: () => widget.onVoiceCancel?.call(),
-                      child: Container(
-                        height: 36,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(18),
-                        ),
-                        alignment: Alignment.center,
-                        child: const Text('按住说话'),
-                      ),
-                    )
-                  : TextField(
-                      controller: _textController,
-                      decoration: const InputDecoration(
-                        hintText: '输入消息...',
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
-                      ),
-                      maxLines: null,
-                    ),
+              child: GestureDetector(
+                onLongPressStart: (_) => widget.onVoice(),
+                child: Container(
+                  height: 40,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Center(
+                    child: Text('按住说话'),
+                  ),
+                ),
+              ),
+            )
+          else
+            Expanded(
+              child: TextField(
+                controller: _controller,
+                decoration: const InputDecoration(
+                  hintText: '输入消息...',
+                  border: InputBorder.none,
+                ),
+              ),
             ),
-            // 发送/更多按钮
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: widget.onAttachment,
+          ),
+          if (!_isVoiceMode)
             IconButton(
               icon: const Icon(Icons.send),
-              onPressed: _handleSend,
+              onPressed: () {
+                if (_controller.text.isNotEmpty) {
+                  widget.onSend(_controller.text);
+                  _controller.clear();
+                }
+              },
             ),
-            if (widget.onTapExtra != null)
-              IconButton(
-                icon: const Icon(Icons.add_circle_outline),
-                onPressed: widget.onTapExtra,
-              ),
-          ],
-        ),
+        ],
       ),
     );
   }

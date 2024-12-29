@@ -1,68 +1,70 @@
+import 'package:flutter/foundation.dart';
 
+/// 消息角色枚举
+enum MessageRole {
+  user,     // 用户
+  assistant, // AI助手
+  system    // 系统
+}
+
+/// 消息类型枚举
+enum MessageType {
+  text,
+  image,
+  voice,
+  file,
+}
+
+/// 聊天消息模型
 class ChatMessage {
+  static const String userSenderId = 'user';
+  static const String assistantSenderId = 'assistant';
+
   final String id;
-  final int conversationId;
+  final String roomId;
   final String content;
   final String type;
   final String senderId;
-  final String senderAvatar;
-  final DateTime createdAt;
-  final bool isRead;
+  final String? senderAvatar;
+  final DateTime timestamp;
+  final String? senderType;
 
-  // 常量定义
-  static const String typeText = 'text';
-  static const String typeVoice = 'voice';
-  static const String typeFile = 'file';
-  static const String typeSystem = 'system';
-
-  static const String senderUser = 'user';
-  static const String senderAi = 'ai';
-  static const String senderSystem = 'system';
+  bool get isFromUser => senderId == userSenderId;
 
   ChatMessage({
     required this.id,
-    required this.conversationId,
+    required this.roomId,
     required this.content,
     required this.type,
     required this.senderId,
-    required this.senderAvatar,
-    required this.createdAt,
-    this.isRead = false,
+    this.senderAvatar,
+    required this.timestamp,
+    this.senderType,
   });
 
-  // 便捷方法
-  bool get isTextMessage => type == typeText;
-  bool get isVoiceMessage => type == typeVoice;
-  bool get isFileMessage => type == typeFile;
-  bool get isSystemMessage => type == typeSystem;
+  factory ChatMessage.fromMap(Map<String, dynamic> map) {
+    return ChatMessage(
+      id: map['id'] as String,
+      roomId: map['room_id'] as String,
+      content: map['content'] as String,
+      type: map['type'] as String,
+      senderId: map['sender_id'] as String,
+      senderAvatar: map['sender_avatar'] as String?,
+      timestamp: DateTime.fromMillisecondsSinceEpoch(map['timestamp'] as int),
+      senderType: map['sender_type'] as String?,
+    );
+  }
 
-  bool get isFromUser => senderId == senderUser;
-  bool get isFromAi => senderId == senderAi;
-  bool get isFromSystem => senderId == senderSystem;
-
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'conversation_id': conversationId,
+      'room_id': roomId,
       'content': content,
       'type': type,
       'sender_id': senderId,
       'sender_avatar': senderAvatar,
-      'created_at': createdAt.toIso8601String(),
-      'is_read': isRead ? 1 : 0,
+      'timestamp': timestamp.millisecondsSinceEpoch,
+      'sender_type': senderType,
     };
-  }
-
-  factory ChatMessage.fromJson(Map<String, dynamic> json) {
-    return ChatMessage(
-      id: json['id'],
-      conversationId: json['conversation_id'],
-      content: json['content'],
-      type: json['type'],
-      senderId: json['sender_id'],
-      senderAvatar: json['sender_avatar'],
-      createdAt: DateTime.parse(json['created_at']),
-      isRead: json['is_read'] == 1,
-    );
   }
 } 

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../routes/app_routes.dart';
-import '../../../controllers/settings_controller.dart';
+import '../../controllers/settings/settings_controller.dart';
 
 class SettingsPage extends GetView<SettingsController> {
   const SettingsPage({Key? key}) : super(key: key);
@@ -10,47 +9,75 @@ class SettingsPage extends GetView<SettingsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: const Text('设置'),
       ),
       body: ListView(
         children: [
+          // 通用设置
+          const ListTile(
+            title: Text('通用'),
+            dense: true,
+            visualDensity: VisualDensity.compact,
+            enabled: false,
+          ),
           ListTile(
-            title: const Text('Theme Mode'),
-            trailing: Obx(() => DropdownButton<ThemeMode>(
-              value: controller.themeMode.value,
-              onChanged: (ThemeMode? mode) {
-                if (mode != null) {
-                  controller.setThemeMode(mode);
-                }
-              },
-              items: ThemeMode.values.map((ThemeMode mode) {
-                return DropdownMenuItem(
-                  value: mode,
-                  child: Text(mode.toString()),
-                );
-              }).toList(),
+            title: const Text('语言'),
+            trailing: Obx(() => Text(controller.currentLanguage)),
+            onTap: controller.changeLanguage,
+          ),
+          ListTile(
+            title: const Text('主题'),
+            trailing: Obx(() => Text(controller.currentTheme)),
+            onTap: controller.changeTheme,
+          ),
+          ListTile(
+            title: const Text('字体大小'),
+            trailing: Obx(() => Text(controller.fontSize.value)),
+            onTap: controller.changeFontSize,
+          ),
+
+          const Divider(),
+
+          // 隐私设置
+          const ListTile(
+            title: Text('隐私'),
+            dense: true,
+            visualDensity: VisualDensity.compact,
+            enabled: false,
+          ),
+          ListTile(
+            title: const Text('通知'),
+            trailing: Obx(() => Switch(
+              value: controller.notificationsEnabled.value,
+              onChanged: controller.toggleNotifications,
             )),
           ),
           ListTile(
-            title: const Text('Font Size'),
-            trailing: Obx(() => Slider(
-              value: controller.fontSize.value,
-              min: 12,
-              max: 24,
-              divisions: 12,
-              label: controller.fontSize.value.toString(),
-              onChanged: controller.setFontSize,
+            title: const Text('生物识别'),
+            trailing: Obx(() => Switch(
+              value: controller.biometricEnabled.value,
+              onChanged: controller.toggleBiometric,
             )),
           ),
-          ListTile(
-            title: const Text('Security'),
-            trailing: const Icon(Icons.arrow_forward_ios),
-            onTap: () => Get.toNamed(Routes.LOGIN_SECURITY),
+
+          const Divider(),
+
+          // 其他设置
+          const ListTile(
+            title: Text('其他'),
+            dense: true,
+            visualDensity: VisualDensity.compact,
+            enabled: false,
           ),
           ListTile(
-            title: const Text('Notifications'),
-            trailing: const Icon(Icons.arrow_forward_ios),
-            onTap: () => Get.toNamed(Routes.LOGIN_NOTIFICATION),
+            title: const Text('清除缓存'),
+            trailing: Obx(() => Text(controller.cacheSize.value)),
+            onTap: controller.clearCache,
+          ),
+          ListTile(
+            title: const Text('关于'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => Get.toNamed('/settings/about'),
           ),
         ],
       ),

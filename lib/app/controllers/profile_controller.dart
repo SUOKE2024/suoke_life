@@ -1,11 +1,15 @@
 import 'package:get/get.dart';
-import '../routes/app_routes.dart';
+import '../services/auth/auth_service.dart';
 
 class ProfileController extends GetxController {
-  void navigateToSettings() => Get.toNamed(Routes.SETTINGS);
+  final AuthService _authService = Get.find();
   
   Future<void> logout() async {
-    // TODO: 实现登出逻辑
-    Get.offAllNamed(Routes.LOGIN);
+    try {
+      await _authService.logout();
+      Get.offAllNamed('/login');
+    } catch (e) {
+      Get.snackbar('错误', '登出失败');
+    }
   }
 } 

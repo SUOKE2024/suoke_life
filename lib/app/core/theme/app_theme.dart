@@ -1,91 +1,39 @@
 import 'package:flutter/material.dart';
 import 'app_colors.dart';
+import 'package:get_it/get_it.dart';
+import 'package:injectable/injectable.dart';
+
+final getIt = GetIt.instance;
 
 class AppTheme {
   static ThemeData get light => ThemeData(
-    primaryColor: AppColors.primary,
-    scaffoldBackgroundColor: AppColors.background,
-    appBarTheme: const AppBarTheme(
-      backgroundColor: AppColors.primary,
-      foregroundColor: Colors.white,
+    useMaterial3: true,
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: Colors.blue,
+      brightness: Brightness.light,
+    ),
+    // 自定义组件主题
+    cardTheme: const CardTheme(
       elevation: 0,
-      centerTitle: true,
-    ),
-    cardTheme: CardTheme(
-      elevation: 2,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
     ),
+    // 无障碍支持
     textTheme: const TextTheme(
-      titleLarge: TextStyle(
-        fontSize: 20,
-        fontWeight: FontWeight.bold,
-        color: AppColors.text,
-      ),
-      bodyLarge: TextStyle(
-        fontSize: 16,
-        color: AppColors.text,
-      ),
-      bodyMedium: TextStyle(
-        fontSize: 14,
-        color: AppColors.textLight,
-      ),
+      bodyLarge: TextStyle(fontSize: 16),
+      bodyMedium: TextStyle(fontSize: 14),
+    ).apply(
+      fontSizeFactor: getIt<AccessibilityManager>().fontScale,
     ),
-    buttonTheme: ButtonThemeData(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      buttonColor: AppColors.primary,
-    ),
-    colorScheme: ColorScheme.light(
-      primary: AppColors.primary,
-      secondary: AppColors.primary.withOpacity(0.8),
-    ),
-    fontFamily: null,
   );
 
   static ThemeData get dark => ThemeData(
-    primaryColor: AppColors.primaryDark,
-    scaffoldBackgroundColor: Colors.black,
-    brightness: Brightness.dark,
-    appBarTheme: const AppBarTheme(
-      backgroundColor: AppColors.primaryDark,
-      foregroundColor: Colors.white,
-      elevation: 0,
-      centerTitle: true,
+    useMaterial3: true,
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: Colors.blue,
+      brightness: Brightness.dark,
     ),
-    cardTheme: CardTheme(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-    ),
-    textTheme: const TextTheme(
-      titleLarge: TextStyle(
-        fontSize: 20,
-        fontWeight: FontWeight.bold,
-        color: Colors.white,
-      ),
-      bodyLarge: TextStyle(
-        fontSize: 16,
-        color: Colors.white,
-      ),
-      bodyMedium: TextStyle(
-        fontSize: 14,
-        color: Colors.white70,
-      ),
-    ),
-    buttonTheme: ButtonThemeData(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      buttonColor: AppColors.primaryDark,
-    ),
-    colorScheme: ColorScheme.dark(
-      primary: AppColors.primaryDark,
-      secondary: AppColors.primaryDark.withOpacity(0.8),
-    ),
-    fontFamily: null,
+    // ... 暗色主题配置
   );
 } 

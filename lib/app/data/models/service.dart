@@ -1,34 +1,39 @@
-import 'package:flutter/material.dart';
-
-
 class Service {
   final String id;
-  final String name;
+  final String title;
   final String description;
-  final String iconPath;
-  final bool isEnabled;
+  final String type;
+  final String? imageUrl;
+  final Map<String, dynamic>? config;
 
   Service({
     required this.id,
-    required this.name,
+    required this.title,
     required this.description,
-    required this.iconPath,
-    this.isEnabled = true,
+    required this.type,
+    this.imageUrl,
+    this.config,
   });
 
-  Map<String, dynamic> toMap() => {
-    'id': id,
-    'name': name,
-    'description': description,
-    'icon_path': iconPath,
-    'is_enabled': isEnabled ? 1 : 0,
-  };
+  factory Service.fromMap(Map<String, dynamic> map) {
+    return Service(
+      id: map['id'] as String,
+      title: map['title'] as String,
+      description: map['description'] as String,
+      type: map['type'] as String,
+      imageUrl: map['image_url'] as String?,
+      config: map['config'] as Map<String, dynamic>?,
+    );
+  }
 
-  factory Service.fromMap(Map<String, dynamic> map) => Service(
-    id: map['id'],
-    name: map['name'],
-    description: map['description'],
-    iconPath: map['icon_path'],
-    isEnabled: map['is_enabled'] == 1,
-  );
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'title': title,
+      'description': description,
+      'type': type,
+      'image_url': imageUrl,
+      'config': config,
+    };
+  }
 } 

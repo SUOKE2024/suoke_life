@@ -3,16 +3,23 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:sqflite/sqflite.dart';
+import '../../lib/app/core/utils/timeago_utils.dart';
 
 class TestHelper {
-  static void setupTest() {
-    Get.reset();
+  static Future<void> initializeTest() async {
+    TestWidgetsFlutterBinding.ensureInitialized();
+    SharedPreferences.setMockInitialValues({});
     
-    // 初始化 FFI
+    // 初始化 SQLite
     sqfliteFfiInit();
-    // 设置数据库工厂
     databaseFactory = databaseFactoryFfi;
+    
+    // 初始化 timeago
+    TimeagoUtils.init();
+    
+    // 初始化 GetX
+    Get.testMode = true;
+    Get.reset();
   }
 
   static void clearTest() {
