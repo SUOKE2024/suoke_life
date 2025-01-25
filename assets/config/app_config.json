@@ -1,0 +1,15 @@
+{
+  "appName": "Suoke Life",
+  "appVersion": "1.0.0",
+  "apiUrl": "http://localhost:8001/api/v1",
+  "env": "dev",
+  "logLevel": "debug",
+  "databaseName": "suoke_life_db.db",
+  "dataContributionEnabled": false,
+  "dataContributionApiEndpoint": "http://localhost:8003/api/v1/data_contribution",
+  "enableKnowledgeGraph": true,
+  "knowledgeGraphApiEndpoint": "http://localhost:8002/query",
+  "contextCompressionType": "keyword_extraction",
+  "reRankingStrategyType": "semantic_similarity",
+  "promptStrategy": "standard_rag"
+} 

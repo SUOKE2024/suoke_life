@@ -1,0 +1,13 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'suoke_services'
+    static_configs:
+      - targets: 
+        - 'user_service:3000'
+        - 'auth_service:3000'
+        - 'health_service:3000' 
+        - 'life_service:3000'
+        - 'llm_service:3000'
+        - 'ai_service:3000'

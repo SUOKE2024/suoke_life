@@ -1,0 +1,9 @@
+# AI Service
+AI_API_KEY=92492541-4e14-439e-9831-73b107cca783
+
+# Database
+DB_NAME=suoke_life.db
+DB_VERSION=1
+
+# Other Services
+ENV=development

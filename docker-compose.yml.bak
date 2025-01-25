@@ -1,0 +1,156 @@
+version: '3.8'
+services:
+    # 认证服务
+    auth_service:
+      build: ./apps/auth_service
+      ports:
+        - "3001:3000"
+      environment:
+        - DB_HOST=118.31.223.213
+        - DB_PORT=3306
+        - DB_USER=suoke
+        - DB_PASSWORD="$${Ht123!@#}"
+        - DB_NAME=suoke_health
+        - MYSQL_SSL_CA=/certs/ca.pem
+        - MYSQL_SSL_CERT=/certs/client-cert.pem
+        - MYSQL_SSL_KEY=/certs/client-key.pem
+        - REDIS_HOST=redis
+        - REDIS_PORT=6379
+      volumes:
+        - ./core:/app/core
+        - ${SSL_CERT_PATH}:/certs  # 需要用户提供证书路径
+      depends_on:
+        - redis
+  
+    # 健康数据分析服务  
+    health_service:
+      build: ./apps/health_service  
+      ports:
+        - "3002:3000"
+      environment:
+        - DB_HOST=118.31.223.213
+        - DB_PORT=3306
+        - DB_USER=suoke
+        - DB_PASSWORD="$${DB_PASSWORD}"
+        - REDIS_HOST=redis
+      volumes:
+        - ./core:/app/core
+      depends_on:
+        - redis
+  
+    # 生活服务
+    life_service:
+      build: ./apps/life_service
+      ports:
+        - "3003:3000" 
+      environment:
+        - DB_HOST=118.31.223.213
+        - DB_PORT=3306
+        - DB_USER=suoke
+        - DB_PASSWORD=${Ht123!@#}
+        - REDIS_HOST=redis
+      volumes:
+        - ./core:/app/core
+      depends_on:
+        - redis
+  
+    # 大语言模型服务
+    llm_service:
+      build: ./apps/llm_service
+      ports:
+        - "3004:3000"
+      environment:
+        - REDIS_HOST=redis
+        - KNOWLEDGE_BASE_PATH=/data/knowledge_base
+        - TRAINING_DATA_PATH=/data/training_sets
+        - DATASET_PATH=/data/datasets
+      volumes:
+        - ./core:/app/core
+        - llm_data:/data
+      depends_on:
+        - redis
+        - minio
+  
+    # 通知服务  
+    notification_service:
+      build: ./apps/notification_service
+      ports:
+        - "3005:3000"
+      environment:
+        - REDIS_HOST=redis
+      volumes:
+        - ./core:/app/core
+      depends_on:
+        - redis
+  
+    # 支付服务
+    payment_service:
+      build: ./apps/payment_service
+      ports:
+        - "3006:3000"
+      environment:
+        - DB_HOST=118.31.223.213
+        - DB_PORT=3306
+        - DB_USER=suoke
+        - DB_PASSWORD=${Ht123!@#}
+      volumes:
+        - ./core:/app/core
+  
+    # 用户服务
+    user_service:
+      image: suoke-registry-vpc.cn-hangzhou.cr.aliyuncs.com/suoke-life/user-service:prod
+      build:
+        context: ./apps/user_service
+        args:
+          REGISTRY_URL: suoke-registry.cn-hangzhou.cr.aliyuncs.com
+      ports:
+        - "3007:3000"
+      environment:
+        - DB_HOST=118.31.223.213
+        - DB_PORT=3306
+        - DB_USER=suoke
+        - DB_PASSWORD=${Ht123!@#}
+        - OSS_ACCESS_KEY_ID=${ALIYUN_OSS_ACCESS_KEY}
+        - OSS_ACCESS_KEY_SECRET=${ALIYUN_OSS_ACCESS_SECRET}
+        - NODE_ENV=production
+        - OSS_BUCKET=suoke-life
+        - OSS_REGION=oss-cn-hangzhou
+      volumes:
+        - ./core:/app/core
+      configs:
+        - source: acr-auth
+          target: /root/.docker/config.json
+  
+    redis:
+      image: redis:7.2-alpine
+      ports:
+        - "6379:6379"
+      volumes:
+        - redis_data:/data
+  
+    user_service:
+      volumes:
+        - user_private_data:/app/data/private
+        - anonymized_datasets:/app/data/shared
+  
+    user_service:
+      volumes:
+        - user_private_data:/app/data/private
+        - anonymized_datasets:/app/data/shared
+  
+  
+  # 数据存储策略配置
+    user_service:
+      volumes:
+        - user_private_data:/app/data/private
+        - anonymized_datasets:/app/data/shared
+  
+    user_service:
+      volumes:
+        - user_private_data:/app/data/private
+        - anonymized_datasets:/app/data/shared
+  
+    user_service:
+      volumes:
+        - user_private_data:/app/data/private
+        - anonymized_datasets:/app/data/shared

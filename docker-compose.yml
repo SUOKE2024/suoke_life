@@ -1,0 +1,133 @@
+version: '3.8'
+services:
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+  ai_assistant_service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${AI_ASSISTANT_PORT:-8081}:8080"
+    depends_on:
+      - redis
+  health_service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${HEALTH_SERVICE_PORT:-8082}:8080"
+    depends_on:
+      - redis
+  life_service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${LIFE_SERVICE_PORT:-8083}:8080"
+    depends_on:
+      - redis
+  user_service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${USER_SERVICE_PORT:-8084}:8080"
+    depends_on:
+      - redis
+  multimodal_service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${MULTIMODAL_SERVICE_PORT:-8085}:8080"
+    depends_on:
+      - redis
+  llm_service:
+    build:
+      context: ./apps/llm_service
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    depends_on:
+      - redis
+  auth_service:
+    image: auth_service
+    networks:
+      - suoke_backend
+    ports:
+      - "3000:3000"
+    environment:
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+    depends_on:
+      - auth_db
+  auth_db:
+    image: postgres:15.3-alpine
+    networks:
+      - suoke_backend
+    environment:
+      POSTGRES_DB: auth_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - auth_db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  health_db:
+    image: postgres:15.3-alpine
+    networks:
+      - suoke_backend
+    environment:
+      POSTGRES_DB: health_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - health_db_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - suoke_backend
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    networks:
+      - suoke_backend
+  loki:
+    image: grafana/loki:2.8.2
+    networks:
+      - suoke_backend
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+  promtail:
+    image: grafana/promtail:2.8.2
+    networks:
+      - suoke_backend
+    volumes:
+      - /var/log:/var/log
+    command: -config.file=/etc/promtail/config.yml
+networks:
+  suoke_backend:
+    name: suoke_backend
+    driver: bridge
+    attachable: true
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
+volumes:
+  grafana_data:
+  auth_db_data:
+  health_db_data:
+  redis_data:

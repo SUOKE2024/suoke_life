@@ -1,0 +1,16 @@
+{
+  "messages": [
+    {
+      "id": "1",
+      "content": "你好，我是小艾",
+      "senderId": "ai",
+      "timestamp": "2024-03-19T10:00:00Z"
+    },
+    {
+      "id": "2",
+      "content": "你好，请问有什么可以帮你的吗？",
+      "senderId": "user",
+      "timestamp": "2024-03-19T10:01:00Z"
+    }
+  ]
+} 

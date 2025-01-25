@@ -1,0 +1,4 @@
+"NSPhotoLibraryUsageDescription" = "需要访问相册以保存和选择图片";
+"NSCameraUsageDescription" = "需要访问相机以拍摄照片";
+"NSMicrophoneUsageDescription" = "需要访问麦克风以进行语音交互";
+"NSLocationWhenInUseUsageDescription" = "需要访问位置信息以提供本地服务"; 

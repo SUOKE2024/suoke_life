@@ -1,0 +1,105 @@
+openapi: 3.0.0
+info:
+  title: Suoke Life API
+  version: 1.0.0
+paths:
+  /health/expert-advice:
+    get:
+      summary: Get expert advice
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    advice:
+                      type: string
+  /health/data:
+    get:
+      summary: Get health data
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  heartRate:
+                    type: integer
+                  bloodPressure:
+                    type: string
+  /life/calendar-events:
+    get:
+      summary: Get calendar events
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    title:
+                      type: string
+                    date:
+                      type: string
+  /life/tasks:
+    get:
+      summary: Get tasks
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    title:
+                      type: string
+                    completed:
+                      type: boolean
+  /user/profile:
+    get:
+      summary: Get user profile
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  email:
+                    type: string
+  /ai/greeting:
+    get:
+      summary: Get AI greeting
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  text:
+                    type: string 

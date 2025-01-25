@@ -1,0 +1,6 @@
+network:
+  base_url: "https://api.suoke.life"
+  timeout: 30000
+
+storage:
+  encrypt: true  # 生产环境加密 
