@@ -7,15 +7,15 @@ void main() {
   testWidgets('SuokePage should display service list and search field',
       (WidgetTester tester) async {
     await tester.pumpWidget(
-      MaterialApp(
-        localizationsDelegates: const [
+      const MaterialApp(
+        localizationsDelegates: [
           AppLocalizations.delegate,
         ],
-        supportedLocales: const [
+        supportedLocales: [
           Locale('en', 'US'),
           Locale('zh', 'CN'),
         ],
-        home: const SuokePage(),
+        home: SuokePage(),
       ),
     );
 
@@ -26,15 +26,15 @@ void main() {
   testWidgets('SuokePage should filter services based on search query',
       (WidgetTester tester) async {
     await tester.pumpWidget(
-      MaterialApp(
-        localizationsDelegates: const [
+      const MaterialApp(
+        localizationsDelegates: [
           AppLocalizations.delegate,
         ],
-        supportedLocales: const [
+        supportedLocales: [
           Locale('en', 'US'),
           Locale('zh', 'CN'),
         ],
-        home: const SuokePage(),
+        home: SuokePage(),
       ),
     );
 
@@ -44,4 +44,4 @@ void main() {
     expect(find.text('Yoga Class'), findsOneWidget);
     expect(find.text('Massage Therapy'), findsNothing);
   });
-} 
+}

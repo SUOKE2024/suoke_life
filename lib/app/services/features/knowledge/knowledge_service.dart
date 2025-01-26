@@ -21,7 +21,8 @@ class KnowledgeServiceImpl implements KnowledgeService {
 
   Future<Map<String, dynamic>> _fetchGraph(String topic) async {
     final response = await _network.get('/knowledge/graph/$topic');
-    await _cache.set('graph_$topic', response.data, ttl: Duration(days: 1));
+    await _cache.set('graph_$topic', response.data,
+        ttl: const Duration(days: 1));
     return response.data;
   }
-} 
+}

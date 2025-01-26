@@ -16,7 +16,8 @@ class _SettingsPageState extends State<SettingsPage> {
   int _currentIndex = 4;
   String _dataRetentionPeriod = '30d'; // 默认数据保留期限
   bool _dataContributionEnabled = false; // 默认数据贡献状态
-  final AgentMemoryService _agentMemoryService = GetIt.instance<AgentMemoryService>();
+  final AgentMemoryService _agentMemoryService =
+      GetIt.instance<AgentMemoryService>();
 
   @override
   void initState() {
@@ -25,11 +26,13 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> _loadPrivacySettings() async {
-    final userPreference = await _agentMemoryService.getUserPreference('defaultUserId'); //  使用默认用户 ID
+    final userPreference = await _agentMemoryService
+        .getUserPreference('defaultUserId'); //  使用默认用户 ID
     if (userPreference != null) {
       setState(() {
         _dataRetentionPeriod = userPreference.localDataRetentionPeriod ?? '30d';
-        _dataContributionEnabled = userPreference.dataContributionEnabled ?? false;
+        _dataContributionEnabled =
+            userPreference.dataContributionEnabled ?? false;
       });
     }
   }
@@ -62,8 +65,8 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
       body: ListView(
         children: <Widget>[
-          ListTile(
-            title: const Text('隐私设置', style: TextStyle(fontWeight: FontWeight.bold)),
+          const ListTile(
+            title: Text('隐私设置', style: TextStyle(fontWeight: FontWeight.bold)),
             dense: true,
             enabled: false,
           ),
@@ -103,8 +106,8 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ),
           const Divider(),
-          ListTile(
-            title: const Text('账户设置', style: TextStyle(fontWeight: FontWeight.bold)),
+          const ListTile(
+            title: Text('账户设置', style: TextStyle(fontWeight: FontWeight.bold)),
             dense: true,
             enabled: false,
           ),
@@ -121,8 +124,8 @@ class _SettingsPageState extends State<SettingsPage> {
             },
           ),
           const Divider(),
-          ListTile(
-            title: const Text('通用设置', style: TextStyle(fontWeight: FontWeight.bold)),
+          const ListTile(
+            title: Text('通用设置', style: TextStyle(fontWeight: FontWeight.bold)),
             dense: true,
             enabled: false,
           ),
@@ -152,4 +155,4 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
     );
   }
-} 
+}

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../blocs/chat/chat_detail_bloc.dart';
-import '../../blocs/chat/chat_detail_event.dart';
 import 'voice_input.dart';
 
 class MessageInput extends StatefulWidget {
@@ -39,7 +38,9 @@ class _MessageInputState extends State<MessageInput> {
             Expanded(
               child: VoiceInput(
                 onResult: (text) {
-                  context.read<ChatDetailBloc>().add(ChatDetailMessageSent(text));
+                  context
+                      .read<ChatDetailBloc>()
+                      .add(ChatDetailMessageSent(text));
                 },
               ),
             )
@@ -54,8 +55,8 @@ class _MessageInputState extends State<MessageInput> {
                 onSubmitted: (text) {
                   if (text.isNotEmpty) {
                     context.read<ChatDetailBloc>().add(
-                      ChatDetailMessageSent(_controller.text),
-                    );
+                          ChatDetailMessageSent(_controller.text),
+                        );
                     _controller.clear();
                   }
                 },
@@ -66,8 +67,8 @@ class _MessageInputState extends State<MessageInput> {
             onPressed: () {
               if (_controller.text.isNotEmpty) {
                 context.read<ChatDetailBloc>().add(
-                  ChatDetailMessageSent(_controller.text),
-                );
+                      ChatDetailMessageSent(_controller.text),
+                    );
                 _controller.clear();
               }
             },
@@ -76,4 +77,4 @@ class _MessageInputState extends State<MessageInput> {
       ),
     );
   }
-} 
+}

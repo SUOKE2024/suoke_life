@@ -120,7 +120,7 @@ class FileListItem extends StatelessWidget {
       width: 40,
       height: 40,
       decoration: BoxDecoration(
-        color: color?.withOpacity(0.1),
+        color: color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Icon(iconData, color: color),
@@ -135,4 +135,4 @@ class FileListItem extends StatelessWidget {
     }
     return '${(bytes / (1024 * 1024 * 1024)).toStringAsFixed(1)} GB';
   }
-} 
+}

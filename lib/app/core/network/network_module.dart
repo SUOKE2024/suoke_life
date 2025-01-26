@@ -8,9 +8,8 @@ import '../config/env_config.dart';
 class NetworkModule {
   static Future<void> init() async {
     // 根据环境配置 HTTP 客户端
-    final httpClient = EnvConfig.enableHttp2
-        ? await HTTP2Config.createHttpClient()
-        : HttpClient();
+    final httpClient =
+        EnvConfig.enableHttp2 ? HTTP2Config.createHttpClient() : HttpClient();
 
     // 配置 HTTP 客户端
     httpClient.connectionTimeout = EnvConfig.timeout;
@@ -28,23 +27,27 @@ class NetworkModule {
     Get.put(TokenManager(Get.find()), permanent: true);
 
     // 注入 API 客户端
-    Get.put(ApiClient(
-      tokenManager: Get.find(),
-      httpClient: Get.find(),
-      baseUrl: EnvConfig.baseUrl,
-      enableLogging: EnvConfig.enableNetworkLogging,
-    ), permanent: true);
+    Get.put(
+        ApiClient(
+          tokenManager: Get.find(),
+          httpClient: Get.find(),
+          baseUrl: EnvConfig.baseUrl,
+          enableLogging: EnvConfig.enableNetworkLogging,
+        ),
+        permanent: true);
 
     // 注入豆包客户端
-    Get.put(DoubaoClient(
-      httpClient: Get.find(),
-      baseUrl: EnvConfig.doubaoBaseUrl,
-      enableLogging: EnvConfig.enableNetworkLogging,
-    ), permanent: true);
+    Get.put(
+        DoubaoClient(
+          httpClient: Get.find(),
+          baseUrl: EnvConfig.doubaoBaseUrl,
+          enableLogging: EnvConfig.enableNetworkLogging,
+        ),
+        permanent: true);
   }
 
   static Future<void> dispose() async {
     final httpClient = Get.find<HttpClient>();
     httpClient.close(force: true);
   }
-} 
+}

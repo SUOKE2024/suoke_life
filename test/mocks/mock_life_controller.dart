@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 import 'package:mockito/mockito.dart';
-import '../../lib/app/presentation/controllers/life/life_controller.dart';
-import '../../lib/app/data/models/life_record.dart';
+import 'package:suoke_life/app/presentation/controllers/life/life_controller.dart';
+import 'package:suoke_life/app/data/models/life_record.dart';
 
-class MockLifeController  with Mock implements LifeController {
+class MockLifeController with Mock implements LifeController {
   final _records = <LifeRecord>[].obs;
   final _isLoading = false.obs;
 
@@ -15,4 +15,4 @@ class MockLifeController  with Mock implements LifeController {
 
   @override
   void showRecordDetail(LifeRecord record) {}
-} 
+}

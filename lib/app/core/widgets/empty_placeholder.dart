@@ -15,7 +15,7 @@ class EmptyPlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -27,7 +27,7 @@ class EmptyPlaceholder extends StatelessWidget {
               size: 64,
               color: theme.disabledColor,
             ),
-            if (message != null) ...[
+            ...[
               SizedBox(height: 16),
               Text(
                 message!,
@@ -39,7 +39,7 @@ class EmptyPlaceholder extends StatelessWidget {
               ),
             ],
             if (action != null) ...[
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
               action!,
             ],
           ],
@@ -47,4 +47,4 @@ class EmptyPlaceholder extends StatelessWidget {
       ),
     );
   }
-} 
+}

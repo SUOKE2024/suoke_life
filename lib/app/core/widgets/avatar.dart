@@ -13,7 +13,7 @@ class AppAvatar extends StatelessWidget {
   final Color? borderColor;
   final BoxFit? fit;
   final VoidCallback? onTap;
-  
+
   const AppAvatar({
     super.key,
     this.text,
@@ -35,7 +35,8 @@ class AppAvatar extends StatelessWidget {
     final defaultSize = size ?? 40.0;
     final defaultBackgroundColor = backgroundColor ?? theme.primaryColor;
     final defaultForegroundColor = foregroundColor ?? Colors.white;
-    final defaultBorderRadius = borderRadius ?? BorderRadius.circular(defaultSize / 2);
+    final defaultBorderRadius =
+        borderRadius ?? BorderRadius.circular(defaultSize / 2);
 
     Widget avatar;
     if (imageUrl != null) {
@@ -89,7 +90,7 @@ class AppAvatar extends StatelessWidget {
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(
-            (defaultBorderRadius as BorderRadius).topLeft.x - borderWidth!,
+            (defaultBorderRadius).topLeft.x - borderWidth!,
           ),
           child: avatar,
         ),
@@ -144,7 +145,7 @@ class AppAvatarGroup extends StatelessWidget {
   final double? borderWidth;
   final Color? borderColor;
   final VoidCallback? onMoreTap;
-  
+
   const AppAvatarGroup({
     super.key,
     required this.avatars,
@@ -175,7 +176,6 @@ class AppAvatarGroup extends StatelessWidget {
           return Padding(
             padding: EdgeInsets.only(right: spacing ?? 8),
             child: AppAvatar(
-              child: avatar.child,
               text: avatar.text,
               imageUrl: avatar.imageUrl,
               size: size ?? avatar.size,
@@ -186,6 +186,7 @@ class AppAvatarGroup extends StatelessWidget {
               borderColor: borderColor ?? avatar.borderColor,
               fit: avatar.fit,
               onTap: avatar.onTap,
+              child: avatar.child,
             ),
           );
         }),
@@ -203,4 +204,4 @@ class AppAvatarGroup extends StatelessWidget {
       ],
     );
   }
-} 
+}

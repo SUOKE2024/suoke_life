@@ -5,14 +5,10 @@ import 'dart:convert';
 class EncryptionUtil {
   static const _storage = FlutterSecureStorage();
   static const _keyName = 'database_key';
-  
+
   // 获取数据库密钥
   static Future<String> getDatabaseKey() async {
     String? key = await _storage.read(key: _keyName);
-    if (key == null) {
-      key = _generateKey();
-      await _storage.write(key: _keyName, value: key);
-    }
     return key;
   }
 
@@ -28,7 +24,7 @@ class EncryptionUtil {
     final iv = IV.fromSecureRandom(16);
     final encrypter = Encrypter(AES(key));
     final encrypted = encrypter.encrypt(data, iv: iv);
-    
+
     return json.encode({
       'data': encrypted.base64,
       'key': base64Encode(key.bytes),
@@ -42,7 +38,7 @@ class EncryptionUtil {
     final key = Key(base64Decode(data['key']));
     final iv = IV(base64Decode(data['iv']));
     final encrypter = Encrypter(AES(key));
-    
+
     return encrypter.decrypt64(data['data'], iv: iv);
   }
-} 
+}

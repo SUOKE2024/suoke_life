@@ -7,15 +7,15 @@ void main() {
   testWidgets('EditProfilePage should display edit profile form',
       (WidgetTester tester) async {
     await tester.pumpWidget(
-      MaterialApp(
-        localizationsDelegates: const [
+      const MaterialApp(
+        localizationsDelegates: [
           AppLocalizations.delegate,
         ],
-        supportedLocales: const [
+        supportedLocales: [
           Locale('en', 'US'),
           Locale('zh', 'CN'),
         ],
-        home: const EditProfilePage(),
+        home: EditProfilePage(),
       ),
     );
 
@@ -25,4 +25,4 @@ void main() {
     expect(find.byType(TextFormField), findsNWidgets(2));
     expect(find.byType(ElevatedButton), findsOneWidget);
   });
-} 
+}

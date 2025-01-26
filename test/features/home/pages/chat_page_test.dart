@@ -18,13 +18,17 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'chat_page_test.mocks.dart';
 
 class MockAiService extends Mock implements AiService {}
+
 class MockLocalStorageService extends Mock implements LocalStorageService {}
+
 class MockChatService extends Mock implements ChatService {}
+
 class MockDataSyncService extends Mock implements DataSyncService {}
+
 class MockErrorHandler extends Mock implements ErrorHandler {}
 
 void main() async {
-  await dotenv.load(fileName: ".env");
+  await dotenv.load(fileName: '.env');
   configureDependencies();
   late MockChatService mockChatService;
   late MockDataSyncService mockDataSyncService;
@@ -46,8 +50,7 @@ void main() async {
   });
 
   testWidgets('ChatPage UI Test', (WidgetTester tester) async {
-    when(() => mockChatService.getMessages())
-        .thenAnswer((_) async => [
+    when(() => mockChatService.getMessages()).thenAnswer((_) async => [
           ChatMessage(text: 'Old Message', isUser: true),
           ChatMessage(text: 'Old AI Response', isUser: false),
         ]);
@@ -74,7 +77,8 @@ void main() async {
     expect(find.text('Old AI Response'), findsOneWidget);
   });
 
-  testWidgets('AiAgentBubble displays message and AI response', (WidgetTester tester) async {
+  testWidgets('AiAgentBubble displays message and AI response',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const MaterialApp(
         home: Scaffold(

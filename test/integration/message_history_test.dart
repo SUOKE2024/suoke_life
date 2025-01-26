@@ -25,8 +25,8 @@ void main() {
 
   group('Message History Service', () {
     test('should save and retrieve messages with pagination', () async {
-      final sessionId = 'test_session';
-      
+      const sessionId = 'test_session';
+
       // 创建25条测试消息
       for (var i = 0; i < 25; i++) {
         final message = Message(
@@ -40,12 +40,14 @@ void main() {
       }
 
       // 测试第一页
-      final page1 = await messageHistoryService.getMessageHistory(sessionId, page: 1, pageSize: 10);
+      final page1 = await messageHistoryService.getMessageHistory(sessionId,
+          page: 1, pageSize: 10);
       expect(page1.length, 10);
-      expect(page1.first.content, 'Message 24');  // 最新的消息
+      expect(page1.first.content, 'Message 24'); // 最新的消息
 
       // 测试第二页
-      final page2 = await messageHistoryService.getMessageHistory(sessionId, page: 2, pageSize: 10);
+      final page2 = await messageHistoryService.getMessageHistory(sessionId,
+          page: 2, pageSize: 10);
       expect(page2.length, 10);
       expect(page2.first.content, 'Message 14');
 
@@ -55,8 +57,8 @@ void main() {
     });
 
     test('should delete session history', () async {
-      final sessionId = 'test_session';
-      
+      const sessionId = 'test_session';
+
       // 保存一些消息
       await messageHistoryService.saveMessage(
         Message(
@@ -78,4 +80,4 @@ void main() {
       expect(messages.isEmpty, true);
     });
   });
-} 
+}

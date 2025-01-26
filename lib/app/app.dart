@@ -6,7 +6,6 @@ import 'presentation/pages/chat/chat_detail_page.dart';
 import 'presentation/controllers/chat/chat_detail_controller.dart';
 import 'presentation/pages/explore/topic_detail_page.dart';
 import 'presentation/controllers/explore/topic_detail_controller.dart';
-import 'presentation/pages/life/record_detail_page.dart';
 import 'presentation/controllers/life/record_detail_controller.dart';
 import 'presentation/pages/profile/edit_profile_page.dart';
 import 'presentation/controllers/profile/edit_profile_controller.dart';
@@ -69,4 +68,4 @@ class App extends StatelessWidget {
       },
     );
   }
-} 
+}

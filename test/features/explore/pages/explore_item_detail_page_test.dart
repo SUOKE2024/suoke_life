@@ -10,7 +10,7 @@ void main() {
     const imageUrl = 'assets/images/test_image.jpg';
 
     await tester.pumpWidget(
-      MaterialApp(
+      const MaterialApp(
         home: ExploreItemDetailPage(
           title: title,
           description: description,
@@ -23,4 +23,4 @@ void main() {
     expect(find.text(description), findsOneWidget);
     expect(find.byType(Image), findsOneWidget);
   });
-} 
+}

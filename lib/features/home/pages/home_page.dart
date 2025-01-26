@@ -11,13 +11,15 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppConfig.appName),
-        actions: const [NotificationIndicator(key: Key('notification_indicator'))],
+        actions: const [
+          NotificationIndicator(key: Key('notification_indicator'))
+        ],
       ),
       body: const Column(
         children: [
-          HealthStatusCard(key: const Key('health_status_card')),
+          HealthStatusCard(key: Key('health_status_card')),
           SizedBox(height: 16),
-          QuickActionGrid(key: const Key('quick_action_grid')),
+          QuickActionGrid(key: Key('quick_action_grid')),
           RecentActivitiesSection(),
         ],
       ),

@@ -5,26 +5,27 @@ class NetworkAnalyzer {
   final _storage = Get.find<StorageManager>();
   final _eventBus = Get.find<EventBus>();
   final _requests = <String, NetworkRequest>{};
-  
+
   bool _isEnabled = true;
   Timer? _cleanupTimer;
 
   // 配置
   static const _config = {
     'slow_request_threshold': 3000, // 慢请求阈值（毫秒）
-    'max_request_history': 100,     // 最大请求历史记录数
-    'cleanup_interval': 300000,     // 清理间隔（毫秒）
+    'max_request_history': 100, // 最大请求历史记录数
+    'cleanup_interval': 300000, // 清理间隔（毫秒）
   };
 
   Future<void> initialize() async {
     _isEnabled = await _storage.getBool('network_analyzer_enabled') ?? true;
-    
+
     if (_isEnabled) {
       _startCleanupTimer();
     }
   }
 
-  void trackRequest(String url, {
+  void trackRequest(
+    String url, {
     required String method,
     Map<String, dynamic>? headers,
     dynamic body,
@@ -42,7 +43,8 @@ class NetworkAnalyzer {
     _requests[request.id] = request;
   }
 
-  void trackResponse(String requestId, {
+  void trackResponse(
+    String requestId, {
     required int statusCode,
     Map<String, dynamic>? headers,
     dynamic body,
@@ -146,7 +148,7 @@ class NetworkRequest {
   final Map<String, dynamic>? headers;
   final dynamic body;
   final DateTime startTime;
-  
+
   DateTime? endTime;
   int? statusCode;
   Map<String, dynamic>? responseHeaders;
@@ -168,8 +170,8 @@ class NetworkRequest {
     dynamic error,
   }) {
     this.statusCode = statusCode;
-    this.responseHeaders = headers;
-    this.responseBody = body;
+    responseHeaders = headers;
+    responseBody = body;
     this.error = error;
     endTime = DateTime.now();
   }
@@ -177,19 +179,19 @@ class NetworkRequest {
   Duration? get duration => endTime?.difference(startTime);
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'url': url,
-    'method': method,
-    'headers': headers,
-    'body': body,
-    'startTime': startTime.toIso8601String(),
-    'endTime': endTime?.toIso8601String(),
-    'statusCode': statusCode,
-    'responseHeaders': responseHeaders,
-    'responseBody': responseBody,
-    'error': error?.toString(),
-    'duration': duration?.inMilliseconds,
-  };
+        'id': id,
+        'url': url,
+        'method': method,
+        'headers': headers,
+        'body': body,
+        'startTime': startTime.toIso8601String(),
+        'endTime': endTime?.toIso8601String(),
+        'statusCode': statusCode,
+        'responseHeaders': responseHeaders,
+        'responseBody': responseBody,
+        'error': error?.toString(),
+        'duration': duration?.inMilliseconds,
+      };
 }
 
 class NetworkWarningEvent extends AppEvent {
@@ -208,4 +210,4 @@ enum NetworkWarningType {
   slowRequest,
   error,
   timeout,
-} 
+}

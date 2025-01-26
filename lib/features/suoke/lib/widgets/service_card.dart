@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:suoke_life/features/suoke/lib/pages/service_detail_page.dart';
 import 'package:go_router/go_router.dart';
 
 class ServiceCard extends StatelessWidget {
@@ -63,4 +62,4 @@ class ServiceCard extends StatelessWidget {
       ),
     );
   }
-} 
+}

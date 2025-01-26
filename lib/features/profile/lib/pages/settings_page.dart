@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:suoke_life/ui_components/navigation/bottom_navigation_bar.dart';
-import 'package:suoke_life/features/profile/lib/widgets/user_info_tile.dart';
 import 'package:suoke_life/core/utils/app_localizations.dart';
 import 'package:suoke_life/features/profile/lib/pages/health_data_input_page.dart';
 
@@ -56,7 +55,10 @@ class _SettingsPageState extends State<SettingsPage> {
             leading: const Icon(Icons.fitness_center),
             title: const Text('健康数据录入'),
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const HealthDataInputPage()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const HealthDataInputPage()));
             },
           ),
           ListTile(
@@ -71,4 +73,4 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
     );
   }
-} 
+}

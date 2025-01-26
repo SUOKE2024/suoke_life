@@ -7,15 +7,15 @@ void main() {
   testWidgets('WelcomePage should display welcome message and buttons',
       (WidgetTester tester) async {
     await tester.pumpWidget(
-      MaterialApp(
-        localizationsDelegates: const [
+      const MaterialApp(
+        localizationsDelegates: [
           AppLocalizations.delegate,
         ],
-        supportedLocales: const [
+        supportedLocales: [
           Locale('en', 'US'),
           Locale('zh', 'CN'),
         ],
-        home: const WelcomePage(),
+        home: WelcomePage(),
       ),
     );
 
@@ -24,4 +24,4 @@ void main() {
     expect(find.text('Register'), findsOneWidget);
     expect(find.byType(ElevatedButton), findsNWidgets(2));
   });
-} 
+}

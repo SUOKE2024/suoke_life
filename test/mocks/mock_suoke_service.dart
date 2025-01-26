@@ -1,4 +1,4 @@
 import 'package:mocktail/mocktail.dart';
-import '../../lib/app/domain/services/suoke_service.dart';
+import 'package:suoke_life/app/domain/services/suoke_service.dart';
 
-class MockSuokeService extends Mock implements SuokeService {} 
+class MockSuokeService extends Mock implements SuokeService {}

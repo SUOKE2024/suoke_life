@@ -9,8 +9,20 @@ class ChatServiceImpl implements ChatService {
 
   @override
   Future<List<ChatMessage>> getChatHistory() async {
-    final chatList = await _localStorageService.getChats();
-    return chatList.map((e) => ChatMessage.fromJson(e)).toList();
+    final chatListString = await _localStorageService.getChatHistory();
+    return chatListString.map((e) => ChatMessage.fromString(e)).toList();
+  }
+
+  @override
+  Future<void> saveMessage(String message, bool isUser) async {
+    List<String> chatHistory = await _localStorageService.getChatHistory();
+    chatHistory.add(message);
+    await _localStorageService.saveChatHistory(chatHistory);
+  }
+
+  @override
+  Future<void> clearChatHistory() async {
+    await _localStorageService.clearChatHistory();
   }
 
   @override

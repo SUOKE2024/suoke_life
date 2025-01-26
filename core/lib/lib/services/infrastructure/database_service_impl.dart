@@ -3,7 +3,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseServiceImpl implements DatabaseService {
-  static const _databaseName = "suoke_life.db";
+  static const _databaseName = 'suoke_life.db';
   static const _databaseVersion = 1;
 
   Database? _database;
@@ -42,4 +42,4 @@ class DatabaseServiceImpl implements DatabaseService {
       )
     ''');
   }
-} 
+}

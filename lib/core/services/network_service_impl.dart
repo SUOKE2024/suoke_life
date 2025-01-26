@@ -1,12 +1,9 @@
-import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:suoke_life/core/config/app_config.dart';
-import 'package:suoke_life/core/utils/error_handler.dart';
 import 'package:suoke_life/core/services/network_service.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:encrypt/encrypt.dart';
 import 'package:suoke_life/core/services/infrastructure/local_storage_service.dart';
-import 'package:get_it/get_it.dart';
 
 class NetworkServiceImpl implements NetworkService {
   final Dio _dio = Dio(BaseOptions(baseUrl: AppConfig.baseUrl));
@@ -36,7 +33,9 @@ class NetworkServiceImpl implements NetworkService {
       },
       onError: (DioException e, handler) async {
         // 添加重试拦截器
-        if (e.type == DioExceptionType.connectionTimeout || e.type == DioExceptionType.receiveTimeout || e.type == DioExceptionType.sendTimeout) {
+        if (e.type == DioExceptionType.connectionTimeout ||
+            e.type == DioExceptionType.receiveTimeout ||
+            e.type == DioExceptionType.sendTimeout) {
           final connectivityResult = await (Connectivity().checkConnectivity());
           if (connectivityResult != ConnectivityResult.none) {
             final options = e.requestOptions;
@@ -63,10 +62,13 @@ class NetworkServiceImpl implements NetworkService {
   }
 
   @override
-  Future<dynamic> get(String path, {Map<String, dynamic>? queryParameters}) async {
+  Future<dynamic> get(String path,
+      {Map<String, dynamic>? queryParameters}) async {
     try {
       final token = await _localStorageService.getStringValue('auth_token');
-      final response = await _dio.get(path, queryParameters: queryParameters, options: Options(headers: {'Authorization': 'Bearer $token'}));
+      final response = await _dio.get(path,
+          queryParameters: queryParameters,
+          options: Options(headers: {'Authorization': 'Bearer $token'}));
       return response.data;
     } on DioException catch (e) {
       print('Error fetching data: $e');
@@ -136,7 +138,8 @@ class NetworkServiceImpl implements NetworkService {
       if (value is String) {
         try {
           final encrypted = Encrypted.fromBase64(value);
-          decryptedData[key] = encrypter.decrypt(encrypted, iv: IV.fromLength(16));
+          decryptedData[key] =
+              encrypter.decrypt(encrypted, iv: IV.fromLength(16));
         } catch (e) {
           decryptedData[key] = value;
         }
@@ -151,4 +154,4 @@ class NetworkServiceImpl implements NetworkService {
     final token = await _localStorageService.getStringValue('auth_token');
     return Options(headers: {'Authorization': 'Bearer $token'});
   }
-} 
+}

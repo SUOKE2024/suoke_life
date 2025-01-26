@@ -21,31 +21,31 @@ class GroupPermissionsPage extends BasePage<GroupPermissionsController> {
         Card(
           child: Column(
             children: [
-              ListTile(
-                title: const Text('成员权限'),
-                subtitle: const Text('设置群成员可以进行的操作'),
+              const ListTile(
+                title: Text('成员权限'),
+                subtitle: Text('设置群成员可以进行的操作'),
               ),
               const Divider(height: 1),
               ListTile(
                 title: const Text('修改群名片'),
                 trailing: Obx(() => Switch(
-                  value: controller.canModifyAlias.value,
-                  onChanged: controller.toggleModifyAlias,
-                )),
+                      value: controller.canModifyAlias.value,
+                      onChanged: controller.toggleModifyAlias,
+                    )),
               ),
               ListTile(
                 title: const Text('邀请新成员'),
                 trailing: Obx(() => Switch(
-                  value: controller.canInviteMembers.value,
-                  onChanged: controller.toggleInviteMembers,
-                )),
+                      value: controller.canInviteMembers.value,
+                      onChanged: controller.toggleInviteMembers,
+                    )),
               ),
               ListTile(
                 title: const Text('查看群成员信息'),
                 trailing: Obx(() => Switch(
-                  value: controller.canViewMemberInfo.value,
-                  onChanged: controller.toggleViewMemberInfo,
-                )),
+                      value: controller.canViewMemberInfo.value,
+                      onChanged: controller.toggleViewMemberInfo,
+                    )),
               ),
             ],
           ),
@@ -57,38 +57,38 @@ class GroupPermissionsPage extends BasePage<GroupPermissionsController> {
         Card(
           child: Column(
             children: [
-              ListTile(
-                title: const Text('消息权限'),
-                subtitle: const Text('设置群成员发送消息的权限'),
+              const ListTile(
+                title: Text('消息权限'),
+                subtitle: Text('设置群成员发送消息的权限'),
               ),
               const Divider(height: 1),
               ListTile(
                 title: const Text('发送消息'),
                 trailing: Obx(() => Switch(
-                  value: controller.canSendMessage.value,
-                  onChanged: controller.toggleSendMessage,
-                )),
+                      value: controller.canSendMessage.value,
+                      onChanged: controller.toggleSendMessage,
+                    )),
               ),
               ListTile(
                 title: const Text('发送图片'),
                 trailing: Obx(() => Switch(
-                  value: controller.canSendImage.value,
-                  onChanged: controller.toggleSendImage,
-                )),
+                      value: controller.canSendImage.value,
+                      onChanged: controller.toggleSendImage,
+                    )),
               ),
               ListTile(
                 title: const Text('发送文件'),
                 trailing: Obx(() => Switch(
-                  value: controller.canSendFile.value,
-                  onChanged: controller.toggleSendFile,
-                )),
+                      value: controller.canSendFile.value,
+                      onChanged: controller.toggleSendFile,
+                    )),
               ),
               ListTile(
                 title: const Text('撤回消息'),
                 trailing: Obx(() => Switch(
-                  value: controller.canRecallMessage.value,
-                  onChanged: controller.toggleRecallMessage,
-                )),
+                      value: controller.canRecallMessage.value,
+                      onChanged: controller.toggleRecallMessage,
+                    )),
               ),
             ],
           ),
@@ -100,31 +100,31 @@ class GroupPermissionsPage extends BasePage<GroupPermissionsController> {
         Card(
           child: Column(
             children: [
-              ListTile(
-                title: const Text('管理权限'),
-                subtitle: const Text('设置管理员可以进行的操作'),
+              const ListTile(
+                title: Text('管理权限'),
+                subtitle: Text('设置管理员可以进行的操作'),
               ),
               const Divider(height: 1),
               ListTile(
                 title: const Text('修改群资料'),
                 trailing: Obx(() => Switch(
-                  value: controller.canModifyGroupInfo.value,
-                  onChanged: controller.toggleModifyGroupInfo,
-                )),
+                      value: controller.canModifyGroupInfo.value,
+                      onChanged: controller.toggleModifyGroupInfo,
+                    )),
               ),
               ListTile(
                 title: const Text('管理成员'),
                 trailing: Obx(() => Switch(
-                  value: controller.canManageMembers.value,
-                  onChanged: controller.toggleManageMembers,
-                )),
+                      value: controller.canManageMembers.value,
+                      onChanged: controller.toggleManageMembers,
+                    )),
               ),
               ListTile(
                 title: const Text('设置管理员'),
                 trailing: Obx(() => Switch(
-                  value: controller.canSetAdmin.value,
-                  onChanged: controller.toggleSetAdmin,
-                )),
+                      value: controller.canSetAdmin.value,
+                      onChanged: controller.toggleSetAdmin,
+                    )),
               ),
             ],
           ),
@@ -132,4 +132,4 @@ class GroupPermissionsPage extends BasePage<GroupPermissionsController> {
       ],
     );
   }
-} 
+}

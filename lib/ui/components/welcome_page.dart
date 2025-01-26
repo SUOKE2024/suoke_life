@@ -7,14 +7,15 @@ class WelcomePage extends StatefulWidget {
   State<WelcomePage> createState() => _WelcomePageState();
 }
 
-class _WelcomePageState extends State<WelcomePage> with SingleTickerProviderStateMixin {
+class _WelcomePageState extends State<WelcomePage>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
 
   @override
   void initState() {
     super.initState();
-    
+
     // 初始化动画控制器
     _controller = AnimationController(
       duration: const Duration(milliseconds: 1500),
@@ -50,16 +51,16 @@ class _WelcomePageState extends State<WelcomePage> with SingleTickerProviderStat
                 height: 150,
               ),
             ),
-            
+
             const SizedBox(height: 32), // 使用spaceXL间距
-            
+
             // 进度条
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.6,
-              child: LinearProgressIndicator(
-                backgroundColor: const Color(0xFFE0E0E0), // 使用中性色divider
+              child: const LinearProgressIndicator(
+                backgroundColor: Color(0xFFE0E0E0), // 使用中性色divider
                 valueColor: AlwaysStoppedAnimation<Color>(
-                  const Color(0xFF2196F3), // 使用主色primary
+                  Color(0xFF2196F3), // 使用主色primary
                 ),
               ),
             ),

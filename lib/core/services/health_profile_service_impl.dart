@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'package:sqflite/sqflite.dart';
 import 'package:suoke_life/core/models/health_profile.dart';
 import 'package:suoke_life/core/services/health_profile_service.dart';
 import 'package:suoke_life/core/services/infrastructure/database_service.dart'; // 导入 DatabaseService
@@ -34,4 +34,4 @@ class HealthProfileServiceImpl implements HealthProfileService {
       conflictAlgorithm: ConflictAlgorithm.replace, //  如果已存在则替换
     );
   }
-} 
+}

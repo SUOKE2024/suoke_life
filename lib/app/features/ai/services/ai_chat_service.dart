@@ -5,7 +5,6 @@ import '../../chat/models/chat_session.dart';
 import '../models/ai_config.dart';
 import '../models/ai_service_response.dart';
 import '../../../core/database/database_service.dart';
-import 'package:sqflite/sqflite.dart';
 
 class AIChatService {
   final ChatSessionService _chatSessionService;
@@ -23,12 +22,13 @@ class AIChatService {
       lastMessageTime: DateTime.now(),
       unreadCount: 0,
     );
-    
+
     await _chatSessionService.createSession(session);
     return sessionId;
   }
 
-  Future<AIResponse> sendMessage(String sessionId, String userId, String message) async {
+  Future<AIResponse> sendMessage(
+      String sessionId, String userId, String message) async {
     final session = await _chatSessionService.getSession(sessionId);
     if (session == null) {
       throw Exception('Session not found');
@@ -43,10 +43,10 @@ class AIChatService {
     );
 
     final response = await _generateAIResponse(aiType, message, sessionId);
-    
+
     // 保存AI响应到历史记录
     await _saveMessageToHistory(sessionId, 'assistant', response.content);
-    
+
     await _chatSessionService.updateLastMessage(
       sessionId,
       response.content,
@@ -56,7 +56,8 @@ class AIChatService {
     return response;
   }
 
-  Future<AIResponse> _generateAIResponse(String aiType, String message, String sessionId) async {
+  Future<AIResponse> _generateAIResponse(
+      String aiType, String message, String sessionId) async {
     // TODO: 接入实际的AI服务
     final aiConfig = await _getAIConfig(aiType);
     final response = await _callAIService(
@@ -64,7 +65,7 @@ class AIChatService {
       config: aiConfig,
       context: await _getConversationContext(sessionId),
     );
-    
+
     return AIResponse(
       content: response.text,
       aiType: aiType,
@@ -82,19 +83,23 @@ class AIChatService {
     return AIConfig.forType(aiType);
   }
 
-  Future<List<Map<String, dynamic>>> _getConversationContext(String sessionId) async {
+  Future<List<Map<String, dynamic>>> _getConversationContext(
+      String sessionId) async {
     final results = await _db.query(
       'SELECT role, content FROM message_history WHERE session_id = ? ORDER BY timestamp ASC',
       [sessionId],
     );
-    
-    return results.map((msg) => {
-      'role': msg['role'],
-      'content': msg['content'],
-    }).toList();
+
+    return results
+        .map((msg) => {
+              'role': msg['role'],
+              'content': msg['content'],
+            })
+        .toList();
   }
 
-  Future<void> _saveMessageToHistory(String sessionId, String role, String content) async {
+  Future<void> _saveMessageToHistory(
+      String sessionId, String role, String content) async {
     await _db.insert('message_history', {
       'id': _uuid.v4(),
       'session_id': sessionId,
@@ -113,15 +118,20 @@ class AIChatService {
     if (context.isNotEmpty) {
       // 查找最近的包含 "my name is" 的用户消息
       final nameMessage = context.lastWhere(
-        (msg) => msg['role'] == 'user' && 
-                 msg['content'].toString().toLowerCase().contains('my name is'),
+        (msg) =>
+            msg['role'] == 'user' &&
+            msg['content'].toString().toLowerCase().contains('my name is'),
         orElse: () => {'content': ''},
       );
 
-      if (message.toLowerCase().contains('what is my name') && 
+      if (message.toLowerCase().contains('what is my name') &&
           nameMessage['content'].toString().isNotEmpty) {
-        final name = nameMessage['content'].toString().toLowerCase()
-            .split('my name is ').last.trim();
+        final name = nameMessage['content']
+            .toString()
+            .toLowerCase()
+            .split('my name is ')
+            .last
+            .trim();
         return AIServiceResponse(
           text: '你的名字是 $name',
           metadata: {
@@ -158,4 +168,4 @@ class AIChatService {
       },
     );
   }
-} 
+}

@@ -1,5 +1,3 @@
-import 'package:redis/redis.dart';
-
 abstract class RedisService {
   Future<void> init();
   Future<void> set(String key, String value, {Duration? expiry});
@@ -8,4 +6,4 @@ abstract class RedisService {
   Future<bool> exists(String key);
   Future<void> publish(String channel, String message);
   Stream<String> subscribe(String channel);
-} 
+}

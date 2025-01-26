@@ -25,7 +25,8 @@ class HomePage extends StatelessWidget {
       children: [
         const Padding(
           padding: EdgeInsets.all(16),
-          child: Text('AI助手', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          child: Text('AI助手',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
         ),
         SizedBox(
           height: 100,
@@ -62,15 +63,16 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildRecentServices() {
-    return Column(
+    return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
+      children: [
         Padding(
           padding: EdgeInsets.all(16),
-          child: Text('最近使用', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          child: Text('最近使用',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
         ),
         // TODO: 实现最近使用的服务列表
       ],
     );
   }
-} 
+}

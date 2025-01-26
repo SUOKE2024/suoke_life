@@ -7,15 +7,15 @@ void main() {
   testWidgets('SettingsPage should display settings options',
       (WidgetTester tester) async {
     await tester.pumpWidget(
-      MaterialApp(
-        localizationsDelegates: const [
+      const MaterialApp(
+        localizationsDelegates: [
           AppLocalizations.delegate,
         ],
-        supportedLocales: const [
+        supportedLocales: [
           Locale('en', 'US'),
           Locale('zh', 'CN'),
         ],
-        home: const SettingsPage(),
+        home: SettingsPage(),
       ),
     );
 
@@ -25,4 +25,4 @@ void main() {
     expect(find.text('Edit Profile'), findsOneWidget);
     expect(find.text('Admin Dashboard'), findsOneWidget);
   });
-} 
+}

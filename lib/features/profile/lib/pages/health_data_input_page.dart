@@ -14,7 +14,8 @@ class _HealthDataInputPageState extends State<HealthDataInputPage> {
   final _heartRateController = TextEditingController();
   final _bloodPressureController = TextEditingController();
   final _sleepDurationController = TextEditingController();
-  final HealthProfileService _healthProfileService = GetIt.I<HealthProfileService>();
+  final HealthProfileService _healthProfileService =
+      GetIt.I<HealthProfileService>();
 
   @override
   void dispose() {
@@ -25,14 +26,15 @@ class _HealthDataInputPageState extends State<HealthDataInputPage> {
   }
 
   Future<void> _saveHealthData() async {
-    final userId = 'defaultUserId'; //  TODO:  替换为实际用户 ID
+    const userId = 'defaultUserId'; //  TODO:  替换为实际用户 ID
     final healthMetrics = {
       'heartRate': _heartRateController.text,
       'bloodPressure': _bloodPressureController.text,
       'sleepDuration': _sleepDurationController.text,
     };
 
-    final healthProfile = HealthProfile(userId: userId, healthMetrics: healthMetrics);
+    final healthProfile =
+        HealthProfile(userId: userId, healthMetrics: healthMetrics);
 
     try {
       await _healthProfileService.saveHealthProfile(healthProfile);
@@ -61,7 +63,8 @@ class _HealthDataInputPageState extends State<HealthDataInputPage> {
             ),
             TextField(
               controller: _bloodPressureController,
-              decoration: const InputDecoration(labelText: '血压 (mmHg) 例如: 120/80'),
+              decoration:
+                  const InputDecoration(labelText: '血压 (mmHg) 例如: 120/80'),
             ),
             TextField(
               controller: _sleepDurationController,
@@ -78,4 +81,4 @@ class _HealthDataInputPageState extends State<HealthDataInputPage> {
       ),
     );
   }
-} 
+}

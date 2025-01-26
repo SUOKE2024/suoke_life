@@ -14,8 +14,8 @@ import 'package:suoke_life/core/services/infrastructure/local_storage_service.da
 import 'package:suoke_life/core/network/knowledge_graph_client.dart';
 
 void registerNetworkModule(GetIt getIt) {
-  final dio = Dio(BaseOptions(baseUrl: AppConfig.baseUrl));
-  getIt.registerLazySingleton<NetworkService>(() => NetworkServiceImpl(getIt<LocalStorageService>()));
+  getIt.registerLazySingleton<Dio>(() => Dio());
+  getIt.registerLazySingleton<NetworkService>(() => NetworkServiceImpl(getIt<Dio>()));
   getIt.registerLazySingleton<RedisService>(() => RedisServiceImpl());
   getIt.registerLazySingleton(() => LLMServiceClient(getIt<NetworkService>()));
   getIt.registerLazySingleton(() => HealthServiceClient(getIt<NetworkService>()));

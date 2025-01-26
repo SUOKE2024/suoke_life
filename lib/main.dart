@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:suoke_life/core/di/modules/database_module.dart';
-import 'package:suoke_life/core/di/modules/storage_module.dart';
+import 'package:suoke_life/core/di/modules/storage_module.dart'
+    as storage_module;
 import 'package:suoke_life/core/router/app_router.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:suoke_life/core/utils/app_localizations.dart';
@@ -17,22 +18,22 @@ import 'package:suoke_life/features/auth/lib/pages/login_page.dart';
 import 'package:go_router/go_router.dart';
 import 'package:suoke_life/core/di/injection.dart';
 import 'package:suoke_life/core/utils/error_handler.dart';
-import 'package:suoke_life/core/services/infrastructure/local_storage_service.dart';
 import 'package:suoke_life/core/services/infrastructure/redis_service.dart';
 import 'package:suoke_life/core/services/ai_service.dart';
-import 'package:suoke_life/core/di/modules/network_module.dart';
+import 'package:suoke_life/core/di/modules/network_module.dart'
+    as network_module;
 import 'package:get_it/get_it.dart';
+import 'package:suoke_life/core/services/infrastructure/database_service.dart';
 
 final getIt = GetIt.instance;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: ".env");
+  await dotenv.load(fileName: '.env');
   configureDependencies();
   await DatabaseModule().register(getIt);
-  await StorageModule().register(getIt);
-  NetworkModule().register(getIt);
-  getIt.registerSingleton<LocalStorageService>(LocalStorageService());
+  storage_module.registerStorageModule(getIt);
+  network_module.registerNetworkModule(getIt);
   getIt.registerSingleton<RedisService>(RedisService());
   getIt.registerSingleton<AiService>(AiService());
 
@@ -67,7 +68,8 @@ class MyApp extends StatelessWidget {
         }
         return supportedLocales.first;
       },
-      onGenerateTitle: (context) => AppLocalizations.of(context)!.translate('app_title'),
+      onGenerateTitle: (context) =>
+          AppLocalizations.of(context)!.translate('app_title'),
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

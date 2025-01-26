@@ -7,22 +7,16 @@ class LLMServiceClientImpl implements LLMServiceClient {
 
   @override
   Future<List<HealthRisk>> analyzeHealthRisks(
-    String medicalHistory,
-    BiologicalSignals signals
-  ) async {
+      String medicalHistory, BiologicalSignals signals) async {
     try {
-      final response = await _dio.post(
-        '${_baseUrl}/analyze',
-        data: {
-          'medical_history': medicalHistory,
-          'vital_signs': signals.toJson()
-        }
-      );
-      
+      final response = await _dio.post('$_baseUrl/analyze', data: {
+        'medical_history': medicalHistory,
+        'vital_signs': signals.toJson()
+      });
+
       return (response.data['risks'] as List)
           .map((json) => HealthRisk.fromJson(json))
           .toList();
-          
     } on DioException catch (e) {
       if (e.response?.statusCode == 503) {
         throw LLMServiceUnavailableException();

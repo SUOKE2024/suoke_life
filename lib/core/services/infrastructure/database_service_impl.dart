@@ -20,56 +20,37 @@ class DatabaseServiceImpl implements DatabaseService {
     if (_database != null) {
       return _database!;
     }
-    _database = await openDatabase();
+    await _init();
     return _database!;
   }
 
-  @override
-  Future<Database> getDatabaseInstance() async {
-    if (_database != null) {
-      return _database!;
-    }
-    _database = await openDatabase();
-    return _database!;
-  }
+  Future<void> _init() async {
+    final databasesPath = await getDatabasesPath();
+    final path = join(databasesPath, 'app_database.db');
 
-  Future<void> _onCreate(Database db, int version) async {
-    await db.execute('''
-      CREATE TABLE users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT,
-        email TEXT UNIQUE,
-        phone TEXT,
-        address TEXT,
-        settings TEXT
-      )
-    ''');
-    await db.execute('''
-      CREATE TABLE health_data (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id TEXT,
-        type TEXT,
-        value TEXT,
-        unit TEXT,
-        timestamp INTEGER
-      )
-    ''');
-    await db.execute('''
-      CREATE TABLE life_activity_data (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id TEXT,
-        activity_type TEXT,
-        details TEXT,
-        start_time INTEGER,
-        end_time INTEGER
-      )
-    ''');
-  }
-
-  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    if (oldVersion < 2) {
-      // 执行数据库升级操作
-    }
+    _database = await openDatabase(
+      path,
+      version: 1,
+      onCreate: (db, version) async {
+        await db.execute('''
+          CREATE TABLE users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT,
+            email TEXT,
+            avatar TEXT
+          )
+        ''');
+        await db.execute('''
+          CREATE TABLE chats (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            userId INTEGER,
+            message TEXT,
+            timestamp INTEGER
+          )
+        ''');
+        // Add more table creation queries here if needed
+      },
+    );
   }
 
   @override
@@ -80,35 +61,37 @@ class DatabaseServiceImpl implements DatabaseService {
 
   @override
   Future<void> clearDatabase() async {
-    final databasePath = await getDatabasesPath();
-    final path = join(databasePath, DatabaseConfig.databaseName);
-    await deleteDatabase(path);
-    _database = null;
+    if (_database == null) return;
+    final tables = ['chats', 'users'];
+    for (final table in tables) {
+      await _database?.delete(table);
+    }
   }
 
   @override
-  Future<List<Map<String, dynamic>>> query(String table, {String? where, List<dynamic>? whereArgs}) async {
-    final db = await getDatabaseInstance();
+  Future<List<Map<String, dynamic>>> query(String table,
+      {String? where, List<dynamic>? whereArgs}) async {
+    final db = await database;
     return await db.query(table, where: where, whereArgs: whereArgs);
   }
 
   @override
-  Future<int> insert(String table, Map<String, dynamic> data) async {
-    final db = await getDatabaseInstance();
-    final encryptedData = _encryptData(data);
-    return await db.insert(table, encryptedData);
+  Future<int> insert(String table, Map<String, dynamic> values) async {
+    final db = await database;
+    return await db.insert(table, values);
   }
 
   @override
-  Future<int> update(String table, Map<String, dynamic> data, {String? where, List<dynamic>? whereArgs}) async {
-    final db = await getDatabaseInstance();
-    final encryptedData = _encryptData(data);
-    return await db.update(table, encryptedData, where: where, whereArgs: whereArgs);
+  Future<int> update(String table, Map<String, dynamic> values,
+      {String? where, List<dynamic>? whereArgs}) async {
+    final db = await database;
+    return await db.update(table, values, where: where, whereArgs: whereArgs);
   }
 
   @override
-  Future<int> delete(String table, {String? where, List<dynamic>? whereArgs}) async {
-    final db = await getDatabaseInstance();
+  Future<int> delete(String table,
+      {String? where, List<dynamic>? whereArgs}) async {
+    final db = await database;
     return await db.delete(table, where: where, whereArgs: whereArgs);
   }
 
@@ -141,4 +124,11 @@ class DatabaseServiceImpl implements DatabaseService {
     });
     return decryptedData;
   }
-} 
+
+  @override
+  Future<void> initializeDatabase() async {
+    // 空实现，如果接口 `DatabaseService` 中 `initializeDatabase` 方法不再需要，
+    // 也可以直接从接口中移除该方法定义。
+    print('initializeDatabase called (empty implementation)');
+  }
+}

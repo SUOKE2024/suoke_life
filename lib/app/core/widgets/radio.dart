@@ -6,13 +6,13 @@ class AppRadio<T> extends StatelessWidget {
   final T? groupValue;
   final ValueChanged<T?>? onChanged;
   final Color? activeColor;
-  final MaterialStateProperty<Color?>? fillColor;
-  final MaterialStateProperty<Color?>? overlayColor;
+  final WidgetStateProperty<Color?>? fillColor;
+  final WidgetStateProperty<Color?>? overlayColor;
   final double? splashRadius;
   final bool toggleable;
   final bool autofocus;
   final bool enabled;
-  
+
   const AppRadio({
     super.key,
     required this.value,
@@ -54,7 +54,7 @@ class AppRadioGroup<T> extends StatelessWidget {
   final EdgeInsets? itemPadding;
   final TextStyle? labelStyle;
   final bool vertical;
-  
+
   const AppRadioGroup({
     super.key,
     required this.items,
@@ -71,7 +71,7 @@ class AppRadioGroup<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     Widget content = vertical
         ? Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,9 +130,9 @@ class AppRadioGroup<T> extends StatelessWidget {
 class AppRadioItem<T> {
   final T value;
   final Widget? label;
-  
+
   const AppRadioItem({
     required this.value,
     this.label,
   });
-} 
+}

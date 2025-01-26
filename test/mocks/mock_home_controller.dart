@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:mockito/mockito.dart';
-import '../../lib/app/presentation/controllers/home/home_controller.dart';
+import 'package:suoke_life/app/presentation/controllers/home/home_controller.dart';
 
 class MockHomeController extends Mock implements HomeController {
   final _currentIndex = ValueNotifier<int>(0);
@@ -17,4 +17,4 @@ class MockHomeController extends Mock implements HomeController {
   void dispose() {
     _currentIndex.dispose();
   }
-} 
+}

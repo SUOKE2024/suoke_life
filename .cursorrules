@@ -949,9 +949,35 @@ ai_integration:
       update_frequency: monthly # 知识库更新频率：每月
       embedding_model: openai/text-embedding-ada-002 # Embedding 模型：OpenAI Ada-002 (示例)
     retrieval: # 检索配置
-      strategy: hybrid_retrieval # 检索策略：混合检索 (关键词 + 语义)
+      strategy: agentic_retrieval # 检索策略：智能体驱动的检索策略，替代 hybrid_retrieval
+      agentic_retrieval_strategies: # 定义智能体检索策略的具体配置
+        - multi_strategy_selection: # 多策略选择
+            enabled: true # 启用多策略选择
+            description: "智能体根据查询类型和知识库特点，动态选择和组合多种检索策略 (关键词、语义、图谱等)。"
+            strategies: # 可选的检索策略
+              - keyword_search # 关键词检索
+              - semantic_search # 语义检索
+              - graph_traversal # 图谱遍历
+            strategy_selection_logic: intent_based # 策略选择逻辑：基于用户意图
+        - iterative_optimization: # 迭代优化
+            enabled: true # 启用迭代优化
+            description: "智能体根据初步检索结果，迭代调整检索策略和查询条件，逐步优化检索效果。"
+            optimization_metrics: # 优化指标
+              - relevance_score # 相关性得分
+              - recall # 召回率
+            optimization_techniques: # 优化技术
+              - query_expansion # 查询扩展
+              - parameter_tuning # 参数调优 (例如相似度阈值)
+        - cross_knowledge_base_search: # 跨知识库搜索
+            enabled: true # 启用跨知识库搜索
+            description: "智能体支持同时或按序访问多个知识库，整合来自不同来源的信息。"
+            knowledge_sources: # 可用的知识来源 (与 knowledge_base.source 对齐)
+              - local_knowledge_base # 本地知识库
+              - web_search # 网络搜索
+              - health_knowledge_base # 健康知识库
+              - life_knowledge_base # 生活知识库
       top_k: 10 # Top K 检索结果数量：10
-      knowledge_sources: # 知识来源
+      knowledge_sources: # 知识来源 (保持不变，但会被智能体动态选择)
         - local_knowledge_base # 本地知识库
         - web_search # 网络搜索
       web_search_configuration: # 网络搜索配置
@@ -962,8 +988,30 @@ ai_integration:
       chunking_strategy: semantic_chunking # 文本分块策略：语义分块
     generation: # 生成配置
       context_window_size: 4096 # 上下文窗口大小
-      prompt_strategy: standard_rag # Prompt 策略：标准 RAG, 可选值: standard_rag, query_expansion, context_compression, re_ranking, chain_of_thought_rag
-      prompt_strategy_options: # Prompt 策略选项 (用于配置不同策略的参数)
+      prompt_strategy: agentic_rag # Prompt 策略：Agentic RAG 优化 Prompt 策略，替代 standard_rag
+      agentic_prompt_strategies: # 定义 Agentic Prompt 策略的具体配置
+        - information_filtering: # 信息过滤
+            enabled: true # 启用信息过滤
+            description: "智能体对检索到的信息进行筛选，去除冗余和低质量信息，突出关键信息。"
+            filtering_criteria: # 过滤标准
+              - source_authority # 来源权威性
+              - information_relevance # 信息相关性
+              - information_recency # 信息时效性
+        - information_summarization: # 信息摘要
+            enabled: true # 启用信息摘要
+            description: "智能体对多个文档或知识片段进行自动摘要，提取核心观点和关键证据。"
+            summarization_techniques: # 摘要技术
+              - extractive_summarization # 抽取式摘要
+              - abstractive_summarization # 抽象式摘要
+            summary_model: "bart-large-cnn" # 摘要模型 (示例)
+        - multi_source_fusion: # 多源信息融合
+            enabled: true # 启用多源信息融合
+            description: "智能体融合来自不同知识库的信息，解决信息冲突，增强信息互补。"
+            fusion_techniques: # 融合技术
+              - information_de-duplication # 信息去重
+              - conflict_resolution_rules # 冲突解决规则
+              - information_complement # 信息互补
+      prompt_strategy_options: # Prompt 策略选项 (保持不变，但可能被 Agentic 策略动态调整)
         query_expansion: # 查询扩展策略
           expansion_model: "..." # 查询扩展模型 (示例)
         context_compression: # 上下文压缩策略配置
@@ -978,7 +1026,7 @@ ai_integration:
         chain_of_thought_rag: # Chain-of-Thought RAG 策略配置
           cot_prompt_template: "请一步步思考，并给出最终答案。" # CoT Prompt 模板 (示例)
           few_shot_examples_path: "assets/data/cot_examples.json" # Few-shot 示例文件路径 (示例)
-      knowledge_fusion_method: weighted_average # 知识融合方法为加权平均
+      knowledge_fusion_method: intelligent_fusion # 知识融合方法：智能融合，替代 weighted_average
       response_parameters: # 响应生成参数
         temperature: 0.7 # Temperature：0.7
         top_p: 0.9 # Top P：0.9

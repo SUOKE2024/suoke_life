@@ -23,7 +23,8 @@ class ThemeService extends GetxService {
       await _loadThemeSettings();
       await _applyTheme();
     } catch (e) {
-      await _loggingService.log('error', 'Failed to initialize theme', data: {'error': e.toString()});
+      await _loggingService.log('error', 'Failed to initialize theme',
+          data: {'error': e.toString()});
     }
   }
 
@@ -32,11 +33,12 @@ class ThemeService extends GetxService {
     try {
       isDarkMode.value = !isDarkMode.value;
       themeMode.value = isDarkMode.value ? ThemeMode.dark : ThemeMode.light;
-      
+
       await _applyTheme();
       await _saveThemeSettings();
     } catch (e) {
-      await _loggingService.log('error', 'Failed to toggle theme mode', data: {'error': e.toString()});
+      await _loggingService.log('error', 'Failed to toggle theme mode',
+          data: {'error': e.toString()});
       rethrow;
     }
   }
@@ -47,7 +49,8 @@ class ThemeService extends GetxService {
       currentTheme.value = theme;
       await _saveThemeSettings();
     } catch (e) {
-      await _loggingService.log('error', 'Failed to update theme', data: {'error': e.toString()});
+      await _loggingService.log('error', 'Failed to update theme',
+          data: {'error': e.toString()});
       rethrow;
     }
   }
@@ -59,7 +62,8 @@ class ThemeService extends GetxService {
       await _saveThemeSettings();
       await _applyTheme();
     } catch (e) {
-      await _loggingService.log('error', 'Failed to update custom colors', data: {'error': e.toString()});
+      await _loggingService.log('error', 'Failed to update custom colors',
+          data: {'error': e.toString()});
       rethrow;
     }
   }
@@ -70,10 +74,11 @@ class ThemeService extends GetxService {
       if (settings != null) {
         isDarkMode.value = settings['is_dark_mode'] ?? false;
         themeMode.value = ThemeMode.values[settings['theme_mode'] ?? 0];
-        
+
         if (settings['custom_colors'] != null) {
           customColors.value = Map<String, Color>.from(
-            settings['custom_colors'].map((key, value) => MapEntry(key, Color(value))),
+            settings['custom_colors']
+                .map((key, value) => MapEntry(key, Color(value))),
           );
         }
       }
@@ -87,7 +92,8 @@ class ThemeService extends GetxService {
       await _storageService.saveLocal('theme_settings', {
         'is_dark_mode': isDarkMode.value,
         'theme_mode': themeMode.value.index,
-        'custom_colors': customColors.map((key, value) => MapEntry(key, value.value)),
+        'custom_colors':
+            customColors.map((key, value) => MapEntry(key, value.value)),
         'updated_at': DateTime.now().toIso8601String(),
       });
     } catch (e) {
@@ -107,7 +113,7 @@ class ThemeService extends GetxService {
 
   ThemeData _buildTheme() {
     final baseTheme = isDarkMode.value ? ThemeData.dark() : ThemeData.light();
-    
+
     return baseTheme.copyWith(
       colorScheme: _buildColorScheme(baseTheme.colorScheme),
       textTheme: _buildTextTheme(baseTheme.textTheme),
@@ -119,7 +125,6 @@ class ThemeService extends GetxService {
     return base.copyWith(
       primary: customColors['primary'] ?? base.primary,
       secondary: customColors['secondary'] ?? base.secondary,
-      background: customColors['background'] ?? base.background,
       surface: customColors['surface'] ?? base.surface,
       error: customColors['error'] ?? base.error,
       // 添加其他颜色配置
@@ -144,4 +149,4 @@ class ThemeService extends GetxService {
       // 添加其他文本样式配置
     );
   }
-} 
+}

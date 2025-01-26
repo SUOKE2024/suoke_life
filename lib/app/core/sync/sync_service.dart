@@ -27,7 +27,7 @@ class SyncService {
     try {
       // 获取上次同步时间
       final lastSync = await _getLastSyncTime();
-      
+
       // 获取需要同步的数据
       final pendingData = await _getPendingData(lastSync);
       if (pendingData.isEmpty) {
@@ -50,13 +50,13 @@ class SyncService {
   }
 
   Future<DateTime?> _getLastSyncTime() async {
-    final timestamp = await _storage.getString('last_sync_time');
+    final timestamp = _storage.getString('last_sync_time');
     return timestamp != null ? DateTime.parse(timestamp) : null;
   }
 
   Future<List<Map<String, dynamic>>> _getPendingData(DateTime? lastSync) async {
     final pendingData = <Map<String, dynamic>>[];
-    
+
     // 获取各类型的待同步数据
     pendingData.addAll(await _getPendingHealthData(lastSync));
     pendingData.addAll(await _getPendingAgricultureData(lastSync));
@@ -112,4 +112,4 @@ class SyncService {
       DateTime.now().toIso8601String(),
     );
   }
-} 
+}

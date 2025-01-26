@@ -10,15 +10,15 @@ class AppSwitch extends StatelessWidget {
   final Color? inactiveTrackColor;
   final ImageProvider? activeThumbImage;
   final ImageProvider? inactiveThumbImage;
-  final MaterialStateProperty<Color?>? thumbColor;
-  final MaterialStateProperty<Color?>? trackColor;
-  final MaterialStateProperty<Color?>? overlayColor;
+  final WidgetStateProperty<Color?>? thumbColor;
+  final WidgetStateProperty<Color?>? trackColor;
+  final WidgetStateProperty<Color?>? overlayColor;
   final double? splashRadius;
   final MaterialTapTargetSize? materialTapTargetSize;
   final DragStartBehavior dragStartBehavior;
   final bool autofocus;
   final bool enabled;
-  
+
   const AppSwitch({
     super.key,
     required this.value,
@@ -59,4 +59,4 @@ class AppSwitch extends StatelessWidget {
       autofocus: autofocus,
     );
   }
-} 
+}

@@ -13,11 +13,6 @@ class EncryptionService {
 
   Future<void> init() async {
     String? savedKey = await _storage.read(key: _keyName);
-    if (savedKey == null) {
-      final key = Key.fromSecureRandom(32);
-      await _storage.write(key: _keyName, value: key.base64);
-      savedKey = key.base64;
-    }
     _encrypter = Encrypter(AES(Key.fromBase64(savedKey)));
   }
 
@@ -34,4 +29,4 @@ class EncryptionService {
     await _storage.write(key: _keyName, value: newKey.base64);
     _encrypter = Encrypter(AES(newKey));
   }
-} 
+}

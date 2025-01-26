@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:suoke_life/features/life/lib/widgets/user_profile_card.dart';
-import 'package:suoke_life/features/life/lib/widgets/health_advice_card.dart';
-import 'package:suoke_life/features/life/lib/widgets/life_record_item.dart';
 import 'package:suoke_life/libs/ui_components/lib/navigation/bottom_navigation_bar.dart';
 
 class LifePage extends StatefulWidget {
@@ -35,4 +32,4 @@ class _LifePageState extends State<LifePage> {
       ),
     );
   }
-} 
+}

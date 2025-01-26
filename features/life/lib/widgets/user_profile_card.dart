@@ -5,25 +5,25 @@ class UserProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return const Card(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.0),
         child: Column(
           children: [
-            const CircleAvatar(
+            CircleAvatar(
               radius: 40,
               backgroundImage: AssetImage('assets/images/user_avatar.png'),
             ),
-            const SizedBox(height: 10),
-            const Text(
+            SizedBox(height: 10),
+            Text(
               'John Doe',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 5),
-            const Text('Software Engineer'),
+            SizedBox(height: 5),
+            Text('Software Engineer'),
           ],
         ),
       ),
     );
   }
-} 
+}

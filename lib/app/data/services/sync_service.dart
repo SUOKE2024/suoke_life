@@ -177,7 +177,7 @@ class SyncService extends GetxService {
         message: '正在上传本地数据...',
         total: 100,
       );
-      
+
       for (int i = 0; i < 100; i++) {
         if (_syncCanceller.operation.isCanceled) {
           throw CancelException();
@@ -198,7 +198,7 @@ class SyncService extends GetxService {
         current: 0,
         total: 50,
       );
-      
+
       for (int i = 0; i < 50; i++) {
         // 模拟下载进度
         await Future.delayed(const Duration(milliseconds: 100));
@@ -222,7 +222,7 @@ class SyncService extends GetxService {
         stage: '错误',
         message: '同步失败: $e',
       );
-      throw e;
+      rethrow;
     }
   }
 }
@@ -238,4 +238,4 @@ class CancelableCompleter {
   CancelableOperation get operation => _operation;
 }
 
-class CancelException implements Exception {} 
+class CancelException implements Exception {}

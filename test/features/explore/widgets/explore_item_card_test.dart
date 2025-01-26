@@ -7,15 +7,15 @@ void main() {
   testWidgets('ExploreItemCard should display explore item information',
       (WidgetTester tester) async {
     await tester.pumpWidget(
-      MaterialApp(
-        localizationsDelegates: const [
+      const MaterialApp(
+        localizationsDelegates: [
           AppLocalizations.delegate,
         ],
-        supportedLocales: const [
+        supportedLocales: [
           Locale('en', 'US'),
           Locale('zh', 'CN'),
         ],
-        home: const ExploreItemCard(
+        home: ExploreItemCard(
           title: 'Test Item',
           description: 'Test Description',
           imageUrl: 'assets/images/yoga.jpg',
@@ -27,4 +27,4 @@ void main() {
     expect(find.text('Test Description'), findsOneWidget);
     expect(find.byType(Image), findsOneWidget);
   });
-} 
+}

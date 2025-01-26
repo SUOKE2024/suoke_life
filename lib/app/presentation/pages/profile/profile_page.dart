@@ -22,18 +22,20 @@ class ProfilePage extends StatelessWidget {
   Widget _buildUserInfo() {
     return Container(
       padding: const EdgeInsets.all(16),
-      child: Row(
+      child: const Row(
         children: [
-          const CircleAvatar(
+          CircleAvatar(
             radius: 40,
             child: Icon(Icons.person, size: 40),
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text('用户名', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              children: [
+                Text('用户名',
+                    style:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                 SizedBox(height: 4),
                 Text('点击登录/注册', style: TextStyle(color: Colors.grey)),
               ],
@@ -64,4 +66,4 @@ class ProfilePage extends StatelessWidget {
       },
     );
   }
-} 
+}

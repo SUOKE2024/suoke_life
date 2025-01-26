@@ -26,7 +26,7 @@ class _ChatPageState extends State<ChatPage> {
         title: const Text('Chats'),
       ),
       body: ListView(
-        children: [
+        children: const [
           ChatListItem(
             title: 'Xiaoai',
             lastMessage: 'Hello, how can I help you?',
@@ -56,4 +56,4 @@ class _ChatPageState extends State<ChatPage> {
       ),
     );
   }
-} 
+}

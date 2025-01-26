@@ -1,0 +1,11 @@
+{
+  "@@locale": "zh_CN",
+  "appTitle": "Suoke 生活",
+  "@appTitle": {
+    "description": "应用的主标题"
+  },
+  "greetingMessage": "你好，世界！",
+  "@greetingMessage": {
+    "description": "通用的问候消息"
+  }
+} 

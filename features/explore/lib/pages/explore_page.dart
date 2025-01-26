@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:suoke_life/libs/ui_components/lib/navigation/bottom_navigation_bar.dart';
 import 'package:suoke_life/core/navigation/app_routes.dart';
-import 'package:suoke_life/features/explore/lib/widgets/explore_item_card.dart';
 
 class ExplorePage extends StatefulWidget {
   const ExplorePage({Key? key}) : super(key: key);
@@ -51,4 +50,4 @@ class _ExplorePageState extends State<ExplorePage> {
       ),
     );
   }
-} 
+}

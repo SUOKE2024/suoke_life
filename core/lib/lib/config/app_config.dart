@@ -17,14 +17,14 @@
 +    required this.redisPort,
    });
  
-   factory AppConfig.fromJson(Map<String, dynamic> json) {
+   AppConfig.fromJson(Map<String, dynamic> json) {
 @@ -25,6 +29,8 @@
        baseUrl: json['baseUrl'] as String,
        googleApiKey: json['googleApiKey'] as String,
        sentryDsn: json['sentryDsn'] as String,
 +      redisHost: json['redisHost'] as String,
 +      redisPort: json['redisPort'] as int,
-     );
+     )
    }
  
 @@ -33,6 +39,8 @@

@@ -7,15 +7,15 @@ void main() {
   testWidgets('HealthAdviceCard should display health advice',
       (WidgetTester tester) async {
     await tester.pumpWidget(
-      MaterialApp(
-        localizationsDelegates: const [
+      const MaterialApp(
+        localizationsDelegates: [
           AppLocalizations.delegate,
         ],
-        supportedLocales: const [
+        supportedLocales: [
           Locale('en', 'US'),
           Locale('zh', 'CN'),
         ],
-        home: const HealthAdviceCard(),
+        home: HealthAdviceCard(),
       ),
     );
 
@@ -25,4 +25,4 @@ void main() {
     expect(find.text('Take regular breaks during work.'), findsOneWidget);
     expect(find.text('Practice mindfulness and meditation.'), findsOneWidget);
   });
-} 
+}

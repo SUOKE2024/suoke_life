@@ -32,10 +32,10 @@ class _ChatInputBarState extends State<ChatInputBar> {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black12,
-            offset: const Offset(0, -1),
+            offset: Offset(0, -1),
             blurRadius: 4,
           ),
         ],
@@ -96,4 +96,4 @@ class _ChatInputBarState extends State<ChatInputBar> {
       ),
     );
   }
-} 
+}

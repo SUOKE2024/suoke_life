@@ -1,6 +1,8 @@
 import 'package:get_it/get_it.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import '../../services/infrastructure/database_service.dart';
+import '../../services/infrastructure/database_service_impl.dart';
 
 class DatabaseModule {
   Future<void> register(GetIt getIt) async {
@@ -24,4 +26,8 @@ class DatabaseModule {
     );
     getIt.registerSingleton<Database>(database);
   }
+}
+
+void registerDatabaseModule(GetIt getIt) {
+  getIt.registerLazySingleton<DatabaseService>(() => DatabaseServiceImpl());
 } 

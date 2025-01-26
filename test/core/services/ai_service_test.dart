@@ -9,11 +9,12 @@ void main() {
       expect(response, isNotEmpty);
     });
 
-    test('sendMessage should return a response containing the input message', () async {
+    test('sendMessage should return a response containing the input message',
+        () async {
       final aiService = AiService();
-      final message = 'Test Message';
+      const message = 'Test Message';
       final response = await aiService.sendMessage(message);
       expect(response, contains(message));
     });
   });
-} 
+}

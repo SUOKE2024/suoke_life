@@ -5,12 +5,12 @@ class HealthAdviceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return const Card(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             Text(
               'Health Advice',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -25,4 +25,4 @@ class HealthAdviceCard extends StatelessWidget {
       ),
     );
   }
-} 
+}

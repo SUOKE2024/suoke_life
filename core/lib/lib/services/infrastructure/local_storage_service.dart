@@ -7,7 +7,7 @@ abstract class LocalStorageService {
 }
 
 class LocalStorageServiceImpl implements LocalStorageService {
-  static const _databaseName = "suoke_life.db";
+  static const _databaseName = 'suoke_life.db';
   static const _databaseVersion = 1;
 
   Database? _database;

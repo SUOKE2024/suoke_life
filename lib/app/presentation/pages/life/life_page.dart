@@ -27,14 +27,15 @@ class LifePage extends StatelessWidget {
   }
 
   Widget _buildHealthStats() {
-    return Card(
-      margin: const EdgeInsets.all(16),
+    return const Card(
+      margin: EdgeInsets.all(16),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Text('健康数据', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          children: [
+            Text('健康数据',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             SizedBox(height: 16),
             // TODO: 实现健康数据展示
           ],
@@ -44,14 +45,15 @@ class LifePage extends StatelessWidget {
   }
 
   Widget _buildDailyRecord() {
-    return Card(
-      margin: const EdgeInsets.all(16),
+    return const Card(
+      margin: EdgeInsets.all(16),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Text('今日记录', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          children: [
+            Text('今日记录',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             SizedBox(height: 16),
             // TODO: 实现日常记录展示
           ],
@@ -61,14 +63,15 @@ class LifePage extends StatelessWidget {
   }
 
   Widget _buildRecommendations() {
-    return Card(
-      margin: const EdgeInsets.all(16),
+    return const Card(
+      margin: EdgeInsets.all(16),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Text('个性化建议', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          children: [
+            Text('个性化建议',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             SizedBox(height: 16),
             // TODO: 实现建议列表
           ],
@@ -76,4 +79,4 @@ class LifePage extends StatelessWidget {
       ),
     );
   }
-} 
+}

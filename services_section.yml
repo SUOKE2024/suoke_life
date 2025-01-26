@@ -1,3 +1,18 @@
+# services_section.yml
+#
+# 描述了后端服务的 Docker Compose 配置。
+#
+# Redis 用于：
+#   - 缓存热点数据，提高性能
+#   - 支持会话管理
+#   - 实现消息队列等功能
+#
+# sqflite (Flutter 前端) 用于：
+#   - 本地存储用户隐私数据，例如对话历史、用户偏好等。
+#   - 具体 sqflite 的配置和使用在 Flutter 代码中实现。
+#
+# MySQL 仍然用于存储结构化数据，例如用户信息、健康记录等。
+
 services:
   # 认证服务
   auth_service:

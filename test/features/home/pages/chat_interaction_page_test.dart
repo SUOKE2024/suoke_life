@@ -16,10 +16,15 @@ import 'package:suoke_life/main.dart';
 import 'chat_interaction_page_test.mocks.dart';
 
 class MockLocalStorageService extends Mock implements LocalStorageService {}
+
 class MockRedisService extends Mock implements RedisService {}
+
 class MockErrorHandler extends Mock implements ErrorHandler {}
+
 class MockChatService extends Mock implements ChatService {}
+
 class MockDataSyncService extends Mock implements DataSyncService {}
+
 class MockAIService extends Mock implements AiService {}
 
 void main() {
@@ -30,7 +35,7 @@ void main() {
   late MockRedisService mockRedis;
   late MockErrorHandler mockErrorHandler;
   late ChatProvider chatProvider;
-  final chatId = 1;
+  const chatId = 1;
 
   setUp(() {
     mockChatService = MockChatService();
@@ -49,8 +54,7 @@ void main() {
   });
 
   testWidgets('ChatInteractionPage UI Test', (WidgetTester tester) async {
-    when(() => mockChatService.getMessages())
-        .thenAnswer((_) async => []);
+    when(() => mockChatService.getMessages()).thenAnswer((_) async => []);
     when(() => mockAIService.generateText(any))
         .thenAnswer((_) async => 'AI Response');
     when(() => mockLocalStorage.insertChat(any, any))

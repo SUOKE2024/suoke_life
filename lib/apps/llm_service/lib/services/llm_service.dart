@@ -53,7 +53,8 @@ class LLMService {
   final AppConfig appConfig;
   final String defaultLocalDataRetentionPeriod; //  默认本地数据保留期限
   final AgentMemoryService _agentMemoryService; // 声明 AgentMemoryService
-  final ContextCompressionStrategy _contextCompressionStrategy; // 声明 ContextCompressionStrategy
+  final ContextCompressionStrategy
+      _contextCompressionStrategy; // 声明 ContextCompressionStrategy
   final ReRankingStrategy _reRankingStrategy; // 声明 ReRankingStrategy
 
   @injectable // 使用 injectable 的 @injectable 注解，如果不是 injectable 请替换为您的 DI 方案
@@ -65,22 +66,27 @@ class LLMService {
     this.compressionRatio = 0.5, // 默认压缩率
     this.keywordsNum = 10, // 默认关键词提取数量
     this.summaryModelName = 'bart-large-cnn', // 默认摘要模型名称
-    this.reRankingModelName = 'sentence-transformers/all-mpnet-base-v2', // 默认重排序模型名称
+    this.reRankingModelName =
+        'sentence-transformers/all-mpnet-base-v2', // 默认重排序模型名称
     this.promptStrategyOptions = const {}, // 默认 Prompt 策略选项为空
     required this.appConfig,
     String? defaultLocalDataRetentionPeriod, //  默认本地数据保留期限
     this.defaultLocalDataRetentionPeriod = '30d', //  默认保留 30 天
-    required AgentMemoryService agentMemoryService, // 构造函数中需要传入 AgentMemoryService
-    required ContextCompressionStrategy contextCompressionStrategy, //  接收 ContextCompressionStrategy 实例
+    required AgentMemoryService
+        agentMemoryService, // 构造函数中需要传入 AgentMemoryService
+    required ContextCompressionStrategy
+        contextCompressionStrategy, //  接收 ContextCompressionStrategy 实例
     required ReRankingStrategy reRankingStrategy, // 接收 ReRankingStrategy 实例
-  }) : _agentMemoryService = agentMemoryService, _contextCompressionStrategy = contextCompressionStrategy, _reRankingStrategy = reRankingStrategy;
+  })  : _agentMemoryService = agentMemoryService,
+        _contextCompressionStrategy = contextCompressionStrategy,
+        _reRankingStrategy = reRankingStrategy;
 
   // 查询扩展的占位符方法 (待实现)
   Future<String> _expandQueryWithSynonyms(String query) async {
     print('使用同义词扩展查询 (占位符), Query: $query'); // 添加日志
     // TODO: 在这里集成真实的同义词查询扩展逻辑
     //       例如：使用 WordNet, ConceptNet 等知识库，或者使用预训练的语言模型
-    await Future.delayed(Duration(seconds: 1)); // 模拟查询扩展延迟
+    await Future.delayed(const Duration(seconds: 1)); // 模拟查询扩展延迟
     return '$query (同义词扩展)'; // 占位符扩展结果
   }
 
@@ -89,7 +95,7 @@ class LLMService {
     print('使用意图识别扩展查询 (占位符), Query: $query'); // 添加日志
     // TODO: 在这里集成真实的意图识别逻辑
     //       例如：使用预训练的意图识别模型，或者使用规则和关键词匹配
-    await Future.delayed(Duration(seconds: 1)); // 模拟意图识别延迟
+    await Future.delayed(const Duration(seconds: 1)); // 模拟意图识别延迟
     return '$query (意图识别扩展)'; // 占位符扩展结果
   }
 
@@ -107,7 +113,8 @@ class LLMService {
       default:
         print('不进行上下文压缩');
     }
-    return context.substring(0, min(100, context.length)); // 占位符压缩结果，截取前 100 个字符
+    return context.substring(
+        0, min(100, context.length)); // 占位符压缩结果，截取前 100 个字符
   }
 
   // 上下文重排序的占位符方法 (待实现)
@@ -128,7 +135,7 @@ class LLMService {
       default:
         print('不进行上下文重排序');
     }
-    await Future.delayed(Duration(seconds: 1)); // 模拟重排序延迟
+    await Future.delayed(const Duration(seconds: 1)); // 模拟重排序延迟
     return context; // 占位符重排序结果，返回原始上下文
   }
 
@@ -137,8 +144,11 @@ class LLMService {
     print('构建 Chain-of-Thought Prompt (占位符)'); // 添加日志
     // TODO: 在这里根据 promptStrategyOptions 构建真实的 Chain-of-Thought Prompt
     //       例如：从 promptStrategyOptions 中获取 CoT 示例，并将其拼接到 Prompt 中
-    final cotPromptTemplate = promptStrategyOptions['cot_prompt_template'] as String? ?? '请一步步思考，并给出最终答案。'; // 从配置中获取 CoT Prompt 模板，如果没有则使用默认模板
-    final fewShotExamplesPath = promptStrategyOptions['few_shot_examples_path'] as String?; // 从配置中获取 Few-shot 示例文件路径
+    final cotPromptTemplate =
+        promptStrategyOptions['cot_prompt_template'] as String? ??
+            '请一步步思考，并给出最终答案。'; // 从配置中获取 CoT Prompt 模板，如果没有则使用默认模板
+    final fewShotExamplesPath = promptStrategyOptions['few_shot_examples_path']
+        as String?; // 从配置中获取 Few-shot 示例文件路径
 
     String fewShotExamples = '';
     if (fewShotExamplesPath != null) {
@@ -180,12 +190,13 @@ class LLMService {
 
     print('Prompt: $prompt'); // 打印 Prompt (用于调试)
 
-    await Future.delayed(Duration(seconds: 2)); // 模拟 LLM 调用延迟
+    await Future.delayed(const Duration(seconds: 2)); // 模拟 LLM 调用延迟
     return 'AI 回复： 这是基于查询 "$query" 和上下文信息生成的回复。 [LLM 模型的实际回复内容]'; // 占位符回复
   }
 
   // 执行 RAG (Retrieval-Augmented Generation) 流程
-  Future<String> _performRAG(String query, String userId, String agentId) async {
+  Future<String> _performRAG(
+      String query, String userId, String agentId) async {
     print('执行 RAG 流程, Query: $query'); // 添加日志
 
     // 1. 查询扩展 (Query Expansion)
@@ -195,7 +206,8 @@ class LLMService {
         expandedQuery = await _expandQueryWithSynonyms(query); // 使用同义词扩展查询
         break;
       case QueryExpansionStrategy.intent_recognition:
-        expandedQuery = await _expandQueryWithIntentRecognition(query); // 使用意图识别扩展查询
+        expandedQuery =
+            await _expandQueryWithIntentRecognition(query); // 使用意图识别扩展查询
         break;
       default:
         print('不进行查询扩展');
@@ -204,10 +216,12 @@ class LLMService {
 
     // 2. 上下文检索 (Context Retrieval)
     // 从知识库检索上下文
-    final retrievedContext = await _retrieveContextFromKnowledgeBase(userId: userId, query: expandedQuery);
+    final retrievedContext = await _retrieveContextFromKnowledgeBase(
+        userId: userId, query: expandedQuery);
 
     // 3. 上下文压缩 (Context Compression)
-    String compressedContext = retrievedContext; // 默认不压缩，使用原始上下文 (这里仍然使用知识库上下文进行压缩，可以根据需要修改)
+    String compressedContext =
+        retrievedContext; // 默认不压缩，使用原始上下文 (这里仍然使用知识库上下文进行压缩，可以根据需要修改)
 
     switch (contextCompressionType) {
       case ContextCompressionType.summary:
@@ -216,19 +230,22 @@ class LLMService {
       default:
         print('不进行上下文压缩');
     }
-    print('压缩后的上下文 (前 100 字): ${compressedContext.substring(0, min(100, compressedContext.length))}...'); // 打印压缩后的上下文 (前 100 字)
+    print(
+        '压缩后的上下文 (前 100 字): ${compressedContext.substring(0, min(100, compressedContext.length))}...'); // 打印压缩后的上下文 (前 100 字)
 
     // 4. 上下文重排序 (Context Re-ranking)
     String reRankedContext = compressedContext; // 默认不重排序，使用压缩后的上下文
     switch (reRankingStrategy) {
       case ReRankingStrategy.semantic_similarity:
       case ReRankingStrategy.context_relevance:
-        reRankedContext = await _reRankContext(query, compressedContext); // 执行上下文重排序
+        reRankedContext =
+            await _reRankContext(query, compressedContext); // 执行上下文重排序
         break;
       default:
         print('不进行上下文重排序');
     }
-    print('重排序后的上下文 (前 100 字): ${reRankedContext.substring(0, min(100, reRankedContext.length))}...'); // 打印重排序后的上下文 (前 100 字)
+    print(
+        '重排序后的上下文 (前 100 字): ${reRankedContext.substring(0, min(100, reRankedContext.length))}...'); // 打印重排序后的上下文 (前 100 字)
 
     // 5. 生成回复 (Response Generation)
     // 使用 Prompt Strategy 和 LLM 生成最终回复
@@ -243,7 +260,7 @@ class LLMService {
     print('执行知识图谱查询 (占位符), Query: $query'); // 添加日志
     // TODO: 在这里集成真实的知识图谱查询逻辑
     //       例如：调用知识图谱 API，并处理 API 响应
-    await Future.delayed(Duration(seconds: 1)); // 模拟知识图谱查询延迟
+    await Future.delayed(const Duration(seconds: 1)); // 模拟知识图谱查询延迟
     return '知识图谱检索结果： 找到了关于 "$query" 的一些知识图谱信息，内容概要如下： [知识图谱检索结果]'; // 占位符知识图谱检索结果
   }
 
@@ -261,7 +278,7 @@ class LLMService {
     //       } else {
     //         return '健康画像检索失败';
     //       }
-    await Future.delayed(Duration(seconds: 1)); // 模拟健康画像检索延迟
+    await Future.delayed(const Duration(seconds: 1)); // 模拟健康画像检索延迟
     return '健康画像上下文： 这是用户的健康画像信息，可以用于个性化健康建议。 [健康画像信息]'; // 占位符健康画像上下文
   }
 
@@ -279,14 +296,16 @@ class LLMService {
   }
 
   // 从知识库检索上下文 (融合知识图谱和健康画像)
-  Future<String> _retrieveContextFromKnowledgeBase({required String userId, required String query}) async {
+  Future<String> _retrieveContextFromKnowledgeBase(
+      {required String userId, required String query}) async {
     print('从知识库检索上下文 (占位符), Query: $query'); // 添加日志
     // TODO: 在这里集成真实的知识库检索逻辑，例如知识图谱查询
     //       示例：假设知识图谱 API 端点为 /api/knowledge_graph/query
     //       并接受 keywords 参数进行查询
 
     //  集成健康画像查询
-    final healthProfileContext = await _retrieveContextFromHealthProfile(userId); //  调用 _retrieveContextFromHealthProfile 获取健康画像上下文
+    final healthProfileContext = await _retrieveContextFromHealthProfile(
+        userId); //  调用 _retrieveContextFromHealthProfile 获取健康画像上下文
     print('健康画像上下文: $healthProfileContext'); // 打印健康画像上下文
 
     String knowledgeGraphContext = ''; // 初始化知识图谱上下文为空字符串
@@ -305,16 +324,17 @@ class LLMService {
       //       } else {
       //         return '知识库检索失败';
       //       }
-      knowledgeGraphContext =
-          await _performKnowledgeGraphQuery(query); //  调用 _performKnowledgeGraphQuery 获取知识图谱上下文 (占位符方法)
+      knowledgeGraphContext = await _performKnowledgeGraphQuery(
+          query); //  调用 _performKnowledgeGraphQuery 获取知识图谱上下文 (占位符方法)
     } else {
       print('知识图谱已禁用'); //  打印日志，提示知识图谱已禁用
     }
 
     //  融合知识图谱上下文和健康画像上下文
-    final finalContext = '$knowledgeGraphContext\n\n$healthProfileContext'; //  简单拼接，可以根据需要调整融合策略
+    final finalContext =
+        '$knowledgeGraphContext\n\n$healthProfileContext'; //  简单拼接，可以根据需要调整融合策略
 
-    await Future.delayed(Duration(seconds: 1)); // 模拟知识库检索延迟
+    await Future.delayed(const Duration(seconds: 1)); // 模拟知识库检索延迟
     return finalContext; //  返回融合后的上下文
   }
 
@@ -325,7 +345,7 @@ class LLMService {
     //       例如：根据文件类型 (txt, pdf, docx 等) 选择不同的文件解析库
     //       提取文件中的文本内容，并进行内容概要或描述
     //       可以使用第三方库，例如：pdf_text, docx_parser 等
-    await Future.delayed(Duration(seconds: 1)); // 模拟文件处理延迟
+    await Future.delayed(const Duration(seconds: 1)); // 模拟文件处理延迟
     return '文件内容描述： 这是用户上传的文件，文件路径为：$filePath，文件内容概要如下： [文件内容概要]'; // 占位符文件内容描述
   }
 
@@ -343,7 +363,7 @@ class LLMService {
     //       } else {
     //         return '无法获取图像描述';
     //       }
-    await Future.delayed(Duration(seconds: 1)); // 模拟网络请求延迟
+    await Future.delayed(const Duration(seconds: 1)); // 模拟网络请求延迟
     return '这是一张关于 [图像内容描述] 的图片'; // 占位符图像描述
   }
 
@@ -370,12 +390,13 @@ class LLMService {
     //       } else {
     //         return '网络搜索失败';
     //       }
-    await Future.delayed(Duration(seconds: 2)); // 模拟网络搜索延迟
+    await Future.delayed(const Duration(seconds: 2)); // 模拟网络搜索延迟
     return '网络搜索结果： 找到了关于 "$query" 的一些网络信息，内容概要如下： [网络搜索结果摘要]'; // 占位符网络搜索结果
   }
 
   // 主消息处理方法
-  Future<String> sendMessage({ // 修改 sendMessage 方法，使用命名参数
+  Future<String> sendMessage({
+    // 修改 sendMessage 方法，使用命名参数
     required String userId,
     required String agentId,
     String? textMessage,
@@ -395,7 +416,8 @@ class LLMService {
     }
     if (filePaths.isNotEmpty) {
       for (final filePath in filePaths) {
-        query += '\n文件内容描述: ${await _getFileContentDescription(filePath)}'; // 获取文件内容描述并添加到查询
+        query +=
+            '\n文件内容描述: ${await _getFileContentDescription(filePath)}'; // 获取文件内容描述并添加到查询
       }
     }
 
@@ -429,42 +451,50 @@ class LLMService {
       //  从 AppConfig 中读取是否启用数据贡献
       print('准备上传用户数据到系统后台 (匿名化处理)'); //  添加日志
       final anonymizedUserData = _anonymizeUserDataForUpload({
-        'conversationHistory': await _agentMemoryService.getConversationHistory(userId, agentId),
+        'conversationHistory':
+            await _agentMemoryService.getConversationHistory(userId, agentId),
         'userPreference': await _agentMemoryService.getUserPreference(userId),
         //  ... 其他需要上传的用户数据 ...
       });
-      _uploadUserDataToBackend(anonymizedUserData); //  调用 _uploadUserDataToBackend 上传匿名化数据 (占位符方法)
+      _uploadUserDataToBackend(
+          anonymizedUserData); //  调用 _uploadUserDataToBackend 上传匿名化数据 (占位符方法)
     }
 
     return aiResponse;
   }
 
   // 匿名化用户数据的占位符方法 (待实现)
-  Map<String, dynamic> _anonymizeUserDataForUpload(Map<String, dynamic> userData) {
+  Map<String, dynamic> _anonymizeUserDataForUpload(
+      Map<String, dynamic> userData) {
     print('匿名化用户数据 (占位符)'); //  添加日志
     final anonymizedData = Map<String, dynamic>.from(userData); //  创建数据副本
 
     // 1. 用户 ID 哈希
     final userId = anonymizedData['userPreference']?.userId;
     if (userId != null) {
-      final hashedUserId = sha256.convert(utf8.encode(userId)).toString(); // SHA256 哈希
+      final hashedUserId =
+          sha256.convert(utf8.encode(userId)).toString(); // SHA256 哈希
       anonymizedData['userId'] = hashedUserId; //  替换为哈希后的用户 ID
       anonymizedData.remove('userPreference'); //  移除原始 userPreference，避免泄露用户 ID
     } else {
-      anonymizedData['userId'] = 'anonymous_user'; //  如果用户 ID 为空，使用 anonymous_user
+      anonymizedData['userId'] =
+          'anonymous_user'; //  如果用户 ID 为空，使用 anonymous_user
       anonymizedData.remove('userPreference');
     }
 
     // 2. 对话历史匿名化 (移除对话文本中的个人信息)
     if (anonymizedData['conversationHistory'] is List) {
-      anonymizedData['conversationHistory'] = (anonymizedData['conversationHistory'] as List).map((turn) {
+      anonymizedData['conversationHistory'] =
+          (anonymizedData['conversationHistory'] as List).map((turn) {
         if (turn is ConversationTurn) {
           String? anonymizedText = turn.text;
           if (anonymizedText != null) {
             anonymizedText = _removePersonalInfo(anonymizedText); //  移除个人信息
           }
-          return ConversationTurn( //  创建新的 ConversationTurn 对象，保持数据结构
-            userId: anonymizedData['userId'] as String? ?? 'anonymous_user', //  使用匿名化后的用户 ID
+          return ConversationTurn(
+            //  创建新的 ConversationTurn 对象，保持数据结构
+            userId: anonymizedData['userId'] as String? ??
+                'anonymous_user', //  使用匿名化后的用户 ID
             agentId: turn.agentId,
             turnIndex: turn.turnIndex,
             role: turn.role,
@@ -480,10 +510,12 @@ class LLMService {
   }
 
   // 上传用户数据到系统后台的占位符方法 (待实现)
-  Future<void> _uploadUserDataToBackend(Map<String, dynamic> anonymizedUserData) async {
+  Future<void> _uploadUserDataToBackend(
+      Map<String, dynamic> anonymizedUserData) async {
     print('上传匿名化用户数据到系统后台 (占位符)'); //  添加日志
-    final dataContributionApiEndpoint = appConfig.dataContributionApiEndpoint; //  从 AppConfig 获取 API 端点
-    if (dataContributionApiEndpoint == null || dataContributionApiEndpoint.isEmpty) {
+    final dataContributionApiEndpoint =
+        appConfig.dataContributionApiEndpoint; //  从 AppConfig 获取 API 端点
+    if (dataContributionApiEndpoint.isEmpty) {
       print('数据贡献 API 端点未配置，取消上传'); //  添加日志
       return;
     }
@@ -506,7 +538,7 @@ class LLMService {
       print('上传用户数据到系统后台发生异常: $e'); //  添加错误日志
       // TODO:  可以根据需要添加异常处理和重试逻辑
     } finally {
-      await Future.delayed(Duration(seconds: 2)); //  模拟上传延迟 (实际上传不需要延迟)
+      await Future.delayed(const Duration(seconds: 2)); //  模拟上传延迟 (实际上传不需要延迟)
       print('匿名化用户数据上传流程结束'); //  添加日志
     }
   }
@@ -515,6 +547,7 @@ class LLMService {
   String _removePersonalInfo(String text) {
     // TODO:  使用更完善的个人信息移除逻辑，例如使用正则表达式或 NER 模型
     //       这里只是一个简单的示例，将文本中的 "姓名"、"电话号码"、"邮箱" 替换为 "[removed]"
-    return text.replaceAll(RegExp(r'(姓名|电话号码|邮箱)', caseSensitive: false), '[removed]');
+    return text.replaceAll(
+        RegExp(r'(姓名|电话号码|邮箱)', caseSensitive: false), '[removed]');
   }
-} 
+}

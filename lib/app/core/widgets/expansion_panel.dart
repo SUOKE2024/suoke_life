@@ -25,7 +25,8 @@ class CustomExpansionPanelList extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<CustomExpansionPanelList> createState() => _CustomExpansionPanelListState();
+  State<CustomExpansionPanelList> createState() =>
+      _CustomExpansionPanelListState();
 }
 
 class _CustomExpansionPanelListState extends State<CustomExpansionPanelList> {
@@ -78,7 +79,7 @@ class ExpansionPanelDemo extends StatelessWidget {
   final List<ExpansionPanelItem> items = [
     ExpansionPanelItem(
       title: '基本信息',
-      content: Column(
+      content: const Column(
         children: [
           ListTile(title: Text('姓名：张三')),
           ListTile(title: Text('年龄：25')),
@@ -88,7 +89,7 @@ class ExpansionPanelDemo extends StatelessWidget {
     ),
     ExpansionPanelItem(
       title: '联系方式',
-      content: Column(
+      content: const Column(
         children: [
           ListTile(title: Text('电话：123456789')),
           ListTile(title: Text('邮箱：zhangsan@example.com')),
@@ -96,6 +97,8 @@ class ExpansionPanelDemo extends StatelessWidget {
       ),
     ),
   ];
+
+  const ExpansionPanelDemo({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -107,4 +110,4 @@ class ExpansionPanelDemo extends StatelessWidget {
       },
     );
   }
-} 
+}

@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:mockito/mockito.dart';
-import '../../lib/app/presentation/controllers/chat/chat_controller.dart';
-import '../../lib/app/data/models/chat_message.dart';
+import 'package:suoke_life/app/presentation/controllers/chat/chat_controller.dart';
+import 'package:suoke_life/app/data/models/chat_message.dart';
 
 class MockChatController extends Mock implements ChatController {
   final _messages = <ChatMessage>[].obs;
@@ -18,4 +18,4 @@ class MockChatController extends Mock implements ChatController {
 
   @override
   void startChat(String assistantId) {}
-} 
+}

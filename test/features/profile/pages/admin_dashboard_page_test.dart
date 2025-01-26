@@ -7,18 +7,18 @@ void main() {
   testWidgets('AdminDashboardPage should display admin dashboard content',
       (WidgetTester tester) async {
     await tester.pumpWidget(
-      MaterialApp(
-        localizationsDelegates: const [
+      const MaterialApp(
+        localizationsDelegates: [
           AppLocalizations.delegate,
         ],
-        supportedLocales: const [
+        supportedLocales: [
           Locale('en', 'US'),
           Locale('zh', 'CN'),
         ],
-        home: const AdminDashboardPage(),
+        home: AdminDashboardPage(),
       ),
     );
 
     expect(find.text('Admin Dashboard Content'), findsOneWidget);
   });
-} 
+}

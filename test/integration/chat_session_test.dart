@@ -34,7 +34,7 @@ void main() {
 
       await chatSessionService.createSession(session);
       final retrieved = await chatSessionService.getSession(session.id);
-      
+
       expect(retrieved, isNotNull);
       expect(retrieved!.participantIds, session.participantIds);
       expect(retrieved.lastMessage, session.lastMessage);
@@ -77,8 +77,8 @@ void main() {
     });
 
     test('should get sessions by participant', () async {
-      final userId = 'user1';
-      
+      const userId = 'user1';
+
       await chatSessionService.createSession(ChatSession(
         id: '4',
         participantIds: [userId, 'user2'],
@@ -95,9 +95,10 @@ void main() {
         unreadCount: 0,
       ));
 
-      final sessions = await chatSessionService.getSessionsByParticipant(userId);
+      final sessions =
+          await chatSessionService.getSessionsByParticipant(userId);
       expect(sessions.length, 2);
       expect(sessions.every((s) => s.participantIds.contains(userId)), true);
     });
   });
-} 
+}

@@ -8,9 +8,7 @@ class DatabaseConfig {
   DatabaseConfig({required this.databaseName});
 
   Future<Database?> get database async {
-    if (_database == null) {
-      _database = await _initDatabase();
-    }
+    _database ??= await _initDatabase();
     return _database;
   }
 
@@ -28,4 +26,4 @@ class DatabaseConfig {
   void _onCreate(Database db, int version) {
     // Add your table creation SQL statements here
   }
-} 
+}

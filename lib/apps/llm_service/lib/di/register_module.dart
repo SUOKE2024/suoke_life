@@ -16,32 +16,43 @@ void registerLLMServiceModule() {
   // 注册 LLMService
   final appConfig = getIt<AppConfig>();
   final agentMemoryService = getIt<AgentMemoryService>();
-  final knowledgeGraphClient = getIt<KnowledgeGraphClient>(); // 获取 KnowledgeGraphClient 实例
+  final knowledgeGraphClient =
+      getIt<KnowledgeGraphClient>(); // 获取 KnowledgeGraphClient 实例
   final healthProfileService = getIt<HealthProfileService>();
 
   //  注册 ContextCompressionStrategy
-  getIt.registerLazySingleton<NoCompressionStrategy>(() => NoCompressionStrategy());
-  getIt.registerLazySingleton<SummaryCompressionStrategy>(() => SummaryCompressionStrategy());
-  getIt.registerLazySingleton<KeywordExtractionCompressionStrategy>(() => KeywordExtractionCompressionStrategy());
+  getIt.registerLazySingleton<NoCompressionStrategy>(
+      () => NoCompressionStrategy());
+  getIt.registerLazySingleton<SummaryCompressionStrategy>(
+      () => SummaryCompressionStrategy());
+  getIt.registerLazySingleton<KeywordExtractionCompressionStrategy>(
+      () => KeywordExtractionCompressionStrategy());
 
   //  根据配置选择 ContextCompressionStrategy
   ContextCompressionStrategy contextCompressionStrategy;
-  final compressionType = ContextCompressionType.keyword_extraction; //  TODO:  从配置中读取
+  const compressionType =
+      ContextCompressionType.keyword_extraction; //  TODO:  从配置中读取
   switch (compressionType) {
-    case ContextCompressionType.summary: contextCompressionStrategy = getIt<SummaryCompressionStrategy>(); break;
-    case ContextCompressionType.keyword_extraction: contextCompressionStrategy = getIt<KeywordExtractionCompressionStrategy>(); break;
-    default: contextCompressionStrategy = getIt<NoCompressionStrategy>(); break;
+    case ContextCompressionType.summary:
+      contextCompressionStrategy = getIt<SummaryCompressionStrategy>();
+      break;
+    case ContextCompressionType.keyword_extraction:
+      contextCompressionStrategy =
+          getIt<KeywordExtractionCompressionStrategy>();
+      break;
+    default:
+      contextCompressionStrategy = getIt<NoCompressionStrategy>();
+      break;
   }
 
-  getIt.registerLazySingleton<LLMService>(
-      () => LLMService(
-    appConfig: appConfig,
-    agentMemoryService: agentMemoryService,
-    queryExpansionStrategy: QueryExpansionStrategy.synonym_replacement,
-    contextCompressionStrategy: contextCompressionStrategy,
-    reRankingStrategy: ReRankingStrategy.semantic_similarity,
-    promptStrategy: PromptStrategy.standard_rag,
-  ));
+  getIt.registerLazySingleton<LLMService>(() => LLMService(
+        appConfig: appConfig,
+        agentMemoryService: agentMemoryService,
+        queryExpansionStrategy: QueryExpansionStrategy.synonym_replacement,
+        contextCompressionStrategy: contextCompressionStrategy,
+        reRankingStrategy: ReRankingStrategy.semantic_similarity,
+        promptStrategy: PromptStrategy.standard_rag,
+      ));
 
   // ... 其他 LLM Service 相关的注册 ...
-} 
+}

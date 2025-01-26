@@ -7,15 +7,15 @@ void main() {
   testWidgets('LifeRecordItem should display life record information',
       (WidgetTester tester) async {
     await tester.pumpWidget(
-      MaterialApp(
-        localizationsDelegates: const [
+      const MaterialApp(
+        localizationsDelegates: [
           AppLocalizations.delegate,
         ],
-        supportedLocales: const [
+        supportedLocales: [
           Locale('en', 'US'),
           Locale('zh', 'CN'),
         ],
-        home: const LifeRecordItem(
+        home: LifeRecordItem(
           title: 'Test Record',
           time: '10:00 AM',
           description: 'Test Description',
@@ -27,4 +27,4 @@ void main() {
     expect(find.text('10:00 AM'), findsOneWidget);
     expect(find.text('Test Description'), findsOneWidget);
   });
-} 
+}

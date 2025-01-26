@@ -28,12 +28,12 @@ class HealthAdviceCard extends StatelessWidget {
             const SizedBox(height: 8),
             Text(localizations.translate('eat_diet')),
             const SizedBox(height: 8),
-            Text('Take regular breaks during work.'),
+            const Text('Take regular breaks during work.'),
             const SizedBox(height: 8),
-            Text('Practice mindfulness and meditation.'),
+            const Text('Practice mindfulness and meditation.'),
           ],
         ),
       ),
     );
   }
-} 
+}

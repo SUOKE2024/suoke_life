@@ -42,12 +42,13 @@ class ExplorePage extends StatelessWidget {
   }
 
   Widget _buildKnowledgeGraph() {
-    return Column(
+    return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
+      children: [
         Padding(
           padding: EdgeInsets.all(16),
-          child: Text('知识图谱', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          child: Text('知识图谱',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
         ),
         // TODO: 实现知识图谱展示
       ],
@@ -55,15 +56,16 @@ class ExplorePage extends StatelessWidget {
   }
 
   Widget _buildTopics() {
-    return Column(
+    return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
+      children: [
         Padding(
           padding: EdgeInsets.all(16),
-          child: Text('热门话题', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          child: Text('热门话题',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
         ),
         // TODO: 实现话题列表
       ],
     );
   }
-} 
+}

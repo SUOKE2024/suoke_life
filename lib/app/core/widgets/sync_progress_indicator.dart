@@ -22,11 +22,11 @@ class SyncProgressIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Container(
       width: width,
       height: height,
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -42,7 +42,8 @@ class SyncProgressIndicator extends StatelessWidget {
                   valueColor: AlwaysStoppedAnimation<Color>(
                     color ?? theme.primaryColor,
                   ),
-                  backgroundColor: (color ?? theme.primaryColor).withOpacity(0.2),
+                  backgroundColor:
+                      (color ?? theme.primaryColor).withOpacity(0.2),
                 ),
               ),
               Text(
@@ -56,7 +57,7 @@ class SyncProgressIndicator extends StatelessWidget {
             ],
           ),
           if (currentItem != null) ...[
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               currentItem!,
               style: TextStyle(
@@ -69,4 +70,4 @@ class SyncProgressIndicator extends StatelessWidget {
       ),
     );
   }
-} 
+}

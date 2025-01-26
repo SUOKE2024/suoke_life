@@ -51,7 +51,8 @@ abstract class AgentMemoryService {
   Future<void> cleanUpExpiredData(String userId);
 }
 
-@LazySingleton(as: AgentMemoryService) // 使用 injectable 的 @LazySingleton 注解，如果不是 injectable 请替换为您的 DI 方案
+@LazySingleton(
+    as: AgentMemoryService) // 使用 injectable 的 @LazySingleton 注解，如果不是 injectable 请替换为您的 DI 方案
 class AgentMemoryServiceImpl implements AgentMemoryService {
   final LocalStorageService _localStorageService;
   final AppConfig _appConfig;
@@ -100,7 +101,8 @@ class AgentMemoryServiceImpl implements AgentMemoryService {
 
   @override
   Future<void> saveUserPreference(UserPreference preference) async {
-    await _localStorageService.insert(_userPreferencesTable, preference.toMap());
+    await _localStorageService.insert(
+        _userPreferencesTable, preference.toMap());
   }
 
   @override
@@ -151,7 +153,9 @@ class AgentMemoryServiceImpl implements AgentMemoryService {
     print('开始清理过期数据, User ID: $userId'); //  添加日志
     final db = await _databaseConfig.database;
     final userPreference = await getUserPreference(userId);
-    final retentionPeriod = userPreference?.localDataRetentionPeriod ?? _appConfig.defaultLocalDataRetentionPeriod; //  从 UserPreference 或 AppConfig 获取保留期限
+    final retentionPeriod = userPreference?.localDataRetentionPeriod ??
+        _appConfig
+            .defaultLocalDataRetentionPeriod; //  从 UserPreference 或 AppConfig 获取保留期限
     if (retentionPeriod == 'persistent') {
       print('数据保留策略设置为永久保留，跳过清理'); //  添加日志
       return; // 永久保留，无需清理
@@ -183,7 +187,7 @@ class AgentMemoryServiceImpl implements AgentMemoryService {
       where: 'userId = ? AND timestamp < ?',
       whereArgs: [userId, expiryTimestamp],
     );
-    print('清理对话历史，删除 ${deletedConversationTurns} 条记录'); //  添加日志
+    print('清理对话历史，删除 $deletedConversationTurns 条记录'); //  添加日志
 
     //  清理用户偏好设置 (如果需要定期清理用户偏好，可以添加类似代码)
     // int deletedUserPreferences = await db.delete(
@@ -199,8 +203,8 @@ class AgentMemoryServiceImpl implements AgentMemoryService {
       where: 'userId = ? AND timestamp < ?',
       whereArgs: [userId, expiryTimestamp],
     );
-    print('清理对话总结，删除 ${deletedConversationSummaries} 条记录'); //  添加日志
+    print('清理对话总结，删除 $deletedConversationSummaries 条记录'); //  添加日志
 
     print('过期数据清理完成'); //  添加日志
   }
-} 
+}

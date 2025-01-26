@@ -5,12 +5,15 @@ import '../base/base_controller.dart';
 @injectable
 class ControllerTemplate extends BaseController {
   final ValueNotifier<bool> loading = ValueNotifier<bool>(false);
+  @override
   final ValueNotifier<String?> error = ValueNotifier<String?>(null);
-  
+
+  @override
   void setLoading(bool value) {
     loading.value = value;
   }
 
+  @override
   void setError(String? message) {
     error.value = message;
   }
@@ -21,4 +24,4 @@ class ControllerTemplate extends BaseController {
     error.dispose();
     super.dispose();
   }
-} 
+}

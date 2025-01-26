@@ -1,44 +1,79 @@
-import 'package:sqflite/sqflite.dart';
 import 'package:suoke_life/core/models/user.dart';
 import 'package:suoke_life/core/repositories/user_repository.dart';
 import 'package:suoke_life/core/services/infrastructure/database_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../core/services/infrastructure/local_storage_service.dart';
+import '../../domain/models/chat_message.dart';
 
 class UserRepositoryImpl implements UserRepository {
   final DatabaseService _databaseService;
+  final LocalStorageService _localStorageService;
+  static const String _userTable = 'users';
 
-  UserRepositoryImpl(this._databaseService);
-
-  @override
-  Future<List<User>> getAllUsers() async {
-    final result = await _databaseService.query('users');
-    return result.map((e) => User.fromJson(e)).toList();
-  }
-
-  @override
-  Future<User> getUser(int id) async {
-    final result = await _databaseService.query('users', where: 'id = ?', whereArgs: [id]);
-    if (result.isNotEmpty) {
-      return User.fromJson(result.first);
-    }
-    throw Exception('User not found');
-  }
+  UserRepositoryImpl(this._databaseService, this._localStorageService);
 
   @override
   Future<User> addUser(User user) async {
-    final id = await _databaseService.insert('users', user.toJson());
+    final db = await _databaseService.database;
+    final id = await db.insert('users', user.toMap());
     return user.copyWith(id: id);
   }
 
   @override
+  Future<User?> getUserById(int id) async {
+    final db = await _databaseService.database;
+    final maps = await db.query(
+      'users',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+    if (maps.isNotEmpty) {
+      return User.fromMap(maps.first);
+    }
+    return null;
+  }
+
+  @override
+  Future<List<User>> getAllUsers() async {
+    final db = await _databaseService.database;
+    final maps = await db.query('users');
+    return maps.map((map) => User.fromMap(map)).toList();
+  }
+
+  @override
   Future<User> updateUser(User user) async {
-    await _databaseService.update('users', user.toJson(), where: 'id = ?', whereArgs: [user.id]);
+    final db = await _databaseService.database;
+    await db.update(
+      'users',
+      user.toMap(),
+      where: 'id = ?',
+      whereArgs: [user.id],
+    );
     return user;
   }
 
   @override
   Future<void> deleteUser(int id) async {
-    await _databaseService.delete('users', where: 'id = ?', whereArgs: [id]);
+    final db = await _databaseService.database;
+    await db.delete(
+      'users',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  @override
+  Future<User?> getUserByEmail(String email) async {
+    final db = await _databaseService.database;
+    List<Map<String, dynamic>> maps = await db.query(
+      _userTable,
+      where: 'email = ?',
+      whereArgs: [email],
+    );
+    if (maps.isNotEmpty) {
+      return User.fromMap(maps.first);
+    }
+    return null;
   }
 
   @override
@@ -54,9 +89,23 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<List<Map<String, dynamic>>> getChatList() async {
-    final db = await _databaseService.openDatabase();
-    final List<Map<String, dynamic>> maps = await db.query('chats');
-    return maps;
+  Future<List<ChatMessage>> getChatHistory() async {
+    try {
+      final chatList = await _localStorageService.getChatHistory();
+      return chatList.map((message) => ChatMessage(text: message)).toList();
+    } catch (e) {
+      print('Error getting chat history: $e');
+      return [];
+    }
   }
-} 
+
+  @override
+  Future<void> saveChatHistory(List<ChatMessage> chatHistory) async {
+    try {
+      final chatStringList = chatHistory.map((chat) => chat.text).toList();
+      await _localStorageService.saveChatHistory(chatStringList);
+    } catch (e) {
+      print('Error saving chat history: $e');
+    }
+  }
+}

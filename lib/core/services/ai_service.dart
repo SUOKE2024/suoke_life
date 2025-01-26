@@ -1,3 +1,4 @@
 abstract class AiService {
-  Future<String> generateResponse(String message);
-} 
+  Future<String> generateText(String prompt);
+  Future<List<double>> getEmbeddings(String text);
+}

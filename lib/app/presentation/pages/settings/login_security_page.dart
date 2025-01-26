@@ -26,9 +26,9 @@ class LoginSecurityPage extends BasePage<LoginSecurityController> {
                 title: const Text('生物识别登录'),
                 subtitle: const Text('使用指纹或面容ID快速登录'),
                 trailing: Obx(() => Switch(
-                  value: controller.biometricEnabled.value,
-                  onChanged: controller.toggleBiometric,
-                )),
+                      value: controller.biometricEnabled.value,
+                      onChanged: controller.toggleBiometric,
+                    )),
               ),
             ],
           ),
@@ -40,27 +40,27 @@ class LoginSecurityPage extends BasePage<LoginSecurityController> {
         Card(
           child: Column(
             children: [
-              ListTile(
-                title: const Text('登录保护'),
-                subtitle: const Text('异常登录行为检测和防护'),
+              const ListTile(
+                title: Text('登录保护'),
+                subtitle: Text('异常登录行为检测和防护'),
               ),
               const Divider(height: 1),
               ListTile(
                 title: const Text('登录验证'),
                 subtitle: const Text('异地登录时需要验证'),
                 trailing: Obx(() => Switch(
-                  value: controller.loginVerificationEnabled.value,
-                  onChanged: controller.toggleLoginVerification,
-                )),
+                      value: controller.loginVerificationEnabled.value,
+                      onChanged: controller.toggleLoginVerification,
+                    )),
               ),
               const Divider(height: 1),
               ListTile(
                 title: const Text('登录通知'),
                 subtitle: const Text('新设备登录时通知'),
                 trailing: Obx(() => Switch(
-                  value: controller.loginNotificationEnabled.value,
-                  onChanged: controller.toggleLoginNotification,
-                )),
+                      value: controller.loginNotificationEnabled.value,
+                      onChanged: controller.toggleLoginNotification,
+                    )),
               ),
             ],
           ),
@@ -72,9 +72,9 @@ class LoginSecurityPage extends BasePage<LoginSecurityController> {
         Card(
           child: Column(
             children: [
-              ListTile(
-                title: const Text('密码安全'),
-                subtitle: const Text('密码相关安全设置'),
+              const ListTile(
+                title: Text('密码安全'),
+                subtitle: Text('密码相关安全设置'),
               ),
               const Divider(height: 1),
               ListTile(
@@ -87,9 +87,9 @@ class LoginSecurityPage extends BasePage<LoginSecurityController> {
                 title: const Text('定期修改密码提醒'),
                 subtitle: const Text('每90天提醒修改密码'),
                 trailing: Obx(() => Switch(
-                  value: controller.passwordChangeReminder.value,
-                  onChanged: controller.togglePasswordChangeReminder,
-                )),
+                      value: controller.passwordChangeReminder.value,
+                      onChanged: controller.togglePasswordChangeReminder,
+                    )),
               ),
             ],
           ),
@@ -120,4 +120,4 @@ class LoginSecurityPage extends BasePage<LoginSecurityController> {
       ],
     );
   }
-} 
+}

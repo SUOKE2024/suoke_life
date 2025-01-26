@@ -36,7 +36,7 @@ void main() {
 
       await messageService.saveMessage(message);
       final retrieved = await messageService.getMessage(message.id);
-      
+
       expect(retrieved, isNotNull);
       expect(retrieved!.content, message.content);
       expect(retrieved.senderId, message.senderId);
@@ -53,7 +53,7 @@ void main() {
 
       await messageService.saveMessage(message);
       await messageService.markAsRead(message.id);
-      
+
       final updated = await messageService.getMessage(message.id);
       expect(updated!.isRead, true);
     });
@@ -80,7 +80,7 @@ void main() {
     });
 
     test('should get messages by sender', () async {
-      final sender = 'user5';
+      const sender = 'user5';
       await messageService.saveMessage(Message(
         id: '5',
         content: 'Message 1',
@@ -125,4 +125,4 @@ void main() {
       );
     });
   });
-} 
+}

@@ -13,7 +13,7 @@ class AppBottomSheet extends StatelessWidget {
   final VoidCallback? onClose;
   final Color? backgroundColor;
   final double? borderRadius;
-  
+
   const AppBottomSheet({
     super.key,
     required this.child,
@@ -32,7 +32,7 @@ class AppBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Container(
       height: height,
       decoration: BoxDecoration(
@@ -118,7 +118,6 @@ class AppBottomSheet extends StatelessWidget {
       enableDrag: enableDrag,
       backgroundColor: Colors.transparent,
       builder: (context) => AppBottomSheet(
-        child: child,
         title: title,
         titleWidget: titleWidget,
         actions: actions,
@@ -129,7 +128,8 @@ class AppBottomSheet extends StatelessWidget {
         onClose: onClose,
         backgroundColor: backgroundColor,
         borderRadius: borderRadius,
+        child: child,
       ),
     );
   }
-} 
+}

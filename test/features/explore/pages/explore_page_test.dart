@@ -7,18 +7,18 @@ void main() {
   testWidgets('ExplorePage should display explore list',
       (WidgetTester tester) async {
     await tester.pumpWidget(
-      MaterialApp(
-        localizationsDelegates: const [
+      const MaterialApp(
+        localizationsDelegates: [
           AppLocalizations.delegate,
         ],
-        supportedLocales: const [
+        supportedLocales: [
           Locale('en', 'US'),
           Locale('zh', 'CN'),
         ],
-        home: const ExplorePage(),
+        home: ExplorePage(),
       ),
     );
 
     expect(find.byType(ExploreItemCard), findsWidgets);
   });
-} 
+}

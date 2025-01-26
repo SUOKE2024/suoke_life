@@ -4,7 +4,7 @@ import 'package:suoke_life/core/di/injection.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
-  await dotenv.load(fileName: ".env");
+  await dotenv.load(fileName: '.env');
   configureDependencies();
   final featureTestDirs = [
     'test/features/home/pages',
@@ -29,7 +29,8 @@ void main() async {
       for (final file in testFiles) {
         test(file.path, () async {
           final result = await Process.run('flutter', ['test', file.path]);
-          expect(result.exitCode, 0, reason: 'Test failed: ${file.path}\n${result.stderr}');
+          expect(result.exitCode, 0,
+              reason: 'Test failed: ${file.path}\n${result.stderr}');
           print('Test passed: ${file.path}');
         });
       }
@@ -39,4 +40,4 @@ void main() async {
   group('All Features Tests', () {
     // 这里可以添加其他测试
   });
-} 
+}

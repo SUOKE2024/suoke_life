@@ -36,7 +36,9 @@ void main() {
                 requestOptions: RequestOptions(path: ''),
               ));
 
-      when(mockLocalStorageService.save(any, any)).thenAnswer((_) async {});
+      when(mockLocalStorageService.save(any, any)).thenAnswer((_) async {
+        return null;
+      });
 
       // Act
       final result = await authService.login(
@@ -79,21 +81,27 @@ void main() {
       const token = 'token';
       const user = {'id': '1', 'email': 'test@example.com'};
 
-      when(mockNetworkService.post('/login', data: {'email': email, 'password': password}))
+      when(mockNetworkService
+              .post('/login', data: {'email': email, 'password': password}))
           .thenAnswer((_) async => Response(
                 requestOptions: RequestOptions(path: '/login'),
                 data: {'token': token, 'user': user},
                 statusCode: 200,
               ));
-      when(mockLocalStorageService.save('token', token)).thenAnswer((_) async {});
-      when(mockLocalStorageService.saveMap('user', user)).thenAnswer((_) async {});
+      when(mockLocalStorageService.save('token', token)).thenAnswer((_) async {
+        return null;
+      });
+      when(mockLocalStorageService.saveMap('user', user)).thenAnswer((_) async {
+        return null;
+      });
 
       // Act
       final result = await authService.login(email: email, password: password);
 
       // Assert
       expect(result, true);
-      verify(mockNetworkService.post('/login', data: {'email': email, 'password': password})).called(1);
+      verify(mockNetworkService.post('/login',
+          data: {'email': email, 'password': password})).called(1);
       verify(mockLocalStorageService.save('token', token)).called(1);
       verify(mockLocalStorageService.saveMap('user', user)).called(1);
     });
@@ -106,38 +114,55 @@ void main() {
       const token = 'token';
       const user = {'id': '1', 'phoneNumber': phoneNumber};
 
-      when(mockNetworkService.post('/register',
-              data: {'phoneNumber': phoneNumber, 'verificationCode': verificationCode, 'password': password}))
-          .thenAnswer((_) async => Response(
-                requestOptions: RequestOptions(path: '/register'),
-                data: {},
-                statusCode: 200,
-              ));
-      when(mockNetworkService.post('/login', data: {'phoneNumber': phoneNumber}))
+      when(mockNetworkService.post('/register', data: {
+        'phoneNumber': phoneNumber,
+        'verificationCode': verificationCode,
+        'password': password
+      })).thenAnswer((_) async => Response(
+            requestOptions: RequestOptions(path: '/register'),
+            data: {},
+            statusCode: 200,
+          ));
+      when(mockNetworkService
+              .post('/login', data: {'phoneNumber': phoneNumber}))
           .thenAnswer((_) async => Response(
                 requestOptions: RequestOptions(path: '/login'),
                 data: {'token': token, 'user': user},
                 statusCode: 200,
               ));
-      when(mockLocalStorageService.save('token', token)).thenAnswer((_) async {});
-      when(mockLocalStorageService.saveMap('user', user)).thenAnswer((_) async {});
+      when(mockLocalStorageService.save('token', token)).thenAnswer((_) async {
+        return null;
+      });
+      when(mockLocalStorageService.saveMap('user', user)).thenAnswer((_) async {
+        return null;
+      });
 
       // Act
-      await authService.register(phoneNumber: phoneNumber, verificationCode: verificationCode, password: password);
+      await authService.register(
+          phoneNumber: phoneNumber,
+          verificationCode: verificationCode,
+          password: password);
 
       // Assert
-      verify(mockNetworkService.post('/register',
-              data: {'phoneNumber': phoneNumber, 'verificationCode': verificationCode, 'password': password}))
-          .called(1);
-      verify(mockNetworkService.post('/login', data: {'phoneNumber': phoneNumber})).called(1);
+      verify(mockNetworkService.post('/register', data: {
+        'phoneNumber': phoneNumber,
+        'verificationCode': verificationCode,
+        'password': password
+      })).called(1);
+      verify(mockNetworkService
+          .post('/login', data: {'phoneNumber': phoneNumber})).called(1);
       verify(mockLocalStorageService.save('token', token)).called(1);
       verify(mockLocalStorageService.saveMap('user', user)).called(1);
     });
 
     test('logout successfully', () async {
       // Arrange
-      when(mockLocalStorageService.remove('token')).thenAnswer((_) async {});
-      when(mockLocalStorageService.remove('user')).thenAnswer((_) async {});
+      when(mockLocalStorageService.remove('token')).thenAnswer((_) async {
+        return null;
+      });
+      when(mockLocalStorageService.remove('user')).thenAnswer((_) async {
+        return null;
+      });
 
       // Act
       await authService.logout();

@@ -1,16 +1,14 @@
-import 'package:flutter/foundation.dart';
-
 enum HealthMetricType {
-  steps,          // 步数
-  heartRate,      // 心率
-  bloodPressure,  // 血压
-  bloodOxygen,    // 血氧
-  sleep,          // 睡眠
-  weight,         // 体重
-  temperature,    // 体温
-  mood,           // 心情
-  water,          // 饮水量
-  nutrition,      // 营养摄入
+  steps, // 步数
+  heartRate, // 心率
+  bloodPressure, // 血压
+  bloodOxygen, // 血氧
+  sleep, // 睡眠
+  weight, // 体重
+  temperature, // 体温
+  mood, // 心情
+  water, // 饮水量
+  nutrition, // 营养摄入
 }
 
 class HealthMetric {
@@ -83,4 +81,4 @@ class HealthData {
       'deviceInfo': deviceInfo,
     };
   }
-} 
+}
