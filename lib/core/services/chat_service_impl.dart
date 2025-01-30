@@ -1,6 +1,6 @@
-import 'package:suoke_life/core/models/chat_message.dart';
-import 'package:suoke_life/core/services/chat_service.dart';
-import 'package:suoke_life/core/services/infrastructure/local_storage_service.dart';
+import 'package:suoke_life/lib/core/models/chat_message.dart';
+import 'package:suoke_life/lib/core/services/chat_service.dart';
+import 'package:suoke_life/lib/core/services/infrastructure/local_storage_service.dart';
 
 class ChatServiceImpl implements ChatService {
   final LocalStorageService _localStorageService;

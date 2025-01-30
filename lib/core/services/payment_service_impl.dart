@@ -1,4 +1,4 @@
-import 'package:suoke_life/core/services/payment_service.dart';
+import 'package:suoke_life/lib/core/services/payment_service.dart';
 
 class PaymentServiceImpl implements PaymentService {
   @override

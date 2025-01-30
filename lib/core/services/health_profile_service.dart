@@ -1,4 +1,5 @@
-import 'package:suoke_life/core/models/health_profile.dart';
+import 'package:suoke_life/lib/core/models/health_profile.dart';
+import 'package:sqflite/sqflite.dart';
 
 abstract class HealthProfileService {
   Future<HealthProfile?> getHealthProfile(String userId);
@@ -10,26 +11,44 @@ class HealthProfileServiceImpl implements HealthProfileService {
   //  这里假设 HealthProfile 数据存储在本地 sqflite 数据库中，您需要根据实际情况进行调整
   //  例如，可以使用 AgentMemoryService 或创建一个新的 DatabaseService 来操作 HealthProfile 数据表
 
+  final DatabaseService _databaseService;
+  final String _healthProfileTable;
+
+  HealthProfileServiceImpl(this._databaseService, this._healthProfileTable);
+
   @override
   Future<HealthProfile?> getHealthProfile(String userId) async {
-    // TODO:  从本地数据库获取用户健康画像数据
-    //       这里返回 mock 数据，您需要根据实际情况实现
-    await Future.delayed(const Duration(milliseconds: 100)); // 模拟延迟
-    return HealthProfile(
-      userId: userId,
-      healthMetrics: {
-        'heartRate': 72,
-        'bloodPressure': '120/80',
-        'sleepDuration': 8,
-      },
-    );
+    try {
+      // 从本地数据库获取用户健康画像数据
+      final db = await _databaseService.database;
+      final List<Map<String, dynamic>> maps = await db.query(
+        _healthProfileTable,
+        where: 'userId = ?',
+        whereArgs: [userId],
+      );
+
+      if (maps.isNotEmpty) {
+        return HealthProfile.fromMap(maps.first);
+      } else {
+        return null;
+      }
+    } catch (e) {
+      rethrow;
+    }
   }
 
   @override
   Future<void> saveHealthProfile(HealthProfile healthProfile) async {
-    // TODO:  将用户健康画像数据保存到本地数据库
-    //       这里只是一个占位符，您需要根据实际情况实现
-    await Future.delayed(const Duration(milliseconds: 50)); // 模拟延迟
-    print('Health profile saved for user: ${healthProfile.userId}');
+    try {
+      // 将用户健康画像数据保存到本地数据库
+      final db = await _databaseService.database;
+      await db.insert(
+        _healthProfileTable,
+        healthProfile.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace, // 如果已存在则替换
+      );
+    } catch (e) {
+      rethrow;
+    }
   }
 } 

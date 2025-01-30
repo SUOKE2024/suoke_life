@@ -1,15 +1,15 @@
-import 'package:suoke_life/core/models/health_data.dart';
-import 'package:suoke_life/core/models/life_activity_data.dart';
-import 'package:suoke_life/core/models/user.dart';
-import 'package:suoke_life/core/repositories/health_data_repository.dart';
-import 'package:suoke_life/core/repositories/life_activity_data_repository.dart';
-import 'package:suoke_life/core/repositories/user_repository.dart';
-import 'package:suoke_life/core/services/data_sync_service.dart';
-import 'package:suoke_life/core/services/network_service.dart';
-import 'package:suoke_life/core/services/privacy_service.dart';
-import 'package:suoke_life/core/services/infrastructure/local_storage_service.dart';
-import 'package:suoke_life/core/services/infrastructure/database_service.dart';
-import 'package:suoke_life/core/services/infrastructure/redis_service.dart';
+import 'package:suoke_life/lib/core/models/health_data.dart';
+import 'package:suoke_life/lib/core/models/life_activity_data.dart';
+import 'package:suoke_life/lib/core/models/user.dart';
+import 'package:suoke_life/lib/core/repositories/health_data_repository.dart';
+import 'package:suoke_life/lib/core/repositories/life_activity_data_repository.dart';
+import 'package:suoke_life/lib/core/repositories/user_repository.dart';
+import 'package:suoke_life/lib/core/services/data_sync_service.dart';
+import 'package:suoke_life/lib/core/services/network_service.dart';
+import 'package:suoke_life/lib/core/services/privacy_service.dart';
+import 'package:suoke_life/lib/core/services/infrastructure/local_storage_service.dart';
+import 'package:suoke_life/lib/core/services/infrastructure/database_service.dart';
+import 'package:suoke_life/lib/core/services/infrastructure/redis_service.dart';
 
 class DataSyncServiceImpl implements DataSyncService {
   final UserRepository _userRepository;
@@ -44,11 +44,9 @@ class DataSyncServiceImpl implements DataSyncService {
     try {
       final localHealthDataList =
           await _healthDataRepository.getHealthData(userId);
-      // TODO: Implement remote data fetching and synchronization logic
-      // Example:
-      // final remoteHealthDataList = await _healthServiceClient.getHealthData(userId);
-      // final mergedHealthDataList = _mergeHealthData(localHealthDataList, remoteHealthDataList);
-      // await _healthDataRepository.saveHealthData(mergedHealthDataList);
+      final remoteHealthDataList = await _networkService.getHealthData(userId);
+      final mergedHealthDataList = _mergeHealthData(localHealthDataList, remoteHealthDataList);
+      await _healthDataRepository.saveHealthData(mergedHealthDataList);
       print('Health data synced successfully');
     } catch (e) {
       print('Error syncing health data: $e');
@@ -59,27 +57,26 @@ class DataSyncServiceImpl implements DataSyncService {
     try {
       final lifeActivityDataList =
           await _lifeActivityDataRepository.getLifeActivityData(userId);
-      // TODO: Implement remote data fetching and synchronization logic
-      // Example:
-      // final remoteLifeActivityDataList = await _lifeActivityServiceClient.getLifeActivityData(userId);
-      // final mergedLifeActivityDataList = _mergeLifeActivityData(localLifeActivityDataList, remoteLifeActivityDataList);
-      // await _lifeActivityDataRepository.saveLifeActivityData(mergedLifeActivityDataList);
+      final remoteLifeActivityDataList = await _networkService.getLifeActivityData(userId);
+      final mergedLifeActivityDataList = _mergeLifeActivityData(lifeActivityDataList, remoteLifeActivityDataList);
+      await _lifeActivityDataRepository.saveLifeActivityData(mergedLifeActivityDataList);
       print('Life activity data synced successfully');
     } catch (e) {
       print('Error syncing life activity data: $e');
     }
   }
 
-  // TODO: Implement data merging logic if needed
-  // List<HealthData> _mergeHealthData(List<HealthData> localData, List<HealthData> remoteData) {
-  //   // Example: Implement conflict resolution and data merging logic
-  //   return localData;
-  // }
+  List<HealthData> _mergeHealthData(List<HealthData> localData, List<HealthData> remoteData) {
+    // 示例：实现冲突解决和数据合并逻辑
+    // 这里简单地返回本地数据，实际实现中需要根据业务逻辑合并数据
+    return localData;
+  }
 
-  // List<LifeActivityData> _mergeLifeActivityData(List<LifeActivityData> localData, List<LifeActivityData> remoteData) {
-  //   // Example: Implement conflict resolution and data merging logic
-  //   return localData;
-  // }
+  List<LifeActivityData> _mergeLifeActivityData(List<LifeActivityData> localData, List<LifeActivityData> remoteData) {
+    // 示例：实现冲突解决和数据合并逻辑
+    // 这里简单地返回本地数据，实际实现中需要根据业务逻辑合并数据
+    return localData;
+  }
 
   @override
   Future<void> addToList(dynamic data) async {

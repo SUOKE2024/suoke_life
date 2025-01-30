@@ -1,5 +1,5 @@
 import 'package:sqflite/sqflite.dart';
-import 'package:suoke_life/core/database/database_config.dart';
+import 'package:suoke_life/lib/core/database/database_config.dart';
 
 /// 本地数据库服务类，封装 sqflite 数据库操作
 ///

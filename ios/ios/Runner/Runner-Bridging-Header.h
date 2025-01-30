@@ -1,1 +1,1 @@
-#import "GeneratedPluginRegistrant.h"
+#import <sqflite_darwin/GeneratedPluginRegistrant.h>

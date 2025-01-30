@@ -1,6 +1,6 @@
-import 'package:redis/redis.dart';
+import 'package:redis/redis.dart' as redis;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:suoke_life/core/services/infrastructure/redis_service.dart';
+import 'package:suoke_life/lib/core/services/infrastructure/redis_service.dart';
 
 import 'dart:async';
 
@@ -8,21 +8,21 @@ import 'dart:async';
 //
 // 提供了连接 Redis, 设置/获取/删除 key-value 对等操作的具体实现
 class RedisServiceImpl implements RedisService {
-  RedisConnection? _connection;
+  redis.RedisConnection? _connection;
   bool _isConnected = false;
 
-  RedisServiceImpl();
+  RedisServiceImpl() {
+    init();
+  }
 
   @override
-  Future<void> connect() async {
-    if (_isConnected) {
+  Future<void> init() async {
+    if (_isConnected && _connection != null)
       return;
-    }
     final host = dotenv.env['REDIS_HOST'] ?? 'localhost';
     final port = int.parse(dotenv.env['REDIS_PORT'] ?? '6379');
     try {
-      _connection = RedisConnection();
-      await _connection!.connect(host, port);
+      _connection = await redis.RedisConnection.connect(host, port);
       _isConnected = true;
       print('Redis connected to $host:$port');
     } catch (e) {
@@ -34,12 +34,24 @@ class RedisServiceImpl implements RedisService {
 
   @override
   Future<void> disconnect() async {
-    if (_isConnected && _connection != null) {
-      await _connection!.close();
-      _isConnected = false;
-      _connection = null;
-      print('Redis disconnected');
-    }
+    if (_isConnected && _connection != null)
+      try {
+        await _connection!.close();
+        _isConnected = false;
+        _connection = null;
+        print('Redis disconnected');
+      } catch (e) {
+        print('Error disconnecting from Redis: $e');
+      }
+  }
+
+  Future<redis.RedisConnection> get connection async {
+    if (!_isConnected || _connection == null)
+      await init();
+    if (!_isConnected || _connection == null)
+      throw Exception('Redis is not connected');
+
+    return _connection!;
   }
 
   @override
@@ -49,20 +61,9 @@ class RedisServiceImpl implements RedisService {
   //
   // [key] 要获取的 key
   Future<String?> get(String key) async {
-    if (!_isConnected || _connection == null) {
-      await connect();
-      if (!_isConnected || _connection == null) {
-        print('Redis is not connected, cannot perform GET operation.');
-        return null;
-      }
-    }
-    try {
-      final command = await _connection!.get(key);
-      return command?.toString();
-    } catch (e) {
-      print('Redis GET error: $e');
-      return null;
-    }
+    final conn = await connection;
+    final command = await conn.sendObject(['GET', key]);
+    return command as String?;
   }
 
   @override
@@ -74,21 +75,12 @@ class RedisServiceImpl implements RedisService {
   // [value] 要设置的 value
   // [expiry] 可选的过期时间
   Future<void> set(String key, String value, {Duration? expiry}) async {
-    if (!_isConnected || _connection == null) {
-      await connect();
-      if (!_isConnected || _connection == null) {
-        print('Redis is not connected, cannot perform SET operation.');
-        return;
-      }
-    }
-    try {
-      if (expiry != null) {
-        await _connection!.setex(key, expiry.inSeconds, value);
-      } else {
-        await _connection!.set(key, value);
-      }
-    } catch (e) {
-      print('Redis SET error: $e');
+    final conn = await connection;
+    if (conn == null) throw Exception('Redis connection not established');
+    if (expiry != null) {
+      await conn.sendObject(['SETEX', key, expiry.inSeconds, value]);
+    } else {
+      await conn.sendObject(['SET', key, value]);
     }
   }
 
@@ -99,67 +91,30 @@ class RedisServiceImpl implements RedisService {
   //
   // [key] 要删除的 key
   Future<void> delete(String key) async {
-    if (!_isConnected || _connection == null) {
-      await connect();
-      if (!_isConnected || _connection == null) {
-        print('Redis is not connected, cannot perform DELETE operation.');
-        return;
-      }
-    }
-    try {
-      await _connection!.del(key);
-    } catch (e) {
-      print('Redis DELETE error: $e');
-    }
+    final conn = await connection;
+    if (conn == null) throw Exception('Redis connection not established');
+    await conn.sendObject(['DEL', key]);
   }
 
   @override
   Future<void> hset(String key, String field, String value) async {
-    if (!_isConnected || _connection == null) {
-      await connect();
-      if (!_isConnected || _connection == null) {
-        print('Redis is not connected, cannot perform HSET operation.');
-        return;
-      }
-    }
-    try {
-      await _connection!.hset(key, field, value);
-    } catch (e) {
-      print('Redis HSET error: $e');
-    }
+    final conn = await connection;
+    if (conn == null) throw Exception('Redis connection not established');
+    await conn.sendObject(['HSET', key, field, value]);
   }
 
   @override
   Future<String?> hget(String key, String field) async {
-    if (!_isConnected || _connection == null) {
-      await connect();
-      if (!_isConnected || _connection == null) {
-        print('Redis is not connected, cannot perform HGET operation.');
-        return null;
-      }
-    }
-    try {
-      final command = await _connection!.hget(key, field);
-      return command.toString();
-    } catch (e) {
-      print('Redis HGET error: $e');
-      return null;
-    }
+    final conn = await connection;
+    if (conn == null) throw Exception('Redis connection not established');
+    final response = await conn.sendObject(['HGET', key, field]);
+    return response as String?;
   }
 
   @override
   Future<void> hdel(String key, String field) async {
-    if (!_isConnected || _connection == null) {
-      await connect();
-      if (!_isConnected || _connection == null) {
-        print('Redis is not connected, cannot perform HDEL operation.');
-        return;
-      }
-    }
-    try {
-      await _connection!.hdel(key, field);
-    } catch (e) {
-      print('Redis HDEL error: $e');
-    }
+    final conn = await connection;
+    if (conn == null) throw Exception('Redis connection not established');
+    await conn.sendObject(['HDEL', key, field]);
   }
 }

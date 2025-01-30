@@ -1,10 +1,25 @@
-import 'package:suoke_life/core/models/life_record.dart';
+import 'package:injectable/injectable.dart';
+import '../../../core/storage/storage_service.dart';
 
-abstract class LifeService {
-  Future<List<LifeRecord>> getLifeRecords(String userId);
-  Future<void> saveLifeRecord(LifeRecord record);
-  // 这里可以定义 LifeService 接口的方法，例如：
-  // Future<LifeData> getLifeData(String userId);
-  // Future<LifeRecord> getLifeRecord(String recordId);
-  // Future<void> recordLifeActivity(LifeActivity activity);
+@lazySingleton
+class LifeService {
+  final StorageService _storage;
+
+  LifeService(this._storage);
+
+  Future<void> init() async {
+    await _storage.init();
+  }
+
+  Future<void> saveUserPreference(String key, dynamic value) async {
+    await _storage.write(key, value);
+  }
+
+  Future<T?> getUserPreference<T>(String key) async {
+    return await _storage.read<T>(key);
+  }
+
+  Future<void> clearUserPreferences() async {
+    await _storage.clear();
+  }
 } 

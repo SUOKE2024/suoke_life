@@ -1,5 +1,5 @@
-import 'package:suoke_life/core/models/user.dart';
-import 'package:suoke_life/core/services/network_service.dart';
+import 'package:suoke_life/lib/core/models/user.dart';
+import 'package:suoke_life/lib/core/services/network_service.dart';
 
 class UserServiceClient {
   final NetworkService _networkService;

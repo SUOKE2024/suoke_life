@@ -1,34 +1,34 @@
-import 'package:redis/redis.dart';
+import 'package:redis/redis.dart' as redis;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 abstract class RedisService {
-  Future<void> connect();
-  Future<void> disconnect();
+  Future<void> connect(String host, int port);
   Future<String?> get(String key);
   Future<void> set(String key, String value, {Duration? expiry});
+  Future<void> delete(String key);
   Future<void> hset(String key, String field, String value);
   Future<String?> hget(String key, String field);
   Future<void> hdel(String key, String field);
-  Future<void> delete(String key);
+  Future<void> disconnect();
 }
 
 class RedisServiceImpl implements RedisService {
-  RedisConnection? _connection;
+  redis.RedisConnection? _connection;
   bool _isConnected = false;
 
   RedisServiceImpl() {
-    connect();
+    init();
   }
 
   @override
-  Future<void> connect() async {
+  Future<void> init() async {
     if (_isConnected && _connection != null) {
       return;
     }
     final host = dotenv.env['REDIS_HOST'] ?? 'localhost';
     final port = int.parse(dotenv.env['REDIS_PORT'] ?? '6379');
     try {
-      _connection = await RedisConnection.connect(host, port);
+      _connection = await redis.RedisConnection.connect(host, port);
       _isConnected = true;
       print('Redis connected to $host:$port');
     } catch (e) {
@@ -38,28 +38,21 @@ class RedisServiceImpl implements RedisService {
     }
   }
 
+  Future<redis.RedisConnection> get connection async {
+    if (!_isConnected || _connection == null) {
+      await init();
+    }
+    return _connection!;
+  }
+
   @override
   Future<void> disconnect() async {
     if (_isConnected && _connection != null) {
-      try {
-        await _connection!.close();
-        _isConnected = false;
-        _connection = null;
-        print('Redis disconnected');
-      } catch (e) {
-        print('Error disconnecting from Redis: $e');
-      }
+      await _connection!.close();
+      _isConnected = false;
+      _connection = null;
+      print('Redis disconnected');
     }
-  }
-
-  Future<RedisConnection> get connection async {
-    if (!_isConnected || _connection == null) {
-      await connect();
-      if (!_isConnected || _connection == null) {
-        throw Exception('Redis is not connected');
-      }
-    }
-    return _connection!;
   }
 
   @override
@@ -70,9 +63,9 @@ class RedisServiceImpl implements RedisService {
   }
 
   @override
-  Future<void> set(String key, String value, {Duration? expiry}) async {
+  Future<void> set(String key, String value) async {
     final conn = await connection;
-    await conn.set(key, value, expiry: expiry);
+    await conn.set(key, value);
   }
 
   @override
@@ -101,5 +94,11 @@ class RedisServiceImpl implements RedisService {
   Future<void> delete(String key) async {
     final conn = await connection;
     await conn.delete(key);
+  }
+
+  @override
+  Future<void> connect(String host, int port) async {
+    final conn = await redis.RedisConnection.connect(host, port);
+    // 其他逻辑
   }
 } 

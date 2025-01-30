@@ -1,5 +1,5 @@
-import 'package:suoke_life/core/services/infrastructure/redis_service.dart';
-import 'package:suoke_life/core/services/session_service.dart';
+import 'package:suoke_life/lib/core/services/infrastructure/redis_service.dart';
+import 'package:suoke_life/lib/core/services/session_service.dart';
 import 'package:uuid/uuid.dart';
 
 class SessionServiceImpl implements SessionService {

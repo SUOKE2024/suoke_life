@@ -1,4 +1,4 @@
-import 'package:suoke_life/core/services/analytics_service.dart';
+import 'package:suoke_life/lib/core/services/analytics_service.dart';
 
 class AnalyticsServiceImpl implements AnalyticsService {
   @override

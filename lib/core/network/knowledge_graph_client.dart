@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:suoke_life/core/config/app_config.dart';
+import 'package:suoke_life/lib/core/config/app_config.dart';
 
 class KnowledgeGraphClient {
   final Dio _dio;

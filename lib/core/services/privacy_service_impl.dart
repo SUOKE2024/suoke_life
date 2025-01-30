@@ -1,9 +1,9 @@
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
-import 'package:suoke_life/core/services/infrastructure/local_storage_service.dart';
-import 'package:suoke_life/core/services/privacy_service.dart';
+import 'package:suoke_life/lib/core/services/infrastructure/local_storage_service.dart';
+import 'package:suoke_life/lib/core/services/privacy_service.dart';
 import 'package:uuid/uuid.dart';
-import 'package:suoke_life/core/models/privacy_settings.dart';
+import 'package:suoke_life/lib/core/models/privacy_settings.dart';
 
 class PrivacyServiceImpl implements PrivacyService {
   final LocalStorageService _localStorageService;
@@ -47,18 +47,25 @@ class PrivacyServiceImpl implements PrivacyService {
 
   @override
   Future<void> anonymizeData() async {
-    // TODO: Implement data anonymization logic
-    // Example:
-    // final userId = await getUserId();
-    // final anonymizedUserId = sha256Hash(userId);
-    // await _localStorageService.save('anonymized_user_id', anonymizedUserId);
+    try {
+      // 实现数据匿名化逻辑
+      final userId = await getUserId();
+      final anonymizedUserId = sha256.convert(utf8.encode(userId)).toString();
+      await _localStorageService.setStringValue('anonymized_user_id', anonymizedUserId);
+    } catch (e) {
+      rethrow;
+    }
   }
 
   @override
   Future<void> clearPrivacyData() async {
-    // TODO: Implement clear privacy data logic
-    // Example:
-    // await _localStorageService.delete('anonymized_user_id');
+    try {
+      // 实现清除隐私数据逻辑
+      await _localStorageService.delete('anonymized_user_id');
+      await _localStorageService.delete(_privacySettingsKey);
+    } catch (e) {
+      rethrow;
+    }
   }
 
   @override

@@ -1,11 +1,10 @@
 import 'package:sqflite/sqflite.dart';
-import 'package:suoke_life/core/config/database_config.dart';
-import 'package:suoke_life/core/config/app_config.dart';
-import 'package:suoke_life/core/models/conversation_summary.dart';
-import 'package:suoke_life/core/models/conversation_turn.dart';
-import 'package:suoke_life/core/models/user_preference.dart';
-import 'package:suoke_life/core/services/infrastructure/local_storage_service.dart';
-import 'package:injectable/injectable.dart'; // 假设您使用 injectable 进行依赖注入，如果不是 injectable 请替换为您的 DI 方案
+import 'package:suoke_life/lib/core/config/database_config.dart';
+import 'package:suoke_life/lib/core/config/app_config.dart';
+import 'package:suoke_life/lib/core/models/conversation_summary.dart';
+import 'package:suoke_life/lib/core/models/conversation_turn.dart';
+import 'package:suoke_life/lib/core/models/user_preference.dart';
+import 'package:suoke_life/lib/core/services/infrastructure/local_storage_service.dart';
 
 abstract class AgentMemoryService {
   // 存储对话轮次
@@ -51,8 +50,6 @@ abstract class AgentMemoryService {
   Future<void> cleanUpExpiredData(String userId);
 }
 
-@LazySingleton(
-    as: AgentMemoryService) // 使用 injectable 的 @LazySingleton 注解，如果不是 injectable 请替换为您的 DI 方案
 class AgentMemoryServiceImpl implements AgentMemoryService {
   final LocalStorageService _localStorageService;
   final AppConfig _appConfig;

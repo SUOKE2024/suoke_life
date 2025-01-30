@@ -1,4 +1,4 @@
-import 'package:suoke_life/core/services/rag/context_compression_strategy.dart';
+import 'package:suoke_life/lib/core/services/rag/context_compression_strategy.dart';
 
 class NoCompressionStrategy implements ContextCompressionStrategy {
   @override

@@ -1,11 +1,14 @@
-import 'package:suoke_life/core/models/privacy_settings.dart';
+import 'package:get/get.dart';
+import '../core/storage/storage_service.dart';
+import '../core/security/encryption_service.dart';
+import 'dart:convert';
 
-abstract class PrivacyService {
-  Future<String> getUserId();
-  Future<PrivacySettings> getPrivacySettings();
-  Future<void> updatePrivacySettings(PrivacySettings settings);
-  Future<void> setPrivacySettings(Map<String, dynamic> settings);
-  Future<void> anonymizeData();
-  Future<void> clearPrivacyData();
-  Future<Map<String, dynamic>> anonymizeUserData(Map<String, dynamic> userData);
+class PrivacyService extends GetxService {
+  final EncryptionService encryption;
+  final StorageService storage;
+
+  Future<void> saveUserData(UserData data) async {
+    final encrypted = encryption.encrypt(jsonEncode(data));
+    await storage.write(key: 'user_data', value: encrypted);
+  }
 } 

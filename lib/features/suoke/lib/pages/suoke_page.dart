@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:suoke_life/ui_components/navigation/bottom_navigation_bar.dart';
 import 'package:suoke_life/features/suoke/lib/widgets/service_card.dart';
-import 'package:suoke_life/core/utils/app_localizations.dart';
+import 'package:suoke_life/lib/core/utils/app_localizations.dart';
+import 'package:suoke_life/lib/core/widgets/common_bottom_navigation_bar.dart';
 
 class SuokePage extends StatefulWidget {
   const SuokePage({Key? key}) : super(key: key);
@@ -66,45 +67,45 @@ class _SuokePageState extends State<SuokePage> {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: Text(localizations.translate('suoke_title')),
+        title: Text(AppLocalizations.of(context)!.translate('suoke_services') ?? 'SUOKE Services'),
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                hintText: localizations.translate('search_services'),
-                prefixIcon: const Icon(Icons.search),
-                border: const OutlineInputBorder(),
-              ),
-              onChanged: _filterServices,
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _filteredServices.length,
-              itemBuilder: (context, index) {
-                final service = _filteredServices[index];
-                return ServiceCard(
-                  title: service.title,
-                  description: service.description,
-                  imageUrl: service.imageUrl,
-                );
-              },
-            ),
-          ),
-        ],
+      body: ListView.builder(
+        itemCount: _services.length,
+        itemBuilder: (context, index) {
+          final service = _services[index];
+          return ServiceCard(
+            title: service.title,
+            description: service.description,
+            imageUrl: service.imageUrl,
+            onTap: () {
+              Navigator.pushNamed(context, '/serviceDetail', arguments: service);
+            },
+          );
+        },
       ),
-      bottomNavigationBar: AppBottomNavigationBar(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _generateContent();
+        },
+        child: const Icon(Icons.add),
+      ),
+      bottomNavigationBar: CommonBottomNavigationBar(
         currentIndex: _currentIndex,
-        onTap: _onTabTapped,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+            // TODO: 实现底部导航逻辑
+          });
+        },
       ),
     );
+  }
+
+  void _generateContent() {
+    // TODO: 实现内容生成逻辑
+    print('内容生成成功');
   }
 }
 

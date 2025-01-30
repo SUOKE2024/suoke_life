@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:suoke_life/features/home/lib/ai_agent_bubble.dart';
-import 'package:suoke_life/core/services/infrastructure/local_storage_service.dart';
+import 'package:suoke_life/lib/core/services/infrastructure/local_storage_service.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
+import 'package:suoke_life/lib/core/widgets/common_scaffold.dart';
 
 class ChatInteractionPage extends StatefulWidget {
   const ChatInteractionPage({Key? key}) : super(key: key);
@@ -70,10 +72,8 @@ class _ChatInteractionPageState extends State<ChatInteractionPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Chat Interaction'),
-      ),
+    return CommonScaffold(
+      title: 'Chat Interaction',
       body: Column(
         children: [
           Expanded(
@@ -82,50 +82,30 @@ class _ChatInteractionPageState extends State<ChatInteractionPage> {
               itemCount: _chatMessages.length,
               itemBuilder: (context, index) {
                 final message = _chatMessages[index];
-                return message['isUser'] == 1
-                    ? _buildUserBubble(message['text'])
-                    : AiAgentBubble(text: message['text']);
+                return AiAgentBubble(
+                  message: message['text'],
+                );
               },
             ),
           ),
-          _buildInputArea(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildUserBubble(String text) {
-    return Align(
-      alignment: Alignment.centerRight,
-      child: Container(
-        margin: const EdgeInsets.all(8.0),
-        padding: const EdgeInsets.all(12.0),
-        decoration: BoxDecoration(
-          color: Colors.blue[200],
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        child: Text(text),
-      ),
-    );
-  }
-
-  Widget _buildInputArea() {
-    return Container(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextField(
-              controller: _textController,
-              decoration: const InputDecoration(
-                hintText: 'Type a message...',
-              ),
-              onSubmitted: (_) => _sendMessage(),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _textController,
+                    decoration: InputDecoration(
+                      hintText: 'Type a message',
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(Icons.send),
+                  onPressed: _sendMessage,
+                ),
+              ],
             ),
-          ),
-          IconButton(
-            icon: const Icon(Icons.send),
-            onPressed: _sendMessage,
           ),
         ],
       ),

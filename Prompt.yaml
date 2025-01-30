@@ -1,0 +1,1231 @@
+Prompt
+
+suoke_life APP rules
+
+version: 1.0
+
+# Project structure rules: 定义项目的基本目录结构和所需文件
+structure:
+  root_dirs:
+    - lib: # Dart 代码主要存放目录
+        sub_dirs:
+          - core: # 核心库
+            sub_dirs:
+              - config # 配置
+              - database # 数据库
+              - di # 依赖注入
+              - di/modules # 依赖注入模块
+              - network # 网络
+              - theme # 主题
+              - utils # 工具类
+              - models # 数据模型
+              - repositories # 数据仓库
+              - router # 路由
+              - services # 服务
+              - services/user # 用户服务
+              - services/health # 健康服务
+              - services/life # 生活服务
+              - ui_components: # UI 组件库
+                sub_dirs:
+                  - buttons # 按钮组件
+                  - cards # 卡片组件
+                  - dialogs # 对话框组件
+                  - navigation # 导航组件
+                  - styles # 样式
+                  - navigation # 导航
+          - features: # 功能模块 (features 目录本身也应该在 root_dirs 中)
+            sub_dirs:
+              - home
+              - suoke
+              - explore
+              - life
+              - profile
+              - auth
+          - apps: # 应用模块 (apps 目录本身也应该在 root_dirs 中)
+            sub_dirs:
+              - ai_assistant_service
+              - health_service
+              - life_service
+              - user_service
+              - multimodal_service
+              - llm_service
+    - test: # 单元测试和集成测试代码存放目录
+        sub_dirs: # 更详细的子目录结构
+          - features: # 功能模块测试
+            sub_dirs:
+              - home
+              - suoke
+              - explore
+              - life
+              - profile
+              - auth
+              - ui_components # ui 组件测试
+          - core: # 核心库测试
+            sub_dirs:
+              - services # core 下的 services 目录测试
+              - models # core 下的 models 目录测试
+    - docs # 项目文档存放目录
+    - assets # 静态资源文件存放目录 (例如图片、字体)
+    - scripts # 脚本文件存放目录 (例如部署脚本、代码生成脚本)
+  required_files:
+    - README.md # 项目的说明文档
+    - pubspec.yaml # Flutter 项目的配置文件，包含依赖和项目信息
+    - analysis_options.yaml # Dart 代码静态分析的配置文件
+    - .gitignore # Git 版本控制的忽略配置文件
+    - CHANGELOG.md # 记录版本更新日志
+    - LICENSE # 项目开源许可证
+  ignored_dirs:
+    - build # Flutter 构建产物输出目录
+    - .dart_tool # Dart 工具生成的临时文件目录
+    - .idea # IntelliJ IDEA IDE 的项目配置文件目录
+    - .vscode # VS Code IDE 的项目配置文件目录
+    - coverage # 代码覆盖率报告目录
+
+# Code style rules: 定义 Dart 和 Flutter 代码的风格规范
+style:
+  dart:
+    line_length: 120 # Dart 代码行的最大长度
+    prefer_single_quotes: true # 优先使用单引号
+    always_specify_types: true # 总是指定类型, 强制类型声明
+    directives_ordering: true # import 语句排序
+    sort_constructors_first: true # 类构造函数排序
+    parameter_assignments: false # 避免在方法体内赋值参数
+    unnecessary_this: false # 避免不必要的 this
+    prefer_final_locals: true # 偏向 final 局部变量
+    avoid_empty_else: true # 避免空的 else 分支
+  flutter:
+    always_declare_return_types: true # 总是声明函数返回类型
+    prefer_const_constructors: true # 优先使用 const 构造函数
+    avoid_print: true # 避免使用 print 语句
+
+# Documentation rules: 定义项目文档的要求
+docs:
+  required:
+    - README.md # 必须包含 README.md 文件
+    - CHANGELOG.md # 必须包含 CHANGELOG.md 文件，记录版本更新
+    - LICENSE # 必须包含 LICENSE 文件，声明项目许可
+  recommended:
+    - CONTRIBUTING.md # 推荐包含 CONTRIBUTING.md 文件，说明如何贡献代码
+    - CODE_OF_CONDUCT.md # 推荐包含 CODE_OF_CONDUCT.md 文件，定义行为准则
+  code_comments: # 代码注释规范
+    format: dart_doc # 代码注释格式：Dart doc (/// 或 /** ... */)
+    content_requirements: # 注释内容要求
+      - function_purpose # 描述函数/方法的功能和用途
+      - parameter_meaning # 描述参数的含义和用途 (@param)
+      - return_value_meaning # 描述返回值的类型和含义 (@return)
+      - exception_handling # 描述可能抛出的异常情况 (@throws 或 @exception)
+      - code_example # 在必要时提供代码示例
+    enforcement: required # 强制执行代码注释规范
+    description: "强制使用 Dart doc 格式 (/// 或 /** ... */) 编写代码注释，并清晰描述函数/方法的功能、参数、返回值和异常情况。" # 描述
+    required_for: # 需要添加注释的元素
+      - function # 函数/方法
+      - class # 类
+
+# Security rules: 定义项目的安全相关配置
+security:
+  env_files:
+    - .env.example # 环境变量文件的示例
+  secrets:
+    - .env # 敏感环境变量文件，不应提交到版本控制
+    - google-services.json # Firebase Android 配置文件
+    - GoogleService-Info.plist # Firebase iOS 配置文件
+  dependency_check: true # 依赖包安全检查
+  dependency_check_tool: flutter_pub_audit # 依赖包安全检查工具：flutter pub audit
+  api_requests_use_https: true # API 请求使用 HTTPS
+  data_transmission_encryption: true # 数据传输加密 (TLS/SSL)
+
+# Privacy rules: 定义用户隐私数据处理的相关规则
+privacy:
+  user_data_classification:
+    - personal_information: # 个人信息
+      - name
+      - email
+      - phone_number
+      - address
+    - health_data: # 健康数据
+      - heart_rate
+      - sleep_patterns
+      - medical_records
+    - life_activity_data: # 生活活动数据
+      - daily_activities
+      - location_history
+      - task_completion
+    - device_info: # 设备信息
+      - device_model
+      - os_version
+      - device_id
+    - behavior_data: # 行为数据
+      - page_views
+  data_handling_policy:
+    encryption_at_rest: true # 静态数据加密
+    encryption_in_transit: true # 传输中数据加密
+    data_access_control: role_based_access_control # 数据访问控制
+    anonymization_methods: # 匿名化方法
+      - user_id: sha256_hash
+      - location: city_level
+    data_retention_period: # 数据保留期限
+      personal_information: 365d
+      health_data: 730d
+      life_activity_data: 365d
+    consent_management: required # 用户同意管理
+    third_party_data_sharing:
+      allowed: false # 是否允许与第三方共享数据
+      justification_required: true # 如果允许，需要提供理由
+      approved_third_parties: [] # 允许共享数据的第三方列表
+  local_data_storage: # 本地数据存储策略
+    database: sqflite # 本地数据库类型：sqflite
+    encryption: true # 本地数据加密：启用
+    data_types: # 本地存储的数据类型
+      - conversation_history # 对话历史 (文本、语音、图像等)
+      - user_health_data # 用户健康数据
+      - user_preferences # 用户偏好设置
+      - agent_memory # Agent 记忆数据
+      - app_local_data # 应用本地数据
+    anonymization_at_rest: false # 静态数据匿名化：否 (本地存储不匿名化)
+    data_retention_policy: # 本地数据保留策略
+      configurable_by_user: true # 用户可配置：是
+      default_retention_period: 30d # 默认保留期限：30 天
+      options: # 保留期限选项
+        - 7d # 7 天
+        - 30d # 30 天
+        - 90d # 90 天
+        - persistent # 永久保留
+    access_control: # 本地数据访问控制
+      policy: device_owner_access_only # 仅设备所有者可访问
+  data_contribution: # 数据贡献策略
+    enabled_by_default: false # 默认不启用数据贡献
+    user_consent_required: true # 需要用户同意：是
+    anonymization_before_upload: true # 上传前匿名化：是
+    anonymization_methods: # 匿名化方法
+      - personal_info_removal # 移除个人身份标识信息
+      - user_id_hashing # 用户 ID 哈希
+      - voice_feature_extraction # 语音特征提取 (而非原始语音)
+      - image_feature_extraction # 图像特征提取 (而非原始图像)
+    data_types_for_contribution: # 用于贡献的数据类型 (匿名化后)
+      - anonymized_conversation_data # 匿名化对话数据
+
+# Service Layer Rules: 定义服务层的架构和实现规范
+services:
+  architecture: layered # 采用分层架构
+  pattern: repository # 使用 Repository 模式
+  dependency_injection: # 依赖注入配置
+    framework: get_it # 使用 get_it 作为依赖注入框架，替换 injectable
+    description: "使用 get_it 进行依赖注入管理，提供轻量级、易于使用的服务定位器模式。" # 更新描述
+    modules: # 依赖注入模块
+      - storage_module: lib/core/di/modules/storage_module.dart # 存储模块
+      - network_module: lib/core/di/modules/network_module.dart # 网络模块
+      # ... 其他模块 ...
+    registration_strategy: module_functions # 使用模块函数进行注册，替代 injectable 的模块类
+    registration_example: | # 注册示例，展示如何使用 get_it 注册依赖
+      // lib/di/modules/service_module.dart
+      import 'package:get_it/get_it.dart';
+      import 'package:my_app/services/my_service.dart';
+
+      void registerServiceModule(GetIt getIt) {
+        getIt.registerLazySingleton(() => MyService());
+      }
+
+      // lib/di/injection.dart
+      import 'package:get_it/get_it.dart';
+      import 'modules/service_module.dart';
+
+      final getIt = GetIt.instance;
+
+      void configureDependencies() {
+        registerServiceModule(getIt);
+        // ... 注册其他模块 ...
+      }
+  cache_strategy: multi_level # 采用多级缓存策略
+  storage:
+    local:
+      type: sqflite # 本地数据库使用 sqflite
+      encryption: true # 本地存储数据加密
+      strategy: conversational_history_and_profile # 记忆策略：对话历史和用户画像
+      retention_policy:
+        conversational_history: 7d # 对话历史保留 7 天
+        user_profile: persistent # 用户画像持久存储
+      data_types: # 内存中存储的数据类型
+        - conversation_turns # 对话轮次
+        - user_preferences # 用户偏好
+      usage:
+        - user_privacy_data # 用户隐私数据
+        - agent_memory # Agent 记忆数据
+        - app_local_data # 应用本地数据
+      performance:
+        optimization: indexing # 数据库性能优化：索引
+      description: "用于存储用户隐私数据和应用运行所需的本地数据。"
+    local_key_value: # 新增：本地键值存储
+      type: shared_preferences
+      description: "用于存储少量配置信息、用户偏好设置等。"
+    remote:
+      type: redis # 远程存储使用 Redis
+      replication: true # Redis 启用复制
+      description: "用于缓存热点数据，支持会话管理和实时数据分析。"
+    object_storage: # 新增：对象存储
+      type: oss # 使用阿里云 OSS
+      provider: aliyun
+      description: "用于存储大量的非结构化数据，例如用户上传的图片、视频等。"
+  security:
+    encryption: aes_256 # 数据加密算法使用 AES-256
+    key_management: secure_storage # 密钥管理使用安全存储
+    data_masking: required # 需要进行数据脱敏
+  sync:
+    strategy: incremental # 数据同步策略为增量同步
+    priority: high # 数据同步优先级高
+    offline_support: true # 支持离线操作
+    conflict_resolution: last_write_wins # 冲突解决策略为最后写入者胜出
+  cache:
+    levels:
+      - memory # 一级缓存：内存
+      - sqflite # 二级缓存：SQLite (适用于移动端)
+      - redis # 三级缓存：Redis (适用于服务器端和部分移动端热点数据)
+    policy: lru # 缓存淘汰策略为 LRU (Least Recently Used)
+    ttl: enabled # 启用缓存 TTL (Time To Live)
+    preload: true # 预加载缓存数据
+    description: "合理利用 Redis 缓存热点数据，减轻数据库压力，提高应用性能。"
+  session_management: # 新增：会话管理
+    strategy: redis # 使用 Redis 存储会话信息
+    ttl: 3600 # 会话过期时间 (秒)
+    description: "使用 Redis 存储用户会话信息，提高会话管理的效率和可扩展性。"
+  network:
+    retry: true # 网络请求失败后重试
+    timeout: 5s # 网络请求超时时间为 5 秒
+    interceptors:
+      - auth # 身份验证拦截器
+      - cache # 缓存拦截器
+      - encryption # 加密拦截器
+      - retry # 重试拦截器
+    api_version: v1 # API 版本号
+    rate_limiting:
+      enabled: true # 启用 API 速率限制
+      requests_per_minute: 100 # 每分钟允许的请求数
+      limiting_dimension: user_id # 速率限制维度：用户 ID
+      strategy: token_bucket # 速率限制策略：令牌桶
+      exceed_action: reject # 超出速率限制后的操作：拒绝请求
+  cache:
+    levels:
+      - memory # 一级缓存：内存
+      - sqflite # 二级缓存：SQLite (适用于移动端)
+      - redis # 三级缓存：Redis (适用于服务器端和部分移动端热点数据)
+    policy: lru # 缓存淘汰策略为 LRU (Least Recently Used)
+    ttl: enabled # 启用缓存 TTL (Time To Live)
+    preload: true # 预加载缓存数据
+    description: "合理利用 Redis 缓存热点数据，减轻数据库压力，提高应用性能。"
+  session_management: # 新增：会话管理
+    strategy: redis # 使用 Redis 存储会话信息
+    ttl: 3600 # 会话过期时间 (秒)
+    description: "使用 Redis 存储用户会话信息，提高会话管理的效率和可扩展性。"
+  network:
+    retry: true # 网络请求失败后重试
+    timeout: 5s # 网络请求超时时间为 5 秒
+    interceptors:
+      - auth # 身份验证拦截器
+      - cache # 缓存拦截器
+      - encryption # 加密拦截器
+      - retry # 重试拦截器
+    api_version: v1 # API 版本号
+    rate_limiting:
+      enabled: true # 启用 API 速率限制
+      requests_per_minute: 100 # 每分钟允许的请求数
+      limiting_dimension: user_id # 速率限制维度：用户 ID
+      strategy: token_bucket # 速率限制策略：令牌桶
+      exceed_action: reject # 超出速率限制后的操作：拒绝请求
+
+# Analytics Rules: 定义数据分析相关的规则
+analytics:
+  data_collection:
+    local_data:
+      behavior_tracking: required # 必须进行用户行为追踪
+      performance_monitoring: required # 必须进行性能监控
+      error_logging: required # 必须进行错误日志记录
+    anonymization:
+      collected_data_types: # 具体收集的数据类型
+        - page_views # 页面浏览量
+        - button_clicks # 按钮点击量
+      user_id: sha256_hash # 用户 ID 匿名化使用 SHA256 哈希
+      location: city_level # 位置信息匿名化到城市级别
+      device_info: platform_only # 设备信息仅收集平台信息
+    retention:
+      raw_data: 30d # 原始数据保留 30 天
+      anonymized_data: 365d # 匿名化数据保留 365 天
+      aggregated_data: unlimited # 聚合数据无限期保留
+    processing:
+      anonymization:
+        required: true # 数据处理前必须进行匿名化
+        rules:
+          - personal_info_removal # 移除个人信息
+          - id_hashing # ID 哈希
+          - location_generalization # 位置信息泛化
+      aggregation:
+        min_group_size: 10 # 聚合数据的最小组大小为 10
+        time_window: 24h # 聚合的时间窗口为 24 小时
+      metrics:
+        - usage_patterns # 使用模式
+        - performance_stats # 性能统计
+        - error_rates # 错误率
+    data_sampling:
+      enabled: true # 启用数据采样
+      sample_rate: 0.1 # 采样率为 0.1
+    data_validation:
+      enabled: true # 启用数据验证
+      rules:
+        - type_check # 类型检查
+        - range_check # 范围检查
+    usage:
+      allowed:
+        - system_optimization # 允许用于系统优化
+        - knowledge_enhancement # 允许用于知识增强
+        - feature_improvement # 允许用于功能改进
+      prohibited:
+        - user_identification # 禁止用于用户识别
+        - personal_tracking # 禁止用于个人追踪
+        - data_sharing # 禁止数据共享
+
+# APP Directory Structure: 定义 APP 模块的目录结构
+app_structure:
+  root: suoke_life/
+  apps:
+    - name: ai_assistant_service
+      path: apps/ai_assistant_service/
+      sub_dirs:
+        - lib
+        - lib/data
+        - lib/data/datasources
+        - lib/data/datasources/local
+        - lib/data/datasources/remote
+        - lib/data/models
+        - lib/data/repositories
+        - lib/di
+        - lib/services
+        - lib/presentation
+        - test
+        - assets
+      files:
+        - lib/di/register_module.dart
+        - lib/services/speech_service.dart
+        - lib/services/llm_interaction_service.dart
+        - lib/app.dart
+        - lib/main.dart
+        - Dockerfile
+        - pubspec.yaml
+    - name: health_service
+      path: apps/health_service/
+      sub_dirs:
+        - lib
+        - lib/data
+        - lib/data/datasources
+        - lib/data/datasources/local
+        - lib/data/datasources/remote
+        - lib/data/models
+        - lib/data/repositories
+        - lib/di
+        - lib/services
+        - lib/presentation
+        - test
+        - assets
+      files:
+        - lib/di/register_module.dart
+        - lib/services/health_advice_service.dart
+        - lib/app.dart
+        - lib/main.dart
+        - Dockerfile
+        - pubspec.yaml
+    - name: life_service
+      path: apps/life_service/
+      sub_dirs:
+        - lib
+        - lib/data
+        - lib/data/datasources
+        - lib/data/datasources/local
+        - lib/data/datasources/remote
+        - lib/data/models
+        - lib/data/repositories
+        - lib/di
+        - lib/services
+        - lib/presentation
+        - test
+        - assets
+      files:
+        - lib/di/register_module.dart
+        - lib/services/life_record_service.dart
+        - lib/app.dart
+        - lib/main.dart
+        - Dockerfile
+        - pubspec.yaml
+    - name: user_service
+      path: apps/user_service/
+      sub_dirs:
+        - lib
+        - lib/data
+        - lib/data/datasources
+        - lib/data/datasources/local
+        - lib/data/datasources/remote
+        - lib/data/models
+        - lib/data/repositories
+        - lib/di
+        - lib/services
+        - lib/presentation
+        - test
+        - assets
+      files:
+        - lib/di/register_module.dart
+        - lib/services/user_management_service.dart
+        - lib/app.dart
+        - lib/main.dart
+        - Dockerfile
+        - pubspec.yaml
+    - name: multimodal_service
+      path: apps/multimodal_service/
+      sub_dirs:
+        - lib
+        - lib/data
+        - lib/data/models
+        - lib/data/repositories
+        - lib/di
+        - lib/services
+        - lib/presentation
+        - test
+        - assets
+      files:
+        - lib/di/register_module.dart
+        - lib/services/multimodal_processing_service.dart
+        - lib/app.dart
+        - lib/main.dart
+        - Dockerfile
+        - pubspec.yaml
+    - name: llm_service
+      path: apps/llm_service/
+      sub_dirs:
+        - lib
+        - lib/data
+        - lib/data/models
+        - lib/data/repositories
+        - lib/di
+        - lib/services
+        - lib/presentation
+        - test
+        - assets
+      files:
+        - lib/di/register_module.dart
+        - lib/services/llm_service.dart
+        - lib/app.dart
+        - lib/main.dart
+        - Dockerfile
+        - pubspec.yaml
+  libs:
+    - name: core
+      path: libs/core/
+      sub_dirs:
+        - lib
+        - lib/config
+        - lib/database
+        - lib/di
+        - lib/di/modules
+        - lib/network
+        - lib/theme
+        - lib/utils
+        - lib/models
+        - lib/repositories
+        - lib/router
+        - lib/navigation
+        - lib/services
+        - lib/services/user
+        - lib/services/health
+        - lib/services/life
+        - lib/services/infrastructure
+      files:
+        - lib/config/app_config.dart
+        - lib/config/database_config.dart
+        - lib/database/database_config.dart
+        - lib/di/modules/storage_module.dart
+        - lib/di/modules/network_module.dart
+        - lib/network/health_service_client.dart
+        - lib/network/life_service_client.dart
+        - lib/network/llm_service_client.dart
+        - lib/network/multimodal_service_client.dart
+        - lib/network/user_service_client.dart
+        - lib/theme/app_theme.dart
+        - lib/utils/error_handler.dart
+        - lib/router/app_router.dart
+        - lib/navigation/app_routes.dart
+        - lib/services/infrastructure/local_storage_service.dart
+        - lib/services/infrastructure/redis_service.dart
+        - lib/services/infrastructure/notification_service.dart
+    - name: ui_components
+      path: libs/ui_components/
+      sub_dirs:
+        - lib
+        - lib/buttons
+        - lib/cards
+        - lib/dialogs
+        - lib/navigation
+        - lib/styles
+      files:
+        - lib/navigation/bottom_navigation_bar.dart
+  features:
+    - name: home
+      path: features/home/
+      sub_dirs:
+        - lib
+        - lib/models
+        - lib/pages
+        - lib/providers
+        - lib/services
+        - lib/widgets
+        - test
+        - assets
+      files:
+        - lib/chat_page.dart
+        - lib/chat_interaction_page.dart
+        - lib/chat_list_item.dart
+        - lib/ai_agent_bubble.dart
+    - name: suoke
+      path: features/suoke/
+      sub_dirs:
+        - lib
+        - lib/models
+        - lib/pages
+        - lib/providers
+        - lib/services
+        - lib/widgets
+        - test
+        - assets
+      files:
+        - lib/pages/suoke_page.dart
+        - lib/pages/service_detail_page.dart
+        - lib/widgets/service_card.dart
+    - name: explore
+      path: features/explore/
+      sub_dirs:
+        - lib
+        - lib/models
+        - lib/pages
+        - lib/providers
+        - lib/services
+        - lib/widgets
+        - test
+        - assets
+      files:
+        - lib/pages/explore_page.dart
+        - lib/pages/explore_item_detail_page.dart
+        - lib/widgets/explore_item_card.dart
+    - name: life
+      path: features/life/
+      sub_dirs:
+        - lib
+        - lib/models
+        - lib/pages
+        - lib/providers
+        - lib/services
+        - lib/widgets
+        - test
+        - assets
+      files:
+        - lib/pages/life_page.dart
+        - lib/widgets/user_profile_card.dart
+        - lib/widgets/health_advice_card.dart
+        - lib/widgets/life_record_item.dart
+    - name: profile
+      path: features/profile/
+      sub_dirs:
+        - lib
+        - lib/models
+        - lib/pages
+        - lib/providers
+        - lib/services
+        - lib/widgets
+        - test
+        - assets
+      files:
+        - lib/pages/settings_page.dart
+        - lib/pages/edit_profile_page.dart
+        - lib/pages/admin_dashboard_page.dart
+        - lib/widgets/user_info_tile.dart
+    - name: auth
+      path: features/auth/
+      sub_dirs:
+        - lib
+        - lib/models
+        - lib/pages
+        - lib/providers
+        - lib/services
+        - lib/widgets
+        - test
+        - assets
+      files:
+        - lib/pages/welcome_page.dart
+        - lib/pages/login_page.dart
+        - lib/widgets/profile_setup_card.dart
+  scripts:
+    path: scripts/
+  tests:
+    path: test/
+    sub_dirs:
+      - features
+      - features/home
+      - features/home/pages
+      - core
+      - core/services
+    files:
+      - test/core/models/user_test.dart
+      - test/core/models/settings_test.dart
+      - test/core/models/life_record_test.dart
+      - test/core/services/ai_service_test.dart
+      - test/core/services/chat_service_test.dart
+      - test/core/services/expert_service_test.dart
+      - test/core/services/health_service_test.dart
+      - test/core/services/payment_service_test.dart
+      - test/core/services/notification_service_test.dart
+      - test/core/services/analytics_service_test.dart
+      - test/core/services/data_sync_service_test.dart
+      - test/features/home/pages/chat_page_test.dart
+  integration_test:
+    path: integration_test/
+  code_coverage:
+    enabled: true
+    report_path: coverage/lcov.info
+  tooling:
+    enforce_rule_checking: true # 强制执行规则检查
+    tool: flutter_lints # 推荐使用的规则检查工具 (例如 flutter_lints)
+
+# Agentic AI Rules: 定义智能代理相关的规则和配置
+agentic_ai:
+  - name: Xiaoai
+    description: Health management AI agent. # Xiaoai 是健康管理 AI 代理
+    module: lib/services/xiaoai_service.dart
+    tools:
+      - health_data_api:
+          description: API for accessing user health data. # 用于访问用户健康数据的 API
+          endpoints:
+            - /v1/users/{userId}/health_data
+            - /v1/health_records
+      - health_knowledge_base:
+          type: vector_database # 健康知识库类型为向量数据库
+          source: curated_medical_database # 数据来源为精选的医疗数据库
+          retrieval_strategy: semantic_search # 检索策略为语义搜索
+      - reminder_tool # 提醒工具
+    memory:
+      type: sqflite # 内存类型为 SQLite (本地存储)
+      path: lib/data/local/xiaoai_memory.db # 内存存储路径
+      strategy: conversational_history_and_profile # 记忆策略：对话历史和用户画像
+      retention_policy:
+        conversational_history: 7d # 对话历史保留 7 天
+        user_profile: persistent # 用户画像持久存储
+      data_types: # 内存中存储的数据类型
+        - conversation_turns # 对话轮次
+        - user_preferences # 用户偏好
+    planning:
+      - collect_health_data:
+          description: Retrieve user's latest health metrics. # 检索用户最新的健康指标
+      - analyze_health_data:
+          description: "Analyze health data to identify trends and potential issues." # 分析健康数据以识别趋势和潜在问题
+          steps:
+            - extract_key_metrics # 提取关键指标
+            - compare_with_historical_data # 与历史数据对比
+            - identify_potential_risks # 识别潜在风险
+            - provide_health_advice # 提供健康建议
+            - remind_user_to_take_medicine # 提醒用户按时服药
+    datasets:
+      health_metrics:
+        source: user_health_data_api # 数据来源：用户健康数据 API
+        type: time_series # 数据类型：时间序列
+        access_permission: read # 访问权限：只读
+      medical_knowledge:
+        source: curated_medical_database # 数据来源：精选的医疗数据库
+        type: knowledge_graph # 数据类型：知识图谱
+        access_permission: read # 访问权限：只读
+    collaboration: # 协作配置
+      strategy: cooperative # 协作策略为合作
+      allowed_agents: # 允许协作的 Agent 列表
+        - Xiaoke
+        - Laoke
+      communication_protocol: shared_memory # 通信协议为共享内存
+      description: "Xiaoai Agent 可以与 Xiaoke 和 Laoke Agent 协作，通过共享内存方式进行高效通信，协同完成健康管理任务。" # 描述
+  - name: Xiaoke
+    description: Life record AI agent. # Xiaoke 是生活记录 AI 代理
+    module: lib/services/xiaoke_service.dart
+    tools:
+      - calendar_api # 日历 API
+      - task_management_api # 任务管理 API
+      - life_knowledge_base:
+          type: document_store # 生活知识库类型为文档存储
+          source: user_provided_notes, public_knowledge_base # 数据来源：用户提供的笔记和公共知识库
+          retrieval_strategy: keyword_search # 检索策略为关键词搜索
+      - product_order_api # 产品订单 API
+      - production_plan_api # 生产计划 API
+      - user_experience_api # 用户体验 API
+      - marketing_promotion_api # 营销推广 API
+    memory:
+      type: sqflite # 内存类型为 SQLite (本地存储)
+      path: lib/data/local/xiaoke_memory.db # 内存存储路径
+      strategy: task_and_activity_history # 记忆策略：任务和活动历史
+      retention_policy:
+      type: sqflite # 内存类型为 SQLite
+      path: lib/data/local/xiaoke_memory.db # 内存存储路径
+    planning:
+      - record_user_daily_activities # 记录用户日常活动
+      - analyze_user_activities # 分析用户活动
+      - remind_user_to_complete_tasks # 提醒用户完成任务
+      - provide_life_advice # 提供生活建议
+      - manage_product_orders # 管理产品订单
+      - manage_production_plans # 管理生产计划
+      - improve_user_experience # 提升用户体验
+      - manage_marketing_promotions # 管理营销推广
+    datasets:
+      life_activities:
+        source: user_activity_logs # 数据来源：用户活动日志
+        type: structured # 数据类型：结构化数据
+        access_permission: read # 访问权限：只读
+      task_information:
+        source: task_management_system # 数据来源：任务管理系统
+        type: structured # 数据类型：结构化数据
+        access_permission: read # 访问权限：只读
+    collaboration: # 协作配置
+      strategy: orchestration # 协作策略为编排
+      allowed_agents: # 允许协作的 Agent 列表
+        - Xiaoai
+      communication_protocol: api_call # 通信协议为 API 调用
+      description: "Xiaoke Agent 可以与 Xiaoai 和 Xiaoke Agent 协作，通过 API 调用方式进行通信，实现更复杂的功能。" # 描述
+  - name: Laoke
+    description: Knowledge question and answer AI agent. # Laoke 是知识问答 AI 代理
+    module: lib/services/laoke_service.dart
+    tools:
+      - search_engine_api # 搜索引擎 API
+      - knowledge_graph_api:
+          type: knowledge_graph # 知识图谱 API 类型为知识图谱
+          source: wikipedia, wikidata # 数据来源：维基百科和维基数据
+          retrieval_strategy: graph_traversal # 检索策略为图遍历
+      - database_query_tool # 数据库查询工具
+      - game_management_api # 游戏管理 API
+    memory:
+      type: sqflite # 内存类型为 SQLite (本地存储)
+      path: lib/data/local/laoke_memory.db # 内存存储路径
+      strategy: question_answer_history # 记忆策略：问答历史
+      retention_policy:
+        question_answer_history: 30d # 问答历史保留 30 天
+      data_types: # 内存中存储的数据类型
+        - questions # 用户问题
+        - answers # 系统答案
+    planning:
+      - receive_user_questions # 接收用户提问
+      - analyze_user_questions # 分析用户提问
+      - query_knowledge_base # 查询知识库
+      - return_answers # 返回答案
+      - manage_game_data # 管理游戏数据
+    datasets:
+      general_knowledge:
+        source: public_knowledge_graph # 数据来源：公共知识图谱
+        type: knowledge_graph # 数据类型：知识图谱
+        access_permission: read # 访问权限：只读
+    collaboration: # 协作配置
+      strategy: delegation # 协作策略为委托
+      allowed_agents: # 允许协作的 Agent 列表
+        - Xiaoai
+        - Xiaoke
+      communication_protocol: message_queue # 通信协议为消息队列
+      description: "Laoke Agent 可以将任务委托给 Xiaoai 和 Xiaoke Agent 处理，通过消息队列方式进行异步通信。" # 描述
+
+# Training data configuration: 定义模型训练数据相关的配置
+training_data:
+  llm_training:
+    dataset_name: large_text_corpus # LLM 训练数据集名称
+    source: common_crawl, bookcorpus # 数据来源
+    size: "TB scale" # 数据集大小
+    preprocessing:
+      - tokenization # 分词
+      - cleaning # 清洗
+    optimization: # 模型优化配置
+      fine_tuning: # 微调配置
+        enabled: true # 默认启用微调
+      compression: # 模型压缩配置
+        enabled: true # 默认启用压缩
+        techniques: # 压缩技术
+          - pruning # 剪枝
+      evaluation_metrics: # 评估指标
+        - perplexity # 困惑度
+    update_frequency: monthly # 更新频率：每月
+  multimodal_training:
+    dataset_name: image_text_pairs # 多模态训练数据集名称
+    source: image_caption_datasets # 数据来源
+    size: "Millions of samples" # 数据集大小
+    preprocessing:
+      - image_resizing # 图片缩放
+      - text_cleaning # 文本清洗
+    update_frequency: quarterly # 更新频率：每季度
+  agent_specific_training: # 特定 Agent 的训练数据
+    Xiaoai:
+      dataset_name: anonymized_health_records # 数据集名称：匿名化健康记录
+      source: internal_data # 数据来源：内部数据
+      size: "100K records" # 数据集大小
+      preprocessing:
+        - anonymization # 匿名化
+        - feature_engineering # 特征工程
+      optimization: # 模型优化配置
+        fine_tuning: # 微调配置
+          enabled: true # 默认启用微调
+          parameters: # 微调参数 (示例)
+            - learning_rate: 0.0001
+        compression: # 模型压缩配置
+          enabled: false # 默认不启用压缩
+        evaluation_metrics: # 评估指标
+          - f1_score # F1 值
+      update_frequency: bi-annually # 更新频率：每半年
+    Xiaoke:
+      dataset_name: anonymized_life_records # 数据集名称：匿名化生活记录
+      source: internal_data # 数据来源：内部数据
+      size: "50K records" # 数据集大小
+      preprocessing:
+        - anonymization # 匿名化
+        - feature_engineering # 特征工程
+      optimization: # 模型优化配置
+        fine_tuning: # 微调配置
+          enabled: false # 默认不启用微调
+        compression: # 模型压缩配置
+          enabled: false # 默认不启用压缩
+        distillation: # 模型蒸馏配置
+          enabled: true # 默认启用蒸馏
+          teacher_model: large_laoke_model # 教师模型 (示例)
+        evaluation_metrics: # 评估指标
+          - bleu_score # BLEU 值
+      update_frequency: quarterly # 更新频率：每季度
+    Laoke:
+      dataset_name: question_answer_pairs # 数据集名称：问答对
+      source: curated_qna_datasets # 数据来源：精选的问答数据集
+      size: "1M pairs" # 数据集大小
+      preprocessing:
+        - text_cleaning # 文本清洗
+        - question_normalization # 问题标准化
+      optimization: # 模型优化配置
+        fine_tuning: # 微调配置
+          enabled: false # 默认不启用微调
+        compression: # 模型压缩配置
+          enabled: false # 默认不启用压缩
+        distillation: # 模型蒸馏配置
+          enabled: true # 默认启用蒸馏
+          teacher_model: large_laoke_model # 教师模型 (示例)
+        evaluation_metrics: # 评估指标
+          - bleu_score # BLEU 值
+      update_frequency: bi-annually # 更新频率：每半年
+
+# Database Configuration: 定义数据库连接配置
+database:
+  remote:
+    relational: # 关系型数据库
+      type: mysql # 远程关系型数据库类型为 MySQL
+      host: 118.31.223.213 # 数据库主机地址
+      port: 3306 # 数据库端口
+      user: suoke # 数据库用户名
+      database: suoke_health # 数据库名
+      description: "适用于存储结构化数据，例如用户信息、健康记录、生活记录、知识库等。"
+    nosql: # NoSQL 数据库
+      type: redis
+      description: "适用于存储非结构化数据、缓存数据、实现消息队列等功能，支持实时数据分析。"
+
+# AI Agent Integration: 定义 AI 代理集成相关的配置
+ai_integration:
+  multi_model: true # 是否使用多模型
+  gui_interaction:
+    enabled: true # 是否启用 GUI 交互
+    technology: aria_ui # GUI 交互技术为 Aria UI
+  voice_interaction:
+    enabled: true # 是否启用语音交互
+    technology: transformer # 语音交互技术为 Transformer
+  realtime_interaction:
+    enabled: true # 是否启用实时交互
+    technology: rte # 实时交互技术为 RTE
+  model_selection:
+    strategy: dynamic # 模型选择策略为动态选择
+    criteria: service_context # 模型选择标准为服务上下文
+  rag_configuration: # RAG 相关配置
+    knowledge_base: # 知识库配置
+      type: knowledge_graph # 知识库类型：知识图谱
+      source: wikipedia, curated_data # 知识库数据来源：维基百科，精选数据
+      integration:
+        - health_profile # 集成健康画像
+      reasoning:
+        - graph_traversal # 图遍历推理
+        - rule_based_reasoning # 基于规则的推理
+      recommendation:
+        - knowledge_graph_based_recommendation # 基于知识图谱的推荐
+        - personalized_recommendation # 个性化推荐
+      indexing_strategy: semantic # 知识库索引策略：语义索引
+      update_frequency: monthly # 知识库更新频率：每月
+      embedding_model: openai/text-embedding-ada-002 # Embedding 模型：OpenAI Ada-002 (示例)
+    retrieval: # 检索配置
+      strategy: agentic_retrieval # 检索策略：智能体驱动的检索策略，替代 hybrid_retrieval
+      agentic_retrieval_strategies: # 定义智能体检索策略的具体配置
+        - multi_strategy_selection: # 多策略选择
+            enabled: true # 启用多策略选择
+            description: "智能体根据查询类型和知识库特点，动态选择和组合多种检索策略 (关键词、语义、图谱等)。"
+            strategies: # 可选的检索策略
+              - keyword_search # 关键词检索
+              - semantic_search # 语义检索
+              - graph_traversal # 图谱遍历
+            strategy_selection_logic: intent_based # 策略选择逻辑：基于用户意图
+        - iterative_optimization: # 迭代优化
+            enabled: true # 启用迭代优化
+            description: "智能体根据初步检索结果，迭代调整检索策略和查询条件，逐步优化检索效果。"
+            optimization_metrics: # 优化指标
+              - relevance_score # 相关性得分
+              - recall # 召回率
+            optimization_techniques: # 优化技术
+              - query_expansion # 查询扩展
+              - parameter_tuning # 参数调优 (例如相似度阈值)
+        - cross_knowledge_base_search: # 跨知识库搜索
+            enabled: true # 启用跨知识库搜索
+            description: "智能体支持同时或按序访问多个知识库，整合来自不同来源的信息。"
+            knowledge_sources: # 可用的知识来源 (与 knowledge_base.source 对齐)
+              - local_knowledge_base # 本地知识库
+              - web_search # 网络搜索
+              - health_knowledge_base # 健康知识库
+              - life_knowledge_base # 生活知识库
+      top_k: 10 # Top K 检索结果数量：10
+      knowledge_sources: # 知识来源 (保持不变，但会被智能体动态选择)
+        - local_knowledge_base # 本地知识库
+        - web_search # 网络搜索
+      web_search_configuration: # 网络搜索配置
+        enabled: true # 启用网络搜索
+        api_provider: google_custom_search # 网络搜索 API 提供商：Google Custom Search (示例)
+        api_key_secret_management: secure_storage # API 密钥管理：安全存储
+      score_threshold: 0.7 # 相关性得分阈值：0.7
+      chunking_strategy: semantic_chunking # 文本分块策略：语义分块
+    generation: # 生成配置
+      context_window_size: 4096 # 上下文窗口大小
+      prompt_strategy: agentic_rag # Prompt 策略：Agentic RAG 优化 Prompt 策略，替代 standard_rag
+      agentic_prompt_strategies: # 定义 Agentic Prompt 策略的具体配置
+        - information_filtering: # 信息过滤
+            enabled: true # 启用信息过滤
+            description: "智能体对检索到的信息进行筛选，去除冗余和低质量信息，突出关键信息。"
+            filtering_criteria: # 过滤标准
+              - source_authority # 来源权威性
+              - information_relevance # 信息相关性
+              - information_recency # 信息时效性
+        - information_summarization: # 信息摘要
+            enabled: true # 启用信息摘要
+            description: "智能体对多个文档或知识片段进行自动摘要，提取核心观点和关键证据。"
+            summarization_techniques: # 摘要技术
+              - extractive_summarization # 抽取式摘要
+              - abstractive_summarization # 抽象式摘要
+            summary_model: "bart-large-cnn" # 摘要模型 (示例)
+        - multi_source_fusion: # 多源信息融合
+            enabled: true # 启用多源信息融合
+            description: "智能体融合来自不同知识库的信息，解决信息冲突，增强信息互补。"
+            fusion_techniques: # 融合技术
+              - information_de-duplication # 信息去重
+              - conflict_resolution_rules # 冲突解决规则
+              - information_complement # 信息互补
+      prompt_strategy_options: # Prompt 策略选项 (保持不变，但可能被 Agentic 策略动态调整)
+        query_expansion: # 查询扩展策略
+          expansion_model: "..." # 查询扩展模型 (示例)
+        context_compression: # 上下文压缩策略配置
+          compression_ratio: 0.5 # 压缩率 (示例)
+          compression_method: "keywords" # 压缩方法 (示例): keywords, summary, reorder_filter
+          keywords_num: 10 # 关键词提取数量 (示例)
+          summary_model_name: "bart-large-cnn" # 摘要模型名称 (示例)
+        re_ranking: # 重排序策略配置
+          re_ranking_model_name: "sentence-transformers/all-mpnet-base-v2" # 重排序模型名称 (示例)
+          similarity_metric: "cosine" # 相似度度量指标 (示例): cosine, dot_product
+          top_n: 5 # 重排序后保留 Top N 个结果 (示例)
+        chain_of_thought_rag: # Chain-of-Thought RAG 策略配置
+          cot_prompt_template: "请一步步思考，并给出最终答案。" # CoT Prompt 模板 (示例)
+          few_shot_examples_path: "assets/data/cot_examples.json" # Few-shot 示例文件路径 (示例)
+      knowledge_fusion_method: intelligent_fusion # 知识融合方法：智能融合，替代 weighted_average
+      response_parameters: # 响应生成参数
+        temperature: 0.7 # Temperature：0.7
+        top_p: 0.9 # Top P：0.9
+        max_tokens: 512 # 最大 Token 数：512
+    evaluation: # 评估与监控配置
+      metrics: # 评估指标
+        - context_relevance
+        - answer_faithfulness
+        - answer_relevance
+        - latency
+      logging_enabled: true # 启用 RAG 日志记录：是
+  model_composition: # 模型组合配置
+    patterns: # 支持的模型组合模式
+      - sequential # 串行模式
+      - parallel # 并行模式
+      - ensemble # 集成模式
+      - hierarchical # 分层模式
+    orchestration_framework: airflow # 模型编排框架：Airflow (示例)
+    service_mesh: istio # 服务网格：Istio (示例)
+
+# Test rules: 定义测试相关的规则
+test:
+  mocks:
+    path: test/mocks # Mock 对象存放路径
+    naming: mock_*.dart # Mock 对象命名规范
+  matchers:
+    prefer_type_matchers: true # 优先使用类型匹配器
+    use_meaningful_descriptions: true # 使用有意义的描述
+  structure:
+    group_by_feature: true # 测试用例按功能模块分组
+    follow_arrange_act_assert: true # 遵循 Arrange-Act-Assert 测试模式
+
+# Adaptation & Internationalization Rules: 定义系统自适应与国际化相关的规则 (简化版)
+adaptation_i18n:
+  localization:
+    enabled: true # 启用国际化 (Localization)
+    default_locale: zh_CN # 默认语言 (中文)
+    supported_locales: # 支持的语言列表
+      - zh_CN # 简体中文
+      - en_US # 英语 (美国)
+    locale_file_path: assets/locales # 语言文件存放路径
+    locale_file_pattern: "{locale}.json" # 语言文件命名模式，例如 en_US.json, zh_CN.json
+    auto_detect_system_locale: true # 自动检测系统语言
+    on_install_set_locale: true # 安装时设置为系统语言 (如果支持)
+    description: "APP 启动时自动检测用户系统语言，并设置为应用语言 (如果支持)。如果系统语言不在支持列表中，则使用默认语言。"
+  regional_settings: # 区域设置 (简化，可根据需要扩展)
+    date_format: system_default # 日期格式：跟随系统默认
+    time_format: system_default # 时间格式：跟随系统默认
+    number_format: system_default # 数字格式：跟随系统默认
+    currency_format: system_default # 货币格式：跟随系统默认
+    timezone: system_default # 时区：跟随系统默认
+    description: "区域设置 (日期、时间、数字、货币、时区) 默认跟随用户系统设置。"
+
+Fangyan_mode_api: # FangyanModeAPI - 方言模型 API (新名称)
+  description: "FangyanModeAPI is a generic, open-source **API service** providing a large dialect model for dialect recognition and adaptation. It emphasizes user privacy by storing user-specific metadata locally and supporting background contribution of **anonymized** voice data to a central training set via API. Designed for integration with any AI agent or application requiring robust dialect support." # FangyanModeAPI 是一个通用的开源 **API 服务**，提供用于方言识别和适配的大型方言模型。它强调用户隐私，通过本地存储用户特定元数据，并支持通过 API 在后台将 **匿名化** 的语音数据贡献到中央训练集。旨在与任何需要强大方言支持的 AI 代理或应用程序集成。(**更新描述，使用新名称 FangyanModeAPI**)
+  personalization_api: # 方言个性化 API (名称同步更新)
+    description: **API for** personalizing local language understanding using FangyanModeAPI. It features real-time adaptation, optional client-managed contextual prompts, and background contribution of **anonymized** data. Agent-agnostic and designed for API integration, with user metadata stored locally. # **用于** 使用 FangyanModeAPI 个性化本地语言理解的 **API**。它具有实时适配、可选的客户端管理上下文提示和后台 **匿名化** 数据贡献功能。与 Agent 无关，专为 API 集成而设计，用户元数据本地存储。(**更新描述，使用新名称 FangyanModeAPI**)
+    method: api_driven_dialect_personalization # 适配方法：API 驱动的方言个性化
+    trigger_condition: on_api_request # 触发条件：API 请求时
+    data_input: voice_data_via_api # 数据输入：通过 API 传输的语音数据
+    prompt_message: "Optional prompt message can be managed by the client application." # 提示信息：提示信息变为可选，由客户端应用管理
+    adaptation_strategy: server_side_online_learning_and_aggregation # 适配策略：服务器端在线学习和聚合
+    model_type: large_dialect_model_api # 模型类型：大型方言模型 API
+    feature_sharing: cross_client_and_fangyan_mode_api # 特征共享：跨客户端和 FangyanModeAPI (名称同步更新)
+    data_storage: fangyan_mode_api_shared_repository # 数据存储：FangyanModeAPI 共享仓库 (名称同步更新)
+    metadata_storage: local_device_storage # 元数据存储：本地设备存储
+    privacy_policy: "Voice data is processed via API for dialect recognition. User-specific metadata is stored locally. Anonymized data contribution to FangyanModeAPI training set is optional and requires user consent. See data usage agreement for details." # 隐私政策：通过 API 处理语音数据以进行方言识别。用户特定元数据本地存储。匿名数据贡献是可选的，需要用户同意。详细信息请参阅数据使用协议。(**更新隐私政策，使用新名称 FangyanModeAPI**)
+    contribution_guidelines_url: "https://fangyan-mode-api.org/contribution-guidelines" # 贡献指南 URL (域名示例，已更新为 fangyan-mode-api.org)
+    community_forum_url: "https://fangyan-mode-api.org/forum" # 社区论坛 URL (域名示例，已更新为 fangyan-mode-api.org)
+  data_contribution_api: # 数据贡献 API 配置 (名称同步更新)
+    enabled: true # 启用数据贡献
+    api_endpoint: "https://fangyan-mode-api.org/api/v1/data_contribution" # 数据贡献 API 端点 (域名示例，已更新为 fangyan-mode-api.org)
+    anonymization_method: voice_feature_extraction_and_tokenization # 匿名化方法：语音特征提取和 Token 化
+    data_types: # 贡献的数据类型
+      - voice_features_via_api # 通过 API 传输的语音特征
+      - optional_dialect_labels # 可选的方言标签
+    trigger_condition: client_initiated_api_call # 触发条件：客户端发起的 API 调用
+    upload_frequency: client_controlled # 上传频率：客户端控制
+    data_size_limit: client_defined # 数据大小限制：客户端定义
+    network_condition: client_preference # 网络条件：客户端偏好
+    user_consent_required: true # 是否需要用户同意：是
+    consent_prompt_message: "FangyanModeAPI can be improved by contributing your **anonymized** dialect data. Do you consent to contribute?" # 用户同意提示信息 (使用新名称 FangyanModeAPI)
+    data_usage_agreement_url: "https://fangyan-mode-api.org/data_usage_agreement" # 数据使用协议 URL (域名示例，已更新为 fangyan-mode-api.org)
+
+multimodal: # 多模态配置
+  enabled: true # 启用多模态
+  input_modalities: # 支持的输入模态
+    - image
+    - voice
+    - video
+  processing_methods: # 多模态处理方法
+    - feature_extraction # 特征提取
+    - modality_fusion # 模态融合
+
+data_flow: # 数据流描述
+  user_interaction: # 用户交互
+    modalities: # 支持的模态
+      - text
+      - voice
+      - image
+      - video
+      - file
+    description: "用户通过多种模态与 AI 代理进行自然交互。"
+  local_data_storage: # 本地数据存储
+    database: sqflite # 数据库类型：sqflite
+    purpose: "存储用户隐私数据，包括对话历史、健康数据、偏好设置等。"
+    encryption: true # 数据加密：启用
+    anonymization: false # 匿名化：否 (本地存储不匿名化)
+  rag_process: # RAG 流程
+    knowledge_sources: # 知识来源
+      - knowledge_graph_api # 知识图谱 API (远程)
+      - health_profile_api # 健康画像 API (本地/远程)
+      - local_database # 本地数据库 (sqflite)
+    description: "RAG 流程从多知识源检索信息，增强上下文，并生成多模态回复。"
+  data_contribution: # 数据贡献
+    purpose: "用于模型训练和知识图谱强化。"
+    anonymization: true # 匿名化：是 (上传前匿名化)
+    - voice_features_via_api # 通过 API 传输的语音特征
+    - optional_dialect_labels # 可选的方言标签
+    trigger_condition: client_initiated_api_call # 触发条件：客户端发起的 API 调用
+
+# Navigation rules for RAG strategies
+nav_rules:
+  - path: lib/core/services/rag/
+    cursor_positions:
+      - context_compression_strategy.dart:
+        - "abstract class ContextCompressionStrategy"
+      - re_ranking_strategy.dart:
+        - "abstract class ReRankingStrategy"
+      - no_re_ranking_strategy.dart:
+        - "class NoReRankingStrategy implements ReRankingStrategy"
+      - semantic_similarity_re_ranking_strategy.dart:
+        - "class SemanticSimilarityReRankingStrategy implements ReRankingStrategy"
+      - no_compression_strategy.dart:
+        - "class NoCompressionStrategy implements ContextCompressionStrategy"
+
+# 项目优化建议
+optimization_suggestions:
+  architecture:
+    - suggestion: "采用模块化微服务架构"
+      details: "将 AI 助手、健康服务、生活服务等拆分为独立微服务"
+      implementation:
+        - 重构 apps/ 目录结构，确保服务解耦
+        - 完善服务间通信机制
+        - 增强服务注册和发现机制
+
+    - suggestion: "优化依赖注入方案"
+      details: "从 injectable 迁移到 get_it，简化依赖管理"
+      implementation:
+        - 重构 di/ 目录下的依赖注入代码
+        - 统一使用 get_it 进行服务定位
+        - 完善模块注册机制
+
+  performance:
+    - suggestion: "引入多级缓存策略"
+      details: "实现内存、本地存储、Redis 的多级缓存"
+      implementation:
+        - 完善 CacheStrategy 接口
+        - 实现 LRU 缓存策略
+        - 优化缓存同步机制
+
+    - suggestion: "优化数据同步机制"
+      details: "实现增量同步和冲突解决"
+      implementation:
+        - 完善 DataSyncService
+        - 实现乐观锁机制
+        - 添加同步状态监控
+
+  security:
+    - suggestion: "增强数据安全机制"
+      details: "实现端到端加密和敏感数据保护"
+      implementation:
+        - 完善 SecurityService
+        - 实现 AES-256-GCM 加密
+        - 加强密钥管理机制
+
+  ai_integration:
+    - suggestion: "优化 AI 代理协作机制"
+      details: "实现智能代理间的协同决策"
+      implementation:
+        - 完善 AgentCollaborationService
+        - 实现代理间通信协议
+        - 优化任务分配机制
+
+  testing:
+    - suggestion: "增强测试覆盖率"
+      details: "完善单元测试和集成测试"
+      implementation:
+        - 补充 test/ 目录下的测试用例
+        - 实现自动化测试流程
+        - 添加性能测试套件
+
+  documentation:
+    - suggestion: "完善文档体系"
+      details: "建立完整的文档管理体系"
+      implementation:
+        - 补充 API 文档
+        - 完善开发指南
+  

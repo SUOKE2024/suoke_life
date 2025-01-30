@@ -1,4 +1,4 @@
-import 'package:suoke_life/core/services/infrastructure/database_service.dart';
+import 'package:suoke_life/lib/core/services/infrastructure/database_service.dart';
 import '../../models/life_record.dart';
 import 'life_service.dart';
 

@@ -1,21 +1,25 @@
+import 'package:dio/dio.dart';
+import 'package:get_it/get_it.dart';
+import '../config/env_config.dart';
+import 'token_manager.dart';
+
 class ApiClient {
-  final Dio dio;
-  final CacheManager cacheManager;
-  
-  Future<T> get<T>(
-    String path, {
-    Map<String, dynamic>? params,
-    Duration? cacheDuration,
-  }) async {
-    if (cacheDuration != null) {
-      final cached = await cacheManager.get<T>(path);
-      if (cached != null) return cached;
-    }
-    
-    final response = await dio.get(path, queryParameters: params);
-    if (cacheDuration != null) {
-      await cacheManager.set(path, response.data, maxAge: cacheDuration);
-    }
-    return response.data;
-  }
-} 
+  final Dio _dio;
+  final TokenManager _tokenManager;
+  final String baseUrl;
+  final bool enableLogging;
+
+  ApiClient({
+    required HttpClient httpClient,
+    required TokenManager tokenManager,
+    required this.baseUrl,
+    required this.enableLogging,
+  }) : _tokenManager = tokenManager {
+    _dio = Dio(BaseOptions(
+      baseUrl: baseUrl,
+      connectTimeout: getIt<EnvConfig>().timeout,
+      receiveTimeout: getIt<EnvConfig>().timeout,
+    ));
+
+    if (enableLogging) {
+      _dio.interceptors.add(LogInterceptor(

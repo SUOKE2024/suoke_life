@@ -1,6 +1,6 @@
-import 'package:suoke_life/core/models/life_activity_data.dart';
-import 'package:suoke_life/core/repositories/life_activity_data_repository.dart';
-import 'package:suoke_life/core/services/infrastructure/database_service.dart';
+import 'package:suoke_life/lib/core/models/life_activity_data.dart';
+import 'package:suoke_life/lib/core/repositories/life_activity_data_repository.dart';
+import 'package:suoke_life/lib/core/services/infrastructure/database_service.dart';
 
 class LifeActivityDataRepositoryImpl implements LifeActivityDataRepository {
   final DatabaseService _databaseService;

@@ -1,18 +1,10 @@
 import 'package:get_it/get_it.dart';
-import 'package:suoke_life/core/di/modules/network_module.dart';
-import 'package:suoke_life/core/di/modules/service_module.dart';
-import 'package:suoke_life/core/di/modules/storage_module.dart';
-import 'package:suoke_life/core/di/modules/config_module.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:suoke_life/core/di/modules/database_module.dart';
 
-final getIt = GetIt.instance;
+final GetIt getIt = GetIt.instance;
 
-Future<void> configureDependencies() async {
-  await dotenv.load(fileName: '.env');
-  registerConfigModule(getIt);
-  registerNetworkModule(getIt);
-  registerStorageModule(getIt);
-  registerServiceModule(getIt);
-  registerDatabaseModule(getIt);
+void setupLocator() {
+  // Register services
+  getIt.registerLazySingleton<DatabaseHelper>(() => DatabaseHelper());
+  getIt.registerLazySingleton<AuthService>(() => AuthServiceImpl(getIt<LocalStorageService>(), getIt<PrivacyService>()));
+  // Add other service registrations here
 }

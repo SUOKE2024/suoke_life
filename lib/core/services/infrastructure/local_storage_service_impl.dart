@@ -1,281 +1,137 @@
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:suoke_life/core/services/infrastructure/local_storage_service.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
-import 'package:suoke_life/core/services/infrastructure/database_service.dart';
-import 'package:suoke_life/core/config/database_config.dart';
-import 'dart:convert';
-import 'package:suoke_life/core/models/chat_message.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:suoke_life/lib/core/services/infrastructure/local_storage_service.dart';
+import 'package:suoke_life/lib/core/database/database_config.dart';
+import 'package:suoke_life/lib/core/models/chat_message.dart';
 
 class LocalStorageServiceImpl implements LocalStorageService {
-  final DatabaseService _databaseService;
+  late SharedPreferences _prefs;
+  late Database _database;
+  bool _isInitialized = false;
 
-  SharedPreferences? _prefs;
-  Database? _database;
-  static const String _chatHistoryKey = 'chat_history';
-
-  LocalStorageServiceImpl(this._databaseService) {
-    init();
-  }
+  @override
+  bool get isInitialized => _isInitialized;
 
   @override
   Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
-    _database = await _databaseService.database;
+    _database = await DatabaseConfig().database;
+    _isInitialized = true;
+  }
+
+  @override
+  Future<void> insertChat(Map<String, dynamic> chat) async {
+    await insert('chat_history', chat);
   }
 
   @override
   Future<int> insert(String table, Map<String, dynamic> values) async {
-    final db = _database;
-    if (db == null) throw Exception('Database not initialized');
-    return await db.insert(table, values);
+    return await _database.insert(table, values);
   }
 
   @override
   Future<List<Map<String, dynamic>>> query(String table,
       {String? where, List<dynamic>? whereArgs}) async {
-    final db = _database;
-    if (db == null) throw Exception('Database not initialized');
-    return await db.query(table, where: where, whereArgs: whereArgs);
+    return await _database.query(table, where: where, whereArgs: whereArgs);
   }
 
   @override
   Future<int> update(String table, Map<String, dynamic> values,
       {String? where, List<dynamic>? whereArgs}) async {
-    final db = _database;
-    if (db == null) throw Exception('Database not initialized');
-    return await db.update(table, values, where: where, whereArgs: whereArgs);
+    return await _database.update(table, values,
+        where: where, whereArgs: whereArgs);
   }
 
   @override
   Future<int> delete(String table,
       {String? where, List<dynamic>? whereArgs}) async {
-    final db = _database;
-    if (db == null) throw Exception('Database not initialized');
-    return await db.delete(table, where: where, whereArgs: whereArgs);
+    return await _database.delete(table, where: where, whereArgs: whereArgs);
   }
 
   @override
   Future<List<Map<String, dynamic>>> getChatList() async {
-    final db = _database;
-    if (db == null) throw Exception('Database not initialized');
-    return await db.query('chats');
+    return await query('chat_history');
   }
 
   @override
   Future<void> clearChatHistory() async {
-    final prefs = _prefs;
-    await prefs?.remove('chat_history');
+    await _database.delete('chat_history');
   }
 
   @override
-  Future<SharedPreferences> get prefs async {
-    if (_prefs == null) {
-      throw Exception('SharedPreferences not initialized. Call init() first.');
-    }
-    return _prefs!;
-  }
+  Future<SharedPreferences> get prefs async => _prefs;
 
   @override
-  Future<Database> get database async {
-    if (_database == null) {
-      throw Exception('Database not initialized. Call init() first.');
-    }
-    return _database!;
-  }
+  Future<Database> get database async => _database;
 
   @override
   Future<void> setIntValue(String key, int value) async {
-    final db = _database;
-    if (db == null) throw Exception('Database not initialized');
-    await db.insert(
-      'settings',
-      {'key': key, 'value': value.toString()},
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+    await _prefs.setInt(key, value);
   }
 
   @override
   Future<int?> getIntValue(String key) async {
-    final db = _database;
-    if (db == null) throw Exception('Database not initialized');
-    final List<Map<String, dynamic>> maps = await db.query(
-      'settings',
-      where: 'key = ?',
-      whereArgs: [key],
-    );
-    if (maps.isNotEmpty) {
-      return int.tryParse(maps.first['value'] as String? ?? '');
-    }
-    return null;
-  }
-
-  @override
-  Future<void> setDoubleValue(String key, double value) async {
-    final db = _database;
-    if (db == null) throw Exception('Database not initialized');
-    await db.insert(
-      'settings',
-      {'key': key, 'value': value.toString()},
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-  }
-
-  @override
-  Future<double?> getDoubleValue(String key) async {
-    final db = _database;
-    if (db == null) throw Exception('Database not initialized');
-    final List<Map<String, dynamic>> maps = await db.query(
-      'settings',
-      where: 'key = ?',
-      whereArgs: [key],
-    );
-    if (maps.isNotEmpty) {
-      return double.tryParse(maps.first['value'] as String? ?? '');
-    }
-    return null;
-  }
-
-  @override
-  Future<void> setBoolValue(String key, bool value) async {
-    final db = _database;
-    if (db == null) throw Exception('Database not initialized');
-    await db.insert(
-      'settings',
-      {'key': key, 'value': value ? 'true' : 'false'},
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-  }
-
-  @override
-  Future<bool?> getBoolValue(String key) async {
-    final db = _database;
-    if (db == null) throw Exception('Database not initialized');
-    final List<Map<String, dynamic>> maps = await db.query(
-      'settings',
-      where: 'key = ?',
-      whereArgs: [key],
-    );
-    if (maps.isNotEmpty) {
-      return (maps.first['value'] as String?) == 'true';
-    }
-    return null;
-  }
-
-  @override
-  Future<void> setStringListValue(String key, List<String> value) async {
-    final db = _database;
-    if (db == null) throw Exception('Database not initialized');
-    await db.insert(
-      'settings',
-      {'key': key, 'value': value.join(',')},
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-  }
-
-  @override
-  Future<List<String>> getStringListValue(String key) async {
-    final db = _database;
-    if (db == null) throw Exception('Database not initialized');
-    final List<Map<String, dynamic>> maps = await db.query(
-      'settings',
-      where: 'key = ?',
-      whereArgs: [key],
-    );
-    if (maps.isNotEmpty) {
-      final valueString = maps.first['value'] as String? ?? '';
-      return valueString.split(',');
-    }
-    return [];
-  }
-
-  @override
-  Future<void> removeValue(String key) async {
-    final db = _database;
-    if (db == null) throw Exception('Database not initialized');
-    await db.delete(
-      'settings',
-      where: 'key = ?',
-      whereArgs: [key],
-    );
+    return _prefs.getInt(key);
   }
 
   @override
   Future<void> clearAll() async {
-    final db = _database;
-    if (db == null) throw Exception('Database not initialized');
-    await db.delete('settings');
-    await db.delete('chats');
-    final sharedPrefs = await prefs;
-    await sharedPrefs.clear();
+    await _prefs.clear();
   }
 
   @override
   Future<void> saveChatHistory(List<String> chatList) async {
-    final db = _database;
-    if (db == null) throw Exception('Database not initialized');
-    await db.delete('chats');
-    final batch = db.batch();
-    for (var message in chatList) {
-      batch.insert('chats', {'text': message, 'isUser': 0});
-    }
-    await batch.commit();
+    await _prefs.setStringList('chat_history', chatList);
   }
 
   @override
   Future<List<String>> getChatHistory() async {
-    final sharedPrefs = await prefs;
-    final chatHistoryString = sharedPrefs.getString(_chatHistoryKey);
-    if (chatHistoryString == null) {
-      return [];
-    }
-    try {
-      return (jsonDecode(chatHistoryString) as List).cast<String>();
-    } catch (e) {
-      print('Error decoding chat history: $e');
-      return [];
-    }
+    return _prefs.getStringList('chat_history') ?? [];
   }
 
   @override
   Future<String?> getStringValue(String key) async {
-    final sharedPrefs = await prefs;
-    return sharedPrefs.getString(key);
+    return _prefs.getString(key);
   }
 
   @override
   Future<void> setStringValue(String key, String value) async {
-    final sharedPrefs = await prefs;
-    await sharedPrefs.setString(key, value);
+    await _prefs.setString(key, value);
   }
 
   @override
   Future<String?> getString(String key) async {
-    final sharedPrefs = await prefs;
-    return sharedPrefs.getString(key);
+    return _prefs.getString(key);
   }
 
   @override
   Future<void> setString(String key, String value) async {
-    final sharedPrefs = await prefs;
-    await sharedPrefs.setString(key, value);
+    await _prefs.setString(key, value);
   }
 
   @override
   Future<void> saveChat(String message, bool isUser) async {
-    final prefs = _prefs;
-    List<String> chatHistory = prefs?.getStringList('chat_history') ?? [];
-    chatHistory.add('$message|$isUser');
-    await prefs?.setStringList('chat_history', chatHistory);
+    final chat = {
+      'message': message,
+      'isUser': isUser ? 1 : 0,
+      'timestamp': DateTime.now().millisecondsSinceEpoch
+    };
+    await insert('chat_history', chat);
   }
 
   @override
-  Future<List<ChatMessage>> getChatMessages() async {
-    final prefs = _prefs;
-    List<String> chatHistory = prefs?.getStringList('chat_history') ?? [];
-    return chatHistory.map((entry) {
-      final parts = entry.split('|');
-      return ChatMessage(text: parts[0], isUser: parts[1] == 'true');
-    }).toList();
+  Future<List<ChatMessage>> getChatMessageHistory() async {
+    final messages = await query('chat_history');
+    return messages.map((e) => ChatMessage.fromJson(e)).toList();
+  }
+
+  @override
+  Future<void> remove(String key) async {
+    await _prefs.remove(key);
+  }
+
+  @override
+  Future<void> clear() async {
+    await _prefs.clear();
   }
 }

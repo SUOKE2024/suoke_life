@@ -1,40 +1,41 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get/get.dart';
 
 class AppConfig {
-  final String knowledgeGraphApiBaseUrl;
-  final String llmApiBaseUrl;
-  final String multimodalApiBaseUrl;
+  static const String appName = 'SuoKe Life';
+  static const String version = '1.0.0';
+  
+  // AI配置
+  static const Map<String, dynamic> aiConfig = {
+    'models': ['doubao-pro-32k', 'doubao-pro-128k', 'doubao-embedding'],
+    'assistants': {
+      'xiaoi': '生活管家和健康服务',
+      'laoke': '知识顾问',
+      'xiaoke': '商务助手'
+    }
+  };
 
-  AppConfig({
-    required this.knowledgeGraphApiBaseUrl,
-    required this.llmApiBaseUrl,
-    required this.multimodalApiBaseUrl,
-  });
-
-  static String get appName => dotenv.env['APP_NAME'] ?? 'SuokeLife';
-  static String get apiBaseUrl =>
-      dotenv.env['API_BASE_URL'] ?? 'http://localhost:3000';
-  static String get apiKey => dotenv.env['API_KEY'] ?? 'default_api_key';
-  static String get redisHost => dotenv.env['REDIS_HOST'] ?? 'localhost';
-  static int get redisPort => int.parse(dotenv.env['REDIS_PORT'] ?? '6379');
-  static String get redisPassword => dotenv.env['REDIS_PASSWORD'] ?? '';
-  static String get llmServiceUrl =>
-      dotenv.env['LLM_SERVICE_URL'] ??
-      'http://localhost:5000/api/v1/llm/generate';
-  static String get mysqlHost => dotenv.env['MYSQL_HOST'] ?? 'localhost';
-  static int get mysqlPort => int.parse(dotenv.env['MYSQL_PORT'] ?? '3306');
-  static String get mysqlUser => dotenv.env['MYSQL_USER'] ?? 'root';
-  static String get mysqlDatabase =>
-      dotenv.env['MYSQL_DATABASE'] ?? 'suoke_life';
-  static const String baseUrl = 'http://118.31.223.213:8080';
-  static const String dbName = 'suoke_life.db';
-  static const int dbVersion = 1;
-  static const bool dbEncryption = true;
-  static const String dbPassword = 'your_db_password';
-  static const bool enableDataContribution = false;
-  static const String dataContributionApiEndpoint =
-      'https://your-data-contribution-api.com/api/v1/contribute';
-  static const String defaultLocalDataRetentionPeriod = '30d';
-  static const bool enableKnowledgeGraph = true;
-  // 其他配置项
-}
+  // 存储配置
+  static const Map<String, dynamic> storageConfig = {
+    'local': {
+      'sqlite': {
+        'name': 'suoke_life.db',
+        'version': 1
+      },
+      'redis': {
+        'host': 'localhost',
+        'port': 6379
+      }
+    },
+    'remote': {
+      'mysql': {
+        'host': 'rm-xxx.mysql.rds.aliyuncs.com',
+        'port': 3306,
+        'database': 'suoke_life'
+      },
+      'oss': {
+        'endpoint': 'oss-cn-hangzhou.aliyuncs.com',
+        'bucket': 'suoke-life'
+      }
+    }
+  };
+} 

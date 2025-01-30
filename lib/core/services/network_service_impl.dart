@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
-import 'package:suoke_life/core/config/app_config.dart';
-import 'package:suoke_life/core/services/network_service.dart';
+import 'package:suoke_life/lib/core/config/app_config.dart';
+import 'package:suoke_life/lib/core/services/network_service.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:encrypt/encrypt.dart';
-import 'package:suoke_life/core/services/infrastructure/local_storage_service.dart';
+import 'package:suoke_life/lib/core/services/infrastructure/local_storage_service.dart';
 
 class NetworkServiceImpl implements NetworkService {
   final Dio _dio = Dio(BaseOptions(baseUrl: AppConfig.baseUrl));

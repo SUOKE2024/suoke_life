@@ -1,5 +1,5 @@
-import 'package:suoke_life/core/models/health_data.dart';
-import 'package:suoke_life/core/services/network_service.dart';
+import 'package:suoke_life/lib/core/models/health_data.dart';
+import 'package:suoke_life/lib/core/services/network_service.dart';
 
 class HealthServiceClient {
   final NetworkService _networkService;

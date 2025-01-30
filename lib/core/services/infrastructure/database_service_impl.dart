@@ -1,134 +1,162 @@
-import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:suoke_life/core/config/app_config.dart';
-import 'package:suoke_life/core/database/database_config.dart';
-import 'package:suoke_life/core/services/infrastructure/database_service.dart';
-import 'package:encrypt/encrypt.dart';
+import 'package:path/path.dart';
+import 'dart:io';
+import 'package:suoke_life/lib/core/services/infrastructure/database_service.dart';
 
+/// 数据库服务实现类，负责管理 SQLite 数据库的创建和升级
 class DatabaseServiceImpl implements DatabaseService {
-  Database? _database;
-  final Key _key = Key.fromLength(32);
-  final IV _iv = IV.fromLength(16);
-  late final Encrypter _encrypter;
+  static const String _databaseName = 'suoke_life.db';
+  static const int _databaseVersion = 1;
 
-  DatabaseServiceImpl() {
-    _encrypter = Encrypter(AES(_key));
-  }
+  Database? _database;
 
   @override
+  /// 获取数据库实例，如果数据库未初始化则先初始化
   Future<Database> get database async {
-    if (_database != null) {
-      return _database!;
-    }
-    await _init();
+    if (_database != null) return _database!;
+    _database = await _initDatabase();
     return _database!;
   }
 
-  Future<void> _init() async {
-    final databasesPath = await getDatabasesPath();
-    final path = join(databasesPath, 'app_database.db');
-
-    _database = await openDatabase(
+  @override
+  /// 初始化数据库
+  Future<Database> _initDatabase() async {
+    final String path = join(await getDatabasesPath(), _databaseName);
+    return await openDatabase(
       path,
-      version: 1,
-      onCreate: (db, version) async {
-        await db.execute('''
-          CREATE TABLE users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT,
-            email TEXT,
-            avatar TEXT
-          )
-        ''');
-        await db.execute('''
-          CREATE TABLE chats (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            userId INTEGER,
-            message TEXT,
-            timestamp INTEGER
-          )
-        ''');
-        // Add more table creation queries here if needed
-      },
+      version: _databaseVersion,
+      onCreate: _onCreate,
+      onUpgrade: _onUpgrade,
     );
   }
 
   @override
-  Future<void> closeDatabase() async {
-    await _database?.close();
-    _database = null;
+  /// 创建数据库表
+  Future<void> _onCreate(Database db, int version) async {
+    // 用户表
+    await db.execute('''
+      CREATE TABLE users (
+        id TEXT PRIMARY KEY,
+        name TEXT NOT NULL,
+        email TEXT,
+        avatar_url TEXT,
+        created_at INTEGER NOT NULL,
+        updated_at INTEGER NOT NULL
+      )
+    ''');
+
+    // 聊天历史表
+    await db.execute('''
+      CREATE TABLE chat_history (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        message TEXT NOT NULL,
+        is_user INTEGER NOT NULL,
+        timestamp INTEGER NOT NULL
+      )
+    ''');
+
+    // 健康数据表
+    await db.execute('''
+      CREATE TABLE health_data (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id TEXT NOT NULL,
+        data_type TEXT NOT NULL,
+        value REAL NOT NULL,
+        unit TEXT,
+        timestamp INTEGER NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES users (id)
+      )
+    ''');
+
+    // 生活记录表
+    await db.execute('''
+      CREATE TABLE life_records (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id TEXT NOT NULL,
+        title TEXT NOT NULL,
+        content TEXT,
+        category TEXT NOT NULL,
+        timestamp INTEGER NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES users (id)
+      )
+    ''');
+
+    // 用户设置表
+    await db.execute('''
+      CREATE TABLE user_settings (
+        user_id TEXT PRIMARY KEY,
+        theme_mode TEXT NOT NULL DEFAULT 'system',
+        language_code TEXT NOT NULL DEFAULT 'zh_CN',
+        notification_enabled INTEGER NOT NULL DEFAULT 1,
+        privacy_level TEXT NOT NULL DEFAULT 'normal',
+        FOREIGN KEY (user_id) REFERENCES users (id)
+      )
+    ''');
   }
 
   @override
-  Future<void> clearDatabase() async {
-    if (_database == null) return;
-    final tables = ['chats', 'users'];
-    for (final table in tables) {
-      await _database?.delete(table);
+  /// 数据库升级
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    // 在这里处理数据库版本升级逻辑
+    if (oldVersion < 2) {
+      // 版本 1 升级到版本 2 的迁移脚本
     }
   }
 
   @override
-  Future<List<Map<String, dynamic>>> query(String table,
-      {String? where, List<dynamic>? whereArgs}) async {
-    final db = await database;
-    return await db.query(table, where: where, whereArgs: whereArgs);
+  /// 关闭数据库连接
+  Future<void> close() async {
+    if (_database != null) {
+      await _database!.close();
+      _database = null;
+    }
   }
 
   @override
-  Future<int> insert(String table, Map<String, dynamic> values) async {
+  /// 清空所有表数据
+  Future<void> clearAllTables() async {
     final db = await database;
-    return await db.insert(table, values);
-  }
-
-  @override
-  Future<int> update(String table, Map<String, dynamic> values,
-      {String? where, List<dynamic>? whereArgs}) async {
-    final db = await database;
-    return await db.update(table, values, where: where, whereArgs: whereArgs);
-  }
-
-  @override
-  Future<int> delete(String table,
-      {String? where, List<dynamic>? whereArgs}) async {
-    final db = await database;
-    return await db.delete(table, where: where, whereArgs: whereArgs);
-  }
-
-  Map<String, dynamic> _encryptData(Map<String, dynamic> data) {
-    final encryptedData = <String, dynamic>{};
-    data.forEach((key, value) {
-      if (value is String) {
-        final encrypted = _encrypter.encrypt(value, iv: _iv);
-        encryptedData[key] = encrypted.base64;
-      } else {
-        encryptedData[key] = value;
-      }
+    await db.transaction((txn) async {
+      // 按照外键约束的顺序删除数据
+      await txn.delete('user_settings');
+      await txn.delete('health_data');
+      await txn.delete('life_records');
+      await txn.delete('chat_history');
+      await txn.delete('users');
     });
-    return encryptedData;
-  }
-
-  Map<String, dynamic> _decryptData(Map<String, dynamic> data) {
-    final decryptedData = <String, dynamic>{};
-    data.forEach((key, value) {
-      if (value is String) {
-        try {
-          final decrypted = _encrypter.decrypt64(value, iv: _iv);
-          decryptedData[key] = decrypted;
-        } catch (e) {
-          decryptedData[key] = value;
-        }
-      } else {
-        decryptedData[key] = value;
-      }
-    });
-    return decryptedData;
   }
 
   @override
-  Future<void> initializeDatabase() async {
-    // 空实现，如果接口 `DatabaseService` 中 `initializeDatabase` 方法不再需要，
-    // 也可以直接从接口中移除该方法定义。
-    print('initializeDatabase called (empty implementation)');
+  /// 获取数据库大小（字节）
+  Future<int> getDatabaseSize() async {
+    final String path = join(await getDatabasesPath(), _databaseName);
+    final stat = await File(path).stat();
+    return stat.size;
   }
-}
+
+  @override
+  /// 备份数据库
+  Future<String> backupDatabase() async {
+    final String dbPath = join(await getDatabasesPath(), _databaseName);
+    final String backupPath = join(await getDatabasesPath(), 'backup_$_databaseName');
+
+    // 复制数据库文件
+    await File(dbPath).copy(backupPath);
+    return backupPath;
+  }
+
+  @override
+  /// 恢复数据库
+  Future<void> restoreDatabase(String backupPath) async {
+    final String dbPath = join(await getDatabasesPath(), _databaseName);
+
+    // 关闭当前数据库连接
+    await close();
+
+    // 复制备份文件到数据库位置
+    await File(backupPath).copy(dbPath);
+
+    // 重新初始化数据库连接
+    _database = await _initDatabase();
+  }
+} 

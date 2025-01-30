@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
-import 'package:suoke_life/core/di/injection.dart';
-import 'package:suoke_life/core/database/local/database_service.dart';
+import 'package:suoke_life/lib/core/di/injection.dart';
+import 'package:suoke_life/lib/core/database/local/database_service.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized(); // 确保 Flutter 绑定已初始化

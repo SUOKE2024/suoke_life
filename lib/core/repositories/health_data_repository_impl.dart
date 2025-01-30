@@ -1,6 +1,6 @@
-import 'package:suoke_life/core/models/health_data.dart';
-import 'package:suoke_life/core/repositories/health_data_repository.dart';
-import 'package:suoke_life/core/services/infrastructure/database_service.dart';
+import 'package:suoke_life/lib/core/models/health_data.dart';
+import 'package:suoke_life/lib/core/repositories/health_data_repository.dart';
+import 'package:suoke_life/lib/core/services/infrastructure/database_service.dart';
 
 class HealthDataRepositoryImpl implements HealthDataRepository {
   final DatabaseService _databaseService;

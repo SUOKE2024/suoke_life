@@ -1,4 +1,4 @@
-import 'package:suoke_life/core/models/life_activity_data.dart';
+import 'package:suoke_life/lib/core/models/life_activity_data.dart';
 
 abstract class LifeActivityDataRepository {
   Future<List<LifeActivityData>> getLifeActivityData(String userId);

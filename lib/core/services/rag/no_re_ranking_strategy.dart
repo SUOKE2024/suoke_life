@@ -1,4 +1,4 @@
-import 'package:suoke_life/core/services/rag/re_ranking_strategy.dart';
+import 'package:suoke_life/lib/core/services/rag/re_ranking_strategy.dart';
 
 class NoReRankingStrategy implements ReRankingStrategy {
   @override

@@ -1,5 +1,5 @@
-import 'package:suoke_life/core/models/life_activity_data.dart';
-import 'package:suoke_life/core/services/network_service.dart';
+import 'package:suoke_life/lib/core/models/life_activity_data.dart';
+import 'package:suoke_life/lib/core/services/network_service.dart';
 
 class LifeServiceClient {
   final NetworkService _networkService;

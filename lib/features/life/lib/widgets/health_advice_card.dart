@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:suoke_life/core/utils/app_localizations.dart';
+import 'package:suoke_life/lib/core/utils/app_localizations.dart';
 
 class HealthAdviceCard extends StatelessWidget {
   const HealthAdviceCard({Key? key}) : super(key: key);

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:suoke_life/core/services/health_profile_service.dart';
-import 'package:suoke_life/core/models/health_profile.dart';
+import 'package:suoke_life/lib/core/services/health_profile_service.dart';
+import 'package:suoke_life/lib/core/models/health_profile.dart';
+import 'package:provider/provider.dart';
+import 'package:suoke_life/ui/common/common_scaffold.dart';
 
 class HealthDataInputPage extends StatefulWidget {
   const HealthDataInputPage({super.key});
@@ -25,7 +27,37 @@ class _HealthDataInputPageState extends State<HealthDataInputPage> {
     super.dispose();
   }
 
-  Future<void> _saveHealthData() async {
+  @override
+  Widget build(BuildContext context) {
+    return CommonScaffold(
+      title: 'Health Data Input',
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _heartRateController,
+              decoration: InputDecoration(labelText: 'Heart Rate'),
+            ),
+            TextField(
+              controller: _bloodPressureController,
+              decoration: InputDecoration(labelText: 'Blood Pressure'),
+            ),
+            TextField(
+              controller: _sleepDurationController,
+              decoration: InputDecoration(labelText: 'Sleep Duration'),
+            ),
+            ElevatedButton(
+              onPressed: _saveHealthData,
+              child: Text('Save'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _saveHealthData() {
     const userId = 'defaultUserId'; //  TODO:  替换为实际用户 ID
     final healthMetrics = {
       'heartRate': _heartRateController.text,
@@ -46,39 +78,5 @@ class _HealthDataInputPageState extends State<HealthDataInputPage> {
         SnackBar(content: Text('保存健康数据失败: $e')),
       );
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('健康数据录入')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: <Widget>[
-            TextField(
-              controller: _heartRateController,
-              decoration: const InputDecoration(labelText: '心率 (次/分钟)'),
-              keyboardType: TextInputType.number,
-            ),
-            TextField(
-              controller: _bloodPressureController,
-              decoration:
-                  const InputDecoration(labelText: '血压 (mmHg) 例如: 120/80'),
-            ),
-            TextField(
-              controller: _sleepDurationController,
-              decoration: const InputDecoration(labelText: '睡眠时长 (小时)'),
-              keyboardType: TextInputType.number,
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _saveHealthData,
-              child: const Text('保存'),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }

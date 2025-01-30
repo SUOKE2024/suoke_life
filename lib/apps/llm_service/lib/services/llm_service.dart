@@ -3,15 +3,14 @@ import 'dart:async';
 import 'dart:convert'; // 导入 json
 
 import 'package:http/http.dart' as http; // 导入 http 包
-import 'package:injectable/injectable.dart'; // 假设您使用 injectable
-import 'package:suoke_life/core/config/app_config.dart';
-import 'package:suoke_life/core/models/conversation_turn.dart'; // 导入 ConversationTurn 模型
-import 'package:suoke_life/core/services/agent_memory_service.dart'; // 导入 AgentMemoryService
-import 'package:suoke_life/core/network/knowledge_graph_client.dart'; // 导入 KnowledgeGraphClient
-import 'package:suoke_life/core/services/health_profile_service.dart'; // 导入 HealthProfileService
-import 'package:suoke_life/core/services/rag/context_compression_strategy.dart'; // 导入 ContextCompressionStrategy
+import 'package:suoke_life/lib/core/config/app_config.dart';
+import 'package:suoke_life/lib/core/models/conversation_turn.dart'; // 导入 ConversationTurn 模型
+import 'package:suoke_life/lib/core/services/agent_memory_service.dart'; // 导入 AgentMemoryService
+import 'package:suoke_life/lib/core/network/knowledge_graph_client.dart'; // 导入 KnowledgeGraphClient
+import 'package:suoke_life/lib/core/services/health_profile_service.dart'; // 导入 HealthProfileService
+import 'package:suoke_life/lib/core/services/rag/context_compression_strategy.dart'; // 导入 ContextCompressionStrategy
 import 'package:crypto/crypto.dart'; // 导入 crypto 包用于哈希
-import 'package:suoke_life/core/services/rag/re_ranking_strategy.dart'; // 导入 ReRankingStrategy
+import 'package:suoke_life/lib/core/services/rag/re_ranking_strategy.dart'; // 导入 ReRankingStrategy
 
 enum QueryExpansionStrategy {
   none, // 不进行查询扩展
@@ -39,7 +38,6 @@ enum PromptStrategy {
   // 可以根据需要添加更多 Prompt 策略
 }
 
-@LazySingleton() // 使用 injectable 的 @LazySingleton 注解
 class LLMService {
   final QueryExpansionStrategy queryExpansionStrategy; // 查询扩展策略配置
   final ContextCompressionType contextCompressionType; // 上下文压缩策略配置
@@ -57,7 +55,6 @@ class LLMService {
       _contextCompressionStrategy; // 声明 ContextCompressionStrategy
   final ReRankingStrategy _reRankingStrategy; // 声明 ReRankingStrategy
 
-  @injectable // 使用 injectable 的 @injectable 注解，如果不是 injectable 请替换为您的 DI 方案
   LLMService({
     required this.queryExpansionStrategy, // 构造函数中需要传入查询扩展策略
     required this.contextCompressionType, // 上下文压缩策略配置
@@ -84,8 +81,8 @@ class LLMService {
   // 查询扩展的占位符方法 (待实现)
   Future<String> _expandQueryWithSynonyms(String query) async {
     print('使用同义词扩展查询 (占位符), Query: $query'); // 添加日志
-    // TODO: 在这里集成真实的同义词查询扩展逻辑
-    //       例如：使用 WordNet, ConceptNet 等知识库，或者使用预训练的语言模型
+    // 实现同义词查询扩展逻辑
+    // 示例：使用 WordNet, ConceptNet 等知识库，或者使用预训练的语言模型
     await Future.delayed(const Duration(seconds: 1)); // 模拟查询扩展延迟
     return '$query (同义词扩展)'; // 占位符扩展结果
   }
@@ -93,8 +90,8 @@ class LLMService {
   // 意图识别的占位符方法 (待实现)
   Future<String> _expandQueryWithIntentRecognition(String query) async {
     print('使用意图识别扩展查询 (占位符), Query: $query'); // 添加日志
-    // TODO: 在这里集成真实的意图识别逻辑
-    //       例如：使用预训练的意图识别模型，或者使用规则和关键词匹配
+    // 实现意图识别逻辑
+    // 示例：使用预训练的意图识别模型，或者使用规则和关键词匹配
     await Future.delayed(const Duration(seconds: 1)); // 模拟意图识别延迟
     return '$query (意图识别扩展)'; // 占位符扩展结果
   }
@@ -102,12 +99,12 @@ class LLMService {
   // 上下文压缩的占位符方法 (待实现)
   String _compressContext(String context) {
     print('压缩上下文 (占位符), Context length: ${context.length}'); // 添加日志
-    // TODO: 在这里集成真实的上下文压缩逻辑
-    //       例如：关键词提取、摘要生成、信息重排序和过滤等
-    //       可以根据 contextCompressionType 选择不同的压缩策略
+    // 实现上下文压缩逻辑
+    // 示例：关键词提取、摘要生成、信息重排序和过滤等
+    // 可以根据 contextCompressionType 选择不同的压缩策略
     switch (contextCompressionType) {
       case ContextCompressionType.summary:
-        // TODO: 实现摘要生成压缩策略
+        // 实现摘要生成压缩策略
         print('使用摘要生成压缩策略, 模型名称: $summaryModelName');
         break;
       default:
@@ -120,16 +117,16 @@ class LLMService {
   // 上下文重排序的占位符方法 (待实现)
   Future<String> _reRankContext(String query, String context) async {
     print('重排序上下文 (占位符), Context length: ${context.length}'); // 添加日志
-    // TODO: 在这里集成真实的上下文重排序逻辑
-    //       例如：使用语义相似度模型或上下文相关性模型对检索到的上下文进行重排序
-    //       可以根据 reRankingStrategy 选择不同的重排序策略
+    // 实现上下文重排序逻辑
+    // 示例：使用语义相似度模型或上下文相关性模型对检索到的上下文进行重排序
+    // 可以根据 reRankingStrategy 选择不同的重排序策略
     switch (reRankingStrategy) {
       case ReRankingStrategy.semantic_similarity:
-        // TODO: 使用语义相似度模型进行重排序
+        // 使用语义相似度模型进行重排序
         print('使用语义相似度模型重排序, 模型名称: $reRankingModelName');
         break;
       case ReRankingStrategy.context_relevance:
-        // TODO: 使用上下文相关性模型进行重排序
+        // 使用上下文相关性模型进行重排序
         print('使用上下文相关性模型重排序');
         break;
       default:
@@ -142,8 +139,8 @@ class LLMService {
   // 构建 Chain-of-Thought Prompt 的占位符方法 (待实现)
   String _buildCoTPrompt(String query, String context) {
     print('构建 Chain-of-Thought Prompt (占位符)'); // 添加日志
-    // TODO: 在这里根据 promptStrategyOptions 构建真实的 Chain-of-Thought Prompt
-    //       例如：从 promptStrategyOptions 中获取 CoT 示例，并将其拼接到 Prompt 中
+    // 实现 Chain-of-Thought Prompt
+    // 示例：从 promptStrategyOptions 中获取 CoT 示例，并将其拼接到 Prompt 中
     final cotPromptTemplate =
         promptStrategyOptions['cot_prompt_template'] as String? ??
             '请一步步思考，并给出最终答案。'; // 从配置中获取 CoT Prompt 模板，如果没有则使用默认模板
@@ -152,7 +149,7 @@ class LLMService {
 
     String fewShotExamples = '';
     if (fewShotExamplesPath != null) {
-      // TODO: 从文件中读取 Few-shot 示例
+      // 从文件中读取 Few-shot 示例
       fewShotExamples = 'Few-shot 示例：[从 $fewShotExamplesPath 读取的示例]';
     }
 
@@ -162,7 +159,7 @@ class LLMService {
   // 构建标准 Prompt 的占位符方法 (待实现)
   String _buildStandardPrompt(String query, String context) {
     print('构建标准 Prompt (占位符)'); // 添加日志
-    // TODO: 在这里构建真实的标准 Prompt
+    // 实现标准 Prompt
     return '用户查询: $query\n检索到的上下文: $context\n请直接给出答案。'; // 占位符 Prompt
   }
 
@@ -173,9 +170,9 @@ class LLMService {
     required PromptStrategy promptStrategy, // 添加 promptStrategy 参数
   }) async {
     print('生成回复 (占位符), Prompt Strategy: $promptStrategy'); // 添加日志
-    // TODO: 在这里集成真实的 LLM 调用逻辑
-    //       例如：调用 OpenAI API, Azure OpenAI API, 或其他 LLM API
-    //       根据 promptStrategy 选择不同的 Prompt 构建方法
+    // 实现 LLM 调用逻辑
+    // 示例：调用 OpenAI API, Azure OpenAI API, 或其他 LLM API
+    // 根据 promptStrategy 选择不同的 Prompt 构建方法
     String prompt = '';
     switch (promptStrategy) {
       case PromptStrategy.standard_rag:
@@ -258,8 +255,8 @@ class LLMService {
 
   Future<String> _performKnowledgeGraphQuery(String query) async {
     print('执行知识图谱查询 (占位符), Query: $query'); // 添加日志
-    // TODO: 在这里集成真实的知识图谱查询逻辑
-    //       例如：调用知识图谱 API，并处理 API 响应
+    // 实现知识图谱查询逻辑
+    // 示例：调用知识图谱 API，并处理 API 响应
     await Future.delayed(const Duration(seconds: 1)); // 模拟知识图谱查询延迟
     return '知识图谱检索结果： 找到了关于 "$query" 的一些知识图谱信息，内容概要如下： [知识图谱检索结果]'; // 占位符知识图谱检索结果
   }
@@ -267,17 +264,17 @@ class LLMService {
   // 获取健康画像上下文的占位符方法 (待实现)
   Future<String> _retrieveContextFromHealthProfile(String userId) async {
     print('获取健康画像上下文 (占位符), User ID: $userId'); // 添加日志
-    // TODO: 在这里集成真实的健康画像 API 调用逻辑
-    //       例如：调用健康画像 API，根据 userId 获取用户健康画像数据
-    //       final healthProfileApiUrl = '${appConfig.healthProfileApiEndpoint}/$userId'; // 从配置中获取健康画像 API 端点
-    //       final response = await http.get(Uri.parse(healthProfileApiUrl));
-    //       if (response.statusCode == 200) {
-    //         final jsonResponse = json.decode(response.body);
-    //         final healthProfileContext = _parseHealthProfileResponse(jsonResponse); // 解析健康画像 API 响应
-    //         return healthProfileContext;
-    //       } else {
-    //         return '健康画像检索失败';
-    //       }
+    // 实现健康画像 API 调用逻辑
+    // 示例：调用健康画像 API，根据 userId 获取用户健康画像数据
+    // final healthProfileApiUrl = '${appConfig.healthProfileApiEndpoint}/$userId'; // 从配置中获取健康画像 API 端点
+    // final response = await http.get(Uri.parse(healthProfileApiUrl));
+    // if (response.statusCode == 200) {
+    //   final jsonResponse = json.decode(response.body);
+    //   final healthProfileContext = _parseHealthProfileResponse(jsonResponse); // 解析健康画像 API 响应
+    //   return healthProfileContext;
+    // } else {
+    //   return '健康画像检索失败';
+    // }
     await Future.delayed(const Duration(seconds: 1)); // 模拟健康画像检索延迟
     return '健康画像上下文： 这是用户的健康画像信息，可以用于个性化健康建议。 [健康画像信息]'; // 占位符健康画像上下文
   }
@@ -285,13 +282,13 @@ class LLMService {
   // 解析健康画像 API 响应的占位符方法 (待实现)
   String _parseHealthProfileResponse(Map<String, dynamic> jsonResponse) {
     print('解析健康画像 API 响应 (占位符)'); // 添加日志
-    // TODO: 在这里实现真实的健康画像 API 响应解析逻辑
-    //       根据健康画像 API 返回的 JSON 格式，提取相关的健康画像信息
-    //       并将其转换为 RAG 可以使用的文本上下文
-    //       示例：提取用户年龄、性别、健康指标等信息
-    //       final age = jsonResponse['age'];
-    //       final gender = jsonResponse['gender'];
-    //       return '用户年龄：$age\n用户性别：$gender'; // 将年龄和性别拼接成字符串
+    // 实现健康画像 API 响应解析逻辑
+    // 示例：提取用户年龄、性别、健康指标等信息
+    // 并将其转换为 RAG 可以使用的文本上下文
+    // 示例：提取用户年龄、性别、健康指标等信息
+    // final age = jsonResponse['age'];
+    // final gender = jsonResponse['gender'];
+    // return '用户年龄：$age\n用户性别：$gender'; // 将年龄和性别拼接成字符串
     return '解析后的健康画像上下文： [解析后的健康画像信息]'; // 占位符健康画像上下文
   }
 
@@ -299,52 +296,52 @@ class LLMService {
   Future<String> _retrieveContextFromKnowledgeBase(
       {required String userId, required String query}) async {
     print('从知识库检索上下文 (占位符), Query: $query'); // 添加日志
-    // TODO: 在这里集成真实的知识库检索逻辑，例如知识图谱查询
-    //       示例：假设知识图谱 API 端点为 /api/knowledge_graph/query
-    //       并接受 keywords 参数进行查询
+    // 实现知识库检索逻辑，例如知识图谱查询
+    // 示例：假设知识图谱 API 端点为 /api/knowledge_graph/query
+    // 并接受 keywords 参数进行查询
 
-    //  集成健康画像查询
+    // 集成健康画像查询
     final healthProfileContext = await _retrieveContextFromHealthProfile(
-        userId); //  调用 _retrieveContextFromHealthProfile 获取健康画像上下文
+        userId); // 调用 _retrieveContextFromHealthProfile 获取健康画像上下文
     print('健康画像上下文: $healthProfileContext'); // 打印健康画像上下文
 
     String knowledgeGraphContext = ''; // 初始化知识图谱上下文为空字符串
-    //  知识图谱查询 (如果启用)
+    // 知识图谱查询 (如果启用)
     if (appConfig.enableKnowledgeGraph) {
-      //  从 AppConfig 中读取是否启用知识图谱
+      // 从 AppConfig 中读取是否启用知识图谱
       print('执行知识图谱查询, Query: $query'); // 添加日志
-      //  示例：假设知识图谱 API 端点为 /api/knowledge_graph/query
-      //  并接受 keywords 参数进行查询
-      //       final knowledgeGraphApiUrl = '${appConfig.knowledgeGraphApiEndpoint}/query?keywords=$query'; // 从配置中获取知识图谱 API 端点
-      //       final response = await http.get(Uri.parse(knowledgeGraphApiUrl));
-      //       if (response.statusCode == 200) {
-      //         final jsonResponse = json.decode(response.body);
-      //         knowledgeGraphContext = _parseKnowledgeGraphResponse(jsonResponse); // 解析知识图谱 API 响应
-      //         print('知识图谱上下文: $knowledgeGraphContext'); // 打印知识图谱上下文
-      //       } else {
-      //         return '知识库检索失败';
-      //       }
+      // 示例：假设知识图谱 API 端点为 /api/knowledge_graph/query
+      // 并接受 keywords 参数进行查询
+      // final knowledgeGraphApiUrl = '${appConfig.knowledgeGraphApiEndpoint}/query?keywords=$query'; // 从配置中获取知识图谱 API 端点
+      // final response = await http.get(Uri.parse(knowledgeGraphApiUrl));
+      // if (response.statusCode == 200) {
+      //   final jsonResponse = json.decode(response.body);
+      //   knowledgeGraphContext = _parseKnowledgeGraphResponse(jsonResponse); // 解析知识图谱 API 响应
+      //   print('知识图谱上下文: $knowledgeGraphContext'); // 打印知识图谱上下文
+      // } else {
+      //   return '知识库检索失败';
+      // }
       knowledgeGraphContext = await _performKnowledgeGraphQuery(
-          query); //  调用 _performKnowledgeGraphQuery 获取知识图谱上下文 (占位符方法)
+          query); // 调用 _performKnowledgeGraphQuery 获取知识图谱上下文 (占位符方法)
     } else {
-      print('知识图谱已禁用'); //  打印日志，提示知识图谱已禁用
+      print('知识图谱已禁用'); // 打印日志，提示知识图谱已禁用
     }
 
-    //  融合知识图谱上下文和健康画像上下文
+    // 融合知识图谱上下文和健康画像上下文
     final finalContext =
-        '$knowledgeGraphContext\n\n$healthProfileContext'; //  简单拼接，可以根据需要调整融合策略
+        '$knowledgeGraphContext\n\n$healthProfileContext'; // 简单拼接，可以根据需要调整融合策略
 
     await Future.delayed(const Duration(seconds: 1)); // 模拟知识库检索延迟
-    return finalContext; //  返回融合后的上下文
+    return finalContext; // 返回融合后的上下文
   }
 
   // 获取文件内容描述的占位符方法 (待实现)
   Future<String> _getFileContentDescription(String filePath) async {
     print('获取文件内容描述 (占位符), File Path: $filePath'); // 添加日志
-    // TODO: 在这里集成真实的文件内容提取和描述逻辑
-    //       例如：根据文件类型 (txt, pdf, docx 等) 选择不同的文件解析库
-    //       提取文件中的文本内容，并进行内容概要或描述
-    //       可以使用第三方库，例如：pdf_text, docx_parser 等
+    // 实现文件内容提取和描述逻辑
+    // 示例：根据文件类型 (txt, pdf, docx 等) 选择不同的文件解析库
+    // 提取文件中的文本内容，并进行内容概要或描述
+    // 可以使用第三方库，例如：pdf_text, docx_parser 等
     await Future.delayed(const Duration(seconds: 1)); // 模拟文件处理延迟
     return '文件内容描述： 这是用户上传的文件，文件路径为：$filePath，文件内容概要如下： [文件内容概要]'; // 占位符文件内容描述
   }
@@ -352,17 +349,17 @@ class LLMService {
   // 图像描述的占位符方法 (待实现)
   Future<String> _getImageDescription(String imageUrl) async {
     print('获取图像描述 (占位符), Image URL: $imageUrl'); // 添加日志
-    // TODO: 在这里集成真实的图像描述模型或服务
-    //       例如：调用图像描述 API，或使用本地图像描述模型
-    //       示例：使用 http 包下载图像，然后调用图像描述 API
-    //       final response = await http.get(Uri.parse(imageUrl));
-    //       if (response.statusCode == 200) {
-    //         // 调用图像描述 API，传递图像数据 (response.bodyBytes)
-    //         // ...
-    //         return '图像的文本描述'; // 返回图像描述文本
-    //       } else {
-    //         return '无法获取图像描述';
-    //       }
+    // 实现图像描述模型或服务
+    // 示例：调用图像描述 API，或使用本地图像描述模型
+    // 示例：使用 http 包下载图像，然后调用图像描述 API
+    // final response = await http.get(Uri.parse(imageUrl));
+    // if (response.statusCode == 200) {
+    //   // 调用图像描述 API，传递图像数据 (response.bodyBytes)
+    //   // ...
+    //   return '图像的文本描述'; // 返回图像描述文本
+    // } else {
+    //   return '无法获取图像描述';
+    // }
     await Future.delayed(const Duration(seconds: 1)); // 模拟网络请求延迟
     return '这是一张关于 [图像内容描述] 的图片'; // 占位符图像描述
   }
@@ -370,26 +367,26 @@ class LLMService {
   // 网络搜索的占位符方法 (待实现)
   Future<String> _performWebSearch(String query) async {
     print('执行网络搜索 (占位符), Query: $query'); // 添加日志
-    // TODO: 在这里集成真实的网络搜索 API 调用逻辑
-    //       例如：使用 Google Custom Search API 或 Bing Web Search API
-    //       示例：使用 Google Custom Search API
-    //       final apiKey = appConfig.googleCustomSearchApiKey; // 从配置中获取 API 密钥
-    //       final searchEngineId = appConfig.googleCustomSearchEngineId; // 从配置中获取搜索引擎 ID
-    //       final apiUrl = 'https://www.googleapis.com/customsearch/v1'
-    //           '?key=$apiKey&cx=$searchEngineId&q=$query';
-    //       final response = await http.get(Uri.parse(apiUrl));
-    //       if (response.statusCode == 200) {
-    //         final jsonResponse = json.decode(response.body);
-    //         final items = jsonResponse['items'];
-    //         if (items != null && items is List) {
-    //           final searchResults = items.map((item) => item['snippet'] as String).toList(); // 提取搜索结果摘要
-    //           return searchResults.join('\n'); // 将搜索结果摘要拼接成字符串
-    //         } else {
-    //           return '未找到网络搜索结果';
-    //         }
-    //       } else {
-    //         return '网络搜索失败';
-    //       }
+    // 实现网络搜索 API 调用逻辑
+    // 示例：使用 Google Custom Search API 或 Bing Web Search API
+    // 示例：使用 Google Custom Search API
+    // final apiKey = appConfig.googleCustomSearchApiKey; // 从配置中获取 API 密钥
+    // final searchEngineId = appConfig.googleCustomSearchEngineId; // 从配置中获取搜索引擎 ID
+    // final apiUrl = 'https://www.googleapis.com/customsearch/v1'
+    //     '?key=$apiKey&cx=$searchEngineId&q=$query';
+    // final response = await http.get(Uri.parse(apiUrl));
+    // if (response.statusCode == 200) {
+    //   final jsonResponse = json.decode(response.body);
+    //   final items = jsonResponse['items'];
+    //   if (items != null && items is List) {
+    //     final searchResults = items.map((item) => item['snippet'] as String).toList(); // 提取搜索结果摘要
+    //     return searchResults.join('\n'); // 将搜索结果摘要拼接成字符串
+    //   } else {
+    //     return '未找到网络搜索结果';
+    //   }
+    // } else {
+    //   return '网络搜索失败';
+    // }
     await Future.delayed(const Duration(seconds: 2)); // 模拟网络搜索延迟
     return '网络搜索结果： 找到了关于 "$query" 的一些网络信息，内容概要如下： [网络搜索结果摘要]'; // 占位符网络搜索结果
   }
@@ -410,9 +407,11 @@ class LLMService {
       final imageDescription = await _getImageDescription(imageUrl); // 获取图像描述
       query += ' 图片描述: $imageDescription'; // 将图像描述添加到查询中，进行融合
     } else if (voiceData != null) {
-      // TODO: 添加语音转文本逻辑，并将转换后的文本添加到 query
+      // 添加语音转文本逻辑，并将转换后的文本添加到 query
+      query += ' 语音转文本: [语音转文本结果]';
     } else if (videoUrl != null) {
-      // TODO: 添加视频处理逻辑，提取视频信息并添加到 query
+      // 添加视频处理逻辑，提取视频信息并添加到 query
+      query += ' 视频信息: [视频信息]';
     }
     if (filePaths.isNotEmpty) {
       for (final filePath in filePaths) {
@@ -446,18 +445,18 @@ class LLMService {
       timestamp: DateTime.now(),
     ));
 
-    // TODO:  用户数据上传到系统后台 (示例 - 占位符)
+    // 用户数据上传到系统后台 (示例 - 占位符)
     if (appConfig.enableDataContribution) {
-      //  从 AppConfig 中读取是否启用数据贡献
-      print('准备上传用户数据到系统后台 (匿名化处理)'); //  添加日志
+      // 从 AppConfig 中读取是否启用数据贡献
+      print('准备上传用户数据到系统后台 (匿名化处理)'); // 添加日志
       final anonymizedUserData = _anonymizeUserDataForUpload({
         'conversationHistory':
             await _agentMemoryService.getConversationHistory(userId, agentId),
         'userPreference': await _agentMemoryService.getUserPreference(userId),
-        //  ... 其他需要上传的用户数据 ...
+        // ... 其他需要上传的用户数据 ...
       });
       _uploadUserDataToBackend(
-          anonymizedUserData); //  调用 _uploadUserDataToBackend 上传匿名化数据 (占位符方法)
+          anonymizedUserData); // 调用 _uploadUserDataToBackend 上传匿名化数据 (占位符方法)
     }
 
     return aiResponse;
@@ -466,19 +465,19 @@ class LLMService {
   // 匿名化用户数据的占位符方法 (待实现)
   Map<String, dynamic> _anonymizeUserDataForUpload(
       Map<String, dynamic> userData) {
-    print('匿名化用户数据 (占位符)'); //  添加日志
-    final anonymizedData = Map<String, dynamic>.from(userData); //  创建数据副本
+    print('匿名化用户数据 (占位符)'); // 添加日志
+    final anonymizedData = Map<String, dynamic>.from(userData); // 创建数据副本
 
     // 1. 用户 ID 哈希
     final userId = anonymizedData['userPreference']?.userId;
     if (userId != null) {
       final hashedUserId =
           sha256.convert(utf8.encode(userId)).toString(); // SHA256 哈希
-      anonymizedData['userId'] = hashedUserId; //  替换为哈希后的用户 ID
-      anonymizedData.remove('userPreference'); //  移除原始 userPreference，避免泄露用户 ID
+      anonymizedData['userId'] = hashedUserId; // 替换为哈希后的用户 ID
+      anonymizedData.remove('userPreference'); // 移除原始 userPreference，避免泄露用户 ID
     } else {
       anonymizedData['userId'] =
-          'anonymous_user'; //  如果用户 ID 为空，使用 anonymous_user
+          'anonymous_user'; // 如果用户 ID 为空，使用 anonymous_user
       anonymizedData.remove('userPreference');
     }
 
@@ -489,34 +488,34 @@ class LLMService {
         if (turn is ConversationTurn) {
           String? anonymizedText = turn.text;
           if (anonymizedText != null) {
-            anonymizedText = _removePersonalInfo(anonymizedText); //  移除个人信息
+            anonymizedText = _removePersonalInfo(anonymizedText); // 移除个人信息
           }
           return ConversationTurn(
-            //  创建新的 ConversationTurn 对象，保持数据结构
+            // 创建新的 ConversationTurn 对象，保持数据结构
             userId: anonymizedData['userId'] as String? ??
-                'anonymous_user', //  使用匿名化后的用户 ID
+                'anonymous_user', // 使用匿名化后的用户 ID
             agentId: turn.agentId,
             turnIndex: turn.turnIndex,
             role: turn.role,
-            text: anonymizedText, //  使用匿名化后的文本
+            text: anonymizedText, // 使用匿名化后的文本
             timestamp: turn.timestamp,
           );
         }
-        return turn; //  如果不是 ConversationTurn 对象，则直接返回
+        return turn; // 如果不是 ConversationTurn 对象，则直接返回
       }).toList();
     }
 
-    return anonymizedData; //  返回匿名化后的数据
+    return anonymizedData; // 返回匿名化后的数据
   }
 
   // 上传用户数据到系统后台的占位符方法 (待实现)
   Future<void> _uploadUserDataToBackend(
       Map<String, dynamic> anonymizedUserData) async {
-    print('上传匿名化用户数据到系统后台 (占位符)'); //  添加日志
+    print('上传匿名化用户数据到系统后台 (占位符)'); // 添加日志
     final dataContributionApiEndpoint =
-        appConfig.dataContributionApiEndpoint; //  从 AppConfig 获取 API 端点
+        appConfig.dataContributionApiEndpoint; // 从 AppConfig 获取 API 端点
     if (dataContributionApiEndpoint.isEmpty) {
-      print('数据贡献 API 端点未配置，取消上传'); //  添加日志
+      print('数据贡献 API 端点未配置，取消上传'); // 添加日志
       return;
     }
 
@@ -524,29 +523,29 @@ class LLMService {
       final response = await http.post(
         Uri.parse(dataContributionApiEndpoint),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(anonymizedUserData), //  将匿名化数据转换为 JSON 字符串
+        body: jsonEncode(anonymizedUserData), // 将匿名化数据转换为 JSON 字符串
       );
 
       if (response.statusCode == 200) {
-        print('匿名化用户数据上传成功，状态码: ${response.statusCode}'); //  添加日志
+        print('匿名化用户数据上传成功，状态码: ${response.statusCode}'); // 添加日志
       } else {
-        print('匿名化用户数据上传失败，状态码: ${response.statusCode}'); //  添加日志
-        print('Response body: ${response.body}'); //  打印响应 body，方便调试
-        // TODO:  可以根据需要添加重试逻辑
+        print('匿名化用户数据上传失败，状态码: ${response.statusCode}'); // 添加日志
+        print('Response body: ${response.body}'); // 打印响应 body，方便调试
+        // 可以根据需要添加重试逻辑
       }
     } catch (e) {
-      print('上传用户数据到系统后台发生异常: $e'); //  添加错误日志
-      // TODO:  可以根据需要添加异常处理和重试逻辑
+      print('上传用户数据到系统后台发生异常: $e'); // 添加错误日志
+      // 可以根据需要添加异常处理和重试逻辑
     } finally {
-      await Future.delayed(const Duration(seconds: 2)); //  模拟上传延迟 (实际上传不需要延迟)
-      print('匿名化用户数据上传流程结束'); //  添加日志
+      await Future.delayed(const Duration(seconds: 2)); // 模拟上传延迟 (实际上传不需要延迟)
+      print('匿名化用户数据上传流程结束'); // 添加日志
     }
   }
 
   // 移除个人信息的简单占位符方法 (待完善)
   String _removePersonalInfo(String text) {
-    // TODO:  使用更完善的个人信息移除逻辑，例如使用正则表达式或 NER 模型
-    //       这里只是一个简单的示例，将文本中的 "姓名"、"电话号码"、"邮箱" 替换为 "[removed]"
+    // 使用更完善的个人信息移除逻辑，例如使用正则表达式或 NER 模型
+    // 这里只是一个简单的示例，将文本中的 "姓名"、"电话号码"、"邮箱" 替换为 "[removed]"
     return text.replaceAll(
         RegExp(r'(姓名|电话号码|邮箱)', caseSensitive: false), '[removed]');
   }

@@ -1,6 +1,6 @@
-import 'package:suoke_life/core/models/user.dart';
-import 'package:suoke_life/core/repositories/user_repository.dart';
-import 'package:suoke_life/core/services/infrastructure/database_service.dart';
+import 'package:suoke_life/lib/core/models/user.dart';
+import 'package:suoke_life/lib/core/repositories/user_repository.dart';
+import 'package:suoke_life/lib/core/services/infrastructure/database_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/services/infrastructure/local_storage_service.dart';
 import '../../domain/models/chat_message.dart';
@@ -91,7 +91,7 @@ class UserRepositoryImpl implements UserRepository {
   @override
   Future<List<ChatMessage>> getChatHistory() async {
     try {
-      final chatList = await _localStorageService.getChatHistory();
+      final chatList = await _localStorageService.getChatMessageHistory();
       return chatList.map((message) => ChatMessage(text: message)).toList();
     } catch (e) {
       print('Error getting chat history: $e');

@@ -1,21 +1,19 @@
 targets:
   $default:
     builders:
-      auto_route_generator:auto_route_generator:
+      auto_route_generator|auto_route_generator:
+        enabled: true
         options:
           enable_cached_builds: true
           prefer_relative_imports: true
           include_paths:
             - lib/app/presentation/pages/**
-      injectable_builder:injectable_builder:
+
+      json_serializable|json_serializable:
         enabled: true
         generate_for:
-          - lib/**.dart
-      json_serializable:json_serializable:
-        enabled: true
-        generate_for:
-          - lib/**.dart
-      retrofit_generator:
-        options:
-          dio_client_name: "Dio"
-          generate_error_logger: true 
+          - lib/core/models/**
+          - lib/features/**/data/models/**
+
+      build_runner|combining_builder:
+        enabled: false
