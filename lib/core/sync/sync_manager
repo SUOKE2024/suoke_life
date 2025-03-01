@@ -1,0 +1,283 @@
+// lib/core/sync/sync_manager.dart
+import 'dart:async';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:logger/logger.dart';
+import '../storage/secure_storage.dart';
+import '../../data/datasources/local/database_helper.dart';
+import '../../data/datasources/remote/health_api_service.dart';
+import '../../data/models/health_data_model.dart';
+import '../network/network_info.dart';
+
+/// 同步配置
+class SyncConfig {
+  final Duration interval;
+  final int retryCount;
+  final Duration retryDelay;
+  final bool syncOnStartup;
+  final bool syncOnNetworkChange;
+  
+  const SyncConfig({
+    this.interval = const Duration(hours: 6),
+    this.retryCount = 3,
+    this.retryDelay = const Duration(minutes: 5),
+    this.syncOnStartup = true,
+    this.syncOnNetworkChange = true,
+  });
+}
+
+/// 同步结果
+class SyncResult {
+  final bool success;
+  final int synced;
+  final int failed;
+  final List<String> errors;
+  
+  SyncResult({
+    required this.success,
+    required this.synced,
+    required this.failed,
+    required this.errors,
+  });
+}
+
+/// 数据同步管理器
+class SyncManager {
+  final DatabaseHelper _dbHelper;
+  final HealthApiService _healthApiService;
+  final SecureStorage _secureStorage;
+  final NetworkInfo _networkInfo;
+  final Logger _logger;
+  final SyncConfig _config;
+  
+  // 同步状态
+  bool _isSyncing = false;
+  DateTime? _lastSyncTime;
+  Timer? _syncTimer;
+  StreamSubscription<ConnectivityResult>? _connectivitySubscription;
+  
+  SyncManager(
+    this._dbHelper,
+    this._healthApiService,
+    this._secureStorage,
+    this._networkInfo,
+    this._logger,
+    this._config,
+  ) {
+    _initialize();
+  }
+  
+  /// 初始化同步管理器
+  void _initialize() async {
+    // 加载上次同步时间
+    final lastSyncTimeStr = await _secureStorage.read('last_sync_time');
+    if (lastSyncTimeStr != null) {
+      _lastSyncTime = DateTime.parse(lastSyncTimeStr);
+    }
+    
+    // 设置定时同步
+    _setupSyncTimer();
+    
+    // 监听网络变化
+    if (_config.syncOnNetworkChange) {
+      _setupNetworkListener();
+    }
+    
+    // 启动时同步
+    if (_config.syncOnStartup) {
+      // 延迟几秒再执行，等应用完全启动
+      Future.delayed(const Duration(seconds: 5), () {
+        syncData();
+      });
+    }
+  }
+  
+  /// 设置同步定时器
+  void _setupSyncTimer() {
+    _syncTimer?.cancel();
+    _syncTimer = Timer.periodic(_config.interval, (_) {
+      syncData();
+    });
+  }
+  
+  /// 设置网络监听
+  void _setupNetworkListener() {
+    _connectivitySubscription?.cancel();
+    _connectivitySubscription = Connectivity().onConnectivityChanged.listen((result) {
+      if (result != ConnectivityResult.none) {
+        // 网络连接恢复，尝试同步
+        syncData();
+      }
+    });
+  }
+  
+  /// 执行数据同步
+  Future<SyncResult> syncData() async {
+    // 检查是否已经在同步
+    if (_isSyncing) {
+      return SyncResult(
+        success: false,
+        synced: 0,
+        failed: 0,
+        errors: ['同步已在进行中'],
+      );
+    }
+    
+    // 检查网络连接
+    final isConnected = await _networkInfo.isConnected;
+    if (!isConnected) {
+      return SyncResult(
+        success: false,
+        synced: 0,
+        failed: 0,
+        errors: ['无网络连接'],
+      );
+    }
+    
+    _isSyncing = true;
+    
+    try {
+      // 获取用户ID
+      final userId = await _secureStorage.read('user_id');
+      if (userId == null) {
+        _isSyncing = false;
+        return SyncResult(
+          success: false,
+          synced: 0,
+          failed: 0,
+          errors: ['用户未登录'],
+        );
+      }
+      
+      // 同步健康数据
+      final healthResult = await _syncHealthData(userId);
+      
+      // 更新最后同步时间
+      _lastSyncTime = DateTime.now();
+      await _secureStorage.write(
+        'last_sync_time',
+        _lastSyncTime!.toIso8601String(),
+      );
+      
+      _isSyncing = false;
+      return healthResult;
+    } catch (e) {
+      _logger.e('同步失败: $e');
+      _isSyncing = false;
+      return SyncResult(
+        success: false,
+        synced: 0,
+        failed: 0,
+        errors: ['同步过程发生错误: $e'],
+      );
+    }
+  }
+  
+  /// 同步健康数据
+  Future<SyncResult> _syncHealthData(String userId) async {
+    try {
+      // 获取未同步的健康数据
+      final pendingData = await _getPendingHealthData(userId);
+      
+      if (pendingData.isEmpty) {
+        return SyncResult(
+          success: true,
+          synced: 0,
+          failed: 0,
+          errors: [],
+        );
+      }
+      
+      // 批量上传数据
+      final result = await _healthApiService.saveBatchHealthData(pendingData);
+      
+      // 更新本地数据同步状态
+      final syncedIds = result.map((item) => item.id).toList();
+      await _updateSyncStatus(syncedIds);
+      
+      return SyncResult(
+        success: true,
+        synced: syncedIds.length,
+        failed: pendingData.length - syncedIds.length,
+        errors: [],
+      );
+    } catch (e) {
+      _logger.e('同步健康数据失败: $e');
+      return SyncResult(
+        success: false,
+        synced: 0,
+        failed: 0,
+        errors: ['同步健康数据失败: $e'],
+      );
+    }
+  }
+  
+  /// 获取未同步的健康数据
+  Future<List<HealthDataModel>> _getPendingHealthData(String userId) async {
+    final records = await _dbHelper.query(
+      'health_data',
+      where: 'user_id = ? AND synced = 0',
+      whereArgs: [userId],
+    );
+    
+    return records.map((record) => HealthDataModel.fromJson(record)).toList();
+  }
+  
+  /// 更新同步状态
+  Future<void> _updateSyncStatus(List<String> ids) async {
+    if (ids.isEmpty) return;
+    
+    // 批量更新
+    final batch = await _dbHelper.batch();
+    for (final id in ids) {
+      batch.update(
+        'health_data',
+        {'synced': 1},
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+    }
+    await batch.commit();
+  }
+  
+  /// 手动触发同步
+  Future<SyncResult> manualSync() {
+    return syncData();
+  }
+  
+  /// 获取上次同步时间
+  DateTime? getLastSyncTime() {
+    return _lastSyncTime;
+  }
+  
+  /// 释放资源
+  void dispose() {
+    _syncTimer?.cancel();
+    _connectivitySubscription?.cancel();
+  }
+}
+
+// 同步管理器提供者
+final syncManagerProvider = Provider<SyncManager>((ref) {
+  final dbHelper = ref.watch(databaseHelperProvider);
+  final healthApiService = ref.watch(healthApiServiceProvider);
+  final secureStorage = ref.watch(secureStorageProvider);
+  final networkInfo = ref.watch(networkInfoProvider);
+  final logger = Logger();
+  final config = SyncConfig();
+  
+  final manager = SyncManager(
+    dbHelper,
+    healthApiService,
+    secureStorage,
+    networkInfo,
+    logger,
+    config,
+  );
+  
+  ref.onDispose(() {
+    manager.dispose();
+  });
+  
+  return manager;
+});

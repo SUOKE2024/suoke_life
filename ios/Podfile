@@ -1,23 +1,8 @@
-# 根据目标平台选择其中一个：
-# 如果是iOS应用：
-if ENV['FLUTTER_TARGET_PLATFORM'] == 'macos'
-  platform :osx, '13.0'
-else
-  platform :ios, '13.0'
-end
-
-# 如果是macOS应用：
-# platform :osx, '13.0'
-use_frameworks! :linkage => :static
-
-# 禁用统计和CDN源
-ENV['COCOAPODS_DISABLE_STATS'] = 'true'
+# Uncomment this line to define a global platform for your project
+# platform :ios, '12.0'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
-
-# 使用清华大学的镜像源
-source 'https://cdn.cocoapods.org/'
 
 project 'Runner', {
   'Debug' => :debug,
@@ -44,104 +29,15 @@ flutter_ios_podfile_setup
 
 target 'Runner' do
   use_frameworks!
-  use_modular_headers!
-  
-  # Firebase dependencies
-  pod 'Firebase/Core', '11.6.0'
-  pod 'Firebase/Analytics', '11.6.0'
-  pod 'Firebase/Performance', '11.6.0'
-  pod 'Firebase/Crashlytics', '11.6.0'
-  # 其他 Firebase 相关依赖
 
-  # Flutter dependencies
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
-  
-  # 添加本地路径引用
-  # pod 'Firebase', :path => './FirebaseSDK/Firebase'
-  # pod 'FirebaseAnalytics', :path => './FirebaseSDK/FirebaseAnalytics'
-  # pod 'FirebaseMessaging', :path => './FirebaseSDK/FirebaseMessaging'
-  
-  pod 'Firebase/Messaging'
-  pod 'Stripe', '23.23.0'
-  pod 'StripePaymentsUI', '~> 23.23.0'
+  target 'RunnerTests' do
+    inherit! :search_paths
+  end
 end
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
-    
-    target.build_configurations.each do |config|
-      # 启用HTTP/2支持
-      config.build_settings['OTHER_CFLAGS'] = '-DFLUTTER_HTTP2_ENABLED=1'
-      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
-      
-      # 添加这些配置
-      config.build_settings['ENABLE_BITCODE'] = 'NO'
-      config.build_settings['SWIFT_VERSION'] = '5.0'
-      
-      # Add these lines for ARM64 support
-      config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
-      
-      # Add permissions descriptions
-      config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= [
-        '$(inherited)',
-        'PERMISSION_CAMERA=1',
-        'PERMISSION_PHOTOS=1',
-        'PERMISSION_LOCATION=1',
-        'PERMISSION_NOTIFICATIONS=1',
-        'PERMISSION_MICROPHONE=1',
-        'PERMISSION_SPEECH_RECOGNIZER=1',
-      ]
-      
-      # 确保所有target的iOS版本一致
-      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'  
-      # 添加Firebase所需配置
-      # config.build_settings['OTHER_LDFLAGS'] = '$(inherited) -ObjC'
-      
-      # 强制设置头文件搜索路径
-      config.build_settings['HEADER_SEARCH_PATHS'] = [
-        '$(inherited)',
-        '"${PODS_ROOT}/../Flutter"',
-        '"${PODS_ROOT}/sqflite_darwin"'
-      ]
-      
-      # 允许非模块化头文件
-      config.build_settings['CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES'] = 'YES'
-      
-      # 针对 flutter_local_notifications 的特殊处理
-      if target.name == 'flutter_local_notifications'
-        config.build_settings['GCC_WARN_INHIBIT_ALL_WARNINGS'] = 'YES'
-      end
-      
-      # 针对sqflite_darwin的特殊处理
-      if target.name == 'sqflite_darwin'
-        config.build_settings['GCC_WARN_INHIBIT_ALL_WARNINGS'] = 'YES'
-        config.build_settings['CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES'] = 'YES'
-        config.build_settings['CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER'] = 'NO'
-      end
-    end
-
-    if target.name == 'StripePaymentsUI'
-      target.build_configurations.each do |config|
-        config.build_settings['SWIFT_SUPPRESS_OBJC_EXTRA_MODULE_IMPORTS'] = 'YES'
-      end
-    end
-
-    if target.name == 'nanopb'
-      target.build_configurations.each do |config|
-        config.build_settings['CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER'] = 'NO'
-      end
-    end
-
-    if ['sqflite_darwin', 'nanopb', 'flutter_local_notifications'].include?(target.name)
-      target.build_configurations.each do |config|
-        config.build_settings['CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER'] = 'NO'
-        config.build_settings['HEADER_SEARCH_PATHS'] ||= '$(inherited)'
-        config.build_settings['HEADER_SEARCH_PATHS'] << ' "${PODS_ROOT}/../Flutter/Flutter.framework/Headers"'
-      end
-    end
   end
 end
-
-# 添加以下配置防止重复链接
-install! 'cocoapods', :disable_input_output_paths => true

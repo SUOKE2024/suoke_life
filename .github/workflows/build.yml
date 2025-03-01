@@ -1,0 +1,138 @@
+name: 应用构建
+
+on:
+  push:
+    branches: [ main, develop ]
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build-android:
+    name: 构建Android应用
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '11'
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.10.0'
+          channel: 'stable'
+
+      - name: 获取依赖
+        run: flutter pub get
+
+      - name: 运行构建前脚本
+        run: |
+          if [ -f ./scripts/prebuild.sh ]; then
+            chmod +x ./scripts/prebuild.sh
+            ./scripts/prebuild.sh
+          fi
+
+      - name: 设置Android签名
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          echo "${{ secrets.KEYSTORE_JKS_BASE64 }}" | base64 --decode > android/app/upload-keystore.jks
+          echo "${{ secrets.KEY_PROPERTIES }}" > android/key.properties
+
+      - name: 构建Android APK
+        run: flutter build apk --release
+
+      - name: 构建Android App Bundle
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: flutter build appbundle --release
+
+      - name: 上传APK制品
+        uses: actions/upload-artifact@v3
+        with:
+          name: suoke-life-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+
+      - name: 上传AAB制品
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: actions/upload-artifact@v3
+        with:
+          name: suoke-life-aab
+          path: build/app/outputs/bundle/release/app-release.aab
+
+  build-ios:
+    name: 构建iOS应用
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.10.0'
+          channel: 'stable'
+
+      - name: 获取依赖
+        run: flutter pub get
+
+      - name: 运行构建前脚本
+        run: |
+          if [ -f ./scripts/prebuild.sh ]; then
+            chmod +x ./scripts/prebuild.sh
+            ./scripts/prebuild.sh
+          fi
+
+      - name: 安装苹果证书和配置文件
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: Apple-Actions/import-codesign-certs@v1
+        with:
+          p12-file-base64: ${{ secrets.P12_BASE64 }}
+          p12-password: ${{ secrets.P12_PASSWORD }}
+
+      - name: 安装Provisioning Profile
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          echo "${{ secrets.PROVISIONING_PROFILE_BASE64 }}" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/profile.mobileprovision
+
+      - name: 构建iOS应用
+        run: flutter build ios --release --no-codesign
+
+      - name: 归档为IPA
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          cd ios
+          xcodebuild archive -workspace Runner.xcworkspace -scheme Runner -configuration Release -archivePath Runner.xcarchive
+          xcodebuild -exportArchive -archivePath Runner.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath . -allowProvisioningUpdates
+
+      - name: 上传IPA制品
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: actions/upload-artifact@v3
+        with:
+          name: suoke-life-ipa
+          path: ios/Runner.ipa
+
+  build-web:
+    name: 构建Web应用
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.10.0'
+          channel: 'stable'
+
+      - name: 获取依赖
+        run: flutter pub get
+
+      - name: 运行构建前脚本
+        run: |
+          if [ -f ./scripts/prebuild.sh ]; then
+            chmod +x ./scripts/prebuild.sh
+            ./scripts/prebuild.sh
+          fi
+
+      - name: 构建Web应用
+        run: flutter build web --release
+
+      - name: 上传Web制品
+        uses: actions/upload-artifact@v3
+        with:
+          name: suoke-life-web
+          path: build/web 

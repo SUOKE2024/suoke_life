@@ -37,5 +37,10 @@
   "what_question": "您有什么问题？",
   "profile_updated": "个人资料更新成功！",
   "please_enter_name": "请输入您的姓名",
-  "please_enter_email": "请输入您的邮箱"
+  "please_enter_email": "请输入您的邮箱",
+  "follow_system_language": "跟随系统语言",
+  "select_language": "选择语言",
+  "theme_settings": "主题设置",
+  "follow_system_theme": "跟随系统主题",
+  "language_settings": "语言设置"
 } 

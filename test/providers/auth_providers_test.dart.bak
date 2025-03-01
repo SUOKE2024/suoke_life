@@ -1,0 +1,149 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mockito/mockito.dart';
+import 'package:mockito/annotations.dart';
+
+import 'package:suoke_life/presentation/providers/auth_providers.dart';
+import 'package:suoke_life/core/storage/hydrated_provider.dart';
+
+// 使用Mockito生成模拟类
+@GenerateMocks([SharedPreferences])
+import 'auth_providers_test.mocks.dart';
+
+/// 测试容器扩展，用于重写Provider
+extension ProviderContainerX on ProviderContainer {
+  /// 覆盖Provider值的便捷方法
+  void overrideWithValue<T>(Provider<T> provider, T value) {
+    final overrides = <Override>[provider.overrideWithValue(value)];
+    // ignore: invalid_use_of_internal_member
+    overrideWithProviders(overrides);
+  }
+}
+
+void main() {
+  late ProviderContainer container;
+  
+  setUp(() {
+    // 创建新的Provider容器
+    container = ProviderContainer();
+  });
+  
+  tearDown(() {
+    // 释放容器资源
+    container.dispose();
+  });
+  
+  group('AuthStateNotifier Tests', () {
+    test('初始状态应该是未认证', () {
+      final authState = container.read(authStateProvider);
+      
+      expect(authState.isAuthenticated, false);
+      expect(authState.userId, isNull);
+      expect(authState.token, isNull);
+    });
+    
+    test('登录成功后状态应变为已认证', () async {
+      // 执行登录
+      final success = await container.read(authStateProvider.notifier)
+          .login('testuser', 'password');
+      
+      // 验证登录成功
+      expect(success, true);
+      
+      // 验证状态更新
+      final authState = container.read(authStateProvider);
+      expect(authState.isAuthenticated, true);
+      expect(authState.username, 'testuser');
+      expect(authState.userId, isNotNull);
+      expect(authState.token, isNotNull);
+      expect(authState.tokenExpiry, isNotNull);
+    });
+    
+    test('使用空用户名密码登录应该失败', () async {
+      // 执行登录
+      final success = await container.read(authStateProvider.notifier)
+          .login('', '');
+      
+      // 验证登录失败
+      expect(success, false);
+      
+      // 验证状态未变
+      final authState = container.read(authStateProvider);
+      expect(authState.isAuthenticated, false);
+    });
+    
+    test('登出后状态应变为未认证', () async {
+      // 先登录
+      await container.read(authStateProvider.notifier)
+          .login('testuser', 'password');
+      
+      // 执行登出
+      container.read(authStateProvider.notifier).logout();
+      
+      // 验证状态
+      final authState = container.read(authStateProvider);
+      expect(authState.isAuthenticated, false);
+      expect(authState.userId, isNull);
+      expect(authState.token, isNull);
+    });
+    
+    test('刷新Token应该更新Token和过期时间', () async {
+      // 先登录
+      await container.read(authStateProvider.notifier)
+          .login('testuser', 'password');
+      
+      // 记录当前Token
+      final oldToken = container.read(authStateProvider).token;
+      
+      // 刷新Token
+      final success = await container.read(authStateProvider.notifier)
+          .refreshToken();
+      
+      // 验证刷新成功
+      expect(success, true);
+      
+      // 验证Token已更新
+      final newToken = container.read(authStateProvider).token;
+      expect(newToken, isNot(equals(oldToken)));
+    });
+  });
+  
+  // 模拟依赖示例
+  group('Mocked Dependencies Tests', () {
+    test('可以覆盖依赖进行测试', () {
+      // 创建一个模拟服务
+      final mockService = MockApiService();
+      
+      // 覆盖Provider
+      container.overrideWithValue(apiServiceProvider, mockService);
+      
+      // 设置模拟行为
+      when(mockService.getData()).thenReturn('mocked data');
+      
+      // 验证使用了模拟依赖
+      final service = container.read(apiServiceProvider);
+      expect(service.getData(), 'mocked data');
+    });
+  });
+}
+
+// 模拟的API服务示例
+class MockApiService extends Mock implements ApiService {}
+
+// API服务接口示例
+abstract class ApiService {
+  String getData();
+}
+
+// API服务Provider示例
+final apiServiceProvider = Provider<ApiService>((ref) {
+  return RealApiService();
+});
+
+// 实际API服务实现示例
+class RealApiService implements ApiService {
+  @override
+  String getData() {
+    return 'real data';
+  }
+} 

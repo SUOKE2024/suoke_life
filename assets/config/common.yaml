@@ -1,0 +1,36 @@
+app:
+  name: "索克生活"
+  version: "1.0.0"
+
+aI:
+  models:
+    chat:
+      name: "doubao-pro-32k"
+      version: "ep-20241207123426-72mnv"
+      max_tokens: 32000
+    chat_pro:
+      name: "doubao-pro-128k"
+      version: "ep-20241207124106-4b5xn"
+      max_tokens: 128000
+    embedding:
+      name: "doubao-embedding"
+      version: "ep-20241207124339-rh46z"
+
+modules:
+  chat:
+    enabled: true
+    max_message_length: 1000
+    message_page_size: 20
+  
+  ai:
+    enabled: true
+    assistants:
+      - name: "小艾"
+        role: "生活助理"
+        model: "doubao-pro-32k"
+      - name: "老克" 
+        role: "知识助理"
+        model: "doubao-pro-128k"
+      - name: "小克"
+        role: "商务助理"
+        model: "doubao-pro-32k" 

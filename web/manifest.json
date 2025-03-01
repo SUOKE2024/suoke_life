@@ -1,6 +1,6 @@
 {
-    "name": "suoke_app",
-    "short_name": "suoke_app",
+    "name": "suoke_life",
+    "short_name": "suoke_life",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

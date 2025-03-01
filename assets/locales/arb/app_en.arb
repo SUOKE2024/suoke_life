@@ -1,0 +1,17 @@
+{
+  "@@locale": "en",
+  "hello": "Hello",
+  "@hello": {
+    "description": "通用问候语"
+  },
+  "welcome": "Welcome {name}!",
+  "@welcome": {
+    "description": "带参数的欢迎语",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "John"
+      }
+    }
+  }
+} 
