@@ -46,14 +46,14 @@ jobs:
         run: flutter build appbundle --release
 
       - name: 上传APK制品
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: suoke-life-apk
           path: build/app/outputs/flutter-apk/app-release.apk
 
       - name: 上传AAB制品
         if: startsWith(github.ref, 'refs/tags/v')
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: suoke-life-aab
           path: build/app/outputs/bundle/release/app-release.aab
@@ -103,7 +103,7 @@ jobs:
 
       - name: 上传IPA制品
         if: startsWith(github.ref, 'refs/tags/v')
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: suoke-life-ipa
           path: ios/Runner.ipa
@@ -132,7 +132,7 @@ jobs:
         run: flutter build web --release
 
       - name: 上传Web制品
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: suoke-life-web
           path: build/web 

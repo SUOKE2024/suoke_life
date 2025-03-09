@@ -53,7 +53,7 @@ jobs:
       
       # 下载之前构建的AAB文件
       - name: 下载AAB制品
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: suoke-life-aab
           path: build
@@ -83,7 +83,7 @@ jobs:
       
       # 下载之前构建的IPA文件
       - name: 下载IPA制品
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: suoke-life-ipa
           path: build
