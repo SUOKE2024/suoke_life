@@ -1,0 +1,153 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: auth-service-config
+  namespace: suoke
+data:
+  NODE_ENV: "production"
+  PORT: "3001"
+  LOG_LEVEL: "info"
+  AUDIT_LOG_ENABLED: "true"
+  JWT_SECRET: "your-jwt-secret-here-change-in-production"
+  JWT_EXPIRES_IN: "1d"
+  REFRESH_TOKEN_SECRET: "your-refresh-token-secret-here-change-in-production"
+  REFRESH_TOKEN_EXPIRES_IN: "7d"
+  REDIS_HOST: "redis"
+  REDIS_PORT: "6379"
+  RATE_LIMIT_WINDOW_MS: "60000"
+  RATE_LIMIT_MAX: "20"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-service
+  namespace: suoke
+  labels:
+    app: auth-service
+    role: auth
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: auth-service
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: auth-service
+        role: auth
+    spec:
+      containers:
+      - name: auth-service
+        image: suoke-registry-vpc.cn-hangzhou.cr.aliyuncs.com/suoke/auth:v1.0.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3001
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "200m"
+        env:
+        - name: NODE_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: auth-service-config
+              key: NODE_ENV
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              name: auth-service-config
+              key: PORT
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: auth-service-config
+              key: LOG_LEVEL
+        - name: AUDIT_LOG_ENABLED
+          valueFrom:
+            configMapKeyRef:
+              name: auth-service-config
+              key: AUDIT_LOG_ENABLED
+        - name: JWT_SECRET
+          valueFrom:
+            configMapKeyRef:
+              name: auth-service-config
+              key: JWT_SECRET
+        - name: JWT_EXPIRES_IN
+          valueFrom:
+            configMapKeyRef:
+              name: auth-service-config
+              key: JWT_EXPIRES_IN
+        - name: REFRESH_TOKEN_SECRET
+          valueFrom:
+            configMapKeyRef:
+              name: auth-service-config
+              key: REFRESH_TOKEN_SECRET
+        - name: REFRESH_TOKEN_EXPIRES_IN
+          valueFrom:
+            configMapKeyRef:
+              name: auth-service-config
+              key: REFRESH_TOKEN_EXPIRES_IN
+        - name: REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: auth-service-config
+              key: REDIS_HOST
+        - name: REDIS_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: auth-service-config
+              key: REDIS_PORT
+        - name: RATE_LIMIT_WINDOW_MS
+          valueFrom:
+            configMapKeyRef:
+              name: auth-service-config
+              key: RATE_LIMIT_WINDOW_MS
+        - name: RATE_LIMIT_MAX
+          valueFrom:
+            configMapKeyRef:
+              name: auth-service-config
+              key: RATE_LIMIT_MAX
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3001
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 3001
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+      imagePullSecrets:
+      - name: aliyun-registry-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service
+  namespace: suoke
+  labels:
+    app: auth-service
+spec:
+  type: NodePort
+  ports:
+  - port: 3001
+    targetPort: 3001
+    nodePort: 30001
+    protocol: TCP
+    name: http
+  selector:
+    app: auth-service
