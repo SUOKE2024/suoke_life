@@ -1,35 +1,33 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: auth-service-config
+  name: api-gateway-config
   namespace: suoke
 data:
   NODE_ENV: "production"
-  PORT: "3001"
+  PORT: "3002"
   LOG_LEVEL: "info"
   AUDIT_LOG_ENABLED: "true"
-  JWT_SECRET: "your-jwt-secret-here-change-in-production"
-  JWT_EXPIRES_IN: "1d"
-  REFRESH_TOKEN_SECRET: "your-refresh-token-secret-here-change-in-production"
-  REFRESH_TOKEN_EXPIRES_IN: "7d"
-  REDIS_HOST: "redis"
-  REDIS_PORT: "6379"
+  STRUCTURED_LOGGING: "true"
+  AUTH_SERVICE_URL: "http://auth-service:3001"
+  USER_SERVICE_URL: "http://user-service:3002"
   RATE_LIMIT_WINDOW_MS: "60000"
-  RATE_LIMIT_MAX: "20"
+  RATE_LIMIT_MAX: "100"
+  CORS_ORIGIN: "*"
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-service
+  name: api-gateway
   namespace: suoke
   labels:
-    app: auth-service
-    role: auth
+    app: api-gateway
+    role: api-gateway
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: auth-service
+      app: api-gateway
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -38,118 +36,128 @@ spec:
   template:
     metadata:
       labels:
-        app: auth-service
-        role: auth
+        app: api-gateway
+        role: api-gateway
     spec:
       nodeSelector:
         kubernetes.io/hostname: suoke-core-np
       containers:
-      - name: auth-service
-        image: suoke-registry-vpc.cn-hangzhou.cr.aliyuncs.com/suoke/auth:v1.0.0
+      - name: api-gateway
+        image: suoke-registry-vpc.cn-hangzhou.cr.aliyuncs.com/suoke/api-gateway:v1.0.0
         imagePullPolicy: Always
         ports:
-        - containerPort: 3001
+        - containerPort: 3000
         resources:
           requests:
             memory: "256Mi"
             cpu: "100m"
           limits:
             memory: "512Mi"
-            cpu: "200m"
+            cpu: "300m"
         env:
         - name: NODE_ENV
           valueFrom:
             configMapKeyRef:
-              name: auth-service-config
+              name: api-gateway-config
               key: NODE_ENV
         - name: PORT
           valueFrom:
             configMapKeyRef:
-              name: auth-service-config
+              name: api-gateway-config
               key: PORT
         - name: LOG_LEVEL
           valueFrom:
             configMapKeyRef:
-              name: auth-service-config
+              name: api-gateway-config
               key: LOG_LEVEL
         - name: AUDIT_LOG_ENABLED
           valueFrom:
             configMapKeyRef:
-              name: auth-service-config
+              name: api-gateway-config
               key: AUDIT_LOG_ENABLED
-        - name: JWT_SECRET
+        - name: STRUCTURED_LOGGING
           valueFrom:
             configMapKeyRef:
-              name: auth-service-config
-              key: JWT_SECRET
-        - name: JWT_EXPIRES_IN
+              name: api-gateway-config
+              key: STRUCTURED_LOGGING
+        - name: AUTH_SERVICE_URL
           valueFrom:
             configMapKeyRef:
-              name: auth-service-config
-              key: JWT_EXPIRES_IN
-        - name: REFRESH_TOKEN_SECRET
+              name: api-gateway-config
+              key: AUTH_SERVICE_URL
+        - name: USER_SERVICE_URL
           valueFrom:
             configMapKeyRef:
-              name: auth-service-config
-              key: REFRESH_TOKEN_SECRET
-        - name: REFRESH_TOKEN_EXPIRES_IN
-          valueFrom:
-            configMapKeyRef:
-              name: auth-service-config
-              key: REFRESH_TOKEN_EXPIRES_IN
-        - name: REDIS_HOST
-          valueFrom:
-            configMapKeyRef:
-              name: auth-service-config
-              key: REDIS_HOST
-        - name: REDIS_PORT
-          valueFrom:
-            configMapKeyRef:
-              name: auth-service-config
-              key: REDIS_PORT
+              name: api-gateway-config
+              key: USER_SERVICE_URL
         - name: RATE_LIMIT_WINDOW_MS
           valueFrom:
             configMapKeyRef:
-              name: auth-service-config
+              name: api-gateway-config
               key: RATE_LIMIT_WINDOW_MS
         - name: RATE_LIMIT_MAX
           valueFrom:
             configMapKeyRef:
-              name: auth-service-config
+              name: api-gateway-config
               key: RATE_LIMIT_MAX
+        - name: CORS_ORIGIN
+          valueFrom:
+            configMapKeyRef:
+              name: api-gateway-config
+              key: CORS_ORIGIN
         livenessProbe:
           httpGet:
             path: /health
-            port: 3001
+            port: 3000
           initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 5
           failureThreshold: 3
         readinessProbe:
           httpGet:
-            path: /ready
-            port: 3001
+            path: /health/ready
+            port: 3000
           initialDelaySeconds: 10
           periodSeconds: 5
           timeoutSeconds: 3
-          failureThreshold: 3
+          failureThreshold: 2
       imagePullSecrets:
       - name: aliyun-registry-secret
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-service
+  name: api-gateway
   namespace: suoke
   labels:
-    app: auth-service
+    app: api-gateway
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
-  - port: 3001
-    targetPort: 3001
-    nodePort: 30001
+  - port: 80
+    targetPort: 3002
     protocol: TCP
     name: http
   selector:
-    app: auth-service
+    app: api-gateway
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: api-gateway
+  namespace: suoke
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+  - host: api.suoke.life
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: api-gateway
+            port:
+              number: 80
