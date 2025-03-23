@@ -1,0 +1,129 @@
+name: 测试
+
+on:
+  pull_request:
+    branches: [ main, master ]
+    paths:
+      - 'services/**'
+  workflow_dispatch:
+    inputs:
+      service:
+        description: '要测试的服务'
+        required: true
+        default: 'api-gateway'
+        type: choice
+        options:
+          - api-gateway
+          - rag-service
+          - user-service
+          - content-service
+
+env:
+  REGISTRY_SERVER: registry.cn-hangzhou.aliyuncs.com
+  REGISTRY_NAMESPACE: suoke
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      services: ${{ steps.filter.outputs.changes }}
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: 检测变更的服务
+        id: filter
+        uses: dorny/paths-filter@v2
+        with:
+          filters: |
+            api-gateway:
+              - 'services/api-gateway/**'
+            rag-service:
+              - 'services/rag-service/**'
+            user-service:
+              - 'services/user-service/**'
+            content-service:
+              - 'services/content-service/**'
+
+  lint-and-build:
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: ${{ github.event_name == 'workflow_dispatch' || needs.detect-changes.outputs.services != '[]' }}
+    strategy:
+      matrix:
+        service: ${{ github.event_name == 'workflow_dispatch' && fromJSON(format('["{}"]', github.event.inputs.service)) || fromJSON(needs.detect-changes.outputs.services) }}
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v3
+
+      - name: 设置Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: 验证Dockerfile
+        run: |
+          cd services/${{ matrix.service }}
+          if [ ! -f "Dockerfile" ]; then
+            echo "::error::找不到Dockerfile"
+            exit 1
+          fi
+          
+          echo "Dockerfile存在，进行结构验证..."
+          # 简单的语法检查，如果文件无法解析则会失败
+          docker buildx imagetools inspect --raw ./Dockerfile || (echo "::error::Dockerfile验证失败" && exit 1)
+          echo "::notice::Dockerfile验证通过"
+
+      - name: 构建镜像（不推送）
+        uses: docker/build-push-action@v4
+        with:
+          context: ./services/${{ matrix.service }}
+          push: false
+          tags: ${{ matrix.service }}:test
+          load: true
+          cache-from: type=registry,ref=${{ env.REGISTRY_SERVER }}/${{ env.REGISTRY_NAMESPACE }}/${{ matrix.service }}:cache
+
+      - name: 验证API Gateway接口（如果适用）
+        if: ${{ matrix.service == 'api-gateway' }}
+        run: |
+          echo "准备测试API Gateway接口..."
+          
+          # 启动容器进行测试
+          docker run -d --name api-gateway-test -p 3000:3000 -e JWT_SECRET=test_secret ${{ matrix.service }}:test
+          
+          # 等待服务启动
+          sleep 10
+          
+          # 检查健康检查端点
+          HEALTH_STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/health)
+          if [ "$HEALTH_STATUS" != "200" ]; then
+            echo "::error::健康检查失败，返回状态码 $HEALTH_STATUS"
+            docker logs api-gateway-test
+            docker stop api-gateway-test
+            docker rm api-gateway-test
+            exit 1
+          fi
+          
+          echo "::notice::API Gateway健康检查通过"
+          
+          # 清理
+          docker stop api-gateway-test
+          docker rm api-gateway-test
+
+      - name: 验证RAG服务（如果适用）
+        if: ${{ matrix.service == 'rag-service' }}
+        run: |
+          echo "准备测试RAG服务..."
+          
+          # 不真正运行测试，因为需要依赖其他服务和数据
+          echo "::notice::RAG服务构建验证通过"
+
+      - name: 测试结果通知
+        if: always()
+        run: |
+          if [ "${{ job.status }}" == "success" ]; then
+            echo "::notice::✅ 服务 ${{ matrix.service }} 测试通过"
+          else
+            echo "::error::❌ 服务 ${{ matrix.service }} 测试失败"
+          fi 

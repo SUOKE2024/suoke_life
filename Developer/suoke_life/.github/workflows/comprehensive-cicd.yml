@@ -1,0 +1,346 @@
+name: 索克生活APP全面CI/CD
+
+on:
+  push:
+    branches: 
+      - main
+      - master
+      - dev
+    paths:
+      - 'services/**'
+      - '.github/workflows/comprehensive-cicd.yml'
+  pull_request:
+    branches: 
+      - main
+      - master
+      - dev
+    paths:
+      - 'services/**'
+  workflow_dispatch:
+    inputs:
+      services:
+        description: '要部署的服务（多个服务请用逗号分隔）'
+        required: true
+        default: 'all'
+        type: string
+      environment:
+        description: '部署环境'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - development
+          - staging
+          - production
+
+env:
+  REGISTRY_SERVER: registry.cn-hangzhou.aliyuncs.com
+  REGISTRY_NAMESPACE: suoke
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
+    outputs:
+      services: ${{ steps.filter.outputs.changes }}
+      any_changes: ${{ steps.check-changes.outputs.any_changes }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: 检测变更的服务
+        id: filter
+        uses: dorny/paths-filter@v2
+        with:
+          filters: |
+            api-gateway:
+              - 'services/api-gateway/**'
+            rag-service:
+              - 'services/rag-service/**'
+            user-service:
+              - 'services/user-service/**'
+            content-service:
+              - 'services/content-service/**'
+            voice-service:
+              - 'services/voice-service/**'
+            web-search-service:
+              - 'services/web-search-service/**'
+            agent-coordinator-service:
+              - 'services/agent-coordinator-service/**'
+            auth-service:
+              - 'services/auth-service/**'
+            
+      - name: 检查是否有服务变更
+        id: check-changes
+        run: |
+          if [[ "${{ steps.filter.outputs.changes }}" != "[]" ]]; then
+            echo "any_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "any_changes=false" >> $GITHUB_OUTPUT
+          fi
+
+  validate-services:
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: github.event_name == 'pull_request' && needs.detect-changes.outputs.any_changes == 'true'
+    strategy:
+      matrix:
+        service: ${{ fromJSON(needs.detect-changes.outputs.services) }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: 验证服务结构
+        run: |
+          SERVICE_DIR="services/${{ matrix.service }}"
+          echo "验证服务 ${{ matrix.service }}"
+          
+          # 检查Dockerfile是否存在
+          if [ ! -f "$SERVICE_DIR/Dockerfile" ]; then
+            echo "::error::服务 ${{ matrix.service }} 缺少Dockerfile"
+            exit 1
+          fi
+          
+          # 检查服务配置是否存在
+          if [ ! -f "scripts/deploy/kubernetes/${{ matrix.service }}.yaml" ] && [ ! -f "scripts/deploy/kubernetes/${{ matrix.service }}-simplified.yaml" ]; then
+            echo "::warning::服务 ${{ matrix.service }} 缺少部署配置文件"
+          fi
+          
+          echo "服务 ${{ matrix.service }} 验证通过"
+
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    needs: [detect-changes]
+    if: |
+      (github.event_name == 'push' && needs.detect-changes.outputs.any_changes == 'true') ||
+      (github.event_name == 'workflow_dispatch')
+    strategy:
+      matrix:
+        service: ${{ github.event_name == 'workflow_dispatch' && (github.event.inputs.services == 'all' && fromJSON('["api-gateway", "rag-service", "user-service", "content-service", "voice-service", "web-search-service", "agent-coordinator-service", "auth-service"]') || fromJSON(format('["{}"]', github.event.inputs.services))) || fromJSON(needs.detect-changes.outputs.services) }}
+        environment: ${{ github.event_name == 'workflow_dispatch' && fromJSON(format('["{}"]', github.event.inputs.environment)) || fromJSON('["production"]') }}
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v3
+
+      - name: 处理多个服务（如果输入逗号分隔的列表）
+        id: parse-services
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.services != 'all' && contains(github.event.inputs.services, ',')
+        run: |
+          SERVICES_JSON="["
+          for service in $(echo "${{ github.event.inputs.services }}" | tr ',' '\n'); do
+            if [ -z "$service" ]; then continue; fi
+            if [ "$SERVICES_JSON" != "[" ]; then SERVICES_JSON="$SERVICES_JSON,"; fi
+            SERVICES_JSON="$SERVICES_JSON\"$(echo $service | xargs)\""
+          done
+          SERVICES_JSON="$SERVICES_JSON]"
+          echo "services_json=$SERVICES_JSON" >> $GITHUB_OUTPUT
+          echo "已解析服务列表: $SERVICES_JSON"
+          
+      - name: 设置矩阵服务
+        id: set-matrix-service
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.services != 'all' && contains(github.event.inputs.services, ',')
+        run: |
+          echo "单服务模式: ${{ matrix.service }}"
+          # 仅在解析的服务列表中找到当前服务时继续
+          if [[ ${{ steps.parse-services.outputs.services_json }} == *"\"${{ matrix.service }}\""* ]]; then
+            echo "服务 ${{ matrix.service }} 在部署列表中，继续处理"
+            echo "valid=true" >> $GITHUB_OUTPUT
+          else
+            echo "服务 ${{ matrix.service }} 不在部署列表中，跳过"
+            echo "valid=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 检查服务目录存在
+        id: check-service
+        if: ${{ !contains(github.event.inputs.services, ',') || steps.set-matrix-service.outputs.valid == 'true' || github.event.inputs.services == 'all' || github.event_name == 'push' }}
+        run: |
+          if [ ! -d "services/${{ matrix.service }}" ]; then
+            echo "::error::服务目录不存在: services/${{ matrix.service }}"
+            echo "exists=false" >> $GITHUB_OUTPUT
+            exit 1
+          else
+            echo "exists=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 检查Dockerfile
+        if: steps.check-service.outputs.exists == 'true'
+        run: |
+          if [ ! -f "services/${{ matrix.service }}/Dockerfile" ]; then
+            echo "::error::Dockerfile不存在: services/${{ matrix.service }}/Dockerfile"
+            exit 1
+          fi
+
+      - name: 设置时间戳
+        id: timestamp
+        if: steps.check-service.outputs.exists == 'true'
+        run: |
+          echo "timestamp=$(date +%Y%m%d%H%M)" >> $GITHUB_OUTPUT
+
+      - name: 设置镜像标签
+        id: set-image
+        if: steps.check-service.outputs.exists == 'true'
+        run: |
+          echo "image_tag=${{ steps.timestamp.outputs.timestamp }}-${{ matrix.environment }}" >> $GITHUB_OUTPUT
+          echo "full_image_name=${{ env.REGISTRY_SERVER }}/${{ env.REGISTRY_NAMESPACE }}/${{ matrix.service }}:${{ steps.timestamp.outputs.timestamp }}-${{ matrix.environment }}" >> $GITHUB_OUTPUT
+          echo "cache_image=${{ env.REGISTRY_SERVER }}/${{ env.REGISTRY_NAMESPACE }}/${{ matrix.service }}:cache" >> $GITHUB_OUTPUT
+
+      - name: 登录阿里云容器镜像服务
+        if: steps.check-service.outputs.exists == 'true'
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY_SERVER }}
+          username: ${{ secrets.ALIYUN_REGISTRY_USERNAME }}
+          password: ${{ secrets.ALIYUN_REGISTRY_PASSWORD }}
+
+      - name: 设置Docker Buildx
+        if: steps.check-service.outputs.exists == 'true'
+        uses: docker/setup-buildx-action@v2
+
+      - name: 构建并推送镜像
+        if: steps.check-service.outputs.exists == 'true'
+        id: build-push
+        uses: docker/build-push-action@v4
+        with:
+          context: ./services/${{ matrix.service }}
+          push: true
+          tags: ${{ steps.set-image.outputs.full_image_name }}
+          cache-from: type=registry,ref=${{ steps.set-image.outputs.cache_image }}
+          cache-to: type=registry,ref=${{ steps.set-image.outputs.cache_image }},mode=max
+
+      - name: 设置Kubernetes配置
+        if: steps.check-service.outputs.exists == 'true' && steps.build-push.outcome == 'success' && github.event_name != 'pull_request'
+        run: |
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 --decode > $HOME/.kube/config
+          chmod 600 $HOME/.kube/config
+
+      - name: 准备部署配置
+        if: steps.check-service.outputs.exists == 'true' && steps.build-push.outcome == 'success' && github.event_name != 'pull_request'
+        id: prepare-config
+        run: |
+          # 创建临时目录
+          mkdir -p k8s-temp
+          
+          # 确定使用哪个部署配置
+          STANDARD_TEMPLATE="scripts/deploy/kubernetes/${{ matrix.service }}.yaml"
+          SIMPLIFIED_TEMPLATE="scripts/deploy/kubernetes/${{ matrix.service }}-simplified.yaml"
+          
+          if [ -f "$STANDARD_TEMPLATE" ]; then
+            cp "$STANDARD_TEMPLATE" "k8s-temp/deployment.yaml"
+            echo "template_used=$STANDARD_TEMPLATE" >> $GITHUB_OUTPUT
+          elif [ -f "$SIMPLIFIED_TEMPLATE" ]; then
+            cp "$SIMPLIFIED_TEMPLATE" "k8s-temp/deployment.yaml"
+            echo "template_used=$SIMPLIFIED_TEMPLATE" >> $GITHUB_OUTPUT
+          else
+            echo "::error::找不到部署配置文件"
+            exit 1
+          fi
+          
+          # 设置命名空间
+          if [ "${{ matrix.environment }}" == "production" ]; then
+            echo "namespace=suoke" >> $GITHUB_OUTPUT
+          else
+            echo "namespace=suoke-${{ matrix.environment }}" >> $GITHUB_OUTPUT
+          fi
+          
+          # 更新镜像标签
+          sed -i "s|image:.*|image: ${{ steps.set-image.outputs.full_image_name }}|g" "k8s-temp/deployment.yaml"
+          
+          # 根据服务需要创建或更新ConfigMap
+          case "${{ matrix.service }}" in
+            "api-gateway")
+              # 检查ConfigMap是否存在
+              if kubectl get configmap ${{ matrix.service }}-config -n $(cat $GITHUB_OUTPUT | grep "namespace=" | cut -d= -f2) 2>/dev/null; then
+                kubectl delete configmap ${{ matrix.service }}-config -n $(cat $GITHUB_OUTPUT | grep "namespace=" | cut -d= -f2)
+              fi
+              
+              # 创建包含JWT密钥的ConfigMap
+              kubectl create configmap ${{ matrix.service }}-config \
+                --from-literal=JWT_SECRET="${{ secrets.JWT_SECRET }}" \
+                -n $(cat $GITHUB_OUTPUT | grep "namespace=" | cut -d= -f2)
+              ;;
+            "rag-service")
+              # 特定于RAG服务的配置可在这里添加
+              ;;
+          esac
+
+      - name: 部署到Kubernetes
+        if: steps.check-service.outputs.exists == 'true' && steps.build-push.outcome == 'success' && github.event_name != 'pull_request' && steps.prepare-config.outcome == 'success'
+        run: |
+          # 确保命名空间存在
+          kubectl get namespace ${{ steps.prepare-config.outputs.namespace }} 2>/dev/null || kubectl create namespace ${{ steps.prepare-config.outputs.namespace }}
+          
+          # 应用部署配置
+          kubectl apply -f k8s-temp/deployment.yaml -n ${{ steps.prepare-config.outputs.namespace }}
+          
+          # 等待部署完成
+          echo "等待部署完成..."
+          SERVICE_NAME=$(grep -o "name: .*" k8s-temp/deployment.yaml | head -1 | cut -d: -f2 | tr -d ' ')
+          
+          # 如果文件中没有找到服务名，则使用当前服务名
+          if [ -z "$SERVICE_NAME" ]; then
+            SERVICE_NAME="${{ matrix.service }}"
+          fi
+          
+          # 等待部署成功
+          kubectl rollout status deployment/$SERVICE_NAME -n ${{ steps.prepare-config.outputs.namespace }} --timeout=300s
+          
+          # 显示部署状态
+          echo "部署状态:"
+          kubectl get deployment $SERVICE_NAME -n ${{ steps.prepare-config.outputs.namespace }}
+          
+          # 显示Pod状态
+          echo "Pod状态:"
+          kubectl get pods -n ${{ steps.prepare-config.outputs.namespace }} -l app=$SERVICE_NAME
+        
+      - name: 验证部署
+        if: steps.check-service.outputs.exists == 'true' && steps.build-push.outcome == 'success' && github.event_name != 'pull_request' && steps.prepare-config.outcome == 'success'
+        run: |
+          # 等待服务就绪
+          sleep 30
+          
+          SERVICE_NAME=$(grep -o "name: .*" k8s-temp/deployment.yaml | head -1 | cut -d: -f2 | tr -d ' ')
+          
+          # 如果文件中没有找到服务名，则使用当前服务名
+          if [ -z "$SERVICE_NAME" ]; then
+            SERVICE_NAME="${{ matrix.service }}"
+          fi
+          
+          # 获取Pod状态
+          READY_PODS=$(kubectl get pods -n ${{ steps.prepare-config.outputs.namespace }} -l app=$SERVICE_NAME -o jsonpath='{.items[?(@.status.phase=="Running")].metadata.name}')
+          
+          if [ -z "$READY_PODS" ]; then
+            echo "服务未能成功部署，检查Pod日志:"
+            FAILED_POD=$(kubectl get pods -n ${{ steps.prepare-config.outputs.namespace }} -l app=$SERVICE_NAME -o jsonpath='{.items[0].metadata.name}')
+            kubectl logs $FAILED_POD -n ${{ steps.prepare-config.outputs.namespace }}
+            exit 1
+          else
+            echo "服务已成功部署。"
+            POD_NAME=$(echo $READY_PODS | cut -d' ' -f1)
+            echo "Pod日志:"
+            kubectl logs $POD_NAME -n ${{ steps.prepare-config.outputs.namespace }} --tail=20
+          fi
+          
+          # 显示服务信息
+          echo "服务信息:"
+          kubectl get service $SERVICE_NAME -n ${{ steps.prepare-config.outputs.namespace }}
+          
+          # 如果有Ingress，显示Ingress信息
+          if kubectl get ingress -n ${{ steps.prepare-config.outputs.namespace }} | grep -q "$SERVICE_NAME"; then
+            echo "Ingress信息:"
+            kubectl get ingress -n ${{ steps.prepare-config.outputs.namespace }} -l app=$SERVICE_NAME
+          fi
+          
+      - name: 部署结果通知
+        if: steps.check-service.outputs.exists == 'true' && always()
+        run: |
+          RESULT="${{ job.status }}"
+          SERVICE="${{ matrix.service }}"
+          ENVIRONMENT="${{ matrix.environment }}"
+          
+          if [ "$RESULT" == "success" ]; then
+            echo "::notice::🎉 服务 $SERVICE 已成功部署到 $ENVIRONMENT 环境"
+          else
+            echo "::error::❌ 服务 $SERVICE 部署到 $ENVIRONMENT 环境失败"
+          fi 

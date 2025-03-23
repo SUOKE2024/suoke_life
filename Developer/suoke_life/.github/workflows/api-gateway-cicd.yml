@@ -1,0 +1,203 @@
+name: API Gateway CI/CD
+
+on:
+  push:
+    branches: [ main, master, develop ]
+    paths:
+      - 'services/api-gateway/**'
+      - '.github/workflows/api-gateway-cicd.yml'
+  pull_request:
+    branches: [ main, master ]
+    paths:
+      - 'services/api-gateway/**'
+  workflow_dispatch:
+    inputs:
+      deploy_env:
+        description: '部署环境 (production, staging, development)'
+        required: true
+        default: 'development'
+        type: choice
+        options:
+          - production
+          - staging
+          - development
+      deploy_tag:
+        description: '自定义镜像标签 (默认: latest)'
+        required: false
+        default: 'latest'
+        type: string
+
+env:
+  REGISTRY_SERVER: registry.cn-hangzhou.aliyuncs.com
+  REGISTRY_NAMESPACE: suoke
+  IMAGE_NAME: api-gateway
+  SERVICE_PATH: services/api-gateway
+
+jobs:
+  build-and-push:
+    name: 构建并推送镜像
+    runs-on: ubuntu-latest
+    outputs:
+      image_tag: ${{ steps.set_image_tag.outputs.image_tag }}
+    
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v3
+        
+      - name: 设置镜像标签
+        id: set_image_tag
+        run: |
+          # 优先使用手动输入的tag
+          if [[ "${{ github.event.inputs.deploy_tag }}" != "" && "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            IMAGE_TAG="${{ github.event.inputs.deploy_tag }}"
+          else
+            # 使用提交的短SHA作为tag
+            IMAGE_TAG="$(echo ${GITHUB_SHA} | cut -c1-7)-$(date +%Y%m%d%H%M)"
+          fi
+          echo "image_tag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
+          echo "构建镜像标签: ${IMAGE_TAG}"
+      
+      - name: 设置 QEMU
+        uses: docker/setup-qemu-action@v2
+      
+      - name: 设置 Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      
+      - name: 登录到阿里云容器镜像服务
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY_SERVER }}
+          username: ${{ secrets.ALIYUN_REGISTRY_USERNAME }}
+          password: ${{ secrets.ALIYUN_REGISTRY_PASSWORD }}
+      
+      - name: 构建并推送镜像
+        uses: docker/build-push-action@v4
+        with:
+          context: ./${{ env.SERVICE_PATH }}
+          file: ./${{ env.SERVICE_PATH }}/Dockerfile
+          push: true
+          tags: |
+            ${{ env.REGISTRY_SERVER }}/${{ env.REGISTRY_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ steps.set_image_tag.outputs.image_tag }}
+            ${{ env.REGISTRY_SERVER }}/${{ env.REGISTRY_NAMESPACE }}/${{ env.IMAGE_NAME }}:latest
+          cache-from: type=registry,ref=${{ env.REGISTRY_SERVER }}/${{ env.REGISTRY_NAMESPACE }}/${{ env.IMAGE_NAME }}:buildcache
+          cache-to: type=registry,ref=${{ env.REGISTRY_SERVER }}/${{ env.REGISTRY_NAMESPACE }}/${{ env.IMAGE_NAME }}:buildcache,mode=max
+          build-args: |
+            BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+            VCS_REF=${{ github.sha }}
+            VERSION=${{ steps.set_image_tag.outputs.image_tag }}
+      
+      - name: 镜像摘要
+        run: echo "镜像 ${{ env.REGISTRY_SERVER }}/${{ env.REGISTRY_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ steps.set_image_tag.outputs.image_tag }} 已成功推送"
+
+  deploy-to-kubernetes:
+    name: 部署到 Kubernetes
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
+    
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v3
+        
+      - name: 设置 Kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'v1.25.6'
+      
+      - name: 配置 Kubernetes 凭据
+        uses: azure/k8s-set-context@v2
+        with:
+          method: kubeconfig
+          kubeconfig: ${{ secrets.KUBE_CONFIG_DATA }}
+        
+      - name: 确定部署环境
+        id: set_env
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            DEPLOY_ENV="${{ github.event.inputs.deploy_env }}"
+          elif [[ "${{ github.ref }}" == "refs/heads/main" || "${{ github.ref }}" == "refs/heads/master" ]]; then
+            DEPLOY_ENV="production"
+          else
+            DEPLOY_ENV="development"
+          fi
+          echo "deploy_env=${DEPLOY_ENV}" >> $GITHUB_OUTPUT
+          echo "部署环境: ${DEPLOY_ENV}"
+      
+      - name: 设置 Namespace
+        id: set_namespace
+        run: |
+          if [[ "${{ steps.set_env.outputs.deploy_env }}" == "production" ]]; then
+            NAMESPACE="suoke"
+          else
+            NAMESPACE="suoke-${{ steps.set_env.outputs.deploy_env }}"
+          fi
+          echo "namespace=${NAMESPACE}" >> $GITHUB_OUTPUT
+          echo "部署 Namespace: ${NAMESPACE}"
+      
+      - name: 检查并创建 Namespace
+        run: |
+          if ! kubectl get namespace ${{ steps.set_namespace.outputs.namespace }} > /dev/null 2>&1; then
+            echo "Namespace ${{ steps.set_namespace.outputs.namespace }} 不存在，创建中..."
+            kubectl create namespace ${{ steps.set_namespace.outputs.namespace }}
+          else
+            echo "Namespace ${{ steps.set_namespace.outputs.namespace }} 已存在"
+          fi
+      
+      - name: 检查 ConfigMap
+        id: check_configmap
+        run: |
+          if kubectl get configmap -n ${{ steps.set_namespace.outputs.namespace }} api-gateway-config > /dev/null 2>&1; then
+            echo "configmap_exists=true" >> $GITHUB_OUTPUT
+            echo "ConfigMap api-gateway-config 已存在"
+          else
+            echo "configmap_exists=false" >> $GITHUB_OUTPUT
+            echo "ConfigMap api-gateway-config 不存在，将在部署过程中创建"
+          fi
+      
+      - name: 更新部署配置
+        run: |
+          # 替换部署文件中的镜像标签
+          cd ./scripts/deploy/kubernetes
+          
+          # 如果特定环境的配置文件存在，则使用它
+          if [ -f "api-gateway-${{ steps.set_env.outputs.deploy_env }}.yaml" ]; then
+            DEPLOY_FILE="api-gateway-${{ steps.set_env.outputs.deploy_env }}.yaml"
+          else
+            DEPLOY_FILE="api-gateway.yaml"
+          fi
+          
+          echo "使用部署文件: ${DEPLOY_FILE}"
+          
+          # 替换镜像标签
+          sed -i 's|image: .*api-gateway:.*|image: ${{ env.REGISTRY_SERVER }}/${{ env.REGISTRY_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ needs.build-and-push.outputs.image_tag }}|g' ${DEPLOY_FILE}
+          
+          # 替换namespace
+          sed -i "s/namespace: suoke/namespace: ${{ steps.set_namespace.outputs.namespace }}/g" ${DEPLOY_FILE}
+          
+          # 应用部署
+          kubectl apply -f ${DEPLOY_FILE}
+      
+      - name: 等待部署完成
+        run: |
+          echo "等待 api-gateway 部署完成..."
+          kubectl rollout status deployment/api-gateway -n ${{ steps.set_namespace.outputs.namespace }} --timeout=180s
+      
+      - name: 部署状态
+        run: |
+          echo "显示 api-gateway Pods 状态:"
+          kubectl get pods -n ${{ steps.set_namespace.outputs.namespace }} -l app=api-gateway -o wide
+          
+          echo "显示 api-gateway 服务状态:"
+          kubectl get service -n ${{ steps.set_namespace.outputs.namespace }} -l app=api-gateway
+      
+      - name: 部署结果通知
+        if: always()
+        run: |
+          if [ ${{ job.status }} == 'success' ]; then
+            echo "✅ API Gateway 部署成功到 ${{ steps.set_env.outputs.deploy_env }} 环境"
+            echo "镜像: ${{ env.REGISTRY_SERVER }}/${{ env.REGISTRY_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ needs.build-and-push.outputs.image_tag }}"
+            echo "部署命名空间: ${{ steps.set_namespace.outputs.namespace }}"
+          else
+            echo "❌ API Gateway 部署失败"
+            echo "请检查工作流日志以获取更多详细信息"
+          fi 
