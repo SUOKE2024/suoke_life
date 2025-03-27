@@ -27,28 +27,43 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y podman
+          podman --version
 
       - name: 登录阿里云镜像仓库
         run: |
           # 登录容器镜像服务
           echo "${{ env.REGISTRY_PASSWORD }}" | podman login --username=${{ env.REGISTRY_USERNAME }} ${{ env.REGISTRY_URL }} --password-stdin
+          echo "登录成功"
 
       - name: 构建和推送镜像
         run: |
           cd services/rag-service
           VERSION=$(cat VERSION)
+          echo "当前版本: $VERSION"
           IMAGE_NAME="${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/rag-service:${VERSION}"
           
-          # 使用Podman专用的Dockerfile
+          # 列出文件确认存在
+          ls -la
+          echo "确认Dockerfile.podman存在:"
+          cat Dockerfile.podman
+          
+          # 使用Podman构建镜像
+          echo "开始构建镜像..."
           podman build -t ${IMAGE_NAME} -f Dockerfile.podman .
+          
+          echo "推送镜像 ${IMAGE_NAME}..."
           podman push ${IMAGE_NAME}
           
           # 同时标记latest标签
+          echo "标记latest标签..."
           podman tag ${IMAGE_NAME} ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/rag-service:latest
+          
+          echo "推送latest标签..."
           podman push ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/rag-service:latest
           
           echo "IMAGE_NAME=${IMAGE_NAME}" >> $GITHUB_ENV
           echo "IMAGE_VERSION=${VERSION}" >> $GITHUB_ENV
+          echo "镜像构建和推送完成"
 
       - name: 准备Kubernetes配置
         run: |
@@ -67,6 +82,7 @@ jobs:
           echo "Deployment timestamp: $(date)" > /tmp/k8s-configs/deploy-timestamp.txt
           echo "Image: ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/rag-service:${IMAGE_TAG}" >> /tmp/k8s-configs/deploy-timestamp.txt
           echo "Version: ${IMAGE_VERSION}" >> /tmp/k8s-configs/deploy-timestamp.txt
+          echo "K8s配置准备完成"
 
       - name: 上传Kubernetes配置
         uses: actions/upload-artifact@v4
