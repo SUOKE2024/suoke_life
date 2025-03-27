@@ -1,0 +1,43 @@
+name: 检查部署状态
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["RAG Service Podman CI/CD"]
+    types:
+      - completed
+
+jobs:
+  check-status:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检查镜像状态
+        env:
+          REGISTRY_URL: registry.cn-hangzhou.aliyuncs.com
+          REGISTRY_USERNAME: ${{ secrets.ALIYUN_REGISTRY_USERNAME }}
+          REGISTRY_PASSWORD: ${{ secrets.ALIYUN_REGISTRY_PASSWORD }}
+        run: |
+          # 安装阿里云CLI
+          wget https://aliyuncli.alicdn.com/aliyun-cli-linux-latest-amd64.tgz
+          tar xzvf aliyun-cli-linux-latest-amd64.tgz
+          sudo mv aliyun /usr/local/bin/
+          
+          # 配置阿里云CLI
+          aliyun configure set \
+            --profile default \
+            --mode AK \
+            --region cn-hangzhou \
+            --access-key-id ${{ secrets.ALIYUN_ACCESS_KEY_ID }} \
+            --access-key-secret ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
+            
+          # 检查镜像仓库状态
+          aliyun cr get-repo-tag \
+            --region cn-hangzhou \
+            --repo-namespace suoke \
+            --repo-name rag-service \
+            --tag latest
+
+      - name: 输出检查结果
+        run: |
+          echo "部署状态检查完成"
+          echo "时间: $(date)" 
