@@ -70,14 +70,22 @@ jobs:
             echo "K8s配置目录不存在"
           fi
 
-      - name: 保存检查结果
-        uses: actions/upload-artifact@v4
+      - name: 创建检查结果目录
+        run: |
+          mkdir -p /tmp/check-results
+          cp -r services/rag-service/k8s/* /tmp/check-results/ || true
+          cp services/rag-service/VERSION /tmp/check-results/ || true
+          echo "检查时间: $(date)" > /tmp/check-results/check_time.txt
+          echo "版本: ${{ steps.version.outputs.version }}" >> /tmp/check-results/check_time.txt
+
+      - name: 上传检查结果
+        uses: actions/upload-artifact@v4.3.1
         with:
           name: deployment-status
-          path: |
-            services/rag-service/k8s/
-            services/rag-service/VERSION
+          path: /tmp/check-results
           retention-days: 5
+          if-no-files-found: warn
+          compression-level: 9
 
       - name: 检查构建产物
         run: |
