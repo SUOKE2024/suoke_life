@@ -27,8 +27,8 @@ jobs:
       - name: 检查镜像状态
         env:
           REGISTRY_URL: suoke-registry.cn-hangzhou.cr.aliyuncs.com
-          REGISTRY_USERNAME: netsong@sina.com
-          REGISTRY_PASSWORD: Netsong2025
+          REGISTRY_USERNAME: ${{ secrets.ALIYUN_REGISTRY_USERNAME }}
+          REGISTRY_PASSWORD: ${{ secrets.ALIYUN_REGISTRY_PASSWORD }}
         run: |
           # 安装阿里云CLI
           wget https://aliyuncli.alicdn.com/aliyun-cli-linux-latest-amd64.tgz
