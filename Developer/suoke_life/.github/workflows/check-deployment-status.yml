@@ -9,7 +9,7 @@ on:
 
 jobs:
   check-status:
-    runs-on: ubuntu-latest
+    runs-on: macos-14-arm64
     permissions:
       contents: read
       packages: read
@@ -24,41 +24,38 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "检查版本: $VERSION"
 
+      - name: 安装必要工具
+        run: |
+          brew install jq
+          brew install wget
+          brew install podman
+
       - name: 检查镜像状态
         env:
           REGISTRY_URL: suoke-registry.cn-hangzhou.cr.aliyuncs.com
           REGISTRY_USERNAME: ${{ secrets.ALIYUN_REGISTRY_USERNAME }}
           REGISTRY_PASSWORD: ${{ secrets.ALIYUN_REGISTRY_PASSWORD }}
         run: |
-          # 安装阿里云CLI
-          wget https://aliyuncli.alicdn.com/aliyun-cli-linux-latest-amd64.tgz
-          tar xzvf aliyun-cli-linux-latest-amd64.tgz
-          sudo mv aliyun /usr/local/bin/
+          # 启动Podman
+          podman machine init
+          podman machine start
           
-          # 配置阿里云CLI
-          aliyun configure set \
-            --profile default \
-            --mode AK \
-            --region cn-hangzhou \
-            --access-key-id ${{ secrets.ALIYUN_ACCESS_KEY_ID }} \
-            --access-key-secret ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
-            
           echo "正在检查镜像仓库状态..."
           
-          # 使用Docker登录镜像仓库
-          echo "$REGISTRY_PASSWORD" | docker login --username=$REGISTRY_USERNAME $REGISTRY_URL --password-stdin
+          # 使用Podman登录镜像仓库
+          echo "$REGISTRY_PASSWORD" | podman login --username=$REGISTRY_USERNAME $REGISTRY_URL --password-stdin
           
           # 检查latest标签
           echo "检查latest标签状态："
-          docker pull $REGISTRY_URL/suoke/rag-service:latest || echo "latest标签不存在"
+          podman pull $REGISTRY_URL/suoke/rag-service:latest || echo "latest标签不存在"
           
           # 检查版本标签
           echo "检查版本标签状态："
-          docker pull $REGISTRY_URL/suoke/rag-service:${{ steps.version.outputs.version }} || echo "版本标签不存在"
+          podman pull $REGISTRY_URL/suoke/rag-service:${{ steps.version.outputs.version }} || echo "版本标签不存在"
           
           # 列出本地镜像
           echo "本地镜像状态："
-          docker images | grep rag-service
+          podman images | grep rag-service || echo "未找到本地镜像"
 
       - name: 检查Kubernetes配置
         run: |
@@ -69,9 +66,11 @@ jobs:
             ls -la services/rag-service/k8s/
             echo "配置文件内容摘要："
             for file in services/rag-service/k8s/*.yaml; do
-              echo "=== $file ==="
-              head -n 5 "$file"
-              echo "..."
+              if [ -f "$file" ]; then
+                echo "=== $(basename $file) ==="
+                head -n 5 "$file"
+                echo "..."
+              fi
             done
           else
             echo "K8s配置目录不存在"
@@ -120,7 +119,7 @@ jobs:
           echo "3. 镜像状态"
           echo "------------"
           echo "镜像仓库: ${REGISTRY_URL}/suoke/rag-service"
-          docker images | grep rag-service || echo "未找到本地镜像"
+          podman images | grep rag-service || echo "未找到本地镜像"
           echo ""
           
           echo "4. 检查结果"
@@ -129,7 +128,13 @@ jobs:
           echo "✓ 版本信息获取完成"
           echo "✓ 镜像状态检查完成"
           echo "✓ K8s配置检查完成"
-          echo "✓ 构建产物检查完成"
+          echo ""
+          
+          echo "5. 运行环境"
+          echo "------------"
+          echo "操作系统: $(sw_vers -productName) $(sw_vers -productVersion)"
+          echo "Podman版本: $(podman version)"
+          echo "Runner: macos-14-arm64"
           echo ""
           
           echo "====================" 
