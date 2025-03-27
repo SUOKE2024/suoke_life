@@ -19,9 +19,10 @@ jobs:
   test:
     name: Test API Gateway
     runs-on: ubuntu-latest
-    
+    permissions:
+      contents: read    
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -48,11 +49,12 @@ jobs:
   build:
     name: Build API Gateway
     runs-on: ubuntu-latest
-    needs: test
+    permissions:
+      contents: read    needs: test
     if: github.event_name != 'pull_request'
     
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       
       - name: Configure Aliyun credentials
         uses: aliyun/acr-login@v1
@@ -79,12 +81,13 @@ jobs:
   deploy-dev:
     name: Deploy to Dev K8s
     runs-on: ubuntu-latest
-    needs: build
+    permissions:
+      contents: read    needs: build
     if: github.ref == 'refs/heads/develop'
     environment: development
     
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       
       - name: Set up kubeconfig
         run: |
@@ -107,14 +110,15 @@ jobs:
   deploy-prod:
     name: Deploy to Production K8s
     runs-on: ubuntu-latest
-    needs: build
+    permissions:
+      contents: read    needs: build
     if: github.ref == 'refs/heads/main'
     environment:
       name: production
       url: https://api.suoke.life
     
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       
       - name: Set up kubeconfig
         run: |

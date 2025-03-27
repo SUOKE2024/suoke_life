@@ -37,12 +37,13 @@ jobs:
   build-and-push:
     name: 构建并推送镜像
     runs-on: ubuntu-latest
-    outputs:
+    permissions:
+      contents: read    outputs:
       image_tag: ${{ steps.set_image_tag.outputs.image_tag }}
     
     steps:
       - name: 检出代码
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         
       - name: 设置镜像标签
         id: set_image_tag
@@ -93,11 +94,12 @@ jobs:
     name: 部署到 Kubernetes
     needs: build-and-push
     runs-on: ubuntu-latest
-    if: github.event_name != 'pull_request'
+    permissions:
+      contents: read    if: github.event_name != 'pull_request'
     
     steps:
       - name: 检出代码
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         
       - name: 设置 Kubectl
         uses: azure/setup-kubectl@v3
