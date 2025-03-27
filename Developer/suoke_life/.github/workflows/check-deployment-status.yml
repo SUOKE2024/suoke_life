@@ -11,6 +11,16 @@ jobs:
   check-status:
     runs-on: ubuntu-latest
     steps:
+      - name: 检出代码
+        uses: actions/checkout@v2
+
+      - name: 获取版本信息
+        id: version
+        run: |
+          VERSION=$(cat services/rag-service/VERSION)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "检查版本: $VERSION"
+
       - name: 检查镜像状态
         env:
           REGISTRY_URL: registry.cn-hangzhou.aliyuncs.com
@@ -30,14 +40,51 @@ jobs:
             --access-key-id ${{ secrets.ALIYUN_ACCESS_KEY_ID }} \
             --access-key-secret ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
             
-          # 检查镜像仓库状态
+          echo "正在检查镜像仓库状态..."
+          
+          # 检查latest标签
+          echo "检查latest标签状态："
           aliyun cr get-repo-tag \
             --region cn-hangzhou \
             --repo-namespace suoke \
             --repo-name rag-service \
-            --tag latest
+            --tag latest || echo "latest标签不存在"
+            
+          # 检查版本标签
+          echo "检查版本标签状态："
+          aliyun cr get-repo-tag \
+            --region cn-hangzhou \
+            --repo-namespace suoke \
+            --repo-name rag-service \
+            --tag ${{ steps.version.outputs.version }} || echo "版本标签不存在"
+
+      - name: 检查Kubernetes配置
+        run: |
+          echo "检查Kubernetes配置文件..."
+          if [ -d "services/rag-service/k8s" ]; then
+            echo "找到K8s配置目录"
+            ls -la services/rag-service/k8s/
+          else
+            echo "K8s配置目录不存在"
+          fi
+
+      - name: 检查构建产物
+        run: |
+          echo "检查最新构建产物..."
+          mkdir -p /tmp/artifacts
+          
+          # 尝试下载最新的构建产物
+          curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/SUOKE2024/suoke_life/actions/artifacts" \
+            > /tmp/artifacts/artifacts.json
+            
+          echo "最新构建产物信息："
+          cat /tmp/artifacts/artifacts.json | jq '.artifacts[] | select(.name=="k8s-configs") | {name, created_at, size_in_bytes}'
 
       - name: 输出检查结果
         run: |
           echo "部署状态检查完成"
-          echo "时间: $(date)" 
+          echo "检查时间: $(date)"
+          echo "版本: ${{ steps.version.outputs.version }}"
+          echo "镜像地址: ${REGISTRY_URL}/suoke/rag-service" 
