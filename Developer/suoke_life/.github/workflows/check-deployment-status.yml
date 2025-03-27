@@ -23,9 +23,9 @@ jobs:
 
       - name: 检查镜像状态
         env:
-          REGISTRY_URL: registry.cn-hangzhou.aliyuncs.com
-          REGISTRY_USERNAME: ${{ secrets.ALIYUN_REGISTRY_USERNAME }}
-          REGISTRY_PASSWORD: ${{ secrets.ALIYUN_REGISTRY_PASSWORD }}
+          REGISTRY_URL: suoke-registry.cn-hangzhou.cr.aliyuncs.com
+          REGISTRY_USERNAME: netsong@sina.com
+          REGISTRY_PASSWORD: Netsong2025
         run: |
           # 安装阿里云CLI
           wget https://aliyuncli.alicdn.com/aliyun-cli-linux-latest-amd64.tgz
@@ -42,21 +42,20 @@ jobs:
             
           echo "正在检查镜像仓库状态..."
           
+          # 使用Docker登录镜像仓库
+          echo "$REGISTRY_PASSWORD" | docker login --username=$REGISTRY_USERNAME $REGISTRY_URL --password-stdin
+          
           # 检查latest标签
           echo "检查latest标签状态："
-          aliyun cr get-repo-tag \
-            --region cn-hangzhou \
-            --repo-namespace suoke \
-            --repo-name rag-service \
-            --tag latest || echo "latest标签不存在"
-            
+          docker pull $REGISTRY_URL/suoke/rag-service:latest || echo "latest标签不存在"
+          
           # 检查版本标签
           echo "检查版本标签状态："
-          aliyun cr get-repo-tag \
-            --region cn-hangzhou \
-            --repo-namespace suoke \
-            --repo-name rag-service \
-            --tag ${{ steps.version.outputs.version }} || echo "版本标签不存在"
+          docker pull $REGISTRY_URL/suoke/rag-service:${{ steps.version.outputs.version }} || echo "版本标签不存在"
+          
+          # 列出本地镜像
+          echo "本地镜像状态："
+          docker images | grep rag-service
 
       - name: 检查Kubernetes配置
         run: |
