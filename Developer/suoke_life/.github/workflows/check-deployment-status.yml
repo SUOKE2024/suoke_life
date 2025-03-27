@@ -65,27 +65,17 @@ jobs:
           echo "检查Kubernetes配置文件..."
           if [ -d "services/rag-service/k8s" ]; then
             echo "找到K8s配置目录"
+            echo "K8s配置文件列表："
             ls -la services/rag-service/k8s/
+            echo "配置文件内容摘要："
+            for file in services/rag-service/k8s/*.yaml; do
+              echo "=== $file ==="
+              head -n 5 "$file"
+              echo "..."
+            done
           else
             echo "K8s配置目录不存在"
           fi
-
-      - name: 创建检查结果目录
-        run: |
-          mkdir -p /tmp/check-results
-          cp -r services/rag-service/k8s/* /tmp/check-results/ || true
-          cp services/rag-service/VERSION /tmp/check-results/ || true
-          echo "检查时间: $(date)" > /tmp/check-results/check_time.txt
-          echo "版本: ${{ steps.version.outputs.version }}" >> /tmp/check-results/check_time.txt
-
-      - name: 上传检查结果
-        uses: actions/upload-artifact@v4.3.1
-        with:
-          name: deployment-status
-          path: /tmp/check-results
-          retention-days: 5
-          if-no-files-found: warn
-          compression-level: 9
 
       - name: 检查构建产物
         run: |
@@ -101,9 +91,45 @@ jobs:
           echo "最新构建产物信息："
           cat /tmp/artifacts/artifacts.json | jq '.artifacts[] | select(.name=="k8s-configs") | {name, created_at, size_in_bytes}'
 
-      - name: 输出检查结果
+      - name: 生成部署状态报告
         run: |
-          echo "部署状态检查完成"
+          echo "===================="
+          echo "部署状态检查报告"
+          echo "===================="
           echo "检查时间: $(date)"
           echo "版本: ${{ steps.version.outputs.version }}"
-          echo "镜像地址: ${REGISTRY_URL}/suoke/rag-service" 
+          echo "镜像地址: ${REGISTRY_URL}/suoke/rag-service"
+          echo ""
+          
+          echo "1. 版本信息"
+          echo "------------"
+          cat services/rag-service/VERSION
+          echo ""
+          
+          echo "2. K8s配置状态"
+          echo "------------"
+          if [ -d "services/rag-service/k8s" ]; then
+            echo "配置文件数量: $(ls -1 services/rag-service/k8s/*.yaml 2>/dev/null | wc -l)"
+            echo "配置文件列表:"
+            ls -la services/rag-service/k8s/
+          else
+            echo "未找到K8s配置目录"
+          fi
+          echo ""
+          
+          echo "3. 镜像状态"
+          echo "------------"
+          echo "镜像仓库: ${REGISTRY_URL}/suoke/rag-service"
+          docker images | grep rag-service || echo "未找到本地镜像"
+          echo ""
+          
+          echo "4. 检查结果"
+          echo "------------"
+          echo "✓ 代码检出完成"
+          echo "✓ 版本信息获取完成"
+          echo "✓ 镜像状态检查完成"
+          echo "✓ K8s配置检查完成"
+          echo "✓ 构建产物检查完成"
+          echo ""
+          
+          echo "====================" 
