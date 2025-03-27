@@ -23,7 +23,10 @@ jobs:
       - name: 检出代码
         uses: actions/checkout@v4
 
-      - name: 设置Docker
+      - name: 设置QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: 设置Docker Buildx
         uses: docker/setup-buildx-action@v3
         
       - name: 显示Docker版本
@@ -37,34 +40,15 @@ jobs:
           password: ${{ env.REGISTRY_PASSWORD }}
 
       - name: 构建和推送镜像
-        run: |
-          cd services/rag-service
-          VERSION=$(cat VERSION)
-          echo "当前版本: $VERSION"
-          IMAGE_NAME="${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/rag-service:${VERSION}"
-          
-          # 列出文件确认存在
-          ls -la
-          echo "确认Dockerfile存在:"
-          cat Dockerfile
-          
-          # 使用Docker构建镜像
-          echo "开始构建镜像..."
-          docker build -t ${IMAGE_NAME} .
-          
-          echo "推送镜像 ${IMAGE_NAME}..."
-          docker push ${IMAGE_NAME}
-          
-          # 同时标记latest标签
-          echo "标记latest标签..."
-          docker tag ${IMAGE_NAME} ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/rag-service:latest
-          
-          echo "推送latest标签..."
-          docker push ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/rag-service:latest
-          
-          echo "IMAGE_NAME=${IMAGE_NAME}" >> $GITHUB_ENV
-          echo "IMAGE_VERSION=${VERSION}" >> $GITHUB_ENV
-          echo "镜像构建和推送完成"
+        uses: docker/build-push-action@v5
+        with:
+          context: ./services/rag-service
+          push: true
+          platforms: linux/amd64
+          tags: |
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/rag-service:${{ github.sha }}
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/rag-service:latest
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/rag-service:1.1.3-docker
 
       - name: 准备Kubernetes配置
         run: |
@@ -77,13 +61,17 @@ jobs:
           # 使用环境变量替换K8s配置中的变量
           export REGISTRY_URL=${{ env.REGISTRY_URL }}
           export REGISTRY_NAMESPACE=${{ env.REGISTRY_NAMESPACE }}
-          export IMAGE_TAG=${IMAGE_VERSION}
+          export IMAGE_TAG=1.1.3-docker
           
           # 创建应用时间戳文件
           echo "Deployment timestamp: $(date)" > /tmp/k8s-configs/deploy-timestamp.txt
           echo "Image: ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/rag-service:${IMAGE_TAG}" >> /tmp/k8s-configs/deploy-timestamp.txt
-          echo "Version: ${IMAGE_VERSION}" >> /tmp/k8s-configs/deploy-timestamp.txt
+          echo "Version: ${IMAGE_TAG}" >> /tmp/k8s-configs/deploy-timestamp.txt
           echo "K8s配置准备完成"
+          
+          # 设置环境变量供下一步使用
+          echo "IMAGE_NAME=${REGISTRY_URL}/${REGISTRY_NAMESPACE}/rag-service:${IMAGE_TAG}" >> $GITHUB_ENV
+          echo "IMAGE_VERSION=${IMAGE_TAG}" >> $GITHUB_ENV
 
       - name: 上传Kubernetes配置
         uses: actions/upload-artifact@v4
