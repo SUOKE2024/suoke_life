@@ -10,9 +10,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: 检出代码
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: 安装Podman
         run: |
@@ -21,19 +24,27 @@ jobs:
 
       - name: 登录阿里云镜像仓库
         env:
-          REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
-          REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
-          REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+          REGISTRY_URL: registry.cn-hangzhou.aliyuncs.com
+          REGISTRY_USERNAME: ${{ secrets.ALIYUN_REGISTRY_USERNAME }}
+          REGISTRY_PASSWORD: ${{ secrets.ALIYUN_REGISTRY_PASSWORD }}
+          ACCESS_KEY_ID: ${{ secrets.ALIYUN_ACCESS_KEY_ID }}
+          ACCESS_KEY_SECRET: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
         run: |
+          # 配置阿里云凭证
+          mkdir -p ~/.aliyun
+          echo "{\"current\":\"default\",\"profiles\":[{\"name\":\"default\",\"mode\":\"AK\",\"access_key_id\":\"${ACCESS_KEY_ID}\",\"access_key_secret\":\"${ACCESS_KEY_SECRET}\"}]}" > ~/.aliyun/config.json
+          
+          # 登录容器镜像服务
           podman login --username ${REGISTRY_USERNAME} --password ${REGISTRY_PASSWORD} ${REGISTRY_URL}
 
       - name: 构建和推送镜像
         env:
-          REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
-          REGISTRY_NAMESPACE: ${{ secrets.REGISTRY_NAMESPACE }}
+          REGISTRY_URL: registry.cn-hangzhou.aliyuncs.com
+          REGISTRY_NAMESPACE: suoke
         run: |
           cd services/rag-service
-          IMAGE_NAME="${REGISTRY_URL}/${REGISTRY_NAMESPACE}/rag-service:${GITHUB_SHA::8}"
+          VERSION=$(cat VERSION)
+          IMAGE_NAME="${REGISTRY_URL}/${REGISTRY_NAMESPACE}/rag-service:${VERSION}"
           
           # 使用Podman专用的Dockerfile
           podman build -t ${IMAGE_NAME} -f Dockerfile.podman .
@@ -42,6 +53,9 @@ jobs:
           # 同时标记latest标签
           podman tag ${IMAGE_NAME} ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/rag-service:latest
           podman push ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/rag-service:latest
+          
+          echo "IMAGE_NAME=${IMAGE_NAME}" >> $GITHUB_ENV
+          echo "IMAGE_VERSION=${VERSION}" >> $GITHUB_ENV
 
       - name: 准备Kubernetes配置
         run: |
@@ -52,16 +66,18 @@ jobs:
           cp -r services/rag-service/k8s/* /tmp/k8s-configs/ || echo "No pre-existing K8s configs found"
           
           # 使用环境变量替换K8s配置中的变量
-          export REGISTRY_URL=${{ secrets.REGISTRY_URL }}
-          export REGISTRY_NAMESPACE=${{ secrets.REGISTRY_NAMESPACE }}
-          export IMAGE_TAG=${GITHUB_SHA::8}
+          export REGISTRY_URL=registry.cn-hangzhou.aliyuncs.com
+          export REGISTRY_NAMESPACE=suoke
+          export IMAGE_TAG=${IMAGE_VERSION}
           
           # 创建应用时间戳文件
           echo "Deployment timestamp: $(date)" > /tmp/k8s-configs/deploy-timestamp.txt
           echo "Image: ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/rag-service:${IMAGE_TAG}" >> /tmp/k8s-configs/deploy-timestamp.txt
+          echo "Version: ${IMAGE_VERSION}" >> /tmp/k8s-configs/deploy-timestamp.txt
 
       - name: 上传Kubernetes配置
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: k8s-configs
-          path: /tmp/k8s-configs 
+          path: /tmp/k8s-configs
+          retention-days: 7 
