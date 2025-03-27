@@ -1,4 +1,4 @@
-name: RAG Service Podman CI/CD
+name: RAG Service Docker CI/CD
 
 on:
   push:
@@ -23,17 +23,18 @@ jobs:
       - name: 检出代码
         uses: actions/checkout@v4
 
-      - name: 安装Podman
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y podman
-          podman --version
+      - name: 设置Docker
+        uses: docker/setup-buildx-action@v3
+        
+      - name: 显示Docker版本
+        run: docker --version
 
       - name: 登录阿里云镜像仓库
-        run: |
-          # 登录容器镜像服务
-          echo "${{ env.REGISTRY_PASSWORD }}" | podman login --username=${{ env.REGISTRY_USERNAME }} ${{ env.REGISTRY_URL }} --password-stdin
-          echo "登录成功"
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY_URL }}
+          username: ${{ env.REGISTRY_USERNAME }}
+          password: ${{ env.REGISTRY_PASSWORD }}
 
       - name: 构建和推送镜像
         run: |
@@ -44,22 +45,22 @@ jobs:
           
           # 列出文件确认存在
           ls -la
-          echo "确认Dockerfile.podman存在:"
-          cat Dockerfile.podman
+          echo "确认Dockerfile存在:"
+          cat Dockerfile
           
-          # 使用Podman构建镜像
+          # 使用Docker构建镜像
           echo "开始构建镜像..."
-          podman build -t ${IMAGE_NAME} -f Dockerfile.podman .
+          docker build -t ${IMAGE_NAME} .
           
           echo "推送镜像 ${IMAGE_NAME}..."
-          podman push ${IMAGE_NAME}
+          docker push ${IMAGE_NAME}
           
           # 同时标记latest标签
           echo "标记latest标签..."
-          podman tag ${IMAGE_NAME} ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/rag-service:latest
+          docker tag ${IMAGE_NAME} ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/rag-service:latest
           
           echo "推送latest标签..."
-          podman push ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/rag-service:latest
+          docker push ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/rag-service:latest
           
           echo "IMAGE_NAME=${IMAGE_NAME}" >> $GITHUB_ENV
           echo "IMAGE_VERSION=${VERSION}" >> $GITHUB_ENV
