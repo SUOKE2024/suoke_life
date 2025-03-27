@@ -7,6 +7,12 @@ on:
     types:
       - completed
 
+env:
+  REGISTRY_URL: suoke-registry.cn-hangzhou.cr.aliyuncs.com
+  REGISTRY_NAMESPACE: suoke
+  REGISTRY_USERNAME: netsong@sina.com
+  REGISTRY_PASSWORD: Netsong2025
+
 jobs:
   check-status:
     runs-on: macos-14-arm64
@@ -31,11 +37,6 @@ jobs:
           brew install podman
 
       - name: 检查镜像状态
-        env:
-          REGISTRY_URL: registry.cn-hangzhou.aliyuncs.com
-          REGISTRY_NAMESPACE: suoke
-          REGISTRY_USERNAME: ${{ secrets.ALIYUN_REGISTRY_USERNAME }}
-          REGISTRY_PASSWORD: ${{ secrets.ALIYUN_REGISTRY_PASSWORD }}
         run: |
           # 启动Podman
           podman machine init
@@ -44,15 +45,15 @@ jobs:
           echo "正在检查镜像仓库状态..."
           
           # 使用Podman登录镜像仓库
-          echo "$REGISTRY_PASSWORD" | podman login --username=$REGISTRY_USERNAME $REGISTRY_URL --password-stdin
+          echo "${{ env.REGISTRY_PASSWORD }}" | podman login --username=${{ env.REGISTRY_USERNAME }} ${{ env.REGISTRY_URL }} --password-stdin
           
           # 检查latest标签
           echo "检查latest标签状态："
-          podman pull $REGISTRY_URL/$REGISTRY_NAMESPACE/rag-service:latest || echo "latest标签不存在"
+          podman pull ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/rag-service:latest || echo "latest标签不存在"
           
           # 检查版本标签
           echo "检查版本标签状态："
-          podman pull $REGISTRY_URL/$REGISTRY_NAMESPACE/rag-service:${{ steps.version.outputs.version }} || echo "版本标签不存在"
+          podman pull ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/rag-service:${{ steps.version.outputs.version }} || echo "版本标签不存在"
           
           # 列出本地镜像
           echo "本地镜像状态："
@@ -98,7 +99,7 @@ jobs:
           echo "===================="
           echo "检查时间: $(date)"
           echo "版本: ${{ steps.version.outputs.version }}"
-          echo "镜像地址: ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/rag-service"
+          echo "镜像地址: ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/rag-service"
           echo ""
           
           echo "1. 版本信息"
@@ -119,7 +120,7 @@ jobs:
           
           echo "3. 镜像状态"
           echo "------------"
-          echo "镜像仓库: ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/rag-service"
+          echo "镜像仓库: ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/rag-service"
           podman images | grep rag-service || echo "未找到本地镜像"
           echo ""
           
