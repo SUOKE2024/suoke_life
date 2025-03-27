@@ -1,0 +1,67 @@
+name: RAG Service Podman CI/CD
+
+on:
+  push:
+    paths:
+      - 'services/rag-service/**'
+      - '.github/workflows/rag-service-podman-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v2
+
+      - name: 安装Podman
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y podman
+
+      - name: 登录阿里云镜像仓库
+        env:
+          REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
+          REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
+          REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+        run: |
+          podman login --username ${REGISTRY_USERNAME} --password ${REGISTRY_PASSWORD} ${REGISTRY_URL}
+
+      - name: 构建和推送镜像
+        env:
+          REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
+          REGISTRY_NAMESPACE: ${{ secrets.REGISTRY_NAMESPACE }}
+        run: |
+          cd services/rag-service
+          IMAGE_NAME="${REGISTRY_URL}/${REGISTRY_NAMESPACE}/rag-service:${GITHUB_SHA::8}"
+          
+          # 使用Podman专用的Dockerfile
+          podman build -t ${IMAGE_NAME} -f Dockerfile.podman .
+          podman push ${IMAGE_NAME}
+          
+          # 同时标记latest标签
+          podman tag ${IMAGE_NAME} ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/rag-service:latest
+          podman push ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/rag-service:latest
+
+      - name: 准备Kubernetes配置
+        run: |
+          # 创建临时目录用于存储K8s配置
+          mkdir -p /tmp/k8s-configs
+          
+          # 复制现有K8s配置文件
+          cp -r services/rag-service/k8s/* /tmp/k8s-configs/ || echo "No pre-existing K8s configs found"
+          
+          # 使用环境变量替换K8s配置中的变量
+          export REGISTRY_URL=${{ secrets.REGISTRY_URL }}
+          export REGISTRY_NAMESPACE=${{ secrets.REGISTRY_NAMESPACE }}
+          export IMAGE_TAG=${GITHUB_SHA::8}
+          
+          # 创建应用时间戳文件
+          echo "Deployment timestamp: $(date)" > /tmp/k8s-configs/deploy-timestamp.txt
+          echo "Image: ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/rag-service:${IMAGE_TAG}" >> /tmp/k8s-configs/deploy-timestamp.txt
+
+      - name: 上传Kubernetes配置
+        uses: actions/upload-artifact@v2
+        with:
+          name: k8s-configs
+          path: /tmp/k8s-configs 

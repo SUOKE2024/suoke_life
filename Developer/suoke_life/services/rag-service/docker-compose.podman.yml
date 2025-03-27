@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  rag-service:
+    image: localhost/rag-service:latest
+    container_name: rag-service-podman
+    ports:
+      - "8000:8000"
+    environment:
+      - LOG_LEVEL=DEBUG
+      - ENABLE_MONITORING=true
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - rag-podman-network
+
+networks:
+  rag-podman-network:
+    driver: bridge 
