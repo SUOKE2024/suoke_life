@@ -10,9 +10,12 @@ on:
 jobs:
   check-status:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
     steps:
       - name: 检出代码
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: 获取版本信息
         id: version
@@ -66,6 +69,15 @@ jobs:
           else
             echo "K8s配置目录不存在"
           fi
+
+      - name: 保存检查结果
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-status
+          path: |
+            services/rag-service/k8s/
+            services/rag-service/VERSION
+          retention-days: 5
 
       - name: 检查构建产物
         run: |
