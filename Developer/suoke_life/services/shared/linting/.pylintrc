@@ -1,0 +1,97 @@
+[MASTER]
+# 最大并行处理数
+jobs=4
+
+# 是否使用Python 3语法规则
+py-version=3.8
+
+# 允许加载C扩展
+extension-pkg-allow-list=numpy,pandas,pydantic,torch
+
+# 忽略的文件或目录
+ignore=CVS,build,dist,docs,tests
+
+# 忽略的警告
+disable=
+    missing-docstring,
+    line-too-long,
+    invalid-name,
+    no-member,
+    broad-except,
+    import-outside-toplevel,
+    too-many-arguments,
+    too-many-locals,
+    too-many-statements
+
+# 启用的检查
+enable=
+    unused-import,
+    unused-variable,
+    undefined-variable,
+    unreachable,
+    dangerous-default-value,
+    bad-super-call
+
+[FORMAT]
+# 最大行长度
+max-line-length=100
+
+# 缩进大小
+indent-string='    '
+
+# 缩进是否使用空格
+indent-after-paren=4
+
+[SIMILARITIES]
+# 最小相似行数
+min-similarity-lines=6
+
+# 忽略导入语句
+ignore-imports=yes
+
+[BASIC]
+# 函数参数的正则表达式
+argument-rgx=[a-z_][a-z0-9_]{0,30}$
+
+# 变量名的正则表达式
+variable-rgx=[a-z_][a-z0-9_]{0,30}$
+
+# 常量名的正则表达式
+const-rgx=(([A-Z_][A-Z0-9_]*)|(__.*__))$
+
+[DESIGN]
+# 最大参数数量
+max-args=8
+
+# 最大属性数量
+max-attributes=15
+
+# 最大本地变量数量
+max-locals=25
+
+# 最大返回语句数量
+max-returns=10
+
+# 最大分支数量
+max-branches=12
+
+# 最大语句数量
+max-statements=50
+
+# 最大嵌套块数量
+max-nested-blocks=5
+
+# 最大方法数量
+max-methods=30
+
+[CLASSES]
+# 是否忽略参数不匹配
+ignore-mixin-members=yes
+
+[IMPORTS]
+# 允许通配符导入
+allow-wildcard-with-all=no
+
+[EXCEPTIONS]
+# 允许捕获异常
+overgeneral-exceptions=Exception

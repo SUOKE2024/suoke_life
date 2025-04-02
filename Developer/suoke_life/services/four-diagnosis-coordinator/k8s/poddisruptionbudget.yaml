@@ -1,0 +1,10 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: four-diagnosis-coordinator-pdb
+  namespace: suoke
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: four-diagnosis-coordinator 

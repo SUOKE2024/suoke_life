@@ -1,0 +1,54 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- base/deployment.yaml
+- base/service.yaml
+- base/network-policy.yaml
+- base/serviceaccount.yaml
+- base/persistent-volumes.yaml
+- hpa.yaml
+- pdb.yaml
+- istio-config.yaml
+- monitoring.yaml
+- opentelemetry-config.yaml
+
+namespace: suoke
+
+commonLabels:
+  app: soer-service
+  part-of: suoke-life-platform
+  tier: ai
+
+configMapGenerator:
+- name: soer-service-config
+  literals:
+  - AGENT_ID=soer
+  - AGENT_NAME=索儿
+  - AGENT_VERSION=1.1.0
+  - KNOWLEDGE_BASE_URL=http://knowledge-base-service
+  - KNOWLEDGE_GRAPH_URL=http://knowledge-graph-service
+  - HEALTH_SERVICE_URL=http://health-service
+  - LIFE_RECORD_SERVICE_URL=http://life-record-service
+  - RAG_SERVICE_URL=http://rag-service
+  - AI_AGENT_SERVICE_URL=http://ai-agent-service
+  - SENSING_SERVICE_URL=http://sensing-service
+  - REDIS_HOST=redis
+  - REDIS_PORT=6379
+  - DATABASE_HOST=mongodb
+  - DATABASE_PORT=27017
+  - DATABASE_NAME=soer_db
+  - MODEL_CONFIG_PATH=/app/config/agent-config.json
+  - ENABLE_KNOWLEDGE_INTEGRATION=true
+  - KNOWLEDGE_CACHE_TTL=3600
+  - KNOWLEDGE_SEARCH_LIMIT=10
+  - KNOWLEDGE_GRAPH_DEPTH=2
+
+secretGenerator:
+- name: soer-service-secrets
+  type: Opaque
+  literals:
+  - DATABASE_USER=soer_service
+  - DATABASE_PASSWORD=change_me_in_production
+  - REDIS_PASSWORD=change_me_in_production
+  - AUTH_SECRET=change_me_in_production

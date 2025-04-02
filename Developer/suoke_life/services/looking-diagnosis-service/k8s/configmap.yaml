@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: looking-diagnosis-config
+  namespace: suoke
+  labels:
+    app: looking-diagnosis
+    service: four-diagnosis
+data:
+  db_host: "mongodb-service"
+  db_port: "27017"
+  db_name: "looking_diagnosis"
+  four_diagnosis_coordinator_url: "http://four-diagnosis-coordinator:3000"
+  user_service_url: "http://user-service:3001"
+  api_gateway_url: "http://api-gateway:3000"
+  store_images: "true"
+  image_quality: "90"
+  max_image_size: "10485760"
+  allowed_image_types: "image/jpeg,image/png"
+  ai_confidence_threshold: "0.65"
+  log_level: "info"
+  log_format: "json"
+  cors_origin: "*.suoke.life,*.suoke.ai"
+  metrics_port: "9464"
+  metrics_path: "/metrics"
+  health_check_path: "/health"
+  readiness_check_path: "/ready"
+  liveness_check_path: "/live"
+  timeout_seconds: "60"
+  max_requests_per_minute: "60"
+  otlp_exporter_endpoint: "http://opentelemetry-collector.monitoring:4317"
+  image_storage_path: "/app/data/images"
+  result_storage_path: "/app/data/results"
+  rate_limit_window_ms: "60000"
+  rate_limit_max: "100" 

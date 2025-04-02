@@ -1,0 +1,71 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: looking-diagnosis-service-rules
+  labels:
+    app: looking-diagnosis-service
+    prometheus: app-prometheus
+    role: alert-rules
+spec:
+  groups:
+  - name: looking-diagnosis-service.alerts
+    rules:
+    - alert: LookingDiagnosisHighErrorRate
+      expr: sum(rate(http_requests_total{service="looking-diagnosis-service", status_code=~"5.."}[5m])) / sum(rate(http_requests_total{service="looking-diagnosis-service"}[5m])) > 0.05
+      for: 5m
+      labels:
+        severity: warning
+        team: four-diagnosis
+      annotations:
+        summary: "望诊服务错误率过高"
+        description: "望诊服务的错误率超过5%，已持续{{ $value | humanizePercentage }}超过5分钟。"
+        runbook_url: "https://wiki.suoke.life/ops/looking-diagnosis/runbooks/high-error-rate"
+        dashboard_url: "https://grafana.suoke.life/d/looking-diagnosis-overview"
+
+    - alert: LookingDiagnosisHighLatency
+      expr: histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{service="looking-diagnosis-service"}[5m])) by (le)) > 1.5
+      for: 5m
+      labels:
+        severity: warning
+        team: four-diagnosis
+      annotations:
+        summary: "望诊服务响应延迟过高"
+        description: "望诊服务的P95响应时间超过1.5秒，当前值为{{ $value }}秒。"
+        runbook_url: "https://wiki.suoke.life/ops/looking-diagnosis/runbooks/high-latency"
+        dashboard_url: "https://grafana.suoke.life/d/looking-diagnosis-overview"
+
+    - alert: LookingDiagnosisHighMemoryUsage
+      expr: sum(container_memory_usage_bytes{container="looking-diagnosis"}) / sum(kube_pod_container_resource_limits_memory_bytes{container="looking-diagnosis"}) > 0.85
+      for: 10m
+      labels:
+        severity: warning
+        team: four-diagnosis
+      annotations:
+        summary: "望诊服务内存使用率过高"
+        description: "望诊服务的内存使用率超过85%，当前值为{{ $value | humanizePercentage }}。"
+        runbook_url: "https://wiki.suoke.life/ops/looking-diagnosis/runbooks/high-memory-usage"
+        dashboard_url: "https://grafana.suoke.life/d/looking-diagnosis-overview"
+    
+    - alert: LookingDiagnosisPodsNotReady
+      expr: sum(kube_pod_status_ready{condition="true", namespace="suoke", pod=~"looking-diagnosis-.*"}) < 1
+      for: 5m
+      labels:
+        severity: critical
+        team: four-diagnosis
+      annotations:
+        summary: "望诊服务没有就绪的Pod"
+        description: "望诊服务没有处于Ready状态的Pod，服务可能不可用。"
+        runbook_url: "https://wiki.suoke.life/ops/looking-diagnosis/runbooks/pods-not-ready"
+        dashboard_url: "https://grafana.suoke.life/d/looking-diagnosis-overview"
+
+    - alert: LookingDiagnosisModelProcessingFailed
+      expr: rate(looking_diagnosis_model_processing_failed_total[5m]) > 0
+      for: 5m
+      labels:
+        severity: warning
+        team: four-diagnosis
+      annotations:
+        summary: "望诊模型处理失败"
+        description: "望诊模型处理出现失败，请检查模型状态和日志。"
+        runbook_url: "https://wiki.suoke.life/ops/looking-diagnosis/runbooks/model-processing-failed"
+        dashboard_url: "https://grafana.suoke.life/d/looking-diagnosis-overview" 

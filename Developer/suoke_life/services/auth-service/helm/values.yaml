@@ -1,0 +1,279 @@
+# 全局配置
+global:
+  environment: production
+  namespace: suoke
+
+# 公共库配置
+common:
+  enabled: true
+
+# 副本数
+replicaCount: 2
+
+# 镜像配置
+image:
+  repository: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/auth-service
+  pullPolicy: Always
+  tag: "1.4.0"
+
+# 镜像拉取密钥
+imagePullSecrets:
+  - name: aliyun-registry
+
+# 命名空间
+namespace: suoke
+
+# 服务配置
+service:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 80
+      targetPort: 3001
+      protocol: TCP
+    - name: metrics
+      port: 9090
+      targetPort: 9090
+      protocol: TCP
+
+# 端口配置
+ports:
+  - name: http
+    containerPort: 3001
+    protocol: TCP
+  - name: metrics
+    containerPort: 9090
+    protocol: TCP
+
+# 健康检查配置
+probes:
+  liveness:
+    path: /health
+    port: 3001
+    initialDelaySeconds: 30
+    periodSeconds: 15
+    timeoutSeconds: 5
+    failureThreshold: 3
+  readiness:
+    path: /health
+    port: 3001
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 3
+    successThreshold: 1
+    failureThreshold: 3
+  startup:
+    path: /health
+    port: 3001
+    initialDelaySeconds: 15
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 12
+
+# 资源配置
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 200m
+    memory: 256Mi
+
+# 节点亲和性
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: node-type
+          operator: In
+          values:
+          - core-services
+
+# 持久卷
+persistentVolume:
+  logs:
+    enabled: true
+    size: 5Gi
+    storageClass: suoke-standard
+    accessModes:
+      - ReadWriteOnce
+  config:
+    enabled: true
+    size: 1Gi
+    storageClass: suoke-standard
+    accessModes:
+      - ReadWriteOnce
+
+# 环境变量配置
+env:
+  # 应用基本配置
+  - name: NODE_ENV
+    value: "production"
+  - name: APP_PORT
+    value: "3001"
+  - name: APP_NAME
+    value: "SuokeAuthService"
+  - name: APP_HOST
+    value: "0.0.0.0"
+  - name: API_PREFIX
+    value: "/api"
+  
+  # OpenTelemetry配置
+  - name: OTEL_ENABLED
+    value: "true"
+  - name: OTEL_SERVICE_NAME
+    value: "auth-service"
+  - name: OTEL_EXPORTER_OTLP_ENDPOINT
+    value: "http://suoke-collector-collector.monitoring:4317"
+  - name: OTEL_EXPORTER_OTLP_PROTOCOL
+    value: "grpc"
+
+  # Kubernetes信息
+  - name: K8S_NAMESPACE
+    valueFrom:
+      fieldRef:
+        fieldPath: metadata.namespace
+  - name: K8S_POD_NAME
+    valueFrom:
+      fieldRef:
+        fieldPath: metadata.name
+  - name: K8S_NODE_NAME
+    valueFrom:
+      fieldRef:
+        fieldPath: spec.nodeName
+
+# 配置映射
+configMap:
+  name: auth-service-config
+  data:
+    # 数据库配置
+    DB_HOST: "mysql.suoke"
+    DB_PORT: "3306"
+    DB_NAME: "suoke_auth"
+    
+    # Redis配置
+    REDIS_HOST: "redis.suoke"
+    REDIS_PORT: "6379"
+    REDIS_DB: "0"
+    
+    # JWT配置
+    JWT_ACCESS_TOKEN_EXPIRATION: "3600"
+    JWT_REFRESH_TOKEN_EXPIRATION: "2592000"
+    JWT_ISSUER: "suoke.life"
+    JWT_AUDIENCE: "suoke-app"
+    
+    # 日志配置
+    LOG_LEVEL: "info"
+    LOG_FORMAT: "json"
+    LOG_DIRECTORY: "logs"
+    
+    # 性能监控
+    ENABLE_METRICS: "true"
+    METRICS_INTERVAL: "15000"
+    
+    # 跨域配置
+    CORS_ALLOWED_ORIGINS: "https://suoke.life,https://app.suoke.life"
+    CORS_ALLOWED_METHODS: "GET,HEAD,PUT,PATCH,POST,DELETE"
+    CORS_ALLOWED_CREDENTIALS: "true"
+
+# 密钥
+secret:
+  name: auth-service-secrets
+  stringData:
+    # 数据库凭据
+    DB_USER: "suoke_auth"
+    DB_PASSWORD: "replace_with_secure_password"
+    
+    # Redis凭据
+    REDIS_PASSWORD: "replace_with_secure_password"
+    
+    # JWT密钥
+    JWT_SECRET: "replace_with_random_jwt_secret"
+    
+    # 短信服务凭据
+    SMS_ACCESS_KEY_ID: "replace_with_sms_access_key"
+    SMS_ACCESS_KEY_SECRET: "replace_with_sms_secret"
+
+# Vault集成
+vault:
+  enabled: true
+  secretProviderClass: "vault-auth-service-config"
+  mountPath: "/vault/secrets"
+
+# 安全上下文
+securityContext:
+  runAsUser: 1000
+  runAsGroup: 1000
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+
+# Istio集成
+istio:
+  enabled: true
+  gateway:
+    enabled: true
+    hosts:
+      - auth.suoke.life
+    tls:
+      mode: SIMPLE
+      credentialName: auth-suoke-life-cert
+  virtualService:
+    enabled: true
+    hosts:
+      - auth.suoke.life
+    gateways:
+      - auth-service-gateway
+  destinationRule:
+    enabled: true
+    trafficPolicy:
+      connectionPool:
+        tcp:
+          maxConnections: 100
+        http:
+          http1MaxPendingRequests: 100
+      outlierDetection:
+        consecutive5xxErrors: 5
+        interval: 30s
+      tls:
+        mode: ISTIO_MUTUAL
+
+# 水平自动伸缩
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
+
+# 监控配置
+monitoring:
+  serviceMonitor:
+    enabled: true
+    namespace: monitoring
+    interval: 15s
+    scrapeTimeout: 10s
+    path: /api/metrics
+
+# 网络策略
+networkPolicy:
+  enabled: true
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: api-gateway
+        - podSelector:
+            matchLabels:
+              app: user-service
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app: mysql
+        - podSelector:
+            matchLabels:
+              app: redis 

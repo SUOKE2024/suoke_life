@@ -1,0 +1,39 @@
+apiVersion: v2
+name: auth-service
+description: 索克生活认证服务Helm Chart
+
+# Helm Chart版本
+version: 0.1.0
+
+# 应用版本
+appVersion: "1.4.0"
+
+# Chart类型
+type: application
+
+# 关键字
+keywords:
+  - suoke
+  - auth
+  - authentication
+  - security
+
+# 维护者
+maintainers:
+  - name: 索克生活技术团队
+    email: tech@suoke.life
+    url: https://suoke.life
+
+# 主页
+home: https://auth.suoke.life
+
+# 源代码
+sources:
+  - https://gitlab.suoke.life/suoke/auth-service
+
+# 依赖
+dependencies:
+  - name: common
+    version: ^1.0.0
+    repository: https://gitlab.suoke.life/suoke/helm-charts
+    condition: common.enabled 

@@ -1,0 +1,140 @@
+{
+  "functions": [
+    {
+      "name": "query_tcm_knowledge",
+      "description": "查询中医理论知识库，获取关于中医基础理论、经络穴位、方剂组成等专业知识",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "查询关键词或问题，例如'肝郁证的主要症状'、'足三里穴位的功效'等"
+          },
+          "category": {
+            "type": "string",
+            "enum": ["基础理论", "方剂学", "经络穴位", "诊断方法", "治疗方法", "药物学"],
+            "description": "可选，指定要查询的中医知识分类"
+          },
+          "source_type": {
+            "type": "string",
+            "enum": ["经典著作", "现代教材", "研究文献", "临床案例"],
+            "description": "可选，指定要查询的知识来源类型"
+          },
+          "max_results": {
+            "type": "integer",
+            "description": "可选，指定返回的最大结果数量，默认为5"
+          }
+        },
+        "required": ["query"]
+      }
+    },
+    {
+      "name": "search_constitution_knowledge",
+      "description": "检索中医九种体质相关知识，包括体质特征、调理方法、适宜食物等",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "constitution_type": {
+            "type": "string",
+            "enum": ["平和质", "气虚质", "阳虚质", "阴虚质", "痰湿质", "湿热质", "血瘀质", "气郁质", "特禀质"],
+            "description": "指定要查询的体质类型"
+          },
+          "aspect": {
+            "type": "string",
+            "enum": ["特征表现", "形成原因", "调理原则", "适宜食物", "运动方式", "生活起居", "情志调摄", "常见问题"],
+            "description": "可选，指定要查询的体质知识方面"
+          },
+          "detailed": {
+            "type": "boolean",
+            "description": "可选，是否返回详细信息，默认为false"
+          }
+        },
+        "required": ["constitution_type"]
+      }
+    },
+    {
+      "name": "get_tcm_formula_details",
+      "description": "获取中医方剂的详细信息，包括组成、功效、用法用量等",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "formula_name": {
+            "type": "string",
+            "description": "方剂名称，例如'四君子汤'、'六味地黄丸'等"
+          },
+          "include_clinical_applications": {
+            "type": "boolean",
+            "description": "可选，是否包含临床应用案例，默认为false"
+          },
+          "include_modern_research": {
+            "type": "boolean",
+            "description": "可选，是否包含现代研究成果，默认为false"
+          }
+        },
+        "required": ["formula_name"]
+      }
+    },
+    {
+      "name": "get_seasonal_health_guidance",
+      "description": "获取基于二十四节气的养生保健指导建议",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "solar_term": {
+            "type": "string",
+            "enum": ["立春", "雨水", "惊蛰", "春分", "清明", "谷雨", "立夏", "小满", "芒种", "夏至", "小暑", "大暑", "立秋", "处暑", "白露", "秋分", "寒露", "霜降", "立冬", "小雪", "大雪", "冬至", "小寒", "大寒"],
+            "description": "指定二十四节气名称，如不提供则默认为当前节气"
+          },
+          "guidance_type": {
+            "type": "string",
+            "enum": ["饮食", "起居", "运动", "情志", "穴位保健", "全面指导"],
+            "description": "可选，指定要获取的养生指导类型，默认为全面指导"
+          },
+          "constitution_type": {
+            "type": "string",
+            "enum": ["平和质", "气虚质", "阳虚质", "阴虚质", "痰湿质", "湿热质", "血瘀质", "气郁质", "特禀质"],
+            "description": "可选，指定体质类型以获取个性化建议"
+          }
+        },
+        "required": []
+      }
+    },
+    {
+      "name": "get_food_therapy_recommendations",
+      "description": "获取中医食疗推荐，包括适宜食物、食疗方和膳食建议",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "condition": {
+            "type": "string",
+            "description": "可选，健康状况或症状描述，例如'失眠'、'消化不良'等"
+          },
+          "constitution_type": {
+            "type": "string",
+            "enum": ["平和质", "气虚质", "阳虚质", "阴虚质", "痰湿质", "湿热质", "血瘀质", "气郁质", "特禀质"],
+            "description": "可选，指定体质类型以获取针对性食疗建议"
+          },
+          "season": {
+            "type": "string",
+            "enum": ["春季", "夏季", "秋季", "冬季"],
+            "description": "可选，指定季节以获取应季食疗建议"
+          },
+          "solar_term": {
+            "type": "string",
+            "enum": ["立春", "雨水", "惊蛰", "春分", "清明", "谷雨", "立夏", "小满", "芒种", "夏至", "小暑", "大暑", "立秋", "处暑", "白露", "秋分", "寒露", "霜降", "立冬", "小雪", "大雪", "冬至", "小寒", "大寒"],
+            "description": "可选，指定节气以获取更精准的食疗建议"
+          },
+          "include_recipes": {
+            "type": "boolean",
+            "description": "可选，是否包含详细食疗方，默认为true"
+          },
+          "limit": {
+            "type": "integer",
+            "description": "可选，指定返回的推荐数量，默认为5"
+          }
+        },
+        "required": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{{- if and .Values.istio.enabled .Values.istio.virtualService.enabled }}
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ include "agent-coordinator.fullname" . }}-vs
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "agent-coordinator.labels" . | nindent 4 }}
+spec:
+  hosts:
+  - {{ include "agent-coordinator.fullname" . }}-service
+  http:
+  - route:
+    - destination:
+        host: {{ include "agent-coordinator.fullname" . }}-service
+        port:
+          number: {{ .Values.service.port }}
+    retries:
+      attempts: {{ .Values.istio.virtualService.retries.attempts }}
+      perTryTimeout: {{ .Values.istio.virtualService.retries.perTryTimeout }}
+      retryOn: "gateway-error,connect-failure,refused-stream,unavailable,cancelled,resource-exhausted"
+{{- end }}

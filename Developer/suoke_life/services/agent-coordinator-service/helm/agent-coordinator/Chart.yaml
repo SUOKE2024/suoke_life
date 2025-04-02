@@ -1,0 +1,21 @@
+apiVersion: v2
+name: agent-coordinator
+description: Agent Coordinator Service for Suoke Life Platform
+type: application
+version: 0.1.0
+appVersion: "1.2.0"
+maintainers:
+  - name: Suoke DevOps Team
+    email: devops@suoke.life
+keywords:
+  - agent
+  - coordinator
+  - ai
+  - suoke
+dependencies:
+  - name: common
+    version: "^1.0.0"
+    repository: "https://charts.bitnami.com/bitnami"
+    condition: common.enabled
+    tags:
+      - suoke-common

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: smell-diagnosis-backup-pvc
+  namespace: suoke
+  labels:
+    app: smell-diagnosis-service
+    service: four-diagnosis
+    component: backup
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: standard
+  volumeMode: Filesystem 

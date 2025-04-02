@@ -1,0 +1,80 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: xiaoai-network-policy
+  namespace: suoke
+spec:
+  podSelector:
+    matchLabels:
+      app: xiaoai-service
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: suoke
+    - podSelector:
+        matchLabels:
+          app: api-gateway
+    ports:
+    - protocol: TCP
+      port: 3040
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          app: looking-diagnosis-service
+    ports:
+    - protocol: TCP
+      port: 3051
+  - to:
+    - podSelector:
+        matchLabels:
+          app: inquiry-diagnosis-service
+    ports:
+    - protocol: TCP
+      port: 3052
+  - to:
+    - podSelector:
+        matchLabels:
+          app: smell-diagnosis-service
+    ports:
+    - protocol: TCP
+      port: 3053
+  - to:
+    - podSelector:
+        matchLabels:
+          app: touch-diagnosis-service
+    ports:
+    - protocol: TCP
+      port: 3054
+  - to:
+    - podSelector:
+        matchLabels:
+          app: tts-service
+    ports:
+    - protocol: TCP
+      port: 3060
+  - to:
+    - podSelector:
+        matchLabels:
+          app: mongodb
+    ports:
+    - protocol: TCP
+      port: 27017
+  - to:
+    - podSelector:
+        matchLabels:
+          app: redis
+    ports:
+    - protocol: TCP
+      port: 6379
+  - to:
+    # 允许DNS解析
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53

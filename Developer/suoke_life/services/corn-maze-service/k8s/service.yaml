@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: corn-maze-service
+  namespace: suoke
+  labels:
+    app: corn-maze-service
+spec:
+  selector:
+    app: corn-maze-service
+  ports:
+  - port: 80
+    targetPort: 3001
+    name: http
+  - port: 3101
+    targetPort: 3101
+    name: websocket
+  type: ClusterIP 

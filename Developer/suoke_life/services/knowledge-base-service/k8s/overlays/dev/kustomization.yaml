@@ -1,0 +1,24 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: suoke
+
+resources:
+  - ../../kustomization.yaml
+
+patchesStrategicMerge:
+  - ../../patches/resources-dev-patch.yaml
+
+configMapGenerator:
+  - name: knowledge-base-config
+    behavior: merge
+    literals:
+      - NODE_ENV=development
+      - LOG_LEVEL=debug
+      - DEBUG=true
+      - ENABLE_METRICS=true
+
+images:
+  - name: knowledge-base-service
+    newName: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/knowledge-base-service
+    newTag: dev

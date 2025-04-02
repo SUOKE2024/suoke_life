@@ -1,0 +1,13 @@
+apiVersion: spire.spiffe.io/v1alpha1
+kind: ClusterSPIFFEID
+metadata:
+  name: agent-coordinator-spiffe-id
+  namespace: spire-system
+spec:
+  spiffeID: "spiffe://suoke.life/ns/suoke/sa/agent-coordinator"
+  selector:
+    namespaces:
+      - suoke
+    podSelector:
+      matchLabels:
+        app: agent-coordinator 

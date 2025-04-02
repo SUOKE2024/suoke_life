@@ -1,0 +1,44 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+commonLabels:
+  app: smell-diagnosis-service
+  service: four-diagnosis
+  app.kubernetes.io/name: smell-diagnosis-service
+  app.kubernetes.io/part-of: suoke-diagnosis
+
+namespace: suoke
+
+resources:
+- deployment.yaml
+- service.yaml
+- pvc.yaml
+- networkpolicy.yaml
+- serviceaccount.yaml
+- configmap.yaml
+- secrets.yaml
+- hpa.yaml
+- backup-cronjob.yaml
+- backup-pvc.yaml
+- vault-secretproviderclass.yaml
+- pdb.yaml
+
+configMapGenerator:
+- name: smell-diagnosis-config
+  literals:
+  - PORT=3002
+  - NODE_ENV=production
+  - API_PREFIX=/api
+  - METRICS_PORT=9464
+  - METRICS_PATH=/metrics
+  - LOG_LEVEL=info
+  - LOG_FORMAT=json
+  - OTEL_SERVICE_NAME=smell-diagnosis-service
+
+secretGenerator:
+- name: smell-diagnosis-secrets
+  literals:
+  - MONGODB_URI=mongodb://mongodb-service:27017/smell-diagnosis
+  - FOUR_DIAGNOSIS_COORDINATOR_URL=http://four-diagnosis-coordinator-service:3050
+  - API_GATEWAY_URL=http://api-gateway-service:3000
+  - OTEL_EXPORTER_OTLP_ENDPOINT=http://opentelemetry-collector.monitoring:4317 

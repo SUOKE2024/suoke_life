@@ -1,0 +1,85 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: soer-service-backup
+  namespace: suoke
+  labels:
+    app: soer-service
+    component: backup
+  annotations:
+    description: "定期备份索儿服务数据"
+spec:
+  schedule: "0 2 * * *"  # 每天凌晨2点执行
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 7
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: soer-service
+            component: backup
+        spec:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+          containers:
+          - name: backup
+            image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/mysql-backup:1.0.0
+            imagePullPolicy: IfNotPresent
+            env:
+            - name: TIMESTAMP
+              value: "$(date +%Y%m%d-%H%M%S)"
+            - name: BACKUP_NAME
+              value: "soer-db-$(date +%Y%m%d)"
+            command:
+            - /bin/sh
+            - -c
+            - |
+              # 创建备份目录
+              mkdir -p /backup/${BACKUP_NAME}
+              
+              # 导出数据库
+              mysqldump -h ${MYSQL_HOST} -u ${MYSQL_USER} -p${MYSQL_PASSWORD} ${MYSQL_DATABASE} > /backup/${BACKUP_NAME}/soer-db.sql
+              
+              # 压缩备份
+              tar -czf /backup/${BACKUP_NAME}.tar.gz -C /backup ${BACKUP_NAME}
+              
+              # 清理临时文件
+              rm -rf /backup/${BACKUP_NAME}
+              
+              # 删除超过30天的备份
+              find /backup -name "soer-db-*.tar.gz" -type f -mtime +30 -delete
+              
+              echo "备份完成: /backup/${BACKUP_NAME}.tar.gz"
+            volumeMounts:
+            - name: backup-volume
+              mountPath: /backup
+            - name: db-credentials
+              mountPath: /etc/secrets
+              readOnly: true
+            resources:
+              requests:
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                cpu: 500m
+                memory: 512Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities:
+                drop:
+                - ALL
+          volumes:
+          - name: backup-volume
+            persistentVolumeClaim:
+              claimName: soer-backup-pvc
+          - name: db-credentials
+            secret:
+              secretName: soer-db-credentials
+          restartPolicy: OnFailure
+          terminationGracePeriodSeconds: 30 

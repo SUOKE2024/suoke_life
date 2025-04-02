@@ -1,0 +1,254 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: soer-service
+  namespace: suoke
+  labels:
+    app: soer-service
+    tier: ai
+    component: agent
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9464"
+    prometheus.io/path: "/metrics"
+    backup.velero.io/backup-volumes: "soer-data,soer-cache,soer-logs"
+    backup.velero.io/schedule: "daily"
+    backup.velero.io/ttl: "720h"
+    sidecar.istio.io/statsInclusionPrefixes: "soer_,health_,life_activity_"
+    trivy.security.scanning/enabled: "true"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: soer-service
+      component: agent
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: soer-service
+        tier: ai
+        component: agent
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9464"
+        prometheus.io/path: "/metrics"
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      # 节点亲和性 - 优先部署在AI服务节点池
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-type
+                operator: In
+                values:
+                - ai-services
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - soer-service
+              topologyKey: kubernetes.io/hostname
+          - weight: 70
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - soer-service
+              topologyKey: topology.kubernetes.io/zone
+      
+      # 污点容忍 - 允许部署在有污点的AI节点上
+      tolerations:
+      - key: "dedicated"
+        operator: "Equal"
+        value: "ai-inference"
+        effect: "NoSchedule"
+      
+      serviceAccountName: soer-service-sa
+      terminationGracePeriodSeconds: 60
+      
+      # 初始化容器 - 为主容器准备环境
+      initContainers:
+      - name: init-permissions
+        image: busybox:1.34.1
+        command: ["sh", "-c", "chmod -R 755 /data /cache /logs && chown -R 1000:1000 /data /cache /logs"]
+        securityContext:
+          allowPrivilegeEscalation: false
+          privileged: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: false
+          runAsUser: 0
+          capabilities:
+            drop:
+            - ALL
+        volumeMounts:
+        - name: data-volume
+          mountPath: /data
+        - name: cache-volume
+          mountPath: /cache
+        - name: log-volume
+          mountPath: /logs
+      
+      containers:
+      - name: soer-service
+        image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/soer-service:1.2.0
+        imagePullPolicy: Always
+        securityContext:
+          allowPrivilegeEscalation: false
+          privileged: false
+          readOnlyRootFilesystem: false
+          capabilities:
+            drop:
+            - ALL
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: LOG_LEVEL
+          value: "info"
+        - name: PORT
+          value: "3006"
+        - name: METRICS_PORT
+          value: "9464"
+        - name: LOG_DIR
+          value: "/app/logs"
+        - name: DATA_DIR
+          value: "/app/data"
+        - name: CACHE_DIR
+          value: "/app/cache"
+        - name: CONFIG_DIR
+          value: "/app/config"
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        ports:
+        - name: http
+          containerPort: 3006
+          protocol: TCP
+        - name: metrics
+          containerPort: 9464
+          protocol: TCP
+        - name: websocket
+          containerPort: 3007
+          protocol: TCP
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config
+          readOnly: true
+        - name: data-volume
+          mountPath: /app/data
+        - name: cache-volume
+          mountPath: /app/cache
+        - name: log-volume
+          mountPath: /app/logs
+        - name: secrets-store
+          mountPath: "/mnt/secrets-store"
+          readOnly: true
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "1Gi"
+          limits:
+            cpu: "1"
+            memory: "2Gi"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+            httpHeaders:
+            - name: X-Probe-Type
+              value: "liveness"
+          initialDelaySeconds: 30
+          periodSeconds: 15
+          timeoutSeconds: 5
+          failureThreshold: 3
+          successThreshold: 1
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+            httpHeaders:
+            - name: X-Probe-Type
+              value: "readiness"
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
+        startupProbe:
+          httpGet:
+            path: /health
+            port: http
+            httpHeaders:
+            - name: X-Probe-Type
+              value: "startup"
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 30
+      - name: otel-collector-sidecar
+        image: otel/opentelemetry-collector-contrib:0.84.0
+        args:
+        - "--config=/conf/otel-collector-config.yaml"
+        ports:
+        - name: otlp
+          containerPort: 4317
+        - name: otlp-http
+          containerPort: 4318
+        - name: health-check
+          containerPort: 13133
+        volumeMounts:
+        - name: otel-collector-config
+          mountPath: /conf
+        resources:
+          limits:
+            cpu: 200m
+            memory: 400Mi
+          requests:
+            cpu: 100m
+            memory: 200Mi
+      
+      volumes:
+      - name: config-volume
+        configMap:
+          name: soer-config
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: soer-data-pvc
+      - name: cache-volume
+        persistentVolumeClaim:
+          claimName: soer-cache-pvc
+      - name: log-volume
+        persistentVolumeClaim:
+          claimName: soer-logs-pvc
+      - name: otel-collector-config
+        configMap:
+          name: soer-otel-collector-config
+      - name: secrets-store
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "vault-soer-service-config"

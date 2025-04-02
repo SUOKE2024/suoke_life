@@ -1,0 +1,155 @@
+version: '3.8'
+
+services:
+  # 索儿服务 - 主应用
+  soer-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: soer-service:dev
+    container_name: soer-service
+    restart: unless-stopped
+    ports:
+      - "3000:3000"  # 主API端口
+      - "9464:9464"  # 指标端口
+    volumes:
+      - ./:/app
+      - soer-data:/app/data
+      - soer-logs:/app/logs
+      - soer-cache:/app/cache
+      - ./config:/app/config
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - METRICS_PORT=9464
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USER=soer
+      - DB_PASSWORD=soer_pass
+      - DB_NAME=soer_db
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - LOG_LEVEL=debug
+      - LOG_DIR=/app/logs
+      - DATA_DIR=/app/data
+      - CACHE_DIR=/app/cache
+      - RUN_MIGRATIONS=true
+    command: ["sh", "-c", "chmod +x /app/scripts/docker-entrypoint.sh && /app/scripts/docker-entrypoint.sh npm run dev"]
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - soer-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # MySQL数据库
+  mysql:
+    image: mysql:8.0
+    container_name: soer-mysql
+    restart: unless-stopped
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_password
+      - MYSQL_DATABASE=soer_db
+      - MYSQL_USER=soer
+      - MYSQL_PASSWORD=soer_pass
+    networks:
+      - soer-network
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "soer", "-psoer_pass"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # Redis缓存
+  redis:
+    image: redis:7.0-alpine
+    container_name: soer-redis
+    restart: unless-stopped
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes --requirepass ""
+    networks:
+      - soer-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # Jaeger - 分布式追踪
+  jaeger:
+    image: jaegertracing/all-in-one:1.41
+    container_name: soer-jaeger
+    ports:
+      - "16686:16686"  # UI
+      - "14268:14268"  # Collector HTTP
+      - "4317:4317"    # OTLP gRPC
+      - "4318:4318"    # OTLP HTTP
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    networks:
+      - soer-network
+
+  # Prometheus - 指标监控
+  prometheus:
+    image: prom/prometheus:v2.40.4
+    container_name: soer-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    networks:
+      - soer-network
+
+  # Grafana - 可视化仪表板
+  grafana:
+    image: grafana/grafana:9.3.6
+    container_name: soer-grafana
+    ports:
+      - "3001:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./prometheus/grafana-datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
+      - ./prometheus/grafana-dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml
+      - ./prometheus/dashboards:/var/lib/grafana/dashboards
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    networks:
+      - soer-network
+    depends_on:
+      - prometheus
+
+volumes:
+  soer-data:
+  soer-logs:
+  soer-cache:
+  mysql-data:
+  redis-data:
+  prometheus-data:
+  grafana-data:
+
+networks:
+  soer-network:
+    driver: bridge 

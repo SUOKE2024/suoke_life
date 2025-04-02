@@ -1,0 +1,107 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  scrape_timeout: 10s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'otel-collector'
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['otel-collector:8889']
+        labels:
+          service: 'otel-collector'
+
+  # API网关
+  - job_name: 'api-gateway'
+    scrape_interval: 10s
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['api-gateway:8000']
+        labels:
+          service: 'api-gateway'
+
+  # 知识图谱服务
+  - job_name: 'knowledge-graph'
+    scrape_interval: 10s
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['knowledge-graph-service:3010']
+        labels:
+          service: 'knowledge-graph'
+
+  # 知识库服务
+  - job_name: 'knowledge-base'
+    scrape_interval: 10s
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['knowledge-base-service:3020']
+        labels:
+          service: 'knowledge-base'
+
+  # RAG服务
+  - job_name: 'rag-service'
+    scrape_interval: 10s
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['rag-service:3030']
+        labels:
+          service: 'rag-service'
+
+  # 小艾服务
+  - job_name: 'xiaoai-service'
+    scrape_interval: 10s
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['xiaoai-service:3040']
+        labels:
+          service: 'xiaoai-service'
+
+  # 四诊协调器服务
+  - job_name: 'four-diagnosis-coordinator'
+    scrape_interval: 10s
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['four-diagnosis-coordinator:3050']
+        labels:
+          service: 'four-diagnosis-coordinator'
+
+  # 望诊服务
+  - job_name: 'looking-diagnosis'
+    scrape_interval: 10s
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['looking-diagnosis:3051']
+        labels:
+          service: 'looking-diagnosis'
+
+  # 问诊服务
+  - job_name: 'inquiry-diagnosis'
+    scrape_interval: 10s
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['inquiry-diagnosis:3052']
+        labels:
+          service: 'inquiry-diagnosis'
+          
+  # Neo4j
+  - job_name: 'neo4j'
+    scrape_interval: 15s
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['neo4j:2004']
+        labels:
+          service: 'neo4j'
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # - alertmanager:9093
+
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"

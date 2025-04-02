@@ -1,0 +1,38 @@
+# EditorConfig文件
+# https://editorconfig.org
+
+# 顶级配置
+root = true
+
+# 所有文件通用配置
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 2
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Python特有配置
+[*.py]
+indent_size = 4
+
+# Markdown文件特有配置
+[*.md]
+trim_trailing_whitespace = false
+
+# JSON文件配置
+[*.json]
+indent_size = 2
+
+# YAML文件配置
+[*.{yml,yaml}]
+indent_size = 2
+
+# Docker文件配置
+[Dockerfile]
+indent_size = 4
+
+# Shell脚本配置
+[*.sh]
+indent_size = 2

@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-gateway-config
+  namespace: suoke-dev
+  labels:
+    app: api-gateway
+    environment: development
+data:
+  config.json: |
+    {
+      "services": {
+        "agentCoordinatorService": {
+          "name": "agent-coordinator-service",
+          "prefix": "/api/v1/agents/coordinator",
+          "healthCheck": "/health",
+          "instances": ["http://agent-coordinator-service.suoke-dev.svc.cluster.local"],
+          "loadBalanceStrategy": "round-robin"
+        }
+      }
+    }

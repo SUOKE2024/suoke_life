@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: four-diagnosis-coordinator
+  namespace: suoke
+  labels:
+    app: four-diagnosis-coordinator
+    service: four-diagnosis
+  annotations:
+    prometheus.io/scrape: 'true'
+    prometheus.io/port: '9464'
+    prometheus.io/path: '/metrics'
+spec:
+  type: ClusterIP
+  ports:
+  - port: 3050
+    targetPort: http
+    protocol: TCP
+    name: http
+  - port: 9464
+    targetPort: metrics
+    protocol: TCP
+    name: metrics
+  selector:
+    app: four-diagnosis-coordinator 

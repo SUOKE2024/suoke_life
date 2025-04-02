@@ -1,0 +1,58 @@
+{{- if .Values.istio.enabled }}
+{{- if .Values.istio.virtualService.enabled }}
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ include "common.names.fullname" . }}-virtual-service
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
+  labels:
+    {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: "auth-service"
+spec:
+  hosts:
+  {{- range .Values.istio.virtualService.hosts }}
+  - {{ . | quote }}
+  {{- end }}
+  gateways:
+  {{- range .Values.istio.virtualService.gateways }}
+  - {{ . | quote }}
+  {{- end }}
+  http:
+  - match:
+    - uri:
+        prefix: "/api/health"
+    route:
+    - destination:
+        host: {{ include "common.names.fullname" . }}
+        port:
+          number: 80
+    retries:
+      attempts: 3
+      perTryTimeout: 2s
+      retryOn: gateway-error,connect-failure,refused-stream
+  - match:
+    - uri:
+        prefix: "/api/metrics"
+    route:
+    - destination:
+        host: {{ include "common.names.fullname" . }}
+        port:
+          number: 80
+    retries:
+      attempts: 1
+      perTryTimeout: 1s
+  - match:
+    - uri:
+        prefix: "/api"
+    route:
+    - destination:
+        host: {{ include "common.names.fullname" . }}
+        port:
+          number: 80
+    timeout: 10s
+    retries:
+      attempts: 3
+      perTryTimeout: 2s
+      retryOn: gateway-error,connect-failure,refused-stream
+{{- end }}
+{{- end }} 

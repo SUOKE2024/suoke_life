@@ -1,0 +1,19 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: corn-maze-service
+  namespace: suoke
+spec:
+  hosts:
+  - "api.suoke.life"
+  gateways:
+  - suoke-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /api/corn-maze
+    route:
+    - destination:
+        host: corn-maze-service
+        port:
+          number: 80 

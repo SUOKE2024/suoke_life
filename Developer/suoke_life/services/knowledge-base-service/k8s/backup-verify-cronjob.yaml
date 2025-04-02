@@ -1,0 +1,120 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: knowledge-base-backup-verify
+  namespace: suoke
+  labels:
+    app: knowledge-base-service
+    component: backup-verify
+spec:
+  schedule: "0 10 * * 0"  # 每周日上午10点执行
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: backup-verify-sa
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+          containers:
+          - name: backup-verify
+            image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/backup-verify:1.0.0
+            command:
+            - /bin/sh
+            - -c
+            - |
+              # 获取最新的备份
+              echo "获取最新的知识库备份文件..."
+              LATEST_BACKUP=$(ls -t /backups/knowledge_base_backup_*.tar.gz | head -1)
+              
+              if [ -z "$LATEST_BACKUP" ]; then
+                echo "未找到可用的备份，检查OSS存储"
+                # 从OSS获取最新备份
+                ossutil ls oss://suoke-backup-beijing/knowledge-base/ | sort -r | head -1 > /tmp/latest_oss
+                if [ -s "/tmp/latest_oss" ]; then
+                  OSS_PATH=$(cat /tmp/latest_oss | awk '{print $NF}')
+                  ossutil cp $OSS_PATH /backups/
+                  LATEST_BACKUP=$(ls -t /backups/knowledge_base_backup_*.tar.gz | head -1)
+                fi
+              fi
+              
+              # 如果存在备份，进行验证
+              if [ ! -z "$LATEST_BACKUP" ]; then
+                echo "验证备份 $LATEST_BACKUP"
+                
+                # 创建临时目录并解压备份
+                VERIFY_DIR="/tmp/verify_backup"
+                mkdir -p $VERIFY_DIR
+                tar -xzf $LATEST_BACKUP -C $VERIFY_DIR
+                
+                # 验证MongoDB备份完整性
+                if [ -d "$VERIFY_DIR/knowledge-base/mongo_"* ]; then
+                  MONGO_BACKUP_DIR=$(find $VERIFY_DIR/knowledge-base -type d -name "mongo_*" | head -1)
+                  
+                  # 检查关键集合是否存在
+                  COLLECTIONS=("categories" "knowledge" "tags" "users" "settings")
+                  MISSING=0
+                  
+                  for COLLECTION in "${COLLECTIONS[@]}"; do
+                    if [ ! -f "$MONGO_BACKUP_DIR/suoke/$COLLECTION.bson" ]; then
+                      echo "警告: 备份中缺少 $COLLECTION 集合" >&2
+                      MISSING=$((MISSING+1))
+                    fi
+                  done
+                  
+                  if [ $MISSING -eq 0 ]; then
+                    echo "备份验证成功: 所有必需集合都存在"
+                    # 测试数据库导入
+                    echo "测试数据恢复..."
+                    mongorestore --uri $TEST_MONGODB_URI --nsFrom suoke.* --nsTo verify_test.* $MONGO_BACKUP_DIR
+                    
+                    # 验证数据导入是否成功
+                    COUNT=$(mongo $TEST_MONGODB_URI --quiet --eval "db.getSiblingDB('verify_test').knowledge.count()")
+                    if [ $COUNT -gt 0 ]; then
+                      echo "备份验证完成: 数据恢复测试成功，恢复了 $COUNT 条知识记录"
+                    else
+                      echo "备份验证失败: 数据恢复测试失败，未能恢复知识记录" >&2
+                      exit 1
+                    fi
+                  else
+                    echo "备份验证失败: 缺少 $MISSING 个必需集合" >&2
+                    exit 1
+                  fi
+                else
+                  echo "备份验证失败: 备份中找不到MongoDB数据目录" >&2
+                  exit 1
+                fi
+                
+                # 清理临时文件
+                rm -rf $VERIFY_DIR
+              else
+                echo "未找到可用的备份进行验证" >&2
+                exit 1
+              fi
+            env:
+            - name: TEST_MONGODB_URI
+              valueFrom:
+                secretKeyRef:
+                  name: knowledge-base-test-secrets
+                  key: mongodb-uri
+            resources:
+              requests:
+                cpu: 100m
+                memory: 128Mi
+              limits:
+                cpu: 200m
+                memory: 256Mi
+            volumeMounts:
+            - name: backup-volume
+              mountPath: /backups
+              readOnly: true
+          volumes:
+          - name: backup-volume
+            persistentVolumeClaim:
+              claimName: knowledge-base-backup-pvc
+          restartPolicy: OnFailure

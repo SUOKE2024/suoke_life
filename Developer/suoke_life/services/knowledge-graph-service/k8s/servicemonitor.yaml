@@ -1,0 +1,33 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: knowledge-graph-service-monitor
+  namespace: suoke
+  labels:
+    app: knowledge-graph-service
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: knowledge-graph-service
+  namespaceSelector:
+    matchNames:
+      - suoke
+  endpoints:
+    - port: metrics
+      path: /metrics
+      interval: 15s
+      scrapeTimeout: 10s
+      metricRelabelings:
+        # 重命名特定指标
+        - sourceLabels: [__name__]
+          regex: 'http_requests_total'
+          targetLabel: 'http_requests_count'
+          action: replace
+      relabelings:
+        # 添加环境标签
+        - targetLabel: environment
+          replacement: production
+        # 添加服务类型标签
+        - targetLabel: service_type
+          replacement: knowledge-graph

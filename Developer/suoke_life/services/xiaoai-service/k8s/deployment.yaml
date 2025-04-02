@@ -1,0 +1,124 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xiaoai-service
+  labels:
+    app: xiaoai-service
+    role: agent-coordinator
+    tier: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: xiaoai-service
+  template:
+    metadata:
+      labels:
+        app: xiaoai-service
+        istio-injection: enabled
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "3040"
+        prometheus.io/path: "/metrics"
+    spec:
+      nodeSelector:
+        node-type: ai-services
+      tolerations:
+      - key: dedicated
+        operator: Equal
+        value: ai-inference
+        effect: NoSchedule
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+      containers:
+      - name: xiaoai-service
+        image: ${DOCKER_REGISTRY}/xiaoai-service:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3040
+        securityContext:
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: PORT
+          value: "3040"
+        - name: MONGODB_URI
+          valueFrom:
+            secretKeyRef:
+              name: xiaoai-secrets
+              key: mongodb-uri
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: xiaoai-secrets
+              key: openai-api-key
+        - name: LOOKING_DIAGNOSIS_SERVICE_URL
+          value: "http://looking-diagnosis-service:3051"
+        - name: INQUIRY_DIAGNOSIS_SERVICE_URL
+          value: "http://inquiry-diagnosis-service:3052"
+        - name: SMELL_DIAGNOSIS_SERVICE_URL
+          value: "http://smell-diagnosis-service:3053"
+        - name: TOUCH_DIAGNOSIS_SERVICE_URL
+          value: "http://touch-diagnosis-service:3054"
+        - name: TTS_SERVICE_URL
+          value: "http://tts-service:3060"
+        - name: REDIS_URI
+          valueFrom:
+            secretKeyRef:
+              name: xiaoai-secrets
+              key: redis-uri
+        # 自适应批处理配置
+        - name: ENABLE_DYNAMIC_BATCHING
+          value: "true"
+        - name: MAX_BATCH_SIZE
+          value: "8"
+        - name: MAX_BATCH_TIMEOUT_MS
+          value: "50"
+        resources:
+          limits:
+            cpu: "1"
+            memory: "1Gi"
+          requests:
+            cpu: "500m"
+            memory: "512Mi"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3040
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3040
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        volumeMounts:
+        - name: logs
+          mountPath: /app/logs
+        - name: tmp
+          mountPath: /tmp
+      volumes:
+      - name: logs
+        persistentVolumeClaim:
+          claimName: xiaoai-logs
+      - name: tmp
+        emptyDir: {}
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: xiaoai-logs
+  labels:
+    app: xiaoai-service
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: suoke-standard
+  resources:
+    requests:
+      storage: 2Gi

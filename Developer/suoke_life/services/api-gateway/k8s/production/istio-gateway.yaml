@@ -1,0 +1,106 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: api-gateway-gateway
+  namespace: suoke
+  labels:
+    app: api-gateway
+    service-type: edge
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "api.suoke.life"
+    tls:
+      httpsRedirect: true
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    hosts:
+    - "api.suoke.life"
+    tls:
+      mode: SIMPLE
+      credentialName: api-suoke-life-cert
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: api-gateway-virtual-service
+  namespace: suoke
+  labels:
+    app: api-gateway
+    service-type: edge
+spec:
+  hosts:
+  - "api.suoke.life"
+  gateways:
+  - api-gateway-gateway
+  http:
+  - match:
+    - uri:
+        prefix: "/health"
+    route:
+    - destination:
+        host: api-gateway
+        port:
+          number: 80
+    retries:
+      attempts: 3
+      perTryTimeout: 2s
+      retryOn: gateway-error,connect-failure,refused-stream
+  - match:
+    - uri:
+        prefix: "/metrics"
+    route:
+    - destination:
+        host: api-gateway
+        port:
+          number: 80
+    retries:
+      attempts: 1
+      perTryTimeout: 1s
+  - match:
+    - uri:
+        prefix: "/api"
+    route:
+    - destination:
+        host: api-gateway
+        port:
+          number: 80
+    timeout: 60s
+    retries:
+      attempts: 3
+      perTryTimeout: 2s
+      retryOn: gateway-error,connect-failure,refused-stream,5xx
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: api-gateway-destination-rule
+  namespace: suoke
+  labels:
+    app: api-gateway
+    service-type: edge
+spec:
+  host: api-gateway
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: 200
+        connectTimeout: 3s
+      http:
+        http1MaxPendingRequests: 200
+        maxRequestsPerConnection: 50
+        maxRetries: 5
+    outlierDetection:
+      consecutive5xxErrors: 5
+      interval: 30s
+      baseEjectionTime: 30s
+    tls:
+      mode: ISTIO_MUTUAL 

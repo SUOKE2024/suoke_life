@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: api-gateway-backup-pvc
+  namespace: suoke
+  labels:
+    app: api-gateway
+    service-type: edge
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "false"
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: alicloud-disk-ssd
+  resources:
+    requests:
+      storage: 20Gi 

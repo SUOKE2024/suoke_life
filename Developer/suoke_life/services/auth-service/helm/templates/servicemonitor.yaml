@@ -1,0 +1,36 @@
+{{- if .Values.monitoring.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "common.names.fullname" . }}-monitor
+  namespace: {{ .Values.monitoring.serviceMonitor.namespace | default .Release.Namespace }}
+  labels:
+    {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: "auth-service"
+    {{- if hasKey .Values "monitoring" }}
+    {{- if hasKey .Values.monitoring "serviceMonitor" }}
+    {{- if hasKey .Values.monitoring.serviceMonitor "labels" }}
+    {{- toYaml .Values.monitoring.serviceMonitor.labels | nindent 4 }}
+    {{- end }}
+    {{- end }}
+    {{- end }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "common.labels.matchLabels" . | nindent 6 }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Values.namespace | default .Release.Namespace }}
+  endpoints:
+    - port: metrics
+      path: {{ .Values.monitoring.serviceMonitor.path | default "/api/metrics" }}
+      interval: {{ .Values.monitoring.serviceMonitor.interval | default "15s" }}
+      scheme: http
+      scrapeTimeout: {{ .Values.monitoring.serviceMonitor.scrapeTimeout | default "10s" }}
+      metricRelabelings:
+        - sourceLabels: [__name__]
+          regex: "(auth_.*|http_.*|process_.*|nodejs_.*)"
+          action: keep
+        - targetLabel: service
+          replacement: auth-service
+{{- end }} 

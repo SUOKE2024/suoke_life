@@ -1,0 +1,95 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: inquiry-diagnosis-backup
+  namespace: suoke
+  labels:
+    app: inquiry-diagnosis
+    service: four-diagnosis
+spec:
+  schedule: "0 1 * * *"  # 每天凌晨1点执行
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 3
+  successfulJobsHistoryLimit: 5
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: inquiry-diagnosis-backup
+        spec:
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+          containers:
+          - name: backup-job
+            image: bitnami/mongodb:4.4
+            imagePullPolicy: IfNotPresent
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities:
+                drop:
+                - ALL
+            env:
+            - name: BACKUP_DATE
+              value: "$(date +%Y%m%d-%H%M%S)"
+            - name: MONGO_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: inquiry-diagnosis-config
+                  key: db_host
+            - name: MONGO_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: inquiry-diagnosis-config
+                  key: db_port
+            - name: MONGO_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: inquiry-diagnosis-config
+                  key: db_name
+            - name: MONGO_USER
+              valueFrom:
+                secretKeyRef:
+                  name: inquiry-diagnosis-secrets
+                  key: db_user
+            - name: MONGO_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: inquiry-diagnosis-secrets
+                  key: db_password
+            command:
+            - /bin/bash
+            - -c
+            - |
+              set -e
+              BACKUP_NAME="inquiry-diagnosis-${BACKUP_DATE}.gz"
+              mongodump --host=${MONGO_HOST} --port=${MONGO_PORT} --username=${MONGO_USER} --password=${MONGO_PASSWORD} --db=${MONGO_DB} --authenticationDatabase=admin --gzip --archive=/backup/${BACKUP_NAME}
+              
+              # 保留最近30天的备份
+              find /backup -name "inquiry-diagnosis-*.gz" -type f -mtime +30 -delete
+              
+              # 复制到跨区域备份存储
+              if [ -d "/backup-crossregion" ]; then
+                cp /backup/${BACKUP_NAME} /backup-crossregion/
+                echo "跨区域备份复制完成: ${BACKUP_NAME}"
+              fi
+              
+              echo "备份完成: ${BACKUP_NAME}"
+            volumeMounts:
+            - name: backup-storage
+              mountPath: /backup
+            - name: crossregion-storage
+              mountPath: /backup-crossregion
+          volumes:
+          - name: backup-storage
+            persistentVolumeClaim:
+              claimName: inquiry-diagnosis-backup-pvc
+          - name: crossregion-storage
+            persistentVolumeClaim:
+              claimName: inquiry-diagnosis-crossregion-backup-pvc
+          restartPolicy: OnFailure
+          nodeSelector:
+            node-type: db-utils 

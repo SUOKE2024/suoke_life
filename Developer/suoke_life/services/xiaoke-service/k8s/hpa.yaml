@@ -1,0 +1,67 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: xiaoke-service
+  namespace: suoke
+  labels:
+    app: xiaoke-service
+    tier: ai
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: xiaoke-service
+  minReplicas: 2
+  maxReplicas: 5
+  metrics:
+    # CPU使用率指标
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    # 内存使用率指标
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+    # 自定义指标 - 订单处理速率
+    - type: Pods
+      pods:
+        metric:
+          name: orders_total
+        target:
+          type: AverageValue
+          averageValue: 50
+    # 自定义指标 - 农事活动处理速率
+    - type: Pods
+      pods:
+        metric:
+          name: farm_activity_metrics
+        target:
+          type: AverageValue
+          averageValue: 30
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+        - type: Pods
+          value: 1
+          periodSeconds: 60
+        - type: Percent
+          value: 50
+          periodSeconds: 60
+      selectPolicy: Max
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+        - type: Pods
+          value: 1
+          periodSeconds: 120
+        - type: Percent
+          value: 20
+          periodSeconds: 120
+      selectPolicy: Min 

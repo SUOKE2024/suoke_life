@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: four-diagnosis-coordinator
+  namespace: suoke-dev
+spec:
+  template:
+    spec:
+      containers:
+      - name: four-diagnosis-coordinator
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "512Mi"
+          limits:
+            cpu: "400m"
+            memory: "1Gi" 

@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: laoke-service-config
+  labels:
+    app: laoke-service
+    part-of: suoke-ai-agents
+data:
+  API_VERSION: "v1"
+  API_PREFIX: "/api/v1"
+  SERVICE_NAME: "laoke-service"
+  LOG_LEVEL: "info"
+  METRICS_PORT: "9465"
+  METRICS_PATH: "/metrics"
+  HEALTH_CHECK_PATH: "/health"
+  ALLOWED_ORIGINS: "https://app.suoke.life,https://admin.suoke.life"
+  OTEL_ENABLED: "true"
+  OTEL_SERVICE_NAME: "laoke-service"
+  MEDIA_STREAMS_ENABLED: "true"
+  AUDIO_SAMPLE_RATE: "16000"
+  AUDIO_CHANNELS: "1"
+  STREAM_CHUNK_DURATION_MS: "200"
+  DIALECT_SUPPORT_ENABLED: "true"
+  DEFAULT_DIALECT: "mandarin" 

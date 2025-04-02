@@ -1,0 +1,179 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: knowledge-base-service
+  namespace: suoke
+  labels:
+    app: knowledge-base-service
+    version: v1
+    tier: data
+    part-of: suoke-platform
+    managed-by: kustomize
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9090"
+    prometheus.io/path: "/metrics"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: knowledge-base-service
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: knowledge-base-service
+        version: v1
+        tier: data
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/metrics"
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "suoke-knowledge-base"
+        vault.hashicorp.com/agent-inject-secret-database-creds: "suoke/data/knowledge-base-service/db"
+        vault.hashicorp.com/agent-inject-template-database-creds: |
+          {{- with secret "suoke/data/knowledge-base-service/db" -}}
+          export MONGODB_URI="{{ .Data.data.mongodb_uri }}"
+          export REDIS_PASSWORD="{{ .Data.data.redis_password }}"
+          export JWT_SECRET="{{ .Data.data.jwt_secret }}"
+          {{- end -}}
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-type
+                    operator: In
+                    values:
+                      - stateful-services
+      tolerations:
+        - key: "dedicated"
+          operator: "Equal"
+          value: "database"
+          effect: "NoSchedule"
+      securityContext:
+        fsGroup: 1000
+        runAsNonRoot: true
+      containers:
+        - name: knowledge-base-service
+          image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/knowledge-base-service:latest
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 1000
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          ports:
+            - name: http
+              containerPort: 3002
+              protocol: TCP
+            - name: metrics
+              containerPort: 9090
+              protocol: TCP
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "200m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: PORT
+              value: "3002"
+            - name: APP_HOST
+              value: "0.0.0.0"
+            - name: LOG_LEVEL
+              value: "info"
+            - name: REDIS_HOST
+              value: "redis-master"
+            - name: REDIS_PORT
+              value: "6379"
+            - name: REDIS_DB
+              value: "0"
+            - name: API_BASE_URL
+              value: "https://api.suoke.life"
+            - name: KNOWLEDGE_GRAPH_SERVICE_URL
+              value: "http://knowledge-graph-service:3000"
+            - name: RAG_SERVICE_URL
+              value: "http://rag-service:3000"
+            - name: AUTH_SERVICE_URL
+              value: "http://auth-service:3000"
+            - name: OTEL_SERVICE_NAME
+              value: "knowledge-base-service"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "http://otel-collector:4317"
+            - name: ENABLE_METRICS
+              value: "true"
+            - name: METRICS_PREFIX
+              value: "knowledge_base_"
+          envFrom:
+            - configMapRef:
+                name: knowledge-base-config
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 3
+          startupProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 12
+          volumeMounts:
+            - name: data
+              mountPath: /app/data
+            - name: logs
+              mountPath: /app/logs
+            - name: tmp
+              mountPath: /app/tmp
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: knowledge-base-data-pvc
+        - name: logs
+          persistentVolumeClaim:
+            claimName: knowledge-base-logs-pvc
+        - name: tmp
+          emptyDir: {}
+      imagePullSecrets:
+        - name: suoke-registry-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: knowledge-base-service
+  labels:
+    app: knowledge-base-service
+spec:
+  selector:
+    app: knowledge-base-service
+  ports:
+  - port: 80
+    targetPort: 3002
+    protocol: TCP
+  type: ClusterIP

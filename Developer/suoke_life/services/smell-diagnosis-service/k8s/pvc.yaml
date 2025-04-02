@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: smell-diagnosis-logs-pvc
+  namespace: suoke
+  labels:
+    app: smell-diagnosis-service
+    service: four-diagnosis
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  storageClassName: standard 

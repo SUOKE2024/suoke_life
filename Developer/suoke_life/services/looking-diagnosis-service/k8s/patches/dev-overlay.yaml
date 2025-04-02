@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: looking-diagnosis
+  namespace: suoke-dev
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+      - name: looking-diagnosis
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "256Mi"
+          limits:
+            cpu: "200m"
+            memory: "512Mi"
+        env:
+        - name: NODE_ENV
+          value: "development"
+        - name: LOG_LEVEL
+          value: "debug"
+        - name: OTEL_LOG_LEVEL
+          value: "debug" 

@@ -1,0 +1,92 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rag-config
+  namespace: suoke
+data:
+  # 服务基础配置
+  SERVICE_NAME: "rag-service"
+  VERSION: "1.0.0"
+  HOST: "0.0.0.0"
+  PORT: "8000"
+  DEBUG: "false"
+  ENVIRONMENT: "production"
+  
+  # 进程配置
+  WORKERS: "4"
+  THREADS: "2"
+  WORKER_CLASS: "uvicorn.workers.UvicornWorker"
+  TIMEOUT: "120"
+  
+  # 日志配置
+  LOG_LEVEL: "INFO"
+  LOG_PATH: "/var/log/rag-service"
+  LOG_FORMAT: "json"
+  LOG_ROTATION: "1d"
+  LOG_RETENTION: "30d"
+  LOG_BACKUP_COUNT: "30"
+  LOG_ENCODING: "utf-8"
+  LOG_HANDLERS: '["console", "file"]'
+  
+  # 监控配置
+  METRICS_PORT: "9090"
+  METRICS_PATH: "/metrics"
+  ERROR_RATE_THRESHOLD: "0.1"
+  LATENCY_THRESHOLD: "5.0"
+  CACHE_HIT_RATE_THRESHOLD: "0.7"
+  ALERT_CHECK_INTERVAL: "300"
+  PROMETHEUS_MULTIPROC_DIR: "/tmp/prometheus-metrics"
+  
+  # 缓存配置
+  CACHE_TYPE: "redis"
+  CACHE_TTL: "3600"
+  CACHE_MAX_SIZE: "10000"
+  CACHE_KEY_PREFIX: "rag"
+  CACHE_SERIALIZER: "json"
+  CACHE_COMPRESSION: "true"
+  CACHE_COMPRESSION_LEVEL: "6"
+  
+  # 向量存储配置
+  VECTOR_STORE_TYPE: "milvus"
+  VECTOR_STORE_HOST: "milvus-standalone"
+  VECTOR_STORE_PORT: "19530"
+  VECTOR_DIMENSION: "768"
+  VECTOR_METRIC_TYPE: "IP"
+  VECTOR_NPROBE: "10"
+  VECTOR_TOP_K: "5"
+  VECTOR_INDEX_TYPE: "IVF_FLAT"
+  VECTOR_INDEX_PARAMS: '{"nlist": 1024}'
+  VECTOR_SEARCH_PARAMS: '{"nprobe": 10}'
+  
+  # RAG配置
+  RAG_CHUNK_SIZE: "512"
+  RAG_CHUNK_OVERLAP: "50"
+  RAG_MAX_CHUNKS: "5"
+  RAG_MIN_RELEVANCE_SCORE: "0.7"
+  RAG_RERANK_TOP_N: "3"
+  RAG_EMBEDDING_MODEL: "paraphrase-multilingual-mpnet-base-v2"
+  RAG_RERANKER_MODEL: "cross-encoder/ms-marco-multilingual-MiniLM-L12-H384-v1"
+  RAG_USE_CACHE: "true"
+  RAG_CACHE_TTL: "86400"
+  
+  # 健康检查配置
+  HEALTH_CHECK_INTERVAL: "30"
+  HEALTH_CHECK_TIMEOUT: "5"
+  COMPONENT_CHECK_PARALLEL: "true"
+  HEALTH_CHECK_RETRIES: "3"
+  HEALTH_CHECK_INITIAL_DELAY: "5"
+  HEALTH_CHECK_ENDPOINTS: '["/health", "/metrics"]'
+  
+  # 性能优化配置
+  MAX_REQUEST_SIZE: "50MB"
+  COMPRESSION_ENABLED: "true"
+  COMPRESSION_LEVEL: "6"
+  CONNECTION_TIMEOUT: "10"
+  READ_TIMEOUT: "30"
+  WRITE_TIMEOUT: "30"
+  KEEP_ALIVE_TIMEOUT: "5"
+  MAX_CONCURRENT_REQUESTS: "1000"
+  BACKLOG_SIZE: "2048"
+  TCP_NODELAY: "true"
+  TCP_KEEPALIVE: "true"
+  GRACEFUL_SHUTDOWN_TIMEOUT: "30" 

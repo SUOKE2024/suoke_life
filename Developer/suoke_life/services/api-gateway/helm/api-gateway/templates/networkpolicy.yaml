@@ -1,0 +1,97 @@
+{{- if .Values.networkPolicy.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "api-gateway.fullname" . }}-network-policy
+  labels:
+    {{- include "api-gateway.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "api-gateway.selectorLabels" . | nindent 6 }}
+  policyTypes:
+  - Ingress
+  - Egress
+  
+  # 入站规则 - 定义谁可以访问API网关
+  ingress:
+    {{- if .Values.networkPolicy.ingress }}
+    {{- toYaml .Values.networkPolicy.ingress | nindent 4 }}
+    {{- else }}
+    # 允许来自Istio入口网关的流量
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            name: istio-system
+        podSelector:
+          matchLabels:
+            app: istio-ingressgateway
+      ports:
+      - protocol: TCP
+        port: {{ .Values.service.targetPort }}
+    
+    # 允许来自同命名空间的服务访问指标端口
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            name: monitoring
+      ports:
+      - protocol: TCP
+        port: 9090
+    {{- end }}
+  
+  # 出站规则 - 定义API网关可以访问哪些服务
+  egress:
+    {{- if .Values.networkPolicy.egress }}
+    {{- toYaml .Values.networkPolicy.egress | nindent 4 }}
+    {{- else }}
+    # 允许访问后端微服务
+    {{- range .Values.networkPolicy.allowedServices }}
+    - to:
+      - podSelector:
+          matchLabels:
+            app: {{ .name }}
+      ports:
+      - protocol: TCP
+        port: {{ .port }}
+    {{- end }}
+    
+    # 允许访问Vault
+    - to:
+      - namespaceSelector:
+          matchLabels:
+            name: vault
+        podSelector:
+          matchLabels:
+            app: vault
+      ports:
+      - protocol: TCP
+        port: 8200
+    
+    # 允许访问OpenTelemetry Collector
+    - to:
+      - namespaceSelector:
+          matchLabels:
+            name: monitoring
+        podSelector:
+          matchLabels:
+            app: suoke-collector
+      ports:
+      - protocol: TCP
+        port: 4317  # OTLP gRPC
+      - protocol: TCP
+        port: 4318  # OTLP HTTP
+    
+    # 允许DNS解析
+    - to:
+      - namespaceSelector: {}
+        podSelector:
+          matchLabels:
+            k8s-app: kube-dns
+      ports:
+      - protocol: UDP
+        port: 53
+      - protocol: TCP
+        port: 53
+    {{- end }}
+{{- end }} 

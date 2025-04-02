@@ -1,0 +1,114 @@
+name: 索儿服务 CI/CD 流水线
+
+on:
+  push:
+    branches: [ main, release/*, feature/* ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint-test:
+    name: 代码检查与测试
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run test
+  
+  security-scan:
+    name: 安全扫描
+    runs-on: ubuntu-latest
+    needs: lint-test
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: 依赖安全扫描
+        run: npx audit-ci --moderate
+        
+      - name: 静态代码安全分析
+        uses: github/codeql-action/analyze@v2
+        with:
+          languages: javascript
+          queries: security-and-quality
+          
+      - name: 构建测试镜像
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: false
+          tags: soer-service:${{ github.sha }}
+          load: true
+          
+      - name: 容器镜像扫描
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'soer-service:${{ github.sha }}'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          timeout: '10m'
+          
+      - name: 上传漏洞扫描结果
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: 'trivy-results.sarif'
+          
+      - name: 检查关键性漏洞
+        run: |
+          CRITICAL_VULNS=$(trivy image --no-progress --severity CRITICAL --quiet soer-service:${{ github.sha }} | wc -l)
+          if [ $CRITICAL_VULNS -gt 0 ]; then
+            echo "发现 $CRITICAL_VULNS 个关键性漏洞，请修复后再部署"
+            exit 1
+          fi
+  
+  build-push:
+    name: 构建和推送镜像
+    runs-on: ubuntu-latest
+    needs: security-scan
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release/'))
+    steps:
+      - uses: actions/checkout@v3
+      - name: 登录阿里云容器镜像服务
+        uses: aliyun/acr-login@v1
+        with:
+          login-server: registry.suoke.life
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+      - name: 提取版本号
+        id: version
+        run: echo "VERSION=${GITHUB_REF_NAME#refs/tags/v}" >> $GITHUB_OUTPUT
+      - name: 构建推送镜像
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: |
+            registry.suoke.life/soer-service:${{ github.sha }}
+            registry.suoke.life/soer-service:1.2.0
+  
+  deploy:
+    name: 部署到Kubernetes
+    runs-on: ubuntu-latest
+    needs: build-push
+    steps:
+      - uses: actions/checkout@v3
+      - name: 设置Kubectl
+        uses: azure/setup-kubectl@v3
+      - name: 配置Kubernetes凭证
+        uses: azure/k8s-set-context@v3
+        with:
+          kubeconfig: ${{ secrets.KUBE_CONFIG }}
+      - name: 更新镜像版本
+        run: |
+          cd k8s
+          kustomize edit set image registry.suoke.life/soer-service:1.2.0
+      - name: 部署应用
+        run: |
+          kubectl apply -k k8s/overlays/production

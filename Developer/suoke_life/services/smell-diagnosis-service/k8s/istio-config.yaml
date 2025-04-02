@@ -1,0 +1,79 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: smell-diagnosis-vs
+  namespace: suoke
+  labels:
+    app: smell-diagnosis-service
+    service: four-diagnosis
+spec:
+  hosts:
+  - "smell-diagnosis.suoke.life"
+  - "smell-diagnosis-service"
+  gateways:
+  - suoke-gateway
+  - mesh
+  http:
+  - match:
+    - uri:
+        prefix: /api/v1/smell-diagnosis
+    - uri:
+        prefix: /health
+    - uri:
+        prefix: /metrics
+    route:
+    - destination:
+        host: smell-diagnosis-service
+        port:
+          number: 8080
+    timeout: 10s
+    retries:
+      attempts: 3
+      perTryTimeout: 2s
+      retryOn: gateway-error,connect-failure,refused-stream
+    fault:
+      delay:
+        percentage:
+          value: 0.1
+        fixedDelay: 5s
+    corsPolicy:
+      allowOrigins:
+      - exact: "https://suoke.life"
+      allowMethods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - OPTIONS
+      allowHeaders:
+      - Authorization
+      - Content-Type
+      maxAge: "24h"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: smell-diagnosis-dr
+  namespace: suoke
+  labels:
+    app: smell-diagnosis-service
+    service: four-diagnosis
+spec:
+  host: smell-diagnosis-service
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: 100
+        connectTimeout: 3s
+      http:
+        http1MaxPendingRequests: 100
+        maxRequestsPerConnection: 10
+    outlierDetection:
+      consecutive5xxErrors: 5
+      interval: 30s
+      baseEjectionTime: 30s
+      maxEjectionPercent: 100
+  subsets:
+  - name: v1
+    labels:
+      version: v1 

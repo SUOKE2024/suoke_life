@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: xiaoke-data-pvc
+  namespace: suoke
+  labels:
+    app: xiaoke-service
+    tier: ai
+  annotations:
+    volume.beta.kubernetes.io/storage-class: "suoke-premium"
+    volume.beta.kubernetes.io/storage-provisioner: "diskplugin.csi.alibabacloud.com"
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: suoke-premium
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: xiaoke-cache-pvc
+  namespace: suoke
+  labels:
+    app: xiaoke-service
+    tier: ai
+  annotations:
+    volume.beta.kubernetes.io/storage-class: "suoke-premium"
+    volume.beta.kubernetes.io/storage-provisioner: "diskplugin.csi.alibabacloud.com"
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: suoke-premium
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: xiaoke-logs-pvc
+  namespace: suoke
+  labels:
+    app: xiaoke-service
+    tier: ai
+  annotations:
+    volume.beta.kubernetes.io/storage-class: "suoke-standard"
+    volume.beta.kubernetes.io/storage-provisioner: "diskplugin.csi.alibabacloud.com"
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: suoke-standard
+  volumeMode: Filesystem 

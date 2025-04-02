@@ -1,0 +1,77 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "api-gateway.fullname" . }}
+  labels:
+    {{- include "api-gateway.labels" . | nindent 4 }}
+data:
+  {{- if .Values.config.customConfig }}
+  {{- range $key, $value := .Values.config.customConfig }}
+  {{ $key }}: {{ $value | quote }}
+  {{- end }}
+  {{- end }}
+  
+  {{- if .Values.config.configFile }}
+  config.json: |-
+    {{- .Values.config.configFile | nindent 4 }}
+  {{- end }}
+  
+  {{- if .Values.config.loggingConfig }}
+  logging.json: |-
+    {{- .Values.config.loggingConfig | nindent 4 }}
+  {{- end }}
+  
+  {{- if .Values.config.routesConfig }}
+  routes.json: |-
+    {{- .Values.config.routesConfig | nindent 4 }}
+  {{- end }}
+  
+  {{- if .Values.config.corsConfig }}
+  cors.json: |-
+    {{- .Values.config.corsConfig | nindent 4 }}
+  {{- end }}
+  
+  {{- if .Values.config.rateLimit }}
+  rate-limit.json: |-
+    {{- .Values.config.rateLimit | nindent 4 }}
+  {{- end }}
+  
+  {{- if .Values.config.circuitBreaker }}
+  circuit-breaker.json: |-
+    {{- .Values.config.circuitBreaker | nindent 4 }}
+  {{- end }}
+  
+  opentelemetry.yaml: |-
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: 0.0.0.0:4317
+          http:
+            endpoint: 0.0.0.0:4318
+    processors:
+      batch:
+        timeout: 1s
+        send_batch_size: 1024
+      memory_limiter:
+        check_interval: 1s
+        limit_mib: 100
+    exporters:
+      otlp:
+        endpoint: {{ .Values.opentelemetry.endpoint | default "otel-collector.monitoring:4317" }}
+        tls:
+          insecure: {{ .Values.opentelemetry.insecure | default true }}
+    service:
+      pipelines:
+        traces:
+          receivers: [otlp]
+          processors: [memory_limiter, batch]
+          exporters: [otlp]
+        metrics:
+          receivers: [otlp]
+          processors: [memory_limiter, batch]
+          exporters: [otlp]
+        logs:
+          receivers: [otlp]
+          processors: [memory_limiter, batch]
+          exporters: [otlp]

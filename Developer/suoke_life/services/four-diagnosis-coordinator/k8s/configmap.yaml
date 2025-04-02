@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: four-diagnosis-coordinator-config
+  namespace: suoke
+  labels:
+    app: four-diagnosis-coordinator
+    service: four-diagnosis
+data:
+  NODE_ENV: "production"
+  PORT: "3050"
+  LOG_LEVEL: "info"
+  LOG_FORMAT: "json"
+  LOOKING_DIAGNOSIS_SERVICE_URL: "http://looking-diagnosis:3001"
+  SMELL_DIAGNOSIS_SERVICE_URL: "http://smell-diagnosis:3005"
+  INQUIRY_DIAGNOSIS_SERVICE_URL: "http://inquiry-diagnosis:3004"
+  TOUCH_DIAGNOSIS_SERVICE_URL: "http://touch-diagnosis:3003"
+  API_GATEWAY_URL: "http://api-gateway:3000"
+  USER_SERVICE_URL: "http://user-service:3001"
+  METRICS_PORT: "9464"
+  METRICS_PATH: "/metrics"
+  HEALTH_CHECK_PATH: "/health"
+  READINESS_CHECK_PATH: "/ready"
+  LIVENESS_CHECK_PATH: "/live"
+  OTLP_EXPORTER_ENDPOINT: "http://opentelemetry-collector.monitoring:4317"
+  MAX_CONCURRENT_REQUESTS: "50"
+  REQUEST_TIMEOUT_MS: "30000"
+  RETRY_COUNT: "3"
+  CORS_ORIGIN: "*.suoke.life,*.suoke.ai" 

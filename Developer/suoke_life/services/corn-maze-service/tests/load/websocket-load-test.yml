@@ -1,0 +1,38 @@
+config:
+  target: "wss://localhost:3000/corn-maze/realtime"
+  phases:
+    - duration: 30
+      arrivalRate: 5
+      rampTo: 20
+      name: "Warm up phase"
+    - duration: 60
+      arrivalRate: 20
+      rampTo: 100
+      name: "Ramp up load"
+    - duration: 120
+      arrivalRate: 100
+      name: "Sustained load"
+  ws:
+    rejectUnauthorized: false
+  processor: "./load-test-functions.js"
+  variables:
+    testToken: "{{ $processEnvironment.TEST_AUTH_TOKEN }}"
+
+scenarios:
+  - name: "Virtual players behavior"
+    weight: 100
+    engine: "ws"
+    flow:
+      - function: "generateUser"
+      - connect:
+          url: "wss://localhost:3000/corn-maze/realtime?token={{ token }}&userId={{ userId }}&deviceId={{ deviceId }}"
+      - think: 3
+      - function: "joinGame"
+      - think: 5
+      - function: "moveRandomly"
+      - loop:
+          - think: 2
+          - function: "updateLocation"
+          - think: 5
+          - function: "performRandomAction"
+        count: 50

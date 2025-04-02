@@ -1,0 +1,84 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: smell-diagnosis-service-network-policy
+  namespace: suoke
+  labels:
+    app: smell-diagnosis-service
+    service: four-diagnosis
+spec:
+  podSelector:
+    matchLabels:
+      app: smell-diagnosis-service
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  # 允许从API网关访问
+  - from:
+    - podSelector:
+        matchLabels:
+          app: api-gateway
+    ports:
+    - protocol: TCP
+      port: 3002
+  # 允许从四诊协调器访问
+  - from:
+    - podSelector:
+        matchLabels:
+          app: four-diagnosis-coordinator
+    ports:
+    - protocol: TCP
+      port: 3002
+  # 允许监控系统访问指标端点
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+      podSelector:
+        matchLabels:
+          app: prometheus
+    ports:
+    - protocol: TCP
+      port: 9464
+  egress:
+  # 允许连接到数据库
+  - to:
+    - podSelector:
+        matchLabels:
+          app: postgres
+    ports:
+    - protocol: TCP
+      port: 5432
+  # 允许连接到四诊协调器
+  - to:
+    - podSelector:
+        matchLabels:
+          app: four-diagnosis-coordinator
+    ports:
+    - protocol: TCP
+      port: 3050
+  # 允许连接到OpenTelemetry收集器
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+      podSelector:
+        matchLabels:
+          app: opentelemetry-collector
+    ports:
+    - protocol: TCP
+      port: 4318
+    - protocol: TCP
+      port: 4317
+  # DNS解析
+  - to:
+    - namespaceSelector: {}
+      podSelector:
+        matchLabels:
+          k8s-app: kube-dns
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53 

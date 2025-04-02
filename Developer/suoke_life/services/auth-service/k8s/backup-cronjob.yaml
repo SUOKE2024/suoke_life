@@ -1,0 +1,81 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: auth-service-backup
+  namespace: suoke
+  labels:
+    app: auth-service
+spec:
+  schedule: "0 1 * * *"  # 每天凌晨1点
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 7
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: auth-service
+            job: backup
+        spec:
+          containers:
+          - name: backup
+            image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/backup-utility:latest
+            command:
+            - /bin/sh
+            - -c
+            - |
+              # 备份配置文件
+              mkdir -p /backup/auth-service/config
+              cp -r /app/dynamic-config/* /backup/auth-service/config/
+              
+              # 备份数据库（假设使用MySQL）
+              mysqldump -h $DB_HOST -u $DB_USER -p$DB_PASSWORD $DB_NAME > /backup/auth-service/db-$(date +%Y%m%d).sql
+              
+              # 压缩备份
+              cd /backup
+              tar -czf auth-service-backup-$(date +%Y%m%d).tar.gz auth-service/
+              
+              # 上传到OSS存储
+              ossutil cp /backup/auth-service-backup-$(date +%Y%m%d).tar.gz oss://suoke-backup/auth-service/
+              
+              # 清理7天前的本地备份
+              find /backup -name "auth-service-backup-*.tar.gz" -type f -mtime +7 -delete
+              
+              echo "备份完成: auth-service-backup-$(date +%Y%m%d).tar.gz"
+            env:
+            - name: DB_HOST
+              value: "mysql.suoke"
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: auth-service-config
+                  key: DB_NAME
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: auth-service-secrets
+                  key: DB_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: auth-service-secrets
+                  key: DB_PASSWORD
+            volumeMounts:
+            - name: backup-volume
+              mountPath: /backup
+            - name: config-volume
+              mountPath: /app/dynamic-config
+              readOnly: true
+            securityContext:
+              runAsUser: 1000
+              runAsGroup: 1000
+              allowPrivilegeEscalation: false
+          volumes:
+          - name: backup-volume
+            persistentVolumeClaim:
+              claimName: auth-service-backup-pvc
+          - name: config-volume
+            persistentVolumeClaim:
+              claimName: auth-service-config-pvc
+          restartPolicy: OnFailure 

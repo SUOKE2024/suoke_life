@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: soer-data-pvc
+  namespace: suoke
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: suoke-standard
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: soer-cache-pvc
+  namespace: suoke
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: suoke-standard
+  resources:
+    requests:
+      storage: 3Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: soer-logs-pvc
+  namespace: suoke
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: suoke-standard
+  resources:
+    requests:
+      storage: 2Gi

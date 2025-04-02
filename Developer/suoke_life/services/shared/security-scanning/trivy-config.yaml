@@ -1,0 +1,96 @@
+# Trivy 扫描配置文件
+
+# 扫描设置
+scan:
+  # 扫描类型：镜像（image）、文件系统（fs）、git仓库（repo）、容器（container）
+  type:
+    - image
+    - fs
+  
+  # 是否扫描所有文件
+  scan-all-files: false
+  
+  # 扫描目标目录
+  target-dir: "."
+  
+  # 排除的目录和文件
+  exclude-dirs:
+    - node_modules
+    - .git
+    - dist
+    - build
+    - coverage
+    - .cache
+  
+  # 排除的文件模式
+  exclude-patterns:
+    - "*.test.ts"
+    - "*.spec.ts"
+    - "*.mock.ts"
+
+# 漏洞扫描设置
+vulnerability:
+  # 严重性分类：CRITICAL、HIGH、MEDIUM、LOW、UNKNOWN
+  severity:
+    - CRITICAL
+    - HIGH
+    - MEDIUM
+  
+  # 忽略未修复的漏洞
+  ignore-unfixed: false
+  
+  # 允许的CVE列表（这些CVE将被忽略）
+  allowlist:
+    - CVE-2023-12345  # 示例，实际使用时应替换为真实的CVE编号
+
+# 镜像扫描设置
+image:
+  # 是否使用远程扫描
+  use-remote: false
+  
+  # 指定Docker套接字的路径
+  docker-socket: /var/run/docker.sock
+  
+  # 是否移除扫描后的镜像
+  remove-image: false
+
+# 缓存设置
+cache:
+  # 是否启用缓存
+  enabled: true
+  
+  # 缓存目录
+  dir: /tmp/trivy-cache
+
+# 输出设置
+output:
+  # 输出格式：table、json、sarif
+  format: table
+  
+  # 是否输出到文件
+  to-file: false
+  
+  # 输出文件名
+  output-file: trivy-results.json
+  
+  # 是否包含漏洞详情
+  include-details: true
+
+# 扫描超时设置（单位：秒）
+timeout: 300
+
+# 是否启用退出码
+exit-code: true
+
+# 退出码映射
+exit-on-severity:
+  CRITICAL: 1
+  HIGH: 1
+  MEDIUM: 0
+  LOW: 0
+  UNKNOWN: 0
+
+# GitHub相关配置
+github:
+  # 是否启用GitHub安全更新
+  enable-security-updates: true

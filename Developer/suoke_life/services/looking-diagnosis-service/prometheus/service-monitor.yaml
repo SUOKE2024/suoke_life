@@ -1,0 +1,33 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: looking-diagnosis-service-monitor
+  labels:
+    app: looking-diagnosis-service
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: looking-diagnosis-service
+  namespaceSelector:
+    matchNames:
+      - suoke
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 15s
+      scrapeTimeout: 10s
+      honorLabels: true
+      metricRelabelings:
+        - sourceLabels: [__name__]
+          regex: 'http_.*'
+          action: keep
+        - sourceLabels: [__name__]
+          regex: 'nodejs_.*'
+          action: keep
+        - sourceLabels: [__name__]
+          regex: 'looking_diagnosis_.*'
+          action: keep
+  targetLabels:
+    - app
+    - version 

@@ -1,0 +1,25 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: suoke-staging
+
+bases:
+  - ../../base
+
+patchesStrategicMerge:
+  - ../../patches/staging-overlay.yaml
+  - ../../patches/resource-limits-patch.yaml
+
+configMapGenerator:
+  - name: knowledge-graph-config
+    behavior: merge
+    literals:
+      - LOG_LEVEL=info
+      - DEBUG=false
+      - NEO4J_DB_NAME=neo4j-staging
+      - API_RATE_LIMIT=200
+
+images:
+  - name: knowledge-graph
+    newName: registry.suoke.life/knowledge-graph-service
+    newTag: staging-latest

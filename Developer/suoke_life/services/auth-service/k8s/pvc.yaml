@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: auth-service-logs-pvc
+  namespace: suoke
+  labels:
+    app: auth-service
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "false"
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: alicloud-disk-ssd
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: auth-service-config-pvc
+  namespace: suoke
+  labels:
+    app: auth-service
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "false"
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: alicloud-disk-ssd
+  resources:
+    requests:
+      storage: 1Gi

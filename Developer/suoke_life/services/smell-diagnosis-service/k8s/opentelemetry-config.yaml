@@ -1,0 +1,81 @@
+apiVersion: opentelemetry.io/v1alpha1
+kind: OpenTelemetryCollector
+metadata:
+  name: smell-diagnosis-otel
+  namespace: suoke
+  labels:
+    app: smell-diagnosis-service
+    service: four-diagnosis
+    component: telemetry
+spec:
+  mode: deployment
+  config: |
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: 0.0.0.0:4317
+          http:
+            endpoint: 0.0.0.0:4318
+      jaeger:
+        protocols:
+          thrift_http:
+            endpoint: 0.0.0.0:14268
+      prometheus:
+        config:
+          scrape_configs:
+          - job_name: 'smell-diagnosis-service'
+            scrape_interval: 15s
+            static_configs:
+            - targets: ['smell-diagnosis-service:8080']
+              labels:
+                service: 'smell-diagnosis'
+                instance: 'smell-diagnosis-service'
+
+    processors:
+      batch:
+        timeout: 10s
+        send_batch_size: 10000
+      memory_limiter:
+        check_interval: 5s
+        limit_mib: 1000
+        spike_limit_mib: 200
+      resource:
+        attributes:
+        - key: service.name
+          value: smell-diagnosis-service
+          action: upsert
+        - key: service.namespace
+          value: suoke
+          action: upsert
+        - key: deployment.environment
+          value: ${DEPLOYMENT_ENV}
+          action: upsert
+
+    exporters:
+      logging:
+        loglevel: debug
+      otlp:
+        endpoint: otel-collector.observability:4317
+        tls:
+          insecure: true
+      jaeger:
+        endpoint: jaeger-collector.observability:14250
+        tls:
+          insecure: true
+      prometheus:
+        endpoint: 0.0.0.0:8889
+        namespace: suoke
+        const_labels:
+          app: smell-diagnosis-service
+
+    service:
+      pipelines:
+        traces:
+          receivers: [otlp, jaeger]
+          processors: [memory_limiter, batch, resource]
+          exporters: [otlp, jaeger, logging]
+        metrics:
+          receivers: [otlp, prometheus]
+          processors: [memory_limiter, batch, resource]
+          exporters: [otlp, prometheus, logging] 

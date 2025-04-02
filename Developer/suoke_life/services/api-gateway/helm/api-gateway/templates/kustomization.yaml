@@ -1,0 +1,65 @@
+{{- if .Values.kustomize.enabled }}
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+metadata:
+  name: {{ include "api-gateway.fullname" . }}-kustomization
+  labels:
+    {{- include "api-gateway.labels" . | nindent 4 }}
+resources:
+  - deployment.yaml
+  - service.yaml
+  {{- if and .Values.persistentVolume (or .Values.persistentVolume.logs.enabled .Values.persistentVolume.config.enabled) }}
+  - pvc.yaml
+  {{- end }}
+  {{- if not .Values.vault.enabled }}
+  - secret.yaml
+  {{- end }}
+  - configmap.yaml
+  {{- if .Values.networkPolicy.enabled }}
+  - networkpolicy.yaml
+  {{- end }}
+  {{- if .Values.serviceMonitor.enabled }}
+  - servicemonitor.yaml
+  {{- end }}
+  {{- if .Values.autoscaling.enabled }}
+  - hpa.yaml
+  {{- end }}
+  {{- if and .Values.istio.enabled .Values.istio.gateway.enabled }}
+  - istio-gateway.yaml
+  {{- end }}
+  {{- if .Values.kustomize.additionalResources }}
+  {{- range .Values.kustomize.additionalResources }}
+  - {{ . }}
+  {{- end }}
+  {{- end }}
+
+{{- if .Values.kustomize.patches }}
+patches:
+{{- toYaml .Values.kustomize.patches | nindent 2 }}
+{{- end }}
+
+{{- if .Values.kustomize.patchesJson6902 }}
+patchesJson6902:
+{{- toYaml .Values.kustomize.patchesJson6902 | nindent 2 }}
+{{- end }}
+
+{{- if .Values.kustomize.images }}
+images:
+{{- toYaml .Values.kustomize.images | nindent 2 }}
+{{- end }}
+
+{{- if .Values.kustomize.configMapGenerator }}
+configMapGenerator:
+{{- toYaml .Values.kustomize.configMapGenerator | nindent 2 }}
+{{- end }}
+
+{{- if .Values.kustomize.secretGenerator }}
+secretGenerator:
+{{- toYaml .Values.kustomize.secretGenerator | nindent 2 }}
+{{- end }}
+
+{{- if .Values.kustomize.vars }}
+vars:
+{{- toYaml .Values.kustomize.vars | nindent 2 }}
+{{- end }}
+{{- end }} 

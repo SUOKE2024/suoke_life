@@ -1,0 +1,23 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+commonLabels:
+  app: corn-maze-service
+  service-type: game
+  managed-by: kustomize
+
+resources:
+  - ../deployment.yaml
+  - ../service.yaml
+  - ../pvc.yaml
+  - ../configmap.yaml
+  - ../secrets.yaml
+  - ../virtualservice.yaml
+  - ../hpa.yaml
+  - ../networkpolicy.yaml
+  - ../backup-cronjob.yaml
+  - ../backup-pvc.yaml
+  - ../servicemonitor.yaml
+  - ../pdb.yaml
+  - ../vault-secretprovider.yaml
+  - ../key-rotation.yaml 

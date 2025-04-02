@@ -1,0 +1,11 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: soer-service-pdb
+  labels:
+    app: soer-service
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: soer-service

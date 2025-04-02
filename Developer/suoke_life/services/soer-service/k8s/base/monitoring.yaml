@@ -1,0 +1,56 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: soer-service-monitor
+  labels:
+    app: soer-service
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: soer-service
+  endpoints:
+  - port: http
+    path: /metrics
+    interval: 30s
+    scrapeTimeout: 10s
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: soer-service-rules
+  labels:
+    app: soer-service
+    prometheus: k8s
+    role: alert-rules
+spec:
+  groups:
+  - name: soer-service-alerts
+    rules:
+    - alert: SoerServiceHighErrorRate
+      expr: sum(rate(http_requests_total{service="soer-service",status=~"5.."}[5m])) / sum(rate(http_requests_total{service="soer-service"}[5m])) > 0.05
+      for: 5m
+      labels:
+        severity: warning
+        team: backend
+      annotations:
+        summary: "索儿服务高错误率"
+        description: "索儿服务在过去5分钟内的错误率超过5%"
+    - alert: SoerServiceHighLatency
+      expr: histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{service="soer-service"}[5m])) by (le)) > 1
+      for: 5m
+      labels:
+        severity: warning
+        team: backend
+      annotations:
+        summary: "索儿服务高延迟"
+        description: "索儿服务的P95响应时间超过1秒"
+    - alert: SoerServiceDown
+      expr: up{job="soer-service"} == 0
+      for: 3m
+      labels:
+        severity: critical
+        team: backend
+      annotations:
+        summary: "索儿服务不可用"
+        description: "索儿服务已经不可用超过3分钟"

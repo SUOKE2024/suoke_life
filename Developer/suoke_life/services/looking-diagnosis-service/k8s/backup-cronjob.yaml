@@ -1,0 +1,82 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: looking-diagnosis-backup
+  labels:
+    app: looking-diagnosis-service
+    component: backup
+spec:
+  schedule: "0 1 * * *"  # 每天凌晨1点运行
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 5
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      ttlSecondsAfterFinished: 86400  # 成功任务保留1天
+      template:
+        spec:
+          containers:
+          - name: backup
+            image: mongo:5.0
+            imagePullPolicy: IfNotPresent
+            command:
+            - /bin/bash
+            - -c
+            - |
+              #!/bin/bash
+              set -e
+              
+              # 设置备份目录和日期标记
+              BACKUP_ROOT="/backup"
+              TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+              BACKUP_DIR="${BACKUP_ROOT}/looking-diagnosis-${TIMESTAMP}"
+              
+              # 创建备份目录
+              mkdir -p "${BACKUP_DIR}"
+              
+              echo "开始备份MongoDB数据..."
+              # 从环境变量中获取MongoDB连接信息
+              mongodump --uri="${MONGODB_URI}" --out="${BACKUP_DIR}/mongodb"
+              
+              # 备份图像文件
+              if [ -d "/data/images" ]; then
+                echo "备份图像文件..."
+                cp -r /data/images "${BACKUP_DIR}/images"
+              fi
+              
+              # 备份诊断结果
+              if [ -d "/data/results" ]; then
+                echo "备份诊断结果..."
+                cp -r /data/results "${BACKUP_DIR}/results"
+              fi
+              
+              # 压缩备份目录
+              echo "压缩备份文件..."
+              cd "${BACKUP_ROOT}"
+              tar -czf "looking-diagnosis-${TIMESTAMP}.tar.gz" "looking-diagnosis-${TIMESTAMP}"
+              rm -rf "${BACKUP_DIR}"
+              
+              # 删除30天前的备份
+              echo "清理30天前的备份..."
+              find "${BACKUP_ROOT}" -name "looking-diagnosis-*.tar.gz" -type f -mtime +30 -delete
+              
+              echo "备份完成: ${BACKUP_ROOT}/looking-diagnosis-${TIMESTAMP}.tar.gz"
+            env:
+            - name: MONGODB_URI
+              valueFrom:
+                secretKeyRef:
+                  name: looking-diagnosis-secrets
+                  key: mongodb-uri
+            volumeMounts:
+            - name: data-volume
+              mountPath: /data
+            - name: backup-volume
+              mountPath: /backup
+          restartPolicy: OnFailure
+          volumes:
+          - name: data-volume
+            persistentVolumeClaim:
+              claimName: looking-diagnosis-pvc
+          - name: backup-volume
+            persistentVolumeClaim:
+              claimName: looking-diagnosis-backup-pvc 

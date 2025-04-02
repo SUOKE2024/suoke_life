@@ -1,0 +1,329 @@
+name: 知识图谱服务 CI/CD 流水线
+
+on:
+  push:
+    branches: 
+      - main
+      - develop
+      - 'release/**'
+      - 'feature/**'
+    paths:
+      - 'services/knowledge-graph-service/**'
+      - '.github/workflows/knowledge-graph-service.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'services/knowledge-graph-service/**'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: '部署环境'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - staging
+          - prod
+      version:
+        description: '手动指定版本号'
+        required: false
+        type: string
+
+env:
+  IMAGE_NAME: suokelife/knowledge-graph-service
+  REGISTRY: registry.cn-hangzhou.aliyuncs.com
+
+jobs:
+  lint:
+    name: 代码规范检查
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./services/knowledge-graph-service
+    steps:
+      - uses: actions/checkout@v3
+      - name: 设置 Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: './services/knowledge-graph-service/package-lock.json'
+      - name: 安装依赖
+        run: npm ci
+      - name: 运行规范检查
+        run: npm run lint
+
+  test:
+    name: 单元测试
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./services/knowledge-graph-service
+    steps:
+      - uses: actions/checkout@v3
+      - name: 设置 Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: './services/knowledge-graph-service/package-lock.json'
+      - name: 安装依赖
+        run: npm ci
+      - name: 运行测试
+        run: npm test
+      - name: 上传测试覆盖率报告
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: ./services/knowledge-graph-service/coverage
+          retention-days: 7
+
+  security-scan:
+    name: 安全扫描
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./services/knowledge-graph-service
+    steps:
+      - uses: actions/checkout@v3
+      - name: 设置 Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: './services/knowledge-graph-service/package-lock.json'
+      - name: 安装依赖
+        run: npm ci
+      - name: 运行依赖漏洞扫描
+        run: npm audit --production
+      - name: 运行 SonarCloud 扫描
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectBaseDir: ./services/knowledge-graph-service
+          args: >
+            -Dsonar.projectKey=suokelife_knowledge-graph-service
+            -Dsonar.organization=suokelife
+
+  build-and-push:
+    name: 构建并推送镜像
+    needs: [lint, test, security-scan]
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: 设置版本号
+        id: version
+        run: |
+          if [ "${{ github.event.inputs.version }}" != "" ]; then
+            echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "VERSION=$(date +'%Y%m%d')-$(git rev-parse --short HEAD)-release" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref }}" == "refs/heads/develop" ]]; then
+            echo "VERSION=$(date +'%Y%m%d')-$(git rev-parse --short HEAD)-dev" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref }}" =~ ^refs/heads/release/(.*)$ ]]; then
+            VERSION="${BASH_REMATCH[1]}"
+            echo "VERSION=${VERSION}-$(git rev-parse --short HEAD)-rc" >> $GITHUB_OUTPUT
+          else
+            echo "VERSION=$(date +'%Y%m%d')-$(git rev-parse --short HEAD)-snapshot" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 登录到 Aliyun 容器镜像服务
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.ALIYUN_REGISTRY_USERNAME }}
+          password: ${{ secrets.ALIYUN_REGISTRY_PASSWORD }}
+
+      - name: 构建和推送 Docker 镜像
+        uses: docker/build-push-action@v4
+        with:
+          context: ./services/knowledge-graph-service
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.VERSION }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          build-args: |
+            BUILD_VERSION=${{ steps.version.outputs.VERSION }}
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache
+          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache,mode=max
+
+      - name: 创建 artifacts
+        run: |
+          mkdir -p ./artifacts
+          echo "${{ steps.version.outputs.VERSION }}" > ./artifacts/version.txt
+          echo "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.VERSION }}" > ./artifacts/image.txt
+
+      - name: 上传 Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-info
+          path: ./artifacts/
+          retention-days: 7
+
+  deploy-dev:
+    name: 部署到开发环境
+    if: (github.ref == 'refs/heads/develop' || github.event.inputs.environment == 'dev') && github.event_name != 'pull_request'
+    needs: [build-and-push]
+    runs-on: ubuntu-latest
+    environment: development
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: 下载构建信息
+        uses: actions/download-artifact@v3
+        with:
+          name: build-info
+          path: ./artifacts/
+      
+      - name: 设置版本和镜像变量
+        id: vars
+        run: |
+          echo "VERSION=$(cat ./artifacts/version.txt)" >> $GITHUB_OUTPUT
+          echo "IMAGE=$(cat ./artifacts/image.txt)" >> $GITHUB_OUTPUT
+      
+      - name: 设置 Kubectl
+        uses: azure/k8s-set-context@v3
+        with:
+          kubeconfig: ${{ secrets.KUBE_CONFIG_DEV }}
+      
+      - name: 部署到 Kubernetes
+        working-directory: ./services/knowledge-graph-service
+        run: |
+          cd k8s
+          kubectl apply -k overlays/dev
+          kubectl set image deployment/knowledge-graph knowledge-graph=${{ steps.vars.outputs.IMAGE }} -n suoke
+          kubectl rollout status deployment/knowledge-graph -n suoke --timeout=180s
+      
+      - name: 发送部署通知到钉钉
+        uses: ghostoy/dingtalk-action@master
+        with:
+          webhook: ${{ secrets.DINGTALK_WEBHOOK }}
+          msgtype: markdown
+          content: |
+            {
+              "title": "知识图谱服务部署通知",
+              "text": "### 🚀 知识图谱服务已部署到开发环境\n\n**版本**: ${{ steps.vars.outputs.VERSION }}\n\n**部署人**: ${{ github.actor }}\n\n**相关提交**: [${{ github.sha }}](${{ github.event.repository.html_url }}/commit/${{ github.sha }})\n\n**详情**: [查看工作流](${{ github.event.repository.html_url }}/actions/runs/${{ github.run_id }})"
+            }
+
+  deploy-staging:
+    name: 部署到预发布环境
+    if: (github.ref == 'refs/heads/release/*' || github.event.inputs.environment == 'staging') && github.event_name != 'pull_request'
+    needs: [build-and-push]
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: 下载构建信息
+        uses: actions/download-artifact@v3
+        with:
+          name: build-info
+          path: ./artifacts/
+      
+      - name: 设置版本和镜像变量
+        id: vars
+        run: |
+          echo "VERSION=$(cat ./artifacts/version.txt)" >> $GITHUB_OUTPUT
+          echo "IMAGE=$(cat ./artifacts/image.txt)" >> $GITHUB_OUTPUT
+      
+      - name: 设置 Kubectl
+        uses: azure/k8s-set-context@v3
+        with:
+          kubeconfig: ${{ secrets.KUBE_CONFIG_STAGING }}
+      
+      - name: 部署到 Kubernetes
+        working-directory: ./services/knowledge-graph-service
+        run: |
+          cd k8s
+          kubectl apply -k overlays/staging
+          kubectl set image deployment/knowledge-graph knowledge-graph=${{ steps.vars.outputs.IMAGE }} -n suoke
+          kubectl rollout status deployment/knowledge-graph -n suoke --timeout=180s
+      
+      - name: 发送部署通知到钉钉
+        uses: ghostoy/dingtalk-action@master
+        with:
+          webhook: ${{ secrets.DINGTALK_WEBHOOK }}
+          msgtype: markdown
+          content: |
+            {
+              "title": "知识图谱服务部署通知",
+              "text": "### 🚀 知识图谱服务已部署到预发布环境\n\n**版本**: ${{ steps.vars.outputs.VERSION }}\n\n**部署人**: ${{ github.actor }}\n\n**相关提交**: [${{ github.sha }}](${{ github.event.repository.html_url }}/commit/${{ github.sha }})\n\n**详情**: [查看工作流](${{ github.event.repository.html_url }}/actions/runs/${{ github.run_id }})"
+            }
+
+  deploy-prod:
+    name: 部署到生产环境
+    if: (github.ref == 'refs/heads/main' || github.event.inputs.environment == 'prod') && github.event_name != 'pull_request'
+    needs: [build-and-push]
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: 下载构建信息
+        uses: actions/download-artifact@v3
+        with:
+          name: build-info
+          path: ./artifacts/
+      
+      - name: 设置版本和镜像变量
+        id: vars
+        run: |
+          echo "VERSION=$(cat ./artifacts/version.txt)" >> $GITHUB_OUTPUT
+          echo "IMAGE=$(cat ./artifacts/image.txt)" >> $GITHUB_OUTPUT
+      
+      - name: 设置 Kubectl
+        uses: azure/k8s-set-context@v3
+        with:
+          kubeconfig: ${{ secrets.KUBE_CONFIG_PROD }}
+      
+      - name: 部署到 Kubernetes
+        working-directory: ./services/knowledge-graph-service
+        run: |
+          cd k8s
+          kubectl apply -k overlays/prod
+          kubectl set image deployment/knowledge-graph knowledge-graph=${{ steps.vars.outputs.IMAGE }} -n suoke
+          kubectl rollout status deployment/knowledge-graph -n suoke --timeout=300s
+      
+      - name: 发送部署通知到钉钉
+        uses: ghostoy/dingtalk-action@master
+        with:
+          webhook: ${{ secrets.DINGTALK_WEBHOOK }}
+          msgtype: markdown
+          content: |
+            {
+              "title": "知识图谱服务部署通知",
+              "text": "### 🚀 知识图谱服务已部署到生产环境\n\n**版本**: ${{ steps.vars.outputs.VERSION }}\n\n**部署人**: ${{ github.actor }}\n\n**相关提交**: [${{ github.sha }}](${{ github.event.repository.html_url }}/commit/${{ github.sha }})\n\n**详情**: [查看工作流](${{ github.event.repository.html_url }}/actions/runs/${{ github.run_id }})"
+            }
+
+  notify-deployment-result:
+    name: 通知部署结果
+    needs: [deploy-dev, deploy-staging, deploy-prod]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: 下载构建信息
+        uses: actions/download-artifact@v3
+        with:
+          name: build-info
+          path: ./artifacts/
+      
+      - name: 设置版本变量
+        id: vars
+        run: |
+          echo "VERSION=$(cat ./artifacts/version.txt)" >> $GITHUB_OUTPUT
+      
+      - name: 部署结果通知
+        uses: ghostoy/dingtalk-action@master
+        with:
+          webhook: ${{ secrets.DINGTALK_WEBHOOK }}
+          msgtype: markdown
+          content: |
+            {
+              "title": "知识图谱服务部署完成",
+              "text": "### 📢 知识图谱服务部署摘要\n\n**版本**: ${{ steps.vars.outputs.VERSION }}\n\n**部署状态**:\n- 开发环境: ${{ needs.deploy-dev.result || '未部署' }}\n- 预发布环境: ${{ needs.deploy-staging.result || '未部署' }}\n- 生产环境: ${{ needs.deploy-prod.result || '未部署' }}\n\n**部署人**: ${{ github.actor }}\n\n**详情**: [查看工作流](${{ github.event.repository.html_url }}/actions/runs/${{ github.run_id }})"
+            }

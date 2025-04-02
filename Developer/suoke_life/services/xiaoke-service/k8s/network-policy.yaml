@@ -1,0 +1,115 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: xiaoke-service-network-policy
+  namespace: suoke
+  labels:
+    app: xiaoke-service
+    tier: ai
+spec:
+  podSelector:
+    matchLabels:
+      app: xiaoke-service
+      component: secondary-agent
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  # 允许API网关访问
+  - from:
+    - podSelector:
+        matchLabels:
+          app: api-gateway
+    ports:
+    - protocol: TCP
+      port: 3011
+    - protocol: TCP
+      port: 3012
+  # 允许其他智能体服务访问
+  - from:
+    - podSelector:
+        matchLabels:
+          tier: ai
+          app: xiaoai-service
+    ports:
+    - protocol: TCP
+      port: 3011
+    - protocol: TCP
+      port: 3012
+  # 允许监控系统访问指标端点
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+    ports:
+    - protocol: TCP
+      port: 9464
+  # 允许同命名空间内的服务访问OpenTelemetry端点
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: suoke
+    ports:
+    - protocol: TCP
+      port: 4317
+    - protocol: TCP
+      port: 4318
+  egress:
+  # 允许访问MongoDB服务
+  - to:
+    - podSelector:
+        matchLabels:
+          app: mongodb
+    ports:
+    - protocol: TCP
+      port: 27017
+  # 允许访问Redis服务
+  - to:
+    - podSelector:
+        matchLabels:
+          app: redis
+    ports:
+    - protocol: TCP
+      port: 6379
+  # 允许访问其他AI服务
+  - to:
+    - podSelector:
+        matchLabels:
+          tier: ai
+    ports:
+    - protocol: TCP
+      port: 3000
+  # 允许访问消息队列服务
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: rocketmq-system
+    ports:
+    - protocol: TCP
+      port: 9876
+    - protocol: TCP
+      port: 10911
+  # 允许访问OpenTelemetry Collector
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+      podSelector:
+        matchLabels:
+          app: opentelemetry-collector
+    ports:
+    - protocol: TCP
+      port: 4317
+    - protocol: TCP
+      port: 4318
+  # 允许DNS查询
+  - to:
+    - namespaceSelector: {}
+      podSelector:
+        matchLabels:
+          k8s-app: kube-dns
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53 

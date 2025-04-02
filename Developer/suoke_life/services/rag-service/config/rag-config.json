@@ -1,0 +1,141 @@
+{
+  "service": {
+    "name": "rag-service",
+    "version": "1.2.0",
+    "description": "索克生活APP RAG检索增强生成服务"
+  },
+  "models": {
+    "embedding": {
+      "model_name": "BAAI/bge-small-zh-v1.5",
+      "max_seq_length": 512,
+      "device": "auto",
+      "cache_folder": "/app/models/embedding"
+    },
+    "reranker": {
+      "model_name": "BAAI/bge-reranker-base",
+      "max_length": 512,
+      "device": "auto",
+      "cache_folder": "/app/models/reranker"
+    },
+    "llm": {
+      "model_name": "Qwen/Qwen1.5-7B-Chat",
+      "max_length": 4096,
+      "temperature": 0.7,
+      "top_p": 0.95,
+      "device": "auto",
+      "cache_folder": "/app/models/text-generation",
+      "load_in_8bit": true,
+      "use_flash_attention": true
+    }
+  },
+  "vectorDb": {
+    "path": "/app/data/vector_store",
+    "dimensions": 384,
+    "index_type": "hnsw",
+    "metric": "cosine",
+    "backup_interval_hours": 24,
+    "backup_path": "/app/data/backups"
+  },
+  "generation": {
+    "maxOutputLength": 2048,
+    "llmConfig": {
+      "promptTemplates": {
+        "standard": "你是索克生活平台的AI助手，专注于中医健康领域。请基于以下信息回答用户问题：\n\n上下文信息：\n{context}\n\n用户问题：{query}\n\n请给出专业、准确且易于理解的回答，引用相关的中医理论和健康建议。",
+        "medical": "你是索克生活平台的中医顾问，拥有深厚的中医理论知识和临床经验。请根据以下信息回答用户关于中医健康的问题：\n\n参考资料：\n{context}\n\n用户问题：{query}\n\n请提供专业的中医解读和建议，注明理论依据和注意事项。避免做出诊断或替代专业医疗咨询的建议。",
+        "tcm": "你是索克生活平台的中医文化专家，精通中医经典和养生理论。请基于以下古籍和现代资料解读中医养生问题：\n\n相关资料摘录：\n{context}\n\n用户问题：{query}\n\n请结合传统中医理论和现代科学认知，给出系统、易懂的解答，并引用相关经典原文支持你的观点。"
+      }
+    }
+  },
+  "retrieval": {
+    "topK": 5,
+    "minScore": 0.65,
+    "chunkSize": 500,
+    "chunkOverlap": 50,
+    "reranking": {
+      "enabled": true,
+      "topK": 3,
+      "minScore": 0.75,
+      "aggregation": "weighted_sum"
+    }
+  },
+  "flare": {
+    "enabled": true,
+    "maxRetrievalRounds": 3,
+    "confidenceThreshold": 0.85,
+    "newQueryGeneration": {
+      "temperature": 0.3,
+      "maxTokens": 200
+    }
+  },
+  "caching": {
+    "enabled": true,
+    "ttl_seconds": 3600,
+    "max_cache_size_mb": 512,
+    "redis_connection": {
+      "enabled": true,
+      "host": "redis-service",
+      "port": 6379,
+      "db": 0,
+      "password": null,
+      "max_retries": 3,
+      "retry_interval_ms": 200,
+      "connection_timeout_ms": 5000
+    }
+  },
+  "monitoring": {
+    "logLevel": "info",
+    "logPath": "/app/logs/rag-service.log",
+    "metrics": {
+      "enabled": true,
+      "endpoint": "/metrics",
+      "collection_interval_seconds": 15
+    },
+    "tracing": {
+      "enabled": true,
+      "endpoint": "jaeger-collector:4317",
+      "service_name": "rag-service"
+    },
+    "health_check": {
+      "enabled": true,
+      "interval_seconds": 60,
+      "timeout_seconds": 10,
+      "components": ["database", "vector_store", "knowledge_graph", "redis", "llm"]
+    }
+  },
+  "security": {
+    "maxRequestSizeMb": 5,
+    "rateLimit": {
+      "enabled": true,
+      "maxRequests": 100,
+      "window": 60,
+      "burst": 20
+    },
+    "apiKey": {
+      "enabled": true,
+      "keys": []
+    },
+    "cors": {
+      "enabled": true,
+      "allowedOrigins": ["https://suoke.life", "http://localhost:3000"],
+      "allowedMethods": ["GET", "POST", "OPTIONS"],
+      "allowedHeaders": ["Content-Type", "Authorization", "X-API-Key"]
+    },
+    "tls": {
+      "enabled": true,
+      "cert_path": "/app/config/ssl/cert.pem",
+      "key_path": "/app/config/ssl/key.pem"
+    }
+  },
+  "scaling": {
+    "max_workers": 4,
+    "max_concurrent_requests": 20,
+    "queue_size": 100,
+    "timeout_seconds": 30
+  },
+  "resources": {
+    "memory_limit_mb": 2048,
+    "vector_store_memory_limit_mb": 1024,
+    "model_load_timeout_seconds": 120,
+    "embedding_batch_size": 32
+  }
+} 

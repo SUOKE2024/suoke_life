@@ -1,0 +1,38 @@
+# 依赖目录
+node_modules/
+
+# 环境变量文件
+.env
+.env.local
+.env.*.local
+
+# 日志文件
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 测试覆盖率报告
+coverage/
+
+# 编辑器文件
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# 构建文件
+dist/
+build/
+out/
+
+# 临时文件
+.tmp/
+.temp/
+.cache/
+
+# 其他
+.lock-wscript
+.nyc_output/ 

@@ -1,0 +1,123 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: api-gateway-network-policy
+  namespace: suoke
+  labels:
+    app: api-gateway
+    service-type: edge
+spec:
+  podSelector:
+    matchLabels:
+      app: api-gateway
+  policyTypes:
+  - Ingress
+  - Egress
+  
+  # 入站规则 - 定义谁可以访问API网关
+  ingress:
+  # 允许来自Istio入口网关的流量
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: istio-system
+      podSelector:
+        matchLabels:
+          app: istio-ingressgateway
+    ports:
+    - protocol: TCP
+      port: 3000
+  
+  # 允许来自同命名空间的服务访问指标端口
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+    ports:
+    - protocol: TCP
+      port: 9090
+  
+  # 出站规则 - 定义API网关可以访问哪些服务
+  egress:
+  # 允许访问Agent Coordinator服务
+  - to:
+    - podSelector:
+        matchLabels:
+          app: agent-coordinator-service
+    ports:
+    - protocol: TCP
+      port: 3002
+  
+  # 允许访问用户服务
+  - to:
+    - podSelector:
+        matchLabels:
+          app: user-service
+    ports:
+    - protocol: TCP
+      port: 3003
+  
+  # 允许访问认证服务
+  - to:
+    - podSelector:
+        matchLabels:
+          app: auth-service
+    ports:
+    - protocol: TCP
+      port: 3001
+  
+  # 允许访问知识库服务
+  - to:
+    - podSelector:
+        matchLabels:
+          app: knowledge-base-service
+    ports:
+    - protocol: TCP
+      port: 3004
+  
+  # 允许访问RAG服务
+  - to:
+    - podSelector:
+        matchLabels:
+          app: rag-service
+    ports:
+    - protocol: TCP
+      port: 3005
+  
+  # 允许访问Vault
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: vault
+      podSelector:
+        matchLabels:
+          app: vault
+    ports:
+    - protocol: TCP
+      port: 8200
+  
+  # 允许访问OpenTelemetry Collector
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+      podSelector:
+        matchLabels:
+          app: suoke-collector
+    ports:
+    - protocol: TCP
+      port: 4317  # OTLP gRPC
+    - protocol: TCP
+      port: 4318  # OTLP HTTP
+  
+  # 允许DNS解析
+  - to:
+    - namespaceSelector: {}
+      podSelector:
+        matchLabels:
+          k8s-app: kube-dns
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53 

@@ -1,0 +1,136 @@
+# 阿里云安全组规则配置示例
+# 用于配置允许两个VPC之间通信的安全组规则
+
+# 主服务器安全组配置
+MainServerSecurityGroup:
+  SecurityGroupId: "sg-bp1xxxxxxxx"  # 需替换为实际的安全组ID
+  RegionId: "cn-hangzhou"
+  IngressRules:
+    # 允许来自K8s集群服务器的所有流量
+    - IpProtocol: "all"
+      PortRange: "-1/-1"
+      SourceCidrIp: "120.26.161.52/32"  # K8s集群IP地址
+      Policy: "accept"
+      Description: "允许来自K8s集群服务器的所有流量"
+      
+    # 允许来自K8s集群VPC网段的所有流量
+    - IpProtocol: "all"
+      PortRange: "-1/-1"
+      SourceCidrIp: "172.16.0.0/12"  # K8s集群VPC的CIDR块，需替换为实际值
+      Policy: "accept"
+      Description: "允许来自K8s集群VPC网段的所有流量"
+      
+    # 允许访问HTTP/HTTPS服务（API网关）
+    - IpProtocol: "tcp"
+      PortRange: "80/80"
+      SourceCidrIp: "0.0.0.0/0"
+      Policy: "accept"
+      Description: "允许HTTP流量"
+      
+    - IpProtocol: "tcp"
+      PortRange: "443/443"
+      SourceCidrIp: "0.0.0.0/0"
+      Policy: "accept"
+      Description: "允许HTTPS流量"
+      
+    # 允许SSH访问
+    - IpProtocol: "tcp"
+      PortRange: "22/22"
+      SourceCidrIp: "0.0.0.0/0"  # 建议限制为特定IP
+      Policy: "accept"
+      Description: "允许SSH访问"
+      
+  EgressRules:
+    # 允许所有出站流量
+    - IpProtocol: "all"
+      PortRange: "-1/-1"
+      DestCidrIp: "0.0.0.0/0"
+      Policy: "accept"
+      Description: "允许所有出站流量"
+
+# K8s集群服务器安全组配置
+K8sServerSecurityGroup:
+  SecurityGroupId: "sg-bp2xxxxxxxx"  # 需替换为实际的安全组ID
+  RegionId: "cn-hangzhou"
+  IngressRules:
+    # 允许来自主服务器的所有流量
+    - IpProtocol: "all"
+      PortRange: "-1/-1"
+      SourceCidrIp: "118.31.223.213/32"  # 主服务器IP地址
+      Policy: "accept"
+      Description: "允许来自主服务器的所有流量"
+      
+    # 允许来自主服务器VPC网段的所有流量
+    - IpProtocol: "all"
+      PortRange: "-1/-1"
+      SourceCidrIp: "172.16.169.0/24"  # 主服务器VPC的CIDR块，需替换为实际值
+      Policy: "accept"
+      Description: "允许来自主服务器VPC网段的所有流量"
+      
+    # 允许Kubernetes API服务访问
+    - IpProtocol: "tcp"
+      PortRange: "6443/6443"
+      SourceCidrIp: "172.16.0.0/12"  # 集群内部网络，需替换为实际值
+      Policy: "accept"
+      Description: "允许Kubernetes API访问"
+      
+    # 允许NodePort服务访问
+    - IpProtocol: "tcp"
+      PortRange: "30000/32767"
+      SourceCidrIp: "0.0.0.0/0"
+      Policy: "accept"
+      Description: "允许NodePort服务访问"
+      
+    # 允许HTTP/HTTPS服务
+    - IpProtocol: "tcp"
+      PortRange: "80/80"
+      SourceCidrIp: "0.0.0.0/0"
+      Policy: "accept"
+      Description: "允许HTTP流量"
+      
+    - IpProtocol: "tcp"
+      PortRange: "443/443"
+      SourceCidrIp: "0.0.0.0/0"
+      Policy: "accept"
+      Description: "允许HTTPS流量"
+      
+    # 允许SSH访问
+    - IpProtocol: "tcp"
+      PortRange: "22/22"
+      SourceCidrIp: "0.0.0.0/0"  # 建议限制为特定IP
+      Policy: "accept"
+      Description: "允许SSH访问"
+      
+    # 允许ICMP (ping)
+    - IpProtocol: "icmp"
+      PortRange: "-1/-1"
+      SourceCidrIp: "0.0.0.0/0"
+      Policy: "accept"
+      Description: "允许ICMP流量"
+      
+  EgressRules:
+    # 允许所有出站流量
+    - IpProtocol: "all"
+      PortRange: "-1/-1"
+      DestCidrIp: "0.0.0.0/0"
+      Policy: "accept"
+      Description: "允许所有出站流量"
+
+# 实施说明
+# 
+# 1. 登录阿里云控制台，进入"云服务器 ECS" > "网络与安全" > "安全组"
+# 
+# 2. 找到主服务器和K8s集群服务器对应的安全组
+# 
+# 3. 为每个安全组添加上述入站和出站规则
+# 
+# 4. 规则添加顺序很重要，请确保特定规则在通用规则之前
+# 
+# 5. 对于生产环境，请进一步限制规则，仅允许必要的流量
+# 
+# 6. 定期审核安全组规则，移除不再需要的规则
+# 
+# 7. 可以使用阿里云CLI或SDK批量添加上述规则：
+#    aliyun ecs AuthorizeSecurityGroup --SecurityGroupId sg-xxxx --IpProtocol tcp --PortRange 80/80 --SourceCidrIp x.x.x.x/x
+#
+# 8. 添加规则后，需要等待几秒钟规则才会生效 

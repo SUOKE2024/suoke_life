@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: knowledge-base-data-pvc
+  namespace: suoke
+  labels:
+    app: knowledge-base-service
+    tier: data
+  annotations:
+    volume.beta.kubernetes.io/storage-provisioner: csi.aliyun.com
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: suoke-premium
+  resources:
+    requests:
+      storage: 20Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: knowledge-base-logs-pvc
+  namespace: suoke
+  labels:
+    app: knowledge-base-service
+    tier: data
+  annotations:
+    volume.beta.kubernetes.io/storage-provisioner: csi.aliyun.com
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: suoke-standard
+  resources:
+    requests:
+      storage: 10Gi

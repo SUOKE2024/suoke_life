@@ -1,0 +1,37 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - deployment.yaml
+  - service.yaml
+  - pvc.yaml
+  - serviceaccount.yaml
+  - hpa.yaml
+  - pdb.yaml
+  - backup-cronjob.yaml
+  - backup-pvc.yaml
+  - networkpolicy.yaml
+  - configmap.yaml
+  # - secrets.yaml  # 使用Vault管理密钥，不直接引用
+  - vault-secretproviderclass.yaml
+  
+namespace: suoke-life
+
+images:
+  - name: touch-diagnosis-service
+    newName: ${CI_REGISTRY}/suoke-life/touch-diagnosis-service
+    newTag: ${CI_COMMIT_SHORT_SHA}
+
+configMapGenerator:
+  - name: touch-diagnosis-configmap
+    behavior: merge
+    literals:
+      - LOG_LEVEL=info
+      - METRICS_ENABLED=true
+      - TRACING_ENABLED=true
+
+commonLabels:
+  app: touch-diagnosis-service
+  component: diagnosis
+  part-of: suoke-life
+  managed-by: kustomize

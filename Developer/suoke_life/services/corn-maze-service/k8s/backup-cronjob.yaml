@@ -1,0 +1,73 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: corn-maze-db-backup
+  namespace: suoke
+spec:
+  schedule: "0 2 * * *"  # 每天凌晨2点执行
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 7
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+          containers:
+          - name: backup
+            image: mongo:4.4
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities:
+                drop:
+                - ALL
+            command:
+            - /bin/bash
+            - -c
+            - |
+              echo "开始备份玉米迷宫数据库..."
+              TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+              BACKUP_FILE="/backup/cornmaze_${TIMESTAMP}.gz"
+              
+              # 执行备份
+              mongodump --uri=${MONGODB_URI} --gzip --archive=${BACKUP_FILE}
+              
+              # 如果备份成功，上传到OSS
+              if [ $? -eq 0 ]; then
+                echo "备份成功: ${BACKUP_FILE}"
+                
+                # 使用阿里云OSS工具上传
+                if [ -x "$(command -v ossutil)" ]; then
+                  ossutil cp ${BACKUP_FILE} oss://suoke-backup/databases/cornmaze/
+                  echo "已上传到OSS存储"
+                else
+                  echo "警告: 未找到ossutil工具，跳过上传步骤"
+                fi
+                
+                # 保留最近10个备份，删除更早的备份
+                ls -tp /backup/cornmaze_*.gz | grep -v '/$' | tail -n +11 | xargs -I {} rm -- {}
+                echo "已清理旧备份"
+              else
+                echo "备份失败"
+                exit 1
+              fi
+            env:
+            - name: MONGODB_URI
+              valueFrom:
+                secretKeyRef:
+                  name: corn-maze-secrets
+                  key: mongodb-uri
+            volumeMounts:
+            - name: backup-volume
+              mountPath: /backup
+          volumes:
+          - name: backup-volume
+            persistentVolumeClaim:
+              claimName: corn-maze-backup-pvc
+          restartPolicy: OnFailure
+          nodeSelector:
+            node-type: db-utils 

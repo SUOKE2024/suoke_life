@@ -1,0 +1,296 @@
+# 默认全局设置
+global:
+  environment: production
+  imageRegistry: suoke-registry.cn-hangzhou.cr.aliyuncs.com
+  imagePullSecrets:
+    - name: suoke-registry-secret
+  storageClass: suoke-premium
+  networkPolicy:
+    enabled: true
+
+# 应用设置
+replicaCount: 2
+
+image:
+  repository: suoke/knowledge-base-service
+  pullPolicy: IfNotPresent
+  tag: latest
+
+imagePullSecrets:
+  - name: suoke-registry-secret
+
+nameOverride: ""
+fullnameOverride: ""
+
+# 服务账号设置
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+# Pod注解
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "9090"
+  prometheus.io/path: "/metrics"
+  vault.hashicorp.com/agent-inject: "true"
+  vault.hashicorp.com/role: "suoke-knowledge-base"
+  vault.hashicorp.com/agent-inject-secret-db-creds: "suoke/data/knowledge-base-service/db"
+
+# Pod安全上下文
+podSecurityContext:
+  fsGroup: 1000
+  runAsUser: 1000
+  runAsNonRoot: true
+
+# 容器安全上下文
+securityContext:
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1000
+  allowPrivilegeEscalation: false
+
+# 服务设置
+service:
+  type: ClusterIP
+  port: 80
+  metricsPort: 9090
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9090"
+
+# Ingress设置
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  hosts:
+    - host: api.suoke.life
+      paths:
+        - path: /api/knowledge
+          pathType: Prefix
+        - path: /api/categories
+          pathType: Prefix
+        - path: /api/tags
+          pathType: Prefix
+        - path: /api/search
+          pathType: Prefix
+  tls:
+    - secretName: api-suoke-tls
+      hosts:
+        - api.suoke.life
+
+# 资源限制和请求
+resources:
+  limits:
+    cpu: 500m
+    memory: 1Gi
+  requests:
+    cpu: 200m
+    memory: 512Mi
+
+# 自动伸缩设置
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+    scaleUp:
+      stabilizationWindowSeconds: 60
+
+# 节点亲和性和容忍设置
+nodeSelector:
+  node-type: stateful-services
+
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: node-type
+              operator: In
+              values:
+                - stateful-services
+
+tolerations:
+  - key: "dedicated"
+    operator: "Equal"
+    value: "database"
+    effect: "NoSchedule"
+
+# 持久卷设置
+persistence:
+  enabled: true
+  data:
+    size: 20Gi
+    storageClass: suoke-premium
+    annotations:
+      volume.beta.kubernetes.io/storage-provisioner: csi.aliyun.com
+  logs:
+    size: 10Gi
+    storageClass: suoke-standard
+    annotations:
+      volume.beta.kubernetes.io/storage-provisioner: csi.aliyun.com
+
+# 环境变量设置
+env:
+  # 应用配置
+  NODE_ENV: production
+  PORT: "3002"
+  APP_HOST: "0.0.0.0"
+  LOG_LEVEL: info
+  API_BASE_URL: "https://api.suoke.life"
+  
+  # 服务集成
+  KNOWLEDGE_GRAPH_SERVICE_URL: "http://knowledge-graph-service:3000"
+  RAG_SERVICE_URL: "http://rag-service:3000"
+  AUTH_SERVICE_URL: "http://auth-service:3000"
+  
+  # Redis配置
+  REDIS_HOST: "redis-master"
+  REDIS_PORT: "6379"
+  REDIS_DB: "0"
+  
+  # 缓存配置
+  CACHE_TTL: "3600"
+  ENABLE_RESPONSE_CACHE: "true"
+  
+  # 内容限制
+  MAX_CONTENT_SIZE: "10mb"
+  MAX_TAGS_PER_KNOWLEDGE: "20"
+  MAX_CATEGORIES_PER_KNOWLEDGE: "5"
+  
+  # 审核配置
+  REQUIRE_CONTENT_APPROVAL: "false"
+  ADMIN_EMAIL: "admin@suoke.life"
+  
+  # 性能配置
+  PAGINATION_DEFAULT_LIMIT: "20"
+  PAGINATION_MAX_LIMIT: "100"
+  REQUEST_TIMEOUT_MS: "30000"
+  
+  # 文档版本控制
+  MAX_VERSIONS_PER_KNOWLEDGE: "10"
+  ENABLE_VERSION_CONTROL: "true"
+  
+  # CORS配置
+  CORS_ORIGINS: "https://app.suoke.life,https://admin.suoke.life,https://suoke.life"
+  
+  # OpenTelemetry配置
+  OTEL_SERVICE_NAME: "knowledge-base-service"
+  OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector:4317"
+  OTEL_EXPORTER_OTLP_PROTOCOL: "grpc"
+  OTEL_TRACES_SAMPLER: "parentbased_traceidratio"
+  OTEL_TRACES_SAMPLER_ARG: "0.5"
+  OTEL_METRICS_EXPORT_INTERVAL: "15000"
+  OTEL_LOGS_EXPORT_INTERVAL: "15000"
+  
+  # 监控配置
+  ENABLE_METRICS: "true"
+  METRICS_PREFIX: "knowledge_base_"
+
+# 密钥环境变量
+secret:
+  MONGODB_URI: placeholder
+  REDIS_PASSWORD: placeholder
+  JWT_SECRET: placeholder
+
+# 服务监控设置
+serviceMonitor:
+  enabled: true
+  interval: 15s
+  scrapeTimeout: 10s
+  selector:
+    release: prometheus
+
+# Istio服务网格设置
+istio:
+  enabled: true
+  mtls:
+    mode: STRICT
+  gateway:
+    enabled: true
+    host: api.suoke.life
+  virtualService:
+    enabled: true
+    hosts:
+      - api.suoke.life
+  destinationRule:
+    enabled: true
+    host: knowledge-base-service
+    trafficPolicy:
+      connectionPool:
+        http:
+          http1MaxPendingRequests: 100
+          maxRequestsPerConnection: 10
+        tcp:
+          maxConnections: 100
+      outlierDetection:
+        consecutive5xxErrors: 5
+        interval: 30s
+        baseEjectionTime: 30s
+
+# 健康检查设置
+livenessProbe:
+  httpGet:
+    path: /health
+    port: http
+  initialDelaySeconds: 30
+  periodSeconds: 15
+  timeoutSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
+
+readinessProbe:
+  httpGet:
+    path: /health
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 3
+  successThreshold: 1
+
+startupProbe:
+  httpGet:
+    path: /health
+    port: http
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 12
+  successThreshold: 1
+
+# 依赖服务设置
+mongodb:
+  enabled: false
+  # 如果启用，以下是MongoDB的默认设置
+  architecture: replicaset
+  replicaCount: 3
+  auth:
+    enabled: true
+  persistence:
+    enabled: true
+    storageClass: suoke-premium
+    size: 50Gi
+
+redis:
+  enabled: false
+  # 如果启用，以下是Redis的默认设置
+  architecture: replication
+  auth:
+    enabled: true
+  master:
+    persistence:
+      storageClass: suoke-premium
+      size: 10Gi

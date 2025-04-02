@@ -1,0 +1,14 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: agent-coordinator-pdb
+  namespace: suoke
+  labels:
+    app: agent-coordinator
+    tier: ai
+    part-of: suoke-life
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: agent-coordinator 

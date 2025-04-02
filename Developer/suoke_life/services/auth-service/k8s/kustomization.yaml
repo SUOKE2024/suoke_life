@@ -1,0 +1,47 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: suoke
+
+commonLabels:
+  app: auth-service
+  part-of: suoke-platform
+  managed-by: kustomize
+
+resources:
+- deployment.yaml
+- service.yaml
+- pvc.yaml
+- configmap.yaml
+- secret.yaml
+- networkpolicy.yaml
+- hpa.yaml
+- istio-gateway.yaml
+
+# 可选：添加ServiceMonitor（如果已安装Prometheus Operator）
+# - servicemonitor.yaml
+
+# 镜像管理
+images:
+- name: auth-service
+  newName: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/auth-service
+  newTag: latest
+
+# 元数据配置
+metadata:
+  labels:
+    service-type: core
+    environment: production
+
+# 配置补丁
+patchesStrategicMerge:
+- |-
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: auth-service
+  spec:
+    template:
+      metadata:
+        annotations:
+          sidecar.istio.io/inject: "true" 

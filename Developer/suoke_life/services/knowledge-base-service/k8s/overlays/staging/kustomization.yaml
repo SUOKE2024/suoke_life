@@ -1,0 +1,25 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: suoke
+
+resources:
+  - ../../kustomization.yaml
+
+patchesStrategicMerge:
+  - ../../patches/storage-class-patch.yaml
+
+configMapGenerator:
+  - name: knowledge-base-config
+    behavior: merge
+    literals:
+      - NODE_ENV=staging
+      - LOG_LEVEL=info
+      - DEBUG=false
+      - ENABLE_METRICS=true
+      - METRICS_PREFIX=staging_knowledge_base_
+
+images:
+  - name: knowledge-base-service
+    newName: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/knowledge-base-service
+    newTag: staging

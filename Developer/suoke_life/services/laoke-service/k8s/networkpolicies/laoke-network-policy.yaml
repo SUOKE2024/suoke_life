@@ -1,0 +1,52 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: laoke-network-policy
+  namespace: suoke-ai
+spec:
+  podSelector:
+    matchLabels:
+      app: laoke-service
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: suoke-ai
+    - podSelector:
+        matchLabels:
+          app: api-gateway
+    ports:
+    - protocol: TCP
+      port: 3012
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          app: knowledge-base-service
+    ports:
+    - protocol: TCP
+      port: 3020
+  - to:
+    - podSelector:
+        matchLabels:
+          app: mongodb
+    ports:
+    - protocol: TCP
+      port: 27017
+  - to:
+    - podSelector:
+        matchLabels:
+          app: redis
+    ports:
+    - protocol: TCP
+      port: 6379
+  - to:
+    # 允许DNS解析
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53

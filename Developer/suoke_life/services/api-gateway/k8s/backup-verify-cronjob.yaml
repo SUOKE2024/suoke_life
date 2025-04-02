@@ -1,0 +1,87 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: api-gateway-backup-verify
+  namespace: suoke
+  labels:
+    app: api-gateway
+    service-type: edge
+spec:
+  schedule: "0 3 * * *"  # 每天凌晨3点
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: api-gateway
+            job: backup-verify
+        spec:
+          containers:
+          - name: backup-verify
+            image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/backup-utility:latest
+            command:
+            - /bin/sh
+            - -c
+            - |
+              # 获取最近的备份文件
+              LATEST_BACKUP=$(ossutil ls oss://suoke-backup/api-gateway/ | grep -E "api-gateway-backup-[0-9]+\.tar\.gz" | sort -r | head -n 1 | awk '{print $NF}')
+              
+              if [ -z "$LATEST_BACKUP" ]; then
+                echo "错误：未找到备份文件"
+                exit 1
+              fi
+              
+              echo "正在验证备份: $LATEST_BACKUP"
+              
+              # 下载备份
+              ossutil cp $LATEST_BACKUP /tmp/
+              BACKUP_FILENAME=$(basename $LATEST_BACKUP)
+              
+              # 解压验证
+              mkdir -p /tmp/verify
+              tar -xzf /tmp/$BACKUP_FILENAME -C /tmp/verify
+              
+              # 检查配置备份
+              if [ ! -d /tmp/verify/api-gateway/config ]; then
+                echo "错误：配置备份不存在"
+                exit 1
+              fi
+              
+              # 检查日志备份
+              if [ ! -d /tmp/verify/api-gateway/logs ]; then
+                echo "错误：日志备份不存在"
+                exit 1
+              fi
+              
+              # 检查路由配置备份
+              if [ ! -d /tmp/verify/api-gateway/routes ]; then
+                echo "错误：路由配置备份不存在"
+                exit 1
+              fi
+              
+              # 验证备份文件完整性
+              CONFIG_FILES=$(find /tmp/verify/api-gateway/config -type f | wc -l)
+              if [ $CONFIG_FILES -eq 0 ]; then
+                echo "错误：配置文件为空"
+                exit 1
+              fi
+              
+              # 发送验证成功通知
+              curl -X POST \
+                -H "Content-Type: application/json" \
+                -d "{\"service\": \"api-gateway\", \"status\": \"success\", \"message\": \"备份验证成功: $BACKUP_FILENAME\"}" \
+                http://notification-service.suoke/api/notify/backup-verify
+              
+              # 清理临时文件
+              rm -rf /tmp/$BACKUP_FILENAME /tmp/verify
+              
+              echo "备份验证成功: $BACKUP_FILENAME"
+            securityContext:
+              runAsUser: 1000
+              runAsGroup: 1000
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+          restartPolicy: OnFailure 

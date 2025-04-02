@@ -1,0 +1,155 @@
+{
+  "nodes": [
+    {
+      "id": "constitution_001",
+      "label": "Constitution",
+      "name": "气虚质",
+      "properties": {
+        "description": "气虚体质的基本特征",
+        "symptoms": ["气短", "懒言", "易疲劳", "易出汗"],
+        "tongue": "舌淡",
+        "pulse": "脉虚"
+      }
+    },
+    {
+      "id": "symptom_001",
+      "label": "Symptom",
+      "name": "气短",
+      "properties": {
+        "description": "呼吸短促，说话无力",
+        "severity": "moderate"
+      }
+    },
+    {
+      "id": "treatment_001",
+      "label": "Treatment",
+      "name": "补气",
+      "properties": {
+        "description": "补益人体之气",
+        "indications": ["气虚", "乏力", "气短"]
+      }
+    },
+    {
+      "id": "formula_001",
+      "label": "Formula",
+      "name": "四君子汤",
+      "properties": {
+        "description": "补气的代表方",
+        "composition": ["人参", "白术", "茯苓", "甘草"],
+        "effect": "补脾益气"
+      }
+    },
+    {
+      "id": "herb_001",
+      "label": "Herb",
+      "name": "人参",
+      "properties": {
+        "nature": "微温",
+        "taste": "甘微苦",
+        "meridians": ["脾", "肺"],
+        "effect": "大补元气"
+      }
+    },
+    {
+      "id": "diagnosis_001",
+      "label": "Diagnosis",
+      "name": "舌诊",
+      "properties": {
+        "description": "观察舌质和舌苔",
+        "aspects": ["舌质", "舌苔", "舌色", "舌形"]
+      }
+    },
+    {
+      "id": "tongue_001",
+      "label": "TongueSign",
+      "name": "舌淡",
+      "properties": {
+        "description": "舌质颜色淡白",
+        "indication": "气血两虚"
+      }
+    },
+    {
+      "id": "pulse_001",
+      "label": "PulseSign",
+      "name": "脉虚",
+      "properties": {
+        "description": "脉来虚浮无力",
+        "indication": "气血亏虚"
+      }
+    }
+  ],
+  "relations": [
+    {
+      "source_id": "constitution_001",
+      "target_id": "symptom_001",
+      "type": "HAS_SYMPTOM",
+      "properties": {
+        "confidence": 0.9,
+        "frequency": "common"
+      }
+    },
+    {
+      "source_id": "constitution_001",
+      "target_id": "tongue_001",
+      "type": "HAS_TONGUE_SIGN",
+      "properties": {
+        "confidence": 0.85,
+        "specificity": "high"
+      }
+    },
+    {
+      "source_id": "constitution_001",
+      "target_id": "pulse_001",
+      "type": "HAS_PULSE_SIGN",
+      "properties": {
+        "confidence": 0.8,
+        "specificity": "medium"
+      }
+    },
+    {
+      "source_id": "treatment_001",
+      "target_id": "constitution_001",
+      "type": "TREATS",
+      "properties": {
+        "effectiveness": "high",
+        "evidence_level": "A"
+      }
+    },
+    {
+      "source_id": "formula_001",
+      "target_id": "treatment_001",
+      "type": "IMPLEMENTS",
+      "properties": {
+        "strength": "strong",
+        "classical_reference": "医方集解"
+      }
+    },
+    {
+      "source_id": "formula_001",
+      "target_id": "herb_001",
+      "type": "CONTAINS",
+      "properties": {
+        "amount": "3g",
+        "role": "君药"
+      }
+    },
+    {
+      "source_id": "diagnosis_001",
+      "target_id": "tongue_001",
+      "type": "OBSERVES",
+      "properties": {
+        "importance": "high",
+        "reliability": 0.9
+      }
+    },
+    {
+      "source_id": "constitution_001",
+      "target_id": "treatment_001",
+      "type": "REQUIRES",
+      "properties": {
+        "priority": "high",
+        "recommendation_level": "strong"
+      }
+    }
+  ]
+} 

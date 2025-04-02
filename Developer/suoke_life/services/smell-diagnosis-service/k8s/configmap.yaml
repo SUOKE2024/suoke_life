@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: smell-diagnosis-config
+  namespace: suoke
+  labels:
+    app: smell-diagnosis-service
+    service: four-diagnosis
+data:
+  NODE_ENV: "production"
+  PORT: "3002"
+  LOG_LEVEL: "info"
+  LOG_FORMAT: "json"
+  CORS_ORIGIN: "*.suoke.life,*.suoke.ai"
+  METRICS_PORT: "9464"
+  METRICS_PATH: "/metrics"
+  API_PREFIX: "/api"
+  MAX_FILE_SIZE: "10485760" # 10MB
+  ALLOWED_FILE_TYPES: "audio/mpeg,audio/wav"
+  TEMP_UPLOAD_DIR: "/tmp/uploads"
+  TIMEOUT_SECONDS: "60"
+  MAX_REQUESTS_PER_MINUTE: "60"
+  OTLP_EXPORTER_ENDPOINT: "http://opentelemetry-collector.monitoring:4317"
+  COORDINATOR_SERVICE_URL: "http://four-diagnosis-coordinator.suoke:3050"
+  FOUR_DIAGNOSIS_COORDINATOR_URL: "http://four-diagnosis-coordinator-service:3050"
+  API_GATEWAY_URL: "http://api-gateway-service:3000"
+  DB_HOST: "postgres-service"
+  DB_PORT: "5432"
+  DB_NAME: "smell_diagnosis"
+  PROMETHEUS_METRICS_ENABLED: "true"
+  LOG_FILE_PATH: "/var/log/smell-diagnosis/service.log"
+  LOG_RETENTION_DAYS: "30"
+  HEALTH_CHECK_PATH: "/health"
+  READINESS_CHECK_PATH: "/ready"
+  LIVENESS_CHECK_PATH: "/live"
+  AUDIO_ANALYSIS_ENABLED: "true"
+  SMELL_SENSITIVITY_THRESHOLD: "0.65" 

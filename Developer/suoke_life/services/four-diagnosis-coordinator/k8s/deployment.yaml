@@ -1,0 +1,168 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: four-diagnosis-coordinator
+  namespace: suoke
+  labels:
+    app: four-diagnosis-coordinator
+    service: four-diagnosis
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: four-diagnosis-coordinator
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: four-diagnosis-coordinator
+        service: four-diagnosis
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9464"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: four-diagnosis-coordinator-sa
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+      - name: four-diagnosis-coordinator
+        image: ${DOCKER_REGISTRY}/four-diagnosis-coordinator:${VERSION}
+        imagePullPolicy: Always
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+        ports:
+        - containerPort: 3050
+          name: http
+        - containerPort: 9464
+          name: metrics
+        env:
+        - name: NODE_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: four-diagnosis-coordinator-config
+              key: NODE_ENV
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              name: four-diagnosis-coordinator-config
+              key: PORT
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: four-diagnosis-coordinator-config
+              key: LOG_LEVEL
+        - name: LOOKING_DIAGNOSIS_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: four-diagnosis-coordinator-config
+              key: LOOKING_DIAGNOSIS_SERVICE_URL
+        - name: SMELL_DIAGNOSIS_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: four-diagnosis-coordinator-config
+              key: SMELL_DIAGNOSIS_SERVICE_URL
+        - name: INQUIRY_DIAGNOSIS_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: four-diagnosis-coordinator-config
+              key: INQUIRY_DIAGNOSIS_SERVICE_URL
+        - name: TOUCH_DIAGNOSIS_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: four-diagnosis-coordinator-config
+              key: TOUCH_DIAGNOSIS_SERVICE_URL
+        - name: API_GATEWAY_URL
+          valueFrom:
+            configMapKeyRef:
+              name: four-diagnosis-coordinator-config
+              key: API_GATEWAY_URL
+        - name: USER_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: four-diagnosis-coordinator-config
+              key: USER_SERVICE_URL
+        - name: OTEL_SERVICE_NAME
+          value: "four-diagnosis-coordinator"
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          valueFrom:
+            configMapKeyRef:
+              name: four-diagnosis-coordinator-config
+              key: OTLP_EXPORTER_ENDPOINT
+        - name: API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: four-diagnosis-coordinator-vault-secrets
+              key: API_KEY
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "512Mi"
+          limits:
+            cpu: "500m"
+            memory: "1Gi"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 15
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: http
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        startupProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 2
+          failureThreshold: 12
+        volumeMounts:
+        - name: logs
+          mountPath: /app/logs
+        - name: tmp
+          mountPath: /tmp
+        - name: secrets-store
+          mountPath: /mnt/secrets-store
+          readOnly: true
+      volumes:
+      - name: logs
+        emptyDir: {}
+      - name: tmp
+        emptyDir: {}
+      - name: secrets-store
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: vault-four-diagnosis-coordinator-config
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - four-diagnosis-coordinator
+              topologyKey: kubernetes.io/hostname 

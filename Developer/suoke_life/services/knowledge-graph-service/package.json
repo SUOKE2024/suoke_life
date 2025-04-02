@@ -1,0 +1,55 @@
+{
+  "name": "knowledge-graph-service",
+  "version": "1.0.0",
+  "description": "索克生活知识图谱服务 - 基于Neo4j和Milvus的中医知识图谱系统",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test": "jest",
+    "lint": "eslint src/",
+    "build": "tsc",
+    "docker:build": "docker build -t registry.suoke.life/knowledge-graph-service:prod ."
+  },
+  "dependencies": {
+    "@fastify/cors": "^8.3.0",
+    "@fastify/helmet": "^11.0.0",
+    "@fastify/rate-limit": "^8.0.3",
+    "@fastify/swagger": "^8.8.0",
+    "@milvus-io/milvus2-sdk-node": "^2.2.18",
+    "@neo4j/graphql": "^3.18.3",
+    "dotenv": "^16.3.1",
+    "fastify": "^4.21.0",
+    "ioredis": "^5.3.2",
+    "neo4j-driver": "^5.11.0",
+    "pino": "^8.15.0",
+    "pino-pretty": "^10.2.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.3",
+    "@types/node": "^20.5.0",
+    "@typescript-eslint/eslint-plugin": "^6.4.0",
+    "@typescript-eslint/parser": "^6.4.0",
+    "eslint": "^8.47.0",
+    "jest": "^29.6.2",
+    "nodemon": "^3.0.1",
+    "typescript": "^5.1.6"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/suoke-life/knowledge-graph-service.git"
+  },
+  "keywords": [
+    "知识图谱",
+    "中医",
+    "Neo4j",
+    "Milvus",
+    "向量数据库",
+    "健康管理"
+  ],
+  "author": "索克生活技术团队",
+  "license": "UNLICENSED"
+}

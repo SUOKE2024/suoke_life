@@ -1,0 +1,100 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: inquiry-diagnosis-network-policy
+  namespace: suoke
+  labels:
+    app: inquiry-diagnosis
+    service: four-diagnosis
+spec:
+  podSelector:
+    matchLabels:
+      app: inquiry-diagnosis
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  # 允许从API网关访问
+  - from:
+    - podSelector:
+        matchLabels:
+          app: api-gateway
+    ports:
+    - protocol: TCP
+      port: 3012
+  # 允许从四诊协调器访问
+  - from:
+    - podSelector:
+        matchLabels:
+          app: four-diagnosis-coordinator
+    ports:
+    - protocol: TCP
+      port: 3012
+  # 允许监控系统访问指标端点
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+      podSelector:
+        matchLabels:
+          app: prometheus
+    ports:
+    - protocol: TCP
+      port: 9464
+  egress:
+  # 允许连接到MongoDB
+  - to:
+    - podSelector:
+        matchLabels:
+          app: mongodb
+    ports:
+    - protocol: TCP
+      port: 27017
+  # 允许连接到四诊协调器
+  - to:
+    - podSelector:
+        matchLabels:
+          app: four-diagnosis-coordinator
+    ports:
+    - protocol: TCP
+      port: 3000
+  # 允许连接到用户服务
+  - to:
+    - podSelector:
+        matchLabels:
+          app: user-service
+    ports:
+    - protocol: TCP
+      port: 3001
+  # 允许连接到知识库服务
+  - to:
+    - podSelector:
+        matchLabels:
+          app: knowledge-base-service
+    ports:
+    - protocol: TCP
+      port: 3000
+  # 允许连接到OpenTelemetry收集器
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+      podSelector:
+        matchLabels:
+          app: opentelemetry-collector
+    ports:
+    - protocol: TCP
+      port: 4318
+    - protocol: TCP
+      port: 4317
+  # DNS解析
+  - to:
+    - namespaceSelector: {}
+      podSelector:
+        matchLabels:
+          k8s-app: kube-dns
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53 

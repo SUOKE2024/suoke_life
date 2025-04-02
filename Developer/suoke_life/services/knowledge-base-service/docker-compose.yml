@@ -1,0 +1,97 @@
+version: '3.8'
+
+services:
+  # 知识库服务
+  knowledge-base-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: knowledge-base-service
+    ports:
+      - "3002:3002"
+    environment:
+      - NODE_ENV=development
+      - PORT=3002
+      - MONGODB_URI=mongodb://mongo:27017/knowledge_base
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - LOG_LEVEL=info
+      - API_BASE_URL=http://localhost:3002
+      - KNOWLEDGE_GRAPH_SERVICE_URL=http://knowledge-graph-service:3003
+      - RAG_SERVICE_URL=http://rag-service:3004
+      - AUTH_SERVICE_URL=http://auth-service:3010
+    volumes:
+      - ./logs:/app/logs
+    depends_on:
+      - mongo
+      - redis
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3002/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    networks:
+      - suoke-network
+
+  # MongoDB数据库
+  mongo:
+    image: mongo:6.0
+    container_name: kb-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - kb-mongo-data:/data/db
+    networks:
+      - suoke-network
+
+  # Redis缓存
+  redis:
+    image: redis:alpine
+    container_name: kb-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - kb-redis-data:/data
+    networks:
+      - suoke-network
+
+  # Mongo Express (MongoDB管理界面)
+  mongo-express:
+    image: mongo-express
+    container_name: kb-mongo-express
+    ports:
+      - "8081:8081"
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongo
+      - ME_CONFIG_MONGODB_PORT=27017
+    depends_on:
+      - mongo
+    restart: unless-stopped
+    networks:
+      - suoke-network
+
+  # Redis Commander (Redis管理界面)
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: kb-redis-commander
+    ports:
+      - "8082:8081"
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    depends_on:
+      - redis
+    restart: unless-stopped
+    networks:
+      - suoke-network
+
+# 持久化存储卷
+volumes:
+  kb-mongo-data:
+  kb-redis-data:
+
+# 网络配置
+networks:
+  suoke-network:
+    driver: bridge

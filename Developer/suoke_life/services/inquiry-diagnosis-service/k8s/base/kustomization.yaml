@@ -1,0 +1,43 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+commonLabels:
+  app: inquiry-diagnosis
+  part-of: four-diagnosis
+  managed-by: kustomize
+
+resources:
+  - ../deployment.yaml
+  - ../service.yaml
+  - ../configmap.yaml
+  - ../secrets.yaml
+  - ../pvc.yaml
+  - ../serviceaccount.yaml
+  - ../networkpolicy.yaml
+  - ../poddisruptionbudget.yaml
+  - ../hpa.yaml
+  - ../vault-secretproviderclass.yaml
+  - ../servicemonitor.yaml
+  - ../backup-cronjob.yaml
+  - ../backup-verify-cronjob.yaml
+  - ../backup-pvc.yaml
+  - ../key-rotation.yaml
+
+configMapGenerator:
+  - name: inquiry-diagnosis-config
+    literals:
+      - API_VERSION=v1
+      - SERVICE_PORT=8080
+      - METRICS_PORT=9464
+      - MAX_CONCURRENCY=5
+      - TIMEOUT_MS=30000
+      - CACHE_TTL=1800
+      - AI_MODEL_PROVIDER=azure
+      - MAX_TOKEN_LIMIT=4096
+      - HEALTH_CHECK_PATH=/health
+
+secretGenerator:
+  - name: inquiry-diagnosis-secrets
+    type: Opaque
+    envs:
+    - ../.env.secret 

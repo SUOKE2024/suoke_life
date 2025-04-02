@@ -1,0 +1,80 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: api-gateway-backup
+  namespace: suoke
+  labels:
+    app: api-gateway
+    service-type: edge
+spec:
+  schedule: "0 2 * * *"  # 每天凌晨2点
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 7
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: api-gateway
+            job: backup
+        spec:
+          containers:
+          - name: backup
+            image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/backup-utility:latest
+            command:
+            - /bin/sh
+            - -c
+            - |
+              # 备份配置文件
+              mkdir -p /backup/api-gateway/config
+              cp -r /app/config/* /backup/api-gateway/config/
+              
+              # 备份日志（最近7天）
+              mkdir -p /backup/api-gateway/logs
+              find /app/logs -name "*.log" -type f -mtime -7 -exec cp {} /backup/api-gateway/logs/ \;
+              
+              # 备份路由配置
+              mkdir -p /backup/api-gateway/routes
+              cp -r /app/routes/* /backup/api-gateway/routes/
+              
+              # 压缩备份
+              cd /backup
+              tar -czf api-gateway-backup-$(date +%Y%m%d).tar.gz api-gateway/
+              
+              # 上传到OSS存储
+              ossutil cp /backup/api-gateway-backup-$(date +%Y%m%d).tar.gz oss://suoke-backup/api-gateway/
+              
+              # 清理30天前的本地备份
+              find /backup -name "api-gateway-backup-*.tar.gz" -type f -mtime +30 -delete
+              
+              echo "备份完成: api-gateway-backup-$(date +%Y%m%d).tar.gz"
+            volumeMounts:
+            - name: backup-volume
+              mountPath: /backup
+            - name: config-volume
+              mountPath: /app/config
+              readOnly: true
+            - name: logs-volume
+              mountPath: /app/logs
+              readOnly: true
+            - name: routes-volume
+              mountPath: /app/routes
+              readOnly: true
+            securityContext:
+              runAsUser: 1000
+              runAsGroup: 1000
+              allowPrivilegeEscalation: false
+          volumes:
+          - name: backup-volume
+            persistentVolumeClaim:
+              claimName: api-gateway-backup-pvc
+          - name: config-volume
+            persistentVolumeClaim:
+              claimName: api-gateway-config-pvc
+          - name: logs-volume
+            persistentVolumeClaim:
+              claimName: api-gateway-logs-pvc
+          - name: routes-volume
+            emptyDir: {}
+          restartPolicy: OnFailure 

@@ -1,0 +1,175 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+  namespace: suoke
+  labels:
+    app: user-service
+    service-type: core
+  annotations:
+    app.kubernetes.io/part-of: suoke-platform
+    app.kubernetes.io/managed-by: argocd
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: user-service
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: user-service
+        service-type: core
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "3002"
+        prometheus.io/path: "/metrics"
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-type
+                operator: In
+                values:
+                - core-services
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - user-service
+              topologyKey: kubernetes.io/hostname
+      containers:
+      - name: user-service
+        image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/user-service:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3002
+          name: http
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: PORT
+          value: "3002"
+        - name: OTEL_SERVICE_NAME
+          value: "user-service"
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: "http://suoke-collector-collector.monitoring:4317"
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: "service.namespace=suoke,service.name=user-service"
+        - name: KNOWLEDGE_BASE_URL
+          value: "http://knowledge-base-service:3000"
+        - name: KNOWLEDGE_GRAPH_URL
+          value: "http://knowledge-graph-service:3000"
+        - name: SHARE_BASE_URL
+          value: "https://suoke.life/share"
+        - name: VECTOR_SIMILARITY_THRESHOLD
+          value: "0.7"
+        - name: CORS_ALLOWED_ORIGINS
+          value: "https://suoke.life,https://app.suoke.life"
+        - name: REDIS_HOST
+          value: "redis.suoke"
+        - name: REDIS_PORT
+          value: "6379"
+        envFrom:
+        - secretRef:
+            name: user-service-env
+        resources:
+          requests:
+            cpu: 200m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3002
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: 3002
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          successThreshold: 1
+          failureThreshold: 3
+        startupProbe:
+          httpGet:
+            path: /health/startup
+            port: 3002
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          failureThreshold: 12
+        volumeMounts:
+        - name: logs
+          mountPath: /app/logs
+        - name: uploads
+          mountPath: /app/uploads
+        - name: tmp
+          mountPath: /app/tmp
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+          runAsUser: 1000
+          runAsGroup: 1000
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: false
+      volumes:
+      - name: logs
+        emptyDir: {}
+      - name: tmp
+        emptyDir: {}
+      - name: uploads
+        persistentVolumeClaim:
+          claimName: user-service-uploads
+      imagePullSecrets:
+      - name: aliyun-registry
+      securityContext:
+        fsGroup: 1000
+      terminationGracePeriodSeconds: 30
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+  namespace: suoke
+  labels:
+    app: user-service
+spec:
+  selector:
+    app: user-service
+  ports:
+  - port: 80
+    targetPort: 3002
+    name: http
+  type: ClusterIP
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: user-service-uploads
+  namespace: suoke
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: suoke-standard
+  resources:
+    requests:
+      storage: 10Gi

@@ -1,0 +1,80 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: touch-diagnosis-db-backup
+spec:
+  schedule: "0 2 * * *"  # 每天凌晨2点执行
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: touch-diagnosis-backup
+            image: mongo:5.0
+            imagePullPolicy: IfNotPresent
+            command:
+            - /bin/bash
+            - -c
+            - |
+              TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+              BACKUP_NAME="touch_diagnosis_backup_$TIMESTAMP"
+              
+              echo "开始备份: $BACKUP_NAME"
+              
+              # 创建备份
+              mongodump --host=${MONGODB_HOST} \
+                --port=${MONGODB_PORT} \
+                --username=${MONGODB_USER} \
+                --password=${MONGODB_PASSWORD} \
+                --authenticationDatabase=admin \
+                --db=touch_diagnosis \
+                --out=/backup/$BACKUP_NAME
+              
+              if [ $? -eq 0 ]; then
+                echo "备份成功: /backup/$BACKUP_NAME"
+                
+                # 压缩备份文件
+                cd /backup
+                tar -zcvf $BACKUP_NAME.tar.gz $BACKUP_NAME
+                rm -rf $BACKUP_NAME
+                
+                # 清理7天前的旧备份
+                find /backup -name "touch_diagnosis_backup_*.tar.gz" -type f -mtime +7 -delete
+                
+                echo "备份完成，已清理7天前的旧备份"
+              else
+                echo "备份失败"
+                exit 1
+              fi
+            env:
+            - name: MONGODB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: touch-diagnosis-secrets
+                  key: mongodb-host
+            - name: MONGODB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: touch-diagnosis-secrets
+                  key: mongodb-port
+            - name: MONGODB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: touch-diagnosis-secrets
+                  key: mongodb-user
+            - name: MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: touch-diagnosis-secrets
+                  key: mongodb-password
+            volumeMounts:
+            - name: backup-volume
+              mountPath: /backup
+          restartPolicy: OnFailure
+          volumes:
+          - name: backup-volume
+            persistentVolumeClaim:
+              claimName: touch-diagnosis-backup-pvc

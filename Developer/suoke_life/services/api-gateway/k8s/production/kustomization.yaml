@@ -1,0 +1,48 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: suoke
+
+commonLabels:
+  app: api-gateway
+  part-of: suoke-platform
+  managed-by: kustomize
+  service-type: edge
+
+resources:
+- deployment.yaml
+- service.yaml
+- pvc.yaml
+- configmap.yaml
+- secret.yaml
+- networkpolicy.yaml
+- hpa.yaml
+- istio-gateway.yaml
+
+# 可选：添加ServiceMonitor（如果已安装Prometheus Operator）
+# - servicemonitor.yaml
+
+# 镜像管理
+images:
+- name: api-gateway
+  newName: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/api-gateway
+  newTag: latest
+
+# 元数据配置
+metadata:
+  labels:
+    environment: production
+
+# 配置补丁
+patchesStrategicMerge:
+- |-
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: api-gateway
+  spec:
+    template:
+      metadata:
+        annotations:
+          sidecar.istio.io/inject: "true"
+          sidecar.istio.io/rewriteAppHTTPProbers: "true" 

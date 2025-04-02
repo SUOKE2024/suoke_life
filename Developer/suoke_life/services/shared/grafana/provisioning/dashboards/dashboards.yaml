@@ -1,0 +1,11 @@
+apiVersion: 1
+
+providers:
+  - name: '索克生活服务仪表板'
+    orgId: 1
+    folder: 'SuokeLife'
+    type: file
+    disableDeletion: false
+    editable: true
+    options:
+      path: /etc/grafana/provisioning/dashboards/json

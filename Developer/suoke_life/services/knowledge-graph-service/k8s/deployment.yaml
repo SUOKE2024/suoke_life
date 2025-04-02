@@ -1,0 +1,292 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: knowledge-graph-service
+  namespace: suoke
+  labels:
+    app: knowledge-graph-service
+    tier: data
+    component: knowledge-graph
+  annotations:
+    app.kubernetes.io/part-of: suoke-platform
+    app.kubernetes.io/managed-by: argocd
+    backup.velero.io/backup-volumes: "data,models,tmp"
+    backup.velero.io/schedule: "daily"
+    backup.velero.io/ttl: "720h"
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: knowledge-graph-service
+  template:
+    metadata:
+      labels:
+        app: knowledge-graph-service
+        tier: data
+        component: knowledge-graph
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "3006"
+        prometheus.io/path: "/metrics"
+        sidecar.istio.io/inject: "true"
+    spec:
+      # 节点亲和性 - 确保部署在数据服务节点池
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-type
+                operator: In
+                values:
+                - stateful-services
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - knowledge-graph-service
+              topologyKey: kubernetes.io/hostname
+      
+      # 污点容忍 - 允许部署在有污点的数据节点上
+      tolerations:
+      - key: "dedicated"
+        operator: "Equal"
+        value: "database"
+        effect: "NoSchedule"
+        
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      
+      # 初始化容器 - 为主容器准备环境
+      initContainers:
+      - name: init-permissions
+        image: busybox:1.34.1
+        command: ["sh", "-c", "chmod -R 755 /app/data /app/models /app/tmp && chown -R 1000:1000 /app/data /app/models /app/tmp"]
+        securityContext:
+          allowPrivilegeEscalation: false
+          privileged: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: false
+          runAsUser: 0
+          capabilities:
+            drop:
+            - ALL
+        volumeMounts:
+        - name: data
+          mountPath: /app/data
+        - name: models
+          mountPath: /app/models
+        - name: tmp
+          mountPath: /app/tmp
+      
+      containers:
+      - name: knowledge-graph-service
+        image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/knowledge-graph-service:latest
+        imagePullPolicy: Always
+        securityContext:
+          allowPrivilegeEscalation: false
+          privileged: false
+          readOnlyRootFilesystem: false
+          capabilities:
+            drop:
+            - ALL
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: LOG_LEVEL
+          value: "info"
+        - name: PORT
+          value: "3006"
+        # Graph DB配置
+        - name: GRAPH_DB_HOST
+          value: "neo4j-service"
+        - name: GRAPH_DB_PORT
+          value: "7687"
+        - name: GRAPH_DB_NAME
+          value: "suoke_knowledge_graph"
+        - name: GRAPH_DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: knowledge-graph-secrets
+              key: neo4j-username
+        - name: GRAPH_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: knowledge-graph-secrets
+              key: neo4j-password
+        # Redis配置
+        - name: REDIS_HOST
+          value: "redis-master"
+        - name: REDIS_PORT
+          value: "6379"
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: knowledge-graph-secrets
+              key: redis-password
+        # Milvus配置
+        - name: VECTOR_DB_HOST
+          value: "milvus-standalone"
+        - name: VECTOR_DB_PORT
+          value: "19530"
+        - name: VECTOR_DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: knowledge-graph-secrets
+              key: milvus-username
+        - name: VECTOR_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: knowledge-graph-secrets
+              key: milvus-password
+        # RAG服务配置
+        - name: RAG_SERVICE_URL
+          value: "http://rag-service:8000"
+        # 安全配置
+        - name: ENCRYPTION_KEY
+          valueFrom:
+            secretKeyRef:
+              name: knowledge-graph-secrets
+              key: encryption-key
+        # OpenTelemetry配置
+        - name: OTEL_SERVICE_NAME
+          value: "knowledge-graph-service"
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: "http://suoke-collector-collector.monitoring:4317"
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: "service.namespace=suoke,service.name=knowledge-graph-service"
+        - name: OTEL_TRACES_SAMPLER
+          value: "parentbased_traceidratio"
+        - name: OTEL_TRACES_SAMPLER_ARG
+          value: "0.5"
+        - name: OTEL_LOGS_EXPORTER
+          value: "otlp"
+        - name: OTEL_METRICS_EXPORTER
+          value: "otlp"
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        ports:
+        - name: http
+          containerPort: 3006
+          protocol: TCP
+        - name: metrics
+          containerPort: 9464
+          protocol: TCP
+        volumeMounts:
+        - name: data
+          mountPath: /app/data
+        - name: models
+          mountPath: /app/models
+        - name: tmp
+          mountPath: /app/tmp
+        - name: secrets-store
+          mountPath: "/mnt/secrets-store"
+          readOnly: true
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "1Gi"
+          limits:
+            cpu: "1"
+            memory: "2Gi"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+            httpHeaders:
+            - name: X-Probe-Type
+              value: "liveness"
+          initialDelaySeconds: 30
+          periodSeconds: 15
+          timeoutSeconds: 5
+          failureThreshold: 3
+          successThreshold: 1
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+            httpHeaders:
+            - name: X-Probe-Type
+              value: "readiness"
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
+        startupProbe:
+          httpGet:
+            path: /health
+            port: http
+            httpHeaders:
+            - name: X-Probe-Type
+              value: "startup"
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 30
+      - name: otel-collector-sidecar
+        image: otel/opentelemetry-collector-contrib:0.84.0
+        args:
+        - "--config=/conf/otel-collector-config.yaml"
+        ports:
+        - name: otlp
+          containerPort: 4317
+        - name: otlp-http
+          containerPort: 4318
+        - name: health-check
+          containerPort: 13133
+        volumeMounts:
+        - name: otel-collector-config
+          mountPath: /conf
+        resources:
+          limits:
+            cpu: 200m
+            memory: 400Mi
+          requests:
+            cpu: 100m
+            memory: 200Mi
+      
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: knowledge-graph-data-pvc
+      - name: models
+        persistentVolumeClaim:
+          claimName: knowledge-graph-models-pvc
+      - name: tmp
+        persistentVolumeClaim:
+          claimName: knowledge-graph-tmp-pvc
+      - name: otel-collector-config
+        configMap:
+          name: knowledge-graph-otel-collector-config
+      - name: secrets-store
+        csi:
+          driver: secrets-store.csi.x-k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "vault-knowledge-graph-config"
+      
+      imagePullSecrets:
+      - name: aliyun-registry-secret
+      
+      terminationGracePeriodSeconds: 60

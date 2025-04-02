@@ -1,0 +1,91 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: knowledge-base-key-rotation
+  namespace: suoke
+  labels:
+    app: knowledge-base-service
+    component: key-rotation
+spec:
+  schedule: "0 3 1 * *"  # 每月1日凌晨3点执行
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      backoffLimit: 3
+      activeDeadlineSeconds: 1800  # 30分钟超时
+      template:
+        spec:
+          serviceAccountName: vault-auth
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+          containers:
+          - name: key-rotation
+            image: hashicorp/vault:1.13.0
+            command:
+            - /bin/sh
+            - -c
+            - |
+              #!/bin/sh
+              set -e
+              
+              # 读取Vault地址
+              VAULT_ADDR="https://vault.suoke.io:8200"
+              
+              # 获取Kubernetes服务账号令牌进行身份验证
+              JWT=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
+              
+              # 使用Kubernetes身份验证登录Vault
+              LOGIN_RESPONSE=$(curl -s -X POST \
+                  -H "Content-Type: application/json" \
+                  --data "{\"jwt\": \"$JWT\", \"role\": \"knowledge-base-key-rotation\"}" \
+                  $VAULT_ADDR/v1/auth/kubernetes/login)
+              
+              # 解析Vault令牌
+              TOKEN=$(echo $LOGIN_RESPONSE | jq -r '.auth.client_token')
+              
+              # 设置Vault环境变量
+              export VAULT_TOKEN="$TOKEN"
+              
+              echo "正在执行知识库服务密钥轮换..."
+              
+              # 生成新的JWT密钥
+              JWT_SECRET=$(openssl rand -base64 48)
+              
+              # 生成新的加密密钥
+              ENCRYPTION_KEY=$(openssl rand -base64 32)
+              
+              # 更新Vault中的密钥
+              curl -s -X POST \
+                -H "X-Vault-Token: $TOKEN" \
+                -H "Content-Type: application/json" \
+                --data "{\"data\": {\"jwt_secret\": \"$JWT_SECRET\", \"encryption_key\": \"$ENCRYPTION_KEY\"}}" \
+                $VAULT_ADDR/v1/suoke/data/knowledge-base-service/security
+              
+              echo "密钥轮换完成，更新了JWT密钥和加密密钥"
+                  
+              # 重启Pod以应用新密钥（通过减少副本数再恢复）
+              CURRENT_REPLICAS=$(kubectl get deployment knowledge-base-service -n suoke -o jsonpath='{.spec.replicas}')
+              
+              # 按顺序重启Pod以避免服务中断
+              for i in $(seq 1 $CURRENT_REPLICAS); do
+                POD_NAME=$(kubectl get pods -n suoke -l app=knowledge-base-service -o jsonpath="{.items[$((i-1))].metadata.name}")
+                echo "重启Pod $POD_NAME..."
+                kubectl delete pod $POD_NAME -n suoke
+                
+                # 等待Pod就绪
+                kubectl wait --for=condition=ready pod -l app=knowledge-base-service -n suoke --timeout=300s
+              done
+              
+              echo "密钥轮换和Pod重启完成"
+            resources:
+              requests:
+                cpu: 100m
+                memory: 128Mi
+              limits:
+                cpu: 200m
+                memory: 256Mi
+          restartPolicy: OnFailure

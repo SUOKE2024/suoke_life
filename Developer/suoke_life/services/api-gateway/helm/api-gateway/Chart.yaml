@@ -1,0 +1,57 @@
+apiVersion: v2
+name: api-gateway
+description: API Gateway for Suoke Life Platform
+
+# API网关版本
+version: 0.1.0
+
+# 应用版本（应与Docker镜像标签匹配）
+appVersion: "1.0.0"
+
+# Chart类型
+type: application
+
+# 关键字
+keywords:
+  - api
+  - gateway
+  - suoke
+  - microservice
+
+# 维护者信息
+maintainers:
+  - name: Suoke Dev Team
+    email: dev@suoke.life
+    url: https://suoke.life
+
+# 图表图标（可选）
+icon: https://suoke.life/logo.png
+
+# 主页
+home: https://suoke.life
+
+# 源代码仓库
+sources:
+  - https://github.com/suoke/api-gateway
+
+# 依赖项
+dependencies:
+  - name: common
+    version: ^1.0.0
+    repository: https://charts.bitnami.com/bitnami
+    condition: common.enabled
+    tags:
+      - suoke-common
+
+# 注解
+annotations:
+  category: Application
+  licenses: Apache-2.0
+  artifacthub.io/containsSecurityUpdates: "false"
+  artifacthub.io/prerelease: "true"
+  artifacthub.io/operator: "false"
+  artifacthub.io/changes: |
+    - 初始版本发布
+    - 增加Istio集成
+    - 增加Vault集成
+    - 增加OpenTelemetry集成 

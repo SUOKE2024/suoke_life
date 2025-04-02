@@ -1,0 +1,134 @@
+{
+  "service": {
+    "name": "api-gateway",
+    "version": "1.0.0",
+    "port": 3000,
+    "log_level": "info",
+    "environment": "development"
+  },
+  "cors": {
+    "origin": "*",
+    "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+  },
+  "rate_limit": {
+    "window": 60000,
+    "max": 100,
+    "message": "请求过于频繁，请稍后再试"
+  },
+  "services": [
+    {
+      "name": "user-service",
+      "url": "http://user-service:3001",
+      "prefix": "/api/users",
+      "timeout": 30000,
+      "circuit_breaker": {
+        "failure_threshold": 5,
+        "reset_timeout": 30000
+      }
+    },
+    {
+      "name": "auth-service",
+      "url": "http://auth-service:3002",
+      "prefix": "/api/auth",
+      "timeout": 30000,
+      "circuit_breaker": {
+        "failure_threshold": 5,
+        "reset_timeout": 30000
+      }
+    },
+    {
+      "name": "knowledge-graph-service",
+      "url": "http://knowledge-graph-service:3003",
+      "prefix": "/api/knowledge",
+      "timeout": 60000,
+      "circuit_breaker": {
+        "failure_threshold": 3,
+        "reset_timeout": 60000
+      },
+      "canary": {
+        "enabled": true,
+        "defaultVersion": "stable",
+        "versions": [
+          {
+            "name": "stable",
+            "url": "http://knowledge-graph-service:3003",
+            "weight": 80
+          },
+          {
+            "name": "beta",
+            "url": "http://knowledge-graph-service-beta:3003",
+            "weight": 20
+          }
+        ],
+        "rules": [
+          {
+            "type": "header",
+            "name": "x-beta-tester",
+            "values": ["true"],
+            "targetVersion": "beta"
+          },
+          {
+            "type": "query",
+            "name": "version",
+            "values": ["beta"],
+            "targetVersion": "beta"
+          },
+          {
+            "type": "userGroup",
+            "values": ["beta-testers", "developers"],
+            "targetVersion": "beta"
+          }
+        ]
+      }
+    },
+    {
+      "name": "rag-service",
+      "url": "http://rag-service:3004",
+      "prefix": "/api/rag",
+      "timeout": 60000,
+      "circuit_breaker": {
+        "failure_threshold": 3,
+        "reset_timeout": 60000
+      },
+      "canary": {
+        "enabled": true,
+        "defaultVersion": "stable",
+        "versions": [
+          {
+            "name": "stable",
+            "url": "http://rag-service:3004",
+            "weight": 90
+          },
+          {
+            "name": "new-algorithm",
+            "url": "http://rag-service-new:3004",
+            "weight": 10
+          }
+        ],
+        "rules": [
+          {
+            "type": "random",
+            "percentage": 10,
+            "targetVersion": "new-algorithm"
+          },
+          {
+            "type": "header",
+            "name": "x-rag-variant",
+            "values": ["new-algorithm"],
+            "targetVersion": "new-algorithm"
+          }
+        ]
+      }
+    },
+    {
+      "name": "agent-coordinator-service",
+      "url": "http://agent-coordinator-service:3005",
+      "prefix": "/api/coordinator",
+      "timeout": 30000,
+      "circuit_breaker": {
+        "failure_threshold": 5,
+        "reset_timeout": 30000
+      }
+    }
+  ]
+} 

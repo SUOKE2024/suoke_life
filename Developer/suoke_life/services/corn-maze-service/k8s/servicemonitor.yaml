@@ -1,0 +1,33 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: corn-maze-service-monitor
+  namespace: suoke
+  labels:
+    app: corn-maze-service
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: corn-maze-service
+  endpoints:
+  - port: http
+    path: /metrics
+    interval: 15s
+    scrapeTimeout: 10s
+    metricRelabelings:
+    - sourceLabels: [__name__]
+      regex: 'http_request_duration_seconds.*'
+      action: keep
+    - sourceLabels: [__name__]
+      regex: 'websocket_connections.*'
+      action: keep
+    - sourceLabels: [__name__]
+      regex: 'mongodb_query_execution_time.*'
+      action: keep
+    - sourceLabels: [__name__]
+      regex: 'redis_cache_hit_.*'
+      action: keep
+  namespaceSelector:
+    matchNames:
+    - suoke 

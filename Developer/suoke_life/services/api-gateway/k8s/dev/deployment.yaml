@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway
+  namespace: suoke-dev
+  labels:
+    app: api-gateway
+    environment: development
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+    spec:
+      containers:
+      - name: api-gateway
+        image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/api-gateway:dev
+        ports:
+        - name: http
+          containerPort: 3000
+        env:
+        - name: NODE_ENV
+          value: "development"
+        - name: LOG_LEVEL
+          value: "debug"
+        - name: PORT
+          value: "3000"
+        - name: API_GATEWAY_ENABLED
+          value: "true"
+        - name: API_GATEWAY_NAME
+          value: "api-gateway"
+        - name: API_BASE_PATH
+          value: "/api"
+        - name: TRUSTED_HEADERS
+          value: "X-API-Gateway,X-Request-ID,Authorization"
+        - name: VAULT_ENABLED
+          value: "false"
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "200m"
+            memory: "256Mi"
+      volumes:
+      - name: config-volume
+        configMap:
+          name: api-gateway-config

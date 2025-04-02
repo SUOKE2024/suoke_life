@@ -1,0 +1,17 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: xiaoke-service-pdb
+  namespace: suoke
+  labels:
+    app: xiaoke-service
+    tier: ai
+    component: secondary-agent
+  annotations:
+    description: "确保小克服务在集群维护过程中至少有一个实例可用"
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: xiaoke-service
+      component: secondary-agent 

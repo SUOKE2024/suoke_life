@@ -1,0 +1,304 @@
+# API Gateway Helm Chart Default Values
+replicaCount: 2
+
+image:
+  repository: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/api-gateway
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # 指定是否创建ServiceAccount
+  create: true
+  # ServiceAccount的注解
+  annotations: {}
+  # ServiceAccount的名称，如果不设置则使用fullname
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext:
+  fsGroup: 1000
+  runAsUser: 1000
+  runAsGroup: 1000
+  runAsNonRoot: true
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 3000
+  annotations: {}
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: api.suoke.life
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+  requests:
+    cpu: 500m
+    memory: 512Mi
+
+# 自动伸缩配置
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+  # 高级自动伸缩配置
+  stabilizationWindowSeconds: 300
+  scaleUpPercent: 100
+  scaleUpPods: 4
+  scaleUpPeriodSeconds: 15
+  scaleDownPercent: 100
+  scaleDownPods: 1
+  scaleDownPeriodSeconds: 15
+  # 自定义指标
+  customMetrics: []
+  annotations: {}
+
+# 节点亲和性配置
+nodeSelector: {}
+tolerations: []
+affinity:
+  nodeAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 100
+      preference:
+        matchExpressions:
+        - key: node-type
+          operator: In
+          values:
+          - application
+
+# 持久卷配置
+persistentVolume:
+  logs:
+    enabled: true
+    accessModes:
+      - ReadWriteOnce
+    storageClass: "alibabacloud-disk-efficiency"
+    size: 10Gi
+  config:
+    enabled: true
+    accessModes:
+      - ReadWriteOnce
+    storageClass: "alibabacloud-disk-efficiency"
+    size: 1Gi
+
+# 配置项
+config:
+  # 自定义配置
+  customConfig: {}
+  # 主配置文件
+  configFile: |
+    {
+      "app": {
+        "name": "api-gateway",
+        "port": 3000,
+        "host": "0.0.0.0"
+      },
+      "services": {
+        "auth": {
+          "url": "http://auth-service:3000",
+          "timeout": 5000
+        },
+        "user": {
+          "url": "http://user-service:3000",
+          "timeout": 5000
+        },
+        "knowledge": {
+          "url": "http://knowledge-base-service:3000",
+          "timeout": 10000
+        }
+      }
+    }
+  # 日志配置
+  loggingConfig: |
+    {
+      "level": "info",
+      "format": "json",
+      "colorize": false,
+      "prettyPrint": false
+    }
+  # 路由配置
+  routesConfig: |
+    {
+      "routes": [
+        {
+          "prefix": "/api/auth",
+          "target": "auth",
+          "stripPrefix": true
+        },
+        {
+          "prefix": "/api/users",
+          "target": "user",
+          "stripPrefix": true
+        },
+        {
+          "prefix": "/api/knowledge",
+          "target": "knowledge",
+          "stripPrefix": true
+        }
+      ]
+    }
+  # CORS配置
+  corsConfig: |
+    {
+      "origin": ["https://suoke.life", "https://app.suoke.life"],
+      "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+      "allowedHeaders": ["Content-Type", "Authorization"],
+      "exposedHeaders": ["Content-Length"],
+      "credentials": true,
+      "maxAge": 86400
+    }
+  # 限流配置
+  rateLimit: |
+    {
+      "enabled": true,
+      "windowMs": 60000,
+      "max": 100,
+      "message": "请求过于频繁，请稍后再试"
+    }
+  # 断路器配置
+  circuitBreaker: |
+    {
+      "enabled": true,
+      "failureThreshold": 50,
+      "resetTimeout": 30000,
+      "errorStatusCodes": [500, 501, 502, 503, 504]
+    }
+
+# 密钥配置（仅在未使用Vault时使用）
+secrets:
+  auth: {}
+  apiKeys: []
+  jwt:
+    secret: ""
+    publicKey: ""
+    privateKey: ""
+  tls:
+    cert: ""
+    key: ""
+    ca: ""
+  customSecrets: {}
+
+# Prometheus监控配置
+serviceMonitor:
+  enabled: true
+  path: "/metrics"
+  interval: "30s"
+  scrapeTimeout: "10s"
+  labels: {}
+  annotations: {}
+  relabelings: []
+  metricRelabelings: []
+  targetLabels: []
+
+# 网络策略配置
+networkPolicy:
+  enabled: true
+
+# Vault集成配置
+vault:
+  enabled: true
+  # Vault地址
+  address: "http://vault.vault:8200"
+  # 密钥路径
+  path: "suoke/api-gateway"
+  # 对应的K8s服务账号
+  serviceAccount: ""
+  # 角色
+  role: "api-gateway"
+  # 命名空间
+  namespace: ""
+  # 使用CSI卷挂载
+  csi:
+    enabled: true
+    mountPath: "/vault/secrets"
+
+# OpenTelemetry配置
+opentelemetry:
+  enabled: true
+  endpoint: "otel-collector.monitoring:4317"
+  insecure: true
+  serviceName: "api-gateway"
+
+# Istio集成配置
+istio:
+  enabled: true
+  # 注入Istio Sidecar
+  inject: true
+  # 网关配置
+  gateway:
+    enabled: true
+    hosts:
+      - "api.suoke.life"
+    tls:
+      enabled: true
+      mode: "SIMPLE"
+      credentialName: "api-gateway-cert"
+    http:
+      redirectToHttps: true
+  # 虚拟服务配置
+  virtualService:
+    timeout: "30s"
+    retries:
+      attempts: 3
+      perTryTimeout: "2s"
+      retryOn: "gateway-error,connect-failure,refused-stream"
+
+# Kustomize配置
+kustomize:
+  enabled: false
+  additionalResources: []
+  patches: []
+  patchesJson6902: []
+  images: []
+  configMapGenerator: []
+  secretGenerator: []
+  vars: []
+
+# 探针配置
+probes:
+  liveness:
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+    successThreshold: 1
+    path: "/health/live"
+  readiness:
+    initialDelaySeconds: 20
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+    successThreshold: 1
+    path: "/health/ready"
+  startup:
+    initialDelaySeconds: 10
+    periodSeconds: 5
+    timeoutSeconds: 3
+    failureThreshold: 30
+    successThreshold: 1
+    path: "/health/startup" 

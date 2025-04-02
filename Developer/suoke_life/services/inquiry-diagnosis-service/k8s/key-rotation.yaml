@@ -1,0 +1,79 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: inquiry-diagnosis-key-rotation
+  namespace: suoke
+  labels:
+    app: inquiry-diagnosis
+    service: four-diagnosis
+spec:
+  schedule: "0 2 1 * *"  # 每月1日凌晨2点执行
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 2
+  successfulJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: inquiry-diagnosis-key-rotation
+        spec:
+          serviceAccountName: inquiry-diagnosis-service-account
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+          containers:
+          - name: key-rotation-job
+            image: bitnami/kubectl:latest
+            imagePullPolicy: IfNotPresent
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities:
+                drop:
+                - ALL
+            env:
+            - name: ROTATION_DATE
+              value: "$(date +%Y%m%d)"
+            - name: VAULT_ADDR
+              value: "http://vault.vault:8200"
+            - name: VAULT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: inquiry-diagnosis-secrets
+                  key: vault_token
+            command:
+            - /bin/bash
+            - -c
+            - |
+              set -e
+              
+              echo "开始密钥轮换流程 - ${ROTATION_DATE}"
+              
+              # 1. 生成新的密钥
+              NEW_DB_PASSWORD=$(openssl rand -base64 20 | tr -dc 'a-zA-Z0-9' | fold -w 20 | head -n 1)
+              
+              # 2. 更新Vault中的密钥
+              curl -s -X POST -H "X-Vault-Token: ${VAULT_TOKEN}" \
+                -d "{\"data\": {\"password\": \"${NEW_DB_PASSWORD}\"}}" \
+                ${VAULT_ADDR}/v1/secret/data/suoke/inquiry-diagnosis/database
+              
+              echo "已更新Vault中的数据库密钥"
+              
+              # 3. 更新数据库中的用户密码
+              kubectl create job --from=cronjob/inquiry-diagnosis-db-password-update db-password-update-${ROTATION_DATE} -n suoke
+              
+              # 4. 等待密码更新作业完成
+              kubectl wait --for=condition=complete --timeout=300s job/db-password-update-${ROTATION_DATE} -n suoke
+              
+              # 5. 重启inquiry-diagnosis服务以应用新密钥
+              kubectl rollout restart deployment/inquiry-diagnosis -n suoke
+              
+              # 6. 等待部署完成
+              kubectl rollout status deployment/inquiry-diagnosis -n suoke --timeout=300s
+              
+              echo "密钥轮换完成"
+          restartPolicy: OnFailure
+          nodeSelector:
+            node-type: system-jobs 

@@ -1,0 +1,539 @@
+openapi: 3.0.0
+info:
+  title: '心理健康知识管理API'
+  version: '1.0.0'
+  description: '索克生活APP心理健康知识管理API，提供全面的心理健康知识CRUD操作'
+
+# 心理健康知识管理相关的模型定义
+components:
+  schemas:
+    Resource:
+      type: object
+      required:
+        - type
+        - name
+        - description
+      properties:
+        type:
+          type: string
+          description: '资源类型，如"书籍"、"视频"、"网站"等'
+          example: '书籍'
+        name:
+          type: string
+          description: '资源名称'
+          example: '认知行为疗法实用指南'
+        description:
+          type: string
+          description: '资源描述'
+          example: '详细介绍认知行为疗法的实践方法'
+        url:
+          type: string
+          description: '资源链接（如有）'
+          example: 'https://example.com/cbt-guide'
+          
+    Reference:
+      type: object
+      required:
+        - author
+        - title
+        - source
+        - year
+      properties:
+        author:
+          type: string
+          description: '作者'
+          example: '张三'
+        title:
+          type: string
+          description: '文献标题'
+          example: '认知行为疗法在抑郁症治疗中的应用'
+        source:
+          type: string
+          description: '来源出处'
+          example: '中国心理健康杂志'
+        year:
+          type: integer
+          description: '发表年份'
+          example: 2020
+        url:
+          type: string
+          description: '文献链接'
+          example: 'https://example.com/journal/article123'
+    
+    PsychologicalHealth:
+      type: object
+      required:
+        - title
+        - description
+        - content
+        - issueType
+      properties:
+        _id:
+          type: string
+          description: '心理健康知识条目ID'
+          example: '60b9b4f6e3a8d34e10b4c123'
+        title:
+          type: string
+          description: '标题'
+          example: '如何应对工作压力引起的焦虑'
+        description:
+          type: string
+          description: '简短描述'
+          example: '本文介绍工作压力引起的焦虑症状及缓解方法'
+        content:
+          type: string
+          description: '详细内容'
+          example: '工作压力是现代社会中焦虑的常见来源。本文详细介绍工作压力的表现形式、对身心健康的影响，以及有效的缓解方法。'
+        issueType:
+          type: string
+          description: '心理问题类型'
+          example: '焦虑症'
+        symptoms:
+          type: array
+          description: '症状列表'
+          items:
+            type: string
+          example: ['心跳加速', '出汗', '注意力难以集中', '睡眠问题']
+        possibleCauses:
+          type: array
+          description: '可能原因'
+          items:
+            type: string
+          example: ['工作压力大', '社交压力', '完美主义倾向']
+        interventionMethods:
+          type: array
+          description: '干预方法'
+          items:
+            type: string
+          example: ['认知行为疗法', '冥想', '渐进式肌肉放松']
+        treatmentMethods:
+          type: array
+          description: '治疗方法'
+          items:
+            type: string
+          example: ['心理咨询', '药物治疗', '支持性团体治疗']
+        selfHelpMeasures:
+          type: array
+          description: '自助措施'
+          items:
+            type: string
+          example: ['深呼吸练习', '规律运动', '保持健康的生活方式']
+        targetAgeGroups:
+          type: array
+          description: '目标年龄组'
+          items:
+            type: string
+          example: ['青少年', '成年人', '中年人']
+        resources:
+          type: array
+          description: '相关资源'
+          items:
+            $ref: '#/components/schemas/Resource'
+        applicableScenarios:
+          type: array
+          description: '适用场景'
+          items:
+            type: string
+          example: ['工作场所', '学校', '日常生活']
+        expectedOutcomes:
+          type: array
+          description: '预期效果'
+          items:
+            type: string
+          example: ['减轻焦虑症状', '提高工作效率', '改善生活质量']
+        expertAdvice:
+          type: string
+          description: '专家建议'
+          example: '当焦虑症状严重影响日常生活时，建议及时寻求专业心理医生的帮助。'
+        keywords:
+          type: array
+          description: '关键词'
+          items:
+            type: string
+          example: ['焦虑', '工作压力', '心理健康', '自我调节']
+        references:
+          type: array
+          description: '参考文献'
+          items:
+            $ref: '#/components/schemas/Reference'
+        createdAt:
+          type: string
+          format: date-time
+          description: '创建时间'
+          example: '2023-06-01T10:00:00Z'
+        updatedAt:
+          type: string
+          format: date-time
+          description: '更新时间'
+          example: '2023-06-02T15:30:00Z'
+        createdBy:
+          type: string
+          description: '创建者ID'
+          example: 'user123'
+        version:
+          type: integer
+          description: '版本号'
+          example: 1
+          
+# 心理健康知识API路径定义
+tags:
+  - name: 心理健康知识管理
+    description: '用于管理心理健康相关的知识库内容'
+
+paths:
+  /api/psychological-health:
+    get:
+      tags:
+        - 心理健康知识管理
+      summary: '获取心理健康知识列表'
+      description: '分页获取心理健康知识列表，支持多种过滤和排序选项'
+      parameters:
+        - name: page
+          in: query
+          description: '页码，从1开始'
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          description: '每页条目数'
+          schema:
+            type: integer
+            default: 10
+        - name: issueType
+          in: query
+          description: '按心理问题类型过滤'
+          schema:
+            type: string
+        - name: targetAgeGroup
+          in: query
+          description: '按目标年龄组过滤'
+          schema:
+            type: string
+        - name: interventionMethod
+          in: query
+          description: '按干预方法过滤'
+          schema:
+            type: string
+        - name: keyword
+          in: query
+          description: '关键词搜索'
+          schema:
+            type: string
+        - name: sortBy
+          in: query
+          description: '排序字段'
+          schema:
+            type: string
+            enum: [createdAt, updatedAt, title]
+            default: createdAt
+        - name: sortOrder
+          in: query
+          description: '排序方向'
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: desc
+      responses:
+        '200':
+          description: '成功获取心理健康知识列表'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PsychologicalHealth'
+                  pagination:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        example: 50
+                      page:
+                        type: integer
+                        example: 1
+                      limit:
+                        type: integer
+                        example: 10
+                      pages:
+                        type: integer
+                        example: 5
+        '400':
+          description: '请求参数错误'
+        '500':
+          description: '服务器内部错误'
+          
+    post:
+      tags:
+        - 心理健康知识管理
+      summary: '创建新的心理健康知识条目'
+      description: '创建一个新的心理健康知识条目'
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PsychologicalHealth'
+      responses:
+        '201':
+          description: '成功创建心理健康知识条目'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/PsychologicalHealth'
+        '400':
+          description: '请求参数错误'
+        '401':
+          description: '未授权'
+        '500':
+          description: '服务器内部错误'
+          
+  /api/psychological-health/{id}:
+    get:
+      tags:
+        - 心理健康知识管理
+      summary: '获取心理健康知识详情'
+      description: '根据ID获取心理健康知识详情'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: '心理健康知识条目ID'
+          schema:
+            type: string
+      responses:
+        '200':
+          description: '成功获取心理健康知识详情'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/PsychologicalHealth'
+        '404':
+          description: '未找到指定条目'
+        '500':
+          description: '服务器内部错误'
+          
+    put:
+      tags:
+        - 心理健康知识管理
+      summary: '更新心理健康知识条目'
+      description: '根据ID更新心理健康知识条目'
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: '心理健康知识条目ID'
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PsychologicalHealth'
+      responses:
+        '200':
+          description: '成功更新心理健康知识条目'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/PsychologicalHealth'
+        '400':
+          description: '请求参数错误'
+        '401':
+          description: '未授权'
+        '404':
+          description: '未找到指定条目'
+        '500':
+          description: '服务器内部错误'
+          
+    delete:
+      tags:
+        - 心理健康知识管理
+      summary: '删除心理健康知识条目'
+      description: '根据ID删除心理健康知识条目'
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: '心理健康知识条目ID'
+          schema:
+            type: string
+      responses:
+        '200':
+          description: '成功删除心理健康知识条目'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: '心理健康知识条目已成功删除'
+        '401':
+          description: '未授权'
+        '404':
+          description: '未找到指定条目'
+        '500':
+          description: '服务器内部错误'
+          
+  /api/psychological-health/issue-type/{type}:
+    get:
+      tags:
+        - 心理健康知识管理
+      summary: '按心理问题类型获取知识'
+      description: '获取特定心理问题类型的所有知识条目'
+      parameters:
+        - name: type
+          in: path
+          required: true
+          description: '心理问题类型'
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: '页码，从1开始'
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          description: '每页条目数'
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: '成功获取指定心理问题类型的知识列表'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PsychologicalHealth'
+                  pagination:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        example: 20
+                      page:
+                        type: integer
+                        example: 1
+                      limit:
+                        type: integer
+                        example: 10
+                      pages:
+                        type: integer
+                        example: 2
+        '400':
+          description: '请求参数错误'
+        '500':
+          description: '服务器内部错误'
+          
+  /api/psychological-health/search:
+    get:
+      tags:
+        - 心理健康知识管理
+      summary: '搜索心理健康知识'
+      description: '全文搜索心理健康知识库'
+      parameters:
+        - name: q
+          in: query
+          required: true
+          description: '搜索关键词'
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: '页码，从1开始'
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          description: '每页条目数'
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: '成功获取搜索结果'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PsychologicalHealth'
+                  pagination:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        example: 15
+                      page:
+                        type: integer
+                        example: 1
+                      limit:
+                        type: integer
+                        example: 10
+                      pages:
+                        type: integer
+                        example: 2
+        '400':
+          description: '请求参数错误'
+        '500':
+          description: '服务器内部错误'
+
+# 安全定义
+securitySchemes:
+  bearerAuth:            
+    type: http
+    scheme: bearer
+    bearerFormat: JWT 
+    description: '使用JWT令牌进行认证，格式为：Bearer {token}'

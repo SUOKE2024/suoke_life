@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: soer-backup-pvc
+  namespace: suoke
+  labels:
+    app: soer-service
+    component: backup
+  annotations:
+    description: "索儿服务备份数据存储"
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: alicloud-disk-ssd 

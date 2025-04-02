@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: knowledge-base-config
+  namespace: suoke
+  labels:
+    app: knowledge-base-service
+    tier: data
+data:
+  # 缓存配置
+  CACHE_TTL: "3600"
+  ENABLE_RESPONSE_CACHE: "true"
+  
+  # 内容限制
+  MAX_CONTENT_SIZE: "10mb"
+  MAX_TAGS_PER_KNOWLEDGE: "20"
+  MAX_CATEGORIES_PER_KNOWLEDGE: "5"
+  
+  # 审核配置
+  REQUIRE_CONTENT_APPROVAL: "false"
+  ADMIN_EMAIL: "admin@suoke.life"
+  
+  # 性能配置
+  PAGINATION_DEFAULT_LIMIT: "20"
+  PAGINATION_MAX_LIMIT: "100"
+  REQUEST_TIMEOUT_MS: "30000"
+  
+  # 文档版本控制
+  MAX_VERSIONS_PER_KNOWLEDGE: "10"
+  ENABLE_VERSION_CONTROL: "true"
+  
+  # CORS配置
+  CORS_ORIGINS: "https://app.suoke.life,https://admin.suoke.life,https://suoke.life"
+  
+  # OpenTelemetry配置
+  OTEL_EXPORTER_OTLP_PROTOCOL: "grpc"
+  OTEL_TRACES_SAMPLER: "parentbased_traceidratio"
+  OTEL_TRACES_SAMPLER_ARG: "0.5"
+  OTEL_METRICS_EXPORT_INTERVAL: "15000"
+  OTEL_LOGS_EXPORT_INTERVAL: "15000"

@@ -1,0 +1,154 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: rag-service-backup
+  namespace: suoke
+  labels:
+    app: rag-service
+    part-of: knowledge-services
+    component: backup
+  annotations:
+    description: "定期备份RAG服务的数据 - 向量数据库、知识图谱等"
+spec:
+  schedule: "0 2 * * *"  # 每天凌晨2点执行
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 7
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: rag-service
+            part-of: knowledge-services
+            component: backup
+        spec:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+          containers:
+          - name: backup
+            image: alpine:3.18
+            imagePullPolicy: IfNotPresent
+            env:
+            - name: TIMESTAMP
+              value: "$(date +%Y%m%d-%H%M%S)"
+            - name: BACKUP_NAME
+              value: "rag-service-$(date +%Y%m%d)"
+            - name: NEO4J_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: rag-service-secrets
+                  key: NEO4J_HOST
+            - name: NEO4J_USER
+              valueFrom:
+                secretKeyRef:
+                  name: rag-service-secrets
+                  key: NEO4J_USER
+            - name: NEO4J_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rag-service-secrets
+                  key: NEO4J_PASSWORD
+            - name: QDRANT_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: rag-service-secrets
+                  key: QDRANT_HOST
+            command:
+            - /bin/sh
+            - -c
+            - |
+              # 安装必要的工具
+              apk add --no-cache curl gzip tar mongodb-tools python3 py3-pip jq
+              pip3 install qdrant-client
+              
+              # 创建备份目录
+              mkdir -p /backup/${BACKUP_NAME}/{neo4j,qdrant,data}
+              
+              # 备份Neo4j数据
+              echo "开始备份Neo4j数据..."
+              curl -f -u ${NEO4J_USER}:${NEO4J_PASSWORD} -H "Accept: application/json" \
+                -H "Content-Type: application/json" \
+                -X POST "http://${NEO4J_HOST}:7474/db/data/admin/backup" \
+                -d '{"to":"/backup/'${BACKUP_NAME}'/neo4j/"}' || echo "Neo4j备份失败"
+              
+              # 备份Qdrant向量数据
+              echo "开始备份Qdrant数据..."
+              python3 - <<END
+              from qdrant_client import QdrantClient
+              import os
+              import json
+              
+              host = os.environ.get('QDRANT_HOST')
+              client = QdrantClient(host=host, port=6333)
+              
+              # 获取所有集合
+              collections = client.get_collections().collections
+              collection_names = [c.name for c in collections]
+              
+              for name in collection_names:
+                  # 获取集合配置
+                  config = client.get_collection(name)
+                  with open(f"/backup/${BACKUP_NAME}/qdrant/{name}_config.json", "w") as f:
+                      json.dump(vars(config), f)
+                  
+                  # 导出集合数据
+                  points = []
+                  limit = 100
+                  offset = 0
+                  while True:
+                      batch = client.scroll(
+                          collection_name=name,
+                          limit=limit,
+                          offset=offset
+                      )[0]
+                      if not batch:
+                          break
+                      points.extend(batch)
+                      offset += len(batch)
+                  
+                  with open(f"/backup/${BACKUP_NAME}/qdrant/{name}_points.json", "w") as f:
+                      json.dump(points, f)
+              
+              print(f"已备份 {len(collection_names)} 个向量集合")
+              END
+              
+              # 备份应用数据
+              echo "开始备份应用数据..."
+              cp -r /app/data/* /backup/${BACKUP_NAME}/data/ || echo "应用数据备份失败"
+              
+              # 压缩备份文件
+              echo "压缩备份文件..."
+              tar -czf /backup/${BACKUP_NAME}.tar.gz -C /backup ${BACKUP_NAME}
+              
+              # 删除临时文件
+              rm -rf /backup/${BACKUP_NAME}
+              
+              # 删除超过30天的备份
+              find /backup -name "rag-service-*.tar.gz" -type f -mtime +30 -delete
+              
+              echo "备份完成: /backup/${BACKUP_NAME}.tar.gz"
+            volumeMounts:
+            - name: backup-volume
+              mountPath: /backup
+            resources:
+              requests:
+                cpu: 200m
+                memory: 512Mi
+              limits:
+                cpu: 1000m
+                memory: 1Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities:
+                drop:
+                - ALL
+          volumes:
+          - name: backup-volume
+            persistentVolumeClaim:
+              claimName: rag-service-backup-pvc
+          restartPolicy: OnFailure
+          terminationGracePeriodSeconds: 300 

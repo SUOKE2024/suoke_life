@@ -1,0 +1,55 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: agent-coordinator-config
+  namespace: suoke
+  labels:
+    app: agent-coordinator
+    tier: ai
+    part-of: suoke-life
+    api-gateway-config: "true"
+data:
+  api-gateway-config.json: |
+    {
+      "service": "agent-coordinator-service",
+      "prefix": "/api/v1/agents/coordinator",
+      "routes": [
+        {
+          "path": "/agents",
+          "methods": ["GET", "POST", "PUT", "DELETE"],
+          "cors": true,
+          "rateLimit": {
+            "windowMs": 60000,
+            "max": 60
+          },
+          "authentication": true,
+          "roles": ["admin", "service"]
+        },
+        {
+          "path": "/agents/available",
+          "methods": ["GET"],
+          "cors": true,
+          "rateLimit": {
+            "windowMs": 60000,
+            "max": 120
+          },
+          "authentication": true,
+          "roles": ["user", "admin", "service"]
+        },
+        {
+          "path": "/health",
+          "methods": ["GET"],
+          "cors": true,
+          "authentication": false
+        }
+      ],
+      "timeouts": {
+        "service": 30000,
+        "socket": 60000
+      },
+      "circuitBreaker": {
+        "enabled": true,
+        "failureThreshold": 5,
+        "resetTimeout": 30000
+      }
+    }

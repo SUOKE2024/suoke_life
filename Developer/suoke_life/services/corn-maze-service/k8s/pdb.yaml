@@ -1,0 +1,10 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: corn-maze-service-pdb
+  namespace: suoke
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: corn-maze-service 

@@ -1,0 +1,32 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: suoke
+
+bases:
+  - ../../base
+
+resources:
+  - ../../cross-region-backup.yaml
+  - ../../key-rotation.yaml
+
+patchesStrategicMerge:
+  - ../../patches/prod-overlay.yaml
+  - ../../patches/resource-limits-patch.yaml
+  - ../../patches/storage-class-patch.yaml
+
+configMapGenerator:
+  - name: knowledge-graph-config
+    behavior: merge
+    literals:
+      - LOG_LEVEL=info
+      - DEBUG=false
+      - NEO4J_DB_NAME=neo4j-prod
+      - API_RATE_LIMIT=300
+      - ENABLE_QUERY_CACHE=true
+      - ENABLE_DATA_ENCRYPTION=true
+
+images:
+  - name: knowledge-graph
+    newName: registry.suoke.life/knowledge-graph-service
+    newTag: stable

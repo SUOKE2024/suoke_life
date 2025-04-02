@@ -1,0 +1,321 @@
+version: '3.8'
+
+# 索克生活微服务架构Docker Compose配置
+# 版本: 1.0
+# 更新日期: 2023-03-29
+
+services:
+  # API网关服务
+  api-gateway:
+    image: suoke/api-gateway:latest
+    container_name: api-gateway
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - LOG_LEVEL=info
+      - CORS_ORIGIN=*
+    volumes:
+      - ./logs/api-gateway:/app/logs
+    depends_on:
+      - auth-service
+      - user-service
+    networks:
+      - suoke-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # 认证服务
+  auth-service:
+    image: suoke/auth-service:latest
+    container_name: auth-service
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRES_IN=1d
+      - JWT_REFRESH_EXPIRES_IN=7d
+    volumes:
+      - ./logs/auth-service:/app/logs
+    depends_on:
+      - redis
+      - mysql
+    networks:
+      - suoke-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # 用户服务
+  user-service:
+    image: suoke/user-service:latest
+    container_name: user-service
+    restart: unless-stopped
+    ports:
+      - "3002:3002"
+    environment:
+      - NODE_ENV=production
+      - PORT=3002
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USER=${MYSQL_USER}
+      - DB_PASSWORD=${MYSQL_PASSWORD}
+      - DB_NAME=${MYSQL_DATABASE}
+    volumes:
+      - ./logs/user-service:/app/logs
+    depends_on:
+      - mysql
+    networks:
+      - suoke-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3002/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # AI服务
+  ai-service:
+    image: suoke/ai-service:latest
+    container_name: ai-service
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - VECTOR_DB_HOST=vector-db
+      - VECTOR_DB_PORT=19530
+    volumes:
+      - ./logs/ai-service:/app/logs
+      - ./data/ai-service:/app/data
+    depends_on:
+      - vector-db
+      - rag-service
+    networks:
+      - suoke-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # RAG服务
+  rag-service:
+    image: suoke/rag-service:latest
+    container_name: rag-service
+    restart: unless-stopped
+    ports:
+      - "5001:5001"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PORT=5001
+      - VECTOR_DB_HOST=vector-db
+      - VECTOR_DB_PORT=19530
+      - MODEL_PATH=/app/models
+      - KNOWLEDGE_BASE_PATH=/app/data/knowledge-base
+    volumes:
+      - ./logs/rag-service:/app/logs
+      - ./data/rag-service:/app/data
+      - ./models:/app/models
+    depends_on:
+      - embeddings-service
+      - vector-db
+    networks:
+      - suoke-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # Embeddings服务
+  embeddings-service:
+    image: suoke/embeddings-service:latest
+    container_name: embeddings-service
+    restart: unless-stopped
+    ports:
+      - "5002:5002"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PORT=5002
+      - MODEL_PATH=/app/models
+    volumes:
+      - ./logs/embeddings-service:/app/logs
+      - ./models:/app/models:ro
+    networks:
+      - suoke-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5002/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+
+  # MySQL数据库
+  mysql:
+    image: mysql:8.0
+    container_name: suoke-mysql
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./config/mysql/init:/docker-entrypoint-initdb.d
+      - ./config/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+    networks:
+      - suoke-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # Redis缓存
+  redis:
+    image: redis:6.2-alpine
+    container_name: suoke-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+      - ./config/redis/redis.conf:/usr/local/etc/redis/redis.conf
+    networks:
+      - suoke-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # 向量数据库
+  vector-db:
+    image: milvusdb/milvus:2.2.8
+    container_name: suoke-vector-db
+    restart: unless-stopped
+    ports:
+      - "19530:19530"
+      - "9091:9091"
+    environment:
+      - ETCD_ENDPOINTS=etcd:2379
+      - MINIO_ADDRESS=minio:9000
+    volumes:
+      - vector-db-data:/var/lib/milvus
+    networks:
+      - suoke-network
+    depends_on:
+      - etcd
+      - minio
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9091/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # ETCD (Milvus依赖)
+  etcd:
+    image: quay.io/coreos/etcd:v3.5.0
+    container_name: suoke-etcd
+    restart: unless-stopped
+    environment:
+      - ETCD_AUTO_COMPACTION_MODE=revision
+      - ETCD_AUTO_COMPACTION_RETENTION=1000
+      - ETCD_QUOTA_BACKEND_BYTES=4294967296
+      - ETCD_SNAPSHOT_COUNT=50000
+    volumes:
+      - etcd-data:/etcd
+    networks:
+      - suoke-network
+    command:
+      - etcd
+      - --advertise-client-urls=http://etcd:2379
+      - --listen-client-urls=http://0.0.0.0:2379
+      - --data-dir=/etcd
+
+  # MinIO (Milvus依赖)
+  minio:
+    image: minio/minio:RELEASE.2022-03-17T06-34-49Z
+    container_name: suoke-minio
+    restart: unless-stopped
+    environment:
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=minioadmin
+    volumes:
+      - minio-data:/data
+    networks:
+      - suoke-network
+    command: minio server /data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # Nginx反向代理
+  nginx:
+    image: nginx:1.21-alpine
+    container_name: suoke-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./config/nginx/suoke.conf:/etc/nginx/conf.d/default.conf
+      - ./config/nginx/conf.d:/etc/nginx/conf.d/includes
+      - ./logs/nginx:/var/log/nginx
+      - ./data/nginx/html:/usr/share/nginx/html
+      - ./data/nginx/certs:/etc/nginx/certs
+    depends_on:
+      - api-gateway
+      - ai-service
+      - rag-service
+    networks:
+      - suoke-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+networks:
+  suoke-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
+  redis-data:
+  vector-db-data:
+  etcd-data:
+  minio-data: 

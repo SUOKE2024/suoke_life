@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: knowledge-base-data-pvc
+  namespace: suoke
+spec:
+  storageClassName: alicloud-disk-essd
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: knowledge-base-logs-pvc
+  namespace: suoke
+spec:
+  storageClassName: alicloud-disk-ssd

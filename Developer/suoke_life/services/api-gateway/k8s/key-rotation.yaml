@@ -1,0 +1,61 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: api-gateway-key-rotation
+  namespace: suoke
+  labels:
+    app: api-gateway
+    service-type: edge
+spec:
+  schedule: "0 1 1 * *"  # 每月1日凌晨1点
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: api-gateway
+            job: key-rotation
+        spec:
+          containers:
+          - name: key-rotation
+            image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/vault-client:latest
+            command:
+            - /bin/sh
+            - -c
+            - |
+              # 生成新的JWT密钥
+              NEW_JWT_SECRET=$(openssl rand -base64 32)
+              NEW_REFRESH_TOKEN_SECRET=$(openssl rand -base64 32)
+              
+              # 更新Vault中的密钥
+              VAULT_TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
+              curl --request POST \
+                --header "X-Vault-Token: $VAULT_TOKEN" \
+                --data "{\"data\": {\"JWT_SECRET\": \"$NEW_JWT_SECRET\", \"REFRESH_TOKEN_SECRET\": \"$NEW_REFRESH_TOKEN_SECRET\"}}" \
+                ${VAULT_ADDR}/v1/secret/data/suoke/api-gateway
+                
+              # 等待传播
+              sleep 10
+              
+              # 重启服务以应用新密钥
+              kubectl rollout restart deployment/api-gateway -n suoke
+              
+              echo "密钥轮换完成，服务正在重启以应用新密钥"
+            env:
+            - name: VAULT_ADDR
+              value: "http://vault.vault.svc.cluster.local:8200"
+            - name: VAULT_ROLE
+              value: "api-gateway"
+            securityContext:
+              runAsUser: 1000
+              runAsGroup: 1000
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                - ALL
+          serviceAccountName: api-gateway-key-rotation
+          restartPolicy: OnFailure 

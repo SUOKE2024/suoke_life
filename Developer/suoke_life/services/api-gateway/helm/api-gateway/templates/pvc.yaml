@@ -1,0 +1,40 @@
+{{- if and .Values.persistentVolume .Values.persistentVolume.logs.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "api-gateway.fullname" . }}-logs
+  labels:
+    {{- include "api-gateway.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/resource-policy": keep
+spec:
+  accessModes:
+    {{- range .Values.persistentVolume.logs.accessModes }}
+    - {{ . | quote }}
+    {{- end }}
+  storageClassName: {{ .Values.persistentVolume.logs.storageClass }}
+  resources:
+    requests:
+      storage: {{ .Values.persistentVolume.logs.size | quote }}
+{{- end }}
+
+{{- if and .Values.persistentVolume .Values.persistentVolume.config.enabled }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "api-gateway.fullname" . }}-config
+  labels:
+    {{- include "api-gateway.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/resource-policy": keep
+spec:
+  accessModes:
+    {{- range .Values.persistentVolume.config.accessModes }}
+    - {{ . | quote }}
+    {{- end }}
+  storageClassName: {{ .Values.persistentVolume.config.storageClass }}
+  resources:
+    requests:
+      storage: {{ .Values.persistentVolume.config.size | quote }}
+{{- end }} 

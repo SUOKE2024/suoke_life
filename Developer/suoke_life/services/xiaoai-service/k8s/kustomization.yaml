@@ -1,0 +1,47 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- deployment.yaml
+- service.yaml
+- pvc.yaml
+- serviceaccount.yaml
+- hpa.yaml
+- pdb.yaml
+- backup-cronjob.yaml
+- backup-pvc.yaml
+- servicemonitor.yaml
+- istio-config.yaml
+- network-policy.yaml
+- opentelemetry-config.yaml
+# - secrets.yaml # 取消注释并创建实际的secrets.yaml
+
+commonLabels:
+  app.kubernetes.io/name: xiaoai-service
+  app.kubernetes.io/part-of: suoke-life
+  app.kubernetes.io/managed-by: kustomize
+
+namespace: suoke
+
+configMapGenerator:
+- name: xiaoai-config
+  literals:
+  - PORT="3040"
+  - NODE_ENV="production"
+  - LOG_LEVEL="info"
+  - LOOKING_DIAGNOSIS_SERVICE_URL="http://looking-diagnosis-service:3051"
+  - INQUIRY_DIAGNOSIS_SERVICE_URL="http://inquiry-diagnosis-service:3052"
+  - SMELL_DIAGNOSIS_SERVICE_URL="http://smell-diagnosis-service:3053"
+  - TOUCH_DIAGNOSIS_SERVICE_URL="http://touch-diagnosis-service:3054"
+  - TTS_SERVICE_URL="http://tts-service:3060"
+  - ENABLE_DYNAMIC_BATCHING="true"
+  - MAX_BATCH_SIZE="8"
+  - MAX_BATCH_TIMEOUT_MS="50"
+  - ENABLE_METRICS="true"
+  - METRICS_PATH="/metrics"
+  - ENABLE_TRACING="true"
+
+images:
+- name: ${DOCKER_REGISTRY}/xiaoai-service
+  newName: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/xiaoai-service
+  newTag: latest

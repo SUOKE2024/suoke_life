@@ -1,0 +1,47 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: suoke
+
+commonLabels:
+  environment: production
+  app: api-gateway
+  service-type: edge
+
+resources:
+- ../../base
+- ../../pdb.yaml
+- ../../backup-cronjob.yaml
+- ../../backup-pvc.yaml
+- ../../backup-verify-cronjob.yaml
+- ../../key-rotation.yaml
+- ../../vault-secretprovider.yaml
+- ../../argocd-app.yaml
+
+patches:
+- path: resources-patch.yaml
+  target:
+    kind: Deployment
+    name: api-gateway
+- path: topology-spread-patch.yaml
+  target:
+    kind: Deployment
+    name: api-gateway
+- path: storage-class-patch.yaml
+  target:
+    kind: PersistentVolumeClaim
+    name: api-gateway-logs-pvc
+- path: storage-class-patch.yaml
+  target:
+    kind: PersistentVolumeClaim
+    name: api-gateway-config-pvc
+
+# 镜像覆盖
+images:
+- name: api-gateway
+  newName: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/api-gateway
+  newTag: stable
+
+replicas:
+- name: api-gateway
+  count: 3 

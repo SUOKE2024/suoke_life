@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: corn-maze-config
+  namespace: suoke
+data:
+  app-config.json: |
+    {
+      "logLevel": "info",
+      "arFeatures": {
+        "arMarkerExpiryDays": 30,
+        "locationSearchRadius": 50,
+        "arMessageDefaultExpiryHours": 24
+      },
+      "npcSystem": {
+        "npcInteractionCooldown": 10,
+        "npcDefaultGreeting": "欢迎来到索克玉米迷宫，我是老克！"
+      }
+    } 

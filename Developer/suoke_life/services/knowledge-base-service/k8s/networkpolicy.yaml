@@ -1,0 +1,108 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: knowledge-base-service-policy
+  namespace: suoke
+  labels:
+    app: knowledge-base-service
+    tier: data
+spec:
+  podSelector:
+    matchLabels:
+      app: knowledge-base-service
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # 允许从同命名空间内的服务访问
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: suoke
+        - podSelector:
+            matchLabels:
+              tier: application
+      ports:
+        - protocol: TCP
+          port: 3002
+    # 允许从监控系统访问
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: monitoring
+        - podSelector:
+            matchLabels:
+              app: prometheus
+      ports:
+        - protocol: TCP
+          port: 9090
+    # 允许从Istio入口网关访问
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: istio-system
+        - podSelector:
+            matchLabels:
+              app: istio-ingressgateway
+  egress:
+    # 允许访问MongoDB服务
+    - to:
+        - podSelector:
+            matchLabels:
+              app: mongodb
+      ports:
+        - protocol: TCP
+          port: 27017
+    # 允许访问Redis服务
+    - to:
+        - podSelector:
+            matchLabels:
+              app: redis
+      ports:
+        - protocol: TCP
+          port: 6379
+    # 允许访问知识图谱服务
+    - to:
+        - podSelector:
+            matchLabels:
+              app: knowledge-graph-service
+      ports:
+        - protocol: TCP
+          port: 3000
+    # 允许访问RAG服务
+    - to:
+        - podSelector:
+            matchLabels:
+              app: rag-service
+      ports:
+        - protocol: TCP
+          port: 3000
+    # 允许访问Auth服务
+    - to:
+        - podSelector:
+            matchLabels:
+              app: auth-service
+      ports:
+        - protocol: TCP
+          port: 3000
+    # 允许访问OpenTelemetry收集器
+    - to:
+        - podSelector:
+            matchLabels:
+              app: otel-collector
+      ports:
+        - protocol: TCP
+          port: 4317
+        - protocol: TCP
+          port: 4318
+    # 允许DNS查询
+    - to:
+        - namespaceSelector: {}
+        - podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53

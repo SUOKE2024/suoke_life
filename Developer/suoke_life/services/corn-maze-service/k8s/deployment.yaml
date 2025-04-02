@@ -1,0 +1,125 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: corn-maze-service
+  namespace: suoke
+  labels:
+    app: corn-maze-service
+    service-type: game
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: corn-maze-service
+  template:
+    metadata:
+      labels:
+        app: corn-maze-service
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "3001"
+        prometheus.io/path: "/metrics"
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      nodeSelector:
+        node-type: core-services
+      tolerations:
+      - key: dedicated
+        operator: Equal
+        value: game-services
+        effect: NoSchedule
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - corn-maze-service
+              topologyKey: kubernetes.io/hostname
+      containers:
+      - name: corn-maze-service
+        image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/corn-maze-service:latest
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+        ports:
+        - containerPort: 3001
+          name: http
+        - containerPort: 3101
+          name: websocket
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: PORT
+          value: "3001"
+        - name: WS_PORT
+          value: "3101"
+        - name: API_PREFIX
+          value: "/api/corn-maze"
+        - name: MONGODB_URI
+          valueFrom:
+            secretKeyRef:
+              name: corn-maze-secrets
+              key: mongodb-uri
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: corn-maze-secrets
+              key: redis-url
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: corn-maze-secrets
+              key: jwt-secret
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+          requests:
+            cpu: 500m
+            memory: 512Mi
+        volumeMounts:
+        - name: uploads
+          mountPath: /app/uploads
+        - name: config-volume
+          mountPath: /app/config
+        - name: tmp-dir
+          mountPath: /tmp
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3001
+          initialDelaySeconds: 30
+          periodSeconds: 15
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3001
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 3
+          successThreshold: 1
+          failureThreshold: 3
+      volumes:
+      - name: uploads
+        persistentVolumeClaim:
+          claimName: corn-maze-uploads-pvc
+      - name: config-volume
+        configMap:
+          name: corn-maze-config
+      - name: tmp-dir
+        emptyDir: {}
+      imagePullSecrets:
+      - name: aliyun-registry 

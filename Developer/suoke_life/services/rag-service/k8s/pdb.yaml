@@ -1,0 +1,16 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: rag-service-pdb
+  namespace: suoke
+  labels:
+    app: rag-service
+    part-of: knowledge-services
+  annotations:
+    description: "确保RAG服务在维护期间的高可用性"
+spec:
+  selector:
+    matchLabels:
+      app: rag-service
+  minAvailable: 1  # 确保至少有一个Pod可用
+  maxUnavailable: 50%  # 或者最多有50%的Pod不可用 

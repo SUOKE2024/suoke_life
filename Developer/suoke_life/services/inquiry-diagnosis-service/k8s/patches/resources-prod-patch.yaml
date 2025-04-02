@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inquiry-diagnosis
+  namespace: suoke
+spec:
+  template:
+    spec:
+      containers:
+      - name: inquiry-diagnosis
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "1Gi"
+          limits:
+            cpu: "1"
+            memory: "2Gi" 

@@ -1,0 +1,44 @@
+apiVersion: jaegertracing.io/v1
+kind: Jaeger
+metadata:
+  name: touch-diagnosis-tracing
+  namespace: monitoring
+  labels:
+    app: touch-diagnosis-service
+    service: four-diagnosis
+spec:
+  strategy: production
+  storage:
+    type: elasticsearch
+    options:
+      es:
+        server-urls: http://elasticsearch-master.logging:9200
+        username: elastic
+  ingress:
+    enabled: true
+    hosts:
+      - touch-diagnosis-tracing.suoke.life
+    tls:
+      - secretName: suoke-tls-cert
+        hosts:
+          - touch-diagnosis-tracing.suoke.life
+  ui:
+    options:
+      menu:
+        - label: 触诊诊断服务
+          items:
+            - label: 生产监控
+              url: https://grafana.suoke.life/d/touch-diagnosis-service
+            - label: 日志
+              url: https://kibana.suoke.life/app/discover#/?_a=(query:(language:kuery,query:'kubernetes.labels.app:touch-diagnosis-service'))
+  collector:
+    options:
+      kafka:
+        producer:
+          brokers: kafka-headless.kafka:9092
+          topic: jaeger-spans
+      collector:
+        zipkin:
+          host-port: ":9411"
+        otlp:
+          enabled: true 

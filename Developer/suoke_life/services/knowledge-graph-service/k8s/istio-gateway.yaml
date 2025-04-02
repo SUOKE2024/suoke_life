@@ -1,0 +1,101 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: knowledge-graph-gateway
+  namespace: suoke
+  labels:
+    app: knowledge-graph-service
+    tier: data
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "kg.suoke.life"
+    tls:
+      httpsRedirect: true
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    hosts:
+    - "kg.suoke.life"
+    tls:
+      mode: SIMPLE
+      credentialName: kg-suoke-tls
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: knowledge-graph-service
+  namespace: suoke
+  labels:
+    app: knowledge-graph-service
+    tier: data
+spec:
+  hosts:
+  - "kg.suoke.life"
+  gateways:
+  - knowledge-graph-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /api
+    route:
+    - destination:
+        host: knowledge-graph-service
+        port:
+          number: 3000
+  - match:
+    - uri:
+        prefix: /health
+    route:
+    - destination:
+        host: knowledge-graph-service
+        port:
+          number: 3000
+  - match:
+    - uri:
+        prefix: /documentation
+    route:
+    - destination:
+        host: knowledge-graph-service
+        port:
+          number: 3000
+  - match:
+    - uri:
+        prefix: /metrics
+    route:
+    - destination:
+        host: knowledge-graph-service
+        port:
+          number: 9090
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: knowledge-graph-service
+  namespace: suoke
+  labels:
+    app: knowledge-graph-service
+    tier: data
+spec:
+  host: knowledge-graph-service
+  trafficPolicy:
+    connectionPool:
+      http:
+        http1MaxPendingRequests: 100
+        maxRequestsPerConnection: 10
+      tcp:
+        maxConnections: 100
+        connectTimeout: 30ms
+    outlierDetection:
+      consecutive5xxErrors: 5
+      interval: 30s
+      baseEjectionTime: 30s
+    tls:
+      mode: ISTIO_MUTUAL

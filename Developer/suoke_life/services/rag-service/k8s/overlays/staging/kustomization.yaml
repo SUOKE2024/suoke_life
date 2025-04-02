@@ -1,0 +1,25 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: suoke-staging
+
+bases:
+  - ../../base
+
+patchesStrategicMerge:
+  - ../../patches/staging-overlay.yaml
+  - ../../patches/resource-limits-patch.yaml
+
+configMapGenerator:
+  - name: rag-service-config
+    behavior: merge
+    literals:
+      - LOG_LEVEL=info
+      - DEBUG=false
+      - ENVIRONMENT=staging
+      - VECTOR_STORE_TYPE=pinecone
+
+images:
+  - name: rag-service
+    newName: registry.suoke.life/rag-service
+    newTag: staging-latest

@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xiaoke-service
+  annotations:
+    backup.velero.io/backup-volumes: "xiaoke-data,xiaoke-cache,xiaoke-logs"
+    backup.velero.io/schedule: "daily"
+    backup.velero.io/ttl: "720h"
+spec:
+  replicas: 3
+  template:
+    metadata:
+      annotations:
+        environment: "production"
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9464"
+        prometheus.io/path: "/metrics"
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - xiaoke-service
+              topologyKey: kubernetes.io/hostname
+          - weight: 70
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - xiaoke-service
+              topologyKey: topology.kubernetes.io/zone
+      containers:
+      - name: xiaoke-service
+        image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/xiaoke-service:1.0.0
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: LOG_LEVEL
+          value: "info"
+        - name: MONGODB_URI
+          value: "mongodb://xiaoke_user:${MONGODB_PASSWORD}@mongodb.suoke:27017/xiaoke-service"
+        - name: REDIS_HOST
+          value: "redis.suoke"
+        - name: REDIS_PORT
+          value: "6379"
+        - name: MONGODB_PASSWORD
+          value: "/mnt/secrets-store/mongodb-password"
+        - name: REDIS_PASSWORD
+          value: "/mnt/secrets-store/redis-password"
+        - name: API_KEY
+          value: "/mnt/secrets-store/api-key"
+        resources:
+          requests:
+            cpu: "1"
+            memory: "2Gi"
+          limits:
+            cpu: "2"
+            memory: "4Gi"
+        volumeMounts:
+        - name: secrets-store
+          mountPath: "/mnt/secrets-store"
+          readOnly: true

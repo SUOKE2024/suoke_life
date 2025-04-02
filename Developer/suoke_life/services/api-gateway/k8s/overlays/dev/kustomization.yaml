@@ -1,0 +1,46 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: suoke-dev
+
+commonLabels:
+  environment: development
+  app: api-gateway
+  service-type: edge
+
+resources:
+- ../../base
+
+patches:
+- path: resources-patch.yaml
+  target:
+    kind: Deployment
+    name: api-gateway
+- path: storage-class-patch.yaml
+  target:
+    kind: PersistentVolumeClaim
+    name: api-gateway-logs-pvc
+- path: storage-class-patch.yaml
+  target:
+    kind: PersistentVolumeClaim
+    name: api-gateway-config-pvc
+
+# 环境特定配置
+configMapGenerator:
+- name: api-gateway-config
+  behavior: merge
+  literals:
+  - NODE_ENV=development
+  - LOG_LEVEL=debug
+  - API_GATEWAY_ENABLED=true
+  - OTEL_ENABLED=false
+
+# 镜像覆盖
+images:
+- name: api-gateway
+  newName: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/api-gateway
+  newTag: dev
+
+replicas:
+- name: api-gateway
+  count: 1 

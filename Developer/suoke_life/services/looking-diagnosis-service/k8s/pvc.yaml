@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: looking-diagnosis-images-pvc
+  namespace: suoke
+  labels:
+    app: looking-diagnosis
+    service: four-diagnosis
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: standard
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: looking-diagnosis-results-pvc
+  namespace: suoke
+  labels:
+    app: looking-diagnosis
+    service: four-diagnosis
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  storageClassName: standard 

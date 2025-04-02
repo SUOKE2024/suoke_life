@@ -1,0 +1,154 @@
+version: '3.8'
+
+services:
+  touch-diagnosis-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: suoke-life/touch-diagnosis-service:dev
+    container_name: touch-diagnosis-service
+    restart: unless-stopped
+    ports:
+      - "3002:3002"
+    environment:
+      - NODE_ENV=development
+      - PORT=3002
+      - LOG_LEVEL=debug
+      - DATABASE_URL=mongodb://mongodb:27017/touch_diagnosis
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - DIAGNOSIS_COORDINATOR_URL=http://diagnosis-coordinator-service:3000
+      - KNOWLEDGE_BASE_URL=http://knowledge-base-service:3010
+      - METRICS_ENABLED=true
+      - TRACING_ENABLED=true
+      - ENABLE_DB_MIGRATION=true
+    volumes:
+      - ./src:/app/src
+      - ./logs:/app/logs
+    depends_on:
+      - mongodb
+      - redis
+      - mock-diagnosis-coordinator
+    entrypoint: ["/app/docker-entrypoint.sh"]
+    command: ["npm", "run", "dev"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3002/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - suoke-network
+
+  mongodb:
+    image: mongo:5.0
+    container_name: touch-diagnosis-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_DATABASE=touch_diagnosis
+    volumes:
+      - mongodb_data:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/touch_diagnosis --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    networks:
+      - suoke-network
+
+  redis:
+    image: redis:6.2-alpine
+    container_name: touch-diagnosis-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - suoke-network
+      
+  mock-diagnosis-coordinator:
+    image: node:16-alpine
+    container_name: mock-diagnosis-coordinator
+    working_dir: /app
+    volumes:
+      - ./tests/mocks:/app
+    command: >
+      sh -c "npm init -y && 
+             npm install express cors && 
+             node diagnosis-coordinator-mock.js"
+    ports:
+      - "3000:3000"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - suoke-network
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.30
+    container_name: touch-diagnosis-jaeger
+    environment:
+      - COLLECTOR_ZIPKIN_HOST_PORT=:9411
+    ports:
+      - "5775:5775/udp"
+      - "6831:6831/udp"
+      - "6832:6832/udp"
+      - "5778:5778"
+      - "16686:16686"
+      - "14268:14268"
+      - "14250:14250"
+      - "9411:9411"
+    networks:
+      - suoke-network
+
+  prometheus:
+    image: prom/prometheus:v2.35.0
+    container_name: touch-diagnosis-prometheus
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    ports:
+      - "9090:9090"
+    networks:
+      - suoke-network
+
+  grafana:
+    image: grafana/grafana:8.5.2
+    container_name: touch-diagnosis-grafana
+    ports:
+      - "3030:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - prometheus
+    networks:
+      - suoke-network
+
+volumes:
+  mongodb_data:
+  redis_data:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  suoke-network:
+    driver: bridge

@@ -1,0 +1,16 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inquiry-diagnosis
+  namespace: suoke
+spec:
+  template:
+    spec:
+      nodeSelector:
+        kubernetes.io/os: linux
+        node-type: ai-services
+      tolerations:
+      - key: dedicated
+        operator: Equal
+        value: ai-inference
+        effect: NoSchedule 

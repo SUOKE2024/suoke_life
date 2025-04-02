@@ -1,0 +1,101 @@
+version: '3.8'
+
+services:
+  rag-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rag-service
+    ports:
+      - "8000:8000"
+      - "9090:9090"
+    environment:
+      - LOG_LEVEL=DEBUG
+      - ENABLE_MONITORING=true
+      - PROMETHEUS_PORT=9090
+      - TCM_KG_URI=bolt://neo4j:7687
+      - TCM_KG_USER=neo4j
+      - TCM_KG_PASSWORD=password
+      - ENABLE_CACHE=true
+      - CACHE_TTL=3600
+    volumes:
+      - ./models:/app/models
+      - ./data:/app/data
+      - ./logs:/app/logs
+    depends_on:
+      - neo4j
+    networks:
+      - rag-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  neo4j:
+    image: neo4j:5.12.0
+    container_name: rag-neo4j
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      - NEO4J_AUTH=neo4j/password
+      - NEO4J_ACCEPT_LICENSE_AGREEMENT=yes
+    volumes:
+      - neo4j-data:/data
+      - neo4j-logs:/logs
+    networks:
+      - rag-network
+    healthcheck:
+      test: ["CMD", "wget", "-O", "/dev/null", "-q", "http://localhost:7474"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  prometheus:
+    image: prom/prometheus:v2.46.0
+    container_name: rag-prometheus
+    ports:
+      - "9091:9090"
+    volumes:
+      - ./config/prometheus:/etc/prometheus
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    networks:
+      - rag-network
+    depends_on:
+      - rag-service
+
+  grafana:
+    image: grafana/grafana:10.1.0
+    container_name: rag-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - ./config/grafana/provisioning:/etc/grafana/provisioning
+      - grafana-data:/var/lib/grafana
+    networks:
+      - rag-network
+    depends_on:
+      - prometheus
+
+networks:
+  rag-network:
+    driver: bridge
+
+volumes:
+  neo4j-data:
+  neo4j-logs:
+  prometheus-data:
+  grafana-data: 

@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  looking-diagnosis:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: looking-diagnosis-service:latest
+    container_name: looking-diagnosis-service
+    restart: unless-stopped
+    ports:
+      - "3011:3011"
+    environment:
+      - NODE_ENV=development
+      - PORT=3011
+      - HOST=0.0.0.0
+      - LOG_LEVEL=debug
+      - DB_HOST=mongodb
+      - DB_PORT=27017
+      - DB_NAME=looking_diagnosis
+      - DB_USER=suoke_app
+      - DB_PASSWORD=suoke_password
+      - CORS_ORIGIN=*
+      - STORE_IMAGES=true
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./logs:/app/logs
+    depends_on:
+      - mongodb
+    networks:
+      - suoke-network
+
+  mongodb:
+    image: mongo:4.4
+    container_name: looking-diagnosis-mongodb
+    restart: unless-stopped
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=suoke_app
+      - MONGO_INITDB_ROOT_PASSWORD=suoke_password
+      - MONGO_INITDB_DATABASE=looking_diagnosis
+    volumes:
+      - mongodb_data:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - suoke-network
+
+networks:
+  suoke-network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
+    driver: local 

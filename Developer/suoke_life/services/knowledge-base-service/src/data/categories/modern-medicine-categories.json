@@ -1,0 +1,202 @@
+[
+  {
+    "name": "现代医学知识",
+    "description": "现代医学研究和实践体系",
+    "icon": "modern-medicine",
+    "color": "#00897B",
+    "children": [
+      {
+        "name": "预防医学",
+        "description": "疾病预防与健康促进的学科",
+        "icon": "preventive-medicine",
+        "color": "#00695C",
+        "children": [
+          {
+            "name": "健康管理",
+            "description": "个人和群体健康的评估与管理",
+            "icon": "health-management",
+            "color": "#004D40"
+          },
+          {
+            "name": "疫苗接种",
+            "description": "预防传染病的免疫接种知识",
+            "icon": "vaccination",
+            "color": "#004D40"
+          },
+          {
+            "name": "健康筛查",
+            "description": "疾病早期发现的检查方法",
+            "icon": "screening",
+            "color": "#004D40"
+          },
+          {
+            "name": "传染病防控",
+            "description": "常见传染病的预防与控制",
+            "icon": "disease-control",
+            "color": "#004D40"
+          }
+        ]
+      },
+      {
+        "name": "运动医学",
+        "description": "运动相关的医学研究与实践",
+        "icon": "sports-medicine",
+        "color": "#0277BD",
+        "children": [
+          {
+            "name": "运动损伤",
+            "description": "运动中常见损伤的预防和治疗",
+            "icon": "sport-injury",
+            "color": "#01579B"
+          },
+          {
+            "name": "运动处方",
+            "description": "针对不同健康状况的运动建议",
+            "icon": "exercise-prescription",
+            "color": "#01579B"
+          },
+          {
+            "name": "运动康复",
+            "description": "通过运动恢复身体功能的方法",
+            "icon": "rehabilitation",
+            "color": "#01579B"
+          },
+          {
+            "name": "运动营养",
+            "description": "运动相关的营养需求与补充",
+            "icon": "sports-nutrition",
+            "color": "#01579B"
+          }
+        ]
+      },
+      {
+        "name": "心理学",
+        "description": "研究心理过程与行为的科学",
+        "icon": "psychology",
+        "color": "#6A1B9A",
+        "children": [
+          {
+            "name": "认知心理学",
+            "description": "研究思维、记忆等认知过程",
+            "icon": "cognitive",
+            "color": "#4A148C"
+          },
+          {
+            "name": "行为心理学",
+            "description": "研究人类行为模式及其影响因素",
+            "icon": "behavioral",
+            "color": "#4A148C"
+          },
+          {
+            "name": "情绪管理",
+            "description": "识别和调节情绪的方法",
+            "icon": "emotional",
+            "color": "#4A148C"
+          },
+          {
+            "name": "心理健康",
+            "description": "维护和改善心理健康的方法",
+            "icon": "mental-health",
+            "color": "#4A148C"
+          }
+        ]
+      },
+      {
+        "name": "星相学",
+        "description": "研究星象与人类关系的学问",
+        "icon": "astrology",
+        "color": "#283593",
+        "children": [
+          {
+            "name": "西方占星",
+            "description": "基于出生时星象分析性格和命运",
+            "icon": "western-astrology",
+            "color": "#1A237E"
+          },
+          {
+            "name": "中国星相",
+            "description": "中国传统的天文与人事关系研究",
+            "icon": "chinese-astrology",
+            "color": "#1A237E"
+          },
+          {
+            "name": "生物节律",
+            "description": "研究宇宙周期与人体生理节律的关系",
+            "icon": "biorhythm",
+            "color": "#1A237E"
+          },
+          {
+            "name": "星座健康",
+            "description": "从星座角度理解健康特点和保健方法",
+            "icon": "zodiac-health",
+            "color": "#1A237E"
+          }
+        ]
+      },
+      {
+        "name": "整合医学",
+        "description": "结合不同医学体系的综合医疗方法",
+        "icon": "integrative-medicine",
+        "color": "#1565C0",
+        "children": [
+          {
+            "name": "功能医学",
+            "description": "关注疾病根源和身体系统功能的医学",
+            "icon": "functional-medicine",
+            "color": "#0D47A1"
+          },
+          {
+            "name": "自然医学",
+            "description": "利用自然疗法促进身体自愈",
+            "icon": "natural-medicine",
+            "color": "#0D47A1"
+          },
+          {
+            "name": "能量医学",
+            "description": "研究和应用人体能量场的医学",
+            "icon": "energy-medicine",
+            "color": "#0D47A1"
+          },
+          {
+            "name": "身心医学",
+            "description": "研究身体与心理互动关系的医学",
+            "icon": "mind-body-medicine",
+            "color": "#0D47A1"
+          }
+        ]
+      },
+      {
+        "name": "慢性病管理",
+        "description": "常见慢性疾病的预防和控制",
+        "icon": "chronic-disease",
+        "color": "#00838F",
+        "children": [
+          {
+            "name": "心血管疾病",
+            "description": "高血压、冠心病等的预防和管理",
+            "icon": "cardiovascular",
+            "color": "#006064"
+          },
+          {
+            "name": "糖尿病",
+            "description": "糖尿病的预防和管理",
+            "icon": "diabetes",
+            "color": "#006064"
+          },
+          {
+            "name": "代谢综合征",
+            "description": "代谢相关疾病的预防和管理",
+            "icon": "metabolic",
+            "color": "#006064"
+          },
+          {
+            "name": "癌症预防",
+            "description": "癌症的早期预防和筛查",
+            "icon": "cancer-prevention",
+            "color": "#006064"
+          }
+        ]
+      }
+    ]
+  }
+]

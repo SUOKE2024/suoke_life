@@ -1,0 +1,191 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "api-gateway.fullname" . }}
+  labels:
+    {{- include "api-gateway.labels" . | nindent 4 }}
+    app.kubernetes.io/component: api-gateway
+  {{- with .Values.deploymentAnnotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "api-gateway.selectorLabels" . | nindent 6 }}
+  strategy:
+    {{- toYaml .Values.deploymentStrategy | nindent 4 }}
+  template:
+    metadata:
+      annotations:
+        {{- include "api-gateway.podAnnotations" . | nindent 8 }}
+        {{- if .Values.vault.enabled }}
+        {{- include "api-gateway.vaultAnnotations" . | nindent 8 }}
+        {{- end }}
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- if .Values.secret.create }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        {{- end }}
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "api-gateway.selectorLabels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "api-gateway.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- if (include "api-gateway.featureEnabled" "serviceDiscovery") }}
+      initContainers:
+        - name: init-service-discovery
+          image: "{{ .Values.initContainer.image.repository }}:{{ .Values.initContainer.image.tag | default "alpine" }}"
+          imagePullPolicy: {{ .Values.initContainer.image.pullPolicy | default "IfNotPresent" }}
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              echo "初始化服务发现..."
+              {{- if (include "api-gateway.featureEnabled" "vault") }}
+              # 等待Vault就绪
+              echo "等待Vault服务就绪..."
+              until nc -z ${VAULT_HOST} ${VAULT_PORT}; do
+                echo "等待Vault服务..."
+                sleep 2
+              done
+              echo "Vault服务已就绪"
+              {{- end }}
+              # 等待服务发现就绪
+              echo "等待服务发现就绪..."
+              until nc -z ${SERVICE_DISCOVERY_HOST} ${SERVICE_DISCOVERY_PORT}; do
+                echo "等待服务发现..."
+                sleep 2
+              done
+              echo "服务发现已就绪"
+              echo "初始化完成"
+          env:
+            {{- if (include "api-gateway.featureEnabled" "vault") }}
+            - name: VAULT_HOST
+              value: "{{ .Values.vault.host | default "vault" }}"
+            - name: VAULT_PORT
+              value: "{{ .Values.vault.port | default 8200 }}"
+            {{- end }}
+            - name: SERVICE_DISCOVERY_HOST
+              value: "{{ .Values.serviceDiscovery.host | default "service-discovery" }}"
+            - name: SERVICE_DISCOVERY_PORT
+              value: "{{ .Values.serviceDiscovery.port | default 8080 }}"
+      {{- end }}
+      {{- if or .Values.persistence.register.enabled .Values.persistence.config.enabled }}
+      initContainers:
+        {{- if .Values.persistence.register.enabled }}
+        - name: init-register
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - "sh"
+            - "-c"
+            - |
+              mkdir -p /register/data
+              chmod -R 777 /register/data
+          volumeMounts:
+            - name: register
+              mountPath: /register
+        {{- end }}
+        {{- if .Values.persistence.config.enabled }}
+        - name: init-config
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - "sh"
+            - "-c"
+            - |
+              mkdir -p /config/data
+              chmod -R 777 /config/data
+          volumeMounts:
+            - name: config
+              mountPath: /config
+        {{- end }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port | default 3000 }}
+              protocol: TCP
+            {{- include "api-gateway.additionalPorts" . | nindent 12 }}
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe:
+            {{- omit .Values.livenessProbe "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe:
+            {{- omit .Values.readinessProbe "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.startupProbe.enabled }}
+          startupProbe:
+            {{- omit .Values.startupProbe "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            {{- include "api-gateway.allEnvVars" . | nindent 12 }}
+          volumeMounts:
+            {{- include "api-gateway.configVolumeMount" . | nindent 12 }}
+            {{- include "api-gateway.logVolumeMount" . | nindent 12 }}
+            {{- if .Values.persistence.register.enabled }}
+            - name: register
+              mountPath: {{ .Values.persistence.register.mountPath | default "/app/register" }}
+              {{- if .Values.persistence.register.subPath }}
+              subPath: {{ .Values.persistence.register.subPath }}
+              {{- end }}
+            {{- end }}
+            {{- with .Values.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          {{- with .Values.lifecycle }}
+          lifecycle:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.sidecars }}
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        {{- include "api-gateway.configVolume" . | nindent 8 }}
+        {{- include "api-gateway.logVolume" . | nindent 8 }}
+        {{- if .Values.persistence.register.enabled }}
+        - name: register
+          persistentVolumeClaim:
+            claimName: {{ include "api-gateway.pvcName" (list "register" .) }}
+        {{- end }}
+        {{- with .Values.extraVolumes }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds | default 30 }} 

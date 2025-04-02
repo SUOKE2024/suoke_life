@@ -1,0 +1,67 @@
+apiVersion: alibabacloud.com/v1
+kind: AliyunCEN
+metadata:
+  name: suoke-network-connection
+spec:
+  cenName: suoke-vpc-connection
+  description: "索克生活项目VPC间通信配置"
+  
+  # 地域配置
+  regionId: cn-hangzhou
+  
+  # 所连接的VPC实例配置
+  attachedInstances:
+    # 主服务器VPC
+    - instanceId: vpc-bp1xxxxxxxx # 需替换为主服务器VPC ID
+      instanceType: VPC
+      instanceRegionId: cn-hangzhou
+      instanceOwnerId: "1234567890" # 需替换为实际阿里云账号ID
+      
+    # K8s集群VPC
+    - instanceId: vpc-bp2xxxxxxxx # 需替换为K8s集群VPC ID
+      instanceType: VPC
+      instanceRegionId: cn-hangzhou
+      instanceOwnerId: "1234567890" # 需替换为实际阿里云账号ID
+      
+  # 带宽包配置
+  bandwidthPackage:
+    bandwidthPlanId: bwp-xxxxxxxxx # 需替换为实际的带宽包ID
+    geographicRegionA: China
+    geographicRegionB: China
+    
+  # 流量监控配置
+  flowLog:
+    enabled: true
+    projectName: suoke-vpc-flowlog
+    logStoreName: vpc-connection-logs
+    
+  # 路由配置
+  routePublish:
+    routeMapType: Whitelist
+    childInstanceRegionId: cn-hangzhou
+    childInstanceId: vpc-bp1xxxxxxxx # 主服务器VPC
+    childInstanceType: VPC
+    destinationCidrBlocks:
+      - "172.16.0.0/12" # K8s集群IP段，需替换为实际使用的CIDR
+
+---
+# 补充说明
+# 以下是通过云企业网配置VPC互联的步骤说明（仅供参考，不作为YAML配置的一部分）：
+# 
+# 1. 创建云企业网实例
+#    通过阿里云控制台或API创建CEN实例
+# 
+# 2. 将两个VPC加入到云企业网
+#    在CEN控制台中选择"网络实例管理"，然后添加要互联的VPC
+# 
+# 3. 购买带宽包（如需跨地域）
+#    如果两个VPC在不同地域，需要购买带宽包
+# 
+# 4. 配置路由
+#    确保两个VPC的路由表中有对方网段的路由条目
+# 
+# 5. 配置安全组
+#    修改两个VPC中的ECS安全组规则，允许对方VPC的流量
+# 
+# 6. 测试连通性
+#    使用ping或其他工具测试两个VPC之间的连通性 

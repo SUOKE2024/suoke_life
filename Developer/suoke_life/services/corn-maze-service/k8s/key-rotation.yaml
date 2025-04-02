@@ -1,0 +1,69 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: corn-maze-key-rotation
+  namespace: suoke
+spec:
+  schedule: "0 3 1 * *"  # 每月1日凌晨3点执行
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 2
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+          containers:
+          - name: key-rotation
+            image: vault:latest
+            imagePullPolicy: IfNotPresent
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities:
+                drop:
+                - ALL
+            env:
+            - name: VAULT_ADDR
+              value: "http://vault.vault:8200"
+            - name: ROTATION_DATE
+              value: "$(date +%Y%m%d)"
+            - name: VAULT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: vault-token
+                  key: token
+            command:
+            - /bin/sh
+            - -c
+            - |
+              set -e
+              
+              echo "开始密钥轮换 - ${ROTATION_DATE}"
+              
+              # 生成新的JWT密钥
+              NEW_JWT_SECRET=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
+              
+              # 更新Vault中的JWT密钥
+              vault kv put secret/suoke/corn-maze/auth jwt-secret="${NEW_JWT_SECRET}"
+              echo "已更新JWT密钥"
+              
+              # 触发应用重启以应用新密钥
+              curl -X POST http://argocd-server.argocd.svc.cluster.local/api/v1/applications/corn-maze-service/sync \
+                -H "Authorization: Bearer ${ARGOCD_TOKEN}" \
+                -H "Content-Type: application/json" \
+                -d '{"dryRun": false, "prune": false}'
+              
+              echo "密钥轮换完成"
+            volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+          volumes:
+          - name: tmp
+            emptyDir: {}
+          restartPolicy: OnFailure
+          nodeSelector:
+            node-type: system-jobs 

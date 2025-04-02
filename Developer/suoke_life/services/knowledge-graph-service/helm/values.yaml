@@ -1,0 +1,277 @@
+# 默认全局设置
+global:
+  environment: production
+  imageRegistry: suoke-registry.cn-hangzhou.cr.aliyuncs.com
+  imagePullSecrets:
+    - name: suoke-registry-secret
+  storageClass: suoke-premium
+  networkPolicy:
+    enabled: true
+
+# 应用设置
+replicaCount: 2
+
+image:
+  repository: suoke/knowledge-graph-service
+  pullPolicy: IfNotPresent
+  tag: latest
+
+imagePullSecrets:
+  - name: suoke-registry-secret
+
+nameOverride: ""
+fullnameOverride: ""
+
+# 服务账号设置
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+# Pod注解
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "9090"
+  prometheus.io/path: "/metrics"
+  vault.hashicorp.com/agent-inject: "true"
+  vault.hashicorp.com/role: "suoke-knowledge-graph"
+  vault.hashicorp.com/agent-inject-secret-db-creds: "suoke/data/knowledge-graph-service/db"
+
+# Pod安全上下文
+podSecurityContext:
+  fsGroup: 1000
+  runAsUser: 1000
+  runAsNonRoot: true
+
+# 容器安全上下文
+securityContext:
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1000
+  allowPrivilegeEscalation: false
+
+# 服务设置
+service:
+  type: ClusterIP
+  port: 3000
+  metricsPort: 9090
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9090"
+
+# Ingress设置
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  hosts:
+    - host: kg.suoke.life
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: knowledge-graph-tls
+      hosts:
+        - kg.suoke.life
+
+# 资源限制和请求
+resources:
+  limits:
+    cpu: 1000m
+    memory: 2Gi
+  requests:
+    cpu: 500m
+    memory: 1Gi
+
+# 自动伸缩设置
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+    scaleUp:
+      stabilizationWindowSeconds: 60
+
+# 节点亲和性和容忍设置
+nodeSelector:
+  node-type: data
+
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: node-type
+              operator: In
+              values:
+                - data
+
+tolerations:
+  - key: "node-type"
+    operator: "Equal"
+    value: "data"
+    effect: "NoSchedule"
+
+# 持久卷设置
+persistence:
+  enabled: true
+  data:
+    size: 50Gi
+    storageClass: suoke-premium
+    annotations:
+      volume.beta.kubernetes.io/storage-provisioner: csi.aliyun.com
+  models:
+    size: 20Gi
+    storageClass: suoke-premium
+    annotations:
+      volume.beta.kubernetes.io/storage-provisioner: csi.aliyun.com
+  tmp:
+    size: 10Gi
+    storageClass: suoke-standard
+    annotations:
+      volume.beta.kubernetes.io/storage-provisioner: csi.aliyun.com
+
+# 环境变量设置
+env:
+  # 应用配置
+  APP_ENV: production
+  APP_PORT: "3000"
+  APP_HOST: "0.0.0.0"
+  LOG_LEVEL: info
+  
+  # Neo4j数据库配置
+  NEO4J_PROTOCOL: bolt
+  NEO4J_HOST: neo4j-service
+  NEO4J_PORT: "7687"
+  NEO4J_DATABASE: suoke
+  
+  # Redis配置
+  REDIS_HOST: redis-master
+  REDIS_PORT: "6379"
+  
+  # 向量数据库配置
+  VECTOR_DB_TYPE: pgvector
+  VECTOR_DB_HOST: postgres-service
+  VECTOR_DB_PORT: "5432"
+  VECTOR_DB_NAME: suoke_vectors
+  
+  # OpenTelemetry配置
+  OTEL_SERVICE_NAME: knowledge-graph-service
+  OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+  
+  # 知识图谱配置
+  GRAPH_MAX_DEPTH: "5"
+  GRAPH_RELATIONSHIP_THRESHOLD: "0.7"
+  GRAPH_CACHE_TTL: "3600"
+  
+  # 模型配置
+  EMBEDDING_MODEL_NAME: suoke-embeddings-v1
+  EMBEDDING_MODEL_PATH: /app/models/embeddings
+  EMBEDDING_DIMENSION: "768"
+
+# 密钥环境变量
+secret:
+  NEO4J_USERNAME: placeholder
+  NEO4J_PASSWORD: placeholder
+  VECTOR_DB_USERNAME: placeholder
+  VECTOR_DB_PASSWORD: placeholder
+  REDIS_PASSWORD: placeholder
+  API_KEY: placeholder
+  JWT_SECRET: placeholder
+
+# 服务监控设置
+serviceMonitor:
+  enabled: true
+  interval: 15s
+  scrapeTimeout: 10s
+  selector:
+    release: prometheus
+
+# Istio服务网格设置
+istio:
+  enabled: true
+  mtls:
+    mode: STRICT
+  gateway:
+    enabled: true
+    host: kg.suoke.life
+  virtualService:
+    enabled: true
+    hosts:
+      - kg.suoke.life
+  destinationRule:
+    enabled: true
+    host: knowledge-graph-service
+    trafficPolicy:
+      connectionPool:
+        http:
+          http1MaxPendingRequests: 100
+          maxRequestsPerConnection: 10
+        tcp:
+          maxConnections: 100
+      outlierDetection:
+        consecutive5xxErrors: 5
+        interval: 30s
+        baseEjectionTime: 30s
+
+# 健康检查设置
+livenessProbe:
+  httpGet:
+    path: /health/live
+    port: http
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
+
+readinessProbe:
+  httpGet:
+    path: /health/ready
+    port: http
+  initialDelaySeconds: 20
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
+
+startupProbe:
+  httpGet:
+    path: /health/startup
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 12
+  successThreshold: 1
+
+# 依赖服务设置
+neo4j:
+  enabled: false
+  # 如果启用，以下是Neo4j的默认设置
+  core:
+    numberOfServers: 3
+    persistentVolume:
+      storageClass: suoke-premium
+      size: 100Gi
+
+redis:
+  enabled: false
+  # 如果启用，以下是Redis的默认设置
+  architecture: replication
+  auth:
+    enabled: true
+  master:
+    persistence:
+      storageClass: suoke-premium
+      size: 20Gi

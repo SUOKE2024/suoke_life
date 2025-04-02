@@ -1,0 +1,57 @@
+apiVersion: flagger.app/v1beta1
+kind: Canary
+metadata:
+  name: agent-coordinator
+  namespace: suoke
+spec:
+  provider: istio
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: agent-coordinator
+  progressDeadlineSeconds: 600
+  service:
+    port: 80
+    targetPort: 3000
+    gateways:
+    - mesh
+    hosts:
+    - agent-coordinator
+  analysis:
+    interval: 30s
+    threshold: 10
+    maxWeight: 50
+    stepWeight: 10
+    metrics:
+    - name: request-success-rate
+      thresholdRange:
+        min: 99
+      interval: 1m
+    - name: request-duration
+      thresholdRange:
+        max: 500
+      interval: 1m
+    webhooks:
+      - name: acceptance-test
+        type: pre-rollout
+        url: http://flagger-loadtester.suoke/
+        timeout: 30s
+        metadata:
+          type: bash
+          cmd: |
+            curl -sS http://agent-coordinator-canary.suoke/health/readiness | grep OK
+      
+      - name: load-test
+        url: http://flagger-loadtester.suoke/
+        timeout: 15s
+        metadata:
+          cmd: "hey -z 1m -q 10 -c 2 http://agent-coordinator-canary.suoke/api/v1/agents/status"
+          
+      - name: prometheus-check
+        type: rollout
+        url: http://prometheus-alertmanager.monitoring/api/v1/alerts
+        timeout: 5s
+        metadata:
+          type: json
+          cmd: |
+            curl -sS http://prometheus-alertmanager.monitoring/api/v1/alerts | jq '.data[].labels.alertname' | grep -v agent-coordinator 

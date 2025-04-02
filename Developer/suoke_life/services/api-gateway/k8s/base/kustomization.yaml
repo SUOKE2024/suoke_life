@@ -1,0 +1,27 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: suoke
+
+commonLabels:
+  app: api-gateway
+  part-of: suoke-platform
+  managed-by: kustomize
+  service-type: edge
+
+resources:
+- ../production/deployment.yaml
+- ../production/service.yaml
+- ../production/pvc.yaml
+- ../production/configmap.yaml
+- ../production/secret.yaml
+- ../production/networkpolicy.yaml
+- ../production/hpa.yaml
+- ../production/servicemonitor.yaml
+- ../production/istio-gateway.yaml
+
+# 镜像管理
+images:
+- name: api-gateway
+  newName: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/api-gateway
+  newTag: latest 

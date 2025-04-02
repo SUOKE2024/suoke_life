@@ -1,0 +1,103 @@
+{
+  "agentCoordination": {
+    "enableOpenAIStyleHandoffs": true,
+    "handoffProtocol": "assistants-api",
+    "trackConversationContext": true,
+    "maxHandoffsPerConversation": 5,
+    "persistStateAcrossHandoffs": true
+  },
+  "agents": [
+    {
+      "id": "xiaoke",
+      "name": "小克",
+      "serviceUrl": "http://xiaoke-service:8080",
+      "capabilities": ["服务订阅", "农产品预制", "供应链管理", "农事活动体验"],
+      "isDefault": true,
+      "description": "小克是索克生活APP的商务服务智能体，专注于农产品订制、供应链管理和商务服务"
+    },
+    {
+      "id": "xiaoai",
+      "name": "小艾",
+      "serviceUrl": "http://xiaoai-service:3000",
+      "capabilities": ["四诊合一", "问诊服务", "健康记录管理", "健康建议", "望诊诊断"],
+      "description": "小艾是索克生活APP的健康管理智能助理，专注于四诊合一及健康问诊服务"
+    },
+    {
+      "id": "laoke",
+      "name": "老克",
+      "serviceUrl": "http://laoke-service:8080",
+      "capabilities": ["知识库", "知识图谱", "RAG", "数据集管理", "训练集管理", "精准医学", "多模态健康", "环境健康", "心理健康"],
+      "description": "老克是索克生活APP的知识管理智能体，专注于知识库、知识图谱和数据管理服务"
+    },
+    {
+      "id": "soer",
+      "name": "索儿",
+      "serviceUrl": "http://soer-service:8080",
+      "capabilities": ["生活服务", "陪伴服务", "健康管理", "生活建议", "环境感知"],
+      "description": "索儿是索克生活APP的生活助手智能体，专注于陪伴和日常生活服务"
+    }
+  ],
+  "toolRegistry": {
+    "tools": [
+      {
+        "name": "web_search",
+        "serviceUrl": "http://rag-service:8080/api/web-search"
+      },
+      {
+        "name": "knowledge_graph",
+        "serviceUrl": "http://knowledge-graph-service:8080"
+      },
+      {
+        "name": "knowledge_base",
+        "serviceUrl": "http://knowledge-base-service:8080"
+      },
+      {
+        "name": "rag_service",
+        "serviceUrl": "http://rag-service:8080"
+      }
+    ],
+    "enableToolObservability": true,
+    "toolTimeoutSeconds": 30
+  },
+  "routing": {
+    "routingMode": "capability-based",
+    "fallbackAgent": "soer",
+    "routingRules": [
+      {
+        "keywords": ["知识库", "知识图谱", "RAG", "数据集", "训练集", "语料库", "向量存储", "文档管理", "语义索引", "知识管理", "精准医学", "基因", "遗传", "多模态", "图像分析", "声音分析", "生物信号", "环境健康", "空气质量", "水质", "气候", "心理健康", "心理咨询", "心理治疗"],
+        "route": "laoke"
+      },
+      {
+        "keywords": ["四诊", "望闻问切", "望诊", "面诊", "舌诊", "问诊", "闻诊", "切诊", "脉诊", "健康记录", "症状", "疾病", "诊断"],
+        "route": "xiaoai"
+      },
+      {
+        "keywords": ["服务订阅", "订阅服务", "套餐", "农产品", "定制", "预定", "预订", "供应链", "溯源", "农事活动", "体验", "商务", "商业"],
+        "route": "xiaoke"
+      },
+      {
+        "keywords": ["生活服务", "陪伴", "日常", "助手", "提醒", "建议", "聊天", "生活", "心情", "情绪", "休闲", "环境感知", "天气"],
+        "route": "soer"
+      }
+    ]
+  },
+  "logging": {
+    "level": "info",
+    "format": "json",
+    "enableRequestLogging": true,
+    "enableAgentInteractionLogging": true
+  },
+  "security": {
+    "enableApiAuthentication": true,
+    "enableAgentAuthentication": true,
+    "rateLimiting": {
+      "enabled": true,
+      "maxRequestsPerMinute": 60
+    }
+  },
+  "performance": {
+    "cacheEnabled": true,
+    "cacheTtlSeconds": 300,
+    "maxConcurrentSessions": 1000
+  }
+}

@@ -1,0 +1,60 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: agent-coordinator-key-rotation
+  namespace: suoke
+  labels:
+    app: agent-coordinator
+    part-of: suoke-platform
+spec:
+  schedule: "0 1 1 * *"  # 每月1日凌晨1点执行
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: agent-coordinator
+            job: key-rotation
+        spec:
+          containers:
+          - name: key-rotation
+            image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/vault-client:latest
+            command:
+            - /bin/sh
+            - -c
+            - |
+              NEW_API_KEY=$(openssl rand -base64 32)
+              NEW_JWT_SECRET=$(openssl rand -base64 32)
+              VAULT_TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
+              
+              # 更新Vault中的密钥
+              curl --request POST \
+                --header "X-Vault-Token: $VAULT_TOKEN" \
+                --data "{\"data\": {\"API_KEY\": \"$NEW_API_KEY\", \"JWT_SECRET\": \"$NEW_JWT_SECRET\"}}" \
+                ${VAULT_ADDR}/v1/secret/data/suoke/agent-coordinator
+                
+              # 等待密钥成功存储
+              sleep 10
+              
+              # 重启服务以应用新密钥
+              kubectl rollout restart deployment/agent-coordinator -n suoke
+              
+              echo "密钥轮换完成，服务正在重启以应用新密钥"
+            env:
+            - name: VAULT_ADDR
+              value: "http://vault.vault.svc.cluster.local:8200"
+            - name: VAULT_ROLE
+              value: "agent-coordinator"
+            securityContext:
+              runAsUser: 1000
+              runAsGroup: 1000
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                - ALL
+          serviceAccountName: agent-coordinator-key-rotation
+          restartPolicy: OnFailure 

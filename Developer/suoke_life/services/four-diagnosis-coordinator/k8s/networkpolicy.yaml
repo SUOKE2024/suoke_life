@@ -1,0 +1,105 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: four-diagnosis-coordinator-network-policy
+  namespace: suoke
+  labels:
+    app: four-diagnosis-coordinator
+    service: four-diagnosis
+spec:
+  podSelector:
+    matchLabels:
+      app: four-diagnosis-coordinator
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  # 允许从API网关访问
+  - from:
+    - podSelector:
+        matchLabels:
+          app: api-gateway
+    ports:
+    - protocol: TCP
+      port: 3050
+  # 允许从各诊断服务访问
+  - from:
+    - podSelector:
+        matchLabels:
+          service: four-diagnosis
+    ports:
+    - protocol: TCP
+      port: 3050
+  # 允许监控系统访问指标端点
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+      podSelector:
+        matchLabels:
+          app: prometheus
+    ports:
+    - protocol: TCP
+      port: 9464
+  egress:
+  # 允许连接到四诊服务组件
+  - to:
+    - podSelector:
+        matchLabels:
+          app: looking-diagnosis
+    ports:
+    - protocol: TCP
+      port: 3001
+  - to:
+    - podSelector:
+        matchLabels:
+          app: inquiry-diagnosis
+    ports:
+    - protocol: TCP
+      port: 3004
+  - to:
+    - podSelector:
+        matchLabels:
+          app: smell-diagnosis
+    ports:
+    - protocol: TCP
+      port: 3005
+  - to:
+    - podSelector:
+        matchLabels:
+          app: touch-diagnosis
+    ports:
+    - protocol: TCP
+      port: 3003
+  # 允许连接到用户服务
+  - to:
+    - podSelector:
+        matchLabels:
+          app: user-service
+    ports:
+    - protocol: TCP
+      port: 3001
+  # 允许连接到OpenTelemetry收集器
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+      podSelector:
+        matchLabels:
+          app: opentelemetry-collector
+    ports:
+    - protocol: TCP
+      port: 4318
+    - protocol: TCP
+      port: 4317
+  # DNS解析
+  - to:
+    - namespaceSelector: {}
+      podSelector:
+        matchLabels:
+          k8s-app: kube-dns
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53 

@@ -1,0 +1,238 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway
+  namespace: suoke
+  labels:
+    app: api-gateway
+    service-type: edge
+  annotations:
+    app.kubernetes.io/name: api-gateway
+    app.kubernetes.io/part-of: suoke-platform
+    app.kubernetes.io/managed-by: kustomize
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+        service-type: edge
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: "9090"
+        sidecar.istio.io/inject: "true"
+    spec:
+      # 节点亲和性 - 部署到边缘服务节点池
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-type
+                operator: In
+                values:
+                - edge-services
+      
+      # 容忍度 - 允许部署到特定污点节点
+      tolerations:
+      - key: "service-type"
+        operator: "Equal"
+        value: "edge"
+        effect: "NoSchedule"
+      
+      # 初始化容器 - 设置正确权限
+      initContainers:
+      - name: init-permissions
+        image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/busybox:latest
+        command: ['sh', '-c', 'chown -R 1000:1000 /app/logs /app/config']
+        securityContext:
+          runAsUser: 0
+        volumeMounts:
+        - name: logs-volume
+          mountPath: /app/logs
+        - name: config-volume
+          mountPath: /app/config
+      
+      # 主容器
+      containers:
+      - name: api-gateway
+        image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/api-gateway:latest
+        imagePullPolicy: Always
+        
+        # 运行时安全上下文
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+        
+        # 端口
+        ports:
+        - containerPort: 3000
+          name: http
+        - containerPort: 9090
+          name: metrics
+        
+        # 资源请求与限制
+        resources:
+          requests:
+            cpu: 300m
+            memory: 512Mi
+          limits:
+            cpu: 700m
+            memory: 1Gi
+        
+        # 健康检查
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 15
+          timeoutSeconds: 5
+          failureThreshold: 3
+        
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 3
+          successThreshold: 1
+          failureThreshold: 3
+        
+        startupProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 12
+        
+        # 环境变量
+        env:
+        - name: NODE_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: api-gateway-config
+              key: NODE_ENV
+        - name: PORT
+          value: "3000"
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: api-gateway-config
+              key: LOG_LEVEL
+        - name: METRICS_PORT
+          value: "9090"
+        
+        # 流量路由配置
+        - name: API_GATEWAY_ENABLED
+          value: "true"
+        - name: API_GATEWAY_NAME
+          value: "api-gateway"
+        - name: API_BASE_PATH
+          value: "/api"
+        - name: API_VERSION
+          value: "v1"
+        - name: TRUSTED_HEADERS
+          valueFrom:
+            configMapKeyRef:
+              name: api-gateway-config
+              key: TRUSTED_HEADERS
+        
+        # 认证配置
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: api-gateway-secrets
+              key: JWT_SECRET
+        - name: REFRESH_TOKEN_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: api-gateway-secrets
+              key: REFRESH_TOKEN_SECRET
+        
+        # OpenTelemetry配置
+        - name: OTEL_ENABLED
+          value: "true"
+        - name: OTEL_SERVICE_NAME
+          value: "api-gateway"
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: "http://suoke-collector-collector.monitoring:4317"
+        - name: OTEL_EXPORTER_OTLP_PROTOCOL
+          value: "grpc"
+        
+        # Vault集成
+        - name: VAULT_ENABLED
+          value: "true"
+        - name: VAULT_ENDPOINT
+          value: "http://vault.vault.svc.cluster.local:8200"
+        - name: VAULT_PATH
+          value: "secret/data/api-gateway"
+        - name: VAULT_AUTH_METHOD
+          value: "k8s"
+        - name: VAULT_K8S_ROLE
+          value: "api-gateway"
+        
+        # Kubernetes信息
+        - name: K8S_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: K8S_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: K8S_NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        
+        # 挂载卷
+        volumeMounts:
+        - name: logs-volume
+          mountPath: /app/logs
+        - name: config-volume
+          mountPath: /app/config
+        - name: tmp-volume
+          mountPath: /tmp
+          readOnly: false
+        - name: vault-secrets
+          mountPath: /vault/secrets
+          readOnly: true
+      
+      # 数据卷
+      volumes:
+      - name: logs-volume
+        persistentVolumeClaim:
+          claimName: api-gateway-logs-pvc
+      - name: config-volume
+        persistentVolumeClaim:
+          claimName: api-gateway-config-pvc
+      - name: tmp-volume
+        emptyDir: {}
+      - name: vault-secrets
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "vault-api-gateway-config"
+      
+      # 镜像拉取密钥
+      imagePullSecrets:
+      - name: aliyun-registry 

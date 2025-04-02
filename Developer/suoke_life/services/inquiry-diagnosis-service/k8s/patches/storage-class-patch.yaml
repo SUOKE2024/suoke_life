@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: inquiry-diagnosis-storage-pvc
+  namespace: suoke
+spec:
+  storageClassName: alicloud-disk-essd
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: inquiry-diagnosis-results-pvc
+  namespace: suoke
+spec:
+  storageClassName: alicloud-disk-ssd 

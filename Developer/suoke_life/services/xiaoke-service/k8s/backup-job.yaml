@@ -1,0 +1,130 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: xiaoke-service-backup
+  namespace: suoke
+  labels:
+    app: xiaoke-service
+    component: backup
+spec:
+  schedule: "0 2 * * *"  # 每天凌晨2点执行
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 3
+  successfulJobsHistoryLimit: 5
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: xiaoke-service
+            component: backup
+        spec:
+          serviceAccountName: xiaoke-backup-sa
+          containers:
+          - name: backup
+            image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/database-backup:latest
+            imagePullPolicy: IfNotPresent
+            env:
+            - name: BACKUP_TYPE
+              value: "xiaoke-service"
+            - name: BACKUP_RETENTION_DAYS
+              value: "30"
+            - name: BACKUP_PREFIX
+              value: "xiaoke"
+            - name: MONGODB_URI
+              valueFrom:
+                secretKeyRef:
+                  name: xiaoke-backup-secrets
+                  key: mongodb-uri
+            - name: STORAGE_TYPE
+              value: "oss"
+            - name: OSS_BUCKET
+              value: "suoke-backups"
+            - name: OSS_PREFIX
+              value: "xiaoke-service"
+            - name: OSS_ENDPOINT
+              value: "oss-cn-hangzhou.aliyuncs.com"
+            - name: OSS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: xiaoke-backup-secrets
+                  key: oss-access-key-id
+            - name: OSS_ACCESS_KEY_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: xiaoke-backup-secrets
+                  key: oss-access-key-secret
+            - name: NOTIFICATION_WEBHOOK
+              valueFrom:
+                secretKeyRef:
+                  name: xiaoke-backup-secrets
+                  key: notification-webhook
+                  optional: true
+            volumeMounts:
+            - name: backup-volume
+              mountPath: /backup
+            - name: config-volume
+              mountPath: /config
+              readOnly: true
+            resources:
+              requests:
+                cpu: "200m"
+                memory: "512Mi"
+              limits:
+                cpu: "500m"
+                memory: "1Gi"
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              runAsNonRoot: true
+              runAsUser: 1000
+          volumes:
+          - name: backup-volume
+            emptyDir: {}
+          - name: config-volume
+            configMap:
+              name: xiaoke-backup-config
+          restartPolicy: OnFailure
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+          nodeSelector:
+            node-type: core-services
+          tolerations:
+          - key: "dedicated"
+            operator: "Equal"
+            value: "core-services"
+            effect: "NoSchedule"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: xiaoke-backup-config
+  namespace: suoke
+  labels:
+    app: xiaoke-service
+    component: backup
+data:
+  backup-config.yaml: |
+    collections:
+      - name: orders
+        retention: 30d
+        priority: high
+      - name: products
+        retention: 90d
+        priority: medium
+      - name: activities
+        retention: 90d
+        priority: medium
+      - name: traceability
+        retention: 365d
+        priority: high
+    data:
+      paths:
+        - /app/data/products
+        - /app/data/activities
+    encryption:
+      enabled: true
+      algorithm: AES256
+      key_source: env 

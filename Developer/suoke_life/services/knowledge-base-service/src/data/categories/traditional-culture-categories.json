@@ -1,0 +1,202 @@
+[
+  {
+    "name": "中国传统文化",
+    "description": "中国几千年来形成的文化传统和知识体系",
+    "icon": "traditional-culture",
+    "color": "#9C27B0",
+    "children": [
+      {
+        "name": "易经",
+        "description": "《周易》及其衍生的解释体系，是中国传统哲学与占卜体系的源头",
+        "icon": "yijing",
+        "color": "#6A1B9A",
+        "children": [
+          {
+            "name": "八卦",
+            "description": "乾、坤、震、巽、坎、离、艮、兑八种基本符号及其代表的自然现象",
+            "icon": "bagua",
+            "color": "#4A148C"
+          },
+          {
+            "name": "六十四卦",
+            "description": "八卦两两相重而成的六十四种卦象",
+            "icon": "hexagram",
+            "color": "#4A148C"
+          },
+          {
+            "name": "易理",
+            "description": "易经的哲学理论和思想体系",
+            "icon": "yili",
+            "color": "#4A148C"
+          },
+          {
+            "name": "命理学",
+            "description": "基于易经原理的命运预测与解析系统",
+            "icon": "fortune",
+            "color": "#4A148C"
+          }
+        ]
+      },
+      {
+        "name": "道学",
+        "description": "以道家哲学为核心的思想体系",
+        "icon": "taoism",
+        "color": "#1A237E",
+        "children": [
+          {
+            "name": "道医",
+            "description": "基于道家理论的医学体系",
+            "icon": "tao-medicine",
+            "color": "#0D47A1"
+          },
+          {
+            "name": "内丹术",
+            "description": "道家养生和修炼的重要方法",
+            "icon": "inner-alchemy",
+            "color": "#0D47A1"
+          },
+          {
+            "name": "道家经典",
+            "description": "《道德经》等道家重要典籍及其解读",
+            "icon": "tao-texts",
+            "color": "#0D47A1"
+          },
+          {
+            "name": "道家养生",
+            "description": "基于道家理论的养生方法和实践",
+            "icon": "tao-health",
+            "color": "#0D47A1"
+          }
+        ]
+      },
+      {
+        "name": "佛学",
+        "description": "佛教在中国的发展和演变形成的思想体系",
+        "icon": "buddhism",
+        "color": "#F57F17",
+        "children": [
+          {
+            "name": "佛医",
+            "description": "融合佛教思想的医学体系",
+            "icon": "buddhist-medicine",
+            "color": "#FF6F00"
+          },
+          {
+            "name": "禅修",
+            "description": "佛教的冥想和精神修炼方法",
+            "icon": "meditation",
+            "color": "#FF6F00"
+          },
+          {
+            "name": "佛教经典",
+            "description": "佛教重要典籍及其解读",
+            "icon": "buddhist-texts",
+            "color": "#FF6F00"
+          },
+          {
+            "name": "佛教养生",
+            "description": "基于佛教理论的身心健康实践",
+            "icon": "buddhist-health",
+            "color": "#FF6F00"
+          }
+        ]
+      },
+      {
+        "name": "相学",
+        "description": "研究人体外观、行为与命运关系的传统学问",
+        "icon": "physiognomy",
+        "color": "#BF360C",
+        "children": [
+          {
+            "name": "面相",
+            "description": "通过观察面部特征推断性格和命运",
+            "icon": "face-reading",
+            "color": "#DD2C00"
+          },
+          {
+            "name": "手相",
+            "description": "通过观察手部纹路和形状推断性格和命运",
+            "icon": "palm-reading",
+            "color": "#DD2C00"
+          },
+          {
+            "name": "体相",
+            "description": "通过观察身体特征推断健康状况和性格特点",
+            "icon": "body-reading",
+            "color": "#DD2C00"
+          },
+          {
+            "name": "相法原理",
+            "description": "相学的基本理论和判断方法",
+            "icon": "physiognomy-principles",
+            "color": "#DD2C00"
+          }
+        ]
+      },
+      {
+        "name": "风水学",
+        "description": "研究环境布局与人的关系的传统学问",
+        "icon": "fengshui",
+        "color": "#1B5E20",
+        "children": [
+          {
+            "name": "阳宅风水",
+            "description": "住宅和工作场所的环境布局学",
+            "icon": "house-fengshui",
+            "color": "#2E7D32"
+          },
+          {
+            "name": "阴宅风水",
+            "description": "陵墓等环境的布局学",
+            "icon": "tomb-fengshui",
+            "color": "#2E7D32"
+          },
+          {
+            "name": "风水罗盘",
+            "description": "风水判断的重要工具及其使用方法",
+            "icon": "compass",
+            "color": "#2E7D32"
+          },
+          {
+            "name": "环境能量学",
+            "description": "环境气场与人体能量关系的研究",
+            "icon": "energy-field",
+            "color": "#2E7D32"
+          }
+        ]
+      },
+      {
+        "name": "国学经典",
+        "description": "中国传统文化的重要典籍",
+        "icon": "classics",
+        "color": "#004D40",
+        "children": [
+          {
+            "name": "儒家经典",
+            "description": "四书五经等儒家重要典籍",
+            "icon": "confucian-classics",
+            "color": "#00796B"
+          },
+          {
+            "name": "诗词歌赋",
+            "description": "中国古代诗歌和文学作品",
+            "icon": "poetry",
+            "color": "#00796B"
+          },
+          {
+            "name": "兵法韬略",
+            "description": "《孙子兵法》等军事思想典籍",
+            "icon": "war-strategy",
+            "color": "#00796B"
+          },
+          {
+            "name": "医书典籍",
+            "description": "《黄帝内经》等传统医学典籍",
+            "icon": "medical-texts",
+            "color": "#00796B"
+          }
+        ]
+      }
+    ]
+  }
+]

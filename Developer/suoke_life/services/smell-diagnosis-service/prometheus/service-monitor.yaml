@@ -1,0 +1,26 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: smell-diagnosis-service-monitor
+  namespace: monitoring
+  labels:
+    app: smell-diagnosis-service
+    service: four-diagnosis
+    release: prometheus-operator
+spec:
+  selector:
+    matchLabels:
+      app: smell-diagnosis-service
+  namespaceSelector:
+    matchNames:
+      - suoke
+  endpoints:
+  - port: metrics
+    path: /metrics
+    interval: 15s
+    scrapeTimeout: 10s
+    honorLabels: true
+    metricRelabelings:
+    - sourceLabels: [__name__]
+      regex: 'http_requests_total|http_request_duration_seconds_bucket|http_request_duration_seconds_sum|http_request_duration_seconds_count|process_cpu_seconds_total|process_resident_memory_bytes|nodejs_eventloop_lag_seconds|nodejs_gc_duration_seconds_sum'
+      action: keep 

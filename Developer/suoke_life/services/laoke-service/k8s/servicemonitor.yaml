@@ -1,0 +1,25 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: laoke-service-monitor
+  namespace: suoke-ai
+  labels:
+    app: laoke-service
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: laoke-service
+  endpoints:
+    - port: metrics
+      path: /metrics
+      interval: 15s
+      scrapeTimeout: 10s
+      metricRelabelings:
+        # 保留特定的指标
+        - sourceLabels: [__name__]
+          regex: 'http_request_duration_seconds.*|agent_processing_time.*|agent_response_length.*|mongodb_query_execution_time.*|redis_cache_hit_.*|memory_usage_bytes|cpu_usage_percent|queue_size'
+          action: keep
+  namespaceSelector:
+    matchNames:
+      - suoke-ai

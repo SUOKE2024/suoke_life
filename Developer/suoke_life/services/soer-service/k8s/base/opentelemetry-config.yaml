@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: soer-service-otel-config
+  labels:
+    app: soer-service
+data:
+  otel-config.yaml: |
+    receivers:
+      otlp:
+        protocols:
+          http:
+            endpoint: 0.0.0.0:4318
+          grpc:
+            endpoint: 0.0.0.0:4317
+    
+    processors:
+      batch:
+        timeout: 1s
+        send_batch_size: 1024
+      memory_limiter:
+        check_interval: 1s
+        limit_mib: 100
+      resourcedetection:
+        detectors: [env, system]
+      k8sattributes:
+        auth_type: "serviceAccount"
+        passthrough: false
+    
+    exporters:
+      otlp:
+        endpoint: jaeger-collector.monitoring:4317
+        tls:
+          insecure: true
+      prometheus:
+        endpoint: 0.0.0.0:8889
+        namespace: "soer_service"
+      logging:
+        loglevel: info
+    
+    service:
+      pipelines:
+        traces:
+          receivers: [otlp]
+          processors: [memory_limiter, batch, resourcedetection, k8sattributes]
+          exporters: [otlp, logging]
+        metrics:
+          receivers: [otlp]
+          processors: [memory_limiter, batch, resourcedetection, k8sattributes]
+          exporters: [prometheus, logging]

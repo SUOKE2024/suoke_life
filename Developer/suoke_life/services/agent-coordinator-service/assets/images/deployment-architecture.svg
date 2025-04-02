@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800" height="600" viewBox="0 0 800 600">
+  <style>
+    text {
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+    }
+    .title {
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .subtitle {
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .container {
+      fill: #ffffff;
+      stroke: #333333;
+      stroke-width: 2;
+      rx: 5;
+    }
+    .cloud {
+      fill: #f5f5f5;
+      stroke: #333333;
+      stroke-width: 2;
+    }
+    .kubernetes {
+      fill: #326ce5;
+      fill-opacity: 0.2;
+      stroke: #326ce5;
+      stroke-width: 2;
+    }
+    .pod {
+      fill: #ffffff;
+      stroke: #326ce5;
+      stroke-width: 2;
+    }
+    .service {
+      fill: #d1e7dd;
+      stroke: #333333;
+      stroke-width: 2;
+    }
+    .database {
+      fill: #cfe2ff;
+      stroke: #333333;
+      stroke-width: 2;
+    }
+    .load-balancer {
+      fill: #ffe5d0;
+      stroke: #333333;
+      stroke-width: 2;
+    }
+    .external {
+      fill: #e2e3e5;
+      stroke: #333333;
+      stroke-width: 2;
+    }
+    .arrow {
+      fill: none;
+      stroke: #333333;
+      stroke-width: 2;
+      marker-end: url(#arrowhead);
+    }
+    .zone {
+      stroke-dasharray: 5,5;
+      fill: none;
+      stroke: #666666;
+      stroke-width: 1;
+    }
+  </style>
+  
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333333" />
+    </marker>
+  </defs>
+  
+  <!-- 背景和标题 -->
+  <rect width="800" height="600" fill="#f8f9fa" />
+  <text x="400" y="40" text-anchor="middle" class="title">索克生活 Agent Coordinator Service 部署架构</text>
+  
+  <!-- 阿里云 -->
+  <rect x="50" y="60" width="700" height="520" class="cloud" />
+  <text x="110" y="85" class="subtitle">阿里云</text>
+  
+  <!-- 区域 1 -->
+  <rect x="80" y="100" width="300" height="460" rx="5" class="zone" />
+  <text x="230" y="125" text-anchor="middle" class="subtitle">华东 1 区域</text>
+  
+  <!-- 区域 2 -->
+  <rect x="420" y="100" width="300" height="460" rx="5" class="zone" />
+  <text x="570" y="125" text-anchor="middle" class="subtitle">华东 2 区域</text>
+  
+  <!-- Kubernetes 集群 1 -->
+  <rect x="100" y="140" width="260" height="400" rx="5" class="kubernetes" />
+  <text x="230" y="165" text-anchor="middle">Kubernetes 集群</text>
+  
+  <!-- Kubernetes 集群 2 -->
+  <rect x="440" y="140" width="260" height="400" rx="5" class="kubernetes" />
+  <text x="570" y="165" text-anchor="middle">Kubernetes 集群</text>
+  
+  <!-- 集群 1 命名空间 -->
+  <rect x="120" y="180" width="220" height="340" rx="5" class="kubernetes" stroke-dasharray="5,5" />
+  <text x="230" y="200" text-anchor="middle">suoke 命名空间</text>
+  
+  <!-- 集群 2 命名空间 -->
+  <rect x="460" y="180" width="220" height="340" rx="5" class="kubernetes" stroke-dasharray="5,5" />
+  <text x="570" y="200" text-anchor="middle">suoke 命名空间</text>
+  
+  <!-- 集群 1 组件 -->
+  <!-- 负载均衡器 -->
+  <rect x="150" y="220" width="160" height="40" rx="5" class="load-balancer" />
+  <text x="230" y="245" text-anchor="middle">内部负载均衡器</text>
+  
+  <!-- Agent Coordinator 部署 -->
+  <rect x="150" y="280" width="160" height="40" rx="5" class="service" />
+  <text x="230" y="305" text-anchor="middle">Agent Coordinator 部署</text>
+  
+  <!-- Agent Coordinator Pods -->
+  <rect x="130" y="340" width="60" height="30" rx="5" class="pod" />
+  <text x="160" y="360" text-anchor="middle" font-size="12">Pod 1</text>
+  
+  <rect x="200" y="340" width="60" height="30" rx="5" class="pod" />
+  <text x="230" y="360" text-anchor="middle" font-size="12">Pod 2</text>
+  
+  <rect x="270" y="340" width="60" height="30" rx="5" class="pod" />
+  <text x="300" y="360" text-anchor="middle" font-size="12">Pod 3</text>
+  
+  <!-- Redis -->
+  <rect x="130" y="390" width="80" height="40" rx="5" class="database" />
+  <text x="170" y="415" text-anchor="middle">Redis</text>
+  
+  <!-- MongoDB -->
+  <rect x="230" y="390" width="80" height="40" rx="5" class="database" />
+  <text x="270" y="415" text-anchor="middle">MongoDB</text>
+  
+  <!-- 监控 -->
+  <rect x="150" y="450" width="160" height="40" rx="5" class="external" />
+  <text x="230" y="475" text-anchor="middle">监控与日志</text>
+  
+  <!-- 集群 2 组件 (类似配置) -->
+  <!-- 负载均衡器 -->
+  <rect x="490" y="220" width="160" height="40" rx="5" class="load-balancer" />
+  <text x="570" y="245" text-anchor="middle">内部负载均衡器</text>
+  
+  <!-- Agent Coordinator 部署 -->
+  <rect x="490" y="280" width="160" height="40" rx="5" class="service" />
+  <text x="570" y="305" text-anchor="middle">Agent Coordinator 部署</text>
+  
+  <!-- Agent Coordinator Pods -->
+  <rect x="470" y="340" width="60" height="30" rx="5" class="pod" />
+  <text x="500" y="360" text-anchor="middle" font-size="12">Pod 1</text>
+  
+  <rect x="540" y="340" width="60" height="30" rx="5" class="pod" />
+  <text x="570" y="360" text-anchor="middle" font-size="12">Pod 2</text>
+  
+  <rect x="610" y="340" width="60" height="30" rx="5" class="pod" />
+  <text x="640" y="360" text-anchor="middle" font-size="12">Pod 3</text>
+  
+  <!-- Redis -->
+  <rect x="470" y="390" width="80" height="40" rx="5" class="database" />
+  <text x="510" y="415" text-anchor="middle">Redis</text>
+  
+  <!-- MongoDB -->
+  <rect x="570" y="390" width="80" height="40" rx="5" class="database" />
+  <text x="610" y="415" text-anchor="middle">MongoDB</text>
+  
+  <!-- 监控 -->
+  <rect x="490" y="450" width="160" height="40" rx="5" class="external" />
+  <text x="570" y="475" text-anchor="middle">监控与日志</text>
+  
+  <!-- 全局负载均衡器 -->
+  <rect x="300" y="80" width="200" height="40" rx="5" class="load-balancer" />
+  <text x="400" y="105" text-anchor="middle">全局负载均衡器</text>
+  
+  <!-- 箭头连接 -->
+  <!-- 集群 1 连接 -->
+  <path d="M 230 260 L 230 280" class="arrow" />
+  <path d="M 230 320 L 230 330" class="arrow" />
+  <path d="M 160 370 L 160 390" class="arrow" />
+  <path d="M 300 370 L 300 390" class="arrow" />
+  <path d="M 230 430 L 230 450" class="arrow" />
+  
+  <!-- 集群 2 连接 -->
+  <path d="M 570 260 L 570 280" class="arrow" />
+  <path d="M 570 320 L 570 330" class="arrow" />
+  <path d="M 500 370 L 500 390" class="arrow" />
+  <path d="M 640 370 L 640 390" class="arrow" />
+  <path d="M 570 430 L 570 450" class="arrow" />
+  
+  <!-- 全局负载均衡器连接 -->
+  <path d="M 350 120 L 230 220" class="arrow" />
+  <path d="M 450 120 L 570 220" class="arrow" />
+  
+  <!-- 跨区域数据同步 -->
+  <path d="M 330 410 C 380 410, 420 410, 470 410" class="arrow" stroke-dasharray="5,5" />
+  <text x="400" y="400" text-anchor="middle" font-size="12">数据同步</text>
+</svg> 

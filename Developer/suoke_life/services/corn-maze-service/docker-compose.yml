@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  corn-maze-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "3001:3001"
+      - "3101:3101"
+    environment:
+      - NODE_ENV=development
+      - PORT=3001
+      - WS_PORT=3101
+      - MONGODB_URI=mongodb://mongo:27017/cornmaze
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=dev-secret-key
+      - LOG_LEVEL=debug
+    volumes:
+      - ./uploads:/app/uploads
+      - ./public:/app/public
+    depends_on:
+      - mongo
+      - redis
+    networks:
+      - corn-maze-network
+
+  mongo:
+    image: mongo:4.4
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - corn-maze-network
+
+  redis:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - corn-maze-network
+
+volumes:
+  mongo-data:
+  redis-data:
+
+networks:
+  corn-maze-network:
+    driver: bridge 

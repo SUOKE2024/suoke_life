@@ -1,0 +1,104 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: smell-diagnosis-backup
+  namespace: suoke
+  labels:
+    app: smell-diagnosis-service
+    service: four-diagnosis
+    component: backup
+  annotations:
+    description: "定期备份气味诊断服务的MongoDB数据"
+spec:
+  schedule: "0 1 * * *"  # 每天凌晨1点执行
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 7
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: smell-diagnosis-service
+            service: four-diagnosis
+            component: backup
+        spec:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+          containers:
+          - name: mongodb-backup
+            image: mongo:6.0
+            imagePullPolicy: IfNotPresent
+            env:
+            - name: TIMESTAMP
+              value: "$(date +%Y%m%d-%H%M%S)"
+            - name: BACKUP_NAME
+              value: "smell-diagnosis-db-$(date +%Y%m%d)"
+            - name: MONGODB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: smell-diagnosis-secrets
+                  key: MONGODB_HOST
+            - name: MONGODB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: smell-diagnosis-secrets
+                  key: MONGODB_PORT
+            - name: MONGODB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: smell-diagnosis-secrets
+                  key: MONGODB_USER
+            - name: MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: smell-diagnosis-secrets
+                  key: MONGODB_PASSWORD
+            command:
+            - /bin/sh
+            - -c
+            - |
+              # 创建备份目录
+              mkdir -p /backup/${BACKUP_NAME}
+              
+              # 执行数据库备份
+              mongodump --host ${MONGODB_HOST} --port ${MONGODB_PORT} \
+                --username ${MONGODB_USER} --password ${MONGODB_PASSWORD} \
+                --authenticationDatabase admin \
+                --db smell-diagnosis \
+                --out /backup/${BACKUP_NAME}
+              
+              # 压缩备份文件
+              tar -czf /backup/${BACKUP_NAME}.tar.gz -C /backup ${BACKUP_NAME}
+              
+              # 删除临时文件
+              rm -rf /backup/${BACKUP_NAME}
+              
+              # 删除超过30天的备份
+              find /backup -name "smell-diagnosis-db-*.tar.gz" -type f -mtime +30 -delete
+              
+              echo "备份完成: /backup/${BACKUP_NAME}.tar.gz"
+            volumeMounts:
+            - name: backup-volume
+              mountPath: /backup
+            resources:
+              requests:
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                cpu: 500m
+                memory: 512Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities:
+                drop:
+                - ALL
+          volumes:
+          - name: backup-volume
+            persistentVolumeClaim:
+              claimName: smell-diagnosis-backup-pvc
+          restartPolicy: OnFailure
+          terminationGracePeriodSeconds: 30 

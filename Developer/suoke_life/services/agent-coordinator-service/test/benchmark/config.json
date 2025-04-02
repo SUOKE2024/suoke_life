@@ -1,0 +1,63 @@
+{
+  "apiBaseUrl": "http://localhost:4000/api",
+  "iterations": 50,
+  "concurrency": 10,
+  "endpoints": [
+    {
+      "name": "Knowledge Search - 中医体质",
+      "method": "GET",
+      "path": "/knowledge/search?query=中医体质",
+      "payload": null
+    },
+    {
+      "name": "Knowledge Search - 养生",
+      "method": "GET",
+      "path": "/knowledge/search?query=养生",
+      "payload": null
+    },
+    {
+      "name": "Agent Query - 体质分析",
+      "method": "POST",
+      "path": "/agents/default/query",
+      "payload": {
+        "query": "分析一下九种不同的中医体质各有什么特点？",
+        "userId": "benchmark-user"
+      }
+    },
+    {
+      "name": "Agent Query - 饮食建议",
+      "method": "POST",
+      "path": "/agents/default/query",
+      "payload": {
+        "query": "阳虚体质的人应该吃什么食物？",
+        "userId": "benchmark-user"
+      }
+    },
+    {
+      "name": "Analyze Query - 体质",
+      "method": "POST",
+      "path": "/coordination/analyze",
+      "payload": {
+        "query": "我想了解自己的体质类型",
+        "userId": "benchmark-user",
+        "sessionId": "benchmark-session"
+      }
+    },
+    {
+      "name": "Analyze Query - 养生",
+      "method": "POST",
+      "path": "/coordination/analyze",
+      "payload": {
+        "query": "春季养生有哪些方法？",
+        "userId": "benchmark-user",
+        "sessionId": "benchmark-session"
+      }
+    }
+  ],
+  "outputDir": "./benchmark-results",
+  "threshold": {
+    "p50": 500,
+    "p90": 800,
+    "p95": 1000
+  }
+} 

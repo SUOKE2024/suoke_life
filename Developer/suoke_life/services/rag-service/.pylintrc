@@ -1,0 +1,94 @@
+[MASTER]
+# Python版本
+py-version = 3.9
+
+# 递归搜索的目录
+recursive = yes
+
+# 要忽略的文件或目录
+ignore = CVS, .git, .pytest_cache, __pycache__, venv, build, dist
+
+# 要分析的Python模块
+load-plugins = pylint.extensions.docparams,
+              pylint.extensions.docstyle,
+              pylint.extensions.bad_builtin
+
+[MESSAGES CONTROL]
+# 禁用的警告
+disable = C0111,  # missing-docstring
+         C0103,  # invalid-name
+         R0903,  # too-few-public-methods
+         W0511,  # fixme
+         R0913,  # too-many-arguments
+         R0914   # too-many-locals
+
+[FORMAT]
+# 最大行长度
+max-line-length = 100
+
+# 缩进宽度
+indent-after-paren = 4
+
+[BASIC]
+# 好的变量名正则表达式
+good-names = i, j, k, ex, Run, _, fd, fp, id, ip, db
+
+# 命名风格
+function-naming-style = snake_case
+variable-naming-style = snake_case
+const-naming-style = UPPER_CASE
+class-naming-style = PascalCase
+class-attribute-naming-style = snake_case
+
+[DESIGN]
+# 最大参数数量
+max-args = 8
+
+# 最大属性数量
+max-attributes = 10
+
+# 最大局部变量数量
+max-locals = 20
+
+# 最大返回值数量
+max-returns = 6
+
+# 最大分支数量
+max-branches = 12
+
+# 最大语句数量
+max-statements = 50
+
+[SIMILARITIES]
+# 最小相似行数
+min-similarity-lines = 4
+
+# 忽略导入语句
+ignore-imports = yes
+
+# 忽略注释
+ignore-comments = yes
+
+# 忽略文档字符串
+ignore-docstrings = yes
+
+[TYPECHECK]
+# 要忽略的模块
+ignored-modules = numpy,tensorflow,torch,cv2
+
+[MISCELLANEOUS]
+# 注释中允许使用TODO
+notes = FIXME,XXX,TODO
+
+[IMPORTS]
+# 应该放在顶部的导入模块
+known-standard-library = os,sys,datetime,logging,json,time,re,math
+known-third-party = numpy,pandas,pytest,requests,aiohttp,fastapi,pydantic,loguru
+
+[LOGGING]
+# 日志记录格式
+logging-format-style = new
+
+[EXCEPTIONS]
+# 允许捕获的异常
+overgeneral-exceptions = Exception 

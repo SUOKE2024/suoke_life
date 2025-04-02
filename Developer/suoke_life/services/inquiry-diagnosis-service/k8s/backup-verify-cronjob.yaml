@@ -1,0 +1,103 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: inquiry-diagnosis-backup-verify
+  namespace: suoke
+  labels:
+    app: inquiry-diagnosis
+    service: four-diagnosis
+spec:
+  schedule: "0 3 * * 0"  # 每周日凌晨3点执行
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 2
+  successfulJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: inquiry-diagnosis-backup-verify
+        spec:
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+          containers:
+          - name: backup-verify-job
+            image: bitnami/mongodb:4.4
+            imagePullPolicy: IfNotPresent
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities:
+                drop:
+                - ALL
+            env:
+            - name: VERIFY_DB
+              value: "verify_db"
+            - name: MONGO_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: inquiry-diagnosis-config
+                  key: db_host
+            - name: MONGO_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: inquiry-diagnosis-config
+                  key: db_port
+            - name: MONGO_USER
+              valueFrom:
+                secretKeyRef:
+                  name: inquiry-diagnosis-secrets
+                  key: db_user
+            - name: MONGO_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: inquiry-diagnosis-secrets
+                  key: db_password
+            command:
+            - /bin/bash
+            - -c
+            - |
+              set -e
+              # 查找最新的备份文件
+              LATEST_BACKUP=$(find /backup -name "inquiry-diagnosis-*.gz" -type f | sort -r | head -1)
+              
+              if [ -z "$LATEST_BACKUP" ]; then
+                echo "错误：未找到备份文件"
+                exit 1
+              fi
+              
+              echo "验证备份文件: $LATEST_BACKUP"
+              
+              # 恢复到临时数据库以验证备份
+              mongorestore --host=${MONGO_HOST} --port=${MONGO_PORT} --username=${MONGO_USER} --password=${MONGO_PASSWORD} --authenticationDatabase=admin --gzip --archive=$LATEST_BACKUP --nsFrom="*" --nsTo="${VERIFY_DB}.*"
+              
+              # 验证重要集合的文档数量
+              DOCS_COUNT=$(mongo --host=${MONGO_HOST} --port=${MONGO_PORT} -u ${MONGO_USER} -p ${MONGO_PASSWORD} --authenticationDatabase=admin ${VERIFY_DB} --eval "db.getCollectionNames().forEach(function(c) { print(c + ': ' + db[c].count()); })" | tee /tmp/verify_output.txt)
+              
+              # 检查是否有关键数据
+              if grep -q "inquiries.*[1-9]" /tmp/verify_output.txt && grep -q "diagnoses.*[1-9]" /tmp/verify_output.txt; then
+                echo "备份验证成功：关键集合存在且包含数据"
+                # 删除验证数据库
+                mongo --host=${MONGO_HOST} --port=${MONGO_PORT} -u ${MONGO_USER} -p ${MONGO_PASSWORD} --authenticationDatabase=admin --eval "db.getSiblingDB('${VERIFY_DB}').dropDatabase()"
+                exit 0
+              else
+                echo "备份验证失败：关键集合数据不完整"
+                exit 1
+              fi
+            volumeMounts:
+            - name: backup-storage
+              mountPath: /backup
+              readOnly: true
+            - name: tmp-storage
+              mountPath: /tmp
+          volumes:
+          - name: backup-storage
+            persistentVolumeClaim:
+              claimName: inquiry-diagnosis-backup-pvc
+          - name: tmp-storage
+            emptyDir: {}
+          restartPolicy: OnFailure
+          nodeSelector:
+            node-type: db-utils 

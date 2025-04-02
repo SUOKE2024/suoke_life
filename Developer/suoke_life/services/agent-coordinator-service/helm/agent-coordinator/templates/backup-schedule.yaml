@@ -1,0 +1,25 @@
+{{- if .Values.backup.enabled }}
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: {{ include "agent-coordinator.fullname" . }}-backup
+  namespace: velero
+  labels:
+    {{- include "agent-coordinator.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.backup.schedule | quote }}
+  template:
+    includedNamespaces:
+      - {{ .Release.Namespace }}
+    includedResources:
+      - deployments
+      - services
+      - configmaps
+      - secrets
+      - persistentvolumeclaims
+    labelSelector:
+      matchLabels:
+        app: agent-coordinator
+    ttl: {{ .Values.backup.ttl }}
+    storageLocation: default
+{{- end }}

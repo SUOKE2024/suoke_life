@@ -1,0 +1,243 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-service
+  namespace: suoke
+  labels:
+    app: auth-service
+    service-type: core
+  annotations:
+    app.kubernetes.io/name: auth-service
+    app.kubernetes.io/part-of: suoke-platform
+    app.kubernetes.io/managed-by: kustomize
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: auth-service
+  template:
+    metadata:
+      labels:
+        app: auth-service
+        service-type: core
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/api/metrics"
+        prometheus.io/port: "3001"
+    spec:
+      # 节点亲和性 - 部署到核心服务节点池
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-type
+                operator: In
+                values:
+                - core-services
+      
+      # 初始化容器 - 设置正确权限
+      initContainers:
+      - name: init-permissions
+        image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/busybox:latest
+        command: ['sh', '-c', 'chown -R 1000:1000 /app/logs /app/dynamic-config']
+        securityContext:
+          runAsUser: 0
+        volumeMounts:
+        - name: logs-volume
+          mountPath: /app/logs
+        - name: config-volume
+          mountPath: /app/dynamic-config
+      
+      # 主容器
+      containers:
+      - name: auth-service
+        image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/auth-service:latest
+        imagePullPolicy: Always
+        
+        # 运行时安全上下文
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+        
+        # 端口
+        ports:
+        - containerPort: 3001
+          name: http
+        - containerPort: 9090
+          name: metrics
+        
+        # 资源请求与限制
+        resources:
+          requests:
+            cpu: 200m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        
+        # 健康检查
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3001
+          initialDelaySeconds: 30
+          periodSeconds: 15
+          timeoutSeconds: 5
+          failureThreshold: 3
+        
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3001
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 3
+          successThreshold: 1
+          failureThreshold: 3
+        
+        startupProbe:
+          httpGet:
+            path: /health
+            port: 3001
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 12
+        
+        # 环境变量
+        env:
+        - name: NODE_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: auth-service-config
+              key: NODE_ENV
+        - name: PORT
+          value: "3001"
+        - name: APP_NAME
+          value: "SuokeAuthService"
+        - name: APP_HOST
+          value: "0.0.0.0"
+        
+        # 数据库配置
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: auth-service-config
+              key: DB_HOST
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: auth-service-config
+              key: DB_PORT
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: auth-service-config
+              key: DB_NAME
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: auth-service-secrets
+              key: DB_USER
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: auth-service-secrets
+              key: DB_PASSWORD
+        
+        # Redis配置
+        - name: REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: auth-service-config
+              key: REDIS_HOST
+        - name: REDIS_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: auth-service-config
+              key: REDIS_PORT
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: auth-service-secrets
+              key: REDIS_PASSWORD
+        
+        # JWT配置
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: auth-service-secrets
+              key: JWT_SECRET
+        - name: JWT_ACCESS_TOKEN_EXPIRATION
+          valueFrom:
+            configMapKeyRef:
+              name: auth-service-config
+              key: JWT_ACCESS_TOKEN_EXPIRATION
+        
+        # OpenTelemetry配置
+        - name: OTEL_ENABLED
+          value: "true"
+        - name: OTEL_SERVICE_NAME
+          value: "auth-service"
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: "http://suoke-collector-collector.monitoring:4317"
+        - name: OTEL_EXPORTER_OTLP_PROTOCOL
+          value: "grpc"
+        
+        # Kubernetes信息
+        - name: K8S_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: K8S_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: K8S_NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        
+        # 挂载卷
+        volumeMounts:
+        - name: logs-volume
+          mountPath: /app/logs
+        - name: config-volume
+          mountPath: /app/dynamic-config
+        - name: vault-secrets
+          mountPath: /vault/secrets
+          readOnly: true
+        - name: tmp-volume
+          mountPath: /tmp
+      
+      # 数据卷
+      volumes:
+      - name: logs-volume
+        persistentVolumeClaim:
+          claimName: auth-service-logs-pvc
+      - name: config-volume
+        persistentVolumeClaim:
+          claimName: auth-service-config-pvc
+      - name: tmp-volume
+        emptyDir: {}
+      - name: vault-secrets
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "vault-auth-service-config"
+      
+      # 镜像拉取密钥
+      imagePullSecrets:
+      - name: aliyun-registry 

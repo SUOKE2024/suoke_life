@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: knowledge-base-service
+  namespace: suoke
+  labels:
+    app: knowledge-base-service
+    tier: data
+    part-of: suoke-platform
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9090"
+    prometheus.io/path: "/metrics"
+spec:
+  selector:
+    app: knowledge-base-service
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+      protocol: TCP
+    - name: metrics
+      port: 9090
+      targetPort: metrics
+      protocol: TCP
+  type: ClusterIP

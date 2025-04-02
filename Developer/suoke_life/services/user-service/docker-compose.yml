@@ -1,0 +1,143 @@
+version: '3.8'
+
+services:
+  # 用户服务
+  user-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: suoke/user-service:local
+    container_name: user-service
+    ports:
+      - "3002:3002"
+    environment:
+      - NODE_ENV=development
+      - PORT=3002
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USER=suoke
+      - DB_PASSWORD=suoke_password
+      - DB_NAME=suoke_users
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=
+      - JWT_SECRET=local_development_secret
+      - JWT_EXPIRES_IN=1d
+      - KNOWLEDGE_BASE_URL=http://knowledge-base-mock:3004
+      - KNOWLEDGE_GRAPH_URL=http://knowledge-graph-mock:3006
+      - SHARE_BASE_URL=http://localhost:3002/share
+      - USER_PROFILE_SERVICE=http://user-profile-mock:3005
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    depends_on:
+      - mysql
+      - redis
+      - user-profile-mock
+      - knowledge-pref-mock
+    networks:
+      - suoke-network
+    command: ["sh", "-c", "chmod +x /app/docker-entrypoint.sh && /app/docker-entrypoint.sh"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3002/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # MySQL 数据库
+  mysql:
+    image: mysql:8.0
+    container_name: user-service-mysql
+    ports:
+      - "3307:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_password
+      - MYSQL_DATABASE=suoke_users
+      - MYSQL_USER=suoke
+      - MYSQL_PASSWORD=suoke_password
+    volumes:
+      - user-mysql-data:/var/lib/mysql
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    networks:
+      - suoke-network
+    command: --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "suoke", "-psuoke_password"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Redis 缓存
+  redis:
+    image: redis:7.0-alpine
+    container_name: user-service-redis
+    ports:
+      - "6380:6379"
+    volumes:
+      - user-redis-data:/data
+    networks:
+      - suoke-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # 用户画像模拟服务
+  user-profile-mock:
+    build:
+      context: ./mocks
+      dockerfile: Dockerfile-mock
+    image: suoke/user-profile-mock:local
+    container_name: user-profile-mock
+    ports:
+      - "3005:3005"
+    environment:
+      - PORT=3005
+    volumes:
+      - ./mocks:/app
+      - /app/node_modules
+    networks:
+      - suoke-network
+    command: ["node", "user-profile-mock.js"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3005/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # 知识偏好模拟服务
+  knowledge-pref-mock:
+    build:
+      context: ./mocks
+      dockerfile: Dockerfile-mock
+    image: suoke/knowledge-pref-mock:local
+    container_name: knowledge-pref-mock
+    ports:
+      - "3006:3006"
+    environment:
+      - PORT=3006
+    volumes:
+      - ./mocks:/app
+      - /app/node_modules
+    networks:
+      - suoke-network
+    command: ["node", "knowledge-pref-mock.js"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3006/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+networks:
+  suoke-network:
+    driver: bridge
+
+volumes:
+  user-mysql-data:
+  user-redis-data: 

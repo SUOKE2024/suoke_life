@@ -1,0 +1,121 @@
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: xiaoke-service-mtls
+  namespace: suoke
+spec:
+  selector:
+    matchLabels:
+      app: xiaoke-service
+      component: secondary-agent
+  mtls:
+    mode: STRICT
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: xiaoke-service
+  namespace: suoke
+spec:
+  host: xiaoke-service
+  trafficPolicy:
+    loadBalancer:
+      simple: LEAST_CONN
+    connectionPool:
+      tcp:
+        maxConnections: 100
+        connectTimeout: 30ms
+      http:
+        http2MaxRequests: 100
+        maxRequestsPerConnection: 10
+    outlierDetection:
+      consecutive5xxErrors: 5
+      interval: 30s
+      baseEjectionTime: 30s
+      maxEjectionPercent: 100
+    tls:
+      mode: ISTIO_MUTUAL
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+  - name: canary
+    labels:
+      version: canary
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: xiaoke-service
+  namespace: suoke
+spec:
+  hosts:
+  - xiaoke-service
+  - xiaoke.suoke.life
+  gateways:
+  - suoke-gateway
+  - mesh
+  http:
+  - match:
+    - headers:
+        end-user:
+          exact: canary-tester
+    route:
+    - destination:
+        host: xiaoke-service
+        subset: canary
+        port:
+          number: 3011
+      weight: 100
+  - route:
+    - destination:
+        host: xiaoke-service
+        subset: v1
+        port:
+          number: 3011
+      weight: 100
+    retries:
+      attempts: 3
+      perTryTimeout: 2s
+      retryOn: gateway-error,connect-failure,refused-stream
+    timeout: 5s
+  - name: "websocket-routes"
+    match:
+    - uri:
+        prefix: "/ws"
+    route:
+    - destination:
+        host: xiaoke-service
+        port:
+          number: 3012
+    websocketUpgrade: true
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: external-mongodb-service
+  namespace: suoke
+spec:
+  hosts:
+  - mongodb.example.com
+  ports:
+  - number: 27017
+    name: mongo
+    protocol: TCP
+  location: MESH_EXTERNAL
+  resolution: DNS
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: external-payment-api
+  namespace: suoke
+spec:
+  hosts:
+  - payment-api.example.com
+  ports:
+  - number: 443
+    name: https
+    protocol: HTTPS
+  location: MESH_EXTERNAL
+  resolution: DNS 

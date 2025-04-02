@@ -1,0 +1,88 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: agent-coordinator-backup-verify
+  namespace: suoke
+  labels:
+    app: agent-coordinator
+    part-of: suoke-platform
+spec:
+  schedule: "0 3 * * *"  # 每天凌晨3点执行
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 7
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: agent-coordinator
+            job: backup-verify
+        spec:
+          containers:
+          - name: backup-verify
+            image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/backup-verify:latest
+            command:
+            - /bin/sh
+            - -c
+            - |
+              # 验证最近一次备份的完整性
+              
+              # 下载最近的备份文件
+              ossutil cp oss://suoke-backup/agent-coordinator/latest.tar.gz /tmp/backup.tar.gz
+              
+              # 验证备份文件完整性
+              if [ ! -f /tmp/backup.tar.gz ]; then
+                echo "备份文件不存在！触发告警"
+                exit 1
+              fi
+              
+              # 检查文件大小
+              SIZE=$(stat -c%s /tmp/backup.tar.gz)
+              if [ $SIZE -lt 1024 ]; then
+                echo "备份文件异常！大小低于1KB"
+                exit 1
+              fi
+              
+              # 解压并验证内部文件
+              mkdir -p /tmp/backup-extract
+              tar -xzf /tmp/backup.tar.gz -C /tmp/backup-extract
+              
+              # 检查关键文件
+              if [ ! -f /tmp/backup-extract/config.json ]; then
+                echo "备份中缺少配置文件！"
+                exit 1
+              fi
+              
+              # 验证元数据
+              if [ ! -f /tmp/backup-extract/metadata.json ]; then
+                echo "备份中缺少元数据！"
+                exit 1
+              fi
+              
+              # 清理
+              rm -rf /tmp/backup-extract
+              rm -f /tmp/backup.tar.gz
+              
+              # 备份验证成功
+              echo "备份验证成功 - $(date)"
+              
+              # 发送备份成功通知
+              curl -X POST -H "Content-Type: application/json" \
+                -d "{\"service\":\"agent-coordinator\",\"status\":\"success\",\"message\":\"备份验证成功\",\"time\":\"$(date -Iseconds)\"}" \
+                http://notification-service.suoke/api/v1/notifications/backup-verify
+            env:
+            - name: OSS_ENDPOINT
+              value: "oss-cn-hangzhou.aliyuncs.com"
+            - name: BACKUP_BUCKET
+              value: "suoke-backup"
+            volumeMounts:
+            - name: oss-credentials
+              mountPath: "/root/.ossutilconfig"
+              subPath: ".ossutilconfig"
+              readOnly: true
+          volumes:
+          - name: oss-credentials
+            secret:
+              secretName: oss-credentials
+          restartPolicy: OnFailure 

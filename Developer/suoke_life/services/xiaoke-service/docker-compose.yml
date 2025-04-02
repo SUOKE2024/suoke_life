@@ -1,0 +1,93 @@
+version: '3.8'
+
+services:
+  xiaoke-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: xiaoke-service:dev
+    container_name: xiaoke-service
+    ports:
+      - "3011:3011"
+      - "9464:9464"
+      - "3012:3012"
+    environment:
+      - NODE_ENV=development
+      - LOG_LEVEL=debug
+      - PORT=3011
+      - METRICS_PORT=9464
+      - WEBSOCKET_PORT=3012
+      - LOG_DIR=/app/logs
+      - DATA_DIR=/app/data
+      - CACHE_DIR=/app/cache
+      - MONGODB_URI=mongodb://mongo:27017/xiaoke
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=devpassword
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./cache:/app/cache
+      - ./config:/app/config
+    depends_on:
+      - mongo
+      - redis
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3011/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    networks:
+      - xiaoke-network
+
+  mongo:
+    image: mongo:5.0
+    container_name: xiaoke-mongo
+    volumes:
+      - mongo-data:/data/db
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin123
+      - MONGO_INITDB_DATABASE=xiaoke
+    restart: unless-stopped
+    networks:
+      - xiaoke-network
+
+  redis:
+    image: redis:6.2-alpine
+    container_name: xiaoke-redis
+    volumes:
+      - redis-data:/data
+    ports:
+      - "6379:6379"
+    command: redis-server --requirepass devpassword
+    restart: unless-stopped
+    networks:
+      - xiaoke-network
+
+  # 用于本地开发和测试的模拟OpenTelemetry收集器
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.84.0
+    container_name: xiaoke-otel-collector
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./k8s/opentelemetry-config.yaml:/etc/otel-collector-config.yaml
+    ports:
+      - "4317:4317" # OTLP gRPC
+      - "4318:4318" # OTLP HTTP
+      - "8889:8889" # Prometheus exporter
+      - "13133:13133" # Health check
+    networks:
+      - xiaoke-network
+
+volumes:
+  mongo-data:
+  redis-data:
+
+networks:
+  xiaoke-network:
+    driver: bridge 

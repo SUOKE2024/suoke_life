@@ -1,0 +1,15 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: four-diagnosis-coordinator
+  namespace: suoke
+spec:
+  template:
+    spec:
+      nodeSelector:
+        node-type: ai-services
+      tolerations:
+      - key: dedicated
+        operator: Equal
+        value: ai-inference
+        effect: NoSchedule 

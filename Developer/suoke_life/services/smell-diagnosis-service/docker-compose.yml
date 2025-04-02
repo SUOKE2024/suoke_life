@@ -1,0 +1,147 @@
+version: '3.8'
+
+services:
+  # 气味诊断服务 - 主应用
+  smell-diagnosis-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: smell-diagnosis-service:dev
+    container_name: smell-diagnosis-service
+    restart: unless-stopped
+    ports:
+      - "3002:3002"  # 主API端口
+      - "9464:9464"  # 指标端口
+    volumes:
+      - ./:/app
+      - smell-uploads:/tmp/uploads
+      - smell-logs:/var/log/smell-diagnosis
+    environment:
+      - NODE_ENV=development
+      - PORT=3002
+      - METRICS_PORT=9464
+      - API_PREFIX=/api
+      - MONGODB_URI=mongodb://mongodb:27017/smell-diagnosis
+      - FOUR_DIAGNOSIS_COORDINATOR_URL=http://four-diagnosis-coordinator:3050
+      - API_GATEWAY_URL=http://api-gateway:3000
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4318
+      - OTEL_SERVICE_NAME=smell-diagnosis-service
+      - LOG_LEVEL=debug
+      - UPLOADED_FILES_PATH=/tmp/uploads
+      - LOG_FILE_PATH=/var/log/smell-diagnosis/service.log
+    command: ["sh", "-c", "chmod +x /app/scripts/docker-entrypoint.sh && /app/scripts/docker-entrypoint.sh npm run dev"]
+    depends_on:
+      - mongodb
+      - mock-coordinator
+    networks:
+      - smell-network
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3002/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # MongoDB数据库
+  mongodb:
+    image: mongo:6.0
+    container_name: smell-mongodb
+    restart: unless-stopped
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongodb-data:/data/db
+      - ./scripts/init-mongodb.js:/docker-entrypoint-initdb.d/init-mongodb.js
+    environment:
+      - MONGO_INITDB_DATABASE=smell-diagnosis
+    networks:
+      - smell-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/smell-diagnosis --quiet
+      interval: 20s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # 模拟四诊协调服务
+  mock-coordinator:
+    image: node:18-alpine
+    container_name: mock-coordinator
+    restart: unless-stopped
+    ports:
+      - "3050:3050"
+    volumes:
+      - ./scripts/mock-coordinator.js:/app/mock-coordinator.js
+    working_dir: /app
+    command: node mock-coordinator.js
+    networks:
+      - smell-network
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3050/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Jaeger - 分布式追踪
+  jaeger:
+    image: jaegertracing/all-in-one:1.41
+    container_name: smell-jaeger
+    ports:
+      - "16686:16686"  # UI
+      - "14268:14268"  # Collector HTTP
+      - "4317:4317"    # OTLP gRPC
+      - "4318:4318"    # OTLP HTTP
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    networks:
+      - smell-network
+
+  # Prometheus - 指标监控
+  prometheus:
+    image: prom/prometheus:v2.40.7
+    container_name: smell-prometheus
+    ports:
+      - "9091:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/rules.yaml:/etc/prometheus/rules.yaml
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    networks:
+      - smell-network
+
+  # Grafana - 可视化仪表板
+  grafana:
+    image: grafana/grafana:9.5.1
+    container_name: smell-grafana
+    ports:
+      - "3003:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/datasources:/etc/grafana/provisioning/datasources
+      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./grafana/dashboard.json:/var/lib/grafana/dashboards/smell-diagnosis-dashboard.json
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    networks:
+      - smell-network
+    depends_on:
+      - prometheus
+      - jaeger
+
+volumes:
+  smell-uploads:
+  smell-logs:
+  mongodb-data:
+  prometheus-data:
+  grafana-data:
+
+networks:
+  smell-network:
+    driver: bridge 

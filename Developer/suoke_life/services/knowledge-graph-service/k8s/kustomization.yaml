@@ -1,0 +1,56 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: suoke
+
+resources:
+  - deployment.yaml
+  - service.yaml
+  - pvc.yaml
+  - hpa.yaml
+  - configmap.yaml
+  - secret.yaml
+  - networkpolicy.yaml
+  - servicemonitor.yaml
+
+commonLabels:
+  app: knowledge-graph-service
+  version: v1
+  component: data
+  part-of: suoke-platform
+  managed-by: kustomize
+
+images:
+  - name: knowledge-graph-service
+    newName: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/knowledge-graph-service
+    newTag: latest
+
+patchesStrategicMerge:
+  # 可以添加环境特定的补丁文件
+  # - patches/dev-resources.yaml
+  # - patches/prod-resources.yaml
+
+configMapGenerator:
+  - name: knowledge-graph-config-json
+    files:
+      - config.json=configs/config.json
+
+secretGenerator:
+  - name: knowledge-graph-certificates
+    files:
+      - tls.crt=configs/tls/tls.crt
+      - tls.key=configs/tls/tls.key
+    type: "kubernetes.io/tls"
+
+replicas:
+  - name: knowledge-graph-service
+    count: 2
+
+vars:
+  - name: SERVICE_NAME
+    objref:
+      kind: Service
+      name: knowledge-graph-service
+      apiVersion: v1
+    fieldref:
+      fieldpath: metadata.name

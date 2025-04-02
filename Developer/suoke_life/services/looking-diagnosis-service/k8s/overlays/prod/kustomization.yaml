@@ -1,0 +1,23 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: suoke
+
+bases:
+  - ../../base
+
+patchesStrategicMerge:
+  - ../../patches/prod-overlay.yaml
+  - ../../patches/resource-limits-patch.yaml
+
+configMapGenerator:
+  - name: looking-diagnosis-config
+    behavior: merge
+    literals:
+      - LOG_LEVEL=info
+      - OTEL_LOG_LEVEL=info
+      - AI_MODEL_VERSION=stable
+
+images:
+  - name: suoke/looking-diagnosis
+    newTag: stable

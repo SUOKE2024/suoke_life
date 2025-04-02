@@ -1,0 +1,32 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: suoke
+
+resources:
+  - ../../kustomization.yaml
+  - ../../backup-pvc.yaml
+  - ../../backup-cronjob.yaml
+  - ../../backup-verify-cronjob.yaml
+  - ../../key-rotation.yaml
+
+patchesStrategicMerge:
+  - ../../patches/resources-prod-patch.yaml
+  - ../../patches/storage-class-patch.yaml
+
+configMapGenerator:
+  - name: knowledge-base-config
+    behavior: merge
+    literals:
+      - NODE_ENV=production
+      - LOG_LEVEL=info
+      - DEBUG=false
+      - API_RATE_LIMIT=300
+      - ENABLE_QUERY_CACHE=true
+      - ENABLE_DATA_ENCRYPTION=true
+      - METRICS_PREFIX=prod_knowledge_base_
+
+images:
+  - name: knowledge-base-service
+    newName: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/knowledge-base-service
+    newTag: stable

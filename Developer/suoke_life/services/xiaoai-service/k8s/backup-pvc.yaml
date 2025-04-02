@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: xiaoai-backup-pvc
+  namespace: suoke
+  labels:
+    app: xiaoai-service
+    role: backup-storage
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: suoke-standard
+  resources:
+    requests:
+      storage: 10Gi 

@@ -1,0 +1,65 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: suoke
+
+resources:
+  - deployment.yaml
+  - service.yaml
+  - hpa.yaml
+  - network-policy.yaml
+  - istio-config.yaml
+  - pvc.yaml
+  - serviceaccount.yaml
+  - backup-job.yaml
+  - pdb.yaml
+
+configMapGenerator:
+  - name: xiaoke-config
+    files:
+      - config/agent-config.json
+      - config/logging-config.json
+      - config/cache-config.json
+    literals:
+      - ENVIRONMENT=production
+      - LOG_LEVEL=info
+      - API_VERSION=v1
+
+secretGenerator:
+  - name: xiaoke-secrets
+    type: Opaque
+    literals:
+      - redis-password=PLACEHOLDER_REPLACE_IN_PIPELINE
+      - mongodb-password=PLACEHOLDER_REPLACE_IN_PIPELINE
+      - api-key=PLACEHOLDER_REPLACE_IN_PIPELINE
+  - name: xiaoke-backup-secrets
+    type: Opaque
+    literals:
+      - mongodb-uri=PLACEHOLDER_REPLACE_IN_PIPELINE
+      - oss-access-key-id=PLACEHOLDER_REPLACE_IN_PIPELINE
+      - oss-access-key-secret=PLACEHOLDER_REPLACE_IN_PIPELINE
+      - notification-webhook=PLACEHOLDER_REPLACE_IN_PIPELINE
+
+images:
+  - name: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/xiaoke-service
+    newTag: "1.0.0"
+
+commonLabels:
+  app.kubernetes.io/name: xiaoke-service
+  app.kubernetes.io/part-of: suoke-platform
+  app.kubernetes.io/managed-by: kustomize
+
+commonAnnotations:
+  app.kubernetes.io/description: "索克生活平台供应链与农产品服务智能体"
+
+patchesStrategicMerge:
+  - patches/deployment-patch.yaml
+
+vars:
+  - name: XIAOKE_SERVICE_SERVICE_NAME
+    objref:
+      kind: Service
+      name: xiaoke-service
+      apiVersion: v1
+    fieldref:
+      fieldpath: metadata.name 

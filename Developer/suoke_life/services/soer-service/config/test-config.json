@@ -1,0 +1,57 @@
+{
+  "version": "1.0.0",
+  "env": "testing",
+  "port": 3000,
+  "logging": {
+    "level": "info",
+    "format": "json",
+    "tracing": true
+  },
+  "database": {
+    "host": "soer-mysql-test",
+    "port": 3306,
+    "user": "soer_test",
+    "password": "test_password",
+    "database": "soer_test",
+    "connectionLimit": 15,
+    "connectTimeout": 10000
+  },
+  "redis": {
+    "host": "soer-redis-test",
+    "port": 6379,
+    "password": "test_redis_password",
+    "db": 0,
+    "keyPrefix": "soer:test:"
+  },
+  "services": {
+    "userService": "http://user-service:3000",
+    "contentService": "http://content-service:3000",
+    "notificationService": "http://notification-service:3000"
+  },
+  "circuit_breaker": {
+    "timeout": 4000,
+    "errorThresholdPercentage": 50,
+    "resetTimeout": 7000
+  },
+  "cors": {
+    "origin": ["https://test.soer.suoke.life"],
+    "methods": ["GET", "POST", "PUT", "DELETE"],
+    "allowedHeaders": ["Content-Type", "Authorization"]
+  },
+  "rateLimit": {
+    "windowMs": 60000,
+    "max": 200
+  },
+  "dependencies": [
+    {
+      "name": "user-service",
+      "url": "http://user-service:3000",
+      "required": true
+    },
+    {
+      "name": "content-service",
+      "url": "http://content-service:3000",
+      "required": false
+    }
+  ]
+}

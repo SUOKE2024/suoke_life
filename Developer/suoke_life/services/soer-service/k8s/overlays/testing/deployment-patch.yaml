@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: soer-service
+spec:
+  replicas: 2
+  template:
+    spec:
+      containers:
+      - name: soer-service
+        env:
+        - name: NODE_ENV
+          value: "testing"
+        - name: LOG_LEVEL
+          value: "info"
+        resources:
+          limits:
+            cpu: 400m
+            memory: 448Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi

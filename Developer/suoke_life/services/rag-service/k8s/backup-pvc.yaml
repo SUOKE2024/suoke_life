@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: rag-service-backup-pvc
+  namespace: suoke
+  labels:
+    app: rag-service
+    part-of: knowledge-services
+    component: backup
+  annotations:
+    description: "RAG服务备份数据持久卷"
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: suoke-standard
+  volumeMode: Filesystem 

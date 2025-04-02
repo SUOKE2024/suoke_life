@@ -1,0 +1,68 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: touch-diagnosis-service-alerts
+  namespace: monitoring
+  labels:
+    app: touch-diagnosis-service
+    service: four-diagnosis
+    prometheus: k8s
+    role: alert-rules
+spec:
+  groups:
+  - name: touch-diagnosis-service.rules
+    rules:
+    - alert: TouchDiagnosisServiceHighErrorRate
+      expr: sum(rate(http_requests_total{app="touch-diagnosis-service",status_code=~"5.."}[5m])) / sum(rate(http_requests_total{app="touch-diagnosis-service"}[5m])) > 0.05
+      for: 5m
+      labels:
+        severity: warning
+        service: touch-diagnosis
+      annotations:
+        summary: "高错误率警告：触诊诊断服务"
+        description: "触诊诊断服务在过去5分钟内的错误率超过5%。"
+        runbook_url: "https://github.com/suoke-ai/suoke-ops/blob/main/docs/runbooks/touch-diagnosis-service-high-error-rate.md"
+    
+    - alert: TouchDiagnosisServiceHighLatency
+      expr: histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{app="touch-diagnosis-service"}[5m])) by (le)) > 2
+      for: 5m
+      labels:
+        severity: warning
+        service: touch-diagnosis
+      annotations:
+        summary: "高延迟警告：触诊诊断服务"
+        description: "触诊诊断服务的95%请求延迟超过2秒。"
+        runbook_url: "https://github.com/suoke-ai/suoke-ops/blob/main/docs/runbooks/touch-diagnosis-service-high-latency.md"
+    
+    - alert: TouchDiagnosisServiceDown
+      expr: up{app="touch-diagnosis-service"} == 0
+      for: 3m
+      labels:
+        severity: critical
+        service: touch-diagnosis
+      annotations:
+        summary: "服务中断：触诊诊断服务"
+        description: "触诊诊断服务已停止运行。"
+        runbook_url: "https://github.com/suoke-ai/suoke-ops/blob/main/docs/runbooks/touch-diagnosis-service-down.md"
+    
+    - alert: TouchDiagnosisServiceHighMemoryUsage
+      expr: sum(container_memory_usage_bytes{app="touch-diagnosis-service"}) / sum(container_spec_memory_limit_bytes{app="touch-diagnosis-service"}) > 0.85
+      for: 10m
+      labels:
+        severity: warning
+        service: touch-diagnosis
+      annotations:
+        summary: "内存使用率高：触诊诊断服务"
+        description: "触诊诊断服务内存使用率超过85%已持续10分钟。"
+        runbook_url: "https://github.com/suoke-ai/suoke-ops/blob/main/docs/runbooks/touch-diagnosis-service-high-memory.md"
+    
+    - alert: TouchDiagnosisServiceHighCPUUsage
+      expr: sum(rate(container_cpu_usage_seconds_total{app="touch-diagnosis-service"}[5m])) / sum(container_spec_cpu_quota{app="touch-diagnosis-service"} / 100000) > 0.85
+      for: 10m
+      labels:
+        severity: warning
+        service: touch-diagnosis
+      annotations:
+        summary: "CPU使用率高：触诊诊断服务"
+        description: "触诊诊断服务CPU使用率超过85%已持续10分钟。"
+        runbook_url: "https://github.com/suoke-ai/suoke-ops/blob/main/docs/runbooks/touch-diagnosis-service-high-cpu.md" 

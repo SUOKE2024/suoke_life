@@ -1,0 +1,330 @@
+{
+  "agent": {
+    "name": "索儿",
+    "id": "soer",
+    "version": "1.1.0",
+    "description": "索儿(Soer) 是索克生活应用的健康助手智能体，专注于健康管理和生活方式指导。",
+    "avatar": "assets/agents/soer_avatar.png",
+    "greeting": "你好！我是索儿，你的生活健康助手。我将为你提供贴心的健康管理和生活指导，帮助你建立健康的生活方式。有什么我能帮助你的吗？",
+    "capabilities": [
+      "健康管理",
+      "饮食建议",
+      "健康数据分析",
+      "生活方式指导",
+      "中医体质分析",
+      "健康知识图谱导航"
+    ],
+    "priority": "high",
+    "visibility": "life-channel",
+    "role": "helper",
+    "specializations": ["健康管理", "生活指导", "饮食起居", "健康监测", "中医养生"],
+    "collaborators": ["xiaoai", "laoke", "xiaoke"]
+  },
+  "models": {
+    "primary": {
+      "id": "soer-core-llm",
+      "type": "llm",
+      "path": "/app/models/llm/soer-core-llm-v1.0.0.onnx",
+      "config": {
+        "temperature": 0.7,
+        "top_p": 0.95,
+        "max_tokens": 3072,
+        "presence_penalty": 0.1,
+        "frequency_penalty": 0.1,
+        "context_window": 12000
+      }
+    },
+    "embedding": {
+      "id": "life-embedding-model",
+      "type": "embedding",
+      "path": "/app/models/embedding/bge-large-zh-life-finetuned.onnx",
+      "config": {
+        "dimensions": 1024,
+        "normalize": true,
+        "pooling_strategy": "cls"
+      }
+    },
+    "health_analyzer": {
+      "id": "health-analyzer-model",
+      "type": "analyzer",
+      "path": "/app/models/analyzer/health-analyzer-v1.0.0.onnx",
+      "config": {
+        "input_types": ["health_metrics", "lifestyle_data", "medical_history"],
+        "output_types": ["health_insights", "risk_factors", "recommendations"],
+        "threshold": 0.75,
+        "prediction_horizon": ["short_term", "medium_term", "long_term"]
+      }
+    },
+    "lifestyle_classifier": {
+      "id": "lifestyle-classifier-model",
+      "type": "classifier",
+      "path": "/app/models/classifier/lifestyle-classifier-v1.0.0.onnx",
+      "config": {
+        "categories": [
+          "diet_pattern", 
+          "sleep_quality", 
+          "exercise_habit", 
+          "stress_level", 
+          "social_interaction"
+        ],
+        "confidence_threshold": 0.8,
+        "feature_importance": true
+      }
+    },
+    "recommendation_engine": {
+      "id": "recommendation-engine",
+      "type": "recommender",
+      "path": "/app/models/recommender/recommendation-engine-v1.0.0.onnx",
+      "config": {
+        "recommendation_types": [
+          "diet", 
+          "exercise", 
+          "sleep", 
+          "stress_management",
+          "social_activity"
+        ],
+        "personalization_level": "high",
+        "context_aware": true,
+        "seasonal_adjustment": true,
+        "tcm_integration": true
+      }
+    },
+    "sensing_integrator": {
+      "id": "sensing-integrator-model",
+      "type": "integrator",
+      "path": "/app/models/integrator/sensing-integrator-v1.0.0.onnx",
+      "config": {
+        "data_sources": [
+          "wearable_devices", 
+          "mobile_sensors", 
+          "smart_home_devices", 
+          "medical_devices"
+        ],
+        "fusion_methods": ["early_fusion", "late_fusion", "hybrid_fusion"],
+        "noise_filtering": true,
+        "anomaly_detection": true,
+        "realtime_processing": true
+      }
+    }
+  },
+  "knowledge_bases": {
+    "health_knowledge": {
+      "type": "vector_store",
+      "source": "rag-service",
+      "collections": ["health_knowledge", "tcm_knowledge", "nutrition_data"],
+      "update_frequency": "daily"
+    },
+    "lifestyle_patterns": {
+      "type": "graph_db",
+      "source": "knowledge-graph-service",
+      "collections": ["lifestyle_patterns", "habit_correlations"],
+      "update_frequency": "weekly"
+    },
+    "user_profiles": {
+      "type": "document_db",
+      "source": "user-service",
+      "collections": ["health_profiles", "preference_profiles"],
+      "update_frequency": "realtime"
+    },
+    "seasonal_guides": {
+      "type": "vector_store",
+      "source": "content-service",
+      "collections": ["seasonal_guides", "solar_terms"],
+      "update_frequency": "monthly"
+    },
+    "health_knowledge_graph": {
+      "id": "health_knowledge_graph",
+      "name": "健康知识图谱",
+      "description": "健康、生活方式、中医养生领域的知识图谱",
+      "source": "knowledge_graph_service",
+      "updateFrequency": "daily",
+      "lastUpdated": "2023-03-25T00:00:00Z"
+    },
+    "tcm_knowledge_base": {
+      "id": "tcm_knowledge_base",
+      "name": "中医知识库",
+      "description": "中医理论、方剂、穴位及应用的结构化知识",
+      "source": "knowledge_base_service",
+      "updateFrequency": "weekly",
+      "lastUpdated": "2023-03-20T00:00:00Z"
+    }
+  },
+  "integrations": {
+    "health_service": {
+      "endpoint": "${HEALTH_SERVICE_URL}/api/v1",
+      "data_types": ["vital_signs", "body_metrics", "health_assessments"],
+      "sync_frequency": "realtime"
+    },
+    "life_record_service": {
+      "endpoint": "${LIFE_RECORD_SERVICE_URL}/api/v1",
+      "data_types": ["activities", "meals", "moods", "environments"],
+      "sync_frequency": "hourly"
+    },
+    "rag_service": {
+      "endpoint": "${RAG_SERVICE_URL}/api/v1",
+      "data_types": ["health_knowledge", "tcm_resources", "nutrition_data"],
+      "sync_frequency": "daily"
+    },
+    "ai_agent_service": {
+      "endpoint": "${AI_AGENT_SERVICE_URL}/api/v1",
+      "data_types": ["agent_collaboration", "conversation_history"],
+      "sync_frequency": "realtime"
+    },
+    "sensing_service": {
+      "endpoint": "${SENSING_SERVICE_URL}/api/v1",
+      "data_types": ["wearable_data", "environmental_data", "audio_sensing"],
+      "sync_frequency": "realtime"
+    },
+    "knowledge_base_service": {
+      "id": "knowledge_base_service",
+      "name": "知识库服务",
+      "description": "提供结构化知识检索和语义搜索功能",
+      "endpoint": "${KNOWLEDGE_BASE_URL}/api",
+      "dataType": "json",
+      "authType": "bearer"
+    },
+    "knowledge_graph_service": {
+      "id": "knowledge_graph_service",
+      "name": "知识图谱服务",
+      "description": "提供健康知识图谱查询和导航功能",
+      "endpoint": "${KNOWLEDGE_GRAPH_URL}/api",
+      "dataType": "json",
+      "authType": "bearer"
+    }
+  },
+  "behavior": {
+    "conversation_style": {
+      "formality": "friendly",
+      "verbosity": "balanced",
+      "empathy": "high",
+      "proactivity": "medium",
+      "tcm_terminology": "simplified"
+    },
+    "decision_making": {
+      "caution_level": "medium",
+      "response_speed": "balanced",
+      "personalization": "high",
+      "adaptability": "high",
+      "explanation_depth": "moderate",
+      "knowledgeUse": {
+        "preferLocalKnowledge": true,
+        "useDynamicKnowledge": true,
+        "crossReferenceThreshold": 0.7,
+        "evidenceBasedRecommendations": true,
+        "useKnowledgeGraph": true,
+        "graphTraversalDepth": 3
+      }
+    },
+    "monitoring": {
+      "health_warning_threshold": "moderate",
+      "anomaly_detection_sensitivity": "medium",
+      "notification_frequency": "adaptive",
+      "data_privacy": "high",
+      "user_feedback_integration": "active"
+    }
+  },
+  "protocols": {
+    "agent_collaboration": {
+      "collaboration_mode": "dynamic",
+      "sharing_level": "context_based",
+      "handoff_criteria": {
+        "specialization_match": 0.8,
+        "confidence_threshold": 0.7,
+        "user_preference": true
+      },
+      "collaboration_partners": {
+        "xiaoai": {
+          "contexts": ["general_information", "technical_questions", "system_interaction"],
+          "delegation_rules": "technical_queries"
+        },
+        "laoke": {
+          "contexts": ["medical_questions", "disease_symptoms", "treatment_options"],
+          "delegation_rules": "clinical_questions"
+        },
+        "xiaoke": {
+          "contexts": ["emotional_support", "social_interaction", "user_engagement"],
+          "delegation_rules": "emotional_concerns"
+        }
+      }
+    },
+    "user_interaction": {
+      "conversation_modes": ["chat", "instruction", "question_answering", "coaching"],
+      "contextual_memory": {
+        "user_profile_retention": "persistent",
+        "conversation_history": "session_based",
+        "health_data_context": "rolling_window"
+      },
+      "privacy_controls": {
+        "data_usage_transparency": "high",
+        "user_consent_checks": "explicit",
+        "data_minimization": "active"
+      }
+    },
+    "health_monitoring": {
+      "alert_thresholds": {
+        "critical": {
+          "immediate_action": true,
+          "notification_channels": ["app_alert", "caregiver_notification"],
+          "risk_level": "high"
+        },
+        "warning": {
+          "follow_up_required": true,
+          "notification_channels": ["app_notification"],
+          "risk_level": "medium"
+        },
+        "informational": {
+          "user_awareness": true,
+          "notification_channels": ["in_conversation"],
+          "risk_level": "low"
+        }
+      },
+      "data_sources_priority": {
+        "vital_signs": "highest",
+        "symptoms": "high",
+        "behavioral_patterns": "medium",
+        "environmental_factors": "medium",
+        "self_reports": "medium"
+      }
+    },
+    "knowledge_sharing": {
+      "id": "knowledge_sharing",
+      "name": "知识共享协议",
+      "description": "与其他智能体共享知识图谱和知识库信息",
+      "triggers": ["knowledge_request", "insight_sharing"],
+      "dataSchema": {
+        "type": "object",
+        "properties": {
+          "query": {"type": "string"},
+          "context": {"type": "object"},
+          "format": {"type": "string", "enum": ["text", "json", "graph"]}
+        }
+      }
+    }
+  },
+  "analytics": {
+    "user_engagement": {
+      "metrics": ["conversation_frequency", "feature_usage", "session_duration"],
+      "objectives": {
+        "daily_check_ins": 1,
+        "weekly_health_review": 1,
+        "habit_formation_days": 21
+      }
+    },
+    "health_impact": {
+      "metrics": ["health_score_improvement", "risk_factor_reduction", "healthy_habit_adherence"],
+      "baseline_period": "30_days",
+      "progress_tracking": {
+        "frequency": "weekly",
+        "visualization": "trends_and_comparisons",
+        "contextualization": "personalized"
+      }
+    },
+    "recommendation_efficacy": {
+      "metrics": ["implementation_rate", "user_satisfaction", "health_outcome_correlation"],
+      "feedback_collection": {
+        "timing": "post_implementation",
+        "methods": ["direct_question", "observed_behavior", "health_data_changes"]
+      }
+    }
+  }
+}

@@ -1,0 +1,91 @@
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: knowledge-graph-cross-region-backup
+  namespace: velero
+  labels:
+    app: knowledge-graph-service
+    type: cross-region-backup
+spec:
+  schedule: "0 1 * * *"  # 每天凌晨1点执行
+  template:
+    includedNamespaces:
+      - suoke
+    includedResources:
+      - persistentvolumeclaims
+      - persistentvolumes
+      - deployments
+      - services
+      - configmaps
+      - secrets
+    labelSelector:
+      matchLabels:
+        app: knowledge-graph-service
+    storageLocation: alibaba-oss-beijing  # 跨区域备份位置
+    volumeSnapshotLocations:
+      - alibaba-disk-beijing
+    ttl: 720h  # 30天保留期
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: knowledge-graph-backup-verify
+  namespace: suoke
+  labels:
+    app: knowledge-graph-service
+    component: backup-verify
+spec:
+  schedule: "0 10 * * 0"  # 每周日上午10点执行
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: backup-verify-sa
+          containers:
+          - name: backup-verify
+            image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/backup-verify:1.0.0
+            command:
+            - /bin/sh
+            - -c
+            - |
+              # 获取最新的备份
+              LATEST_BACKUP=$(velero backup get | grep knowledge-graph-cross-region-backup | head -1 | awk '{print $1}')
+              
+              # 如果存在备份，进行验证
+              if [ ! -z "$LATEST_BACKUP" ]; then
+                echo "验证备份 $LATEST_BACKUP"
+                
+                # 创建恢复验证命名空间
+                kubectl create ns backup-verify-temp
+                
+                # 尝试恢复到临时命名空间
+                velero restore create --from-backup $LATEST_BACKUP --namespace-mappings suoke:backup-verify-temp
+                
+                # 验证关键资源是否已恢复
+                sleep 120
+                PODS_READY=$(kubectl get pods -n backup-verify-temp -l app=knowledge-graph-service -o json | jq '.items[] | .status.containerStatuses[] | select(.ready==true) | .name' | wc -l)
+                
+                if [ "$PODS_READY" -gt 0 ]; then
+                  echo "备份验证成功: 服务已成功启动"
+                else
+                  echo "备份验证失败: 服务未就绪" >&2
+                  exit 1
+                fi
+                
+                # 清理临时命名空间
+                kubectl delete ns backup-verify-temp
+              else
+                echo "未找到可用的备份进行验证" >&2
+                exit 1
+              fi
+            resources:
+              requests:
+                cpu: 100m
+                memory: 128Mi
+              limits:
+                cpu: 200m
+                memory: 256Mi
+          restartPolicy: OnFailure

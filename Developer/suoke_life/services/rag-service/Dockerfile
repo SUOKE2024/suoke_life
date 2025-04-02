@@ -1,56 +1,54 @@
+FROM python:3.9-slim as builder
+
+WORKDIR /app
+
+# 安装编译所需的依赖
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    gcc \
+    python3-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# 安装Python依赖
+COPY requirements.txt /app/
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 第二阶段：运行时镜像
 FROM python:3.9-slim
 
 WORKDIR /app
 
-# 安装基本工具
+# 安装运行时依赖
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     netcat-openbsd \
+    procps \
     && rm -rf /var/lib/apt/lists/*
 
-# 复制项目文件
-COPY requirements.txt /app/
+# 从构建阶段复制Python包
+COPY --from=builder /usr/local/lib/python3.9/site-packages /usr/local/lib/python3.9/site-packages
+COPY --from=builder /usr/local/bin /usr/local/bin
 
-# 创建Python启动脚本 - 更健壮的服务启动方式
-RUN echo 'import socket, time, json, sys' > /app/start.py && \
-    echo 'print("RAG服务（Docker版本）已启动")' >> /app/start.py && \
-    echo 'print("提供健康检查端点...")' >> /app/start.py && \
-    echo 'def create_response():' >> /app/start.py && \
-    echo '    return json.dumps({"status": "healthy", "version": "1.1.3-docker"})' >> /app/start.py && \
-    echo 'try:' >> /app/start.py && \
-    echo '    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)' >> /app/start.py && \
-    echo '    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)' >> /app/start.py && \
-    echo '    sock.bind(("0.0.0.0", 8000))' >> /app/start.py && \
-    echo '    sock.listen(5)' >> /app/start.py && \
-    echo '    print("服务器运行在 http://0.0.0.0:8000")' >> /app/start.py && \
-    echo '    while True:' >> /app/start.py && \
-    echo '        conn, addr = sock.accept()' >> /app/start.py && \
-    echo '        print(f"接收到来自 {addr} 的连接")' >> /app/start.py && \
-    echo '        data = conn.recv(1024)' >> /app/start.py && \
-    echo '        response_body = create_response()' >> /app/start.py && \
-    echo '        response = f"HTTP/1.1 200 OK\\r\\nContent-Type: application/json\\r\\nContent-Length: {len(response_body)}\\r\\n\\r\\n{response_body}"' >> /app/start.py && \
-    echo '        conn.sendall(response.encode())' >> /app/start.py && \
-    echo '        conn.close()' >> /app/start.py && \
-    echo 'except Exception as e:' >> /app/start.py && \
-    echo '    print(f"错误: {e}")' >> /app/start.py && \
-    echo '    sys.exit(1)' >> /app/start.py && \
-    echo 'finally:' >> /app/start.py && \
-    echo '    sock.close()' >> /app/start.py
+# 复制应用代码
+COPY . /app/
 
-# 创建健康检查脚本
-RUN echo '#!/bin/sh' > /app/healthcheck.sh && \
-    echo 'curl -f http://localhost:8000/ || exit 1' >> /app/healthcheck.sh && \
-    chmod +x /app/healthcheck.sh
+# 创建必要的目录
+RUN mkdir -p /app/data /app/logs /app/cache /app/models
+
+# 设置权限
+RUN chmod +x /app/scripts/docker-entrypoint.sh
 
 # 暴露应用端口
 EXPOSE 8000
 
 # 健康检查
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 CMD /app/healthcheck.sh
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 CMD curl -f http://localhost:8000/health || exit 1
 
 # 以非root用户运行
 RUN groupadd -r appuser && useradd -r -g appuser appuser
 RUN chown -R appuser:appuser /app
 USER appuser
 
-CMD ["python", "/app/start.py"] 
+# 使用entrypoint脚本启动应用
+ENTRYPOINT ["/app/scripts/docker-entrypoint.sh"]
+CMD ["python", "-m", "src.main"] 

@@ -1,0 +1,138 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rag-service-config
+  labels:
+    app: rag-service
+data:
+  LOG_LEVEL: "INFO"
+  MAX_RESPONSE_TIME: "30"
+  ENABLE_MONITORING: "true"
+  TCM_KG_URI: "bolt://neo4j-service:7687"
+  PROMETHEUS_PORT: "9090"
+  ENABLE_CACHE: "true"
+  CACHE_TTL: "3600"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rag-service
+  labels:
+    app: rag-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: rag-service
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: rag-service
+    spec:
+      containers:
+      - name: rag-service
+        image: registry.suoke.life/suoke/rag-service:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+          name: http
+        - containerPort: 9090
+          name: metrics
+        env:
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: rag-service-config
+              key: LOG_LEVEL
+        - name: MAX_RESPONSE_TIME
+          valueFrom:
+            configMapKeyRef:
+              name: rag-service-config
+              key: MAX_RESPONSE_TIME
+        - name: ENABLE_MONITORING
+          valueFrom:
+            configMapKeyRef:
+              name: rag-service-config
+              key: ENABLE_MONITORING
+        - name: TCM_KG_URI
+          valueFrom:
+            configMapKeyRef:
+              name: rag-service-config
+              key: TCM_KG_URI
+        - name: TCM_KG_USER
+          valueFrom:
+            secretKeyRef:
+              name: rag-service-secrets
+              key: NEO4J_USER
+        - name: TCM_KG_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: rag-service-secrets
+              key: NEO4J_PASSWORD
+        resources:
+          limits:
+            cpu: "2"
+            memory: "4Gi"
+          requests:
+            cpu: "500m"
+            memory: "1Gi"
+        volumeMounts:
+        - name: models-volume
+          mountPath: /app/models
+        - name: data-volume
+          mountPath: /app/data
+        - name: logs-volume
+          mountPath: /app/logs
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 2
+      volumes:
+      - name: models-volume
+        persistentVolumeClaim:
+          claimName: rag-models-pvc
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: rag-data-pvc
+      - name: logs-volume
+        persistentVolumeClaim:
+          claimName: rag-logs-pvc
+      imagePullSecrets:
+      - name: registry-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rag-service
+  labels:
+    app: rag-service
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8000
+    targetPort: 8000
+    protocol: TCP
+    name: http
+  - port: 9090
+    targetPort: 9090
+    protocol: TCP
+    name: metrics
+  selector:
+    app: rag-service 

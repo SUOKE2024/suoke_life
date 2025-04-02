@@ -1,0 +1,443 @@
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     EnvironmentalHealth:
+ *       type: object
+ *       required:
+ *         - title
+ *         - description
+ *         - content
+ *         - environmentType
+ *         - riskLevel
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: 条目ID
+ *           example: "60d21b4667d0d8992e610c85"
+ *         title:
+ *           type: string
+ *           description: 条目标题
+ *           example: "空气污染与健康"
+ *         description:
+ *           type: string
+ *           description: 简短描述
+ *           example: "空气污染对人体健康的影响"
+ *         content:
+ *           type: string
+ *           description: 详细内容
+ *           example: "空气污染是指大气中的有害物质达到对人体健康产生危害的程度..."
+ *         environmentType:
+ *           type: string
+ *           description: 环境类型
+ *           example: "空气"
+ *         pollutantType:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: 污染物类型
+ *           example: ["PM2.5", "臭氧", "二氧化硫"]
+ *         healthImpacts:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: 健康影响
+ *           example: ["呼吸系统疾病", "心血管疾病"]
+ *         riskLevel:
+ *           type: number
+ *           minimum: 1
+ *           maximum: 5
+ *           description: 风险级别，1-5，5表示最高风险
+ *           example: 4
+ *         vulnerableGroups:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: 易感人群
+ *           example: ["老人", "儿童", "孕妇"]
+ *         protectiveMeasures:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: 保护措施
+ *           example: ["减少外出", "佩戴口罩"]
+ *         preventiveAdvice:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: 预防建议
+ *           example: ["关闭门窗", "使用空气净化器"]
+ *         relatedDiseases:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: 相关疾病
+ *           example: ["哮喘", "慢性支气管炎"]
+ *         regionSpecific:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: 地区特异性
+ *           example: ["北方城市", "工业区"]
+ *         seasonalEffects:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: 季节性影响
+ *           example: ["冬季", "春季沙尘暴期"]
+ *         keywords:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: 关键词
+ *           example: ["空气污染", "PM2.5", "健康"]
+ *         version:
+ *           type: number
+ *           description: 版本号
+ *           example: 1
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           description: 创建时间
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *           description: 更新时间
+ */
+
+/**
+ * @swagger
+ * tags:
+ *   name: 环境健康
+ *   description: 环境健康知识管理
+ */
+
+/**
+ * @swagger
+ * /environmental-health:
+ *   get:
+ *     summary: 获取环境健康知识列表
+ *     tags: [环境健康]
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: 页码
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 20
+ *         description: 每页记录数
+ *       - in: query
+ *         name: environmentType
+ *         schema:
+ *           type: string
+ *         description: 按环境类型过滤
+ *       - in: query
+ *         name: pollutantType
+ *         schema:
+ *           type: string
+ *         description: 按污染物类型过滤
+ *       - in: query
+ *         name: healthImpact
+ *         schema:
+ *           type: string
+ *         description: 按健康影响过滤
+ *       - in: query
+ *         name: region
+ *         schema:
+ *           type: string
+ *         description: 按地区过滤
+ *       - in: query
+ *         name: riskLevel
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 5
+ *         description: 按风险级别过滤
+ *       - in: query
+ *         name: keyword
+ *         schema:
+ *           type: string
+ *         description: 关键词搜索
+ *     responses:
+ *       200:
+ *         description: 成功返回环境健康知识列表
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/EnvironmentalHealth'
+ *                 total:
+ *                   type: integer
+ *                   example: 50
+ *                 page:
+ *                   type: integer
+ *                   example: 1
+ *                 limit:
+ *                   type: integer
+ *                   example: 20
+ *                 totalPages:
+ *                   type: integer
+ *                   example: 3
+ *       500:
+ *         description: 服务器错误
+ *
+ *   post:
+ *     summary: 创建环境健康知识条目
+ *     tags: [环境健康]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/EnvironmentalHealth'
+ *     responses:
+ *       201:
+ *         description: 成功创建环境健康知识条目
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   $ref: '#/components/schemas/EnvironmentalHealth'
+ *       400:
+ *         description: 请求参数错误
+ *       401:
+ *         description: 未授权
+ *       500:
+ *         description: 服务器错误
+ */
+
+/**
+ * @swagger
+ * /environmental-health/{id}:
+ *   get:
+ *     summary: 获取环境健康知识详情
+ *     tags: [环境健康]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: 环境健康知识ID
+ *     responses:
+ *       200:
+ *         description: 成功返回环境健康知识详情
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   $ref: '#/components/schemas/EnvironmentalHealth'
+ *       404:
+ *         description: 未找到指定记录
+ *       500:
+ *         description: 服务器错误
+ *
+ *   put:
+ *     summary: 更新环境健康知识条目
+ *     tags: [环境健康]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: 环境健康知识ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/EnvironmentalHealth'
+ *     responses:
+ *       200:
+ *         description: 成功更新环境健康知识条目
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   $ref: '#/components/schemas/EnvironmentalHealth'
+ *       400:
+ *         description: 请求参数错误
+ *       401:
+ *         description: 未授权
+ *       404:
+ *         description: 未找到指定记录
+ *       500:
+ *         description: 服务器错误
+ *
+ *   delete:
+ *     summary: 删除环境健康知识条目
+ *     tags: [环境健康]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: 环境健康知识ID
+ *     responses:
+ *       200:
+ *         description: 成功删除环境健康知识条目
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: "环境健康知识删除成功"
+ *       401:
+ *         description: 未授权
+ *       404:
+ *         description: 未找到指定记录
+ *       500:
+ *         description: 服务器错误
+ */
+
+/**
+ * @swagger
+ * /environmental-health/type/{type}:
+ *   get:
+ *     summary: 按环境类型获取环境健康知识
+ *     tags: [环境健康]
+ *     parameters:
+ *       - in: path
+ *         name: type
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: 环境类型
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: 页码
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 20
+ *         description: 每页记录数
+ *     responses:
+ *       200:
+ *         description: 成功返回环境健康知识列表
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/EnvironmentalHealth'
+ *                 total:
+ *                   type: integer
+ *                   example: 10
+ *                 page:
+ *                   type: integer
+ *                   example: 1
+ *                 limit:
+ *                   type: integer
+ *                   example: 20
+ *                 totalPages:
+ *                   type: integer
+ *                   example: 1
+ *       500:
+ *         description: 服务器错误
+ */
+
+/**
+ * @swagger
+ * /environmental-health/search/{keyword}:
+ *   get:
+ *     summary: 搜索环境健康知识
+ *     tags: [环境健康]
+ *     parameters:
+ *       - in: path
+ *         name: keyword
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: 搜索关键词
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: 页码
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 20
+ *         description: 每页记录数
+ *     responses:
+ *       200:
+ *         description: 成功返回环境健康知识列表
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/EnvironmentalHealth'
+ *                 total:
+ *                   type: integer
+ *                   example: 5
+ *                 page:
+ *                   type: integer
+ *                   example: 1
+ *                 limit:
+ *                   type: integer
+ *                   example: 20
+ *                 totalPages:
+ *                   type: integer
+ *                   example: 1
+ *       500:
+ *         description: 服务器错误
+ */

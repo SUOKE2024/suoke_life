@@ -1,0 +1,32 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: api-gateway-monitor
+  namespace: monitoring
+  labels:
+    app: api-gateway
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: api-gateway
+      service-type: edge
+  namespaceSelector:
+    matchNames:
+      - suoke
+  endpoints:
+  - port: metrics
+    path: /metrics
+    interval: 15s
+    scheme: http
+    scrapeTimeout: 10s
+    metricRelabelings:
+    # 将服务名添加为标签
+    - sourceLabels: [__meta_kubernetes_pod_name]
+      targetLabel: pod
+    - sourceLabels: [__meta_kubernetes_service_name]
+      targetLabel: service
+    # 保留特定指标
+    - sourceLabels: [__name__]
+      regex: "(apigateway_.*|http_.*|process_.*|nodejs_.*)"
+      action: keep 

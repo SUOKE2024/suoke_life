@@ -1,0 +1,73 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: four-diagnosis-coordinator-key-rotation
+  namespace: suoke
+  labels:
+    app: four-diagnosis-coordinator
+    service: four-diagnosis
+spec:
+  schedule: "0 2 1 * *"  # 每月1日凌晨2点执行
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 2
+  successfulJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: four-diagnosis-coordinator-key-rotation
+        spec:
+          serviceAccountName: four-diagnosis-coordinator-sa
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+          containers:
+          - name: key-rotation-job
+            image: bitnami/kubectl:latest
+            imagePullPolicy: IfNotPresent
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities:
+                drop:
+                - ALL
+            env:
+            - name: ROTATION_DATE
+              value: "$(date +%Y%m%d)"
+            - name: VAULT_ADDR
+              value: "http://vault.vault:8200"
+            - name: VAULT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: four-diagnosis-coordinator-vault-secrets
+                  key: VAULT_TOKEN
+            command:
+            - /bin/bash
+            - -c
+            - |
+              set -e
+              
+              echo "开始密钥轮换流程 - ${ROTATION_DATE}"
+              
+              # 1. 生成新的API密钥
+              NEW_API_KEY=$(openssl rand -base64 32 | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+              
+              # 2. 更新Vault中的密钥
+              curl -s -X POST -H "X-Vault-Token: ${VAULT_TOKEN}" \
+                -d "{\"data\": {\"API_KEY\": \"${NEW_API_KEY}\"}}" \
+                ${VAULT_ADDR}/v1/secret/data/suoke/four-diagnosis-coordinator/api
+              
+              echo "已更新Vault中的API密钥"
+              
+              # 3. 重启four-diagnosis-coordinator服务以应用新密钥
+              kubectl rollout restart deployment/four-diagnosis-coordinator -n suoke
+              
+              # 4. 等待部署完成
+              kubectl rollout status deployment/four-diagnosis-coordinator -n suoke --timeout=300s
+              
+              echo "密钥轮换完成"
+          restartPolicy: OnFailure
+          nodeSelector:
+            node-type: system-jobs 

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: agent-coordinator-data-pvc
+  namespace: suoke
+  labels:
+    app: agent-coordinator
+    tier: ai
+    part-of: suoke-life
+spec:
+  storageClassName: suoke-standard
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi 

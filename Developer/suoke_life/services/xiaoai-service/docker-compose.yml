@@ -1,0 +1,141 @@
+version: '3.8'
+
+services:
+  xiaoai-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    image: xiaoai-service:dev
+    container_name: xiaoai-service
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - xiaoai_logs:/app/logs
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - LOG_LEVEL=debug
+      - MONGODB_URI=mongodb://mongo:27017/xiaoai
+      - REDIS_URL=redis://redis:6379
+      - LOOKING_DIAGNOSIS_SERVICE_URL=http://mock-looking-diagnosis:3001
+      - INQUIRY_DIAGNOSIS_SERVICE_URL=http://mock-inquiry-diagnosis:3002
+      - SMELL_DIAGNOSIS_SERVICE_URL=http://mock-smell-diagnosis:3003
+      - TOUCH_DIAGNOSIS_SERVICE_URL=http://mock-touch-diagnosis:3004
+      - ENABLE_METRICS=true
+      - JWT_SECRET=dev_secret_key_for_development_only
+    depends_on:
+      - mongo
+      - redis
+      - mock-looking-diagnosis
+      - mock-inquiry-diagnosis
+      - mock-smell-diagnosis
+      - mock-touch-diagnosis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    command: ["./docker-entrypoint.sh", "npm", "run", "dev"]
+
+  mongo:
+    image: mongo:5.0
+    container_name: xiaoai-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/test --quiet
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  redis:
+    image: redis:6.2-alpine
+    container_name: xiaoai-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 模拟诊断服务 - 望诊
+  mock-looking-diagnosis:
+    image: node:16-alpine
+    container_name: mock-looking-diagnosis
+    volumes:
+      - ./tests/mocks:/app
+    working_dir: /app
+    command: node looking-diagnosis-mock.js
+    ports:
+      - "3001:3001"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 模拟诊断服务 - 问诊
+  mock-inquiry-diagnosis:
+    image: node:16-alpine
+    container_name: mock-inquiry-diagnosis
+    volumes:
+      - ./tests/mocks:/app
+    working_dir: /app
+    command: node inquiry-diagnosis-mock.js
+    ports:
+      - "3002:3002"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://localhost:3002/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 模拟诊断服务 - 闻诊
+  mock-smell-diagnosis:
+    image: node:16-alpine
+    container_name: mock-smell-diagnosis
+    volumes:
+      - ./tests/mocks:/app
+    working_dir: /app
+    command: node smell-diagnosis-mock.js
+    ports:
+      - "3003:3003"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://localhost:3003/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 模拟诊断服务 - 切诊
+  mock-touch-diagnosis:
+    image: node:16-alpine
+    container_name: mock-touch-diagnosis
+    volumes:
+      - ./tests/mocks:/app
+    working_dir: /app
+    command: node touch-diagnosis-mock.js
+    ports:
+      - "3004:3004"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://localhost:3004/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  mongo_data:
+  redis_data:
+  xiaoai_logs: 

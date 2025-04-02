@@ -1,0 +1,102 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: soer-service-network-policy
+  namespace: suoke
+spec:
+  podSelector:
+    matchLabels:
+      app: soer-service
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: ingress-nginx
+    - namespaceSelector:
+        matchLabels:
+          name: istio-system
+    - podSelector:
+        matchLabels:
+          app: api-gateway
+      namespaceSelector:
+        matchLabels:
+          name: suoke
+    - podSelector:
+        matchLabels:
+          app: xiaoai-service
+      namespaceSelector:
+        matchLabels:
+          name: suoke
+    - podSelector:
+        matchLabels:
+          app: agent-coordinator
+      namespaceSelector:
+        matchLabels:
+          name: suoke
+    ports:
+    - protocol: TCP
+      port: 3006
+    - protocol: TCP
+      port: 3007
+    - protocol: TCP
+      port: 9464
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          app: health-service
+      namespaceSelector:
+        matchLabels:
+          name: suoke
+    - podSelector:
+        matchLabels:
+          app: life-record-service
+      namespaceSelector:
+        matchLabels:
+          name: suoke
+    - podSelector:
+        matchLabels:
+          app: rag-service
+      namespaceSelector:
+        matchLabels:
+          name: suoke
+    - podSelector:
+        matchLabels:
+          app: knowledge-base-service
+      namespaceSelector:
+        matchLabels:
+          name: suoke
+    - podSelector:
+        matchLabels:
+          app: knowledge-graph-service
+      namespaceSelector:
+        matchLabels:
+          name: suoke
+    - podSelector:
+        matchLabels:
+          app: vector-db
+      namespaceSelector:
+        matchLabels:
+          name: suoke
+    ports:
+    - protocol: TCP
+      port: 80
+    - protocol: TCP
+      port: 443
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+    ports:
+    - protocol: TCP
+      port: 4318
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: vault
+    ports:
+    - protocol: TCP
+      port: 8200

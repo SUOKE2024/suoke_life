@@ -1,0 +1,53 @@
+{
+  "service": {
+    "name": "api-gateway",
+    "version": "1.0.0",
+    "port": 3000,
+    "log_level": "info",
+    "environment": "production"
+  },
+  "cors": {
+    "origin": "*",
+    "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    "allowedHeaders": ["Content-Type", "Authorization"],
+    "exposedHeaders": ["Content-Length", "X-Request-ID"],
+    "credentials": true,
+    "maxAge": 86400
+  },
+  "rate_limit": {
+    "window": 60000,
+    "max": 100,
+    "message": "请求过于频繁，请稍后再试"
+  },
+  "auth": {
+    "jwt_secret": "${JWT_SECRET}",
+    "token_expires_in": "24h"
+  },
+  "services": [
+    {
+      "name": "rag-service",
+      "url": "http://rag-service",
+      "prefix": "/api/rag"
+    },
+    {
+      "name": "user-service",
+      "url": "http://user-service",
+      "prefix": "/api/users"
+    },
+    {
+      "name": "knowledge-graph-service",
+      "url": "http://knowledge-graph-service",
+      "prefix": "/api/kg"
+    },
+    {
+      "name": "agent-coordinator-service",
+      "url": "${AGENT_COORDINATOR_SERVICE_URL}",
+      "prefix": "/api/v1/agents/coordinator",
+      "timeout": 30000,
+      "circuit_breaker": {
+        "failure_threshold": 5,
+        "reset_timeout": 30000
+      }
+    }
+  ]
+} 
