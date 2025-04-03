@@ -1,0 +1,43 @@
+name: 四诊协调服务 CI/CD
+
+on:
+  push:
+    paths:
+      - 'services/four-diagnosis-coordinator/**'
+      - '.github/workflows/four-diagnosis-coordinator-ci-cd.yml'
+      - '.github/workflows/templates/service-ci-cd-template.yml'
+  pull_request:
+    paths:
+      - 'services/four-diagnosis-coordinator/**'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: '部署环境'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - staging
+          - prod
+      version:
+        description: '指定版本号(不填使用默认版本)'
+        required: false
+        type: string
+
+jobs:
+  call-template-workflow:
+    uses: ./.github/workflows/templates/service-ci-cd-template.yml
+    with:
+      service_name: four-diagnosis-coordinator
+      service_path: services/four-diagnosis-coordinator
+      service_version: ${{ github.event.inputs.version || '1.0.0' }}
+      deployments: '["dev"]'
+      container_port: 3008
+      health_check_path: "/health"
+    secrets:
+      REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
+      REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+      KUBE_CONFIG_DEV: ${{ secrets.KUBE_CONFIG_DEV }}
+      KUBE_CONFIG_STAGING: ${{ secrets.KUBE_CONFIG_STAGING }}
+      KUBE_CONFIG_PROD: ${{ secrets.KUBE_CONFIG_PROD }} 

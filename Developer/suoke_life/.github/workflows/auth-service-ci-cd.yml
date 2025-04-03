@@ -114,28 +114,98 @@ jobs:
       - name: 准备Kubernetes配置
         run: |
           # 创建临时目录用于存储K8s配置
-          mkdir -p /tmp/k8s-configs
+          mkdir -p /tmp/k8s-configs/base
+          mkdir -p /tmp/k8s-configs/overlays/dev
+          mkdir -p /tmp/k8s-configs/overlays/staging
+          mkdir -p /tmp/k8s-configs/overlays/prod
           
-          # 复制现有K8s配置文件
-          cp -r services/auth-service/k8s/* /tmp/k8s-configs/
+          # 复制并重组配置文件
+          cp services/auth-service/k8s/deployment.yaml /tmp/k8s-configs/base/
+          cp services/auth-service/k8s/service.yaml /tmp/k8s-configs/base/
+          cp services/auth-service/k8s/configmap.yaml /tmp/k8s-configs/base/
+          cp services/auth-service/k8s/pvc.yaml /tmp/k8s-configs/base/
+          cp services/auth-service/k8s/secret.yaml /tmp/k8s-configs/base/
           
-          # 使用环境变量替换K8s配置中的变量
-          export IMAGE_TAG=${{ env.SERVICE_VERSION }}
-          export IMAGE_NAME="${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${SERVICE_NAME}:${IMAGE_TAG}"
+          # 复制覆盖配置
+          cp services/auth-service/k8s/overlays/dev/* /tmp/k8s-configs/overlays/dev/
+          cp services/auth-service/k8s/overlays/staging/* /tmp/k8s-configs/overlays/staging/
+          cp services/auth-service/k8s/overlays/prod/* /tmp/k8s-configs/overlays/prod/
           
-          # 更新deployment.yaml中的镜像
-          sed -i "s|image:.*|image: ${IMAGE_NAME}|g" /tmp/k8s-configs/deployment.yaml
+          # 创建正确的kustomization文件
+          cat > /tmp/k8s-configs/base/kustomization.yaml <<EOF
+          apiVersion: kustomize.config.k8s.io/v1beta1
+          kind: Kustomization
+          namespace: suoke
+          resources:
+          - deployment.yaml
+          - service.yaml
+          - pvc.yaml
+          - configmap.yaml
+          - secret.yaml
+          EOF
           
-          # 创建应用时间戳文件
-          echo "部署时间戳: $(date)" > /tmp/k8s-configs/deploy-timestamp.txt
-          echo "镜像: ${IMAGE_NAME}" >> /tmp/k8s-configs/deploy-timestamp.txt
-          echo "版本: ${IMAGE_TAG}" >> /tmp/k8s-configs/deploy-timestamp.txt
-          echo "GitSHA: ${{ github.sha }}" >> /tmp/k8s-configs/deploy-timestamp.txt
-          echo "K8s配置准备完成"
+          # 创建dev环境kustomization文件
+          cat > /tmp/k8s-configs/overlays/dev/kustomization.yaml <<EOF
+          apiVersion: kustomize.config.k8s.io/v1beta1
+          kind: Kustomization
+          namespace: suoke-dev
+          commonLabels:
+            environment: development
+            app: auth-service
+          resources:
+          - ../../base
+          patchesStrategicMerge:
+          - resources-patch.yaml
+          images:
+          - name: auth-service
+            newName: ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${SERVICE_NAME}
+            newTag: ${SERVICE_VERSION}
+          EOF
+          
+          # 创建staging环境kustomization文件
+          cat > /tmp/k8s-configs/overlays/staging/kustomization.yaml <<EOF
+          apiVersion: kustomize.config.k8s.io/v1beta1
+          kind: Kustomization
+          namespace: staging-services
+          commonLabels:
+            environment: staging
+            app: auth-service
+          resources:
+          - ../../base
+          patchesStrategicMerge:
+          - resources-patch.yaml
+          images:
+          - name: auth-service
+            newName: ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${SERVICE_NAME}
+            newTag: ${SERVICE_VERSION}
+          EOF
+          
+          # 创建prod环境kustomization文件
+          cat > /tmp/k8s-configs/overlays/prod/kustomization.yaml <<EOF
+          apiVersion: kustomize.config.k8s.io/v1beta1
+          kind: Kustomization
+          namespace: production-services
+          commonLabels:
+            environment: production
+            app: auth-service
+          resources:
+          - ../../base
+          patchesStrategicMerge:
+          - resources-patch.yaml
+          images:
+          - name: auth-service
+            newName: ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${SERVICE_NAME}
+            newTag: ${SERVICE_VERSION}
+          EOF
+          
+          # 验证kustomize配置正确性
+          kubectl kustomize /tmp/k8s-configs/overlays/dev > /dev/null || echo "⚠️ Dev环境Kustomize验证失败"
+          kubectl kustomize /tmp/k8s-configs/overlays/staging > /dev/null || echo "⚠️ Staging环境Kustomize验证失败"
+          kubectl kustomize /tmp/k8s-configs/overlays/prod > /dev/null || echo "⚠️ Prod环境Kustomize验证失败"
           
           # 设置环境变量供下一步使用
-          echo "IMAGE_NAME=${IMAGE_NAME}" >> $GITHUB_ENV
-          echo "IMAGE_VERSION=${IMAGE_TAG}" >> $GITHUB_ENV
+          echo "IMAGE_NAME=${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${SERVICE_NAME}:${SERVICE_VERSION}" >> $GITHUB_ENV
+          echo "IMAGE_VERSION=${SERVICE_VERSION}" >> $GITHUB_ENV
 
       - name: 上传Kubernetes配置
         uses: actions/upload-artifact@v4
