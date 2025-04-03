@@ -1,4 +1,5 @@
 # 索克生活 - 用户服务
+# 触发GitHub Actions CI/CD - 演示用
 
 ## 项目概述
 
@@ -17,29 +18,30 @@
 
 ```
 /services/user-service/
-├── src/                    # 源代码目录
-│   ├── controllers/        # 控制器
-│   ├── middleware/         # 中间件
-│   ├── models/             # 数据模型
-│   ├── routes/             # 路由定义
-│   ├── services/           # 业务逻辑服务
-│   ├── utils/              # 工具函数
-│   ├── config/             # 配置文件
-│   └── server.js           # 服务入口
-├── mock/                   # 模拟数据
-├── tests/                  # 测试文件
-├── k8s/                    # Kubernetes配置文件
-│   ├── configmap.yaml      # 配置映射
-│   ├── deployment.yaml     # 部署配置
-│   ├── secret.yaml         # 密钥配置
-│   ├── pv.yaml             # 持久卷配置
-│   └── service.yaml        # 服务配置
+├── src/                     # 源代码目录
+│   ├── config/              # 配置文件
+│   ├── controllers/         # 控制器
+│   ├── middlewares/         # 中间件
+│   ├── models/              # 数据模型
+│   ├── repositories/        # 数据存取层
+│   ├── routes/              # 路由定义
+│   ├── services/            # 业务逻辑层
+│   ├── utils/               # 工具函数
+│   ├── tests/               # 测试代码
+│   ├── app.js               # 应用程序配置
+│   ├── index.js             # 入口文件
+│   └── server.js            # 服务启动文件
+├── scripts/                 # 工具脚本
+├── config/                  # 环境配置目录
+├── logs/                    # 日志目录
+├── uploads/                 # 上传文件目录
+├── mocks/                   # 模拟数据和服务
 ├── Dockerfile              # 构建镜像配置
-├── Dockerfile.multiarch    # 多架构镜像构建配置
-├── package.json            # 依赖管理
-├── mock-server.js          # 模拟服务器
-├── DEPLOYMENT_GUIDE.md     # 部署指南
-└── README.md               # 说明文档
+├── .dockerignore           # Docker忽略文件
+├── docker-compose.yml      # Docker Compose配置
+├── package.json            # 项目依赖配置
+├── package-lock.json       # 依赖版本锁定
+└── README.md               # 项目说明文档
 ```
 
 ## API接口文档
