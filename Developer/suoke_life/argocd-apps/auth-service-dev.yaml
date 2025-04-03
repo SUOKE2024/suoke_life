@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: auth-service-dev
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/SUOKE2024/suoke_life.git
+    targetRevision: HEAD
+    path: services/auth-service/k8s/overlays/dev
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: suoke-dev
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
