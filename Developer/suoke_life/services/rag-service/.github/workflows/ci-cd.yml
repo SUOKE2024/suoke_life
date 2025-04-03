@@ -188,11 +188,51 @@ jobs:
       - name: 验证部署
         run: |
           kubectl rollout status deployment/rag -n suoke-dev --timeout=180s
+      
+      - name: 执行健康检查
+        run: |
+          # 等待服务启动
+          sleep 20
+          # 获取服务IP
+          SERVICE_URL=$(kubectl get svc rag -n suoke-dev -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+          # 检查健康端点
+          curl -f http://$SERVICE_URL:8000/health || exit 1
 
+  performance-test-dev:
+    name: 开发环境性能测试
+    runs-on: ubuntu-latest
+    needs: deploy-dev
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: 设置Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      - name: 安装测试依赖
+        run: |
+          pip install locust pytest pytest-benchmark
+      
+      - name: 执行性能测试
+        run: |
+          cd tests/load
+          python -m locust --headless -f locustfile.py --host https://dev.api.suoke.life/rag --users 50 --spawn-rate 5 --run-time 2m
+      
+      - name: 分析性能测试结果
+        run: |
+          python scripts/analyze_load_test.py
+      
+      - name: 上传性能测试报告
+        uses: actions/upload-artifact@v3
+        with:
+          name: performance-report-dev
+          path: load_test_results/
+  
   deploy-staging:
     name: 部署到预发布环境
     runs-on: ubuntu-latest
-    needs: [build-push, deploy-dev]
+    needs: [build-push, performance-test-dev]
     if: startsWith(github.ref, 'refs/heads/release/') || github.event.inputs.environment == 'staging'
     environment:
       name: staging
@@ -220,11 +260,51 @@ jobs:
       - name: 验证部署
         run: |
           kubectl rollout status deployment/rag -n suoke-staging --timeout=180s
+      
+      - name: 执行健康检查
+        run: |
+          # 等待服务启动
+          sleep 20
+          # 获取服务IP
+          SERVICE_URL=$(kubectl get svc rag -n suoke-staging -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+          # 检查健康端点
+          curl -f http://$SERVICE_URL:8000/health || exit 1
+
+  performance-test-staging:
+    name: 预发布环境性能测试
+    runs-on: ubuntu-latest
+    needs: deploy-staging
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: 设置Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      - name: 安装测试依赖
+        run: |
+          pip install locust pytest pytest-benchmark
+      
+      - name: 执行性能测试
+        run: |
+          cd tests/load
+          python -m locust --headless -f locustfile.py --host https://staging.api.suoke.life/rag --users 100 --spawn-rate 10 --run-time 5m
+      
+      - name: 分析性能测试结果
+        run: |
+          python scripts/analyze_load_test.py
+      
+      - name: 上传性能测试报告
+        uses: actions/upload-artifact@v3
+        with:
+          name: performance-report-staging
+          path: load_test_results/
 
   deploy-prod:
     name: 部署到生产环境
     runs-on: ubuntu-latest
-    needs: [build-push, deploy-staging]
+    needs: [build-push, performance-test-staging]
     if: startsWith(github.ref, 'refs/heads/release/') || github.event.inputs.environment == 'prod'
     environment:
       name: production
@@ -248,44 +328,42 @@ jobs:
       - name: 部署应用
         run: |
           kubectl apply -k k8s/overlays/prod
-
+          
       - name: 验证部署
         run: |
-          kubectl rollout status deployment/rag -n suoke --timeout=180s
-
-  load-test:
-    name: 负载测试
-    runs-on: ubuntu-latest
-    needs: deploy-staging
-    if: startsWith(github.ref, 'refs/heads/release/')
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: 安装k6
+          kubectl rollout status deployment/rag -n suoke-production --timeout=300s
+      
+      - name: 执行生产环境健康检查
         run: |
-          curl -s https://packagecloud.io/install/repositories/k6/k6/script.deb.sh | sudo bash
-          sudo apt-get install k6
-
-      - name: 运行负载测试
+          # 等待服务启动
+          sleep 30
+          # 获取服务IP
+          SERVICE_URL=$(kubectl get svc rag -n suoke-production -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+          # 检查健康端点
+          curl -f http://$SERVICE_URL:8000/health || exit 1
+          
+      - name: 执行功能验证
         run: |
-          k6 run tests/load/load-test.js --out json=load_test_results/results.json
-
-      - name: 分析测试结果
-        run: |
-          python scripts/analyze_load_test.py -f load_test_results/results.json -t 500
-
-      - name: 上传测试结果
-        uses: actions/upload-artifact@v3
-        with:
-          name: load-test-results
-          path: load_test_results/
-
+          # 使用测试脚本验证基本功能
+          python scripts/verify_deployment.py --env=prod
+          
   notify:
-    name: 部署结果通知
+    name: 发送通知
     runs-on: ubuntu-latest
-    needs: [deploy-dev, deploy-staging, deploy-prod, load-test]
+    needs: [deploy-dev, deploy-staging, deploy-prod]
     if: always()
     steps:
+      - name: 检查部署状态
+        id: check
+        run: |
+          if [[ "${{ needs.deploy-dev.result }}" == "success" && "${{ contains(needs.*.result, 'failure') }}" == "false" ]]; then
+            echo "status=success" >> $GITHUB_OUTPUT
+            echo "message=RAG服务部署成功！版本: ${{ needs.build-push.outputs.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "status=failure" >> $GITHUB_OUTPUT
+            echo "message=RAG服务部署失败，请检查CI/CD日志" >> $GITHUB_OUTPUT
+          fi
+          
       - name: 发送钉钉通知
         uses: zcong1993/actions-ding@master
         with:
@@ -294,7 +372,7 @@ jobs:
             {
               "msgtype": "markdown",
               "markdown": {
-                "title": "RAG服务部署状态",
-                "text": "### RAG服务部署状态 📢\n\n**版本**: ${{ needs.build-push.outputs.version }}\n\n**环境状态**:\n- 开发环境: ${{ needs.deploy-dev.result || '未触发' }}\n- 预发布环境: ${{ needs.deploy-staging.result || '未触发' }}\n- 生产环境: ${{ needs.deploy-prod.result || '未触发' }}\n- 负载测试: ${{ needs.load-test.result || '未触发' }}\n\n**触发者**: ${{ github.actor }}\n\n[查看工作流详情](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+                "title": "RAG服务部署通知",
+                "text": "### RAG服务部署状态: ${{ steps.check.outputs.status }}\n\n${{ steps.check.outputs.message }}\n\n> 分支: ${{ github.ref }}\n\n> 提交者: ${{ github.actor }}\n\n> [查看详细CI/CD日志](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
               }
             }
