@@ -194,4 +194,5 @@ INTERNAL_SERVICE_KEY=xxxxxxxxxxxx
 1. 在请求时添加JWT令牌到Authorization头：`Bearer {token}`
 2. 对需要知识库权限的资源，使用`/api/v1/knowledge/check-access`验证权限
 3. 对于需要批量检查的场景，使用`/api/v1/knowledge/batch-check-access`提高性能
-4. 记录资源访问日志到`/api/v1/knowledge/access-log`
+4. 记录资源访问日志到`/api/v1/knowledge/access-log`触发GitHub Actions
+触发GitHub Actions

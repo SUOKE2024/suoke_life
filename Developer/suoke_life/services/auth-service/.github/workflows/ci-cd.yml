@@ -1,0 +1,193 @@
+name: 认证服务 CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'services/auth-service/**'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'services/auth-service/**'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: '部署环境'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+
+jobs:
+  test:
+    name: 测试
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: services/auth-service
+    
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v3
+      
+      - name: 设置Node.js环境
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: services/auth-service/package-lock.json
+      
+      - name: 安装依赖
+        run: npm ci
+      
+      - name: 运行代码检查
+        run: npm run lint
+      
+      - name: 运行单元测试
+        run: npm run test:unit
+        env:
+          NODE_ENV: test
+      
+      - name: 运行集成测试
+        run: npm run test:integration
+        env:
+          NODE_ENV: test
+          JWT_SECRET: test_jwt_secret
+          JWT_EXPIRES_IN: 1h
+      
+      - name: 生成测试覆盖率报告
+        run: npm run test:coverage
+      
+      - name: 上传测试覆盖率报告
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: services/auth-service/coverage
+  
+  build:
+    name: 构建镜像
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    
+    defaults:
+      run:
+        working-directory: services/auth-service
+    
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v3
+      
+      - name: 设置QEMU
+        uses: docker/setup-qemu-action@v2
+      
+      - name: 设置Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      
+      - name: 设置Docker镜像加速
+        run: |
+          mkdir -p $HOME/.docker
+          echo '{
+            "registry-mirrors": [
+              "https://registry.cn-hangzhou.aliyuncs.com",
+              "https://docker.m.daocloud.io",
+              "https://hub-mirror.c.163.com",
+              "https://mirror.baidubce.com"
+            ]
+          }' > $HOME/.docker/config.json
+      
+      - name: 登录到阿里云容器镜像仓库
+        uses: docker/login-action@v2
+        with:
+          registry: suoke-registry.cn-hangzhou.cr.aliyuncs.com
+          username: ${{ secrets.ALI_REGISTRY_USERNAME }}
+          password: ${{ secrets.ALI_REGISTRY_PASSWORD }}
+      
+      - name: 提取元数据
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/auth-service
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=sha,format=short
+      
+      - name: 构建并推送标准Docker镜像
+        uses: docker/build-push-action@v4
+        with:
+          context: services/auth-service
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=registry,ref=suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/auth-service:buildcache
+          cache-to: type=registry,ref=suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/auth-service:buildcache,mode=max
+  
+  deploy-staging:
+    name: 部署到测试环境
+    needs: build
+    runs-on: ubuntu-latest
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/develop') || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'staging')
+    
+    environment:
+      name: staging
+      url: https://staging-api.suoke.life/auth
+    
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v3
+      
+      - name: 设置kubeconfig
+        uses: azure/k8s-set-context@v3
+        with:
+          kubeconfig: ${{ secrets.KUBE_CONFIG_STAGING }}
+      
+      - name: 更新Kubernetes镜像
+        run: |
+          kubectl set image deployment/auth-service auth-service=suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/auth-service:sha-${{ github.sha }} -n suoke
+      
+      - name: 验证部署
+        run: |
+          kubectl rollout status deployment/auth-service -n suoke --timeout=180s
+  
+  deploy-production:
+    name: 部署到生产环境
+    needs: build
+    runs-on: ubuntu-latest
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'production')
+    
+    environment:
+      name: production
+      url: https://api.suoke.life/auth
+    
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v3
+      
+      - name: 设置kubeconfig
+        uses: azure/k8s-set-context@v3
+        with:
+          kubeconfig: ${{ secrets.KUBE_CONFIG_PRODUCTION }}
+      
+      - name: 更新Kubernetes镜像
+        run: |
+          kubectl set image deployment/auth-service auth-service=suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/auth-service:sha-${{ github.sha }} -n suoke
+      
+      - name: 验证部署
+        run: |
+          kubectl rollout status deployment/auth-service -n suoke --timeout=180s
+      
+      - name: 发送部署通知
+        if: success()
+        uses: slackapi/slack-github-action@v1
+        with:
+          payload: |
+            {
+              "text": "✅ 认证服务已成功部署到生产环境! 版本: ${{ github.sha }}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} 
