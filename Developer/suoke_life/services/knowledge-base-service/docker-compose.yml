@@ -1,95 +1,172 @@
 version: '3.8'
 
 services:
-  # 知识库服务
+  # 知识库服务仅构建不启动，因为需要先构建Go二进制文件
   knowledge-base-service:
     build:
       context: .
       dockerfile: Dockerfile
+    image: knowledge-base-service:local
     container_name: knowledge-base-service
     ports:
       - "3002:3002"
+      - "9090:9090" # 指标端口
     environment:
-      - NODE_ENV=development
       - PORT=3002
-      - MONGODB_URI=mongodb://mongo:27017/knowledge_base
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      - LOG_LEVEL=info
-      - API_BASE_URL=http://localhost:3002
-      - KNOWLEDGE_GRAPH_SERVICE_URL=http://knowledge-graph-service:3003
-      - RAG_SERVICE_URL=http://rag-service:3004
-      - AUTH_SERVICE_URL=http://auth-service:3010
+      - APP_HOST=0.0.0.0
+      - DB_CONNECTION_STRING=postgres://postgres:postgres@postgres:5432/knowledge_base?sslmode=disable
+      - VECTOR_STORE_HOST=milvus
+      - VECTOR_STORE_PORT=19530
+      - VECTOR_STORE_COLLECTION=knowledge_base_documents
+      - EMBEDDING_MODEL_URL=http://embedding-service:8000/embed
+      - EMBEDDING_API_TOKEN=dev_token
+      - EMBEDDING_CONTEXT_SIZE=4096
+      - EMBEDDING_DIMENSIONS=1536
+      - EMBEDDING_BATCH_SIZE=10
+      - TEXT_SPLITTER_CHUNK_SIZE=512
+      - TEXT_SPLITTER_CHUNK_OVERLAP=128
+      - LOG_LEVEL=debug
+      - KNOWLEDGE_GRAPH_SERVICE_URL=http://knowledge-graph-service:3000
+      - RAG_SERVICE_URL=http://rag-service:3000
     volumes:
+      - ./data:/app/data
       - ./logs:/app/logs
+      - ./tmp:/app/tmp
     depends_on:
-      - mongo
-      - redis
+      - postgres
+      - milvus
+      - embedding-service
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3002/health"]
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3002/api/v1/health"]
       interval: 30s
       timeout: 5s
       retries: 3
       start_period: 10s
     networks:
       - suoke-network
+    profiles:
+      - service
 
-  # MongoDB数据库
-  mongo:
-    image: mongo:6.0
-    container_name: kb-mongo
+  # PostgreSQL数据库
+  postgres:
+    image: postgres:16-alpine
+    container_name: kb-postgres
     ports:
-      - "27017:27017"
-    volumes:
-      - kb-mongo-data:/data/db
-    networks:
-      - suoke-network
-
-  # Redis缓存
-  redis:
-    image: redis:alpine
-    container_name: kb-redis
-    ports:
-      - "6379:6379"
-    volumes:
-      - kb-redis-data:/data
-    networks:
-      - suoke-network
-
-  # Mongo Express (MongoDB管理界面)
-  mongo-express:
-    image: mongo-express
-    container_name: kb-mongo-express
-    ports:
-      - "8081:8081"
+      - "5432:5432"
     environment:
-      - ME_CONFIG_MONGODB_SERVER=mongo
-      - ME_CONFIG_MONGODB_PORT=27017
-    depends_on:
-      - mongo
-    restart: unless-stopped
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=knowledge_base
+    volumes:
+      - kb-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - suoke-network
 
-  # Redis Commander (Redis管理界面)
-  redis-commander:
-    image: rediscommander/redis-commander:latest
-    container_name: kb-redis-commander
+  # Milvus向量数据库
+  milvus:
+    image: milvusdb/milvus:v2.4.2
+    container_name: kb-milvus
     ports:
-      - "8082:8081"
+      - "19530:19530"
+      - "9091:9091"
     environment:
-      - REDIS_HOSTS=local:redis:6379
+      - ETCD_ENDPOINTS=etcd:2379
+      - MINIO_ADDRESS=minio:9000
+    volumes:
+      - kb-milvus-data:/var/lib/milvus
     depends_on:
-      - redis
-    restart: unless-stopped
+      - etcd
+      - minio
+    networks:
+      - suoke-network
+
+  # Etcd (Milvus依赖)
+  etcd:
+    image: quay.io/coreos/etcd:v3.5.5
+    container_name: kb-etcd
+    environment:
+      - ETCD_AUTO_COMPACTION_MODE=revision
+      - ETCD_AUTO_COMPACTION_RETENTION=1000
+      - ETCD_QUOTA_BACKEND_BYTES=4294967296
+      - ETCD_SNAPSHOT_COUNT=50000
+    volumes:
+      - kb-etcd-data:/etcd
+    command: etcd --advertise-client-urls=http://127.0.0.1:2379 --listen-client-urls http://0.0.0.0:2379 --data-dir /etcd
+    networks:
+      - suoke-network
+
+  # MinIO (Milvus依赖)
+  minio:
+    image: minio/minio:RELEASE.2023-03-20T20-16-18Z
+    container_name: kb-minio
+    environment:
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=minioadmin
+    volumes:
+      - kb-minio-data:/data
+    command: minio server /data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    networks:
+      - suoke-network
+
+  # 嵌入服务（使用开源替代）
+  embedding-service:
+    image: semitechnologies/transformers-inference:sentence-transformers-paraphrase-multilingual-mpnet-base-v2
+    container_name: kb-embedding-service
+    ports:
+      - "8000:8080"
+    environment:
+      - ENABLE_CUDA=0
+      - MODEL_NAME=sentence-transformers/paraphrase-multilingual-mpnet-base-v2
+    networks:
+      - suoke-network
+
+  # PgAdmin (PostgreSQL管理界面)
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: kb-pgadmin
+    ports:
+      - "8083:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@suoke.life
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    volumes:
+      - kb-pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    networks:
+      - suoke-network
+
+  # Milvus管理界面
+  attu:
+    image: zilliz/attu:v2.4.3
+    container_name: kb-attu
+    ports:
+      - "8084:3000"
+    environment:
+      - MILVUS_URL=kb-milvus:19530
+    depends_on:
+      - milvus
     networks:
       - suoke-network
 
 # 持久化存储卷
 volumes:
-  kb-mongo-data:
-  kb-redis-data:
+  kb-postgres-data:
+  kb-milvus-data:
+  kb-etcd-data:
+  kb-minio-data:
+  kb-pgadmin-data:
 
 # 网络配置
 networks:

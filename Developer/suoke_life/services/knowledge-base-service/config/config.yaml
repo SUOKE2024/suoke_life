@@ -1,0 +1,12 @@
+server:
+  port: 8080
+
+database:
+  postgres_url: "postgresql://postgres:postgres@localhost:5432/knowledge_base?sslmode=disable"
+  milvus_host: "localhost"
+  milvus_port: 19530
+
+blockchain:
+  provider_url: "http://localhost:8545"
+  contract_address: ""  # 部署后填充
+  wallet_private_key: "" # 开发测试密钥，生产环境应使用环境变量或安全存储

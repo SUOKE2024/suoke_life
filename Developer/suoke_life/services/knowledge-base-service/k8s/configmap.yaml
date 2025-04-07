@@ -2,19 +2,30 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: knowledge-base-config
-  namespace: suoke
+  namespace: suoke-prod
   labels:
     app: knowledge-base-service
     tier: data
 data:
-  # 缓存配置
-  CACHE_TTL: "3600"
-  ENABLE_RESPONSE_CACHE: "true"
+  # 数据库配置
+  DB_TIMEOUT_SECONDS: "30"
+  
+  # 服务器配置
+  SERVER_READ_TIMEOUT_SECONDS: "60"
+  SERVER_WRITE_TIMEOUT_SECONDS: "60"
+  SERVER_IDLE_TIMEOUT_SECONDS: "120"
+  
+  # 向量存储配置
+  VECTOR_STORE_TIMEOUT_SECONDS: "30"
+  VECTOR_STORE_COLLECTION: "knowledge_base_documents"
+  
+  # 嵌入配置
+  EMBEDDING_CONTEXT_SIZE: "4096"
   
   # 内容限制
   MAX_CONTENT_SIZE: "10mb"
-  MAX_TAGS_PER_KNOWLEDGE: "20"
-  MAX_CATEGORIES_PER_KNOWLEDGE: "5"
+  MAX_TAGS_PER_DOCUMENT: "20"
+  MAX_CATEGORIES_PER_DOCUMENT: "5"
   
   # 审核配置
   REQUIRE_CONTENT_APPROVAL: "false"
@@ -23,10 +34,9 @@ data:
   # 性能配置
   PAGINATION_DEFAULT_LIMIT: "20"
   PAGINATION_MAX_LIMIT: "100"
-  REQUEST_TIMEOUT_MS: "30000"
   
   # 文档版本控制
-  MAX_VERSIONS_PER_KNOWLEDGE: "10"
+  MAX_VERSIONS_PER_DOCUMENT: "10"
   ENABLE_VERSION_CONTROL: "true"
   
   # CORS配置

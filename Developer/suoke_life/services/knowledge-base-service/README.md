@@ -2,6 +2,8 @@
 
 知识库服务是索克生活APP的核心知识管理服务，负责存储、索引和提供健康养生相关的结构化知识内容。本服务与知识图谱服务和RAG服务协同工作，为用户提供精准、专业的健康知识内容。
 
+> **重要更新**: 本服务已完成从Node.js到Go的重构，以提高性能、可靠性和可维护性。所有API路径前缀从'/'更改为'/api/v1/'。
+
 ## 功能特性
 
 - 知识内容管理（CRUD操作）
@@ -25,59 +27,51 @@
 
 ## 技术栈
 
-- Node.js & TypeScript
-- Express 框架
+- Go语言
+- Chi路由框架
 - RESTful API
-- MongoDB 数据库
-- Redis 缓存
-- 向量数据库集成
+- PostgreSQL数据库
+- Milvus向量数据库
 - 微服务架构
-- Docker 容器化
-- Kubernetes 编排
+- Docker容器化
+- Kubernetes编排
 
 ## 项目结构
 
 ```
 knowledge-base-service/
-├── config/                   # 配置文件目录
-│   └── default.yml           # 默认配置
-├── src/                      # 源代码目录
-│   ├── controllers/          # 控制器
-│   ├── integrations/         # 外部服务集成
-│   │   ├── knowledge-graph-integration.service.ts # 知识图谱集成
-│   │   ├── rag-integration.service.ts            # RAG服务集成
-│   │   ├── wearable-data-integration.service.ts  # 可穿戴设备数据集成
-│   │   ├── health-data-integration.service.ts    # 健康数据集成
-│   │   └── evidence-based-medicine.service.ts    # 循证医学服务
-│   ├── interfaces/          # 类型接口定义
-│   │   ├── knowledge.interface.ts                # 基础知识接口
-│   │   ├── extended-knowledge.interface.ts       # 扩展知识接口
-│   │   ├── precision-medicine.interface.ts       # 精准医学接口
-│   │   ├── multimodal-health.interface.ts        # 多模态健康接口
-│   │   ├── environmental-health.interface.ts     # 环境健康接口
-│   │   └── mental-health.interface.ts            # 心理健康接口
-│   ├── middlewares/         # 中间件
-│   ├── models/              # 数据模型
-│   ├── routes/              # 路由定义
-│   ├── services/            # 业务服务
-│   │   ├── knowledge.service.ts                  # 基础知识服务
-│   │   ├── traditional-culture-knowledge.service.ts # 传统文化知识服务
-│   │   ├── modern-medicine-knowledge.service.ts  # 现代医学知识服务
-│   │   ├── precision-medicine.service.ts         # 精准医学服务
-│   │   ├── multimodal-health.service.ts          # 多模态健康服务
-│   │   ├── search.service.ts                     # 搜索服务
-│   ├── utils/               # 工具函数
-│   ├── validations/         # 请求验证
-│   ├── app.ts               # 应用配置
-│   └── server.ts            # 服务器入口
-├── tests/                   # 测试目录
+├── cmd/                     # 命令和入口点
+│   ├── server/              # 主服务入口
+│   ├── tools/               # 工具命令
+│   └── benchmark/           # 性能测试
+├── config/                  # 配置管理
+├── internal/                # 内部代码
+│   ├── api/                 # API定义
+│   ├── domain/              # 领域模型和服务
+│   │   ├── entity/          # 领域实体
+│   │   ├── repository/      # 存储库接口
+│   │   └── service/         # 领域服务
+│   ├── infrastructure/      # 基础设施
+│   │   ├── database/        # 数据库实现
+│   │   ├── nlp/             # 自然语言处理
+│   │   ├── repository/      # 存储库实现
+│   │   └── vectorstore/     # 向量存储实现
+│   ├── interfaces/          # 接口层
+│   │   ├── rest/            # REST API
+│   │   └── ai/              # AI集成
+│   ├── mocks/               # 模拟测试
+│   └── test/                # 测试辅助
+├── pkg/                     # 公共包
+│   └── logger/              # 日志工具
+├── contracts/               # 协议定义
 ├── docs/                    # 文档目录
 ├── k8s/                     # Kubernetes配置
 ├── helm/                    # Helm Chart配置
+├── scripts/                 # 脚本
 ├── .env.example             # 环境变量示例
 ├── Dockerfile               # Docker构建文件
-├── package.json             # 项目依赖
-└── tsconfig.json            # TypeScript配置
+├── go.mod                   # Go模块定义
+└── go.sum                   # Go依赖校验
 ```
 
 ## 安装与运行
@@ -92,7 +86,7 @@ cd knowledge-base-service
 
 2. 安装依赖：
 ```bash
-npm install
+go mod download
 ```
 
 3. 配置环境变量：
@@ -103,10 +97,10 @@ cp .env.example .env
 
 4. 启动开发服务器：
 ```bash
-npm run dev
+go run cmd/server/main.go
 ```
 
-服务将在 http://localhost:3002 启动，API文档可访问 http://localhost:3002/api-docs
+服务将在 http://localhost:3002 启动，健康检查接口可访问 http://localhost:3002/api/v1/health
 
 ### Docker部署
 
@@ -153,8 +147,8 @@ kubectl apply -k k8s/
 
 3. 验证部署：
 ```bash
-kubectl get pods -n suoke -l app=knowledge-base-service
-kubectl get svc -n suoke -l app=knowledge-base-service
+kubectl get pods -n suoke-prod -l app=knowledge-base-service
+kubectl get svc -n suoke-prod -l app=knowledge-base-service
 ```
 
 #### 使用Helm部署
@@ -162,7 +156,7 @@ kubectl get svc -n suoke -l app=knowledge-base-service
 1. 安装或升级Chart：
 ```bash
 helm upgrade --install knowledge-base-service ./helm \
-  --namespace suoke \
+  --namespace suoke-prod \
   --create-namespace \
   --set image.tag=latest \
   --values ./helm/values.yaml
@@ -173,57 +167,73 @@ helm upgrade --install knowledge-base-service ./helm \
 cp ./helm/values.yaml ./helm/custom-values.yaml
 # 编辑custom-values.yaml以适应环境
 helm upgrade --install knowledge-base-service ./helm \
-  --namespace suoke \
+  --namespace suoke-prod \
   --values ./helm/custom-values.yaml
 ```
 
 3. 卸载Chart：
 ```bash
-helm uninstall knowledge-base-service -n suoke
+helm uninstall knowledge-base-service -n suoke-prod
 ```
 
 ## API文档
 
-服务集成了完整的Swagger/OpenAPI文档系统，提供了交互式的API文档界面。
+服务将在后续版本中集成Swagger/OpenAPI文档系统，目前主要API端点如下：
 
-### 访问API文档
+- **健康检查**: `/api/v1/health`
+- **文档列表**: `/api/v1/documents`
+- **文档详情**: `/api/v1/documents/{id}`
+- **创建文档**: `/api/v1/documents`
+- **更新文档**: `/api/v1/documents/{id}`
+- **删除文档**: `/api/v1/documents/{id}`
+- **搜索文档**: `/api/v1/documents/search?q={query}`
+- **语义搜索**: `/api/v1/documents/semantic-search?q={query}`
 
-- **开发环境**: http://localhost:3002/api-docs
-- **测试环境**: https://test-api.suoke.life/knowledge-base/api-docs
-- **生产环境**: https://api.suoke.life/knowledge-base/api-docs
+## 数据库配置
 
-### API文档特性
+### PostgreSQL配置
 
-- 交互式API测试界面
-- 完整的请求/响应示例
-- 模型定义和验证规则
-- 安全认证文档
-- 分组和标签组织的API端点
+服务需要配置以下PostgreSQL环境变量：
 
-### API文档指南
+```
+DB_CONNECTION_STRING=postgresql://username:password@host:port/dbname?sslmode=disable
+```
 
-详细的API文档使用和开发指南可在以下文件找到：
+### Milvus向量数据库配置
 
-- [API文档使用指南](./docs/API_DOCS_GUIDE.md) - 如何使用API文档
-- [Swagger注解编写指南](./docs/SWAGGER_ANNOTATION_GUIDE.md) - 如何为API添加文档
-- [API测试指南](./docs/API_TESTING_GUIDE.md) - 如何测试API端点
+服务需要配置以下Milvus环境变量：
 
-### 主要端点
+```
+VECTOR_STORE_HOST=milvus-host
+VECTOR_STORE_PORT=19530
+VECTOR_STORE_API_KEY=your-api-key
+VECTOR_STORE_COLLECTION=documents
+```
 
-- `GET /api/knowledge` - 获取知识列表
-- `GET /api/knowledge/:id` - 获取特定知识详情
-- `POST /api/knowledge` - 创建知识条目
-- `PUT /api/knowledge/:id` - 更新知识条目
-- `DELETE /api/knowledge/:id` - 删除知识条目
-- `GET /api/categories` - 获取知识分类
-- `GET /api/tags` - 获取知识标签
-- `GET /api/search` - 搜索知识
-- `GET /api/traditional-culture` - 获取传统文化知识列表
-- `GET /api/modern-medicine` - 获取现代医学知识列表
-- `GET /api/precision-medicine` - 获取精准医学知识列表
-- `GET /api/multimodal-health` - 获取多模态健康知识列表
-- `GET /api/environmental-health` - 获取环境健康知识列表
-- `GET /api/mental-health` - 获取心理健康知识列表
+### 嵌入服务配置
+
+文本嵌入服务配置：
+
+```
+EMBEDDING_MODEL_URL=http://embedding-service:8000/embed
+EMBEDDING_API_TOKEN=your-api-token
+EMBEDDING_DIMENSIONS=1536
+EMBEDDING_BATCH_SIZE=10
+```
+
+## 文档迁移
+
+如需从旧版本MongoDB数据迁移到新版PostgreSQL和Milvus数据库，可参考：
+
+1. 导出MongoDB数据：
+```bash
+./scripts/export_mongo_data.sh
+```
+
+2. 导入到PostgreSQL和Milvus：
+```bash
+./knowledge-base-service migrate --source=./exported_data.json
+```
 
 ## 集成服务
 

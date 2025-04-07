@@ -2,7 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: knowledge-base-backup-pvc
-  namespace: suoke
+  namespace: suoke-prod
   labels:
     app: knowledge-base-service
     role: backup-storage

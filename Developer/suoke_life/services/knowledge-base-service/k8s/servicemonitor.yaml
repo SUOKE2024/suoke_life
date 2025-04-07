@@ -2,7 +2,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: knowledge-base-service-monitor
-  namespace: suoke
+  namespace: suoke-prod
   labels:
     app: knowledge-base-service
     release: prometheus

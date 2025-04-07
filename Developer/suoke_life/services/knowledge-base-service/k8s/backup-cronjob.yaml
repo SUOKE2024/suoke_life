@@ -2,7 +2,7 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: knowledge-base-backup
-  namespace: suoke
+  namespace: suoke-prod
   labels:
     app: knowledge-base-service
     role: backup

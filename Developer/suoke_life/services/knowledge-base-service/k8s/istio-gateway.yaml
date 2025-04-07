@@ -2,7 +2,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: knowledge-base-service
-  namespace: suoke
+  namespace: suoke-prod
   labels:
     app: knowledge-base-service
     tier: data
@@ -49,7 +49,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: knowledge-base-service
-  namespace: suoke
+  namespace: suoke-prod
   labels:
     app: knowledge-base-service
     tier: data

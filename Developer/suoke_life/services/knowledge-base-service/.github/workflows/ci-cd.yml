@@ -23,6 +23,7 @@ on:
 env:
   IMAGE_NAME: knowledge-base-service
   REGISTRY: registry.suoke.life
+  GO_VERSION: '1.24'
 
 jobs:
   lint-test:
@@ -46,15 +47,20 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-      - uses: actions/setup-node@v3
+      - name: 设置Go环境
+        uses: actions/setup-go@v4
         with:
-          node-version: '18'
-          cache: 'npm'
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
 
-      - run: npm ci
+      - name: 安装依赖
+        run: go mod download
 
       - name: 代码风格检查
-        run: npm run lint || echo "警告: Lint失败，但允许继续构建"
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: latest
+          args: --timeout=5m
 
       - name: 代码质量分析
         uses: SonarSource/sonarcloud-github-action@master
@@ -67,14 +73,14 @@ jobs:
             -Dsonar.organization=suokelife
 
       - name: 单元测试
-        run: npm run test -- --coverage || echo "警告: 测试失败，但允许继续构建"
+        run: go test -v -race -coverprofile=coverage.out ./...
 
       - name: 上传测试覆盖率报告
         uses: actions/upload-artifact@v3
         if: always()
         with:
           name: coverage-report
-          path: coverage/
+          path: coverage.out
   
   vector-db-integration-test:
     name: 向量数据库集成测试
@@ -83,23 +89,25 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
-      - uses: actions/setup-node@v3
+      - name: 设置Go环境
+        uses: actions/setup-go@v4
         with:
-          node-version: '18'
-          cache: 'npm'
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
       
-      - run: npm ci
+      - name: 安装依赖
+        run: go mod download
       
       - name: 准备测试数据
         run: |
-          npm run db:seed:test
+          go run ./cmd/tools/seed_testdata
 
       - name: 运行集成测试
         env:
-          VECTOR_DB_TYPE: faiss
-          VECTOR_DB_PATH: ./test-data
-          EMBEDDINGS_MODEL: all-MiniLM-L6-v2
-        run: npm run test:integration || echo "警告: 集成测试失败，但允许继续构建"
+          VECTOR_STORE_HOST: localhost
+          VECTOR_STORE_PORT: 19530
+          VECTOR_STORE_COLLECTION: test_collection
+        run: go test -v -tags=integration ./internal/infrastructure/vectorstore/...
   
   security-scan:
     name: 安全扫描
@@ -109,11 +117,13 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: 依赖安全扫描
-        uses: snyk/actions/node@master
+        uses: aquasecurity/trivy-action@master
         with:
-          args: --severity-threshold=high
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+          scan-type: 'fs'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+          ignore-unfixed: true
 
       - name: 构建临时镜像用于扫描
         uses: docker/build-push-action@v4
@@ -200,7 +210,7 @@ jobs:
     needs: build-push
     if: github.ref == 'refs/heads/main' || github.event.inputs.environment == 'dev'
     environment:
-      name: development
+      name: dev
       url: https://dev.api.suoke.life/kb
     steps:
       - uses: actions/checkout@v3
@@ -232,7 +242,7 @@ jobs:
     needs: [build-push, deploy-dev]
     if: startsWith(github.ref, 'refs/heads/release/') || github.event.inputs.environment == 'staging'
     environment:
-      name: staging
+      name: staging-env
       url: https://staging.api.suoke.life/kb
     steps:
       - uses: actions/checkout@v3
@@ -260,7 +270,7 @@ jobs:
 
       - name: 同步知识库数据
         run: |
-          kubectl exec -n suoke-staging deploy/knowledge-base -- npm run sync:knowledge
+          kubectl exec -n suoke-staging deploy/knowledge-base -- ./knowledge-base-service sync
 
   deploy-prod:
     name: 部署到生产环境
@@ -268,7 +278,7 @@ jobs:
     needs: [build-push, deploy-staging]
     if: startsWith(github.ref, 'refs/heads/release/') || github.event.inputs.environment == 'prod'
     environment:
-      name: production
+      name: prod
       url: https://api.suoke.life/kb
     steps:
       - uses: actions/checkout@v3
@@ -292,11 +302,11 @@ jobs:
 
       - name: 验证部署
         run: |
-          kubectl rollout status deployment/knowledge-base -n suoke --timeout=180s
+          kubectl rollout status deployment/knowledge-base -n suoke-prod --timeout=180s
 
       - name: 同步知识库数据
         run: |
-          kubectl exec -n suoke deploy/knowledge-base -- npm run sync:knowledge
+          kubectl exec -n suoke-prod deploy/knowledge-base -- ./knowledge-base-service sync
 
   index-benchmark:
     name: 索引性能测试
@@ -306,21 +316,23 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v3
+      - name: 设置Go环境
+        uses: actions/setup-go@v4
         with:
-          node-version: '18'
-          cache: 'npm'
-
-      - run: npm ci
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+      
+      - name: 安装依赖
+        run: go mod download
       
       - name: 执行索引性能测试
         run: |
           mkdir -p benchmark-results
-          npm run benchmark:index > benchmark-results/index-benchmark.json
+          go run ./cmd/benchmark/index > benchmark-results/index-benchmark.json
 
       - name: 执行检索性能测试
         run: |
-          npm run benchmark:retrieval > benchmark-results/retrieval-benchmark.json
+          go run ./cmd/benchmark/retrieval > benchmark-results/retrieval-benchmark.json
 
       - name: 上传性能测试结果
         uses: actions/upload-artifact@v3

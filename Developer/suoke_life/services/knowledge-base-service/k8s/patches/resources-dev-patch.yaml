@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: knowledge-base-service
-  namespace: suoke
+  namespace: suoke-prod
 spec:
   template:
     spec:

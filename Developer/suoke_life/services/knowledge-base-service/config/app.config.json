@@ -1,0 +1,32 @@
+{
+  "service": {
+    "name": "knowledge-base-service",
+    "version": "1.0.0",
+    "description": "索克生活知识库服务"
+  },
+  "server": {
+    "timeout": 60000,
+    "cors": {
+      "enabled": true,
+      "origins": ["*"],
+      "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+      "headers": ["Content-Type", "Authorization", "X-Requested-With"]
+    }
+  },
+  "logging": {
+    "level": "info",
+    "format": "json",
+    "output": "both"
+  },
+  "vectorStore": {
+    "collectionPrefix": "suoke_"
+  },
+  "textSplitter": {
+    "defaultSeparators": ["\n\n", "\n", " ", ""]
+  },
+  "swagger": {
+    "title": "知识库服务 API",
+    "description": "索克生活知识库服务 RESTful API 文档",
+    "version": "1.0.0"
+  }
+}
