@@ -1,154 +1,147 @@
-# RAG服务 (检索增强生成服务)
+# RAG服务 (Go实现)
 
-## 服务概述
+本项目是索克生活RAG（检索增强生成）服务的Go语言实现版本。原Python/Node.js版本已归档至archived_code目录。
 
-RAG服务是索克生活平台的核心知识服务，负责将用户查询与知识库中的相关内容进行关联，增强AI回复的准确性、专业性和可信度。服务集成了向量检索、知识图谱遍历和语义理解能力，为各个智能体提供知识支持。
+## 项目概述
 
-## 技术栈
+索克生活 RAG（检索增强生成）服务是一个用 Go 语言开发的轻量级、高性能检索增强生成服务，为索克生活 APP 提供知识检索和文档管理能力。该服务通过向量数据库（Milvus）存储文档嵌入，支持高效的语义搜索，并使用嵌入模型将查询和文档转换为向量表示。
 
-- **语言**: Python 3.9+
-- **主要框架**: FastAPI
-- **向量数据库**: Qdrant
-- **知识图谱**: Neo4j
-- **缓存**: Redis
-- **监控**: Prometheus + Grafana
-- **日志**: OpenTelemetry + Loki
-- **部署**: Kubernetes + Docker
-- **CI/CD**: GitHub Actions
+## 特性
 
-## 核心功能
-
-1. **多模态知识检索**: 支持文本、图像、音频输入，返回相关知识结果
-2. **知识图谱遍历**: 支持实体关系查询和路径探索
-3. **语义匹配**: 使用最新的向量嵌入模型进行语义相似度计算
-4. **结果融合与排序**: 智能合并来自不同数据源的结果
-5. **知识上下文处理**: 构建结构化知识上下文供LLM使用
-
-## 最新优化
-
-### 1. 容器化优化
-
-- 多阶段构建，减小镜像体积约35%
-- 实现健壮的启动脚本，支持健康检查和依赖验证
-- 配置优雅关闭机制，保障数据一致性
-
-### 2. Kubernetes配置标准化
-
-- 实现符合微服务部署标准的K8s资源
-- 增加备份CronJob保障数据安全
-- 配置Pod中断预算(PDB)确保高可用性
-- 实现Horizontal Pod Autoscaler自动扩缩容
-
-### 3. 可观测性增强
-
-- 集成OpenTelemetry分布式追踪
-- 配置Prometheus监控指标
-- 构建Grafana自定义仪表盘
-- 实现结构化日志和集中式日志收集
-
-### 4. 性能优化
-
-- 向量索引并行加载与预热
-- Redis结果缓存机制
-- 批量查询优化
-- 按需加载大型模型
-
-### 5. CI/CD 自动化
-
-- 完整的持续集成与持续部署流程
-- 代码质量检查与测试自动化
-- 安全扫描确保依赖和容器安全
-- 多环境自动部署流水线
-- 自动化性能测试与监控
-- 部署结果通知机制
+- 支持多种嵌入模型（OpenAI、本地模型）
+- 支持向量数据库（Milvus）和本地向量存储
+- 提供 RESTful API 用于文档管理和语义搜索
+- 内置指标监控（Prometheus）
+- 可水平扩展支持高并发
+- 支持文档过滤和元数据管理
+- 健康检查和优雅关闭
+- 完整的监控和日志系统
 
 ## 快速开始
 
+### 环境要求
+
+- Go 1.21+
+- Docker 和 Docker Compose（可选，用于容器化部署）
+- Milvus 向量数据库（可选，支持本地向量存储）
+
 ### 本地开发
 
+1. 克隆仓库
 ```bash
-# 克隆仓库
-git clone https://github.com/suoke/rag-service.git
-cd rag-service
-
-# 安装依赖
-pip install -r requirements.txt
-
-# 配置环境变量
-cp .env.example .env
-# 编辑.env文件设置必要参数
-
-# 启动服务
-python -m src.main
+git clone https://github.com/suoke/suoke_life.git
+cd services/rag-service
 ```
 
-### 本地测试
-
+2. 安装依赖
 ```bash
-# 运行全套本地测试（代码检查、单元测试、Docker构建）
-./scripts/run_local_tests.sh
-
-# 测试并自动部署
-./scripts/test_and_deploy.sh <分支名> "<提交消息>" [Y/N]
-
-# 例如：测试并部署到功能分支
-./scripts/test_and_deploy.sh feature/new-feature "添加新功能" Y
-
-# 例如：测试并部署到发布分支
-./scripts/test_and_deploy.sh release/1.2.0 "准备发布1.2.0版本" Y
+go mod tidy
 ```
 
-详细的本地测试和自动部署文档请参阅 [本地测试指南](docs/LOCAL_TESTING.md)。
-
-### Docker 运行
-
+3. 配置环境变量
 ```bash
-# 构建镜像
-docker build -t suoke/rag-service:latest .
-
-# 运行容器
-docker run -p 8000:8000 --env-file .env suoke/rag-service:latest
+cp .env.example .env  # 创建 .env 文件并配置
 ```
 
-### Kubernetes 部署
-
+4. 运行服务
 ```bash
-# 使用Kustomize部署
-kubectl apply -k k8s/base
-
-# 或使用特定环境配置
-kubectl apply -k k8s/overlays/production
+go run main.go
 ```
 
-## 接口文档
+### Docker 部署
 
-启动服务后访问 `/docs` 或 `/redoc` 获取Swagger或ReDoc格式的API文档。
+使用 Docker Compose 启动整个 RAG 服务生态系统（包括 Milvus、Redis、Prometheus 和 Grafana）：
 
-## CI/CD 流程
+```bash
+docker-compose up -d
+```
 
-服务使用GitHub Actions实现自动化CI/CD流程，主要包括：
+## API 文档
 
-### 自动化流程
+该服务提供以下主要 API 端点：
 
-1. **代码检查与测试**: 每次提交自动运行代码格式检查、类型检查、单元测试
-2. **安全扫描**: 自动检测依赖和容器中的安全漏洞
-3. **镜像构建与推送**: 自动构建Docker镜像并推送到容器镜像仓库
-4. **多环境部署**: 根据分支策略自动部署到相应环境
-5. **性能测试**: 自动执行负载测试并分析性能指标
-6. **部署验证**: 自动验证服务部署状态和功能可用性
+### RAG 查询
+- `POST /api/rag/query` - 执行RAG查询
+- `POST /api/rag/stream` - 执行流式RAG查询
+- `POST /api/rag/search/:collection` - 在集合中搜索文档
+- `GET /api/rag/collections` - 列出所有集合
+- `POST /api/rag/collections` - 创建新集合
+- `GET /api/rag/collections/:name` - 获取集合信息
+- `DELETE /api/rag/collections/:name` - 删除集合
+- `POST /api/rag/upload` - 上传文档到集合
+- `GET /api/rag/documents/:collection/:id` - 获取文档
+- `DELETE /api/rag/documents/:collection/:id` - 从集合中删除文档
 
-### 使用方法
+### 嵌入生成
+- `POST /api/embeddings` - 生成文本嵌入
+- `GET /api/embeddings/models` - 列出可用的嵌入模型
 
-- **开发新功能**: 创建feature/*分支进行开发，提交PR触发测试
-- **发布版本**: 合并到main自动部署到开发环境，创建release/*分支部署到生产
-- **手动部署**: 通过GitHub Actions界面手动触发特定环境的部署
+### 系统管理
+- `GET /health` - 健康检查
+- `GET /metrics` - Prometheus 指标
 
-详细说明请参阅 [CI/CD文档](docs/CI_CD_README.md)。
+## 配置
+
+服务配置可以通过 `.env` 文件或环境变量进行配置。主要配置项包括：
+
+- `SERVER_PORT`: 服务端口（默认 8080）
+- `LOG_LEVEL`: 日志级别
+- `VECTOR_DB_HOST`: 向量数据库主机
+- `VECTOR_DB_PORT`: 向量数据库端口
+- `EMBEDDING_MODEL`: 默认嵌入模型
+- `OPENAI_API_KEY`: OpenAI API 密钥（如果使用 OpenAI 嵌入）
+
+详细配置请参考 `config/config.yaml` 文件。
+
+## 项目结构
+
+```
+.
+├── api/              # API 定义和文档
+├── config/           # 配置文件和加载器
+├── core/             # 核心功能
+├── database/         # 数据库连接和迁移
+├── embeddings/       # 嵌入模型实现
+├── handlers/         # HTTP 处理器
+├── middleware/       # HTTP 中间件
+├── models/           # 数据模型
+├── rag/              # RAG 服务实现
+├── tests/            # 测试文件
+├── utils/            # 工具函数
+├── vector_store/     # 向量存储实现
+├── Dockerfile        # Docker 构建文件
+├── docker-compose.yml# Docker Compose 配置
+├── go.mod            # Go 模块定义
+├── go.sum            # Go 模块校验和
+├── main.go           # 应用入口
+└── README.md         # 项目文档
+```
+
+## Kubernetes部署
+
+```bash
+# 使用Kustomize部署到开发环境
+kubectl apply -k k8s/overlays/dev
+
+# 部署到预发布环境
+kubectl apply -k k8s/overlays/staging
+
+# 部署到生产环境
+kubectl apply -k k8s/overlays/prod
+```
 
 ## 贡献指南
 
-请参阅 [CONTRIBUTING.md](CONTRIBUTING.md) 了解如何为项目做出贡献。
+我们欢迎任何形式的贡献，包括新功能、bug 修复或文档改进。请遵循以下步骤：
+
+1. Fork 项目
+2. 创建功能分支 (`git checkout -b feature/amazing-feature`)
+3. 提交更改 (`git commit -m '添加了一个很棒的功能'`)
+4. 推送到分支 (`git push origin feature/amazing-feature`)
+5. 打开 Pull Request
 
 ## 许可证
 
-本项目采用 [MIT 许可证](LICENSE)。
+本项目采用 MIT 许可证 - 详情请参见 LICENSE 文件。
+
+
