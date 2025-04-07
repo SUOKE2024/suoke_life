@@ -210,7 +210,7 @@ jobs:
     needs: build-push
     if: github.ref == 'refs/heads/main' || github.event.inputs.environment == 'dev'
     environment:
-      name: dev
+      name: development
       url: https://dev.api.suoke.life/kb
     steps:
       - uses: actions/checkout@v3
@@ -242,7 +242,7 @@ jobs:
     needs: [build-push, deploy-dev]
     if: startsWith(github.ref, 'refs/heads/release/') || github.event.inputs.environment == 'staging'
     environment:
-      name: staging-env
+      name: staging
       url: https://staging.api.suoke.life/kb
     steps:
       - uses: actions/checkout@v3
@@ -278,7 +278,7 @@ jobs:
     needs: [build-push, deploy-staging]
     if: startsWith(github.ref, 'refs/heads/release/') || github.event.inputs.environment == 'prod'
     environment:
-      name: prod
+      name: production
       url: https://api.suoke.life/kb
     steps:
       - uses: actions/checkout@v3
