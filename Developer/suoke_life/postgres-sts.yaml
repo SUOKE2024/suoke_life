@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  creationTimestamp: "2025-04-05T19:47:25Z"
+  generation: 1
+  labels:
+    app: postgres
+  name: postgres
+  namespace: suoke-prod
+  resourceVersion: "10271216"
+  uid: 946532f6-0aef-44a5-9dd7-3c25a3d3725b
+spec:
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: Retain
+    whenScaled: Retain
+  podManagementPolicy: OrderedReady
+  replicas: 2
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: postgres
+  serviceName: postgres-svc
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: postgres
+    spec:
+      containers:
+      - env:
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              key: DB_USER
+              name: knowledge-base-secrets
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: DB_PASSWORD
+              name: knowledge-base-secrets
+        - name: POSTGRES_DB
+          valueFrom:
+            configMapKeyRef:
+              key: DB_NAME
+              name: knowledge-base-config
+        - name: PGDATA
+          value: /var/lib/postgresql/data/pgdata
+        image: postgres:14-alpine
+        imagePullPolicy: IfNotPresent
+        name: postgres
+        resources:
+          requests:
+            cpu: 250m
+            memory: 512Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+  updateStrategy:
+    type: RollingUpdate
+status:
+  availableReplicas: 0
+  collisionCount: 0
+  currentReplicas: 2
+  currentRevision: postgres-6b7dfdd6c9
+  observedGeneration: 1
+  replicas: 2
+  updateRevision: postgres-6b7dfdd6c9
+  updatedReplicas: 2

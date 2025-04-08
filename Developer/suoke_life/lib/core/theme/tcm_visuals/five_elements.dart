@@ -1,8 +1,6 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import 'package:suoke_life/core/theme/app_colors.dart';
 
-/// 五行元素类型枚举
+/// 五行元素类型
 enum ElementType {
   /// 木
   wood,
@@ -20,152 +18,69 @@ enum ElementType {
   water,
 }
 
-/// 五行元素视觉系统
-/// 定义了中医五行相关的视觉设计元素
+/// 五行元素工具类
 class FiveElements {
-  // 五行基础色彩 - 与AppColors中定义保持一致
-  static const Color woodColor = AppColors.woodColor; // 木
-  static const Color fireColor = AppColors.fireColor; // 火
-  static const Color earthColor = AppColors.earthColor; // 土
-  static const Color metalColor = AppColors.metalColor; // 金
-  static const Color waterColor = AppColors.waterColor; // 水
-
-  // 获取元素对应的颜色
+  /// 获取元素颜色
   static Color getElementColor(ElementType type) {
     switch (type) {
       case ElementType.wood:
-        return woodColor;
+        return const Color(0xFF4CAF50);  // 绿色代表木
       case ElementType.fire:
-        return fireColor;
+        return const Color(0xFFE53935);  // 红色代表火
       case ElementType.earth:
-        return earthColor;
+        return const Color(0xFFFFB300);  // 黄色代表土
       case ElementType.metal:
-        return metalColor;
+        return const Color(0xFFBDBDBD);  // 银灰色代表金
       case ElementType.water:
-        return waterColor;
+        return const Color(0xFF2196F3);  // 蓝色代表水
     }
   }
 
-  // 五行渐变色
-  static LinearGradient get woodGradient => LinearGradient(
-        colors: [woodColor, woodColor.withAlpha(160)],
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-      );
-
-  static LinearGradient get fireGradient => LinearGradient(
-        colors: [fireColor, fireColor.withAlpha(160)],
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-      );
-
-  static LinearGradient get earthGradient => LinearGradient(
-        colors: [earthColor, earthColor.withAlpha(160)],
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-      );
-
-  static LinearGradient get metalGradient => LinearGradient(
-        colors: [metalColor, metalColor.withAlpha(160)],
-        begin: Alignment.topRight,
-        end: Alignment.bottomLeft,
-      );
-
-  static LinearGradient get waterGradient => LinearGradient(
-        colors: [waterColor, waterColor.withAlpha(160)],
-        begin: Alignment.bottomCenter,
-        end: Alignment.topCenter,
-      );
-
-  // 五行图标
-  static IconData get woodIcon => Icons.eco; // 木 - 生长
-  static IconData get fireIcon => Icons.whatshot; // 火 - 热力
-  static IconData get earthIcon => Icons.terrain; // 土 - 大地
-  static IconData get metalIcon => Icons.trip_origin; // 金 - 金属
-  static IconData get waterIcon => Icons.water; // 水 - 流动
-
-  // 五行装饰形状生成器
-  static ShapeBorder getElementShape(String element) {
-    switch (element) {
-      case 'wood':
-        return RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        );
-      case 'fire':
-        return const StarBorder(
-          points: 5,
-          innerRadiusRatio: 0.6,
-        );
-      case 'earth':
-        return RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(4),
-        );
-      case 'metal':
-        return const CircleBorder();
-      case 'water':
-        return const StadiumBorder();
-      default:
-        return RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        );
+  /// 获取元素名称
+  static String getElementName(ElementType type) {
+    switch (type) {
+      case ElementType.wood:
+        return '木';
+      case ElementType.fire:
+        return '火';
+      case ElementType.earth:
+        return '土';
+      case ElementType.metal:
+        return '金';
+      case ElementType.water:
+        return '水';
     }
   }
-}
 
-/// 星形边框 - 用于火元素装饰
-class StarBorder extends ShapeBorder {
-  final int points;
-  final double innerRadiusRatio;
-
-  const StarBorder({
-    required this.points,
-    this.innerRadiusRatio = 0.5,
-  });
-
-  @override
-  EdgeInsetsGeometry get dimensions => EdgeInsets.zero;
-
-  @override
-  Path getInnerPath(Rect rect, {TextDirection? textDirection}) {
-    return getOuterPath(rect, textDirection: textDirection);
-  }
-
-  @override
-  Path getOuterPath(Rect rect, {TextDirection? textDirection}) {
-    final center = rect.center;
-    final outerRadius =
-        rect.width < rect.height ? rect.width / 2 : rect.height / 2;
-    final innerRadius = outerRadius * innerRadiusRatio;
-
-    final path = Path();
-    const startAngle = -math.pi / 2;
-    final angleStep = math.pi / points;
-
-    for (int i = 0; i < points * 2; i++) {
-      final radius = i.isEven ? outerRadius : innerRadius;
-      final angle = startAngle + (i * angleStep);
-      final point = Offset(
-        center.dx + radius * math.cos(angle),
-        center.dy + radius * math.sin(angle),
-      );
-
-      if (i == 0) {
-        path.moveTo(point.dx, point.dy);
-      } else {
-        path.lineTo(point.dx, point.dy);
-      }
+  /// 获取相生关系
+  static ElementType getGeneratesElement(ElementType type) {
+    switch (type) {
+      case ElementType.wood:
+        return ElementType.fire;   // 木生火
+      case ElementType.fire:
+        return ElementType.earth;  // 火生土
+      case ElementType.earth:
+        return ElementType.metal;  // 土生金
+      case ElementType.metal:
+        return ElementType.water;  // 金生水
+      case ElementType.water:
+        return ElementType.wood;   // 水生木
     }
-
-    path.close();
-    return path;
   }
 
-  @override
-  void paint(Canvas canvas, Rect rect, {TextDirection? textDirection}) {}
-
-  @override
-  ShapeBorder scale(double t) => StarBorder(
-        points: points,
-        innerRadiusRatio: innerRadiusRatio,
-      );
-}
+  /// 获取相克关系
+  static ElementType getControlsElement(ElementType type) {
+    switch (type) {
+      case ElementType.wood:
+        return ElementType.earth;  // 木克土
+      case ElementType.fire:
+        return ElementType.metal;  // 火克金
+      case ElementType.earth:
+        return ElementType.water;  // 土克水
+      case ElementType.metal:
+        return ElementType.wood;   // 金克木
+      case ElementType.water:
+        return ElementType.fire;   // 水克火
+    }
+  }
+} 

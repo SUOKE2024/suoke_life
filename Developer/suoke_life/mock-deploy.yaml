@@ -1,0 +1,115 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: knowledge-base-service
+  namespace: suoke-prod
+  labels:
+    app: knowledge-base-service
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: knowledge-base-service
+  template:
+    metadata:
+      labels:
+        app: knowledge-base-service
+        version: v1
+    spec:
+      containers:
+        - name: knowledge-base-service
+          image: registry.cn-hangzhou.aliyuncs.com/acs/nginx:1.18
+          ports:
+            - containerPort: 80
+              name: http
+          volumeMounts:
+            - name: config-volume
+              mountPath: /usr/share/nginx/html
+      volumes:
+        - name: config-volume
+          configMap:
+            name: knowledge-base-mock
+            items:
+              - key: index.html
+                path: index.html
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: knowledge-base-mock
+  namespace: suoke-prod
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>知识库服务 - 模拟服务器</title>
+      <style>
+        body {
+          font-family: 'Helvetica Neue', Arial, sans-serif;
+          color: #333;
+          max-width: 800px;
+          margin: 0 auto;
+          padding: 20px;
+        }
+        h1 { color: #35BB78; }
+        .status { padding: 10px; background: #f1f1f1; border-radius: 4px; }
+        .api-list { margin-top: 20px; }
+        .api-item { 
+          padding: 10px;
+          border-left: 3px solid #35BB78;
+          margin-bottom: 10px;
+          background: #f9f9f9;
+        }
+      </style>
+    </head>
+    <body>
+      <h1>索克生活 - 知识库服务</h1>
+      <div class="status">
+        <p><strong>状态:</strong> 正在模拟运行</p>
+        <p><strong>版本:</strong> v1.0.0</p>
+        <p><strong>维护模式:</strong> 开启</p>
+      </div>
+      
+      <div class="api-list">
+        <h2>API 端点</h2>
+        <div class="api-item">
+          <strong>GET /api/v1/health</strong>
+          <p>健康检查端点</p>
+        </div>
+        <div class="api-item">
+          <strong>GET /api/v1/documents</strong>
+          <p>获取文档列表</p>
+        </div>
+        <div class="api-item">
+          <strong>POST /api/v1/documents</strong>
+          <p>创建新文档</p>
+        </div>
+        <div class="api-item">
+          <strong>GET /api/v1/search</strong>
+          <p>语义搜索</p>
+        </div>
+      </div>
+      
+      <footer>
+        <p>© 2025 索克生活科技有限公司</p>
+      </footer>
+    </body>
+    </html>
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: knowledge-base-service
+  namespace: suoke-prod
+  labels:
+    app: knowledge-base-service
+spec:
+  selector:
+    app: knowledge-base-service
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+  type: ClusterIP

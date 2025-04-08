@@ -4,20 +4,20 @@ import (
 	"context"
 	"fmt"
 	"sync"
-	
+
 	"knowledge-base-service/internal/interfaces/ai"
 )
 
 // ChineseEmbeddingService 中文文本嵌入服务
 // 基于预训练的中文词向量模型，针对中文处理进行了优化
 type ChineseEmbeddingService struct {
-	modelURL      string
-	apiToken      string
-	contextSize   int
-	dimension     int
-	client        HttpClient
-	mutex         sync.Mutex
-	batchSize     int
+	modelURL    string
+	apiToken    string
+	contextSize int
+	dimension   int
+	client      HttpClient
+	mutex       sync.Mutex
+	batchSize   int
 }
 
 // 确保 ChineseEmbeddingService 实现了 EmbeddingService 接口
@@ -61,7 +61,7 @@ func NewChineseEmbeddingService(options EmbeddingOptions, client HttpClient) *Ch
 	if options.BatchSize <= 0 {
 		options.BatchSize = DefaultEmbeddingOptions.BatchSize
 	}
-	
+
 	return &ChineseEmbeddingService{
 		modelURL:    options.ModelURL,
 		apiToken:    options.APIToken,
@@ -77,17 +77,17 @@ func (s *ChineseEmbeddingService) GetEmbedding(ctx context.Context, text string)
 	if text == "" {
 		return make([]float32, s.dimension), nil
 	}
-	
+
 	// 调用批量接口处理单个文本
 	vectors, err := s.GetBatchEmbeddings(ctx, []string{text})
 	if err != nil {
 		return nil, err
 	}
-	
+
 	if len(vectors) == 0 {
 		return make([]float32, s.dimension), nil
 	}
-	
+
 	return vectors[0], nil
 }
 
@@ -96,11 +96,11 @@ func (s *ChineseEmbeddingService) GetBatchEmbeddings(ctx context.Context, texts 
 	if len(texts) == 0 {
 		return [][]float32{}, nil
 	}
-	
+
 	// 加锁确保并发安全
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
-	
+
 	// 检查上下文是否已取消
 	select {
 	case <-ctx.Done():
@@ -108,7 +108,7 @@ func (s *ChineseEmbeddingService) GetBatchEmbeddings(ctx context.Context, texts 
 	default:
 		// 继续处理
 	}
-	
+
 	// TODO: 在实际实现中，这里应该调用嵌入API
 	// 当前返回模拟的嵌入向量
 	vectors := make([][]float32, len(texts))
@@ -120,7 +120,7 @@ func (s *ChineseEmbeddingService) GetBatchEmbeddings(ctx context.Context, texts 
 		}
 		vectors[i] = vector
 	}
-	
+
 	return vectors, nil
 }
 
@@ -139,27 +139,27 @@ func (s *ChineseEmbeddingService) callEmbeddingAPI(texts []string) ([][]float32,
 	if s.client == nil {
 		return nil, fmt.Errorf("HTTP客户端未初始化")
 	}
-	
+
 	// 构建请求体
 	req := embeddingRequest{
 		Texts: texts,
 	}
-	
+
 	// 构建请求头
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}
-	
+
 	if s.apiToken != "" {
 		headers["Authorization"] = "Bearer " + s.apiToken
 	}
-	
+
 	// 调用API
 	_, err := s.client.Post(s.modelURL, req, headers)
 	if err != nil {
 		return nil, fmt.Errorf("调用嵌入API失败: %w", err)
 	}
-	
+
 	// TODO: 解析响应JSON到embeddingResponse结构体
 	// 当前返回模拟数据
 	vectors := make([][]float32, len(texts))
@@ -170,6 +170,6 @@ func (s *ChineseEmbeddingService) callEmbeddingAPI(texts []string) ([][]float32,
 		}
 		vectors[i] = vector
 	}
-	
+
 	return vectors, nil
-} 
+}

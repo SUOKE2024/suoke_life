@@ -1,0 +1,90 @@
+version: '3.8'
+
+services:
+  test-postgres:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=test
+      - POSTGRES_DB=test_kb
+    ports:
+      - "5433:5432"
+    volumes:
+      - test-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  test-milvus:
+    image: milvusdb/milvus:v2.4.2
+    environment:
+      - ETCD_ENDPOINTS=test-etcd:2379
+      - MINIO_ADDRESS=test-minio:9000
+    ports:
+      - "19531:19530"
+    depends_on:
+      - test-etcd
+      - test-minio
+    volumes:
+      - test-milvus-data:/var/lib/milvus
+
+  test-etcd:
+    image: quay.io/coreos/etcd:v3.5.5
+    environment:
+      - ETCD_AUTO_COMPACTION_MODE=revision
+      - ETCD_AUTO_COMPACTION_RETENTION=1000
+      - ETCD_QUOTA_BACKEND_BYTES=4294967296
+      - ETCD_SNAPSHOT_COUNT=50000
+    volumes:
+      - test-etcd-data:/etcd
+    command: etcd --advertise-client-urls=http://127.0.0.1:2379 --listen-client-urls http://0.0.0.0:2379 --data-dir /etcd
+
+  test-minio:
+    image: minio/minio:RELEASE.2023-03-20T20-16-18Z
+    environment:
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=minioadmin
+    volumes:
+      - test-minio-data:/data
+    command: minio server /data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+  test-embedding-service:
+    image: semitechnologies/transformers-inference:sentence-transformers-paraphrase-multilingual-mpnet-base-v2
+    environment:
+      - ENABLE_CUDA=0
+      - MODEL_NAME=sentence-transformers/paraphrase-multilingual-mpnet-base-v2
+    ports:
+      - "8001:8080"
+
+  # 测试运行器 - 运行端到端测试
+  test-runner:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    depends_on:
+      - test-postgres
+      - test-milvus
+      - test-embedding-service
+    environment:
+      - DB_CONNECTION_STRING=postgres://test:test@test-postgres:5432/test_kb?sslmode=disable
+      - VECTOR_STORE_HOST=test-milvus
+      - VECTOR_STORE_PORT=19530
+      - VECTOR_STORE_COLLECTION=test_documents
+      - EMBEDDING_MODEL_URL=http://test-embedding-service:8080/embed
+      - TEST_MODE=e2e
+    volumes:
+      - ./:/app
+    command: go test -v ./internal/test/e2e/...
+
+volumes:
+  test-postgres-data:
+  test-milvus-data:
+  test-etcd-data:
+  test-minio-data:

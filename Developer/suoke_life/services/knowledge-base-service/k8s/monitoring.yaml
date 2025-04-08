@@ -1,0 +1,32 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: knowledge-base-monitor
+  namespace: suoke-prod
+spec:
+  selector:
+    matchLabels:
+      app: knowledge-base-service
+  endpoints:
+  - port: metrics
+    interval: 15s
+    path: /metrics
+---
+apiVersion: logging.banzaicloud.io/v1beta1
+kind: Flow
+metadata:
+  name: knowledge-base-logs
+  namespace: suoke-prod
+spec:
+  filters:
+    - parser:
+        remove_key_name_field: true
+        reserve_data: true
+        parse:
+          type: json
+  match:
+    - select:
+        labels:
+          app: knowledge-base-service
+  localOutputRefs:
+    - elasticsearch-output

@@ -1,0 +1,228 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: xiaoai-agent-config
+  namespace: suoke
+data:
+  AGENT_ID: "xiaoai-001"
+  AGENT_NAME: "小爱"
+  AGENT_VERSION: "1.0.0"
+  
+  agent.yaml: |
+    name: "小爱"
+    version: "1.0.0"
+    description: "索克生活APP的主智能体，整合四诊合参能力，提供全方位健康管理服务"
+    
+    capabilities:
+      - name: "四诊合参"
+        description: "整合望闻问切四诊方法，提供全面的健康评估"
+        enabled: true
+        components:
+          - name: "望诊"
+            service: "looking-diagnosis-service"
+            version: "1.0.0"
+            enabled: true
+          - name: "闻诊"
+            service: "voice-diagnosis-service" 
+            version: "1.0.0"
+            enabled: true
+          - name: "切诊"
+            service: "pulse-diagnosis-service"
+            version: "1.0.0"
+            enabled: true
+      
+      - name: "多模态交互"
+        description: "支持语音、文字、图像等多种交互方式"
+        enabled: true
+        components:
+          - name: "语音交互"
+            enabled: true
+            config:
+              voice_styles:
+                - name: "标准女声"
+                  id: "zh-CN-XiaoxiaoNeural"
+                  default: true
+                - name: "标准男声"
+                  id: "zh-CN-YunxiNeural"
+              speech_rate: 1.0
+              pitch: 0
+              volume: 1.0
+          - name: "图像交互"
+            enabled: true
+            config:
+              image_formats: ["jpg", "png", "heic"]
+              max_image_size: 10485760  # 10MB
+          - name: "文字交互"
+            enabled: true
+            config:
+              max_input_length: 1000
+              
+      - name: "知识推理"
+        description: "基于知识图谱的健康知识推理能力"
+        enabled: true
+        components:
+          - name: "知识图谱"
+            service: "knowledge-graph-service"
+            version: "1.0.0"
+            enabled: true
+          - name: "推理引擎"
+            service: "reasoning-engine"
+            version: "1.0.0"
+            enabled: true
+            
+      - name: "情感计算"
+        description: "理解和回应用户情感状态"
+        enabled: true
+        config:
+          emotion_detection:
+            enabled: true
+            models:
+              - name: "语音情感识别"
+                type: "audio"
+                enabled: true
+              - name: "文本情感分析"
+                type: "text"
+                enabled: true
+              - name: "面部表情识别"
+                type: "image"
+                enabled: true
+          response_strategy:
+            adaptive: true
+            emotion_matching: true
+            
+    models:
+      primary:
+        name: "gpt-4-turbo-preview"
+        provider: "openai"
+        temperature: 0.7
+        max_tokens: 4000
+        top_p: 0.95
+        frequency_penalty: 0.5
+        presence_penalty: 0.5
+      fallback:
+        name: "gpt-3.5-turbo"
+        provider: "openai"
+        temperature: 0.7
+        max_tokens: 2000
+        
+    multimodal:
+      enabled: true
+      models:
+        - name: "gpt-4-vision-preview"
+          type: "vision"
+          enabled: true
+        - name: "whisper-1"
+          type: "speech"
+          enabled: true
+          
+    memory:
+      type: "hybrid"
+      components:
+        - name: "短期记忆"
+          type: "conversation"
+          max_tokens: 4000
+          ttl: 3600  # 1小时
+        - name: "长期记忆"
+          type: "vector"
+          embedding_model: "text-embedding-3-large"
+          
+    personality:
+      base_traits:
+        - name: "专业性"
+          value: 0.9
+          description: "展现专业的中医养生知识"
+        - name: "亲和力"
+          value: 0.8
+          description: "平易近人，容易沟通"
+        - name: "同理心"
+          value: 0.85
+          description: "理解并关心用户的健康状况"
+      voice_style:
+        tone: "温和"
+        pace: "适中"
+        expression: "自然"
+        
+    safety:
+      content_filtering:
+        enabled: true
+        level: "strict"
+      privacy:
+        data_encryption: true
+        data_retention_days: 30
+      authentication:
+        required: true
+        methods: ["token", "biometric"]
+        
+    performance:
+      response_time_threshold_ms: 2000
+      batch_processing:
+        enabled: true
+        max_batch_size: 10
+      caching:
+        enabled: true
+        ttl: 3600
+      rate_limiting:
+        enabled: true
+        requests_per_minute: 60
+        
+    monitoring:
+      metrics:
+        - name: "response_time"
+          type: "histogram"
+          description: "响应时间分布"
+        - name: "user_satisfaction"
+          type: "gauge"
+          description: "用户满意度评分"
+        - name: "diagnostic_accuracy"
+          type: "gauge"
+          description: "诊断准确率"
+      alerts:
+        - name: "high_latency"
+          condition: "response_time > 5s"
+          severity: "warning"
+        - name: "service_degradation"
+          condition: "success_rate < 95%"
+          severity: "critical"
+          
+    integration:
+      services:
+        - name: "用户服务"
+          id: "user-service"
+          required: true
+        - name: "知识图谱服务"
+          id: "knowledge-graph-service"
+          required: true
+        - name: "RAG服务"
+          id: "rag-service"
+          required: true
+      apis:
+        - name: "OpenAI API"
+          version: "v1"
+          required: true
+        - name: "Azure Speech Services"
+          version: "v1"
+          required: true
+          
+    localization:
+      default_language: "zh-CN"
+      supported_languages:
+        - code: "zh-CN"
+          name: "简体中文"
+          enabled: true
+        - code: "en-US"
+          name: "英语"
+          enabled: true
+      timezone: "Asia/Shanghai"
+      
+    accessibility:
+      screen_reader:
+        enabled: true
+        voice_rate_control: true
+      voice_guidance:
+        enabled: true
+        context_aware: true
+      high_contrast:
+        enabled: true
+      font_scaling:
+        enabled: true
+        range: [0.8, 2.0] 

@@ -1,447 +1,302 @@
-# 索克生活知识图谱服务 [完成度: 100%]
+# 索克生活知识图谱服务
 
-基于Neo4j和Milvus的中医知识图谱系统，为索克生活APP提供知识图谱服务支持。
+索克生活平台知识图谱服务，基于Neo4j和Milvus的中医知识图谱系统，提供中医药材、方剂、症状等实体关联知识查询和管理。
 
-## 功能特点
+> **重要提示**: 本服务已从Node.js重构为Go实现，请参考下方关于重构的说明。
 
-- 支持中医知识的图谱化存储和检索
-- 集成向量数据库实现语义相似度搜索
-- 支持多领域知识的组织和管理
-- 提供RESTful API接口
-- 支持知识图谱的动态扩展和更新
-- 集成RAG服务增强检索效果
-- 支持精准医学知识节点管理
-- 多模态健康数据节点支持
-- 环境健康知识节点支持
-- 心理健康知识节点支持
-- 知识间复杂关系建模
-- 跨领域知识图谱对齐
-- 3D/AR/VR知识图谱沉浸式可视化
+## 重构说明
 
-## 技术栈
+本服务已从Node.js重构为Go实现，主要变化包括：
 
-- Node.js + TypeScript
-- Neo4j图数据库
-- Milvus向量数据库
-- Redis缓存
-- Fastify Web框架
-- Docker容器化
-- Kubernetes编排
-- Three.js/A-Frame 3D可视化引擎
-- AR.js/8th Wall AR技术支持
-- WebXR/WebVR VR支持
+- 使用Go语言重新实现了所有核心功能
+- 保持了相同的API接口和功能
+- 数据库连接和查询逻辑优化
+- 新增高效的数据导入工具
+- 性能显著提升
 
-## 开发环境要求
-
-- Node.js >= 18.0.0
-- Neo4j >= 4.4
-- Milvus >= 2.2
-- Redis >= 6.0
-- Docker >= 20.10
-- Kubernetes >= 1.24 (生产环境)
-
-## 快速开始
-
-1. 安装依赖：
-```bash
-npm install
-```
-
-2. 配置环境变量：
-```bash
-cp .env.example .env
-# 编辑.env文件配置相关参数
-```
-
-3. 开发模式运行：
-```bash
-npm run dev
-```
-
-4. 构建生产版本：
-```bash
-npm run build
-```
-
-5. 生产模式运行：
-```bash
-npm start
-```
-
-## Docker部署
-
-1. 构建镜像：
-```bash
-docker build -t suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/knowledge-graph-service:latest .
-```
-
-2. 推送镜像：
-```bash
-docker push suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/knowledge-graph-service:latest
-```
-
-3. 运行容器：
-```bash
-docker run -d \
-  --name knowledge-graph-service \
-  -p 3000:3000 \
-  -v /path/to/data:/app/data \
-  -v /path/to/models:/app/models \
-  --env-file .env \
-  suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/knowledge-graph-service:latest
-```
-
-## Kubernetes部署
-
-本服务提供了完整的Kubernetes配置，支持在Kubernetes集群中部署。
-
-### 使用kubectl和Kustomize部署
-
-1. 切换到正确的上下文：
-```bash
-kubectl config use-context your-cluster-context
-```
-
-2. 部署服务：
-```bash
-kubectl apply -k k8s/
-```
-
-3. 验证部署：
-```bash
-kubectl get pods -n suoke -l app=knowledge-graph-service
-kubectl get svc -n suoke -l app=knowledge-graph-service
-```
-
-### 使用Helm部署
-
-1. 安装或升级Chart：
-```bash
-helm upgrade --install knowledge-graph-service ./helm \
-  --namespace suoke \
-  --create-namespace \
-  --set image.tag=latest \
-  --values ./helm/values.yaml
-```
-
-2. 自定义值文件：
-```bash
-# 创建自定义值文件
-cp ./helm/values.yaml ./helm/custom-values.yaml
-# 编辑custom-values.yaml以适应环境
-```
-
-3. 使用自定义值文件：
-```bash
-helm upgrade --install knowledge-graph-service ./helm \
-  --namespace suoke \
-  --values ./helm/custom-values.yaml
-```
-
-4. 卸载Chart：
-```bash
-helm uninstall knowledge-graph-service -n suoke
-```
-
-### 持久化存储配置
-
-服务使用三个持久化卷：
-- `data`：存储知识图谱数据
-- `models`：存储嵌入模型和其他机器学习模型
-- `tmp`：临时文件存储
-
-确保在部署前配置了适当的存储类。
-
-### 安全配置
-
-本服务集成了Vault进行密钥管理。请确保在部署前正确配置了Vault。
-
-## API文档
-
-服务集成了完整的Swagger/OpenAPI文档系统，提供了交互式的API文档界面。
-
-### 访问API文档
-
-启动服务后，访问以下URL查看API文档：
-
-- **本地开发环境**：http://localhost:3000/api-docs
-- **测试环境**：https://test-api.suoke.life/knowledge-graph/api-docs
-- **生产环境**：https://api.suoke.life/knowledge-graph/api-docs
-
-### API文档特性
-
-- 完整的API端点描述和参数说明
-- 交互式API测试界面
-- 请求和响应示例
-- 模型定义和验证规则
-- 安全认证方式说明
-- 按功能分组的API端点
-- 可视化数据模型和关系
-- 详细的错误码和响应格式说明
-- 支持API导出为其他格式（如Postman Collection）
-- 基于环境变量的文档保护机制
-
-### API开发与使用指南
-
-详细的API文档使用和开发指南可在以下文件找到：
-
-- [API文档使用指南](./docs/API_DOCS_GUIDE.md) - 如何使用API文档和测试API
-- [Fastify Schema指南](./docs/FASTIFY_SCHEMA_GUIDE.md) - 如何为API端点添加文档和验证
-- [API测试指南](./docs/API_TESTING_GUIDE.md) - 如何进行API自动化测试和手动测试
-
-### API文档配置
-
-API文档支持通过环境变量进行配置：
-
-- `SWAGGER_PROTECTED`: 是否对API文档启用访问保护（true/false）
-- `SWAGGER_USERNAME`: 访问API文档的用户名
-- `SWAGGER_PASSWORD`: 访问API文档的密码
-
-这些配置可以在`.env`文件中设置，示例：
-
-```
-SWAGGER_PROTECTED=true
-SWAGGER_USERNAME=admin
-SWAGGER_PASSWORD=suoke@2024
-```
-
-## 可观测性
-
-服务通过以下方式支持可观测性：
-
-1. Prometheus指标：
-   - 服务在`:9090/metrics`端点暴露Prometheus指标
-   - ServiceMonitor自动配置了指标收集
-
-2. OpenTelemetry集成：
-   - 通过环境变量`OTEL_EXPORTER_OTLP_ENDPOINT`配置OpenTelemetry导出器
-   - 支持分布式追踪
-
-3. 健康检查端点：
-   - `/health/live`：活性检查
-   - `/health/ready`：就绪检查
-   - `/health/startup`：启动检查
+如果需要访问旧版Node.js代码，请查看`node-backup-*`目录或git历史版本。
 
 ## 目录结构
 
 ```
-src/
-├── config/           # 配置文件
-├── core/            # 核心功能
-├── domain/          # 领域模型
-│   ├── entities/    # 实体定义
-│   │   ├── base-node.ts                # 基础节点
-│   │   ├── tcm-node.ts                 # 中医节点
-│   │   ├── herb-node.ts                # 中药节点
-│   │   ├── prescription-node.ts        # 方剂节点
-│   │   ├── symptom-node.ts             # 症状节点
-│   │   ├── constitution-node.ts        # 体质节点
-│   │   ├── acupoint-node.ts            # 穴位节点
-│   │   ├── diagnosis-node.ts           # 诊断节点
-│   │   ├── meridian-node.ts            # 经络节点
-│   │   ├── modern-medicine-node.ts     # 现代医学节点
-│   │   ├── precision-medicine-node.ts  # 精准医学节点
-│   │   ├── multimodal-health-node.ts   # 多模态健康节点
-│   │   ├── environmental-health-node.ts # 环境健康节点
-│   │   ├── mental-health-node.ts       # 心理健康节点
-│   │   └── relationship-types.ts       # 关系类型定义
-│   └── repositories/# 仓储接口
-├── infrastructure/  # 基础设施
-│   ├── database/    # 数据库连接
-│   ├── swagger.ts   # API文档配置
-│   └── logger.ts    # 日志工具
-├── application/     # 应用服务
-├── interfaces/      # 接口层
-│   └── http/       # HTTP接口
-└── index.ts         # 应用入口
+.
+├── cmd/                  # 可执行命令
+│   ├── server/           # API服务器入口
+│   └── importer/         # 数据导入工具
+├── internal/             # 内部包
+│   ├── api/              # API处理程序
+│   ├── config/           # 配置
+│   ├── database/         # 数据库连接
+│   ├── domain/           # 领域模型
+│   │   ├── entities/     # 实体定义
+│   │   ├── repositories/ # 存储库接口
+│   ├── infrastructure/   # 基础设施
+│   │   ├── repositories/ # 存储库实现
+├── pkg/                  # 公共包
+├── data/                 # 数据文件
+├── docs/                 # 文档
+├── k8s/                  # Kubernetes配置
+└── clean-scripts/        # 迁移/清理脚本
 ```
 
-## 部署架构
+## 功能特点
 
-```
-                           ┌────────────────┐
-                           │  Ingress/Gateway │
-                           └────────┬─────────┘
-                                   │
-                           ┌────────┴─────────┐
-                           │  Service         │
-                           └────────┬─────────┘
-                                   │
-              ┌──────────────────┬─┴───────────────────┐
-              │                 │                     │
-    ┌─────────┴─────────┐  ┌────┴─────────────┐  ┌────┴─────────────┐
-    │  Pod             │  │  Pod             │  │  Pod             │
-    │                 │  │                 │  │                 │
-    │  ┌─────────────┐  │  │  ┌─────────────┐  │  │  ┌─────────────┐  │
-    │  │ Container   │  │  │  │ Container   │  │  │  │ Container   │  │
-    │  └─────────────┘  │  │  └─────────────┘  │  │  └─────────────┘  │
-    │                 │  │                 │  │                 │
-    └─────────────────┘  └─────────────────┘  └─────────────────┘
-             │                  │                     │
-             │                  │                     │
-    ┌────────┴──────────────────┴─────────────────────┴────────┐
-    │                                                         │
-    │  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐   │
-    │  │  PVC Data  │    │  PVC Models │    │  PVC Tmp    │   │
-    │  └─────────────┘    └─────────────┘    └─────────────┘   │
-    │                                                         │
-    └─────────────────────────────────────────────────────────┘
+- 知识图谱节点和关系管理
+- 中医药材和方剂导入和查询
+- 知识实体关系分析
+- 图谱可视化数据格式支持
+- 搜索和过滤
+- 矢量相似度搜索
+
+## 环境要求
+
+- Go 1.20+
+- Neo4j 4.4+
+- Milvus 2.3+
+- Redis 6.0+
+
+## 安装和运行
+
+### 快速启动（推荐）
+
+使用提供的便捷脚本快速启动服务：
+
+```bash
+# 本地启动（需要自行配置Neo4j）
+./scripts/start.sh
+
+# 使用Docker Compose启动完整环境（包含Neo4j）
+./scripts/docker-start.sh
 ```
 
-## 知识领域
+### 本地开发
 
-- 中医基础理论
-- 方剂学
-- 中药学
-- 诊断学
-- 体质学说
-- 食疗学
-- 针灸学
-- 经络学
-- 气功推拿
-- 现代医学
-- 精准医学
-- 多模态健康数据
-- 环境健康
-- 心理健康
+1. 克隆代码库：
 
-## 数据集和训练集
+```bash
+git clone https://github.com/suoke-life/knowledge-graph-service.git
+cd knowledge-graph-service
+```
 
-知识图谱服务包含丰富的数据集和训练集，用于构建和训练知识图谱：
+2. 构建代码：
 
-### 数据集
+```bash
+go build -o knowledge-graph-service ./cmd/server
+```
 
-数据集位于 `datasets/` 目录下，包含以下类别：
+3. 运行服务：
 
-- **中医特色数据集**：包含中药材、方剂、证型、穴位、经络等中医专业数据
-- **多模态数据集**：包含图像、音频、文本等多模态数据
-- **健康数据集**：包含基因组、环境健康、心理健康等健康数据
+```bash
+./knowledge-graph-service
+```
 
-数据集遵循标准命名规范：`{dataset_name}_v{version}_{type}.{ext}`
+### Docker构建
 
-### 训练集
+使用Docker构建镜像：
 
-训练集位于 `training/` 目录下，用于训练以下模型：
+```bash
+docker build -t suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/knowledge-graph-service:latest .
+```
 
-- **嵌入模型**：用于节点、关系和图的嵌入表示
-- **关系抽取模型**：用于从文本中抽取实体间关系
-- **实体识别模型**：用于识别文本中的领域实体
-- **知识融合模型**：用于整合多源知识
+### Docker Compose环境
 
-## 知识服务
+使用Docker Compose快速启动完整环境（包含Neo4j数据库）：
 
-知识图谱服务提供以下核心知识服务：
+```bash
+# 构建并启动所有服务
+docker-compose up -d
 
-### 1. 多源知识整合
+# 仅重建并启动知识图谱服务
+docker-compose up -d --build knowledge-graph-service
 
-整合以下三类知识源的查询结果：
-- **RAG服务**：提供检索增强生成能力
-- **知识库服务**：提供结构化和半结构化知识
-- **知识图谱**：提供图结构知识和关系推理
+# 查看服务日志
+docker-compose logs -f knowledge-graph-service
 
-### 2. 领域特定知识
+# 停止所有服务
+docker-compose down
+```
 
-支持在特定领域内进行知识查询和分析：
-- **领域搜索**：在特定领域内搜索知识
-- **领域统计**：获取领域知识统计信息
-- **核心概念**：识别领域内的核心概念
+Neo4j管理界面访问：
+- 地址：http://localhost:7474
+- 默认凭据：neo4j/suokeneo4j
 
-### 3. 精准医学分析
+### Kubernetes部署
 
-整合基因组数据和健康历史，提供个性化健康建议：
-- **基因组分析**：分析基因变异和健康风险
-- **健康历史分析**：分析个人和家族健康史
-- **个性化推荐**：基于基因和健康史的个性化建议
+```bash
+kubectl apply -f k8s/deployment.yaml
+kubectl apply -f k8s/service.yaml
+```
 
-### 4. 多模态健康分析
+## 数据导入
 
-支持图像、音频等多模态数据输入：
-- **图像分析**：分析医学图像和健康相关图像
-- **音频分析**：分析语音和生物声学数据
-- **健康指标分析**：分析多源健康指标数据
+使用数据导入工具导入中医知识图谱数据：
 
-### 5. 环境健康分析
+```bash
+# 构建导入工具
+go build -o importer ./cmd/importer
 
-分析环境因素对健康的影响：
-- **环境数据分析**：分析空气、水、食物等环境因素
-- **地理位置分析**：基于地理位置的健康风险分析
-- **季节性分析**：分析季节变化对健康的影响
+# 导入中药数据
+./importer -source=data/herbs.csv -type=herbs
 
-### 6. 心理健康支持
+# 导入方剂数据
+./importer -source=data/formulas.csv -type=formulas
+```
 
-提供心理健康知识和情绪分析：
-- **情绪分析**：分析用户情绪状态
-- **心理健康知识**：提供心理健康相关知识
-- **干预建议**：根据情绪状态提供干预建议
+## API接口
 
-### 7. 图谱可视化
+主要API接口包括：
 
-提供知识图谱的可视化数据：
-- **子图可视化**：围绕特定节点的子图可视化
-- **领域可视化**：特定领域知识的图谱可视化
-- **健康画像可视化**：用户健康数据的图谱可视化
+- `/api/v1/nodes` - 知识图谱节点管理
+- `/api/v1/relationships` - 知识图谱关系管理
+- `/api/v1/tcm` - 中医专业知识查询
+- `/api/v1/search` - 知识图谱搜索
+- `/health` - 健康检查
 
-### 8. 沉浸式知识可视化
+详细API文档参见 `/docs/api.md`
 
-基于3D、AR、VR技术的知识图谱沉浸式体验：
-- **3D图谱可视化**：提供交互式3D知识图谱
-- **AR知识叠加**：将知识图谱叠加到现实环境
-- **VR沉浸体验**：提供完全沉浸式图谱探索体验
+## 配置选项
 
-## 3D/AR/VR可视化技术
+配置优先级：命令行参数 > 环境变量 > 配置文件
 
-知识图谱服务支持先进的沉浸式可视化技术，为用户提供直观、交互式的知识探索体验：
+主要配置选项：
 
-### 3D可视化
-
-- **技术实现**：基于Three.js/WebGL的3D图谱渲染
-- **特点**：
-  - 立体化知识节点和关系表示
-  - 多维度数据可视化
-  - 动态缩放和旋转
-  - 节点类型差异化3D表示
-  - 交互式图谱导航
-
-### AR可视化
-
-- **技术实现**：AR.js和8th Wall跨平台AR引擎
-- **特点**：
-  - 基于图像/QR识别的知识锚定
-  - 将知识图谱叠加到实物上
-  - 空间中的知识标记
-  - 协作式AR知识探索
-  - 手势交互和语音控制
-
-### VR可视化
-
-- **技术实现**：WebXR/A-Frame沉浸式VR体验
-- **特点**：
-  - 完全沉浸式知识空间
-  - 体感交互式知识导航
-  - "知识宇宙"漫游体验
-  - 多人协作VR知识探索
-  - 空间音效增强感知
-  - 根据相似度优化空间布局
-
-### 应用场景
-
-- **医学教育**：3D解剖与生理系统可视化
-- **中医经络**：AR叠加人体经络与穴位
-- **食疗推荐**：AR识别食材提供食疗知识
-- **健康画像**：VR沉浸式个人健康数据探索
-- **药材识别**：AR识别中药材提供详细信息
-- **虚拟问诊**：VR环境下的医师咨询
-- **环境健康**：AR叠加环境健康风险提示
-- **传统文化**：中医经典知识的VR沉浸式学习
+- `PORT` - API服务端口，默认3000
+- `LOG_LEVEL` - 日志级别，可选：debug, info, warn, error
+- `NEO4J_URI` - Neo4j数据库URI
+- `NEO4J_USER` - Neo4j用户名
+- `NEO4J_PASSWORD` - Neo4j密码
+- `REDIS_HOST` - Redis主机地址
+- `REDIS_PORT` - Redis端口
+- `MILVUS_HOST` - Milvus主机地址
+- `MILVUS_PORT` - Milvus端口
 
 ## 贡献指南
 
-1. Fork 本仓库
-2. 创建特性分支
-3. 提交变更
-4. 推送到分支
-5. 创建Pull Request
+1. Fork项目
+2. 创建功能分支：`git checkout -b feature/your-feature-name`
+3. 提交更改：`git commit -m 'Add some feature'`
+4. 推送到分支：`git push origin feature/your-feature-name`
+5. 提交Pull Request
 
 ## 许可证
 
-版权所有 © 2024 索克生活技术团队
+内部项目，版权所有 © 索克生活
+
+## CI/CD 自动化流程
+
+本项目支持通过自动化脚本进行构建和部署，并集成了GitLab CI/CD流水线。
+
+### 使用自动化脚本
+
+#### 手动构建和部署
+
+项目提供了用于手动构建和部署的脚本`scripts/run-ci-cd.sh`，该脚本支持多架构镜像构建和Kubernetes部署。
+
+##### 基本用法
+
+```bash
+# 完整流程：检查、测试、构建和部署
+./scripts/run-ci-cd.sh
+
+# 仅构建镜像，不部署
+SKIP_DEPLOY=true ./scripts/run-ci-cd.sh
+
+# 仅部署已构建的镜像
+SKIP_LINT=true SKIP_TESTS=true SKIP_BUILD=true ./scripts/run-ci-cd.sh
+```
+
+##### 支持的环境变量
+
+脚本支持以下环境变量来自定义构建和部署行为：
+
+| 环境变量 | 描述 | 默认值 |
+|----------|------|-------|
+| `REGISTRY` | 容器镜像仓库地址 | `suoke-registry.cn-hangzhou.cr.aliyuncs.com` |
+| `REPOSITORY` | 镜像名称 | `suoke/suoke-knowledge-graph-service` |
+| `REGISTRY_USERNAME` | 镜像仓库用户名 | - |
+| `REGISTRY_PASSWORD` | 镜像仓库密码 | - |
+| `NAMESPACE` | Kubernetes命名空间 | `suoke-prod` |
+| `VERSION` | 镜像版本号 | 自动生成 |
+| `DOCKERFILE` | 多架构Dockerfile路径 | `Dockerfile.new` |
+| `DOCKERFILE_AMD64` | AMD64架构专用Dockerfile路径 | `Dockerfile.amd64` |
+| `SKIP_LINT` | 是否跳过代码检查 | `false` |
+| `SKIP_TESTS` | 是否跳过单元测试 | `false` |
+| `SKIP_BUILD` | 是否跳过镜像构建 | `false` |
+| `SKIP_DEPLOY` | 是否跳过部署 | `false` |
+| `BUILD_ARM64` | 是否构建单独的ARM64镜像 | `false` |
+| `CI` | 是否在CI环境中运行 | `false` |
+
+##### 示例：仅部署到开发环境
+
+```bash
+NAMESPACE=suoke-dev SKIP_LINT=true SKIP_TESTS=true SKIP_BUILD=true ./scripts/run-ci-cd.sh
+```
+
+#### 在GitLab CI/CD中使用
+
+项目根目录下的`.gitlab-ci.yml`文件配置了完整的CI/CD流水线，包括以下阶段：
+
+1. **lint**: 进行代码规范检查
+2. **test**: 运行单元测试
+3. **security**: 进行安全性扫描
+4. **build**: 构建多架构Docker镜像
+5. **deploy**: 部署到不同环境(开发、预发布、生产)
+
+##### GitLab CI/CD变量配置
+
+需要在GitLab项目中配置以下CI/CD变量：
+
+| 变量名 | 描述 |
+|--------|------|
+| `ALIYUN_REGISTRY_USERNAME` | 阿里云容器镜像服务用户名 |
+| `ALIYUN_REGISTRY_PASSWORD` | 阿里云容器镜像服务密码 |
+| `KUBE_CONFIG_DEV` | 开发环境Kubernetes配置(Base64编码) |
+| `KUBE_CONFIG_STAGING` | 预发布环境Kubernetes配置(Base64编码) |
+| `KUBE_CONFIG_PROD` | 生产环境Kubernetes配置(Base64编码) |
+
+##### 环境部署规则
+
+不同环境的部署按照以下规则触发：
+
+- **开发环境**: 当代码提交到`develop`分支时，可手动触发部署
+- **预发布环境**: 当代码提交到`release/*`分支时，可手动触发部署
+- **生产环境**: 当代码提交到`main`分支时，可手动触发部署
+
+### 多架构支持
+
+系统支持构建以下类型的Docker镜像：
+
+1. 多架构镜像(`linux/amd64,linux/arm64`)
+2. AMD64专用镜像
+3. 可选的ARM64专用镜像
+
+所有镜像会使用相同的版本号，但AMD64和ARM64专用镜像会添加架构后缀，例如：
+- `suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/suoke-knowledge-graph-service:1.0.0` (多架构)
+- `suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/suoke-knowledge-graph-service:1.0.0-amd64` (仅AMD64)
+- `suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/suoke-knowledge-graph-service:1.0.0-arm64` (仅ARM64)
+
+## 问题排查
+
+如果遇到部署问题，可以使用以下命令进行排查：
+
+```bash
+# 查看Pod状态
+kubectl get pods -n suoke-prod -l app.kubernetes.io/name=knowledge-graph-service
+
+# 查看Pod详情
+kubectl describe pod -n suoke-prod <pod-name>
+
+# 查看Pod日志
+kubectl logs -n suoke-prod <pod-name>
+
+# 使用分析脚本
+./scripts/analyze-situation.sh
+```
+
+## 贡献指南
+
+请参阅[贡献指南](CONTRIBUTING.md)了解如何为项目做出贡献。
+
+## 许可证
+
+本项目采用[MIT许可证](LICENSE)。

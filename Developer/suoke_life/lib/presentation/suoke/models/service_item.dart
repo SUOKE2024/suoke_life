@@ -26,6 +26,9 @@ class ServiceItem {
   /// 服务图片URL
   final String? imageUrl;
 
+  /// 路由路径
+  final String? routePath;
+
   const ServiceItem({
     required this.id,
     required this.name,
@@ -35,5 +38,6 @@ class ServiceItem {
     this.price,
     this.rating,
     this.imageUrl,
+    this.routePath,
   });
 }

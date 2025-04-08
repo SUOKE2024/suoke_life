@@ -6,8 +6,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: suoke/user-service:local
-    container_name: user-service
+    image: suoke/user-service:dev
+    container_name: suoke-user-service
     ports:
       - "3002:3002"
     environment:
@@ -16,75 +16,72 @@ services:
       - DB_HOST=mysql
       - DB_PORT=3306
       - DB_USER=suoke
-      - DB_PASSWORD=suoke_password
+      - DB_PASSWORD=suoke_dev_password
       - DB_NAME=suoke_users
       - REDIS_HOST=redis
       - REDIS_PORT=6379
-      - REDIS_PASSWORD=
-      - JWT_SECRET=local_development_secret
+      - JWT_SECRET=dev_jwt_secret
       - JWT_EXPIRES_IN=1d
-      - KNOWLEDGE_BASE_URL=http://knowledge-base-mock:3004
-      - KNOWLEDGE_GRAPH_URL=http://knowledge-graph-mock:3006
-      - SHARE_BASE_URL=http://localhost:3002/share
-      - USER_PROFILE_SERVICE=http://user-profile-mock:3005
+      - KNOWLEDGE_BASE_URL=http://knowledge-base-service:3000
+      - KNOWLEDGE_GRAPH_URL=http://knowledge-graph-service:3000
+      - USER_PROFILE_SERVICE=http://user-profile-service:3000
     volumes:
-      - ./:/app
-      - /app/node_modules
+      - ./src:/app/src
+      - ./logs:/app/logs
+      - ./uploads:/app/uploads
     depends_on:
       - mysql
       - redis
-      - user-profile-mock
-      - knowledge-pref-mock
     networks:
       - suoke-network
-    command: ["sh", "-c", "chmod +x /app/docker-entrypoint.sh && /app/docker-entrypoint.sh"]
+    restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3002/health"]
       interval: 30s
-      timeout: 10s
+      timeout: 5s
       retries: 3
-      start_period: 40s
+      start_period: 30s
 
   # MySQL 数据库
   mysql:
     image: mysql:8.0
-    container_name: user-service-mysql
+    container_name: suoke-user-mysql
     ports:
-      - "3307:3306"
+      - "3306:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=root_password
       - MYSQL_DATABASE=suoke_users
       - MYSQL_USER=suoke
-      - MYSQL_PASSWORD=suoke_password
+      - MYSQL_PASSWORD=suoke_dev_password
     volumes:
-      - user-mysql-data:/var/lib/mysql
+      - mysql-data:/var/lib/mysql
       - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
     networks:
       - suoke-network
-    command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "suoke", "-psuoke_password"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   # Redis 缓存
   redis:
     image: redis:7.0-alpine
-    container_name: user-service-redis
+    container_name: suoke-user-redis
     ports:
-      - "6380:6379"
+      - "6379:6379"
     volumes:
-      - user-redis-data:/data
+      - redis-data:/data
+    command: redis-server --appendonly yes
     networks:
       - suoke-network
+    restart: unless-stopped
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   # 用户画像模拟服务
   user-profile-mock:
@@ -134,10 +131,38 @@ services:
       retries: 3
       start_period: 10s
 
-networks:
-  suoke-network:
-    driver: bridge
+  mock-service:
+    image: node:18-alpine
+    container_name: suoke-mock-user-service
+    working_dir: /app
+    volumes:
+      - ./mocks:/app
+    ports:
+      - "3005:3005"
+    environment:
+      - NODE_ENV=development
+      - PORT=3005
+    command: >
+      sh -c "apk add --no-cache curl && npm init -y && npm install express cors body-parser && node user-profile-mock.js"
+
+  adminer:
+    image: adminer:latest
+    container_name: suoke-user-adminer
+    ports:
+      - "8080:8080"
+    environment:
+      - ADMINER_DEFAULT_SERVER=mysql
+    depends_on:
+      - mysql
+    networks:
+      - suoke-network
+    restart: unless-stopped
 
 volumes:
-  user-mysql-data:
-  user-redis-data: 
+  mysql-data:
+  redis-data:
+
+networks:
+  suoke-network:
+    name: suoke-network
+    driver: bridge 

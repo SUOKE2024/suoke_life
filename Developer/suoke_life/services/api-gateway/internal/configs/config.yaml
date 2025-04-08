@@ -1,0 +1,70 @@
+server:
+  port: 8080
+  host: "0.0.0.0"
+  read_timeout: 15
+  write_timeout: 15
+  shutdown_timeout: 10
+
+logging:
+  level: "debug"
+  file_path: "/var/log/api-gateway.log"
+  max_size: 100
+  max_age: 30
+  max_backups: 5
+
+metrics:
+  enabled: true
+  path: "/metrics"
+
+cache:
+  enabled: true
+  default_ttl: 300
+  max_cache_size: 1000
+  exclude_paths:
+    - "/health"
+    - "/metrics"
+    - "/api/v1/auth/login"
+
+rate_limit:
+  enabled: true
+  requests_per_minute: 100
+  burst_size: 20
+  time_window: 60
+
+service_discovery:
+  enabled: false
+  url: "http://localhost:8500"
+  refresh_interval: 300
+  timeout: 5
+  fallback_to_static: true
+
+circuit_breaker:
+  enabled: true
+  max_failures: 5
+  timeout: 10
+  reset_timeout: 60
+
+services:
+  auth_service:
+    url: "http://auth-service:8081"
+    timeout: 5
+    retry_count: 3
+    retry_interval: 1
+  
+  user_service:
+    url: "http://user-service:8082"
+    timeout: 5
+    retry_count: 3
+    retry_interval: 1
+  
+  rag_service:
+    url: "http://rag-service:8083"
+    timeout: 10
+    retry_count: 2
+    retry_interval: 2
+  
+  knowledge_graph_service:
+    url: "http://knowledge-graph-service:8084"
+    timeout: 8
+    retry_count: 2
+    retry_interval: 1

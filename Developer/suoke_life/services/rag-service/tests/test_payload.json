@@ -1,0 +1,51 @@
+{
+  "rag_query": {
+    "query": "中医养生方法",
+    "collection": "health_knowledge",
+    "top_k": 3,
+    "filters": {
+      "category": "中医养生",
+      "tags": ["养生", "保健"]
+    },
+    "language": "zh",
+    "stream": false
+  },
+  "embedding": {
+    "text": "中医养生是中华民族传统医学的重要组成部分，主要通过调整人体阴阳平衡，达到防病治病、延年益寿的目的。它包括药物养生、食疗养生、运动养生、精神养生等方法。中医养生强调天人合一、阴阳平衡、气血调和、脏腑功能协调等基本原则。",
+    "model": "bge-large-zh-v1.5",
+    "options": {
+      "normalize": true,
+      "truncate": "END"
+    }
+  },
+  "document": {
+    "id": "doc_001",
+    "title": "太极养生法",
+    "content": "太极拳是一种传统的中国武术，也是非常好的养生方法。它通过柔和缓慢的动作，配合深沉的呼吸，达到调和阴阳、强身健体的效果。太极拳可以增强心肺功能，改善血液循环，增强肌肉力量和关节灵活性，还能够平衡情绪，减轻压力。常练太极拳的人通常气色好、精神佳、抵抗力强，是老少皆宜的健康运动。",
+    "metadata": {
+      "author": "张三",
+      "source": "中医养生大全",
+      "publish_date": "2023-01-15",
+      "category": "中医养生",
+      "tags": ["太极", "运动养生", "武术"]
+    },
+    "collection": "health_knowledge",
+    "embedding_model": "bge-large-zh-v1.5"
+  },
+  "collection": {
+    "name": "health_knowledge",
+    "description": "健康知识数据集",
+    "metadata": {
+      "type": "health",
+      "language": "zh"
+    },
+    "settings": {
+      "dimension": 768,
+      "metric_type": "COSINE",
+      "index_type": "IVF_FLAT",
+      "params": {
+        "nlist": 1024
+      }
+    }
+  }
+} 

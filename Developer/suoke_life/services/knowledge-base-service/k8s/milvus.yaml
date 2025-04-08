@@ -1,0 +1,80 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: milvus-config
+  namespace: suoke-prod
+data:
+  milvus.yaml: |
+    log:
+      level: info
+    etcd:
+      endpoints:
+        - localhost:2379
+    minio:
+      address: localhost
+      port: 9000
+      accessKeyID: minioadmin
+      secretAccessKey: minioadmin
+    pulsar:
+      address: localhost
+      port: 6650
+    resource_quota:
+      cpu_limit_percentage: 80
+      memory_limit_percentage: 80
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: milvus
+  namespace: suoke-prod
+spec:
+  serviceName: "milvus-service"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: milvus
+  template:
+    metadata:
+      labels:
+        app: milvus
+    spec:
+      containers:
+      - name: milvus
+        image: milvusdb/milvus:v2.2.11
+        args: ["milvus", "run", "standalone"]
+        ports:
+        - containerPort: 19530
+          name: milvus
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "250m"
+          limits:
+            memory: "2Gi"
+            cpu: "500m"
+        volumeMounts:
+        - name: milvus-data
+          mountPath: /var/lib/milvus
+        - name: milvus-config
+          mountPath: /milvus/configs/milvus.yaml
+          subPath: milvus.yaml
+      volumes:
+      - name: milvus-data
+        persistentVolumeClaim:
+          claimName: milvus-data-milvus-0
+      - name: milvus-config
+        configMap:
+          name: milvus-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: milvus-service
+  namespace: suoke-prod
+spec:
+  selector:
+    app: milvus
+  ports:
+  - port: 19530
+    targetPort: 19530
+  type: ClusterIP

@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: knowledge-base-service
+  namespace: suoke-prod
+  labels:
+    app: knowledge-base-service
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: knowledge-base-service
+  template:
+    metadata:
+      labels:
+        app: knowledge-base-service
+        version: v1
+    spec:
+      containers:
+      - name: knowledge-base-service
+        image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/api-gateway:1.0.1
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: LOG_LEVEL
+          value: "info"
+        - name: API_GATEWAY_PORT 
+          value: "8080"
+        - name: AUTH_SERVICE_HOST
+          value: "auth-service"
+        - name: AUTH_SERVICE_PORT
+          value: "8081"
+        - name: USER_SERVICE_HOST
+          value: "user-service"
+        - name: USER_SERVICE_PORT
+          value: "8082"
+        - name: KNOWLEDGE_BASE_SERVICE_MOCK
+          value: "true"
+        ports:
+        - containerPort: 8080
+          name: http
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        volumeMounts:
+        - name: logs-volume
+          mountPath: /app/logs
+      volumes:
+      - name: logs-volume
+        persistentVolumeClaim:
+          claimName: knowledge-base-logs-pvc
+      imagePullSecrets:
+      - name: aliyun-docker-registry
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: knowledge-base-service
+  namespace: suoke-prod
+  labels:
+    app: knowledge-base-service
+spec:
+  selector:
+    app: knowledge-base-service
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+  type: ClusterIP

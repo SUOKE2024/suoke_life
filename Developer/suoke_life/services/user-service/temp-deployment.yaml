@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service-temp
+  namespace: suoke
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-service-temp
+  template:
+    metadata:
+      labels:
+        app: user-service-temp
+    spec:
+      containers:
+      - name: user-service
+        image: node:18-alpine
+        command: ["sh", "-c", "echo \"User service temporary deployment\" && sleep 3600"]

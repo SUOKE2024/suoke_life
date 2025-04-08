@@ -1,0 +1,141 @@
+# 基于values.yaml的生产环境特定配置
+# 命名空间配置
+namespace: suoke-prod
+createNamespace: false  # 假设命名空间已经存在
+
+global:
+  environment: production
+  imageRegistry: suoke-registry.cn-hangzhou.cr.aliyuncs.com
+  imagePullSecrets:
+    - name: suoke-registry-secret
+  storageClass: alicloud-disk-essd
+  networkPolicy:
+    enabled: true
+
+# 应用设置
+replicaCount: 3
+
+image:
+  repository: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/suoke-knowledge-graph-service
+  pullPolicy: Always
+  # 默认使用多架构镜像
+  tag: "20250407-36693f0-snapshot"
+  # 备用镜像标签
+  tagAMD64: "20250407-36693f0-snapshot-amd64"  # AMD64架构镜像标签
+  tagARM64: "20250407-36693f0-snapshot-arm64"  # ARM64架构镜像标签
+
+# Pod注解增加时间戳，促使更新
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "9464"
+  prometheus.io/path: "/metrics"
+  vault.hashicorp.com/agent-inject: "true"
+  vault.hashicorp.com/role: "suoke-knowledge-graph"
+  vault.hashicorp.com/agent-inject-secret-db-creds: "suoke/data/knowledge-graph-service/db"
+  deploy-date: "2025-04-07T18:12:29"  # 部署时间自动更新
+  multi-arch: "enabled"  # 启用多架构支持
+
+# 资源限制和请求
+resources:
+  limits:
+    cpu: 1500m
+    memory: 3Gi
+  requests:
+    cpu: 750m
+    memory: 1.5Gi
+
+# 自动伸缩设置
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 65
+  targetMemoryUtilizationPercentage: 70
+
+# 持久卷设置
+persistence:
+  enabled: true
+  data:
+    size: 100Gi  # 生产环境增加存储空间
+    storageClass: alicloud-disk-essd
+  models:
+    size: 50Gi   # 生产环境增加模型存储空间
+    storageClass: alicloud-disk-essd
+  tmp:
+    size: 20Gi   # 生产环境增加临时存储空间
+    storageClass: alicloud-disk-essd
+
+# 环境变量设置 - 生产环境特定配置
+env:
+  # 应用配置
+  ENV: production
+  SERVER_PORT: "8080"
+  LOG_LEVEL: info
+  LOG_FORMAT: json
+  
+  # Neo4j数据库配置 - 连接到生产环境的服务
+  DB_NEO4J_URI: bolt://neo4j-service.suoke-prod.svc.cluster.local:7687
+  DB_NEO4J_DATABASE: suoke_knowledge_graph
+  
+  # Redis配置 - 连接到生产环境的服务
+  REDIS_HOST: redis-master.suoke-prod.svc.cluster.local
+  REDIS_PORT: "6379"
+  
+  # Milvus向量数据库配置 - 连接到生产环境的服务
+  MILVUS_URI: milvus-standalone.suoke-prod.svc.cluster.local:19530
+  
+  # OpenTelemetry配置
+  OTEL_SERVICE_NAME: knowledge-graph-service
+  OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector.monitoring.svc.cluster.local:4317
+  OTEL_RESOURCE_ATTRIBUTES: service.namespace=suoke-prod,service.name=knowledge-graph-service
+  
+  # 知识图谱配置 - 生产环境调整
+  GRAPH_MAX_DEPTH: "4"
+  GRAPH_RELATIONSHIP_THRESHOLD: "0.75"
+  GRAPH_CACHE_TTL: "7200"
+  
+  # RAG服务配置 - 连接到生产环境的服务
+  RAG_SERVICE_URL: http://rag-service.suoke-prod.svc.cluster.local:8000
+
+# 服务监控设置
+serviceMonitor:
+  enabled: true
+  interval: 30s
+  scrapeTimeout: 15s
+  selector:
+    release: monitoring
+
+# Istio服务网格设置
+istio:
+  enabled: true
+  mtls:
+    mode: STRICT  # 生产环境使用严格的mTLS
+  gateway:
+    enabled: true
+    host: kg.suoke.life
+    tls:
+      enabled: true
+      secretName: knowledge-graph-tls-prod 
+
+# 节点选择器、亲和性和容忍设置
+# 完全覆盖默认配置，使用role: suoke-core-np
+nodeSelector:
+  role: suoke-core-np
+  # 移除特定架构限制，允许调度到任何架构的节点
+
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: role
+          operator: In
+          values:
+          - suoke-core-np
+      # 移除架构特定的亲和性限制，允许部署到各种架构
+
+tolerations:
+- key: role
+  operator: Equal
+  value: suoke-core-np
+  effect: NoSchedule 

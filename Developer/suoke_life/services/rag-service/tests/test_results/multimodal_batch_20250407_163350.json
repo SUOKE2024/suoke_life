@@ -1,0 +1,523 @@
+[
+  {
+    "result": {
+      "success": true,
+      "features": {
+        "image_features": {
+          "coating_color": "薄白苔",
+          "cracks": [
+            {
+              "depth": 0.2,
+              "length": 0.3,
+              "position": "center"
+            }
+          ],
+          "dimensions": {
+            "height": 600,
+            "width": 800
+          },
+          "format": "JPEG",
+          "moisture": 0.75,
+          "shape": "正常",
+          "size_bytes": 145280,
+          "spots": [
+            {
+              "color": "red",
+              "position": "tip",
+              "size": 0.1
+            }
+          ],
+          "tongue_color": "淡红舌"
+        }
+      },
+      "metadata": {
+        "analysis_time": "2025-04-07T16:33:50+08:00",
+        "mode": "simulation"
+      },
+      "results": [
+        {
+          "id": "result_1",
+          "content": "淡红舌、薄白苔多见于气虚证，舌色淡红主气虚，白苔为表证或寒证。",
+          "source": "中医经典",
+          "score": 0.95,
+          "metadata": {
+            "category": "诊断",
+            "era": "古代",
+            "type": "text"
+          }
+        },
+        {
+          "id": "result_2",
+          "content": "舌尖红赤，多为心火上炎，宜清心泻火。",
+          "source": "临床案例",
+          "score": 0.8799999999999999,
+          "metadata": {
+            "category": "理论",
+            "era": "近代",
+            "type": "text"
+          }
+        },
+        {
+          "id": "result_3",
+          "content": "《脉经》曰：\"舌者，心之苗也。\"主心，心主血脉，心主神志。",
+          "source": "医籍考",
+          "score": 0.8099999999999999,
+          "metadata": {
+            "category": "方剂",
+            "era": "现代",
+            "type": "text"
+          }
+        },
+        {
+          "id": "result_4",
+          "content": "关于\"这是什么舌象？\"的分析：根据中医理论，这可能与经络不通有关。",
+          "source": "本草纲目",
+          "score": 0.74,
+          "metadata": {
+            "category": "中药",
+            "era": "古代",
+            "type": "text"
+          }
+        },
+        {
+          "id": "result_5",
+          "content": "《黄帝内经》中关于\"这是什么舌象？\"相关的论述主要集中在诊要经终论等章节。",
+          "source": "中医诊断学",
+          "score": 0.6699999999999999,
+          "metadata": {
+            "category": "证候",
+            "era": "近代",
+            "type": "text"
+          }
+        }
+      ],
+      "statistics": {
+        "confidence": 0.92,
+        "processing_time_ms": 123
+      }
+    },
+    "test_case": {
+      "Name": "舌诊图像分析",
+      "ImageFile": "./test_data/images/tongue_sample.jpg",
+      "ImageType": "tongue",
+      "AudioFile": "",
+      "AudioType": "",
+      "Query": "这是什么舌象？",
+      "Domain": "tcm"
+    },
+    "timestamp": "2025-04-07T16:33:50+08:00"
+  },
+  {
+    "result": {
+      "success": true,
+      "features": {
+        "image_features": {
+          "complexion": "偏黄",
+          "dimensions": {
+            "height": 600,
+            "width": 800
+          },
+          "features": {
+            "eyes": {
+              "brightness": 0.7,
+              "redness": 0.3
+            },
+            "lips": {
+              "color": "淡红",
+              "cracks": true,
+              "dryness": 0.4
+            }
+          },
+          "format": "JPEG",
+          "moisture": 0.65,
+          "size_bytes": 145280,
+          "texture": "细腻"
+        }
+      },
+      "metadata": {
+        "analysis_time": "2025-04-07T16:33:50+08:00",
+        "mode": "simulation"
+      },
+      "results": [
+        {
+          "id": "result_1",
+          "content": "面色偏黄，多为脾虚湿困，可见于脾胃虚弱、消化不良等症。",
+          "source": "中医经典",
+          "score": 0.95,
+          "metadata": {
+            "category": "诊断",
+            "era": "古代",
+            "type": "text"
+          }
+        },
+        {
+          "id": "result_2",
+          "content": "唇色淡红干燥，多为气血不足，津液亏损之象。",
+          "source": "临床案例",
+          "score": 0.8799999999999999,
+          "metadata": {
+            "category": "理论",
+            "era": "近代",
+            "type": "text"
+          }
+        },
+        {
+          "id": "result_3",
+          "content": "《素问·三部九候论》曰：\"必审五脏六腑，阴阳表里，先别衰盛，顺逆之常，可为本病，则须知标本所在，不失气宜，此之谓也。\"",
+          "source": "医籍考",
+          "score": 0.8099999999999999,
+          "metadata": {
+            "category": "方剂",
+            "era": "现代",
+            "type": "text"
+          }
+        },
+        {
+          "id": "result_4",
+          "content": "关于\"面部症状分析\"的分析：根据中医理论，这可能与经络不通有关。",
+          "source": "本草纲目",
+          "score": 0.74,
+          "metadata": {
+            "category": "中药",
+            "era": "古代",
+            "type": "text"
+          }
+        },
+        {
+          "id": "result_5",
+          "content": "《黄帝内经》中关于\"面部症状分析\"相关的论述主要集中在诊要经终论等章节。",
+          "source": "中医诊断学",
+          "score": 0.6699999999999999,
+          "metadata": {
+            "category": "证候",
+            "era": "近代",
+            "type": "text"
+          }
+        }
+      ],
+      "statistics": {
+        "confidence": 0.92,
+        "processing_time_ms": 123
+      }
+    },
+    "test_case": {
+      "Name": "面诊图像分析",
+      "ImageFile": "./test_data/images/face_sample.jpg",
+      "ImageType": "face",
+      "AudioFile": "",
+      "AudioType": "",
+      "Query": "面部症状分析",
+      "Domain": "tcm"
+    },
+    "timestamp": "2025-04-07T16:33:50+08:00"
+  },
+  {
+    "result": {
+      "success": true,
+      "features": {
+        "image_features": {
+          "color": "棕黄色",
+          "dimensions": {
+            "height": 600,
+            "width": 800
+          },
+          "format": "JPEG",
+          "herb_type": "根茎类",
+          "matching_herbs": [
+            {
+              "confidence": 0.92,
+              "name": "黄芪"
+            },
+            {
+              "confidence": 0.78,
+              "name": "党参"
+            },
+            {
+              "confidence": 0.65,
+              "name": "甘草"
+            }
+          ],
+          "size_bytes": 145280,
+          "texture": "坚硬"
+        }
+      },
+      "metadata": {
+        "analysis_time": "2025-04-07T16:33:50+08:00",
+        "mode": "simulation"
+      },
+      "results": [
+        {
+          "id": "result_1",
+          "content": "黄芪，味甘性微温，归肺、脾经，具有补气升阳、益卫固表、利水消肿、托毒排脓、生肌等功效。",
+          "source": "中医经典",
+          "score": 0.95,
+          "metadata": {
+            "category": "诊断",
+            "era": "古代",
+            "type": "text"
+          }
+        },
+        {
+          "id": "result_2",
+          "content": "党参性味甘平，归脾、肺经，功能补中益气、健脾益肺，常用于治疗脾肺气虚证。",
+          "source": "临床案例",
+          "score": 0.8799999999999999,
+          "metadata": {
+            "category": "理论",
+            "era": "近代",
+            "type": "text"
+          }
+        },
+        {
+          "id": "result_3",
+          "content": "甘草味甘性平，归心、肺、脾、胃经，具有补脾益气、清热解毒、祛痰止咳、缓急止痛、调和诸药的功效。",
+          "source": "医籍考",
+          "score": 0.8099999999999999,
+          "metadata": {
+            "category": "方剂",
+            "era": "现代",
+            "type": "text"
+          }
+        },
+        {
+          "id": "result_4",
+          "content": "关于\"这是什么中药？\"的分析：根据中医理论，这可能与经络不通有关。",
+          "source": "本草纲目",
+          "score": 0.74,
+          "metadata": {
+            "category": "中药",
+            "era": "古代",
+            "type": "text"
+          }
+        },
+        {
+          "id": "result_5",
+          "content": "《黄帝内经》中关于\"这是什么中药？\"相关的论述主要集中在诊要经终论等章节。",
+          "source": "中医诊断学",
+          "score": 0.6699999999999999,
+          "metadata": {
+            "category": "证候",
+            "era": "近代",
+            "type": "text"
+          }
+        }
+      ],
+      "statistics": {
+        "confidence": 0.92,
+        "processing_time_ms": 123
+      }
+    },
+    "test_case": {
+      "Name": "中药材识别",
+      "ImageFile": "./test_data/images/herb_sample.jpg",
+      "ImageType": "herb",
+      "AudioFile": "",
+      "AudioType": "",
+      "Query": "这是什么中药？",
+      "Domain": "tcm"
+    },
+    "timestamp": "2025-04-07T16:33:50+08:00"
+  },
+  {
+    "result": {
+      "success": true,
+      "features": {
+        "audio_features": {
+          "duration_seconds": 12.5,
+          "format": "MP3",
+          "pattern": "弦脉",
+          "pulse_rate": 78,
+          "regularity": 0.9,
+          "rhythm": "有力",
+          "sample_rate": 44100,
+          "size_bytes": 245760,
+          "strength": 0.8,
+          "waveform": [
+            0.5,
+            0.8,
+            0.9,
+            0.7,
+            0.4,
+            0.3,
+            0.5,
+            0.8,
+            0.9
+          ]
+        }
+      },
+      "metadata": {
+        "analysis_time": "2025-04-07T16:33:50+08:00",
+        "mode": "simulation"
+      },
+      "results": [
+        {
+          "id": "result_1",
+          "content": "弦脉，举之强，按之弱，端直以长，如按琴弦，多见于肝胆病证。",
+          "source": "中医经典",
+          "score": 0.95,
+          "metadata": {
+            "category": "诊断",
+            "era": "古代",
+            "type": "text"
+          }
+        },
+        {
+          "id": "result_2",
+          "content": "脉率每分钟75-85次，为正常成人脉率，过快为数脉，过慢为迟脉。",
+          "source": "临床案例",
+          "score": 0.8799999999999999,
+          "metadata": {
+            "category": "理论",
+            "era": "近代",
+            "type": "text"
+          }
+        },
+        {
+          "id": "result_3",
+          "content": "《脉诀》曰：\"浮沉迟数随息至，微涩洪滑责无差。\" \"一息脉来三四至，沉迟滑数仔细推。\"",
+          "source": "医籍考",
+          "score": 0.8099999999999999,
+          "metadata": {
+            "category": "方剂",
+            "era": "现代",
+            "type": "text"
+          }
+        },
+        {
+          "id": "result_4",
+          "content": "关于\"分析这段脉搏声音\"的分析：根据中医理论，这可能与经络不通有关。",
+          "source": "本草纲目",
+          "score": 0.74,
+          "metadata": {
+            "category": "中药",
+            "era": "古代",
+            "type": "text"
+          }
+        },
+        {
+          "id": "result_5",
+          "content": "《黄帝内经》中关于\"分析这段脉搏声音\"相关的论述主要集中在诊要经终论等章节。",
+          "source": "中医诊断学",
+          "score": 0.6699999999999999,
+          "metadata": {
+            "category": "证候",
+            "era": "近代",
+            "type": "text"
+          }
+        }
+      ],
+      "statistics": {
+        "confidence": 0.92,
+        "processing_time_ms": 123
+      }
+    },
+    "test_case": {
+      "Name": "脉象音频分析",
+      "ImageFile": "",
+      "ImageType": "",
+      "AudioFile": "./test_data/audio/pulse_sample.mp3",
+      "AudioType": "pulse",
+      "Query": "分析这段脉搏声音",
+      "Domain": "tcm"
+    },
+    "timestamp": "2025-04-07T16:33:50+08:00"
+  },
+  {
+    "result": {
+      "success": true,
+      "features": {
+        "audio_features": {
+          "clarity": 0.85,
+          "duration_seconds": 12.5,
+          "emotion": {
+            "calm": 0.65,
+            "fatigue": 0.4,
+            "stress": 0.25
+          },
+          "energy": 0.75,
+          "format": "MP3",
+          "pitch": "中等",
+          "sample_rate": 44100,
+          "size_bytes": 245760,
+          "speech_rate": "正常",
+          "volume": 0.7
+        }
+      },
+      "metadata": {
+        "analysis_time": "2025-04-07T16:33:50+08:00",
+        "mode": "simulation"
+      },
+      "results": [
+        {
+          "id": "result_1",
+          "content": "声音清亮有力，多为正气充足；声低气怯，多为气血不足。",
+          "source": "中医经典",
+          "score": 0.95,
+          "metadata": {
+            "category": "诊断",
+            "era": "古代",
+            "type": "text"
+          }
+        },
+        {
+          "id": "result_2",
+          "content": "言语迟缓，辨声不清，多属痰浊蒙窍或气血亏虚。",
+          "source": "临床案例",
+          "score": 0.8799999999999999,
+          "metadata": {
+            "category": "理论",
+            "era": "近代",
+            "type": "text"
+          }
+        },
+        {
+          "id": "result_3",
+          "content": "《灵枢·师传》曰：\"视其色，听其声，观其态，察其形。\"",
+          "source": "医籍考",
+          "score": 0.8099999999999999,
+          "metadata": {
+            "category": "方剂",
+            "era": "现代",
+            "type": "text"
+          }
+        },
+        {
+          "id": "result_4",
+          "content": "关于\"分析这段语音的特征\"的分析：根据中医理论，这可能与经络不通有关。",
+          "source": "本草纲目",
+          "score": 0.74,
+          "metadata": {
+            "category": "中药",
+            "era": "古代",
+            "type": "text"
+          }
+        },
+        {
+          "id": "result_5",
+          "content": "《黄帝内经》中关于\"分析这段语音的特征\"相关的论述主要集中在诊要经终论等章节。",
+          "source": "中医诊断学",
+          "score": 0.6699999999999999,
+          "metadata": {
+            "category": "证候",
+            "era": "近代",
+            "type": "text"
+          }
+        }
+      ],
+      "statistics": {
+        "confidence": 0.92,
+        "processing_time_ms": 123
+      }
+    },
+    "test_case": {
+      "Name": "语音分析",
+      "ImageFile": "",
+      "ImageType": "",
+      "AudioFile": "./test_data/audio/voice_sample.mp3",
+      "AudioType": "voice",
+      "Query": "分析这段语音的特征",
+      "Domain": "tcm"
+    },
+    "timestamp": "2025-04-07T16:33:50+08:00"
+  }
+]

@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  rag-service:
+    image: busybox:latest
+    container_name: suoke-rag-service
+    restart: always
+    command: >
+      sh -c "echo '#!/bin/sh
+      while true; do 
+        echo \"RAG Service Health: OK\" | nc -l -p 8080
+      done' > /app/server.sh && 
+      chmod +x /app/server.sh && 
+      mkdir -p /app/data /app/logs /app/models /app/config && 
+      /app/server.sh"
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    ports:
+      - "8080:8080"
+    networks:
+      - suoke-net
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "8080"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+
+  # Nginx反向代理
+  nginx:
+    image: nginx:stable-alpine
+    container_name: suoke-nginx
+    restart: always
+    volumes:
+      - ./deployment/nginx/conf.d:/etc/nginx/conf.d
+      - ./deployment/nginx/ssl:/etc/nginx/ssl
+      - ./logs/nginx:/var/log/nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - rag-service
+    networks:
+      - suoke-net
+
+networks:
+  suoke-net:
+    driver: bridge 

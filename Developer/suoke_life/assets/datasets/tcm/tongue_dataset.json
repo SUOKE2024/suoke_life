@@ -1,0 +1,1285 @@
+[
+  {
+    "id": "tongue_0000",
+    "tongue_type": "灰黑舌",
+    "tongue_coating": "剥苔",
+    "pulse_type": "浮脉",
+    "syndrome": "气虚证",
+    "constitution": "痰湿质",
+    "herbs": [
+      "荆芥",
+      "枳实",
+      "红花",
+      "防风",
+      "甘草",
+      "黄芪",
+      "白芍",
+      "黄芩"
+    ],
+    "formulas": [
+      "归脾汤",
+      "苓桂术甘汤"
+    ],
+    "features": [
+      "舌有齿痕",
+      "舌尖紫",
+      "舌苔滑"
+    ],
+    "description": "该患者舌象为灰黑舌，剥苔，脉象为浮脉，辨证为气虚证。",
+    "timestamp": "2025-04-07T17:12:02.936374"
+  },
+  {
+    "id": "tongue_0001",
+    "tongue_type": "青舌",
+    "tongue_coating": "干苔",
+    "pulse_type": "代脉",
+    "syndrome": "痰饮证",
+    "constitution": "痰湿质",
+    "herbs": [
+      "附子",
+      "桔梗",
+      "肉桂",
+      "艾叶",
+      "半夏",
+      "前胡",
+      "石膏"
+    ],
+    "formulas": [
+      "百合固金汤",
+      "桑菊饮"
+    ],
+    "features": [
+      "舌有齿痕"
+    ],
+    "description": "该患者舌象为青舌，干苔，脉象为代脉，辨证为痰饮证。",
+    "timestamp": "2025-04-07T17:12:02.936399"
+  },
+  {
+    "id": "tongue_0002",
+    "tongue_type": "淡红舌",
+    "tongue_coating": "厚黄苔",
+    "pulse_type": "代脉",
+    "syndrome": "血虚证",
+    "constitution": "血瘀质",
+    "herbs": [
+      "黄柏",
+      "生地黄",
+      "蝉蜕",
+      "枳壳",
+      "前胡",
+      "黄芪",
+      "枳实",
+      "知母"
+    ],
+    "formulas": [
+      "小柴胡汤",
+      "泻黄散"
+    ],
+    "features": [
+      "舌尖紫",
+      "舌苔干"
+    ],
+    "description": "该患者舌象为淡红舌，厚黄苔，脉象为代脉，辨证为血虚证。",
+    "timestamp": "2025-04-07T17:12:02.936413"
+  },
+  {
+    "id": "tongue_0003",
+    "tongue_type": "绛舌",
+    "tongue_coating": "无苔",
+    "pulse_type": "迟脉",
+    "syndrome": "痰饮证",
+    "constitution": "血瘀质",
+    "herbs": [
+      "黄柏",
+      "黄芪",
+      "生姜",
+      "艾叶",
+      "陈皮",
+      "蝉蜕",
+      "人参"
+    ],
+    "formulas": [
+      "泻白散"
+    ],
+    "features": [
+      "舌体瘦小",
+      "舌苔燥"
+    ],
+    "description": "该患者舌象为绛舌，无苔，脉象为迟脉，辨证为痰饮证。",
+    "timestamp": "2025-04-07T17:12:02.936439"
+  },
+  {
+    "id": "tongue_0004",
+    "tongue_type": "绛舌",
+    "tongue_coating": "干苔",
+    "pulse_type": "动脉",
+    "syndrome": "气虚证",
+    "constitution": "阳虚质",
+    "herbs": [
+      "茯苓",
+      "白芍",
+      "甘草",
+      "人参"
+    ],
+    "formulas": [
+      "生脉散",
+      "四君子汤",
+      "防风通圣散"
+    ],
+    "features": [
+      "舌有齿痕",
+      "舌尖暗红",
+      "舌苔剥落"
+    ],
+    "description": "该患者舌象为绛舌，干苔，脉象为动脉，辨证为气虚证。",
+    "timestamp": "2025-04-07T17:12:02.936464"
+  },
+  {
+    "id": "tongue_0005",
+    "tongue_type": "紫舌",
+    "tongue_coating": "黄苔",
+    "pulse_type": "沉脉",
+    "syndrome": "血虚证",
+    "constitution": "阳虚质",
+    "herbs": [
+      "独活",
+      "前胡",
+      "麻黄",
+      "黄柏",
+      "枳壳",
+      "栀子"
+    ],
+    "formulas": [
+      "葛根汤",
+      "小青龙汤",
+      "消风散"
+    ],
+    "features": [
+      "舌体正常",
+      "舌无齿痕",
+      "舌尖红"
+    ],
+    "description": "该患者舌象为紫舌，黄苔，脉象为沉脉，辨证为血虚证。",
+    "timestamp": "2025-04-07T17:12:02.936505"
+  },
+  {
+    "id": "tongue_0006",
+    "tongue_type": "青舌",
+    "tongue_coating": "干苔",
+    "pulse_type": "动脉",
+    "syndrome": "水饮证",
+    "constitution": "平和质",
+    "herbs": [
+      "熟地黄",
+      "川芎",
+      "羌活",
+      "艾叶"
+    ],
+    "formulas": [
+      "甘麦大枣汤"
+    ],
+    "features": [
+      "舌有齿痕",
+      "舌尖正常"
+    ],
+    "description": "该患者舌象为青舌，干苔，脉象为动脉，辨证为水饮证。",
+    "timestamp": "2025-04-07T17:12:02.936516"
+  },
+  {
+    "id": "tongue_0007",
+    "tongue_type": "淡红舌",
+    "tongue_coating": "薄白苔",
+    "pulse_type": "实脉",
+    "syndrome": "风湿证",
+    "constitution": "平和质",
+    "herbs": [
+      "黄芩",
+      "桔梗",
+      "杏仁",
+      "红花"
+    ],
+    "formulas": [
+      "银翘散"
+    ],
+    "features": [
+      "舌无齿痕"
+    ],
+    "description": "该患者舌象为淡红舌，薄白苔，脉象为实脉，辨证为风湿证。",
+    "timestamp": "2025-04-07T17:12:02.936526"
+  },
+  {
+    "id": "tongue_0008",
+    "tongue_type": "红舌",
+    "tongue_coating": "剥苔",
+    "pulse_type": "微脉",
+    "syndrome": "风寒证",
+    "constitution": "湿热质",
+    "herbs": [
+      "杏仁",
+      "白芷",
+      "生姜",
+      "陈皮",
+      "荆芥",
+      "板蓝根",
+      "葛根"
+    ],
+    "formulas": [
+      "归脾汤"
+    ],
+    "features": [
+      "舌无齿痕",
+      "舌苔滑"
+    ],
+    "description": "该患者舌象为红舌，剥苔，脉象为微脉，辨证为风寒证。",
+    "timestamp": "2025-04-07T17:12:02.936537"
+  },
+  {
+    "id": "tongue_0009",
+    "tongue_type": "紫舌",
+    "tongue_coating": "薄白苔",
+    "pulse_type": "紧脉",
+    "syndrome": "痰饮证",
+    "constitution": "气郁质",
+    "herbs": [
+      "熟地黄",
+      "黄芪",
+      "蝉蜕"
+    ],
+    "formulas": [
+      "葛根汤",
+      "半夏白术天麻汤",
+      "银翘散"
+    ],
+    "features": [
+      "舌体正常",
+      "舌无齿痕",
+      "舌尖正常"
+    ],
+    "description": "该患者舌象为紫舌，薄白苔，脉象为紧脉，辨证为痰饮证。",
+    "timestamp": "2025-04-07T17:12:02.936548"
+  },
+  {
+    "id": "tongue_0010",
+    "tongue_type": "绛舌",
+    "tongue_coating": "无苔",
+    "pulse_type": "洪脉",
+    "syndrome": "燥证",
+    "constitution": "湿热质",
+    "herbs": [
+      "葛根",
+      "牛蒡子",
+      "蝉蜕",
+      "枳实",
+      "白芷",
+      "藁本",
+      "细辛",
+      "桑叶"
+    ],
+    "formulas": [
+      "沙参麦冬汤",
+      "四物汤",
+      "逍遥散"
+    ],
+    "features": [
+      "舌无齿痕"
+    ],
+    "description": "该患者舌象为绛舌，无苔，脉象为洪脉，辨证为燥证。",
+    "timestamp": "2025-04-07T17:12:02.936559"
+  },
+  {
+    "id": "tongue_0011",
+    "tongue_type": "淡红舌",
+    "tongue_coating": "厚白苔",
+    "pulse_type": "微脉",
+    "syndrome": "暑证",
+    "constitution": "阴虚质",
+    "herbs": [
+      "蝉蜕",
+      "前胡",
+      "桑叶",
+      "金银花",
+      "白芷"
+    ],
+    "formulas": [
+      "生脉散"
+    ],
+    "features": [
+      "舌尖暗红"
+    ],
+    "description": "该患者舌象为淡红舌，厚白苔，脉象为微脉，辨证为暑证。",
+    "timestamp": "2025-04-07T17:12:02.936569"
+  },
+  {
+    "id": "tongue_0012",
+    "tongue_type": "绛舌",
+    "tongue_coating": "厚白苔",
+    "pulse_type": "长脉",
+    "syndrome": "湿证",
+    "constitution": "湿热质",
+    "herbs": [
+      "蝉蜕",
+      "枳实",
+      "连翘",
+      "知母"
+    ],
+    "formulas": [
+      "银翘散",
+      "沙参麦冬汤"
+    ],
+    "features": [
+      "舌有齿痕",
+      "舌苔燥"
+    ],
+    "description": "该患者舌象为绛舌，厚白苔，脉象为长脉，辨证为湿证。",
+    "timestamp": "2025-04-07T17:12:02.936578"
+  },
+  {
+    "id": "tongue_0013",
+    "tongue_type": "红舌",
+    "tongue_coating": "腻苔",
+    "pulse_type": "细脉",
+    "syndrome": "痰证",
+    "constitution": "痰湿质",
+    "herbs": [
+      "枳壳",
+      "白芷",
+      "石膏"
+    ],
+    "formulas": [
+      "清营汤",
+      "生脉散",
+      "麦门冬汤"
+    ],
+    "features": [
+      "舌体瘦小",
+      "舌无齿痕"
+    ],
+    "description": "该患者舌象为红舌，腻苔，脉象为细脉，辨证为痰证。",
+    "timestamp": "2025-04-07T17:12:02.936588"
+  },
+  {
+    "id": "tongue_0014",
+    "tongue_type": "灰黑舌",
+    "tongue_coating": "厚白苔",
+    "pulse_type": "伏脉",
+    "syndrome": "风热证",
+    "constitution": "特禀质",
+    "herbs": [
+      "栀子",
+      "葛根",
+      "陈皮",
+      "石膏",
+      "菊花"
+    ],
+    "formulas": [
+      "小青龙汤",
+      "泻黄散",
+      "防风通圣散"
+    ],
+    "features": [
+      "舌体胖大",
+      "舌尖暗红"
+    ],
+    "description": "该患者舌象为灰黑舌，厚白苔，脉象为伏脉，辨证为风热证。",
+    "timestamp": "2025-04-07T17:12:02.936598"
+  },
+  {
+    "id": "tongue_0015",
+    "tongue_type": "紫舌",
+    "tongue_coating": "腻苔",
+    "pulse_type": "洪脉",
+    "syndrome": "阳虚证",
+    "constitution": "阳虚质",
+    "herbs": [
+      "防风",
+      "丹参",
+      "枳壳",
+      "桑叶",
+      "当归",
+      "艾叶",
+      "黄柏",
+      "川芎"
+    ],
+    "formulas": [
+      "百合固金汤",
+      "麻黄汤"
+    ],
+    "features": [
+      "舌体胖大",
+      "舌有齿痕",
+      "舌尖暗红",
+      "舌苔腻"
+    ],
+    "description": "该患者舌象为紫舌，腻苔，脉象为洪脉，辨证为阳虚证。",
+    "timestamp": "2025-04-07T17:12:02.936610"
+  },
+  {
+    "id": "tongue_0016",
+    "tongue_type": "青舌",
+    "tongue_coating": "干苔",
+    "pulse_type": "虚脉",
+    "syndrome": "痰饮证",
+    "constitution": "痰湿质",
+    "herbs": [
+      "栀子",
+      "白芍",
+      "艾叶",
+      "生姜",
+      "薄荷",
+      "黄芪",
+      "桔梗",
+      "肉桂"
+    ],
+    "formulas": [
+      "桂枝汤",
+      "柴胡疏肝散",
+      "沙参麦冬汤"
+    ],
+    "features": [
+      "舌体胖大",
+      "舌无齿痕"
+    ],
+    "description": "该患者舌象为青舌，干苔，脉象为虚脉，辨证为痰饮证。",
+    "timestamp": "2025-04-07T17:12:02.936621"
+  },
+  {
+    "id": "tongue_0017",
+    "tongue_type": "青舌",
+    "tongue_coating": "薄白苔",
+    "pulse_type": "短脉",
+    "syndrome": "血热证",
+    "constitution": "平和质",
+    "herbs": [
+      "独活",
+      "荆芥",
+      "陈皮",
+      "红花",
+      "桔梗",
+      "石膏"
+    ],
+    "formulas": [
+      "补中益气汤",
+      "导赤散"
+    ],
+    "features": [
+      "舌体正常"
+    ],
+    "description": "该患者舌象为青舌，薄白苔，脉象为短脉，辨证为血热证。",
+    "timestamp": "2025-04-07T17:12:02.936631"
+  },
+  {
+    "id": "tongue_0018",
+    "tongue_type": "灰黑舌",
+    "tongue_coating": "厚白苔",
+    "pulse_type": "浮脉",
+    "syndrome": "气虚证",
+    "constitution": "平和质",
+    "herbs": [
+      "独活",
+      "黄连",
+      "板蓝根"
+    ],
+    "formulas": [
+      "黄连解毒汤",
+      "大青龙汤",
+      "安宫牛黄丸"
+    ],
+    "features": [
+      "舌苔腻"
+    ],
+    "description": "该患者舌象为灰黑舌，厚白苔，脉象为浮脉，辨证为气虚证。",
+    "timestamp": "2025-04-07T17:12:02.936640"
+  },
+  {
+    "id": "tongue_0019",
+    "tongue_type": "灰黑舌",
+    "tongue_coating": "薄白苔",
+    "pulse_type": "伏脉",
+    "syndrome": "寒证",
+    "constitution": "痰湿质",
+    "herbs": [
+      "前胡",
+      "丹参",
+      "熟地黄",
+      "川芎"
+    ],
+    "formulas": [
+      "四物汤"
+    ],
+    "features": [
+      "舌体瘦小",
+      "舌有齿痕",
+      "舌尖红"
+    ],
+    "description": "该患者舌象为灰黑舌，薄白苔，脉象为伏脉，辨证为寒证。",
+    "timestamp": "2025-04-07T17:12:02.936651"
+  },
+  {
+    "id": "tongue_0020",
+    "tongue_type": "淡白舌",
+    "tongue_coating": "黑苔",
+    "pulse_type": "结脉",
+    "syndrome": "痰饮证",
+    "constitution": "血瘀质",
+    "herbs": [
+      "荆芥",
+      "大青叶",
+      "熟地黄",
+      "干姜",
+      "防风",
+      "薄荷",
+      "细辛",
+      "桑叶"
+    ],
+    "formulas": [
+      "羌活胜湿汤",
+      "六味地黄丸"
+    ],
+    "features": [
+      "舌体正常",
+      "舌有齿痕",
+      "舌尖正常"
+    ],
+    "description": "该患者舌象为淡白舌，黑苔，脉象为结脉，辨证为痰饮证。",
+    "timestamp": "2025-04-07T17:12:02.936662"
+  },
+  {
+    "id": "tongue_0021",
+    "tongue_type": "淡白舌",
+    "tongue_coating": "黄苔",
+    "pulse_type": "浮脉",
+    "syndrome": "气滞证",
+    "constitution": "血瘀质",
+    "herbs": [
+      "当归",
+      "半夏",
+      "细辛"
+    ],
+    "formulas": [
+      "葛根汤"
+    ],
+    "features": [
+      "舌有齿痕",
+      "舌尖红"
+    ],
+    "description": "该患者舌象为淡白舌，黄苔，脉象为浮脉，辨证为气滞证。",
+    "timestamp": "2025-04-07T17:12:02.936671"
+  },
+  {
+    "id": "tongue_0022",
+    "tongue_type": "淡红舌",
+    "tongue_coating": "腻苔",
+    "pulse_type": "革脉",
+    "syndrome": "阳虚证",
+    "constitution": "湿热质",
+    "herbs": [
+      "板蓝根",
+      "艾叶",
+      "川芎"
+    ],
+    "formulas": [
+      "清营汤",
+      "消风散",
+      "四逆散"
+    ],
+    "features": [
+      "舌尖正常"
+    ],
+    "description": "该患者舌象为淡红舌，腻苔，脉象为革脉，辨证为阳虚证。",
+    "timestamp": "2025-04-07T17:12:02.936679"
+  },
+  {
+    "id": "tongue_0023",
+    "tongue_type": "灰黑舌",
+    "tongue_coating": "腻苔",
+    "pulse_type": "芤脉",
+    "syndrome": "气滞证",
+    "constitution": "平和质",
+    "herbs": [
+      "板蓝根",
+      "杏仁",
+      "牛蒡子",
+      "川芎",
+      "栀子",
+      "附子",
+      "枳壳"
+    ],
+    "formulas": [
+      "四君子汤",
+      "桂枝甘草龙骨牡蛎汤"
+    ],
+    "features": [
+      "舌体胖大",
+      "舌有齿痕",
+      "舌苔滑"
+    ],
+    "description": "该患者舌象为灰黑舌，腻苔，脉象为芤脉，辨证为气滞证。",
+    "timestamp": "2025-04-07T17:12:02.936694"
+  },
+  {
+    "id": "tongue_0024",
+    "tongue_type": "淡红舌",
+    "tongue_coating": "黄苔",
+    "pulse_type": "虚脉",
+    "syndrome": "阳虚证",
+    "constitution": "阴虚质",
+    "herbs": [
+      "茯苓",
+      "陈皮",
+      "枳壳",
+      "红花",
+      "菊花",
+      "知母"
+    ],
+    "formulas": [
+      "二陈汤",
+      "四物汤"
+    ],
+    "features": [
+      "舌无齿痕",
+      "舌尖暗红"
+    ],
+    "description": "该患者舌象为淡红舌，黄苔，脉象为虚脉，辨证为阳虚证。",
+    "timestamp": "2025-04-07T17:12:02.936705"
+  },
+  {
+    "id": "tongue_0025",
+    "tongue_type": "青舌",
+    "tongue_coating": "厚白苔",
+    "pulse_type": "动脉",
+    "syndrome": "暑证",
+    "constitution": "特禀质",
+    "herbs": [
+      "大青叶",
+      "柴胡",
+      "艾叶",
+      "半夏",
+      "干姜",
+      "附子"
+    ],
+    "formulas": [
+      "羌活胜湿汤",
+      "十全大补汤",
+      "消风散"
+    ],
+    "features": [],
+    "description": "该患者舌象为青舌，厚白苔，脉象为动脉，辨证为暑证。",
+    "timestamp": "2025-04-07T17:12:02.936715"
+  },
+  {
+    "id": "tongue_0026",
+    "tongue_type": "绛舌",
+    "tongue_coating": "腻苔",
+    "pulse_type": "浮脉",
+    "syndrome": "内热证",
+    "constitution": "湿热质",
+    "herbs": [
+      "黄芩",
+      "黄芪",
+      "柴胡",
+      "金银花"
+    ],
+    "formulas": [
+      "安宫牛黄丸",
+      "半夏白术天麻汤"
+    ],
+    "features": [
+      "舌苔滑"
+    ],
+    "description": "该患者舌象为绛舌，腻苔，脉象为浮脉，辨证为内热证。",
+    "timestamp": "2025-04-07T17:12:02.936726"
+  },
+  {
+    "id": "tongue_0027",
+    "tongue_type": "青舌",
+    "tongue_coating": "灰苔",
+    "pulse_type": "虚脉",
+    "syndrome": "痰证",
+    "constitution": "痰湿质",
+    "herbs": [
+      "干姜",
+      "川芎",
+      "前胡",
+      "茯苓",
+      "生地黄"
+    ],
+    "formulas": [
+      "泻白散",
+      "玉屏风散",
+      "桑菊饮"
+    ],
+    "features": [
+      "舌尖正常"
+    ],
+    "description": "该患者舌象为青舌，灰苔，脉象为虚脉，辨证为痰证。",
+    "timestamp": "2025-04-07T17:12:02.936736"
+  },
+  {
+    "id": "tongue_0028",
+    "tongue_type": "淡白舌",
+    "tongue_coating": "黑苔",
+    "pulse_type": "微脉",
+    "syndrome": "津液亏虚",
+    "constitution": "湿热质",
+    "herbs": [
+      "荆芥",
+      "细辛",
+      "枳壳",
+      "附子",
+      "板蓝根",
+      "藁本",
+      "栀子",
+      "白术"
+    ],
+    "formulas": [
+      "生脉散",
+      "羌活胜湿汤",
+      "归脾汤"
+    ],
+    "features": [
+      "舌体正常",
+      "舌苔腻"
+    ],
+    "description": "该患者舌象为淡白舌，黑苔，脉象为微脉，辨证为津液亏虚。",
+    "timestamp": "2025-04-07T17:12:02.936750"
+  },
+  {
+    "id": "tongue_0029",
+    "tongue_type": "灰黑舌",
+    "tongue_coating": "腻苔",
+    "pulse_type": "结脉",
+    "syndrome": "湿证",
+    "constitution": "湿热质",
+    "herbs": [
+      "丹参",
+      "枳壳",
+      "桔梗",
+      "板蓝根"
+    ],
+    "formulas": [
+      "桂枝甘草龙骨牡蛎汤",
+      "葛根汤"
+    ],
+    "features": [
+      "舌体正常",
+      "舌有齿痕",
+      "舌苔滑"
+    ],
+    "description": "该患者舌象为灰黑舌，腻苔，脉象为结脉，辨证为湿证。",
+    "timestamp": "2025-04-07T17:12:02.936761"
+  },
+  {
+    "id": "tongue_0030",
+    "tongue_type": "紫舌",
+    "tongue_coating": "剥苔",
+    "pulse_type": "濡脉",
+    "syndrome": "风湿证",
+    "constitution": "湿热质",
+    "herbs": [
+      "桔梗",
+      "连翘",
+      "黄芩",
+      "干姜",
+      "桑叶",
+      "杏仁",
+      "当归"
+    ],
+    "formulas": [
+      "四物汤",
+      "玉屏风散",
+      "左金丸"
+    ],
+    "features": [
+      "舌有齿痕",
+      "舌苔干"
+    ],
+    "description": "该患者舌象为紫舌，剥苔，脉象为濡脉，辨证为风湿证。",
+    "timestamp": "2025-04-07T17:12:02.936771"
+  },
+  {
+    "id": "tongue_0031",
+    "tongue_type": "淡白舌",
+    "tongue_coating": "干苔",
+    "pulse_type": "细脉",
+    "syndrome": "寒证",
+    "constitution": "平和质",
+    "herbs": [
+      "连翘",
+      "金银花",
+      "干姜",
+      "前胡",
+      "黄柏"
+    ],
+    "formulas": [
+      "桂枝甘草龙骨牡蛎汤"
+    ],
+    "features": [
+      "舌体瘦小",
+      "舌尖正常",
+      "舌苔干"
+    ],
+    "description": "该患者舌象为淡白舌，干苔，脉象为细脉，辨证为寒证。",
+    "timestamp": "2025-04-07T17:12:02.936782"
+  },
+  {
+    "id": "tongue_0032",
+    "tongue_type": "紫舌",
+    "tongue_coating": "剥苔",
+    "pulse_type": "紧脉",
+    "syndrome": "风湿证",
+    "constitution": "气虚质",
+    "herbs": [
+      "防风",
+      "白芷",
+      "黄芩",
+      "蝉蜕",
+      "枳实",
+      "红花",
+      "连翘"
+    ],
+    "formulas": [
+      "十全大补汤",
+      "四逆散"
+    ],
+    "features": [
+      "舌体瘦小",
+      "舌尖紫"
+    ],
+    "description": "该患者舌象为紫舌，剥苔，脉象为紧脉，辨证为风湿证。",
+    "timestamp": "2025-04-07T17:12:02.936792"
+  },
+  {
+    "id": "tongue_0033",
+    "tongue_type": "淡白舌",
+    "tongue_coating": "腻苔",
+    "pulse_type": "濡脉",
+    "syndrome": "痰证",
+    "constitution": "痰湿质",
+    "herbs": [
+      "柴胡",
+      "黄芪",
+      "藁本",
+      "半夏",
+      "当归",
+      "牛蒡子",
+      "连翘",
+      "生姜"
+    ],
+    "formulas": [
+      "小青龙汤",
+      "四物汤"
+    ],
+    "features": [
+      "舌有齿痕",
+      "舌尖正常",
+      "舌苔剥落"
+    ],
+    "description": "该患者舌象为淡白舌，腻苔，脉象为濡脉，辨证为痰证。",
+    "timestamp": "2025-04-07T17:12:02.936804"
+  },
+  {
+    "id": "tongue_0034",
+    "tongue_type": "紫舌",
+    "tongue_coating": "剥苔",
+    "pulse_type": "细脉",
+    "syndrome": "痰饮证",
+    "constitution": "痰湿质",
+    "herbs": [
+      "藁本",
+      "当归",
+      "艾叶"
+    ],
+    "formulas": [
+      "安宫牛黄丸",
+      "六味地黄丸"
+    ],
+    "features": [],
+    "description": "该患者舌象为紫舌，剥苔，脉象为细脉，辨证为痰饮证。",
+    "timestamp": "2025-04-07T17:12:02.936812"
+  },
+  {
+    "id": "tongue_0035",
+    "tongue_type": "紫舌",
+    "tongue_coating": "腻苔",
+    "pulse_type": "虚脉",
+    "syndrome": "热证",
+    "constitution": "平和质",
+    "herbs": [
+      "牛蒡子",
+      "肉桂",
+      "板蓝根"
+    ],
+    "formulas": [
+      "泻白散"
+    ],
+    "features": [
+      "舌体瘦小",
+      "舌尖紫",
+      "舌苔燥"
+    ],
+    "description": "该患者舌象为紫舌，腻苔，脉象为虚脉，辨证为热证。",
+    "timestamp": "2025-04-07T17:12:02.936821"
+  },
+  {
+    "id": "tongue_0036",
+    "tongue_type": "红舌",
+    "tongue_coating": "黄苔",
+    "pulse_type": "细脉",
+    "syndrome": "热证",
+    "constitution": "湿热质",
+    "herbs": [
+      "肉桂",
+      "石膏",
+      "川芎",
+      "白芍",
+      "桑叶",
+      "甘草",
+      "生姜",
+      "连翘"
+    ],
+    "formulas": [
+      "苓桂术甘汤",
+      "桂枝汤",
+      "麦门冬汤"
+    ],
+    "features": [
+      "舌有齿痕",
+      "舌苔滑"
+    ],
+    "description": "该患者舌象为红舌，黄苔，脉象为细脉，辨证为热证。",
+    "timestamp": "2025-04-07T17:12:02.936832"
+  },
+  {
+    "id": "tongue_0037",
+    "tongue_type": "紫舌",
+    "tongue_coating": "剥苔",
+    "pulse_type": "缓脉",
+    "syndrome": "燥证",
+    "constitution": "气虚质",
+    "herbs": [
+      "柴胡",
+      "黄连",
+      "白术",
+      "枳壳",
+      "黄芩"
+    ],
+    "formulas": [
+      "导赤散",
+      "小柴胡汤",
+      "安宫牛黄丸"
+    ],
+    "features": [
+      "舌体正常",
+      "舌无齿痕",
+      "舌尖正常"
+    ],
+    "description": "该患者舌象为紫舌，剥苔，脉象为缓脉，辨证为燥证。",
+    "timestamp": "2025-04-07T17:12:02.936843"
+  },
+  {
+    "id": "tongue_0038",
+    "tongue_type": "绛舌",
+    "tongue_coating": "厚白苔",
+    "pulse_type": "濡脉",
+    "syndrome": "风寒证",
+    "constitution": "痰湿质",
+    "herbs": [
+      "熟地黄",
+      "甘草",
+      "半夏",
+      "杏仁",
+      "天麻",
+      "人参",
+      "附子",
+      "丹参"
+    ],
+    "formulas": [
+      "四逆散",
+      "黄连解毒汤"
+    ],
+    "features": [
+      "舌体正常"
+    ],
+    "description": "该患者舌象为绛舌，厚白苔，脉象为濡脉，辨证为风寒证。",
+    "timestamp": "2025-04-07T17:12:02.936854"
+  },
+  {
+    "id": "tongue_0039",
+    "tongue_type": "灰黑舌",
+    "tongue_coating": "灰苔",
+    "pulse_type": "濡脉",
+    "syndrome": "内热证",
+    "constitution": "平和质",
+    "herbs": [
+      "黄柏",
+      "细辛",
+      "柴胡"
+    ],
+    "formulas": [
+      "五苓散"
+    ],
+    "features": [
+      "舌体瘦小",
+      "舌尖紫"
+    ],
+    "description": "该患者舌象为灰黑舌，灰苔，脉象为濡脉，辨证为内热证。",
+    "timestamp": "2025-04-07T17:12:02.936862"
+  },
+  {
+    "id": "tongue_0040",
+    "tongue_type": "绛舌",
+    "tongue_coating": "无苔",
+    "pulse_type": "濡脉",
+    "syndrome": "燥证",
+    "constitution": "气郁质",
+    "herbs": [
+      "桑叶",
+      "石膏",
+      "生姜",
+      "栀子",
+      "丹参",
+      "防风",
+      "干姜"
+    ],
+    "formulas": [
+      "猪苓汤",
+      "百合固金汤"
+    ],
+    "features": [
+      "舌有齿痕",
+      "舌苔干"
+    ],
+    "description": "该患者舌象为绛舌，无苔，脉象为濡脉，辨证为燥证。",
+    "timestamp": "2025-04-07T17:12:02.936874"
+  },
+  {
+    "id": "tongue_0041",
+    "tongue_type": "绛舌",
+    "tongue_coating": "无苔",
+    "pulse_type": "实脉",
+    "syndrome": "痰饮证",
+    "constitution": "痰湿质",
+    "herbs": [
+      "半夏",
+      "蝉蜕",
+      "茯苓",
+      "当归",
+      "藁本"
+    ],
+    "formulas": [
+      "十全大补汤",
+      "百合固金汤",
+      "导赤散"
+    ],
+    "features": [
+      "舌体瘦小"
+    ],
+    "description": "该患者舌象为绛舌，无苔，脉象为实脉，辨证为痰饮证。",
+    "timestamp": "2025-04-07T17:12:02.936884"
+  },
+  {
+    "id": "tongue_0042",
+    "tongue_type": "青舌",
+    "tongue_coating": "腻苔",
+    "pulse_type": "实脉",
+    "syndrome": "气逆证",
+    "constitution": "痰湿质",
+    "herbs": [
+      "人参",
+      "陈皮",
+      "黄柏",
+      "金银花"
+    ],
+    "formulas": [
+      "玉屏风散",
+      "四君子汤",
+      "补中益气汤"
+    ],
+    "features": [],
+    "description": "该患者舌象为青舌，腻苔，脉象为实脉，辨证为气逆证。",
+    "timestamp": "2025-04-07T17:12:02.936892"
+  },
+  {
+    "id": "tongue_0043",
+    "tongue_type": "灰黑舌",
+    "tongue_coating": "厚白苔",
+    "pulse_type": "伏脉",
+    "syndrome": "血虚证",
+    "constitution": "血瘀质",
+    "herbs": [
+      "肉桂",
+      "藁本",
+      "附子",
+      "当归"
+    ],
+    "formulas": [
+      "清营汤"
+    ],
+    "features": [
+      "舌无齿痕",
+      "舌苔腻"
+    ],
+    "description": "该患者舌象为灰黑舌，厚白苔，脉象为伏脉，辨证为血虚证。",
+    "timestamp": "2025-04-07T17:12:02.936902"
+  },
+  {
+    "id": "tongue_0044",
+    "tongue_type": "淡红舌",
+    "tongue_coating": "剥苔",
+    "pulse_type": "微脉",
+    "syndrome": "寒证",
+    "constitution": "平和质",
+    "herbs": [
+      "藁本",
+      "黄芪",
+      "茯苓",
+      "牛蒡子",
+      "陈皮",
+      "黄连",
+      "杏仁"
+    ],
+    "formulas": [
+      "真武汤",
+      "五苓散",
+      "清瘟败毒饮"
+    ],
+    "features": [
+      "舌体胖大",
+      "舌有齿痕",
+      "舌尖正常",
+      "舌苔剥落"
+    ],
+    "description": "该患者舌象为淡红舌，剥苔，脉象为微脉，辨证为寒证。",
+    "timestamp": "2025-04-07T17:12:02.936914"
+  },
+  {
+    "id": "tongue_0045",
+    "tongue_type": "紫舌",
+    "tongue_coating": "灰苔",
+    "pulse_type": "迟脉",
+    "syndrome": "气陷证",
+    "constitution": "阳虚质",
+    "herbs": [
+      "川芎",
+      "薄荷",
+      "黄连",
+      "丹参",
+      "蝉蜕",
+      "板蓝根"
+    ],
+    "formulas": [
+      "安宫牛黄丸"
+    ],
+    "features": [],
+    "description": "该患者舌象为紫舌，灰苔，脉象为迟脉，辨证为气陷证。",
+    "timestamp": "2025-04-07T17:12:02.936923"
+  },
+  {
+    "id": "tongue_0046",
+    "tongue_type": "红舌",
+    "tongue_coating": "薄白苔",
+    "pulse_type": "长脉",
+    "syndrome": "寒证",
+    "constitution": "平和质",
+    "herbs": [
+      "茯苓",
+      "天麻",
+      "麻黄",
+      "熟地黄",
+      "细辛",
+      "藁本",
+      "丹参"
+    ],
+    "formulas": [
+      "泻白散",
+      "逍遥散"
+    ],
+    "features": [
+      "舌无齿痕",
+      "舌尖紫"
+    ],
+    "description": "该患者舌象为红舌，薄白苔，脉象为长脉，辨证为寒证。",
+    "timestamp": "2025-04-07T17:12:02.936933"
+  },
+  {
+    "id": "tongue_0047",
+    "tongue_type": "灰黑舌",
+    "tongue_coating": "无苔",
+    "pulse_type": "洪脉",
+    "syndrome": "热证",
+    "constitution": "痰湿质",
+    "herbs": [
+      "荆芥",
+      "甘草",
+      "板蓝根",
+      "桔梗",
+      "细辛",
+      "当归",
+      "金银花"
+    ],
+    "formulas": [
+      "导赤散",
+      "苓桂术甘汤",
+      "清瘟败毒饮"
+    ],
+    "features": [
+      "舌体正常",
+      "舌尖红"
+    ],
+    "description": "该患者舌象为灰黑舌，无苔，脉象为洪脉，辨证为热证。",
+    "timestamp": "2025-04-07T17:12:02.936944"
+  },
+  {
+    "id": "tongue_0048",
+    "tongue_type": "淡红舌",
+    "tongue_coating": "黑苔",
+    "pulse_type": "代脉",
+    "syndrome": "燥证",
+    "constitution": "气虚质",
+    "herbs": [
+      "葛根",
+      "荆芥",
+      "金银花",
+      "丹参",
+      "藁本"
+    ],
+    "formulas": [
+      "百合固金汤",
+      "大青龙汤"
+    ],
+    "features": [
+      "舌体胖大",
+      "舌有齿痕"
+    ],
+    "description": "该患者舌象为淡红舌，黑苔，脉象为代脉，辨证为燥证。",
+    "timestamp": "2025-04-07T17:12:02.936953"
+  },
+  {
+    "id": "tongue_0049",
+    "tongue_type": "青舌",
+    "tongue_coating": "灰苔",
+    "pulse_type": "结脉",
+    "syndrome": "火证",
+    "constitution": "气虚质",
+    "herbs": [
+      "天麻",
+      "蝉蜕",
+      "当归",
+      "人参",
+      "附子",
+      "黄芩",
+      "栀子"
+    ],
+    "formulas": [
+      "猪苓汤",
+      "六味地黄丸"
+    ],
+    "features": [
+      "舌无齿痕",
+      "舌尖暗红",
+      "舌苔腻"
+    ],
+    "description": "该患者舌象为青舌，灰苔，脉象为结脉，辨证为火证。",
+    "timestamp": "2025-04-07T17:12:02.936965"
+  }
+]

@@ -352,7 +352,7 @@ class TongueImageProcessor {
             (h >= 340 || h <= 20) && s > 0.08 && v > 0.4 ||
             // 增加浅红色范围
             (h >= 0 && h <= 30) && s > 0.05 && v > 0.5;
-            
+
         mask[y][x] = isTongueColor;
       }
     }
@@ -570,7 +570,8 @@ class TongueImageProcessor {
       }
 
       // 如果检测到足够的舌头像素 - 降低阈值以提高检测率
-      if (tonguePixelCount > (scanRadius * scanRadius * 0.1)) { // 从0.2降低到0.1
+      if (tonguePixelCount > (scanRadius * scanRadius * 0.1)) {
+        // 从0.2降低到0.1
         _tongueDetected = true;
 
         // 添加边距
@@ -602,16 +603,16 @@ class TongueImageProcessor {
     // 舌头颜色阈值放宽，增加检测率
     // 1. 红色分量高的像素 (典型舌色)
     final isRedTongue = r > 120 && r > g * 1.1 && r > b * 1.1;
-    
+
     // 2. 粉色偏白的舌色 (淡白舌)
     final isPinkTongue = r > 180 && g > 130 && b > 130 && r > g && r > b;
-    
+
     // 3. 深红色的舌色 (深红舌)
     final isDeepRedTongue = r > 100 && r > g * 1.3 && r > b * 1.3 && r < 180;
-    
+
     // 4. 紫红色的舌色 (紫舌)
     final isPurpleTongue = r > 100 && b > 80 && r > g * 1.2 && b > g * 1.1;
-    
+
     return isRedTongue || isPinkTongue || isDeepRedTongue || isPurpleTongue;
   }
 
@@ -1241,81 +1242,81 @@ class TongueImageProcessor {
     try {
       // 缩放图像以提高处理速度
       final scaledImage = img.copyResize(image, width: 300);
-      
+
       // 获取红色区域比例作为舌头检测的简单方法
       double redPixelRatio = _calculateRedPixelRatio(scaledImage);
-      
+
       // 检测圆形/椭圆形状比例
       double shapeScore = _calculateTongueShapeScore(scaledImage);
-      
+
       // 综合评分（红色占比权重0.7，形状权重0.3）
       double score = redPixelRatio * 0.7 + shapeScore * 0.3;
-      
+
       // 添加一些边界条件
       // 如果红色太少，降低评分
       if (redPixelRatio < 0.05) score *= 0.5;
-      
+
       // 如果图像太暗或太亮，降低评分
       double brightness = _calculateBrightness(scaledImage);
       if (brightness < 0.2 || brightness > 0.8) score *= 0.7;
-      
+
       return score;
     } catch (e) {
       debugPrint('舌头检测失败: $e');
       return 0.0;
     }
   }
-  
+
   /// 计算图像中红色像素的比例
   double _calculateRedPixelRatio(img.Image image) {
     int redPixels = 0;
     int totalPixels = image.width * image.height;
-    
+
     for (int y = 0; y < image.height; y++) {
       for (int x = 0; x < image.width; x++) {
         final pixel = image.getPixel(x, y);
         final r = pixel.r;
         final g = pixel.g;
         final b = pixel.b;
-        
+
         // 红色成分显著高于其他成分
         if (r > 100 && r > g * 1.5 && r > b * 1.5) {
           redPixels++;
         }
       }
     }
-    
+
     return redPixels / totalPixels;
   }
-  
+
   /// 计算可能是舌头形状的得分
   double _calculateTongueShapeScore(img.Image image) {
     // 简单实现：通过边缘检测和椭圆拟合来判断
     // 在实际应用中，这需要更复杂的计算机视觉算法
-    
+
     // 此处为简化实现
     // 真实应用需要使用边缘检测、形状分析等更复杂算法
     return 0.5; // 默认中等可能性
   }
-  
+
   /// 计算图像亮度
   double _calculateBrightness(img.Image image) {
     int sum = 0;
     int totalPixels = image.width * image.height;
-    
+
     for (int y = 0; y < image.height; y++) {
       for (int x = 0; x < image.width; x++) {
         final pixel = image.getPixel(x, y);
         final r = pixel.r;
         final g = pixel.g;
         final b = pixel.b;
-        
+
         // 计算亮度（简化版本）
         int brightness = (0.299 * r + 0.587 * g + 0.114 * b).round();
         sum += brightness;
       }
     }
-    
+
     // 返回范围0-1的亮度值
     return sum / (totalPixels * 255);
   }

@@ -1,0 +1,271 @@
+# 索克生活微服务Docker Compose配置 - 生产环境
+
+version: '3.8'
+
+services:
+  # API网关服务
+  api-gateway:
+    image: ${ALIYUN_REGISTRY}/${ALIYUN_NAMESPACE}/api-gateway:${VERSION}
+    ports:
+      - "${API_GATEWAY_PORT}:${API_GATEWAY_PORT}"
+    environment:
+      - TZ=${TZ}
+      - AUTH_SERVICE_HOST=${AUTH_SERVICE_HOST}
+      - AUTH_SERVICE_PORT=${AUTH_SERVICE_PORT}
+      - USER_SERVICE_HOST=${USER_SERVICE_HOST}
+      - USER_SERVICE_PORT=${USER_SERVICE_PORT}
+      - KNOWLEDGE_BASE_SERVICE_HOST=${KNOWLEDGE_BASE_SERVICE_HOST}
+      - KNOWLEDGE_BASE_SERVICE_PORT=${KNOWLEDGE_BASE_SERVICE_PORT}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - LOG_FORMAT=${LOG_FORMAT}
+      - LOG_OUTPUT=${LOG_OUTPUT}
+      - METRICS_ENABLED=${METRICS_ENABLED}
+      - TRACE_ENABLED=${TRACE_ENABLED}
+      - API_GATEWAY_PORT=${API_GATEWAY_PORT}
+      - API_GATEWAY_READ_TIMEOUT=${API_GATEWAY_READ_TIMEOUT}
+      - API_GATEWAY_WRITE_TIMEOUT=${API_GATEWAY_WRITE_TIMEOUT}
+      - API_GATEWAY_MAX_HEADER_BYTES=${API_GATEWAY_MAX_HEADER_BYTES}
+    volumes:
+      - ./api-gateway/configs:/app/configs
+      - ./logs/api-gateway:/app/logs
+    depends_on:
+      - auth-service
+      - user-service
+      - knowledge-base-service
+    networks:
+      - suoke-network
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+      replicas: 2
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${API_GATEWAY_PORT}/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  # 认证服务
+  auth-service:
+    image: ${ALIYUN_REGISTRY}/${ALIYUN_NAMESPACE}/auth-service:${VERSION}
+    environment:
+      - TZ=${TZ}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_CHARSET=${DB_CHARSET}
+      - DB_MAX_IDLE_CONNS=${DB_MAX_IDLE_CONNS}
+      - DB_MAX_OPEN_CONNS=${DB_MAX_OPEN_CONNS}
+      - DB_CONN_MAX_LIFETIME=${DB_CONN_MAX_LIFETIME}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_DB=${REDIS_DB}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_ACCESS_TOKEN_EXPIRY=${JWT_ACCESS_TOKEN_EXPIRY}
+      - JWT_REFRESH_TOKEN_EXPIRY=${JWT_REFRESH_TOKEN_EXPIRY}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - LOG_FORMAT=${LOG_FORMAT}
+      - LOG_OUTPUT=${LOG_OUTPUT}
+      - METRICS_ENABLED=${METRICS_ENABLED}
+      - TRACE_ENABLED=${TRACE_ENABLED}
+      - AUTH_SERVICE_PORT=${AUTH_SERVICE_PORT}
+    volumes:
+      - ./auth-service/configs:/app/configs
+      - ./logs/auth-service:/app/logs
+    networks:
+      - suoke-network
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+      replicas: 2
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${AUTH_SERVICE_PORT}/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  # 用户服务
+  user-service:
+    image: ${ALIYUN_REGISTRY}/${ALIYUN_NAMESPACE}/user-service:${VERSION}
+    environment:
+      - TZ=${TZ}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_CHARSET=${DB_CHARSET}
+      - DB_MAX_IDLE_CONNS=${DB_MAX_IDLE_CONNS}
+      - DB_MAX_OPEN_CONNS=${DB_MAX_OPEN_CONNS}
+      - DB_CONN_MAX_LIFETIME=${DB_CONN_MAX_LIFETIME}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_DB=${REDIS_DB}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - LOG_FORMAT=${LOG_FORMAT}
+      - LOG_OUTPUT=${LOG_OUTPUT}
+      - METRICS_ENABLED=${METRICS_ENABLED}
+      - TRACE_ENABLED=${TRACE_ENABLED}
+      - USER_SERVICE_PORT=${USER_SERVICE_PORT}
+    volumes:
+      - ./user-service/configs:/app/configs
+      - ./logs/user-service:/app/logs
+    networks:
+      - suoke-network
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+      replicas: 2
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${USER_SERVICE_PORT}/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  # 知识库服务
+  knowledge-base-service:
+    image: ${ALIYUN_REGISTRY}/${ALIYUN_NAMESPACE}/knowledge-base-service:${VERSION}
+    environment:
+      - TZ=${TZ}
+      - SERVER_PORT=${KNOWLEDGE_BASE_SERVICE_PORT}
+      - ENVIRONMENT=${ENVIRONMENT}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_SSL_MODE=${DB_SSL_MODE}
+      - DB_MAX_IDLE_CONNS=${DB_MAX_IDLE_CONNS}
+      - DB_MAX_OPEN_CONNS=${DB_MAX_OPEN_CONNS}
+      - DB_CONN_MAX_LIFETIME=${DB_CONN_MAX_LIFETIME}
+      - VECTOR_STORE_HOST=${VECTOR_STORE_HOST}
+      - VECTOR_STORE_PORT=${VECTOR_STORE_PORT}
+      - TEXT_SPLITTER_CHUNK_SIZE=${TEXT_SPLITTER_CHUNK_SIZE}
+      - TEXT_SPLITTER_CHUNK_OVERLAP=${TEXT_SPLITTER_CHUNK_OVERLAP}
+      - EMBEDDING_MODEL=${EMBEDDING_MODEL}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - EMBEDDING_BATCH_SIZE=${EMBEDDING_BATCH_SIZE}
+      - EMBEDDING_DIMENSIONS=${EMBEDDING_DIMENSIONS}
+      - BLOCKCHAIN_CHAIN_ID=${BLOCKCHAIN_CHAIN_ID}
+      - BLOCKCHAIN_NODE_URL=${BLOCKCHAIN_NODE_URL}
+      - BLOCKCHAIN_PRIVATE_KEY=${BLOCKCHAIN_PRIVATE_KEY}
+      - BLOCKCHAIN_CONTRACT_ADDRESS=${BLOCKCHAIN_CONTRACT_ADDRESS}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - LOG_FORMAT=${LOG_FORMAT}
+      - LOG_OUTPUT=${LOG_OUTPUT}
+      - METRICS_ENABLED=${METRICS_ENABLED}
+      - TRACE_ENABLED=${TRACE_ENABLED}
+    volumes:
+      - ./knowledge-base-service/config:/app/config
+      - ./logs/knowledge-base-service:/app/logs
+      - ./knowledge-base-service/data:/app/data
+    networks:
+      - suoke-network
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+      replicas: 2
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${KNOWLEDGE_BASE_SERVICE_PORT}/api/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    depends_on:
+      - postgres
+      - milvus
+
+  # PostgreSQL数据库
+  postgres:
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - PGDATA=/var/lib/postgresql/data
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./knowledge-base-service/scripts/db:/docker-entrypoint-initdb.d
+    networks:
+      - suoke-network
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # Milvus向量数据库
+  milvus:
+    image: milvusdb/milvus:v2.2.6
+    command: ["milvus", "run", "standalone"]
+    environment:
+      - ETCD_ENDPOINTS=etcd:2379
+      - MINIO_ADDRESS=minio:9000
+    volumes:
+      - milvus-data:/var/lib/milvus
+    networks:
+      - suoke-network
+    restart: always
+    depends_on:
+      - etcd
+      - minio
+
+  # ETCD (Milvus依赖)
+  etcd:
+    image: quay.io/coreos/etcd:v3.5.0
+    environment:
+      - ETCD_AUTO_COMPACTION_MODE=revision
+      - ETCD_AUTO_COMPACTION_RETENTION=1000
+      - ETCD_QUOTA_BACKEND_BYTES=4294967296
+      - ETCD_SNAPSHOT_COUNT=50000
+    volumes:
+      - etcd-data:/etcd
+    command: etcd -advertise-client-urls=http://127.0.0.1:2379 -listen-client-urls http://0.0.0.0:2379 --data-dir /etcd
+    networks:
+      - suoke-network
+    restart: always
+
+  # MinIO (Milvus依赖)
+  minio:
+    image: minio/minio:RELEASE.2023-03-20T20-16-18Z
+    environment:
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=minioadmin
+    volumes:
+      - minio-data:/minio_data
+    command: minio server /minio_data
+    networks:
+      - suoke-network
+    restart: always
+
+# 网络配置
+networks:
+  suoke-network:
+    driver: bridge
+
+# 数据卷配置
+volumes:
+  postgres-data:
+  milvus-data:
+  etcd-data:
+  minio-data:

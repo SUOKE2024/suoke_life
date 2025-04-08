@@ -13,4 +13,21 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 10Gi 
+      storage: 10Gi
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: agent-coordinator-logs-pvc
+  namespace: suoke
+  labels:
+    app: agent-coordinator
+    tier: ai
+    part-of: suoke-life
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  storageClassName: alicloud-disk-ssd 

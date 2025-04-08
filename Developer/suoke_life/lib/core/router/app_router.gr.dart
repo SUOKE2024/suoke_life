@@ -1,3 +1,4 @@
+// dart format width=80
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 // **************************************************************************
@@ -9,174 +10,131 @@
 
 part of 'app_router.dart';
 
-abstract class _$AppRouter extends RootStackRouter {
-  // ignore: unused_element
-  _$AppRouter({super.navigatorKey});
+/// generated route for
+/// [AccountSecurityPage]
+class AccountSecurityPageRoute extends PageRouteInfo<void> {
+  const AccountSecurityPageRoute({List<PageRouteInfo>? children})
+    : super(AccountSecurityPageRoute.name, initialChildren: children);
+
+  static const String name = 'AccountSecurityPageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AccountSecurityPage();
+    },
+  );
+}
+
+/// generated route for
+/// [ApiTestPage]
+class ApiTestPageRoute extends PageRouteInfo<void> {
+  const ApiTestPageRoute({List<PageRouteInfo>? children})
+    : super(ApiTestPageRoute.name, initialChildren: children);
+
+  static const String name = 'ApiTestPageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ApiTestPage();
+    },
+  );
+}
+
+/// generated route for
+/// [BiometricAuthPage]
+class BiometricAuthPageRoute extends PageRouteInfo<BiometricAuthPageRouteArgs> {
+  BiometricAuthPageRoute({
+    Key? key,
+    String? userId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         BiometricAuthPageRoute.name,
+         args: BiometricAuthPageRouteArgs(key: key, userId: userId),
+         initialChildren: children,
+       );
+
+  static const String name = 'BiometricAuthPageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<BiometricAuthPageRouteArgs>(
+        orElse: () => const BiometricAuthPageRouteArgs(),
+      );
+      return BiometricAuthPage(key: args.key, userId: args.userId);
+    },
+  );
+}
+
+class BiometricAuthPageRouteArgs {
+  const BiometricAuthPageRouteArgs({this.key, this.userId});
+
+  final Key? key;
+
+  final String? userId;
 
   @override
-  final Map<String, PageFactory> pagesMap = {
-    ChatRoute.name: (routeData) {
-      final args = routeData.argsAs<ChatRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: ChatPage(
-          key: args.key,
-          contactName: args.contactName,
-          contactAvatar: args.contactAvatar,
-          isAI: args.isAI,
-        ),
-      );
+  String toString() {
+    return 'BiometricAuthPageRouteArgs{key: $key, userId: $userId}';
+  }
+}
+
+/// generated route for
+/// [BlockchainPage]
+class BlockchainPageRoute extends PageRouteInfo<void> {
+  const BlockchainPageRoute({List<PageRouteInfo>? children})
+    : super(BlockchainPageRoute.name, initialChildren: children);
+
+  static const String name = 'BlockchainPageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const BlockchainPage();
     },
-    ConstitutionAssessmentRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const ConstitutionAssessmentPage(),
-      );
-    },
-    ConstitutionResultRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const ConstitutionResultPage(),
-      );
-    },
-    DesignSystemShowcaseRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const DesignSystemShowcasePage(),
-      );
-    },
-    ExplorationDetailRoute.name: (routeData) {
-      final args = routeData.argsAs<ExplorationDetailRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: ExplorationDetailPage(
-          key: args.key,
-          item: args.item,
-        ),
-      );
-    },
-    ExploreRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const ExplorePage(),
-      );
-    },
-    HealthRegimenRoute.name: (routeData) {
-      final args = routeData.argsAs<HealthRegimenRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: HealthRegimenPage(
-          key: args.key,
-          constitutionTypeStr: args.constitutionTypeStr,
-        ),
-      );
-    },
-    HomeRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const HomePage(),
-      );
-    },
-    LifeRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const LifePage(),
-      );
-    },
-    LoginRoute.name: (routeData) {
-      final args = routeData.argsAs<LoginRouteArgs>(
-          orElse: () => const LoginRouteArgs());
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: LoginPage(
-          key: args.key,
-          onLoginSuccess: args.onLoginSuccess,
-        ),
-      );
-    },
-    MainDashboardRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const MainDashboardPage(),
-      );
-    },
-    NotFoundRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const NotFoundPage(),
-      );
-    },
-    ProfileRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const ProfilePage(),
-      );
-    },
-    PulseDiagnosisRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const PulseDiagnosisPage(),
-      );
-    },
-    SuokeRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const SuokePage(),
-      );
-    },
-    ThemeSettingsRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const ThemeSettingsPage(),
-      );
-    },
-    TongueDiagnosisRoute.name: (routeData) {
-      final args = routeData.argsAs<TongueDiagnosisRouteArgs>(
-          orElse: () => const TongueDiagnosisRouteArgs());
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: TongueDiagnosisPage(
-          key: args.key,
-          imagePath: args.imagePath,
-        ),
-      );
-    },
-    WelcomeRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const WelcomePage(),
-      );
-    },
-  };
+  );
 }
 
 /// generated route for
 /// [ChatPage]
-class ChatRoute extends PageRouteInfo<ChatRouteArgs> {
-  ChatRoute({
+class ChatPageRoute extends PageRouteInfo<ChatPageRouteArgs> {
+  ChatPageRoute({
     Key? key,
     required String contactName,
     required String contactAvatar,
     bool isAI = false,
     List<PageRouteInfo>? children,
   }) : super(
-          ChatRoute.name,
-          args: ChatRouteArgs(
-            key: key,
-            contactName: contactName,
-            contactAvatar: contactAvatar,
-            isAI: isAI,
-          ),
-          initialChildren: children,
-        );
+         ChatPageRoute.name,
+         args: ChatPageRouteArgs(
+           key: key,
+           contactName: contactName,
+           contactAvatar: contactAvatar,
+           isAI: isAI,
+         ),
+         initialChildren: children,
+       );
 
-  static const String name = 'ChatRoute';
+  static const String name = 'ChatPageRoute';
 
-  static const PageInfo<ChatRouteArgs> page = PageInfo<ChatRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ChatPageRouteArgs>();
+      return ChatPage(
+        key: args.key,
+        contactName: args.contactName,
+        contactAvatar: args.contactAvatar,
+        isAI: args.isAI,
+      );
+    },
+  );
 }
 
-class ChatRouteArgs {
-  const ChatRouteArgs({
+class ChatPageRouteArgs {
+  const ChatPageRouteArgs({
     this.key,
     required this.contactName,
     required this.contactAvatar,
@@ -193,79 +151,100 @@ class ChatRouteArgs {
 
   @override
   String toString() {
-    return 'ChatRouteArgs{key: $key, contactName: $contactName, contactAvatar: $contactAvatar, isAI: $isAI}';
+    return 'ChatPageRouteArgs{key: $key, contactName: $contactName, contactAvatar: $contactAvatar, isAI: $isAI}';
   }
 }
 
 /// generated route for
 /// [ConstitutionAssessmentPage]
-class ConstitutionAssessmentRoute extends PageRouteInfo<void> {
-  const ConstitutionAssessmentRoute({List<PageRouteInfo>? children})
-      : super(
-          ConstitutionAssessmentRoute.name,
-          initialChildren: children,
-        );
+class ConstitutionAssessmentPageRoute extends PageRouteInfo<void> {
+  const ConstitutionAssessmentPageRoute({List<PageRouteInfo>? children})
+    : super(ConstitutionAssessmentPageRoute.name, initialChildren: children);
 
-  static const String name = 'ConstitutionAssessmentRoute';
+  static const String name = 'ConstitutionAssessmentPageRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ConstitutionAssessmentPage();
+    },
+  );
 }
 
 /// generated route for
 /// [ConstitutionResultPage]
-class ConstitutionResultRoute extends PageRouteInfo<void> {
-  const ConstitutionResultRoute({List<PageRouteInfo>? children})
-      : super(
-          ConstitutionResultRoute.name,
-          initialChildren: children,
-        );
+class ConstitutionResultPageRoute
+    extends PageRouteInfo<ConstitutionResultPageRouteArgs> {
+  ConstitutionResultPageRoute({
+    Key? key,
+    required ConstitutionData constitutionData,
+    List<PageRouteInfo>? children,
+  }) : super(
+         ConstitutionResultPageRoute.name,
+         args: ConstitutionResultPageRouteArgs(
+           key: key,
+           constitutionData: constitutionData,
+         ),
+         initialChildren: children,
+       );
 
-  static const String name = 'ConstitutionResultRoute';
+  static const String name = 'ConstitutionResultPageRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ConstitutionResultPageRouteArgs>();
+      return ConstitutionResultPage(
+        key: args.key,
+        constitutionData: args.constitutionData,
+      );
+    },
+  );
 }
 
-/// generated route for
-/// [DesignSystemShowcasePage]
-class DesignSystemShowcaseRoute extends PageRouteInfo<void> {
-  const DesignSystemShowcaseRoute({List<PageRouteInfo>? children})
-      : super(
-          DesignSystemShowcaseRoute.name,
-          initialChildren: children,
-        );
+class ConstitutionResultPageRouteArgs {
+  const ConstitutionResultPageRouteArgs({
+    this.key,
+    required this.constitutionData,
+  });
 
-  static const String name = 'DesignSystemShowcaseRoute';
+  final Key? key;
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  final ConstitutionData constitutionData;
+
+  @override
+  String toString() {
+    return 'ConstitutionResultPageRouteArgs{key: $key, constitutionData: $constitutionData}';
+  }
 }
 
 /// generated route for
 /// [ExplorationDetailPage]
-class ExplorationDetailRoute extends PageRouteInfo<ExplorationDetailRouteArgs> {
-  ExplorationDetailRoute({
+class ExplorationDetailPageRoute
+    extends PageRouteInfo<ExplorationDetailPageRouteArgs> {
+  ExplorationDetailPageRoute({
     Key? key,
     required ExplorationItem item,
     List<PageRouteInfo>? children,
   }) : super(
-          ExplorationDetailRoute.name,
-          args: ExplorationDetailRouteArgs(
-            key: key,
-            item: item,
-          ),
-          initialChildren: children,
-        );
+         ExplorationDetailPageRoute.name,
+         args: ExplorationDetailPageRouteArgs(key: key, item: item),
+         initialChildren: children,
+       );
 
-  static const String name = 'ExplorationDetailRoute';
+  static const String name = 'ExplorationDetailPageRoute';
 
-  static const PageInfo<ExplorationDetailRouteArgs> page =
-      PageInfo<ExplorationDetailRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ExplorationDetailPageRouteArgs>();
+      return ExplorationDetailPage(key: args.key, item: args.item);
+    },
+  );
 }
 
-class ExplorationDetailRouteArgs {
-  const ExplorationDetailRouteArgs({
-    this.key,
-    required this.item,
-  });
+class ExplorationDetailPageRouteArgs {
+  const ExplorationDetailPageRouteArgs({this.key, required this.item});
 
   final Key? key;
 
@@ -273,48 +252,74 @@ class ExplorationDetailRouteArgs {
 
   @override
   String toString() {
-    return 'ExplorationDetailRouteArgs{key: $key, item: $item}';
+    return 'ExplorationDetailPageRouteArgs{key: $key, item: $item}';
   }
 }
 
 /// generated route for
 /// [ExplorePage]
-class ExploreRoute extends PageRouteInfo<void> {
-  const ExploreRoute({List<PageRouteInfo>? children})
-      : super(
-          ExploreRoute.name,
-          initialChildren: children,
-        );
+class ExplorePageRoute extends PageRouteInfo<void> {
+  const ExplorePageRoute({List<PageRouteInfo>? children})
+    : super(ExplorePageRoute.name, initialChildren: children);
 
-  static const String name = 'ExploreRoute';
+  static const String name = 'ExplorePageRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ExplorePage();
+    },
+  );
+}
+
+/// generated route for
+/// [HealthProfilePage]
+class HealthProfilePageRoute extends PageRouteInfo<void> {
+  const HealthProfilePageRoute({List<PageRouteInfo>? children})
+    : super(HealthProfilePageRoute.name, initialChildren: children);
+
+  static const String name = 'HealthProfilePageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const HealthProfilePage();
+    },
+  );
 }
 
 /// generated route for
 /// [HealthRegimenPage]
-class HealthRegimenRoute extends PageRouteInfo<HealthRegimenRouteArgs> {
-  HealthRegimenRoute({
+class HealthRegimenPageRoute extends PageRouteInfo<HealthRegimenPageRouteArgs> {
+  HealthRegimenPageRoute({
     Key? key,
     required String constitutionTypeStr,
     List<PageRouteInfo>? children,
   }) : super(
-          HealthRegimenRoute.name,
-          args: HealthRegimenRouteArgs(
-            key: key,
-            constitutionTypeStr: constitutionTypeStr,
-          ),
-          initialChildren: children,
-        );
+         HealthRegimenPageRoute.name,
+         args: HealthRegimenPageRouteArgs(
+           key: key,
+           constitutionTypeStr: constitutionTypeStr,
+         ),
+         initialChildren: children,
+       );
 
-  static const String name = 'HealthRegimenRoute';
+  static const String name = 'HealthRegimenPageRoute';
 
-  static const PageInfo<HealthRegimenRouteArgs> page =
-      PageInfo<HealthRegimenRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<HealthRegimenPageRouteArgs>();
+      return HealthRegimenPage(
+        key: args.key,
+        constitutionTypeStr: args.constitutionTypeStr,
+      );
+    },
+  );
 }
 
-class HealthRegimenRouteArgs {
-  const HealthRegimenRouteArgs({
+class HealthRegimenPageRouteArgs {
+  const HealthRegimenPageRouteArgs({
     this.key,
     required this.constitutionTypeStr,
   });
@@ -325,64 +330,179 @@ class HealthRegimenRouteArgs {
 
   @override
   String toString() {
-    return 'HealthRegimenRouteArgs{key: $key, constitutionTypeStr: $constitutionTypeStr}';
+    return 'HealthRegimenPageRouteArgs{key: $key, constitutionTypeStr: $constitutionTypeStr}';
   }
 }
 
 /// generated route for
 /// [HomePage]
-class HomeRoute extends PageRouteInfo<void> {
-  const HomeRoute({List<PageRouteInfo>? children})
-      : super(
-          HomeRoute.name,
-          initialChildren: children,
-        );
+class HomePageRoute extends PageRouteInfo<void> {
+  const HomePageRoute({List<PageRouteInfo>? children})
+    : super(HomePageRoute.name, initialChildren: children);
 
-  static const String name = 'HomeRoute';
+  static const String name = 'HomePageRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const HomePage();
+    },
+  );
+}
+
+/// generated route for
+/// [KnowledgeArticleDetailPage]
+class KnowledgeArticleDetailPageRoute
+    extends PageRouteInfo<KnowledgeArticleDetailPageRouteArgs> {
+  KnowledgeArticleDetailPageRoute({
+    Key? key,
+    required String articleId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         KnowledgeArticleDetailPageRoute.name,
+         args: KnowledgeArticleDetailPageRouteArgs(
+           key: key,
+           articleId: articleId,
+         ),
+         rawPathParams: {'articleId': articleId},
+         initialChildren: children,
+       );
+
+  static const String name = 'KnowledgeArticleDetailPageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<KnowledgeArticleDetailPageRouteArgs>(
+        orElse:
+            () => KnowledgeArticleDetailPageRouteArgs(
+              articleId: pathParams.getString('articleId'),
+            ),
+      );
+      return KnowledgeArticleDetailPage(
+        key: args.key,
+        articleId: args.articleId,
+      );
+    },
+  );
+}
+
+class KnowledgeArticleDetailPageRouteArgs {
+  const KnowledgeArticleDetailPageRouteArgs({
+    this.key,
+    required this.articleId,
+  });
+
+  final Key? key;
+
+  final String articleId;
+
+  @override
+  String toString() {
+    return 'KnowledgeArticleDetailPageRouteArgs{key: $key, articleId: $articleId}';
+  }
+}
+
+/// generated route for
+/// [KnowledgeGraphViewer]
+class KnowledgeGraphViewerRoute
+    extends PageRouteInfo<KnowledgeGraphViewerRouteArgs> {
+  KnowledgeGraphViewerRoute({
+    Key? key,
+    String? initialNodeId,
+    VisualizationMode mode = VisualizationMode.mode3D,
+    List<PageRouteInfo>? children,
+  }) : super(
+         KnowledgeGraphViewerRoute.name,
+         args: KnowledgeGraphViewerRouteArgs(
+           key: key,
+           initialNodeId: initialNodeId,
+           mode: mode,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'KnowledgeGraphViewerRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<KnowledgeGraphViewerRouteArgs>(
+        orElse: () => const KnowledgeGraphViewerRouteArgs(),
+      );
+      return KnowledgeGraphViewer(
+        key: args.key,
+        initialNodeId: args.initialNodeId,
+        mode: args.mode,
+      );
+    },
+  );
+}
+
+class KnowledgeGraphViewerRouteArgs {
+  const KnowledgeGraphViewerRouteArgs({
+    this.key,
+    this.initialNodeId,
+    this.mode = VisualizationMode.mode3D,
+  });
+
+  final Key? key;
+
+  final String? initialNodeId;
+
+  final VisualizationMode mode;
+
+  @override
+  String toString() {
+    return 'KnowledgeGraphViewerRouteArgs{key: $key, initialNodeId: $initialNodeId, mode: $mode}';
+  }
 }
 
 /// generated route for
 /// [LifePage]
-class LifeRoute extends PageRouteInfo<void> {
-  const LifeRoute({List<PageRouteInfo>? children})
-      : super(
-          LifeRoute.name,
-          initialChildren: children,
-        );
+class LifePageRoute extends PageRouteInfo<void> {
+  const LifePageRoute({List<PageRouteInfo>? children})
+    : super(LifePageRoute.name, initialChildren: children);
 
-  static const String name = 'LifeRoute';
+  static const String name = 'LifePageRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const LifePage();
+    },
+  );
 }
 
 /// generated route for
 /// [LoginPage]
-class LoginRoute extends PageRouteInfo<LoginRouteArgs> {
-  LoginRoute({
+class LoginPageRoute extends PageRouteInfo<LoginPageRouteArgs> {
+  LoginPageRoute({
     Key? key,
     void Function()? onLoginSuccess,
     List<PageRouteInfo>? children,
   }) : super(
-          LoginRoute.name,
-          args: LoginRouteArgs(
-            key: key,
-            onLoginSuccess: onLoginSuccess,
-          ),
-          initialChildren: children,
-        );
+         LoginPageRoute.name,
+         args: LoginPageRouteArgs(key: key, onLoginSuccess: onLoginSuccess),
+         initialChildren: children,
+       );
 
-  static const String name = 'LoginRoute';
+  static const String name = 'LoginPageRoute';
 
-  static const PageInfo<LoginRouteArgs> page = PageInfo<LoginRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<LoginPageRouteArgs>(
+        orElse: () => const LoginPageRouteArgs(),
+      );
+      return LoginPage(key: args.key, onLoginSuccess: args.onLoginSuccess);
+    },
+  );
 }
 
-class LoginRouteArgs {
-  const LoginRouteArgs({
-    this.key,
-    this.onLoginSuccess,
-  });
+class LoginPageRouteArgs {
+  const LoginPageRouteArgs({this.key, this.onLoginSuccess});
 
   final Key? key;
 
@@ -390,121 +510,253 @@ class LoginRouteArgs {
 
   @override
   String toString() {
-    return 'LoginRouteArgs{key: $key, onLoginSuccess: $onLoginSuccess}';
+    return 'LoginPageRouteArgs{key: $key, onLoginSuccess: $onLoginSuccess}';
   }
 }
 
 /// generated route for
 /// [MainDashboardPage]
-class MainDashboardRoute extends PageRouteInfo<void> {
-  const MainDashboardRoute({List<PageRouteInfo>? children})
-      : super(
-          MainDashboardRoute.name,
-          initialChildren: children,
-        );
+class MainDashboardPageRoute extends PageRouteInfo<void> {
+  const MainDashboardPageRoute({List<PageRouteInfo>? children})
+    : super(MainDashboardPageRoute.name, initialChildren: children);
 
-  static const String name = 'MainDashboardRoute';
+  static const String name = 'MainDashboardPageRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const MainDashboardPage();
+    },
+  );
+}
+
+/// generated route for
+/// [MainPage]
+class MainPageRoute extends PageRouteInfo<void> {
+  const MainPageRoute({List<PageRouteInfo>? children})
+    : super(MainPageRoute.name, initialChildren: children);
+
+  static const String name = 'MainPageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const MainPage();
+    },
+  );
+}
+
+/// generated route for
+/// [NetworkTestRoute]
+class NetworkTestRouteRoute extends PageRouteInfo<void> {
+  const NetworkTestRouteRoute({List<PageRouteInfo>? children})
+    : super(NetworkTestRouteRoute.name, initialChildren: children);
+
+  static const String name = 'NetworkTestRouteRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const NetworkTestRoute();
+    },
+  );
 }
 
 /// generated route for
 /// [NotFoundPage]
-class NotFoundRoute extends PageRouteInfo<void> {
-  const NotFoundRoute({List<PageRouteInfo>? children})
-      : super(
-          NotFoundRoute.name,
-          initialChildren: children,
-        );
+class NotFoundPageRoute extends PageRouteInfo<void> {
+  const NotFoundPageRoute({List<PageRouteInfo>? children})
+    : super(NotFoundPageRoute.name, initialChildren: children);
 
-  static const String name = 'NotFoundRoute';
+  static const String name = 'NotFoundPageRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const NotFoundPage();
+    },
+  );
 }
 
 /// generated route for
 /// [ProfilePage]
-class ProfileRoute extends PageRouteInfo<void> {
-  const ProfileRoute({List<PageRouteInfo>? children})
-      : super(
-          ProfileRoute.name,
-          initialChildren: children,
-        );
+class ProfilePageRoute extends PageRouteInfo<void> {
+  const ProfilePageRoute({List<PageRouteInfo>? children})
+    : super(ProfilePageRoute.name, initialChildren: children);
 
-  static const String name = 'ProfileRoute';
+  static const String name = 'ProfilePageRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ProfilePage();
+    },
+  );
 }
 
 /// generated route for
 /// [PulseDiagnosisPage]
-class PulseDiagnosisRoute extends PageRouteInfo<void> {
-  const PulseDiagnosisRoute({List<PageRouteInfo>? children})
-      : super(
-          PulseDiagnosisRoute.name,
-          initialChildren: children,
-        );
+class PulseDiagnosisPageRoute extends PageRouteInfo<void> {
+  const PulseDiagnosisPageRoute({List<PageRouteInfo>? children})
+    : super(PulseDiagnosisPageRoute.name, initialChildren: children);
 
-  static const String name = 'PulseDiagnosisRoute';
+  static const String name = 'PulseDiagnosisPageRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const PulseDiagnosisPage();
+    },
+  );
+}
+
+/// generated route for
+/// [RagSearchPage]
+class RagSearchPageRoute extends PageRouteInfo<RagSearchPageRouteArgs> {
+  RagSearchPageRoute({
+    Key? key,
+    String initialQuery = '',
+    String searchType = 'general',
+    List<PageRouteInfo>? children,
+  }) : super(
+         RagSearchPageRoute.name,
+         args: RagSearchPageRouteArgs(
+           key: key,
+           initialQuery: initialQuery,
+           searchType: searchType,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'RagSearchPageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<RagSearchPageRouteArgs>(
+        orElse: () => const RagSearchPageRouteArgs(),
+      );
+      return RagSearchPage(
+        key: args.key,
+        initialQuery: args.initialQuery,
+        searchType: args.searchType,
+      );
+    },
+  );
+}
+
+class RagSearchPageRouteArgs {
+  const RagSearchPageRouteArgs({
+    this.key,
+    this.initialQuery = '',
+    this.searchType = 'general',
+  });
+
+  final Key? key;
+
+  final String initialQuery;
+
+  final String searchType;
+
+  @override
+  String toString() {
+    return 'RagSearchPageRouteArgs{key: $key, initialQuery: $initialQuery, searchType: $searchType}';
+  }
+}
+
+/// generated route for
+/// [RegisterPage]
+class RegisterPageRoute extends PageRouteInfo<void> {
+  const RegisterPageRoute({List<PageRouteInfo>? children})
+    : super(RegisterPageRoute.name, initialChildren: children);
+
+  static const String name = 'RegisterPageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const RegisterPage();
+    },
+  );
+}
+
+/// generated route for
+/// [SensingControlPage]
+class SensingControlPageRoute extends PageRouteInfo<void> {
+  const SensingControlPageRoute({List<PageRouteInfo>? children})
+    : super(SensingControlPageRoute.name, initialChildren: children);
+
+  static const String name = 'SensingControlPageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const SensingControlPage();
+    },
+  );
 }
 
 /// generated route for
 /// [SuokePage]
-class SuokeRoute extends PageRouteInfo<void> {
-  const SuokeRoute({List<PageRouteInfo>? children})
-      : super(
-          SuokeRoute.name,
-          initialChildren: children,
-        );
+class SuokePageRoute extends PageRouteInfo<void> {
+  const SuokePageRoute({List<PageRouteInfo>? children})
+    : super(SuokePageRoute.name, initialChildren: children);
 
-  static const String name = 'SuokeRoute';
+  static const String name = 'SuokePageRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const SuokePage();
+    },
+  );
 }
 
 /// generated route for
 /// [ThemeSettingsPage]
-class ThemeSettingsRoute extends PageRouteInfo<void> {
-  const ThemeSettingsRoute({List<PageRouteInfo>? children})
-      : super(
-          ThemeSettingsRoute.name,
-          initialChildren: children,
-        );
+class ThemeSettingsPageRoute extends PageRouteInfo<void> {
+  const ThemeSettingsPageRoute({List<PageRouteInfo>? children})
+    : super(ThemeSettingsPageRoute.name, initialChildren: children);
 
-  static const String name = 'ThemeSettingsRoute';
+  static const String name = 'ThemeSettingsPageRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ThemeSettingsPage();
+    },
+  );
 }
 
 /// generated route for
 /// [TongueDiagnosisPage]
-class TongueDiagnosisRoute extends PageRouteInfo<TongueDiagnosisRouteArgs> {
-  TongueDiagnosisRoute({
+class TongueDiagnosisPageRoute
+    extends PageRouteInfo<TongueDiagnosisPageRouteArgs> {
+  TongueDiagnosisPageRoute({
     Key? key,
     String? imagePath,
     List<PageRouteInfo>? children,
   }) : super(
-          TongueDiagnosisRoute.name,
-          args: TongueDiagnosisRouteArgs(
-            key: key,
-            imagePath: imagePath,
-          ),
-          initialChildren: children,
-        );
+         TongueDiagnosisPageRoute.name,
+         args: TongueDiagnosisPageRouteArgs(key: key, imagePath: imagePath),
+         initialChildren: children,
+       );
 
-  static const String name = 'TongueDiagnosisRoute';
+  static const String name = 'TongueDiagnosisPageRoute';
 
-  static const PageInfo<TongueDiagnosisRouteArgs> page =
-      PageInfo<TongueDiagnosisRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<TongueDiagnosisPageRouteArgs>(
+        orElse: () => const TongueDiagnosisPageRouteArgs(),
+      );
+      return TongueDiagnosisPage(key: args.key, imagePath: args.imagePath);
+    },
+  );
 }
 
-class TongueDiagnosisRouteArgs {
-  const TongueDiagnosisRouteArgs({
-    this.key,
-    this.imagePath,
-  });
+class TongueDiagnosisPageRouteArgs {
+  const TongueDiagnosisPageRouteArgs({this.key, this.imagePath});
 
   final Key? key;
 
@@ -512,20 +764,67 @@ class TongueDiagnosisRouteArgs {
 
   @override
   String toString() {
-    return 'TongueDiagnosisRouteArgs{key: $key, imagePath: $imagePath}';
+    return 'TongueDiagnosisPageRouteArgs{key: $key, imagePath: $imagePath}';
+  }
+}
+
+/// generated route for
+/// [TwoFactorAuthPage]
+class TwoFactorAuthPageRoute extends PageRouteInfo<TwoFactorAuthPageRouteArgs> {
+  TwoFactorAuthPageRoute({
+    Key? key,
+    String? temporaryToken,
+    List<PageRouteInfo>? children,
+  }) : super(
+         TwoFactorAuthPageRoute.name,
+         args: TwoFactorAuthPageRouteArgs(
+           key: key,
+           temporaryToken: temporaryToken,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'TwoFactorAuthPageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<TwoFactorAuthPageRouteArgs>(
+        orElse: () => const TwoFactorAuthPageRouteArgs(),
+      );
+      return TwoFactorAuthPage(
+        key: args.key,
+        temporaryToken: args.temporaryToken,
+      );
+    },
+  );
+}
+
+class TwoFactorAuthPageRouteArgs {
+  const TwoFactorAuthPageRouteArgs({this.key, this.temporaryToken});
+
+  final Key? key;
+
+  final String? temporaryToken;
+
+  @override
+  String toString() {
+    return 'TwoFactorAuthPageRouteArgs{key: $key, temporaryToken: $temporaryToken}';
   }
 }
 
 /// generated route for
 /// [WelcomePage]
-class WelcomeRoute extends PageRouteInfo<void> {
-  const WelcomeRoute({List<PageRouteInfo>? children})
-      : super(
-          WelcomeRoute.name,
-          initialChildren: children,
-        );
+class WelcomePageRoute extends PageRouteInfo<void> {
+  const WelcomePageRoute({List<PageRouteInfo>? children})
+    : super(WelcomePageRoute.name, initialChildren: children);
 
-  static const String name = 'WelcomeRoute';
+  static const String name = 'WelcomePageRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const WelcomePage();
+    },
+  );
 }

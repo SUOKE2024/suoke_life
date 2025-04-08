@@ -183,13 +183,14 @@ class _RelationLinePainter extends CustomPainter {
     }
   }
 
-  void _drawArrow(Canvas canvas, Offset start, Offset end, ElementRelationType relationType) {
+  void _drawArrow(Canvas canvas, Offset start, Offset end,
+      ElementRelationType relationType) {
     // 检查是否有NaN值
     if (start.dx.isNaN || start.dy.isNaN || end.dx.isNaN || end.dy.isNaN) {
       // 防止NaN值导致渲染错误
       return;
     }
-    
+
     final paint = Paint()
       ..color = _getRelationColor(relationType)
       ..strokeWidth = 2.0
@@ -199,7 +200,7 @@ class _RelationLinePainter extends CustomPainter {
     final dx = end.dx - start.dx;
     final dy = end.dy - start.dy;
     final distance = math.sqrt(dx * dx + dy * dy);
-    
+
     // 如果距离太小，不绘制箭头
     if (distance < 1e-10) {
       return;
@@ -223,15 +224,15 @@ class _RelationLinePainter extends CustomPainter {
     // 箭头的两个底角
     final leftX = tipX - unitX * arrowSize + perpX * arrowSize * 0.5;
     final leftY = tipY - unitY * arrowSize + perpY * arrowSize * 0.5;
-    
+
     // 检查计算结果是否有NaN值
     if (leftX.isNaN || leftY.isNaN || tipX.isNaN || tipY.isNaN) {
       return;
     }
-    
+
     final rightX = tipX - unitX * arrowSize - perpX * arrowSize * 0.5;
     final rightY = tipY - unitY * arrowSize - perpY * arrowSize * 0.5;
-    
+
     // 检查右侧点是否有NaN值
     if (rightX.isNaN || rightY.isNaN) {
       return;

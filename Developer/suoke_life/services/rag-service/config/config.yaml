@@ -1,0 +1,100 @@
+app:
+  name: "索克生活RAG服务"
+  environment: "development"
+  log_level: "info"
+  log_path: "./logs"
+  temp_dir: "./tmp"
+  data_dir: "./data"
+  config_dir: "./config"
+  models_dir: "./models"
+
+server:
+  port: 8080
+  host: "0.0.0.0"
+  threads: 4
+  workers: 4
+  read_timeout_seconds: 30
+  write_timeout_seconds: 30
+  idle_timeout_seconds: 60
+
+database:
+  type: "sqlite"
+  path: "./data/rag.db"
+  migrations_path: "./migrations"
+
+redis:
+  host: "redis"
+  port: 6379
+  password: ""
+  db: 0
+  prefix: "rag:"
+  timeout: 5
+
+vector:
+  type: "milvus"
+  host: "milvus"
+  port: 19530
+  username: ""
+  password: ""
+  data_path: "./data/vectors"
+
+knowledge:
+  sources_dir: "./data/sources"
+  chunks_dir: "./data/chunks"
+  metadata_path: "./data/metadata.json"
+
+security:
+  token_secret: "your-secret-key-change-me"
+  token_expiry: 86400
+  allowed_origins:
+    - "http://localhost:3000"
+    - "http://localhost:8080"
+  api_key_required: false
+
+web_search:
+  enabled: true
+  api_key: ""
+  engine: "brave"
+  timeout: 10
+
+embedding:
+  use_local: false
+  model_name: "text-embedding-3-small"
+  dimensions: 1536
+  local_model_path: "./models/all-MiniLM-L6-v2"
+  openai_key: "${OPENAI_API_KEY}"
+  openai_org: ""
+  batch_size: 20
+
+rag:
+  top_k: 10
+  context_window: 4000
+  reranker_enabled: false
+  result_mode: "search"
+
+reranker:
+  model_name: "bge-reranker-base"
+  local_model_path: "./models/bge-reranker-base"
+  use_local: false
+  openai_key: "${OPENAI_API_KEY}"
+
+llm:
+  use_local: false
+  model_name: "gpt-3.5-turbo-0613"
+  local_model_path: "./models/llm"
+  openai_key: "${OPENAI_API_KEY}"
+  openai_org: ""
+  temperature: 0.7
+  top_p: 0.9
+  max_tokens: 2000
+
+cache:
+  enabled: true
+  ttl: 3600
+  max_size: 1000
+  algorithm: "lru"
+
+rate_limit:
+  enabled: true
+  max_requests: 100
+  window_seconds: 60 

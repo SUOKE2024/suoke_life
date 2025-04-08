@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 /// 索克生活APP色彩系统
 /// 定义了品牌色、功能色和中性色等设计令牌
 class AppColors {
+  AppColors._();
+
   // 品牌主色
   static const Color primaryColor = Color(0xFF35BB78); // 索克绿
   static const Color secondaryColor = Color(0xFFFF6800); // 索克橙
@@ -30,12 +32,12 @@ class AppColors {
 
   // 功能色
   static const Color successColor = Color(0xFF4CAF50); // 成功
-  static const Color errorColor = Color(0xFFE53935); // 错误
-  static const Color warningColor = Color(0xFFFFB74D); // 警告
+  static const Color errorColor = Color(0xFFD32F2F); // 错误
+  static const Color warningColor = Color(0xFFFFC107); // 警告
   static const Color infoColor = Color(0xFF4FC3F7); // 信息
 
   // 中性色调 - 亮色主题
-  static const Color lightBackground = Color(0xFFFAFAFA); // 背景
+  static const Color lightBackground = Color(0xFFF5F5F5); // 背景
   static const Color lightSurface = Color(0xFFFFFFFF); // 表面
   static const Color lightTextPrimary = Color(0xFF212121); // 主要文本
   static const Color lightTextSecondary = Color(0xFF757575); // 次要文本
@@ -45,14 +47,14 @@ class AppColors {
   // 中性色调 - 暗色主题
   static const Color darkBackground = Color(0xFF121212); // 背景
   static const Color darkSurface = Color(0xFF1E1E1E); // 表面
-  static const Color darkTextPrimary = Color(0xFFEEEEEE); // 主要文本
-  static const Color darkTextSecondary = Color(0xFFBDBDBD); // 次要文本
+  static const Color darkTextPrimary = Color(0xFFE0E0E0); // 主要文本
+  static const Color darkTextSecondary = Color(0xFFB3B3B3); // 次要文本
   static const Color darkBorder = Color(0xFF424242); // 边框
   static const Color darkDivider = Color(0xFF353535); // 分割线
 
   // 系统状态栏颜色
   static const Color darkSystemGray = Color(0xFF8E8E93); // 暗色系统灰
-  static const Color lightSystemGray = Color(0xFFAEAEB2); // 亮色系统灰
+  static const Color lightSystemGray = Color(0xFF8E8E93); // 亮色系统灰
 
   // 亮色主题iOS特有颜色
   static const Color lightBackgroundSecondary = Color(0xFFE5E5EA); // 次要背景色

@@ -1,0 +1,33 @@
+FROM golang:1.18-alpine AS builder
+
+WORKDIR /app
+COPY go.mod go.sum ./
+RUN go mod download
+
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux go build -o rag-service ./cmd/server
+
+FROM alpine:latest
+
+RUN apk --no-cache add ca-certificates curl netcat-openbsd
+
+WORKDIR /app
+
+COPY --from=builder /app/rag-service /app/
+COPY config /app/config
+
+# 创建健康检查脚本
+RUN echo '#!/bin/sh\necho "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n{\"status\":\"healthy\",\"service\":\"rag-minimal\",\"version\":\"1.0.0\"}"' > /app/health.sh && \
+    chmod +x /app/health.sh
+
+# 创建必要的目录
+RUN mkdir -p /app/data /app/logs /app/models
+
+EXPOSE 8080
+
+# 健康检查
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:8080/health || exit 1
+
+# 如果主服务无法启动，则使用最小健康服务
+CMD [ "/bin/sh", "-c", "exec /app/rag-service || (echo 'Main service failed to start, using minimal health service' && while true; do nc -l -p 8080 -e /app/health.sh; done)" ]

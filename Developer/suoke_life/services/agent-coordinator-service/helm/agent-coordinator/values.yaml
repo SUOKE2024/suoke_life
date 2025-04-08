@@ -130,15 +130,15 @@ backup:
 
 # 环境变量
 env:
-  - name: NODE_ENV
-    value: "production"
   - name: LOG_LEVEL
     value: "info"
   - name: PORT
-    value: "3000"
+    value: "3007"
   - name: COORDINATOR_MODE
     value: "distributed"
   - name: AGENT_STATE_PERSISTENCE
     value: "redis"
   - name: OTEL_SERVICE_NAME
     value: "agent-coordinator-service"
+  - name: GIN_MODE
+    value: "release"

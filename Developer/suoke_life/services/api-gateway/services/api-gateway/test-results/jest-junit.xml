@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="14" failures="10" errors="0" time="0.305">
+  <testsuite name="知识路由中间件" errors="0" failures="10" skipped="0" timestamp="2025-04-03T04:54:20" time="0.276" tests="14">
+    <testcase classname="知识路由中间件 路径匹配 应处理/api/v1/knowledge路径" name="知识路由中间件 路径匹配 应处理/api/v1/knowledge路径" time="0.004">
+      <failure>assert.strictEqual(received, expected)
+
+Expected value to strictly be equal to:
+  true
+Received:
+  false
+
+Message:
+  expected false to be true
+    at Object.&lt;anonymous&gt; (/Users/songxu/Developer/suoke_life/services/api-gateway/test/unit/middlewares/knowledge-router.test.js:83:53)
+    at Promise.then.completed (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-runner/build/runTest.js:444:34)</failure>
+    </testcase>
+    <testcase classname="知识路由中间件 路径匹配 应处理/api/v1/knowledge/路径" name="知识路由中间件 路径匹配 应处理/api/v1/knowledge/路径" time="0.001">
+      <failure>assert.strictEqual(received, expected)
+
+Expected value to strictly be equal to:
+  true
+Received:
+  false
+
+Message:
+  expected false to be true
+    at Object.&lt;anonymous&gt; (/Users/songxu/Developer/suoke_life/services/api-gateway/test/unit/middlewares/knowledge-router.test.js:91:53)
+    at Promise.then.completed (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-runner/build/runTest.js:444:34)</failure>
+    </testcase>
+    <testcase classname="知识路由中间件 路径匹配 应跳过不匹配的路径" name="知识路由中间件 路径匹配 应跳过不匹配的路径" time="0.001">
+    </testcase>
+    <testcase classname="知识路由中间件 查询参数处理 应从q参数中获取查询内容" name="知识路由中间件 查询参数处理 应从q参数中获取查询内容" time="0.001">
+    </testcase>
+    <testcase classname="知识路由中间件 查询参数处理 应从query参数中获取查询内容" name="知识路由中间件 查询参数处理 应从query参数中获取查询内容" time="0">
+    </testcase>
+    <testcase classname="知识路由中间件 领域分类 应将基因相关查询分类到精准医学领域" name="知识路由中间件 领域分类 应将基因相关查询分类到精准医学领域" time="0.001">
+      <failure>assert.strictEqual(received, expected)
+
+Expected value to strictly be equal to:
+  true
+Received:
+  false
+
+Message:
+  expected false to be true
+    at Object.&lt;anonymous&gt; (/Users/songxu/Developer/suoke_life/services/api-gateway/test/unit/middlewares/knowledge-router.test.js:123:57)
+    at Promise.then.completed (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-runner/build/runTest.js:444:34)</failure>
+    </testcase>
+    <testcase classname="知识路由中间件 领域分类 应将多模态相关查询分类到多模态健康领域" name="知识路由中间件 领域分类 应将多模态相关查询分类到多模态健康领域" time="0">
+      <failure>assert.strictEqual(received, expected)
+
+Expected value to strictly be equal to:
+  true
+Received:
+  false
+
+Message:
+  expected false to be true
+    at Object.&lt;anonymous&gt; (/Users/songxu/Developer/suoke_life/services/api-gateway/test/unit/middlewares/knowledge-router.test.js:138:57)
+    at Promise.then.completed (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-runner/build/runTest.js:444:34)</failure>
+    </testcase>
+    <testcase classname="知识路由中间件 领域分类 应将环境相关查询分类到环境健康领域" name="知识路由中间件 领域分类 应将环境相关查询分类到环境健康领域" time="0.001">
+      <failure>assert.strictEqual(received, expected)
+
+Expected value to strictly be equal to:
+  true
+Received:
+  false
+
+Message:
+  expected false to be true
+    at Object.&lt;anonymous&gt; (/Users/songxu/Developer/suoke_life/services/api-gateway/test/unit/middlewares/knowledge-router.test.js:149:57)
+    at Promise.then.completed (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-runner/build/runTest.js:444:34)</failure>
+    </testcase>
+    <testcase classname="知识路由中间件 领域分类 应将心理相关查询分类到心理健康领域" name="知识路由中间件 领域分类 应将心理相关查询分类到心理健康领域" time="0.002">
+      <failure>assert.strictEqual(received, expected)
+
+Expected value to strictly be equal to:
+  true
+Received:
+  false
+
+Message:
+  expected false to be true
+    at Object.&lt;anonymous&gt; (/Users/songxu/Developer/suoke_life/services/api-gateway/test/unit/middlewares/knowledge-router.test.js:160:57)
+    at Promise.then.completed (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-runner/build/runTest.js:444:34)</failure>
+    </testcase>
+    <testcase classname="知识路由中间件 领域分类 应将中医相关查询分类到传统文化领域" name="知识路由中间件 领域分类 应将中医相关查询分类到传统文化领域" time="0.001">
+      <failure>assert.strictEqual(received, expected)
+
+Expected value to strictly be equal to:
+  true
+Received:
+  false
+
+Message:
+  expected false to be true
+    at Object.&lt;anonymous&gt; (/Users/songxu/Developer/suoke_life/services/api-gateway/test/unit/middlewares/knowledge-router.test.js:171:57)
+    at Promise.then.completed (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-runner/build/runTest.js:444:34)</failure>
+    </testcase>
+    <testcase classname="知识路由中间件 领域分类 应将西医相关查询分类到现代医学领域" name="知识路由中间件 领域分类 应将西医相关查询分类到现代医学领域" time="0.001">
+      <failure>assert.strictEqual(received, expected)
+
+Expected value to strictly be equal to:
+  true
+Received:
+  false
+
+Message:
+  expected false to be true
+    at Object.&lt;anonymous&gt; (/Users/songxu/Developer/suoke_life/services/api-gateway/test/unit/middlewares/knowledge-router.test.js:182:57)
+    at Promise.then.completed (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-runner/build/runTest.js:444:34)</failure>
+    </testcase>
+    <testcase classname="知识路由中间件 领域分类 应将无法分类的查询分类到默认领域" name="知识路由中间件 领域分类 应将无法分类的查询分类到默认领域" time="0.001">
+      <failure>assert.strictEqual(received, expected)
+
+Expected value to strictly be equal to:
+  true
+Received:
+  false
+
+Message:
+  expected false to be true
+    at Object.&lt;anonymous&gt; (/Users/songxu/Developer/suoke_life/services/api-gateway/test/unit/middlewares/knowledge-router.test.js:193:57)
+    at Promise.then.completed (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-runner/build/runTest.js:444:34)</failure>
+    </testcase>
+    <testcase classname="知识路由中间件 错误处理 应在负载均衡器不存在时返回503错误" name="知识路由中间件 错误处理 应在负载均衡器不存在时返回503错误" time="0.001">
+    </testcase>
+    <testcase classname="知识路由中间件 错误处理 应捕获并处理异常" name="知识路由中间件 错误处理 应捕获并处理异常" time="0.001">
+      <failure>assert.strictEqual(received, expected)
+
+Expected value to strictly be equal to:
+  true
+Received:
+  false
+
+Message:
+  expected false to be true
+    at Object.&lt;anonymous&gt; (/Users/songxu/Developer/suoke_life/services/api-gateway/test/unit/middlewares/knowledge-router.test.js:214:44)
+    at Promise.then.completed (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/songxu/Developer/suoke_life/services/api-gateway/node_modules/jest-runner/build/runTest.js:444:34)</failure>
+    </testcase>
+  </testsuite>
+</testsuites>

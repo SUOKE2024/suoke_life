@@ -1,0 +1,22 @@
+{
+  "datasets": [
+    {
+      "name": "舌诊数据集",
+      "path": "tongue_dataset.json",
+      "count": 50
+    },
+    {
+      "name": "脉诊数据集",
+      "path": "pulse_dataset.json",
+      "count": 50
+    },
+    {
+      "name": "面诊数据集",
+      "path": "face_dataset.json",
+      "count": 50
+    }
+  ],
+  "total_samples": 150,
+  "creation_time": "2025-04-07T17:12:02.941692",
+  "version": "1.0.0"
+}

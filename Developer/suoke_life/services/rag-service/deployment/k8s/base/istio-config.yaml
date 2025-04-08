@@ -1,0 +1,56 @@
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: rag-service-mtls
+  namespace: suoke
+spec:
+  selector:
+    matchLabels:
+      app: rag-service
+  mtls:
+    mode: STRICT
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: rag-service-dr
+  namespace: suoke
+spec:
+  host: rag-service
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+    connectionPool:
+      tcp:
+        maxConnections: 100
+      http:
+        http1MaxPendingRequests: 30
+        maxRequestsPerConnection: 10
+    outlierDetection:
+      consecutive5xxErrors: 5
+      interval: 30s
+      baseEjectionTime: 30s
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: rag-service-vs
+  namespace: suoke
+spec:
+  hosts:
+  - rag-service
+  http:
+  - route:
+    - destination:
+        host: rag-service
+        port:
+          number: 8000
+    retries:
+      attempts: 3
+      perTryTimeout: 2s
+    timeout: 10s
+    fault:
+      delay:
+        percentage:
+          value: 0
+        fixedDelay: 5ms

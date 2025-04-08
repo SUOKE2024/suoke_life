@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: knowledge-graph-service
+  namespace: suoke-prod
+  labels:
+    app.kubernetes.io/instance: knowledge-graph
+    app.kubernetes.io/name: knowledge-graph-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: knowledge-graph
+      app.kubernetes.io/name: knowledge-graph-service
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: knowledge-graph
+        app.kubernetes.io/name: knowledge-graph-service
+    spec:
+      serviceAccountName: knowledge-graph-service
+      containers:
+        - name: knowledge-graph-service
+          image: registry-cn-hangzhou-vpc.ack.aliyuncs.com/acs/coredns:v1.11.3.5-5321daf49-aliyun
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 53
+              protocol: TCP
+            - name: metrics
+              containerPort: 9153
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1Gi
+            requests:
+              cpu: 500m
+              memory: 512Mi
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          env:
+            - name: APP_ENV
+              value: production
+            - name: DEBUG
+              value: "false"
+            - name: LOG_LEVEL
+              value: info
+      volumes:
+        - name: data
+          emptyDir: {}
+      nodeSelector:
+        role: suoke-core-np
+      tolerations:
+        - key: dedicated
+          operator: Equal
+          value: suoke-core
+          effect: NoSchedule

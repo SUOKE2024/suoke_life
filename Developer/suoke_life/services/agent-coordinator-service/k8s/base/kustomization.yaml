@@ -5,6 +5,7 @@ commonLabels:
   app: agent-coordinator
   part-of: suoke-platform
   managed-by: kustomize
+  component: agent-coordinator
 resources:
 - ../deployment.yaml
 - ../service.yaml

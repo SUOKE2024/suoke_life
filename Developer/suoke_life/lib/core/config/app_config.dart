@@ -5,7 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// 应用配置提供者
-final appConfigProvider = StateNotifierProvider<AppConfigNotifier, AppConfig>((ref) {
+final appConfigProvider =
+    StateNotifierProvider<AppConfigNotifier, AppConfig>((ref) {
   return AppConfigNotifier();
 });
 
@@ -13,31 +14,31 @@ final appConfigProvider = StateNotifierProvider<AppConfigNotifier, AppConfig>((r
 class AppConfig {
   /// 主题模式
   final ThemeMode themeMode;
-  
+
   /// 字体大小
   final double fontSize;
-  
+
   /// 是否启用语音回复
   final bool enableVoiceReply;
-  
+
   /// 是否启用通知
   final bool enableNotifications;
-  
+
   /// 是否显示发送按钮
   final bool showSendButton;
-  
+
   /// 是否显示麦克风按钮
   final bool showMicButton;
-  
+
   /// 是否自动识别舌诊图片
   final bool autoDetectTongueImages;
-  
+
   /// 用户ID
   final String? userId;
-  
+
   /// 用户名
   final String? username;
-  
+
   /// 上次同步时间
   final DateTime? lastSyncTime;
 
@@ -54,7 +55,7 @@ class AppConfig {
     this.username,
     this.lastSyncTime,
   });
-  
+
   /// 从JSON创建
   factory AppConfig.fromJson(Map<String, dynamic> json) {
     return AppConfig(
@@ -67,12 +68,12 @@ class AppConfig {
       autoDetectTongueImages: json['autoDetectTongueImages'] ?? false,
       userId: json['userId'],
       username: json['username'],
-      lastSyncTime: json['lastSyncTime'] != null 
-          ? DateTime.parse(json['lastSyncTime']) 
+      lastSyncTime: json['lastSyncTime'] != null
+          ? DateTime.parse(json['lastSyncTime'])
           : null,
     );
   }
-  
+
   /// 转换为JSON
   Map<String, dynamic> toJson() {
     return {
@@ -88,7 +89,7 @@ class AppConfig {
       'lastSyncTime': lastSyncTime?.toIso8601String(),
     };
   }
-  
+
   /// 创建副本
   AppConfig copyWith({
     ThemeMode? themeMode,
@@ -112,13 +113,15 @@ class AppConfig {
       enableNotifications: enableNotifications ?? this.enableNotifications,
       showSendButton: showSendButton ?? this.showSendButton,
       showMicButton: showMicButton ?? this.showMicButton,
-      autoDetectTongueImages: autoDetectTongueImages ?? this.autoDetectTongueImages,
+      autoDetectTongueImages:
+          autoDetectTongueImages ?? this.autoDetectTongueImages,
       userId: clearUserId ? null : (userId ?? this.userId),
       username: clearUsername ? null : (username ?? this.username),
-      lastSyncTime: clearLastSyncTime ? null : (lastSyncTime ?? this.lastSyncTime),
+      lastSyncTime:
+          clearLastSyncTime ? null : (lastSyncTime ?? this.lastSyncTime),
     );
   }
-  
+
   /// 解析主题模式
   static ThemeMode _parseThemeMode(String mode) {
     switch (mode) {
@@ -138,19 +141,19 @@ class AppConfigNotifier extends StateNotifier<AppConfig> {
   AppConfigNotifier() : super(AppConfig()) {
     _loadConfig();
   }
-  
+
   /// 在debug模式下获取当前状态的getter
   AppConfig get debugState => state;
-  
+
   /// 配置存储键
   static const _configKey = 'app_config';
-  
+
   /// 加载配置
   Future<void> _loadConfig() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final configJson = prefs.getString(_configKey);
-      
+
       if (configJson != null) {
         final config = AppConfig.fromJson(jsonDecode(configJson));
         state = config;
@@ -166,7 +169,7 @@ class AppConfigNotifier extends StateNotifier<AppConfig> {
       state = AppConfig();
     }
   }
-  
+
   /// 保存配置
   Future<void> _saveConfig() async {
     try {
@@ -178,49 +181,49 @@ class AppConfigNotifier extends StateNotifier<AppConfig> {
       debugPrint('保存应用配置失败: $e');
     }
   }
-  
+
   /// 更新主题模式
   Future<void> updateThemeMode(ThemeMode themeMode) async {
     state = state.copyWith(themeMode: themeMode);
     await _saveConfig();
   }
-  
+
   /// 更新字体大小
   Future<void> updateFontSize(double fontSize) async {
     state = state.copyWith(fontSize: fontSize);
     await _saveConfig();
   }
-  
+
   /// 更新语音回复设置
   Future<void> updateVoiceReply(bool enable) async {
     state = state.copyWith(enableVoiceReply: enable);
     await _saveConfig();
   }
-  
+
   /// 更新通知设置
   Future<void> updateNotifications(bool enable) async {
     state = state.copyWith(enableNotifications: enable);
     await _saveConfig();
   }
-  
+
   /// 更新显示发送按钮设置
   Future<void> updateShowSendButton(bool show) async {
     state = state.copyWith(showSendButton: show);
     await _saveConfig();
   }
-  
+
   /// 更新显示麦克风按钮设置
   Future<void> updateShowMicButton(bool show) async {
     state = state.copyWith(showMicButton: show);
     await _saveConfig();
   }
-  
+
   /// 更新自动识别舌诊图片设置
   Future<void> updateAutoDetectTongueImages(bool enable) async {
     state = state.copyWith(autoDetectTongueImages: enable);
     await _saveConfig();
   }
-  
+
   /// 设置用户信息
   Future<void> setUserInfo({String? userId, String? username}) async {
     state = state.copyWith(
@@ -229,7 +232,7 @@ class AppConfigNotifier extends StateNotifier<AppConfig> {
     );
     await _saveConfig();
   }
-  
+
   /// 清除用户信息
   Future<void> clearUserInfo() async {
     state = state.copyWith(
@@ -238,10 +241,10 @@ class AppConfigNotifier extends StateNotifier<AppConfig> {
     );
     await _saveConfig();
   }
-  
+
   /// 更新同步时间
   Future<void> updateSyncTime(DateTime time) async {
     state = state.copyWith(lastSyncTime: time);
     await _saveConfig();
   }
-} 
+}

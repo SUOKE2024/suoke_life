@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: user-service-config
+  namespace: suoke
+data:
+  db_host: "mysql.database.svc.cluster.local"
+  db_port: "3306"
+  db_name: "user_service_db"
+  redis_host: "redis.cache.svc.cluster.local"
+  redis_port: "6379"
+  knowledge_base_url: "http://knowledge-base-service.suoke.svc.cluster.local/api"
+  knowledge_graph_url: "http://knowledge-graph-service.suoke.svc.cluster.local/api"
+  user_profile_service: "http://user-profile-service.suoke.svc.cluster.local/api"
+  share_base_url: "https://share.suoke.life"
+  log_level: "info" 

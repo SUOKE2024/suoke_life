@@ -1,0 +1,705 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pulse-agent-config
+  namespace: suoke
+data:
+  agent-config.json: |
+    {
+      "agent_id": "maizhen",
+      "name": "脉诊",
+      "version": "1.0.0",
+      "description": "专注于中医脉诊的AI代理，能够分析脉象数据，提供脉诊解读和健康建议",
+      "capabilities": [
+        "脉象分析",
+        "脉诊解读",
+        "体质辨识",
+        "健康状态评估",
+        "中医理论应用"
+      ],
+      "models": [
+        {
+          "id": "pulse-analysis-model",
+          "type": "classification",
+          "path": "/app/models/pulse/pulse-analysis-v1.0.0.onnx",
+          "description": "脉象分析模型，用于识别28种基本脉象",
+          "parameters": {
+            "input_dimensions": [1, 128, 1000],
+            "output_dimensions": 28,
+            "confidence_threshold": 0.75,
+            "preprocessing": {
+              "normalization": true,
+              "filtering": true,
+              "segmentation": true
+            }
+          }
+        },
+        {
+          "id": "pulse-interpretation-model",
+          "type": "llm",
+          "path": "/app/models/pulse/pulse-interpretation-v1.0.0.onnx",
+          "description": "脉诊解读模型，将脉象分析结果转化为中医诊断意见",
+          "parameters": {
+            "max_tokens": 2048,
+            "temperature": 0.3,
+            "top_p": 0.95,
+            "context_window": 8192
+          }
+        },
+        {
+          "id": "constitution-inference-model",
+          "type": "inference",
+          "path": "/app/models/pulse/constitution-inference-v1.0.0.onnx",
+          "description": "体质推断模型，基于脉象特征推断九种体质倾向",
+          "parameters": {
+            "input_features": 64,
+            "output_classes": 9,
+            "threshold": 0.6,
+            "ensemble": true
+          }
+        },
+        {
+          "id": "multimodal-pulse-processor",
+          "type": "multimodal",
+          "path": "/app/models/multimodal/pulse-multimodal-processor-v1.0.0.onnx",
+          "description": "多模态脉诊处理模型，支持脉象图像、音频和文本分析",
+          "parameters": {
+            "supported_modalities": ["image", "audio", "text"],
+            "fusion_method": "attention_based",
+            "output_dimensions": 1024,
+            "image_processing": {
+              "max_resolution": 1024,
+              "supported_formats": ["jpg", "jpeg", "png", "webp"],
+              "feature_extraction": ["color", "texture", "shape", "objects"]
+            },
+            "audio_processing": {
+              "max_duration_seconds": 60,
+              "supported_formats": ["mp3", "wav", "ogg"],
+              "feature_extraction": ["frequency", "amplitude", "tempo", "timbre"]
+            },
+            "text_processing": {
+              "max_length": 1024,
+              "languages": ["zh", "en"],
+              "embedding_dimensions": 768
+            }
+          }
+        }
+      ],
+      "tools": [
+        {
+          "id": "analyze_pulse",
+          "name": "脉象分析",
+          "description": "分析脉搏数据，识别脉象类型",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "pulse_data": {
+                "type": "string",
+                "description": "脉搏数据的Base64编码"
+              },
+              "duration": {
+                "type": "number",
+                "description": "脉搏记录的持续时间（秒）"
+              },
+              "position": {
+                "type": "string",
+                "enum": ["寸", "关", "尺"],
+                "description": "脉诊位置"
+              },
+              "hand": {
+                "type": "string",
+                "enum": ["左", "右"],
+                "description": "左手或右手"
+              }
+            },
+            "required": ["pulse_data", "position", "hand"]
+          }
+        },
+        {
+          "id": "interpret_pulse",
+          "name": "脉诊解读",
+          "description": "根据脉象分析结果提供中医解读",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "pulse_types": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "脉象类型"
+                    },
+                    "confidence": {
+                      "type": "number",
+                      "description": "置信度"
+                    },
+                    "position": {
+                      "type": "string",
+                      "description": "脉诊位置"
+                    }
+                  }
+                },
+                "description": "识别出的脉象类型列表"
+              },
+              "user_profile": {
+                "type": "object",
+                "description": "用户的基本健康档案"
+              }
+            },
+            "required": ["pulse_types"]
+          }
+        },
+        {
+          "id": "assess_constitution",
+          "name": "体质评估",
+          "description": "基于脉象特征评估用户的体质类型",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "pulse_features": {
+                "type": "object",
+                "description": "提取的脉象特征"
+              },
+              "additional_symptoms": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "用户报告的其他症状"
+              },
+              "age": {
+                "type": "number",
+                "description": "用户年龄"
+              },
+              "gender": {
+                "type": "string",
+                "description": "用户性别"
+              }
+            },
+            "required": ["pulse_features"]
+          }
+        },
+        {
+          "id": "analyze_pulse_image",
+          "name": "脉象图像分析",
+          "description": "分析脉象图像数据，提取脉象特征",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "image_data": {
+                "type": "string",
+                "description": "脉象图像的Base64编码"
+              },
+              "image_type": {
+                "type": "string",
+                "enum": ["脉图", "脉波", "脉搏波形图"],
+                "description": "图像类型"
+              },
+              "measurement_device": {
+                "type": "string",
+                "description": "测量设备类型"
+              }
+            },
+            "required": ["image_data", "image_type"]
+          }
+        },
+        {
+          "id": "analyze_pulse_audio",
+          "name": "脉搏音频分析",
+          "description": "分析脉搏音频数据，提取脉象特征",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "audio_data": {
+                "type": "string",
+                "description": "脉搏音频的Base64编码"
+              },
+              "duration": {
+                "type": "number",
+                "description": "音频持续时间（秒）"
+              },
+              "sample_rate": {
+                "type": "number",
+                "description": "采样率"
+              },
+              "position": {
+                "type": "string",
+                "enum": ["寸", "关", "尺"],
+                "description": "脉诊位置"
+              }
+            },
+            "required": ["audio_data", "position"]
+          }
+        },
+        {
+          "id": "multimodal_diagnosis",
+          "name": "多模态脉诊",
+          "description": "结合多种模态数据进行综合脉诊分析",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "pulse_data": {
+                "type": "string",
+                "description": "脉搏数据的Base64编码"
+              },
+              "image_data": {
+                "type": "string",
+                "description": "脉象图像的Base64编码"
+              },
+              "audio_data": {
+                "type": "string",
+                "description": "脉搏音频的Base64编码"
+              },
+              "text_description": {
+                "type": "string",
+                "description": "用户对脉象的文字描述"
+              },
+              "position": {
+                "type": "string",
+                "enum": ["寸", "关", "尺"],
+                "description": "脉诊位置"
+              }
+            },
+            "required": ["position"]
+          }
+        }
+      ],
+      "context": {
+        "memory_window": 10,
+        "max_tokens": 16000,
+        "system_prompt": "你是索克生活平台的脉诊AI助手，专注于中医脉诊分析和健康建议。你擅长分析脉象数据，提供专业的中医脉诊解读，并基于脉象特征评估用户的体质类型和健康状态。在回答用户问题时，你应该保持专业、准确，并遵循中医理论和实践。当遇到超出你能力范围的问题时，你应该明确告知用户并建议咨询其他专业医疗人员。",
+        "user_profile_fields": [
+          "age",
+          "gender",
+          "medical_history",
+          "constitution_type",
+          "previous_pulse_readings"
+        ],
+        "memory": {
+          "enabled": true,
+          "storage_type": "vector_database",
+          "service_url": "http://memory-service/api/v1",
+          "memory_types": {
+            "episodic": {
+              "enabled": true,
+              "content_types": ["pulse_readings", "diagnostic_sessions", "user_queries"],
+              "importance_weighting": true,
+              "recency_bias": 0.6,
+              "max_age_days": 365,
+              "retrieval_limit": 30
+            },
+            "semantic": {
+              "enabled": true,
+              "content_types": ["pulse_knowledge", "constitution_mapping", "seasonal_patterns"],
+              "clustering": true,
+              "cross_reference": true,
+              "update_frequency": "adaptive"
+            },
+            "patient": {
+              "enabled": true,
+              "content_types": ["pulse_history", "constitution_history", "treatment_response"],
+              "longitudinal_analysis": true,
+              "trend_detection": true,
+              "baseline_comparison": true
+            },
+            "procedural": {
+              "enabled": true,
+              "content_types": ["pulse_taking_technique", "diagnosis_workflow", "interpretation_methods"],
+              "optimization": true,
+              "personalization": true,
+              "context_adaptation": true
+            }
+          },
+          "retrieval_mechanisms": {
+            "recency": {
+              "enabled": true,
+              "time_decay_factor": 0.05,
+              "max_age_days": 180
+            },
+            "relevance": {
+              "enabled": true,
+              "similarity_threshold": 0.75,
+              "context_matching": true,
+              "top_k": 5
+            },
+            "importance": {
+              "enabled": true,
+              "diagnostic_value_weight": 0.7,
+              "abnormal_finding_weight": 0.8,
+              "explicit_marking_weight": 0.6
+            }
+          },
+          "memory_operations": {
+            "consolidation": {
+              "enabled": true,
+              "frequency": "daily",
+              "threshold": 0.7,
+              "method": "semantic_clustering"
+            },
+            "forgetting": {
+              "enabled": true,
+              "strategies": ["time_based", "importance_based", "redundancy_based"],
+              "time_threshold_days": 180,
+              "importance_threshold": 0.3,
+              "exceptions": ["critical_findings", "rare_patterns", "baseline_values"]
+            },
+            "cross_patient_learning": {
+              "enabled": true,
+              "anonymization": true,
+              "pattern_extraction": true,
+              "seasonal_trend_analysis": true,
+              "demographic_pattern_analysis": true
+            }
+          },
+          "contextual_retrieval": {
+            "enabled": true,
+            "context_types": ["constitution", "season", "age_group", "current_complaint", "previous_diagnosis"],
+            "adaptive_retrieval": true,
+            "chain_of_thought": true,
+            "diagnosis_phase_awareness": true
+          }
+        }
+      },
+      "integration": {
+        "api": {
+          "base_url": "http://pulse-agent-api/v1",
+          "endpoints": {
+            "analyze": "/analyze",
+            "interpret": "/interpret",
+            "assess": "/assess"
+          },
+          "authentication": {
+            "type": "bearer",
+            "token_env": "PULSE_API_TOKEN"
+          }
+        },
+        "services": {
+          "health_record": {
+            "url": "http://health-record-service/api/v1",
+            "enabled": true
+          },
+          "knowledge_base": {
+            "url": "http://tcm-knowledge-service/api/v1",
+            "enabled": true
+          },
+          "notification": {
+            "url": "http://notification-service/api/v1",
+            "enabled": true
+          }
+        },
+        "data_sources": {
+          "pulse_database": {
+            "type": "timeseries",
+            "connection_string_env": "PULSE_DB_CONNECTION",
+            "tables": {
+              "raw_readings": "pulse_raw_readings",
+              "processed_features": "pulse_processed_features",
+              "analysis_results": "pulse_analysis_results"
+            }
+          },
+          "tcm_knowledge": {
+            "type": "vector",
+            "connection_string_env": "TCM_VECTOR_DB_CONNECTION",
+            "collections": {
+              "pulse_theory": "tcm_pulse_theory",
+              "diagnosis_patterns": "tcm_diagnosis_patterns",
+              "treatment_principles": "tcm_treatment_principles"
+            }
+          }
+        },
+        "perception": {
+          "enabled": true,
+          "service_url": "http://perception-service/api/v1",
+          "context_awareness": {
+            "temporal": {
+              "enabled": true,
+              "time_of_day": true,
+              "day_of_week": true,
+              "season": true,
+              "solar_term": true,
+              "lunar_calendar": true
+            },
+            "spatial": {
+              "enabled": true,
+              "geographic_location": true,
+              "altitude": true,
+              "indoor_outdoor": true,
+              "urban_rural": true
+            },
+            "environmental": {
+              "enabled": true,
+              "temperature": true,
+              "humidity": true,
+              "air_pressure": true,
+              "air_quality": true,
+              "weather_conditions": true
+            }
+          },
+          "seasonal_awareness": {
+            "enabled": true,
+            "chinese_calendar": {
+              "enabled": true,
+              "solar_terms": true,
+              "five_elements_correspondence": true,
+              "seasonal_qi_changes": true
+            },
+            "pulse_seasonal_patterns": {
+              "enabled": true,
+              "spring_pulse": "弦脉",
+              "summer_pulse": "洪脉",
+              "autumn_pulse": "毛脉",
+              "winter_pulse": "石脉"
+            },
+            "seasonal_health_patterns": {
+              "enabled": true,
+              "data_source": "http://tcm-seasonal-service/api/v1/patterns"
+            }
+          },
+          "clinical_context": {
+            "enabled": true,
+            "patient_state": true,
+            "measurement_conditions": true,
+            "previous_readings": true,
+            "circadian_rhythm": true,
+            "meal_timing": true
+          },
+          "real_time_data_sources": {
+            "weather": {
+              "enabled": true,
+              "api_endpoint": "http://weather-service/api/v1/current",
+              "update_frequency_minutes": 60,
+              "parameters": ["temperature", "humidity", "pressure", "weather_condition"]
+            },
+            "air_quality": {
+              "enabled": true,
+              "api_endpoint": "http://air-quality-service/api/v1/current",
+              "update_frequency_minutes": 60,
+              "parameters": ["aqi", "pm25", "pm10", "o3", "no2"]
+            },
+            "seasonal_factors": {
+              "enabled": true,
+              "api_endpoint": "http://seasonal-service/api/v1/current",
+              "update_frequency_minutes": 1440,
+              "parameters": ["solar_term", "season", "seasonal_health_focus"]
+            },
+            "epidemic_alerts": {
+              "enabled": true,
+              "api_endpoint": "http://epidemic-alert-service/api/v1/current",
+              "update_frequency_minutes": 1440,
+              "parameters": ["active_epidemics", "risk_level", "preventive_measures"]
+            }
+          }
+        }
+      },
+      "compliance": {
+        "data_retention": {
+          "raw_data_days": 30,
+          "processed_data_days": 365,
+          "anonymized_data_days": 3650
+        },
+        "privacy": {
+          "pii_detection": true,
+          "data_minimization": true,
+          "consent_required": true,
+          "anonymization": {
+            "enabled": true,
+            "techniques": ["hashing", "generalization"]
+          }
+        },
+        "medical_disclaimer": "本AI助手提供的脉诊分析和健康建议仅供参考，不构成医疗诊断或治疗建议。请在专业医疗人员的指导下使用这些信息。",
+        "regulatory": {
+          "frameworks": ["GDPR", "HIPAA", "中国网络安全法"],
+          "certifications": ["ISO27001", "SOC2"]
+        }
+      },
+      "collaboration": {
+        "enabled": true,
+        "handoffs": [
+          {
+            "target_agent": "xiaoai",
+            "conditions": ["需要全面体质辨识", "综合辨证问题", "多系统健康评估"],
+            "handoff_prompt": "根据脉诊结果发现可能存在复杂体质问题，建议进行全面四诊合参分析",
+            "return_expected": true
+          },
+          {
+            "target_agent": "wangzhen",
+            "conditions": ["需要舌象分析", "需要面色评估", "望诊确认"],
+            "handoff_prompt": "脉诊发现脉象可能与舌象有关联，建议进行望诊确认",
+            "return_expected": true
+          },
+          {
+            "target_agent": "wenzhen",
+            "conditions": ["需要声音分析", "呼吸音异常", "语音特征分析"],
+            "handoff_prompt": "脉象提示可能存在气管或肺部问题，建议进行闻诊评估",
+            "return_expected": true
+          },
+          {
+            "target_agent": "soer",
+            "conditions": ["需要健康方案", "长期保健建议", "生活方式调整"],
+            "handoff_prompt": "根据脉诊结果，用户需要系统性健康管理方案",
+            "return_expected": true
+          },
+          {
+            "target_agent": "laoke",
+            "conditions": ["需要典籍依据", "理论深入解释", "医案参考"],
+            "handoff_prompt": "用户需要脉诊结果的中医典籍依据和理论解释",
+            "return_expected": true
+          }
+        ],
+        "task_routing": {
+          "enabled": true,
+          "routing_strategy": "expertise_based",
+          "confidence_threshold": 0.75,
+          "context_preservation": true,
+          "user_confirmation_required": {
+            "enabled": true,
+            "exemptions": ["紧急情况", "简单脉诊分析"]
+          }
+        },
+        "collaborative_diagnosis": {
+          "enabled": true,
+          "consensus_required": true,
+          "voting_mechanism": "weighted",
+          "agent_weights": {
+            "maizhen": 0.4,
+            "wangzhen": 0.2,
+            "wenzhen": 0.2,
+            "xiaoai": 0.2
+          },
+          "confidence_threshold": 0.8
+        },
+        "context_sharing": {
+          "enabled": true,
+          "shared_fields": [
+            "pulse_data", 
+            "constitution_analysis", 
+            "health_status",
+            "diagnostic_findings"
+          ],
+          "privacy_filter": true,
+          "retention_period_days": 30
+        }
+      },
+      "knowledge_areas": [
+        {
+          "name": "脉诊理论",
+          "description": "中医脉诊的基础理论和方法",
+          "sources": [
+            "《脉经》",
+            "《伤寒论》",
+            "《金匮要略》",
+            "《脉学》",
+            "现代脉诊研究文献"
+          ]
+        },
+        {
+          "name": "脉象分类",
+          "description": "28种基本脉象的特征和临床意义",
+          "sources": [
+            "《脉诊研究》",
+            "《中医诊断学》",
+            "《脉象图谱》"
+          ]
+        },
+        {
+          "name": "体质学说",
+          "description": "中医九种体质分类及其与脉象的关系",
+          "sources": [
+            "《中医体质学》",
+            "《黄帝内经》",
+            "现代体质研究文献"
+          ]
+        },
+        {
+          "name": "脉诊仪器",
+          "description": "现代脉诊仪器的原理和应用",
+          "sources": [
+            "脉诊仪技术文献",
+            "数字化脉诊研究论文",
+            "脉象信号处理方法"
+          ]
+        }
+      ],
+      "telemetry": {
+        "enabled": true,
+        "metrics": [
+          "inference_time",
+          "pulse_processing_time",
+          "classification_accuracy",
+          "user_satisfaction",
+          "error_rate",
+          "confidence_scores"
+        ],
+        "logging": {
+          "level": "info",
+          "components": [
+            "model",
+            "preprocessing",
+            "feature_extraction",
+            "inference",
+            "postprocessing"
+          ]
+        }
+      }
+    }
+  env.list: |
+    # 基础配置
+    AGENT_ID="maizhen"
+    AGENT_NAME="脉诊"
+    AGENT_VERSION="1.0.0"
+    
+    # 模型配置
+    PULSE_ANALYSIS_MODEL_PATH="/app/models/pulse/pulse-analysis-v1.0.0.onnx"
+    PULSE_INTERPRETATION_MODEL_PATH="/app/models/pulse/pulse-interpretation-v1.0.0.onnx"
+    CONSTITUTION_INFERENCE_MODEL_PATH="/app/models/pulse/constitution-inference-v1.0.0.onnx"
+    
+    # API配置
+    PULSE_API_BASE_URL="http://pulse-agent-api/v1"
+    PULSE_API_TOKEN="{{PULSE_API_TOKEN}}"
+    
+    # 数据库配置
+    PULSE_DB_CONNECTION="{{PULSE_DB_CONNECTION}}"
+    TCM_VECTOR_DB_CONNECTION="{{TCM_VECTOR_DB_CONNECTION}}"
+    
+    # 服务配置
+    HEALTH_RECORD_SERVICE_URL="http://health-record-service/api/v1"
+    TCM_KNOWLEDGE_SERVICE_URL="http://tcm-knowledge-service/api/v1"
+    NOTIFICATION_SERVICE_URL="http://notification-service/api/v1"
+    
+    # 系统配置
+    LOG_LEVEL="info"
+    MAX_CONCURRENT_REQUESTS=50
+    TIMEOUT_MS=30000
+    CACHE_TTL=3600
+    
+    # 功能开关
+    FEATURE_ADVANCED_ANALYSIS=true
+    FEATURE_HISTORICAL_COMPARISON=true
+    FEATURE_HEALTH_RECOMMENDATIONS=true
+    FEATURE_EMERGENCY_ALERTS=true
+    
+    # 环境感知相关环境变量
+    PERCEPTION_ENABLED="true"
+    PERCEPTION_SERVICE_URL="http://perception-service/api/v1"
+    CONTEXT_AWARENESS_ENABLED="true"
+    
+    # 协作能力相关环境变量
+    COLLABORATION_ENABLED="true"
+    COLLABORATION_SERVICE_URL="http://collaboration-service:8700/api/v1"
+    
+    # 长期记忆管理相关环境变量
+    MEMORY_ENABLED="true"
+    MEMORY_SERVICE_URL="http://memory-service/api/v1"
+    MEMORY_STORAGE_TYPE="vector_database"
+    
+    # 多模态处理相关环境变量
+    MULTIMODAL_ENABLED="true"
+    MULTIMODAL_PROCESSOR_URL="http://multimodal-processor-service/api/v1"
+    MULTIMODAL_TOOLS_CONFIG_PATH="/app/config/multimodal-tools.json"
+    
+    # 安全增强相关环境变量
+    ENHANCED_SECURITY_ENABLED="true"
+    PRIVACY_FILTER_ENABLED="true"
+    DATA_ENCRYPTION_ENABLED="true"

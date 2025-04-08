@@ -20,20 +20,28 @@ class AppTheme {
   /// 亮色主题
   static ThemeData lightTheme() {
     return ThemeData(
-      brightness: Brightness.light,
-      primaryColor: AppColors.primaryColor,
-      scaffoldBackgroundColor: AppColors.lightBackground,
-      colorScheme: ColorScheme.light(
-        primary: AppColors.primaryColor,
-        secondary: AppColors.secondaryColor,
-        background: AppColors.lightBackground,
-        surface: AppColors.lightSurface,
-        error: AppColors.errorColor,
-        onPrimary: Colors.white,
-        onSecondary: Colors.white,
-        onBackground: AppColors.lightTextPrimary,
-        onSurface: AppColors.lightTextPrimary,
-        onError: Colors.white,
+      useMaterial3: true,
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: const Color(0xFF35BB78), // 索克绿
+        brightness: Brightness.light,
+      ),
+      appBarTheme: const AppBarTheme(
+        centerTitle: true,
+        elevation: 0,
+      ),
+      cardTheme: const CardTheme(
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(16)),
+        ),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
       ),
 
       // 文本主题
@@ -58,29 +66,7 @@ class AppTheme {
             .copyWith(color: AppColors.lightTextSecondary),
       ),
 
-      // 卡片主题
-      cardTheme: CardTheme(
-        color: AppColors.lightSurface,
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppShapes.radiusLG),
-        ),
-        margin: EdgeInsets.zero,
-      ),
-
       // 按钮主题
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primaryColor,
-          foregroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppShapes.radiusSM),
-          ),
-          elevation: 0,
-        ),
-      ),
-
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: AppColors.primaryColor,
@@ -142,15 +128,6 @@ class AppTheme {
         }),
       ),
 
-      // 应用栏主题
-      appBarTheme: AppBarTheme(
-        backgroundColor: AppColors.lightSurface,
-        foregroundColor: AppColors.lightTextPrimary,
-        elevation: 0,
-        centerTitle: true,
-        iconTheme: IconThemeData(color: AppColors.lightTextPrimary),
-      ),
-
       // 底部导航栏主题
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: AppColors.lightSurface,
@@ -165,20 +142,28 @@ class AppTheme {
   /// 暗色主题
   static ThemeData darkTheme() {
     return ThemeData(
-      brightness: Brightness.dark,
-      primaryColor: AppColors.primaryColor,
-      scaffoldBackgroundColor: AppColors.darkBackground,
-      colorScheme: ColorScheme.dark(
-        primary: AppColors.primaryColor,
-        secondary: AppColors.secondaryColor,
-        background: AppColors.darkBackground,
-        surface: AppColors.darkSurface,
-        error: AppColors.errorColor,
-        onPrimary: Colors.white,
-        onSecondary: Colors.white,
-        onBackground: AppColors.darkTextPrimary,
-        onSurface: AppColors.darkTextPrimary,
-        onError: Colors.white,
+      useMaterial3: true,
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: const Color(0xFF35BB78), // 索克绿
+        brightness: Brightness.dark,
+      ),
+      appBarTheme: const AppBarTheme(
+        centerTitle: true,
+        elevation: 0,
+      ),
+      cardTheme: const CardTheme(
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(16)),
+        ),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
       ),
 
       // 文本主题
@@ -201,17 +186,6 @@ class AppTheme {
             color: AppColors.darkTextPrimary, fontWeight: FontWeight.w500),
         labelSmall: AppTypography.smallStyle
             .copyWith(color: AppColors.darkTextSecondary),
-      ),
-
-      // 卡片主题
-      cardTheme: CardTheme(
-        color: AppColors.darkSurface,
-        elevation: 0,
-        margin: const EdgeInsets.all(8.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(_kCardCornerRadius),
-        ),
-        shadowColor: Colors.black.withAlpha(50),
       ),
 
       // 对话框主题
@@ -240,34 +214,6 @@ class AppTheme {
         color: AppColors.primaryColor,
         circularTrackColor: AppColors.darkSystemGray5,
         linearTrackColor: AppColors.darkSystemGray5,
-      ),
-
-      // 按钮主题
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.resolveWith((states) {
-            if (states.contains(MaterialState.disabled)) {
-              return AppColors.darkSystemGray5;
-            }
-            return AppColors.primaryColor;
-          }),
-          foregroundColor: MaterialStateProperty.resolveWith((states) {
-            if (states.contains(MaterialState.disabled)) {
-              return AppColors.darkSystemGray;
-            }
-            return Colors.white;
-          }),
-          elevation: MaterialStateProperty.all(0),
-          padding: MaterialStateProperty.all(
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          ),
-          shape: MaterialStateProperty.all(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(_kButtonCornerRadius),
-            ),
-          ),
-          overlayColor: MaterialStateProperty.all(Colors.white.withAlpha(30)),
-        ),
       ),
 
       textButtonTheme: TextButtonThemeData(

@@ -1,4 +1,4 @@
-name: 知识库服务 CI/CD 流水线
+/name: 知识库服务 CI/CD 流水线
 
 on:
   push:
@@ -210,7 +210,7 @@ jobs:
     needs: build-push
     if: github.ref == 'refs/heads/main' || github.event.inputs.environment == 'dev'
     environment:
-      name: development
+      name: dev
       url: https://dev.api.suoke.life/kb
     steps:
       - uses: actions/checkout@v3
@@ -242,7 +242,7 @@ jobs:
     needs: [build-push, deploy-dev]
     if: startsWith(github.ref, 'refs/heads/release/') || github.event.inputs.environment == 'staging'
     environment:
-      name: staging
+      name: staging-env
       url: https://staging.api.suoke.life/kb
     steps:
       - uses: actions/checkout@v3
@@ -278,7 +278,7 @@ jobs:
     needs: [build-push, deploy-staging]
     if: startsWith(github.ref, 'refs/heads/release/') || github.event.inputs.environment == 'prod'
     environment:
-      name: production
+      name: prod
       url: https://api.suoke.life/kb
     steps:
       - uses: actions/checkout@v3

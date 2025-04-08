@@ -1,0 +1,115 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: knowledge-base-backup-pvc
+  namespace: suoke-prod
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: alicloud-disk-essd
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: knowledge-base-backup
+  namespace: suoke-prod
+spec:
+  schedule: "0 2 * * *"  # 每天凌晨2点执行
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: backup
+            image: postgres:16-alpine
+            command:
+            - /bin/sh
+            - -c
+            - |
+              echo "备份开始时间: $(date)"
+              
+              # 备份数据库
+              pg_dump -h postgres-service -U ${DATABASE_USER} -d suoke -n knowledge_base > /backup/knowledge_base_$(date +%Y%m%d).sql
+              
+              # 压缩备份
+              gzip /backup/knowledge_base_$(date +%Y%m%d).sql
+              
+              # 删除超过30天的备份
+              find /backup -name "knowledge_base_*.sql.gz" -mtime +30 -delete
+              
+              # 列出当前备份
+              echo "当前备份文件列表:"
+              ls -lh /backup/
+              
+              echo "备份完成时间: $(date)"
+            env:
+            - name: DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: username
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: password
+            volumeMounts:
+            - name: backup-volume
+              mountPath: /backup
+          volumes:
+          - name: backup-volume
+            persistentVolumeClaim:
+              claimName: knowledge-base-backup-pvc
+          restartPolicy: OnFailure
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: knowledge-base-config-backup
+  namespace: suoke-prod
+spec:
+  schedule: "0 3 * * *"  # 每天凌晨3点执行
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: kubectl
+            image: bitnami/kubectl:latest
+            command:
+            - /bin/sh
+            - -c
+            - |
+              echo "开始备份配置文件: $(date)"
+              
+              # 备份ConfigMap
+              kubectl get configmap knowledge-base-config -n suoke-prod -o yaml > /backup/knowledge-base-config-$(date +%Y%m%d).yaml
+              kubectl get configmap knowledge-base-typeorm-config -n suoke-prod -o yaml > /backup/knowledge-base-typeorm-config-$(date +%Y%m%d).yaml
+              
+              # 备份Deployment
+              kubectl get deployment knowledge-base-service -n suoke-prod -o yaml > /backup/knowledge-base-deployment-$(date +%Y%m%d).yaml
+              
+              # 压缩所有备份
+              tar -czf /backup/knowledge-base-configs-$(date +%Y%m%d).tar.gz /backup/*.yaml
+              rm /backup/*.yaml
+              
+              # 删除超过30天的备份
+              find /backup -name "knowledge-base-configs-*.tar.gz" -mtime +30 -delete
+              
+              echo "配置备份完成: $(date)"
+            volumeMounts:
+            - name: backup-volume
+              mountPath: /backup
+          volumes:
+          - name: backup-volume
+            persistentVolumeClaim:
+              claimName: knowledge-base-backup-pvc
+          restartPolicy: OnFailure

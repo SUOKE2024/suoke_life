@@ -5,7 +5,7 @@ metadata:
   namespace: suoke
   labels:
     app: user-service
-    release: prometheus
+    release: monitoring
 spec:
   selector:
     matchLabels:
@@ -13,13 +13,8 @@ spec:
   endpoints:
     - port: http
       path: /metrics
-      interval: 15s
+      interval: 30s
       scrapeTimeout: 10s
-      metricRelabelings:
-        # 保留特定的指标
-        - sourceLabels: [__name__]
-          regex: 'http_request_duration_seconds.*|user_service_.*|mongodb_query_execution_time.*|redis_cache_hit_.*|memory_usage_bytes|cpu_usage_percent'
-          action: keep
   namespaceSelector:
     matchNames:
       - suoke 

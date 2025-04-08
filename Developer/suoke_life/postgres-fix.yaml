@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  creationTimestamp: "2025-04-05T19:47:25Z"
+  generation: 2
+  labels:
+    app: postgres
+  name: postgres
+  namespace: suoke-prod
+  resourceVersion: "10283788"
+  uid: 946532f6-0aef-44a5-9dd7-3c25a3d3725b
+spec:
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: Retain
+    whenScaled: Retain
+  podManagementPolicy: OrderedReady
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: postgres
+  serviceName: postgres-svc
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: postgres
+    spec:
+      containers:
+      - image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/postgres:14-alpine
+        imagePullPolicy: IfNotPresent
+        name: postgres
+        env:
+        - name: POSTGRES_DB
+          value: "suoke"
+        - name: POSTGRES_USER
+          value: "suoke_admin"
+        - name: POSTGRES_PASSWORD
+          value: "suoke_password"
+        ports:
+        - containerPort: 5432
+          protocol: TCP
+        volumeMounts:
+        - name: postgres-data
+          mountPath: /var/lib/postgresql/data
+        resources:
+          requests:
+            cpu: 250m
+            memory: 512Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      volumes:
+      - name: postgres-data
+        emptyDir: {}
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+  updateStrategy:
+    type: RollingUpdate
+status:
+  availableReplicas: 0
+  collisionCount: 0
+  currentReplicas: 1
+  currentRevision: postgres-6b7dfdd6c9
+  observedGeneration: 2
+  replicas: 1
+  updateRevision: postgres-7f6cf5887d

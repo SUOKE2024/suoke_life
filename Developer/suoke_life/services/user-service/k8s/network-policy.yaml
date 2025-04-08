@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: user-service-policy
+  name: user-service-network-policy
   namespace: suoke
 spec:
   podSelector:
@@ -12,12 +12,12 @@ spec:
   - Egress
   ingress:
   - from:
+    - namespaceSelector:
+        matchLabels:
+          name: ingress-nginx
     - podSelector:
         matchLabels:
           app: api-gateway
-    - podSelector:
-        matchLabels:
-          app: auth-service
     ports:
     - protocol: TCP
       port: 3002
@@ -25,17 +25,10 @@ spec:
   - to:
     - podSelector:
         matchLabels:
-          app: knowledge-base-service
+          app: mysql
     ports:
     - protocol: TCP
-      port: 3000
-  - to:
-    - podSelector:
-        matchLabels:
-          app: knowledge-graph-service
-    ports:
-    - protocol: TCP
-      port: 3000
+      port: 3306
   - to:
     - podSelector:
         matchLabels:
@@ -46,22 +39,20 @@ spec:
   - to:
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: monitoring
-      podSelector:
+          name: suoke
+    - podSelector:
         matchLabels:
-          app: suoke-collector
+          app: knowledge-base-service
     ports:
     - protocol: TCP
-      port: 4317
-    - protocol: TCP
-      port: 4318
+      port: 80
   - to:
-    - namespaceSelector: {}
-      podSelector:
+    - namespaceSelector:
         matchLabels:
-          k8s-app: kube-dns
+          name: suoke
+    - podSelector:
+        matchLabels:
+          app: knowledge-graph-service
     ports:
-    - protocol: UDP
-      port: 53
     - protocol: TCP
-      port: 53
+      port: 80

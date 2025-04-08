@@ -1,0 +1,58 @@
+{
+  "name": "web-search-module",
+  "version": "1.0.0",
+  "description": "索克生活网络搜索模块配置",
+  "api_keys": {
+    "google": "",
+    "brave": "",
+    "bing": ""
+  },
+  "search": {
+    "default_engine": "brave",
+    "max_results": 10,
+    "timeout": 30,
+    "google": {
+      "search_engine_id": ""
+    }
+  },
+  "content_processing": {
+    "summarization": {
+      "enabled": true,
+      "max_length": 200
+    },
+    "translation": {
+      "enabled": true,
+      "target_language": "zh-CN"
+    },
+    "filtering": {
+      "enabled": true,
+      "blocked_domains": [
+        "example.com",
+        "bad-actor.com"
+      ]
+    }
+  },
+  "services": {
+    "knowledge_base": {
+      "enabled": true,
+      "url": "http://knowledge-base-service:8080",
+      "api_key": "",
+      "timeout": 30
+    },
+    "knowledge_graph": {
+      "enabled": true,
+      "url": "http://knowledge-graph-service:8090",
+      "api_key": "",
+      "timeout": 30
+    }
+  },
+  "cache": {
+    "enabled": true,
+    "ttl": 3600
+  },
+  "advanced_features": {
+    "insights_generation": {
+      "enabled": true
+    }
+  }
+} 

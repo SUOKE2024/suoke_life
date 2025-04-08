@@ -1,0 +1,94 @@
+version: '3.8'
+
+services:
+  api-gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile.multistage
+      args:
+        VERSION: dev
+        BUILD_DATE: "$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+        GIT_COMMIT: "$(git rev-parse --short HEAD)"
+    ports:
+      - "8080:8080"
+      - "9090:9090" # 指标端口
+    volumes:
+      - ./configs:/app/configs
+      - ./logs:/app/logs
+    environment:
+      - GIN_MODE=debug
+      - LOG_LEVEL=debug
+      - PORT=8080
+      - CONFIG_PATH=/app/configs/config.json
+      - SUOKE_GATEWAY_SERVICES_AUTH_SERVICE_URL=http://auth-service:3001
+      - SUOKE_GATEWAY_SERVICES_USER_SERVICE_URL=http://user-service:3002
+      - SUOKE_GATEWAY_SERVICES_RAG_SERVICE_URL=http://rag-service:3003
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O-", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    networks:
+      - suoke-network
+      
+  # 模拟的后端服务，用于开发和测试
+  auth-service:
+    image: mendhak/http-https-echo:32
+    environment:
+      - HTTP_PORT=3001
+    ports:
+      - "3001:3001"
+    networks:
+      - suoke-network
+      
+  user-service:
+    image: mendhak/http-https-echo:32
+    environment:
+      - HTTP_PORT=3002
+    ports:
+      - "3002:3002"
+    networks:
+      - suoke-network
+      
+  rag-service:
+    image: mendhak/http-https-echo:32
+    environment:
+      - HTTP_PORT=3003
+    ports:
+      - "3003:3003"
+    networks:
+      - suoke-network
+      
+  # Prometheus监控
+  prometheus:
+    image: prom/prometheus:v2.45.0
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9091:9090"
+    networks:
+      - suoke-network
+      
+  # Grafana可视化
+  grafana:
+    image: grafana/grafana:10.0.0
+    depends_on:
+      - prometheus
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    networks:
+      - suoke-network
+
+networks:
+  suoke-network:
+    driver: bridge
+
+volumes:
+  grafana-storage: 

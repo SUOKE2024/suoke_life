@@ -1,0 +1,189 @@
+{
+  "models": [
+    {
+      "id": "suoke-tcm-large",
+      "name": "Suoke TCM Large",
+      "type": "text-generation",
+      "description": "索克生活中医大模型，专注于中医健康领域的生成式AI模型",
+      "underlying_model": "Qwen/Qwen1.5-7B-Chat",
+      "capabilities": {
+        "chat": true,
+        "text_completion": true,
+        "embeddings": false,
+        "function_calling": true
+      },
+      "context_length": 4096,
+      "tokenizer": "tiktoken",
+      "parameters": {
+        "temperature": {
+          "type": "float",
+          "default": 0.7,
+          "min": 0.0,
+          "max": 1.0
+        },
+        "top_p": {
+          "type": "float",
+          "default": 0.95,
+          "min": 0.0,
+          "max": 1.0
+        },
+        "max_tokens": {
+          "type": "integer",
+          "default": 1024,
+          "min": 1,
+          "max": 4096
+        },
+        "stop": {
+          "type": "array",
+          "default": []
+        },
+        "frequency_penalty": {
+          "type": "float",
+          "default": 0.0,
+          "min": -2.0,
+          "max": 2.0
+        },
+        "presence_penalty": {
+          "type": "float",
+          "default": 0.0,
+          "min": -2.0,
+          "max": 2.0
+        }
+      },
+      "pricing": {
+        "prompt_tokens": 0.0001,
+        "completion_tokens": 0.0002
+      },
+      "mode": "local"
+    },
+    {
+      "id": "suoke-tcm-base",
+      "name": "Suoke TCM Base",
+      "type": "text-generation",
+      "description": "索克生活中医基础模型，面向一般性中医健康咨询的轻量级模型",
+      "underlying_model": "Qwen/Qwen1.5-1.8B-Chat",
+      "capabilities": {
+        "chat": true,
+        "text_completion": true,
+        "embeddings": false,
+        "function_calling": false
+      },
+      "context_length": 2048,
+      "tokenizer": "tiktoken",
+      "parameters": {
+        "temperature": {
+          "type": "float",
+          "default": 0.5,
+          "min": 0.0,
+          "max": 1.0
+        },
+        "top_p": {
+          "type": "float",
+          "default": 0.9,
+          "min": 0.0,
+          "max": 1.0
+        },
+        "max_tokens": {
+          "type": "integer",
+          "default": 512,
+          "min": 1,
+          "max": 2048
+        },
+        "stop": {
+          "type": "array",
+          "default": []
+        },
+        "frequency_penalty": {
+          "type": "float",
+          "default": 0.0,
+          "min": -2.0,
+          "max": 2.0
+        },
+        "presence_penalty": {
+          "type": "float",
+          "default": 0.0,
+          "min": -2.0,
+          "max": 2.0
+        }
+      },
+      "pricing": {
+        "prompt_tokens": 0.00005,
+        "completion_tokens": 0.0001
+      },
+      "mode": "local"
+    },
+    {
+      "id": "bge-large-zh-v1.5",
+      "name": "BGE Large Chinese Embedding",
+      "type": "embedding",
+      "description": "中文文本嵌入模型，用于向量搜索和相似度计算",
+      "underlying_model": "BAAI/bge-large-zh-v1.5",
+      "capabilities": {
+        "chat": false,
+        "text_completion": false,
+        "embeddings": true,
+        "function_calling": false
+      },
+      "output_dimensions": 1024,
+      "parameters": {
+        "normalize": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "pricing": {
+        "tokens": 0.00001
+      },
+      "mode": "local"
+    },
+    {
+      "id": "bge-reranker-v1.3",
+      "name": "BGE Reranker",
+      "type": "reranker",
+      "description": "文档重排序模型，优化检索结果的相关性排序",
+      "underlying_model": "BAAI/bge-reranker-base",
+      "capabilities": {
+        "chat": false,
+        "text_completion": false,
+        "embeddings": false,
+        "reranking": true,
+        "function_calling": false
+      },
+      "parameters": {
+        "top_k": {
+          "type": "integer",
+          "default": 5,
+          "min": 1,
+          "max": 100
+        }
+      },
+      "pricing": {
+        "pair": 0.00001
+      },
+      "mode": "local"
+    }
+  ],
+  "openai_model_mappings": {
+    "gpt-3.5-turbo": "suoke-tcm-base",
+    "gpt-3.5-turbo-16k": "suoke-tcm-large",
+    "gpt-4": "suoke-tcm-large",
+    "text-embedding-ada-002": "bge-large-zh-v1.5"
+  },
+  "default_embedding_model": "bge-large-zh-v1.5",
+  "default_completion_model": "suoke-tcm-base",
+  "default_chat_model": "suoke-tcm-large",
+  "default_reranker_model": "bge-reranker-v1.3",
+  "model_version_policy": {
+    "enable_versioning": true,
+    "fallback_to_latest": true
+  },
+  "caching": {
+    "enable_model_caching": true,
+    "cache_ttl_seconds": 86400,
+    "max_cache_size_mb": 1024
+  },
+  "logging": {
+    "log_model_usage": true,
+    "log_level": "info"
+  }
+}

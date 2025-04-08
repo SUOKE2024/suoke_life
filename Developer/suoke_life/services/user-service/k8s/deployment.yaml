@@ -5,10 +5,9 @@ metadata:
   namespace: suoke
   labels:
     app: user-service
-    service-type: core
   annotations:
     app.kubernetes.io/part-of: suoke-platform
-    app.kubernetes.io/managed-by: argocd
+    app.kubernetes.io/managed-by: kustomize
 spec:
   replicas: 2
   selector:
@@ -23,21 +22,12 @@ spec:
     metadata:
       labels:
         app: user-service
-        service-type: core
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: "3002"
         prometheus.io/path: "/metrics"
+        prometheus.io/port: "3002"
     spec:
       affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: node-type
-                operator: In
-                values:
-                - core-services
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
           - weight: 100
@@ -55,35 +45,88 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 3002
-          name: http
         env:
         - name: NODE_ENV
           value: "production"
         - name: PORT
           value: "3002"
-        - name: OTEL_SERVICE_NAME
-          value: "user-service"
-        - name: OTEL_EXPORTER_OTLP_ENDPOINT
-          value: "http://suoke-collector-collector.monitoring:4317"
-        - name: OTEL_RESOURCE_ATTRIBUTES
-          value: "service.namespace=suoke,service.name=user-service"
-        - name: KNOWLEDGE_BASE_URL
-          value: "http://knowledge-base-service:3000"
-        - name: KNOWLEDGE_GRAPH_URL
-          value: "http://knowledge-graph-service:3000"
-        - name: SHARE_BASE_URL
-          value: "https://suoke.life/share"
-        - name: VECTOR_SIMILARITY_THRESHOLD
-          value: "0.7"
-        - name: CORS_ALLOWED_ORIGINS
-          value: "https://suoke.life,https://app.suoke.life"
+        - name: NODE_OPTIONS
+          value: "--max-old-space-size=384"
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: user-service-config
+              key: db.host
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: user-service-config
+              key: db.port
+        - name: DB_USER
+          valueFrom:
+            configMapKeyRef:
+              name: user-service-config
+              key: db.user
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: user-service-secrets
+              key: db.password
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: user-service-config
+              key: db.name
         - name: REDIS_HOST
-          value: "redis.suoke"
+          valueFrom:
+            configMapKeyRef:
+              name: user-service-config
+              key: redis.host
         - name: REDIS_PORT
-          value: "6379"
-        envFrom:
-        - secretRef:
-            name: user-service-env
+          valueFrom:
+            configMapKeyRef:
+              name: user-service-config
+              key: redis.port
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: user-service-secrets
+              key: redis.password
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: user-service-secrets
+              key: jwt.secret
+        - name: JWT_EXPIRES_IN
+          valueFrom:
+            configMapKeyRef:
+              name: user-service-config
+              key: jwt.expires
+        - name: KNOWLEDGE_BASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: user-service-config
+              key: knowledge.base.url
+        - name: KNOWLEDGE_GRAPH_URL
+          valueFrom:
+            configMapKeyRef:
+              name: user-service-config
+              key: knowledge.graph.url
+        - name: USER_PROFILE_SERVICE
+          valueFrom:
+            configMapKeyRef:
+              name: user-service-config
+              key: user.profile.url
+        - name: SHARE_BASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: user-service-config
+              key: share.base.url
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: user-service-config
+              key: log.level
         resources:
           requests:
             cpu: 200m
@@ -96,80 +139,45 @@ spec:
             path: /health
             port: 3002
           initialDelaySeconds: 30
-          periodSeconds: 10
+          periodSeconds: 15
           timeoutSeconds: 5
           failureThreshold: 3
         readinessProbe:
           httpGet:
-            path: /health/ready
+            path: /health
             port: 3002
           initialDelaySeconds: 10
-          periodSeconds: 5
+          periodSeconds: 10
           timeoutSeconds: 3
-          successThreshold: 1
           failureThreshold: 3
-        startupProbe:
-          httpGet:
-            path: /health/startup
-            port: 3002
-          initialDelaySeconds: 5
-          periodSeconds: 5
-          failureThreshold: 12
         volumeMounts:
         - name: logs
           mountPath: /app/logs
         - name: uploads
           mountPath: /app/uploads
+          readOnly: false
         - name: tmp
-          mountPath: /app/tmp
+          mountPath: /tmp
         securityContext:
           allowPrivilegeEscalation: false
           runAsNonRoot: true
-          runAsUser: 1000
-          runAsGroup: 1000
+          runAsUser: 1001
+          runAsGroup: 1001
           capabilities:
             drop:
             - ALL
-          readOnlyRootFilesystem: false
+          readOnlyRootFilesystem: true
       volumes:
       - name: logs
-        emptyDir: {}
-      - name: tmp
-        emptyDir: {}
+        persistentVolumeClaim:
+          claimName: user-service-logs-pvc
       - name: uploads
         persistentVolumeClaim:
-          claimName: user-service-uploads
+          claimName: user-service-uploads-pvc
+      - name: tmp
+        emptyDir: {}
       imagePullSecrets:
-      - name: aliyun-registry
+      - name: suoke-registry-secret
       securityContext:
-        fsGroup: 1000
+        fsGroup: 1001
       terminationGracePeriodSeconds: 30
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: user-service
-  namespace: suoke
-  labels:
-    app: user-service
-spec:
-  selector:
-    app: user-service
-  ports:
-  - port: 80
-    targetPort: 3002
-    name: http
-  type: ClusterIP
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: user-service-uploads
-  namespace: suoke
-spec:
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: suoke-standard
-  resources:
-    requests:
-      storage: 10Gi

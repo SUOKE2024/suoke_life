@@ -104,7 +104,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage>
   /// 根据登录状态导航到下一个页面
   void _navigateToNextScreen() async {
     print('开始导航到下一个页面 - WelcomePage');
-    
+
     // 移除设置已看过欢迎页面的标记，确保每次启动都显示欢迎页面
     // final preferencesManager = ref.read(preferencesManagerProvider);
     // await preferencesManager.setHasSeenWelcome(true);
@@ -112,7 +112,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage>
     // 检查用户是否已登录
     final authRepository = ref.read(authRepositoryProvider);
     print('用户登录状态: ${authRepository.isAuthenticated ? "已登录" : "未登录"}');
-    
+
     if (authRepository.isAuthenticated) {
       // 已登录，直接导航到主页面，使用replaceAll确保导航堆栈干净
       if (mounted) {
@@ -218,13 +218,15 @@ class _WelcomePageState extends ConsumerState<WelcomePage>
                                 shape: BoxShape.circle,
                                 boxShadow: [
                                   BoxShadow(
-                                    color: AppColors.primaryColor.withAlpha(100),
+                                    color:
+                                        AppColors.primaryColor.withAlpha(100),
                                     blurRadius: 20,
                                     spreadRadius: 5,
                                   ),
                                 ],
                                 image: const DecorationImage(
-                                  image: AssetImage('assets/images/app_icon.jpg'),
+                                  image:
+                                      AssetImage('assets/images/app_icon.jpg'),
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -294,14 +296,16 @@ class _WelcomePageState extends ConsumerState<WelcomePage>
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.primaryColor,
                                 foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 40, vertical: 15),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(30),
                                 ),
                               ),
                               child: const Text(
                                 '点击进入',
-                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
                               ),
                             ),
                           ],

@@ -1,0 +1,2 @@
+FAIL	knowledge-base-service/internal/test/benchmark/real [build failed]
+FAIL

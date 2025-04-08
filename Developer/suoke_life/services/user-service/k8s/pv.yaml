@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: user-service-uploads-pv
+  labels:
+    type: local
+    app: user-service
+spec:
+  storageClassName: suoke-standard
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data/user-service-uploads"
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: user-service-logs-pv
+  labels:
+    type: local
+    app: user-service
+spec:
+  storageClassName: suoke-standard
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data/user-service-logs"
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: user-service-backup-pv
+  labels:
+    type: local
+    app: user-service
+spec:
+  storageClassName: suoke-standard
+  capacity:
+    storage: 20Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data/user-service-backup"
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: suoke-standard
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: Immediate 

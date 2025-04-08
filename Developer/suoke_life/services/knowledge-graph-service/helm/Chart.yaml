@@ -1,27 +1,35 @@
 apiVersion: v2
 name: knowledge-graph-service
-description: 索克生活平台的知识图谱服务
+description: 索克生活平台的知识图谱服务 (Go版本)
 type: application
-version: 0.1.0
+version: 1.0.0
 appVersion: "1.0.0"
 keywords:
   - knowledge-graph
   - neo4j
   - graph
   - suoke
+  - golang
 home: https://suoke.life
 maintainers:
   - name: SuoKe DevOps Team
     email: devops@suoke.life
-dependencies:
-  - name: common
-    version: ~1.x.x
-    repository: "https://suoke-charts.cn-hangzhou.cr.aliyuncs.com/suoke-common"
-  - name: redis
-    version: ~17.x.x
-    repository: "https://charts.bitnami.com/bitnami"
-    condition: redis.enabled
-  - name: neo4j
-    version: ~4.x.x
-    repository: "https://neo4j-contrib.github.io/neo4j-helm"
-    condition: neo4j.enabled
+# dependencies:
+#   - name: common
+#     version: ~1.x.x
+#     repository: "https://suoke-charts.cn-hangzhou.cr.aliyuncs.com/suoke-common"
+#   - name: redis
+#     version: ~17.x.x
+#     repository: "https://charts.bitnami.com/bitnami"
+#     condition: redis.enabled
+#   - name: neo4j
+#     version: ~4.x.x
+#     repository: "https://neo4j-contrib.github.io/neo4j-helm"
+#     condition: neo4j.enabled
+#   - name: milvus
+#     version: ~4.x.x
+#     repository: "https://milvus-io.github.io/milvus-helm"
+#     condition: milvus.enabled
+annotations:
+  category: Database
+  licenses: MIT

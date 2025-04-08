@@ -1,0 +1,105 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+  namespace: suoke-prod
+spec:
+  serviceName: "postgres-service"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:latest
+        ports:
+        - containerPort: 5432
+          name: postgres
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "200m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        env:
+        - name: POSTGRES_USER
+          value: "postgres"
+        - name: POSTGRES_PASSWORD
+          value: "postgres"
+        - name: POSTGRES_DB
+          value: "suoke"
+        volumeMounts:
+        - name: postgres-data
+          mountPath: /var/lib/postgresql/data
+          subPath: postgres
+      volumes:
+      - name: postgres-data
+        persistentVolumeClaim:
+          claimName: postgres-data-postgres-0
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service
+  namespace: suoke-prod
+spec:
+  selector:
+    app: postgres
+  ports:
+  - port: 5432
+    targetPort: 5432
+  clusterIP: None
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-init-scripts
+  namespace: suoke-prod
+data:
+  init-knowledge-base.sql: |
+    CREATE SCHEMA IF NOT EXISTS knowledge_base;
+
+    CREATE TABLE IF NOT EXISTS knowledge_base.categories (
+      id UUID PRIMARY KEY,
+      name VARCHAR(255) NOT NULL,
+      description TEXT,
+      parent_id UUID,
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS knowledge_base.documents (
+      id UUID PRIMARY KEY,
+      title VARCHAR(255) NOT NULL,
+      content TEXT NOT NULL,
+      description TEXT,
+      status VARCHAR(50) NOT NULL,
+      content_type VARCHAR(50) NOT NULL,
+      category_id UUID REFERENCES knowledge_base.categories(id),
+      author_id UUID NOT NULL,
+      version INT DEFAULT 1,
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+      published_at TIMESTAMP WITH TIME ZONE,
+      metadata JSONB
+    );
+
+    CREATE TABLE IF NOT EXISTS knowledge_base.chunks (
+      id UUID PRIMARY KEY,
+      document_id UUID NOT NULL REFERENCES knowledge_base.documents(id) ON DELETE CASCADE,
+      content TEXT NOT NULL,
+      chunk_index INT NOT NULL,
+      metadata JSONB,
+      vector_id VARCHAR(255),
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+      UNIQUE(document_id, chunk_index)
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_chunks_document_id ON knowledge_base.chunks(document_id);
+    CREATE INDEX IF NOT EXISTS idx_chunks_vector_id ON knowledge_base.chunks(vector_id);

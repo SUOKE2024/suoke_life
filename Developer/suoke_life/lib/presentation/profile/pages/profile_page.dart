@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:suoke_life/core/router/app_router.dart';
 import 'package:suoke_life/core/theme/app_colors.dart';
 import 'package:suoke_life/core/widgets/app_widgets.dart' as app_widgets;
@@ -359,13 +359,14 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   Widget _buildSettingCard(Map<String, dynamic> setting) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final isSwitch = setting['isSwitch'] == true;
-    
+
     // 处理点击事件
     void Function()? onTapHandler;
     if (setting['title'] == '主题设置') {
       onTapHandler = () => context.router.push(const ThemeSettingsRoute());
     } else if (setting['title'] == '设计系统') {
-      onTapHandler = () => context.router.push(const DesignSystemShowcaseRoute());
+      onTapHandler =
+          () => context.router.push(const DesignSystemShowcaseRoute());
     } else if (!isSwitch) {
       onTapHandler = () {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -528,6 +529,112 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
           ),
         );
       },
+    );
+  }
+
+  /// 构建系统设置部分
+  Widget _buildSystemSettings() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // 标题
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Text(
+            '系统设置',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? AppColors.darkTextPrimary
+                  : AppColors.lightTextSecondary,
+            ),
+          ),
+        ),
+
+        // 设置项列表
+        Card(
+          elevation: 0,
+          margin: const EdgeInsets.all(8),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Column(
+            children: [
+              // 暗色模式
+              _buildSettingItem(
+                context: context,
+                setting: {
+                  'icon': Icons.dark_mode,
+                  'title': '暗色模式',
+                  'isSwitch': true,
+                },
+                onTap: () {},
+              ),
+
+              // 隐私设置
+              _buildSettingItem(
+                context: context,
+                setting: {
+                  'icon': Icons.privacy_tip,
+                  'title': '隐私设置',
+                  'isSwitch': false,
+                },
+                onTap: () {},
+              ),
+
+              // 语言设置
+              _buildSettingItem(
+                context: context,
+                setting: {
+                  'icon': Icons.language,
+                  'title': '语言设置',
+                  'isSwitch': false,
+                },
+                onTap: () {},
+              ),
+
+              // 网络测试
+              _buildSettingItem(
+                context: context,
+                setting: {
+                  'icon': Icons.network_check,
+                  'title': '网络连接测试',
+                  'isSwitch': false,
+                },
+                onTap: () {
+                  // 导航到网络测试页面
+                  context.router.push(const NetworkTestRoute());
+                },
+              ),
+
+              // 关于我们
+              _buildSettingItem(
+                context: context,
+                setting: {
+                  'icon': Icons.info,
+                  'title': '关于我们',
+                  'isSwitch': false,
+                },
+                onTap: () {},
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// 构建设置项
+  Widget _buildSettingItem({
+    required BuildContext context,
+    required Map<String, dynamic> setting,
+    required VoidCallback onTap,
+  }) {
+    return ListTile(
+      leading: Icon(setting['icon']),
+      title: Text(setting['title']),
+      onTap: onTap,
     );
   }
 }

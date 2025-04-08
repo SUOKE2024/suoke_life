@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  agent-coordinator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3007:3007"
+    volumes:
+      - ./config:/app/config
+      - ./logs:/app/logs
+      - ./state:/app/state
+    environment:
+      - GIN_MODE=debug
+      - LOG_LEVEL=debug
+      - PORT=3007
+      - CONFIG_PATH=/app/config/config.json
+      - COORDINATOR_MODE=distributed
+      - AGENT_STATE_PERSISTENCE=redis
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - redis
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O-", "http://localhost:3007/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+      
+  redis:
+    image: redis:7.0-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 2s
+      retries: 3
+
+volumes:
+  redis-data: 

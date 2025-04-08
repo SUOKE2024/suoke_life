@@ -1,0 +1,1201 @@
+[
+  {
+    "id": "face_0000",
+    "face_color": "面色黑",
+    "pulse_type": "牢脉",
+    "syndrome": "湿证",
+    "constitution": "痰湿质",
+    "herbs": [
+      "枳壳",
+      "羌活",
+      "陈皮",
+      "细辛",
+      "丹参",
+      "葛根"
+    ],
+    "formulas": [
+      "导赤散",
+      "麦门冬汤"
+    ],
+    "features": [
+      "眼黯淡",
+      "鼻红",
+      "面部正常"
+    ],
+    "description": "该患者面色黑，脉象为牢脉，辨证为湿证。",
+    "timestamp": "2025-04-07T17:12:02.940032"
+  },
+  {
+    "id": "face_0001",
+    "face_color": "面色黑",
+    "pulse_type": "细脉",
+    "syndrome": "血瘀证",
+    "constitution": "平和质",
+    "herbs": [
+      "杏仁",
+      "蝉蜕",
+      "藁本"
+    ],
+    "formulas": [
+      "麻黄汤",
+      "紫雪散",
+      "四物汤"
+    ],
+    "features": [
+      "鼻红",
+      "面部水肿"
+    ],
+    "description": "该患者面色黑，脉象为细脉，辨证为血瘀证。",
+    "timestamp": "2025-04-07T17:12:02.940046"
+  },
+  {
+    "id": "face_0002",
+    "face_color": "面色红黑",
+    "pulse_type": "伏脉",
+    "syndrome": "津液亏虚",
+    "constitution": "气郁质",
+    "herbs": [
+      "薄荷",
+      "艾叶",
+      "菊花"
+    ],
+    "formulas": [
+      "四君子汤",
+      "左金丸",
+      "桑菊饮"
+    ],
+    "features": [
+      "鼻红"
+    ],
+    "description": "该患者面色红黑，脉象为伏脉，辨证为津液亏虚。",
+    "timestamp": "2025-04-07T17:12:02.940054"
+  },
+  {
+    "id": "face_0003",
+    "face_color": "面色青黑",
+    "pulse_type": "浮脉",
+    "syndrome": "风湿证",
+    "constitution": "气虚质",
+    "herbs": [
+      "桔梗",
+      "天麻",
+      "连翘",
+      "蝉蜕",
+      "羌活",
+      "桑叶",
+      "黄柏"
+    ],
+    "formulas": [
+      "泻白散",
+      "桂枝甘草龙骨牡蛎汤"
+    ],
+    "features": [
+      "眼黯淡",
+      "唇暗紫",
+      "面部正常"
+    ],
+    "description": "该患者面色青黑，脉象为浮脉，辨证为风湿证。",
+    "timestamp": "2025-04-07T17:12:02.940099"
+  },
+  {
+    "id": "face_0004",
+    "face_color": "面色黄",
+    "pulse_type": "迟脉",
+    "syndrome": "气滞证",
+    "constitution": "血瘀质",
+    "herbs": [
+      "生地黄",
+      "附子",
+      "白芷"
+    ],
+    "formulas": [
+      "清营汤",
+      "麻黄汤"
+    ],
+    "features": [
+      "唇干裂",
+      "鼻正常"
+    ],
+    "description": "该患者面色黄，脉象为迟脉，辨证为气滞证。",
+    "timestamp": "2025-04-07T17:12:02.940141"
+  },
+  {
+    "id": "face_0005",
+    "face_color": "面色晦暗",
+    "pulse_type": "代脉",
+    "syndrome": "气滞证",
+    "constitution": "血瘀质",
+    "herbs": [
+      "独活",
+      "防风",
+      "当归",
+      "川芎",
+      "大青叶",
+      "知母"
+    ],
+    "formulas": [
+      "消风散"
+    ],
+    "features": [
+      "眼充血",
+      "唇苍白",
+      "面部水肿"
+    ],
+    "description": "该患者面色晦暗，脉象为代脉，辨证为气滞证。",
+    "timestamp": "2025-04-07T17:12:02.940153"
+  },
+  {
+    "id": "face_0006",
+    "face_color": "面色青白",
+    "pulse_type": "弦脉",
+    "syndrome": "寒证",
+    "constitution": "特禀质",
+    "herbs": [
+      "桑叶",
+      "生地黄",
+      "金银花",
+      "川芎",
+      "独活",
+      "连翘",
+      "熟地黄"
+    ],
+    "formulas": [
+      "玉屏风散",
+      "六味地黄丸"
+    ],
+    "features": [
+      "眼充血",
+      "面部水肿"
+    ],
+    "description": "该患者面色青白，脉象为弦脉，辨证为寒证。",
+    "timestamp": "2025-04-07T17:12:02.940163"
+  },
+  {
+    "id": "face_0007",
+    "face_color": "面色青",
+    "pulse_type": "虚脉",
+    "syndrome": "风热证",
+    "constitution": "痰湿质",
+    "herbs": [
+      "枳实",
+      "麻黄",
+      "甘草",
+      "人参",
+      "半夏"
+    ],
+    "formulas": [
+      "甘麦大枣汤"
+    ],
+    "features": [
+      "鼻正常",
+      "面部正常"
+    ],
+    "description": "该患者面色青，脉象为虚脉，辨证为风热证。",
+    "timestamp": "2025-04-07T17:12:02.940171"
+  },
+  {
+    "id": "face_0008",
+    "face_color": "面色萎黄",
+    "pulse_type": "缓脉",
+    "syndrome": "气滞证",
+    "constitution": "阴虚质",
+    "herbs": [
+      "生姜",
+      "金银花",
+      "人参",
+      "当归"
+    ],
+    "formulas": [
+      "四君子汤"
+    ],
+    "features": [
+      "眼充血",
+      "面部正常"
+    ],
+    "description": "该患者面色萎黄，脉象为缓脉，辨证为气滞证。",
+    "timestamp": "2025-04-07T17:12:02.940178"
+  },
+  {
+    "id": "face_0009",
+    "face_color": "面色晦暗",
+    "pulse_type": "微脉",
+    "syndrome": "水饮证",
+    "constitution": "阳虚质",
+    "herbs": [
+      "细辛",
+      "天麻",
+      "黄芪",
+      "黄芩"
+    ],
+    "formulas": [
+      "麦门冬汤",
+      "四君子汤",
+      "桑菊饮"
+    ],
+    "features": [
+      "唇苍白",
+      "鼻正常"
+    ],
+    "description": "该患者面色晦暗，脉象为微脉，辨证为水饮证。",
+    "timestamp": "2025-04-07T17:12:02.940185"
+  },
+  {
+    "id": "face_0010",
+    "face_color": "面色淡白",
+    "pulse_type": "长脉",
+    "syndrome": "气滞证",
+    "constitution": "特禀质",
+    "herbs": [
+      "石膏",
+      "白芍",
+      "川芎"
+    ],
+    "formulas": [
+      "补中益气汤",
+      "安宫牛黄丸",
+      "百合固金汤"
+    ],
+    "features": [
+      "眼明亮",
+      "唇红润",
+      "鼻正常"
+    ],
+    "description": "该患者面色淡白，脉象为长脉，辨证为气滞证。",
+    "timestamp": "2025-04-07T17:12:02.940194"
+  },
+  {
+    "id": "face_0011",
+    "face_color": "面色青白",
+    "pulse_type": "动脉",
+    "syndrome": "水饮证",
+    "constitution": "阴虚质",
+    "herbs": [
+      "半夏",
+      "川芎",
+      "枳实"
+    ],
+    "formulas": [
+      "生脉散",
+      "清营汤"
+    ],
+    "features": [],
+    "description": "该患者面色青白，脉象为动脉，辨证为水饮证。",
+    "timestamp": "2025-04-07T17:12:02.940200"
+  },
+  {
+    "id": "face_0012",
+    "face_color": "面色黧黑",
+    "pulse_type": "结脉",
+    "syndrome": "内热证",
+    "constitution": "特禀质",
+    "herbs": [
+      "知母",
+      "黄芩",
+      "藁本",
+      "薄荷",
+      "黄柏"
+    ],
+    "formulas": [
+      "炙甘草汤"
+    ],
+    "features": [
+      "眼混浊",
+      "唇干裂"
+    ],
+    "description": "该患者面色黧黑，脉象为结脉，辨证为内热证。",
+    "timestamp": "2025-04-07T17:12:02.940208"
+  },
+  {
+    "id": "face_0013",
+    "face_color": "面色晦暗",
+    "pulse_type": "缓脉",
+    "syndrome": "气虚证",
+    "constitution": "阳虚质",
+    "herbs": [
+      "当归",
+      "丹参",
+      "金银花",
+      "石膏",
+      "细辛",
+      "知母",
+      "干姜",
+      "栀子"
+    ],
+    "formulas": [
+      "银翘散",
+      "防风通圣散",
+      "麦门冬汤"
+    ],
+    "features": [
+      "唇干裂",
+      "面部消瘦"
+    ],
+    "description": "该患者面色晦暗，脉象为缓脉，辨证为气虚证。",
+    "timestamp": "2025-04-07T17:12:02.940216"
+  },
+  {
+    "id": "face_0014",
+    "face_color": "面色黄而明亮",
+    "pulse_type": "滑脉",
+    "syndrome": "燥证",
+    "constitution": "气虚质",
+    "herbs": [
+      "细辛",
+      "杏仁",
+      "天麻",
+      "羌活",
+      "荆芥",
+      "桑叶",
+      "菊花",
+      "前胡"
+    ],
+    "formulas": [
+      "四物汤",
+      "清营汤",
+      "四君子汤"
+    ],
+    "features": [
+      "唇红润",
+      "鼻正常"
+    ],
+    "description": "该患者面色黄而明亮，脉象为滑脉，辨证为燥证。",
+    "timestamp": "2025-04-07T17:12:02.940224"
+  },
+  {
+    "id": "face_0015",
+    "face_color": "面色萎黄",
+    "pulse_type": "紧脉",
+    "syndrome": "风湿证",
+    "constitution": "血瘀质",
+    "herbs": [
+      "荆芥",
+      "白芍",
+      "甘草"
+    ],
+    "formulas": [
+      "十全大补汤",
+      "五苓散"
+    ],
+    "features": [
+      "眼充血",
+      "唇暗紫",
+      "鼻红",
+      "面部水肿"
+    ],
+    "description": "该患者面色萎黄，脉象为紧脉，辨证为风湿证。",
+    "timestamp": "2025-04-07T17:12:02.940232"
+  },
+  {
+    "id": "face_0016",
+    "face_color": "面色青黑",
+    "pulse_type": "促脉",
+    "syndrome": "内热证",
+    "constitution": "痰湿质",
+    "herbs": [
+      "桔梗",
+      "生姜",
+      "葛根",
+      "防风"
+    ],
+    "formulas": [
+      "甘麦大枣汤"
+    ],
+    "features": [
+      "眼充血",
+      "唇红润",
+      "面部消瘦"
+    ],
+    "description": "该患者面色青黑，脉象为促脉，辨证为内热证。",
+    "timestamp": "2025-04-07T17:12:02.940239"
+  },
+  {
+    "id": "face_0017",
+    "face_color": "面色红黑",
+    "pulse_type": "滑脉",
+    "syndrome": "水饮证",
+    "constitution": "气郁质",
+    "herbs": [
+      "防风",
+      "肉桂",
+      "半夏",
+      "陈皮",
+      "枳壳",
+      "金银花",
+      "熟地黄"
+    ],
+    "formulas": [
+      "黄连解毒汤"
+    ],
+    "features": [
+      "眼明亮",
+      "鼻白"
+    ],
+    "description": "该患者面色红黑，脉象为滑脉，辨证为水饮证。",
+    "timestamp": "2025-04-07T17:12:02.940247"
+  },
+  {
+    "id": "face_0018",
+    "face_color": "面色淡白",
+    "pulse_type": "微脉",
+    "syndrome": "内热证",
+    "constitution": "阴虚质",
+    "herbs": [
+      "黄柏",
+      "甘草",
+      "黄连",
+      "菊花",
+      "桔梗",
+      "丹参",
+      "艾叶"
+    ],
+    "formulas": [
+      "苓桂术甘汤"
+    ],
+    "features": [
+      "唇暗紫",
+      "面部消瘦"
+    ],
+    "description": "该患者面色淡白，脉象为微脉，辨证为内热证。",
+    "timestamp": "2025-04-07T17:12:02.940255"
+  },
+  {
+    "id": "face_0019",
+    "face_color": "面色黧黑",
+    "pulse_type": "濡脉",
+    "syndrome": "阳虚证",
+    "constitution": "气虚质",
+    "herbs": [
+      "肉桂",
+      "荆芥",
+      "细辛",
+      "附子",
+      "麻黄"
+    ],
+    "formulas": [
+      "补中益气汤",
+      "泻黄散",
+      "黄连解毒汤"
+    ],
+    "features": [
+      "眼明亮",
+      "面部消瘦"
+    ],
+    "description": "该患者面色黧黑，脉象为濡脉，辨证为阳虚证。",
+    "timestamp": "2025-04-07T17:12:02.940262"
+  },
+  {
+    "id": "face_0020",
+    "face_color": "面色青白",
+    "pulse_type": "实脉",
+    "syndrome": "燥证",
+    "constitution": "血瘀质",
+    "herbs": [
+      "藁本",
+      "黄芪",
+      "半夏",
+      "茯苓"
+    ],
+    "formulas": [
+      "生脉散"
+    ],
+    "features": [
+      "眼黯淡",
+      "唇暗紫",
+      "鼻红",
+      "面部消瘦"
+    ],
+    "description": "该患者面色青白，脉象为实脉，辨证为燥证。",
+    "timestamp": "2025-04-07T17:12:02.940270"
+  },
+  {
+    "id": "face_0021",
+    "face_color": "面色青黑",
+    "pulse_type": "滑脉",
+    "syndrome": "痰饮证",
+    "constitution": "特禀质",
+    "herbs": [
+      "菊花",
+      "熟地黄",
+      "黄芪",
+      "桑叶",
+      "黄柏",
+      "羌活",
+      "当归",
+      "天麻"
+    ],
+    "formulas": [
+      "桂枝汤",
+      "桂枝甘草龙骨牡蛎汤",
+      "人参养营汤"
+    ],
+    "features": [
+      "眼充血",
+      "唇干裂"
+    ],
+    "description": "该患者面色青黑，脉象为滑脉，辨证为痰饮证。",
+    "timestamp": "2025-04-07T17:12:02.940278"
+  },
+  {
+    "id": "face_0022",
+    "face_color": "面色黄",
+    "pulse_type": "结脉",
+    "syndrome": "火证",
+    "constitution": "气虚质",
+    "herbs": [
+      "牛蒡子",
+      "天麻",
+      "连翘"
+    ],
+    "formulas": [
+      "葛根汤",
+      "桂枝甘草龙骨牡蛎汤",
+      "黄连解毒汤"
+    ],
+    "features": [],
+    "description": "该患者面色黄，脉象为结脉，辨证为火证。",
+    "timestamp": "2025-04-07T17:12:02.940285"
+  },
+  {
+    "id": "face_0023",
+    "face_color": "面色淡白",
+    "pulse_type": "弦脉",
+    "syndrome": "血虚证",
+    "constitution": "平和质",
+    "herbs": [
+      "附子",
+      "防风",
+      "枳实",
+      "红花",
+      "葛根",
+      "大青叶",
+      "人参"
+    ],
+    "formulas": [
+      "小柴胡汤",
+      "玉屏风散",
+      "苍术导痰汤"
+    ],
+    "features": [
+      "眼混浊",
+      "唇苍白",
+      "面部消瘦"
+    ],
+    "description": "该患者面色淡白，脉象为弦脉，辨证为血虚证。",
+    "timestamp": "2025-04-07T17:12:02.940293"
+  },
+  {
+    "id": "face_0024",
+    "face_color": "面色潮红",
+    "pulse_type": "沉脉",
+    "syndrome": "气滞证",
+    "constitution": "血瘀质",
+    "herbs": [
+      "葛根",
+      "黄柏",
+      "连翘",
+      "陈皮",
+      "知母",
+      "肉桂",
+      "干姜",
+      "黄连"
+    ],
+    "formulas": [
+      "补中益气汤",
+      "五苓散",
+      "升麻葛根汤"
+    ],
+    "features": [
+      "面部消瘦"
+    ],
+    "description": "该患者面色潮红，脉象为沉脉，辨证为气滞证。",
+    "timestamp": "2025-04-07T17:12:02.940302"
+  },
+  {
+    "id": "face_0025",
+    "face_color": "面色青黑",
+    "pulse_type": "牢脉",
+    "syndrome": "寒证",
+    "constitution": "血瘀质",
+    "herbs": [
+      "前胡",
+      "白芍",
+      "黄芪"
+    ],
+    "formulas": [
+      "防风通圣散",
+      "桂枝甘草龙骨牡蛎汤"
+    ],
+    "features": [
+      "眼明亮",
+      "鼻正常"
+    ],
+    "description": "该患者面色青黑，脉象为牢脉，辨证为寒证。",
+    "timestamp": "2025-04-07T17:12:02.940308"
+  },
+  {
+    "id": "face_0026",
+    "face_color": "面色萎黄",
+    "pulse_type": "缓脉",
+    "syndrome": "痰饮证",
+    "constitution": "气郁质",
+    "herbs": [
+      "杏仁",
+      "细辛",
+      "黄芩",
+      "黄芪",
+      "川芎",
+      "艾叶",
+      "肉桂",
+      "白术"
+    ],
+    "formulas": [
+      "安宫牛黄丸",
+      "桂枝甘草龙骨牡蛎汤"
+    ],
+    "features": [
+      "眼充血",
+      "唇红润"
+    ],
+    "description": "该患者面色萎黄，脉象为缓脉，辨证为痰饮证。",
+    "timestamp": "2025-04-07T17:12:02.940316"
+  },
+  {
+    "id": "face_0027",
+    "face_color": "面色青",
+    "pulse_type": "代脉",
+    "syndrome": "气滞证",
+    "constitution": "气虚质",
+    "herbs": [
+      "菊花",
+      "知母",
+      "人参",
+      "枳实"
+    ],
+    "formulas": [
+      "猪苓汤",
+      "防风通圣散"
+    ],
+    "features": [
+      "眼黯淡",
+      "唇干裂"
+    ],
+    "description": "该患者面色青，脉象为代脉，辨证为气滞证。",
+    "timestamp": "2025-04-07T17:12:02.940323"
+  },
+  {
+    "id": "face_0028",
+    "face_color": "面色青白",
+    "pulse_type": "革脉",
+    "syndrome": "气虚证",
+    "constitution": "阴虚质",
+    "herbs": [
+      "附子",
+      "黄柏",
+      "甘草"
+    ],
+    "formulas": [
+      "泻黄散"
+    ],
+    "features": [],
+    "description": "该患者面色青白，脉象为革脉，辨证为气虚证。",
+    "timestamp": "2025-04-07T17:12:02.940329"
+  },
+  {
+    "id": "face_0029",
+    "face_color": "面色黑",
+    "pulse_type": "促脉",
+    "syndrome": "风热证",
+    "constitution": "平和质",
+    "herbs": [
+      "藁本",
+      "石膏",
+      "黄芩"
+    ],
+    "formulas": [
+      "导赤散"
+    ],
+    "features": [
+      "眼充血",
+      "唇苍白",
+      "面部水肿"
+    ],
+    "description": "该患者面色黑，脉象为促脉，辨证为风热证。",
+    "timestamp": "2025-04-07T17:12:02.940336"
+  },
+  {
+    "id": "face_0030",
+    "face_color": "面色晦暗",
+    "pulse_type": "濡脉",
+    "syndrome": "水饮证",
+    "constitution": "痰湿质",
+    "herbs": [
+      "薄荷",
+      "大青叶",
+      "黄芩",
+      "黄连",
+      "牛蒡子",
+      "川芎",
+      "半夏",
+      "栀子"
+    ],
+    "formulas": [
+      "消风散",
+      "温胆汤"
+    ],
+    "features": [
+      "眼黯淡",
+      "唇苍白"
+    ],
+    "description": "该患者面色晦暗，脉象为濡脉，辨证为水饮证。",
+    "timestamp": "2025-04-07T17:12:02.940344"
+  },
+  {
+    "id": "face_0031",
+    "face_color": "面色黑",
+    "pulse_type": "浮脉",
+    "syndrome": "风寒证",
+    "constitution": "湿热质",
+    "herbs": [
+      "生姜",
+      "黄芪",
+      "桔梗",
+      "防风",
+      "熟地黄"
+    ],
+    "formulas": [
+      "甘麦大枣汤",
+      "泻黄散"
+    ],
+    "features": [
+      "眼黯淡",
+      "唇暗紫",
+      "鼻红",
+      "面部消瘦"
+    ],
+    "description": "该患者面色黑，脉象为浮脉，辨证为风寒证。",
+    "timestamp": "2025-04-07T17:12:02.940353"
+  },
+  {
+    "id": "face_0032",
+    "face_color": "面色潮红",
+    "pulse_type": "数脉",
+    "syndrome": "风湿证",
+    "constitution": "血瘀质",
+    "herbs": [
+      "桑叶",
+      "茯苓",
+      "附子",
+      "板蓝根",
+      "防风",
+      "荆芥",
+      "大青叶",
+      "黄连"
+    ],
+    "formulas": [
+      "导赤散",
+      "清瘟败毒饮",
+      "真武汤"
+    ],
+    "features": [],
+    "description": "该患者面色潮红，脉象为数脉，辨证为风湿证。",
+    "timestamp": "2025-04-07T17:12:02.940365"
+  },
+  {
+    "id": "face_0033",
+    "face_color": "面色红黑",
+    "pulse_type": "促脉",
+    "syndrome": "气滞证",
+    "constitution": "气虚质",
+    "herbs": [
+      "枳实",
+      "金银花",
+      "黄柏",
+      "羌活",
+      "茯苓",
+      "黄连",
+      "独活",
+      "藁本"
+    ],
+    "formulas": [
+      "桂枝甘草龙骨牡蛎汤"
+    ],
+    "features": [
+      "眼充血",
+      "唇暗紫",
+      "鼻正常",
+      "面部水肿"
+    ],
+    "description": "该患者面色红黑，脉象为促脉，辨证为气滞证。",
+    "timestamp": "2025-04-07T17:12:02.940375"
+  },
+  {
+    "id": "face_0034",
+    "face_color": "面色青",
+    "pulse_type": "长脉",
+    "syndrome": "阳虚证",
+    "constitution": "痰湿质",
+    "herbs": [
+      "枳实",
+      "前胡",
+      "石膏",
+      "桔梗",
+      "当归",
+      "独活",
+      "黄芪",
+      "甘草"
+    ],
+    "formulas": [
+      "玉屏风散",
+      "生脉散",
+      "六味地黄丸"
+    ],
+    "features": [
+      "鼻白",
+      "面部水肿"
+    ],
+    "description": "该患者面色青，脉象为长脉，辨证为阳虚证。",
+    "timestamp": "2025-04-07T17:12:02.940383"
+  },
+  {
+    "id": "face_0035",
+    "face_color": "面色青黑",
+    "pulse_type": "细脉",
+    "syndrome": "水饮证",
+    "constitution": "气虚质",
+    "herbs": [
+      "人参",
+      "藁本",
+      "前胡",
+      "陈皮",
+      "黄芩",
+      "半夏"
+    ],
+    "formulas": [
+      "清瘟败毒饮"
+    ],
+    "features": [
+      "唇苍白"
+    ],
+    "description": "该患者面色青黑，脉象为细脉，辨证为水饮证。",
+    "timestamp": "2025-04-07T17:12:02.940390"
+  },
+  {
+    "id": "face_0036",
+    "face_color": "面色萎黄",
+    "pulse_type": "代脉",
+    "syndrome": "寒证",
+    "constitution": "阳虚质",
+    "herbs": [
+      "柴胡",
+      "薄荷",
+      "石膏",
+      "黄柏",
+      "杏仁",
+      "桑叶",
+      "白芍",
+      "知母"
+    ],
+    "formulas": [
+      "左金丸"
+    ],
+    "features": [
+      "眼充血"
+    ],
+    "description": "该患者面色萎黄，脉象为代脉，辨证为寒证。",
+    "timestamp": "2025-04-07T17:12:02.940397"
+  },
+  {
+    "id": "face_0037",
+    "face_color": "面色萎黄",
+    "pulse_type": "数脉",
+    "syndrome": "气逆证",
+    "constitution": "阳虚质",
+    "herbs": [
+      "白芍",
+      "藁本",
+      "细辛",
+      "知母",
+      "连翘",
+      "柴胡",
+      "石膏",
+      "肉桂"
+    ],
+    "formulas": [
+      "甘麦大枣汤",
+      "四物汤"
+    ],
+    "features": [
+      "唇红润",
+      "鼻正常"
+    ],
+    "description": "该患者面色萎黄，脉象为数脉，辨证为气逆证。",
+    "timestamp": "2025-04-07T17:12:02.940405"
+  },
+  {
+    "id": "face_0038",
+    "face_color": "面色黑",
+    "pulse_type": "芤脉",
+    "syndrome": "寒证",
+    "constitution": "阴虚质",
+    "herbs": [
+      "红花",
+      "白术",
+      "熟地黄",
+      "杏仁"
+    ],
+    "formulas": [
+      "导赤散",
+      "四逆散"
+    ],
+    "features": [
+      "唇干裂",
+      "面部消瘦"
+    ],
+    "description": "该患者面色黑，脉象为芤脉，辨证为寒证。",
+    "timestamp": "2025-04-07T17:12:02.940412"
+  },
+  {
+    "id": "face_0039",
+    "face_color": "面色青白",
+    "pulse_type": "虚脉",
+    "syndrome": "痰饮证",
+    "constitution": "湿热质",
+    "herbs": [
+      "金银花",
+      "肉桂",
+      "生地黄"
+    ],
+    "formulas": [
+      "四物汤",
+      "苍术导痰汤"
+    ],
+    "features": [
+      "鼻红"
+    ],
+    "description": "该患者面色青白，脉象为虚脉，辨证为痰饮证。",
+    "timestamp": "2025-04-07T17:12:02.940419"
+  },
+  {
+    "id": "face_0040",
+    "face_color": "面色黄",
+    "pulse_type": "浮脉",
+    "syndrome": "阳虚证",
+    "constitution": "湿热质",
+    "herbs": [
+      "黄芪",
+      "葛根",
+      "黄芩",
+      "生地黄",
+      "枳壳"
+    ],
+    "formulas": [
+      "小青龙汤",
+      "百合固金汤"
+    ],
+    "features": [
+      "眼充血"
+    ],
+    "description": "该患者面色黄，脉象为浮脉，辨证为阳虚证。",
+    "timestamp": "2025-04-07T17:12:02.940426"
+  },
+  {
+    "id": "face_0041",
+    "face_color": "面色晦暗",
+    "pulse_type": "沉脉",
+    "syndrome": "热证",
+    "constitution": "痰湿质",
+    "herbs": [
+      "石膏",
+      "丹参",
+      "甘草",
+      "金银花",
+      "葛根",
+      "当归",
+      "黄连"
+    ],
+    "formulas": [
+      "导赤散",
+      "玉屏风散"
+    ],
+    "features": [
+      "面部水肿"
+    ],
+    "description": "该患者面色晦暗，脉象为沉脉，辨证为热证。",
+    "timestamp": "2025-04-07T17:12:02.940434"
+  },
+  {
+    "id": "face_0042",
+    "face_color": "面色青黑",
+    "pulse_type": "促脉",
+    "syndrome": "水饮证",
+    "constitution": "阳虚质",
+    "herbs": [
+      "生地黄",
+      "羌活",
+      "杏仁"
+    ],
+    "formulas": [
+      "人参养营汤",
+      "猪苓汤"
+    ],
+    "features": [],
+    "description": "该患者面色青黑，脉象为促脉，辨证为水饮证。",
+    "timestamp": "2025-04-07T17:12:02.940440"
+  },
+  {
+    "id": "face_0043",
+    "face_color": "面色黄",
+    "pulse_type": "濡脉",
+    "syndrome": "寒证",
+    "constitution": "湿热质",
+    "herbs": [
+      "半夏",
+      "陈皮",
+      "石膏"
+    ],
+    "formulas": [
+      "归脾汤"
+    ],
+    "features": [],
+    "description": "该患者面色黄，脉象为濡脉，辨证为寒证。",
+    "timestamp": "2025-04-07T17:12:02.940446"
+  },
+  {
+    "id": "face_0044",
+    "face_color": "面色淡白",
+    "pulse_type": "滑脉",
+    "syndrome": "津液亏虚",
+    "constitution": "阴虚质",
+    "herbs": [
+      "黄连",
+      "半夏",
+      "黄芪"
+    ],
+    "formulas": [
+      "逍遥散",
+      "人参养营汤",
+      "八珍汤"
+    ],
+    "features": [
+      "唇红润",
+      "鼻红"
+    ],
+    "description": "该患者面色淡白，脉象为滑脉，辨证为津液亏虚。",
+    "timestamp": "2025-04-07T17:12:02.940453"
+  },
+  {
+    "id": "face_0045",
+    "face_color": "面色黧黑",
+    "pulse_type": "实脉",
+    "syndrome": "痰饮证",
+    "constitution": "气郁质",
+    "herbs": [
+      "人参",
+      "板蓝根",
+      "防风",
+      "附子",
+      "羌活",
+      "白芍",
+      "茯苓"
+    ],
+    "formulas": [
+      "安宫牛黄丸",
+      "黄连解毒汤"
+    ],
+    "features": [
+      "鼻红"
+    ],
+    "description": "该患者面色黧黑，脉象为实脉，辨证为痰饮证。",
+    "timestamp": "2025-04-07T17:12:02.940460"
+  },
+  {
+    "id": "face_0046",
+    "face_color": "面色黧黑",
+    "pulse_type": "代脉",
+    "syndrome": "阴虚证",
+    "constitution": "气郁质",
+    "herbs": [
+      "天麻",
+      "前胡",
+      "生地黄"
+    ],
+    "formulas": [
+      "猪苓汤"
+    ],
+    "features": [
+      "唇暗紫",
+      "面部正常"
+    ],
+    "description": "该患者面色黧黑，脉象为代脉，辨证为阴虚证。",
+    "timestamp": "2025-04-07T17:12:02.940467"
+  },
+  {
+    "id": "face_0047",
+    "face_color": "面色黄",
+    "pulse_type": "虚脉",
+    "syndrome": "痰饮证",
+    "constitution": "阳虚质",
+    "herbs": [
+      "艾叶",
+      "附子",
+      "葛根",
+      "菊花",
+      "天麻",
+      "黄柏"
+    ],
+    "formulas": [
+      "玉屏风散",
+      "左金丸"
+    ],
+    "features": [
+      "唇暗紫",
+      "鼻白",
+      "面部水肿"
+    ],
+    "description": "该患者面色黄，脉象为虚脉，辨证为痰饮证。",
+    "timestamp": "2025-04-07T17:12:02.940475"
+  },
+  {
+    "id": "face_0048",
+    "face_color": "面色黄",
+    "pulse_type": "滑脉",
+    "syndrome": "风湿证",
+    "constitution": "特禀质",
+    "herbs": [
+      "丹参",
+      "肉桂",
+      "附子"
+    ],
+    "formulas": [
+      "炙甘草汤"
+    ],
+    "features": [
+      "唇干裂"
+    ],
+    "description": "该患者面色黄，脉象为滑脉，辨证为风湿证。",
+    "timestamp": "2025-04-07T17:12:02.940481"
+  },
+  {
+    "id": "face_0049",
+    "face_color": "面色晦暗",
+    "pulse_type": "滑脉",
+    "syndrome": "火证",
+    "constitution": "平和质",
+    "herbs": [
+      "附子",
+      "大青叶",
+      "薄荷"
+    ],
+    "formulas": [
+      "六味地黄丸",
+      "桑菊饮",
+      "大青龙汤"
+    ],
+    "features": [
+      "唇红润",
+      "面部正常"
+    ],
+    "description": "该患者面色晦暗，脉象为滑脉，辨证为火证。",
+    "timestamp": "2025-04-07T17:12:02.940488"
+  }
+]

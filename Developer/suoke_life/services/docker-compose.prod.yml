@@ -1,0 +1,138 @@
+# 索克生活微服务Docker Compose配置 - 生产环境
+
+# API网关服务
+services:
+  api-gateway:
+    image: ${ALIYUN_REGISTRY}/${ALIYUN_NAMESPACE}/api-gateway:${VERSION}
+    ports:
+      - "${API_GATEWAY_PORT}:${API_GATEWAY_PORT}"
+    environment:
+      - TZ=${TZ}
+      - AUTH_SERVICE_HOST=${AUTH_SERVICE_HOST}
+      - AUTH_SERVICE_PORT=${AUTH_SERVICE_PORT}
+      - USER_SERVICE_HOST=${USER_SERVICE_HOST}
+      - USER_SERVICE_PORT=${USER_SERVICE_PORT}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - LOG_FORMAT=${LOG_FORMAT}
+      - LOG_OUTPUT=${LOG_OUTPUT}
+      - METRICS_ENABLED=${METRICS_ENABLED}
+      - TRACE_ENABLED=${TRACE_ENABLED}
+      - API_GATEWAY_PORT=${API_GATEWAY_PORT}
+      - API_GATEWAY_READ_TIMEOUT=${API_GATEWAY_READ_TIMEOUT}
+      - API_GATEWAY_WRITE_TIMEOUT=${API_GATEWAY_WRITE_TIMEOUT}
+      - API_GATEWAY_MAX_HEADER_BYTES=${API_GATEWAY_MAX_HEADER_BYTES}
+    volumes:
+      - ./api-gateway/configs:/app/configs
+      - ./logs/api-gateway:/app/logs
+    depends_on:
+      - auth-service
+      - user-service
+    networks:
+      - suoke-network
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+      replicas: 2
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${API_GATEWAY_PORT}/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  # 认证服务
+  auth-service:
+    image: ${ALIYUN_REGISTRY}/${ALIYUN_NAMESPACE}/auth-service:${VERSION}
+    environment:
+      - TZ=${TZ}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_CHARSET=${DB_CHARSET}
+      - DB_MAX_IDLE_CONNS=${DB_MAX_IDLE_CONNS}
+      - DB_MAX_OPEN_CONNS=${DB_MAX_OPEN_CONNS}
+      - DB_CONN_MAX_LIFETIME=${DB_CONN_MAX_LIFETIME}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_DB=${REDIS_DB}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_ACCESS_TOKEN_EXPIRY=${JWT_ACCESS_TOKEN_EXPIRY}
+      - JWT_REFRESH_TOKEN_EXPIRY=${JWT_REFRESH_TOKEN_EXPIRY}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - LOG_FORMAT=${LOG_FORMAT}
+      - LOG_OUTPUT=${LOG_OUTPUT}
+      - METRICS_ENABLED=${METRICS_ENABLED}
+      - TRACE_ENABLED=${TRACE_ENABLED}
+      - AUTH_SERVICE_PORT=${AUTH_SERVICE_PORT}
+    volumes:
+      - ./auth-service/configs:/app/configs
+      - ./logs/auth-service:/app/logs
+    networks:
+      - suoke-network
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+      replicas: 2
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${AUTH_SERVICE_PORT}/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  # 用户服务
+  user-service:
+    image: ${ALIYUN_REGISTRY}/${ALIYUN_NAMESPACE}/user-service:${VERSION}
+    environment:
+      - TZ=${TZ}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_CHARSET=${DB_CHARSET}
+      - DB_MAX_IDLE_CONNS=${DB_MAX_IDLE_CONNS}
+      - DB_MAX_OPEN_CONNS=${DB_MAX_OPEN_CONNS}
+      - DB_CONN_MAX_LIFETIME=${DB_CONN_MAX_LIFETIME}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_DB=${REDIS_DB}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - LOG_FORMAT=${LOG_FORMAT}
+      - LOG_OUTPUT=${LOG_OUTPUT}
+      - METRICS_ENABLED=${METRICS_ENABLED}
+      - TRACE_ENABLED=${TRACE_ENABLED}
+      - USER_SERVICE_PORT=${USER_SERVICE_PORT}
+    volumes:
+      - ./user-service/configs:/app/configs
+      - ./logs/user-service:/app/logs
+    networks:
+      - suoke-network
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+      replicas: 2
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${USER_SERVICE_PORT}/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+# 网络配置
+networks:
+  suoke-network:
+    driver: bridge

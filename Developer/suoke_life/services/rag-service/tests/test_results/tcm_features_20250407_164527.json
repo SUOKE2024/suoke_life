@@ -1,0 +1,212 @@
+[
+  {
+    "result": {
+      "status": "success",
+      "features": {
+        "analyzed_at": "2025-04-07T16:45:30+08:00",
+        "model": "suoke-tcm-v2.0",
+        "tongue_analysis": {
+          "coating": "薄白苔",
+          "color": "淡红舌",
+          "cracks": [
+            {
+              "depth": "浅",
+              "position": "center",
+              "size": "小"
+            }
+          ],
+          "diagnosis": {
+            "primary": "气虚",
+            "secondary": "阴虚"
+          },
+          "moisture": 0.75,
+          "shape": "正常"
+        }
+      },
+      "metadata": {
+        "feature_type": "tongue",
+        "mode": "simulation",
+        "options": {
+          "detailed": true
+        }
+      }
+    },
+    "test_case": {
+      "Name": "舌诊分析",
+      "FeatureType": "tongue",
+      "InputFile": "./test_data/images/tongue_sample.jpg",
+      "Options": {
+        "detailed": true
+      }
+    },
+    "timestamp": "2025-04-07T16:45:30+08:00"
+  },
+  {
+    "result": {
+      "status": "success",
+      "features": {
+        "analyzed_at": "2025-04-07T16:45:30+08:00",
+        "face_analysis": {
+          "cheeks": "色黄",
+          "chin": "色淡",
+          "color": "偏黄",
+          "complexion": "较暗淡",
+          "diagnosis": {
+            "primary": "脾虚湿困",
+            "secondary": "肝郁"
+          },
+          "forehead": "色暗"
+        },
+        "model": "suoke-tcm-v2.0"
+      },
+      "metadata": {
+        "feature_type": "face",
+        "mode": "simulation",
+        "options": {
+          "detailed": true
+        }
+      }
+    },
+    "test_case": {
+      "Name": "面诊分析",
+      "FeatureType": "face",
+      "InputFile": "./test_data/images/face_sample.jpg",
+      "Options": {
+        "detailed": true
+      }
+    },
+    "timestamp": "2025-04-07T16:45:30+08:00"
+  },
+  {
+    "result": {
+      "status": "success",
+      "features": {
+        "analyzed_at": "2025-04-07T16:45:30+08:00",
+        "model": "suoke-tcm-v2.0",
+        "pulse_analysis": {
+          "diagnosis": {
+            "primary": "肝郁气滞",
+            "secondary": "气血亏虚"
+          },
+          "left_chi": "细弱",
+          "left_cun": "弦",
+          "left_guan": "弦细",
+          "rate": 78,
+          "regularity": 0.9,
+          "rhythm": "规律",
+          "right_chi": "细弱",
+          "right_cun": "弦",
+          "right_guan": "弦",
+          "strength": "中等",
+          "type": "弦脉"
+        }
+      },
+      "metadata": {
+        "feature_type": "pulse",
+        "mode": "simulation",
+        "options": {
+          "detailed": true
+        }
+      }
+    },
+    "test_case": {
+      "Name": "脉诊分析",
+      "FeatureType": "pulse",
+      "InputFile": "./test_data/audio/pulse_sample.mp3",
+      "Options": {
+        "detailed": true
+      }
+    },
+    "timestamp": "2025-04-07T16:45:30+08:00"
+  },
+  {
+    "result": {
+      "status": "success",
+      "features": {
+        "analyzed_at": "2025-04-07T16:45:30+08:00",
+        "model": "suoke-tcm-v2.0",
+        "voice_analysis": {
+          "clarity": 0.8,
+          "diagnosis": {
+            "primary": "肺气不足",
+            "secondary": "心神不宁"
+          },
+          "pitch": "偏高",
+          "speech_rate": "正常",
+          "tone": "中等",
+          "tremor": 0.2,
+          "volume": "偏弱"
+        }
+      },
+      "metadata": {
+        "feature_type": "voice",
+        "mode": "simulation",
+        "options": {
+          "detailed": true
+        }
+      }
+    },
+    "test_case": {
+      "Name": "声音分析",
+      "FeatureType": "voice",
+      "InputFile": "./test_data/audio/voice_sample.mp3",
+      "Options": {
+        "detailed": true
+      }
+    },
+    "timestamp": "2025-04-07T16:45:30+08:00"
+  },
+  {
+    "result": {
+      "status": "success",
+      "features": {
+        "analyzed_at": "2025-04-07T16:45:30+08:00",
+        "constitution_analysis": {
+          "characteristics": [
+            "易疲劳",
+            "气短",
+            "自汗",
+            "舌淡",
+            "脉弱"
+          ],
+          "primary_type": "气虚质",
+          "recommendations": [
+            "饮食宜温补脾肺",
+            "适当运动，避免过度疲劳",
+            "情志调养，保持心情舒畅",
+            "推荐食疗：人参、黄芪、白术、大枣"
+          ],
+          "scores": {
+            "平和质": 0.35,
+            "气虚质": 0.75,
+            "气郁质": 0.25,
+            "湿热质": 0.32,
+            "特禀质": 0.18,
+            "痰湿质": 0.38,
+            "血瘀质": 0.28,
+            "阳虚质": 0.42,
+            "阴虚质": 0.65
+          },
+          "secondary_type": "阴虚质"
+        },
+        "model": "suoke-tcm-v2.0"
+      },
+      "metadata": {
+        "feature_type": "constitution",
+        "mode": "simulation",
+        "options": {
+          "detailed": true
+        }
+      }
+    },
+    "test_case": {
+      "Name": "体质辨识",
+      "FeatureType": "constitution",
+      "InputFile": "",
+      "Options": {
+        "detailed": true
+      }
+    },
+    "timestamp": "2025-04-07T16:45:30+08:00"
+  }
+]

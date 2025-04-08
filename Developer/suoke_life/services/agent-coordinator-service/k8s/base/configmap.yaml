@@ -1,0 +1,55 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: agent-coordinator-config
+data:
+  config.yaml: |
+    server:
+      port: 8080
+      host: "0.0.0.0"
+      read_timeout: 60s
+      write_timeout: 60s
+      idle_timeout: 120s
+      shutdown_timeout: 30s
+      
+    logging:
+      level: "info"
+      format: "json"
+      output: "stdout"
+      
+    services:
+      auth_service:
+        url: "http://auth-service/api/v1"
+        timeout: 30s
+        retry: 3
+        retry_interval: 500ms
+      
+      knowledge_graph_service:
+        url: "http://knowledge-graph-service/api/v1"
+        timeout: 30s
+        retry: 3
+        retry_interval: 500ms
+      
+      rag_service:
+        url: "http://rag-service/api/v1"
+        timeout: 60s
+        retry: 2
+        retry_interval: 1s
+      
+      xiaoke_service:
+        url: "http://xiaoke-service/api/v1"
+        timeout: 120s
+        retry: 2
+        retry_interval: 2s
+      
+    database:
+      type: "sqlite"
+      connection: "/app/data/agent-coordinator.db"
+      
+    session:
+      timeout: 3600s
+      cleanup_interval: 300s
+      
+    workflow:
+      default_timeout: 300s
+      max_concurrent_tasks: 10 

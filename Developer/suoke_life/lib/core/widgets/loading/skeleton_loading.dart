@@ -555,7 +555,7 @@ class ContentPlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final effectiveColor =
-        color ?? Theme.of(context).disabledColor.withOpacity(0.2);
+        color ?? Theme.of(context).disabledColor.withAlpha((0.2 * 255).toInt());
 
     // 根据形状选择实现方式
     Widget placeholder;

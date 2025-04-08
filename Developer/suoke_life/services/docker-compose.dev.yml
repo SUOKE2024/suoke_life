@@ -1,0 +1,120 @@
+# 索克生活微服务Docker Compose开发环境配置
+
+# API网关服务
+services:
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    image: api-gateway:latest
+    ports:
+      - "${API_GATEWAY_PORT}:${API_GATEWAY_PORT}"
+    environment:
+      - TZ=${TZ}
+      - AUTH_SERVICE_HOST=host.docker.internal
+      - AUTH_SERVICE_PORT=${AUTH_SERVICE_PORT}
+      - USER_SERVICE_HOST=host.docker.internal
+      - USER_SERVICE_PORT=${USER_SERVICE_PORT}
+      - LOG_LEVEL=debug
+      - LOG_FORMAT=${LOG_FORMAT}
+      - LOG_OUTPUT=${LOG_OUTPUT}
+      - METRICS_ENABLED=${METRICS_ENABLED}
+      - TRACE_ENABLED=${TRACE_ENABLED}
+      - API_GATEWAY_PORT=${API_GATEWAY_PORT}
+      - API_GATEWAY_READ_TIMEOUT=${API_GATEWAY_READ_TIMEOUT}
+      - API_GATEWAY_WRITE_TIMEOUT=${API_GATEWAY_WRITE_TIMEOUT}
+      - API_GATEWAY_MAX_HEADER_BYTES=${API_GATEWAY_MAX_HEADER_BYTES}
+    volumes:
+      - ./api-gateway/configs:/app/configs
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - suoke-network
+    restart: unless-stopped
+
+  # 认证服务
+  auth-service:
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+    image: auth-service:latest
+    ports:
+      - "${AUTH_SERVICE_PORT}:${AUTH_SERVICE_PORT}"
+    environment:
+      - TZ=${TZ}
+      - DB_HOST=host.docker.internal
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_CHARSET=${DB_CHARSET}
+      - DB_MAX_IDLE_CONNS=${DB_MAX_IDLE_CONNS}
+      - DB_MAX_OPEN_CONNS=${DB_MAX_OPEN_CONNS}
+      - DB_CONN_MAX_LIFETIME=${DB_CONN_MAX_LIFETIME}
+      - REDIS_HOST=host.docker.internal
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_DB=${REDIS_DB}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_ACCESS_TOKEN_EXPIRY=${JWT_ACCESS_TOKEN_EXPIRY}
+      - JWT_REFRESH_TOKEN_EXPIRY=${JWT_REFRESH_TOKEN_EXPIRY}
+      - LOG_LEVEL=debug
+      - LOG_FORMAT=${LOG_FORMAT}
+      - LOG_OUTPUT=${LOG_OUTPUT}
+      - METRICS_ENABLED=${METRICS_ENABLED}
+      - TRACE_ENABLED=${TRACE_ENABLED}
+      - AUTH_SERVICE_PORT=${AUTH_SERVICE_PORT}
+    volumes:
+      - ./auth-service/configs:/app/configs
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - suoke-network
+    restart: unless-stopped
+
+  # 用户服务
+  user-service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    image: user-service:latest
+    ports:
+      - "${USER_SERVICE_PORT}:${USER_SERVICE_PORT}"
+    environment:
+      - TZ=${TZ}
+      - DB_HOST=host.docker.internal
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_CHARSET=${DB_CHARSET}
+      - DB_MAX_IDLE_CONNS=${DB_MAX_IDLE_CONNS}
+      - DB_MAX_OPEN_CONNS=${DB_MAX_OPEN_CONNS}
+      - DB_CONN_MAX_LIFETIME=${DB_CONN_MAX_LIFETIME}
+      - REDIS_HOST=host.docker.internal
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_DB=${REDIS_DB}
+      - LOG_LEVEL=debug
+      - LOG_FORMAT=${LOG_FORMAT}
+      - LOG_OUTPUT=${LOG_OUTPUT}
+      - METRICS_ENABLED=${METRICS_ENABLED}
+      - TRACE_ENABLED=${TRACE_ENABLED}
+      - USER_SERVICE_PORT=${USER_SERVICE_PORT}
+    volumes:
+      - ./user-service/configs:/app/configs
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - suoke-network
+    restart: unless-stopped
+
+# 网络配置
+networks:
+  suoke-network:
+    driver: bridge
+
+# 数据卷配置
+volumes:
+  mysql-data:
+  redis-data: 

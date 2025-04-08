@@ -10,7 +10,7 @@ type MockHttpClient struct {
 			Headers map[string]string
 		}
 	}
-	
+
 	// 配置响应
 	PostResponse struct {
 		Data  []byte
@@ -30,7 +30,7 @@ func (m *MockHttpClient) Post(url string, body interface{}, headers map[string]s
 		Body:    body,
 		Headers: headers,
 	})
-	
+
 	// 返回配置的响应
 	return m.PostResponse.Data, m.PostResponse.Error
-} 
+}

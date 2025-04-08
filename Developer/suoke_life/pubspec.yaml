@@ -1,33 +1,12 @@
 name: suoke_life
-description: "索克生活APP - 现代生活（健康养生）管理平台"
-# The following line prevents the package from being accidentally published to
-# pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-
-# The following defines the version and build number for your application.
-# A version number is three numbers separated by dots, like 1.2.43
-# followed by an optional build number separated by a +.
-# Both the version and the builder number may be overridden in flutter
-# build by specifying --build-name and --build-number, respectively.
-# In Android, build-name is used as versionName while build-number used as versionCode.
-# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
-# In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.
-# Read more about iOS versioning at
-# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-# In Windows, build-name is used as the major, minor, and patch parts
-# of the product and file versions while build-number is used as the build suffix.
+description: A comprehensive health management platform integrating traditional Chinese medicine and modern preventive medicine concepts.
+publish_to: 'none'
 version: 1.0.0+1
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
   flutter: ">=3.10.0"
 
-# Dependencies specify other packages that your package needs in order to work.
-# To automatically upgrade your package dependencies to the latest versions
-# consider running `flutter pub upgrade --major-versions`. Alternatively,
-# dependencies can be manually updated by changing the version numbers below to
-# the latest version available on pub.dev. To see which dependencies have newer
-# versions available, run `flutter pub outdated`.
 dependencies:
   flutter:
     sdk: flutter
@@ -35,42 +14,86 @@ dependencies:
     sdk: flutter
   
   # UI
-  cupertino_icons: ^1.0.8
-  flutter_svg: ^2.0.9
-  lottie: ^3.1.0
+  cupertino_icons: ^1.0.5
+  flutter_svg: ^2.0.6
+  google_fonts: ^4.0.4
+  cached_network_image: ^3.2.3
+  lottie: ^3.3.1
   shimmer: ^3.0.0
-  flutter_markdown: ^0.7.0
-  cached_network_image: ^3.3.1
-  flutter_staggered_grid_view: ^0.7.0
+  flutter_screenutil: ^5.8.4
+  
+  # Architecture
+  flutter_riverpod: ^2.4.4
+  riverpod_annotation: ^2.2.0
+  freezed_annotation: ^2.4.1
+  json_annotation: ^4.8.1
+  auto_route: ^10.0.1
+  
+  # Storage
+  sqflite: ^2.2.8+4
+  path: ^1.8.3
+  path_provider: ^2.0.15
+  flutter_secure_storage: ^8.0.0
+  shared_preferences: ^2.1.2
+  
+  # Network
+  dio: ^5.2.1+1
+  connectivity_plus: ^4.0.1
+  http: ^1.2.0
+  
+  # Authentication
+  jwt_decoder: ^2.0.1
+  local_auth: ^2.1.6
+  
+  # Utils
+  intl: ^0.19.0
+  logger: ^1.4.0
+  uuid: ^4.5.1
+  collection: ^1.17.1
+  rxdart: ^0.27.7
+  url_launcher: ^6.1.12
+  equatable: ^2.0.5
+  flutter_dotenv: ^5.1.0
+  
+  # Sensors & Hardware
+  sensors_plus: ^3.0.2
+  permission_handler: ^10.4.0
+  camera: ^0.10.5+2
+  image_picker: ^1.0.0
+  audio_session: ^0.1.16
+  just_audio: ^0.9.34
+  record: ^4.4.4
+  geolocator: ^9.0.2
+  
+  # AI & ML
+  tflite_flutter: ^0.10.1
+  google_ml_kit: ^0.16.1
+  
+  # FFI 与 Rust 集成相关
+  ffi: ^2.1.0
+  flutter_rust_bridge: ^1.82.1
   
   # 状态管理
-  flutter_riverpod: ^2.4.0
-  riverpod_annotation: ^2.3.0
+  flutter_staggered_grid_view: ^0.7.0
   
   # 路由
-  auto_route: ^7.8.0
+  flutter_launcher_icons: ^0.13.1
+  image: ^4.5.3
   
-  # 网络和API
-  dio: ^5.3.2
-  http: ^1.1.0
-  connectivity_plus: ^4.0.2
+  # 后台服务
+  flutter_background_service: ^5.0.5
+  flutter_background_service_android: ^6.2.2
   
-  # 本地存储
-  sqflite: ^2.3.0
-  path: ^1.8.3
-  path_provider: ^2.1.5
-  flutter_secure_storage: ^8.0.0
-  shared_preferences: ^2.2.2
+  # 设备传感器和信息
+  device_info_plus: ^9.0.2
+  activity_recognition_flutter: ^5.0.0
+  light: ^3.0.0 
+  noise_meter: ^5.0.2
+  workmanager: ^0.5.2
   
-  # 工具
-  intl: ^0.19.0
-  uuid: ^4.5.1
-  logger: ^2.0.1
-  equatable: ^2.0.5
-  meta: ^1.10.0
-  dartz: ^0.10.1
-  package_info_plus: ^5.0.1
-  json_annotation: ^4.9.0
+  # 加密和安全
+  encrypt: ^5.0.3
+  crypto: ^3.0.3
   
   # 数据可视化
   fl_chart: ^0.63.0
@@ -80,99 +103,72 @@ dependencies:
   # 多媒体与多模态
   speech_to_text: ^6.3.0
   flutter_tts: ^4.2.2
-  camera: ^0.10.5+2
-  image_picker: ^1.0.0
   video_player: ^2.8.4
-  record: ^5.0.4
   
-  # AI与机器学习
-  google_ml_kit: ^0.16.3
-  # tflite_flutter: ^0.10.4
+  # 机器学习
+  vector_math: ^2.1.4
   
-  # 位置服务
-  geolocator: ^9.0.2
+  # 添加缺失的依赖
+  package_info_plus: ^8.3.0
+  web: ^1.1.1
+  dartz: ^0.10.1
+  internet_connection_checker: ^1.0.0+1
+  mockito: ^5.4.5
+  auto_route_generator: ^10.0.1
   
-  # 通知
-  flutter_local_notifications: ^15.1.0+1
-  
-  # 实时通信
+  # 区块链相关
+  web3dart: ^2.7.3
   web_socket_channel: ^2.4.0
-  # 暂时注释Firebase相关依赖，以解决iOS Pod安装问题
-  # firebase_messaging: ^14.7.16
-  flutter_launcher_icons: ^0.14.3
-  image: ^4.5.3
-  permission_handler: ^11.4.0
-  flutter_dotenv: ^5.2.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   integration_test:
     sdk: flutter
-
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
   flutter_lints: ^2.0.2
   
   # 代码生成
-  build_runner: ^2.4.6
-  auto_route_generator: ^7.3.0
-  json_serializable: ^6.7.1
-  retrofit_generator: ^8.1.0
-  riverpod_generator: ^2.3.2
-  sqflite_common_ffi: ^2.3.2+1
-  mockito: ^5.4.2
-  mocktail: ^1.0.4
+  build_runner: ^2.4.14
+  freezed: ^2.4.5          # 与freezed_annotation 2.4.1保持兼容
+  json_serializable: ^6.8.0 # 最新稳定版6.x
+  riverpod_generator: ^2.4.0 # 匹配Riverpod 2.4.x
+  test: any
   golden_toolkit: ^0.15.0
   network_image_mock: ^2.1.1
   collection: ^1.17.2
 
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
-
-# The following section is specific to Flutter packages.
 flutter:
-
-  # The following line ensures that the Material Icons font is
-  # included with your application, so that you can use the icons in
-  # the material Icons class.
   uses-material-design: true
-
-  # To add assets to your application, add an assets section, like this:
+  generate: true
   assets:
     - assets/images/
     - assets/icons/
     - assets/animations/
-    - assets/ml_models/
-    - assets/data/
     - assets/datasets/
-    - assets/images/avatars/
+    - assets/contracts/
+    - .env
+    - .env.development
+    - .env.test
+    - .env.production
 
-  # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/to/resolution-aware-images
+  fonts:
+    - family: PingFang SC
+      fonts:
+        - asset: assets/fonts/PingFang-SC-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/PingFang-SC-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/PingFang-SC-Semibold.ttf
+          weight: 600
 
-  # For details regarding adding assets from package dependencies, see
-  # https://flutter.dev/to/asset-from-package
+flutter_intl:
+  enabled: true
+  class_name: S
+  main_locale: zh_CN
+  arb_dir: assets/locales/arb
+  output_dir: lib/generated
+  use_deferred_loading: false
 
-  # To add custom fonts to your application, add a fonts section here,
-  # in this "flutter" section. Each entry in this list should have a
-  # "family" key with the font family name, and a "fonts" key with a
-  # list giving the asset and other descriptors for the font. For
-  # example:
-  # fonts:
-  #   - family: CustomFont
-  #     fonts:
-  #       - asset: assets/fonts/CustomFont-Regular.ttf
-  #       - asset: assets/fonts/CustomFont-Bold.ttf
-  #         weight: 700
-  #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/to/font-from-package
-
-# Flutter Launcher Icons 配置
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
@@ -180,7 +176,7 @@ flutter_launcher_icons:
   image_path_ios: "assets/images/app_icon.jpg"
   remove_alpha_ios: true
   min_sdk_android: 21
-  adaptive_icon_background: "#35BB78" # 索克绿色背景
+  adaptive_icon_background: "#35BB78"
   adaptive_icon_foreground: "assets/images/app_icon.jpg"
   web:
     generate: true

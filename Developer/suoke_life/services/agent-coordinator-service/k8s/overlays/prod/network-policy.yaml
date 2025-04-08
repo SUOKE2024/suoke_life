@@ -1,0 +1,57 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: agent-coordinator-network-policy
+spec:
+  podSelector:
+    matchLabels:
+      app: agent-coordinator
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+    - namespaceSelector:
+        matchLabels:
+          name: suoke-prod
+    - podSelector:
+        matchLabels:
+          app: api-gateway
+    ports:
+    - protocol: TCP
+      port: 8080
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+    - namespaceSelector:
+        matchLabels:
+          name: suoke-prod
+    # 允许访问内部服务
+    - podSelector:
+        matchLabels:
+          app: auth-service
+    - podSelector:
+        matchLabels:
+          app: knowledge-graph-service
+    - podSelector:
+        matchLabels:
+          app: rag-service
+    - podSelector:
+        matchLabels:
+          app: xiaoke-service
+    # 允许DNS查询
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
+    # 允许HTTP/HTTPS出站流量
+    - protocol: TCP
+      port: 80
+    - protocol: TCP
+      port: 443 

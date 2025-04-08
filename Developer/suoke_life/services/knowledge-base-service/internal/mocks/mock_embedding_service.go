@@ -2,7 +2,7 @@ package mocks
 
 import (
 	"context"
-	
+
 	"github.com/stretchr/testify/mock"
 )
 
@@ -27,4 +27,4 @@ func (m *MockEmbeddingService) GetBatchEmbeddings(ctx context.Context, texts []s
 		return nil, args.Error(1)
 	}
 	return args.Get(0).([][]float32), args.Error(1)
-} 
+}

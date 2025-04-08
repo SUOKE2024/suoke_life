@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  rag-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.go
+    container_name: suoke-rag-service
+    restart: always
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./config:/app/config
+    ports:
+      - "8080:8080"
+    networks:
+      - suoke-net
+
+networks:
+  suoke-net:
+    driver: bridge 

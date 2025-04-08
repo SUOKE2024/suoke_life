@@ -1,98 +1,102 @@
 package logger
 
 import (
-	"fmt"
-	"log"
+	"context"
 	"os"
+
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
-// Logger 定义日志接口
-type Logger interface {
-	Debug(msg string, keysAndValues ...interface{})
-	Info(msg string, keysAndValues ...interface{})
-	Warn(msg string, keysAndValues ...interface{})
-	Error(msg string, keysAndValues ...interface{})
-	Fatal(msg string, keysAndValues ...interface{})
-}
+type contextKey string
 
-// StructuredLogger 结构化日志实现
-type StructuredLogger struct {
-	debugLogger *log.Logger
-	infoLogger  *log.Logger
-	warnLogger  *log.Logger
-	errorLogger *log.Logger
-	fatalLogger *log.Logger
-}
+const loggerKey contextKey = "logger"
 
-// NewStructuredLogger 创建新的结构化日志记录器
-func NewStructuredLogger() Logger {
-	return &StructuredLogger{
-		debugLogger: log.New(os.Stdout, "DEBUG: ", log.Ldate|log.Ltime|log.Lshortfile),
-		infoLogger:  log.New(os.Stdout, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile),
-		warnLogger:  log.New(os.Stdout, "WARN: ", log.Ldate|log.Ltime|log.Lshortfile),
-		errorLogger: log.New(os.Stderr, "ERROR: ", log.Ldate|log.Ltime|log.Lshortfile),
-		fatalLogger: log.New(os.Stderr, "FATAL: ", log.Ldate|log.Ltime|log.Lshortfile),
-	}
-}
+var defaultLogger *zap.SugaredLogger
 
-// formatKeyValues 格式化键值对
-func formatKeyValues(keysAndValues ...interface{}) string {
-	if len(keysAndValues) == 0 {
-		return ""
-	}
-	
-	result := " "
-	for i := 0; i < len(keysAndValues); i += 2 {
-		key := keysAndValues[i]
-		
-		var value interface{} = "MISSING"
-		if i+1 < len(keysAndValues) {
-			value = keysAndValues[i+1]
-		}
-		
-		result += key.(string) + "=" + formatValue(value) + " "
-	}
-	
-	return result
-}
+// 初始化默认日志记录器
+func init() {
+	// 创建基础生产环境配置
+	config := zap.NewProductionConfig()
+	config.EncoderConfig.TimeKey = "timestamp"
+	config.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
 
-// formatValue 格式化值
-func formatValue(value interface{}) string {
-	if value == nil {
-		return "nil"
-	}
-	
-	switch v := value.(type) {
-	case string:
-		return `"` + v + `"`
-	case error:
-		return `"` + v.Error() + `"`
+	// 根据环境变量调整日志级别
+	logLevel := os.Getenv("LOG_LEVEL")
+	switch logLevel {
+	case "debug":
+		config.Level = zap.NewAtomicLevelAt(zapcore.DebugLevel)
+	case "info":
+		config.Level = zap.NewAtomicLevelAt(zapcore.InfoLevel)
+	case "warn":
+		config.Level = zap.NewAtomicLevelAt(zapcore.WarnLevel)
+	case "error":
+		config.Level = zap.NewAtomicLevelAt(zapcore.ErrorLevel)
 	default:
-		return fmt.Sprintf("%v", v)
+		config.Level = zap.NewAtomicLevelAt(zapcore.InfoLevel)
 	}
+
+	// 构建日志记录器
+	logger, err := config.Build(
+		zap.AddCallerSkip(1),
+		zap.AddStacktrace(zapcore.ErrorLevel),
+	)
+	if err != nil {
+		// 使用控制台输出作为后备
+		logger = zap.NewExample()
+	}
+
+	defaultLogger = logger.Sugar()
 }
 
-// Debug 输出调试级别日志
-func (l *StructuredLogger) Debug(msg string, keysAndValues ...interface{}) {
-	l.debugLogger.Println(msg + formatKeyValues(keysAndValues...))
+// GetLogger 返回默认日志记录器
+func GetLogger() *zap.SugaredLogger {
+	return defaultLogger
 }
 
-// Info 输出信息级别日志
-func (l *StructuredLogger) Info(msg string, keysAndValues ...interface{}) {
-	l.infoLogger.Println(msg + formatKeyValues(keysAndValues...))
+// WithContext 将日志记录器添加到上下文
+func WithContext(ctx context.Context, logger *zap.SugaredLogger) context.Context {
+	return context.WithValue(ctx, loggerKey, logger)
 }
 
-// Warn 输出警告级别日志
-func (l *StructuredLogger) Warn(msg string, keysAndValues ...interface{}) {
-	l.warnLogger.Println(msg + formatKeyValues(keysAndValues...))
+// FromContext 从上下文获取日志记录器
+func FromContext(ctx context.Context) *zap.SugaredLogger {
+	if ctx == nil {
+		return defaultLogger
+	}
+	if logger, ok := ctx.Value(loggerKey).(*zap.SugaredLogger); ok {
+		return logger
+	}
+	return defaultLogger
 }
 
-// Error 输出错误级别日志
-func (l *StructuredLogger) Error(msg string, keysAndValues ...interface{}) {
-	l.errorLogger.Println(msg + formatKeyValues(keysAndValues...))
+// With 添加字段到日志记录器
+func With(fields ...interface{}) *zap.SugaredLogger {
+	return defaultLogger.With(fields...)
 }
 
-// Fatal 输出致命错误级别日志并退出程序
-func (l *StructuredLogger) Fatal(msg string, keysAndValues ...interface{}) {
-	l.fatalLogger.Fatalln(msg + formatKeyValues(keysAndValues...))
-} 
+// 标准日志方法，用于独立使用
+func Debug(msg string, keysAndValues ...interface{}) {
+	defaultLogger.Debugw(msg, keysAndValues...)
+}
+
+func Info(msg string, keysAndValues ...interface{}) {
+	defaultLogger.Infow(msg, keysAndValues...)
+}
+
+func Warn(msg string, keysAndValues ...interface{}) {
+	defaultLogger.Warnw(msg, keysAndValues...)
+}
+
+func Error(msg string, keysAndValues ...interface{}) {
+	defaultLogger.Errorw(msg, keysAndValues...)
+}
+
+func Fatal(msg string, keysAndValues ...interface{}) {
+	defaultLogger.Fatalw(msg, keysAndValues...)
+}
+
+// NewStructuredLogger 创建结构化日志器
+func NewStructuredLogger() *zap.SugaredLogger {
+	return defaultLogger
+}

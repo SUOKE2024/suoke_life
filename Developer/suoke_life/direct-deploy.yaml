@@ -1,0 +1,161 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: user-service-code
+  namespace: suoke
+data:
+  server.js: |
+    const express = require('express');
+    const bodyParser = require('body-parser');
+    const app = express();
+    const PORT = process.env.PORT || 3002;
+
+    app.use(bodyParser.json());
+
+    // 健康检查端点
+    app.get('/health', (req, res) => {
+      res.json({
+        status: 'ok',
+        timestamp: new Date().toISOString(),
+        service: 'user-service',
+        version: '1.0.0'
+      });
+    });
+
+    // 用户API
+    app.get('/users', (req, res) => {
+      res.json({
+        users: [
+          { id: 1, username: 'user1', email: 'user1@example.com' },
+          { id: 2, username: 'user2', email: 'user2@example.com' }
+        ]
+      });
+    });
+
+    app.get('/users/:id', (req, res) => {
+      res.json({
+        id: parseInt(req.params.id),
+        username: `user${req.params.id}`,
+        email: `user${req.params.id}@example.com`,
+        role: 'user',
+        profile: {
+          fullName: `用户 ${req.params.id}`,
+          avatar: `https://example.com/avatars/${req.params.id}.jpg`,
+          phone: `123-456-${req.params.id}`,
+          address: `示例地址 ${req.params.id}`,
+          createdAt: new Date().toISOString()
+        }
+      });
+    });
+
+    // 认证API
+    app.post('/auth/login', (req, res) => {
+      const { username, password } = req.body;
+      
+      if (username && password) {
+        res.json({
+          success: true,
+          user: {
+            id: 1,
+            username,
+            role: 'user'
+          },
+          token: 'mock-jwt-token-' + Date.now(),
+          expiresIn: 3600
+        });
+      } else {
+        res.status(400).json({
+          success: false,
+          message: '用户名和密码不能为空'
+        });
+      }
+    });
+
+    // 启动服务器
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`用户服务启动在端口: ${PORT}`);
+    });
+
+  package.json: |
+    {
+      "name": "user-service",
+      "version": "1.0.0",
+      "description": "索克生活用户服务",
+      "main": "server.js",
+      "scripts": {
+        "start": "node server.js"
+      },
+      "dependencies": {
+        "express": "^4.18.2",
+        "body-parser": "^1.20.2"
+      }
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service-direct
+  namespace: suoke
+  labels:
+    app: user-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: user-service-direct
+  template:
+    metadata:
+      labels:
+        app: user-service-direct
+    spec:
+      containers:
+      - name: user-service
+        image: node:18-alpine
+        imagePullPolicy: IfNotPresent
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            cd /app
+            npm install
+            npm start
+        ports:
+        - containerPort: 3002
+        resources:
+          requests:
+            cpu: 250m
+            memory: 512Mi
+        env:
+        - name: PORT
+          value: "3002"
+        volumeMounts:
+        - name: code-volume
+          mountPath: /app
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3002
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3002
+          initialDelaySeconds: 15
+          periodSeconds: 10
+      volumes:
+      - name: code-volume
+        configMap:
+          name: user-service-code
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+  namespace: suoke
+spec:
+  selector:
+    app: user-service-direct
+  ports:
+  - port: 80
+    targetPort: 3002
+  type: ClusterIP 

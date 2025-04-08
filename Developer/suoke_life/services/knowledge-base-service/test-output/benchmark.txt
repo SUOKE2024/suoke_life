@@ -1,0 +1,786 @@
+2025/04/07 17:17:03 警告: 未设置TEST_DB_CONNECTION_STRING环境变量，尝试使用testuser账户: host=localhost port=5432 user=testuser password=testpassword dbname=knowledge_base_test sslmode=disable
+2025/04/07 17:17:03 尝试连接数据库...
+2025/04/07 17:17:03 使用testuser连接失败，尝试使用postgres账户...
+--- FAIL: BenchmarkDocumentService_CreateDocument
+    document_service_bench_test.go:23: 设置文档服务失败: 连接数据库失败: 数据库连接测试失败: pq: role "postgres" does not exist
+2025/04/07 17:17:03 警告: 未设置TEST_DB_CONNECTION_STRING环境变量，尝试使用testuser账户: host=localhost port=5432 user=testuser password=testpassword dbname=knowledge_base_test sslmode=disable
+2025/04/07 17:17:03 尝试连接数据库...
+2025/04/07 17:17:03 使用testuser连接失败，尝试使用postgres账户...
+--- FAIL: BenchmarkDocumentService_SemanticSearch
+    document_service_bench_test.go:67: 设置文档服务失败: 连接数据库失败: 数据库连接测试失败: pq: role "postgres" does not exist
+goos: darwin
+goarch: arm64
+pkg: knowledge-base-service/internal/test/benchmark
+cpu: Apple M3
+BenchmarkSemanticSearch-8                   	   74992	     18022 ns/op	    5553 B/op	      57 allocs/op
+BenchmarkBatchDocumentCreation/ShortDocument-8         	   10000	    115132 ns/op	   33855 B/op	     373 allocs/op
+BenchmarkBatchDocumentCreation/MediumDocument-8        	    9651	    106308 ns/op	   37905 B/op	     373 allocs/op
+BenchmarkBatchDocumentCreation/LongDocument-8          	   10000	    118123 ns/op	   60692 B/op	     373 allocs/op
+FAIL
+exit status 1
+FAIL	knowledge-base-service/internal/test/benchmark	6.326s
+2025/04/07 17:17:09 警告: 未设置TEST_DB_CONNECTION_STRING环境变量，尝试使用testuser账户: host=localhost port=5432 user=testuser password=testpassword dbname=knowledge_base_test sslmode=disable
+2025/04/07 17:17:09 尝试连接数据库...
+2025/04/07 17:17:09 使用testuser连接失败，尝试使用postgres账户...
+--- FAIL: BenchmarkRealDocumentServiceCreate
+    document_service_bench_test.go:22: 设置文档服务失败: 连接数据库失败: 数据库连接测试失败: pq: role "postgres" does not exist
+2025/04/07 17:17:09 警告: 未设置TEST_DB_CONNECTION_STRING环境变量，尝试使用testuser账户: host=localhost port=5432 user=testuser password=testpassword dbname=knowledge_base_test sslmode=disable
+2025/04/07 17:17:09 尝试连接数据库...
+2025/04/07 17:17:09 使用testuser连接失败，尝试使用postgres账户...
+--- FAIL: BenchmarkRealSemanticSearch
+    document_service_bench_test.go:68: 设置文档服务失败: 连接数据库失败: 数据库连接测试失败: pq: role "postgres" does not exist
+2025/04/07 17:17:09 警告: 未设置TEST_DB_CONNECTION_STRING环境变量，尝试使用testuser账户: host=localhost port=5432 user=testuser password=testpassword dbname=knowledge_base_test sslmode=disable
+2025/04/07 17:17:09 尝试连接数据库...
+2025/04/07 17:17:09 使用testuser连接失败，尝试使用postgres账户...
+--- FAIL: BenchmarkRealGetDocumentByID
+    document_service_bench_test.go:169: 设置文档服务失败: 连接数据库失败: 数据库连接测试失败: pq: role "postgres" does not exist
+2025/04/07 17:17:09 警告: 未设置TEST_DB_CONNECTION_STRING环境变量，尝试使用testuser账户: host=localhost port=5432 user=testuser password=testpassword dbname=knowledge_base_test sslmode=disable
+2025/04/07 17:17:09 尝试连接数据库...
+2025/04/07 17:17:09 使用testuser连接失败，尝试使用postgres账户...
+--- FAIL: BenchmarkRealGetDocumentsByCategory
+    document_service_bench_test.go:192: 设置文档服务失败: 连接数据库失败: 数据库连接测试失败: pq: role "postgres" does not exist
+2025/04/07 17:17:09 警告: 未设置TEST_DB_CONNECTION_STRING环境变量，尝试使用testuser账户: host=localhost port=5432 user=testuser password=testpassword dbname=knowledge_base_test sslmode=disable
+2025/04/07 17:17:09 尝试连接数据库...
+2025/04/07 17:17:09 使用testuser连接失败，尝试使用postgres账户...
+--- FAIL: BenchmarkRealSearchDocuments
+    document_service_bench_test.go:237: 设置文档服务失败: 连接数据库失败: 数据库连接测试失败: pq: role "postgres" does not exist
+2025/04/07 17:17:09 警告: 未设置TEST_DB_CONNECTION_STRING环境变量，尝试使用testuser账户: host=localhost port=5432 user=testuser password=testpassword dbname=knowledge_base_test sslmode=disable
+2025/04/07 17:17:09 尝试连接数据库...
+2025/04/07 17:17:09 使用testuser连接失败，尝试使用postgres账户...
+--- FAIL: BenchmarkRealCreateDocument
+    document_service_bench_test.go:260: 设置文档服务失败: 连接数据库失败: 数据库连接测试失败: pq: role "postgres" does not exist
+2025/04/07 17:17:09 警告: 未设置TEST_DB_CONNECTION_STRING环境变量，尝试使用testuser账户: host=localhost port=5432 user=testuser password=testpassword dbname=knowledge_base_test sslmode=disable
+2025/04/07 17:17:09 尝试连接数据库...
+2025/04/07 17:17:09 使用testuser连接失败，尝试使用postgres账户...
+--- FAIL: BenchmarkRealUpdateDocument
+    document_service_bench_test.go:318: 设置文档服务失败: 连接数据库失败: 数据库连接测试失败: pq: role "postgres" does not exist
+2025/04/07 17:17:09 警告: 未设置TEST_DB_CONNECTION_STRING环境变量，尝试使用testuser账户: host=localhost port=5432 user=testuser password=testpassword dbname=knowledge_base_test sslmode=disable
+2025/04/07 17:17:09 尝试连接数据库...
+2025/04/07 17:17:09 使用testuser连接失败，尝试使用postgres账户...
+--- FAIL: BenchmarkDocumentRepositorySave
+    repository_bench_test.go:25: 设置数据库失败: 连接数据库失败: 数据库连接测试失败: pq: role "postgres" does not exist
+2025/04/07 17:17:09 警告: 未设置TEST_DB_CONNECTION_STRING环境变量，尝试使用testuser账户: host=localhost port=5432 user=testuser password=testpassword dbname=knowledge_base_test sslmode=disable
+2025/04/07 17:17:09 尝试连接数据库...
+2025/04/07 17:17:09 使用testuser连接失败，尝试使用postgres账户...
+--- FAIL: BenchmarkDocumentRepositoryFindByID
+    repository_bench_test.go:98: 设置数据库失败: 连接数据库失败: 数据库连接测试失败: pq: role "postgres" does not exist
+2025/04/07 17:17:09 警告: 未设置TEST_DB_CONNECTION_STRING环境变量，尝试使用testuser账户: host=localhost port=5432 user=testuser password=testpassword dbname=knowledge_base_test sslmode=disable
+2025/04/07 17:17:09 尝试连接数据库...
+2025/04/07 17:17:09 使用testuser连接失败，尝试使用postgres账户...
+--- FAIL: BenchmarkDocumentRepositoryUpdate
+    repository_bench_test.go:184: 设置数据库失败: 连接数据库失败: 数据库连接测试失败: pq: role "postgres" does not exist
+2025/04/07 17:17:09 警告: 未设置TEST_DB_CONNECTION_STRING环境变量，尝试使用testuser账户: host=localhost port=5432 user=testuser password=testpassword dbname=knowledge_base_test sslmode=disable
+2025/04/07 17:17:09 尝试连接数据库...
+2025/04/07 17:17:09 使用testuser连接失败，尝试使用postgres账户...
+--- FAIL: BenchmarkPostgresDocumentRepository_Save
+    repository_bench_test.go:261: 设置数据库失败: 连接数据库失败: 数据库连接测试失败: pq: role "postgres" does not exist
+2025/04/07 17:17:09 警告: 未设置TEST_DB_CONNECTION_STRING环境变量，尝试使用testuser账户: host=localhost port=5432 user=testuser password=testpassword dbname=knowledge_base_test sslmode=disable
+2025/04/07 17:17:09 尝试连接数据库...
+2025/04/07 17:17:09 使用testuser连接失败，尝试使用postgres账户...
+--- FAIL: BenchmarkPostgresDocumentRepository_FindByID
+    repository_bench_test.go:320: 设置数据库失败: 连接数据库失败: 数据库连接测试失败: pq: role "postgres" does not exist
+2025/04/07 17:17:09 警告: 未设置TEST_DB_CONNECTION_STRING环境变量，尝试使用testuser账户: host=localhost port=5432 user=testuser password=testpassword dbname=knowledge_base_test sslmode=disable
+2025/04/07 17:17:09 尝试连接数据库...
+2025/04/07 17:17:09 使用testuser连接失败，尝试使用postgres账户...
+--- FAIL: BenchmarkPostgresDocumentRepository_Search
+    repository_bench_test.go:380: 设置数据库失败: 连接数据库失败: 数据库连接测试失败: pq: role "postgres" does not exist
+2025/04/07 17:17:09 尝试连接Milvus向量存储: localhost:19530
+SIGQUIT: quit
+PC=0x19498d01c m=0 sigcode=0
+
+goroutine 0 gp=0x101d7ec60 m=0 mp=0x101d7f6e0 [idle]:
+runtime.kevent(0x3, 0x0, 0x0, 0x16f102270, 0x40, 0x16f102240)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/sys_darwin.go:498 +0x20 fp=0x16f1021f0 sp=0x16f1021d0 pc=0x100d5c990
+runtime.netpoll(0xbd25e2d7)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/netpoll_kqueue.go:110 +0xf8 fp=0x16f102a80 sp=0x16f1021f0 pc=0x100d36f38
+runtime.findRunnable()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:3602 +0x9a4 fp=0x16f102bf0 sp=0x16f102a80 pc=0x100d43a14
+runtime.schedule()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:4017 +0x94 fp=0x16f102c30 sp=0x16f102bf0 pc=0x100d45534
+runtime.park_m(0x140000c5180)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:4141 +0x2b0 fp=0x16f102c90 sp=0x16f102c30 pc=0x100d45a30
+runtime.mcall()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:193 +0x54 fp=0x16f102ca0 sp=0x16f102c90 pc=0x100d78914
+
+goroutine 1 gp=0x140000021c0 m=nil [chan receive, 10 minutes]:
+runtime.gopark(0x10143af27?, 0x20?, 0x48?, 0x98?, 0x1020295e8?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x140002b9800 sp=0x140002b97e0 pc=0x100d727a8
+runtime.chanrecv(0x140000a2070, 0x0, 0x1)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/chan.go:664 +0x42c fp=0x140002b9880 sp=0x140002b9800 pc=0x100d0baec
+runtime.chanrecv1(0x140002b9908?, 0x0?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/chan.go:506 +0x14 fp=0x140002b98b0 sp=0x140002b9880 pc=0x100d0b684
+testing.(*B).run1(0x1400026c848)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/testing/benchmark.go:247 +0xa0 fp=0x140002b99b0 sp=0x140002b98b0 pc=0x100e265b0
+testing.(*B).Run(0x1400026c588, {0x10143af27?, 0x140000abae8?}, 0x101745960)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/testing/benchmark.go:847 +0x3f0 fp=0x140002b9ab0 sp=0x140002b99b0 pc=0x100e29170
+testing.runBenchmarks.func1(0x1400026c588)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/testing/benchmark.go:708 +0x40 fp=0x140002b9af0 sp=0x140002b9ab0 pc=0x100e285a0
+testing.(*B).runN(0x1400026c588, 0x1)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/testing/benchmark.go:219 +0x1a4 fp=0x140002b9b80 sp=0x140002b9af0 pc=0x100e26364
+testing.runBenchmarks({0x10144e04d, 0x33}, 0x0?, {0x101d6e120, 0x10, 0x7?})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/testing/benchmark.go:717 +0x51c fp=0x140002b9c90 sp=0x140002b9b80 pc=0x100e2850c
+testing.(*M).Run(0x14000255360)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/testing/testing.go:2158 +0x86c fp=0x140002b9ec0 sp=0x140002b9c90 pc=0x100e34f4c
+main.main()
+	_testmain.go:81 +0x90 fp=0x140002b9f40 sp=0x140002b9ec0 pc=0x1013d1810
+runtime.main()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:283 +0x284 fp=0x140002b9fd0 sp=0x140002b9f40 pc=0x100d3d164
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x140002b9fd0 sp=0x140002b9fd0 pc=0x100d7ad24
+
+goroutine 2 gp=0x14000002700 m=nil [force gc (idle), 2 minutes]:
+runtime.gopark(0x217f3fcd16cb7?, 0x0?, 0x0?, 0x0?, 0x0?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x14000076f90 sp=0x14000076f70 pc=0x100d727a8
+runtime.goparkunlock(...)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:441
+runtime.forcegchelper()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:348 +0xb8 fp=0x14000076fd0 sp=0x14000076f90 pc=0x100d3d4b8
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x14000076fd0 sp=0x14000076fd0 pc=0x100d7ad24
+created by runtime.init.7 in goroutine 1
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:336 +0x24
+
+goroutine 3 gp=0x14000002c40 m=nil [GC sweep wait]:
+runtime.gopark(0x101d7ce01?, 0x0?, 0x0?, 0x0?, 0x0?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x14000077760 sp=0x14000077740 pc=0x100d727a8
+runtime.goparkunlock(...)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:441
+runtime.bgsweep(0x1400007e000)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/mgcsweep.go:316 +0x108 fp=0x140000777b0 sp=0x14000077760 pc=0x100d26178
+runtime.gcenable.gowrap1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/mgc.go:204 +0x28 fp=0x140000777d0 sp=0x140000777b0 pc=0x100d19f88
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x140000777d0 sp=0x140000777d0 pc=0x100d7ad24
+created by runtime.gcenable in goroutine 1
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/mgc.go:204 +0x6c
+
+goroutine 4 gp=0x14000002e00 m=nil [GC scavenge wait]:
+runtime.gopark(0xf2f89?, 0xe18fc?, 0x0?, 0x0?, 0x0?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x14000077f60 sp=0x14000077f40 pc=0x100d727a8
+runtime.goparkunlock(...)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:441
+runtime.(*scavengerState).park(0x101d7e6c0)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/mgcscavenge.go:425 +0x5c fp=0x14000077f90 sp=0x14000077f60 pc=0x100d23c1c
+runtime.bgscavenge(0x1400007e000)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/mgcscavenge.go:658 +0xac fp=0x14000077fb0 sp=0x14000077f90 pc=0x100d241bc
+runtime.gcenable.gowrap2()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/mgc.go:205 +0x28 fp=0x14000077fd0 sp=0x14000077fb0 pc=0x100d19f28
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x14000077fd0 sp=0x14000077fd0 pc=0x100d7ad24
+created by runtime.gcenable in goroutine 1
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/mgc.go:205 +0xac
+
+goroutine 17 gp=0x14000102380 m=nil [finalizer wait, 10 minutes]:
+runtime.gopark(0x140000765c8?, 0x1000000000000?, 0xf8?, 0x65?, 0x101067e0c?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x14000076590 sp=0x14000076570 pc=0x100d727a8
+runtime.runfinq()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/mfinal.go:196 +0x108 fp=0x140000767d0 sp=0x14000076590 pc=0x100d18f88
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x140000767d0 sp=0x140000767d0 pc=0x100d7ad24
+created by runtime.createfing in goroutine 1
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/mfinal.go:166 +0x80
+
+goroutine 18 gp=0x14000102c40 m=nil [chan receive]:
+runtime.gopark(0x1400012fae0?, 0x14000232528?, 0x48?, 0x27?, 0x100ed7e58?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x140000726f0 sp=0x140000726d0 pc=0x100d727a8
+runtime.chanrecv(0x14000110460, 0x0, 0x1)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/chan.go:664 +0x42c fp=0x14000072770 sp=0x140000726f0 pc=0x100d0baec
+runtime.chanrecv1(0x0?, 0x0?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/chan.go:506 +0x14 fp=0x140000727a0 sp=0x14000072770 pc=0x100d0b684
+runtime.unique_runtime_registerUniqueMapCleanup.func2(...)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/mgc.go:1796
+runtime.unique_runtime_registerUniqueMapCleanup.gowrap1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/mgc.go:1799 +0x3c fp=0x140000727d0 sp=0x140000727a0 pc=0x100d1d1ac
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x140000727d0 sp=0x140000727d0 pc=0x100d7ad24
+created by unique.runtime_registerUniqueMapCleanup in goroutine 1
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/mgc.go:1794 +0x78
+
+goroutine 19 gp=0x14000102fc0 m=nil [GC worker (idle), 10 minutes]:
+runtime.gopark(0x0?, 0x0?, 0x0?, 0x0?, 0x0?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x14000072f10 sp=0x14000072ef0 pc=0x100d727a8
+runtime.gcBgMarkWorker(0x14000110620)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/mgc.go:1423 +0xdc fp=0x14000072fb0 sp=0x14000072f10 pc=0x100d1c41c
+runtime.gcBgMarkStartWorkers.gowrap1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/mgc.go:1339 +0x28 fp=0x14000072fd0 sp=0x14000072fb0 pc=0x100d1c308
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x14000072fd0 sp=0x14000072fd0 pc=0x100d7ad24
+created by runtime.gcBgMarkStartWorkers in goroutine 1
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/mgc.go:1339 +0x140
+
+goroutine 20 gp=0x14000103180 m=nil [GC worker (idle), 10 minutes]:
+runtime.gopark(0x0?, 0x0?, 0x0?, 0x0?, 0x0?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x14000073710 sp=0x140000736f0 pc=0x100d727a8
+runtime.gcBgMarkWorker(0x14000110620)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/mgc.go:1423 +0xdc fp=0x140000737b0 sp=0x14000073710 pc=0x100d1c41c
+runtime.gcBgMarkStartWorkers.gowrap1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/mgc.go:1339 +0x28 fp=0x140000737d0 sp=0x140000737b0 pc=0x100d1c308
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x140000737d0 sp=0x140000737d0 pc=0x100d7ad24
+created by runtime.gcBgMarkStartWorkers in goroutine 1
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/mgc.go:1339 +0x140
+
+goroutine 21 gp=0x14000103340 m=nil [GC worker (idle), 10 minutes]:
+runtime.gopark(0x0?, 0x0?, 0x0?, 0x0?, 0x0?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x14000073f10 sp=0x14000073ef0 pc=0x100d727a8
+runtime.gcBgMarkWorker(0x14000110620)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/mgc.go:1423 +0xdc fp=0x14000073fb0 sp=0x14000073f10 pc=0x100d1c41c
+runtime.gcBgMarkStartWorkers.gowrap1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/mgc.go:1339 +0x28 fp=0x14000073fd0 sp=0x14000073fb0 pc=0x100d1c308
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x14000073fd0 sp=0x14000073fd0 pc=0x100d7ad24
+created by runtime.gcBgMarkStartWorkers in goroutine 1
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/mgc.go:1339 +0x140
+
+goroutine 22 gp=0x14000103500 m=nil [GC worker (idle), 10 minutes]:
+runtime.gopark(0x0?, 0x0?, 0x0?, 0x0?, 0x0?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x14000074710 sp=0x140000746f0 pc=0x100d727a8
+runtime.gcBgMarkWorker(0x14000110620)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/mgc.go:1423 +0xdc fp=0x140000747b0 sp=0x14000074710 pc=0x100d1c41c
+runtime.gcBgMarkStartWorkers.gowrap1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/mgc.go:1339 +0x28 fp=0x140000747d0 sp=0x140000747b0 pc=0x100d1c308
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x140000747d0 sp=0x140000747d0 pc=0x100d7ad24
+created by runtime.gcBgMarkStartWorkers in goroutine 1
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/mgc.go:1339 +0x140
+
+goroutine 23 gp=0x140001036c0 m=nil [GC worker (idle), 8 minutes]:
+runtime.gopark(0x2179f8c8d1965?, 0x3?, 0x71?, 0x2?, 0x0?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x14000117f10 sp=0x14000117ef0 pc=0x100d727a8
+runtime.gcBgMarkWorker(0x14000110620)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/mgc.go:1423 +0xdc fp=0x14000117fb0 sp=0x14000117f10 pc=0x100d1c41c
+runtime.gcBgMarkStartWorkers.gowrap1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/mgc.go:1339 +0x28 fp=0x14000117fd0 sp=0x14000117fb0 pc=0x100d1c308
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x14000117fd0 sp=0x14000117fd0 pc=0x100d7ad24
+created by runtime.gcBgMarkStartWorkers in goroutine 1
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/mgc.go:1339 +0x140
+
+goroutine 24 gp=0x14000103880 m=nil [GC worker (idle), 10 minutes]:
+runtime.gopark(0x21766f3c18456?, 0x1?, 0xb0?, 0x6?, 0x0?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x14000115f10 sp=0x14000115ef0 pc=0x100d727a8
+runtime.gcBgMarkWorker(0x14000110620)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/mgc.go:1423 +0xdc fp=0x14000115fb0 sp=0x14000115f10 pc=0x100d1c41c
+runtime.gcBgMarkStartWorkers.gowrap1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/mgc.go:1339 +0x28 fp=0x14000115fd0 sp=0x14000115fb0 pc=0x100d1c308
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x14000115fd0 sp=0x14000115fd0 pc=0x100d7ad24
+created by runtime.gcBgMarkStartWorkers in goroutine 1
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/mgc.go:1339 +0x140
+
+goroutine 25 gp=0x14000103a40 m=nil [GC worker (idle)]:
+runtime.gopark(0x217f3fce92fe2?, 0x0?, 0x0?, 0x0?, 0x0?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x14000116f10 sp=0x14000116ef0 pc=0x100d727a8
+runtime.gcBgMarkWorker(0x14000110620)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/mgc.go:1423 +0xdc fp=0x14000116fb0 sp=0x14000116f10 pc=0x100d1c41c
+runtime.gcBgMarkStartWorkers.gowrap1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/mgc.go:1339 +0x28 fp=0x14000116fd0 sp=0x14000116fb0 pc=0x100d1c308
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x14000116fd0 sp=0x14000116fd0 pc=0x100d7ad24
+created by runtime.gcBgMarkStartWorkers in goroutine 1
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/mgc.go:1339 +0x140
+
+goroutine 26 gp=0x14000103c00 m=nil [GC worker (idle)]:
+runtime.gopark(0x217f3fce5f4bc?, 0x3?, 0xc7?, 0x4e?, 0x0?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x14000191f10 sp=0x14000191ef0 pc=0x100d727a8
+runtime.gcBgMarkWorker(0x14000110620)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/mgc.go:1423 +0xdc fp=0x14000191fb0 sp=0x14000191f10 pc=0x100d1c41c
+runtime.gcBgMarkStartWorkers.gowrap1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/mgc.go:1339 +0x28 fp=0x14000191fd0 sp=0x14000191fb0 pc=0x100d1c308
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x14000191fd0 sp=0x14000191fd0 pc=0x100d7ad24
+created by runtime.gcBgMarkStartWorkers in goroutine 1
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/mgc.go:1339 +0x140
+
+goroutine 102 gp=0x140001028c0 m=nil [select, 10 minutes]:
+runtime.gopark(0x140002b78f8?, 0x2?, 0x60?, 0xa1?, 0x140002b78ec?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x140002b7780 sp=0x140002b7760 pc=0x100d727a8
+runtime.selectgo(0x140002b78f8, 0x140002b78e8, 0x90?, 0x0, 0x140002b7918?, 0x1)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/select.go:351 +0x6c4 fp=0x140002b78b0 sp=0x140002b7780 pc=0x100d50c14
+google.golang.org/grpc.(*ClientConn).WaitForStateChange(0x140001d4408, {0x1017569f8, 0x101da5fe0}, 0x3)
+	/Users/songxu/go/pkg/mod/google.golang.org/grpc@v1.71.1/clientconn.go:659 +0x8c fp=0x140002b7920 sp=0x140002b78b0 pc=0x10120f02c
+google.golang.org/grpc.DialContext({0x1017569f8, 0x101da5fe0}, {0x14000138006, 0xf}, {0x1400012e640, 0x7, 0x1400011e3c0?})
+	/Users/songxu/go/pkg/mod/google.golang.org/grpc@v1.71.1/clientconn.go:310 +0x3a8 fp=0x140002b7ac0 sp=0x140002b7920 pc=0x10120d938
+github.com/milvus-io/milvus-sdk-go/v2/client.(*GrpcClient).connect(0x1400013a040, {0x1017569f8, 0x101da5fe0}, {0x14000138006, 0xf}, {0x1400012e640, 0x7, 0xa})
+	/Users/songxu/go/pkg/mod/github.com/milvus-io/milvus-sdk-go/v2@v2.4.2/client/grpc_client.go:42 +0xe4 fp=0x140002b7b20 sp=0x140002b7ac0 pc=0x10137ca44
+github.com/milvus-io/milvus-sdk-go/v2/client.NewClient({0x1017569f8, 0x101da5fe0}, {{0x1400012a400, 0xf}, {0x0, 0x0}, {0x0, 0x0}, {0x0, 0x0}, ...})
+	/Users/songxu/go/pkg/mod/github.com/milvus-io/milvus-sdk-go/v2@v2.4.2/client/client.go:271 +0xf0 fp=0x140002b7b90 sp=0x140002b7b20 pc=0x101373340
+github.com/milvus-io/milvus-sdk-go/v2/client.NewGrpcClient(...)
+	/Users/songxu/go/pkg/mod/github.com/milvus-io/milvus-sdk-go/v2@v2.4.2/client/client.go:283
+knowledge-base-service/internal/infrastructure/vectorstore.NewMilvusClientWithAddr({0x1400012a400?, 0x5?})
+	/Users/songxu/Developer/suoke_life/services/knowledge-base-service/internal/infrastructure/vectorstore/milvus.go:42 +0x5c fp=0x140002b7c90 sp=0x140002b7b90 pc=0x10138bb9c
+knowledge-base-service/internal/infrastructure/vectorstore.NewMilvusClient({0x10142447e?, 0x0?}, 0x4c4a)
+	/Users/songxu/Developer/suoke_life/services/knowledge-base-service/internal/infrastructure/vectorstore/milvus.go:36 +0x74 fp=0x140002b7cf0 sp=0x140002b7c90 pc=0x10138bb14
+knowledge-base-service/internal/test/benchmark/real.SetupRealVectorStore({0x14000271501?, 0x100d1377c?})
+	/Users/songxu/Developer/suoke_life/services/knowledge-base-service/internal/test/benchmark/real/db_setup.go:88 +0x1ac fp=0x140002b7da0 sp=0x140002b7cf0 pc=0x1013c9bfc
+knowledge-base-service/internal/test/benchmark/real.BenchmarkVectorStore_StoreVector(0x1400026c848)
+	/Users/songxu/Developer/suoke_life/services/knowledge-base-service/internal/test/benchmark/real/vectorstore_bench_test.go:21 +0x40 fp=0x140002b7f00 sp=0x140002b7da0 pc=0x1013d0a00
+testing.(*B).runN(0x1400026c848, 0x1)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/testing/benchmark.go:219 +0x1a4 fp=0x140002b7f90 sp=0x140002b7f00 pc=0x100e26364
+testing.(*B).run1.func1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/testing/benchmark.go:245 +0x4c fp=0x140002b7fd0 sp=0x140002b7f90 pc=0x100e269cc
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x140002b7fd0 sp=0x140002b7fd0 pc=0x100d7ad24
+created by testing.(*B).run1 in goroutine 1
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/testing/benchmark.go:238 +0x90
+
+goroutine 6 gp=0x14000102a80 m=nil [select, 10 minutes]:
+runtime.gopark(0x140002aaf78?, 0x2?, 0x78?, 0x4a?, 0x140002aaf74?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x140002aae00 sp=0x140002aade0 pc=0x100d727a8
+runtime.selectgo(0x140002aaf78, 0x140002aaf70, 0x100e26420?, 0x0, 0x100e26470?, 0x1)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/select.go:351 +0x6c4 fp=0x140002aaf30 sp=0x140002aae00 pc=0x100d50c14
+database/sql.(*DB).connectionOpener(0x1400026e0d0, {0x101756aa0, 0x1400017a230})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:1261 +0x80 fp=0x140002aafa0 sp=0x140002aaf30 pc=0x10105ab00
+database/sql.OpenDB.gowrap1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x30 fp=0x140002aafd0 sp=0x140002aafa0 pc=0x101058d60
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x140002aafd0 sp=0x140002aafd0 pc=0x100d7ad24
+created by database/sql.OpenDB in goroutine 5
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x124
+
+goroutine 43 gp=0x14000102e00 m=nil [select, 10 minutes]:
+runtime.gopark(0x14000075778?, 0x2?, 0x30?, 0x4f?, 0x14000075774?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x14000075600 sp=0x140000755e0 pc=0x100d727a8
+runtime.selectgo(0x14000075778, 0x14000075770, 0x14000075768?, 0x0, 0x1400000e201?, 0x1)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/select.go:351 +0x6c4 fp=0x14000075730 sp=0x14000075600 pc=0x100d50c14
+database/sql.(*DB).connectionOpener(0x1400013cb60, {0x101756aa0, 0x140002d00f0})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:1261 +0x80 fp=0x140000757a0 sp=0x14000075730 pc=0x10105ab00
+database/sql.OpenDB.gowrap1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x30 fp=0x140000757d0 sp=0x140000757a0 pc=0x101058d60
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x140000757d0 sp=0x140000757d0 pc=0x100d7ad24
+created by database/sql.OpenDB in goroutine 76
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x124
+
+goroutine 65 gp=0x14000103dc0 m=nil [select, 10 minutes]:
+runtime.gopark(0x140002ab778?, 0x2?, 0x8?, 0x41?, 0x140002ab774?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x140002ab600 sp=0x140002ab5e0 pc=0x100d727a8
+runtime.selectgo(0x140002ab778, 0x140002ab770, 0x140002ab768?, 0x0, 0x1400027c401?, 0x1)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/select.go:351 +0x6c4 fp=0x140002ab730 sp=0x140002ab600 pc=0x100d50c14
+database/sql.(*DB).connectionOpener(0x1400013c4e0, {0x101756aa0, 0x140002d0280})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:1261 +0x80 fp=0x140002ab7a0 sp=0x140002ab730 pc=0x10105ab00
+database/sql.OpenDB.gowrap1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x30 fp=0x140002ab7d0 sp=0x140002ab7a0 pc=0x101058d60
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x140002ab7d0 sp=0x140002ab7d0 pc=0x100d7ad24
+created by database/sql.OpenDB in goroutine 37
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x124
+
+goroutine 11 gp=0x14000302700 m=nil [select, 10 minutes]:
+runtime.gopark(0x140002abf78?, 0x2?, 0x78?, 0x4a?, 0x140002abf74?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x140002abe00 sp=0x140002abde0 pc=0x100d727a8
+runtime.selectgo(0x140002abf78, 0x140002abf70, 0x0?, 0x0, 0x0?, 0x1)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/select.go:351 +0x6c4 fp=0x140002abf30 sp=0x140002abe00 pc=0x100d50c14
+database/sql.(*DB).connectionOpener(0x1400026f930, {0x101756aa0, 0x1400017a730})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:1261 +0x80 fp=0x140002abfa0 sp=0x140002abf30 pc=0x10105ab00
+database/sql.OpenDB.gowrap1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x30 fp=0x140002abfd0 sp=0x140002abfa0 pc=0x101058d60
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x140002abfd0 sp=0x140002abfd0 pc=0x100d7ad24
+created by database/sql.OpenDB in goroutine 5
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x124
+
+goroutine 28 gp=0x140003028c0 m=nil [select, 10 minutes]:
+runtime.gopark(0x140002a9f78?, 0x2?, 0x30?, 0x4f?, 0x140002a9f74?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x140002a9e00 sp=0x140002a9de0 pc=0x100d727a8
+runtime.selectgo(0x140002a9f78, 0x140002a9f70, 0x100e26420?, 0x0, 0x100e26470?, 0x1)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/select.go:351 +0x6c4 fp=0x140002a9f30 sp=0x140002a9e00 pc=0x100d50c14
+database/sql.(*DB).connectionOpener(0x1400013c270, {0x101756aa0, 0x140002d0000})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:1261 +0x80 fp=0x140002a9fa0 sp=0x140002a9f30 pc=0x10105ab00
+database/sql.OpenDB.gowrap1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x30 fp=0x140002a9fd0 sp=0x140002a9fa0 pc=0x101058d60
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x140002a9fd0 sp=0x140002a9fd0 pc=0x100d7ad24
+created by database/sql.OpenDB in goroutine 37
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x124
+
+goroutine 82 gp=0x14000302a80 m=nil [select, 10 minutes]:
+runtime.gopark(0x140002a6f78?, 0x2?, 0x30?, 0x4f?, 0x140002a6f74?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x140002a6e00 sp=0x140002a6de0 pc=0x100d727a8
+runtime.selectgo(0x140002a6f78, 0x140002a6f70, 0x140002a6f68?, 0x0, 0x1400027c401?, 0x1)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/select.go:351 +0x6c4 fp=0x140002a6f30 sp=0x140002a6e00 pc=0x100d50c14
+database/sql.(*DB).connectionOpener(0x1400026fe10, {0x101756aa0, 0x1400009e0a0})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:1261 +0x80 fp=0x140002a6fa0 sp=0x140002a6f30 pc=0x10105ab00
+database/sql.OpenDB.gowrap1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x30 fp=0x140002a6fd0 sp=0x140002a6fa0 pc=0x101058d60
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x140002a6fd0 sp=0x140002a6fd0 pc=0x100d7ad24
+created by database/sql.OpenDB in goroutine 99
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x124
+
+goroutine 16 gp=0x14000302c40 m=nil [select, 10 minutes]:
+runtime.gopark(0x140002a6778?, 0x2?, 0x30?, 0x4f?, 0x140002a6774?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x140002a6600 sp=0x140002a65e0 pc=0x100d727a8
+runtime.selectgo(0x140002a6778, 0x140002a6770, 0x100e26420?, 0x0, 0x100e26470?, 0x1)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/select.go:351 +0x6c4 fp=0x140002a6730 sp=0x140002a6600 pc=0x100d50c14
+database/sql.(*DB).connectionOpener(0x1400013c1a0, {0x101756aa0, 0x140002d0050})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:1261 +0x80 fp=0x140002a67a0 sp=0x140002a6730 pc=0x10105ab00
+database/sql.OpenDB.gowrap1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x30 fp=0x140002a67d0 sp=0x140002a67a0 pc=0x101058d60
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x140002a67d0 sp=0x140002a67d0 pc=0x100d7ad24
+created by database/sql.OpenDB in goroutine 27
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x124
+
+goroutine 49 gp=0x14000302e00 m=nil [select, 10 minutes]:
+runtime.gopark(0x140002a4778?, 0x2?, 0x8?, 0x41?, 0x140002a4774?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x140002a4600 sp=0x140002a45e0 pc=0x100d727a8
+runtime.selectgo(0x140002a4778, 0x140002a4770, 0x0?, 0x0, 0x0?, 0x1)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/select.go:351 +0x6c4 fp=0x140002a4730 sp=0x140002a4600 pc=0x100d50c14
+database/sql.(*DB).connectionOpener(0x1400026fad0, {0x101756aa0, 0x1400017a1e0})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:1261 +0x80 fp=0x140002a47a0 sp=0x140002a4730 pc=0x10105ab00
+database/sql.OpenDB.gowrap1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x30 fp=0x140002a47d0 sp=0x140002a47a0 pc=0x101058d60
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x140002a47d0 sp=0x140002a47d0 pc=0x100d7ad24
+created by database/sql.OpenDB in goroutine 27
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x124
+
+goroutine 77 gp=0x14000302fc0 m=nil [select, 10 minutes]:
+runtime.gopark(0x14000078778?, 0x2?, 0x8?, 0x41?, 0x14000078774?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x14000078600 sp=0x140000785e0 pc=0x100d727a8
+runtime.selectgo(0x14000078778, 0x14000078770, 0x0?, 0x0, 0x0?, 0x1)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/select.go:351 +0x6c4 fp=0x14000078730 sp=0x14000078600 pc=0x100d50c14
+database/sql.(*DB).connectionOpener(0x1400026fba0, {0x101756aa0, 0x1400017a2d0})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:1261 +0x80 fp=0x140000787a0 sp=0x14000078730 pc=0x10105ab00
+database/sql.OpenDB.gowrap1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x30 fp=0x140000787d0 sp=0x140000787a0 pc=0x101058d60
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x140000787d0 sp=0x140000787d0 pc=0x100d7ad24
+created by database/sql.OpenDB in goroutine 76
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x124
+
+goroutine 71 gp=0x14000303500 m=nil [select, 10 minutes]:
+runtime.gopark(0x140002a7f78?, 0x2?, 0x78?, 0x4a?, 0x140002a7f74?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x140002a7e00 sp=0x140002a7de0 pc=0x100d727a8
+runtime.selectgo(0x140002a7f78, 0x140002a7f70, 0x100e26420?, 0x0, 0x100e26470?, 0x1)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/select.go:351 +0x6c4 fp=0x140002a7f30 sp=0x140002a7e00 pc=0x100d50c14
+database/sql.(*DB).connectionOpener(0x1400013c5b0, {0x101756aa0, 0x140002d00a0})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:1261 +0x80 fp=0x140002a7fa0 sp=0x140002a7f30 pc=0x10105ab00
+database/sql.OpenDB.gowrap1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x30 fp=0x140002a7fd0 sp=0x140002a7fa0 pc=0x101058d60
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x140002a7fd0 sp=0x140002a7fd0 pc=0x100d7ad24
+created by database/sql.OpenDB in goroutine 70
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x124
+
+goroutine 38 gp=0x140003036c0 m=nil [select, 10 minutes]:
+runtime.gopark(0x140000ea778?, 0x2?, 0xc0?, 0x45?, 0x140000ea774?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x140000ea600 sp=0x140000ea5e0 pc=0x100d727a8
+runtime.selectgo(0x140000ea778, 0x140000ea770, 0x0?, 0x0, 0x0?, 0x1)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/select.go:351 +0x6c4 fp=0x140000ea730 sp=0x140000ea600 pc=0x100d50c14
+database/sql.(*DB).connectionOpener(0x1400026fa00, {0x101756aa0, 0x1400017a280})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:1261 +0x80 fp=0x140000ea7a0 sp=0x140000ea730 pc=0x10105ab00
+database/sql.OpenDB.gowrap1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x30 fp=0x140000ea7d0 sp=0x140000ea7a0 pc=0x101058d60
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x140000ea7d0 sp=0x140000ea7d0 pc=0x100d7ad24
+created by database/sql.OpenDB in goroutine 70
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x124
+
+goroutine 48 gp=0x14000303a40 m=nil [select, 10 minutes]:
+runtime.gopark(0x140000e8f78?, 0x2?, 0x30?, 0x4f?, 0x140000e8f74?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x140000e8e00 sp=0x140000e8de0 pc=0x100d727a8
+runtime.selectgo(0x140000e8f78, 0x140000e8f70, 0x100e26420?, 0x0, 0x100e26470?, 0x1)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/select.go:351 +0x6c4 fp=0x140000e8f30 sp=0x140000e8e00 pc=0x100d50c14
+database/sql.(*DB).connectionOpener(0x140001fdad0, {0x101756aa0, 0x1400009e050})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:1261 +0x80 fp=0x140000e8fa0 sp=0x140000e8f30 pc=0x10105ab00
+database/sql.OpenDB.gowrap1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x30 fp=0x140000e8fd0 sp=0x140000e8fa0 pc=0x101058d60
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x140000e8fd0 sp=0x140000e8fd0 pc=0x100d7ad24
+created by database/sql.OpenDB in goroutine 97
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x124
+
+goroutine 54 gp=0x14000303c00 m=nil [select, 10 minutes]:
+runtime.gopark(0x140000e8778?, 0x2?, 0x30?, 0x4f?, 0x140000e8774?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x140000e8600 sp=0x140000e85e0 pc=0x100d727a8
+runtime.selectgo(0x140000e8778, 0x140000e8770, 0x100e26420?, 0x0, 0x100e26470?, 0x1)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/select.go:351 +0x6c4 fp=0x140000e8730 sp=0x140000e8600 pc=0x100d50c14
+database/sql.(*DB).connectionOpener(0x1400013cdd0, {0x101756aa0, 0x140002d0190})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:1261 +0x80 fp=0x140000e87a0 sp=0x140000e8730 pc=0x10105ab00
+database/sql.OpenDB.gowrap1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x30 fp=0x140000e87d0 sp=0x140000e87a0 pc=0x101058d60
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x140000e87d0 sp=0x140000e87d0 pc=0x100d7ad24
+created by database/sql.OpenDB in goroutine 98
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x124
+
+goroutine 122 gp=0x14000303dc0 m=nil [select, 10 minutes]:
+runtime.gopark(0x14000074f78?, 0x2?, 0x78?, 0x4a?, 0x14000074f74?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x14000074e00 sp=0x14000074de0 pc=0x100d727a8
+runtime.selectgo(0x14000074f78, 0x14000074f70, 0x21766f0b9601e?, 0x0, 0x57864?, 0x1)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/select.go:351 +0x6c4 fp=0x14000074f30 sp=0x14000074e00 pc=0x100d50c14
+database/sql.(*DB).connectionOpener(0x1400026fd40, {0x101756aa0, 0x1400009e000})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:1261 +0x80 fp=0x14000074fa0 sp=0x14000074f30 pc=0x10105ab00
+database/sql.OpenDB.gowrap1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x30 fp=0x14000074fd0 sp=0x14000074fa0 pc=0x101058d60
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x14000074fd0 sp=0x14000074fd0 pc=0x100d7ad24
+created by database/sql.OpenDB in goroutine 98
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x124
+
+goroutine 117 gp=0x14000402540 m=nil [select, 10 minutes]:
+runtime.gopark(0x14000079778?, 0x2?, 0x78?, 0x4a?, 0x14000079774?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x14000079600 sp=0x140000795e0 pc=0x100d727a8
+runtime.selectgo(0x14000079778, 0x14000079770, 0x0?, 0x0, 0x0?, 0x1)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/select.go:351 +0x6c4 fp=0x14000079730 sp=0x14000079600 pc=0x100d50c14
+database/sql.(*DB).connectionOpener(0x1400013cc30, {0x101756aa0, 0x1400009e230})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:1261 +0x80 fp=0x140000797a0 sp=0x14000079730 pc=0x10105ab00
+database/sql.OpenDB.gowrap1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x30 fp=0x140000797d0 sp=0x140000797a0 pc=0x101058d60
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x140000797d0 sp=0x140000797d0 pc=0x100d7ad24
+created by database/sql.OpenDB in goroutine 97
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x124
+
+goroutine 127 gp=0x14000003500 m=nil [select, 10 minutes]:
+runtime.gopark(0x140000e5f78?, 0x2?, 0xc0?, 0x45?, 0x140000e5f74?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x140000e5e00 sp=0x140000e5de0 pc=0x100d727a8
+runtime.selectgo(0x140000e5f78, 0x140000e5f70, 0x0?, 0x0, 0x0?, 0x1)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/select.go:351 +0x6c4 fp=0x140000e5f30 sp=0x140000e5e00 pc=0x100d50c14
+database/sql.(*DB).connectionOpener(0x140000aa1a0, {0x101756aa0, 0x140002d0140})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:1261 +0x80 fp=0x140000e5fa0 sp=0x140000e5f30 pc=0x10105ab00
+database/sql.OpenDB.gowrap1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x30 fp=0x140000e5fd0 sp=0x140000e5fa0 pc=0x101058d60
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x140000e5fd0 sp=0x140000e5fd0 pc=0x100d7ad24
+created by database/sql.OpenDB in goroutine 99
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x124
+
+goroutine 132 gp=0x14000003880 m=nil [select, 10 minutes]:
+runtime.gopark(0x14000275f78?, 0x2?, 0x30?, 0x4f?, 0x14000275f74?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x14000275e00 sp=0x14000275de0 pc=0x100d727a8
+runtime.selectgo(0x14000275f78, 0x14000275f70, 0x100e26420?, 0x0, 0x100e26470?, 0x1)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/select.go:351 +0x6c4 fp=0x14000275f30 sp=0x14000275e00 pc=0x100d50c14
+database/sql.(*DB).connectionOpener(0x1400026fc70, {0x101756aa0, 0x1400009e0f0})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:1261 +0x80 fp=0x14000275fa0 sp=0x14000275f30 pc=0x10105ab00
+database/sql.OpenDB.gowrap1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x30 fp=0x14000275fd0 sp=0x14000275fa0 pc=0x101058d60
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x14000275fd0 sp=0x14000275fd0 pc=0x100d7ad24
+created by database/sql.OpenDB in goroutine 100
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x124
+
+goroutine 87 gp=0x14000003a40 m=nil [select, 10 minutes]:
+runtime.gopark(0x140000e7778?, 0x2?, 0x8?, 0x41?, 0x140000e7774?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x140000e7600 sp=0x140000e75e0 pc=0x100d727a8
+runtime.selectgo(0x140000e7778, 0x140000e7770, 0x0?, 0x0, 0x0?, 0x1)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/select.go:351 +0x6c4 fp=0x140000e7730 sp=0x140000e7600 pc=0x100d50c14
+database/sql.(*DB).connectionOpener(0x140000aa000, {0x101756aa0, 0x140002d01e0})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:1261 +0x80 fp=0x140000e77a0 sp=0x140000e7730 pc=0x10105ab00
+database/sql.OpenDB.gowrap1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x30 fp=0x140000e77d0 sp=0x140000e77a0 pc=0x101058d60
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x140000e77d0 sp=0x140000e77d0 pc=0x100d7ad24
+created by database/sql.OpenDB in goroutine 100
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x124
+
+goroutine 137 gp=0x14000402fc0 m=nil [select, 10 minutes]:
+runtime.gopark(0x14000274f78?, 0x2?, 0xc0?, 0x45?, 0x14000274f74?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x14000274e00 sp=0x14000274de0 pc=0x100d727a8
+runtime.selectgo(0x14000274f78, 0x14000274f70, 0x100e26420?, 0x0, 0x100e26470?, 0x1)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/select.go:351 +0x6c4 fp=0x14000274f30 sp=0x14000274e00 pc=0x100d50c14
+database/sql.(*DB).connectionOpener(0x140000aa270, {0x101756aa0, 0x140002d0230})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:1261 +0x80 fp=0x14000274fa0 sp=0x14000274f30 pc=0x10105ab00
+database/sql.OpenDB.gowrap1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x30 fp=0x14000274fd0 sp=0x14000274fa0 pc=0x101058d60
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x14000274fd0 sp=0x14000274fd0 pc=0x100d7ad24
+created by database/sql.OpenDB in goroutine 101
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x124
+
+goroutine 92 gp=0x14000403180 m=nil [select, 10 minutes]:
+runtime.gopark(0x140000e7f78?, 0x2?, 0x8?, 0x41?, 0x140000e7f74?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x140000e7e00 sp=0x140000e7de0 pc=0x100d727a8
+runtime.selectgo(0x140000e7f78, 0x140000e7f70, 0x0?, 0x0, 0x0?, 0x1)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/select.go:351 +0x6c4 fp=0x140000e7f30 sp=0x140000e7e00 pc=0x100d50c14
+database/sql.(*DB).connectionOpener(0x1400013c0d0, {0x101756aa0, 0x1400017a370})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:1261 +0x80 fp=0x140000e7fa0 sp=0x140000e7f30 pc=0x10105ab00
+database/sql.OpenDB.gowrap1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x30 fp=0x140000e7fd0 sp=0x140000e7fa0 pc=0x101058d60
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x140000e7fd0 sp=0x140000e7fd0 pc=0x100d7ad24
+created by database/sql.OpenDB in goroutine 101
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x124
+
+goroutine 143 gp=0x14000403340 m=nil [select, 10 minutes]:
+runtime.gopark(0x14000075f78?, 0x2?, 0x78?, 0x4a?, 0x14000075f74?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x14000075e00 sp=0x14000075de0 pc=0x100d727a8
+runtime.selectgo(0x14000075f78, 0x14000075f70, 0x100e26420?, 0x0, 0x100e26470?, 0x1)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/select.go:351 +0x6c4 fp=0x14000075f30 sp=0x14000075e00 pc=0x100d50c14
+database/sql.(*DB).connectionOpener(0x140000aa340, {0x101756aa0, 0x1400017a320})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:1261 +0x80 fp=0x14000075fa0 sp=0x14000075f30 pc=0x10105ab00
+database/sql.OpenDB.gowrap1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x30 fp=0x14000075fd0 sp=0x14000075fa0 pc=0x101058d60
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x14000075fd0 sp=0x14000075fd0 pc=0x100d7ad24
+created by database/sql.OpenDB in goroutine 142
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x124
+
+goroutine 148 gp=0x140004036c0 m=nil [select, 10 minutes]:
+runtime.gopark(0x140000e4f78?, 0x2?, 0x30?, 0x4f?, 0x140000e4f74?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x140000e4e00 sp=0x140000e4de0 pc=0x100d727a8
+runtime.selectgo(0x140000e4f78, 0x140000e4f70, 0x0?, 0x0, 0x0?, 0x1)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/select.go:351 +0x6c4 fp=0x140000e4f30 sp=0x140000e4e00 pc=0x100d50c14
+database/sql.(*DB).connectionOpener(0x140000aa410, {0x101756aa0, 0x1400017aa00})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:1261 +0x80 fp=0x140000e4fa0 sp=0x140000e4f30 pc=0x10105ab00
+database/sql.OpenDB.gowrap1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x30 fp=0x140000e4fd0 sp=0x140000e4fa0 pc=0x101058d60
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x140000e4fd0 sp=0x140000e4fd0 pc=0x100d7ad24
+created by database/sql.OpenDB in goroutine 142
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x124
+
+goroutine 60 gp=0x14000403880 m=nil [select, 10 minutes]:
+runtime.gopark(0x14000274778?, 0x2?, 0x8?, 0x41?, 0x14000274774?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x14000274600 sp=0x140002745e0 pc=0x100d727a8
+runtime.selectgo(0x14000274778, 0x14000274770, 0x0?, 0x0, 0x0?, 0x1)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/select.go:351 +0x6c4 fp=0x14000274730 sp=0x14000274600 pc=0x100d50c14
+database/sql.(*DB).connectionOpener(0x1400026e000, {0x101756aa0, 0x1400017a6e0})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:1261 +0x80 fp=0x140002747a0 sp=0x14000274730 pc=0x10105ab00
+database/sql.OpenDB.gowrap1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x30 fp=0x140002747d0 sp=0x140002747a0 pc=0x101058d60
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x140002747d0 sp=0x140002747d0 pc=0x100d7ad24
+created by database/sql.OpenDB in goroutine 59
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x124
+
+goroutine 162 gp=0x14000403a40 m=nil [select, 10 minutes]:
+runtime.gopark(0x14000270778?, 0x2?, 0x8?, 0x41?, 0x14000270774?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x14000270600 sp=0x140002705e0 pc=0x100d727a8
+runtime.selectgo(0x14000270778, 0x14000270770, 0x100e26420?, 0x0, 0x100e26470?, 0x1)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/select.go:351 +0x6c4 fp=0x14000270730 sp=0x14000270600 pc=0x100d50c14
+database/sql.(*DB).connectionOpener(0x140000bc0d0, {0x101756aa0, 0x1400017a8c0})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:1261 +0x80 fp=0x140002707a0 sp=0x14000270730 pc=0x10105ab00
+database/sql.OpenDB.gowrap1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x30 fp=0x140002707d0 sp=0x140002707a0 pc=0x101058d60
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x140002707d0 sp=0x140002707d0 pc=0x100d7ad24
+created by database/sql.OpenDB in goroutine 161
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x124
+
+goroutine 153 gp=0x14000403c00 m=nil [select, 10 minutes]:
+runtime.gopark(0x14000276f78?, 0x2?, 0xc0?, 0x45?, 0x14000276f74?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x14000276e00 sp=0x14000276de0 pc=0x100d727a8
+runtime.selectgo(0x14000276f78, 0x14000276f70, 0x100e26420?, 0x0, 0x100e26470?, 0x1)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/select.go:351 +0x6c4 fp=0x14000276f30 sp=0x14000276e00 pc=0x100d50c14
+database/sql.(*DB).connectionOpener(0x140000aa4e0, {0x101756aa0, 0x140002d0320})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:1261 +0x80 fp=0x14000276fa0 sp=0x14000276f30 pc=0x10105ab00
+database/sql.OpenDB.gowrap1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x30 fp=0x14000276fd0 sp=0x14000276fa0 pc=0x101058d60
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x14000276fd0 sp=0x14000276fd0 pc=0x100d7ad24
+created by database/sql.OpenDB in goroutine 59
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x124
+
+goroutine 177 gp=0x14000012000 m=nil [select, 10 minutes]:
+runtime.gopark(0x14000271750?, 0x2?, 0xd8?, 0x15?, 0x14000271714?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x140002715a0 sp=0x14000271580 pc=0x100d727a8
+runtime.selectgo(0x14000271750, 0x14000271710, 0x101da8ce0?, 0x0, 0x14000271788?, 0x1)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/select.go:351 +0x6c4 fp=0x140002716d0 sp=0x140002715a0 pc=0x100d50c14
+google.golang.org/grpc/internal/grpcsync.(*CallbackSerializer).run(0x14000130840, {0x101756aa0, 0x1400009e1e0})
+	/Users/songxu/go/pkg/mod/google.golang.org/grpc@v1.71.1/internal/grpcsync/callback_serializer.go:88 +0xc4 fp=0x140002717a0 sp=0x140002716d0 pc=0x101166b94
+google.golang.org/grpc/internal/grpcsync.NewCallbackSerializer.gowrap1()
+	/Users/songxu/go/pkg/mod/google.golang.org/grpc@v1.71.1/internal/grpcsync/callback_serializer.go:52 +0x30 fp=0x140002717d0 sp=0x140002717a0 pc=0x1011669d0
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x140002717d0 sp=0x140002717d0 pc=0x100d7ad24
+created by google.golang.org/grpc/internal/grpcsync.NewCallbackSerializer in goroutine 102
+	/Users/songxu/go/pkg/mod/google.golang.org/grpc@v1.71.1/internal/grpcsync/callback_serializer.go:52 +0x118
+
+goroutine 178 gp=0x140000121c0 m=nil [select]:
+runtime.gopark(0x140002e0f50?, 0x2?, 0x1?, 0x4a?, 0x140002e0f14?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x140002e0da0 sp=0x140002e0d80 pc=0x100d727a8
+runtime.selectgo(0x140002e0f50, 0x140002e0f10, 0x100d0adb0?, 0x0, 0x140000ebf28?, 0x1)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/select.go:351 +0x6c4 fp=0x140002e0ed0 sp=0x140002e0da0 pc=0x100d50c14
+google.golang.org/grpc/internal/grpcsync.(*CallbackSerializer).run(0x14000130870, {0x101756aa0, 0x1400009e280})
+	/Users/songxu/go/pkg/mod/google.golang.org/grpc@v1.71.1/internal/grpcsync/callback_serializer.go:88 +0xc4 fp=0x140002e0fa0 sp=0x140002e0ed0 pc=0x101166b94
+google.golang.org/grpc/internal/grpcsync.NewCallbackSerializer.gowrap1()
+	/Users/songxu/go/pkg/mod/google.golang.org/grpc@v1.71.1/internal/grpcsync/callback_serializer.go:52 +0x30 fp=0x140002e0fd0 sp=0x140002e0fa0 pc=0x1011669d0
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x140002e0fd0 sp=0x140002e0fd0 pc=0x100d7ad24
+created by google.golang.org/grpc/internal/grpcsync.NewCallbackSerializer in goroutine 102
+	/Users/songxu/go/pkg/mod/google.golang.org/grpc@v1.71.1/internal/grpcsync/callback_serializer.go:52 +0x118
+
+goroutine 167 gp=0x14000012380 m=nil [select, 10 minutes]:
+runtime.gopark(0x140000eaf78?, 0x2?, 0x78?, 0x4a?, 0x140000eaf74?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x140000eae00 sp=0x140000eade0 pc=0x100d727a8
+runtime.selectgo(0x140000eaf78, 0x140000eaf70, 0x0?, 0x0, 0x0?, 0x1)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/select.go:351 +0x6c4 fp=0x140000eaf30 sp=0x140000eae00 pc=0x100d50c14
+database/sql.(*DB).connectionOpener(0x140000bc1a0, {0x101756aa0, 0x1400017aaf0})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:1261 +0x80 fp=0x140000eafa0 sp=0x140000eaf30 pc=0x10105ab00
+database/sql.OpenDB.gowrap1()
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x30 fp=0x140000eafd0 sp=0x140000eafa0 pc=0x101058d60
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x140000eafd0 sp=0x140000eafd0 pc=0x100d7ad24
+created by database/sql.OpenDB in goroutine 161
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/database/sql/sql.go:841 +0x124
+
+goroutine 179 gp=0x140000128c0 m=nil [select]:
+runtime.gopark(0x14000190f50?, 0x2?, 0xa0?, 0xf8?, 0x14000190f14?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x14000190da0 sp=0x14000190d80 pc=0x100d727a8
+runtime.selectgo(0x14000190f50, 0x14000190f10, 0x140000e9798?, 0x0, 0x1400007e000?, 0x1)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/select.go:351 +0x6c4 fp=0x14000190ed0 sp=0x14000190da0 pc=0x100d50c14
+google.golang.org/grpc/internal/grpcsync.(*CallbackSerializer).run(0x140001308a0, {0x101756aa0, 0x1400009e2d0})
+	/Users/songxu/go/pkg/mod/google.golang.org/grpc@v1.71.1/internal/grpcsync/callback_serializer.go:88 +0xc4 fp=0x14000190fa0 sp=0x14000190ed0 pc=0x101166b94
+google.golang.org/grpc/internal/grpcsync.NewCallbackSerializer.gowrap1()
+	/Users/songxu/go/pkg/mod/google.golang.org/grpc@v1.71.1/internal/grpcsync/callback_serializer.go:52 +0x30 fp=0x14000190fd0 sp=0x14000190fa0 pc=0x1011669d0
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x14000190fd0 sp=0x14000190fd0 pc=0x100d7ad24
+created by google.golang.org/grpc/internal/grpcsync.NewCallbackSerializer in goroutine 102
+	/Users/songxu/go/pkg/mod/google.golang.org/grpc@v1.71.1/internal/grpcsync/callback_serializer.go:52 +0x118
+
+goroutine 1762 gp=0x140000c5180 m=nil [select]:
+runtime.gopark(0x140002bbf18?, 0x3?, 0x8?, 0x0?, 0x140002bbe8a?)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/proc.go:435 +0xc8 fp=0x140002bbd00 sp=0x140002bbce0 pc=0x100d727a8
+runtime.selectgo(0x140002bbf18, 0x140002bbe84, 0x10174f8a0?, 0x0, 0x3?, 0x1)
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/select.go:351 +0x6c4 fp=0x140002bbe30 sp=0x140002bbd00 pc=0x100d50c14
+google.golang.org/grpc.(*addrConn).resetTransportAndUnlock(0x14000134308)
+	/Users/songxu/go/pkg/mod/google.golang.org/grpc@v1.71.1/clientconn.go:1297 +0x43c fp=0x140002bbf50 sp=0x140002bbe30 pc=0x10121226c
+google.golang.org/grpc.(*addrConn).connect(0x14000134308)
+	/Users/songxu/go/pkg/mod/google.golang.org/grpc@v1.71.1/clientconn.go:933 +0x1a0 fp=0x140002bbfb0 sp=0x140002bbf50 pc=0x1012104c0
+google.golang.org/grpc.(*acBalancerWrapper).Connect.gowrap1()
+	/Users/songxu/go/pkg/mod/google.golang.org/grpc@v1.71.1/balancer_wrapper.go:354 +0x28 fp=0x140002bbfd0 sp=0x140002bbfb0 pc=0x10120ab58
+runtime.goexit({})
+	/opt/homebrew/Cellar/go/1.24.2/libexec/src/runtime/asm_arm64.s:1223 +0x4 fp=0x140002bbfd0 sp=0x140002bbfd0 pc=0x100d7ad24
+created by google.golang.org/grpc.(*acBalancerWrapper).Connect in goroutine 179
+	/Users/songxu/go/pkg/mod/google.golang.org/grpc@v1.71.1/balancer_wrapper.go:354 +0x60
+
+r0      0x4
+r1      0x0
+r2      0x0
+r3      0x16f102270
+r4      0x40
+r5      0x16f102240
+r6      0x0
+r7      0x218004ada7d17
+r8      0x101d7f6e0
+r9      0x1
+r10     0x0
+r11     0x8
+r12     0x1
+r13     0x16f102180
+r14     0x1
+r15     0x0
+r16     0x16b
+r17     0x19498d014
+r18     0x0
+r19     0x16f1029a8
+r20     0x16f1021f0
+r21     0x3
+r22     0x0
+r23     0x0
+r24     0x8e41dc0be9fcd734
+r25     0x14000059790
+r26     0x101745e70
+r27     0x101cdc000
+r28     0x101d7ec60
+r29     0x16f102168
+lr      0x100d7bed8
+sp      0x16f102170
+pc      0x19498d01c
+fault   0x19498d01c
+*** Test killed with quit: ran too long (11m0s).
+exit status 2
+FAIL	knowledge-base-service/internal/test/benchmark/real	660.010s
+FAIL

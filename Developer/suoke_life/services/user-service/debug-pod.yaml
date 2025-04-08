@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: user-service-debug
+  namespace: suoke
+spec:
+  containers:
+  - name: debug
+    image: registry-vpc.cn-hangzhou.aliyuncs.com/ack/busybox:v1.29.3
+    command: ["sleep", "3600"]

@@ -24,10 +24,12 @@ spec:
     metadata:
       labels:
         {{- include "knowledge-graph-service.selectorLabels" . | nindent 8 }}
+        suoke-platform/arch: amd64
       annotations:
         {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
+        suoke-platform/image-arch: "amd64"
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -36,26 +38,6 @@ spec:
       serviceAccountName: {{ include "knowledge-graph-service.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
-      initContainers:
-        - name: init-volume-permissions
-          image: "{{ .Values.global.imageRegistry }}/suoke/busybox:latest"
-          imagePullPolicy: IfNotPresent
-          command:
-            - sh
-            - -c
-            - |
-              chmod -R 777 /data
-              chmod -R 777 /models
-              chmod -R 777 /tmp
-          securityContext:
-            runAsUser: 0
-          volumeMounts:
-            - name: data
-              mountPath: /data
-            - name: models
-              mountPath: /models
-            - name: tmp
-              mountPath: /tmp
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -102,10 +84,12 @@ spec:
               mountPath: /app/config
               readOnly: true
             {{- end }}
-      {{- with .Values.nodeSelector }}
+      # 确保Pod调度到amd64架构节点
       nodeSelector:
+        kubernetes.io/arch: amd64
+        {{- with .Values.nodeSelector }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- end }}
       {{- with .Values.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}

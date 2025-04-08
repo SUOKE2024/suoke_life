@@ -1,0 +1,88 @@
+==========================================================
+      索克生活RAG服务多模态搜索测试 (Go版本)
+      服务器: http://localhost:8080
+      查询: 中医舌诊健康分析
+      图像: assets/tongue_sample.jpg
+      音频: assets/audio_sample.mp3
+      输出目录: ./output
+==========================================================
+[34m[TEST][0m 测试健康检查...
+[32m[SUCCESS][0m 健康检查通过
+{
+  "status": "healthy",
+  "service": "rag-minimal",
+  "version": "1.0.0",
+  "time": "2025-04-07T20:58:41.077519+08:00"
+}
+[34m[TEST][0m 测试基本搜索...
+[32m[SUCCESS][0m 基本搜索测试通过
+{
+  "status": "success",
+  "results": [
+    {
+      "content": "索克健康问答: 中医舌诊健康分析",
+      "score": 1,
+      "metadata": {
+        "source": "最小服务响应",
+        "type": "text"
+      }
+    }
+  ]
+}
+[33m[INFO][0m 图像文件已读取并编码
+[34m[TEST][0m 测试舌诊分析...
+[32m[SUCCESS][0m 舌诊分析测试通过
+[33m[INFO][0m 体质类型: 平和质
+{
+  "status": "success",
+  "features": [
+    "淡红舌",
+    "薄白苔"
+  ],
+  "bodyType": "平和质",
+  "analysis": "舌质淡红，苔薄白，提示气血调和，身体状态良好。"
+}
+[33m[INFO][0m 音频文件已读取并编码
+[34m[TEST][0m 测试音频分析...
+[32m[SUCCESS][0m 音频分析测试通过
+[33m[INFO][0m 体质类型: 气虚质
+{
+  "status": "success",
+  "features": [
+    "声音洪亮",
+    "语速适中"
+  ],
+  "bodyType": "气虚质",
+  "analysis": "声音洪亮有力，语速适中，提示肺气充足。"
+}
+[34m[TEST][0m 测试多模态搜索...
+[33m[INFO][0m 多模态搜索请求: {
+  "query": "中医舌诊健康分析",
+  "domain": "TCM",
+  "maxResults": 5,
+  "useCache": true,
+  "imageData": "[图像数据省略]",
+  "imageType": "image/jpeg",
+  "audioData": "[音频数据省略]",
+  "audioType": "audio/mpeg",
+  "tcmOptions": {
+    "includeAnalysis": true,
+    "includeBodyTypes": true
+  }
+}
+[32m[SUCCESS][0m 多模态搜索测试通过，找到 1 个结果
+{
+  "status": "success",
+  "results": [
+    {
+      "content": "这是一个多模态测试响应",
+      "score": 1,
+      "metadata": {
+        "processed": true,
+        "source": "最小服务响应",
+        "type": "multimodal"
+      }
+    }
+  ]
+}
+[33m[INFO][0m 结果已保存到: output/multimodal_search_result.json

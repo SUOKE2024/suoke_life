@@ -1,215 +1,219 @@
-# 索克生活APP测试工作流指南
+# 代理协调器服务测试文档
 
-## 概述
+## 测试概述
 
-本文档介绍索克生活APP的测试策略、测试工作流以及CI/CD集成方案，旨在保证代码质量和应用稳定性。
+代理协调器服务实现了全面的测试策略，包括单元测试、集成测试和基准测试。我们的目标是确保API的可靠性、稳定性和性能。
 
-## 测试结构
-
-索克生活APP的测试分为以下几类：
-
-1. **单元测试**：测试独立的函数、类和方法
-2. **Widget测试**：测试UI组件和页面
-3. **集成测试**：测试多个组件之间的交互
-4. **端到端测试**：模拟用户操作的完整流程测试
-
-测试文件组织结构遵循与源代码相同的结构，位于`test/`目录下：
-
-```
-test/
-  ├── core/                 # 核心模块测试
-  │   ├── network/          # 网络相关测试
-  │   ├── storage/          # 存储相关测试
-  │   ├── router/           # 路由相关测试
-  │   └── ...
-  ├── data/                 # 数据层测试
-  │   ├── datasources/      # 数据源测试
-  │   ├── models/           # 数据模型测试
-  │   └── repositories/     # 存储库实现测试
-  ├── domain/               # 领域层测试
-  │   ├── entities/         # 实体测试
-  │   └── usecases/         # 用例测试
-  ├── presentation/         # 表现层测试
-  │   ├── home/             # 首页测试
-  │   ├── suoke/            # SUOKE页测试
-  │   └── ...
-  ├── integration_test/     # 集成测试
-  └── e2e/                  # 端到端测试
-```
-
-## 运行测试
-
-### 本地运行测试
-
-1. **运行所有测试**：
-
-```bash
-flutter test
-```
-
-2. **运行特定目录的测试**：
-
-```bash
-flutter test test/core/
-```
-
-3. **运行单个测试文件**：
-
-```bash
-flutter test test/core/network/api_client_test.dart
-```
-
-4. **带覆盖率的测试**：
-
-```bash
-flutter test --coverage
-```
-
-5. **生成HTML覆盖率报告**：
-
-我们提供了一个便捷脚本来生成并打开HTML覆盖率报告：
-
-```bash
-./scripts/gen_coverage_report.sh
-```
-
-### CI/CD环境下的测试
-
-我们的CI/CD系统使用GitHub Actions进行自动化测试和构建。工作流配置文件位于`.github/workflows/`目录。
-
-主要的测试工作流包括：
-
-1. **core_test.yml**：核心模块测试，使用矩阵策略并行测试多个核心模块
-2. **data_test.yml**：数据层测试
-3. **domain_test.yml**：领域层测试
-4. **presentation_test.yml**：表现层测试
-5. **integration_test.yml**：集成测试
-
-## 测试优化策略
-
-为提高测试效率和质量，我们采用以下优化策略：
-
-### 1. 并行测试
-
-使用矩阵策略在CI/CD环境中并行运行多个测试模块，显著减少测试时间。例如：
-
-```yaml
-strategy:
-  matrix:
-    module: [network, utils, storage, theme, router, error, localization, sync]
-```
-
-### 2. 依赖缓存
-
-使用GitHub Actions的缓存功能，缓存Pub依赖，避免每次构建重新下载：
-
-```yaml
-- name: 缓存Pub依赖
-  uses: actions/cache@v3
-  with:
-    path: |
-      ~/.pub-cache
-      .dart_tool
-    key: ${{ runner.os }}-pub-${{ hashFiles('pubspec.lock') }}
-    restore-keys: ${{ runner.os }}-pub-
-```
-
-### 3. 增量测试
-
-在本地开发中，可以只运行与更改相关的测试：
-
-```bash
-flutter test --name="should correctly handle API errors"
-```
-
-### 4. 测试覆盖率监控
-
-CI/CD系统自动计算并监控测试覆盖率，确保代码质量：
-
-```yaml
-- name: 上传覆盖率报告
-  uses: actions/upload-artifact@v3
-  with:
-    name: coverage-report
-    path: coverage/html/
-```
-
-## 测试最佳实践
+## 测试类型
 
 ### 单元测试
 
-1. 测试函数的输入输出，而不是实现细节
-2. 使用模拟（Mock）对象隔离依赖
-3. 测试边界条件和异常情况
-4. 每个测试只测试一个特定行为
+单元测试专注于测试单个组件的功能，特别是处理程序逻辑。这些测试使用模拟依赖项来隔离被测试的组件。
 
-示例：
+**目录**: `internal/handlers/*.test.go`
 
-```dart
-test('当网络请求失败时应返回NetworkFailure', () async {
-  // Arrange
-  when(mockHttpClient.get(any)).thenThrow(Exception('Network error'));
-  
-  // Act
-  final result = await apiClient.fetchData();
-  
-  // Assert
-  expect(result, isA<Failure>());
-  expect((result as Failure).message, contains('网络错误'));
-});
-```
+### 集成测试
 
-### Widget测试
+集成测试验证API端点的完整请求-响应流程，确保各组件之间的正确交互。
 
-1. 测试Widget的渲染和交互
-2. 验证Widget的状态变化
-3. 测试用户输入处理
+**目录**: `internal/tests/integration/*.test.go`
 
-示例：
+### 基准测试
 
-```dart
-testWidgets('当点击按钮时应显示加载指示器', (WidgetTester tester) async {
-  // Arrange
-  await tester.pumpWidget(MaterialApp(home: MyButton()));
-  
-  // Act
-  await tester.tap(find.byType(ElevatedButton));
-  await tester.pump();
-  
-  // Assert
-  expect(find.byType(CircularProgressIndicator), findsOneWidget);
-});
-```
+基准测试衡量关键功能的性能，帮助我们识别性能瓶颈并优化代码。
 
-## 持续改进
+**目录**: `internal/tests/benchmark/*.test.go`
 
-我们致力于持续改进测试流程和质量：
+### 错误情况测试
 
-1. 定期审查测试覆盖率报告，增加低覆盖率区域的测试
-2. 引入新特性时同步编写测试
-3. 在代码审查中验证测试质量
-4. 参与团队培训，提高测试技能
+错误情况测试验证系统对错误输入和边界条件的处理能力，确保系统在各种异常情况下表现出预期行为。
 
-## 常见问题
+**目录**: `internal/tests/integration/*.test.go` (使用 `ErrorTestCase` 结构)
 
-### 测试覆盖率不准确
+### 边界条件测试
 
-如果发现测试覆盖率不准确，可能是因为生成的代码被包含在覆盖率计算中。使用我们的覆盖率报告脚本可以过滤掉生成的代码：
+边界条件测试关注系统在各种边界情况下的行为，如极大数据量、特殊字符输入、资源限制等。
+
+**目录**: `internal/tests/integration/*.test.go` (使用 `BoundaryTestCase` 结构)
+
+### 生命周期测试
+
+生命周期测试模拟真实用户的完整操作流程，通过一系列相互关联的API调用来验证系统的端到端功能。
+
+**目录**: `internal/tests/integration/*.test.go` (使用 `TestLifecycle` 函数)
+
+## 测试工具
+
+- **测试框架**: Go标准测试包 (`testing`)
+- **断言库**: `github.com/stretchr/testify/assert`
+- **模拟库**: `github.com/stretchr/testify/mock`
+- **HTTP测试**: `net/http/httptest`
+- **JSON处理**: 标准`encoding/json`包
+- **测试工具包**: `internal/tests/testutils`，包含自定义测试工具和辅助函数
+
+## 测试结构
+
+### 测试工具包 (`internal/tests/testutils`)
+
+包含通用测试函数和结构体，减少重复代码并简化测试编写。主要组件包括：
+
+- **APITestCase**: 定义正常API测试用例
+- **ErrorTestCase**: 定义错误情况测试用例
+- **BoundaryTestCase**: 定义边界条件测试用例
+- **RunAPITests**: 运行正常API测试集合
+- **RunErrorTests**: 运行错误情况测试集合
+- **RunBoundaryTests**: 运行边界条件测试集合
+
+### 模拟组件 (`internal/tests/mocks`)
+
+包含模拟存储库和服务的实现，用于替代真实依赖项进行测试。
+
+## 运行测试
+
+### 运行所有测试
 
 ```bash
-./scripts/gen_coverage_report.sh
+./scripts/run_tests.sh -a -c
 ```
 
-### 测试运行缓慢
+### 运行所有单元测试
 
-1. 优先运行相关模块的测试
-2. 使用并行测试功能
-3. 确保模拟对象正确配置，避免不必要的实际网络请求
+```bash
+./scripts/run_tests.sh -u
+```
 
-### 集成测试失败但单元测试通过
+或者使用Go命令:
 
-这通常表明组件之间的集成出现问题：
+```bash
+go test -v ./internal/handlers/...
+```
 
-1. 检查依赖注入配置
-2. 验证数据流和状态管理
-3. 确保模拟对象的行为与实际组件一致 
+### 运行集成测试
+
+```bash
+./scripts/run_tests.sh -i
+```
+
+### 运行基准测试
+
+```bash
+./scripts/run_tests.sh -b
+```
+
+### 运行错误情况测试
+
+```bash
+./scripts/run_tests.sh -e
+```
+
+### 运行边界条件测试
+
+```bash
+./scripts/run_tests.sh -y
+```
+
+### 运行生命周期测试
+
+```bash
+./scripts/run_tests.sh -l
+```
+
+### 运行特定测试
+
+```bash
+go test -v ./internal/handlers -run TestHealthCheck
+```
+
+### 生成测试覆盖率报告
+
+```bash
+./scripts/run_tests.sh -a -c
+```
+
+或者使用Go命令:
+
+```bash
+go test -coverprofile=coverage.out ./internal/handlers/...
+go tool cover -html=coverage.out -o coverage.html
+```
+
+## 编写新测试
+
+### 单元测试最佳实践
+
+1. 每个测试函数只测试一个功能点
+2. 使用描述性的测试函数名称 (如 `TestHealthCheck_ReturnsCorrectStatusCode`)
+3. 为每个测试设置独立的测试环境
+4. 使用断言库进行验证 (`assert.Equal`, `assert.Contains` 等)
+5. 模拟外部依赖项
+
+### 集成测试最佳实践
+
+1. 测试完整的API调用流程
+2. 验证HTTP状态码和响应体
+3. 测试特定的用例场景（如创建-获取-更新-删除流程）
+4. 利用 `testutils` 包减少重复代码
+
+### 编写错误情况测试
+
+1. 使用 `ErrorTestCase` 结构体定义测试用例
+2. 指明预期的HTTP状态码和错误消息
+3. 测试各种输入验证和边界条件
+4. 使用 `RunErrorTests` 运行测试集合
+
+### 编写边界条件测试
+
+1. 使用 `BoundaryTestCase` 结构体定义测试用例
+2. 实现自定义请求构建函数和断言函数
+3. 测试极端情况和特殊输入
+4. 使用 `RunBoundaryTests` 运行测试集合
+
+### 编写生命周期测试
+
+1. 在单个测试函数中模拟完整的用户操作流程
+2. 按顺序执行创建、读取、更新、删除等操作
+3. 验证每个步骤的响应和数据一致性
+4. 确保测试结束时清理所有资源
+
+### 编写基准测试
+
+1. 使用 `testing.B` 参数
+2. 在基准测试中，仅执行关键验证
+3. 使用 `b.ResetTimer()` 避免包含设置时间
+4. 考虑添加并行基准测试版本 (`b.RunParallel`)
+
+## 自动化测试流程
+
+### CI/CD 集成
+
+服务已配置为在Pull Request和推送到主分支时自动运行测试。CI流程中包括：
+
+1. 单元测试和覆盖率分析
+2. 集成测试验证
+3. 基准测试结果比较
+4. 错误情况和边界条件测试
+
+### 测试环境
+
+1. **开发环境**: 开发人员在本地运行的测试
+2. **CI环境**: 在自动化流程中运行的测试
+3. **预生产环境**: 在部署到生产前的最终验证
+
+## 测试报告
+
+测试结果会自动生成报告并存储在CI/CD系统中。覆盖率报告也可以在构建过程中生成和归档。
+
+## 故障排除
+
+### 常见测试失败问题
+
+1. **模拟对象未被调用**: 验证模拟对象的期望是否正确设置
+2. **HTTP状态码不匹配**: 检查请求是否正确，路由是否注册
+3. **JSON解析错误**: 验证响应格式是否与预期一致
+4. **错误消息不匹配**: 检查错误字段路径和预期错误消息是否正确
+
+### 调试技巧
+
+1. 使用 `-v` 标志获取详细输出
+2. 检查日志记录
+3. 添加临时断言来隔离问题 

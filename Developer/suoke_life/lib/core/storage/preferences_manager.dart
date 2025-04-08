@@ -1,39 +1,100 @@
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// 偏好设置管理器
+/// 首选项管理器，统一管理应用程序持久化存储
 class PreferencesManager {
-  final SharedPreferences _prefs;
+  final SharedPreferences _preferences;
+  final FlutterSecureStorage _secureStorage;
 
-  // 键名常量
+  // 密钥常量
+  static const String _keyToken = 'auth_token';
+  static const String _keyRefreshToken = 'refresh_token';
+  static const String _keyUserId = 'user_id';
+  static const String _keyUsername = 'username';
   static const String _keyHasSeenWelcome = 'has_seen_welcome';
-  static const String _keyLastLoginTime = 'last_login_time';
+  static const String _keyAppTheme = 'app_theme';
+  static const String _keyLanguage = 'language';
+  static const String _keyNotificationsEnabled = 'notifications_enabled';
 
-  PreferencesManager(this._prefs);
+  PreferencesManager(this._preferences, this._secureStorage);
 
-  /// 是否已经看过欢迎页面
-  bool get hasSeenWelcome => _prefs.getBool(_keyHasSeenWelcome) ?? false;
-
-  /// 设置是否已经看过欢迎页面
-  Future<void> setHasSeenWelcome(bool value) async {
-    await _prefs.setBool(_keyHasSeenWelcome, value);
+  // 认证令牌管理
+  Future<void> setToken(String token) async {
+    await _secureStorage.write(key: _keyToken, value: token);
   }
 
-  /// 获取上次登录时间
-  DateTime? get lastLoginTime {
-    final timestamp = _prefs.getInt(_keyLastLoginTime);
-    if (timestamp == null) return null;
-    return DateTime.fromMillisecondsSinceEpoch(timestamp);
+  Future<String?> getToken() async {
+    return await _secureStorage.read(key: _keyToken);
   }
 
-  /// 设置上次登录时间
-  Future<void> setLastLoginTime(DateTime time) async {
-    await _prefs.setInt(_keyLastLoginTime, time.millisecondsSinceEpoch);
+  Future<void> setRefreshToken(String token) async {
+    await _secureStorage.write(key: _keyRefreshToken, value: token);
   }
 
-  /// 清除所有偏好设置
-  Future<void> clear() async {
-    await _prefs.clear();
+  Future<String?> getRefreshToken() async {
+    return await _secureStorage.read(key: _keyRefreshToken);
+  }
+
+  Future<void> clearTokens() async {
+    await _secureStorage.delete(key: _keyToken);
+    await _secureStorage.delete(key: _keyRefreshToken);
+  }
+
+  // 用户信息管理
+  Future<void> setUserId(String userId) async {
+    await _secureStorage.write(key: _keyUserId, value: userId);
+  }
+
+  Future<String?> getUserId() async {
+    return await _secureStorage.read(key: _keyUserId);
+  }
+
+  Future<void> setUsername(String username) async {
+    await _preferences.setString(_keyUsername, username);
+  }
+
+  String? getUsername() {
+    return _preferences.getString(_keyUsername);
+  }
+
+  // 应用程序设置
+  Future<void> setHasSeenWelcome(bool hasSeen) async {
+    await _preferences.setBool(_keyHasSeenWelcome, hasSeen);
+  }
+
+  bool getHasSeenWelcome() {
+    return _preferences.getBool(_keyHasSeenWelcome) ?? false;
+  }
+
+  Future<void> setAppTheme(String theme) async {
+    await _preferences.setString(_keyAppTheme, theme);
+  }
+
+  String getAppTheme() {
+    return _preferences.getString(_keyAppTheme) ?? 'system';
+  }
+
+  Future<void> setLanguage(String language) async {
+    await _preferences.setString(_keyLanguage, language);
+  }
+
+  String getLanguage() {
+    return _preferences.getString(_keyLanguage) ?? 'zh_CN';
+  }
+
+  Future<void> setNotificationsEnabled(bool enabled) async {
+    await _preferences.setBool(_keyNotificationsEnabled, enabled);
+  }
+
+  bool getNotificationsEnabled() {
+    return _preferences.getBool(_keyNotificationsEnabled) ?? true;
+  }
+
+  // 清除所有数据
+  Future<void> clearAll() async {
+    await _preferences.clear();
+    await _secureStorage.deleteAll();
   }
 }
 
@@ -45,5 +106,6 @@ final preferencesManagerProvider = Provider<PreferencesManager>((ref) {
 /// 初始化偏好设置管理器
 Future<PreferencesManager> initPreferencesManager() async {
   final prefs = await SharedPreferences.getInstance();
-  return PreferencesManager(prefs);
+  final secureStorage = FlutterSecureStorage();
+  return PreferencesManager(prefs, secureStorage);
 }

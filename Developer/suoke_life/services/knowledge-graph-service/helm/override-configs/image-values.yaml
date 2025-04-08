@@ -1,0 +1,4 @@
+image:
+  repository: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/suoke-knowledge-graph-service
+  tag: 1.0.0
+  pullPolicy: Always

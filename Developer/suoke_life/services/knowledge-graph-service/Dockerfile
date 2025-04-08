@@ -1,68 +1,51 @@
-# 构建阶段 - 使用官方标准镜像
-FROM suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/node:18-alpine as builder
+FROM golang:1.24.0 AS builder
 
-WORKDIR /app
+# 设置工作目录
+WORKDIR /build
 
-# 复制package文件
-COPY package*.json ./
+# 设置Go模块和代理参数
+ENV GO111MODULE=on
+ENV GOPROXY=https://goproxy.cn,direct
 
-# 安装依赖
-RUN npm ci
+# 复制Go模块定义
+COPY go.mod go.sum ./
+
+# 降级依赖
+RUN go get -u github.com/klauspost/cpuid/v2@v2.1.2
+RUN go get -u golang.org/x/arch@v0.5.0
+RUN go get -u github.com/gin-contrib/cors@v1.4.0
+
+# 下载依赖
+RUN go mod download
 
 # 复制源代码
 COPY . .
 
-# 构建TypeScript
-RUN npm run build
+# 编译应用程序
+RUN CGO_ENABLED=0 GOOS=linux go build -a -o knowledge-graph-service ./cmd/server
 
-# 生产阶段 - 使用官方标准镜像
-FROM suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/node:18-alpine
+# 第二阶段：基于alpine构建精简镜像
+FROM alpine:3.17
 
+# 设置工作目录
 WORKDIR /app
 
-# 设置标签
-LABEL maintainer="SuoKe Platform Team <dev@suoke.life>" \
-      org.opencontainers.image.title="Knowledge Graph Service" \
-      org.opencontainers.image.description="索克生活平台知识图谱服务" \
-      org.opencontainers.image.vendor="SuoKe Platform" \
-      org.opencontainers.image.version="1.0.0" \
-      org.opencontainers.image.url="https://suoke.life" \
-      org.opencontainers.image.source="https://github.com/suoke-life/knowledge-graph-service"
+# 安装必要的软件包
+RUN apk add --no-cache ca-certificates tzdata wget
 
-# 复制package文件和构建产物
-COPY --from=builder /app/package*.json ./
-COPY --from=builder /app/dist ./dist
+# 设置时区
+ENV TZ=Asia/Shanghai
 
-# 只安装生产依赖
-RUN npm ci --only=production && npm cache clean --force
-
-# 创建非root用户
-RUN addgroup -g 1000 appuser && \
-    adduser -u 1000 -G appuser -s /bin/sh -D appuser
-
-# 创建必要的目录并设置权限
-RUN mkdir -p /app/data /app/models /app/tmp /app/logs && \
-    chown -R appuser:appuser /app
-
-# 切换到非root用户
-USER appuser
+# 复制编译好的二进制文件和环境变量示例文件
+COPY --from=builder /build/knowledge-graph-service .
+COPY --from=builder /build/.env.example ./.env
 
 # 设置环境变量
-ENV NODE_ENV=production \
-    PORT=3000 \
-    APP_HOST=0.0.0.0 \
-    LOG_LEVEL=info \
-    OTEL_SERVICE_NAME=knowledge-graph-service
-
-# 添加健康检查
-HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
-    CMD wget -q --spider http://localhost:3000/health/live || exit 1
+ENV GIN_MODE=release
+ENV NEO4J_SERVICE_PORT=8080
 
 # 暴露端口
-EXPOSE 3000 9090
+EXPOSE 8080
 
-# 挂载卷
-VOLUME ["/app/data", "/app/models", "/app/tmp"]
-
-# 启动命令
-CMD ["node", "dist/index.js"]
+# 运行应用
+CMD ["./knowledge-graph-service"]

@@ -1,0 +1,122 @@
+# 生产环境配置，包含镜像加速设置
+
+image:
+  repository: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/suoke-knowledge-graph-service
+  tag: 1.0.0
+  pullPolicy: Always
+
+# 配置镜像拉取凭证
+imagePullSecrets:
+  - name: aliyun-registry-secret
+
+# 持久化存储配置
+persistence:
+  data:
+    enabled: true
+    storageClassName: "alicloud-disk-essd"
+    size: 10Gi
+  models:
+    enabled: true
+    storageClassName: "alicloud-disk-essd"
+    size: 5Gi
+  logs:
+    enabled: true
+    storageClassName: "alicloud-disk-essd"
+    size: 5Gi
+
+service:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: http
+      protocol: TCP
+      name: http
+    - port: 9464
+      targetPort: metrics
+      protocol: TCP
+      name: prometheus
+
+deployment:
+  annotations:
+    timestamp: "20250407-1"
+  
+  ports:
+    - name: http
+      containerPort: 8080
+      protocol: TCP
+    - name: metrics
+      containerPort: 9464
+      protocol: TCP
+
+  # 资源限制
+  resources:
+    limits:
+      cpu: 1500m
+      memory: 3Gi
+    requests:
+      cpu: 750m
+      memory: 1536Mi
+
+  # 健康检查
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: http
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+    
+  readinessProbe:
+    httpGet:
+      path: /health
+      port: http
+    initialDelaySeconds: 15
+    periodSeconds: 5
+    timeoutSeconds: 3
+    failureThreshold: 3
+
+  # 启动探针
+  startupProbe:
+    httpGet:
+      path: /health
+      port: http
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 12
+
+# 禁用其他探针类型
+tcpSocket: null
+exec: null
+
+# 节点选择器和容忍度
+nodeSelector:
+  role: suoke-core-np
+
+tolerations:
+  - key: role
+    operator: Equal
+    value: suoke-core-np
+    effect: NoSchedule
+
+# 环境变量
+env:
+  - name: APP_ENV
+    value: production
+  - name: LOG_LEVEL
+    value: info
+  - name: SERVER_PORT
+    value: "8080"
+  - name: METRICS_PORT
+    value: "9464"
+  - name: OTEL_SERVICE_NAME
+    value: knowledge-graph-service
+  - name: OTEL_RESOURCE_ATTRIBUTES
+    value: service.namespace=suoke-prod,service.name=knowledge-graph-service
+  - name: GRAPH_CACHE_TTL
+    value: "7200"
+  - name: GRAPH_MAX_DEPTH
+    value: "4"
+  - name: GRAPH_RELATIONSHIP_THRESHOLD
+    value: "0.75"

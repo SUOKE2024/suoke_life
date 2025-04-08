@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  creationTimestamp: "2025-04-06T01:03:14Z"
+  generation: 2
+  labels:
+    app: milvus
+  name: milvus
+  namespace: suoke-prod
+  resourceVersion: "10283820"
+  uid: 813dd9cd-34fd-4c70-8081-f399b7f97fbd
+spec:
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: Retain
+    whenScaled: Retain
+  podManagementPolicy: OrderedReady
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: milvus
+  serviceName: milvus-svc
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: milvus
+    spec:
+      containers:
+      - image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/milvus:v2.2.11
+        imagePullPolicy: IfNotPresent
+        name: milvus
+        ports:
+        - containerPort: 19530
+          protocol: TCP
+        volumeMounts:
+        - name: milvus-data
+          mountPath: /var/lib/milvus
+        resources:
+          requests:
+            cpu: 250m
+            memory: 512Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      volumes:
+      - name: milvus-data
+        emptyDir: {}
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: aliyun-registry-secret
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+  updateStrategy:
+    type: RollingUpdate
+status:
+  availableReplicas: 0
+  collisionCount: 0
+  currentReplicas: 1
+  currentRevision: milvus-7668b976cf
+  observedGeneration: 2
+  replicas: 1
+  updateRevision: milvus-56db645645

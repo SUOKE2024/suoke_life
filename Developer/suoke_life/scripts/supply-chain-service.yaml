@@ -1,0 +1,2256 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: supply-chain-service
+  namespace: suoke
+  labels:
+    app: supply-chain-service
+    tier: backend
+    version: v1
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "3011"
+    prometheus.io/path: "/metrics"
+    seccomp.security.alpha.kubernetes.io/pod: "runtime/default"
+    container.apparmor.security.beta.kubernetes.io/supply-chain-service: "runtime/default"
+    backup.velero.io/backup-volumes: "supply-chain-data,supply-chain-logs"
+    backup.velero.io/schedule: "daily"
+    backup.velero.io/ttl: "720h"
+    backup.velero.io/restore-test: "enabled"
+    sidecar.istio.io/statsInclusionPrefixes: "supply_chain_,tcm_,product_,order_,inventory_"
+    trivy.security.scanning/enabled: "true"
+    alertmanager.rules/supply-chain-service: |
+      groups:
+      - name: supply-chain-service-alerts
+        rules:
+        - alert: SupplyChainServiceHighError
+        expr: rate(supply_chain_http_requests_total{status=~"5.."}[5m]) / rate(supply_chain_http_requests_total[5m]) > 0.05
+        for: 2m
+        labels:
+          severity: critical
+          service: supply-chain-service
+        annotations:
+            summary: "供应链服务错误率高"
+          description: "供应链服务在过去2分钟内错误率超过5%"
+        - alert: SupplyChainServiceHighLatency
+          expr: histogram_quantile(0.95, sum(rate(supply_chain_request_duration_seconds_bucket[5m])) by (le)) > 1.5
+          for: 3m
+        labels:
+          severity: warning
+          service: supply-chain-service
+        annotations:
+            summary: "供应链服务延迟高"
+            description: "供应链服务95%请求响应时间超过1.5秒，持续3分钟"
+      - alert: SupplyChainServiceDown
+        expr: up{app="supply-chain-service"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: supply-chain-service
+        annotations:
+          summary: "供应链服务不可用"
+            description: "供应链服务实例不可用"
+        - alert: ProductInventoryLow
+          expr: supply_chain_product_inventory_count < 10
+          for: 10m
+        labels:
+          severity: warning
+          service: supply-chain-service
+        annotations:
+            summary: "产品库存不足"
+            description: "某些产品库存低于10个单位，请及时补货"
+        - alert: OrderProcessingDelay
+          expr: supply_chain_order_processing_time_seconds > 300
+          for: 15m
+          labels:
+            severity: warning
+            service: supply-chain-service
+          annotations:
+            summary: "订单处理延迟"
+            description: "订单处理时间超过5分钟，需要检查订单处理流程"
+        - alert: BlockchainSyncFailure
+          expr: supply_chain_blockchain_sync_failures_total > 0
+          for: 15m
+          labels:
+            severity: warning
+            service: supply-chain-service
+          annotations:
+            summary: "区块链同步失败"
+            description: "与区块链网络同步溯源数据失败，请检查连接状态"
+    grafana.dashboards/config: |
+      {
+        "supply-chain-dashboard": {
+          "url": "/grafana/dashboards/supply-chain-service",
+          "title": "供应链服务监控面板",
+          "refresh": "30s",
+        "panels": [
+          {
+            "title": "请求速率",
+            "targets": [{"expr": "sum(rate(supply_chain_http_requests_total[5m])) by (status)"}]
+          },
+          {
+            "title": "错误率",
+            "targets": [{"expr": "sum(rate(supply_chain_http_requests_total{status=~\"5..\"}[5m])) / sum(rate(supply_chain_http_requests_total[5m]))"}]
+          },
+            {
+              "title": "响应延迟",
+              "targets": [{"expr": "histogram_quantile(0.95, sum(rate(supply_chain_request_duration_seconds_bucket[5m])) by (le))"}]
+            },
+          {
+            "title": "订单处理时间",
+              "targets": [{"expr": "supply_chain_order_processing_time_seconds"}]
+            },
+            {
+              "title": "库存水平",
+              "targets": [{"expr": "supply_chain_product_inventory_count"}]
+            },
+            {
+              "title": "区块链溯源写入速率",
+              "targets": [{"expr": "rate(supply_chain_blockchain_writes_total[5m])"}]
+            },
+            {
+              "title": "CPU使用率",
+              "targets": [{"expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"suoke\", pod=~\"supply-chain-service-.*\"}[5m]))"}]
+            },
+            {
+              "title": "内存使用",
+              "targets": [{"expr": "sum(container_memory_usage_bytes{namespace=\"suoke\", pod=~\"supply-chain-service-.*\"})"}]
+            }
+          ]
+        }
+      }
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: supply-chain-service
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: supply-chain-service
+        tier: backend
+        version: v1
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "3011"
+        prometheus.io/path: "/metrics"
+        checksum/config: "${CHECKSUM}"  # 配置变更时触发Pod更新
+    spec:
+      priorityClassName: high-priority
+      terminationGracePeriodSeconds: 45
+      serviceAccountName: supply-chain-service
+      initContainers:
+      - name: config-validator
+        image: registry.suoke.life/config-validator:latest
+        command:
+        - "/bin/sh"
+        - "-c"
+        - |
+          echo "验证供应链服务配置..."
+          if [ -f /app/config/supply-chain-config.json ]; then
+            echo "配置文件存在，验证JSON格式..."
+            cat /app/config/supply-chain-config.json | jq . > /dev/null
+            if [ $? -eq 0 ]; then
+              echo "配置文件格式正确"
+            else
+              echo "配置文件JSON格式错误，退出"
+              exit 1
+            fi
+          else
+            echo "配置文件不存在，退出"
+            exit 1
+          fi
+          echo "配置验证完成"
+        volumeMounts:
+        - name: supply-chain-config-volume
+          mountPath: /app/config
+          readOnly: true
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+      - name: data-directory-setup
+        image: registry.suoke.life/alpine:latest
+        command:
+        - "/bin/sh"
+        - "-c"
+        - |
+          echo "创建必要的数据目录..."
+          mkdir -p /app/data/cache
+          mkdir -p /app/data/reports
+          mkdir -p /app/data/logs
+          mkdir -p /app/data/exports
+          mkdir -p /app/data/temp
+          chmod -R 755 /app/data
+          echo "数据目录已创建"
+        volumeMounts:
+        - name: supply-chain-data
+          mountPath: /app/data
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 100m
+            memory: 128Mi
+      - name: cache-warmup
+        image: registry.suoke.life/supply-chain-service:prod
+        command:
+        - "/bin/sh"
+        - "-c"
+        - |
+          echo "预热商品分类缓存..."
+          node /app/scripts/cache-warmup.js --type=categories
+          echo "预热热门商品缓存..."
+          node /app/scripts/cache-warmup.js --type=popular_products
+          echo "预热节气数据缓存..."
+          node /app/scripts/cache-warmup.js --type=solar_terms
+          echo "缓存预热完成"
+        env:
+        - name: REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: supply-chain-config
+              key: redis_host
+        - name: REDIS_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: supply-chain-config
+              key: redis_port
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: supply-chain-secrets
+              key: redis_password
+        volumeMounts:
+        - name: supply-chain-config-volume
+          mountPath: /app/config
+          readOnly: true
+        resources:
+          requests:
+            cpu: 200m
+            memory: 256Mi
+          limits:
+            cpu: 400m
+            memory: 512Mi
+      - name: database-migration
+        image: registry.suoke.life/supply-chain-service:prod
+        command:
+        - "/bin/sh"
+        - "-c"
+        - |
+          echo "执行数据库迁移..."
+          export DATABASE_URL="mysql://${DATABASE_USER}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}"
+          node /app/scripts/migrate.js --auto-migrate --seed-data
+          echo "数据库迁移完成"
+        env:
+        - name: DATABASE_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: supply-chain-config
+              key: database_host
+        - name: DATABASE_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: supply-chain-config
+              key: database_port
+        - name: DATABASE_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: supply-chain-config
+              key: database_name
+        - name: DATABASE_USER
+          valueFrom:
+            secretKeyRef:
+              name: supply-chain-secrets
+              key: database_user
+        - name: DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: supply-chain-secrets
+              key: database_password
+        resources:
+          requests:
+            cpu: 200m
+            memory: 256Mi
+          limits:
+            cpu: 400m
+            memory: 512Mi
+      containers:
+      - name: supply-chain-service
+        image: registry.suoke.life/supply-chain-service:prod
+        imagePullPolicy: Always
+        command:
+        - "/bin/bash"
+        - "-c"
+        - |
+          # 确保数据目录存在和权限
+          mkdir -p /app/logs /app/data/reports /app/data/cache /app/data/temp
+          
+          # 设置正确的权限
+          chmod -R 755 /app/logs /app/data
+          
+          # 设置环境变量
+          export NODE_OPTIONS="--max-old-space-size=2048"
+          export SUPPLY_CHAIN_CONFIG="/app/config/supply-chain-config.json"
+          export TLS_CERT_PATH="/etc/ssl/certs/supply-chain-service.crt"
+          export TLS_KEY_PATH="/etc/ssl/private/supply-chain-service.key"
+          
+          # 打印启动信息
+          echo "启动供应链服务 - $(date)"
+          echo "节点环境: $NODE_ENV"
+          echo "日志级别: $LOG_LEVEL"
+          
+          # 检查数据库连接
+          node /app/scripts/check-db-connection.js || exit 1
+          
+          # 预热缓存
+          node /app/scripts/cache-warmup.js
+          
+          # 启动应用
+          exec node /app/server.js
+        ports:
+        - containerPort: 3011
+          name: http
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: LOG_LEVEL
+          value: "info"
+        - name: DATABASE_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: supply-chain-config
+              key: database_host
+        - name: DATABASE_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: supply-chain-config
+              key: database_port
+        - name: DATABASE_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: supply-chain-config
+              key: database_name
+        - name: DATABASE_USER
+          valueFrom:
+            secretKeyRef:
+              name: supply-chain-secrets
+              key: database_user
+        - name: DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: supply-chain-secrets
+              key: database_password
+        - name: DATABASE_POOL_MIN
+          valueFrom:
+            configMapKeyRef:
+              name: supply-chain-config
+              key: database_pool_min
+        - name: DATABASE_POOL_MAX
+          valueFrom:
+            configMapKeyRef:
+              name: supply-chain-config
+              key: database_pool_max
+        - name: REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: supply-chain-config
+              key: redis_host
+        - name: REDIS_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: supply-chain-config
+              key: redis_port
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: supply-chain-secrets
+              key: redis_password
+        - name: PAYMENT_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: supply-chain-secrets
+              key: payment_api_key
+        - name: LOGISTICS_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: supply-chain-secrets
+              key: logistics_api_key
+        - name: RAG_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: supply-chain-config
+              key: rag_service_url
+        - name: ENCRYPTION_KEY
+          valueFrom:
+            secretKeyRef:
+              name: supply-chain-secrets
+              key: encryption_key
+        - name: CONSTITUTION_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: supply-chain-config
+              key: constitution_service_url
+        - name: HEALTH_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: supply-chain-config
+              key: health_service_url
+        - name: FEATURE_FLAGS
+          valueFrom:
+            configMapKeyRef:
+              name: supply-chain-config
+              key: feature_flags
+        - name: SERVICE_TIMEOUTS
+          valueFrom:
+            configMapKeyRef:
+              name: supply-chain-config
+              key: service_timeouts
+        - name: METRICS_EXPORT_ENABLED
+          value: "true"
+        - name: DISTRIBUTED_TRACING_ENABLED
+          value: "true"
+        - name: BLOCKCHAIN_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: supply-chain-config
+              key: blockchain_service_url
+        - name: BLOCKCHAIN_NETWORK_TYPE
+          value: "hyperledger-fabric"
+        - name: BLOCKCHAIN_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: supply-chain-secrets
+              key: blockchain_api_key
+        - name: SUPPLIER_PORTAL_ENABLED
+          value: "true"
+        - name: SUPPLIER_APPROVAL_WORKFLOW
+          value: "automatic"
+        - name: PRODUCT_CUSTOMIZATION_ENABLED
+          value: "true"
+        - name: CUSTOM_PRODUCT_APPROVAL_WORKFLOW
+          value: "manual"
+        - name: FARM_EXPERIENCE_ENABLED
+          value: "true"
+        - name: GEOLOCATION_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: supply-chain-config
+              key: geolocation_service_url
+        - name: BLOCKCHAIN_PROVIDER
+          valueFrom:
+            configMapKeyRef:
+              name: supply-chain-config
+              key: blockchain_provider
+        - name: ENABLE_OPENAI_COMPATIBILITY
+          value: "true"
+        - name: OPENAI_API_VERSION
+          value: "2023-07-01"
+        - name: OPENAI_API_KEY_HEADER
+          value: "X-OpenAI-Api-Key"
+        - name: OPENAI_TOOLS_ENABLED
+          value: "true"
+        - name: OPENAI_RESPONSE_FORMAT
+          value: "openai_compatible"
+        - name: OPENAI_ENDPOINTS_PREFIX
+          value: "/api/v1/openai"
+        - name: OPENAI_TOOLS_CONFIG_PATH
+          value: "/app/config/openai/openai-tools.json"
+        resources:
+          requests:
+            cpu: 300m
+            memory: 512Mi
+          limits:
+            cpu: 1000m
+            memory: 2Gi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3011
+            httpHeaders:
+            - name: X-Probe-Type
+              value: "liveness"
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+          successThreshold: 1
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: 3011
+            httpHeaders:
+            - name: X-Probe-Type
+              value: "readiness"
+            - name: Content-Type
+              value: "application/json"
+          initialDelaySeconds: 15
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 2
+          successThreshold: 1
+        startupProbe:
+          httpGet:
+            path: /health/startup
+            port: 3011
+            scheme: HTTP
+            httpHeaders:
+            - name: X-Probe-Type
+              value: "startup"
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          failureThreshold: 12
+          timeoutSeconds: 3
+          successThreshold: 1
+        lifecycle:
+          postStart:
+            exec:
+              command:
+              - "/bin/bash"
+              - "-c"
+              - |
+                # 记录启动事件
+                echo "$(date -Iseconds) - CONTAINER_STARTED - 供应链服务启动, PID: $$, NODE_ENV: ${NODE_ENV}" >> /app/logs/lifecycle.log
+                
+                # 创建必要的目录
+                mkdir -p /app/data/reports/$(date +%Y-%m-%d)
+                
+                # 发送启动通知
+                curl -s -X POST ${NOTIFICATION_SERVICE_URL}/api/notifications/system \
+                  -H "Content-Type: application/json" \
+                  -d "{\"service\":\"supply-chain-service\",\"event\":\"startup\",\"level\":\"info\",\"message\":\"供应链服务已启动\",\"timestamp\":\"$(date -Iseconds)\"}" || true
+                
+                # 注册服务到服务发现
+                curl -s -X PUT ${SERVICE_REGISTRY_URL}/api/services/register \
+                  -H "Content-Type: application/json" \
+                  -d "{\"name\":\"supply-chain-service\",\"version\":\"1.0.0\",\"status\":\"starting\",\"endpoints\":[{\"name\":\"main\",\"url\":\"http://supply-chain-service:3011\"}]}" || true
+          preStop:
+            exec:
+              command:
+              - "/bin/bash"
+              - "-c"
+              - |
+                # 记录关闭事件
+                echo "$(date -Iseconds) - CONTAINER_STOPPING - 供应链服务正在优雅关闭..." >> /app/logs/lifecycle.log
+                
+                # 通知服务发现此服务即将下线
+                curl -s -X PUT ${SERVICE_REGISTRY_URL}/api/services/status \
+                  -H "Content-Type: application/json" \
+                  -d "{\"name\":\"supply-chain-service\",\"status\":\"stopping\"}" || true
+                  
+                # 等待处理中的请求完成
+                sleep 5
+                
+                # 关闭连接池
+                curl -s -X POST http://localhost:3011/internal/shutdown \
+                  -H "Content-Type: application/json" \
+                  -H "Authorization: Bearer ${INTERNAL_API_TOKEN}" \
+                  -d "{\"reason\":\"container_stopping\",\"gracePeriod\":10}" || true
+                
+                # 再次等待确保请求都已完成
+                sleep 10
+                
+                # 记录成功关闭
+                echo "$(date -Iseconds) - CONTAINER_STOPPED - 供应链服务已完成优雅关闭" >> /app/logs/lifecycle.log
+        volumeMounts:
+        - name: supply-chain-config-volume
+          mountPath: /app/config
+          readOnly: true
+        - name: supply-chain-data
+          mountPath: /app/data
+        - name: supply-chain-logs
+          mountPath: /app/logs
+        - name: supply-chain-temp
+          mountPath: /app/temp
+        - name: openai-config-volume
+          mountPath: /app/config/openai
+          readOnly: true
+        securityContext:
+          allowPrivilegeEscalation: false
+          privileged: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          capabilities:
+            drop:
+            - ALL
+      volumes:
+      - name: supply-chain-config-volume
+        configMap:
+          name: supply-chain-config-files
+      - name: supply-chain-data
+        persistentVolumeClaim:
+          claimName: supply-chain-data-pvc
+      - name: supply-chain-logs
+        persistentVolumeClaim:
+          claimName: supply-chain-logs-pvc
+      - name: supply-chain-temp
+        emptyDir: {}
+      - name: openai-config-volume
+        configMap:
+          name: supply-chain-openai-config
+      - name: supply-chain-tls
+        secret:
+          secretName: supply-chain-service-tls
+          items:
+          - key: tls.crt
+            path: tls.crt
+          - key: tls.key
+            path: tls.key
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - supply-chain-service
+              topologyKey: kubernetes.io/hostname
+          - weight: 70
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - supply-chain-service
+              topologyKey: topology.kubernetes.io/zone
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: cloud.google.com/gke-nodepool
+                operator: In
+                values:
+                - standard-nodes
+              - key: node.kubernetes.io/instance-type
+                operator: In
+                values:
+                - n2-standard-4
+                - n2-standard-8
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 90
+            preference:
+              matchExpressions:
+              - key: failure-domain.beta.kubernetes.io/region
+                operator: In
+                values:
+                - asia-east1
+                - asia-east2
+          - weight: 80
+            preference:
+              matchExpressions:
+              - key: node-role.kubernetes.io/production
+                operator: In
+                values:
+                - "true"
+          - weight: 70
+            preference:
+              matchExpressions:
+              - key: supply-chain/optimized
+                operator: In
+                values:
+                - "true"
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: topology.kubernetes.io/zone
+        whenUnsatisfiable: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            app: supply-chain-service
+      - maxSkew: 1
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: DoNotSchedule
+        labelSelector:
+          matchLabels:
+            app: supply-chain-service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: supply-chain-service
+  namespace: suoke
+  labels:
+    app: supply-chain-service
+    tier: backend
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "3011"
+    prometheus.io/path: "/metrics"
+spec:
+  selector:
+    app: supply-chain-service
+  ports:
+  - port: 80
+    targetPort: 3011
+    name: http
+  type: ClusterIP
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 3600  # 会话保持1小时
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: supply-chain-service-ingress
+  namespace: suoke
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "120"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "120"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "30"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://suoke.life,https://app.suoke.life"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, POST, PUT, DELETE, OPTIONS"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "X-Content-Type-Options: nosniff";
+      more_set_headers "X-Frame-Options: DENY";
+      more_set_headers "X-XSS-Protection: 1; mode=block";
+      more_set_headers "Strict-Transport-Security: max-age=31536000; includeSubDomains; preload";
+      more_set_headers "Content-Security-Policy: default-src 'self'; script-src 'self'; img-src 'self' data:; style-src 'self'; connect-src 'self'";
+      more_set_headers "Referrer-Policy: strict-origin-when-cross-origin";
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/limit-rps: "10"
+    nginx.ingress.kubernetes.io/limit-connections: "5"
+spec:
+  tls:
+  - hosts:
+    - supply.suoke.life
+    secretName: supply-chain-tls
+  rules:
+  - host: supply.suoke.life
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: supply-chain-service
+            port:
+              number: 80
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: supply-chain-service
+  namespace: suoke
+  labels:
+    app: supply-chain-service
+  annotations:
+    autoscaling.alpha.kubernetes.io/metrics-visibility: "all"
+    autoscaling.alpha.kubernetes.io/behavior: |
+      {
+        "scaleDown": {
+          "stabilizationWindowSeconds": 300,
+          "policies": [
+            {
+              "type": "Percent",
+              "value": 20,
+              "periodSeconds": 60
+            }
+          ]
+        },
+        "scaleUp": {
+          "stabilizationWindowSeconds": 60,
+          "policies": [
+            {
+              "type": "Percent",
+              "value": 50,
+              "periodSeconds": 60
+            },
+            {
+              "type": "Pods",
+              "value": 4,
+              "periodSeconds": 60
+            }
+          ],
+          "selectPolicy": "Max"
+        }
+      }
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: supply-chain-service
+  minReplicas: 3
+  maxReplicas: 12
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 75
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  - type: Pods
+    pods:
+      metric:
+        name: supply_chain_http_requests_per_second
+      target:
+        type: AverageValue
+        averageValue: 300
+  - type: External
+    external:
+      metric:
+        name: supply_chain_active_orders
+        selector:
+          matchLabels:
+            status: processing
+      target:
+        type: AverageValue
+        averageValue: 200
+  - type: External
+    external:
+      metric:
+        name: supply_chain_queue_length
+        selector:
+          matchLabels:
+            queue: order_processing
+      target:
+        type: AverageValue
+        averageValue: 50
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: supply-chain-service-pdb
+  namespace: suoke
+  labels:
+    app: supply-chain-service
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: supply-chain-service
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: supply-chain-service-circuit-breaker
+  namespace: suoke
+spec:
+  host: supply-chain-service
+  trafficPolicy:
+    connectionPool:
+      http:
+        maxRequestsPerConnection: 10
+        http1MaxPendingRequests: 1024
+        http2MaxRequests: 1024
+        maxRetries: 3
+      tcp:
+        maxConnections: 1000
+        connectTimeout: 3s
+        tcpKeepalive:
+          time: 600s
+          interval: 60s
+    outlierDetection:
+      consecutiveErrors: 5
+      interval: 30s
+      baseEjectionTime: 30s
+      maxEjectionPercent: 50
+      minHealthPercent: 50
+---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: high-priority
+value: 1000000
+globalDefault: false
+description: "用于关键微服务的高优先级"
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: supply-chain-service-monitor
+  namespace: monitoring
+  labels:
+    app: supply-chain-service
+    release: prometheus-operator
+spec:
+  selector:
+    matchLabels:
+      app: supply-chain-service
+  namespaceSelector:
+    matchNames:
+      - suoke
+  endpoints:
+  - port: http
+    path: /metrics
+    interval: 15s
+    scrapeTimeout: 10s
+    metricRelabelings:
+    - sourceLabels: [__name__]
+      regex: 'supply_chain_.*'
+      action: keep
+    - sourceLabels: [__name__]
+      regex: 'go_.*'
+      action: drop
+    - targetLabel: app
+      replacement: supply-chain-service
+    relabelings:
+    - sourceLabels: [__meta_kubernetes_pod_node_name]
+      targetLabel: node
+    - sourceLabels: [__meta_kubernetes_pod_name]
+      targetLabel: pod
+  - port: http
+    path: /metrics/business
+    interval: 30s
+    scrapeTimeout: 10s
+    honorLabels: true
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: supply-chain-service-quota
+  namespace: suoke
+spec:
+  hard:
+    pods: "20"
+    requests.cpu: "10"
+    requests.memory: 20Gi
+    limits.cpu: "20"
+    limits.memory: 40Gi
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: supply-chain-service-limits
+  namespace: suoke
+spec:
+  limits:
+  - type: Container
+    defaultRequest:
+      cpu: 200m
+      memory: 512Mi
+    default:
+      cpu: 500m
+      memory: 1Gi
+    min:
+      cpu: 50m
+      memory: 128Mi
+    max:
+      cpu: 4
+      memory: 8Gi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: supply-chain-rag-config
+  namespace: suoke
+data:
+  rag-integration.json: |
+    {
+      "enabled": true,
+      "serviceEndpoint": "${RAG_SERVICE_URL}",
+      "timeout": 3000,
+      "maxConcurrentRequests": 20,
+      "queryTemplates": {
+        "productRecommendation": "请根据{constitution_type}体质特点，推荐适合的{product_category}产品，详细说明理由和注意事项。",
+        "productUsage": "请详细介绍{product_name}的功效作用、使用方法、适用体质以及注意事项。",
+        "seasonalHealth": "当前节气是{solar_term}，请推荐适合此节气的养生食材和使用方法。",
+        "foodCombination": "请分析{product_name}与{other_product}一起食用是否合适，有何协同或相克效果？",
+        "constitutionAdvice": "我是{constitution_type}体质，请推荐适合我的日常饮食、应季食材和注意事项。",
+        "medicinalFoodAdvice": "请详细介绍{product_name}作为药食同源产品的药用价值和食用方法，以及适用人群。",
+        "premiumAgriProductsInfo": "请介绍{product_name}这款优质农产品的生长环境、品质特点和营养价值。"
+      },
+      "integrationPoints": [
+        {
+          "endpoint": "/api/products/medicinal-food/:id/details",
+          "template": "medicinalFoodAdvice",
+          "parameters": {
+            "product_name": "$.name"
+          },
+          "cacheEnabled": true,
+          "cacheTTL": 86400
+        },
+        {
+          "endpoint": "/api/products/premium-agri/:id/details",
+          "template": "premiumAgriProductsInfo",
+          "parameters": {
+            "product_name": "$.name"
+          },
+          "cacheEnabled": true,
+          "cacheTTL": 86400
+        },
+        {
+          "endpoint": "/api/products/:id/details",
+          "template": "productUsage",
+          "parameters": {
+            "product_name": "$.name"
+          },
+          "cacheEnabled": true,
+          "cacheTTL": 86400
+        },
+        {
+          "endpoint": "/api/recommendations/constitution",
+          "template": "constitutionAdvice",
+          "parameters": {
+            "constitution_type": "$.constitutionType"
+          },
+          "cacheEnabled": true,
+          "cacheTTL": 3600
+        },
+        {
+          "endpoint": "/api/recommendations/seasonal",
+          "template": "seasonalHealth",
+          "parameters": {
+            "solar_term": "$.currentSolarTerm"
+          },
+          "cacheEnabled": true,
+          "cacheTTL": 86400
+        }
+      ],
+      "contextEnhancement": {
+        "enabled": true,
+        "productAttributes": ["tcm_properties", "origin", "harvest_time", "certification"],
+        "userContext": ["constitutionType", "healthConditions", "preferences"]
+      },
+      "metrics": {
+        "trackLatency": true,
+        "trackUsage": true,
+        "trackSuccessRate": true
+      }
+    }
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: supply-chain-constitution-integration
+  namespace: suoke
+data:
+  constitution-integration.json: |
+    {
+      "enabled": true,
+      "serviceEndpoint": "${CONSTITUTION_SERVICE_URL}",
+      "timeout": 3000,
+      "integrationFeatures": {
+        "personalizedRecommendations": true,
+        "productFiltering": true,
+        "seasonalAdjustment": true,
+        "userPreferences": true
+      },
+      "constitutionProductMapping": {
+        "平和质": {
+          "preferredProducts": ["balanced_herbs", "seasonal_foods", "organic_vegetables", "balanced_medicinal_food"],
+          "avoidProducts": []
+        },
+        "气虚质": {
+          "preferredProducts": ["qi_tonifying_herbs", "energy_foods", "nutritious_grains", "qi_boosting_medicinal_food"],
+          "avoidProducts": ["cold_foods", "raw_foods"]
+        },
+        "阳虚质": {
+          "preferredProducts": ["yang_tonifying_herbs", "warming_foods", "warm_nature_fruits", "yang_warming_medicinal_food"],
+          "avoidProducts": ["cold_foods", "cooling_herbs"]
+        },
+        "阴虚质": {
+          "preferredProducts": ["yin_nourishing_herbs", "moistening_foods", "hydrating_fruits", "yin_nourishing_medicinal_food"],
+          "avoidProducts": ["hot_foods", "drying_herbs"]
+        },
+        "痰湿质": {
+          "preferredProducts": ["dampness_resolving_herbs", "drying_foods", "coarse_grains", "dampness_draining_medicinal_food"],
+          "avoidProducts": ["greasy_foods", "dairy_products"]
+        },
+        "湿热质": {
+          "preferredProducts": ["heat_clearing_herbs", "cooling_foods", "bitter_vegetables", "heat_clearing_medicinal_food"],
+          "avoidProducts": ["spicy_foods", "fried_foods"]
+        },
+        "血瘀质": {
+          "preferredProducts": ["blood_activating_herbs", "circulation_foods", "dark_fruits", "blood_activating_medicinal_food"],
+          "avoidProducts": ["cold_foods", "blood_stasis_foods"]
+        },
+        "气郁质": {
+          "preferredProducts": ["qi_regulating_herbs", "mood_foods", "aromatic_vegetables", "qi_soothing_medicinal_food"],
+          "avoidProducts": ["irritating_foods"]
+        },
+        "特禀质": {
+          "preferredProducts": ["gentle_herbs", "hypoallergenic_foods", "organic_products", "mild_medicinal_food"],
+          "avoidProducts": ["allergenic_foods", "stimulating_herbs"]
+        }
+      },
+      "seasonalAdjustments": {
+        "spring": {
+          "emphasis": ["liver_nourishing", "mild_sweet", "slightly_pungent"],
+          "reduction": ["sour", "astringent"],
+          "healthProperties": {
+            "liver_nourishing": {
+              "description": "养肝护肝，促进肝气调达",
+              "ingredients": ["枸杞", "菊花", "绿叶蔬菜", "青色食物"],
+              "beneficialFor": ["肝气郁结", "眼部疲劳", "情绪波动"],
+              "icon": "liver_icon.svg"
+            },
+            "mild_sweet": {
+              "description": "温和甘甜，补益脾胃",
+              "ingredients": ["薏米", "山药", "蜂蜜", "大枣"],
+              "beneficialFor": ["消化不良", "气血不足", "体倦乏力"],
+              "icon": "sweet_icon.svg"
+            },
+            "slightly_pungent": {
+              "description": "微辛发散，助阳气生发",
+              "ingredients": ["葱", "姜", "蒜", "香菜"],
+              "beneficialFor": ["感冒初期", "气血运行不畅", "春季过敏"],
+              "icon": "pungent_icon.svg"
+            }
+          }
+        },
+        "summer": {
+          "emphasis": ["cooling", "hydrating", "light"],
+          "reduction": ["heavy", "warming", "drying"],
+          "healthProperties": {
+            "cooling": {
+              "description": "清热解暑，降低体内热量",
+              "ingredients": ["苦瓜", "莲子", "绿豆", "西瓜"],
+              "beneficialFor": ["暑热烦躁", "口干舌燥", "消化不良"],
+              "icon": "cooling_icon.svg"
+            },
+            "hydrating": {
+              "description": "补充水分，滋养津液",
+              "ingredients": ["黄瓜", "番茄", "白木耳", "芦荟"],
+              "beneficialFor": ["津液不足", "口渴多饮", "大便干结"],
+              "icon": "hydrating_icon.svg"
+            },
+            "light": {
+              "description": "清淡易消化，减轻脾胃负担",
+              "ingredients": ["豆腐", "冬瓜", "鱼肉", "绿叶菜"],
+              "beneficialFor": ["消化不良", "胃口不佳", "体重管理"],
+              "icon": "light_icon.svg"
+            }
+          }
+        },
+        "autumn": {
+          "emphasis": ["lung_nourishing", "moistening", "slightly_sour"],
+          "reduction": ["drying", "pungent"],
+          "healthProperties": {
+            "lung_nourishing": {
+              "description": "养肺润肺，增强呼吸系统功能",
+              "ingredients": ["百合", "银耳", "冰糖", "梨"],
+              "beneficialFor": ["干咳少痰", "咽干喉痒", "肺燥"],
+              "icon": "lung_icon.svg"
+            },
+            "moistening": {
+              "description": "滋润干燥，养阴生津",
+              "ingredients": ["石斛", "沙参", "百合", "银耳"],
+              "beneficialFor": ["口干舌燥", "皮肤干燥", "便秘"],
+              "icon": "moistening_icon.svg"
+            },
+            "slightly_sour": {
+              "description": "微酸收敛，益肺生津",
+              "ingredients": ["山楂", "柚子", "山胡椒", "乌梅"],
+              "beneficialFor": ["多汗", "气虚乏力", "肺气不收"],
+              "icon": "sour_icon.svg"
+            }
+          }
+        },
+        "winter": {
+          "emphasis": ["kidney_nourishing", "warming", "tonifying"],
+          "reduction": ["cooling", "dispersing"],
+          "healthProperties": {
+            "kidney_nourishing": {
+              "description": "滋补肾精，强健肾功能",
+              "ingredients": ["核桃", "黑芝麻", "黑豆", "阿胶"],
+              "beneficialFor": ["腰膝酸软", "耳鸣", "头发早白"],
+              "icon": "kidney_icon.svg"
+            },
+            "warming": {
+              "description": "温阳散寒，增强阳气",
+              "ingredients": ["肉桂", "干姜", "附子", "羊肉"],
+              "beneficialFor": ["畏寒肢冷", "脾胃虚寒", "元阳不足"],
+              "icon": "warming_icon.svg"
+            },
+            "tonifying": {
+              "description": "补益气血，增强体质",
+              "ingredients": ["人参", "黄芪", "当归", "何首乌"],
+              "beneficialFor": ["气血亏虚", "体质虚弱", "抵抗力低下"],
+              "icon": "tonifying_icon.svg"
+            }
+          }
+        }
+      },
+      "dataSync": {
+        "enabled": true,
+        "frequency": "daily",
+        "syncFields": [
+          "constitutionType", "constitutionScore", "healthRecommendations", "dietaryAdvice"
+        ]
+      }
+    } 
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: supply-chain-config
+  namespace: suoke
+data:
+  database_host: "mysql-service"
+  database_port: "3306"
+  database_name: "supply_chain_db"
+  database_pool_min: "5"
+  database_pool_max: "20"
+  redis_host: "redis-service"
+  redis_port: "6379"
+  rag_service_url: "http://rag-service"
+  constitution_service_url: "http://constitution-service"
+  health_service_url: "http://health-service"
+  blockchain_service_url: "http://blockchain-service:3020"
+  geolocation_service_url: "http://geolocation-service:3030"
+  feature_flags: |
+    {
+      "enable_rag_recommendation": true,
+      "enable_constitution_integration": true,
+      "enable_seasonal_adjustment": true,
+      "enable_blockchain_service": true,
+      "enable_supplier_portal": true,
+      "enable_product_customization": true,
+      "enable_farm_experience": true,
+      "enable_debug_mode": false
+    }
+  service_timeouts: |
+    {
+      "rag_query_timeout_ms": 3000,
+      "constitution_service_timeout_ms": 2000,
+      "blockchain_service_timeout_ms": 5000,
+      "health_service_timeout_ms": 2000,
+      "database_query_timeout_ms": 5000,
+      "redis_operation_timeout_ms": 1000,
+      "api_gateway_timeout_ms": 10000
+    }
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: supply-chain-secrets
+  namespace: suoke
+  annotations:
+    secret.reloader.stakater.com/reload: "true"
+    secret.management/rotation-schedule: "weekly"
+    secret.management/last-rotated: "2023-12-01T00:00:00Z"
+    secret.management/key-vault-integration: "enabled"
+    secret.management/key-vault-type: "alicloud-kms"
+type: Opaque
+stringData:
+  database_user: "${DB_USER}"
+  database_password: "${DB_PASSWORD}"
+  payment_api_key: "${PAYMENT_API_KEY}"
+  logistics_api_key: "${LOGISTICS_API_KEY}"
+  redis_password: "${REDIS_PASSWORD}"
+  encryption_key: "${ENCRYPTION_KEY}"
+  blockchain_api_key: "${BLOCKCHAIN_API_KEY}"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: supply-chain-cache-config
+  namespace: suoke
+data:
+  cache-strategy.json: |
+    {
+      "enabled": true,
+      "strategies": {
+        "multi_level": {
+          "enabled": true,
+          "levels": [
+            {
+              "name": "memory",
+              "type": "local_memory",
+              "max_size_mb": 128,
+              "ttl_seconds": 300,
+              "priority": 1
+            },
+            {
+              "name": "redis",
+              "type": "redis",
+              "ttl_seconds": 3600,
+              "priority": 2
+            },
+            {
+              "name": "persistent",
+              "type": "database",
+              "ttl_seconds": 86400,
+              "priority": 3
+            }
+          ]
+        },
+        "data_categories": {
+          "hot_data": {
+            "description": "频繁访问数据",
+            "examples": ["当季产品", "热门商品", "促销商品", "首页推荐"],
+            "cache_level": "memory",
+            "cache_strategy": "preload",
+            "ttl_seconds": 300
+          },
+          "warm_data": {
+            "description": "常规访问数据",
+            "examples": ["产品详情", "用户体质分析", "中医知识"],
+            "cache_level": "redis",
+            "cache_strategy": "lazy_load",
+            "ttl_seconds": 3600
+          },
+          "cold_data": {
+            "description": "低频访问数据",
+            "examples": ["历史订单", "库存记录", "供应商评估"],
+            "cache_level": "persistent",
+            "cache_strategy": "on_demand",
+            "ttl_seconds": 86400
+          }
+        },
+        "eviction_policies": {
+          "memory": {
+            "policy": "LRU",
+            "check_interval_seconds": 60
+          },
+          "redis": {
+            "policy": "volatile-lru",
+            "max_memory_policy": "volatile-lru"
+          }
+        },
+        "preload_data": [
+          "current_season_products",
+          "current_solar_term_products",
+          "featured_products",
+          "promotion_products",
+          "most_viewed_categories"
+        ],
+        "invalidation_triggers": {
+          "product_update": ["product_cache", "category_cache", "search_cache"],
+          "price_update": ["product_cache", "price_cache"],
+          "inventory_update": ["inventory_cache", "product_cache"],
+          "season_change": ["season_cache", "product_recommendation"],
+          "solar_term_change": ["solar_term_cache", "seasonal_recommendation"]
+        },
+        "monitoring": {
+          "cache_hit_ratio_threshold": 0.8,
+          "cache_size_warning_threshold": 0.9,
+          "response_time_threshold_ms": 200
+        },
+        "optimization": {
+          "auto_tune": true,
+          "auto_tune_interval_hours": 24,
+          "auto_tune_metrics": ["hit_ratio", "memory_usage", "response_time"]
+        }
+      }
+    }
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: supply-chain-database-optimization
+  namespace: suoke
+data:
+  database-optimization.json: |
+    {
+      "indexes": {
+        "product": [
+          {
+            "name": "idx_product_category",
+            "fields": ["category_id"],
+            "type": "BTREE"
+          },
+          {
+            "name": "idx_product_constitution",
+            "fields": ["suitable_constitutions"],
+            "type": "BTREE"
+          },
+          {
+            "name": "idx_product_season",
+            "fields": ["season_id"],
+            "type": "BTREE"
+          },
+          {
+            "name": "idx_product_search",
+            "fields": ["name", "keywords", "description"],
+            "type": "FULLTEXT"
+          },
+          {
+            "name": "idx_product_tcm_properties",
+            "fields": ["tcm_properties_nature", "tcm_properties_taste", "tcm_properties_meridian"],
+            "type": "BTREE"
+          }
+        ],
+        "order": [
+          {
+            "name": "idx_order_user",
+            "fields": ["user_id"],
+            "type": "BTREE"
+          },
+          {
+            "name": "idx_order_status",
+            "fields": ["status"],
+            "type": "BTREE"
+          },
+          {
+            "name": "idx_order_date",
+            "fields": ["created_at"],
+            "type": "BTREE"
+          },
+          {
+            "name": "idx_order_composite",
+            "fields": ["user_id", "status", "created_at"],
+            "type": "BTREE"
+          }
+        ],
+        "inventory": [
+          {
+            "name": "idx_inventory_product",
+            "fields": ["product_id"],
+            "type": "BTREE"
+          },
+          {
+            "name": "idx_inventory_stock_level",
+            "fields": ["stock_level"],
+            "type": "BTREE"
+          }
+        ],
+        "supplier": [
+          {
+            "name": "idx_supplier_rating",
+            "fields": ["overall_rating"],
+            "type": "BTREE"
+          },
+          {
+            "name": "idx_supplier_categories",
+            "fields": ["product_categories"],
+            "type": "BTREE"
+          }
+        ],
+        "user": [
+          {
+            "name": "idx_user_constitution",
+            "fields": ["constitution_type"],
+            "type": "BTREE"
+          },
+          {
+            "name": "idx_user_preferences",
+            "fields": ["preferences"],
+            "type": "BTREE"
+          }
+        ]
+      },
+      "query_optimizations": {
+        "product_queries": {
+          "frequent_filters": ["category", "constitution_match", "season", "solar_term"],
+          "optimization_strategies": [
+            "use_covering_indexes",
+            "pagination_optimization",
+            "cursor_based_pagination"
+          ],
+          "batch_size": 20,
+          "cache_ttl_seconds": 300
+        },
+        "recommendation_queries": {
+          "optimization_strategies": [
+            "precompute_recommendations",
+            "materialized_views",
+            "background_calculation"
+          ],
+          "update_frequency": "hourly",
+          "cache_ttl_seconds": 1800
+        },
+        "report_queries": {
+          "optimization_strategies": [
+            "use_read_replicas",
+            "scheduled_calculation",
+            "materialized_views",
+            "data_partitioning"
+          ],
+          "execution_time_window": "off_peak_hours",
+          "data_retention_strategy": "summary_aggregation"
+        }
+      },
+      "connection_pool": {
+        "min_connections": 5,
+        "max_connections": 20,
+        "idle_timeout_seconds": 300,
+        "connection_timeout_ms": 3000,
+        "validation_query": "SELECT 1",
+        "validation_interval_ms": 5000
+      },
+      "scaling_strategy": {
+        "read_heavy_optimizations": {
+          "use_read_replicas": true,
+          "read_connection_pool_max": 30,
+          "cache_utilization": "aggressive"
+        },
+        "write_heavy_optimizations": {
+          "batch_operations": true,
+          "write_connection_pool_max": 25,
+          "transaction_isolation_level": "READ_COMMITTED"
+        }
+      },
+      "data_partitioning": {
+        "enabled": true,
+        "strategies": {
+          "order_table": {
+            "partition_by": "RANGE",
+            "partition_column": "created_at",
+            "interval": "MONTH",
+            "retention_months": 24
+          },
+          "inventory_history": {
+            "partition_by": "RANGE",
+            "partition_column": "recorded_at",
+            "interval": "MONTH",
+            "retention_months": 12
+          },
+          "product_view_logs": {
+            "partition_by": "RANGE",
+            "partition_column": "viewed_at",
+            "interval": "WEEK",
+            "retention_months": 3
+          }
+        }
+      }
+    }
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: supply-chain-security-config
+  namespace: suoke
+data:
+  security-policy.json: |
+    {
+      "data_security": {
+        "classification": {
+          "levels": {
+            "public": {
+              "description": "可公开访问的数据",
+              "examples": ["产品名称", "产品分类", "公开价格"]
+            },
+            "internal": {
+              "description": "仅内部使用的数据",
+              "examples": ["库存水平", "销售统计", "供应商信息"]
+            },
+            "sensitive": {
+              "description": "敏感数据，需要特殊保护",
+              "examples": ["用户个人信息", "支付信息"]
+            },
+            "restricted": {
+              "description": "高度敏感数据，需要最高级别保护",
+              "examples": ["加密密钥", "系统凭证"]
+            }
+          },
+          "handling_policies": {
+            "public": {
+              "encryption": "none",
+              "access_control": "none",
+              "logging": "basic"
+            },
+            "internal": {
+              "encryption": "in_transit",
+              "access_control": "role_based",
+              "logging": "detailed"
+            },
+            "sensitive": {
+              "encryption": "in_transit_and_at_rest",
+              "access_control": "strict_rbac",
+              "logging": "full_audit",
+              "masking": true
+            },
+            "restricted": {
+              "encryption": "end_to_end",
+              "access_control": "multi_factor",
+              "logging": "full_audit",
+              "masking": true,
+              "key_rotation": true
+            }
+          }
+        },
+        "encryption": {
+          "at_rest": {
+            "algorithm": "AES-256-GCM",
+            "key_management": "external_kms",
+            "key_rotation_days": 90
+          },
+          "in_transit": {
+            "protocol": "TLS_1.3",
+            "minimum_strength": "128_bit",
+            "perfect_forward_secrecy": true
+          },
+          "field_level": {
+            "enabled": true,
+            "fields": [
+              {"name": "user.phone_number", "level": "sensitive"},
+              {"name": "user.email", "level": "sensitive"},
+              {"name": "user.address", "level": "sensitive"},
+              {"name": "payment.card_number", "level": "restricted"},
+              {"name": "payment.cvv", "level": "restricted"},
+              {"name": "payment.expiry", "level": "restricted"},
+              {"name": "health.constitution_details", "level": "sensitive"},
+              {"name": "health.medical_history", "level": "sensitive"}
+            ]
+          },
+          "key_management": {
+            "provider": "alicloud_kms",
+            "rotation_automation": true,
+            "rotation_schedule": "90d",
+            "key_access_control": "strict_rbac"
+          }
+        },
+        "anonymization": {
+          "enabled": true,
+          "techniques": {
+            "hashing": {
+              "algorithm": "SHA-256",
+              "salt_rotation_days": 30
+            },
+            "masking": {
+              "patterns": {
+                "credit_card": "XXXX-XXXX-XXXX-{last4}",
+                "phone": "{country_code}-XXX-XXX-{last4}",
+                "email": "{first_character}XXX@{domain}",
+                "name": "{first_character}. {last_name}",
+                "address": "{city}, {province}, {country}"
+              }
+            },
+            "tokenization": {
+              "enabled": true,
+              "token_vault": "external",
+              "token_lifetime_days": 180
+            }
+          },
+          "data_minimization": {
+            "enabled": true,
+            "retention_policies": {
+              "transaction_data": "3y",
+              "user_activity": "1y",
+              "operational_logs": "180d",
+              "debug_logs": "30d"
+            },
+            "minimization_rules": [
+              {
+                "data_type": "user_address",
+                "usage": "delivery_only",
+                "retention": "until_delivery_completed+30d"
+              },
+              {
+                "data_type": "payment_details",
+                "usage": "transaction_processing_only",
+                "retention": "until_refund_period_expired"
+              },
+              {
+                "data_type": "browsing_history",
+                "usage": "recommendation_only",
+                "retention": "90d"
+              }
+            ]
+          }
+        },
+        "access_control": {
+          "rbac": {
+            "roles": [
+              {
+                "name": "admin",
+                "permissions": ["read:*", "write:*", "delete:*"],
+                "restrictions": []
+              },
+              {
+                "name": "operations_manager",
+                "permissions": ["read:*", "write:inventory", "write:product", "write:order"],
+                "restrictions": ["no_access:payment_details", "no_access:user_sensitive"]
+              },
+              {
+                "name": "customer_service",
+                "permissions": ["read:order", "read:product", "write:order_status"],
+                "restrictions": ["no_access:payment_details", "masked_access:user_contact"]
+              },
+              {
+                "name": "supply_chain_analyst",
+                "permissions": ["read:inventory", "read:supplier", "read:product", "read:order_summary"],
+                "restrictions": ["no_access:user_data", "no_access:payment_data"]
+              }
+            ],
+            "permission_inheritance": true,
+            "principle_of_least_privilege": true
+          },
+          "authentication": {
+            "methods": ["password", "otp", "certificate"],
+            "mfa_required_for_roles": ["admin", "operations_manager"],
+            "session_management": {
+              "timeout_minutes": 30,
+              "absolute_timeout_hours": 12,
+              "idle_timeout_minutes": 15,
+              "concurrent_sessions_limit": 3
+            }
+          }
+        },
+        "audit_logging": {
+          "enabled": true,
+          "log_levels": {
+            "security_events": "INFO",
+            "data_access": "INFO",
+            "data_modification": "INFO",
+            "authentication": "INFO",
+            "authorization": "INFO"
+          },
+          "retention": {
+            "security_logs": "365d",
+            "access_logs": "180d",
+            "operation_logs": "90d"
+          },
+          "logged_actions": [
+            "login_attempt", "logout", "password_change", "role_change",
+            "data_access", "data_modification", "configuration_change",
+            "security_setting_change", "api_access", "export_operation"
+          ],
+          "log_format": {
+            "timestamp": true,
+            "user_id": true,
+            "action": true,
+            "resource": true,
+            "result": true,
+            "ip_address": true,
+            "location": true,
+            "user_agent": true
+          }
+        }
+      }
+    }
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: supply-chain-service-network-policy
+  namespace: suoke
+  labels:
+    app: supply-chain-service
+spec:
+  podSelector:
+    matchLabels:
+      app: supply-chain-service
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: suoke
+      podSelector:
+        matchLabels:
+          app: api-gateway
+    - namespaceSelector:
+        matchLabels:
+          name: suoke
+      podSelector:
+        matchLabels:
+          app: health-service
+    - namespaceSelector:
+        matchLabels:
+          name: suoke
+      podSelector:
+        matchLabels:
+          app: knowledge-graph-service
+    - namespaceSelector:
+        matchLabels:
+          name: suoke
+      podSelector:
+        matchLabels:
+          app: rag-service
+    - namespaceSelector:
+        matchLabels:
+          name: istio-system
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+    ports:
+    - protocol: TCP
+      port: 3011
+  egress:
+  - to:
+    - namespaceSelector: {}
+      podSelector:
+        matchLabels:
+          app: mysql
+    ports:
+    - protocol: TCP
+      port: 3306
+  - to:
+    - namespaceSelector: {}
+      podSelector:
+        matchLabels:
+          app: redis
+    ports:
+    - protocol: TCP
+      port: 6379
+  - to:
+    - namespaceSelector: {}
+      podSelector:
+        matchLabels:
+          app: blockchain-service
+    ports:
+    - protocol: TCP
+      port: 4000
+  - to:
+    - namespaceSelector: {}
+      podSelector:
+        matchLabels:
+          app: rag-service
+    ports:
+    - protocol: TCP
+      port: 5000
+  - to:
+    - namespaceSelector: {}
+      podSelector:
+        matchLabels:
+          app: knowledge-graph-service
+    ports:
+    - protocol: TCP
+      port: 4010
+  - to:
+    - namespaceSelector: {}
+      podSelector:
+        matchLabels:
+          app: health-service
+    ports:
+    - protocol: TCP
+      port: 5050
+  - to:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+        except:
+        - 10.0.0.0/8
+        - 172.16.0.0/12
+        - 192.168.0.0/16
+    ports:
+    - protocol: TCP
+      port: 443
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: supply-chain-service-authorization
+  namespace: suoke
+spec:
+  selector:
+    matchLabels:
+      app: supply-chain-service
+  rules:
+  - from:
+    - source:
+        principals: ["cluster.local/ns/suoke/sa/api-gateway"]
+        namespaces: ["suoke"]
+    to:
+    - operation:
+        methods: ["GET", "POST", "PUT", "DELETE"]
+        paths: ["/api/*"]
+  - from:
+    - source:
+        principals: ["cluster.local/ns/suoke/sa/health-service"]
+        namespaces: ["suoke"]
+    to:
+    - operation:
+        methods: ["GET", "POST"]
+        paths: ["/internal/health-integration/*"]
+  - from:
+    - source:
+        principals: ["cluster.local/ns/suoke/sa/knowledge-graph-service"]
+        namespaces: ["suoke"]
+    to:
+    - operation:
+        methods: ["GET"]
+        paths: ["/internal/product-data/*"]
+  - from:
+    - source:
+        namespaces: ["monitoring"]
+    to:
+    - operation:
+        methods: ["GET"]
+        paths: ["/metrics", "/metrics/*", "/health"]
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: supply-chain-service-peer-authentication
+  namespace: suoke
+spec:
+  selector:
+    matchLabels:
+      app: supply-chain-service
+  mtls:
+    mode: STRICT
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: supply-chain-service-cert
+  namespace: suoke
+spec:
+  secretName: supply-chain-service-tls
+  duration: 2160h # 90d
+  renewBefore: 360h # 15d
+  subject:
+    organizations:
+    - Suoke Health Technology
+  commonName: supply-chain-service.suoke.svc.cluster.local
+  isCA: false
+  privateKey:
+    algorithm: RSA
+    encoding: PKCS8
+    size: 2048
+    rotationPolicy: Always
+  usages:
+  - server auth
+  - client auth
+  dnsNames:
+  - supply-chain-service
+  - supply-chain-service.suoke
+  - supply-chain-service.suoke.svc.cluster.local
+  issuerRef:
+    name: suoke-ca-issuer
+    kind: ClusterIssuer
+    group: cert-manager.io
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: supply-chain-service
+  namespace: suoke
+  labels:
+    app: supply-chain-service
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: supply-chain-service-role
+  namespace: suoke
+rules:
+- apiGroups: [""]
+  resources: ["configmaps", "secrets"]
+  verbs: ["get", "list", "watch"]
+  resourceNames: ["supply-chain-config", "supply-chain-secrets", "supply-chain-config-files"]
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list"]
+- apiGroups: ["apps"]
+  resources: ["deployments"]
+  verbs: ["get"]
+  resourceNames: ["supply-chain-service"]
+- apiGroups: [""]
+  resources: ["events"]
+  verbs: ["create", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: supply-chain-service-role-binding
+  namespace: suoke
+subjects:
+- kind: ServiceAccount
+  name: supply-chain-service
+  namespace: suoke
+roleRef:
+  kind: Role
+  name: supply-chain-service-role
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: supply-chain-openai-config
+  namespace: suoke
+  labels:
+    app: supply-chain-service
+    component: ai-integration
+data:
+  openai-tools.json: |
+    {
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "search_products",
+            "description": "搜索符合条件的产品",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "query": {
+                  "type": "string",
+                  "description": "搜索关键词"
+                },
+                "category": {
+                  "type": "string",
+                  "description": "产品分类"
+                },
+                "constitution_type": {
+                  "type": "string",
+                  "description": "体质类型，用于匹配适合的产品"
+                },
+                "season": {
+                  "type": "string",
+                  "description": "季节，用于季节性产品推荐"
+                },
+                "solar_term": {
+                  "type": "string",
+                  "description": "二十四节气名称"
+                },
+                "page": {
+                  "type": "integer",
+                  "description": "页码，默认1"
+                },
+                "page_size": {
+                  "type": "integer",
+                  "description": "每页结果数，默认20"
+                }
+              },
+              "required": ["query"]
+            }
+          }
+        },
+        {
+          "type": "function",
+          "function": {
+            "name": "get_product_details",
+            "description": "获取产品详细信息",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "product_id": {
+                  "type": "string",
+                  "description": "产品ID"
+                },
+                "include_traceability": {
+                  "type": "boolean",
+                  "description": "是否包含溯源信息"
+                }
+              },
+              "required": ["product_id"]
+            }
+          }
+        },
+        {
+          "type": "function",
+          "function": {
+            "name": "get_constitution_recommendations",
+            "description": "获取基于体质的产品推荐",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "constitution_type": {
+                  "type": "string",
+                  "description": "体质类型，如'平和质'、'气虚质'等"
+                },
+                "category": {
+                  "type": "string",
+                  "description": "可选的产品分类限制"
+                },
+                "limit": {
+                  "type": "integer",
+                  "description": "返回结果数量，默认10"
+                }
+              },
+              "required": ["constitution_type"]
+            }
+          }
+        },
+        {
+          "type": "function",
+          "function": {
+            "name": "get_seasonal_recommendations",
+            "description": "获取基于季节或节气的产品推荐",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "season": {
+                  "type": "string",
+                  "description": "季节（春、夏、秋、冬）"
+                },
+                "solar_term": {
+                  "type": "string",
+                  "description": "二十四节气名称"
+                },
+                "category": {
+                  "type": "string",
+                  "description": "可选的产品分类限制"
+                },
+                "constitution_type": {
+                  "type": "string",
+                  "description": "可选的体质类型筛选"
+                },
+                "limit": {
+                  "type": "integer",
+                  "description": "返回结果数量，默认10"
+                }
+              },
+              "required": []
+            }
+          }
+        },
+        {
+          "type": "function",
+          "function": {
+            "name": "check_product_availability",
+            "description": "检查产品库存和可用性",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "product_id": {
+                  "type": "string",
+                  "description": "产品ID"
+                },
+                "location": {
+                  "type": "string",
+                  "description": "可选的位置信息"
+                },
+                "quantity": {
+                  "type": "integer",
+                  "description": "查询的数量，默认1"
+                }
+              },
+              "required": ["product_id"]
+            }
+          }
+        },
+        {
+          "type": "function",
+          "function": {
+            "name": "get_product_traceability",
+            "description": "获取产品溯源信息",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "product_id": {
+                  "type": "string",
+                  "description": "产品ID"
+                },
+                "detail_level": {
+                  "type": "string",
+                  "enum": ["basic", "detailed", "full"],
+                  "description": "溯源信息详细程度"
+                }
+              },
+              "required": ["product_id"]
+            }
+          }
+        }
+      ]
+    } 
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: supply-chain-config-files
+  namespace: suoke
+  labels:
+    app: supply-chain-service
+    component: configuration
+data:
+  supply-chain-config.json: |
+    {
+      "server": {
+        "port": 3011,
+        "host": "0.0.0.0",
+        "timeouts": {
+          "request_timeout_ms": 30000,
+          "idle_timeout_ms": 60000,
+          "keep_alive_timeout_ms": 5000
+        },
+        "cors": {
+          "enabled": true,
+          "origins": ["https://suoke.life", "https://app.suoke.life"],
+          "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+          "headers": ["Content-Type", "Authorization", "X-API-Key"]
+        }
+      },
+      "openaiAgentsCompatibility": {
+        "enabled": true,
+        "apiEndpoints": {
+          "assistantApi": "/api/v1/openai/assistants",
+          "threadApi": "/api/v1/openai/threads",
+          "messageApi": "/api/v1/openai/messages",
+          "runApi": "/api/v1/openai/runs",
+          "toolsApi": "/api/v1/openai/tools"
+        },
+        "authentication": {
+          "required": true,
+          "methods": ["JWT", "API_KEY"],
+          "apiKeyHeader": "X-OpenAI-Api-Key"
+        },
+        "tools": [
+          {
+            "name": "search_products",
+            "description": "搜索符合条件的产品",
+            "parameters": {
+              "query": "搜索关键词",
+              "category": "可选的产品分类",
+              "constitution_type": "可选的体质类型",
+              "season": "可选的季节",
+              "solar_term": "可选的节气"
+            },
+            "required": ["query"]
+          },
+          {
+            "name": "get_product_details",
+            "description": "获取产品详细信息",
+            "parameters": {
+              "product_id": "产品ID",
+              "include_traceability": "是否包含溯源信息"
+            },
+            "required": ["product_id"]
+          },
+          {
+            "name": "get_recommendations",
+            "description": "获取产品推荐",
+            "parameters": {
+              "constitution_type": "可选的体质类型",
+              "season": "可选的季节",
+              "limit": "返回结果数量"
+            },
+            "required": []
+          }
+        ],
+        "responseFormat": "openai_compatible",
+        "versionCompatibility": "2023-07-01"
+      },
+      "database": {
+        "pooling": {
+          "min": "${DATABASE_POOL_MIN}",
+          "max": "${DATABASE_POOL_MAX}"
+        },
+        "queryTimeout": 5000
+      },
+      "logging": {
+        "level": "${LOG_LEVEL}",
+        "format": "json",
+        "outputPath": "/app/logs/supply-chain-service.log",
+        "rotation": {
+          "enabled": true,
+          "maxSize": "100m",
+          "maxFiles": 10
+        }
+      },
+      "metrics": {
+        "enabled": true,
+        "endpoint": "/metrics",
+        "defaultLabels": {
+          "service": "supply-chain-service"
+        }
+      },
+      "tracing": {
+        "enabled": true,
+        "exporter": "jaeger",
+        "jaeger": {
+          "endpoint": "http://jaeger-collector:14268/api/traces"
+        }
+      }
+    } 

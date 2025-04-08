@@ -234,7 +234,7 @@ class _AnimatedPressButtonState extends State<AnimatedPressButton>
                   borderRadius: BorderRadius.circular(widget.borderRadius),
                   boxShadow: [
                     BoxShadow(
-                      color: widget.shadowColor.withOpacity(shadowOpacity),
+                      color: widget.shadowColor.withAlpha((shadowOpacity * 255).toInt()),
                       blurRadius: blurRadius,
                       offset: Offset(0, 2 * (1 - _currentValue)),
                     ),

@@ -1,0 +1,93 @@
+{
+  "environment": "testing",
+  "serviceName": "agent-coordinator-service",
+  "serviceVersion": "1.0.0",
+  "server": {
+    "port": 3007,
+    "readTimeout": 60,
+    "writeTimeout": 60,
+    "shutdownTimeout": 30
+  },
+  "logging": {
+    "enableRequestLogging": true,
+    "logLevel": "debug",
+    "format": "json",
+    "outputPaths": ["stdout", "test.log"]
+  },
+  "security": {
+    "enableApiAuthentication": false,
+    "apiKey": "test-api-key-for-integration-testing",
+    "rateLimiting": {
+      "enabled": true,
+      "maxRequestsPerMinute": 1000,
+      "excludedPaths": ["/health", "/metrics"]
+    },
+    "cors": {
+      "allowedOrigins": ["*"],
+      "allowedMethods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+      "allowedHeaders": ["*"],
+      "maxAge": 86400
+    }
+  },
+  "persistence": {
+    "type": "memory",
+    "redis": {
+      "host": "localhost",
+      "port": 6379,
+      "password": "",
+      "db": 0,
+      "enableTLS": false,
+      "connectionTimeout": 5,
+      "maxRetries": 3
+    },
+    "file": {
+      "basePath": "./state",
+      "cleanupIntervalMinutes": 60,
+      "maxAgeHours": 24
+    }
+  },
+  "agents": {
+    "defaultTimeout": 30,
+    "maxConcurrentRequests": 100,
+    "cacheEnabled": true,
+    "cacheTTLSeconds": 300
+  },
+  "sessions": {
+    "defaultTTLMinutes": 60,
+    "cleanupIntervalMinutes": 5,
+    "maxSessionsPerUser": 10,
+    "maxSessionSize": 10485760
+  },
+  "coordination": {
+    "maxTaskTimeout": 300,
+    "taskPollingIntervalSeconds": 1,
+    "maxTaskRetries": 3,
+    "defaultWorkflowTimeout": 600
+  },
+  "knowledge": {
+    "maxSearchResults": 20,
+    "defaultSearchTimeout": 10,
+    "cacheEnabled": true,
+    "cacheTTLSeconds": 300
+  },
+  "metrics": {
+    "enabled": true,
+    "collectionIntervalSeconds": 15,
+    "retentionPeriodHours": 24
+  },
+  "tracing": {
+    "enabled": false,
+    "samplingRate": 0.1,
+    "exporter": "jaeger",
+    "jaeger": {
+      "endpoint": "http://localhost:14268/api/traces",
+      "agentHost": "localhost",
+      "agentPort": 6831
+    }
+  },
+  "healthCheck": {
+    "enabled": true,
+    "intervalSeconds": 30,
+    "timeoutSeconds": 5
+  }
+} 

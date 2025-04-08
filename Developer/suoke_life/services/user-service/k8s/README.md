@@ -72,3 +72,18 @@
 - 所有配置已根据MICROSERVICES_DEPLOYMENT.md中的标准进行设计
 - 用户服务作为核心服务，部署在`suoke-core-np`节点池上
 - 已实现严格的安全配置和访问控制
+
+## 目录说明
+
+- `deployment.yaml` - 主要部署配置文件
+- `service.yaml` - 服务配置
+- `configmap.yaml` - 配置映射
+- `secret.yaml` - 密钥配置
+- `pv.yaml` - 持久卷配置
+- `hpa.yaml` - 水平自动扩缩容配置
+- `pdb.yaml` - Pod干扰预算
+- `network-policy.yaml` - 网络策略
+- `istio-config.yaml` - Istio服务网格配置
+- `opentelemetry-config.yaml` - OpenTelemetry配置
+- `servicemonitor.yaml` - 服务监控配置
+- `backup/` - 备份的配置文件，包括各种最小化部署和测试配置

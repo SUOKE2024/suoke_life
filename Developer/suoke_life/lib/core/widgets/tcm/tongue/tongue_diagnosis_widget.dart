@@ -15,7 +15,7 @@ import 'package:suoke_life/core/widgets/tcm/tongue/tongue_diagnosis_notifier.dar
 class TongueDiagnosisWidget extends ConsumerStatefulWidget {
   /// 初始图片路径
   final String? initialImagePath;
-  
+
   /// 创建舌诊组件
   const TongueDiagnosisWidget({super.key, this.initialImagePath});
 
@@ -33,7 +33,7 @@ class _TongueDiagnosisWidgetState extends ConsumerState<TongueDiagnosisWidget>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    
+
     // 如果有初始图片路径，延迟加载图片
     if (widget.initialImagePath != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -41,7 +41,7 @@ class _TongueDiagnosisWidgetState extends ConsumerState<TongueDiagnosisWidget>
       });
     }
   }
-  
+
   /// 加载初始图片
   Future<void> _loadInitialImage() async {
     try {
@@ -200,7 +200,7 @@ class _TongueDiagnosisWidgetState extends ConsumerState<TongueDiagnosisWidget>
     final screenWidth = MediaQuery.of(context).size.width;
     final boxWidth = screenWidth * 0.8;
     final boxHeight = boxWidth * 0.6;
-    
+
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -211,7 +211,7 @@ class _TongueDiagnosisWidgetState extends ConsumerState<TongueDiagnosisWidget>
             isAnalyzing: state.isAnalyzing,
           ),
         ),
-        
+
         // 舌头检测区域框
         Container(
           decoration: BoxDecoration(
@@ -236,13 +236,13 @@ class _TongueDiagnosisWidgetState extends ConsumerState<TongueDiagnosisWidget>
                     size: boxWidth * 0.2,
                   ),
                 ),
-              
+
               // 分析中指示器
               if (state.isAnalyzing)
                 const CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                 ),
-                
+
               // 角落标记 - 增强视觉引导
               Positioned(
                 top: 8,
@@ -337,9 +337,7 @@ class _TongueDiagnosisWidgetState extends ConsumerState<TongueDiagnosisWidget>
           ),
           const SizedBox(height: 8),
           Text(
-            state.isAnalyzing 
-                ? '正在分析中，请保持不动...' 
-                : '提示: 保持充足光线，将舌头完全伸出并填满中央区域',
+            state.isAnalyzing ? '正在分析中，请保持不动...' : '提示: 保持充足光线，将舌头完全伸出并填满中央区域',
             style: TextStyle(
               color: Colors.white.withAlpha(180),
               fontSize: 14,
@@ -642,33 +640,28 @@ class _TongueDiagnosisWidgetState extends ConsumerState<TongueDiagnosisWidget>
 /// 引导覆盖画笔
 class GuidanceOverlayPainter extends CustomPainter {
   final bool isAnalyzing;
-  
+
   GuidanceOverlayPainter({required this.isAnalyzing});
-  
+
   @override
   void paint(Canvas canvas, Size size) {
     final width = size.width;
     final height = size.height;
     final centerX = width / 2;
     final centerY = height / 2;
-    
+
     final paint = Paint()
-      ..color = isAnalyzing ? Colors.green.withAlpha(100) : Colors.white.withAlpha(70)
+      ..color =
+          isAnalyzing ? Colors.green.withAlpha(100) : Colors.white.withAlpha(70)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.5;
-    
+
     // 绘制中心十字线
     canvas.drawLine(
-      Offset(centerX - 20, centerY), 
-      Offset(centerX + 20, centerY), 
-      paint
-    );
+        Offset(centerX - 20, centerY), Offset(centerX + 20, centerY), paint);
     canvas.drawLine(
-      Offset(centerX, centerY - 20), 
-      Offset(centerX, centerY + 20), 
-      paint
-    );
-    
+        Offset(centerX, centerY - 20), Offset(centerX, centerY + 20), paint);
+
     // 绘制舌头轮廓参考线（椭圆形）
     final ellipseRect = Rect.fromCenter(
       center: Offset(centerX, centerY),
@@ -677,7 +670,7 @@ class GuidanceOverlayPainter extends CustomPainter {
     );
     canvas.drawOval(ellipseRect, paint..style = PaintingStyle.stroke);
   }
-  
+
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }

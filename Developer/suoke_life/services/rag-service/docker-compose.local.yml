@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  # 使用本地文件构建的简单服务
+  rag-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+    container_name: suoke-rag-service
+    restart: always
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./config:/app/config
+    ports:
+      - "8080:8080"
+    networks:
+      - suoke-net
+
+networks:
+  suoke-net:
+    driver: bridge 

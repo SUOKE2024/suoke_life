@@ -28,7 +28,7 @@ metadata:
       }
       {{- end -}}
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: agent-coordinator
@@ -36,7 +36,7 @@ spec:
     type: RollingUpdate
     rollingUpdate:
       maxSurge: 1
-      maxUnavailable: 1
+      maxUnavailable: 0
   template:
     metadata:
       labels:
@@ -107,151 +107,76 @@ spec:
           mountPath: /app/data
       containers:
       - name: agent-coordinator
-        image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/agent-coordinator-service:1.2.0
-        imagePullPolicy: IfNotPresent
-        securityContext:
-          allowPrivilegeEscalation: false
-          runAsNonRoot: true
-          runAsUser: 1000
-          capabilities:
-            drop:
-            - ALL
-          readOnlyRootFilesystem: true
+        image: ${REGISTRY_HOST}/suoke-life/agent-coordinator-service:${VERSION}
+        imagePullPolicy: Always
         ports:
-        - name: http
-          containerPort: 3007
-          protocol: TCP
-        - name: metrics
-          containerPort: 9090
-          protocol: TCP
+        - containerPort: 3007
+          name: api
         env:
-        - name: NODE_ENV
-          value: "production"
-        - name: LOG_LEVEL
-          value: "info"
         - name: PORT
-          value: "3000"
-        - name: API_GATEWAY_ENABLED
+          value: "3007"
+        - name: ENVIRONMENT
+          value: "${ENVIRONMENT}"
+        - name: LOG_LEVEL
+          value: "${LOG_LEVEL}"
+        - name: ENABLE_API_AUTH
+          value: "${ENABLE_API_AUTH}"
+        - name: API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: agent-coordinator-secrets
+              key: api-key
+        - name: ENABLE_REQUEST_LOGGING
           value: "true"
-        - name: API_GATEWAY_NAME
-          value: "api-gateway"
-        - name: API_BASE_PATH
-          value: "/api"
-        - name: TRUSTED_HEADERS
-          value: "X-API-Gateway,X-Request-ID,Authorization"
-        - name: ENABLE_METRICS
+        - name: RATE_LIMIT_ENABLED
           value: "true"
-        - name: ENABLE_HEALTH_CHECK
-          value: "true"
-        - name: VAULT_ENABLED
-          value: "true"
-        - name: VAULT_AUTH_METHOD
-          value: "k8s"
-        - name: VAULT_K8S_ROLE
-          value: "agent-coordinator"
-        - name: TZ
-          value: "Asia/Shanghai"
+        - name: MAX_REQUESTS_PER_MINUTE
+          value: "100"
+        - name: AGENT_STATE_PERSISTENCE
+          value: "${AGENT_STATE_PERSISTENCE}"
         - name: REDIS_HOST
-          valueFrom:
-            configMapKeyRef:
-              name: redis-config
-              key: redis_host
+          value: "${REDIS_HOST}"
         - name: REDIS_PORT
-          valueFrom:
-            configMapKeyRef:
-              name: redis-config
-              key: redis_port
+          value: "${REDIS_PORT}"
         - name: REDIS_PASSWORD
           valueFrom:
             secretKeyRef:
               name: redis-secrets
-              key: redis_password
+              key: redis-password
               optional: true
-        - name: API_KEY
-          valueFrom:
-            secretKeyRef:
-              name: api-keys
-              key: coordinator_api_key
-        - name: AGENT_SECRET_KEY
-          valueFrom:
-            secretKeyRef:
-              name: api-keys
-              key: agent_secret_key
-        - name: CONFIG_PATH
-          value: "/app/config/coordinator-config.json"
-        - name: AGENT_STATE_PERSISTENCE
-          value: "redis"
-        - name: COORDINATOR_MODE
-          value: "distributed"
-        - name: SESSION_TTL_SECONDS
-          value: "86400"
-        - name: MAX_CONCURRENT_SESSIONS
-          value: "5000"
-        - name: RAG_SERVICE_URL
-          value: "http://rag-service:8080"
-        - name: KG_SERVICE_URL
-          value: "http://knowledge-graph-service:8080"
-        - name: USER_SERVICE_URL
-          value: "http://user-service:3001"
-        - name: OTEL_SERVICE_NAME
-          value: "agent-coordinator-service"
-        - name: OTEL_RESOURCE_ATTRIBUTES
-          value: "service.namespace=suoke,service.name=agent-coordinator-service"
-        volumeMounts:
-        - name: config-volume
-          mountPath: /app/config
-          readOnly: true
-        - name: logs-volume
-          mountPath: /app/logs
-        - name: data-volume
-          mountPath: /app/data
-        - name: tmp-volume
-          mountPath: /tmp
         resources:
           requests:
-            cpu: "500m"
-            memory: "512Mi"
+            cpu: 100m
+            memory: 128Mi
           limits:
-            cpu: "1000m"
-            memory: "1Gi"
+            cpu: 500m
+            memory: 512Mi
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3007
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 5
         livenessProbe:
           httpGet:
             path: /health
-            port: http
-            httpHeaders:
-            - name: X-Probe-Type
-              value: "liveness"
-          initialDelaySeconds: 30
-          periodSeconds: 15
-          timeoutSeconds: 5
-          failureThreshold: 3
-          successThreshold: 1
-        readinessProbe:
-          httpGet:
-            path: /ready
-            port: http
-            httpHeaders:
-            - name: X-Probe-Type
-              value: "readiness"
+            port: 3007
           initialDelaySeconds: 15
-          periodSeconds: 10
-          timeoutSeconds: 3
-          failureThreshold: 3
-        startupProbe:
-          httpGet:
-            path: /health
-            port: http
-          initialDelaySeconds: 5
-          periodSeconds: 5
-          failureThreshold: 30
+          periodSeconds: 20
+          timeoutSeconds: 10
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config
+        - name: logs-volume
+          mountPath: /app/logs
       volumes:
       - name: config-volume
         configMap:
           name: agent-coordinator-config
       - name: logs-volume
-        emptyDir: {}
-      - name: tmp-volume
-        emptyDir: {}
+        persistentVolumeClaim:
+          claimName: agent-coordinator-logs-pvc
       - name: data-volume
         persistentVolumeClaim:
           claimName: agent-coordinator-data-pvc

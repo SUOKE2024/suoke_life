@@ -1,54 +1,85 @@
-FROM python:3.9-slim as builder
+FROM golang:1.21-alpine AS builder
 
+# 设置工作目录
 WORKDIR /app
 
-# 安装编译所需的依赖
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    gcc \
-    python3-dev \
-    && rm -rf /var/lib/apt/lists/*
+# 设置Go代理
+ENV GOPROXY=https://goproxy.cn,direct
+ENV GO111MODULE=on
+ENV CGO_ENABLED=0
 
-# 安装Python依赖
-COPY requirements.txt /app/
-RUN pip install --no-cache-dir -r requirements.txt
+# 安装基本工具和依赖
+RUN apk add --no-cache git gcc musl-dev tzdata
 
-# 第二阶段：运行时镜像
-FROM python:3.9-slim
+# 拷贝go.mod和go.sum文件
+COPY go.mod go.sum ./
 
+# 下载依赖 - 这一步会被缓存，除非go.mod或go.sum文件变化
+RUN go mod download && go mod verify
+
+# 拷贝源代码
+COPY . .
+
+# 设置构建参数
+ARG BUILD_VERSION="v1.0.0"
+ARG BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+ARG COMMIT_SHA="custom-build"
+ARG TARGETOS=linux
+ARG TARGETARCH=amd64
+
+# 编译为静态二进制文件
+RUN GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
+    go build -a -installsuffix cgo -ldflags "-s -w \
+    -X main.Version=${BUILD_VERSION} \
+    -X main.BuildTime=${BUILD_DATE} \
+    -X main.GitCommit=${COMMIT_SHA}" \
+    -o rag-service .
+
+# 使用多阶段构建，使用更小的基础镜像
+FROM alpine:latest
+
+LABEL org.opencontainers.image.version="${BUILD_VERSION}" \
+      org.opencontainers.image.created="${BUILD_DATE}" \
+      org.opencontainers.image.revision="${COMMIT_SHA}" \
+      org.opencontainers.image.title="SUOKE RAG Service" \
+      org.opencontainers.image.description="索克生活知识搜索和检索增强服务" \
+      org.opencontainers.image.vendor="SUOKE Health" \
+      maintainer="SUOKE Life Team"
+
+# 安装ca-certificates，用于HTTPS请求，并清理APK缓存
+RUN apk --no-cache add ca-certificates tzdata && \
+    rm -rf /var/cache/apk/*
+
+# 设置工作目录
 WORKDIR /app
 
-# 安装运行时依赖
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl \
-    netcat-openbsd \
-    procps \
-    && rm -rf /var/lib/apt/lists/*
+# 从构建阶段拷贝二进制文件
+COPY --from=builder /app/rag-service .
+COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
 
-# 从构建阶段复制Python包
-COPY --from=builder /usr/local/lib/python3.9/site-packages /usr/local/lib/python3.9/site-packages
-COPY --from=builder /usr/local/bin /usr/local/bin
-
-# 复制应用代码
-COPY . /app/
+# 拷贝配置文件和必要的资源文件
+COPY config.yaml /app/config/
+COPY .env.example /app/.env
 
 # 创建必要的目录
-RUN mkdir -p /app/data /app/logs /app/cache /app/models
+RUN mkdir -p /app/data /app/logs /app/models
 
-# 设置权限
-RUN chmod +x /app/scripts/docker-entrypoint.sh
+# 设置时区为上海
+ENV TZ=Asia/Shanghai
 
-# 暴露应用端口
-EXPOSE 8000
+# 为应用创建非root用户
+RUN addgroup -S suoke && adduser -S -G suoke suoke && \
+    chown -R suoke:suoke /app
 
-# 健康检查
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 CMD curl -f http://localhost:8000/health || exit 1
+# 切换到非root用户
+USER suoke
 
-# 以非root用户运行
-RUN groupadd -r appuser && useradd -r -g appuser appuser
-RUN chown -R appuser:appuser /app
-USER appuser
+# 设置健康检查
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD wget -q --spider http://localhost:8080/health || exit 1
 
-# 使用entrypoint脚本启动应用
-ENTRYPOINT ["/app/scripts/docker-entrypoint.sh"]
-CMD ["python", "-m", "src.main"] 
+# 公开端口
+EXPOSE 8080
+
+# 运行二进制文件
+ENTRYPOINT ["/app/rag-service"]

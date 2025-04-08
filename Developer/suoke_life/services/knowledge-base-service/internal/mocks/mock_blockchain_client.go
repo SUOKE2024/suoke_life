@@ -2,9 +2,9 @@ package mocks
 
 import (
 	"context"
-	
+
 	"github.com/stretchr/testify/mock"
-	
+
 	"knowledge-base-service/internal/domain/entity"
 )
 
@@ -23,4 +23,4 @@ func (m *MockBlockchainClient) RegisterDocument(ctx context.Context, doc *entity
 func (m *MockBlockchainClient) VerifyDocument(ctx context.Context, doc *entity.Document) (bool, error) {
 	args := m.Called(ctx, doc)
 	return args.Bool(0), args.Error(1)
-} 
+}

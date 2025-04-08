@@ -1,5 +1,5 @@
 # 构建阶段
-FROM golang:1.24-alpine AS builder
+FROM golang:1.20-alpine AS builder
 
 # 设置工作目录
 WORKDIR /app
@@ -16,11 +16,13 @@ RUN go mod download
 # 复制源代码
 COPY . .
 
-# 构建应用
-RUN go build -o knowledge-base-service ./cmd/server
+# 构建应用 - 确保跨平台兼容性
+# 指定构建平台为linux/amd64，设置CGO_ENABLED=0以静态链接
+ENV CGO_ENABLED=0 GOOS=linux GOARCH=amd64
+RUN go build -ldflags="-w -s" -o knowledge-base-service ./cmd/server
 
 # 生产阶段使用轻量级镜像
-FROM alpine:3.19
+FROM alpine:3.16
 
 # 设置标签
 LABEL maintainer="SuoKe Platform Team <dev@suoke.life>" \

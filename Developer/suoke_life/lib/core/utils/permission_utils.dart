@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart' hide openAppSettings;
-import 'package:permission_handler/permission_handler.dart' as permission_handler show openAppSettings;
+import 'package:permission_handler/permission_handler.dart'
+    hide openAppSettings;
+import 'package:permission_handler/permission_handler.dart'
+    as permission_handler show openAppSettings;
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 // 对dart:html进行条件导入，只在web平台使用
-import 'permission_utils_web.dart' if (dart.library.io) 'permission_utils_mobile.dart';
+import 'permission_utils_web.dart'
+    if (dart.library.io) 'permission_utils_mobile.dart';
 
 /// 权限工具类，用于请求和检查应用所需的各种权限
 class PermissionUtils {
@@ -14,22 +17,22 @@ class PermissionUtils {
       // Web平台使用媒体设备API请求相机权限
       return WebPermissionUtils.requestCameraPermission();
     }
-    
+
     try {
       // 获取当前权限状态
       PermissionStatus status = await Permission.camera.status;
-      
+
       // 如果已经被永久拒绝，则返回false
       if (status.isPermanentlyDenied) {
         return false;
       }
-      
+
       // 如果还未请求或被拒绝但不是永久拒绝，请求权限
       if (status.isDenied || status.isRestricted) {
         // 请求摄像头权限
         status = await Permission.camera.request();
       }
-      
+
       // 返回是否获得权限
       return status.isGranted;
     } catch (e) {
@@ -39,27 +42,28 @@ class PermissionUtils {
   }
 
   /// 请求麦克风权限
-  static Future<bool> requestMicrophonePermission({bool forceRequest = false}) async {
+  static Future<bool> requestMicrophonePermission(
+      {bool forceRequest = false}) async {
     if (kIsWeb) {
       // Web平台使用媒体设备API请求麦克风权限
       return WebPermissionUtils.requestMicrophonePermission();
     }
-    
+
     try {
       // 获取当前权限状态
       PermissionStatus status = await Permission.microphone.status;
-      
+
       // 如果已经被永久拒绝，且不是强制请求模式，则返回false
       if (status.isPermanentlyDenied && !forceRequest) {
         return false;
       }
-      
+
       // 如果还未请求或被拒绝但不是永久拒绝，请求权限
       if (status.isDenied || status.isRestricted || forceRequest) {
         // 请求麦克风权限
         status = await Permission.microphone.request();
       }
-      
+
       // 返回是否获得权限
       return status.isGranted;
     } catch (e) {
@@ -67,7 +71,7 @@ class PermissionUtils {
       return false;
     }
   }
-  
+
   /// 请求相册权限
   static Future<bool> requestPhotosPermission() async {
     if (kIsWeb) {
@@ -78,18 +82,18 @@ class PermissionUtils {
     try {
       // 获取当前权限状态
       PermissionStatus status = await Permission.photos.status;
-      
+
       // 如果已经被永久拒绝，则返回false
       if (status.isPermanentlyDenied) {
         return false;
       }
-      
+
       // 如果还未请求或被拒绝但不是永久拒绝，请求权限
       if (status.isDenied || status.isRestricted) {
         // 请求照片库权限
         status = await Permission.photos.request();
       }
-      
+
       // 返回是否获得权限
       return status.isGranted;
     } catch (e) {
@@ -97,7 +101,7 @@ class PermissionUtils {
       return false;
     }
   }
-  
+
   /// 请求位置权限
   static Future<bool> requestLocationPermission() async {
     if (kIsWeb) {
@@ -107,18 +111,18 @@ class PermissionUtils {
     try {
       // 获取当前权限状态
       PermissionStatus status = await Permission.location.status;
-      
+
       // 如果已经被永久拒绝，则返回false
       if (status.isPermanentlyDenied) {
         return false;
       }
-      
+
       // 如果还未请求或被拒绝但不是永久拒绝，请求权限
       if (status.isDenied || status.isRestricted) {
         // 请求位置权限
         status = await Permission.location.request();
       }
-      
+
       // 返回是否获得权限
       return status.isGranted;
     } catch (e) {
@@ -126,7 +130,7 @@ class PermissionUtils {
       return false;
     }
   }
-  
+
   /// 检查相机权限
   static Future<bool> checkCameraPermission() async {
     if (kIsWeb) {
@@ -135,14 +139,14 @@ class PermissionUtils {
     }
     return await Permission.camera.isGranted;
   }
-  
+
   /// 检查麦克风权限
   static Future<bool> checkMicrophonePermission() async {
     if (kIsWeb) {
       // Web平台检查麦克风权限
       return WebPermissionUtils.checkMicrophonePermission();
     }
-    
+
     try {
       final status = await Permission.microphone.status;
       return status.isGranted;
@@ -151,7 +155,7 @@ class PermissionUtils {
       return false;
     }
   }
-  
+
   /// 检查相册权限
   static Future<bool> checkPhotosPermission() async {
     if (kIsWeb) {
@@ -160,7 +164,7 @@ class PermissionUtils {
     }
     return await Permission.photos.isGranted;
   }
-  
+
   /// 检查位置权限
   static Future<bool> checkLocationPermission() async {
     if (kIsWeb) {
@@ -169,19 +173,20 @@ class PermissionUtils {
     }
     return await Permission.location.isGranted;
   }
-  
+
   /// 请求所有必要权限
-  static Future<Map<Permission, PermissionStatus>> requestAllPermissions() async {
+  static Future<Map<Permission, PermissionStatus>>
+      requestAllPermissions() async {
     try {
       // Web平台特殊处理
       if (kIsWeb) {
         debugPrint('Web平台初始化权限请求');
-        
+
         // 请求各种权限
         await WebPermissionUtils.requestAllPermissions();
         return {};
       }
-      
+
       return await [
         Permission.camera,
         Permission.microphone,
@@ -194,7 +199,7 @@ class PermissionUtils {
       return {};
     }
   }
-  
+
   /// 显示权限请求对话框
   static Future<void> showPermissionDialog(
     BuildContext context, {
@@ -233,4 +238,4 @@ class PermissionUtils {
       debugPrint('打开应用设置页面失败: $e');
     }
   }
-} 
+}

@@ -31,27 +31,27 @@ func GenerateLoremIpsum(length int) string {
 	if length <= 0 {
 		return ""
 	}
-	
+
 	var builder strings.Builder
 	currentLength := 0
-	
+
 	for currentLength < length {
 		// 随机选择一个段落
 		paragraph := chineseLoremIpsumParagraphs[rand.Intn(len(chineseLoremIpsumParagraphs))]
-		
+
 		// 添加段落和换行
 		builder.WriteString(paragraph)
 		builder.WriteString("\n\n")
-		
+
 		currentLength += len(paragraph) + 2
 	}
-	
+
 	result := builder.String()
-	
+
 	// 如果生成的文本超过指定长度，截断
 	if len(result) > length {
 		return result[:length]
 	}
-	
+
 	return result
-} 
+}

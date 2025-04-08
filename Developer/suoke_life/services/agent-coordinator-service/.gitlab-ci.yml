@@ -1,227 +1,172 @@
-image: node:18-alpine
-
-stages:
-  - validate
-  - test
-  - build
-  - security
-  - release
-  - deploy
-
-# 缓存依赖项以加速构建
-cache:
-  key: ${CI_COMMIT_REF_SLUG}
-  paths:
-    - node_modules/
+image: golang:1.20-alpine
 
 variables:
-  DOCKER_REGISTRY: suoke-registry.cn-hangzhou.cr.aliyuncs.com
-  DOCKER_REPOSITORY: suoke/agent-coordinator-service
+  GO111MODULE: "on"
+  CGO_ENABLED: "0"
+  GOOS: "linux"
+  GOARCH: "amd64"
+  GOPATH: "$CI_PROJECT_DIR/.go"
+  GOPRIVATE: "github.com/suoke-life"
+  DOCKER_REGISTRY: "suoke-registry.cn-hangzhou.cr.aliyuncs.com"
+  DOCKER_REPOSITORY: "suoke/agent-coordinator-service"
+  IMAGE_TAG: ${CI_COMMIT_SHORT_SHA}
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_TLS_CERTDIR: ""
+  DOCKER_BUILDKIT: 1
+  GO_VERSION: "1.20"
 
-# 代码验证阶段
-lint:
-  stage: validate
+cache:
+  key: "$CI_COMMIT_REF_SLUG"
+  paths:
+    - .go/pkg/mod/
+
+stages:
+  - lint
+  - test
+  - build
+  - deploy
+  - benchmark
+  - chaos
+
+.go-cache:
+  variables:
+    GOPATH: $CI_PROJECT_DIR/.go
+  cache:
+    paths:
+      - .go/pkg/mod/
+
+.docker:
+  image: docker:24.0.5
+  services:
+    - docker:24.0.5-dind
+  before_script:
+    - docker login -u $ALIYUN_DOCKER_USERNAME -p $ALIYUN_DOCKER_PASSWORD $DOCKER_REGISTRY
+
+golint:
+  stage: lint
+  image: golang:${GO_VERSION}-alpine
+  extends: .go-cache
   script:
-    - npm ci
-    - npm run lint
-    - npm run check-types
+    - apk add --no-cache gcc musl-dev
+    - go install golang.org/x/lint/golint@latest
+    - go mod download
+    - golint -set_exit_status ./...
+  only:
+    - merge_requests
+    - main
+    - staging
+    - prod
 
-sonarqube:
-  stage: validate
-  image: 
-    name: sonarsource/sonar-scanner-cli:latest
-    entrypoint: [""]
+gotest:
+  stage: test
+  image: golang:${GO_VERSION}-alpine
+  extends: .go-cache
   script:
-    - sonar-scanner -Dsonar.projectKey=agent-coordinator-service -Dsonar.sources=. -Dsonar.host.url=https://sonar.suoke.life -Dsonar.login=$SONAR_TOKEN
-  rules:
-    - if: $CI_COMMIT_BRANCH == "main" || $CI_MERGE_REQUEST_ID
+    - apk add --no-cache gcc musl-dev
+    - go mod download
+    - go test -v ./...
+  only:
+    - merge_requests
+    - main
+    - staging
+    - prod
 
-# 构建阶段
 build:
   stage: build
+  extends: .docker
   script:
-    - npm ci
-    - npm run build
-  artifacts:
-    paths:
-      - dist/
+    - echo "Building amd64 architecture image"
+    - docker build 
+      --build-arg VERSION=${CI_COMMIT_SHORT_SHA}
+      --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+      --build-arg VCS_REF=${CI_COMMIT_SHA}
+      --platform linux/amd64
+      -t ${DOCKER_REGISTRY}/${DOCKER_REPOSITORY}:${IMAGE_TAG}
+      -t ${DOCKER_REGISTRY}/${DOCKER_REPOSITORY}:latest .
+    - docker push ${DOCKER_REGISTRY}/${DOCKER_REPOSITORY}:${IMAGE_TAG}
+    - docker push ${DOCKER_REGISTRY}/${DOCKER_REPOSITORY}:latest
+  only:
+    - main
+    - staging
+    - prod
 
-# 单元测试和集成测试
-unit_test:
-  stage: test
-  script:
-    - npm ci
-    - npm run test:unit
-  coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
-  artifacts:
-    paths:
-      - coverage/
-    reports:
-      junit: junit.xml
-      coverage_report:
-        coverage_format: cobertura
-        path: coverage/cobertura-coverage.xml
-
-integration_test:
-  stage: test
-  services:
-    - name: redis:alpine
-      alias: redis
-  variables:
-    REDIS_HOST: redis
-    REDIS_PORT: 6379
-  script:
-    - npm ci
-    - npm run test:integration
-  artifacts:
-    paths:
-      - test-results/
-
-contract_test:
-  stage: test
-  services:
-    - name: redis:alpine
-      alias: redis
-  variables:
-    REDIS_HOST: redis
-    REDIS_PORT: 6379
-  script:
-    - npm ci
-    - npm run test:contract
-  artifacts:
-    paths:
-      - pacts/
-
-# 性能基准测试
-benchmark:
-  stage: test
-  script:
-    - npm ci
-    - npm run benchmark:ci
-  artifacts:
-    paths:
-      - test/benchmark/benchmark-results/
-    reports:
-      junit:
-        - test/benchmark/benchmark-results/report.xml
-  rules:
-    - if: $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_TAG
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-
-# 混沌测试
-chaos:
-  stage: test
-  script:
-    - npm ci
-    - npm run test:chaos
-  allow_failure: true
-  rules:
-    - if: $CI_COMMIT_BRANCH == "main"
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-
-# Docker镜像构建
-build_image:
-  stage: build
-  image: docker:20.10.16
-  services:
-    - docker:20.10.16-dind
-  variables:
-    DOCKER_TLS_CERTDIR: "/certs"
-  script:
-    - docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD $DOCKER_REGISTRY
-    - docker build -t $DOCKER_REGISTRY/$DOCKER_REPOSITORY:$CI_COMMIT_SHA .
-    - docker push $DOCKER_REGISTRY/$DOCKER_REPOSITORY:$CI_COMMIT_SHA
-    - |
-      if [[ "$CI_COMMIT_BRANCH" == "main" ]]; then
-        docker tag $DOCKER_REGISTRY/$DOCKER_REPOSITORY:$CI_COMMIT_SHA $DOCKER_REGISTRY/$DOCKER_REPOSITORY:latest
-        docker push $DOCKER_REGISTRY/$DOCKER_REPOSITORY:latest
-      fi
-    - |
-      if [[ "$CI_COMMIT_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-        docker tag $DOCKER_REGISTRY/$DOCKER_REPOSITORY:$CI_COMMIT_SHA $DOCKER_REGISTRY/$DOCKER_REPOSITORY:${CI_COMMIT_TAG#v}
-        docker push $DOCKER_REGISTRY/$DOCKER_REPOSITORY:${CI_COMMIT_TAG#v}
-      fi
-
-# 容器安全扫描
-container_scanning:
-  stage: security
+.deploy-template:
   image: 
-    name: aquasec/trivy:latest
+    name: dtzar/helm-kubectl:3.12
     entrypoint: [""]
   script:
-    - trivy image --format json --output trivy-results.json $DOCKER_REGISTRY/$DOCKER_REPOSITORY:$CI_COMMIT_SHA
-  artifacts:
-    paths:
-      - trivy-results.json
-    when: always
-  rules:
-    - if: $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_TAG
+    - echo "Deploying to ${ENVIRONMENT} environment"
+    - kubectl config use-context ${K8S_CONTEXT}
+    - cd k8s/overlays/${ENVIRONMENT}
+    - kustomize edit set image agent-coordinator=${DOCKER_REGISTRY}/${DOCKER_REPOSITORY}:${IMAGE_TAG}
+    - kubectl apply -k .
+    - kubectl rollout status deployment/agent-coordinator -n suoke
 
-# Helm Chart验证
-helm_lint:
-  stage: validate
-  image: 
-    name: alpine/helm:latest
-    entrypoint: [""]
-  script:
-    - cd helm/agent-coordinator
-    - helm lint .
-    - helm template . > rendered-template.yaml
-  artifacts:
-    paths:
-      - helm/agent-coordinator/rendered-template.yaml
-  rules:
-    - changes:
-        - helm/agent-coordinator/**/*
-
-# 测试环境部署
-deploy_test:
+deploy-dev:
   stage: deploy
-  image: 
-    name: bitnami/kubectl:latest
-    entrypoint: [""]
+  extends: .deploy-template
   variables:
-    ENVIRONMENT: test
-  script:
-    - mkdir -p ~/.kube
-    - echo "$KUBE_CONFIG" > ~/.kube/config
-    - kubectl config use-context suoke-cluster-test
-    - helm upgrade --install agent-coordinator-test ./helm/agent-coordinator --namespace suoke-test --set image.tag=$CI_COMMIT_SHA --set environment=testing
-  environment:
-    name: test
-    url: https://api-test.suoke.life/api/v1/agents/coordinator
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
+    ENVIRONMENT: dev
+    K8S_CONTEXT: suoke-dev
+  only:
+    - main
 
-# 生产环境部署
-deploy_prod:
+deploy-staging:
   stage: deploy
-  image: 
-    name: bitnami/kubectl:latest
-    entrypoint: [""]
+  extends: .deploy-template
   variables:
-    ENVIRONMENT: production
-  script:
-    - mkdir -p ~/.kube
-    - echo "$KUBE_CONFIG" > ~/.kube/config
-    - kubectl config use-context suoke-cluster-prod
-    - helm upgrade --install agent-coordinator ./helm/agent-coordinator --namespace suoke --set image.tag=${CI_COMMIT_TAG#v} --set environment=production
-  environment:
-    name: production
-    url: https://api.suoke.life/api/v1/agents/coordinator
-  rules:
-    - if: '$CI_COMMIT_TAG =~ /^v[0-9]+\.[0-9]+\.[0-9]+$/'
+    ENVIRONMENT: staging
+    K8S_CONTEXT: suoke-staging
+  only:
+    - staging
   when: manual
 
-# 性能基准测试定期作业
-scheduled_benchmark:
+deploy-prod:
+  stage: deploy
+  extends: .deploy-template
+  variables:
+    ENVIRONMENT: prod
+    K8S_CONTEXT: suoke-prod
+  only:
+    - prod
+  when: manual
+  environment:
+    name: production
+
+benchmark:
   stage: benchmark
+  image: alpine:3.17
+  before_script:
+    - apk add --no-cache go curl
   script:
-    - npm ci
-    - npm run benchmark:schedule
-  artifacts:
-    paths:
-      - test/benchmark/reports/
-      - test/benchmark/logs/
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule" 
+    - go mod download
+    - go run cmd/benchmark/main.go
+  only:
+    - merge_requests
+    - main
+    - tags
+
+benchmark_schedule:
+  stage: benchmark
+  image: alpine:3.17
+  before_script:
+    - apk add --no-cache go curl
+  script:
+    - go mod download
+    - go run cmd/benchmark/main.go --compare
+  only:
+    - schedules
+
+chaos_test:
+  stage: chaos
+  image: alpine:3.17
+  before_script:
+    - apk add --no-cache go curl
+  script:
+    - go mod download
+    - go run cmd/chaos/main.go
+  only:
+    - merge_requests
+    - main
+    - tags
+  when: manual 

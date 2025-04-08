@@ -14,7 +14,7 @@ metadata:
     prometheus.io/port: "9090"
     prometheus.io/path: "/metrics"
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: knowledge-base-service
@@ -33,45 +33,11 @@ spec:
         prometheus.io/scrape: "true"
         prometheus.io/port: "9090"
         prometheus.io/path: "/metrics"
-        vault.hashicorp.com/agent-inject: "true"
-        vault.hashicorp.com/role: "suoke-knowledge-base"
-        vault.hashicorp.com/agent-inject-secret-database-creds: "suoke/data/knowledge-base-service/db"
-        vault.hashicorp.com/agent-inject-template-database-creds: |
-          {{- with secret "suoke/data/knowledge-base-service/db" -}}
-          export DB_CONNECTION_STRING="{{ .Data.data.postgresql_url }}"
-          export VECTOR_STORE_API_KEY="{{ .Data.data.milvus_api_key }}"
-          export EMBEDDING_API_TOKEN="{{ .Data.data.embedding_api_token }}"
-          {{- end -}}
     spec:
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: node-type
-                    operator: In
-                    values:
-                      - stateful-services
-      tolerations:
-        - key: "dedicated"
-          operator: "Equal"
-          value: "database"
-          effect: "NoSchedule"
-      securityContext:
-        fsGroup: 1000
-        runAsNonRoot: true
       containers:
         - name: knowledge-base-service
           image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/knowledge-base-service:latest
-          imagePullPolicy: IfNotPresent
-          securityContext:
-            allowPrivilegeEscalation: false
-            runAsNonRoot: true
-            runAsUser: 1000
-            capabilities:
-              drop:
-                - ALL
-            readOnlyRootFilesystem: true
+          imagePullPolicy: Always
           ports:
             - name: http
               containerPort: 3002
@@ -93,10 +59,34 @@ spec:
               value: "0.0.0.0"
             - name: LOG_LEVEL
               value: "info"
+            - name: DB_CONNECTION_STRING
+              value: "postgresql://$(DATABASE_USER):$(DATABASE_PASSWORD)@postgres-service:5432/suoke?sslmode=disable"
+            - name: DATABASE_HOST
+              value: "postgres-service"
+            - name: DATABASE_PORT
+              value: "5432"
+            - name: DATABASE_NAME
+              value: "suoke"
+            - name: DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: username
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: password
+            - name: DATABASE_SSL_MODE
+              value: "disable"
+            - name: DATABASE_CONNECTION_RETRY
+              value: "5"
             - name: VECTOR_STORE_HOST
-              value: "milvus"
+              value: "milvus-service"
             - name: VECTOR_STORE_PORT
               value: "19530"
+            - name: VECTOR_STORE_COLLECTION
+              value: "knowledge_base_documents"
             - name: EMBEDDING_MODEL_URL
               value: "http://embedding-service:8000/embed"
             - name: EMBEDDING_DIMENSIONS
@@ -107,17 +97,8 @@ spec:
               value: "512"
             - name: TEXT_SPLITTER_CHUNK_OVERLAP
               value: "128"
-            - name: KNOWLEDGE_GRAPH_SERVICE_URL
-              value: "http://knowledge-graph-service:3000"
-            - name: RAG_SERVICE_URL
-              value: "http://rag-service:3000"
             - name: OTEL_SERVICE_NAME
               value: "knowledge-base-service"
-            - name: OTEL_EXPORTER_OTLP_ENDPOINT
-              value: "http://otel-collector:4317"
-          envFrom:
-            - configMapRef:
-                name: knowledge-base-config
           readinessProbe:
             httpGet:
               path: /api/v1/health
@@ -159,12 +140,14 @@ spec:
         - name: tmp
           emptyDir: {}
       imagePullSecrets:
+        - name: aliyun-docker-registry
         - name: suoke-registry-secret
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: knowledge-base-service
+  namespace: suoke-prod
   labels:
     app: knowledge-base-service
 spec:

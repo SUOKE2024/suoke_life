@@ -1,0 +1,75 @@
+pipeline {
+    agent {
+        kubernetes {
+            yaml '''
+                apiVersion: v1
+                kind: Pod
+                spec:
+                  containers:
+                  - name: docker
+                    image: docker:20.10-dind
+                    securityContext:
+                      privileged: true
+                  - name: kubectl
+                    image: bitnami/kubectl:1.26
+                    command:
+                    - cat
+                    tty: true
+            '''
+        }
+    }
+    
+    environment {
+        REGISTRY = "suoke-registry.cn-hangzhou.cr.aliyuncs.com"
+        IMAGE_NAME = "suoke/user-service"
+        KUBECONFIG = credentials('kubeconfig-credentials-id')
+    }
+    
+    stages {
+        stage('Build & Push') {
+            steps {
+                container('docker') {
+                    sh '''
+                        docker buildx create --name multiarch-builder --use
+                        docker buildx inspect --bootstrap
+                        
+                        VERSION=$(git rev-parse --short HEAD)
+                        
+                        docker buildx build --platform linux/amd64,linux/arm64 \
+                          -t ${REGISTRY}/${IMAGE_NAME}:latest \
+                          -t ${REGISTRY}/${IMAGE_NAME}:${VERSION} \
+                          -f Dockerfile \
+                          --push .
+                    '''
+                }
+            }
+        }
+        
+        stage('Deploy') {
+            steps {
+                container('kubectl') {
+                    sh '''
+                        export KUBECONFIG=${KUBECONFIG}
+                        
+                        VERSION=$(git rev-parse --short HEAD)
+                        
+                        kubectl set image deployment/user-service \
+                          user-service=${REGISTRY}/${IMAGE_NAME}:${VERSION} \
+                          -n suoke --record
+                          
+                        kubectl rollout status deployment/user-service -n suoke
+                    '''
+                }
+            }
+        }
+    }
+    
+    post {
+        success {
+            echo 'Deployment successful!'
+        }
+        failure {
+            echo 'Deployment failed!'
+        }
+    }
+} 

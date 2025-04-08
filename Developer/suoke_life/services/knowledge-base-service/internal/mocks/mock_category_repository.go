@@ -2,10 +2,10 @@ package mocks
 
 import (
 	"context"
-	
+
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/mock"
-	
+
 	"knowledge-base-service/internal/domain/entity"
 )
 
@@ -66,4 +66,4 @@ func (m *MockCategoryRepository) Update(ctx context.Context, category *entity.Ca
 func (m *MockCategoryRepository) Delete(ctx context.Context, id uuid.UUID) error {
 	args := m.Called(ctx, id)
 	return args.Error(0)
-} 
+}

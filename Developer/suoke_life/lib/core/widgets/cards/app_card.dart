@@ -190,12 +190,12 @@ class AppCard extends StatelessWidget {
   Widget _buildCardContent(BuildContext context, bool isDarkMode) {
     // 创建内容组件
     Widget contentWidget = content;
-    
+
     // 如果有明确的尺寸约束，使用Flexible包装内容
     if (height != null || width != null) {
       contentWidget = Flexible(child: content);
     }
-    
+
     return Container(
       padding: padding ?? _getDefaultPadding(),
       decoration: BoxDecoration(

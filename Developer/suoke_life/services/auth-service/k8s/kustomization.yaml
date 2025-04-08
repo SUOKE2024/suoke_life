@@ -13,7 +13,7 @@ resources:
 - service.yaml
 - pvc.yaml
 - configmap.yaml
-- secret.yaml
+- vault-secretprovider.yaml
 - networkpolicy.yaml
 - hpa.yaml
 - istio-gateway.yaml

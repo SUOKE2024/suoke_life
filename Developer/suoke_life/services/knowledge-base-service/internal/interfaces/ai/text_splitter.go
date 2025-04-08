@@ -12,4 +12,4 @@ type TextSplitter interface {
 	// metadata: 附加到每个块的元数据
 	// 返回分割后的块列表和可能的错误
 	Split(text string, metadata map[string]interface{}) ([]entity.Chunk, error)
-} 
+}

@@ -15,7 +15,7 @@ class ThemeSettingsPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final appConfig = ref.watch(appConfigProvider);
     final appConfigNotifier = ref.read(appConfigProvider.notifier);
-    
+
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
@@ -37,7 +37,8 @@ class ThemeSettingsPage extends ConsumerWidget {
                   subtitle: '跟随系统主题',
                   icon: Icons.auto_awesome,
                   isSelected: appConfig.themeMode == ThemeMode.system,
-                  onTap: () => appConfigNotifier.updateThemeMode(ThemeMode.system),
+                  onTap: () =>
+                      appConfigNotifier.updateThemeMode(ThemeMode.system),
                 ),
                 const Divider(),
                 _buildThemeModeOption(
@@ -46,7 +47,8 @@ class ThemeSettingsPage extends ConsumerWidget {
                   subtitle: '始终使用亮色主题',
                   icon: Icons.light_mode,
                   isSelected: appConfig.themeMode == ThemeMode.light,
-                  onTap: () => appConfigNotifier.updateThemeMode(ThemeMode.light),
+                  onTap: () =>
+                      appConfigNotifier.updateThemeMode(ThemeMode.light),
                 ),
                 const Divider(),
                 _buildThemeModeOption(
@@ -55,14 +57,15 @@ class ThemeSettingsPage extends ConsumerWidget {
                   subtitle: '始终使用暗色主题',
                   icon: Icons.dark_mode,
                   isSelected: appConfig.themeMode == ThemeMode.dark,
-                  onTap: () => appConfigNotifier.updateThemeMode(ThemeMode.dark),
+                  onTap: () =>
+                      appConfigNotifier.updateThemeMode(ThemeMode.dark),
                 ),
               ],
             ),
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // 字体大小调整
           AppCard(
             title: '字体大小',
@@ -83,18 +86,25 @@ class ThemeSettingsPage extends ConsumerWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('较小', style: TextStyle(
-                        fontSize: 12,
-                        color: isDarkMode ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
-                      )),
-                      Text('${appConfig.fontSize.toStringAsFixed(1)}', style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.primaryColor,
-                      )),
-                      Text('较大', style: TextStyle(
-                        fontSize: 12,
-                        color: isDarkMode ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
-                      )),
+                      Text('较小',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: isDarkMode
+                                ? AppColors.darkTextSecondary
+                                : AppColors.lightTextSecondary,
+                          )),
+                      Text('${appConfig.fontSize.toStringAsFixed(1)}',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.primaryColor,
+                          )),
+                      Text('较大',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: isDarkMode
+                                ? AppColors.darkTextSecondary
+                                : AppColors.lightTextSecondary,
+                          )),
                     ],
                   ),
                 ),
@@ -109,9 +119,9 @@ class ThemeSettingsPage extends ConsumerWidget {
               ],
             ),
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // 自动检测舌诊图片开关
           AppCard(
             title: '功能设置',
@@ -129,7 +139,7 @@ class ThemeSettingsPage extends ConsumerWidget {
       ),
     );
   }
-  
+
   /// 构建主题模式选项
   Widget _buildThemeModeOption({
     required BuildContext context,
@@ -140,18 +150,20 @@ class ThemeSettingsPage extends ConsumerWidget {
     required VoidCallback onTap,
   }) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    
+
     return ListTile(
       leading: Icon(
         icon,
-        color: isSelected ? AppColors.primaryColor : (isDarkMode ? Colors.white70 : Colors.black54),
+        color: isSelected
+            ? AppColors.primaryColor
+            : (isDarkMode ? Colors.white70 : Colors.black54),
       ),
       title: Text(title),
       subtitle: Text(subtitle),
-      trailing: isSelected 
+      trailing: isSelected
           ? const Icon(Icons.check_circle, color: AppColors.primaryColor)
           : null,
       onTap: onTap,
     );
   }
-} 
+}

@@ -1,0 +1,93 @@
+# 索克生活 RAG服务配置文件
+
+# 服务配置
+server:
+  port: 8080
+  host: "0.0.0.0"
+  base_url: "http://localhost:8080"
+  environment: "development"  # development, production, test
+  max_request_size: "10MB"  # 最大请求大小
+  timeout: 60  # 请求超时时间(秒)
+
+# 嵌入模型配置
+embedding:
+  model: "text-embedding-ada-002"  # OpenAI模型名称或"local"使用本地模型
+  api_key: ""  # OpenAI API密钥，使用本地模型时可留空
+  endpoint: "https://api.openai.com/v1/embeddings"  # API端点，使用本地模型时可留空
+  model_path: ""  # 本地模型路径，使用OpenAI时可留空
+  dimension: 1536  # 嵌入向量维度
+  # 多模态嵌入配置
+  multimodal:
+    enabled: true  # 是否启用多模态嵌入
+    image_model: "clip"  # 图像嵌入模型
+    audio_model: "whisper"  # 音频嵌入模型
+    tcm_enhance: true  # 是否启用中医领域增强
+
+# 向量存储配置
+vector_store:
+  type: "memory"  # memory, postgres
+  connection_string: ""  # PostgreSQL连接字符串，使用内存存储时可留空
+  # 混合检索配置
+  hybrid_search:
+    enabled: true  # 是否启用混合检索
+    keyword_search_model: "bm25"  # 关键词搜索模型: bm25, tfidf
+    default_vector_weight: 0.7  # 向量检索默认权重
+    default_keyword_weight: 0.3  # 关键词检索默认权重
+    use_query_analyzer: true  # 是否使用查询分析器
+    enable_dynamic_weights: true  # 是否启用动态权重调整
+    tcm_specific_weights:  # 中医特定查询权重
+      vector_weight: 0.6
+      keyword_weight: 0.4
+
+# LLM配置
+llm:
+  model: "gpt-3.5-turbo"  # OpenAI模型名称或"local"使用本地模型
+  api_key: ""  # OpenAI API密钥，使用本地模型时可留空
+  endpoint: "https://api.openai.com/v1/chat/completions"  # API端点，使用本地模型时可留空
+  model_path: ""  # 本地模型路径，使用OpenAI时可留空
+  temperature: 0.7  # 温度参数 (0-1)
+  max_tokens: 2048  # 最大生成token数
+  top_p: 1.0  # Top-P采样参数 (0-1)
+
+# RAG配置
+rag:
+  chunk_size: 1000  # 文档分块大小
+  chunk_overlap: 200  # 文档分块重叠大小
+  # 查询改写配置
+  query_rewrite:
+    enabled: true  # 是否启用查询改写
+    cache_size: 1000  # 查询改写缓存大小
+    default_mode: "expand"  # 默认改写模式 (expand/focus/decompose)
+  # 重排序配置
+  reranker:
+    enabled: true  # 是否启用重排序
+    model: "cross-encoder-ms-marco"  # 重排序模型
+    top_k: 20  # 重排序后返回的文档数量
+    batch_size: 16  # 批处理大小
+    tcm_specific: true  # 是否启用中医特定重排序
+    score_threshold: 0.5  # 分数阈值，低于该值的文档将被过滤
+  # 分块策略配置
+  chunking:
+    strategy: "semantic"  # 分块策略: fixed, sentence, paragraph, semantic
+    max_chunk_size: 1500  # 最大分块大小
+    min_chunk_size: 500   # 最小分块大小
+
+# 语言和区域设置
+language:
+  default: "zh-CN"  # 默认语言
+  supported: ["zh-CN", "en-US"]  # 支持的语言
+
+# 中医特色配置
+tcm:
+  enable_tcm_terms: true  # 是否启用中医术语增强
+  enable_diagnostic_recognition: true  # 是否启用四诊识别
+  tongue_diagnosis_model: "tcm-tongue-v1"  # 舌诊模型
+  pulse_diagnosis_model: "tcm-pulse-v1"  # 脉诊模型
+  tcm_term_library: "data/tcm_terms.json"  # 中医术语库路径
+
+# 日志配置
+logging:
+  level: "info"  # debug, info, warn, error
+  directory: "logs"  # 日志目录
+  format: "json"  # 日志格式: text, json
+  output: "stdout"  # 日志输出位置: stdout, file

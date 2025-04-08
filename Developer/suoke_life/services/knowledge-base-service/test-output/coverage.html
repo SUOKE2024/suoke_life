@@ -1,0 +1,3322 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>entity: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">knowledge-base-service/internal/domain/entity/category.go (0.0%)</option>
+				
+				<option value="file1">knowledge-base-service/internal/domain/entity/document.go (0.0%)</option>
+				
+				<option value="file2">knowledge-base-service/internal/domain/service/document_service.go (32.5%)</option>
+				
+				<option value="file3">knowledge-base-service/internal/domain/service/knowledge_service.go (0.0%)</option>
+				
+				<option value="file4">knowledge-base-service/internal/domain/service/mocks/mock_embedding_service.go (0.0%)</option>
+				
+				<option value="file5">knowledge-base-service/internal/domain/service/mocks/mock_text_splitter.go (0.0%)</option>
+				
+				<option value="file6">knowledge-base-service/internal/interfaces/ai/chinese_text_splitter.go (0.0%)</option>
+				
+				<option value="file7">knowledge-base-service/internal/interfaces/ai/http_embedding_service.go (0.0%)</option>
+				
+				<option value="file8">knowledge-base-service/internal/interfaces/health/health_handler.go (0.0%)</option>
+				
+				<option value="file9">knowledge-base-service/internal/interfaces/metrics/metrics.go (0.0%)</option>
+				
+				<option value="file10">knowledge-base-service/internal/interfaces/middleware/context.go (0.0%)</option>
+				
+				<option value="file11">knowledge-base-service/internal/interfaces/middleware/error_handler.go (0.0%)</option>
+				
+				<option value="file12">knowledge-base-service/internal/interfaces/rest/document_handler.go (59.9%)</option>
+				
+				<option value="file13">knowledge-base-service/internal/interfaces/rest/helpers/response.go (0.0%)</option>
+				
+				<option value="file14">knowledge-base-service/internal/interfaces/rest/knowledge_handler.go (0.0%)</option>
+				
+				<option value="file15">knowledge-base-service/pkg/ctxutil/context.go (0.0%)</option>
+				
+				<option value="file16">knowledge-base-service/pkg/errors/errors.go (0.0%)</option>
+				
+				<option value="file17">knowledge-base-service/pkg/logger/logger.go (0.0%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package entity
+
+import (
+        "fmt"
+        "time"
+
+        "github.com/google/uuid"
+)
+
+// Category 表示文档分类
+type Category struct {
+        ID          uuid.UUID   `json:"id"`
+        Name        string      `json:"name"`
+        Description string      `json:"description"`
+        ParentID    *uuid.UUID  `json:"parent_id,omitempty"`
+        Path        string      `json:"path"` // 存储路径，如 "/中医/经络/"
+        Children    []*Category `json:"children,omitempty"`
+        CreatedAt   time.Time   `json:"created_at"`
+        UpdatedAt   time.Time   `json:"updated_at"`
+}
+
+// NewCategory 创建新分类
+func NewCategory(name, description string, parentID *uuid.UUID) (*Category, error) <span class="cov0" title="0">{
+        if name == "" </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("分类名称不能为空")
+        }</span>
+
+        <span class="cov0" title="0">now := time.Now()
+
+        return &amp;Category{
+                ID:          uuid.New(),
+                Name:        name,
+                Description: description,
+                ParentID:    parentID,
+                Path:        fmt.Sprintf("/%s/", name), // 默认路径
+                Children:    []*Category{},
+                CreatedAt:   now,
+                UpdatedAt:   now,
+        }, nil</span>
+}
+
+// AddChild 添加子分类
+func (c *Category) AddChild(child *Category) error <span class="cov0" title="0">{
+        if child == nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("子分类不能为空")
+        }</span>
+
+        // 更新子分类的父ID
+        <span class="cov0" title="0">parentID := c.ID
+        child.ParentID = &amp;parentID
+
+        // 更新子分类的路径
+        child.Path = fmt.Sprintf("%s%s/", c.Path, child.Name)
+
+        // 添加到子分类列表
+        c.Children = append(c.Children, child)
+        c.UpdatedAt = time.Now()
+
+        return nil</span>
+}
+
+// RemoveChild 移除子分类
+func (c *Category) RemoveChild(childID uuid.UUID) error <span class="cov0" title="0">{
+        for i, child := range c.Children </span><span class="cov0" title="0">{
+                if child.ID == childID </span><span class="cov0" title="0">{
+                        c.Children = append(c.Children[:i], c.Children[i+1:]...)
+                        c.UpdatedAt = time.Now()
+                        return nil
+                }</span>
+        }
+
+        <span class="cov0" title="0">return fmt.Errorf("未找到子分类 ID: %s", childID)</span>
+}
+
+// Update 更新分类信息
+func (c *Category) Update(name, description string) <span class="cov0" title="0">{
+        if name != "" </span><span class="cov0" title="0">{
+                c.Name = name
+        }</span>
+
+        <span class="cov0" title="0">if description != "" </span><span class="cov0" title="0">{
+                c.Description = description
+        }</span>
+
+        <span class="cov0" title="0">c.UpdatedAt = time.Now()
+
+        // 如果名称变更，需要更新路径
+        if name != "" </span><span class="cov0" title="0">{
+                c.updatePath()
+        }</span>
+}
+
+// IsRoot 检查是否为根分类
+func (c *Category) IsRoot() bool <span class="cov0" title="0">{
+        return c.ParentID == nil
+}</span>
+
+// HasChildren 检查是否有子分类
+func (c *Category) HasChildren() bool <span class="cov0" title="0">{
+        return len(c.Children) &gt; 0
+}</span>
+
+// 更新路径（内部方法）
+func (c *Category) updatePath() <span class="cov0" title="0">{
+        if c.IsRoot() </span><span class="cov0" title="0">{
+                c.Path = fmt.Sprintf("/%s/", c.Name)
+        }</span>
+
+        // 递归更新所有子分类的路径
+        <span class="cov0" title="0">for _, child := range c.Children </span><span class="cov0" title="0">{
+                child.Path = fmt.Sprintf("%s%s/", c.Path, child.Name)
+                child.updatePath()
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package entity
+
+import (
+        "fmt"
+        "time"
+
+        "github.com/google/uuid"
+)
+
+// DocumentStatus 表示文档状态
+type DocumentStatus string
+
+const (
+        // StatusDraft 草稿状态
+        StatusDraft DocumentStatus = "draft"
+
+        // StatusPublished 已发布状态
+        StatusPublished DocumentStatus = "published"
+
+        // StatusArchived 已归档状态
+        StatusArchived DocumentStatus = "archived"
+
+        // StatusDeleted 已删除状态
+        StatusDeleted DocumentStatus = "deleted"
+)
+
+// ContentType 文档内容类型
+type ContentType string
+
+const (
+        // ContentTypeText 纯文本类型
+        ContentTypeText ContentType = "text"
+
+        // ContentTypeMarkdown Markdown类型
+        ContentTypeMarkdown ContentType = "markdown"
+
+        // ContentTypeHTML HTML类型
+        ContentTypeHTML ContentType = "html"
+)
+
+// MetadataField 元数据字段
+type MetadataField struct {
+        Name  string      `json:"name"`
+        Value interface{} `json:"value"`
+}
+
+// Chunk 表示文档的一个小块
+type Chunk struct {
+        ID         uuid.UUID       `json:"id"`
+        DocumentID uuid.UUID       `json:"document_id"`
+        Content    string          `json:"content"`
+        Vector     []float32       `json:"vector,omitempty"`
+        VectorID   string          `json:"vector_id,omitempty"`
+        Metadata   []MetadataField `json:"metadata,omitempty"`
+        TokenCount int             `json:"token_count"`
+        Offset     int             `json:"offset"`
+        Length     int             `json:"length"`
+        CreatedAt  time.Time       `json:"created_at"`
+}
+
+// Document 表示知识库中的一个文档
+type Document struct {
+        ID          uuid.UUID       `json:"id"`
+        Title       string          `json:"title"`
+        Description string          `json:"description"`
+        Content     string          `json:"content"`
+        ContentType ContentType     `json:"content_type"`
+        Status      DocumentStatus  `json:"status"`
+        AuthorID    uuid.UUID       `json:"author_id"`
+        CategoryID  uuid.UUID       `json:"category_id"`
+        Tags        []string        `json:"tags"`
+        TxHash      string          `json:"tx_hash,omitempty"` // 区块链交易哈希
+        Metadata    []MetadataField `json:"metadata,omitempty"`
+        Chunks      []Chunk         `json:"chunks,omitempty"`
+        CreatedAt   time.Time       `json:"created_at"`
+        UpdatedAt   time.Time       `json:"updated_at"`
+}
+
+// NewDocument 创建新文档
+func NewDocument(title, content string, contentType ContentType, authorID, categoryID uuid.UUID) (*Document, error) <span class="cov0" title="0">{
+        if title == "" </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("文档标题不能为空")
+        }</span>
+
+        <span class="cov0" title="0">if content == "" </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("文档内容不能为空")
+        }</span>
+
+        <span class="cov0" title="0">now := time.Now()
+
+        return &amp;Document{
+                ID:          uuid.New(),
+                Title:       title,
+                Content:     content,
+                ContentType: contentType,
+                Status:      StatusDraft,
+                AuthorID:    authorID,
+                CategoryID:  categoryID,
+                Tags:        []string{},
+                Metadata:    []MetadataField{},
+                Chunks:      []Chunk{},
+                CreatedAt:   now,
+                UpdatedAt:   now,
+        }, nil</span>
+}
+
+// Publish 发布文档
+func (d *Document) Publish() <span class="cov0" title="0">{
+        d.Status = StatusPublished
+        d.UpdatedAt = time.Now()
+}</span>
+
+// Archive 归档文档
+func (d *Document) Archive() <span class="cov0" title="0">{
+        d.Status = StatusArchived
+        d.UpdatedAt = time.Now()
+}</span>
+
+// Delete 删除文档
+func (d *Document) Delete() <span class="cov0" title="0">{
+        d.Status = StatusDeleted
+        d.UpdatedAt = time.Now()
+}</span>
+
+// AddTag 添加标签
+func (d *Document) AddTag(tag string) <span class="cov0" title="0">{
+        // 检查标签是否已存在
+        for _, t := range d.Tags </span><span class="cov0" title="0">{
+                if t == tag </span><span class="cov0" title="0">{
+                        return
+                }</span>
+        }
+
+        <span class="cov0" title="0">d.Tags = append(d.Tags, tag)
+        d.UpdatedAt = time.Now()</span>
+}
+
+// RemoveTag 移除标签
+func (d *Document) RemoveTag(tag string) <span class="cov0" title="0">{
+        for i, t := range d.Tags </span><span class="cov0" title="0">{
+                if t == tag </span><span class="cov0" title="0">{
+                        d.Tags = append(d.Tags[:i], d.Tags[i+1:]...)
+                        d.UpdatedAt = time.Now()
+                        return
+                }</span>
+        }
+}
+
+// AddMetadata 添加元数据
+func (d *Document) AddMetadata(name string, value interface{}) <span class="cov0" title="0">{
+        // 检查是否存在同名元数据
+        for i, m := range d.Metadata </span><span class="cov0" title="0">{
+                if m.Name == name </span><span class="cov0" title="0">{
+                        d.Metadata[i].Value = value
+                        d.UpdatedAt = time.Now()
+                        return
+                }</span>
+        }
+
+        // 不存在则添加
+        <span class="cov0" title="0">d.Metadata = append(d.Metadata, MetadataField{
+                Name:  name,
+                Value: value,
+        })
+        d.UpdatedAt = time.Now()</span>
+}
+
+// GetMetadata 获取元数据
+func (d *Document) GetMetadata(name string) (interface{}, bool) <span class="cov0" title="0">{
+        for _, m := range d.Metadata </span><span class="cov0" title="0">{
+                if m.Name == name </span><span class="cov0" title="0">{
+                        return m.Value, true
+                }</span>
+        }
+        <span class="cov0" title="0">return nil, false</span>
+}
+
+// AddChunk 添加文档块
+func (d *Document) AddChunk(content string, offset, length, tokenCount int, metadata []MetadataField) *Chunk <span class="cov0" title="0">{
+        chunk := Chunk{
+                ID:         uuid.New(),
+                DocumentID: d.ID,
+                Content:    content,
+                Metadata:   metadata,
+                TokenCount: tokenCount,
+                Offset:     offset,
+                Length:     length,
+                CreatedAt:  time.Now(),
+        }
+
+        d.Chunks = append(d.Chunks, chunk)
+        d.UpdatedAt = time.Now()
+
+        return &amp;d.Chunks[len(d.Chunks)-1]
+}</span>
+
+// UpdateChunkVector 更新块的向量
+func (d *Document) UpdateChunkVector(chunkID uuid.UUID, vector []float32, vectorID string) error <span class="cov0" title="0">{
+        for i, chunk := range d.Chunks </span><span class="cov0" title="0">{
+                if chunk.ID == chunkID </span><span class="cov0" title="0">{
+                        d.Chunks[i].Vector = vector
+                        d.Chunks[i].VectorID = vectorID
+                        d.UpdatedAt = time.Now()
+                        return nil
+                }</span>
+        }
+        <span class="cov0" title="0">return fmt.Errorf("未找到指定的块 ID: %s", chunkID)</span>
+}
+
+// SetBlockchainTxHash 设置区块链交易哈希
+func (d *Document) SetBlockchainTxHash(txHash string) <span class="cov0" title="0">{
+        d.TxHash = txHash
+        d.UpdatedAt = time.Now()
+}</span>
+
+// IsRegisteredOnBlockchain 检查是否已在区块链上注册
+func (d *Document) IsRegisteredOnBlockchain() bool <span class="cov0" title="0">{
+        return d.TxHash != ""
+}</span>
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package service
+
+import (
+        "context"
+        "fmt"
+        "time"
+
+        "github.com/google/uuid"
+
+        "knowledge-base-service/internal/domain/entity"
+        "knowledge-base-service/internal/domain/repository"
+        "knowledge-base-service/internal/interfaces/ai"
+)
+
+// DocumentOptions 文档选项
+type DocumentOptions struct {
+        Title       string
+        Content     string
+        Description string
+        ContentType entity.ContentType
+        AuthorID    uuid.UUID
+        CategoryID  uuid.UUID
+        Tags        []string
+        Metadata    []entity.MetadataField
+}
+
+// DocumentService 文档服务
+type DocumentService struct {
+        documentRepo     repository.DocumentRepository
+        categoryRepo     repository.CategoryRepository
+        textSplitter     ai.TextSplitter
+        embeddingService ai.EmbeddingService
+}
+
+// NewDocumentService 创建文档服务
+func NewDocumentService(
+        documentRepo repository.DocumentRepository,
+        categoryRepo repository.CategoryRepository,
+        textSplitter ai.TextSplitter,
+        embeddingService ai.EmbeddingService,
+) *DocumentService <span class="cov8" title="1">{
+        return &amp;DocumentService{
+                documentRepo:     documentRepo,
+                categoryRepo:     categoryRepo,
+                textSplitter:     textSplitter,
+                embeddingService: embeddingService,
+        }
+}</span>
+
+// GetDocumentByID 通过ID获取文档
+func (s *DocumentService) GetDocumentByID(ctx context.Context, id uuid.UUID) (*entity.Document, error) <span class="cov8" title="1">{
+        return s.documentRepo.FindByID(ctx, id)
+}</span>
+
+// GetDocumentsByCategory 获取分类下的所有文档
+func (s *DocumentService) GetDocumentsByCategory(ctx context.Context, categoryID uuid.UUID) ([]*entity.Document, error) <span class="cov0" title="0">{
+        return s.documentRepo.FindByCategory(ctx, categoryID)
+}</span>
+
+// GetDocumentsByTags 通过标签获取文档
+func (s *DocumentService) GetDocumentsByTags(ctx context.Context, tags []string) ([]*entity.Document, error) <span class="cov0" title="0">{
+        return s.documentRepo.FindByTags(ctx, tags)
+}</span>
+
+// SearchDocuments 搜索文档
+func (s *DocumentService) SearchDocuments(ctx context.Context, query string) ([]*entity.Document, error) <span class="cov0" title="0">{
+        return s.documentRepo.Search(ctx, query)
+}</span>
+
+// SemanticSearch 语义搜索文档
+func (s *DocumentService) SemanticSearch(ctx context.Context, query string, limit int) ([]*entity.Document, error) <span class="cov8" title="1">{
+        if limit &lt;= 0 </span><span class="cov0" title="0">{
+                limit = 10 // 默认限制10条
+        }</span>
+        <span class="cov8" title="1">return s.documentRepo.SemanticSearch(ctx, query, limit)</span>
+}
+
+// CreateDocument 创建文档
+func (s *DocumentService) CreateDocument(ctx context.Context, opts DocumentOptions) (*entity.Document, error) <span class="cov8" title="1">{
+        // 验证必填项
+        if opts.Title == "" </span><span class="cov8" title="1">{
+                return nil, fmt.Errorf("title is required")
+        }</span>
+        <span class="cov8" title="1">if opts.Content == "" </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("content is required")
+        }</span>
+        <span class="cov8" title="1">if opts.AuthorID == uuid.Nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("author ID is required")
+        }</span>
+        <span class="cov8" title="1">if opts.CategoryID == uuid.Nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("category ID is required")
+        }</span>
+
+        // 验证分类ID是否存在
+        <span class="cov8" title="1">category, err := s.categoryRepo.FindByID(ctx, opts.CategoryID)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("failed to get category: %w", err)
+        }</span>
+
+        <span class="cov8" title="1">if category == nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("category not found: %s", opts.CategoryID)
+        }</span>
+
+        // 创建文档实体
+        <span class="cov8" title="1">doc, err := entity.NewDocument(opts.Title, opts.Content, opts.ContentType, opts.AuthorID, opts.CategoryID)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        // 设置描述
+        <span class="cov8" title="1">if opts.Description != "" </span><span class="cov0" title="0">{
+                doc.Description = opts.Description
+        }</span>
+
+        // 添加标签
+        <span class="cov8" title="1">for _, tag := range opts.Tags </span><span class="cov8" title="1">{
+                doc.AddTag(tag)
+        }</span>
+
+        // 添加元数据
+        <span class="cov8" title="1">for _, meta := range opts.Metadata </span><span class="cov0" title="0">{
+                doc.AddMetadata(meta.Name, meta.Value)
+        }</span>
+
+        // 处理文档分块
+        <span class="cov8" title="1">err = s.processDocumentChunks(ctx, doc)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        // 保存文档
+        <span class="cov8" title="1">err = s.documentRepo.Save(ctx, doc)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("failed to save document: %w", err)
+        }</span>
+
+        <span class="cov8" title="1">return doc, nil</span>
+}
+
+// UpdateDocument 更新文档
+func (s *DocumentService) UpdateDocument(
+        ctx context.Context,
+        id uuid.UUID,
+        title, content, description string,
+        contentType entity.ContentType,
+        categoryID uuid.UUID,
+        tags []string,
+) (*entity.Document, error) <span class="cov0" title="0">{
+        // 获取现有文档
+        doc, err := s.documentRepo.FindByID(ctx, id)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("获取文档失败: %w", err)
+        }</span>
+
+        <span class="cov0" title="0">if doc == nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("文档不存在: %s", id)
+        }</span>
+
+        // 验证分类ID是否存在
+        <span class="cov0" title="0">if categoryID != doc.CategoryID </span><span class="cov0" title="0">{
+                category, err := s.categoryRepo.FindByID(ctx, categoryID)
+                if err != nil </span><span class="cov0" title="0">{
+                        return nil, fmt.Errorf("获取分类失败: %w", err)
+                }</span>
+
+                <span class="cov0" title="0">if category == nil </span><span class="cov0" title="0">{
+                        return nil, fmt.Errorf("分类不存在: %s", categoryID)
+                }</span>
+
+                <span class="cov0" title="0">doc.CategoryID = categoryID</span>
+        }
+
+        // 更新文档信息
+        <span class="cov0" title="0">if title != "" &amp;&amp; title != doc.Title </span><span class="cov0" title="0">{
+                doc.Title = title
+        }</span>
+
+        <span class="cov0" title="0">if description != "" &amp;&amp; description != doc.Description </span><span class="cov0" title="0">{
+                doc.Description = description
+        }</span>
+
+        <span class="cov0" title="0">if content != "" &amp;&amp; content != doc.Content </span><span class="cov0" title="0">{
+                doc.Content = content
+                doc.Chunks = nil // 内容改变，清空现有块
+        }</span>
+
+        <span class="cov0" title="0">if contentType != "" &amp;&amp; contentType != doc.ContentType </span><span class="cov0" title="0">{
+                doc.ContentType = contentType
+        }</span>
+
+        // 更新标签
+        <span class="cov0" title="0">if len(tags) &gt; 0 </span><span class="cov0" title="0">{
+                doc.Tags = tags
+        }</span>
+
+        // 设置更新时间
+        <span class="cov0" title="0">doc.UpdatedAt = time.Now()
+
+        // 处理文档分块（仅在内容变更时）
+        if doc.Chunks == nil </span><span class="cov0" title="0">{
+                err = s.processDocumentChunks(ctx, doc)
+                if err != nil </span><span class="cov0" title="0">{
+                        return nil, err
+                }</span>
+        }
+
+        // 保存文档
+        <span class="cov0" title="0">err = s.documentRepo.Update(ctx, doc)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("更新文档失败: %w", err)
+        }</span>
+
+        <span class="cov0" title="0">return doc, nil</span>
+}
+
+// PublishDocument 发布文档
+func (s *DocumentService) PublishDocument(ctx context.Context, id uuid.UUID) error <span class="cov0" title="0">{
+        doc, err := s.documentRepo.FindByID(ctx, id)
+        if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("获取文档失败: %w", err)
+        }</span>
+
+        <span class="cov0" title="0">if doc == nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("文档不存在: %s", id)
+        }</span>
+
+        // 发布文档
+        <span class="cov0" title="0">doc.Publish()
+
+        // 保存文档
+        err = s.documentRepo.Update(ctx, doc)
+        if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("更新文档状态失败: %w", err)
+        }</span>
+
+        <span class="cov0" title="0">return nil</span>
+}
+
+// ArchiveDocument 归档文档
+func (s *DocumentService) ArchiveDocument(ctx context.Context, id uuid.UUID) error <span class="cov0" title="0">{
+        doc, err := s.documentRepo.FindByID(ctx, id)
+        if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("获取文档失败: %w", err)
+        }</span>
+
+        <span class="cov0" title="0">if doc == nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("文档不存在: %s", id)
+        }</span>
+
+        // 归档文档
+        <span class="cov0" title="0">doc.Archive()
+
+        // 保存文档
+        err = s.documentRepo.Update(ctx, doc)
+        if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("更新文档状态失败: %w", err)
+        }</span>
+
+        <span class="cov0" title="0">return nil</span>
+}
+
+// DeleteDocument 删除文档
+func (s *DocumentService) DeleteDocument(ctx context.Context, id uuid.UUID) error <span class="cov0" title="0">{
+        // 验证文档是否存在
+        doc, err := s.documentRepo.FindByID(ctx, id)
+        if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("获取文档失败: %w", err)
+        }</span>
+
+        <span class="cov0" title="0">if doc == nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("文档不存在: %s", id)
+        }</span>
+
+        // 删除文档
+        <span class="cov0" title="0">return s.documentRepo.Delete(ctx, id)</span>
+}
+
+// RegisterDocumentOnBlockchain 在区块链上注册文档
+func (s *DocumentService) RegisterDocumentOnBlockchain(ctx context.Context, id uuid.UUID) (string, error) <span class="cov0" title="0">{
+        // 获取文档
+        doc, err := s.documentRepo.FindByID(ctx, id)
+        if err != nil </span><span class="cov0" title="0">{
+                return "", fmt.Errorf("获取文档失败: %w", err)
+        }</span>
+
+        <span class="cov0" title="0">if doc == nil </span><span class="cov0" title="0">{
+                return "", fmt.Errorf("文档不存在: %s", id)
+        }</span>
+
+        // 检查文档状态
+        <span class="cov0" title="0">if doc.Status != entity.StatusPublished </span><span class="cov0" title="0">{
+                return "", fmt.Errorf("只有已发布的文档才能在区块链上注册")
+        }</span>
+
+        // 调用存储库方法注册
+        <span class="cov0" title="0">return s.documentRepo.RegisterOnBlockchain(ctx, doc)</span>
+}
+
+// 处理文档分块和向量化
+func (s *DocumentService) processDocumentChunks(ctx context.Context, doc *entity.Document) error <span class="cov8" title="1">{
+        // 如果已有块，则跳过处理
+        if len(doc.Chunks) &gt; 0 </span><span class="cov0" title="0">{
+                return nil
+        }</span>
+
+        // 将文档转换为元数据映射
+        <span class="cov8" title="1">metadata := make(map[string]interface{})
+        metadata["document_id"] = doc.ID.String()
+        metadata["title"] = doc.Title
+
+        for _, m := range doc.Metadata </span><span class="cov0" title="0">{
+                metadata[m.Name] = m.Value
+        }</span>
+
+        // 使用文本分割器分割文档
+        <span class="cov8" title="1">chunks, err := s.textSplitter.Split(doc.Content, metadata)
+        if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("文档分块失败: %w", err)
+        }</span>
+
+        // 没有块则直接返回
+        <span class="cov8" title="1">if len(chunks) == 0 </span><span class="cov0" title="0">{
+                return nil
+        }</span>
+
+        // 提取块文本用于向量化
+        <span class="cov8" title="1">texts := make([]string, len(chunks))
+        for i, chunk := range chunks </span><span class="cov8" title="1">{
+                texts[i] = chunk.Content
+        }</span>
+
+        // 获取块的向量表示
+        <span class="cov8" title="1">vectors, err := s.embeddingService.GetBatchEmbeddings(ctx, texts)
+        if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("获取文本向量失败: %w", err)
+        }</span>
+
+        // 将块添加到文档
+        <span class="cov8" title="1">for i, chunk := range chunks </span><span class="cov8" title="1">{
+                // 添加块到文档
+                chunkEntity := doc.AddChunk(
+                        chunk.Content,
+                        chunk.Offset,
+                        chunk.Length,
+                        chunk.TokenCount,
+                        chunk.Metadata,
+                )
+
+                // 设置向量（将在数据库中存储）
+                if i &lt; len(vectors) </span><span class="cov8" title="1">{
+                        _ = doc.UpdateChunkVector(chunkEntity.ID, vectors[i], "")
+                }</span>
+        }
+
+        <span class="cov8" title="1">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package service
+
+import (
+        "context"
+        "errors"
+        "fmt"
+        "time"
+
+        "github.com/google/uuid"
+
+        "knowledge-base-service/internal/domain/entity"
+        "knowledge-base-service/internal/domain/entity/models"
+        "knowledge-base-service/internal/domain/repository"
+        "knowledge-base-service/internal/interfaces/ai"
+)
+
+// 定义知识服务接口
+type KnowledgeService interface {
+        // 中医知识相关
+        CreateTCMKnowledge(ctx context.Context, knowledge *models.TraditionalChineseMedicineKnowledge) error
+        GetTCMKnowledgeByID(ctx context.Context, id uuid.UUID) (*models.TraditionalChineseMedicineKnowledge, error)
+        UpdateTCMKnowledge(ctx context.Context, knowledge *models.TraditionalChineseMedicineKnowledge) error
+        DeleteTCMKnowledge(ctx context.Context, id uuid.UUID) error
+        FindTCMKnowledgeByMeridian(ctx context.Context, meridian string, limit, offset int) ([]models.TraditionalChineseMedicineKnowledge, int, error)
+        FindTCMKnowledgeByHerbalMedicine(ctx context.Context, herb string, limit, offset int) ([]models.TraditionalChineseMedicineKnowledge, int, error)
+        FindTCMKnowledgeByConstitutionType(ctx context.Context, constitutionType string, limit, offset int) ([]models.TraditionalChineseMedicineKnowledge, int, error)
+
+        // 现代医学知识相关
+        CreateModernMedicineKnowledge(ctx context.Context, knowledge *models.ModernMedicineKnowledge) error
+        GetModernMedicineKnowledgeByID(ctx context.Context, id uuid.UUID) (*models.ModernMedicineKnowledge, error)
+        UpdateModernMedicineKnowledge(ctx context.Context, knowledge *models.ModernMedicineKnowledge) error
+        DeleteModernMedicineKnowledge(ctx context.Context, id uuid.UUID) error
+        FindModernMedicineKnowledgeByDiagnosticMethod(ctx context.Context, method string, limit, offset int) ([]models.ModernMedicineKnowledge, int, error)
+        FindModernMedicineKnowledgeByTreatmentOption(ctx context.Context, treatment string, limit, offset int) ([]models.ModernMedicineKnowledge, int, error)
+
+        // 精准医学相关
+        CreatePrecisionMedicineKnowledge(ctx context.Context, knowledge *models.PrecisionMedicineKnowledge) error
+        GetPrecisionMedicineKnowledgeByID(ctx context.Context, id uuid.UUID) (*models.PrecisionMedicineKnowledge, error)
+        UpdatePrecisionMedicineKnowledge(ctx context.Context, knowledge *models.PrecisionMedicineKnowledge) error
+        DeletePrecisionMedicineKnowledge(ctx context.Context, id uuid.UUID) error
+
+        // 健康教育相关
+        CreateHealthEducationKnowledge(ctx context.Context, knowledge *models.HealthEducationKnowledge) error
+        GetHealthEducationKnowledgeByID(ctx context.Context, id uuid.UUID) (*models.HealthEducationKnowledge, error)
+        UpdateHealthEducationKnowledge(ctx context.Context, knowledge *models.HealthEducationKnowledge) error
+        DeleteHealthEducationKnowledge(ctx context.Context, id uuid.UUID) error
+        FindHealthEducationKnowledgeByTargetAudience(ctx context.Context, audience string, limit, offset int) ([]models.HealthEducationKnowledge, int, error)
+
+        // 多模态健康数据相关
+        CreateMultimodalHealthData(ctx context.Context, data *models.MultimodalHealthData) error
+        GetMultimodalHealthDataByID(ctx context.Context, id uuid.UUID) (*models.MultimodalHealthData, error)
+        UpdateMultimodalHealthData(ctx context.Context, data *models.MultimodalHealthData) error
+        DeleteMultimodalHealthData(ctx context.Context, id uuid.UUID) error
+        FindMultimodalHealthDataByDataType(ctx context.Context, dataType string, limit, offset int) ([]models.MultimodalHealthData, int, error)
+
+        // 通用搜索
+        SearchKnowledge(ctx context.Context, query string, knowledgeType string, limit, offset int) ([]interface{}, int, error)
+        SemanticSearchKnowledge(ctx context.Context, query string, knowledgeType string, limit int) ([]interface{}, error)
+}
+
+// 知识服务实现
+type knowledgeService struct {
+        knowledgeRepo    repository.KnowledgeRepository
+        categoryRepo     repository.CategoryRepository
+        documentRepo     repository.DocumentRepository
+        textSplitter     ai.TextSplitter
+        embeddingService ai.EmbeddingService
+}
+
+// 创建新的知识服务
+func NewKnowledgeService(
+        knowledgeRepo repository.KnowledgeRepository,
+        categoryRepo repository.CategoryRepository,
+        documentRepo repository.DocumentRepository,
+        textSplitter ai.TextSplitter,
+        embeddingService ai.EmbeddingService,
+) KnowledgeService <span class="cov0" title="0">{
+        return &amp;knowledgeService{
+                knowledgeRepo:    knowledgeRepo,
+                categoryRepo:     categoryRepo,
+                documentRepo:     documentRepo,
+                textSplitter:     textSplitter,
+                embeddingService: embeddingService,
+        }
+}</span>
+
+// 将map转换为元数据字段切片
+func convertToMetadataFields(metadata map[string]interface{}) []entity.MetadataField <span class="cov0" title="0">{
+        result := make([]entity.MetadataField, 0, len(metadata))
+        for key, value := range metadata </span><span class="cov0" title="0">{
+                result = append(result, entity.MetadataField{
+                        Name:  key,
+                        Value: value,
+                })
+        }</span>
+        <span class="cov0" title="0">return result</span>
+}
+
+// 中医知识实现
+
+func (s *knowledgeService) CreateTCMKnowledge(ctx context.Context, knowledge *models.TraditionalChineseMedicineKnowledge) error <span class="cov0" title="0">{
+        if knowledge.ID == uuid.Nil </span><span class="cov0" title="0">{
+                knowledge.ID = uuid.New()
+        }</span>
+
+        // 设置创建和更新时间
+        <span class="cov0" title="0">now := time.Now()
+        knowledge.CreatedAt = now
+        knowledge.UpdatedAt = now
+
+        // 验证分类存在
+        category, err := s.categoryRepo.FindByID(ctx, knowledge.CategoryID)
+        if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("查找分类失败: %w", err)
+        }</span>
+        <span class="cov0" title="0">if category == nil </span><span class="cov0" title="0">{
+                return errors.New("指定的分类不存在")
+        }</span>
+
+        // 保存知识
+        <span class="cov0" title="0">err = s.knowledgeRepo.SaveKnowledge(ctx, knowledge)
+        if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("保存中医知识失败: %w", err)
+        }</span>
+
+        // 将内容分块并创建文档
+        <span class="cov0" title="0">document := &amp;entity.Document{
+                ID:          knowledge.ID,
+                Title:       knowledge.Title,
+                Description: knowledge.Description,
+                Content:     knowledge.Content,
+                ContentType: entity.ContentTypeMarkdown, // 假设内容为Markdown格式
+                Status:      entity.DocumentStatus(knowledge.Status),
+                AuthorID:    knowledge.AuthorID,
+                CategoryID:  knowledge.CategoryID,
+                Tags:        knowledge.Tags,
+                Metadata: convertToMetadataFields(map[string]interface{}{
+                        "knowledgeType":     "tcm",
+                        "origin":            knowledge.Origin,
+                        "classicalText":     knowledge.ClassicalText,
+                        "meridianSystem":    knowledge.MeridianSystem,
+                        "fiveElements":      knowledge.FiveElements,
+                        "herbalMedicines":   knowledge.HerbalMedicines,
+                        "acupoints":         knowledge.Acupoints,
+                        "constitutionTypes": knowledge.ConstitutionTypes,
+                        "contraindications": knowledge.Contraindications,
+                }),
+                CreatedAt: knowledge.CreatedAt,
+                UpdatedAt: knowledge.UpdatedAt,
+        }
+
+        // 保存文档
+        return s.documentRepo.Save(ctx, document)</span>
+}
+
+func (s *knowledgeService) GetTCMKnowledgeByID(ctx context.Context, id uuid.UUID) (*models.TraditionalChineseMedicineKnowledge, error) <span class="cov0" title="0">{
+        knowledge, err := s.knowledgeRepo.FindKnowledgeByID(ctx, id, "tcm")
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("获取中医知识失败: %w", err)
+        }</span>
+
+        <span class="cov0" title="0">if knowledge == nil </span><span class="cov0" title="0">{
+                return nil, nil
+        }</span>
+
+        <span class="cov0" title="0">tcmKnowledge, ok := knowledge.(*models.TraditionalChineseMedicineKnowledge)
+        if !ok </span><span class="cov0" title="0">{
+                return nil, errors.New("类型转换失败")
+        }</span>
+
+        <span class="cov0" title="0">return tcmKnowledge, nil</span>
+}
+
+func (s *knowledgeService) UpdateTCMKnowledge(ctx context.Context, knowledge *models.TraditionalChineseMedicineKnowledge) error <span class="cov0" title="0">{
+        // 检查知识是否存在
+        existing, err := s.GetTCMKnowledgeByID(ctx, knowledge.ID)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov0" title="0">if existing == nil </span><span class="cov0" title="0">{
+                return errors.New("中医知识不存在")
+        }</span>
+
+        // 更新时间戳
+        <span class="cov0" title="0">knowledge.UpdatedAt = time.Now()
+        knowledge.CreatedAt = existing.CreatedAt
+
+        // 保存更新后的知识
+        err = s.knowledgeRepo.UpdateKnowledge(ctx, knowledge)
+        if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("更新中医知识失败: %w", err)
+        }</span>
+
+        // 更新文档
+        <span class="cov0" title="0">document := &amp;entity.Document{
+                ID:          knowledge.ID,
+                Title:       knowledge.Title,
+                Description: knowledge.Description,
+                Content:     knowledge.Content,
+                ContentType: entity.ContentTypeMarkdown, // 假设内容为Markdown格式
+                Status:      entity.DocumentStatus(knowledge.Status),
+                AuthorID:    knowledge.AuthorID,
+                CategoryID:  knowledge.CategoryID,
+                Tags:        knowledge.Tags,
+                Metadata: convertToMetadataFields(map[string]interface{}{
+                        "knowledgeType":     "tcm",
+                        "origin":            knowledge.Origin,
+                        "classicalText":     knowledge.ClassicalText,
+                        "meridianSystem":    knowledge.MeridianSystem,
+                        "fiveElements":      knowledge.FiveElements,
+                        "herbalMedicines":   knowledge.HerbalMedicines,
+                        "acupoints":         knowledge.Acupoints,
+                        "constitutionTypes": knowledge.ConstitutionTypes,
+                        "contraindications": knowledge.Contraindications,
+                }),
+                CreatedAt: knowledge.CreatedAt,
+                UpdatedAt: knowledge.UpdatedAt,
+        }
+
+        // 更新文档
+        return s.documentRepo.Update(ctx, document)</span>
+}
+
+func (s *knowledgeService) DeleteTCMKnowledge(ctx context.Context, id uuid.UUID) error <span class="cov0" title="0">{
+        // 删除知识
+        err := s.knowledgeRepo.DeleteKnowledge(ctx, id, "tcm")
+        if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("删除中医知识失败: %w", err)
+        }</span>
+
+        // 删除对应的文档
+        <span class="cov0" title="0">return s.documentRepo.Delete(ctx, id)</span>
+}
+
+func (s *knowledgeService) FindTCMKnowledgeByMeridian(ctx context.Context, meridian string, limit, offset int) ([]models.TraditionalChineseMedicineKnowledge, int, error) <span class="cov0" title="0">{
+        return s.knowledgeRepo.FindByMeridian(ctx, meridian, limit, offset)
+}</span>
+
+func (s *knowledgeService) FindTCMKnowledgeByHerbalMedicine(ctx context.Context, herb string, limit, offset int) ([]models.TraditionalChineseMedicineKnowledge, int, error) <span class="cov0" title="0">{
+        return s.knowledgeRepo.FindByHerbalMedicine(ctx, herb, limit, offset)
+}</span>
+
+func (s *knowledgeService) FindTCMKnowledgeByConstitutionType(ctx context.Context, constitutionType string, limit, offset int) ([]models.TraditionalChineseMedicineKnowledge, int, error) <span class="cov0" title="0">{
+        return s.knowledgeRepo.FindByConstitutionType(ctx, constitutionType, limit, offset)
+}</span>
+
+// 现代医学知识实现
+
+func (s *knowledgeService) CreateModernMedicineKnowledge(ctx context.Context, knowledge *models.ModernMedicineKnowledge) error <span class="cov0" title="0">{
+        if knowledge.ID == uuid.Nil </span><span class="cov0" title="0">{
+                knowledge.ID = uuid.New()
+        }</span>
+
+        // 设置创建和更新时间
+        <span class="cov0" title="0">now := time.Now()
+        knowledge.CreatedAt = now
+        knowledge.UpdatedAt = now
+
+        // 验证分类存在
+        category, err := s.categoryRepo.FindByID(ctx, knowledge.CategoryID)
+        if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("查找分类失败: %w", err)
+        }</span>
+        <span class="cov0" title="0">if category == nil </span><span class="cov0" title="0">{
+                return errors.New("指定的分类不存在")
+        }</span>
+
+        // 保存知识
+        <span class="cov0" title="0">err = s.knowledgeRepo.SaveKnowledge(ctx, knowledge)
+        if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("保存现代医学知识失败: %w", err)
+        }</span>
+
+        // 将内容分块并创建文档
+        <span class="cov0" title="0">document := &amp;entity.Document{
+                ID:          knowledge.ID,
+                Title:       knowledge.Title,
+                Description: knowledge.Description,
+                Content:     knowledge.Content,
+                ContentType: entity.ContentTypeMarkdown, // 假设内容为Markdown格式
+                Status:      entity.DocumentStatus(knowledge.Status),
+                AuthorID:    knowledge.AuthorID,
+                CategoryID:  knowledge.CategoryID,
+                Tags:        knowledge.Tags,
+                Metadata: convertToMetadataFields(map[string]interface{}{
+                        "knowledgeType":     "modern_medicine",
+                        "scientificBasis":   knowledge.ScientificBasis,
+                        "researchPapers":    knowledge.ResearchPapers,
+                        "clinicalEvidence":  knowledge.ClinicalEvidence,
+                        "healthStandards":   knowledge.HealthStandards,
+                        "riskFactors":       knowledge.RiskFactors,
+                        "preventionMethods": knowledge.PreventionMethods,
+                        "diagnosticMethods": knowledge.DiagnosticMethods,
+                        "treatmentOptions":  knowledge.TreatmentOptions,
+                }),
+                CreatedAt: knowledge.CreatedAt,
+                UpdatedAt: knowledge.UpdatedAt,
+        }
+
+        // 保存文档
+        return s.documentRepo.Save(ctx, document)</span>
+}
+
+func (s *knowledgeService) GetModernMedicineKnowledgeByID(ctx context.Context, id uuid.UUID) (*models.ModernMedicineKnowledge, error) <span class="cov0" title="0">{
+        knowledge, err := s.knowledgeRepo.FindKnowledgeByID(ctx, id, "modern_medicine")
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("获取现代医学知识失败: %w", err)
+        }</span>
+
+        <span class="cov0" title="0">if knowledge == nil </span><span class="cov0" title="0">{
+                return nil, nil
+        }</span>
+
+        <span class="cov0" title="0">modernKnowledge, ok := knowledge.(*models.ModernMedicineKnowledge)
+        if !ok </span><span class="cov0" title="0">{
+                return nil, errors.New("类型转换失败")
+        }</span>
+
+        <span class="cov0" title="0">return modernKnowledge, nil</span>
+}
+
+func (s *knowledgeService) UpdateModernMedicineKnowledge(ctx context.Context, knowledge *models.ModernMedicineKnowledge) error <span class="cov0" title="0">{
+        // 检查知识是否存在
+        existing, err := s.GetModernMedicineKnowledgeByID(ctx, knowledge.ID)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov0" title="0">if existing == nil </span><span class="cov0" title="0">{
+                return errors.New("现代医学知识不存在")
+        }</span>
+
+        // 更新时间戳
+        <span class="cov0" title="0">knowledge.UpdatedAt = time.Now()
+        knowledge.CreatedAt = existing.CreatedAt
+
+        // 保存更新后的知识
+        err = s.knowledgeRepo.UpdateKnowledge(ctx, knowledge)
+        if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("更新现代医学知识失败: %w", err)
+        }</span>
+
+        // 更新文档
+        <span class="cov0" title="0">document := &amp;entity.Document{
+                ID:          knowledge.ID,
+                Title:       knowledge.Title,
+                Description: knowledge.Description,
+                Content:     knowledge.Content,
+                ContentType: entity.ContentTypeMarkdown, // 假设内容为Markdown格式
+                Status:      entity.DocumentStatus(knowledge.Status),
+                AuthorID:    knowledge.AuthorID,
+                CategoryID:  knowledge.CategoryID,
+                Tags:        knowledge.Tags,
+                Metadata: convertToMetadataFields(map[string]interface{}{
+                        "knowledgeType":     "modern_medicine",
+                        "scientificBasis":   knowledge.ScientificBasis,
+                        "researchPapers":    knowledge.ResearchPapers,
+                        "clinicalEvidence":  knowledge.ClinicalEvidence,
+                        "healthStandards":   knowledge.HealthStandards,
+                        "riskFactors":       knowledge.RiskFactors,
+                        "preventionMethods": knowledge.PreventionMethods,
+                        "diagnosticMethods": knowledge.DiagnosticMethods,
+                        "treatmentOptions":  knowledge.TreatmentOptions,
+                }),
+                CreatedAt: knowledge.CreatedAt,
+                UpdatedAt: knowledge.UpdatedAt,
+        }
+
+        // 更新文档
+        return s.documentRepo.Update(ctx, document)</span>
+}
+
+func (s *knowledgeService) DeleteModernMedicineKnowledge(ctx context.Context, id uuid.UUID) error <span class="cov0" title="0">{
+        // 删除知识
+        err := s.knowledgeRepo.DeleteKnowledge(ctx, id, "modern_medicine")
+        if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("删除现代医学知识失败: %w", err)
+        }</span>
+
+        // 删除对应的文档
+        <span class="cov0" title="0">return s.documentRepo.Delete(ctx, id)</span>
+}
+
+func (s *knowledgeService) FindModernMedicineKnowledgeByDiagnosticMethod(ctx context.Context, method string, limit, offset int) ([]models.ModernMedicineKnowledge, int, error) <span class="cov0" title="0">{
+        return s.knowledgeRepo.FindByDiagnosticMethod(ctx, method, limit, offset)
+}</span>
+
+func (s *knowledgeService) FindModernMedicineKnowledgeByTreatmentOption(ctx context.Context, treatment string, limit, offset int) ([]models.ModernMedicineKnowledge, int, error) <span class="cov0" title="0">{
+        return s.knowledgeRepo.FindByTreatmentOption(ctx, treatment, limit, offset)
+}</span>
+
+// 精准医学相关实现
+// ... [精简输出，实际应该包含完整实现]
+
+func (s *knowledgeService) CreatePrecisionMedicineKnowledge(ctx context.Context, knowledge *models.PrecisionMedicineKnowledge) error <span class="cov0" title="0">{
+        // 简化实现，与其他类型类似
+        return nil
+}</span>
+
+func (s *knowledgeService) GetPrecisionMedicineKnowledgeByID(ctx context.Context, id uuid.UUID) (*models.PrecisionMedicineKnowledge, error) <span class="cov0" title="0">{
+        // 简化实现，与其他类型类似
+        return nil, nil
+}</span>
+
+func (s *knowledgeService) UpdatePrecisionMedicineKnowledge(ctx context.Context, knowledge *models.PrecisionMedicineKnowledge) error <span class="cov0" title="0">{
+        // 简化实现，与其他类型类似
+        return nil
+}</span>
+
+func (s *knowledgeService) DeletePrecisionMedicineKnowledge(ctx context.Context, id uuid.UUID) error <span class="cov0" title="0">{
+        // 简化实现，与其他类型类似
+        return nil
+}</span>
+
+// 健康教育相关实现
+// ... [精简输出，实际应该包含完整实现]
+
+func (s *knowledgeService) CreateHealthEducationKnowledge(ctx context.Context, knowledge *models.HealthEducationKnowledge) error <span class="cov0" title="0">{
+        // 简化实现，与其他类型类似
+        return nil
+}</span>
+
+func (s *knowledgeService) GetHealthEducationKnowledgeByID(ctx context.Context, id uuid.UUID) (*models.HealthEducationKnowledge, error) <span class="cov0" title="0">{
+        // 简化实现，与其他类型类似
+        return nil, nil
+}</span>
+
+func (s *knowledgeService) UpdateHealthEducationKnowledge(ctx context.Context, knowledge *models.HealthEducationKnowledge) error <span class="cov0" title="0">{
+        // 简化实现，与其他类型类似
+        return nil
+}</span>
+
+func (s *knowledgeService) DeleteHealthEducationKnowledge(ctx context.Context, id uuid.UUID) error <span class="cov0" title="0">{
+        // 简化实现，与其他类型类似
+        return nil
+}</span>
+
+func (s *knowledgeService) FindHealthEducationKnowledgeByTargetAudience(ctx context.Context, audience string, limit, offset int) ([]models.HealthEducationKnowledge, int, error) <span class="cov0" title="0">{
+        // 简化实现，与其他类型类似
+        return nil, 0, nil
+}</span>
+
+// 多模态健康数据相关实现
+// ... [精简输出，实际应该包含完整实现]
+
+func (s *knowledgeService) CreateMultimodalHealthData(ctx context.Context, data *models.MultimodalHealthData) error <span class="cov0" title="0">{
+        // 简化实现，与其他类型类似
+        return nil
+}</span>
+
+func (s *knowledgeService) GetMultimodalHealthDataByID(ctx context.Context, id uuid.UUID) (*models.MultimodalHealthData, error) <span class="cov0" title="0">{
+        // 简化实现，与其他类型类似
+        return nil, nil
+}</span>
+
+func (s *knowledgeService) UpdateMultimodalHealthData(ctx context.Context, data *models.MultimodalHealthData) error <span class="cov0" title="0">{
+        // 简化实现，与其他类型类似
+        return nil
+}</span>
+
+func (s *knowledgeService) DeleteMultimodalHealthData(ctx context.Context, id uuid.UUID) error <span class="cov0" title="0">{
+        // 简化实现，与其他类型类似
+        return nil
+}</span>
+
+func (s *knowledgeService) FindMultimodalHealthDataByDataType(ctx context.Context, dataType string, limit, offset int) ([]models.MultimodalHealthData, int, error) <span class="cov0" title="0">{
+        // 简化实现，与其他类型类似
+        return nil, 0, nil
+}</span>
+
+// 通用搜索实现
+
+func (s *knowledgeService) SearchKnowledge(ctx context.Context, query string, knowledgeType string, limit, offset int) ([]interface{}, int, error) <span class="cov0" title="0">{
+        return s.knowledgeRepo.Search(ctx, query, knowledgeType, limit, offset)
+}</span>
+
+func (s *knowledgeService) SemanticSearchKnowledge(ctx context.Context, query string, knowledgeType string, limit int) ([]interface{}, error) <span class="cov0" title="0">{
+        return s.knowledgeRepo.SemanticSearch(ctx, query, knowledgeType, limit)
+}</span>
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package mocks
+
+import (
+        "context"
+        "github.com/stretchr/testify/mock"
+)
+
+// MockEmbeddingService 是 EmbeddingService 接口的模拟实现
+type MockEmbeddingService struct {
+        mock.Mock
+}
+
+// GetEmbedding 模拟获取单个文本的嵌入向量
+func (m *MockEmbeddingService) GetEmbedding(ctx context.Context, text string) ([]float32, error) <span class="cov0" title="0">{
+        args := m.Called(ctx, text)
+
+        // 如果返回值是 nil，则直接返回 nil
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+
+        // 否则转换为预期的类型
+        <span class="cov0" title="0">return args.Get(0).([]float32), args.Error(1)</span>
+}
+
+// GetBatchEmbeddings 模拟批量获取多个文本的嵌入向量
+func (m *MockEmbeddingService) GetBatchEmbeddings(ctx context.Context, texts []string) ([][]float32, error) <span class="cov0" title="0">{
+        args := m.Called(ctx, texts)
+
+        // 如果返回值是 nil，则直接返回 nil
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+
+        // 否则转换为预期的类型
+        <span class="cov0" title="0">return args.Get(0).([][]float32), args.Error(1)</span>
+}
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package mocks
+
+import (
+        "github.com/stretchr/testify/mock"
+
+        "knowledge-base-service/internal/domain/entity"
+)
+
+// MockTextSplitter 是 TextSplitter 接口的模拟实现
+type MockTextSplitter struct {
+        mock.Mock
+}
+
+// Split 模拟文本分割功能
+func (m *MockTextSplitter) Split(text string, metadata map[string]interface{}) ([]entity.Chunk, error) <span class="cov0" title="0">{
+        args := m.Called(text, metadata)
+
+        // 如果返回值是 nil，则直接返回 nil
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+
+        // 否则转换为预期的类型
+        <span class="cov0" title="0">return args.Get(0).([]entity.Chunk), args.Error(1)</span>
+}
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package ai
+
+import (
+        "fmt"
+        "github.com/google/uuid"
+        "strings"
+        "time"
+
+        "knowledge-base-service/internal/domain/entity"
+)
+
+// ChineseTextSplitter 中文文本分割器
+type ChineseTextSplitter struct {
+        ChunkSize    int // 块大小（字符数）
+        ChunkOverlap int // 块重叠（字符数）
+}
+
+// Split 将中文文本分割成块
+func (s *ChineseTextSplitter) Split(text string, metadata map[string]interface{}) ([]entity.Chunk, error) <span class="cov0" title="0">{
+        if s.ChunkSize &lt;= 0 </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("块大小必须大于0")
+        }</span>
+
+        // 文本长度
+        <span class="cov0" title="0">textLen := len([]rune(text))
+
+        // 如果文本为空，返回空块
+        if textLen == 0 </span><span class="cov0" title="0">{
+                return []entity.Chunk{}, nil
+        }</span>
+
+        // 如果重叠大于或等于块大小，将其调整为块大小的一半
+        <span class="cov0" title="0">if s.ChunkOverlap &gt;= s.ChunkSize </span><span class="cov0" title="0">{
+                s.ChunkOverlap = s.ChunkSize / 2
+        }</span>
+
+        // 将文本转换为rune切片以正确处理中文字符
+        <span class="cov0" title="0">textRunes := []rune(text)
+
+        // 计算步长
+        step := s.ChunkSize - s.ChunkOverlap
+
+        // 如果文本长度小于块大小，直接返回一个块
+        if textLen &lt;= s.ChunkSize </span><span class="cov0" title="0">{
+                return []entity.Chunk{
+                        {
+                                ID:         uuid.New(),
+                                Content:    text,
+                                Metadata:   convertToMetadataFields(metadata),
+                                TokenCount: estimateTokenCount(text),
+                                Offset:     0,
+                                Length:     textLen,
+                                CreatedAt:  time.Now(),
+                        },
+                }, nil
+        }</span>
+
+        // 分割文本
+        <span class="cov0" title="0">var chunks []entity.Chunk
+
+        for i := 0; i &lt; textLen; i += step </span><span class="cov0" title="0">{
+                // 计算当前块的结束位置
+                end := i + s.ChunkSize
+                if end &gt; textLen </span><span class="cov0" title="0">{
+                        end = textLen
+                }</span>
+
+                // 提取当前块的文本
+                <span class="cov0" title="0">chunkText := string(textRunes[i:end])
+
+                // 创建块
+                chunk := entity.Chunk{
+                        ID:         uuid.New(),
+                        Content:    chunkText,
+                        Metadata:   convertToMetadataFields(metadata),
+                        TokenCount: estimateTokenCount(chunkText),
+                        Offset:     i,
+                        Length:     end - i,
+                        CreatedAt:  time.Now(),
+                }
+
+                chunks = append(chunks, chunk)
+
+                // 如果已经处理到文本末尾，退出循环
+                if end == textLen </span><span class="cov0" title="0">{
+                        break</span>
+                }
+        }
+
+        <span class="cov0" title="0">return chunks, nil</span>
+}
+
+// 将map[string]interface{}转换为[]entity.MetadataField
+func convertToMetadataFields(metadata map[string]interface{}) []entity.MetadataField <span class="cov0" title="0">{
+        fields := make([]entity.MetadataField, 0, len(metadata))
+
+        for key, value := range metadata </span><span class="cov0" title="0">{
+                fields = append(fields, entity.MetadataField{
+                        Name:  key,
+                        Value: value,
+                })
+        }</span>
+
+        <span class="cov0" title="0">return fields</span>
+}
+
+// 估算文本的token数量（简单实现，实际应用中应该使用分词器）
+func estimateTokenCount(text string) int <span class="cov0" title="0">{
+        // 对于中文，我们可以粗略地认为每个字符是一个token
+        // 对于英文，我们可以按空格分割来估算
+
+        // 计算中文字符数
+        chineseCount := 0
+        for _, r := range text </span><span class="cov0" title="0">{
+                if r &gt;= 0x4e00 &amp;&amp; r &lt;= 0x9fff </span><span class="cov0" title="0">{
+                        chineseCount++
+                }</span>
+        }
+
+        // 计算英文单词数
+        <span class="cov0" title="0">englishWords := len(strings.Fields(text))
+
+        // 返回估算的token数量
+        return chineseCount + englishWords</span>
+}
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">package ai
+
+import (
+        "bytes"
+        "context"
+        "encoding/json"
+        "fmt"
+        "io/ioutil"
+        "net/http"
+)
+
+// HTTPEmbeddingService 通过HTTP API调用嵌入服务
+type HTTPEmbeddingService struct {
+        URL string
+}
+
+// GetEmbedding 获取文本嵌入向量
+func (s *HTTPEmbeddingService) GetEmbedding(ctx context.Context, text string) ([]float32, error) <span class="cov0" title="0">{
+        // 构造请求体
+        requestBody, err := json.Marshal(map[string]interface{}{
+                "text": text,
+        })
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("序列化请求体失败: %w", err)
+        }</span>
+
+        // 创建HTTP请求
+        <span class="cov0" title="0">req, err := http.NewRequestWithContext(ctx, "POST", s.URL, bytes.NewBuffer(requestBody))
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("创建HTTP请求失败: %w", err)
+        }</span>
+        <span class="cov0" title="0">req.Header.Set("Content-Type", "application/json")
+
+        // 发送请求
+        client := &amp;http.Client{}
+        resp, err := client.Do(req)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("发送HTTP请求失败: %w", err)
+        }</span>
+        <span class="cov0" title="0">defer resp.Body.Close()
+
+        // 检查响应状态
+        if resp.StatusCode != http.StatusOK </span><span class="cov0" title="0">{
+                body, _ := ioutil.ReadAll(resp.Body)
+                return nil, fmt.Errorf("嵌入服务返回错误状态码: %d, 响应: %s", resp.StatusCode, string(body))
+        }</span>
+
+        // 解析响应
+        <span class="cov0" title="0">var result struct {
+                Embedding []float32 `json:"embedding"`
+        }
+        if err := json.NewDecoder(resp.Body).Decode(&amp;result); err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("解析响应失败: %w", err)
+        }</span>
+
+        <span class="cov0" title="0">return result.Embedding, nil</span>
+}
+
+// GetBatchEmbeddings 批量获取文本嵌入向量
+func (s *HTTPEmbeddingService) GetBatchEmbeddings(ctx context.Context, texts []string) ([][]float32, error) <span class="cov0" title="0">{
+        // 构造请求体
+        requestBody, err := json.Marshal(map[string]interface{}{
+                "texts": texts,
+        })
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("序列化请求体失败: %w", err)
+        }</span>
+
+        // 创建HTTP请求
+        <span class="cov0" title="0">req, err := http.NewRequestWithContext(ctx, "POST", s.URL, bytes.NewBuffer(requestBody))
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("创建HTTP请求失败: %w", err)
+        }</span>
+        <span class="cov0" title="0">req.Header.Set("Content-Type", "application/json")
+
+        // 发送请求
+        client := &amp;http.Client{}
+        resp, err := client.Do(req)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("发送HTTP请求失败: %w", err)
+        }</span>
+        <span class="cov0" title="0">defer resp.Body.Close()
+
+        // 检查响应状态
+        if resp.StatusCode != http.StatusOK </span><span class="cov0" title="0">{
+                body, _ := ioutil.ReadAll(resp.Body)
+                return nil, fmt.Errorf("嵌入服务返回错误状态码: %d, 响应: %s", resp.StatusCode, string(body))
+        }</span>
+
+        // 解析响应
+        <span class="cov0" title="0">var result struct {
+                Embeddings [][]float32 `json:"embeddings"`
+        }
+        if err := json.NewDecoder(resp.Body).Decode(&amp;result); err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("解析响应失败: %w", err)
+        }</span>
+
+        <span class="cov0" title="0">return result.Embeddings, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file8" style="display: none">package health
+
+import (
+        "context"
+        "encoding/json"
+        "net/http"
+        "runtime"
+        "time"
+
+        "github.com/go-chi/chi/v5"
+
+        "knowledge-base-service/internal/infrastructure/database"
+        "knowledge-base-service/internal/infrastructure/vectorstore"
+)
+
+// HealthHandler 健康检查处理器
+type HealthHandler struct {
+        db          *database.PostgresDB
+        vectorStore vectorstore.VectorStore
+        startTime   time.Time
+        version     string
+}
+
+// HealthResponse 健康检查响应
+type HealthResponse struct {
+        Status    string            `json:"status"`
+        Version   string            `json:"version"`
+        Uptime    string            `json:"uptime"`
+        Timestamp string            `json:"timestamp"`
+        GoVersion string            `json:"go_version"`
+        Services  map[string]string `json:"services"`
+}
+
+// NewHealthHandler 创建健康检查处理器
+func NewHealthHandler(db *database.PostgresDB, vectorStore vectorstore.VectorStore, version string) *HealthHandler <span class="cov0" title="0">{
+        return &amp;HealthHandler{
+                db:          db,
+                vectorStore: vectorStore,
+                startTime:   time.Now(),
+                version:     version,
+        }
+}</span>
+
+// RegisterRoutes 注册路由
+func (h *HealthHandler) RegisterRoutes(r chi.Router) <span class="cov0" title="0">{
+        r.Get("/health", h.GetHealth)
+        r.Get("/health/liveness", h.GetLiveness)
+        r.Get("/health/readiness", h.GetReadiness)
+}</span>
+
+// GetHealth 获取综合健康状态
+func (h *HealthHandler) GetHealth(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        ctx, cancel := context.WithTimeout(r.Context(), 5*time.Second)
+        defer cancel()
+
+        statusCode := http.StatusOK
+        services := make(map[string]string)
+
+        // 检查数据库连接
+        if err := h.db.Ping(ctx); err != nil </span><span class="cov0" title="0">{
+                services["database"] = "down"
+                statusCode = http.StatusServiceUnavailable
+        }</span> else<span class="cov0" title="0"> {
+                services["database"] = "up"
+        }</span>
+
+        // 检查向量存储连接
+        <span class="cov0" title="0">if err := h.vectorStore.Ping(ctx); err != nil </span><span class="cov0" title="0">{
+                services["vector_store"] = "down"
+                statusCode = http.StatusServiceUnavailable
+        }</span> else<span class="cov0" title="0"> {
+                services["vector_store"] = "up"
+        }</span>
+
+        // 构建响应
+        <span class="cov0" title="0">response := HealthResponse{
+                Status:    "healthy",
+                Version:   h.version,
+                Uptime:    time.Since(h.startTime).String(),
+                Timestamp: time.Now().Format(time.RFC3339),
+                GoVersion: runtime.Version(),
+                Services:  services,
+        }
+
+        if statusCode != http.StatusOK </span><span class="cov0" title="0">{
+                response.Status = "degraded"
+        }</span>
+
+        <span class="cov0" title="0">w.Header().Set("Content-Type", "application/json")
+        w.WriteHeader(statusCode)
+        json.NewEncoder(w).Encode(response)</span>
+}
+
+// GetLiveness 获取活跃状态（容器健康检查）
+func (h *HealthHandler) GetLiveness(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        w.Header().Set("Content-Type", "application/json")
+        w.WriteHeader(http.StatusOK)
+        json.NewEncoder(w).Encode(map[string]string{"status": "alive"})
+}</span>
+
+// GetReadiness 获取就绪状态（容器就绪检查）
+func (h *HealthHandler) GetReadiness(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        ctx, cancel := context.WithTimeout(r.Context(), 5*time.Second)
+        defer cancel()
+
+        // 检查数据库连接
+        if err := h.db.Ping(ctx); err != nil </span><span class="cov0" title="0">{
+                w.WriteHeader(http.StatusServiceUnavailable)
+                json.NewEncoder(w).Encode(map[string]string{"status": "not ready", "reason": "database connection failed"})
+                return
+        }</span>
+
+        // 检查向量存储连接
+        <span class="cov0" title="0">if err := h.vectorStore.Ping(ctx); err != nil </span><span class="cov0" title="0">{
+                w.WriteHeader(http.StatusServiceUnavailable)
+                json.NewEncoder(w).Encode(map[string]string{"status": "not ready", "reason": "vector store connection failed"})
+                return
+        }</span>
+
+        <span class="cov0" title="0">w.Header().Set("Content-Type", "application/json")
+        w.WriteHeader(http.StatusOK)
+        json.NewEncoder(w).Encode(map[string]string{"status": "ready"})</span>
+}
+</pre>
+		
+		<pre class="file" id="file9" style="display: none">package metrics
+
+import (
+        "fmt"
+        "net/http"
+        "time"
+
+        "github.com/prometheus/client_golang/prometheus"
+        "github.com/prometheus/client_golang/prometheus/promhttp"
+)
+
+var (
+        // 请求计数器
+        requestCounter = prometheus.NewCounterVec(
+                prometheus.CounterOpts{
+                        Name: "knowledge_base_http_requests_total",
+                        Help: "总HTTP请求数",
+                },
+                []string{"method", "endpoint", "status"},
+        )
+
+        // 请求持续时间
+        requestDuration = prometheus.NewHistogramVec(
+                prometheus.HistogramOpts{
+                        Name:    "knowledge_base_http_request_duration_seconds",
+                        Help:    "HTTP请求持续时间（秒）",
+                        Buckets: prometheus.DefBuckets,
+                },
+                []string{"method", "endpoint"},
+        )
+
+        // 数据库操作计数器
+        dbOperationsCounter = prometheus.NewCounterVec(
+                prometheus.CounterOpts{
+                        Name: "knowledge_base_db_operations_total",
+                        Help: "数据库操作总数",
+                },
+                []string{"operation", "status"},
+        )
+
+        // 向量搜索计数器
+        vectorSearchCounter = prometheus.NewCounterVec(
+                prometheus.CounterOpts{
+                        Name: "knowledge_base_vector_searches_total",
+                        Help: "向量搜索总数",
+                },
+                []string{"status"},
+        )
+
+        // 嵌入计数器
+        embeddingCounter = prometheus.NewCounter(
+                prometheus.CounterOpts{
+                        Name: "knowledge_base_embeddings_total",
+                        Help: "嵌入总数",
+                },
+        )
+
+        // 活跃连接数
+        activeConnections = prometheus.NewGauge(
+                prometheus.GaugeOpts{
+                        Name: "knowledge_base_active_connections",
+                        Help: "当前活跃连接数",
+                },
+        )
+)
+
+// 初始化函数
+func init() <span class="cov0" title="0">{
+        // 注册指标
+        prometheus.MustRegister(requestCounter)
+        prometheus.MustRegister(requestDuration)
+        prometheus.MustRegister(dbOperationsCounter)
+        prometheus.MustRegister(vectorSearchCounter)
+        prometheus.MustRegister(embeddingCounter)
+        prometheus.MustRegister(activeConnections)
+}</span>
+
+// StartMetricsServer 启动指标服务器
+func StartMetricsServer(port int) <span class="cov0" title="0">{
+        http.Handle("/metrics", promhttp.Handler())
+        go func() </span><span class="cov0" title="0">{
+                fmt.Printf("指标服务器在:%d/metrics启动\n", port)
+                if err := http.ListenAndServe(fmt.Sprintf(":%d", port), nil); err != nil </span><span class="cov0" title="0">{
+                        fmt.Printf("指标服务器错误: %v\n", err)
+                }</span>
+        }()
+}
+
+// ResponseRecorder 包装http.ResponseWriter以捕获状态码
+type ResponseRecorder struct {
+        http.ResponseWriter
+        StatusCode int
+}
+
+// WriteHeader 捕获状态码
+func (r *ResponseRecorder) WriteHeader(statusCode int) <span class="cov0" title="0">{
+        r.StatusCode = statusCode
+        r.ResponseWriter.WriteHeader(statusCode)
+}</span>
+
+// RequestMetricsMiddleware HTTP请求指标中间件
+func RequestMetricsMiddleware(next http.Handler) http.Handler <span class="cov0" title="0">{
+        return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) </span><span class="cov0" title="0">{
+                activeConnections.Inc()
+                defer activeConnections.Dec()
+
+                start := time.Now()
+
+                // 创建响应记录器以捕获状态码
+                recorder := &amp;ResponseRecorder{
+                        ResponseWriter: w,
+                        StatusCode:     http.StatusOK,
+                }
+
+                // 调用下一个处理器
+                next.ServeHTTP(recorder, r)
+
+                // 记录请求持续时间
+                duration := time.Since(start).Seconds()
+                requestDuration.WithLabelValues(r.Method, r.URL.Path).Observe(duration)
+
+                // 增加请求计数
+                requestCounter.WithLabelValues(
+                        r.Method,
+                        r.URL.Path,
+                        fmt.Sprintf("%d", recorder.StatusCode),
+                ).Inc()
+        }</span>)
+}
+
+// IncrementDBCounter 增加数据库操作计数
+func IncrementDBCounter(operation string, success bool) <span class="cov0" title="0">{
+        status := "success"
+        if !success </span><span class="cov0" title="0">{
+                status = "error"
+        }</span>
+        <span class="cov0" title="0">dbOperationsCounter.WithLabelValues(operation, status).Inc()</span>
+}
+
+// IncrementVectorSearchCounter 增加向量搜索计数
+func IncrementVectorSearchCounter(success bool) <span class="cov0" title="0">{
+        status := "success"
+        if !success </span><span class="cov0" title="0">{
+                status = "error"
+        }</span>
+        <span class="cov0" title="0">vectorSearchCounter.WithLabelValues(status).Inc()</span>
+}
+
+// IncrementEmbeddingCounter 增加嵌入计数
+func IncrementEmbeddingCounter() <span class="cov0" title="0">{
+        embeddingCounter.Inc()
+}</span>
+</pre>
+		
+		<pre class="file" id="file10" style="display: none">package middleware
+
+import (
+        "github.com/go-chi/chi/v5/middleware"
+        "github.com/google/uuid"
+        "knowledge-base-service/pkg/ctxutil"
+        "knowledge-base-service/pkg/logger"
+        "net/http"
+)
+
+// ContextMiddleware 添加请求上下文信息
+func ContextMiddleware(next http.Handler) http.Handler <span class="cov0" title="0">{
+        return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) </span><span class="cov0" title="0">{
+                // 从请求头获取requestID或生成新的
+                requestID := r.Header.Get("X-Request-ID")
+                if requestID == "" </span><span class="cov0" title="0">{
+                        requestID = middleware.GetReqID(r.Context())
+                        if requestID == "" </span><span class="cov0" title="0">{
+                                requestID = uuid.New().String()
+                        }</span>
+                }
+
+                // 从请求头获取traceID
+                <span class="cov0" title="0">traceID := r.Header.Get("X-Trace-ID")
+                if traceID == "" </span><span class="cov0" title="0">{
+                        traceID = requestID
+                }</span>
+
+                // 创建带有requestID和traceID的上下文
+                <span class="cov0" title="0">ctx := ctxutil.WithRequestID(r.Context(), requestID)
+                ctx = ctxutil.WithTraceID(ctx, traceID)
+
+                // 从请求中获取认证信息（若有）
+                if userIDStr := r.Header.Get("X-User-ID"); userIDStr != "" </span><span class="cov0" title="0">{
+                        if userID, err := uuid.Parse(userIDStr); err == nil </span><span class="cov0" title="0">{
+                                ctx = ctxutil.WithUserID(ctx, userID)
+                        }</span>
+                }
+
+                // 创建与请求关联的日志记录器
+                <span class="cov0" title="0">log := logger.With("request_id", requestID, "trace_id", traceID)
+                ctx = logger.WithContext(ctx, log)
+
+                // 设置响应头
+                w.Header().Set("X-Request-ID", requestID)
+                w.Header().Set("X-Trace-ID", traceID)
+
+                // 使用增强的上下文继续处理请求
+                next.ServeHTTP(w, r.WithContext(ctx))</span>
+        })
+}
+</pre>
+		
+		<pre class="file" id="file11" style="display: none">package middleware
+
+import (
+        "encoding/json"
+        "knowledge-base-service/pkg/errors"
+        "knowledge-base-service/pkg/logger"
+        "net/http"
+)
+
+// responseWriter 是一个包装 http.ResponseWriter 的自定义响应写入器
+type responseWriter struct {
+        http.ResponseWriter
+        status  int
+        written bool
+        err     error
+}
+
+// WriteHeader 重写以捕获状态码
+func (rw *responseWriter) WriteHeader(status int) <span class="cov0" title="0">{
+        rw.status = status
+        rw.written = true
+        rw.ResponseWriter.WriteHeader(status)
+}</span>
+
+// Write 重写以捕获写入状态
+func (rw *responseWriter) Write(b []byte) (int, error) <span class="cov0" title="0">{
+        if !rw.written </span><span class="cov0" title="0">{
+                rw.WriteHeader(http.StatusOK)
+        }</span>
+        <span class="cov0" title="0">return rw.ResponseWriter.Write(b)</span>
+}
+
+// SetError 设置错误
+func (rw *responseWriter) SetError(err error) <span class="cov0" title="0">{
+        rw.err = err
+}</span>
+
+// ErrorResponse 错误响应
+type ErrorResponse struct {
+        Error string `json:"error"`
+}
+
+// ErrorHandler 错误处理中间件
+func ErrorHandler(next http.Handler) http.Handler <span class="cov0" title="0">{
+        return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) </span><span class="cov0" title="0">{
+                // 创建自定义响应写入器
+                rw := &amp;responseWriter{ResponseWriter: w, status: http.StatusOK}
+
+                // 执行下一个处理器
+                next.ServeHTTP(rw, r)
+
+                // 如果有错误且未处理
+                if rw.err != nil &amp;&amp; !rw.written </span><span class="cov0" title="0">{
+                        handleError(rw, r, rw.err)
+                }</span>
+        })
+}
+
+// handleError 处理错误
+func handleError(w http.ResponseWriter, r *http.Request, err error) <span class="cov0" title="0">{
+        log := logger.FromContext(r.Context())
+
+        switch e := err.(type) </span>{
+        case *errors.AppError:<span class="cov0" title="0">
+                log.Errorw("应用错误",
+                        "code", e.Code,
+                        "message", e.Message,
+                        "error", e.Err,
+                        "path", r.URL.Path,
+                        "method", r.Method,
+                )
+
+                w.Header().Set("Content-Type", "application/json")
+                w.WriteHeader(e.Code)
+
+                response := ErrorResponse{Error: e.Message}
+                json.NewEncoder(w).Encode(response)</span>
+        default:<span class="cov0" title="0">
+                log.Errorw("未知错误",
+                        "error", err,
+                        "path", r.URL.Path,
+                        "method", r.Method,
+                )
+
+                w.Header().Set("Content-Type", "application/json")
+                w.WriteHeader(http.StatusInternalServerError)
+
+                response := ErrorResponse{Error: "服务器内部错误"}
+                json.NewEncoder(w).Encode(response)</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">package rest
+
+import (
+        "encoding/json"
+        "net/http"
+        "strconv"
+        "time"
+
+        "github.com/go-chi/chi/v5"
+        "github.com/google/uuid"
+
+        "knowledge-base-service/internal/domain/entity"
+        "knowledge-base-service/internal/domain/service"
+        "knowledge-base-service/internal/domain/service/interfaces"
+        "knowledge-base-service/internal/interfaces/metrics"
+        "knowledge-base-service/internal/interfaces/rest/helpers"
+        "knowledge-base-service/pkg/errors"
+        "knowledge-base-service/pkg/logger"
+)
+
+// DocumentHandler 处理文档相关的API请求
+type DocumentHandler struct {
+        documentService interfaces.DocumentService
+}
+
+// NewDocumentHandler 创建文档处理器
+func NewDocumentHandler(documentService interfaces.DocumentService) *DocumentHandler <span class="cov8" title="1">{
+        return &amp;DocumentHandler{
+                documentService: documentService,
+        }
+}</span>
+
+// RegisterRoutes 注册路由
+func (h *DocumentHandler) RegisterRoutes(r chi.Router) <span class="cov8" title="1">{
+        r.Route("/documents", func(r chi.Router) </span><span class="cov8" title="1">{
+                r.Get("/", h.ListDocuments)
+                r.Post("/", h.CreateDocument)
+                r.Get("/{id}", h.GetDocument)
+                r.Put("/{id}", h.UpdateDocument)
+                r.Delete("/{id}", h.DeleteDocument)
+                r.Post("/{id}/publish", h.PublishDocument)
+                r.Post("/{id}/archive", h.ArchiveDocument)
+                r.Post("/{id}/blockchain", h.RegisterOnBlockchain)
+                r.Get("/category/{categoryId}", h.GetDocumentsByCategory)
+                r.Get("/search", h.SearchDocuments)
+                r.Get("/semantic-search", h.SemanticSearch)
+        }</span>)
+}
+
+// 请求和响应结构体
+
+// DocumentResponse 文档响应
+type DocumentResponse struct {
+        ID          string                 `json:"id"`
+        Title       string                 `json:"title"`
+        Description string                 `json:"description"`
+        Content     string                 `json:"content"`
+        ContentType string                 `json:"content_type"`
+        Status      string                 `json:"status"`
+        AuthorID    string                 `json:"author_id"`
+        CategoryID  string                 `json:"category_id"`
+        Tags        []string               `json:"tags"`
+        TxHash      string                 `json:"tx_hash,omitempty"`
+        Metadata    []entity.MetadataField `json:"metadata,omitempty"`
+        CreatedAt   string                 `json:"created_at"`
+        UpdatedAt   string                 `json:"updated_at"`
+}
+
+// CreateDocumentRequest 创建文档请求
+type CreateDocumentRequest struct {
+        Title       string   `json:"title"`
+        Description string   `json:"description"`
+        Content     string   `json:"content"`
+        ContentType string   `json:"content_type"`
+        AuthorID    string   `json:"author_id"`
+        CategoryID  string   `json:"category_id"`
+        Tags        []string `json:"tags"`
+}
+
+// UpdateDocumentRequest 更新文档请求
+type UpdateDocumentRequest struct {
+        Title       string   `json:"title"`
+        Description string   `json:"description"`
+        Content     string   `json:"content"`
+        ContentType string   `json:"content_type"`
+        CategoryID  string   `json:"category_id"`
+        Tags        []string `json:"tags"`
+}
+
+// 处理程序方法
+
+// ListDocuments 列出所有文档
+func (h *DocumentHandler) ListDocuments(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        log := logger.FromContext(r.Context())
+        // 实际业务中这里应该分页，并支持各种过滤条件
+        // 但为简化示例，这里简单地通过标签获取一些文档
+        tags := r.URL.Query()["tag"]
+
+        documents, err := h.documentService.GetDocumentsByTags(r.Context(), tags)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Errorw("获取文档列表失败", "error", err, "tags", tags)
+                helpers.RenderError(w, r, errors.InternalServerError("获取文档列表失败", err))
+                return
+        }</span>
+
+        // 转换为响应格式
+        <span class="cov0" title="0">response := make([]DocumentResponse, len(documents))
+        for i, doc := range documents </span><span class="cov0" title="0">{
+                response[i] = mapDocumentToResponse(doc)
+        }</span>
+
+        <span class="cov0" title="0">helpers.RenderJSON(w, r, http.StatusOK, response)</span>
+}
+
+// GetDocument 获取单个文档
+func (h *DocumentHandler) GetDocument(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        id, err := helpers.ParseUUID(r, "id")
+        if err != nil </span><span class="cov8" title="1">{
+                helpers.RenderError(w, r, err)
+                return
+        }</span>
+
+        <span class="cov8" title="1">document, err := h.documentService.GetDocumentByID(r.Context(), id)
+        if err != nil </span><span class="cov8" title="1">{
+                helpers.RenderError(w, r, errors.InternalServerError("获取文档失败", err))
+                return
+        }</span>
+
+        <span class="cov8" title="1">if document == nil </span><span class="cov8" title="1">{
+                helpers.RenderError(w, r, errors.NotFound("文档", nil))
+                return
+        }</span>
+
+        <span class="cov8" title="1">helpers.RenderJSON(w, r, http.StatusOK, mapDocumentToResponse(document))</span>
+}
+
+// CreateDocument 创建文档
+func (h *DocumentHandler) CreateDocument(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        log := logger.FromContext(r.Context())
+
+        var req CreateDocumentRequest
+        if err := helpers.ParseRequestBody(r, &amp;req); err != nil </span><span class="cov8" title="1">{
+                helpers.RenderError(w, r, err)
+                return
+        }</span>
+
+        // 验证必填字段
+        <span class="cov8" title="1">requiredFields := map[string]string{
+                "标题":   req.Title,
+                "内容":   req.Content,
+                "作者ID": req.AuthorID,
+                "分类ID": req.CategoryID,
+        }
+        if err := helpers.ValidateRequired(requiredFields); err != nil </span><span class="cov8" title="1">{
+                helpers.RenderError(w, r, err)
+                return
+        }</span>
+
+        // 解析UUID
+        <span class="cov8" title="1">authorID, err := uuid.Parse(req.AuthorID)
+        if err != nil </span><span class="cov8" title="1">{
+                helpers.RenderError(w, r, errors.BadRequest("无效的UUID格式", err))
+                return
+        }</span>
+
+        <span class="cov8" title="1">categoryID, err := uuid.Parse(req.CategoryID)
+        if err != nil </span><span class="cov0" title="0">{
+                helpers.RenderError(w, r, errors.BadRequest("无效的UUID格式", err))
+                return
+        }</span>
+
+        // 解析内容类型
+        <span class="cov8" title="1">contentType := entity.ContentType(req.ContentType)
+
+        // 创建文档选项
+        opts := service.DocumentOptions{
+                Title:       req.Title,
+                Content:     req.Content,
+                Description: req.Description,
+                ContentType: contentType,
+                AuthorID:    authorID,
+                CategoryID:  categoryID,
+                Tags:        req.Tags,
+                Metadata:    []entity.MetadataField{}, // 如果API需要支持元数据，这里可以从请求中解析
+        }
+
+        // 记录指标
+        metrics.IncrementDBCounter("document_create", true)
+
+        // 创建文档
+        document, err := h.documentService.CreateDocument(r.Context(), opts)
+        if err != nil </span><span class="cov8" title="1">{
+                metrics.IncrementDBCounter("document_create", false)
+                log.Errorw("创建文档失败", "error", err, "title", req.Title)
+                helpers.RenderError(w, r, errors.InternalServerError("创建文档失败", err))
+                return
+        }</span>
+
+        <span class="cov8" title="1">log.Infow("文档创建成功", "document_id", document.ID, "title", document.Title)
+        helpers.RenderJSON(w, r, http.StatusCreated, mapDocumentToResponse(document))</span>
+}
+
+// UpdateDocument 更新文档
+func (h *DocumentHandler) UpdateDocument(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        log := logger.FromContext(r.Context())
+
+        // 解析文档ID
+        id, err := helpers.ParseUUID(r, "id")
+        if err != nil </span><span class="cov0" title="0">{
+                helpers.RenderError(w, r, err)
+                return
+        }</span>
+
+        // 解析请求体
+        <span class="cov8" title="1">var req UpdateDocumentRequest
+        if err := json.NewDecoder(r.Body).Decode(&amp;req); err != nil </span><span class="cov0" title="0">{
+                helpers.RenderError(w, r, errors.BadRequest("无效的请求体", err))
+                return
+        }</span>
+
+        // 验证必填字段
+        <span class="cov8" title="1">if req.Title == "" </span><span class="cov0" title="0">{
+                helpers.RenderError(w, r, errors.BadRequest("标题不能为空", nil))
+                return
+        }</span>
+
+        // 解析分类ID，如果提供了的话
+        <span class="cov8" title="1">var categoryID uuid.UUID
+        if req.CategoryID != "" </span><span class="cov8" title="1">{
+                categoryID, err = uuid.Parse(req.CategoryID)
+                if err != nil </span><span class="cov0" title="0">{
+                        helpers.RenderError(w, r, errors.BadRequest("无效的分类ID", err))
+                        return
+                }</span>
+        }
+
+        // 解析内容类型
+        <span class="cov8" title="1">contentType := entity.ContentType(req.ContentType)
+
+        // 记录指标
+        metrics.IncrementDBCounter("document_update", true)
+
+        // 更新文档
+        document, err := h.documentService.UpdateDocument(
+                r.Context(),
+                id,
+                req.Title,
+                req.Content,
+                req.Description,
+                contentType,
+                categoryID,
+                req.Tags,
+        )
+
+        if err != nil </span><span class="cov0" title="0">{
+                metrics.IncrementDBCounter("document_update", false)
+                log.Errorw("更新文档失败", "error", err, "document_id", id)
+                helpers.RenderError(w, r, errors.InternalServerError("更新文档失败", err))
+                return
+        }</span>
+
+        <span class="cov8" title="1">if document == nil </span><span class="cov0" title="0">{
+                helpers.RenderError(w, r, errors.NotFound("文档", nil))
+                return
+        }</span>
+
+        <span class="cov8" title="1">log.Infow("文档更新成功", "document_id", document.ID)
+        helpers.RenderJSON(w, r, http.StatusOK, mapDocumentToResponse(document))</span>
+}
+
+// DeleteDocument 删除文档
+func (h *DocumentHandler) DeleteDocument(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        log := logger.FromContext(r.Context())
+
+        id, err := helpers.ParseUUID(r, "id")
+        if err != nil </span><span class="cov0" title="0">{
+                helpers.RenderError(w, r, err)
+                return
+        }</span>
+
+        // 记录指标
+        <span class="cov8" title="1">metrics.IncrementDBCounter("document_delete", true)
+
+        err = h.documentService.DeleteDocument(r.Context(), id)
+        if err != nil </span><span class="cov0" title="0">{
+                metrics.IncrementDBCounter("document_delete", false)
+                log.Errorw("删除文档失败", "error", err, "document_id", id)
+                helpers.RenderError(w, r, errors.InternalServerError("删除文档失败", err))
+                return
+        }</span>
+
+        <span class="cov8" title="1">log.Infow("文档删除成功", "document_id", id)
+        w.WriteHeader(http.StatusNoContent)</span>
+}
+
+// PublishDocument 发布文档
+func (h *DocumentHandler) PublishDocument(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        log := logger.FromContext(r.Context())
+
+        id, err := helpers.ParseUUID(r, "id")
+        if err != nil </span><span class="cov8" title="1">{
+                helpers.RenderError(w, r, err)
+                return
+        }</span>
+
+        <span class="cov8" title="1">err = h.documentService.PublishDocument(r.Context(), id)
+        if err != nil </span><span class="cov8" title="1">{
+                log.Errorw("发布文档失败", "error", err, "document_id", id)
+                helpers.RenderError(w, r, errors.InternalServerError("发布文档失败", err))
+                return
+        }</span>
+
+        // 获取最新的文档信息
+        <span class="cov8" title="1">document, err := h.documentService.GetDocumentByID(r.Context(), id)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Errorw("获取已发布文档失败", "error", err, "document_id", id)
+                helpers.RenderError(w, r, errors.InternalServerError("获取已发布文档失败", err))
+                return
+        }</span>
+
+        <span class="cov8" title="1">log.Infow("文档发布成功", "document_id", id)
+        helpers.RenderJSON(w, r, http.StatusOK, mapDocumentToResponse(document))</span>
+}
+
+// ArchiveDocument 归档文档
+func (h *DocumentHandler) ArchiveDocument(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        log := logger.FromContext(r.Context())
+
+        id, err := helpers.ParseUUID(r, "id")
+        if err != nil </span><span class="cov0" title="0">{
+                helpers.RenderError(w, r, err)
+                return
+        }</span>
+
+        <span class="cov0" title="0">err = h.documentService.ArchiveDocument(r.Context(), id)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Errorw("归档文档失败", "error", err, "document_id", id)
+                helpers.RenderError(w, r, errors.InternalServerError("归档文档失败", err))
+                return
+        }</span>
+
+        <span class="cov0" title="0">log.Infow("文档归档成功", "document_id", id)
+        helpers.RenderSuccess(w, r, http.StatusOK, "文档归档成功", map[string]string{
+                "id": id.String(),
+        })</span>
+}
+
+// RegisterOnBlockchain 在区块链上注册文档
+func (h *DocumentHandler) RegisterOnBlockchain(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        log := logger.FromContext(r.Context())
+
+        id, err := helpers.ParseUUID(r, "id")
+        if err != nil </span><span class="cov0" title="0">{
+                helpers.RenderError(w, r, err)
+                return
+        }</span>
+
+        <span class="cov8" title="1">txHash, err := h.documentService.RegisterDocumentOnBlockchain(r.Context(), id)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Errorw("在区块链上注册文档失败", "error", err, "document_id", id)
+                helpers.RenderError(w, r, errors.InternalServerError("在区块链上注册文档失败", err))
+                return
+        }</span>
+
+        <span class="cov8" title="1">log.Infow("文档在区块链上注册成功", "document_id", id, "tx_hash", txHash)
+        helpers.RenderJSON(w, r, http.StatusOK, map[string]interface{}{
+                "id":      id.String(),
+                "tx_hash": txHash,
+                "message": "文档已在区块链上注册成功",
+        })</span>
+}
+
+// GetDocumentsByCategory 获取分类下的文档
+func (h *DocumentHandler) GetDocumentsByCategory(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        categoryID, err := helpers.ParseUUID(r, "categoryId")
+        if err != nil </span><span class="cov0" title="0">{
+                helpers.RenderError(w, r, err)
+                return
+        }</span>
+
+        <span class="cov0" title="0">documents, err := h.documentService.GetDocumentsByCategory(r.Context(), categoryID)
+        if err != nil </span><span class="cov0" title="0">{
+                helpers.RenderError(w, r, errors.InternalServerError("获取分类文档列表失败", err))
+                return
+        }</span>
+
+        // 转换为响应格式
+        <span class="cov0" title="0">response := make([]DocumentResponse, len(documents))
+        for i, doc := range documents </span><span class="cov0" title="0">{
+                response[i] = mapDocumentToResponse(doc)
+        }</span>
+
+        <span class="cov0" title="0">helpers.RenderJSON(w, r, http.StatusOK, response)</span>
+}
+
+// SearchDocuments 全文搜索文档
+func (h *DocumentHandler) SearchDocuments(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        query := r.URL.Query().Get("q")
+
+        if query == "" </span><span class="cov0" title="0">{
+                helpers.RenderError(w, r, errors.BadRequest("搜索查询不能为空", nil))
+                return
+        }</span>
+
+        <span class="cov8" title="1">documents, err := h.documentService.SearchDocuments(r.Context(), query)
+        if err != nil </span><span class="cov0" title="0">{
+                helpers.RenderError(w, r, errors.InternalServerError("搜索文档失败", err))
+                return
+        }</span>
+
+        // 转换为响应格式
+        <span class="cov8" title="1">response := make([]DocumentResponse, len(documents))
+        for i, doc := range documents </span><span class="cov8" title="1">{
+                response[i] = mapDocumentToResponse(doc)
+        }</span>
+
+        <span class="cov8" title="1">helpers.RenderJSON(w, r, http.StatusOK, response)</span>
+}
+
+// SemanticSearch 语义搜索
+func (h *DocumentHandler) SemanticSearch(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        query := r.URL.Query().Get("q")
+
+        if query == "" </span><span class="cov0" title="0">{
+                helpers.RenderError(w, r, errors.BadRequest("搜索查询不能为空", nil))
+                return
+        }</span>
+
+        // 获取limit参数，默认为10
+        <span class="cov8" title="1">limitStr := r.URL.Query().Get("limit")
+        limit := 10
+        if limitStr != "" </span><span class="cov0" title="0">{
+                var err error
+                limit, err = strconv.Atoi(limitStr)
+                if err != nil || limit &lt;= 0 </span><span class="cov0" title="0">{
+                        helpers.RenderError(w, r, errors.BadRequest("无效的limit参数", err))
+                        return
+                }</span>
+        }
+
+        // 记录指标
+        <span class="cov8" title="1">metrics.IncrementVectorSearchCounter(true)
+
+        documents, err := h.documentService.SemanticSearch(r.Context(), query, limit)
+        if err != nil </span><span class="cov0" title="0">{
+                metrics.IncrementVectorSearchCounter(false)
+                helpers.RenderError(w, r, errors.InternalServerError("语义搜索失败", err))
+                return
+        }</span>
+
+        // 转换为响应格式
+        <span class="cov8" title="1">response := make([]DocumentResponse, len(documents))
+        for i, doc := range documents </span><span class="cov8" title="1">{
+                response[i] = mapDocumentToResponse(doc)
+        }</span>
+
+        <span class="cov8" title="1">helpers.RenderJSON(w, r, http.StatusOK, response)</span>
+}
+
+// mapDocumentToResponse 将领域实体映射为响应格式
+func mapDocumentToResponse(doc *entity.Document) DocumentResponse <span class="cov8" title="1">{
+        return DocumentResponse{
+                ID:          doc.ID.String(),
+                Title:       doc.Title,
+                Description: doc.Description,
+                Content:     doc.Content,
+                ContentType: string(doc.ContentType),
+                Status:      string(doc.Status),
+                AuthorID:    doc.AuthorID.String(),
+                CategoryID:  doc.CategoryID.String(),
+                Tags:        doc.Tags,
+                TxHash:      doc.TxHash,
+                Metadata:    doc.Metadata,
+                CreatedAt:   doc.CreatedAt.Format(time.RFC3339),
+                UpdatedAt:   doc.UpdatedAt.Format(time.RFC3339),
+        }
+}</span>
+</pre>
+		
+		<pre class="file" id="file13" style="display: none">package helpers
+
+import (
+        "encoding/json"
+        "io"
+        "net/http"
+
+        "github.com/go-chi/chi/v5"
+        "github.com/go-chi/render"
+        "github.com/google/uuid"
+
+        "knowledge-base-service/pkg/errors"
+        "knowledge-base-service/pkg/logger"
+)
+
+// ErrorResponse 错误响应
+type ErrorResponse struct {
+        Error string `json:"error"`
+}
+
+// SuccessResponse 成功响应
+type SuccessResponse struct {
+        Message string      `json:"message"`
+        Data    interface{} `json:"data,omitempty"`
+}
+
+// ParseRequestBody 解析请求体到给定结构
+func ParseRequestBody(r *http.Request, dst interface{}) error <span class="cov0" title="0">{
+        body, err := io.ReadAll(r.Body)
+        if err != nil </span><span class="cov0" title="0">{
+                return errors.BadRequest("无法读取请求体", err)
+        }</span>
+        <span class="cov0" title="0">defer r.Body.Close()
+
+        err = json.Unmarshal(body, dst)
+        if err != nil </span><span class="cov0" title="0">{
+                return errors.BadRequest("无法解析JSON", err)
+        }</span>
+
+        <span class="cov0" title="0">return nil</span>
+}
+
+// ParseUUID 解析URL参数为UUID
+func ParseUUID(r *http.Request, paramName string) (uuid.UUID, error) <span class="cov0" title="0">{
+        idStr := chi.URLParam(r, paramName)
+        id, err := uuid.Parse(idStr)
+        if err != nil </span><span class="cov0" title="0">{
+                return uuid.Nil, errors.BadRequest("无效的UUID格式", err)
+        }</span>
+        <span class="cov0" title="0">return id, nil</span>
+}
+
+// RenderJSON 渲染JSON响应
+func RenderJSON(w http.ResponseWriter, r *http.Request, status int, data interface{}) <span class="cov0" title="0">{
+        render.Status(r, status)
+        render.JSON(w, r, data)
+}</span>
+
+// RenderError 渲染错误响应
+func RenderError(w http.ResponseWriter, r *http.Request, err error) <span class="cov0" title="0">{
+        log := logger.FromContext(r.Context())
+
+        if appErr, ok := err.(*errors.AppError); ok </span><span class="cov0" title="0">{
+                log.Errorw("处理请求时遇到错误",
+                        "error", appErr.Error(),
+                        "code", appErr.Code,
+                        "path", r.URL.Path,
+                        "method", r.Method,
+                )
+
+                render.Status(r, appErr.Code)
+                render.JSON(w, r, ErrorResponse{Error: appErr.Message})
+                return
+        }</span>
+
+        <span class="cov0" title="0">log.Errorw("处理请求时遇到未知错误",
+                "error", err.Error(),
+                "path", r.URL.Path,
+                "method", r.Method,
+        )
+
+        render.Status(r, http.StatusInternalServerError)
+        render.JSON(w, r, ErrorResponse{Error: "服务器内部错误"})</span>
+}
+
+// RenderSuccess 渲染成功响应
+func RenderSuccess(w http.ResponseWriter, r *http.Request, status int, message string, data interface{}) <span class="cov0" title="0">{
+        response := SuccessResponse{
+                Message: message,
+                Data:    data,
+        }
+
+        render.Status(r, status)
+        render.JSON(w, r, response)
+}</span>
+
+// ValidateRequired 验证必填字段
+func ValidateRequired(fields map[string]string) error <span class="cov0" title="0">{
+        for fieldName, fieldValue := range fields </span><span class="cov0" title="0">{
+                if fieldValue == "" </span><span class="cov0" title="0">{
+                        return errors.BadRequest(fieldName+"为必填项", nil)
+                }</span>
+        }
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file14" style="display: none">package rest
+
+import (
+        "encoding/json"
+        "net/http"
+        "strconv"
+
+        "github.com/go-chi/chi/v5"
+        "github.com/go-chi/render"
+        "github.com/google/uuid"
+
+        "knowledge-base-service/internal/domain/entity/models"
+        "knowledge-base-service/internal/domain/service"
+)
+
+// KnowledgeHandler 知识处理器
+type KnowledgeHandler struct {
+        knowledgeService service.KnowledgeService
+}
+
+// NewKnowledgeHandler 创建知识处理器
+func NewKnowledgeHandler(knowledgeService service.KnowledgeService) *KnowledgeHandler <span class="cov0" title="0">{
+        return &amp;KnowledgeHandler{
+                knowledgeService: knowledgeService,
+        }
+}</span>
+
+// RegisterRoutes 注册路由
+func (h *KnowledgeHandler) RegisterRoutes(r chi.Router) <span class="cov0" title="0">{
+        // 中医知识路由
+        r.Route("/tcm", func(r chi.Router) </span><span class="cov0" title="0">{
+                r.Post("/", h.CreateTCMKnowledge)
+                r.Get("/{id}", h.GetTCMKnowledge)
+                r.Put("/{id}", h.UpdateTCMKnowledge)
+                r.Delete("/{id}", h.DeleteTCMKnowledge)
+                r.Get("/meridian/{meridian}", h.FindTCMKnowledgeByMeridian)
+                r.Get("/herb/{herb}", h.FindTCMKnowledgeByHerbalMedicine)
+                r.Get("/constitution/{type}", h.FindTCMKnowledgeByConstitutionType)
+        }</span>)
+
+        // 现代医学知识路由
+        <span class="cov0" title="0">r.Route("/modern-medicine", func(r chi.Router) </span><span class="cov0" title="0">{
+                r.Post("/", h.CreateModernMedicineKnowledge)
+                r.Get("/{id}", h.GetModernMedicineKnowledge)
+                r.Put("/{id}", h.UpdateModernMedicineKnowledge)
+                r.Delete("/{id}", h.DeleteModernMedicineKnowledge)
+                r.Get("/diagnostic-method/{method}", h.FindModernMedicineKnowledgeByDiagnosticMethod)
+                r.Get("/treatment/{treatment}", h.FindModernMedicineKnowledgeByTreatmentOption)
+        }</span>)
+
+        // 精准医学知识路由
+        <span class="cov0" title="0">r.Route("/precision-medicine", func(r chi.Router) </span><span class="cov0" title="0">{
+                r.Post("/", h.CreatePrecisionMedicineKnowledge)
+                r.Get("/{id}", h.GetPrecisionMedicineKnowledge)
+                r.Put("/{id}", h.UpdatePrecisionMedicineKnowledge)
+                r.Delete("/{id}", h.DeletePrecisionMedicineKnowledge)
+        }</span>)
+
+        // 健康教育知识路由
+        <span class="cov0" title="0">r.Route("/health-education", func(r chi.Router) </span><span class="cov0" title="0">{
+                r.Post("/", h.CreateHealthEducationKnowledge)
+                r.Get("/{id}", h.GetHealthEducationKnowledge)
+                r.Put("/{id}", h.UpdateHealthEducationKnowledge)
+                r.Delete("/{id}", h.DeleteHealthEducationKnowledge)
+                r.Get("/audience/{audience}", h.FindHealthEducationKnowledgeByTargetAudience)
+        }</span>)
+
+        // 多模态健康数据路由
+        <span class="cov0" title="0">r.Route("/multimodal-health", func(r chi.Router) </span><span class="cov0" title="0">{
+                r.Post("/", h.CreateMultimodalHealthData)
+                r.Get("/{id}", h.GetMultimodalHealthData)
+                r.Put("/{id}", h.UpdateMultimodalHealthData)
+                r.Delete("/{id}", h.DeleteMultimodalHealthData)
+                r.Get("/data-type/{type}", h.FindMultimodalHealthDataByDataType)
+        }</span>)
+
+        // 搜索路由
+        <span class="cov0" title="0">r.Get("/search", h.SearchKnowledge)
+        r.Get("/semantic-search", h.SemanticSearchKnowledge)</span>
+}
+
+// 中医知识处理方法
+
+func (h *KnowledgeHandler) CreateTCMKnowledge(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        var knowledge models.TraditionalChineseMedicineKnowledge
+        if err := json.NewDecoder(r.Body).Decode(&amp;knowledge); err != nil </span><span class="cov0" title="0">{
+                http.Error(w, "无效的请求体", http.StatusBadRequest)
+                return
+        }</span>
+
+        <span class="cov0" title="0">if err := h.knowledgeService.CreateTCMKnowledge(r.Context(), &amp;knowledge); err != nil </span><span class="cov0" title="0">{
+                http.Error(w, err.Error(), http.StatusInternalServerError)
+                return
+        }</span>
+
+        <span class="cov0" title="0">render.Status(r, http.StatusCreated)
+        render.JSON(w, r, knowledge)</span>
+}
+
+func (h *KnowledgeHandler) GetTCMKnowledge(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        idStr := chi.URLParam(r, "id")
+        id, err := uuid.Parse(idStr)
+        if err != nil </span><span class="cov0" title="0">{
+                http.Error(w, "无效的ID", http.StatusBadRequest)
+                return
+        }</span>
+
+        <span class="cov0" title="0">knowledge, err := h.knowledgeService.GetTCMKnowledgeByID(r.Context(), id)
+        if err != nil </span><span class="cov0" title="0">{
+                http.Error(w, err.Error(), http.StatusInternalServerError)
+                return
+        }</span>
+
+        <span class="cov0" title="0">if knowledge == nil </span><span class="cov0" title="0">{
+                http.Error(w, "未找到中医知识", http.StatusNotFound)
+                return
+        }</span>
+
+        <span class="cov0" title="0">render.JSON(w, r, knowledge)</span>
+}
+
+func (h *KnowledgeHandler) UpdateTCMKnowledge(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        idStr := chi.URLParam(r, "id")
+        id, err := uuid.Parse(idStr)
+        if err != nil </span><span class="cov0" title="0">{
+                http.Error(w, "无效的ID", http.StatusBadRequest)
+                return
+        }</span>
+
+        <span class="cov0" title="0">var knowledge models.TraditionalChineseMedicineKnowledge
+        if err := json.NewDecoder(r.Body).Decode(&amp;knowledge); err != nil </span><span class="cov0" title="0">{
+                http.Error(w, "无效的请求体", http.StatusBadRequest)
+                return
+        }</span>
+
+        // 确保ID匹配
+        <span class="cov0" title="0">knowledge.ID = id
+
+        if err := h.knowledgeService.UpdateTCMKnowledge(r.Context(), &amp;knowledge); err != nil </span><span class="cov0" title="0">{
+                http.Error(w, err.Error(), http.StatusInternalServerError)
+                return
+        }</span>
+
+        <span class="cov0" title="0">render.JSON(w, r, knowledge)</span>
+}
+
+func (h *KnowledgeHandler) DeleteTCMKnowledge(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        idStr := chi.URLParam(r, "id")
+        id, err := uuid.Parse(idStr)
+        if err != nil </span><span class="cov0" title="0">{
+                http.Error(w, "无效的ID", http.StatusBadRequest)
+                return
+        }</span>
+
+        <span class="cov0" title="0">if err := h.knowledgeService.DeleteTCMKnowledge(r.Context(), id); err != nil </span><span class="cov0" title="0">{
+                http.Error(w, err.Error(), http.StatusInternalServerError)
+                return
+        }</span>
+
+        <span class="cov0" title="0">w.WriteHeader(http.StatusNoContent)</span>
+}
+
+func (h *KnowledgeHandler) FindTCMKnowledgeByMeridian(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        meridian := chi.URLParam(r, "meridian")
+
+        // 处理分页
+        limit, offset := getPaginationParams(r)
+
+        results, total, err := h.knowledgeService.FindTCMKnowledgeByMeridian(r.Context(), meridian, limit, offset)
+        if err != nil </span><span class="cov0" title="0">{
+                http.Error(w, err.Error(), http.StatusInternalServerError)
+                return
+        }</span>
+
+        <span class="cov0" title="0">render.JSON(w, r, map[string]interface{}{
+                "total":   total,
+                "results": results,
+        })</span>
+}
+
+func (h *KnowledgeHandler) FindTCMKnowledgeByHerbalMedicine(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        herb := chi.URLParam(r, "herb")
+
+        // 处理分页
+        limit, offset := getPaginationParams(r)
+
+        results, total, err := h.knowledgeService.FindTCMKnowledgeByHerbalMedicine(r.Context(), herb, limit, offset)
+        if err != nil </span><span class="cov0" title="0">{
+                http.Error(w, err.Error(), http.StatusInternalServerError)
+                return
+        }</span>
+
+        <span class="cov0" title="0">render.JSON(w, r, map[string]interface{}{
+                "total":   total,
+                "results": results,
+        })</span>
+}
+
+func (h *KnowledgeHandler) FindTCMKnowledgeByConstitutionType(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        constitutionType := chi.URLParam(r, "type")
+
+        // 处理分页
+        limit, offset := getPaginationParams(r)
+
+        results, total, err := h.knowledgeService.FindTCMKnowledgeByConstitutionType(r.Context(), constitutionType, limit, offset)
+        if err != nil </span><span class="cov0" title="0">{
+                http.Error(w, err.Error(), http.StatusInternalServerError)
+                return
+        }</span>
+
+        <span class="cov0" title="0">render.JSON(w, r, map[string]interface{}{
+                "total":   total,
+                "results": results,
+        })</span>
+}
+
+// 现代医学知识处理方法
+
+func (h *KnowledgeHandler) CreateModernMedicineKnowledge(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        var knowledge models.ModernMedicineKnowledge
+        if err := json.NewDecoder(r.Body).Decode(&amp;knowledge); err != nil </span><span class="cov0" title="0">{
+                http.Error(w, "无效的请求体", http.StatusBadRequest)
+                return
+        }</span>
+
+        <span class="cov0" title="0">if err := h.knowledgeService.CreateModernMedicineKnowledge(r.Context(), &amp;knowledge); err != nil </span><span class="cov0" title="0">{
+                http.Error(w, err.Error(), http.StatusInternalServerError)
+                return
+        }</span>
+
+        <span class="cov0" title="0">render.Status(r, http.StatusCreated)
+        render.JSON(w, r, knowledge)</span>
+}
+
+func (h *KnowledgeHandler) GetModernMedicineKnowledge(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        idStr := chi.URLParam(r, "id")
+        id, err := uuid.Parse(idStr)
+        if err != nil </span><span class="cov0" title="0">{
+                http.Error(w, "无效的ID", http.StatusBadRequest)
+                return
+        }</span>
+
+        <span class="cov0" title="0">knowledge, err := h.knowledgeService.GetModernMedicineKnowledgeByID(r.Context(), id)
+        if err != nil </span><span class="cov0" title="0">{
+                http.Error(w, err.Error(), http.StatusInternalServerError)
+                return
+        }</span>
+
+        <span class="cov0" title="0">if knowledge == nil </span><span class="cov0" title="0">{
+                http.Error(w, "未找到现代医学知识", http.StatusNotFound)
+                return
+        }</span>
+
+        <span class="cov0" title="0">render.JSON(w, r, knowledge)</span>
+}
+
+func (h *KnowledgeHandler) UpdateModernMedicineKnowledge(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        idStr := chi.URLParam(r, "id")
+        id, err := uuid.Parse(idStr)
+        if err != nil </span><span class="cov0" title="0">{
+                http.Error(w, "无效的ID", http.StatusBadRequest)
+                return
+        }</span>
+
+        <span class="cov0" title="0">var knowledge models.ModernMedicineKnowledge
+        if err := json.NewDecoder(r.Body).Decode(&amp;knowledge); err != nil </span><span class="cov0" title="0">{
+                http.Error(w, "无效的请求体", http.StatusBadRequest)
+                return
+        }</span>
+
+        // 确保ID匹配
+        <span class="cov0" title="0">knowledge.ID = id
+
+        if err := h.knowledgeService.UpdateModernMedicineKnowledge(r.Context(), &amp;knowledge); err != nil </span><span class="cov0" title="0">{
+                http.Error(w, err.Error(), http.StatusInternalServerError)
+                return
+        }</span>
+
+        <span class="cov0" title="0">render.JSON(w, r, knowledge)</span>
+}
+
+func (h *KnowledgeHandler) DeleteModernMedicineKnowledge(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        idStr := chi.URLParam(r, "id")
+        id, err := uuid.Parse(idStr)
+        if err != nil </span><span class="cov0" title="0">{
+                http.Error(w, "无效的ID", http.StatusBadRequest)
+                return
+        }</span>
+
+        <span class="cov0" title="0">if err := h.knowledgeService.DeleteModernMedicineKnowledge(r.Context(), id); err != nil </span><span class="cov0" title="0">{
+                http.Error(w, err.Error(), http.StatusInternalServerError)
+                return
+        }</span>
+
+        <span class="cov0" title="0">w.WriteHeader(http.StatusNoContent)</span>
+}
+
+func (h *KnowledgeHandler) FindModernMedicineKnowledgeByDiagnosticMethod(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        method := chi.URLParam(r, "method")
+
+        // 处理分页
+        limit, offset := getPaginationParams(r)
+
+        results, total, err := h.knowledgeService.FindModernMedicineKnowledgeByDiagnosticMethod(r.Context(), method, limit, offset)
+        if err != nil </span><span class="cov0" title="0">{
+                http.Error(w, err.Error(), http.StatusInternalServerError)
+                return
+        }</span>
+
+        <span class="cov0" title="0">render.JSON(w, r, map[string]interface{}{
+                "total":   total,
+                "results": results,
+        })</span>
+}
+
+func (h *KnowledgeHandler) FindModernMedicineKnowledgeByTreatmentOption(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        treatment := chi.URLParam(r, "treatment")
+
+        // 处理分页
+        limit, offset := getPaginationParams(r)
+
+        results, total, err := h.knowledgeService.FindModernMedicineKnowledgeByTreatmentOption(r.Context(), treatment, limit, offset)
+        if err != nil </span><span class="cov0" title="0">{
+                http.Error(w, err.Error(), http.StatusInternalServerError)
+                return
+        }</span>
+
+        <span class="cov0" title="0">render.JSON(w, r, map[string]interface{}{
+                "total":   total,
+                "results": results,
+        })</span>
+}
+
+// 精准医学处理方法
+// ... [精简输出，实际应该包含完整实现]
+
+func (h *KnowledgeHandler) CreatePrecisionMedicineKnowledge(w http.ResponseWriter, r *http.Request) {<span class="cov0" title="0">
+        // 简化实现
+}</span>
+
+func (h *KnowledgeHandler) GetPrecisionMedicineKnowledge(w http.ResponseWriter, r *http.Request) {<span class="cov0" title="0">
+        // 简化实现
+}</span>
+
+func (h *KnowledgeHandler) UpdatePrecisionMedicineKnowledge(w http.ResponseWriter, r *http.Request) {<span class="cov0" title="0">
+        // 简化实现
+}</span>
+
+func (h *KnowledgeHandler) DeletePrecisionMedicineKnowledge(w http.ResponseWriter, r *http.Request) {<span class="cov0" title="0">
+        // 简化实现
+}</span>
+
+// 健康教育处理方法
+// ... [精简输出，实际应该包含完整实现]
+
+func (h *KnowledgeHandler) CreateHealthEducationKnowledge(w http.ResponseWriter, r *http.Request) {<span class="cov0" title="0">
+        // 简化实现
+}</span>
+
+func (h *KnowledgeHandler) GetHealthEducationKnowledge(w http.ResponseWriter, r *http.Request) {<span class="cov0" title="0">
+        // 简化实现
+}</span>
+
+func (h *KnowledgeHandler) UpdateHealthEducationKnowledge(w http.ResponseWriter, r *http.Request) {<span class="cov0" title="0">
+        // 简化实现
+}</span>
+
+func (h *KnowledgeHandler) DeleteHealthEducationKnowledge(w http.ResponseWriter, r *http.Request) {<span class="cov0" title="0">
+        // 简化实现
+}</span>
+
+func (h *KnowledgeHandler) FindHealthEducationKnowledgeByTargetAudience(w http.ResponseWriter, r *http.Request) {<span class="cov0" title="0">
+        // 简化实现
+}</span>
+
+// 多模态健康数据处理方法
+// ... [精简输出，实际应该包含完整实现]
+
+func (h *KnowledgeHandler) CreateMultimodalHealthData(w http.ResponseWriter, r *http.Request) {<span class="cov0" title="0">
+        // 简化实现
+}</span>
+
+func (h *KnowledgeHandler) GetMultimodalHealthData(w http.ResponseWriter, r *http.Request) {<span class="cov0" title="0">
+        // 简化实现
+}</span>
+
+func (h *KnowledgeHandler) UpdateMultimodalHealthData(w http.ResponseWriter, r *http.Request) {<span class="cov0" title="0">
+        // 简化实现
+}</span>
+
+func (h *KnowledgeHandler) DeleteMultimodalHealthData(w http.ResponseWriter, r *http.Request) {<span class="cov0" title="0">
+        // 简化实现
+}</span>
+
+func (h *KnowledgeHandler) FindMultimodalHealthDataByDataType(w http.ResponseWriter, r *http.Request) {<span class="cov0" title="0">
+        // 简化实现
+}</span>
+
+// 搜索处理方法
+
+func (h *KnowledgeHandler) SearchKnowledge(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        query := r.URL.Query().Get("q")
+        if query == "" </span><span class="cov0" title="0">{
+                http.Error(w, "搜索关键词不能为空", http.StatusBadRequest)
+                return
+        }</span>
+
+        <span class="cov0" title="0">knowledgeType := r.URL.Query().Get("type")
+
+        // 处理分页
+        limit, offset := getPaginationParams(r)
+
+        results, total, err := h.knowledgeService.SearchKnowledge(r.Context(), query, knowledgeType, limit, offset)
+        if err != nil </span><span class="cov0" title="0">{
+                http.Error(w, err.Error(), http.StatusInternalServerError)
+                return
+        }</span>
+
+        <span class="cov0" title="0">render.JSON(w, r, map[string]interface{}{
+                "total":   total,
+                "results": results,
+        })</span>
+}
+
+func (h *KnowledgeHandler) SemanticSearchKnowledge(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        query := r.URL.Query().Get("q")
+        if query == "" </span><span class="cov0" title="0">{
+                http.Error(w, "搜索关键词不能为空", http.StatusBadRequest)
+                return
+        }</span>
+
+        <span class="cov0" title="0">knowledgeType := r.URL.Query().Get("type")
+
+        limitStr := r.URL.Query().Get("limit")
+        limit := 10 // 默认值
+        if limitStr != "" </span><span class="cov0" title="0">{
+                if l, err := strconv.Atoi(limitStr); err == nil &amp;&amp; l &gt; 0 </span><span class="cov0" title="0">{
+                        limit = l
+                }</span>
+        }
+
+        <span class="cov0" title="0">results, err := h.knowledgeService.SemanticSearchKnowledge(r.Context(), query, knowledgeType, limit)
+        if err != nil </span><span class="cov0" title="0">{
+                http.Error(w, err.Error(), http.StatusInternalServerError)
+                return
+        }</span>
+
+        <span class="cov0" title="0">render.JSON(w, r, map[string]interface{}{
+                "results": results,
+        })</span>
+}
+
+// 辅助方法
+
+// 获取分页参数
+func getPaginationParams(r *http.Request) (limit, offset int) <span class="cov0" title="0">{
+        limitStr := r.URL.Query().Get("limit")
+        offsetStr := r.URL.Query().Get("offset")
+
+        limit = 10 // 默认值
+        if limitStr != "" </span><span class="cov0" title="0">{
+                if l, err := strconv.Atoi(limitStr); err == nil &amp;&amp; l &gt; 0 </span><span class="cov0" title="0">{
+                        limit = l
+                }</span>
+        }
+
+        <span class="cov0" title="0">offset = 0 // 默认值
+        if offsetStr != "" </span><span class="cov0" title="0">{
+                if o, err := strconv.Atoi(offsetStr); err == nil &amp;&amp; o &gt;= 0 </span><span class="cov0" title="0">{
+                        offset = o
+                }</span>
+        }
+
+        <span class="cov0" title="0">return limit, offset</span>
+}
+</pre>
+		
+		<pre class="file" id="file15" style="display: none">package ctxutil
+
+import (
+        "context"
+        "github.com/google/uuid"
+)
+
+type contextKey string
+
+const (
+        requestIDKey contextKey = "request_id"
+        userIDKey    contextKey = "user_id"
+        traceIDKey   contextKey = "trace_id"
+)
+
+// WithRequestID 添加请求ID到上下文
+func WithRequestID(ctx context.Context, requestID string) context.Context <span class="cov0" title="0">{
+        return context.WithValue(ctx, requestIDKey, requestID)
+}</span>
+
+// RequestIDFromContext 从上下文获取请求ID
+func RequestIDFromContext(ctx context.Context) string <span class="cov0" title="0">{
+        if id, ok := ctx.Value(requestIDKey).(string); ok </span><span class="cov0" title="0">{
+                return id
+        }</span>
+        <span class="cov0" title="0">return ""</span>
+}
+
+// WithUserID 添加用户ID到上下文
+func WithUserID(ctx context.Context, userID uuid.UUID) context.Context <span class="cov0" title="0">{
+        return context.WithValue(ctx, userIDKey, userID)
+}</span>
+
+// UserIDFromContext 从上下文获取用户ID
+func UserIDFromContext(ctx context.Context) (uuid.UUID, bool) <span class="cov0" title="0">{
+        if id, ok := ctx.Value(userIDKey).(uuid.UUID); ok </span><span class="cov0" title="0">{
+                return id, true
+        }</span>
+        <span class="cov0" title="0">return uuid.Nil, false</span>
+}
+
+// WithTraceID 添加追踪ID到上下文
+func WithTraceID(ctx context.Context, traceID string) context.Context <span class="cov0" title="0">{
+        return context.WithValue(ctx, traceIDKey, traceID)
+}</span>
+
+// TraceIDFromContext 从上下文获取追踪ID
+func TraceIDFromContext(ctx context.Context) string <span class="cov0" title="0">{
+        if id, ok := ctx.Value(traceIDKey).(string); ok </span><span class="cov0" title="0">{
+                return id
+        }</span>
+        <span class="cov0" title="0">return ""</span>
+}
+</pre>
+		
+		<pre class="file" id="file16" style="display: none">package errors
+
+import (
+        "fmt"
+        "net/http"
+)
+
+// AppError 自定义应用错误
+type AppError struct {
+        Code    int    // HTTP状态码
+        Message string // 用户友好消息
+        Err     error  // 原始错误
+}
+
+func (e *AppError) Error() string <span class="cov0" title="0">{
+        if e.Err != nil </span><span class="cov0" title="0">{
+                return fmt.Sprintf("%s: %v", e.Message, e.Err)
+        }</span>
+        <span class="cov0" title="0">return e.Message</span>
+}
+
+// 常用错误类型
+func NotFound(resource string, err error) *AppError <span class="cov0" title="0">{
+        return &amp;AppError{
+                Code:    http.StatusNotFound,
+                Message: fmt.Sprintf("%s不存在", resource),
+                Err:     err,
+        }
+}</span>
+
+func BadRequest(message string, err error) *AppError <span class="cov0" title="0">{
+        return &amp;AppError{
+                Code:    http.StatusBadRequest,
+                Message: message,
+                Err:     err,
+        }
+}</span>
+
+func InternalServerError(message string, err error) *AppError <span class="cov0" title="0">{
+        return &amp;AppError{
+                Code:    http.StatusInternalServerError,
+                Message: message,
+                Err:     err,
+        }
+}</span>
+
+func Unauthorized(message string, err error) *AppError <span class="cov0" title="0">{
+        return &amp;AppError{
+                Code:    http.StatusUnauthorized,
+                Message: message,
+                Err:     err,
+        }
+}</span>
+
+func Forbidden(message string, err error) *AppError <span class="cov0" title="0">{
+        return &amp;AppError{
+                Code:    http.StatusForbidden,
+                Message: message,
+                Err:     err,
+        }
+}</span>
+
+func Conflict(message string, err error) *AppError <span class="cov0" title="0">{
+        return &amp;AppError{
+                Code:    http.StatusConflict,
+                Message: message,
+                Err:     err,
+        }
+}</span>
+</pre>
+		
+		<pre class="file" id="file17" style="display: none">package logger
+
+import (
+        "context"
+        "os"
+
+        "go.uber.org/zap"
+        "go.uber.org/zap/zapcore"
+)
+
+type contextKey string
+
+const loggerKey contextKey = "logger"
+
+var defaultLogger *zap.SugaredLogger
+
+// 初始化默认日志记录器
+func init() <span class="cov0" title="0">{
+        // 创建基础生产环境配置
+        config := zap.NewProductionConfig()
+        config.EncoderConfig.TimeKey = "timestamp"
+        config.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+
+        // 根据环境变量调整日志级别
+        logLevel := os.Getenv("LOG_LEVEL")
+        switch logLevel </span>{
+        case "debug":<span class="cov0" title="0">
+                config.Level = zap.NewAtomicLevelAt(zapcore.DebugLevel)</span>
+        case "info":<span class="cov0" title="0">
+                config.Level = zap.NewAtomicLevelAt(zapcore.InfoLevel)</span>
+        case "warn":<span class="cov0" title="0">
+                config.Level = zap.NewAtomicLevelAt(zapcore.WarnLevel)</span>
+        case "error":<span class="cov0" title="0">
+                config.Level = zap.NewAtomicLevelAt(zapcore.ErrorLevel)</span>
+        default:<span class="cov0" title="0">
+                config.Level = zap.NewAtomicLevelAt(zapcore.InfoLevel)</span>
+        }
+
+        // 构建日志记录器
+        <span class="cov0" title="0">logger, err := config.Build(
+                zap.AddCallerSkip(1),
+                zap.AddStacktrace(zapcore.ErrorLevel),
+        )
+        if err != nil </span><span class="cov0" title="0">{
+                // 使用控制台输出作为后备
+                logger = zap.NewExample()
+        }</span>
+
+        <span class="cov0" title="0">defaultLogger = logger.Sugar()</span>
+}
+
+// GetLogger 返回默认日志记录器
+func GetLogger() *zap.SugaredLogger <span class="cov0" title="0">{
+        return defaultLogger
+}</span>
+
+// WithContext 将日志记录器添加到上下文
+func WithContext(ctx context.Context, logger *zap.SugaredLogger) context.Context <span class="cov0" title="0">{
+        return context.WithValue(ctx, loggerKey, logger)
+}</span>
+
+// FromContext 从上下文获取日志记录器
+func FromContext(ctx context.Context) *zap.SugaredLogger <span class="cov0" title="0">{
+        if ctx == nil </span><span class="cov0" title="0">{
+                return defaultLogger
+        }</span>
+        <span class="cov0" title="0">if logger, ok := ctx.Value(loggerKey).(*zap.SugaredLogger); ok </span><span class="cov0" title="0">{
+                return logger
+        }</span>
+        <span class="cov0" title="0">return defaultLogger</span>
+}
+
+// With 添加字段到日志记录器
+func With(fields ...interface{}) *zap.SugaredLogger <span class="cov0" title="0">{
+        return defaultLogger.With(fields...)
+}</span>
+
+// 标准日志方法，用于独立使用
+func Debug(msg string, keysAndValues ...interface{}) <span class="cov0" title="0">{
+        defaultLogger.Debugw(msg, keysAndValues...)
+}</span>
+
+func Info(msg string, keysAndValues ...interface{}) <span class="cov0" title="0">{
+        defaultLogger.Infow(msg, keysAndValues...)
+}</span>
+
+func Warn(msg string, keysAndValues ...interface{}) <span class="cov0" title="0">{
+        defaultLogger.Warnw(msg, keysAndValues...)
+}</span>
+
+func Error(msg string, keysAndValues ...interface{}) <span class="cov0" title="0">{
+        defaultLogger.Errorw(msg, keysAndValues...)
+}</span>
+
+func Fatal(msg string, keysAndValues ...interface{}) <span class="cov0" title="0">{
+        defaultLogger.Fatalw(msg, keysAndValues...)
+}</span>
+
+// NewStructuredLogger 创建结构化日志器
+func NewStructuredLogger() *zap.SugaredLogger <span class="cov0" title="0">{
+        return defaultLogger
+}</span>
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

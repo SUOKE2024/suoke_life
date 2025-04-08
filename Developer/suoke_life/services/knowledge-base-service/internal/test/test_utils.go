@@ -102,7 +102,7 @@ func GenerateTestDocumentWithContent(title, content string) *entity.Document {
 
 	doc.Description = "Generated test document"
 	doc.AddTag("test")
-	
+
 	return doc
 }
 
@@ -142,4 +142,4 @@ func CleanupTestData(testDataDir string) error {
 		return os.RemoveAll(testDataDir)
 	}
 	return nil
-} 
+}

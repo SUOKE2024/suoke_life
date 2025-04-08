@@ -183,18 +183,22 @@ jobs:
 
       - name: 部署应用
         run: |
+          # 确保命名空间存在
+          kubectl get ns suoke-dev || kubectl create ns suoke-dev
+          # 部署应用
           kubectl apply -k k8s/overlays/dev
 
       - name: 验证部署
         run: |
-          kubectl rollout status deployment/rag -n suoke-dev --timeout=180s
+          # 使用正确的命名空间
+          kubectl rollout status deployment/rag-service -n suoke-dev --timeout=180s
       
       - name: 执行健康检查
         run: |
           # 等待服务启动
           sleep 20
           # 获取服务IP
-          SERVICE_URL=$(kubectl get svc rag -n suoke-dev -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+          SERVICE_URL=$(kubectl get svc rag-service -n suoke-dev -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
           # 检查健康端点
           curl -f http://$SERVICE_URL:8000/health || exit 1
 
@@ -331,14 +335,14 @@ jobs:
           
       - name: 验证部署
         run: |
-          kubectl rollout status deployment/rag -n suoke-production --timeout=300s
+          kubectl rollout status deployment/rag -n suoke --timeout=300s
       
       - name: 执行生产环境健康检查
         run: |
           # 等待服务启动
           sleep 30
           # 获取服务IP
-          SERVICE_URL=$(kubectl get svc rag -n suoke-production -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+          SERVICE_URL=$(kubectl get svc rag -n suoke -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
           # 检查健康端点
           curl -f http://$SERVICE_URL:8000/health || exit 1
           

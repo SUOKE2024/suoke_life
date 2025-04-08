@@ -1,0 +1,196 @@
+image: docker:24.0-dind
+
+variables:
+  DOCKER_TLS_CERTDIR: "/certs"
+  REGISTRY: suoke-registry.cn-hangzhou.cr.aliyuncs.com
+  REPOSITORY: suoke/suoke-knowledge-graph-service
+  CI: "true"
+
+services:
+  - docker:24.0-dind
+
+stages:
+  - lint
+  - test
+  - security
+  - build
+  - deploy
+
+# 全局默认设置
+default:
+  before_script:
+    - apk add --no-cache bash git curl make go build-base
+
+# 代码规范检查
+lint:
+  stage: lint
+  image: golang:1.20-alpine
+  script:
+    - go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+    - cd services/knowledge-graph-service
+    - golangci-lint run ./...
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /^(main|develop|release\/.*|feature\/.*)$/
+      changes:
+        - services/knowledge-graph-service/**/*
+        - .gitlab-ci.yml
+
+# 单元测试
+test:
+  stage: test
+  image: golang:1.20-alpine
+  script:
+    - cd services/knowledge-graph-service
+    - go test -v -race -coverprofile=coverage.out ./...
+  artifacts:
+    paths:
+      - services/knowledge-graph-service/coverage.out
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /^(main|develop|release\/.*|feature\/.*)$/
+      changes:
+        - services/knowledge-graph-service/**/*
+        - .gitlab-ci.yml
+
+# 安全扫描
+security:
+  stage: security
+  image: golang:1.20-alpine
+  script:
+    - go install github.com/securego/gosec/v2/cmd/gosec@latest
+    - cd services/knowledge-graph-service
+    - gosec ./...
+    - go list -json -deps ./... | go run github.com/sonatype-nexus-community/nancy@latest sleuth
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /^(main|develop|release\/.*)$/
+      changes:
+        - services/knowledge-graph-service/**/*
+        - .gitlab-ci.yml
+
+# 构建镜像
+build:
+  stage: build
+  script:
+    - apk add --no-cache curl jq
+    - mkdir -p ~/.docker/cli-plugins/
+    - curl -SL https://github.com/docker/buildx/releases/download/v0.12.1/buildx-v0.12.1.linux-amd64 -o ~/.docker/cli-plugins/docker-buildx
+    - chmod +x ~/.docker/cli-plugins/docker-buildx
+    - docker buildx version
+    - cd services/knowledge-graph-service
+    - chmod +x ./scripts/run-ci-cd.sh
+    - >
+      SKIP_LINT=true 
+      SKIP_TESTS=true 
+      SKIP_DEPLOY=true 
+      REGISTRY_USERNAME=$ALIYUN_REGISTRY_USERNAME 
+      REGISTRY_PASSWORD=$ALIYUN_REGISTRY_PASSWORD 
+      ./scripts/run-ci-cd.sh
+  artifacts:
+    paths:
+      - services/knowledge-graph-service/artifacts/
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /^(main|develop|release\/.*)$/
+      changes:
+        - services/knowledge-graph-service/**/*
+        - .gitlab-ci.yml
+
+# 部署到开发环境
+deploy-dev:
+  stage: deploy
+  image: dtzar/helm-kubectl:latest
+  script:
+    - cd services/knowledge-graph-service
+    - |
+      VERSION=$(cat artifacts/version.txt)
+      NAMESPACE="suoke-dev"
+
+      echo "部署到开发环境: $NAMESPACE, 版本: $VERSION"
+
+      # 配置Kubernetes访问
+      echo "${KUBE_CONFIG_DEV}" | base64 -d > kubeconfig
+      export KUBECONFIG=kubeconfig
+
+      # 执行部署脚本
+      SKIP_LINT=true
+      SKIP_TESTS=true
+      SKIP_BUILD=true
+      NAMESPACE=$NAMESPACE
+      chmod +x ./scripts/run-ci-cd.sh
+      ./scripts/run-ci-cd.sh
+  environment:
+    name: development
+  dependencies:
+    - build
+  when: manual
+  rules:
+    - if: $CI_COMMIT_BRANCH == "develop"
+      changes:
+        - services/knowledge-graph-service/**/*
+        - .gitlab-ci.yml
+
+# 部署到预发布环境
+deploy-staging:
+  stage: deploy
+  image: dtzar/helm-kubectl:latest
+  script:
+    - cd services/knowledge-graph-service
+    - |
+      VERSION=$(cat artifacts/version.txt)
+      NAMESPACE="suoke-staging"
+
+      echo "部署到预发布环境: $NAMESPACE, 版本: $VERSION"
+
+      # 配置Kubernetes访问
+      echo "${KUBE_CONFIG_STAGING}" | base64 -d > kubeconfig
+      export KUBECONFIG=kubeconfig
+
+      # 执行部署脚本
+      SKIP_LINT=true
+      SKIP_TESTS=true
+      SKIP_BUILD=true
+      NAMESPACE=$NAMESPACE
+      chmod +x ./scripts/run-ci-cd.sh
+      ./scripts/run-ci-cd.sh
+  environment:
+    name: staging
+  dependencies:
+    - build
+  when: manual
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /^release\/.*$/
+      changes:
+        - services/knowledge-graph-service/**/*
+        - .gitlab-ci.yml
+
+# 部署到生产环境
+deploy-prod:
+  stage: deploy
+  image: dtzar/helm-kubectl:latest
+  script:
+    - cd services/knowledge-graph-service
+    - |
+      VERSION=$(cat artifacts/version.txt)
+      NAMESPACE="suoke-prod"
+
+      echo "部署到生产环境: $NAMESPACE, 版本: $VERSION"
+
+      # 配置Kubernetes访问
+      echo "${KUBE_CONFIG_PROD}" | base64 -d > kubeconfig
+      export KUBECONFIG=kubeconfig
+
+      # 执行部署脚本
+      SKIP_LINT=true
+      SKIP_TESTS=true
+      SKIP_BUILD=true
+      NAMESPACE=$NAMESPACE
+      chmod +x ./scripts/run-ci-cd.sh
+      ./scripts/run-ci-cd.sh
+  environment:
+    name: production
+  dependencies:
+    - build
+  when: manual
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      changes:
+        - services/knowledge-graph-service/**/*
+        - .gitlab-ci.yml 

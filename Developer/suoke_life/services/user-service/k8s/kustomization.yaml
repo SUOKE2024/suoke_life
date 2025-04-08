@@ -1,42 +1,30 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+namespace: suoke
+
 resources:
+- namespace.yaml
+- configmap.yaml
+- secret.yaml
+- pv.yaml
+- pvc.yaml
 - deployment.yaml
+- service.yaml
 - hpa.yaml
-- pdb.yaml
-- serviceaccount.yaml
 - network-policy.yaml
-- istio-config.yaml
-- opentelemetry-config.yaml
+- ingress.yaml
+- backup-cronjob.yaml
+- backup-pvc.yaml
 - servicemonitor.yaml
-# - backup-cronjob.yaml  # 取消注释启用备份
-# - backup-pvc.yaml     # 取消注释启用备份
-# - secrets.yaml        # 取消注释启用密钥配置
 
 commonLabels:
   app.kubernetes.io/name: user-service
+  app.kubernetes.io/component: backend
   app.kubernetes.io/part-of: suoke-life
   app.kubernetes.io/managed-by: kustomize
-
-namespace: suoke
-
-configMapGenerator:
-- name: user-service-config
-  literals:
-  - PORT="3002"
-  - NODE_ENV="production"
-  - LOG_LEVEL="info"
-  - ENABLE_METRICS="true"
-  - METRICS_PATH="/metrics"
-  - ENABLE_TRACING="true"
-  - VECTOR_SIMILARITY_THRESHOLD="0.7"
-  - CORS_ALLOWED_ORIGINS="https://suoke.life,https://app.suoke.life"
-  - KNOWLEDGE_BASE_URL="http://knowledge-base-service:3000"
-  - KNOWLEDGE_GRAPH_URL="http://knowledge-graph-service:3000"
-  - SHARE_BASE_URL="https://suoke.life/share"
 
 images:
 - name: ${DOCKER_REGISTRY}/user-service
   newName: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/user-service
-  newTag: latest 
+  newTag: 20250404-211610 

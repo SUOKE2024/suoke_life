@@ -40,6 +40,12 @@ class _LoginPageState extends ConsumerState<LoginPage>
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
 
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  bool _isPasswordVisible = false;
+  String? _error;
+
   @override
   void initState() {
     super.initState();
@@ -66,6 +72,8 @@ class _LoginPageState extends ConsumerState<LoginPage>
   @override
   void dispose() {
     _animationController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
@@ -78,6 +86,22 @@ class _LoginPageState extends ConsumerState<LoginPage>
 
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authStateProvider);
+    
+    // 当登录状态改变时更新UI
+    ref.listen(authStateProvider, (previous, current) {
+      if (current.isAuthenticated) {
+        // 导航到首页
+        Navigator.of(context).pushReplacementNamed('/home');
+      }
+      
+      if (current.error != null) {
+        setState(() {
+          _error = current.error;
+        });
+      }
+    });
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       body: Stack(
@@ -530,6 +554,85 @@ class _LoginPageState extends ConsumerState<LoginPage>
     } else {
       // 导航到主仪表盘，确保使用replaceAll方法清除导航堆栈
       context.router.replaceAll([const MainDashboardRoute()]);
+    }
+  }
+
+  // 处理微信登录
+  Future<void> _handleWechatLogin() async {
+    try {
+      final redirectUrl = 'suokelife://auth/callback';
+      final authUrl = 'https://open.weixin.qq.com/connect/oauth2/authorize'
+          '?appid=${Uri.encodeComponent("你的微信AppID")}'
+          '&redirect_uri=${Uri.encodeComponent(redirectUrl)}'
+          '&response_type=code'
+          '&scope=snsapi_userinfo'
+          '#wechat_redirect';
+
+      final result = await FlutterWebAuth.authenticate(
+        url: authUrl,
+        callbackUrlScheme: 'suokelife',
+      );
+
+      final code = Uri.parse(result).queryParameters['code'];
+      if (code != null) {
+        ref.read(authStateProvider.notifier).loginWithWechat(code);
+      }
+    } catch (e) {
+      setState(() {
+        _error = '微信登录失败: $e';
+      });
+    }
+  }
+
+  // 处理小红书登录
+  Future<void> _handleXiaohongshuLogin() async {
+    try {
+      final redirectUrl = 'suokelife://auth/callback';
+      final authUrl = 'https://ark-api.xiaohongshu.com/authorize'
+          '?client_id=${Uri.encodeComponent("你的小红书AppKey")}'
+          '&redirect_uri=${Uri.encodeComponent(redirectUrl)}'
+          '&response_type=code'
+          '&scope=user_info';
+
+      final result = await FlutterWebAuth.authenticate(
+        url: authUrl,
+        callbackUrlScheme: 'suokelife',
+      );
+
+      final code = Uri.parse(result).queryParameters['code'];
+      if (code != null) {
+        ref.read(authStateProvider.notifier).loginWithXiaohongshu(code, redirectUrl);
+      }
+    } catch (e) {
+      setState(() {
+        _error = '小红书登录失败: $e';
+      });
+    }
+  }
+
+  // 处理抖音登录
+  Future<void> _handleDouyinLogin() async {
+    try {
+      final redirectUrl = 'suokelife://auth/callback';
+      final authUrl = 'https://open.douyin.com/platform/oauth/connect'
+          '?client_key=${Uri.encodeComponent("你的抖音ClientKey")}'
+          '&redirect_uri=${Uri.encodeComponent(redirectUrl)}'
+          '&response_type=code'
+          '&scope=user_info';
+
+      final result = await FlutterWebAuth.authenticate(
+        url: authUrl,
+        callbackUrlScheme: 'suokelife',
+      );
+
+      final code = Uri.parse(result).queryParameters['code'];
+      if (code != null) {
+        ref.read(authStateProvider.notifier).loginWithDouyin(code, redirectUrl);
+      }
+    } catch (e) {
+      setState(() {
+        _error = '抖音登录失败: $e';
+      });
     }
   }
 }

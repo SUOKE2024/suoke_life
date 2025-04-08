@@ -90,16 +90,25 @@ term_handler() {
 # 设置信号处理
 trap 'term_handler' SIGTERM SIGINT
 
-# 启动主应用
-echo "启动用户服务..."
-if [ "$NODE_ENV" = "production" ]; then
-  node server.js &
-else
-  if [ -x "$(command -v nodemon)" ]; then
-    nodemon server.js &
+# 根据运行模式启动服务
+if [ "$RUN_MODE" = "development" ]; then
+  echo "以开发模式启动服务..."
+  npm install
+  # 如果存在supervisor或PM2则用它们，否则使用nodemon或直接启动
+  if command -v supervisor &> /dev/null; then
+    supervisor src/server.js &
+  elif command -v pm2 &> /dev/null; then
+    pm2 start src/server.js --name "user-service" --no-daemon
+  elif command -v nodemon &> /dev/null; then
+    nodemon src/server.js &
   else
-    node server.js &
+    node src/server.js &
   fi
+  wait
+elif [ "$RUN_MODE" = "production" ]; then
+  echo "以生产模式启动服务..."
+  node src/server.js &
+  wait
 fi
 
 # 获取子进程PID

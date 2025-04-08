@@ -4,13 +4,18 @@ namespace: suoke-dev
 resources:
 - ../../base
 
-patchesStrategicMerge:
-- resources-patch.yaml
-- storage-class-patch.yaml
+patches:
+- path: patches/deployment-patch.yaml
+- path: patches/amd64-node-selector.yaml
 
 commonLabels:
-  environment: development
-  tier: backend
+  app: agent-coordinator
+  environment: dev
+
+images:
+  - name: agent-coordinator
+    newName: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/agent-coordinator
+    newTag: latest
 
 namePrefix: dev-
 

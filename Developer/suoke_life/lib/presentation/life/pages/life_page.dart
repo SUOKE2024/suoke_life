@@ -728,12 +728,13 @@ class _LifePageState extends ConsumerState<LifePage>
                     return Container(
                       color: Colors.grey.withAlpha(50),
                       child: const Center(
-                        child: Icon(Icons.image_not_supported, color: Colors.grey),
+                        child:
+                            Icon(Icons.image_not_supported, color: Colors.grey),
                       ),
                     );
                   },
                 ),
-                
+
                 // 渐变叠加层
                 Container(
                   decoration: BoxDecoration(
@@ -747,7 +748,7 @@ class _LifePageState extends ConsumerState<LifePage>
                     ),
                   ),
                 ),
-                
+
                 // 内容
                 Padding(
                   padding: const EdgeInsets.all(16),

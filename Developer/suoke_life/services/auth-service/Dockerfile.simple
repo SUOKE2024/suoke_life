@@ -1,0 +1,23 @@
+FROM alpine:3.17
+
+# 安装基础工具
+RUN apk add --no-cache ca-certificates tzdata
+
+# 设置工作目录
+WORKDIR /app
+
+# 复制二进制和配置
+COPY auth-service-bin /app/auth-service
+COPY configs /app/configs
+
+# 创建日志目录
+RUN mkdir -p /app/logs
+
+# 设置时区
+ENV TZ=Asia/Shanghai
+
+# 暴露服务端口
+EXPOSE 8081
+
+# 指定启动命令
+CMD ["/app/auth-service"]

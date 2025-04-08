@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  knowledge-graph-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.amd64
+      args:
+        - GOPROXY=https://goproxy.cn,direct
+        - DOCKER_REGISTRY_MIRROR=registry.cn-hangzhou.aliyuncs.com/library
+    image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/suoke-knowledge-graph-service:1.0.0
+    container_name: knowledge-graph-service
+    ports:
+      - "8080:8080"
+      - "9464:9464"
+    environment:
+      - APP_ENV=production
+      - PORT=8080
+      - METRICS_PORT=9464
+      - LOG_LEVEL=info
+      - TZ=Asia/Shanghai
+    volumes:
+      - kg_data:/data
+      - kg_logs:/app/logs
+      - kg_models:/app/models
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+
+  # 开发环境的服务定义（可选）
+  knowledge-graph-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.new
+      args:
+        - GOPROXY=https://goproxy.cn,direct
+        - TARGETPLATFORM=linux/amd64
+        - DOCKER_REGISTRY_MIRROR=registry.cn-hangzhou.aliyuncs.com/library
+    image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/suoke-knowledge-graph-service:dev
+    profiles:
+      - dev
+    ports:
+      - "8081:8080"
+      - "9465:9464"
+    environment:
+      - APP_ENV=development
+      - PORT=8080
+      - METRICS_PORT=9464
+      - LOG_LEVEL=debug
+    volumes:
+      - kg_data_dev:/app/data
+      - kg_logs_dev:/app/logs
+    profiles:
+      - dev
+
+volumes:
+  kg_data:
+    driver: local
+  kg_logs:
+    driver: local
+  kg_models:
+    driver: local
+  kg_data_dev:
+    driver: local
+  kg_logs_dev:
+    driver: local

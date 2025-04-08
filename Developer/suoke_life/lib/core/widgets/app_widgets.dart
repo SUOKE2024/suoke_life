@@ -12,7 +12,15 @@ export 'buttons/app_button.dart'
 export 'buttons/animated_press_button.dart';
 
 // 卡片组件
-export 'cards/app_card.dart' show AppCard, AppCardSize, AppCardStyle, FrostedCard, GradientCard, BasicCard, OutlineCard;
+export 'cards/app_card.dart'
+    show
+        AppCard,
+        AppCardSize,
+        AppCardStyle,
+        FrostedCard,
+        GradientCard,
+        BasicCard,
+        OutlineCard;
 export 'cards/standard_card.dart';
 export 'cards/animated_gradient_card.dart';
 

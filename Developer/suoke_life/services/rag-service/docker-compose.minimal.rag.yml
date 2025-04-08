@@ -1,0 +1,45 @@
+services:
+  rag-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.minimal.rag
+    container_name: suoke-rag-service-minimal
+    restart: always
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./config:/app/config
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - LOG_LEVEL=info
+      - DB_TYPE=memory
+    networks:
+      - suoke-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+
+  # Nginx反向代理
+  nginx:
+    image: nginx:stable-alpine
+    container_name: suoke-nginx-minimal
+    restart: always
+    volumes:
+      - ./deployment/nginx/conf.d:/etc/nginx/conf.d
+      - ./deployment/nginx/ssl:/etc/nginx/ssl
+      - ./logs/nginx:/var/log/nginx
+    ports:
+      - "8081:80"
+    depends_on:
+      - rag-service
+    networks:
+      - suoke-net
+
+networks:
+  suoke-net:
+    driver: bridge 

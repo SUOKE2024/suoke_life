@@ -120,7 +120,7 @@ class TongueDiagnosisNotifier extends StateNotifier<TongueDiagnosisState> {
       // 如果未检测到舌头
       if (result == null || result['detected'] == false) {
         _detectionFailureCount++;
-        
+
         // 如果连续5次未检测到舌头，更新指导文本
         if (_detectionFailureCount >= 5) {
           _detectionFailureCount = 0; // 重置计数器
@@ -146,11 +146,11 @@ class TongueDiagnosisNotifier extends StateNotifier<TongueDiagnosisState> {
       if (_analysisFrameCount >= 10) {
         // 分析结束，更新状态
         _stopAnalysis();
-        
+
         // 计算平均特征
         final avgFeatures = _calculateAverageFeatures();
         final finalResult = TongueDiagnosisResult.fromFeatures(avgFeatures);
-        
+
         // 更新状态
         state = state.copyWith(
           isAnalyzing: false,
@@ -161,7 +161,7 @@ class TongueDiagnosisNotifier extends StateNotifier<TongueDiagnosisState> {
       } else {
         // 更新进度提示
         state = state.copyWith(
-          guidanceText: '分析中，请保持不动 (${_analysisFrameCount*10}%)',
+          guidanceText: '分析中，请保持不动 (${_analysisFrameCount * 10}%)',
         );
       }
     } catch (e) {
@@ -247,7 +247,7 @@ class TongueDiagnosisNotifier extends StateNotifier<TongueDiagnosisState> {
           state.cameraController!.value.isStreamingImages) {
         state.cameraController!.stopImageStream();
       }
-      
+
       // 如果提供了错误消息，更新状态
       if (errorMessage != null) {
         state = state.copyWith(
@@ -275,7 +275,7 @@ class TongueDiagnosisNotifier extends StateNotifier<TongueDiagnosisState> {
     await state.cameraController!.startImageStream((CameraImage image) async {
       // 保存当前图像帧
       state = state.copyWith(currentImage: image);
-      
+
       // 每3帧处理一次以减轻CPU负担
       if (_frameCounter++ % 3 != 0) return;
 
@@ -319,11 +319,11 @@ class TongueDiagnosisNotifier extends StateNotifier<TongueDiagnosisState> {
             await state.cameraController!.startImageStream((image) async {
               try {
                 await state.cameraController!.stopImageStream();
-                
+
                 // 处理图像并保存
                 // 这里简化处理，实际应用中可能需要更复杂的图像处理
                 await _processCameraImageAndSave(image, imagePath);
-                
+
                 // 更新状态
                 state = state.copyWith(
                   historyId: uuid,
@@ -495,10 +495,14 @@ class TongueDiagnosisNotifier extends StateNotifier<TongueDiagnosisState> {
 
     // 统计每种特征的出现次数和置信度
     for (final feature in _accumulatedFeatures) {
-      bodyCount[feature.bodyFeature] = (bodyCount[feature.bodyFeature] ?? 0) + 1;
-      coatingCount[feature.coatingFeature] = (coatingCount[feature.coatingFeature] ?? 0) + 1;
-      shapeCount[feature.shapeFeature] = (shapeCount[feature.shapeFeature] ?? 0) + 1;
-      veinCount[feature.veinFeature] = (veinCount[feature.veinFeature] ?? 0) + 1;
+      bodyCount[feature.bodyFeature] =
+          (bodyCount[feature.bodyFeature] ?? 0) + 1;
+      coatingCount[feature.coatingFeature] =
+          (coatingCount[feature.coatingFeature] ?? 0) + 1;
+      shapeCount[feature.shapeFeature] =
+          (shapeCount[feature.shapeFeature] ?? 0) + 1;
+      veinCount[feature.veinFeature] =
+          (veinCount[feature.veinFeature] ?? 0) + 1;
 
       bodyConfidenceSum += feature.bodyConfidence;
       coatingConfidenceSum += feature.coatingConfidence;
@@ -507,18 +511,14 @@ class TongueDiagnosisNotifier extends StateNotifier<TongueDiagnosisState> {
     }
 
     // 找出出现次数最多的特征
-    TongueBodyFeature mostCommonBody = bodyCount.entries
-        .reduce((a, b) => a.value > b.value ? a : b)
-        .key;
-    TongueCoatingFeature mostCommonCoating = coatingCount.entries
-        .reduce((a, b) => a.value > b.value ? a : b)
-        .key;
-    TongueShapeFeature mostCommonShape = shapeCount.entries
-        .reduce((a, b) => a.value > b.value ? a : b)
-        .key;
-    TongueVeinFeature mostCommonVein = veinCount.entries
-        .reduce((a, b) => a.value > b.value ? a : b)
-        .key;
+    TongueBodyFeature mostCommonBody =
+        bodyCount.entries.reduce((a, b) => a.value > b.value ? a : b).key;
+    TongueCoatingFeature mostCommonCoating =
+        coatingCount.entries.reduce((a, b) => a.value > b.value ? a : b).key;
+    TongueShapeFeature mostCommonShape =
+        shapeCount.entries.reduce((a, b) => a.value > b.value ? a : b).key;
+    TongueVeinFeature mostCommonVein =
+        veinCount.entries.reduce((a, b) => a.value > b.value ? a : b).key;
 
     // 计算平均置信度
     final count = _accumulatedFeatures.length;
@@ -553,29 +553,29 @@ class TongueDiagnosisNotifier extends StateNotifier<TongueDiagnosisState> {
         isAnalyzing: true,
         guidanceText: '正在加载图片...',
       );
-      
+
       // 读取图片文件
       final file = File(imagePath);
       if (!await file.exists()) {
         throw Exception('图片文件不存在');
       }
-      
+
       // 读取图片数据
       final bytes = await file.readAsBytes();
       final image = img.decodeImage(bytes);
-      
+
       if (image == null) {
         throw Exception('无法解码图片');
       }
-      
+
       // 分析图片
       // 这里应该调用实际的图像分析逻辑
       // 为简化示例，使用随机生成的特征
       await Future.delayed(const Duration(seconds: 1)); // 模拟处理时间
-      
+
       final features = TongueDiagnosisFeatures.random();
       final result = TongueDiagnosisResult.fromFeatures(features);
-      
+
       // 更新状态
       state = state.copyWith(
         isAnalyzing: false,
@@ -591,17 +591,17 @@ class TongueDiagnosisNotifier extends StateNotifier<TongueDiagnosisState> {
       );
     }
   }
-  
+
   /// 分析图片
   Future<Map<String, dynamic>> _analyzeImage(img.Image image) async {
     try {
       // 这里应该调用实际的图像分析逻辑
       // 为简化示例，使用随机生成的特征
       await Future.delayed(const Duration(seconds: 1)); // 模拟处理时间
-      
+
       final features = TongueDiagnosisFeatures.random();
       final result = TongueDiagnosisResult.fromFeatures(features);
-      
+
       return {
         'features': features,
         'result': result,

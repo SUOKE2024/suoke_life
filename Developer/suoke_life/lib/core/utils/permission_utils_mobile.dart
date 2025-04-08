@@ -37,4 +37,4 @@ class WebPermissionUtils {
   static Future<void> requestAllPermissions() async {
     // 在移动平台上不会被调用
   }
-} 
+}

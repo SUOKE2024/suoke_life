@@ -1,0 +1,555 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: life-record-service
+  namespace: suoke
+  labels:
+    app: life-record-service
+    tier: backend
+    version: v1
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "3004"
+    prometheus.io/path: "/metrics"
+    seccomp.security.alpha.kubernetes.io/pod: "runtime/default"
+    container.apparmor.security.beta.kubernetes.io/life-record-service: "runtime/default"
+    backup.velero.io/backup-volumes: "life-record-data,life-record-logs,life-record-media"
+    backup.velero.io/schedule: "daily"
+    backup.velero.io/ttl: "720h"
+    sidecar.istio.io/statsInclusionPrefixes: "life_,tcm_"
+    trivy.security.scanning/enabled: "true"
+    alertmanager.rules/life-record-service: |
+      - alert: LifeRecordServiceHighErrorRate
+        expr: rate(life_record_http_requests_total{status=~"5.."}[5m]) / rate(life_record_http_requests_total[5m]) > 0.05
+        for: 2m
+        labels:
+          severity: critical
+          service: life-record-service
+        annotations:
+          summary: "Life Record Service High Error Rate"
+          description: "Life Record Service has a high error rate (> 5%) for the last 2 minutes"
+      
+      - alert: LifeRecordServiceHighLatency
+        expr: histogram_quantile(0.95, sum(rate(life_record_request_duration_seconds_bucket[5m])) by (le)) > 1.0
+        for: 2m
+        labels:
+          severity: warning
+          service: life-record-service
+        annotations:
+          summary: "Life Record Service High Latency"
+          description: "Life Record Service 95th percentile latency is above 1s for the last 2 minutes"
+          
+      - alert: LifeRecordServiceDown
+        expr: up{app="life-record-service"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: life-record-service
+        annotations:
+          summary: "Life Record Service Down"
+          description: "Life Record Service instance is down"
+    grafana.dashboard/life-record-service: |
+      {
+        "title": "Life Record Service Dashboard",
+        "uid": "life-record-service-dashboard",
+        "panels": [
+          {
+            "title": "Request Rate",
+            "targets": [{"expr": "sum(rate(life_record_http_requests_total[5m])) by (status)"}]
+          },
+          {
+            "title": "Error Rate",
+            "targets": [{"expr": "sum(rate(life_record_http_requests_total{status=~\"5..\"}[5m])) / sum(rate(life_record_http_requests_total[5m]))"}]
+          },
+          {
+            "title": "Latency",
+            "targets": [{"expr": "histogram_quantile(0.95, sum(rate(life_record_request_duration_seconds_bucket[5m])) by (le))"}]
+          },
+          {
+            "title": "Active Users",
+            "targets": [{"expr": "sum(life_record_active_users)"}]
+          },
+          {
+            "title": "Records Created",
+            "targets": [{"expr": "sum(rate(life_record_records_created_total[5m]))"}]
+          },
+          {
+            "title": "Media Uploads",
+            "targets": [{"expr": "sum(rate(life_record_media_uploads_total[5m]))"}]
+          }
+        ]
+      }
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: life-record-service
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: life-record-service
+        tier: backend
+        version: v1
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "3004"
+        prometheus.io/path: "/metrics"
+        checksum/config: "${CHECKSUM}"
+    spec:
+      priorityClassName: high-priority
+      terminationGracePeriodSeconds: 60
+      containers:
+      - name: life-record-service
+        image: registry.suoke.life/life-record-service:prod
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3004
+          name: http
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: LOG_LEVEL
+          value: "info"
+        - name: DATABASE_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: life-record-config
+              key: database_host
+        - name: DATABASE_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: life-record-config
+              key: database_port
+        - name: DATABASE_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: life-record-config
+              key: database_name
+        - name: DATABASE_USER
+          valueFrom:
+            secretKeyRef:
+              name: life-record-secrets
+              key: database_user
+        - name: DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: life-record-secrets
+              key: database_password
+        - name: REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: life-record-config
+              key: redis_host
+        - name: REDIS_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: life-record-config
+              key: redis_port
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: life-record-secrets
+              key: redis_password
+        - name: STORAGE_TYPE
+          valueFrom:
+            configMapKeyRef:
+              name: life-record-config
+              key: storage_type
+        - name: S3_ENDPOINT
+          valueFrom:
+            configMapKeyRef:
+              name: life-record-config
+              key: s3_endpoint
+        - name: S3_BUCKET
+          valueFrom:
+            configMapKeyRef:
+              name: life-record-config
+              key: s3_bucket
+        - name: S3_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: life-record-secrets
+              key: s3_access_key
+        - name: S3_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: life-record-secrets
+              key: s3_secret_key
+        - name: RAG_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: life-record-config
+              key: rag_service_url
+        - name: AI_AGENT_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: life-record-config
+              key: ai_agent_service_url
+        resources:
+          requests:
+            cpu: 300m
+            memory: 512Mi
+          limits:
+            cpu: 1500m
+            memory: 2Gi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3004
+            httpHeaders:
+            - name: X-Probe-Type
+              value: "liveness"
+          initialDelaySeconds: 60
+          periodSeconds: 15
+          timeoutSeconds: 5
+          failureThreshold: 3
+          successThreshold: 1
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: 3004
+            httpHeaders:
+            - name: X-Probe-Type
+              value: "readiness"
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
+          successThreshold: 1
+        startupProbe:
+          httpGet:
+            path: /health/startup
+            port: 3004
+            httpHeaders:
+            - name: X-Probe-Type
+              value: "startup"
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 30
+          successThreshold: 1
+        volumeMounts:
+        - name: life-record-config-volume
+          mountPath: /app/config
+          readOnly: true
+        - name: life-record-data
+          mountPath: /app/data
+        - name: life-record-logs
+          mountPath: /app/logs
+        - name: life-record-media
+          mountPath: /app/media
+        - name: life-record-tmp
+          mountPath: /tmp
+      volumes:
+      - name: life-record-config-volume
+        configMap:
+          name: life-record-config-files
+      - name: life-record-data
+        persistentVolumeClaim:
+          claimName: life-record-data-pvc
+      - name: life-record-logs
+        persistentVolumeClaim:
+          claimName: life-record-logs-pvc
+      - name: life-record-media
+        persistentVolumeClaim:
+          claimName: life-record-media-pvc
+      - name: life-record-tmp
+        emptyDir: {}
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - life-record-service
+              topologyKey: kubernetes.io/hostname
+          - weight: 70
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - life-record-service
+              topologyKey: topology.kubernetes.io/zone
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: topology.kubernetes.io/zone
+        whenUnsatisfiable: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            app: life-record-service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: life-record-service
+  namespace: suoke
+  labels:
+    app: life-record-service
+    tier: backend
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "3004"
+    prometheus.io/path: "/metrics"
+spec:
+  selector:
+    app: life-record-service
+  ports:
+  - port: 80
+    targetPort: 3004
+    name: http
+  type: ClusterIP
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 7200
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: life-record-service-ingress
+  namespace: suoke
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "180"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "180"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "30"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "X-Content-Type-Options: nosniff";
+      more_set_headers "X-Frame-Options: DENY";
+      more_set_headers "X-XSS-Protection: 1; mode=block";
+      more_set_headers "Strict-Transport-Security: max-age=31536000; includeSubDomains; preload";
+      more_set_headers "Content-Security-Policy: default-src 'self'; script-src 'self'; img-src 'self' data:; style-src 'self'; connect-src 'self'";
+      more_set_headers "Referrer-Policy: strict-origin-when-cross-origin";
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/limit-rps: "30"
+    nginx.ingress.kubernetes.io/limit-connections: "15"
+spec:
+  tls:
+  - hosts:
+    - life.suoke.life
+    secretName: life-record-tls
+  rules:
+  - host: life.suoke.life
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: life-record-service
+            port:
+              number: 80
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: life-record-service-hpa
+  namespace: suoke
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: life-record-service
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  - type: Pods
+    pods:
+      metric:
+        name: request_rate
+      target:
+        type: AverageValue
+        averageValue: 50
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+      - type: Percent
+        value: 100
+        periodSeconds: 60
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 10
+        periodSeconds: 60
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: life-record-service-pdb
+  namespace: suoke
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: life-record-service
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: life-record-service-network-policy
+  namespace: suoke
+spec:
+  podSelector:
+    matchLabels:
+      app: life-record-service
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: suoke
+      podSelector:
+        matchLabels:
+          tier: frontend
+    - podSelector:
+        matchLabels:
+          app: ingress-nginx
+          tier: gateway
+    ports:
+    - protocol: TCP
+      port: 3004
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          app: mysql-service
+    ports:
+    - protocol: TCP
+      port: 3306
+  - to:
+    - podSelector:
+        matchLabels:
+          app: redis-service
+    ports:
+    - protocol: TCP
+      port: 6379
+  - to:
+    - podSelector:
+        matchLabels:
+          app: minio-service
+    ports:
+    - protocol: TCP
+      port: 9000
+  - to:
+    - podSelector:
+        matchLabels:
+          app: rag-service
+    ports:
+    - protocol: TCP
+      port: 80
+  - to:
+    - podSelector:
+        matchLabels:
+          app: ai-agent-service
+    ports:
+    - protocol: TCP
+      port: 80
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+      podSelector:
+        matchLabels:
+          k8s-app: kube-dns
+    ports:
+    - protocol: UDP
+      port: 53
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: life-record-config
+  namespace: suoke
+data:
+  database_host: "mysql-service"
+  database_port: "3306"
+  database_name: "life_record_db"
+  database_pool_min: "5"
+  database_pool_max: "20"
+  redis_host: "redis-service"
+  redis_port: "6379"
+  storage_type: "s3"
+  s3_endpoint: "http://minio-service:9000"
+  s3_bucket: "life-records"
+  rag_service_url: "http://rag-service"
+  ai_agent_service_url: "http://ai-agent-service" 
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: life-record-secrets
+  namespace: suoke
+type: Opaque
+data:
+  database_user: "bGlmZV9yZWNvcmRfc2VydmljZQ=="
+  database_password: "cGFzc3dvcmQxMjM="
+  redis_password: "cmVkaXNwYXNzd29yZDEyMw=="
+  s3_access_key: "bWluaW9hY2Nlc3NrZXk="
+  s3_secret_key: "bWluaW9zZWNyZXRrZXkxMjM0NTY="
+  encryption_key: "ZW5jcnlwdGlvbktleTEyMzQ1Njc4OTAxMjM0NTY3ODkw"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: life-record-config-files
+  namespace: suoke
+data:
+  life-record-config.json: |
+    {
+      "recordTypes": {
+        "daily": {
+          "fields": ["title", "content", "mood", "tags", "location", "weather"],
+          "mediaSupport": true,
+          "maxMediaFiles": 10
+        },
+        "mood": {
+          "fields": ["moodLevel", "moodDescription", "factors", "notes"],
+          "moodLevels": ["verySad", "sad", "neutral", "happy", "veryHappy"],
+          "mediaSupport": true
+        }
+      },
+      "privacyLevels": {
+        "private": { "description": "仅自己可见" },
+        "friends": { "description": "仅好友可见" },
+        "public": { "description": "所有人可见" }
+      },
+      "aiFeatures": {
+        "moodAnalysis": { "enabled": true },
+        "contentSuggestions": { "enabled": true },
+        "insightGeneration": { "enabled": true }
+      }
+    }

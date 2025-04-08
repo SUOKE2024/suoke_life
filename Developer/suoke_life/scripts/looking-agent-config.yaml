@@ -1,0 +1,1902 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: wangzhen-agent-config
+  namespace: suoke
+  labels:
+    app: looking-diagnosis-service
+    component: agent
+    agent-name: wangzhen
+data:
+  agent-config.json: |
+    {
+      "agent": {
+        "name": "望诊",
+        "id": "wangzhen",
+        "version": "1.0.0",
+        "description": "索克生活中医望诊智能体，负责中医四诊中的望诊环节，通过面部、舌象、形体等特征分析，进行体质辨识和健康状态评估",
+        "avatar": "assets/agents/wangzhen_avatar.png",
+        "greeting": "您好，我是望诊，您的中医望诊专家。请上传您的面部照片或舌象照片，我将为您分析体质特征和健康状态。",
+        "capabilities": [
+          "面色诊断",
+          "舌象分析",
+          "眼耳鼻诊断",
+          "形体姿态评估",
+          "体质辨识",
+          "健康状态评估",
+          "辨证分析",
+          "语音引导拍照",
+          "无障碍服务支持"
+        ],
+        "priority": "high",
+        "visibility": "patient-facing",
+        "role": "specialist",
+        "specializations": ["望诊分析", "四诊合参", "多模态图像处理", "语音交互", "无障碍服务"]
+      },
+      "models": {
+        "primary": {
+          "id": "tcm-looking-diagnosis-llm",
+          "type": "llm",
+          "path": "/app/models/llm/looking-diagnosis-llm-v1.2.0.onnx",
+          "config": {
+            "temperature": 0.7,
+            "top_p": 0.95,
+            "max_tokens": 2048,
+            "presence_penalty": 0.1,
+            "frequency_penalty": 0.1
+          }
+        },
+        "embedding": {
+          "id": "tcm-embedding-model",
+          "type": "embedding",
+          "path": "/app/models/llm/tcm-embedding-model.onnx",
+          "config": {
+            "dimensions": 768,
+            "normalize": true
+          }
+        },
+        "face_detection": {
+          "id": "face-detection-model",
+          "type": "vision",
+          "path": "/app/models/detection/face-detection-v2.1.0.onnx",
+          "config": {
+            "threshold": 0.85,
+            "input_size": [640, 640]
+          }
+        },
+        "face_landmarks": {
+          "id": "face-landmarks-model",
+          "type": "vision",
+          "path": "/app/models/landmarks/face-landmarks-v1.4.0.onnx",
+          "config": {
+            "landmarks_count": 468,
+            "input_size": [192, 192]
+          }
+        },
+        "complexion_analyzer": {
+          "id": "complexion-analyzer",
+          "type": "vision",
+          "path": "/app/models/complexion/complexion-analyzer-v1.3.0.onnx",
+          "config": {
+            "classes": ["淡白", "红润", "潮红", "晦暗", "黝黑", "黄褐", "青紫", "萎黄"],
+            "threshold": 0.75
+          }
+        },
+        "tongue_analyzer": {
+          "id": "tongue-analyzer",
+          "type": "vision",
+          "path": "/app/models/tongue/tongue-analyzer-v2.0.0.onnx",
+          "config": {
+            "tongue_color_classes": ["淡白舌", "淡红舌", "红舌", "绛舌", "青紫舌", "瘀斑舌", "芒刺舌"],
+            "coating_classes": ["无苔", "薄白苔", "厚白苔", "黄苔", "厚黄苔", "灰黑苔", "腻苔"],
+            "threshold": 0.80
+          }
+        }
+      },
+      "tools": {
+        "enabled": true,
+        "list": [
+          {
+            "name": "analyze_face_complexion",
+            "description": "分析面色特征，识别中医面诊特征和对应的体质状态",
+            "parameters": [
+              {
+                "name": "face_image",
+                "type": "image",
+                "description": "面部照片",
+                "required": true
+              },
+              {
+                "name": "lighting_condition",
+                "type": "string",
+                "description": "拍摄光线条件",
+                "required": false
+              }
+            ]
+          },
+          {
+            "name": "analyze_tongue",
+            "description": "分析舌象特征，识别舌色、舌态、舌苔等信息",
+            "parameters": [
+              {
+                "name": "tongue_image",
+                "type": "image",
+                "description": "舌象照片",
+                "required": true
+              },
+              {
+                "name": "before_meal",
+                "type": "boolean",
+                "description": "是否在饭前拍摄",
+                "required": false
+              }
+            ]
+          },
+          {
+            "name": "analyze_eye_ear_nose",
+            "description": "分析眼、耳、鼻等部位特征",
+            "parameters": [
+              {
+                "name": "face_image",
+                "type": "image",
+                "description": "面部照片",
+                "required": true
+              }
+            ]
+          },
+          {
+            "name": "analyze_body_posture",
+            "description": "分析体态与姿势特征",
+            "parameters": [
+              {
+                "name": "body_image",
+                "type": "image",
+                "description": "全身或上半身照片",
+                "required": true
+              }
+            ]
+          },
+          {
+            "name": "identify_constitution",
+            "description": "通过望诊结果分析体质类型",
+            "parameters": [
+              {
+                "name": "complexion_features",
+                "type": "object",
+                "description": "面色分析结果",
+                "required": false
+              },
+              {
+                "name": "tongue_features",
+                "type": "object",
+                "description": "舌象分析结果",
+                "required": false
+              },
+              {
+                "name": "other_features",
+                "type": "object",
+                "description": "其他望诊特征",
+                "required": false
+              }
+            ]
+          },
+          {
+            "name": "search_tcm_knowledge",
+            "description": "搜索中医知识库获取望诊相关信息",
+            "parameters": [
+              {
+                "name": "query",
+                "type": "string",
+                "description": "搜索查询内容",
+                "required": true
+              },
+              {
+                "name": "category",
+                "type": "string",
+                "description": "知识类别：面诊、舌诊、形体等",
+                "required": false
+              }
+            ]
+          },
+          {
+            "name": "get_health_recommendations",
+            "description": "基于望诊结果提供健康建议",
+            "parameters": [
+              {
+                "name": "diagnosis_results",
+                "type": "object",
+                "description": "望诊分析结果",
+                "required": true
+              },
+              {
+                "name": "constitution_type",
+                "type": "string",
+                "description": "体质类型",
+                "required": true
+              },
+              {
+                "name": "season",
+                "type": "string",
+                "description": "当前季节",
+                "required": false
+              }
+            ]
+          },
+          {
+            "name": "voice_guided_photo_capture",
+            "description": "通过语音引导用户完成照片采集",
+            "parameters": [
+              {
+                "name": "capture_type",
+                "type": "string",
+                "description": "拍摄类型：面部/舌象/全身",
+                "required": true
+              },
+              {
+                "name": "accessibility_mode",
+                "type": "boolean",
+                "description": "是否启用无障碍模式",
+                "required": false,
+                "default": false
+              },
+              {
+                "name": "voice_guidance_level",
+                "type": "string",
+                "description": "语音引导详细程度：简单/标准/详细",
+                "required": false,
+                "default": "标准"
+              }
+            ]
+          },
+          {
+            "name": "photo_quality_feedback",
+            "description": "实时评估照片质量并提供语音反馈",
+            "parameters": [
+              {
+                "name": "image_stream",
+                "type": "stream",
+                "description": "实时图像流",
+                "required": true
+              },
+              {
+                "name": "feedback_type",
+                "type": "string",
+                "description": "反馈类型：光线/角度/清晰度/构图",
+                "required": true
+              }
+            ]
+          }
+        ]
+      },
+      "context": {
+        "system_prompt": "你是索克生活健康平台的中医望诊智能体「望诊」。你的主要任务是通过中医四诊的「望诊」环节，分析用户的面色、舌象、形体等特征，进行体质辨识和健康状态评估。\n\n指导原则：\n1. 遵循中医理论体系，以整体观念、辨证论治为核心\n2. 通过图像分析获取望诊信息，如面色、舌象、眼耳鼻特征、形体姿态等\n3. 使用专业且易懂的语言解释分析结果和健康建议\n4. 结合季节、环境等因素进行整体分析\n5. 根据望诊结果，给出初步的辨证分析和养生建议\n6. 有针对性地引导用户提供补充信息或配合其他诊法\n7. 注意识别异常体征，提示及时就医\n\n望诊要点：\n- 面色分析：色泽（淡白、红润、潮红、晦暗、黝黑、黄褐、青紫、萎黄）、部位分布、光泽\n- 舌诊分析：舌质（色、形、态、动态）、舌苔（色、厚薄、腻润干燥、部位分布）\n- 眼耳鼻分析：形态特征、色泽、神态\n- 形体姿态分析：体型、姿势、动态特征\n\n你的回应应当：\n- 简明扼要地描述分析结果，突出关键发现\n- 解释分析结果与体质类型及健康状态的关联\n- 提供有针对性的养生保健建议\n- 在必要时建议结合其他诊法（问诊、闻诊、切诊）进行综合判断\n- 保持专业、客观、有同理心的语气",
+        "memory_window": 10,
+        "max_tokens": 16000,
+        "default_temperature": 0.7
+      },
+      "integration": {
+        "rag_enabled": true,
+        "rag_service_url": "http://rag-service/api/v1/query",
+        "four_diagnosis_enabled": true,
+        "services": {
+          "inquiry": "http://inquiry-service/api/v1/inquiry",
+          "auscultation": "http://voice-service/api/v1/auscultation",
+          "palpation": "http://pulse-diagnosis-service/api/v1/pulse-analysis"
+        },
+        "knowledge_graph": "http://knowledge-graph-service/api/v1/query",
+        "vector_search": "http://vector-search-service/api/v1/search",
+        "image_processing": "http://image-processing-service/api/v1/process",
+        "voice_service": {
+          "enabled": true,
+          "service_url": "http://voice-service/api/v1",
+          "features": {
+            "speech_recognition": true,
+            "text_to_speech": true,
+            "voice_guidance": true,
+            "noise_cancellation": true
+          }
+        },
+        "accessibility_service": {
+          "enabled": true,
+          "service_url": "http://accessibility-service/api/v1",
+          "features": {
+            "screen_reader_support": true,
+            "voice_control": true,
+            "gesture_recognition": true,
+            "assistive_technology_integration": true,
+            "real_time_transcription": true,
+            "sign_language_processing": true,
+            "eye_tracking_support": true,
+            "switch_control_integration": true,
+            "simplified_interface_generation": true
+          },
+          "platform_integrations": {
+            "android_accessibility": {
+              "enabled": true,
+              "talkback_compatible": true,
+              "switch_access_support": true,
+              "voice_access_support": true
+            },
+            "ios_accessibility": {
+              "enabled": true,
+              "voiceover_compatible": true,
+              "switch_control_support": true,
+              "siri_shortcuts": true
+            },
+            "specialized_hardware": {
+              "enabled": true,
+              "eye_tracker_devices": true,
+              "adaptive_switches": true,
+              "braille_displays": true,
+              "alternative_input_devices": true
+            }
+          },
+          "standards_compliance": {
+            "wcag_level": "AAA",
+            "aria_support": true,
+            "section_508_compliance": true,
+            "regular_audits": true
+          },
+          "personalized_solutions": {
+            "enabled": true,
+            "user_profiles": true,
+            "adaptive_interfaces": true,
+            "progressive_disclosure": true,
+            "preferred_modality_selection": true
+          }
+        }
+      },
+      "persona": {
+        "voice": {
+          "id": "wangzhen_voice",
+          "gender": "male",
+          "age": "middle_aged",
+          "accent": "standard_mandarin",
+          "style": "professional_calm"
+        },
+        "traits": [
+          "观察力敏锐",
+          "分析能力强",
+          "专业知识丰富",
+          "表达清晰准确",
+          "耐心细致",
+          "谨慎客观",
+          "有同理心"
+        ],
+        "backstory": "望诊是索克生活健康平台的中医望诊智能体，专门负责四诊中的「望诊」环节。他拥有精湛的望诊技能，能够通过分析面色、舌象、形体等特征，准确识别体质类型和健康状态。望诊性格稳重细致，善于捕捉细微变化，并能够将专业的望诊结果转化为通俗易懂的健康建议。他与问诊、闻诊、切诊等智能体密切配合，共同为用户提供全面的中医健康评估和个性化建议。"
+      },
+      "analytics": {
+        "tracking_enabled": true,
+        "metrics": [
+          "image_processing_time",
+          "detection_accuracy",
+          "feature_extraction_precision",
+          "diagnosis_consistency",
+          "user_satisfaction",
+          "constitution_identification_confidence"
+        ],
+        "feedback_collection": true
+      },
+      "compliance": {
+        "data_retention": {
+          "image_data_days": 30,
+          "analysis_results_days": 365,
+          "anonymized_data_years": 5
+        },
+        "privacy": {
+          "pii_detection": true,
+          "data_minimization": true,
+          "encryption": true,
+          "face_anonymization": true,
+          "access_control": {
+            "enabled": true,
+            "role_based_access": true,
+            "audit_logging": true,
+            "data_access_approval": true
+          },
+          "sensitive_data_handling": {
+            "face_image_additional_encryption": true,
+            "tongue_image_additional_encryption": true,
+            "encryption_key_rotation_days": 30
+          }
+        },
+        "medical_disclaimers": {
+          "enabled": true,
+          "abnormal_finding_warning": true,
+          "not_medical_diagnosis_notice": true
+        }
+      },
+      "collaboration": {
+        "enabled": true,
+        "handoffs": [
+          {
+            "target_agent": "xiaoai",
+            "conditions": ["需要全面问诊", "需要病史采集", "需要症状详细描述"],
+            "handoff_prompt": "根据望诊结果发现可能需要进一步问诊，请协助进行全面症状收集",
+            "return_expected": true
+          },
+          {
+            "target_agent": "wenzhen",
+            "conditions": ["需要声音分析", "呼吸音评估", "语音特征分析"],
+            "handoff_prompt": "望诊发现面色可能与呼吸功能相关，建议进行闻诊确认",
+            "return_expected": true
+          },
+          {
+            "target_agent": "qiezhen",
+            "conditions": ["需要脉诊", "需要触诊", "需要脉象验证"],
+            "handoff_prompt": "望诊发现面舌特征与脉象可能有关联，建议进行脉诊确认",
+            "return_expected": true
+          },
+          {
+            "target_agent": "soer",
+            "conditions": ["需要健康方案", "需要养生建议", "需要生活方式调整"],
+            "handoff_prompt": "根据望诊结果，用户需要个性化健康管理方案",
+            "return_expected": true
+          },
+          {
+            "target_agent": "laoke",
+            "conditions": ["需要典籍依据", "需要理论解释", "需要专业知识补充"],
+            "handoff_prompt": "需要中医经典理论支持望诊发现，请提供典籍依据",
+            "return_expected": true
+          }
+        ],
+        "task_routing": {
+          "enabled": true,
+          "routing_strategy": "expertise_based",
+          "confidence_threshold": 0.75,
+          "context_preservation": true,
+          "user_confirmation_required": {
+            "enabled": true,
+            "exemptions": ["紧急情况", "简单望诊分析"]
+          }
+        },
+        "collaborative_diagnosis": {
+          "enabled": true,
+          "consensus_required": true,
+          "voting_mechanism": "weighted",
+          "agent_weights": {
+            "wangzhen": 0.4,
+            "xiaoai": 0.2,
+            "wenzhen": 0.2,
+            "qiezhen": 0.2
+          },
+          "confidence_threshold": 0.8
+        },
+        "context_sharing": {
+          "enabled": true,
+          "shared_fields": [
+            "face_analysis", 
+            "tongue_analysis", 
+            "constitution_type", 
+            "diagnostic_findings",
+            "visual_features"
+          ],
+          "privacy_filter": true,
+          "retention_period_days": 30
+        }
+      },
+      "perception": {
+        "enabled": true,
+        "service_url": "http://perception-service/api/v1",
+        "context_awareness": {
+          "temporal": {
+            "enabled": true,
+            "time_of_day": true,
+            "day_of_week": true,
+            "season": true,
+            "solar_term": true,
+            "lunar_calendar": true
+          },
+          "spatial": {
+            "enabled": true,
+            "geographic_location": true,
+            "altitude": true,
+            "indoor_outdoor": true,
+            "urban_rural": true
+          },
+          "environmental": {
+            "enabled": true,
+            "temperature": true,
+            "humidity": true,
+            "air_pressure": true,
+            "air_quality": true,
+            "weather_conditions": true
+          }
+        },
+        "seasonal_awareness": {
+          "enabled": true,
+          "chinese_calendar": {
+            "enabled": true,
+            "solar_terms": true,
+            "five_elements_correspondence": true,
+            "seasonal_qi_changes": true
+          },
+          "face_seasonal_patterns": {
+            "enabled": true,
+            "spring_features": "面色青绿，疏泄特性",
+            "summer_features": "面色偏红，心火偏旺",
+            "autumn_features": "面色白皙，肃杀特性",
+            "winter_features": "面色深沉，藏精特性"
+          },
+          "tongue_seasonal_patterns": {
+            "enabled": true,
+            "spring_tongue": "舌淡红，苔薄白",
+            "summer_tongue": "舌红，苔薄黄",
+            "autumn_tongue": "舌淡红，苔薄白干燥",
+            "winter_tongue": "舌淡暗，苔白滑"
+          },
+          "seasonal_health_patterns": {
+            "enabled": true,
+            "data_source": "http://tcm-seasonal-service/api/v1/patterns"
+          }
+        },
+        "clinical_context": {
+          "enabled": true,
+          "lighting_conditions": true,
+          "camera_settings": true,
+          "previous_readings": true,
+          "meal_timing": true,
+          "hydration_status": true
+        },
+        "real_time_data_sources": {
+          "weather": {
+            "enabled": true,
+            "api_endpoint": "http://weather-service/api/v1/current",
+            "update_frequency_minutes": 60,
+            "parameters": ["temperature", "humidity", "pressure", "weather_condition"]
+          },
+          "air_quality": {
+            "enabled": true,
+            "api_endpoint": "http://air-quality-service/api/v1/current",
+            "update_frequency_minutes": 60,
+            "parameters": ["aqi", "pm25", "pm10", "o3", "no2"]
+          },
+          "seasonal_factors": {
+            "enabled": true,
+            "api_endpoint": "http://seasonal-service/api/v1/current",
+            "update_frequency_minutes": 1440,
+            "parameters": ["solar_term", "season", "seasonal_health_focus"]
+          },
+          "epidemic_alerts": {
+            "enabled": true,
+            "api_endpoint": "http://epidemic-alert-service/api/v1/current",
+            "update_frequency_minutes": 1440,
+            "parameters": ["active_epidemics", "risk_level", "preventive_measures"]
+          }
+        }
+      },
+      "memory": {
+        "enabled": true,
+        "storage_type": "vector_database",
+        "service_url": "http://memory-service/api/v1",
+        "memory_types": {
+          "episodic": {
+            "enabled": true,
+            "content_types": ["visual_assessments", "diagnostic_sessions", "user_images"],
+            "importance_weighting": true,
+            "recency_bias": 0.6,
+            "max_age_days": 365,
+            "retrieval_limit": 30
+          },
+          "semantic": {
+            "enabled": true,
+            "content_types": ["face_diagnosis_knowledge", "tongue_diagnosis_knowledge", "seasonal_patterns"],
+            "clustering": true,
+            "cross_reference": true,
+            "update_frequency": "adaptive"
+          },
+          "patient": {
+            "enabled": true,
+            "content_types": ["face_history", "tongue_history", "constitution_history", "treatment_response"],
+            "longitudinal_analysis": true,
+            "trend_detection": true,
+            "baseline_comparison": true
+          },
+          "procedural": {
+            "enabled": true,
+            "content_types": ["image_analysis_technique", "diagnosis_workflow", "interpretation_methods"],
+            "optimization": true,
+            "personalization": true,
+            "context_adaptation": true
+          }
+        },
+        "retrieval_mechanisms": {
+          "recency": {
+            "enabled": true,
+            "time_decay_factor": 0.05,
+            "max_age_days": 180
+          },
+          "relevance": {
+            "enabled": true,
+            "similarity_threshold": 0.75,
+            "context_matching": true,
+            "top_k": 5
+          },
+          "importance": {
+            "enabled": true,
+            "diagnostic_value_weight": 0.7,
+            "abnormal_finding_weight": 0.8,
+            "explicit_marking_weight": 0.6
+          }
+        },
+        "memory_operations": {
+          "consolidation": {
+            "enabled": true,
+            "frequency": "daily",
+            "threshold": 0.7,
+            "method": "semantic_clustering"
+          },
+          "forgetting": {
+            "enabled": true,
+            "strategies": ["time_based", "importance_based", "redundancy_based"],
+            "time_threshold_days": 180,
+            "importance_threshold": 0.3,
+            "exceptions": ["critical_findings", "rare_patterns", "baseline_values"]
+          },
+          "cross_patient_learning": {
+            "enabled": true,
+            "anonymization": true,
+            "pattern_extraction": true,
+            "seasonal_trend_analysis": true,
+            "demographic_pattern_analysis": true
+          }
+        },
+        "contextual_retrieval": {
+          "enabled": true,
+          "context_types": ["constitution", "season", "age_group", "current_complaint", "previous_diagnosis"],
+          "adaptive_retrieval": true,
+          "chain_of_thought": true,
+          "diagnosis_phase_awareness": true
+        }
+      },
+      "multimodal": {
+        "enabled": true,
+        "service_url": "http://multimodal-processor-service/api/v1",
+        "image_processing": {
+          "enabled": true,
+          "max_resolution": 2048,
+          "supported_formats": ["jpg", "jpeg", "png", "webp", "heic", "raw"],
+          "preprocessing": {
+            "white_balance": true,
+            "color_correction": true,
+            "noise_reduction": true,
+            "lighting_normalization": true,
+            "face_detection": true
+          },
+          "feature_extraction": {
+            "color_features": true,
+            "texture_features": true,
+            "shape_features": true,
+            "landmark_detection": true,
+            "segmentation": true
+          },
+          "specialized_analyzers": {
+            "face_analyzer": {
+              "enabled": true,
+              "color_analysis": true,
+              "feature_detection": true,
+              "expression_analysis": true,
+              "age_estimation": true
+            },
+            "tongue_analyzer": {
+              "enabled": true,
+              "color_analysis": true,
+              "coating_analysis": true,
+              "shape_analysis": true,
+              "texture_analysis": true,
+              "moisture_analysis": true
+            },
+            "body_posture_analyzer": {
+              "enabled": true,
+              "skeleton_detection": true,
+              "posture_analysis": true,
+              "gait_analysis": true
+            }
+          }
+        },
+        "data_fusion": {
+          "enabled": true,
+          "fusion_method": "attention_based",
+          "modality_weighting": {
+            "image": 0.7,
+            "text": 0.2,
+            "metadata": 0.1
+          },
+          "cross_modal_validation": true,
+          "uncertainty_estimation": true
+        },
+        "tools_config_path": "/app/config/multimodal-tools.json",
+        "tools_auto_load": true,
+        "timeout_ms": 30000,
+        "cache_enabled": true,
+        "cache_ttl": 3600,
+        "batch_processing": {
+          "enabled": true,
+          "max_batch_size": 8,
+          "parallel_processing": true
+        },
+        "output_formats": ["json", "binary", "text", "embedding"],
+        "metrics_collection": true
+      },
+      "accessibility": {
+        "enabled": true,
+        "features": {
+          "voice_guidance": {
+            "enabled": true,
+            "language": "zh-CN",
+            "voice_speed": 1.0,
+            "voice_pitch": 1.0,
+            "guidance_templates": {
+              "face_photo": [
+                "请将手机放置在面部正前方约30厘米处",
+                "当听到提示音后，手机会自动对焦并拍摄",
+                "请保持面部在取景框内，我会实时提供位置调整建议"
+              ],
+              "tongue_photo": [
+                "请将手机放置在下巴前方约20厘米处",
+                "张开嘴巴，将舌头自然伸出",
+                "保持舌头在取景框中心位置"
+              ],
+              "body_photo": [
+                "请将手机放置在身体正前方约1.5米处",
+                "确保全身都在取景范围内",
+                "我会通过语音指导您调整姿势"
+              ]
+            },
+            "feedback_templates": {
+              "position": {
+                "too_close": "请将手机稍微往后移动",
+                "too_far": "请将手机稍微往前移动",
+                "too_high": "请将手机略微向下调整",
+                "too_low": "请将手机略微向上调整"
+              },
+              "lighting": {
+                "too_dark": "当前光线较暗，请开启补光或移动到明亮处",
+                "too_bright": "当前光线过强，请避开直射光线",
+                "uneven": "光线不均匀，请调整位置使光线更均匀"
+              },
+              "quality": {
+                "blurry": "图像有点模糊，请保持手机稳定",
+                "good": "很好，图像清晰度合适",
+                "perfect": "完美，这是一张很好的照片"
+              },
+              "special_needs": {
+                "visual_impairment": {
+                  "enabled": true,
+                  "enhanced_audio_description": true,
+                  "spatial_audio_guidance": true,
+                  "confirmation_sounds": {
+                    "position_correct": "assets/sounds/position_correct.mp3",
+                    "lighting_correct": "assets/sounds/lighting_correct.mp3",
+                    "photo_captured": "assets/sounds/photo_captured.mp3",
+                    "analysis_complete": "assets/sounds/analysis_complete.mp3"
+                  },
+                  "continuous_feedback": true,
+                  "haptic_patterns": {
+                    "move_left": "short_vibration_left",
+                    "move_right": "short_vibration_right",
+                    "move_up": "short_vibration_up",
+                    "move_down": "short_vibration_down",
+                    "correct_position": "double_vibration"
+                  }
+                },
+                "motor_impairment": {
+                  "enabled": true,
+                  "extended_time_delays": true,
+                  "stable_target_detection": true,
+                  "auto_capture_sensitivity": "high",
+                  "voice_command_photography": true,
+                  "alternative_input_methods": ["voice", "eye_tracking", "switch_control"],
+                  "minimal_movement_required": true,
+                  "stabilization_assistance": {
+                    "enabled": true,
+                    "digital_stabilization": "enhanced",
+                    "motion_compensation": true,
+                    "frame_selection": "best_of_series"
+                  }
+                },
+                "cognitive_impairment": {
+                  "enabled": true,
+                  "simplified_instructions": true,
+                  "step_by_step_guidance": true,
+                  "visual_demonstrations": true,
+                  "patience_settings": {
+                    "extended_timeouts": true,
+                    "gentle_reminders": true,
+                    "positive_reinforcement": true
+                  },
+                  "repeated_instructions": true,
+                  "progress_indicators": true
+                },
+                "elderly_assistance": {
+                  "enabled": true,
+                  "larger_visual_elements": true,
+                  "higher_contrast": true,
+                  "slower_speech_rate": true,
+                  "simplified_interactions": true,
+                  "reminder_system": true
+                }
+              }
+            }
+          },
+          "auto_capture": {
+            "enabled": true,
+            "triggers": {
+              "face_detection": true,
+              "stability_check": true,
+              "quality_threshold": 0.8,
+              "countdown_enabled": true,
+              "countdown_seconds": 3
+            },
+            "confirmation": {
+              "audio_feedback": true,
+              "vibration_feedback": true
+            }
+          },
+          "image_enhancement": {
+            "enabled": true,
+            "auto_focus": true,
+            "auto_exposure": true,
+            "stability_compensation": true,
+            "noise_reduction": true
+          },
+          "simplified_mode": {
+            "enabled": true,
+            "simplified_instructions": true,
+            "reduced_options": true,
+            "larger_ui_elements": true,
+            "step_by_step_guidance": true
+          },
+          "guided_examples": {
+            "enabled": true,
+            "tutorial_mode": true,
+            "example_images": [
+              "/app/examples/face_example_good.jpg",
+              "/app/examples/tongue_example_good.jpg",
+              "/app/examples/common_mistakes.jpg"
+            ],
+            "interactive_guidance": true,
+            "achievement_system": true
+          },
+          "multimodal_perception": {
+            "enabled": true,
+            "camera_sensing": {
+              "enabled": true,
+              "user_distance_detection": true,
+              "lighting_condition_detection": true,
+              "environment_classification": true,
+              "user_posture_detection": true,
+              "attention_tracking": true,
+              "movement_detection": true
+            },
+            "screen_interaction": {
+              "enabled": true,
+              "touch_pattern_analysis": true,
+              "gaze_tracking_support": true,
+              "gesture_recognition": true,
+              "adaptive_interface": {
+                "font_size_adjustment": true,
+                "contrast_enhancement": true,
+                "element_repositioning": true,
+                "touch_target_enlargement": true
+              }
+            },
+            "audio_perception": {
+              "enabled": true,
+              "voice_command_detection": true,
+              "ambient_noise_analysis": true,
+              "user_proximity_by_voice": true,
+              "emotional_state_detection": true,
+              "dialect_and_accent_adaptation": true
+            },
+            "device_sensors": {
+              "enabled": true,
+              "accelerometer_usage": true,
+              "gyroscope_for_stability": true,
+              "proximity_sensing": true,
+              "light_sensor_adaptation": true,
+              "barometer_for_altitude": true
+            },
+            "cross_modal_integration": {
+              "enabled": true,
+              "fallback_chains": true,
+              "complementary_information": true,
+              "priority_based_selection": true,
+              "confidence_weighted_fusion": true
+            }
+          }
+        },
+        "device_support": {
+          "camera_flash": true,
+          "screen_reader": true,
+          "haptic_feedback": true,
+          "voice_commands": true,
+          "switch_control": true,
+          "external_devices": {
+            "enabled": true,
+            "bluetooth_switches": true,
+            "smart_glasses": true,
+            "hearing_aid_integration": true,
+            "braille_displays": true
+          }
+        },
+        "content_adaptation": {
+          "enabled": true,
+          "audio_descriptions": true,
+          "text_simplification": true,
+          "high_contrast_mode": true,
+          "symbol_supported_text": true,
+          "reading_level_adjustment": true,
+          "culturally_adaptive_content": true
+        },
+        "user_preferences": {
+          "enabled": true,
+          "accessibility_profile": true,
+          "stored_preferences": true,
+          "quick_settings": true,
+          "voice_control_keywords": [
+            "拍照", "捕获", "确认", "取消", "帮助",
+            "放大", "缩小", "调亮", "调暗",
+            "向左", "向右", "向上", "向下"
+          ],
+          "custom_gesture_mapping": true
+        },
+        "emergency_features": {
+          "enabled": true,
+          "quick_exit": true,
+          "emergency_contacts": true,
+          "simplified_emergency_mode": true,
+          "distress_detection": true
+        }
+      },
+      "knowledge_areas": {
+        "face_diagnosis": {
+          "colors": ["淡白", "红润", "潮红", "晦暗", "黝黑", "黄褐", "青紫", "萎黄"],
+          "locations": ["前额", "鼻部", "两颊", "嘴周", "下颌"],
+          "organ_relationships": {
+            "前额": "膀胱、小肠",
+            "太阳穴": "胆",
+            "眉间": "肝",
+            "鼻": "脾",
+            "面颊": "肺",
+            "人中": "心",
+            "嘴唇": "脾胃",
+            "下巴": "肾"
+          },
+          "special_signs": ["颧红", "鼻尖红", "印堂暗", "眼袋黑青", "唇色异常"]
+        },
+        "tongue_diagnosis": {
+          "tongue_body": {
+            "colors": ["淡白", "淡红", "红", "绛", "青紫", "瘀点", "瘀斑"],
+            "shapes": ["胖大", "瘦薄", "齿痕", "裂纹", "点刺", "歪斜"],
+            "movements": ["强硬", "轻颤", "痿软", "短缩"]
+          },
+          "tongue_coating": {
+            "colors": ["白", "黄", "灰", "黑"],
+            "thickness": ["无苔", "薄", "厚"],
+            "moisture": ["干燥", "湿润", "腻滑", "剥脱"],
+            "distribution": ["部分", "全部", "根部", "两侧", "中间"]
+          },
+          "typical_patterns": {
+            "淡白舌薄白苔": "气血两虚",
+            "淡红舌薄白苔": "平和状态",
+            "红舌黄苔": "热证",
+            "胖大舌齿痕": "脾虚湿阻",
+            "青紫舌": "血瘀"
+          }
+        },
+        "eye_ear_nose_diagnosis": {
+          "eye_features": ["神光", "色泽", "形态", "分泌物", "血丝"],
+          "ear_features": ["色泽", "大小", "厚薄", "分泌物"],
+          "nose_features": ["色泽", "形态", "通畅度", "分泌物"],
+          "common_patterns": {
+            "目赤": "肝火上炎",
+            "目黄": "湿热内蕴",
+            "耳轮红赤": "心火旺",
+            "鼻翼煽动": "肺气不足"
+          }
+        },
+        "body_posture_diagnosis": {
+          "shapes": ["壮实", "消瘦", "肥胖", "浮肿"],
+          "postures": ["挺拔", "佝偻", "前倾", "后仰", "侧倾"],
+          "movements": ["灵活", "迟缓", "僵硬", "抖动", "不稳"],
+          "constitution_correlations": {
+            "挺拔灵活": "气血充盈",
+            "佝偻迟缓": "肾精不足",
+            "肥胖步履蹒跚": "痰湿内阻",
+            "消瘦动作急促": "阴虚内热"
+          }
+        },
+        "constitution_types": {
+          "balanced": {
+            "face": "色泽红润有光泽",
+            "tongue": "淡红舌，薄白苔",
+            "body": "体态均匀，动作协调"
+          },
+          "qi_deficiency": {
+            "face": "面色淡白，少光泽",
+            "tongue": "淡舌，薄白苔",
+            "body": "形体瘦弱，语声低弱"
+          },
+          "yang_deficiency": {
+            "face": "面色苍白",
+            "tongue": "淡胖舌，白滑苔",
+            "body": "畏寒喜暖，动作迟缓"
+          },
+          "yin_deficiency": {
+            "face": "颧红，面色枯槁",
+            "tongue": "红舌少苔，或光剥苔",
+            "body": "形体消瘦，烦躁不安"
+          },
+          "phlegm_dampness": {
+            "face": "面色淡黄或晦暗",
+            "tongue": "胖大舌，白腻苔",
+            "body": "体形肥胖，动作迟缓"
+          },
+          "dampness_heat": {
+            "face": "面色黄垢或油光发亮",
+            "tongue": "红舌，黄腻苔",
+            "body": "身重困倦，口苦黏腻"
+          },
+          "blood_stasis": {
+            "face": "面色晦暗或有瘀斑",
+            "tongue": "紫暗舌，或有瘀点瘀斑",
+            "body": "肌肤甲错，疼痛刺痛"
+          },
+          "qi_stagnation": {
+            "face": "面色不华，表情抑郁",
+            "tongue": "舌淡红，苔薄白",
+            "body": "情绪波动，胸胁胀满"
+          }
+        },
+        "seasonal_adaptations": {
+          "spring": {
+            "observational_focus": ["肝气条达", "面色变化", "情绪波动"],
+            "typical_patterns": "春季肝阳易动，面红目赤",
+            "recommendations": "疏肝解郁，清肝明目"
+          },
+          "summer": {
+            "observational_focus": ["心火亢盛", "汗出", "口渴"],
+            "typical_patterns": "面色潮红，舌红苔黄",
+            "recommendations": "清心泻火，养心安神"
+          },
+          "autumn": {
+            "observational_focus": ["肺气收敛", "皮肤干燥", "鼻燥"],
+            "typical_patterns": "面色淡白，舌淡苔少",
+            "recommendations": "润肺生津，养阴清燥"
+          },
+          "winter": {
+            "observational_focus": ["肾气固摄", "畏寒", "腰膝酸软"],
+            "typical_patterns": "面色黯淡，舌淡胖",
+            "recommendations": "温补肾阳，固本培元"
+          }
+        },
+        "special_populations": {
+          "children": {
+            "age_groups": ["婴儿", "幼儿", "学龄前", "学龄期"],
+            "face_features": {
+              "normal_variations": {
+                "婴儿": "面色偏红，肌肤娇嫩",
+                "幼儿": "面色红润有光泽，面颊丰满",
+                "学龄前": "面色明亮，表情丰富",
+                "学龄期": "面色红润，气色充沛"
+              },
+              "pathological_signs": {
+                "面色苍白": "气血不足",
+                "面色发黄": "脾胃湿热",
+                "面色晦暗": "气血瘀滞",
+                "颧红": "内热"
+              }
+            },
+            "tongue_features": {
+              "normal_variations": {
+                "婴儿": "舌体娇嫩，淡红色，薄白苔",
+                "幼儿": "舌体较大，淡红色，薄白苔",
+                "学龄前": "舌体红润，薄白苔",
+                "学龄期": "舌体红润，苔薄白均匀"
+              },
+              "pathological_signs": {
+                "舌红苔黄": "热证",
+                "舌淡苔厚": "寒湿",
+                "舌嫩红少苔": "阴虚热",
+                "舌紫暗": "血瘀"
+              }
+            },
+            "diagnostic_adjustments": {
+              "standards_modification": "儿童舌象宜结合年龄阶段特点评估",
+              "reference_values": "参考同龄儿童正常范围",
+              "interpretation_guidance": "注重发育阶段特征与病理表现的区分"
+            }
+          },
+          "elderly": {
+            "age_groups": ["年轻老年", "中期老年", "高龄老年"],
+            "face_features": {
+              "normal_variations": {
+                "年轻老年": "面色略减退，皮肤弹性下降",
+                "中期老年": "面色较淡，皮肤松弛",
+                "高龄老年": "面色晦暗，皮肤皱纹明显"
+              },
+              "pathological_signs": {
+                "面色苍白": "气血亏虚加重",
+                "面色灰暗": "肾气衰退",
+                "面色紫暗": "血瘀明显",
+                "两颧潮红": "阴虚内热"
+              }
+            },
+            "tongue_features": {
+              "normal_variations": {
+                "年轻老年": "舌体略淡，舌苔略厚",
+                "中期老年": "舌体偏胖，舌苔不均",
+                "高龄老年": "舌体瘦小，舌苔少或薄"
+              },
+              "pathological_signs": {
+                "舌红绛": "阴虚火旺",
+                "舌胖大齿痕": "脾肾阳虚",
+                "舌暗紫有瘀斑": "血瘀严重",
+                "舌苔剥落": "胃阴不足"
+              }
+            },
+            "diagnostic_adjustments": {
+              "standards_modification": "老年人舌象应考虑生理性变化",
+              "reference_values": "参考同龄人群正常范围",
+              "interpretation_guidance": "注重生理性衰退与病理表现的区分"
+            }
+          },
+          "pregnant_women": {
+            "trimesters": ["第一孕期", "第二孕期", "第三孕期"],
+            "face_features": {
+              "normal_variations": {
+                "第一孕期": "面色略有变化，可见轻微黄褐斑",
+                "第二孕期": "面色红润，气血充盈",
+                "第三孕期": "面色红润或略显疲态"
+              },
+              "pathological_signs": {
+                "面色苍白": "血虚",
+                "面色晦暗": "气血瘀滞",
+                "面色青紫": "血瘀严重",
+                "面色黧黑": "肾气不足"
+              }
+            },
+            "tongue_features": {
+              "normal_variations": {
+                "第一孕期": "舌淡红，苔薄白",
+                "第二孕期": "舌淡红或红，苔薄白",
+                "第三孕期": "舌偏胖大，苔薄白或略厚"
+              },
+              "pathological_signs": {
+                "舌暗紫": "血瘀",
+                "舌红绛少苔": "阴虚内热",
+                "舌胖大齿痕": "脾虚湿困",
+                "舌苔厚腻": "湿热内蕴"
+              }
+            },
+            "diagnostic_adjustments": {
+              "standards_modification": "孕期舌象应结合孕周评估",
+              "reference_values": "参考同期孕妇正常范围",
+              "interpretation_guidance": "注重孕期生理变化与病理表现的区分",
+              "special_attention": "关注胎气、胎动相关征象"
+            }
+          }
+        },
+        "ethnic_variations": {
+          "enabled": true,
+          "ethnic_groups": ["汉族", "藏族", "维吾尔族", "蒙古族", "回族", "其他少数民族"],
+          "feature_adjustments": {
+            "face_color_baseline": {
+              "汉族": "以标准面色诊断为基础",
+              "藏族": "面色普遍偏红，高原红现象常见",
+              "维吾尔族": "面色普遍偏黑红，皮肤较厚",
+              "蒙古族": "面色偏红黑，风吹日晒痕迹明显",
+              "回族": "面色较白，女性尤甚"
+            },
+            "tongue_appearance_baseline": {
+              "汉族": "以标准舌象诊断为基础",
+              "藏族": "舌体偏红，舌苔常略厚",
+              "维吾尔族": "舌体较大，舌苔常见黄厚",
+              "蒙古族": "舌体较厚，舌苔白厚常见",
+              "回族": "舌体中等，舌苔分布均匀"
+            },
+            "diagnostic_interpretation_guidelines": {
+              "原则": "民族特征纳入正常范围考量",
+              "方法": "参考同民族人群健康状态基线",
+              "注意事项": "避免以汉族标准简单套用于少数民族",
+              "特殊情况": "高原、沙漠、草原等特殊地域环境因素考量"
+            }
+          }
+        }
+      }
+    }
+  persona-profile.json: |
+    {
+      "profile": {
+        "name": "望诊",
+        "id": "wangzhen",
+        "title": "中医望诊专家",
+        "avatar": "assets/agents/wangzhen_avatar.png",
+        "introduction": "您好，我是望诊，索克生活平台的中医望诊专家。我可以通过分析您的面色、舌象、形体等特征，评估您的体质类型和健康状态，并提供针对性的养生建议。",
+        "background": "我接受了系统的中医望诊理论培训，精通面诊、舌诊、形体诊断等技术，能够综合分析各种望诊特征，辨识不同体质类型及其健康状态。",
+        "specialties": ["面色诊断", "舌象分析", "眼耳鼻诊断", "形体姿态评估", "体质辨识"],
+        "conversation_style": {
+          "tone": "专业而平和",
+          "formality": "适中",
+          "empathy": "中高",
+          "thoroughness": "精准详实",
+          "examples": [
+            "请上传您的面部照片或舌象照片，我将为您进行望诊分析。",
+            "从您的面色来看，呈现淡红色，且有光泽，这通常反映气血状态较为平和。",
+            "您的舌象显示舌质淡红，舌苔薄白，舌体略胖大，边有齿痕，这提示可能有一定的脾虚湿困的倾向。",
+            "结合您的面色和舌象特征，您的体质偏向脾虚湿阻型。建议在饮食上注意清淡温热，减少生冷油腻食物的摄入。",
+            "望诊只是中医四诊之一，建议结合问诊、闻诊和切诊进行更全面的健康评估。"
+          ]
+        },
+        "visual_elements": {
+          "color_scheme": "沉稳蓝色调",
+          "design_style": "专业医疗风格",
+          "animation": "稳健平和",
+          "icon": "传统中医望诊图案"
+        }
+      },
+      "response_guidelines": {
+        "opening": {
+          "first_interaction": "礼貌问候，介绍望诊功能",
+          "follow_up_session": "回顾上次望诊结果，询问变化"
+        },
+        "analysis_process": {
+          "approach": "系统化分析，从整体到局部",
+          "key_areas": ["面色", "舌象", "眼耳鼻", "形体姿态", "整体气色"],
+          "analysis_framework": "色形态综合评估法",
+          "certainty_expression": "根据证据强度表达确定性程度"
+        },
+        "findings_communication": {
+          "structure": "先描述客观观察，再给出中医理论解释",
+          "focus": "突出异常或特殊发现，解释其中医意义",
+          "language": "专业术语与通俗解释相结合",
+          "visual_references": "适当使用图示辅助说明"
+        },
+        "recommendations": {
+          "approach": "基于体质和季节的个性化建议",
+          "components": ["饮食调理", "作息建议", "环境适应", "穴位按摩", "情志调节"],
+          "specificity": "具体可行的建议，避免笼统表达",
+          "prioritization": "按重要性和易执行度排序"
+        },
+        "integration": {
+          "four_diagnosis_connection": "说明与其他诊法的关联性",
+          "evidence_combination": "整合多种望诊特征的综合判断",
+          "uncertainty_handling": "明确表达不确定性，建议进一步检查"
+        },
+        "medical_disclaimers": {
+          "scope_limitations": "明确望诊的局限性",
+          "abnormal_findings": "对异常发现提供适当警示",
+          "professional_consultation": "鼓励必要时寻求专业医师诊断"
+        }
+      },
+      "knowledge_areas": {
+        "face_diagnosis": {
+          "colors": ["淡白", "红润", "潮红", "晦暗", "黝黑", "黄褐", "青紫", "萎黄"],
+          "locations": ["前额", "鼻部", "两颊", "嘴周", "下颌"],
+          "organ_relationships": {
+            "前额": "膀胱、小肠",
+            "太阳穴": "胆",
+            "眉间": "肝",
+            "鼻": "脾",
+            "面颊": "肺",
+            "人中": "心",
+            "嘴唇": "脾胃",
+            "下巴": "肾"
+          },
+          "special_signs": ["颧红", "鼻尖红", "印堂暗", "眼袋黑青", "唇色异常"]
+        },
+        "tongue_diagnosis": {
+          "tongue_body": {
+            "colors": ["淡白", "淡红", "红", "绛", "青紫", "瘀点", "瘀斑"],
+            "shapes": ["胖大", "瘦薄", "齿痕", "裂纹", "点刺", "歪斜"],
+            "movements": ["强硬", "轻颤", "痿软", "短缩"]
+          },
+          "tongue_coating": {
+            "colors": ["白", "黄", "灰", "黑"],
+            "thickness": ["无苔", "薄", "厚"],
+            "moisture": ["干燥", "湿润", "腻滑", "剥脱"],
+            "distribution": ["部分", "全部", "根部", "两侧", "中间"]
+          },
+          "typical_patterns": {
+            "淡白舌薄白苔": "气血两虚",
+            "淡红舌薄白苔": "平和状态",
+            "红舌黄苔": "热证",
+            "胖大舌齿痕": "脾虚湿阻",
+            "青紫舌": "血瘀"
+          }
+        },
+        "eye_ear_nose_diagnosis": {
+          "eye_features": ["神光", "色泽", "形态", "分泌物", "血丝"],
+          "ear_features": ["色泽", "大小", "厚薄", "分泌物"],
+          "nose_features": ["色泽", "形态", "通畅度", "分泌物"],
+          "common_patterns": {
+            "目赤": "肝火上炎",
+            "目黄": "湿热内蕴",
+            "耳轮红赤": "心火旺",
+            "鼻翼煽动": "肺气不足"
+          }
+        },
+        "body_posture_diagnosis": {
+          "shapes": ["壮实", "消瘦", "肥胖", "浮肿"],
+          "postures": ["挺拔", "佝偻", "前倾", "后仰", "侧倾"],
+          "movements": ["灵活", "迟缓", "僵硬", "抖动", "不稳"],
+          "constitution_correlations": {
+            "挺拔灵活": "气血充盈",
+            "佝偻迟缓": "肾精不足",
+            "肥胖步履蹒跚": "痰湿内阻",
+            "消瘦动作急促": "阴虚内热"
+          }
+        },
+        "constitution_types": {
+          "balanced": {
+            "face": "色泽红润有光泽",
+            "tongue": "淡红舌，薄白苔",
+            "body": "体态均匀，动作协调"
+          },
+          "qi_deficiency": {
+            "face": "面色淡白，少光泽",
+            "tongue": "淡舌，薄白苔",
+            "body": "形体瘦弱，语声低弱"
+          },
+          "yang_deficiency": {
+            "face": "面色苍白",
+            "tongue": "淡胖舌，白滑苔",
+            "body": "畏寒喜暖，动作迟缓"
+          },
+          "yin_deficiency": {
+            "face": "颧红，面色枯槁",
+            "tongue": "红舌少苔，或光剥苔",
+            "body": "形体消瘦，烦躁不安"
+          },
+          "phlegm_dampness": {
+            "face": "面色淡黄或晦暗",
+            "tongue": "胖大舌，白腻苔",
+            "body": "体形肥胖，动作迟缓"
+          },
+          "dampness_heat": {
+            "face": "面色黄垢或油光发亮",
+            "tongue": "红舌，黄腻苔",
+            "body": "身重困倦，口苦黏腻"
+          },
+          "blood_stasis": {
+            "face": "面色晦暗或有瘀斑",
+            "tongue": "紫暗舌，或有瘀点瘀斑",
+            "body": "肌肤甲错，疼痛刺痛"
+          },
+          "qi_stagnation": {
+            "face": "面色不华，表情抑郁",
+            "tongue": "舌淡红，苔薄白",
+            "body": "情绪波动，胸胁胀满"
+          }
+        },
+        "seasonal_adaptations": {
+          "spring": {
+            "observational_focus": ["肝气条达", "面色变化", "情绪波动"],
+            "typical_patterns": "春季肝阳易动，面红目赤",
+            "recommendations": "疏肝解郁，清肝明目"
+          },
+          "summer": {
+            "observational_focus": ["心火亢盛", "汗出", "口渴"],
+            "typical_patterns": "面色潮红，舌红苔黄",
+            "recommendations": "清心泻火，养心安神"
+          },
+          "autumn": {
+            "observational_focus": ["肺气收敛", "皮肤干燥", "鼻燥"],
+            "typical_patterns": "面色淡白，舌淡苔少",
+            "recommendations": "润肺生津，养阴清燥"
+          },
+          "winter": {
+            "observational_focus": ["肾气固摄", "畏寒", "腰膝酸软"],
+            "typical_patterns": "面色黯淡，舌淡胖",
+            "recommendations": "温补肾阳，固本培元"
+          }
+        },
+        "special_populations": {
+          "children": {
+            "age_groups": ["婴儿", "幼儿", "学龄前", "学龄期"],
+            "face_features": {
+              "normal_variations": {
+                "婴儿": "面色偏红，肌肤娇嫩",
+                "幼儿": "面色红润有光泽，面颊丰满",
+                "学龄前": "面色明亮，表情丰富",
+                "学龄期": "面色红润，气色充沛"
+              },
+              "pathological_signs": {
+                "面色苍白": "气血不足",
+                "面色发黄": "脾胃湿热",
+                "面色晦暗": "气血瘀滞",
+                "颧红": "内热"
+              }
+            },
+            "tongue_features": {
+              "normal_variations": {
+                "婴儿": "舌体娇嫩，淡红色，薄白苔",
+                "幼儿": "舌体较大，淡红色，薄白苔",
+                "学龄前": "舌体红润，薄白苔",
+                "学龄期": "舌体红润，苔薄白均匀"
+              },
+              "pathological_signs": {
+                "舌红苔黄": "热证",
+                "舌淡苔厚": "寒湿",
+                "舌嫩红少苔": "阴虚热",
+                "舌紫暗": "血瘀"
+              }
+            },
+            "diagnostic_adjustments": {
+              "standards_modification": "儿童舌象宜结合年龄阶段特点评估",
+              "reference_values": "参考同龄儿童正常范围",
+              "interpretation_guidance": "注重发育阶段特征与病理表现的区分"
+            }
+          },
+          "elderly": {
+            "age_groups": ["年轻老年", "中期老年", "高龄老年"],
+            "face_features": {
+              "normal_variations": {
+                "年轻老年": "面色略减退，皮肤弹性下降",
+                "中期老年": "面色较淡，皮肤松弛",
+                "高龄老年": "面色晦暗，皮肤皱纹明显"
+              },
+              "pathological_signs": {
+                "面色苍白": "气血亏虚加重",
+                "面色灰暗": "肾气衰退",
+                "面色紫暗": "血瘀明显",
+                "两颧潮红": "阴虚内热"
+              }
+            },
+            "tongue_features": {
+              "normal_variations": {
+                "年轻老年": "舌体略淡，舌苔略厚",
+                "中期老年": "舌体偏胖，舌苔不均",
+                "高龄老年": "舌体瘦小，舌苔少或薄"
+              },
+              "pathological_signs": {
+                "舌红绛": "阴虚火旺",
+                "舌胖大齿痕": "脾肾阳虚",
+                "舌暗紫有瘀斑": "血瘀严重",
+                "舌苔剥落": "胃阴不足"
+              }
+            },
+            "diagnostic_adjustments": {
+              "standards_modification": "老年人舌象应考虑生理性变化",
+              "reference_values": "参考同龄人群正常范围",
+              "interpretation_guidance": "注重生理性衰退与病理表现的区分"
+            }
+          },
+          "pregnant_women": {
+            "trimesters": ["第一孕期", "第二孕期", "第三孕期"],
+            "face_features": {
+              "normal_variations": {
+                "第一孕期": "面色略有变化，可见轻微黄褐斑",
+                "第二孕期": "面色红润，气血充盈",
+                "第三孕期": "面色红润或略显疲态"
+              },
+              "pathological_signs": {
+                "面色苍白": "血虚",
+                "面色晦暗": "气血瘀滞",
+                "面色青紫": "血瘀严重",
+                "面色黧黑": "肾气不足"
+              }
+            },
+            "tongue_features": {
+              "normal_variations": {
+                "第一孕期": "舌淡红，苔薄白",
+                "第二孕期": "舌淡红或红，苔薄白",
+                "第三孕期": "舌偏胖大，苔薄白或略厚"
+              },
+              "pathological_signs": {
+                "舌暗紫": "血瘀",
+                "舌红绛少苔": "阴虚内热",
+                "舌胖大齿痕": "脾虚湿困",
+                "舌苔厚腻": "湿热内蕴"
+              }
+            },
+            "diagnostic_adjustments": {
+              "standards_modification": "孕期舌象应结合孕周评估",
+              "reference_values": "参考同期孕妇正常范围",
+              "interpretation_guidance": "注重孕期生理变化与病理表现的区分",
+              "special_attention": "关注胎气、胎动相关征象"
+            }
+          }
+        },
+        "ethnic_variations": {
+          "enabled": true,
+          "ethnic_groups": ["汉族", "藏族", "维吾尔族", "蒙古族", "回族", "其他少数民族"],
+          "feature_adjustments": {
+            "face_color_baseline": {
+              "汉族": "以标准面色诊断为基础",
+              "藏族": "面色普遍偏红，高原红现象常见",
+              "维吾尔族": "面色普遍偏黑红，皮肤较厚",
+              "蒙古族": "面色偏红黑，风吹日晒痕迹明显",
+              "回族": "面色较白，女性尤甚"
+            },
+            "tongue_appearance_baseline": {
+              "汉族": "以标准舌象诊断为基础",
+              "藏族": "舌体偏红，舌苔常略厚",
+              "维吾尔族": "舌体较大，舌苔常见黄厚",
+              "蒙古族": "舌体较厚，舌苔白厚常见",
+              "回族": "舌体中等，舌苔分布均匀"
+            },
+            "diagnostic_interpretation_guidelines": {
+              "原则": "民族特征纳入正常范围考量",
+              "方法": "参考同民族人群健康状态基线",
+              "注意事项": "避免以汉族标准简单套用于少数民族",
+              "特殊情况": "高原、沙漠、草原等特殊地域环境因素考量"
+            }
+          }
+        }
+      }
+    }
+  wangzhen-model-config.json: |
+    {
+      "models": {
+        "looking_diagnosis_llm": {
+          "name": "tcm-looking-diagnosis-llm",
+          "version": "1.2.0",
+          "type": "onnx",
+          "path": "/app/models/llm/looking-diagnosis-llm-v1.2.0.onnx",
+          "quantization": "int8",
+          "hardware_acceleration": "gpu",
+          "parameters": {
+            "temperature": 0.7,
+            "top_p": 0.95,
+            "max_tokens": 2048,
+            "presence_penalty": 0.1,
+            "frequency_penalty": 0.1,
+            "stop_sequences": ["\n用户:", "\n患者:"]
+          },
+          "inference_options": {
+            "batch_size": 1,
+            "num_threads": 4,
+            "timeout_ms": 30000
+          },
+          "fallback": {
+            "enabled": true,
+            "fallback_model": "looking-diagnosis-llm-backup",
+            "fallback_threshold_ms": 5000,
+            "max_fallback_attempts": 2
+          },
+          "performance": {
+            "cache_enabled": true,
+            "cache_ttl_seconds": 3600,
+            "memory_optimization": "dynamic"
+          }
+        },
+        "tcm_embedding": {
+          "name": "tcm-embedding-model",
+          "version": "1.2.0",
+          "type": "onnx",
+          "path": "/app/models/llm/tcm-embedding-model.onnx",
+          "quantization": "int8",
+          "dimensions": 768,
+          "normalize": true,
+          "inference_options": {
+            "batch_size": 32,
+            "num_threads": 2
+          },
+          "performance": {
+            "cache_enabled": true,
+            "cache_ttl_seconds": 7200
+          }
+        },
+        "face_detection": {
+          "name": "face-detection-model",
+          "version": "2.1.0",
+          "type": "onnx",
+          "path": "/app/models/detection/face-detection-v2.1.0.onnx",
+          "quantization": "int8",
+          "inference_options": {
+            "batch_size": 1,
+            "num_threads": 2
+          },
+          "parameters": {
+            "confidence_threshold": 0.85,
+            "nms_threshold": 0.5,
+            "max_detections": 5
+          },
+          "input_processing": {
+            "input_size": [640, 640],
+            "pixel_mean": [127.5, 127.5, 127.5],
+            "pixel_scale": 0.007843137254901961
+          }
+        },
+        "complexion_analyzer": {
+          "name": "complexion-analyzer",
+          "version": "1.3.0",
+          "type": "onnx",
+          "path": "/app/models/complexion/complexion-analyzer-v1.3.0.onnx",
+          "quantization": "int8",
+          "inference_options": {
+            "batch_size": 1,
+            "num_threads": 2
+          },
+          "parameters": {
+            "classes": ["淡白", "红润", "潮红", "晦暗", "黝黑", "黄褐", "青紫", "萎黄"],
+            "threshold": 0.75,
+            "region_analysis": true
+          },
+          "input_processing": {
+            "input_size": [224, 224],
+            "normalization": true,
+            "lighting_compensation": true
+          }
+        },
+        "tongue_analyzer": {
+          "name": "tongue-analyzer",
+          "version": "2.0.0",
+          "type": "onnx",
+          "path": "/app/models/tongue/tongue-analyzer-v2.0.0.onnx",
+          "quantization": "int8",
+          "inference_options": {
+            "batch_size": 1,
+            "num_threads": 2
+          },
+          "parameters": {
+            "tongue_classes": ["淡白舌", "淡红舌", "红舌", "绛舌", "青紫舌", "瘀斑舌", "芒刺舌"],
+            "coating_classes": ["无苔", "薄白苔", "厚白苔", "黄苔", "厚黄苔", "灰黑苔", "腻苔"],
+            "shape_classes": ["正常", "胖大", "瘦薄", "齿痕", "裂纹", "点刺", "歪斜"],
+            "threshold": 0.80,
+            "segmentation_enabled": true
+          },
+          "input_processing": {
+            "input_size": [320, 320],
+            "color_correction": true,
+            "white_balance": true
+          }
+        }
+      },
+      "model_configurations": {
+        "default": {
+          "primary_model": "looking_diagnosis_llm",
+          "embedding_model": "tcm_embedding",
+          "face_model": "face_detection",
+          "complexion_model": "complexion_analyzer",
+          "tongue_model": "tongue_analyzer"
+        },
+        "face_only": {
+          "primary_model": "looking_diagnosis_llm",
+          "embedding_model": "tcm_embedding",
+          "face_model": "face_detection",
+          "complexion_model": "complexion_analyzer"
+        },
+        "tongue_only": {
+          "primary_model": "looking_diagnosis_llm",
+          "embedding_model": "tcm_embedding",
+          "tongue_model": "tongue_analyzer"
+        },
+        "mobile_optimized": {
+          "primary_model": "looking_diagnosis_llm_mobile",
+          "embedding_model": "tcm_embedding_mobile",
+          "face_model": "face_detection_mobile",
+          "complexion_model": "complexion_analyzer_mobile",
+          "tongue_model": "tongue_analyzer_mobile"
+        },
+        "edge_optimized": {
+          "primary_model": "looking_diagnosis_llm_edge",
+          "embedding_model": "tcm_embedding_edge",
+          "face_model": "face_detection_edge",
+          "complexion_model": "complexion_analyzer_edge",
+          "tongue_model": "tongue_analyzer_edge"
+        }
+      },
+      "model_registry": {
+        "url": "https://models.suoke.life/looking-diagnosis-service",
+        "authentication": {
+          "required": true,
+          "method": "api_key"
+        },
+        "version_check": {
+          "enabled": true,
+          "interval_hours": 24,
+          "auto_update": true
+        }
+      },
+      "runtime": {
+        "memory_limit_mb": 2048,
+        "cpu_priority": "high",
+        "gpu_allocation": 0.5,
+        "optimization_level": "performance",
+        "serving_threads": 4,
+        "adaptive_resource_management": {
+          "enabled": true,
+          "battery_aware": true,
+          "thermal_aware": true,
+          "network_aware": true,
+          "low_power_mode_settings": {
+            "model_downscaling": true,
+            "batch_processing_disabled": true,
+            "resolution_reduction": true
+          }
+        },
+        "warmup": {
+          "enabled": true,
+          "sample_inputs": [
+            "/app/models/samples/face_sample1.jpg",
+            "/app/models/samples/face_sample2.jpg",
+            "/app/models/samples/tongue_sample1.jpg",
+            "/app/models/samples/tongue_sample2.jpg"
+          ]
+        }
+      },
+      "telemetry": {
+        "enabled": true,
+        "metrics": [
+          "inference_time",
+          "detection_accuracy",
+          "memory_usage",
+          "error_rate",
+          "confidence_scores"
+        ],
+        "logging": {
+          "level": "info",
+          "components": ["model", "preprocessing", "inference", "postprocessing"]
+        }
+      },
+      "monitoring": {
+        "enabled": true,
+        "model_performance": {
+          "accuracy_tracking": true,
+          "latency_monitoring": true,
+          "error_rate_alerting": true,
+          "threshold_alerts": {
+            "accuracy_below": 0.85,
+            "latency_above_ms": 3000,
+            "error_rate_above": 0.05
+          }
+        },
+        "system_health": {
+          "memory_usage": true,
+          "cpu_utilization": true,
+          "gpu_utilization": true,
+          "disk_space": true,
+          "alert_thresholds": {
+            "memory_above_percent": 85,
+            "cpu_above_percent": 90,
+            "gpu_above_percent": 95,
+            "disk_below_gb": 5
+          }
+        },
+        "anomaly_collection": {
+          "enabled": true,
+          "anomaly_detection": true,
+          "sample_storage": {
+            "enabled": true,
+            "anonymized": true,
+            "max_samples_per_day": 50,
+            "retention_days": 90
+          },
+          "expert_review_system": {
+            "enabled": true,
+            "review_frequency": "weekly",
+            "feedback_integration": true
+          }
+        },
+        "automated_reporting": {
+          "daily_summary": true,
+          "weekly_performance": true,
+          "monthly_trend_analysis": true,
+          "report_distribution": ["system_admin", "medical_team", "development_team"]
+        }
+      }
+    }
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: wangzhen-agent-env
+  namespace: suoke
+  labels:
+    app: looking-diagnosis-service
+    component: agent
+    agent-name: wangzhen
+data:
+  AGENT_ENABLED: "true"
+  AGENT_ID: "wangzhen"
+  AGENT_NAME: "望诊"
+  AGENT_VERSION: "1.0.0"
+  AGENT_LOG_LEVEL: "info"
+  AGENT_CONFIG_PATH: "/app/config/agent/agent-config.json"
+  AGENT_MODEL_CONFIG_PATH: "/app/config/agent/wangzhen-model-config.json"
+  AGENT_PROMPT_CONFIG_PATH: "/app/config/agent/wangzhen-prompt-templates.json"
+  AGENT_SCENARIOS_PATH: "/app/config/agent/wangzhen-scenarios.json"
+  AGENT_MEMORY_TYPE: "conversation_buffer_window"
+  AGENT_MEMORY_WINDOW_SIZE: "10"
+  AGENT_EMBEDDINGS_MODEL: "tcm-embedding-model"
+  AGENT_PRIMARY_MODEL: "tcm-looking-diagnosis-llm"
+  AGENT_FACE_DETECTION_MODEL: "face-detection-model"
+  AGENT_COMPLEXION_ANALYSIS_MODEL: "complexion-analyzer"
+  AGENT_TONGUE_ANALYSIS_MODEL: "tongue-analyzer"
+  AGENT_RAG_ENABLED: "true"
+  AGENT_KNOWLEDGE_GRAPH_ENABLED: "true"
+  AGENT_FOUR_DIAGNOSIS_INTEGRATION: "true"
+  AGENT_ABNORMAL_DETECTION_ENABLED: "true"
+  AGENT_TELEMETRY_ENABLED: "true"
+  AGENT_API_ENABLED: "true"
+  AGENT_API_KEY_AUTH: "true"
+  AGENT_FEEDBACK_COLLECTION: "true"
+  AGENT_MODEL_CACHE_ENABLED: "true"
+  AGENT_MODEL_CACHE_TTL: "3600"
+  AGENT_WARMUP_ENABLED: "true"
+  AGENT_IMAGE_PROCESSING_TIMEOUT: "10000"
+  AGENT_IMAGE_MIN_RESOLUTION: "640x480"
+  AGENT_IMAGE_MAX_SIZE_MB: "10"
+  AGENT_FACE_REGION_EXPANSION: "1.2"
+  AGENT_LIGHTING_COMPENSATION: "true"
+  AGENT_COLOR_CORRECTION: "true"
+  AGENT_DETAILED_ANALYSIS: "true"
+  AGENT_MULTI_REGION_ANALYSIS: "true"
+  AGENT_SEASONAL_ADJUSTMENT: "true"
+  AGENT_COLLABORATION_ENABLED: "true"
+  AGENT_COLLABORATION_SERVICE_URL: "http://collaboration-service/api/v1"
+  AGENT_COLLABORATION_HANDOFFS: "true"
+  AGENT_TASK_ROUTING_ENABLED: "true"
+  AGENT_COLLABORATIVE_DIAGNOSIS: "true"
+  AGENT_CONTEXT_SHARING_ENABLED: "true"
+  AGENT_PERCEPTION_ENABLED: "true"
+  AGENT_PERCEPTION_SERVICE_URL: "http://perception-service/api/v1"
+  AGENT_CONTEXT_AWARENESS_ENABLED: "true"
+  AGENT_SEASONAL_AWARENESS_ENABLED: "true"
+  AGENT_ENVIRONMENTAL_AWARENESS_ENABLED: "true"
+  AGENT_CLINICAL_CONTEXT_ENABLED: "true"
+  AGENT_REAL_TIME_DATA_ENABLED: "true"
+  AGENT_MEMORY_MANAGEMENT_ENABLED: "true"
+  AGENT_MEMORY_SERVICE_URL: "http://memory-service/api/v1"
+  AGENT_MEMORY_STORAGE_TYPE: "vector_database"
+  AGENT_EPISODIC_MEMORY_ENABLED: "true"
+  AGENT_SEMANTIC_MEMORY_ENABLED: "true"
+  AGENT_PATIENT_MEMORY_ENABLED: "true"
+  AGENT_PROCEDURAL_MEMORY_ENABLED: "true"
+  AGENT_MEMORY_RETRIEVAL_ENABLED: "true"
+  AGENT_MEMORY_CONSOLIDATION_ENABLED: "true"
+  AGENT_MEMORY_FORGETTING_ENABLED: "true"
+  AGENT_CROSS_PATIENT_LEARNING: "true"
+  AGENT_MULTIMODAL_ENABLED: "true"
+  AGENT_MULTIMODAL_SERVICE_URL: "http://multimodal-processor-service/api/v1"
+  AGENT_MULTIMODAL_TOOLS_CONFIG_PATH: "/app/config/multimodal-tools.json"
+  AGENT_MULTIMODAL_TOOLS_AUTO_LOAD: "true"
+  AGENT_IMAGE_PROCESSING_ENABLED: "true"
+  AGENT_FEATURE_EXTRACTION_ENABLED: "true"
+  AGENT_DATA_FUSION_ENABLED: "true"
+  AGENT_SPECIALIZED_ANALYZERS_ENABLED: "true"
+  AGENT_MULTIMODAL_TIMEOUT_MS: "30000"
+  AGENT_MULTIMODAL_CACHE_ENABLED: "true"
+  AGENT_MULTIMODAL_CACHE_TTL: "3600"
+  AGENT_MONITORING_ENABLED: "true"
+  AGENT_MONITORING_PERFORMANCE_TRACKING: "true"
+  AGENT_MONITORING_SYSTEM_HEALTH: "true"
+  AGENT_MONITORING_ANOMALY_COLLECTION: "true"
+  AGENT_MONITORING_REPORTING: "true"
+  AGENT_MONITORING_ALERT_SLACK_WEBHOOK: "https://hooks.slack.com/services/xxx/yyy/zzz"
+  AGENT_MONITORING_ALERT_EMAIL: "monitoring@suoke.life"
+  AGENT_MONITORING_DASHBOARD_ENABLED: "true"
+  AGENT_SPECIAL_POPULATIONS_ENABLED: "true"
+  AGENT_ETHNIC_VARIATIONS_ENABLED: "true"
+  AGENT_ADAPTIVE_RESOURCES_ENABLED: "true"
+  AGENT_SIMPLIFIED_MODE_ENABLED: "true"
+  AGENT_GUIDED_EXAMPLES_ENABLED: "true"
+  AGENT_ACCESSIBILITY_ENHANCED: "true"
+  AGENT_ACCESSIBILITY_VISION_IMPAIRMENT_SUPPORT: "true"
+  AGENT_ACCESSIBILITY_MOTOR_IMPAIRMENT_SUPPORT: "true"
+  AGENT_ACCESSIBILITY_COGNITIVE_IMPAIRMENT_SUPPORT: "true"
+  AGENT_ACCESSIBILITY_ELDERLY_SUPPORT: "true"
+  AGENT_ACCESSIBILITY_MULTIMODAL_PERCEPTION: "true"
+  AGENT_ACCESSIBILITY_CAMERA_SENSING: "true"
+  AGENT_ACCESSIBILITY_SCREEN_INTERACTION: "true"
+  AGENT_ACCESSIBILITY_AUDIO_PERCEPTION: "true"
+  AGENT_ACCESSIBILITY_DEVICE_SENSORS: "true"
+  AGENT_ACCESSIBILITY_CROSS_MODAL_INTEGRATION: "true"
+  AGENT_ACCESSIBILITY_EXTERNAL_DEVICES: "true"
+  AGENT_ACCESSIBILITY_CONTENT_ADAPTATION: "true"
+  AGENT_ACCESSIBILITY_USER_PREFERENCES: "true"
+  AGENT_ACCESSIBILITY_EMERGENCY_FEATURES: "true"
+  AGENT_ACCESSIBILITY_VOICE_KEYWORDS_ENABLED: "true"
+  AGENT_ACCESSIBILITY_PLATFORM_INTEGRATIONS: "true"
+  AGENT_ACCESSIBILITY_ANDROID_SUPPORT: "true"
+  AGENT_ACCESSIBILITY_IOS_SUPPORT: "true"
+  AGENT_ACCESSIBILITY_HARDWARE_SUPPORT: "true"
+  AGENT_ACCESSIBILITY_WCAG_COMPLIANCE: "true"
+  AGENT_ACCESSIBILITY_PERSONALIZED_SOLUTIONS: "true"
+  AGENT_ACCESSIBILITY_FEEDBACK_SYSTEM: "true"
+  AGENT_ACCESSIBILITY_SERVICE_URL: "http://accessibility-service/api/v1"
+  AGENT_ACCESSIBILITY_ASSISTIVE_TECH_INTEGRATION: "true"
+  AGENT_ACCESSIBILITY_SIGN_LANGUAGE_PROCESSING: "true" 

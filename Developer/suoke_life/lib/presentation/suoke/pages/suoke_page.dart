@@ -133,10 +133,11 @@ class _SuokePageState extends ConsumerState<SuokePage> {
   final List<ServiceItem> _recommendedServicesData = [
     ServiceItem(
       id: '0',
-      name: '脉诊智能分析',
-      description: '通过AI技术分析脉象，辅助中医辨证',
-      iconData: Icons.favorite_border,
+      name: '中医特色功能',
+      description: '多模态智能诊断、舌诊、脉诊分析',
+      iconData: Icons.health_and_safety,
       color: AppColors.primaryColor.withAlpha(220),
+      routePath: '/tcm/features',
     ),
     ServiceItem(
       id: '1',
@@ -396,11 +397,14 @@ class _SuokePageState extends ConsumerState<SuokePage> {
 
   // 处理服务点击
   void _handleServiceTap(ServiceItem service) {
+    if (service.routePath != null && service.routePath!.isNotEmpty) {
+      // 使用指定的路由路径
+      context.router.pushNamed(service.routePath!);
+      return;
+    }
+    
+    // 兼容旧的路由逻辑
     switch (service.id) {
-      case '0':
-        // 脉诊智能分析
-        context.router.pushNamed('/suoke/pulse-diagnosis');
-        break;
       case '1':
         // 中医体质测评
         context.router.pushNamed('/life/constitution-assessment');
@@ -408,6 +412,18 @@ class _SuokePageState extends ConsumerState<SuokePage> {
       case '2':
         // 舌诊智能分析
         context.router.pushNamed('/suoke/tongue-diagnosis');
+        break;
+      case '3':
+        // 个性化营养方案
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('个性化营养方案功能正在开发中')),
+        );
+        break;
+      case '4':
+        // 睡眠质量分析
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('睡眠质量分析功能正在开发中')),
+        );
         break;
       default:
         // 其他服务
@@ -419,5 +435,147 @@ class _SuokePageState extends ConsumerState<SuokePage> {
         );
         break;
     }
+  }
+}
+
+/// 中医特色功能入口页面
+@RoutePage()
+class TcmFeaturesEntryPage extends StatelessWidget {
+  const TcmFeaturesEntryPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('中医特色功能'),
+        backgroundColor: AppColors.SUOKE_GREEN,
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                '中医智能诊断',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 16),
+              _buildFeatureCard(
+                context,
+                title: '多模态智能诊断',
+                description: '结合舌诊、面诊、声音分析和症状描述，进行智能辨证分析',
+                icon: Icons.health_and_safety,
+                color: AppColors.SUOKE_GREEN,
+                onTap: () => context.router.pushNamed('/tcm/multimodal-diagnosis'),
+              ),
+              const SizedBox(height: 16),
+              _buildFeatureCard(
+                context,
+                title: '舌诊分析',
+                description: '通过舌象分析体质特征和健康状态',
+                icon: Icons.spa,
+                color: const Color(0xFF4C8DAE),
+                onTap: () => context.router.pushNamed('/tcm/tongue-diagnosis'),
+              ),
+              const SizedBox(height: 16),
+              _buildFeatureCard(
+                context,
+                title: '脉诊分析',
+                description: '通过脉象分析体内气血状态和脏腑功能',
+                icon: Icons.favorite,
+                color: const Color(0xFFFF6800),
+                onTap: () => context.router.pushNamed('/tcm/pulse-diagnosis'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFeatureCard(
+    BuildContext context, {
+    required String title,
+    required String description,
+    required IconData icon,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              color,
+              color.withAlpha(220),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: color.withAlpha(40),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white.withAlpha(50),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  icon,
+                  color: Colors.white,
+                  size: 28,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      description,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.white,
+                size: 16,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

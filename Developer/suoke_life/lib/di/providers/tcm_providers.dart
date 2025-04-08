@@ -1,50 +1,33 @@
-import 'package:flutter/material.dart';
+// 中医服务提供者文件
+// 定义中医相关的Provider
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:suoke_life/core/theme/tcm_chart_themes.dart';
-import 'package:suoke_life/core/theme/tcm_visuals/five_elements.dart';
-import 'package:suoke_life/core/widgets/tcm/models/five_elements_data.dart';
-import 'package:suoke_life/core/widgets/tcm/models/radar_chart_data.dart';
-import 'package:suoke_life/domain/entities/constitution/constitution_type.dart';
+import 'package:suoke_life/di/providers/core_providers.dart';
 
-/// 五行数据Provider
-final fiveElementsDataProvider = Provider<FiveElementsData>((ref) {
-  return FiveElementsData.balanced(); // 默认提供平衡的五行数据
+/// 中医服务提供者
+/// 暂时仅提供空实现，将在后续开发中完善
+final tcmServiceProvider = Provider<TCMService>((ref) {
+  final dio = ref.watch(dioProvider);
+  return TCMService(dio: dio);
 });
 
-/// 五行元素颜色Provider
-final elementColorProvider =
-    Provider.family<Color, ElementType>((ref, elementType) {
-  return FiveElements.getElementColor(elementType);
-});
-
-/// 体质类型颜色Provider
-final constitutionColorProvider =
-    Provider.family<Color, ConstitutionType>((ref, type) {
-  return TCMChartThemes.getConstitutionColor(type);
-});
-
-/// 体质雷达图数据Provider
-final constitutionRadarDataProvider =
-    Provider.family<RadarChartData, Map<ConstitutionType, double>>(
-        (ref, scores) {
-  final dataPoints = scores.entries.map((entry) {
-    return RadarDataPoint(
-      label: entry.key.toString().split('.').last,
-      value: entry.value * 10, // 转换为0-10的范围
-      color: TCMChartThemes.getConstitutionColor(entry.key),
-      tooltip: _getConstitutionName(entry.key),
-    );
-  }).toList();
-
-  return RadarChartData(
-    name: '体质分布',
-    dataPoints: dataPoints,
-    color: Colors.blueAccent,
-    lineWidth: 2.0,
-  );
-});
-
-/// 获取体质类型名称
-String _getConstitutionName(ConstitutionType type) {
-  return type.name;
-}
+/// 临时中医服务类
+/// 后续将实现完整的中医服务功能
+class TCMService {
+  final dynamic dio;
+  
+  TCMService({required this.dio});
+  
+  // 未来将实现的方法
+  Future<void> fetchConstitutionTypes() async {
+    // 获取体质类型
+  }
+  
+  Future<void> analyzeFourDiagnostics(Map<String, dynamic> data) async {
+    // 分析四诊数据
+  }
+  
+  Future<void> getHealthRegimen() async {
+    // 获取调理方案
+  }
+} 

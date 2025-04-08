@@ -9,19 +9,19 @@ import 'package:suoke_life/core/theme/app_colors.dart';
 class StandardCard extends StatelessWidget {
   /// 卡片标题
   final String? title;
-  
+
   /// 卡片内容
   final Widget content;
-  
+
   /// 卡片高度
   final double? height;
-  
+
   /// 点击事件
   final VoidCallback? onTap;
-  
+
   /// 内边距
   final EdgeInsetsGeometry? padding;
-  
+
   /// 构造函数
   const StandardCard({
     super.key,
@@ -31,7 +31,7 @@ class StandardCard extends StatelessWidget {
     this.onTap,
     this.padding,
   });
-  
+
   @override
   Widget build(BuildContext context) {
     return AppCard(
@@ -44,4 +44,4 @@ class StandardCard extends StatelessWidget {
       padding: padding,
     );
   }
-} 
+}

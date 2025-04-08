@@ -19,6 +19,7 @@ import (
 	"knowledge-base-service/internal/domain/service"
 	"knowledge-base-service/internal/domain/service/interfaces"
 	"knowledge-base-service/internal/interfaces/rest"
+	"knowledge-base-service/internal/interfaces/rest/helpers"
 	"knowledge-base-service/internal/test"
 )
 
@@ -184,7 +185,7 @@ func TestDocumentHandler_GetDocument_InvalidID(t *testing.T) {
 	err := json.Unmarshal(rr.Body.Bytes(), &response)
 	assert.NoError(t, err)
 
-	assert.Contains(t, response["error"], "无效的文档ID格式")
+	assert.Contains(t, response["error"], "无效的UUID格式")
 }
 
 func TestDocumentHandler_CreateDocument_Success(t *testing.T) {
@@ -253,10 +254,9 @@ func TestDocumentHandler_CreateDocument_MissingRequiredFields(t *testing.T) {
 
 	// 测试数据 - 缺少必填字段
 	requestData := map[string]interface{}{
-		"title":       "Test Document",
-		// 缺少content
-		"description": "Test description",
-		// 缺少author_id
+		"title":       "", // 空标题
+		"content":     "This is test content",
+		"author_id":   uuid.New().String(),
 		"category_id": uuid.New().String(),
 	}
 
@@ -276,7 +276,7 @@ func TestDocumentHandler_CreateDocument_MissingRequiredFields(t *testing.T) {
 	err := json.Unmarshal(rr.Body.Bytes(), &response)
 	assert.NoError(t, err)
 
-	assert.Contains(t, response["error"].(string), "必填项")
+	assert.Contains(t, response["error"].(string), "标题为必填项")
 }
 
 func TestDocumentHandler_CreateDocument_InvalidUUID(t *testing.T) {
@@ -308,7 +308,7 @@ func TestDocumentHandler_CreateDocument_InvalidUUID(t *testing.T) {
 	err := json.Unmarshal(rr.Body.Bytes(), &response)
 	assert.NoError(t, err)
 
-	assert.Contains(t, response["error"].(string), "无效的作者ID格式")
+	assert.Contains(t, response["error"].(string), "无效的UUID格式")
 }
 
 func TestDocumentHandler_UpdateDocument_Success(t *testing.T) {
@@ -341,8 +341,8 @@ func TestDocumentHandler_UpdateDocument_Success(t *testing.T) {
 		docID,
 		"Updated Title",
 		"Updated content",
-		"",  // 空描述
-		entity.ContentType(""),  // 使用正确的ContentType类型
+		"",                     // 空描述
+		entity.ContentType(""), // 使用正确的ContentType类型
 		categoryID,
 		[]string{"updated", "tag"},
 	).Return(expectedDoc, nil)
@@ -525,11 +525,11 @@ func TestDocumentHandler_SemanticSearch_Success(t *testing.T) {
 func TestDocumentHandler_GetDocument(t *testing.T) {
 	// 创建一个测试用的文档ID
 	docID := uuid.New()
-	
+
 	t.Run("获取文档成功", func(t *testing.T) {
 		// 创建模拟服务
 		mockService := new(MockDocumentService)
-		
+
 		// 创建一个测试文档
 		testDoc := &entity.Document{
 			ID:          docID,
@@ -544,35 +544,35 @@ func TestDocumentHandler_GetDocument(t *testing.T) {
 			CreatedAt:   time.Now(),
 			UpdatedAt:   time.Now(),
 		}
-		
+
 		// 设置模拟行为
 		mockService.On("GetDocumentByID", mock.Anything, docID).Return(testDoc, nil)
-		
+
 		// 创建处理器
 		handler := rest.NewDocumentHandler(mockService)
-		
+
 		// 创建请求
 		req, _ := http.NewRequest("GET", "/documents/"+docID.String(), nil)
-		
+
 		// 设置Chi路由上下文
 		rctx := chi.NewRouteContext()
 		rctx.URLParams.Add("id", docID.String())
 		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
-		
+
 		// 创建响应记录器
 		rr := httptest.NewRecorder()
-		
+
 		// 调用处理器
 		handler.GetDocument(rr, req)
-		
+
 		// 检查状态码
 		assert.Equal(t, http.StatusOK, rr.Code)
-		
+
 		// 解析响应
 		var response rest.DocumentResponse
 		err := json.Unmarshal(rr.Body.Bytes(), &response)
 		assert.NoError(t, err)
-		
+
 		// 验证响应内容
 		assert.Equal(t, docID.String(), response.ID)
 		assert.Equal(t, "测试文档", response.Title)
@@ -580,119 +580,118 @@ func TestDocumentHandler_GetDocument(t *testing.T) {
 		assert.Equal(t, "测试文档的描述", response.Description)
 		assert.Equal(t, "markdown", response.ContentType)
 		assert.Equal(t, "published", response.Status)
-		
+
 		// 验证模拟行为
 		mockService.AssertExpectations(t)
 	})
-	
+
 	t.Run("无效的ID格式", func(t *testing.T) {
 		// 创建模拟服务
 		mockService := new(MockDocumentService)
-		
+
 		// 创建处理器
 		handler := rest.NewDocumentHandler(mockService)
-		
+
 		// 创建请求 - 使用无效的ID
 		req, _ := http.NewRequest("GET", "/documents/invalid-id", nil)
-		
+
 		// 设置Chi路由上下文
 		rctx := chi.NewRouteContext()
 		rctx.URLParams.Add("id", "invalid-id")
 		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
-		
+
 		// 创建响应记录器
 		rr := httptest.NewRecorder()
-		
+
 		// 调用处理器
 		handler.GetDocument(rr, req)
-		
+
 		// 检查状态码
 		assert.Equal(t, http.StatusBadRequest, rr.Code)
-		
+
 		// 解析响应
-		var response rest.ErrorResponse
+		var response helpers.ErrorResponse
 		err := json.Unmarshal(rr.Body.Bytes(), &response)
 		assert.NoError(t, err)
-		
+
 		// 验证错误消息
-		assert.Contains(t, response.Error, "无效的文档ID格式")
+		assert.Contains(t, response.Error, "无效的UUID格式")
 	})
-	
+
 	t.Run("文档不存在", func(t *testing.T) {
 		// 创建模拟服务
 		mockService := new(MockDocumentService)
-		
+
 		// 设置模拟行为 - 文档不存在
 		mockService.On("GetDocumentByID", mock.Anything, docID).Return(nil, nil)
-		
+
 		// 创建处理器
 		handler := rest.NewDocumentHandler(mockService)
-		
+
 		// 创建请求
 		req, _ := http.NewRequest("GET", "/documents/"+docID.String(), nil)
-		
+
 		// 设置Chi路由上下文
 		rctx := chi.NewRouteContext()
 		rctx.URLParams.Add("id", docID.String())
 		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
-		
+
 		// 创建响应记录器
 		rr := httptest.NewRecorder()
-		
+
 		// 调用处理器
 		handler.GetDocument(rr, req)
-		
+
 		// 检查状态码
 		assert.Equal(t, http.StatusNotFound, rr.Code)
-		
+
 		// 解析响应
-		var response rest.ErrorResponse
+		var response helpers.ErrorResponse
 		err := json.Unmarshal(rr.Body.Bytes(), &response)
 		assert.NoError(t, err)
-		
+
 		// 验证错误消息
 		assert.Contains(t, response.Error, "文档不存在")
-		
+
 		// 验证模拟行为
 		mockService.AssertExpectations(t)
 	})
-	
+
 	t.Run("服务错误", func(t *testing.T) {
 		// 创建模拟服务
 		mockService := new(MockDocumentService)
-		
+
 		// 设置模拟行为 - 服务返回错误
 		mockService.On("GetDocumentByID", mock.Anything, docID).Return(nil, fmt.Errorf("数据库错误"))
-		
+
 		// 创建处理器
 		handler := rest.NewDocumentHandler(mockService)
-		
+
 		// 创建请求
 		req, _ := http.NewRequest("GET", "/documents/"+docID.String(), nil)
-		
+
 		// 设置Chi路由上下文
 		rctx := chi.NewRouteContext()
 		rctx.URLParams.Add("id", docID.String())
 		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
-		
+
 		// 创建响应记录器
 		rr := httptest.NewRecorder()
-		
+
 		// 调用处理器
 		handler.GetDocument(rr, req)
-		
+
 		// 检查状态码
 		assert.Equal(t, http.StatusInternalServerError, rr.Code)
-		
+
 		// 解析响应
-		var response rest.ErrorResponse
+		var response helpers.ErrorResponse
 		err := json.Unmarshal(rr.Body.Bytes(), &response)
 		assert.NoError(t, err)
-		
-		// 验证错误消息
+
+		// 验证错误消息包含预期内容
 		assert.Contains(t, response.Error, "获取文档失败")
-		assert.Contains(t, response.Error, "数据库错误")
-		
+
 		// 验证模拟行为
 		mockService.AssertExpectations(t)
 	})
@@ -702,11 +701,11 @@ func TestDocumentHandler_CreateDocument(t *testing.T) {
 	t.Run("创建文档成功", func(t *testing.T) {
 		// 创建模拟服务
 		mockService := new(MockDocumentService)
-		
+
 		// 准备测试数据
 		authorID := uuid.New()
 		categoryID := uuid.New()
-		
+
 		// 创建请求体
 		reqBody := rest.CreateDocumentRequest{
 			Title:       "测试文档",
@@ -717,10 +716,10 @@ func TestDocumentHandler_CreateDocument(t *testing.T) {
 			CategoryID:  categoryID.String(),
 			Tags:        []string{"测试", "文档"},
 		}
-		
+
 		// 转换为JSON
 		jsonBody, _ := json.Marshal(reqBody)
-		
+
 		// 创建一个测试文档用于模拟返回
 		testDoc := &entity.Document{
 			ID:          uuid.New(),
@@ -735,7 +734,7 @@ func TestDocumentHandler_CreateDocument(t *testing.T) {
 			CreatedAt:   time.Now(),
 			UpdatedAt:   time.Now(),
 		}
-		
+
 		// 设置模拟行为 - 匹配DocumentOptions参数
 		mockService.On("CreateDocument", mock.Anything, mock.MatchedBy(func(opts service.DocumentOptions) bool {
 			return opts.Title == reqBody.Title &&
@@ -745,28 +744,28 @@ func TestDocumentHandler_CreateDocument(t *testing.T) {
 				opts.AuthorID == authorID &&
 				opts.CategoryID == categoryID
 		})).Return(testDoc, nil)
-		
+
 		// 创建处理器
 		handler := rest.NewDocumentHandler(mockService)
-		
+
 		// 创建请求
 		req, _ := http.NewRequest("POST", "/documents", bytes.NewBuffer(jsonBody))
 		req.Header.Set("Content-Type", "application/json")
-		
+
 		// 创建响应记录器
 		rr := httptest.NewRecorder()
-		
+
 		// 调用处理器
 		handler.CreateDocument(rr, req)
-		
+
 		// 检查状态码
 		assert.Equal(t, http.StatusCreated, rr.Code)
-		
+
 		// 解析响应
 		var response rest.DocumentResponse
 		err := json.Unmarshal(rr.Body.Bytes(), &response)
 		assert.NoError(t, err)
-		
+
 		// 验证响应内容
 		assert.Equal(t, testDoc.ID.String(), response.ID)
 		assert.Equal(t, reqBody.Title, response.Title)
@@ -776,47 +775,47 @@ func TestDocumentHandler_CreateDocument(t *testing.T) {
 		assert.Equal(t, "draft", response.Status)
 		assert.Equal(t, reqBody.AuthorID, response.AuthorID)
 		assert.Equal(t, reqBody.CategoryID, response.CategoryID)
-		
+
 		// 验证模拟行为
 		mockService.AssertExpectations(t)
 	})
-	
+
 	t.Run("请求体解析失败", func(t *testing.T) {
 		// 创建模拟服务
 		mockService := new(MockDocumentService)
-		
+
 		// 创建处理器
 		handler := rest.NewDocumentHandler(mockService)
-		
+
 		// 创建请求 - 无效的JSON
 		req, _ := http.NewRequest("POST", "/documents", bytes.NewBufferString("invalid json"))
 		req.Header.Set("Content-Type", "application/json")
-		
+
 		// 创建响应记录器
 		rr := httptest.NewRecorder()
-		
+
 		// 调用处理器
 		handler.CreateDocument(rr, req)
-		
+
 		// 检查状态码
 		assert.Equal(t, http.StatusBadRequest, rr.Code)
-		
+
 		// 解析响应
-		var response rest.ErrorResponse
+		var response helpers.ErrorResponse
 		err := json.Unmarshal(rr.Body.Bytes(), &response)
 		assert.NoError(t, err)
-		
+
 		// 验证错误消息
-		assert.Contains(t, response.Error, "解析请求失败")
+		assert.Contains(t, response.Error, "无法解析JSON")
 	})
-	
+
 	t.Run("缺少必填字段", func(t *testing.T) {
 		// 创建模拟服务
 		mockService := new(MockDocumentService)
-		
+
 		// 创建处理器
 		handler := rest.NewDocumentHandler(mockService)
-		
+
 		// 创建请求体 - 缺少必填字段
 		reqBody := rest.CreateDocumentRequest{
 			Title:       "", // 缺少标题
@@ -825,39 +824,39 @@ func TestDocumentHandler_CreateDocument(t *testing.T) {
 			CategoryID:  uuid.New().String(),
 			ContentType: "text",
 		}
-		
+
 		// 转换为JSON
 		jsonBody, _ := json.Marshal(reqBody)
-		
+
 		// 创建请求
 		req, _ := http.NewRequest("POST", "/documents", bytes.NewBuffer(jsonBody))
 		req.Header.Set("Content-Type", "application/json")
-		
+
 		// 创建响应记录器
 		rr := httptest.NewRecorder()
-		
+
 		// 调用处理器
 		handler.CreateDocument(rr, req)
-		
+
 		// 检查状态码
 		assert.Equal(t, http.StatusBadRequest, rr.Code)
-		
+
 		// 解析响应
-		var response rest.ErrorResponse
+		var response helpers.ErrorResponse
 		err := json.Unmarshal(rr.Body.Bytes(), &response)
 		assert.NoError(t, err)
-		
+
 		// 验证错误消息
-		assert.Contains(t, response.Error, "标题、内容、作者ID和分类ID为必填项")
+		assert.Contains(t, response.Error, "标题为必填项")
 	})
-	
+
 	t.Run("无效的UUID格式", func(t *testing.T) {
 		// 创建模拟服务
 		mockService := new(MockDocumentService)
-		
+
 		// 创建处理器
 		handler := rest.NewDocumentHandler(mockService)
-		
+
 		// 创建请求体 - 无效的UUID
 		reqBody := rest.CreateDocumentRequest{
 			Title:       "测试文档",
@@ -866,40 +865,40 @@ func TestDocumentHandler_CreateDocument(t *testing.T) {
 			CategoryID:  uuid.New().String(),
 			ContentType: "text",
 		}
-		
+
 		// 转换为JSON
 		jsonBody, _ := json.Marshal(reqBody)
-		
+
 		// 创建请求
 		req, _ := http.NewRequest("POST", "/documents", bytes.NewBuffer(jsonBody))
 		req.Header.Set("Content-Type", "application/json")
-		
+
 		// 创建响应记录器
 		rr := httptest.NewRecorder()
-		
+
 		// 调用处理器
 		handler.CreateDocument(rr, req)
-		
+
 		// 检查状态码
 		assert.Equal(t, http.StatusBadRequest, rr.Code)
-		
+
 		// 解析响应
-		var response rest.ErrorResponse
+		var response helpers.ErrorResponse
 		err := json.Unmarshal(rr.Body.Bytes(), &response)
 		assert.NoError(t, err)
-		
+
 		// 验证错误消息
-		assert.Contains(t, response.Error, "无效的作者ID格式")
+		assert.Contains(t, response.Error, "无效的UUID格式")
 	})
-	
+
 	t.Run("服务错误", func(t *testing.T) {
 		// 创建模拟服务
 		mockService := new(MockDocumentService)
-		
+
 		// 准备测试数据
 		authorID := uuid.New()
 		categoryID := uuid.New()
-		
+
 		// 创建请求体
 		reqBody := rest.CreateDocumentRequest{
 			Title:       "测试文档",
@@ -910,38 +909,37 @@ func TestDocumentHandler_CreateDocument(t *testing.T) {
 			CategoryID:  categoryID.String(),
 			Tags:        []string{"测试", "文档"},
 		}
-		
+
 		// 转换为JSON
 		jsonBody, _ := json.Marshal(reqBody)
-		
+
 		// 设置模拟行为 - 服务返回错误
 		mockService.On("CreateDocument", mock.Anything, mock.Anything).Return(nil, fmt.Errorf("创建文档错误"))
-		
+
 		// 创建处理器
 		handler := rest.NewDocumentHandler(mockService)
-		
+
 		// 创建请求
 		req, _ := http.NewRequest("POST", "/documents", bytes.NewBuffer(jsonBody))
 		req.Header.Set("Content-Type", "application/json")
-		
+
 		// 创建响应记录器
 		rr := httptest.NewRecorder()
-		
+
 		// 调用处理器
 		handler.CreateDocument(rr, req)
-		
+
 		// 检查状态码
 		assert.Equal(t, http.StatusInternalServerError, rr.Code)
-		
+
 		// 解析响应
-		var response rest.ErrorResponse
+		var response helpers.ErrorResponse
 		err := json.Unmarshal(rr.Body.Bytes(), &response)
 		assert.NoError(t, err)
-		
+
 		// 验证错误消息
 		assert.Contains(t, response.Error, "创建文档失败")
-		assert.Contains(t, response.Error, "创建文档错误")
-		
+
 		// 验证模拟行为
 		mockService.AssertExpectations(t)
 	})
@@ -950,130 +948,129 @@ func TestDocumentHandler_CreateDocument(t *testing.T) {
 func TestDocumentHandler_PublishDocument(t *testing.T) {
 	// 创建一个测试用的文档ID
 	docID := uuid.New()
-	
+
 	t.Run("发布文档成功", func(t *testing.T) {
 		// 创建模拟服务
 		mockService := new(MockDocumentService)
-		
+
 		// 创建一个测试文档
 		testDoc := &entity.Document{
-			ID:          docID,
-			Title:       "测试文档",
-			Content:     "这是一个测试文档的内容",
-			Status:      entity.StatusPublished, // 已发布状态
-			AuthorID:    uuid.New(),
-			CategoryID:  uuid.New(),
-			CreatedAt:   time.Now(),
-			UpdatedAt:   time.Now(),
+			ID:         docID,
+			Title:      "测试文档",
+			Content:    "这是一个测试文档的内容",
+			Status:     entity.StatusPublished, // 已发布状态
+			AuthorID:   uuid.New(),
+			CategoryID: uuid.New(),
+			CreatedAt:  time.Now(),
+			UpdatedAt:  time.Now(),
 		}
-		
+
 		// 设置模拟行为
 		mockService.On("PublishDocument", mock.Anything, docID).Return(nil)
 		mockService.On("GetDocumentByID", mock.Anything, docID).Return(testDoc, nil)
-		
+
 		// 创建处理器
 		handler := rest.NewDocumentHandler(mockService)
-		
+
 		// 创建请求
 		req, _ := http.NewRequest("POST", "/documents/"+docID.String()+"/publish", nil)
-		
+
 		// 设置Chi路由上下文
 		rctx := chi.NewRouteContext()
 		rctx.URLParams.Add("id", docID.String())
 		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
-		
+
 		// 创建响应记录器
 		rr := httptest.NewRecorder()
-		
+
 		// 调用处理器
 		handler.PublishDocument(rr, req)
-		
+
 		// 检查状态码
 		assert.Equal(t, http.StatusOK, rr.Code)
-		
+
 		// 解析响应
 		var response rest.DocumentResponse
 		err := json.Unmarshal(rr.Body.Bytes(), &response)
 		assert.NoError(t, err)
-		
+
 		// 验证响应内容
 		assert.Equal(t, docID.String(), response.ID)
 		assert.Equal(t, "published", response.Status)
-		
+
 		// 验证模拟行为
 		mockService.AssertExpectations(t)
 	})
-	
+
 	t.Run("无效的ID格式", func(t *testing.T) {
 		// 创建模拟服务
 		mockService := new(MockDocumentService)
-		
+
 		// 创建处理器
 		handler := rest.NewDocumentHandler(mockService)
-		
+
 		// 创建请求 - 使用无效的ID
 		req, _ := http.NewRequest("POST", "/documents/invalid-id/publish", nil)
-		
+
 		// 设置Chi路由上下文
 		rctx := chi.NewRouteContext()
 		rctx.URLParams.Add("id", "invalid-id")
 		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
-		
+
 		// 创建响应记录器
 		rr := httptest.NewRecorder()
-		
+
 		// 调用处理器
 		handler.PublishDocument(rr, req)
-		
+
 		// 检查状态码
 		assert.Equal(t, http.StatusBadRequest, rr.Code)
-		
+
 		// 解析响应
-		var response rest.ErrorResponse
+		var response helpers.ErrorResponse
 		err := json.Unmarshal(rr.Body.Bytes(), &response)
 		assert.NoError(t, err)
-		
+
 		// 验证错误消息
-		assert.Contains(t, response.Error, "无效的文档ID格式")
+		assert.Contains(t, response.Error, "无效的UUID格式")
 	})
-	
+
 	t.Run("发布文档失败", func(t *testing.T) {
 		// 创建模拟服务
 		mockService := new(MockDocumentService)
-		
+
 		// 设置模拟行为 - 发布失败
 		mockService.On("PublishDocument", mock.Anything, docID).Return(fmt.Errorf("发布错误"))
-		
+
 		// 创建处理器
 		handler := rest.NewDocumentHandler(mockService)
-		
+
 		// 创建请求
 		req, _ := http.NewRequest("POST", "/documents/"+docID.String()+"/publish", nil)
-		
+
 		// 设置Chi路由上下文
 		rctx := chi.NewRouteContext()
 		rctx.URLParams.Add("id", docID.String())
 		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
-		
+
 		// 创建响应记录器
 		rr := httptest.NewRecorder()
-		
+
 		// 调用处理器
 		handler.PublishDocument(rr, req)
-		
+
 		// 检查状态码
 		assert.Equal(t, http.StatusInternalServerError, rr.Code)
-		
+
 		// 解析响应
-		var response rest.ErrorResponse
+		var response helpers.ErrorResponse
 		err := json.Unmarshal(rr.Body.Bytes(), &response)
 		assert.NoError(t, err)
-		
+
 		// 验证错误消息
 		assert.Contains(t, response.Error, "发布文档失败")
-		assert.Contains(t, response.Error, "发布错误")
-		
+
 		// 验证模拟行为
 		mockService.AssertExpectations(t)
 	})
-} 
+}

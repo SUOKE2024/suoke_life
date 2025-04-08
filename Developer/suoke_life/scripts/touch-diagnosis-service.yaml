@@ -1,0 +1,581 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: touch-diagnosis-service
+  namespace: suoke
+  labels:
+    app: touch-diagnosis-service
+    tier: backend
+    category: tcm-diagnosis
+    version: v1
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "3007"
+    prometheus.io/path: "/metrics"
+    seccomp.security.alpha.kubernetes.io/pod: "runtime/default"
+    container.apparmor.security.beta.kubernetes.io/touch-diagnosis-service: "runtime/default"
+    backup.velero.io/backup-volumes: "touch-diagnosis-data,touch-diagnosis-models,touch-diagnosis-logs"
+    backup.velero.io/schedule: "daily"
+    backup.velero.io/ttl: "720h"
+    backup.velero.io/restore-test: "enabled"
+    sidecar.istio.io/statsInclusionPrefixes: "touch_,tcm_"
+    trivy.security.scanning/enabled: "true"
+    alertmanager.rules/touch-diagnosis-service: |
+      - alert: TouchDiagnosisServiceHighErrorRate
+        expr: rate(touch_http_requests_total{status=~"5.."}[5m]) / rate(touch_http_requests_total[5m]) > 0.05
+        for: 2m
+        labels:
+          severity: critical
+          service: touch-diagnosis-service
+        annotations:
+          summary: "切诊服务错误率过高"
+          description: "切诊服务在过去2分钟内错误率超过5%"
+      
+      - alert: TouchDiagnosisServiceHighLatency
+        expr: histogram_quantile(0.95, sum(rate(touch_request_duration_seconds_bucket[5m])) by (le)) > 2.0
+        for: 2m
+        labels:
+          severity: warning
+          service: touch-diagnosis-service
+        annotations:
+          summary: "切诊服务响应时间过长"
+          description: "切诊服务95%的请求响应时间超过2秒"
+      
+      - alert: TouchDiagnosisServiceDown
+        expr: up{app="touch-diagnosis-service"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: touch-diagnosis-service
+        annotations:
+          summary: "切诊服务不可用"
+          description: "切诊服务实例不可用"
+      
+      - alert: TouchDiagnosisModelPerformanceDegraded
+        expr: touch_model_accuracy < 0.85
+        for: 30m
+        labels:
+          severity: warning
+          service: touch-diagnosis-service
+        annotations:
+          summary: "切诊模型性能下降"
+          description: "切诊模型准确率低于85%，可能需要重新训练或调整"
+    grafana.dashboard/touch-diagnosis-service: |
+      {
+        "title": "切诊服务仪表盘",
+        "uid": "touch-diagnosis-dashboard",
+        "panels": [
+          {
+            "title": "请求频率",
+            "targets": [{"expr": "sum(rate(touch_http_requests_total[5m])) by (status)"}]
+          },
+          {
+            "title": "错误率",
+            "targets": [{"expr": "sum(rate(touch_http_requests_total{status=~\"5..\"}[5m])) / sum(rate(touch_http_requests_total[5m]))"}]
+          },
+          {
+            "title": "响应时间",
+            "targets": [{"expr": "histogram_quantile(0.95, sum(rate(touch_request_duration_seconds_bucket[5m])) by (le))"}]
+          },
+          {
+            "title": "模型推理时间",
+            "targets": [{"expr": "histogram_quantile(0.95, sum(rate(touch_model_inference_seconds_bucket[5m])) by (le, model))"}]
+          },
+          {
+            "title": "模型准确率",
+            "targets": [{"expr": "touch_model_accuracy"}]
+          },
+          {
+            "title": "GPU利用率",
+            "targets": [{"expr": "avg(container_gpu_utilization{namespace=\"suoke\", pod=~\"touch-diagnosis-service.*\"})"}]
+          }
+        ]
+      }
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: touch-diagnosis-service
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: touch-diagnosis-service
+        tier: backend
+        category: tcm-diagnosis
+        version: v1
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "3007"
+        prometheus.io/path: "/metrics"
+        checksum/config: "${CHECKSUM}"
+        container.security.alpha.kubernetes.io/trivy-scan: "enabled"
+        policy.sysdig.com/runtime-rules: "tcm-diagnosis-services"
+    spec:
+      priorityClassName: high-priority
+      terminationGracePeriodSeconds: 60
+      initContainers:
+      - name: model-downloader
+        image: registry.suoke.life/tcm-model-tools:latest
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          if [ ! -f /app/models/signal_processor/complete ] || [ ! -f /app/models/classifier/complete ] || [ ! -f /app/models/feature_extractor/complete ]; then
+            echo "Downloading touch diagnosis models..."
+            mkdir -p /app/models/signal_processor /app/models/classifier /app/models/feature_extractor
+            curl -L -o /tmp/signal_processor.tar.gz ${MODEL_REGISTRY}/touch-signal-processor-v1.2.0.tar.gz
+            curl -L -o /tmp/classifier.tar.gz ${MODEL_REGISTRY}/touch-classifier-resnet-v1.3.0.tar.gz
+            curl -L -o /tmp/feature_extractor.tar.gz ${MODEL_REGISTRY}/touch-feature-extractor-v1.1.0.tar.gz
+            
+            tar -xzf /tmp/signal_processor.tar.gz -C /app/models/signal_processor
+            tar -xzf /tmp/classifier.tar.gz -C /app/models/classifier
+            tar -xzf /tmp/feature_extractor.tar.gz -C /app/models/feature_extractor
+            
+            touch /app/models/signal_processor/complete
+            touch /app/models/classifier/complete
+            touch /app/models/feature_extractor/complete
+            echo "Model download complete"
+          else
+            echo "Models already exist, skipping download"
+          fi
+        env:
+        - name: MODEL_REGISTRY
+          value: "https://models.suoke.life/touch-diagnosis"
+        volumeMounts:
+        - name: touch-diagnosis-models
+          mountPath: /app/models
+        resources:
+          requests:
+            cpu: 500m
+            memory: 1Gi
+          limits:
+            cpu: 1000m
+            memory: 2Gi
+      - name: model-warmup
+        image: registry.suoke.life/touch-diagnosis-service:prod
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          echo "Warming up models..."
+          python /app/scripts/model_warmup.py --config /app/config/touch-diagnosis-config.json
+          echo "Model warmup complete"
+        volumeMounts:
+        - name: touch-diagnosis-config-volume
+          mountPath: /app/config
+          readOnly: true
+        - name: touch-diagnosis-models
+          mountPath: /app/models
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 2Gi
+            nvidia.com/gpu: "0.3"
+          requests:
+            cpu: 500m
+            memory: 1Gi
+            nvidia.com/gpu: "0.2"
+      containers:
+      - name: touch-diagnosis-service
+        image: registry.suoke.life/touch-diagnosis-service:prod
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3007
+          name: http
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: LOG_LEVEL
+          value: "info"
+        - name: DATABASE_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: touch-diagnosis-config
+              key: database_host
+        - name: DATABASE_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: touch-diagnosis-config
+              key: database_port
+        - name: DATABASE_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: touch-diagnosis-config
+              key: database_name
+        - name: DATABASE_USER
+          valueFrom:
+            secretKeyRef:
+              name: touch-diagnosis-secrets
+              key: database_user
+        - name: DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: touch-diagnosis-secrets
+              key: database_password
+        - name: REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: touch-diagnosis-config
+              key: redis_host
+        - name: REDIS_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: touch-diagnosis-config
+              key: redis_port
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: touch-diagnosis-secrets
+              key: redis_password
+        - name: MODEL_PATH
+          value: "/app/models"
+        - name: RAG_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: touch-diagnosis-config
+              key: rag_service_url
+        - name: LOOKING_DIAGNOSIS_URL
+          valueFrom:
+            configMapKeyRef:
+              name: touch-diagnosis-config
+              key: looking_diagnosis_url
+        - name: INQUIRY_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: touch-diagnosis-config
+              key: inquiry_service_url
+        - name: AUSCULTATION_OLFACTION_URL
+          valueFrom:
+            configMapKeyRef:
+              name: touch-diagnosis-config
+              key: auscultation_olfaction_url
+        - name: AUTH_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: touch-diagnosis-config
+              key: auth_service_url
+        - name: CUDA_VISIBLE_DEVICES
+          value: "0"
+        - name: TF_FORCE_GPU_ALLOW_GROWTH
+          value: "true"
+        - name: ENABLE_GPU
+          value: "true"
+        resources:
+          requests:
+            cpu: 500m
+            memory: 1Gi
+            nvidia.com/gpu: "0.3"
+          limits:
+            cpu: 2000m
+            memory: 4Gi
+            nvidia.com/gpu: "0.5"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3007
+            httpHeaders:
+            - name: X-Probe-Type
+              value: liveness
+          initialDelaySeconds: 60
+          periodSeconds: 15
+          timeoutSeconds: 5
+          failureThreshold: 3
+          successThreshold: 1
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: 3007
+            httpHeaders:
+            - name: X-Probe-Type
+              value: readiness
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
+          successThreshold: 1
+        startupProbe:
+          httpGet:
+            path: /health/startup
+            port: 3007
+            httpHeaders:
+            - name: X-Probe-Type
+              value: startup
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 30
+          successThreshold: 1
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/sh", "-c", "echo 'Gracefully shutting down touch diagnosis service' >> /app/logs/lifecycle.log && sleep 10 && pkill -SIGTERM -f 'python /app/server.py'"]
+          postStart:
+            exec:
+              command: ["/bin/sh", "-c", "echo 'Touch diagnosis service started at '$(date)' with PID '$$' and environment '${NODE_ENV} >> /app/logs/lifecycle.log && mkdir -p /app/data/temp /app/data/results"]
+        volumeMounts:
+        - name: touch-diagnosis-config-volume
+          mountPath: /app/config
+          readOnly: true
+        - name: touch-diagnosis-models
+          mountPath: /app/models
+          readOnly: true
+        - name: touch-diagnosis-data
+          mountPath: /app/data
+        - name: touch-diagnosis-tmp
+          mountPath: /tmp
+        - name: touch-diagnosis-logs
+          mountPath: /app/logs
+        securityContext:
+          allowPrivilegeEscalation: false
+          privileged: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          capabilities:
+            drop:
+              - ALL
+      volumes:
+      - name: touch-diagnosis-config-volume
+        configMap:
+          name: touch-diagnosis-config-files
+      - name: touch-diagnosis-models
+        persistentVolumeClaim:
+          claimName: touch-diagnosis-models-pvc
+      - name: touch-diagnosis-data
+        persistentVolumeClaim:
+          claimName: touch-diagnosis-data-pvc
+      - name: touch-diagnosis-tmp
+        emptyDir:
+          sizeLimit: 2Gi
+      - name: touch-diagnosis-logs
+        persistentVolumeClaim:
+          claimName: touch-diagnosis-logs-pvc
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/os
+                operator: In
+                values:
+                - linux
+              - key: accelerator
+                operator: In
+                values:
+                - gpu
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - touch-diagnosis-service
+              topologyKey: kubernetes.io/hostname
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: topology.kubernetes.io/zone
+        whenUnsatisfiable: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            app: touch-diagnosis-service
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "2"
+          - name: timeout
+            value: "3"
+          - name: attempts
+            value: "3"
+      dnsPolicy: ClusterFirst
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: touch-diagnosis-service
+  namespace: suoke
+  labels:
+    app: touch-diagnosis-service
+    tier: backend
+    category: tcm-diagnosis
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "3007"
+    prometheus.io/path: "/metrics"
+spec:
+  selector:
+    app: touch-diagnosis-service
+  ports:
+  - port: 80
+    targetPort: 3007
+    name: http
+  type: ClusterIP
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 3600
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: touch-diagnosis-service-ingress
+  namespace: suoke
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "20m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "180"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "180"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "30"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "X-Content-Type-Options: nosniff";
+      more_set_headers "X-Frame-Options: DENY";
+      more_set_headers "X-XSS-Protection: 1; mode=block";
+      more_set_headers "Strict-Transport-Security: max-age=31536000; includeSubDomains; preload";
+      more_set_headers "Content-Security-Policy: default-src 'self'; script-src 'self'; img-src 'self' data:; style-src 'self'; connect-src 'self' https://*.suoke.life";
+      more_set_headers "Referrer-Policy: strict-origin-when-cross-origin";
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/limit-rps: "10"
+    nginx.ingress.kubernetes.io/limit-connections: "5"
+spec:
+  tls:
+  - hosts:
+    - touch.suoke.life
+    secretName: touch-diagnosis-tls
+  rules:
+  - host: touch.suoke.life
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: touch-diagnosis-service
+            port:
+              number: 80
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: touch-diagnosis-service-hpa
+  namespace: suoke
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: touch-diagnosis-service
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 75
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+      - type: Percent
+        value: 100
+        periodSeconds: 60
+      - type: Pods
+        value: 4
+        periodSeconds: 60
+      selectPolicy: Max
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 10
+        periodSeconds: 60
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: touch-diagnosis-config
+  namespace: suoke
+data:
+  database_host: "mysql-service"
+  database_port: "3306"
+  database_name: "touch_diagnosis_db"
+  database_pool_min: "5"
+  database_pool_max: "20"
+  redis_host: "redis-service"
+  redis_port: "6379"
+  rag_service_url: "http://rag-service"
+  looking_diagnosis_url: "http://looking-diagnosis-service"
+  inquiry_service_url: "http://inquiry-service"
+  auscultation_olfaction_url: "http://auscultation-olfaction-service"
+  auth_service_url: "http://auth-service"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: touch-diagnosis-secrets
+  namespace: suoke
+type: Opaque
+data:
+  database_user: "dG91Y2hfc2VydmljZQ=="
+  database_password: "cGFzc3dvcmQxMjM="
+  redis_password: "cmVkaXNwYXNzd29yZDEyMw=="
+  model_encryption_key: "bW9kZWxFbmNyeXB0aW9uS2V5MTIzNDU2Nzg5MDEyMzQ1Njc4OTA="
+  data_encryption_key: "ZGF0YUVuY3J5cHRpb25LZXkxMjM0NTY3ODkwMTIzNDU2Nzg5MA=="
+  oauth_client_id: "dG91Y2gtZGlhZ25vc2lzLXNlcnZpY2U="
+  oauth_client_secret: "dGhpc2lzYXNlY3JldGtleWZvcnRvdWNoZGlhZ25vc2lzc2VydmljZQ=="
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: touch-diagnosis-data-pvc
+  namespace: suoke
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: standard
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: touch-diagnosis-models-pvc
+  namespace: suoke
+spec:
+  accessModes:
+    - ReadOnlyMany
+  resources:
+    requests:
+      storage: 15Gi
+  storageClassName: standard
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: touch-diagnosis-logs-pvc
+  namespace: suoke
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: standard 

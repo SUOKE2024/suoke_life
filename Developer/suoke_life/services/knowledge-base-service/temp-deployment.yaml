@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: knowledge-base-service
+  namespace: suoke-prod
+  labels:
+    app: knowledge-base-service
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: knowledge-base-service
+  template:
+    metadata:
+      labels:
+        app: knowledge-base-service
+        version: v1
+    spec:
+      containers:
+      - name: knowledge-base-service
+        # 使用与其他服务相同格式的镜像
+        image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/api-gateway:1.0.1
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+          name: http
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/configs
+        - name: logs-volume
+          mountPath: /app/logs
+      volumes:
+      - name: config-volume
+        configMap:
+          name: knowledge-base-mock
+      - name: logs-volume
+        persistentVolumeClaim:
+          claimName: knowledge-base-logs-pvc
+      imagePullSecrets:
+      - name: aliyun-docker-registry
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: knowledge-base-mock
+  namespace: suoke-prod
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Knowledge Base Service - Temporary</title>
+      <style>
+        body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.6; }
+        h1 { color: #35BB78; }
+        .status { background: #f4f4f4; padding: 20px; border-radius: 5px; }
+      </style>
+    </head>
+    <body>
+      <h1>知识库服务 - 临时页面</h1>
+      <div class="status">
+        <p>此页面是索克生活知识库服务的临时替代页面。</p>
+        <p>正式服务正在配置中，请稍后访问完整功能。</p>
+        <p>状态: <strong>准备中</strong></p>
+        <p>版本: <strong>临时版本 1.0</strong></p>
+        <p>时间: <strong>2025-04-07</strong></p>
+      </div>
+    </body>
+    </html>

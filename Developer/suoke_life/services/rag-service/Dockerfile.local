@@ -1,0 +1,16 @@
+FROM ubuntu:20.04
+
+WORKDIR /app
+
+# 复制健康检查脚本
+COPY scripts/health_check.sh /app/
+RUN chmod +x /app/health_check.sh
+
+# 创建必要的目录
+RUN mkdir -p /app/data /app/logs /app/models /app/config
+
+# 公开端口
+EXPOSE 8080
+
+# 运行健康检查服务
+CMD ["/app/health_check.sh"] 

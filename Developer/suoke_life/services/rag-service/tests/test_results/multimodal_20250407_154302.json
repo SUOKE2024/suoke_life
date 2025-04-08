@@ -1,0 +1,90 @@
+{
+  "success": true,
+  "features": {
+    "audio_features": {
+      "diagnosis": {
+        "body_condition": "气血平和",
+        "recommendation": "维持正常作息"
+      },
+      "pulse_rate": 72,
+      "pulse_rhythm": "规律",
+      "pulse_strength": "中等",
+      "pulse_type": "和脉"
+    },
+    "image_features": {
+      "diagnosis": {
+        "body_condition": "气血调和",
+        "recommendation": "维持良好生活习惯"
+      },
+      "tongue_coating": "薄白",
+      "tongue_color": "淡红",
+      "tongue_moisture": "正常",
+      "tongue_shape": "正常"
+    }
+  },
+  "metadata": {
+    "analysis_time": "2025-04-07T15:43:06+08:00",
+    "mode": "simulation"
+  },
+  "results": [
+    {
+      "id": "result_1",
+      "content": "舌诊在中医诊断中的应用\n\n这是关于舌诊在中医诊断中的应用的模拟搜索结果内容。此内容为测试生成，并不代表真实的信息。",
+      "source": "模拟数据源_1",
+      "score": 0.95,
+      "metadata": {
+        "result_type": "模拟结果",
+        "test_mode": true,
+        "timestamp": 1744011786
+      }
+    },
+    {
+      "id": "result_2",
+      "content": "淡红舌象的临床意义\n\n这是关于淡红舌象的临床意义的模拟搜索结果内容。此内容为测试生成，并不代表真实的信息。",
+      "source": "模拟数据源_2",
+      "score": 0.8999999999999999,
+      "metadata": {
+        "result_type": "模拟结果",
+        "test_mode": true,
+        "timestamp": 1744011786
+      }
+    },
+    {
+      "id": "result_3",
+      "content": "舌苔的形成原理与辨证\n\n这是关于舌苔的形成原理与辨证的模拟搜索结果内容。此内容为测试生成，并不代表真实的信息。",
+      "source": "模拟数据源_3",
+      "score": 0.85,
+      "metadata": {
+        "result_type": "模拟结果",
+        "test_mode": true,
+        "timestamp": 1744011786
+      }
+    },
+    {
+      "id": "result_4",
+      "content": "舌诊与脏腑关系\n\n这是关于舌诊与脏腑关系的模拟搜索结果内容。此内容为测试生成，并不代表真实的信息。",
+      "source": "模拟数据源_1",
+      "score": 0.7999999999999999,
+      "metadata": {
+        "result_type": "模拟结果",
+        "test_mode": true,
+        "timestamp": 1744011786
+      }
+    },
+    {
+      "id": "result_5",
+      "content": "中医舌诊图谱解析\n\n这是关于中医舌诊图谱解析的模拟搜索结果内容。此内容为测试生成，并不代表真实的信息。",
+      "source": "模拟数据源_2",
+      "score": 0.75,
+      "metadata": {
+        "result_type": "模拟结果",
+        "test_mode": true,
+        "timestamp": 1744011786
+      }
+    }
+  ],
+  "statistics": {
+    "confidence": 0.92,
+    "processing_time_ms": 123
+  }
+}

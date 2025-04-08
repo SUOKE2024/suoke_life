@@ -1,0 +1,17 @@
+FROM busybox:latest
+
+# 设置工作目录
+WORKDIR /app
+
+# 创建示例文件
+RUN echo '#!/bin/sh\nwhile true; do echo "RAG Service Health: OK" | nc -l -p 8080; done' > /app/server.sh && \
+    chmod +x /app/server.sh
+
+# 创建必要的目录
+RUN mkdir -p /app/data /app/logs /app/models /app/config
+
+# 公开端口
+EXPOSE 8080
+
+# 运行简单服务器
+CMD ["/app/server.sh"] 

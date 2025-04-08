@@ -9,7 +9,7 @@ import 'package:suoke_life/core/widgets/tcm/models/tongue_diagnosis_data.dart';
 class TongueDiagnosisPage extends ConsumerWidget {
   /// 外部传入的图片路径
   final String? imagePath;
-  
+
   /// 创建舌诊分析页面
   const TongueDiagnosisPage({super.key, this.imagePath});
 

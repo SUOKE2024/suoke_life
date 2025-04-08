@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: knowledge-base-typeorm-config
+  namespace: suoke-prod
+  labels:
+    app: knowledge-base-service
+    part-of: suoke-life
+data:
+  # 覆盖TypeORM配置，直接指定正确的连接信息
+  TYPEORM_CONNECTION: "postgres"
+  TYPEORM_HOST: "postgres-service"
+  TYPEORM_PORT: "5432"
+  TYPEORM_USERNAME: "suoke_user"
+  TYPEORM_PASSWORD: "suoke_password"
+  TYPEORM_DATABASE: "suoke"
+  TYPEORM_SYNCHRONIZE: "false"
+  TYPEORM_LOGGING: "true"
+  TYPEORM_ENTITIES: "dist/**/*.entity.js"
+  TYPEORM_MIGRATIONS: "dist/migrations/*.js"
+  # 设置NestJS应用使用的主机
+  HOST: "postgres-service"
+  # 禁用localhost连接
+  USE_LOCALHOST: "false"
+  # 添加调试信息
+  NODE_ENV: "production"
+  DEBUG: "typeorm:*,db:*"

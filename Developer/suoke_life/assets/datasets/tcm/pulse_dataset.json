@@ -1,0 +1,1364 @@
+[
+  {
+    "id": "pulse_0000",
+    "pulse_type": "结脉",
+    "pulse_strength": "无力",
+    "pulse_rhythm": "规律",
+    "syndrome": "内热证",
+    "constitution": "气虚质",
+    "herbs": [
+      "干姜",
+      "枳壳",
+      "大青叶",
+      "白芍"
+    ],
+    "formulas": [
+      "苍术导痰汤",
+      "清瘟败毒饮",
+      "桂枝甘草龙骨牡蛎汤"
+    ],
+    "features": [
+      "左寸弱",
+      "左尺正常",
+      "右寸弱",
+      "右尺弱"
+    ],
+    "description": "该患者脉象为结脉，无力，节律规律，辨证为内热证。",
+    "timestamp": "2025-04-07T17:12:02.938244"
+  },
+  {
+    "id": "pulse_0001",
+    "pulse_type": "数脉",
+    "pulse_strength": "有力",
+    "pulse_rhythm": "不规律",
+    "syndrome": "湿证",
+    "constitution": "气郁质",
+    "herbs": [
+      "白芷",
+      "柴胡",
+      "羌活",
+      "红花",
+      "白芍",
+      "生地黄"
+    ],
+    "formulas": [
+      "四物汤",
+      "人参养营汤"
+    ],
+    "features": [
+      "右尺正常"
+    ],
+    "description": "该患者脉象为数脉，有力，节律不规律，辨证为湿证。",
+    "timestamp": "2025-04-07T17:12:02.938270"
+  },
+  {
+    "id": "pulse_0002",
+    "pulse_type": "牢脉",
+    "pulse_strength": "有力",
+    "pulse_rhythm": "规律",
+    "syndrome": "血虚证",
+    "constitution": "血瘀质",
+    "herbs": [
+      "连翘",
+      "防风",
+      "生地黄",
+      "葛根",
+      "白芍",
+      "熟地黄"
+    ],
+    "formulas": [
+      "生脉散",
+      "百合固金汤"
+    ],
+    "features": [
+      "左寸弱",
+      "右关弱",
+      "右尺强"
+    ],
+    "description": "该患者脉象为牢脉，有力，节律规律，辨证为血虚证。",
+    "timestamp": "2025-04-07T17:12:02.938295"
+  },
+  {
+    "id": "pulse_0003",
+    "pulse_type": "濡脉",
+    "pulse_strength": "有力",
+    "pulse_rhythm": "规律",
+    "syndrome": "湿证",
+    "constitution": "湿热质",
+    "herbs": [
+      "附子",
+      "板蓝根",
+      "肉桂",
+      "白芷",
+      "枳壳",
+      "白芍",
+      "杏仁",
+      "连翘"
+    ],
+    "formulas": [
+      "桂枝汤",
+      "银翘散"
+    ],
+    "features": [
+      "左寸弱",
+      "左关弱",
+      "左尺弱",
+      "右寸弱",
+      "右尺弱"
+    ],
+    "description": "该患者脉象为濡脉，有力，节律规律，辨证为湿证。",
+    "timestamp": "2025-04-07T17:12:02.938349"
+  },
+  {
+    "id": "pulse_0004",
+    "pulse_type": "芤脉",
+    "pulse_strength": "有力",
+    "pulse_rhythm": "规律",
+    "syndrome": "气虚证",
+    "constitution": "阴虚质",
+    "herbs": [
+      "桑叶",
+      "葛根",
+      "独活",
+      "石膏"
+    ],
+    "formulas": [
+      "麦门冬汤",
+      "逍遥散"
+    ],
+    "features": [
+      "左关弱",
+      "左尺正常",
+      "右尺强"
+    ],
+    "description": "该患者脉象为芤脉，有力，节律规律，辨证为气虚证。",
+    "timestamp": "2025-04-07T17:12:02.938365"
+  },
+  {
+    "id": "pulse_0005",
+    "pulse_type": "细脉",
+    "pulse_strength": "无力",
+    "pulse_rhythm": "规律",
+    "syndrome": "气陷证",
+    "constitution": "血瘀质",
+    "herbs": [
+      "麻黄",
+      "干姜",
+      "荆芥",
+      "熟地黄",
+      "黄连"
+    ],
+    "formulas": [
+      "苍术导痰汤",
+      "桑菊饮"
+    ],
+    "features": [
+      "左寸正常",
+      "左关强",
+      "左尺强",
+      "右寸正常"
+    ],
+    "description": "该患者脉象为细脉，无力，节律规律，辨证为气陷证。",
+    "timestamp": "2025-04-07T17:12:02.938375"
+  },
+  {
+    "id": "pulse_0006",
+    "pulse_type": "浮脉",
+    "pulse_strength": "无力",
+    "pulse_rhythm": "规律",
+    "syndrome": "风热证",
+    "constitution": "湿热质",
+    "herbs": [
+      "石膏",
+      "白芷",
+      "前胡",
+      "附子",
+      "板蓝根"
+    ],
+    "formulas": [
+      "半夏白术天麻汤",
+      "葛根汤",
+      "猪苓汤"
+    ],
+    "features": [
+      "左寸正常",
+      "左关弱",
+      "右关正常",
+      "右尺弱"
+    ],
+    "description": "该患者脉象为浮脉，无力，节律规律，辨证为风热证。",
+    "timestamp": "2025-04-07T17:12:02.938385"
+  },
+  {
+    "id": "pulse_0007",
+    "pulse_type": "迟脉",
+    "pulse_strength": "无力",
+    "pulse_rhythm": "不规律",
+    "syndrome": "血虚证",
+    "constitution": "湿热质",
+    "herbs": [
+      "桑叶",
+      "枳壳",
+      "黄连",
+      "前胡",
+      "半夏",
+      "肉桂"
+    ],
+    "formulas": [
+      "黄连解毒汤",
+      "桂枝甘草龙骨牡蛎汤",
+      "人参养营汤"
+    ],
+    "features": [
+      "右寸弱",
+      "右尺强"
+    ],
+    "description": "该患者脉象为迟脉，无力，节律不规律，辨证为血虚证。",
+    "timestamp": "2025-04-07T17:12:02.938394"
+  },
+  {
+    "id": "pulse_0008",
+    "pulse_type": "濡脉",
+    "pulse_strength": "有力",
+    "pulse_rhythm": "不规律",
+    "syndrome": "火证",
+    "constitution": "平和质",
+    "herbs": [
+      "藁本",
+      "桑叶",
+      "干姜",
+      "人参",
+      "熟地黄",
+      "柴胡"
+    ],
+    "formulas": [
+      "大青龙汤"
+    ],
+    "features": [
+      "左尺正常",
+      "右寸强",
+      "右关正常"
+    ],
+    "description": "该患者脉象为濡脉，有力，节律不规律，辨证为火证。",
+    "timestamp": "2025-04-07T17:12:02.938404"
+  },
+  {
+    "id": "pulse_0009",
+    "pulse_type": "微脉",
+    "pulse_strength": "中等",
+    "pulse_rhythm": "不规律",
+    "syndrome": "阳虚证",
+    "constitution": "阳虚质",
+    "herbs": [
+      "杏仁",
+      "藁本",
+      "红花",
+      "石膏",
+      "生地黄",
+      "桔梗"
+    ],
+    "formulas": [
+      "炙甘草汤",
+      "大青龙汤",
+      "桂枝甘草龙骨牡蛎汤"
+    ],
+    "features": [
+      "左关弱",
+      "左尺正常",
+      "右寸强",
+      "右尺强"
+    ],
+    "description": "该患者脉象为微脉，中等，节律不规律，辨证为阳虚证。",
+    "timestamp": "2025-04-07T17:12:02.938414"
+  },
+  {
+    "id": "pulse_0010",
+    "pulse_type": "细脉",
+    "pulse_strength": "无力",
+    "pulse_rhythm": "不规律",
+    "syndrome": "暑证",
+    "constitution": "痰湿质",
+    "herbs": [
+      "肉桂",
+      "细辛",
+      "熟地黄"
+    ],
+    "formulas": [
+      "二陈汤",
+      "紫雪散",
+      "导赤散"
+    ],
+    "features": [
+      "左寸弱",
+      "左关强",
+      "右寸弱",
+      "右关强",
+      "右尺弱"
+    ],
+    "description": "该患者脉象为细脉，无力，节律不规律，辨证为暑证。",
+    "timestamp": "2025-04-07T17:12:02.938423"
+  },
+  {
+    "id": "pulse_0011",
+    "pulse_type": "紧脉",
+    "pulse_strength": "无力",
+    "pulse_rhythm": "规律",
+    "syndrome": "血热证",
+    "constitution": "湿热质",
+    "herbs": [
+      "杏仁",
+      "细辛",
+      "前胡",
+      "白术",
+      "知母",
+      "红花",
+      "大青叶",
+      "黄连"
+    ],
+    "formulas": [
+      "六味地黄丸",
+      "安宫牛黄丸",
+      "小青龙汤"
+    ],
+    "features": [
+      "左关强",
+      "右寸正常",
+      "右关弱",
+      "右尺强"
+    ],
+    "description": "该患者脉象为紧脉，无力，节律规律，辨证为血热证。",
+    "timestamp": "2025-04-07T17:12:02.938432"
+  },
+  {
+    "id": "pulse_0012",
+    "pulse_type": "伏脉",
+    "pulse_strength": "有力",
+    "pulse_rhythm": "规律",
+    "syndrome": "气逆证",
+    "constitution": "阳虚质",
+    "herbs": [
+      "黄柏",
+      "白芍",
+      "麻黄"
+    ],
+    "formulas": [
+      "紫雪散",
+      "左金丸"
+    ],
+    "features": [
+      "左寸弱",
+      "右尺正常"
+    ],
+    "description": "该患者脉象为伏脉，有力，节律规律，辨证为气逆证。",
+    "timestamp": "2025-04-07T17:12:02.938439"
+  },
+  {
+    "id": "pulse_0013",
+    "pulse_type": "濡脉",
+    "pulse_strength": "无力",
+    "pulse_rhythm": "不规律",
+    "syndrome": "水饮证",
+    "constitution": "阳虚质",
+    "herbs": [
+      "干姜",
+      "茯苓",
+      "丹参",
+      "前胡",
+      "半夏"
+    ],
+    "formulas": [
+      "四物汤",
+      "百合固金汤",
+      "柴胡疏肝散"
+    ],
+    "features": [
+      "左寸弱",
+      "左关弱",
+      "左尺弱",
+      "右寸弱",
+      "右关弱"
+    ],
+    "description": "该患者脉象为濡脉，无力，节律不规律，辨证为水饮证。",
+    "timestamp": "2025-04-07T17:12:02.938449"
+  },
+  {
+    "id": "pulse_0014",
+    "pulse_type": "濡脉",
+    "pulse_strength": "中等",
+    "pulse_rhythm": "不规律",
+    "syndrome": "气陷证",
+    "constitution": "平和质",
+    "herbs": [
+      "白术",
+      "当归",
+      "菊花",
+      "板蓝根",
+      "知母",
+      "枳壳"
+    ],
+    "formulas": [
+      "逍遥散"
+    ],
+    "features": [
+      "左寸强",
+      "左关正常",
+      "左尺正常",
+      "右尺正常"
+    ],
+    "description": "该患者脉象为濡脉，中等，节律不规律，辨证为气陷证。",
+    "timestamp": "2025-04-07T17:12:02.938459"
+  },
+  {
+    "id": "pulse_0015",
+    "pulse_type": "缓脉",
+    "pulse_strength": "有力",
+    "pulse_rhythm": "不规律",
+    "syndrome": "阳虚证",
+    "constitution": "湿热质",
+    "herbs": [
+      "防风",
+      "半夏",
+      "茯苓",
+      "当归",
+      "白芍",
+      "枳壳",
+      "薄荷"
+    ],
+    "formulas": [
+      "泻白散",
+      "麦门冬汤"
+    ],
+    "features": [
+      "左关正常",
+      "左尺正常",
+      "右寸强",
+      "右关强"
+    ],
+    "description": "该患者脉象为缓脉，有力，节律不规律，辨证为阳虚证。",
+    "timestamp": "2025-04-07T17:12:02.938468"
+  },
+  {
+    "id": "pulse_0016",
+    "pulse_type": "牢脉",
+    "pulse_strength": "有力",
+    "pulse_rhythm": "规律",
+    "syndrome": "气陷证",
+    "constitution": "阳虚质",
+    "herbs": [
+      "牛蒡子",
+      "黄芩",
+      "大青叶",
+      "柴胡",
+      "栀子",
+      "板蓝根",
+      "连翘"
+    ],
+    "formulas": [
+      "柴胡疏肝散",
+      "四逆散"
+    ],
+    "features": [
+      "左关弱",
+      "右关弱"
+    ],
+    "description": "该患者脉象为牢脉，有力，节律规律，辨证为气陷证。",
+    "timestamp": "2025-04-07T17:12:02.938476"
+  },
+  {
+    "id": "pulse_0017",
+    "pulse_type": "浮脉",
+    "pulse_strength": "中等",
+    "pulse_rhythm": "不规律",
+    "syndrome": "气逆证",
+    "constitution": "气郁质",
+    "herbs": [
+      "羌活",
+      "栀子",
+      "当归",
+      "金银花",
+      "黄柏"
+    ],
+    "formulas": [
+      "清瘟败毒饮"
+    ],
+    "features": [
+      "左寸弱",
+      "右关强",
+      "右尺正常"
+    ],
+    "description": "该患者脉象为浮脉，中等，节律不规律，辨证为气逆证。",
+    "timestamp": "2025-04-07T17:12:02.938485"
+  },
+  {
+    "id": "pulse_0018",
+    "pulse_type": "涩脉",
+    "pulse_strength": "有力",
+    "pulse_rhythm": "不规律",
+    "syndrome": "气陷证",
+    "constitution": "气郁质",
+    "herbs": [
+      "白芷",
+      "黄芩",
+      "肉桂",
+      "防风",
+      "羌活",
+      "板蓝根"
+    ],
+    "formulas": [
+      "甘麦大枣汤"
+    ],
+    "features": [
+      "左关正常",
+      "左尺强",
+      "右寸强"
+    ],
+    "description": "该患者脉象为涩脉，有力，节律不规律，辨证为气陷证。",
+    "timestamp": "2025-04-07T17:12:02.938493"
+  },
+  {
+    "id": "pulse_0019",
+    "pulse_type": "牢脉",
+    "pulse_strength": "有力",
+    "pulse_rhythm": "不规律",
+    "syndrome": "风湿证",
+    "constitution": "平和质",
+    "herbs": [
+      "知母",
+      "杏仁",
+      "附子",
+      "枳壳",
+      "桔梗"
+    ],
+    "formulas": [
+      "黄连解毒汤",
+      "桑菊饮",
+      "归脾汤"
+    ],
+    "features": [
+      "左关正常",
+      "右尺强"
+    ],
+    "description": "该患者脉象为牢脉，有力，节律不规律，辨证为风湿证。",
+    "timestamp": "2025-04-07T17:12:02.938501"
+  },
+  {
+    "id": "pulse_0020",
+    "pulse_type": "滑脉",
+    "pulse_strength": "无力",
+    "pulse_rhythm": "规律",
+    "syndrome": "血热证",
+    "constitution": "气郁质",
+    "herbs": [
+      "桑叶",
+      "黄芪",
+      "藁本"
+    ],
+    "formulas": [
+      "沙参麦冬汤"
+    ],
+    "features": [
+      "左关弱",
+      "左尺强",
+      "右尺强"
+    ],
+    "description": "该患者脉象为滑脉，无力，节律规律，辨证为血热证。",
+    "timestamp": "2025-04-07T17:12:02.938509"
+  },
+  {
+    "id": "pulse_0021",
+    "pulse_type": "动脉",
+    "pulse_strength": "有力",
+    "pulse_rhythm": "规律",
+    "syndrome": "燥证",
+    "constitution": "阳虚质",
+    "herbs": [
+      "前胡",
+      "枳实",
+      "柴胡",
+      "人参",
+      "天麻"
+    ],
+    "formulas": [
+      "柴胡疏肝散",
+      "猪苓汤"
+    ],
+    "features": [
+      "左寸强",
+      "左尺强",
+      "右寸强"
+    ],
+    "description": "该患者脉象为动脉，有力，节律规律，辨证为燥证。",
+    "timestamp": "2025-04-07T17:12:02.938517"
+  },
+  {
+    "id": "pulse_0022",
+    "pulse_type": "濡脉",
+    "pulse_strength": "中等",
+    "pulse_rhythm": "规律",
+    "syndrome": "津液亏虚",
+    "constitution": "湿热质",
+    "herbs": [
+      "当归",
+      "陈皮",
+      "白术"
+    ],
+    "formulas": [
+      "清营汤",
+      "苍术导痰汤"
+    ],
+    "features": [
+      "左关正常",
+      "右关弱",
+      "右尺弱"
+    ],
+    "description": "该患者脉象为濡脉，中等，节律规律，辨证为津液亏虚。",
+    "timestamp": "2025-04-07T17:12:02.938525"
+  },
+  {
+    "id": "pulse_0023",
+    "pulse_type": "微脉",
+    "pulse_strength": "无力",
+    "pulse_rhythm": "不规律",
+    "syndrome": "血瘀证",
+    "constitution": "湿热质",
+    "herbs": [
+      "陈皮",
+      "白芷",
+      "大青叶",
+      "葛根"
+    ],
+    "formulas": [
+      "补中益气汤",
+      "五苓散"
+    ],
+    "features": [
+      "左关弱",
+      "右尺强"
+    ],
+    "description": "该患者脉象为微脉，无力，节律不规律，辨证为血瘀证。",
+    "timestamp": "2025-04-07T17:12:02.938533"
+  },
+  {
+    "id": "pulse_0024",
+    "pulse_type": "虚脉",
+    "pulse_strength": "有力",
+    "pulse_rhythm": "不规律",
+    "syndrome": "气逆证",
+    "constitution": "湿热质",
+    "herbs": [
+      "川芎",
+      "黄芩",
+      "陈皮",
+      "白芍",
+      "桔梗",
+      "黄柏"
+    ],
+    "formulas": [
+      "泻白散",
+      "升麻葛根汤",
+      "苓桂术甘汤"
+    ],
+    "features": [
+      "左寸强",
+      "左关正常",
+      "左尺强"
+    ],
+    "description": "该患者脉象为虚脉，有力，节律不规律，辨证为气逆证。",
+    "timestamp": "2025-04-07T17:12:02.938541"
+  },
+  {
+    "id": "pulse_0025",
+    "pulse_type": "浮脉",
+    "pulse_strength": "有力",
+    "pulse_rhythm": "规律",
+    "syndrome": "痰饮证",
+    "constitution": "湿热质",
+    "herbs": [
+      "柴胡",
+      "陈皮",
+      "黄芪",
+      "黄芩"
+    ],
+    "formulas": [
+      "葛根汤"
+    ],
+    "features": [
+      "左寸正常",
+      "左关强",
+      "左尺强",
+      "右寸弱",
+      "右关强",
+      "右尺弱"
+    ],
+    "description": "该患者脉象为浮脉，有力，节律规律，辨证为痰饮证。",
+    "timestamp": "2025-04-07T17:12:02.938551"
+  },
+  {
+    "id": "pulse_0026",
+    "pulse_type": "结脉",
+    "pulse_strength": "有力",
+    "pulse_rhythm": "规律",
+    "syndrome": "风寒证",
+    "constitution": "阳虚质",
+    "herbs": [
+      "半夏",
+      "杏仁",
+      "葛根",
+      "肉桂",
+      "生姜",
+      "桔梗",
+      "天麻"
+    ],
+    "formulas": [
+      "补中益气汤"
+    ],
+    "features": [
+      "左寸强",
+      "左关正常",
+      "左尺强",
+      "右尺强"
+    ],
+    "description": "该患者脉象为结脉，有力，节律规律，辨证为风寒证。",
+    "timestamp": "2025-04-07T17:12:02.938560"
+  },
+  {
+    "id": "pulse_0027",
+    "pulse_type": "缓脉",
+    "pulse_strength": "有力",
+    "pulse_rhythm": "规律",
+    "syndrome": "暑证",
+    "constitution": "血瘀质",
+    "herbs": [
+      "生地黄",
+      "栀子",
+      "板蓝根",
+      "知母",
+      "金银花",
+      "黄芪",
+      "菊花"
+    ],
+    "formulas": [
+      "五苓散"
+    ],
+    "features": [
+      "左寸强",
+      "左关强",
+      "右寸强",
+      "右关强"
+    ],
+    "description": "该患者脉象为缓脉，有力，节律规律，辨证为暑证。",
+    "timestamp": "2025-04-07T17:12:02.938568"
+  },
+  {
+    "id": "pulse_0028",
+    "pulse_type": "虚脉",
+    "pulse_strength": "中等",
+    "pulse_rhythm": "不规律",
+    "syndrome": "阴虚证",
+    "constitution": "气郁质",
+    "herbs": [
+      "陈皮",
+      "荆芥",
+      "大青叶",
+      "红花",
+      "杏仁",
+      "当归",
+      "知母",
+      "石膏"
+    ],
+    "formulas": [
+      "葛根汤",
+      "苍术导痰汤"
+    ],
+    "features": [
+      "左尺强",
+      "右寸正常",
+      "右尺正常"
+    ],
+    "description": "该患者脉象为虚脉，中等，节律不规律，辨证为阴虚证。",
+    "timestamp": "2025-04-07T17:12:02.938578"
+  },
+  {
+    "id": "pulse_0029",
+    "pulse_type": "微脉",
+    "pulse_strength": "无力",
+    "pulse_rhythm": "不规律",
+    "syndrome": "气逆证",
+    "constitution": "血瘀质",
+    "herbs": [
+      "杏仁",
+      "独活",
+      "连翘",
+      "半夏",
+      "黄芩",
+      "熟地黄",
+      "红花",
+      "白术"
+    ],
+    "formulas": [
+      "麻黄汤",
+      "沙参麦冬汤"
+    ],
+    "features": [
+      "左尺强",
+      "右关弱",
+      "右尺弱"
+    ],
+    "description": "该患者脉象为微脉，无力，节律不规律，辨证为气逆证。",
+    "timestamp": "2025-04-07T17:12:02.938587"
+  },
+  {
+    "id": "pulse_0030",
+    "pulse_type": "伏脉",
+    "pulse_strength": "中等",
+    "pulse_rhythm": "规律",
+    "syndrome": "阳虚证",
+    "constitution": "气虚质",
+    "herbs": [
+      "杏仁",
+      "黄柏",
+      "独活",
+      "黄芩",
+      "麻黄"
+    ],
+    "formulas": [
+      "紫雪散",
+      "左金丸",
+      "大青龙汤"
+    ],
+    "features": [
+      "左寸正常",
+      "左关强",
+      "右关正常",
+      "右尺强"
+    ],
+    "description": "该患者脉象为伏脉，中等，节律规律，辨证为阳虚证。",
+    "timestamp": "2025-04-07T17:12:02.938595"
+  },
+  {
+    "id": "pulse_0031",
+    "pulse_type": "沉脉",
+    "pulse_strength": "无力",
+    "pulse_rhythm": "不规律",
+    "syndrome": "痰饮证",
+    "constitution": "血瘀质",
+    "herbs": [
+      "人参",
+      "白芷",
+      "枳壳",
+      "白术",
+      "细辛",
+      "荆芥",
+      "甘草"
+    ],
+    "formulas": [
+      "桑菊饮"
+    ],
+    "features": [
+      "左尺强",
+      "右寸强",
+      "右关正常",
+      "右尺强"
+    ],
+    "description": "该患者脉象为沉脉，无力，节律不规律，辨证为痰饮证。",
+    "timestamp": "2025-04-07T17:12:02.938603"
+  },
+  {
+    "id": "pulse_0032",
+    "pulse_type": "虚脉",
+    "pulse_strength": "中等",
+    "pulse_rhythm": "规律",
+    "syndrome": "热证",
+    "constitution": "湿热质",
+    "herbs": [
+      "白术",
+      "人参",
+      "甘草",
+      "细辛",
+      "菊花",
+      "生姜",
+      "干姜"
+    ],
+    "formulas": [
+      "黄连解毒汤",
+      "苍术导痰汤"
+    ],
+    "features": [
+      "右寸强",
+      "右关强"
+    ],
+    "description": "该患者脉象为虚脉，中等，节律规律，辨证为热证。",
+    "timestamp": "2025-04-07T17:12:02.938611"
+  },
+  {
+    "id": "pulse_0033",
+    "pulse_type": "濡脉",
+    "pulse_strength": "有力",
+    "pulse_rhythm": "规律",
+    "syndrome": "气逆证",
+    "constitution": "血瘀质",
+    "herbs": [
+      "生地黄",
+      "川芎",
+      "菊花"
+    ],
+    "formulas": [
+      "猪苓汤",
+      "补中益气汤",
+      "沙参麦冬汤"
+    ],
+    "features": [
+      "左关正常",
+      "右关弱",
+      "右尺正常"
+    ],
+    "description": "该患者脉象为濡脉，有力，节律规律，辨证为气逆证。",
+    "timestamp": "2025-04-07T17:12:02.938620"
+  },
+  {
+    "id": "pulse_0034",
+    "pulse_type": "牢脉",
+    "pulse_strength": "有力",
+    "pulse_rhythm": "不规律",
+    "syndrome": "风寒证",
+    "constitution": "阴虚质",
+    "herbs": [
+      "半夏",
+      "当归",
+      "黄柏"
+    ],
+    "formulas": [
+      "四物汤",
+      "麦门冬汤"
+    ],
+    "features": [
+      "左寸弱",
+      "左尺强",
+      "右寸正常",
+      "右关弱",
+      "右尺弱"
+    ],
+    "description": "该患者脉象为牢脉，有力，节律不规律，辨证为风寒证。",
+    "timestamp": "2025-04-07T17:12:02.938628"
+  },
+  {
+    "id": "pulse_0035",
+    "pulse_type": "长脉",
+    "pulse_strength": "有力",
+    "pulse_rhythm": "规律",
+    "syndrome": "寒证",
+    "constitution": "气虚质",
+    "herbs": [
+      "半夏",
+      "防风",
+      "知母",
+      "菊花",
+      "人参",
+      "栀子"
+    ],
+    "formulas": [
+      "桑菊饮"
+    ],
+    "features": [
+      "左寸强",
+      "左关正常",
+      "右寸正常",
+      "右关强",
+      "右尺强"
+    ],
+    "description": "该患者脉象为长脉，有力，节律规律，辨证为寒证。",
+    "timestamp": "2025-04-07T17:12:02.938637"
+  },
+  {
+    "id": "pulse_0036",
+    "pulse_type": "紧脉",
+    "pulse_strength": "中等",
+    "pulse_rhythm": "规律",
+    "syndrome": "痰证",
+    "constitution": "痰湿质",
+    "herbs": [
+      "荆芥",
+      "当归",
+      "生地黄",
+      "前胡",
+      "栀子",
+      "大青叶",
+      "杏仁",
+      "柴胡"
+    ],
+    "formulas": [
+      "银翘散",
+      "柴胡疏肝散"
+    ],
+    "features": [
+      "右尺正常"
+    ],
+    "description": "该患者脉象为紧脉，中等，节律规律，辨证为痰证。",
+    "timestamp": "2025-04-07T17:12:02.938645"
+  },
+  {
+    "id": "pulse_0037",
+    "pulse_type": "洪脉",
+    "pulse_strength": "中等",
+    "pulse_rhythm": "规律",
+    "syndrome": "燥证",
+    "constitution": "湿热质",
+    "herbs": [
+      "蝉蜕",
+      "川芎",
+      "桔梗",
+      "知母",
+      "荆芥",
+      "细辛",
+      "牛蒡子"
+    ],
+    "formulas": [
+      "银翘散"
+    ],
+    "features": [
+      "左寸弱",
+      "左关正常",
+      "左尺正常",
+      "右关正常"
+    ],
+    "description": "该患者脉象为洪脉，中等，节律规律，辨证为燥证。",
+    "timestamp": "2025-04-07T17:12:02.938654"
+  },
+  {
+    "id": "pulse_0038",
+    "pulse_type": "短脉",
+    "pulse_strength": "无力",
+    "pulse_rhythm": "规律",
+    "syndrome": "血瘀证",
+    "constitution": "气虚质",
+    "herbs": [
+      "葛根",
+      "羌活",
+      "天麻",
+      "菊花",
+      "当归",
+      "蝉蜕"
+    ],
+    "formulas": [
+      "补中益气汤",
+      "五苓散"
+    ],
+    "features": [
+      "左寸弱",
+      "左尺正常",
+      "右尺正常"
+    ],
+    "description": "该患者脉象为短脉，无力，节律规律，辨证为血瘀证。",
+    "timestamp": "2025-04-07T17:12:02.938663"
+  },
+  {
+    "id": "pulse_0039",
+    "pulse_type": "代脉",
+    "pulse_strength": "无力",
+    "pulse_rhythm": "规律",
+    "syndrome": "津液亏虚",
+    "constitution": "气郁质",
+    "herbs": [
+      "甘草",
+      "栀子",
+      "生姜",
+      "人参"
+    ],
+    "formulas": [
+      "甘麦大枣汤",
+      "消风散"
+    ],
+    "features": [
+      "左关强"
+    ],
+    "description": "该患者脉象为代脉，无力，节律规律，辨证为津液亏虚。",
+    "timestamp": "2025-04-07T17:12:02.938670"
+  },
+  {
+    "id": "pulse_0040",
+    "pulse_type": "迟脉",
+    "pulse_strength": "无力",
+    "pulse_rhythm": "规律",
+    "syndrome": "风湿证",
+    "constitution": "平和质",
+    "herbs": [
+      "黄芪",
+      "丹参",
+      "薄荷",
+      "大青叶"
+    ],
+    "formulas": [
+      "真武汤"
+    ],
+    "features": [
+      "左尺弱",
+      "右寸弱",
+      "右关强",
+      "右尺正常"
+    ],
+    "description": "该患者脉象为迟脉，无力，节律规律，辨证为风湿证。",
+    "timestamp": "2025-04-07T17:12:02.938678"
+  },
+  {
+    "id": "pulse_0041",
+    "pulse_type": "细脉",
+    "pulse_strength": "中等",
+    "pulse_rhythm": "不规律",
+    "syndrome": "气陷证",
+    "constitution": "气虚质",
+    "herbs": [
+      "葛根",
+      "细辛",
+      "金银花",
+      "肉桂",
+      "藁本",
+      "枳实",
+      "黄芪",
+      "前胡"
+    ],
+    "formulas": [
+      "大柴胡汤"
+    ],
+    "features": [
+      "左寸强",
+      "左尺强",
+      "右寸弱",
+      "右关正常"
+    ],
+    "description": "该患者脉象为细脉，中等，节律不规律，辨证为气陷证。",
+    "timestamp": "2025-04-07T17:12:02.938687"
+  },
+  {
+    "id": "pulse_0042",
+    "pulse_type": "弦脉",
+    "pulse_strength": "无力",
+    "pulse_rhythm": "规律",
+    "syndrome": "内热证",
+    "constitution": "阳虚质",
+    "herbs": [
+      "红花",
+      "熟地黄",
+      "当归",
+      "甘草",
+      "肉桂",
+      "菊花",
+      "生地黄",
+      "前胡"
+    ],
+    "formulas": [
+      "泻白散",
+      "猪苓汤",
+      "四逆散"
+    ],
+    "features": [
+      "左寸强",
+      "左关正常",
+      "左尺弱",
+      "右关正常"
+    ],
+    "description": "该患者脉象为弦脉，无力，节律规律，辨证为内热证。",
+    "timestamp": "2025-04-07T17:12:02.938698"
+  },
+  {
+    "id": "pulse_0043",
+    "pulse_type": "实脉",
+    "pulse_strength": "有力",
+    "pulse_rhythm": "不规律",
+    "syndrome": "风寒证",
+    "constitution": "阳虚质",
+    "herbs": [
+      "枳壳",
+      "附子",
+      "细辛",
+      "独活"
+    ],
+    "formulas": [
+      "麻黄汤"
+    ],
+    "features": [
+      "左关弱",
+      "左尺强",
+      "右寸强",
+      "右关弱"
+    ],
+    "description": "该患者脉象为实脉，有力，节律不规律，辨证为风寒证。",
+    "timestamp": "2025-04-07T17:12:02.938705"
+  },
+  {
+    "id": "pulse_0044",
+    "pulse_type": "涩脉",
+    "pulse_strength": "中等",
+    "pulse_rhythm": "规律",
+    "syndrome": "火证",
+    "constitution": "阳虚质",
+    "herbs": [
+      "白术",
+      "麻黄",
+      "防风",
+      "茯苓",
+      "薄荷",
+      "板蓝根"
+    ],
+    "formulas": [
+      "防风通圣散",
+      "苍术导痰汤",
+      "大柴胡汤"
+    ],
+    "features": [
+      "左寸正常",
+      "左尺弱",
+      "右尺强"
+    ],
+    "description": "该患者脉象为涩脉，中等，节律规律，辨证为火证。",
+    "timestamp": "2025-04-07T17:12:02.938714"
+  },
+  {
+    "id": "pulse_0045",
+    "pulse_type": "芤脉",
+    "pulse_strength": "中等",
+    "pulse_rhythm": "不规律",
+    "syndrome": "阴虚证",
+    "constitution": "特禀质",
+    "herbs": [
+      "艾叶",
+      "枳壳",
+      "栀子",
+      "藁本",
+      "黄芪",
+      "天麻",
+      "石膏",
+      "菊花"
+    ],
+    "formulas": [
+      "炙甘草汤",
+      "四物汤"
+    ],
+    "features": [
+      "左寸强",
+      "左关正常",
+      "左尺弱",
+      "右寸强"
+    ],
+    "description": "该患者脉象为芤脉，中等，节律不规律，辨证为阴虚证。",
+    "timestamp": "2025-04-07T17:12:02.938723"
+  },
+  {
+    "id": "pulse_0046",
+    "pulse_type": "伏脉",
+    "pulse_strength": "中等",
+    "pulse_rhythm": "规律",
+    "syndrome": "内热证",
+    "constitution": "阳虚质",
+    "herbs": [
+      "甘草",
+      "黄柏",
+      "生地黄",
+      "知母",
+      "藁本",
+      "枳实",
+      "葛根",
+      "麻黄"
+    ],
+    "formulas": [
+      "黄连解毒汤",
+      "四物汤",
+      "真武汤"
+    ],
+    "features": [
+      "左寸弱",
+      "左尺弱",
+      "右寸正常",
+      "右尺弱"
+    ],
+    "description": "该患者脉象为伏脉，中等，节律规律，辨证为内热证。",
+    "timestamp": "2025-04-07T17:12:02.938732"
+  },
+  {
+    "id": "pulse_0047",
+    "pulse_type": "紧脉",
+    "pulse_strength": "无力",
+    "pulse_rhythm": "不规律",
+    "syndrome": "风寒证",
+    "constitution": "平和质",
+    "herbs": [
+      "附子",
+      "枳壳",
+      "知母",
+      "菊花",
+      "陈皮",
+      "红花"
+    ],
+    "formulas": [
+      "大青龙汤",
+      "四君子汤",
+      "四物汤"
+    ],
+    "features": [
+      "左尺强",
+      "右关正常",
+      "右尺正常"
+    ],
+    "description": "该患者脉象为紧脉，无力，节律不规律，辨证为风寒证。",
+    "timestamp": "2025-04-07T17:12:02.938745"
+  },
+  {
+    "id": "pulse_0048",
+    "pulse_type": "牢脉",
+    "pulse_strength": "无力",
+    "pulse_rhythm": "规律",
+    "syndrome": "血热证",
+    "constitution": "湿热质",
+    "herbs": [
+      "知母",
+      "红花",
+      "附子",
+      "白芷",
+      "麻黄",
+      "人参",
+      "桔梗",
+      "独活"
+    ],
+    "formulas": [
+      "防风通圣散"
+    ],
+    "features": [
+      "左关强",
+      "左尺正常",
+      "右寸正常",
+      "右关弱"
+    ],
+    "description": "该患者脉象为牢脉，无力，节律规律，辨证为血热证。",
+    "timestamp": "2025-04-07T17:12:02.938754"
+  },
+  {
+    "id": "pulse_0049",
+    "pulse_type": "短脉",
+    "pulse_strength": "无力",
+    "pulse_rhythm": "不规律",
+    "syndrome": "燥证",
+    "constitution": "平和质",
+    "herbs": [
+      "板蓝根",
+      "白芍",
+      "防风",
+      "薄荷",
+      "蝉蜕",
+      "羌活",
+      "黄芪",
+      "白芷"
+    ],
+    "formulas": [
+      "大柴胡汤",
+      "清瘟败毒饮"
+    ],
+    "features": [
+      "左寸弱",
+      "左关强",
+      "左尺正常",
+      "右关弱",
+      "右尺强"
+    ],
+    "description": "该患者脉象为短脉，无力，节律不规律，辨证为燥证。",
+    "timestamp": "2025-04-07T17:12:02.938763"
+  }
+]

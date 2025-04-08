@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: knowledge-graph-service
+  namespace: suoke-prod
+  labels:
+    app: knowledge-graph-service
+    tier: data
+    component: knowledge-graph
+  annotations:
+    service.beta.kubernetes.io/alibaba-cloud-loadbalancer-protocol-port: "http:80:3006"
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "3006"
+    prometheus.io/path: "/metrics"
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 3006
+    targetPort: http
+    protocol: TCP
+  - name: metrics
+    port: 9464
+    targetPort: metrics
+    protocol: TCP
+  selector:
+    app: knowledge-graph-service
+    component: knowledge-graph 

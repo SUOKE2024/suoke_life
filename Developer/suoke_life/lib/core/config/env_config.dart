@@ -47,11 +47,14 @@ class EnvConfig {
       _currentEnv = _parseEnvType(envString);
 
       // 设置API基础URL
-      _apiBaseUrl = dotenv.get('API_BASE_URL', fallback: 'http://localhost:8000');
-      
+      _apiBaseUrl =
+          dotenv.get('API_BASE_URL', fallback: 'http://localhost:8000');
+
       // 设置DeepSeek配置
-      _deepseekApiKey = dotenv.get('DEEPSEEK_API_KEY', fallback: 'sk-7861d4a25a4b4d5facb51d696b49e321');
-      _deepseekApiUrl = dotenv.get('DEEPSEEK_API_URL', fallback: 'https://api.deepseek.com/v1');
+      _deepseekApiKey = dotenv.get('DEEPSEEK_API_KEY',
+          fallback: 'sk-7861d4a25a4b4d5facb51d696b49e321');
+      _deepseekApiUrl = dotenv.get('DEEPSEEK_API_URL',
+          fallback: 'https://api.deepseek.com/v1');
 
       _isInitialized = true;
       debugPrint('环境配置已初始化: $_currentEnv');
@@ -99,4 +102,4 @@ class EnvConfig {
 
   /// 是否为生产环境
   bool get isProduction => _currentEnv == EnvironmentType.production;
-} 
+}

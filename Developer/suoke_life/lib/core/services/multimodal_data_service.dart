@@ -20,13 +20,13 @@ final multimodalDataServiceProvider = Provider<MultimodalDataService>((ref) {
 enum MultimodalDataType {
   /// 文本数据
   text,
-  
+
   /// 图像数据
   image,
-  
+
   /// 音频数据
   audio,
-  
+
   /// 视频数据
   video,
 }
@@ -35,22 +35,22 @@ enum MultimodalDataType {
 enum ImageContentType {
   /// 未知类型
   unknown,
-  
+
   /// 舌头图片
   tongue,
-  
+
   /// 脸部图片
   face,
-  
+
   /// 食物图片
   food,
-  
+
   /// 药材图片
   herb,
-  
+
   /// 脉象图片
   pulse,
-  
+
   /// 一般图片
   general,
 }
@@ -58,49 +58,51 @@ enum ImageContentType {
 /// 多模态数据收集服务
 class MultimodalDataService {
   final DeepSeekService _deepseekService;
-  
+
   /// 存储收集的数据
   final Map<String, Map<String, dynamic>> _collectedData = {};
-  
+
   /// 图片选择器
   final ImagePicker _imagePicker = ImagePicker();
-  
+
   /// 舌诊图像处理器
   final TongueImageProcessor _tongueProcessor = TongueImageProcessor();
-  
+
   MultimodalDataService(this._deepseekService);
 
   /// 收集文本数据
-  Future<void> collectTextData(String sessionId, String text, {String? label}) async {
+  Future<void> collectTextData(String sessionId, String text,
+      {String? label}) async {
     final dataItem = {
       'type': MultimodalDataType.text.name,
       'content': text,
       'timestamp': DateTime.now().toIso8601String(),
       'label': label,
     };
-    
+
     _addToCollection(sessionId, dataItem);
   }
 
   /// 收集图像数据
-  Future<String?> collectImageData(String sessionId, {String? label, bool fromCamera = false}) async {
+  Future<String?> collectImageData(String sessionId,
+      {String? label, bool fromCamera = false}) async {
     try {
       final XFile? image = fromCamera
           ? await _imagePicker.pickImage(source: ImageSource.camera)
           : await _imagePicker.pickImage(source: ImageSource.gallery);
-      
+
       if (image == null) return null;
-      
+
       // 读取图像数据
       final bytes = await image.readAsBytes();
       final base64Image = base64Encode(bytes);
-      
+
       // 保存图像到本地存储
       final localPath = await _saveImageLocally(image);
-      
+
       // 识别图像内容类型
       final imageContentType = await _detectImageContentType(image.path);
-      
+
       final dataItem = {
         'type': MultimodalDataType.image.name,
         'content': base64Image,
@@ -109,9 +111,9 @@ class MultimodalDataService {
         'label': label,
         'contentType': imageContentType.name,
       };
-      
+
       _addToCollection(sessionId, dataItem);
-      
+
       return localPath;
     } catch (e) {
       debugPrint('收集图像数据失败: $e');
@@ -120,14 +122,15 @@ class MultimodalDataService {
   }
 
   /// 收集音频数据
-  Future<String?> collectAudioData(String sessionId, String audioPath, {String? label}) async {
+  Future<String?> collectAudioData(String sessionId, String audioPath,
+      {String? label}) async {
     try {
       final file = File(audioPath);
       if (!await file.exists()) return null;
-      
+
       final bytes = await file.readAsBytes();
       final base64Audio = base64Encode(bytes);
-      
+
       final dataItem = {
         'type': MultimodalDataType.audio.name,
         'content': base64Audio,
@@ -135,9 +138,9 @@ class MultimodalDataService {
         'timestamp': DateTime.now().toIso8601String(),
         'label': label,
       };
-      
+
       _addToCollection(sessionId, dataItem);
-      
+
       return audioPath;
     } catch (e) {
       debugPrint('收集音频数据失败: $e');
@@ -154,12 +157,12 @@ class MultimodalDataService {
   }) async {
     try {
       final messages = <ChatMessage>[];
-      
+
       // 添加系统消息
       if (systemMessage != null && systemMessage.isNotEmpty) {
         messages.add(ChatMessage.system(systemMessage));
       }
-      
+
       // 如果有图像，添加图像消息
       if (imagePath != null) {
         if (kIsWeb) {
@@ -170,7 +173,8 @@ class MultimodalDataService {
           final imageFile = File(imagePath);
           if (await imageFile.exists()) {
             final base64Image = await DeepSeekService.imageToBase64(imageFile);
-            messages.add(ChatMessage.userImageBase64(base64Image, caption: prompt));
+            messages
+                .add(ChatMessage.userImageBase64(base64Image, caption: prompt));
           } else {
             // 如果图像不存在，只发送文本
             messages.add(ChatMessage.userText(prompt));
@@ -180,13 +184,14 @@ class MultimodalDataService {
         // 无图像，只发送文本
         messages.add(ChatMessage.userText(prompt));
       }
-      
+
       // 使用多模态模型处理请求
-      final response = await _deepseekService.multimodalChat(messages: messages);
-      
+      final response =
+          await _deepseekService.multimodalChat(messages: messages);
+
       // 收集回复文本
       collectTextData(sessionId, response, label: 'ai_response');
-      
+
       return response;
     } catch (e) {
       debugPrint('LLM处理失败: $e');
@@ -223,12 +228,14 @@ class MultimodalDataService {
         'items': <Map<String, dynamic>>[],
       };
     }
-    
-    final items = _collectedData[sessionId]!['items'] as List<Map<String, dynamic>>;
+
+    final items =
+        _collectedData[sessionId]!['items'] as List<Map<String, dynamic>>;
     items.add(dataItem);
-    
+
     // 更新最后修改时间
-    _collectedData[sessionId]!['lastModified'] = DateTime.now().toIso8601String();
+    _collectedData[sessionId]!['lastModified'] =
+        DateTime.now().toIso8601String();
   }
 
   /// 保存图像到本地存储
@@ -238,7 +245,7 @@ class MultimodalDataService {
       final uuid = const Uuid().v4();
       final extension = image.path.split('.').last;
       final filename = 'image_$uuid.$extension';
-      
+
       if (kIsWeb) {
         // Web平台直接返回原始路径
         return image.path;
@@ -246,18 +253,18 @@ class MultimodalDataService {
         // 非Web平台，保存到应用文档目录
         final appDir = await getApplicationDocumentsDirectory();
         final imageDir = Directory('${appDir.path}/multimodal_data/images');
-        
+
         // 确保目录存在
         if (!await imageDir.exists()) {
           await imageDir.create(recursive: true);
         }
-        
+
         // 复制文件
         final newPath = '${imageDir.path}/$filename';
         final bytes = await image.readAsBytes();
         final file = File(newPath);
         await file.writeAsBytes(bytes);
-        
+
         return newPath;
       }
     } catch (e) {
@@ -276,25 +283,25 @@ class MultimodalDataService {
     try {
       final bytes = await File(imagePath).readAsBytes();
       final image = img.decodeImage(bytes);
-      
+
       if (image == null) return ImageContentType.unknown;
-      
+
       // 判断是否为舌头图片
       final isTongue = await _detectTongueImage(image);
       if (isTongue) return ImageContentType.tongue;
-      
+
       // 判断是否为脸部图片
       final isFace = await _detectFaceImage(image);
       if (isFace) return ImageContentType.face;
-      
+
       // 判断是否为食物图片
       final isFood = await _detectFoodImage(image);
       if (isFood) return ImageContentType.food;
-      
+
       // 判断是否为药材图片
       final isHerb = await _detectHerbImage(image);
       if (isHerb) return ImageContentType.herb;
-      
+
       // 默认为一般图片
       return ImageContentType.general;
     } catch (e) {
@@ -302,7 +309,7 @@ class MultimodalDataService {
       return ImageContentType.unknown;
     }
   }
-  
+
   /// 判断是否为舌头图片
   Future<bool> _detectTongueImage(img.Image image) async {
     try {
@@ -314,20 +321,20 @@ class MultimodalDataService {
       return false;
     }
   }
-  
+
   /// 判断是否为脸部图片
   Future<bool> _detectFaceImage(img.Image image) async {
     // TODO: 实现脸部检测
     // 简单实现：红色区域占比判断是否可能是脸部
     return false;
   }
-  
+
   /// 判断是否为食物图片
   Future<bool> _detectFoodImage(img.Image image) async {
     // TODO: 实现食物检测
     return false;
   }
-  
+
   /// 判断是否为药材图片
   Future<bool> _detectHerbImage(img.Image image) async {
     // TODO: 实现药材检测
@@ -338,17 +345,16 @@ class MultimodalDataService {
   Map<String, dynamic>? getLastItemOfType(String sessionId, String type) {
     try {
       if (!_collectedData.containsKey(sessionId)) return null;
-      
+
       final sessionData = _collectedData[sessionId]!;
-      
+
       // 按时间戳降序排序
-      final items = sessionData.values.where((item) => 
-        item['type'] == type
-      ).toList()
-       ..sort((a, b) => 
-        (b['timestamp'] as String).compareTo(a['timestamp'] as String)
-      );
-      
+      final items = sessionData.values
+          .where((item) => item['type'] == type)
+          .toList()
+        ..sort((a, b) =>
+            (b['timestamp'] as String).compareTo(a['timestamp'] as String));
+
       return items.isNotEmpty ? items.first : null;
     } catch (e) {
       debugPrint('获取最后一个$type数据项失败: $e');

@@ -5,16 +5,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // 页面导入
 import 'package:suoke_life/presentation/home/pages/home_page.dart';
 import 'package:suoke_life/presentation/home/pages/chat_page.dart';
+import 'package:suoke_life/presentation/home/screens/chat_screen.dart';
 import 'package:suoke_life/presentation/suoke/pages/suoke_page.dart';
 import 'package:suoke_life/presentation/suoke/pages/pulse_diagnosis_page.dart';
 import 'package:suoke_life/presentation/suoke/pages/tongue_diagnosis_page.dart';
+import 'package:suoke_life/presentation/tcm/tcm_diagnosis_page.dart';
 import 'package:suoke_life/presentation/explore/pages/explore_page.dart';
 import 'package:suoke_life/presentation/explore/pages/exploration_detail_page.dart';
+import 'package:suoke_life/presentation/explore/pages/knowledge_article_detail_page.dart';
+import 'package:suoke_life/presentation/explore/screens/knowledge_graph_screen.dart';
 import 'package:suoke_life/presentation/life/pages/life_page.dart';
 import 'package:suoke_life/presentation/profile/pages/profile_page.dart';
 import 'package:suoke_life/presentation/home/pages/welcome_page.dart';
 import 'package:suoke_life/presentation/auth/pages/login_page.dart';
-import 'package:suoke_life/presentation/design/pages/design_system_showcase_page.dart';
 import 'package:suoke_life/presentation/explore/providers/explore_providers.dart';
 import 'package:suoke_life/presentation/life/pages/constitution_assessment_page.dart';
 import 'package:suoke_life/presentation/life/pages/constitution_result_page.dart';
@@ -23,6 +26,25 @@ import 'package:suoke_life/presentation/profile/pages/theme_settings_page.dart';
 import 'package:suoke_life/domain/repositories/auth_repository.dart';
 import 'package:suoke_life/core/theme/app_colors.dart';
 import 'package:suoke_life/presentation/life/models/constitution_type.dart';
+import 'package:suoke_life/presentation/sensing/sensing_control_page.dart';
+import 'package:suoke_life/presentation/life/health_profile_page.dart';
+import 'package:suoke_life/presentation/explore/rag_search_page.dart';
+import 'package:suoke_life/presentation/auth/pages/register_page.dart';
+import 'package:suoke_life/presentation/auth/pages/two_factor_auth_page.dart';
+import 'package:suoke_life/presentation/auth/pages/biometric_auth_page.dart';
+import 'package:suoke_life/presentation/network_test/network_test_screen.dart';
+import 'package:suoke_life/presentation/home/api_test_page.dart';
+import 'package:suoke_life/presentation/blockchain/blockchain_page.dart';
+import 'package:suoke_life/presentation/blockchain/health_record_detail_page.dart';
+import 'package:suoke_life/presentation/blockchain/wallet_page.dart';
+import 'package:suoke_life/presentation/blockchain/health_record_page.dart';
+import 'package:suoke_life/presentation/splash/splash_page.dart';
+
+// 路由配置
+import 'package:suoke_life/core/router/agent_routes.dart';
+import 'package:suoke_life/core/router/knowledge_routes.dart';
+import 'package:suoke_life/core/router/tcm_routes.dart';
+import 'package:suoke_life/core/router/blockchain_routes.dart';
 
 part 'app_router.gr.dart';
 
@@ -33,109 +55,62 @@ final appRouterProvider = Provider<AppRouter>((ref) {
 });
 
 /// 应用程序路由配置
-@AutoRouterConfig(replaceInRouteName: 'Page,Route')
-class AppRouter extends _$AppRouter {
+@AutoRouterConfig(replaceInRouteName: 'Page,Route,Screen,Route')
+class AppRouter extends $AppRouter {
   final AuthGuard authGuard;
 
   AppRouter({required this.authGuard});
 
   @override
   List<AutoRoute> get routes => [
-        // 欢迎页面
-        AutoRoute(
-          path: '/welcome',
-          page: WelcomeRoute.page,
-          initial: true,
-        ),
-        // 登录页面
-        AutoRoute(
-          path: '/login',
-          page: LoginRoute.page,
-        ),
-        // 主仪表盘（包含底部导航）
-        AutoRoute(
-          path: '/',
-          page: MainDashboardRoute.page,
-          children: [
-            // 首页（聊天）
-            AutoRoute(
-              path: 'home',
-              page: HomeRoute.page,
-              title: (context, data) => '聊天',
-            ),
-            // SUOKE页面
-            AutoRoute(
-              path: 'suoke',
-              page: SuokeRoute.page,
-              title: (context, data) => 'SUOKE',
-            ),
-            // 探索页面
-            AutoRoute(
-              path: 'explore',
-              page: ExploreRoute.page,
-              title: (context, data) => '探索',
-            ),
-            // LIFE页面
-            AutoRoute(
-              path: 'life',
-              page: LifeRoute.page,
-              title: (context, data) => 'LIFE',
-            ),
-            // 个人资料页面
-            AutoRoute(
-              path: 'profile',
-              page: ProfileRoute.page,
-              title: (context, data) => '我的',
-              guards: [authGuard],
-            ),
-          ],
-        ),
-        // 探索详情页面
-        AutoRoute(
-          path: '/explore/detail/:id',
-          page: ExplorationDetailRoute.page,
-        ),
-        // 体质评估页面
-        AutoRoute(
-          path: '/life/constitution-assessment',
-          page: ConstitutionAssessmentRoute.page,
-        ),
-        // 体质评估结果页面
-        AutoRoute(
-          path: '/life/constitution-result',
-          page: ConstitutionResultRoute.page,
-        ),
-        // 健康调理方案页面
-        AutoRoute(
-          path: '/life/health-regimen/:constitutionType',
-          page: HealthRegimenRoute.page,
-        ),
-        // 脉诊服务页面
-        AutoRoute(
-          path: '/suoke/pulse-diagnosis',
-          page: PulseDiagnosisRoute.page,
-        ),
-        // 舌诊服务页面
-        AutoRoute(
-          path: '/suoke/tongue-diagnosis',
-          page: TongueDiagnosisRoute.page,
-        ),
-        // 主题设置页面
-        AutoRoute(
-          path: '/profile/theme-settings',
-          page: ThemeSettingsRoute.page,
-        ),
-        // 聊天页面
-        AutoRoute(
-          path: '/home/chat',
-          page: ChatRoute.page,
-        ),
-        // 404页面
-        AutoRoute(
-          path: '*',
-          page: NotFoundRoute.page,
-        ),
-      ];
+    // 闪屏页
+    AutoRoute(page: SplashRoute.page, initial: true),
+    
+    // 认证相关页面
+    AutoRoute(page: LoginRoute.page),
+    AutoRoute(page: RegisterRoute.page),
+    
+    // 主页
+    AutoRoute(
+      page: HomeRoute.page,
+      guards: [authGuard],
+    ),
+    
+    // 个人资料页
+    AutoRoute(
+      page: ProfileRoute.page,
+      guards: [authGuard],
+    ),
+    
+    // 区块链页面
+    AutoRoute(
+      page: BlockchainRoute.page,
+      guards: [authGuard],
+    ),
+    
+    // 知识文章详情页面
+    AutoRoute(
+      path: '/knowledge/articles/:articleId',
+      page: KnowledgeArticleDetailRoute.page,
+    ),
+    
+    // 引入其他路由配置
+    ...AgentRoutes.routes,
+    ...KnowledgeRoutes.routes,
+    ...TcmRoutes.routes,
+    ...BlockchainRoutes.routes,
+    
+    // 新增路由
+    AutoRoute(
+      path: '/chat',
+      page: ChatRoute.page,
+    ),
+    AutoRoute(
+      path: '/knowledge-graph',
+      page: KnowledgeGraphRoute.page,
+    ),
+    // 可添加其他路由
+  ];
 }
 
 /// 身份验证路由守卫
@@ -145,15 +120,13 @@ class AuthGuard extends AutoRouteGuard {
   AuthGuard(this.authRepository);
 
   @override
-  void onNavigation(NavigationResolver resolver, StackRouter router) {
-    if (authRepository.isAuthenticated) {
-      // 已登录，允许导航
+  void onNavigation(NavigationResolver resolver, StackRouter router) async {
+    final isAuthenticated = await authRepository.isAuthenticated();
+    
+    if (isAuthenticated) {
       resolver.next(true);
     } else {
-      // 未登录，重定向到登录页面
-      router.navigateNamed('/login');
-      // 拒绝当前导航
-      resolver.next(false);
+      router.push(LoginRoute());
     }
   }
 }
@@ -292,5 +265,16 @@ class NotFoundPage extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+/// 网络测试页面路由
+@RoutePage()
+class NetworkTestRoute extends StatelessWidget {
+  const NetworkTestRoute({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const NetworkTestScreen();
   }
 }

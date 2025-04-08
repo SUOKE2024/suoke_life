@@ -1,0 +1,95 @@
+version: '3.8'
+
+services:
+  knowledge-graph-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.custom
+      args:
+        - VERSION=1.0.0
+    image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/knowledge-graph-service:local
+    container_name: knowledge-graph-service
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - APP_ENV=development
+      - APP_PORT=3000
+      - APP_HOST=0.0.0.0
+      - LOG_LEVEL=debug
+      - SERVER_PROTOCOL=http
+      - NEO4J_PROTOCOL=bolt
+      - NEO4J_HOST=neo4j
+      - NEO4J_PORT=7687
+      - NEO4J_DATABASE=suoke
+      - NEO4J_USERNAME=neo4j
+      - NEO4J_PASSWORD=password
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - ENABLE_API_DOCS=true
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./config:/app/config
+    depends_on:
+      - neo4j
+      - redis
+    networks:
+      - suoke-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  neo4j:
+    image: neo4j:5.13.0
+    container_name: neo4j
+    restart: unless-stopped
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      - NEO4J_AUTH=neo4j/password
+      - NEO4J_dbms_memory_heap_initial__size=512m
+      - NEO4J_dbms_memory_heap_max__size=1G
+    volumes:
+      - neo4j_data:/data
+      - neo4j_logs:/logs
+      - neo4j_conf:/conf
+    networks:
+      - suoke-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7474"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  redis:
+    image: redis:7.2-alpine
+    container_name: redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - suoke-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  neo4j_data:
+  neo4j_logs:
+  neo4j_conf:
+  redis_data:
+
+networks:
+  suoke-network:
+    driver: bridge 

@@ -33,6 +33,7 @@ on:
 env:
   IMAGE_NAME: suokelife/knowledge-graph-service
   REGISTRY: registry.cn-hangzhou.aliyuncs.com
+  GO_VERSION: 1.20
 
 jobs:
   lint:
@@ -43,16 +44,15 @@ jobs:
         working-directory: ./services/knowledge-graph-service
     steps:
       - uses: actions/checkout@v3
-      - name: 设置 Node.js
-        uses: actions/setup-node@v3
+      - name: 设置 Go
+        uses: actions/setup-go@v4
         with:
-          node-version: '18'
-          cache: 'npm'
-          cache-dependency-path: './services/knowledge-graph-service/package-lock.json'
-      - name: 安装依赖
-        run: npm ci
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+      - name: 安装 golangci-lint
+        run: go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
       - name: 运行规范检查
-        run: npm run lint
+        run: golangci-lint run ./...
 
   test:
     name: 单元测试
@@ -62,21 +62,18 @@ jobs:
         working-directory: ./services/knowledge-graph-service
     steps:
       - uses: actions/checkout@v3
-      - name: 设置 Node.js
-        uses: actions/setup-node@v3
+      - name: 设置 Go
+        uses: actions/setup-go@v4
         with:
-          node-version: '18'
-          cache: 'npm'
-          cache-dependency-path: './services/knowledge-graph-service/package-lock.json'
-      - name: 安装依赖
-        run: npm ci
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
       - name: 运行测试
-        run: npm test
+        run: go test -v -race -coverprofile=coverage.out ./...
       - name: 上传测试覆盖率报告
         uses: actions/upload-artifact@v3
         with:
           name: coverage-report
-          path: ./services/knowledge-graph-service/coverage
+          path: ./services/knowledge-graph-service/coverage.out
           retention-days: 7
 
   security-scan:
@@ -87,16 +84,18 @@ jobs:
         working-directory: ./services/knowledge-graph-service
     steps:
       - uses: actions/checkout@v3
-      - name: 设置 Node.js
-        uses: actions/setup-node@v3
+      - name: 设置 Go
+        uses: actions/setup-go@v4
         with:
-          node-version: '18'
-          cache: 'npm'
-          cache-dependency-path: './services/knowledge-graph-service/package-lock.json'
-      - name: 安装依赖
-        run: npm ci
-      - name: 运行依赖漏洞扫描
-        run: npm audit --production
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+      - name: 安装 gosec
+        run: go install github.com/securego/gosec/v2/cmd/gosec@latest
+      - name: 运行 gosec 安全扫描
+        run: gosec ./...
+      - name: 运行 nancy 依赖扫描
+        run: |
+          go list -json -deps ./... | go run github.com/sonatype-nexus-community/nancy@latest sleuth
       - name: 运行 SonarCloud 扫描
         uses: SonarSource/sonarcloud-github-action@master
         env:
@@ -139,11 +138,24 @@ jobs:
           username: ${{ secrets.ALIYUN_REGISTRY_USERNAME }}
           password: ${{ secrets.ALIYUN_REGISTRY_PASSWORD }}
 
-      - name: 构建和推送 Docker 镜像
+      - name: 设置 Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        with:
+          install: true
+          use: true
+      
+      - name: 设置 QEMU 用于多架构构建
+        uses: docker/setup-qemu-action@v2
+        with:
+          platforms: linux/amd64,linux/arm64
+
+      - name: 构建和推送多架构 Docker 镜像
         uses: docker/build-push-action@v4
         with:
           context: ./services/knowledge-graph-service
+          file: ./services/knowledge-graph-service/Dockerfile.new
           push: true
+          platforms: linux/amd64,linux/arm64
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.VERSION }}
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
@@ -152,11 +164,41 @@ jobs:
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache
           cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache,mode=max
 
+      - name: 构建和推送 AMD64 架构镜像
+        uses: docker/build-push-action@v4
+        with:
+          context: ./services/knowledge-graph-service
+          file: ./services/knowledge-graph-service/Dockerfile.amd64
+          push: true
+          platforms: linux/amd64
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.VERSION }}-amd64
+          build-args: |
+            BUILD_VERSION=${{ steps.version.outputs.VERSION }}
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache-amd64
+          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache-amd64,mode=max
+
+      - name: 构建和推送 ARM64 架构镜像
+        uses: docker/build-push-action@v4
+        with:
+          context: ./services/knowledge-graph-service
+          file: ./services/knowledge-graph-service/Dockerfile.new
+          push: true
+          platforms: linux/arm64
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.VERSION }}-arm64
+          build-args: |
+            BUILD_VERSION=${{ steps.version.outputs.VERSION }}
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache-arm64
+          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache-arm64,mode=max
+
       - name: 创建 artifacts
         run: |
           mkdir -p ./artifacts
           echo "${{ steps.version.outputs.VERSION }}" > ./artifacts/version.txt
           echo "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.VERSION }}" > ./artifacts/image.txt
+          echo "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.VERSION }}-amd64" > ./artifacts/image-amd64.txt
+          echo "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.VERSION }}-arm64" > ./artifacts/image-arm64.txt
 
       - name: 上传 Artifacts
         uses: actions/upload-artifact@v3
@@ -170,7 +212,6 @@ jobs:
     if: (github.ref == 'refs/heads/develop' || github.event.inputs.environment == 'dev') && github.event_name != 'pull_request'
     needs: [build-and-push]
     runs-on: ubuntu-latest
-    environment: development
     steps:
       - uses: actions/checkout@v3
       
@@ -215,7 +256,6 @@ jobs:
     if: (github.ref == 'refs/heads/release/*' || github.event.inputs.environment == 'staging') && github.event_name != 'pull_request'
     needs: [build-and-push]
     runs-on: ubuntu-latest
-    environment: staging
     steps:
       - uses: actions/checkout@v3
       
@@ -260,7 +300,6 @@ jobs:
     if: (github.ref == 'refs/heads/main' || github.event.inputs.environment == 'prod') && github.event_name != 'pull_request'
     needs: [build-and-push]
     runs-on: ubuntu-latest
-    environment: production
     steps:
       - uses: actions/checkout@v3
       
@@ -275,6 +314,7 @@ jobs:
         run: |
           echo "VERSION=$(cat ./artifacts/version.txt)" >> $GITHUB_OUTPUT
           echo "IMAGE=$(cat ./artifacts/image.txt)" >> $GITHUB_OUTPUT
+          echo "IMAGE_AMD64=$(cat ./artifacts/image-amd64.txt)" >> $GITHUB_OUTPUT
       
       - name: 设置 Kubectl
         uses: azure/k8s-set-context@v3
@@ -284,10 +324,16 @@ jobs:
       - name: 部署到 Kubernetes
         working-directory: ./services/knowledge-graph-service
         run: |
-          cd k8s
-          kubectl apply -k overlays/prod
-          kubectl set image deployment/knowledge-graph knowledge-graph=${{ steps.vars.outputs.IMAGE }} -n suoke
-          kubectl rollout status deployment/knowledge-graph -n suoke --timeout=300s
+          # 确认AMD64镜像标签已设置
+          export MULTI_ARCH_IMAGE=${{ steps.vars.outputs.IMAGE }}
+          export AMD64_IMAGE=${{ steps.vars.outputs.IMAGE_AMD64 }}
+          
+          # 执行部署
+          chmod +x ./scripts/deploy-to-k8s.sh
+          ./scripts/deploy-to-k8s.sh suoke-prod
+          
+          # 确认部署状态
+          kubectl rollout status deployment/knowledge-graph-service -n suoke-prod --timeout=300s
       
       - name: 发送部署通知到钉钉
         uses: ghostoy/dingtalk-action@master
@@ -297,7 +343,7 @@ jobs:
           content: |
             {
               "title": "知识图谱服务部署通知",
-              "text": "### 🚀 知识图谱服务已部署到生产环境\n\n**版本**: ${{ steps.vars.outputs.VERSION }}\n\n**部署人**: ${{ github.actor }}\n\n**相关提交**: [${{ github.sha }}](${{ github.event.repository.html_url }}/commit/${{ github.sha }})\n\n**详情**: [查看工作流](${{ github.event.repository.html_url }}/actions/runs/${{ github.run_id }})"
+              "text": "### 🚀 知识图谱服务已部署到生产环境\n\n**版本**: ${{ steps.vars.outputs.VERSION }}\n\n**多架构镜像**: ${{ steps.vars.outputs.IMAGE }}\n\n**AMD64镜像**: ${{ steps.vars.outputs.IMAGE_AMD64 }}\n\n**部署人**: ${{ github.actor }}\n\n**相关提交**: [${{ github.sha }}](${{ github.event.repository.html_url }}/commit/${{ github.sha }})\n\n**详情**: [查看工作流](${{ github.event.repository.html_url }}/actions/runs/${{ github.run_id }})"
             }
 
   notify-deployment-result:

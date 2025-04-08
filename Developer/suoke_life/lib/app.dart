@@ -5,23 +5,47 @@ import 'package:suoke_life/core/router/app_router.dart';
 import 'package:suoke_life/core/theme/app_theme.dart';
 import 'package:suoke_life/core/storage/preferences_manager.dart';
 import 'package:suoke_life/core/config/app_config.dart';
+import 'package:suoke_life/core/services/holistic_sensing_engine.dart';
+import 'package:suoke_life/core/config/env_config.dart';
+import 'package:suoke_life/core/constants/api_constants.dart';
+import 'package:suoke_life/di/providers.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:suoke_life/core/widgets/api_connection_status.dart';
+import 'package:suoke_life/core/network/api_health_service.dart';
 
 /// 索克生活APP主体
-class SuokeLifeApp extends ConsumerWidget {
-  const SuokeLifeApp({super.key});
+class SuokeApp extends ConsumerStatefulWidget {
+  const SuokeApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SuokeApp> createState() => _SuokeAppState();
+}
+
+class _SuokeAppState extends ConsumerState<SuokeApp> {
+  @override
+  void initState() {
+    super.initState();
+    
+    // 延迟初始化区块链服务
+    Future.microtask(() {
+      ref.read(blockchainInitProvider);
+      
+      // 初始化时检查API健康状态
+      ref.read(apiHealthStatusProvider);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     // 获取路由实例
     final appRouter = ref.watch(appRouterProvider);
+    final themeMode = ref.watch(themeModeProvider);
 
-    // 获取应用配置
-    final appConfig = ref.watch(appConfigProvider);
-
-    // 使用Builder包装，确保有适当的上下文和错误处理
-    return Builder(
-      builder: (context) {
-        // 错误边界，捕获并显示应用错误
+    return ScreenUtilInit(
+      designSize: const Size(375, 812),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) {
         return MaterialApp.router(
           title: '索克生活',
           debugShowCheckedModeBanner: false,
@@ -29,24 +53,7 @@ class SuokeLifeApp extends ConsumerWidget {
           // 主题配置
           theme: AppTheme.lightTheme(),
           darkTheme: AppTheme.darkTheme(),
-          themeMode: appConfig.themeMode,
-          
-          // 错误处理
-          builder: (context, widget) {
-            // 添加全局错误处理和布局约束
-            Widget errorWidget = widget ?? const SizedBox.shrink();
-            
-            // 确保文本缩放适当
-            errorWidget = MediaQuery(
-              // 限制文本缩放比例，防止布局溢出
-              data: MediaQuery.of(context).copyWith(
-                textScaleFactor: (appConfig.fontSize / 16.0).clamp(0.8, 1.2),
-              ),
-              child: errorWidget,
-            );
-            
-            return errorWidget;
-          },
+          themeMode: themeMode,
 
           // 国际化配置
           localizationsDelegates: const [
@@ -56,14 +63,39 @@ class SuokeLifeApp extends ConsumerWidget {
           ],
           supportedLocales: const [
             Locale('zh', 'CN'), // 中文简体
+            Locale('en', 'US'),
           ],
 
           // 路由配置
-          routerDelegate: appRouter.delegate(),
-          routeInformationParser: appRouter.defaultRouteParser(),
-          routeInformationProvider: appRouter.routeInfoProvider(),
+          routerConfig: appRouter.config(),
+          builder: (context, widget) {
+            return MediaQuery(
+              // 设置文本缩放比例为1.0
+              data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+              child: Overlay(
+                initialEntries: [
+                  OverlayEntry(
+                    builder: (context) => Column(
+                      children: [
+                        // API连接状态栏
+                        ApiConnectionStatus(
+                          compact: true,
+                          onRetry: () {
+                            // 重试连接
+                            ref.refresh(apiHealthStatusProvider);
+                          },
+                        ),
+                        // 应用主体内容
+                        Expanded(child: widget!),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
         );
-      }
+      },
     );
   }
 }

@@ -1,0 +1,58 @@
+FROM node:18-alpine AS builder
+
+WORKDIR /app
+
+# 安装构建依赖
+RUN apk add --no-cache python3 make g++ curl
+
+# 复制依赖相关文件
+COPY package*.json ./
+
+# 安装依赖
+RUN npm ci --only=production
+
+# 复制应用源码
+COPY . .
+
+# 第二阶段：运行时环境
+FROM node:18-alpine
+
+# 安装wget用于健康检查
+RUN apk add --no-cache wget
+
+# 创建非root用户
+RUN addgroup -g 1001 suoke && \
+    adduser -u 1001 -G suoke -s /bin/sh -D suoke
+
+# 设置工作目录
+WORKDIR /app
+
+# 从构建阶段复制依赖和源码
+COPY --from=builder --chown=suoke:suoke /app/node_modules ./node_modules
+COPY --from=builder --chown=suoke:suoke /app/package*.json ./
+COPY --from=builder --chown=suoke:suoke /app/src ./src
+
+# 创建必要的目录并设置权限
+RUN mkdir -p /app/logs /app/uploads && \
+    chown -R suoke:suoke /app/logs /app/uploads
+
+# 切换到非root用户
+USER suoke
+
+# 配置环境变量
+ENV NODE_ENV=production \
+    PORT=3002 \
+    NODE_OPTIONS="--max-old-space-size=384"
+
+# 暴露端口
+EXPOSE 3002
+
+# 健康检查
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+    CMD wget -q -O - http://localhost:3002/health || exit 1
+
+# 显式覆盖node镜像默认的entrypoint
+ENTRYPOINT []
+
+# 直接使用CMD启动应用
+CMD ["node", "src/server.js"]

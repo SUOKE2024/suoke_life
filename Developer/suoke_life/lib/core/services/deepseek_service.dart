@@ -22,7 +22,7 @@ enum DeepSeekModelType {
   coder("deepseek-coder");
 
   final String value;
-  
+
   const DeepSeekModelType(this.value);
 }
 
@@ -33,7 +33,7 @@ enum MessageRole {
   system("system");
 
   final String value;
-  
+
   const MessageRole(this.value);
 }
 
@@ -43,7 +43,7 @@ enum ContentType {
   imageUrl("image_url");
 
   final String value;
-  
+
   const ContentType(this.value);
 }
 
@@ -130,11 +130,11 @@ class ChatMessage {
     final contents = <MessageContent>[
       MessageContent.imageUrl(imageUrl),
     ];
-    
+
     if (caption != null && caption.isNotEmpty) {
       contents.add(MessageContent.text(caption));
     }
-    
+
     return ChatMessage(
       role: MessageRole.user,
       content: contents,
@@ -146,11 +146,11 @@ class ChatMessage {
     final contents = <MessageContent>[
       MessageContent.imageBase64(base64Image),
     ];
-    
+
     if (caption != null && caption.isNotEmpty) {
       contents.add(MessageContent.text(caption));
     }
-    
+
     return ChatMessage(
       role: MessageRole.user,
       content: contents,
@@ -178,7 +178,7 @@ class ChatMessage {
 class DeepSeekService {
   late final Dio _dio;
   late final String _apiKey;
-  
+
   DeepSeekService() {
     _dio = Dio(BaseOptions(
       baseUrl: EnvConfig().deepseekApiUrl,
@@ -188,9 +188,9 @@ class DeepSeekService {
       connectTimeout: const Duration(seconds: 30),
       receiveTimeout: const Duration(seconds: 30),
     ));
-    
+
     _apiKey = EnvConfig().deepseekApiKey;
-    
+
     // 添加请求拦截器
     _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) {
@@ -254,4 +254,4 @@ class DeepSeekService {
     final bytes = await imageFile.readAsBytes();
     return base64Encode(bytes);
   }
-} 
+}

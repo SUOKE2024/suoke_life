@@ -1,0 +1,109 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: knowledge-graph-service
+  labels:
+    app: knowledge-graph-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: knowledge-graph-service
+  template:
+    metadata:
+      labels:
+        app: knowledge-graph-service
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9464"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+      - name: knowledge-graph-service
+        # 使用已知可用的镜像
+        image: registry-cn-hangzhou-vpc.ack.aliyuncs.com/acs/coredns:v1.11.3.5-5321daf49-aliyun
+        imagePullPolicy: IfNotPresent
+        command: ["/coredns"]
+        args: ["-conf", "/etc/coredns/Corefile"]
+        ports:
+        - containerPort: 53
+          name: dns
+          protocol: UDP
+        - containerPort: 53
+          name: dns-tcp
+          protocol: TCP
+        - containerPort: 9464
+          name: metrics
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 200m
+            memory: 256Mi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 5
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8181
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/coredns
+      volumes:
+      - name: config-volume
+        configMap:
+          name: coredns-config
+          items:
+          - key: Corefile
+            path: Corefile
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: coredns-config
+data:
+  Corefile: |
+    .:53 {
+        health
+        ready
+        prometheus :9464
+        forward . 8.8.8.8 8.8.4.4
+        cache 30
+        loop
+        reload
+        loadbalance
+    }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: knowledge-graph-service
+  labels:
+    app: knowledge-graph-service
+spec:
+  selector:
+    app: knowledge-graph-service
+  ports:
+  - port: 53
+    targetPort: 53
+    protocol: UDP
+    name: dns
+  - port: 53
+    targetPort: 53
+    protocol: TCP
+    name: dns-tcp
+  - port: 9464
+    targetPort: 9464
+    name: metrics
+  type: ClusterIP

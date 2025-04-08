@@ -148,12 +148,12 @@ spec:
         - name: DB_USER
           valueFrom:
             secretKeyRef:
-              name: auth-service-secrets
+              name: auth-service-vault-secrets
               key: DB_USER
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: auth-service-secrets
+              name: auth-service-vault-secrets
               key: DB_PASSWORD
         
         # Redis配置
@@ -170,14 +170,14 @@ spec:
         - name: REDIS_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: auth-service-secrets
+              name: auth-service-vault-secrets
               key: REDIS_PASSWORD
         
         # JWT配置
         - name: JWT_SECRET
           valueFrom:
             secretKeyRef:
-              name: auth-service-secrets
+              name: auth-service-vault-secrets
               key: JWT_SECRET
         - name: JWT_ACCESS_TOKEN_EXPIRATION
           valueFrom:

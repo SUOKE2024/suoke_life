@@ -5,6 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:suoke_life/core/theme/app_colors.dart';
 import 'package:suoke_life/core/router/app_router.dart';
 import 'package:suoke_life/presentation/home/widgets/chat_list_item.dart';
+import 'package:suoke_life/data/models/agent_model.dart';
+import 'package:suoke_life/di/providers/agent_providers.dart';
+import 'package:suoke_life/presentation/home/providers/agent_state_provider.dart';
 
 /// 首页（聊天频道）- 显示聊天列表
 @RoutePage()
@@ -88,6 +91,15 @@ class _HomePageState extends ConsumerState<HomePage> {
   bool _isSearching = false;
 
   @override
+  void initState() {
+    super.initState();
+    // 确保预设智能体已加载
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(agentStateProvider.notifier).loadPresetAgents();
+    });
+  }
+
+  @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
@@ -95,6 +107,9 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // 获取预设智能体列表
+    final presetAgents = ref.watch(presetAgentsProvider);
+    
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       body: Stack(
@@ -105,12 +120,31 @@ class _HomePageState extends ConsumerState<HomePage> {
           // 主内容
           SafeArea(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // 顶部导航栏
                 _buildAppBar(),
 
+                // 智能体服务部分
+                _buildAgentServices(presetAgents),
+                
                 // 搜索栏
                 _buildSearchBar(),
+
+                // 聊天标题
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                  child: Text(
+                    '最近会话',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? AppColors.darkTextPrimary
+                          : AppColors.lightTextPrimary,
+                    ),
+                  ),
+                ),
 
                 // 聊天列表
                 Expanded(
@@ -170,6 +204,22 @@ class _HomePageState extends ConsumerState<HomePage> {
           ),
           Row(
             children: [
+              // 新的聊天界面按钮
+              _buildAppBarButton(
+                Icons.chat_bubble,
+                () => context.router.pushNamed('/chat'),
+              ),
+
+              const SizedBox(width: 12),
+              
+              // 知识图谱按钮
+              _buildAppBarButton(
+                Icons.bubble_chart,
+                () => context.router.pushNamed('/knowledge-graph'),
+              ),
+
+              const SizedBox(width: 12),
+
               // 新建群聊按钮
               _buildAppBarButton(
                 Icons.group_add,
@@ -223,6 +273,199 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
+  /// 构建智能体服务部分
+  Widget _buildAgentServices(List<AgentModel> agents) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+          child: Text(
+            '索克智能体',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? AppColors.darkTextPrimary
+                  : AppColors.lightTextPrimary,
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 150,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            itemCount: agents.length,
+            itemBuilder: (context, index) {
+              final agent = agents[index];
+              return _buildAgentServiceCard(agent);
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// 构建智能体服务卡片
+  Widget _buildAgentServiceCard(AgentModel agent) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    
+    // 根据不同智能体设置不同的卡片颜色
+    Color cardColor;
+    switch (agent.id) {
+      case 'xiaoke-service':
+        cardColor = Colors.blue.shade600;
+        break;
+      case 'xiaoai-service':
+        cardColor = AppColors.primaryColor;
+        break;
+      case 'soer-service':
+        cardColor = Colors.purple.shade600;
+        break;
+      case 'laoke-service':
+        cardColor = Colors.amber.shade800;
+        break;
+      default:
+        cardColor = Colors.grey.shade700;
+    }
+    
+    return GestureDetector(
+      onTap: () => _selectAndNavigateToAgent(agent),
+      child: Container(
+        width: 250,
+        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        decoration: BoxDecoration(
+          color: isDarkMode 
+              ? cardColor.withAlpha(50) 
+              : cardColor.withAlpha(30),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: cardColor.withAlpha(100),
+            width: 1,
+          ),
+        ),
+        child: Stack(
+          children: [
+            // 卡片内容
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // 头像和名称
+                  Row(
+                    children: [
+                      Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: cardColor.withAlpha(80),
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: cardColor,
+                            width: 2,
+                          ),
+                        ),
+                        child: ClipOval(
+                          child: Center(
+                            child: Text(
+                              agent.name.substring(0, 1),
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: cardColor,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        agent.name,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: isDarkMode ? Colors.white : Colors.black87,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: cardColor.withAlpha(80),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          agent.type,
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: isDarkMode ? Colors.white70 : Colors.black87,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  // 描述
+                  Text(
+                    agent.description,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: isDarkMode ? Colors.white70 : Colors.black54,
+                    ),
+                  ),
+                  const Spacer(),
+                  // 开始聊天按钮
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: cardColor,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        '开始对话',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.white.withAlpha(240),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// 选择智能体并导航到聊天页面
+  void _selectAndNavigateToAgent(AgentModel agent) {
+    // 更新当前选中的智能体
+    ref.read(agentStateProvider.notifier).selectAgent(agent);
+    
+    // 导航到聊天界面
+    context.router.push(
+      ChatRoute(
+        contactName: agent.name,
+        contactAvatar: agent.avatarUrl,
+        isAI: true,
+      ),
+    );
+  }
+
   /// 构建搜索栏
   Widget _buildSearchBar() {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
@@ -251,8 +494,8 @@ class _HomePageState extends ConsumerState<HomePage> {
         decoration: InputDecoration(
           hintText: '搜索',
           hintStyle: TextStyle(
-            color: isDarkMode 
-                ? Colors.grey.withAlpha(150) 
+            color: isDarkMode
+                ? Colors.grey.withAlpha(150)
                 : Colors.grey.withAlpha(180),
           ),
           prefixIcon: Icon(
@@ -287,10 +530,15 @@ class _HomePageState extends ConsumerState<HomePage> {
   /// 构建聊天列表
   Widget _buildChatList() {
     final filteredList = _isSearching
-        ? _chatList.where((chat) =>
-            chat['name'].toLowerCase().contains(_searchController.text.toLowerCase()) ||
-            chat['lastMessage'].toLowerCase().contains(_searchController.text.toLowerCase()))
-        .toList()
+        ? _chatList
+            .where((chat) =>
+                chat['name']
+                    .toLowerCase()
+                    .contains(_searchController.text.toLowerCase()) ||
+                chat['lastMessage']
+                    .toLowerCase()
+                    .contains(_searchController.text.toLowerCase()))
+            .toList()
         : _chatList;
 
     if (filteredList.isEmpty && _isSearching) {
@@ -346,10 +594,30 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   /// 构建悬浮按钮
   Widget _buildFloatingActionButton() {
-    return FloatingActionButton(
-      onPressed: _showNewChatOptions,
-      backgroundColor: AppColors.primaryColor,
-      child: const Icon(Icons.chat),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // API测试入口
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16.0),
+          child: FloatingActionButton.small(
+            heroTag: 'api_test_fab',
+            onPressed: () {
+              context.router.push(const ApiTestRoute());
+            },
+            backgroundColor: Colors.orange,
+            child: const Icon(Icons.api),
+          ),
+        ),
+        // 新建聊天按钮
+        FloatingActionButton(
+          onPressed: () {
+            context.router.push(const ChatRoute());
+          },
+          backgroundColor: AppColors.primaryColor,
+          child: const Icon(Icons.add),
+        ),
+      ],
     );
   }
 
@@ -367,7 +635,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   /// 显示新建聊天选项
   void _showNewChatOptions() {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    
+
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -412,7 +680,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     required VoidCallback onTap,
   }) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    
+
     return ListTile(
       leading: Container(
         padding: const EdgeInsets.all(8),

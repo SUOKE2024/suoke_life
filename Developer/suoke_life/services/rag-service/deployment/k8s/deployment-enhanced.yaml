@@ -1,0 +1,234 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rag-service
+  namespace: suoke
+  labels:
+    app: rag-service
+    service-type: data
+  annotations:
+    app.kubernetes.io/part-of: suoke-platform
+    app.kubernetes.io/managed-by: argocd
+    backup.velero.io/backup-volumes: "data,logs"
+    backup.velero.io/schedule: "daily"
+    backup.velero.io/ttl: "720h"
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: rag-service
+  template:
+    metadata:
+      labels:
+        app: rag-service
+        service-type: data
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/metrics"
+        sidecar.istio.io/inject: "true"
+    spec:
+      # 节点亲和性 - 确保部署在数据服务节点池
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-type
+                operator: In
+                values:
+                - stateful-services
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - rag-service
+              topologyKey: kubernetes.io/hostname
+      
+      # 污点容忍 - 允许部署在有污点的数据节点上
+      tolerations:
+      - key: "dedicated"
+        operator: "Equal"
+        value: "database"
+        effect: "NoSchedule"
+      
+      containers:
+      - name: rag-service
+        image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/rag-service:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+          name: http
+        - containerPort: 9090
+          name: metrics
+        
+        # 环境变量配置
+        envFrom:
+        - configMapRef:
+            name: rag-config
+        env:
+        # Neo4j配置
+        - name: NEO4J_URI
+          valueFrom:
+            secretKeyRef:
+              name: rag-secrets
+              key: neo4j-uri
+        - name: NEO4J_USER
+          valueFrom:
+            secretKeyRef:
+              name: rag-secrets
+              key: neo4j-user
+        - name: NEO4J_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: rag-secrets
+              key: neo4j-password
+        - name: NEO4J_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: rag-secrets
+              key: neo4j-database
+              
+        # OTEL配置
+        - name: OTEL_SERVICE_NAME
+          value: "rag-service"
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: "http://suoke-collector-collector.monitoring:4317"
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: "service.namespace=suoke,service.name=rag-service"
+        
+        # Redis配置
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: rag-secrets
+              key: redis-password
+        - name: REDIS_SSL
+          valueFrom:
+            secretKeyRef:
+              name: rag-secrets
+              key: redis-ssl
+              
+        # LLM服务配置
+        - name: LLM_SERVICE_URL
+          valueFrom:
+            secretKeyRef:
+              name: rag-secrets
+              key: llm-service-url
+        - name: LLM_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: rag-secrets
+              key: llm-api-key
+              
+        # JWT配置
+        - name: JWT_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: rag-secrets
+              key: jwt-secret-key
+        - name: JWT_ALGORITHM
+          valueFrom:
+            secretKeyRef:
+              name: rag-secrets
+              key: jwt-algorithm
+              
+        volumeMounts:
+        - name: ssl-certs
+          mountPath: /etc/ssl/certs/api.suoke.life.crt
+          subPath: ssl-cert
+        - name: ssl-keys
+          mountPath: /etc/ssl/private/api.suoke.life.key
+          subPath: ssl-key
+        - name: data
+          mountPath: /app/data
+        - name: logs
+          mountPath: /app/logs
+          
+        # 资源请求和限制
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "1Gi"
+          limits:
+            cpu: "2"
+            memory: "4Gi"
+            
+        # 健康检查
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 3
+          
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 15
+          periodSeconds: 15
+          timeoutSeconds: 3
+          successThreshold: 1
+          failureThreshold: 3
+          
+        startupProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          failureThreshold: 12
+          
+        # 安全上下文
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+          runAsUser: 1000
+          runAsGroup: 1000
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: false
+          
+      volumes:
+      - name: ssl-certs
+        secret:
+          secretName: rag-secrets
+          items:
+          - key: ssl-cert
+            path: ssl-cert
+      - name: ssl-keys
+        secret:
+          secretName: rag-secrets
+          items:
+          - key: ssl-key
+            path: ssl-key
+      - name: data
+        persistentVolumeClaim:
+          claimName: rag-service-data
+      - name: logs
+        persistentVolumeClaim:
+          claimName: rag-service-logs
+          
+      imagePullSecrets:
+      - name: aliyun-registry-secret
+      
+      # Pod安全上下文
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: "OnRootMismatch"
+        
+      terminationGracePeriodSeconds: 60

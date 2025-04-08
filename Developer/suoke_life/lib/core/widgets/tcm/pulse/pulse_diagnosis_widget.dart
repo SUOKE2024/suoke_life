@@ -1032,13 +1032,13 @@ class PulseDiagnosisNotifier extends StateNotifier<PulseDiagnosisState> {
         if (cameraController.value.isStreamingImages) {
           await cameraController.stopImageStream();
         }
-        
+
         try {
           await cameraController.setFlashMode(FlashMode.off);
         } catch (e) {
           print('关闭闪光灯出错: $e');
         }
-        
+
         // 最后再释放相机资源
         await cameraController.dispose();
       } catch (e) {
@@ -1076,7 +1076,7 @@ class PulseDiagnosisNotifier extends StateNotifier<PulseDiagnosisState> {
 class PulseDiagnosisWidget extends ConsumerStatefulWidget {
   /// 默认脉象类型
   static const PulseType defaultPulseType = PulseType.floating;
-  
+
   /// 初始脉象类型
   final PulseType? initialPulseType;
 
@@ -1103,56 +1103,58 @@ class PulseDiagnosisWidget extends ConsumerStatefulWidget {
   }) : super(key: key);
 
   @override
-  ConsumerState<PulseDiagnosisWidget> createState() => _PulseDiagnosisWidgetState();
+  ConsumerState<PulseDiagnosisWidget> createState() =>
+      _PulseDiagnosisWidgetState();
 }
 
 class _PulseDiagnosisWidgetState extends ConsumerState<PulseDiagnosisWidget> {
   // 使用简化版脉象数据源
   late PulseType _selectedPulseType;
-  
+
   // 相机相关变量
   CameraController? _cameraController;
   bool _isCameraInitialized = false;
   bool _isCameraMode = false;
-  
+
   // 动画相关变量
   late bool _isAnimationEnabled;
   Timer? _animationTimer;
   int _animationFrame = 0;
   final int _totalAnimationFrames = 100;
-  
+
   // 波形点
   final List<double> _wavePoints = [];
   final int _maxPoints = 100;
-  
+
   @override
   void initState() {
     super.initState();
     _selectedPulseType = widget.initialPulseType ?? PulseType.floating;
-    _isAnimationEnabled = widget.enableAnimationByDefault && !kIsWeb; // Web平台默认禁用动画
-    
+    _isAnimationEnabled =
+        widget.enableAnimationByDefault && !kIsWeb; // Web平台默认禁用动画
+
     // 初始化波形点
     _initializeWavePoints();
-    
+
     // 如果启用动画且不是Web平台，启动动画
     if (_isAnimationEnabled) {
       _startAnimation();
     }
-    
+
     // 如果启用相机且不是Web平台，初始化相机
     if (widget.enableCamera && !kIsWeb) {
       _initializeCamera();
     }
   }
-  
+
   // 初始化波形点
   void _initializeWavePoints() {
     _wavePoints.clear();
     final pulseData = PulseData.fromSample(_selectedPulseType);
-    
+
     // 仅使用较少点以降低渲染压力
     final int pointsToUse = kIsWeb ? 50 : _maxPoints;
-    
+
     for (int i = 0; i < pointsToUse; i++) {
       if (i < pulseData.values.length) {
         _wavePoints.add(pulseData.values[i]);
@@ -1161,15 +1163,16 @@ class _PulseDiagnosisWidgetState extends ConsumerState<PulseDiagnosisWidget> {
       }
     }
   }
-  
+
   // 启动动画
   void _startAnimation() {
     // 停止现有动画
     _stopAnimation();
-    
+
     // 根据平台调整更新频率
-    final int updatesPerSecond = kIsWeb ? _kWebUpdatesPerSecond : _kNativeUpdatesPerSecond;
-    
+    final int updatesPerSecond =
+        kIsWeb ? _kWebUpdatesPerSecond : _kNativeUpdatesPerSecond;
+
     // 创建新动画计时器
     _animationTimer = Timer.periodic(
       Duration(milliseconds: 1000 ~/ updatesPerSecond),
@@ -1183,26 +1186,27 @@ class _PulseDiagnosisWidgetState extends ConsumerState<PulseDiagnosisWidget> {
       },
     );
   }
-  
+
   // 停止动画
   void _stopAnimation() {
     _animationTimer?.cancel();
     _animationTimer = null;
   }
-  
+
   // 更新波形点
   void _updateWavePoints() {
     if (_wavePoints.isEmpty) return;
-    
+
     // 生成新的点
     final pulseData = PulseData.fromSample(_selectedPulseType);
-    final double newPoint = pulseData.values[_animationFrame % pulseData.values.length];
-    
+    final double newPoint =
+        pulseData.values[_animationFrame % pulseData.values.length];
+
     // 移除第一个点并添加新点
     _wavePoints.removeAt(0);
     _wavePoints.add(newPoint);
   }
-  
+
   // 初始化相机
   Future<void> _initializeCamera() async {
     // Web平台不支持或跳过相机初始化
@@ -1210,29 +1214,29 @@ class _PulseDiagnosisWidgetState extends ConsumerState<PulseDiagnosisWidget> {
       debugPrint('Web平台不初始化相机功能');
       return;
     }
-    
+
     try {
       final cameras = await availableCameras();
       if (cameras.isEmpty) {
         debugPrint('没有可用的相机');
         return;
       }
-      
+
       // 使用后置相机
       final camera = cameras.firstWhere(
         (camera) => camera.lensDirection == CameraLensDirection.back,
         orElse: () => cameras.first,
       );
-      
+
       // 初始化相机控制器
       _cameraController = CameraController(
         camera,
         ResolutionPreset.medium,
         enableAudio: false,
       );
-      
+
       await _cameraController!.initialize();
-      
+
       if (mounted) {
         setState(() {
           _isCameraInitialized = true;

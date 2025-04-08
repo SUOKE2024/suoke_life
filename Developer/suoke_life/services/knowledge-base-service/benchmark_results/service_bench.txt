@@ -1,0 +1,18 @@
+--- FAIL: BenchmarkRealDocumentServiceCreate
+    document_service_bench_test.go:22: 设置文档服务失败: 连接数据库失败: 数据库连接测试失败: pq: role "postgres" does not exist
+--- FAIL: BenchmarkRealSemanticSearch
+    document_service_bench_test.go:68: 设置文档服务失败: 连接数据库失败: 数据库连接测试失败: pq: role "postgres" does not exist
+--- FAIL: BenchmarkRealGetDocumentByID
+    document_service_bench_test.go:169: 设置文档服务失败: 连接数据库失败: 数据库连接测试失败: pq: role "postgres" does not exist
+--- FAIL: BenchmarkRealGetDocumentsByCategory
+    document_service_bench_test.go:192: 设置文档服务失败: 连接数据库失败: 数据库连接测试失败: pq: role "postgres" does not exist
+--- FAIL: BenchmarkRealSearchDocuments
+    document_service_bench_test.go:237: 设置文档服务失败: 连接数据库失败: 数据库连接测试失败: pq: role "postgres" does not exist
+--- FAIL: BenchmarkRealCreateDocument
+    document_service_bench_test.go:260: 设置文档服务失败: 连接数据库失败: 数据库连接测试失败: pq: role "postgres" does not exist
+--- FAIL: BenchmarkRealUpdateDocument
+    document_service_bench_test.go:318: 设置文档服务失败: 连接数据库失败: 数据库连接测试失败: pq: role "postgres" does not exist
+FAIL
+exit status 1
+FAIL	knowledge-base-service/internal/test/benchmark/real	0.366s
+FAIL

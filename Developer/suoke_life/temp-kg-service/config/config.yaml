@@ -1,0 +1,50 @@
+server:
+  port: 8080
+  host: 0.0.0.0
+
+neo4j:
+  uri: "neo4j://neo4j:7687"
+  username: "neo4j"
+  password: "password"
+
+logging:
+  level: "info"
+  format: "json"
+
+# 中医知识库配置
+tcm:
+  # 知识体系分类
+  categories:
+    - name: "基础理论"
+      description: "中医基础理论体系"
+    - name: "诊断方法"
+      description: "四诊法等诊断方法"
+    - name: "治疗方法"
+      description: "各类治疗方法与应用"
+    - name: "方剂学"
+      description: "中药方剂组成与应用"
+    - name: "中药学"
+      description: "中药材性味归经与应用"
+
+  # 实体类型定义
+  entityTypes:
+    - type: "脏腑"
+      properties:
+        - name: "description"
+          dataType: "string"
+        - name: "category"
+          dataType: "string"
+    - type: "症状"
+      properties:
+        - name: "description"
+          dataType: "string"
+        - name: "severity"
+          dataType: "string"
+    - type: "方剂"
+      properties:
+        - name: "composition"
+          dataType: "string"
+        - name: "effect"
+          dataType: "string"
+        - name: "contraindications"
+          dataType: "string" 

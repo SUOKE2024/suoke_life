@@ -8,4 +8,4 @@ import (
 type TextSplitter interface {
 	// Split 将文本分割成块
 	Split(text string, metadata map[string]interface{}) ([]entity.Chunk, error)
-} 
+}

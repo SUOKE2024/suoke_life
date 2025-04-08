@@ -1,0 +1,99 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: knowledge-graph-service
+  labels:
+    app: knowledge-graph-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: knowledge-graph-service
+  template:
+    metadata:
+      labels:
+        app: knowledge-graph-service
+    spec:
+      containers:
+      - name: knowledge-graph-service
+        image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/knowledge-graph-service:local
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 9464
+          name: metrics
+        env:
+        - name: LOG_LEVEL
+          value: "debug"
+        - name: DEBUG
+          value: "true"
+        - name: ENV
+          value: "development"
+        - name: DB_NEO4J_URI
+          value: "bolt://localhost:7687"
+        - name: DB_NEO4J_USERNAME
+          value: "neo4j"
+        - name: DB_NEO4J_PASSWORD
+          value: "password"
+        - name: REDIS_HOST
+          value: "localhost"
+        - name: REDIS_PORT
+          value: "6379"
+        - name: MILVUS_URI
+          value: "localhost:19530"
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 200m
+            memory: 256Mi
+        volumeMounts:
+        - name: data
+          mountPath: /app/data
+        - name: models
+          mountPath: /app/models
+        - name: tmp
+          mountPath: /app/tmp
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+      imagePullSecrets:
+      - name: suoke-registry-secret
+      volumes:
+      - name: data
+        emptyDir: {}
+      - name: models
+        emptyDir: {}
+      - name: tmp
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: knowledge-graph-service
+  labels:
+    app: knowledge-graph-service
+spec:
+  selector:
+    app: knowledge-graph-service
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: http
+  - port: 9464
+    targetPort: 9464
+    name: metrics
+  type: ClusterIP

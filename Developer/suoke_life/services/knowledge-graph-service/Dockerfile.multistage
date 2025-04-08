@@ -1,0 +1,65 @@
+# 第一阶段：拉取pause镜像
+FROM registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.9 as pause
+
+# 第二阶段：使用Go编译环境构建应用
+FROM golang:1.24.0 AS builder
+
+# 设置工作目录
+WORKDIR /build
+
+# 设置Go模块和代理参数
+ENV GO111MODULE=on
+ENV GOPROXY=https://goproxy.cn,direct
+
+# 复制Go模块定义
+COPY go.mod go.sum ./
+
+# 降级依赖（如果需要）
+RUN go get -u github.com/klauspost/cpuid/v2@v2.1.2
+RUN go get -u golang.org/x/arch@v0.5.0
+RUN go get -u github.com/gin-contrib/cors@v1.4.0
+
+# 下载依赖
+RUN go mod download
+
+# 复制源代码
+COPY . .
+
+# 编译应用程序为静态链接二进制文件
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -ldflags="-w -s -extldflags '-static'" -o knowledge-graph-service ./cmd/server
+
+# 第三阶段：基于scratch构建最小镜像
+FROM scratch AS final
+
+# 从builder阶段复制CA证书
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+
+# 复制时区数据
+COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
+ENV TZ=Asia/Shanghai
+
+# 设置工作目录
+WORKDIR /app
+
+# 复制编译好的二进制文件
+COPY --from=builder /build/knowledge-graph-service /app/
+COPY --from=builder /build/.env.example /app/.env
+
+# 复制入口脚本和其他必要文件
+COPY entrypoint.sh /app/
+COPY config/ /app/config/
+
+# 复制数据目录（如果需要）
+COPY datasets/ /app/datasets/
+COPY data/ /app/data/
+
+# 设置环境变量
+ENV GIN_MODE=release
+ENV APP_PORT=8080
+ENV APP_HOST=0.0.0.0
+
+# 暴露端口
+EXPOSE 8080
+
+# 设置入口点
+ENTRYPOINT ["/app/knowledge-graph-service"] 

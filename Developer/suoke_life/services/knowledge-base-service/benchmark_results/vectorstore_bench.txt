@@ -1,0 +1,5 @@
+goos: darwin
+goarch: arm64
+pkg: knowledge-base-service/internal/test/benchmark/real
+cpu: Apple M3
+BenchmarkVectorStoreStore

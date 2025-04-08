@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: knowledge-graph-service
-  namespace: suoke
+  namespace: suoke-prod
   labels:
     app: knowledge-graph-service
     tier: data
@@ -31,7 +31,7 @@ spec:
         component: knowledge-graph
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: "3006"
+        prometheus.io/port: "8080"
         prometheus.io/path: "/metrics"
         sidecar.istio.io/inject: "true"
     spec:
@@ -96,7 +96,7 @@ spec:
       
       containers:
       - name: knowledge-graph-service
-        image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/knowledge-graph-service:latest
+        image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/knowledge-graph-service-go:latest
         imagePullPolicy: Always
         securityContext:
           allowPrivilegeEscalation: false
@@ -106,29 +106,29 @@ spec:
             drop:
             - ALL
         env:
-        - name: NODE_ENV
+        - name: ENV
           value: "production"
         - name: LOG_LEVEL
           value: "info"
-        - name: PORT
-          value: "3006"
+        - name: LOG_FORMAT
+          value: "json"
+        - name: SERVER_PORT
+          value: "8080"
         # Graph DB配置
-        - name: GRAPH_DB_HOST
-          value: "neo4j-service"
-        - name: GRAPH_DB_PORT
-          value: "7687"
-        - name: GRAPH_DB_NAME
-          value: "suoke_knowledge_graph"
-        - name: GRAPH_DB_USER
+        - name: DB_NEO4J_URI
+          value: "bolt://neo4j-service:7687"
+        - name: DB_NEO4J_USERNAME
           valueFrom:
             secretKeyRef:
               name: knowledge-graph-secrets
               key: neo4j-username
-        - name: GRAPH_DB_PASSWORD
+        - name: DB_NEO4J_PASSWORD
           valueFrom:
             secretKeyRef:
               name: knowledge-graph-secrets
               key: neo4j-password
+        - name: DB_NEO4J_DATABASE
+          value: "suoke_knowledge_graph"
         # Redis配置
         - name: REDIS_HOST
           value: "redis-master"
@@ -140,16 +140,14 @@ spec:
               name: knowledge-graph-secrets
               key: redis-password
         # Milvus配置
-        - name: VECTOR_DB_HOST
-          value: "milvus-standalone"
-        - name: VECTOR_DB_PORT
-          value: "19530"
-        - name: VECTOR_DB_USER
+        - name: MILVUS_URI
+          value: "milvus-standalone:19530"
+        - name: MILVUS_USERNAME
           valueFrom:
             secretKeyRef:
               name: knowledge-graph-secrets
               key: milvus-username
-        - name: VECTOR_DB_PASSWORD
+        - name: MILVUS_PASSWORD
           valueFrom:
             secretKeyRef:
               name: knowledge-graph-secrets
@@ -158,6 +156,11 @@ spec:
         - name: RAG_SERVICE_URL
           value: "http://rag-service:8000"
         # 安全配置
+        - name: API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: knowledge-graph-secrets
+              key: api-key
         - name: ENCRYPTION_KEY
           valueFrom:
             secretKeyRef:
@@ -188,7 +191,7 @@ spec:
               fieldPath: metadata.namespace
         ports:
         - name: http
-          containerPort: 3006
+          containerPort: 8080
           protocol: TCP
         - name: metrics
           containerPort: 9464
@@ -200,71 +203,66 @@ spec:
           mountPath: /app/models
         - name: tmp
           mountPath: /app/tmp
-        - name: secrets-store
-          mountPath: "/mnt/secrets-store"
-          readOnly: true
-        resources:
-          requests:
-            cpu: "500m"
-            memory: "1Gi"
-          limits:
-            cpu: "1"
-            memory: "2Gi"
+        - name: configs
+          mountPath: /app/configs
         livenessProbe:
           httpGet:
             path: /health
             port: http
-            httpHeaders:
-            - name: X-Probe-Type
-              value: "liveness"
           initialDelaySeconds: 30
-          periodSeconds: 15
           timeoutSeconds: 5
+          periodSeconds: 10
           failureThreshold: 3
-          successThreshold: 1
         readinessProbe:
           httpGet:
             path: /health
             port: http
-            httpHeaders:
-            - name: X-Probe-Type
-              value: "readiness"
           initialDelaySeconds: 15
+          timeoutSeconds: 5
           periodSeconds: 10
-          timeoutSeconds: 3
           failureThreshold: 3
         startupProbe:
           httpGet:
             path: /health
             port: http
-            httpHeaders:
-            - name: X-Probe-Type
-              value: "startup"
           initialDelaySeconds: 10
-          periodSeconds: 10
           timeoutSeconds: 5
-          failureThreshold: 30
-      - name: otel-collector-sidecar
-        image: otel/opentelemetry-collector-contrib:0.84.0
-        args:
-        - "--config=/conf/otel-collector-config.yaml"
-        ports:
-        - name: otlp
-          containerPort: 4317
-        - name: otlp-http
-          containerPort: 4318
-        - name: health-check
-          containerPort: 13133
+          periodSeconds: 10
+          failureThreshold: 12
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "512Mi"
+          limits:
+            cpu: "1000m"
+            memory: "2Gi"
+      
+      - name: fluent-bit
+        image: fluent/fluent-bit:1.9.10
+        imagePullPolicy: IfNotPresent
+        command: ["/fluent-bit/bin/fluent-bit", "-c", "/fluent-bit/etc/fluent-bit.conf"]
         volumeMounts:
-        - name: otel-collector-config
-          mountPath: /conf
+        - name: app-logs
+          mountPath: /var/log/app
+          readOnly: true
+        - name: fluent-bit-config
+          mountPath: /fluent-bit/etc/
         resources:
           limits:
-            cpu: 200m
-            memory: 400Mi
+            cpu: "100m"
+            memory: "128Mi"
           requests:
-            cpu: 100m
-            memory: 200Mi
+            cpu: "50m"
+            memory: "64Mi"
+        securityContext:
+          allowPrivilegeEscalation: false
+          privileged: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1000
+          capabilities:
+            drop:
+            - ALL
       
       volumes:
       - name: data
@@ -274,17 +272,15 @@ spec:
         persistentVolumeClaim:
           claimName: knowledge-graph-models-pvc
       - name: tmp
-        persistentVolumeClaim:
-          claimName: knowledge-graph-tmp-pvc
-      - name: otel-collector-config
+        emptyDir: {}
+      - name: configs
         configMap:
-          name: knowledge-graph-otel-collector-config
-      - name: secrets-store
-        csi:
-          driver: secrets-store.csi.x-k8s.io
-          readOnly: true
-          volumeAttributes:
-            secretProviderClass: "vault-knowledge-graph-config"
+          name: knowledge-graph-config
+      - name: app-logs
+        emptyDir: {}
+      - name: fluent-bit-config
+        configMap:
+          name: knowledge-graph-fluentbit-config
       
       imagePullSecrets:
       - name: aliyun-registry-secret
