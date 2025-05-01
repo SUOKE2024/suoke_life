@@ -29,11 +29,11 @@ spec:
           requests:
             cpu: 500m
             memory: 2Gi
-            nvidia.com/gpu: ${GPU_COUNT:-0}
+            nvidia.com/gpu: "${GPU_COUNT}"
           limits:
             cpu: 2000m
             memory: 4Gi
-            nvidia.com/gpu: ${GPU_COUNT:-0}
+            nvidia.com/gpu: "${GPU_COUNT}"
         env:
         - name: NODE_ENV
           value: production

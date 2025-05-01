@@ -44,8 +44,8 @@
     "corn-maze-service": 7000
   },
   "gpu_services": {
-    "xiaoai-service": 1,
-    "laoke-service": 1,
-    "looking-diagnosis-service": 1
+    "xiaoai-service": "1",
+    "laoke-service": "1",
+    "looking-diagnosis-service": "1"
   }
 } 
