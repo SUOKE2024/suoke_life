@@ -40,6 +40,7 @@ jobs:
         run: |
           cat services/.env.prod >> $GITHUB_ENV
 
+      # Core服务
       - name: 构建并推送共享模块镜像
         if: ${{ steps.vars.outputs.service == 'all' || steps.vars.outputs.service == 'shared' }}
         uses: docker/build-push-action@v4
@@ -62,7 +63,185 @@ jobs:
             ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/api-gateway:${{ steps.vars.outputs.tag }}
             ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/api-gateway:latest
 
-      # 其他服务构建步骤可以根据需要添加...
+      - name: 构建并推送认证服务镜像
+        if: ${{ steps.vars.outputs.service == 'all' || steps.vars.outputs.service == 'auth-service' }}
+        uses: docker/build-push-action@v4
+        with:
+          context: ./services/auth-service
+          push: true
+          platforms: linux/amd64
+          tags: |
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/auth-service:${{ steps.vars.outputs.tag }}
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/auth-service:latest
+
+      - name: 构建并推送用户服务镜像
+        if: ${{ steps.vars.outputs.service == 'all' || steps.vars.outputs.service == 'user-service' }}
+        uses: docker/build-push-action@v4
+        with:
+          context: ./services/user-service
+          push: true
+          platforms: linux/amd64
+          tags: |
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/user-service:${{ steps.vars.outputs.tag }}
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/user-service:latest
+
+      # AI服务
+      - name: 构建并推送XiaoAI服务镜像
+        if: ${{ steps.vars.outputs.service == 'all' || steps.vars.outputs.service == 'xiaoai-service' }}
+        uses: docker/build-push-action@v4
+        with:
+          context: ./services/xiaoai-service
+          push: true
+          platforms: linux/amd64
+          tags: |
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/xiaoai-service:${{ steps.vars.outputs.tag }}
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/xiaoai-service:latest
+
+      - name: 构建并推送XiaoKe服务镜像
+        if: ${{ steps.vars.outputs.service == 'all' || steps.vars.outputs.service == 'xiaoke-service' }}
+        uses: docker/build-push-action@v4
+        with:
+          context: ./services/xiaoke-service
+          push: true
+          platforms: linux/amd64
+          tags: |
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/xiaoke-service:${{ steps.vars.outputs.tag }}
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/xiaoke-service:latest
+
+      - name: 构建并推送LaoKe服务镜像
+        if: ${{ steps.vars.outputs.service == 'all' || steps.vars.outputs.service == 'laoke-service' }}
+        uses: docker/build-push-action@v4
+        with:
+          context: ./services/laoke-service
+          push: true
+          platforms: linux/amd64
+          tags: |
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/laoke-service:${{ steps.vars.outputs.tag }}
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/laoke-service:latest
+
+      - name: 构建并推送Soer服务镜像
+        if: ${{ steps.vars.outputs.service == 'all' || steps.vars.outputs.service == 'soer-service' }}
+        uses: docker/build-push-action@v4
+        with:
+          context: ./services/soer-service
+          push: true
+          platforms: linux/amd64
+          tags: |
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/soer-service:${{ steps.vars.outputs.tag }}
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/soer-service:latest
+
+      - name: 构建并推送代理协调服务镜像
+        if: ${{ steps.vars.outputs.service == 'all' || steps.vars.outputs.service == 'agent-coordinator-service' }}
+        uses: docker/build-push-action@v4
+        with:
+          context: ./services/agent-coordinator-service
+          push: true
+          platforms: linux/amd64
+          tags: |
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/agent-coordinator-service:${{ steps.vars.outputs.tag }}
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/agent-coordinator-service:latest
+
+      # 知识服务
+      - name: 构建并推送RAG服务镜像
+        if: ${{ steps.vars.outputs.service == 'all' || steps.vars.outputs.service == 'rag-service' }}
+        uses: docker/build-push-action@v4
+        with:
+          context: ./services/rag-service
+          push: true
+          platforms: linux/amd64
+          tags: |
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/rag-service:${{ steps.vars.outputs.tag }}
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/rag-service:latest
+
+      - name: 构建并推送知识图谱服务镜像
+        if: ${{ steps.vars.outputs.service == 'all' || steps.vars.outputs.service == 'knowledge-graph-service' }}
+        uses: docker/build-push-action@v4
+        with:
+          context: ./services/knowledge-graph-service
+          push: true
+          platforms: linux/amd64
+          tags: |
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/knowledge-graph-service:${{ steps.vars.outputs.tag }}
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/knowledge-graph-service:latest
+
+      - name: 构建并推送知识库服务镜像
+        if: ${{ steps.vars.outputs.service == 'all' || steps.vars.outputs.service == 'knowledge-base-service' }}
+        uses: docker/build-push-action@v4
+        with:
+          context: ./services/knowledge-base-service
+          push: true
+          platforms: linux/amd64
+          tags: |
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/knowledge-base-service:${{ steps.vars.outputs.tag }}
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/knowledge-base-service:latest
+
+      # 诊断服务
+      - name: 构建并推送问诊服务镜像
+        if: ${{ steps.vars.outputs.service == 'all' || steps.vars.outputs.service == 'inquiry-diagnosis-service' }}
+        uses: docker/build-push-action@v4
+        with:
+          context: ./services/inquiry-diagnosis-service
+          push: true
+          platforms: linux/amd64
+          tags: |
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/inquiry-diagnosis-service:${{ steps.vars.outputs.tag }}
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/inquiry-diagnosis-service:latest
+
+      - name: 构建并推送望诊服务镜像
+        if: ${{ steps.vars.outputs.service == 'all' || steps.vars.outputs.service == 'looking-diagnosis-service' }}
+        uses: docker/build-push-action@v4
+        with:
+          context: ./services/looking-diagnosis-service
+          push: true
+          platforms: linux/amd64
+          tags: |
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/looking-diagnosis-service:${{ steps.vars.outputs.tag }}
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/looking-diagnosis-service:latest
+
+      - name: 构建并推送闻诊服务镜像
+        if: ${{ steps.vars.outputs.service == 'all' || steps.vars.outputs.service == 'smell-diagnosis-service' }}
+        uses: docker/build-push-action@v4
+        with:
+          context: ./services/smell-diagnosis-service
+          push: true
+          platforms: linux/amd64
+          tags: |
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/smell-diagnosis-service:${{ steps.vars.outputs.tag }}
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/smell-diagnosis-service:latest
+
+      - name: 构建并推送切诊服务镜像
+        if: ${{ steps.vars.outputs.service == 'all' || steps.vars.outputs.service == 'touch-diagnosis-service' }}
+        uses: docker/build-push-action@v4
+        with:
+          context: ./services/touch-diagnosis-service
+          push: true
+          platforms: linux/amd64
+          tags: |
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/touch-diagnosis-service:${{ steps.vars.outputs.tag }}
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/touch-diagnosis-service:latest
+
+      - name: 构建并推送四诊协调服务镜像
+        if: ${{ steps.vars.outputs.service == 'all' || steps.vars.outputs.service == 'four-diagnosis-coordinator' }}
+        uses: docker/build-push-action@v4
+        with:
+          context: ./services/four-diagnosis-coordinator
+          push: true
+          platforms: linux/amd64
+          tags: |
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/four-diagnosis-coordinator:${{ steps.vars.outputs.tag }}
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/four-diagnosis-coordinator:latest
+
+      # 特性服务
+      - name: 构建并推送玉米迷宫服务镜像
+        if: ${{ steps.vars.outputs.service == 'all' || steps.vars.outputs.service == 'corn-maze-service' }}
+        uses: docker/build-push-action@v4
+        with:
+          context: ./services/corn-maze-service
+          push: true
+          platforms: linux/amd64
+          tags: |
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/corn-maze-service:${{ steps.vars.outputs.tag }}
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/corn-maze-service:latest
 
       - name: 保存镜像标签到文件
         run: |
@@ -111,32 +290,219 @@ jobs:
           kubectl apply -f services/k8s/consul-deployment.yaml
           kubectl apply -f services/k8s/consul-service.yaml
 
-      - name: 部署API网关配置
-        run: kubectl apply -f services/k8s/api-gateway-configmap.yaml
-
-      - name: 替换API网关部署文件中的镜像标签
-        run: |
-          envsubst < services/k8s/api-gateway-deployment.yaml > services/k8s/api-gateway-deployment-with-tag.yaml
-
+      # 部署Core服务
       - name: 部署API网关
+        if: ${{ github.event.inputs.service == 'all' || github.event.inputs.service == 'api-gateway' || github.event.inputs.service == null }}
         run: |
+          kubectl apply -f services/k8s/api-gateway-configmap.yaml
+          envsubst < services/k8s/api-gateway-deployment.yaml > services/k8s/api-gateway-deployment-with-tag.yaml
           kubectl apply -f services/k8s/api-gateway-deployment-with-tag.yaml
           kubectl apply -f services/k8s/api-gateway-service.yaml
+
+      - name: 部署认证服务
+        if: ${{ github.event.inputs.service == 'all' || github.event.inputs.service == 'auth-service' || github.event.inputs.service == null }}
+        run: |
+          kubectl apply -f services/auth-service/k8s/configmap.yaml
+          envsubst < services/auth-service/k8s/deployment.yaml > services/auth-service/k8s/deployment-with-tag.yaml
+          kubectl apply -f services/auth-service/k8s/deployment-with-tag.yaml
+          kubectl apply -f services/auth-service/k8s/service.yaml
+
+      - name: 部署用户服务
+        if: ${{ github.event.inputs.service == 'all' || github.event.inputs.service == 'user-service' || github.event.inputs.service == null }}
+        run: |
+          kubectl apply -f services/user-service/k8s/configmap.yaml
+          envsubst < services/user-service/k8s/deployment.yaml > services/user-service/k8s/deployment-with-tag.yaml
+          kubectl apply -f services/user-service/k8s/deployment-with-tag.yaml
+          kubectl apply -f services/user-service/k8s/service.yaml
+
+      # 部署AI服务
+      - name: 部署XiaoAI服务
+        if: ${{ github.event.inputs.service == 'all' || github.event.inputs.service == 'xiaoai-service' || github.event.inputs.service == null }}
+        run: |
+          kubectl apply -f services/xiaoai-service/k8s/configmap.yaml
+          envsubst < services/xiaoai-service/k8s/deployment.yaml > services/xiaoai-service/k8s/deployment-with-tag.yaml
+          kubectl apply -f services/xiaoai-service/k8s/deployment-with-tag.yaml
+          kubectl apply -f services/xiaoai-service/k8s/service.yaml
+
+      - name: 部署XiaoKe服务
+        if: ${{ github.event.inputs.service == 'all' || github.event.inputs.service == 'xiaoke-service' || github.event.inputs.service == null }}
+        run: |
+          kubectl apply -f services/xiaoke-service/k8s/base/configmap.yaml
+          envsubst < services/xiaoke-service/k8s/base/deployment.yaml > services/xiaoke-service/k8s/base/deployment-with-tag.yaml
+          kubectl apply -f services/xiaoke-service/k8s/base/deployment-with-tag.yaml
+          kubectl apply -f services/xiaoke-service/k8s/base/service.yaml
+
+      - name: 部署LaoKe服务
+        if: ${{ github.event.inputs.service == 'all' || github.event.inputs.service == 'laoke-service' || github.event.inputs.service == null }}
+        run: |
+          kubectl apply -f services/laoke-service/k8s/base/configmap.yaml
+          envsubst < services/laoke-service/k8s/base/deployment.yaml > services/laoke-service/k8s/base/deployment-with-tag.yaml
+          kubectl apply -f services/laoke-service/k8s/base/deployment-with-tag.yaml
+          kubectl apply -f services/laoke-service/k8s/base/service.yaml
+
+      - name: 部署Soer服务
+        if: ${{ github.event.inputs.service == 'all' || github.event.inputs.service == 'soer-service' || github.event.inputs.service == null }}
+        run: |
+          kubectl apply -f services/soer-service/k8s/base/configmap.yaml
+          envsubst < services/soer-service/k8s/base/deployment.yaml > services/soer-service/k8s/base/deployment-with-tag.yaml
+          kubectl apply -f services/soer-service/k8s/base/deployment-with-tag.yaml
+          kubectl apply -f services/soer-service/k8s/base/service.yaml
+
+      - name: 部署Agent协调服务
+        if: ${{ github.event.inputs.service == 'all' || github.event.inputs.service == 'agent-coordinator-service' || github.event.inputs.service == null }}
+        run: |
+          kubectl apply -f services/agent-coordinator-service/k8s/configmap.yaml
+          envsubst < services/agent-coordinator-service/k8s/deployment.yaml > services/agent-coordinator-service/k8s/deployment-with-tag.yaml
+          kubectl apply -f services/agent-coordinator-service/k8s/deployment-with-tag.yaml
+          kubectl apply -f services/agent-coordinator-service/k8s/service.yaml
+
+      # 部署知识服务
+      - name: 部署RAG服务
+        if: ${{ github.event.inputs.service == 'all' || github.event.inputs.service == 'rag-service' || github.event.inputs.service == null }}
+        run: |
+          kubectl apply -f services/rag-service/k8s/configmap.yaml
+          envsubst < services/rag-service/k8s/deployment.yaml > services/rag-service/k8s/deployment-with-tag.yaml
+          kubectl apply -f services/rag-service/k8s/deployment-with-tag.yaml
+          kubectl apply -f services/rag-service/k8s/03-service.yaml
+
+      - name: 部署知识图谱服务
+        if: ${{ github.event.inputs.service == 'all' || github.event.inputs.service == 'knowledge-graph-service' || github.event.inputs.service == null }}
+        run: |
+          kubectl apply -f services/knowledge-graph-service/k8s/configmap.yaml
+          envsubst < services/knowledge-graph-service/k8s/deployment.yaml > services/knowledge-graph-service/k8s/deployment-with-tag.yaml
+          kubectl apply -f services/knowledge-graph-service/k8s/deployment-with-tag.yaml
+          kubectl apply -f services/knowledge-graph-service/k8s/service.yaml
+
+      - name: 部署知识库服务
+        if: ${{ github.event.inputs.service == 'all' || github.event.inputs.service == 'knowledge-base-service' || github.event.inputs.service == null }}
+        run: |
+          kubectl apply -f services/knowledge-base-service/k8s/configmap.yaml
+          envsubst < services/knowledge-base-service/k8s/deployment.yaml > services/knowledge-base-service/k8s/deployment-with-tag.yaml
+          kubectl apply -f services/knowledge-base-service/k8s/deployment-with-tag.yaml
+          kubectl apply -f services/knowledge-base-service/k8s/service.yaml
+
+      # 部署诊断服务
+      - name: 部署问诊服务
+        if: ${{ github.event.inputs.service == 'all' || github.event.inputs.service == 'inquiry-diagnosis-service' || github.event.inputs.service == null }}
+        run: |
+          kubectl apply -f services/inquiry-diagnosis-service/k8s/configmap.yaml
+          envsubst < services/inquiry-diagnosis-service/k8s/deployment.yaml > services/inquiry-diagnosis-service/k8s/deployment-with-tag.yaml
+          kubectl apply -f services/inquiry-diagnosis-service/k8s/deployment-with-tag.yaml
+          kubectl apply -f services/inquiry-diagnosis-service/k8s/service.yaml
+
+      - name: 部署望诊服务
+        if: ${{ github.event.inputs.service == 'all' || github.event.inputs.service == 'looking-diagnosis-service' || github.event.inputs.service == null }}
+        run: |
+          kubectl apply -f services/looking-diagnosis-service/k8s/configmap.yaml
+          envsubst < services/looking-diagnosis-service/k8s/deployment.yaml > services/looking-diagnosis-service/k8s/deployment-with-tag.yaml
+          kubectl apply -f services/looking-diagnosis-service/k8s/deployment-with-tag.yaml
+          kubectl apply -f services/looking-diagnosis-service/k8s/service.yaml
+
+      - name: 部署闻诊服务
+        if: ${{ github.event.inputs.service == 'all' || github.event.inputs.service == 'smell-diagnosis-service' || github.event.inputs.service == null }}
+        run: |
+          kubectl apply -f services/smell-diagnosis-service/k8s/configmap.yaml
+          envsubst < services/smell-diagnosis-service/k8s/deployment.yaml > services/smell-diagnosis-service/k8s/deployment-with-tag.yaml
+          kubectl apply -f services/smell-diagnosis-service/k8s/deployment-with-tag.yaml
+          kubectl apply -f services/smell-diagnosis-service/k8s/service.yaml
+
+      - name: 部署切诊服务
+        if: ${{ github.event.inputs.service == 'all' || github.event.inputs.service == 'touch-diagnosis-service' || github.event.inputs.service == null }}
+        run: |
+          kubectl apply -f services/touch-diagnosis-service/k8s/configmap.yaml
+          envsubst < services/touch-diagnosis-service/k8s/deployment.yaml > services/touch-diagnosis-service/k8s/deployment-with-tag.yaml
+          kubectl apply -f services/touch-diagnosis-service/k8s/deployment-with-tag.yaml
+          kubectl apply -f services/touch-diagnosis-service/k8s/service.yaml
+
+      - name: 部署四诊协调服务
+        if: ${{ github.event.inputs.service == 'all' || github.event.inputs.service == 'four-diagnosis-coordinator' || github.event.inputs.service == null }}
+        run: |
+          kubectl apply -f services/four-diagnosis-coordinator/k8s/configmap.yaml
+          envsubst < services/four-diagnosis-coordinator/k8s/deployment.yaml > services/four-diagnosis-coordinator/k8s/deployment-with-tag.yaml
+          kubectl apply -f services/four-diagnosis-coordinator/k8s/deployment-with-tag.yaml
+          kubectl apply -f services/four-diagnosis-coordinator/k8s/service.yaml
+
+      # 部署特性服务
+      - name: 部署玉米迷宫服务
+        if: ${{ github.event.inputs.service == 'all' || github.event.inputs.service == 'corn-maze-service' || github.event.inputs.service == null }}
+        run: |
+          kubectl apply -f services/corn-maze-service/k8s/configmap.yaml
+          envsubst < services/corn-maze-service/k8s/deployment.yaml > services/corn-maze-service/k8s/deployment-with-tag.yaml
+          kubectl apply -f services/corn-maze-service/k8s/deployment-with-tag.yaml
+          kubectl apply -f services/corn-maze-service/k8s/service.yaml
 
       - name: 部署Ingress配置
         run: kubectl apply -f services/k8s/ingress.yaml
 
       - name: 等待部署完成
         run: |
-          kubectl rollout status deployment/api-gateway -n suoke
-          kubectl rollout status deployment/suoke-discovery -n suoke
+          # Core服务
+          if [[ "${{ github.event.inputs.service }}" == "all" || "${{ github.event.inputs.service }}" == "api-gateway" || "${{ github.event.inputs.service }}" == "" ]]; then
+            kubectl rollout status deployment/api-gateway -n suoke
+          fi
+          if [[ "${{ github.event.inputs.service }}" == "all" || "${{ github.event.inputs.service }}" == "auth-service" || "${{ github.event.inputs.service }}" == "" ]]; then
+            kubectl rollout status deployment/auth-service -n suoke
+          fi
+          if [[ "${{ github.event.inputs.service }}" == "all" || "${{ github.event.inputs.service }}" == "user-service" || "${{ github.event.inputs.service }}" == "" ]]; then
+            kubectl rollout status deployment/user-service -n suoke
+          fi
+          
+          # AI服务
+          if [[ "${{ github.event.inputs.service }}" == "all" || "${{ github.event.inputs.service }}" == "xiaoai-service" || "${{ github.event.inputs.service }}" == "" ]]; then
+            kubectl rollout status deployment/xiaoai-service -n suoke
+          fi
+          if [[ "${{ github.event.inputs.service }}" == "all" || "${{ github.event.inputs.service }}" == "xiaoke-service" || "${{ github.event.inputs.service }}" == "" ]]; then
+            kubectl rollout status deployment/xiaoke-service -n suoke
+          fi
+          if [[ "${{ github.event.inputs.service }}" == "all" || "${{ github.event.inputs.service }}" == "laoke-service" || "${{ github.event.inputs.service }}" == "" ]]; then
+            kubectl rollout status deployment/laoke-service -n suoke
+          fi
+          if [[ "${{ github.event.inputs.service }}" == "all" || "${{ github.event.inputs.service }}" == "soer-service" || "${{ github.event.inputs.service }}" == "" ]]; then
+            kubectl rollout status deployment/soer-service -n suoke
+          fi
+          if [[ "${{ github.event.inputs.service }}" == "all" || "${{ github.event.inputs.service }}" == "agent-coordinator-service" || "${{ github.event.inputs.service }}" == "" ]]; then
+            kubectl rollout status deployment/agent-coordinator-service -n suoke
+          fi
+          
+          # 知识服务
+          if [[ "${{ github.event.inputs.service }}" == "all" || "${{ github.event.inputs.service }}" == "rag-service" || "${{ github.event.inputs.service }}" == "" ]]; then
+            kubectl rollout status deployment/rag-service -n suoke
+          fi
+          if [[ "${{ github.event.inputs.service }}" == "all" || "${{ github.event.inputs.service }}" == "knowledge-graph-service" || "${{ github.event.inputs.service }}" == "" ]]; then
+            kubectl rollout status deployment/knowledge-graph-service -n suoke
+          fi
+          if [[ "${{ github.event.inputs.service }}" == "all" || "${{ github.event.inputs.service }}" == "knowledge-base-service" || "${{ github.event.inputs.service }}" == "" ]]; then
+            kubectl rollout status deployment/knowledge-base-service -n suoke
+          fi
+          
+          # 诊断服务
+          if [[ "${{ github.event.inputs.service }}" == "all" || "${{ github.event.inputs.service }}" == "inquiry-diagnosis-service" || "${{ github.event.inputs.service }}" == "" ]]; then
+            kubectl rollout status deployment/inquiry-diagnosis-service -n suoke
+          fi
+          if [[ "${{ github.event.inputs.service }}" == "all" || "${{ github.event.inputs.service }}" == "looking-diagnosis-service" || "${{ github.event.inputs.service }}" == "" ]]; then
+            kubectl rollout status deployment/looking-diagnosis-service -n suoke
+          fi
+          if [[ "${{ github.event.inputs.service }}" == "all" || "${{ github.event.inputs.service }}" == "smell-diagnosis-service" || "${{ github.event.inputs.service }}" == "" ]]; then
+            kubectl rollout status deployment/smell-diagnosis-service -n suoke
+          fi
+          if [[ "${{ github.event.inputs.service }}" == "all" || "${{ github.event.inputs.service }}" == "touch-diagnosis-service" || "${{ github.event.inputs.service }}" == "" ]]; then
+            kubectl rollout status deployment/touch-diagnosis-service -n suoke
+          fi
+          if [[ "${{ github.event.inputs.service }}" == "all" || "${{ github.event.inputs.service }}" == "four-diagnosis-coordinator" || "${{ github.event.inputs.service }}" == "" ]]; then
+            kubectl rollout status deployment/four-diagnosis-coordinator -n suoke
+          fi
+          
+          # 特性服务
+          if [[ "${{ github.event.inputs.service }}" == "all" || "${{ github.event.inputs.service }}" == "corn-maze-service" || "${{ github.event.inputs.service }}" == "" ]]; then
+            kubectl rollout status deployment/corn-maze-service -n suoke
+          fi
 
       - name: 部署完成通知
         uses: slackapi/slack-github-action@v1.24.0
         with:
           payload: |
             {
-              "text": "🚀 索克生活APP成功部署到生产环境！\n版本: ${{ env.TAG }}\n部署时间: $(date +'%Y-%m-%d %H:%M:%S')\n部署人: ${{ github.actor }}"
+              "text": "🚀 索克生活APP微服务成功部署到生产环境！\n版本: ${{ env.TAG }}\n部署时间: $(date +'%Y-%m-%d %H:%M:%S')\n部署服务: ${{ github.event.inputs.service || 'all' }}\n部署人: ${{ github.actor }}"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
