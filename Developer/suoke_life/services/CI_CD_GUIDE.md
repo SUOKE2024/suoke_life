@@ -44,6 +44,37 @@
 5. 指定要部署的服务（可以是"all"或特定服务名称）
 6. 点击"Run workflow"按钮启动部署
 
+## 支持的微服务
+
+CI/CD流程现已支持自动构建和部署以下微服务:
+
+1. **核心服务 (Core)**
+   - `api-gateway`: API网关
+   - `auth-service`: 身份认证服务
+   - `user-service`: 用户服务
+
+2. **AI服务 (AI)**
+   - `xiaoai-service`: 小AI服务
+   - `xiaoke-service`: 小客服务
+   - `laoke-service`: 老客服务
+   - `soer-service`: Soer服务
+   - `agent-coordinator-service`: 代理协调服务
+
+3. **知识服务 (Knowledge)**
+   - `rag-service`: 检索增强生成服务
+   - `knowledge-graph-service`: 知识图谱服务
+   - `knowledge-base-service`: 知识库服务
+
+4. **诊断服务 (Diagnosis)**
+   - `inquiry-diagnosis-service`: 问诊服务
+   - `looking-diagnosis-service`: 望诊服务
+   - `smell-diagnosis-service`: 闻诊服务
+   - `touch-diagnosis-service`: 切诊服务
+   - `four-diagnosis-coordinator`: 四诊协调服务
+
+5. **特性服务 (Feature)**
+   - `corn-maze-service`: 玉米迷宫服务
+
 ## 自动部署触发条件
 
 以下情况会自动触发部署流程:
@@ -71,6 +102,39 @@
    - 等待部署完成
    - 发送部署通知
 
+## 添加新的微服务
+
+要将新的微服务添加到CI/CD流程中，请按照以下步骤操作:
+
+1. **创建服务目录结构**:
+   ```
+   services/
+   └── your-new-service/
+       ├── src/                 # 源代码
+       ├── Dockerfile           # Docker构建文件
+       ├── package.json         # 依赖配置
+       └── k8s/                 # Kubernetes配置
+           ├── configmap.yaml   # 配置映射
+           ├── deployment.yaml  # 部署配置
+           └── service.yaml     # 服务配置
+   ```
+
+2. **修改CI/CD工作流配置**:
+   - 在`.github/workflows/deploy-prod.yml`中添加新服务的构建步骤
+   - 在`.github/workflows/deploy-prod.yml`中添加新服务的部署步骤
+   - 在`.github/workflows/deploy-prod.yml`中添加新服务的部署状态检查
+
+3. **准备Kubernetes配置文件**:
+   - 创建configmap.yaml：包含服务配置
+   - 创建deployment.yaml：定义Pod规格和副本数
+   - 创建service.yaml：定义服务端口和类型
+
+4. **更新API网关配置**:
+   - 在API网关配置中添加新服务的路由规则
+
+5. **注册到服务发现**:
+   - 确保新服务在Consul中正确注册
+
 ## 常见问题排查
 
 1. **镜像构建失败**:
@@ -86,6 +150,16 @@
    - 检查环境变量配置
    - 检查服务依赖项是否已部署
    - 查看服务日志
+
+4. **服务发现问题**:
+   - 检查Consul服务是否正常运行
+   - 检查服务是否正确注册到Consul
+   - 检查服务健康检查配置
+
+5. **网络连接问题**:
+   - 检查服务间网络连接
+   - 检查Ingress配置
+   - 检查防火墙规则
 
 ## 重要文件说明
 
