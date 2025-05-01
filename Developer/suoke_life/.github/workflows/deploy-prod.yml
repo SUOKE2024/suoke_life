@@ -1,0 +1,143 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [ master, main ]
+    paths:
+      - 'services/**'
+      - '.github/workflows/deploy-prod.yml'
+  workflow_dispatch:
+    inputs:
+      service:
+        description: '要部署的服务 (all, api-gateway, user-service 等)'
+        required: true
+        default: 'all'
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v3
+
+      - name: 设置 Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: 登录到阿里云容器镜像服务
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ secrets.ALI_REGISTRY_URL }}
+          username: ${{ secrets.ALI_REGISTRY_USERNAME }}
+          password: ${{ secrets.ALI_REGISTRY_PASSWORD }}
+
+      - name: 获取版本信息
+        id: vars
+        run: |
+          echo "tag=$(date +'%Y%m%d%H%M%S')-${GITHUB_SHA::8}" >> $GITHUB_OUTPUT
+          echo "service=${{ github.event.inputs.service || 'all' }}" >> $GITHUB_OUTPUT
+
+      - name: 加载环境变量
+        run: |
+          cat services/.env.prod >> $GITHUB_ENV
+
+      - name: 构建并推送共享模块镜像
+        if: ${{ steps.vars.outputs.service == 'all' || steps.vars.outputs.service == 'shared' }}
+        uses: docker/build-push-action@v4
+        with:
+          context: ./services/shared
+          push: true
+          platforms: linux/amd64
+          tags: |
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/shared:${{ steps.vars.outputs.tag }}
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/shared:latest
+
+      - name: 构建并推送API网关镜像
+        if: ${{ steps.vars.outputs.service == 'all' || steps.vars.outputs.service == 'api-gateway' }}
+        uses: docker/build-push-action@v4
+        with:
+          context: ./services/api-gateway
+          push: true
+          platforms: linux/amd64
+          tags: |
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/api-gateway:${{ steps.vars.outputs.tag }}
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/api-gateway:latest
+
+      # 其他服务构建步骤可以根据需要添加...
+
+      - name: 保存镜像标签到文件
+        run: |
+          echo "TAG=${{ steps.vars.outputs.tag }}" > services/k8s/image-tag.env
+
+      - name: 上传镜像标签文件
+        uses: actions/upload-artifact@v3
+        with:
+          name: image-tag
+          path: services/k8s/image-tag.env
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v3
+
+      - name: 下载镜像标签文件
+        uses: actions/download-artifact@v3
+        with:
+          name: image-tag
+          path: services/k8s
+
+      - name: 加载环境变量和镜像标签
+        run: |
+          cat services/.env.prod >> $GITHUB_ENV
+          source services/k8s/image-tag.env
+          echo "TAG=$TAG" >> $GITHUB_ENV
+
+      - name: 安装kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'v1.25.0'
+
+      - name: 配置kubectl
+        run: |
+          echo "${{ secrets.KUBE_CONFIG }}" > kubeconfig
+          echo "KUBECONFIG=./kubeconfig" >> $GITHUB_ENV
+
+      - name: 创建命名空间
+        run: kubectl apply -f services/k8s/namespace.yaml
+
+      - name: 部署Consul服务发现
+        run: |
+          kubectl apply -f services/k8s/consul-deployment.yaml
+          kubectl apply -f services/k8s/consul-service.yaml
+
+      - name: 部署API网关配置
+        run: kubectl apply -f services/k8s/api-gateway-configmap.yaml
+
+      - name: 替换API网关部署文件中的镜像标签
+        run: |
+          envsubst < services/k8s/api-gateway-deployment.yaml > services/k8s/api-gateway-deployment-with-tag.yaml
+
+      - name: 部署API网关
+        run: |
+          kubectl apply -f services/k8s/api-gateway-deployment-with-tag.yaml
+          kubectl apply -f services/k8s/api-gateway-service.yaml
+
+      - name: 部署Ingress配置
+        run: kubectl apply -f services/k8s/ingress.yaml
+
+      - name: 等待部署完成
+        run: |
+          kubectl rollout status deployment/api-gateway -n suoke
+          kubectl rollout status deployment/suoke-discovery -n suoke
+
+      - name: 部署完成通知
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "text": "🚀 索克生活APP成功部署到生产环境！\n版本: ${{ env.TAG }}\n部署时间: $(date +'%Y-%m-%d %H:%M:%S')\n部署人: ${{ github.actor }}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK

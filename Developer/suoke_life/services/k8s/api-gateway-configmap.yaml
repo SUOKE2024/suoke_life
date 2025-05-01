@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-gateway-config
+  namespace: suoke
+data:
+  default.json: |
+    {
+      "server": {
+        "port": 8080,
+        "logFormat": "combined"
+      },
+      "consul": {
+        "host": "suoke-discovery",
+        "port": 8500
+      },
+      "services": {
+        "userService": "user-service",
+        "authService": "auth-service",
+        "contentService": "content-service",
+        "ragService": "rag-service",
+        "knowledgeService": "knowledge-service",
+        "healthDataService": "health-data-service"
+      },
+      "circuitBreaker": {
+        "enabled": true,
+        "failureThreshold": 5,
+        "resetTimeout": 30000,
+        "halfOpenSuccessThreshold": 3
+      }
+    }

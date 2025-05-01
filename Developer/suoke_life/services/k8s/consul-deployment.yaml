@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: suoke-discovery
+  namespace: suoke
+  labels:
+    app: suoke-discovery
+    component: consul
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: suoke-discovery
+  template:
+    metadata:
+      labels:
+        app: suoke-discovery
+        component: consul
+    spec:
+      containers:
+      - name: consul
+        image: consul:1.14
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8500
+          name: http
+        - containerPort: 8600
+          name: dns
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+          requests:
+            cpu: "100m"
+            memory: "256Mi"
+        env:
+        - name: CONSUL_BIND_INTERFACE
+          value: eth0
+        - name: CONSUL_CLIENT_INTERFACE
+          value: eth0
+        args:
+        - "agent"
+        - "-dev"
+        - "-client"
+        - "0.0.0.0"
+        - "-ui"
+        volumeMounts:
+        - name: consul-data
+          mountPath: /consul/data
+      volumes:
+      - name: consul-data
+        emptyDir: {}
