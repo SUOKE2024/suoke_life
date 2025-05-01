@@ -1,140 +1,144 @@
-# 索克生活微服务架构
+# 索克生活APP微服务部署说明
 
-本目录包含索克生活APP的后端微服务架构实现。
+## 节点池资源分配方案
 
-## 服务概述
+索克生活APP微服务按照以下节点池资源分配原则进行部署：
 
-### 核心服务
-- **API网关服务 (api-gateway)**: 所有服务的统一入口点，负责请求路由和转发
-- **认证服务 (auth-service)**: 处理用户认证、授权和token管理
-- **用户服务 (user-service)**: 管理用户资料和用户数据
+| 节点池 | 分配服务组 | 特点 |
+|--------|-----------|------|
+| **suoke-core-np** | core, feature | 高可用性，稳定性优先 |
+| **suoke-ai-np** | ai, diagnosis | 高计算能力，GPU支持 |
+| **suoke-db-np** | knowledge | 高IO性能，大存储容量 |
 
-### 中医特色服务
-- **四诊协调服务 (four-diagnosis-coordinator)**: 协调四诊法数据收集和分析
-- **望诊服务 (looking-diagnosis-service)**: 处理望诊相关功能
-- **闻诊服务 (smell-diagnosis-service)**: 处理闻诊相关功能
-- **问诊服务 (inquiry-diagnosis-service)**: 处理问诊相关功能
-- **切诊服务 (touch-diagnosis-service)**: 处理切诊相关功能
+## 服务分组明细
 
-### 知识管理服务
-- **知识库服务 (knowledge-base-service)**: 管理结构化知识内容
-- **知识图谱服务 (knowledge-graph-service)**: 构建和查询中医知识图谱
-- **RAG服务 (rag-service)**: 实现检索增强生成功能
+### Core服务组
+- `api-gateway`: API网关，处理请求路由和负载均衡
+- `auth-service`: 身份认证服务，管理用户登录和授权
+- `user-service`: 用户服务，管理用户资料和设置
 
-### AI智能体服务
-- **智能体协调服务 (agent-coordinator-service)**: 协调多个AI智能体的工作
-- **小爱服务 (xiaoai-service)**: AI助手智能体实现
-- **小柯服务 (xiaoke-service)**: 中医专家智能体实现
-- **老柯服务 (laoke-service)**: 老中医专家智能体实现
+### AI服务组
+- `xiaoai-service`: 小AI服务，提供基础AI对话能力
+- `xiaoke-service`: 小客服务，提供客服场景AI能力
+- `laoke-service`: 老客服务，提供中医专家AI能力
+- `soer-service`: Soer服务，提供健康顾问AI能力
+- `agent-coordinator-service`: 代理协调服务，协调多个AI代理
 
-### 特色应用服务
-- **索耳服务 (soer-service)**: 声音诊断智能体实现
-- **玉米迷宫服务 (corn-maze-service)**: AR玉米迷宫游戏服务
+### 诊断服务组
+- `inquiry-diagnosis-service`: 问诊服务，处理问诊数据采集和分析
+- `looking-diagnosis-service`: 望诊服务，处理图像识别和望诊分析
+- `smell-diagnosis-service`: 闻诊服务，处理气味数据分析
+- `touch-diagnosis-service`: 切诊服务，处理触诊数据分析
+- `four-diagnosis-coordinator`: 四诊协调服务，整合四诊结果
 
-## 技术架构
+### 知识服务组
+- `rag-service`: 检索增强生成服务，提供知识检索能力
+- `knowledge-graph-service`: 知识图谱服务，管理健康知识图谱
+- `knowledge-base-service`: 知识库服务，管理知识库内容
 
-### 开发语言和框架
-- **Go**: 用于API网关、认证服务和用户服务
-- **Python**: 用于AI服务和知识管理服务
-- **Node.js**: 用于部分工具和辅助服务
+### 特性服务组
+- `corn-maze-service`: 玉米迷宫服务，提供AR玉米迷宫游戏功能
 
-### 数据存储
-- **MySQL**: 关系型数据库，存储用户数据和结构化信息
-- **Redis**: 缓存和会话存储
-- **Vector DB**: 向量数据库，用于知识检索
+## 资源配置
 
-### 通信
-- **REST API**: 服务间同步通信
-- **gRPC**: 高性能服务间通信
-- **消息队列**: 异步通信和事件驱动架构
-
-## 快速开始
-
-### 系统要求
-- Docker 20.10+
-- Docker Compose 2.0+
-- Go 1.21+
-- MySQL 8.0+
-- Redis 6.2+
-
-### 本地开发环境设置
-
-1. 克隆仓库
-```bash
-git clone https://github.com/your-org/suoke_life.git
-cd suoke_life/services
+### Core/Feature服务资源配置
+```yaml
+resources:
+  requests:
+    cpu: 200m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
 ```
 
-2. 启动所有服务
-```bash
-docker-compose up -d
+### AI/诊断服务资源配置
+```yaml
+resources:
+  requests:
+    cpu: 500m
+    memory: 2Gi
+    nvidia.com/gpu: ${GPU_COUNT:-0} # GPU服务配置
+  limits:
+    cpu: 2000m
+    memory: 4Gi
+    nvidia.com/gpu: ${GPU_COUNT:-0} # GPU服务配置
 ```
 
-3. 运行集成测试
-```bash
-./tests/integration_test.sh
+### 知识服务资源配置
+```yaml
+resources:
+  requests:
+    cpu: 500m
+    memory: 2Gi
+  limits:
+    cpu: 1000m
+    memory: 4Gi
 ```
 
-4. 单独构建和运行特定服务
-```bash
-# 构建特定服务
-cd api-gateway
-docker build -t suoke-api-gateway .
+## 一键部署操作步骤
 
-# 运行特定服务
-docker run -p 8080:8080 -e CONFIG_PATH=/app/configs/config.json suoke-api-gateway
-```
+1. 确保已安装以下工具：
+   - kubectl
+   - jq
+   - envsubst
 
-### 部署
+2. 登录到Kubernetes集群：
+   ```bash
+   # 配置kubeconfig
+   export KUBECONFIG=/path/to/your/kubeconfig
+   ```
 
-使用部署脚本可以轻松部署服务：
+3. 设置镜像仓库信息（可选，默认使用阿里云仓库）：
+   ```bash
+   export REGISTRY_URL=suoke-registry.cn-hangzhou.cr.aliyuncs.com
+   export REGISTRY_NAMESPACE=suoke
+   export TAG=latest  # 或指定版本标签
+   ```
 
-```bash
-# 部署所有服务到开发环境
-./deploy.sh --env dev --service all
+4. 运行一键部署脚本：
+   ```bash
+   cd services
+   ./k8s-templates/deploy-all.sh
+   ```
 
-# 仅构建但不部署
-./deploy.sh --build true --deploy false
+5. 查看部署状态：
+   ```bash
+   kubectl get pods -n suoke -o wide
+   kubectl get svc -n suoke
+   kubectl get nodes --show-labels | grep suoke.life
+   ```
 
-# 部署特定服务到生产环境
-./deploy.sh --env prod --service auth-service --push true
-```
+## 持久卷配置
 
-## 项目结构
+1. AI模型存储：
+   ```yaml
+   apiVersion: v1
+   kind: PersistentVolumeClaim
+   metadata:
+     name: ai-models-pvc
+     namespace: suoke
+   spec:
+     accessModes:
+       - ReadWriteMany
+     storageClassName: alicloud-disk-efficiency
+     resources:
+       requests:
+         storage: 50Gi
+   ```
 
-每个服务遵循类似的项目结构：
-
-```
-service-name/
-├── cmd/                    # 主应用程序入口点
-│   └── main.go            # 主函数
-├── internal/               # 私有应用和库代码
-│   ├── config/            # 配置管理
-│   ├── controllers/       # 控制器/处理器
-│   ├── database/          # 数据库访问和迁移
-│   ├── middleware/        # HTTP中间件
-│   ├── models/            # 数据模型
-│   ├── repository/        # 数据存储库实现
-│   ├── server/            # HTTP服务器
-│   └── services/          # 业务逻辑
-├── configs/                # 配置文件
-├── Dockerfile              # Docker构建文件
-└── go.mod                  # Go模块定义
-```
-
-## 贡献指南
-
-### 代码风格
-- Go代码必须通过`gofmt`和`golint`
-- 提交前运行单元测试和集成测试
-- 遵循仓库中的代码风格和最佳实践
-
-### 工作流程
-1. 为新功能或修复创建分支
-2. 实现更改并添加测试
-3. 提交Pull Request进行代码审查
-4. 合并至主分支
-
-## 许可证
-
-版权所有 © 2023-2024 索克生活 
+2. 知识数据存储：
+   ```yaml
+   apiVersion: v1
+   kind: PersistentVolumeClaim
+   metadata:
+     name: knowledge-data-pvc
+     namespace: suoke
+   spec:
+     accessModes:
+       - ReadWriteMany
+     storageClassName: alicloud-disk-ssd
+     resources:
+       requests:
+         storage: 100Gi
+   ``` 

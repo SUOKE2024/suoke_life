@@ -1,0 +1,67 @@
+---
+# 为现有的节点添加标签
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nodepool-setup-script
+  namespace: kube-system
+data:
+  setup.sh: |
+    #!/bin/bash
+    
+    # 为Core节点池添加标签
+    kubectl label nodes --selector=alicloud.service.k8s.aliyun.com/nodepool=suoke-core-np suoke.life/node-pool=suoke-core-np --overwrite
+    
+    # 为AI节点池添加标签
+    kubectl label nodes --selector=alicloud.service.k8s.aliyun.com/nodepool=suoke-ai-np suoke.life/node-pool=suoke-ai-np --overwrite
+    
+    # 为DB节点池添加标签
+    kubectl label nodes --selector=alicloud.service.k8s.aliyun.com/nodepool=suoke-db-np suoke.life/node-pool=suoke-db-np --overwrite
+    
+    echo "节点池标签配置完成"
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: nodepool-setup
+  namespace: kube-system
+spec:
+  template:
+    spec:
+      serviceAccountName: nodepool-setup-sa
+      containers:
+      - name: kubectl
+        image: bitnami/kubectl:latest
+        command:
+        - /bin/bash
+        - -c
+        - /scripts/setup.sh
+        volumeMounts:
+        - name: scripts
+          mountPath: /scripts
+      volumes:
+      - name: scripts
+        configMap:
+          name: nodepool-setup-script
+          defaultMode: 0777
+      restartPolicy: Never
+  backoffLimit: 2
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nodepool-setup-sa
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: nodepool-setup-crb
+subjects:
+- kind: ServiceAccount
+  name: nodepool-setup-sa
+  namespace: kube-system
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io 

@@ -1,0 +1,51 @@
+{
+  "core": [
+    "api-gateway",
+    "auth-service",
+    "user-service"
+  ],
+  "ai": [
+    "xiaoai-service",
+    "xiaoke-service",
+    "laoke-service",
+    "soer-service",
+    "agent-coordinator-service",
+    "inquiry-diagnosis-service",
+    "looking-diagnosis-service",
+    "smell-diagnosis-service",
+    "touch-diagnosis-service",
+    "four-diagnosis-coordinator"
+  ],
+  "knowledge": [
+    "rag-service",
+    "knowledge-graph-service",
+    "knowledge-base-service"
+  ],
+  "feature": [
+    "corn-maze-service"
+  ],
+  "service_ports": {
+    "api-gateway": 3000,
+    "auth-service": 3001,
+    "user-service": 3002,
+    "xiaoai-service": 4000,
+    "xiaoke-service": 4001,
+    "laoke-service": 4002,
+    "soer-service": 4003,
+    "agent-coordinator-service": 4004,
+    "rag-service": 5000,
+    "knowledge-graph-service": 5001,
+    "knowledge-base-service": 5002,
+    "inquiry-diagnosis-service": 6000,
+    "looking-diagnosis-service": 6001,
+    "smell-diagnosis-service": 6002,
+    "touch-diagnosis-service": 6003,
+    "four-diagnosis-coordinator": 6004,
+    "corn-maze-service": 7000
+  },
+  "gpu_services": {
+    "xiaoai-service": 1,
+    "laoke-service": 1,
+    "looking-diagnosis-service": 1
+  }
+} 

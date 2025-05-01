@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ${SERVICE_NAME}
+  namespace: suoke
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ${SERVICE_NAME}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: ${SERVICE_NAME}
+    spec:
+      nodeSelector:
+        suoke.life/node-pool: suoke-db-np
+      containers:
+      - name: ${SERVICE_NAME}
+        image: ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${SERVICE_NAME}:${TAG}
+        ports:
+        - containerPort: ${PORT}
+        resources:
+          requests:
+            cpu: 500m
+            memory: 2Gi
+          limits:
+            cpu: 1000m
+            memory: 4Gi
+        env:
+        - name: NODE_ENV
+          value: production
+        - name: PORT
+          value: "${PORT}"
+        - name: IO_THREADS
+          value: "4"
+        - name: ENABLE_CACHE
+          value: "true"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: ${PORT}
+          initialDelaySeconds: 20
+          periodSeconds: 25
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: ${PORT}
+          initialDelaySeconds: 10
+          periodSeconds: 15
+        volumeMounts:
+        - name: ${SERVICE_NAME}-config
+          mountPath: /app/config
+        - name: knowledge-data
+          mountPath: /app/data
+      volumes:
+      - name: ${SERVICE_NAME}-config
+        configMap:
+          name: ${SERVICE_NAME}-config
+      - name: knowledge-data
+        persistentVolumeClaim:
+          claimName: knowledge-data-pvc 
