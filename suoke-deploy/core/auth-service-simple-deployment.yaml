@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-service-simple
+  namespace: suoke
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-service-simple
+  template:
+    metadata:
+      labels:
+        app: auth-service-simple
+        app.kubernetes.io/part-of: suoke
+    spec:
+      nodeSelector:
+        node-type: core-service
+      containers:
+      - name: auth-service
+        image: node:18-alpine
+        imagePullPolicy: IfNotPresent
+        command: ["/bin/sh"]
+        args: ["-c", "echo '{\"main\":\"server.js\",\"scripts\":{\"start\":\"node server.js\"}}' > /app/package.json && echo 'const http = require(\"http\"); const fs = require(\"fs\"); const config = JSON.parse(fs.readFileSync(\"/app/config/app.json\")); const server = http.createServer((req, res) => { res.setHeader(\"Content-Type\", \"application/json\"); if (req.url === \"/health\") { res.writeHead(200); res.end(JSON.stringify({status: \"UP\", service: \"auth\"})); } else if (req.url === \"/api/auth/login\") { res.writeHead(200); res.end(JSON.stringify({token: \"demo-token\", expiresIn: config.auth.jwt.expiresIn})); } else { res.writeHead(404); res.end(JSON.stringify({error: \"Not found\"})); } }); server.listen(3001, () => { console.log(\"Auth service listening on port 3001\"); });' > /app/server.js && node /app/server.js"]
+        ports:
+        - containerPort: 3001
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3001
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3001
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config
+      volumes:
+      - name: config-volume
+        configMap:
+          name: auth-service-simple-config

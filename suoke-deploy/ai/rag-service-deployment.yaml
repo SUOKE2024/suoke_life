@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rag-service
+  namespace: suoke
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: rag-service
+  template:
+    metadata:
+      labels:
+        app: rag-service
+        app.kubernetes.io/part-of: suoke
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9464"
+        prometheus.io/path: "/metrics"
+    spec:
+      nodeSelector:
+        node-type: ai-service
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+      volumes:
+      - name: vector-storage
+        persistentVolumeClaim:
+          claimName: rag-vector-storage
+      containers:
+      - name: rag-service
+        image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/rag-service:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 4001
+        - containerPort: 9464
+          name: metrics
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 2Gi
+          limits:
+            cpu: 3000m
+            memory: 6Gi
+        volumeMounts:
+        - name: vector-storage
+          mountPath: /app/data/vectors
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 4001
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 4001
+          initialDelaySeconds: 60
+          periodSeconds: 20
+        envFrom:
+        - configMapRef:
+            name: rag-service-config
+      imagePullSecrets:
+      - name: aliyun-registry-secret

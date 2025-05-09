@@ -7,24 +7,20 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:suoke_life/main.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:suoke_life/app.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('基础应用启动测试', (WidgetTester tester) async {
+    // 构建应用并触发一帧
+    await tester.pumpWidget(const ProviderScope(child: SuokeLifeApp()));
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // 这里可以添加验证应用成功启动的断言
+    // 例如检查标题、底部导航栏等关键元素是否存在
+    expect(find.text('首页'), findsOneWidget);
+    expect(find.text('SUOKE'), findsOneWidget);
+    expect(find.text('探索'), findsOneWidget);
+    expect(find.text('LIFE'), findsOneWidget);
+    expect(find.text('我的'), findsOneWidget);
   });
 }

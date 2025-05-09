@@ -1,0 +1,260 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rag-service-config
+  namespace: suoke
+data:
+  server.js: |
+    const http = require('http');
+    const fs = require('fs');
+    const path = require('path');
+
+    // 确保数据目录存在
+    const dataDir = '/data/vectors';
+    if (!fs.existsSync(dataDir)) {
+      fs.mkdirSync(dataDir, { recursive: true });
+      console.log(`创建数据目录: ${dataDir}`);
+    }
+
+    // 简易向量数据存储
+    const vectorDB = {
+      collections: {},
+      
+      // 初始化示例集合
+      init() {
+        // 尝试从文件加载数据
+        try {
+          const filePath = path.join(dataDir, 'vector_db.json');
+          if (fs.existsSync(filePath)) {
+            const data = fs.readFileSync(filePath, 'utf8');
+            this.collections = JSON.parse(data);
+            console.log('从持久存储加载向量数据库成功');
+            return;
+          }
+        } catch (err) {
+          console.error('加载向量数据库失败:', err);
+        }
+
+        // 如果加载失败，创建新的集合
+        this.collections = {
+          'medical_knowledge': {
+            name: 'medical_knowledge',
+            vectors: []
+          },
+          'tcm_herbs': {
+            name: 'tcm_herbs',
+            vectors: []
+          }
+        };
+        // 保存到文件
+        this.saveToFile();
+        console.log('向量数据库初始化完成');
+      },
+      
+      // 模拟向量搜索
+      search(collection, query, limit = 5) {
+        if (!this.collections[collection]) {
+          return { error: '集合不存在' };
+        }
+        
+        // 模拟返回结果
+        return {
+          results: [
+            { id: '1', text: '中医养生基础知识', score: 0.95 },
+            { id: '2', text: '五行与人体健康的关系', score: 0.89 },
+            { id: '3', text: '艾灸的功效与应用', score: 0.82 }
+          ]
+        };
+      },
+      
+      // 保存到文件
+      saveToFile() {
+        try {
+          const filePath = path.join(dataDir, 'vector_db.json');
+          fs.writeFileSync(filePath, JSON.stringify(this.collections, null, 2));
+          console.log('向量数据已保存到持久存储');
+        } catch (err) {
+          console.error('保存向量数据失败:', err);
+        }
+      }
+    };
+
+    // 初始化数据
+    vectorDB.init();
+
+    // 每5分钟自动保存一次数据
+    setInterval(() => {
+      vectorDB.saveToFile();
+    }, 5 * 60 * 1000);
+
+    // 创建服务器
+    const server = http.createServer((req, res) => {
+      res.setHeader('Content-Type', 'application/json');
+      
+      // 解析URL和方法
+      const url = new URL(req.url, `http://${req.headers.host}`);
+      const method = req.method;
+      
+      // 健康检查端点
+      if (url.pathname === '/health') {
+        res.writeHead(200);
+        res.end(JSON.stringify({ status: 'UP', service: 'rag-service' }));
+        return;
+      }
+      
+      // 搜索API
+      if (url.pathname === '/api/search' && method === 'GET') {
+        const collection = url.searchParams.get('collection') || 'medical_knowledge';
+        const query = url.searchParams.get('query') || '';
+        const limit = parseInt(url.searchParams.get('limit') || '5');
+        
+        const results = vectorDB.search(collection, query, limit);
+        res.writeHead(200);
+        res.end(JSON.stringify(results));
+        return;
+      }
+      
+      // 列出可用集合
+      if (url.pathname === '/api/collections' && method === 'GET') {
+        res.writeHead(200);
+        res.end(JSON.stringify({
+          collections: Object.keys(vectorDB.collections)
+        }));
+        return;
+      }
+      
+      // 获取存储状态
+      if (url.pathname === '/api/storage/status' && method === 'GET') {
+        // 获取存储目录信息
+        fs.stat(dataDir, (err, stats) => {
+          if (err) {
+            res.writeHead(500);
+            res.end(JSON.stringify({ error: '无法获取存储状态' }));
+            return;
+          }
+          
+          res.writeHead(200);
+          res.end(JSON.stringify({
+            storage: {
+              path: dataDir,
+              exists: true,
+              isDirectory: stats.isDirectory(),
+              size: stats.size,
+              permissions: stats.mode.toString(8).slice(-3)
+            }
+          }));
+        });
+        return;
+      }
+      
+      // 其他路径返回404
+      res.writeHead(404);
+      res.end(JSON.stringify({ error: '未找到请求的资源' }));
+    });
+
+    // 优雅关闭处理
+    process.on('SIGTERM', () => {
+      console.log('收到SIGTERM信号，正在保存数据并关闭服务...');
+      vectorDB.saveToFile();
+      server.close(() => {
+        console.log('HTTP服务已关闭');
+        process.exit(0);
+      });
+    });
+
+    const PORT = 8082;
+    server.listen(PORT, () => {
+      console.log(`RAG服务运行在端口 ${PORT}`);
+    });
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rag-service
+  namespace: suoke
+  labels:
+    app: rag-service
+    app.kubernetes.io/part-of: suoke
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rag-service
+  template:
+    metadata:
+      labels:
+        app: rag-service
+        app.kubernetes.io/part-of: suoke
+    spec:
+      nodeSelector:
+        node-type: ai-service
+      containers:
+      - name: rag-service
+        image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/rag-service:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8082
+        resources:
+          requests:
+            cpu: 200m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8082
+          initialDelaySeconds: 20
+          periodSeconds: 15
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8082
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config
+        - name: rag-data
+          mountPath: /data
+        env:
+        - name: NODE_ENV
+          value: "production"
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+      imagePullSecrets:
+      - name: aliyun-registry-secret
+      volumes:
+      - name: config-volume
+        configMap:
+          name: rag-service-config
+      - name: rag-data
+        persistentVolumeClaim:
+          claimName: rag-vector-storage
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rag-service
+  namespace: suoke
+spec:
+  selector:
+    app: rag-service
+  ports:
+  - port: 8082
+    targetPort: 8082
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: rag-service-pdb
+  namespace: suoke
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: rag-service 

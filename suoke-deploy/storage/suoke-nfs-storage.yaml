@@ -1,0 +1,44 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: suoke-nfs
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "false"
+provisioner: kubernetes.io/nfs
+parameters:
+  archiveOnDelete: "false"
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: suoke-rag-data-pv
+  labels:
+    type: nfs
+    app.kubernetes.io/part-of: suoke
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: suoke-nfs
+  nfs:
+    server: 10.0.0.10  # 需要替换为实际NFS服务器IP
+    path: "/mnt/suoke-data/rag-vectors"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: rag-vector-storage
+  namespace: suoke
+spec:
+  storageClassName: suoke-nfs
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+  selector:
+    matchLabels:
+      type: nfs
+      app.kubernetes.io/part-of: suoke 

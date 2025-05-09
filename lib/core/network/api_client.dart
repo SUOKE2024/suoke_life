@@ -1,299 +1,262 @@
-import 'dart:convert';
+import 'dart:io';
+
 import 'package:dio/dio.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../config/environment.dart';
-import '../utils/logger.dart';
-import 'interceptors/auth_interceptor.dart';
-import 'interceptors/error_interceptor.dart';
-import 'interceptors/logging_interceptor.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:suoke_life/core/constants/app_constants.dart';
+import 'package:suoke_life/core/utils/logger.dart';
 
-/// API请求方法
-enum ApiMethod {
-  /// GET请求
-  get,
+/// API请求异常
+class ApiException implements Exception {
+  final String message;
+  final int? statusCode;
+  final dynamic data;
 
-  /// POST请求
-  post,
+  ApiException({
+    required this.message,
+    this.statusCode,
+    this.data,
+  });
 
-  /// PUT请求
-  put,
-
-  /// DELETE请求
-  delete,
-
-  /// PATCH请求
-  patch,
-
-  /// HEAD请求
-  head,
+  @override
+  String toString() => 'ApiException: $message (Status: $statusCode)';
 }
 
-/// API配置
-class ApiConfig {
-  static const String baseUrl = 'http://118.31.223.213/api';
-  static const Duration connectTimeout = Duration(seconds: 30);
-  static const Duration receiveTimeout = Duration(seconds: 30);
-  static const Duration sendTimeout = Duration(seconds: 30);
-  static const String contentType = 'application/json; charset=utf-8';
-  
-  // API端点
-  static const String endpoint = {
-    'auth': '/auth',
-    'users': '/users',
-    'healthData': '/health-data',
-    'knowledge': '/knowledge',
-    'chat': '/chat',
-    'sync': '/sync',
-  };
-}
-
-/// API客户端类
+/// API客户端
+///
+/// 封装Dio实现HTTP请求的客户端类，处理认证、错误和重试逻辑
 class ApiClient {
-  /// Dio HTTP客户端
-  final Dio _dio;
+  static final ApiClient _instance = ApiClient._internal();
+  late final Dio _dio;
+  final AppLogger _logger = AppLogger();
 
-  /// 构造函数
-  ApiClient(this._dio) {
-    _dio.options.baseUrl = Environment.apiUrl;
-    _dio.options.connectTimeout = Duration(milliseconds: Environment.timeout);
-    _dio.options.receiveTimeout = Duration(milliseconds: Environment.timeout);
-    _dio.options.headers = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-    };
+  /// 单例访问器
+  factory ApiClient() => _instance;
+
+  ApiClient._internal() {
+    final baseUrl = dotenv.env[AppConstants.apiBaseUrlKey] ?? '';
+
+    final options = BaseOptions(
+      baseUrl: baseUrl,
+      connectTimeout:
+          Duration(seconds: AppConstants.defaultConnectTimeoutSeconds),
+      receiveTimeout: Duration(seconds: AppConstants.defaultApiTimeoutSeconds),
+      contentType: 'application/json',
+    );
+
+    _dio = Dio(options);
+    _setupInterceptors();
+
+    _logger.i('ApiClient 初始化完成: baseUrl=$baseUrl');
   }
 
-  /// 设置认证令牌
-  void setAuthToken(String token) {
+  /// 配置拦截器
+  void _setupInterceptors() {
+    _dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          _logger.d('API请求: ${options.method} ${options.path}');
+          return handler.next(options);
+        },
+        onResponse: (response, handler) {
+          _logger.d(
+              'API响应: ${response.statusCode} ${response.requestOptions.path}');
+          return handler.next(response);
+        },
+        onError: (DioException error, handler) {
+          _logger.e(
+            'API错误: ${error.requestOptions.path}',
+            error,
+            error.stackTrace,
+          );
+
+          final exception = _handleError(error);
+          return handler.reject(
+            DioException(
+              requestOptions: error.requestOptions,
+              error: exception,
+              message: exception.message,
+              response: error.response,
+              type: error.type,
+              stackTrace: error.stackTrace,
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  /// 设置访问令牌
+  void setToken(String token) {
     _dio.options.headers['Authorization'] = 'Bearer $token';
   }
-  
-  /// 清除认证令牌
-  void clearAuthToken() {
+
+  /// 清除访问令牌
+  void clearToken() {
     _dio.options.headers.remove('Authorization');
   }
 
-  /// 执行API请求
-  Future<Response<T>> request<T>({
-    required String endpoint,
-    required ApiMethod method,
-    Map<String, dynamic>? queryParameters,
-    dynamic data,
-    Map<String, dynamic>? headers,
-    ResponseType responseType = ResponseType.json,
-    String? contentType,
-    bool validateStatus = true,
-  }) async {
-    try {
-      // 构建请求选项
-      final options = Options(
-        headers: headers,
-        responseType: responseType,
-        contentType: contentType,
-        validateStatus: validateStatus ? null : (_) => true,
-      );
-
-      // 根据方法选择对应的请求函数
-      Response<T> response;
-      switch (method) {
-        case ApiMethod.get:
-          response = await _dio.get<T>(
-            endpoint,
-            queryParameters: queryParameters,
-            options: options,
-          );
-          break;
-        case ApiMethod.post:
-          response = await _dio.post<T>(
-            endpoint,
-            data: data,
-            queryParameters: queryParameters,
-            options: options,
-          );
-          break;
-        case ApiMethod.put:
-          response = await _dio.put<T>(
-            endpoint,
-            data: data,
-            queryParameters: queryParameters,
-            options: options,
-          );
-          break;
-        case ApiMethod.delete:
-          response = await _dio.delete<T>(
-            endpoint,
-            data: data,
-            queryParameters: queryParameters,
-            options: options,
-          );
-          break;
-        case ApiMethod.patch:
-          response = await _dio.patch<T>(
-            endpoint,
-            data: data,
-            queryParameters: queryParameters,
-            options: options,
-          );
-          break;
-        case ApiMethod.head:
-          response = await _dio.head<T>(
-            endpoint,
-            data: data,
-            queryParameters: queryParameters,
-            options: options,
-          );
-          break;
-      }
-
-      return response;
-    } on DioException catch (e) {
-      logger.e(
-        'API请求失败: ${e.message}',
-        error: e,
-        stackTrace: e.stackTrace,
-      );
-      
-      if (e.response != null) {
-        logger.e('响应状态: ${e.response?.statusCode}');
-        logger.e('响应数据: ${jsonEncode(e.response?.data)}');
-      }
-      
-      rethrow;
-    } catch (e, stackTrace) {
-      logger.e('API请求未知错误', error: e, stackTrace: stackTrace);
-      rethrow;
-    }
-  }
-
-  /// GET请求
-  Future<Response<T>> get<T>(
-    String endpoint, {
-    Map<String, dynamic>? queryParameters,
-    Map<String, dynamic>? headers,
-    ResponseType responseType = ResponseType.json,
-  }) {
-    return request<T>(
-      endpoint: endpoint,
-      method: ApiMethod.get,
-      queryParameters: queryParameters,
-      headers: headers,
-      responseType: responseType,
-    );
-  }
-
-  /// POST请求
-  Future<Response<T>> post<T>(
-    String endpoint, {
-    dynamic data,
-    Map<String, dynamic>? queryParameters,
-    Map<String, dynamic>? headers,
-    ResponseType responseType = ResponseType.json,
-  }) {
-    return request<T>(
-      endpoint: endpoint,
-      method: ApiMethod.post,
-      data: data,
-      queryParameters: queryParameters,
-      headers: headers,
-      responseType: responseType,
-    );
-  }
-
-  /// PUT请求
-  Future<Response<T>> put<T>(
-    String endpoint, {
-    dynamic data,
-    Map<String, dynamic>? queryParameters,
-    Map<String, dynamic>? headers,
-    ResponseType responseType = ResponseType.json,
-  }) {
-    return request<T>(
-      endpoint: endpoint,
-      method: ApiMethod.put,
-      data: data,
-      queryParameters: queryParameters,
-      headers: headers,
-      responseType: responseType,
-    );
-  }
-
-  /// DELETE请求
-  Future<Response<T>> delete<T>(
-    String endpoint, {
-    dynamic data,
-    Map<String, dynamic>? queryParameters,
-    Map<String, dynamic>? headers,
-    ResponseType responseType = ResponseType.json,
-  }) {
-    return request<T>(
-      endpoint: endpoint,
-      method: ApiMethod.delete,
-      data: data,
-      queryParameters: queryParameters,
-      headers: headers,
-      responseType: responseType,
-    );
-  }
-
-  /// PATCH请求
-  Future<Response<T>> patch<T>(
-    String endpoint, {
-    dynamic data,
-    Map<String, dynamic>? queryParameters,
-    Map<String, dynamic>? headers,
-    ResponseType responseType = ResponseType.json,
-  }) {
-    return request<T>(
-      endpoint: endpoint,
-      method: ApiMethod.patch,
-      data: data,
-      queryParameters: queryParameters,
-      headers: headers,
-      responseType: responseType,
-    );
-  }
-
-  /// 上传文件
-  Future<Response> uploadFile(
-    String path,
-    String filePath, {
-    String fileKey = 'file',
-    Map<String, dynamic>? data,
+  /// 标准GET请求
+  Future<T> get<T>(
+    String path, {
     Map<String, dynamic>? queryParameters,
     Options? options,
     CancelToken? cancelToken,
-    void Function(int, int)? onSendProgress,
+    ProgressCallback? onReceiveProgress,
   }) async {
-    final formData = FormData.fromMap({
-      ...?data,
-      fileKey: await MultipartFile.fromFile(filePath),
-    });
-    
-    return _dio.post(
-      path,
-      data: formData,
-      queryParameters: queryParameters,
-      options: options,
-      cancelToken: cancelToken,
-      onSendProgress: onSendProgress,
-    );
+    try {
+      final response = await _dio.get<T>(
+        path,
+        queryParameters: queryParameters,
+        options: options,
+        cancelToken: cancelToken,
+        onReceiveProgress: onReceiveProgress,
+      );
+      return response.data as T;
+    } on DioException catch (e) {
+      throw _handleError(e);
+    } catch (e, stack) {
+      _logger.e('GET请求未知错误: $path', e, stack);
+      throw ApiException(message: e.toString());
+    }
+  }
+
+  /// 标准POST请求
+  Future<T> post<T>(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
+  }) async {
+    try {
+      final response = await _dio.post<T>(
+        path,
+        data: data,
+        queryParameters: queryParameters,
+        options: options,
+        cancelToken: cancelToken,
+        onSendProgress: onSendProgress,
+        onReceiveProgress: onReceiveProgress,
+      );
+      return response.data as T;
+    } on DioException catch (e) {
+      throw _handleError(e);
+    } catch (e, stack) {
+      _logger.e('POST请求未知错误: $path', e, stack);
+      throw ApiException(message: e.toString());
+    }
+  }
+
+  /// 标准PUT请求
+  Future<T> put<T>(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
+  }) async {
+    try {
+      final response = await _dio.put<T>(
+        path,
+        data: data,
+        queryParameters: queryParameters,
+        options: options,
+        cancelToken: cancelToken,
+        onSendProgress: onSendProgress,
+        onReceiveProgress: onReceiveProgress,
+      );
+      return response.data as T;
+    } on DioException catch (e) {
+      throw _handleError(e);
+    } catch (e, stack) {
+      _logger.e('PUT请求未知错误: $path', e, stack);
+      throw ApiException(message: e.toString());
+    }
+  }
+
+  /// 标准DELETE请求
+  Future<T> delete<T>(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+  }) async {
+    try {
+      final response = await _dio.delete<T>(
+        path,
+        data: data,
+        queryParameters: queryParameters,
+        options: options,
+        cancelToken: cancelToken,
+      );
+      return response.data as T;
+    } on DioException catch (e) {
+      throw _handleError(e);
+    } catch (e, stack) {
+      _logger.e('DELETE请求未知错误: $path', e, stack);
+      throw ApiException(message: e.toString());
+    }
+  }
+
+  /// 处理Dio异常
+  ApiException _handleError(DioException e) {
+    switch (e.type) {
+      case DioExceptionType.connectionTimeout:
+      case DioExceptionType.sendTimeout:
+      case DioExceptionType.receiveTimeout:
+        return ApiException(
+          message: AppConstants.timeoutErrorMessage,
+          statusCode: e.response?.statusCode,
+          data: e.response?.data,
+        );
+      case DioExceptionType.badResponse:
+        return ApiException(
+          message: _getErrorMessage(e.response?.statusCode),
+          statusCode: e.response?.statusCode,
+          data: e.response?.data,
+        );
+      case DioExceptionType.cancel:
+        return ApiException(
+          message: '请求已取消',
+          statusCode: e.response?.statusCode,
+          data: e.response?.data,
+        );
+      default:
+        if (e.error is SocketException) {
+          return ApiException(
+            message: AppConstants.networkErrorMessage,
+            statusCode: e.response?.statusCode,
+            data: e.response?.data,
+          );
+        }
+        return ApiException(
+          message: e.message ?? AppConstants.unknownErrorMessage,
+          statusCode: e.response?.statusCode,
+          data: e.response?.data,
+        );
+    }
+  }
+
+  /// 根据状态码获取错误消息
+  String _getErrorMessage(int? statusCode) {
+    switch (statusCode) {
+      case 400:
+        return '请求参数错误';
+      case 401:
+        return '未授权，请重新登录';
+      case 403:
+        return '拒绝访问';
+      case 404:
+        return '请求资源不存在';
+      case 500:
+        return AppConstants.serverErrorMessage;
+      default:
+        return AppConstants.unknownErrorMessage;
+    }
   }
 }
-
-/// 创建API客户端提供者
-final apiClientProvider = Provider<ApiClient>((ref) {
-  final dio = Dio(BaseOptions(
-    baseUrl: ApiConfig.baseUrl,
-    connectTimeout: ApiConfig.connectTimeout,
-    receiveTimeout: ApiConfig.receiveTimeout,
-    sendTimeout: ApiConfig.sendTimeout,
-    contentType: ApiConfig.contentType,
-  ));
-  
-  // 添加拦截器
-  dio.interceptors.add(LoggingInterceptor());
-  dio.interceptors.add(AuthInterceptor(ref));
-  dio.interceptors.add(ErrorInterceptor());
-  
-  return ApiClient(dio);
-}); 

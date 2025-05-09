@@ -1,0 +1,130 @@
+stages:
+  - test
+  - build
+  - deploy
+
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+  REGISTRY: suoke-registry.cn-hangzhou.cr.aliyuncs.com
+  NAMESPACE: suoke
+  CONFIG_PATH: suoke-deploy
+
+# 测试阶段
+lint-helm:
+  stage: test
+  image: alpine/helm:3.12.0
+  script:
+    - cd ${CONFIG_PATH}/helm
+    - helm lint suoke-app
+
+test-docker:
+  stage: test
+  image: docker:20.10.16
+  services:
+    - docker:20.10.16-dind
+  before_script:
+    - docker info
+  script:
+    - cd ${CONFIG_PATH}/docker
+    - docker build -t test-api-gateway ./api-gateway
+    - docker build -t test-agent-coordinator ./agent-coordinator
+    - docker build -t test-rag-service ./rag-service
+
+# 构建阶段
+.build_template: &build_definition
+  stage: build
+  image: docker:20.10.16
+  services:
+    - docker:20.10.16-dind
+  before_script:
+    - echo "$ALIYUN_REGISTRY_PASSWORD" | docker login -u "$ALIYUN_REGISTRY_USERNAME" --password-stdin $REGISTRY
+    - docker buildx create --use --name suoke-builder
+    - docker buildx inspect --bootstrap
+  script:
+    - cd ${CONFIG_PATH}/docker/$SERVICE_NAME
+    - |
+      if [ "$CI_COMMIT_BRANCH" == "main" ]; then
+        DOCKER_TAG="latest"
+      else
+        DOCKER_TAG="$CI_COMMIT_REF_SLUG"
+      fi
+    - |
+      docker buildx build --platform linux/amd64,linux/arm64 \
+        -t $REGISTRY/$NAMESPACE/$SERVICE_NAME:$DOCKER_TAG \
+        -t $REGISTRY/$NAMESPACE/$SERVICE_NAME:$CI_COMMIT_SHORT_SHA \
+        --push .
+    - echo "Built and pushed $REGISTRY/$NAMESPACE/$SERVICE_NAME:$DOCKER_TAG and $REGISTRY/$NAMESPACE/$SERVICE_NAME:$CI_COMMIT_SHORT_SHA"
+
+build-api-gateway:
+  <<: *build_definition
+  variables:
+    SERVICE_NAME: api-gateway
+  only:
+    changes:
+      - suoke-deploy/docker/api-gateway/**/*
+      - .gitlab-ci.yml
+
+build-agent-coordinator:
+  <<: *build_definition
+  variables:
+    SERVICE_NAME: agent-coordinator
+  only:
+    changes:
+      - suoke-deploy/docker/agent-coordinator/**/*
+      - .gitlab-ci.yml
+
+build-rag-service:
+  <<: *build_definition
+  variables:
+    SERVICE_NAME: rag-service
+  only:
+    changes:
+      - suoke-deploy/docker/rag-service/**/*
+      - .gitlab-ci.yml
+
+# 部署阶段
+.deploy_template: &deploy_definition
+  stage: deploy
+  image: alpine/helm:3.12.0
+  before_script:
+    - apk add --update curl jq
+    - curl -LO "https://dl.k8s.io/release/v1.25.4/bin/linux/amd64/kubectl"
+    - chmod +x kubectl
+    - mv kubectl /usr/local/bin/
+    - echo "$KUBE_CONFIG" | base64 -d > kubeconfig.yaml
+    - export KUBECONFIG=$(pwd)/kubeconfig.yaml
+  script:
+    - cd ${CONFIG_PATH}/helm
+    - |
+      if [ "$CI_COMMIT_BRANCH" == "main" ]; then
+        ENVIRONMENT="suoke"
+      else
+        ENVIRONMENT="suoke-dev"
+      fi
+    - |
+      kubectl create namespace $ENVIRONMENT --dry-run=client -o yaml | kubectl apply -f -
+      helm upgrade --install \
+        --namespace $ENVIRONMENT \
+        --set global.environment=$ENVIRONMENT \
+        --set global.imageTag=$CI_COMMIT_SHORT_SHA \
+        suoke-app suoke-app
+  after_script:
+    - rm -f kubeconfig.yaml
+
+deploy-dev:
+  <<: *deploy_definition
+  environment:
+    name: development
+    url: https://dev.suoke.cn
+  only:
+    - develop
+
+deploy-prod:
+  <<: *deploy_definition
+  environment:
+    name: production
+    url: https://api.suoke.cn
+  only:
+    - main
+  when: manual 

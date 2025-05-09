@@ -1,0 +1,111 @@
+replicaCount: 1
+
+image:
+  repository: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/api-gateway
+  tag: latest
+  pullPolicy: IfNotPresent
+
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+  hosts:
+    - host: ""
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 200m
+    memory: 256Mi
+
+livenessProbe:
+  httpGet:
+    path: /health
+    port: 80
+  initialDelaySeconds: 10
+  periodSeconds: 10
+
+readinessProbe:
+  httpGet:
+    path: /health
+    port: 80
+  initialDelaySeconds: 5
+  periodSeconds: 5
+
+nodeSelector:
+  node-type: core-service
+
+tolerations: []
+
+affinity: {}
+
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "80"
+  prometheus.io/path: "/metrics"
+
+config:
+  default.conf: |
+    server {
+      listen 80;
+      server_name localhost;
+      
+      # 健康检查端点
+      location /health {
+        access_log off;
+        add_header Content-Type application/json;
+        return 200 '{"status":"UP","timestamp":"test"}';
+      }
+      
+      # 根路径响应
+      location = / {
+        add_header Content-Type text/plain;
+        return 200 'Welcome to Suoke API Gateway';
+      }
+      
+      # 认证服务路由
+      location /api/auth/ {
+        proxy_pass http://auth-service:3001/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+      }
+      
+      # 智能体协调器路由
+      location /api/agents/ {
+        proxy_pass http://agent-coordinator:8080/api/agents/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+      }
+      
+      # RAG知识检索服务路由
+      location /api/rag/ {
+        proxy_pass http://rag-service:8082/api/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+      }
+      
+      # 指标采集端点
+      location /metrics {
+        stub_status on;
+      }
+    } 

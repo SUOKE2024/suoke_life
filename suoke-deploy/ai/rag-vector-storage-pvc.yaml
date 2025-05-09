@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: rag-vector-storage
+  namespace: suoke
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: suoke-ssd
+  resources:
+    requests:
+      storage: 20Gi

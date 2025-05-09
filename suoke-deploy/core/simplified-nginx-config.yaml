@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: simplified-nginx-config
+  namespace: suoke
+  labels:
+    app: api-gateway-test
+    component: core
+    tier: config
+data:
+  default.conf: |
+    server {
+      listen 80;
+      server_name localhost;
+      
+      # 健康检查
+      location /health {
+        access_log off;
+        return 200 '{"status":"UP","timestamp":"test"}';
+        default_type application/json;
+      }
+      
+      # 默认路由
+      location / {
+        return 200 'Welcome to Suoke API Gateway';
+        default_type text/plain;
+      }
+    }

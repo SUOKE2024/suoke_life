@@ -1,0 +1,143 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: agent-coordinator-config-simple
+  namespace: suoke
+data:
+  config.yaml: |
+    server:
+      port: 8080
+      timeout: 30s
+    
+    agents:
+      xiaoai:
+        url: http://xiaoai-service:8081
+      
+    database:
+      type: memory
+      
+    logging:
+      level: info
+      format: json
+  server.js: |
+    const http = require('http');
+    const fs = require('fs');
+    const yaml = require('js-yaml');
+
+    // 读取配置文件
+    let config;
+    try {
+      const configFile = fs.readFileSync('/app/config/config.yaml', 'utf8');
+      config = yaml.load(configFile);
+      console.log('配置文件加载成功');
+    } catch (e) {
+      console.error('配置文件加载失败:', e);
+      config = {
+        server: { port: 8080 },
+        agents: { xiaoai: { url: 'http://xiaoai-service:8081' } }
+      };
+    }
+
+    // 创建服务器
+    const server = http.createServer((req, res) => {
+      res.setHeader('Content-Type', 'application/json');
+      
+      if (req.url === '/health') {
+        res.writeHead(200);
+        res.end(JSON.stringify({ status: 'UP', service: 'agent-coordinator' }));
+      } else if (req.url === '/api/agents/status') {
+        res.writeHead(200);
+        res.end(JSON.stringify({ 
+          agents: {
+            xiaoai: { status: 'AVAILABLE' },
+            xiaosu: { status: 'SIMULATED' },
+            laoke: { status: 'SIMULATED' },
+            indexer: { status: 'SIMULATED' }
+          }
+        }));
+      } else {
+        res.writeHead(404);
+        res.end(JSON.stringify({ error: '未找到请求的资源' }));
+      }
+    });
+
+    const PORT = config.server.port || 8080;
+    server.listen(PORT, () => {
+      console.log(`智能体协调器服务运行在端口 ${PORT}`);
+    });
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agent-coordinator-simple
+  namespace: suoke
+  labels:
+    app: agent-coordinator-simple
+    app.kubernetes.io/part-of: suoke
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: agent-coordinator-simple
+  template:
+    metadata:
+      labels:
+        app: agent-coordinator-simple
+        app.kubernetes.io/part-of: suoke
+    spec:
+      nodeSelector:
+        node-type: ai-service
+      containers:
+      - name: agent-coordinator
+        image: node:18-alpine
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            cpu: 200m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 20
+          periodSeconds: 15
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        command: ["/bin/sh"]
+        args:
+        - "-c"
+        - |
+          mkdir -p /app
+          cd /app
+          echo '{"dependencies":{"js-yaml":"^4.1.0"}}' > package.json
+          npm install
+          cp /app/config/server.js /app/
+          node server.js
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config
+      volumes:
+      - name: config-volume
+        configMap:
+          name: agent-coordinator-config-simple
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: agent-coordinator-simple
+  namespace: suoke
+spec:
+  selector:
+    app: agent-coordinator-simple
+  ports:
+  - port: 8080
+    targetPort: 8080 

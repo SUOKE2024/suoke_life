@@ -1,0 +1,210 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-gateway-config
+  namespace: suoke
+data:
+  nginx.conf: |
+    user nginx;
+    worker_processes 1;
+    
+    error_log /var/log/nginx/error.log warn;
+    pid /var/run/nginx.pid;
+    
+    events {
+      worker_connections 1024;
+    }
+    
+    http {
+      include /etc/nginx/mime.types;
+      default_type application/octet-stream;
+      
+      log_format main '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+      
+      access_log /var/log/nginx/access.log main;
+      
+      sendfile on;
+      keepalive_timeout 65;
+      
+      # GZIP 配置
+      gzip on;
+      gzip_disable "msie6";
+      gzip_vary on;
+      gzip_proxied any;
+      gzip_comp_level 6;
+      gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+      
+      # 后端服务上游配置
+      upstream auth_service {
+        server auth-service-simple:3001;
+      }
+      
+      upstream user_service {
+        server user-service:8082;
+      }
+      
+      upstream agent_coordinator_service {
+        server agent-coordinator-service:8080;
+      }
+      
+      upstream xiaoai_service {
+        server xiaoai-service:8081;
+      }
+      
+      upstream knowledge_graph_service {
+        server knowledge-graph-service:8083;
+      }
+      
+      server {
+        listen 80;
+        server_name localhost;
+        
+        # 健康检查端点
+        location /health {
+          access_log off;
+          add_header Content-Type application/json;
+          return 200 '{"status":"UP","timestamp":"test"}';
+        }
+        
+        # 根路径响应
+        location = / {
+          add_header Content-Type text/plain;
+          return 200 'Welcome to Suoke API Gateway';
+        }
+        
+        # 认证服务路由
+        location /api/auth/ {
+          proxy_pass http://auth_service/;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+        }
+        
+        # 用户服务路由
+        location /api/users/ {
+          proxy_pass http://user_service/;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+        }
+        
+        # 智能体协调服务路由
+        location /api/agents/ {
+          proxy_pass http://agent_coordinator_service/;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+        }
+        
+        # 小艾服务路由
+        location /api/xiaoai/ {
+          proxy_pass http://xiaoai_service/;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+        }
+        
+        # 知识图谱服务路由
+        location /api/knowledge/ {
+          proxy_pass http://knowledge_graph_service/;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+        }
+      }
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway
+  namespace: suoke
+  labels:
+    app: api-gateway
+    app.kubernetes.io/part-of: suoke
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+        app.kubernetes.io/part-of: suoke
+    spec:
+      nodeSelector:
+        node-type: core-service
+      containers:
+      - name: nginx
+        image: nginx:1.23.1-alpine
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        volumeMounts:
+        - name: nginx-config
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+      volumes:
+      - name: nginx-config
+        configMap:
+          name: api-gateway-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-gateway
+  namespace: suoke
+spec:
+  selector:
+    app: api-gateway
+  ports:
+  - port: 80
+    targetPort: 80
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: api-gateway-ingress
+  namespace: suoke
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: api-gateway
+            port:
+              number: 80 

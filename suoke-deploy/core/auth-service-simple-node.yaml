@@ -1,0 +1,124 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: auth-service-simple-config
+  namespace: suoke
+data:
+  app.json: |
+    {
+      "auth": {
+        "jwt": {
+          "secret": "suoke_auth_secret_key",
+          "expiresIn": "1h"
+        }
+      }
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-service-simple-node
+  namespace: suoke
+  labels:
+    app: auth-service-simple-node
+    app.kubernetes.io/part-of: suoke
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-service-simple-node
+  template:
+    metadata:
+      labels:
+        app: auth-service-simple-node
+        app.kubernetes.io/part-of: suoke
+    spec:
+      nodeSelector:
+        node-type: core-service
+      containers:
+      - name: auth-service
+        image: node:18-alpine
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3001
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3001
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3001
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        command: ["/bin/sh"]
+        args:
+        - "-c"
+        - |
+          mkdir -p /app
+          echo '{"main":"server.js","scripts":{"start":"node server.js"}}' > /app/package.json
+          echo 'const http = require("http");
+          const fs = require("fs");
+          
+          let config = {auth:{jwt:{expiresIn:"1h"}}};
+          try {
+            config = JSON.parse(fs.readFileSync("/app/config/app.json"));
+            console.log("Config loaded successfully");
+          } catch(e) {
+            console.log("Using default config:", e.message);
+          }
+          
+          const server = http.createServer((req, res) => {
+            res.setHeader("Content-Type", "application/json");
+            
+            if (req.url === "/health") {
+              res.writeHead(200);
+              res.end(JSON.stringify({status: "UP", service: "auth"}));
+              console.log("Health check passed");
+            } else if (req.url === "/api/auth/login") {
+              res.writeHead(200);
+              res.end(JSON.stringify({
+                token: "demo-token-" + Date.now(), 
+                expiresIn: config.auth.jwt.expiresIn
+              }));
+              console.log("Login request processed");
+            } else {
+              res.writeHead(404);
+              res.end(JSON.stringify({error: "Not found"}));
+              console.log("Unknown path:", req.url);
+            }
+          });
+          
+          server.listen(3001, () => {
+            console.log("Auth service listening on port 3001");
+          });' > /app/server.js
+          
+          cd /app && node server.js
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config
+      volumes:
+      - name: config-volume
+        configMap:
+          name: auth-service-simple-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service-simple-node
+  namespace: suoke
+spec:
+  selector:
+    app: auth-service-simple-node
+  ports:
+  - port: 3001
+    targetPort: 3001 

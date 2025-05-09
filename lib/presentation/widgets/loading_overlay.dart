@@ -1,48 +1,50 @@
 import 'package:flutter/material.dart';
 
-/// 加载覆盖层
-/// 在内容上显示半透明加载指示器
+/// 加载覆盖组件
 class LoadingOverlay extends StatelessWidget {
-  final bool isLoading;
-  final Widget child;
-  final Color? color;
-  final double opacity;
-  final Widget? loadingWidget;
-
+  /// 加载消息
+  final String message;
+  
+  /// 背景颜色
+  final Color backgroundColor;
+  
+  /// 文字颜色
+  final Color textColor;
+  
+  /// 构造函数
   const LoadingOverlay({
-    Key? key,
-    required this.isLoading,
-    required this.child,
-    this.color,
-    this.opacity = 0.5,
-    this.loadingWidget,
-  }) : super(key: key);
-
+    super.key,
+    required this.message,
+    this.backgroundColor = Colors.black54,
+    this.textColor = Colors.white,
+  });
+  
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    
-    return Stack(
-      children: [
-        // 内容
-        child,
-        
-        // 加载指示器
-        if (isLoading)
-          Positioned.fill(
-            child: Container(
-              color: (color ?? Colors.black).withOpacity(opacity),
-              child: Center(
-                child: loadingWidget ?? 
-                  CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      theme.colorScheme.primary,
-                    ),
-                  ),
+    return Positioned.fill(
+      child: Container(
+        color: backgroundColor,
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
               ),
-            ),
+              const SizedBox(height: 16),
+              Text(
+                message,
+                style: TextStyle(
+                  color: textColor,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
           ),
-      ],
+        ),
+      ),
     );
   }
 } 

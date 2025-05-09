@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: knowledge-graph-service
+  namespace: suoke
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: knowledge-graph-service
+  template:
+    metadata:
+      labels:
+        app: knowledge-graph-service
+        app.kubernetes.io/part-of: suoke
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9464"
+        prometheus.io/path: "/metrics"
+    spec:
+      nodeSelector:
+        node-type: data-service
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+      containers:
+      - name: knowledge-graph-service
+        image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/knowledge-graph-service:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3006
+        - containerPort: 9464
+          name: metrics
+        resources:
+          requests:
+            cpu: 500m
+            memory: 1Gi
+          limits:
+            cpu: 1000m
+            memory: 2Gi
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3006
+          initialDelaySeconds: 20
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3006
+          initialDelaySeconds: 40
+          periodSeconds: 20
+        envFrom:
+        - configMapRef:
+            name: knowledge-graph-service-config
+      imagePullSecrets:
+      - name: aliyun-registry-secret

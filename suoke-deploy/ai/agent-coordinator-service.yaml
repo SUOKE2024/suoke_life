@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agent-coordinator-service
+  namespace: suoke
+  labels:
+    app: agent-coordinator-service
+    app.kubernetes.io/part-of: suoke
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: agent-coordinator-service
+  template:
+    metadata:
+      labels:
+        app: agent-coordinator-service
+        app.kubernetes.io/part-of: suoke
+    spec:
+      nodeSelector:
+        node-type: ai-service
+      imagePullSecrets:
+      - name: aliyun-registry-secret
+      containers:
+      - name: agent-coordinator
+        image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/agent-coordinator-service:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            cpu: 200m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 20
+          periodSeconds: 15
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: agent-coordinator-service
+  namespace: suoke
+spec:
+  selector:
+    app: agent-coordinator-service
+  ports:
+  - port: 8080
+    targetPort: 8080 

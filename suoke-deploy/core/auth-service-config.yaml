@@ -1,0 +1,34 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: auth-service-simple-config
+  namespace: suoke
+  labels:
+    app: auth-service-simple
+    component: core
+    tier: config
+data:
+  app.json: |
+    {
+      "server": {
+        "port": 3001,
+        "cors": {
+          "origin": "*",
+          "methods": ["GET", "POST", "PUT", "DELETE"],
+          "allowedHeaders": ["Content-Type", "Authorization"]
+        }
+      },
+      "auth": {
+        "jwt": {
+          "secret": "suoke-auth-secret-dev-only",
+          "expiresIn": "1d"
+        },
+        "refreshToken": {
+          "expiresIn": "7d"
+        }
+      },
+      "logging": {
+        "level": "info",
+        "format": "json"
+      }
+    }

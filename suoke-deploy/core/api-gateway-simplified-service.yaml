@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-gateway-simple
+  namespace: suoke
+  labels:
+    app: api-gateway-simple
+    app.kubernetes.io/part-of: suoke
+spec:
+  selector:
+    app: api-gateway-simple
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+  type: ClusterIP

@@ -1,0 +1,199 @@
+# 全局配置
+global:
+  environment: dev  # 环境标识: dev, test, prod
+  registry: suoke-registry.cn-hangzhou.cr.aliyuncs.com
+  namespace: suoke
+  imagePullSecrets:
+    - name: aliyun-registry-secret
+  podAnnotations:
+    prometheus.io/scrape: "true"
+  nodeSelector:
+    kubernetes.io/os: linux
+  storageClass: suoke-nfs
+
+# API网关配置
+api-gateway:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/api-gateway
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 80
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+  nodeSelector:
+    node-type: core-service
+  ingress:
+    enabled: true
+    annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    hosts:
+      - host: ""
+        paths:
+          - path: /
+            pathType: Prefix
+
+# 认证服务配置
+auth-service:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/auth-service
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 3001
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+  nodeSelector:
+    node-type: core-service
+  config:
+    jwt:
+      secret: suoke_auth_secret_key
+      expiresIn: 1h
+
+# 智能体协调器配置
+agent-coordinator:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/agent-coordinator
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8080
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  nodeSelector:
+    node-type: ai-service
+  config:
+    server:
+      port: 8080
+      timeout: 30s
+    agents:
+      xiaoai:
+        url: http://xiaoai-service:8081
+    database:
+      type: memory
+    logging:
+      level: info
+      format: json
+
+# RAG服务配置
+rag-service:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/rag-service
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8082
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  nodeSelector:
+    node-type: ai-service
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    runAsGroup: 1000
+  persistence:
+    enabled: true
+    storageClass: suoke-nfs
+    accessMode: ReadWriteMany
+    size: 10Gi
+
+# 监控配置
+monitoring:
+  enabled: true
+  namespace: monitoring
+  prometheus:
+    retention: 15d
+    scrapeInterval: 15s
+    resources:
+      requests:
+        cpu: 200m
+        memory: 512Mi
+      limits:
+        cpu: 500m
+        memory: 1Gi
+  grafana:
+    adminPassword: suoke2025
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
+    persistence:
+      enabled: true
+      size: 5Gi
+    
+# 日志配置
+logging:
+  enabled: true
+  namespace: logging
+  elasticsearch:
+    replicas: 1
+    resources:
+      requests:
+        cpu: 500m
+        memory: 1Gi
+      limits:
+        cpu: 1000m
+        memory: 2Gi
+    persistence:
+      enabled: true
+      size: 10Gi
+  kibana:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 512Mi
+      limits:
+        cpu: 300m
+        memory: 1Gi
+
+# 自动扩缩容配置
+autoscaling:
+  enabled: true
+  apiGateway:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+  authService:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80 

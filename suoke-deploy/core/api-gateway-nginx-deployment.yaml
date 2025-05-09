@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway-nginx
+  namespace: suoke
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: api-gateway-nginx
+  template:
+    metadata:
+      labels:
+        app: api-gateway-nginx
+        app.kubernetes.io/part-of: suoke
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9464"
+        prometheus.io/path: "/metrics"
+    spec:
+      nodeSelector:
+        node-type: core-service
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - api-gateway-nginx
+              topologyKey: kubernetes.io/hostname
+      securityContext:
+        runAsNonRoot: false
+      containers:
+      - name: api-gateway-nginx
+        image: registry.cn-hangzhou.aliyuncs.com/acs/nginx:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 300m
+            memory: 384Mi
+          limits:
+            cpu: 600m
+            memory: 768Mi
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 10
+        volumeMounts:
+        - name: api-gateway-config
+          mountPath: /etc/nginx/conf.d/default.conf
+          subPath: api-routes.conf
+        - name: api-gateway-config
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+      volumes:
+      - name: api-gateway-config
+        configMap:
+          name: api-gateway-config

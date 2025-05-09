@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: knowledge-graph-service
+  namespace: suoke
+  labels:
+    app: knowledge-graph-service
+    app.kubernetes.io/part-of: suoke
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: knowledge-graph-service
+  template:
+    metadata:
+      labels:
+        app: knowledge-graph-service
+        app.kubernetes.io/part-of: suoke
+    spec:
+      nodeSelector:
+        node-type: ai-service
+      imagePullSecrets:
+      - name: aliyun-registry-secret
+      containers:
+      - name: knowledge-graph
+        image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/knowledge-graph-service:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8083
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 300m
+            memory: 512Mi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8083
+          initialDelaySeconds: 15
+          periodSeconds: 12
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8083
+          initialDelaySeconds: 8
+          periodSeconds: 8
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: knowledge-graph-service
+  namespace: suoke
+spec:
+  selector:
+    app: knowledge-graph-service
+  ports:
+  - port: 8083
+    targetPort: 8083 

@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-service
+  namespace: suoke
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: auth-service
+  template:
+    metadata:
+      labels:
+        app: auth-service
+        app.kubernetes.io/part-of: suoke
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9464"
+        prometheus.io/path: "/metrics"
+    spec:
+      nodeSelector:
+        node-type: core-service
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+      containers:
+      - name: auth-service
+        image: suoke-registry.cn-hangzhou.cr.aliyuncs.com/suoke/auth-service:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3001
+        - containerPort: 9464
+          name: metrics
+        resources:
+          requests:
+            cpu: 300m
+            memory: 384Mi
+          limits:
+            cpu: 600m
+            memory: 768Mi
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3001
+          initialDelaySeconds: 15
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3001
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        envFrom:
+        - configMapRef:
+            name: auth-service-config
+      imagePullSecrets:
+      - name: aliyun-registry-secret

@@ -1,0 +1,56 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: api-gateway-monitor
+  namespace: monitoring
+  labels:
+    app: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: api-gateway-nginx
+  namespaceSelector:
+    matchNames:
+      - suoke
+  endpoints:
+  - port: http
+    path: /metrics
+    interval: 15s
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: rag-service-monitor
+  namespace: monitoring
+  labels:
+    app: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: rag-service
+  namespaceSelector:
+    matchNames:
+      - suoke
+  endpoints:
+  - port: http
+    path: /metrics
+    interval: 15s
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: agent-coordinator-monitor
+  namespace: monitoring
+  labels:
+    app: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: agent-coordinator-simple
+  namespaceSelector:
+    matchNames:
+      - suoke
+  endpoints:
+  - port: http
+    path: /metrics
+    interval: 15s 

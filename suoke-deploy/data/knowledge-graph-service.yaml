@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: knowledge-graph-service
+  namespace: suoke
+  labels:
+    app: knowledge-graph-service
+    app.kubernetes.io/part-of: suoke
+spec:
+  selector:
+    app: knowledge-graph-service
+  ports:
+  - name: http
+    port: 3006
+    targetPort: 3006
+  - name: metrics
+    port: 9464
+    targetPort: 9464
+  type: ClusterIP

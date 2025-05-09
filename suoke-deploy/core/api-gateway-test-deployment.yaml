@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway-test
+  namespace: suoke
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-gateway-test
+  template:
+    metadata:
+      labels:
+        app: api-gateway-test
+        app.kubernetes.io/part-of: suoke
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/metrics"
+    spec:
+      nodeSelector:
+        node-type: core-service
+      containers:
+      - name: api-gateway-test
+        image: registry.cn-hangzhou.aliyuncs.com/acs/nginx:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+        - containerPort: 9090
+          name: metrics
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi

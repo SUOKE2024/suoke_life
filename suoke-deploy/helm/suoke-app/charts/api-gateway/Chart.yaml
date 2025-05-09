@@ -1,0 +1,9 @@
+apiVersion: v2
+name: api-gateway
+description: 索克生活APP API网关
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+maintainers:
+  - name: 索克生活APP开发组
+    email: netsong@sina.com 

@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: agent-coordinator-config
+  namespace: suoke
+data:
+  config.yaml: |
+    server:
+      port: 8080
+      timeout: 30s
+    
+    agents:
+      xiaoai:
+        url: http://xiaoai-service:8081
+      
+    database:
+      type: memory
+      
+    logging:
+      level: info
+      format: json 

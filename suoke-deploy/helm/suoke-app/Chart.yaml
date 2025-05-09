@@ -1,0 +1,34 @@
+apiVersion: v2
+name: suoke-app
+description: 索克生活APP后端微服务Helm Chart
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+maintainers:
+  - name: 索克生活APP开发组
+    email: netsong@sina.com
+dependencies:
+  - name: api-gateway
+    version: 0.1.0
+    repository: "file://./charts/api-gateway"
+    condition: api-gateway.enabled
+  - name: auth-service
+    version: 0.1.0
+    repository: "file://./charts/auth-service"
+    condition: auth-service.enabled
+  - name: agent-coordinator
+    version: 0.1.0
+    repository: "file://./charts/agent-coordinator"
+    condition: agent-coordinator.enabled
+  - name: rag-service
+    version: 0.1.0
+    repository: "file://./charts/rag-service"
+    condition: rag-service.enabled
+  - name: prometheus-stack
+    version: 0.1.0
+    repository: "file://./charts/prometheus-stack"
+    condition: monitoring.enabled
+  - name: logging-stack
+    version: 0.1.0
+    repository: "file://./charts/logging-stack"
+    condition: logging.enabled 
