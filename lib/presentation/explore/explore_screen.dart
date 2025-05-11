@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:auto_route/auto_route.dart';
 
 /// 探索屏幕
+@RoutePage()
 class ExploreScreen extends StatelessWidget {
   /// 构造函数
   const ExploreScreen({Key? key}) : super(key: key);

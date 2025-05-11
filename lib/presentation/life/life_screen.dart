@@ -10,8 +10,10 @@ import 'package:suoke_life/presentation/life/health_records_list_screen.dart';
 import 'package:suoke_life/presentation/life/sleep_analysis/sleep_analysis_screen.dart';
 import 'package:suoke_life/presentation/life/sleep_analysis/sleep_trend_screen.dart';
 import 'package:suoke_life/presentation/life/view_models/health_record_view_model.dart';
+import 'package:auto_route/auto_route.dart';
 
 /// LIFE模块主页面
+@RoutePage()
 class LifeScreen extends ConsumerStatefulWidget {
   const LifeScreen({super.key});
 
@@ -81,8 +83,12 @@ class _LifeScreenState extends ConsumerState<LifeScreen>
 
     return RefreshIndicator(
       onRefresh: () async {
-        await ref.read(healthRecordViewModelProvider.notifier).getRecentRecords(5);
-        await ref.read(sleepAnalysisViewModelProvider.notifier).getRecentAnalyses(5);
+        await ref
+            .read(healthRecordViewModelProvider.notifier)
+            .getRecentRecords(5);
+        await ref
+            .read(sleepAnalysisViewModelProvider.notifier)
+            .getRecentAnalyses(5);
       },
       child: ListView(
         padding: const EdgeInsets.all(16.0),
