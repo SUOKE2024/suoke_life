@@ -1,7 +1,7 @@
 # 索克生活APP
 
 <p align="center">
-  <img src="assets/images/app_icon.jpg" width="100" alt="索克生活Logo">
+  <img src="src/assets/images/app_icon.png" width="100" alt="索克生活Logo">
 </p>
 
 <div align="center">
