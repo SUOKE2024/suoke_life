@@ -1,0 +1,99 @@
+{
+  "server": {
+    "port": 50053,
+    "host": "0.0.0.0",
+    "max_workers": 5,
+    "max_concurrent_rpcs": 20,
+    "keep_alive_time": 7200,
+    "timeout": 30
+  },
+  "database": {
+    "type": "mongodb",
+    "connection_string": "mongodb://localhost:27017",
+    "name": "palpation_test_db",
+    "collections": {
+      "sessions": "pulse_sessions_test",
+      "features": "pulse_features_test",
+      "analyses": "pulse_analyses_test",
+      "users": "users_test",
+      "reports": "palpation_reports_test",
+      "abdominal": "abdominal_data_test",
+      "skin": "skin_data_test"
+    }
+  },
+  "cache": {
+    "type": "memory",
+    "ttl": 300
+  },
+  "pulse_analysis": {
+    "model_path": "./test/data/dummy_model",
+    "model_version": "test_v1.0",
+    "confidence_threshold": 0.6,
+    "batch_size": 16,
+    "use_gpu": false,
+    "feature_extraction": {
+      "window_size": 512,
+      "overlap": 128,
+      "sampling_rate": 1000,
+      "low_pass_filter": 20,
+      "high_pass_filter": 0.1
+    },
+    "wavelet_transform": {
+      "wavelet_type": "db4",
+      "decomposition_level": 5
+    }
+  },
+  "skin_analysis": {
+    "model_path": "./test/data/dummy_model",
+    "confidence_threshold": 0.6,
+    "region_mappings": [
+      {
+        "id": "skin_face",
+        "name": "面部"
+      },
+      {
+        "id": "skin_hand",
+        "name": "手部"
+      }
+    ]
+  },
+  "abdominal_analysis": {
+    "model_path": "./test/data/dummy_model",
+    "confidence_threshold": 0.6,
+    "region_mappings": [
+      {
+        "id": "abd_top_left",
+        "name": "左上腹部",
+        "organs": ["liver", "stomach"]
+      },
+      {
+        "id": "abd_middle",
+        "name": "脐部",
+        "organs": ["small_intestine"]
+      }
+    ]
+  },
+  "logging": {
+    "level": "INFO",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    "file": "./test/logs/palpation_test.log",
+    "max_size_mb": 10,
+    "backup_count": 3,
+    "log_to_console": true
+  },
+  "metrics": {
+    "enabled": false
+  },
+  "integrations": {
+    "xiaoai_service": {
+      "host": "localhost",
+      "port": 50050,
+      "timeout": 5
+    },
+    "rag_service": {
+      "host": "localhost",
+      "port": 50055,
+      "timeout": 5
+    }
+  }
+} 

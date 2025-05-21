@@ -1,0 +1,101 @@
+# 情绪分析模型配置
+
+# 模型参数
+model:
+  name: "tcm_emotion_analyzer_v1"
+  version: "1.0.0"
+  description: "基于中医五志理论的情绪分析模型"
+  
+# 输入源配置
+input_sources:
+  text:
+    enabled: true
+    weight: 0.6
+    min_text_length: 5
+    max_text_length: 5000
+    language: "zh-CN"
+  
+  voice:
+    enabled: true
+    weight: 0.8
+    min_duration_ms: 1000
+    max_duration_ms: 60000
+    sample_rate: 16000
+    features:
+      - "pitch"
+      - "volume"
+      - "speech_rate"
+      - "energy"
+      - "pause_ratio"
+  
+  physiological:
+    enabled: true
+    weight: 0.9
+    metrics:
+      - "heart_rate"
+      - "hrv"
+      - "eda"
+      - "skin_temperature"
+      - "respiration_rate"
+
+# 情绪分类配置
+emotion_categories:
+  modern:
+    - "愤怒"
+    - "快乐"
+    - "忧郁"
+    - "担忧"
+    - "恐惧"
+    - "平静"
+    - "悲伤"
+    - "烦躁"
+  
+  tcm:
+    - "怒"
+    - "喜"
+    - "思"
+    - "忧"
+    - "恐"
+    - "惊"
+    - "悲"
+
+# 情绪映射配置
+emotion_mapping:
+  anger_threshold: 0.6
+  joy_threshold: 0.7
+  anxiety_threshold: 0.5
+  fear_threshold: 0.4
+  calm_threshold: 0.7
+
+# 健康影响评估规则
+health_impact:
+  severity_levels:
+    mild: 0.3
+    moderate: 0.6
+    severe: 0.8
+  
+  duration_factors:
+    short_term: 1.0
+    medium_term: 1.5
+    long_term: 2.0
+
+# 干预策略配置
+intervention:
+  urgency_threshold: 0.7
+  effectiveness_minimum: 0.5
+  max_suggestions: 3
+  follow_up_days: 3
+
+# 历史分析配置
+history_analysis:
+  lookback_days: 30
+  significant_change_threshold: 0.25
+  pattern_detection_window: 7
+  trend_confirmation_count: 3
+
+# 日志记录配置
+logging:
+  level: "INFO"
+  emotion_events: true
+  intervention_events: true
+  user_feedback: true 

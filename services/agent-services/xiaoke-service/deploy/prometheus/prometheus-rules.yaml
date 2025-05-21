@@ -1,0 +1,108 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: xiaoke-service-rules
+  namespace: monitoring
+  labels:
+    app: prometheus
+    release: prometheus-operator
+spec:
+  groups:
+  - name: xiaoke-service.rules
+    rules:
+    # 高错误率告警
+    - alert: XiaokeServiceHighErrorRate
+      expr: sum(rate(xiaoke_grpc_request_errors_total{service="xiaoke-service"}[5m])) / sum(rate(xiaoke_grpc_requests_total{service="xiaoke-service"}[5m])) > 0.05
+      for: 5m
+      labels:
+        severity: critical
+        service: xiaoke-service
+      annotations:
+        summary: "小克服务 - 高错误率"
+        description: "小克服务在过去5分钟内的错误率超过5%"
+        dashboard_url: "{{ $externalURL }}/d/xiaoke-service/xiaoke-service-overview"
+        
+    # 服务接口高延迟告警
+    - alert: XiaokeServiceHighLatency
+      expr: histogram_quantile(0.95, sum(rate(xiaoke_grpc_request_duration_seconds_bucket{service="xiaoke-service"}[5m])) by (le, method)) > 0.5
+      for: 5m
+      labels:
+        severity: warning
+        service: xiaoke-service
+      annotations:
+        summary: "小克服务 - 高延迟"
+        description: "小克服务95%的请求延迟超过500ms"
+        dashboard_url: "{{ $externalURL }}/d/xiaoke-service/xiaoke-service-overview"
+        
+    # 服务实例不可用告警
+    - alert: XiaokeServiceInstanceDown
+      expr: up{job="xiaoke-service"} == 0
+      for: 1m
+      labels:
+        severity: critical
+        service: xiaoke-service
+      annotations:
+        summary: "小克服务 - 实例宕机"
+        description: "小克服务实例已经宕机超过1分钟"
+        dashboard_url: "{{ $externalURL }}/d/xiaoke-service/xiaoke-service-overview"
+        
+    # 服务实例高内存使用率
+    - alert: XiaokeServiceHighMemoryUsage
+      expr: container_memory_usage_bytes{pod=~"xiaoke-service-.*"} / container_spec_memory_limit_bytes{pod=~"xiaoke-service-.*"} > 0.85
+      for: 10m
+      labels:
+        severity: warning
+        service: xiaoke-service
+      annotations:
+        summary: "小克服务 - 高内存使用率"
+        description: "小克服务实例内存使用率超过85%已持续10分钟"
+        dashboard_url: "{{ $externalURL }}/d/xiaoke-service/xiaoke-service-overview"
+        
+    # 服务实例高CPU使用率
+    - alert: XiaokeServiceHighCPUUsage
+      expr: sum(rate(container_cpu_usage_seconds_total{pod=~"xiaoke-service-.*"}[5m])) by (pod) / sum(container_spec_cpu_quota{pod=~"xiaoke-service-.*"} / container_spec_cpu_period{pod=~"xiaoke-service-.*"}) by (pod) > 0.85
+      for: 10m
+      labels:
+        severity: warning
+        service: xiaoke-service
+      annotations:
+        summary: "小克服务 - 高CPU使用率"
+        description: "小克服务实例CPU使用率超过85%已持续10分钟"
+        dashboard_url: "{{ $externalURL }}/d/xiaoke-service/xiaoke-service-overview"
+        
+    # 服务高重启次数
+    - alert: XiaokeServiceHighRestartCount
+      expr: increase(kube_pod_container_status_restarts_total{pod=~"xiaoke-service-.*"}[1h]) > 2
+      for: 10m
+      labels:
+        severity: warning
+        service: xiaoke-service
+      annotations:
+        summary: "小克服务 - 高重启次数"
+        description: "小克服务实例在过去1小时内重启超过2次"
+        dashboard_url: "{{ $externalURL }}/d/xiaoke-service/xiaoke-service-overview"
+        
+    # 服务OOM风险
+    - alert: XiaokeServiceOOMRisk
+      expr: container_memory_working_set_bytes{pod=~"xiaoke-service-.*"} / container_spec_memory_limit_bytes{pod=~"xiaoke-service-.*"} > 0.95
+      for: 5m
+      labels:
+        severity: critical
+        service: xiaoke-service
+      annotations:
+        summary: "小克服务 - 内存溢出风险"
+        description: "小克服务实例内存使用接近限制，存在OOM风险"
+        dashboard_url: "{{ $externalURL }}/d/xiaoke-service/xiaoke-service-overview"
+        
+    # ERP集成异常告警
+    - alert: XiaokeServiceERPIntegrationFailure
+      expr: xiaoke_erp_request_errors_total{service="xiaoke-service"} > 0
+      for: 5m
+      labels:
+        severity: warning
+        service: xiaoke-service
+        component: erp-integration
+      annotations:
+        summary: "小克服务 - ERP集成失败"
+        description: "小克服务与ERP系统集成出现故障"
+        dashboard_url: "{{ $externalURL }}/d/xiaoke-service/xiaoke-service-overview" 

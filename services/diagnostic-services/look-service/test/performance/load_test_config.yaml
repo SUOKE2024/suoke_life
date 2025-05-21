@@ -1,0 +1,138 @@
+# Look服务负载测试配置
+
+# 服务URLs
+service_urls:
+  look_service: "localhost:50051"
+  health_service: "localhost:50051/health"
+
+# 全局设置
+global:
+  duration: "5m"    # 测试持续时间
+  ramp_up: "30s"    # 爬坡时间
+  max_vus: 50       # 最大虚拟用户数
+  timeout: "10s"    # 请求超时时间
+
+# 测试场景定义
+scenarios:
+  # 舌象分析负载测试
+  tongue_analysis:
+    weight: 40        # 该场景在总测试中的比重
+    target_rps: 10    # 目标每秒请求数
+    scenarios:
+      - path: "api.grpc.look_service.LookService/AnalyzeTongue"
+        method: "grpc"
+        request_files:
+          - "test/data/tongue/normal_1.jpg"
+          - "test/data/tongue/normal_2.jpg"
+          - "test/data/tongue/pale_1.jpg"
+          - "test/data/tongue/red_1.jpg"
+        metadata:
+          user_id: ["user1", "user2", "user3"]
+          analysis_type: [0, 1, 2]  # 对应 BASIC, COMPREHENSIVE, SPECIALIZED
+        thresholds:
+          latency_p95: 500     # 95%的请求应在500ms内完成
+          error_rate: 0.01     # 错误率不超过1%
+          success_rate: 0.99   # 成功率至少99%
+
+  # 面色分析负载测试
+  face_analysis:
+    weight: 40
+    target_rps: 10
+    scenarios:
+      - path: "api.grpc.look_service.LookService/AnalyzeFace"
+        method: "grpc"
+        request_files:
+          - "test/data/face/normal_1.jpg"
+          - "test/data/face/yellow_1.jpg"
+          - "test/data/face/pale_1.jpg"
+          - "test/data/face/red_1.jpg"
+        metadata:
+          user_id: ["user1", "user2", "user3"]
+          analysis_type: [0, 1, 2]
+        thresholds:
+          latency_p95: 600
+          error_rate: 0.01
+          success_rate: 0.99
+
+  # 形体分析负载测试
+  body_analysis:
+    weight: 10
+    target_rps: 5
+    scenarios:
+      - path: "api.grpc.look_service.LookService/AnalyzeBody"
+        method: "grpc"
+        request_files:
+          - "test/data/body/normal_1.jpg"
+          - "test/data/body/thin_1.jpg"
+          - "test/data/body/overweight_1.jpg"
+        metadata:
+          user_id: ["user1", "user2", "user3"]
+          analysis_type: [0, 1, 2]
+        thresholds:
+          latency_p95: 800
+          error_rate: 0.01
+          success_rate: 0.99
+
+  # 历史记录查询负载测试
+  analysis_history:
+    weight: 5
+    target_rps: 20
+    scenarios:
+      - path: "api.grpc.look_service.LookService/GetAnalysisHistory"
+        method: "grpc"
+        params:
+          user_id: ["user1", "user2", "user3", "user4", "user5"]
+          analysis_type: ["tongue", "face", "body"]
+          limit: [10, 20, 50]
+        thresholds:
+          latency_p95: 200
+          error_rate: 0.01
+          success_rate: 0.99
+
+  # 结果比较负载测试
+  compare_analysis:
+    weight: 5
+    target_rps: 10
+    scenarios:
+      - path: "api.grpc.look_service.LookService/CompareAnalysis"
+        method: "grpc"
+        params:
+          user_id: ["user1", "user2", "user3"]
+          analysis_type: ["tongue", "face", "body"]
+          first_analysis_id: ["an_001", "an_002", "an_003"]
+          second_analysis_id: ["an_101", "an_102", "an_103"]
+        thresholds:
+          latency_p95: 300
+          error_rate: 0.01
+          success_rate: 0.99
+
+# 监控配置
+monitoring:
+  # 普罗米修斯监控指标
+  prometheus:
+    url: "http://localhost:9090"
+    metrics:
+      # 服务级别指标
+      - name: "look_service_request_duration_seconds"
+        query: 'histogram_quantile(0.95, sum(rate(look_service_request_duration_seconds_bucket[1m])) by (le, method))'
+        threshold: 0.5
+      - name: "look_service_request_errors_total"
+        query: 'sum(rate(look_service_request_errors_total[1m])) by (method)'
+        threshold: 0.01
+      # 系统级别指标
+      - name: "cpu_usage"
+        query: 'sum(rate(process_cpu_seconds_total{job="look-service"}[1m])) * 100'
+        threshold: 80
+      - name: "memory_usage"
+        query: 'process_resident_memory_bytes{job="look-service"} / (1024 * 1024)'
+        threshold: 2048  # 限制内存使用不超过2GB
+
+# 报告配置
+report:
+  output_dir: "test/performance/results"
+  formats:
+    - "html"
+    - "json"
+    - "csv"
+  include_environment_info: true
+  include_system_metrics: true 

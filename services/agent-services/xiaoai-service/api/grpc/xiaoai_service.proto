@@ -1,0 +1,362 @@
+syntax = "proto3";
+
+package xiaoai_service;
+
+option go_package = "github.com/SUOKE2024/suoke_life/xiaoai-service/api/grpc";
+
+// 定义小艾智能体服务接口
+service XiaoAIService {
+  // 流式聊天接口
+  rpc ChatStream (ChatRequest) returns (stream ChatResponse);
+  
+  // 四诊协调接口
+  rpc CoordinateDiagnosis (DiagnosisCoordinationRequest) returns (DiagnosisCoordinationResponse);
+  
+  // 处理多模态输入接口
+  rpc ProcessMultimodalInput (MultimodalRequest) returns (MultimodalResponse);
+  
+  // 查询用户健康记录
+  rpc QueryHealthRecord (HealthRecordRequest) returns (HealthRecordResponse);
+  
+  // 生成用户健康摘要
+  rpc GenerateHealthSummary (HealthSummaryRequest) returns (HealthSummaryResponse);
+  
+  // 健康检查
+  rpc HealthCheck (HealthCheckRequest) returns (HealthCheckResponse);
+}
+
+// 聊天请求
+message ChatRequest {
+  string user_id = 1;              // 用户ID
+  string message = 2;              // 用户消息
+  string session_id = 3;           // 会话ID
+  int32 context_size = 4;          // 上下文大小
+  map<string, string> metadata = 5; // 元数据
+}
+
+// 聊天响应
+message ChatResponse {
+  string message_id = 1;           // 消息ID
+  string message = 2;              // 响应消息
+  float confidence = 3;            // 置信度
+  repeated string suggested_actions = 4; // 建议动作
+  map<string, string> metadata = 5; // 元数据
+  int64 timestamp = 6;             // 时间戳
+}
+
+// 四诊协调请求
+message DiagnosisCoordinationRequest {
+  string user_id = 1;                  // 用户ID
+  string session_id = 2;               // 会话ID
+  bool include_looking = 3;            // 是否包含望诊
+  bool include_listening = 4;          // 是否包含闻诊
+  bool include_inquiry = 5;            // 是否包含问诊
+  bool include_palpation = 6;          // 是否包含切诊
+  bytes looking_data = 7;              // 望诊数据（图像）
+  bytes listening_data = 8;            // 闻诊数据（语音）
+  string inquiry_data = 9;             // 问诊数据（文本）
+  bytes palpation_data = 10;           // 切诊数据（脉象）
+  map<string, string> settings = 11;   // 诊断设置
+}
+
+// 四诊协调响应
+message DiagnosisCoordinationResponse {
+  string coordination_id = 1;                    // 协调ID
+  repeated DiagnosisResult diagnosis_results = 2; // 诊断结果列表
+  SyndromeAnalysis syndrome_analysis = 3;         // 辨证分析
+  ConstitutionAnalysis constitution_analysis = 4; // 体质分析
+  string summary = 5;                            // 总结
+  repeated Recommendation recommendations = 6;    // 建议
+  int64 timestamp = 7;                           // 时间戳
+}
+
+// 诊断结果
+message DiagnosisResult {
+  enum DiagnosisType {
+    UNKNOWN = 0;
+    LOOKING = 1;
+    LISTENING = 2;
+    INQUIRY = 3;
+    PALPATION = 4;
+  }
+  
+  DiagnosisType type = 1;          // 诊断类型
+  string diagnosis_id = 2;         // 诊断ID
+  string source_service = 3;       // 来源服务
+  float confidence = 4;            // 置信度
+  string detailed_result = 5;      // 详细结果JSON
+  repeated Feature features = 6;   // 特征列表
+  int64 timestamp = 7;             // 时间戳
+}
+
+// 特征
+message Feature {
+  string name = 1;                 // 特征名称
+  string value = 2;                // 特征值
+  float confidence = 3;            // 置信度
+  string category = 4;             // 类别
+}
+
+// 辨证分析
+message SyndromeAnalysis {
+  repeated Syndrome primary_syndromes = 1;    // 主要证型
+  repeated Syndrome secondary_syndromes = 2;  // 次要证型
+  string analysis_summary = 3;                // 分析总结
+  float confidence = 4;                       // 整体置信度
+}
+
+// 证型
+message Syndrome {
+  string name = 1;                 // 证型名称
+  float confidence = 2;            // 置信度
+  string description = 3;          // 描述
+  repeated string related_features = 4; // 相关特征
+}
+
+// 体质分析
+message ConstitutionAnalysis {
+  repeated Constitution constitutions = 1; // 体质列表
+  string analysis_summary = 2;            // 分析总结
+  float confidence = 3;                   // 整体置信度
+}
+
+// 体质
+message Constitution {
+  string type = 1;                 // 体质类型
+  float score = 2;                 // 体质得分
+  string description = 3;          // 描述
+  bool dominant = 4;               // 是否主导体质
+}
+
+// 建议
+message Recommendation {
+  enum RecommendationType {
+    UNKNOWN = 0;
+    DIET = 1;           // 饮食
+    EXERCISE = 2;       // 运动
+    LIFESTYLE = 3;      // 生活方式
+    MEDICATION = 4;     // 用药
+    FOLLOW_UP = 5;      // 随访
+    CONSULTATION = 6;   // 咨询
+  }
+  
+  RecommendationType type = 1;     // 建议类型
+  string content = 2;              // 建议内容
+  string reason = 3;               // 建议原因
+  int32 priority = 4;              // 优先级(1-5)
+  map<string, string> metadata = 5; // 元数据
+}
+
+// 多模态请求
+message MultimodalRequest {
+  string user_id = 1;               // 用户ID
+  string session_id = 2;            // 会话ID
+  
+  oneof input_data {
+    VoiceInput voice = 3;           // 语音输入
+    ImageInput image = 4;           // 图像输入
+    TextInput text = 5;             // 文本输入
+    SignLanguageInput sign = 6;     // 手语输入
+  }
+  
+  map<string, string> metadata = 7; // 元数据
+}
+
+// 语音输入
+message VoiceInput {
+  bytes audio_data = 1;             // 音频数据
+  string audio_format = 2;          // 音频格式(wav, mp3等)
+  int32 sample_rate = 3;            // 采样率
+  int32 channels = 4;               // 通道数
+  bool noise_reduction = 5;         // 是否降噪
+  bool dialect_detection = 6;       // 是否检测方言
+}
+
+// 图像输入
+message ImageInput {
+  bytes image_data = 1;             // 图像数据
+  string image_format = 2;          // 图像格式(jpg, png等)
+  string image_type = 3;            // 图像类型(舌象, 面色等)
+  bool apply_preprocessing = 4;     // 是否预处理
+}
+
+// 文本输入
+message TextInput {
+  string text = 1;                  // 文本内容
+  string language = 2;              // 语言
+}
+
+// 手语输入
+message SignLanguageInput {
+  bytes video_data = 1;             // 视频数据
+  string video_format = 2;          // 视频格式
+  int32 frame_rate = 3;             // 帧率
+}
+
+// 多模态响应
+message MultimodalResponse {
+  string request_id = 1;            // 请求ID
+  
+  oneof processed_result {
+    VoiceResult voice_result = 2;   // 语音处理结果
+    ImageResult image_result = 3;   // 图像处理结果
+    TextResult text_result = 4;     // 文本处理结果
+    SignLanguageResult sign_result = 5; // 手语处理结果
+  }
+  
+  float confidence = 6;             // 置信度
+  string error_message = 7;         // 错误信息
+  map<string, string> metadata = 8; // 元数据
+  int64 timestamp = 9;              // 时间戳
+}
+
+// 语音处理结果
+message VoiceResult {
+  string transcription = 1;         // 语音转写文本
+  string detected_language = 2;     // 检测到的语言
+  string detected_dialect = 3;      // 检测到的方言
+  float speech_rate = 4;            // 语速
+  map<string, float> emotions = 5;  // 情绪分析
+  repeated SpeechFeature features = 6; // 语音特征
+}
+
+// 语音特征
+message SpeechFeature {
+  string feature_name = 1;          // 特征名称
+  float value = 2;                  // 特征值
+  string description = 3;           // 描述
+}
+
+// 图像处理结果
+message ImageResult {
+  string image_type = 1;            // 图像类型
+  repeated ImageFeature features = 2; // 图像特征
+  map<string, float> classifications = 3; // 分类结果
+  bytes processed_image = 4;        // 处理后的图像
+  map<string, bytes> visualizations = 5; // 可视化结果
+}
+
+// 图像特征
+message ImageFeature {
+  string feature_name = 1;          // 特征名称
+  float confidence = 2;             // 置信度
+  string description = 3;           // 描述
+  BoundingBox location = 4;         // 边界框位置
+}
+
+// 边界框
+message BoundingBox {
+  float x_min = 1;                  // 左上角x坐标
+  float y_min = 2;                  // 左上角y坐标
+  float x_max = 3;                  // 右下角x坐标
+  float y_max = 4;                  // 右下角y坐标
+}
+
+// 文本处理结果
+message TextResult {
+  string processed_text = 1;        // 处理后的文本
+  string detected_language = 2;     // 检测到的语言
+  map<string, float> intent_scores = 3; // 意图分类结果
+  map<string, string> entities = 4; // 实体识别结果
+  float sentiment_score = 5;        // 情感得分 (-1到1)
+}
+
+// 手语处理结果
+message SignLanguageResult {
+  string transcription = 1;         // 手语转写文本
+  float confidence = 2;             // 置信度
+  repeated SignGesture gestures = 3; // 识别到的手势
+}
+
+// 手语手势
+message SignGesture {
+  string gesture_type = 1;          // 手势类型
+  string meaning = 2;               // 含义
+  float confidence = 3;             // 置信度
+  int64 timestamp_ms = 4;           // 时间戳(毫秒)
+}
+
+// 健康记录请求
+message HealthRecordRequest {
+  string user_id = 1;               // 用户ID
+  int64 start_time = 2;             // 开始时间
+  int64 end_time = 3;               // 结束时间
+  string record_type = 4;           // 记录类型
+  int32 limit = 5;                  // 限制数量
+  int32 offset = 6;                 // 偏移量
+}
+
+// 健康记录响应
+message HealthRecordResponse {
+  repeated HealthRecord records = 1; // 健康记录列表
+  int32 total_count = 2;            // 总记录数
+  bool has_more = 3;                // 是否有更多
+}
+
+// 健康记录
+message HealthRecord {
+  string record_id = 1;             // 记录ID
+  string user_id = 2;               // 用户ID
+  string record_type = 3;           // 记录类型
+  string title = 4;                 // 标题
+  string content = 5;               // 内容
+  map<string, string> metadata = 6; // 元数据
+  int64 created_at = 7;             // 创建时间
+  int64 updated_at = 8;             // 更新时间
+}
+
+// 健康摘要请求
+message HealthSummaryRequest {
+  string user_id = 1;               // 用户ID
+  int64 start_time = 2;             // 开始时间
+  int64 end_time = 3;               // 结束时间
+  repeated string categories = 4;   // 类别列表
+  bool include_charts = 5;          // 是否包含图表
+  bool include_recommendations = 6; // 是否包含建议
+}
+
+// 健康摘要响应
+message HealthSummaryResponse {
+  string summary_id = 1;            // 摘要ID
+  string user_id = 2;               // 用户ID
+  string text_summary = 3;          // 文本摘要
+  repeated HealthTrend trends = 4;  // 健康趋势
+  repeated HealthMetric metrics = 5; // 健康指标
+  repeated Recommendation recommendations = 6; // 建议
+  map<string, bytes> charts = 7;    // 图表数据
+  int64 generated_at = 8;           // 生成时间
+}
+
+// 健康趋势
+message HealthTrend {
+  string metric_name = 1;           // 指标名称
+  string trend_direction = 2;       // 趋势方向 (上升, 下降, 稳定)
+  float change_percentage = 3;      // 变化百分比
+  string description = 4;           // 描述
+  int32 priority = 5;               // 优先级
+}
+
+// 健康指标
+message HealthMetric {
+  string name = 1;                  // 名称
+  string value = 2;                 // 值
+  string unit = 3;                  // 单位
+  string status = 4;                // 状态 (正常, 偏高, 偏低)
+  string reference_range = 5;       // 参考范围
+}
+
+// 健康检查请求
+message HealthCheckRequest {
+  bool include_details = 1;         // 是否包含详细信息
+}
+
+// 健康检查响应
+message HealthCheckResponse {
+  enum Status {
+    UNKNOWN = 0;
+    SERVING = 1;
+    NOT_SERVING = 2;
+  }
+  Status status = 1;                // 服务状态
+  map<string, string> details = 2;  // 详细状态信息
+} 

@@ -1,0 +1,24 @@
+# Core dependencies
+pyyaml==6.0
+psycopg2-binary==2.9.9
+grpcio==1.59.0
+grpcio-tools==1.59.0
+protobuf==4.24.4
+fastapi==0.103.2
+uvicorn==0.23.2
+pydantic==2.4.2
+python-jose==3.3.0
+python-multipart==0.0.9
+
+# Observability
+opentelemetry-api==1.20.0
+opentelemetry-sdk==1.20.0
+opentelemetry-exporter-jaeger==1.20.0
+opentelemetry-exporter-prometheus==1.20.0
+opentelemetry-exporter-otlp-proto-grpc==1.20.0
+prometheus-client==0.17.1
+
+# Testing
+pytest==7.4.0
+pytest-cov==4.1.0
+requests==2.31.0 

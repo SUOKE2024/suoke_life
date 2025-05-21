@@ -1,0 +1,199 @@
+# 切诊服务配置文件
+
+# 服务器配置
+server:
+  port: 50053
+  host: 0.0.0.0
+  max_workers: 10
+  max_concurrent_rpcs: 100
+  keep_alive_time: 7200  # 秒
+  timeout: 30  # 秒
+
+# 数据库配置
+database:
+  type: mongodb
+  connection_string: mongodb://mongodb:27017
+  name: palpation_db
+  collections:
+    sessions: pulse_sessions
+    features: pulse_features
+    analyses: pulse_analyses
+    users: users
+    reports: palpation_reports
+    abdominal: abdominal_data
+    skin: skin_data
+
+# 缓存配置
+cache:
+  type: redis
+  host: redis
+  port: 6379
+  ttl: 3600  # 秒
+  max_connections: 10
+
+# 脉诊分析模型配置
+pulse_analysis:
+  model_path: /app/models/pulse_analysis
+  model_version: v1.0.0
+  confidence_threshold: 0.65
+  batch_size: 32
+  use_gpu: true
+  feature_extraction:
+    window_size: 512
+    overlap: 128
+    sampling_rate: 1000
+    low_pass_filter: 20  # Hz
+    high_pass_filter: 0.1  # Hz
+  wavelet_transform:
+    wavelet_type: db4
+    decomposition_level: 5
+
+# 皮肤触诊分析配置
+skin_analysis:
+  model_path: /app/models/skin_analysis
+  confidence_threshold: 0.70
+  region_mappings:
+    - id: "skin_face"
+      name: "面部"
+    - id: "skin_hand"
+      name: "手部"
+    - id: "skin_abdomen"
+      name: "腹部"
+    - id: "skin_back"
+      name: "背部"
+    - id: "skin_feet"
+      name: "足部"
+
+# 腹诊分析配置
+abdominal_analysis:
+  model_path: /app/models/abdominal_analysis
+  confidence_threshold: 0.70
+  region_mappings:
+    - id: "abd_top_left"
+      name: "左上腹部"
+      organs: ["liver", "stomach"]
+    - id: "abd_top_middle"
+      name: "上腹部中间"
+      organs: ["stomach", "pancreas"]
+    - id: "abd_top_right"
+      name: "右上腹部"
+      organs: ["liver", "gallbladder"]
+    - id: "abd_middle_left"
+      name: "左中腹部"
+      organs: ["spleen", "large_intestine"]
+    - id: "abd_middle"
+      name: "脐部"
+      organs: ["small_intestine"]
+    - id: "abd_middle_right"
+      name: "右中腹部"
+      organs: ["large_intestine"]
+    - id: "abd_lower_left"
+      name: "左下腹部"
+      organs: ["large_intestine", "bladder"]
+    - id: "abd_lower_middle"
+      name: "下腹部中间"
+      organs: ["bladder", "uterus", "prostate"]
+    - id: "abd_lower_right"
+      name: "右下腹部"
+      organs: ["large_intestine", "appendix"]
+
+# 中医证型映射配置
+tcm_pattern_mapping:
+  model_path: /app/models/tcm_pattern_mapper
+  confidence_threshold: 0.70
+  pattern_definitions:
+    - id: "qi_deficiency"
+      name: "气虚证"
+      pulse_types: ["weak", "thready", "faint", "empty"]
+    - id: "yin_deficiency"
+      name: "阴虚证"
+      pulse_types: ["thready", "rapid", "floating"]
+    - id: "yang_deficiency"
+      name: "阳虚证"
+      pulse_types: ["weak", "slow", "sunken"]
+    - id: "blood_deficiency"
+      name: "血虚证"
+      pulse_types: ["thready", "weak"]
+    - id: "qi_stagnation"
+      name: "气滞证"
+      pulse_types: ["wiry", "tight"]
+    - id: "blood_stasis"
+      name: "血瘀证"
+      pulse_types: ["rough", "wiry", "intermittent"]
+    - id: "dampness"
+      name: "湿证"
+      pulse_types: ["slippery", "soft"]
+    - id: "phlegm"
+      name: "痰证"
+      pulse_types: ["slippery", "wiry"]
+    - id: "heat"
+      name: "热证"
+      pulse_types: ["rapid", "surging"]
+    - id: "cold"
+      name: "寒证"
+      pulse_types: ["tight", "slow"]
+
+# 报告生成配置
+report_generation:
+  templates_dir: /app/templates
+  output_dir: /app/data/reports
+  tcm_reference_text_path: /app/data/references/tcm_references.json
+  medical_disclaimer: "本报告仅供参考，不构成医疗诊断。如有疑问请咨询专业医师。"
+  logo_path: /app/assets/logo.png
+  include_graphs: true
+
+# 设备配置
+devices:
+  supported_models:
+    - model: "WP-100"
+      manufacturer: "SuokeHealth"
+      firmware_min_version: "2.0.0"
+    - model: "PulseWave Pro"
+      manufacturer: "TCMDiagnostics"
+      firmware_min_version: "1.5.0"
+    - model: "PulseReader 2000"
+      manufacturer: "MedSense"
+      firmware_min_version: "3.1.2"
+  calibration_interval_days: 30
+  sampling_rate: 1000  # Hz
+  resolution: 16  # bits
+
+# 日志配置
+logging:
+  level: INFO
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: /app/logs/palpation_service.log
+  max_size_mb: 100
+  backup_count: 10
+  log_to_console: true
+
+# 指标监控配置
+metrics:
+  enabled: true
+  port: 9090
+  path: /metrics
+  include_default_metrics: true
+  collection_interval_seconds: 15
+
+# 集成配置
+integrations:
+  xiaoai_service:
+    host: xiaoai-service
+    port: 50050
+    timeout: 10  # 秒
+  look_service:
+    host: look-service
+    port: 50051
+    timeout: 10  # 秒
+  listen_service:
+    host: listen-service
+    port: 50052
+    timeout: 10  # 秒
+  inquiry_service:
+    host: inquiry-service
+    port: 50053
+    timeout: 10  # 秒
+  rag_service:
+    host: rag-service
+    port: 50055
+    timeout: 10  # 秒 

@@ -1,0 +1,140 @@
+version: '3.8'
+
+services:
+  listen-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: suoke/listen-service:latest
+    container_name: listen-service
+    restart: unless-stopped
+    ports:
+      - "50052:50052"  # gRPC服务端口
+      - "9090:9090"    # Prometheus指标端口
+    volumes:
+      - ./config:/app/config
+      - ./models:/app/models
+      - ./logs:/var/log/listen_service
+      - ./tmp:/tmp/listen_service
+    env_file:
+      - .env
+    environment:
+      - CONFIG_PATH=/app/config/config.yaml
+      - MONGO_USERNAME=${MONGO_USERNAME:-admin}
+      - MONGO_PASSWORD=${MONGO_PASSWORD:-password}
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-}
+      - JWT_SECRET=${JWT_SECRET:-default_jwt_secret}
+    depends_on:
+      - mongodb
+      - redis
+    networks:
+      - suoke-network
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+    # 如果使用GPU，取消下面注释
+    # runtime: nvidia
+    # environment:
+    #   - NVIDIA_VISIBLE_DEVICES=all
+    #   - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+    healthcheck:
+      test: ["CMD", "python", "-c", "import grpc; channel = grpc.insecure_channel('localhost:50052'); stub = grpc.health.v1.health_pb2_grpc.HealthStub(channel); response = stub.Check(grpc.health.v1.health_pb2.HealthCheckRequest(service='listen_service.ListenService')); exit(0 if response.status == grpc.health.v1.health_pb2.HealthCheckResponse.SERVING else 1)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # MongoDB数据库服务
+  mongodb:
+    image: mongo:6.0
+    container_name: listen-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME:-admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-password}
+      MONGO_INITDB_DATABASE: listen_service
+    networks:
+      - suoke-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/listen_service --quiet
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  # Redis缓存服务
+  redis:
+    image: redis:7.0-alpine
+    container_name: listen-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --save 60 1 --loglevel warning --requirepass ${REDIS_PASSWORD:-}
+    networks:
+      - suoke-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Prometheus监控服务
+  prometheus:
+    image: prom/prometheus:v2.44.0
+    container_name: listen-prometheus
+    restart: unless-stopped
+    ports:
+      - "9091:9090"
+    volumes:
+      - ./deploy/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=15d'
+      - '--web.enable-lifecycle'
+    networks:
+      - suoke-network
+    depends_on:
+      - listen-service
+
+  # Grafana监控面板
+  grafana:
+    image: grafana/grafana:10.0.3
+    container_name: listen-grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./deploy/grafana/provisioning:/etc/grafana/provisioning
+      - ./deploy/grafana/dashboards:/var/lib/grafana/dashboards
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    networks:
+      - suoke-network
+    depends_on:
+      - prometheus
+
+networks:
+  suoke-network:
+    name: suoke-network
+    external: true
+
+volumes:
+  mongodb_data:
+  redis_data:
+  prometheus_data:
+  grafana_data: 

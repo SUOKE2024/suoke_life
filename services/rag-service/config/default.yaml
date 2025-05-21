@@ -1,0 +1,197 @@
+service:
+  name: rag-service
+  version: 0.1.0
+
+server:
+  grpc:
+    enabled: true
+    host: "0.0.0.0"
+    port: 50051
+    max_workers: 10
+    max_message_length: 104857600  # 100MB
+    options:
+      - ["grpc.max_receive_message_length", 104857600]  # 100MB
+      - ["grpc.max_send_message_length", 104857600]     # 100MB
+  rest:
+    enabled: true
+    host: "0.0.0.0"
+    port: 8000
+    workers: 4
+    log_level: "info"
+    reload: false
+    cors_origins: ["*"]
+    api_prefix: "/api/v1"
+
+vector_database:
+  type: "milvus"  # milvus, qdrant, weaviate
+  host: "${MILVUS_HOST:-localhost}"
+  port: ${MILVUS_PORT:-19530}
+  collection_name: "suoke_knowledge"
+  dimension: 768
+  distance_metric: "COSINE"
+  connection_pool_size: 10
+  connection_timeout: 10.0  # 秒
+  index_type: "HNSW"
+  index_params:
+    M: 16
+    efConstruction: 200
+  
+document_processor:
+  chunk_size: 512
+  chunk_overlap: 100
+  max_doc_size_mb: 10
+  supported_formats: ["pdf", "txt", "md", "html", "docx"]
+
+embeddings:
+  model_name: "paraphrase-multilingual-MiniLM-L12-v2"
+  device: "${EMBEDDING_DEVICE:-cpu}"  # cuda or cpu
+  batch_size: 32
+  cache_dir: "/app/data/models"
+  max_length: 512
+  normalize: true
+
+generator:
+  model_type: "${GENERATOR_TYPE:-openai}"  # local or openai
+  openai:
+    api_key: "${OPENAI_API_KEY}"
+    api_base: "${OPENAI_API_BASE:-https://api.openai.com/v1}"
+    model_name: "${OPENAI_MODEL:-gpt-3.5-turbo}"
+    temperature: 0.7
+    max_tokens: 1024
+    top_p: 1.0
+    frequency_penalty: 0.0
+    presence_penalty: 0.0
+    timeout: 60.0  # 秒
+  local:
+    model_path: "/app/data/models/llm"
+    max_length: 1024
+    device: "${LLM_DEVICE:-cpu}"
+    quantization: "int8"  # none, int8, int4
+    temperature: 0.7
+    top_p: 0.9
+    top_k: 40
+    repetition_penalty: 1.1
+
+retriever:
+  top_k: 5
+  score_threshold: 0.7
+  reranker_enabled: true
+  reranker_model: "cross-encoder/ms-marco-MiniLM-L-12-v2"
+  # 混合检索策略配置
+  hybrid_search:
+    enabled: true
+    keyword_weight: 0.3
+    vector_weight: 0.7
+    bm25_b: 0.75
+    bm25_k1: 1.2
+    use_sparse: true
+    use_dense: true
+
+# 多级缓存配置
+cache:
+  enabled: true
+  # 查询缓存
+  query:
+    enabled: true
+    type: "${CACHE_TYPE:-local}"  # redis, local
+    ttl: 3600  # 秒
+    max_size: 10000  # 本地缓存最大项数
+  # 嵌入向量缓存
+  embedding:
+    enabled: true
+    type: "${CACHE_TYPE:-local}"  # redis, local
+    ttl: 86400  # 24小时
+    max_size: 100000
+  # 检索结果缓存
+  retrieval:
+    enabled: true
+    type: "${CACHE_TYPE:-local}"  # redis, local
+    ttl: 1800  # 30分钟
+    invalidation_events: ["knowledge_update", "embedding_model_change"]
+  # 生成结果缓存
+  generation:
+    enabled: true
+    type: "${CACHE_TYPE:-local}"  # redis, local
+    ttl: 1800  # 30分钟
+
+storage:
+  mongodb:
+    uri: "${MONGODB_URI:-mongodb://localhost:27017}"
+    database: "suoke_rag"
+  redis:
+    host: "${REDIS_HOST:-localhost}"
+    port: ${REDIS_PORT:-6379}
+    ttl: 3600  # seconds
+    db: 0
+    password: "${REDIS_PASSWORD:-}"
+
+logging:
+  level: "${LOG_LEVEL:-INFO}"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: "<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>"
+  file: "/app/logs/rag-service.log"
+  rotation: "500 MB"  # 日志滚动大小
+  retention: "10 days"  # 日志保留时间
+  compression: "zip"  # 日志压缩方式
+  
+telemetry:
+  enabled: "${TELEMETRY_ENABLED:-false}"
+  exporter: "${TELEMETRY_EXPORTER:-prometheus}"  # otlp, prometheus
+  endpoint: "${TELEMETRY_ENDPOINT:-http://localhost:4317}"
+  # 自定义指标配置
+  metrics:
+    enabled: true
+    prefix: "rag"
+    push_interval: 15  # 秒
+    histogram_buckets: [0.01, 0.05, 0.1, 0.5, 1, 2, 5, 10]
+
+# 熔断器配置
+circuit_breaker:
+  enabled: true
+  failure_threshold: 5  # 失败次数阈值
+  recovery_timeout: 30  # 恢复超时(秒)
+  timeout: 10  # 操作超时(秒)
+  max_retries: 3  # 最大重试次数
+  retry_backoff: 2  # 重试退避系数
+
+knowledge_sources:
+  - name: "中医基础理论"
+    type: "collection"
+    path: "/app/data/tcm_basic_theory"
+    update_interval: 86400  # 24 hours in seconds
+    priority: 1
+  - name: "方剂学数据"
+    type: "collection"
+    path: "/app/data/tcm_prescriptions"
+    update_interval: 86400
+    priority: 2
+  - name: "中西医结合案例"
+    type: "collection"
+    path: "/app/data/integrated_cases"
+    update_interval: 86400
+    priority: 2
+
+# 系统提示词，用于生成高质量的中医回答
+prompts:
+  system:
+    default: |
+      你是索克健康平台的TCM-GPT，一个专注于中医健康咨询的AI助手。
+      你的回答应当基于检索到的中医知识，并遵循以下原则：
+      1. 准确描述中医理论和方法，使用专业但平易近人的语言
+      2. 清晰说明中医诊断、治疗和调理的方法，包括可能的中药、针灸或其他中医疗法
+      3. 在适当情况下可以提及现代医学的相关观点
+      4. 引用检索到的知识，不要编造或推测内容
+      5. 对于复杂的健康问题，建议用户咨询专业医师
+      6. 简明扼要地回答问题，避免冗长
+      7. 使用简体中文回答
+      
+      当你不确定或没有足够信息时，坦诚告知用户。
+  query:
+    template: |
+      请根据用户的问题，并参考以下中医知识，以中医专业角度回答问题。如果提供的知识不足以回答问题，请坦诚告知，不要编造内容。
+      
+      用户问题：{query}
+      
+      参考知识：
+      {context}
+      
+      请基于上述参考知识回答问题，不要包含"根据提供的参考资料"等引导语。

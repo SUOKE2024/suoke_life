@@ -1,0 +1,409 @@
+syntax = "proto3";
+
+package suoke.accessibility.v1;
+
+option go_package = "github.com/SUOKE2024/accessibility-service/api/grpc";
+
+// 无障碍服务API
+service AccessibilityService {
+  // 导盲服务 - 提供场景识别和语音引导
+  rpc BlindAssistance(BlindAssistanceRequest) returns (BlindAssistanceResponse);
+  
+  // 手语识别 - 将手语视频转换为文本
+  rpc SignLanguageRecognition(SignLanguageRequest) returns (SignLanguageResponse);
+  
+  // 屏幕阅读 - 提供屏幕内容的语音描述
+  rpc ScreenReading(ScreenReadingRequest) returns (ScreenReadingResponse);
+  
+  // 语音辅助 - 提供语音控制和语音响应
+  rpc VoiceAssistance(VoiceAssistanceRequest) returns (VoiceAssistanceResponse);
+  
+  // 健康内容无障碍转换 - 将健康内容转换为无障碍格式
+  rpc AccessibleContent(AccessibleContentRequest) returns (AccessibleContentResponse);
+  
+  // 无障碍设置管理 - 管理用户的无障碍设置
+  rpc ManageSettings(SettingsRequest) returns (SettingsResponse);
+  
+  // 后台数据收集服务 - 配置和控制后台健康数据收集
+  rpc ConfigureBackgroundCollection(BackgroundCollectionRequest) returns (BackgroundCollectionResponse);
+  
+  // 获取后台数据收集状态 - 查询当前数据收集服务状态
+  rpc GetCollectionStatus(CollectionStatusRequest) returns (CollectionStatusResponse);
+  
+  // 提交收集的数据 - 从设备提交收集的健康数据
+  rpc SubmitCollectedData(CollectedDataRequest) returns (CollectedDataResponse);
+  
+  // 危机报警服务 - 触发健康危机报警
+  rpc TriggerHealthAlert(HealthAlertRequest) returns (HealthAlertResponse);
+  
+  // 配置危机报警阈值 - 设置个性化健康警报阈值
+  rpc ConfigureAlertThresholds(AlertThresholdsRequest) returns (AlertThresholdsResponse);
+  
+  // 获取健康报警历史 - 查询用户的历史健康报警
+  rpc GetAlertHistory(AlertHistoryRequest) returns (AlertHistoryResponse);
+}
+
+// 导盲服务请求
+message BlindAssistanceRequest {
+  bytes image_data = 1;  // 场景图像数据
+  string user_id = 2;  // 用户ID
+  UserPreferences preferences = 3;  // 用户偏好
+  GeoLocation location = 4;  // 地理位置信息
+}
+
+// 导盲服务响应
+message BlindAssistanceResponse {
+  string scene_description = 1;  // 场景描述
+  repeated Obstacle obstacles = 2;  // 障碍物列表
+  string navigation_guidance = 3;  // 导航指导
+  float confidence = 4;  // 识别置信度
+  bytes audio_guidance = 5;  // 语音引导数据
+}
+
+// 障碍物信息
+message Obstacle {
+  string type = 1;  // 障碍物类型
+  float distance = 2;  // 距离（米）
+  string direction = 3;  // 方向（前/左/右等）
+  float confidence = 4;  // 识别置信度
+}
+
+// 手语识别请求
+message SignLanguageRequest {
+  bytes video_data = 1;  // 手语视频数据
+  string user_id = 2;  // 用户ID
+  string language = 3;  // 语言代码
+}
+
+// 手语识别响应
+message SignLanguageResponse {
+  string text = 1;  // 转换后的文本
+  float confidence = 2;  // 识别置信度
+  repeated SignSegment segments = 3;  // 分段识别结果
+}
+
+// 手语分段
+message SignSegment {
+  string text = 1;  // 分段文本
+  uint32 start_time_ms = 2;  // 开始时间（毫秒）
+  uint32 end_time_ms = 3;  // 结束时间（毫秒）
+  float confidence = 4;  // 分段置信度
+}
+
+// 屏幕阅读请求
+message ScreenReadingRequest {
+  bytes screen_data = 1;  // 屏幕截图数据
+  string user_id = 2;  // 用户ID
+  string context = 3;  // 上下文信息
+  UserPreferences preferences = 4;  // 用户偏好
+}
+
+// 屏幕阅读响应
+message ScreenReadingResponse {
+  string screen_description = 1;  // 屏幕内容描述
+  repeated UIElement elements = 2;  // UI元素列表
+  bytes audio_description = 3;  // 语音描述数据
+}
+
+// UI元素
+message UIElement {
+  string element_type = 1;  // 元素类型（按钮/文本/图像等）
+  string content = 2;  // 元素内容
+  string action = 3;  // 可执行操作
+  BoundingBox location = 4;  // 位置信息
+}
+
+// 界面元素位置
+message BoundingBox {
+  float x = 1;  // x坐标
+  float y = 2;  // y坐标
+  float width = 3;  // 宽度
+  float height = 4;  // 高度
+}
+
+// 语音辅助请求
+message VoiceAssistanceRequest {
+  bytes audio_data = 1;  // 语音数据
+  string user_id = 2;  // 用户ID
+  string context = 3;  // 上下文信息
+  string language = 4;  // 语言代码
+  string dialect = 5;  // 方言代码
+}
+
+// 语音辅助响应
+message VoiceAssistanceResponse {
+  string recognized_text = 1;  // 识别的文本
+  string response_text = 2;  // 回复文本
+  bytes response_audio = 3;  // 回复语音数据
+  float confidence = 4;  // 识别置信度
+}
+
+// 健康内容无障碍转换请求
+message AccessibleContentRequest {
+  string content_id = 1;  // 内容ID
+  string content_type = 2;  // 内容类型
+  string user_id = 3;  // 用户ID
+  string target_format = 4;  // 目标格式
+  UserPreferences preferences = 5;  // 用户偏好
+}
+
+// 健康内容无障碍转换响应
+message AccessibleContentResponse {
+  string accessible_content = 1;  // 可访问内容
+  string content_url = 2;  // 内容URL
+  bytes audio_content = 3;  // 音频内容
+  bytes tactile_content = 4;  // 触觉内容（盲文等）
+}
+
+// 无障碍设置请求
+message SettingsRequest {
+  string user_id = 1;  // 用户ID
+  UserPreferences preferences = 2;  // 用户偏好设置
+  string action = 3;  // 操作（获取/更新）
+}
+
+// 无障碍设置响应
+message SettingsResponse {
+  UserPreferences current_preferences = 1;  // 当前用户偏好
+  bool success = 2;  // 操作是否成功
+  string message = 3;  // 响应消息
+}
+
+// 用户偏好
+message UserPreferences {
+  string font_size = 1;  // 字体大小
+  bool high_contrast = 2;  // 高对比度
+  string voice_type = 3;  // 语音类型
+  float speech_rate = 4;  // 语速
+  string language = 5;  // 首选语言
+  string dialect = 6;  // 方言
+  bool screen_reader = 7;  // 是否启用屏幕阅读器
+  bool sign_language = 8;  // 是否启用手语
+  repeated string enabled_features = 9;  // 启用的无障碍功能
+}
+
+// 地理位置信息
+message GeoLocation {
+  double latitude = 1;  // 纬度
+  double longitude = 2;  // 经度
+  float accuracy = 3;  // 精度（米）
+  string location_context = 4;  // 位置上下文
+}
+
+// 后台数据收集配置请求
+message BackgroundCollectionRequest {
+  string user_id = 1;  // 用户ID
+  CollectionConfiguration configuration = 2;  // 收集配置
+  repeated string data_types = 3;  // 收集的数据类型
+  DeviceInfo device_info = 4;  // 设备信息
+}
+
+// 后台数据收集配置响应
+message BackgroundCollectionResponse {
+  bool success = 1;  // 操作是否成功
+  string message = 2;  // 响应消息
+  CollectionConfiguration applied_configuration = 3;  // 应用的配置
+  string collection_id = 4;  // 数据收集ID
+}
+
+// 数据收集配置
+message CollectionConfiguration {
+  int32 collection_interval_seconds = 1;  // 收集间隔（秒）
+  int32 upload_interval_seconds = 2;  // 上传间隔（秒）
+  bool battery_optimization = 3;  // 是否启用电池优化
+  int32 low_battery_threshold = 4;  // 低电量阈值（百分比）
+  bool collect_during_sleep = 5;  // 是否在用户睡眠时收集
+  string storage_policy = 6;  // 存储策略
+  int32 data_retention_days = 7;  // 数据保留天数
+  bool encrypt_data = 8;  // 是否加密数据
+}
+
+// 收集状态请求
+message CollectionStatusRequest {
+  string user_id = 1;  // 用户ID
+  string device_id = 2;  // 设备ID
+}
+
+// 收集状态响应
+message CollectionStatusResponse {
+  bool is_active = 1;  // 是否活跃
+  CollectionConfiguration current_configuration = 2;  // 当前配置
+  string last_collection_time = 3;  // 上次收集时间
+  string last_upload_time = 4;  // 上次上传时间
+  int64 stored_data_bytes = 5;  // 存储的数据大小（字节）
+  repeated DataTypeStatus data_types = 6;  // 数据类型状态
+  BatteryStatus battery_status = 7;  // 电池状态
+  UserState user_state = 8;  // 用户状态
+}
+
+// 数据类型状态
+message DataTypeStatus {
+  string data_type = 1;  // 数据类型
+  bool is_collecting = 2;  // 是否正在收集
+  int32 collection_frequency = 3;  // 实际收集频率
+  string last_collection_time = 4;  // 上次收集时间
+}
+
+// 电池状态
+message BatteryStatus {
+  int32 level = 1;  // 电量百分比
+  bool is_charging = 2;  // 是否充电中
+  string power_mode = 3;  // 电源模式
+}
+
+// 用户状态
+message UserState {
+  string state = 1;  // 状态（活跃/闲置/睡眠）
+  int64 state_duration_seconds = 2;  // 当前状态持续时间（秒）
+  float confidence = 3;  // 状态识别置信度
+}
+
+// 收集的数据请求
+message CollectedDataRequest {
+  string user_id = 1;  // 用户ID
+  string device_id = 2;  // 设备ID
+  string collection_id = 3;  // 收集ID
+  repeated HealthDataPoint data_points = 4;  // 健康数据点
+  DeviceInfo device_info = 5;  // 设备信息
+  string batch_id = 6;  // 批次ID
+  int64 timestamp = 7;  // 时间戳
+}
+
+// 收集的数据响应
+message CollectedDataResponse {
+  bool success = 1;  // 操作是否成功
+  string message = 2;  // 响应消息
+  int32 accepted_points = 3;  // 接受的数据点数
+  int32 rejected_points = 4;  // 拒绝的数据点数
+  repeated string alerts = 5;  // 触发的警报
+}
+
+// 健康数据点
+message HealthDataPoint {
+  string data_type = 1;  // 数据类型
+  string value = 2;  // 值
+  int64 timestamp = 3;  // 时间戳
+  float confidence = 4;  // 置信度
+  map<string, string> metadata = 5;  // 元数据
+  bytes binary_data = 6;  // 二进制数据
+}
+
+// 设备信息
+message DeviceInfo {
+  string device_id = 1;  // 设备ID
+  string device_model = 2;  // 设备型号
+  string os_version = 3;  // 操作系统版本
+  string app_version = 4;  // 应用版本
+  string sdk_version = 5;  // SDK版本
+}
+
+// 健康警报请求
+message HealthAlertRequest {
+  string user_id = 1;  // 用户ID
+  string device_id = 2;  // 设备ID
+  AlertLevel alert_level = 3;  // 警报级别
+  string alert_type = 4;  // 警报类型
+  string description = 5;  // 描述
+  repeated HealthDataPoint data_points = 6;  // 相关数据点
+  map<string, string> context = 7;  // 上下文信息
+  int64 timestamp = 8;  // 时间戳
+  bool require_acknowledgment = 9;  // 是否需要确认
+}
+
+// 健康警报响应
+message HealthAlertResponse {
+  bool success = 1;  // 操作是否成功
+  string alert_id = 2;  // 警报ID
+  string message = 3;  // 响应消息
+  repeated string notified_contacts = 4;  // 已通知的联系人
+  repeated AgentAction agent_actions = 5;  // 智能体行动
+  RecommendedAction recommended_action = 6;  // 推荐行动
+}
+
+// 警报级别
+enum AlertLevel {
+  INFORMATION = 0;  // 信息
+  WARNING = 1;  // 警告
+  DANGER = 2;  // 危险
+  CRITICAL = 3;  // 严重
+}
+
+// 智能体行动
+message AgentAction {
+  string agent_id = 1;  // 智能体ID
+  string action_type = 2;  // 行动类型
+  string description = 3;  // 描述
+  int64 timestamp = 4;  // 时间戳
+}
+
+// 推荐行动
+message RecommendedAction {
+  string action_type = 1;  // 行动类型
+  string description = 2;  // 描述
+  int32 urgency_level = 3;  // 紧急程度
+  string instruction = 4;  // 指示
+}
+
+// 警报阈值配置请求
+message AlertThresholdsRequest {
+  string user_id = 1;  // 用户ID
+  repeated AlertThreshold thresholds = 2;  // 阈值设置
+}
+
+// 警报阈值配置响应
+message AlertThresholdsResponse {
+  bool success = 1;  // 操作是否成功
+  string message = 2;  // 响应消息
+  repeated AlertThreshold applied_thresholds = 3;  // 应用的阈值
+}
+
+// 警报阈值
+message AlertThreshold {
+  string data_type = 1;  // 数据类型
+  double warning_threshold = 2;  // 警告阈值
+  double danger_threshold = 3;  // 危险阈值
+  double critical_threshold = 4;  // 严重阈值
+  ThresholdDirection direction = 5;  // 阈值方向
+  int32 sustained_seconds = 6;  // 持续时间（秒）
+}
+
+// 阈值方向
+enum ThresholdDirection {
+  ABOVE = 0;  // 高于
+  BELOW = 1;  // 低于
+  EQUAL = 2;  // 等于
+  CHANGE_RATE = 3;  // 变化率
+}
+
+// 警报历史请求
+message AlertHistoryRequest {
+  string user_id = 1;  // 用户ID
+  int64 start_time = 2;  // 开始时间
+  int64 end_time = 3;  // 结束时间
+  string alert_type = 4;  // 警报类型
+  AlertLevel min_level = 5;  // 最低级别
+  int32 max_results = 6;  // 最大结果数
+}
+
+// 警报历史响应
+message AlertHistoryResponse {
+  bool success = 1;  // 操作是否成功
+  string message = 2;  // 响应消息
+  repeated AlertRecord alerts = 3;  // 警报记录
+  bool has_more = 4;  // 是否有更多结果
+  int32 total_count = 5;  // 总计数
+}
+
+// 警报记录
+message AlertRecord {
+  string alert_id = 1;  // 警报ID
+  string user_id = 2;  // 用户ID
+  AlertLevel alert_level = 3;  // 警报级别
+  string alert_type = 4;  // 警报类型
+  string description = 5;  // 描述
+  int64 timestamp = 6;  // 时间戳
+  bool acknowledged = 7;  // 是否已确认
+  int64 acknowledged_at = 8;  // 确认时间
+  repeated string notified_contacts = 9;  // 已通知的联系人
+  repeated AgentAction agent_actions = 10;  // 智能体行动
+} 

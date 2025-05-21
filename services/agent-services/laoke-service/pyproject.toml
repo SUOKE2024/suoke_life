@@ -1,0 +1,85 @@
+[tool.poetry]
+name = "laoke-service"
+version = "1.0.0"
+description = "索克生活APP探索频道的核心智能体，负责知识传播、知识培训和用户博客管理等工作"
+authors = ["SuoKe Life Team <dev@suoke.ai>"]
+readme = "README.md"
+license = "MIT"
+packages = [{include = "cmd"}, {include = "internal"}, {include = "pkg"}, {include = "api"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.110.0"
+uvicorn = "^0.27.1"
+grpcio = "^1.62.0"
+grpcio-tools = "^1.62.0"
+protobuf = "^4.25.1"
+asyncio = "^3.4.3"
+pyyaml = "^6.0.1"
+python-dotenv = "^1.0.1"
+strawberry-graphql = "^0.217.0"
+graphql-core = "^3.2.3"
+graphql-relay = "^3.2.0"
+motor = "^3.3.2"
+pymongo = "^4.6.1"
+redis = "^5.0.1"
+aioredis = "^2.0.1"
+sqlalchemy = "^2.0.25"
+asyncpg = "^0.29.0"
+neo4j = "^5.18.0"
+openai = "^1.13.3"
+langchain = "^0.0.342"
+langchain-openai = "^0.0.5"
+transformers = "^4.38.1"
+pillow = "^10.2.0"
+prometheus-client = "^0.19.0"
+opentelemetry-api = "^1.21.0"
+opentelemetry-sdk = "^1.21.0"
+opentelemetry-exporter-prometheus = "^1.21.0"
+opentelemetry-exporter-otlp = "^1.21.0"
+httpx = "^0.25.2"
+aiohttp = "^3.9.1"
+cachetools = "^5.3.2"
+tenacity = "^8.2.3"
+psutil = "^5.9.6"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.0"
+pytest-asyncio = "^0.23.4"
+black = "^24.1.1"
+isort = "^5.13.2"
+mypy = "^1.7.1"
+pylint = "^3.0.3"
+pytest-cov = "^4.1.0"
+pytest-mock = "^3.12.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+target-version = ['py310']
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+line_length = 88
+multi_line_output = 3
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+
+[tool.pytest.ini_options]
+testpaths = ["test"]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+asyncio_mode = "auto"
+
+[tool.poetry.scripts]
+server = "cmd.server:main" 

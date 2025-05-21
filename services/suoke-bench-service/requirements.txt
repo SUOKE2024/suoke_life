@@ -1,0 +1,87 @@
+# Core dependencies
+fastapi==0.109.0
+uvicorn==0.27.0
+pydantic==2.5.3
+python-multipart==0.0.6
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-dotenv==1.0.0
+PyYAML==6.0.1
+
+# Data processing and analysis
+numpy==1.26.3
+pandas==2.2.0
+scikit-learn==1.4.0
+scipy==1.12.0
+
+# Database and storage
+SQLAlchemy==2.0.25
+alembic==1.13.1
+psycopg2-binary==2.9.9
+redis==5.0.1
+aioredis==2.0.1
+
+# Monitoring and logging
+prometheus-client==0.19.0
+python-json-logger==2.0.7
+opentelemetry-api==1.21.0
+opentelemetry-sdk==1.21.0
+opentelemetry-instrumentation-fastapi==0.42b0
+
+# Testing
+pytest==7.4.4
+pytest-asyncio==0.23.3
+pytest-cov==4.1.0
+pytest-mock==3.12.0
+hypothesis==6.92.1
+
+# Security
+cryptography==41.0.7
+pyOpenSSL==24.0.0
+certifi==2023.11.17
+bcrypt==4.1.2
+
+# gRPC
+grpcio==1.60.0
+grpcio-tools==1.60.0
+protobuf==4.25.2
+
+# Async utilities
+aiohttp==3.9.1
+asyncio==3.4.3
+httpx==0.26.0
+
+# Documentation
+mkdocs==1.5.3
+mkdocs-material==9.5.3
+mkdocstrings==0.24.0
+
+# Development tools
+black==23.12.1
+isort==5.13.2
+flake8==7.0.0
+mypy==1.8.0
+pylint==3.0.3
+
+# Performance monitoring
+psutil==5.9.7
+py-spy==0.3.14
+memory-profiler==0.61.0
+
+# Zero-knowledge proof libraries
+pysnark==0.4.0
+zokrates==0.7.13
+
+# Edge computing
+onnxruntime==1.16.3
+tensorflow-lite==2.14.0
+tflite-runtime==2.14.0
+torch==2.1.2
+torchvision==0.16.2
+torchaudio==2.1.2
+
+# Visualization
+plotly==5.18.0
+dash==2.14.2
+bokeh==3.3.3
+seaborn==0.13.1

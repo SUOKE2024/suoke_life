@@ -1,0 +1,138 @@
+# 望诊服务配置文件
+
+# 服务器配置
+server:
+  host: "0.0.0.0"
+  port: 50053
+  debug: false
+  grpc:
+    max_workers: 10
+    max_concurrent_rpcs: 100
+    keepalive_time_ms: 7200000  # 2小时
+    keepalive_timeout_ms: 20000  # 20秒
+    max_connection_idle_ms: 10000  # 10秒
+    max_connection_age_ms: 600000  # 10分钟
+    max_message_size: 10485760  # 10MB
+
+# 日志配置
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "./logs/look_service.log"
+  max_size_mb: 100
+  backup_count: 10
+  console: true
+
+# 数据库配置
+database:
+  uri: "sqlite:///./data/look_service.db"
+  pool_size: 5
+  max_overflow: 10
+  pool_timeout: 30
+  pool_recycle: 3600
+
+# 模型配置
+models:
+  # 面部分析模型
+  face_analysis:
+    path: "./models/face_analyzer"
+    version: "v1.0.0"
+    batch_size: 1
+    device: "cpu"  # 或 "cuda:0"
+    threshold: 0.7
+    input_size: [224, 224]
+    
+  # 形体分析模型
+  body_analysis:
+    path: "./models/body_analyzer"
+    version: "v1.0.0"
+    batch_size: 1
+    device: "cpu"
+    threshold: 0.6
+    input_size: [384, 384]
+
+# 特征分析配置
+feature_analysis:
+  # 面色分析配置
+  face_color:
+    enabled: true
+    sample_regions: ["forehead", "cheeks", "nose", "chin"]
+    use_hsv: true
+    
+  # 形体分析配置  
+  body_shape:
+    enabled: true
+    detect_points: ["shoulders", "chest", "waist", "hips", "legs"]
+    body_ratio_analysis: true
+
+# 存储配置
+storage:
+  # 图像存储
+  image:
+    path: "./data/images"
+    max_size_mb: 10
+    allowed_formats: ["jpg", "jpeg", "png"]
+    resize_before_save: true
+    resize_dimensions: [1024, 1024]
+    quality: 85
+    
+  # 分析结果存储
+  analysis:
+    path: "./data/analysis"
+    ttl_days: 90  # 数据保留天数
+
+# 服务集成配置
+integration:
+  # 与xiaoai-service集成
+  xiaoai_service:
+    host: "xiaoai-service"
+    port: 50050
+    timeout_ms: 5000
+    max_retries: 3
+    retry_interval_ms: 1000
+    circuit_breaker:
+      failure_threshold: 5
+      reset_timeout_ms: 30000
+
+# 监控与可观测性配置
+monitoring:
+  # Prometheus指标
+  prometheus:
+    enabled: true
+    endpoint: "/metrics"
+    
+  # 健康检查
+  health_check:
+    enabled: true
+    endpoint: "/health"
+    
+  # 分布式追踪
+  tracing:
+    enabled: true
+    exporter: "jaeger"
+    endpoint: "jaeger-collector:14268/api/traces"
+    service_name: "look-service"
+    sample_rate: 0.1
+
+# 安全配置
+security:
+  # SSL/TLS配置
+  tls:
+    enabled: false
+    cert_file: "./certs/server.crt"
+    key_file: "./certs/server.key"
+    
+  # 身份验证
+  authentication:
+    required: true
+    token_header: "x-api-key"
+    
+  # API密钥
+  api_keys:
+    internal_services: "INTERNAL_SERVICE_KEY"  # 用于服务间通信的密钥
+
+# 限流配置
+rate_limiting:
+  enabled: true
+  requests_per_minute: 300
+  burst: 50 

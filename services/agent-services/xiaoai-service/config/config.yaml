@@ -1,0 +1,252 @@
+# 小艾智能体服务配置文件
+
+# 服务配置
+service:
+  name: "xiaoai-service"
+  version: "0.1.0"
+  description: "索克生活APP小艾智能体服务"
+  host: "0.0.0.0"
+  port: 50053
+  debug: true
+
+# 日志配置
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/xiaoai-service.log"
+  max_size_mb: 100
+  backup_count: 5
+
+# 监控配置
+monitoring:
+  prometheus:
+    enabled: true
+    path: "/metrics"
+    port: 51053
+  health_check:
+    enabled: true
+    path: "/health"
+
+# 性能配置
+performance:
+  max_workers: 20
+  thread_pool_size: 10
+  max_concurrent_requests: 200
+  enable_batching: true
+  queue_size: 64
+
+# 多模态配置
+multimodal:
+  voice:
+    sample_rate: 16000
+    channels: 1
+    language_detection: true
+    dialect_support: true
+    noise_reduction: true
+  image:
+    max_resolution: [1920, 1080]
+    supported_formats: ["jpg", "png", "webp"]
+    preprocessing: true
+  text:
+    max_length: 4096
+    language_detection: true
+
+# AI模型配置
+models:
+  llm:
+    primary_model: "gpt-4o-mini"  # 可选值: "gpt-4o-mini", "glm-4", "ernie-bot-4"
+    fallback_model: "llama-3-8b"
+    api_key: "${LLM_API_KEY:}"
+    api_base: "${LLM_API_BASE:https://api.openai.com/v1}"
+    org_id: "${LLM_ORG_ID:}"
+    temperature: 0.7
+    max_tokens: 2048
+    streaming: true
+    
+  local_llm:
+    endpoint_url: "${LOCAL_LLM_URL:http://llm-service:8080/v1}"
+    available_models: ["llama-3-8b", "llama-3-70b"]
+    default_model: "llama-3-8b"
+    model_path: "internal/agent/models/weights/llama3-8b-q4.gguf"
+    quantization: "q4_k_m"
+    context_size: 4096
+    temperature: 0.7
+    max_tokens: 1024
+    
+  zhipu:
+    api_key: "${ZHIPU_API_KEY:}"
+    api_base: "${ZHIPU_API_BASE:https://open.bigmodel.cn/api/paas/v4}"
+    temperature: 0.7
+    max_tokens: 2048
+    
+  baidu:
+    api_key: "${BAIDU_API_KEY:}"
+    secret_key: "${BAIDU_SECRET_KEY:}"
+    api_url: "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/"
+    temperature: 0.7
+    max_tokens: 2048
+    
+  embedding:
+    model: "all-MiniLM-L6-v2"
+    dimensions: 384
+    normalize: true
+    
+  speech:
+    asr_model: "whisper-large-v3"
+    tts_model: "bark"
+    dialect_classification: "dialect-bert-base"
+    
+  vision:
+    model: "clip-vit-large-patch14"
+    input_size: [224, 224]
+    batch_size: 16
+    device: "cuda"  # 或 "cpu"
+
+# 数据库配置
+database:
+  postgres:
+    uri: "postgresql://xiaoai:${POSTGRES_PASSWORD}@postgres-service:5432/xiaoai_db"
+    pool_size: 10
+    max_overflow: 20
+    
+  mongodb:
+    uri: "mongodb://xiaoai:${MONGO_PASSWORD}@mongodb-service:27017/xiaoai_db"
+    collections:
+      user_profiles: "user_profiles"
+      chat_history: "chat_history"
+      diagnosis_reports: "diagnosis_reports"
+      session_data: "session_data"
+      
+  redis:
+    uri: "redis://:${REDIS_PASSWORD}@redis-service:6379/0"
+    ttl_seconds: 3600
+    max_connections: 20
+
+# 会话配置
+conversation:
+  max_history_turns: 20
+  persist_history: true
+  context_window_size: 4096
+  system_prompt: "你是小艾，索克生活APP的智能体，专注于中医健康咨询与四诊协调。你应当运用中医理论和现代医学知识，以专业、亲切的语气为用户提供健康建议，必要时协调其他服务（望诊、闻诊、问诊、切诊）获取更多信息。注意避免诊断疾病，而是引导用户寻求专业医疗帮助。"
+  session_timeout_minutes: 30
+
+# 四诊协调配置
+four_diagnosis:
+  coordinator_mode: "sequential"  # 或 "parallel"
+  confidence_threshold: 0.75
+  timeout_seconds: 30
+  retry_count: 3
+  
+  looking:
+    enabled: true
+    base_weight: 1.0
+    
+  listening:
+    enabled: true
+    base_weight: 1.0
+    
+  inquiry:
+    enabled: true
+    base_weight: 1.5
+    
+  palpation:
+    enabled: true
+    base_weight: 1.0
+
+# 集成服务配置
+integrations:
+  look_service:
+    host: "look-service"
+    port: 50051
+    timeout_ms: 5000
+    retry_count: 3
+    connection_pool_size: 5
+    
+  listen_service:
+    host: "listen-service"
+    port: 50052
+    timeout_ms: 5000
+    retry_count: 3
+    connection_pool_size: 5
+    
+  inquiry_service:
+    host: "inquiry-service"
+    port: 50054
+    timeout_ms: 5000
+    retry_count: 3
+    connection_pool_size: 5
+    
+  palpation_service:
+    host: "palpation-service"
+    port: 50055
+    timeout_ms: 5000
+    retry_count: 3
+    connection_pool_size: 5
+    
+  med_knowledge:
+    host: "med-knowledge"
+    port: 50056
+    timeout_ms: 3000
+    retry_count: 2
+    connection_pool_size: 10
+    
+  rag_service:
+    host: "rag-service"
+    port: 50057
+    timeout_ms: 3000
+    retry_count: 2
+    connection_pool_size: 10
+    
+  streaming_service:
+    host: "streaming-service"
+    port: 50058
+    timeout_ms: 2000
+    retry_count: 2
+    connection_pool_size: 5
+
+# 无障碍服务配置
+accessibility:
+  screen_reader:
+    enabled: true
+    output_format: "ssml"
+    voice_rate: 1.0
+    
+  sign_language:
+    enabled: true
+    model: "sign-language-recognition-v2"
+    confidence_threshold: 0.8
+    
+  elderly_mode:
+    enabled: true
+    simplified_interface: true
+    larger_text: true
+    higher_contrast: true
+
+# 缓存配置
+cache:
+  enabled: true
+  type: "redis"
+  ttl_seconds: 3600
+  max_size_mb: 1024
+
+# 安全配置
+security:
+  encryption:
+    enabled: true
+    algorithm: "AES-256-GCM"
+    
+  authentication:
+    required: true
+    token_expiry_hours: 24
+    
+  authorization:
+    enabled: true
+    role_based_access: true
+    
+  sensitive_data:
+    masking_enabled: true
+    masked_fields: ["medical_history", "phone_number", "address"]
+    
+  session:
+    idle_timeout_minutes: 30
+    absolute_timeout_hours: 24 

@@ -1,0 +1,358 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: palpation-service-config
+  namespace: suoke-ai-np
+  labels:
+    app.kubernetes.io/name: palpation-service
+    app.kubernetes.io/part-of: suoke-life
+data:
+  config.yaml: |
+    service:
+      name: "palpation-service"
+      version: "0.1.0"
+      description: "索克生活APP切诊服务"
+      host: "0.0.0.0"
+      port: 50053
+      debug: false
+
+    logging:
+      level: "INFO"
+      format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+      file: "logs/palpation-service.log"
+      max_size_mb: 100
+      backup_count: 5
+
+    monitoring:
+      prometheus:
+        enabled: true
+        port: 51053
+
+    performance:
+      max_workers: 10
+      timeout_seconds: 30
+      connection_pool_size: 10
+
+    database:
+      uri: "mongodb://suoke:${MONGO_PASSWORD}@mongodb-service:27017/palpation_service?authSource=admin"
+      database: "palpation_service"
+      collections:
+        pulse_records: "pulse_records"
+        pulse_features: "pulse_features"
+        abdominal_records: "abdominal_records"
+        skin_records: "skin_records"
+        user_profiles: "user_profiles"
+
+    cache:
+      uri: "redis://:${REDIS_PASSWORD}@redis-service:6379/0"
+      ttl_seconds: 3600
+
+    pulse_analysis:
+      sampling_rate: 1000
+      filter:
+        low_cutoff: 0.5
+        high_cutoff: 20.0
+      wavelet:
+        wavelet_type: "db4"
+        decomposition_level: 5
+      models:
+        pulse_classifier:
+          model_path: "internal/model/weights/pulse_classifier.pkl"
+          device: "cuda"
+          confidence_threshold: 0.75
+        
+    abdominal_analysis:
+      model_path: "internal/model/weights/abdominal_model.pt"
+      device: "cuda"
+      confidence_threshold: 0.70
+      
+    skin_analysis:
+      model_path: "internal/model/weights/skin_model.pt"
+      device: "cuda"
+      confidence_threshold: 0.75
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: palpation-service
+  namespace: suoke-diagnostic
+  labels:
+    app: palpation-service
+    component: diagnostic-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: palpation-service
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: palpation-service
+        component: diagnostic-service
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+      - name: palpation-service
+        image: suoke-registry.com/diagnostic-services/palpation-service:latest
+        imagePullPolicy: Always
+        env:
+        - name: CONFIG_PATH
+          value: "/app/config/config.yaml"
+        - name: LOG_LEVEL
+          value: "INFO"
+        - name: DB_CONNECTION_STRING
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secrets
+              key: connection-string
+        - name: XIAOAI_SERVICE_HOST
+          value: "xiaoai-service.suoke-agents.svc.cluster.local"
+        - name: XIAOAI_SERVICE_PORT
+          value: "50050"
+        - name: RAG_SERVICE_HOST
+          value: "rag-service.suoke-services.svc.cluster.local"
+        - name: RAG_SERVICE_PORT
+          value: "50050"
+        ports:
+        - containerPort: 50053
+          name: grpc
+        - containerPort: 9090
+          name: metrics
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "512Mi"
+          limits:
+            cpu: "1000m"
+            memory: "1Gi"
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config
+        - name: models-volume
+          mountPath: /app/models
+        - name: logs-volume
+          mountPath: /app/logs
+        livenessProbe:
+          exec:
+            command:
+            - python
+            - -c
+            - |
+              import grpc
+              import sys
+              from api.grpc import palpation_service_pb2 as pb2
+              from api.grpc import palpation_service_pb2_grpc as pb2_grpc
+              channel = grpc.insecure_channel('localhost:50053')
+              stub = pb2_grpc.PalpationServiceStub(channel)
+              request = pb2.HealthCheckRequest(level=0)
+              try:
+                  response = stub.HealthCheck(request, timeout=5)
+                  if response.status != 1:  # SERVING状态
+                      sys.exit(1)
+                  sys.exit(0)
+              except Exception as e:
+                  print(f"健康检查失败: {e}")
+                  sys.exit(1)
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command:
+            - python
+            - -c
+            - |
+              import grpc
+              import sys
+              from api.grpc import palpation_service_pb2 as pb2
+              from api.grpc import palpation_service_pb2_grpc as pb2_grpc
+              channel = grpc.insecure_channel('localhost:50053')
+              stub = pb2_grpc.PalpationServiceStub(channel)
+              request = pb2.HealthCheckRequest(level=1)  # BASIC级别
+              try:
+                  response = stub.HealthCheck(request, timeout=5)
+                  if response.status != 1:  # SERVING状态
+                      sys.exit(1)
+                  sys.exit(0)
+              except Exception as e:
+                  print(f"就绪检查失败: {e}")
+                  sys.exit(1)
+          initialDelaySeconds: 15
+          periodSeconds: 15
+          timeoutSeconds: 5
+          failureThreshold: 3
+        startupProbe:
+          exec:
+            command:
+            - python
+            - -c
+            - |
+              import grpc
+              import sys
+              from api.grpc import palpation_service_pb2 as pb2
+              from api.grpc import palpation_service_pb2_grpc as pb2_grpc
+              channel = grpc.insecure_channel('localhost:50053')
+              stub = pb2_grpc.PalpationServiceStub(channel)
+              request = pb2.HealthCheckRequest(level=0)  # MINIMAL级别
+              try:
+                  response = stub.HealthCheck(request, timeout=5)
+                  sys.exit(0)
+              except Exception as e:
+                  print(f"启动探针失败: {e}")
+                  sys.exit(1)
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          failureThreshold: 30
+      volumes:
+      - name: config-volume
+        configMap:
+          name: palpation-service-config
+      - name: models-volume
+        persistentVolumeClaim:
+          claimName: palpation-models-pvc
+      - name: logs-volume
+        emptyDir: {}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - palpation-service
+              topologyKey: kubernetes.io/hostname
+      nodeSelector:
+        suoke-services: "true"
+      
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: palpation-service
+  namespace: suoke-diagnostic
+  labels:
+    app: palpation-service
+    component: diagnostic-service
+spec:
+  ports:
+  - port: 50053
+    targetPort: 50053
+    name: grpc
+  - port: 9090
+    targetPort: 9090
+    name: metrics
+  selector:
+    app: palpation-service
+  type: ClusterIP
+  
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: palpation-service
+  namespace: suoke-diagnostic
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: palpation-service
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: palpation-service-models-pvc
+  namespace: suoke-ai-np
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: standard-rwo
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: palpation-service-logs-pvc
+  namespace: suoke-ai-np
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: standard-rwo
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: palpation-service-hpa
+  namespace: suoke-ai-np
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: palpation-service
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 50
+        periodSeconds: 60
+    scaleUp:
+      stabilizationWindowSeconds: 0
+      policies:
+      - type: Percent
+        value: 100
+        periodSeconds: 60
+      - type: Pods
+        value: 4
+        periodSeconds: 60
+      selectPolicy: Max 

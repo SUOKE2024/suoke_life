@@ -1,0 +1,345 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: medical-service
+  namespace: suoke-life
+  labels:
+    app: medical-service
+    component: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: medical-service
+  template:
+    metadata:
+      labels:
+        app: medical-service
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+    spec:
+      containers:
+      - name: medical-service
+        image: ${DOCKER_REGISTRY}/suoke-life/medical-service:${VERSION}
+        imagePullPolicy: Always
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            # 等待数据库就绪
+            echo "等待数据库就绪..."
+            python3 -c "
+            import time
+            import psycopg2
+            import os
+            import sys
+            
+            # 重试计数器
+            retries = 0
+            max_retries = 20
+            
+            # 连接参数
+            db_params = {
+                'host': os.environ.get('DB_HOST', 'localhost'),
+                'port': os.environ.get('DB_PORT', '5432'),
+                'user': os.environ.get('DB_USER', 'postgres'),
+                'password': os.environ.get('DB_PASSWORD', 'postgres'),
+                'dbname': 'postgres'  # 使用默认数据库进行连接测试
+            }
+            
+            # 连接重试逻辑
+            while retries < max_retries:
+                try:
+                    conn = psycopg2.connect(**db_params)
+                    conn.close()
+                    print('数据库连接成功')
+                    break
+                except Exception as e:
+                    retries += 1
+                    if retries >= max_retries:
+                        print(f'数据库连接失败：{e}')
+                        sys.exit(1)
+                    print(f'尝试连接数据库... ({retries}/{max_retries})')
+                    time.sleep(3)
+            "
+            
+            # 执行数据库初始化
+            echo "初始化数据库..."
+            python3 scripts/create_tables.py
+            
+            # 启动服务
+            echo "启动医疗服务..."
+            exec python3 cmd/server/main.py
+        ports:
+        - containerPort: 50051
+          name: grpc
+        - containerPort: 8080
+          name: http
+        - containerPort: 9090
+          name: metrics
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 256Mi
+        env:
+        - name: LOG_LEVEL
+          value: "info"
+        - name: LOG_FORMAT
+          value: "json"
+        - name: LOG_OUTPUT
+          value: "stdout"
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: medical-service-config
+              key: db.host
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: medical-service-config
+              key: db.port
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: medical-service-secrets
+              key: db.user
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: medical-service-secrets
+              key: db.password
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: medical-service-config
+              key: db.name
+        - name: KAFKA_BROKER
+          valueFrom:
+            configMapKeyRef:
+              name: medical-service-config
+              key: kafka.broker
+        - name: HEALTH_DATA_SERVICE_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: medical-service-config
+              key: services.health-data.host
+        - name: HEALTH_DATA_SERVICE_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: medical-service-config
+              key: services.health-data.port
+        - name: MED_KNOWLEDGE_SERVICE_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: medical-service-config
+              key: services.med-knowledge.host
+        - name: MED_KNOWLEDGE_SERVICE_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: medical-service-config
+              key: services.med-knowledge.port
+        - name: INQUIRY_SERVICE_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: medical-service-config
+              key: services.inquiry.host
+        - name: INQUIRY_SERVICE_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: medical-service-config
+              key: services.inquiry.port
+        - name: LISTEN_SERVICE_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: medical-service-config
+              key: services.listen.host
+        - name: LISTEN_SERVICE_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: medical-service-config
+              key: services.listen.port
+        - name: LOOK_SERVICE_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: medical-service-config
+              key: services.look.host
+        - name: LOOK_SERVICE_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: medical-service-config
+              key: services.look.port
+        - name: PALPATION_SERVICE_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: medical-service-config
+              key: services.palpation.host
+        - name: PALPATION_SERVICE_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: medical-service-config
+              key: services.palpation.port
+        - name: RAG_SERVICE_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: medical-service-config
+              key: services.rag.host
+        - name: RAG_SERVICE_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: medical-service-config
+              key: services.rag.port
+        - name: JAEGER_ENDPOINT
+          valueFrom:
+            configMapKeyRef:
+              name: medical-service-config
+              key: jaeger.endpoint
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: medical-service-secrets
+              key: jwt.secret
+        livenessProbe:
+          httpGet:
+            path: /api/liveness
+            port: http
+          initialDelaySeconds: 60
+          periodSeconds: 15
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /api/readiness
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        startupProbe:
+          httpGet:
+            path: /api/health
+            port: http
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 12  # 允许2分钟启动时间
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config
+        - name: tmp-volume
+          mountPath: /tmp
+      volumes:
+      - name: config-volume
+        configMap:
+          name: medical-service-config
+          items:
+          - key: config.yaml
+            path: config.yaml
+      - name: tmp-volume
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: medical-service
+  namespace: suoke-life
+  labels:
+    app: medical-service
+spec:
+  type: ClusterIP
+  ports:
+  - port: 50051
+    targetPort: 50051
+    protocol: TCP
+    name: grpc
+  - port: 8080
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  - port: 9090
+    targetPort: 9090
+    protocol: TCP
+    name: metrics
+  selector:
+    app: medical-service
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: medical-service
+  namespace: suoke-life
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    certmanager.k8s.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+  - hosts:
+    - api.suokelife.com
+    secretName: medical-service-tls
+  rules:
+  - host: api.suokelife.com
+    http:
+      paths:
+      - path: /api/v1/medical
+        pathType: Prefix
+        backend:
+          service:
+            name: medical-service
+            port:
+              name: http
+---
+# HorizontalPodAutoscaler配置
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: medical-service
+  namespace: suoke-life
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: medical-service
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+      - type: Percent
+        value: 100
+        periodSeconds: 60
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 25
+        periodSeconds: 60
+---
+# PodDisruptionBudget配置确保服务可用性
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: medical-service-pdb
+  namespace: suoke-life
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: medical-service 

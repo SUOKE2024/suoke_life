@@ -1,0 +1,316 @@
+syntax = "proto3";
+
+package health_data;
+
+option go_package = "github.com/SUOKE2024/suoke_life/services/health-data-service/api/grpc/generated;health_data";
+option java_multiple_files = true;
+option java_package = "com.suoke.life.services.health_data";
+option java_outer_classname = "HealthDataProto";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/struct.proto";
+
+// 健康数据服务
+service HealthDataService {
+  // 获取健康数据
+  rpc GetHealthData(GetHealthDataRequest) returns (GetHealthDataResponse) {}
+  
+  // 创建健康数据
+  rpc CreateHealthData(CreateHealthDataRequest) returns (CreateHealthDataResponse) {}
+  
+  // 批量创建健康数据
+  rpc CreateHealthDataBatch(CreateHealthDataBatchRequest) returns (CreateHealthDataBatchResponse) {}
+  
+  // 获取健康数据统计
+  rpc GetHealthStatistics(GetHealthStatisticsRequest) returns (GetHealthStatisticsResponse) {}
+  
+  // 获取中医体质
+  rpc GetTCMConstitution(GetTCMConstitutionRequest) returns (GetTCMConstitutionResponse) {}
+  
+  // 创建中医体质评估
+  rpc CreateTCMConstitution(CreateTCMConstitutionRequest) returns (CreateTCMConstitutionResponse) {}
+  
+  // 获取健康洞察
+  rpc GetHealthInsights(GetHealthInsightsRequest) returns (GetHealthInsightsResponse) {}
+  
+  // 获取健康档案
+  rpc GetHealthProfile(GetHealthProfileRequest) returns (GetHealthProfileResponse) {}
+  
+  // 服务健康检查
+  rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse) {}
+}
+
+// 健康数据类型
+enum HealthDataType {
+  HEALTH_DATA_TYPE_UNSPECIFIED = 0;
+  HEALTH_DATA_TYPE_STEPS = 1;
+  HEALTH_DATA_TYPE_HEART_RATE = 2;
+  HEALTH_DATA_TYPE_SLEEP = 3;
+  HEALTH_DATA_TYPE_BLOOD_PRESSURE = 4;
+  HEALTH_DATA_TYPE_BLOOD_GLUCOSE = 5;
+  HEALTH_DATA_TYPE_BODY_TEMPERATURE = 6;
+  HEALTH_DATA_TYPE_OXYGEN_SATURATION = 7;
+  HEALTH_DATA_TYPE_RESPIRATORY_RATE = 8;
+  HEALTH_DATA_TYPE_BODY_MASS = 9;
+  HEALTH_DATA_TYPE_BODY_FAT = 10;
+  HEALTH_DATA_TYPE_ACTIVITY = 11;
+  HEALTH_DATA_TYPE_WATER_INTAKE = 12;
+  HEALTH_DATA_TYPE_NUTRITION = 13;
+  HEALTH_DATA_TYPE_MEDICATION = 14;
+  HEALTH_DATA_TYPE_SYMPTOM = 15;
+  HEALTH_DATA_TYPE_PULSE = 16;
+  HEALTH_DATA_TYPE_TONGUE = 17;
+  HEALTH_DATA_TYPE_FACE = 18;
+  HEALTH_DATA_TYPE_VOICE = 19;
+  HEALTH_DATA_TYPE_CUSTOM = 20;
+}
+
+// 设备类型
+enum DeviceType {
+  DEVICE_TYPE_UNSPECIFIED = 0;
+  DEVICE_TYPE_APPLE_HEALTH = 1;
+  DEVICE_TYPE_FITBIT = 2;
+  DEVICE_TYPE_GARMIN = 3;
+  DEVICE_TYPE_XIAOMI = 4;
+  DEVICE_TYPE_TCM_DEVICE = 5;
+  DEVICE_TYPE_MANUAL_ENTRY = 6;
+  DEVICE_TYPE_OTHER = 7;
+}
+
+// 测量单位
+enum MeasurementUnit {
+  MEASUREMENT_UNIT_UNSPECIFIED = 0;
+  MEASUREMENT_UNIT_COUNT = 1;
+  MEASUREMENT_UNIT_STEPS = 2;
+  MEASUREMENT_UNIT_BPM = 3;
+  MEASUREMENT_UNIT_MMHG = 4;
+  MEASUREMENT_UNIT_MGDL = 5;
+  MEASUREMENT_UNIT_MMOLL = 6;
+  MEASUREMENT_UNIT_CELSIUS = 7;
+  MEASUREMENT_UNIT_FAHRENHEIT = 8;
+  MEASUREMENT_UNIT_PERCENT = 9;
+  MEASUREMENT_UNIT_KG = 10;
+  MEASUREMENT_UNIT_LB = 11;
+  MEASUREMENT_UNIT_MINUTES = 12;
+  MEASUREMENT_UNIT_HOURS = 13;
+  MEASUREMENT_UNIT_KCAL = 14;
+  MEASUREMENT_UNIT_ML = 15;
+  MEASUREMENT_UNIT_G = 16;
+  MEASUREMENT_UNIT_MG = 17;
+  MEASUREMENT_UNIT_RPM = 18;
+  MEASUREMENT_UNIT_CUSTOM = 19;
+}
+
+// 中医体质类型
+enum TCMConstitutionType {
+  TCM_CONSTITUTION_TYPE_UNSPECIFIED = 0;
+  TCM_CONSTITUTION_TYPE_BALANCED = 1;
+  TCM_CONSTITUTION_TYPE_QI_DEFICIENCY = 2;
+  TCM_CONSTITUTION_TYPE_YANG_DEFICIENCY = 3;
+  TCM_CONSTITUTION_TYPE_YIN_DEFICIENCY = 4;
+  TCM_CONSTITUTION_TYPE_PHLEGM_DAMPNESS = 5;
+  TCM_CONSTITUTION_TYPE_DAMPNESS_HEAT = 6;
+  TCM_CONSTITUTION_TYPE_BLOOD_STASIS = 7;
+  TCM_CONSTITUTION_TYPE_QI_DEPRESSION = 8;
+  TCM_CONSTITUTION_TYPE_SPECIAL = 9;
+}
+
+// 健康数据
+message HealthData {
+  string id = 1;
+  string user_id = 2;
+  HealthDataType data_type = 3;
+  google.protobuf.Timestamp timestamp = 4;
+  DeviceType device_type = 5;
+  google.protobuf.StringValue device_id = 6;
+  oneof value {
+    double numeric_value = 7;
+    int32 integer_value = 8;
+    string string_value = 9;
+    google.protobuf.Struct json_value = 10;
+  }
+  MeasurementUnit unit = 11;
+  string source = 12;
+  google.protobuf.Struct metadata = 13;
+  google.protobuf.Timestamp created_at = 14;
+  google.protobuf.Timestamp updated_at = 15;
+}
+
+// 获取健康数据请求
+message GetHealthDataRequest {
+  string user_id = 1;
+  google.protobuf.StringValue data_type = 2;
+  google.protobuf.Timestamp start_time = 3;
+  google.protobuf.Timestamp end_time = 4;
+  int32 limit = 5;
+  int32 offset = 6;
+}
+
+// 获取健康数据响应
+message GetHealthDataResponse {
+  repeated HealthData data = 1;
+  int32 total_count = 2;
+}
+
+// 创建健康数据请求
+message CreateHealthDataRequest {
+  string user_id = 1;
+  HealthDataType data_type = 2;
+  google.protobuf.Timestamp timestamp = 3;
+  DeviceType device_type = 4;
+  google.protobuf.StringValue device_id = 5;
+  oneof value {
+    double numeric_value = 6;
+    int32 integer_value = 7;
+    string string_value = 8;
+    google.protobuf.Struct json_value = 9;
+  }
+  MeasurementUnit unit = 10;
+  string source = 11;
+  google.protobuf.Struct metadata = 12;
+}
+
+// 创建健康数据响应
+message CreateHealthDataResponse {
+  string id = 1;
+}
+
+// 批量创建健康数据请求
+message CreateHealthDataBatchRequest {
+  string user_id = 1;
+  repeated CreateHealthDataRequest data = 2;
+}
+
+// 批量创建健康数据响应
+message CreateHealthDataBatchResponse {
+  repeated string ids = 1;
+  int32 processed_count = 2;
+}
+
+// 获取健康数据统计请求
+message GetHealthStatisticsRequest {
+  string user_id = 1;
+  HealthDataType data_type = 2;
+  int32 days = 3;
+}
+
+// 获取健康数据统计响应
+message GetHealthStatisticsResponse {
+  double average = 1;
+  double maximum = 2;
+  double minimum = 3;
+  int32 count = 4;
+  google.protobuf.Timestamp start_time = 5;
+  google.protobuf.Timestamp end_time = 6;
+  string data_type = 7;
+}
+
+// 中医体质数据
+message TCMConstitutionData {
+  string id = 1;
+  string user_id = 2;
+  google.protobuf.Timestamp timestamp = 3;
+  TCMConstitutionType primary_type = 4;
+  repeated TCMConstitutionType secondary_types = 5;
+  map<string, double> scores = 6;
+  google.protobuf.Struct analysis_basis = 7;
+  google.protobuf.Struct recommendations = 8;
+  string created_by = 9;
+  google.protobuf.Timestamp created_at = 10;
+  google.protobuf.Timestamp updated_at = 11;
+}
+
+// 获取中医体质请求
+message GetTCMConstitutionRequest {
+  string user_id = 1;
+}
+
+// 获取中医体质响应
+message GetTCMConstitutionResponse {
+  TCMConstitutionData data = 1;
+}
+
+// 创建中医体质评估请求
+message CreateTCMConstitutionRequest {
+  string user_id = 1;
+  TCMConstitutionType primary_type = 2;
+  repeated TCMConstitutionType secondary_types = 3;
+  map<string, double> scores = 4;
+  google.protobuf.Struct analysis_basis = 5;
+  google.protobuf.Struct recommendations = 6;
+  string created_by = 7;
+}
+
+// 创建中医体质评估响应
+message CreateTCMConstitutionResponse {
+  string id = 1;
+}
+
+// 健康洞察
+message HealthInsight {
+  string id = 1;
+  string user_id = 2;
+  google.protobuf.Timestamp timestamp = 3;
+  string insight_type = 4;
+  HealthDataType data_type = 5;
+  message TimeRange {
+    google.protobuf.Timestamp start = 1;
+    google.protobuf.Timestamp end = 2;
+  }
+  TimeRange time_range = 6;
+  string description = 7;
+  google.protobuf.Struct details = 8;
+  google.protobuf.StringValue severity = 9;
+  double relevance_score = 10;
+  google.protobuf.Timestamp created_at = 11;
+}
+
+// 获取健康洞察请求
+message GetHealthInsightsRequest {
+  string user_id = 1;
+  google.protobuf.StringValue insight_type = 2;
+  google.protobuf.StringValue severity = 3;
+  int32 limit = 4;
+}
+
+// 获取健康洞察响应
+message GetHealthInsightsResponse {
+  repeated HealthInsight insights = 1;
+  int32 total_count = 2;
+}
+
+// 健康档案
+message HealthProfile {
+  string id = 1;
+  string user_id = 2;
+  google.protobuf.Timestamp timestamp = 3;
+  double health_index = 4;
+  map<string, double> metrics = 5;
+  google.protobuf.Struct tcm_constitution = 6;
+  google.protobuf.Struct recent_trends = 7;
+  repeated google.protobuf.Struct notable_insights = 8;
+  repeated google.protobuf.Struct recommendations = 9;
+  google.protobuf.Timestamp created_at = 10;
+  google.protobuf.Timestamp updated_at = 11;
+}
+
+// 获取健康档案请求
+message GetHealthProfileRequest {
+  string user_id = 1;
+}
+
+// 获取健康档案响应
+message GetHealthProfileResponse {
+  HealthProfile profile = 1;
+}
+
+// 健康检查请求
+message HealthCheckRequest {
+}
+
+// 健康检查响应
+message HealthCheckResponse {
+  string status = 1;
+  google.protobuf.Struct details = 2;
+} 

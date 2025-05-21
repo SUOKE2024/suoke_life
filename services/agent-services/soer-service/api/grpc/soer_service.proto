@@ -1,0 +1,553 @@
+syntax = "proto3";
+
+package suoke.soer.v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/life/soer-service/api/grpc/soer";
+
+service SoerService {
+  // 生成个性化健康计划
+  rpc GenerateHealthPlan (HealthPlanRequest) returns (HealthPlanResponse);
+  
+  // 获取生活方式建议
+  rpc GetLifestyleRecommendation (LifestyleRequest) returns (LifestyleResponse);
+  
+  // 分析传感器数据
+  rpc AnalyzeSensorData (SensorDataRequest) returns (SensorDataResponse);
+  
+  // 追踪并分析用户营养摄入
+  rpc TrackNutrition (NutritionRequest) returns (NutritionResponse);
+  
+  // 检测异常健康模式
+  rpc DetectAbnormalPattern (AbnormalPatternRequest) returns (AbnormalPatternResponse);
+  
+  // 预测健康趋势
+  rpc PredictHealthTrend (HealthTrendRequest) returns (HealthTrendResponse);
+  
+  // 获取个性化睡眠建议
+  rpc GetSleepRecommendation (SleepRequest) returns (SleepResponse);
+  
+  // 分析情绪状态
+  rpc AnalyzeEmotionalState (EmotionalStateRequest) returns (EmotionalStateResponse);
+  
+  // 健康计划相关
+  rpc GetHealthPlan (GetHealthPlanRequest) returns (HealthPlanResponse);
+  rpc UpdateHealthPlan (UpdateHealthPlanRequest) returns (HealthPlanResponse);
+  rpc ListHealthPlans (ListHealthPlansRequest) returns (ListHealthPlansResponse);
+  
+  // 健康分析相关
+  rpc AnalyzeHealthProfile (AnalyzeHealthProfileRequest) returns (HealthProfileAnalysisResponse);
+  rpc TrackHealthMetrics (TrackHealthMetricsRequest) returns (HealthMetricsResponse);
+  
+  // 传感器数据分析
+  rpc GetSensorRecommendations (GetSensorRecommendationsRequest) returns (SensorRecommendationsResponse);
+  
+  // 情绪分析相关
+  rpc GetEmotionalHistory (GetEmotionalHistoryRequest) returns (EmotionalHistoryResponse);
+  rpc GetEmotionalInsights (GetEmotionalInsightsRequest) returns (EmotionalInsightsResponse);
+  
+  // 系统健康检查
+  rpc HealthCheck (google.protobuf.Empty) returns (HealthCheckResponse);
+}
+
+// 健康计划请求
+message HealthPlanRequest {
+  string user_id = 1;
+  string constitution_type = 2;
+  repeated string health_goals = 3;
+  map<string, repeated string> preferences = 4;
+  string current_season = 5;
+}
+
+// 健康计划响应
+message HealthPlanResponse {
+  string plan_id = 1;
+  repeated string diet_recommendations = 2;
+  repeated string exercise_recommendations = 3;
+  repeated string lifestyle_recommendations = 4;
+  repeated string supplement_recommendations = 5;
+  map<string, string> schedule = 6;
+  float confidence_score = 7;
+}
+
+// 生活方式请求
+message LifestyleRequest {
+  string user_id = 1;
+  string context = 2;  // 当前情境，如"工作日"、"周末"、"旅行"等
+  string location = 3;  // 用户当前位置
+  map<string, string> environment_data = 4;  // 环境数据，如气温、湿度、空气质量等
+}
+
+// 生活方式响应
+message LifestyleResponse {
+  repeated Recommendation recommendations = 1;
+  
+  message Recommendation {
+    string category = 1;  // 例如：饮食、运动、作息等
+    string content = 2;
+    float priority = 3;  // 优先级：0-1
+    string reasoning = 4;  // 推荐理由
+  }
+}
+
+// 传感器数据请求
+message SensorDataRequest {
+  string user_id = 1;
+  repeated SensorData data = 2;
+  
+  message SensorData {
+    string sensor_type = 1;  // 如"heart_rate", "steps", "sleep", 等
+    string device_id = 2;
+    repeated DataPoint data_points = 3;
+    
+    message DataPoint {
+      int64 timestamp = 1;  // Unix时间戳(毫秒)
+      map<string, double> values = 2;
+      map<string, string> metadata = 3;
+    }
+  }
+}
+
+// 传感器数据响应
+message SensorDataResponse {
+  repeated HealthMetric metrics = 1;
+  repeated Insight insights = 2;
+  
+  message HealthMetric {
+    string metric_name = 1;
+    double current_value = 2;
+    double reference_min = 3;
+    double reference_max = 4;
+    string interpretation = 5;
+    string trend = 6;  // "improving", "stable", "declining"
+  }
+  
+  message Insight {
+    string category = 1;
+    string description = 2;
+    float confidence = 3;
+    repeated string suggestions = 4;
+  }
+}
+
+// 营养请求
+message NutritionRequest {
+  string user_id = 1;
+  repeated FoodEntry food_entries = 2;
+  string analysis_type = 3;  // "daily", "weekly", "constitutional"
+  
+  message FoodEntry {
+    string food_name = 1;
+    double quantity = 2;
+    string unit = 3;
+    int64 timestamp = 4;
+    map<string, string> properties = 5;  // 如"温热"、"凉性"、"有机"等属性
+  }
+}
+
+// 营养响应
+message NutritionResponse {
+  map<string, double> nutrient_summary = 1;
+  repeated NutrientBalance balance = 2;
+  repeated FoodSuggestion suggestions = 3;
+  ConstitutionalAnalysis constitutional_analysis = 4;
+  
+  message NutrientBalance {
+    string nutrient = 1;
+    double current = 2;
+    double target = 3;
+    string status = 4;  // "excess", "balanced", "deficient"
+  }
+  
+  message FoodSuggestion {
+    string food = 1;
+    repeated string benefits = 2;
+    double recommendation_strength = 3;  // 0-1
+    string reason = 4;
+  }
+  
+  message ConstitutionalAnalysis {
+    map<string, double> five_elements_balance = 1;  // 五行平衡
+    map<string, double> five_tastes_distribution = 2;  // 五味分布
+    repeated string imbalance_corrections = 3;
+  }
+}
+
+// 异常模式请求
+message AbnormalPatternRequest {
+  string user_id = 1;
+  repeated string data_types = 2;
+  int32 days_to_analyze = 3;
+  double sensitivity = 4;  // 0-1，检测敏感度
+}
+
+// 异常模式响应
+message AbnormalPatternResponse {
+  repeated AbnormalPattern patterns = 1;
+  
+  message AbnormalPattern {
+    string pattern_type = 1;
+    double severity = 2;  // 0-1
+    string description = 3;
+    int64 detection_time = 4;
+    repeated string related_metrics = 5;
+    repeated string suggested_actions = 6;
+    bool requires_attention = 7;
+  }
+}
+
+// 健康趋势请求
+message HealthTrendRequest {
+  string user_id = 1;
+  repeated string metrics = 2;
+  int32 prediction_days = 3;
+  bool include_seasonal_factors = 4;
+}
+
+// 健康趋势响应
+message HealthTrendResponse {
+  repeated MetricPrediction predictions = 1;
+  
+  message MetricPrediction {
+    string metric = 1;
+    repeated PredictionPoint points = 2;
+    repeated string influencing_factors = 3;
+    double confidence = 4;
+    
+    message PredictionPoint {
+      int64 timestamp = 1;
+      double predicted_value = 2;
+      double lower_bound = 3;
+      double upper_bound = 4;
+    }
+  }
+}
+
+// 睡眠请求
+message SleepRequest {
+  string user_id = 1;
+  repeated SleepData recent_sleep = 2;
+  string constitution_type = 3;
+  map<string, string> lifestyle_factors = 4;
+  
+  message SleepData {
+    int64 sleep_start = 1;
+    int64 sleep_end = 2;
+    repeated SleepPhase phases = 3;
+    double efficiency = 4;
+    int32 awakenings = 5;
+    
+    message SleepPhase {
+      string phase_type = 1;  // "deep", "light", "rem", "awake"
+      int64 start_time = 2;
+      int64 end_time = 3;
+    }
+  }
+}
+
+// 睡眠响应
+message SleepResponse {
+  SleepQuality sleep_quality = 1;
+  repeated SleepRecommendation recommendations = 2;
+  repeated string environmental_factors = 3;
+  string optimal_sleep_schedule = 4;
+  
+  message SleepQuality {
+    double overall_score = 1;
+    map<string, double> component_scores = 2;
+    repeated string improvement_areas = 3;
+    repeated string positive_aspects = 4;
+  }
+  
+  message SleepRecommendation {
+    string category = 1;  // "environment", "routine", "nutrition", "mindfulness"
+    string suggestion = 2;
+    string reasoning = 3;
+    double expected_impact = 4;  // 0-1
+    bool is_personalized = 5;
+  }
+}
+
+// 情绪状态请求
+message EmotionalStateRequest {
+  string user_id = 1;
+  repeated EmotionalInput inputs = 2;
+  
+  message EmotionalInput {
+    string input_type = 1;  // "text", "voice", "physiological"
+    bytes data = 2;
+    map<string, string> metadata = 3;
+    int64 timestamp = 4;
+  }
+}
+
+// 情绪状态响应
+message EmotionalStateResponse {
+  map<string, double> emotion_scores = 1;  // 各种情绪的得分
+  string primary_emotion = 2;
+  string emotional_tendency = 3;  // "improving", "fluctuating", "declining"
+  EmotionalImpact health_impact = 4;
+  repeated EmotionalSuggestion suggestions = 5;
+  
+  message EmotionalImpact {
+    repeated string affected_systems = 1;  // 受影响的身体系统
+    string tcm_interpretation = 2;  // 中医解读
+    double severity = 3;  // 0-1
+  }
+  
+  message EmotionalSuggestion {
+    string intervention_type = 1;
+    string description = 2;
+    double estimated_effectiveness = 3;
+    bool is_urgent = 4;
+  }
+}
+
+// 健康计划相关
+message GetHealthPlanRequest {
+  string user_id = 1;
+  string plan_id = 2;
+}
+
+message UpdateHealthPlanRequest {
+  string user_id = 1;
+  string plan_id = 2;
+  repeated string updated_health_goals = 3;
+  HealthDataInput updated_health_data = 4;
+  UserPreferences updated_preferences = 5;
+}
+
+message ListHealthPlansRequest {
+  string user_id = 1;
+  int32 page = 2;
+  int32 page_size = 3;
+}
+
+message ListHealthPlansResponse {
+  repeated HealthPlanResponse plans = 1;
+  int32 total_count = 2;
+  int32 page = 3;
+  int32 page_size = 4;
+}
+
+// 健康分析相关
+message AnalyzeHealthProfileRequest {
+  string user_id = 1;
+  HealthDataInput health_data = 2;
+  string constitution_type = 3;
+}
+
+message HealthProfileAnalysisResponse {
+  string user_id = 1;
+  string primary_constitution = 2;
+  repeated ConstitutionScore constitution_scores = 3;
+  repeated HealthRiskFactor risk_factors = 4;
+  repeated HealthStrengthFactor strength_factors = 5;
+  repeated HealthSuggestion suggestions = 6;
+  google.protobuf.Timestamp analysis_date = 7;
+}
+
+message TrackHealthMetricsRequest {
+  string user_id = 1;
+  repeated HealthMetric metrics = 2;
+}
+
+message HealthMetricsResponse {
+  string user_id = 1;
+  repeated HealthMetricAnalysis metric_analyses = 2;
+  google.protobuf.Timestamp analysis_date = 3;
+}
+
+// 传感器数据分析
+message AnalyzeSensorDataRequest {
+  string user_id = 1;
+  repeated SensorData sensor_data = 2;
+  string data_type = 3;
+}
+
+message SensorAnalysisResponse {
+  string user_id = 1;
+  string data_type = 2;
+  repeated SensorAnalysisResult analysis_results = 3;
+  google.protobuf.Timestamp analysis_date = 4;
+}
+
+message GetSensorRecommendationsRequest {
+  string user_id = 1;
+  string analysis_id = 2;
+}
+
+message SensorRecommendationsResponse {
+  string user_id = 1;
+  string analysis_id = 2;
+  repeated HealthSuggestion recommendations = 3;
+  google.protobuf.Timestamp recommendation_date = 4;
+}
+
+// 情绪分析相关
+message GetEmotionalHistoryRequest {
+  string user_id = 1;
+  google.protobuf.Timestamp start_date = 2;
+  google.protobuf.Timestamp end_date = 3;
+  string emotion_type = 4;
+}
+
+message EmotionalHistoryResponse {
+  string user_id = 1;
+  repeated EmotionalStateRecord emotional_states = 2;
+  EmotionalTrendAnalysis trend_analysis = 3;
+}
+
+message GetEmotionalInsightsRequest {
+  string user_id = 1;
+  int32 lookback_days = 2;
+}
+
+message EmotionalInsightsResponse {
+  string user_id = 1;
+  repeated EmotionalPattern emotional_patterns = 2;
+  repeated EmotionalTrigger emotional_triggers = 3;
+  EmotionalBalanceAssessment balance_assessment = 4;
+  repeated EmotionalSuggestion long_term_suggestions = 5;
+}
+
+// 系统健康检查
+message HealthCheckResponse {
+  string status = 1;
+  string version = 2;
+  google.protobuf.Timestamp timestamp = 3;
+}
+
+// 辅助数据类型
+message HealthDataInput {
+  float height = 1;
+  float weight = 2;
+  string blood_pressure = 3;
+  int32 heart_rate = 4;
+  float sleep_duration = 5;
+  string activity_level = 6;
+  repeated string existing_conditions = 7;
+  map<string, string> additional_metrics = 8;
+}
+
+message UserPreferences {
+  repeated string diet_restrictions = 1;
+  repeated string exercise_preferences = 2;
+  map<string, string> schedule = 3;
+  repeated string lifestyle_preferences = 4;
+}
+
+message ConstitutionScore {
+  string constitution_type = 1;
+  float score = 2;
+  string description = 3;
+}
+
+message HealthRiskFactor {
+  string factor_name = 1;
+  string description = 2;
+  float severity = 3;
+  string system_affected = 4;
+}
+
+message HealthStrengthFactor {
+  string factor_name = 1;
+  string description = 2;
+  float strength_level = 3;
+  string system_related = 4;
+}
+
+message HealthSuggestion {
+  string suggestion_type = 1;
+  string description = 2;
+  float priority = 3;
+  string rationale = 4;
+}
+
+message HealthMetric {
+  string metric_name = 1;
+  float value = 2;
+  string unit = 3;
+  google.protobuf.Timestamp timestamp = 4;
+}
+
+message HealthMetricAnalysis {
+  string metric_name = 1;
+  float current_value = 2;
+  float baseline_value = 3;
+  float change_percentage = 4;
+  string trend = 5;
+  string interpretation = 6;
+}
+
+message SensorData {
+  string sensor_id = 1;
+  string data_type = 2;
+  bytes data = 3;
+  map<string, string> metadata = 4;
+  google.protobuf.Timestamp capture_time = 5;
+}
+
+message SensorAnalysisResult {
+  string result_type = 1;
+  float confidence = 2;
+  map<string, float> metrics = 3;
+  string interpretation = 4;
+}
+
+message EmotionalInput {
+  string input_type = 1;
+  bytes data = 2;
+  map<string, string> metadata = 3;
+  google.protobuf.Timestamp capture_time = 4;
+}
+
+message EmotionalHealthImpact {
+  repeated string affected_systems = 1;
+  string tcm_interpretation = 2;
+  float severity = 3;
+}
+
+message EmotionalSuggestion {
+  string intervention_type = 1;
+  string description = 2;
+  float estimated_effectiveness = 3;
+  bool is_urgent = 4;
+}
+
+message EmotionalStateRecord {
+  string analysis_id = 1;
+  string primary_emotion = 2;
+  map<string, float> emotion_scores = 3;
+  google.protobuf.Timestamp record_date = 4;
+}
+
+message EmotionalTrendAnalysis {
+  string dominant_emotion = 1;
+  string trend_direction = 2;
+  float volatility = 3;
+  string interpretation = 4;
+}
+
+message EmotionalPattern {
+  string pattern_type = 1;
+  string description = 2;
+  float confidence = 3;
+  repeated string related_emotions = 4;
+}
+
+message EmotionalTrigger {
+  string trigger_source = 1;
+  string description = 2;
+  repeated string associated_emotions = 3;
+  float confidence = 4;
+}
+
+message EmotionalBalanceAssessment {
+  string overall_status = 1;
+  map<string, float> element_balance = 2;
+  string tcm_interpretation = 3;
+  map<string, float> organ_system_impact = 4;
+}

@@ -1,0 +1,949 @@
+openapi: 3.0.3
+info:
+  title: 医学知识服务 API
+  description: 索克生活APP医学知识图谱服务API
+  version: 1.0.0
+  contact:
+    name: 索克开发团队
+    email: dev@suoke-life.com
+servers:
+  - url: /api/v1
+    description: API v1版本
+
+paths:
+  /constitutions:
+    get:
+      summary: 获取所有体质类型
+      description: 返回所有中医体质类型信息
+      tags:
+        - 体质
+      parameters:
+        - name: limit
+          in: query
+          description: 返回记录数量限制
+          schema:
+            type: integer
+            default: 10
+        - name: offset
+          in: query
+          description: 分页偏移量
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: 成功返回体质列表
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConstitutionList'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  
+  /constitutions/{id}:
+    get:
+      summary: 获取指定体质信息
+      description: 根据ID获取特定体质的详细信息
+      tags:
+        - 体质
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: 体质ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功返回体质信息
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Constitution'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  
+  /symptoms:
+    get:
+      summary: 获取症状列表
+      description: 返回中医症状列表
+      tags:
+        - 症状
+      parameters:
+        - name: limit
+          in: query
+          description: 返回记录数量限制
+          schema:
+            type: integer
+            default: 10
+        - name: offset
+          in: query
+          description: 分页偏移量
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: 成功返回症状列表
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SymptomList'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  
+  /symptoms/{id}:
+    get:
+      summary: 获取指定症状信息
+      description: 根据ID获取特定症状的详细信息
+      tags:
+        - 症状
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: 症状ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功返回症状信息
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Symptom'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  
+  /acupoints:
+    get:
+      summary: 获取穴位列表
+      description: 返回中医穴位列表
+      tags:
+        - 穴位
+      parameters:
+        - name: limit
+          in: query
+          description: 返回记录数量限制
+          schema:
+            type: integer
+            default: 10
+        - name: offset
+          in: query
+          description: 分页偏移量
+          schema:
+            type: integer
+            default: 0
+        - name: meridian
+          in: query
+          description: 经络筛选
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功返回穴位列表
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AcupointList'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  
+  /acupoints/{id}:
+    get:
+      summary: 获取指定穴位信息
+      description: 根据ID获取特定穴位的详细信息
+      tags:
+        - 穴位
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: 穴位ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功返回穴位信息
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Acupoint'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  
+  /herbs:
+    get:
+      summary: 获取中药列表
+      description: 返回中药列表
+      tags:
+        - 中药
+      parameters:
+        - name: limit
+          in: query
+          description: 返回记录数量限制
+          schema:
+            type: integer
+            default: 10
+        - name: offset
+          in: query
+          description: 分页偏移量
+          schema:
+            type: integer
+            default: 0
+        - name: category
+          in: query
+          description: 中药分类筛选
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功返回中药列表
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HerbList'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  
+  /herbs/{id}:
+    get:
+      summary: 获取指定中药信息
+      description: 根据ID获取特定中药的详细信息
+      tags:
+        - 中药
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: 中药ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功返回中药信息
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Herb'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  
+  /search:
+    get:
+      summary: 知识库搜索
+      description: 关键字搜索知识库
+      tags:
+        - 搜索
+      parameters:
+        - name: q
+          in: query
+          required: true
+          description: 搜索查询关键字
+          schema:
+            type: string
+        - name: type
+          in: query
+          description: 实体类型筛选
+          schema:
+            type: string
+            enum: [constitution, symptom, acupoint, herb, syndrome]
+        - name: limit
+          in: query
+          description: 返回记录数量限制
+          schema:
+            type: integer
+            default: 10
+        - name: offset
+          in: query
+          description: 分页偏移量
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: 成功返回搜索结果
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResults'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  
+  /syndromes:
+    get:
+      summary: 获取证型列表
+      description: 返回中医证型列表
+      tags:
+        - 证型
+      parameters:
+        - name: limit
+          in: query
+          description: 返回记录数量限制
+          schema:
+            type: integer
+            default: 10
+        - name: offset
+          in: query
+          description: 分页偏移量
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: 成功返回证型列表
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyndromeList'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  
+  /syndromes/{id}:
+    get:
+      summary: 获取指定证型信息
+      description: 根据ID获取特定证型的详细信息
+      tags:
+        - 证型
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: 证型ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功返回证型信息
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Syndrome'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  
+  /syndromes/{id}/pathways:
+    get:
+      summary: 获取证型辨证路径
+      description: 获取特定证型的辨证路径
+      tags:
+        - 证型
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: 证型ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功返回辨证路径
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyndromePathways'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  
+  /recommendations:
+    get:
+      summary: 获取健康推荐
+      description: 根据体质和推荐类型获取健康推荐
+      tags:
+        - 推荐
+      parameters:
+        - name: constitution_id
+          in: query
+          required: true
+          description: 体质ID
+          schema:
+            type: string
+        - name: type
+          in: query
+          description: 推荐类型
+          schema:
+            type: string
+            enum: [diet, exercise, lifestyle, acupoint, herb]
+      responses:
+        '200':
+          description: 成功返回推荐列表
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecommendationList'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+components:
+  schemas:
+    Constitution:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 体质唯一标识
+        name:
+          type: string
+          description: 体质名称
+        description:
+          type: string
+          description: 体质描述
+        characteristics:
+          type: array
+          description: 体质特征
+          items:
+            type: string
+        symptoms:
+          type: array
+          description: 常见症状
+          items:
+            type: string
+        preventions:
+          type: array
+          description: 预防建议
+          items:
+            type: string
+        food_recommendations:
+          type: array
+          description: 食物推荐
+          items:
+            type: string
+        food_avoidances:
+          type: array
+          description: 忌口食物
+          items:
+            type: string
+        prevalence:
+          type: number
+          format: float
+          description: 人群分布比例
+      required:
+        - id
+        - name
+        - description
+    
+    ConstitutionList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Constitution'
+        total:
+          type: integer
+          description: 总记录数
+        limit:
+          type: integer
+          description: 当前页记录数限制
+        offset:
+          type: integer
+          description: 当前页偏移量
+      required:
+        - data
+        - total
+        - limit
+        - offset
+    
+    Symptom:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 症状唯一标识
+        name:
+          type: string
+          description: 症状名称
+        description:
+          type: string
+          description: 症状描述
+        related_syndromes:
+          type: array
+          description: 相关证型
+          items:
+            type: string
+        related_diseases:
+          type: array
+          description: 相关疾病
+          items:
+            type: string
+        related_constitutions:
+          type: array
+          description: 相关体质
+          items:
+            type: string
+        western_medicine_explanation:
+          type: string
+          description: 西医解释
+      required:
+        - id
+        - name
+        - description
+    
+    SymptomList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Symptom'
+        total:
+          type: integer
+          description: 总记录数
+        limit:
+          type: integer
+          description: 当前页记录数限制
+        offset:
+          type: integer
+          description: 当前页偏移量
+      required:
+        - data
+        - total
+        - limit
+        - offset
+    
+    Acupoint:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 穴位唯一标识
+        name:
+          type: string
+          description: 穴位名称
+        pinyin:
+          type: string
+          description: 拼音
+        meridian:
+          type: string
+          description: 所属经络
+        location:
+          type: string
+          description: 位置描述
+        functions:
+          type: array
+          description: 功效
+          items:
+            type: string
+        indications:
+          type: array
+          description: 主治症状
+          items:
+            type: string
+        manipulation:
+          type: string
+          description: 操作方法
+        cautions:
+          type: array
+          description: 注意事项
+          items:
+            type: string
+      required:
+        - id
+        - name
+        - meridian
+        - location
+    
+    AcupointList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Acupoint'
+        total:
+          type: integer
+          description: 总记录数
+        limit:
+          type: integer
+          description: 当前页记录数限制
+        offset:
+          type: integer
+          description: 当前页偏移量
+      required:
+        - data
+        - total
+        - limit
+        - offset
+    
+    Herb:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 中药唯一标识
+        name:
+          type: string
+          description: 中药名称
+        pinyin:
+          type: string
+          description: 拼音
+        category:
+          type: string
+          description: 分类
+        nature:
+          type: string
+          description: 药性
+        flavor:
+          type: string
+          description: 味道
+        meridian_tropism:
+          type: string
+          description: 归经
+        efficacy:
+          type: string
+          description: 功效
+        indications:
+          type: array
+          description: 主治
+          items:
+            type: string
+        dosage:
+          type: string
+          description: 用量
+        cautions:
+          type: array
+          description: 禁忌
+          items:
+            type: string
+        common_pairs:
+          type: array
+          description: 常用配伍
+          items:
+            type: string
+        modern_research:
+          type: string
+          description: 现代研究
+      required:
+        - id
+        - name
+        - category
+        - nature
+        - flavor
+        - efficacy
+    
+    HerbList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Herb'
+        total:
+          type: integer
+          description: 总记录数
+        limit:
+          type: integer
+          description: 当前页记录数限制
+        offset:
+          type: integer
+          description: 当前页偏移量
+      required:
+        - data
+        - total
+        - limit
+        - offset
+    
+    SearchResult:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 实体唯一标识
+        name:
+          type: string
+          description: 实体名称
+        entity_type:
+          type: string
+          description: 实体类型
+        brief:
+          type: string
+          description: 简要描述
+        relevance_score:
+          type: number
+          format: float
+          description: 相关性评分
+      required:
+        - id
+        - name
+        - entity_type
+        - brief
+    
+    SearchResults:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchResult'
+        total:
+          type: integer
+          description: 总记录数
+        limit:
+          type: integer
+          description: 当前页记录数限制
+        offset:
+          type: integer
+          description: 当前页偏移量
+      required:
+        - data
+        - total
+        - limit
+        - offset
+    
+    Syndrome:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 证型唯一标识
+        name:
+          type: string
+          description: 证型名称
+        description:
+          type: string
+          description: 证型描述
+        key_symptoms:
+          type: array
+          description: 主要症状
+          items:
+            type: string
+        tongue_features:
+          type: array
+          description: 舌象特征
+          items:
+            type: string
+        pulse_features:
+          type: array
+          description: 脉象特征
+          items:
+            type: string
+      required:
+        - id
+        - name
+        - description
+    
+    SyndromeList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Syndrome'
+        total:
+          type: integer
+          description: 总记录数
+        limit:
+          type: integer
+          description: 当前页记录数限制
+        offset:
+          type: integer
+          description: 当前页偏移量
+      required:
+        - data
+        - total
+        - limit
+        - offset
+    
+    DiagnosisStep:
+      type: object
+      properties:
+        step_number:
+          type: integer
+          description: 步骤序号
+        description:
+          type: string
+          description: 步骤描述
+        evidence:
+          type: array
+          description: 诊断依据
+          items:
+            $ref: '#/components/schemas/DiagnosisEvidence'
+        differential_points:
+          type: array
+          description: 鉴别要点
+          items:
+            type: string
+      required:
+        - step_number
+        - description
+    
+    DiagnosisEvidence:
+      type: object
+      properties:
+        type:
+          type: string
+          description: 依据类型
+        description:
+          type: string
+          description: 描述
+        weight:
+          type: number
+          format: float
+          description: 权重
+      required:
+        - type
+        - description
+    
+    DiagnosisPathway:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 路径唯一标识
+        name:
+          type: string
+          description: 路径名称
+        description:
+          type: string
+          description: 路径描述
+        steps:
+          type: array
+          description: 诊断步骤
+          items:
+            $ref: '#/components/schemas/DiagnosisStep'
+      required:
+        - id
+        - name
+        - steps
+    
+    SyndromePathways:
+      type: object
+      properties:
+        syndrome:
+          $ref: '#/components/schemas/Syndrome'
+        pathways:
+          type: array
+          description: 辨证路径
+          items:
+            $ref: '#/components/schemas/DiagnosisPathway'
+      required:
+        - syndrome
+        - pathways
+    
+    Recommendation:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 推荐唯一标识
+        type:
+          type: string
+          description: 推荐类型
+        title:
+          type: string
+          description: 标题
+        description:
+          type: string
+          description: 描述
+        relevance_score:
+          type: number
+          format: float
+          description: 相关性评分
+        evidence:
+          type: string
+          description: 证据来源
+      required:
+        - id
+        - type
+        - title
+        - description
+    
+    RecommendationList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Recommendation'
+        total:
+          type: integer
+          description: 总记录数
+      required:
+        - data
+        - total
+    
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: 错误代码
+        message:
+          type: string
+          description: 人类可读的错误消息
+        details:
+          type: object
+          description: 错误详情
+          additionalProperties: true
+        request_id:
+          type: string
+          description: 请求ID，用于追踪
+      required:
+        - code
+        - message
+  
+  responses:
+    NotFound:
+      description: 请求的资源不存在
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    
+    ServerError:
+      description: 服务器内部错误
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    
+    BadRequest:
+      description: 请求参数错误
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+
+security:
+  - BearerAuth: []
+  - ApiKeyAuth: []
+
+tags:
+  - name: 体质
+    description: 中医体质分类相关接口
+  - name: 症状
+    description: 中医症状相关接口
+  - name: 穴位
+    description: 中医穴位相关接口
+  - name: 中药
+    description: 中药信息相关接口
+  - name: 证型
+    description: 中医证型相关接口
+  - name: 搜索
+    description: 知识库搜索相关接口
+  - name: 推荐
+    description: 健康推荐相关接口 

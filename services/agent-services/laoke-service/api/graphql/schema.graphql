@@ -1,0 +1,294 @@
+"""
+老克服务GraphQL模式定义
+"""
+
+scalar DateTime
+scalar JSON
+
+type Query {
+  # 知识查询相关
+  searchKnowledge(query: String!, limit: Int): [KnowledgeItem!]!
+  getRelatedTopics(topic: String!, limit: Int): [String!]!
+  
+  # 社区相关
+  getTrendingContent(category: String, limit: Int): [TrendingItem!]!
+  getForumPosts(category: String, offset: Int, limit: Int): [ForumPost!]!
+  
+  # NPC相关
+  getNPCProfiles(location: String, limit: Int): [NPCProfile!]!
+  
+  # 教育相关
+  getCourseRecommendations(userId: ID!, interests: [String!]!, limit: Int): [Course!]!
+  searchCourses(query: String!, courseType: String, difficulty: String, limit: Int): [Course!]!
+  getCourseDetails(courseId: ID!): Course
+  getEducationalContent(contentType: String!, topic: String!, format: String): EducationalContent
+  getUserLearningPath(userId: ID!, goal: String!): LearningPath
+  getLearningStatistics(userId: ID!): LearningStatistics
+  
+  # 知识库查询
+  knowledgeArticle(id: ID!): KnowledgeArticle
+  knowledgeArticles(category: String, tags: [String], limit: Int = 10, offset: Int = 0): [KnowledgeArticle!]!
+  
+  # 学习路径查询
+  learningPath(id: ID!): LearningPath
+  userLearningPaths(userId: ID!): [LearningPath!]!
+  recommendedLearningPaths(userId: ID!, limit: Int = 5): [LearningPath!]!
+  
+  # 社区内容查询
+  communityPost(id: ID!): CommunityPost
+  communityPosts(category: String, tags: [String], limit: Int = 20, offset: Int = 0): [CommunityPost!]!
+  userCommunityPosts(userId: ID!, limit: Int = 10, offset: Int = 0): [CommunityPost!]!
+  
+  # 教育课程查询
+  educationCourse(id: ID!): EducationCourse
+  educationCourses(category: String, level: CourseLevel, limit: Int = 10, offset: Int = 0): [EducationCourse!]!
+  userEnrolledCourses(userId: ID!): [EducationCourse!]!
+  
+  # 游戏NPC查询
+  gameNPC(id: ID!): GameNPC
+  gameNPCInteraction(npcId: ID!, context: String!): NPCInteractionResponse!
+}
+
+type Mutation {
+  # 知识贡献相关
+  evaluateContribution(input: ContributionInput!): ContributionEvaluation!
+  
+  # 社区相关
+  moderateContent(input: ModerationInput!): ModerationResult!
+  createForumPost(input: ForumPostInput!): ForumPost!
+  
+  # NPC互动
+  interactWithNPC(input: NPCInteractionInput!): NPCInteractionResult!
+  
+  # 教育相关
+  generateLearningPath(input: LearningPathInput!): LearningPath!
+  trackLearningProgress(input: ProgressInput!): Boolean!
+  
+  # 知识贡献
+  createKnowledgeArticle(input: KnowledgeArticleInput!): KnowledgeArticle!
+  updateKnowledgeArticle(id: ID!, input: KnowledgeArticleInput!): KnowledgeArticle!
+  rateKnowledgeArticle(articleId: ID!, rating: Int!): KnowledgeArticle!
+  
+  # 学习路径
+  enrollLearningPath(userId: ID!, pathId: ID!): LearningPath!
+  updateLearningProgress(userId: ID!, pathId: ID!, progress: Float!): LearningPath!
+  
+  # 社区内容
+  createCommunityPost(input: CommunityPostInput!): CommunityPost!
+  updateCommunityPost(id: ID!, input: CommunityPostInput!): CommunityPost!
+  createComment(postId: ID!, content: String!): Comment!
+  
+  # 教育课程
+  enrollCourse(userId: ID!, courseId: ID!): EducationCourse!
+  completeCourseModule(userId: ID!, courseId: ID!, moduleId: ID!): Boolean!
+  
+  # 游戏交互
+  sendNPCMessage(npcId: ID!, message: String!): NPCInteractionResponse!
+}
+
+# 知识库类型
+type KnowledgeArticle {
+  id: ID!
+  title: String!
+  content: String!
+  category: String!
+  subcategory: String
+  tags: [String!]!
+  author: User
+  createdAt: String!
+  updatedAt: String
+  rating: Float
+  ratingCount: Int
+  viewCount: Int
+  relatedTopics: [KnowledgeArticle!]
+}
+
+input KnowledgeArticleInput {
+  title: String!
+  content: String!
+  category: String!
+  subcategory: String
+  tags: [String!]!
+}
+
+# 学习路径类型
+type LearningPath {
+  id: ID!
+  title: String!
+  description: String!
+  category: String!
+  level: String!
+  estimatedDuration: String!
+  modules: [LearningModule!]!
+  prerequisites: [LearningPath!]
+  enrolledUsers: Int
+  completionRate: Float
+}
+
+type LearningModule {
+  id: ID!
+  title: String!
+  description: String!
+  content: String!
+  resources: [Resource!]!
+  quizzes: [Quiz!]
+  order: Int!
+}
+
+type Resource {
+  id: ID!
+  title: String!
+  type: ResourceType!
+  url: String!
+  description: String
+}
+
+enum ResourceType {
+  ARTICLE
+  VIDEO
+  AUDIO
+  PDF
+  INTERACTIVE
+}
+
+type Quiz {
+  id: ID!
+  title: String!
+  questions: [QuizQuestion!]!
+  passingScore: Float!
+}
+
+type QuizQuestion {
+  id: ID!
+  question: String!
+  options: [String!]!
+  correctAnswer: Int!
+  explanation: String
+}
+
+# 社区内容类型
+type CommunityPost {
+  id: ID!
+  title: String!
+  content: String!
+  author: User!
+  category: String!
+  tags: [String!]!
+  createdAt: String!
+  updatedAt: String
+  likeCount: Int!
+  commentCount: Int!
+  comments: [Comment!]!
+  isFeatured: Boolean!
+}
+
+input CommunityPostInput {
+  title: String!
+  content: String!
+  category: String!
+  tags: [String!]!
+}
+
+type Comment {
+  id: ID!
+  content: String!
+  author: User!
+  createdAt: String!
+  likeCount: Int!
+  replies: [Comment!]
+}
+
+# 教育课程类型
+type EducationCourse {
+  id: ID!
+  title: String!
+  description: String!
+  category: String!
+  level: CourseLevel!
+  instructor: User!
+  modules: [CourseModule!]!
+  estimatedDuration: String!
+  enrolledCount: Int!
+  rating: Float
+  certificationEnabled: Boolean!
+}
+
+enum CourseLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  EXPERT
+}
+
+type CourseModule {
+  id: ID!
+  title: String!
+  description: String!
+  lessons: [Lesson!]!
+  quiz: Quiz
+  order: Int!
+}
+
+type Lesson {
+  id: ID!
+  title: String!
+  content: String!
+  videoUrl: String
+  duration: String!
+  order: Int!
+}
+
+# 游戏NPC类型
+type GameNPC {
+  id: ID!
+  name: String!
+  role: String!
+  personality: String!
+  backstory: String!
+  avatarUrl: String!
+  dialogueStyle: String!
+}
+
+type NPCInteractionResponse {
+  message: String!
+  emotion: String!
+  actions: [NPCAction!]
+  knowledge: [String!]
+}
+
+type NPCAction {
+  id: ID!
+  type: ActionType!
+  description: String!
+  requirementsMet: Boolean!
+  rewards: [String!]
+}
+
+enum ActionType {
+  QUEST
+  CHALLENGE
+  REWARD
+  DIALOGUE
+  GAME
+}
+
+# 用户类型
+type User {
+  id: ID!
+  username: String!
+  displayName: String!
+  avatarUrl: String
+  role: UserRole!
+  specialization: [String!]
+  contributionScore: Int!
+  joinedAt: String!
+}
+
+enum UserRole {
+  STUDENT
+  CONTRIBUTOR
+  INSTRUCTOR
+  EXPERT
+  MODERATOR
+  ADMIN
+} 

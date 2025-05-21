@@ -1,0 +1,296 @@
+---
+# ConfigMap for RAG Service configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rag-service-config
+  namespace: suoke
+  labels:
+    app: rag-service
+data:
+  default.yaml: |
+    service:
+      name: rag-service
+      version: 0.1.0
+
+    server:
+      grpc:
+        enabled: true
+        host: "0.0.0.0"
+        port: 50051
+        max_workers: 10
+      rest:
+        enabled: true
+        host: "0.0.0.0"
+        port: 8000
+        workers: 4
+        cors_origins: ["*"]
+        api_prefix: "/api/v1"
+
+    vector_database:
+      type: "milvus"
+      host: "${MILVUS_HOST}"
+      port: ${MILVUS_PORT}
+      collection_name: "suoke_knowledge"
+      dimension: 768
+
+    # 更多配置项请参考config/default.yaml
+
+---
+# Secret for sensitive information
+apiVersion: v1
+kind: Secret
+metadata:
+  name: rag-service-secrets
+  namespace: suoke
+type: Opaque
+data:
+  # base64 encoded secrets
+  OPENAI_API_KEY: "eW91ci1vcGVuYWktYXBpLWtleQ=="  # base64 encoded
+  REDIS_PASSWORD: "cmVkaXNwYXNzd29yZA=="           # base64 encoded
+
+---
+# Service for REST API
+apiVersion: v1
+kind: Service
+metadata:
+  name: rag-service-rest
+  namespace: suoke
+  labels:
+    app: rag-service
+spec:
+  selector:
+    app: rag-service
+  ports:
+    - port: 8000
+      targetPort: 8000
+      name: http
+  type: ClusterIP
+
+---
+# Service for gRPC API
+apiVersion: v1
+kind: Service
+metadata:
+  name: rag-service-grpc
+  namespace: suoke
+  labels:
+    app: rag-service
+spec:
+  selector:
+    app: rag-service
+  ports:
+    - port: 50051
+      targetPort: 50051
+      name: grpc
+  type: ClusterIP
+
+---
+# Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rag-service
+  namespace: suoke
+  labels:
+    app: rag-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: rag-service
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: rag-service
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8000"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+        - name: rag-service
+          image: suoke/rag-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+              name: http
+            - containerPort: 50051
+              name: grpc
+          env:
+            - name: MILVUS_HOST
+              value: "milvus-service"
+            - name: MILVUS_PORT
+              value: "19530"
+            - name: REDIS_HOST
+              value: "redis-service"
+            - name: REDIS_PORT
+              value: "6379"
+            - name: CACHE_TYPE
+              value: "redis"
+            - name: EMBEDDING_DEVICE
+              value: "cpu"
+            - name: GENERATOR_TYPE
+              value: "openai"
+            - name: LOG_LEVEL
+              value: "INFO"
+            - name: ENV
+              value: "production"
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: rag-service-secrets
+                  key: OPENAI_API_KEY
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rag-service-secrets
+                  key: REDIS_PASSWORD
+          volumeMounts:
+            - name: config-volume
+              mountPath: /app/config
+            - name: data-volume
+              mountPath: /app/data
+            - name: logs-volume
+              mountPath: /app/logs
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "1Gi"
+            limits:
+              cpu: "2"
+              memory: "4Gi"
+          livenessProbe:
+            httpGet:
+              path: /api/v1/health
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /api/v1/health
+              port: 8000
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 2
+      volumes:
+        - name: config-volume
+          configMap:
+            name: rag-service-config
+        - name: data-volume
+          persistentVolumeClaim:
+            claimName: rag-service-data
+        - name: logs-volume
+          persistentVolumeClaim:
+            claimName: rag-service-logs
+
+---
+# PVC for Data
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: rag-service-data
+  namespace: suoke
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: standard
+
+---
+# PVC for Logs
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: rag-service-logs
+  namespace: suoke
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: standard
+
+---
+# HorizontalPodAutoscaler
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: rag-service-hpa
+  namespace: suoke
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: rag-service
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+        - type: Percent
+          value: 25
+          periodSeconds: 60
+    scaleUp:
+      stabilizationWindowSeconds: 0
+      policies:
+        - type: Percent
+          value: 50
+          periodSeconds: 30
+
+---
+# Ingress for REST API
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: rag-service-ingress
+  namespace: suoke
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+    - hosts:
+        - rag-api.suokelife.com
+      secretName: rag-tls-secret
+  rules:
+    - host: rag-api.suokelife.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: rag-service-rest
+                port:
+                  number: 8000 

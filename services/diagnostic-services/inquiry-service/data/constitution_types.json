@@ -1,0 +1,56 @@
+{
+  "constitution_types": [
+    {
+      "name": "平和质",
+      "code": "BALANCED",
+      "description": "平和体质是相对于偏颇体质而言的一种正常体质。",
+      "characteristics": [
+        "面色润泽",
+        "精力充沛",
+        "睡眠良好",
+        "适应能力强",
+        "体形适中"
+      ],
+      "common_patterns": []
+    },
+    {
+      "name": "气虚质",
+      "code": "QI_DEFICIENCY",
+      "description": "气虚体质是以元气不足为主的体质。",
+      "characteristics": [
+        "疲乏无力",
+        "言语低弱",
+        "气短自汗",
+        "易感冒",
+        "舌淡苔薄"
+      ],
+      "common_patterns": ["气虚证"]
+    },
+    {
+      "name": "阳虚质",
+      "code": "YANG_DEFICIENCY",
+      "description": "阳虚体质是以阳气亏虚，形寒为主的体质。",
+      "characteristics": [
+        "畏寒肢冷",
+        "面色苍白",
+        "喜温喜按",
+        "舌淡胖嫩",
+        "脉沉迟"
+      ],
+      "common_patterns": ["阳虚证"]
+    },
+    {
+      "name": "阴虚质",
+      "code": "YIN_DEFICIENCY",
+      "description": "阴虚体质是以阴液亏少，形热为主的体质。",
+      "characteristics": [
+        "手足心热",
+        "口干咽燥",
+        "五心烦热",
+        "舌红少苔",
+        "脉细数"
+      ],
+      "common_patterns": ["阴虚证"]
+    }
+  ]
+} 

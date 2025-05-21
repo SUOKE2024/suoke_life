@@ -1,0 +1,440 @@
+syntax = "proto3";
+
+package palpation;
+
+option go_package = "github.com/suoke-life/palpation-service/api/grpc";
+
+service PalpationService {
+  // 开始脉诊会话
+  rpc StartPulseSession(StartPulseSessionRequest) returns (StartPulseSessionResponse) {}
+  
+  // 记录脉诊数据
+  rpc RecordPulseData(stream PulseDataPacket) returns (RecordPulseDataResponse) {}
+  
+  // 获取脉象特征
+  rpc ExtractPulseFeatures(ExtractPulseFeaturesRequest) returns (ExtractPulseFeaturesResponse) {}
+  
+  // 分析脉象
+  rpc AnalyzePulse(AnalyzePulseRequest) returns (AnalyzePulseResponse) {}
+  
+  // 腹诊数据分析
+  rpc AnalyzeAbdominalPalpation(AbdominalPalpationRequest) returns (AbdominalPalpationResponse) {}
+  
+  // 皮肤触诊分析
+  rpc AnalyzeSkinPalpation(SkinPalpationRequest) returns (SkinPalpationResponse) {}
+  
+  // 获取综合切诊分析结果
+  rpc GetComprehensivePalpationAnalysis(ComprehensiveAnalysisRequest) returns (ComprehensiveAnalysisResponse) {}
+  
+  // 批量分析历史脉诊数据
+  rpc BatchAnalyzePulseData(BatchAnalysisRequest) returns (BatchAnalysisResponse) {}
+  
+  // 比较多次脉诊数据
+  rpc ComparePulseSessions(ComparePulseSessionsRequest) returns (ComparePulseSessionsResponse) {}
+  
+  // 生成切诊报告
+  rpc GeneratePalpationReport(GeneratePalpationReportRequest) returns (GeneratePalpationReportResponse) {}
+  
+  // 健康检查接口
+  rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse) {}
+}
+
+// 请求响应消息定义
+message StartPulseSessionRequest {
+  string user_id = 1;
+  DeviceInfo device_info = 2;
+  SensorCalibrationData calibration_data = 3;
+}
+
+message StartPulseSessionResponse {
+  string session_id = 1;
+  bool success = 2;
+  string error_message = 3;
+  SamplingConfig sampling_config = 4;
+}
+
+message PulseDataPacket {
+  string session_id = 1;
+  int64 timestamp = 2;
+  repeated float pressure_data = 3;
+  repeated float velocity_data = 4;
+  PulsePosition position = 5;
+  float skin_temperature = 6;
+  float skin_moisture = 7;
+}
+
+message RecordPulseDataResponse {
+  string session_id = 1;
+  int32 packets_received = 2;
+  bool success = 3;
+  string error_message = 4;
+}
+
+message ExtractPulseFeaturesRequest {
+  string session_id = 1;
+  bool include_raw_data = 2;
+}
+
+message ExtractPulseFeaturesResponse {
+  string session_id = 1;
+  repeated PulseFeature features = 2;
+  PulseQualityMetrics quality_metrics = 3;
+  bool success = 4;
+  string error_message = 5;
+}
+
+message AnalyzePulseRequest {
+  string session_id = 1;
+  string user_id = 2;
+  bool include_detailed_analysis = 3;
+  AnalysisOptions options = 4;
+}
+
+message AnalyzePulseResponse {
+  string session_id = 1;
+  repeated PulseWaveType pulse_types = 2;
+  repeated TCMPulsePattern tcm_patterns = 3;
+  repeated OrganCondition organ_conditions = 4;
+  string analysis_summary = 5;
+  float confidence_score = 6;
+  bool success = 7;
+  string error_message = 8;
+}
+
+message AbdominalPalpationRequest {
+  string user_id = 1;
+  repeated AbdominalRegionData regions = 2;
+  bool include_detailed_analysis = 3;
+}
+
+message AbdominalPalpationResponse {
+  repeated AbdominalFinding findings = 1;
+  string analysis_summary = 2;
+  bool success = 3;
+  string error_message = 4;
+}
+
+message SkinPalpationRequest {
+  string user_id = 1;
+  repeated SkinRegionData regions = 2;
+}
+
+message SkinPalpationResponse {
+  repeated SkinFinding findings = 1;
+  string analysis_summary = 2;
+  bool success = 3;
+  string error_message = 4;
+}
+
+message ComprehensiveAnalysisRequest {
+  string user_id = 1;
+  string pulse_session_id = 2;
+  bool include_abdominal = 3;
+  bool include_skin = 4;
+}
+
+message ComprehensiveAnalysisResponse {
+  string analysis_id = 1;
+  PalpationOverview overview = 2;
+  repeated TCMPattern tcm_patterns = 3;
+  repeated HealthAlert health_alerts = 4;
+  string summary = 5;
+  bool success = 6;
+  string error_message = 7;
+}
+
+message BatchAnalysisRequest {
+  string user_id = 1;
+  repeated string session_ids = 2;
+  AnalysisTimeframe timeframe = 3;
+}
+
+message BatchAnalysisResponse {
+  repeated PulseAnalysisSummary analysis_summaries = 1;
+  TrendAnalysis trend_analysis = 2;
+  bool success = 3;
+  string error_message = 4;
+}
+
+message ComparePulseSessionsRequest {
+  string user_id = 1;
+  string baseline_session_id = 2;
+  string comparison_session_id = 3;
+}
+
+message ComparePulseSessionsResponse {
+  ComparisonResult comparison = 1;
+  bool success = 2;
+  string error_message = 3;
+}
+
+message GeneratePalpationReportRequest {
+  string user_id = 1;
+  string analysis_id = 2;
+  ReportFormat format = 3;
+  bool include_recommendations = 4;
+}
+
+message GeneratePalpationReportResponse {
+  bytes report_data = 1;
+  string report_url = 2;
+  bool success = 3;
+  string error_message = 4;
+}
+
+// 支持类型定义
+enum PulsePosition {
+  UNKNOWN_POSITION = 0;
+  CUN_LEFT = 1;  // 寸关尺三部位
+  GUAN_LEFT = 2;
+  CHI_LEFT = 3;
+  CUN_RIGHT = 4;
+  GUAN_RIGHT = 5;
+  CHI_RIGHT = 6;
+}
+
+enum PulseWaveType {
+  UNKNOWN_WAVE = 0;
+  FLOATING = 1;   // 浮脉
+  SUNKEN = 2;     // 沉脉
+  SLOW = 3;       // 迟脉
+  RAPID = 4;      // 数脉
+  SLIPPERY = 5;   // 滑脉
+  ROUGH = 6;      // 涩脉
+  WIRY = 7;       // 弦脉
+  MODERATE = 8;   // 和脉
+  FAINT = 9;      // 微脉
+  SURGING = 10;   // 洪脉
+  TIGHT = 11;     // 紧脉
+  EMPTY = 12;     // 虚脉
+  LEATHER = 13;   // 革脉
+  WEAK = 14;      // 弱脉
+  SCATTERED = 15; // 散脉
+  INTERMITTENT = 16; // 代脉
+  BOUND = 17;     // 结脉
+  HASTY = 18;     // 促脉
+  HIDDEN = 19;    // 伏脉
+  LONG = 20;      // 长脉
+  SHORT = 21;     // 短脉
+  THREADY = 22;   // 细脉
+  SOFT = 23;      // 软脉
+  REGULARLY_INTERMITTENT = 24; // 结脉
+  IRREGULARLY_INTERMITTENT = 25; // 代脉
+}
+
+enum ReportFormat {
+  PDF = 0;
+  HTML = 1;
+  JSON = 2;
+}
+
+message DeviceInfo {
+  string device_id = 1;
+  string model = 2;
+  string firmware_version = 3;
+  repeated string sensor_types = 4;
+}
+
+message SensorCalibrationData {
+  repeated float calibration_values = 1;
+  int64 calibration_timestamp = 2;
+  string calibration_operator = 3;
+}
+
+message SamplingConfig {
+  int32 sampling_rate = 1;
+  int32 sampling_duration = 2;
+  repeated string required_positions = 3;
+  int32 minimum_pressure = 4;
+  int32 maximum_pressure = 5;
+}
+
+message PulseFeature {
+  string feature_name = 1;
+  float feature_value = 2;
+  string feature_description = 3;
+  PulsePosition position = 4;
+}
+
+message PulseQualityMetrics {
+  float signal_quality = 1;
+  float noise_level = 2;
+  bool is_valid = 3;
+  string quality_issues = 4;
+}
+
+message AnalysisOptions {
+  bool use_tcm_model = 1;
+  bool use_western_model = 2;
+  string analysis_depth = 3;
+  repeated string specific_conditions = 4;
+}
+
+message TCMPulsePattern {
+  string pattern_name = 1;
+  float confidence = 2;
+  string description = 3;
+  repeated string related_conditions = 4;
+}
+
+message OrganCondition {
+  string organ_name = 1;
+  string condition = 2;
+  float severity = 3;
+  string description = 4;
+}
+
+message AbdominalRegionData {
+  string region_id = 1;
+  string region_name = 2;
+  float tenderness_level = 3;
+  float tension_level = 4;
+  bool has_mass = 5;
+  string texture_description = 6;
+  string comments = 7;
+}
+
+message AbdominalFinding {
+  string region_id = 1;
+  string finding_type = 2;
+  string description = 3;
+  float confidence = 4;
+  repeated string potential_causes = 5;
+}
+
+message SkinRegionData {
+  string region_id = 1;
+  string region_name = 2;
+  float moisture_level = 3;
+  float elasticity = 4;
+  string texture = 5;
+  float temperature = 6;
+  string color = 7;
+}
+
+message SkinFinding {
+  string region_id = 1;
+  string finding_type = 2;
+  string description = 3;
+  repeated string related_conditions = 4;
+}
+
+message PalpationOverview {
+  PulseOverview pulse = 1;
+  AbdominalOverview abdominal = 2;
+  SkinOverview skin = 3;
+  string general_condition = 4;
+}
+
+message PulseOverview {
+  string dominant_pulse_type = 1;
+  string pulse_quality = 2;
+  string rhythm_description = 3;
+  repeated string notable_features = 4;
+}
+
+message AbdominalOverview {
+  repeated string notable_regions = 1;
+  string overall_condition = 2;
+}
+
+message SkinOverview {
+  string overall_moisture = 1;
+  string overall_elasticity = 2;
+  string overall_temperature = 3;
+  repeated string notable_regions = 4;
+}
+
+message TCMPattern {
+  string pattern_name = 1;
+  string element = 2;
+  string nature = 3;
+  float confidence = 4;
+  string description = 5;
+  repeated string supporting_findings = 6;
+}
+
+message HealthAlert {
+  string alert_type = 1;
+  string description = 2;
+  float severity = 3;
+  string recommendation = 4;
+  bool requires_immediate_attention = 5;
+}
+
+message AnalysisTimeframe {
+  int64 start_timestamp = 1;
+  int64 end_timestamp = 2;
+  string timeframe_type = 3;
+}
+
+message PulseAnalysisSummary {
+  string session_id = 1;
+  int64 timestamp = 2;
+  repeated string dominant_pulse_types = 3;
+  repeated string main_patterns = 4;
+  string summary = 5;
+}
+
+message TrendAnalysis {
+  repeated string improving_aspects = 1;
+  repeated string worsening_aspects = 2;
+  repeated string stable_aspects = 3;
+  string overall_trend = 4;
+}
+
+message ComparisonResult {
+  repeated ChangedFeature changed_features = 1;
+  repeated string new_patterns = 2;
+  repeated string resolved_patterns = 3;
+  repeated string persisting_patterns = 4;
+  string comparison_summary = 5;
+}
+
+message ChangedFeature {
+  string feature_name = 1;
+  float baseline_value = 2;
+  float current_value = 3;
+  float change_percentage = 4;
+  string change_significance = 5;
+}
+
+// 健康检查请求
+message HealthCheckRequest {
+  // 可选的检查级别
+  // MINIMAL: 仅检查服务是否运行
+  // BASIC: 检查关键依赖是否可用 (数据库)
+  // FULL: 全面检查所有集成点
+  enum HealthCheckLevel {
+    MINIMAL = 0;
+    BASIC = 1;
+    FULL = 2;
+  }
+  
+  HealthCheckLevel level = 1; 
+}
+
+// 健康检查响应
+message HealthCheckResponse {
+  // 服务总体健康状态
+  enum ServiceStatus {
+    UNKNOWN = 0;
+    SERVING = 1;
+    NOT_SERVING = 2;
+    SERVICE_UNKNOWN = 3;
+  }
+  
+  ServiceStatus status = 1;
+  
+  // 各组件健康状态
+  message ComponentHealth {
+    string component_name = 1;
+    ServiceStatus status = 2;
+    string details = 3;
+    int64 response_time_ms = 4;
+  }
+  
+  repeated ComponentHealth components = 2;
+  string version = 3;
+  int64 timestamp = 4;
+} 

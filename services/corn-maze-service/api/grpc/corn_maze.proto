@@ -1,0 +1,222 @@
+syntax = "proto3";
+
+package cornmaze;
+
+option go_package = "github.com/suoke-life/corn-maze-service/api/grpc";
+
+service CornMazeService {
+  // 创建新迷宫
+  rpc CreateMaze(CreateMazeRequest) returns (MazeResponse);
+  
+  // 获取迷宫信息
+  rpc GetMaze(GetMazeRequest) returns (MazeResponse);
+  
+  // 用户在迷宫中移动
+  rpc MoveInMaze(MoveRequest) returns (MoveResponse);
+  
+  // 获取用户在迷宫中的进度
+  rpc GetUserProgress(UserProgressRequest) returns (UserProgressResponse);
+  
+  // 获取可用的迷宫模板
+  rpc ListMazeTemplates(ListMazeTemplatesRequest) returns (ListMazeTemplatesResponse);
+  
+  // 记录用户完成迷宫挑战
+  rpc RecordMazeCompletion(RecordMazeCompletionRequest) returns (RecordMazeCompletionResponse);
+  
+  // 获取健康知识节点
+  rpc GetKnowledgeNode(KnowledgeNodeRequest) returns (KnowledgeNodeResponse);
+}
+
+// 创建迷宫请求
+message CreateMazeRequest {
+  string user_id = 1;
+  string maze_type = 2;  // 迷宫类型：四季养生、五行平衡、经络调理等
+  int32 difficulty = 3;  // 难度级别：1-5
+  map<string, string> health_attributes = 4;  // 用户健康属性
+  bool use_template = 5;  // 是否使用模板
+  string template_id = 6;  // 模板ID（如果使用模板）
+}
+
+// 获取迷宫请求
+message GetMazeRequest {
+  string maze_id = 1;
+  string user_id = 2;
+}
+
+// 迷宫响应
+message MazeResponse {
+  string maze_id = 1;
+  string maze_type = 2;
+  int32 size_x = 3;
+  int32 size_y = 4;
+  repeated MazeCell cells = 5;
+  Position start_position = 6;
+  Position goal_position = 7;
+  repeated KnowledgeNode knowledge_nodes = 8;
+  repeated Challenge challenges = 9;
+  string created_at = 10;
+  int32 difficulty = 11;
+  string status = 12;  // 生成中、可用、已完成等
+}
+
+// 迷宫单元格
+message MazeCell {
+  int32 x = 1;
+  int32 y = 2;
+  CellType type = 3;
+  bool north_wall = 4;
+  bool east_wall = 5;
+  bool south_wall = 6;
+  bool west_wall = 7;
+  string cell_id = 8;
+  string content_id = 9;  // 引用知识点或挑战
+}
+
+// 单元格类型
+enum CellType {
+  EMPTY = 0;
+  PATH = 1;
+  WALL = 2;
+  START = 3;
+  GOAL = 4;
+  KNOWLEDGE = 5;
+  CHALLENGE = 6;
+  REWARD = 7;
+}
+
+// 位置
+message Position {
+  int32 x = 1;
+  int32 y = 2;
+}
+
+// 移动请求
+message MoveRequest {
+  string maze_id = 1;
+  string user_id = 2;
+  Direction direction = 3;
+}
+
+// 方向
+enum Direction {
+  NORTH = 0;
+  EAST = 1;
+  SOUTH = 2;
+  WEST = 3;
+}
+
+// 移动响应
+message MoveResponse {
+  bool success = 1;
+  Position new_position = 2;
+  string event_type = 3;  // NONE, KNOWLEDGE, CHALLENGE, GOAL等
+  string event_id = 4;    // 如果触发了事件，事件的ID
+  string message = 5;     // 事件描述或错误信息
+}
+
+// 用户进度请求
+message UserProgressRequest {
+  string user_id = 1;
+  string maze_id = 2;
+}
+
+// 用户进度响应
+message UserProgressResponse {
+  string user_id = 1;
+  string maze_id = 2;
+  Position current_position = 3;
+  repeated string visited_cells = 4;
+  repeated string completed_challenges = 5;
+  repeated string acquired_knowledge = 6;
+  int32 completion_percentage = 7;
+  string status = 8;  // 进行中、已完成等
+  int32 steps_taken = 9;
+  string start_time = 10;
+  string last_active_time = 11;
+}
+
+// 知识节点
+message KnowledgeNode {
+  string node_id = 1;
+  string title = 2;
+  string content = 3;
+  string category = 4;  // 四季养生、五行平衡、经络调理等
+  string difficulty_level = 5;
+  repeated string related_tags = 6;
+}
+
+// 挑战
+message Challenge {
+  string challenge_id = 1;
+  string title = 2;
+  string description = 3;
+  string type = 4;  // 选择题、配对题、排序题等
+  string difficulty_level = 5;
+  string reward_description = 6;
+}
+
+// 知识节点请求
+message KnowledgeNodeRequest {
+  string node_id = 1;
+}
+
+// 知识节点响应
+message KnowledgeNodeResponse {
+  KnowledgeNode node = 1;
+}
+
+// 迷宫模板列表请求
+message ListMazeTemplatesRequest {
+  string maze_type = 1;
+  int32 difficulty = 2;
+  int32 page = 3;
+  int32 page_size = 4;
+}
+
+// 迷宫模板列表响应
+message ListMazeTemplatesResponse {
+  repeated MazeTemplate templates = 1;
+  int32 total = 2;
+}
+
+// 迷宫模板
+message MazeTemplate {
+  string template_id = 1;
+  string name = 2;
+  string description = 3;
+  string maze_type = 4;
+  int32 difficulty = 5;
+  string preview_image_url = 6;
+  int32 size_x = 7;
+  int32 size_y = 8;
+  int32 knowledge_node_count = 9;
+  int32 challenge_count = 10;
+}
+
+// 记录迷宫完成请求
+message RecordMazeCompletionRequest {
+  string user_id = 1;
+  string maze_id = 2;
+  int32 steps_taken = 3;
+  int32 time_spent_seconds = 4;
+  int32 knowledge_nodes_discovered = 5;
+  int32 challenges_completed = 6;
+}
+
+// 记录迷宫完成响应
+message RecordMazeCompletionResponse {
+  bool success = 1;
+  string completion_id = 2;
+  int32 points_earned = 3;
+  repeated Reward rewards = 4;
+  string message = 5;
+}
+
+// 奖励
+message Reward {
+  string reward_id = 1;
+  string reward_type = 2;  // 经验值、虚拟物品、成就等
+  string name = 3;
+  string description = 4;
+  int32 value = 5;
+}

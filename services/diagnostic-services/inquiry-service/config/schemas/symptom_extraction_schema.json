@@ -1,0 +1,98 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["symptoms", "confidence_score"],
+  "properties": {
+    "symptoms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["symptom_name", "severity", "confidence"],
+        "properties": {
+          "symptom_name": {
+            "type": "string",
+            "description": "症状名称"
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["MILD", "MODERATE", "SEVERE", "EXTREME"],
+            "description": "症状严重程度"
+          },
+          "onset_time": {
+            "type": "integer",
+            "description": "症状开始时间戳(秒)"
+          },
+          "duration": {
+            "type": "integer",
+            "description": "症状持续时间(秒)"
+          },
+          "description": {
+            "type": "string",
+            "description": "症状的具体描述"
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "症状识别的置信度"
+          }
+        }
+      }
+    },
+    "body_locations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["location_name", "associated_symptoms"],
+        "properties": {
+          "location_name": {
+            "type": "string",
+            "description": "身体部位名称"
+          },
+          "associated_symptoms": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "与该部位相关的症状列表"
+          },
+          "side": {
+            "type": "string",
+            "enum": ["left", "right", "central", "bilateral"],
+            "description": "身体部位的侧别"
+          }
+        }
+      }
+    },
+    "temporal_factors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["factor_type", "description"],
+        "properties": {
+          "factor_type": {
+            "type": "string",
+            "description": "时间因素类型，如'diurnal'(日间),'seasonal'(季节性),'posture'(姿势相关)等"
+          },
+          "description": {
+            "type": "string",
+            "description": "时间因素的具体描述"
+          },
+          "symptoms_affected": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "受该时间因素影响的症状列表"
+          }
+        }
+      }
+    },
+    "confidence_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "整体提取结果的置信度"
+    }
+  }
+} 

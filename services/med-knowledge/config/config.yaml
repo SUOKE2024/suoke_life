@@ -1,0 +1,91 @@
+server:
+  port: 8080
+  host: "0.0.0.0"
+  timeout: 30 # 请求超时时间（秒）
+  debug: true # 开发环境开启调试模式
+  max_request_size: 10485760 # 10MB
+  allowed_origins:
+    - "*"
+
+database:
+  neo4j:
+    uri: "bolt://localhost:7687"
+    username: "neo4j"
+    password: "suoke_password"
+    max_connections: 50
+    connection_timeout: 5 # 连接超时时间（秒）
+    retry:
+      max_attempts: 3
+      backoff: "exponential" # 指数退避策略
+  
+logging:
+  level: "debug" # debug, info, warning, error, fatal
+  format: "json" # json, text
+  output: "stdout" # stdout, file
+  file_path: "/var/log/med-knowledge/app.log"
+
+security:
+  jwt:
+    secret: "suoke_med_knowledge_secret_key"
+    expiry: 86400 # 24小时过期
+  api_keys:
+    - name: "xiaoai-service"
+      key: "api_key_xiaoai_service"
+      roles: ["read", "write"]
+    - name: "xiaoke-service" 
+      key: "api_key_xiaoke_service"
+      roles: ["read"]
+    - name: "laoke-service"
+      key: "api_key_laoke_service"
+      roles: ["read"]
+    - name: "soer-service"
+      key: "api_key_soer_service"
+      roles: ["read"]
+
+cache:
+  redis:
+    enabled: true
+    host: "redis"
+    port: 6379
+    password: ""
+    db: 0
+    ttl: 3600 # 默认缓存过期时间（秒）
+
+tracing:
+  enabled: true
+  jaeger:
+    host: "jaeger"
+    port: 6831
+    service_name: "med-knowledge"
+
+metrics:
+  enabled: true
+  prometheus:
+    port: 9090
+    path: "/metrics"
+
+data_import:
+  sources:
+    - name: "constitution"
+      path: "/data/constitutions.json"
+    - name: "symptom"
+      path: "/data/symptoms.json"
+    - name: "acupoint"
+      path: "/data/acupoints.json"
+    - name: "herb"
+      path: "/data/herbs.json"
+    - name: "syndrome"
+      path: "/data/syndromes.json"
+  schedule:
+    enabled: false
+    cron: "0 0 * * 0" # 每周日0点运行
+
+services:
+  rag:
+    host: "rag-service"
+    port: 8080
+    timeout: 10
+  xiaoai:
+    host: "xiaoai-service"
+    port: 8080
+    timeout: 10 

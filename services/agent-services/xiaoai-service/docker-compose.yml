@@ -1,0 +1,159 @@
+version: '3.8'
+
+services:
+  xiaoai-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: suoke/xiaoai-service:latest
+    container_name: xiaoai-service
+    restart: unless-stopped
+    ports:
+      - "50053:50053"  # gRPC 服务端口
+      - "51053:51053"  # Prometheus 指标端口
+    volumes:
+      - ./config:/app/config
+      - ./logs:/app/logs
+      - ./data:/app/data
+    env_file:
+      - .env
+    environment:
+      - SERVICE_ENV=production
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-xiaoaipassword}
+      - MONGO_PASSWORD=${MONGO_PASSWORD:-xiaoaipassword}
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-xiaoaipassword}
+      - LLM_API_KEY=${LLM_API_KEY:-}
+    depends_on:
+      - mongodb
+      - postgres
+      - redis
+    networks:
+      - suoke-network
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+        reservations:
+          cpus: '1'
+          memory: 2G
+
+  # MongoDB 数据库
+  mongodb:
+    image: mongo:6.0
+    container_name: xiaoai-mongodb
+    restart: unless-stopped
+    ports:
+      - "27027:27017"  # 映射到非标准端口避免冲突
+    volumes:
+      - mongodb_data:/data/db
+      - ./config/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ADMIN_PASSWORD:-adminpassword}
+      - MONGO_INITDB_DATABASE=xiaoai_db
+    command: ["--auth", "--bind_ip_all"]
+    networks:
+      - suoke-network
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+
+  # PostgreSQL 数据库
+  postgres:
+    image: postgres:15
+    container_name: xiaoai-postgres
+    restart: unless-stopped
+    ports:
+      - "5442:5432"  # 映射到非标准端口避免冲突
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./config/postgres-init.sql:/docker-entrypoint-initdb.d/postgres-init.sql:ro
+    environment:
+      - POSTGRES_USER=xiaoai
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-xiaoaipassword}
+      - POSTGRES_DB=xiaoai_db
+    networks:
+      - suoke-network
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+
+  # Redis 缓存
+  redis:
+    image: redis:7.0-alpine
+    container_name: xiaoai-redis
+    restart: unless-stopped
+    ports:
+      - "6389:6379"  # 映射到非标准端口避免冲突
+    volumes:
+      - redis_data:/data
+      - ./config/redis.conf:/usr/local/etc/redis/redis.conf:ro
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf", "--requirepass", "${REDIS_PASSWORD:-xiaoaipassword}"]
+    networks:
+      - suoke-network
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+
+  # Prometheus 监控
+  prometheus:
+    image: prom/prometheus:v2.45.0
+    container_name: xiaoai-prometheus
+    restart: unless-stopped
+    ports:
+      - "9097:9090"  # 映射到非标准端口避免冲突
+    volumes:
+      - ./deploy/prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    networks:
+      - suoke-network
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+
+  # Grafana 仪表盘
+  grafana:
+    image: grafana/grafana:10.0.3
+    container_name: xiaoai-grafana
+    restart: unless-stopped
+    ports:
+      - "3007:3000"  # 映射到非标准端口避免冲突
+    volumes:
+      - ./deploy/grafana/provisioning:/etc/grafana/provisioning
+      - ./deploy/grafana/dashboards:/var/lib/grafana/dashboards
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
+      - GF_INSTALL_PLUGINS=grafana-piechart-panel,grafana-clock-panel
+    networks:
+      - suoke-network
+    depends_on:
+      - prometheus
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
+networks:
+  suoke-network:
+    name: suoke-network
+    external: true
+
+volumes:
+  mongodb_data:
+  postgres_data:
+  redis_data:
+  prometheus_data:
+  grafana_data:

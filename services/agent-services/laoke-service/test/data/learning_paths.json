@@ -1,0 +1,137 @@
+{
+  "paths": [
+    {
+      "path_id": "path-001",
+      "modules": [
+        {
+          "id": "module-001",
+          "title": "中医基础知识",
+          "courses": ["course-001", "course-003"],
+          "duration": 9000,
+          "order": 1,
+          "description": "掌握中医基础理论和中药学基础知识"
+        },
+        {
+          "id": "module-002",
+          "title": "健康生活实践",
+          "courses": ["course-004", "course-005"],
+          "duration": 9000,
+          "order": 2,
+          "description": "学习四季养生和食疗基础知识"
+        }
+      ],
+      "estimated_duration": 18000,
+      "difficulty": "beginner",
+      "description": "适合中医初学者的基础入门学习路径，涵盖中医基础理论和健康生活实践",
+      "goal": "入门中医学习"
+    },
+    {
+      "path_id": "path-002",
+      "modules": [
+        {
+          "id": "module-003",
+          "title": "针灸基础",
+          "courses": ["course-001", "course-002"],
+          "duration": 10800,
+          "order": 1,
+          "description": "学习中医基础理论和针灸入门知识"
+        },
+        {
+          "id": "module-004",
+          "title": "中医诊断技能",
+          "courses": ["course-007"],
+          "duration": 7200,
+          "order": 2,
+          "description": "掌握中医四诊方法和基本诊断技能"
+        }
+      ],
+      "estimated_duration": 18000,
+      "difficulty": "intermediate",
+      "description": "针对有一定中医基础知识的学习者，提供针灸和诊断技能的学习路径",
+      "goal": "掌握针灸基础技能"
+    },
+    {
+      "path_id": "path-003",
+      "modules": [
+        {
+          "id": "module-005",
+          "title": "经络穴位深入研究",
+          "courses": ["course-008"],
+          "duration": 9000,
+          "order": 1,
+          "description": "深入学习经络穴位理论与临床应用"
+        },
+        {
+          "id": "module-006",
+          "title": "中医经典研读",
+          "courses": ["course-010"],
+          "duration": 12600,
+          "order": 2,
+          "description": "系统研读《黄帝内经》，理解中医学理论体系"
+        }
+      ],
+      "estimated_duration": 21600,
+      "difficulty": "advanced",
+      "description": "适合中医进阶学习者的高级学习路径，深入经络穴位理论和中医经典研读",
+      "goal": "深入经络穴位理论研究"
+    },
+    {
+      "path_id": "path-004",
+      "modules": [
+        {
+          "id": "module-007",
+          "title": "养生基础",
+          "courses": ["course-004", "course-005", "course-009"],
+          "duration": 12600,
+          "order": 1,
+          "description": "学习四季养生、食疗和冥想技巧"
+        },
+        {
+          "id": "module-008",
+          "title": "太极导引",
+          "courses": ["course-006"],
+          "duration": 6000,
+          "order": 2,
+          "description": "学习太极拳养生方法"
+        }
+      ],
+      "estimated_duration": 18600,
+      "difficulty": "beginner",
+      "description": "专注于传统养生方法的学习路径，包括四季养生、食疗、冥想和太极拳",
+      "goal": "掌握传统养生方法"
+    },
+    {
+      "path_id": "path-005",
+      "modules": [
+        {
+          "id": "module-009",
+          "title": "中医基础理论",
+          "courses": ["course-001"],
+          "duration": 3600,
+          "order": 1,
+          "description": "了解中医的基本理论和核心概念"
+        },
+        {
+          "id": "module-010",
+          "title": "中药学基础",
+          "courses": ["course-003"],
+          "duration": 5400,
+          "order": 2,
+          "description": "学习常用中药的性能、功效及配伍原则"
+        },
+        {
+          "id": "module-011",
+          "title": "中医食疗",
+          "courses": ["course-005"],
+          "duration": 4200,
+          "order": 3,
+          "description": "了解食物的性味归经，掌握常见的食疗方法"
+        }
+      ],
+      "estimated_duration": 13200,
+      "difficulty": "beginner",
+      "description": "面向家庭健康管理的中医基础学习路径，重点关注中医理论、中药和食疗知识",
+      "goal": "学习家庭健康管理知识"
+    }
+  ]
+} 

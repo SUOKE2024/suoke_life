@@ -1,0 +1,288 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: accessibility-service
+  labels:
+    app: accessibility-service
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: accessibility-service
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: accessibility-service
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+      - name: accessibility-service
+        image: ghcr.io/suoke2024/accessibility-service:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 50051
+          name: grpc
+        - containerPort: 9090
+          name: metrics
+        resources:
+          requests:
+            cpu: 500m
+            memory: 512Mi
+          limits:
+            cpu: 2000m
+            memory: 2Gi
+        env:
+        - name: LOG_LEVEL
+          value: "INFO"
+        - name: ENVIRONMENT
+          value: "production"
+        - name: SERVICE_NAME
+          value: "accessibility-service"
+        - name: GRPC_SERVER_PORT
+          value: "50051"
+        - name: METRICS_PORT
+          value: "9090"
+        - name: HEALTH_DATA_API_URL
+          value: "http://health-data-service:8080/api/health-data"
+        - name: USER_API_URL
+          value: "http://user-service:8080/api/users"
+        - name: ALERT_API_URL
+          value: "http://alert-service:8080/api/alerts"
+        - name: AGENT_API_BASE_URL
+          value: "http://api-gateway:8080/api/agents"
+        - name: REDIS_HOST
+          value: "redis-master"
+        - name: REDIS_PORT
+          value: "6379"
+        - name: DATA_COLLECTION_ENABLED
+          value: "true"
+        - name: COLLECTION_INTERVAL_SECONDS
+          value: "300"
+        - name: UPLOAD_INTERVAL_SECONDS
+          value: "3600"
+        - name: BATTERY_OPTIMIZATION_ENABLED
+          value: "true"
+        - name: LOW_BATTERY_THRESHOLD
+          value: "20"
+        - name: COLLECT_DURING_SLEEP
+          value: "true"
+        - name: STORAGE_POLICY
+          value: "ENCRYPT_AND_COMPRESS"
+        - name: DATA_RETENTION_DAYS
+          value: "30"
+        - name: ENCRYPT_DATA
+          value: "true"
+        - name: ALERT_ENABLED
+          value: "true"
+        - name: PULSE_WARNING_THRESHOLD
+          value: "100"
+        - name: PULSE_DANGER_THRESHOLD
+          value: "120"
+        - name: PULSE_CRITICAL_THRESHOLD
+          value: "140"
+        - name: PULSE_THRESHOLD_DIRECTION
+          value: "ABOVE"
+        - name: PULSE_SUSTAINED_SECONDS
+          value: "120"
+        - name: TEMPERATURE_WARNING_THRESHOLD
+          value: "37.5"
+        - name: TEMPERATURE_DANGER_THRESHOLD
+          value: "38.5"
+        - name: TEMPERATURE_CRITICAL_THRESHOLD
+          value: "39.5"
+        - name: TEMPERATURE_THRESHOLD_DIRECTION
+          value: "ABOVE"
+        - name: TEMPERATURE_SUSTAINED_SECONDS
+          value: "300"
+        - name: AGENT_NOTIFICATION_ENABLED
+          value: "true"
+        - name: XIAOAI_NOTIFICATION_URL
+          value: "http://xiaoai-service:8080/api/notification"
+        - name: XIAOKE_NOTIFICATION_URL
+          value: "http://xiaoke-service:8080/api/notification"
+        - name: LAOKE_NOTIFICATION_URL
+          value: "http://laoke-service:8080/api/notification"
+        - name: SOER_NOTIFICATION_URL
+          value: "http://soer-service:8080/api/notification"
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config
+        - name: temp-volume
+          mountPath: /app/temp
+        - name: models-volume
+          mountPath: /app/models
+        livenessProbe:
+          exec:
+            command:
+            - python
+            - -c
+            - "import grpc; from suoke.accessibility.v1 import accessibility_pb2_grpc; channel = grpc.insecure_channel('localhost:50051'); stub = accessibility_pb2_grpc.AccessibilityServiceStub(channel); channel.close()"
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - python
+            - -c
+            - "import grpc; from suoke.accessibility.v1 import accessibility_pb2, accessibility_pb2_grpc; channel = grpc.insecure_channel('localhost:50051'); stub = accessibility_pb2_grpc.AccessibilityServiceStub(channel); channel.close()"
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          timeoutSeconds: 3
+        lifecycle:
+          preStop:
+            exec:
+              command:
+              - python
+              - /app/scripts/graceful_shutdown.py
+      volumes:
+      - name: config-volume
+        configMap:
+          name: accessibility-service-config
+      - name: temp-volume
+        emptyDir: {}
+      - name: models-volume
+        persistentVolumeClaim:
+          claimName: models-pvc
+      imagePullSecrets:
+      - name: github-registry
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: accessibility-service-config
+data:
+  config.yaml: |
+    service:
+      name: accessibility-service
+      version: 1.0.0
+      
+    grpc:
+      port: 50051
+      max_workers: 10
+      
+    metrics:
+      port: 9090
+      path: /metrics
+      
+    logging:
+      level: INFO
+      format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+      
+    data_collection:
+      enabled: true
+      default_collection_interval: 300
+      default_upload_interval: 3600
+      battery_optimization: true
+      low_battery_threshold: 20
+      collect_during_sleep: true
+      storage_policy: "ENCRYPT_AND_COMPRESS"
+      data_retention_days: 30
+      encrypt_data: true
+      
+    alert:
+      enabled: true
+      thresholds:
+        pulse:
+          warning: 100
+          danger: 120
+          critical: 140
+          direction: ABOVE
+          sustained_seconds: 120
+        temperature:
+          warning: 37.5
+          danger: 38.5
+          critical: 39.5
+          direction: ABOVE
+          sustained_seconds: 300
+        
+    agent_notification:
+      enabled: true
+      xiaoai_url: "http://xiaoai-service:8080/api/notification"
+      xiaoke_url: "http://xiaoke-service:8080/api/notification"
+      laoke_url: "http://laoke-service:8080/api/notification"
+      soer_url: "http://soer-service:8080/api/notification"
+      
+    redis:
+      host: redis-master
+      port: 6379
+      db: 0
+      password: ""
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: accessibility-service
+  labels:
+    app: accessibility-service
+spec:
+  ports:
+  - port: 50051
+    targetPort: 50051
+    protocol: TCP
+    name: grpc
+  - port: 9090
+    targetPort: 9090
+    protocol: TCP
+    name: metrics
+  selector:
+    app: accessibility-service
+  type: ClusterIP
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: models-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: standard
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: accessibility-service-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: accessibility-service
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+      - type: Pods
+        value: 2
+        periodSeconds: 60
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Pods
+        value: 1
+        periodSeconds: 120 

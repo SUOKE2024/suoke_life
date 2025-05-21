@@ -1,0 +1,355 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway
+  namespace: suoke
+  labels:
+    app: api-gateway
+    component: network
+    part-of: suoke-platform
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: api-gateway
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8000"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+        - name: api-gateway
+          image: ${REGISTRY}/suoke/api-gateway:${TAG}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8000
+          env:
+            - name: CONFIG_FILE
+              value: "/app/config/config.yaml"
+            - name: LOG_LEVEL
+              value: "INFO"
+            - name: ENV
+              value: "production"
+          volumeMounts:
+            - name: config-volume
+              mountPath: /app/config
+            - name: logs-volume
+              mountPath: /app/logs
+          resources:
+            requests:
+              cpu: 200m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 60
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
+          startupProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 2
+            successThreshold: 1
+            failureThreshold: 30
+      volumes:
+        - name: config-volume
+          configMap:
+            name: api-gateway-config
+        - name: logs-volume
+          emptyDir: {}
+      terminationGracePeriodSeconds: 30
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-gateway
+  namespace: suoke
+  labels:
+    app: api-gateway
+    part-of: suoke-life-platform
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8000"
+    prometheus.io/path: "/metrics"
+spec:
+  selector:
+    app: api-gateway
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8000
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: api-gateway-ingress
+  namespace: suoke
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "120"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "120"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "120"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+    - hosts:
+        - api.suoke.life
+      secretName: api-gateway-tls
+  rules:
+    - host: api.suoke.life
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: api-gateway
+                port:
+                  name: http
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: api-gateway-hpa
+  namespace: suoke
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: api-gateway
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+        - type: Percent
+          value: 100
+          periodSeconds: 60
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+        - type: Percent
+          value: 10
+          periodSeconds: 60
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: api-gateway-pdb
+  namespace: suoke
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: api-gateway
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-gateway-config
+  namespace: suoke
+data:
+  config.yaml: |
+    server:
+      rest:
+        host: 0.0.0.0
+        port: 8080
+      grpc:
+        host: 0.0.0.0
+        port: 50050
+      production: true
+      debug: false
+
+    middleware:
+      cors:
+        enabled: true
+        allow_origins:
+          - "https://*.suoke.life"
+          - "https://app.suoke.life"
+        allow_methods:
+          - GET
+          - POST
+          - PUT
+          - DELETE
+          - OPTIONS
+          - PATCH
+        allow_headers:
+          - Authorization
+          - Content-Type
+          - X-Request-ID
+        allow_credentials: true
+        max_age: 3600
+      
+      rate_limit:
+        enabled: true
+        limit: 200
+        window: 60
+        strategy: fixed-window
+        by_ip: true
+        by_user: true
+      
+      auth:
+        enabled: true
+        public_paths:
+          - /health
+          - /metrics
+          - /api/auth/login
+          - /api/auth/register
+        jwt:
+          secret_key: "${JWT_SECRET_KEY}"
+          algorithm: HS256
+          expire_minutes: 60
+          refresh_expire_minutes: 1440
+
+    metrics:
+      enabled: true
+      path: /metrics
+
+    timeout: 30.0
+
+    cache:
+      enabled: true
+      type: redis
+      redis_url: "redis://redis:6379/0"
+      ttl: 300
+      max_items: 10000
+      include_headers:
+        - accept-language
+        - content-language
+
+    routes:
+      - name: auth
+        prefix: /api/auth/
+        service: auth-service
+        methods:
+          - GET
+          - POST
+          - PUT
+          - DELETE
+        auth_required: false
+        rewrite_path: "^/api/auth/(.*)$ => /$1"
+        headers:
+          X-Service: auth-service
+
+      - name: user
+        prefix: /api/user/
+        service: user-service
+        methods:
+          - GET
+          - POST
+          - PUT
+          - DELETE
+        auth_required: true
+        rewrite_path: "^/api/user/(.*)$ => /$1"
+        headers:
+          X-Service: user-service
+
+      - name: medical
+        prefix: /api/medical/
+        service: medical-service
+        methods:
+          - GET
+          - POST
+          - PUT
+          - DELETE
+        auth_required: true
+        rewrite_path: "^/api/medical/(.*)$ => /$1"
+        headers:
+          X-Service: medical-service
+
+      - name: xiaoai
+        prefix: /api/xiaoai/
+        service: xiaoai-service
+        methods:
+          - GET
+          - POST
+          - PUT
+          - DELETE
+        auth_required: true
+        rewrite_path: "^/api/xiaoai/(.*)$ => /$1"
+        headers:
+          X-Service: xiaoai-service
+
+      - name: xiaoke
+        prefix: /api/xiaoke/
+        service: xiaoke-service
+        methods:
+          - GET
+          - POST
+          - PUT
+          - DELETE
+        auth_required: true
+        rewrite_path: "^/api/xiaoke/(.*)$ => /$1"
+        headers:
+          X-Service: xiaoke-service
+
+      - name: laoke
+        prefix: /api/laoke/
+        service: laoke-service
+        methods:
+          - GET
+          - POST
+          - PUT
+          - DELETE
+        auth_required: true
+        rewrite_path: "^/api/laoke/(.*)$ => /$1"
+        headers:
+          X-Service: laoke-service
+
+      - name: soer
+        prefix: /api/soer/
+        service: soer-service
+        methods:
+          - GET
+          - POST
+          - PUT
+          - DELETE
+        auth_required: true
+        rewrite_path: "^/api/soer/(.*)$ => /$1"
+        headers:
+          X-Service: soer-service 

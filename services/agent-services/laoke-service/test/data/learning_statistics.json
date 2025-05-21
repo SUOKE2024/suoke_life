@@ -1,0 +1,54 @@
+{
+  "statistics": [
+    {
+      "user_id": "user-001",
+      "courses_started": 6,
+      "courses_completed": 4,
+      "total_learning_time": 43200,
+      "average_completion_rate": 92.5,
+      "learning_streak": 14,
+      "last_active": "2023-12-15T18:30:00Z",
+      "favorite_topics": ["中医基础", "食疗", "四季养生"]
+    },
+    {
+      "user_id": "user-002",
+      "courses_started": 3,
+      "courses_completed": 1,
+      "total_learning_time": 10800,
+      "average_completion_rate": 65.0,
+      "learning_streak": 3,
+      "last_active": "2023-12-14T09:45:00Z",
+      "favorite_topics": ["针灸", "太极"]
+    },
+    {
+      "user_id": "user-003",
+      "courses_started": 10,
+      "courses_completed": 8,
+      "total_learning_time": 72000,
+      "average_completion_rate": 98.2,
+      "learning_streak": 30,
+      "last_active": "2023-12-15T20:15:00Z",
+      "favorite_topics": ["中医基础", "针灸", "中药学", "经络学说", "黄帝内经"]
+    },
+    {
+      "user_id": "user-004",
+      "courses_started": 2,
+      "courses_completed": 0,
+      "total_learning_time": 3600,
+      "average_completion_rate": 45.0,
+      "learning_streak": 0,
+      "last_active": "2023-11-20T14:30:00Z",
+      "favorite_topics": ["中医基础"]
+    },
+    {
+      "user_id": "user-005",
+      "courses_started": 8,
+      "courses_completed": 5,
+      "total_learning_time": 36000,
+      "average_completion_rate": 87.5,
+      "learning_streak": 8,
+      "last_active": "2023-12-15T12:00:00Z",
+      "favorite_topics": ["太极", "冥想", "养生"]
+    }
+  ]
+} 

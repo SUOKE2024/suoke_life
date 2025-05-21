@@ -1,0 +1,99 @@
+# SoKe Life 区块链服务配置
+
+# 服务器配置
+server:
+  port: 50055
+  max_workers: 10
+  max_message_length: 10485760 # 10MB
+
+# 日志配置
+logging:
+  level: INFO
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: logs/blockchain_service.log
+  max_size_mb: 100
+  backup_count: 5
+
+# 区块链网络配置
+blockchain:
+  # 网络类型: ethereum, hyperledger, etc.
+  network_type: ethereum
+  # 区块链节点配置
+  node:
+    endpoint: http://localhost:8545
+    chain_id: 1337 # 本地测试网
+  # 合约地址
+  contracts:
+    health_data: "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f"
+    zkp_verifier: "0x9FBDa871d559710256a2502A2517b794B482Db40"
+    access_control: "0x2C4E8f2D746113d0696cE89B35F0d8bF88E0AEcA"
+  # 钱包配置（用于签名交易）
+  wallet:
+    keystore_path: config/keystore
+    gas_limit: 3000000
+    gas_price_strategy: medium # slow, medium, fast
+
+# 数据库配置
+database:
+  driver: postgresql
+  host: localhost
+  port: 5432
+  username: suokelife
+  password: ${DB_PASSWORD} # 从环境变量加载
+  database: blockchain_service
+  pool_size: 20
+  max_overflow: 10
+  pool_timeout: 30
+
+# 安全配置
+security:
+  encryption_key_path: config/keys/encryption_key.pem
+  jwt:
+    public_key_path: config/keys/jwt_public_key.pem
+    private_key_path: config/keys/jwt_private_key.pem
+    algorithm: RS256
+    access_token_expire_minutes: 30
+
+# 零知识证明配置
+zkp:
+  proving_key_path: config/zkp/proving_key.bin
+  verification_key_path: config/zkp/verification_key.bin
+  supported_circuits:
+    - health_range
+    - age_verification
+    - medication_compatibility
+
+# 服务集成配置
+integrations:
+  user_service:
+    endpoint: localhost:50051
+    timeout_seconds: 5
+  message_bus:
+    host: localhost
+    port: 5672
+    username: guest
+    password: ${MESSAGE_BUS_PASSWORD}
+    exchange: suokelife.events
+    routing_key: blockchain.events
+
+# 指标和监控
+monitoring:
+  # Prometheus指标
+  prometheus:
+    enabled: true
+    port: 9090
+  # 分布式追踪
+  tracing:
+    enabled: true
+    jaeger_endpoint: http://jaeger:14268/api/traces
+    service_name: blockchain-service
+    sample_rate: 0.1
+
+# 缓存配置
+cache:
+  type: redis
+  host: localhost
+  port: 6379
+  db: 0
+  password: ${REDIS_PASSWORD}
+  ttl_seconds: 300 

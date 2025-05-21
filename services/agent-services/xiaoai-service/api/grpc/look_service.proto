@@ -1,0 +1,331 @@
+syntax = "proto3";
+
+package look_service;
+
+option go_package = "github.com/SUOKE2024/suoke_life/look-service/api/grpc";
+
+import "google/protobuf/timestamp.proto";
+
+// 望诊服务 - 负责舌象、面色、形体等图像分析
+service LookService {
+  // 分析图像
+  rpc AnalyzeImage(AnalyzeImageRequest) returns (AnalysisResponse);
+  
+  // 舌象分析
+  rpc AnalyzeTongue(TongueRequest) returns (TongueAnalysisResponse);
+  
+  // 面色分析
+  rpc AnalyzeFace(FaceRequest) returns (FaceAnalysisResponse);
+  
+  // 形体分析
+  rpc AnalyzeBody(BodyRequest) returns (BodyAnalysisResponse);
+  
+  // 健康检查
+  rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse);
+}
+
+// 图像分析请求
+message AnalyzeImageRequest {
+  string user_id = 1;                // 用户ID
+  string session_id = 2;             // 会话ID
+  bytes image_data = 3;              // 图像数据
+  string image_format = 4;           // 图像格式(jpg, png等)
+  enum ImageType {
+    UNKNOWN = 0;
+    TONGUE = 1;
+    FACE = 2;
+    BODY = 3;
+    NAIL = 4;
+    EYE = 5;
+    LIP = 6;
+    SKIN = 7;
+  }
+  ImageType image_type = 5;          // 图像类型
+  bool apply_preprocessing = 6;      // 是否应用预处理
+  bool include_visualization = 7;    // 是否包含可视化结果
+  map<string, string> metadata = 8;  // 元数据
+}
+
+// 舌象分析请求
+message TongueRequest {
+  string user_id = 1;                // 用户ID
+  string session_id = 2;             // 会话ID
+  bytes image_data = 3;              // 舌象图像数据
+  string image_format = 4;           // 图像格式
+  bool apply_preprocessing = 5;      // 是否应用预处理
+  bool include_visualization = 6;    // 是否包含可视化结果
+  map<string, string> metadata = 7;  // 元数据
+}
+
+// 面色分析请求
+message FaceRequest {
+  string user_id = 1;                // 用户ID
+  string session_id = 2;             // 会话ID
+  bytes image_data = 3;              // 面色图像数据
+  string image_format = 4;           // 图像格式
+  bool include_visualization = 5;    // 是否包含可视化结果
+  map<string, string> metadata = 6;  // 元数据
+}
+
+// 形体分析请求
+message BodyRequest {
+  string user_id = 1;                // 用户ID
+  string session_id = 2;             // 会话ID
+  bytes image_data = 3;              // 形体图像数据
+  string image_format = 4;           // 图像格式
+  bool include_detailed_analysis = 5; // 是否包含详细分析
+  map<string, string> metadata = 6;  // 元数据
+}
+
+// 分析响应
+message AnalysisResponse {
+  string diagnosis_id = 1;               // 诊断ID
+  float confidence = 2;                  // 整体置信度
+  repeated Feature features = 3;         // 特征列表
+  
+  oneof analysis_result {
+    TongueAnalysisResult tongue_result = 4;       // 舌象分析结果
+    FaceAnalysisResult face_result = 5;           // 面色分析结果
+    BodyAnalysisResult body_result = 6;           // 形体分析结果
+    EyeAnalysisResult eye_result = 7;             // 眼部分析结果
+    NailAnalysisResult nail_result = 8;           // 指甲分析结果
+    LipAnalysisResult lip_result = 9;             // 唇部分析结果
+    SkinAnalysisResult skin_result = 10;          // 皮肤分析结果
+  }
+  
+  string detailed_result = 11;           // 详细结果（JSON格式）
+  bytes visualization = 12;              // 可视化结果图像
+  int64 timestamp = 13;                  // 时间戳
+}
+
+// 特征
+message Feature {
+  string name = 1;                 // 特征名称
+  string value = 2;                // 特征值
+  float confidence = 3;            // 置信度
+  string category = 4;             // 类别
+  BoundingBox location = 5;        // 位置
+}
+
+// 边界框
+message BoundingBox {
+  float x_min = 1;                  // 左上角x坐标
+  float y_min = 2;                  // 左上角y坐标
+  float x_max = 3;                  // 右下角x坐标
+  float y_max = 4;                  // 右下角y坐标
+}
+
+// 舌象分析结果
+message TongueAnalysisResult {
+  // 舌质特征
+  string tongue_color = 1;               // 舌色
+  string tongue_shape = 2;               // 舌形
+  string tongue_moisture = 3;            // 舌体湿润度
+  string tongue_texture = 4;             // 舌质地
+  bool has_teeth_marks = 5;              // 是否有齿痕
+  bool has_cracks = 6;                   // 是否有裂纹
+  
+  // 舌苔特征
+  string coating_color = 7;              // 苔色
+  string coating_thickness = 8;          // 苔厚薄
+  string coating_distribution = 9;       // 苔分布
+  string coating_texture = 10;           // 苔质地
+  
+  // 舌下络脉
+  string sublingual_vein_color = 11;     // 舌下络脉颜色
+  string sublingual_vein_thickness = 12; // 舌下络脉粗细
+  
+  // 分区分析
+  repeated TongueRegion regions = 13;    // 舌区域分析
+  
+  // 证候与体质相关性
+  repeated SyndromeCorrelation syndrome_correlations = 14; // 证候相关性
+  repeated ConstitutionCorrelation constitution_correlations = 15; // 体质相关性
+}
+
+// 舌区域
+message TongueRegion {
+  enum Region {
+    UNKNOWN = 0;
+    TIP = 1;      // 舌尖
+    CENTER = 2;   // 舌中
+    ROOT = 3;     // 舌根
+    LEFT = 4;     // 舌左
+    RIGHT = 5;    // 舌右
+  }
+  
+  Region region = 1;                     // 区域
+  string color = 2;                      // 颜色
+  string coating_color = 3;              // 苔色
+  string coating_thickness = 4;          // 苔厚薄
+  string abnormality = 5;                // 异常情况
+  repeated string related_organs = 6;    // 相关脏腑
+}
+
+// 面色分析结果
+message FaceAnalysisResult {
+  string overall_complexion = 1;         // 整体面色
+  string facial_expression = 2;          // 面部表情
+  string skin_texture = 3;               // 皮肤质地
+  string skin_moisture = 4;              // 皮肤湿润度
+  string facial_feature = 5;             // 面部特征
+  
+  // 分区分析
+  repeated FaceRegion regions = 6;       // 面部区域分析
+  
+  // 证候与体质相关性
+  repeated SyndromeCorrelation syndrome_correlations = 7; // 证候相关性
+  repeated ConstitutionCorrelation constitution_correlations = 8; // 体质相关性
+}
+
+// 面部区域
+message FaceRegion {
+  enum Region {
+    UNKNOWN = 0;
+    FOREHEAD = 1;   // 额
+    NOSE = 2;       // 鼻
+    LEFT_CHEEK = 3; // 左颊
+    RIGHT_CHEEK = 4; // 右颊
+    CHIN = 5;       // 颏
+    EYES = 6;       // 目
+    LIPS = 7;       // 唇
+  }
+  
+  Region region = 1;                     // 区域
+  string color = 2;                      // 颜色
+  string texture = 3;                    // 质地
+  string abnormality = 4;                // 异常情况
+  repeated string related_organs = 5;    // 相关脏腑
+}
+
+// 形体分析结果
+message BodyAnalysisResult {
+  string body_type = 1;                  // 体型
+  string posture = 2;                    // 姿态
+  float height = 3;                      // 身高(cm)
+  float weight = 4;                      // 体重(kg)
+  float bmi = 5;                         // BMI指数
+  string muscle_condition = 6;           // 肌肉状况
+  string fat_distribution = 7;           // 脂肪分布
+  
+  // 分区分析
+  repeated BodyRegion regions = 8;       // 身体区域分析
+  
+  // 证候与体质相关性
+  repeated SyndromeCorrelation syndrome_correlations = 9; // 证候相关性
+  repeated ConstitutionCorrelation constitution_correlations = 10; // 体质相关性
+}
+
+// 身体区域
+message BodyRegion {
+  enum Region {
+    UNKNOWN = 0;
+    UPPER_BODY = 1;  // 上半身
+    LOWER_BODY = 2;  // 下半身
+    LIMBS = 3;       // 四肢
+    ABDOMEN = 4;     // 腹部
+    BACK = 5;        // 背部
+    CHEST = 6;       // 胸部
+  }
+  
+  Region region = 1;                     // 区域
+  string condition = 2;                  // 状况
+  string abnormality = 3;                // 异常情况
+  repeated string related_organs = 4;    // 相关脏腑
+}
+
+// 眼部分析结果
+message EyeAnalysisResult {
+  string eye_spirit = 1;                 // 神采
+  string sclera_color = 2;               // 眼白颜色
+  string iris_condition = 3;             // 虹膜状况
+  string eye_moisture = 4;               // 眼部湿润度
+  repeated SyndromeCorrelation syndrome_correlations = 5; // 证候相关性
+}
+
+// 指甲分析结果
+message NailAnalysisResult {
+  string nail_color = 1;                 // 指甲颜色
+  string nail_shape = 2;                 // 指甲形状
+  string nail_texture = 3;               // 指甲质地
+  bool has_lines = 4;                    // 是否有纹路
+  repeated SyndromeCorrelation syndrome_correlations = 5; // 证候相关性
+}
+
+// 唇部分析结果
+message LipAnalysisResult {
+  string lip_color = 1;                  // 唇色
+  string lip_moisture = 2;               // 唇部湿润度
+  string lip_texture = 3;                // 唇质地
+  repeated SyndromeCorrelation syndrome_correlations = 4; // 证候相关性
+}
+
+// 皮肤分析结果
+message SkinAnalysisResult {
+  string skin_color = 1;                 // 肤色
+  string skin_moisture = 2;              // 皮肤湿润度
+  string skin_texture = 3;               // 皮肤质地
+  string skin_elasticity = 4;            // 皮肤弹性
+  repeated SyndromeCorrelation syndrome_correlations = 5; // 证候相关性
+}
+
+// 证候相关性
+message SyndromeCorrelation {
+  string syndrome_name = 1;              // 证型名称
+  float correlation = 2;                 // 相关度(0-1)
+  string rationale = 3;                  // 相关理由
+}
+
+// 体质相关性
+message ConstitutionCorrelation {
+  string constitution_type = 1;          // 体质类型
+  float correlation = 2;                 // 相关度(0-1)
+  string rationale = 3;                  // 相关理由
+}
+
+// 舌象分析响应
+message TongueAnalysisResponse {
+  string diagnosis_id = 1;               // 诊断ID
+  float confidence = 2;                  // 整体置信度
+  TongueAnalysisResult result = 3;       // 舌象分析结果
+  string detailed_result = 4;            // 详细结果（JSON格式）
+  bytes visualization = 5;               // 可视化结果图像
+  int64 timestamp = 6;                   // 时间戳
+}
+
+// 面色分析响应
+message FaceAnalysisResponse {
+  string diagnosis_id = 1;               // 诊断ID
+  float confidence = 2;                  // 整体置信度
+  FaceAnalysisResult result = 3;         // 面色分析结果
+  string detailed_result = 4;            // 详细结果（JSON格式）
+  bytes visualization = 5;               // 可视化结果图像
+  int64 timestamp = 6;                   // 时间戳
+}
+
+// 形体分析响应
+message BodyAnalysisResponse {
+  string diagnosis_id = 1;               // 诊断ID
+  float confidence = 2;                  // 整体置信度
+  BodyAnalysisResult result = 3;         // 形体分析结果
+  string detailed_result = 4;            // 详细结果（JSON格式）
+  bytes visualization = 5;               // 可视化结果图像
+  int64 timestamp = 6;                   // 时间戳
+}
+
+// 健康检查请求
+message HealthCheckRequest {
+  bool include_details = 1;             // 是否包含详细信息
+}
+
+// 健康检查响应
+message HealthCheckResponse {
+  enum Status {
+    UNKNOWN = 0;
+    SERVING = 1;
+    NOT_SERVING = 2;
+  }
+  
+  Status status = 1;                    // 服务状态
+  map<string, string> details = 2;      // 详细信息
+} 

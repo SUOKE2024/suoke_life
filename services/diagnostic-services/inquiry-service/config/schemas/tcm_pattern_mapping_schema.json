@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["primary_patterns", "confidence_score"],
+  "properties": {
+    "primary_patterns": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["pattern_name", "category", "match_score"],
+        "properties": {
+          "pattern_name": {
+            "type": "string",
+            "description": "证型名称，如'气虚证'、'阴虚证'等"
+          },
+          "category": {
+            "type": "string",
+            "description": "证型分类，如'虚证'、'实证'、'寒证'、'热证'等"
+          },
+          "match_score": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "匹配得分，表示该证型与患者症状的匹配程度"
+          },
+          "related_symptoms": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "与该证型相关的症状列表"
+          },
+          "description": {
+            "type": "string",
+            "description": "证型的简要描述"
+          }
+        }
+      }
+    },
+    "secondary_patterns": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["pattern_name", "category", "match_score"],
+        "properties": {
+          "pattern_name": {
+            "type": "string",
+            "description": "次要证型名称"
+          },
+          "category": {
+            "type": "string",
+            "description": "证型分类"
+          },
+          "match_score": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "匹配得分"
+          },
+          "related_symptoms": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "与该证型相关的症状列表"
+          },
+          "description": {
+            "type": "string",
+            "description": "证型的简要描述"
+          }
+        }
+      }
+    },
+    "interpretation": {
+      "type": "string",
+      "description": "对证型组合的整体解读和分析"
+    },
+    "confidence_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "整体辨证结果的置信度"
+    }
+  }
+} 

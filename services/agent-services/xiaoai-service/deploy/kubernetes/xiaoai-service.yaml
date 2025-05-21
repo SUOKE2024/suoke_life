@@ -1,0 +1,603 @@
+---
+# ConfigMap for XiaoAI Service
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: xiaoai-service-config
+  namespace: suoke-life
+  labels:
+    app: xiaoai-service
+    component: four-diagnosis
+data:
+  config.yaml: |
+    app:
+      name: xiaoai-service
+      version: 1.0.0
+    
+    server:
+      host: "0.0.0.0"
+      port: 50051
+      workers: 8
+    
+    logging:
+      level: "INFO"
+      format: "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+    
+    diagnostic_services:
+      look_service:
+        host: "look-service"
+        port: 50051
+      listen_service:
+        host: "listen-service"
+        port: 50051
+      inquiry_service:
+        host: "inquiry-service"
+        port: 50051
+      palpation_service:
+        host: "palpation-service"
+        port: 50051
+  
+  # 生产环境特定配置
+  config.production.yaml: |
+    server:
+      workers: 12
+    
+    logging:
+      level: "WARNING"
+    
+    llm:
+      default_model: "gpt-4o"
+      timeout: 10000
+      max_retries: 5
+    
+    resilience:
+      circuit_breaker:
+        failure_threshold: 5
+        success_threshold: 2
+        timeout_seconds: 30
+      retry:
+        max_retries: 3
+        initial_delay: 0.5
+        backoff_factor: 2.0
+
+---
+# Secret for XiaoAI Service
+apiVersion: v1
+kind: Secret
+metadata:
+  name: xiaoai-service-secrets
+  namespace: suoke-life
+  labels:
+    app: xiaoai-service
+    component: four-diagnosis
+type: Opaque
+data:
+  # base64 encoded passwords (example values)
+  # in production, use Kubernetes secret management solutions
+  POSTGRES_PASSWORD: eGlhb2FpcGFzc3dvcmQ=  # xiaoaipassword
+  MONGO_PASSWORD: eGlhb2FpcGFzc3dvcmQ=     # xiaoaipassword
+  REDIS_PASSWORD: eGlhb2FpcGFzc3dvcmQ=     # xiaoaipassword
+  LLM_API_KEY: ""  # Add your base64 encoded API key
+  openai-api-key: ""  # Add your base64 encoded API key
+---
+# Service for XiaoAI Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: xiaoai-service
+  namespace: suoke-life
+  labels:
+    app: xiaoai-service
+    component: four-diagnosis
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "50051"
+    prometheus.io/path: "/metrics"
+spec:
+  type: ClusterIP
+  ports:
+    - port: 50051
+      targetPort: 50051
+      protocol: TCP
+      name: grpc
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+      name: http
+  selector:
+    app: xiaoai-service
+---
+# Deployment for XiaoAI Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xiaoai-service
+  namespace: suoke-life
+  labels:
+    app: xiaoai-service
+    component: four-diagnosis
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: xiaoai-service
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: xiaoai-service
+        component: four-diagnosis
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "50051"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+        - name: xiaoai-service
+          image: suoke/xiaoai-service:latest
+          imagePullPolicy: Always
+          env:
+            - name: ENV
+              value: "production"
+            - name: XIAOAI_CONFIG_DIR
+              value: "/etc/xiaoai/config"
+            - name: PYTHONUNBUFFERED
+              value: "1"
+            - name: XIAOAI_LLM__OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: xiaoai-service-secrets
+                  key: openai-api-key
+          ports:
+            - containerPort: 50051
+              name: grpc
+            - containerPort: 8080
+              name: http
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "1Gi"
+            limits:
+              cpu: "2000m"
+              memory: "4Gi"
+          volumeMounts:
+            - name: xiaoai-config
+              mountPath: /etc/xiaoai/config
+            - name: xiaoai-data
+              mountPath: /var/lib/xiaoai
+          livenessProbe:
+            exec:
+              command:
+                - python
+                - -c
+                - |
+                  import grpc
+                  from grpc_health.v1 import health_pb2, health_pb2_grpc
+                  channel = grpc.insecure_channel('localhost:50051')
+                  stub = health_pb2_grpc.HealthStub(channel)
+                  response = stub.Check(health_pb2.HealthCheckRequest(service='xiaoai_service.XiaoAIService'))
+                  exit(0 if response.status == health_pb2.HealthCheckResponse.SERVING else 1)
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 10
+          readinessProbe:
+            exec:
+              command:
+                - python
+                - -c
+                - |
+                  import grpc
+                  from grpc_health.v1 import health_pb2, health_pb2_grpc
+                  channel = grpc.insecure_channel('localhost:50051')
+                  stub = health_pb2_grpc.HealthStub(channel)
+                  response = stub.Check(health_pb2.HealthCheckRequest(service='xiaoai_service.XiaoAIService'))
+                  exit(0 if response.status == health_pb2.HealthCheckResponse.SERVING else 1)
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+          lifecycle:
+            preStop:
+              exec:
+                command: ["sleep", "10"]  # 优雅关闭的宽限期
+      volumes:
+        - name: xiaoai-config
+          configMap:
+            name: xiaoai-service-config
+        - name: xiaoai-data
+          persistentVolumeClaim:
+            claimName: xiaoai-service-data
+      terminationGracePeriodSeconds: 30
+      serviceAccountName: xiaoai-service
+---
+# PersistentVolumeClaim for XiaoAI Service
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: xiaoai-service-data
+  namespace: suoke-life
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: standard
+---
+# HorizontalPodAutoscaler for XiaoAI Service
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: xiaoai-service-hpa
+  namespace: suoke-life
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: xiaoai-service
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+        - type: Percent
+          value: 10
+          periodSeconds: 60
+    scaleUp:
+      stabilizationWindowSeconds: 0
+      policies:
+        - type: Percent
+          value: 100
+          periodSeconds: 30
+        - type: Pods
+          value: 4
+          periodSeconds: 60
+      selectPolicy: Max
+---
+# NetworkPolicy for XiaoAI Service
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: xiaoai-service-network-policy
+  namespace: suoke-life
+spec:
+  podSelector:
+    matchLabels:
+      app: xiaoai-service
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: api-gateway
+        ports:
+          - protocol: TCP
+            port: 50051
+          - protocol: TCP
+            port: 8080
+    egress:
+      - to:
+          - podSelector:
+              matchLabels:
+                app: look-service
+        ports:
+          - protocol: TCP
+            port: 50051
+      - to:
+          - podSelector:
+              matchLabels:
+                app: listen-service
+        ports:
+          - protocol: TCP
+            port: 50051
+      - to:
+          - podSelector:
+              matchLabels:
+                app: inquiry-service
+        ports:
+          - protocol: TCP
+            port: 50051
+      - to:
+          - podSelector:
+              matchLabels:
+                app: palpation-service
+        ports:
+          - protocol: TCP
+            port: 50051
+      - to:
+          - namespaceSelector:
+              matchLabels:
+                name: kube-system
+        ports:
+          - protocol: TCP
+            port: 53
+---
+# ConfigMap for XiaoAI Service Grafana Dashboard
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: xiaoai-service-grafana-dashboard
+  namespace: monitoring
+  labels:
+    app.kubernetes.io/name: xiaoai-service
+    app.kubernetes.io/part-of: suoke-life
+    app.kubernetes.io/component: ai-service
+    grafana_dashboard: "true"
+data:
+  xiaoai-service-dashboard.json: |
+    {
+      "annotations": {
+        "list": [
+          {
+            "builtIn": 1,
+            "datasource": "-- Grafana --",
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
+          }
+        ]
+      },
+      "editable": true,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "id": null,
+      "links": [],
+      "panels": [
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {}
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 0
+          },
+          "hiddenSeries": false,
+          "id": 2,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "7.5.5",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "sum(rate(xiaoai_service_request_count_total[5m])) by (endpoint)",
+              "interval": "",
+              "legendFormat": "{{endpoint}}",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "请求速率 (按端点)",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:169",
+              "format": "reqps",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "$$hashKey": "object:170",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {}
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 0
+          },
+          "hiddenSeries": false,
+          "id": 4,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "7.5.5",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "histogram_quantile(0.5, sum(rate(xiaoai_service_request_latency_seconds_bucket[5m])) by (le, endpoint))",
+              "interval": "",
+              "legendFormat": "p50 - {{endpoint}}",
+              "refId": "A"
+            },
+            {
+              "expr": "histogram_quantile(0.95, sum(rate(xiaoai_service_request_latency_seconds_bucket[5m])) by (le, endpoint))",
+              "interval": "",
+              "legendFormat": "p95 - {{endpoint}}",
+              "refId": "B"
+            },
+            {
+              "expr": "histogram_quantile(0.99, sum(rate(xiaoai_service_request_latency_seconds_bucket[5m])) by (le, endpoint))",
+              "interval": "",
+              "legendFormat": "p99 - {{endpoint}}",
+              "refId": "C"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "请求延迟",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:224",
+              "format": "s",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "$$hashKey": "object:225",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        }
+      ],
+      "refresh": "10s",
+      "schemaVersion": 27,
+      "style": "dark",
+      "tags": ["xiaoai", "suoke-life"],
+      "templating": {
+        "list": []
+      },
+      "time": {
+        "from": "now-1h",
+        "to": "now"
+      },
+      "timepicker": {},
+      "timezone": "",
+      "title": "XiaoAI Service Dashboard",
+      "uid": "xiaoai-service",
+      "version": 1
+    }
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: xiaoai-service
+  namespace: suoke-life
+
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: xiaoai-service-pdb
+  namespace: suoke-life
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: xiaoai-service 

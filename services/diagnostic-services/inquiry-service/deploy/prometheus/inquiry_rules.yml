@@ -1,0 +1,38 @@
+groups:
+  - name: inquiry_service
+    rules:
+      - alert: HighErrorRate
+        expr: sum(rate(inquiry_service_errors_total[5m])) / sum(rate(inquiry_service_requests_total[5m])) > 0.05
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "高错误率警告"
+          description: "问诊服务错误率超过5%，持续2分钟"
+
+      - alert: SlowResponseTime
+        expr: histogram_quantile(0.95, sum(rate(inquiry_service_response_time_seconds_bucket[5m])) by (le)) > 1.0
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "响应时间过长警告"
+          description: "问诊服务95%的响应时间超过1秒，持续5分钟"
+
+      - alert: HighActiveSessions
+        expr: inquiry_service_active_sessions > 400
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "活跃会话过多警告"
+          description: "问诊服务活跃会话数超过400，可能需要扩容"
+
+      - alert: LowTCMPatternConfidence
+        expr: avg(inquiry_service_tcm_pattern_match_confidence) < 0.6
+        for: 30m
+        labels:
+          severity: warning
+        annotations:
+          summary: "证型匹配置信度低警告"
+          description: "问诊服务证型匹配平均置信度低于0.6，可能需要优化匹配算法"

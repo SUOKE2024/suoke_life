@@ -1,0 +1,110 @@
+# 舄刻生命区块链服务生产环境配置
+# ==================================
+
+# 服务器配置
+server:
+  port: 50055
+  max_workers: 20
+  max_message_length: 104857600  # 100MB
+
+# 区块链网络配置
+blockchain:
+  network_type: "ethereum"  # 支持 ethereum, bnb_chain
+  node:
+    endpoint: ${NODE_ENDPOINT}  # 生产环境通过环境变量注入
+    chain_id: ${CHAIN_ID}
+    is_poa: false
+  wallet:
+    use_keystore_file: false
+    private_key: ${WALLET_PRIVATE_KEY}  # 敏感信息通过环境变量注入
+    gas_limit: 5000000
+    gas_price_strategy: "fast"
+  contracts:
+    health_data: ${HEALTH_DATA_CONTRACT}
+    zkp_verifier: ${ZKP_VERIFIER_CONTRACT}
+    access_control: ${ACCESS_CONTROL_CONTRACT}
+    factory: ${CONTRACT_FACTORY_ADDRESS}
+    artifacts_dir: "/app/internal/blockchain/contracts"
+  events:
+    poll_interval: 10  # 秒
+    timeout: 300  # 秒
+    max_blocks_per_poll: 100
+    retry:
+      max_attempts: 5
+      initial_backoff: 1.0  # 秒
+      max_backoff: 30.0  # 秒
+      backoff_multiplier: 2.0
+
+# 零知识证明配置
+zkp:
+  verifier_configs_dir: "/app/config/verifiers"
+  local_verification: true  # 启用本地验证
+  circuit_cache_size: 10
+  parallel_proving: true
+  max_proof_size: 1048576  # 1MB
+
+# 数据安全配置
+security:
+  data_encryption: true
+  key_rotation_days: 90
+  hash_algorithm: "sha3_256"
+  tls:
+    enabled: true
+    cert_file: "/app/config/certs/server.crt"
+    key_file: "/app/config/certs/server.key"
+  rate_limiting:
+    enabled: true
+    requests_per_minute: 1000
+    burst: 100
+
+# 弹性配置
+resilience:
+  circuit_breaker:
+    enabled: true
+    failure_threshold: 5
+    reset_timeout: 30  # 秒
+  retry:
+    max_attempts: 3
+    initial_backoff: 1.0  # 秒
+    max_backoff: 10.0  # 秒
+    backoff_multiplier: 2.0
+  timeout:
+    default: 30  # 秒
+    blockchain_operation: 60  # 秒
+    proof_generation: 120  # 秒
+
+# 缓存配置
+cache:
+  enabled: true
+  contract_ttl: 3600  # 秒
+  zkp_verifier_ttl: 7200  # 秒
+  proof_ttl: 300  # 秒
+
+# 日志配置
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "/app/logs/blockchain-service.log"
+  max_size_mb: 100
+  backup_count: 10
+  syslog:
+    enabled: true
+    facility: "local7"
+    ident: "blockchain-service"
+
+# 监控配置
+monitoring:
+  metrics:
+    enabled: true
+    port: 8080
+    path: "/metrics"
+  health_check:
+    enabled: true
+    port: 8080
+    path: "/health"
+  tracing:
+    enabled: true
+    exporter: "jaeger"
+    endpoint: "http://jaeger-collector:14268/api/traces"
+    service_name: "blockchain-service"
+    sample_rate: 0.1 

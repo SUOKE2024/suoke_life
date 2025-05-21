@@ -1,0 +1,212 @@
+syntax = "proto3";
+
+package suoke.xiaoke.v1;
+
+import "google/protobuf/timestamp.proto";
+
+service XiaoKeService {
+  // 医疗资源调度接口
+  rpc ScheduleMedicalResource (MedicalResourceRequest) returns (MedicalResourceResponse);
+  
+  // 预约管理接口
+  rpc ManageAppointment (AppointmentRequest) returns (AppointmentResponse);
+  
+  // 农产品定制接口
+  rpc CustomizeProduct (ProductCustomizationRequest) returns (ProductCustomizationResponse);
+  
+  // 农产品溯源接口
+  rpc TraceProduct (ProductTraceRequest) returns (ProductTraceResponse);
+  
+  // 支付处理接口
+  rpc ProcessPayment (PaymentRequest) returns (PaymentResponse);
+  
+  // 订阅管理接口
+  rpc ManageSubscription (SubscriptionRequest) returns (SubscriptionResponse);
+  
+  // 商品推荐接口
+  rpc RecommendProducts (ProductRecommendationRequest) returns (ProductRecommendationResponse);
+}
+
+// 医疗资源调度相关消息
+message MedicalResourceRequest {
+  string user_id = 1;
+  string resource_type = 2;  // DOCTOR, HOSPITAL, EQUIPMENT, etc.
+  string constitution_type = 3;
+  string location = 4;
+  google.protobuf.Timestamp preferred_time = 5;
+  repeated string requirements = 6;
+  int32 page_size = 7;
+  int32 page_number = 8;
+}
+
+message MedicalResourceResponse {
+  string request_id = 1;
+  repeated MedicalResource resources = 2;
+  int32 total_count = 3;
+  int32 page_count = 4;
+}
+
+message MedicalResource {
+  string resource_id = 1;
+  string name = 2;
+  string type = 3;
+  string location = 4;
+  float rating = 5;
+  string description = 6;
+  float price = 7;
+  repeated string available_times = 8;
+  repeated string specialties = 9;
+  map<string, string> metadata = 10;
+}
+
+// 预约管理相关消息
+message AppointmentRequest {
+  string user_id = 1;
+  string doctor_id = 2;
+  string appointment_type = 3;  // ONLINE_CONSULTATION, IN_PERSON, etc.
+  string preferred_time = 4;  // ISO 8601 format
+  string symptoms = 5;
+  string constitution_type = 6;
+  map<string, string> metadata = 7;
+}
+
+message AppointmentResponse {
+  string appointment_id = 1;
+  string status = 2;  // CONFIRMED, PENDING, REJECTED
+  string confirmed_time = 3;  // ISO 8601 format
+  string doctor_name = 4;
+  string location = 5;
+  string meeting_link = 6;  // 在线咨询链接
+  map<string, string> metadata = 7;
+}
+
+// 农产品定制相关消息
+message ProductCustomizationRequest {
+  string user_id = 1;
+  string constitution_type = 2;
+  repeated string health_conditions = 3;
+  repeated string preferences = 4;
+  string season = 5;
+  string packaging_preference = 6;
+  int32 quantity = 7;
+  bool need_delivery = 8;
+  string delivery_address = 9;
+}
+
+message ProductCustomizationResponse {
+  string customization_id = 1;
+  repeated CustomizedProduct products = 2;
+  float total_price = 3;
+  string delivery_estimate = 4;  // ISO 8601 format
+  map<string, string> metadata = 5;
+  string payment_link = 6;
+}
+
+message CustomizedProduct {
+  string product_id = 1;
+  string name = 2;
+  string description = 3;
+  string origin = 4;
+  string producer = 5;
+  float price = 6;
+  int32 quantity = 7;
+  string image_url = 8;
+  string constitution_benefit = 9;
+  repeated string health_benefits = 10;
+  string harvesting_date = 11;  // ISO 8601 format
+}
+
+// 农产品溯源相关消息
+message ProductTraceRequest {
+  string product_id = 1;
+  string batch_id = 2;
+  string trace_token = 3;
+}
+
+message ProductTraceResponse {
+  string product_name = 1;
+  repeated TraceRecord trace_records = 2;
+  string blockchain_verification_url = 3;
+  bool verified = 4;
+  string qr_code_url = 5;
+}
+
+message TraceRecord {
+  string stage_name = 1;
+  string location = 2;
+  google.protobuf.Timestamp timestamp = 3;
+  string operator = 4;
+  map<string, string> details = 5;
+  string verification_hash = 6;
+}
+
+// 支付处理相关消息
+message PaymentRequest {
+  string user_id = 1;
+  string order_id = 2;
+  string payment_method = 3;  // ALIPAY, WECHAT, CREDIT_CARD, etc.
+  float amount = 4;
+  string currency = 5;
+  map<string, string> metadata = 6;
+}
+
+message PaymentResponse {
+  string payment_id = 1;
+  string status = 2;  // SUCCESS, PENDING, FAILED
+  string transaction_id = 3;
+  google.protobuf.Timestamp timestamp = 4;
+  string payment_url = 5;  // 支付跳转URL
+  string receipt_url = 6;
+}
+
+// 订阅管理相关消息
+message SubscriptionRequest {
+  string user_id = 1;
+  string action = 2;  // CREATE, UPDATE, CANCEL, QUERY
+  string subscription_id = 3;  // 更新或取消时需要
+  string plan_id = 4;  // 创建时需要
+  string payment_method = 5;
+  int32 billing_cycle = 6;  // 月数
+  map<string, string> metadata = 7;
+}
+
+message SubscriptionResponse {
+  string subscription_id = 1;
+  string status = 2;  // ACTIVE, PENDING, CANCELED, EXPIRED
+  google.protobuf.Timestamp start_date = 3;
+  google.protobuf.Timestamp end_date = 4;
+  string plan_name = 5;
+  float amount = 6;
+  string next_billing_date = 7;  // ISO 8601 format
+  repeated string included_services = 8;
+  map<string, string> metadata = 9;
+}
+
+// 商品推荐相关消息
+message ProductRecommendationRequest {
+  string user_id = 1;
+  string constitution_type = 2;
+  string season = 3;
+  repeated string health_conditions = 4;
+  repeated string preferences = 5;
+  int32 max_results = 6;
+}
+
+message ProductRecommendationResponse {
+  repeated RecommendedProduct seasonal_products = 1;
+  repeated RecommendedProduct constitution_specific_products = 2;
+  repeated RecommendedProduct personalized_products = 3;
+  map<string, string> recommendation_explanation = 4;
+}
+
+message RecommendedProduct {
+  string product_id = 1;
+  string name = 2;
+  string description = 3;
+  string category = 4;
+  float price = 5;
+  float recommendation_score = 6;
+  string image_url = 7;
+  repeated string health_benefits = 8;
+  string recommendation_reason = 9;
+}

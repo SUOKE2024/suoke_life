@@ -1,0 +1,233 @@
+server:
+  host: "0.0.0.0"
+  port: 50052
+  max_workers: 10
+  max_concurrent_sessions: 500
+  timeout_seconds: 300
+  enable_reflection: true
+
+grpc:
+  max_message_size: 10485760  # 10MB
+  keep_alive_time: 60000  # 60s
+  keep_alive_timeout: 20000  # 20s
+  connection_age: 300000  # 5 min
+  connection_age_grace: 10000  # 10s
+
+dialogue:
+  session_timeout_minutes: 60
+  max_session_history: 50
+  default_language: "zh-CN"
+  supported_languages: ["zh-CN", "zh-TW", "en-US"]
+  default_follow_up_count: 3
+  confidence_threshold: 0.7
+  prompt_templates:
+    dialogue: "./config/prompts/dialogue_prompt.txt"
+    summary: "./config/prompts/summary_prompt.txt"
+    welcome: "./config/prompts/welcome_prompt.txt"
+
+llm:
+  model_type: "llama3" # 或者 "glm", "gpt4", "qwen2"等
+  temperature: 0.7
+  top_p: 0.95
+  response_max_tokens: 1024
+  context_window: 8192
+  system_prompt_path: "./config/prompts/system_prompt.txt"
+  adapter_path: "./data/models/tcm_qa_adapter"
+  cache_size: 1000
+  timeout_seconds: 30
+  local_inference: false  # 本地开发环境设置为false
+  local_model_path: "./data/models/tcm_medical_qa"
+  remote_endpoint: "http://ai-inference-service:8080/v1"
+  use_mock_mode: true  # 启用mock模式
+  mock_responses_path: "./data/mock_responses"
+
+symptom_extraction:
+  model_path: "./data/models/symptom_extractor"
+  min_confidence: 0.6
+  batch_size: 16
+  enable_negation_detection: true
+  context_window_size: 10
+  max_symptoms_per_text: 30
+  prompt_template_path: "./config/prompts/symptom_extraction_prompt.txt"
+  output_schema_path: "./config/schemas/symptom_extraction_schema.json"
+
+tcm_pattern_mapping:
+  prompt_template_path: "./config/prompts/tcm_pattern_mapping_prompt.txt"
+  output_schema_path: "./config/schemas/tcm_pattern_mapping_schema.json"
+  min_confidence: 0.6
+  max_primary_patterns: 3
+  max_secondary_patterns: 5
+
+tcm_knowledge:
+  data_dir: "./data/tcm_knowledge"
+  enable_traditional_terms: true
+  enable_simplified_terms: true
+  confidence_threshold: 0.7
+  auto_create_sample_data: true
+  cache_timeout_seconds: 3600
+  refresh_interval_hours: 24
+
+health_risk_assessment:
+  prompt_template_path: "./config/prompts/health_risk_assessment_prompt.txt"
+  output_schema_path: "./config/schemas/health_risk_assessment_schema.json"
+  min_confidence: 0.6
+  risk_thresholds:
+    low: 0.3
+    moderate: 0.5
+    high: 0.7
+    critical: 0.9
+
+database:
+  type: "memory"  # 开发环境使用内存数据库
+  host: "localhost"
+  port: 27017
+  name: "inquiry_db"
+  user: "inquiry_user"
+  password: "dev_password"
+  auth_source: "admin"
+  connection_timeout_ms: 5000
+  max_pool_size: 100
+  min_pool_size: 10
+  enable_ssl: false
+  retry_writes: true
+
+cache:
+  type: "memory"  # 开发环境使用内存缓存
+  host: "localhost"
+  port: 6379
+  db: 0
+  password: "dev_password"
+  ttl_seconds: 3600
+  max_connections: 50
+  connection_timeout_ms: 2000
+
+metrics:
+  enabled: false
+  host: "0.0.0.0"
+  port: 9090
+  path: "/metrics"
+  collection_interval_seconds: 15
+  include_latency_histogram: true
+  include_request_counter: true
+  custom_metrics:
+    - name: "active_sessions"
+      help: "现在活跃的问诊会话数"
+      type: "gauge"
+    - name: "symptom_extraction_accuracy"
+      help: "症状提取的准确率"
+      type: "gauge"
+    - name: "tcm_pattern_match_confidence"
+      help: "中医证型匹配置信度"
+      type: "histogram"
+    - name: "llm_response_time"
+      help: "大语言模型响应时间(ms)"
+      type: "histogram"
+    - name: "session_duration"
+      help: "问诊会话持续时间(s)"
+      type: "histogram"
+
+logging:
+  level: "debug"
+  format: "json"
+  output: "console" # console, file, both
+  file_path: "./logs/inquiry_service.log"
+  rotation: true
+  max_size_mb: 100
+  max_backups: 5
+  max_age_days: 30
+  compress: true
+  include_caller: true
+  include_timestamp: true
+  disable_colors: false
+
+integration:
+  xiaoai_service:
+    host: "localhost"
+    port: 50050
+    timeout_seconds: 10
+    retry_delay_ms: 500
+    max_retries: 3
+    use_tls: false
+    cert_path: ""
+    mock_enabled: true
+    mock_delay_ms: 200
+  med_knowledge:
+    host: "localhost"
+    port: 50060
+    timeout_seconds: 15
+    retry_delay_ms: 500
+    max_retries: 3
+    use_tls: false
+    mock_enabled: true
+  listen_service:
+    host: "localhost"
+    port: 50052
+    timeout_seconds: 10
+    mock_enabled: true
+  look_service:
+    host: "localhost"
+    port: 50051
+    timeout_seconds: 10
+    mock_enabled: true
+
+security:
+  enable_token_auth: false  # 开发环境关闭认证
+  jwt_secret: "dev_secret_key"
+  token_expiry_minutes: 60
+  allowed_origins: ["*"]
+  rate_limit:
+    enabled: false  # 开发环境关闭速率限制
+    requests_per_minute: 60
+    burst: 20
+
+health_check:
+  enabled: true
+  interval_seconds: 30
+  timeout_seconds: 5
+  unhealthy_threshold: 3
+  healthy_threshold: 2
+  components:
+    memory:
+      enabled: true
+      warning_threshold: 80.0  # 内存使用率超过80%时发出警告
+      critical_threshold: 90.0  # 内存使用率超过90%时标记为不可用
+    cpu:
+      enabled: true
+      warning_threshold: 75.0
+      critical_threshold: 85.0
+    disk:
+      enabled: true
+      warning_threshold: 80.0
+      critical_threshold: 90.0
+    database:
+      enabled: true
+    llm:
+      enabled: true
+      timeout_seconds: 10
+    xiaoai_service:
+      enabled: true
+      endpoint: "localhost:50050"
+    med_knowledge:
+      enabled: true
+      endpoint: "localhost:50060"
+
+mock:
+  enabled: true
+  response_delay_ms: 200
+  random_failures: false
+  failure_rate: 0.0
+
+# 分布式追踪配置
+tracing:
+  enabled: false  # 开发环境默认关闭追踪
+  service_name: "inquiry-service"
+  service_version: "1.0.0"
+  otlp_endpoint: "localhost:4317"
+  sample_rate: 0.1  # 采样率10%
+  max_attributes_per_span: 128
+  max_events_per_span: 128
+  max_links_per_span: 128
+  ignore_patterns:
+    - "/health"
+    - "/metrics"
+  propagation_format: "b3multi"  # 或 "b3", "w3c"

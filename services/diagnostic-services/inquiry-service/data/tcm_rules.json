@@ -1,0 +1,50 @@
+[
+  {
+    "rule_id": "R001",
+    "pattern_name": "气虚证",
+    "required_symptoms": ["疲劳", "乏力", "气短"],
+    "supporting_symptoms": {
+      "少气懒言": 0.8,
+      "自汗": 0.7,
+      "声低": 0.6,
+      "倦怠": 0.5
+    },
+    "exclusion_symptoms": ["口渴", "面红"],
+    "minimum_required_count": 2,
+    "minimum_supporting_score": 0.6,
+    "tongue_rules": "舌淡胖，苔薄白",
+    "pulse_rules": "脉弱"
+  },
+  {
+    "rule_id": "R002",
+    "pattern_name": "阴虚证",
+    "required_symptoms": ["口干", "咽干", "五心烦热"],
+    "supporting_symptoms": {
+      "潮热": 0.8,
+      "盗汗": 0.7,
+      "颧红": 0.6,
+      "失眠": 0.5
+    },
+    "exclusion_symptoms": ["畏寒", "舌苔厚白"],
+    "minimum_required_count": 2,
+    "minimum_supporting_score": 0.5,
+    "tongue_rules": "舌红少苔",
+    "pulse_rules": "脉细数"
+  },
+  {
+    "rule_id": "R003",
+    "pattern_name": "肝郁脾虚证",
+    "required_symptoms": ["胸胁胀痛", "脘腹胀满", "食欲不振"],
+    "supporting_symptoms": {
+      "易怒": 0.8,
+      "嗳气": 0.7,
+      "腹胀": 0.6,
+      "叹息": 0.5
+    },
+    "exclusion_symptoms": ["高热", "剧烈腹痛"],
+    "minimum_required_count": 2,
+    "minimum_supporting_score": 0.6,
+    "tongue_rules": "舌淡红，苔薄白",
+    "pulse_rules": "脉弦"
+  }
+] 

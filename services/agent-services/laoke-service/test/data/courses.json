@@ -1,0 +1,409 @@
+{
+  "courses": [
+    {
+      "id": "course-001",
+      "title": "中医基础理论导论",
+      "description": "了解中医的基本理论和核心概念，包括阴阳五行、脏腑经络等基础知识。",
+      "difficulty": "beginner",
+      "duration": 3600,
+      "type": "tcm_basic",
+      "modules": [
+        {
+          "id": "module-001",
+          "title": "阴阳五行理论",
+          "content_type": "video",
+          "duration": 1200,
+          "order": 1
+        },
+        {
+          "id": "module-002",
+          "title": "脏腑经络学说",
+          "content_type": "reading",
+          "duration": 1800,
+          "order": 2
+        },
+        {
+          "id": "module-003",
+          "title": "中医基础理论测验",
+          "content_type": "quiz",
+          "duration": 600,
+          "order": 3
+        }
+      ],
+      "instructor": "王大夫",
+      "rating": 4.8,
+      "reviews_count": 123,
+      "prerequisites": [],
+      "imageUrl": "https://example.com/images/tcm_basic.jpg",
+      "tags": ["中医基础", "阴阳五行", "脏腑经络"]
+    },
+    {
+      "id": "course-002",
+      "title": "针灸入门实践",
+      "description": "学习针灸的基本技巧和应用方法，理解穴位的位置和功效。",
+      "difficulty": "intermediate",
+      "duration": 7200,
+      "type": "tcm_clinical",
+      "modules": [
+        {
+          "id": "module-004",
+          "title": "针灸基础理论",
+          "content_type": "video",
+          "duration": 1800,
+          "order": 1
+        },
+        {
+          "id": "module-005",
+          "title": "常用穴位定位",
+          "content_type": "interactive",
+          "duration": 2400,
+          "order": 2
+        },
+        {
+          "id": "module-006",
+          "title": "基础针法实践",
+          "content_type": "video",
+          "duration": 1800,
+          "order": 3
+        },
+        {
+          "id": "module-007",
+          "title": "针灸应用案例",
+          "content_type": "reading",
+          "duration": 1200,
+          "order": 4
+        }
+      ],
+      "instructor": "李教授",
+      "rating": 4.6,
+      "reviews_count": 86,
+      "prerequisites": ["course-001"],
+      "imageUrl": "https://example.com/images/acupuncture.jpg",
+      "tags": ["针灸", "穴位", "经络"]
+    },
+    {
+      "id": "course-003",
+      "title": "中药学基础",
+      "description": "学习常用中药的性能、功效及配伍原则，培养中药辨识能力。",
+      "difficulty": "beginner",
+      "duration": 5400,
+      "type": "herbal_medicine",
+      "modules": [
+        {
+          "id": "module-008",
+          "title": "中药基本知识",
+          "content_type": "video",
+          "duration": 1800,
+          "order": 1
+        },
+        {
+          "id": "module-009",
+          "title": "常用中药介绍",
+          "content_type": "reading",
+          "duration": 2400,
+          "order": 2
+        },
+        {
+          "id": "module-010",
+          "title": "中药配伍原则",
+          "content_type": "video",
+          "duration": 1200,
+          "order": 3
+        }
+      ],
+      "instructor": "张药师",
+      "rating": 4.9,
+      "reviews_count": 152,
+      "prerequisites": [],
+      "imageUrl": "https://example.com/images/herbal_medicine.jpg",
+      "tags": ["中药", "药性", "配伍"]
+    },
+    {
+      "id": "course-004",
+      "title": "四季养生法则",
+      "description": "根据四季变化调整养生方法，学习适合不同季节的养生技巧。",
+      "difficulty": "beginner",
+      "duration": 4800,
+      "type": "health_living",
+      "modules": [
+        {
+          "id": "module-011",
+          "title": "春季养生",
+          "content_type": "video",
+          "duration": 1200,
+          "order": 1
+        },
+        {
+          "id": "module-012",
+          "title": "夏季养生",
+          "content_type": "video",
+          "duration": 1200,
+          "order": 2
+        },
+        {
+          "id": "module-013",
+          "title": "秋季养生",
+          "content_type": "video",
+          "duration": 1200,
+          "order": 3
+        },
+        {
+          "id": "module-014",
+          "title": "冬季养生",
+          "content_type": "video",
+          "duration": 1200,
+          "order": 4
+        }
+      ],
+      "instructor": "刘老师",
+      "rating": 4.7,
+      "reviews_count": 98,
+      "prerequisites": [],
+      "imageUrl": "https://example.com/images/seasonal_health.jpg",
+      "tags": ["养生", "四季", "健康生活"]
+    },
+    {
+      "id": "course-005",
+      "title": "中医食疗基础",
+      "description": "了解食物的性味归经，掌握常见的食疗方法与食疗方剂。",
+      "difficulty": "beginner",
+      "duration": 4200,
+      "type": "nutrition",
+      "modules": [
+        {
+          "id": "module-015",
+          "title": "食物性味理论",
+          "content_type": "video",
+          "duration": 1200,
+          "order": 1
+        },
+        {
+          "id": "module-016",
+          "title": "常见食疗方法",
+          "content_type": "reading",
+          "duration": 1800,
+          "order": 2
+        },
+        {
+          "id": "module-017",
+          "title": "食疗方剂实例",
+          "content_type": "video",
+          "duration": 1200,
+          "order": 3
+        }
+      ],
+      "instructor": "周营养师",
+      "rating": 4.5,
+      "reviews_count": 76,
+      "prerequisites": [],
+      "imageUrl": "https://example.com/images/food_therapy.jpg",
+      "tags": ["食疗", "营养", "养生"]
+    },
+    {
+      "id": "course-006",
+      "title": "太极拳养生",
+      "description": "学习太极拳基本动作，理解太极拳的养生原理，培养健康生活方式。",
+      "difficulty": "beginner",
+      "duration": 6000,
+      "type": "exercise",
+      "modules": [
+        {
+          "id": "module-018",
+          "title": "太极拳基本理论",
+          "content_type": "video",
+          "duration": 1200,
+          "order": 1
+        },
+        {
+          "id": "module-019",
+          "title": "太极拳基本动作",
+          "content_type": "video",
+          "duration": 2400,
+          "order": 2
+        },
+        {
+          "id": "module-020",
+          "title": "太极拳简易套路",
+          "content_type": "video",
+          "duration": 2400,
+          "order": 3
+        }
+      ],
+      "instructor": "吴太极师傅",
+      "rating": 4.9,
+      "reviews_count": 135,
+      "prerequisites": [],
+      "imageUrl": "https://example.com/images/taichi.jpg",
+      "tags": ["太极", "运动", "养生"]
+    },
+    {
+      "id": "course-007",
+      "title": "中医诊断学",
+      "description": "学习中医四诊（望、闻、问、切）方法，掌握中医诊断的基本技能。",
+      "difficulty": "intermediate",
+      "duration": 7200,
+      "type": "tcm_clinical",
+      "modules": [
+        {
+          "id": "module-021",
+          "title": "望诊",
+          "content_type": "video",
+          "duration": 1800,
+          "order": 1
+        },
+        {
+          "id": "module-022",
+          "title": "闻诊与问诊",
+          "content_type": "video",
+          "duration": 1800,
+          "order": 2
+        },
+        {
+          "id": "module-023",
+          "title": "切诊与脉诊",
+          "content_type": "video",
+          "duration": 2400,
+          "order": 3
+        },
+        {
+          "id": "module-024",
+          "title": "诊断学实例分析",
+          "content_type": "reading",
+          "duration": 1200,
+          "order": 4
+        }
+      ],
+      "instructor": "陈医师",
+      "rating": 4.8,
+      "reviews_count": 112,
+      "prerequisites": ["course-001"],
+      "imageUrl": "https://example.com/images/diagnosis.jpg",
+      "tags": ["中医诊断", "四诊", "临床技能"]
+    },
+    {
+      "id": "course-008",
+      "title": "经络穴位高级研修",
+      "description": "深入研究经络穴位理论与应用，提升针灸临床疗效。",
+      "difficulty": "advanced",
+      "duration": 9000,
+      "type": "tcm_advanced",
+      "modules": [
+        {
+          "id": "module-025",
+          "title": "经络理论深入探讨",
+          "content_type": "video",
+          "duration": 2400,
+          "order": 1
+        },
+        {
+          "id": "module-026",
+          "title": "特定穴位研究",
+          "content_type": "reading",
+          "duration": 1800,
+          "order": 2
+        },
+        {
+          "id": "module-027",
+          "title": "穴位配伍高级技巧",
+          "content_type": "video",
+          "duration": 2400,
+          "order": 3
+        },
+        {
+          "id": "module-028",
+          "title": "复杂病例穴位选配",
+          "content_type": "case_study",
+          "duration": 2400,
+          "order": 4
+        }
+      ],
+      "instructor": "黄教授",
+      "rating": 4.9,
+      "reviews_count": 67,
+      "prerequisites": ["course-001", "course-002"],
+      "imageUrl": "https://example.com/images/advanced_meridian.jpg",
+      "tags": ["经络", "穴位", "高级", "针灸"]
+    },
+    {
+      "id": "course-009",
+      "title": "中医养生冥想",
+      "description": "学习中医静心冥想技巧，结合呼吸调节与意守丹田，提升身心健康。",
+      "difficulty": "beginner",
+      "duration": 3600,
+      "type": "meditation",
+      "modules": [
+        {
+          "id": "module-029",
+          "title": "冥想基础理论",
+          "content_type": "video",
+          "duration": 1200,
+          "order": 1
+        },
+        {
+          "id": "module-030",
+          "title": "呼吸调节技巧",
+          "content_type": "video",
+          "duration": 1200,
+          "order": 2
+        },
+        {
+          "id": "module-031",
+          "title": "意守丹田实践",
+          "content_type": "video",
+          "duration": 1200,
+          "order": 3
+        }
+      ],
+      "instructor": "林老师",
+      "rating": 4.7,
+      "reviews_count": 89,
+      "prerequisites": [],
+      "imageUrl": "https://example.com/images/meditation.jpg",
+      "tags": ["冥想", "养生", "气功"]
+    },
+    {
+      "id": "course-010",
+      "title": "《黄帝内经》研读",
+      "description": "系统研读中医经典《黄帝内经》，理解中医学理论体系的核心思想。",
+      "difficulty": "advanced",
+      "duration": 12600,
+      "type": "tcm_advanced",
+      "modules": [
+        {
+          "id": "module-032",
+          "title": "《素问》上篇研读",
+          "content_type": "reading",
+          "duration": 3600,
+          "order": 1
+        },
+        {
+          "id": "module-033",
+          "title": "《素问》下篇研读",
+          "content_type": "reading",
+          "duration": 3600,
+          "order": 2
+        },
+        {
+          "id": "module-034",
+          "title": "《灵枢》研读",
+          "content_type": "reading",
+          "duration": 3600,
+          "order": 3
+        },
+        {
+          "id": "module-035",
+          "title": "《内经》思想应用",
+          "content_type": "discussion",
+          "duration": 1800,
+          "order": 4
+        }
+      ],
+      "instructor": "赵教授",
+      "rating": 4.9,
+      "reviews_count": 58,
+      "prerequisites": ["course-001", "course-007"],
+      "imageUrl": "https://example.com/images/huangdi_neijing.jpg",
+      "tags": ["经典", "黄帝内经", "中医理论", "高级"]
+    }
+  ]
+} 

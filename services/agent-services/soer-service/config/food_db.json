@@ -1,0 +1,624 @@
+{
+  "苹果": {
+    "name": "苹果",
+    "category": "水果",
+    "tcm_properties": {
+      "nature": "凉",
+      "taste": "甘、酸",
+      "meridians": ["脾", "肺", "胃"],
+      "actions": ["生津止渴", "润肺", "开胃"]
+    },
+    "nutrients": {
+      "calories": 52,
+      "protein": 0.3,
+      "fat": 0.2,
+      "carbs": 13.8,
+      "fiber": 2.4,
+      "vitamin_c": 4.6,
+      "calcium": 6,
+      "iron": 0.1
+    }
+  },
+  "香蕉": {
+    "name": "香蕉",
+    "category": "水果",
+    "tcm_properties": {
+      "nature": "寒",
+      "taste": "甘",
+      "meridians": ["肺", "大肠"],
+      "actions": ["清热润肠", "润肺止咳"]
+    },
+    "nutrients": {
+      "calories": 89,
+      "protein": 1.1,
+      "fat": 0.3,
+      "carbs": 22.8,
+      "fiber": 2.6,
+      "vitamin_c": 8.7,
+      "calcium": 5,
+      "iron": 0.3
+    }
+  },
+  "大米": {
+    "name": "大米",
+    "category": "谷物",
+    "tcm_properties": {
+      "nature": "平",
+      "taste": "甘",
+      "meridians": ["脾", "胃"],
+      "actions": ["补中益气", "健脾和胃", "止渴"]
+    },
+    "nutrients": {
+      "calories": 130,
+      "protein": 2.7,
+      "fat": 0.3,
+      "carbs": 28.2,
+      "fiber": 0.4,
+      "vitamin_c": 0,
+      "calcium": 10,
+      "iron": 0.2
+    }
+  },
+  "鸡蛋": {
+    "name": "鸡蛋",
+    "category": "蛋类",
+    "tcm_properties": {
+      "nature": "平",
+      "taste": "甘",
+      "meridians": ["脾", "肾"],
+      "actions": ["补气养血", "滋阴润燥"]
+    },
+    "nutrients": {
+      "calories": 155,
+      "protein": 12.8,
+      "fat": 10.6,
+      "carbs": 1.1,
+      "fiber": 0,
+      "vitamin_c": 0,
+      "calcium": 56,
+      "iron": 1.8
+    }
+  },
+  "牛肉": {
+    "name": "牛肉",
+    "category": "肉类",
+    "tcm_properties": {
+      "nature": "温",
+      "taste": "甘",
+      "meridians": ["脾", "胃"],
+      "actions": ["补脾胃", "强筋骨", "补气养血"]
+    },
+    "nutrients": {
+      "calories": 106,
+      "protein": 20.7,
+      "fat": 2.7,
+      "carbs": 0,
+      "fiber": 0,
+      "vitamin_c": 0,
+      "calcium": 9,
+      "iron": 2.6
+    }
+  },
+  "羊肉": {
+    "name": "羊肉",
+    "category": "肉类",
+    "tcm_properties": {
+      "nature": "热",
+      "taste": "甘",
+      "meridians": ["脾", "肾"],
+      "actions": ["温补脾肾", "温中暖下", "益气补虚"]
+    },
+    "nutrients": {
+      "calories": 109,
+      "protein": 19.6,
+      "fat": 3.6,
+      "carbs": 0,
+      "fiber": 0,
+      "vitamin_c": 0,
+      "calcium": 11,
+      "iron": 1.9
+    }
+  },
+  "猪肉": {
+    "name": "猪肉",
+    "category": "肉类",
+    "tcm_properties": {
+      "nature": "平",
+      "taste": "甘咸",
+      "meridians": ["脾", "肾"],
+      "actions": ["滋阴润燥", "补气血", "滋养"]
+    },
+    "nutrients": {
+      "calories": 143,
+      "protein": 19.2,
+      "fat": 7.7,
+      "carbs": 0,
+      "fiber": 0,
+      "vitamin_c": 0,
+      "calcium": 7,
+      "iron": 0.8
+    }
+  },
+  "鸡肉": {
+    "name": "鸡肉",
+    "category": "肉类",
+    "tcm_properties": {
+      "nature": "温",
+      "taste": "甘",
+      "meridians": ["脾", "胃"],
+      "actions": ["温中益气", "补脾胃", "强筋骨"]
+    },
+    "nutrients": {
+      "calories": 120,
+      "protein": 22.5,
+      "fat": 3.1,
+      "carbs": 0,
+      "fiber": 0,
+      "vitamin_c": 0,
+      "calcium": 12,
+      "iron": 0.9
+    }
+  },
+  "鲫鱼": {
+    "name": "鲫鱼",
+    "category": "水产",
+    "tcm_properties": {
+      "nature": "平",
+      "taste": "甘",
+      "meridians": ["脾", "胃"],
+      "actions": ["健脾利水", "清热解毒", "通乳"]
+    },
+    "nutrients": {
+      "calories": 101,
+      "protein": 17.5,
+      "fat": 3.2,
+      "carbs": 0,
+      "fiber": 0,
+      "vitamin_c": 0,
+      "calcium": 48,
+      "iron": 0.5
+    }
+  },
+  "豆腐": {
+    "name": "豆腐",
+    "category": "豆制品",
+    "tcm_properties": {
+      "nature": "凉",
+      "taste": "甘",
+      "meridians": ["脾", "胃", "大肠"],
+      "actions": ["清热解毒", "润燥生津", "宽中散结"]
+    },
+    "nutrients": {
+      "calories": 76,
+      "protein": 8.1,
+      "fat": 4.2,
+      "carbs": 1.9,
+      "fiber": 0.3,
+      "vitamin_c": 0.1,
+      "calcium": 126,
+      "iron": 1.6
+    }
+  },
+  "黑豆": {
+    "name": "黑豆",
+    "category": "豆类",
+    "tcm_properties": {
+      "nature": "平",
+      "taste": "甘",
+      "meridians": ["脾", "肾"],
+      "actions": ["补肾强身", "活血利水", "解毒"]
+    },
+    "nutrients": {
+      "calories": 341,
+      "protein": 35.1,
+      "fat": 15.6,
+      "carbs": 30.2,
+      "fiber": 8.7,
+      "vitamin_c": 0,
+      "calcium": 240,
+      "iron": 8.5
+    }
+  },
+  "小米": {
+    "name": "小米",
+    "category": "谷物",
+    "tcm_properties": {
+      "nature": "平",
+      "taste": "甘咸",
+      "meridians": ["脾", "胃", "肾"],
+      "actions": ["健脾和胃", "补肾益精", "清热解渴"]
+    },
+    "nutrients": {
+      "calories": 356,
+      "protein": 10.5,
+      "fat": 4.0,
+      "carbs": 72.8,
+      "fiber": 8.5,
+      "vitamin_c": 0,
+      "calcium": 14,
+      "iron": 5.0
+    }
+  },
+  "大枣": {
+    "name": "大枣",
+    "category": "果品",
+    "tcm_properties": {
+      "nature": "温",
+      "taste": "甘",
+      "meridians": ["脾", "胃"],
+      "actions": ["补中益气", "养血安神", "缓和药性"]
+    },
+    "nutrients": {
+      "calories": 287,
+      "protein": 5.6,
+      "fat": 1.2,
+      "carbs": 70.7,
+      "fiber": 10.6,
+      "vitamin_c": 69,
+      "calcium": 79,
+      "iron": 2.6
+    }
+  },
+  "山药": {
+    "name": "山药",
+    "category": "蔬菜",
+    "tcm_properties": {
+      "nature": "平",
+      "taste": "甘",
+      "meridians": ["肺", "脾", "肾"],
+      "actions": ["补脾养胃", "补肺固肾", "益精"]
+    },
+    "nutrients": {
+      "calories": 118,
+      "protein": 2.0,
+      "fat": 0.1,
+      "carbs": 27.6,
+      "fiber": 4.1,
+      "vitamin_c": 8.7,
+      "calcium": 11,
+      "iron": 0.6
+    }
+  },
+  "白术": {
+    "name": "白术",
+    "category": "药食同源",
+    "tcm_properties": {
+      "nature": "温",
+      "taste": "苦甘",
+      "meridians": ["脾", "胃"],
+      "actions": ["健脾益气", "燥湿利水", "止汗安胎"]
+    },
+    "nutrients": {
+      "calories": 348,
+      "protein": 4.2,
+      "fat": 1.5,
+      "carbs": 76.5,
+      "fiber": 10.3,
+      "vitamin_c": 0,
+      "calcium": 21,
+      "iron": 3.4
+    }
+  },
+  "莲子": {
+    "name": "莲子",
+    "category": "果实",
+    "tcm_properties": {
+      "nature": "平",
+      "taste": "甘涩",
+      "meridians": ["心", "脾", "肾"],
+      "actions": ["补脾止泻", "益肾固精", "养心安神"]
+    },
+    "nutrients": {
+      "calories": 350,
+      "protein": 16.6,
+      "fat": 2.1,
+      "carbs": 71.8,
+      "fiber": 7.3,
+      "vitamin_c": 0,
+      "calcium": 57,
+      "iron": 2.6
+    }
+  },
+  "红枣": {
+    "name": "红枣",
+    "category": "果品",
+    "tcm_properties": {
+      "nature": "温",
+      "taste": "甘",
+      "meridians": ["脾", "胃"],
+      "actions": ["补中益气", "养血安神", "缓和药性"]
+    },
+    "nutrients": {
+      "calories": 287,
+      "protein": 5.6,
+      "fat": 1.2,
+      "carbs": 70.7,
+      "fiber": 10.6,
+      "vitamin_c": 69,
+      "calcium": 79,
+      "iron": 2.6
+    }
+  },
+  "菠菜": {
+    "name": "菠菜",
+    "category": "蔬菜",
+    "tcm_properties": {
+      "nature": "凉",
+      "taste": "甘",
+      "meridians": ["肝", "大肠"],
+      "actions": ["养血", "止血", "润肠通便"]
+    },
+    "nutrients": {
+      "calories": 23,
+      "protein": 2.9,
+      "fat": 0.4,
+      "carbs": 3.6,
+      "fiber": 2.2,
+      "vitamin_c": 28,
+      "calcium": 99,
+      "iron": 2.7
+    }
+  },
+  "生姜": {
+    "name": "生姜",
+    "category": "调味品",
+    "tcm_properties": {
+      "nature": "温",
+      "taste": "辛",
+      "meridians": ["肺", "脾", "胃"],
+      "actions": ["发汗解表", "温中止呕", "温肺止咳"]
+    },
+    "nutrients": {
+      "calories": 80,
+      "protein": 1.8,
+      "fat": 0.8,
+      "carbs": 17.8,
+      "fiber": 2.0,
+      "vitamin_c": 5,
+      "calcium": 16,
+      "iron": 0.6
+    }
+  },
+  "西红柿": {
+    "name": "西红柿",
+    "category": "蔬菜",
+    "tcm_properties": {
+      "nature": "凉",
+      "taste": "甘酸",
+      "meridians": ["脾", "胃", "肝"],
+      "actions": ["清热解毒", "生津止渴", "健胃消食"]
+    },
+    "nutrients": {
+      "calories": 18,
+      "protein": 0.9,
+      "fat": 0.2,
+      "carbs": 3.9,
+      "fiber": 1.2,
+      "vitamin_c": 14,
+      "calcium": 10,
+      "iron": 0.3
+    }
+  },
+  "冬瓜": {
+    "name": "冬瓜",
+    "category": "蔬菜",
+    "tcm_properties": {
+      "nature": "寒",
+      "taste": "甘淡",
+      "meridians": ["肺", "大肠", "膀胱"],
+      "actions": ["清热利水", "消痰止渴", "解毒消肿"]
+    },
+    "nutrients": {
+      "calories": 14,
+      "protein": 0.4,
+      "fat": 0.1,
+      "carbs": 3.1,
+      "fiber": 0.5,
+      "vitamin_c": 8,
+      "calcium": 19,
+      "iron": 0.3
+    }
+  },
+  "茯苓": {
+    "name": "茯苓",
+    "category": "药食同源",
+    "tcm_properties": {
+      "nature": "平",
+      "taste": "甘淡",
+      "meridians": ["心", "脾", "肺"],
+      "actions": ["利水渗湿", "健脾和胃", "宁心安神"]
+    },
+    "nutrients": {
+      "calories": 359,
+      "protein": 6.1,
+      "fat": 1.5,
+      "carbs": 81.8,
+      "fiber": 24.6,
+      "vitamin_c": 0,
+      "calcium": 24,
+      "iron": 1.6
+    }
+  },
+  "薏苡仁": {
+    "name": "薏苡仁",
+    "category": "谷物",
+    "tcm_properties": {
+      "nature": "凉",
+      "taste": "甘淡",
+      "meridians": ["脾", "肺", "肾"],
+      "actions": ["利水渗湿", "健脾止泻", "清热排脓"]
+    },
+    "nutrients": {
+      "calories": 358,
+      "protein": 12.5,
+      "fat": 6.1,
+      "carbs": 72.2,
+      "fiber": 4.2,
+      "vitamin_c": 0,
+      "calcium": 25,
+      "iron": 5.0
+    }
+  },
+  "胡萝卜": {
+    "name": "胡萝卜",
+    "category": "蔬菜",
+    "tcm_properties": {
+      "nature": "平",
+      "taste": "甘",
+      "meridians": ["肺", "脾"],
+      "actions": ["健脾和胃", "明目", "化痰止咳"]
+    },
+    "nutrients": {
+      "calories": 41,
+      "protein": 0.9,
+      "fat": 0.2,
+      "carbs": 9.6,
+      "fiber": 2.8,
+      "vitamin_c": 7,
+      "calcium": 33,
+      "iron": 0.3,
+      "vitamin_a": 835
+    }
+  },
+  "枸杞": {
+    "name": "枸杞",
+    "category": "药食同源",
+    "tcm_properties": {
+      "nature": "平",
+      "taste": "甘",
+      "meridians": ["肝", "肾", "肺"],
+      "actions": ["滋补肝肾", "明目", "养血安神"]
+    },
+    "nutrients": {
+      "calories": 349,
+      "protein": 14.3,
+      "fat": 0.7,
+      "carbs": 77.9,
+      "fiber": 13.0,
+      "vitamin_c": 48,
+      "calcium": 190,
+      "iron": 6.8,
+      "vitamin_a": 271
+    }
+  },
+  "黑芝麻": {
+    "name": "黑芝麻",
+    "category": "调味品",
+    "tcm_properties": {
+      "nature": "平",
+      "taste": "甘",
+      "meridians": ["肝", "肾", "大肠"],
+      "actions": ["补肝肾", "润肠通便", "养血生津"]
+    },
+    "nutrients": {
+      "calories": 582,
+      "protein": 17.7,
+      "fat": 49.7,
+      "carbs": 23.5,
+      "fiber": 17.9,
+      "vitamin_c": 0,
+      "calcium": 975,
+      "iron": 14.6
+    }
+  },
+  "百合": {
+    "name": "百合",
+    "category": "药食同源",
+    "tcm_properties": {
+      "nature": "凉",
+      "taste": "甘微苦",
+      "meridians": ["心", "肺"],
+      "actions": ["养阴润肺", "清心安神", "清热止咳"]
+    },
+    "nutrients": {
+      "calories": 76,
+      "protein": 3.1,
+      "fat": 0.1,
+      "carbs": 17.2,
+      "fiber": 2.5,
+      "vitamin_c": 11,
+      "calcium": 6,
+      "iron": 0.4
+    }
+  },
+  "银耳": {
+    "name": "银耳",
+    "category": "菌类",
+    "tcm_properties": {
+      "nature": "平",
+      "taste": "甘淡",
+      "meridians": ["肺", "胃", "肾"],
+      "actions": ["养阴生津", "润肺益胃", "强身健体"]
+    },
+    "nutrients": {
+      "calories": 323,
+      "protein": 7.9,
+      "fat": 0.8,
+      "carbs": 73.0,
+      "fiber": 33.6,
+      "vitamin_c": 0,
+      "calcium": 24,
+      "iron": 2.4
+    }
+  },
+  "苦瓜": {
+    "name": "苦瓜",
+    "category": "蔬菜",
+    "tcm_properties": {
+      "nature": "寒",
+      "taste": "苦",
+      "meridians": ["心", "脾", "肺", "大肠"],
+      "actions": ["清热解毒", "明目", "解暑"]
+    },
+    "nutrients": {
+      "calories": 17,
+      "protein": 1.0,
+      "fat": 0.2,
+      "carbs": 3.7,
+      "fiber": 2.8,
+      "vitamin_c": 84,
+      "calcium": 19,
+      "iron": 0.4
+    }
+  },
+  "荷叶": {
+    "name": "荷叶",
+    "category": "药食同源",
+    "tcm_properties": {
+      "nature": "凉",
+      "taste": "苦",
+      "meridians": ["心", "肝", "脾"],
+      "actions": ["清暑利湿", "升发清阳", "化瘀止血"]
+    },
+    "nutrients": {
+      "calories": 305,
+      "protein": 19.8,
+      "fat": 3.7,
+      "carbs": 62.8,
+      "fiber": 11.9,
+      "vitamin_c": 0,
+      "calcium": 0,
+      "iron": 0
+    }
+  },
+  "绿茶": {
+    "name": "绿茶",
+    "category": "饮品",
+    "tcm_properties": {
+      "nature": "凉",
+      "taste": "苦甘",
+      "meridians": ["心", "肺", "胃"],
+      "actions": ["清热生津", "消暑解毒", "醒神提神"]
+    },
+    "nutrients": {
+      "calories": 0,
+      "protein": 0,
+      "fat": 0,
+      "carbs": 0,
+      "fiber": 0,
+      "vitamin_c": 0,
+      "calcium": 0,
+      "iron": 0
+    }
+  }
+} 

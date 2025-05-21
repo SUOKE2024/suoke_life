@@ -1,0 +1,245 @@
+syntax = "proto3";
+
+package palpation_service;
+
+option go_package = "github.com/SUOKE2024/suoke_life/palpation-service/api/grpc";
+
+import "google/protobuf/timestamp.proto";
+
+// 切诊服务 - 负责分析脉象、腹诊、皮肤触感和穴位反应等
+service PalpationService {
+  // 分析脉象数据
+  rpc AnalyzePulse(PulseRequest) returns (PalpationResponse);
+  
+  // 分析腹诊数据
+  rpc AnalyzeAbdomen(AbdomenRequest) returns (PalpationResponse);
+  
+  // 分析皮肤触感
+  rpc AnalyzeSkinTouch(SkinTouchRequest) returns (PalpationResponse);
+  
+  // 分析穴位反应
+  rpc AnalyzeAcupoints(AcupointsRequest) returns (PalpationResponse);
+  
+  // 健康检查
+  rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse);
+}
+
+// 脉象分析请求
+message PulseRequest {
+  string user_id = 1;                // 用户ID
+  string session_id = 2;             // 会话ID
+  bytes pulse_data = 3;              // 脉象原始数据
+  string data_format = 4;            // 数据格式
+  int32 sampling_rate = 5;           // 采样率
+  bool include_detailed_analysis = 6; // 是否包含详细分析
+  repeated PulsePosition positions = 7; // 采集的脉位
+  map<string, string> metadata = 8;  // 元数据
+}
+
+// 脉位
+message PulsePosition {
+  enum Position {
+    UNKNOWN = 0;
+    CUN_LEFT = 1;     // 左寸
+    GUAN_LEFT = 2;    // 左关
+    CHI_LEFT = 3;     // 左尺
+    CUN_RIGHT = 4;    // 右寸
+    GUAN_RIGHT = 5;   // 右关
+    CHI_RIGHT = 6;    // 右尺
+  }
+  
+  Position position = 1;             // 脉位
+  bytes data = 2;                    // 该位置的数据
+}
+
+// 腹诊分析请求
+message AbdomenRequest {
+  string user_id = 1;                // 用户ID
+  string session_id = 2;             // 会话ID
+  bytes pressure_map = 3;            // 压力图数据
+  string data_format = 4;            // 数据格式
+  int32 width = 5;                   // 宽度
+  int32 height = 6;                  // 高度
+  bool include_detailed_analysis = 7; // 是否包含详细分析
+  map<string, string> metadata = 8;  // 元数据
+}
+
+// 皮肤触感分析请求
+message SkinTouchRequest {
+  string user_id = 1;                // 用户ID
+  string session_id = 2;             // 会话ID
+  
+  repeated SkinRegion regions = 3;   // 皮肤区域数据
+  bool include_detailed_analysis = 4; // 是否包含详细分析
+  map<string, string> metadata = 5;  // 元数据
+}
+
+// 皮肤区域
+message SkinRegion {
+  string region_name = 1;            // 区域名称
+  float temperature = 2;             // 温度
+  float moisture = 3;                // 湿度
+  float elasticity = 4;              // 弹性
+  float thickness = 5;               // 厚度
+  string texture = 6;                // 质地描述
+  string color = 7;                  // 颜色
+}
+
+// 穴位分析请求
+message AcupointsRequest {
+  string user_id = 1;                // 用户ID
+  string session_id = 2;             // 会话ID
+  repeated Acupoint acupoints = 3;   // 穴位数据
+  bool include_detailed_analysis = 4; // 是否包含详细分析
+  map<string, string> metadata = 5;  // 元数据
+}
+
+// 穴位
+message Acupoint {
+  string point_name = 1;             // 穴位名称
+  string point_code = 2;             // 穴位编码
+  string meridian = 3;               // 所属经络
+  float sensitivity = 4;             // 敏感度(0-10)
+  float temperature = 5;             // 温度
+  string reaction = 6;               // 反应描述
+  bool is_tender = 7;                // 是否压痛
+}
+
+// 切诊响应
+message PalpationResponse {
+  string diagnosis_id = 1;                 // 诊断ID
+  float confidence = 2;                    // 整体置信度
+  
+  repeated PalpationFeature features = 3;  // 特征列表
+  
+  oneof analysis_result {
+    PulseAnalysisResult pulse_result = 4;         // 脉象分析结果
+    AbdomenAnalysisResult abdomen_result = 5;     // 腹诊分析结果
+    SkinTouchAnalysisResult skin_result = 6;      // 皮肤触感分析结果
+    AcupointsAnalysisResult acupoints_result = 7; // 穴位分析结果
+  }
+  
+  string detailed_result = 8;            // 详细结果（JSON格式）
+  int64 timestamp = 9;                   // 时间戳
+}
+
+// 切诊特征
+message PalpationFeature {
+  string name = 1;                 // 特征名称
+  string value = 2;                // 特征值
+  float confidence = 3;            // 置信度
+  string category = 4;             // 类别
+}
+
+// 脉象分析结果
+message PulseAnalysisResult {
+  string pulse_overall_type = 1;          // 脉象总体类型
+  string pulse_rhythm = 2;                // 脉律
+  string pulse_force = 3;                 // 脉力
+  string pulse_width = 4;                 // 脉宽
+  string pulse_depth = 5;                 // 脉深度
+  string pulse_length = 6;                // 脉长度
+  
+  repeated PulsePositionResult positions = 7; // 各脉位结果
+  repeated SyndromeIndicator syndrome_indicators = 8; // 证候指征
+  repeated OrganCorrelation organ_correlations = 9; // 脏腑关联
+}
+
+// 脉位结果
+message PulsePositionResult {
+  PulsePosition.Position position = 1;   // 脉位
+  string pulse_type = 2;                 // 脉型
+  string description = 3;                // 描述
+  float strength = 4;                    // 强度
+  map<string, float> characteristics = 5; // 特性及其强度
+}
+
+// 证候指征
+message SyndromeIndicator {
+  string syndrome = 1;                   // 证型
+  float correlation = 2;                 // 相关度
+  string evidence = 3;                   // 脉象证据
+}
+
+// 脏腑关联
+message OrganCorrelation {
+  string organ = 1;                      // 脏腑名称
+  string condition = 2;                  // 状态
+  float confidence = 3;                  // 置信度
+  string evidence = 4;                   // 脉象证据
+}
+
+// 腹诊分析结果
+message AbdomenAnalysisResult {
+  bool has_pain = 1;                     // 是否有疼痛
+  
+  repeated AbdomenRegionResult regions = 2; // 腹部区域结果
+  repeated SyndromeIndicator syndrome_indicators = 3; // 证候指征
+  repeated OrganCorrelation organ_correlations = 4; // 脏腑关联
+}
+
+// 腹部区域结果
+message AbdomenRegionResult {
+  string region_name = 1;                // 区域名称
+  string condition = 2;                  // 状态
+  float tension = 3;                     // 紧张度
+  float tenderness = 4;                  // 压痛度
+  string description = 5;                // 描述
+}
+
+// 皮肤触感分析结果
+message SkinTouchAnalysisResult {
+  string overall_skin_condition = 1;     // 总体皮肤状况
+  
+  repeated SkinRegionResult region_results = 2; // 区域结果
+  repeated SyndromeIndicator syndrome_indicators = 3; // 证候指征
+}
+
+// 皮肤区域结果
+message SkinRegionResult {
+  string region_name = 1;                // 区域名称
+  string condition = 2;                  // 状态
+  map<string, float> characteristics = 3; // 特性及其强度
+  string description = 4;                // 描述
+}
+
+// 穴位分析结果
+message AcupointsAnalysisResult {
+  repeated AcupointResult acupoint_results = 1; // 穴位结果
+  repeated MeridianResult meridian_results = 2; // 经络结果
+  repeated SyndromeIndicator syndrome_indicators = 3; // 证候指征
+}
+
+// 穴位结果
+message AcupointResult {
+  string point_name = 1;                 // 穴位名称
+  string meridian = 2;                   // 所属经络
+  string condition = 3;                  // 状态
+  float sensitivity_score = 4;           // 敏感度评分
+  string suggested_treatment = 5;        // 建议治疗
+}
+
+// 经络结果
+message MeridianResult {
+  string meridian_name = 1;              // 经络名称
+  string condition = 2;                  // 状态
+  string description = 3;                // 描述
+  repeated string imbalanced_points = 4; // 失衡穴位
+}
+
+// 健康检查请求
+message HealthCheckRequest {
+  bool include_details = 1;             // 是否包含详细信息
+}
+
+// 健康检查响应
+message HealthCheckResponse {
+  enum Status {
+    UNKNOWN = 0;
+    SERVING = 1;
+    NOT_SERVING = 2;
+  }
+  
+  Status status = 1;                    // 服务状态
+  map<string, string> details = 2;      // 详细信息
+} 

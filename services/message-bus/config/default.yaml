@@ -1,0 +1,86 @@
+# Message Bus 服务默认配置
+
+# 基本服务配置
+environment: development  # 环境: development, testing, staging, production
+debug: true  # 是否启用调试模式
+enable_auth: false  # 是否启用认证
+max_message_size_bytes: 4194304  # 最大消息大小 (4MB)
+
+# 服务器配置
+server:
+  host: 0.0.0.0
+  port: 50051
+  max_workers: 10
+
+# Kafka配置
+kafka:
+  bootstrap_servers:
+    - localhost:9092
+  topic_prefix: sokelife-
+  consumer_group_id: message-bus-service
+  auto_create_topics: true
+  num_partitions: 3
+  replication_factor: 1
+  security_protocol: PLAINTEXT
+  # 安全认证 - 在生产环境中配置
+  # sasl_mechanism: PLAIN
+  # sasl_plain_username: kafka-user
+  # sasl_plain_password: kafka-pass
+
+# Redis配置 (可选，用于主题和订阅管理)
+redis:
+  host: localhost
+  port: 6379
+  db: 0
+  # password: redis-password
+  ssl: false
+
+# 指标配置
+metrics:
+  enabled: true
+  port: 9090
+
+# 日志配置
+logging:
+  level: INFO  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: standard  # standard, json
+  log_file: logs/message_bus.log
+
+# 消息配置
+messages:
+  default_ttl_hours: 24  # 消息默认存活时间
+  retention_policy: delete  # 消息保留策略: delete, archive
+  max_batch_size: 100  # 批量操作的最大消息数量
+
+# 限流配置
+rate_limiting:
+  enabled: true
+  max_requests_per_minute: 1000  # 每分钟最大请求数
+  burst_size: 100  # 突发请求数量
+
+# 弹性配置
+resilience:
+  retry:
+    max_attempts: 3  # 最大重试次数
+    initial_backoff_ms: 100  # 初始重试等待时间(毫秒)
+    max_backoff_ms: 1000  # 最大重试等待时间(毫秒)
+    backoff_multiplier: 2.0  # 重试等待时间乘数
+  circuit_breaker:
+    failure_threshold: 5  # 触发断路器的失败次数
+    reset_timeout_ms: 30000  # 断路器重置超时(毫秒)
+    half_open_requests: 1  # 半开状态下允许的请求数
+
+# 安全配置 (在生产环境中使用)
+security:
+  auth_service:
+    url: http://localhost:8080/auth
+    timeout_ms: 5000
+  jwt:
+    public_key_path: ""  # JWT公钥路径
+    issuer: sokelife
+    audience: message-bus
+  tls:
+    enabled: false
+    cert_file: certs/server.crt
+    key_file: certs/server.key
+    ca_file: certs/ca.crt 

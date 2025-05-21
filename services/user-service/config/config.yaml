@@ -1,0 +1,55 @@
+# 用户服务配置文件
+
+# 服务配置
+service:
+  name: "user-service"
+  version: "1.0.0"
+  description: "索克生活APP用户管理服务"
+
+# REST API配置
+rest:
+  port: 8000
+  debug: false
+  cors:
+    allow_origins: ["*"]
+    allow_methods: ["*"]
+    allow_headers: ["*"]
+    allow_credentials: true
+
+# gRPC配置
+grpc:
+  port: 50051
+  max_workers: 10
+  reflection: true
+
+# 数据库配置
+database:
+  path: "user-service.db"
+  pool_size: 5
+  timeout: 30
+
+# 日志配置
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "user-service.log"
+
+# 安全配置
+security:
+  jwt_secret: "change_this_in_production"
+  token_expiry: 86400  # 24小时
+  hash_algorithm: "pbkdf2_sha256"
+  hash_rounds: 100000
+
+# 与其他服务集成
+integration:
+  auth_service:
+    url: "http://auth-service:8000"
+    grpc_url: "auth-service:50051"
+  api_gateway:
+    url: "http://api-gateway:8000"
+  
+# 健康检查配置
+health:
+  check_interval: 30  # 秒
+  timeout: 5  # 秒 

@@ -1,0 +1,111 @@
+syntax = "proto3";
+
+package xiaoai_service.constitution;
+
+option go_package = "github.com/SUOKE2024/suoke_life/xiaoai-service/api/grpc/constitution";
+
+// 体质类型定义服务
+service ConstitutionService {
+  // 获取体质类型定义
+  rpc GetConstitutionDefinition(ConstitutionRequest) returns (ConstitutionDefinition);
+  
+  // 计算体质得分
+  rpc CalculateConstitutionScore(ConstitutionScoreRequest) returns (ConstitutionScoreResponse);
+  
+  // 获取所有体质类型
+  rpc ListConstitutionTypes(ListTypesRequest) returns (ListTypesResponse);
+}
+
+// 体质请求
+message ConstitutionRequest {
+  string constitution_type = 1;  // 体质类型
+  string language = 2;           // 语言 (默认为zh-CN)
+}
+
+// 体质定义
+message ConstitutionDefinition {
+  string constitution_type = 1;      // 体质类型
+  string chinese_name = 2;           // 中文名称
+  string english_name = 3;           // 英文名称
+  string description = 4;            // 描述
+  repeated Feature features = 5;     // 特征列表
+  repeated BodySystem impacts = 6;   // 影响的身体系统
+  HealthTendency health_tendency = 7; // 健康倾向
+  
+  message Feature {
+    string name = 1;                 // 特征名称
+    string description = 2;          // 特征描述
+    string category = 3;             // 特征类别
+    float weight = 4;                // 特征权重
+  }
+  
+  message BodySystem {
+    string system_name = 1;          // 系统名称
+    string impact_description = 2;   // 影响描述
+    float impact_level = 3;          // 影响程度 (0-1)
+  }
+  
+  message HealthTendency {
+    repeated string prone_diseases = 1; // 易患疾病
+    repeated string strengths = 2;      // 优势
+    repeated string weaknesses = 3;     // 弱点
+  }
+}
+
+// 体质得分请求
+message ConstitutionScoreRequest {
+  string user_id = 1;               // 用户ID
+  repeated FeatureScore features = 2; // 特征得分
+  repeated DiagnosticData diagnostic_data = 3; // 诊断数据
+  
+  message FeatureScore {
+    string feature_name = 1;         // 特征名称
+    float score = 2;                 // 得分 (0-1)
+    string source = 3;               // 得分来源
+  }
+  
+  message DiagnosticData {
+    string diagnosis_type = 1;       // 诊断类型
+    string diagnosis_id = 2;         // 诊断ID
+  }
+}
+
+// 体质得分响应
+message ConstitutionScoreResponse {
+  string user_id = 1;                // 用户ID
+  repeated ConstitutionScore scores = 2; // 体质得分
+  string dominant_type = 3;          // 主导体质类型
+  string analysis_summary = 4;       // 分析总结
+  int64 calculated_at = 5;           // 计算时间
+  
+  message ConstitutionScore {
+    string constitution_type = 1;    // 体质类型
+    float score = 2;                 // 得分 (0-100)
+    string level = 3;                // 级别 (mild, moderate, severe)
+    repeated FeatureContribution feature_contributions = 4; // 特征贡献
+  }
+  
+  message FeatureContribution {
+    string feature_name = 1;         // 特征名称
+    float contribution = 2;          // 贡献值
+    string impact = 3;               // 影响 (positive, negative, neutral)
+  }
+}
+
+// 列表请求
+message ListTypesRequest {
+  string language = 1;               // 语言 (默认为zh-CN)
+}
+
+// 列表响应
+message ListTypesResponse {
+  repeated ConstitutionBasicInfo constitutions = 1; // 体质基本信息列表
+  
+  message ConstitutionBasicInfo {
+    string constitution_type = 1;    // 体质类型
+    string chinese_name = 2;         // 中文名称
+    string english_name = 3;         // 英文名称
+    string short_description = 4;    // 简短描述
+    bool is_balanced = 5;            // 是否为平衡体质
+  }
+} 

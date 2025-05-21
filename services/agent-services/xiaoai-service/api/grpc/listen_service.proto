@@ -1,0 +1,145 @@
+syntax = "proto3";
+
+package listen_service;
+
+option go_package = "github.com/SUOKE2024/suoke_life/listen-service/api/grpc";
+
+import "google/protobuf/timestamp.proto";
+
+// 闻诊服务 - 负责分析声音、语音、呼吸等相关数据
+service ListenService {
+  // 分析语音数据
+  rpc AnalyzeVoice(AnalyzeVoiceRequest) returns (AnalysisResponse);
+  
+  // 分析呼吸音
+  rpc AnalyzeBreathing(AnalyzeBreathingRequest) returns (AnalysisResponse);
+  
+  // 分析咳嗽声
+  rpc AnalyzeCough(AnalyzeCoughRequest) returns (AnalysisResponse);
+  
+  // 服务健康检查
+  rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse);
+}
+
+// 语音分析请求
+message AnalyzeVoiceRequest {
+  string user_id = 1;                // 用户ID
+  string session_id = 2;             // 会话ID
+  bytes audio_data = 3;              // 语音数据
+  string audio_format = 4;           // 音频格式(wav, mp3等)
+  int32 sample_rate = 5;             // 采样率
+  int32 bit_depth = 6;               // 位深度
+  int32 channels = 7;                // 通道数
+  bool detect_dialect = 8;           // 是否检测方言
+  map<string, string> metadata = 9;  // 元数据
+}
+
+// 呼吸音分析请求
+message AnalyzeBreathingRequest {
+  string user_id = 1;                // 用户ID
+  string session_id = 2;             // 会话ID
+  bytes audio_data = 3;              // 呼吸音频数据
+  string audio_format = 4;           // 音频格式
+  int32 sample_rate = 5;             // 采样率
+  int32 bit_depth = 6;               // 位深度
+  int32 channels = 7;                // 通道数
+  string breathing_type = 8;         // 呼吸类型（正常、深呼吸等）
+  map<string, string> metadata = 9;  // 元数据
+}
+
+// 咳嗽声分析请求
+message AnalyzeCoughRequest {
+  string user_id = 1;                // 用户ID
+  string session_id = 2;             // 会话ID
+  bytes audio_data = 3;              // 咳嗽音频数据
+  string audio_format = 4;           // 音频格式
+  int32 sample_rate = 5;             // 采样率
+  int32 bit_depth = 6;               // 位深度
+  int32 channels = 7;                // 通道数
+  map<string, string> metadata = 8;  // 元数据
+}
+
+// 分析响应
+message AnalysisResponse {
+  string diagnosis_id = 1;               // 诊断ID
+  float confidence = 2;                  // 整体置信度
+  repeated AudioFeature features = 3;    // 特征列表
+  oneof analysis_result {
+    VoiceAnalysisResult voice_result = 4;         // 语音分析结果
+    BreathingAnalysisResult breathing_result = 5; // 呼吸分析结果
+    CoughAnalysisResult cough_result = 6;         // 咳嗽分析结果
+  }
+  string detailed_result = 7;            // 详细结果（JSON格式）
+  int64 timestamp = 8;                   // 时间戳
+}
+
+// 音频特征
+message AudioFeature {
+  string name = 1;                 // 特征名称
+  string value = 2;                // 特征值
+  float confidence = 3;            // 置信度
+  string category = 4;             // 类别
+}
+
+// 语音分析结果
+message VoiceAnalysisResult {
+  string voice_quality = 1;             // 音质（清脆、嘶哑等）
+  string voice_strength = 2;            // 音量强度
+  string speech_rhythm = 3;             // 语速节律
+  string dialect_detected = 4;          // 检测到的方言
+  map<string, float> emotions = 5;      // 情绪分析结果
+  repeated VoicePattern patterns = 6;   // 特征模式
+}
+
+// 语音模式
+message VoicePattern {
+  string pattern_name = 1;              // 模式名称
+  string description = 2;               // 描述
+  float confidence = 3;                 // 置信度
+  repeated string related_syndromes = 4; // 相关证型
+}
+
+// 呼吸分析结果
+message BreathingAnalysisResult {
+  string breathing_pattern = 1;         // 呼吸模式
+  float breathing_rate = 2;             // 呼吸频率
+  float breathing_depth = 3;            // 呼吸深度
+  float inspiration_expiration_ratio = 4; // 吸呼比
+  bool has_abnormal_sounds = 5;         // 是否有异常声音
+  repeated AbnormalSound abnormal_sounds = 6; // 异常声音列表
+}
+
+// 异常声音
+message AbnormalSound {
+  string sound_type = 1;                // 声音类型
+  string location = 2;                  // 位置
+  float intensity = 3;                  // 强度
+  string description = 4;               // 描述
+}
+
+// 咳嗽分析结果
+message CoughAnalysisResult {
+  string cough_type = 1;                // 咳嗽类型
+  string cough_pattern = 2;             // 咳嗽模式（频繁、偶尔）
+  string cough_sound = 3;               // 咳嗽声音特征
+  bool has_phlegm = 4;                  // 是否有痰
+  string phlegm_description = 5;        // 痰的描述
+  repeated string related_syndromes = 6; // 相关证型
+}
+
+// 健康检查请求
+message HealthCheckRequest {
+  bool include_details = 1;             // 是否包含详细信息
+}
+
+// 健康检查响应
+message HealthCheckResponse {
+  enum Status {
+    UNKNOWN = 0;
+    SERVING = 1;
+    NOT_SERVING = 2;
+  }
+  
+  Status status = 1;                    // 服务状态
+  map<string, string> details = 2;      // 详细信息
+} 

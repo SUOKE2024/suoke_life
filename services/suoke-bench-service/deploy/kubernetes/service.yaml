@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: suoke-bench-service
+  namespace: suoke-core
+  labels:
+    app: suoke-bench-service
+    app.kubernetes.io/part-of: suoke-life
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8000
+    targetPort: 8000
+    name: http
+  - port: 50051
+    targetPort: 50051
+    name: grpc
+  selector:
+    app: suoke-bench-service

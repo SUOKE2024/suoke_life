@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  palpation-service:
+    build: .
+    container_name: palpation-service
+    ports:
+      - "50053:50053"
+    volumes:
+      - ./config:/app/config
+    env_file:
+      - .env
+    environment:
+      - MONGO_URI=${MONGO_URI:-mongodb://mongo:27017}
+      - MONGO_DB=${MONGO_DB:-palpation_db}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    depends_on:
+      - mongo
+    networks:
+      - suoke-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; socket.socket().connect(('localhost', 50053))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  mongo:
+    image: mongo:5.0
+    container_name: palpation-mongo
+    ports:
+      - "27020:27017"
+    volumes:
+      - palpation-mongo-data:/data/db
+    networks:
+      - suoke-network
+    restart: unless-stopped
+    command: --wiredTigerCacheSizeGB 1.0
+
+networks:
+  suoke-network:
+    external: true
+
+volumes:
+  palpation-mongo-data: 

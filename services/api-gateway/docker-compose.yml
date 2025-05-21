@@ -1,0 +1,89 @@
+version: '3.8'
+
+services:
+  api-gateway:
+    build:
+      context: .
+      dockerfile: deploy/docker/Dockerfile
+    image: suoke/api-gateway:latest
+    container_name: suoke-api-gateway
+    restart: unless-stopped
+    ports:
+      - "8080:8080"  # REST API
+      - "50050:50050"  # gRPC API
+    volumes:
+      - ./config:/app/config
+      - ./logs:/app/logs
+    networks:
+      - suoke-network
+    environment:
+      - CONFIG_PATH=/app/config/config.yaml
+      - LOGGING_FILE=/app/logs/api_gateway.log
+      - LOG_LEVEL=INFO
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+  # 本地开发示例服务（可选，用于测试API网关）
+  mock-user-service:
+    image: python:3.10-slim
+    container_name: mock-user-service
+    restart: unless-stopped
+    command: >
+      sh -c "pip install fastapi uvicorn && 
+             echo 'from fastapi import FastAPI; app = FastAPI(); @app.get(\"/health\"); def health(): return {\"status\": \"ok\"}; @app.get(\"/api/users\"); def get_users(): return [{\"id\": 1, \"name\": \"测试用户\"}]' > /app/main.py && 
+             uvicorn main:app --host 0.0.0.0 --port 50051"
+    ports:
+      - "50051:50051"
+    networks:
+      - suoke-network
+
+  mock-auth-service:
+    image: python:3.10-slim
+    container_name: mock-auth-service
+    restart: unless-stopped
+    command: >
+      sh -c "pip install fastapi uvicorn && 
+             echo 'from fastapi import FastAPI, HTTPException; app = FastAPI(); @app.get(\"/health\"); def health(): return {\"status\": \"ok\"}; @app.post(\"/api/auth/login\"); def login(data: dict): return {\"token\": \"mock_token_123\", \"user\": {\"id\": 1, \"name\": \"测试用户\"}}' > /app/main.py && 
+             uvicorn main:app --host 0.0.0.0 --port 50052"
+    ports:
+      - "50052:50052"
+    networks:
+      - suoke-network
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./deploy/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - suoke-network
+    depends_on:
+      - api-gateway
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - ./deploy/grafana/dashboards:/etc/grafana/dashboards
+      - ./deploy/grafana/provisioning:/etc/grafana/provisioning
+    networks:
+      - suoke-network
+    depends_on:
+      - prometheus
+
+networks:
+  suoke-network:
+    driver: bridge 

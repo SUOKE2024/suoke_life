@@ -1,0 +1,16 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'xiaoke-service'
+    static_configs:
+      - targets: ['xiaoke-service:51054']
+    
+  - job_name: 'xiaoke-service-node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']
+
+  - job_name: 'xiaoke-service-cadvisor'
+    static_configs:
+      - targets: ['cadvisor:8080']

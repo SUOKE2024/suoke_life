@@ -1,0 +1,351 @@
+syntax = "proto3";
+
+package inquiry;
+option go_package = "github.com/suoke-life/inquiry-service/api/grpc";
+
+// 问诊服务接口定义
+service InquiryService {
+  // 开始问诊会话
+  rpc StartInquirySession(StartSessionRequest) returns (SessionResponse) {}
+  
+  // 问诊互动 - 流式响应，用于连续对话
+  rpc InteractWithUser(InteractionRequest) returns (stream InteractionResponse) {}
+  
+  // 结束问诊会话并获取汇总结果
+  rpc EndInquirySession(EndSessionRequest) returns (InquirySummary) {}
+  
+  // 分析用户病史
+  rpc AnalyzeMedicalHistory(MedicalHistoryRequest) returns (MedicalHistoryAnalysis) {}
+  
+  // 提取症状信息
+  rpc ExtractSymptoms(SymptomsExtractionRequest) returns (SymptomsResponse) {}
+  
+  // 中医症状匹配
+  rpc MapToTCMPatterns(TCMPatternMappingRequest) returns (TCMPatternResponse) {}
+  
+  // 批量分析健康数据
+  rpc BatchAnalyzeInquiryData(BatchInquiryRequest) returns (BatchInquiryResponse) {}
+  
+  // 健康风险评估
+  rpc AssessHealthRisks(HealthRiskRequest) returns (HealthRiskResponse) {}
+}
+
+// 开始会话请求
+message StartSessionRequest {
+  string user_id = 1;
+  string session_type = 2; // "general", "targeted", "follow_up"
+  string language_preference = 3; // 语言偏好
+  map<string, string> context_data = 4; // 上下文数据
+}
+
+// 会话响应
+message SessionResponse {
+  string session_id = 1;
+  string welcome_message = 2;
+  repeated string suggested_questions = 3;
+  uint64 timestamp = 4;
+}
+
+// 交互请求
+message InteractionRequest {
+  string session_id = 1;
+  string user_message = 2;
+  uint64 timestamp = 3;
+  repeated string attached_data_urls = 4; // 用户可能附加的数据URL
+}
+
+// 交互响应
+message InteractionResponse {
+  string response_text = 1;
+  ResponseType response_type = 2;
+  repeated string detected_symptoms = 3; // 从对话中检测到的症状
+  repeated string follow_up_questions = 4; // 建议的跟进问题
+  uint64 timestamp = 5;
+  
+  enum ResponseType {
+    TEXT = 0;
+    FOLLOW_UP_QUESTION = 1;
+    SYMPTOM_CONFIRMATION = 2;
+    RECOMMENDATION = 3;
+    INFO_REQUEST = 4;
+  }
+}
+
+// 结束会话请求
+message EndSessionRequest {
+  string session_id = 1;
+  string feedback = 2; // 用户对此次问诊的反馈
+}
+
+// 问诊总结
+message InquirySummary {
+  string session_id = 1;
+  string user_id = 2;
+  repeated SymptomInfo detected_symptoms = 3;
+  repeated TCMPattern tcm_patterns = 4;
+  HealthProfile health_profile = 5;
+  repeated FollowUpRecommendation recommendations = 6;
+  uint64 session_duration = 7; // 会话持续时间（秒）
+  uint64 session_end_time = 8;
+}
+
+// 病史分析请求
+message MedicalHistoryRequest {
+  string user_id = 1;
+  repeated MedicalRecord medical_records = 2;
+  repeated string family_history = 3;
+  map<string, string> additional_info = 4;
+}
+
+// 病史记录
+message MedicalRecord {
+  string condition = 1;
+  uint64 diagnosis_time = 2;
+  string treatment = 3;
+  string outcome = 4;
+  repeated string symptoms = 5;
+}
+
+// 病史分析结果
+message MedicalHistoryAnalysis {
+  repeated ChronicCondition chronic_conditions = 1;
+  repeated RiskFactor risk_factors = 2;
+  repeated TCMPattern historical_patterns = 3;
+  LifestyleImpact lifestyle_impact = 4;
+}
+
+// 慢性病状况
+message ChronicCondition {
+  string condition_name = 1;
+  Severity severity = 2;
+  uint64 onset_time = 3;
+  string current_status = 4;
+  
+  enum Severity {
+    MILD = 0;
+    MODERATE = 1;
+    SEVERE = 2;
+  }
+}
+
+// 风险因素
+message RiskFactor {
+  string factor_name = 1;
+  float risk_score = 2; // 0-1范围的风险评分
+  string description = 3;
+  repeated string prevention_suggestions = 4;
+}
+
+// 生活方式影响
+message LifestyleImpact {
+  repeated string dietary_factors = 1;
+  repeated string exercise_factors = 2;
+  repeated string sleep_factors = 3;
+  repeated string mental_factors = 4;
+  float overall_impact_score = 5; // 综合影响评分
+}
+
+// 症状提取请求
+message SymptomsExtractionRequest {
+  string text_content = 1; // 需要分析的文本内容
+  string user_id = 2; // 可选的用户ID
+  string language = 3; // 文本语言
+}
+
+// 症状响应
+message SymptomsResponse {
+  repeated SymptomInfo symptoms = 1;
+  repeated BodyLocation body_locations = 2;
+  repeated TemporalFactor temporal_factors = 3;
+  float confidence_score = 4;
+}
+
+// 症状信息
+message SymptomInfo {
+  string symptom_name = 1;
+  Severity severity = 2;
+  uint64 onset_time = 3; // 开始时间戳
+  uint64 duration = 4; // 持续时间（秒）
+  string description = 5;
+  float confidence = 6; // 置信度
+  
+  enum Severity {
+    MILD = 0;
+    MODERATE = 1;
+    SEVERE = 2;
+    EXTREME = 3;
+  }
+}
+
+// 身体部位
+message BodyLocation {
+  string location_name = 1;
+  repeated string associated_symptoms = 2;
+  string side = 3; // "left", "right", "central", "bilateral"
+}
+
+// 时间因素
+message TemporalFactor {
+  string factor_type = 1; // "diurnal", "seasonal", "menstrual", "dietary", etc.
+  string description = 2;
+  repeated string symptoms_affected = 3;
+}
+
+// 中医证型映射请求
+message TCMPatternMappingRequest {
+  repeated SymptomInfo symptoms = 1;
+  string user_constitution = 2; // 用户体质信息
+  repeated BodyLocation body_locations = 3;
+  repeated TemporalFactor temporal_factors = 4;
+}
+
+// 中医证型响应
+message TCMPatternResponse {
+  repeated TCMPattern primary_patterns = 1;
+  repeated TCMPattern secondary_patterns = 2;
+  string interpretation = 3;
+  float confidence_score = 4;
+}
+
+// 中医证型
+message TCMPattern {
+  string pattern_name = 1;
+  string category = 2; // 例如："寒热"、"虚实"
+  float match_score = 3; // 匹配得分
+  repeated string related_symptoms = 4;
+  string description = 5;
+}
+
+// 健康档案
+message HealthProfile {
+  string user_id = 1;
+  ConstitutionType constitution_type = 2;
+  repeated TCMPattern common_patterns = 3;
+  LifestyleCharacteristics lifestyle = 4;
+  repeated string health_goals = 5;
+  
+  enum ConstitutionType {
+    BALANCED = 0;
+    QI_DEFICIENCY = 1;
+    YANG_DEFICIENCY = 2;
+    YIN_DEFICIENCY = 3;
+    PHLEGM_DAMPNESS = 4;
+    DAMP_HEAT = 5;
+    BLOOD_STASIS = 6;
+    QI_STAGNATION = 7;
+    SPECIAL_CONSTITUTION = 8;
+  }
+}
+
+// 生活方式特征
+message LifestyleCharacteristics {
+  DietaryHabits dietary_habits = 1;
+  SleepPattern sleep_pattern = 2;
+  EmotionalTendency emotional_tendency = 3;
+  PhysicalActivity physical_activity = 4;
+}
+
+// 饮食习惯
+message DietaryHabits {
+  repeated string preferences = 1;
+  repeated string restrictions = 2;
+  repeated string harmful_habits = 3;
+  string regular_pattern = 4;
+}
+
+// 睡眠模式
+message SleepPattern {
+  uint32 average_hours = 1;
+  string quality = 2;
+  repeated string issues = 3;
+  string typical_schedule = 4;
+}
+
+// 情绪倾向
+message EmotionalTendency {
+  repeated string dominant_emotions = 1;
+  string stress_response = 2;
+  repeated string triggers = 3;
+}
+
+// 身体活动
+message PhysicalActivity {
+  string activity_level = 1; // "sedentary", "light", "moderate", "active", "very_active"
+  repeated string preferred_activities = 2;
+  string consistency = 3;
+  repeated string limitations = 4;
+}
+
+// 后续建议
+message FollowUpRecommendation {
+  RecommendationType type = 1;
+  string description = 2;
+  string rationale = 3;
+  uint64 suggested_timeframe = 4; // 建议的跟进时间
+  
+  enum RecommendationType {
+    MEDICAL_EXAM = 0;
+    LIFESTYLE_CHANGE = 1;
+    DIETARY_ADJUSTMENT = 2;
+    EXERCISE_PROGRAM = 3;
+    SPECIALIST_CONSULTATION = 4;
+    MONITORING = 5;
+    TCM_INTERVENTION = 6;
+  }
+}
+
+// 批量问诊数据分析请求
+message BatchInquiryRequest {
+  repeated string session_ids = 1;
+  string analysis_type = 2; // "symptoms", "patterns", "recommendations"
+  map<string, string> analysis_parameters = 3;
+}
+
+// 批量问诊数据分析响应
+message BatchInquiryResponse {
+  repeated InquirySummary session_summaries = 1;
+  map<string, float> aggregated_metrics = 2;
+  repeated AnalysisInsight insights = 3;
+}
+
+// 分析洞察
+message AnalysisInsight {
+  string insight_type = 1;
+  string description = 2;
+  float confidence = 3;
+  repeated string supporting_evidence = 4;
+}
+
+// 健康风险评估请求
+message HealthRiskRequest {
+  string user_id = 1;
+  repeated SymptomInfo current_symptoms = 2;
+  MedicalHistoryRequest medical_history = 3;
+  HealthProfile health_profile = 4;
+}
+
+// 健康风险评估响应
+message HealthRiskResponse {
+  repeated HealthRisk immediate_risks = 1;
+  repeated HealthRisk long_term_risks = 2;
+  repeated PreventionStrategy prevention_strategies = 3;
+  float overall_risk_score = 4;
+}
+
+// 健康风险
+message HealthRisk {
+  string risk_name = 1;
+  float probability = 2; // 0-1之间的概率
+  string severity = 3; // "low", "moderate", "high", "critical"
+  string timeframe = 4; // 风险时间框架，例如"immediate", "within a year"
+  repeated string contributing_factors = 5;
+}
+
+// 预防策略
+message PreventionStrategy {
+  string strategy_name = 1;
+  string description = 2;
+  repeated string action_items = 3;
+  repeated string targets = 4; // 针对的风险
+  float effectiveness_score = 5; // 有效性评分，0-1之间
+} 

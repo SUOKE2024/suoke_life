@@ -1,0 +1,322 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: look-service-config
+  namespace: suoke-ai-np
+  labels:
+    app.kubernetes.io/name: look-service
+    app.kubernetes.io/part-of: suoke-life
+data:
+  config.yaml: |
+    service:
+      name: "look-service"
+      version: "0.1.0"
+      description: "索克生活APP望诊服务"
+      host: "0.0.0.0"
+      port: 50051
+      debug: false
+
+    logging:
+      level: "INFO"
+      format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+      file: "logs/look-service.log"
+      max_size_mb: 100
+      backup_count: 5
+
+    monitoring:
+      prometheus:
+        enabled: true
+        port: 51051
+
+    performance:
+      max_workers: 10
+      timeout_seconds: 30
+      connection_pool_size: 10
+
+    database:
+      uri: "mongodb://suoke:${MONGO_PASSWORD}@mongodb-service:27017/look_service?authSource=admin"
+      database: "look_service"
+      collections:
+        tongue_records: "tongue_records"
+        face_records: "face_records"
+        body_records: "body_records"
+        user_profiles: "user_profiles"
+
+    cache:
+      uri: "redis://:${REDIS_PASSWORD}@redis-service:6379/0"
+      ttl_seconds: 3600
+
+    models:
+      tongue_analysis:
+        model_path: "internal/model/weights/tongue_model.pt"
+        device: "cuda"
+        confidence_threshold: 0.75
+        input_size: [448, 448]
+        batch_size: 4
+        quantized: true
+        
+      face_analysis:
+        model_path: "internal/model/weights/face_model.pt"
+        device: "cuda"
+        confidence_threshold: 0.70
+        input_size: [256, 256]
+        batch_size: 1
+        quantized: true
+        
+      body_analysis:
+        model_path: "internal/model/weights/body_model.pt"
+        device: "cuda"
+        confidence_threshold: 0.68
+        input_size: [384, 384]
+        batch_size: 1
+        quantized: true
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: look-service
+  namespace: suoke-ai
+  labels:
+    app.kubernetes.io/name: look-service
+    app.kubernetes.io/part-of: suoke-life
+    app.kubernetes.io/component: ai-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: look-service
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: look-service
+        app.kubernetes.io/part-of: suoke-life
+        app.kubernetes.io/component: ai-service
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "51051"
+        prometheus.io/path: "/metrics"
+    spec:
+      affinity:
+        nodeAffinity:
+          # 优先调度到具有GPU资源的节点
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            preference:
+              matchExpressions:
+              - key: nvidia.com/gpu
+                operator: Exists
+        podAntiAffinity:
+          # 避免将服务的多个副本部署到同一节点
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                  - look-service
+              topologyKey: "kubernetes.io/hostname"
+      containers:
+      - name: look-service
+        image: suoke/look-service:latest
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            cpu: "4"
+            memory: "8Gi"
+            nvidia.com/gpu: "1"
+          requests:
+            cpu: "2"
+            memory: "4Gi"
+            nvidia.com/gpu: "1"
+        env:
+        - name: MODEL_PRECISION
+          value: "FP16"  # 使用FP16精度提高性能
+        - name: ENABLE_TENSORRT
+          value: "true"  # 启用TensorRT加速
+        - name: BATCH_SIZE
+          value: "4"     # 设置适当的批处理大小
+        - name: NUM_WORKERS
+          value: "4"     # 并行处理工作线程数
+        - name: ENABLE_CACHE
+          value: "true"  # 启用结果缓存
+        - name: CACHE_TTL_SECONDS
+          value: "3600"  # 缓存有效期1小时
+        - name: ENABLE_BATCHING
+          value: "true"  # 启用请求批处理
+        - name: MAX_BATCH_TIMEOUT_MS
+          value: "50"    # 批处理最大等待时间
+        ports:
+        - name: grpc
+          containerPort: 50051
+          protocol: TCP
+        - name: metrics
+          containerPort: 51051
+          protocol: TCP
+        volumeMounts:
+        - name: models-volume
+          mountPath: /app/models
+        - name: config-volume
+          mountPath: /app/config
+        - name: cache-volume
+          mountPath: /app/cache
+        readinessProbe:
+          grpc:
+            port: 50051
+          initialDelaySeconds: 15
+          periodSeconds: 10
+        livenessProbe:
+          grpc:
+            port: 50051
+          initialDelaySeconds: 30
+          periodSeconds: 20
+        startupProbe:
+          grpc:
+            port: 50051
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          failureThreshold: 10  # 给予更多时间加载大型模型
+      volumes:
+      - name: models-volume
+        persistentVolumeClaim:
+          claimName: look-service-models-pvc
+      - name: config-volume
+        configMap:
+          name: look-service-config
+      - name: cache-volume
+        emptyDir:
+          sizeLimit: 2Gi
+          medium: Memory  # 使用内存存储提高性能
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: look-service
+  namespace: suoke-ai-np
+  labels:
+    app.kubernetes.io/name: look-service
+    app.kubernetes.io/part-of: suoke-life
+spec:
+  selector:
+    app.kubernetes.io/name: look-service
+  ports:
+  - name: grpc
+    port: 50051
+    targetPort: 50051
+  - name: metrics
+    port: 51051
+    targetPort: 51051
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: look-service-models-pvc
+  namespace: suoke-ai
+spec:
+  accessModes:
+    - ReadOnlyMany
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: ssd  # 使用SSD存储提高性能
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: look-service-hpa
+  namespace: suoke-ai
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: look-service
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 75
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  # 使用自定义指标，需要配置Prometheus适配器
+  - type: Pods
+    pods:
+      metric:
+        name: gpu_utilization
+      target:
+        type: AverageValue
+        averageValue: 80
+  - type: Pods
+    pods:
+      metric:
+        name: queue_length
+      target:
+        type: AverageValue
+        averageValue: 10
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+      - type: Pods
+        value: 1
+        periodSeconds: 30
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Pods
+        value: 1
+        periodSeconds: 60
+
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: look-service-pdb
+  namespace: suoke-ai
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: look-service
+
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: look-service-vpa
+  namespace: suoke-ai
+spec:
+  targetRef:
+    apiVersion: "apps/v1"
+    kind: Deployment
+    name: look-service
+  updatePolicy:
+    updateMode: "Auto"
+  resourcePolicy:
+    containerPolicies:
+    - containerName: "look-service"
+      minAllowed:
+        cpu: "1"
+        memory: "2Gi"
+      maxAllowed:
+        cpu: "8"
+        memory: "16Gi"
+      controlledResources: ["cpu", "memory"] 

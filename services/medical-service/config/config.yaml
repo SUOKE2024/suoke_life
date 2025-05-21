@@ -1,0 +1,82 @@
+server:
+  name: "medical-service"
+  version: "1.0.0"
+  grpc:
+    port: 50051
+    workers: 10
+    max_message_length: 104857600  # 100MB
+    max_concurrent_streams: 100
+    enable_reflection: true
+  rest:
+    port: 8080
+    workers: 4
+    enable_cors: true
+    cors_allowed_origins:
+      - "*"
+    enable_swagger: true
+
+database:
+  host: "localhost"
+  port: 5432
+  user: "postgres"
+  password: "postgres"
+  dbname: "medical_service"
+  max_connections: 10
+  min_connections: 1
+  connection_timeout: 10
+
+services:
+  health_data:
+    host: "health-data-service"
+    port: 50051
+    timeout: 10
+  med_knowledge:
+    host: "med-knowledge"
+    port: 50051
+    timeout: 10
+  inquiry:
+    host: "inquiry-service"
+    port: 50051
+    timeout: 10
+  listen:
+    host: "listen-service"
+    port: 50051
+    timeout: 10
+  look:
+    host: "look-service"
+    port: 50051
+    timeout: 10
+  palpation:
+    host: "palpation-service"
+    port: 50051
+    timeout: 10
+  rag:
+    host: "rag-service"
+    port: 50051
+    timeout: 10
+
+kafka:
+  broker: "kafka:9092"
+  topics:
+    medical_record_created: "medical.record.created"
+    medical_record_updated: "medical.record.updated"
+    diagnosis_created: "medical.diagnosis.created"
+    treatment_created: "medical.treatment.created"
+    health_risk_updated: "medical.health_risk.updated"
+  consumer_group: "medical-service"
+  auto_commit: true
+  auto_commit_interval_ms: 5000
+
+observability:
+  log_level: "info"
+  log_format: "json"
+  enable_tracing: true
+  jaeger_endpoint: "http://jaeger:14268/api/traces"
+  enable_metrics: true
+  metrics_port: 9090
+
+security:
+  jwt_secret: "${JWT_SECRET}"
+  jwt_algorithm: "HS256"
+  jwt_expiration_seconds: 86400  # 24小时
+  enable_api_key: false 

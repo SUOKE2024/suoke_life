@@ -1,0 +1,266 @@
+syntax = "proto3";
+
+package listen_service;
+
+option go_package = "github.com/SUOKE2024/suoke_life/listen-service/api/grpc";
+
+// 定义闻诊服务接口
+service ListenService {
+  // 分析语音特征 - 提取语音中的医学相关特征
+  rpc AnalyzeVoice (VoiceAnalysisRequest) returns (VoiceAnalysisResponse);
+  
+  // 分析声音特征 - 处理咳嗽声、呼吸声等非语言声音
+  rpc AnalyzeSound (SoundAnalysisRequest) returns (SoundAnalysisResponse);
+  
+  // 方言识别 - 识别用户使用的方言类型
+  rpc DetectDialect (DialectDetectionRequest) returns (DialectDetectionResponse);
+  
+  // 情绪分析 - 从语音中提取情绪信息
+  rpc AnalyzeEmotion (EmotionAnalysisRequest) returns (EmotionAnalysisResponse);
+  
+  // 语音转写 - 将语音转换为文本(用于问诊协作)
+  rpc TranscribeAudio (TranscriptionRequest) returns (TranscriptionResponse);
+  
+  // 批量分析 - 对一段音频进行全面分析，包含上述所有功能
+  rpc BatchAnalyze (BatchAnalysisRequest) returns (BatchAnalysisResponse);
+  
+  // 健康检查
+  rpc HealthCheck (HealthCheckRequest) returns (HealthCheckResponse);
+}
+
+// 语音分析请求
+message VoiceAnalysisRequest {
+  string user_id = 1;                // 用户ID
+  string session_id = 2;             // 会话ID
+  bytes audio_data = 3;              // 音频数据
+  string audio_format = 4;           // 音频格式(wav, mp3等)
+  int32 sample_rate = 5;             // 采样率
+  int32 channels = 6;                // 通道数
+  map<string, string> metadata = 7;  // 元数据
+  bool apply_preprocessing = 8;      // 是否应用预处理
+}
+
+// 语音分析响应
+message VoiceAnalysisResponse {
+  string analysis_id = 1;             // 分析ID
+  float speech_rate = 2;              // 语速(单位：字/分钟)
+  float pitch_avg = 3;                // 平均音调(Hz)
+  float pitch_range = 4;              // 音调范围(Hz)
+  float volume_avg = 5;               // 平均音量(dB)
+  float voice_stability = 6;          // 声音稳定性得分(0-1)
+  float breathiness = 7;              // 气息音特征得分(0-1)
+  repeated VoiceFeature features = 8; // 详细特征列表
+  map<string, float> tcm_relevance = 9; // 中医相关性得分(特征-分数)
+  map<string, string> metadata = 10;   // 元数据
+  string diagnostic_hint = 11;        // 诊断提示
+  float confidence = 12;              // 置信度
+  int64 timestamp = 13;               // 时间戳
+}
+
+// 声音特征
+message VoiceFeature {
+  string feature_name = 1;  // 特征名称
+  float value = 2;          // 特征值
+  string unit = 3;          // 单位
+  string description = 4;   // 描述
+  float significance = 5;   // 重要程度(0-1)
+}
+
+// 声音分析请求(非语言声音，如咳嗽、呼吸等)
+message SoundAnalysisRequest {
+  string user_id = 1;                // 用户ID
+  string session_id = 2;             // 会话ID
+  bytes audio_data = 3;              // 音频数据
+  string audio_format = 4;           // 音频格式
+  int32 sample_rate = 5;             // 采样率
+  SoundType sound_type = 6;          // 声音类型
+  map<string, string> metadata = 7;  // 元数据
+  bool apply_preprocessing = 8;      // 是否应用预处理
+}
+
+// 声音类型枚举
+enum SoundType {
+  SOUND_UNKNOWN = 0;  // 未知
+  COUGH = 1;          // 咳嗽
+  BREATHING = 2;      // 呼吸
+  SNORING = 3;        // 鼾声
+  HEART_SOUND = 4;    // 心音
+  OTHER = 5;          // 其他
+}
+
+// 声音分析响应
+message SoundAnalysisResponse {
+  string analysis_id = 1;                // 分析ID
+  SoundType sound_type = 2;              // 识别的声音类型
+  float duration = 3;                    // 持续时间(秒)
+  float amplitude = 4;                   // 振幅
+  float regularity = 5;                  // 规律性得分(0-1)
+  float moisture = 6;                    // 湿度特征(干-湿,0-1)
+  repeated SoundPattern patterns = 7;    // 声音模式
+  map<string, float> tcm_relevance = 8;  // 中医相关性得分(特征-分数)
+  map<string, string> metadata = 9;      // 元数据
+  string diagnostic_hint = 10;           // 诊断提示
+  float confidence = 11;                 // 置信度
+  int64 timestamp = 12;                  // 时间戳
+}
+
+// 声音模式
+message SoundPattern {
+  string pattern_name = 1;    // 模式名称
+  float score = 2;            // 匹配得分(0-1)
+  string description = 3;     // 描述
+  float significance = 4;     // 重要程度(0-1)
+}
+
+// 方言检测请求
+message DialectDetectionRequest {
+  string user_id = 1;               // 用户ID
+  string session_id = 2;            // 会话ID
+  bytes audio_data = 3;             // 音频数据
+  string audio_format = 4;          // 音频格式
+  int32 sample_rate = 5;            // 采样率
+  string text_transcript = 6;       // 可选文本记录(如果已有)
+  map<string, string> metadata = 7; // 元数据
+}
+
+// 方言检测响应
+message DialectDetectionResponse {
+  string detection_id = 1;                // 检测ID
+  string primary_dialect = 2;             // 主要方言
+  string primary_dialect_region = 3;      // 主要方言地区
+  float primary_dialect_confidence = 4;   // 主要方言置信度(0-1)
+  repeated DialectCandidate candidates = 5; // 其他方言候选
+  map<string, string> metadata = 6;       // 元数据
+  int64 timestamp = 7;                    // 时间戳
+}
+
+// 方言候选
+message DialectCandidate {
+  string dialect = 1;         // 方言
+  string region = 2;          // 地区
+  float confidence = 3;       // 置信度(0-1)
+}
+
+// 情绪分析请求
+message EmotionAnalysisRequest {
+  string user_id = 1;               // 用户ID
+  string session_id = 2;            // 会话ID
+  bytes audio_data = 3;             // 音频数据
+  string audio_format = 4;          // 音频格式
+  int32 sample_rate = 5;            // 采样率
+  string text_transcript = 6;       // 可选文本记录(如果已有)
+  map<string, string> metadata = 7; // 元数据
+}
+
+// 情绪分析响应
+message EmotionAnalysisResponse {
+  string analysis_id = 1;                // 分析ID
+  map<string, float> emotions = 2;       // 情绪及强度(0-1)
+  float emotional_stability = 3;         // 情绪稳定性(0-1)
+  map<string, float> tcm_emotions = 4;   // 中医五志(喜、怒、忧、思、恐)得分
+  EmotionTrend trend = 5;                // 情绪变化趋势
+  map<string, string> metadata = 6;      // 元数据
+  string diagnostic_hint = 7;            // 诊断提示
+  float confidence = 8;                  // 置信度
+  int64 timestamp = 9;                   // 时间戳
+}
+
+// 情绪变化趋势
+enum EmotionTrend {
+  TREND_UNKNOWN = 0;   // 未知
+  STABLE = 1;          // 稳定
+  RISING = 2;          // 上升
+  FALLING = 3;         // 下降
+  FLUCTUATING = 4;     // 波动
+}
+
+// 语音转写请求
+message TranscriptionRequest {
+  string user_id = 1;               // 用户ID
+  string session_id = 2;            // 会话ID
+  bytes audio_data = 3;             // 音频数据
+  string audio_format = 4;          // 音频格式
+  int32 sample_rate = 5;            // 采样率
+  string language = 6;              // 语言代码(如zh-CN)
+  bool detect_dialect = 7;          // 是否检测方言
+  map<string, string> metadata = 8; // 元数据
+}
+
+// 语音转写响应
+message TranscriptionResponse {
+  string transcription_id = 1;       // 转写ID
+  string text = 2;                   // 转写文本
+  string language = 3;               // 识别出的语言
+  string dialect = 4;                // 识别出的方言(如果请求)
+  float confidence = 5;              // 置信度(0-1)
+  repeated TranscriptionSegment segments = 6; // 分段转写结果
+  map<string, string> metadata = 7;  // 元数据
+  int64 timestamp = 8;               // 时间戳
+}
+
+// 转写分段
+message TranscriptionSegment {
+  string text = 1;           // 分段文本
+  float start_time = 2;      // 开始时间(秒)
+  float end_time = 3;        // 结束时间(秒)
+  float confidence = 4;      // 置信度(0-1)
+}
+
+// 批量分析请求
+message BatchAnalysisRequest {
+  string user_id = 1;               // 用户ID
+  string session_id = 2;            // 会话ID
+  bytes audio_data = 3;             // 音频数据
+  string audio_format = 4;          // 音频格式
+  int32 sample_rate = 5;            // 采样率
+  repeated string analysis_types = 6; // 请求的分析类型列表
+  map<string, string> metadata = 7;  // 元数据
+}
+
+// 批量分析响应
+message BatchAnalysisResponse {
+  string batch_id = 1;                       // 批量分析ID
+  VoiceAnalysisResponse voice_analysis = 2;  // 语音分析结果
+  SoundAnalysisResponse sound_analysis = 3;  // 声音分析结果
+  DialectDetectionResponse dialect = 4;      // 方言检测结果
+  EmotionAnalysisResponse emotion = 5;       // 情绪分析结果
+  TranscriptionResponse transcription = 6;   // 转写结果
+  ListenDiagnosisResult diagnosis = 7;       // 综合诊断结果
+  map<string, string> metadata = 8;          // 元数据
+  int64 timestamp = 9;                       // 时间戳
+}
+
+// 闻诊诊断结果
+message ListenDiagnosisResult {
+  string diagnosis_id = 1;                      // 诊断ID
+  repeated DiagnosticFeature features = 2;      // 诊断特征
+  map<string, float> tcm_patterns = 3;          // 中医证型相关性得分
+  map<string, float> constitution_relevance = 4; // 体质相关性得分
+  string analysis_summary = 5;                  // 分析总结
+  float confidence = 6;                         // 置信度
+  int64 timestamp = 7;                          // 时间戳
+}
+
+// 诊断特征
+message DiagnosticFeature {
+  string feature_name = 1;  // 特征名称
+  string value = 2;         // 特征值
+  float confidence = 3;     // 置信度(0-1)
+  string category = 4;      // 分类
+}
+
+// 健康检查请求
+message HealthCheckRequest {
+  bool include_details = 1;  // 是否包含详细信息
+}
+
+// 健康检查响应
+message HealthCheckResponse {
+  enum Status {
+    UNKNOWN = 0;
+    SERVING = 1;
+    NOT_SERVING = 2;
+  }
+  Status status = 1;                  // 服务状态
+  map<string, string> details = 2;    // 详细状态信息
+} 

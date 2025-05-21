@@ -1,0 +1,248 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: xiaoke-service-config
+  namespace: suoke-ai-np
+data:
+  config.yaml: |
+    service:
+      name: xiaoke-service
+      version: 1.0.0
+      description: 小克服务 - 医疗资源调度平台
+    
+    server:
+      grpc:
+        host: 0.0.0.0
+        port: 50054
+        max_workers: 10
+      
+      monitoring:
+        host: 0.0.0.0
+        port: 51054
+        metrics_path: /metrics
+    
+    logging:
+      level: INFO
+      format: json
+      file: /app/logs/xiaoke-service.log
+    
+    monitoring:
+      enabled: true
+      prometheus:
+        enabled: true
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: xiaoke-service-secrets
+  namespace: suoke-ai-np
+type: Opaque
+data:
+  postgres_password: eGlhb2tlcGFzc3dvcmQ=  # xiaokepassword
+  mongo_password: eGlhb2tlcGFzc3dvcmQ=  # xiaokepassword
+  redis_password: eGlhb2tlcGFzc3dvcmQ=  # xiaokepassword
+  encryption_key: c2VjcmV0ZW5jcnlwdGlvbmtleWZvcnhpYW9rZXNlcnZpY2U=  # secretencryptionkeyforxiaokeservice
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xiaoke-service
+  namespace: suoke-ai-np
+  labels:
+    app: xiaoke-service
+    app.kubernetes.io/name: xiaoke-service
+    app.kubernetes.io/part-of: suoke-life
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: xiaoke-service
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: xiaoke-service
+        app.kubernetes.io/name: xiaoke-service
+        app.kubernetes.io/part-of: suoke-life
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "51054"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+      - name: xiaoke-service
+        image: suoke/xiaoke-service:latest
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "1Gi"
+          limits:
+            cpu: "2"
+            memory: "4Gi"
+        ports:
+        - name: grpc
+          containerPort: 50054
+        - name: metrics
+          containerPort: 51054
+        env:
+        - name: SERVICE_ENV
+          value: "production"
+        - name: LOG_LEVEL
+          value: "INFO"
+        - name: MONITORING_ENABLED
+          value: "true"
+        - name: POSTGRES_HOST
+          value: "postgres-xiaoke"
+        - name: POSTGRES_USER
+          value: "xiaoke"
+        - name: POSTGRES_DB
+          value: "xiaoke_db"
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: xiaoke-service-secrets
+              key: postgres_password
+        - name: MONGO_HOST
+          value: "mongodb-xiaoke"
+        - name: MONGO_USER
+          value: "xiaoke"
+        - name: MONGO_DB
+          value: "xiaoke_db"
+        - name: MONGO_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: xiaoke-service-secrets
+              key: mongo_password
+        - name: REDIS_HOST
+          value: "redis-xiaoke"
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: xiaoke-service-secrets
+              key: redis_password
+        - name: ENCRYPTION_KEY
+          valueFrom:
+            secretKeyRef:
+              name: xiaoke-service-secrets
+              key: encryption_key
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config
+        - name: logs-volume
+          mountPath: /app/logs
+        - name: data-volume
+          mountPath: /app/data
+        livenessProbe:
+          exec:
+            command:
+            - python
+            - -c
+            - "import socket; socket.socket().connect(('localhost', 50054))"
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command:
+            - python
+            - -c
+            - "import socket; socket.socket().connect(('localhost', 50054))"
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 2
+          failureThreshold: 3
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          runAsNonRoot: true
+          runAsUser: 1000
+      volumes:
+      - name: config-volume
+        configMap:
+          name: xiaoke-service-config
+      - name: logs-volume
+        emptyDir: {}
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: xiaoke-service-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: xiaoke-service
+  namespace: suoke-ai-np
+  labels:
+    app: xiaoke-service
+    app.kubernetes.io/name: xiaoke-service
+    app.kubernetes.io/part-of: suoke-life
+spec:
+  type: ClusterIP
+  ports:
+  - port: 50054
+    targetPort: 50054
+    protocol: TCP
+    name: grpc
+  - port: 51054
+    targetPort: 51054
+    protocol: TCP
+    name: metrics
+  selector:
+    app: xiaoke-service
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: xiaoke-service-data
+  namespace: suoke-ai-np
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: standard
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: xiaoke-service-hpa
+  namespace: suoke-ai-np
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: xiaoke-service
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 75
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 20
+        periodSeconds: 60
+    scaleUp:
+      stabilizationWindowSeconds: 0
+      policies:
+      - type: Percent
+        value: 30
+        periodSeconds: 60

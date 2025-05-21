@@ -1,0 +1,306 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: xiaoke-service-config
+  namespace: agent-services
+  labels:
+    app: xiaoke-service
+    tier: backend
+data:
+  config.yaml: |
+    service:
+      name: xiaoke-service
+      version: 1.0.0
+      description: 小克服务 - 医疗资源调度平台
+      
+    server:
+      grpc:
+        host: 0.0.0.0
+        port: 50054
+        max_workers: 10
+        max_message_length: 10485760  # 10MB
+      
+      monitoring:
+        host: 0.0.0.0
+        port: 51054
+        metrics_path: /metrics
+        
+    logging:
+      level: INFO
+      format: json
+      file: logs/xiaoke-service.log
+      
+    monitoring:
+      enabled: true
+      prometheus:
+        enabled: true
+        push_gateway: prometheus-pushgateway.monitoring.svc.cluster.local:9091
+      
+      tracing:
+        enabled: true
+        jaeger:
+          host: jaeger-agent.monitoring.svc.cluster.local
+          port: 6831
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xiaoke-service
+  namespace: agent-services
+  labels:
+    app: xiaoke-service
+    tier: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: xiaoke-service
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: xiaoke-service
+        tier: backend
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "51054"
+        prometheus.io/path: "/metrics"
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+      - name: xiaoke-service
+        image: ${REGISTRY_URL}/xiaoke-service:${IMAGE_TAG}
+        imagePullPolicy: Always
+        ports:
+        - name: grpc
+          containerPort: 50054
+          protocol: TCP
+        - name: http-monitor
+          containerPort: 51054
+          protocol: TCP
+        env:
+        - name: SERVICE_ENV
+          value: "production"
+        - name: SERVICE_VERSION
+          value: "1.0.0"
+        - name: LOG_LEVEL
+          value: "INFO"
+        - name: POSTGRES_HOST
+          value: "postgres.database.svc.cluster.local"
+        - name: POSTGRES_PORT
+          value: "5432"
+        - name: POSTGRES_DB
+          value: "xiaoke_db"
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgres-credentials
+              key: username
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-credentials
+              key: password
+        - name: MONGO_HOST
+          value: "mongodb.database.svc.cluster.local"
+        - name: MONGO_PORT
+          value: "27017"
+        - name: MONGO_DB
+          value: "xiaoke_db"
+        - name: MONGO_USER
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-credentials
+              key: username
+        - name: MONGO_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-credentials
+              key: password
+        - name: REDIS_HOST
+          value: "redis.database.svc.cluster.local"
+        - name: REDIS_PORT
+          value: "6379"
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: redis-credentials
+              key: password
+        - name: ERP_API_URL
+          value: "https://erp-api.suoke.life"
+        - name: ERP_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: erp-api-credentials
+              key: api-key
+        - name: PROMETHEUS_PUSH_GATEWAY
+          value: "prometheus-pushgateway.monitoring.svc.cluster.local:9091"
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "512Mi"
+          limits:
+            cpu: "1000m"
+            memory: "1Gi"
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config/config.yaml
+          subPath: config.yaml
+        - name: logs-volume
+          mountPath: /app/logs
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http-monitor
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: http-monitor
+          initialDelaySeconds: 15
+          periodSeconds: 15
+          timeoutSeconds: 5
+        startupProbe:
+          httpGet:
+            path: /health
+            port: http-monitor
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 5
+          failureThreshold: 12
+      volumes:
+      - name: config-volume
+        configMap:
+          name: xiaoke-service-config
+      - name: logs-volume
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: xiaoke-service
+  namespace: agent-services
+  labels:
+    app: xiaoke-service
+    tier: backend
+spec:
+  type: ClusterIP
+  ports:
+  - name: grpc
+    port: 50054
+    targetPort: grpc
+    protocol: TCP
+  - name: http-monitor
+    port: 51054
+    targetPort: http-monitor
+    protocol: TCP
+  selector:
+    app: xiaoke-service
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: xiaoke-service-hpa
+  namespace: agent-services
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: xiaoke-service
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+      - type: Percent
+        value: 50
+        periodSeconds: 60
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 20
+        periodSeconds: 120
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: xiaoke-service-pdb
+  namespace: agent-services
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: xiaoke-service
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: xiaoke-service-network-policy
+  namespace: agent-services
+spec:
+  podSelector:
+    matchLabels:
+      app: xiaoke-service
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: api-gateway
+    - namespaceSelector:
+        matchLabels:
+          name: agent-services
+    ports:
+    - protocol: TCP
+      port: 50054
+    - protocol: TCP
+      port: 51054
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: database
+    ports:
+    - protocol: TCP
+      port: 5432
+    - protocol: TCP
+      port: 27017
+    - protocol: TCP
+      port: 6379
+  - to:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+        except:
+        - 10.0.0.0/8
+        - 172.16.0.0/12
+        - 192.168.0.0/16
+    ports:
+    - protocol: TCP
+      port: 443 

@@ -1,0 +1,330 @@
+# 索克生活API网关配置
+server:
+  rest:
+    host: 0.0.0.0
+    port: 8080
+  grpc:
+    host: 0.0.0.0
+    port: 50050
+  production: false
+  debug: true
+
+middleware:
+  cors:
+    enabled: true
+    allow_origins:
+      - "*"
+    allow_methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - OPTIONS
+      - PATCH
+    allow_headers:
+      - Authorization
+      - Content-Type
+      - X-Request-ID
+    allow_credentials: false
+    max_age: 600
+  
+  rate_limit:
+    enabled: true
+    limit: 100
+    window: 60
+    strategy: fixed-window
+    by_ip: true
+    by_user: false
+  
+  auth:
+    enabled: true
+    public_paths:
+      - /health
+      - /metrics
+      - /api/auth/login
+      - /api/auth/register
+      - /docs
+      - /redoc
+      - /openapi.json
+    jwt:
+      secret_key: "dev_secret_key_12345_change_in_production"
+      algorithm: HS256
+      expire_minutes: 1440  # 24小时
+      refresh_expire_minutes: 10080  # 7天
+
+service_discovery:
+  type: static
+  refresh_interval: 30
+  
+  # 静态服务配置
+  services:
+    user-service:
+      name: user-service
+      endpoints:
+        - host: user-service
+          port: 50051
+          use_tls: false
+          health_check:
+            enabled: true
+            interval: 10
+            timeout: 5
+            retries: 3
+            path: /health
+      load_balancer: round-robin
+      circuit_breaker: true
+      timeout: 30
+    
+    auth-service:
+      name: auth-service
+      endpoints:
+        - host: auth-service
+          port: 50052
+          use_tls: false
+          health_check:
+            enabled: true
+            interval: 10
+            timeout: 5
+            retries: 3
+            path: /health
+      load_balancer: round-robin
+      circuit_breaker: true
+      timeout: 30
+    
+    accessibility-service:
+      name: accessibility-service
+      endpoints:
+        - host: accessibility-service
+          port: 50051
+          use_tls: false
+          health_check:
+            enabled: true
+            interval: 10
+            timeout: 5
+            retries: 3
+            path: /health
+      load_balancer: round-robin
+      circuit_breaker: true
+      timeout: 30
+    
+    xiaoai-service:
+      name: xiaoai-service
+      endpoints:
+        - host: xiaoai-service
+          port: 50053
+          use_tls: false
+          health_check:
+            enabled: true
+            interval: 10
+            timeout: 5
+            retries: 3
+            path: /health
+      load_balancer: round-robin
+      circuit_breaker: true
+      timeout: 30
+    
+    xiaoke-service:
+      name: xiaoke-service
+      endpoints:
+        - host: xiaoke-service
+          port: 50054
+          use_tls: false
+          health_check:
+            enabled: true
+            interval: 10
+            timeout: 5
+            retries: 3
+            path: /health
+      load_balancer: round-robin
+      circuit_breaker: true
+      timeout: 30
+    
+    laoke-service:
+      name: laoke-service
+      endpoints:
+        - host: laoke-service
+          port: 50055
+          use_tls: false
+          health_check:
+            enabled: true
+            interval: 10
+            timeout: 5
+            retries: 3
+            path: /health
+      load_balancer: round-robin
+      circuit_breaker: true
+      timeout: 30
+    
+    soer-service:
+      name: soer-service
+      endpoints:
+        - host: soer-service
+          port: 50056
+          use_tls: false
+          health_check:
+            enabled: true
+            interval: 10
+            timeout: 5
+            retries: 3
+            path: /health
+      load_balancer: round-robin
+      circuit_breaker: true
+      timeout: 30
+    
+    rag-service:
+      name: rag-service
+      endpoints:
+        - host: rag-service
+          port: 50057
+          use_tls: false
+          health_check:
+            enabled: true
+            interval: 10
+            timeout: 5
+            retries: 3
+            path: /health
+      load_balancer: round-robin
+      circuit_breaker: true
+      timeout: 30
+
+# 路由配置
+routes:
+  - name: user-service
+    prefix: /api/users
+    service: user-service
+    strip_prefix: true
+    methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - PATCH
+    timeout: 30
+    retry: 0
+    auth_required: true
+  
+  - name: auth-service
+    prefix: /api/auth
+    service: auth-service
+    strip_prefix: true
+    methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - PATCH
+    timeout: 30
+    retry: 0
+    auth_required: false
+  
+  - name: accessibility-service
+    prefix: /api/accessibility
+    service: accessibility-service
+    strip_prefix: true
+    methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - PATCH
+    timeout: 30
+    retry: 0
+    auth_required: true
+  
+  - name: xiaoai-service
+    prefix: /api/agents/xiaoai
+    service: xiaoai-service
+    strip_prefix: true
+    methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - PATCH
+    timeout: 30
+    retry: 0
+    auth_required: true
+  
+  - name: xiaoke-service
+    prefix: /api/agents/xiaoke
+    service: xiaoke-service
+    strip_prefix: true
+    methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - PATCH
+    timeout: 30
+    retry: 0
+    auth_required: true
+  
+  - name: laoke-service
+    prefix: /api/agents/laoke
+    service: laoke-service
+    strip_prefix: true
+    methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - PATCH
+    timeout: 30
+    retry: 0
+    auth_required: true
+  
+  - name: soer-service
+    prefix: /api/agents/soer
+    service: soer-service
+    strip_prefix: true
+    methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - PATCH
+    timeout: 30
+    retry: 0
+    auth_required: true
+  
+  - name: rag-service
+    prefix: /api/rag
+    service: rag-service
+    strip_prefix: true
+    methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - PATCH
+    timeout: 30
+    retry: 0
+    auth_required: true
+
+tracing:
+  enabled: false
+  type: jaeger
+  host: jaeger
+  port: 9411
+  service_name: api-gateway
+  sample_rate: 0.1
+
+metrics:
+  enabled: true
+  path: /metrics
+
+logging:
+  level: INFO
+  format: json
+  output: stdout
+  file_path: null
+  max_size: 10
+  max_backups: 5
+  max_age: 30
+  compress: true
+
+cache:
+  enabled: false
+  type: memory
+  redis_url: null
+  ttl: 60
+  max_items: 1000 

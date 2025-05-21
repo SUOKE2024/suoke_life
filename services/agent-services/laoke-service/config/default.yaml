@@ -1,0 +1,156 @@
+# 老克智能体服务默认配置
+service:
+  name: laoke-service
+  version: 1.0.0
+  description: 索克生活APP的知识传播平台智能体
+
+server:
+  host: 0.0.0.0
+  port: 8081
+  debug: false
+  workers: 4
+  timeout: 60
+  cors:
+    enabled: true
+    origins:
+      - "*"
+
+logging:
+  level: INFO
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: logs/laoke-service.log
+  max_size: 10485760  # 10MB
+  backup_count: 5
+
+metrics:
+  enabled: true
+  report_interval: 60  # 秒
+
+conversation:
+  system_prompt: "你是老克，索克生活APP的知识传播平台智能体，你专注于中医知识传播、社群管理和教育培训。"
+  max_history_turns: 20
+
+models:
+  llm:
+    primary_model: gpt-4o-mini
+    fallback_model: llama-3-8b
+    api_key: ${OPENAI_API_KEY}
+    api_base: ${OPENAI_API_BASE:-https://api.openai.com/v1}
+    org_id: ${OPENAI_ORG_ID}
+    timeout: 60
+  
+  local_llm:
+    endpoint_url: http://localhost:8000/v1
+    available_models:
+      - llama-3-8b
+      - llama-3-70b
+    default_model: llama-3-8b
+    max_tokens: 4096
+  
+  zhipu:
+    api_key: ${ZHIPU_API_KEY}
+    available_models:
+      - glm-4
+      - glm-3-turbo
+  
+  baidu:
+    api_key: ${BAIDU_API_KEY}
+    secret_key: ${BAIDU_SECRET_KEY}
+    api_url: https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/
+    available_models:
+      - ernie-bot-4
+      - ernie-bot
+
+database:
+  type: postgresql
+  host: ${DB_HOST:-localhost}
+  port: ${DB_PORT:-5432}
+  username: ${DB_USER:-postgres}
+  password: ${DB_PASS:-postgres}
+  database: ${DB_NAME:-laoke_service}
+  pool_size: 10
+  max_overflow: 5
+  timeout: 30
+
+cache:
+  type: redis
+  host: ${REDIS_HOST:-localhost}
+  port: ${REDIS_PORT:-6379}
+  db: 1
+  password: ${REDIS_PASS}
+  ttl: 3600
+  memory_cache_size: 10000  # 内存缓存大小
+  memory_cache_ttl: 300     # 内存缓存TTL（秒）
+
+queues:
+  message_bus:
+    host: ${KAFKA_HOST:-localhost}
+    port: ${KAFKA_PORT:-9092}
+    topic_prefix: laoke
+    consumer_group: laoke-service
+    topics:
+      - knowledge-sharing
+      - community-events
+      - edu-content
+
+integrations:
+  med_knowledge:
+    url: ${MED_KNOWLEDGE_URL:-http://localhost:8081}
+    api_key: ${MED_KNOWLEDGE_KEY}
+  
+  education_platform:
+    url: ${EDU_PLATFORM_URL}
+    api_key: ${EDU_PLATFORM_KEY}
+    timeout: 30
+  
+  community_system:
+    url: ${COMMUNITY_SYSTEM_URL}
+    api_key: ${COMMUNITY_SYSTEM_KEY}
+    timeout: 30
+
+knowledge_repository:
+  vector_db:
+    type: milvus
+    host: ${MILVUS_HOST:-localhost}
+    port: ${MILVUS_PORT:-19530}
+    collection: tcm_knowledge
+  
+  document_store:
+    type: elasticsearch
+    host: ${ES_HOST:-localhost}
+    port: ${ES_PORT:-9200}
+    index: tcm_documents
+
+security:
+  jwt:
+    secret: ${JWT_SECRET}
+    algorithm: HS256
+    expires: 3600  # 1小时
+  
+  api_keys:
+    enabled: true
+    header_name: X-API-Key
+
+resilience:
+  circuit_breaker:
+    failure_threshold: 5
+    recovery_time: 30
+  
+  rate_limiter:
+    max_calls: 60
+    time_period: 60
+
+telemetry:
+  tracing:
+    enabled: ${TRACING_ENABLED:-false}
+    exporter: otlp
+    endpoint: ${OTLP_ENDPOINT:-localhost:4317}
+    service_name: laoke-service
+    environment: ${SERVICE_ENV:-development}
+    sampler: always_on   # always_on, always_off, trace_id_ratio
+    sampler_ratio: 1.0   # 采样率，仅在trace_id_ratio采样器中使用
+  metrics:
+    enabled: ${METRICS_ENABLED:-true}
+    exporter: prometheus
+    endpoint: ${METRICS_ENDPOINT:-localhost:9090}
+    export_interval: 15  # 秒

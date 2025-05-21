@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  inquiry-service:
+    build:
+      context: .
+      dockerfile: deploy/docker/Dockerfile
+      args:
+        # 使用阿里云镜像加速
+        PIP_INDEX_URL: https://mirrors.aliyun.com/pypi/simple/
+        PIP_TRUSTED_HOST: mirrors.aliyun.com
+    image: suoke/inquiry-service:latest
+    container_name: inquiry-service
+    restart: unless-stopped
+    ports:
+      - "50052:50052"  # gRPC端口
+      - "9090:9090"    # 监控端口
+    volumes:
+      - ./config:/app/config
+      - ./data:/app/data
+      - ./.env:/app/.env
+    environment:
+      - SERVICE_ENV=development
+      - LOG_LEVEL=DEBUG
+      - USE_MOCK_MODE=true
+      - MOCK_EXTERNAL_SERVICES=true
+    networks:
+      - suoke-network
+
+networks:
+  suoke-network:
+    name: suoke-network
+    driver: bridge

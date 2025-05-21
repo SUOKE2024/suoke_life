@@ -1,0 +1,41 @@
+[
+  {
+    "id": "P001",
+    "name": "气虚证",
+    "english_name": "Qi Deficiency",
+    "category": "虚证",
+    "description": "气虚证是指人体内气的不足所导致的一系列症状",
+    "main_symptoms": ["疲劳", "乏力", "气短", "少气懒言", "自汗"],
+    "secondary_symptoms": ["声低", "动则汗出", "倦怠", "食欲不振"],
+    "tongue": ["舌淡", "舌胖", "齿痕", "舌苔薄白"],
+    "pulse": ["脉弱", "脉缓"],
+    "dietary_recommendations": ["宜食补气健脾食物", "适量吃些山药、红枣", "避免生冷食物"],
+    "lifestyle_recommendations": ["适当运动", "保证充足睡眠", "避免过度劳累"]
+  },
+  {
+    "id": "P002",
+    "name": "阴虚证",
+    "english_name": "Yin Deficiency",
+    "category": "虚证",
+    "description": "阴虚证是指人体阴液亏损所导致的一系列症状",
+    "main_symptoms": ["口干", "咽干", "五心烦热", "潮热", "盗汗"],
+    "secondary_symptoms": ["失眠", "颧红", "手足心热", "形体消瘦", "大便干燥"],
+    "tongue": ["舌红", "少津", "少苔", "舌苔薄或无苔"],
+    "pulse": ["脉细数", "脉弦细"],
+    "dietary_recommendations": ["宜食滋阴润燥食物", "多吃豆制品、水果", "少食辛辣刺激食物"],
+    "lifestyle_recommendations": ["保持情绪平和", "适当练习太极", "避免熬夜"]
+  },
+  {
+    "id": "P003",
+    "name": "肝郁脾虚证",
+    "english_name": "Liver Qi Stagnation with Spleen Deficiency",
+    "category": "肝脾",
+    "description": "肝郁脾虚证是由于肝的疏泄功能失常，导致肝气郁结，横逆犯脾，影响脾的运化功能而形成的证候。",
+    "main_symptoms": ["胸胁胀痛", "脘腹胀满", "嗳气", "食欲不振", "易怒"],
+    "secondary_symptoms": ["腹胀", "腹泻", "恶心", "叹息", "头痛"],
+    "tongue": ["舌淡红，苔薄白", "舌体胖有齿痕"],
+    "pulse": ["脉弦细", "脉弦缓"],
+    "dietary_recommendations": ["宜食清淡易消化食物", "忌食辛辣刺激食物", "少吃生冷食物"],
+    "lifestyle_recommendations": ["保持情绪稳定", "适当运动", "减轻精神压力"]
+  }
+] 

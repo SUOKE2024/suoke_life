@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: accessibility-service
+  template:
+    metadata:
+      labels:
+        app: accessibility-service
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+    spec:
+      containers:
+      - name: accessibility-service
+        image: suoke/accessibility-service:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 50051
+          name: grpc
+        - containerPort: 9090
+          name: metrics
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "1Gi"
+          limits:
+            cpu: "2"
+            memory: "4Gi"
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: ACCESSIBILITY_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: accessibility-secrets
+              key: db-password
+        volumeMounts:
+        - name: config
+          mountPath: /app/config/config.yaml
+          subPath: config.yaml
+        - name: logs
+          mountPath: /var/log/accessibility-service
+        livenessProbe:
+          exec:
+            command:
+            - python
+            - -c
+            - |
+              import socket
+              socket.socket().connect(('localhost', 50051))
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command:
+            - python
+            - -c
+            - |
+              import socket
+              socket.socket().connect(('localhost', 50051))
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 2
+      volumes:
+      - name: config
+        configMap:
+          name: accessibility-config
+      - name: logs
+        emptyDir: {}
+      nodeSelector:
+        cloud.google.com/gke-nodepool: suoke-ai-np
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - accessibility-service
+              topologyKey: kubernetes.io/hostname 

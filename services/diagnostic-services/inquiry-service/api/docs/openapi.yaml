@@ -1,0 +1,836 @@
+openapi: 3.0.3
+info:
+  title: 问诊服务API
+  description: |
+    问诊服务是索克生活APP四诊合参体系中的"问诊"部分，负责通过自然语言问答收集用户健康信息，
+    提取症状并映射到中医理论体系中。本API提供RESTful接口访问问诊服务功能。
+  version: 1.0.0
+  contact:
+    name: 索克生活技术团队
+    email: tech@suoke-life.com
+  
+servers:
+  - url: https://api.suoke-life.com/inquiry
+    description: 生产环境
+  - url: https://api-staging.suoke-life.com/inquiry
+    description: 测试环境
+  - url: http://localhost:8080/inquiry
+    description: 本地开发环境
+
+tags:
+  - name: sessions
+    description: 问诊会话管理
+  - name: interaction
+    description: 问诊互动
+  - name: analysis
+    description: 健康数据分析
+  - name: tcm
+    description: 中医证型分析
+
+paths:
+  /sessions:
+    post:
+      summary: 创建新的问诊会话
+      description: 为指定用户创建新的问诊会话
+      operationId: createInquirySession
+      tags:
+        - sessions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSessionRequest'
+      responses:
+        '201':
+          description: 会话创建成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    
+    get:
+      summary: 获取用户的问诊会话列表
+      description: 获取指定用户的所有问诊会话
+      operationId: getInquirySessions
+      tags:
+        - sessions
+      parameters:
+        - name: user_id
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: 用户ID
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [active, paused, completed, expired, failed]
+          description: 过滤特定状态的会话
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+          description: 页码
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+            maximum: 100
+          description: 每页记录数
+      responses:
+        '200':
+          description: 成功返回会话列表
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sessions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SessionResponse'
+                  total:
+                    type: integer
+                    description: 总记录数
+                  page:
+                    type: integer
+                    description: 当前页码
+                  limit:
+                    type: integer
+                    description: 每页记录数
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  
+  /sessions/{sessionId}:
+    get:
+      summary: 获取问诊会话详情
+      description: 获取特定问诊会话的详细信息
+      operationId: getInquirySessionDetail
+      tags:
+        - sessions
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: 会话ID
+      responses:
+        '200':
+          description: 成功返回会话详情
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionDetailResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    
+    patch:
+      summary: 更新问诊会话状态
+      description: 更新特定问诊会话的状态
+      operationId: updateInquirySessionStatus
+      tags:
+        - sessions
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: 会话ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSessionRequest'
+      responses:
+        '200':
+          description: 会话状态更新成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    
+    delete:
+      summary: 删除问诊会话
+      description: 删除特定的问诊会话
+      operationId: deleteInquirySession
+      tags:
+        - sessions
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: 会话ID
+      responses:
+        '204':
+          description: 会话删除成功
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  
+  /sessions/{sessionId}/interaction:
+    post:
+      summary: 发送用户问诊消息
+      description: 在特定会话中发送用户问诊消息并获取回复
+      operationId: sendUserMessage
+      tags:
+        - interaction
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: 会话ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserMessageRequest'
+      responses:
+        '200':
+          description: 成功获取回复
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InteractionResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  
+  /sessions/{sessionId}/messages:
+    get:
+      summary: 获取问诊会话消息历史
+      description: 获取特定问诊会话的消息历史记录
+      operationId: getSessionMessages
+      tags:
+        - interaction
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: 会话ID
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+          description: 页码
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 50
+            minimum: 1
+            maximum: 100
+          description: 每页记录数
+      responses:
+        '200':
+          description: 成功返回消息历史
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messages:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Message'
+                  total:
+                    type: integer
+                    description: 总记录数
+                  page:
+                    type: integer
+                    description: 当前页码
+                  limit:
+                    type: integer
+                    description: 每页记录数
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  
+  /sessions/{sessionId}/extract-symptoms:
+    post:
+      summary: 提取问诊会话中的症状
+      description: 从特定问诊会话的历史消息中提取症状信息
+      operationId: extractSymptoms
+      tags:
+        - analysis
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: 会话ID
+      responses:
+        '200':
+          description: 成功提取症状
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExtractSymptomsResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  
+  /sessions/{sessionId}/tcm-patterns:
+    post:
+      summary: 分析中医证型
+      description: 基于问诊会话中提取的症状分析中医证型
+      operationId: analyzeTCMPatterns
+      tags:
+        - tcm
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: 会话ID
+      responses:
+        '200':
+          description: 成功分析中医证型
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TCMPatternsResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  
+  /sessions/{sessionId}/summary:
+    post:
+      summary: 生成问诊总结
+      description: 为特定问诊会话生成总结报告
+      operationId: generateSessionSummary
+      tags:
+        - analysis
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: 会话ID
+      responses:
+        '200':
+          description: 成功生成总结
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionSummaryResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  
+  /sessions/{sessionId}/submit-to-xiaoai:
+    post:
+      summary: 提交问诊结果到小艾服务
+      description: 将问诊结果提交到小艾服务进行四诊合参分析
+      operationId: submitToXiaoai
+      tags:
+        - analysis
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: 会话ID
+      responses:
+        '202':
+          description: 问诊结果提交成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmitToXiaoaiResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  
+  /health:
+    get:
+      summary: 健康检查端点
+      description: 用于监控和负载均衡的健康检查端点
+      operationId: healthCheck
+      responses:
+        '200':
+          description: 服务运行正常
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [ok]
+                  version:
+                    type: string
+                    description: 服务版本
+                  timestamp:
+                    type: string
+                    format: date-time
+                    description: 当前时间戳
+
+components:
+  schemas:
+    CreateSessionRequest:
+      type: object
+      required:
+        - user_id
+      properties:
+        user_id:
+          type: string
+          format: uuid
+          description: 用户ID
+        metadata:
+          type: object
+          description: 会话元数据
+          additionalProperties: true
+    
+    UpdateSessionRequest:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum: [active, paused, completed, expired, failed]
+          description: 会话状态
+    
+    UserMessageRequest:
+      type: object
+      required:
+        - content
+      properties:
+        content:
+          type: string
+          description: 用户消息内容
+        metadata:
+          type: object
+          description: 消息元数据
+          additionalProperties: true
+    
+    SessionResponse:
+      type: object
+      properties:
+        session_id:
+          type: string
+          format: uuid
+          description: 会话ID
+        user_id:
+          type: string
+          format: uuid
+          description: 用户ID
+        status:
+          type: string
+          enum: [active, paused, completed, expired, failed]
+          description: 会话状态
+        created_at:
+          type: string
+          format: date-time
+          description: 创建时间
+        updated_at:
+          type: string
+          format: date-time
+          description: 更新时间
+        metadata:
+          type: object
+          description: 会话元数据
+          additionalProperties: true
+    
+    SessionDetailResponse:
+      allOf:
+        - $ref: '#/components/schemas/SessionResponse'
+        - type: object
+          properties:
+            message_count:
+              type: integer
+              description: 消息数量
+            last_message:
+              $ref: '#/components/schemas/Message'
+            extracted_symptoms_count:
+              type: integer
+              description: 提取的症状数量
+            has_tcm_patterns:
+              type: boolean
+              description: 是否已有中医证型分析
+            has_summary:
+              type: boolean
+              description: 是否已有会话总结
+            integration_status:
+              type: object
+              properties:
+                is_submitted:
+                  type: boolean
+                  description: 是否已提交到小艾服务
+                integration_id:
+                  type: string
+                  description: 与小艾服务的集成ID
+                status:
+                  type: string
+                  description: 集成状态
+    
+    Message:
+      type: object
+      properties:
+        message_id:
+          type: string
+          description: 消息ID
+        session_id:
+          type: string
+          format: uuid
+          description: 会话ID
+        role:
+          type: string
+          enum: [system, user, assistant, function]
+          description: 消息角色
+        content:
+          type: string
+          description: 消息内容
+        timestamp:
+          type: string
+          format: date-time
+          description: 消息时间戳
+        metadata:
+          type: object
+          description: 消息元数据
+          additionalProperties: true
+    
+    InteractionResponse:
+      type: object
+      properties:
+        message:
+          $ref: '#/components/schemas/Message'
+        extracted_symptoms:
+          type: array
+          items:
+            $ref: '#/components/schemas/Symptom'
+          description: 本次互动中提取的症状
+    
+    Symptom:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 症状名称
+        description:
+          type: string
+          description: 症状描述
+        body_part:
+          type: string
+          description: 身体部位
+        severity:
+          type: string
+          enum: [mild, moderate, severe]
+          description: 严重程度
+        duration:
+          type: string
+          enum: [acute, subacute, chronic]
+          description: 持续时间类型
+        duration_value:
+          type: integer
+          description: 持续时间值（天/周/月）
+        frequency:
+          type: string
+          description: 频率
+        triggers:
+          type: array
+          items:
+            type: string
+          description: 诱因
+        relieving_factors:
+          type: array
+          items:
+            type: string
+          description: 缓解因素
+        aggravating_factors:
+          type: array
+          items:
+            type: string
+          description: 加重因素
+        associated_symptoms:
+          type: array
+          items:
+            type: string
+          description: 相关症状
+        confidence:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+          description: 提取置信度
+        source_text:
+          type: string
+          description: 来源文本
+    
+    TCMPattern:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 证型名称
+        score:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+          description: 证型匹配分数
+        key_symptoms:
+          type: array
+          items:
+            type: string
+          description: 关键症状
+        description:
+          type: string
+          description: 证型描述
+        recommendations:
+          type: array
+          items:
+            type: string
+          description: 建议
+    
+    ExtractSymptomsResponse:
+      type: object
+      properties:
+        session_id:
+          type: string
+          format: uuid
+          description: 会话ID
+        symptoms:
+          type: array
+          items:
+            $ref: '#/components/schemas/Symptom'
+          description: 提取的症状
+        confidence:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+          description: 整体置信度
+    
+    TCMPatternsResponse:
+      type: object
+      properties:
+        session_id:
+          type: string
+          format: uuid
+          description: 会话ID
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/TCMPattern'
+          description: 中医证型列表
+        primary_pattern:
+          $ref: '#/components/schemas/TCMPattern'
+          description: 主要证型
+        confidence:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+          description: 证型映射置信度
+        analysis:
+          type: string
+          description: 证型分析说明
+    
+    SessionSummaryResponse:
+      type: object
+      properties:
+        session_id:
+          type: string
+          format: uuid
+          description: 会话ID
+        user_id:
+          type: string
+          format: uuid
+          description: 用户ID
+        timestamp:
+          type: string
+          format: date-time
+          description: 生成时间戳
+        symptoms:
+          type: array
+          items:
+            $ref: '#/components/schemas/Symptom'
+          description: 提取的症状
+        tcm_patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/TCMPattern'
+          description: 中医证型
+        western_diagnosis_suggestions:
+          type: array
+          items:
+            type: string
+          description: 西医诊断建议
+        health_risk_factors:
+          type: object
+          additionalProperties:
+            type: number
+            format: float
+            minimum: 0
+            maximum: 1
+          description: 健康风险因素及其评分
+        recommendations:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          description: 分类建议
+        summary:
+          type: string
+          description: 总结文本
+    
+    SubmitToXiaoaiResponse:
+      type: object
+      properties:
+        session_id:
+          type: string
+          format: uuid
+          description: 会话ID
+        success:
+          type: boolean
+          description: 提交是否成功
+        integration_id:
+          type: string
+          description: 集成ID，用于后续查询结果
+        message:
+          type: string
+          description: 提交结果消息
+    
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+          description: 错误代码
+        message:
+          type: string
+          description: 错误消息
+        details:
+          type: object
+          description: 错误详情
+          additionalProperties: true
+        request_id:
+          type: string
+          description: 请求ID，用于追踪问题
+  
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  
+  responses:
+    BadRequest:
+      description: 请求参数无效
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    
+    Unauthorized:
+      description: 未授权访问
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    
+    NotFound:
+      description: 资源不存在
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    
+    InternalServerError:
+      description: 服务器内部错误
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+security:
+  - BearerAuth: [] 

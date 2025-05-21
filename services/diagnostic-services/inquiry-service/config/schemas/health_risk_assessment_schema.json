@@ -1,0 +1,120 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["immediate_risks", "long_term_risks", "prevention_strategies", "overall_risk_score"],
+  "properties": {
+    "immediate_risks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["risk_name", "probability", "severity"],
+        "properties": {
+          "risk_name": {
+            "type": "string",
+            "description": "风险名称"
+          },
+          "probability": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "风险概率"
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["low", "moderate", "high", "critical"],
+            "description": "风险严重程度"
+          },
+          "timeframe": {
+            "type": "string",
+            "description": "风险时间框架，如'immediate'(立即),'within a week'(一周内)等"
+          },
+          "contributing_factors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "促成风险的因素列表"
+          }
+        }
+      }
+    },
+    "long_term_risks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["risk_name", "probability", "severity"],
+        "properties": {
+          "risk_name": {
+            "type": "string",
+            "description": "长期风险名称"
+          },
+          "probability": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "风险概率"
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["low", "moderate", "high", "critical"],
+            "description": "风险严重程度"
+          },
+          "timeframe": {
+            "type": "string",
+            "description": "风险时间框架，如'1-3 years'(1-3年),'3-5 years'(3-5年)等"
+          },
+          "contributing_factors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "促成风险的因素列表"
+          }
+        }
+      }
+    },
+    "prevention_strategies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["strategy_name", "description", "action_items"],
+        "properties": {
+          "strategy_name": {
+            "type": "string",
+            "description": "预防策略名称"
+          },
+          "description": {
+            "type": "string",
+            "description": "预防策略的详细描述"
+          },
+          "action_items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "具体行动项列表"
+          },
+          "targets": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "该策略针对的风险列表"
+          },
+          "effectiveness_score": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "策略有效性评分"
+          }
+        }
+      }
+    },
+    "overall_risk_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "整体风险评分"
+    }
+  }
+} 

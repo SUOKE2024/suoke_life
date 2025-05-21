@@ -1,0 +1,266 @@
+# 索克生活APP - 闻诊服务生产环境配置
+
+# 服务基本信息
+service:
+  name: "listen-service"
+  version: "1.0.0"
+  env: "production"
+  log_level: "info"
+  log_format: "json"
+
+# 服务器配置
+server:
+  host: "0.0.0.0"
+  port: 50052
+  max_workers: 20
+  max_concurrent_rpcs: 100
+  request_timeout: 30000  # 毫秒
+  connection_timeout: 5000  # 毫秒
+  keepalive: true
+  keepalive_time: 7200  # 秒
+  max_message_size: 20971520  # 20MB
+
+# 数据库配置
+database:
+  mongo:
+    uri: "${MONGO_URI}"
+    db_name: "listen_service_db"
+    pool_size: 10
+    connection_timeout: 5000
+    max_idle_time: 60000
+    write_concern: "majority"
+    read_concern: "majority"
+    retry_writes: true
+
+# 缓存配置
+cache:
+  redis:
+    host: "${REDIS_HOST}"
+    port: 6379
+    password: "${REDIS_PASSWORD}"
+    db: 0
+    pool_size: 20
+    connection_timeout: 5000
+    key_prefix: "listen:"
+    ttl: 3600  # 秒
+
+# 模型配置
+models:
+  base_path: "/opt/suoke/models"
+  voice_feature_analyzer:
+    path: "/opt/suoke/models/voice_feature_analyzer"
+    version: "1.2.1"
+    device: "cuda"  # 或 "cpu"
+    batch_size: 16
+    preload: true
+    config:
+      feature_extraction:
+        mfcc: true
+        prosody: true
+        spectral: true
+  
+  sound_analyzer:
+    path: "/opt/suoke/models/sound_analyzer"
+    version: "1.1.0"
+    device: "cuda"
+    batch_size: 8
+    preload: true
+    config:
+      extraction_window: 1024
+      hop_length: 512
+      resample_rate: 16000
+      normalize: true
+
+  emotion_detector:
+    path: "/opt/suoke/models/emotion_detector"
+    version: "1.3.2"
+    device: "cuda"
+    batch_size: 1
+    preload: true
+    config:
+      emotion_labels: ["neutral", "happy", "sad", "angry", "fearful", "surprise"]
+      fusion_mode: "audio_text"  # "audio_only", "text_only", "audio_text"
+
+  dialect_detector:
+    path: "/opt/suoke/models/dialect_detector"
+    version: "1.0.5"
+    device: "cuda"
+    batch_size: 1
+    preload: true
+    config:
+      dialect_map_file: "/opt/suoke/models/dialect_detector/dialect_map.json"
+
+  speech_to_text:
+    path: "/opt/suoke/models/speech_to_text"
+    version: "1.4.0"
+    device: "cuda"
+    batch_size: 1
+    preload: true
+    config:
+      language: "zh-CN"
+      beam_size: 5
+      lm_weight: 0.5
+
+# 音频处理配置
+audio_processing:
+  default_sample_rate: 16000
+  max_duration: 300  # 秒
+  supported_formats: ["wav", "mp3", "flac", "ogg", "m4a"]
+  temp_dir: "/tmp/listen_service"
+  preprocessing:
+    denoise: true
+    normalize: true
+    vad: true  # 语音活动检测
+    trim_silence: true
+
+# 监控和指标配置
+monitoring:
+  prometheus:
+    enabled: true
+    endpoint: "/metrics"
+    push_gateway: "prometheus-pushgateway.monitoring:9091"
+    push_interval: 10  # 秒
+    namespace: "suoke"
+    subsystem: "listen_service"
+  
+  tracing:
+    enabled: true
+    provider: "jaeger"
+    service_name: "listen-service"
+    endpoint: "${JAEGER_ENDPOINT}"
+    sample_rate: 0.1
+
+  logging:
+    file: "/var/log/suoke/listen-service.log"
+    max_size: 100  # MB
+    max_backups: 20
+    max_age: 30  # 天
+    compress: true
+
+# 安全配置
+security:
+  tls:
+    enabled: true
+    cert_file: "/etc/suoke/ssl/listen-service.crt"
+    key_file: "/etc/suoke/ssl/listen-service.key"
+  
+  auth:
+    enabled: true
+    jwt:
+      secret: "${JWT_SECRET}"
+      audience: "suoke-services"
+      issuer: "auth-service"
+
+# 集成配置
+integration:
+  xiaoai_service:
+    host: "xiaoai-service.service"
+    port: 50060
+    timeout: 5000
+    tls: true
+    retry:
+      max_attempts: 3
+      initial_backoff: 100  # 毫秒
+      max_backoff: 1000  # 毫秒
+  
+  inquiry_service:
+    host: "inquiry-service.service"
+    port: 50053
+    timeout: 5000
+    tls: true
+    retry:
+      max_attempts: 3
+      initial_backoff: 100
+      max_backoff: 1000
+  
+  look_service:
+    host: "look-service.service"
+    port: 50051
+    timeout: 5000
+    tls: true
+    retry:
+      max_attempts: 3
+      initial_backoff: 100
+      max_backoff: 1000
+  
+  palpation_service:
+    host: "palpation-service.service"
+    port: 50054
+    timeout: 5000
+    tls: true
+    retry:
+      max_attempts: 3
+      initial_backoff: 100
+      max_backoff: 1000
+
+# 限流配置
+rate_limiting:
+  enabled: true
+  global_limits:
+    requests_per_second: 100
+    burst: 50
+  
+  endpoint_limits:
+    AnalyzeVoice:
+      requests_per_second: 20
+      burst: 10
+    AnalyzeSound:
+      requests_per_second: 20
+      burst: 10
+    BatchAnalyze:
+      requests_per_second: 10
+      burst: 5
+    TranscribeAudio:
+      requests_per_second: 20
+      burst: 10
+
+# 健康检查配置
+health_check:
+  enabled: true
+  interval: 30  # 秒
+  timeout: 5  # 秒
+  checks:
+    - name: "database"
+      enabled: true
+    - name: "cache"
+      enabled: true
+    - name: "models"
+      enabled: true
+    - name: "disk_space"
+      enabled: true
+      threshold: 90  # 百分比
+    - name: "memory"
+      enabled: true
+      threshold: 90  # 百分比
+
+# 故障恢复配置
+resilience:
+  circuit_breaker:
+    enabled: true
+    failure_threshold: 5
+    recovery_timeout: 30  # 秒
+  
+  retry:
+    enabled: true
+    max_attempts: 3
+    initial_backoff: 100  # 毫秒
+    max_backoff: 1000  # 毫秒
+
+# 资源限制配置
+resources:
+  cpu:
+    limit: 4
+    request: 2
+  memory:
+    limit: "8Gi"
+    request: "4Gi"
+  gpu:
+    enabled: true
+    count: 1
+    type: "nvidia-tesla-t4"
+
+# 任务队列配置
+task_queue:
+  workers: 5
+  queue_size: 100
+  max_execution_time: 120  # 秒 

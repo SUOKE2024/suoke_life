@@ -1,0 +1,118 @@
+# 索儿服务配置文件
+
+# 服务配置
+service:
+  name: soer-service
+  version: 1.0.0
+  environment: development
+
+# gRPC服务配置
+grpc:
+  port: 50054
+  max_workers: 10
+  max_message_length: 104857600  # 100MB
+  enable_reflection: true
+
+# REST API配置
+rest:
+  port: 8054
+  cors_origins: ["*"]
+  api_prefix: /api/v1
+
+# 数据库配置
+database:
+  type: postgresql
+  host: postgres
+  port: 5432
+  name: soer_db
+  user: soer_user
+  password: ${DB_PASSWORD}
+  pool_size: 10
+  timeout: 30
+
+# 缓存配置
+cache:
+  type: redis
+  host: redis
+  port: 6379
+  db: 0
+  password: ${REDIS_PASSWORD}
+  ttl: 300  # 5分钟
+
+# 日志配置
+logging:
+  level: INFO
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: logs/soer-service.log
+  rotate: true
+  max_size: 100  # MB
+  backups: 5
+
+# 指标配置
+metrics:
+  enabled: true
+  type: prometheus
+  port: 9098
+  path: /metrics
+
+# 追踪配置
+tracing:
+  enabled: true
+  type: jaeger
+  service_name: soer-service
+  host: jaeger
+  port: 6831
+
+# 大模型配置
+models:
+  llm:
+    primary_model: gpt-4o-mini
+    fallback_model: llama-3-8b
+    api_base: ${LLM_API_BASE}
+    api_key: ${LLM_API_KEY}
+    timeout: 60
+    max_tokens: 4096
+    top_p: 0.9
+    temperature: 0.7
+
+# 会话配置
+conversation:
+  system_prompt: "你是索儿，索克生活APP的健康生活智能体，负责为用户提供个性化的健康管理服务。你基于传统中医理论和现代健康科学，用温暖亲切的语气为用户提供全生命周期健康管理服务。"
+  max_history_turns: 20
+  idle_timeout: 1800  # 30分钟
+
+# 健康分析配置
+health_analyzer:
+  update_interval: 86400  # 24小时
+  alert_threshold:
+    heart_rate: 
+      min: 45
+      max: 120
+    blood_pressure:
+      systolic_min: 90
+      systolic_max: 140
+      diastolic_min: 60
+      diastolic_max: 90
+
+# 营养分析配置
+nutrition:
+  food_db_path: config/food_db.json
+  daily_reference:
+    calories: 2000
+    protein: 50
+    carbs: 275
+    fat: 60
+    fiber: 25
+
+# 传感器配置
+sensors:
+  refresh_interval: 300  # 5分钟
+  devices:
+    - type: apple_health
+      enabled: true
+    - type: google_fit
+      enabled: true
+    - type: fitbit
+      enabled: true
+    - type: garmin
+      enabled: true

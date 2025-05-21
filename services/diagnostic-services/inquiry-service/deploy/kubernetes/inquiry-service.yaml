@@ -1,0 +1,280 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: inquiry-service-config
+  labels:
+    app.kubernetes.io/name: inquiry-service
+    app.kubernetes.io/part-of: suoke-life
+data:
+  config.yaml: |
+    server:
+      host: "0.0.0.0"
+      port: 50053
+      max_workers: 10
+      max_concurrent_sessions: 500
+      timeout_seconds: 300
+      enable_reflection: true
+
+    grpc:
+      max_message_size: 10485760  # 10MB
+      keep_alive_time: 60000  # 60s
+      keep_alive_timeout: 20000  # 20s
+      connection_age: 300000  # 5 min
+      connection_age_grace: 10000  # 10s
+
+    # 其余配置略（使用容器环境中的config.yaml）
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: inquiry-service-secrets
+  labels:
+    app.kubernetes.io/name: inquiry-service
+    app.kubernetes.io/part-of: suoke-life
+type: Opaque
+data:
+  mongodb-password: aW5xdWlyeXBhc3N3b3Jk  # inquirypassword
+  redis-password: cmVkaXNwYXNzd29yZA==  # redispassword
+  jwt-secret: aW5xdWlyeXNlY3JldGtleQ==  # inquirysecretkey
+  llm-api-key: eW91cl9sbG1fYXBpX2tleQ==  # your_llm_api_key
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inquiry-service
+  labels:
+    app.kubernetes.io/name: inquiry-service
+    app.kubernetes.io/part-of: suoke-life
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: inquiry-service
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: inquiry-service
+        app.kubernetes.io/part-of: suoke-life
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+      - name: inquiry-service
+        image: inquiry-service:latest
+        imagePullPolicy: Always
+        ports:
+        - name: grpc
+          containerPort: 50053
+        - name: metrics
+          containerPort: 8080
+        env:
+        - name: MONGODB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: inquiry-service-secrets
+              key: mongodb-password
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: inquiry-service-secrets
+              key: redis-password
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: inquiry-service-secrets
+              key: jwt-secret
+        - name: LLM_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: inquiry-service-secrets
+              key: llm-api-key
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config
+        - name: data-volume
+          mountPath: /app/data
+        - name: models-volume
+          mountPath: /app/models
+        - name: logs-volume
+          mountPath: /var/log
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "1Gi"
+          limits:
+            cpu: "2"
+            memory: "4Gi"
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 15
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /metrics
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 2
+      volumes:
+      - name: config-volume
+        configMap:
+          name: inquiry-service-config
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: inquiry-service-data
+      - name: models-volume
+        persistentVolumeClaim:
+          claimName: inquiry-service-models
+      - name: logs-volume
+        persistentVolumeClaim:
+          claimName: inquiry-service-logs
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: inquiry-service-data
+  labels:
+    app.kubernetes.io/name: inquiry-service
+    app.kubernetes.io/part-of: suoke-life
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: inquiry-service-models
+  labels:
+    app.kubernetes.io/name: inquiry-service
+    app.kubernetes.io/part-of: suoke-life
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: inquiry-service-logs
+  labels:
+    app.kubernetes.io/name: inquiry-service
+    app.kubernetes.io/part-of: suoke-life
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: inquiry-service
+  labels:
+    app.kubernetes.io/name: inquiry-service
+    app.kubernetes.io/part-of: suoke-life
+spec:
+  type: ClusterIP
+  ports:
+  - name: grpc
+    port: 50053
+    targetPort: 50053
+  - name: metrics
+    port: 8080
+    targetPort: 8080
+  selector:
+    app.kubernetes.io/name: inquiry-service
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: inquiry-service-grpc-ingress
+  labels:
+    app.kubernetes.io/name: inquiry-service
+    app.kubernetes.io/part-of: suoke-life
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  rules:
+  - host: inquiry-api.suoke.life
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: inquiry-service
+            port:
+              number: 50053
+  tls:
+  - hosts:
+    - inquiry-api.suoke.life
+    secretName: suoke-tls-secret
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: inquiry-service-hpa
+  labels:
+    app.kubernetes.io/name: inquiry-service
+    app.kubernetes.io/part-of: suoke-life
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: inquiry-service
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 75
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+      - type: Percent
+        value: 100
+        periodSeconds: 60
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 10
+        periodSeconds: 60 

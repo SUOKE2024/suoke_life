@@ -1,0 +1,509 @@
+syntax = "proto3";
+
+package medical;
+
+option go_package = "github.com/suokelife/medical-service/api/grpc;medical";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+service MedicalService {
+  // 健康记录相关
+  rpc CreateMedicalRecord(CreateMedicalRecordRequest) returns (MedicalRecord);
+  rpc GetMedicalRecord(GetMedicalRecordRequest) returns (MedicalRecord);
+  rpc ListMedicalRecords(ListMedicalRecordsRequest) returns (ListMedicalRecordsResponse);
+  rpc UpdateMedicalRecord(UpdateMedicalRecordRequest) returns (MedicalRecord);
+  rpc DeleteMedicalRecord(DeleteMedicalRecordRequest) returns (google.protobuf.Empty);
+  
+  // 诊断相关
+  rpc RequestDiagnosis(DiagnosisRequest) returns (DiagnosisResponse);
+  rpc GetDiagnosisResult(GetDiagnosisResultRequest) returns (DiagnosisResult);
+  rpc ListDiagnosisHistory(ListDiagnosisHistoryRequest) returns (ListDiagnosisHistoryResponse);
+  
+  // 治疗方案相关
+  rpc GenerateTreatmentPlan(TreatmentPlanRequest) returns (TreatmentPlan);
+  rpc GetTreatmentPlan(GetTreatmentPlanRequest) returns (TreatmentPlan);
+  rpc UpdateTreatmentPlanStatus(UpdateTreatmentPlanStatusRequest) returns (TreatmentPlan);
+  
+  // 健康风险评估
+  rpc AssessHealthRisk(HealthRiskAssessmentRequest) returns (HealthRiskAssessmentResponse);
+  
+  // 医疗咨询
+  rpc SubmitMedicalQuery(MedicalQueryRequest) returns (MedicalQueryResponse);
+}
+
+// 健康记录相关消息
+message MedicalRecord {
+  string id = 1;
+  string user_id = 2;
+  string record_type = 3;  // 例如：常规检查，慢性病随访，急诊等
+  google.protobuf.Timestamp record_date = 4;
+  string doctor_id = 5;
+  string doctor_name = 6;
+  string institution = 7;
+  string chief_complaint = 8;
+  string diagnosis = 9;
+  string treatment = 10;
+  string notes = 11;
+  repeated Attachment attachments = 12;
+  map<string, string> metadata = 13;
+  google.protobuf.Timestamp created_at = 14;
+  google.protobuf.Timestamp updated_at = 15;
+}
+
+message Attachment {
+  string id = 1;
+  string name = 2;
+  string content_type = 3;
+  string url = 4;
+  int64 size = 5;
+}
+
+message CreateMedicalRecordRequest {
+  string user_id = 1;
+  string record_type = 2;
+  google.protobuf.Timestamp record_date = 3;
+  string doctor_id = 4;
+  string doctor_name = 5;
+  string institution = 6;
+  string chief_complaint = 7;
+  string diagnosis = 8;
+  string treatment = 9;
+  string notes = 10;
+  repeated Attachment attachments = 11;
+  map<string, string> metadata = 12;
+}
+
+message GetMedicalRecordRequest {
+  string id = 1;
+}
+
+message ListMedicalRecordsRequest {
+  string user_id = 1;
+  string record_type = 2;
+  google.protobuf.Timestamp start_date = 3;
+  google.protobuf.Timestamp end_date = 4;
+  int32 page = 5;
+  int32 page_size = 6;
+}
+
+message ListMedicalRecordsResponse {
+  repeated MedicalRecord records = 1;
+  int32 total_count = 2;
+  int32 page = 3;
+  int32 page_size = 4;
+}
+
+message UpdateMedicalRecordRequest {
+  string id = 1;
+  string record_type = 2;
+  google.protobuf.Timestamp record_date = 3;
+  string doctor_id = 4;
+  string doctor_name = 5;
+  string institution = 6;
+  string chief_complaint = 7;
+  string diagnosis = 8;
+  string treatment = 9;
+  string notes = 10;
+  repeated Attachment attachments = 11;
+  map<string, string> metadata = 12;
+}
+
+message DeleteMedicalRecordRequest {
+  string id = 1;
+}
+
+// 诊断相关消息
+message DiagnosisRequest {
+  string user_id = 1;
+  string chief_complaint = 2;
+  repeated string symptoms = 3;
+  map<string, string> health_data = 4;  // 健康数据，如 "heart_rate": "85"
+  repeated string diagnostic_methods = 5;  // 例如：望、闻、问、切
+  bool include_western_medicine = 6;
+  bool include_tcm = 7;
+}
+
+message DiagnosisResponse {
+  string diagnosis_id = 1;
+  string status = 2;  // "PROCESSING", "COMPLETED", "FAILED"
+  string estimated_completion_time = 3;
+}
+
+message GetDiagnosisResultRequest {
+  string diagnosis_id = 1;
+}
+
+message DiagnosisResult {
+  string id = 1;
+  string user_id = 2;
+  google.protobuf.Timestamp diagnosis_time = 3;
+  string status = 4;  // "COMPLETED", "FAILED"
+  
+  // TCM 诊断结果
+  TCMDiagnosis tcm_diagnosis = 5;
+  
+  // 西医诊断结果
+  WesternDiagnosis western_diagnosis = 6;
+  
+  // 综合诊断结果
+  string integrated_diagnosis = 7;
+  repeated string health_advice = 8;
+  
+  google.protobuf.Timestamp created_at = 9;
+}
+
+message TCMDiagnosis {
+  // 四诊结果
+  LookDiagnosis look = 1;  // 望诊
+  ListenSmellDiagnosis listen_smell = 2;  // 闻诊
+  InquiryDiagnosis inquiry = 3;  // 问诊
+  PalpationDiagnosis palpation = 4;  // 切诊
+  
+  repeated string pattern_differentiation = 5;  // 证型辨别
+  repeated string meridian_analysis = 6;  // 经络分析
+  string constitution_type = 7;  // 体质类型
+  repeated string imbalances = 8;  // 阴阳失衡
+}
+
+message LookDiagnosis {
+  string facial_color = 1;
+  string tongue_diagnosis = 2;
+  string body_shape = 3;
+  string complexion = 4;
+  repeated string abnormal_signs = 5;
+}
+
+message ListenSmellDiagnosis {
+  string voice_quality = 1;
+  string breathing_sounds = 2;
+  string odor = 3;
+  repeated string abnormal_sounds = 4;
+}
+
+message InquiryDiagnosis {
+  repeated string reported_symptoms = 1;
+  string sleep_quality = 2;
+  string diet_habits = 3;
+  string emotional_state = 4;
+  string pain_description = 5;
+  map<string, string> additional_information = 6;
+}
+
+message PalpationDiagnosis {
+  string pulse_diagnosis = 1;
+  repeated string pulse_qualities = 2;
+  string abdominal_diagnosis = 3;
+  map<string, string> acupoint_tenderness = 4;
+  repeated string other_findings = 5;
+}
+
+message WesternDiagnosis {
+  repeated string possible_conditions = 1;
+  map<string, string> vital_signs = 2;  // 例如 "blood_pressure": "120/80"
+  repeated LabTest lab_results = 3;
+  string clinical_analysis = 4;
+  int32 confidence_score = 5;  // 0-100
+  repeated string differential_diagnosis = 6;
+}
+
+message LabTest {
+  string test_name = 1;
+  string result = 2;
+  string unit = 3;
+  string reference_range = 4;
+  bool is_abnormal = 5;
+}
+
+message ListDiagnosisHistoryRequest {
+  string user_id = 1;
+  google.protobuf.Timestamp start_date = 2;
+  google.protobuf.Timestamp end_date = 3;
+  int32 page = 4;
+  int32 page_size = 5;
+}
+
+message ListDiagnosisHistoryResponse {
+  repeated DiagnosisResult diagnosis_history = 1;
+  int32 total_count = 2;
+  int32 page = 3;
+  int32 page_size = 4;
+}
+
+// 治疗方案相关消息
+message TreatmentPlanRequest {
+  string user_id = 1;
+  string diagnosis_id = 2;
+  repeated string treatment_preferences = 3;  // 例如：药物治疗、针灸、推拿等
+  bool include_western_medicine = 4;
+  bool include_tcm = 5;
+}
+
+message TreatmentPlan {
+  string id = 1;
+  string user_id = 2;
+  string diagnosis_id = 3;
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
+  string status = 6;  // "ACTIVE", "COMPLETED", "CANCELED"
+  
+  // TCM 治疗方案
+  TCMTreatment tcm_treatment = 7;
+  
+  // 西医治疗方案
+  WesternTreatment western_treatment = 8;
+  
+  // 生活方式调整建议
+  LifestyleAdjustment lifestyle_adjustment = 9;
+  
+  // 随访计划
+  FollowUpPlan follow_up_plan = 10;
+}
+
+message TCMTreatment {
+  // 中药处方
+  repeated HerbalPrescription herbal_prescriptions = 1;
+  
+  // 针灸方案
+  repeated AcupunctureTreatment acupuncture_treatments = 2;
+  
+  // 推拿方案
+  repeated TuinaTreatment tuina_treatments = 3;
+  
+  // 其他 TCM 疗法
+  repeated OtherTCMTherapy other_therapies = 4;
+}
+
+message HerbalPrescription {
+  string name = 1;
+  repeated HerbalComponent components = 2;
+  string preparation_method = 3;
+  string dosage_instruction = 4;
+  string duration = 5;
+  repeated string precautions = 6;
+}
+
+message HerbalComponent {
+  string herb_name = 1;
+  string quantity = 2;
+  string unit = 3;
+  string preparation = 4;  // 例如：生用、炒用等
+}
+
+message AcupunctureTreatment {
+  repeated string acupoints = 1;
+  string technique = 2;
+  string duration = 3;
+  string frequency = 4;
+  int32 total_sessions = 5;
+}
+
+message TuinaTreatment {
+  repeated string techniques = 1;
+  repeated string target_areas = 2;
+  string duration = 3;
+  string frequency = 4;
+  int32 total_sessions = 5;
+}
+
+message OtherTCMTherapy {
+  string therapy_name = 1;
+  string description = 2;
+  string application_method = 3;
+  string duration = 4;
+  string frequency = 5;
+}
+
+message WesternTreatment {
+  // 药物治疗
+  repeated MedicationPrescription medications = 1;
+  
+  // 治疗程序
+  repeated MedicalProcedure procedures = 2;
+  
+  // 检测计划
+  repeated TestPlan tests = 3;
+  
+  // 转诊建议
+  repeated Referral referrals = 4;
+}
+
+message MedicationPrescription {
+  string medication_name = 1;
+  string dosage = 2;
+  string route = 3;  // 口服、静脉注射等
+  string frequency = 4;
+  string duration = 5;
+  repeated string side_effects = 6;
+  repeated string precautions = 7;
+}
+
+message MedicalProcedure {
+  string procedure_name = 1;
+  string description = 2;
+  string location = 3;
+  google.protobuf.Timestamp scheduled_time = 4;
+  string preparation = 5;
+  string aftercare = 6;
+}
+
+message TestPlan {
+  string test_name = 1;
+  string purpose = 2;
+  string facility = 3;
+  google.protobuf.Timestamp scheduled_time = 4;
+  string preparation = 5;
+}
+
+message Referral {
+  string specialist_type = 1;
+  string reason = 2;
+  string urgency = 3;  // "ROUTINE", "URGENT", "EMERGENCY"
+  string preferred_facility = 4;
+}
+
+message LifestyleAdjustment {
+  // 饮食建议
+  repeated DietaryRecommendation dietary = 1;
+  
+  // 运动建议
+  ExerciseRecommendation exercise = 2;
+  
+  // 睡眠建议
+  SleepRecommendation sleep = 3;
+  
+  // 压力管理
+  StressManagement stress_management = 4;
+  
+  // 其他生活方式建议
+  repeated string other_recommendations = 5;
+}
+
+message DietaryRecommendation {
+  repeated string foods_to_consume = 1;
+  repeated string foods_to_avoid = 2;
+  string meal_pattern = 3;
+  repeated string dietary_principles = 4;
+  repeated string recipes = 5;
+}
+
+message ExerciseRecommendation {
+  repeated string exercise_types = 1;
+  string intensity = 2;
+  string duration = 3;
+  string frequency = 4;
+  repeated string precautions = 5;
+}
+
+message SleepRecommendation {
+  string recommended_sleep_duration = 1;
+  repeated string sleep_hygiene_tips = 2;
+  string bedtime_routine = 3;
+}
+
+message StressManagement {
+  repeated string relaxation_techniques = 1;
+  repeated string mindfulness_practices = 2;
+  string daily_routine_adjustment = 3;
+}
+
+message FollowUpPlan {
+  repeated FollowUpAppointment appointments = 1;
+  repeated string monitoring_parameters = 2;
+  string self_assessment_guide = 3;
+  repeated string warning_signs = 4;
+}
+
+message FollowUpAppointment {
+  string appointment_type = 1;
+  google.protobuf.Timestamp scheduled_time = 2;
+  string provider = 3;
+  string purpose = 4;
+}
+
+message GetTreatmentPlanRequest {
+  string id = 1;
+}
+
+message UpdateTreatmentPlanStatusRequest {
+  string id = 1;
+  string status = 2;  // "ACTIVE", "COMPLETED", "CANCELED"
+}
+
+// 健康风险评估
+message HealthRiskAssessmentRequest {
+  string user_id = 1;
+  map<string, string> health_data = 2;
+  repeated string family_history = 3;
+  map<string, string> lifestyle_factors = 4;
+  repeated string environmental_factors = 5;
+  bool include_genetic_analysis = 6;
+}
+
+message HealthRiskAssessmentResponse {
+  string assessment_id = 1;
+  string user_id = 2;
+  google.protobuf.Timestamp assessment_date = 3;
+  
+  // 总体健康风险
+  int32 overall_risk_score = 4;  // 0-100
+  string risk_level = 5;  // "LOW", "MODERATE", "HIGH"
+  
+  // 疾病风险评估
+  repeated DiseaseRisk disease_risks = 6;
+  
+  // 体质相关风险（TCM视角）
+  ConstitutionRisk constitution_risk = 7;
+  
+  // 预防建议
+  repeated string prevention_recommendations = 8;
+  
+  // 生活方式改善建议
+  repeated string lifestyle_recommendations = 9;
+  
+  // 建议的筛查和监测
+  repeated string recommended_screenings = 10;
+}
+
+message DiseaseRisk {
+  string disease_name = 1;
+  int32 risk_score = 2;  // 0-100
+  string risk_level = 3;  // "LOW", "MODERATE", "HIGH"
+  repeated string risk_factors = 4;
+  repeated string preventive_measures = 5;
+}
+
+message ConstitutionRisk {
+  string constitution_type = 1;
+  repeated string imbalances = 2;
+  repeated string vulnerable_systems = 3;
+  repeated string protective_measures = 4;
+}
+
+// 医疗咨询
+message MedicalQueryRequest {
+  string user_id = 1;
+  string query_text = 2;
+  repeated string related_symptoms = 3;
+  repeated string related_conditions = 4;
+  bool include_western_medicine = 5;
+  bool include_tcm = 6;
+}
+
+message MedicalQueryResponse {
+  string response_id = 1;
+  string query_text = 2;
+  string answer = 3;
+  repeated SourceReference sources = 4;
+  bool is_emergency_advice = 5;
+  string disclaimer = 6;
+  repeated string follow_up_questions = 7;
+}
+
+message SourceReference {
+  string title = 1;
+  string author = 2;
+  string publication = 3;
+  string url = 4;
+  string citation = 5;
+} 

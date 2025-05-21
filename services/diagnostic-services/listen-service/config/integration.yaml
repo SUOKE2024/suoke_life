@@ -1,0 +1,199 @@
+# 闻诊服务与其他服务的集成配置
+
+# 小艾服务集成配置
+xiaoai_service:
+  host: "xiaoai-service"
+  port: 50051
+  timeout: 10   # 秒
+  retry_count: 3
+  retry_interval: 1  # 秒
+  circuit_breaker:
+    enabled: true
+    failure_threshold: 5
+    success_threshold: 2
+    timeout: 30  # 秒
+  connection_pool:
+    max_size: 20
+    idle_timeout: 60  # 秒
+  metrics:
+    enabled: true
+  tracing:
+    enabled: true
+  ssl:
+    enabled: false
+    cert_file: ""
+    key_file: ""
+  auth:
+    type: "jwt"
+    token: "${XIAOAI_SERVICE_TOKEN}"
+  endpoints:
+    sync_tcm_knowledge: "/api/v1/sync_tcm_knowledge"
+    report_diagnosis: "/api/v1/report_listen_diagnosis"
+    get_patient_context: "/api/v1/get_patient_context"
+
+# 问诊服务集成配置
+inquiry_service:
+  host: "inquiry-service"
+  port: 50053
+  timeout: 10
+  retry_count: 3
+  retry_interval: 1
+  circuit_breaker:
+    enabled: true
+    failure_threshold: 5
+    success_threshold: 2
+    timeout: 30
+  connection_pool:
+    max_size: 20
+    idle_timeout: 60
+  metrics:
+    enabled: true
+  tracing:
+    enabled: true
+  ssl:
+    enabled: false
+    cert_file: ""
+    key_file: ""
+  auth:
+    type: "jwt"
+    token: "${INQUIRY_SERVICE_TOKEN}"
+  endpoints:
+    enrich_diagnosis: "/api/v1/enrich_listen_diagnosis"
+    get_inquiry_results: "/api/v1/get_inquiry_results"
+
+# 望诊服务集成配置
+look_service:
+  host: "look-service"
+  port: 50054
+  timeout: 10
+  retry_count: 3
+  retry_interval: 1
+  circuit_breaker:
+    enabled: true
+    failure_threshold: 5
+    success_threshold: 2
+    timeout: 30
+  connection_pool:
+    max_size: 20
+    idle_timeout: 60
+  metrics:
+    enabled: true
+  tracing:
+    enabled: true
+  ssl:
+    enabled: false
+    cert_file: ""
+    key_file: ""
+  auth:
+    type: "jwt"
+    token: "${LOOK_SERVICE_TOKEN}"
+  endpoints:
+    combine_diagnosis: "/api/v1/combine_diagnosis"
+    get_look_results: "/api/v1/get_look_results"
+
+# 切诊服务集成配置
+palpation_service:
+  host: "palpation-service"
+  port: 50055
+  timeout: 10
+  retry_count: 3
+  retry_interval: 1
+  circuit_breaker:
+    enabled: true
+    failure_threshold: 5
+    success_threshold: 2
+    timeout: 30
+  connection_pool:
+    max_size: 20
+    idle_timeout: 60
+  metrics:
+    enabled: true
+  tracing:
+    enabled: true
+  ssl:
+    enabled: false
+    cert_file: ""
+    key_file: ""
+  auth:
+    type: "jwt"
+    token: "${PALPATION_SERVICE_TOKEN}"
+  endpoints:
+    combine_diagnosis: "/api/v1/combine_diagnosis"
+    get_palpation_results: "/api/v1/get_palpation_results"
+
+# 四诊合参配置
+four_diagnosis_coordination:
+  enabled: true
+  # 定义闻诊在四诊合参中的优先级和权重
+  weights:
+    look: 0.25    # 望诊权重
+    listen: 0.25  # 闻诊权重
+    inquiry: 0.3  # 问诊权重
+    palpation: 0.2  # 切诊权重
+  # 闻诊与其他诊法的协同规则
+  coordination_rules:
+    # 闻诊和问诊协同规则
+    inquiry_listen:
+      - condition: "inquiry.main_complaint contains '咳嗽' AND listen.sound_type == COUGH"
+        action: "boost_confidence(0.2)"
+        description: "问诊主诉包含咳嗽且闻诊检测到咳嗽声，提升诊断置信度"
+      - condition: "inquiry.main_complaint contains '气短' AND listen.breathiness > 0.6"
+        action: "boost_confidence(0.15)"
+        description: "问诊主诉包含气短且闻诊检测到气息不足，提升诊断置信度"
+    
+    # 闻诊和望诊协同规则
+    look_listen:
+      - condition: "look.face_color == 'pale' AND listen.voice_stability < 0.4"
+        action: "suggest_diagnosis('气虚')"
+        description: "面色苍白且声音不稳，考虑气虚"
+      - condition: "look.face_color == 'reddish' AND listen.speech_rate > 0.7"
+        action: "suggest_diagnosis('热证')"
+        description: "面色偏红且语速较快，考虑热证"
+    
+    # 闻诊和切诊协同规则
+    palpation_listen:
+      - condition: "palpation.pulse_type == 'weak' AND listen.volume_avg < 0.4"
+        action: "suggest_diagnosis('虚证')"
+        description: "脉搏微弱且声音低弱，考虑虚证"
+      - condition: "palpation.pulse_type == 'rapid' AND listen.speech_rate > 0.7"
+        action: "suggest_diagnosis('热证')"
+        description: "脉搏急促且语速较快，考虑热证"
+
+# 异步通信配置(事件总线)
+event_bus:
+  enabled: true
+  type: "kafka"
+  brokers: "kafka:9092"
+  topics:
+    publish:
+      listen_diagnosis_complete: "listen.diagnosis.complete"
+      listen_service_status: "service.listen.status"
+    subscribe:
+      start_diagnosis: "diagnosis.start"
+      xiaoai_commands: "xiaoai.commands"
+  consumer_group: "listen-service-group"
+  retry:
+    max_attempts: 3
+    initial_interval: 1000  # 毫秒
+    multiplier: 2.0
+    max_interval: 10000  # 毫秒
+
+# 服务发现配置
+service_discovery:
+  enabled: true
+  type: "kubernetes"
+  namespace: "suoke-services"
+  lookup_interval: 60  # 秒
+  cache_ttl: 300  # 秒
+
+# API网关集成
+api_gateway:
+  enabled: true
+  auth_required: true
+  rate_limit:
+    enabled: true
+    requests_per_minute: 300
+  cors:
+    enabled: true
+    allowed_origins: ["*"]
+    allowed_methods: ["GET", "POST"] 

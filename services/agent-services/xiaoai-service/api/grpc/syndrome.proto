@@ -1,0 +1,192 @@
+syntax = "proto3";
+
+package xiaoai_service.syndrome;
+
+option go_package = "github.com/SUOKE2024/suoke_life/xiaoai-service/api/grpc/syndrome";
+
+// 证型定义服务
+service SyndromeService {
+  // 获取证型定义
+  rpc GetSyndromeDefinition(SyndromeRequest) returns (SyndromeDefinition);
+  
+  // 证型辨识
+  rpc IdentifySyndrome(SyndromeIdentificationRequest) returns (SyndromeIdentificationResponse);
+  
+  // 获取所有证型
+  rpc ListSyndromeTypes(ListTypesRequest) returns (ListTypesResponse);
+  
+  // 获取证型关系图
+  rpc GetSyndromeRelationshipGraph(SyndromeGraphRequest) returns (SyndromeGraph);
+}
+
+// 证型请求
+message SyndromeRequest {
+  string syndrome_type = 1;    // 证型类型
+  string language = 2;         // 语言 (默认为zh-CN)
+}
+
+// 证型定义
+message SyndromeDefinition {
+  string syndrome_type = 1;        // 证型类型
+  string chinese_name = 2;         // 中文名称
+  string english_name = 3;         // 英文名称
+  string description = 4;          // 描述
+  
+  // 临床表现
+  repeated Feature symptoms = 5;   // 症状特征
+  repeated Feature tongueFeatures = 6; // 舌象特征
+  repeated Feature pulseFeatures = 7;  // 脉象特征
+  repeated Feature facialFeatures = 8; // 面色特征
+  
+  // 病因病机
+  string pathogenesis = 9;         // 病因病机
+  repeated OrganInvolvement involved_organs = 10; // 累及脏腑
+  string imbalance_type = 11;      // 失衡类型
+  
+  // 治疗原则
+  string treatment_principle = 12; // 治疗原则
+  repeated Therapy therapies = 13; // 治疗方法
+  
+  message Feature {
+    string name = 1;               // 特征名称
+    string description = 2;        // 特征描述
+    float diagnostic_weight = 3;   // 诊断权重
+    bool is_defining = 4;          // 是否为定义性特征
+  }
+  
+  message OrganInvolvement {
+    string organ_name = 1;         // 脏腑名称
+    string involvement_type = 2;   // 累及类型
+    string description = 3;        // 描述
+  }
+  
+  message Therapy {
+    string therapy_type = 1;       // 治疗类型
+    string description = 2;        // 描述
+    repeated string typical_herbs = 3; // 典型中药
+    repeated string typical_formulas = 4; // 典型方剂
+  }
+}
+
+// 证型辨识请求
+message SyndromeIdentificationRequest {
+  string user_id = 1;              // 用户ID
+  
+  // 四诊数据特征
+  repeated SymptomFeature symptoms = 2;       // 症状特征
+  repeated TongueFeature tongue_features = 3; // 舌象特征
+  repeated PulseFeature pulse_features = 4;   // 脉象特征
+  repeated FacialFeature facial_features = 5; // 面色特征
+  
+  // 诊断上下文
+  repeated string diagnostic_context = 6;     // 诊断上下文
+  repeated string existing_conditions = 7;    // 已有疾病
+}
+
+// 症状特征
+message SymptomFeature {
+  string symptom_name = 1;         // 症状名称
+  string severity = 2;             // 严重程度
+  float confidence = 3;            // 置信度
+  string source = 4;               // 来源
+}
+
+// 舌象特征
+message TongueFeature {
+  string feature_name = 1;         // 特征名称
+  string value = 2;                // 值
+  float confidence = 3;            // 置信度
+}
+
+// 脉象特征
+message PulseFeature {
+  string feature_name = 1;         // 特征名称
+  string value = 2;                // 值
+  float confidence = 3;            // 置信度
+}
+
+// 面色特征
+message FacialFeature {
+  string feature_name = 1;         // 特征名称
+  string value = 2;                // 值
+  float confidence = 3;            // 置信度
+}
+
+// 证型辨识响应
+message SyndromeIdentificationResponse {
+  string user_id = 1;                    // 用户ID
+  repeated IdentifiedSyndrome syndromes = 2; // 辨识的证型
+  string analysis_summary = 3;          // 分析总结
+  int64 identified_at = 4;              // 辨识时间
+}
+
+// 辨识的证型
+message IdentifiedSyndrome {
+  string syndrome_type = 1;              // 证型类型
+  float confidence = 2;                  // 置信度
+  bool is_primary = 3;                   // 是否为主要证型
+  
+  // 证据
+  repeated FeatureEvidence supporting_evidence = 4; // 支持性证据
+  repeated FeatureEvidence conflicting_evidence = 5; // 冲突性证据
+  
+  // 评论
+  string clinical_note = 6;              // 临床注释
+}
+
+// 特征证据
+message FeatureEvidence {
+  string feature_name = 1;               // 特征名称
+  string expected_value = 2;             // 预期值
+  string actual_value = 3;               // 实际值
+  float contribution = 4;                // 贡献度
+  string source = 5;                     // 来源
+}
+
+// 列表请求
+message ListTypesRequest {
+  string language = 1;                   // 语言 (默认为zh-CN)
+  string category = 2;                   // 分类
+  repeated string organ_systems = 3;     // 脏腑系统过滤
+}
+
+// 列表响应
+message ListTypesResponse {
+  repeated SyndromeBasicInfo syndromes = 1; // 证型基本信息列表
+  
+  message SyndromeBasicInfo {
+    string syndrome_type = 1;              // 证型类型
+    string chinese_name = 2;               // 中文名称
+    string english_name = 3;               // 英文名称
+    string short_description = 4;          // 简短描述
+    string category = 5;                   // 分类
+    repeated string related_organs = 6;    // 相关脏腑
+  }
+}
+
+// 证型关系图请求
+message SyndromeGraphRequest {
+  repeated string syndrome_types = 1;     // 证型类型列表
+  int32 depth = 2;                        // 关系深度
+  string language = 3;                    // 语言 (默认为zh-CN)
+}
+
+// 证型关系图
+message SyndromeGraph {
+  repeated SyndromeNode nodes = 1;        // 节点
+  repeated SyndromeRelation edges = 2;    // 边
+  
+  message SyndromeNode {
+    string syndrome_type = 1;              // 证型类型
+    string chinese_name = 2;               // 中文名称
+    string english_name = 3;               // 英文名称
+    string category = 4;                   // 分类
+  }
+  
+  message SyndromeRelation {
+    string source_syndrome = 1;            // 源证型
+    string target_syndrome = 2;            // 目标证型
+    string relation_type = 3;              // 关系类型
+    string description = 4;                // 描述
+  }
+} 

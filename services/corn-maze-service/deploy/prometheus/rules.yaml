@@ -1,0 +1,72 @@
+groups:
+- name: corn-maze-service
+  rules:
+  - alert: CornMazeServiceDown
+    expr: up{job="corn-maze-service"} == 0
+    for: 1m
+    labels:
+      severity: critical
+      service: corn-maze-service
+    annotations:
+      summary: "Corn Maze Service is down"
+      description: "The Corn Maze Service instance has been down for more than 1 minute."
+      
+  - alert: CornMazeServiceHighErrorRate
+    expr: sum(rate(grpc_server_handled_total{job="corn-maze-service",grpc_code=~"Aborted|Cancelled|Unknown|Internal|Unavailable|DataLoss"}[5m])) / sum(rate(grpc_server_handled_total{job="corn-maze-service"}[5m])) > 0.05
+    for: 5m
+    labels:
+      severity: warning
+      service: corn-maze-service
+    annotations:
+      summary: "High error rate in Corn Maze Service"
+      description: "Corn Maze Service has a high error rate of {{ $value | humanizePercentage }} for 5 minutes."
+      
+  - alert: CornMazeServiceHighResponseTime
+    expr: histogram_quantile(0.95, sum(rate(grpc_server_handling_seconds_bucket{job="corn-maze-service"}[5m])) by (le)) > 0.5
+    for: 5m
+    labels:
+      severity: warning
+      service: corn-maze-service
+    annotations:
+      summary: "High response time in Corn Maze Service"
+      description: "Corn Maze Service has a 95th percentile latency of {{ $value }} seconds for 5 minutes."
+      
+  - alert: CornMazeServiceHighCPUUsage
+    expr: sum(rate(process_cpu_seconds_total{job="corn-maze-service"}[5m])) / count(process_cpu_seconds_total{job="corn-maze-service"}) > 0.8
+    for: 5m
+    labels:
+      severity: warning
+      service: corn-maze-service
+    annotations:
+      summary: "High CPU usage in Corn Maze Service"
+      description: "Corn Maze Service is using a lot of CPU ({{ $value | humanizePercentage }}) for 5 minutes."
+      
+  - alert: CornMazeServiceHighMemoryUsage
+    expr: sum(process_resident_memory_bytes{job="corn-maze-service"}) / sum(container_memory_limit_bytes{container="corn-maze-service"}) > 0.8
+    for: 5m
+    labels:
+      severity: warning
+      service: corn-maze-service
+    annotations:
+      summary: "High memory usage in Corn Maze Service"
+      description: "Corn Maze Service is using a lot of memory ({{ $value | humanizePercentage }}) for 5 minutes."
+      
+  - alert: CornMazeServiceMazeCreationSlow
+    expr: histogram_quantile(0.95, sum(rate(corn_maze_generation_seconds_bucket[5m])) by (le, maze_type, size)) > 2
+    for: 5m
+    labels:
+      severity: warning
+      service: corn-maze-service
+    annotations:
+      summary: "Slow maze generation in Corn Maze Service"
+      description: "Maze generation for type {{ $labels.maze_type }} size {{ $labels.size }} is slow with 95th percentile of {{ $value }} seconds for 5 minutes."
+      
+  - alert: CornMazeServiceDatabaseErrors
+    expr: increase(corn_maze_database_errors_total[5m]) > 5
+    for: 5m
+    labels:
+      severity: warning
+      service: corn-maze-service
+    annotations:
+      summary: "Database errors in Corn Maze Service"
+      description: "Corn Maze Service has {{ $value }} database errors in the last 5 minutes." 

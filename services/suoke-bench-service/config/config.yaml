@@ -1,0 +1,148 @@
+server:
+  host: "0.0.0.0"
+  port: 8000
+  grpc_port: 50051
+  workers: 4
+  debug: false
+
+storage:
+  type: "local"  # local, s3, gcs
+  local:
+    data_dir: "data"
+    results_dir: "data/results"
+    reports_dir: "data/reports"
+  s3:
+    bucket: "suoke-bench"
+    region: "ap-northeast-1"
+  gcs:
+    bucket: "suoke-bench"
+    project: "suoke-life"
+
+metrics:
+  default_threshold:
+    accuracy: 0.85
+    precision: 0.80
+    recall: 0.80
+    f1: 0.82
+    latency_ms: 200
+    throughput: 100
+  custom_thresholds:
+    tongue_recognition:
+      accuracy: 0.90
+      precision: 0.88
+    face_recognition:
+      accuracy: 0.92
+      recall: 0.90
+
+tasks:
+  tcm_diagnosis:
+    enabled: true
+    batch_size: 32
+    timeout: 300
+    metrics:
+      - accuracy
+      - precision
+      - recall
+      - f1
+      - latency_ms
+  tongue_recognition:
+    enabled: true
+    batch_size: 16
+    timeout: 180
+    metrics:
+      - accuracy
+      - precision
+      - recall
+      - f1
+      - latency_ms
+  face_recognition:
+    enabled: true
+    batch_size: 16
+    timeout: 180
+    metrics:
+      - accuracy
+      - precision
+      - recall
+      - f1
+      - latency_ms
+  pulse_recognition:
+    enabled: true
+    batch_size: 32
+    timeout: 240
+    metrics:
+      - accuracy
+      - precision
+      - recall
+      - f1
+      - latency_ms
+  health_plan_generation:
+    enabled: true
+    batch_size: 8
+    timeout: 600
+    metrics:
+      - bleu
+      - rouge
+      - coherence
+      - relevance
+      - latency_ms
+  agent_collaboration:
+    enabled: true
+    batch_size: 4
+    timeout: 900
+    metrics:
+      - task_completion
+      - collaboration_efficiency
+      - response_quality
+      - latency_ms
+  privacy_verification:
+    enabled: true
+    batch_size: 16
+    timeout: 300
+    metrics:
+      - zkp_correctness
+      - privacy_leakage
+      - verification_time
+  edge_performance:
+    enabled: true
+    batch_size: 1
+    timeout: 60
+    metrics:
+      - cpu_usage
+      - memory_usage
+      - battery_impact
+      - latency_ms
+      - throughput
+  dialect_recognition:
+    enabled: true
+    batch_size: 16
+    timeout: 240
+    metrics:
+      - accuracy
+      - precision
+      - recall
+      - f1
+      - latency_ms
+
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/suoke-bench.log"
+  max_size: 100  # MB
+  backup_count: 10
+
+monitoring:
+  prometheus:
+    enabled: true
+    port: 9090
+  grafana:
+    enabled: true
+    port: 3000
+
+security:
+  api_key_required: true
+  allowed_origins:
+    - "http://localhost:3000"
+    - "https://bench.suoke.life"
+  rate_limit:
+    enabled: true
+    requests_per_minute: 60

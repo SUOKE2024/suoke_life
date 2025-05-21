@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuokeBench - 索克生活APP评测系统</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>SuokeBench <span class="version">v1.0</span></h1>
+            <p class="tagline">索克生活APP评测系统</p>
+        </header>
+        
+        <nav>
+            <ul>
+                <li><a href="#dashboard" class="active">仪表盘</a></li>
+                <li><a href="#benchmarks">评测</a></li>
+                <li><a href="#results">结果</a></li>
+                <li><a href="#reports">报告</a></li>
+                <li><a href="#settings">设置</a></li>
+            </ul>
+        </nav>
+        
+        <main>
+            <section id="dashboard" class="active-section">
+                <h2>系统概览</h2>
+                
+                <div class="cards">
+                    <div class="card">
+                        <h3>已完成评测</h3>
+                        <p class="big-number" id="completed-benchmarks">-</p>
+                    </div>
+                    <div class="card">
+                        <h3>进行中评测</h3>
+                        <p class="big-number" id="running-benchmarks">-</p>
+                    </div>
+                    <div class="card">
+                        <h3>可用模型</h3>
+                        <p class="big-number" id="available-models">-</p>
+                    </div>
+                    <div class="card">
+                        <h3>评测数据集</h3>
+                        <p class="big-number" id="data-sets">-</p>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-box">
+                        <h3>智能体性能对比</h3>
+                        <canvas id="agentChart"></canvas>
+                    </div>
+                    <div class="chart-box">
+                        <h3>评测类型分布</h3>
+                        <canvas id="taskChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="recent-runs">
+                    <h3>最近评测记录</h3>
+                    <table id="recent-runs-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>评测类型</th>
+                                <th>模型</th>
+                                <th>状态</th>
+                                <th>时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recent-runs-body">
+                            <tr>
+                                <td colspan="6">加载中...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <section id="benchmarks">
+                <h2>运行评测</h2>
+                
+                <div class="run-benchmark-form">
+                    <form id="benchmark-form">
+                        <div class="form-group">
+                            <label for="benchmark-select">评测类型</label>
+                            <select id="benchmark-select">
+                                <option value="">-- 选择评测 --</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="model-select">模型选择</label>
+                            <select id="model-select">
+                                <option value="">-- 选择模型 --</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="model-version">模型版本</label>
+                            <input type="text" id="model-version" placeholder="例如：v1.0">
+                        </div>
+                        
+                        <div class="form-group" id="parameters-container">
+                            <!-- 参数将动态添加 -->
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn primary">开始评测</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div id="benchmark-list">
+                    <h3>可用评测</h3>
+                    <div class="benchmarks-grid" id="benchmarks-grid">
+                        <!-- 评测卡片将动态添加 -->
+                    </div>
+                </div>
+            </section>
+            
+            <section id="results">
+                <h2>评测结果</h2>
+                
+                <div class="filters">
+                    <input type="text" id="result-search" placeholder="搜索评测结果...">
+                    <select id="result-filter">
+                        <option value="all">所有状态</option>
+                        <option value="running">运行中</option>
+                        <option value="completed">已完成</option>
+                        <option value="failed">失败</option>
+                    </select>
+                </div>
+                
+                <table id="results-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>评测类型</th>
+                            <th>模型</th>
+                            <th>版本</th>
+                            <th>状态</th>
+                            <th>创建时间</th>
+                            <th>完成时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="results-body">
+                        <tr>
+                            <td colspan="8">加载中...</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="pagination" id="results-pagination">
+                    <!-- 分页控件 -->
+                </div>
+            </section>
+            
+            <section id="reports">
+                <h2>评测报告</h2>
+                
+                <div id="report-viewer">
+                    <div class="report-list" id="report-list">
+                        <!-- 报告列表将动态添加 -->
+                    </div>
+                    <div class="report-content" id="report-content">
+                        <div class="report-placeholder">
+                            <p>请选择一个报告查看</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="settings">
+                <h2>系统设置</h2>
+                
+                <div class="settings-form">
+                    <form id="settings-form">
+                        <div class="form-group">
+                            <label for="data-dir">数据目录</label>
+                            <input type="text" id="data-dir">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="report-dir">报告保存目录</label>
+                            <input type="text" id="report-dir">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="parallel-runs">最大并行评测数</label>
+                            <input type="number" id="parallel-runs" min="1" max="16">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="log-level">日志级别</label>
+                            <select id="log-level">
+                                <option value="debug">DEBUG</option>
+                                <option value="info">INFO</option>
+                                <option value="warning">WARNING</option>
+                                <option value="error">ERROR</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn primary">保存设置</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>&copy; 2023 SuokeBench - 索克生活APP评测系统 | <a href="/docs" target="_blank">API文档</a></p>
+        </footer>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html> 

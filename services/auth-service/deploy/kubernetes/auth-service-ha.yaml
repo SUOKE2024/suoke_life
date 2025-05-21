@@ -1,0 +1,233 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: auth-service-ha-config
+  namespace: suoke
+  labels:
+    app: auth-service
+    environment: production
+    component: high-availability
+data:
+  ZONE_AWARE_ROUTING: "true"
+  FAILOVER_ENABLED: "true"
+  PRIMARY_REGION: "cn-north"
+  BACKUP_REGIONS: "cn-east,cn-south"
+  READ_REPLICAS_ENABLED: "true"
+  CIRCUIT_BREAKER_ENABLED: "true"
+  CONNECTION_TIMEOUT_MS: "3000"
+  REQUEST_TIMEOUT_MS: "5000"
+  RETRY_COUNT: "3"
+  CACHE_TTL_SECONDS: "300"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-service-dr
+  namespace: suoke
+  labels:
+    app: auth-service
+    environment: production
+    component: disaster-recovery
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: auth-service
+      component: disaster-recovery
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: auth-service
+        component: disaster-recovery
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /metrics
+        prometheus.io/port: "8000"
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - auth-service
+              topologyKey: "kubernetes.io/hostname"
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: topology.kubernetes.io/zone
+                operator: In
+                values:
+                - cn-east-1a
+                - cn-east-1b
+      containers:
+      - name: auth-service
+        image: suoke/auth-service:latest
+        imagePullPolicy: Always
+        ports:
+        - name: http
+          containerPort: 8000
+        - name: grpc
+          containerPort: 50051
+        env:
+        - name: SERVICE_MODE
+          value: "hot_standby"
+        - name: PRIMARY_DB_HOST
+          value: "postgres-primary"
+        - name: PRIMARY_DB_PORT
+          value: "5432"
+        - name: REPLICA_DB_HOST
+          value: "postgres-replica"
+        - name: REPLICA_DB_PORT
+          value: "5432"
+        - name: DB_NAME
+          value: "auth_db"
+        - name: REDIS_SENTINEL_ADDRS
+          value: "redis-sentinel-0:26379,redis-sentinel-1:26379,redis-sentinel-2:26379"
+        - name: REDIS_MASTER_NAME
+          value: "auth-redis-master"
+        envFrom:
+        - configMapRef:
+            name: auth-service-ha-config
+        resources:
+          requests:
+            cpu: 200m
+            memory: 256Mi
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /health/live
+            port: 8000
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        startupProbe:
+          httpGet:
+            path: /health/live
+            port: 8000
+          failureThreshold: 30
+          periodSeconds: 10
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: auth-service-pdb
+  namespace: suoke
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: auth-service
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: auth-service-network-policy
+  namespace: suoke
+spec:
+  podSelector:
+    matchLabels:
+      app: auth-service
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: suoke
+    - podSelector:
+        matchLabels:
+          app: api-gateway
+    ports:
+    - protocol: TCP
+      port: 8000
+    - protocol: TCP
+      port: 50051
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          app: postgres
+    ports:
+    - protocol: TCP
+      port: 5432
+  - to:
+    - podSelector:
+        matchLabels:
+          app: redis
+    ports:
+    - protocol: TCP
+      port: 6379
+    - protocol: TCP
+      port: 26379
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: auth-service-hpa-memory
+  namespace: suoke
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: auth-service
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 75
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 10
+        periodSeconds: 60
+    scaleUp:
+      stabilizationWindowSeconds: 0
+      policies:
+      - type: Percent
+        value: 100
+        periodSeconds: 60
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: auth-service-monitor
+  namespace: suoke
+  labels:
+    app: auth-service
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: auth-service
+  endpoints:
+  - port: http
+    interval: 15s
+    path: /metrics
+  namespaceSelector:
+    matchNames:
+    - suoke 

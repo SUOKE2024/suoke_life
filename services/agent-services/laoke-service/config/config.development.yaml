@@ -1,0 +1,66 @@
+# 老克智能体服务 - 开发环境配置
+
+# 日志设置
+logging:
+  level: "debug"  # 开发环境使用更详细的日志级别
+  format: "text"  # 开发环境使用文本格式以便于阅读
+
+# 服务器设置
+server:
+  port: 8080
+  metrics_port: 9091
+  grpc_port: 50051
+
+# 数据库设置 - 开发环境
+database:
+  # PostgreSQL 配置
+  postgres:
+    host: "localhost"  # 本地开发使用localhost
+    port: 5432
+    ssl_mode: "disable"
+  
+  # MongoDB 配置
+  mongodb:
+    uri: "mongodb://localhost:27017"
+  
+  # Neo4j 配置
+  neo4j:
+    uri: "bolt://localhost:7687"
+  
+  # Redis 配置
+  redis:
+    host: "localhost"
+    port: 6379
+
+# 缓存设置
+cache:
+  enabled: true
+  max_size: 500  # 开发环境使用较小的内存缓存
+
+# 大语言模型配置 - 开发环境
+models:
+  llm:
+    primary_model: "llama-3-8b"  # 开发环境默认使用本地模型
+    providers:
+      ollama:
+        base_url: "http://localhost:11434"
+        timeout: 180  # 本地模型可能需要更长的超时时间
+
+# GraphQL调试 - 开发环境特有
+graphql:
+  playground: true
+  debug: true
+  introspection: true
+
+# 安全设置 - 开发环境
+security:
+  rate_limit:
+    enabled: false  # 开发环境禁用速率限制
+  api_token:
+    enabled: false  # 开发环境禁用API令牌验证
+
+# 追踪设置 - 开发环境
+tracing:
+  enabled: true
+  exporter: "console"  # 开发环境直接输出到控制台
+  sample_rate: 1.0  # 开发环境追踪所有请求 

@@ -1,0 +1,195 @@
+syntax = "proto3";
+
+package laoke;
+
+// 老克智能体服务 - 内部服务接口定义
+service LaokeService {
+  // 知识图谱检索
+  rpc SearchKnowledge (SearchKnowledgeRequest) returns (SearchKnowledgeResponse);
+  
+  // 获取用户学习路径
+  rpc GetUserLearningPath (UserLearningPathRequest) returns (UserLearningPathResponse);
+  
+  // 知识贡献评估
+  rpc EvaluateContribution (ContributionRequest) returns (ContributionEvaluationResponse);
+  
+  // 游戏NPC交互
+  rpc NPCInteraction (NPCInteractionRequest) returns (NPCInteractionResponse);
+  
+  // 内容审核
+  rpc ModerateContent (ContentModerationRequest) returns (ContentModerationResponse);
+  
+  // 获取社区热门内容
+  rpc GetTrendingContent (TrendingContentRequest) returns (TrendingContentResponse);
+  
+  // 获取教育内容
+  rpc GetEducationalContent (EducationalContentRequest) returns (EducationalContentResponse);
+}
+
+// 知识图谱检索相关消息
+message SearchKnowledgeRequest {
+  string query = 1;
+  repeated string categories = 2;
+  repeated string tags = 3;
+  int32 limit = 4;
+  string user_id = 5;
+}
+
+message SearchKnowledgeResponse {
+  repeated KnowledgeItem items = 1;
+  float search_latency_ms = 2;
+}
+
+message KnowledgeItem {
+  string id = 1;
+  string title = 2;
+  string summary = 3;
+  string content = 4;
+  string category = 5;
+  repeated string tags = 6;
+  float relevance_score = 7;
+  repeated string related_topics = 8;
+}
+
+// 学习路径相关消息
+message UserLearningPathRequest {
+  string user_id = 1;
+  string path_id = 2;
+  bool include_progress = 3;
+}
+
+message UserLearningPathResponse {
+  repeated LearningPathInfo paths = 1;
+  float completion_percentage = 2;
+  string next_recommended_action = 3;
+}
+
+message LearningPathInfo {
+  string id = 1;
+  string title = 2;
+  string description = 3;
+  string level = 4;
+  int32 total_modules = 5;
+  int32 completed_modules = 6;
+  float progress_percentage = 7;
+  repeated ModuleInfo modules = 8;
+}
+
+message ModuleInfo {
+  string id = 1;
+  string title = 2;
+  bool completed = 3;
+  int32 order = 4;
+}
+
+// 知识贡献评估相关消息
+message ContributionRequest {
+  string user_id = 1;
+  string content_id = 2;
+  string content_type = 3;  // "article", "comment", "course", etc.
+  string content = 4;
+}
+
+message ContributionEvaluationResponse {
+  float quality_score = 1;  // 0-1 quality score
+  float originality_score = 2;  // 0-1 originality score
+  float usefulness_score = 3;  // 0-1 usefulness score
+  int32 contribution_points = 4;  // points awarded
+  repeated string improvement_suggestions = 5;
+  bool is_approved = 6;
+}
+
+// NPC交互相关消息
+message NPCInteractionRequest {
+  string npc_id = 1;
+  string user_id = 2;
+  string message = 3;
+  string interaction_context = 4;
+  string location = 5;
+  repeated string active_quests = 6;
+}
+
+message NPCInteractionResponse {
+  string response_text = 1;
+  string emotion = 2;
+  repeated NPCAction actions = 3;
+  repeated string knowledge_hints = 4;
+}
+
+message NPCAction {
+  string id = 1;
+  string type = 2;
+  string description = 3;
+  bool requirements_met = 4;
+  repeated string rewards = 5;
+}
+
+// 内容审核相关消息
+message ContentModerationRequest {
+  string content_id = 1;
+  string content_type = 2;  // "article", "comment", "course"
+  string content = 3;
+  repeated string context_items = 4;
+}
+
+message ContentModerationResponse {
+  bool is_approved = 1;
+  repeated string violation_types = 2;
+  string review_comment = 3;
+  string moderation_level = 4;  // "auto_approved", "auto_rejected", "needs_review"
+  float confidence_score = 5;
+}
+
+// 社区热门内容相关消息
+message TrendingContentRequest {
+  string content_type = 1;  // "all", "articles", "courses", "posts"
+  int32 time_window_hours = 2;
+  int32 limit = 3;
+  string category = 4;
+}
+
+message TrendingContentResponse {
+  repeated TrendingItem items = 1;
+  string trending_algorithm_version = 2;
+}
+
+message TrendingItem {
+  string id = 1;
+  string title = 2;
+  string type = 3;
+  int32 view_count = 4;
+  int32 like_count = 5;
+  int32 comment_count = 6;
+  float trending_score = 7;
+  string author_id = 8;
+  string created_at = 9;
+}
+
+// 教育内容相关消息
+message EducationalContentRequest {
+  string user_id = 1;
+  string category = 2;
+  string level = 3;
+  bool personalized = 4;
+  int32 limit = 5;
+}
+
+message EducationalContentResponse {
+  repeated CourseInfo courses = 1;
+  repeated string recommended_categories = 2;
+  string personalization_info = 3;
+}
+
+message CourseInfo {
+  string id = 1;
+  string title = 2;
+  string description = 3;
+  string category = 4;
+  string level = 5;
+  string instructor_id = 6;
+  int32 module_count = 7;
+  string estimated_duration = 8;
+  float rating = 9;
+  int32 enrolled_count = 10;
+  bool certification_enabled = 11;
+} 

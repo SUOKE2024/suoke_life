@@ -1,0 +1,61 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  scrape_timeout: 10s
+
+# Alertmanager配置
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # 如果有Alertmanager，在此添加
+
+# 规则文件加载
+rule_files:
+  # - "alerts.yml"
+  # - "rules.yml"
+
+# Scrape配置
+scrape_configs:
+  # 闻诊服务监控
+  - job_name: 'listen-service'
+    honor_labels: true
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['listen-service:9090']
+        labels:
+          service: 'listen-service'
+          environment: 'production'
+
+  # Prometheus 自监控
+  - job_name: 'prometheus'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['localhost:9090']
+        labels:
+          service: 'prometheus'
+          environment: 'production'
+
+  # Redis监控（如果已经配置Redis Exporter）
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis-exporter:9121']
+        labels:
+          service: 'redis'
+          environment: 'production'
+
+  # MongoDB监控（如果已经配置MongoDB Exporter）
+  - job_name: 'mongodb'
+    static_configs:
+      - targets: ['mongodb-exporter:9216']
+        labels:
+          service: 'mongodb'
+          environment: 'production'
+
+  # Node Exporter（用于监控主机）
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']
+        labels:
+          service: 'node'
+          environment: 'production' 

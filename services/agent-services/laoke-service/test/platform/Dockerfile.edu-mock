@@ -1,0 +1,22 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# 安装依赖
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 复制模拟服务代码
+COPY edu_service_mock.py .
+COPY ./data /app/data
+
+# 设置环境变量
+ENV PORT=8000
+ENV MOCK_DELAY=200
+ENV RANDOM_FAILURES=false
+
+# 暴露端口
+EXPOSE ${PORT}
+
+# 启动命令
+CMD ["python", "edu_service_mock.py"] 

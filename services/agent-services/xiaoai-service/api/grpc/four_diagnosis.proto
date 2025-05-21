@@ -1,0 +1,545 @@
+syntax = "proto3";
+
+package xiaoai_service.four_diagnosis;
+
+option go_package = "github.com/suoke_life/services/xiaoai-service/api/grpc/xiaoai_service/four_diagnosis";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/any.proto";
+
+// 四诊协调服务
+service FourDiagnosisService {
+  // 生成诊断报告
+  rpc GenerateDiagnosisReport(DiagnosisRequest) returns (DiagnosisReport);
+  
+  // 获取融合诊断数据
+  rpc GetFusedDiagnosticData(FusionRequest) returns (FusionResult);
+  
+  // 获取单项诊断结果
+  rpc GetSingleDiagnosisResult(SingleDiagnosisRequest) returns (SingleDiagnosisResult);
+  
+  // 获取诊断进度
+  rpc GetDiagnosisProgress(DiagnosisProgressRequest) returns (DiagnosisProgressResponse);
+  
+  // 健康检查
+  rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse);
+}
+
+// 诊断请求
+message DiagnosisRequest {
+  string user_id = 1;               // 用户ID
+  string session_id = 2;            // 会话ID
+  
+  bool include_look = 3;            // 是否包含望诊
+  bool include_listen = 4;          // 是否包含闻诊
+  bool include_inquiry = 5;         // 是否包含问诊
+  bool include_palpation = 6;       // 是否包含切诊
+  
+  LookData look_data = 7;           // 望诊数据
+  ListenData listen_data = 8;       // 闻诊数据
+  InquiryData inquiry_data = 9;     // 问诊数据
+  PalpationData palpation_data = 10; // 切诊数据
+}
+
+// 融合请求
+message FusionRequest {
+  string user_id = 1;                // 用户ID
+  string session_id = 2;             // 会话ID
+  repeated string analysis_ids = 3;  // 分析ID列表
+}
+
+// 单项诊断请求
+message SingleDiagnosisRequest {
+  string user_id = 1;                // 用户ID
+  string analysis_id = 2;            // 分析ID
+  string diagnosis_type = 3;         // 诊断类型 ("look", "listen", "inquiry", "palpation")
+}
+
+// 诊断进度请求
+message DiagnosisProgressRequest {
+  string user_id = 1;               // 用户ID
+  string session_id = 2;            // 会话ID
+}
+
+// 健康检查请求
+message HealthCheckRequest {
+  bool include_details = 1;         // 是否包含详细信息
+}
+
+// 健康检查响应
+message HealthCheckResponse {
+  enum Status {
+    UNKNOWN = 0;
+    SERVING = 1;
+    NOT_SERVING = 2;
+  }
+  
+  Status status = 1;                // 服务状态
+  map<string, string> details = 2;  // 详细信息
+}
+
+// 望诊数据
+message LookData {
+  oneof data {
+    bytes tongue_image = 1;         // 舌象图像
+    bytes face_image = 2;           // 面色图像
+    bytes body_image = 3;           // 形体图像
+  }
+  map<string, string> metadata = 4; // 元数据
+}
+
+// 闻诊数据
+message ListenData {
+  oneof data {
+    bytes voice_audio = 1;          // 语音音频
+    bytes breathing_audio = 2;      // 呼吸音频
+    bytes cough_audio = 3;          // 咳嗽音频
+  }
+  string audio_format = 4;          // 音频格式
+  int32 sample_rate = 5;            // 采样率
+  int32 channels = 6;               // 通道数
+  map<string, string> metadata = 7; // 元数据
+}
+
+// 问诊数据
+message InquiryData {
+  oneof data {
+    string conversation = 1;        // 对话内容
+    SymptomList symptoms = 2;       // 症状列表
+    MedicalHistoryData medical_history = 3; // 病史数据
+  }
+  map<string, string> metadata = 4; // 元数据
+}
+
+// 症状列表
+message SymptomList {
+  repeated string symptom_list = 1; // 症状列表
+}
+
+// 病史数据
+message MedicalHistoryData {
+  repeated string chronic_diseases = 1; // 慢性病
+  repeated string allergies = 2;        // 过敏史
+  repeated string family_history = 3;   // 家族病史
+  repeated string past_surgeries = 4;   // 手术史
+  repeated string medications = 5;      // 用药史
+}
+
+// 切诊数据
+message PalpationData {
+  oneof data {
+    PulseData pulse_data = 1;            // 脉象数据
+    AbdominalPalpationData abdominal_data = 2; // 腹诊数据
+    SkinTouchData skin_touch_data = 3;    // 皮肤触感数据
+    AcupointData acupoint_data = 4;       // 穴位反应数据
+  }
+  map<string, string> metadata = 5;       // 元数据
+}
+
+// 脉象数据
+message PulseData {
+  bytes raw_data = 1;                     // 原始数据
+  string data_format = 2;                 // 数据格式
+  int32 sampling_rate = 3;                // 采样率
+}
+
+// 腹诊数据
+message AbdominalPalpationData {
+  bytes pressure_map = 1;                 // 压力图
+  string data_format = 2;                 // 数据格式
+  int32 width = 3;                        // 宽度
+  int32 height = 4;                       // 高度
+}
+
+// 皮肤触感数据
+message SkinTouchData {
+  float temperature = 1;                  // 体温
+  float moisture = 2;                     // 湿度
+  float elasticity = 3;                   // 弹性
+  
+  message SkinRegion {
+    string region_name = 1;               // 区域名称
+    float temperature = 2;                // 区域温度
+    float moisture = 3;                   // 区域湿度
+    float elasticity = 4;                 // 区域弹性
+  }
+  
+  repeated SkinRegion regions = 4;        // 区域列表
+}
+
+// 穴位数据
+message AcupointData {
+  message Acupoint {
+    string point_name = 1;                // 穴位名称
+    float sensitivity = 2;                // 敏感度
+    float temperature = 3;                // 温度
+    string meridian = 4;                  // 所属经络
+  }
+  
+  repeated Acupoint points = 1;           // 穴位列表
+}
+
+// 诊断报告
+message DiagnosisReport {
+  string report_id = 1;                         // 报告ID
+  string user_id = 2;                           // 用户ID
+  string session_id = 3;                        // 会话ID
+  int64 created_at = 4;                         // 创建时间
+  
+  SingleDiagnosisResult look_result = 5;        // 望诊结果
+  SingleDiagnosisResult listen_result = 6;      // 闻诊结果
+  SingleDiagnosisResult inquiry_result = 7;     // 问诊结果
+  SingleDiagnosisResult palpation_result = 8;   // 切诊结果
+  
+  SyndromeAnalysisResult syndrome_analysis = 9; // 辨证分析
+  ConstitutionAnalysisResult constitution_analysis = 10; // 体质分析
+  
+  string diagnostic_summary = 11;               // 诊断总结
+  repeated RecommendationItem recommendations = 12; // 调理建议
+  
+  float overall_confidence = 13;                // 整体置信度
+}
+
+// 单项诊断结果
+message SingleDiagnosisResult {
+  string diagnosis_id = 1;               // 诊断ID
+  string diagnosis_type = 2;             // 诊断类型 ("look", "listen", "inquiry", "palpation")
+  string user_id = 3;                    // 用户ID
+  string session_id = 4;                 // 会话ID
+  int64 created_at = 5;                  // 创建时间
+  
+  string summary = 6;                    // 诊断总结
+  float confidence = 7;                  // 置信度
+  
+  message LookDetail {
+    TongueAnalysis tongue = 1;            // 舌象分析
+    FaceAnalysis face = 2;                // 面色分析
+    BodyAnalysis body = 3;                // 形体分析
+  }
+  
+  message ListenDetail {
+    VoiceAnalysis voice = 1;              // 语音分析
+    BreathingAnalysis breathing = 2;      // 呼吸分析
+    CoughAnalysis cough = 3;              // 咳嗽分析
+  }
+  
+  message InquiryDetail {
+    ConversationAnalysis conversation = 1; // 对话分析
+    SymptomsAnalysis symptoms = 2;         // 症状分析
+    MedicalHistoryAnalysis medical_history = 3; // 病史分析
+  }
+  
+  message PalpationDetail {
+    PulseAnalysis pulse = 1;              // 脉象分析
+    AbdominalAnalysis abdominal = 2;      // 腹诊分析
+    SkinTouchAnalysis skin_touch = 3;     // 皮肤触感分析
+    AcupointAnalysis acupoint = 4;        // 穴位反应分析
+  }
+  
+  oneof detail {
+    LookDetail look_detail = 8;           // 望诊详情
+    ListenDetail listen_detail = 9;       // 闻诊详情
+    InquiryDetail inquiry_detail = 10;    // 问诊详情
+    PalpationDetail palpation_detail = 11; // 切诊详情
+  }
+  
+  repeated DiagnosticFeature features = 12; // 诊断特征
+}
+
+// 诊断特征
+message DiagnosticFeature {
+  string feature_name = 1;                 // 特征名称
+  string feature_value = 2;                // 特征值
+  float confidence = 3;                    // 置信度
+  string source = 4;                       // 来源
+  string category = 5;                     // 类别
+}
+
+// 舌象分析
+message TongueAnalysis {
+  string tongue_color = 1;                  // 舌色
+  string tongue_shape = 2;                  // 舌形
+  string coating_color = 3;                 // 苔色
+  string coating_distribution = 4;          // 苔布
+  
+  message FeatureRegion {
+    string region_name = 1;                 // 区域名称
+    string feature = 2;                     // 特征
+    float confidence = 3;                   // 置信度
+  }
+  
+  repeated FeatureRegion regions = 5;       // 区域特征
+}
+
+// 面色分析
+message FaceAnalysis {
+  string overall_color = 1;                 // 整体面色
+  string complexion = 2;                    // 气色
+  
+  message FaceRegion {
+    string region_name = 1;                 // 区域名称
+    string color = 2;                       // 颜色
+    string feature = 3;                     // 特征
+  }
+  
+  repeated FaceRegion regions = 3;          // 区域特征
+}
+
+// 形体分析
+message BodyAnalysis {
+  string body_type = 1;                     // 体型
+  string posture = 2;                       // 姿态
+  float bmi = 3;                            // BMI指数
+  
+  message BodyRegion {
+    string region_name = 1;                 // 区域名称
+    string feature = 2;                     // 特征
+  }
+  
+  repeated BodyRegion regions = 4;          // 区域特征
+}
+
+// 语音分析
+message VoiceAnalysis {
+  string voice_quality = 1;                 // 声音质量
+  string voice_strength = 2;                // 声音强度
+  string voice_rhythm = 3;                  // 声音节律
+  string voice_tone = 4;                    // 声音音调
+}
+
+// 呼吸分析
+message BreathingAnalysis {
+  float breathing_rate = 1;                 // 呼吸频率
+  string breathing_depth = 2;               // 呼吸深度
+  string breathing_rhythm = 3;              // 呼吸节律
+  string breathing_sound = 4;               // 呼吸音
+}
+
+// 咳嗽分析
+message CoughAnalysis {
+  string cough_type = 1;                    // 咳嗽类型
+  string cough_strength = 2;                // 咳嗽强度
+  float cough_frequency = 3;                // 咳嗽频率
+  string cough_sound = 4;                   // 咳嗽音
+}
+
+// 对话分析
+message ConversationAnalysis {
+  string chief_complaint = 1;               // 主诉
+  string duration = 2;                      // 病程
+  string pain_description = 3;              // 疼痛描述
+  string sleep_quality = 4;                 // 睡眠质量
+  string appetite = 5;                      // 食欲
+}
+
+// 症状分析
+message SymptomsAnalysis {
+  message SymptomSyndrome {
+    string syndrome_name = 1;               // 症候名称
+    float confidence = 2;                   // 置信度
+    string description = 3;                 // 描述
+  }
+  
+  repeated SymptomSyndrome syndromes = 1;   // 症候列表
+}
+
+// 病史分析
+message MedicalHistoryAnalysis {
+  message HistoryRiskFactor {
+    string factor = 1;                      // 风险因素
+    string risk_level = 2;                  // 风险等级
+    string description = 3;                 // 描述
+  }
+  
+  message HistoricalPattern {
+    string pattern_name = 1;                // 规律名称
+    float significance = 2;                 // 重要性
+    string description = 3;                 // 描述
+  }
+  
+  repeated HistoryRiskFactor risk_factors = 1; // 风险因素
+  repeated HistoricalPattern patterns = 2;  // 历史规律
+}
+
+// 脉象分析
+message PulseAnalysis {
+  string pulse_pattern = 1;                 // 脉型
+  string pulse_strength = 2;                // 脉力
+  string pulse_rhythm = 3;                  // 脉律
+  float pulse_rate = 4;                     // 脉率
+  string overall_quality = 5;               // 整体质量
+  
+  message PulsePositionAnalysis {
+    string position_name = 1;               // 位置名称
+    string quality = 2;                     // 脉象质量
+    string strength = 3;                    // 脉象强度
+    string characteristic = 4;              // 脉象特征
+  }
+  
+  repeated PulsePositionAnalysis positions = 6; // 部位脉象
+}
+
+// 腹诊分析
+message AbdominalAnalysis {
+  string overall_tension = 1;               // 整体张力
+  string tenderness_level = 2;              // 压痛程度
+  string temperature_distribution = 3;      // 温度分布
+  
+  message AbdominalRegionAnalysis {
+    string region_name = 1;                 // 区域名称
+    string tension = 2;                     // 张力
+    string tenderness = 3;                  // 压痛
+    float temperature = 4;                  // 温度
+    string organ_correspondence = 5;        // 对应脏腑
+  }
+  
+  repeated AbdominalRegionAnalysis regions = 4; // 区域分析
+}
+
+// 皮肤触感分析
+message SkinTouchAnalysis {
+  float overall_moisture = 1;               // 整体湿度
+  float overall_temperature = 2;            // 整体温度
+  float overall_elasticity = 3;             // 整体弹性
+  
+  message SkinRegionAnalysis {
+    string region_name = 1;                 // 区域名称
+    float moisture = 2;                     // 湿度
+    float temperature = 3;                  // 温度
+    float elasticity = 4;                   // 弹性
+    string abnormality = 5;                 // 异常
+  }
+  
+  repeated SkinRegionAnalysis regions = 4;  // 区域分析
+}
+
+// 穴位反应分析
+message AcupointAnalysis {
+  message AcupointReaction {
+    string point_name = 1;                  // 穴位名称
+    float sensitivity = 2;                  // 敏感度
+    float temperature = 3;                  // 温度
+    string meridian = 4;                    // 所属经络
+  }
+  
+  message MeridianAnalysis {
+    string meridian_name = 1;               // 经络名称
+    string overall_status = 2;              // 整体状态
+    string excess_deficiency = 3;           // 虚实状态
+    string yin_yang_balance = 4;            // 阴阳平衡
+  }
+  
+  repeated AcupointReaction points = 1;     // 穴位反应
+  repeated MeridianAnalysis meridians = 2;  // 经络分析
+}
+
+// 辨证分析结果
+message SyndromeAnalysisResult {
+  string analysis_id = 1;                   // 分析ID
+  string user_id = 2;                       // 用户ID
+  string session_id = 3;                    // 会话ID
+  int64 created_at = 4;                     // 创建时间
+  
+  repeated SyndromeResult syndromes = 5;    // 辨证结果
+  float overall_confidence = 6;             // 整体置信度
+  string summary = 7;                       // 总结
+}
+
+// 辨证结果
+message SyndromeResult {
+  string syndrome_name = 1;                 // 辨证名称
+  float confidence = 2;                     // 置信度
+  string description = 3;                   // 描述
+  repeated string matched_features = 4;     // 匹配特征
+  repeated string missing_features = 5;     // 缺失特征
+}
+
+// 体质分析结果
+message ConstitutionAnalysisResult {
+  string analysis_id = 1;                   // 分析ID
+  string user_id = 2;                       // 用户ID
+  string session_id = 3;                    // 会话ID
+  int64 created_at = 4;                     // 创建时间
+  
+  repeated ConstitutionResult constitutions = 5; // 体质结果
+  string primary_constitution = 6;          // 主要体质
+  float overall_confidence = 7;             // 整体置信度
+  string summary = 8;                       // 总结
+}
+
+// 体质结果
+message ConstitutionResult {
+  string constitution_name = 1;             // 体质名称
+  float confidence = 2;                     // 置信度
+  string description = 3;                   // 描述
+  repeated string matched_features = 4;     // 匹配特征
+  repeated string missing_features = 5;     // 缺失特征
+}
+
+// 推荐项目
+message RecommendationItem {
+  enum RecommendationType {
+    UNKNOWN = 0;
+    DIET = 1;                             // 饮食
+    EXERCISE = 2;                         // 运动
+    LIFESTYLE = 3;                        // 生活方式
+    HERBAL = 4;                           // 草药
+    ACUPUNCTURE = 5;                      // 针灸
+    MASSAGE = 6;                          // 推拿
+    SUPPLEMENT = 7;                       // 营养补充
+    MIND_BODY = 8;                        // 心身调养
+  }
+  
+  RecommendationType type = 1;              // 推荐类型
+  string content = 2;                       // 推荐内容
+  string rationale = 3;                     // 推荐理由
+  int32 priority = 4;                       // 优先级 (1-5)
+  string target_issue = 5;                  // 针对问题
+}
+
+// 融合结果
+message FusionResult {
+  string fusion_id = 1;                     // 融合ID
+  string user_id = 2;                       // 用户ID
+  string session_id = 3;                    // 会话ID
+  int64 created_at = 4;                     // 创建时间
+  
+  FusedFeatures fused_features = 5;         // 融合特征
+  float fusion_confidence = 6;              // 融合置信度
+}
+
+// 融合特征
+message FusedFeatures {
+  repeated DiagnosticFeature features = 1;  // 特征列表
+  
+  message ConflictResolution {
+    string feature_name = 1;                // 特征名称
+    string resolved_value = 2;              // 解决后的值
+    string resolution_method = 3;           // 解决方法
+    
+    message ConflictingValue {
+      string value = 1;                     // 值
+      string source = 2;                    // 来源
+      float confidence = 3;                 // 置信度
+    }
+    
+    repeated ConflictingValue values = 4;   // 冲突值
+  }
+  
+  repeated ConflictResolution conflicts = 2; // 冲突解决
+}
+
+// 诊断进度响应
+message DiagnosisProgressResponse {
+  string user_id = 1;                       // 用户ID
+  string session_id = 2;                    // 会话ID
+  bool look_completed = 3;                  // 望诊是否完成
+  bool listen_completed = 4;                // 闻诊是否完成
+  bool inquiry_completed = 5;               // 问诊是否完成
+  bool palpation_completed = 6;             // 切诊是否完成
+  bool fusion_completed = 7;                // 融合是否完成
+  bool analysis_completed = 8;              // 分析是否完成
+  float overall_progress = 9;               // 整体进度 (0.0-1.0)
+  string status_message = 10;               // 状态消息
+  int64 last_updated = 11;                  // 最后更新时间
+} 

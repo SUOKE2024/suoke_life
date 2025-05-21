@@ -1,0 +1,144 @@
+global:
+  scrape_interval: 15s # 默认抓取间隔，15秒向目标抓取一次数据
+  evaluation_interval: 15s # 评估规则的间隔，15秒检测报警规则
+  scrape_timeout: 10s # 抓取超时时间，默认为10秒
+
+# Alertmanager 配置
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # - alertmanager:9093
+
+# 报警规则文件
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+# 抓取配置
+scrape_configs:
+  # 监控 Prometheus 服务自身
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # 监控 小艾服务
+  - job_name: 'xiaoai-service'
+    scrape_interval: 10s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['xiaoai-service:51053']
+        labels:
+          service: 'xiaoai-service'
+          environment: 'production'
+
+  # 监控 望诊服务
+  - job_name: 'look-service'
+    scrape_interval: 10s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['look-service:51051']
+        labels:
+          service: 'look-service'
+          environment: 'production'
+
+  # 监控 闻诊服务
+  - job_name: 'listen-service'
+    scrape_interval: 10s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['listen-service:51052']
+        labels:
+          service: 'listen-service'
+          environment: 'production'
+
+  # 监控 问诊服务
+  - job_name: 'inquiry-service'
+    scrape_interval: 10s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['inquiry-service:51054']
+        labels:
+          service: 'inquiry-service'
+          environment: 'production'
+
+  # 监控 切诊服务
+  - job_name: 'palpation-service'
+    scrape_interval: 10s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['palpation-service:51055']
+        labels:
+          service: 'palpation-service'
+          environment: 'production'
+
+  # 监控 知识库服务
+  - job_name: 'med-knowledge'
+    scrape_interval: 10s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['med-knowledge:51056']
+        labels:
+          service: 'med-knowledge'
+          environment: 'production'
+
+  # 监控 MongoDB 导出器
+  - job_name: 'mongodb-exporter'
+    scrape_interval: 15s
+    static_configs:
+      - targets: ['mongodb-exporter:9216']
+        labels:
+          service: 'mongodb'
+          environment: 'production'
+
+  # 监控 PostgreSQL 导出器
+  - job_name: 'postgres-exporter'
+    scrape_interval: 15s
+    static_configs:
+      - targets: ['postgres-exporter:9187']
+        labels:
+          service: 'postgres'
+          environment: 'production'
+
+  # 监控 Redis 导出器
+  - job_name: 'redis-exporter'
+    scrape_interval: 15s
+    static_configs:
+      - targets: ['redis-exporter:9121']
+        labels:
+          service: 'redis'
+          environment: 'production'
+
+  # 监控 Node Exporter
+  - job_name: 'node-exporter'
+    scrape_interval: 15s
+    static_configs:
+      - targets: ['node-exporter:9100']
+        labels:
+          environment: 'production'
+
+  # 监控 Kubernetes 服务（如果部署在Kubernetes上）
+  - job_name: 'kubernetes-service-endpoints'
+    kubernetes_sd_configs:
+      - role: endpoints
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape]
+        action: keep
+        regex: true
+      - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_path]
+        action: replace
+        target_label: __metrics_path__
+        regex: (.+)
+      - source_labels: [__address__, __meta_kubernetes_service_annotation_prometheus_io_port]
+        action: replace
+        regex: ([^:]+)(?::\d+)?;(\d+)
+        replacement: $1:$2
+        target_label: __address__
+      - action: labelmap
+        regex: __meta_kubernetes_service_label_(.+)
+      - source_labels: [__meta_kubernetes_namespace]
+        action: replace
+        target_label: kubernetes_namespace
+      - source_labels: [__meta_kubernetes_service_name]
+        action: replace
+        target_label: kubernetes_name 
