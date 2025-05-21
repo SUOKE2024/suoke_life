@@ -1,5 +1,525 @@
 ---
-description:
-globs:
+description: 
+globs: 
 alwaysApply: false
 ---
+# 索克生活（Suoke Life）项目开发规范
+# Suoke Life Project Development Guidelines
+
+## 简介
+## Introduction
+
+本文档定义了索克生活项目在Cursor IDE中的开发规范和最佳实践。所有项目贡献者应遵循这些规则，以确保代码质量和项目一致性。
+
+This document defines the development guidelines and best practices for the Suoke Life project in Cursor IDE. All project contributors should follow these rules to ensure code quality and project consistency.
+
+## 技术框架
+## Technology Framework
+
+- **前端**: React Native 0.73+, TypeScript 4.8+
+- **后端**: Python (FastAPI, gRPC)
+- **数据库**: SQLite (移动端本地存储), PostgreSQL, MongoDB (服务端)
+- **状态管理**: Redux Toolkit
+- **API通信**: Axios, gRPC
+
+- **Frontend**: React Native 0.73+, TypeScript 4.8+
+- **Backend**: Python (FastAPI, gRPC)
+- **Database**: SQLite (mobile local storage), PostgreSQL, MongoDB (server-side)
+- **State Management**: Redux Toolkit
+- **API Communication**: Axios, gRPC
+
+## 编码规范
+## Coding Standards
+
+### 全局规范
+### Global Standards
+
+- 使用空格而非Tab进行缩进
+- 缩进大小：2个空格
+- 行长度限制：100字符
+- 文件使用UTF-8编码
+- 文件末尾保留一个空行
+- 删除行尾空白字符
+- 优先使用英文注释和变量名，确保国际化协作可行性
+
+- Use spaces instead of tabs for indentation
+- Indentation size: 2 spaces
+- Line length limit: 100 characters
+- Use UTF-8 encoding for files
+- Keep one empty line at the end of the file
+- Remove trailing whitespace
+- Prioritize English comments and variable names to ensure international collaboration feasibility
+
+### JavaScript/TypeScript规范
+### JavaScript/TypeScript Standards
+
+- 使用TypeScript编写所有新功能
+- 使用ES6+语法特性和函数式编程风格
+- 变量声明优先使用`const`，其次使用`let`，禁止使用`var`
+- 所有函数、类、接口必须有类型定义
+- 避免使用`any`类型，必要时使用`unknown`
+- 使用接口`interface`定义对象类型，使用类型别名`type`定义联合类型或交叉类型
+- 在组件上使用React.FC类型声明，并明确定义Props接口
+- 使用空格对齐代码以提高可读性
+
+- Use TypeScript for all new features
+- Use ES6+ syntax features and functional programming style
+- Prioritize `const` for variable declarations, then `let`, never use `var`
+- All functions, classes, and interfaces must have type definitions
+- Avoid using the `any` type, use `unknown` when necessary
+- Use `interface` to define object types, use `type` aliases for union or intersection types
+- Use React.FC type declaration on components, and clearly define Props interfaces
+- Use space alignment to improve code readability
+
+```typescript
+// ✅ 正确示例
+// ✅ Correct example
+interface UserProps {
+  id: string;
+  name: string;
+  email?: string;
+}
+
+const UserProfile: React.FC<UserProps> = ({ id, name, email }) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  
+  return (
+    <View>
+      <Text>{name}</Text>
+      {email && <Text>{email}</Text>}
+    </View>
+  );
+};
+
+// ❌ 错误示例
+// ❌ Incorrect example
+var UserProfile = (props) => {
+  var loading = false;
+  
+  return (
+    <View>
+      <Text>{props.name}</Text>
+      {props.email && <Text>{props.email}</Text>}
+    </View>
+  );
+}
+```
+
+### React Native规范
+### React Native Standards
+
+- 使用函数组件和React Hooks，避免使用类组件
+- 将大型组件拆分为小型、可复用的组件
+- 使用`StyleSheet.create`创建样式，避免内联样式
+- 组件props应有完整的TypeScript类型定义
+- 使用解构获取props和state
+- 合理使用memo, useMemo和useCallback优化性能
+- 遵循Hooks调用规则，不在条件或循环中调用Hook
+
+- Use functional components and React Hooks, avoid class components
+- Break large components into smaller, reusable components
+- Use `StyleSheet.create` to create styles, avoid inline styles
+- Component props should have complete TypeScript type definitions
+- Use destructuring to get props and state
+- Use memo, useMemo, and useCallback appropriately to optimize performance
+- Follow Hooks calling rules, don't call Hooks inside conditions or loops
+
+```typescript
+// ✅ 正确示例
+// ✅ Correct example
+const styles = StyleSheet.create({
+  container: {
+    padding: 16,
+    backgroundColor: '#ffffff',
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  }
+});
+
+// ❌ 错误示例
+// ❌ Incorrect example
+<View style={{padding: 16, backgroundColor: '#ffffff'}}>
+  <Text style={{fontSize: 18, fontWeight: 'bold'}}>Title</Text>
+</View>
+```
+
+### Python规范
+### Python Standards
+
+- 遵循PEP 8编码规范
+- 使用4个空格缩进
+- 最大行长度为88字符(Black格式化工具默认)
+- 使用类型注解(Type Hints)
+- 使用f-strings进行字符串格式化
+- 函数和类必须有文档字符串(docstring)
+- 使用虚拟环境管理依赖
+
+- Follow PEP 8 coding guidelines
+- Use 4 spaces for indentation
+- Maximum line length of 88 characters (Black formatter default)
+- Use type hints
+- Use f-strings for string formatting
+- Functions and classes must have docstrings
+- Use virtual environments for dependency management
+
+```python
+# ✅ 正确示例
+# ✅ Correct example
+def get_user_by_id(user_id: str) -> Optional[User]:
+    """
+    根据用户ID获取用户信息
+    Get user information by user ID
+    
+    Args:
+        user_id: 用户唯一标识
+                User unique identifier
+        
+    Returns:
+        用户对象，若不存在则返回None
+        User object, or None if not found
+    """
+    try:
+        return db.users.find_one({"id": user_id})
+    except Exception as e:
+        logger.error(f"获取用户失败: {e}")
+        logger.error(f"Failed to get user: {e}")
+        return None
+```
+
+### 命名规范
+### Naming Conventions
+
+- **文件命名**:
+  - React组件文件: PascalCase，如`UserProfile.tsx`
+  - 非组件TS/JS文件: camelCase，如`apiService.ts`
+  - Python文件: snake_case，如`user_service.py`
+  
+- **变量/函数命名**:
+  - TS/JS: camelCase，如`getUserData`
+  - Python: snake_case，如`get_user_data`
+  
+- **组件命名**: PascalCase，如`UserProfile`
+- **接口/类型命名**: PascalCase，如`UserData`
+- **常量命名**: 全大写下划线分隔，如`API_BASE_URL`
+- **CSS类命名**: camelCase，使用React Native StyleSheet
+
+- **File naming**:
+  - React component files: PascalCase, e.g., `UserProfile.tsx`
+  - Non-component TS/JS files: camelCase, e.g., `apiService.ts`
+  - Python files: snake_case, e.g., `user_service.py`
+  
+- **Variable/function naming**:
+  - TS/JS: camelCase, e.g., `getUserData`
+  - Python: snake_case, e.g., `get_user_data`
+  
+- **Component naming**: PascalCase, e.g., `UserProfile`
+- **Interface/type naming**: PascalCase, e.g., `UserData`
+- **Constant naming**: UPPERCASE with underscores, e.g., `API_BASE_URL`
+- **CSS class naming**: camelCase, using React Native StyleSheet
+
+## 文件组织
+## File Organization
+
+### 前端目录结构
+### Frontend Directory Structure
+
+```
+src/
+├── api/          # API服务接口 (API service interfaces)
+│   ├── agents/   # 智能代理API (Intelligent agent APIs)
+│   ├── medical/  # 医疗服务API (Medical service APIs)
+│   └── user/     # 用户服务API (User service APIs)
+├── assets/       # 静态资源 (Static assets)
+├── components/   # 共享组件 (Shared components)
+│   ├── common/   # 通用UI组件 (Common UI components)
+│   └── medical/  # 医疗相关组件 (Medical-related components)
+├── features/     # 功能模块 (Feature modules)
+│   ├── agents/   # 智能代理相关功能 (Intelligent agent features)
+│   ├── auth/     # 认证功能 (Authentication features)
+│   └── ...
+├── navigation/   # 导航配置 (Navigation configuration)
+├── screens/      # 屏幕组件 (Screen components)
+├── services/     # 业务服务 (Business services)
+├── store/        # Redux状态管理 (Redux state management)
+├── types/        # 类型定义 (Type definitions)
+└── utils/        # 工具函数 (Utility functions)
+```
+
+### 后端目录结构
+### Backend Directory Structure
+
+每个微服务应遵循以下结构:
+Each microservice should follow this structure:
+
+```
+services/xxx-service/
+├── api/           # API定义 (API definitions)
+│   ├── grpc/      # gRPC服务定义 (gRPC service definitions)
+│   └── rest/      # REST API定义 (REST API definitions)
+├── cmd/           # 命令入口 (Command entries)
+│   └── server/    # 服务器入口 (Server entry)
+├── config/        # 配置文件 (Configuration files)
+├── internal/      # 内部包 (Internal packages)
+│   ├── delivery/  # 处理层(控制器) (Delivery layer/controllers)
+│   ├── model/     # 数据模型 (Data models)
+│   ├── repository/# 数据访问层 (Data access layer)
+│   └── service/   # 业务逻辑层 (Business logic layer)
+├── pkg/           # 可公开复用的包 (Public reusable packages)
+└── test/          # 测试文件 (Test files)
+```
+
+## Git工作流
+## Git Workflow
+
+- 使用GitFlow工作流
+- 主分支:
+  - `main`: 生产环境代码
+  - `develop`: 开发环境代码
+- 临时分支:
+  - `feature/xxx`: 新功能
+  - `fix/xxx`: 错误修复
+  - `docs/xxx`: 文档更新
+  - `refactor/xxx`: 代码重构
+  - `test/xxx`: 测试相关
+
+- Use GitFlow workflow
+- Main branches:
+  - `main`: Production code
+  - `develop`: Development code
+- Temporary branches:
+  - `feature/xxx`: New features
+  - `fix/xxx`: Bug fixes
+  - `docs/xxx`: Documentation updates
+  - `refactor/xxx`: Code refactoring
+  - `test/xxx`: Test-related changes
+
+### 提交规范
+### Commit Standards
+
+遵循Conventional Commits规范:
+Follow the Conventional Commits specification:
+
+```
+<类型>[可选的作用域]: <描述>
+
+[可选的正文]
+
+[可选的脚注]
+```
+
+```
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footer]
+```
+
+类型包括:
+Types include:
+- `feat`: 新功能 (new feature)
+- `fix`: 错误修复 (bug fix)
+- `docs`: 文档变更 (documentation changes)
+- `style`: 代码格式变更(不影响功能) (code formatting changes, no functional changes)
+- `refactor`: 代码重构 (code refactoring)
+- `perf`: 性能优化 (performance improvement)
+- `test`: 测试相关 (test-related changes)
+- `build`: 构建系统变更 (build system changes)
+- `ci`: 持续集成变更 (continuous integration changes)
+- `chore`: 其他变更 (other changes)
+
+## 代码质量与测试
+## Code Quality and Testing
+
+### 静态分析与格式化
+### Static Analysis and Formatting
+
+- 使用ESLint和Prettier检查和格式化JavaScript/TypeScript代码
+- 使用Flake8和Black检查和格式化Python代码
+- 提交前运行代码检查和格式化
+
+- Use ESLint and Prettier to check and format JavaScript/TypeScript code
+- Use Flake8 and Black to check and format Python code
+- Run code checks and formatting before committing
+
+### 测试规范
+### Testing Standards
+
+- 写单元测试覆盖关键业务逻辑
+- 写集成测试测试组件间交互
+- 使用Jest和React Native Testing Library测试前端代码
+- 使用pytest测试Python代码
+- 测试覆盖率目标: 80%+
+
+- Write unit tests covering key business logic
+- Write integration tests for component interactions
+- Use Jest and React Native Testing Library for frontend testing
+- Use pytest for Python code testing
+- Test coverage goal: 80%+
+
+## 文档要求
+## Documentation Requirements
+
+- 所有公共API必须有完整文档
+- 复杂组件需要有使用示例
+- 核心业务逻辑需要有流程说明
+- 更新代码同时更新相关文档
+
+- All public APIs must have complete documentation
+- Complex components need usage examples
+- Core business logic needs process explanations
+- Update related documentation when updating code
+
+## 性能考量
+## Performance Considerations
+
+- 使用合适的React生命周期优化组件渲染
+- 使用memo, useMemo和useCallback缓存组件和函数引用
+- 使用PureComponent或React.memo减少不必要的重渲染
+- 为长列表使用FlatList或SectionList，实现虚拟化和优化
+- 合理管理Redux状态，避免过度使用Context
+- 使用Hermes引擎提升JavaScript性能
+
+- Use appropriate React lifecycle methods to optimize component rendering
+- Use memo, useMemo, and useCallback to cache component and function references
+- Use PureComponent or React.memo to reduce unnecessary re-renders
+- Use FlatList or SectionList for long lists, implementing virtualization and optimization
+- Manage Redux state appropriately, avoid overuse of Context
+- Use the Hermes engine to enhance JavaScript performance
+
+## 安全规范
+## Security Standards
+
+- 不在代码中硬编码密钥、密码或其他敏感信息
+- 使用环境变量和安全存储管理密钥
+- 对用户输入进行验证和转义
+- 确保API请求使用HTTPS
+- 实现适当的认证和授权机制
+
+- Do not hardcode keys, passwords, or other sensitive information in the code
+- Use environment variables and secure storage for key management
+- Validate and escape user input
+- Ensure API requests use HTTPS
+- Implement appropriate authentication and authorization mechanisms
+
+## 无障碍性要求
+## Accessibility Requirements
+
+- 所有交互元素必须有适当的标签和角色
+- 支持屏幕阅读器友好的交互
+- 确保颜色对比度符合WCAG标准
+- 支持动态字体大小
+- 实现语音控制和无障碍导航
+
+- All interactive elements must have appropriate labels and roles
+- Support screen reader-friendly interactions
+- Ensure color contrast meets WCAG standards
+- Support dynamic font sizes
+- Implement voice control and accessible navigation
+
+## 国际化与本地化
+## Internationalization and Localization
+
+- 使用i18next或类似工具管理多语言支持
+- 外部化所有用户可见的文本
+- 考虑右到左(RTL)语言的布局调整
+- 支持不同区域的日期、数字和货币格式
+
+- Use i18next or similar tools for multilingual support
+- Externalize all user-visible text
+- Consider layout adjustments for right-to-left (RTL) languages
+- Support different regional date, number, and currency formats
+
+## 调试与性能监控
+## Debugging and Performance Monitoring
+
+- 使用React DevTools和Redux DevTools进行调试
+- 使用Flipper进行网络监控和布局检查
+- 定期进行性能检测和优化
+- 集成崩溃报告和性能监控工具
+
+- Use React DevTools and Redux DevTools for debugging
+- Use Flipper for network monitoring and layout inspection
+- Regularly perform performance testing and optimization
+- Integrate crash reporting and performance monitoring tools
+
+## 依赖管理
+## Dependency Management
+
+- 使用package.json管理前端依赖
+- 使用requirements.txt管理Python依赖
+- 定期更新依赖以修复安全漏洞
+- 慎重添加新依赖，评估其必要性和维护状态
+
+- Use package.json to manage frontend dependencies
+- Use requirements.txt to manage Python dependencies
+- Regularly update dependencies to fix security vulnerabilities
+- Carefully add new dependencies, evaluating their necessity and maintenance status
+
+## 适配多种设备和屏幕
+## Adapting to Various Devices and Screens
+
+- 使用Responsive组件和平台特定设计
+- 适配不同屏幕尺寸和方向
+- 支持暗色模式和动态主题
+- 考虑不同设备的性能差异
+
+- Use Responsive components and platform-specific designs
+- Adapt to different screen sizes and orientations
+- Support dark mode and dynamic themes
+- Consider performance differences across devices
+
+## 应用特有规范
+## Application-Specific Standards
+
+### 本地数据存储
+### Local Data Storage
+
+- 使用SQLite作为本地数据库，不使用Hive
+- 表名使用下划线命名法，如`health_data`
+- 每个表包含创建时间(`created_at`)和更新时间(`updated_at`)字段
+- 需要编写迁移脚本管理数据库架构变更
+
+- Use SQLite as the local database, not Hive
+- Use underscore naming for tables, e.g., `health_data`
+- Each table should include created time (`created_at`) and updated time (`updated_at`) fields
+- Write migration scripts to manage database schema changes
+
+### 智能体开发
+### Intelligent Agent Development
+
+- 智能体代码应遵循功能模块化设计
+- 每个智能体(小艾、小克、老克、索儿)保持独立的业务逻辑
+- 智能体间通信使用消息总线
+- 智能体配置和提示词统一管理在`config/prompts`目录
+
+- Agent code should follow modular design principles
+- Each agent (Xiaoai, Xiaoke, Laoke, Soer) should maintain independent business logic
+- Use message bus for inter-agent communication
+- Centralize agent configuration and prompts in the `config/prompts` directory
+
+### 中医特色功能
+### Traditional Chinese Medicine Features
+
+- 中医术语统一使用标准中医词汇
+- 舌诊、面诊等图像分析算法单独模块化
+- 体质辨识算法需提供判断依据和置信度
+- 中药材和食疗数据需标注来源和参考文献
+
+- Use standardized TCM terminology consistently
+- Modularize image analysis algorithms for tongue and face diagnosis
+- Constitution identification algorithms must provide basis for judgment and confidence levels
+- Herbal medicine and dietary therapy data need source annotations and references
+
+## 总结
+## Summary
+
+请严格遵循上述规范进行开发。如有任何问题或建议，请联系项目维护者。
+
+规范可能会随项目发展而更新，请定期查看最新版本。
+
+Please strictly follow the above guidelines for development. If you have any questions or suggestions, please contact the project maintainers.
+
+The guidelines may be updated as the project evolves, please check for the latest version regularly.
