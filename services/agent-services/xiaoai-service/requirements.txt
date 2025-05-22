@@ -19,10 +19,10 @@ pydantic>=2.0.0,<3.0.0
 
 # 数据库连接
 motor>=3.1.2,<4.0.0
-asyncpg>=0.27.0,<1.0.0
+asyncpg>=0.29.0,<1.0.0
 redis>=4.5.5,<5.0.0
 SQLAlchemy>=2.0.0,<3.0.0
-alembic>=1.11.1,<2.0.0
+alembic>=1.13.1,<2.0.0
 
 # AI相关
 langchain>=0.0.267,<1.0.0
@@ -30,9 +30,9 @@ langchain-core==0.1.4
 transformers>=4.30.0,<5.0.0
 openai>=1.0.0,<2.0.0
 sentence-transformers>=2.2.2,<3.0.0
-numpy>=1.24.3,<2.0.0
-scipy>=1.10.1,<2.0.0
-torch>=2.0.0,<3.0.0
+numpy>=1.26.3
+scipy>=1.12.0
+torch>=2.6.0
 
 # 日志和监控
 prometheus-client>=0.17.0,<1.0.0
@@ -82,7 +82,7 @@ pydub==0.25.1
 # 监控与度量
 aioprometheus==23.6.0
 statsd>=4.0.1,<5.0.0
-grafana-api-client>=2.1.0,<3.0.0
+grafana-api-client>=0.2.0
 
 # 服务依赖
 websockets==12.0
@@ -104,7 +104,7 @@ langchain-openai>=0.0.1,<1.0.0
 zhipuai>=1.0.7,<2.0.0
 baidu-aip>=4.16.10,<5.0.0
 tiktoken>=0.4.0,<1.0.0
-torch>=2.0.0,<3.0.0
+torch>=2.6.0
 transformers>=4.30.0,<5.0.0
 anthropic>=0.3.11,<1.0.0
 llama-cpp-python>=0.1.77,<1.0.0
@@ -118,4 +118,4 @@ passlib>=1.7.4,<2.0.0
 bcrypt>=4.0.1,<5.0.0
 
 # 日志和监控
-loguru>=0.7.0,<1.0.0 
+loguru>=0.7.0,<1.0.0

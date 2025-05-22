@@ -46,6 +46,7 @@ middleware:
       - /docs
       - /redoc
       - /openapi.json
+      - /routes
     jwt:
       secret_key: "dev_secret_key_12345_change_in_production"
       algorithm: HS256
@@ -61,11 +62,11 @@ service_discovery:
     user-service:
       name: user-service
       endpoints:
-        - host: user-service
+        - host: localhost
           port: 50051
           use_tls: false
           health_check:
-            enabled: true
+            enabled: false   # 临时禁用健康检查便于本地测试
             interval: 10
             timeout: 5
             retries: 3
@@ -77,11 +78,11 @@ service_discovery:
     auth-service:
       name: auth-service
       endpoints:
-        - host: auth-service
+        - host: localhost
           port: 50052
           use_tls: false
           health_check:
-            enabled: true
+            enabled: false   # 临时禁用健康检查便于本地测试
             interval: 10
             timeout: 5
             retries: 3
@@ -93,11 +94,11 @@ service_discovery:
     accessibility-service:
       name: accessibility-service
       endpoints:
-        - host: accessibility-service
-          port: 50051
+        - host: localhost
+          port: 50053
           use_tls: false
           health_check:
-            enabled: true
+            enabled: false   # 临时禁用健康检查便于本地测试
             interval: 10
             timeout: 5
             retries: 3
@@ -327,4 +328,4 @@ cache:
   type: memory
   redis_url: null
   ttl: 60
-  max_items: 1000 
+  max_size: 1000 

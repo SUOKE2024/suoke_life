@@ -1,0 +1,52 @@
+{
+  "stage": 4,
+  "environment": "test",
+  "total_services": 8,
+  "healthy_services": 0,
+  "unhealthy_services": 8,
+  "not_deployed_services": 0,
+  "python312_services": 0,
+  "services_results": [
+    {
+      "status": "error",
+      "service": "accessibility-service",
+      "error": "error: no context exists with the name: \"test-cluster\"\n"
+    },
+    {
+      "status": "error",
+      "service": "blockchain-service",
+      "error": "error: no context exists with the name: \"test-cluster\"\n"
+    },
+    {
+      "status": "error",
+      "service": "corn-maze-service",
+      "error": "error: no context exists with the name: \"test-cluster\"\n"
+    },
+    {
+      "status": "error",
+      "service": "suoke-bench-service",
+      "error": "error: no context exists with the name: \"test-cluster\"\n"
+    },
+    {
+      "status": "error",
+      "service": "diagnostic-services/listen-service",
+      "error": "error: no context exists with the name: \"test-cluster\"\n"
+    },
+    {
+      "status": "error",
+      "service": "diagnostic-services/inquiry-service",
+      "error": "error: no context exists with the name: \"test-cluster\"\n"
+    },
+    {
+      "status": "error",
+      "service": "diagnostic-services/palpation-service",
+      "error": "error: no context exists with the name: \"test-cluster\"\n"
+    },
+    {
+      "status": "error",
+      "service": "diagnostic-services/look-service",
+      "error": "error: no context exists with the name: \"test-cluster\"\n"
+    }
+  ],
+  "timestamp": "2025-05-22 11:45:58"
+}

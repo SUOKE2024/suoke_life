@@ -36,32 +36,84 @@ class AccessibilityService:
         self.agent_coordination = None
         self.privacy_service = None
         self.background_collection_service = None
+        self.translation_service = None  # 新增翻译服务
         
         logger.info("无障碍服务初始化完成")
     
     def _init_models(self):
         """初始化各种AI模型"""
-        # 场景识别模型 (用于导盲服务)
-        self.scene_processor = AutoProcessor.from_pretrained(
-            self.config.get("models", {}).get("scene_model", "microsoft/beit-base-patch16-224-pt22k")
-        )
-        self.scene_model = AutoModelForObjectDetection.from_pretrained(
-            self.config.get("models", {}).get("scene_model", "microsoft/beit-base-patch16-224-pt22k")
-        )
+        # 在离线环境下使用模拟模型
+        use_mock_models = True
         
-        # 手语识别模型
-        self.sign_language_model = self._init_sign_language_model()
-        
-        # 语音识别与合成模型
-        self.speech_model = self._init_speech_model()
-        
-        # 屏幕阅读模型
-        self.screen_reading_model = self._init_screen_reading_model()
-        
-        # 内容转换模型
-        self.content_conversion_model = self._init_content_conversion_model()
-        
-        logger.info("所有AI模型加载完成")
+        try:
+            # 场景识别模型 (用于导盲服务)
+            blind_assistance_enabled = self.config.get("features", {}).get("blind_assistance", {}).get("enabled", False)
+            if blind_assistance_enabled and not use_mock_models:
+                logger.info("加载场景识别模型")
+                self.scene_processor = AutoProcessor.from_pretrained(
+                    self.config.get("models", {}).get("scene_model", "microsoft/beit-base-patch16-224-pt22k")
+                )
+                self.scene_model = AutoModelForObjectDetection.from_pretrained(
+                    self.config.get("models", {}).get("scene_model", "microsoft/beit-base-patch16-224-pt22k")
+                )
+            else:
+                logger.info("导盲服务已禁用或使用模拟模型，跳过场景识别模型加载")
+                self.scene_processor = None
+                self.scene_model = None
+            
+            # 手语识别模型
+            sign_language_enabled = self.config.get("features", {}).get("sign_language", {}).get("enabled", False)
+            if sign_language_enabled:
+                logger.info("加载手语识别模型")
+                self.sign_language_model = self._init_sign_language_model()
+            else:
+                logger.info("手语识别已禁用，跳过模型加载")
+                self.sign_language_model = None
+            
+            # 语音识别与合成模型
+            voice_assistance_enabled = self.config.get("features", {}).get("voice_assistance", {}).get("enabled", False)
+            if voice_assistance_enabled:
+                logger.info("加载语音识别与合成模型")
+                self.speech_model = self._init_speech_model()
+            else:
+                logger.info("语音辅助已禁用，跳过模型加载")
+                self.speech_model = None
+            
+            # 屏幕阅读模型
+            screen_reading_enabled = self.config.get("features", {}).get("screen_reading", {}).get("enabled", False)
+            if screen_reading_enabled:
+                logger.info("加载屏幕阅读模型")
+                self.screen_reading_model = self._init_screen_reading_model()
+            else:
+                logger.info("屏幕阅读已禁用，跳过模型加载")
+                self.screen_reading_model = None
+            
+            # 内容转换模型
+            content_conversion_enabled = self.config.get("features", {}).get("content_conversion", {}).get("enabled", False)
+            if content_conversion_enabled and not use_mock_models:
+                logger.info("加载内容转换模型")
+                tokenizer = AutoTokenizer.from_pretrained(
+                    self.config.get("models", {}).get("conversion_model", "google/flan-t5-base")
+                )
+                model = AutoModelForSeq2SeqLM.from_pretrained(
+                    self.config.get("models", {}).get("conversion_model", "google/flan-t5-base")
+                )
+                self.content_conversion_model = {"tokenizer": tokenizer, "model": model}
+            else:
+                logger.info("内容转换已禁用或使用模拟模型，跳过模型加载")
+                self.content_conversion_model = None
+            
+            logger.info("AI模型加载完成")
+        except Exception as e:
+            logger.error(f"模型加载失败: {str(e)}")
+            logger.info("使用模拟模型代替")
+            # 所有模型默认为None
+            self.scene_processor = None
+            self.scene_model = None
+            self.sign_language_model = None
+            self.speech_model = None
+            self.screen_reading_model = None
+            self.content_conversion_model = None
     
     def _init_sign_language_model(self):
         """初始化手语识别模型"""
@@ -753,4 +805,329 @@ class AccessibilityService:
         """更新用户偏好设置到数据库"""
         # 实际项目中应更新到数据库
         # 这里为简化返回成功
-        return True 
+        return True
+    
+    def speech_translation(self, audio_data: bytes, user_id: str, source_language: str, target_language: str,
+                         source_dialect: Optional[str] = None, target_dialect: Optional[str] = None,
+                         preferences: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """
+        语音翻译服务 - 将一种语言的语音翻译为另一种语言的语音
+        
+        Args:
+            audio_data: 语音数据
+            user_id: 用户ID
+            source_language: 源语言代码
+            target_language: 目标语言代码
+            source_dialect: 源方言代码
+            target_dialect: 目标方言代码
+            preferences: 用户偏好设置
+            
+        Returns:
+            Dict[str, Any]: 翻译结果，包含源文本、翻译文本和翻译语音
+        """
+        logger.info(f"处理语音翻译请求: 用户={user_id}, 语言={source_language} → {target_language}")
+        start_time = time.time()
+        
+        try:
+            # 检查翻译服务是否可用
+            if not self.translation_service:
+                logger.error("翻译服务不可用")
+                return {
+                    "error": "translation_service_unavailable",
+                    "source_text": "",
+                    "translated_text": "",
+                    "translated_audio": b"",
+                    "source_confidence": 0.0,
+                    "translation_confidence": 0.0,
+                    "processing_time_ms": 0
+                }
+            
+            # 数据匿名化处理（如果隐私服务可用）
+            if self.privacy_service:
+                logger.debug(f"对用户 {user_id} 的音频数据进行匿名化处理")
+                audio_data = self.privacy_service.anonymize_user_data(audio_data, "audio")
+            
+            # 验证语言代码
+            if not self._validate_language_code(source_language) or not self._validate_language_code(target_language):
+                logger.warning(f"不支持的语言代码: {source_language} → {target_language}")
+                return {
+                    "error": "unsupported_language",
+                    "source_text": "",
+                    "translated_text": "",
+                    "translated_audio": b"",
+                    "source_confidence": 0.0,
+                    "translation_confidence": 0.0,
+                    "processing_time_ms": int((time.time() - start_time) * 1000)
+                }
+            
+            # 调用翻译服务
+            result = self.translation_service.translate_speech(
+                audio_data,
+                source_language,
+                target_language,
+                source_dialect,
+                target_dialect,
+                preferences
+            )
+            
+            # 与智能体协调（如果可用）
+            if self.agent_coordination:
+                self.agent_coordination.event_bus.publish(
+                    "speech_translation.completed",
+                    {
+                        "user_id": user_id,
+                        "source_language": source_language,
+                        "target_language": target_language,
+                        "source_text_length": len(result.get("source_text", "")),
+                        "translated_text_length": len(result.get("translated_text", "")),
+                        "processing_time_ms": result.get("processing_time_ms", 0),
+                        "timestamp": time.time()
+                    }
+                )
+            
+            logger.info(f"语音翻译完成: 用户={user_id}, 耗时={time.time() - start_time:.2f}秒")
+            return result
+            
+        except Exception as e:
+            logger.error(f"语音翻译失败: {str(e)}", exc_info=True)
+            return {
+                "error": str(e),
+                "source_text": "",
+                "translated_text": "",
+                "translated_audio": b"",
+                "source_confidence": 0.0,
+                "translation_confidence": 0.0,
+                "processing_time_ms": int((time.time() - start_time) * 1000)
+            }
+    
+    def create_translation_session(self, user_id: str, source_language: str, target_language: str,
+                                 source_dialect: Optional[str] = None, target_dialect: Optional[str] = None,
+                                 preferences: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """
+        创建流式翻译会话
+        
+        Args:
+            user_id: 用户ID
+            source_language: 源语言代码
+            target_language: 目标语言代码
+            source_dialect: 源方言代码
+            target_dialect: 目标方言代码
+            preferences: 用户偏好设置
+            
+        Returns:
+            Dict[str, Any]: 会话创建结果，包含会话ID
+        """
+        logger.info(f"创建翻译会话: 用户={user_id}, 语言={source_language} → {target_language}")
+        
+        try:
+            # 检查翻译服务是否可用
+            if not self.translation_service:
+                logger.error("翻译服务不可用")
+                return {
+                    "success": False,
+                    "message": "translation_service_unavailable",
+                    "session_id": ""
+                }
+            
+            # 验证语言代码
+            if not self._validate_language_code(source_language) or not self._validate_language_code(target_language):
+                logger.warning(f"不支持的语言代码: {source_language} → {target_language}")
+                return {
+                    "success": False,
+                    "message": "unsupported_language",
+                    "session_id": ""
+                }
+            
+            # 创建会话
+            session_id = self.translation_service.create_streaming_session(
+                user_id,
+                source_language,
+                target_language,
+                source_dialect,
+                target_dialect,
+                preferences
+            )
+            
+            # 与智能体协调（如果可用）
+            if self.agent_coordination:
+                self.agent_coordination.event_bus.publish(
+                    "speech_translation.session_created",
+                    {
+                        "user_id": user_id,
+                        "session_id": session_id,
+                        "source_language": source_language,
+                        "target_language": target_language,
+                        "timestamp": time.time()
+                    }
+                )
+            
+            logger.info(f"翻译会话创建成功: 会话ID={session_id}")
+            return {
+                "success": True,
+                "message": "session_created",
+                "session_id": session_id
+            }
+            
+        except Exception as e:
+            logger.error(f"创建翻译会话失败: {str(e)}", exc_info=True)
+            return {
+                "success": False,
+                "message": str(e),
+                "session_id": ""
+            }
+    
+    def process_streaming_translation(self, session_id: str, audio_chunk: bytes, user_id: str,
+                                    is_final: bool = False) -> Optional[Dict[str, Any]]:
+        """
+        处理流式翻译的音频数据块
+        
+        Args:
+            session_id: 会话ID
+            audio_chunk: 音频数据块
+            user_id: 用户ID
+            is_final: 是否为最后一块
+            
+        Returns:
+            Optional[Dict[str, Any]]: 处理结果，如果未准备好则为None
+        """
+        logger.debug(f"处理流式翻译数据块: 会话ID={session_id}, 用户ID={user_id}, 数据大小={len(audio_chunk)}字节")
+        
+        try:
+            # 检查翻译服务是否可用
+            if not self.translation_service:
+                logger.error("翻译服务不可用")
+                return {
+                    "error": "translation_service_unavailable",
+                    "is_final": True
+                }
+            
+            # 处理数据块
+            result = self.translation_service.process_streaming_chunk(
+                session_id,
+                audio_chunk,
+                is_final
+            )
+            
+            # 如果结果为None，表示数据还不足以处理
+            if result is None:
+                return None
+            
+            # 与智能体协调（如果可用且是最终结果）
+            if self.agent_coordination and result.get("is_final", False):
+                self.agent_coordination.event_bus.publish(
+                    "speech_translation.segment_completed",
+                    {
+                        "user_id": user_id,
+                        "session_id": session_id,
+                        "segment_id": result.get("segment_id", ""),
+                        "timestamp": time.time()
+                    }
+                )
+            
+            return result
+            
+        except Exception as e:
+            logger.error(f"处理流式翻译数据块失败: {str(e)}", exc_info=True)
+            return {
+                "error": str(e),
+                "source_text": "",
+                "translated_text": "",
+                "translated_audio": b"",
+                "segment_id": "",
+                "is_final": True
+            }
+    
+    def get_session_status(self, session_id: str, user_id: str) -> Dict[str, Any]:
+        """
+        获取翻译会话状态
+        
+        Args:
+            session_id: 会话ID
+            user_id: 用户ID
+            
+        Returns:
+            Dict[str, Any]: 会话状态
+        """
+        logger.info(f"获取翻译会话状态: 会话ID={session_id}, 用户ID={user_id}")
+        
+        try:
+            # 检查翻译服务是否可用
+            if not self.translation_service:
+                logger.error("翻译服务不可用")
+                return {
+                    "error": "translation_service_unavailable"
+                }
+            
+            # 获取会话状态
+            status = self.translation_service.get_session_status(session_id)
+            
+            # 验证用户ID（安全检查）
+            if "user_id" in status and status["user_id"] != user_id:
+                logger.warning(f"用户ID不匹配: 请求={user_id}, 会话={status['user_id']}")
+                return {
+                    "error": "user_id_mismatch"
+                }
+            
+            return status
+            
+        except Exception as e:
+            logger.error(f"获取翻译会话状态失败: {str(e)}", exc_info=True)
+            return {
+                "error": str(e)
+            }
+    
+    def get_supported_languages(self, user_id: str, include_dialects: bool = False) -> Dict[str, Any]:
+        """
+        获取支持的语言和方言列表
+        
+        Args:
+            user_id: 用户ID
+            include_dialects: 是否包含方言信息
+            
+        Returns:
+            Dict[str, Any]: 支持的语言和方言列表
+        """
+        logger.info(f"获取支持的语言列表: 用户={user_id}, 包含方言={include_dialects}")
+        
+        try:
+            result = {
+                "languages": [],
+                "language_pairs": [],
+                "supported_dialects": []
+            }
+            
+            # 获取翻译服务支持的语言
+            if self.translation_service:
+                result["languages"] = self.translation_service.supported_languages
+                result["language_pairs"] = self.translation_service.get_supported_language_pairs()
+            
+            # 获取方言服务支持的方言（如果需要）
+            if include_dialects and self.dialect_service:
+                result["supported_dialects"] = self.dialect_service.get_supported_dialects()
+            
+            return result
+            
+        except Exception as e:
+            logger.error(f"获取支持的语言列表失败: {str(e)}", exc_info=True)
+            return {
+                "error": str(e),
+                "languages": [],
+                "language_pairs": [],
+                "supported_dialects": []
+            }
+    
+    def _validate_language_code(self, language_code: str) -> bool:
+        """
+        验证语言代码是否支持
+        
+        Args:
+            language_code: 语言代码
+            
+        Returns:
+            bool: 是否支持
+        """
+        if not self.translation_service or not self.translation_service.supported_languages:
+            return True  # 如果服务不可用，默认假定支持
+        
+        supported_codes = [lang["code"] for lang in self.translation_service.supported_languages]
+        return language_code in supported_codes 

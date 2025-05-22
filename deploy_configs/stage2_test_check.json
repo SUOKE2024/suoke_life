@@ -1,0 +1,32 @@
+{
+  "stage": 2,
+  "environment": "test",
+  "total_services": 4,
+  "healthy_services": 0,
+  "unhealthy_services": 4,
+  "not_deployed_services": 0,
+  "python312_services": 0,
+  "services_results": [
+    {
+      "status": "error",
+      "service": "user-service",
+      "error": "error: no context exists with the name: \"test-cluster\"\n"
+    },
+    {
+      "status": "error",
+      "service": "health-data-service",
+      "error": "error: no context exists with the name: \"test-cluster\"\n"
+    },
+    {
+      "status": "error",
+      "service": "med-knowledge",
+      "error": "error: no context exists with the name: \"test-cluster\"\n"
+    },
+    {
+      "status": "error",
+      "service": "medical-service",
+      "error": "error: no context exists with the name: \"test-cluster\"\n"
+    }
+  ],
+  "timestamp": "2025-05-22 11:45:58"
+}

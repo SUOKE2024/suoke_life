@@ -1,5 +1,5 @@
 # 构建阶段
-FROM python:3.11-slim AS builder
+FROM python:3.12-slim AS builder
 
 # 设置环境变量
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -22,7 +22,7 @@ RUN python -m venv /opt/venv && \
     /opt/venv/bin/pip install --no-cache-dir -r requirements.txt
 
 # 运行阶段
-FROM python:3.11-slim
+FROM python:3.12-slim
 
 # 设置环境变量
 ENV PYTHONDONTWRITEBYTECODE=1 \

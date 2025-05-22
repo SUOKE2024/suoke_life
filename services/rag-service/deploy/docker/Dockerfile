@@ -1,5 +1,5 @@
 # 构建阶段
-FROM python:3.10-slim AS builder
+FROM python:3.12-slim AS builder
 
 WORKDIR /app
 
@@ -21,7 +21,7 @@ RUN poetry config virtualenvs.create false
 RUN poetry install --no-dev --no-interaction --no-ansi
 
 # 多阶段构建：生产镜像
-FROM python:3.10-slim
+FROM python:3.12-slim
 
 WORKDIR /app
 

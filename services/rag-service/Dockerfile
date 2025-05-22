@@ -1,4 +1,4 @@
-FROM python:3.10-slim as builder
+FROM python:3.12-slim as builder
 
 # 设置工作目录
 WORKDIR /app
@@ -27,7 +27,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
 # 构建最终镜像
-FROM python:3.10-slim
+FROM python:3.12-slim
 
 # 设置工作目录
 WORKDIR /app

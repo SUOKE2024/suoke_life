@@ -6,10 +6,10 @@ protobuf==4.24.4
 PyYAML==6.0.1
 librosa==0.10.1
 scikit-learn==1.3.2
-torch==2.1.1
+torch>=2.6.0
 parselmouth==0.4.3
-numpy==1.26.1
-scipy==1.11.3
+numpy>=1.26.3
+scipy>=1.12.0
 pymongo==4.6.0
 redis==5.0.1
 prometheus-client==0.17.1
@@ -17,4 +17,4 @@ psutil==5.9.6
 soundfile==0.12.1
 GPUtil==1.4.0
 python-dotenv==1.0.0
-pydub==0.25.1 
+pydub==0.25.1

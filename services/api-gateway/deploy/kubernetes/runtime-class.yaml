@@ -1,0 +1,33 @@
+apiVersion: node.k8s.io/v1
+kind: RuntimeClass
+metadata:
+  name: runc-containerd
+# handler 指定应该用来运行 Pod 的容器运行时
+handler: runc
+# 调度规则
+scheduling:
+  # 表示这个运行时可能对节点性能产生一定影响
+  nodeSelector:
+    # 只在支持 containerd 的节点上运行
+    runtime-support: containerd
+  tolerations:
+  - effect: NoSchedule
+    key: node-role.kubernetes.io/master
+    operator: Equal
+    value: "true"
+  # 这个设置表示 Kubernetes 调度器应该优先选择指定了 containerd 的节点
+  # 即使这些节点资源利用率更高
+  preferredDuringSchedulingIgnoredDuringExecution:
+  - weight: 1
+    preference:
+      matchExpressions:
+      - key: containerd-optimized
+        operator: In
+        values:
+        - "true"
+# 这个运行时类在资源管理方面的额外开销
+overhead:
+  # Pod 内存开销（5MB）
+  podFixed:
+    memory: "5Mi"
+    cpu: "10m" 

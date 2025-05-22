@@ -94,18 +94,23 @@ routes:
 
 ## 部署指南
 
-### Docker部署
+### 容器镜像构建
 
-使用Docker Compose快速部署：
+API网关服务使用 containerd 作为容器运行时，推荐使用 buildah 构建容器镜像：
 
 ```bash
 # 克隆代码仓库
 git clone https://github.com/suoke/life.git
 cd life/services/api-gateway
 
-# 构建并启动服务
-docker-compose up -d
+# 使用 buildah 构建镜像
+./scripts/build_containerd.sh
+
+# 自定义构建参数
+REGISTRY=your-registry.com IMAGE_NAME=suoke/api-gateway TAG=v1.0 USE_ENHANCED=true PUSH_IMAGE=true ./scripts/build_containerd.sh
 ```
+
+> **注意**：从 Kubernetes v1.20 开始，containerd 已替代 Docker 成为推荐的容器运行时。详情请参阅 [docs/containerd-migration.md](docs/containerd-migration.md)。
 
 ### Kubernetes部署
 
@@ -115,11 +120,30 @@ docker-compose up -d
 # 创建命名空间
 kubectl create namespace suoke
 
-# 部署配置
-kubectl apply -f deploy/kubernetes/deployment.yaml
+# 部署 containerd RuntimeClass
+kubectl apply -f deploy/kubernetes/runtime-class.yaml
+
+# 部署服务
+kubectl apply -f deploy/kubernetes/deployment-containerd.yaml
 
 # 验证部署
 kubectl get pods -n suoke -l app=api-gateway
+```
+
+### 本地开发部署（支持Docker兼容性）
+
+尽管生产环境使用 containerd，本地开发仍可使用 Docker：
+
+```bash
+# 使用增强版 Dockerfile 构建 Docker 镜像
+docker build -t suoke/api-gateway:dev -f deploy/docker/Dockerfile.containerd .
+
+# 运行容器
+docker run -p 8080:8080 -p 50050:50050 \
+  -v $(pwd)/config:/app/config \
+  -v $(pwd)/logs:/app/logs \
+  -e LOG_LEVEL=DEBUG \
+  suoke/api-gateway:dev
 ```
 
 ### 配置环境变量

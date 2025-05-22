@@ -1,0 +1,31 @@
+{
+  "stage": 1,
+  "environment": "test",
+  "services": [
+    "api-gateway",
+    "auth-service",
+    "message-bus"
+  ],
+  "results": [
+    {
+      "status": "failed",
+      "error": "error: no context exists with the name: \"test-cluster\"\n"
+    },
+    {
+      "status": "failed",
+      "error": "error: no context exists with the name: \"test-cluster\"\n"
+    },
+    {
+      "status": "failed",
+      "error": "error: no context exists with the name: \"test-cluster\"\n"
+    }
+  ],
+  "failed_services": [
+    "api-gateway",
+    "auth-service",
+    "message-bus"
+  ],
+  "timestamp": "2025-05-22 11:55:45",
+  "status": "failed",
+  "action": "deploy"
+}

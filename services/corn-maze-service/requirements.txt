@@ -14,12 +14,12 @@ PyYAML==6.0
 motor==3.3.1
 pymongo==4.3.3
 redis==4.5.4
-sqlalchemy==2.0.23
+sqlalchemy>=2.0.25
 aiosqlite==0.18.0
 
 # ML & NLP
 openai==1.13.0
-numpy==1.24.3
+numpy>=1.26.3
 langchain==0.0.312
 langchain_community==0.0.9
 

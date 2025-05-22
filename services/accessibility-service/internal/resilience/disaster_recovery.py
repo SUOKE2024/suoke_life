@@ -23,10 +23,40 @@ class BackupScheduler:
             config: 配置对象
         """
         self.config = config
-        self.backup_enabled = config.resilience.backup.enabled
-        self.backup_schedule = config.resilience.backup.schedule
-        self.backup_path = config.resilience.backup.path
-        self.max_backups = config.resilience.backup.max_backups
+        
+        # 安全获取备份配置
+        try:
+            self.backup_enabled = config.resilience.backup.enabled
+        except AttributeError:
+            self.backup_enabled = False
+            logger.warning("未找到备份启用配置，备份功能将被禁用")
+            
+        # 如果备份功能禁用，使用默认值
+        if not self.backup_enabled:
+            logger.info("备份功能已禁用，使用默认配置值")
+            self.backup_schedule = {}
+            self.backup_path = "/tmp/backups"
+            self.max_backups = 5
+        else:
+            # 安全获取其他备份配置
+            try:
+                self.backup_schedule = config.resilience.backup.schedule
+            except AttributeError:
+                self.backup_schedule = {}
+                logger.warning("未找到备份计划配置，使用空计划")
+                
+            try:
+                self.backup_path = config.resilience.backup.path
+            except AttributeError:
+                self.backup_path = "/tmp/backups"
+                logger.warning(f"未找到备份路径配置，使用默认路径: {self.backup_path}")
+                
+            try:
+                self.max_backups = config.resilience.backup.max_backups
+            except AttributeError:
+                self.max_backups = 5
+                logger.warning(f"未找到最大备份数配置，使用默认值: {self.max_backups}")
+            
         self.jobs = {}
         self.running = False
         self.scheduler_thread = None

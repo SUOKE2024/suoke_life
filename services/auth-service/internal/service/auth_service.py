@@ -12,7 +12,7 @@ import pyotp
 import qrcode
 import base64
 from io import BytesIO
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 from typing import Dict, Optional, List, Any, Tuple
 
 from fastapi import Depends, HTTPException, status
@@ -35,7 +35,13 @@ REFRESH_TOKEN_EXPIRE_DAYS = int(os.getenv("REFRESH_TOKEN_EXPIRE_DAYS", "30"))
 MFA_ISSUER = "索克生活APP"
 
 # 工具初始化
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(
+    schemes=["bcrypt", "sha256_crypt"],
+    default="bcrypt",
+    bcrypt__rounds=12,  # 工作因子，增加安全性
+    sha256_crypt__rounds=100000,  # 足够强度的备用哈希
+    deprecated=["auto"]  # 自动弃用不安全的哈希
+)
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
@@ -120,7 +126,7 @@ async def authenticate_user(
     await audit_repo.add_login_attempt(user.id, ip_address, True)
     
     # 更新最后登录时间
-    user.last_login = datetime.utcnow()
+    user.last_login = datetime.now(UTC)
     await session.commit()
     
     return user
@@ -132,9 +138,9 @@ async def create_access_token(data: Dict[str, Any], expires_delta: Optional[time
     
     # 设置过期时间
     if expires_delta:
-        expire = datetime.utcnow() + expires_delta
+        expire = datetime.now(UTC) + expires_delta
     else:
-        expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        expire = datetime.now(UTC) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     
     to_encode.update({"exp": expire})
     
@@ -148,15 +154,11 @@ async def create_refresh_token(
     session: AsyncSession = Depends(get_session),
 ) -> Tuple[str, datetime]:
     """创建刷新令牌"""
-    # 生成令牌
-    token_value = str(uuid.uuid4())
-    expires_at = datetime.utcnow() + timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS)
-    
-    # 保存令牌到数据库
+    # 调用仓储创建刷新令牌
     token_repo = TokenRepository(session)
-    await token_repo.create_refresh_token(user_id, token_value, expires_at)
+    result = await token_repo.create_refresh_token(str(user_id), expires_days=REFRESH_TOKEN_EXPIRE_DAYS)
     
-    return token_value, expires_at
+    return result["token_value"], result["expires_at"]
 
 
 async def create_tokens(
@@ -200,7 +202,7 @@ async def refresh_tokens(
     
     # 验证刷新令牌
     token = await token_repo.get_refresh_token(refresh_token)
-    if not token or token.revoked or token.expires_at < datetime.utcnow():
+    if not token or token.revoked or token.expires_at < datetime.now(UTC):
         raise ValueError("刷新令牌无效或已过期")
     
     # 获取用户

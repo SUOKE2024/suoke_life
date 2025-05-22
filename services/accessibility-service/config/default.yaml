@@ -1,0 +1,166 @@
+# 无障碍服务默认配置
+service:
+  name: accessibility-service
+  version: 1.0.0
+  description: 索克生活APP的无障碍服务，提供屏幕阅读和辅助功能支持
+
+server:
+  host: 0.0.0.0
+  port: 8090
+  debug: false
+  workers: 4
+  timeout: 60
+  cors:
+    enabled: true
+    origins:
+      - "*"
+
+logging:
+  level: INFO
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: logs/accessibility-service.log
+  max_size: 10485760  # 10MB
+  backup_count: 5
+
+# 标准数据库配置
+database:
+  # 主数据库配置
+  primary:
+    type: postgresql
+    host: ${DB_HOST:-localhost}
+    port: ${DB_PORT:-5432}
+    username: ${DB_USER:-postgres}
+    password: ${DB_PASS:-postgres}
+    database: ${DB_NAME:-accessibility_service}
+    
+    # 连接池配置
+    pool:
+      min_size: 5
+      max_size: ${DB_POOL_SIZE:-20}
+      max_overflow: ${DB_MAX_OVERFLOW:-10}
+      timeout: ${DB_POOL_TIMEOUT:-30}
+      recycle: ${DB_POOL_RECYCLE:-3600}
+      use_lifo: true
+      echo: ${DB_ECHO:-false}
+    
+    # 性能优化参数
+    optimization:
+      prepared_statement_cache_size: 100
+      statement_timeout: 30000
+      idle_in_transaction_session_timeout: 60000
+      effective_cache_size: "4GB"
+      maintenance_work_mem: "64MB"
+      max_parallel_workers_per_gather: 2
+      enable_partitionwise_join: true
+    
+    # 连接参数
+    options:
+      application_name: "accessibility_service"
+      client_encoding: "UTF8"
+      connect_timeout: 10
+      keepalives: 1
+      keepalives_idle: 60
+    
+    # 事务隔离级别
+    isolation_level: "READ COMMITTED"
+  
+  # 只读副本配置（用于读写分离）
+  replicas:
+    enabled: ${DB_REPLICAS_ENABLED:-false}
+    strategy: "round_robin"
+    nodes:
+      - host: ${DB_REPLICA1_HOST}
+        port: ${DB_REPLICA1_PORT:-5432}
+        username: ${DB_REPLICA1_USER:-postgres}
+        password: ${DB_REPLICA1_PASS:-postgres}
+        database: ${DB_REPLICA1_NAME:-accessibility_service}
+        pool:
+          min_size: 2
+          max_size: ${DB_REPLICA1_POOL_SIZE:-10}
+          max_overflow: 5
+          timeout: 20
+  
+  # SQLite配置（用于本地存储和离线模式）
+  sqlite:
+    path: ${SQLITE_PATH:-data/local.db}
+    journal_mode: "WAL"
+    synchronous: "NORMAL"
+    busy_timeout: 5000
+    cache_size: 2000
+    temp_store: "MEMORY"
+  
+  # 缓存配置
+  cache:
+    type: redis
+    host: ${REDIS_HOST:-localhost}
+    port: ${REDIS_PORT:-6379}
+    db: ${REDIS_DB:-0}
+    password: ${REDIS_PASS}
+    ttl: ${REDIS_TTL:-3600}
+    key_prefix: "accessibility:"
+    
+    # Redis连接池配置
+    pool:
+      min_idle: 5
+      max_idle: 20
+      max_active: 50
+      max_wait: 3000
+      timeout: 2000
+    
+    # 本地缓存配置（双层缓存）
+    local:
+      enabled: true
+      max_size: 5000
+      ttl: 300
+  
+  # 监控配置
+  monitoring:
+    query_timeout_threshold: 1000
+    slow_query_log: true
+    slow_query_threshold: 500
+    connection_stats: true
+    query_stats: true
+
+# 无障碍功能配置
+accessibility:
+  screen_reader:
+    enabled: true
+    voice_rate: 1.0
+    voice_pitch: 1.0
+    preferred_voice: ${PREFERRED_VOICE:-default}
+  
+  visual:
+    high_contrast: ${HIGH_CONTRAST:-false}
+    text_size_multiplier: ${TEXT_SIZE_MULTIPLIER:-1.0}
+    color_blind_mode: ${COLOR_BLIND_MODE:-none}
+  
+  motor:
+    touch_assist: ${TOUCH_ASSIST:-false}
+    gesture_simplification: ${GESTURE_SIMPLIFICATION:-false}
+    input_delay: ${INPUT_DELAY:-0}
+
+# 安全配置
+security:
+  jwt:
+    secret: ${JWT_SECRET}
+    algorithm: HS256
+    expires: 3600  # 1小时
+  
+  api_keys:
+    enabled: true
+    header_name: X-API-Key
+
+# 可观测性配置
+telemetry:
+  tracing:
+    enabled: ${TRACING_ENABLED:-false}
+    exporter: otlp
+    endpoint: ${OTLP_ENDPOINT:-localhost:4317}
+    service_name: accessibility-service
+    environment: ${SERVICE_ENV:-development}
+  
+  metrics:
+    enabled: ${METRICS_ENABLED:-true}
+    exporter: prometheus
+    endpoint: ${METRICS_ENDPOINT:-localhost:9090}
+    export_interval: 15  # 秒

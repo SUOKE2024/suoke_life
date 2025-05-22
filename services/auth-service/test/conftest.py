@@ -9,7 +9,7 @@ import uuid
 import asyncio
 import pytest
 import asyncpg
-import aioredis
+import redis
 from typing import Dict, Any, Optional
 
 # 测试环境配置
@@ -182,25 +182,24 @@ async def db_pool():
 
 
 @pytest.fixture(scope="session")
-async def redis_pool():
+def redis_pool():
     """创建Redis连接池"""
     # 创建Redis连接
-    redis = aioredis.Redis(
+    redis_client = redis.Redis(
         host=TEST_REDIS_HOST,
         port=TEST_REDIS_PORT,
         db=TEST_REDIS_DB,
-        encoding="utf-8",
         decode_responses=True
     )
     
     # 清空测试数据库
-    await redis.flushdb()
+    redis_client.flushdb()
     
-    yield redis
+    yield redis_client
     
     # 测试完成后清空并关闭
-    await redis.flushdb()
-    await redis.close()
+    redis_client.flushdb()
+    redis_client.close()
 
 
 @pytest.fixture

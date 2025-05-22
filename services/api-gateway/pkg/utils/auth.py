@@ -8,10 +8,11 @@
 import logging
 import time
 import uuid
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 from typing import Dict, List, Optional, Union
 
 import jwt
+import pydantic
 from pydantic import BaseModel
 
 from internal.model.config import JwtConfig
@@ -97,7 +98,7 @@ class JWTManager:
         Returns:
             JWT令牌
         """
-        now = datetime.utcnow()
+        now = datetime.now(UTC)
         expires = now + expires_delta
         
         # 创建令牌负载
@@ -201,6 +202,9 @@ class JWTManager:
             
         except jwt.ExpiredSignatureError:
             raise ValueError("令牌已过期")
+        except pydantic.ValidationError:
+            # 处理验证错误，表示令牌缺少必要字段
+            raise ValueError("缺少必要字段")
         except jwt.InvalidTokenError as e:
             raise ValueError(f"无效的令牌: {str(e)}")
 
@@ -223,6 +227,6 @@ def extract_token_from_header(authorization: str) -> str:
     
     parts = authorization.split()
     if len(parts) != 2 or parts[0].lower() != "bearer":
-        raise ValueError("无效的认证令牌格式")
+        raise ValueError("无效的认证头部格式")
     
     return parts[1] 

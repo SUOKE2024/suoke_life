@@ -2,11 +2,11 @@
 service:
   name: laoke-service
   version: 1.0.0
-  description: 索克生活APP的知识传播平台智能体
+  description: 索克生活APP的社区健康知识智能体，提供社区健康教育和知识管理
 
 server:
   host: 0.0.0.0
-  port: 8081
+  port: 8082
   debug: false
   workers: 4
   timeout: 60
@@ -61,26 +61,125 @@ models:
       - ernie-bot-4
       - ernie-bot
 
+# 标准数据库配置
 database:
-  type: postgresql
-  host: ${DB_HOST:-localhost}
-  port: ${DB_PORT:-5432}
-  username: ${DB_USER:-postgres}
-  password: ${DB_PASS:-postgres}
-  database: ${DB_NAME:-laoke_service}
-  pool_size: 10
-  max_overflow: 5
-  timeout: 30
-
-cache:
-  type: redis
-  host: ${REDIS_HOST:-localhost}
-  port: ${REDIS_PORT:-6379}
-  db: 1
-  password: ${REDIS_PASS}
-  ttl: 3600
-  memory_cache_size: 10000  # 内存缓存大小
-  memory_cache_ttl: 300     # 内存缓存TTL（秒）
+  # 主数据库配置
+  primary:
+    type: postgresql
+    host: ${DB_HOST:-localhost}
+    port: ${DB_PORT:-5432}
+    username: ${DB_USER:-postgres}
+    password: ${DB_PASS:-postgres}
+    database: ${DB_NAME:-laoke_service}
+    
+    # 连接池配置
+    pool:
+      min_size: 5
+      max_size: ${DB_POOL_SIZE:-20}
+      max_overflow: ${DB_MAX_OVERFLOW:-10}
+      timeout: ${DB_POOL_TIMEOUT:-30}
+      recycle: ${DB_POOL_RECYCLE:-3600}
+      use_lifo: true
+      echo: ${DB_ECHO:-false}
+    
+    # 性能优化参数
+    optimization:
+      prepared_statement_cache_size: 100
+      statement_timeout: 30000
+      idle_in_transaction_session_timeout: 60000
+      effective_cache_size: "4GB"
+      maintenance_work_mem: "64MB"
+      max_parallel_workers_per_gather: 2
+      enable_partitionwise_join: true
+    
+    # 连接参数
+    options:
+      application_name: "laoke_service"
+      client_encoding: "UTF8"
+      connect_timeout: 10
+      keepalives: 1
+      keepalives_idle: 60
+    
+    # 事务隔离级别
+    isolation_level: "READ COMMITTED"
+  
+  # 只读副本配置（用于读写分离）
+  replicas:
+    enabled: ${DB_REPLICAS_ENABLED:-false}
+    strategy: "round_robin"
+    nodes:
+      - host: ${DB_REPLICA1_HOST}
+        port: ${DB_REPLICA1_PORT:-5432}
+        username: ${DB_REPLICA1_USER:-postgres}
+        password: ${DB_REPLICA1_PASS:-postgres}
+        database: ${DB_REPLICA1_NAME:-laoke_service}
+        pool:
+          min_size: 2
+          max_size: ${DB_REPLICA1_POOL_SIZE:-10}
+          max_overflow: 5
+          timeout: 20
+  
+  # SQLite配置（用于本地存储）
+  sqlite:
+    path: ${SQLITE_PATH:-data/local.db}
+    journal_mode: "WAL"
+    synchronous: "NORMAL"
+    busy_timeout: 5000
+    cache_size: 2000
+    temp_store: "MEMORY"
+  
+  # MongoDB配置（用于知识内容存储）
+  mongodb:
+    uri: ${MONGODB_URI:-mongodb://localhost:27017}
+    database: ${MONGODB_DB:-laoke_knowledge}
+    min_pool_size: 5
+    max_pool_size: 20
+    max_connection_idle_time: 60000
+    connect_timeout: 20000
+    socket_timeout: 300000
+  
+  # 向量数据库配置
+  vector:
+    type: milvus
+    host: ${VECTOR_DB_HOST:-localhost}
+    port: ${VECTOR_DB_PORT:-19530}
+    collection: ${VECTOR_DB_COLLECTION:-laoke_vectors}
+    dimension: 768
+    metric_type: "IP"
+    partition_key: "source"
+    replica_number: 1
+  
+  # 缓存配置
+  cache:
+    type: redis
+    host: ${REDIS_HOST:-localhost}
+    port: ${REDIS_PORT:-6379}
+    db: ${REDIS_DB:-0}
+    password: ${REDIS_PASS}
+    ttl: ${REDIS_TTL:-3600}
+    key_prefix: "laoke:"
+    
+    # Redis连接池配置
+    pool:
+      min_idle: 5
+      max_idle: 20
+      max_active: 50
+      max_wait: 3000
+      timeout: 2000
+    
+    # 本地缓存配置（双层缓存）
+    local:
+      enabled: true
+      max_size: 10000
+      ttl: 300
+  
+  # 监控配置
+  monitoring:
+    query_timeout_threshold: 1000
+    slow_query_log: true
+    slow_query_threshold: 500
+    connection_stats: true
+    query_stats: true
 
 queues:
   message_bus:
@@ -154,3 +253,14 @@ telemetry:
     exporter: prometheus
     endpoint: ${METRICS_ENDPOINT:-localhost:9090}
     export_interval: 15  # 秒
+
+community:
+  knowledge_base:
+    enabled: true
+    sync_interval: 3600  # 每小时同步一次
+    categories:
+      - health_education
+      - preventive_medicine
+      - tcm_practices
+      - diet_nutrition
+      - exercise_guidance

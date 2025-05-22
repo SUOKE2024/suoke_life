@@ -256,6 +256,47 @@ class Config:
             }
         }
     
+    def __getattr__(self, name):
+        """
+        通过属性访问配置项
+        
+        Args:
+            name: 属性名
+            
+        Returns:
+            配置节或属性值
+        """
+        # 先检查是否有对应的配置节属性
+        section_attr = f"_{name}"
+        # 使用对象字典直接检查，避免触发递归
+        if section_attr in self.__dict__:
+            return self.__dict__[section_attr]
+            
+        # 如果是直接在配置数据中的键
+        if name in self.config_data:
+            value = self.config_data[name]
+            if isinstance(value, dict):
+                return ConfigSection(value)
+            return value
+        
+        # 检查是否是嵌套配置路径
+        if "." in name:
+            parts = name.split(".", 1)  # 只拆分第一个点
+            root_name, remainder = parts
+            
+            # 尝试获取根配置节
+            try:
+                root_section = self.__getattr__(root_name)
+                if isinstance(root_section, ConfigSection):
+                    try:
+                        return getattr(root_section, remainder)
+                    except AttributeError:
+                        pass
+            except AttributeError:
+                pass
+            
+        raise AttributeError(f"配置未定义属性: {name}")
+    
     def get(self, key: str, default: Any = None) -> Any:
         """
         获取配置项
@@ -309,13 +350,41 @@ class Config:
             logger.error(f"保存配置失败: {str(e)}")
     
     def as_dict(self) -> Dict[str, Any]:
-        """
-        返回配置的字典形式
-        
+        """将配置转换为字典
+
         Returns:
-            配置字典
+            Dict[str, Any]: 配置字典
         """
-        return self.config_data.copy()
+        config_dict = {}
+        
+        for key, value in self.config_data.items():
+            if isinstance(value, dict):
+                # 递归处理嵌套字典
+                config_dict[key] = self._dict_to_nested_dict(value)
+            else:
+                config_dict[key] = value
+        
+        return config_dict
+    
+    def _dict_to_nested_dict(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        """递归将嵌套字典中的值处理为字典
+
+        Args:
+            data: 字典数据
+
+        Returns:
+            Dict[str, Any]: 处理后的字典
+        """
+        result = {}
+        
+        for key, value in data.items():
+            if isinstance(value, dict):
+                # 递归处理嵌套字典
+                result[key] = self._dict_to_nested_dict(value)
+            else:
+                result[key] = value
+        
+        return result
         
     # 属性访问器
     @property

@@ -174,7 +174,20 @@ class MetricsClient:
         
         # 添加配置中的默认标签
         if self.default_labels:
-            result.update(self.default_labels)
+            # 处理 ConfigSection 对象
+            try:
+                if hasattr(self.default_labels, '__dict__'):
+                    # 如果是 ConfigSection 对象，转换为字典
+                    config_dict = {}
+                    for key, value in vars(self.default_labels).items():
+                        if not key.startswith('_'):
+                            config_dict[key] = value
+                    result.update(config_dict)
+                elif isinstance(self.default_labels, dict):
+                    # 如果是字典直接更新
+                    result.update(self.default_labels)
+            except Exception as e:
+                logger.warning(f"合并标签时出错: {str(e)}")
             
         # 添加自定义标签
         if labels:

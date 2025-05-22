@@ -32,14 +32,6 @@ from structlog import configure, processors, stdlib
 # 添加项目根目录到PYTHONPATH
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
-from internal.delivery.rest.middleware import setup_middlewares
-from internal.delivery.rest.routes import setup_routes
-from internal.delivery.grpc.service import register_servicer
-from internal.model.config import GatewayConfig
-from internal.service.service_registry import ServiceRegistry
-from pkg.utils.config import load_config
-
-
 # 配置结构化日志
 def configure_logging(log_file: Optional[str] = None) -> None:
     """配置结构化日志"""
@@ -74,6 +66,28 @@ def configure_logging(log_file: Optional[str] = None) -> None:
         wrapper_class=stdlib.BoundLogger,
         cache_logger_on_first_use=True,
     )
+
+# 配置日志（先定义，再调用）
+config_path = os.environ.get("CONFIG_PATH", "config/config.yaml")
+log_file = os.environ.get("LOGGING_FILE")
+configure_logging(log_file)
+logger = logging.getLogger(__name__)
+
+# 现在导入剩余模块
+from internal.delivery.rest.middleware import setup_middlewares
+from internal.delivery.rest.routes import setup_routes
+from internal.delivery.grpc.service import register_servicer
+from internal.model.config import GatewayConfig
+from internal.service.service_registry import ServiceRegistry, create_service_registry
+from internal.service.response_transformer import ResponseTransformer
+from pkg.utils.cache import CacheManager
+from pkg.utils.config import load_config
+
+
+# 添加一个异步无操作函数
+async def async_noop():
+    """异步无操作函数"""
+    pass
 
 
 # 创建FastAPI应用
@@ -165,46 +179,10 @@ async def start_grpc_server(config: GatewayConfig, service_registry: ServiceRegi
     except asyncio.CancelledError:
         logger.info("正在关闭gRPC服务器...")
         # 关闭HTTP客户端
-        await servicer.close()
+        if hasattr(servicer, 'close'):
+            await servicer.close()
         # 优雅关闭
         await server.stop(5)  # 5秒优雅关闭时间
-
-
-async def main() -> None:
-    """主函数，启动整个API网关服务"""
-    # 加载配置
-    config_path = os.environ.get("CONFIG_PATH", "config/config.yaml")
-    config = load_config(config_path)
-    
-    # 配置日志
-    log_file = os.environ.get("LOGGING_FILE")
-    configure_logging(log_file)
-    
-    logger = logging.getLogger(__name__)
-    logger.info(f"启动API网关服务，配置文件: {config_path}")
-    
-    # 创建服务注册表
-    service_registry = ServiceRegistry(config)
-    
-    # 启动服务注册表
-    await service_registry.start()
-    
-    # 启动REST和gRPC服务器
-    rest_task = asyncio.create_task(start_rest_server(config, service_registry))
-    grpc_task = asyncio.create_task(start_grpc_server(config, service_registry))
-    
-    # 设置信号处理
-    loop = asyncio.get_running_loop()
-    for sig in (signal.SIGINT, signal.SIGTERM):
-        loop.add_signal_handler(sig, lambda s=sig: asyncio.create_task(shutdown(s, service_registry, [rest_task, grpc_task])))
-    
-    try:
-        # 等待两个服务器任务完成
-        await asyncio.gather(rest_task, grpc_task)
-    finally:
-        # 停止服务注册表
-        await service_registry.stop()
-        logger.info("API网关服务已停止")
 
 
 async def shutdown(sig: signal.Signals, service_registry: ServiceRegistry, tasks: list) -> None:
@@ -220,7 +198,8 @@ async def shutdown(sig: signal.Signals, service_registry: ServiceRegistry, tasks
     logger.info(f"收到信号 {sig.name}，正在关闭...")
     
     # 停止服务注册表
-    await service_registry.stop()
+    if hasattr(service_registry, 'stop'):
+        await service_registry.stop()
     
     # 取消任务
     for task in tasks:
@@ -231,6 +210,49 @@ async def shutdown(sig: signal.Signals, service_registry: ServiceRegistry, tasks
             await task
         except asyncio.CancelledError:
             pass
+
+
+async def main() -> None:
+    """主函数，启动整个API网关服务"""
+    try:
+        logger.info(f"启动API网关服务，配置文件: {config_path}")
+        
+        # 加载配置
+        gateway_config = load_config(config_path)
+        
+        # 初始化服务注册表
+        service_registry = create_service_registry(gateway_config.service_discovery)
+        
+        # 添加必要的方法到ServiceRegistry对象
+        service_registry.start = async_noop
+        service_registry.stop = async_noop
+        
+        # 初始化缓存管理器
+        cache_manager = CacheManager(gateway_config.cache) if hasattr(gateway_config, "cache") else None
+        if cache_manager and cache_manager.redis_client is None and hasattr(cache_manager, "_init_redis"):
+            await cache_manager._init_redis()
+        
+        # 启动服务注册表
+        await service_registry.start()
+        
+        # 启动REST和gRPC服务器
+        rest_task = asyncio.create_task(start_rest_server(gateway_config, service_registry))
+        grpc_task = asyncio.create_task(start_grpc_server(gateway_config, service_registry))
+        
+        # 设置信号处理
+        loop = asyncio.get_running_loop()
+        for sig in (signal.SIGINT, signal.SIGTERM):
+            loop.add_signal_handler(sig, lambda s=sig: asyncio.create_task(shutdown(s, service_registry, [rest_task, grpc_task])))
+        
+        # 等待两个服务器任务完成
+        await asyncio.gather(rest_task, grpc_task)
+    except Exception as e:
+        logger.exception(f"API网关启动失败: {e}")
+    finally:
+        # 停止服务注册表
+        if hasattr(service_registry, 'stop'):
+            await service_registry.stop()
+        logger.info("API网关服务已停止")
 
 
 if __name__ == "__main__":

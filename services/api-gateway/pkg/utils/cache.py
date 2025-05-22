@@ -156,24 +156,15 @@ class CacheManager:
         
         # 如果使用Redis，初始化Redis客户端
         if config.enabled and config.type == "redis" and config.redis_url:
-            self._init_redis()
+            # 暂时不初始化Redis，仅使用内存缓存
+            logger.warning("Redis缓存暂时禁用，使用内存缓存代替")
+            # self._init_redis()
     
     async def _init_redis(self):
-        """初始化Redis客户端"""
-        try:
-            import aioredis
-            self.redis_client = await aioredis.from_url(
-                self.config.redis_url,
-                encoding="utf-8",
-                decode_responses=False  # 我们需要原始字节
-            )
-            logger.info(f"Redis缓存已连接: {self.config.redis_url}")
-        except ImportError:
-            logger.warning("aioredis未安装，使用内存缓存代替")
-            self.redis_client = None
-        except Exception as e:
-            logger.error(f"Redis连接失败: {str(e)}", exc_info=True)
-            self.redis_client = None
+        """初始化Redis客户端 - 暂时禁用"""
+        # 只使用内存缓存进行测试
+        logger.info("Redis缓存已禁用，仅使用内存缓存")
+        self.redis_client = None
     
     def create_cache_key_from_request(self, request: Request, cache_headers: List[str] = None) -> CacheKey:
         """
@@ -269,26 +260,17 @@ class CacheManager:
         return item
     
     async def _get_from_redis(self, key_str: str) -> Optional[CacheItem]:
-        """从Redis缓存获取项"""
-        if not self.redis_client:
-            return None
+        """
+        从Redis获取缓存项
         
-        try:
-            data = await self.redis_client.get(f"api_gateway:cache:{key_str}")
-            if not data:
-                return None
+        Args:
+            key_str: 缓存键字符串
             
-            item = CacheItem.from_bytes(data)
-            
-            # 检查是否过期
-            if item.is_expired():
-                await self.redis_client.delete(f"api_gateway:cache:{key_str}")
-                return None
-            
-            return item
-        except Exception as e:
-            logger.error(f"从Redis获取缓存失败: {str(e)}", exc_info=True)
-            return None
+        Returns:
+            Optional[CacheItem]: 缓存项，如果不存在则为None
+        """
+        # 暂时禁用Redis缓存，返回None
+        return None
     
     async def set(self, key: CacheKey, item: CacheItem) -> bool:
         """
@@ -312,52 +294,50 @@ class CacheManager:
             return self._set_to_memory(key_str, item)
     
     def _set_to_memory(self, key_str: str, item: CacheItem) -> bool:
-        """存储到内存缓存"""
-        # 检查内存缓存是否已满
-        if len(self.memory_cache) >= self.config.max_items:
-            # 删除最老的项
+        """
+        将缓存项写入内存
+        
+        Args:
+            key_str: 缓存键字符串
+            item: 缓存项
+            
+        Returns:
+            bool: 操作是否成功
+        """
+        # 清理过期缓存项
+        self._cleanup_expired()
+        
+        # 检查缓存容量限制
+        if len(self.memory_cache) >= self.config.max_size:
+            # 删除最旧的缓存项
             if self.lru_keys:
-                oldest_key = self.lru_keys.pop(0)
-                if oldest_key in self.memory_cache:
-                    del self.memory_cache[oldest_key]
+                oldest_key = self.lru_keys[0]  # 使用LRU列表中的第一个键
+                del self.memory_cache[oldest_key]
+                self.lru_keys.remove(oldest_key)
+            elif self.memory_cache:
+                # 备选方案：找出创建时间最早的项
+                oldest_key = min(self.memory_cache.keys(), 
+                                key=lambda k: self.memory_cache[k].created_at)
+                del self.memory_cache[oldest_key]
         
-        # 保存缓存项
+        # 添加到内存缓存
         self.memory_cache[key_str] = item
-        
-        # 更新LRU
-        if key_str in self.lru_keys:
-            self.lru_keys.remove(key_str)
-        self.lru_keys.append(key_str)
         
         return True
     
     async def _set_to_redis(self, key_str: str, item: CacheItem) -> bool:
-        """存储到Redis缓存"""
-        if not self.redis_client:
-            return False
+        """
+        设置缓存项到Redis
         
-        try:
-            # 计算TTL
-            ttl = None
-            if item.expires_at:
-                ttl = max(1, int(item.expires_at - time.time()))
+        Args:
+            key_str: 缓存键字符串
+            item: 缓存项
             
-            # 序列化并存储
-            data = item.to_bytes()
-            
-            if ttl:
-                await self.redis_client.setex(
-                    f"api_gateway:cache:{key_str}", 
-                    ttl, 
-                    data
-                )
-            else:
-                await self.redis_client.set(f"api_gateway:cache:{key_str}", data)
-            
-            return True
-        except Exception as e:
-            logger.error(f"设置Redis缓存失败: {str(e)}", exc_info=True)
-            return False
+        Returns:
+            bool: 是否成功
+        """
+        # 暂时禁用Redis缓存，返回False
+        return False
     
     async def clear_all(self):
         """
@@ -393,4 +373,20 @@ class CacheManager:
         """关闭缓存管理器（释放Redis连接等）"""
         if self.redis_client:
             await self.redis_client.close()
-            self.redis_client = None 
+            self.redis_client = None
+    
+    def _cleanup_expired(self) -> None:
+        """
+        清理内存中的过期缓存项
+        """
+        current_time = time.time()
+        expired_keys = []
+        
+        # 找出所有过期的键
+        for key, item in self.memory_cache.items():
+            if item.expires_at and item.expires_at < current_time:
+                expired_keys.append(key)
+        
+        # 删除过期的项
+        for key in expired_keys:
+            del self.memory_cache[key] 

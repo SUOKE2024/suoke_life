@@ -17,7 +17,7 @@ redis==4.5.4
 
 # ML & NLP
 openai==1.13.0
-numpy==1.24.3
+numpy>=1.26.3
 spacy==3.7.2
 jieba==0.42.1
 langchain==0.0.312

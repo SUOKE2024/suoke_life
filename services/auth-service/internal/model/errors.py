@@ -29,6 +29,7 @@ class ErrorCode(Enum):
     INVALID_PASSWORD = (1104, "密码不符合要求", grpc.StatusCode.INVALID_ARGUMENT, 400)
     INVALID_EMAIL = (1105, "邮箱格式不正确", grpc.StatusCode.INVALID_ARGUMENT, 400)
     INVALID_PHONE = (1106, "手机号格式不正确", grpc.StatusCode.INVALID_ARGUMENT, 400)
+    PASSWORD_POLICY_ERROR = (1107, "密码策略不符合要求", grpc.StatusCode.INVALID_ARGUMENT, 400)
     
     # 权限相关错误 (1200-1299)
     PERMISSION_DENIED = (1201, "没有操作权限", grpc.StatusCode.PERMISSION_DENIED, 403)
@@ -41,12 +42,15 @@ class ErrorCode(Enum):
     MFA_SETUP_REQUIRED = (1303, "需要设置多因素认证", grpc.StatusCode.FAILED_PRECONDITION, 403)
     MFA_ALREADY_ENABLED = (1304, "多因素认证已启用", grpc.StatusCode.ALREADY_EXISTS, 409)
     MFA_NOT_ENABLED = (1305, "多因素认证未启用", grpc.StatusCode.FAILED_PRECONDITION, 400)
+    MFA_VERIFICATION_ERROR = (1306, "多因素认证验证失败", grpc.StatusCode.INVALID_ARGUMENT, 401)
+    INVALID_VERIFICATION_CODE = (1307, "验证码无效", grpc.StatusCode.INVALID_ARGUMENT, 401)
     
     # 一般错误 (1900-1999)
     VALIDATION_ERROR = (1901, "请求参数验证失败", grpc.StatusCode.INVALID_ARGUMENT, 400)
     DATABASE_ERROR = (1902, "数据库操作错误", grpc.StatusCode.INTERNAL, 500)
     RATE_LIMIT_EXCEEDED = (1903, "请求频率超限", grpc.StatusCode.RESOURCE_EXHAUSTED, 429)
     INTERNAL_ERROR = (1904, "服务内部错误", grpc.StatusCode.INTERNAL, 500)
+    CONFIGURATION_ERROR = (1905, "配置错误", grpc.StatusCode.INTERNAL, 500)
     
     def __init__(self, code: int, message: str, grpc_code: grpc.StatusCode, http_status: int):
         self.code = code
@@ -151,6 +155,12 @@ class InvalidPasswordError(AuthServiceError):
         super().__init__(ErrorCode.INVALID_PASSWORD, message, details)
 
 
+class PasswordPolicyError(AuthServiceError):
+    """密码策略错误"""
+    def __init__(self, message: Optional[str] = None, details: Any = None):
+        super().__init__(ErrorCode.PASSWORD_POLICY_ERROR, message, details)
+
+
 # 权限相关错误
 class PermissionDeniedError(AuthServiceError):
     """权限不足错误"""
@@ -183,6 +193,18 @@ class MFANotEnabledError(AuthServiceError):
         super().__init__(ErrorCode.MFA_NOT_ENABLED, message, details)
 
 
+class MFAVerificationError(AuthServiceError):
+    """多因素认证验证失败错误"""
+    def __init__(self, message: Optional[str] = None, details: Any = None):
+        super().__init__(ErrorCode.MFA_VERIFICATION_ERROR, message, details)
+
+
+class InvalidVerificationCodeError(AuthServiceError):
+    """验证码无效错误"""
+    def __init__(self, message: Optional[str] = None, details: Any = None):
+        super().__init__(ErrorCode.INVALID_VERIFICATION_CODE, message, details)
+
+
 # 一般错误
 class ValidationError(AuthServiceError):
     """请求参数验证失败错误"""
@@ -205,4 +227,10 @@ class RateLimitExceededError(AuthServiceError):
 class InternalError(AuthServiceError):
     """服务内部错误"""
     def __init__(self, message: Optional[str] = None, details: Any = None):
-        super().__init__(ErrorCode.INTERNAL_ERROR, message, details) 
+        super().__init__(ErrorCode.INTERNAL_ERROR, message, details)
+
+
+class ConfigurationError(AuthServiceError):
+    """配置错误"""
+    def __init__(self, message: Optional[str] = None, details: Any = None):
+        super().__init__(ErrorCode.CONFIGURATION_ERROR, message, details) 

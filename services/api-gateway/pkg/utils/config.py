@@ -64,12 +64,14 @@ def _merge_configs(base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, 
     return result
 
 
-def load_config(config_path: str, env_prefix: str = "APIGATEWAY_") -> GatewayConfig:
+def load_config(config_path: Optional[str] = None, config_data: Optional[Dict[str, Any]] = None, 
+            env_prefix: str = "API_GATEWAY_") -> GatewayConfig:
     """
-    加载配置，支持从文件和环境变量加载
+    加载配置，支持从文件、字典和环境变量加载
     
     Args:
-        config_path: 配置文件路径
+        config_path: 配置文件路径，可选
+        config_data: 配置字典，可选。如果同时提供config_path和config_data，config_data会覆盖文件中的配置
         env_prefix: 环境变量前缀，用于识别哪些环境变量应该被加载
         
     Returns:
@@ -80,12 +82,19 @@ def load_config(config_path: str, env_prefix: str = "APIGATEWAY_") -> GatewayCon
         yaml.YAMLError: YAML解析错误
         ValueError: 配置验证错误
     """
-    # 加载配置文件
+    # 加载配置文件或使用提供的配置字典
     config_dict = {}
-    if os.path.exists(config_path):
-        config_dict = _read_yaml_file(config_path)
-    else:
-        logger.warning(f"配置文件不存在，使用默认配置: {config_path}")
+    
+    # 如果提供了配置路径，尝试加载文件
+    if config_path:
+        if os.path.exists(config_path):
+            config_dict = _read_yaml_file(config_path)
+        else:
+            logger.warning(f"配置文件不存在，使用默认配置: {config_path}")
+    
+    # 如果提供了配置字典，将其合并
+    if config_data:
+        config_dict = _merge_configs(config_dict, config_data)
         
     # 加载环境变量配置
     env_config = _load_from_env(env_prefix)
@@ -106,7 +115,10 @@ def _load_from_env(prefix: str) -> Dict[str, Any]:
     从环境变量加载配置
     
     环境变量格式: {prefix}_{配置路径}
-    例如: APIGATEWAY_SERVER_REST_PORT=8080
+    例如: API_GATEWAY_SERVER_REST_PORT=8080
+    
+    特殊处理:
+    - API_GATEWAY_JWT_SECRET_KEY 会被映射到 middleware.auth.jwt.secret_key
     
     Args:
         prefix: 环境变量前缀
@@ -119,10 +131,22 @@ def _load_from_env(prefix: str) -> Dict[str, Any]:
     
     for key, value in os.environ.items():
         if key.startswith(prefix):
-            path = key[len(prefix):].lower().split("_")
-            
             # 处理值类型
             typed_value = _parse_env_value(value)
+            
+            # 特殊处理JWT相关配置
+            if key == f"{prefix}JWT_SECRET_KEY":
+                if "middleware" not in result:
+                    result["middleware"] = {}
+                if "auth" not in result["middleware"]:
+                    result["middleware"]["auth"] = {}
+                if "jwt" not in result["middleware"]["auth"]:
+                    result["middleware"]["auth"]["jwt"] = {}
+                result["middleware"]["auth"]["jwt"]["secret_key"] = typed_value
+                continue
+            
+            # 正常处理其他环境变量
+            path = key[len(prefix):].lower().split("_")
             
             # 构建嵌套字典
             current = result

@@ -7,7 +7,7 @@
 """
 import os
 import time
-from datetime import datetime
+from datetime import datetime, UTC
 from typing import Dict, List, Optional
 
 from fastapi import APIRouter, Depends, Response, status
@@ -147,7 +147,7 @@ async def health(health_checker: HealthCheck = Depends(get_health_check)) -> Dic
         "service": SERVICE_NAME,
         "version": SERVICE_VERSION,
         "environment": ENV,
-        "timestamp": datetime.utcnow().isoformat(),
+        "timestamp": datetime.now(UTC).isoformat(),
         "uptime_seconds": int(time.time() - START_TIME)
     }
     

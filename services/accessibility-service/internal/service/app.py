@@ -161,7 +161,20 @@ class AccessibilityApp:
         logger.info("初始化核心无障碍服务")
         
         # 创建核心服务并注入其他服务依赖
-        service = AccessibilityService(self.config.as_dict())
+        config_dict = {}
+        try:
+            if hasattr(self.config, 'as_dict') and callable(self.config.as_dict):
+                config_dict = self.config.as_dict()
+            else:
+                # 尝试将配置转换为字典
+                logger.warning("配置对象没有as_dict方法，尝试手动转换")
+                for key, value in vars(self.config).items():
+                    if not key.startswith('_'):
+                        config_dict[key] = value
+        except Exception as e:
+            logger.error(f"转换配置为字典失败: {str(e)}")
+            
+        service = AccessibilityService(config_dict)
         
         # 注入服务依赖
         service.edge_computing_service = self.edge_computing
@@ -179,17 +192,26 @@ class AccessibilityApp:
         logger.info("启动无障碍服务应用")
         
         # 启动后台数据采集服务
-        if self.background_collection and hasattr(self.config.background_collection, 'enabled') and self.config.background_collection.enabled:
-            logger.info("启动后台数据采集服务")
-            self.background_collection.start()
+        try:
+            if self.background_collection and hasattr(self.config, 'background_collection') and \
+               hasattr(self.config.background_collection, 'enabled') and self.config.background_collection.enabled:
+                logger.info("启动后台数据采集服务")
+                self.background_collection.start()
+        except AttributeError as e:
+            logger.warning(f"未能启动后台数据采集服务: {str(e)}")
             
         # 启动危机报警服务
-        if self.crisis_alert and hasattr(self.config.crisis_alert, 'enabled') and self.config.crisis_alert.enabled:
-            logger.info("启动危机报警服务")
-            self.crisis_alert.start()
+        try:
+            if self.crisis_alert and hasattr(self.config, 'crisis_alert') and \
+               hasattr(self.config.crisis_alert, 'enabled') and self.config.crisis_alert.enabled:
+                logger.info("启动危机报警服务")
+                self.crisis_alert.start()
+        except AttributeError as e:
+            logger.warning(f"未能启动危机报警服务: {str(e)}")
         
         # 记录应用启动指标
-        self.monitoring_service.metrics_client.counter("accessibility_app_start", 1)
+        if self.monitoring_service and hasattr(self.monitoring_service, 'metrics_client'):
+            self.monitoring_service.metrics_client.counter("accessibility_app_start", 1)
         
     def stop(self):
         """停止应用服务"""
@@ -211,4 +233,5 @@ class AccessibilityApp:
             self.backup_scheduler.stop()
             
         # 记录应用停止指标
-        self.monitoring_service.metrics_client.counter("accessibility_app_stop", 1) 
+        if self.monitoring_service and hasattr(self.monitoring_service, 'metrics_client'):
+            self.monitoring_service.metrics_client.counter("accessibility_app_stop", 1) 

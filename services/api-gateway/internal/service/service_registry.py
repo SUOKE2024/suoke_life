@@ -12,359 +12,73 @@ import random
 from typing import Dict, List, Optional, Tuple
 
 import aiohttp
+# 导入自定义修补模块
+from pkg.utils.consul_patch import *
 import consul.aio
 from kubernetes_asyncio import client, config
 
 from internal.model.config import GatewayConfig, ServiceConfig, ServiceEndpointConfig
 
-
 logger = logging.getLogger(__name__)
 
-
 class ServiceRegistry:
-    """服务注册表，管理后端微服务信息和健康状态"""
+    """服务注册表基类"""
     
-    def __init__(self, config: GatewayConfig):
+    def __init__(self, config):
         """
         初始化服务注册表
         
         Args:
-            config: 网关配置
+            config: 服务发现配置
         """
         self.config = config
-        self.services: Dict[str, ServiceConfig] = {}
-        self.healthy_endpoints: Dict[str, List[ServiceEndpointConfig]] = {}
-        self._refresh_task = None
-        self._health_check_tasks = {}
-        self._session = None
-        self._consul_client = None
-        self._k8s_client = None
-    
-    async def start(self):
-        """启动服务发现和健康检查"""
-        self._session = aiohttp.ClientSession()
+        self.services = {}
+        self.healthy_endpoints = {}  # 健康端点缓存
         
-        # 初始化Consul客户端
-        if self.config.service_discovery.type == "consul":
-            self._consul_client = consul.aio.Consul(
-                host=self.config.service_discovery.consul_host or "consul",
-                port=self.config.service_discovery.consul_port
-            )
-        
-        # 初始化Kubernetes客户端
-        if self.config.service_discovery.type == "kubernetes":
-            try:
-                # 尝试在集群内加载配置
-                await config.load_incluster_config()
-            except config.config_exception.ConfigException:
-                # 如果失败，则尝试从本地加载
-                await config.load_kube_config()
+        # 从配置中加载服务（如果有）
+        if hasattr(config, "services") and config.services:
+            self.services = config.services
             
-            self._k8s_client = client.CoreV1Api()
-        
-        await self._load_services()
-        
-        # 启动定期刷新任务
-        self._refresh_task = asyncio.create_task(self._periodic_refresh())
-        
-        logger.info(f"服务注册表已启动，发现 {len(self.services)} 个服务")
-    
-    async def stop(self):
-        """停止服务发现和健康检查"""
-        if self._refresh_task:
-            self._refresh_task.cancel()
-            try:
-                await self._refresh_task
-            except asyncio.CancelledError:
-                pass
+            # 初始化健康端点信息
+            for service_name, service in self.services.items():
+                if service.endpoints:
+                    self.healthy_endpoints[service_name] = [(endpoint.host, endpoint.port) 
+                                                           for endpoint in service.endpoints]
             
-        # 取消所有健康检查任务
-        for task in self._health_check_tasks.values():
-            task.cancel()
-            
-        # 等待所有任务完成
-        if self._health_check_tasks:
-            await asyncio.gather(*self._health_check_tasks.values(), return_exceptions=True)
-        
-        # 关闭Consul客户端
-        if self._consul_client:
-            await self._consul_client.close()
-            
-        # 关闭HTTP会话
-        if self._session:
-            await self._session.close()
-            
-        logger.info("服务注册表已停止")
-    
-    async def _load_services(self):
-        """根据配置加载服务信息"""
-        discovery_type = self.config.service_discovery.type
-        
-        if discovery_type == "static":
-            await self._load_static_services()
-        elif discovery_type == "consul":
-            await self._load_consul_services()
-        elif discovery_type == "kubernetes":
-            await self._load_kubernetes_services()
-        else:
-            logger.error(f"不支持的服务发现类型: {discovery_type}")
-            raise ValueError(f"不支持的服务发现类型: {discovery_type}")
-    
-    async def _load_static_services(self):
-        """从静态配置加载服务"""
-        self.services = self.config.service_discovery.services
-        
-        # 初始化健康端点列表
-        self.healthy_endpoints = {}
-        for service_name, service in self.services.items():
-            # 开始健康检查
-            self._health_check_tasks[service_name] = asyncio.create_task(
-                self._check_service_health(service_name, service)
-            )
-            
-            # 初始时假设所有端点都是健康的
-            self.healthy_endpoints[service_name] = service.endpoints
-    
-    async def _load_consul_services(self):
-        """从Consul加载服务信息"""
-        if not self._consul_client:
-            logger.error("Consul客户端未初始化")
-            return
-        
-        try:
-            # 从Consul获取所有服务
-            _, services = await self._consul_client.catalog.services()
-            
-            # 清除旧的健康检查任务
-            for task in self._health_check_tasks.values():
-                task.cancel()
-            self._health_check_tasks = {}
-            
-            # 更新服务列表
-            self.services = {}
-            self.healthy_endpoints = {}
-            
-            # 处理每个服务
-            for service_name in services:
-                # 跳过consul服务
-                if service_name == "consul":
-                    continue
-                
-                # 获取服务实例
-                _, instances = await self._consul_client.catalog.service(service_name)
-                
-                if not instances:
-                    continue
-                
-                # 创建端点列表
-                endpoints = []
-                for instance in instances:
-                    endpoint = ServiceEndpointConfig(
-                        host=instance["ServiceAddress"] or instance["Address"],
-                        port=instance["ServicePort"],
-                        use_tls=False,  # 可以根据标签或元数据设置
-                        health_check=self.config.service_discovery.default_health_check
-                    )
-                    endpoints.append(endpoint)
-                
-                # 创建服务配置
-                service_config = ServiceConfig(
-                    name=service_name,
-                    endpoints=endpoints,
-                    load_balancer="round-robin",  # 默认负载均衡策略
-                    circuit_breaker=True,
-                    timeout=30
-                )
-                
-                self.services[service_name] = service_config
-                
-                # 创建健康检查任务
-                self._health_check_tasks[service_name] = asyncio.create_task(
-                    self._check_service_health(service_name, service_config)
-                )
-            
-            logger.info(f"从Consul加载了 {len(self.services)} 个服务")
-            
-        except Exception as e:
-            logger.error(f"从Consul加载服务失败: {str(e)}", exc_info=True)
-    
-    async def _load_kubernetes_services(self):
-        """从Kubernetes加载服务信息"""
-        if not self._k8s_client:
-            logger.error("Kubernetes客户端未初始化")
-            return
-        
-        try:
-            # 获取指定命名空间中的所有服务
-            namespace = self.config.service_discovery.kubernetes_namespace
-            label_selector = self.config.service_discovery.kubernetes_label_selector
-            
-            services = await self._k8s_client.list_namespaced_service(
-                namespace=namespace,
-                label_selector=label_selector
-            )
-            
-            # 清除旧的健康检查任务
-            for task in self._health_check_tasks.values():
-                task.cancel()
-            self._health_check_tasks = {}
-            
-            # 更新服务列表
-            self.services = {}
-            self.healthy_endpoints = {}
-            
-            # 处理每个服务
-            for svc in services.items:
-                service_name = svc.metadata.name
-                
-                # 获取服务端点
-                endpoints = await self._k8s_client.read_namespaced_endpoints(
-                    name=service_name,
-                    namespace=namespace
-                )
-                
-                # 创建端点列表
-                service_endpoints = []
-                
-                if endpoints.subsets:
-                    for subset in endpoints.subsets:
-                        if not subset.addresses:
-                            continue
-                            
-                        for address in subset.addresses:
-                            for port in subset.ports:
-                                endpoint = ServiceEndpointConfig(
-                                    host=address.ip,
-                                    port=port.port,
-                                    use_tls=False,  # 可以从注解中确定
-                                    health_check=self.config.service_discovery.default_health_check
-                                )
-                                service_endpoints.append(endpoint)
-                
-                if not service_endpoints:
-                    # 如果没有端点，使用服务的ClusterIP和端口
-                    for port in svc.spec.ports:
-                        endpoint = ServiceEndpointConfig(
-                            host=svc.spec.cluster_ip,
-                            port=port.port,
-                            use_tls=False,
-                            health_check=self.config.service_discovery.default_health_check
-                        )
-                        service_endpoints.append(endpoint)
-                
-                # 创建服务配置
-                service_config = ServiceConfig(
-                    name=service_name,
-                    endpoints=service_endpoints,
-                    load_balancer="round-robin",  # 默认负载均衡策略
-                    circuit_breaker=True,
-                    timeout=30
-                )
-                
-                self.services[service_name] = service_config
-                
-                # 创建健康检查任务
-                self._health_check_tasks[service_name] = asyncio.create_task(
-                    self._check_service_health(service_name, service_config)
-                )
-            
-            logger.info(f"从Kubernetes加载了 {len(self.services)} 个服务")
-            
-        except Exception as e:
-            logger.error(f"从Kubernetes加载服务失败: {str(e)}", exc_info=True)
-    
-    async def _periodic_refresh(self):
-        """周期性刷新服务列表和健康状态"""
-        try:
-            while True:
-                await asyncio.sleep(self.config.service_discovery.refresh_interval)
-                await self._load_services()
-                logger.debug(f"服务列表已刷新，共 {len(self.services)} 个服务")
-        except asyncio.CancelledError:
-            logger.debug("服务刷新任务已取消")
-            raise
-        except Exception as e:
-            logger.error(f"服务刷新出错: {e}", exc_info=True)
-    
-    async def _check_service_health(self, service_name: str, service: ServiceConfig):
+    def get_endpoint(self, service_name: str) -> Optional[Tuple[str, int]]:
         """
-        周期性检查服务健康状态
+        获取服务端点
         
         Args:
             service_name: 服务名称
-            service: 服务配置
-        """
-        try:
-            # 初始化健康端点列表
-            self.healthy_endpoints[service_name] = []
-            
-            while True:
-                healthy_endpoints = []
-                
-                for endpoint in service.endpoints:
-                    if not endpoint.health_check.enabled:
-                        # 如果未启用健康检查，默认认为端点健康
-                        healthy_endpoints.append(endpoint)
-                        continue
-                    
-                    is_healthy = await self._check_endpoint_health(service_name, endpoint)
-                    if is_healthy:
-                        healthy_endpoints.append(endpoint)
-                
-                # 更新健康端点列表
-                self.healthy_endpoints[service_name] = healthy_endpoints
-                
-                # 如果没有健康端点，记录警告
-                if not healthy_endpoints:
-                    logger.warning(f"服务 {service_name} 没有健康端点可用")
-                else:
-                    logger.debug(f"服务 {service_name} 有 {len(healthy_endpoints)} 个健康端点")
-                
-                # 等待下一次检查
-                health_check_interval = service.endpoints[0].health_check.interval if service.endpoints else 10
-                await asyncio.sleep(health_check_interval)
-                
-        except asyncio.CancelledError:
-            logger.debug(f"服务 {service_name} 健康检查任务已取消")
-            raise
-        except Exception as e:
-            logger.error(f"服务 {service_name} 健康检查出错: {str(e)}", exc_info=True)
-    
-    async def _check_endpoint_health(self, service_name: str, endpoint: ServiceEndpointConfig) -> bool:
-        """
-        检查单个端点的健康状态
-        
-        Args:
-            service_name: 服务名称
-            endpoint: 服务端点配置
             
         Returns:
-            bool: 端点是否健康
+            元组 (host, port) 或 None
         """
-        health_check = endpoint.health_check
-        health_url = f"http{'s' if endpoint.use_tls else ''}://{endpoint.host}:{endpoint.port}{health_check.path}"
-        
-        for retry in range(health_check.retries + 1):
-            try:
-                async with self._session.get(
-                    health_url, 
-                    timeout=health_check.timeout,
-                    ssl=None if not endpoint.use_tls else True
-                ) as response:
-                    if 200 <= response.status < 300:
-                        return True
-                    logger.debug(f"服务 {service_name} 健康检查失败，状态码: {response.status}")
-            except Exception as e:
-                logger.debug(f"服务 {service_name} 健康检查异常: {e}")
+        if service_name not in self.services:
+            return None
             
-            # 最后一次重试
-            if retry == health_check.retries:
-                break
-                
-            # 等待下一次重试
-            await asyncio.sleep(1)
+        service = self.services[service_name]
         
-        return False
+        if not service.endpoints:
+            return None
+            
+        # 实现简单的轮询负载均衡
+        endpoint = service.endpoints[0]
+        
+        # 循环端点列表
+        service.endpoints.append(service.endpoints.pop(0))
+        
+        return (endpoint.host, endpoint.port)
+    
+    def get_all_services(self) -> Dict[str, ServiceConfig]:
+        """
+        获取所有服务
+        
+        Returns:
+            服务字典
+        """
+        return self.services
     
     def get_service(self, service_name: str) -> Optional[ServiceConfig]:
         """
@@ -374,47 +88,202 @@ class ServiceRegistry:
             service_name: 服务名称
             
         Returns:
-            Optional[ServiceConfig]: 服务配置，如不存在则返回None
+            服务配置或None
         """
         return self.services.get(service_name)
     
-    def get_endpoint(self, service_name: str) -> Optional[Tuple[str, int]]:
+    async def refresh_services(self):
         """
-        获取服务端点，使用配置的负载均衡策略
+        刷新服务列表
+        """
+        # 在子类中实现
+        pass
+
+
+class ConsulServiceRegistry(ServiceRegistry):
+    """基于Consul的服务注册表"""
+    
+    def __init__(self, config):
+        """
+        初始化Consul服务注册表
         
         Args:
-            service_name: 服务名称
-            
-        Returns:
-            Optional[Tuple[str, int]]: 主机和端口元组，如不存在则返回None
+            config: 服务发现配置
         """
-        if service_name not in self.services:
-            logger.warning(f"服务不存在: {service_name}")
-            return None
+        super().__init__(config)
+        self.consul_host = config.consul_host
+        self.consul_port = config.consul_port
+        self.consul_client = consul.aio.Consul(
+            host=self.consul_host, 
+            port=self.consul_port
+        )
         
-        healthy_endpoints = self.healthy_endpoints.get(service_name, [])
-        if not healthy_endpoints:
-            logger.warning(f"服务 {service_name} 没有健康端点可用")
-            return None
+    async def refresh_services(self):
+        """
+        从Consul刷新服务列表
+        """
+        try:
+            # 获取所有服务
+            index, services = await self.consul_client.catalog.services()
+            
+            # 清空当前服务列表
+            self.services = {}
+            
+            # 获取每个服务的详情
+            for service_name in services:
+                # 跳过consul服务
+                if service_name == "consul":
+                    continue
+                    
+                # 获取服务实例
+                index, service_instances = await self.consul_client.catalog.service(service_name)
+                
+                if not service_instances:
+                    continue
+                
+                # 创建端点列表
+                endpoints = []
+                
+                for instance in service_instances:
+                    host = instance.get("ServiceAddress") or instance.get("Address")
+                    port = instance.get("ServicePort")
+                    
+                    if host and port:
+                        endpoints.append(ServiceEndpointConfig(
+                            host=host,
+                            port=port
+                        ))
+                
+                # 获取服务标签
+                tags = service_instances[0].get("ServiceTags", [])
+                version = next((tag for tag in tags if tag.startswith("v")), "v1")
+                
+                # 添加到服务列表
+                self.services[service_name] = ServiceConfig(
+                    name=service_name,
+                    version=version,
+                    endpoints=endpoints
+                )
+                
+                # 更新健康端点
+                if endpoints:
+                    self.healthy_endpoints[service_name] = [(endpoint.host, endpoint.port) 
+                                                          for endpoint in endpoints]
+                
+            logger.info(f"从Consul刷新了 {len(self.services)} 个服务")
+            
+        except Exception as e:
+            logger.error(f"从Consul刷新服务失败: {str(e)}")
+
+
+class KubernetesServiceRegistry(ServiceRegistry):
+    """基于Kubernetes的服务注册表"""
+    
+    def __init__(self, config):
+        """
+        初始化Kubernetes服务注册表
         
-        service = self.services[service_name]
-        lb_strategy = service.load_balancer
+        Args:
+            config: 服务发现配置
+        """
+        super().__init__(config)
+        self.namespace = config.kubernetes_namespace
+        self.label_selector = config.kubernetes_label_selector
+        self.api_client = None
         
-        if lb_strategy == "round-robin":
-            # 简单的轮询策略，实际应用中可能需要一个计数器
-            endpoint = healthy_endpoints[0]  # 使用第一个端点，实际应该轮询
-            # 将第一个端点移动到列表末尾，实现轮询
-            self.healthy_endpoints[service_name] = healthy_endpoints[1:] + [healthy_endpoints[0]]
-        elif lb_strategy == "random":
-            # 随机选择
-            endpoint = random.choice(healthy_endpoints)
-        elif lb_strategy == "least-conn":
-            # 实际中，这里需要跟踪每个端点的连接数
-            # 但此处简化为随机选择
-            endpoint = random.choice(healthy_endpoints)
-        else:
-            # 默认使用第一个
-            logger.warning(f"不支持的负载均衡策略: {lb_strategy}，使用第一个端点")
-            endpoint = healthy_endpoints[0]
+    async def _init_client(self):
+        """
+        初始化Kubernetes客户端
+        """
+        if self.api_client is None:
+            try:
+                # 加载配置 - 使用正确的导入路径
+                import kubernetes_asyncio.config as k8s_config
+                await k8s_config.load_kube_config()
+                self.api_client = client.CoreV1Api()
+            except Exception as e:
+                logger.error(f"初始化Kubernetes客户端失败: {str(e)}")
+                
+    async def refresh_services(self):
+        """
+        从Kubernetes刷新服务列表
+        """
+        try:
+            # 初始化客户端
+            await self._init_client()
+            
+            if not self.api_client:
+                return
+                
+            # 获取所有Endpoints
+            endpoints = await self.api_client.list_namespaced_endpoints(
+                namespace=self.namespace,
+                label_selector=self.label_selector
+            )
+            
+            # 清空当前服务列表
+            self.services = {}
+            
+            # 处理每个Endpoint
+            for endpoint in endpoints.items:
+                service_name = endpoint.metadata.name
+                
+                # 创建端点列表
+                service_endpoints = []
+                
+                # 处理子集
+                for subset in endpoint.subsets:
+                    # 获取地址
+                    addresses = subset.addresses or []
+                    
+                    # 获取端口
+                    ports = subset.ports or []
+                    
+                    # 创建端点
+                    for address in addresses:
+                        for port in ports:
+                            host = address.ip
+                            port_number = port.port
+                            
+                            service_endpoints.append(ServiceEndpointConfig(
+                                host=host,
+                                port=port_number
+                            ))
+                
+                # 如果有端点，添加到服务列表
+                if service_endpoints:
+                    self.services[service_name] = ServiceConfig(
+                        name=service_name,
+                        version="v1",  # 默认版本
+                        endpoints=service_endpoints
+                    )
+                    
+                    # 更新健康端点
+                    self.healthy_endpoints[service_name] = [(endpoint_item.host, endpoint_item.port) 
+                                                          for endpoint_item in service_endpoints]
+            
+            logger.info(f"从Kubernetes刷新了 {len(self.services)} 个服务")
+            
+        except Exception as e:
+            logger.error(f"从Kubernetes刷新服务失败: {str(e)}")
         
-        return endpoint.host, endpoint.port 
+
+def create_service_registry(config):
+    """
+    创建服务注册表
+    
+    Args:
+        config: 服务发现配置
+        
+    Returns:
+        服务注册表实例
+    """
+    discovery_type = config.type.lower()
+    
+    if discovery_type == "consul":
+        return ConsulServiceRegistry(config)
+    elif discovery_type == "kubernetes":
+        return KubernetesServiceRegistry(config)
+    else:
+        # 默认使用静态配置
+        return ServiceRegistry(config) 

@@ -188,7 +188,7 @@ class TestMFASecurity:
         code = "123456"
         
         # 尝试验证，应抛出异常
-        with pytest.raises(ValueError) as exc_info:
+        with pytest.raises(MFAVerificationError) as exc_info:
             verify_mfa_code(mfa_type, secret, code)
         
         # 验证异常信息

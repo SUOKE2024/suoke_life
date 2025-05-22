@@ -9,14 +9,14 @@ python-dotenv==1.0.0
 PyYAML==6.0.1
 
 # Data processing and analysis
-numpy==1.26.3
+numpy>=1.26.3
 pandas==2.2.0
 scikit-learn==1.4.0
-scipy==1.12.0
+scipy>=1.12.0
 
 # Database and storage
 SQLAlchemy==2.0.25
-alembic==1.13.1
+alembic>=1.13.1
 psycopg2-binary==2.9.9
 redis==5.0.1
 aioredis==2.0.1
@@ -69,16 +69,16 @@ py-spy==0.3.14
 memory-profiler==0.61.0
 
 # Zero-knowledge proof libraries
-pysnark==0.4.0
-zokrates==0.7.13
+# pysnark==0.4.0 # Python 3.12 暂不支持，考虑使用替代方案
+# zokrates==0.7.13 # Python 3.12 暂不支持，考虑使用替代方案
 
 # Edge computing
-onnxruntime==1.16.3
-tensorflow-lite==2.14.0
-tflite-runtime==2.14.0
-torch==2.1.2
-torchvision==0.16.2
-torchaudio==2.1.2
+onnxruntime>=1.20.0
+# tensorflow-lite==2.14.0 # Python 3.12 暂不支持，考虑使用替代方案
+# tflite-runtime==2.14.0 # Python 3.12 暂不支持，考虑使用替代方案
+torch>=2.6.0
+torchvision>=0.21.0
+torchaudio>=2.6.0
 
 # Visualization
 plotly==5.18.0

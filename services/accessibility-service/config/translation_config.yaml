@@ -1,0 +1,65 @@
+# 翻译服务配置
+translation:
+  # 通用翻译模型配置
+  model_name: "facebook/mbart-large-50-many-to-many-mmt"  # 默认多语言翻译模型
+  device: "cuda"  # 使用GPU推理，可选项: "cuda", "cpu"
+  half_precision: true  # 使用FP16加速（仅GPU有效）
+  
+  # 特殊语言对的专用模型
+  special_pairs:
+    "zh_CN-en_XX":  # 中文到英文
+      model_name: "Helsinki-NLP/opus-mt-zh-en"
+      priority: 1  # 优先级，越高越优先使用
+    "en_XX-zh_CN":  # 英文到中文
+      model_name: "Helsinki-NLP/opus-mt-en-zh"
+      priority: 1
+  
+  # 性能配置
+  max_tokens: 128  # 最大生成token数
+  batch_size: 4  # 批处理大小
+  num_beams: 4  # 束搜索宽度
+  cache_dir: "./data/model_cache"  # 模型缓存目录
+  
+  # 流式处理配置
+  streaming:
+    chunk_size_ms: 2000  # 音频流chunk大小（毫秒）
+    buffer_size: 5  # 最大缓冲chunk数
+    timeout_ms: 10000  # 流式会话超时（毫秒）
+    max_sessions_per_user: 5  # 每用户最大活跃会话数
+    cleanup_interval_seconds: 300  # 清理间隔（秒）
+  
+  # 会话管理配置
+  session:
+    default_ttl_seconds: 3600  # 会话默认生存时间（秒）
+    max_inactive_seconds: 300  # 最大不活跃时间（秒）
+    max_sessions: 1000  # 全局最大会话数
+  
+  # 缓存配置
+  cache:
+    enable: true  # 启用翻译缓存
+    max_size: 1000  # 最大缓存条目数
+    ttl_seconds: 3600  # 缓存条目生存时间（秒）
+  
+  # 监控和指标
+  monitoring:
+    enable: true  # 启用指标收集
+    latency_threshold_ms: 3000  # 延迟阈值（毫秒）
+    error_threshold_percent: 5  # 错误率阈值（百分比）
+
+# 与方言服务集成配置
+dialect_integration:
+  enable: true  # 启用方言服务集成
+  default_dialect: "mandarin"  # 默认方言
+  priority_dialects:  # 优先支持的方言
+    - "cantonese"
+    - "sichuanese"
+    - "northeastern"
+    - "shanghainese"
+  
+  # 方言到语言映射
+  dialect_to_language:
+    "mandarin": "zh_CN"
+    "cantonese": "zh_CN"
+    "sichuanese": "zh_CN"
+    "northeastern": "zh_CN"
+    "shanghainese": "zh_CN" 

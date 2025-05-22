@@ -1,4 +1,4 @@
-FROM python:3.11-slim AS builder
+FROM python:3.12-slim AS builder
 
 # 设置工作目录
 WORKDIR /app
@@ -16,7 +16,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir --user -r requirements.txt
 
 # 开发阶段
-FROM python:3.11-slim AS development
+FROM python:3.12-slim AS development
 
 # 设置环境变量
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -54,7 +54,7 @@ USER sokelife
 CMD ["python", "cmd/server/main.py"]
 
 # 生产阶段
-FROM python:3.11-slim AS production
+FROM python:3.12-slim AS production
 
 # 设置环境变量
 ENV PYTHONDONTWRITEBYTECODE=1 \

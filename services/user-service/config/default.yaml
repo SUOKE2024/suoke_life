@@ -1,0 +1,201 @@
+# 用户服务默认配置
+service:
+  name: user-service
+  version: 1.0.0
+  description: 索克生活APP的用户管理服务，负责用户身份验证、权限和个人资料管理
+
+server:
+  host: 0.0.0.0
+  port: 8070
+  debug: false
+  workers: 4
+  timeout: 60
+  cors:
+    enabled: true
+    origins:
+      - "*"
+
+logging:
+  level: INFO
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: logs/user-service.log
+  max_size: 10485760  # 10MB
+  backup_count: 5
+
+# 标准数据库配置
+database:
+  # 主数据库配置
+  primary:
+    type: postgresql
+    host: ${DB_HOST:-localhost}
+    port: ${DB_PORT:-5432}
+    username: ${DB_USER:-postgres}
+    password: ${DB_PASS:-postgres}
+    database: ${DB_NAME:-user_service}
+    
+    # 连接池配置
+    pool:
+      min_size: 10
+      max_size: ${DB_POOL_SIZE:-50}
+      max_overflow: ${DB_MAX_OVERFLOW:-20}
+      timeout: ${DB_POOL_TIMEOUT:-30}
+      recycle: ${DB_POOL_RECYCLE:-3600}
+      use_lifo: true
+      echo: ${DB_ECHO:-false}
+    
+    # 性能优化参数
+    optimization:
+      prepared_statement_cache_size: 200
+      statement_timeout: 30000
+      idle_in_transaction_session_timeout: 60000
+      effective_cache_size: "8GB"
+      maintenance_work_mem: "128MB"
+      max_parallel_workers_per_gather: 4
+      enable_partitionwise_join: true
+    
+    # 连接参数
+    options:
+      application_name: "user_service"
+      client_encoding: "UTF8"
+      connect_timeout: 10
+      keepalives: 1
+      keepalives_idle: 60
+    
+    # 事务隔离级别
+    isolation_level: "READ COMMITTED"
+  
+  # 只读副本配置（用于读写分离）
+  replicas:
+    enabled: ${DB_REPLICAS_ENABLED:-false}
+    strategy: "round_robin"
+    nodes:
+      - host: ${DB_REPLICA1_HOST}
+        port: ${DB_REPLICA1_PORT:-5432}
+        username: ${DB_REPLICA1_USER:-postgres}
+        password: ${DB_REPLICA1_PASS:-postgres}
+        database: ${DB_REPLICA1_NAME:-user_service}
+        pool:
+          min_size: 5
+          max_size: ${DB_REPLICA1_POOL_SIZE:-25}
+          max_overflow: 10
+          timeout: 20
+  
+  # SQLite配置（用于本地存储）
+  sqlite:
+    path: ${SQLITE_PATH:-data/local.db}
+    journal_mode: "WAL"
+    synchronous: "NORMAL"
+    busy_timeout: 5000
+    cache_size: 2000
+    temp_store: "MEMORY"
+  
+  # 缓存配置
+  cache:
+    type: redis
+    host: ${REDIS_HOST:-localhost}
+    port: ${REDIS_PORT:-6379}
+    db: ${REDIS_DB:-0}
+    password: ${REDIS_PASS}
+    ttl: ${REDIS_TTL:-3600}
+    key_prefix: "user:"
+    
+    # Redis连接池配置
+    pool:
+      min_idle: 10
+      max_idle: 50
+      max_active: 100
+      max_wait: 3000
+      timeout: 2000
+    
+    # 本地缓存配置（双层缓存）
+    local:
+      enabled: true
+      max_size: 20000
+      ttl: 300
+  
+  # 迁移配置
+  migrations:
+    enabled: true
+    auto_migrate: ${AUTO_MIGRATE:-true}
+    dir: "migrations"
+    table: "schema_migrations"
+  
+  # 监控配置
+  monitoring:
+    query_timeout_threshold: 1000
+    slow_query_log: true
+    slow_query_threshold: 500
+    connection_stats: true
+    query_stats: true
+    
+  # 安全配置
+  security:
+    ssl_mode: "prefer"
+    encrypt_sensitive_data: true
+
+# 用户配置
+user:
+  password:
+    min_length: 8
+    require_special_char: true
+    require_number: true
+    require_uppercase: true
+    max_login_attempts: 5
+    lockout_duration: 1800  # 30分钟
+  
+  session:
+    duration: 86400  # 24小时
+    refresh_token_duration: 2592000  # 30天
+    idle_timeout: 1800  # 30分钟
+  
+  profiles:
+    allow_anonymous: false
+    default_avatar: "assets/images/avatars/default.png"
+    max_bio_length: 500
+
+# 安全配置
+security:
+  jwt:
+    secret: ${JWT_SECRET}
+    algorithm: HS256
+    access_token_expires: 3600  # 1小时
+    refresh_token_expires: 2592000  # 30天
+  
+  api_keys:
+    enabled: true
+    header_name: X-API-Key
+  
+  oauth:
+    providers:
+      - name: google
+        client_id: ${GOOGLE_CLIENT_ID}
+        client_secret: ${GOOGLE_CLIENT_SECRET}
+        enabled: ${GOOGLE_OAUTH_ENABLED:-false}
+      
+      - name: wechat
+        app_id: ${WECHAT_APP_ID}
+        app_secret: ${WECHAT_APP_SECRET}
+        enabled: ${WECHAT_OAUTH_ENABLED:-true}
+
+# 审计配置
+audit:
+  enabled: true
+  log_login_attempts: true
+  log_profile_changes: true
+  log_permission_changes: true
+  retention_days: 90
+
+# 可观测性配置
+telemetry:
+  tracing:
+    enabled: ${TRACING_ENABLED:-false}
+    exporter: otlp
+    endpoint: ${OTLP_ENDPOINT:-localhost:4317}
+    service_name: user-service
+    environment: ${SERVICE_ENV:-development}
+  
+  metrics:
+    enabled: ${METRICS_ENABLED:-true}
+    exporter: prometheus
+    endpoint: ${METRICS_ENDPOINT:-localhost:9090}
+    export_interval: 15  # 秒 

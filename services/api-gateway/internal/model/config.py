@@ -7,7 +7,7 @@ API网关配置模型
 
 from typing import Dict, List, Optional, Set, Union
 
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 
 
 class RouteConfig(BaseModel):
@@ -127,6 +127,7 @@ class CacheConfig(BaseModel):
     ttl: int = 60  # 秒
     max_size: int = 1000  # 内存缓存最大条目数
     redis_url: Optional[str] = None  # Redis连接URL
+    include_headers: List[str] = Field(default_factory=list)  # 要包含在缓存键中的请求头
 
 
 class CircuitBreakerConfig(BaseModel):
@@ -192,14 +193,34 @@ class MiddlewareConfig(BaseModel):
     trusted_hosts: Optional[List[str]] = None
 
 
+class RestServerConfig(BaseModel):
+    """REST服务器配置"""
+    host: str = "0.0.0.0"
+    port: int = 8080
+
+
+class GrpcServerConfig(BaseModel):
+    """gRPC服务器配置"""
+    host: str = "0.0.0.0"
+    port: int = 50050
+
+
+class ServerConfig(BaseModel):
+    """
+    服务器配置
+    """
+    rest: RestServerConfig = Field(default_factory=RestServerConfig)
+    grpc: GrpcServerConfig = Field(default_factory=GrpcServerConfig)
+    production: bool = False
+    debug: bool = True
+
+
 class GatewayConfig(BaseModel):
     """
     API网关主配置
     """
     app_name: str = "suoke-api-gateway"
-    host: str = "0.0.0.0"
-    port: int = 8000
-    debug: bool = False
+    server: ServerConfig = Field(default_factory=ServerConfig)
     
     # 路由配置
     routes: List[RouteConfig] = Field(default_factory=list)
@@ -228,7 +249,8 @@ class GatewayConfig(BaseModel):
     # 可观测性
     observability: ObservabilityConfig = Field(default_factory=ObservabilityConfig)
     
-    @validator("middleware", pre=True, always=True)
+    @field_validator("middleware", mode="before")
+    @classmethod
     def set_default_middleware(cls, v):
         if v is None:
             return MiddlewareConfig()

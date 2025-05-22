@@ -1,7 +1,7 @@
 # 多阶段构建 Dockerfile
 
 # 第1阶段：Python依赖构建
-FROM python:3.10-slim AS builder
+FROM python:3.12-slim AS builder
 
 # 设置构建参数
 ARG APP_ENV=production
@@ -47,7 +47,7 @@ RUN mkdir -p /app/generated/grpc && \
     /app/api/grpc/*.proto
 
 # 第二阶段 - 最终镜像
-FROM python:3.10-slim
+FROM python:3.12-slim
 
 # 设置运行时环境变量
 ENV PYTHONDONTWRITEBYTECODE=1 \

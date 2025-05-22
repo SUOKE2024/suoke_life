@@ -1,6 +1,6 @@
 # 使用多阶段构建
 # 构建阶段
-FROM python:3.10-slim as builder
+FROM python:3.12-slim as builder
 
 # 设置工作目录
 WORKDIR /build
@@ -28,7 +28,7 @@ ENV PATH="/opt/venv/bin:$PATH"
 RUN pip install --no-cache-dir -r requirements.txt
 
 # 运行阶段
-FROM python:3.10-slim
+FROM python:3.12-slim
 
 # 设置工作目录
 WORKDIR /app

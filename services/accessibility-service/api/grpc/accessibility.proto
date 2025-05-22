@@ -41,6 +41,21 @@ service AccessibilityService {
   
   // 获取健康报警历史 - 查询用户的历史健康报警
   rpc GetAlertHistory(AlertHistoryRequest) returns (AlertHistoryResponse);
+  
+  // 语音翻译服务 - 提供实时语音翻译
+  rpc SpeechTranslation(SpeechTranslationRequest) returns (SpeechTranslationResponse);
+  
+  // 语音翻译流式服务 - 提供流式语音翻译
+  rpc StreamingSpeechTranslation(stream SpeechTranslationChunk) returns (stream SpeechTranslationResult);
+  
+  // 创建翻译会话 - 创建流式翻译会话
+  rpc CreateTranslationSession(CreateSessionRequest) returns (CreateSessionResponse);
+  
+  // 获取会话状态 - 查询翻译会话状态
+  rpc GetSessionStatus(SessionStatusRequest) returns (SessionStatusResponse);
+  
+  // 获取支持的语言和方言 - 查询系统支持的语言和方言
+  rpc GetSupportedLanguages(SupportedLanguagesRequest) returns (SupportedLanguagesResponse);
 }
 
 // 导盲服务请求
@@ -406,4 +421,120 @@ message AlertRecord {
   int64 acknowledged_at = 8;  // 确认时间
   repeated string notified_contacts = 9;  // 已通知的联系人
   repeated AgentAction agent_actions = 10;  // 智能体行动
+}
+
+// 语音翻译请求
+message SpeechTranslationRequest {
+  bytes audio_data = 1;  // 语音数据
+  string user_id = 2;  // 用户ID
+  string source_language = 3;  // 源语言代码
+  string target_language = 4;  // 目标语言代码
+  string source_dialect = 5;  // 源方言代码
+  string target_dialect = 6;  // 目标方言代码
+  UserPreferences preferences = 7;  // 用户偏好
+}
+
+// 语音翻译响应
+message SpeechTranslationResponse {
+  string source_text = 1;  // 源语言文本
+  string translated_text = 2;  // 翻译后文本
+  bytes translated_audio = 3;  // 翻译后语音
+  float source_confidence = 4;  // 源语言识别置信度
+  float translation_confidence = 5;  // 翻译置信度
+  int32 processing_time_ms = 6;  // 处理时间(毫秒)
+  string error = 7;  // 错误信息(如果有)
+}
+
+// 创建会话请求
+message CreateSessionRequest {
+  string user_id = 1;  // 用户ID
+  string source_language = 2;  // 源语言代码
+  string target_language = 3;  // 目标语言代码
+  string source_dialect = 4;  // 源方言代码
+  string target_dialect = 5;  // 目标方言代码
+  UserPreferences preferences = 6;  // 用户偏好
+}
+
+// 创建会话响应
+message CreateSessionResponse {
+  string session_id = 1;  // 会话ID
+  bool success = 2;  // 是否成功
+  string message = 3;  // 响应消息
+}
+
+// 会话状态请求
+message SessionStatusRequest {
+  string session_id = 1;  // 会话ID
+  string user_id = 2;  // 用户ID
+}
+
+// 会话状态响应
+message SessionStatusResponse {
+  string session_id = 1;  // 会话ID
+  string user_id = 2;  // 用户ID
+  string source_language = 3;  // 源语言代码
+  string target_language = 4;  // 目标语言代码
+  bool is_active = 5;  // 是否活跃
+  int64 created_at = 6;  // 创建时间(Unix时间戳)
+  int64 last_activity = 7;  // 最后活动时间(Unix时间戳)
+  int32 segment_count = 8;  // 已处理片段数量
+  int64 duration_seconds = 9;  // 会话持续时间(秒)
+  string error = 10;  // 错误信息(如果有)
+}
+
+// 流式翻译数据块
+message SpeechTranslationChunk {
+  bytes audio_chunk = 1;  // 音频数据块
+  string user_id = 2;  // 用户ID
+  string session_id = 3;  // 会话ID
+  bool is_final = 4;  // 是否为最后一块
+  TranslationConfig config = 5;  // 翻译配置(仅第一块需要)
+}
+
+// 翻译配置
+message TranslationConfig {
+  string source_language = 1;  // 源语言代码
+  string target_language = 2;  // 目标语言代码
+  string source_dialect = 3;  // 源方言代码
+  string target_dialect = 4;  // 目标方言代码
+  UserPreferences preferences = 5;  // 用户偏好
+}
+
+// 流式翻译结果
+message SpeechTranslationResult {
+  string source_text = 1;  // 源语言文本
+  string translated_text = 2;  // 翻译后文本
+  bytes translated_audio = 3;  // 翻译后语音
+  bool is_final = 4;  // 是否为最终结果
+  string segment_id = 5;  // 片段ID
+  string error = 6;  // 错误信息(如果有)
+}
+
+// 支持的语言请求
+message SupportedLanguagesRequest {
+  string user_id = 1;  // 用户ID
+  bool include_dialects = 2;  // 是否包含方言信息
+}
+
+// 支持的语言响应
+message SupportedLanguagesResponse {
+  repeated Language languages = 1;  // 支持的语言列表
+  repeated LanguagePair language_pairs = 2;  // 支持的语言对
+  repeated string supported_dialects = 3;  // 支持的方言列表(如果请求包含方言)
+}
+
+// 语言信息
+message Language {
+  string code = 1;  // 语言代码
+  string name = 2;  // 语言名称
+  bool supports_speech = 3;  // 是否支持语音
+}
+
+// 语言对信息
+message LanguagePair {
+  string source_code = 1;  // 源语言代码
+  string source_name = 2;  // 源语言名称
+  string target_code = 3;  // 目标语言代码
+  string target_name = 4;  // 目标语言名称
+  bool supports_speech = 5;  // 是否支持语音翻译
 } 

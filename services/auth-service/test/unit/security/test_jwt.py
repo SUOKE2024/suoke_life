@@ -1,220 +1,176 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-JWT令牌工具单元测试
+JWT安全模块单元测试
 """
-import time
-from datetime import datetime, timedelta
-
-import jwt
 import pytest
+import jwt
+from unittest.mock import patch, MagicMock
+from datetime import datetime, timedelta, UTC
+import time
 
-from internal.security.jwt import (
-    create_access_token,
-    create_refresh_token,
-    decode_token,
-    create_token_pair
-)
-from internal.model.errors import InvalidTokenError, ConfigurationError
+from internal.security.jwt import JWTSecurity
+from internal.model.errors import AuthenticationError
 
 
 class TestJWTSecurity:
-    """JWT安全功能测试"""
+    """JWT安全模块测试"""
     
-    # 测试密钥
-    SECRET_KEY = "test_secret_key_for_jwt_tokens"
+    @pytest.fixture
+    def jwt_security(self):
+        """创建JWT安全实例"""
+        return JWTSecurity(
+            secret_key="test_secret_key",
+            algorithm="HS256",
+            access_token_expire_minutes=30,
+            refresh_token_expire_minutes=60*24*7
+        )
     
-    def test_create_access_token(self):
+    def test_init(self, jwt_security):
+        """测试初始化"""
+        assert jwt_security.secret_key == "test_secret_key"
+        assert jwt_security.algorithm == "HS256"
+        assert jwt_security.access_token_expire_minutes == 30
+        assert jwt_security.refresh_token_expire_minutes == 60*24*7
+    
+    def test_create_access_token(self, jwt_security):
         """测试创建访问令牌"""
-        # 准备测试数据
-        user_data = {
-            "sub": "user123",
-            "username": "testuser",
-            "roles": ["user"],
-            "permissions": ["read:data"]
-        }
-        
         # 创建令牌
-        token = create_access_token(
-            data=user_data,
-            secret_key=self.SECRET_KEY,
-            expires_delta=timedelta(minutes=15)
-        )
+        user_id = "test_user_id"
+        token = jwt_security.create_access_token(user_id)
         
-        # 验证令牌不为空
-        assert token is not None
-        assert isinstance(token, str)
+        # 验证令牌
+        payload = jwt.decode(token, "test_secret_key", algorithms=["HS256"])
+        assert payload["sub"] == user_id
+        assert payload["type"] == "access"
+        assert "exp" in payload
+        assert "iat" in payload
         
-        # 解码并验证内容
-        payload = jwt.decode(token, self.SECRET_KEY, algorithms=["HS256"])
-        
-        # 检查必要字段
-        assert payload["sub"] == user_data["sub"]
-        assert payload["username"] == user_data["username"]
-        assert payload["roles"] == user_data["roles"]
-        assert payload["permissions"] == user_data["permissions"]
-        assert "jti" in payload  # 令牌ID
-        assert "iat" in payload  # 发行时间
-        assert "exp" in payload  # 过期时间
+        # 验证过期时间
+        now = datetime.now(UTC).timestamp()
+        assert payload["exp"] > now
+        assert payload["exp"] <= now + 30*60 + 5  # 允许5秒误差
     
-    def test_create_refresh_token(self):
+    def test_create_refresh_token(self, jwt_security):
         """测试创建刷新令牌"""
-        # 准备测试数据
-        user_data = {
-            "sub": "user123",
-            "username": "testuser"
-        }
-        
         # 创建令牌
-        token = create_refresh_token(
-            data=user_data,
-            secret_key=self.SECRET_KEY,
-            expires_delta=timedelta(days=7)
-        )
+        user_id = "test_user_id"
+        token = jwt_security.create_refresh_token(user_id)
         
-        # 验证令牌不为空
-        assert token is not None
-        assert isinstance(token, str)
+        # 验证令牌
+        payload = jwt.decode(token, "test_secret_key", algorithms=["HS256"])
+        assert payload["sub"] == user_id
+        assert payload["type"] == "refresh"
+        assert "exp" in payload
+        assert "iat" in payload
         
-        # 解码并验证内容
-        payload = jwt.decode(token, self.SECRET_KEY, algorithms=["HS256"])
-        
-        # 检查必要字段
-        assert payload["sub"] == user_data["sub"]
-        assert payload["username"] == user_data["username"]
-        assert payload["token_type"] == "refresh"  # 确认是刷新令牌
-        assert "jti" in payload  # 令牌ID
-        assert "iat" in payload  # 发行时间
-        assert "exp" in payload  # 过期时间
+        # 验证过期时间
+        now = datetime.now(UTC).timestamp()
+        assert payload["exp"] > now
+        assert payload["exp"] <= now + 60*60*24*7 + 5  # 允许5秒误差
     
-    def test_decode_token_valid(self):
-        """测试解码有效令牌"""
-        # 准备测试数据
-        user_data = {
-            "sub": "user123",
-            "username": "testuser"
-        }
+    def test_create_token_with_custom_expires(self, jwt_security):
+        """测试创建带自定义过期时间的令牌"""
+        # 创建令牌，10分钟过期
+        user_id = "test_user_id"
+        expires = timedelta(minutes=10)
+        token = jwt_security.create_access_token(user_id, expires_delta=expires)
         
+        # 验证令牌
+        payload = jwt.decode(token, "test_secret_key", algorithms=["HS256"])
+        assert payload["sub"] == user_id
+        
+        # 验证过期时间
+        now = datetime.now(UTC).timestamp()
+        assert payload["exp"] > now
+        assert payload["exp"] <= now + 10*60 + 5  # 允许5秒误差
+    
+    def test_verify_token_valid(self, jwt_security):
+        """测试验证有效令牌"""
         # 创建令牌
-        token = create_access_token(
-            data=user_data,
-            secret_key=self.SECRET_KEY
-        )
+        user_id = "test_user_id"
+        token = jwt_security.create_access_token(user_id)
         
-        # 解码令牌
-        payload = decode_token(token, self.SECRET_KEY)
-        
-        # 检查解码结果
-        assert payload["sub"] == user_data["sub"]
-        assert payload["username"] == user_data["username"]
+        # 验证令牌
+        claims = jwt_security.verify_token(token)
+        assert claims["sub"] == user_id
+        assert claims["type"] == "access"
     
-    def test_decode_token_expired(self):
-        """测试解码过期令牌"""
-        # 准备测试数据
-        user_data = {
-            "sub": "user123",
-            "username": "testuser"
-        }
-        
-        # 创建一个立即过期的令牌
-        payload = {
-            **user_data,
-            "exp": datetime.utcnow() - timedelta(seconds=1)  # 已过期
-        }
-        token = jwt.encode(payload, self.SECRET_KEY, algorithm="HS256")
-        
-        # 尝试解码，应抛出异常
-        with pytest.raises(InvalidTokenError) as exc_info:
-            decode_token(token, self.SECRET_KEY)
-        
-        # 验证异常信息
-        assert "过期" in str(exc_info.value)
-    
-    def test_decode_token_invalid(self):
-        """测试解码无效令牌"""
-        # 创建一个无效令牌
-        invalid_token = "invalid.token.string"
-        
-        # 尝试解码，应抛出异常
-        with pytest.raises(InvalidTokenError) as exc_info:
-            decode_token(invalid_token, self.SECRET_KEY)
-        
-        # 验证异常信息
-        assert "无效" in str(exc_info.value)
-    
-    def test_decode_token_wrong_secret(self):
-        """测试使用错误密钥解码"""
-        # 准备测试数据
-        user_data = {
-            "sub": "user123",
-            "username": "testuser"
-        }
-        
+    def test_verify_token_invalid_signature(self, jwt_security):
+        """测试验证无效签名"""
         # 创建令牌
-        token = create_access_token(
-            data=user_data,
-            secret_key=self.SECRET_KEY
-        )
+        user_id = "test_user_id"
+        token = jwt_security.create_access_token(user_id)
         
-        # 使用错误密钥尝试解码，应抛出异常
-        wrong_key = "wrong_secret_key"
-        with pytest.raises(InvalidTokenError):
-            decode_token(token, wrong_key)
+        # 修改令牌使签名无效
+        token_parts = token.split(".")
+        token_parts[2] = "invalid_signature"
+        invalid_token = ".".join(token_parts)
+        
+        # 验证令牌
+        with pytest.raises(AuthenticationError, match="无效的令牌签名"):
+            jwt_security.verify_token(invalid_token)
     
-    def test_create_token_pair(self):
-        """测试创建令牌对"""
-        # 准备测试数据
-        user_id = "user123"
-        username = "testuser"
-        roles = ["user"]
-        permissions = ["read:data"]
+    def test_verify_token_expired(self, jwt_security):
+        """测试验证已过期令牌"""
+        # 创建已过期的令牌
+        user_id = "test_user_id"
+        expires = timedelta(seconds=-1)
+        token = jwt_security.create_access_token(user_id, expires_delta=expires)
         
-        # 创建令牌对
-        access_token, refresh_token, expires_in = create_token_pair(
-            user_id=user_id,
-            username=username,
-            roles=roles,
-            permissions=permissions,
-            secret_key=self.SECRET_KEY,
-            access_token_expires=timedelta(minutes=30),
-            refresh_token_expires=timedelta(days=7)
-        )
-        
-        # 验证令牌不为空
-        assert access_token is not None
-        assert refresh_token is not None
-        assert expires_in == 30 * 60  # 30分钟转换为秒
-        
-        # 解码访问令牌
-        access_payload = jwt.decode(access_token, self.SECRET_KEY, algorithms=["HS256"])
-        
-        # 检查访问令牌内容
-        assert access_payload["sub"] == user_id
-        assert access_payload["username"] == username
-        assert access_payload["roles"] == roles
-        assert access_payload["permissions"] == permissions
-        
-        # 解码刷新令牌
-        refresh_payload = jwt.decode(refresh_token, self.SECRET_KEY, algorithms=["HS256"])
-        
-        # 检查刷新令牌内容
-        assert refresh_payload["sub"] == user_id
-        assert refresh_payload["username"] == username
-        assert refresh_payload["token_type"] == "refresh"
-        assert "roles" not in refresh_payload  # 刷新令牌不应包含角色
-        assert "permissions" not in refresh_payload  # 刷新令牌不应包含权限
+        # 验证令牌
+        with pytest.raises(AuthenticationError, match="令牌已过期"):
+            jwt_security.verify_token(token)
     
-    def test_missing_secret_key(self):
-        """测试缺少密钥的情况"""
-        # 准备测试数据
-        user_data = {
-            "sub": "user123",
-            "username": "testuser"
-        }
+    def test_verify_token_invalid_payload(self, jwt_security):
+        """测试验证无效载荷"""
+        # 创建无效载荷的令牌
+        payload = {"invalid": "payload"}
+        token = jwt.encode(payload, "test_secret_key", algorithm="HS256")
         
-        # 尝试创建令牌，应抛出异常
-        with pytest.raises(ConfigurationError) as exc_info:
-            create_access_token(user_data, "")
+        # 验证令牌
+        with pytest.raises(AuthenticationError, match="无效的令牌载荷"):
+            jwt_security.verify_token(token)
+    
+    def test_verify_token_malformed(self, jwt_security):
+        """测试验证格式错误的令牌"""
+        # 创建格式错误的令牌
+        token = "not.a.jwt.token"
         
-        # 验证异常信息
-        assert "密钥未配置" in str(exc_info.value) 
+        # 验证令牌
+        with pytest.raises(AuthenticationError, match="令牌格式错误"):
+            jwt_security.verify_token(token)
+    
+    def test_refresh_access_token_valid(self, jwt_security):
+        """测试使用有效刷新令牌刷新访问令牌"""
+        # 创建刷新令牌
+        user_id = "test_user_id"
+        refresh_token = jwt_security.create_refresh_token(user_id)
+        
+        # 刷新访问令牌
+        access_token = jwt_security.refresh_access_token(refresh_token)
+        
+        # 验证新的访问令牌
+        payload = jwt.decode(access_token, "test_secret_key", algorithms=["HS256"])
+        assert payload["sub"] == user_id
+        assert payload["type"] == "access"
+    
+    def test_refresh_access_token_invalid(self, jwt_security):
+        """测试使用无效刷新令牌刷新访问令牌"""
+        # 创建访问令牌而不是刷新令牌
+        user_id = "test_user_id"
+        access_token = jwt_security.create_access_token(user_id)
+        
+        # 尝试刷新访问令牌
+        with pytest.raises(AuthenticationError, match="无效的刷新令牌"):
+            jwt_security.refresh_access_token(access_token)
+    
+    def test_get_user_id_from_token(self, jwt_security):
+        """测试从令牌中获取用户ID"""
+        # 创建令牌
+        user_id = "test_user_id"
+        token = jwt_security.create_access_token(user_id)
+        
+        # 获取用户ID
+        extracted_user_id = jwt_security.get_user_id_from_token(token)
+        assert extracted_user_id == user_id 

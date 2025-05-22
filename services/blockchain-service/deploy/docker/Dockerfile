@@ -1,4 +1,4 @@
-FROM python:3.9-slim as builder
+FROM python:3.12-slim as builder
 
 # 设置工作目录
 WORKDIR /app
@@ -22,7 +22,7 @@ RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
 # 多阶段构建，使用更小的基础镜像
-FROM python:3.9-slim
+FROM python:3.12-slim
 
 # 创建非root用户
 RUN groupadd -g 1000 blockchain && \

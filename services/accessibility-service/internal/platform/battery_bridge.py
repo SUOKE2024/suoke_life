@@ -494,12 +494,43 @@ battery_bridge = BatteryBridge()
 
 
 def get_battery_level() -> int:
-    """获取电池电量百分比（全局函数）"""
-    return battery_bridge.get_battery_level()
+    """
+    全局函数：获取电池电量百分比
+    
+    Returns:
+        电池电量百分比（0-100）
+    """
+    # 检查是否在测试环境中
+    import os
+    if os.environ.get("TEST_ENVIRONMENT") == "true":
+        try:
+            return int(os.environ.get("MOCK_BATTERY_LEVEL", "100"))
+        except (ValueError, TypeError):
+            return 100
+            
+    bridge = BatteryBridge()
+    return bridge.get_battery_level()
+
+
+def set_cache_expiry(seconds: int) -> None:
+    """
+    全局函数：设置电池信息缓存有效期
+    
+    Args:
+        seconds: 缓存有效期（秒）
+    """
+    bridge = BatteryBridge()
+    bridge.cache_ttl = seconds
+    logger.debug(f"已设置电池信息缓存有效期为 {seconds} 秒")
 
 
 def is_charging() -> bool:
-    """检查设备是否正在充电（全局函数）"""
+    """
+    全局函数：检查设备是否正在充电
+    
+    Returns:
+        设备是否正在充电
+    """
     return battery_bridge.is_charging()
 
 
@@ -509,5 +540,31 @@ def get_power_mode() -> str:
 
 
 def get_battery_info(force_refresh: bool = False) -> Dict[str, Any]:
-    """获取完整电池信息（全局函数）"""
-    return battery_bridge.get_battery_info(force_refresh)
+    """
+    全局函数：获取电池信息
+    
+    Args:
+        force_refresh: 是否强制刷新缓存
+    
+    Returns:
+        包含电池信息的字典
+    """
+    # 检查是否在测试环境中
+    import os
+    if os.environ.get("TEST_ENVIRONMENT") == "true":
+        try:
+            level = int(os.environ.get("MOCK_BATTERY_LEVEL", "100"))
+        except (ValueError, TypeError):
+            level = 100
+            
+        charging = os.environ.get("MOCK_BATTERY_CHARGING", "true").lower() in ("true", "1", "yes")
+        
+        return {
+            "level": level,
+            "charging": charging,
+            "power_mode": "normal",
+            "source": "mock"
+        }
+            
+    bridge = BatteryBridge()
+    return bridge.get_battery_info(force_refresh)

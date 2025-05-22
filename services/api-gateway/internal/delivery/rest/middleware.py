@@ -2,46 +2,77 @@
 # -*- coding: utf-8 -*-
 
 """
-REST API中间件定义
-包括认证、CORS、限流等中间件
+REST API中间件模块
+提供CORS、身份验证、请求日志等功能
 """
 
 import fnmatch
 import logging
 import time
 import uuid
-from typing import Callable, List, Optional, Set, Union
+from typing import Callable, Dict, List, Optional, Set, Union
 
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 from internal.model.config import GatewayConfig, AuthConfig, CorsConfig, MiddlewareConfig, RateLimitConfig
-from pkg.utils.auth import JWTManager, extract_token_from_header
+from pkg.utils.auth import JWTManager
 
 
 logger = logging.getLogger(__name__)
 
 
-def setup_middlewares(app: FastAPI, config: GatewayConfig) -> None:
+def extract_token_from_header(auth_header: str) -> str:
+    """
+    从Authorization头中提取JWT令牌
+    
+    Args:
+        auth_header: Authorization请求头值
+        
+    Returns:
+        str: JWT令牌
+        
+    Raises:
+        ValueError: 如果令牌格式无效
+    """
+    if not auth_header:
+        raise ValueError("Authorization头为空")
+    
+    parts = auth_header.split()
+    
+    if parts[0].lower() != "bearer":
+        raise ValueError("认证类型必须为Bearer")
+    
+    if len(parts) != 2:
+        raise ValueError("无效的Authorization头格式")
+    
+    return parts[1]
+
+
+def setup_middlewares(app: FastAPI, config: Union[GatewayConfig, MiddlewareConfig]) -> None:
     """
     设置FastAPI中间件
     
     Args:
         app: FastAPI应用实例
-        config: 网关配置
+        config: 网关配置或中间件配置
     """
+    # 获取正确的中间件配置
+    middleware_config = config if isinstance(config, MiddlewareConfig) else config.middleware
+    
     # 添加CORS中间件
-    if config.middleware.cors.enabled:
+    if middleware_config.cors and middleware_config.cors.enabled:
         app.add_middleware(
             CORSMiddleware,
-            allow_origins=config.middleware.cors.allow_origins,
-            allow_credentials=config.middleware.cors.allow_credentials,
-            allow_methods=config.middleware.cors.allow_methods,
-            allow_headers=config.middleware.cors.allow_headers,
-            max_age=config.middleware.cors.max_age,
+            allow_origins=middleware_config.cors.allow_origins,
+            allow_credentials=middleware_config.cors.allow_credentials,
+            allow_methods=middleware_config.cors.allow_methods,
+            allow_headers=middleware_config.cors.allow_headers,
+            max_age=middleware_config.cors.max_age,
         )
         logger.info("已启用CORS中间件")
     
@@ -52,24 +83,36 @@ def setup_middlewares(app: FastAPI, config: GatewayConfig) -> None:
     app.add_middleware(LoggingMiddleware)
     
     # 添加限流中间件
-    if config.middleware.rate_limit.enabled:
+    if middleware_config.rate_limit and middleware_config.rate_limit.enabled:
         app.add_middleware(
             RateLimitMiddleware,
-            config=config.middleware.rate_limit,
+            config=middleware_config.rate_limit,
         )
         logger.info("已启用限流中间件")
     
     # 添加认证中间件
-    if config.middleware.auth.enabled:
+    if middleware_config.auth and middleware_config.auth.enabled:
         # 创建JWT管理器
-        jwt_manager = JWTManager(config.middleware.auth.jwt)
+        jwt_manager = JWTManager(middleware_config.auth.jwt)
         
         app.add_middleware(
             AuthMiddleware,
-            config=config.middleware.auth,
+            config=middleware_config.auth,
             jwt_manager=jwt_manager,
         )
         logger.info("已启用认证中间件")
+    
+    # 添加可信主机中间件
+    if middleware_config.trusted_hosts and middleware_config.trusted_hosts:
+        app.add_middleware(
+            TrustedHostMiddleware,
+            allowed_hosts=middleware_config.trusted_hosts
+        )
+        logger.info(f"已启用可信主机中间件，允许的主机: {middleware_config.trusted_hosts}")
+    
+    # GZip压缩中间件
+    if getattr(config, 'compression_enabled', False):
+        app.add_middleware(GZipMiddleware, minimum_size=1000)
     
     logger.info("所有中间件设置完成")
 
@@ -229,6 +272,16 @@ class AuthMiddleware(BaseHTTPMiddleware):
         return False
     
     async def dispatch(self, request: Request, call_next: Callable) -> Response:
+        """
+        处理请求
+        
+        Args:
+            request: 请求对象
+            call_next: 下一个处理器
+            
+        Returns:
+            响应对象
+        """
         # 如果未启用认证，直接处理请求
         if not self.config.enabled:
             return await call_next(request)
@@ -248,30 +301,37 @@ class AuthMiddleware(BaseHTTPMiddleware):
             )
         
         # 提取令牌
-        token = self.jwt_manager.extract_token_from_header(auth_header)
-        if not token:
-            logger.warning(f"无效的认证令牌格式 - 路径: {path}")
+        try:
+            # 使用独立的extract_token_from_header函数
+            token = extract_token_from_header(auth_header)
+        except ValueError as e:
+            logger.warning(f"无效的认证令牌格式 - 路径: {path}, 错误: {str(e)}")
             return JSONResponse(
                 status_code=401, 
                 content={"detail": "无效的认证令牌格式"}
             )
         
         # 验证令牌
-        is_valid, token_data, error_msg = self.jwt_manager.verify_token(token)
-        if not is_valid:
+        try:
+            # 使用validate_token方法验证令牌
+            token_data = self.jwt_manager.validate_token(token)
+        except ValueError as e:
+            error_msg = str(e)
             logger.warning(f"令牌验证失败 - 路径: {path}, 错误: {error_msg}")
             
             # 根据错误类型返回适当的状态码
             status_code = 401
-            if error_msg and "已过期" in error_msg:
-                status_code = 401
+            if "已过期" in error_msg:
                 error_detail = "令牌已过期"
-            elif error_msg and "已被撤销" in error_msg:
-                status_code = 401
+            elif "尚未生效" in error_msg:
+                error_detail = "令牌尚未生效"
+            elif "签名无效" in error_msg:
+                error_detail = "令牌签名无效"
+            elif "已被撤销" in error_msg:
                 error_detail = "令牌已被撤销"
             else:
                 error_detail = "无效的认证令牌"
-            
+                
             return JSONResponse(
                 status_code=status_code,
                 content={"detail": error_detail}

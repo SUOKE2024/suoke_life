@@ -1,6 +1,6 @@
 # 使用多阶段构建减少最终镜像大小
 # 构建阶段
-FROM python:3.10-slim as builder
+FROM python:3.12-slim as builder
 
 # 设置工作目录
 WORKDIR /app
@@ -18,7 +18,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir --user -r requirements.txt
 
 # 运行阶段
-FROM python:3.10-slim
+FROM python:3.12-slim
 
 # 设置时区为上海
 ENV TZ=Asia/Shanghai

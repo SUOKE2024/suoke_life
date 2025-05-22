@@ -60,4 +60,4 @@ pre-commit>=3.5.0
 
 # 服务发现
 python-consul==1.1.0
-kubernetes-asyncio==32.3.2 
+kubernetes-asyncio==32.3.2

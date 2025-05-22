@@ -147,9 +147,9 @@ def main():
         
         # 显示已启用的服务
         logging.info("已启用的服务:")
-        if app.edge_computing_service and hasattr(app.edge_computing_service, 'enabled') and app.edge_computing_service.enabled:
+        if app.edge_computing and hasattr(app.edge_computing, 'enabled') and app.edge_computing.enabled:
             logging.info("  - 边缘计算服务")
-        if app.tcm_accessibility_service:
+        if app.tcm_accessibility:
             logging.info("  - 中医特色无障碍适配服务")
         if app.dialect_service:
             dialects = len(app.dialect_service.supported_dialects) if hasattr(app.dialect_service, 'supported_dialects') else 0
@@ -178,20 +178,22 @@ def main():
         signal.signal(signal.SIGINT, handle_sigterm)
         
         # 创建并启动服务器
-        server, server_address = create_server(app, host, port)
-        
-        logging.info(f"无障碍服务启动于: {server_address}")
-        server.start()
-        
-        # 保持服务运行
-        while True:
-            time.sleep(60 * 60)  # 每小时检查一次
-    except KeyboardInterrupt:
-        logging.info("关闭服务器...")
-        if app:
-            app.stop()
-        server.stop(grace=5)  # 给5秒钟完成当前请求
-        logging.info("服务器已关闭")
+        try:
+            server, server_address = create_server(app, host, port)
+            
+            logging.info(f"无障碍服务启动于: {server_address}")
+            server.start()
+            
+            # 保持服务运行
+            while True:
+                time.sleep(60 * 60)  # 每小时检查一次
+        except KeyboardInterrupt:
+            logging.info("关闭服务器...")
+            if app:
+                app.stop()
+            if 'server' in locals() and server:
+                server.stop(grace=5)  # 给5秒钟完成当前请求
+            logging.info("服务器已关闭")
     except Exception as e:
         logging.exception(f"服务启动失败: {str(e)}")
         if app:

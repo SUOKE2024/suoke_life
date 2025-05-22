@@ -1,0 +1,149 @@
+name: API Gateway Build & Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+    paths:
+      - 'services/api-gateway/**'
+  pull_request:
+    branches:
+      - main
+      - develop
+    paths:
+      - 'services/api-gateway/**'
+  workflow_dispatch:
+
+env:
+  SERVICE_NAME: api-gateway
+  REGISTRY: ${{ secrets.CONTAINER_REGISTRY }}
+  REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
+  REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          cd services/api-gateway
+          pip install -r requirements.txt
+          pip install pytest pytest-cov
+
+      - name: Run tests
+        run: |
+          cd services/api-gateway
+          pytest test/
+
+  build:
+    name: Build & Push Image
+    needs: test
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Buildah
+        uses: redhat-actions/buildah-build@v2
+        id: build-image
+        with:
+          image: ${{ env.SERVICE_NAME }}
+          tags: latest ${{ github.sha }} ${{ github.ref_name }}
+          context: services/api-gateway
+          containerfiles: services/api-gateway/deploy/docker/Dockerfile
+
+      - name: Push to Registry
+        uses: redhat-actions/push-to-registry@v2
+        with:
+          image: ${{ steps.build-image.outputs.image }}
+          tags: ${{ steps.build-image.outputs.tags }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ env.REGISTRY_USERNAME }}
+          password: ${{ env.REGISTRY_PASSWORD }}
+
+  deploy-dev:
+    name: Deploy to Development
+    needs: build
+    if: github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+
+      - name: Set Kubernetes context
+        uses: azure/k8s-set-context@v3
+        with:
+          kubeconfig: ${{ secrets.KUBE_CONFIG_DEV }}
+
+      - name: Deploy to Kubernetes
+        run: |
+          cd services/api-gateway
+          TAG=${{ github.sha }}
+          REGISTRY=${{ env.REGISTRY }}
+          
+          # 替换 deployment.yaml 中的变量
+          envsubst < deploy/kubernetes/deployment.yaml > deployment.yaml
+          
+          # 应用 RuntimeClass
+          kubectl apply -f deploy/kubernetes/runtime-class.yaml
+          
+          # 应用部署
+          kubectl apply -f deployment.yaml
+          
+          # 等待部署完成
+          kubectl rollout status deployment/api-gateway -n suoke --timeout=300s
+
+  deploy-prod:
+    name: Deploy to Production
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+
+      - name: Set Kubernetes context
+        uses: azure/k8s-set-context@v3
+        with:
+          kubeconfig: ${{ secrets.KUBE_CONFIG_PROD }}
+
+      - name: Deploy to Kubernetes
+        run: |
+          cd services/api-gateway
+          TAG=${{ github.sha }}
+          REGISTRY=${{ env.REGISTRY }}
+          
+          # 替换 deployment.yaml 中的变量
+          envsubst < deploy/kubernetes/deployment.yaml > deployment.yaml
+          
+          # 应用 RuntimeClass
+          kubectl apply -f deploy/kubernetes/runtime-class.yaml
+          
+          # 应用部署
+          kubectl apply -f deployment.yaml
+          
+          # 等待部署完成
+          kubectl rollout status deployment/api-gateway -n suoke --timeout=300s 

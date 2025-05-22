@@ -10,12 +10,12 @@ import json
 import os
 import sys
 import time
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 from typing import Dict, List, Optional, Tuple
 
 import jwt
 import pytest
-from fastapi import Depends, FastAPI, HTTPException, Security, status
+from fastapi import Depends, FastAPI, HTTPException, Security, status, Request
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from fastapi.testclient import TestClient
 
@@ -95,17 +95,17 @@ def test_app(middleware_config):
         return {"message": "public endpoint"}
     
     @app.get("/api/protected")
-    def protected_endpoint():
+    def protected_endpoint(request: Request):
         """受保护的端点"""
-        user_id = getattr(app.state, "user_id", None)
-        user_roles = getattr(app.state, "user_roles", [])
+        user_id = getattr(request.state, "user_id", None)
+        user_roles = getattr(request.state, "user_roles", [])
         return {"user_id": user_id, "roles": user_roles}
     
     @app.get("/api/admin")
-    def admin_endpoint():
+    def admin_endpoint(request: Request):
         """管理员端点"""
-        user_id = getattr(app.state, "user_id", None)
-        user_roles = getattr(app.state, "user_roles", [])
+        user_id = getattr(request.state, "user_id", None)
+        user_roles = getattr(request.state, "user_roles", [])
         
         if "admin" not in user_roles:
             raise HTTPException(status_code=403, detail="仅管理员可访问")
@@ -123,7 +123,7 @@ def client(test_app):
 
 def create_token(user_id: str, roles: List[str] = None, expired: bool = False) -> str:
     """创建测试令牌"""
-    now = datetime.utcnow()
+    now = datetime.now(UTC)
     roles = roles or ["user"]
     
     payload = {
@@ -215,4 +215,212 @@ class TestAuthMiddleware:
         response = client.get("/api/admin", headers=headers)
         assert response.status_code == 200
         assert response.json()["message"] == "管理员专属内容"
-        assert response.json()["user_id"] == "admin123" 
+        assert response.json()["user_id"] == "admin123"
+
+@pytest.mark.asyncio
+async def test_complex_public_path_matching():
+    """测试复杂的公共路径匹配规则"""
+    # 创建各种复杂的公共路径规则
+    config = GatewayConfig(
+        routes=[],
+        middleware=MiddlewareConfig(
+            auth=AuthConfig(
+                enabled=True,
+                jwt=JwtConfig(
+                    secret_key="test-secret",
+                    algorithm="HS256",
+                    expire_minutes=30
+                ),
+                public_paths=[
+                    "/api/public",  # 精确匹配
+                    "/api/docs/*",  # 通配符匹配
+                    "/api/v*/status",  # 中间通配符
+                    "/health-*",   # 前缀匹配
+                    "*.png",       # 文件扩展名匹配
+                ]
+            )
+        )
+    )
+    
+    app = FastAPI()
+    auth_middleware = AuthMiddleware(app, config.middleware.auth)
+    
+    # 测试各种路径匹配情况
+    test_cases = [
+        # 精确匹配
+        ("/api/public", True),
+        ("/api/public/", False),  # 尾部斜杠不匹配精确路径
+        
+        # 通配符匹配
+        ("/api/docs/index.html", True),
+        ("/api/docs/swagger.json", True),
+        ("/api/docs", False),  # 不匹配父路径
+        
+        # 中间通配符
+        ("/api/v1/status", True),
+        ("/api/v2/status", True),
+        ("/api/vstatus", False),  # 不匹配缺少/的路径
+        
+        # 前缀匹配
+        ("/health-check", True),
+        ("/health-status", True),
+        ("/health", False),  # 不匹配前缀
+        
+        # 文件扩展名匹配
+        ("/assets/image.png", True),
+        ("/deep/path/icon.png", True),
+        ("/image.jpg", False)  # 不匹配其他扩展名
+    ]
+    
+    for path, expected in test_cases:
+        assert auth_middleware._is_public_path(path) == expected, f"Path {path} should be {'public' if expected else 'private'}"
+
+@pytest.mark.asyncio
+async def test_invalid_token_formats():
+    """测试各种无效令牌格式"""
+    config = GatewayConfig(
+        routes=[],
+        middleware=MiddlewareConfig(
+            auth=AuthConfig(
+                enabled=True,
+                jwt=JwtConfig(
+                    secret_key="test-secret",
+                    algorithm="HS256",
+                    expire_minutes=30
+                ),
+                public_paths=["/public"]
+            )
+        )
+    )
+    
+    app = FastAPI()
+    auth_middleware = AuthMiddleware(app, config.middleware.auth)
+    
+    # 测试各种无效令牌格式
+    invalid_auth_headers = [
+        "",                      # 空字符串
+        "Bearer",                # 只有Bearer前缀
+        "Bearer ",               # Bearer后面是空格
+        "bearer token",          # 小写bearer
+        "Basic dXNlcjpwYXNz",    # Basic认证格式
+        "token",                 # 无前缀
+        "Bearer\ttoken",         # 使用tab分隔
+        "Bearer\ntoken",         # 使用换行分隔
+        "Bearer token extra",    # 多余的部分
+        f"Bearer {' ' * 1000}",  # 非常长的空格
+        "Bearer " + "a" * 10000, # 非常长的令牌
+    ]
+    
+    for header in invalid_auth_headers:
+        request = Request(scope={
+            "type": "http",
+            "method": "GET",
+            "path": "/api/private",
+            "headers": [(b"authorization", header.encode())]
+        })
+        
+        user = await auth_middleware._get_current_user(request)
+        assert user is None, f"应该不能从无效授权头 '{header}' 中获取用户"
+
+@pytest.mark.asyncio
+async def test_token_with_missing_claims():
+    """测试缺少必要声明的令牌"""
+    config = GatewayConfig(
+        routes=[],
+        middleware=MiddlewareConfig(
+            auth=AuthConfig(
+                enabled=True,
+                jwt=JwtConfig(
+                    secret_key="test-secret",
+                    algorithm="HS256",
+                    expire_minutes=30
+                ),
+                public_paths=["/public"]
+            )
+        )
+    )
+    
+    app = FastAPI()
+    auth_middleware = AuthMiddleware(app, config.middleware.auth)
+    
+    # 创建JWT管理器
+    jwt_manager = JWTManager(config.middleware.auth.jwt)
+    
+    # 测试缺少不同声明的情况
+    test_cases = [
+        # 缺少sub
+        {"exp": time.time() + 3600, "roles": ["user"]},
+        
+        # 缺少exp
+        {"sub": "user-123", "roles": ["user"]},
+        
+        # 缺少roles
+        {"sub": "user-123", "exp": time.time() + 3600},
+        
+        # 空的sub
+        {"sub": "", "exp": time.time() + 3600, "roles": ["user"]},
+        
+        # 无效的roles类型
+        {"sub": "user-123", "exp": time.time() + 3600, "roles": "user"},
+        
+        # 完全空的payload
+        {}
+    ]
+    
+    for payload in test_cases:
+        # 手动创建令牌
+        token = jwt.encode(payload, config.middleware.auth.jwt.secret_key, algorithm=config.middleware.auth.jwt.algorithm)
+        
+        # 创建请求
+        request = Request(scope={
+            "type": "http",
+            "method": "GET",
+            "path": "/api/private",
+            "headers": [(b"authorization", f"Bearer {token}".encode())]
+        })
+        
+        # 尝试获取用户
+        user = await auth_middleware._get_current_user(request)
+        assert user is None, f"应该不能从缺少必要声明的令牌中获取用户: {payload}"
+
+@pytest.mark.asyncio
+async def test_expired_token_handling():
+    """测试过期令牌处理"""
+    config = GatewayConfig(
+        routes=[],
+        middleware=MiddlewareConfig(
+            auth=AuthConfig(
+                enabled=True,
+                jwt=JwtConfig(
+                    secret_key="test-secret",
+                    algorithm="HS256",
+                    expire_minutes=30
+                ),
+                public_paths=["/public"]
+            )
+        )
+    )
+    
+    app = FastAPI()
+    auth_middleware = AuthMiddleware(app, config.middleware.auth)
+    
+    # 创建一个已经过期的令牌
+    payload = {
+        "sub": "user-123",
+        "exp": time.time() - 60,  # 过期时间为1分钟前
+        "roles": ["user"]
+    }
+    
+    token = jwt.encode(payload, config.middleware.auth.jwt.secret_key, algorithm=config.middleware.auth.jwt.algorithm)
+    
+    # 创建请求
+    request = Request(scope={
+        "type": "http",
+        "method": "GET",
+        "path": "/api/private",
+        "headers": [(b"authorization", f"Bearer {token}".encode())]
+    })
+    
+    # 尝试获取用户
+    user = await auth_middleware._get_current_user(request)
+    assert user is None, "应该不能从过期令牌中获取用户" 

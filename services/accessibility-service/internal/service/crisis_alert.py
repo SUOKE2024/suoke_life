@@ -394,18 +394,25 @@ class CrisisAlertService:
             data: 数据内容
         """
         if data_type not in self.data_analyzers:
+            logger.debug(f"未找到数据类型 {data_type} 的分析器，跳过处理")
             return
         
         try:
             # 获取用户的警报阈值
-            thresholds = self.alert_thresholds.get(user_id, {}).get(data_type, {})
+            if user_id not in self.alert_thresholds or data_type not in self.alert_thresholds.get(user_id, {}):
+                logger.debug(f"用户 {user_id} 未设置 {data_type} 数据的警报阈值，使用默认阈值")
+                thresholds = {}
+            else:
+                thresholds = self.alert_thresholds.get(user_id, {}).get(data_type, {})
             
             # 分析数据
             analyzer = self.data_analyzers[data_type]
+            logger.debug(f"调用 {data_type} 数据分析器处理用户 {user_id} 的数据")
             alert_info = analyzer(user_id, data, thresholds)
             
             # 如果需要触发警报
             if alert_info:
+                logger.info(f"数据分析触发警报: 用户={user_id}, 类型={data_type}, 级别={alert_info.get('level', 'info')}")
                 # 添加一些基本信息
                 if "timestamp" not in alert_info:
                     alert_info["timestamp"] = datetime.now().isoformat()
@@ -416,6 +423,8 @@ class CrisisAlertService:
                 
                 # 加入警报队列
                 self.alert_queue.put((user_id, alert_info))
+            else:
+                logger.debug(f"数据分析未触发警报: 用户={user_id}, 类型={data_type}")
         except Exception as e:
             logger.error(f"处理 {data_type} 数据出错: {str(e)}")
     
@@ -690,7 +699,7 @@ class CrisisAlertService:
             }
         elif pulse_rate < default_thresholds["min_normal"] or pulse_rate > default_thresholds["max_normal"]:
             return {
-                "level": "info",
+                "level": "warning",
                 "message": f"心率轻微偏离正常范围：{pulse_rate}次/分钟",
                 "data_values": {"pulse_rate": pulse_rate}
             }
@@ -1016,7 +1025,9 @@ class CrisisAlertService:
         # 对应于项目中的四大智能体
         if level in ["danger", "critical"]:
             return "xiaoke"  # 小克负责医疗资源调度，适合处理紧急情况
-        elif data_type in ["pulse", "sleep", "voice", "activity"]:
+        elif data_type == "sleep":
+            return "laoke"   # 老克负责睡眠相关问题
+        elif data_type in ["pulse", "voice", "activity"]:
             return "xiaoai"  # 小艾负责四诊协调，适合处理生理数据异常
         elif "environment" in data_type:
             return "soer"    # 索儿负责健康管理，适合处理环境因素

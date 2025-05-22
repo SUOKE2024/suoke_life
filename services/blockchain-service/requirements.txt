@@ -15,8 +15,8 @@ py-ecc==6.0.0
 pyethash==0.1.27
 
 # 数据库
-sqlalchemy==2.0.23
-alembic==1.12.1
+sqlalchemy>=2.0.25
+alembic>=1.13.1
 psycopg2-binary==2.9.9
 
 # 加密和安全
@@ -40,4 +40,4 @@ pytest-cov==4.1.0
 black==23.10.0
 isort==5.12.0
 mypy==1.6.1
-flake8==6.1.0 
+flake8==6.1.0

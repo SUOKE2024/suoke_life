@@ -8,23 +8,29 @@ import json
 import logging
 import time
 from typing import Dict, Optional, Any, Tuple
+from datetime import datetime, UTC, timedelta
+import secrets
+import sqlalchemy as sa
 
-import aioredis
+import redis
 
 from internal.model.errors import InvalidTokenError, DatabaseError
+from internal.model.refresh_token import RefreshToken
 
 
 class TokenRepository:
     """令牌仓储，管理JWT令牌的存储、验证和撤销"""
 
-    def __init__(self, redis_pool: aioredis.Redis):
+    def __init__(self, redis_client: redis.Redis, session):
         """
         初始化令牌仓储
         
         Args:
-            redis_pool: Redis连接池
+            redis_client: Redis客户端
+            session: SQLAlchemy会话
         """
-        self.redis = redis_pool
+        self.redis = redis_client
+        self.session = session
         self.logger = logging.getLogger(__name__)
         
         # 令牌相关键前缀
@@ -63,12 +69,12 @@ class TokenRepository:
             
             # 存储令牌数据
             key = f"{prefix}{token}"
-            await self.redis.setex(key, expires_in, json.dumps(data))
+            self.redis.setex(key, expires_in, json.dumps(data))
             
             # 如果是访问令牌，还要在用户的令牌集合中存储
             if token_type == 'access' and 'user_id' in data:
                 user_tokens_key = f"auth:user_tokens:{data['user_id']}"
-                await self.redis.sadd(user_tokens_key, token)
+                self.redis.sadd(user_tokens_key, token)
                 
             return True
             
@@ -103,13 +109,13 @@ class TokenRepository:
                 raise ValueError(f"未知的令牌类型: {token_type}")
             
             # 检查令牌是否在黑名单中
-            is_blacklisted = await self.redis.exists(f"{self.BLACKLIST_PREFIX}{token}")
+            is_blacklisted = self.redis.exists(f"{self.BLACKLIST_PREFIX}{token}")
             if is_blacklisted:
                 raise InvalidTokenError("令牌已被撤销")
             
             # 获取令牌数据
             key = f"{prefix}{token}"
-            data = await self.redis.get(key)
+            data = self.redis.get(key)
             
             if not data:
                 raise InvalidTokenError("令牌无效或已过期")
@@ -151,23 +157,23 @@ class TokenRepository:
             
             # 获取令牌的剩余有效期
             key = f"{prefix}{token}"
-            ttl = await self.redis.ttl(key)
+            ttl = self.redis.ttl(key)
             
             if ttl <= 0:
                 # 令牌已经过期，无需操作
                 return True
             
             # 从数据库中删除令牌
-            await self.redis.delete(key)
+            self.redis.delete(key)
             
             # 将令牌加入黑名单，黑名单项的有效期与原令牌相同
             blacklist_key = f"{self.BLACKLIST_PREFIX}{token}"
-            await self.redis.setex(blacklist_key, ttl, "1")
+            self.redis.setex(blacklist_key, ttl, "1")
             
             # 如果提供了用户ID，从用户的令牌集合中移除该令牌
             if user_id and token_type == 'access':
                 user_tokens_key = f"auth:user_tokens:{user_id}"
-                await self.redis.srem(user_tokens_key, token)
+                self.redis.srem(user_tokens_key, token)
             
             return True
             
@@ -191,7 +197,7 @@ class TokenRepository:
         try:
             # 获取用户的所有访问令牌
             user_tokens_key = f"auth:user_tokens:{user_id}"
-            tokens = await self.redis.smembers(user_tokens_key)
+            tokens = self.redis.smembers(user_tokens_key)
             
             # 撤销每个令牌
             for token in tokens:
@@ -199,7 +205,7 @@ class TokenRepository:
                 await self.revoke_token(token_str, 'access', user_id)
             
             # 清空用户令牌集合
-            await self.redis.delete(user_tokens_key)
+            self.redis.delete(user_tokens_key)
             
             return True
             
@@ -226,7 +232,7 @@ class TokenRepository:
         """
         try:
             key = f"auth:{code_type}_code:{identifier}"
-            await self.redis.setex(key, expires_in, code)
+            self.redis.setex(key, expires_in, code)
             return True
             
         except Exception as e:
@@ -250,16 +256,16 @@ class TokenRepository:
         """
         try:
             key = f"auth:{code_type}_code:{identifier}"
-            stored_code = await self.redis.get(key)
+            stored_code = self.redis.get(key)
             
             if not stored_code:
                 return False
-            
+                
             stored_code_str = stored_code.decode('utf-8') if isinstance(stored_code, bytes) else stored_code
             return stored_code_str == code
             
         except Exception as e:
-            self.logger.exception(f"验证验证码时发生错误: {code_type}, {identifier}")
+            self.logger.exception(f"验证码验证时发生错误: {code_type}, {identifier}")
             raise DatabaseError(f"验证码验证失败: {str(e)}")
     
     async def delete_code(self, code_type: str, identifier: str) -> bool:
@@ -278,7 +284,7 @@ class TokenRepository:
         """
         try:
             key = f"auth:{code_type}_code:{identifier}"
-            await self.redis.delete(key)
+            self.redis.delete(key)
             return True
             
         except Exception as e:
@@ -292,39 +298,151 @@ class TokenRepository:
         
         Args:
             action: 操作类型 ('login', 'register', 'password_reset')
-            identifier: 标识符(IP地址/用户ID)
+            identifier: 标识符(用户ID/IP地址)
             max_attempts: 最大尝试次数
             window_seconds: 时间窗口(秒)
             
         Returns:
-            Tuple[bool, Optional[int]]: (是否允许操作, 剩余等待时间(秒))
+            Tuple[bool, Optional[int]]: (是否允许操作, 剩余冷却时间)
             
         Raises:
             DatabaseError: Redis操作失败
         """
         try:
-            # 构造键
+            current_time = int(time.time())
             key = f"auth:rate_limit:{action}:{identifier}"
             
-            # 获取当前尝试次数
-            count = await self.redis.get(key)
-            count = int(count) if count else 0
+            # 获取当前计数和窗口开始时间
+            data = self.redis.get(key)
             
-            if count >= max_attempts:
-                # 超过限制，获取剩余时间
-                ttl = await self.redis.ttl(key)
-                return False, ttl if ttl > 0 else window_seconds
-            
-            # 增加尝试次数
-            if count == 0:
-                # 第一次尝试，设置初始值和过期时间
-                await self.redis.setex(key, window_seconds, "1")
+            if data:
+                data_dict = json.loads(data)
+                attempts = data_dict.get("attempts", 0)
+                window_start = data_dict.get("window_start", current_time)
+                
+                # 检查是否在窗口期内
+                if current_time - window_start > window_seconds:
+                    # 窗口已过期，重置计数
+                    attempts = 1
+                    window_start = current_time
+                else:
+                    # 窗口内，增加计数
+                    attempts += 1
+                
+                # 检查是否超出限制
+                if attempts > max_attempts:
+                    # 计算剩余冷却时间
+                    cooldown = window_seconds - (current_time - window_start)
+                    return False, cooldown
+                
+                # 更新数据
+                data_dict = {
+                    "attempts": attempts,
+                    "window_start": window_start
+                }
+                self.redis.setex(key, window_seconds, json.dumps(data_dict))
+                return True, None
+                
             else:
-                # 非第一次尝试，增加计数
-                await self.redis.incr(key)
-            
-            return True, None
-            
+                # 首次尝试，设置初始值
+                data_dict = {
+                    "attempts": 1,
+                    "window_start": current_time
+                }
+                self.redis.setex(key, window_seconds, json.dumps(data_dict))
+                return True, None
+                
         except Exception as e:
             self.logger.exception(f"速率限制检查时发生错误: {action}, {identifier}")
-            raise DatabaseError(f"速率限制检查失败: {str(e)}") 
+            raise DatabaseError(f"速率限制检查失败: {str(e)}")
+    
+    async def create_refresh_token(self, user_id: str, client_id: str = None, client_info: Dict = None, expires_days: int = 30) -> Dict:
+        """
+        创建刷新令牌
+        
+        Args:
+            user_id: 用户ID
+            client_id: 客户端ID（可选）
+            client_info: 客户端信息（可选）
+            expires_days: 过期天数
+            
+        Returns:
+            Dict: 创建的刷新令牌信息
+            
+        Raises:
+            DatabaseError: 数据库错误
+        """
+        try:
+            # 生成令牌
+            token_value = secrets.token_urlsafe(64)  # 生成安全的随机令牌
+            expires_at = datetime.now(UTC) + timedelta(days=expires_days)
+            
+            # 插入数据库
+            stmt = sa.insert(RefreshToken).values(
+                user_id=user_id,
+                token_value=token_value,
+                expires_at=expires_at,
+                is_revoked=False,
+                client_id=client_id,
+                client_info=client_info or {},
+                created_at=datetime.now(UTC)
+            ).returning(
+                RefreshToken.id,
+                RefreshToken.user_id,
+                RefreshToken.token_value,
+                RefreshToken.expires_at,
+                RefreshToken.created_at
+            )
+            
+            result = await self.session.execute(stmt)
+            token_data = result.fetchone()
+            await self.session.commit()
+            
+            # 同时存储到Redis
+            seconds_until_expiry = int((expires_at - datetime.now(UTC)).total_seconds())
+            data = {
+                "user_id": user_id,
+                "token_id": str(token_data[0]),
+                "client_id": client_id,
+                "created_at": token_data[4].isoformat() if token_data[4] else None
+            }
+            
+            await self.store_token_data(token_value, "refresh", data, seconds_until_expiry)
+            
+            return {
+                "token_value": token_value,
+                "expires_at": expires_at,
+                "expires_in": seconds_until_expiry
+            }
+            
+        except Exception as e:
+            await self.session.rollback()
+            self.logger.error(f"创建刷新令牌失败: {str(e)}")
+            raise DatabaseError(f"创建刷新令牌失败: {str(e)}")
+    
+    async def get_refresh_token(self, token_value: str) -> Optional[RefreshToken]:
+        """
+        通过令牌值获取刷新令牌
+        
+        Args:
+            token_value: 令牌值
+            
+        Returns:
+            Optional[RefreshToken]: 刷新令牌，如果不存在则为None
+            
+        Raises:
+            DatabaseError: 数据库错误
+        """
+        try:
+            # 查询数据库
+            stmt = sa.select(RefreshToken).where(
+                RefreshToken.token_value == token_value
+            )
+            result = await self.session.execute(stmt)
+            token = result.scalar_one_or_none()
+            
+            return token
+            
+        except Exception as e:
+            self.logger.error(f"获取刷新令牌失败: {str(e)}")
+            raise DatabaseError(f"获取刷新令牌失败: {str(e)}") 

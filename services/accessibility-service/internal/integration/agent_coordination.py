@@ -53,10 +53,18 @@ class Capability:
         params = {}
         exclude_keys = ["enabled"]
         
-        for key, value in self.config.items():
-            if key not in exclude_keys and not isinstance(value, dict):
-                params[key] = value
-                
+        # 处理 ConfigSection 或 dict 对象
+        if hasattr(self.config, '__dict__'):
+            # 如果是 ConfigSection 对象
+            for key, value in vars(self.config).items():
+                if not key.startswith('_') and key not in exclude_keys and not isinstance(value, dict) and not hasattr(value, '__dict__'):
+                    params[key] = value
+        elif isinstance(self.config, dict):
+            # 如果是字典
+            for key, value in self.config.items():
+                if key not in exclude_keys and not isinstance(value, dict):
+                    params[key] = value
+        
         return params
 
 
@@ -419,16 +427,34 @@ class AgentCoordinationService:
         try:
             logger.info("初始化智能体客户端")
             
-            # 四大智能体
-            clients["xiaoai"] = AgentClient("xiaoai", self.config.integration.xiaoai_service)
-            clients["xiaoke"] = AgentClient("xiaoke", self.config.integration.xiaoke_service)
-            clients["laoke"] = AgentClient("laoke", self.config.integration.laoke_service)
-            clients["soer"] = AgentClient("soer", self.config.integration.soer_service)
+            # 安全获取集成配置
+            integration_config = getattr(self.config, 'integration', None)
+            if not integration_config:
+                logger.warning("未找到integration配置，使用空配置初始化客户端")
+                # 使用空配置初始化四大智能体
+                empty_config = {}
+                clients["xiaoai"] = AgentClient("xiaoai", empty_config)
+                clients["xiaoke"] = AgentClient("xiaoke", empty_config)
+                clients["laoke"] = AgentClient("laoke", empty_config)
+                clients["soer"] = AgentClient("soer", empty_config)
+            else:
+                # 安全获取各智能体配置
+                xiaoai_config = getattr(integration_config, 'xiaoai_service', {})
+                xiaoke_config = getattr(integration_config, 'xiaoke_service', {})
+                laoke_config = getattr(integration_config, 'laoke_service', {})
+                soer_config = getattr(integration_config, 'soer_service', {})
+                
+                # 初始化四大智能体
+                clients["xiaoai"] = AgentClient("xiaoai", xiaoai_config)
+                clients["xiaoke"] = AgentClient("xiaoke", xiaoke_config)
+                clients["laoke"] = AgentClient("laoke", laoke_config)
+                clients["soer"] = AgentClient("soer", soer_config)
             
             logger.info(f"成功初始化 {len(clients)} 个智能体客户端")
         except Exception as e:
             logger.error(f"初始化智能体客户端失败: {str(e)}")
-        
+            # 出错时仍然返回空字典，避免程序崩溃
+            
         return clients
     
     def _subscribe_events(self):
@@ -512,13 +538,34 @@ class AgentCoordinationService:
         """注册无障碍服务能力到能力注册中心"""
         logger.info("注册无障碍服务能力")
         
-        capabilities = [
-            Capability("blind_assistance", "visual", self.config.features.blind_assistance),
-            Capability("sign_language", "gestural", self.config.features.sign_language),
-            Capability("screen_reading", "visual", self.config.features.screen_reading),
-            Capability("voice_assistance", "auditory", self.config.features.voice_assistance),
-            Capability("content_conversion", "content", self.config.features.content_conversion)
-        ]
+        # 安全获取功能配置
+        features_config = getattr(self.config, 'features', None)
+        if not features_config:
+            logger.warning("未找到features配置，使用默认配置注册能力")
+            # 使用默认空配置
+            empty_config = {}
+            capabilities = [
+                Capability("blind_assistance", "visual", empty_config),
+                Capability("sign_language", "gestural", empty_config),
+                Capability("screen_reading", "visual", empty_config),
+                Capability("voice_assistance", "auditory", empty_config),
+                Capability("content_conversion", "content", empty_config)
+            ]
+        else:
+            # 安全获取各功能配置
+            blind_assistance_config = getattr(features_config, 'blind_assistance', {})
+            sign_language_config = getattr(features_config, 'sign_language', {})
+            screen_reading_config = getattr(features_config, 'screen_reading', {})
+            voice_assistance_config = getattr(features_config, 'voice_assistance', {})
+            content_conversion_config = getattr(features_config, 'content_conversion', {})
+            
+            capabilities = [
+                Capability("blind_assistance", "visual", blind_assistance_config),
+                Capability("sign_language", "gestural", sign_language_config),
+                Capability("screen_reading", "visual", screen_reading_config),
+                Capability("voice_assistance", "auditory", voice_assistance_config),
+                Capability("content_conversion", "content", content_conversion_config)
+            ]
         
         self.capability_registry.register_bulk(capabilities)
         logger.info(f"已注册 {len(capabilities)} 个能力")

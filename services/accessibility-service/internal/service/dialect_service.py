@@ -20,13 +20,25 @@ class DialectService:
         self.config = config
         logger.info("初始化多方言支持服务")
         
+        # 安全获取支持的方言列表
+        try:
+            features = config.features
+            if hasattr(features, 'voice_assistance'):
+                self.voice_assistance_config = features.voice_assistance
+                self.supported_dialects = self.voice_assistance_config.supported_dialects
+            else:
+                # 使用默认值
+                self.supported_dialects = ["mandarin"]
+                logger.warning("未找到voice_assistance配置，使用默认方言列表")
+        except Exception as e:
+            self.supported_dialects = ["mandarin"]
+            logger.warning(f"获取方言配置失败: {str(e)}，使用默认方言列表")
+            
+        logger.info(f"支持的方言数量: {len(self.supported_dialects)}")
+        
         # 加载方言模型
         self.dialect_models = self._load_dialect_models()
         self.tts_dialect_adapters = self._load_tts_dialect_adapters()
-        
-        # 支持的方言列表
-        self.supported_dialects = self.config.voice_assistance.supported_dialects
-        logger.info(f"支持的方言数量: {len(self.supported_dialects)}")
         
     def _load_dialect_models(self) -> Dict[str, Any]:
         """加载方言识别模型
@@ -40,7 +52,7 @@ class DialectService:
             
             # 实际实现中应该加载真实模型
             # 这里使用模拟数据
-            for dialect in self.config.voice_assistance.supported_dialects:
+            for dialect in self.supported_dialects:
                 logger.debug(f"加载方言模型: {dialect}")
                 models[dialect] = self._load_mock_model(dialect)
                 
@@ -81,7 +93,7 @@ class DialectService:
             
             # 实际实现中应该加载真实适配器
             # 这里使用模拟数据
-            for dialect in self.config.voice_assistance.supported_dialects:
+            for dialect in self.supported_dialects:
                 logger.debug(f"加载方言TTS适配器: {dialect}")
                 adapters[dialect] = self._load_mock_tts_adapter(dialect)
                 

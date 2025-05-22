@@ -7,8 +7,9 @@
 import asyncio
 import logging
 import uuid
-from datetime import datetime
+from datetime import datetime, UTC
 from typing import Dict, List, Optional, Tuple, Any
+import json
 
 import asyncpg
 from sqlalchemy.ext.asyncio import AsyncEngine
@@ -71,7 +72,7 @@ class UserRepository:
                 
                 # 生成用户ID
                 user_id = str(uuid.uuid4())
-                now = datetime.utcnow()
+                now = datetime.now(UTC)
                 
                 # 创建用户记录
                 await conn.execute(
@@ -281,7 +282,7 @@ class UserRepository:
                     SET password = $2, updated_at = $3
                     WHERE id = $1
                     """,
-                    user_id, hashed_password, datetime.utcnow()
+                    user_id, hashed_password, datetime.now(UTC)
                 )
                 
                 if result == "UPDATE 0":
@@ -312,7 +313,7 @@ class UserRepository:
         """
         async with self.pool.acquire() as conn:
             try:
-                now = datetime.utcnow()
+                now = datetime.now(UTC)
                 result = await conn.execute(
                     """
                     UPDATE users
@@ -336,43 +337,95 @@ class UserRepository:
     
     async def enable_mfa(self, user_id: str, mfa_type: str, mfa_secret: str) -> bool:
         """
-        为用户启用多因素认证
+        启用多因素认证
         
         Args:
             user_id: 用户ID
-            mfa_type: 多因素认证类型 (totp, sms, email)
-            mfa_secret: 多因素认证密钥
+            mfa_type: MFA类型 (totp, sms, email)
+            mfa_secret: MFA密钥
             
         Returns:
-            bool: 操作是否成功
+            bool: 更新是否成功
             
         Raises:
-            UserNotFoundError: 如果用户不存在
-            DatabaseError: 数据库操作失败
+            UserNotFoundError: 用户不存在
+            DatabaseError: 数据库错误
         """
-        async with self.pool.acquire() as conn:
-            try:
-                now = datetime.utcnow()
+        try:
+            # 获取连接
+            async with self.pool.acquire() as conn:
+                # 检查用户是否存在
+                user = await conn.fetchrow("SELECT id FROM users WHERE id = $1", user_id)
+                
+                if not user:
+                    raise UserNotFoundError(f"用户不存在: {user_id}")
+                
+                # 更新MFA设置
                 result = await conn.execute(
                     """
                     UPDATE users
                     SET mfa_enabled = true, mfa_type = $2, mfa_secret = $3, updated_at = $4
                     WHERE id = $1
                     """,
-                    user_id, mfa_type, mfa_secret, now
+                    user_id, mfa_type, mfa_secret, datetime.now(UTC)
                 )
                 
-                if result == "UPDATE 0":
-                    raise UserNotFoundError(user_id)
-                
+                # 验证更新是否成功
                 return True
+        
+        except asyncpg.exceptions.PostgresError as e:
+            self.logger.exception(f"启用MFA时发生数据库错误: {user_id}")
+            raise DatabaseError(f"启用MFA失败: {str(e)}")
+    
+    async def update_mfa_settings(self, user_id: str, mfa_enabled: bool, mfa_type: Optional[str] = None, 
+                               mfa_secret: Optional[str] = None, mfa_backup_codes: Optional[list] = None) -> bool:
+        """
+        更新多因素认证设置
+        
+        Args:
+            user_id: 用户ID
+            mfa_enabled: 是否启用MFA
+            mfa_type: MFA类型 (totp, sms, email)，如果禁用则为None
+            mfa_secret: MFA密钥，如果禁用则为None
+            mfa_backup_codes: 备用码列表，如果禁用则为None
+            
+        Returns:
+            bool: 更新是否成功
+            
+        Raises:
+            UserNotFoundError: 用户不存在
+            DatabaseError: 数据库错误
+        """
+        try:
+            # 获取连接
+            async with self.pool.acquire() as conn:
+                # 检查用户是否存在
+                user = await conn.fetchrow("SELECT id FROM users WHERE id = $1", user_id)
                 
-            except UserNotFoundError:
-                # 重新抛出用户未找到错误
-                raise
-            except Exception as e:
-                self.logger.exception(f"启用用户多因素认证时发生数据库错误: {user_id}")
-                raise DatabaseError(f"启用多因素认证失败: {str(e)}")
+                if not user:
+                    raise UserNotFoundError(f"用户不存在: {user_id}")
+                
+                # 准备备用码存储格式
+                backup_codes_json = json.dumps(mfa_backup_codes) if mfa_backup_codes else None
+                
+                # 更新MFA设置
+                result = await conn.execute(
+                    """
+                    UPDATE users
+                    SET mfa_enabled = $2, mfa_type = $3, mfa_secret = $4, 
+                        mfa_backup_codes = $5, updated_at = $6
+                    WHERE id = $1
+                    """,
+                    user_id, mfa_enabled, mfa_type, mfa_secret, 
+                    backup_codes_json, datetime.now(UTC)
+                )
+                
+                # 验证更新是否成功
+                return True
+        
+        except asyncpg.exceptions.PostgresError as e:
+            self.logger.exception(f"更新MFA设置时发生数据库错误: {user_id}")
+            raise DatabaseError(f"更新MFA设置失败: {str(e)}")
     
     async def disable_mfa(self, user_id: str) -> bool:
         """
@@ -390,11 +443,11 @@ class UserRepository:
         """
         async with self.pool.acquire() as conn:
             try:
-                now = datetime.utcnow()
+                now = datetime.now(UTC)
                 result = await conn.execute(
                     """
                     UPDATE users
-                    SET mfa_enabled = false, updated_at = $2
+                    SET mfa_enabled = FALSE, mfa_type = 'none', mfa_secret = NULL, updated_at = $2
                     WHERE id = $1
                     """,
                     user_id, now

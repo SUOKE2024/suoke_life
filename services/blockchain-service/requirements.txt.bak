@@ -1,0 +1,43 @@
+# 核心依赖
+fastapi==0.104.1
+pydantic==2.4.2
+uvicorn==0.23.2
+grpcio==1.59.0
+grpcio-tools==1.59.0
+protobuf==4.24.4
+
+# 区块链依赖
+web3==6.11.1
+py-solc-x==2.0.1
+eth-account==0.9.0
+py-evm==0.7.0a1
+py-ecc==6.0.0
+pyethash==0.1.27
+
+# 数据库
+sqlalchemy==2.0.23
+alembic==1.12.1
+psycopg2-binary==2.9.9
+
+# 加密和安全
+cryptography==41.0.4
+pyjwt==2.8.0
+pyopenssl==23.2.0
+zkpy==0.1.2  # 零知识证明库
+
+# 工具和实用程序
+pyyaml==6.0.1
+python-dotenv==1.0.0
+tenacity==8.2.3
+prometheus-client==0.17.1
+opentelemetry-api==1.20.0
+opentelemetry-sdk==1.20.0
+opentelemetry-exporter-otlp==1.20.0
+
+# 开发依赖
+pytest==7.4.2
+pytest-cov==4.1.0
+black==23.10.0
+isort==5.12.0
+mypy==1.6.1
+flake8==6.1.0

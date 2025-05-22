@@ -2,11 +2,11 @@
 service:
   name: soer-service
   version: 1.0.0
-  description: 索克生活APP的健康管理引擎智能体
+  description: 索克生活APP的生活方式智能体，提供营养、运动和生活方式建议
 
 server:
   host: 0.0.0.0
-  port: 8082
+  port: 8084
   debug: false
   workers: 4
   timeout: 60
@@ -22,103 +22,145 @@ logging:
   max_size: 10485760  # 10MB
   backup_count: 5
 
-metrics:
-  enabled: true
-  report_interval: 60  # 秒
+# 标准数据库配置
+database:
+  # 主数据库配置
+  primary:
+    type: postgresql
+    host: ${DB_HOST:-localhost}
+    port: ${DB_PORT:-5432}
+    username: ${DB_USER:-postgres}
+    password: ${DB_PASS:-postgres}
+    database: ${DB_NAME:-soer_service}
+    
+    # 连接池配置
+    pool:
+      min_size: 5
+      max_size: ${DB_POOL_SIZE:-20}
+      max_overflow: ${DB_MAX_OVERFLOW:-10}
+      timeout: ${DB_POOL_TIMEOUT:-30}
+      recycle: ${DB_POOL_RECYCLE:-3600}
+      use_lifo: true
+      echo: ${DB_ECHO:-false}
+    
+    # 性能优化参数
+    optimization:
+      prepared_statement_cache_size: 100
+      statement_timeout: 30000
+      idle_in_transaction_session_timeout: 60000
+      effective_cache_size: "4GB"
+      maintenance_work_mem: "64MB"
+      max_parallel_workers_per_gather: 2
+      enable_partitionwise_join: true
+    
+    # 连接参数
+    options:
+      application_name: "soer_service"
+      client_encoding: "UTF8"
+      connect_timeout: 10
+      keepalives: 1
+      keepalives_idle: 60
+    
+    # 事务隔离级别
+    isolation_level: "READ COMMITTED"
+  
+  # 只读副本配置（用于读写分离）
+  replicas:
+    enabled: ${DB_REPLICAS_ENABLED:-false}
+    strategy: "round_robin"
+    nodes:
+      - host: ${DB_REPLICA1_HOST}
+        port: ${DB_REPLICA1_PORT:-5432}
+        username: ${DB_REPLICA1_USER:-postgres}
+        password: ${DB_REPLICA1_PASS:-postgres}
+        database: ${DB_REPLICA1_NAME:-soer_service}
+        pool:
+          min_size: 2
+          max_size: ${DB_REPLICA1_POOL_SIZE:-10}
+          max_overflow: 5
+          timeout: 20
+  
+  # SQLite配置（用于本地存储）
+  sqlite:
+    path: ${SQLITE_PATH:-data/local.db}
+    journal_mode: "WAL"
+    synchronous: "NORMAL"
+    busy_timeout: 5000
+    cache_size: 2000
+    temp_store: "MEMORY"
+  
+  # 缓存配置
+  cache:
+    type: redis
+    host: ${REDIS_HOST:-localhost}
+    port: ${REDIS_PORT:-6379}
+    db: ${REDIS_DB:-0}
+    password: ${REDIS_PASS}
+    ttl: ${REDIS_TTL:-3600}
+    key_prefix: "soer:"
+    
+    # Redis连接池配置
+    pool:
+      min_idle: 5
+      max_idle: 20
+      max_active: 50
+      max_wait: 3000
+      timeout: 2000
+    
+    # 本地缓存配置（双层缓存）
+    local:
+      enabled: true
+      max_size: 10000
+      ttl: 300
+  
+  # 监控配置
+  monitoring:
+    query_timeout_threshold: 1000
+    slow_query_log: true
+    slow_query_threshold: 500
+    connection_stats: true
+    query_stats: true
 
-conversation:
-  system_prompt: "你是索儿，索克生活APP的健康管理引擎智能体，你专注于为用户提供全生命周期的健康管理服务。"
-  max_history_turns: 20
-
+# 模型配置
 models:
   llm:
     primary_model: gpt-4o-mini
     fallback_model: llama-3-8b
     api_key: ${OPENAI_API_KEY}
     api_base: ${OPENAI_API_BASE:-https://api.openai.com/v1}
-    org_id: ${OPENAI_ORG_ID}
     timeout: 60
-  
-  local_llm:
-    endpoint_url: http://localhost:8000/v1
-    available_models:
-      - llama-3-8b
-      - llama-3-70b
-    default_model: llama-3-8b
-    max_tokens: 4096
-  
-  zhipu:
-    api_key: ${ZHIPU_API_KEY}
-    available_models:
-      - glm-4
-      - glm-3-turbo
-  
-  baidu:
-    api_key: ${BAIDU_API_KEY}
-    secret_key: ${BAIDU_SECRET_KEY}
-    api_url: https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/
-    available_models:
-      - ernie-bot-4
-      - ernie-bot
 
-database:
-  type: postgresql
-  host: ${DB_HOST:-localhost}
-  port: ${DB_PORT:-5432}
-  username: ${DB_USER:-postgres}
-  password: ${DB_PASS:-postgres}
-  database: ${DB_NAME:-soer_service}
-  pool_size: 10
-  max_overflow: 5
-  timeout: 30
-
-cache:
-  type: redis
-  host: ${REDIS_HOST:-localhost}
-  port: ${REDIS_PORT:-6379}
-  db: 2
-  password: ${REDIS_PASS}
-  ttl: 3600
-
-queues:
-  message_bus:
-    host: ${KAFKA_HOST:-localhost}
-    port: ${KAFKA_PORT:-9092}
-    topic_prefix: soer
-    consumer_group: soer-service
-    topics:
-      - health-plans
-      - nutrition-guidance
-      - lifestyle-advice
-
-integrations:
-  med_knowledge:
-    url: ${MED_KNOWLEDGE_URL:-http://localhost:8081}
-    api_key: ${MED_KNOWLEDGE_KEY}
+# 生活方式建议配置
+lifestyle:
+  nutrition:
+    enabled: true
+    meal_plan_generator: true
+    food_recommendation_engine: true
+    dietary_preference_support:
+      - vegetarian
+      - vegan
+      - keto
+      - paleo
+      - mediterranean
+      - low_carb
   
-  health_data:
-    url: ${HEALTH_DATA_URL}
-    api_key: ${HEALTH_DATA_KEY}
-    timeout: 30
+  exercise:
+    enabled: true
+    workout_plan_generator: true
+    activity_tracking: true
+    exercise_types:
+      - cardio
+      - strength
+      - flexibility
+      - balance
+      - meditation
   
-  nutrition_database:
-    url: ${NUTRITION_DB_URL}
-    api_key: ${NUTRITION_DB_KEY}
-    timeout: 30
+  western_integration:
+    enabled: ${WESTERN_INTEGRATION_ENABLED:-true}
+    api_key: ${WESTERN_API_KEY}
+    endpoint: ${WESTERN_ENDPOINT}
 
-health_engines:
-  constitution_analyzer:
-    model_path: models/constitution_analyzer
-    version: 1.0.0
-  
-  nutrition_planner:
-    model_path: models/nutrition_planner
-    version: 1.0.0
-  
-  lifestyle_advisor:
-    model_path: models/lifestyle_advisor
-    version: 1.0.0
-
+# 安全配置
 security:
   jwt:
     secret: ${JWT_SECRET}
@@ -129,11 +171,16 @@ security:
     enabled: true
     header_name: X-API-Key
 
-resilience:
-  circuit_breaker:
-    failure_threshold: 5
-    recovery_time: 30
+telemetry:
+  tracing:
+    enabled: ${TRACING_ENABLED:-false}
+    exporter: otlp
+    endpoint: ${OTLP_ENDPOINT:-localhost:4317}
+    service_name: soer-service
+    environment: ${SERVICE_ENV:-development}
   
-  rate_limiter:
-    max_calls: 60
-    time_period: 60
+  metrics:
+    enabled: ${METRICS_ENABLED:-true}
+    exporter: prometheus
+    endpoint: ${METRICS_ENDPOINT:-localhost:9090}
+    export_interval: 15  # 秒
