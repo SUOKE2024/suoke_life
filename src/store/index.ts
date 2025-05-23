@@ -24,3 +24,8 @@ export const store = configureStore({
 // 导出RootState和AppDispatch类型
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+
+// 强制指定RootState对象的类型
+declare module 'react-redux' {
+  interface DefaultRootState extends RootState {}
+}

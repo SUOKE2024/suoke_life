@@ -10,14 +10,14 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
-from ..schemas import (
+from ...schemas import (
     LoginResponse, RefreshRequest, RegisterRequest, ResetPasswordRequest,
-    TokenResponse, UserCreate, UserResponse, UserUpdate, VerifyTokenRequest,
-    MFASetupResponse, MFAVerifyRequest, PermissionResponse, RoleResponse
+    TokenResponse, MFASetupResponse, MFAVerifyRequest, VerifyTokenRequest,
+    RoleResponse, PermissionResponse
 )
+from ...model.user import User, UserCreate, UserResponse, UserUpdate
 from ...service import auth_service, permission_service, role_service, user_service
 from ...service.auth_service import get_current_user
-from ...model.user import User
 
 # 创建API路由
 router = APIRouter(tags=["auth"])
@@ -361,4 +361,14 @@ async def remove_role_from_user(
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=str(e),
-        ) 
+        )
+
+
+def register_routes(app):
+    """
+    向FastAPI应用注册所有路由
+    
+    Args:
+        app: FastAPI应用实例
+    """
+    app.include_router(router, prefix="/api/v1/auth") 

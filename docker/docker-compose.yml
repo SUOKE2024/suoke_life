@@ -1,0 +1,256 @@
+version: '3.8'
+
+# 索克生活智能体服务编排配置
+# 用于开发环境快速部署所有服务
+
+services:
+  # PostgreSQL 数据库
+  postgres:
+    image: postgres:13
+    container_name: suoke-postgres
+    environment:
+      POSTGRES_DB: suoke_db
+      POSTGRES_USER: suoke_user
+      POSTGRES_PASSWORD: suoke_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U suoke_user -d suoke_db"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - suoke-network
+
+  # Redis 缓存
+  redis:
+    image: redis:7-alpine
+    container_name: suoke-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - suoke-network
+
+  # 小艾服务 - 四诊协调
+  xiaoai-service:
+    build:
+      context: ../services/agent-services/xiaoai-service
+      dockerfile: Dockerfile
+    container_name: xiaoai-service
+    environment:
+      - SERVICE_PORT=50051
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=suoke_db
+      - DB_USER=suoke_user
+      - DB_PASSWORD=suoke_password
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - LOG_LEVEL=info
+      - GRPC_REFLECTION=true
+    ports:
+      - "50051:50051"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./logs/xiaoai:/app/logs
+    healthcheck:
+      test: ["CMD", "grpc_health_probe", "-addr=localhost:50051"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - suoke-network
+    restart: unless-stopped
+
+  # 小克服务 - 资源调度
+  xiaoke-service:
+    build:
+      context: ../services/agent-services/xiaoke-service
+      dockerfile: Dockerfile
+    container_name: xiaoke-service
+    environment:
+      - SERVICE_PORT=9083
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=suoke_db
+      - DB_USER=suoke_user
+      - DB_PASSWORD=suoke_password
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - LOG_LEVEL=info
+    ports:
+      - "9083:9083"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./logs/xiaoke:/app/logs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9083/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - suoke-network
+    restart: unless-stopped
+
+  # 老克服务 - 知识传播
+  laoke-service:
+    build:
+      context: ../services/agent-services/laoke-service
+      dockerfile: Dockerfile
+    container_name: laoke-service
+    environment:
+      - SERVICE_PORT=8080
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=suoke_db
+      - DB_USER=suoke_user
+      - DB_PASSWORD=suoke_password
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - LOG_LEVEL=info
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./logs/laoke:/app/logs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - suoke-network
+    restart: unless-stopped
+
+  # 索儿服务 - 生活管理
+  soer-service:
+    build:
+      context: ../services/agent-services/soer-service
+      dockerfile: Dockerfile
+    container_name: soer-service
+    environment:
+      - SERVICE_PORT=8054
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=suoke_db
+      - DB_USER=suoke_user
+      - DB_PASSWORD=suoke_password
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - LOG_LEVEL=info
+    ports:
+      - "8054:8054"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./logs/soer:/app/logs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8054/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - suoke-network
+    restart: unless-stopped
+
+  # Nginx 反向代理（可选）
+  nginx:
+    image: nginx:alpine
+    container_name: suoke-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./ssl:/etc/nginx/ssl
+    depends_on:
+      - xiaoai-service
+      - xiaoke-service
+      - laoke-service
+      - soer-service
+    networks:
+      - suoke-network
+    restart: unless-stopped
+
+  # Prometheus 监控（可选）
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: suoke-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    networks:
+      - suoke-network
+    restart: unless-stopped
+
+  # Grafana 可视化（可选）
+  grafana:
+    image: grafana/grafana:latest
+    container_name: suoke-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./grafana/datasources:/etc/grafana/provisioning/datasources
+    networks:
+      - suoke-network
+    restart: unless-stopped
+
+# 网络配置
+networks:
+  suoke-network:
+    driver: bridge
+    name: suoke-network
+
+# 数据卷配置
+volumes:
+  postgres_data:
+    driver: local
+    name: suoke_postgres_data
+  redis_data:
+    driver: local
+    name: suoke_redis_data
+  prometheus_data:
+    driver: local
+    name: suoke_prometheus_data
+  grafana_data:
+    driver: local
+    name: suoke_grafana_data

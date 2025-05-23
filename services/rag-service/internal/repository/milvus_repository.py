@@ -191,7 +191,8 @@ class MilvusRepository:
             return False
         
         try:
-            expr = f"id in {document_ids}"
+            ids_str = ",".join([f'\"{doc_id}\"' for doc_id in document_ids])
+            expr = f"id in [{ids_str}]"
             self.collection.delete(expr)
             self.collection.flush()
             
@@ -262,7 +263,13 @@ class MilvusRepository:
             for hits in results:
                 for hit in hits:
                     # 根据分数阈值过滤
-                    score = 1.0 - hit.distance if self.distance_metric == "L2" else hit.score
+                    if hasattr(hit, "distance"):
+                        # 对于 COSINE，distance ∈ [0, 2] (Milvus 计算方式为 1 - cosSim)
+                        # 对于 L2，distance ≥ 0，常见 embedding 通常距离不会很大
+                        # 统一做 1 - distance 的近似归一化，必要时可在外部再做截断或缩放。
+                        score = 1.0 - float(hit.distance)
+                    else:
+                        score = float(hit.score)
                     if score < score_threshold:
                         continue
                     
@@ -281,6 +288,50 @@ class MilvusRepository:
             
         except Exception as e:
             logger.error(f"Failed to search in Milvus: {str(e)}")
+            return []
+    
+    async def get_all_documents(self, limit: Optional[int] = None) -> List[Document]:
+        """
+        获取集合中的所有文档（主要用于离线任务，如构建 BM25 索引）。
+
+        NOTE:
+            1. 该方法会一次性将结果加载到内存，若数据量较大请酌情设置 `limit` 或在调用端做分批处理。
+            2. 目前 Milvus Python SDK 的 `query` 接口并不支持异步，这里仍采用同步调用，
+               但整体方法保持 `async` 以与仓库其它接口保持一致。
+
+        Args:
+            limit: 最大返回文档数量，None 表示返回全部（谨慎使用）。
+
+        Returns:
+            包含 Document 对象的列表。
+        """
+        if not self.is_connected or self.collection is None:
+            logger.error("Not connected to Milvus or collection not initialized")
+            return []
+
+        try:
+            logger.info(f"Fetching all documents from collection '{self.collection_name}'" + (f" (limit={limit})" if limit else ""))
+
+            query_results = self.collection.query(
+                expr=None,  # 不设置过滤条件，查询全部
+                output_fields=["id", "content", "metadata", "source"],
+                limit=limit  # Milvus 3.x 支持 None 表示全部，旧版本需设置一个较大的数字
+            )
+
+            documents = [
+                Document(
+                    id=record.get("id"),
+                    content=record.get("content", ""),
+                    metadata=record.get("metadata", {}),
+                    source=record.get("source", "")
+                )
+                for record in query_results
+            ]
+
+            logger.info(f"Fetched {len(documents)} documents from collection '{self.collection_name}'")
+            return documents
+        except Exception as e:
+            logger.error(f"Failed to fetch documents from Milvus: {str(e)}")
             return []
     
     async def close(self):

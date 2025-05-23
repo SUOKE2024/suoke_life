@@ -74,36 +74,26 @@ class HybridRetriever(BaseRetriever):
     
     async def _initialize_bm25(self):
         """初始化BM25索引"""
-        # 获取所有文档以构建BM25索引
-        # 这里需要实现一个方法来获取所有文档，此处使用模拟数据
-        logger.info("Building BM25 index...")
-        
-        # 获取所有文档的功能需要在数据库类中实现
-        # 这里假设有一个方法可以获取所有文档
-        # self.corpus_docs = await self.vector_db.get_all_documents()
-        
-        # 由于可能没有get_all_documents方法，这里模拟加载一些文档
-        # 在实际实现中，应该从向量数据库加载所有文档
-        # 这是一个简化的实现
-        self.corpus_docs = []
-        
-        # 对每个文档进行分词处理
-        self.tokenized_corpus = []
-        for doc in self.corpus_docs:
-            # 简单分词，实际项目中可能使用更复杂的中文分词工具
-            tokens = self._tokenize(doc.content)
-            self.tokenized_corpus.append(tokens)
-        
-        # 构建BM25索引
-        if self.tokenized_corpus:
-            self.bm25_index = BM25Okapi(
-                self.tokenized_corpus,
-                k1=self.bm25_k1, 
-                b=self.bm25_b
-            )
-            logger.info(f"BM25 index built with {len(self.corpus_docs)} documents")
-        else:
-            logger.warning("No documents available for BM25 indexing")
+        logger.info("Building BM25 index from vector database documents...")
+
+        # 通过向量数据库仓库获取全部文档
+        self.corpus_docs = await self.vector_db.get_all_documents()
+
+        if not self.corpus_docs:
+            logger.warning("No documents retrieved from vector database; BM25 index will not be created")
+            return
+
+        # 分词并生成语料
+        self.tokenized_corpus = [self._tokenize(doc.content) for doc in self.corpus_docs]
+
+        # 初始化 BM25 索引
+        self.bm25_index = BM25Okapi(
+            self.tokenized_corpus,
+            k1=self.bm25_k1,
+            b=self.bm25_b
+        )
+
+        logger.info(f"BM25 index built with {len(self.corpus_docs)} documents")
     
     def _tokenize(self, text: str) -> List[str]:
         """

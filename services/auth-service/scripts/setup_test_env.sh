@@ -335,4 +335,33 @@ echo -e "${YELLOW}使用以下命令运行测试:${NC}"
 echo -e "${YELLOW}  python3 scripts/run_tests.py unit    # 运行单元测试${NC}"
 echo -e "${YELLOW}  python3 scripts/run_tests.py integration    # 运行集成测试${NC}"
 echo -e "${YELLOW}使用以下命令停止测试环境:${NC}"
-echo -e "${YELLOW}  ./test/stop_test_env.sh${NC}" 
+echo -e "${YELLOW}  ./test/stop_test_env.sh${NC}"
+
+# 集成测试环境变量设置脚本
+
+# 测试数据库配置
+export DB_HOST=localhost
+export DB_PORT=5432
+export DB_NAME=auth_test_db
+export DB_USER=postgres
+export DB_PASSWORD=postgres
+
+# 测试Redis配置
+export REDIS_HOST=localhost
+export REDIS_PORT=6379
+export REDIS_DB=1
+
+# JWT测试配置
+export JWT_SECRET=test_secret_key
+export JWT_ACCESS_EXPIRES=3600
+export JWT_REFRESH_EXPIRES=86400
+
+# MFA测试配置
+export MFA_ISSUER=suoke_test
+export MFA_SECRET_KEY=test_mfa_secret
+
+# 服务配置
+export SERVICE_PORT=8001
+export SERVICE_HOST=0.0.0.0
+
+echo "测试环境变量已设置" 

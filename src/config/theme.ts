@@ -1,11 +1,12 @@
-import { MD3LightTheme, MD3DarkTheme, MD3Theme } from 'react-native-paper';
+import { MD3LightTheme, MD3DarkTheme, type MD3Theme } from 'react-native-paper';
+import type { MD3Colors } from 'react-native-paper/lib/typescript/types';
 
 // 索克品牌颜色
 export const BRAND_COLORS = {
   // 索克绿，主色调
-  primary: '#35BB78',
+  primary: '#35bb78',
   // 索克橙，辅色调
-  secondary: '#FF6800',
+  secondary: '#ff6800',
   // 中医特色色彩，五行对应颜色
   wuxing: {
     wood: '#50A060', // 木，青色系
@@ -51,8 +52,23 @@ export const FONT_SIZE = {
   xxxl: 32,
 };
 
+// 扩展MD3Colors类型以包含自定义颜色
+interface ExtendedMD3Colors extends MD3Colors {
+  success: string;
+  warning: string;
+  info: string;
+}
+
+// 扩展MD3Theme类型以包含自定义属性
+interface ExtendedMD3Theme extends MD3Theme {
+  spacing: typeof SPACING;
+  borderRadius: typeof BORDER_RADIUS;
+  fontSize: typeof FONT_SIZE;
+  colors: ExtendedMD3Colors;
+}
+
 // 自定义浅色主题
-export const lightTheme: Partial<MD3Theme> = {
+export const lightTheme = {
   ...MD3LightTheme,
   colors: {
     ...MD3LightTheme.colors,
@@ -64,31 +80,14 @@ export const lightTheme: Partial<MD3Theme> = {
     success: BRAND_COLORS.success,
     warning: BRAND_COLORS.warning,
     info: BRAND_COLORS.info,
-    background: '#FAFAFA',
-    surface: '#FFFFFF',
-    // 文字颜色
-    onBackground: '#1A1A1A',
-    onSurface: '#1A1A1A',
-    onPrimary: '#FFFFFF',
-    onSecondary: '#FFFFFF',
-    // 卡片背景
-    elevation: {
-      level0: '#FFFFFF',
-      level1: '#F5F5F5',
-      level2: '#EEEEEE',
-      level3: '#E0E0E0',
-      level4: '#D6D6D6',
-      level5: '#C2C2C2',
-    },
-  },
-  // 自定义主题变量
+  } as ExtendedMD3Colors,
   spacing: SPACING,
   borderRadius: BORDER_RADIUS,
   fontSize: FONT_SIZE,
-};
+} as ExtendedMD3Theme;
 
 // 自定义深色主题
-export const darkTheme: Partial<MD3Theme> = {
+export const darkTheme = {
   ...MD3DarkTheme,
   colors: {
     ...MD3DarkTheme.colors,
@@ -100,36 +99,19 @@ export const darkTheme: Partial<MD3Theme> = {
     success: BRAND_COLORS.success,
     warning: BRAND_COLORS.warning,
     info: BRAND_COLORS.info,
-    background: '#121212',
-    surface: '#1E1E1E',
-    // 文字颜色
-    onBackground: '#E5E5E5',
-    onSurface: '#E5E5E5',
-    onPrimary: '#FFFFFF',
-    onSecondary: '#FFFFFF',
-    // 卡片背景
-    elevation: {
-      level0: '#1E1E1E',
-      level1: '#232323',
-      level2: '#272727',
-      level3: '#2C2C2C',
-      level4: '#323232',
-      level5: '#383838',
-    },
-  },
-  // 自定义主题变量
+  } as ExtendedMD3Colors,
   spacing: SPACING,
   borderRadius: BORDER_RADIUS,
   fontSize: FONT_SIZE,
-};
+} as ExtendedMD3Theme;
 
 // 使用自定义属性扩展MD3Theme类型
 declare global {
   namespace ReactNativePaper {
-    interface Theme {
-      spacing: typeof SPACING;
-      borderRadius: typeof BORDER_RADIUS;
-      fontSize: typeof FONT_SIZE;
-    }
+    interface Theme extends ExtendedMD3Theme {}
   }
 }
+
+// 默认导出浅色主题
+export const theme = lightTheme;
+export default lightTheme;

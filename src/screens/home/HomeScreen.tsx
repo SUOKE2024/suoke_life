@@ -1,381 +1,310 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { 
-  View, 
-  FlatList, 
-  TextInput, 
-  TouchableOpacity, 
-  StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
-  ActivityIndicator
-} from 'react-native';
-import { 
-  Text, 
-  Card, 
-  Avatar, 
-  Button, 
-  IconButton, 
-  useTheme,
-  Divider
-} from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import React, { useEffect } from 'react';
+import { View, StyleSheet, ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
+import { Text, Card, Button, Avatar, Title, Paragraph, useTheme, ActivityIndicator, Surface } from 'react-native-paper';
+import { useSelector } from 'react-redux';
+import { useAppDispatch } from '../../hooks/redux';
+import { useTranslation } from 'react-i18next';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useNavigation } from '@react-navigation/native';
+import { fetchAgents } from '../../store/slices/agentSlice';
+import { RootState } from '../../store';
 
-import { RootStackParamList } from '../../navigation/AppNavigator';
-
-// 临时模拟数据
-const MOCK_MESSAGES = [
-  {
-    id: '1',
-    content: '您好，我是您的健康助手小艾。请问今天有什么可以帮助您的吗？',
-    sender: 'agent',
-    contentType: 'text',
-    timestamp: new Date().getTime() - 3600000
-  },
-  {
-    id: '2',
-    content: '我最近感觉容易疲劳，有什么建议吗？',
-    sender: 'user',
-    contentType: 'text',
-    timestamp: new Date().getTime() - 3500000
-  },
-  {
-    id: '3',
-    content: '容易疲劳可能与多种因素有关，如睡眠质量、饮食习惯、运动状况或压力等。您的睡眠情况如何？每晚能睡够7-8小时吗？',
-    sender: 'agent',
-    contentType: 'text',
-    timestamp: new Date().getTime() - 3400000
-  }
-];
-
-// 消息类型定义
-type Message = {
-  id: string;
-  content: string;
-  sender: 'user' | 'agent';
-  contentType: 'text' | 'image' | 'voice';
-  fileUrl?: string;
-  timestamp: number;
-};
-
-// 消息气泡组件
-const MessageBubble: React.FC<{ message: Message }> = ({ message }) => {
+const HomeScreen = () => {
   const theme = useTheme();
-  const isUser = message.sender === 'user';
+  const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+  const navigation = useNavigation<any>();
+  const [refreshing, setRefreshing] = React.useState(false);
+  
+  const { currentUser } = useSelector((state: RootState) => state.user);
+  const { agents, isLoading } = useSelector((state: RootState) => state.agent);
+  
+  // 加载智能体信息
+  useEffect(() => {
+    dispatch(fetchAgents());
+  }, [dispatch]);
+  
+  // 下拉刷新
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    dispatch(fetchAgents()).then(() => {
+      setRefreshing(false);
+    });
+  }, [dispatch]);
+
+  // 导航到智能体专区
+  const navigateToAgents = () => {
+    navigation.navigate('AgentSelection');
+  };
   
   return (
-    <View style={[
-      styles.messageBubble,
-      isUser ? styles.userBubble : styles.agentBubble,
-      { 
-        backgroundColor: isUser 
-          ? theme.colors.primaryContainer
-          : theme.colors.surface
-      }
-    ]}>
-      {!isUser && (
-        <Avatar.Image 
-          size={36} 
-          source={require('../../assets/images/xiaoai_avatar.png')} 
-          style={styles.avatar}
-        />
-      )}
-      <View style={styles.messageContent}>
-        <Text style={[
-          styles.messageText,
-          { color: isUser ? theme.colors.onPrimaryContainer : theme.colors.onSurface }
-        ]}>
-          {message.content}
-        </Text>
-      </View>
-    </View>
-  );
-};
-
-// 首页屏幕
-const HomeScreen: React.FC = () => {
-  const theme = useTheme();
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const [messages, setMessages] = useState<Message[]>(MOCK_MESSAGES);
-  const [inputText, setInputText] = useState('');
-  const [isRecording, setIsRecording] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const flatListRef = useRef<FlatList>(null);
-
-  // 自动滚动到最新消息
-  useEffect(() => {
-    if (messages.length > 0) {
-      setTimeout(() => {
-        flatListRef.current?.scrollToEnd({ animated: true });
-      }, 100);
-    }
-  }, [messages]);
-
-  // 发送消息
-  const handleSendMessage = () => {
-    if (!inputText.trim()) return;
-    
-    // 创建用户消息
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      content: inputText,
-      sender: 'user',
-      contentType: 'text',
-      timestamp: Date.now()
-    };
-    
-    setMessages(prev => [...prev, userMessage]);
-    setInputText('');
-    setIsLoading(true);
-    
-    // 模拟API响应延迟
-    setTimeout(() => {
-      // 创建智能体响应
-      const agentMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        content: `我理解您的问题是"${inputText}"。我正在思考如何回答...`,
-        sender: 'agent',
-        contentType: 'text',
-        timestamp: Date.now()
-      };
-      
-      setMessages(prev => [...prev, agentMessage]);
-      setIsLoading(false);
-    }, 1000);
-  };
-
-  // 开始四诊功能
-  const handleStartDiagnosis = () => {
-    navigation.navigate('Diagnosis');
-  };
-
-  // 渲染健康卡片
-  const renderHealthCard = () => (
-    <Card style={styles.healthCard}>
-      <Card.Title 
-        title="今日健康" 
-        subtitle="点击了解详情" 
-        left={(props) => <Icon name="heart-pulse" size={24} color={theme.colors.primary} />}
-      />
-      <Card.Content>
-        <View style={styles.healthMetrics}>
-          <View style={styles.metric}>
-            <Text style={styles.metricValue}>7.2</Text>
-            <Text style={styles.metricLabel}>睡眠(小时)</Text>
-          </View>
-          <View style={styles.metric}>
-            <Text style={styles.metricValue}>6,521</Text>
-            <Text style={styles.metricLabel}>步数</Text>
-          </View>
-          <View style={styles.metric}>
-            <Text style={styles.metricValue}>72</Text>
-            <Text style={styles.metricLabel}>心率(次/分)</Text>
-          </View>
+    <SafeAreaView style={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        {/* 欢迎横幅 */}
+        <Card style={styles.welcomeCard}>
+          <Card.Content style={styles.welcomeCardContent}>
+            <View style={styles.welcomeTextContainer}>
+              <Title style={styles.welcomeTitle}>
+                {t('common.welcome')}
+              </Title>
+              <Paragraph style={styles.welcomeSubtitle}>
+                {currentUser?.username || t('auth.login')}
+              </Paragraph>
+            </View>
+            <Avatar.Image 
+              size={60} 
+              source={{ uri: currentUser?.avatar || 'https://www.suoke.life/default-avatar.png' }} 
+            />
+          </Card.Content>
+        </Card>
+        
+        {/* 智能体卡片 */}
+        <View style={styles.sectionHeader}>
+          <Title style={styles.sectionTitle}>{t('agents.title')}</Title>
+          <TouchableOpacity onPress={navigateToAgents}>
+            <Text style={styles.viewAllText}>{t('common.view_all')}</Text>
+          </TouchableOpacity>
         </View>
-      </Card.Content>
-      <Card.Actions>
-        <Button onPress={handleStartDiagnosis}>
-          开始四诊
-        </Button>
-      </Card.Actions>
-    </Card>
-  );
-
-  return (
-    <KeyboardAvoidingView 
-      style={styles.container} 
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 88 : 0}
-    >
-      {/* 健康卡片区域 */}
-      {renderHealthCard()}
-      
-      <Divider style={styles.divider} />
-      
-      {/* 消息列表 */}
-      <FlatList
-        ref={flatListRef}
-        data={messages}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <MessageBubble message={item} />}
-        style={styles.messagesList}
-        contentContainerStyle={styles.messagesContainer}
-      />
-      
-      {/* 输入区域 */}
-      <View style={styles.inputContainer}>
-        <IconButton
-          icon="image"
-          size={24}
-          onPress={() => console.log('选择图片')}
-          style={styles.iconButton}
-        />
-        <TextInput
-          style={[styles.input, { backgroundColor: theme.colors.surface }]}
-          value={inputText}
-          onChangeText={setInputText}
-          placeholder="输入消息..."
-          multiline
-        />
-        {inputText.trim() ? (
-          <IconButton
-            icon="send"
-            size={24}
-            onPress={handleSendMessage}
-            style={styles.iconButton}
-          />
+        
+        {isLoading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator animating={true} color={theme.colors.primary} />
+            <Text style={styles.loadingText}>{t('common.loading')}</Text>
+          </View>
         ) : (
-          <IconButton
-            icon="microphone"
-            size={24}
-            onPress={() => setIsRecording(true)}
-            style={styles.iconButton}
-          />
-        )}
-      </View>
-      
-      {/* 加载指示器 */}
-      {isLoading && (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="small" color={theme.colors.primary} />
-          <Text style={styles.loadingText}>小艾正在思考...</Text>
-        </View>
-      )}
-      
-      {/* 录音界面 - 实际项目中应该是单独的组件 */}
-      {isRecording && (
-        <View style={styles.recordingOverlay}>
-          <View style={styles.recordingContainer}>
-            <Icon name="microphone" size={48} color={theme.colors.primary} />
-            <Text style={styles.recordingText}>正在录音...</Text>
-            <Button 
-              mode="contained" 
-              onPress={() => setIsRecording(false)}
-              style={styles.recordingButton}
-            >
-              停止录音
-            </Button>
+          <View style={styles.agentsContainer}>
+            {/* 小艾智能体 */}
+            <TouchableOpacity onPress={navigateToAgents}>
+              <Surface style={[styles.agentCard, { backgroundColor: theme.colors.primaryContainer }]}>
+                <View style={styles.agentIconContainer}>
+                  <Icon name="medical-bag" size={32} color={theme.colors.primary} />
+                </View>
+                <Text style={styles.agentName}>{t('agents.xiaoai')}</Text>
+                <Text style={styles.agentDescription}>{t('agents.xiaoai_desc')}</Text>
+              </Surface>
+            </TouchableOpacity>
+            
+            {/* 小克智能体 */}
+            <TouchableOpacity onPress={navigateToAgents}>
+              <Surface style={[styles.agentCard, { backgroundColor: theme.colors.secondaryContainer }]}>
+                <View style={styles.agentIconContainer}>
+                  <Icon name="food-apple" size={32} color={theme.colors.secondary} />
+                </View>
+                <Text style={styles.agentName}>{t('agents.xiaoke')}</Text>
+                <Text style={styles.agentDescription}>{t('agents.xiaoke_desc')}</Text>
+              </Surface>
+            </TouchableOpacity>
+            
+            {/* 老克智能体 */}
+            <TouchableOpacity onPress={navigateToAgents}>
+              <Surface style={[styles.agentCard, { backgroundColor: '#F0F4F8' }]}>
+                <View style={styles.agentIconContainer}>
+                  <Icon name="book-open-variant" size={32} color="#324D61" />
+                </View>
+                <Text style={styles.agentName}>{t('agents.laoke')}</Text>
+                <Text style={styles.agentDescription}>{t('agents.laoke_desc')}</Text>
+              </Surface>
+            </TouchableOpacity>
+            
+            {/* 索儿智能体 */}
+            <TouchableOpacity onPress={navigateToAgents}>
+              <Surface style={[styles.agentCard, { backgroundColor: '#FFF3E0' }]}>
+                <View style={styles.agentIconContainer}>
+                  <Icon name="sprout" size={32} color="#FF9800" />
+                </View>
+                <Text style={styles.agentName}>{t('agents.soer')}</Text>
+                <Text style={styles.agentDescription}>{t('agents.soer_desc')}</Text>
+              </Surface>
+            </TouchableOpacity>
           </View>
+        )}
+        
+        {/* 智能体协同 */}
+        <Card style={styles.collaborationCard} onPress={() => navigation.navigate('AgentCollaboration')}>
+          <Card.Content>
+            <View style={styles.collaborationContent}>
+              <View style={styles.collaborationTextContainer}>
+                <Text style={styles.collaborationTitle}>{t('agents.collaboration')}</Text>
+                <Text style={styles.collaborationDescription}>
+                  {t('agents.collaboration_desc')}
+                </Text>
+              </View>
+              <Icon name="arrow-right-circle" size={36} color={theme.colors.onSurface} />
+            </View>
+          </Card.Content>
+        </Card>
+        
+        {/* 快速入口区域 */}
+        <Title style={styles.sectionTitle}>{t('home.quick_access')}</Title>
+        <View style={styles.quickAccessContainer}>
+          <Button
+            mode="outlined"
+            icon="stethoscope"
+            style={styles.quickAccessButton}
+            contentStyle={styles.quickAccessButtonContent}
+            onPress={() => navigation.navigate('XiaoaiFourDiagnosis')}
+          >
+            {t('diagnosis.title')}
+          </Button>
+          
+          <Button
+            mode="outlined"
+            icon="chart-line"
+            style={styles.quickAccessButton}
+            contentStyle={styles.quickAccessButtonContent}
+            onPress={() => navigation.navigate('XiaoaiHealthRecords')}
+          >
+            {t('home.health_data')}
+          </Button>
+          
+          <Button
+            mode="outlined"
+            icon="calendar-check"
+            style={styles.quickAccessButton}
+            contentStyle={styles.quickAccessButtonContent}
+            onPress={() => navigation.navigate('SoerHealthPlan')}
+          >
+            {t('home.health_plan')}
+          </Button>
+          
+          <Button
+            mode="outlined"
+            icon="book-open-page-variant"
+            style={styles.quickAccessButton}
+            contentStyle={styles.quickAccessButtonContent}
+            onPress={() => navigation.navigate('LaokeKnowledge')}
+          >
+            {t('home.knowledge')}
+          </Button>
         </View>
-      )}
-    </KeyboardAvoidingView>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F8F8',
   },
-  healthCard: {
-    margin: 16,
-    elevation: 2,
+  scrollContent: {
+    padding: 16,
   },
-  healthMetrics: {
+  welcomeCard: {
+    marginBottom: 24,
+    elevation: 4,
+  },
+  welcomeCardContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginVertical: 8,
-  },
-  metric: {
     alignItems: 'center',
   },
-  metricValue: {
-    fontSize: 18,
+  welcomeTextContainer: {
+    flex: 1,
+  },
+  welcomeTitle: {
+    fontSize: 22,
     fontWeight: 'bold',
   },
-  metricLabel: {
-    fontSize: 12,
-    color: '#666',
-  },
-  divider: {
-    marginHorizontal: 16,
-  },
-  messagesList: {
-    flex: 1,
-  },
-  messagesContainer: {
-    padding: 16,
-  },
-  messageBubble: {
-    maxWidth: '80%',
-    padding: 12,
-    borderRadius: 16,
-    marginBottom: 8,
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-  },
-  userBubble: {
-    alignSelf: 'flex-end',
-    borderBottomRightRadius: 0,
-  },
-  agentBubble: {
-    alignSelf: 'flex-start',
-    borderBottomLeftRadius: 0,
-  },
-  avatar: {
-    marginRight: 8,
-  },
-  messageContent: {
-    flex: 1,
-  },
-  messageText: {
+  welcomeSubtitle: {
     fontSize: 16,
-    lineHeight: 22,
+    opacity: 0.7,
   },
-  inputContainer: {
+  sectionHeader: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 8,
-    backgroundColor: '#F0F0F0',
+    marginBottom: 16,
   },
-  iconButton: {
-    margin: 0,
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 0,
   },
-  input: {
-    flex: 1,
-    borderRadius: 20,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    maxHeight: 120,
-    marginHorizontal: 8,
+  viewAllText: {
+    fontSize: 14,
+    color: '#007AFF',
   },
   loadingContainer: {
-    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 8,
-    backgroundColor: 'rgba(0, 0, 0, 0.03)',
+    padding: 24,
   },
   loadingText: {
-    marginLeft: 8,
+    marginTop: 8,
     fontSize: 14,
-    color: '#666',
+    opacity: 0.6,
   },
-  recordingOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 1000,
-  },
-  recordingContainer: {
-    width: 200,
-    height: 200,
-    backgroundColor: 'white',
-    borderRadius: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 16,
-  },
-  recordingText: {
-    marginTop: 16,
+  agentsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
     marginBottom: 24,
-    fontSize: 16,
   },
-  recordingButton: {
+  agentCard: {
     width: '100%',
+    padding: 16,
+    marginBottom: 16,
+    borderRadius: 12,
+    elevation: 2,
+  },
+  agentIconContainer: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  agentName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 4,
+  },
+  agentDescription: {
+    fontSize: 12,
+    opacity: 0.7,
+  },
+  collaborationCard: {
+    marginBottom: 24,
+  },
+  collaborationContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  collaborationTextContainer: {
+    flex: 1,
+    marginRight: 16,
+  },
+  collaborationTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 4,
+  },
+  collaborationDescription: {
+    fontSize: 14,
+    opacity: 0.7,
+  },
+  quickAccessContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    marginBottom: 24,
+  },
+  quickAccessButton: {
+    width: '48%',
+    marginBottom: 12,
+  },
+  quickAccessButtonContent: {
+    height: 48,
   },
 });
 
-export default HomeScreen; 
+export default HomeScreen;

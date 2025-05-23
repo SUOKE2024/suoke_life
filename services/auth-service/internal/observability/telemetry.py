@@ -8,7 +8,9 @@
 import logging
 import os
 import socket
-from typing import Any, Dict, Optional
+import functools
+import inspect
+from typing import Any, Dict, Optional, Callable, TypeVar, cast
 
 import structlog
 from opentelemetry import trace
@@ -60,41 +62,153 @@ USER_OPERATION_COUNT = Counter(
     ["operation", "status"]
 )
 
+# 全局Tracer缓存
+_tracer = None
 
-def configure_tracer() -> None:
-    """配置分布式追踪器
+def setup_telemetry(
+    service_name: str, 
+    service_version: str, 
+    environment: str, 
+    otlp_endpoint: Optional[str] = None
+) -> None:
+    """
+    设置OpenTelemetry追踪
     
-    设置OpenTelemetry追踪器提供者和导出器
+    参数:
+        service_name: 服务名称
+        service_version: 服务版本
+        environment: 环境名称
+        otlp_endpoint: OTLP导出端点(可选)
     """
     # 创建资源
     resource = Resource.create({
-        "service.name": SERVICE_NAME,
-        "service.namespace": "suoke",
-        "service.instance.id": socket.gethostname(),
-        "deployment.environment": ENV
+        "service.name": service_name,
+        "service.version": service_version,
+        "deployment.environment": environment,
+        "host.name": socket.gethostname()
     })
     
-    # 创建追踪器提供者
-    tracer_provider = TracerProvider(resource=resource)
+    # 创建追踪提供者
+    provider = TracerProvider(resource=resource)
     
-    # 添加控制台导出器(开发环境)
-    if ENABLE_CONSOLE_EXPORT:
-        tracer_provider.add_span_processor(
-            BatchSpanProcessor(ConsoleSpanExporter())
-        )
+    # 配置导出器
+    # 开发环境添加控制台导出
+    if environment.lower() == "development" or ENABLE_CONSOLE_EXPORT:
+        console_exporter = ConsoleSpanExporter()
+        provider.add_span_processor(BatchSpanProcessor(console_exporter))
     
-    # 添加OTLP导出器(如果配置了端点)
-    if OTLP_ENDPOINT:
-        otlp_exporter = OTLPSpanExporter(endpoint=OTLP_ENDPOINT)
-        tracer_provider.add_span_processor(
-            BatchSpanProcessor(otlp_exporter)
-        )
+    # 添加OTLP导出器(如果提供)
+    if otlp_endpoint:
+        otlp_exporter = OTLPSpanExporter(endpoint=otlp_endpoint)
+        provider.add_span_processor(BatchSpanProcessor(otlp_exporter))
     
-    # 设置全局追踪器提供者
-    trace.set_tracer_provider(tracer_provider)
+    # 设置全局Tracer提供者
+    trace.set_tracer_provider(provider)
+
+
+def create_tracer(module_name: str) -> trace.Tracer:
+    """
+    为指定模块创建Tracer
     
-    # 获取追踪器
-    return trace.get_tracer(__name__, "0.1.0")
+    参数:
+        module_name: 模块名称
+        
+    返回:
+        OpenTelemetry Tracer实例
+    """
+    return trace.get_tracer(module_name)
+
+
+def get_tracer() -> trace.Tracer:
+    """
+    获取或创建默认Tracer
+    
+    返回:
+        OpenTelemetry Tracer实例
+    """
+    global _tracer
+    if _tracer is None:
+        _tracer = create_tracer("auth_service")
+    return _tracer
+
+
+F = TypeVar('F', bound=Callable[..., Any])
+
+
+def trace(operation_name: str) -> Callable[[F], F]:
+    """
+    用于追踪函数执行的装饰器
+    
+    参数:
+        operation_name: 操作名称
+    
+    返回:
+        装饰后的函数
+    """
+    def decorator(func: F) -> F:
+        # 判断是异步函数还是同步函数
+        is_async = inspect.iscoroutinefunction(func)
+        
+        if is_async:
+            @functools.wraps(func)
+            async def async_wrapper(*args: Any, **kwargs: Any) -> Any:
+                tracer = get_tracer()
+                with tracer.start_as_current_span(operation_name) as span:
+                    # 添加函数参数作为Span属性
+                    # 注意：这里应该过滤敏感信息
+                    try:
+                        span.set_attribute("function.name", func.__name__)
+                        
+                        # 异步执行原函数
+                        return await func(*args, **kwargs)
+                    except Exception as e:
+                        # 记录异常
+                        record_exception(e)
+                        raise
+            return cast(F, async_wrapper)
+        else:
+            @functools.wraps(func)
+            def sync_wrapper(*args: Any, **kwargs: Any) -> Any:
+                tracer = get_tracer()
+                with tracer.start_as_current_span(operation_name) as span:
+                    # 添加函数参数作为Span属性
+                    try:
+                        span.set_attribute("function.name", func.__name__)
+                        
+                        # 执行原函数
+                        return func(*args, **kwargs)
+                    except Exception as e:
+                        # 记录异常
+                        record_exception(e)
+                        raise
+            return cast(F, sync_wrapper)
+    return decorator
+
+
+def record_exception(exception: Exception) -> None:
+    """
+    记录异常到当前span
+    
+    参数:
+        exception: 要记录的异常
+    """
+    span = trace.get_current_span()
+    span.record_exception(exception)
+    span.set_attribute("error", True)
+    span.set_attribute("error.message", str(exception))
+    span.set_attribute("error.type", exception.__class__.__name__)
+
+
+def add_span_attributes(attributes: Dict[str, Any]) -> None:
+    """
+    将属性添加到当前span
+    
+    参数:
+        attributes: 要添加的属性字典
+    """
+    span = trace.get_current_span()
+    for key, value in attributes.items():
+        span.set_attribute(key, value)
 
 
 def configure_logging() -> None:
@@ -191,8 +305,13 @@ def initialize_telemetry(app: Any = None, engine: Optional[Any] = None, redis_cl
         engine: SQLAlchemy引擎实例
         redis_client: Redis客户端实例
     """
-    # 配置追踪器
-    configure_tracer()
+    # 设置追踪
+    setup_telemetry(
+        service_name=SERVICE_NAME,
+        service_version="0.1.0",
+        environment=ENV,
+        otlp_endpoint=OTLP_ENDPOINT if OTLP_ENDPOINT else None
+    )
     
     # 配置日志
     configure_logging()

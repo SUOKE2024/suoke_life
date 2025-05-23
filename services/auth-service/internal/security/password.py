@@ -38,6 +38,20 @@ def hash_password(password: str) -> str:
     return pwd_context.hash(password)
 
 
+# 为了兼容性提供的别名函数
+def get_password_hash(password: str) -> str:
+    """
+    hash_password函数的别名，用于兼容性
+
+    Args:
+        password: 明文密码
+        
+    Returns:
+        哈希后的密码
+    """
+    return hash_password(password)
+
+
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """
     验证明文密码是否与哈希密码匹配
@@ -151,4 +165,63 @@ def generate_secure_password(length: int = 16) -> str:
     # 打乱密码顺序
     secrets.SystemRandom().shuffle(password)
     
-    return ''.join(password) 
+    return ''.join(password)
+
+
+# 添加PasswordHasher类以匹配测试期望
+class PasswordHasher:
+    """
+    密码哈希处理类
+    为了向后兼容提供的类包装器，实际使用模块级函数
+    """
+    
+    def hash_password(self, password: str) -> str:
+        """
+        使用Argon2id算法对密码进行哈希处理
+        
+        Args:
+            password: 明文密码
+            
+        Returns:
+            哈希后的密码
+        """
+        return hash_password(password)
+    
+    def verify_password(self, plain_password: str, hashed_password: str) -> bool:
+        """
+        验证明文密码是否与哈希密码匹配
+        
+        Args:
+            plain_password: 明文密码
+            hashed_password: 哈希后的密码
+            
+        Returns:
+            如果密码匹配则返回True，否则返回False
+        """
+        return verify_password(plain_password, hashed_password)
+    
+    @staticmethod
+    def enforce_password_policy(password: str) -> Tuple[bool, Optional[str]]:
+        """
+        强制执行密码策略
+        
+        Args:
+            password: 要验证的密码
+            
+        Returns:
+            (是否通过验证, 失败原因)
+        """
+        return enforce_password_policy(password)
+    
+    @staticmethod
+    def generate_secure_password(length: int = 12) -> str:
+        """
+        生成符合密码策略的随机安全密码
+        
+        Args:
+            length: 密码长度，默认为12
+            
+        Returns:
+            符合密码策略的随机密码
+        """
+        return generate_secure_password(length) 

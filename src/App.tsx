@@ -1,6 +1,6 @@
 import React from 'react';
 import { StatusBar, useColorScheme } from 'react-native';
-import { Provider as PaperProvider, DefaultTheme, DarkTheme } from 'react-native-paper';
+import { Provider as PaperProvider, MD3LightTheme, MD3DarkTheme } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { Provider as ReduxProvider } from 'react-redux';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -21,8 +21,8 @@ const App: React.FC = () => {
 
   // 合并 React Native Paper 主题与自定义主题
   const paperTheme = isDarkMode 
-    ? { ...DarkTheme, ...darkTheme } 
-    : { ...DefaultTheme, ...lightTheme };
+    ? { ...MD3DarkTheme, ...darkTheme } 
+    : { ...MD3LightTheme, ...lightTheme };
 
   return (
     <SafeAreaProvider>

@@ -3,200 +3,190 @@
 """
 数据库初始化模块
 
-负责初始化数据库连接、创建表结构和初始化数据。
+提供数据库连接池创建和初始化功能。
 """
 import logging
 from typing import Dict, Any
 
-from sqlalchemy import create_engine, URL
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
-from sqlalchemy.orm import sessionmaker
-
-from internal.model.user import Base
-from pkg.utils.database import run_migrations
-
 import asyncpg
 
-logger = logging.getLogger(__name__)
 
-async def init_database(db_config: Dict[str, Any]) -> asyncpg.Pool:
+async def init_database(config: Dict[str, Any]) -> asyncpg.Pool:
     """
-    初始化数据库，创建表和加载初始数据
+    初始化数据库连接池
     
     Args:
-        db_config: 数据库配置信息
+        config: 数据库配置
         
     Returns:
         asyncpg.Pool: 数据库连接池
     """
-    # 连接配置
-    dsn = f"postgresql://{db_config['username']}:{db_config['password']}@{db_config['host']}:{db_config['port']}/{db_config['database']}"
+    logging.info("初始化数据库连接池")
+    
+    # 提取配置
+    host = config.get("host", "localhost")
+    port = config.get("port", 5432)
+    database = config.get("database", "auth_db")
+    username = config.get("username", "postgres")
+    password = config.get("password", "postgres")
+    pool_size = config.get("pool_size", 10)
     
     # 创建连接池
-    pool = await asyncpg.create_pool(
-        dsn=dsn,
-        min_size=5,
-        max_size=db_config.get('pool_size', 20)
-    )
-    
-    # 创建表
-    async with pool.acquire() as conn:
-        await conn.execute("""
-        -- 用户表
-        CREATE TABLE IF NOT EXISTS users (
-            id VARCHAR(36) PRIMARY KEY,
-            username VARCHAR(100) UNIQUE NOT NULL,
-            email VARCHAR(255) UNIQUE NOT NULL,
-            password VARCHAR(255) NOT NULL,
-            phone_number VARCHAR(20) UNIQUE,
-            profile_data JSONB DEFAULT '{}',
-            is_active BOOLEAN DEFAULT TRUE,
-            is_locked BOOLEAN DEFAULT FALSE,
-            failed_login_attempts INT DEFAULT 0,
-            lock_until TIMESTAMP,
-            mfa_enabled BOOLEAN DEFAULT FALSE,
-            mfa_type VARCHAR(10),
-            mfa_secret VARCHAR(100),
-            created_at TIMESTAMP NOT NULL,
-            updated_at TIMESTAMP NOT NULL,
-            last_login_at TIMESTAMP
-        );
+    try:
+        pool = await asyncpg.create_pool(
+            host=host,
+            port=port,
+            database=database,
+            user=username,
+            password=password,
+            min_size=2,
+            max_size=pool_size
+        )
         
-        -- 角色表
-        CREATE TABLE IF NOT EXISTS roles (
-            id VARCHAR(36) PRIMARY KEY,
-            name VARCHAR(50) UNIQUE NOT NULL,
-            description TEXT,
-            created_at TIMESTAMP NOT NULL,
-            updated_at TIMESTAMP NOT NULL
-        );
+        logging.info(f"数据库连接池初始化成功，连接到 {host}:{port}/{database}")
         
-        -- 权限表
-        CREATE TABLE IF NOT EXISTS permissions (
-            id VARCHAR(36) PRIMARY KEY,
-            name VARCHAR(100) UNIQUE NOT NULL,
-            description TEXT,
-            created_at TIMESTAMP NOT NULL,
-            updated_at TIMESTAMP NOT NULL
-        );
+        # 初始化数据库表结构
+        await init_tables(pool)
         
-        -- 用户角色关联表
-        CREATE TABLE IF NOT EXISTS user_roles (
-            user_id VARCHAR(36) REFERENCES users(id) ON DELETE CASCADE,
-            role_id VARCHAR(36) REFERENCES roles(id) ON DELETE CASCADE,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            PRIMARY KEY (user_id, role_id)
-        );
-        
-        -- 角色权限关联表
-        CREATE TABLE IF NOT EXISTS role_permissions (
-            role_id VARCHAR(36) REFERENCES roles(id) ON DELETE CASCADE,
-            permission_id VARCHAR(36) REFERENCES permissions(id) ON DELETE CASCADE,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            PRIMARY KEY (role_id, permission_id)
-        );
-        
-        -- 用户资源权限表(用于特定资源的访问控制)
-        CREATE TABLE IF NOT EXISTS user_resource_permissions (
-            id SERIAL PRIMARY KEY,
-            user_id VARCHAR(36) REFERENCES users(id) ON DELETE CASCADE,
-            resource_id VARCHAR(36) NOT NULL,
-            resource_type VARCHAR(50) NOT NULL,
-            permission VARCHAR(100) NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            UNIQUE (user_id, resource_id, permission)
-        );
-        
-        -- 审计日志表
-        CREATE TABLE IF NOT EXISTS audit_logs (
-            id SERIAL PRIMARY KEY,
-            user_id VARCHAR(36),
-            action VARCHAR(100) NOT NULL,
-            resource_type VARCHAR(50),
-            resource_id VARCHAR(100),
-            ip_address VARCHAR(45),
-            user_agent TEXT,
-            details JSONB,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
-        
-        -- 为用户表添加索引
-        CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
-        CREATE INDEX IF NOT EXISTS idx_users_username ON users(username);
-        CREATE INDEX IF NOT EXISTS idx_users_phone ON users(phone_number);
-        
-        -- 为审计日志表添加索引
-        CREATE INDEX IF NOT EXISTS idx_audit_logs_user ON audit_logs(user_id);
-        CREATE INDEX IF NOT EXISTS idx_audit_logs_action ON audit_logs(action);
-        CREATE INDEX IF NOT EXISTS idx_audit_logs_created_at ON audit_logs(created_at);
-        """)
-        
-        # 检查是否需要插入初始数据
-        roles_count = await conn.fetchval("SELECT COUNT(*) FROM roles")
-        
-        if roles_count == 0:
-            logger.info("正在创建初始角色和权限...")
-            
-            # 插入默认角色
-            await conn.execute("""
-            INSERT INTO roles (id, name, description, created_at, updated_at)
-            VALUES
-                ('1', 'admin', '系统管理员，拥有所有权限', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                ('2', 'user', '普通用户', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                ('3', 'guest', '访客用户，仅有只读权限', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-            """)
-            
-            # 插入默认权限
-            await conn.execute("""
-            INSERT INTO permissions (id, name, description, created_at, updated_at)
-            VALUES
-                ('1', 'user:read', '查看用户信息', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                ('2', 'user:create', '创建用户', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                ('3', 'user:update', '更新用户信息', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                ('4', 'user:delete', '删除用户', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                ('5', 'role:read', '查看角色', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                ('6', 'role:create', '创建角色', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                ('7', 'role:update', '更新角色', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                ('8', 'role:delete', '删除角色', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                ('9', 'permission:read', '查看权限', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                ('10', 'permission:assign', '分配权限', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-            """)
-            
-            # 分配权限给角色
-            # 管理员角色拥有所有权限
-            await conn.execute("""
-            INSERT INTO role_permissions (role_id, permission_id)
-            SELECT '1', id FROM permissions;
-            """)
-            
-            # 普通用户角色拥有查看用户和自身信息的权限
-            await conn.execute("""
-            INSERT INTO role_permissions (role_id, permission_id)
-            VALUES
-                ('2', '1'),  -- user:read
-                ('3', '1');  -- guest也有user:read权限
-            """)
-            
-            logger.info("初始角色和权限创建完成")
-    
-    return pool
+        return pool
+    except Exception as e:
+        logging.error(f"数据库连接池初始化失败: {str(e)}")
+        raise
 
-async def get_db_session() -> AsyncSession:
+
+async def init_tables(pool: asyncpg.Pool) -> None:
     """
-    获取数据库会话的依赖函数
+    初始化数据库表结构
     
-    Returns:
-        AsyncSession: 数据库会话对象
+    Args:
+        pool: 数据库连接池
     """
-    from fastapi import FastAPI
-    app = FastAPI.lifespan_context.get_app()
-    session_factory = app.state.db_session_factory
+    logging.info("初始化数据库表结构")
     
-    async with session_factory() as session:
-        try:
-            yield session
-            await session.commit()
-        except Exception:
-            await session.rollback()
-            raise 
+    # 在真实项目中，应该使用迁移工具(如Alembic)
+    # 这里仅为示例实现简单建表逻辑
+    
+    # 定义建表SQL
+    create_tables_sql = """
+    -- 创建UUID扩展（如果不存在）
+    CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+    
+    -- 用户表
+    CREATE TABLE IF NOT EXISTS users (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        username VARCHAR(50) UNIQUE NOT NULL,
+        email VARCHAR(100) UNIQUE NOT NULL,
+        password_hash VARCHAR(255) NOT NULL,
+        phone_number VARCHAR(20) UNIQUE,
+        status VARCHAR(20) NOT NULL DEFAULT 'pending',
+        profile_data JSONB DEFAULT '{}',
+        mfa_enabled BOOLEAN NOT NULL DEFAULT FALSE,
+        mfa_type VARCHAR(20) NOT NULL DEFAULT 'none',
+        mfa_secret VARCHAR(100),
+        created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP WITH TIME ZONE,
+        last_login TIMESTAMP WITH TIME ZONE
+    );
+    
+    -- 为用户表添加索引
+    CREATE INDEX IF NOT EXISTS idx_users_username ON users(username);
+    CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+    CREATE INDEX IF NOT EXISTS idx_users_phone ON users(phone_number);
+    
+    -- 角色表
+    CREATE TABLE IF NOT EXISTS roles (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        name VARCHAR(50) UNIQUE NOT NULL,
+        description VARCHAR(255),
+        created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP WITH TIME ZONE
+    );
+    
+    -- 权限表
+    CREATE TABLE IF NOT EXISTS permissions (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        name VARCHAR(100) UNIQUE NOT NULL,
+        description VARCHAR(255),
+        resource VARCHAR(50) NOT NULL,
+        action VARCHAR(50) NOT NULL,
+        created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP WITH TIME ZONE
+    );
+    
+    -- 用户角色关联表
+    CREATE TABLE IF NOT EXISTS user_roles (
+        user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        role_id UUID NOT NULL REFERENCES roles(id) ON DELETE CASCADE,
+        PRIMARY KEY (user_id, role_id)
+    );
+    
+    -- 角色权限关联表
+    CREATE TABLE IF NOT EXISTS role_permissions (
+        role_id UUID NOT NULL REFERENCES roles(id) ON DELETE CASCADE,
+        permission_id UUID NOT NULL REFERENCES permissions(id) ON DELETE CASCADE,
+        created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (role_id, permission_id)
+    );
+    
+    -- 刷新令牌表
+    CREATE TABLE IF NOT EXISTS refresh_tokens (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        token_value VARCHAR(255) UNIQUE NOT NULL,
+        expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
+        is_revoked BOOLEAN NOT NULL DEFAULT FALSE,
+        revoked_at TIMESTAMP WITH TIME ZONE,
+        client_id VARCHAR(100),
+        client_info JSONB,
+        created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+    );
+    
+    -- 登录尝试记录表
+    CREATE TABLE IF NOT EXISTS login_attempts (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        user_id UUID REFERENCES users(id) ON DELETE SET NULL,
+        ip_address VARCHAR(50) NOT NULL,
+        user_agent VARCHAR(255),
+        success BOOLEAN NOT NULL DEFAULT FALSE,
+        attempt_time TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+    );
+    
+    -- 审计日志表
+    CREATE TABLE IF NOT EXISTS audit_logs (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        user_id UUID REFERENCES users(id) ON DELETE SET NULL,
+        action VARCHAR(50) NOT NULL,
+        resource VARCHAR(50),
+        resource_id VARCHAR(50),
+        ip_address VARCHAR(50),
+        user_agent VARCHAR(255),
+        details TEXT,
+        success BOOLEAN NOT NULL DEFAULT TRUE,
+        created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+    );
+    
+    -- OAuth连接表
+    CREATE TABLE IF NOT EXISTS oauth_connections (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        provider VARCHAR(50) NOT NULL,
+        provider_user_id VARCHAR(100) NOT NULL,
+        access_token VARCHAR(1000) NOT NULL,
+        refresh_token VARCHAR(1000),
+        expires_at TIMESTAMP WITH TIME ZONE,
+        scopes JSONB DEFAULT '[]',
+        user_data JSONB DEFAULT '{}',
+        created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP WITH TIME ZONE,
+        UNIQUE(provider, provider_user_id)
+    );
+    """
+    
+    try:
+        async with pool.acquire() as conn:
+            await conn.execute(create_tables_sql)
+            logging.info("数据库表结构初始化成功")
+    except Exception as e:
+        logging.error(f"数据库表结构初始化失败: {str(e)}")
+        # 在真实项目中，根据具体情况决定是否抛出异常
+        logging.warning("继续执行，但数据库功能可能不可用") 

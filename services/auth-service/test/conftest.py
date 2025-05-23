@@ -10,7 +10,16 @@ import asyncio
 import pytest
 import asyncpg
 import redis
+import sys
 from typing import Dict, Any, Optional
+
+# 添加mock模块路径
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "mocks")))
+
+# Mock OpenTelemetry模块
+sys.modules["opentelemetry.instrumentation.fastapi"] = __import__("opentelemetry.instrumentation.fastapi", fromlist=[""])
+sys.modules["opentelemetry.instrumentation.redis"] = __import__("opentelemetry.instrumentation.redis", fromlist=[""])
+sys.modules["opentelemetry.instrumentation.sqlalchemy"] = __import__("opentelemetry.instrumentation.sqlalchemy", fromlist=[""])
 
 # 测试环境配置
 TEST_DB_HOST = os.getenv("TEST_DB_HOST", "localhost")
@@ -27,13 +36,59 @@ TEST_REDIS_DB = int(os.getenv("TEST_REDIS_DB", "1"))  # 使用不同的数据库
 TEST_JWT_SECRET = "test_jwt_secret_for_testing_only"
 TEST_JWT_ALGORITHM = "HS256"
 
+# 注意：pytest-asyncio > 0.14.0 不再需要重写event_loop fixture
+# asyncio模式已在pytest.ini中设置为"strict"
 
-@pytest.fixture(scope="session")
-def event_loop():
-    """创建事件循环，用于异步测试"""
-    loop = asyncio.get_event_loop_policy().new_event_loop()
-    yield loop
-    loop.close()
+@pytest.fixture
+async def pg_pool():
+    """创建异步PostgreSQL连接池"""
+    dsn = f"postgresql://{TEST_DB_USER}:{TEST_DB_PASSWORD}@{TEST_DB_HOST}:{TEST_DB_PORT}/{TEST_DB_NAME}"
+    try:
+        pool = await asyncpg.create_pool(dsn=dsn)
+        yield pool
+    finally:
+        if 'pool' in locals():
+            await pool.close()
+
+
+@pytest.fixture
+def redis_client():
+    """创建Redis客户端"""
+    client = redis.Redis(
+        host=TEST_REDIS_HOST,
+        port=TEST_REDIS_PORT,
+        db=TEST_REDIS_DB,
+        decode_responses=True  # 自动将字节解码为字符串
+    )
+    try:
+        yield client
+    finally:
+        client.close()
+
+
+@pytest.fixture
+def test_user_data() -> Dict[str, Any]:
+    """生成测试用户数据"""
+    return {
+        "id": str(uuid.uuid4()),
+        "username": f"testuser_{uuid.uuid4().hex[:8]}",
+        "email": f"test_{uuid.uuid4().hex[:8]}@example.com",
+        "password": "Test@123456",
+        "phone_number": "13800138000",
+    }
+
+
+@pytest.fixture
+def test_token_data() -> Dict[str, Any]:
+    """生成测试令牌数据"""
+    return {
+        "sub": str(uuid.uuid4()),
+        "username": "testuser",
+        "email": "test@example.com",
+        "roles": ["user"],
+        "iat": 1630000000,
+        "exp": 1630086400
+    }
 
 
 @pytest.fixture(scope="session")
@@ -200,23 +255,6 @@ def redis_pool():
     # 测试完成后清空并关闭
     redis_client.flushdb()
     redis_client.close()
-
-
-@pytest.fixture
-def test_user_data() -> Dict[str, Any]:
-    """生成测试用户数据"""
-    unique_id = str(uuid.uuid4())[:8]
-    return {
-        "username": f"testuser_{unique_id}",
-        "email": f"test_{unique_id}@example.com",
-        "password": "TestPassword123!",
-        "phone_number": f"+8613800{unique_id}",
-        "profile_data": {
-            "display_name": "测试用户",
-            "age": 30,
-            "location": "北京"
-        }
-    }
 
 
 @pytest.fixture

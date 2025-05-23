@@ -1,19 +1,13 @@
-# Resolve react_native_pods.rb with node to allow for hoisting
-require Pod::Executable.execute_command('node', ['-p',
-  'require.resolve(
-    "react-native/scripts/react_native_pods.rb",
-    {paths: [process.argv[1]]},
-  )', __dir__]).strip
+# frozen_string_literal: true
 
-# 禁用所有代理
-ENV['https_proxy'] = nil
-ENV['http_proxy'] = nil
-ENV['all_proxy'] = nil
-ENV['ALL_PROXY'] = nil
-ENV['HTTPS_PROXY'] = nil
-ENV['HTTP_PROXY'] = nil
-# 禁用pods的ghproxy代理
-ENV['COCOAPODS_DISABLE_GITHUB_PROXY'] = 'true'
+# 使用清华源来加速 CocoaPods 依赖下载
+source 'https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git'
+# source 'https://cdn.cocoapods.org/'
+
+# ENV['COCOAPODS_DISABLE_GITHUB_PROXY'] = 'true'
+
+require_relative '../node_modules/react-native/scripts/react_native_pods'
+require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
@@ -26,7 +20,7 @@ end
 
 target 'SuokeLife' do
   config = use_native_modules!
-
+  
   use_react_native!(
     :path => config[:reactNativePath],
     # An absolute path to your application root.
@@ -41,5 +35,25 @@ target 'SuokeLife' do
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
     )
+    
+    # Fix for fmt library compilation error with newer Xcode versions
+    installer.pods_project.targets.each do |target|
+      if target.name == 'fmt'
+        target.build_configurations.each do |config|
+          config.build_settings['GCC_WARN_PEDANTIC'] = 'NO'
+          config.build_settings['WARNING_CFLAGS'] = '$(inherited) -w'
+          config.build_settings['OTHER_CFLAGS'] = '$(inherited) -w -DFMT_HEADER_ONLY=1 -DFMT_DISABLE_COMPILE_TIME_CHECKS'
+          config.build_settings['GCC_TREAT_WARNINGS_AS_ERRORS'] = 'NO'
+          config.build_settings['CLANG_WARN_EVERYTHING'] = 'NO'
+          config.build_settings['CLANG_WARN_PEDANTIC'] = 'NO'
+          config.build_settings['OTHER_CPLUSPLUSFLAGS'] = '$(inherited) -w -DFMT_HEADER_ONLY=1'
+        end
+      end
+      
+      # 设置iOS部署目标为12.4
+      target.build_configurations.each do |config|
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.4'
+      end
+    end
   end
 end

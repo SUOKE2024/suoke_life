@@ -20,8 +20,6 @@ import aiohttp
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from internal.repository.user_repository import UserRepository
-from internal.repository.oauth_repository import OAuthRepository
-from internal.repository.token_repository import TokenRepository
 from internal.model.user import User
 from internal.model.errors import UserNotFoundError
 from internal.security.jwt import JWTSecurity
@@ -289,8 +287,6 @@ async def authenticate_with_oauth(
     """
     # 初始化仓储
     user_repo = UserRepository(session)
-    oauth_repo = OAuthRepository(session)
-    token_repo = TokenRepository(session)
     
     provider_user_id = str(user_profile.get("id") or user_profile.get("sub"))
     if not provider_user_id:
@@ -486,7 +482,6 @@ async def get_user_connections(session: AsyncSession, user_id: str) -> List[Dict
     """
     # 初始化仓储
     user_repo = UserRepository(session)
-    oauth_repo = OAuthRepository(session)
     
     # 检查用户是否存在
     user = await user_repo.get_user_by_id(user_id)
@@ -530,7 +525,6 @@ async def unlink_oauth_connection(session: AsyncSession, user_id: str, connectio
     """
     # 初始化仓储
     user_repo = UserRepository(session)
-    oauth_repo = OAuthRepository(session)
     
     # 检查用户是否存在
     user = await user_repo.get_user_by_id(user_id)
@@ -553,4 +547,103 @@ async def unlink_oauth_connection(session: AsyncSession, user_id: str, connectio
         raise ValueError("无法解除唯一的登录方式，请先设置密码")
     
     # 解除连接
-    return await oauth_repo.delete_connection(connection_id) 
+    return await oauth_repo.delete_connection(connection_id)
+
+async def get_oauth_url(provider: str, redirect_uri: str) -> str:
+    """
+    获取OAuth认证URL
+    
+    Args:
+        provider: OAuth提供商（如google, github, facebook等）
+        redirect_uri: 认证完成后的重定向URI
+    
+    Returns:
+        str: 认证URL
+    
+    Raises:
+        ValueError: 不支持的提供商
+    """
+    logging.info(f"获取{provider}的OAuth URL")
+    
+    # 根据提供商返回不同的认证URL
+    # 这里只是示例实现
+    if provider == "google":
+        return f"https://accounts.google.com/o/oauth2/auth?redirect_uri={redirect_uri}"
+    elif provider == "github":
+        return f"https://github.com/login/oauth/authorize?redirect_uri={redirect_uri}"
+    elif provider == "wechat":
+        return f"https://open.weixin.qq.com/connect/qrconnect?redirect_uri={redirect_uri}"
+    else:
+        raise ValueError(f"不支持的OAuth提供商: {provider}")
+
+
+async def handle_oauth_callback(provider: str, code: str, redirect_uri: str) -> Dict[str, Any]:
+    """
+    处理OAuth回调
+    
+    Args:
+        provider: OAuth提供商
+        code: 授权码
+        redirect_uri: 重定向URI
+    
+    Returns:
+        Dict[str, Any]: 用户信息和令牌
+    
+    Raises:
+        ValueError: 认证失败
+    """
+    logging.info(f"处理{provider}的OAuth回调")
+    
+    # 在真实项目中，这里应该实现:
+    # 1. 使用授权码获取访问令牌
+    # 2. 使用访问令牌获取用户信息
+    # 3. 在本地创建或关联用户
+    # 4. 返回JWT令牌
+    
+    # 示例实现
+    return {
+        "access_token": "fake_access_token",
+        "refresh_token": "fake_refresh_token",
+        "token_type": "Bearer",
+        "expires_in": 3600,
+        "user_info": {
+            "id": "oauth_user_123",
+            "name": f"{provider}_user",
+            "email": f"user@{provider}.com"
+        }
+    }
+
+
+async def link_oauth_account(user_id: str, provider: str, access_token: str) -> bool:
+    """
+    关联OAuth账户到现有用户
+    
+    Args:
+        user_id: 用户ID
+        provider: OAuth提供商
+        access_token: OAuth访问令牌
+    
+    Returns:
+        bool: 是否成功
+    """
+    logging.info(f"关联{provider}账户到用户{user_id}")
+    
+    # 示例实现
+    return True
+
+
+async def unlink_oauth_account(user_id: str, provider: str) -> bool:
+    """
+    解除OAuth账户关联
+    
+    Args:
+        user_id: 用户ID
+        provider: OAuth提供商
+    
+    Returns:
+        bool: 是否成功
+    """
+    logging.info(f"解除用户{user_id}的{provider}账户关联")
+    
+    # 示例实现
+    return True 

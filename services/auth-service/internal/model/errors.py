@@ -21,6 +21,7 @@ class ErrorCode(Enum):
     PASSWORD_EXPIRED = (1005, "密码已过期", grpc.StatusCode.FAILED_PRECONDITION, 403)
     INVALID_TOKEN = (1006, "令牌无效", grpc.StatusCode.UNAUTHENTICATED, 401)
     TOKEN_EXPIRED = (1007, "令牌已过期", grpc.StatusCode.UNAUTHENTICATED, 401)
+    AUTHENTICATION_FAILED = (1008, "认证失败", grpc.StatusCode.UNAUTHENTICATED, 401)
     
     # 用户管理相关错误 (1100-1199)
     USER_EXISTS = (1101, "用户已存在", grpc.StatusCode.ALREADY_EXISTS, 409)
@@ -100,6 +101,12 @@ class AuthServiceError(Exception):
 
 
 # 认证相关错误
+class AuthenticationError(AuthServiceError):
+    """认证失败通用错误"""
+    def __init__(self, message: Optional[str] = None, details: Any = None):
+        super().__init__(ErrorCode.AUTHENTICATION_FAILED, message, details)
+
+
 class CredentialsError(AuthServiceError):
     """凭证错误"""
     def __init__(self, message: Optional[str] = None, details: Any = None):

@@ -6,6 +6,7 @@
 import os
 from typing import AsyncGenerator
 
+from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 from sqlalchemy.orm import sessionmaker
 
@@ -46,4 +47,16 @@ async def get_session() -> AsyncGenerator[AsyncSession, None]:
         try:
             yield session
         finally:
-            await session.close() 
+            await session.close()
+
+
+# FastAPI 依赖注入函数
+async def get_db() -> AsyncSession:
+    """
+    FastAPI依赖函数，用于注入数据库会话
+    
+    Returns:
+        AsyncSession: SQLAlchemy异步会话对象
+    """
+    async for session in get_session():
+        return session 
