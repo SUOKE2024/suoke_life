@@ -1,268 +1,210 @@
-# 老克服务配置文件
+# 老克智能体服务配置文件
 
-# 服务基本信息
+# 服务基本配置
 service:
   name: "laoke-service"
-  version: "0.1.0"
-  description: "老克智能体服务 - 专注于知识共享和社区互动的智能体"
-
-# 服务端口配置
-server:
-  host: "0.0.0.0"
-  port: 9000
-  grpc_port: 9001
-  metrics_port: 9091
+  version: "1.0.0"
   debug: false
-  timeout: 30  # 请求超时（秒）
-  cors_origins: ["*"]  # 允许的CORS源
+  environment: "production"
 
-# 日志配置
-logging:
-  level: "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
-  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-  file: "./logs/laoke-service.log"
-  max_size_mb: 100
-  backup_count: 10
-  console: true
+# 服务器配置
+server:
+  grpc:
+    host: "0.0.0.0"
+    port: 50051
+    max_workers: 10
+    max_message_length: 4194304  # 4MB
+  
+  rest:
+    host: "0.0.0.0"
+    port: 8080
+    workers: 4
+    
+  cors:
+    allowed_origins: ["*"]
+    allow_credentials: true
+    allowed_methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+    allowed_headers: ["*"]
 
 # 数据库配置
 database:
-  type: "postgres"
-  host: "${DB_HOST:localhost}"
-  port: "${DB_PORT:5432}"
-  user: "${DB_USER:postgres}"
-  password: "${DB_PASSWORD:postgres}"
-  database: "${DB_NAME:laoke_service}"
-  pool_size: 10
-  ssl_mode: "disable"
+  type: "sqlite"
+  sqlite:
+    path: "data/laoke.db"
+    pool_size: 10
+    timeout: 30
+  
+  # PostgreSQL配置（可选）
+  postgres:
+    host: "localhost"
+    port: 5432
+    user: "laoke"
+    password: "${DB_PASSWORD}"
+    database: "laoke_service"
+    pool_size: 10
+    ssl_mode: "disable"
 
 # 缓存配置
 cache:
-  type: "redis"
-  host: "${REDIS_HOST:localhost}"
-  port: "${REDIS_PORT:6379}"
-  password: "${REDIS_PASSWORD:}"
-  db: 0
-  pool_size: 10
-  ttl: 3600  # 默认缓存时间（秒）
+  backend: "memory"  # memory, redis
+  redis:
+    url: "redis://localhost:6379"
+    db: 0
+    password: "${REDIS_PASSWORD}"
+  
+  default_ttl: 3600  # 1小时
+  max_memory_items: 10000
+  key_prefix: "laoke:"
 
-# 代理配置
+# 智能体配置
 agent:
-  name: "老克"
-  description: "专注于传统医学知识传播和社区教育的智能体"
-  capabilities: ["knowledge_sharing", "community_management", "education", "npc_interaction"]
-  personality:
-    tone: "scholarly"
-    traits: ["knowledgeable", "patient", "wise", "respectful"]
-  
-  # 会话和对话配置
-  conversation:
-    system_prompt: "你是老克，索克生活APP探索频道的智能体，你的职责是知识传播、知识培训和社区内容管理，你擅长提供中医知识普及、学习路径设计和社区互动指导。作为一名资深中医专家和教育工作者，你言辞亲切且专业，始终秉持科学精神和传统智慧的结合。"
-    max_history_turns: 20
-    max_tokens_per_message: 4096
-  
   # 模型配置
   models:
     llm:
-      primary_model: "${LLM_PRIMARY_MODEL:gpt-4o-mini}"
-      fallback_model: "${LLM_FALLBACK_MODEL:llama-3-8b}"
-      providers:
-        openai:
-          api_key: "${OPENAI_API_KEY:}"
-          base_url: "${OPENAI_BASE_URL:https://api.openai.com/v1}"
-          organization: "${OPENAI_ORGANIZATION:}"
-        anthropic:
-          api_key: "${ANTHROPIC_API_KEY:}"
-        local:
-          url: "${LOCAL_LLM_URL:http://localhost:11434}"
-          models_dir: "${LOCAL_MODELS_DIR:/app/models}"
-      retries: 3
+      primary_model: "gpt-4o-mini"
+      fallback_model: "llama-3-8b"
+      api_key: "${OPENAI_API_KEY}"
+      base_url: "https://api.openai.com/v1"
       timeout: 30
-      cache_enabled: true
-      cache_ttl: 3600  # 1小时
+      max_retries: 3
+  
+  # 对话配置
+  conversation:
+    system_prompt: |
+      你是老克，一位资深的中医专家和教育者，专注于中医知识传播、社群管理和教育内容创建。
+      
+      你的核心职责：
+      1. 传播准确的中医知识，包括理论、诊断、治疗方法等
+      2. 管理中医学习社群，促进成员间的交流和学习
+      3. 创建高质量的中医教育内容，适合不同水平的学习者
+      4. 提供个性化的中医学习路径和建议
+      
+      你的特点：
+      - 知识渊博，对中医经典和现代应用都有深入理解
+      - 善于教学，能够将复杂的概念简化为易懂的内容
+      - 耐心细致，关注每个学习者的需求和进步
+      - 严谨负责，确保传播的知识准确可靠
+      
+      请始终保持专业、友善和耐心的态度，用通俗易懂的语言回答问题。
     
-    embedding:
-      model: "${EMBEDDING_MODEL:text-embedding-3-large}"
-      provider: "${EMBEDDING_PROVIDER:openai}"
-      dimension: 3072
-      batch_size: 32
-      cache_enabled: true
-      cache_ttl: 86400  # 24小时
-
-# 知识服务配置
-knowledge:
-  sources:
-    - name: "primary_knowledge_base"
-      type: "vector_db"
-      url: "${VECTOR_DB_URL:http://rag-service:8000}"
-      api_key: "${VECTOR_DB_API_KEY:}"
-      collection: "laoke_knowledge"
-    - name: "secondary_knowledge_base"
-      type: "knowledge_graph"
-      url: "${KNOWLEDGE_GRAPH_URL:http://med-knowledge:8000}"
-      api_key: "${KNOWLEDGE_GRAPH_API_KEY:}"
+    max_history_turns: 20
+    max_tokens_per_message: 4096
   
-  max_search_results: 10
-  search_similarity_threshold: 0.7
-  embedding_model: "text-embedding-3-large"
-  rerank_enabled: true
-  context_window_size: 8192
-  
-  # 知识类别
-  categories:
-    - "中医基础理论"
-    - "中药学"
-    - "方剂学"
-    - "针灸学"
-    - "中医诊断学"
-    - "经络学说"
-    - "养生保健"
-    - "食疗"
-    - "中医哲学"
-    - "名医案例"
+  # 会话管理
+  session_timeout: 3600  # 1小时
+  max_concurrent_sessions: 1000
+  cleanup_interval: 300  # 5分钟
 
-# 社区服务配置
-community:
-  moderation:
+# 速率限制配置
+rate_limit:
+  global_rules:
+    - requests: 100
+      window: 60  # 每分钟100请求
+      algorithm: "sliding_window"
+    - requests: 1000
+      window: 3600  # 每小时1000请求
+      algorithm: "sliding_window"
+  
+  user_rules:
+    "premium_user":
+      requests: 200
+      window: 60
+      algorithm: "token_bucket"
+      burst: 50
+
+# 日志配置
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file:
     enabled: true
-    auto_moderate: true
-    moderation_model: "content-filter-alpha"
-    sensitive_topics:
-      - "政治"
-      - "宗教"
-      - "灵异"
-    toxic_threshold: 0.7
+    path: "logs/laoke-service.log"
+    max_size: "100MB"
+    backup_count: 5
   
-  post_types:
-    - "article"
-    - "question"
-    - "discussion"
-    - "experience_sharing"
-    - "case_study"
-  
-  rewards:
+  console:
     enabled: true
-    points_per_post: 5
-    points_per_comment: 2
-    points_per_like: 1
-    points_per_accepted_answer: 10
-  
-  trending:
-    algorithm: "weighted_score"  # weighted_score, recency, popularity
-    time_decay_factor: 0.5
-    update_interval: 3600  # 1小时
-    cache_ttl: 1800  # 30分钟
+    colored: true
 
-# 教育服务配置
-education:
-  learning_paths:
-    beginner: ["中医基础概论", "阴阳五行", "藏象学说", "四诊基础", "中药入门"]
-    intermediate: ["经络腧穴", "常用方剂", "中医诊断", "中药配伍", "临床应用基础"]
-    advanced: ["伤寒论研读", "金匮要略", "温病学", "经方应用", "中医方法论"]
-  course_formats:
-    - "video_lecture"
-    - "interactive_quiz"
-    - "reading_material"
-    - "practical_exercise"
-    - "case_study"
-    - "live_workshop"
-  quiz_types:
-    - "multiple_choice"
-    - "true_false"
-    - "matching"
-    - "short_answer"
-    - "case_analysis"
-  quiz_pass_threshold: 0.7  # 70%通过率
-
-# 外部集成配置
-integrations:
-  edu_service:
-    api_url: "${EDU_API_URL:http://edu-service:8000/api}"
-    api_key: "${EDU_API_KEY:}"
-    timeout: 10  # 请求超时（秒）
-    cache_enabled: true
-    cache_ttl: 3600  # 默认缓存1小时
-    
-    # 课程类型
-    course_types:
-      - "tcm_basic"       # 中医基础
-      - "tcm_advanced"    # 中医进阶
-      - "tcm_clinical"    # 中医临床
-      - "health_living"   # 健康生活
-      - "nutrition"       # 营养学
-      - "exercise"        # 运动养生
-      - "meditation"      # 冥想修炼
-      - "herbal_medicine" # 中药学
-    
-    # 难度级别
-    difficulty_levels:
-      - "beginner"      # 入门
-      - "intermediate"  # 中级
-      - "advanced"      # 高级
-      - "expert"        # 专家
-
-# NPC配置
-npc:
-  enabled: true
-  profiles_path: "./config/npc_profiles.json"
-  interaction_memory_limit: 20  # 记忆最近20次互动
-  default_context_items: 5      # 默认上下文项数
-  response_temperature: 0.7
-
-# 指标和监控配置
+# 指标配置
 metrics:
   enabled: true
-  prometheus:
-    enabled: true
-    path: "/metrics"
-    port: 9091
+  port: 9090
+  path: "/metrics"
   
-  logging:
-    enabled: true
-    interval: 300  # 5分钟
-  
-  health_check:
-    enabled: true
-    path: "/health"
-    timeout: 5  # 检查超时（秒）
-    interval: 60  # 检查间隔（秒）
-    components:
-      - "database"
-      - "cache"
-      - "agent_models"
-      - "knowledge_service"
-      - "education_service"
+  # 自定义指标
+  custom_metrics:
+    - name: "agent_requests_total"
+      type: "counter"
+      description: "Total number of agent requests"
+      labels: ["request_type", "user_id"]
+    
+    - name: "agent_response_time"
+      type: "histogram"
+      description: "Agent response time in seconds"
+      buckets: [0.1, 0.5, 1.0, 2.0, 5.0, 10.0]
+
+# 健康检查配置
+health:
+  enabled: true
+  path: "/health"
+  checks:
+    - name: "database"
+      timeout: 5
+    - name: "cache"
+      timeout: 3
+    - name: "llm_api"
+      timeout: 10
 
 # 安全配置
 security:
-  api_key_required: true
-  api_keys:
-    - "${API_KEY_1:default-key-1}"
-    - "${API_KEY_2:default-key-2}"
-  jwt:
-    enabled: true
-    secret: "${JWT_SECRET:your-secret-key}"
-    expiration: 86400  # 24小时
-  rate_limit:
-    enabled: true
-    requests_per_minute: 60
-    burst: 10
-
-# 网络设置
-network:
-  timeout: 30  # 秒
-  retries: 3
-  backoff_factor: 0.5
-  proxy:
+  # API密钥验证
+  api_key:
     enabled: false
-    url: "${HTTP_PROXY:}"
+    header_name: "X-API-Key"
+    keys: []
+  
+  # JWT配置
+  jwt:
+    enabled: false
+    secret: "${JWT_SECRET}"
+    algorithm: "HS256"
+    expiration: 3600
+  
+  # 输入验证
+  validation:
+    max_request_size: 1048576  # 1MB
+    sanitize_html: true
+    check_sql_injection: true
 
-# 系统资源限制
-resources:
-  max_memory_mb: 4096
-  max_cpu_usage: 0.8
-  thread_pool_size: 16
-  graceful_shutdown_timeout: 30  # 秒
+# 外部服务配置
+external_services:
+  # 知识库服务
+  knowledge_service:
+    enabled: true
+    url: "http://localhost:8081"
+    timeout: 10
+    api_key: "${KNOWLEDGE_SERVICE_API_KEY}"
+  
+  # 用户服务
+  user_service:
+    enabled: true
+    url: "http://localhost:8082"
+    timeout: 5
+    api_key: "${USER_SERVICE_API_KEY}"
 
-# 环境设置
-environment: "${ENV:development}"  # development, staging, production 
+# 特性开关
+features:
+  enable_caching: true
+  enable_rate_limiting: true
+  enable_metrics: true
+  enable_tracing: false
+  enable_content_moderation: true
+  enable_learning_analytics: true
+
+# 开发配置
+development:
+  debug: true
+  hot_reload: true
+  mock_external_services: false
+  log_sql_queries: false 

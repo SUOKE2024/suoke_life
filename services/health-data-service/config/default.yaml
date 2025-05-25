@@ -1,10 +1,11 @@
-# 索克生活健康数据服务默认配置
+# 索克生活健康数据服务优化配置
 
 # 服务配置
 service:
   name: "health-data-service"
-  version: "1.0.0"
-  description: "索克生活健康数据服务"
+  version: "2.0.0"
+  description: "索克生活健康数据服务 - 优化版"
+  environment: "${ENV:development}"
 
 # 服务器配置
 rest:
@@ -18,6 +19,10 @@ rest:
     allow_credentials: true
   timeout: 60  # 秒
   debug: false
+  # 性能优化
+  keepalive_timeout: 65
+  max_requests: 1000
+  max_requests_jitter: 50
 
 # gRPC服务配置
 grpc:
@@ -25,31 +30,78 @@ grpc:
   port: 50051
   max_workers: 10
   max_message_length: 104857600  # 100MB
+  # 性能优化
+  keepalive_time_ms: 30000
+  keepalive_timeout_ms: 5000
+  keepalive_permit_without_calls: true
 
-# 数据库配置
+# 数据库配置 - 使用PostgreSQL
 database:
   dialect: "postgresql"
   driver: "asyncpg"
   host: "${DB_HOST:localhost}"
   port: "${DB_PORT:5432}"
-  username: "${DB_USERNAME:postgres}"
+  database: "${DB_NAME:suoke_health_data}"
+  username: "${DB_USER:postgres}"
   password: "${DB_PASSWORD:postgres}"
-  database: "${DB_NAME:health_data}"
-  pool_size: 5
+  # PostgreSQL优化配置
+  pool_size: 20
   max_overflow: 10
+  pool_timeout: 30
+  pool_recycle: 3600  # 1小时回收连接
+  pool_pre_ping: true  # 连接前检查
   echo: false
+  # PostgreSQL特定优化
+  connect_args:
+    server_settings:
+      application_name: "health_data_service"
+      jit: "off"  # 关闭JIT以提高小查询性能
+    command_timeout: 60
+    statement_cache_size: 1024
+    prepared_statement_cache_size: 1024
+  # 性能优化设置
+  engine_options:
+    isolation_level: "READ_COMMITTED"
+    pool_reset_on_return: "commit"
+
+# Redis缓存配置
+cache:
+  enabled: true
+  type: "redis"
+  url: "${REDIS_URL:redis://localhost:6379/0}"
+  ttl: 3600  # 秒
+  max_connections: 10
+  # 缓存策略
+  strategies:
+    health_data: 1800  # 30分钟
+    statistics: 3600   # 1小时
+    insights: 7200     # 2小时
+    tcm_analysis: 14400  # 4小时
+
+# 内存缓存配置
+memory_cache:
+  enabled: true
+  max_size: 1000
+  ttl: 300  # 5分钟
 
 # 区块链服务配置
 blockchain:
   enabled: "${BLOCKCHAIN_ENABLED:false}"
   service_url: "${BLOCKCHAIN_SERVICE_URL:http://localhost:8081}"
   timeout: 30
+  retry_attempts: 3
+  retry_delay: 1
 
 # 监控配置
 monitoring:
   prometheus:
     enabled: true
     port: 9180
+    metrics_path: "/metrics"
+  health_check:
+    enabled: true
+    path: "/health"
+    interval: 30
   logging:
     level: "${LOG_LEVEL:INFO}"
     format: "json"
@@ -58,12 +110,15 @@ monitoring:
     rotation: "00:00"  # 每天轮换
     retention: "30 days"
     compression: "zip"
+    # 性能日志
+    performance_logging: true
+    slow_query_threshold: 1.0  # 秒
 
 # 安全配置
 security:
   jwt:
     enabled: true
-    secret: "${JWT_SECRET:your-secret-key}"
+    secret: "${JWT_SECRET:your-secret-key-change-in-production}"
     algorithm: "HS256"
     expires_in: 3600  # 秒
   api_cors:
@@ -71,22 +126,34 @@ security:
     allow_methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
     allow_headers: ["*"]
     max_age: 86400
-
-# 缓存配置
-cache:
-  enabled: false
-  type: "redis"
-  url: "${REDIS_URL:redis://localhost:6379/0}"
-  ttl: 3600  # 秒
+  # API限流
+  rate_limiting:
+    enabled: true
+    requests_per_minute: 100
+    burst_size: 20
+  # 数据加密
+  encryption:
+    enabled: true
+    algorithm: "AES-256-GCM"
+    key: "${ENCRYPTION_KEY:your-encryption-key}"
 
 # 数据分析配置
 analytics:
+  # 异步处理
+  async_processing: true
+  batch_size: 100
+  max_workers: 4
+  
   time_series:
     window_sizes: [7, 30, 90]  # 天
-    aggregation_methods: ["mean", "max", "min", "sum"]
+    aggregation_methods: ["mean", "max", "min", "sum", "std"]
+    cache_results: true
+    
   correlation:
     min_data_points: 10
     significance_threshold: 0.05
+    cache_results: true
+    
   health_index:
     weights:
       heart_rate: 0.2
@@ -96,13 +163,22 @@ analytics:
       blood_glucose: 0.1
       body_temperature: 0.05
       oxygen_saturation: 0.05
+    cache_duration: 3600
+    
   tcm_constitution:
     model_path: "config/models/tcm_constitution_model.pkl"
     feature_weights_path: "config/models/tcm_feature_weights.json"
+    cache_duration: 14400
+    batch_processing: true
 
 # 可穿戴设备数据配置
 wearable_data:
-  upload_limit: 10485760  # 10MB
+  upload_limit: 52428800  # 50MB
+  # 异步处理配置
+  async_processing: true
+  batch_size: 500
+  max_workers: 2
+  
   supported_devices:
     - name: "apple_health"
       parser: "apple_health_xml_parser"
@@ -112,15 +188,20 @@ wearable_data:
       parser: "garmin_fit_parser"
     - name: "xiaomi"
       parser: "xiaomi_json_parser"
+      
   parsers:
     apple_health_xml_parser:
       supported_types: ["steps", "heart_rate", "sleep", "blood_pressure", "body_temperature"]
+      chunk_size: 1000
     fitbit_json_parser:
       supported_types: ["steps", "heart_rate", "sleep", "body_mass"]
+      chunk_size: 1000
     garmin_fit_parser:
       supported_types: ["steps", "heart_rate", "sleep", "activity"]
+      chunk_size: 1000
     xiaomi_json_parser:
       supported_types: ["steps", "heart_rate", "sleep"]
+      chunk_size: 1000
 
 # 生物标记物分析配置
 biometric_data:
@@ -128,24 +209,31 @@ biometric_data:
     voice:
       enabled: true
       model_path: "models/voice_analysis.onnx"
+      cache_duration: 1800
     face:
       enabled: true
       model_path: "models/face_analysis.onnx"
+      cache_duration: 1800
     pulse:
       enabled: true
       model_path: "models/pulse_analysis.onnx"
+      cache_duration: 900
     tongue:
       enabled: true
       model_path: "models/tongue_analysis.onnx"
+      cache_duration: 1800
 
 # 健康数据模型
 health_models:
   breathing:
     model_path: "models/breathing_analysis.onnx"
+    cache_duration: 900
   stress:
     model_path: "models/stress_assessment.onnx"
+    cache_duration: 1800
   sleep:
     model_path: "models/sleep_quality.onnx"
+    cache_duration: 3600
 
 # 数据归一化设置
 normalization:
@@ -157,6 +245,12 @@ normalization:
   sleep:
     optimal_duration: 8
     min_duration: 4
+  # 数据清洗规则
+  data_cleaning:
+    remove_outliers: true
+    outlier_threshold: 3  # 标准差
+    interpolate_missing: true
+    max_gap_hours: 6
 
 # 数据导出设置
 export:
@@ -168,6 +262,9 @@ export:
   encryption:
     enabled: true
     algorithm: "AES-256-GCM"
+  # 异步导出
+  async_export: true
+  max_export_size: 104857600  # 100MB
 
 # 隐私设置
 privacy:
@@ -187,8 +284,48 @@ privacy:
     validity_period_days: 365
     revocation_allowed: true
 
+# 性能优化设置
+performance:
+  # 连接池优化
+  connection_pool:
+    max_size: 20
+    min_size: 5
+    acquire_timeout: 30
+  
+  # 批处理优化
+  batch_processing:
+    enabled: true
+    batch_size: 100
+    max_wait_time: 5  # 秒
+  
+  # 压缩设置
+  compression:
+    enabled: true
+    algorithm: "gzip"
+    level: 6
+  
+  # 预加载设置
+  preload:
+    models: true
+    cache_warmup: true
+
+# 错误处理和重试
+error_handling:
+  retry:
+    max_attempts: 3
+    backoff_factor: 2
+    max_delay: 60
+  circuit_breaker:
+    enabled: true
+    failure_threshold: 5
+    recovery_timeout: 60
+  timeout:
+    default: 30
+    database: 10
+    external_api: 15
+
 # 区块链集成设置
-blockchain:
+blockchain_integration:
   enabled: true
   service_url: "${BLOCKCHAIN_SERVICE_URL:-http://blockchain-service:8008}"
   timeout: 10
@@ -198,7 +335,7 @@ blockchain:
     proof_types:
       - "health_index"
       - "condition_verification"
-      - "medication_adherence"
+    cache_duration: 7200
 
 # 微服务集成
 integrations:

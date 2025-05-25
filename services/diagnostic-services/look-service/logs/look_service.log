@@ -1,0 +1,6 @@
+2025-05-23 19:43:01,941 - internal.analysis.image_quality_assessor - INFO - 图像质量评估器初始化完成
+2025-05-23 19:43:01,942 - internal.analysis.tongue_analyzer - ERROR - Model path models/face_analyzer does not exist
+2025-05-23 19:43:01,942 - internal.analysis.tongue_analyzer - ERROR - Failed to load models: Model path models/face_analyzer does not exist
+2025-05-23 19:43:01,942 - internal.analysis.tongue_analyzer - WARNING - 模型加载失败: Model path models/face_analyzer does not exist，将使用模拟模式
+2025-05-23 19:43:01,942 - internal.analysis.tongue_analyzer - INFO - TongueAnalyzer initialized on cpu device
+2025-05-23 19:43:01,943 - internal.repository.analysis_repository - INFO - 分析存储库初始化完成，存储路径: ./data/analysis_results

@@ -1,0 +1,213 @@
+# 中医证型分类
+# 按虚实、寒热、表里、阴阳等不同维度对证型进行分类
+
+categories:
+  # 八纲辨证分类
+  eight_principles:
+    - name: 表里
+      description: 疾病部位的深浅
+      subcategories:
+        - name: 表证
+          patterns:
+            - 风寒表证
+            - 风热表证
+            - 风湿表证
+            - 暑湿表证
+        - name: 里证
+          patterns:
+            - 里寒证
+            - 里热证
+            - 里虚证
+            - 里实证
+            
+    - name: 寒热
+      description: 疾病性质的寒热属性
+      subcategories:
+        - name: 寒证
+          patterns:
+            - 实寒证
+            - 虚寒证
+            - 表寒证
+            - 里寒证
+        - name: 热证
+          patterns:
+            - 实热证
+            - 虚热证
+            - 表热证
+            - 里热证
+            
+    - name: 虚实
+      description: 正气与邪气的盛衰状态
+      subcategories:
+        - name: 虚证
+          patterns:
+            - 气虚证
+            - 血虚证
+            - 阴虚证
+            - 阳虚证
+        - name: 实证
+          patterns:
+            - 气滞证
+            - 血瘀证
+            - 痰湿证
+            - 食积证
+            
+    - name: 阴阳
+      description: 疾病的阴阳属性
+      subcategories:
+        - name: 阴证
+          patterns:
+            - 阳虚阴盛
+            - 阴寒内盛
+            - 阴虚阳亢
+        - name: 阳证
+          patterns:
+            - 阳热亢盛
+            - 阴虚阳亢
+            - 阳虚阴盛
+            
+  # 脏腑辨证分类
+  zangfu:
+    - name: 心系证候
+      patterns:
+        - 心气虚
+        - 心阳虚
+        - 心血虚
+        - 心阴虚
+        - 心火亢盛
+        - 心血瘀阻
+        - 痰火扰心
+        - 心脾两虚
+        
+    - name: 肝系证候
+      patterns:
+        - 肝气郁结
+        - 肝火上炎
+        - 肝阳上亢
+        - 肝风内动
+        - 肝血虚
+        - 肝阴虚
+        - 寒滞肝脉
+        - 肝胆湿热
+        
+    - name: 脾系证候
+      patterns:
+        - 脾气虚
+        - 脾阳虚
+        - 脾虚湿困
+        - 寒湿困脾
+        - 脾胃湿热
+        - 脾不统血
+        - 脾胃虚寒
+        
+    - name: 肺系证候
+      patterns:
+        - 肺气虚
+        - 肺阴虚
+        - 风寒犯肺
+        - 风热犯肺
+        - 燥邪犯肺
+        - 痰热壅肺
+        - 痰湿阻肺
+        - 肺肾阴虚
+        
+    - name: 肾系证候
+      patterns:
+        - 肾阳虚
+        - 肾阴虚
+        - 肾气虚
+        - 肾精不足
+        - 肾虚水泛
+        - 肾阳虚衰
+        - 肾阴阳两虚
+        
+  # 气血津液辨证分类
+  qi_blood_fluids:
+    - name: 气病证候
+      patterns:
+        - 气虚证
+        - 气陷证
+        - 气滞证
+        - 气逆证
+        
+    - name: 血病证候
+      patterns:
+        - 血虚证
+        - 血瘀证
+        - 血热证
+        - 血寒证
+        
+    - name: 津液证候
+      patterns:
+        - 津液不足
+        - 水湿内停
+        - 痰饮证
+        - 水肿证
+        
+  # 六经辨证分类（用于外感病）
+  six_meridians:
+    - name: 太阳病
+      patterns:
+        - 太阳中风
+        - 太阳伤寒
+        
+    - name: 阳明病
+      patterns:
+        - 阳明经证
+        - 阳明腑证
+        
+    - name: 少阳病
+      patterns:
+        - 少阳证
+        
+    - name: 太阴病
+      patterns:
+        - 太阴虚寒
+        
+    - name: 少阴病
+      patterns:
+        - 少阴寒化
+        - 少阴热化
+        
+    - name: 厥阴病
+      patterns:
+        - 厥阴寒热错杂
+        
+  # 卫气营血辨证分类（用于温病）
+  wei_qi_ying_xue:
+    - name: 卫分证
+      patterns:
+        - 风热犯卫
+        - 暑湿犯卫
+        
+    - name: 气分证
+      patterns:
+        - 热扰胸膈
+        - 热结肠腑
+        
+    - name: 营分证
+      patterns:
+        - 热入营分
+        - 热扰心营
+        
+    - name: 血分证
+      patterns:
+        - 热入血分
+        - 血热妄行
+        
+  # 三焦辨证分类
+  triple_burner:
+    - name: 上焦证候
+      patterns:
+        - 上焦风热
+        - 上焦湿热
+        
+    - name: 中焦证候
+      patterns:
+        - 中焦湿热
+        - 中焦虚寒
+        
+    - name: 下焦证候
+      patterns:
+        - 下焦湿热
+        - 下焦虚寒

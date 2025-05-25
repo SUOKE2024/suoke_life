@@ -3,12 +3,13 @@
 
 """
 索儿(soer)智能体的无障碍服务客户端适配器
+支持健康计划和传感器数据的无障碍转换
 """
 
 import logging
-import json
+import asyncio
 import time
-from typing import Dict, Any, Optional, List
+from typing import Dict, Any, Optional, List, Union
 
 import grpc
 from google.protobuf.json_format import MessageToDict, ParseDict
@@ -26,440 +27,216 @@ from config.config import Config
 logger = logging.getLogger(__name__)
 
 class AccessibilityClient:
-    """无障碍服务客户端适配器，处理与无障碍服务的通信"""
+    """无障碍服务客户端适配器，为索儿智能体提供无障碍能力"""
     
-    def __init__(self, config: Optional[Config] = None):
+    def __init__(self, config: Optional[Dict[str, Any]] = None):
         """
         初始化客户端
         
         Args:
-            config: 配置对象，如果为None则使用默认配置
+            config: 配置字典，包含无障碍服务的连接信息
         """
-        self.config = config or Config()
+        self.config = config or {}
         self.channel = None
         self.stub = None
         self._connect()
-        logger.info("无障碍服务客户端初始化完成")
+        logger.info("索儿智能体无障碍服务客户端初始化完成")
     
-    def _connect(self) -> None:
+    def _connect(self):
         """连接到无障碍服务"""
         try:
-            # 获取服务地址
-            host = self.config.get("integration.accessibility_service.host", "accessibility-service")
-            port = self.config.get("integration.accessibility_service.port", 50051)
-            timeout_ms = self.config.get("integration.accessibility_service.timeout_ms", 5000)
+            # 从配置获取服务地址
+            host = self.config.get('accessibility_service', {}).get('host', 'accessibility-service')
+            port = self.config.get('accessibility_service', {}).get('port', 50051)
             
-            # 创建通道
-            self.channel = grpc.insecure_channel(
-                f"{host}:{port}",
-                options=[
-                    ('grpc.max_send_message_length', 50 * 1024 * 1024),
-                    ('grpc.max_receive_message_length', 50 * 1024 * 1024),
-                    ('grpc.enable_retries', 1),
-                    ('grpc.service_config', json.dumps({
-                        'methodConfig': [{
-                            'name': [{}],
-                            'retryPolicy': {
-                                'maxAttempts': 3,
-                                'initialBackoff': '0.1s',
-                                'maxBackoff': '1s',
-                                'backoffMultiplier': 2,
-                                'retryableStatusCodes': ['UNAVAILABLE']
-                            },
-                            'timeout': f'{timeout_ms}ms'
-                        }]
-                    }))
-                ]
-            )
+            # 创建gRPC通道
+            self.channel = grpc.insecure_channel(f'{host}:{port}')
             
-            # 创建stub
-            # 实际项目中应该创建实际的stub
+            # 导入生成的proto文件（实际项目中需要正确的导入路径）
+            # from accessibility_service.api.grpc import accessibility_pb2_grpc as pb2_grpc
             # self.stub = pb2_grpc.AccessibilityServiceStub(self.channel)
-            # 这里为简化，不创建实际的stub
             
-            logger.info(f"成功连接到无障碍服务: {host}:{port}")
+            # 模拟stub（实际项目中替换为真实的stub）
+            self.stub = MockAccessibilityStub()
+            
+            logger.info(f"已连接到无障碍服务: {host}:{port}")
             
         except Exception as e:
-            logger.error(f"连接无障碍服务失败: {str(e)}", exc_info=True)
-            self.channel = None
+            logger.error(f"连接无障碍服务失败: {e}")
+            self.stub = MockAccessibilityStub()  # 使用模拟客户端作为降级
     
-    def screen_reading(self, screen_data: bytes, user_id: str, 
-                      context: str, preferences: Dict[str, Any]) -> Dict[str, Any]:
+    async def convert_health_plan_to_accessible(self, health_plan: Dict[str, Any], 
+                                              user_id: str, target_format: str = "audio") -> Dict[str, Any]:
         """
-        屏幕阅读服务 - 分析屏幕内容并提供语音描述
+        将健康计划转换为无障碍格式
         
         Args:
-            screen_data: 屏幕截图数据
+            health_plan: 健康计划信息
             user_id: 用户ID
-            context: 上下文信息
-            preferences: 用户偏好设置
+            target_format: 目标格式（audio/simplified/braille）
             
         Returns:
-            包含屏幕描述和UI元素的字典
+            无障碍格式的健康计划
         """
-        logger.info(f"发送屏幕阅读请求: 用户={user_id}")
-        start_time = time.time()
-        
         try:
-            if not self.channel:
-                self._connect()
-                if not self.channel:
-                    raise Exception("无法连接到无障碍服务")
+            logger.info(f"转换健康计划: 用户={user_id}, 计划={health_plan.get('plan_name', 'unknown')}")
             
-            # 实际项目中应该构建请求并调用stub
-            # user_preferences = pb2.UserPreferences(**preferences)
-            # request = pb2.ScreenReadingRequest(
-            #     screen_data=screen_data,
-            #     user_id=user_id,
-            #     context=context,
-            #     preferences=user_preferences
-            # )
-            # response = self.stub.ScreenReading(request)
-            # return MessageToDict(response, preserving_proto_field_name=True)
-            
-            # 模拟服务调用结果 - 索儿版本特别关注健康计划和生活建议内容
-            time.sleep(0.15)  # 模拟网络延迟
-            result = {
-                "screen_description": "当前页面显示您本周的健康计划，包含四个主要模块：饮食建议、运动计划、睡眠管理和心理调节。每个模块都有一个详情按钮和完成度进度条。",
-                "elements": [
-                    {
-                        "element_type": "section", 
-                        "content": "饮食建议",
-                        "action": "点击查看详情",
-                        "location": {"x": 0.5, "y": 0.2, "width": 0.9, "height": 0.15}
-                    },
-                    {
-                        "element_type": "section", 
-                        "content": "运动计划",
-                        "action": "点击查看详情",
-                        "location": {"x": 0.5, "y": 0.4, "width": 0.9, "height": 0.15}
-                    },
-                    {
-                        "element_type": "section", 
-                        "content": "睡眠管理",
-                        "action": "点击查看详情",
-                        "location": {"x": 0.5, "y": 0.6, "width": 0.9, "height": 0.15}
-                    },
-                    {
-                        "element_type": "section", 
-                        "content": "心理调节",
-                        "action": "点击查看详情",
-                        "location": {"x": 0.5, "y": 0.8, "width": 0.9, "height": 0.15}
-                    }
-                ],
-                "audio_description": b""  # 实际应该返回音频数据
+            # 构建请求
+            request = {
+                'content_id': f"health_plan_{health_plan.get('plan_id', 'unknown')}",
+                'content_type': 'health_plan',
+                'user_id': user_id,
+                'target_format': target_format,
+                'preferences': {
+                    'language': 'zh-CN',
+                    'voice_type': 'caring',
+                    'speech_rate': 1.0,
+                    'health_context': True,
+                    'motivational_tone': True
+                }
             }
             
-            logger.info(f"屏幕阅读请求完成: 用户={user_id}, 耗时={time.time() - start_time:.2f}秒")
-            return result
+            # 调用无障碍服务的内容转换接口
+            response = await self._call_accessible_content(request)
+            
+            # 处理健康计划特定信息
+            accessible_info = self._format_health_plan_content(health_plan, response, target_format)
+            
+            return {
+                'accessible_content': accessible_info,
+                'content_url': response.get('content_url', ''),
+                'audio_content': response.get('audio_content', b''),
+                'tactile_content': response.get('tactile_content', b''),
+                'daily_reminders': self._generate_daily_reminders(health_plan, target_format),
+                'progress_indicators': self._generate_progress_indicators(health_plan),
+                'success': True
+            }
             
         except Exception as e:
-            logger.error(f"屏幕阅读请求失败: {str(e)}", exc_info=True)
+            logger.error(f"健康计划无障碍转换失败: {e}")
             return {
-                "error": str(e),
-                "screen_description": "无法解析屏幕内容",
-                "elements": [],
-                "audio_description": b""
+                'accessible_content': f'健康计划转换失败: {str(e)}',
+                'content_url': '',
+                'audio_content': b'',
+                'tactile_content': b'',
+                'daily_reminders': [],
+                'progress_indicators': [],
+                'success': False,
+                'error': str(e)
             }
     
-    def voice_assistance(self, audio_data: bytes, user_id: str, context: str, 
-                        language: str, dialect: str) -> Dict[str, Any]:
-        """
-        语音辅助服务 - 进行语音识别和响应
+    def _format_health_plan_content(self, health_plan: Dict[str, Any], 
+                                  response: Dict[str, Any], target_format: str) -> str:
+        """格式化健康计划内容"""
+        plan_name = health_plan.get('plan_name', '未知计划')
+        duration = health_plan.get('duration', '未知时长')
+        goals = health_plan.get('goals', [])
+        current_progress = health_plan.get('current_progress', 0)
         
-        Args:
-            audio_data: 语音数据
-            user_id: 用户ID
-            context: 上下文信息
-            language: 语言代码
-            dialect: 方言代码
-            
-        Returns:
-            包含识别文本和响应的字典
-        """
-        logger.info(f"发送语音辅助请求: 用户={user_id}, 语言={language}, 方言={dialect}")
-        start_time = time.time()
+        goals_text = '、'.join(goals) if goals else '无具体目标'
         
-        try:
-            if not self.channel:
-                self._connect()
-                if not self.channel:
-                    raise Exception("无法连接到无障碍服务")
+        if target_format == "simplified":
+            return f"{plan_name}，时长{duration}，目标：{goals_text}，进度{current_progress}%"
+        elif target_format == "audio":
+            return f"健康计划：{plan_name}。计划时长：{duration}。主要目标：{goals_text}。当前进度：{current_progress}%。"
+        else:
+            return response.get('accessible_content', f"健康计划：{plan_name}")
+    
+    def _generate_daily_reminders(self, health_plan: Dict[str, Any], target_format: str) -> List[Dict[str, Any]]:
+        """生成每日提醒"""
+        reminders = []
+        
+        # 根据健康计划生成提醒
+        goals = health_plan.get('goals', [])
+        
+        for goal in goals:
+            if '运动' in goal:
+                reminders.append({
+                    'type': 'exercise',
+                    'time': '09:00',
+                    'content': '记得进行今日的运动计划',
+                    'format': target_format
+                })
             
-            # 实际项目中应该构建请求并调用stub
-            # request = pb2.VoiceAssistanceRequest(
-            #     audio_data=audio_data,
-            #     user_id=user_id,
-            #     context=context,
-            #     language=language,
-            #     dialect=dialect
-            # )
-            # response = self.stub.VoiceAssistance(request)
-            # return MessageToDict(response, preserving_proto_field_name=True)
+            if '饮食' in goal or '营养' in goal:
+                reminders.append({
+                    'type': 'nutrition',
+                    'time': '12:00',
+                    'content': '记录午餐营养摄入',
+                    'format': target_format
+                })
             
-            # 模拟服务调用结果 - 索儿版本特别关注健康管理和生活建议
-            time.sleep(0.12)  # 模拟网络延迟
-            result = {
-                "recognized_text": "我今天应该吃什么食物来改善阳虚体质",
-                "response_text": "根据您的阳虚体质，今天建议您食用一些温补阳气的食物，如羊肉、牛肉、鸡肉、韭菜、生姜、桂圆等。早餐可以喝一碗生姜红枣粥，午餐可以搭配羊肉和韭菜，晚餐可以选择温补的鸡汤。记得保持食物温热，避免生冷食物。",
-                "response_audio": b"",  # 实际应该返回音频数据
-                "confidence": 0.89
+            if '睡眠' in goal:
+                reminders.append({
+                    'type': 'sleep',
+                    'time': '22:00',
+                    'content': '准备就寝，保证充足睡眠',
+                    'format': target_format
+                })
+        
+        return reminders
+    
+    def _generate_progress_indicators(self, health_plan: Dict[str, Any]) -> List[Dict[str, Any]]:
+        """生成进度指标"""
+        indicators = []
+        
+        current_progress = health_plan.get('current_progress', 0)
+        goals = health_plan.get('goals', [])
+        
+        for i, goal in enumerate(goals):
+            indicator = {
+                'goal': goal,
+                'progress': min(current_progress + (i * 10), 100),  # 模拟不同目标的进度
+                'status': 'on_track' if current_progress > 50 else 'needs_attention',
+                'accessibility_description': f"目标{i+1}：{goal}，完成度{min(current_progress + (i * 10), 100)}%"
             }
-            
-            logger.info(f"语音辅助请求完成: 用户={user_id}, 耗时={time.time() - start_time:.2f}秒")
-            return result
-            
-        except Exception as e:
-            logger.error(f"语音辅助请求失败: {str(e)}", exc_info=True)
+            indicators.append(indicator)
+        
+        return indicators
+    
+    # 模拟的服务调用方法（实际项目中替换为真实的gRPC调用）
+    async def _call_accessible_content(self, request: Dict[str, Any]) -> Dict[str, Any]:
+        """调用无障碍内容转换服务"""
+        await asyncio.sleep(0.1)
+        content_type = request.get('content_type', 'unknown')
+        
+        if content_type == 'health_plan':
             return {
-                "error": str(e),
-                "recognized_text": "",
-                "response_text": "抱歉，我无法处理您的语音请求",
-                "response_audio": b"",
-                "confidence": 0.0
+                'accessible_content': '个人健康计划：30天体重管理计划，目标减重5公斤，当前进度60%',
+                'content_url': 'https://accessibility.suoke.life/health_plan/123',
+                'audio_content': b'mock_health_plan_audio',
+                'tactile_content': b'mock_health_plan_braille'
+            }
+        else:
+            return {
+                'accessible_content': '健康数据已转换为无障碍格式',
+                'content_url': 'https://accessibility.suoke.life/content/general',
+                'audio_content': b'mock_audio_content',
+                'tactile_content': b'mock_braille_content'
             }
     
-    def accessible_content(self, content_id: str, content_type: str, user_id: str, 
-                          target_format: str, preferences: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        健康内容无障碍转换 - 将健康内容转换为无障碍格式
-        
-        Args:
-            content_id: 内容ID
-            content_type: 内容类型
-            user_id: 用户ID
-            target_format: 目标格式
-            preferences: 用户偏好设置
-            
-        Returns:
-            包含可访问内容的字典
-        """
-        logger.info(f"发送内容转换请求: 用户={user_id}, 内容ID={content_id}, 目标格式={target_format}")
-        start_time = time.time()
-        
-        try:
-            if not self.channel:
-                self._connect()
-                if not self.channel:
-                    raise Exception("无法连接到无障碍服务")
-            
-            # 实际项目中应该构建请求并调用stub
-            # user_preferences = pb2.UserPreferences(**preferences)
-            # request = pb2.AccessibleContentRequest(
-            #     content_id=content_id,
-            #     content_type=content_type,
-            #     user_id=user_id,
-            #     target_format=target_format,
-            #     preferences=user_preferences
-            # )
-            # response = self.stub.AccessibleContent(request)
-            # return MessageToDict(response, preserving_proto_field_name=True)
-            
-            # 模拟服务调用结果 - 索儿版本特别关注健康计划和生活建议的内容
-            time.sleep(0.18)  # 模拟网络延迟
-            
-            if target_format == "audio":
-                result = {
-                    "accessible_content": "",
-                    "content_url": "https://storage.suoke.life/audio/health_plan_123.mp3",
-                    "audio_content": b"",  # 实际应该返回音频数据
-                    "tactile_content": b""
-                }
-            elif target_format == "simplified":
-                result = {
-                    "accessible_content": "阳虚体质养生要点：1. 注意保暖 2. 多吃温热食物 3. 适当运动增强阳气 4. 避免受凉 5. 保持情绪稳定",
-                    "content_url": "",
-                    "audio_content": b"",
-                    "tactile_content": b""
-                }
-            else:
-                result = {
-                    "accessible_content": "阳虚体质养生计划：\n\n1. 饮食调理：选择温热性质食物，如羊肉、牛肉、鸡肉、韭菜、生姜等。避免生冷食物和寒凉水果。适量食用桂圆、红枣等温补食材。\n\n2. 运动建议：宜进行八段锦、太极拳等温和运动，避免大量出汗。室外运动注意保暖，避免受寒。\n\n3. 作息调整：保证充足睡眠，避免熬夜。睡前泡脚有助于温阳。\n\n4. 情志调养：保持乐观情绪，避免抑郁。",
-                    "content_url": "",
-                    "audio_content": b"",
-                    "tactile_content": b""
-                }
-            
-            logger.info(f"内容转换请求完成: 用户={user_id}, 耗时={time.time() - start_time:.2f}秒")
-            return result
-            
-        except Exception as e:
-            logger.error(f"内容转换请求失败: {str(e)}", exc_info=True)
-            return {
-                "error": str(e),
-                "accessible_content": "内容转换失败",
-                "content_url": "",
-                "audio_content": b"",
-                "tactile_content": b""
-            }
-    
-    def manage_settings(self, user_id: str, preferences: Dict[str, Any], 
-                       action: str) -> Dict[str, Any]:
-        """
-        无障碍设置管理 - 获取或更新用户的无障碍设置
-        
-        Args:
-            user_id: 用户ID
-            preferences: 用户偏好设置
-            action: 操作（获取/更新）
-            
-        Returns:
-            包含当前设置的字典
-        """
-        logger.info(f"发送设置管理请求: 用户={user_id}, 操作={action}")
-        start_time = time.time()
-        
-        try:
-            if not self.channel:
-                self._connect()
-                if not self.channel:
-                    raise Exception("无法连接到无障碍服务")
-            
-            # 实际项目中应该构建请求并调用stub
-            # user_preferences = pb2.UserPreferences(**preferences)
-            # request = pb2.SettingsRequest(
-            #     user_id=user_id,
-            #     preferences=user_preferences,
-            #     action=action
-            # )
-            # response = self.stub.ManageSettings(request)
-            # return MessageToDict(response, preserving_proto_field_name=True)
-            
-            # 模拟服务调用结果 - 索儿版本关注健康管理相关设置
-            time.sleep(0.08)  # 模拟网络延迟
-            
-            if action == "get":
-                result = {
-                    "current_preferences": {
-                        "font_size": "large",
-                        "high_contrast": True,
-                        "voice_type": "female",
-                        "speech_rate": 1.0,
-                        "language": "zh-CN",
-                        "dialect": "mandarin",
-                        "screen_reader": True,
-                        "sign_language": False,
-                        "enabled_features": ["voice_assistance", "screen_reading"],
-                        "health_plan_detail_level": "detailed",
-                        "reminder_frequency": "daily",
-                        "auto_read_health_data": True
-                    },
-                    "success": True,
-                    "message": "成功获取用户设置"
-                }
-            elif action == "update":
-                result = {
-                    "current_preferences": preferences,
-                    "success": True,
-                    "message": "成功更新用户设置"
-                }
-            else:
-                result = {
-                    "current_preferences": {},
-                    "success": False,
-                    "message": f"不支持的操作: {action}"
-                }
-            
-            logger.info(f"设置管理请求完成: 用户={user_id}, 耗时={time.time() - start_time:.2f}秒")
-            return result
-            
-        except Exception as e:
-            logger.error(f"设置管理请求失败: {str(e)}", exc_info=True)
-            return {
-                "error": str(e),
-                "current_preferences": {},
-                "success": False,
-                "message": f"处理失败: {str(e)}"
-            }
-    
-    def convert_health_plan(self, health_plan_id: str, user_id: str, 
-                           target_format: str, preferences: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        健康计划无障碍转换 - 将健康计划转换为无障碍格式
-        
-        Args:
-            health_plan_id: 健康计划ID
-            user_id: 用户ID
-            target_format: 目标格式
-            preferences: 用户偏好设置
-            
-        Returns:
-            包含可访问健康计划的字典
-        """
-        logger.info(f"发送健康计划转换请求: 用户={user_id}, 计划ID={health_plan_id}")
-        start_time = time.time()
-        
-        try:
-            # 内部使用通用内容转换
-            result = self.accessible_content(
-                content_id=health_plan_id,
-                content_type="health_plan",
-                user_id=user_id,
-                target_format=target_format,
-                preferences=preferences
-            )
-            
-            # 添加健康计划特有的字段
-            result["plan_sections"] = [
-                {
-                    "title": "饮食建议",
-                    "content": "选择温热性质食物，如羊肉、牛肉、鸡肉、韭菜、生姜等。避免生冷食物和寒凉水果。"
-                },
-                {
-                    "title": "运动建议",
-                    "content": "宜进行八段锦、太极拳等温和运动，避免大量出汗。室外运动注意保暖，避免受寒。"
-                },
-                {
-                    "title": "作息调整",
-                    "content": "保证充足睡眠，避免熬夜。睡前泡脚有助于温阳。"
-                },
-                {
-                    "title": "情志调养",
-                    "content": "保持乐观情绪，避免抑郁。"
-                }
-            ]
-            
-            result["reminders"] = [
-                {
-                    "type": "diet",
-                    "time": "08:00",
-                    "message": "早餐记得喝一碗生姜红枣粥"
-                },
-                {
-                    "type": "exercise",
-                    "time": "16:00",
-                    "message": "现在是做八段锦的好时间"
-                },
-                {
-                    "type": "sleep",
-                    "time": "21:30",
-                    "message": "准备睡前泡脚，有助于提高睡眠质量"
-                }
-            ]
-            
-            logger.info(f"健康计划转换请求完成: 用户={user_id}, 耗时={time.time() - start_time:.2f}秒")
-            return result
-            
-        except Exception as e:
-            logger.error(f"健康计划转换请求失败: {str(e)}", exc_info=True)
-            return {
-                "error": str(e),
-                "accessible_content": "健康计划转换失败",
-                "content_url": "",
-                "audio_content": b"",
-                "tactile_content": b"",
-                "plan_sections": [],
-                "reminders": []
-            }
-    
-    def close(self) -> None:
-        """关闭与无障碍服务的连接"""
+    def close(self):
+        """关闭客户端连接"""
         if self.channel:
-            try:
-                self.channel.close()
-                logger.info("关闭与无障碍服务的连接")
-            except Exception as e:
-                logger.error(f"关闭与无障碍服务的连接失败: {str(e)}", exc_info=True)
+            self.channel.close()
+        logger.info("索儿无障碍服务客户端连接已关闭")
+
+
+class MockAccessibilityStub:
+    """模拟的无障碍服务存根（用于开发和测试）"""
+    
+    def __init__(self):
+        logger.info("使用模拟无障碍服务存根")
+    
+    async def AccessibleContent(self, request):
+        """模拟无障碍内容转换"""
+        await asyncio.sleep(0.1)
+        return type('Response', (), {
+            'accessible_content': '模拟健康数据无障碍转换',
+            'content_url': 'https://mock.url',
+            'audio_content': b'mock_health_audio',
+            'tactile_content': b'mock_health_braille'
+        })()
 
 
 # 单例实例

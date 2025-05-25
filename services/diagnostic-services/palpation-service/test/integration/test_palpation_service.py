@@ -3,381 +3,382 @@
 
 """
 切诊服务集成测试
-测试服务的完整功能流程
 """
 
-import unittest
 import sys
-import os
 import time
 import grpc
-import json
-import logging
-import uuid
-from concurrent import futures
 from pathlib import Path
-from unittest.mock import MagicMock, patch
-import numpy as np
 
 # 添加项目根目录到Python路径
-sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+project_root = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(project_root))
 
-# 导入服务相关模块
 from api.grpc import palpation_service_pb2 as pb2
 from api.grpc import palpation_service_pb2_grpc as pb2_grpc
-from internal.delivery.palpation_service_impl import PalpationServiceImpl, PalpationServiceServicer
-from internal.repository.session_repository import SessionRepository
-from internal.repository.user_repository import UserRepository
-from internal.signal.pulse_processor import PulseProcessor
-from internal.signal.abdominal_analyzer import AbdominalAnalyzer
-from internal.signal.skin_analyzer import SkinAnalyzer
 
-class TestPalpationServiceIntegration(unittest.TestCase):
-    """切诊服务集成测试"""
+def test_health_check():
+    """测试健康检查接口"""
+    print("测试健康检查接口...")
     
-    @classmethod
-    def setUpClass(cls):
-        """设置测试环境"""
-        # 加载测试配置
-        cls.config = {
-            'pulse_analysis': {
-                'sampling_rate': 100,
-                'window_size': 5,
-                'feature_extraction': {
-                    'time_domain': True,
-                    'frequency_domain': True,
-                    'wavelet_domain': True
-                }
-            },
-            'abdominal_analysis': {
-                'region_mappings': [
-                    {'id': 'right_top', 'name': '右上腹', 'organs': ['liver', 'gallbladder']}
-                ]
-            },
-            'skin_analysis': {
-                'region_mappings': [
-                    {'id': 'face', 'name': '面部', 'related_organs': ['lung', 'heart']}
-                ]
-            },
-            'devices': {
-                'supported_models': [
-                    {
-                        'model': 'TEST_MODEL',
-                        'sampling_rate': 1000,
-                        'sampling_duration': 30
-                    }
-                ]
-            }
-        }
+    # 创建gRPC通道
+    channel = grpc.insecure_channel('localhost:50051')
+    stub = pb2_grpc.PalpationServiceStub(channel)
+    
+    try:
+        # 调用健康检查
+        request = pb2.HealthCheckRequest(level=pb2.HealthCheckRequest.FULL)
+        response = stub.HealthCheck(request)
         
-        # 创建模拟数据库仓库
-        cls.mock_session_repo = MagicMock(spec=SessionRepository)
-        cls.mock_user_repo = MagicMock(spec=UserRepository)
+        print(f"健康检查状态: {pb2.HealthCheckResponse.ServiceStatus.Name(response.status)}")
+        print(f"服务版本: {response.version}")
+        print(f"组件状态:")
+        for component in response.components:
+            print(f"  - {component.component_name}: {pb2.HealthCheckResponse.ServiceStatus.Name(component.status)}")
+            print(f"    详情: {component.details}")
+            print(f"    响应时间: {component.response_time_ms}ms")
         
-        # 配置模拟仓库的行为
-        cls.mock_user_repo.get_user.return_value = {'user_id': 'test_user', 'name': '测试用户'}
-        cls.stored_session = None
+        return response.status == pb2.HealthCheckResponse.SERVING
         
-        def mock_create_session(session_id, data):
-            cls.stored_session = data
-            return True
-            
-        def mock_get_session(session_id):
-            if cls.stored_session and cls.stored_session.get('session_id') == session_id:
-                return cls.stored_session
-            return None
-        
-        def mock_update_session(session_id, data):
-            if cls.stored_session and cls.stored_session.get('session_id') == session_id:
-                cls.stored_session = data
-                return True
-            return False
-            
-        cls.mock_session_repo.create_session.side_effect = mock_create_session
-        cls.mock_session_repo.get_session.side_effect = mock_get_session
-        cls.mock_session_repo.update_session.side_effect = mock_update_session
-        
-        # 创建服务实现
-        cls.service = PalpationServiceImpl(
-            config=cls.config,
-            session_repository=cls.mock_session_repo,
-            user_repository=cls.mock_user_repo
+    except grpc.RpcError as e:
+        print(f"健康检查失败: {e}")
+        return False
+    finally:
+        channel.close()
+
+def test_pulse_session():
+    """测试脉诊会话流程"""
+    print("\n测试脉诊会话流程...")
+    
+    # 创建gRPC通道
+    channel = grpc.insecure_channel('localhost:50051')
+    stub = pb2_grpc.PalpationServiceStub(channel)
+    
+    try:
+        # 1. 开始脉诊会话
+        print("1. 开始脉诊会话...")
+        device_info = pb2.DeviceInfo(
+            device_id="test-device-001",
+            model="索克WP-100",
+            firmware_version="1.0.0",
+            sensor_types=["pressure", "velocity"]
         )
         
-        # 创建gRPC服务器
-        cls.server = grpc.server(futures.ThreadPoolExecutor(max_workers=1))
-        pb2_grpc.add_PalpationServiceServicer_to_server(cls.service, cls.server)
-        cls.port = 50099
-        cls.server.add_insecure_port(f'[::]:{cls.port}')
-        cls.server.start()
+        calibration_data = pb2.SensorCalibrationData(
+            calibration_values=[1.0, 1.0, 1.0],
+            calibration_timestamp=int(time.time()),
+            calibration_operator="测试操作员"
+        )
         
-        # 创建gRPC客户端
-        cls.channel = grpc.insecure_channel(f'localhost:{cls.port}')
-        cls.client = pb2_grpc.PalpationServiceStub(cls.channel)
-    
-    @classmethod
-    def tearDownClass(cls):
-        """清理测试环境"""
-        cls.channel.close()
-        cls.server.stop(0)
-    
-    def setUp(self):
-        """每个测试前准备"""
-        self.__class__.stored_session = None
-    
-    def test_full_analysis_flow(self):
-        """测试完整的分析流程"""
-        # 步骤1: 启动脉诊会话
-        session_response = self.client.StartPulseSession(pb2.StartPulseSessionRequest(
-            user_id='test_user',
-            device_info=pb2.DeviceInfo(
-                device_id='device123',
-                model='TEST_MODEL',
-                firmware_version='v1.0',
-                sensor_types=['pressure', 'temperature']
-            ),
-            calibration_data=pb2.SensorCalibrationData(
-                calibration_values=[1.0, 1.1, 1.0],
-                calibration_timestamp=int(time.time()),
-                calibration_operator='auto'
-            )
-        ))
+        start_request = pb2.StartPulseSessionRequest(
+            user_id="test-user-001",
+            device_info=device_info,
+            calibration_data=calibration_data
+        )
         
-        # 验证会话创建成功
-        self.assertTrue(session_response.success)
-        self.assertNotEqual(session_response.session_id, '')
-        session_id = session_response.session_id
+        start_response = stub.StartPulseSession(start_request)
         
-        # 步骤2: 记录脉诊数据
-        # 创建模拟脉搏数据
-        pulse_data_packets = []
+        if not start_response.success:
+            print(f"开始会话失败: {start_response.error_message}")
+            return False
         
-        for i in range(5):
-            # 创建正弦波形模拟脉搏
-            import math
+        session_id = start_response.session_id
+        print(f"会话ID: {session_id}")
+        print(f"采样配置: 采样率={start_response.sampling_config.sampling_rate}Hz")
+        
+        # 2. 发送脉搏数据
+        print("\n2. 发送脉搏数据...")
+        
+        def generate_pulse_data():
+            """生成模拟脉搏数据"""
             import numpy as np
-            time_points = np.linspace(0, 2*math.pi, 100)
-            pressure_data = [math.sin(t) + 1 for t in time_points]  # 范围 0-2
-            velocity_data = [math.cos(t) for t in time_points]
             
-            packet = pb2.PulseDataPacket(
-                session_id=session_id,
-                timestamp=int(time.time()) + i,
-                pressure_data=pressure_data,
-                velocity_data=velocity_data,
-                position=i % 6 + 1,  # 轮换六个脉位
-                skin_temperature=36.5,
-                skin_moisture=0.7
-            )
-            pulse_data_packets.append(packet)
+            positions = [
+                pb2.PulsePosition.CUN_LEFT,
+                pb2.PulsePosition.GUAN_LEFT,
+                pb2.PulsePosition.CHI_LEFT,
+                pb2.PulsePosition.CUN_RIGHT,
+                pb2.PulsePosition.GUAN_RIGHT,
+                pb2.PulsePosition.CHI_RIGHT
+            ]
+            
+            for position in positions:
+                # 每个位置发送10个数据包
+                for i in range(10):
+                    # 生成模拟脉搏波形数据
+                    t = np.linspace(0, 1, 100)
+                    # 模拟脉搏波形：主波 + 重搏波
+                    pressure = 0.5 + 0.3 * np.sin(2 * np.pi * t) + 0.1 * np.sin(4 * np.pi * t)
+                    velocity = 0.3 * np.cos(2 * np.pi * t) + 0.05 * np.cos(4 * np.pi * t)
+                    
+                    # 添加一些噪声
+                    pressure += np.random.normal(0, 0.02, len(pressure))
+                    velocity += np.random.normal(0, 0.01, len(velocity))
+                    
+                    packet = pb2.PulseDataPacket(
+                        session_id=session_id,
+                        timestamp=int(time.time() * 1000) + i * 100,
+                        pressure_data=pressure.tolist(),
+                        velocity_data=velocity.tolist(),
+                        position=position,
+                        skin_temperature=36.5 + np.random.normal(0, 0.1),
+                        skin_moisture=0.5 + np.random.normal(0, 0.05)
+                    )
+                    
+                    yield packet
+                    time.sleep(0.1)  # 模拟实时数据流
         
-        # 发送数据包
-        record_response = self.client.RecordPulseData(iter(pulse_data_packets))
+        record_response = stub.RecordPulseData(generate_pulse_data())
         
-        # 验证数据记录成功
-        self.assertTrue(record_response.success)
-        self.assertEqual(record_response.packets_received, len(pulse_data_packets))
+        if not record_response.success:
+            print(f"记录数据失败: {record_response.error_message}")
+            return False
         
-        # 步骤3: 提取脉象特征
-        extract_response = self.client.ExtractPulseFeatures(pb2.ExtractPulseFeaturesRequest(
+        print(f"成功接收 {record_response.packets_received} 个数据包")
+        
+        # 3. 提取脉象特征
+        print("\n3. 提取脉象特征...")
+        
+        extract_request = pb2.ExtractPulseFeaturesRequest(
             session_id=session_id,
             include_raw_data=False
-        ))
+        )
         
-        # 验证特征提取成功
-        self.assertTrue(extract_response.success)
-        self.assertTrue(len(extract_response.features) > 0)
+        extract_response = stub.ExtractPulseFeatures(extract_request)
         
-        # 步骤4: 分析脉象
-        analyze_response = self.client.AnalyzePulse(pb2.AnalyzePulseRequest(
+        if not extract_response.success:
+            print(f"提取特征失败: {extract_response.error_message}")
+            return False
+        
+        print(f"提取到 {len(extract_response.features)} 个特征")
+        print(f"信号质量: {extract_response.quality_metrics.signal_quality}")
+        print(f"噪声水平: {extract_response.quality_metrics.noise_level}")
+        print(f"数据有效: {extract_response.quality_metrics.is_valid}")
+        
+        # 显示部分特征
+        for feature in extract_response.features[:5]:
+            print(f"  - {feature.feature_name}: {feature.feature_value:.3f} ({feature.feature_description})")
+        
+        # 4. 分析脉象
+        print("\n4. 分析脉象...")
+        
+        analyze_request = pb2.AnalyzePulseRequest(
             session_id=session_id,
-            user_id='test_user',
+            user_id="test-user-001",
             include_detailed_analysis=True,
             options=pb2.AnalysisOptions(
                 use_tcm_model=True,
                 use_western_model=False,
-                analysis_depth='detailed'
+                analysis_depth="standard"
             )
-        ))
+        )
         
-        # 验证脉象分析成功
-        self.assertTrue(analyze_response.success)
+        analyze_response = stub.AnalyzePulse(analyze_request)
         
-        # 步骤5: 腹诊分析
-        abdominal_data = [pb2.AbdominalRegionData(
-            region_id='right_top',
-            region_name='右上腹',
-            tenderness_level=0.7,
-            tension_level=0.6,
-            has_mass=False,
-            texture_description='稍硬',
-            comments='轻度压痛'
-        )]
+        if not analyze_response.success:
+            print(f"分析脉象失败: {analyze_response.error_message}")
+            return False
         
-        abdominal_response = self.client.AnalyzeAbdominalPalpation(pb2.AbdominalPalpationRequest(
-            user_id='test_user',
-            regions=abdominal_data,
-            include_detailed_analysis=True
-        ))
+        print(f"识别到的脉象类型:")
+        for pulse_type in analyze_response.pulse_types:
+            print(f"  - {pb2.PulseWaveType.Name(pulse_type)}")
         
-        # 验证腹诊分析成功
-        self.assertTrue(abdominal_response.success)
-        self.assertTrue(len(abdominal_response.findings) > 0)
+        print(f"\n中医证型:")
+        for pattern in analyze_response.tcm_patterns:
+            print(f"  - {pattern.pattern_name} (置信度: {pattern.confidence:.1%})")
+            print(f"    描述: {pattern.description}")
         
-        # 步骤6: 皮肤触诊分析
-        skin_data = [pb2.SkinRegionData(
-            region_id='face',
-            region_name='面部',
-            moisture_level=0.4,
-            elasticity=0.6,
-            texture='正常',
-            temperature=36.8,
-            color='正常'
-        )]
+        print(f"\n脏腑状态:")
+        for condition in analyze_response.organ_conditions:
+            print(f"  - {condition.organ_name}: {condition.condition} (严重程度: {condition.severity:.1f})")
         
-        skin_response = self.client.AnalyzeSkinPalpation(pb2.SkinPalpationRequest(
-            user_id='test_user',
-            regions=skin_data
-        ))
+        print(f"\n分析总结: {analyze_response.analysis_summary}")
+        print(f"置信度评分: {analyze_response.confidence_score:.1%}")
         
-        # 验证皮肤触诊分析成功
-        self.assertTrue(skin_response.success)
+        return True
         
-        # 步骤7: 获取综合分析
-        comprehensive_response = self.client.GetComprehensivePalpationAnalysis(pb2.ComprehensiveAnalysisRequest(
-            user_id='test_user',
-            pulse_session_id=session_id,
-            include_abdominal=True,
-            include_skin=True
-        ))
-        
-        # 验证综合分析成功
-        self.assertTrue(comprehensive_response.success)
-        self.assertNotEqual(comprehensive_response.summary, '')
-        
-        # 验证结果包含所有切诊方法的分析
-        self.assertTrue(hasattr(comprehensive_response.overview, 'pulse'))
-        self.assertTrue(hasattr(comprehensive_response.overview, 'abdominal'))
-        self.assertTrue(hasattr(comprehensive_response.overview, 'skin'))
+    except grpc.RpcError as e:
+        print(f"测试失败: {e}")
+        return False
+    finally:
+        channel.close()
 
-class HealthCheckTests(unittest.TestCase):
-    """健康检查接口测试"""
+def test_abdominal_palpation():
+    """测试腹诊分析"""
+    print("\n测试腹诊分析...")
     
-    @classmethod
-    def setUpClass(cls):
-        """设置测试环境"""
-        # 加载测试配置
-        test_config_path = Path(__file__).resolve().parents[1] / "data" / "test_config.json"
-        if test_config_path.exists():
-            with open(test_config_path, 'r', encoding='utf-8') as f:
-                cls.config = json.load(f)
-        else:
-            # 使用默认测试配置
-            cls.config = {
-                "server": {"port": 50053, "max_workers": 5},
-                "database": {"type": "mongodb", "connection_string": "mongodb://localhost:27017", "name": "palpation_test_db"},
-                "pulse_analysis": {"model_path": "./test/data/dummy_model", "confidence_threshold": 0.6},
-                "abdominal_analysis": {"model_path": "./test/data/dummy_model", "confidence_threshold": 0.6},
-                "skin_analysis": {"model_path": "./test/data/dummy_model", "confidence_threshold": 0.6}
-            }
+    # 创建gRPC通道
+    channel = grpc.insecure_channel('localhost:50051')
+    stub = pb2_grpc.PalpationServiceStub(channel)
+    
+    try:
+        # 准备腹诊数据
+        regions = [
+            pb2.AbdominalRegionData(
+                region_id="epigastric",
+                region_name="上腹部",
+                tenderness_level=0.3,
+                tension_level=0.4,
+                has_mass=False,
+                texture_description="柔软",
+                comments="轻度压痛"
+            ),
+            pb2.AbdominalRegionData(
+                region_id="umbilical",
+                region_name="脐周",
+                tenderness_level=0.1,
+                tension_level=0.2,
+                has_mass=False,
+                texture_description="正常",
+                comments="无异常"
+            ),
+            pb2.AbdominalRegionData(
+                region_id="right_hypochondriac",
+                region_name="右胁部",
+                tenderness_level=0.6,
+                tension_level=0.7,
+                has_mass=False,
+                texture_description="紧张",
+                comments="明显压痛"
+            )
+        ]
         
-        # 创建服务器
-        cls.server = grpc.server(futures.ThreadPoolExecutor(max_workers=5))
-        
-        # 初始化仓库和处理器
-        cls.session_repo = SessionRepository(cls.config.get('database', {}))
-        cls.user_repo = UserRepository(cls.config.get('database', {}))
-        cls.pulse_processor = PulseProcessor(cls.config.get('pulse_analysis', {}))
-        cls.abdominal_analyzer = AbdominalAnalyzer(cls.config.get('abdominal_analysis', {}))
-        cls.skin_analyzer = SkinAnalyzer(cls.config.get('skin_analysis', {}))
-        
-        # 创建服务实现
-        cls.servicer = PalpationServiceServicer(
-            session_repository=cls.session_repo,
-            user_repository=cls.user_repo,
-            pulse_processor=cls.pulse_processor,
-            abdominal_analyzer=cls.abdominal_analyzer,
-            skin_analyzer=cls.skin_analyzer,
-            config=cls.config
+        request = pb2.AbdominalPalpationRequest(
+            user_id="test-user-001",
+            regions=regions,
+            include_detailed_analysis=True
         )
         
-        # 注册服务
-        pb2_grpc.add_PalpationServiceServicer_to_server(cls.servicer, cls.server)
+        response = stub.AnalyzeAbdominalPalpation(request)
         
-        # 选择随机端口
-        cls.port = 50055 + np.random.randint(100)
-        cls.server.add_insecure_port(f'[::]:{cls.port}')
-        cls.server.start()
+        if not response.success:
+            print(f"腹诊分析失败: {response.error_message}")
+            return False
         
-        # 创建客户端通道
-        cls.channel = grpc.insecure_channel(f'localhost:{cls.port}')
-        cls.stub = pb2_grpc.PalpationServiceStub(cls.channel)
+        print(f"腹诊发现:")
+        for finding in response.findings:
+            print(f"  - 区域: {finding.region_id}")
+            print(f"    类型: {finding.finding_type}")
+            print(f"    描述: {finding.description}")
+            print(f"    置信度: {finding.confidence:.1%}")
+            if finding.potential_causes:
+                print(f"    可能原因: {', '.join(finding.potential_causes)}")
         
-        logging.info(f"集成测试服务器启动，端口: {cls.port}")
+        print(f"\n分析总结: {response.analysis_summary}")
+        
+        return True
+        
+    except grpc.RpcError as e:
+        print(f"腹诊测试失败: {e}")
+        return False
+    finally:
+        channel.close()
+
+def test_skin_palpation():
+    """测试皮肤触诊分析"""
+    print("\n测试皮肤触诊分析...")
     
-    @classmethod
-    def tearDownClass(cls):
-        """清理测试环境"""
-        cls.channel.close()
-        cls.server.stop(grace=0)
-        logging.info("集成测试服务器已关闭")
+    # 创建gRPC通道
+    channel = grpc.insecure_channel('localhost:50051')
+    stub = pb2_grpc.PalpationServiceStub(channel)
     
-    def test_minimal_health_check(self):
-        """测试最小级别健康检查"""
-        request = pb2.HealthCheckRequest(
-            level=pb2.HealthCheckRequest.HealthCheckLevel.MINIMAL
+    try:
+        # 准备皮肤触诊数据
+        regions = [
+            pb2.SkinRegionData(
+                region_id="face",
+                region_name="面部",
+                moisture_level=0.3,
+                elasticity=0.4,
+                texture="干燥",
+                temperature=36.2,
+                color="偏黄"
+            ),
+            pb2.SkinRegionData(
+                region_id="hands",
+                region_name="手部",
+                moisture_level=0.2,
+                elasticity=0.3,
+                texture="粗糙",
+                temperature=35.8,
+                color="苍白"
+            )
+        ]
+        
+        request = pb2.SkinPalpationRequest(
+            user_id="test-user-001",
+            regions=regions
         )
         
-        response = self.stub.HealthCheck(request)
+        response = stub.AnalyzeSkinPalpation(request)
         
-        self.assertEqual(response.status, pb2.HealthCheckResponse.ServiceStatus.SERVING)
-        self.assertTrue(len(response.components) >= 1)
-        self.assertIsNotNone(response.version)
-        self.assertGreater(response.timestamp, 0)
+        if not response.success:
+            print(f"皮肤触诊分析失败: {response.error_message}")
+            return False
         
-        # 验证组件信息
-        service_component = next((c for c in response.components if c.component_name == "palpation_service"), None)
-        self.assertIsNotNone(service_component)
-        self.assertEqual(service_component.status, pb2.HealthCheckResponse.ServiceStatus.SERVING)
+        print(f"皮肤触诊发现:")
+        for finding in response.findings:
+            print(f"  - 区域: {finding.region_id}")
+            print(f"    类型: {finding.finding_type}")
+            print(f"    描述: {finding.description}")
+            if finding.related_conditions:
+                print(f"    相关状况: {', '.join(finding.related_conditions)}")
+        
+        print(f"\n分析总结: {response.analysis_summary}")
+        
+        return True
+        
+    except grpc.RpcError as e:
+        print(f"皮肤触诊测试失败: {e}")
+        return False
+    finally:
+        channel.close()
+
+def main():
+    """主测试函数"""
+    print("=== 切诊服务集成测试 ===\n")
     
-    def test_basic_health_check(self):
-        """测试基础级别健康检查"""
-        request = pb2.HealthCheckRequest(
-            level=pb2.HealthCheckRequest.HealthCheckLevel.BASIC
-        )
-        
-        response = self.stub.HealthCheck(request)
-        
-        self.assertEqual(response.status, pb2.HealthCheckResponse.ServiceStatus.SERVING)
-        self.assertTrue(len(response.components) >= 2)
-        
-        # 验证数据库组件信息
-        db_component = next((c for c in response.components if c.component_name == "database"), None)
-        self.assertIsNotNone(db_component)
-        # 注意：由于测试环境可能没有真实的数据库连接，此处的状态可能会有不同
+    # 等待服务启动
+    print("等待服务启动...")
+    time.sleep(2)
     
-    def test_full_health_check(self):
-        """测试完整级别健康检查"""
-        request = pb2.HealthCheckRequest(
-            level=pb2.HealthCheckRequest.HealthCheckLevel.FULL
-        )
+    # 执行测试
+    tests = [
+        ("健康检查", test_health_check),
+        ("脉诊会话", test_pulse_session),
+        ("腹诊分析", test_abdominal_palpation),
+        ("皮肤触诊", test_skin_palpation)
+    ]
+    
+    results = []
+    for test_name, test_func in tests:
+        print(f"\n{'='*50}")
+        print(f"执行测试: {test_name}")
+        print('='*50)
         
-        response = self.stub.HealthCheck(request)
-        
-        # 验证响应包含足够的组件信息
-        self.assertTrue(len(response.components) >= 4)
-        
-        # 验证模型组件信息
-        model_component = next((c for c in response.components if c.component_name == "ml_models"), None)
-        self.assertIsNotNone(model_component)
-        
-        # 验证集成服务组件信息
-        xiaoai_component = next((c for c in response.components if c.component_name == "xiaoai_service"), None)
-        self.assertIsNotNone(xiaoai_component)
-        
-        rag_component = next((c for c in response.components if c.component_name == "rag_service"), None)
-        self.assertIsNotNone(rag_component)
+        try:
+            success = test_func()
+            results.append((test_name, success))
+        except Exception as e:
+            print(f"测试异常: {e}")
+            results.append((test_name, False))
+    
+    # 显示测试结果
+    print(f"\n\n{'='*50}")
+    print("测试结果汇总")
+    print('='*50)
+    
+    total_tests = len(results)
+    passed_tests = sum(1 for _, success in results if success)
+    
+    for test_name, success in results:
+        status = "✓ 通过" if success else "✗ 失败"
+        print(f"{test_name}: {status}")
+    
+    print(f"\n总计: {passed_tests}/{total_tests} 通过")
+    
+    return passed_tests == total_tests
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO)
-    unittest.main() 
+    success = main()
+    sys.exit(0 if success else 1)

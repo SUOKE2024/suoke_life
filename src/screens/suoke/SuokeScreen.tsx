@@ -1,322 +1,375 @@
 import React, { useState } from 'react';
 import {
   View,
-  ScrollView,
-  StyleSheet,
-  Dimensions,
-} from 'react-native';
-import {
-  Card,
-  Title,
-  Paragraph,
-  Button,
   Text,
-  Surface,
-  Avatar,
-  Chip,
-  ProgressBar,
-} from 'react-native-paper';
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Alert,
+  FlatList,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useTheme } from 'react-native-paper';
-import { useTranslation } from 'react-i18next';
-import { useNavigation } from '@react-navigation/native';
+import { colors } from '../../constants/theme';
 
-const { width } = Dimensions.get('window');
+// 服务类型
+interface ServiceItem {
+  id: string;
+  title: string;
+  subtitle: string;
+  icon: string;
+  color: string;
+  category: 'diagnosis' | 'product' | 'service' | 'subscription' | 'appointment' | 'market' | 'custom' | 'supplier';
+  description: string;
+  features: string[];
+  price?: string;
+  available: boolean;
+}
 
-const SuokeScreen = () => {
-  const navigation = useNavigation<any>();
-  const theme = useTheme();
-  const { t } = useTranslation();
+// 四诊服务配置
+const DIAGNOSIS_SERVICES: ServiceItem[] = [
+  {
+    id: 'look_diagnosis',
+    title: '望诊服务',
+    subtitle: '面色舌象智能分析',
+    icon: 'eye',
+    color: '#007AFF',
+    category: 'diagnosis',
+    description: '通过AI视觉技术分析面色、舌象、体态等外在表现',
+    features: ['面色分析', '舌象检测', '体态评估', '精神状态评估'],
+    price: '¥99',
+    available: true
+  },
+  {
+    id: 'listen_diagnosis',
+    title: '闻诊服务',
+    subtitle: '声音气味智能识别',
+    icon: 'ear-hearing',
+    color: '#34C759',
+    category: 'diagnosis',
+    description: '通过声纹分析和气味识别技术进行健康评估',
+    features: ['语音分析', '呼吸音检测', '咳嗽分析', '气味识别'],
+    price: '¥79',
+    available: true
+  },
+  {
+    id: 'inquiry_diagnosis',
+    title: '问诊服务',
+    subtitle: '智能问诊对话',
+    icon: 'comment-question',
+    color: '#FF9500',
+    category: 'diagnosis',
+    description: '基于中医理论的智能问诊系统，全面了解症状和病史',
+    features: ['症状询问', '病史采集', '生活习惯评估', '家族史分析'],
+    price: '¥59',
+    available: true
+  },
+  {
+    id: 'palpation_diagnosis',
+    title: '切诊服务',
+    subtitle: '脉象触诊检测',
+    icon: 'hand-back-right',
+    color: '#FF2D92',
+    category: 'diagnosis',
+    description: '结合传感器技术的现代化脉诊和触诊服务',
+    features: ['脉象分析', '腹部触诊', '穴位检查', '皮肤触感'],
+    price: '¥129',
+    available: true
+  }
+];
 
-  // 健康评分
-  const healthScore = {
-    overall: 85,
-    physical: 88,
-    mental: 82,
-    lifestyle: 86,
-  };
+// 其他服务配置
+const OTHER_SERVICES: ServiceItem[] = [
+  {
+    id: 'health_products',
+    title: '健康产品',
+    subtitle: '精选健康商品',
+    icon: 'package-variant',
+    color: '#8E44AD',
+    category: 'product',
+    description: '经过专业筛选的健康产品和保健用品',
+    features: ['中药材', '保健品', '健康器械', '养生用品'],
+    available: true
+  },
+  {
+    id: 'medical_services',
+    title: '医疗服务',
+    subtitle: '专业医疗咨询',
+    icon: 'medical-bag',
+    color: '#E74C3C',
+    category: 'service',
+    description: '提供专业的医疗咨询和健康管理服务',
+    features: ['专家咨询', '健康评估', '治疗方案', '康复指导'],
+    available: true
+  },
+  {
+    id: 'health_subscription',
+    title: '健康订阅',
+    subtitle: '个性化健康计划',
+    icon: 'calendar-check',
+    color: '#3498DB',
+    category: 'subscription',
+    description: '定制化的健康管理订阅服务',
+    features: ['月度体检', '营养配餐', '运动计划', '健康报告'],
+    price: '¥299/月',
+    available: true
+  },
+  {
+    id: 'appointment_booking',
+    title: '预约服务',
+    subtitle: '便捷预约挂号',
+    icon: 'calendar-clock',
+    color: '#F39C12',
+    category: 'appointment',
+    description: '快速预约医生和健康服务',
+    features: ['在线挂号', '专家预约', '体检预约', '上门服务'],
+    available: true
+  },
+  {
+    id: 'health_market',
+    title: '健康市集',
+    subtitle: '健康生活商城',
+    icon: 'store',
+    color: '#27AE60',
+    category: 'market',
+    description: '一站式健康生活用品购物平台',
+    features: ['有机食品', '运动器材', '美容护肤', '家居健康'],
+    available: true
+  },
+  {
+    id: 'custom_service',
+    title: '定制服务',
+    subtitle: '个性化健康方案',
+    icon: 'cog',
+    color: '#9B59B6',
+    category: 'custom',
+    description: '根据个人需求定制专属健康解决方案',
+    features: ['体质分析', '方案定制', '跟踪服务', '效果评估'],
+    price: '¥999起',
+    available: true
+  },
+  {
+    id: 'supplier_network',
+    title: '供应商网络',
+    subtitle: '优质供应商合作',
+    icon: 'truck',
+    color: '#34495E',
+    category: 'supplier',
+    description: '与优质健康产品供应商建立合作关系',
+    features: ['供应商认证', '质量保证', '物流配送', '售后服务'],
+    available: true
+  }
+];
 
-  // 体质分析结果
-  const constitutionAnalysis = {
-    type: '平和质',
-    description: '阴阳调和，脏腑功能正常，体质较好',
-    characteristics: ['精力充沛', '睡眠良好', '食欲正常', '情绪稳定'],
-    suggestions: ['保持规律作息', '适度运动', '均衡饮食', '心情愉悦'],
-  };
+const SuokeScreen: React.FC = () => {
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [xiaokeChatVisible, setXiaokeChatVisible] = useState(false);
 
-  // 最近评估
-  const recentAssessments = [
-    {
-      id: '1',
-      title: '春季体质评估',
-      date: '2024-03-15',
-      score: 85,
-      type: 'constitution',
-      status: 'completed',
-    },
-    {
-      id: '2',
-      title: '睡眠质量分析',
-      date: '2024-03-14',
-      score: 78,
-      type: 'sleep',
-      status: 'completed',
-    },
-    {
-      id: '3',
-      title: '情绪健康评估',
-      date: '2024-03-13',
-      score: 82,
-      type: 'emotion',
-      status: 'completed',
-    },
+  // 所有服务
+  const allServices = [...DIAGNOSIS_SERVICES, ...OTHER_SERVICES];
+
+  // 过滤服务
+  const filteredServices = selectedCategory === 'all' 
+    ? allServices 
+    : allServices.filter(service => service.category === selectedCategory);
+
+  // 分类选项
+  const categories = [
+    { key: 'all', label: '全部', icon: 'view-grid' },
+    { key: 'diagnosis', label: '四诊', icon: 'stethoscope' },
+    { key: 'product', label: '产品', icon: 'package-variant' },
+    { key: 'service', label: '服务', icon: 'medical-bag' },
+    { key: 'subscription', label: '订阅', icon: 'calendar-check' },
+    { key: 'appointment', label: '预约', icon: 'calendar-clock' },
+    { key: 'market', label: '市集', icon: 'store' },
+    { key: 'custom', label: '定制', icon: 'cog' },
+    { key: 'supplier', label: '供应商', icon: 'truck' }
   ];
 
-  // 推荐服务
-  const recommendedServices = [
-    {
-      id: '1',
-      title: '四诊合参',
-      description: '中医传统诊断方法，全面了解身体状况',
-      icon: 'medical-bag',
-      color: '#FF5722',
-      route: 'FourDiagnosisSystem',
-    },
-    {
-      id: '2',
-      title: '健康评估',
-      description: '综合健康状况评估，制定个性化方案',
-      icon: 'clipboard-check',
-      color: '#2196F3',
-      route: 'HealthAssessment',
-    },
-    {
-      id: '3',
-      title: '智能体咨询',
-      description: '与AI健康顾问对话，获取专业建议',
-      icon: 'robot',
-      color: '#4CAF50',
-      route: 'AgentSelection',
-    },
-    {
-      id: '4',
-      title: '数据分析',
-      description: '健康数据可视化分析，洞察健康趋势',
-      icon: 'chart-line',
-      color: '#FF9800',
-      route: 'HealthDataChart',
-    },
-  ];
-
-  const getScoreColor = (score: number) => {
-    if (score >= 80) return '#4CAF50';
-    if (score >= 60) return '#FF9800';
-    return '#F44336';
+  // 与小克对话
+  const chatWithXiaoke = () => {
+    Alert.alert(
+      '与小克对话',
+      '小克是您的专业医疗服务管理助手，可以帮助您：\n\n• 选择合适的诊断服务\n• 预约医疗服务\n• 管理健康订阅\n• 推荐健康产品\n\n是否开始对话？',
+      [
+        { text: '取消', style: 'cancel' },
+        { text: '开始对话', onPress: () => startXiaokeChat() }
+      ]
+    );
   };
 
-  const getScoreLevel = (score: number) => {
-    if (score >= 90) return '优秀';
-    if (score >= 80) return '良好';
-    if (score >= 70) return '一般';
-    if (score >= 60) return '需改善';
-    return '较差';
+  // 开始与小克对话
+  const startXiaokeChat = () => {
+    setXiaokeChatVisible(true);
+    // 这里将集成实际的小克智能体服务
+    console.log('Starting chat with Xiaoke agent');
   };
 
-  const renderHealthScore = () => (
-    <Card style={styles.card}>
-      <Card.Content>
-        <Title style={styles.cardTitle}>健康评分</Title>
-        
-        {/* 总体评分 */}
-        <View style={styles.overallScore}>
-          <View style={styles.scoreCircle}>
-            <Text style={[styles.scoreNumber, { color: getScoreColor(healthScore.overall) }]}>
-              {healthScore.overall}
-            </Text>
-            <Text style={styles.scoreLabel}>总分</Text>
-          </View>
-          <View style={styles.scoreInfo}>
-            <Text style={styles.scoreLevel}>
-              {getScoreLevel(healthScore.overall)}
-            </Text>
-            <Text style={styles.scoreDescription}>
-              您的整体健康状况良好，继续保持！
-            </Text>
-          </View>
-        </View>
+  // 选择服务
+  const selectService = (service: ServiceItem) => {
+    if (!service.available) {
+      Alert.alert('服务暂不可用', '该服务正在准备中，敬请期待！');
+      return;
+    }
 
-        {/* 分项评分 */}
-        <View style={styles.scoreDetails}>
-          <View style={styles.scoreItem}>
-            <Text style={styles.scoreItemLabel}>身体健康</Text>
-            <View style={styles.scoreItemBar}>
-              <ProgressBar
-                progress={healthScore.physical / 100}
-                color={getScoreColor(healthScore.physical)}
-                style={styles.progressBar}
-              />
-              <Text style={styles.scoreItemValue}>{healthScore.physical}</Text>
-            </View>
-          </View>
-          
-          <View style={styles.scoreItem}>
-            <Text style={styles.scoreItemLabel}>心理健康</Text>
-            <View style={styles.scoreItemBar}>
-              <ProgressBar
-                progress={healthScore.mental / 100}
-                color={getScoreColor(healthScore.mental)}
-                style={styles.progressBar}
-              />
-              <Text style={styles.scoreItemValue}>{healthScore.mental}</Text>
-            </View>
-          </View>
-          
-          <View style={styles.scoreItem}>
-            <Text style={styles.scoreItemLabel}>生活方式</Text>
-            <View style={styles.scoreItemBar}>
-              <ProgressBar
-                progress={healthScore.lifestyle / 100}
-                color={getScoreColor(healthScore.lifestyle)}
-                style={styles.progressBar}
-              />
-              <Text style={styles.scoreItemValue}>{healthScore.lifestyle}</Text>
-            </View>
-          </View>
-        </View>
-      </Card.Content>
-    </Card>
-  );
+    if (service.category === 'diagnosis') {
+      startDiagnosisService(service);
+    } else {
+      Alert.alert(
+        service.title,
+        `${service.description}\n\n主要功能：\n${service.features.map(f => `• ${f}`).join('\n')}\n\n${service.price ? `价格：${service.price}` : ''}`,
+        [
+          { text: '了解更多', onPress: () => console.log(`Learn more about ${service.id}`) },
+          { text: '立即使用', onPress: () => useService(service) }
+        ]
+      );
+    }
+  };
 
-  const renderConstitutionAnalysis = () => (
-    <Card style={styles.card}>
-      <Card.Content>
-        <Title style={styles.cardTitle}>体质分析</Title>
-        
-        <View style={styles.constitutionHeader}>
-          <Avatar.Text
-            size={48}
-            label={constitutionAnalysis.type.charAt(0)}
-            style={{ backgroundColor: theme.colors.primary }}
+  // 开始诊断服务
+  const startDiagnosisService = (service: ServiceItem) => {
+    Alert.alert(
+      `开始${service.title}`,
+      `${service.description}\n\n包含功能：\n${service.features.map(f => `• ${f}`).join('\n')}\n\n价格：${service.price}\n\n是否开始诊断？`,
+      [
+        { text: '取消', style: 'cancel' },
+        { text: '开始诊断', onPress: () => performDiagnosis(service) }
+      ]
+    );
+  };
+
+  // 执行诊断
+  const performDiagnosis = (service: ServiceItem) => {
+    Alert.alert('诊断开始', `正在启动${service.title}，请按照指引完成诊断过程...`);
+    // 这里将集成实际的四诊服务
+    console.log(`Starting diagnosis service: ${service.id}`);
+  };
+
+  // 使用服务
+  const useService = (service: ServiceItem) => {
+    Alert.alert('服务启动', `正在为您准备${service.title}服务...`);
+    // 这里将集成实际的服务功能
+    console.log(`Using service: ${service.id}`);
+  };
+
+  // 渲染分类过滤器
+  const renderCategoryFilter = () => (
+    <ScrollView 
+      horizontal 
+      showsHorizontalScrollIndicator={false}
+      style={styles.categoryContainer}
+      contentContainerStyle={styles.categoryContent}
+    >
+      {categories.map(category => (
+        <TouchableOpacity
+          key={category.key}
+          style={[
+            styles.categoryButton,
+            selectedCategory === category.key && styles.activeCategoryButton
+          ]}
+          onPress={() => setSelectedCategory(category.key)}
+        >
+          <Icon 
+            name={category.icon} 
+            size={16} 
+            color={selectedCategory === category.key ? 'white' : colors.textSecondary} 
           />
-          <View style={styles.constitutionInfo}>
-            <Text style={styles.constitutionType}>{constitutionAnalysis.type}</Text>
-            <Text style={styles.constitutionDescription}>
-              {constitutionAnalysis.description}
-            </Text>
-          </View>
-        </View>
-
-        <View style={styles.constitutionSection}>
-          <Text style={styles.sectionTitle}>体质特征</Text>
-          <View style={styles.tagsContainer}>
-            {constitutionAnalysis.characteristics.map((item, index) => (
-              <Chip
-                key={index}
-                style={styles.characteristicChip}
-                textStyle={styles.chipText}
-              >
-                {item}
-              </Chip>
-            ))}
-          </View>
-        </View>
-
-        <View style={styles.constitutionSection}>
-          <Text style={styles.sectionTitle}>调理建议</Text>
-          <View style={styles.tagsContainer}>
-            {constitutionAnalysis.suggestions.map((item, index) => (
-              <Chip
-                key={index}
-                mode="outlined"
-                style={styles.suggestionChip}
-                textStyle={styles.chipText}
-              >
-                {item}
-              </Chip>
-            ))}
-          </View>
-        </View>
-      </Card.Content>
-    </Card>
+          <Text style={[
+            styles.categoryText,
+            selectedCategory === category.key && styles.activeCategoryText
+          ]}>
+            {category.label}
+          </Text>
+        </TouchableOpacity>
+      ))}
+    </ScrollView>
   );
 
-  const renderRecentAssessments = () => (
-    <Card style={styles.card}>
-      <Card.Content>
-        <View style={styles.cardHeader}>
-          <Title style={styles.cardTitle}>最近评估</Title>
-          <Button
-            mode="text"
-            onPress={() => navigation.navigate('HealthAssessment')}
-            compact
-          >
-            新建评估
-          </Button>
+  // 渲染服务卡片
+  const renderServiceCard = ({ item }: { item: ServiceItem }) => (
+    <TouchableOpacity 
+      style={[styles.serviceCard, { borderLeftColor: item.color }]}
+      onPress={() => selectService(item)}
+    >
+      <View style={styles.cardHeader}>
+        <View style={[styles.iconContainer, { backgroundColor: item.color + '20' }]}>
+          <Icon name={item.icon} size={24} color={item.color} />
         </View>
-        
-        {recentAssessments.map(assessment => (
-          <View key={assessment.id} style={styles.assessmentItem}>
-            <View style={styles.assessmentIcon}>
-              <Icon
-                name={assessment.type === 'constitution' ? 'human' : 
-                      assessment.type === 'sleep' ? 'sleep' : 'emoticon-happy'}
-                size={20}
-                color={theme.colors.primary}
-              />
-            </View>
-            <View style={styles.assessmentInfo}>
-              <Text style={styles.assessmentTitle}>{assessment.title}</Text>
-              <Text style={styles.assessmentDate}>{assessment.date}</Text>
-            </View>
-            <View style={styles.assessmentScore}>
-              <Text style={[styles.scoreText, { color: getScoreColor(assessment.score) }]}>
-                {assessment.score}
-              </Text>
-              <Text style={styles.scoreUnit}>分</Text>
-            </View>
+        <View style={styles.cardTitleContainer}>
+          <Text style={styles.cardTitle}>{item.title}</Text>
+          <Text style={styles.cardSubtitle}>{item.subtitle}</Text>
+        </View>
+        {item.price && (
+          <Text style={[styles.priceText, { color: item.color }]}>{item.price}</Text>
+        )}
+      </View>
+
+      <Text style={styles.cardDescription}>{item.description}</Text>
+
+      <View style={styles.featuresContainer}>
+        {item.features.slice(0, 3).map((feature, index) => (
+          <View key={index} style={styles.featureItem}>
+            <Icon name="check-circle" size={12} color={item.color} />
+            <Text style={styles.featureText}>{feature}</Text>
           </View>
         ))}
-      </Card.Content>
-    </Card>
-  );
+        {item.features.length > 3 && (
+          <Text style={styles.moreFeatures}>+{item.features.length - 3} 更多功能</Text>
+        )}
+      </View>
 
-  const renderRecommendedServices = () => (
-    <Card style={styles.card}>
-      <Card.Content>
-        <Title style={styles.cardTitle}>推荐服务</Title>
-        <View style={styles.servicesGrid}>
-          {recommendedServices.map(service => (
-            <Surface
-              key={service.id}
-              style={styles.serviceCard}
-              onTouchEnd={() => navigation.navigate(service.route)}
-            >
-              <View style={[styles.serviceIcon, { backgroundColor: service.color }]}>
-                <Icon name={service.icon} size={24} color="white" />
-              </View>
-              <Text style={styles.serviceTitle}>{service.title}</Text>
-              <Text style={styles.serviceDescription}>{service.description}</Text>
-            </Surface>
-          ))}
+      <View style={styles.cardFooter}>
+        <View style={[styles.statusBadge, { backgroundColor: item.available ? '#E8F5E8' : '#FFF3E0' }]}>
+          <Text style={[styles.statusText, { color: item.available ? '#27AE60' : '#F39C12' }]}>
+            {item.available ? '可用' : '准备中'}
+          </Text>
         </View>
-      </Card.Content>
-    </Card>
+        <Icon name="chevron-right" size={20} color={colors.textSecondary} />
+      </View>
+    </TouchableOpacity>
   );
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* 头部 */}
       <View style={styles.header}>
-        <Title style={styles.headerTitle}>索克健康</Title>
-        <Text style={styles.headerSubtitle}>AI驱动的个性化健康管理</Text>
+        <View>
+          <Text style={styles.title}>SUOKE 服务</Text>
+          <Text style={styles.subtitle}>专业健康服务平台</Text>
+        </View>
+        <TouchableOpacity style={styles.xiaokeChatButton} onPress={chatWithXiaoke}>
+          <Text style={styles.xiaokeChatEmoji}>👨‍⚕️</Text>
+          <Text style={styles.xiaokeChatText}>小克</Text>
+        </TouchableOpacity>
       </View>
 
-      <ScrollView style={styles.content}>
-        {renderHealthScore()}
-        {renderConstitutionAnalysis()}
-        {renderRecentAssessments()}
-        {renderRecommendedServices()}
-      </ScrollView>
+      {/* 小克助手卡片 */}
+      <TouchableOpacity style={styles.xiaokeCard} onPress={chatWithXiaoke}>
+        <View style={styles.xiaokeInfo}>
+          <Text style={styles.xiaokeEmoji}>👨‍⚕️</Text>
+          <View style={styles.xiaokeTextContainer}>
+            <Text style={styles.xiaokeName}>小克 - 医疗服务助手</Text>
+            <Text style={styles.xiaokeDesc}>为您提供专业的医疗服务管理和健康咨询</Text>
+          </View>
+        </View>
+        <View style={styles.onlineStatus}>
+          <View style={styles.onlineDot} />
+          <Text style={styles.onlineText}>在线</Text>
+        </View>
+      </TouchableOpacity>
+
+      {/* 分类过滤器 */}
+      {renderCategoryFilter()}
+
+      {/* 服务列表 */}
+      <FlatList
+        data={filteredServices}
+        keyExtractor={item => item.id}
+        renderItem={renderServiceCard}
+        style={styles.servicesList}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.servicesContent}
+      />
     </SafeAreaView>
   );
 };
@@ -324,213 +377,203 @@ const SuokeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: colors.background,
   },
   header: {
-    padding: 16,
-    paddingBottom: 8,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
   },
-  headerTitle: {
+  title: {
     fontSize: 24,
     fontWeight: 'bold',
+    color: colors.text,
   },
-  headerSubtitle: {
+  subtitle: {
     fontSize: 14,
-    color: '#666',
-    marginTop: 4,
+    color: colors.textSecondary,
+    marginTop: 2,
   },
-  content: {
-    flex: 1,
-    padding: 16,
+  xiaokeChatButton: {
+    alignItems: 'center',
+    padding: 8,
   },
-  card: {
-    marginBottom: 16,
+  xiaokeChatEmoji: {
+    fontSize: 24,
+  },
+  xiaokeChatText: {
+    fontSize: 12,
+    color: colors.primary,
+    fontWeight: '600',
+    marginTop: 2,
+  },
+  xiaokeCard: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    margin: 15,
+    padding: 15,
+    backgroundColor: colors.primary + '10',
     borderRadius: 12,
+    borderLeftWidth: 4,
+    borderLeftColor: colors.primary,
   },
-  cardTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 16,
+  xiaokeInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  xiaokeEmoji: {
+    fontSize: 32,
+    marginRight: 12,
+  },
+  xiaokeTextContainer: {
+    flex: 1,
+  },
+  xiaokeName: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.text,
+    marginBottom: 4,
+  },
+  xiaokeDesc: {
+    fontSize: 12,
+    color: colors.textSecondary,
+  },
+  onlineStatus: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  onlineDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#34C759',
+    marginRight: 4,
+  },
+  onlineText: {
+    fontSize: 12,
+    color: '#34C759',
+    fontWeight: '600',
+  },
+  categoryContainer: {
+    maxHeight: 50,
+  },
+  categoryContent: {
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+  },
+  categoryButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    marginRight: 8,
+    borderRadius: 15,
+    backgroundColor: colors.surface,
+  },
+  activeCategoryButton: {
+    backgroundColor: colors.primary,
+  },
+  categoryText: {
+    marginLeft: 4,
+    fontSize: 12,
+    color: colors.textSecondary,
+  },
+  activeCategoryText: {
+    color: 'white',
+    fontWeight: '600',
+  },
+  servicesList: {
+    flex: 1,
+  },
+  servicesContent: {
+    padding: 15,
+  },
+  serviceCard: {
+    backgroundColor: colors.surface,
+    borderRadius: 12,
+    padding: 15,
+    marginBottom: 15,
+    borderLeftWidth: 4,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
   },
   cardHeader: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 10,
   },
-  overallScore: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 24,
-  },
-  scoreCircle: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: '#f0f0f0',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 16,
-  },
-  scoreNumber: {
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  scoreLabel: {
-    fontSize: 12,
-    color: '#666',
-  },
-  scoreInfo: {
-    flex: 1,
-  },
-  scoreLevel: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 4,
-  },
-  scoreDescription: {
-    fontSize: 14,
-    color: '#666',
-  },
-  scoreDetails: {
-    marginTop: 16,
-  },
-  scoreItem: {
-    marginBottom: 12,
-  },
-  scoreItemLabel: {
-    fontSize: 14,
-    fontWeight: '500',
-    marginBottom: 8,
-  },
-  scoreItemBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  progressBar: {
-    flex: 1,
-    height: 6,
-    borderRadius: 3,
-    marginRight: 12,
-  },
-  scoreItemValue: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    minWidth: 30,
-    textAlign: 'right',
-  },
-  constitutionHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  constitutionInfo: {
-    flex: 1,
-    marginLeft: 12,
-  },
-  constitutionType: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 4,
-  },
-  constitutionDescription: {
-    fontSize: 14,
-    color: '#666',
-  },
-  constitutionSection: {
-    marginBottom: 16,
-  },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
-  tagsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  characteristicChip: {
-    marginRight: 8,
-    marginBottom: 8,
-    backgroundColor: '#e3f2fd',
-  },
-  suggestionChip: {
-    marginRight: 8,
-    marginBottom: 8,
-  },
-  chipText: {
-    fontSize: 12,
-  },
-  assessmentItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-  },
-  assessmentIcon: {
+  iconContainer: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#f0f0f0',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
   },
-  assessmentInfo: {
+  cardTitleContainer: {
     flex: 1,
   },
-  assessmentTitle: {
-    fontSize: 14,
-    fontWeight: '500',
+  cardTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.text,
     marginBottom: 2,
   },
-  assessmentDate: {
+  cardSubtitle: {
     fontSize: 12,
-    color: '#666',
+    color: colors.textSecondary,
   },
-  assessmentScore: {
-    alignItems: 'center',
-  },
-  scoreText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  scoreUnit: {
-    fontSize: 10,
-    color: '#666',
-  },
-  servicesGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  serviceCard: {
-    width: '48%',
-    padding: 16,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  serviceIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  serviceTitle: {
+  priceText: {
     fontSize: 14,
     fontWeight: 'bold',
-    marginBottom: 4,
-    textAlign: 'center',
   },
-  serviceDescription: {
+  cardDescription: {
+    fontSize: 14,
+    color: colors.textSecondary,
+    marginBottom: 10,
+    lineHeight: 20,
+  },
+  featuresContainer: {
+    marginBottom: 10,
+  },
+  featureItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  featureText: {
     fontSize: 12,
-    color: '#666',
-    textAlign: 'center',
-    lineHeight: 16,
+    color: colors.textSecondary,
+    marginLeft: 6,
+  },
+  moreFeatures: {
+    fontSize: 12,
+    color: colors.primary,
+    fontStyle: 'italic',
+    marginTop: 4,
+  },
+  cardFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  statusBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 10,
+  },
+  statusText: {
+    fontSize: 10,
+    fontWeight: '600',
   },
 });
 

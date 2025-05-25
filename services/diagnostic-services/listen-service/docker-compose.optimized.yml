@@ -1,0 +1,300 @@
+version: '3.8'
+
+# 闻诊服务优化Docker Compose配置
+# 包含完整的服务栈：应用、数据库、缓存、监控
+
+services:
+  # 闻诊服务主应用
+  listen-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.optimized
+      target: runtime
+    container_name: listen-service
+    hostname: listen-service
+    restart: unless-stopped
+    ports:
+      - "50052:50052"  # gRPC服务端口
+      - "9090:9090"    # Prometheus指标端口
+    environment:
+      - LISTEN_SERVICE_ENV=production
+      - LISTEN_SERVICE_HOST=0.0.0.0
+      - LISTEN_SERVICE_PORT=50052
+      - LISTEN_SERVICE_WORKERS=16
+      - LISTEN_SERVICE_DATABASE_MONGODB_HOST=mongodb
+      - LISTEN_SERVICE_CACHE_REDIS_HOST=redis
+      - PYTHONPATH=/app
+    volumes:
+      - ./config:/app/config:ro
+      - ./logs:/app/logs
+      - ./data:/app/data
+      - listen_temp:/tmp/listen_service
+    depends_on:
+      - mongodb
+      - redis
+    networks:
+      - listen-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:50052/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4G
+        reservations:
+          cpus: '1.0'
+          memory: 2G
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
+
+  # MongoDB数据库
+  mongodb:
+    image: mongo:7.0
+    container_name: listen-mongodb
+    hostname: mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=listen_admin_2024
+      - MONGO_INITDB_DATABASE=listen_service
+    volumes:
+      - mongodb_data:/data/db
+      - mongodb_config:/data/configdb
+      - ./scripts/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - listen-network
+    command: mongod --auth --bind_ip_all
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 1G
+
+  # Redis缓存
+  redis:
+    image: redis:7.2-alpine
+    container_name: listen-redis
+    hostname: redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --requirepass listen_redis_2024
+    volumes:
+      - redis_data:/data
+      - ./config/redis.conf:/usr/local/etc/redis/redis.conf:ro
+    networks:
+      - listen-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1G
+        reservations:
+          cpus: '0.2'
+          memory: 512M
+
+  # Prometheus监控
+  prometheus:
+    image: prom/prometheus:v2.47.0
+    container_name: listen-prometheus
+    hostname: prometheus
+    restart: unless-stopped
+    ports:
+      - "9091:9090"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=15d'
+      - '--web.enable-lifecycle'
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    networks:
+      - listen-network
+    depends_on:
+      - listen-service
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9090/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # Grafana可视化
+  grafana:
+    image: grafana/grafana:10.1.0
+    container_name: listen-grafana
+    hostname: grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=listen_grafana_2024
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./config/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./config/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    networks:
+      - listen-network
+    depends_on:
+      - prometheus
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3000/api/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # Jaeger链路追踪
+  jaeger:
+    image: jaegertracing/all-in-one:1.49
+    container_name: listen-jaeger
+    hostname: jaeger
+    restart: unless-stopped
+    ports:
+      - "16686:16686"  # Jaeger UI
+      - "14268:14268"  # HTTP collector
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    volumes:
+      - jaeger_data:/tmp
+    networks:
+      - listen-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:16686/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # Nginx反向代理
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: listen-nginx
+    hostname: nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./config/nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./ssl:/etc/nginx/ssl:ro
+      - nginx_logs:/var/log/nginx
+    networks:
+      - listen-network
+    depends_on:
+      - listen-service
+      - grafana
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+# 开发环境配置
+  listen-service-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.optimized
+      target: development
+    container_name: listen-service-dev
+    hostname: listen-service-dev
+    restart: "no"
+    ports:
+      - "50053:50052"
+      - "9091:9090"
+      - "8888:8888"  # Jupyter端口
+    environment:
+      - LISTEN_SERVICE_ENV=development
+      - LISTEN_SERVICE_DEBUG=true
+      - LISTEN_SERVICE_HOST=0.0.0.0
+      - LISTEN_SERVICE_PORT=50052
+      - LISTEN_SERVICE_DATABASE_MONGODB_HOST=mongodb
+      - LISTEN_SERVICE_CACHE_REDIS_HOST=redis
+      - PYTHONPATH=/app
+    volumes:
+      - .:/app
+      - listen_dev_temp:/tmp/listen_service
+    depends_on:
+      - mongodb
+      - redis
+    networks:
+      - listen-network
+    profiles:
+      - dev
+    command: ["python", "cmd/server.py", "--config", "/app/config/config.yaml", "--debug"]
+
+# 网络配置
+networks:
+  listen-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+# 数据卷配置
+volumes:
+  mongodb_data:
+    driver: local
+  mongodb_config:
+    driver: local
+  redis_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  jaeger_data:
+    driver: local
+  nginx_logs:
+    driver: local
+  listen_temp:
+    driver: local
+  listen_dev_temp:
+    driver: local
+
+# 扩展配置
+x-logging: &default-logging
+  driver: "json-file"
+  options:
+    max-size: "100m"
+    max-file: "5"
+
+x-restart-policy: &default-restart-policy
+  restart: unless-stopped
+
+x-healthcheck-defaults: &default-healthcheck
+  interval: 30s
+  timeout: 10s
+  retries: 3
+  start_period: 30s 

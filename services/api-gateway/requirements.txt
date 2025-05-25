@@ -33,6 +33,7 @@ opentelemetry-exporter-otlp>=1.20.0
 opentelemetry-exporter-jaeger==1.21.0
 opentelemetry-instrumentation-fastapi==0.41b0
 opentelemetry-instrumentation-grpc==0.41b0
+opentelemetry-instrumentation-aiohttp-client==0.41b0
 
 # 日志
 structlog==24.1.0

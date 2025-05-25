@@ -1,0 +1,323 @@
+# 小克服务优化配置
+service:
+  name: xiaoke-service
+  version: 2.0.0
+  environment: ${ENVIRONMENT:-development}
+  debug: ${DEBUG:-false}
+
+# 服务器配置
+server:
+  host: ${SERVER_HOST:-0.0.0.0}
+  port: ${SERVER_PORT:-9083}
+  workers: ${SERVER_WORKERS:-4}
+  max_connections: ${MAX_CONNECTIONS:-1000}
+  keepalive_timeout: ${KEEPALIVE_TIMEOUT:-65}
+  graceful_shutdown_timeout: ${GRACEFUL_SHUTDOWN_TIMEOUT:-30}
+
+# 数据库配置
+database:
+  postgresql:
+    host: ${POSTGRES_HOST:-localhost}
+    port: ${POSTGRES_PORT:-5432}
+    database: ${POSTGRES_DB:-xiaoke_db}
+    username: ${POSTGRES_USER:-postgres}
+    password: ${POSTGRES_PASSWORD:-}
+    min_size: ${POSTGRES_MIN_POOL_SIZE:-5}
+    max_size: ${POSTGRES_MAX_POOL_SIZE:-20}
+    max_queries: ${POSTGRES_MAX_QUERIES:-50000}
+    max_inactive_connection_lifetime: ${POSTGRES_MAX_INACTIVE_LIFETIME:-300.0}
+    timeout: ${POSTGRES_TIMEOUT:-60.0}
+    command_timeout: ${POSTGRES_COMMAND_TIMEOUT:-60.0}
+    
+  mongodb:
+    host: ${MONGO_HOST:-localhost}
+    port: ${MONGO_PORT:-27017}
+    database: ${MONGO_DB:-xiaoke_db}
+    username: ${MONGO_USER:-}
+    password: ${MONGO_PASSWORD:-}
+    min_pool_size: ${MONGO_MIN_POOL_SIZE:-5}
+    max_pool_size: ${MONGO_MAX_POOL_SIZE:-20}
+    max_idle_time_ms: ${MONGO_MAX_IDLE_TIME:-300000}
+    connect_timeout_ms: ${MONGO_CONNECT_TIMEOUT:-20000}
+    server_selection_timeout_ms: ${MONGO_SERVER_SELECTION_TIMEOUT:-30000}
+
+# 缓存配置
+cache:
+  redis:
+    url: ${REDIS_URL:-redis://localhost:6379}
+    db: ${REDIS_DB:-0}
+    password: ${REDIS_PASSWORD:-}
+    enable: ${REDIS_ENABLE:-true}
+  
+  memory:
+    enable: ${MEMORY_CACHE_ENABLE:-true}
+    size: ${MEMORY_CACHE_SIZE:-1000}
+    
+  default_ttl: ${CACHE_DEFAULT_TTL:-3600}
+  key_prefix: ${CACHE_KEY_PREFIX:-xiaoke:}
+
+# 重试和弹性配置
+resilience:
+  retry:
+    max_attempts: ${RETRY_MAX_ATTEMPTS:-3}
+    base_delay: ${RETRY_BASE_DELAY:-1.0}
+    max_delay: ${RETRY_MAX_DELAY:-60.0}
+    strategy: ${RETRY_STRATEGY:-exponential}
+    backoff_multiplier: ${RETRY_BACKOFF_MULTIPLIER:-2.0}
+    jitter: ${RETRY_JITTER:-true}
+    
+  circuit_breaker:
+    failure_threshold: ${CIRCUIT_BREAKER_FAILURE_THRESHOLD:-5}
+    recovery_timeout: ${CIRCUIT_BREAKER_RECOVERY_TIMEOUT:-60.0}
+    success_threshold: ${CIRCUIT_BREAKER_SUCCESS_THRESHOLD:-3}
+
+# 监控和指标配置
+monitoring:
+  prometheus:
+    enable: ${PROMETHEUS_ENABLE:-true}
+    port: ${PROMETHEUS_PORT:-9090}
+    
+  metrics:
+    enable_custom: ${CUSTOM_METRICS_ENABLE:-true}
+    retention_hours: ${METRICS_RETENTION_HOURS:-24}
+    health_check_interval: ${HEALTH_CHECK_INTERVAL:-60}
+    performance_sampling_rate: ${PERFORMANCE_SAMPLING_RATE:-1.0}
+
+# 日志配置
+logging:
+  level: ${LOG_LEVEL:-INFO}
+  format: ${LOG_FORMAT:-json}
+  file: ${LOG_FILE:-}
+  max_size: ${LOG_MAX_SIZE:-100MB}
+  backup_count: ${LOG_BACKUP_COUNT:-5}
+  
+  # 结构化日志配置
+  structured:
+    enable: ${STRUCTURED_LOGGING:-true}
+    include_trace_id: ${INCLUDE_TRACE_ID:-true}
+    include_user_id: ${INCLUDE_USER_ID:-true}
+
+# AI模型配置
+models:
+  llm:
+    primary_model: ${PRIMARY_MODEL:-gpt-4o-mini}
+    fallback_model: ${FALLBACK_MODEL:-llama-3-8b}
+    temperature: ${MODEL_TEMPERATURE:-0.7}
+    max_tokens: ${MODEL_MAX_TOKENS:-2048}
+    timeout: ${MODEL_TIMEOUT:-30}
+    
+    # 模型缓存配置
+    cache_responses: ${MODEL_CACHE_RESPONSES:-true}
+    cache_ttl: ${MODEL_CACHE_TTL:-1800}
+    
+    # 速率限制
+    rate_limit:
+      requests_per_minute: ${MODEL_RATE_LIMIT_RPM:-60}
+      tokens_per_minute: ${MODEL_RATE_LIMIT_TPM:-100000}
+
+# 对话配置
+conversation:
+  system_prompt: |
+    你是小克，索克生活APP的医疗资源调度智能体。你专门负责：
+    1. 医疗资源的智能调度和匹配
+    2. 治疗方案的生成和优化
+    3. 药品信息的查询和用药指导
+    4. 紧急情况的快速响应
+    
+    请始终以专业、准确、温暖的态度为用户提供服务。
+    
+  max_history_turns: ${MAX_HISTORY_TURNS:-20}
+  context_window: ${CONTEXT_WINDOW:-4000}
+  
+# 食疗服务配置
+food_therapy:
+  enable_seasonal_adjustment: ${FOOD_THERAPY_SEASONAL:-true}
+  enable_constitution_matching: ${FOOD_THERAPY_CONSTITUTION:-true}
+  enable_drug_interaction_check: ${FOOD_THERAPY_DRUG_CHECK:-true}
+  
+  # 推荐算法配置
+  recommendation:
+    algorithm: ${FOOD_RECOMMENDATION_ALGORITHM:-hybrid}
+    weights:
+      constitution_match: ${FOOD_WEIGHT_CONSTITUTION:-0.4}
+      seasonal_factor: ${FOOD_WEIGHT_SEASONAL:-0.2}
+      health_condition: ${FOOD_WEIGHT_HEALTH:-0.3}
+      user_preference: ${FOOD_WEIGHT_PREFERENCE:-0.1}
+
+# 资源调度配置
+scheduler:
+  resource_matching:
+    algorithm: ${RESOURCE_MATCHING_ALGORITHM:-weighted_score}
+    weights:
+      constitution_match: ${RESOURCE_WEIGHT_CONSTITUTION:-0.4}
+      location_proximity: ${RESOURCE_WEIGHT_LOCATION:-0.2}
+      rating: ${RESOURCE_WEIGHT_RATING:-0.2}
+      availability: ${RESOURCE_WEIGHT_AVAILABILITY:-0.2}
+    max_recommendations: ${MAX_RESOURCE_RECOMMENDATIONS:-5}
+    
+  appointment:
+    default_duration: ${APPOINTMENT_DEFAULT_DURATION:-30}
+    buffer_time: ${APPOINTMENT_BUFFER_TIME:-15}
+    max_advance_booking_days: ${MAX_ADVANCE_BOOKING_DAYS:-30}
+
+# 安全配置
+security:
+  jwt:
+    secret_key: ${JWT_SECRET_KEY:-your-secret-key}
+    algorithm: ${JWT_ALGORITHM:-HS256}
+    expire_minutes: ${JWT_EXPIRE_MINUTES:-1440}
+    
+  rate_limiting:
+    enable: ${RATE_LIMITING_ENABLE:-true}
+    requests_per_minute: ${RATE_LIMIT_RPM:-100}
+    burst_size: ${RATE_LIMIT_BURST:-20}
+    
+  cors:
+    allow_origins: ${CORS_ALLOW_ORIGINS:-["*"]}
+    allow_methods: ${CORS_ALLOW_METHODS:-["GET", "POST", "PUT", "DELETE"]}
+    allow_headers: ${CORS_ALLOW_HEADERS:-["*"]}
+
+# 外部服务配置
+external_services:
+  blockchain:
+    endpoint: ${BLOCKCHAIN_ENDPOINT:-http://localhost:8545}
+    timeout: ${BLOCKCHAIN_TIMEOUT:-30}
+    
+  payment:
+    provider: ${PAYMENT_PROVIDER:-stripe}
+    api_key: ${PAYMENT_API_KEY:-}
+    webhook_secret: ${PAYMENT_WEBHOOK_SECRET:-}
+    
+  notification:
+    provider: ${NOTIFICATION_PROVIDER:-local}
+    api_key: ${NOTIFICATION_API_KEY:-}
+
+# 性能优化配置
+performance:
+  # 异步处理配置
+  async_processing:
+    max_workers: ${ASYNC_MAX_WORKERS:-10}
+    queue_size: ${ASYNC_QUEUE_SIZE:-1000}
+    
+  # 批处理配置
+  batch_processing:
+    enable: ${BATCH_PROCESSING_ENABLE:-true}
+    batch_size: ${BATCH_SIZE:-50}
+    flush_interval: ${BATCH_FLUSH_INTERVAL:-5}
+    
+  # 预加载配置
+  preloading:
+    enable: ${PRELOADING_ENABLE:-true}
+    warm_up_queries: ${WARM_UP_QUERIES:-10}
+
+# 消息队列配置
+messaging:
+  # 队列类型: redis 或 rabbitmq
+  queue_type: ${QUEUE_TYPE:-redis}
+  
+  # Redis配置
+  redis:
+    url: ${REDIS_URL:-redis://localhost:6379}
+    
+  # RabbitMQ配置
+  rabbitmq:
+    url: ${RABBITMQ_URL:-amqp://localhost/}
+  
+  # 工作进程配置
+  workers:
+    count: ${MESSAGE_WORKERS:-4}
+    queues: ${MESSAGE_QUEUES:-["default", "high_priority", "low_priority"]}
+  
+  # 任务配置
+  tasks:
+    default_timeout: ${TASK_DEFAULT_TIMEOUT:-300}
+    max_retries: ${TASK_MAX_RETRIES:-3}
+    retry_delay: ${TASK_RETRY_DELAY:-60}
+
+# 分布式锁配置
+distributed_lock:
+  redis_url: ${REDIS_URL:-redis://localhost:6379}
+  default_timeout: ${LOCK_DEFAULT_TIMEOUT:-30}
+  retry_interval: ${LOCK_RETRY_INTERVAL:-0.1}
+  max_retries: ${LOCK_MAX_RETRIES:-100}
+  auto_extend: ${LOCK_AUTO_EXTEND:-true}
+  extend_interval: ${LOCK_EXTEND_INTERVAL:-10}
+
+# 健康检查配置
+health_check:
+  # 全局配置
+  global:
+    enabled: ${HEALTH_CHECK_ENABLED:-true}
+    check_interval: ${HEALTH_CHECK_INTERVAL:-30}
+    
+  # 数据库健康检查
+  database:
+    enabled: ${DB_HEALTH_CHECK_ENABLED:-true}
+    postgresql:
+      timeout: ${DB_HEALTH_CHECK_TIMEOUT:-10}
+      interval: ${DB_HEALTH_CHECK_INTERVAL:-30}
+    mongodb:
+      timeout: ${MONGO_HEALTH_CHECK_TIMEOUT:-10}
+      interval: ${MONGO_HEALTH_CHECK_INTERVAL:-30}
+      
+  # Redis健康检查
+  redis:
+    enabled: ${REDIS_HEALTH_CHECK_ENABLED:-true}
+    timeout: ${REDIS_HEALTH_CHECK_TIMEOUT:-5}
+    interval: ${REDIS_HEALTH_CHECK_INTERVAL:-30}
+    
+  # HTTP服务健康检查
+  http_services:
+    enabled: ${HTTP_HEALTH_CHECK_ENABLED:-true}
+    endpoints:
+      - name: "auth_service"
+        url: "${AUTH_SERVICE_URL:-http://auth-service:8000}/health"
+        expected_status: 200
+        timeout: 10
+        interval: 60
+      - name: "user_service"
+        url: "${USER_SERVICE_URL:-http://user-service:8000}/health"
+        expected_status: 200
+        timeout: 10
+        interval: 60
+
+# 动态配置管理
+dynamic_config:
+  # Redis存储配置
+  redis_url: ${REDIS_URL:-redis://localhost:6379}
+  
+  # 环境配置
+  environment: ${ENVIRONMENT:-development}
+  env_prefix: ${CONFIG_ENV_PREFIX:-XIAOKE_}
+  
+  # 文件监控
+  file_sources:
+    - path: "config/app_config.yaml"
+      format: "yaml"
+    - path: "config/business_config.json"
+      format: "json"
+      
+  # 远程配置
+  remote_config:
+    enabled: ${REMOTE_CONFIG_ENABLED:-false}
+    url: ${REMOTE_CONFIG_URL:-}
+    poll_interval: ${REMOTE_CONFIG_POLL_INTERVAL:-60}
+    
+  # 版本管理
+  max_versions: ${CONFIG_MAX_VERSIONS:-10}
+  
+  # 缓存配置
+  cache:
+    enabled: ${CONFIG_CACHE_ENABLED:-true}
+    ttl: ${CONFIG_CACHE_TTL:-300}
+
+# 开发和调试配置
+development:
+  enable_debug_endpoints: ${ENABLE_DEBUG_ENDPOINTS:-false}
+  enable_profiling: ${ENABLE_PROFILING:-false}
+  mock_external_services: ${MOCK_EXTERNAL_SERVICES:-false}
+  
+  # 测试配置
+  testing:
+    enable_test_data: ${ENABLE_TEST_DATA:-false}
+    test_user_id: ${TEST_USER_ID:-test_user_123} 

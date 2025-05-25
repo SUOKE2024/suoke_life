@@ -9,6 +9,7 @@
 import logging
 import time
 from typing import Dict, List, Any, Optional
+from pymongo import MongoClient
 
 logger = logging.getLogger(__name__)
 
@@ -36,6 +37,53 @@ class UserRepository:
         self._create_indexes()
         
         logger.info("用户存储库初始化完成")
+    
+    def _init_db_client(self):
+        """初始化数据库客户端"""
+        # 构建连接字符串
+        host = self.db_config.get('host', 'localhost')
+        port = self.db_config.get('port', 27017)
+        username = self.db_config.get('username', '')
+        password = self.db_config.get('password', '')
+        
+        if username and password:
+            connection_string = f"mongodb://{username}:{password}@{host}:{port}/"
+        else:
+            connection_string = f"mongodb://{host}:{port}/"
+        
+        # 连接选项
+        connection_options = {
+            'serverSelectionTimeoutMS': self.db_config.get('timeout', 5000),
+            'connectTimeoutMS': self.db_config.get('connect_timeout', 10000),
+            'maxPoolSize': self.db_config.get('max_pool_size', 10),
+            'minPoolSize': self.db_config.get('min_pool_size', 1)
+        }
+        
+        try:
+            client = MongoClient(connection_string, **connection_options)
+            # 测试连接
+            client.admin.command('ping')
+            logger.info("MongoDB连接成功")
+            return client
+        except Exception as e:
+            logger.error(f"MongoDB连接失败: {e}")
+            raise
+    
+    def _create_indexes(self):
+        """创建数据库索引"""
+        try:
+            # 用户集合索引
+            self.users_collection.create_index([('user_id', 1)], unique=True)
+            self.users_collection.create_index([('created_at', -1)])
+            
+            # 健康记录集合索引
+            self.health_records_collection.create_index([('user_id', 1)], unique=True)
+            self.health_records_collection.create_index([('health_events.timestamp', -1)])
+            self.health_records_collection.create_index([('health_events.event_type', 1)])
+            
+            logger.info("数据库索引创建完成")
+        except Exception as e:
+            logger.warning(f"创建索引时出现错误（可能索引已存在）: {e}")
     
     def get_user(self, user_id: str) -> Optional[Dict[str, Any]]:
         """
@@ -315,4 +363,160 @@ class UserRepository:
             return True
         except Exception as e:
             self.logger.error(f"数据库连接检查失败: {e}")
-            raise 
+            raise
+    
+    def get_latest_abdominal_data(self, user_id: str) -> Optional[Dict[str, Any]]:
+        """
+        获取用户最新的腹诊数据
+        
+        Args:
+            user_id: 用户ID
+            
+        Returns:
+            最新的腹诊数据，不存在时返回None
+        """
+        try:
+            # 从健康记录中获取最新的腹诊数据
+            pipeline = [
+                {'$match': {'user_id': user_id}},
+                {'$unwind': '$health_events'},
+                {'$match': {'health_events.event_type': 'abdominal_palpation'}},
+                {'$sort': {'health_events.timestamp': -1}},
+                {'$limit': 1},
+                {'$project': {'_id': 0, 'data': '$health_events.data'}}
+            ]
+            
+            result = list(self.health_records_collection.aggregate(pipeline))
+            
+            if result:
+                return result[0].get('data')
+            
+            return None
+        except Exception as e:
+            logger.exception(f"获取最新腹诊数据失败: {str(e)}")
+            return None
+    
+    def get_latest_skin_data(self, user_id: str) -> Optional[Dict[str, Any]]:
+        """
+        获取用户最新的皮肤触诊数据
+        
+        Args:
+            user_id: 用户ID
+            
+        Returns:
+            最新的皮肤触诊数据，不存在时返回None
+        """
+        try:
+            # 从健康记录中获取最新的皮肤触诊数据
+            pipeline = [
+                {'$match': {'user_id': user_id}},
+                {'$unwind': '$health_events'},
+                {'$match': {'health_events.event_type': 'skin_palpation'}},
+                {'$sort': {'health_events.timestamp': -1}},
+                {'$limit': 1},
+                {'$project': {'_id': 0, 'data': '$health_events.data'}}
+            ]
+            
+            result = list(self.health_records_collection.aggregate(pipeline))
+            
+            if result:
+                return result[0].get('data')
+            
+            return None
+        except Exception as e:
+            logger.exception(f"获取最新皮肤触诊数据失败: {str(e)}")
+            return None
+    
+    def get_user_preferences(self, user_id: str) -> Dict[str, Any]:
+        """
+        获取用户偏好设置
+        
+        Args:
+            user_id: 用户ID
+            
+        Returns:
+            用户偏好设置字典
+        """
+        try:
+            user = self.get_user(user_id)
+            if user:
+                return user.get('preferences', {})
+            return {}
+        except Exception as e:
+            logger.exception(f"获取用户偏好设置失败: {str(e)}")
+            return {}
+    
+    def update_user_preferences(self, user_id: str, preferences: Dict[str, Any]) -> bool:
+        """
+        更新用户偏好设置
+        
+        Args:
+            user_id: 用户ID
+            preferences: 偏好设置字典
+            
+        Returns:
+            更新是否成功
+        """
+        try:
+            result = self.users_collection.update_one(
+                {'user_id': user_id},
+                {
+                    '$set': {
+                        'preferences': preferences,
+                        'updated_at': time.time()
+                    }
+                }
+            )
+            
+            return result.acknowledged
+        except Exception as e:
+            logger.exception(f"更新用户偏好设置失败: {str(e)}")
+            return False
+    
+    def get_user_statistics(self, user_id: str) -> Dict[str, Any]:
+        """
+        获取用户统计信息
+        
+        Args:
+            user_id: 用户ID
+            
+        Returns:
+            统计信息字典
+        """
+        try:
+            # 获取用户基本信息
+            user = self.get_user(user_id)
+            if not user:
+                return {}
+            
+            # 获取健康事件统计
+            pipeline = [
+                {'$match': {'user_id': user_id}},
+                {'$unwind': '$health_events'},
+                {
+                    '$group': {
+                        '_id': '$health_events.event_type',
+                        'count': {'$sum': 1},
+                        'latest': {'$max': '$health_events.timestamp'}
+                    }
+                }
+            ]
+            
+            event_stats = list(self.health_records_collection.aggregate(pipeline))
+            
+            # 构建统计信息
+            statistics = {
+                'user_since': user.get('created_at', 0),
+                'total_events': sum(stat['count'] for stat in event_stats),
+                'event_breakdown': {
+                    stat['_id']: {
+                        'count': stat['count'],
+                        'latest': stat['latest']
+                    } for stat in event_stats
+                }
+            }
+            
+            return statistics
+        except Exception as e:
+            logger.exception(f"获取用户统计信息失败: {str(e)}")
+            return {} 

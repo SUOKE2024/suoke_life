@@ -1,0 +1,394 @@
+# 触诊设备配置文件
+# 包含脉诊、腹诊、皮肤触诊等各种设备的配置
+
+# 脉诊设备配置
+pulse_devices:
+  # 主要脉诊设备
+  primary_pulse_sensor:
+    enabled: true
+    device_type: "pulse_sensor"
+    connection:
+      type: "serial"
+      port: "/dev/ttyUSB0"
+      baudrate: 9600
+      timeout: 5
+      parity: "none"
+      stopbits: 1
+      bytesize: 8
+    
+    # 采样配置
+    sampling:
+      rate: 1000  # Hz
+      duration: 60  # 秒
+      channels: 3  # 寸关尺三部
+      resolution: 16  # 位
+    
+    # 信号处理配置
+    signal_processing:
+      filter:
+        enabled: true
+        type: "bandpass"
+        low_freq: 0.5
+        high_freq: 30
+        order: 4
+      
+      noise_reduction:
+        enabled: true
+        method: "wavelet"
+        threshold: 0.1
+    
+    # 校准配置
+    calibration:
+      enabled: true
+      interval: 86400  # 24小时
+      reference_pressure: 100  # mmHg
+      tolerance: 5  # %
+  
+  # 备用脉诊设备
+  backup_pulse_sensor:
+    enabled: false
+    device_type: "pulse_sensor"
+    connection:
+      type: "serial"
+      port: "/dev/ttyUSB1"
+      baudrate: 9600
+      timeout: 5
+    
+    sampling:
+      rate: 500
+      duration: 60
+      channels: 1
+      resolution: 12
+  
+  # 无线脉诊设备
+  wireless_pulse_sensor:
+    enabled: false
+    device_type: "wireless_pulse_sensor"
+    connection:
+      type: "bluetooth"
+      mac_address: "00:11:22:33:44:55"
+      timeout: 10
+    
+    sampling:
+      rate: 250
+      duration: 60
+      channels: 1
+      resolution: 12
+    
+    # 电池管理
+    battery:
+      low_threshold: 20  # %
+      critical_threshold: 10  # %
+      auto_shutdown: true
+
+# 腹诊设备配置
+abdominal_devices:
+  # 压力传感器
+  pressure_sensor:
+    enabled: true
+    device_type: "pressure_sensor"
+    connection:
+      type: "serial"
+      port: "/dev/ttyUSB2"
+      baudrate: 9600
+      timeout: 5
+    
+    # 压力配置
+    pressure:
+      range: [0, 500]  # mmHg
+      resolution: 0.1
+      accuracy: 1  # %
+    
+    # 位置配置
+    positions:
+      - name: "上腹部"
+        coordinates: [0, 10]
+        pressure_range: [10, 100]
+      - name: "中腹部"
+        coordinates: [0, 0]
+        pressure_range: [5, 80]
+      - name: "下腹部"
+        coordinates: [0, -10]
+        pressure_range: [5, 60]
+  
+  # 温度传感器
+  temperature_sensor:
+    enabled: true
+    device_type: "temperature_sensor"
+    connection:
+      type: "i2c"
+      address: "0x48"
+      bus: 1
+    
+    # 温度配置
+    temperature:
+      range: [20, 45]  # 摄氏度
+      resolution: 0.1
+      accuracy: 0.5
+    
+    # 采样配置
+    sampling:
+      rate: 10  # Hz
+      duration: 30  # 秒
+
+# 皮肤触诊设备配置
+skin_devices:
+  # 触觉传感器
+  tactile_sensor:
+    enabled: true
+    device_type: "tactile_sensor"
+    connection:
+      type: "spi"
+      device: "/dev/spidev0.0"
+      speed: 1000000
+    
+    # 触觉配置
+    tactile:
+      sensitivity: "high"
+      force_range: [0, 10]  # N
+      resolution: 0.01
+    
+    # 纹理分析
+    texture_analysis:
+      enabled: true
+      parameters:
+        roughness: true
+        elasticity: true
+        moisture: true
+  
+  # 湿度传感器
+  humidity_sensor:
+    enabled: true
+    device_type: "humidity_sensor"
+    connection:
+      type: "i2c"
+      address: "0x40"
+      bus: 1
+    
+    # 湿度配置
+    humidity:
+      range: [0, 100]  # %RH
+      resolution: 0.1
+      accuracy: 2
+  
+  # 弹性传感器
+  elasticity_sensor:
+    enabled: false
+    device_type: "elasticity_sensor"
+    connection:
+      type: "analog"
+      pin: "A0"
+    
+    # 弹性配置
+    elasticity:
+      range: [0, 100]  # 弹性指数
+      resolution: 1
+      calibration_points: 10
+
+# 辅助设备配置
+auxiliary_devices:
+  # 环境传感器
+  environment_sensor:
+    enabled: true
+    device_type: "environment_sensor"
+    connection:
+      type: "i2c"
+      address: "0x76"
+      bus: 1
+    
+    # 环境参数
+    parameters:
+      temperature:
+        range: [10, 40]
+        resolution: 0.1
+      humidity:
+        range: [20, 80]
+        resolution: 1
+      pressure:
+        range: [950, 1050]  # hPa
+        resolution: 0.1
+  
+  # 照明设备
+  lighting_device:
+    enabled: true
+    device_type: "led_light"
+    connection:
+      type: "gpio"
+      pin: 18
+    
+    # 照明配置
+    lighting:
+      brightness: 80  # %
+      color_temperature: 5000  # K
+      auto_adjust: true
+  
+  # 摄像头
+  camera_device:
+    enabled: false
+    device_type: "usb_camera"
+    connection:
+      type: "usb"
+      device: "/dev/video0"
+    
+    # 摄像配置
+    video:
+      resolution: [1920, 1080]
+      fps: 30
+      format: "mjpeg"
+
+# 设备管理配置
+device_management:
+  # 自动发现
+  auto_discovery:
+    enabled: true
+    scan_interval: 30  # 秒
+    timeout: 10
+  
+  # 连接管理
+  connection_management:
+    retry_attempts: 3
+    retry_delay: 5  # 秒
+    keepalive_interval: 60
+    connection_timeout: 30
+  
+  # 故障检测
+  fault_detection:
+    enabled: true
+    check_interval: 10  # 秒
+    error_threshold: 5
+    auto_recovery: true
+  
+  # 设备监控
+  monitoring:
+    enabled: true
+    metrics:
+      - "connection_status"
+      - "data_quality"
+      - "error_rate"
+      - "response_time"
+    
+    alerts:
+      connection_lost:
+        enabled: true
+        severity: "high"
+      data_quality_low:
+        enabled: true
+        threshold: 0.7
+        severity: "medium"
+      high_error_rate:
+        enabled: true
+        threshold: 0.1
+        severity: "high"
+
+# 数据采集配置
+data_acquisition:
+  # 采集策略
+  strategy:
+    mode: "continuous"  # continuous, triggered, scheduled
+    buffer_size: 10000
+    flush_interval: 5  # 秒
+  
+  # 数据质量控制
+  quality_control:
+    enabled: true
+    checks:
+      - "signal_range"
+      - "noise_level"
+      - "sampling_rate"
+      - "data_integrity"
+    
+    thresholds:
+      min_signal_strength: 0.1
+      max_noise_ratio: 0.2
+      min_sampling_rate: 100
+  
+  # 数据预处理
+  preprocessing:
+    enabled: true
+    steps:
+      - "noise_filtering"
+      - "baseline_correction"
+      - "artifact_removal"
+      - "normalization"
+
+# 设备特定配置
+device_specific:
+  # 脉诊设备特定配置
+  pulse_specific:
+    # 脉象识别参数
+    pulse_patterns:
+      - name: "浮脉"
+        characteristics: ["shallow", "rapid"]
+        threshold: 0.8
+      - name: "沉脉"
+        characteristics: ["deep", "slow"]
+        threshold: 0.8
+      - name: "数脉"
+        characteristics: ["rapid"]
+        threshold: 0.9
+    
+    # 三部九候配置
+    positions:
+      寸部:
+        location: "wrist_distal"
+        organs: ["heart", "lung"]
+        pressure: "light"
+      关部:
+        location: "wrist_middle"
+        organs: ["liver", "gallbladder", "spleen", "stomach"]
+        pressure: "medium"
+      尺部:
+        location: "wrist_proximal"
+        organs: ["kidney", "bladder"]
+        pressure: "heavy"
+  
+  # 腹诊设备特定配置
+  abdominal_specific:
+    # 腹部分区
+    regions:
+      - name: "右上腹"
+        organs: ["liver", "gallbladder"]
+        normal_pressure: [20, 40]
+      - name: "上腹"
+        organs: ["stomach", "pancreas"]
+        normal_pressure: [15, 35]
+      - name: "左上腹"
+        organs: ["spleen"]
+        normal_pressure: [15, 30]
+      - name: "右腹"
+        organs: ["ascending_colon"]
+        normal_pressure: [10, 25]
+      - name: "脐周"
+        organs: ["small_intestine"]
+        normal_pressure: [10, 20]
+      - name: "左腹"
+        organs: ["descending_colon"]
+        normal_pressure: [10, 25]
+      - name: "右下腹"
+        organs: ["cecum", "appendix"]
+        normal_pressure: [15, 30]
+      - name: "下腹"
+        organs: ["bladder", "uterus"]
+        normal_pressure: [10, 25]
+      - name: "左下腹"
+        organs: ["sigmoid_colon"]
+        normal_pressure: [15, 30]
+  
+  # 皮肤触诊特定配置
+  skin_specific:
+    # 皮肤特征参数
+    skin_features:
+      texture:
+        smooth: [0, 0.3]
+        rough: [0.7, 1.0]
+      elasticity:
+        elastic: [0.7, 1.0]
+        inelastic: [0, 0.3]
+      moisture:
+        dry: [0, 0.3]
+        normal: [0.3, 0.7]
+        moist: [0.7, 1.0]
+      temperature:
+        cold: [20, 32]
+        normal: [32, 37]
+        warm: [37, 42] 

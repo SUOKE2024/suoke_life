@@ -1,0 +1,206 @@
+# 基础设施配置示例
+# 医疗资源微服务基础设施组件配置
+
+# 性能监控配置
+performance:
+  metrics:
+    enabled: true
+    collection_interval: 30  # 秒
+    retention_period: 3600   # 秒
+  alerts:
+    enabled: true
+    thresholds:
+      cpu_percent: 80.0
+      memory_percent: 85.0
+      response_time_avg: 5.0
+      error_rate: 0.05
+  prometheus:
+    enabled: true
+    port: 9090
+    path: "/metrics"
+
+# 缓存管理配置
+cache:
+  memory:
+    enabled: true
+    max_size: 1000
+    strategy: "lru"  # lru, lfu, ttl, adaptive
+  redis:
+    enabled: true
+    url: "redis://localhost:6379"
+    prefix: "medical_resource"
+    max_connections: 20
+  default_ttl: 3600
+  enable_compression: true
+  enable_encryption: false
+  warmup:
+    enabled: false
+    data: []
+
+# 数据库连接池配置
+database:
+  databases:
+    postgres:
+      type: "postgresql"
+      host: "localhost"
+      port: 5432
+      database: "medical_resources"
+      username: "postgres"
+      password: "password"
+      pool_size: 20
+      max_overflow: 30
+      pool_timeout: 30
+      retry_attempts: 3
+      retry_delay: 1.0
+      health_check_interval: 60
+      connection_timeout: 10
+    
+    redis:
+      type: "redis"
+      host: "localhost"
+      port: 6379
+      database: 0
+      username: ""
+      password: ""
+      pool_size: 20
+      connection_timeout: 10
+    
+    mongodb:
+      type: "mongodb"
+      host: "localhost"
+      port: 27017
+      database: "medical_analytics"
+      username: "mongo"
+      password: "password"
+      pool_size: 20
+      connection_timeout: 10
+
+# 事件总线配置
+event_bus:
+  queue_size: 1000
+  worker_count: 4
+  retry_interval: 60
+  enable_persistence: true
+  storage:
+    type: "redis"  # memory, redis
+    redis_url: "redis://localhost:6379"
+    prefix: "events"
+
+# 配置管理配置
+config:
+  watch_files: true
+  env_prefix: "MEDICAL_RESOURCE_"
+  validation:
+    enabled: true
+    strict: true
+  hot_reload:
+    enabled: true
+    debounce_time: 1.0
+
+# 日志配置
+logging:
+  level: "INFO"
+  format: "json"  # text, json
+  file_path: "logs/medical-resource-service.log"
+  max_size: "100MB"
+  backup_count: 5
+  structured: true
+
+# 服务配置
+service:
+  name: "medical-resource-service"
+  version: "1.0.0"
+  host: "0.0.0.0"
+  port: 9084
+  debug: false
+  workers: 4
+  reload: false
+
+# 小克智能体配置
+xiaoke_agent:
+  agent_id: "xiaoke_001"
+  name: "小克"
+  version: "1.0.0"
+  capabilities:
+    - "medical_resource_management"
+    - "tcm_knowledge"
+    - "food_agriculture"
+    - "wellness_tourism"
+  learning_rate: 0.01
+  memory_size: 10000
+  model_path: "models/xiaoke"
+  update_interval: 3600
+
+# 中医知识配置
+tcm_knowledge:
+  knowledge_base_path: "/data/tcm_knowledge"
+  enable_learning: true
+  update_interval: 3600
+  vector_store:
+    type: "faiss"
+    dimension: 768
+    index_path: "/data/tcm_vectors"
+
+# 食农结合配置
+food_agriculture:
+  food_database_path: "/data/food_agriculture"
+  enable_seasonal_updates: true
+  nutrition_api_enabled: true
+  seasonal_data_path: "/data/seasonal"
+
+# 山水养生配置
+wellness_tourism:
+  wellness_database_path: "/data/wellness_tourism"
+  enable_weather_integration: true
+  booking_api_enabled: false
+  weather_api_key: ""
+
+# 资源调度配置
+resource_scheduler:
+  scheduler_algorithm: "constitution_based"  # fcfs, priority, load_balance, constitution_based
+  max_queue_size: 1000
+  scheduling_interval: 60
+  enable_load_balancing: true
+  priority_weights:
+    urgency: 0.4
+    constitution_match: 0.3
+    location: 0.2
+    cost: 0.1
+
+# CORS配置
+cors:
+  allow_origins: ["*"]
+  allow_credentials: true
+  allow_methods: ["*"]
+  allow_headers: ["*"]
+
+# 监控配置
+monitoring:
+  metrics:
+    enabled: true
+    port: 9090
+    path: "/metrics"
+  health_check:
+    enabled: true
+    path: "/health"
+    interval: 30
+  tracing:
+    enabled: false
+    jaeger_endpoint: ""
+
+# 安全配置
+security:
+  enable_auth: true
+  jwt_secret: "your-secret-key"
+  jwt_algorithm: "HS256"
+  jwt_expiration: 3600
+  rate_limiting:
+    enabled: true
+    requests_per_minute: 100
+
+# 开发配置
+development:
+  debug: true
+  auto_reload: true
+  log_level: "DEBUG"
+  enable_profiling: true 

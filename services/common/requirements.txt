@@ -1,22 +1,4 @@
-# 索克生活APP数据库组件依赖
-# 基础数据库驱动和ORM
-sqlalchemy>=2.0.0,<3.0.0
-asyncpg>=0.29.0,<1.0.0    # PostgreSQL异步驱动
-psycopg2-binary>=2.9.9,<3.0.0  # PostgreSQL同步驱动
-aiomysql>=0.2.0,<1.0.0    # MySQL异步驱动
-pymysql>=1.1.0,<2.0.0     # MySQL同步驱动
-aiosqlite>=0.19.0,<1.0.0  # SQLite异步驱动
-alembic>=1.13.1,<2.0.0    # 数据库迁移工具
-
-# NoSQL数据库
-redis>=5.0.1,<6.0.0       # Redis客户端
-aioredis>=2.0.1,<3.0.0    # Redis异步客户端
-pymongo>=4.6.1,<5.0.0     # MongoDB客户端
-motor>=3.3.2,<4.0.0       # MongoDB异步客户端
-
-# 向量数据库客户端
-pymilvus>=2.3.4,<3.0.0    # Milvus客户端
-chromadb>=0.4.22,<1.0.0   # ChromaDB客户端
+# 索克生活APP通用组件依赖
 
 # 缓存和性能
 cachetools>=5.3.2,<6.0.0  # 内存缓存工具
@@ -25,11 +7,17 @@ tenacity>=8.2.3,<9.0.0    # 重试工具
 # 安全和加密
 cryptography>=42.0.2,<43.0.0  # 数据加密
 passlib>=1.7.4,<2.0.0     # 密码散列
-python-jose>=3.3.0,<4.0.0  # JWT
+python-jose[cryptography]>=3.3.0,<4.0.0  # JWT
+bcrypt>=4.1.2,<5.0.0      # bcrypt密码哈希
 
 # 配置和环境变量管理
 pyyaml>=6.0.1,<7.0.0      # YAML解析
 python-dotenv>=1.0.0,<2.0.0  # 环境变量加载
+watchdog>=3.0.0,<4.0.0    # 文件监视
+
+# 配置中心
+python-consul>=1.1.0,<2.0.0  # Consul客户端
+etcd3>=0.12.0,<1.0.0      # etcd客户端
 
 # 可观测性
 opentelemetry-api>=1.21.0,<2.0.0
@@ -37,14 +25,35 @@ opentelemetry-sdk>=1.21.0,<2.0.0
 opentelemetry-exporter-otlp>=1.21.0,<2.0.0
 prometheus-client>=0.17.1,<1.0.0  # Prometheus指标
 
+# 日志聚合
+structlog>=24.1.0,<25.0.0  # 结构化日志
+python-json-logger>=2.0.7,<3.0.0  # JSON日志格式化
+python-logstash>=0.4.8,<1.0.0  # Logstash集成
+fluent-logger>=0.10.0,<1.0.0  # Fluentd集成
+
+# 异步和并发
+aiohttp>=3.9.1,<4.0.0     # 异步HTTP客户端
+httpx>=0.25.2,<1.0.0      # 现代HTTP客户端
+
+# 消息队列
+kafka-python>=2.0.2,<3.0.0  # Kafka客户端
+aio-pika>=9.3.1,<10.0.0   # RabbitMQ异步客户端
+
+# 服务网格和Kubernetes
+kubernetes>=28.1.0,<29.0.0  # Kubernetes Python客户端
+
 # 测试工具
 pytest>=7.4.3,<8.0.0
 pytest-asyncio>=0.23.2,<1.0.0
 pytest-cov>=4.1.0,<5.0.0
 freezegun>=1.2.2,<2.0.0   # 时间模拟
+faker>=22.0.0,<23.0.0     # 测试数据生成
 
 # 开发工具
 black>=23.12.1,<24.0.0    # 代码格式化
 isort>=5.13.2,<6.0.0      # 导入排序
 flake8>=6.1.0,<7.0.0      # 代码检查
-mypy>=1.8.0,<2.0.0        # 类型检查 
+mypy>=1.8.0,<2.0.0        # 类型检查
+
+# 数据验证
+pydantic>=2.5.3,<3.0.0    # 数据验证和设置管理 

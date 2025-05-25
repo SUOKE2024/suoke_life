@@ -74,3 +74,20 @@ tenacity==8.2.3
 jsonschema==4.21.1
 pytz==2024.1
 python-dateutil==2.8.2
+
+# 新增优化依赖
+psutil==5.9.8
+backoff==2.2.1
+
+# 消息队列和异步任务
+aio-pika==9.0.0
+
+# 健康检查依赖（部分已存在）
+# aiohttp==3.9.1  # 已存在
+# asyncpg>=0.29.0  # 已存在
+# motor==3.3.2  # 已存在
+
+# 动态配置依赖
+# pyyaml==6.0.1  # 已存在
+watchdog==3.0.0
+toml==0.10.2

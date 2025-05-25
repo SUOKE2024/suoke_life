@@ -585,4 +585,288 @@ class SymptomExtractor:
                         'location_name': loc_name,
                         'associated_symptoms': [symp_name],
                         'side': 'central'
-                    }) 
+                    })
+
+    async def extract_symptoms_with_knowledge(self, text: str, knowledge_base) -> Dict:
+        """
+        使用知识库增强的症状提取
+        
+        Args:
+            text: 需要分析的文本
+            knowledge_base: 中医知识库实例
+            
+        Returns:
+            Dict: 增强的症状提取结果
+        """
+        try:
+            # 先进行基础症状提取
+            base_result = await self.extract_symptoms(text)
+            
+            # 使用知识库验证和增强症状
+            enhanced_symptoms = []
+            for symptom in base_result['symptoms']:
+                symptom_name = symptom['symptom_name']
+                
+                # 从知识库获取症状信息
+                symptom_info = knowledge_base.get_symptom_info(symptom_name)
+                
+                if symptom_info:
+                    # 更新症状描述和相关信息
+                    symptom['description'] = symptom_info.get('description', symptom['description'])
+                    symptom['related_patterns'] = symptom_info.get('related_patterns', [])
+                    symptom['validated'] = True
+                    symptom['confidence'] = min(symptom['confidence'] * 1.2, 0.95)  # 提高置信度
+                else:
+                    # 尝试模糊匹配
+                    similar_symptoms = knowledge_base.search_symptoms(symptom_name)
+                    if similar_symptoms:
+                        # 使用最相似的症状
+                        symptom['symptom_name'] = similar_symptoms[0]
+                        symptom['original_name'] = symptom_name
+                        symptom['validated'] = True
+                        symptom['confidence'] = symptom['confidence'] * 0.9
+                    else:
+                        symptom['validated'] = False
+                        
+                enhanced_symptoms.append(symptom)
+                
+            # 根据症状推断可能的证型
+            symptom_names = [s['symptom_name'] for s in enhanced_symptoms if s.get('validated', False)]
+            if symptom_names:
+                possible_patterns = knowledge_base.get_patterns_by_symptoms(symptom_names)
+                
+                # 添加证型信息到结果中
+                base_result['possible_tcm_patterns'] = [
+                    {
+                        'pattern_name': p['pattern_name'],
+                        'match_score': p['match_score'],
+                        'category': p['pattern_info'].get('category', ''),
+                        'description': p['pattern_info'].get('description', '')
+                    }
+                    for p in possible_patterns[:5]  # 返回前5个最可能的证型
+                ]
+            else:
+                base_result['possible_tcm_patterns'] = []
+                
+            # 更新增强后的症状列表
+            base_result['symptoms'] = enhanced_symptoms
+            
+            # 增强身体部位信息
+            for location in base_result['body_locations']:
+                loc_name = location['location_name']
+                # 从知识库获取该部位的常见症状
+                common_symptoms = knowledge_base.get_symptoms_by_body_location(loc_name)
+                
+                # 检查这些常见症状是否在文本中出现
+                location['potential_symptoms'] = []
+                for common_symptom in common_symptoms:
+                    if common_symptom in text:
+                        location['potential_symptoms'].append(common_symptom)
+                        
+            return base_result
+            
+        except Exception as e:
+            logger.error(f"使用知识库增强症状提取失败: {str(e)}")
+            return base_result  # 返回基础结果
+            
+    def analyze_symptom_context(self, text: str, symptom: str) -> Dict:
+        """
+        分析症状的上下文信息
+        
+        Args:
+            text: 完整文本
+            symptom: 症状名称
+            
+        Returns:
+            Dict: 症状的上下文分析结果
+        """
+        context = {
+            'triggers': [],      # 诱发因素
+            'relieving_factors': [],  # 缓解因素
+            'aggravating_factors': [],  # 加重因素
+            'accompanying_symptoms': [],  # 伴随症状
+            'timing': {},        # 时间特征
+            'quality': []        # 性质描述
+        }
+        
+        # 获取包含症状的句子及其前后句
+        sentences = re.split(r'[。！？.!?]', text)
+        for i, sentence in enumerate(sentences):
+            if symptom in sentence:
+                # 当前句子和前后句组成上下文
+                context_sentences = []
+                if i > 0:
+                    context_sentences.append(sentences[i-1])
+                context_sentences.append(sentence)
+                if i < len(sentences) - 1:
+                    context_sentences.append(sentences[i+1])
+                    
+                context_text = '。'.join(context_sentences)
+                
+                # 分析诱发因素
+                trigger_patterns = [
+                    '吃.*后', '饮.*后', '运动后', '劳累后', '受凉后', '生气后', 
+                    '着急后', '熬夜后', '喝酒后', '吹风后', '淋雨后'
+                ]
+                for pattern in trigger_patterns:
+                    if re.search(pattern, context_text):
+                        context['triggers'].append(pattern)
+                        
+                # 分析缓解因素
+                relief_patterns = [
+                    '休息.*好转', '吃.*缓解', '按摩.*舒服', '热敷.*减轻', 
+                    '服药.*好转', '睡.*缓解'
+                ]
+                for pattern in relief_patterns:
+                    if re.search(pattern, context_text):
+                        context['relieving_factors'].append(pattern)
+                        
+                # 分析加重因素
+                aggravate_patterns = [
+                    '活动.*加重', '劳累.*严重', '夜间.*明显', '饭后.*加重',
+                    '情绪.*严重', '天冷.*加重'
+                ]
+                for pattern in aggravate_patterns:
+                    if re.search(pattern, context_text):
+                        context['aggravating_factors'].append(pattern)
+                        
+                # 分析伴随症状
+                # 在同一句中查找其他症状
+                for other_symptom in self.symptom_keywords:
+                    if other_symptom != symptom and other_symptom in sentence:
+                        context['accompanying_symptoms'].append(other_symptom)
+                        
+                # 分析时间特征
+                time_features = {
+                    'morning': ['早上', '早晨', '清晨', '凌晨'],
+                    'afternoon': ['下午', '午后'],
+                    'evening': ['晚上', '傍晚', '夜间', '深夜'],
+                    'meal_related': ['饭前', '饭后', '空腹', '餐后']
+                }
+                
+                for feature, keywords in time_features.items():
+                    for keyword in keywords:
+                        if keyword in context_text:
+                            context['timing'][feature] = True
+                            
+                # 分析性质描述
+                quality_patterns = {
+                    'pain_quality': ['刺痛', '胀痛', '隐痛', '剧痛', '钝痛', '绞痛', '灼痛'],
+                    'sensation': ['麻木', '发凉', '发热', '沉重', '紧绷'],
+                    'characteristics': ['持续', '间歇', '阵发', '游走', '固定']
+                }
+                
+                for quality_type, patterns in quality_patterns.items():
+                    for pattern in patterns:
+                        if pattern in context_text:
+                            context['quality'].append({
+                                'type': quality_type,
+                                'description': pattern
+                            })
+                            
+        return context
+        
+    def classify_symptom_by_tcm(self, symptom_name: str) -> Dict:
+        """
+        根据中医理论对症状进行分类
+        
+        Args:
+            symptom_name: 症状名称
+            
+        Returns:
+            Dict: 中医分类信息
+        """
+        classification = {
+            'pattern_associations': [],  # 关联的证型
+            'organ_systems': [],        # 涉及的脏腑
+            'pathogenic_factors': [],   # 病理因素
+            'nature': ''               # 性质（寒热虚实）
+        }
+        
+        # 查找症状在TCM映射中的位置
+        for pattern_type, symptoms in self.symptoms_map.get('tcm_mapping', {}).items():
+            if symptom_name in symptoms:
+                classification['pattern_associations'].append(pattern_type)
+                
+                # 推断脏腑系统
+                if '气虚' in pattern_type or '血虚' in pattern_type:
+                    classification['organ_systems'].extend(['脾', '肺'])
+                    classification['nature'] = '虚'
+                elif '阴虚' in pattern_type:
+                    classification['organ_systems'].extend(['肾', '肝'])
+                    classification['nature'] = '虚热'
+                elif '阳虚' in pattern_type:
+                    classification['organ_systems'].extend(['肾', '脾'])
+                    classification['nature'] = '虚寒'
+                elif '痰湿' in pattern_type:
+                    classification['organ_systems'].extend(['脾', '肺'])
+                    classification['nature'] = '实'
+                    classification['pathogenic_factors'].append('痰湿')
+                elif '湿热' in pattern_type:
+                    classification['organ_systems'].extend(['脾', '肝胆'])
+                    classification['nature'] = '实热'
+                    classification['pathogenic_factors'].extend(['湿', '热'])
+                elif '气滞' in pattern_type:
+                    classification['organ_systems'].extend(['肝', '脾'])
+                    classification['nature'] = '实'
+                    classification['pathogenic_factors'].append('气滞')
+                elif '血瘀' in pattern_type:
+                    classification['organ_systems'].extend(['肝', '心'])
+                    classification['nature'] = '实'
+                    classification['pathogenic_factors'].append('血瘀')
+                    
+        # 根据症状特征推断
+        symptom_characteristics = {
+            '痛': {
+                'organs': ['肝'],
+                'factors': ['气滞', '血瘀'],
+                'nature': '实'
+            },
+            '胀': {
+                'organs': ['脾', '肝'],
+                'factors': ['气滞'],
+                'nature': '实'
+            },
+            '痒': {
+                'organs': ['肺', '肝'],
+                'factors': ['风', '血虚'],
+                'nature': '虚'
+            },
+            '麻': {
+                'organs': ['肝', '肾'],
+                'factors': ['血虚', '痰湿'],
+                'nature': '虚'
+            },
+            '热': {
+                'organs': ['心', '肺'],
+                'factors': ['热', '火'],
+                'nature': '热'
+            },
+            '冷': {
+                'organs': ['肾', '脾'],
+                'factors': ['阳虚', '寒'],
+                'nature': '寒'
+            }
+        }
+        
+        # 检查症状名称中的特征词
+        for char, info in symptom_characteristics.items():
+            if char in symptom_name:
+                classification['organ_systems'].extend(info['organs'])
+                classification['pathogenic_factors'].extend(info['factors'])
+                if not classification['nature']:
+                    classification['nature'] = info['nature']
+                    
+        # 去重
+        classification['organ_systems'] = list(set(classification['organ_systems']))
+        classification['pathogenic_factors'] = list(set(classification['pathogenic_factors']))
+        
+        return classification
+        
+    async def check_health(self) -> bool:
+        """健康检查"""
+        try:
+            # 检查是否加载了必要的数据
+            return bool(self.symptom_keywords) and bool(self.symptoms_map)
+        except Exception:
+            return False 

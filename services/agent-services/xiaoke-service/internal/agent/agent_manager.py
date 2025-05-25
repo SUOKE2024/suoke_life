@@ -16,6 +16,9 @@ from typing import Dict, List, Any, Optional, Tuple
 from .model_factory import ModelFactory
 from pkg.utils.config_loader import get_config
 from pkg.utils.metrics import get_metrics_collector, track_llm_metrics
+from pkg.cache.cache_manager import get_cache_manager, CacheStrategy
+from pkg.resilience.retry_manager import retry, circuit_breaker, RetryStrategy
+from pkg.observability.enhanced_metrics import get_metrics_collector as get_enhanced_metrics
 
 logger = logging.getLogger(__name__)
 
@@ -31,9 +34,14 @@ class AgentManager:
         """
         self.config = get_config()
         self.metrics = get_metrics_collector()
+        self.enhanced_metrics = get_enhanced_metrics()
         
         # 设置依赖组件
         self.session_repository = session_repository
+        
+        # 初始化缓存管理器
+        self.cache_manager = None
+        asyncio.create_task(self._init_cache_manager())
         
         # 加载模型配置
         self.llm_config = self.config.get_section('models.llm')
@@ -59,6 +67,14 @@ class AgentManager:
         logger.info("小克智能体管理器初始化完成，主模型: %s, 备用模型: %s", 
                    self.primary_model, self.fallback_model)
     
+    async def _init_cache_manager(self):
+        """初始化缓存管理器"""
+        try:
+            self.cache_manager = await get_cache_manager()
+            logger.info("缓存管理器初始化成功")
+        except Exception as e:
+            logger.error("缓存管理器初始化失败: %s", str(e))
+    
     def _update_active_sessions_metric(self):
         """更新活跃会话数指标"""
         if hasattr(self.metrics, 'update_active_sessions'):
@@ -72,6 +88,7 @@ class AgentManager:
         self._update_active_sessions_metric()
     
     @track_llm_metrics(model="primary", query_type="resource_management")
+    @retry(max_attempts=3, strategy=RetryStrategy.EXPONENTIAL, circuit_breaker_name="agent_processing")
     async def process_request(self, user_id: str, request_data: Dict[str, Any], 
                             session_id: str = None) -> Dict[str, Any]:
         """
@@ -88,25 +105,45 @@ class AgentManager:
         # 记录请求指标
         request_type = request_data.get('type', 'general')
         self.metrics.increment_request_count(request_type)
+        self.enhanced_metrics.increment_business_metric('user_sessions')
         
         # 确保会话ID存在
         if not session_id:
             session_id = str(uuid.uuid4())
             logger.info("创建新会话，用户ID: %s, 会话ID: %s", user_id, session_id)
         
+        # 尝试从缓存获取结果
+        cache_key = f"request:{user_id}:{hash(str(request_data))}"
+        if self.cache_manager:
+            cached_result = await self.cache_manager.get(cache_key, CacheStrategy.TTL)
+            if cached_result:
+                logger.info("从缓存获取到结果，用户ID: %s", user_id)
+                self.enhanced_metrics.record_cache_operation("get", "hit")
+                return cached_result
+            else:
+                self.enhanced_metrics.record_cache_operation("get", "miss")
+        
         try:
             # 根据请求类型分发处理
             if request_type == 'treatment_plan':
-                return await self._generate_treatment_plan(user_id, request_data, session_id)
+                result = await self._generate_treatment_plan(user_id, request_data, session_id)
             elif request_type == 'medicine_info':
-                return await self._provide_medicine_info(user_id, request_data, session_id)
+                result = await self._provide_medicine_info(user_id, request_data, session_id)
             elif request_type == 'resource_allocation':
-                return await self._allocate_medical_resource(user_id, request_data, session_id)
+                result = await self._allocate_medical_resource(user_id, request_data, session_id)
+                self.enhanced_metrics.increment_business_metric('resource_allocations')
             elif request_type == 'emergency_response':
-                return await self._handle_emergency(user_id, request_data, session_id)
+                result = await self._handle_emergency(user_id, request_data, session_id)
             else:
                 # 默认对话处理
-                return await self._process_general_inquiry(user_id, request_data, session_id)
+                result = await self._process_general_inquiry(user_id, request_data, session_id)
+            
+            # 缓存结果
+            if self.cache_manager and result.get('success', False):
+                await self.cache_manager.set(cache_key, result, ttl=1800)  # 缓存30分钟
+                self.enhanced_metrics.record_cache_operation("set", "success")
+            
+            return result
                 
         except Exception as e:
             logger.error("请求处理失败，用户ID: %s, 会话ID: %s, 错误: %s", 

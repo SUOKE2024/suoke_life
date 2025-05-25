@@ -1,182 +1,163 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Image, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
-import { TextInput, Button, Text, Surface, Snackbar, useTheme } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useSelector } from 'react-redux';
-import { useAppDispatch } from '../../hooks/redux';
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  SafeAreaView,
+  StatusBar,
+  Alert,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useTranslation } from 'react-i18next';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { login, clearError, setUser } from '../../store/slices/userSlice';
-import { AuthStackParamList } from '../../navigation/AppNavigator';
-import { RootState } from '../../store';
+import { useDispatch } from 'react-redux';
+import { AuthStackParamList } from '../../navigation/AuthNavigator';
+import { login } from '../../store/slices/authSlice';
+import { colors, spacing } from '../../constants/theme';
+import {
+  validateLoginForm,
+  LoginFormData,
+  LoginFormErrors,
+} from '../../utils/authUtils';
 
-// 开发环境标识
-const isDevelopment = __DEV__;
+type LoginScreenNavigationProp = NativeStackNavigationProp<
+  AuthStackParamList,
+  'Login'
+>;
 
-const LoginScreen: React.FC = () => {
-  const theme = useTheme();
-  const dispatch = useAppDispatch();
-  const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
-  const { t } = useTranslation();
-  
-  const { isLoading, error } = useSelector((state: RootState) => state.user);
-  
-  const [mobile, setMobile] = useState('');
-  const [password, setPassword] = useState('');
+export const LoginScreen: React.FC = () => {
+  const navigation = useNavigation<LoginScreenNavigationProp>();
+  const dispatch = useDispatch();
+
+  const [formData, setFormData] = useState<LoginFormData>({
+    email: '',
+    password: '',
+  });
+  const [errors, setErrors] = useState<LoginFormErrors>({});
+  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [snackbarVisible, setSnackbarVisible] = useState(false);
-  
-  // 处理表单提交
-  const handleSubmit = () => {
-    if (!mobile || !password) {
+
+  const handleInputChange = (field: keyof LoginFormData, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    // 清除对应字段的错误
+    if (errors[field]) {
+      setErrors((prev) => ({ ...prev, [field]: undefined }));
+    }
+  };
+
+  const handleLogin = async () => {
+    // 表单验证
+    const validationErrors = validateLoginForm(formData);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
       return;
     }
-    
-    dispatch(login({ mobile, password }));
-  };
-  
-  // 处理开发环境直接登录
-  const handleDevLogin = () => {
-    if (!isDevelopment) return;
-    
-    // 创建一个测试用户
-    const testUser = {
-      id: 'test-user-id',
-      mobile: '13800138000',
-      username: '测试用户',
-      avatar: '',
-      createTime: Date.now(),
-      lastLoginTime: Date.now()
-    };
-    
-    // 直接设置用户（绕过API调用）
-    dispatch(setUser(testUser));
-  };
-  
-  // 处理错误显示
-  useEffect(() => {
-    if (error) {
-      setSnackbarVisible(true);
+
+    setLoading(true);
+    try {
+      await dispatch(
+        login({
+          email: formData.email.trim().toLowerCase(),
+          password: formData.password,
+        }) as any
+      );
+    } catch (error) {
+      Alert.alert('登录失败', '请检查您的邮箱和密码');
+    } finally {
+      setLoading(false);
     }
-  }, [error]);
-  
-  // 处理关闭错误提示
-  const onDismissSnackbar = () => {
-    setSnackbarVisible(false);
-    dispatch(clearError());
   };
-  
+
+  const handleForgotPassword = () => {
+    navigation.navigate('ForgotPassword');
+  };
+
+  const handleRegister = () => {
+    navigation.navigate('Register');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView 
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.keyboardAvoidingView}
-      >
-        <ScrollView contentContainerStyle={styles.scrollContent}>
-          <View style={styles.logoContainer}>
-            <View style={[styles.logo, styles.logoPlaceholder]}>
-              <Icon name="leaf" size={80} color={theme.colors.primary} />
-            </View>
-            <Text style={styles.appName}>索克生活</Text>
-            <Text style={styles.appSlogan}>智慧中医，健康生活</Text>
-          </View>
-          
-          <Surface style={styles.formContainer}>
-            <Text style={styles.title}>{t('auth.login')}</Text>
-            
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
+
+      <View style={styles.content}>
+        {/* 标题 */}
+        <View style={styles.header}>
+          <Text style={styles.title}>欢迎回来</Text>
+          <Text style={styles.subtitle}>登录您的索克生活账户</Text>
+        </View>
+
+        {/* 表单 */}
+        <View style={styles.form}>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>邮箱</Text>
             <TextInput
-              label={t('auth.mobile')}
-              value={mobile}
-              onChangeText={setMobile}
-              mode="outlined"
-              style={styles.input}
-              keyboardType="phone-pad"
-              left={<TextInput.Icon icon="cellphone" />}
+              style={[styles.input, errors.email ? styles.inputError : null]}
+              value={formData.email}
+              onChangeText={(value) => handleInputChange('email', value)}
+              placeholder="请输入您的邮箱"
+              keyboardType="email-address"
               autoCapitalize="none"
+              autoCorrect={false}
             />
-            
-            <TextInput
-              label={t('auth.password')}
-              value={password}
-              onChangeText={setPassword}
-              mode="outlined"
-              style={styles.input}
-              secureTextEntry={!showPassword}
-              left={<TextInput.Icon icon="lock" />}
-              right={
-                <TextInput.Icon 
-                  icon={showPassword ? "eye-off" : "eye"} 
-                  onPress={() => setShowPassword(!showPassword)} 
-                />
-              }
-            />
-            
-            <TouchableOpacity 
-              style={styles.forgotPasswordContainer}
-              onPress={() => navigation.navigate('ForgotPassword')}
-            >
-              <Text style={[styles.forgotPasswordText, { color: theme.colors.primary }]}>
-                {t('auth.forgotPassword')}
-              </Text>
-            </TouchableOpacity>
-            
-            <Button 
-              mode="contained" 
-              onPress={handleSubmit} 
-              style={styles.loginButton}
-              loading={isLoading}
-              disabled={isLoading || !mobile || !password}
-            >
-              {t('auth.login')}
-            </Button>
-            
-            {isDevelopment && (
-              <Button 
-                mode="outlined" 
-                onPress={handleDevLogin}
-                style={[styles.loginButton, { marginTop: 8 }]}
-              >
-                开发环境登录
-              </Button>
+            {errors.email && (
+              <Text style={styles.errorText}>{errors.email}</Text>
             )}
-            
-            <TouchableOpacity 
-              style={styles.registerContainer}
-              onPress={() => navigation.navigate('Register')}
-            >
-              <Text style={styles.registerText}>
-                没有账号？ <Text style={{ color: theme.colors.primary }}>立即注册</Text>
-              </Text>
-            </TouchableOpacity>
-          </Surface>
-          
-          <View style={styles.socialLoginContainer}>
-            <Text style={styles.socialLoginText}>其他登录方式</Text>
-            <View style={styles.socialIcons}>
-              <TouchableOpacity style={styles.socialIcon}>
-                <Icon name="wechat" size={28} color="#09B83E" />
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.socialIcon}>
-                <Icon name="cellphone" size={28} color={theme.colors.primary} />
+          </View>
+
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>密码</Text>
+            <View style={styles.passwordContainer}>
+              <TextInput
+                style={[
+                  styles.passwordInput,
+                  errors.password ? styles.inputError : null,
+                ]}
+                value={formData.password}
+                onChangeText={(value) => handleInputChange('password', value)}
+                placeholder="请输入您的密码"
+                secureTextEntry={!showPassword}
+                autoCapitalize="none"
+                autoCorrect={false}
+              />
+              <TouchableOpacity
+                style={styles.eyeButton}
+                onPress={() => setShowPassword(!showPassword)}
+              >
+                <Text style={styles.eyeText}>
+                  {showPassword ? '隐藏' : '显示'}
+                </Text>
               </TouchableOpacity>
             </View>
+            {errors.password && (
+              <Text style={styles.errorText}>{errors.password}</Text>
+            )}
           </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
-      
-      <Snackbar
-        visible={snackbarVisible}
-        onDismiss={onDismissSnackbar}
-        duration={3000}
-        action={{
-          label: '关闭',
-          onPress: onDismissSnackbar,
-        }}
-      >
-        {error}
-      </Snackbar>
+
+          <TouchableOpacity onPress={handleForgotPassword}>
+            <Text style={styles.forgotPassword}>忘记密码？</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.loginButton, loading && styles.loginButtonDisabled]}
+            onPress={handleLogin}
+            disabled={loading}
+          >
+            <Text style={styles.loginButtonText}>
+              {loading ? '登录中...' : '登录'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* 注册链接 */}
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>还没有账户？</Text>
+          <TouchableOpacity onPress={handleRegister}>
+            <Text style={styles.registerLink}>立即注册</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </SafeAreaView>
   );
 };
@@ -184,94 +165,111 @@ const LoginScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: colors.background,
   },
-  keyboardAvoidingView: {
+  content: {
     flex: 1,
+    paddingHorizontal: spacing.xl,
+    paddingVertical: spacing.xxl,
   },
-  scrollContent: {
-    flexGrow: 1,
-    padding: 16,
-    justifyContent: 'center',
-  },
-  logoContainer: {
-    alignItems: 'center',
-    marginBottom: 32,
-  },
-  logo: {
-    width: 100,
-    height: 100,
-    marginBottom: 16,
-  },
-  logoPlaceholder: {
-    backgroundColor: '#f0f0f0',
-    borderRadius: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  appName: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
-  appSlogan: {
-    fontSize: 16,
-    opacity: 0.7,
-  },
-  formContainer: {
-    padding: 24,
-    borderRadius: 12,
-    elevation: 2,
+  header: {
+    marginBottom: spacing.xxl,
   },
   title: {
-    fontSize: 24,
+    fontSize: 32,
     fontWeight: 'bold',
-    marginBottom: 24,
-    textAlign: 'center',
+    color: colors.text,
+    marginBottom: spacing.sm,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: colors.textSecondary,
+  },
+  form: {
+    flex: 1,
+  },
+  inputContainer: {
+    marginBottom: spacing.lg,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.text,
+    marginBottom: spacing.sm,
   },
   input: {
-    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 12,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.md,
+    fontSize: 16,
+    backgroundColor: colors.surface,
   },
-  forgotPasswordContainer: {
-    alignSelf: 'flex-end',
-    marginBottom: 24,
+  inputError: {
+    borderColor: colors.error,
   },
-  forgotPasswordText: {
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 12,
+    backgroundColor: colors.surface,
+  },
+  passwordInput: {
+    flex: 1,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.md,
+    fontSize: 16,
+  },
+  eyeButton: {
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  eyeText: {
+    color: colors.primary,
     fontSize: 14,
+  },
+  errorText: {
+    color: colors.error,
+    fontSize: 12,
+    marginTop: spacing.xs,
+  },
+  forgotPassword: {
+    fontSize: 14,
+    color: colors.primary,
+    textAlign: 'right',
+    marginBottom: spacing.xl,
   },
   loginButton: {
-    paddingVertical: 8,
-    borderRadius: 4,
-  },
-  registerContainer: {
-    marginTop: 24,
+    backgroundColor: colors.primary,
+    paddingVertical: spacing.md,
+    borderRadius: 12,
     alignItems: 'center',
   },
-  registerText: {
-    fontSize: 14,
+  loginButtonDisabled: {
+    opacity: 0.6,
   },
-  socialLoginContainer: {
-    marginTop: 40,
-    alignItems: 'center',
+  loginButtonText: {
+    color: colors.surface,
+    fontSize: 18,
+    fontWeight: '600',
   },
-  socialLoginText: {
-    fontSize: 14,
-    opacity: 0.7,
-    marginBottom: 16,
-  },
-  socialIcons: {
+  footer: {
     flexDirection: 'row',
     justifyContent: 'center',
-  },
-  socialIcon: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
-    justifyContent: 'center',
     alignItems: 'center',
-    marginHorizontal: 10,
+    marginTop: spacing.xl,
+  },
+  footerText: {
+    fontSize: 16,
+    color: colors.textSecondary,
+  },
+  registerLink: {
+    fontSize: 16,
+    color: colors.primary,
+    fontWeight: '600',
+    marginLeft: spacing.sm,
   },
 });
-
-export default LoginScreen; 

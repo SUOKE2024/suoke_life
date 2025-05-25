@@ -1,0 +1,525 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: blockchain-service
+  labels:
+    app: blockchain-service
+    version: v2.0.0
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: blockchain-config
+  namespace: blockchain-service
+data:
+  # 服务配置
+  SERVICE_PORT: "8084"
+  LOG_LEVEL: "INFO"
+  
+  # 区块链配置
+  DEFAULT_CHAIN: "private"
+  PRIVATE_CHAIN_RPC: "http://blockchain-node:8545"
+  PRIVATE_CHAIN_ID: "1337"
+  
+  # Redis配置
+  REDIS_HOST: "redis"
+  REDIS_PORT: "6379"
+  REDIS_DB: "3"
+  
+  # 批处理配置
+  BATCH_SIZE: "100"
+  BATCH_TIMEOUT: "5"
+  MAX_GAS_PER_BATCH: "8000000"
+  PARALLEL_BATCHES: "3"
+  
+  # 缓存配置
+  CONTRACT_CACHE_TTL: "3600"
+  METHOD_CACHE_TTL: "300"
+  EVENT_CACHE_TTL: "600"
+  MAX_CACHE_SIZE: "1000"
+  
+  # 索引配置
+  INDEX_BATCH_SIZE: "1000"
+  INDEX_INTERVAL: "10"
+  RETENTION_DAYS: "365"
+  SHARD_COUNT: "10"
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: blockchain-secrets
+  namespace: blockchain-service
+type: Opaque
+stringData:
+  # 私钥（示例，实际使用时应该使用真实的私钥）
+  PRIVATE_KEY: "0x0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+  
+  # 外部链RPC密钥
+  INFURA_API_KEY: "your-infura-api-key"
+  ALCHEMY_API_KEY: "your-alchemy-api-key"
+  
+  # Redis密码
+  REDIS_PASSWORD: "redis_password"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blockchain-service
+  namespace: blockchain-service
+  labels:
+    app: blockchain-service
+    version: v2.0.0
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: blockchain-service
+  template:
+    metadata:
+      labels:
+        app: blockchain-service
+        version: v2.0.0
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8084"
+        prometheus.io/path: "/api/v1/blockchain/metrics"
+    spec:
+      serviceAccountName: blockchain-service
+      containers:
+      - name: blockchain-service
+        image: suoke-life/blockchain-service:v2.0.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8084
+          name: http
+          protocol: TCP
+        env:
+        - name: SERVICE_NAME
+          value: "blockchain-service"
+        - name: SERVICE_VERSION
+          value: "v2.0.0"
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        envFrom:
+        - configMapRef:
+            name: blockchain-config
+        - secretRef:
+            name: blockchain-secrets
+        resources:
+          requests:
+            cpu: 500m
+            memory: 1Gi
+          limits:
+            cpu: 2000m
+            memory: 4Gi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8084
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8084
+          initialDelaySeconds: 20
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        startupProbe:
+          httpGet:
+            path: /health
+            port: 8084
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 30
+        volumeMounts:
+        - name: contract-artifacts
+          mountPath: /app/contracts
+        - name: logs
+          mountPath: /logs
+      volumes:
+      - name: contract-artifacts
+        configMap:
+          name: contract-artifacts
+      - name: logs
+        emptyDir: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: blockchain-service
+  namespace: blockchain-service
+  labels:
+    app: blockchain-service
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8084
+    targetPort: 8084
+    protocol: TCP
+    name: http
+  selector:
+    app: blockchain-service
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: blockchain-service
+  namespace: blockchain-service
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: blockchain-service
+  namespace: blockchain-service
+rules:
+- apiGroups: [""]
+  resources: ["configmaps", "secrets"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: blockchain-service
+  namespace: blockchain-service
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: blockchain-service
+subjects:
+- kind: ServiceAccount
+  name: blockchain-service
+  namespace: blockchain-service
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: blockchain-service-hpa
+  namespace: blockchain-service
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: blockchain-service
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  - type: Pods
+    pods:
+      metric:
+        name: blockchain_transaction_queue_size
+      target:
+        type: AverageValue
+        averageValue: "100"
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 10
+        periodSeconds: 60
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+      - type: Percent
+        value: 100
+        periodSeconds: 60
+      - type: Pods
+        value: 2
+        periodSeconds: 60
+
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: blockchain-service-pdb
+  namespace: blockchain-service
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: blockchain-service
+
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: blockchain-service-netpol
+  namespace: blockchain-service
+spec:
+  podSelector:
+    matchLabels:
+      app: blockchain-service
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: api-gateway
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+    ports:
+    - protocol: TCP
+      port: 8084
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: blockchain-infrastructure
+    ports:
+    - protocol: TCP
+      port: 8545  # Ethereum RPC
+    - protocol: TCP
+      port: 8546  # Ethereum WebSocket
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: data-storage
+    ports:
+    - protocol: TCP
+      port: 6379  # Redis
+  - to:
+    - namespaceSelector: {}
+    ports:
+    - protocol: TCP
+      port: 53   # DNS
+    - protocol: UDP
+      port: 53   # DNS
+  - to:
+    - podSelector: {}
+    ports:
+    - protocol: TCP
+      port: 443  # HTTPS for external blockchain APIs
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: contract-artifacts
+  namespace: blockchain-service
+data:
+  # 这里应该包含智能合约的ABI文件
+  # 示例：
+  HealthDataStorage.json: |
+    {
+      "abi": [
+        {
+          "inputs": [],
+          "name": "storeHealthData",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        }
+      ]
+    }
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: blockchain-service
+  namespace: blockchain-service
+  labels:
+    app: blockchain-service
+spec:
+  selector:
+    matchLabels:
+      app: blockchain-service
+  endpoints:
+  - port: http
+    path: /api/v1/blockchain/metrics
+    interval: 30s
+    scrapeTimeout: 10s
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: blockchain-grafana-dashboard
+  namespace: blockchain-service
+  labels:
+    grafana_dashboard: "1"
+data:
+  blockchain-dashboard.json: |
+    {
+      "dashboard": {
+        "title": "Blockchain Service Dashboard",
+        "panels": [
+          {
+            "title": "Total Transactions",
+            "targets": [
+              {
+                "expr": "blockchain_total_transactions"
+              }
+            ]
+          },
+          {
+            "title": "Transaction Rate",
+            "targets": [
+              {
+                "expr": "rate(blockchain_total_transactions[5m])"
+              }
+            ]
+          },
+          {
+            "title": "Failed Transactions",
+            "targets": [
+              {
+                "expr": "blockchain_failed_transactions"
+              }
+            ]
+          },
+          {
+            "title": "Average Gas Price",
+            "targets": [
+              {
+                "expr": "blockchain_average_gas_price"
+              }
+            ]
+          },
+          {
+            "title": "Cache Hit Rate",
+            "targets": [
+              {
+                "expr": "blockchain_cache_hits / (blockchain_cache_hits + blockchain_cache_misses)"
+              }
+            ]
+          },
+          {
+            "title": "Active Chains",
+            "targets": [
+              {
+                "expr": "blockchain_active_chains"
+              }
+            ]
+          },
+          {
+            "title": "Batch Queue Size",
+            "targets": [
+              {
+                "expr": "blockchain_transaction_queue_size"
+              }
+            ]
+          },
+          {
+            "title": "Indexed Records",
+            "targets": [
+              {
+                "expr": "blockchain_indexed_records"
+              }
+            ]
+          }
+        ]
+      }
+    }
+
+---
+# 私有区块链节点（用于开发/测试）
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: blockchain-node
+  namespace: blockchain-service
+spec:
+  serviceName: blockchain-node
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blockchain-node
+  template:
+    metadata:
+      labels:
+        app: blockchain-node
+    spec:
+      containers:
+      - name: geth
+        image: ethereum/client-go:latest
+        command:
+        - geth
+        - --dev
+        - --http
+        - --http.addr=0.0.0.0
+        - --http.port=8545
+        - --http.api=eth,net,web3,personal,admin,debug,miner
+        - --http.corsdomain=*
+        - --ws
+        - --ws.addr=0.0.0.0
+        - --ws.port=8546
+        - --ws.api=eth,net,web3,personal,admin,debug,miner
+        - --ws.origins=*
+        - --datadir=/data
+        ports:
+        - containerPort: 8545
+          name: rpc
+        - containerPort: 8546
+          name: ws
+        volumeMounts:
+        - name: data
+          mountPath: /data
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 10Gi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: blockchain-node
+  namespace: blockchain-service
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8545
+    targetPort: 8545
+    name: rpc
+  - port: 8546
+    targetPort: 8546
+    name: ws
+  selector:
+    app: blockchain-node 

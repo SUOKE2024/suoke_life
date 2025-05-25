@@ -4,12 +4,12 @@
 source 'https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git'
 # source 'https://cdn.cocoapods.org/'
 
-# ENV['COCOAPODS_DISABLE_GITHUB_PROXY'] = 'true'
+# 配置环境变量使用清华源镜像
+ENV['COCOAPODS_DISABLE_GITHUB_PROXY'] = 'true'
 
 require_relative '../node_modules/react-native/scripts/react_native_pods'
-require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-platform :ios, min_ios_version_supported
+platform :ios, '15.1'
 prepare_react_native_project!
 
 linkage = ENV['USE_FRAMEWORKS']
@@ -24,8 +24,13 @@ target 'SuokeLife' do
   use_react_native!(
     :path => config[:reactNativePath],
     # An absolute path to your application root.
-    :app_path => "#{Pod::Config.instance.installation_root}/.."
+    :app_path => "#{Pod::Config.instance.installation_root}/..",
+    # 启用 Hermes 和 Fabric（新架构）
+    :hermes_enabled => true,
+    :fabric_enabled => true
   )
+
+
 
   post_install do |installer|
     # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
@@ -36,23 +41,41 @@ target 'SuokeLife' do
       # :ccache_enabled => true
     )
     
-    # Fix for fmt library compilation error with newer Xcode versions
+    # React Native 0.79 兼容性配置
     installer.pods_project.targets.each do |target|
-      if target.name == 'fmt'
-        target.build_configurations.each do |config|
-          config.build_settings['GCC_WARN_PEDANTIC'] = 'NO'
-          config.build_settings['WARNING_CFLAGS'] = '$(inherited) -w'
-          config.build_settings['OTHER_CFLAGS'] = '$(inherited) -w -DFMT_HEADER_ONLY=1 -DFMT_DISABLE_COMPILE_TIME_CHECKS'
-          config.build_settings['GCC_TREAT_WARNINGS_AS_ERRORS'] = 'NO'
-          config.build_settings['CLANG_WARN_EVERYTHING'] = 'NO'
-          config.build_settings['CLANG_WARN_PEDANTIC'] = 'NO'
-          config.build_settings['OTHER_CPLUSPLUSFLAGS'] = '$(inherited) -w -DFMT_HEADER_ONLY=1'
+      target.build_configurations.each do |config|
+        # 确保所有Pod使用相同的iOS Deployment Target
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.1'
+        # 禁用严格警告以避免编译错误
+        config.build_settings['GCC_WARN_INHIBIT_ALL_WARNINGS'] = 'YES'
+        # 升级到C++20以支持std::unordered_map::contains方法
+        config.build_settings['CLANG_CXX_LANGUAGE_STANDARD'] = 'c++20'
+        config.build_settings['CLANG_CXX_LIBRARY'] = 'libc++'
+        # 解决模块映射问题
+        config.build_settings['DEFINES_MODULE'] = 'YES'
+        # 确保使用最新的C++标准库
+        config.build_settings['MACOSX_DEPLOYMENT_TARGET'] = '10.15'
+        
+        # 修复 Swift 标准库嵌入问题
+        # 对于静态库，不应该嵌入 Swift 标准库
+        if target.respond_to?(:product_type) && target.product_type == "com.apple.product-type.library.static"
+          config.build_settings['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = 'NO'
+        end
+        
+        # 对于应用程序目标，确保嵌入 Swift 标准库
+        if target.respond_to?(:product_type) && target.product_type == "com.apple.product-type.application"
+          config.build_settings['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = 'YES'
         end
       end
-      
-      # 设置iOS部署目标为12.4
-      target.build_configurations.each do |config|
-        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.4'
+    end
+    
+    # 修复 VisionCamera 警告
+    installer.pods_project.targets.each do |target|
+      if target.name == 'VisionCamera'
+        target.build_configurations.each do |config|
+          # 减少 VisionCamera 的警告
+          config.build_settings['SWIFT_SUPPRESS_WARNINGS'] = 'YES'
+        end
       end
     end
   end

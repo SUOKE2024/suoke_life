@@ -2,278 +2,391 @@
 # -*- coding: utf-8 -*-
 
 """
-服务入口程序
+RAG服务主入口
+整合所有组件并启动服务
 """
 
-import os
-import sys
-import argparse
-import yaml
 import asyncio
+import signal
+import sys
+import os
+from pathlib import Path
+from typing import Optional
 import uvicorn
+from fastapi import FastAPI, HTTPException, Depends
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 from contextlib import asynccontextmanager
 from loguru import logger
-import signal
 
 # 添加项目根目录到Python路径
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
-sys.path.insert(0, project_root)
+project_root = Path(__file__).parent.parent.parent
+sys.path.insert(0, str(project_root))
 
-from internal.delivery.grpc.server import RagServicer
-from internal.delivery.rest.app import create_app
-from internal.service.rag_service import RagService
+from internal.container import Container
+from internal.delivery.rest_handler import create_rest_handler
+from internal.delivery.grpc_server import create_grpc_server
+from internal.observability.metrics import MetricsCollector
+from internal.resilience.circuit_breaker import CircuitBreakerService
+from internal.routing.intelligent_router import IntelligentRouter
+from internal.integration.api_gateway import APIGateway
+from config.settings import Settings
 
 
-def load_config(config_path: str) -> dict:
-    """
-    加载配置文件
+class RAGService:
+    """RAG服务主类"""
     
-    Args:
-        config_path: 配置文件路径
-        
-    Returns:
-        配置字典
-    """
-    try:
-        with open(config_path, 'r', encoding='utf-8') as f:
-            config = yaml.safe_load(f)
-        return config
+    def __init__(self):
+        self.settings = Settings()
+        self.container: Optional[Container] = None
+        self.app: Optional[FastAPI] = None
+        self.grpc_server = None
+        self.metrics_collector: Optional[MetricsCollector] = None
+        self.circuit_breaker: Optional[CircuitBreakerService] = None
+        self.intelligent_router: Optional[IntelligentRouter] = None
+        self.api_gateway: Optional[APIGateway] = None
+        self.shutdown_event = asyncio.Event()
+    
+    async def initialize(self):
+        """初始化服务"""
+        try:
+            logger.info("正在初始化RAG服务...")
+            
+            # 初始化依赖注入容器
+            self.container = Container()
+            await self.container.init_resources()
+            
+            # 获取核心组件
+            self.metrics_collector = self.container.metrics_collector()
+            self.circuit_breaker = self.container.circuit_breaker_service()
+            
+            # 初始化智能路由器
+            self.intelligent_router = IntelligentRouter(self.metrics_collector)
+            
+            # 初始化API网关
+            self.api_gateway = APIGateway(self.metrics_collector, self.circuit_breaker)
+            await self.api_gateway.__aenter__()
+            
+            # 创建FastAPI应用
+            self.app = await self._create_fastapi_app()
+            
+            # 创建gRPC服务器
+            self.grpc_server = await create_grpc_server(self.container)
+            
+            logger.info("RAG服务初始化完成")
+            
     except Exception as e:
-        logger.error(f"加载配置文件失败: {e}")
+            logger.error(f"RAG服务初始化失败: {e}")
         raise
 
+    async def _create_fastapi_app(self) -> FastAPI:
+        """创建FastAPI应用"""
+        
+        @asynccontextmanager
+        async def lifespan(app: FastAPI):
+            """应用生命周期管理"""
+            # 启动时
+            logger.info("FastAPI应用启动")
+            yield
+            # 关闭时
+            logger.info("FastAPI应用关闭")
+            await self.cleanup()
+        
+        app = FastAPI(
+            title="索克生活 RAG服务",
+            description="基于检索增强生成的智能健康管理服务",
+            version="1.2.0",
+            docs_url="/docs",
+            redoc_url="/redoc",
+            openapi_url="/openapi.json",
+            lifespan=lifespan
+        )
+        
+        # 添加中间件
+        app.add_middleware(
+            CORSMiddleware,
+            allow_origins=["*"],
+            allow_credentials=True,
+            allow_methods=["*"],
+            allow_headers=["*"],
+        )
+        
+        app.add_middleware(GZipMiddleware, minimum_size=1000)
+        
+        # 注册路由
+        rest_handler = create_rest_handler(
+            self.container,
+            self.intelligent_router,
+            self.api_gateway
+        )
+        app.include_router(rest_handler, prefix="/api/v1")
+        
+        # 健康检查端点
+        @app.get("/health")
+        async def health_check():
+            """健康检查"""
+            try:
+                # 检查核心组件状态
+                container_status = "healthy" if self.container else "unhealthy"
+                router_status = "healthy" if self.intelligent_router else "unhealthy"
+                gateway_status = "healthy" if self.api_gateway else "unhealthy"
+                
+                # 检查数据库连接
+                vector_db = self.container.vector_database()
+                db_status = "healthy" if await vector_db.health_check() else "unhealthy"
+                
+                overall_status = "healthy" if all([
+                    container_status == "healthy",
+                    router_status == "healthy",
+                    gateway_status == "healthy",
+                    db_status == "healthy"
+                ]) else "unhealthy"
+                
+                return {
+                    "status": overall_status,
+                    "components": {
+                        "container": container_status,
+                        "router": router_status,
+                        "gateway": gateway_status,
+                        "vector_database": db_status
+                    },
+                    "version": "1.2.0",
+                    "timestamp": asyncio.get_event_loop().time()
+                }
+                
+            except Exception as e:
+                logger.error(f"健康检查失败: {e}")
+                raise HTTPException(status_code=503, detail="服务不健康")
+        
+        # 指标端点
+        @app.get("/metrics")
+        async def get_metrics():
+            """获取Prometheus格式的指标"""
+            try:
+                if self.metrics_collector:
+                    return await self.metrics_collector.export_prometheus_metrics()
+                else:
+                    return {"error": "指标收集器未初始化"}
+            except Exception as e:
+                logger.error(f"获取指标失败: {e}")
+                raise HTTPException(status_code=500, detail="获取指标失败")
+        
+        # 服务状态端点
+        @app.get("/status")
+        async def get_service_status():
+            """获取详细的服务状态"""
+            try:
+                status = {
+                    "service": "rag-service",
+                    "version": "1.2.0",
+                    "environment": self.settings.environment,
+                    "uptime": asyncio.get_event_loop().time(),
+                }
+                
+                # 添加路由器统计
+                if self.intelligent_router:
+                    status["routing"] = await self.intelligent_router.get_routing_statistics()
+                
+                # 添加网关统计
+                if self.api_gateway:
+                    status["gateway"] = await self.api_gateway.get_gateway_statistics()
+                
+                # 添加容器统计
+                if self.container:
+                    status["container"] = {
+                        "initialized": True,
+                        "components_count": len(self.container._providers)
+                    }
+                
+                return status
+                
+            except Exception as e:
+                logger.error(f"获取服务状态失败: {e}")
+                raise HTTPException(status_code=500, detail="获取服务状态失败")
+        
+        return app
+    
+    async def start_http_server(self):
+        """启动HTTP服务器"""
+        try:
+            config = uvicorn.Config(
+                app=self.app,
+                host=self.settings.server.host,
+                port=self.settings.server.port,
+                log_level=self.settings.server.log_level.lower(),
+                access_log=True,
+                loop="asyncio"
+            )
+            
+            server = uvicorn.Server(config)
+            
+            logger.info(
+                f"启动HTTP服务器: http://{self.settings.server.host}:{self.settings.server.port}"
+            )
+            
+            # 在后台任务中运行服务器
+            server_task = asyncio.create_task(server.serve())
+            
+            # 等待关闭信号
+            await self.shutdown_event.wait()
+            
+            # 优雅关闭
+            logger.info("正在关闭HTTP服务器...")
+            server.should_exit = True
+            await server_task
+            
+        except Exception as e:
+            logger.error(f"HTTP服务器启动失败: {e}")
+            raise
+    
+    async def start_grpc_server(self):
+        """启动gRPC服务器"""
+        try:
+            if self.grpc_server:
+                grpc_port = self.settings.grpc.port
+                await self.grpc_server.start(f"[::]:{grpc_port}")
+                
+                logger.info(f"启动gRPC服务器: 端口 {grpc_port}")
+                
+                # 等待关闭信号
+                await self.shutdown_event.wait()
+                
+                # 优雅关闭
+                logger.info("正在关闭gRPC服务器...")
+                await self.grpc_server.stop(grace=30)
+                
+        except Exception as e:
+            logger.error(f"gRPC服务器启动失败: {e}")
+            raise
+    
+    async def run(self):
+        """运行服务"""
+        try:
+            # 初始化服务
+            await self.initialize()
+            
+            # 设置信号处理
+            self._setup_signal_handlers()
+            
+            # 启动服务器
+            tasks = []
+            
+            # HTTP服务器
+            http_task = asyncio.create_task(self.start_http_server())
+            tasks.append(http_task)
+            
+            # gRPC服务器
+            if self.settings.grpc.enabled:
+                grpc_task = asyncio.create_task(self.start_grpc_server())
+                tasks.append(grpc_task)
+            
+            logger.info("RAG服务已启动，等待请求...")
+            
+            # 等待所有任务完成
+            await asyncio.gather(*tasks, return_exceptions=True)
+            
+        except KeyboardInterrupt:
+            logger.info("收到中断信号，正在关闭服务...")
+        except Exception as e:
+            logger.error(f"服务运行失败: {e}")
+            raise
+        finally:
+            await self.cleanup()
+    
+    def _setup_signal_handlers(self):
+        """设置信号处理器"""
+        def signal_handler(signum, frame):
+            logger.info(f"收到信号 {signum}，开始优雅关闭...")
+            asyncio.create_task(self.shutdown())
+        
+        signal.signal(signal.SIGINT, signal_handler)
+        signal.signal(signal.SIGTERM, signal_handler)
+    
+    async def shutdown(self):
+        """关闭服务"""
+        logger.info("正在关闭RAG服务...")
+        self.shutdown_event.set()
+    
+    async def cleanup(self):
+        """清理资源"""
+        try:
+            logger.info("正在清理资源...")
+            
+            # 关闭API网关
+            if self.api_gateway:
+                await self.api_gateway.__aexit__(None, None, None)
+            
+            # 关闭容器
+            if self.container:
+                await self.container.shutdown_resources()
+            
+            logger.info("资源清理完成")
+        
+    except Exception as e:
+            logger.error(f"资源清理失败: {e}")
 
-def setup_logging(config: dict):
-    """
-    配置日志
+
+def setup_logging():
+    """设置日志"""
+    # 移除默认处理器
+    logger.remove()
     
-    Args:
-        config: 配置信息
-    """
-    log_config = config.get('logging', {})
-    log_level = log_config.get('level', 'INFO')
-    log_format = log_config.get('format', "<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>")
-    
-    # 配置日志
-    logger.remove()  # 移除默认处理器
+    # 添加控制台处理器
     logger.add(
         sys.stdout,
-        format=log_format,
-        level=log_level,
-        colorize=True
+        format="<green>{time:YYYY-MM-DD HH:mm:ss}</green> | "
+               "<level>{level: <8}</level> | "
+               "<cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> | "
+               "<level>{message}</level>",
+        level="INFO"
     )
     
-    # 文件日志
-    log_file = log_config.get('file')
-    if log_file:
-        logger.add(
-            log_file,
-            rotation=log_config.get('rotation', '500 MB'),
-            retention=log_config.get('retention', '10 days'),
-            compression=log_config.get('compression', 'zip'),
-            level=log_level
-        )
+    # 添加文件处理器
+    log_dir = Path("logs")
+    log_dir.mkdir(exist_ok=True)
     
-    # 还可以添加其他日志处理，如 Sentry, ELK 等
-
-
-def setup_grpc_server(config: dict, rag_service: RagService):
-    """
-    启动gRPC服务器
-    
-    Args:
-        config: 配置信息
-        rag_service: RAG服务实例
-    """
-    import grpc
-    from concurrent import futures
-    from api.grpc.generated import rag_service_pb2_grpc
-    
-    server_config = config['server']['grpc']
-    server = grpc.aio.server(
-        futures.ThreadPoolExecutor(max_workers=server_config.get('max_workers', 10)),
-        options=server_config.get('options', [])
+    logger.add(
+        log_dir / "rag-service.log",
+        format="{time:YYYY-MM-DD HH:mm:ss} | {level: <8} | {name}:{function}:{line} | {message}",
+        level="DEBUG",
+        rotation="100 MB",
+        retention="30 days",
+        compression="zip"
     )
     
-    # 创建服务实现
-    servicer = RagServicer(config, rag_service)
-    
-    # 添加服务实现到服务器
-    rag_service_pb2_grpc.add_RagServiceServicer_to_server(servicer, server)
-    
-    # 添加服务地址
-    addr = f"{server_config['host']}:{server_config['port']}"
-    server.add_insecure_port(addr)
-    
-    return server
-
-
-async def serve_grpc(server, config: dict):
-    """
-    启动gRPC服务
-    
-    Args:
-        server: gRPC服务器
-        config: 配置信息
-    """
-    server_config = config['server']['grpc']
-    addr = f"{server_config['host']}:{server_config['port']}"
-    
-    try:
-        logger.info(f"启动gRPC服务，监听地址: {addr}")
-        await server.start()
-        await server.wait_for_termination()
-    except Exception as e:
-        logger.error(f"gRPC服务启动失败: {e}")
-        raise
-    finally:
-        logger.info("关闭gRPC服务")
-        await server.stop(0)
-
-
-def serve_rest(config: dict, rag_service: RagService = None):
-    """
-    启动REST服务
-    
-    Args:
-        config: 配置信息
-        rag_service: 可选的RAG服务实例
-    """
-    server_config = config['server']['rest']
-    
-    # 创建FastAPI应用
-    app = create_app(config)
-    
-    # 使用uvicorn服务器运行
-    uvicorn.run(
-        app,
-        host=server_config['host'],
-        port=server_config['port'],
-        log_level=server_config.get('log_level', 'info').lower(),
-        reload=server_config.get('reload', False)
+    # 添加错误日志文件
+    logger.add(
+        log_dir / "rag-service-error.log",
+        format="{time:YYYY-MM-DD HH:mm:ss} | {level: <8} | {name}:{function}:{line} | {message}",
+        level="ERROR",
+        rotation="50 MB",
+        retention="30 days",
+        compression="zip"
     )
-
-
-async def run_services(config: dict):
-    """
-    运行所有服务
-    
-    Args:
-        config: 配置信息
-    """
-    # 创建RAG服务实例
-    rag_service = RagService(config)
-    await rag_service.initialize()
-    
-    # 决定启动哪些服务
-    server_config = config['server']
-    
-    # 创建gRPC服务器
-    grpc_server = None
-    if server_config.get('grpc', {}).get('enabled', True):
-        grpc_server = setup_grpc_server(config, rag_service)
-    
-    try:
-        # 同时启动REST和gRPC服务
-        if server_config.get('rest', {}).get('enabled', True) and grpc_server:
-            # 创建协程任务
-            grpc_task = asyncio.create_task(serve_grpc(grpc_server, config))
-            
-            # 启动REST服务（这会阻塞当前线程）
-            rest_config = server_config['rest']
-            app = create_app(config)
-            config = uvicorn.Config(
-                app=app,
-                host=rest_config['host'],
-                port=rest_config['port'],
-                log_level=rest_config.get('log_level', 'info').lower(),
-                reload=rest_config.get('reload', False)
-            )
-            server = uvicorn.Server(config)
-            await server.serve()
-            
-            # 等待gRPC任务完成
-            await grpc_task
-        
-        # 仅启动gRPC服务
-        elif grpc_server:
-            await serve_grpc(grpc_server, config)
-            
-        # 仅启动REST服务
-        elif server_config.get('rest', {}).get('enabled', True):
-            rest_config = server_config['rest']
-            app = create_app(config)
-            config = uvicorn.Config(
-                app=app,
-                host=rest_config['host'],
-                port=rest_config['port'],
-                log_level=rest_config.get('log_level', 'info').lower(),
-                reload=rest_config.get('reload', False)
-            )
-            server = uvicorn.Server(config)
-            await server.serve()
-        
-        else:
-            logger.warning("未启用任何服务，程序将退出")
-        
-    except Exception as e:
-        logger.error(f"服务运行出错: {e}")
-    finally:
-        # 优雅关闭
-        if rag_service:
-            logger.info("关闭RAG服务")
-            await rag_service.close()
-
-
-def handle_signal(sig, frame):
-    """
-    处理终止信号
-    
-    Args:
-        sig: 信号
-        frame: 栈帧
-    """
-    logger.info(f"接收到信号: {sig}, 准备优雅关闭")
-    if 'rag_service' in globals() and rag_service:
-        asyncio.run(rag_service.close())
-    sys.exit(0)
 
 
 def main():
     """主函数"""
-    # 解析命令行参数
-    parser = argparse.ArgumentParser(description='索克生活 RAG 服务')
-    parser.add_argument(
-        '--config', '-c',
-        type=str,
-        default=os.environ.get('RAG_CONFIG_PATH', 'config/default.yaml'),
-        help='配置文件路径'
-    )
-    args = parser.parse_args()
-    
-    # 加载配置
-    config = load_config(args.config)
-    
-    # 设置日志
-    setup_logging(config)
-    
-    # 注册信号处理器
-    signal.signal(signal.SIGINT, handle_signal)
-    signal.signal(signal.SIGTERM, handle_signal)
-    
-    logger.info("启动索克生活 RAG 服务")
-    
     try:
-        # 运行服务
-        asyncio.run(run_services(config))
+        # 设置日志
+        setup_logging()
+        
+        logger.info("启动索克生活 RAG服务...")
+        logger.info(f"Python版本: {sys.version}")
+        logger.info(f"工作目录: {os.getcwd()}")
+        
+        # 创建并运行服务
+        service = RAGService()
+        asyncio.run(service.run())
+        
     except KeyboardInterrupt:
-        logger.info("接收到中断信号，服务正在退出")
+        logger.info("服务被用户中断")
     except Exception as e:
-        logger.error(f"启动服务失败: {e}")
+        logger.error(f"服务启动失败: {e}")
         sys.exit(1)
     finally:
-        logger.info("服务已退出")
+        logger.info("RAG服务已停止")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

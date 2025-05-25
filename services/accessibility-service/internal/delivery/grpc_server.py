@@ -17,7 +17,7 @@ from api.grpc import accessibility_pb2 as pb2
 from api.grpc import accessibility_pb2_grpc as pb2_grpc
 
 # 导入服务实现
-from internal.service.accessibility_service import AccessibilityService
+from internal.service.optimized_accessibility_service import OptimizedAccessibilityService
 
 
 logger = logging.getLogger(__name__)
@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 class AccessibilityServicer(pb2_grpc.AccessibilityServiceServicer):
     """无障碍服务的gRPC实现类"""
     
-    def __init__(self, service: AccessibilityService):
+    def __init__(self, service: OptimizedAccessibilityService):
         """
         初始化服务
         

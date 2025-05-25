@@ -2,788 +2,472 @@
 # -*- coding: utf-8 -*-
 
 """
-皮肤触诊分析模块
-负责皮肤触诊数据的分析和解读
+皮肤触诊分析器
+负责分析皮肤触诊数据，评估皮肤各项指标
 """
 
 import logging
-from typing import Dict, List, Any, Optional
+from typing import List, Dict, Optional, Any
+from datetime import datetime
 
-logger = logging.getLogger(__name__)
+from internal.model.palpation_models import (
+    SkinRegionData, SkinFinding, SkinMoistureLevel,
+    SkinElasticityLevel, SkinTexture, SkinTemperatureLevel
+)
+
 
 class SkinAnalyzer:
-    """
-    皮肤触诊分析器，负责处理皮肤触诊数据并生成分析结果
-    """
+    """皮肤触诊分析器"""
     
-    def __init__(self, config):
-        """初始化皮肤分析器"""
-        self.config = config
-        self.logger = logging.getLogger(self.__class__.__name__)
-        
-        # 加载区域映射
-        self.region_mappings = config.get('region_mappings', [])
-        
-        # 加载模型
-        self.model_loaded = False
-        self.model = self._load_model()
-        self.model_loaded = True
-        
-        # 设置信心阈值
-        self.confidence_threshold = config.get('confidence_threshold', 0.7)
-        
-        # 构建区域映射字典
-        self.region_map = {}
-        for region in self.region_mappings:
-            self.region_map[region.get('id', '')] = {
-                'name': region.get('name', '')
-            }
-        
-        self.logger.info("皮肤分析器初始化完成")
-    
-    def analyze_region(self, region_data: Dict[str, Any]) -> Dict[str, Any]:
+    def __init__(self, config: Dict[str, Any]):
         """
-        分析单个皮肤区域的触诊数据
+        初始化皮肤分析器
         
         Args:
-            region_data: 皮肤区域触诊数据
+            config: 配置字典
+        """
+        self.config = config
+        self.parameters = config.get('parameters', {})
+        self.texture_mapping = config.get('texture_mapping', {})
+        self.logger = logging.getLogger(__name__)
+        
+    def analyze_skin_regions(self, regions_data: List[SkinRegionData]) -> List[SkinFinding]:
+        """
+        分析皮肤各区域数据
+        
+        Args:
+            regions_data: 皮肤区域数据列表
             
         Returns:
-            区域分析结果
+            皮肤触诊发现列表
         """
-        region_id = region_data.get('region_id', '')
-        region_info = self.region_map.get(region_id, {'name': '未知区域'})
-        
-        # 提取关键触诊数据
-        moisture_level = region_data.get('moisture_level', 0)
-        elasticity = region_data.get('elasticity', 0)
-        texture = region_data.get('texture', '')
-        temperature = region_data.get('temperature', 0)
-        color = region_data.get('color', '')
-        
         findings = []
         
-        # 分析水分
-        if moisture_level != 0:  # 只要有值就分析
-            finding = self._analyze_moisture(
-                region_id, 
-                region_info, 
-                moisture_level
-            )
-            if finding:
-                findings.append(finding)
+        for region_data in regions_data:
+            # 分析单个区域
+            region_findings = self._analyze_single_region(region_data)
+            findings.extend(region_findings)
+        
+        # 综合分析各区域模式
+        pattern_findings = self._analyze_skin_patterns(regions_data)
+        findings.extend(pattern_findings)
+        
+        return findings
+    
+    def _analyze_single_region(self, region_data: SkinRegionData) -> List[SkinFinding]:
+        """分析单个皮肤区域"""
+        findings = []
+        
+        # 分析湿度
+        moisture_finding = self._analyze_moisture(region_data)
+        if moisture_finding:
+            findings.append(moisture_finding)
         
         # 分析弹性
-        if elasticity != 0:
-            finding = self._analyze_elasticity(
-                region_id, 
-                region_info, 
-                elasticity
-            )
-            if finding:
-                findings.append(finding)
-        
-        # 分析质地
-        if texture:
-            finding = self._analyze_texture(
-                region_id, 
-                region_info, 
-                texture
-            )
-            if finding:
-                findings.append(finding)
+        elasticity_finding = self._analyze_elasticity(region_data)
+        if elasticity_finding:
+            findings.append(elasticity_finding)
         
         # 分析温度
-        if temperature != 0:
-            finding = self._analyze_temperature(
-                region_id, 
-                region_info, 
-                temperature
-            )
-            if finding:
-                findings.append(finding)
+        temperature_finding = self._analyze_temperature(region_data)
+        if temperature_finding:
+            findings.append(temperature_finding)
+        
+        # 分析质地
+        texture_finding = self._analyze_texture(region_data)
+        if texture_finding:
+            findings.append(texture_finding)
         
         # 分析颜色
-        if color:
-            finding = self._analyze_color(
-                region_id, 
-                region_info, 
-                color
-            )
-            if finding:
-                findings.append(finding)
+        color_finding = self._analyze_color(region_data)
+        if color_finding:
+            findings.append(color_finding)
         
-        return {
-            'region_id': region_id,
-            'region_name': region_info.get('name', '未知区域'),
-            'findings': findings
-        }
+        # 分析特殊标记
+        if region_data.special_markings:
+            marking_finding = self._analyze_special_markings(region_data)
+            if marking_finding:
+                findings.append(marking_finding)
+        
+        return findings
     
-    def _analyze_moisture(
-        self, 
-        region_id: str, 
-        region_info: Dict[str, Any], 
-        moisture_level: float
-    ) -> Optional[Dict[str, Any]]:
-        """分析皮肤水分情况"""
-        description = ""
-        related_conditions = []
-        confidence = 0.0
+    def _analyze_moisture(self, region_data: SkinRegionData) -> Optional[SkinFinding]:
+        """分析皮肤湿度"""
+        if region_data.moisture_level == SkinMoistureLevel.NORMAL:
+            return None
         
-        # 根据水分等级分析
-        if moisture_level < 0.3:
-            # 皮肤干燥
-            description = f"{region_info.get('name', '皮肤')}干燥"
-            if moisture_level < 0.2:
-                description = f"{region_info.get('name', '皮肤')}极度干燥"
-                related_conditions.extend(["阴虚", "血虚", "津液不足", "气血亏虚"])
-                confidence = 0.9
-            else:
-                related_conditions.extend(["津液不足", "血虚"])
-                confidence = 0.8
-                
-        elif moisture_level > 0.7:
-            # 皮肤湿润或油腻
-            description = f"{region_info.get('name', '皮肤')}湿润"
-            if moisture_level > 0.85:
-                description = f"{region_info.get('name', '皮肤')}过度潮湿"
-                related_conditions.extend(["湿盛", "痰湿内蕴", "脾虚湿盛"])
-                confidence = 0.9
-            else:
-                related_conditions.extend(["湿热", "脾虚湿滞"])
-                confidence = 0.8
-                
-        else:
-            # 水分正常
-            description = f"{region_info.get('name', '皮肤')}水分适中"
-            related_conditions.append("气血调和")
-            confidence = 0.7
-        
-        return {
-            "finding_type": "moisture",
-            "description": description,
-            "confidence": confidence,
-            "related_conditions": related_conditions
+        # 根据湿度级别确定严重程度
+        severity_map = {
+            SkinMoistureLevel.VERY_DRY: 0.8,
+            SkinMoistureLevel.DRY: 0.5,
+            SkinMoistureLevel.MOIST: 0.3,
+            SkinMoistureLevel.VERY_MOIST: 0.6
         }
+        
+        severity = severity_map.get(region_data.moisture_level, 0.3)
+        
+        # 推断相关病症
+        if region_data.moisture_level in [SkinMoistureLevel.VERY_DRY, SkinMoistureLevel.DRY]:
+            related_conditions = ["阴虚", "血虚", "津液不足", "燥证"]
+            tcm_interpretation = "皮肤干燥提示阴津亏虚或血虚失养"
+        else:  # MOIST or VERY_MOIST
+            related_conditions = ["湿热", "水湿内停", "阳虚水泛"]
+            tcm_interpretation = "皮肤湿润过度提示湿邪内盛或阳虚不能化湿"
+        
+        description = f"{region_data.region_name}皮肤{region_data.moisture_level.value}"
+        if region_data.moisture_value is not None:
+            description += f"（湿度值：{region_data.moisture_value}%）"
+        
+        return SkinFinding(
+            region_id=region_data.region_id,
+            region_name=region_data.region_name,
+            finding_type="湿度异常",
+            description=description,
+            related_conditions=related_conditions,
+            tcm_interpretation=tcm_interpretation,
+            severity=severity,
+            requires_attention=severity > 0.6
+        )
     
-    def _analyze_elasticity(
-        self, 
-        region_id: str, 
-        region_info: Dict[str, Any], 
-        elasticity: float
-    ) -> Optional[Dict[str, Any]]:
+    def _analyze_elasticity(self, region_data: SkinRegionData) -> Optional[SkinFinding]:
         """分析皮肤弹性"""
-        description = ""
-        related_conditions = []
-        confidence = 0.0
-        
-        # 根据弹性等级分析
-        if elasticity < 0.3:
-            # 皮肤弹性差
-            description = f"{region_info.get('name', '皮肤')}弹性差"
-            if elasticity < 0.2:
-                description = f"{region_info.get('name', '皮肤')}弹性极差"
-                related_conditions.extend(["气血两虚", "肾精亏虚", "阴阳失衡"])
-                confidence = 0.9
-            else:
-                related_conditions.extend(["气虚", "血虚", "肾气不足"])
-                confidence = 0.8
-                
-        elif elasticity > 0.7:
-            # 皮肤弹性好
-            description = f"{region_info.get('name', '皮肤')}弹性好"
-            related_conditions.extend(["气血充盈", "阴阳平衡"])
-            confidence = 0.8
-                
-        else:
-            # 弹性一般
-            description = f"{region_info.get('name', '皮肤')}弹性适中"
-            related_conditions.append("气血基本调和")
-            confidence = 0.7
-        
-        return {
-            "finding_type": "elasticity",
-            "description": description,
-            "confidence": confidence,
-            "related_conditions": related_conditions
-        }
-    
-    def _analyze_texture(
-        self, 
-        region_id: str, 
-        region_info: Dict[str, Any], 
-        texture: str
-    ) -> Optional[Dict[str, Any]]:
-        """分析皮肤质地"""
-        if not texture:
+        if region_data.elasticity in [SkinElasticityLevel.GOOD, SkinElasticityLevel.VERY_GOOD, 
+                                     SkinElasticityLevel.EXCELLENT]:
             return None
-            
-        description = ""
-        related_conditions = []
-        confidence = 0.0
         
-        # 根据质地描述分析
-        if any(term in texture.lower() for term in ["粗糙", "硬", "干"]):
-            description = f"{region_info.get('name', '皮肤')}质地粗糙"
-            related_conditions.extend(["血虚", "风燥", "津液不足"])
-            confidence = 0.85
-            
-        elif any(term in texture.lower() for term in ["细腻", "柔软", "光滑"]):
-            description = f"{region_info.get('name', '皮肤')}质地细腻"
-            related_conditions.extend(["气血调和", "阴液充足"])
-            confidence = 0.8
-            
-        elif any(term in texture.lower() for term in ["浮肿", "松软", "水肿"]):
-            description = f"{region_info.get('name', '皮肤')}质地浮肿"
-            related_conditions.extend(["水湿内停", "脾肾阳虚", "痰湿内蕴"])
-            confidence = 0.85
-            
-        elif any(term in texture.lower() for term in ["紧绷", "紧致"]):
-            description = f"{region_info.get('name', '皮肤')}质地紧绷"
-            related_conditions.extend(["血瘀", "气滞", "风邪束表"])
-            confidence = 0.8
-            
-        else:
-            # 如果未匹配到具体质地描述，直接使用提供的描述
-            description = f"{region_info.get('name', '皮肤')}质地：{texture}"
-            related_conditions.append("需进一步分析")
-            confidence = 0.6
-        
-        return {
-            "finding_type": "texture",
-            "description": description,
-            "confidence": confidence,
-            "related_conditions": related_conditions
+        # 根据弹性级别确定严重程度
+        severity_map = {
+            SkinElasticityLevel.POOR: 0.8,
+            SkinElasticityLevel.FAIR: 0.5
         }
+        
+        severity = severity_map.get(region_data.elasticity, 0.3)
+        
+        # 推断相关病症
+        related_conditions = ["气虚", "血虚", "肾精不足", "脾虚", "衰老"]
+        tcm_interpretation = "皮肤弹性差提示气血不足或肾精亏虚"
+        
+        description = f"{region_data.region_name}皮肤弹性{region_data.elasticity.value}"
+        
+        return SkinFinding(
+            region_id=region_data.region_id,
+            region_name=region_data.region_name,
+            finding_type="弹性降低",
+            description=description,
+            related_conditions=related_conditions,
+            tcm_interpretation=tcm_interpretation,
+            severity=severity,
+            requires_attention=severity > 0.6
+        )
     
-    def _analyze_temperature(
-        self, 
-        region_id: str, 
-        region_info: Dict[str, Any], 
-        temperature: float
-    ) -> Optional[Dict[str, Any]]:
+    def _analyze_temperature(self, region_data: SkinRegionData) -> Optional[SkinFinding]:
         """分析皮肤温度"""
-        # 假设温度范围是归一化到0-1，或者是相对温度
-        # 0.5代表正常体温，低于0.4为凉，低于0.3为冷，高于0.6为热，高于0.7为烫
-        
-        description = ""
-        related_conditions = []
-        confidence = 0.0
-        
-        # 根据温度等级分析
-        if temperature < 0.4:
-            # 皮肤凉或冷
-            if temperature < 0.3:
-                description = f"{region_info.get('name', '皮肤')}冰冷"
-                related_conditions.extend(["阳虚", "寒凝", "气血不足", "阳气亏虚"])
-                confidence = 0.9
-            else:
-                description = f"{region_info.get('name', '皮肤')}偏凉"
-                related_conditions.extend(["阳气不足", "气血运行不畅"])
-                confidence = 0.8
-                
-        elif temperature > 0.6:
-            # 皮肤热或烫
-            if temperature > 0.7:
-                description = f"{region_info.get('name', '皮肤')}灼热"
-                related_conditions.extend(["阴虚火旺", "热毒", "实热", "湿热内蕴"])
-                confidence = 0.9
-            else:
-                description = f"{region_info.get('name', '皮肤')}偏热"
-                related_conditions.extend(["热证", "气血壅滞", "阳热偏盛"])
-                confidence = 0.8
-                
-        else:
-            # 温度正常
-            description = f"{region_info.get('name', '皮肤')}温度适中"
-            related_conditions.append("阴阳平衡")
-            confidence = 0.7
-        
-        return {
-            "finding_type": "temperature",
-            "description": description,
-            "confidence": confidence,
-            "related_conditions": related_conditions
-        }
-    
-    def _analyze_color(
-        self, 
-        region_id: str, 
-        region_info: Dict[str, Any], 
-        color: str
-    ) -> Optional[Dict[str, Any]]:
-        """分析皮肤颜色"""
-        if not color:
+        if region_data.temperature == SkinTemperatureLevel.NORMAL:
             return None
-            
-        description = f"{region_info.get('name', '皮肤')}颜色：{color}"
-        related_conditions = []
-        confidence = 0.7
         
-        # 根据颜色描述分析
-        color_lower = color.lower()
+        # 根据温度级别确定严重程度和相关病症
+        if region_data.temperature in [SkinTemperatureLevel.COLD, SkinTemperatureLevel.COOL]:
+            severity = 0.7 if region_data.temperature == SkinTemperatureLevel.COLD else 0.4
+            related_conditions = ["阳虚", "寒证", "气血不足", "经络不通"]
+            tcm_interpretation = "皮肤发凉提示阳气不足或寒邪内盛"
+        else:  # WARM or HOT
+            severity = 0.7 if region_data.temperature == SkinTemperatureLevel.HOT else 0.4
+            related_conditions = ["热证", "阴虚发热", "实热", "炎症"]
+            tcm_interpretation = "皮肤发热提示热邪内盛或阴虚发热"
         
-        if "苍白" in color_lower or "淡白" in color_lower:
-            description = f"{region_info.get('name', '皮肤')}苍白"
-            related_conditions.extend(["气血两虚", "血虚", "阳虚"])
-            confidence = 0.85
-            
-        elif "潮红" in color_lower or "红润" in color_lower:
-            description = f"{region_info.get('name', '皮肤')}潮红"
-            related_conditions.extend(["热证", "阴虚火旺", "肺热"])
-            confidence = 0.85
-            
-        elif "青紫" in color_lower or "紫暗" in color_lower or "青色" in color_lower:
-            description = f"{region_info.get('name', '皮肤')}青紫"
-            related_conditions.extend(["血瘀", "气滞", "寒凝血脉"])
-            confidence = 0.9
-            
-        elif "黄" in color_lower:
-            description = f"{region_info.get('name', '皮肤')}黄色"
-            if "萎黄" in color_lower:
-                related_conditions.extend(["脾虚", "气血两虚"])
-                confidence = 0.85
-            else:
-                related_conditions.extend(["湿热", "脾胃湿热", "黄疸"])
-                confidence = 0.8
-            
-        elif "黯" in color_lower or "黑" in color_lower:
-            description = f"{region_info.get('name', '皮肤')}黯黑"
-            related_conditions.extend(["肾虚", "肾阴亏虚", "瘀血内阻"])
-            confidence = 0.85
-            
-        elif "红润均匀" in color_lower or "正常" in color_lower:
-            description = f"{region_info.get('name', '皮肤')}红润均匀"
-            related_conditions.extend(["气血调和", "阴阳平衡"])
-            confidence = 0.8
-            
-        # 如果未匹配到具体颜色，保持原始描述
+        description = f"{region_data.region_name}皮肤温度{region_data.temperature.value}"
+        if region_data.temperature_value is not None:
+            description += f"（{region_data.temperature_value}°C）"
         
-        return {
-            "finding_type": "color",
-            "description": description,
-            "confidence": confidence,
-            "related_conditions": related_conditions
-        }
+        return SkinFinding(
+            region_id=region_data.region_id,
+            region_name=region_data.region_name,
+            finding_type="温度异常",
+            description=description,
+            related_conditions=related_conditions,
+            tcm_interpretation=tcm_interpretation,
+            severity=severity,
+            requires_attention=severity > 0.6
+        )
     
-    def analyze_regions(self, regions_data: List[Dict[str, Any]]) -> Dict[str, Any]:
-        """
-        分析多个皮肤区域的触诊数据，生成综合分析结果
+    def _analyze_texture(self, region_data: SkinRegionData) -> Optional[SkinFinding]:
+        """分析皮肤质地"""
+        if region_data.texture == SkinTexture.NORMAL:
+            return None
         
-        Args:
-            regions_data: 多个皮肤区域的触诊数据列表
-            
-        Returns:
-            综合分析结果
-        """
-        if not regions_data:
-            return {
-                "findings": [],
-                "analysis_summary": "未提供皮肤触诊数据",
-                "success": False,
-                "error_message": "缺少皮肤触诊数据"
+        # 根据质地类型确定相关病症
+        texture_conditions_map = {
+            SkinTexture.SMOOTH: {
+                "conditions": ["气血充足", "津液充沛"],
+                "interpretation": "皮肤光滑通常为正常表现",
+                "severity": 0.1
+            },
+            SkinTexture.ROUGH: {
+                "conditions": ["血虚", "风燥", "瘀血"],
+                "interpretation": "皮肤粗糙提示血虚失养或风燥伤津",
+                "severity": 0.5
+            },
+            SkinTexture.DRY: {
+                "conditions": ["阴虚", "血虚", "燥证"],
+                "interpretation": "皮肤干燥提示阴血不足",
+                "severity": 0.6
+            },
+            SkinTexture.OILY: {
+                "conditions": ["湿热", "痰湿", "脾虚湿盛"],
+                "interpretation": "皮肤油腻提示湿热内蕴或脾虚生湿",
+                "severity": 0.4
+            },
+            SkinTexture.SCALY: {
+                "conditions": ["血虚风燥", "血热", "皮肤病"],
+                "interpretation": "皮肤鳞状提示血虚风燥或血热生风",
+                "severity": 0.7
+            }
+        }
+        
+        texture_info = texture_conditions_map.get(region_data.texture, {
+            "conditions": ["需进一步辨证"],
+            "interpretation": "皮肤质地异常",
+            "severity": 0.5
+        })
+        
+        description = f"{region_data.region_name}皮肤{self.texture_mapping.get(region_data.texture.name, region_data.texture.value)}"
+        
+        return SkinFinding(
+            region_id=region_data.region_id,
+            region_name=region_data.region_name,
+            finding_type="质地异常",
+            description=description,
+            related_conditions=texture_info["conditions"],
+            tcm_interpretation=texture_info["interpretation"],
+            severity=texture_info["severity"],
+            requires_attention=texture_info["severity"] > 0.6
+        )
+    
+    def _analyze_color(self, region_data: SkinRegionData) -> Optional[SkinFinding]:
+        """分析皮肤颜色"""
+        if not region_data.color or region_data.color.lower() in ["正常", "normal"]:
+            return None
+        
+        # 根据颜色描述推断病症
+        color_patterns = {
+            "苍白": {
+                "conditions": ["气血不足", "阳虚", "失血"],
+                "interpretation": "面色苍白提示气血亏虚或阳气不足",
+                "severity": 0.7
+            },
+            "萎黄": {
+                "conditions": ["脾虚", "营养不良", "慢性病"],
+                "interpretation": "面色萎黄提示脾胃虚弱或气血生化不足",
+                "severity": 0.6
+            },
+            "潮红": {
+                "conditions": ["阴虚", "实热", "血热"],
+                "interpretation": "皮肤潮红提示阴虚火旺或实热内盛",
+                "severity": 0.6
+            },
+            "紫暗": {
+                "conditions": ["瘀血", "寒凝", "缺氧"],
+                "interpretation": "皮肤紫暗提示血瘀或寒凝血脉",
+                "severity": 0.8
+            },
+            "青紫": {
+                "conditions": ["寒证", "瘀血", "气滞"],
+                "interpretation": "皮肤青紫提示寒邪内盛或气血瘀滞",
+                "severity": 0.8
+            }
+        }
+        
+        # 查找匹配的颜色模式
+        color_info = None
+        for pattern, info in color_patterns.items():
+            if pattern in region_data.color:
+                color_info = info
+                break
+        
+        if not color_info:
+            color_info = {
+                "conditions": ["需进一步辨证"],
+                "interpretation": "皮肤颜色异常",
+                "severity": 0.5
             }
         
-        # 分析各个区域
-        regions_analyses = []
-        for region_data in regions_data:
-            region_analysis = self.analyze_region(region_data)
-            regions_analyses.append(region_analysis)
+        description = f"{region_data.region_name}皮肤呈{region_data.color}"
         
-        # 收集所有发现
-        all_findings = []
-        for region_analysis in regions_analyses:
-            for finding in region_analysis.get('findings', []):
-                all_findings.append({
-                    "region_id": region_analysis.get('region_id', ''),
-                    "region_name": region_analysis.get('region_name', ''),
-                    "finding_type": finding.get('finding_type', ''),
-                    "description": finding.get('description', ''),
-                    "confidence": finding.get('confidence', 0),
-                    "related_conditions": finding.get('related_conditions', [])
-                })
-        
-        # 生成综合分析
-        summary = self._generate_summary(regions_analyses, all_findings)
-        
-        return {
-            "findings": all_findings,
-            "analysis_summary": summary,
-            "success": True,
-            "error_message": ""
-        }
+        return SkinFinding(
+            region_id=region_data.region_id,
+            region_name=region_data.region_name,
+            finding_type="颜色异常",
+            description=description,
+            related_conditions=color_info["conditions"],
+            tcm_interpretation=color_info["interpretation"],
+            severity=color_info["severity"],
+            requires_attention=color_info["severity"] > 0.6
+        )
     
-    def _generate_summary(
-        self, 
-        regions_analyses: List[Dict[str, Any]], 
-        all_findings: List[Dict[str, Any]]
-    ) -> str:
-        """生成综合分析总结"""
-        if not all_findings:
-            return "皮肤触诊未见明显异常"
+    def _analyze_special_markings(self, region_data: SkinRegionData) -> Optional[SkinFinding]:
+        """分析特殊标记"""
+        if not region_data.special_markings:
+            return None
         
-        # 按置信度排序发现
-        sorted_findings = sorted(all_findings, key=lambda x: x.get('confidence', 0), reverse=True)
+        # 分析各种特殊标记
+        marking_interpretations = {
+            "痣": "多数为正常，但需注意观察变化",
+            "斑": "可能与肝郁、血瘀、肾虚有关",
+            "疹": "可能与风热、湿热、血热有关",
+            "疮": "多与热毒、湿毒有关",
+            "瘀点": "提示血瘀或出血倾向",
+            "瘀斑": "提示严重血瘀或凝血功能异常"
+        }
         
-        # 提取主要发现
-        main_findings = sorted_findings[:3] if len(sorted_findings) > 3 else sorted_findings
+        conditions = []
+        interpretations = []
+        severity = 0.3
         
-        # 统计发现的类型分布
+        for marking in region_data.special_markings:
+            for key, interpretation in marking_interpretations.items():
+                if key in marking:
+                    interpretations.append(interpretation)
+                    if key in ["疮", "瘀斑"]:
+                        severity = max(severity, 0.8)
+                    elif key in ["斑", "疹", "瘀点"]:
+                        severity = max(severity, 0.6)
+                    
+                    # 添加相关病症
+                    if key == "斑":
+                        conditions.extend(["肝郁", "血瘀", "肾虚"])
+                    elif key in ["疹", "疮"]:
+                        conditions.extend(["风热", "湿热", "血热"])
+                    elif key in ["瘀点", "瘀斑"]:
+                        conditions.extend(["血瘀", "出血证"])
+        
+        description = f"{region_data.region_name}发现{', '.join(region_data.special_markings)}"
+        tcm_interpretation = "；".join(set(interpretations)) if interpretations else "特殊皮肤标记需结合其他症状辨证"
+        
+        return SkinFinding(
+            region_id=region_data.region_id,
+            region_name=region_data.region_name,
+            finding_type="特殊标记",
+            description=description,
+            related_conditions=list(set(conditions)),
+            tcm_interpretation=tcm_interpretation,
+            severity=severity,
+            requires_attention=severity > 0.6
+        )
+    
+    def _analyze_skin_patterns(self, regions_data: List[SkinRegionData]) -> List[SkinFinding]:
+        """分析皮肤的整体模式"""
+        findings = []
+        
+        # 统计各项指标
+        moisture_levels = [r.moisture_level for r in regions_data]
+        temperature_levels = [r.temperature for r in regions_data]
+        elasticity_levels = [r.elasticity for r in regions_data]
+        textures = [r.texture for r in regions_data]
+        
+        # 检查全身性干燥
+        dry_count = sum(1 for m in moisture_levels if m in [SkinMoistureLevel.DRY, SkinMoistureLevel.VERY_DRY])
+        if dry_count >= len(regions_data) * 0.6:  # 60%以上区域干燥
+            finding = SkinFinding(
+                region_id="whole_body",
+                region_name="全身",
+                finding_type="广泛性干燥",
+                description="全身多处皮肤干燥",
+                related_conditions=["阴虚", "血虚", "津液大伤"],
+                tcm_interpretation="全身皮肤干燥提示阴血亏虚或津液大伤",
+                severity=0.8,
+                requires_attention=True
+            )
+            findings.append(finding)
+        
+        # 检查全身性发冷
+        cold_count = sum(1 for t in temperature_levels if t in [SkinTemperatureLevel.COLD, SkinTemperatureLevel.COOL])
+        if cold_count >= len(regions_data) * 0.6:
+            finding = SkinFinding(
+                region_id="whole_body",
+                region_name="全身",
+                finding_type="广泛性发冷",
+                description="全身多处皮肤发冷",
+                related_conditions=["阳虚", "寒证", "气血不足"],
+                tcm_interpretation="全身皮肤发冷提示阳虚或寒邪内盛",
+                severity=0.8,
+                requires_attention=True
+            )
+            findings.append(finding)
+        
+        # 检查皮肤弹性普遍降低
+        poor_elasticity_count = sum(1 for e in elasticity_levels if e in [SkinElasticityLevel.POOR, SkinElasticityLevel.FAIR])
+        if poor_elasticity_count >= len(regions_data) * 0.5:
+            finding = SkinFinding(
+                region_id="whole_body",
+                region_name="全身",
+                finding_type="弹性普遍降低",
+                description="全身皮肤弹性普遍较差",
+                related_conditions=["气血不足", "肾精亏虚", "脾虚"],
+                tcm_interpretation="皮肤弹性普遍降低提示气血不足或肾精亏虚",
+                severity=0.7,
+                requires_attention=True
+            )
+            findings.append(finding)
+        
+        return findings
+    
+    def generate_summary(self, findings: List[SkinFinding]) -> str:
+        """
+        生成皮肤触诊分析总结
+        
+        Args:
+            findings: 皮肤触诊发现列表
+            
+        Returns:
+            分析总结文本
+        """
+        if not findings:
+            return "皮肤触诊检查未发现明显异常"
+        
+        # 按严重程度排序
+        findings.sort(key=lambda x: x.severity, reverse=True)
+        
+        # 统计各类发现
         finding_types = {}
-        for finding in all_findings:
-            finding_type = finding.get('finding_type', '')
-            if finding_type in finding_types:
-                finding_types[finding_type] += 1
-            else:
-                finding_types[finding_type] = 1
-        
-        # 收集所有相关的病理状态
-        all_conditions = []
-        for finding in all_findings:
-            all_conditions.extend(finding.get('related_conditions', []))
-        
-        # 统计病理状态出现频率
-        condition_counter = {}
-        for condition in all_conditions:
-            if condition in condition_counter:
-                condition_counter[condition] += 1
-            else:
-                condition_counter[condition] = 1
-        
-        # 找出出现频率最高的病理状态
-        sorted_conditions = sorted(condition_counter.items(), key=lambda x: x[1], reverse=True)
-        top_conditions = [condition for condition, count in sorted_conditions[:3]] if sorted_conditions else []
+        for finding in findings:
+            finding_type = finding.finding_type
+            if finding_type not in finding_types:
+                finding_types[finding_type] = []
+            finding_types[finding_type].append(finding)
         
         # 生成总结
         summary_parts = []
         
-        # 描述整体肤质状态
-        overall_state = self._determine_overall_skin_state(finding_types, condition_counter)
-        if overall_state:
-            summary_parts.append(f"整体肤质{overall_state}")
+        # 最严重的发现
+        most_severe = findings[0]
+        summary_parts.append(f"皮肤触诊发现最显著的问题是{most_severe.description}")
         
-        # 描述主要发现
-        if main_findings:
-            findings_desc = "、".join([f.get('description', '') for f in main_findings])
-            summary_parts.append(f"主要发现：{findings_desc}")
+        # 各类发现统计
+        if len(finding_types) > 1:
+            type_summary = []
+            for ftype, items in finding_types.items():
+                type_summary.append(f"{ftype}（{len(items)}处）")
+            summary_parts.append(f"共发现{len(finding_types)}类异常：{', '.join(type_summary)}")
         
-        # 描述可能的相关病理状态
-        if top_conditions:
-            summary_parts.append(f"提示可能存在{', '.join(top_conditions)}")
+        # 中医证候归纳
+        all_conditions = set()
+        for finding in findings:
+            all_conditions.update(finding.related_conditions)
         
-        # 组合总结
-        summary = "；".join(summary_parts) + "。"
+        # 统计高频证候
+        condition_counts = {}
+        for finding in findings:
+            for condition in finding.related_conditions:
+                condition_counts[condition] = condition_counts.get(condition, 0) + 1
         
-        return summary
-    
-    def _determine_overall_skin_state(
-        self, 
-        finding_types: Dict[str, int], 
-        condition_counter: Dict[str, int]
-    ) -> str:
-        """确定整体肤质状态"""
+        # 找出出现3次以上的证候
+        frequent_conditions = [c for c, count in condition_counts.items() if count >= 3]
+        if frequent_conditions:
+            summary_parts.append(f"中医辨证提示主要存在：{', '.join(frequent_conditions)}")
         
-        # 分析水分状态
-        moisture_state = ""
-        if "moisture" in finding_types:
-            if any(cond in condition_counter for cond in ["津液不足", "血虚", "阴虚"]):
-                moisture_state = "干燥"
-            elif any(cond in condition_counter for cond in ["湿盛", "痰湿内蕴", "脾虚湿盛"]):
-                moisture_state = "湿润"
+        # 需要注意的发现
+        attention_needed = [f for f in findings if f.requires_attention]
+        if attention_needed:
+            summary_parts.append(f"有{len(attention_needed)}项发现需要特别关注")
         
-        # 分析弹性状态
-        elasticity_state = ""
-        if "elasticity" in finding_types:
-            if any(cond in condition_counter for cond in ["气虚", "血虚", "肾气不足", "气血两虚"]):
-                elasticity_state = "松弛"
-            elif any(cond in condition_counter for cond in ["气血充盈", "阴阳平衡"]):
-                elasticity_state = "有弹性"
-        
-        # 分析质地状态
-        texture_state = ""
-        if "texture" in finding_types:
-            if any(cond in condition_counter for cond in ["血虚", "风燥", "津液不足"]):
-                texture_state = "粗糙"
-            elif any(cond in condition_counter for cond in ["水湿内停", "脾肾阳虚"]):
-                texture_state = "浮肿"
-            elif any(cond in condition_counter for cond in ["气血调和", "阴液充足"]):
-                texture_state = "细腻"
-        
-        # 分析温度状态
-        temperature_state = ""
-        if "temperature" in finding_types:
-            if any(cond in condition_counter for cond in ["阳虚", "寒凝", "阳气亏虚"]):
-                temperature_state = "偏寒"
-            elif any(cond in condition_counter for cond in ["阴虚火旺", "热毒", "实热"]):
-                temperature_state = "偏热"
-        
-        # 分析颜色状态
-        color_state = ""
-        if "color" in finding_types:
-            if any(cond in condition_counter for cond in ["气血两虚", "血虚", "阳虚"]):
-                color_state = "苍白"
-            elif any(cond in condition_counter for cond in ["热证", "阴虚火旺"]):
-                color_state = "潮红"
-            elif any(cond in condition_counter for cond in ["血瘀", "气滞"]):
-                color_state = "青紫"
-            elif any(cond in condition_counter for cond in ["脾虚", "湿热", "黄疸"]):
-                color_state = "发黄"
-            elif any(cond in condition_counter for cond in ["肾虚", "瘀血内阻"]):
-                color_state = "黯黑"
-        
-        # 综合状态描述
-        states = []
-        if moisture_state:
-            states.append(moisture_state)
-        if elasticity_state:
-            states.append(elasticity_state)
-        if texture_state:
-            states.append(texture_state)
-        if temperature_state:
-            states.append(temperature_state)
-        if color_state:
-            states.append(color_state)
-        
-        # 判断整体状态
-        overall_state = ""
-        if states:
-            overall_state = "、".join(states)
-        
-        return overall_state
-    
-    def map_to_tcm_patterns(self, regions_analyses: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        """
-        将皮肤触诊结果映射到中医证型
-        
-        Args:
-            regions_analyses: 皮肤区域分析结果列表
-            
-        Returns:
-            中医证型列表
-        """
-        # 收集所有发现和相关病理状态
-        all_findings = []
-        all_conditions = []
-        
-        for region_analysis in regions_analyses:
-            for finding in region_analysis.get('findings', []):
-                all_findings.append(finding)
-                all_conditions.extend(finding.get('related_conditions', []))
-        
-        # 统计病理状态出现频率
-        condition_counter = {}
-        for condition in all_conditions:
-            if condition in condition_counter:
-                condition_counter[condition] += 1
-            else:
-                condition_counter[condition] = 1
-        
-        # 映射到中医证型
-        patterns = []
-        
-        # 气血两虚证
-        qi_blood_deficiency_conditions = [
-            "气血两虚", "气虚", "血虚", "气血不足"
-        ]
-        qi_blood_count = sum(condition_counter.get(cond, 0) for cond in qi_blood_deficiency_conditions)
-        
-        if qi_blood_count > 0:
-            patterns.append({
-                "pattern_name": "气血两虚证",
-                "element": "气血",
-                "nature": "虚",
-                "confidence": min(0.9, 0.6 + 0.05 * qi_blood_count),
-                "description": "气血两虚，表现为皮肤苍白干燥，弹性差，温度偏低",
-                "supporting_findings": [f.get('description') for f in all_findings 
-                                      if any(cond in f.get('related_conditions', []) 
-                                           for cond in qi_blood_deficiency_conditions)]
-            })
-        
-        # 阴虚证
-        yin_deficiency_conditions = [
-            "阴虚", "阴虚火旺", "阴液不足", "津液不足"
-        ]
-        yin_deficiency_count = sum(condition_counter.get(cond, 0) for cond in yin_deficiency_conditions)
-        
-        if yin_deficiency_count > 0:
-            patterns.append({
-                "pattern_name": "阴虚证",
-                "element": "阴",
-                "nature": "虚",
-                "confidence": min(0.9, 0.6 + 0.05 * yin_deficiency_count),
-                "description": "阴虚证，表现为皮肤干燥，温度偏高，质地粗糙",
-                "supporting_findings": [f.get('description') for f in all_findings 
-                                      if any(cond in f.get('related_conditions', []) 
-                                           for cond in yin_deficiency_conditions)]
-            })
-        
-        # 阳虚证
-        yang_deficiency_conditions = [
-            "阳虚", "阳气亏虚", "脾肾阳虚", "阳气不足"
-        ]
-        yang_deficiency_count = sum(condition_counter.get(cond, 0) for cond in yang_deficiency_conditions)
-        
-        if yang_deficiency_count > 0:
-            patterns.append({
-                "pattern_name": "阳虚证",
-                "element": "阳",
-                "nature": "虚",
-                "confidence": min(0.9, 0.6 + 0.05 * yang_deficiency_count),
-                "description": "阳虚证，表现为皮肤苍白，温度低，可有水肿",
-                "supporting_findings": [f.get('description') for f in all_findings 
-                                      if any(cond in f.get('related_conditions', []) 
-                                           for cond in yang_deficiency_conditions)]
-            })
-        
-        # 湿热证
-        damp_heat_conditions = [
-            "湿热", "湿热内蕴", "脾胃湿热"
-        ]
-        damp_heat_count = sum(condition_counter.get(cond, 0) for cond in damp_heat_conditions)
-        
-        if damp_heat_count > 0:
-            patterns.append({
-                "pattern_name": "湿热证",
-                "element": "湿热",
-                "nature": "实",
-                "confidence": min(0.9, 0.6 + 0.05 * damp_heat_count),
-                "description": "湿热证，表现为皮肤潮湿油腻，温度高，可有发黄",
-                "supporting_findings": [f.get('description') for f in all_findings 
-                                      if any(cond in f.get('related_conditions', []) 
-                                           for cond in damp_heat_conditions)]
-            })
-        
-        # 痰湿证
-        phlegm_damp_conditions = [
-            "痰湿内蕴", "痰湿", "水湿内停", "脾虚湿盛"
-        ]
-        phlegm_damp_count = sum(condition_counter.get(cond, 0) for cond in phlegm_damp_conditions)
-        
-        if phlegm_damp_count > 0:
-            patterns.append({
-                "pattern_name": "痰湿证",
-                "element": "痰湿",
-                "nature": "实",
-                "confidence": min(0.9, 0.6 + 0.05 * phlegm_damp_count),
-                "description": "痰湿证，表现为皮肤浮肿，湿润，水分潴留",
-                "supporting_findings": [f.get('description') for f in all_findings 
-                                      if any(cond in f.get('related_conditions', []) 
-                                           for cond in phlegm_damp_conditions)]
-            })
-        
-        # 血瘀证
-        blood_stasis_conditions = [
-            "血瘀", "瘀血内阻", "气滞血瘀"
-        ]
-        blood_stasis_count = sum(condition_counter.get(cond, 0) for cond in blood_stasis_conditions)
-        
-        if blood_stasis_count > 0:
-            patterns.append({
-                "pattern_name": "血瘀证",
-                "element": "血",
-                "nature": "瘀",
-                "confidence": min(0.9, 0.6 + 0.05 * blood_stasis_count),
-                "description": "血瘀证，表现为皮肤青紫或暗黑，质地紧绷",
-                "supporting_findings": [f.get('description') for f in all_findings 
-                                      if any(cond in f.get('related_conditions', []) 
-                                           for cond in blood_stasis_conditions)]
-            })
-        
-        # 热毒证
-        heat_toxin_conditions = [
-            "热毒", "实热", "热证"
-        ]
-        heat_toxin_count = sum(condition_counter.get(cond, 0) for cond in heat_toxin_conditions)
-        
-        if heat_toxin_count > 0:
-            patterns.append({
-                "pattern_name": "热毒证",
-                "element": "热",
-                "nature": "实",
-                "confidence": min(0.9, 0.6 + 0.05 * heat_toxin_count),
-                "description": "热毒证，表现为皮肤潮红，灼热，可有红肿",
-                "supporting_findings": [f.get('description') for f in all_findings 
-                                      if any(cond in f.get('related_conditions', []) 
-                                           for cond in heat_toxin_conditions)]
-            })
-        
-        # 风燥证
-        wind_dryness_conditions = [
-            "风燥", "风邪束表"
-        ]
-        wind_dryness_count = sum(condition_counter.get(cond, 0) for cond in wind_dryness_conditions)
-        
-        if wind_dryness_count > 0:
-            patterns.append({
-                "pattern_name": "风燥证",
-                "element": "风",
-                "nature": "燥",
-                "confidence": min(0.9, 0.6 + 0.05 * wind_dryness_count),
-                "description": "风燥证，表现为皮肤干燥，粗糙，瘙痒",
-                "supporting_findings": [f.get('description') for f in all_findings 
-                                      if any(cond in f.get('related_conditions', []) 
-                                           for cond in wind_dryness_conditions)]
-            })
-        
-        # 按置信度排序
-        patterns.sort(key=lambda x: x.get('confidence', 0), reverse=True)
-        
-        # 如果没有匹配到证型，返回一个默认的低置信度证型
-        if not patterns:
-            patterns.append({
-                "pattern_name": "皮肤未见明显证候",
-                "element": "未定",
-                "nature": "未定",
-                "confidence": 0.3,
-                "description": "皮肤触诊未发现明确的中医证型特征",
-                "supporting_findings": []
-            })
-        
-        return patterns 
-    
-    def check_model_loaded(self):
-        """
-        检查模型是否正确加载
-        
-        Returns:
-            bool: 如果模型正确加载则返回True
-            
-        Raises:
-            Exception: 如果模型未正确加载则抛出异常
-        """
-        if not self.model_loaded or self.model is None:
-            self.logger.error("皮肤分析模型未正确加载")
-            raise Exception("皮肤分析模型未正确加载")
-        
-        # 可以添加一个简单的推理测试来验证模型是否可用
-        try:
-            # 创建测试数据
-            test_data = {
-                'region_id': 'skin_hand',
-                'moisture_level': 0.6,
-                'elasticity': 0.7,
-                'temperature': 36.5
-            }
-            
-            # 执行简单分析
-            _ = self._analyze_single_region(test_data)
-            return True
-        except Exception as e:
-            self.logger.error(f"皮肤模型可用性检查失败: {e}")
-            raise Exception(f"皮肤分析模型不可用: {str(e)}")
-    
-    def _load_model(self):
-        """加载皮肤分析模型"""
-        model_path = self.config.get('model_path')
-        
-        self.logger.info(f"加载皮肤分析模型: {model_path}")
-        
-        try:
-            # TODO: 实际模型加载代码
-            # 这里是占位代码，实际应当根据具体ML框架加载模型
-            model = {}  # 假模型
-            self.logger.info("皮肤分析模型加载成功")
-            return model
-        except Exception as e:
-            self.logger.error(f"加载皮肤分析模型失败: {e}")
-            raise 
+        return "。".join(summary_parts) 

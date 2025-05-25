@@ -1,0 +1,105 @@
+# 开发环境配置
+
+# 环境配置
+environment: development
+
+# 服务器配置
+server:
+  host: "0.0.0.0"
+  port: 8000
+  timeout: 60
+  debug: true
+  max_request_size: 52428800  # 50MB
+  allowed_origins:
+    - "http://localhost:3000"
+    - "http://localhost:8080"
+    - "http://127.0.0.1:3000"
+    - "http://127.0.0.1:8080"
+
+# 数据库配置
+database:
+  uri: "bolt://localhost:7687"
+  username: "neo4j"
+  password: "development"
+  max_connections: 10
+  connection_timeout: 10
+  retry_max_attempts: 5
+  retry_backoff: "exponential"
+
+# 日志配置
+logging:
+  level: "debug"
+  format: "text"
+  output: "stdout"
+  file_path: "./logs/app.log"
+
+# 安全配置
+security:
+  enabled: false  # 开发环境关闭安全验证
+
+# 缓存配置
+cache:
+  redis:
+    enabled: false  # 开发环境可选择关闭Redis
+    host: "localhost"
+    port: 6379
+    password: ""
+    db: 1  # 使用不同的数据库
+    ttl: 1800  # 30分钟
+    max_connections: 5
+
+# 监控配置
+metrics:
+  enabled: true
+  prometheus:
+    port: 9090
+    path: "/metrics"
+
+# 追踪配置
+tracing:
+  enabled: false  # 开发环境关闭追踪
+
+# 限流配置
+rate_limit:
+  enabled: false  # 开发环境关闭限流
+  default_limit: "1000/minute"
+  per_user_limit: "10000/hour"
+
+# 数据导入配置
+data_import:
+  sources:
+    - name: "constitutions"
+      path: "data/sample/constitutions.json"
+      enabled: true
+    - name: "symptoms"
+      path: "data/sample/symptoms.json"
+      enabled: true
+    - name: "acupoints"
+      path: "data/sample/acupoints.json"
+      enabled: true
+    - name: "herbs"
+      path: "data/sample/herbs.json"
+      enabled: true
+    - name: "syndromes"
+      path: "data/sample/syndromes.json"
+      enabled: true
+  schedule:
+    enabled: false
+
+# 外部服务依赖
+services:
+  rag:
+    host: "localhost"
+    port: 8001
+    timeout: 60
+    enabled: false
+  xiaoai:
+    host: "localhost"
+    port: 8002
+    timeout: 60
+    enabled: false
+  auth:
+    host: "localhost"
+    port: 8003
+    timeout: 60
+    enabled: false 

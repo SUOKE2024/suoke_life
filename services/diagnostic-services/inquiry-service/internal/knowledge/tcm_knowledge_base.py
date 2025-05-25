@@ -2,21 +2,22 @@
 # -*- coding: utf-8 -*-
 
 """
-中医知识库模块，提供中医症状与证型的映射关系
+中医知识库模块，管理和查询中医相关知识数据
 """
 
-import logging
-import json
 import os
 import yaml
-from typing import Dict, List, Any, Tuple, Set, Optional
-from pathlib import Path
+import json
+import logging
+from typing import Dict, List, Optional, Any, Set
+from datetime import datetime, timedelta
 
 logger = logging.getLogger(__name__)
 
+
 class TCMKnowledgeBase:
-    """中医知识库类"""
-    
+    """中医知识库管理类"""
+
     def __init__(self, config: Dict[str, Any]):
         """
         初始化中医知识库
@@ -25,625 +26,584 @@ class TCMKnowledgeBase:
             config: 配置信息
         """
         self.config = config
-        self.knowledge_config = config.get("tcm_knowledge", {})
+        self.tcm_config = config.get('tcm_knowledge', {})
         
-        # 知识库加载路径
-        self.data_dir = self.knowledge_config.get("data_dir", "data/tcm_knowledge")
+        # 数据目录
+        self.data_dir = self.tcm_config.get('data_dir', './data/tcm_knowledge')
         
-        # 加载标志
-        self._initialized = False
-        self._loading_error = None
+        # 配置选项
+        self.enable_traditional_terms = self.tcm_config.get('enable_traditional_terms', True)
+        self.enable_simplified_terms = self.tcm_config.get('enable_simplified_terms', True)
+        self.confidence_threshold = self.tcm_config.get('confidence_threshold', 0.7)
+        self.auto_create_sample_data = self.tcm_config.get('auto_create_sample_data', True)
         
-        # 数据存储
+        # 知识库数据
         self.patterns = {}  # 证型数据
         self.symptoms = {}  # 症状数据
-        self.symptom_pattern_mapping = {}  # 症状到证型的映射
+        self.symptom_pattern_mapping = {}  # 症状-证型映射
         self.pattern_categories = {}  # 证型分类
         self.body_locations = {}  # 身体部位
+        
+        # 索引数据
+        self.symptom_aliases = {}  # 症状别名索引
+        self.pattern_aliases = {}  # 证型别名索引
         
         # 加载知识库
         self._load_knowledge_base()
         
-    def _load_knowledge_base(self) -> None:
-        """加载中医知识库数据"""
+        logger.info("中医知识库初始化完成")
+        
+    def _load_knowledge_base(self):
+        """加载知识库数据"""
         try:
-            # 获取知识库路径
-            base_path = Path(self.data_dir)
+            # 确保数据目录存在
+            os.makedirs(self.data_dir, exist_ok=True)
             
-            # 检查目录是否存在
-            if not base_path.exists():
-                logger.warning(f"中医知识库目录不存在: {base_path}，尝试创建")
-                os.makedirs(base_path, exist_ok=True)
+            # 检查数据文件是否存在
+            data_files = {
+                'patterns.yaml': self._load_patterns,
+                'symptoms.yaml': self._load_symptoms,
+                'symptom_pattern_mapping.yaml': self._load_symptom_pattern_mapping,
+                'pattern_categories.yaml': self._load_pattern_categories,
+                'body_locations.yaml': self._load_body_locations
+            }
             
-            # 加载证型数据
-            patterns_file = base_path / "patterns.yaml"
-            if patterns_file.exists():
-                with open(patterns_file, 'r', encoding='utf-8') as f:
-                    self.patterns = yaml.safe_load(f)
-                logger.info(f"已加载 {len(self.patterns)} 个证型")
-            else:
-                logger.warning(f"证型文件不存在: {patterns_file}")
-                # 创建初始数据文件
-                self._create_sample_data_files(base_path)
+            # 如果任何文件不存在且启用自动创建，则创建示例数据
+            missing_files = [f for f in data_files.keys() 
+                           if not os.path.exists(os.path.join(self.data_dir, f))]
+            
+            if missing_files and self.auto_create_sample_data:
+                logger.info(f"缺少数据文件: {missing_files}，创建示例数据...")
+                self._create_sample_data()
                 
-            # 加载症状数据
-            symptoms_file = base_path / "symptoms.yaml"
-            if symptoms_file.exists():
-                with open(symptoms_file, 'r', encoding='utf-8') as f:
-                    self.symptoms = yaml.safe_load(f)
-                logger.info(f"已加载 {len(self.symptoms)} 个症状")
-            else:
-                logger.warning(f"症状文件不存在: {symptoms_file}")
+            # 加载各类数据
+            for filename, loader_func in data_files.items():
+                filepath = os.path.join(self.data_dir, filename)
+                if os.path.exists(filepath):
+                    loader_func(filepath)
+                else:
+                    logger.warning(f"数据文件不存在: {filepath}")
+                    
+            # 构建索引
+            self._build_indexes()
             
-            # 加载症状-证型映射
-            mapping_file = base_path / "symptom_pattern_mapping.yaml"
-            if mapping_file.exists():
-                with open(mapping_file, 'r', encoding='utf-8') as f:
-                    self.symptom_pattern_mapping = yaml.safe_load(f)
-                logger.info(f"已加载 {len(self.symptom_pattern_mapping)} 个症状-证型映射")
-            else:
-                logger.warning(f"症状-证型映射文件不存在: {mapping_file}")
-            
-            # 加载证型分类
-            categories_file = base_path / "pattern_categories.yaml"
-            if categories_file.exists():
-                with open(categories_file, 'r', encoding='utf-8') as f:
-                    self.pattern_categories = yaml.safe_load(f)
-                logger.info(f"已加载 {len(self.pattern_categories)} 个证型分类")
-            else:
-                logger.warning(f"证型分类文件不存在: {categories_file}")
-            
-            # 加载身体部位
-            body_locations_file = base_path / "body_locations.yaml"
-            if body_locations_file.exists():
-                with open(body_locations_file, 'r', encoding='utf-8') as f:
-                    self.body_locations = yaml.safe_load(f)
-                logger.info(f"已加载 {len(self.body_locations)} 个身体部位")
-            else:
-                logger.warning(f"身体部位文件不存在: {body_locations_file}")
-            
-            # 设置初始化标志
-            self._initialized = True
-            logger.info("中医知识库加载完成")
-            
+            logger.info(f"知识库加载完成: {len(self.patterns)}个证型, "
+                       f"{len(self.symptoms)}个症状, "
+                       f"{len(self.symptom_pattern_mapping)}个映射关系")
+                       
         except Exception as e:
-            logger.error(f"加载中医知识库失败: {str(e)}", exc_info=True)
-            self._loading_error = str(e)
-            self._initialized = False
-    
-    def _create_sample_data_files(self, base_path: Path) -> None:
+            logger.error(f"加载知识库失败: {str(e)}")
+            
+    def _create_sample_data(self):
+        """创建示例数据"""
+        try:
+            # 创建证型数据
+            patterns_data = {
+                "气虚证": {
+                    "id": "qi_deficiency",
+                    "name": "气虚证",
+                    "aliases": ["气不足", "元气虚弱"],
+                    "category": "虚证",
+                    "description": "气虚证是指人体内气的不足所导致的一系列症状，表现为疲劳、气短、自汗等",
+                    "common_symptoms": ["疲劳", "气短", "自汗", "声音低弱", "面色萎黄"],
+                    "pathogenesis": "过度劳累、久病耗气、饮食失调等导致气的生成不足或消耗过度",
+                    "treatment_principle": "补气健脾",
+                    "common_herbs": ["人参", "黄芪", "白术", "山药"],
+                    "dietary_advice": ["多吃补气食物如山药、大枣", "避免生冷寒凉食物"],
+                    "lifestyle_advice": ["适量运动，避免过度劳累", "保证充足睡眠"]
+                },
+                "阳虚证": {
+                    "id": "yang_deficiency",
+                    "name": "阳虚证",
+                    "aliases": ["阳气不足", "虚寒证"],
+                    "category": "虚证",
+                    "description": "阳虚证是指机体阳气不足，温煦功能减退所表现的证候",
+                    "common_symptoms": ["畏寒", "肢冷", "腰膝酸软", "夜尿频多", "便溏"],
+                    "pathogenesis": "先天不足、久病耗阳、年老体衰等导致阳气虚损",
+                    "treatment_principle": "温补阳气",
+                    "common_herbs": ["附子", "肉桂", "干姜", "巴戟天"],
+                    "dietary_advice": ["多吃温热食物如羊肉、生姜", "避免寒凉食物"],
+                    "lifestyle_advice": ["注意保暖", "适当晒太阳", "避免过度房劳"]
+                },
+                "阴虚证": {
+                    "id": "yin_deficiency",
+                    "name": "阴虚证",
+                    "aliases": ["阴液不足", "虚热证"],
+                    "category": "虚证",
+                    "description": "阴虚证是指机体阴液不足，滋润、宁静功能减退所表现的证候",
+                    "common_symptoms": ["口干", "潮热", "盗汗", "五心烦热", "便秘"],
+                    "pathogenesis": "热病伤阴、久病耗阴、情志内伤等导致阴液亏损",
+                    "treatment_principle": "滋阴降火",
+                    "common_herbs": ["生地黄", "麦冬", "玄参", "百合"],
+                    "dietary_advice": ["多吃滋阴食物如银耳、百合", "避免辛辣刺激食物"],
+                    "lifestyle_advice": ["避免熬夜", "保持心情平和", "适量饮水"]
+                },
+                "湿热证": {
+                    "id": "damp_heat",
+                    "name": "湿热证",
+                    "aliases": ["湿热内蕴", "湿热困脾"],
+                    "category": "实证",
+                    "description": "湿热证是指湿邪与热邪相合，蕴结体内所表现的证候",
+                    "common_symptoms": ["口苦", "身重", "小便黄赤", "大便黏滞", "舌苔黄腻"],
+                    "pathogenesis": "饮食不节、环境潮湿、情志不畅等导致湿热内生",
+                    "treatment_principle": "清热利湿",
+                    "common_herbs": ["黄连", "黄芩", "茵陈", "滑石"],
+                    "dietary_advice": ["清淡饮食", "多吃清热利湿食物如冬瓜、薏米"],
+                    "lifestyle_advice": ["保持环境干燥", "规律作息", "适量运动"]
+                }
+            }
+            
+            # 创建症状数据
+            symptoms_data = {
+                "疲劳": {
+                    "id": "fatigue",
+                    "name": "疲劳",
+                    "aliases": ["乏力", "倦怠", "无力"],
+                    "description": "全身或局部感到疲乏无力，精神不振",
+                    "body_locations": ["全身"],
+                    "related_patterns": ["气虚证", "阳虚证", "血虚证"],
+                    "severity_indicators": {
+                        "mild": "轻度疲劳，休息后可缓解",
+                        "moderate": "中度疲劳，影响日常活动",
+                        "severe": "重度疲劳，严重影响生活质量"
+                    }
+                },
+                "头痛": {
+                    "id": "headache",
+                    "name": "头痛",
+                    "aliases": ["头疼", "偏头痛"],
+                    "description": "头部疼痛不适",
+                    "body_locations": ["头部"],
+                    "related_patterns": ["肝阳上亢", "风寒犯表", "血瘀证"],
+                    "severity_indicators": {
+                        "mild": "轻微头痛，不影响活动",
+                        "moderate": "中度头痛，影响注意力",
+                        "severe": "剧烈头痛，需要卧床休息"
+                    }
+                },
+                "失眠": {
+                    "id": "insomnia",
+                    "name": "失眠",
+                    "aliases": ["不寐", "睡眠障碍"],
+                    "description": "入睡困难或睡眠质量差",
+                    "body_locations": ["神志"],
+                    "related_patterns": ["心肾不交", "肝火上炎", "心脾两虚"],
+                    "severity_indicators": {
+                        "mild": "偶尔失眠",
+                        "moderate": "经常失眠，影响白天精神",
+                        "severe": "严重失眠，彻夜难眠"
+                    }
+                }
+            }
+            
+            # 创建映射数据
+            mapping_data = {
+                "mappings": [
+                    {
+                        "symptom": "疲劳",
+                        "pattern": "气虚证",
+                        "weight": 0.8,
+                        "notes": "疲劳是气虚证的主要症状之一"
+                    },
+                    {
+                        "symptom": "疲劳",
+                        "pattern": "阳虚证",
+                        "weight": 0.6,
+                        "notes": "阳虚也可导致疲劳，常伴有畏寒"
+                    },
+                    {
+                        "symptom": "畏寒",
+                        "pattern": "阳虚证",
+                        "weight": 0.9,
+                        "notes": "畏寒是阳虚证的典型表现"
+                    },
+                    {
+                        "symptom": "口干",
+                        "pattern": "阴虚证",
+                        "weight": 0.8,
+                        "notes": "口干是阴虚证的常见症状"
+                    }
+                ]
+            }
+            
+            # 创建分类数据
+            categories_data = {
+                "虚实": {
+                    "虚证": ["气虚证", "血虚证", "阴虚证", "阳虚证"],
+                    "实证": ["气滞证", "血瘀证", "痰湿证", "湿热证"]
+                },
+                "寒热": {
+                    "寒证": ["寒湿证", "阳虚证"],
+                    "热证": ["实热证", "阴虚内热证", "湿热证"]
+                },
+                "表里": {
+                    "表证": ["风寒表证", "风热表证"],
+                    "里证": ["里实证", "里虚证"]
+                }
+            }
+            
+            # 创建身体部位数据
+            body_locations_data = {
+                "头部": {
+                    "id": "head",
+                    "name": "头部",
+                    "sub_locations": ["前额", "头顶", "后脑", "太阳穴"],
+                    "related_organs": ["脑", "眼", "耳", "鼻"],
+                    "common_symptoms": ["头痛", "眩晕", "耳鸣", "鼻塞"]
+                },
+                "胸部": {
+                    "id": "chest",
+                    "name": "胸部",
+                    "sub_locations": ["心前区", "胸骨后", "两胁"],
+                    "related_organs": ["心", "肺"],
+                    "common_symptoms": ["胸痛", "胸闷", "心悸", "咳嗽"]
+                },
+                "腹部": {
+                    "id": "abdomen",
+                    "name": "腹部",
+                    "sub_locations": ["上腹", "中腹", "下腹", "两胁"],
+                    "related_organs": ["胃", "肠", "肝", "脾"],
+                    "common_symptoms": ["腹痛", "腹胀", "恶心", "便秘"]
+                }
+            }
+            
+            # 保存数据文件
+            files_to_create = {
+                'patterns.yaml': patterns_data,
+                'symptoms.yaml': symptoms_data,
+                'symptom_pattern_mapping.yaml': mapping_data,
+                'pattern_categories.yaml': categories_data,
+                'body_locations.yaml': body_locations_data
+            }
+            
+            for filename, data in files_to_create.items():
+                filepath = os.path.join(self.data_dir, filename)
+                with open(filepath, 'w', encoding='utf-8') as f:
+                    yaml.dump(data, f, allow_unicode=True, default_flow_style=False)
+                logger.info(f"创建示例数据文件: {filepath}")
+                
+        except Exception as e:
+            logger.error(f"创建示例数据失败: {str(e)}")
+            
+    def _load_patterns(self, filepath: str):
+        """加载证型数据"""
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                data = yaml.safe_load(f)
+                self.patterns = data if data else {}
+                logger.info(f"加载了 {len(self.patterns)} 个证型")
+        except Exception as e:
+            logger.error(f"加载证型数据失败: {str(e)}")
+            
+    def _load_symptoms(self, filepath: str):
+        """加载症状数据"""
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                data = yaml.safe_load(f)
+                self.symptoms = data if data else {}
+                logger.info(f"加载了 {len(self.symptoms)} 个症状")
+        except Exception as e:
+            logger.error(f"加载症状数据失败: {str(e)}")
+            
+    def _load_symptom_pattern_mapping(self, filepath: str):
+        """加载症状-证型映射"""
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                data = yaml.safe_load(f)
+                if data and 'mappings' in data:
+                    # 转换为便于查询的格式
+                    for mapping in data['mappings']:
+                        symptom = mapping['symptom']
+                        pattern = mapping['pattern']
+                        weight = mapping.get('weight', 0.5)
+                        
+                        if symptom not in self.symptom_pattern_mapping:
+                            self.symptom_pattern_mapping[symptom] = []
+                            
+                        self.symptom_pattern_mapping[symptom].append({
+                            'pattern': pattern,
+                            'weight': weight,
+                            'notes': mapping.get('notes', '')
+                        })
+                        
+                logger.info(f"加载了 {len(self.symptom_pattern_mapping)} 个症状映射关系")
+        except Exception as e:
+            logger.error(f"加载症状-证型映射失败: {str(e)}")
+            
+    def _load_pattern_categories(self, filepath: str):
+        """加载证型分类"""
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                data = yaml.safe_load(f)
+                self.pattern_categories = data if data else {}
+                logger.info(f"加载了 {len(self.pattern_categories)} 个证型分类")
+        except Exception as e:
+            logger.error(f"加载证型分类失败: {str(e)}")
+            
+    def _load_body_locations(self, filepath: str):
+        """加载身体部位数据"""
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                data = yaml.safe_load(f)
+                self.body_locations = data if data else {}
+                logger.info(f"加载了 {len(self.body_locations)} 个身体部位")
+        except Exception as e:
+            logger.error(f"加载身体部位数据失败: {str(e)}")
+            
+    def _build_indexes(self):
+        """构建索引以提高查询效率"""
+        try:
+            # 构建症状别名索引
+            for symptom_name, symptom_data in self.symptoms.items():
+                if isinstance(symptom_data, dict):
+                    # 添加主名称
+                    self.symptom_aliases[symptom_name.lower()] = symptom_name
+                    
+                    # 添加别名
+                    aliases = symptom_data.get('aliases', [])
+                    for alias in aliases:
+                        self.symptom_aliases[alias.lower()] = symptom_name
+                        
+            # 构建证型别名索引
+            for pattern_name, pattern_data in self.patterns.items():
+                if isinstance(pattern_data, dict):
+                    # 添加主名称
+                    self.pattern_aliases[pattern_name.lower()] = pattern_name
+                    
+                    # 添加别名
+                    aliases = pattern_data.get('aliases', [])
+                    for alias in aliases:
+                        self.pattern_aliases[alias.lower()] = pattern_name
+                        
+            logger.info(f"构建索引完成: {len(self.symptom_aliases)}个症状别名, "
+                       f"{len(self.pattern_aliases)}个证型别名")
+                       
+        except Exception as e:
+            logger.error(f"构建索引失败: {str(e)}")
+            
+    def get_symptom_info(self, symptom_name: str) -> Optional[Dict]:
         """
-        创建示例数据文件
+        获取症状信息
         
         Args:
-            base_path: 数据目录路径
+            symptom_name: 症状名称
+            
+        Returns:
+            症状信息字典，如果不存在则返回None
         """
-        logger.info("创建示例中医知识库数据文件")
+        # 先尝试直接匹配
+        if symptom_name in self.symptoms:
+            return self.symptoms[symptom_name]
+            
+        # 尝试别名匹配
+        normalized_name = symptom_name.lower()
+        if normalized_name in self.symptom_aliases:
+            actual_name = self.symptom_aliases[normalized_name]
+            return self.symptoms.get(actual_name)
+            
+        return None
         
-        # 确保目录存在
-        os.makedirs(base_path, exist_ok=True)
-        
-        # 创建示例证型数据
-        sample_patterns = {
-            "qi_deficiency": {
-                "name": "气虚证",
-                "category": "虚证",
-                "description": "气虚证是指人体内气的不足所导致的一系列症状，常见表现为疲乏无力、气短懒言、面色苍白、自汗等。",
-                "common_symptoms": ["疲乏无力", "气短懒言", "面色苍白", "自汗", "食欲不振", "大便溏薄", "舌淡胖", "脉弱"]
-            },
-            "yang_deficiency": {
-                "name": "阳虚证",
-                "category": "虚证",
-                "description": "阳虚证是指人体阳气不足所导致的一系列症状，常见表现为畏寒肢冷、面色苍白、精神萎靡、小便清长等。",
-                "common_symptoms": ["畏寒肢冷", "面色苍白", "精神萎靡", "小便清长", "腰膝酸软", "舌淡胖", "脉沉细"]
-            },
-            "yin_deficiency": {
-                "name": "阴虚证",
-                "category": "虚证",
-                "description": "阴虚证是指人体阴液不足所导致的一系列症状，常见表现为口燥咽干、五心烦热、盗汗、舌红少苔等。",
-                "common_symptoms": ["口燥咽干", "五心烦热", "盗汗", "颧红", "手足心热", "舌红少苔", "脉细数"]
-            },
-            "blood_stasis": {
-                "name": "血瘀证",
-                "category": "实证",
-                "description": "血瘀证是指血液运行不畅、停滞所导致的一系列症状，常见表现为疼痛固定、舌质紫暗、瘀斑瘀点等。",
-                "common_symptoms": ["疼痛固定", "刺痛", "皮肤紫暗", "唇甲紫暗", "舌质紫暗", "瘀斑瘀点", "脉涩"]
-            },
-            "phlegm_dampness": {
-                "name": "痰湿证",
-                "category": "实证",
-                "description": "痰湿证是指体内水液代谢异常，聚湿成痰所导致的一系列症状，常见表现为胸闷、痰多、恶心、舌苔厚腻等。",
-                "common_symptoms": ["胸闷", "痰多", "恶心", "头重", "肢体困重", "舌苔厚腻", "脉滑"]
-            },
-            "damp_heat": {
-                "name": "湿热证",
-                "category": "实证",
-                "description": "湿热证是指湿邪与热邪同时侵犯人体所导致的一系列症状，常见表现为发热、口苦、小便短赤、舌红苔黄腻等。",
-                "common_symptoms": ["发热", "口苦", "小便短赤", "苔黄腻", "脉濡数"]
-            },
-            "qi_stagnation": {
-                "name": "气滞证",
-                "category": "实证",
-                "description": "气滞证是指气机郁滞不畅所导致的一系列症状，常见表现为胸胁胀痛、情绪波动、叹息、脉弦等。",
-                "common_symptoms": ["胸胁胀痛", "情绪波动", "叹息", "嗳气", "脉弦"]
-            },
-            "liver_yang_hyperactivity": {
-                "name": "肝阳上亢证",
-                "category": "实证",
-                "description": "肝阳上亢证是指肝阳上亢所导致的一系列症状，常见表现为头痛、头晕、面红、易怒、舌红脉弦等。",
-                "common_symptoms": ["头痛", "头晕", "面红", "易怒", "耳鸣", "舌红", "脉弦"]
-            },
-            "spleen_deficiency": {
-                "name": "脾虚证",
-                "category": "虚证",
-                "description": "脾虚证是指脾的功能减弱所导致的一系列症状，常见表现为食欲不振、腹胀、大便溏薄、倦怠乏力等。",
-                "common_symptoms": ["食欲不振", "腹胀", "大便溏薄", "倦怠乏力", "面色萎黄", "舌淡胖", "脉缓弱"]
-            },
-            "lung_heat": {
-                "name": "肺热证",
-                "category": "实证",
-                "description": "肺热证是指热邪侵犯肺部所导致的一系列症状，常见表现为发热、咳嗽、痰黄、鼻塞、咽痛等。",
-                "common_symptoms": ["发热", "咳嗽", "痰黄", "鼻塞", "咽痛", "舌红", "脉浮数"]
-            }
-        }
-        
-        with open(base_path / "patterns.yaml", 'w', encoding='utf-8') as f:
-            yaml.dump(sample_patterns, f, allow_unicode=True, default_flow_style=False)
-        
-        # 创建示例症状数据
-        sample_symptoms = {
-            "fatigue": {
-                "name": "疲乏无力",
-                "description": "身体乏力，精神不振，容易疲劳",
-                "body_locations": ["全身"],
-                "common_patterns": ["气虚证", "脾虚证", "肾虚证"]
-            },
-            "shortness_of_breath": {
-                "name": "气短懒言",
-                "description": "说话无力，呼吸急促，不愿意多讲话",
-                "body_locations": ["胸部", "肺"],
-                "common_patterns": ["气虚证", "肺虚证"]
-            },
-            "pale_face": {
-                "name": "面色苍白",
-                "description": "面部颜色苍白，缺乏血色",
-                "body_locations": ["面部"],
-                "common_patterns": ["气虚证", "血虚证", "阳虚证"]
-            },
-            "spontaneous_sweating": {
-                "name": "自汗",
-                "description": "不因运动、热等外因而自行出汗",
-                "body_locations": ["全身"],
-                "common_patterns": ["气虚证", "阳虚证"]
-            },
-            "chills": {
-                "name": "畏寒肢冷",
-                "description": "怕冷，手脚发凉",
-                "body_locations": ["四肢", "全身"],
-                "common_patterns": ["阳虚证", "寒证"]
-            },
-            "listlessness": {
-                "name": "精神萎靡",
-                "description": "精神状态不佳，提不起精神",
-                "body_locations": ["全身"],
-                "common_patterns": ["气虚证", "阳虚证", "脾虚证"]
-            },
-            "clear_urination": {
-                "name": "小便清长",
-                "description": "尿量多，颜色清淡",
-                "body_locations": ["泌尿系统"],
-                "common_patterns": ["阳虚证", "肾虚证"]
-            },
-            "dry_mouth": {
-                "name": "口燥咽干",
-                "description": "口腔和咽喉干燥",
-                "body_locations": ["口腔", "咽喉"],
-                "common_patterns": ["阴虚证", "热证"]
-            },
-            "hot_sensation": {
-                "name": "五心烦热",
-                "description": "手心、足心、胸部感到烦热",
-                "body_locations": ["手掌", "足底", "胸部"],
-                "common_patterns": ["阴虚证", "心火旺"]
-            },
-            "night_sweats": {
-                "name": "盗汗",
-                "description": "睡眠中出汗，醒后汗止",
-                "body_locations": ["全身"],
-                "common_patterns": ["阴虚证", "血虚证"]
-            },
-            "fixed_pain": {
-                "name": "疼痛固定",
-                "description": "疼痛位置固定不移",
-                "body_locations": ["全身"],
-                "common_patterns": ["血瘀证"]
-            },
-            "chest_stuffiness": {
-                "name": "胸闷",
-                "description": "胸部闷胀不适",
-                "body_locations": ["胸部"],
-                "common_patterns": ["痰湿证", "气滞证"]
-            },
-            "phlegm": {
-                "name": "痰多",
-                "description": "痰液分泌过多",
-                "body_locations": ["肺", "咽喉"],
-                "common_patterns": ["痰湿证", "肺热证"]
-            },
-            "nausea": {
-                "name": "恶心",
-                "description": "胃部不适，欲吐不吐",
-                "body_locations": ["胃部"],
-                "common_patterns": ["痰湿证", "脾胃不和"]
-            },
-            "fever": {
-                "name": "发热",
-                "description": "体温升高",
-                "body_locations": ["全身"],
-                "common_patterns": ["湿热证", "肺热证", "热证"]
-            },
-            "bitter_taste": {
-                "name": "口苦",
-                "description": "口中有苦味",
-                "body_locations": ["口腔"],
-                "common_patterns": ["湿热证", "肝胆湿热"]
-            },
-            "chest_pain": {
-                "name": "胸胁胀痛",
-                "description": "胸部和侧腹部胀痛",
-                "body_locations": ["胸部", "侧腹部"],
-                "common_patterns": ["气滞证", "肝气郁结"]
-            },
-            "mood_swings": {
-                "name": "情绪波动",
-                "description": "情绪不稳定，易喜易怒",
-                "body_locations": ["心"],
-                "common_patterns": ["气滞证", "肝气郁结"]
-            },
-            "headache": {
-                "name": "头痛",
-                "description": "头部疼痛",
-                "body_locations": ["头部"],
-                "common_patterns": ["肝阳上亢证", "风寒证", "风热证"]
-            },
-            "dizziness": {
-                "name": "头晕",
-                "description": "头晕目眩",
-                "body_locations": ["头部"],
-                "common_patterns": ["肝阳上亢证", "气虚证", "血虚证"]
-            },
-            "irritability": {
-                "name": "易怒",
-                "description": "容易发怒",
-                "body_locations": ["肝"],
-                "common_patterns": ["肝阳上亢证", "肝火旺"]
-            },
-            "poor_appetite": {
-                "name": "食欲不振",
-                "description": "胃口不好，不想吃东西",
-                "body_locations": ["胃部"],
-                "common_patterns": ["脾虚证", "气虚证"]
-            },
-            "abdominal_distension": {
-                "name": "腹胀",
-                "description": "腹部胀满不适",
-                "body_locations": ["腹部"],
-                "common_patterns": ["脾虚证", "气滞证"]
-            },
-            "loose_stool": {
-                "name": "大便溏薄",
-                "description": "大便稀溏不成形",
-                "body_locations": ["肠道"],
-                "common_patterns": ["脾虚证", "湿证"]
-            },
-            "cough": {
-                "name": "咳嗽",
-                "description": "咳嗽",
-                "body_locations": ["肺", "咽喉"],
-                "common_patterns": ["肺热证", "风寒咳嗽", "风热咳嗽"]
-            },
-            "yellow_phlegm": {
-                "name": "痰黄",
-                "description": "痰液呈黄色",
-                "body_locations": ["肺", "咽喉"],
-                "common_patterns": ["肺热证", "湿热证"]
-            },
-            "sore_throat": {
-                "name": "咽痛",
-                "description": "咽喉疼痛",
-                "body_locations": ["咽喉"],
-                "common_patterns": ["肺热证", "风热证"]
-            }
-        }
-        
-        with open(base_path / "symptoms.yaml", 'w', encoding='utf-8') as f:
-            yaml.dump(sample_symptoms, f, allow_unicode=True, default_flow_style=False)
-        
-        # 创建示例症状-证型映射
-        sample_mapping = {
-            "疲乏无力": ["气虚证", "脾虚证", "肾虚证"],
-            "气短懒言": ["气虚证", "肺虚证"],
-            "面色苍白": ["气虚证", "血虚证", "阳虚证"],
-            "自汗": ["气虚证", "阳虚证"],
-            "畏寒肢冷": ["阳虚证", "寒证"],
-            "精神萎靡": ["气虚证", "阳虚证", "脾虚证"],
-            "小便清长": ["阳虚证", "肾虚证"],
-            "口燥咽干": ["阴虚证", "热证"],
-            "五心烦热": ["阴虚证", "心火旺"],
-            "盗汗": ["阴虚证", "血虚证"],
-            "疼痛固定": ["血瘀证"],
-            "胸闷": ["痰湿证", "气滞证"],
-            "痰多": ["痰湿证", "肺热证"],
-            "恶心": ["痰湿证", "脾胃不和"],
-            "发热": ["湿热证", "肺热证", "热证"],
-            "口苦": ["湿热证", "肝胆湿热"],
-            "胸胁胀痛": ["气滞证", "肝气郁结"],
-            "情绪波动": ["气滞证", "肝气郁结"],
-            "头痛": ["肝阳上亢证", "风寒证", "风热证"],
-            "头晕": ["肝阳上亢证", "气虚证", "血虚证"],
-            "易怒": ["肝阳上亢证", "肝火旺"],
-            "食欲不振": ["脾虚证", "气虚证"],
-            "腹胀": ["脾虚证", "气滞证"],
-            "大便溏薄": ["脾虚证", "湿证"],
-            "咳嗽": ["肺热证", "风寒咳嗽", "风热咳嗽"],
-            "痰黄": ["肺热证", "湿热证"],
-            "咽痛": ["肺热证", "风热证"]
-        }
-        
-        with open(base_path / "symptom_pattern_mapping.yaml", 'w', encoding='utf-8') as f:
-            yaml.dump(sample_mapping, f, allow_unicode=True, default_flow_style=False)
-        
-        # 创建示例证型分类
-        sample_categories = {
-            "虚实": ["虚证", "实证"],
-            "寒热": ["寒证", "热证"],
-            "气血津液": ["气虚证", "气滞证", "血虚证", "血瘀证", "津液不足", "痰湿证"],
-            "脏腑": ["肝证", "心证", "脾证", "肺证", "肾证"]
-        }
-        
-        with open(base_path / "pattern_categories.yaml", 'w', encoding='utf-8') as f:
-            yaml.dump(sample_categories, f, allow_unicode=True, default_flow_style=False)
-        
-        # 创建示例身体部位
-        sample_body_locations = {
-            "头部": {
-                "associated_organs": ["脑", "肝"],
-                "common_symptoms": ["头痛", "头晕", "头重"]
-            },
-            "面部": {
-                "associated_organs": ["脾", "肺"],
-                "common_symptoms": ["面色苍白", "面红", "面浮肿"]
-            },
-            "眼部": {
-                "associated_organs": ["肝"],
-                "common_symptoms": ["目赤", "视物模糊", "干涩"]
-            },
-            "口腔": {
-                "associated_organs": ["脾", "胃"],
-                "common_symptoms": ["口燥", "口苦", "口臭"]
-            },
-            "咽喉": {
-                "associated_organs": ["肺"],
-                "common_symptoms": ["咽干", "咽痛", "咳嗽"]
-            },
-            "胸部": {
-                "associated_organs": ["心", "肺"],
-                "common_symptoms": ["胸闷", "胸痛", "心悸"]
-            },
-            "腹部": {
-                "associated_organs": ["脾", "胃", "肝", "肾"],
-                "common_symptoms": ["腹痛", "腹胀", "腹泻"]
-            },
-            "腰部": {
-                "associated_organs": ["肾"],
-                "common_symptoms": ["腰酸", "腰痛", "腰膝酸软"]
-            },
-            "四肢": {
-                "associated_organs": ["肝", "脾"],
-                "common_symptoms": ["肢体酸痛", "肢体麻木", "肢体沉重"]
-            }
-        }
-        
-        with open(base_path / "body_locations.yaml", 'w', encoding='utf-8') as f:
-            yaml.dump(sample_body_locations, f, allow_unicode=True, default_flow_style=False)
-        
-        logger.info("已创建示例中医知识库数据文件")
-    
-    def get_pattern_by_name(self, pattern_name: str) -> Optional[Dict]:
+    def get_pattern_info(self, pattern_name: str) -> Optional[Dict]:
         """
-        根据证型名称获取证型信息
+        获取证型信息
         
         Args:
             pattern_name: 证型名称
             
         Returns:
-            证型信息字典
+            证型信息字典，如果不存在则返回None
         """
-        if not self._initialized:
-            logger.warning("中医知识库未初始化")
-            return None
+        # 先尝试直接匹配
+        if pattern_name in self.patterns:
+            return self.patterns[pattern_name]
             
-        # 直接匹配
-        for pattern_id, pattern_info in self.patterns.items():
-            if pattern_info["name"] == pattern_name:
-                result = pattern_info.copy()
-                result["id"] = pattern_id
-                return result
-                
-        # 模糊匹配
-        for pattern_id, pattern_info in self.patterns.items():
-            if pattern_name in pattern_info["name"]:
-                result = pattern_info.copy()
-                result["id"] = pattern_id
-                return result
-                
-        logger.debug(f"未找到证型: {pattern_name}")
+        # 尝试别名匹配
+        normalized_name = pattern_name.lower()
+        if normalized_name in self.pattern_aliases:
+            actual_name = self.pattern_aliases[normalized_name]
+            return self.patterns.get(actual_name)
+            
         return None
-    
-    def get_symptom_by_name(self, symptom_name: str) -> Optional[Dict]:
+        
+    def get_patterns_by_symptoms(self, symptoms: List[str]) -> List[Dict]:
         """
-        根据症状名称获取症状信息
+        根据症状列表获取可能的证型
         
         Args:
-            symptom_name: 症状名称
+            symptoms: 症状名称列表
             
         Returns:
-            症状信息字典
+            证型列表，按匹配度排序
         """
-        if not self._initialized:
-            logger.warning("中医知识库未初始化")
-            return None
+        pattern_scores = {}
+        
+        for symptom in symptoms:
+            # 获取症状对应的证型
+            mappings = self.symptom_pattern_mapping.get(symptom, [])
             
-        # 直接匹配
-        for symptom_id, symptom_info in self.symptoms.items():
-            if symptom_info["name"] == symptom_name:
-                result = symptom_info.copy()
-                result["id"] = symptom_id
-                return result
+            # 如果直接匹配失败，尝试别名匹配
+            if not mappings:
+                normalized = symptom.lower()
+                if normalized in self.symptom_aliases:
+                    actual_symptom = self.symptom_aliases[normalized]
+                    mappings = self.symptom_pattern_mapping.get(actual_symptom, [])
+                    
+            # 累计证型得分
+            for mapping in mappings:
+                pattern = mapping['pattern']
+                weight = mapping['weight']
                 
-        # 模糊匹配
-        for symptom_id, symptom_info in self.symptoms.items():
-            if symptom_name in symptom_info["name"]:
-                result = symptom_info.copy()
-                result["id"] = symptom_id
-                return result
+                if pattern not in pattern_scores:
+                    pattern_scores[pattern] = 0
+                    
+                pattern_scores[pattern] += weight
                 
-        logger.debug(f"未找到症状: {symptom_name}")
-        return None
-    
-    def get_related_patterns(self, symptom_name: str) -> List[Dict]:
+        # 转换为列表并排序
+        results = []
+        for pattern, score in pattern_scores.items():
+            pattern_info = self.get_pattern_info(pattern)
+            if pattern_info:
+                results.append({
+                    'pattern_name': pattern,
+                    'match_score': score / len(symptoms),  # 归一化得分
+                    'matched_symptoms': symptoms,
+                    'pattern_info': pattern_info
+                })
+                
+        # 按匹配度排序
+        results.sort(key=lambda x: x['match_score'], reverse=True)
+        
+        # 只返回置信度超过阈值的结果
+        return [r for r in results if r['match_score'] >= self.confidence_threshold]
+        
+    def get_symptoms_by_body_location(self, location: str) -> List[str]:
         """
-        根据症状获取相关证型
+        根据身体部位获取常见症状
         
         Args:
-            symptom_name: 症状名称
-            
-        Returns:
-            相关证型列表
-        """
-        if not self._initialized:
-            logger.warning("中医知识库未初始化")
-            return []
-            
-        related_patterns = []
-        
-        # 从映射中查找
-        if symptom_name in self.symptom_pattern_mapping:
-            pattern_names = self.symptom_pattern_mapping[symptom_name]
-            for pattern_name in pattern_names:
-                pattern = self.get_pattern_by_name(pattern_name)
-                if pattern:
-                    related_patterns.append(pattern)
-        else:
-            # 在症状信息中查找
-            symptom = self.get_symptom_by_name(symptom_name)
-            if symptom and "common_patterns" in symptom:
-                for pattern_name in symptom["common_patterns"]:
-                    pattern = self.get_pattern_by_name(pattern_name)
-                    if pattern:
-                        related_patterns.append(pattern)
-        
-        return related_patterns
-    
-    def get_patterns_by_category(self, category: str) -> List[Dict]:
-        """
-        根据分类获取证型
-        
-        Args:
-            category: 证型分类
-            
-        Returns:
-            证型列表
-        """
-        if not self._initialized:
-            logger.warning("中医知识库未初始化")
-            return []
-            
-        result = []
-        
-        for pattern_id, pattern_info in self.patterns.items():
-            if pattern_info.get("category") == category:
-                pattern_copy = pattern_info.copy()
-                pattern_copy["id"] = pattern_id
-                result.append(pattern_copy)
-                
-        return result
-    
-    def get_body_location(self, location_name: str) -> Optional[Dict]:
-        """
-        获取身体部位信息
-        
-        Args:
-            location_name: 部位名称
-            
-        Returns:
-            部位信息字典
-        """
-        if not self._initialized:
-            logger.warning("中医知识库未初始化")
-            return None
-            
-        # 直接匹配
-        if location_name in self.body_locations:
-            result = self.body_locations[location_name].copy()
-            result["name"] = location_name
-            return result
-            
-        # 模糊匹配
-        for loc_name, loc_info in self.body_locations.items():
-            if location_name in loc_name or loc_name in location_name:
-                result = loc_info.copy()
-                result["name"] = loc_name
-                return result
-                
-        logger.debug(f"未找到身体部位: {location_name}")
-        return None
-    
-    def get_symptoms_by_body_location(self, location_name: str) -> List[Dict]:
-        """
-        根据身体部位获取相关症状
-        
-        Args:
-            location_name: 部位名称
+            location: 身体部位名称
             
         Returns:
             症状列表
         """
-        if not self._initialized:
-            logger.warning("中医知识库未初始化")
-            return []
+        location_info = self.body_locations.get(location)
+        if location_info and isinstance(location_info, dict):
+            return location_info.get('common_symptoms', [])
             
-        result = []
-        location = self.get_body_location(location_name)
+        # 搜索子部位
+        for loc_name, loc_data in self.body_locations.items():
+            if isinstance(loc_data, dict):
+                sub_locations = loc_data.get('sub_locations', [])
+                if location in sub_locations:
+                    return loc_data.get('common_symptoms', [])
+                    
+        return []
         
-        if location and "common_symptoms" in location:
-            for symptom_name in location["common_symptoms"]:
-                symptom = self.get_symptom_by_name(symptom_name)
-                if symptom:
-                    result.append(symptom)
-        else:
-            # 在所有症状中查找与该部位相关的
-            for symptom_id, symptom_info in self.symptoms.items():
-                if "body_locations" in symptom_info and location_name in symptom_info["body_locations"]:
-                    symptom_copy = symptom_info.copy()
-                    symptom_copy["id"] = symptom_id
-                    result.append(symptom_copy)
-        
-        return result
-    
-    def get_status(self) -> Dict:
+    def get_pattern_category(self, pattern_name: str) -> Dict[str, str]:
         """
-        获取知识库状态
+        获取证型的分类信息
         
+        Args:
+            pattern_name: 证型名称
+            
         Returns:
-            状态信息字典
+            分类信息字典
         """
+        categories = {}
+        
+        for category_type, category_data in self.pattern_categories.items():
+            for category_name, patterns in category_data.items():
+                if pattern_name in patterns:
+                    categories[category_type] = category_name
+                    
+        return categories
+        
+    def search_symptoms(self, keyword: str) -> List[str]:
+        """
+        搜索包含关键词的症状
+        
+        Args:
+            keyword: 搜索关键词
+            
+        Returns:
+            匹配的症状列表
+        """
+        keyword_lower = keyword.lower()
+        matched_symptoms = set()
+        
+        # 搜索症状名称
+        for symptom_name in self.symptoms.keys():
+            if keyword_lower in symptom_name.lower():
+                matched_symptoms.add(symptom_name)
+                
+        # 搜索症状别名
+        for alias, actual_name in self.symptom_aliases.items():
+            if keyword_lower in alias:
+                matched_symptoms.add(actual_name)
+                
+        # 搜索症状描述
+        for symptom_name, symptom_data in self.symptoms.items():
+            if isinstance(symptom_data, dict):
+                description = symptom_data.get('description', '')
+                if keyword_lower in description.lower():
+                    matched_symptoms.add(symptom_name)
+                    
+        return list(matched_symptoms)
+        
+    def get_treatment_suggestions(self, pattern_name: str) -> Dict[str, Any]:
+        """
+        获取证型的治疗建议
+        
+        Args:
+            pattern_name: 证型名称
+            
+        Returns:
+            治疗建议字典
+        """
+        pattern_info = self.get_pattern_info(pattern_name)
+        
+        if not pattern_info:
+            return {}
+            
         return {
-            "initialized": self._initialized,
-            "loading_error": self._loading_error,
-            "patterns_count": len(self.patterns),
-            "symptoms_count": len(self.symptoms),
-            "mappings_count": len(self.symptom_pattern_mapping),
-            "categories_count": len(self.pattern_categories),
-            "body_locations_count": len(self.body_locations)
-        } 
+            'treatment_principle': pattern_info.get('treatment_principle', ''),
+            'common_herbs': pattern_info.get('common_herbs', []),
+            'dietary_advice': pattern_info.get('dietary_advice', []),
+            'lifestyle_advice': pattern_info.get('lifestyle_advice', [])
+        }
+        
+    def validate_symptom(self, symptom: str) -> bool:
+        """
+        验证症状是否在知识库中
+        
+        Args:
+            symptom: 症状名称
+            
+        Returns:
+            是否存在
+        """
+        return (symptom in self.symptoms or 
+                symptom.lower() in self.symptom_aliases)
+                
+    def validate_pattern(self, pattern: str) -> bool:
+        """
+        验证证型是否在知识库中
+        
+        Args:
+            pattern: 证型名称
+            
+        Returns:
+            是否存在
+        """
+        return (pattern in self.patterns or 
+                pattern.lower() in self.pattern_aliases)
+                
+    async def check_health(self) -> bool:
+        """健康检查"""
+        try:
+            # 检查是否加载了基本数据
+            return (len(self.patterns) > 0 and 
+                   len(self.symptoms) > 0 and 
+                   len(self.symptom_pattern_mapping) > 0)
+        except Exception:
+            return False 

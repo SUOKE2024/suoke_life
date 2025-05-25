@@ -1,0 +1,125 @@
+{
+  "info": {
+    "name": "Accessibility Service API",
+    "description": "索克生活无障碍服务API",
+    "version": "1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{access_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://api.suoke.life/accessibility/v1",
+      "type": "string"
+    },
+    {
+      "key": "access_token",
+      "value": "your-jwt-token-here",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "导盲服务",
+      "item": [
+        {
+          "name": "场景分析",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "user_id",
+                  "value": "user123",
+                  "type": "text"
+                },
+                {
+                  "key": "image",
+                  "type": "file"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/blind-assistance/analyze-scene",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "blind-assistance",
+                "analyze-scene"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "语音助手",
+      "item": [
+        {
+          "name": "语音转文字",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "user_id",
+                  "value": "user123",
+                  "type": "text"
+                },
+                {
+                  "key": "audio",
+                  "type": "file"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/voice-assistance/speech-to-text",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "voice-assistance",
+                "speech-to-text"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "系统",
+      "item": [
+        {
+          "name": "健康检查",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "health"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

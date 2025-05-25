@@ -1,0 +1,250 @@
+# Istio服务网格配置
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  name: suoke-life-istio
+  namespace: istio-system
+spec:
+  values:
+    global:
+      meshID: suoke-mesh
+      network: suoke-network
+      proxy:
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+  components:
+    pilot:
+      k8s:
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        hpaSpec:
+          minReplicas: 2
+          maxReplicas: 5
+          metrics:
+          - type: Resource
+            resource:
+              name: cpu
+              target:
+                type: Utilization
+                averageUtilization: 80
+    ingressGateways:
+    - name: istio-ingressgateway
+      enabled: true
+      k8s:
+        service:
+          type: LoadBalancer
+          ports:
+          - port: 80
+            targetPort: 8080
+            name: http2
+          - port: 443
+            targetPort: 8443
+            name: https
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        hpaSpec:
+          minReplicas: 2
+          maxReplicas: 5
+    egressGateways:
+    - name: istio-egressgateway
+      enabled: true
+      k8s:
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+---
+# 服务间通信安全配置
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace: suoke
+spec:
+  mtls:
+    mode: STRICT
+---
+# 授权策略
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: service-to-service
+  namespace: suoke
+spec:
+  rules:
+  - from:
+    - source:
+        principals: ["cluster.local/ns/suoke/sa/api-gateway"]
+    to:
+    - operation:
+        methods: ["GET", "POST", "PUT", "DELETE"]
+  - from:
+    - source:
+        principals: ["cluster.local/ns/suoke/sa/xiaoai-service"]
+    to:
+    - operation:
+        methods: ["GET", "POST"]
+  - from:
+    - source:
+        principals: ["cluster.local/ns/suoke/sa/xiaoke-service"]
+    to:
+    - operation:
+        methods: ["GET", "POST"]
+---
+# 网关配置
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: suoke-gateway
+  namespace: suoke
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "api.suoke.life"
+    - "*.suoke.life"
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      credentialName: suoke-tls-secret
+    hosts:
+    - "api.suoke.life"
+    - "*.suoke.life"
+---
+# 虚拟服务配置
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: suoke-api
+  namespace: suoke
+spec:
+  hosts:
+  - "api.suoke.life"
+  gateways:
+  - suoke-gateway
+  http:
+  - match:
+    - uri:
+        prefix: "/api/v1/auth"
+    route:
+    - destination:
+        host: auth-service
+        port:
+          number: 80
+    timeout: 30s
+    retries:
+      attempts: 3
+      perTryTimeout: 10s
+  - match:
+    - uri:
+        prefix: "/api/v1/agents/xiaoai"
+    route:
+    - destination:
+        host: xiaoai-service
+        port:
+          number: 80
+    timeout: 60s
+    retries:
+      attempts: 2
+      perTryTimeout: 30s
+  - match:
+    - uri:
+        prefix: "/api/v1/agents/xiaoke"
+    route:
+    - destination:
+        host: xiaoke-service
+        port:
+          number: 80
+    timeout: 60s
+  - match:
+    - uri:
+        prefix: "/api/v1/"
+    route:
+    - destination:
+        host: api-gateway
+        port:
+          number: 80
+    timeout: 30s
+    retries:
+      attempts: 3
+      perTryTimeout: 10s
+---
+# 目标规则 - 负载均衡和熔断
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: api-gateway-dr
+  namespace: suoke
+spec:
+  host: api-gateway
+  trafficPolicy:
+    loadBalancer:
+      simple: LEAST_CONN
+    connectionPool:
+      tcp:
+        maxConnections: 100
+      http:
+        http1MaxPendingRequests: 50
+        http2MaxRequests: 100
+        maxRequestsPerConnection: 10
+        maxRetries: 3
+        consecutiveGatewayErrors: 5
+        interval: 30s
+        baseEjectionTime: 30s
+        maxEjectionPercent: 50
+    outlierDetection:
+      consecutiveGatewayErrors: 5
+      interval: 30s
+      baseEjectionTime: 30s
+      maxEjectionPercent: 50
+      minHealthPercent: 50
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: xiaoai-service-dr
+  namespace: suoke
+spec:
+  host: xiaoai-service
+  trafficPolicy:
+    loadBalancer:
+      simple: ROUND_ROBIN
+    connectionPool:
+      tcp:
+        maxConnections: 50
+      http:
+        http1MaxPendingRequests: 25
+        http2MaxRequests: 50
+        maxRequestsPerConnection: 5
+        maxRetries: 2
+    outlierDetection:
+      consecutiveGatewayErrors: 3
+      interval: 30s
+      baseEjectionTime: 30s
+      maxEjectionPercent: 30 

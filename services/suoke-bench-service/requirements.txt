@@ -1,87 +1,133 @@
-# Core dependencies
-fastapi==0.109.0
-uvicorn==0.27.0
-pydantic==2.5.3
-python-multipart==0.0.6
-python-jose[cryptography]==3.3.0
-passlib[bcrypt]==1.7.4
+# SuokeBench 服务依赖 - 优化版
+# 版本: 1.1.0
+
+# 核心框架
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+grpcio==1.59.3
+grpcio-tools==1.59.3
+pydantic==2.5.0
+pydantic-settings==2.1.0
+
+# 异步支持
+asyncio-mqtt==0.16.1
+aiofiles==23.2.1
+aiohttp==3.9.1
+
+# 数据处理
+numpy==1.24.3
+pandas==2.1.4
+scikit-learn==1.3.2
+scipy==1.11.4
+
+# 机器学习和AI
+torch==2.1.1
+transformers==4.36.2
+tokenizers==0.15.0
+huggingface-hub==0.19.4
+
+# 监控和指标
+prometheus-client==0.19.0
+psutil==5.9.6
+py-cpuinfo==9.0.0
+
+# 日志和配置
+loguru==0.7.2
+pyyaml==6.0.1
 python-dotenv==1.0.0
-PyYAML==6.0.1
+click==8.1.7
 
-# Data processing and analysis
-numpy>=1.26.3
-pandas==2.2.0
-scikit-learn==1.4.0
-scipy>=1.12.0
+# 数据库 (可选)
+sqlalchemy==2.0.23
+alembic==1.13.1
+asyncpg==0.29.0  # PostgreSQL异步驱动
+aiosqlite==0.19.0  # SQLite异步驱动
 
-# Database and storage
-SQLAlchemy==2.0.25
-alembic>=1.13.1
-psycopg2-binary==2.9.9
+# 缓存
 redis==5.0.1
 aioredis==2.0.1
 
-# Monitoring and logging
-prometheus-client==0.19.0
-python-json-logger==2.0.7
-opentelemetry-api==1.21.0
-opentelemetry-sdk==1.21.0
-opentelemetry-instrumentation-fastapi==0.42b0
+# HTTP客户端
+httpx==0.25.2
+requests==2.31.0
 
-# Testing
-pytest==7.4.4
-pytest-asyncio==0.23.3
+# 数据验证和序列化
+marshmallow==3.20.1
+jsonschema==4.20.0
+
+# 时间处理
+python-dateutil==2.8.2
+pytz==2023.3
+
+# 文件处理
+openpyxl==3.1.2
+xlsxwriter==3.1.9
+pillow==10.1.0
+
+# 网络和安全
+cryptography==41.0.8
+bcrypt==4.1.2
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+
+# 测试框架
+pytest==7.4.3
+pytest-asyncio==0.21.1
 pytest-cov==4.1.0
 pytest-mock==3.12.0
-hypothesis==6.92.1
+httpx==0.25.2  # 用于API测试
 
-# Security
-cryptography==41.0.7
-pyOpenSSL==24.0.0
-certifi==2023.11.17
-bcrypt==4.1.2
+# 开发工具
+black==23.11.0
+isort==5.12.0
+flake8==6.1.0
+mypy==1.7.1
+pre-commit==3.6.0
 
-# gRPC
-grpcio==1.60.0
-grpcio-tools==1.60.0
-protobuf==4.25.2
-
-# Async utilities
-aiohttp==3.9.1
-asyncio==3.4.3
-httpx==0.26.0
-
-# Documentation
+# 文档生成
 mkdocs==1.5.3
-mkdocs-material==9.5.3
-mkdocstrings==0.24.0
+mkdocs-material==9.4.8
 
-# Development tools
-black==23.12.1
-isort==5.13.2
-flake8==7.0.0
-mypy==1.8.0
-pylint==3.0.3
-
-# Performance monitoring
-psutil==5.9.7
-py-spy==0.3.14
+# 性能分析
 memory-profiler==0.61.0
+line-profiler==4.1.1
+py-spy==0.3.14
 
-# Zero-knowledge proof libraries
-# pysnark==0.4.0 # Python 3.12 暂不支持，考虑使用替代方案
-# zokrates==0.7.13 # Python 3.12 暂不支持，考虑使用替代方案
+# 容器化和部署
+gunicorn==21.2.0
+docker==6.1.3
 
-# Edge computing
-onnxruntime>=1.20.0
-# tensorflow-lite==2.14.0 # Python 3.12 暂不支持，考虑使用替代方案
-# tflite-runtime==2.14.0 # Python 3.12 暂不支持，考虑使用替代方案
-torch>=2.6.0
-torchvision>=0.21.0
-torchaudio>=2.6.0
+# 中医相关 (如果需要)
+jieba==0.42.1  # 中文分词
+pypinyin==0.49.0  # 拼音转换
 
-# Visualization
-plotly==5.18.0
-dash==2.14.2
-bokeh==3.3.3
-seaborn==0.13.1
+# 图表和可视化
+matplotlib==3.8.2
+seaborn==0.13.0
+plotly==5.17.0
+
+# 工具库
+tqdm==4.66.1
+rich==13.7.0
+typer==0.9.0
+jinja2==3.1.2
+
+# 健康检查和监控
+healthcheck==1.3.3
+
+# 分布式任务 (可选)
+celery==5.3.4
+kombu==5.3.4
+
+# 消息队列 (可选)
+pika==1.3.2  # RabbitMQ
+kafka-python==2.0.2  # Kafka
+
+# 对象存储 (可选)
+boto3==1.34.0  # AWS S3
+google-cloud-storage==2.10.0  # Google Cloud Storage
+
+# 其他工具
+python-multipart==0.0.6  # 文件上传支持
+email-validator==2.1.0  # 邮箱验证
+phonenumbers==8.13.26  # 电话号码验证

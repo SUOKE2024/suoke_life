@@ -15,6 +15,8 @@ from google.protobuf.json_format import MessageToDict
 from ..dialogue.dialogue_manager import DialogueManager
 from ..llm.symptom_extractor import SymptomExtractor
 from ..llm.tcm_pattern_mapper import TCMPatternMapper
+from ..llm.health_risk_assessor import HealthRiskAssessor
+from ..knowledge.tcm_knowledge_base import TCMKnowledgeBase
 
 # 导入生成的gRPC代码
 # 需要先生成proto文件的Python代码
@@ -33,6 +35,8 @@ class InquiryServiceServicer(pb2_grpc.InquiryServiceServicer):
         dialogue_manager: DialogueManager,
         symptom_extractor: SymptomExtractor,
         tcm_pattern_mapper: TCMPatternMapper,
+        health_risk_assessor: HealthRiskAssessor,
+        tcm_knowledge_base: TCMKnowledgeBase,
         config: Dict[str, Any]
     ):
         """
@@ -42,11 +46,15 @@ class InquiryServiceServicer(pb2_grpc.InquiryServiceServicer):
             dialogue_manager: 对话管理器
             symptom_extractor: 症状提取器
             tcm_pattern_mapper: TCM证型映射器
+            health_risk_assessor: 健康风险评估器
+            tcm_knowledge_base: 中医知识库
             config: 配置信息
         """
         self.dialogue_manager = dialogue_manager
         self.symptom_extractor = symptom_extractor
         self.tcm_pattern_mapper = tcm_pattern_mapper
+        self.health_risk_assessor = health_risk_assessor
+        self.tcm_knowledge_base = tcm_knowledge_base
         self.config = config
         
         logger.info("问诊服务实现初始化完成")
@@ -600,99 +608,64 @@ class InquiryServiceServicer(pb2_grpc.InquiryServiceServicer):
             medical_history = MessageToDict(request.medical_history)
             health_profile = MessageToDict(request.health_profile)
             
-            # 实现健康风险评估逻辑
-            # 此处为简化示例，实际应实现完整的风险评估逻辑
+            # 调用健康风险评估器
+            assessment_result = await self.health_risk_assessor.assess_health_risks(
+                user_id=user_id,
+                current_symptoms=current_symptoms,
+                medical_history=medical_history,
+                health_profile=health_profile
+            )
+            
+            # 构建响应
             response = pb2.HealthRiskResponse(
-                overall_risk_score=0.45
+                overall_risk_score=assessment_result.get('overall_risk_score', 0.0)
             )
             
             # 添加即时风险
-            immediate_risks = [
-                pb2.HealthRisk(
-                    risk_name="急性上呼吸道感染",
-                    probability=0.65,
-                    severity="moderate",
-                    timeframe="immediate"
-                ),
-                pb2.HealthRisk(
-                    risk_name="慢性疲劳加重",
-                    probability=0.75,
-                    severity="moderate",
-                    timeframe="within a week"
-                )
-            ]
-            
+            immediate_risks = assessment_result.get('immediate_risks', [])
             for risk in immediate_risks:
-                risk.contributing_factors.extend([
-                    "当前症状表现",
-                    "季节性因素",
-                    "免疫力状况"
-                ])
-                response.immediate_risks.append(risk)
+                health_risk = pb2.HealthRisk(
+                    risk_name=risk.get('risk_name', ''),
+                    probability=float(risk.get('probability', 0.0)),
+                    severity=risk.get('severity', 'low'),
+                    timeframe=risk.get('timeframe', 'unknown')
+                )
+                health_risk.contributing_factors.extend(risk.get('contributing_factors', []))
+                response.immediate_risks.append(health_risk)
                 
             # 添加长期风险
-            long_term_risks = [
-                pb2.HealthRisk(
-                    risk_name="脾胃功能紊乱",
-                    probability=0.55,
-                    severity="moderate",
-                    timeframe="within a year"
-                ),
-                pb2.HealthRisk(
-                    risk_name="气虚体质加重",
-                    probability=0.62,
-                    severity="low",
-                    timeframe="within 6 months"
-                )
-            ]
-            
+            long_term_risks = assessment_result.get('long_term_risks', [])
             for risk in long_term_risks:
-                risk.contributing_factors.extend([
-                    "饮食习惯",
-                    "生活方式",
-                    "病史情况",
-                    "体质因素"
-                ])
-                response.long_term_risks.append(risk)
+                health_risk = pb2.HealthRisk(
+                    risk_name=risk.get('risk_name', ''),
+                    probability=float(risk.get('probability', 0.0)),
+                    severity=risk.get('severity', 'low'),
+                    timeframe=risk.get('timeframe', 'unknown')
+                )
+                health_risk.contributing_factors.extend(risk.get('contributing_factors', []))
+                response.long_term_risks.append(health_risk)
                 
             # 添加预防策略
-            prevention_strategies = [
-                pb2.PreventionStrategy(
-                    strategy_name="调整作息",
-                    description="保持规律作息，确保充足睡眠",
-                    effectiveness_score=0.85
-                ),
-                pb2.PreventionStrategy(
-                    strategy_name="饮食调理",
-                    description="增加优质蛋白质摄入，减少油腻食物",
-                    effectiveness_score=0.78
-                ),
-                pb2.PreventionStrategy(
-                    strategy_name="适度运动",
-                    description="每周进行3-4次适度有氧运动",
-                    effectiveness_score=0.82
-                )
-            ]
-            
+            prevention_strategies = assessment_result.get('prevention_strategies', [])
             for strategy in prevention_strategies:
-                strategy.action_items.extend([
-                    "制定每日计划",
-                    "记录实施情况",
-                    "定期评估效果"
-                ])
-                strategy.targets.extend([
-                    "慢性疲劳",
-                    "气虚体质",
-                    "免疫力下降"
-                ])
-                response.prevention_strategies.append(strategy)
+                prevention_strategy = pb2.PreventionStrategy(
+                    strategy_name=strategy.get('strategy_name', ''),
+                    description=strategy.get('description', ''),
+                    effectiveness_score=float(strategy.get('effectiveness_score', 0.0))
+                )
+                prevention_strategy.action_items.extend(strategy.get('action_items', []))
+                prevention_strategy.targets.extend(strategy.get('targets', []))
+                response.prevention_strategies.append(prevention_strategy)
                 
-            logger.info(f"健康风险评估: user_id={user_id}, symptoms_count={len(current_symptoms)}")
+            logger.info(f"健康风险评估完成: user_id={user_id}, "
+                       f"即时风险={len(immediate_risks)}, "
+                       f"长期风险={len(long_term_risks)}, "
+                       f"预防策略={len(prevention_strategies)}")
             
             return response
             
         except Exception as e:
-            logger.error(f"健康风险评估失败: {str(e)}")
+            logger.error(f"健康风险评估失败: {str(e)}", exc_info=True)
             context.set_code(grpc.StatusCode.INTERNAL)
             context.set_details(f"健康风险评估失败: {str(e)}")
             return pb2.HealthRiskResponse() 

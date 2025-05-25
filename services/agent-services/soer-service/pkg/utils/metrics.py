@@ -1,88 +1,397 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-指标收集工具
-
-提供用于收集和导出服务指标的功能，支持Prometheus监控集成。
+指标收集器
+提供Prometheus指标收集和暴露功能
 """
 import os
 import time
 import threading
 import logging
-from typing import Dict, Any, Optional, Callable
-from prometheus_client import Counter, Histogram, Gauge, Summary, start_http_server
+from typing import Dict, Any, Optional, Callable, List
+from collections import defaultdict, Counter
+from threading import Lock
+import asyncio
+from prometheus_client import (
+    Counter as PrometheusCounter,
+    Histogram as PrometheusHistogram,
+    Gauge as PrometheusGauge,
+    Info as PrometheusInfo,
+    generate_latest,
+    CONTENT_TYPE_LATEST,
+    CollectorRegistry,
+    REGISTRY
+)
 from functools import wraps
+from pkg.utils.dependency_injection import ServiceLifecycle
 
 # 配置日志
 logger = logging.getLogger(__name__)
 
-# 全局指标注册表
-METRICS = {
-    # API指标
-    "api_requests_total": Counter(
-        "soer_api_requests_total", 
-        "API请求总数", 
-        ["method", "endpoint", "status"]
-    ),
-    "api_request_duration_seconds": Histogram(
-        "soer_api_request_duration_seconds", 
-        "API请求持续时间（秒）",
-        ["method", "endpoint"]
-    ),
-    
-    # 服务指标
-    "health_plan_generations_total": Counter(
-        "soer_health_plan_generations_total", 
-        "健康计划生成总数",
-        ["constitution_type", "status"]
-    ),
-    "emotional_analyses_total": Counter(
-        "soer_emotional_analyses_total", 
-        "情绪分析总数",
-        ["input_type", "status"]
-    ),
-    
-    # 性能指标
-    "function_execution_time_seconds": Histogram(
-        "soer_function_execution_time_seconds", 
-        "函数执行时间（秒）",
-        ["function_name", "module"]
-    ),
-    
-    # 资源指标
-    "active_connections": Gauge(
-        "soer_active_connections", 
-        "当前活动连接数",
-        ["connection_type"]
-    ),
-    "database_query_duration_seconds": Histogram(
-        "soer_database_query_duration_seconds", 
-        "数据库查询持续时间（秒）",
-        ["query_type", "database"]
-    ),
-    
-    # LLM调用指标
-    "llm_api_calls_total": Counter(
-        "soer_llm_api_calls_total", 
-        "LLM API调用总数",
-        ["model", "status"]
-    ),
-    "llm_api_duration_seconds": Histogram(
-        "soer_llm_api_duration_seconds", 
-        "LLM API调用持续时间（秒）",
-        ["model"]
-    ),
-    "llm_token_usage": Counter(
-        "soer_llm_token_usage", 
-        "LLM令牌使用量",
-        ["model", "token_type"]
-    )
-}
+# 全局指标收集器实例
+_metrics_collector: Optional[MetricsCollector] = None
 
-# HTTP服务器状态
-_http_server_started = False
-_http_server_lock = threading.Lock()
+class MetricsCollector(ServiceLifecycle):
+    """指标收集器"""
+    
+    def __init__(self, registry: Optional[CollectorRegistry] = None):
+        self.registry = registry or REGISTRY
+        self._lock = Lock()
+        
+        # 基础指标
+        self._counters: Dict[str, PrometheusCounter] = {}
+        self._histograms: Dict[str, PrometheusHistogram] = {}
+        self._gauges: Dict[str, PrometheusGauge] = {}
+        self._infos: Dict[str, PrometheusInfo] = {}
+        
+        # 内存中的指标缓存
+        self._counter_cache: Dict[str, float] = defaultdict(float)
+        self._histogram_cache: Dict[str, List[float]] = defaultdict(list)
+        self._gauge_cache: Dict[str, float] = {}
+        
+        # 初始化核心指标
+        self._init_core_metrics()
+    
+    def _init_core_metrics(self) -> None:
+        """初始化核心指标"""
+        # 请求相关指标
+        self.register_counter(
+            "soer_requests_total",
+            "总请求数",
+            ["user_id", "endpoint", "method"]
+        )
+        
+        self.register_counter(
+            "soer_requests_success",
+            "成功请求数",
+            ["user_id", "endpoint"]
+        )
+        
+        self.register_counter(
+            "soer_requests_error",
+            "错误请求数",
+            ["user_id", "endpoint", "error_type"]
+        )
+        
+        self.register_histogram(
+            "soer_request_duration_seconds",
+            "请求处理时间",
+            ["endpoint", "method", "status_code"],
+            buckets=[0.1, 0.5, 1.0, 2.0, 5.0, 10.0, 30.0]
+        )
+        
+        # 智能体相关指标
+        self.register_counter(
+            "soer_agent_conversations",
+            "智能体对话数",
+            ["user_id", "conversation_type"]
+        )
+        
+        self.register_histogram(
+            "soer_agent_response_time",
+            "智能体响应时间",
+            ["conversation_type"],
+            buckets=[0.5, 1.0, 2.0, 5.0, 10.0, 20.0, 60.0]
+        )
+        
+        # 缓存相关指标
+        self.register_counter(
+            "soer_cache_hits",
+            "缓存命中数",
+            ["cache_type", "endpoint"]
+        )
+        
+        self.register_counter(
+            "soer_cache_misses",
+            "缓存未命中数",
+            ["cache_type", "endpoint"]
+        )
+        
+        # 数据库相关指标
+        self.register_counter(
+            "soer_db_queries",
+            "数据库查询数",
+            ["operation", "table"]
+        )
+        
+        self.register_histogram(
+            "soer_db_query_duration",
+            "数据库查询时间",
+            ["operation", "table"],
+            buckets=[0.01, 0.05, 0.1, 0.5, 1.0, 2.0, 5.0]
+        )
+        
+        # 系统资源指标
+        self.register_gauge(
+            "soer_active_sessions",
+            "活跃会话数"
+        )
+        
+        self.register_gauge(
+            "soer_memory_usage_bytes",
+            "内存使用量（字节）"
+        )
+        
+        self.register_gauge(
+            "soer_cpu_usage_percent",
+            "CPU使用率（百分比）"
+        )
+        
+        # 错误相关指标
+        self.register_counter(
+            "soer_errors_total",
+            "错误总数",
+            ["error_type", "severity", "component"]
+        )
+        
+        # 限流相关指标
+        self.register_counter(
+            "soer_rate_limit_exceeded",
+            "限流触发次数",
+            ["client_type", "endpoint"]
+        )
+        
+        # 认证相关指标
+        self.register_counter(
+            "soer_auth_attempts",
+            "认证尝试次数",
+            ["result", "method"]
+        )
+    
+    async def start(self) -> None:
+        """启动指标收集器"""
+        logger.info("指标收集器启动成功")
+    
+    async def stop(self) -> None:
+        """停止指标收集器"""
+        logger.info("指标收集器已停止")
+    
+    async def health_check(self) -> bool:
+        """健康检查"""
+        return True
+    
+    def register_counter(
+        self, 
+        name: str, 
+        description: str, 
+        labels: Optional[List[str]] = None
+    ) -> PrometheusCounter:
+        """注册计数器指标"""
+        with self._lock:
+            if name not in self._counters:
+                self._counters[name] = PrometheusCounter(
+                    name, description, labels or [], registry=self.registry
+                )
+            return self._counters[name]
+    
+    def register_histogram(
+        self, 
+        name: str, 
+        description: str, 
+        labels: Optional[List[str]] = None,
+        buckets: Optional[List[float]] = None
+    ) -> PrometheusHistogram:
+        """注册直方图指标"""
+        with self._lock:
+            if name not in self._histograms:
+                self._histograms[name] = PrometheusHistogram(
+                    name, description, labels or [], 
+                    buckets=buckets, registry=self.registry
+                )
+            return self._histograms[name]
+    
+    def register_gauge(
+        self, 
+        name: str, 
+        description: str, 
+        labels: Optional[List[str]] = None
+    ) -> PrometheusGauge:
+        """注册仪表盘指标"""
+        with self._lock:
+            if name not in self._gauges:
+                self._gauges[name] = PrometheusGauge(
+                    name, description, labels or [], registry=self.registry
+                )
+            return self._gauges[name]
+    
+    def register_info(
+        self, 
+        name: str, 
+        description: str
+    ) -> PrometheusInfo:
+        """注册信息指标"""
+        with self._lock:
+            if name not in self._infos:
+                self._infos[name] = PrometheusInfo(
+                    name, description, registry=self.registry
+                )
+            return self._infos[name]
+    
+    def increment_counter(
+        self, 
+        name: str, 
+        labels: Optional[Dict[str, str]] = None, 
+        value: float = 1.0
+    ) -> None:
+        """增加计数器"""
+        try:
+            if name in self._counters:
+                if labels:
+                    self._counters[name].labels(**labels).inc(value)
+                else:
+                    self._counters[name].inc(value)
+            else:
+                logger.warning(f"计数器指标未注册: {name}")
+        except Exception as e:
+            logger.error(f"增加计数器失败: {e}")
+    
+    def observe_histogram(
+        self, 
+        name: str, 
+        value: float, 
+        labels: Optional[Dict[str, str]] = None
+    ) -> None:
+        """观察直方图值"""
+        try:
+            if name in self._histograms:
+                if labels:
+                    self._histograms[name].labels(**labels).observe(value)
+                else:
+                    self._histograms[name].observe(value)
+            else:
+                logger.warning(f"直方图指标未注册: {name}")
+        except Exception as e:
+            logger.error(f"观察直方图失败: {e}")
+    
+    def set_gauge(
+        self, 
+        name: str, 
+        value: float, 
+        labels: Optional[Dict[str, str]] = None
+    ) -> None:
+        """设置仪表盘值"""
+        try:
+            if name in self._gauges:
+                if labels:
+                    self._gauges[name].labels(**labels).set(value)
+                else:
+                    self._gauges[name].set(value)
+            else:
+                logger.warning(f"仪表盘指标未注册: {name}")
+        except Exception as e:
+            logger.error(f"设置仪表盘失败: {e}")
+    
+    def inc_gauge(
+        self, 
+        name: str, 
+        value: float = 1.0, 
+        labels: Optional[Dict[str, str]] = None
+    ) -> None:
+        """增加仪表盘值"""
+        try:
+            if name in self._gauges:
+                if labels:
+                    self._gauges[name].labels(**labels).inc(value)
+                else:
+                    self._gauges[name].inc(value)
+            else:
+                logger.warning(f"仪表盘指标未注册: {name}")
+        except Exception as e:
+            logger.error(f"增加仪表盘失败: {e}")
+    
+    def dec_gauge(
+        self, 
+        name: str, 
+        value: float = 1.0, 
+        labels: Optional[Dict[str, str]] = None
+    ) -> None:
+        """减少仪表盘值"""
+        try:
+            if name in self._gauges:
+                if labels:
+                    self._gauges[name].labels(**labels).dec(value)
+                else:
+                    self._gauges[name].dec(value)
+            else:
+                logger.warning(f"仪表盘指标未注册: {name}")
+        except Exception as e:
+            logger.error(f"减少仪表盘失败: {e}")
+    
+    def set_info(
+        self, 
+        name: str, 
+        info: Dict[str, str]
+    ) -> None:
+        """设置信息指标"""
+        try:
+            if name in self._infos:
+                self._infos[name].info(info)
+            else:
+                logger.warning(f"信息指标未注册: {name}")
+        except Exception as e:
+            logger.error(f"设置信息指标失败: {e}")
+    
+    # 便捷方法
+    def histogram(
+        self, 
+        name: str, 
+        value: float, 
+        labels: Optional[Dict[str, str]] = None
+    ) -> None:
+        """直方图观察的便捷方法"""
+        self.observe_histogram(name, value, labels)
+    
+    def timer(self, name: str, labels: Optional[Dict[str, str]] = None):
+        """计时器上下文管理器"""
+        return TimerContext(self, name, labels)
+    
+    def get_metrics(self) -> str:
+        """获取Prometheus格式的指标"""
+        return generate_latest(self.registry).decode('utf-8')
+    
+    def get_content_type(self) -> str:
+        """获取指标内容类型"""
+        return CONTENT_TYPE_LATEST
+    
+    def get_stats(self) -> Dict[str, Any]:
+        """获取指标统计信息"""
+        return {
+            "counters": len(self._counters),
+            "histograms": len(self._histograms),
+            "gauges": len(self._gauges),
+            "infos": len(self._infos),
+            "registry_collectors": len(list(self.registry._collector_to_names.keys()))
+        }
 
+class TimerContext:
+    """计时器上下文管理器"""
+    
+    def __init__(self, metrics: MetricsCollector, name: str, labels: Optional[Dict[str, str]] = None):
+        self.metrics = metrics
+        self.name = name
+        self.labels = labels
+        self.start_time = None
+    
+    def __enter__(self):
+        self.start_time = time.time()
+        return self
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self.start_time:
+            duration = time.time() - self.start_time
+            self.metrics.observe_histogram(self.name, duration, self.labels)
+
+def get_metrics_collector() -> MetricsCollector:
+    """获取全局指标收集器"""
+    global _metrics_collector
+    if _metrics_collector is None:
+        _metrics_collector = MetricsCollector()
+    return _metrics_collector
+
+def setup_metrics_collector(collector: MetricsCollector) -> None:
+    """设置全局指标收集器"""
+    global _metrics_collector
+    _metrics_collector = collector
 
 def initialize_metrics(config: Dict[str, Any]):
     """

@@ -1,0 +1,27 @@
+node_modules/
+android/
+ios/
+.expo/
+dist/
+build/
+coverage/
+*.log
+.DS_Store
+metro.config.js
+babel.config.js
+jest.config.js
+
+# 服务端代码
+services/
+
+# 脚本文件
+scripts/
+
+# 测试覆盖率文件
+htmlcov/
+*.coverage
+
+# Python虚拟环境
+venv/
+__pycache__/
+*.pyc 

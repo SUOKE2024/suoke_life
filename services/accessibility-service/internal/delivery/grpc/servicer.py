@@ -9,7 +9,7 @@ import grpc
 
 from api.grpc import accessibility_pb2 as pb2
 from api.grpc import accessibility_pb2_grpc as pb2_grpc
-from internal.service.accessibility_service import AccessibilityService
+from internal.service.optimized_accessibility_service import OptimizedAccessibilityService
 from internal.delivery.grpc.translation_handler import TranslationHandler
 
 logger = logging.getLogger(__name__)
@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 class AccessibilityServicer(pb2_grpc.AccessibilityServiceServicer):
     """无障碍服务gRPC接口实现"""
 
-    def __init__(self, service: AccessibilityService):
+    def __init__(self, service: OptimizedAccessibilityService):
         """初始化服务实现
 
         Args:
@@ -56,7 +56,7 @@ class AccessibilityServicer(pb2_grpc.AccessibilityServiceServicer):
         return await self.translation_handler.get_supported_languages(request, context)
 
 
-def register_servicer(server: grpc.aio.Server, service: AccessibilityService, config: Dict[str, Any]) -> AccessibilityServicer:
+def register_servicer(server: grpc.aio.Server, service: OptimizedAccessibilityService, config: Dict[str, Any]) -> AccessibilityServicer:
     """注册服务到gRPC服务器
 
     Args:

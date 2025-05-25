@@ -17,6 +17,8 @@ from ..generator.local_generator import LocalGenerator
 from ..repository.milvus_repository import MilvusRepository
 from .embedding_service import EmbeddingService
 from .cache_service import CacheService
+from .kg_integration_service import KnowledgeGraphIntegrationService
+from ..retriever.kg_enhanced_retriever import KGEnhancedRetriever
 
 
 class RagService:
@@ -39,9 +41,13 @@ class RagService:
         self.retriever = None
         self.generator = None
         self.cache_service = None
+        self.kg_integration_service = None
         
         # 服务状态
         self.is_initialized = False
+        
+        # 检查是否启用知识图谱增强
+        self.kg_enhanced = config.get('knowledge_graph', {}).get('enabled', False)
     
     async def initialize(self) -> None:
         """初始化所有组件"""
@@ -58,8 +64,12 @@ class RagService:
         self.embedding_service = EmbeddingService(self.config)
         await self.embedding_service.initialize()
         
-        # 初始化检索器
-        self.retriever = HybridRetriever(self.config, self.milvus_repository)
+        # 初始化检索器（根据配置选择是否使用知识图谱增强）
+        if self.kg_enhanced:
+            logger.info("Using Knowledge Graph Enhanced Retriever")
+            self.retriever = KGEnhancedRetriever(self.config, self.milvus_repository)
+        else:
+            self.retriever = HybridRetriever(self.config, self.milvus_repository)
         await self.retriever.initialize()
         
         # 初始化生成器 (基于配置选择本地或远程模型)
@@ -72,6 +82,11 @@ class RagService:
         # 初始化缓存服务
         self.cache_service = CacheService(self.config['cache'])
         await self.cache_service.initialize()
+        
+        # 如果启用知识图谱，初始化知识图谱集成服务
+        if self.kg_enhanced:
+            self.kg_integration_service = KnowledgeGraphIntegrationService(self.config)
+            await self.kg_integration_service.initialize()
         
         self.is_initialized = True
         logger.info("RAG service initialized successfully")
@@ -480,3 +495,56 @@ class RagService:
         
         self.is_initialized = False
         logger.info("RAG service closed")
+    
+    async def sync_knowledge_graph(self) -> Dict[str, int]:
+        """
+        同步知识图谱数据到向量数据库
+        
+        Returns:
+            同步结果统计
+        """
+        if not self.kg_integration_service:
+            raise ValueError("Knowledge graph integration is not enabled")
+        
+        logger.info("Starting knowledge graph synchronization")
+        
+        # 同步所有知识图谱数据
+        sync_results = await self.kg_integration_service.sync_all_knowledge()
+        
+        # 获取所有文档类型的同步结果
+        all_documents = []
+        
+        # 同步体质数据
+        if sync_results["constitutions"] > 0:
+            constitution_docs = await self.kg_integration_service.sync_constitutions()
+            all_documents.extend(constitution_docs)
+        
+        # 同步证型数据
+        if sync_results["syndromes"] > 0:
+            syndrome_docs = await self.kg_integration_service.sync_syndromes()
+            all_documents.extend(syndrome_docs)
+        
+        # 同步中药数据
+        if sync_results["herbs"] > 0:
+            herb_docs = await self.kg_integration_service.sync_herbs()
+            all_documents.extend(herb_docs)
+        
+        # 同步穴位数据
+        if sync_results["acupoints"] > 0:
+            acupoint_docs = await self.kg_integration_service.sync_acupoints()
+            all_documents.extend(acupoint_docs)
+        
+        # 生成嵌入向量
+        if all_documents:
+            logger.info(f"Generating embeddings for {len(all_documents)} documents")
+            documents_with_vectors = await self.embedding_service.embed_documents(all_documents)
+            
+            # 添加到向量数据库
+            success = await self.milvus_repository.add_documents(documents_with_vectors)
+            
+            if success:
+                logger.info(f"Successfully synced {len(documents_with_vectors)} documents to vector database")
+            else:
+                logger.error("Failed to sync documents to vector database")
+        
+        return sync_results

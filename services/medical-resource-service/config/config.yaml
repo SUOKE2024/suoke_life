@@ -1,0 +1,202 @@
+# 医疗资源微服务配置文件
+service:
+  name: medical-resource-service
+  version: 1.0.0
+  description: "索克生活医疗资源微服务，由小克智能体管理协调"
+  
+server:
+  host: ${SERVER_HOST:-0.0.0.0}
+  port: ${SERVER_PORT:-9084}
+  workers: ${SERVER_WORKERS:-4}
+  
+grpc:
+  host: ${GRPC_HOST:-0.0.0.0}
+  port: ${GRPC_PORT:-50084}
+  max_workers: ${GRPC_MAX_WORKERS:-10}
+
+# 小克智能体配置
+xiaoke_agent:
+  model_path: ${XIAOKE_MODEL_PATH:-/models/xiaoke_v1.0}
+  learning_rate: ${XIAOKE_LEARNING_RATE:-0.001}
+  decision_threshold: ${XIAOKE_DECISION_THRESHOLD:-0.8}
+  max_recommendations: ${XIAOKE_MAX_RECOMMENDATIONS:-10}
+  constitution_types:
+    - 平和质
+    - 气虚质
+    - 阳虚质
+    - 阴虚质
+    - 痰湿质
+    - 湿热质
+    - 血瘀质
+    - 气郁质
+    - 特禀质
+
+# 数据库配置
+database:
+  postgres:
+    host: ${POSTGRES_HOST:-localhost}
+    port: ${POSTGRES_PORT:-5432}
+    database: ${POSTGRES_DB:-medical_resources}
+    username: ${POSTGRES_USER:-postgres}
+    password: ${POSTGRES_PASSWORD:-password}
+    pool_size: ${POSTGRES_POOL_SIZE:-20}
+    max_overflow: ${POSTGRES_MAX_OVERFLOW:-30}
+    pool_timeout: ${POSTGRES_POOL_TIMEOUT:-30}
+    
+  redis:
+    host: ${REDIS_HOST:-localhost}
+    port: ${REDIS_PORT:-6379}
+    database: ${REDIS_DB:-0}
+    password: ${REDIS_PASSWORD:-}
+    max_connections: ${REDIS_MAX_CONNECTIONS:-20}
+    
+  mongodb:
+    host: ${MONGODB_HOST:-localhost}
+    port: ${MONGODB_PORT:-27017}
+    database: ${MONGODB_DB:-medical_analytics}
+    username: ${MONGODB_USER:-}
+    password: ${MONGODB_PASSWORD:-}
+
+# 资源管理配置
+resource_management:
+  # 医生资源
+  doctors:
+    max_daily_appointments: 20
+    appointment_duration_minutes: 30
+    advance_booking_days: 30
+    
+  # 医疗机构
+  facilities:
+    operating_hours:
+      start: "08:00"
+      end: "18:00"
+    weekend_available: true
+    
+  # 设备资源
+  equipment:
+    maintenance_interval_days: 30
+    max_concurrent_usage: 5
+    
+  # 药材资源
+  medicines:
+    stock_alert_threshold: 100
+    expiry_alert_days: 30
+
+# 调度引擎配置
+scheduling:
+  algorithm: "weighted_round_robin"
+  load_balancing:
+    enabled: true
+    strategy: "least_connections"
+  optimization:
+    enabled: true
+    interval_minutes: 15
+    
+# 推荐系统配置
+recommendation:
+  similarity_threshold: 0.7
+  max_results: 10
+  cache_ttl_seconds: 3600
+  model_update_interval_hours: 24
+
+# 外部服务集成
+external_services:
+  # 支付服务
+  payment_service:
+    url: ${PAYMENT_SERVICE_URL:-http://localhost:9080}
+    timeout_seconds: 30
+    
+  # 通知服务
+  notification_service:
+    url: ${NOTIFICATION_SERVICE_URL:-http://localhost:9081}
+    timeout_seconds: 10
+    
+  # 用户服务
+  user_service:
+    url: ${USER_SERVICE_URL:-http://localhost:9082}
+    timeout_seconds: 15
+    
+  # HIS系统集成
+  his_systems:
+    - name: "hospital_a"
+      endpoint: ${HOSPITAL_A_HIS_URL:-}
+      auth_token: ${HOSPITAL_A_TOKEN:-}
+      timeout_seconds: 30
+    - name: "hospital_b"
+      endpoint: ${HOSPITAL_B_HIS_URL:-}
+      auth_token: ${HOSPITAL_B_TOKEN:-}
+      timeout_seconds: 30
+
+# 监控和日志配置
+monitoring:
+  metrics:
+    enabled: true
+    port: ${METRICS_PORT:-9090}
+    path: "/metrics"
+    
+  health_check:
+    enabled: true
+    path: "/health"
+    
+  tracing:
+    enabled: ${TRACING_ENABLED:-false}
+    jaeger_endpoint: ${JAEGER_ENDPOINT:-http://localhost:14268/api/traces}
+
+logging:
+  level: ${LOG_LEVEL:-INFO}
+  format: "json"
+  file_path: ${LOG_FILE_PATH:-/var/log/medical-resource-service.log}
+  max_file_size_mb: 100
+  backup_count: 5
+
+# 安全配置
+security:
+  jwt:
+    secret_key: ${JWT_SECRET_KEY:-your-secret-key}
+    algorithm: "HS256"
+    access_token_expire_minutes: 30
+    
+  cors:
+    allow_origins: ${CORS_ALLOW_ORIGINS:-["*"]}
+    allow_methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+    allow_headers: ["*"]
+    
+  rate_limiting:
+    enabled: true
+    requests_per_minute: 100
+
+# 缓存配置
+cache:
+  default_ttl_seconds: 3600
+  resource_cache_ttl_seconds: 1800
+  appointment_cache_ttl_seconds: 900
+  recommendation_cache_ttl_seconds: 7200
+
+# 任务队列配置
+celery:
+  broker_url: ${CELERY_BROKER_URL:-redis://localhost:6379/1}
+  result_backend: ${CELERY_RESULT_BACKEND:-redis://localhost:6379/2}
+  task_serializer: "json"
+  accept_content: ["json"]
+  result_serializer: "json"
+  timezone: "Asia/Shanghai"
+  
+# 业务规则配置
+business_rules:
+  # 预约规则
+  appointment:
+    min_advance_hours: 2
+    max_advance_days: 30
+    cancellation_deadline_hours: 24
+    
+  # 资源分配规则
+  allocation:
+    priority_weights:
+      urgency: 0.4
+      user_level: 0.3
+      resource_availability: 0.3
+      
+  # 质量评估规则
+  quality:
+    min_rating_threshold: 3.0
+    review_required_threshold: 2.5 

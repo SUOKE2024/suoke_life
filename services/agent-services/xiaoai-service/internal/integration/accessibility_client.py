@@ -3,12 +3,13 @@
 
 """
 小艾(xiaoai)智能体的无障碍服务客户端适配器
+支持多模态输入处理和四诊协调中的无障碍功能
 """
 
 import logging
-import json
+import asyncio
 import time
-from typing import Dict, Any, Optional, List
+from typing import Dict, Any, Optional, List, Union
 
 import grpc
 from google.protobuf.json_format import MessageToDict, ParseDict
@@ -26,467 +27,487 @@ from config.config import Config
 logger = logging.getLogger(__name__)
 
 class AccessibilityClient:
-    """无障碍服务客户端适配器，处理与无障碍服务的通信"""
+    """无障碍服务客户端适配器，为小艾智能体提供无障碍能力"""
     
-    def __init__(self, config: Optional[Config] = None):
+    def __init__(self, config: Optional[Dict[str, Any]] = None):
         """
         初始化客户端
         
         Args:
-            config: 配置对象，如果为None则使用默认配置
+            config: 配置字典，包含无障碍服务的连接信息
         """
-        self.config = config or Config()
+        self.config = config or {}
         self.channel = None
         self.stub = None
         self._connect()
-        logger.info("无障碍服务客户端初始化完成")
+        logger.info("小艾智能体无障碍服务客户端初始化完成")
     
-    def _connect(self) -> None:
+    def _connect(self):
         """连接到无障碍服务"""
         try:
-            # 获取服务地址
-            host = self.config.get("integration.accessibility_service.host", "accessibility-service")
-            port = self.config.get("integration.accessibility_service.port", 50051)
-            timeout_ms = self.config.get("integration.accessibility_service.timeout_ms", 5000)
+            # 从配置获取服务地址
+            host = self.config.get('accessibility_service', {}).get('host', 'accessibility-service')
+            port = self.config.get('accessibility_service', {}).get('port', 50051)
             
-            # 创建通道
-            self.channel = grpc.insecure_channel(
-                f"{host}:{port}",
-                options=[
-                    ('grpc.max_send_message_length', 50 * 1024 * 1024),
-                    ('grpc.max_receive_message_length', 50 * 1024 * 1024),
-                    ('grpc.enable_retries', 1),
-                    ('grpc.service_config', json.dumps({
-                        'methodConfig': [{
-                            'name': [{}],
-                            'retryPolicy': {
-                                'maxAttempts': 3,
-                                'initialBackoff': '0.1s',
-                                'maxBackoff': '1s',
-                                'backoffMultiplier': 2,
-                                'retryableStatusCodes': ['UNAVAILABLE']
-                            },
-                            'timeout': f'{timeout_ms}ms'
-                        }]
-                    }))
-                ]
-            )
+            # 创建gRPC通道
+            self.channel = grpc.insecure_channel(f'{host}:{port}')
             
-            # 创建stub
-            # 实际项目中应该创建实际的stub
+            # 导入生成的proto文件（实际项目中需要正确的导入路径）
+            # from accessibility_service.api.grpc import accessibility_pb2_grpc as pb2_grpc
             # self.stub = pb2_grpc.AccessibilityServiceStub(self.channel)
-            # 这里为简化，不创建实际的stub
             
-            logger.info(f"成功连接到无障碍服务: {host}:{port}")
+            # 模拟stub（实际项目中替换为真实的stub）
+            self.stub = MockAccessibilityStub()
             
-        except Exception as e:
-            logger.error(f"连接无障碍服务失败: {str(e)}", exc_info=True)
-            self.channel = None
-    
-    def blind_assistance(self, image_data: bytes, user_id: str, 
-                         preferences: Dict[str, Any], location: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        导盲服务 - 分析图像并提供场景描述和障碍物检测
-        
-        Args:
-            image_data: 场景图像数据
-            user_id: 用户ID
-            preferences: 用户偏好设置
-            location: 地理位置信息
-            
-        Returns:
-            包含场景描述、障碍物信息和导航建议的字典
-        """
-        logger.info(f"发送导盲服务请求: 用户={user_id}")
-        start_time = time.time()
-        
-        try:
-            if not self.channel:
-                self._connect()
-                if not self.channel:
-                    raise Exception("无法连接到无障碍服务")
-            
-            # 实际项目中应该构建请求并调用stub
-            # user_preferences = pb2.UserPreferences(**preferences)
-            # geo_location = pb2.GeoLocation(**location)
-            # request = pb2.BlindAssistanceRequest(
-            #     image_data=image_data,
-            #     user_id=user_id,
-            #     preferences=user_preferences,
-            #     location=geo_location
-            # )
-            # response = self.stub.BlindAssistance(request)
-            # return MessageToDict(response, preserving_proto_field_name=True)
-            
-            # 模拟服务调用结果
-            time.sleep(0.1)  # 模拟网络延迟
-            result = {
-                "scene_description": "前方是一条人行道，左侧有一棵树，右侧是商店入口",
-                "obstacles": [
-                    {"type": "person", "distance": 2.5, "direction": "front", "confidence": 0.92},
-                    {"type": "bench", "distance": 1.8, "direction": "left", "confidence": 0.85},
-                ],
-                "navigation_guidance": "可以继续直行，但注意前方2.5米处有行人",
-                "confidence": 0.89,
-                "audio_guidance": b""  # 实际应该返回音频数据
-            }
-            
-            logger.info(f"导盲服务请求完成: 用户={user_id}, 耗时={time.time() - start_time:.2f}秒")
-            return result
+            logger.info(f"已连接到无障碍服务: {host}:{port}")
             
         except Exception as e:
-            logger.error(f"导盲服务请求失败: {str(e)}", exc_info=True)
-            return {
-                "error": str(e),
-                "scene_description": "无法获取场景描述",
-                "obstacles": [],
-                "navigation_guidance": "服务暂时不可用，请稍后重试",
-                "confidence": 0.0,
-                "audio_guidance": b""
-            }
+            logger.error(f"连接无障碍服务失败: {e}")
+            self.stub = MockAccessibilityStub()  # 使用模拟客户端作为降级
     
-    def sign_language_recognition(self, video_data: bytes, user_id: str, 
-                                 language: str) -> Dict[str, Any]:
+    async def process_voice_input(self, audio_data: bytes, user_id: str, 
+                                context: str = "diagnosis", language: str = "zh-CN",
+                                dialect: str = "standard") -> Dict[str, Any]:
         """
-        手语识别服务 - 将手语视频转换为文本
+        处理语音输入，支持语音识别和语音辅助
         
         Args:
-            video_data: 手语视频数据
-            user_id: 用户ID
-            language: 语言代码
-            
-        Returns:
-            包含识别文本和置信度的字典
-        """
-        logger.info(f"发送手语识别请求: 用户={user_id}, 语言={language}")
-        start_time = time.time()
-        
-        try:
-            if not self.channel:
-                self._connect()
-                if not self.channel:
-                    raise Exception("无法连接到无障碍服务")
-            
-            # 实际项目中应该构建请求并调用stub
-            # request = pb2.SignLanguageRequest(
-            #     video_data=video_data,
-            #     user_id=user_id,
-            #     language=language
-            # )
-            # response = self.stub.SignLanguageRecognition(request)
-            # return MessageToDict(response, preserving_proto_field_name=True)
-            
-            # 模拟服务调用结果
-            time.sleep(0.2)  # 模拟网络延迟
-            result = {
-                "text": "您好，我需要帮助",
-                "confidence": 0.82,
-                "segments": [
-                    {"text": "您好", "start_time_ms": 0, "end_time_ms": 1200, "confidence": 0.90},
-                    {"text": "我需要帮助", "start_time_ms": 1500, "end_time_ms": 3000, "confidence": 0.78}
-                ]
-            }
-            
-            logger.info(f"手语识别请求完成: 用户={user_id}, 耗时={time.time() - start_time:.2f}秒")
-            return result
-            
-        except Exception as e:
-            logger.error(f"手语识别请求失败: {str(e)}", exc_info=True)
-            return {
-                "error": str(e),
-                "text": "",
-                "confidence": 0.0,
-                "segments": []
-            }
-    
-    def screen_reading(self, screen_data: bytes, user_id: str, 
-                      context: str, preferences: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        屏幕阅读服务 - 分析屏幕内容并提供语音描述
-        
-        Args:
-            screen_data: 屏幕截图数据
-            user_id: 用户ID
-            context: 上下文信息
-            preferences: 用户偏好设置
-            
-        Returns:
-            包含屏幕描述和UI元素的字典
-        """
-        logger.info(f"发送屏幕阅读请求: 用户={user_id}")
-        start_time = time.time()
-        
-        try:
-            if not self.channel:
-                self._connect()
-                if not self.channel:
-                    raise Exception("无法连接到无障碍服务")
-            
-            # 实际项目中应该构建请求并调用stub
-            # user_preferences = pb2.UserPreferences(**preferences)
-            # request = pb2.ScreenReadingRequest(
-            #     screen_data=screen_data,
-            #     user_id=user_id,
-            #     context=context,
-            #     preferences=user_preferences
-            # )
-            # response = self.stub.ScreenReading(request)
-            # return MessageToDict(response, preserving_proto_field_name=True)
-            
-            # 模拟服务调用结果
-            time.sleep(0.15)  # 模拟网络延迟
-            result = {
-                "screen_description": "当前页面显示了3个元素，包含1个可操作按钮：开始体质测评。",
-                "elements": [
-                    {
-                        "element_type": "button", 
-                        "content": "开始体质测评",
-                        "action": "点击开始测评流程",
-                        "location": {"x": 0.5, "y": 0.3, "width": 0.4, "height": 0.08}
-                    },
-                    {
-                        "element_type": "text", 
-                        "content": "了解您的中医体质",
-                        "action": "静态文本",
-                        "location": {"x": 0.5, "y": 0.2, "width": 0.6, "height": 0.05}
-                    },
-                    {
-                        "element_type": "image", 
-                        "content": "体质类型图谱",
-                        "action": "显示体质介绍",
-                        "location": {"x": 0.5, "y": 0.5, "width": 0.7, "height": 0.3}
-                    }
-                ],
-                "audio_description": b""  # 实际应该返回音频数据
-            }
-            
-            logger.info(f"屏幕阅读请求完成: 用户={user_id}, 耗时={time.time() - start_time:.2f}秒")
-            return result
-            
-        except Exception as e:
-            logger.error(f"屏幕阅读请求失败: {str(e)}", exc_info=True)
-            return {
-                "error": str(e),
-                "screen_description": "无法解析屏幕内容",
-                "elements": [],
-                "audio_description": b""
-            }
-    
-    def voice_assistance(self, audio_data: bytes, user_id: str, context: str, 
-                        language: str, dialect: str) -> Dict[str, Any]:
-        """
-        语音辅助服务 - 进行语音识别和响应
-        
-        Args:
-            audio_data: 语音数据
+            audio_data: 音频数据
             user_id: 用户ID
             context: 上下文信息
             language: 语言代码
             dialect: 方言代码
             
         Returns:
-            包含识别文本和响应的字典
+            处理结果字典
         """
-        logger.info(f"发送语音辅助请求: 用户={user_id}, 语言={language}, 方言={dialect}")
-        start_time = time.time()
-        
         try:
-            if not self.channel:
-                self._connect()
-                if not self.channel:
-                    raise Exception("无法连接到无障碍服务")
+            logger.info(f"处理语音输入: 用户={user_id}, 上下文={context}")
             
-            # 实际项目中应该构建请求并调用stub
-            # request = pb2.VoiceAssistanceRequest(
-            #     audio_data=audio_data,
-            #     user_id=user_id,
-            #     context=context,
-            #     language=language,
-            #     dialect=dialect
-            # )
-            # response = self.stub.VoiceAssistance(request)
-            # return MessageToDict(response, preserving_proto_field_name=True)
-            
-            # 模拟服务调用结果
-            time.sleep(0.12)  # 模拟网络延迟
-            result = {
-                "recognized_text": "我想了解痰湿体质的特点",
-                "response_text": "痰湿体质的主要特点是体形肥胖，腹部松软，容易疲劳，痰多，舌苔厚腻。建议饮食清淡，少食多餐，多运动以促进代谢。",
-                "response_audio": b"",  # 实际应该返回音频数据
-                "confidence": 0.88
+            # 构建请求（实际项目中使用真实的proto消息）
+            request = {
+                'audio_data': audio_data,
+                'user_id': user_id,
+                'context': context,
+                'language': language,
+                'dialect': dialect
             }
             
-            logger.info(f"语音辅助请求完成: 用户={user_id}, 耗时={time.time() - start_time:.2f}秒")
-            return result
+            # 调用无障碍服务的语音辅助接口
+            response = await self._call_voice_assistance(request)
+            
+            return {
+                'recognized_text': response.get('recognized_text', ''),
+                'response_text': response.get('response_text', ''),
+                'response_audio': response.get('response_audio', b''),
+                'confidence': response.get('confidence', 0.0),
+                'success': True
+            }
             
         except Exception as e:
-            logger.error(f"语音辅助请求失败: {str(e)}", exc_info=True)
+            logger.error(f"语音输入处理失败: {e}")
             return {
-                "error": str(e),
-                "recognized_text": "",
-                "response_text": "抱歉，我无法处理您的语音请求",
-                "response_audio": b"",
-                "confidence": 0.0
+                'recognized_text': '',
+                'response_text': f'语音处理失败: {str(e)}',
+                'response_audio': b'',
+                'confidence': 0.0,
+                'success': False,
+                'error': str(e)
             }
     
-    def accessible_content(self, content_id: str, content_type: str, user_id: str, 
-                          target_format: str, preferences: Dict[str, Any]) -> Dict[str, Any]:
+    async def process_image_input(self, image_data: bytes, user_id: str,
+                                image_type: str = "tongue", context: str = "looking_diagnosis") -> Dict[str, Any]:
         """
-        健康内容无障碍转换 - 将健康内容转换为无障碍格式
+        处理图像输入，支持图像识别和描述
         
         Args:
-            content_id: 内容ID
+            image_data: 图像数据
+            user_id: 用户ID
+            image_type: 图像类型（舌象、面色等）
+            context: 上下文信息
+            
+        Returns:
+            处理结果字典
+        """
+        try:
+            logger.info(f"处理图像输入: 用户={user_id}, 类型={image_type}")
+            
+            # 构建请求
+            request = {
+                'image_data': image_data,
+                'user_id': user_id,
+                'preferences': {
+                    'language': 'zh-CN',
+                    'detail_level': 'high',
+                    'medical_context': True
+                },
+                'location': {
+                    'location_context': context
+                }
+            }
+            
+            # 调用无障碍服务的导盲辅助接口（用于图像识别）
+            response = await self._call_blind_assistance(request)
+            
+            return {
+                'scene_description': response.get('scene_description', ''),
+                'medical_features': self._extract_medical_features(response),
+                'navigation_guidance': response.get('navigation_guidance', ''),
+                'confidence': response.get('confidence', 0.0),
+                'audio_guidance': response.get('audio_guidance', b''),
+                'success': True
+            }
+            
+        except Exception as e:
+            logger.error(f"图像输入处理失败: {e}")
+            return {
+                'scene_description': f'图像处理失败: {str(e)}',
+                'medical_features': [],
+                'navigation_guidance': '',
+                'confidence': 0.0,
+                'audio_guidance': b'',
+                'success': False,
+                'error': str(e)
+            }
+    
+    async def process_sign_language_input(self, video_data: bytes, user_id: str,
+                                        language: str = "csl") -> Dict[str, Any]:
+        """
+        处理手语输入，支持手语识别
+        
+        Args:
+            video_data: 视频数据
+            user_id: 用户ID
+            language: 手语语言代码
+            
+        Returns:
+            处理结果字典
+        """
+        try:
+            logger.info(f"处理手语输入: 用户={user_id}, 语言={language}")
+            
+            # 构建请求
+            request = {
+                'video_data': video_data,
+                'user_id': user_id,
+                'language': language
+            }
+            
+            # 调用无障碍服务的手语识别接口
+            response = await self._call_sign_language_recognition(request)
+            
+            return {
+                'recognized_text': response.get('text', ''),
+                'confidence': response.get('confidence', 0.0),
+                'segments': response.get('segments', []),
+                'success': True
+            }
+            
+        except Exception as e:
+            logger.error(f"手语输入处理失败: {e}")
+            return {
+                'recognized_text': f'手语处理失败: {str(e)}',
+                'confidence': 0.0,
+                'segments': [],
+                'success': False,
+                'error': str(e)
+            }
+    
+    async def generate_accessible_health_content(self, content: str, user_id: str,
+                                               content_type: str = "diagnosis_result",
+                                               target_format: str = "audio") -> Dict[str, Any]:
+        """
+        生成无障碍健康内容
+        
+        Args:
+            content: 原始内容
+            user_id: 用户ID
             content_type: 内容类型
-            user_id: 用户ID
             target_format: 目标格式
-            preferences: 用户偏好设置
             
         Returns:
-            包含可访问内容的字典
+            无障碍内容字典
         """
-        logger.info(f"发送内容转换请求: 用户={user_id}, 内容ID={content_id}, 目标格式={target_format}")
-        start_time = time.time()
-        
         try:
-            if not self.channel:
-                self._connect()
-                if not self.channel:
-                    raise Exception("无法连接到无障碍服务")
+            logger.info(f"生成无障碍健康内容: 用户={user_id}, 类型={content_type}")
             
-            # 实际项目中应该构建请求并调用stub
-            # user_preferences = pb2.UserPreferences(**preferences)
-            # request = pb2.AccessibleContentRequest(
-            #     content_id=content_id,
-            #     content_type=content_type,
-            #     user_id=user_id,
-            #     target_format=target_format,
-            #     preferences=user_preferences
-            # )
-            # response = self.stub.AccessibleContent(request)
-            # return MessageToDict(response, preserving_proto_field_name=True)
-            
-            # 模拟服务调用结果
-            time.sleep(0.18)  # 模拟网络延迟
-            
-            if target_format == "audio":
-                result = {
-                    "accessible_content": "",
-                    "content_url": "https://storage.suoke.life/audio/content_123.mp3",
-                    "audio_content": b"",  # 实际应该返回音频数据
-                    "tactile_content": b""
+            # 构建请求
+            request = {
+                'content_id': f"xiaoai_{int(time.time())}",
+                'content_type': content_type,
+                'user_id': user_id,
+                'target_format': target_format,
+                'preferences': {
+                    'language': 'zh-CN',
+                    'voice_type': 'female',
+                    'speech_rate': 1.0,
+                    'high_contrast': False
                 }
-            elif target_format == "simplified":
-                result = {
-                    "accessible_content": "痰湿体质特点：胖、疲劳、痰多。建议：少吃、多动、清淡饮食。",
-                    "content_url": "",
-                    "audio_content": b"",
-                    "tactile_content": b""
-                }
-            else:
-                result = {
-                    "accessible_content": "痰湿体质的主要特点是体形肥胖，腹部松软，容易疲劳，痰多，舌苔厚腻。建议饮食清淡，少食多餐，多运动以促进代谢。",
-                    "content_url": "",
-                    "audio_content": b"",
-                    "tactile_content": b""
-                }
+            }
             
-            logger.info(f"内容转换请求完成: 用户={user_id}, 耗时={time.time() - start_time:.2f}秒")
-            return result
+            # 调用无障碍服务的内容转换接口
+            response = await self._call_accessible_content(request)
+            
+            return {
+                'accessible_content': response.get('accessible_content', ''),
+                'content_url': response.get('content_url', ''),
+                'audio_content': response.get('audio_content', b''),
+                'tactile_content': response.get('tactile_content', b''),
+                'success': True
+            }
             
         except Exception as e:
-            logger.error(f"内容转换请求失败: {str(e)}", exc_info=True)
+            logger.error(f"无障碍内容生成失败: {e}")
             return {
-                "error": str(e),
-                "accessible_content": "内容转换失败",
-                "content_url": "",
-                "audio_content": b"",
-                "tactile_content": b""
+                'accessible_content': f'内容转换失败: {str(e)}',
+                'content_url': '',
+                'audio_content': b'',
+                'tactile_content': b'',
+                'success': False,
+                'error': str(e)
             }
     
-    def manage_settings(self, user_id: str, preferences: Dict[str, Any], 
-                       action: str) -> Dict[str, Any]:
+    async def provide_screen_reading(self, screen_data: bytes, user_id: str,
+                                   context: str = "diagnosis_interface") -> Dict[str, Any]:
         """
-        无障碍设置管理 - 获取或更新用户的无障碍设置
+        提供屏幕阅读服务
+        
+        Args:
+            screen_data: 屏幕截图数据
+            user_id: 用户ID
+            context: 上下文信息
+            
+        Returns:
+            屏幕阅读结果字典
+        """
+        try:
+            logger.info(f"提供屏幕阅读: 用户={user_id}, 上下文={context}")
+            
+            # 构建请求
+            request = {
+                'screen_data': screen_data,
+                'user_id': user_id,
+                'context': context,
+                'preferences': {
+                    'language': 'zh-CN',
+                    'detail_level': 'medium',
+                    'medical_context': True
+                }
+            }
+            
+            # 调用无障碍服务的屏幕阅读接口
+            response = await self._call_screen_reading(request)
+            
+            return {
+                'screen_description': response.get('screen_description', ''),
+                'ui_elements': response.get('elements', []),
+                'audio_description': response.get('audio_description', b''),
+                'success': True
+            }
+            
+        except Exception as e:
+            logger.error(f"屏幕阅读失败: {e}")
+            return {
+                'screen_description': f'屏幕阅读失败: {str(e)}',
+                'ui_elements': [],
+                'audio_description': b'',
+                'success': False,
+                'error': str(e)
+            }
+    
+    async def manage_accessibility_settings(self, user_id: str, 
+                                          preferences: Dict[str, Any],
+                                          action: str = "update") -> Dict[str, Any]:
+        """
+        管理用户的无障碍设置
         
         Args:
             user_id: 用户ID
             preferences: 用户偏好设置
-            action: 操作（获取/更新）
+            action: 操作类型（获取/更新）
             
         Returns:
-            包含当前设置的字典
+            设置管理结果字典
         """
-        logger.info(f"发送设置管理请求: 用户={user_id}, 操作={action}")
-        start_time = time.time()
-        
         try:
-            if not self.channel:
-                self._connect()
-                if not self.channel:
-                    raise Exception("无法连接到无障碍服务")
+            logger.info(f"管理无障碍设置: 用户={user_id}, 操作={action}")
             
-            # 实际项目中应该构建请求并调用stub
-            # user_preferences = pb2.UserPreferences(**preferences)
-            # request = pb2.SettingsRequest(
-            #     user_id=user_id,
-            #     preferences=user_preferences,
-            #     action=action
-            # )
-            # response = self.stub.ManageSettings(request)
-            # return MessageToDict(response, preserving_proto_field_name=True)
+            # 构建请求
+            request = {
+                'user_id': user_id,
+                'preferences': preferences,
+                'action': action
+            }
             
-            # 模拟服务调用结果
-            time.sleep(0.08)  # 模拟网络延迟
+            # 调用无障碍服务的设置管理接口
+            response = await self._call_manage_settings(request)
             
-            if action == "get":
-                result = {
-                    "current_preferences": {
-                        "font_size": "large",
-                        "high_contrast": True,
-                        "voice_type": "female",
-                        "speech_rate": 1.2,
-                        "language": "zh-CN",
-                        "dialect": "mandarin",
-                        "screen_reader": True,
-                        "sign_language": False,
-                        "enabled_features": ["voice_assistance", "screen_reading"]
-                    },
-                    "success": True,
-                    "message": "成功获取用户设置"
-                }
-            elif action == "update":
-                result = {
-                    "current_preferences": preferences,
-                    "success": True,
-                    "message": "成功更新用户设置"
-                }
-            else:
-                result = {
-                    "current_preferences": {},
-                    "success": False,
-                    "message": f"不支持的操作: {action}"
-                }
-            
-            logger.info(f"设置管理请求完成: 用户={user_id}, 耗时={time.time() - start_time:.2f}秒")
-            return result
+            return {
+                'current_preferences': response.get('current_preferences', {}),
+                'success': response.get('success', False),
+                'message': response.get('message', ''),
+                'success': True
+            }
             
         except Exception as e:
-            logger.error(f"设置管理请求失败: {str(e)}", exc_info=True)
+            logger.error(f"无障碍设置管理失败: {e}")
             return {
-                "error": str(e),
-                "current_preferences": {},
-                "success": False,
-                "message": f"处理失败: {str(e)}"
+                'current_preferences': {},
+                'success': False,
+                'message': f'设置管理失败: {str(e)}',
+                'error': str(e)
             }
     
-    def close(self) -> None:
-        """关闭与无障碍服务的连接"""
+    def _extract_medical_features(self, response: Dict[str, Any]) -> List[Dict[str, Any]]:
+        """从图像识别结果中提取医学特征"""
+        features = []
+        
+        # 从场景描述中提取医学相关信息
+        description = response.get('scene_description', '')
+        if '舌' in description:
+            features.append({
+                'type': 'tongue',
+                'description': description,
+                'confidence': response.get('confidence', 0.0)
+            })
+        
+        # 从障碍物信息中提取相关特征
+        for obstacle in response.get('obstacles', []):
+            if obstacle.get('type') in ['medical_feature', 'symptom_indicator']:
+                features.append({
+                    'type': obstacle.get('type'),
+                    'description': f"{obstacle.get('direction')} {obstacle.get('distance')}米处",
+                    'confidence': obstacle.get('confidence', 0.0)
+                })
+        
+        return features
+    
+    # 模拟的服务调用方法（实际项目中替换为真实的gRPC调用）
+    async def _call_voice_assistance(self, request: Dict[str, Any]) -> Dict[str, Any]:
+        """调用语音辅助服务"""
+        await asyncio.sleep(0.1)  # 模拟网络延迟
+        return {
+            'recognized_text': '用户说：我感觉头痛',
+            'response_text': '我理解您的症状，让我为您进行详细分析',
+            'response_audio': b'mock_audio_data',
+            'confidence': 0.95
+        }
+    
+    async def _call_blind_assistance(self, request: Dict[str, Any]) -> Dict[str, Any]:
+        """调用导盲辅助服务"""
+        await asyncio.sleep(0.1)
+        return {
+            'scene_description': '检测到舌象图片，舌质偏红，苔薄白',
+            'obstacles': [
+                {
+                    'type': 'medical_feature',
+                    'distance': 0.0,
+                    'direction': '中央',
+                    'confidence': 0.9
+                }
+            ],
+            'navigation_guidance': '请保持图片清晰度以便更好分析',
+            'confidence': 0.88,
+            'audio_guidance': b'mock_audio_guidance'
+        }
+    
+    async def _call_sign_language_recognition(self, request: Dict[str, Any]) -> Dict[str, Any]:
+        """调用手语识别服务"""
+        await asyncio.sleep(0.1)
+        return {
+            'text': '我需要看医生',
+            'confidence': 0.92,
+            'segments': [
+                {
+                    'text': '我',
+                    'start_time_ms': 0,
+                    'end_time_ms': 500,
+                    'confidence': 0.95
+                },
+                {
+                    'text': '需要',
+                    'start_time_ms': 500,
+                    'end_time_ms': 1000,
+                    'confidence': 0.90
+                },
+                {
+                    'text': '看医生',
+                    'start_time_ms': 1000,
+                    'end_time_ms': 2000,
+                    'confidence': 0.91
+                }
+            ]
+        }
+    
+    async def _call_accessible_content(self, request: Dict[str, Any]) -> Dict[str, Any]:
+        """调用无障碍内容转换服务"""
+        await asyncio.sleep(0.1)
+        return {
+            'accessible_content': '根据您的症状分析，建议您注意休息，多喝水',
+            'content_url': 'https://accessibility.suoke.life/content/123',
+            'audio_content': b'mock_audio_content',
+            'tactile_content': b'mock_braille_content'
+        }
+    
+    async def _call_screen_reading(self, request: Dict[str, Any]) -> Dict[str, Any]:
+        """调用屏幕阅读服务"""
+        await asyncio.sleep(0.1)
+        return {
+            'screen_description': '当前显示四诊协调界面，包含望闻问切四个选项',
+            'elements': [
+                {
+                    'element_type': 'button',
+                    'content': '望诊',
+                    'action': 'click',
+                    'location': {'x': 100, 'y': 100, 'width': 80, 'height': 40}
+                },
+                {
+                    'element_type': 'button',
+                    'content': '闻诊',
+                    'action': 'click',
+                    'location': {'x': 200, 'y': 100, 'width': 80, 'height': 40}
+                }
+            ],
+            'audio_description': b'mock_screen_audio'
+        }
+    
+    async def _call_manage_settings(self, request: Dict[str, Any]) -> Dict[str, Any]:
+        """调用设置管理服务"""
+        await asyncio.sleep(0.1)
+        return {
+            'current_preferences': {
+                'language': 'zh-CN',
+                'voice_type': 'female',
+                'speech_rate': 1.0,
+                'high_contrast': False,
+                'screen_reader': True
+            },
+            'success': True,
+            'message': '设置更新成功'
+        }
+    
+    def close(self):
+        """关闭客户端连接"""
         if self.channel:
-            try:
-                self.channel.close()
-                logger.info("关闭与无障碍服务的连接")
-            except Exception as e:
-                logger.error(f"关闭与无障碍服务的连接失败: {str(e)}", exc_info=True)
+            self.channel.close()
+        logger.info("无障碍服务客户端连接已关闭")
+
+
+class MockAccessibilityStub:
+    """模拟的无障碍服务存根（用于开发和测试）"""
+    
+    def __init__(self):
+        logger.info("使用模拟无障碍服务存根")
+    
+    async def VoiceAssistance(self, request):
+        """模拟语音辅助"""
+        await asyncio.sleep(0.1)
+        return type('Response', (), {
+            'recognized_text': '模拟识别文本',
+            'response_text': '模拟回复文本',
+            'response_audio': b'mock_audio',
+            'confidence': 0.9
+        })()
 
 
 # 单例实例

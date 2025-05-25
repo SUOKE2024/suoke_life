@@ -1,0 +1,436 @@
+# 索克生活API网关增强配置
+server:
+  rest:
+    host: 0.0.0.0
+    port: 8080
+  grpc:
+    host: 0.0.0.0
+    port: 50050
+  production: false
+  debug: true
+
+# 连接池配置
+connection_pool:
+  enabled: true
+  max_connections: 100
+  max_connections_per_host: 30
+  connection_timeout: 10.0
+  read_timeout: 30.0
+  keepalive_timeout: 30.0
+  enable_cleanup: true
+  cleanup_interval: 60.0
+  max_idle_time: 300.0
+
+# 增强缓存配置
+cache:
+  enabled: true
+  default_ttl: 300  # 5分钟
+  max_memory_size: 104857600  # 100MB
+  max_memory_items: 10000
+  redis_url: "redis://localhost:6379"
+  redis_db: 0
+  compression_enabled: true
+  compression_threshold: 1024
+  cache_warming_enabled: true
+  cache_warming_interval: 300
+  
+  # 缓存规则
+  rules:
+    - pattern: "/api/users/\\d+"
+      ttl: 300
+      conditions:
+        headers:
+          cache-control: "public"
+    - pattern: "/health"
+      ttl: 30
+    - pattern: "/static/.*"
+      ttl: 3600
+
+# 负载均衡配置
+load_balancer:
+  default_algorithm: "weighted_round_robin"
+  health_check_enabled: true
+  health_check_interval: 30
+  adaptive_weights: true
+  weight_adjustment_interval: 60
+  max_weight_factor: 2.0
+  min_weight_factor: 0.1
+
+# 监控和指标配置
+metrics:
+  enabled: true
+  prometheus_enabled: true
+  opentelemetry_enabled: true
+  otlp_endpoint: "http://localhost:4317"
+  service_name: "suoke-api-gateway"
+  service_version: "1.0.0"
+  export_interval: 30
+  custom_metrics_enabled: true
+
+middleware:
+  cors:
+    enabled: true
+    allow_origins:
+      - "*"
+    allow_methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - OPTIONS
+      - PATCH
+    allow_headers:
+      - Authorization
+      - Content-Type
+      - X-Request-ID
+      - X-Trace-ID
+    allow_credentials: false
+    max_age: 600
+  
+  rate_limit:
+    enabled: true
+    limit: 1000  # 增加限流阈值
+    window: 60
+    strategy: sliding-window  # 使用滑动窗口
+    by_ip: true
+    by_user: true
+    adaptive: true  # 自适应限流
+  
+  auth:
+    enabled: true
+    public_paths:
+      - /health
+      - /metrics
+      - /api/auth/login
+      - /api/auth/register
+      - /docs
+      - /redoc
+      - /openapi.json
+      - /routes
+      - /stats
+    jwt:
+      secret_key: "dev_secret_key_12345_change_in_production"
+      algorithm: HS256
+      expire_minutes: 1440  # 24小时
+      refresh_expire_minutes: 10080  # 7天
+      
+  # 安全头部
+  security_headers:
+    enabled: true
+    headers:
+      X-Content-Type-Options: "nosniff"
+      X-Frame-Options: "DENY"
+      X-XSS-Protection: "1; mode=block"
+      Strict-Transport-Security: "max-age=31536000; includeSubDomains"
+      Content-Security-Policy: "default-src 'self'"
+
+# 重试配置
+retry:
+  enabled: true
+  max_retries: 3
+  retry_delay: 1.0
+  retry_status_codes:
+    - 502
+    - 503
+    - 504
+    - 429
+  exponential_backoff: true
+
+# 熔断器配置
+circuit_breaker:
+  enabled: true
+  failure_threshold: 5
+  recovery_timeout: 30
+  timeout: 10
+
+service_discovery:
+  type: static
+  refresh_interval: 30
+  
+  # 静态服务配置（增强版）
+  services:
+    user-service:
+      name: user-service
+      endpoints:
+        - host: localhost
+          port: 50051
+          weight: 1
+          max_connections: 50
+          use_tls: false
+          health_check:
+            enabled: true
+            interval: 10
+            timeout: 5
+            retries: 3
+            path: /health
+      load_balancer: weighted_round_robin
+      circuit_breaker: true
+      timeout: 30
+    
+    auth-service:
+      name: auth-service
+      endpoints:
+        - host: localhost
+          port: 50052
+          weight: 1
+          max_connections: 50
+          use_tls: false
+          health_check:
+            enabled: true
+            interval: 10
+            timeout: 5
+            retries: 3
+            path: /health
+      load_balancer: least_connections
+      circuit_breaker: true
+      timeout: 30
+    
+    accessibility-service:
+      name: accessibility-service
+      endpoints:
+        - host: localhost
+          port: 50053
+          weight: 1
+          max_connections: 30
+          use_tls: false
+          health_check:
+            enabled: true
+            interval: 15
+            timeout: 5
+            retries: 3
+            path: /health
+      load_balancer: response_time
+      circuit_breaker: true
+      timeout: 30
+    
+    xiaoai-service:
+      name: xiaoai-service
+      endpoints:
+        - host: xiaoai-service
+          port: 50053
+          weight: 2  # 更高权重
+          max_connections: 100
+          use_tls: false
+          health_check:
+            enabled: true
+            interval: 10
+            timeout: 5
+            retries: 3
+            path: /health
+      load_balancer: weighted_least_connections
+      circuit_breaker: true
+      timeout: 45
+    
+    xiaoke-service:
+      name: xiaoke-service
+      endpoints:
+        - host: xiaoke-service
+          port: 50054
+          weight: 2
+          max_connections: 100
+          use_tls: false
+          health_check:
+            enabled: true
+            interval: 10
+            timeout: 5
+            retries: 3
+            path: /health
+      load_balancer: weighted_least_connections
+      circuit_breaker: true
+      timeout: 45
+    
+    laoke-service:
+      name: laoke-service
+      endpoints:
+        - host: laoke-service
+          port: 50055
+          weight: 1
+          max_connections: 80
+          use_tls: false
+          health_check:
+            enabled: true
+            interval: 10
+            timeout: 5
+            retries: 3
+            path: /health
+      load_balancer: weighted_round_robin
+      circuit_breaker: true
+      timeout: 60  # 更长超时时间
+    
+    soer-service:
+      name: soer-service
+      endpoints:
+        - host: soer-service
+          port: 50056
+          weight: 1
+          max_connections: 60
+          use_tls: false
+          health_check:
+            enabled: true
+            interval: 10
+            timeout: 5
+            retries: 3
+            path: /health
+      load_balancer: response_time
+      circuit_breaker: true
+      timeout: 45
+    
+    rag-service:
+      name: rag-service
+      endpoints:
+        - host: rag-service
+          port: 50057
+          weight: 1
+          max_connections: 40
+          use_tls: false
+          health_check:
+            enabled: true
+            interval: 15
+            timeout: 10
+            retries: 3
+            path: /health
+      load_balancer: least_connections
+      circuit_breaker: true
+      timeout: 120  # RAG服务需要更长时间
+
+# 路由配置（增强版）
+routes:
+  - name: user-service
+    prefix: /api/users
+    service: user-service
+    strip_prefix: true
+    methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+    cache_enabled: true
+    cache_ttl: 300
+    
+  - name: auth-service
+    prefix: /api/auth
+    service: auth-service
+    strip_prefix: true
+    methods:
+      - GET
+      - POST
+    cache_enabled: false  # 认证服务不缓存
+    
+  - name: accessibility-service
+    prefix: /api/accessibility
+    service: accessibility-service
+    strip_prefix: true
+    methods:
+      - GET
+      - POST
+    cache_enabled: true
+    cache_ttl: 600
+    
+  - name: xiaoai-service
+    prefix: /api/xiaoai
+    service: xiaoai-service
+    strip_prefix: true
+    methods:
+      - GET
+      - POST
+    cache_enabled: true
+    cache_ttl: 180
+    
+  - name: xiaoke-service
+    prefix: /api/xiaoke
+    service: xiaoke-service
+    strip_prefix: true
+    methods:
+      - GET
+      - POST
+    cache_enabled: true
+    cache_ttl: 180
+    
+  - name: laoke-service
+    prefix: /api/laoke
+    service: laoke-service
+    strip_prefix: true
+    methods:
+      - GET
+      - POST
+    cache_enabled: true
+    cache_ttl: 300
+    
+  - name: soer-service
+    prefix: /api/soer
+    service: soer-service
+    strip_prefix: true
+    methods:
+      - GET
+      - POST
+    cache_enabled: true
+    cache_ttl: 240
+    
+  - name: rag-service
+    prefix: /api/rag
+    service: rag-service
+    strip_prefix: true
+    methods:
+      - GET
+      - POST
+    cache_enabled: true
+    cache_ttl: 900  # RAG结果缓存15分钟
+
+# 日志配置
+logging:
+  level: INFO
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  structured: true
+  file: logs/api_gateway.log
+  max_size: 100MB
+  backup_count: 5
+  
+  # 访问日志
+  access_log:
+    enabled: true
+    file: logs/access.log
+    format: "combined"
+    
+  # 错误日志
+  error_log:
+    enabled: true
+    file: logs/error.log
+    level: ERROR
+
+# 性能调优
+performance:
+  # 异步工作线程数
+  worker_threads: 4
+  
+  # 请求队列大小
+  request_queue_size: 1000
+  
+  # 连接保持时间
+  keep_alive_timeout: 75
+  
+  # 最大请求大小
+  max_request_size: 10485760  # 10MB
+  
+  # 响应压缩
+  compression:
+    enabled: true
+    minimum_size: 1024
+    algorithms:
+      - gzip
+      - deflate
+      - br
+
+# 开发和调试
+development:
+  debug_mode: true
+  hot_reload: true
+  profiling_enabled: false
+  
+  # 测试端点
+  test_endpoints:
+    enabled: true
+    paths:
+      - /debug/stats
+      - /debug/health
+      - /debug/metrics
+      - /debug/cache 

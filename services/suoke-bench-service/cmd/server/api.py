@@ -4,18 +4,22 @@ SuokeBench API 接口
 
 import logging
 import os
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Optional, Union, Any
+from datetime import datetime
 
-from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, UploadFile
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, UploadFile, Path, BackgroundTasks
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-from internal.benchmark.benchmark_service import BenchmarkService
+from internal.benchmark.benchmark_service import BenchmarkService, get_global_executor
 from internal.benchmark.model_interface import ModelRegistry, model_registry
 from internal.evaluation.report_generator import ReportGenerator
 from internal.metrics.basic_metrics import register_basic_metrics
 from internal.suokebench.config import BenchConfig, load_config
+from internal.benchmark.model_cache import get_global_cache
+from internal.observability.metrics import get_global_metrics
+from internal.resilience.retry import retry, circuit_breaker
 
 # 初始化基础指标
 register_basic_metrics()
@@ -77,6 +81,53 @@ class SettingsRequest(BaseModel):
     report_dir: Optional[str] = Field(default=None, description="报告保存目录")
     parallel_runs: Optional[int] = Field(default=None, description="最大并行评测数")
     log_level: Optional[str] = Field(default=None, description="日志级别")
+
+
+# 新增的请求和响应模型
+class BenchmarkRequest(BaseModel):
+    """基准测试请求"""
+    benchmark_id: str = Field(..., description="基准测试ID")
+    model_id: str = Field(..., description="模型ID")
+    model_version: str = Field(default="latest", description="模型版本")
+    test_data: List[Dict[str, Any]] = Field(..., description="测试数据")
+    config: Optional[Dict[str, Any]] = Field(default=None, description="测试配置")
+
+
+class BenchmarkResponse(BaseModel):
+    """基准测试响应"""
+    task_id: str = Field(..., description="任务ID")
+    status: str = Field(..., description="任务状态")
+    message: str = Field(..., description="响应消息")
+
+
+class TaskStatusResponse(BaseModel):
+    """任务状态响应"""
+    task_id: str = Field(..., description="任务ID")
+    status: str = Field(..., description="任务状态")
+    progress: float = Field(..., description="进度百分比")
+    created_at: str = Field(..., description="创建时间")
+    error_message: Optional[str] = Field(default=None, description="错误消息")
+    results: Optional[Dict[str, Any]] = Field(default=None, description="测试结果")
+
+
+class TaskListResponse(BaseModel):
+    """任务列表响应"""
+    tasks: List[Dict[str, Any]] = Field(..., description="任务列表")
+    total: int = Field(..., description="总数量")
+
+
+class MetricsResponse(BaseModel):
+    """指标响应"""
+    timestamp: str = Field(..., description="时间戳")
+    metrics: Dict[str, Any] = Field(..., description="指标数据")
+
+
+class CacheStatsResponse(BaseModel):
+    """缓存统计响应"""
+    total_models: int = Field(..., description="缓存模型总数")
+    total_memory_mb: float = Field(..., description="总内存使用量(MB)")
+    memory_usage_percent: float = Field(..., description="内存使用百分比")
+    models: Dict[str, Any] = Field(..., description="模型详情")
 
 
 # API端点
@@ -831,4 +882,523 @@ async def update_settings(request: SettingsRequest):
         }
     except Exception as e:
         logging.error(f"更新设置失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e)) 
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# 基准测试相关接口
+@router.post("/benchmarks/submit", response_model=BenchmarkResponse)
+@retry(max_attempts=3, base_delay=1.0)
+@circuit_breaker(failure_threshold=5, recovery_timeout=60.0)
+async def submit_benchmark(request: BenchmarkRequest, background_tasks: BackgroundTasks):
+    """
+    提交基准测试任务
+    
+    Args:
+        request: 基准测试请求
+        background_tasks: 后台任务
+        
+    Returns:
+        基准测试响应
+    """
+    try:
+        executor = get_global_executor()
+        
+        # 验证请求数据
+        if not request.test_data:
+            raise HTTPException(status_code=400, detail="测试数据不能为空")
+        
+        if len(request.test_data) > 10000:
+            raise HTTPException(status_code=400, detail="测试数据量过大，最多支持10000条")
+        
+        # 提交任务
+        task_id = await executor.submit_benchmark(
+            benchmark_id=request.benchmark_id,
+            model_id=request.model_id,
+            model_version=request.model_version,
+            test_data=request.test_data,
+            config=request.config
+        )
+        
+        # 添加后台清理任务
+        background_tasks.add_task(executor.cleanup_old_tasks, 24)
+        
+        logger.info(f"基准测试任务已提交: {task_id}")
+        
+        return BenchmarkResponse(
+            task_id=task_id,
+            status="submitted",
+            message=f"基准测试任务已提交，任务ID: {task_id}"
+        )
+        
+    except Exception as e:
+        logger.error(f"提交基准测试失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"提交基准测试失败: {str(e)}")
+
+
+@router.get("/benchmarks/tasks/{task_id}", response_model=TaskStatusResponse)
+async def get_task_status(task_id: str = Path(..., description="任务ID")):
+    """
+    获取任务状态
+    
+    Args:
+        task_id: 任务ID
+        
+    Returns:
+        任务状态响应
+    """
+    try:
+        executor = get_global_executor()
+        status = executor.get_task_status(task_id)
+        
+        if not status:
+            raise HTTPException(status_code=404, detail=f"找不到任务: {task_id}")
+        
+        return TaskStatusResponse(**status)
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"获取任务状态失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"获取任务状态失败: {str(e)}")
+
+
+@router.get("/benchmarks/tasks", response_model=TaskListResponse)
+async def list_tasks(
+    status: Optional[str] = Query(None, description="任务状态过滤"),
+    limit: int = Query(50, ge=1, le=200, description="返回数量限制"),
+    offset: int = Query(0, ge=0, description="偏移量")
+):
+    """
+    列出基准测试任务
+    
+    Args:
+        status: 状态过滤
+        limit: 数量限制
+        offset: 偏移量
+        
+    Returns:
+        任务列表响应
+    """
+    try:
+        executor = get_global_executor()
+        all_tasks = executor.list_tasks(status)
+        
+        # 分页
+        total = len(all_tasks)
+        tasks = all_tasks[offset:offset + limit]
+        
+        return TaskListResponse(
+            tasks=tasks,
+            total=total
+        )
+        
+    except Exception as e:
+        logger.error(f"列出任务失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"列出任务失败: {str(e)}")
+
+
+@router.get("/benchmarks/tasks/{task_id}/result")
+async def get_task_result(task_id: str = Path(..., description="任务ID")):
+    """
+    获取任务结果
+    
+    Args:
+        task_id: 任务ID
+        
+    Returns:
+        任务结果
+    """
+    try:
+        executor = get_global_executor()
+        result = executor.get_task_result(task_id)
+        
+        if not result:
+            raise HTTPException(status_code=404, detail=f"找不到任务结果: {task_id}")
+        
+        # 转换为字典格式
+        from dataclasses import asdict
+        return asdict(result)
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"获取任务结果失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"获取任务结果失败: {str(e)}")
+
+
+@router.post("/benchmarks/tasks/{task_id}/report")
+async def generate_report(task_id: str = Path(..., description="任务ID")):
+    """
+    生成测试报告
+    
+    Args:
+        task_id: 任务ID
+        
+    Returns:
+        报告信息
+    """
+    try:
+        executor = get_global_executor()
+        report_path = await executor.generate_report(task_id)
+        
+        if not report_path:
+            raise HTTPException(status_code=404, detail=f"找不到任务或任务未完成: {task_id}")
+        
+        return {
+            "task_id": task_id,
+            "report_path": report_path,
+            "report_url": f"/reports/{task_id}_report.html",
+            "message": "报告生成成功"
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"生成报告失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"生成报告失败: {str(e)}")
+
+
+# 缓存管理接口
+@router.get("/cache/stats", response_model=CacheStatsResponse)
+async def get_cache_stats():
+    """
+    获取缓存统计信息
+    
+    Returns:
+        缓存统计响应
+    """
+    try:
+        cache = get_global_cache()
+        stats = cache.get_cache_stats()
+        
+        return CacheStatsResponse(**stats)
+        
+    except Exception as e:
+        logger.error(f"获取缓存统计失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"获取缓存统计失败: {str(e)}")
+
+
+@router.post("/cache/clear")
+async def clear_cache():
+    """
+    清空模型缓存
+    
+    Returns:
+        清理结果
+    """
+    try:
+        cache = get_global_cache()
+        cache.clear_cache()
+        
+        return {
+            "message": "缓存已清空",
+            "timestamp": datetime.now().isoformat()
+        }
+        
+    except Exception as e:
+        logger.error(f"清空缓存失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"清空缓存失败: {str(e)}")
+
+
+@router.post("/cache/preload")
+async def preload_models(model_configs: Dict[str, str]):
+    """
+    预加载模型
+    
+    Args:
+        model_configs: 模型配置字典，格式为 {model_key: model_type}
+        
+    Returns:
+        预加载结果
+    """
+    try:
+        cache = get_global_cache()
+        
+        # 简化实现，实际应该根据model_type创建对应的工厂函数
+        def create_model_factory(model_type: str):
+            def factory():
+                from internal.benchmark.model_interface import LocalModel
+                return LocalModel("preload", "1.0", None)
+            return factory
+        
+        factories = {
+            key: create_model_factory(model_type)
+            for key, model_type in model_configs.items()
+        }
+        
+        cache.preload_models(factories)
+        
+        return {
+            "message": f"已预加载 {len(model_configs)} 个模型",
+            "models": list(model_configs.keys()),
+            "timestamp": datetime.now().isoformat()
+        }
+        
+    except Exception as e:
+        logger.error(f"预加载模型失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"预加载模型失败: {str(e)}")
+
+
+# 监控和指标接口
+@router.get("/metrics/summary", response_model=MetricsResponse)
+async def get_metrics_summary():
+    """
+    获取指标摘要
+    
+    Returns:
+        指标响应
+    """
+    try:
+        metrics = get_global_metrics()
+        summary = metrics.get_metrics_summary()
+        
+        return MetricsResponse(
+            timestamp=summary["timestamp"],
+            metrics=summary
+        )
+        
+    except Exception as e:
+        logger.error(f"获取指标摘要失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"获取指标摘要失败: {str(e)}")
+
+
+@router.get("/metrics/custom/{metric_name}")
+async def get_custom_metric(
+    metric_name: str = Path(..., description="指标名称"),
+    window_seconds: int = Query(300, ge=60, le=3600, description="时间窗口(秒)")
+):
+    """
+    获取自定义指标统计
+    
+    Args:
+        metric_name: 指标名称
+        window_seconds: 时间窗口
+        
+    Returns:
+        指标统计
+    """
+    try:
+        metrics = get_global_metrics()
+        stats = metrics.get_custom_metric_stats(metric_name, window_seconds)
+        
+        if not stats:
+            raise HTTPException(status_code=404, detail=f"找不到指标: {metric_name}")
+        
+        return {
+            "metric_name": metric_name,
+            "window_seconds": window_seconds,
+            "stats": stats,
+            "timestamp": datetime.now().isoformat()
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"获取自定义指标失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"获取自定义指标失败: {str(e)}")
+
+
+@router.post("/metrics/custom")
+async def record_custom_metric(
+    name: str = Query(..., description="指标名称"),
+    value: float = Query(..., description="指标值"),
+    labels: Optional[Dict[str, str]] = None
+):
+    """
+    记录自定义指标
+    
+    Args:
+        name: 指标名称
+        value: 指标值
+        labels: 标签
+        
+    Returns:
+        记录结果
+    """
+    try:
+        metrics = get_global_metrics()
+        metrics.record_custom_metric(name, value, labels)
+        
+        return {
+            "message": f"指标 {name} 已记录",
+            "value": value,
+            "labels": labels or {},
+            "timestamp": datetime.now().isoformat()
+        }
+        
+    except Exception as e:
+        logger.error(f"记录自定义指标失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"记录自定义指标失败: {str(e)}")
+
+
+# 系统管理接口
+@router.get("/system/info")
+async def get_system_info():
+    """
+    获取系统信息
+    
+    Returns:
+        系统信息
+    """
+    try:
+        import psutil
+        import platform
+        
+        # 获取系统信息
+        cpu_percent = psutil.cpu_percent(interval=1)
+        memory = psutil.virtual_memory()
+        disk = psutil.disk_usage('/')
+        
+        # 获取缓存和任务统计
+        cache = get_global_cache()
+        cache_stats = cache.get_cache_stats()
+        
+        executor = get_global_executor()
+        all_tasks = executor.list_tasks()
+        running_tasks = [t for t in all_tasks if t["status"] == "running"]
+        
+        return {
+            "system": {
+                "platform": platform.platform(),
+                "python_version": platform.python_version(),
+                "cpu_count": psutil.cpu_count(),
+                "cpu_percent": cpu_percent,
+                "memory_total_gb": memory.total / 1024 / 1024 / 1024,
+                "memory_used_gb": memory.used / 1024 / 1024 / 1024,
+                "memory_percent": memory.percent,
+                "disk_total_gb": disk.total / 1024 / 1024 / 1024,
+                "disk_used_gb": disk.used / 1024 / 1024 / 1024,
+                "disk_percent": (disk.used / disk.total) * 100
+            },
+            "service": {
+                "version": "1.1.0",
+                "uptime": "运行中",  # 简化实现
+                "cache_models": cache_stats.get("total_models", 0),
+                "cache_memory_mb": cache_stats.get("total_memory_mb", 0),
+                "active_tasks": len(running_tasks),
+                "total_tasks": len(all_tasks)
+            },
+            "timestamp": datetime.now().isoformat()
+        }
+        
+    except Exception as e:
+        logger.error(f"获取系统信息失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"获取系统信息失败: {str(e)}")
+
+
+@router.post("/system/cleanup")
+async def cleanup_system():
+    """
+    系统清理
+    
+    Returns:
+        清理结果
+    """
+    try:
+        # 清理旧任务
+        executor = get_global_executor()
+        executor.cleanup_old_tasks(24)
+        
+        # 强制垃圾回收
+        import gc
+        collected = gc.collect()
+        
+        return {
+            "message": "系统清理完成",
+            "garbage_collected": collected,
+            "timestamp": datetime.now().isoformat()
+        }
+        
+    except Exception as e:
+        logger.error(f"系统清理失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"系统清理失败: {str(e)}")
+
+
+# 错误处理
+@router.get("/test/error")
+async def test_error():
+    """测试错误处理（仅用于开发调试）"""
+    raise HTTPException(status_code=500, detail="这是一个测试错误")
+
+
+@router.get("/test/timeout")
+async def test_timeout():
+    """测试超时处理（仅用于开发调试）"""
+    import asyncio
+    await asyncio.sleep(10)  # 模拟长时间操作
+    return {"message": "操作完成"}
+
+
+# 健康检查
+@router.get("/health/detailed")
+async def detailed_health_check():
+    """
+    详细健康检查
+    
+    Returns:
+        详细健康状态
+    """
+    try:
+        health_status = {
+            "status": "healthy",
+            "timestamp": datetime.now().isoformat(),
+            "checks": {}
+        }
+        
+        # 检查缓存
+        try:
+            cache = get_global_cache()
+            cache_stats = cache.get_cache_stats()
+            health_status["checks"]["cache"] = {
+                "status": "healthy",
+                "models": cache_stats.get("total_models", 0),
+                "memory_mb": cache_stats.get("total_memory_mb", 0)
+            }
+        except Exception as e:
+            health_status["checks"]["cache"] = {
+                "status": "unhealthy",
+                "error": str(e)
+            }
+            health_status["status"] = "degraded"
+        
+        # 检查指标系统
+        try:
+            metrics = get_global_metrics()
+            summary = metrics.get_metrics_summary()
+            health_status["checks"]["metrics"] = {
+                "status": "healthy",
+                "active_benchmarks": summary.get("active_benchmarks", 0)
+            }
+        except Exception as e:
+            health_status["checks"]["metrics"] = {
+                "status": "unhealthy",
+                "error": str(e)
+            }
+            health_status["status"] = "degraded"
+        
+        # 检查基准测试执行器
+        try:
+            executor = get_global_executor()
+            tasks = executor.list_tasks()
+            running_tasks = [t for t in tasks if t["status"] == "running"]
+            health_status["checks"]["executor"] = {
+                "status": "healthy",
+                "running_tasks": len(running_tasks),
+                "total_tasks": len(tasks)
+            }
+        except Exception as e:
+            health_status["checks"]["executor"] = {
+                "status": "unhealthy",
+                "error": str(e)
+            }
+            health_status["status"] = "degraded"
+        
+        return health_status
+        
+    except Exception as e:
+        logger.error(f"健康检查失败: {str(e)}")
+        return {
+            "status": "unhealthy",
+            "timestamp": datetime.now().isoformat(),
+            "error": str(e)
+        } 

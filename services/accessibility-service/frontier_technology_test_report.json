@@ -1,0 +1,72 @@
+{
+  "timestamp": "2025-05-25T00:59:50.707682",
+  "test_summary": {
+    "total_tests": 33,
+    "passed_tests": 33,
+    "success_rate": 100.0,
+    "total_time": 1016.0851078033447
+  },
+  "service_results": {
+    "bci_service": {
+      "status": "passed",
+      "tests_passed": 10,
+      "tests_total": 10,
+      "features": [
+        "设备检测与连接",
+        "用户校准",
+        "信号采集与处理",
+        "意图识别",
+        "BCI命令执行",
+        "神经反馈",
+        "脑状态监控"
+      ]
+    },
+    "haptic_service": {
+      "status": "passed",
+      "tests_passed": 9,
+      "tests_total": 9,
+      "features": [
+        "设备检测与连接",
+        "设备校准",
+        "触觉模式创建与播放",
+        "空间触觉映射",
+        "触觉语言编码",
+        "多模态交互"
+      ]
+    },
+    "spatial_audio_service": {
+      "status": "passed",
+      "tests_passed": 10,
+      "tests_total": 10,
+      "features": [
+        "设备检测与配置",
+        "空间场景创建",
+        "音频源管理",
+        "HRTF个性化",
+        "房间声学模拟",
+        "音频导航",
+        "空间引导"
+      ]
+    },
+    "integration_tests": {
+      "status": "passed",
+      "tests_passed": 4,
+      "tests_total": 4,
+      "scenarios": [
+        "BCI控制多模态反馈",
+        "空间音频-触觉导航",
+        "神经反馈多模态增强",
+        "跨服务数据同步"
+      ]
+    },
+    "performance_metrics": {
+      "bci_init_time": 0.006801128387451172,
+      "haptic_init_time": 0.0002830028533935547,
+      "audio_init_time": 9.489059448242188e-05,
+      "signal_processing_latency": 0.1239776611328125,
+      "haptic_rendering_latency": 0.0011920928955078125,
+      "audio_rendering_latency": 0.0011920928955078125
+    }
+  },
+  "conclusion": "所有前沿技术服务测试通过"
+}

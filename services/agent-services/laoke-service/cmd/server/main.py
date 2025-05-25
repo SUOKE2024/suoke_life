@@ -1,115 +1,143 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 """
 老克智能体服务 - 主入口
-提供GraphQL和REST API服务
+提供中医知识传播、社群管理和教育内容生成服务
 """
 
 import os
 import sys
-import uvicorn
+import asyncio
 import logging
-from fastapi import FastAPI, Request, Response
-from fastapi.middleware.cors import CORSMiddleware
-from strawberry.fastapi import GraphQLRouter
-import argparse
+import signal
+from typing import Optional
+from pathlib import Path
 
-# 将当前目录添加到Python路径
-sys.path.insert(0, os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))))
+# 添加项目根目录到Python路径
+project_root = Path(__file__).parent.parent.parent
+sys.path.insert(0, str(project_root))
 
-from pkg.utils.logger import setup_logger
+from pkg.container.container import ServiceContainer
 from pkg.utils.config import Config
-from pkg.utils.middleware import request_logging_middleware
-from internal.delivery.graphql.schema import schema
-from internal.delivery.rest.health_controller import router as health_router
-from internal.delivery.rest.metrics_controller import router as metrics_router
-from internal.repository.community_repository import CommunityRepository
-from internal.repository.knowledge_repository import KnowledgeRepository
-from internal.repository.session_repository import SessionRepository
+from pkg.utils.logger import setup_logger
+from internal.delivery.grpc_server import GRPCServer
+from internal.delivery.rest_server import RESTServer
 
-# 创建FastAPI应用
-app = FastAPI(title="老克智能体服务")
+logger = logging.getLogger(__name__)
 
-# 加载配置
-config = Config()
+class LaokeSevice:
+    """老克智能体服务"""
+    
+    def __init__(self):
+        self.container: Optional[ServiceContainer] = None
+        self.grpc_server: Optional[GRPCServer] = None
+        self.rest_server: Optional[RESTServer] = None
+        self._shutdown_event = asyncio.Event()
+        
+    async def initialize(self) -> None:
+        """初始化服务"""
+        try:
+            # 设置日志
+            setup_logger()
+            logger.info("开始初始化老克智能体服务...")
+            
+            # 加载配置
+            config = Config()
+            
+            # 创建依赖注入容器
+            self.container = ServiceContainer(config)
+            await self.container.initialize()
+            
+            # 创建服务器
+            self.grpc_server = GRPCServer(self.container)
+            self.rest_server = RESTServer(self.container)
+            
+            logger.info("老克智能体服务初始化完成")
+            
+        except Exception as e:
+            logger.error(f"服务初始化失败: {str(e)}")
+            raise
+    
+    async def start(self) -> None:
+        """启动服务"""
+        try:
+            logger.info("启动老克智能体服务...")
+            
+            # 启动服务器
+            await asyncio.gather(
+                self.grpc_server.start(),
+                self.rest_server.start()
+            )
+            
+            logger.info("老克智能体服务启动成功")
+            
+            # 等待关闭信号
+            await self._shutdown_event.wait()
+            
+        except Exception as e:
+            logger.error(f"服务启动失败: {str(e)}")
+            raise
+    
+    async def shutdown(self) -> None:
+        """关闭服务"""
+        try:
+            logger.info("开始关闭老克智能体服务...")
+            
+            # 关闭服务器
+            if self.grpc_server:
+                await self.grpc_server.stop()
+            
+            if self.rest_server:
+                await self.rest_server.stop()
+            
+            # 关闭容器
+            if self.container:
+                await self.container.close()
+            
+            logger.info("老克智能体服务已关闭")
+            
+        except Exception as e:
+            logger.error(f"服务关闭失败: {str(e)}")
+    
+    def _setup_signal_handlers(self) -> None:
+        """设置信号处理器"""
+        def signal_handler(signum, frame):
+            logger.info(f"收到信号 {signum}，开始优雅关闭...")
+            self._shutdown_event.set()
+        
+        signal.signal(signal.SIGINT, signal_handler)
+        signal.signal(signal.SIGTERM, signal_handler)
 
-# 设置日志
-logger = logging.getLogger("laoke-service")
-setup_logger(logger, level=config.get("logging.level", "INFO"))
-
-# GraphQL路由
-graphql_app = GraphQLRouter(schema)
-app.include_router(graphql_app, prefix="/graphql")
-
-# REST API路由
-app.include_router(health_router)
-app.include_router(metrics_router)
-
-# CORS中间件
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=config.get("server.cors.allowed_origins", ["*"]),
-    allow_credentials=config.get("server.cors.allow_credentials", True),
-    allow_methods=config.get("server.cors.allowed_methods", ["*"]),
-    allow_headers=config.get("server.cors.allowed_headers", ["*"]),
-)
-
-# 请求日志中间件
-@app.middleware("http")
-async def logging_middleware(request: Request, call_next):
-    return await request_logging_middleware(request, call_next)
-
-# 启动时初始化存储库索引
-@app.on_event("startup")
-async def startup_event():
+async def main():
+    """主函数"""
+    service = LaokeSevice()
+    
     try:
-        # 初始化社区存储库索引
-        community_repo = CommunityRepository()
-        await community_repo.init_indexes()
+        # 初始化服务
+        await service.initialize()
         
-        # 初始化知识存储库索引
-        knowledge_repo = KnowledgeRepository()
-        await knowledge_repo.init_indexes()
+        # 设置信号处理器
+        service._setup_signal_handlers()
         
-        # 初始化会话存储库索引
-        session_repo = SessionRepository()
-        await session_repo.init_indexes()
+        # 启动服务
+        await service.start()
         
-        logger.info("存储库索引初始化完成")
+    except KeyboardInterrupt:
+        logger.info("收到键盘中断信号")
     except Exception as e:
-        logger.error(f"初始化存储库索引失败: {str(e)}")
-
-def parse_args():
-    parser = argparse.ArgumentParser(description="老克智能体服务")
-    parser.add_argument(
-        "--host", 
-        type=str,
-        default=config.get("server.host", "0.0.0.0"),
-        help="服务主机地址"
-    )
-    parser.add_argument(
-        "--port", 
-        type=int,
-        default=config.get("server.port", 8080),
-        help="服务端口"
-    )
-    parser.add_argument(
-        "--reload", 
-        action="store_true",
-        help="是否启用热重载（开发模式）"
-    )
-    return parser.parse_args()
+        logger.error(f"服务运行异常: {str(e)}")
+        return 1
+    finally:
+        # 关闭服务
+        await service.shutdown()
+    
+    return 0
 
 if __name__ == "__main__":
-    args = parse_args()
+    # 设置环境变量
+    os.environ.setdefault("PYTHONPATH", str(project_root))
     
-    logger.info(f"启动老克智能体服务，监听 {args.host}:{args.port}")
-    
-    uvicorn.run(
-        "main:app",
-        host=args.host,
-        port=args.port,
-        reload=args.reload,
-        log_level=config.get("logging.level", "info").lower()
-    ) 
+    # 运行服务
+    exit_code = asyncio.run(main())
+    sys.exit(exit_code) 

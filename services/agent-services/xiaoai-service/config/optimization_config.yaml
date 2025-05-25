@@ -1,0 +1,482 @@
+# XiaoAI Service 优化配置
+# 小艾智能体服务优化配置文件
+
+# 服务基础配置
+service:
+  name: "xiaoai-service"
+  version: "2.0.0"
+  environment: "production"
+  debug: false
+  
+# 数据库连接池配置
+database:
+  postgresql:
+    enabled: true
+    host: "localhost"
+    port: 5432
+    database: "xiaoai_db"
+    username: "xiaoai_user"
+    password: "${POSTGRES_PASSWORD}"
+    pool_size: 20
+    max_overflow: 30
+    pool_timeout: 30
+    pool_recycle: 3600
+    echo: false
+    
+  mongodb:
+    enabled: true
+    uri: "mongodb://localhost:27017"
+    database: "xiaoai_mongo"
+    max_pool_size: 100
+    min_pool_size: 10
+    max_idle_time_ms: 30000
+    server_selection_timeout_ms: 5000
+    
+  redis:
+    enabled: true
+    host: "localhost"
+    port: 6379
+    password: "${REDIS_PASSWORD}"
+    db: 0
+    max_connections: 50
+    retry_on_timeout: true
+    socket_timeout: 5
+    socket_connect_timeout: 5
+
+# 内存优化配置
+memory:
+  # GC配置
+  gc:
+    threshold_0: 700
+    threshold_1: 10
+    threshold_2: 10
+    auto_enabled: true
+    interval: 30.0
+    
+  # 内存池配置
+  memory_pool:
+    enabled: true
+    block_size: 1048576  # 1MB
+    max_size: 104857600  # 100MB
+    
+  # 对象池配置
+  object_pool:
+    enabled: true
+    max_objects_per_type: 1000
+    
+  # 内存监控配置
+  monitoring:
+    enabled: true
+    threshold: 0.8  # 80%
+    leak_detection: true
+    trace_malloc: true
+
+# 缓存配置
+cache:
+  # 智能缓存管理器
+  smart_cache:
+    enabled: true
+    memory_cache_size: 1000
+    redis_enabled: true
+    compression_enabled: true
+    compression_algorithm: "lz4"
+    default_ttl: 3600
+    
+  # 特征缓存
+  feature_cache:
+    enabled: true
+    max_size: 10000
+    ttl: 1800
+    
+  # 模型缓存
+  model_cache:
+    enabled: true
+    max_size: 5
+    ttl: 7200
+
+# 监控配置
+monitoring:
+  # Prometheus指标
+  prometheus:
+    enabled: true
+    port: 9090
+    path: "/metrics"
+    
+  # 分布式追踪
+  tracing:
+    enabled: true
+    service_name: "xiaoai-service"
+    jaeger_endpoint: "http://localhost:14268/api/traces"
+    sampling_rate: 0.1
+    
+  # 告警配置
+  alerting:
+    enabled: true
+    memory_threshold: 0.85
+    cpu_threshold: 0.8
+    response_time_threshold: 5.0
+    error_rate_threshold: 0.05
+    
+  # 性能监控
+  performance:
+    enabled: true
+    slow_query_threshold: 1.0
+    profile_enabled: false
+
+# 服务治理配置
+governance:
+  # 熔断器配置
+  circuit_breaker:
+    enabled: true
+    failure_threshold: 5
+    recovery_timeout: 60
+    expected_exception: "Exception"
+    
+  # 限流配置
+  rate_limiting:
+    enabled: true
+    default_rate: 1000  # 每分钟请求数
+    burst_rate: 100     # 突发请求数
+    
+  # 重试配置
+  retry:
+    enabled: true
+    max_attempts: 3
+    base_delay: 1.0
+    max_delay: 60.0
+    exponential_base: 2
+    
+  # 负载均衡配置
+  load_balancing:
+    strategy: "round_robin"  # round_robin, weighted_round_robin, least_connections, ip_hash, random
+    health_check_interval: 30
+
+# API网关配置
+api_gateway:
+  enabled: true
+  host: "0.0.0.0"
+  port: 8080
+  
+  # 认证配置
+  auth:
+    enabled: true
+    secret_key: "${JWT_SECRET_KEY}"
+    algorithm: "HS256"
+    token_expiry: 3600
+    
+  # CORS配置
+  cors:
+    enabled: true
+    allow_origins: ["*"]
+    allow_methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+    allow_headers: ["Content-Type", "Authorization"]
+    
+  # 健康检查
+  health_check:
+    enabled: true
+    interval: 30
+    timeout: 5
+
+# 任务队列配置
+task_queue:
+  # Celery配置
+  celery:
+    enabled: true
+    broker_url: "redis://localhost:6379/1"
+    result_backend: "redis://localhost:6379/2"
+    task_serializer: "json"
+    result_serializer: "json"
+    accept_content: ["json"]
+    timezone: "UTC"
+    
+  # 工作流配置
+  workflow:
+    enabled: true
+    max_concurrent_workflows: 10
+    workflow_timeout: 3600
+    
+  # 任务优先级
+  priority:
+    high: 9
+    normal: 5
+    low: 1
+
+# 配置管理
+config_management:
+  # 动态配置
+  dynamic:
+    enabled: true
+    sources:
+      - type: "file"
+        path: "./config/dynamic.yaml"
+        format: "yaml"
+      - type: "redis"
+        prefix: "xiaoai:config:"
+      - type: "etcd"
+        prefix: "/xiaoai/config/"
+        
+  # 配置验证
+  validation:
+    enabled: true
+    strict_mode: false
+    
+  # 配置热更新
+  hot_reload:
+    enabled: true
+    file_watch: true
+    
+  # 配置版本控制
+  versioning:
+    enabled: true
+    max_history: 100
+
+# 模型优化配置
+model_optimization:
+  # 推理优化
+  inference:
+    enabled: true
+    batch_size: 32
+    max_batch_delay: 0.1
+    use_gpu: true
+    gpu_memory_fraction: 0.8
+    
+  # 模型量化
+  quantization:
+    enabled: true
+    method: "dynamic"  # dynamic, static, qat
+    
+  # 模型剪枝
+  pruning:
+    enabled: false
+    sparsity: 0.5
+    
+  # ONNX优化
+  onnx:
+    enabled: true
+    optimization_level: "all"
+    
+  # TensorRT优化
+  tensorrt:
+    enabled: false
+    precision: "fp16"
+    max_workspace_size: 1073741824  # 1GB
+
+# 多模态融合优化
+multimodal_fusion:
+  # 编码器优化
+  encoder:
+    use_optimized: true
+    cache_embeddings: true
+    batch_encoding: true
+    
+  # 融合策略
+  fusion:
+    strategy: "attention"  # attention, concatenation, weighted_sum, gated
+    attention_heads: 8
+    dropout_rate: 0.1
+    
+  # 特征缓存
+  feature_cache:
+    enabled: true
+    max_size: 10000
+    ttl: 1800
+
+# 四诊协调配置
+four_diagnosis:
+  # 望诊配置
+  inspection:
+    enabled: true
+    image_preprocessing: true
+    feature_extraction: "resnet50"
+    
+  # 闻诊配置
+  auscultation:
+    enabled: true
+    audio_preprocessing: true
+    feature_extraction: "mfcc"
+    
+  # 问诊配置
+  inquiry:
+    enabled: true
+    nlp_model: "bert-base-chinese"
+    max_sequence_length: 512
+    
+  # 切诊配置
+  palpation:
+    enabled: true
+    signal_preprocessing: true
+    feature_extraction: "wavelet"
+
+# 辨证分析配置
+syndrome_analysis:
+  # 辨证方法
+  methods:
+    - "eight_principles"
+    - "qi_blood"
+    - "zang_fu"
+    - "six_channels"
+    - "triple_energizer"
+    
+  # 权重配置
+  weights:
+    inspection: 0.25
+    auscultation: 0.25
+    inquiry: 0.25
+    palpation: 0.25
+    
+  # 置信度阈值
+  confidence_threshold: 0.7
+
+# 健康建议配置
+health_advice:
+  # 生成策略
+  generation:
+    model: "gpt-3.5-turbo"
+    max_tokens: 1000
+    temperature: 0.7
+    
+  # 个性化配置
+  personalization:
+    enabled: true
+    user_profile_weight: 0.3
+    historical_data_weight: 0.2
+    
+  # 建议类型
+  advice_types:
+    - "lifestyle"
+    - "diet"
+    - "exercise"
+    - "medication"
+    - "follow_up"
+
+# 智能体协作配置
+agent_collaboration:
+  # 协作模式
+  mode: "distributed"  # centralized, distributed, hybrid
+  
+  # 通信配置
+  communication:
+    protocol: "grpc"
+    timeout: 30
+    retry_attempts: 3
+    
+  # 协作策略
+  strategy:
+    consensus_threshold: 0.6
+    conflict_resolution: "weighted_voting"
+    
+  # 其他智能体配置
+  agents:
+    xiaoke:
+      enabled: true
+      endpoint: "localhost:50052"
+      weight: 1.0
+    laoke:
+      enabled: true
+      endpoint: "localhost:50053"
+      weight: 1.0
+    soer:
+      enabled: true
+      endpoint: "localhost:50054"
+      weight: 1.0
+
+# 日志配置
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  
+  # 文件日志
+  file:
+    enabled: true
+    path: "./logs/xiaoai.log"
+    max_size: "100MB"
+    backup_count: 5
+    
+  # 结构化日志
+  structured:
+    enabled: true
+    format: "json"
+    
+  # 日志聚合
+  aggregation:
+    enabled: false
+    endpoint: "http://localhost:9200"
+
+# 安全配置
+security:
+  # 加密配置
+  encryption:
+    enabled: true
+    algorithm: "AES-256-GCM"
+    key_rotation_interval: 86400  # 24小时
+    
+  # 访问控制
+  access_control:
+    enabled: true
+    default_policy: "deny"
+    
+  # 审计日志
+  audit:
+    enabled: true
+    log_all_requests: false
+    log_sensitive_data: false
+
+# 部署配置
+deployment:
+  # 容器配置
+  container:
+    image: "xiaoai-service:2.0.0"
+    resources:
+      cpu_request: "500m"
+      cpu_limit: "2000m"
+      memory_request: "1Gi"
+      memory_limit: "4Gi"
+      
+  # 扩展配置
+  scaling:
+    enabled: true
+    min_replicas: 2
+    max_replicas: 10
+    target_cpu_utilization: 70
+    
+  # 健康检查
+  health_check:
+    liveness_probe:
+      path: "/health"
+      initial_delay: 30
+      period: 10
+    readiness_probe:
+      path: "/ready"
+      initial_delay: 5
+      period: 5
+
+# 环境特定配置
+environments:
+  development:
+    debug: true
+    log_level: "DEBUG"
+    database:
+      postgresql:
+        echo: true
+    monitoring:
+      tracing:
+        sampling_rate: 1.0
+        
+  staging:
+    debug: false
+    log_level: "INFO"
+    monitoring:
+      tracing:
+        sampling_rate: 0.5
+        
+  production:
+    debug: false
+    log_level: "WARNING"
+    monitoring:
+      tracing:
+        sampling_rate: 0.1
+    security:
+      encryption:
+        enabled: true
+      access_control:
+        enabled: true 

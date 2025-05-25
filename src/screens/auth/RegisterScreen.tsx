@@ -1,240 +1,328 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
-import { TextInput, Button, Text, Surface, useTheme, Snackbar, HelperText } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useSelector } from 'react-redux';
-import { useAppDispatch } from '../../hooks/redux';
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  SafeAreaView,
+  StatusBar,
+  Alert,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useTranslation } from 'react-i18next';
-import { register, clearError } from '../../store/slices/userSlice';
-import { AuthStackParamList } from '../../navigation/AppNavigator';
-import { RootState } from '../../store';
+import { useDispatch, useSelector } from 'react-redux';
+import { AuthStackParamList } from '../../navigation/AuthNavigator';
+import { register } from '../../store/slices/authSlice';
+import {
+  selectAuthLoading,
+  // selectAuthError,
+} from '../../store/slices/authSlice';
+import { colors, spacing } from '../../constants/theme';
 
-// 验证手机号的正则表达式
-const MOBILE_REGEX = /^1[3-9]\d{9}$/;
+type RegisterScreenNavigationProp = NativeStackNavigationProp<
+  AuthStackParamList,
+  'Register'
+>;
 
-const RegisterScreen = () => {
-  const theme = useTheme();
-  const dispatch = useAppDispatch();
-  const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
-  const { t } = useTranslation();
-  
-  const { isLoading, error } = useSelector((state: RootState) => state.user);
-  
-  // 表单状态
-  const [username, setUsername] = useState('');
-  const [mobile, setMobile] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+interface FormData {
+  username: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  phone: string;
+}
+
+interface FormErrors {
+  username?: string;
+  email?: string;
+  password?: string;
+  confirmPassword?: string;
+  phone?: string;
+}
+
+export const RegisterScreen: React.FC = () => {
+  const navigation = useNavigation<RegisterScreenNavigationProp>();
+  const dispatch = useDispatch();
+  const loading = useSelector(selectAuthLoading);
+  // const error = useSelector(selectAuthError);
+
+  const [formData, setFormData] = useState<FormData>({
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    phone: '',
+  });
+
+  const [errors, setErrors] = useState<FormErrors>({});
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [snackbarVisible, setSnackbarVisible] = useState(false);
-  
-  // 错误状态
-  const [usernameError, setUsernameError] = useState('');
-  const [mobileError, setMobileError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
-  const [confirmPasswordError, setConfirmPasswordError] = useState('');
-  
+
   // 表单验证
-  const validateUsername = () => {
-    if (!username.trim()) {
-      setUsernameError('请输入用户名');
-      return false;
+  const validateForm = (): boolean => {
+    const newErrors: FormErrors = {};
+
+    // 用户名验证
+    if (!formData.username.trim()) {
+      newErrors.username = '请输入用户名';
+    } else if (formData.username.length < 2) {
+      newErrors.username = '用户名至少2个字符';
+    } else if (formData.username.length > 20) {
+      newErrors.username = '用户名不能超过20个字符';
     }
-    if (username.length < 2 || username.length > 20) {
-      setUsernameError('用户名长度应为2-20个字符');
-      return false;
+
+    // 邮箱验证
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.email.trim()) {
+      newErrors.email = '请输入邮箱';
+    } else if (!emailRegex.test(formData.email)) {
+      newErrors.email = '请输入有效的邮箱地址';
     }
-    setUsernameError('');
-    return true;
+
+    // 密码验证
+    if (!formData.password) {
+      newErrors.password = '请输入密码';
+    } else if (formData.password.length < 6) {
+      newErrors.password = '密码至少6个字符';
+    } else if (formData.password.length > 50) {
+      newErrors.password = '密码不能超过50个字符';
+    } else if (!/(?=.*[a-zA-Z])(?=.*\d)/.test(formData.password)) {
+      newErrors.password = '密码必须包含字母和数字';
+    }
+
+    // 确认密码验证
+    if (!formData.confirmPassword) {
+      newErrors.confirmPassword = '请确认密码';
+    } else if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = '两次输入的密码不一致';
+    }
+
+    // 手机号验证（可选）
+    if (formData.phone.trim()) {
+      const phoneRegex = /^1[3-9]\d{9}$/;
+      if (!phoneRegex.test(formData.phone)) {
+        newErrors.phone = '请输入有效的手机号';
+      }
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
-  
-  const validateMobile = () => {
-    if (!mobile) {
-      setMobileError('请输入手机号');
-      return false;
-    }
-    if (!MOBILE_REGEX.test(mobile)) {
-      setMobileError('请输入有效的手机号');
-      return false;
-    }
-    setMobileError('');
-    return true;
-  };
-  
-  const validatePassword = () => {
-    if (!password) {
-      setPasswordError('请输入密码');
-      return false;
-    }
-    if (password.length < 6) {
-      setPasswordError('密码长度不能少于6位');
-      return false;
-    }
-    setPasswordError('');
-    return true;
-  };
-  
-  const validateConfirmPassword = () => {
-    if (!confirmPassword) {
-      setConfirmPasswordError('请确认密码');
-      return false;
-    }
-    if (confirmPassword !== password) {
-      setConfirmPasswordError('两次输入的密码不一致');
-      return false;
-    }
-    setConfirmPasswordError('');
-    return true;
-  };
-  
-  // 提交表单
-  const handleSubmit = () => {
-    const isUsernameValid = validateUsername();
-    const isMobileValid = validateMobile();
-    const isPasswordValid = validatePassword();
-    const isConfirmPasswordValid = validateConfirmPassword();
-    
-    if (isUsernameValid && isMobileValid && isPasswordValid && isConfirmPasswordValid) {
-      dispatch(register({ 
-        username, 
-        mobile, 
-        password,
-        confirmPassword: confirmPassword,
-        verificationCode: '000000' // 在实际应用中，应该使用真实的验证码
-      }));
+
+  const handleInputChange = (field: keyof FormData, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    // 清除对应字段的错误
+    if (errors[field]) {
+      setErrors((prev) => ({ ...prev, [field]: undefined }));
     }
   };
-  
-  // 处理错误显示
-  useEffect(() => {
-    if (error) {
-      setSnackbarVisible(true);
+
+  const handleRegister = async () => {
+    if (!validateForm()) {
+      return;
     }
-  }, [error]);
-  
-  // 处理关闭错误提示
-  const onDismissSnackbar = () => {
-    setSnackbarVisible(false);
-    dispatch(clearError());
+
+    try {
+      const registerData = {
+        username: formData.username.trim(),
+        email: formData.email.trim().toLowerCase(),
+        password: formData.password,
+        phone: formData.phone.trim() || undefined,
+      };
+
+      await dispatch(register(registerData) as any);
+      Alert.alert('注册成功', '欢迎加入索克生活！', [
+        { text: '确定', onPress: () => navigation.navigate('Login') },
+      ]);
+    } catch (registerError) {
+      Alert.alert('注册失败', '请检查您的信息并重试');
+    }
   };
-  
+
+  const handleLogin = () => {
+    navigation.navigate('Login');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView 
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
+
+      <KeyboardAvoidingView
+        style={styles.keyboardAvoid}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.keyboardAvoidingView}
       >
-        <ScrollView contentContainerStyle={styles.scrollContent}>
-          <Text style={styles.headerTitle}>{t('auth.register')}</Text>
-          <Text style={styles.headerSubtitle}>创建您的索克生活账号</Text>
-          
-          <Surface style={styles.formContainer}>
-            <TextInput
-              label="用户名"
-              value={username}
-              onChangeText={setUsername}
-              onBlur={validateUsername}
-              mode="outlined"
-              style={styles.input}
-              left={<TextInput.Icon icon="account" />}
-              error={!!usernameError}
-            />
-            {usernameError ? <HelperText type="error">{usernameError}</HelperText> : null}
-            
-            <TextInput
-              label="手机号"
-              value={mobile}
-              onChangeText={setMobile}
-              onBlur={validateMobile}
-              mode="outlined"
-              style={styles.input}
-              keyboardType="phone-pad"
-              left={<TextInput.Icon icon="cellphone" />}
-              error={!!mobileError}
-            />
-            {mobileError ? <HelperText type="error">{mobileError}</HelperText> : null}
-            
-            <TextInput
-              label="密码"
-              value={password}
-              onChangeText={setPassword}
-              onBlur={validatePassword}
-              mode="outlined"
-              style={styles.input}
-              secureTextEntry={!showPassword}
-              left={<TextInput.Icon icon="lock" />}
-              right={
-                <TextInput.Icon 
-                  icon={showPassword ? "eye-off" : "eye"} 
-                  onPress={() => setShowPassword(!showPassword)} 
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          {/* 标题 */}
+          <View style={styles.header}>
+            <Text style={styles.title}>创建账户</Text>
+            <Text style={styles.subtitle}>加入索克生活，开启健康之旅</Text>
+          </View>
+
+          {/* 表单 */}
+          <View style={styles.form}>
+            {/* 用户名 */}
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>用户名 *</Text>
+              <TextInput
+                style={[
+                  styles.input,
+                  errors.username ? styles.inputError : null,
+                ]}
+                value={formData.username}
+                onChangeText={(value) => handleInputChange('username', value)}
+                placeholder="请输入用户名"
+                autoCapitalize="none"
+                autoCorrect={false}
+                maxLength={20}
+              />
+              {errors.username && (
+                <Text style={styles.errorText}>{errors.username}</Text>
+              )}
+            </View>
+
+            {/* 邮箱 */}
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>邮箱 *</Text>
+              <TextInput
+                style={[styles.input, errors.email ? styles.inputError : null]}
+                value={formData.email}
+                onChangeText={(value) => handleInputChange('email', value)}
+                placeholder="请输入邮箱地址"
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
+              />
+              {errors.email && (
+                <Text style={styles.errorText}>{errors.email}</Text>
+              )}
+            </View>
+
+            {/* 手机号 */}
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>手机号</Text>
+              <TextInput
+                style={[styles.input, errors.phone ? styles.inputError : null]}
+                value={formData.phone}
+                onChangeText={(value) => handleInputChange('phone', value)}
+                placeholder="请输入手机号（可选）"
+                keyboardType="phone-pad"
+                maxLength={11}
+              />
+              {errors.phone && (
+                <Text style={styles.errorText}>{errors.phone}</Text>
+              )}
+            </View>
+
+            {/* 密码 */}
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>密码 *</Text>
+              <View
+                style={[
+                  styles.passwordContainer,
+                  errors.password ? styles.inputError : null,
+                ]}
+              >
+                <TextInput
+                  style={styles.passwordInput}
+                  value={formData.password}
+                  onChangeText={(value) => handleInputChange('password', value)}
+                  placeholder="请输入密码"
+                  secureTextEntry={!showPassword}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  maxLength={50}
                 />
-              }
-              error={!!passwordError}
-            />
-            {passwordError ? <HelperText type="error">{passwordError}</HelperText> : null}
-            
-            <TextInput
-              label="确认密码"
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-              onBlur={validateConfirmPassword}
-              mode="outlined"
-              style={styles.input}
-              secureTextEntry={!showConfirmPassword}
-              left={<TextInput.Icon icon="lock-check" />}
-              right={
-                <TextInput.Icon 
-                  icon={showConfirmPassword ? "eye-off" : "eye"} 
-                  onPress={() => setShowConfirmPassword(!showConfirmPassword)} 
+                <TouchableOpacity
+                  style={styles.eyeButton}
+                  onPress={() => setShowPassword(!showPassword)}
+                >
+                  <Text style={styles.eyeText}>
+                    {showPassword ? '隐藏' : '显示'}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              {errors.password && (
+                <Text style={styles.errorText}>{errors.password}</Text>
+              )}
+              <Text style={styles.passwordHint}>
+                密码需包含字母和数字，至少6个字符
+              </Text>
+            </View>
+
+            {/* 确认密码 */}
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>确认密码 *</Text>
+              <View
+                style={[
+                  styles.passwordContainer,
+                  errors.confirmPassword ? styles.inputError : null,
+                ]}
+              >
+                <TextInput
+                  style={styles.passwordInput}
+                  value={formData.confirmPassword}
+                  onChangeText={(value) =>
+                    handleInputChange('confirmPassword', value)
+                  }
+                  placeholder="请再次输入密码"
+                  secureTextEntry={!showConfirmPassword}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  maxLength={50}
                 />
-              }
-              error={!!confirmPasswordError}
-            />
-            {confirmPasswordError ? <HelperText type="error">{confirmPasswordError}</HelperText> : null}
-            
-            <Text style={styles.privacyText}>
-              注册即表示您同意索克生活的
-              <Text style={{ color: theme.colors.primary }}> 服务条款 </Text>
-              和
-              <Text style={{ color: theme.colors.primary }}> 隐私政策</Text>
-            </Text>
-            
-            <Button 
-              mode="contained" 
-              onPress={handleSubmit} 
-              style={styles.registerButton}
-              loading={isLoading}
-              disabled={isLoading}
+                <TouchableOpacity
+                  style={styles.eyeButton}
+                  onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  <Text style={styles.eyeText}>
+                    {showConfirmPassword ? '隐藏' : '显示'}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              {errors.confirmPassword && (
+                <Text style={styles.errorText}>{errors.confirmPassword}</Text>
+              )}
+            </View>
+
+            {/* 注册按钮 */}
+            <TouchableOpacity
+              style={[
+                styles.registerButton,
+                loading && styles.registerButtonDisabled,
+              ]}
+              onPress={handleRegister}
+              disabled={loading}
             >
-              {t('auth.register')}
-            </Button>
-            
-            <TouchableOpacity 
-              style={styles.loginContainer}
-              onPress={() => navigation.navigate('Login')}
-            >
-              <Text style={styles.loginText}>
-                已有账号？ <Text style={{ color: theme.colors.primary }}>返回登录</Text>
+              <Text style={styles.registerButtonText}>
+                {loading ? '注册中...' : '注册'}
               </Text>
             </TouchableOpacity>
-          </Surface>
+
+            {/* 服务条款 */}
+            <Text style={styles.termsText}>
+              注册即表示您同意我们的
+              <Text style={styles.termsLink}>服务条款</Text>和
+              <Text style={styles.termsLink}>隐私政策</Text>
+            </Text>
+          </View>
+
+          {/* 登录链接 */}
+          <View style={styles.footer}>
+            <Text style={styles.footerText}>已有账户？</Text>
+            <TouchableOpacity onPress={handleLogin}>
+              <Text style={styles.loginLink}>立即登录</Text>
+            </TouchableOpacity>
+          </View>
         </ScrollView>
       </KeyboardAvoidingView>
-      
-      <Snackbar
-        visible={snackbarVisible}
-        onDismiss={onDismissSnackbar}
-        duration={3000}
-        action={{
-          label: '关闭',
-          onPress: onDismissSnackbar,
-        }}
-      >
-        {error}
-      </Snackbar>
     </SafeAreaView>
   );
 };
@@ -242,51 +330,132 @@ const RegisterScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: colors.background,
   },
-  keyboardAvoidingView: {
+  keyboardAvoid: {
+    flex: 1,
+  },
+  scrollView: {
     flex: 1,
   },
   scrollContent: {
-    flexGrow: 1,
-    padding: 16,
+    paddingHorizontal: spacing.xl,
+    paddingVertical: spacing.lg,
   },
-  headerTitle: {
-    fontSize: 28,
+  header: {
+    marginBottom: spacing.xl,
+  },
+  title: {
+    fontSize: 32,
     fontWeight: 'bold',
-    marginTop: 40,
-    marginBottom: 8,
+    color: colors.text,
+    marginBottom: spacing.sm,
   },
-  headerSubtitle: {
+  subtitle: {
     fontSize: 16,
-    opacity: 0.7,
-    marginBottom: 32,
+    color: colors.textSecondary,
   },
-  formContainer: {
-    padding: 24,
-    borderRadius: 12,
-    elevation: 2,
+  form: {
+    flex: 1,
+  },
+  inputContainer: {
+    marginBottom: spacing.lg,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.text,
+    marginBottom: spacing.sm,
   },
   input: {
-    marginBottom: 8,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 12,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.md,
+    fontSize: 16,
+    backgroundColor: colors.surface,
   },
-  privacyText: {
+  inputError: {
+    borderColor: colors.error,
+  },
+  passwordContainerError: {
+    borderColor: colors.error,
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 12,
+    backgroundColor: colors.surface,
+  },
+  passwordInput: {
+    flex: 1,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.md,
+    fontSize: 16,
+    borderWidth: 0,
+  },
+  eyeButton: {
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  eyeText: {
+    color: colors.primary,
     fontSize: 14,
-    opacity: 0.7,
-    marginVertical: 16,
-    textAlign: 'center',
+  },
+  errorText: {
+    color: colors.error,
+    fontSize: 12,
+    marginTop: spacing.xs,
+  },
+  passwordHint: {
+    color: colors.textSecondary,
+    fontSize: 12,
+    marginTop: spacing.xs,
   },
   registerButton: {
-    marginTop: 8,
-    paddingVertical: 8,
-    borderRadius: 4,
-  },
-  loginContainer: {
-    marginTop: 24,
+    backgroundColor: colors.primary,
+    paddingVertical: spacing.md,
+    borderRadius: 12,
     alignItems: 'center',
+    marginTop: spacing.lg,
   },
-  loginText: {
-    fontSize: 14,
+  registerButtonDisabled: {
+    opacity: 0.6,
+  },
+  registerButtonText: {
+    color: colors.surface,
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  termsText: {
+    fontSize: 12,
+    color: colors.textSecondary,
+    textAlign: 'center',
+    marginTop: spacing.md,
+    lineHeight: 18,
+  },
+  termsLink: {
+    color: colors.primary,
+    textDecorationLine: 'underline',
+  },
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: spacing.xl,
+    paddingBottom: spacing.lg,
+  },
+  footerText: {
+    fontSize: 16,
+    color: colors.textSecondary,
+  },
+  loginLink: {
+    fontSize: 16,
+    color: colors.primary,
+    fontWeight: '600',
+    marginLeft: spacing.sm,
   },
 });
-
-export default RegisterScreen;

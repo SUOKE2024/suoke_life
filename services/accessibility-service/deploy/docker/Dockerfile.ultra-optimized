@@ -1,0 +1,114 @@
+# ==================== 多阶段构建 - 超级优化版本 ====================
+# 构建阶段 - 使用完整的Python镜像进行构建
+FROM python:3.12-slim as builder
+
+# 设置构建参数
+ARG BUILD_MODE=production
+ARG ENABLE_OPTIONAL_DEPS=false
+
+# 安装构建依赖
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    gcc \
+    g++ \
+    pkg-config \
+    && rm -rf /var/lib/apt/lists/*
+
+# 设置工作目录
+WORKDIR /build
+
+# 复制依赖文件
+COPY requirements-core.txt requirements.txt ./
+
+# 创建虚拟环境并安装依赖
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# 根据构建模式安装不同的依赖
+RUN if [ "$ENABLE_OPTIONAL_DEPS" = "true" ]; then \
+        pip install --no-cache-dir -r requirements.txt; \
+    else \
+        pip install --no-cache-dir -r requirements-core.txt; \
+    fi
+
+# 清理pip缓存和不必要的文件
+RUN pip cache purge && \
+    find /opt/venv -name "*.pyc" -delete && \
+    find /opt/venv -name "__pycache__" -type d -exec rm -rf {} + && \
+    find /opt/venv -name "*.pyo" -delete
+
+# ==================== 运行时阶段 - 使用最小镜像 ====================
+FROM python:3.11-alpine as runtime
+
+# 设置标签
+LABEL maintainer="索克生活团队 <dev@suoke.life>"
+LABEL version="2.0.0"
+LABEL description="索克生活无障碍服务 - 超级优化版本"
+
+# 安装运行时依赖（仅必需的系统库）
+RUN apk add --no-cache \
+    # 基础运行时库
+    libstdc++ \
+    libgcc \
+    # 音频支持
+    alsa-lib \
+    # 图像处理支持
+    libjpeg-turbo \
+    libpng \
+    # 网络和SSL
+    ca-certificates \
+    # 时区数据
+    tzdata \
+    && rm -rf /var/cache/apk/*
+
+# 创建非root用户
+RUN addgroup -g 1000 suoke && \
+    adduser -D -u 1000 -G suoke suoke
+
+# 设置工作目录
+WORKDIR /app
+
+# 从构建阶段复制虚拟环境
+COPY --from=builder /opt/venv /opt/venv
+
+# 复制应用代码（使用.dockerignore优化）
+COPY --chown=suoke:suoke . .
+
+# 设置环境变量
+ENV PATH="/opt/venv/bin:$PATH" \
+    PYTHONPATH="/app" \
+    PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    # 优化Python性能
+    PYTHONHASHSEED=random \
+    # 设置时区
+    TZ=Asia/Shanghai \
+    # 应用配置
+    APP_ENV=production \
+    LOG_LEVEL=INFO
+
+# 创建必要的目录
+RUN mkdir -p /app/logs /app/data /app/tmp && \
+    chown -R suoke:suoke /app
+
+# 切换到非root用户
+USER suoke
+
+# 健康检查
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD python -c "import requests; requests.get('http://localhost:8080/health', timeout=5)" || exit 1
+
+# 暴露端口
+EXPOSE 8080 50051
+
+# 设置启动命令
+CMD ["python", "cmd/server/main.py"]
+
+# ==================== 镜像优化说明 ====================
+# 1. 使用多阶段构建分离构建和运行时环境
+# 2. 使用Alpine Linux作为基础镜像（约5MB）
+# 3. 只安装必需的运行时依赖
+# 4. 清理所有缓存和临时文件
+# 5. 使用非root用户提高安全性
+# 6. 优化Python环境变量
+# 7. 预期镜像大小：< 200MB（相比原来的500MB+） 

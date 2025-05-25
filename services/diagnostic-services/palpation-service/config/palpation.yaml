@@ -1,0 +1,279 @@
+# 索克生活 - 触诊服务配置文件
+# 主要配置项，包含服务、数据库、AI模型等核心设置
+
+# 服务基础配置
+service:
+  name: "palpation-service"
+  version: "1.0.0"
+  description: "索克生活触诊智能分析服务"
+  host: "0.0.0.0"
+  port: 8000
+  debug: false
+  workers: 4
+  max_connections: 1000
+  timeout: 30
+  
+  # 服务发现配置
+  discovery:
+    enabled: true
+    consul_host: "localhost"
+    consul_port: 8500
+    health_check_interval: 30
+
+# 数据库配置
+database:
+  type: "sqlite"
+  path: "data/palpation.db"
+  pool_size: 10
+  timeout: 30
+  backup_enabled: true
+  backup_interval: 3600  # 1小时
+  
+  # 连接池配置
+  pool:
+    min_size: 5
+    max_size: 20
+    recycle_time: 3600
+
+# 缓存配置
+cache:
+  enabled: true
+  enabled_levels:
+    - "l1_memory"
+    - "l2_redis"
+    - "l3_file"
+  
+  # 缓存配置
+  cache_config:
+    max_size: 10000
+    max_memory: 104857600  # 100MB
+    default_ttl: 3600
+    strategy: "lru"
+    enable_compression: true
+    auto_cleanup: true
+    cleanup_interval: 300
+  
+  # Redis配置
+  redis_config:
+    host: "localhost"
+    port: 6379
+    db: 0
+    password: null
+    timeout: 5
+  
+  # 文件缓存配置
+  file_cache_dir: "cache/files"
+  db_cache_path: "cache/cache.db"
+
+# 日志配置
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/palpation.log"
+  max_size: "10MB"
+  backup_count: 5
+  
+  # 日志轮转配置
+  rotation:
+    when: "midnight"
+    interval: 1
+    backup_count: 30
+
+# AI模型配置
+ai:
+  # 模型路径
+  models:
+    tcm_analyzer: "models/tcm_analyzer.pkl"
+    pulse_classifier: "models/pulse_classifier.h5"
+    constitution_predictor: "models/constitution_predictor.pkl"
+    risk_assessor: "models/risk_assessor.pkl"
+  
+  # 推理配置
+  inference:
+    confidence_threshold: 0.8
+    max_inference_time: 10
+    batch_size: 32
+    use_gpu: false
+    
+  # 模型更新配置
+  model_update:
+    enabled: true
+    check_interval: 86400  # 24小时
+    auto_update: false
+
+# 多模态融合配置
+fusion:
+  # 融合策略
+  strategy: "weighted_ensemble"
+  
+  # 模态权重
+  modality_weights:
+    pulse: 0.4
+    abdominal: 0.3
+    skin: 0.3
+  
+  # 融合参数
+  fusion_params:
+    confidence_threshold: 0.7
+    consensus_threshold: 0.6
+    temporal_window: 30  # 秒
+    
+  # 质量控制
+  quality_control:
+    enabled: true
+    min_data_quality: 0.6
+    outlier_detection: true
+
+# 预测分析配置
+prediction:
+  # 模型配置
+  models:
+    time_series:
+      type: "lstm"
+      sequence_length: 30
+      hidden_units: 64
+    
+    anomaly_detection:
+      type: "isolation_forest"
+      contamination: 0.1
+    
+    risk_prediction:
+      type: "random_forest"
+      n_estimators: 100
+  
+  # 预测参数
+  prediction_params:
+    forecast_horizon: 7  # 天
+    confidence_interval: 0.95
+    update_frequency: 3600  # 秒
+
+# 可视化配置
+visualization:
+  output_dir: "output/visualizations"
+  default_style: "medical"
+  default_dpi: 300
+  default_figsize: [12, 8]
+  
+  # 图表配置
+  charts:
+    pulse_waveform:
+      width: 1200
+      height: 400
+      sampling_rate: 1000
+    
+    constitution_radar:
+      width: 600
+      height: 600
+      
+    health_trend:
+      width: 1000
+      height: 600
+
+# 报告生成配置
+report:
+  # 模板配置
+  templates:
+    basic: "templates/basic_report.html"
+    detailed: "templates/detailed_report.html"
+    professional: "templates/professional_report.html"
+  
+  # 生成配置
+  generation:
+    default_language: "zh"
+    include_charts: true
+    include_recommendations: true
+    max_report_size: "50MB"
+  
+  # 输出配置
+  output:
+    directory: "reports"
+    formats: ["html", "pdf"]
+    retention_days: 90
+
+# 智能协调器配置
+coordinator:
+  # 任务调度配置
+  scheduler:
+    max_concurrent_tasks: 10
+    task_timeout: 300
+    retry_attempts: 3
+    
+  # 工作流配置
+  workflows:
+    pulse_analysis:
+      steps: ["data_validation", "signal_processing", "feature_extraction", "classification"]
+      timeout: 60
+    
+    comprehensive_analysis:
+      steps: ["data_fusion", "ai_analysis", "risk_assessment", "report_generation"]
+      timeout: 180
+
+# 监控配置
+monitoring:
+  enabled: true
+  host: "0.0.0.0"
+  port: 8080
+  update_interval: 5
+  retention_days: 30
+  
+  # 告警配置
+  alerts:
+    cpu_threshold: 80
+    memory_threshold: 85
+    disk_threshold: 90
+    response_time_threshold: 5000  # 毫秒
+  
+  # 指标收集
+  metrics:
+    system_metrics: true
+    application_metrics: true
+    custom_metrics: true
+    collection_interval: 60
+
+# 安全配置
+security:
+  # 认证配置
+  authentication:
+    enabled: true
+    jwt_secret: "your-secret-key"
+    token_expiry: 3600
+  
+  # 加密配置
+  encryption:
+    enabled: true
+    algorithm: "AES-256-GCM"
+    key_rotation_interval: 86400
+  
+  # 访问控制
+  access_control:
+    rate_limiting:
+      enabled: true
+      requests_per_minute: 100
+    
+    cors:
+      enabled: true
+      allowed_origins: ["*"]
+
+# 设备配置（引用外部文件）
+devices: !include devices.yaml
+
+# 环境特定配置
+environments:
+  development:
+    debug: true
+    log_level: "DEBUG"
+    cache:
+      enabled: false
+  
+  testing:
+    database:
+      path: ":memory:"
+    cache:
+      enabled: false
+  
+  production:
+    debug: false
+    log_level: "INFO"
+    workers: 8
+    monitoring:
+      enabled: true 

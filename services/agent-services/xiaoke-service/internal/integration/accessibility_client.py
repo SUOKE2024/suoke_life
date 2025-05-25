@@ -3,12 +3,13 @@
 
 """
 小克(xiaoke)智能体的无障碍服务客户端适配器
+支持医疗资源和产品信息的无障碍转换
 """
 
 import logging
-import json
+import asyncio
 import time
-from typing import Dict, Any, Optional, List
+from typing import Dict, Any, Optional, List, Union
 
 import grpc
 from google.protobuf.json_format import MessageToDict, ParseDict
@@ -26,351 +27,597 @@ from config.config import Config
 logger = logging.getLogger(__name__)
 
 class AccessibilityClient:
-    """无障碍服务客户端适配器，处理与无障碍服务的通信"""
+    """无障碍服务客户端适配器，为小克智能体提供无障碍能力"""
     
-    def __init__(self, config: Optional[Config] = None):
+    def __init__(self, config: Optional[Dict[str, Any]] = None):
         """
         初始化客户端
         
         Args:
-            config: 配置对象，如果为None则使用默认配置
+            config: 配置字典，包含无障碍服务的连接信息
         """
-        self.config = config or Config()
+        self.config = config or {}
         self.channel = None
         self.stub = None
         self._connect()
-        logger.info("无障碍服务客户端初始化完成")
+        logger.info("小克智能体无障碍服务客户端初始化完成")
     
-    def _connect(self) -> None:
+    def _connect(self):
         """连接到无障碍服务"""
         try:
-            # 获取服务地址
-            host = self.config.get("integration.accessibility_service.host", "accessibility-service")
-            port = self.config.get("integration.accessibility_service.port", 50051)
-            timeout_ms = self.config.get("integration.accessibility_service.timeout_ms", 5000)
+            # 从配置获取服务地址
+            host = self.config.get('accessibility_service', {}).get('host', 'accessibility-service')
+            port = self.config.get('accessibility_service', {}).get('port', 50051)
             
-            # 创建通道
-            self.channel = grpc.insecure_channel(
-                f"{host}:{port}",
-                options=[
-                    ('grpc.max_send_message_length', 50 * 1024 * 1024),
-                    ('grpc.max_receive_message_length', 50 * 1024 * 1024),
-                    ('grpc.enable_retries', 1),
-                    ('grpc.service_config', json.dumps({
-                        'methodConfig': [{
-                            'name': [{}],
-                            'retryPolicy': {
-                                'maxAttempts': 3,
-                                'initialBackoff': '0.1s',
-                                'maxBackoff': '1s',
-                                'backoffMultiplier': 2,
-                                'retryableStatusCodes': ['UNAVAILABLE']
-                            },
-                            'timeout': f'{timeout_ms}ms'
-                        }]
-                    }))
-                ]
-            )
+            # 创建gRPC通道
+            self.channel = grpc.insecure_channel(f'{host}:{port}')
             
-            # 创建stub
-            # 实际项目中应该创建实际的stub
+            # 导入生成的proto文件（实际项目中需要正确的导入路径）
+            # from accessibility_service.api.grpc import accessibility_pb2_grpc as pb2_grpc
             # self.stub = pb2_grpc.AccessibilityServiceStub(self.channel)
-            # 这里为简化，不创建实际的stub
             
-            logger.info(f"成功连接到无障碍服务: {host}:{port}")
+            # 模拟stub（实际项目中替换为真实的stub）
+            self.stub = MockAccessibilityStub()
+            
+            logger.info(f"已连接到无障碍服务: {host}:{port}")
             
         except Exception as e:
-            logger.error(f"连接无障碍服务失败: {str(e)}", exc_info=True)
-            self.channel = None
+            logger.error(f"连接无障碍服务失败: {e}")
+            self.stub = MockAccessibilityStub()  # 使用模拟客户端作为降级
     
-    def screen_reading(self, screen_data: bytes, user_id: str, 
-                      context: str, preferences: Dict[str, Any]) -> Dict[str, Any]:
+    async def convert_medical_resource_to_accessible(self, resource_info: Dict[str, Any], 
+                                                   user_id: str, target_format: str = "audio") -> Dict[str, Any]:
         """
-        屏幕阅读服务 - 分析屏幕内容并提供语音描述
+        将医疗资源信息转换为无障碍格式
+        
+        Args:
+            resource_info: 医疗资源信息
+            user_id: 用户ID
+            target_format: 目标格式（audio/simplified/braille）
+            
+        Returns:
+            无障碍格式的资源信息
+        """
+        try:
+            logger.info(f"转换医疗资源信息: 用户={user_id}, 格式={target_format}")
+            
+            # 构建请求
+            request = {
+                'content_id': f"medical_resource_{resource_info.get('resource_id', 'unknown')}",
+                'content_type': 'medical_resource',
+                'user_id': user_id,
+                'target_format': target_format,
+                'preferences': {
+                    'language': 'zh-CN',
+                    'voice_type': 'professional',
+                    'speech_rate': 1.0,
+                    'medical_terminology': True
+                }
+            }
+            
+            # 调用无障碍服务的内容转换接口
+            response = await self._call_accessible_content(request)
+            
+            # 处理医疗资源特定信息
+            accessible_info = self._format_medical_resource_content(resource_info, response, target_format)
+            
+            return {
+                'accessible_content': accessible_info,
+                'content_url': response.get('content_url', ''),
+                'audio_content': response.get('audio_content', b''),
+                'tactile_content': response.get('tactile_content', b''),
+                'success': True
+            }
+            
+        except Exception as e:
+            logger.error(f"医疗资源无障碍转换失败: {e}")
+            return {
+                'accessible_content': f'医疗资源信息转换失败: {str(e)}',
+                'content_url': '',
+                'audio_content': b'',
+                'tactile_content': b'',
+                'success': False,
+                'error': str(e)
+            }
+    
+    async def convert_product_info_to_accessible(self, product_info: Dict[str, Any],
+                                               user_id: str, target_format: str = "audio") -> Dict[str, Any]:
+        """
+        将农产品信息转换为无障碍格式
+        
+        Args:
+            product_info: 农产品信息
+            user_id: 用户ID
+            target_format: 目标格式
+            
+        Returns:
+            无障碍格式的产品信息
+        """
+        try:
+            logger.info(f"转换农产品信息: 用户={user_id}, 产品={product_info.get('name', 'unknown')}")
+            
+            # 构建请求
+            request = {
+                'content_id': f"product_{product_info.get('product_id', 'unknown')}",
+                'content_type': 'product_info',
+                'user_id': user_id,
+                'target_format': target_format,
+                'preferences': {
+                    'language': 'zh-CN',
+                    'voice_type': 'friendly',
+                    'speech_rate': 1.0,
+                    'include_nutrition': True
+                }
+            }
+            
+            # 调用无障碍服务的内容转换接口
+            response = await self._call_accessible_content(request)
+            
+            # 处理农产品特定信息
+            accessible_info = self._format_product_content(product_info, response, target_format)
+            
+            return {
+                'accessible_content': accessible_info,
+                'content_url': response.get('content_url', ''),
+                'audio_content': response.get('audio_content', b''),
+                'tactile_content': response.get('tactile_content', b''),
+                'success': True
+            }
+            
+        except Exception as e:
+            logger.error(f"农产品信息无障碍转换失败: {e}")
+            return {
+                'accessible_content': f'农产品信息转换失败: {str(e)}',
+                'content_url': '',
+                'audio_content': b'',
+                'tactile_content': b'',
+                'success': False,
+                'error': str(e)
+            }
+    
+    async def provide_voice_guidance_for_payment(self, payment_info: Dict[str, Any],
+                                               user_id: str, language: str = "zh-CN") -> Dict[str, Any]:
+        """
+        为支付流程提供语音引导
+        
+        Args:
+            payment_info: 支付信息
+            user_id: 用户ID
+            language: 语言代码
+            
+        Returns:
+            语音引导信息
+        """
+        try:
+            logger.info(f"提供支付语音引导: 用户={user_id}, 金额={payment_info.get('amount', 0)}")
+            
+            # 构建语音引导内容
+            guidance_text = self._generate_payment_guidance_text(payment_info)
+            
+            # 构建请求
+            request = {
+                'audio_data': guidance_text.encode('utf-8'),  # 将文本作为音频数据处理
+                'user_id': user_id,
+                'context': 'payment_guidance',
+                'language': language,
+                'dialect': 'standard'
+            }
+            
+            # 调用无障碍服务的语音辅助接口
+            response = await self._call_voice_assistance(request)
+            
+            return {
+                'guidance_text': guidance_text,
+                'audio_guidance': response.get('response_audio', b''),
+                'confidence': response.get('confidence', 0.0),
+                'success': True
+            }
+            
+        except Exception as e:
+            logger.error(f"支付语音引导失败: {e}")
+            return {
+                'guidance_text': f'支付引导生成失败: {str(e)}',
+                'audio_guidance': b'',
+                'confidence': 0.0,
+                'success': False,
+                'error': str(e)
+            }
+    
+    async def convert_subscription_info_to_accessible(self, subscription_info: Dict[str, Any],
+                                                    user_id: str, target_format: str = "audio") -> Dict[str, Any]:
+        """
+        将订阅信息转换为无障碍格式
+        
+        Args:
+            subscription_info: 订阅信息
+            user_id: 用户ID
+            target_format: 目标格式
+            
+        Returns:
+            无障碍格式的订阅信息
+        """
+        try:
+            logger.info(f"转换订阅信息: 用户={user_id}, 订阅={subscription_info.get('plan_name', 'unknown')}")
+            
+            # 构建请求
+            request = {
+                'content_id': f"subscription_{subscription_info.get('subscription_id', 'unknown')}",
+                'content_type': 'subscription_info',
+                'user_id': user_id,
+                'target_format': target_format,
+                'preferences': {
+                    'language': 'zh-CN',
+                    'voice_type': 'professional',
+                    'speech_rate': 1.0,
+                    'include_pricing': True
+                }
+            }
+            
+            # 调用无障碍服务的内容转换接口
+            response = await self._call_accessible_content(request)
+            
+            # 处理订阅特定信息
+            accessible_info = self._format_subscription_content(subscription_info, response, target_format)
+            
+            return {
+                'accessible_content': accessible_info,
+                'content_url': response.get('content_url', ''),
+                'audio_content': response.get('audio_content', b''),
+                'tactile_content': response.get('tactile_content', b''),
+                'success': True
+            }
+            
+        except Exception as e:
+            logger.error(f"订阅信息无障碍转换失败: {e}")
+            return {
+                'accessible_content': f'订阅信息转换失败: {str(e)}',
+                'content_url': '',
+                'audio_content': b'',
+                'tactile_content': b'',
+                'success': False,
+                'error': str(e)
+            }
+    
+    async def provide_screen_reading_for_interface(self, screen_data: bytes, user_id: str,
+                                                 interface_type: str = "resource_list") -> Dict[str, Any]:
+        """
+        为界面提供屏幕阅读服务
         
         Args:
             screen_data: 屏幕截图数据
             user_id: 用户ID
-            context: 上下文信息
-            preferences: 用户偏好设置
+            interface_type: 界面类型
             
         Returns:
-            包含屏幕描述和UI元素的字典
+            屏幕阅读结果
         """
-        logger.info(f"发送屏幕阅读请求: 用户={user_id}")
-        start_time = time.time()
-        
         try:
-            if not self.channel:
-                self._connect()
-                if not self.channel:
-                    raise Exception("无法连接到无障碍服务")
+            logger.info(f"提供界面屏幕阅读: 用户={user_id}, 类型={interface_type}")
             
-            # 实际项目中应该构建请求并调用stub
-            # user_preferences = pb2.UserPreferences(**preferences)
-            # request = pb2.ScreenReadingRequest(
-            #     screen_data=screen_data,
-            #     user_id=user_id,
-            #     context=context,
-            #     preferences=user_preferences
-            # )
-            # response = self.stub.ScreenReading(request)
-            # return MessageToDict(response, preserving_proto_field_name=True)
-            
-            # 模拟服务调用结果 - 小克版本特别关注医疗资源和预约信息
-            time.sleep(0.15)  # 模拟网络延迟
-            result = {
-                "screen_description": "当前页面显示了附近诊所列表，共有3个选项，每个选项包含诊所名称、地址和可预约时间。",
-                "elements": [
-                    {
-                        "element_type": "list_item", 
-                        "content": "仁和中医诊所",
-                        "action": "点击查看详情",
-                        "location": {"x": 0.5, "y": 0.3, "width": 0.9, "height": 0.15}
-                    },
-                    {
-                        "element_type": "list_item", 
-                        "content": "康复理疗中心",
-                        "action": "点击查看详情",
-                        "location": {"x": 0.5, "y": 0.5, "width": 0.9, "height": 0.15}
-                    },
-                    {
-                        "element_type": "list_item", 
-                        "content": "同仁堂国医馆",
-                        "action": "点击查看详情",
-                        "location": {"x": 0.5, "y": 0.7, "width": 0.9, "height": 0.15}
-                    }
-                ],
-                "audio_description": b""  # 实际应该返回音频数据
+            # 构建请求
+            request = {
+                'screen_data': screen_data,
+                'user_id': user_id,
+                'context': f"xiaoke_{interface_type}",
+                'preferences': {
+                    'language': 'zh-CN',
+                    'detail_level': 'medium',
+                    'business_context': True
+                }
             }
             
-            logger.info(f"屏幕阅读请求完成: 用户={user_id}, 耗时={time.time() - start_time:.2f}秒")
-            return result
+            # 调用无障碍服务的屏幕阅读接口
+            response = await self._call_screen_reading(request)
+            
+            # 处理小克特定的界面元素
+            enhanced_elements = self._enhance_ui_elements_for_xiaoke(response.get('elements', []), interface_type)
+            
+            return {
+                'screen_description': response.get('screen_description', ''),
+                'ui_elements': enhanced_elements,
+                'audio_description': response.get('audio_description', b''),
+                'navigation_hints': self._generate_navigation_hints(enhanced_elements, interface_type),
+                'success': True
+            }
             
         except Exception as e:
-            logger.error(f"屏幕阅读请求失败: {str(e)}", exc_info=True)
+            logger.error(f"界面屏幕阅读失败: {e}")
             return {
-                "error": str(e),
-                "screen_description": "无法解析屏幕内容",
-                "elements": [],
-                "audio_description": b""
+                'screen_description': f'界面阅读失败: {str(e)}',
+                'ui_elements': [],
+                'audio_description': b'',
+                'navigation_hints': [],
+                'success': False,
+                'error': str(e)
             }
     
-    def voice_assistance(self, audio_data: bytes, user_id: str, context: str, 
-                        language: str, dialect: str) -> Dict[str, Any]:
+    async def convert_appointment_info_to_accessible(self, appointment_info: Dict[str, Any],
+                                                   user_id: str, target_format: str = "audio") -> Dict[str, Any]:
         """
-        语音辅助服务 - 进行语音识别和响应
+        将预约信息转换为无障碍格式
         
         Args:
-            audio_data: 语音数据
-            user_id: 用户ID
-            context: 上下文信息
-            language: 语言代码
-            dialect: 方言代码
-            
-        Returns:
-            包含识别文本和响应的字典
-        """
-        logger.info(f"发送语音辅助请求: 用户={user_id}, 语言={language}, 方言={dialect}")
-        start_time = time.time()
-        
-        try:
-            if not self.channel:
-                self._connect()
-                if not self.channel:
-                    raise Exception("无法连接到无障碍服务")
-            
-            # 实际项目中应该构建请求并调用stub
-            # request = pb2.VoiceAssistanceRequest(
-            #     audio_data=audio_data,
-            #     user_id=user_id,
-            #     context=context,
-            #     language=language,
-            #     dialect=dialect
-            # )
-            # response = self.stub.VoiceAssistance(request)
-            # return MessageToDict(response, preserving_proto_field_name=True)
-            
-            # 模拟服务调用结果 - 小克版本特别关注医疗预约和资源查询
-            time.sleep(0.12)  # 模拟网络延迟
-            result = {
-                "recognized_text": "我想预约最近的中医诊所",
-                "response_text": "好的，我已为您找到3家附近的中医诊所。最近的是仁和中医诊所，距离您500米，明天上午9点有号源，您要预约吗？",
-                "response_audio": b"",  # 实际应该返回音频数据
-                "confidence": 0.91
-            }
-            
-            logger.info(f"语音辅助请求完成: 用户={user_id}, 耗时={time.time() - start_time:.2f}秒")
-            return result
-            
-        except Exception as e:
-            logger.error(f"语音辅助请求失败: {str(e)}", exc_info=True)
-            return {
-                "error": str(e),
-                "recognized_text": "",
-                "response_text": "抱歉，我无法处理您的语音请求",
-                "response_audio": b"",
-                "confidence": 0.0
-            }
-    
-    def accessible_content(self, content_id: str, content_type: str, user_id: str, 
-                          target_format: str, preferences: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        健康内容无障碍转换 - 将健康内容转换为无障碍格式
-        
-        Args:
-            content_id: 内容ID
-            content_type: 内容类型
+            appointment_info: 预约信息
             user_id: 用户ID
             target_format: 目标格式
-            preferences: 用户偏好设置
             
         Returns:
-            包含可访问内容的字典
+            无障碍格式的预约信息
         """
-        logger.info(f"发送内容转换请求: 用户={user_id}, 内容ID={content_id}, 目标格式={target_format}")
-        start_time = time.time()
-        
         try:
-            if not self.channel:
-                self._connect()
-                if not self.channel:
-                    raise Exception("无法连接到无障碍服务")
+            logger.info(f"转换预约信息: 用户={user_id}, 预约={appointment_info.get('appointment_id', 'unknown')}")
             
-            # 实际项目中应该构建请求并调用stub
-            # user_preferences = pb2.UserPreferences(**preferences)
-            # request = pb2.AccessibleContentRequest(
-            #     content_id=content_id,
-            #     content_type=content_type,
-            #     user_id=user_id,
-            #     target_format=target_format,
-            #     preferences=user_preferences
-            # )
-            # response = self.stub.AccessibleContent(request)
-            # return MessageToDict(response, preserving_proto_field_name=True)
-            
-            # 模拟服务调用结果 - 小克版本特别关注医疗资源和预约信息
-            time.sleep(0.18)  # 模拟网络延迟
-            
-            if target_format == "audio":
-                result = {
-                    "accessible_content": "",
-                    "content_url": "https://storage.suoke.life/audio/medical_content_123.mp3",
-                    "audio_content": b"",  # 实际应该返回音频数据
-                    "tactile_content": b""
+            # 构建请求
+            request = {
+                'content_id': f"appointment_{appointment_info.get('appointment_id', 'unknown')}",
+                'content_type': 'appointment_info',
+                'user_id': user_id,
+                'target_format': target_format,
+                'preferences': {
+                    'language': 'zh-CN',
+                    'voice_type': 'professional',
+                    'speech_rate': 1.0,
+                    'include_time_details': True
                 }
-            elif target_format == "simplified":
-                result = {
-                    "accessible_content": "预约步骤：1. 选择诊所 2. 选择时间 3. 确认预约 4. 支付费用",
-                    "content_url": "",
-                    "audio_content": b"",
-                    "tactile_content": b""
-                }
-            else:
-                result = {
-                    "accessible_content": "预约流程：首先在地图上选择您方便前往的诊所，然后选择合适的预约时间，系统会显示可用的医生和服务项目，确认无误后点击确认并支付预约金即可完成预约。",
-                    "content_url": "",
-                    "audio_content": b"",
-                    "tactile_content": b""
-                }
+            }
             
-            logger.info(f"内容转换请求完成: 用户={user_id}, 耗时={time.time() - start_time:.2f}秒")
-            return result
+            # 调用无障碍服务的内容转换接口
+            response = await self._call_accessible_content(request)
+            
+            # 处理预约特定信息
+            accessible_info = self._format_appointment_content(appointment_info, response, target_format)
+            
+            return {
+                'accessible_content': accessible_info,
+                'content_url': response.get('content_url', ''),
+                'audio_content': response.get('audio_content', b''),
+                'tactile_content': response.get('tactile_content', b''),
+                'success': True
+            }
             
         except Exception as e:
-            logger.error(f"内容转换请求失败: {str(e)}", exc_info=True)
+            logger.error(f"预约信息无障碍转换失败: {e}")
             return {
-                "error": str(e),
-                "accessible_content": "内容转换失败",
-                "content_url": "",
-                "audio_content": b"",
-                "tactile_content": b""
+                'accessible_content': f'预约信息转换失败: {str(e)}',
+                'content_url': '',
+                'audio_content': b'',
+                'tactile_content': b'',
+                'success': False,
+                'error': str(e)
             }
     
-    def manage_settings(self, user_id: str, preferences: Dict[str, Any], 
-                       action: str) -> Dict[str, Any]:
-        """
-        无障碍设置管理 - 获取或更新用户的无障碍设置
+    def _format_medical_resource_content(self, resource_info: Dict[str, Any], 
+                                       response: Dict[str, Any], target_format: str) -> str:
+        """格式化医疗资源内容"""
+        name = resource_info.get('name', '未知资源')
+        resource_type = resource_info.get('type', '未知类型')
+        location = resource_info.get('location', '未知位置')
+        rating = resource_info.get('rating', 0)
+        price = resource_info.get('price', 0)
         
-        Args:
-            user_id: 用户ID
-            preferences: 用户偏好设置
-            action: 操作（获取/更新）
-            
-        Returns:
-            包含当前设置的字典
-        """
-        logger.info(f"发送设置管理请求: 用户={user_id}, 操作={action}")
-        start_time = time.time()
+        if target_format == "simplified":
+            return f"{name}，{resource_type}，位于{location}，评分{rating}分，价格{price}元"
+        elif target_format == "audio":
+            return f"医疗资源：{name}。类型：{resource_type}。地址：{location}。用户评分：{rating}分。价格：{price}元。"
+        else:
+            return response.get('accessible_content', f"医疗资源信息：{name}")
+    
+    def _format_product_content(self, product_info: Dict[str, Any], 
+                              response: Dict[str, Any], target_format: str) -> str:
+        """格式化农产品内容"""
+        name = product_info.get('name', '未知产品')
+        origin = product_info.get('origin', '未知产地')
+        price = product_info.get('price', 0)
+        constitution_benefit = product_info.get('constitution_benefit', '适合所有体质')
         
-        try:
-            if not self.channel:
-                self._connect()
-                if not self.channel:
-                    raise Exception("无法连接到无障碍服务")
+        if target_format == "simplified":
+            return f"{name}，产地{origin}，价格{price}元，{constitution_benefit}"
+        elif target_format == "audio":
+            return f"农产品：{name}。产地：{origin}。价格：{price}元。体质适宜性：{constitution_benefit}。"
+        else:
+            return response.get('accessible_content', f"农产品信息：{name}")
+    
+    def _format_subscription_content(self, subscription_info: Dict[str, Any], 
+                                   response: Dict[str, Any], target_format: str) -> str:
+        """格式化订阅内容"""
+        plan_name = subscription_info.get('plan_name', '未知套餐')
+        status = subscription_info.get('status', '未知状态')
+        amount = subscription_info.get('amount', 0)
+        next_billing = subscription_info.get('next_billing_date', '未知')
+        
+        if target_format == "simplified":
+            return f"{plan_name}，状态{status}，月费{amount}元，下次扣费{next_billing}"
+        elif target_format == "audio":
+            return f"订阅套餐：{plan_name}。当前状态：{status}。月费：{amount}元。下次扣费日期：{next_billing}。"
+        else:
+            return response.get('accessible_content', f"订阅信息：{plan_name}")
+    
+    def _format_appointment_content(self, appointment_info: Dict[str, Any], 
+                                  response: Dict[str, Any], target_format: str) -> str:
+        """格式化预约内容"""
+        doctor_name = appointment_info.get('doctor_name', '未知医生')
+        confirmed_time = appointment_info.get('confirmed_time', '未确认时间')
+        location = appointment_info.get('location', '未知地点')
+        appointment_type = appointment_info.get('appointment_type', '未知类型')
+        
+        if target_format == "simplified":
+            return f"预约{doctor_name}医生，时间{confirmed_time}，地点{location}"
+        elif target_format == "audio":
+            return f"预约信息：医生{doctor_name}，预约时间{confirmed_time}，就诊地点{location}，预约类型{appointment_type}。"
+        else:
+            return response.get('accessible_content', f"预约信息：{doctor_name}")
+    
+    def _generate_payment_guidance_text(self, payment_info: Dict[str, Any]) -> str:
+        """生成支付引导文本"""
+        amount = payment_info.get('amount', 0)
+        payment_method = payment_info.get('payment_method', '未知支付方式')
+        order_id = payment_info.get('order_id', '未知订单')
+        
+        return f"您即将支付{amount}元，使用{payment_method}支付方式，订单号{order_id}。请确认支付信息无误后继续。"
+    
+    def _enhance_ui_elements_for_xiaoke(self, elements: List[Dict[str, Any]], 
+                                      interface_type: str) -> List[Dict[str, Any]]:
+        """为小克界面增强UI元素信息"""
+        enhanced_elements = []
+        
+        for element in elements:
+            enhanced_element = element.copy()
             
-            # 实际项目中应该构建请求并调用stub
-            # user_preferences = pb2.UserPreferences(**preferences)
-            # request = pb2.SettingsRequest(
-            #     user_id=user_id,
-            #     preferences=user_preferences,
-            #     action=action
-            # )
-            # response = self.stub.ManageSettings(request)
-            # return MessageToDict(response, preserving_proto_field_name=True)
+            # 根据界面类型添加特定的上下文信息
+            if interface_type == "resource_list":
+                if element.get('element_type') == 'button' and '预约' in element.get('content', ''):
+                    enhanced_element['accessibility_hint'] = '点击此按钮可预约该医疗资源'
+                elif element.get('element_type') == 'text' and '评分' in element.get('content', ''):
+                    enhanced_element['accessibility_hint'] = '这是用户对该资源的评分信息'
             
-            # 模拟服务调用结果
-            time.sleep(0.08)  # 模拟网络延迟
+            elif interface_type == "product_list":
+                if element.get('element_type') == 'button' and '购买' in element.get('content', ''):
+                    enhanced_element['accessibility_hint'] = '点击此按钮可购买该农产品'
+                elif element.get('element_type') == 'text' and '价格' in element.get('content', ''):
+                    enhanced_element['accessibility_hint'] = '这是产品的价格信息'
             
-            if action == "get":
-                result = {
-                    "current_preferences": {
-                        "font_size": "large",
-                        "high_contrast": True,
-                        "voice_type": "female",
-                        "speech_rate": 1.2,
-                        "language": "zh-CN",
-                        "dialect": "mandarin",
-                        "screen_reader": True,
-                        "sign_language": False,
-                        "enabled_features": ["voice_assistance", "screen_reading", "content_conversion"]
+            elif interface_type == "payment":
+                if element.get('element_type') == 'button' and '确认' in element.get('content', ''):
+                    enhanced_element['accessibility_hint'] = '点击此按钮确认支付'
+                elif element.get('element_type') == 'input':
+                    enhanced_element['accessibility_hint'] = '请输入支付相关信息'
+            
+            enhanced_elements.append(enhanced_element)
+        
+        return enhanced_elements
+    
+    def _generate_navigation_hints(self, elements: List[Dict[str, Any]], 
+                                 interface_type: str) -> List[str]:
+        """生成导航提示"""
+        hints = []
+        
+        if interface_type == "resource_list":
+            hints.append("使用Tab键在医疗资源列表中导航")
+            hints.append("按空格键或回车键选择资源")
+            hints.append("按Escape键返回上级菜单")
+        
+        elif interface_type == "product_list":
+            hints.append("使用方向键浏览农产品列表")
+            hints.append("按回车键查看产品详情")
+            hints.append("按C键添加到购物车")
+        
+        elif interface_type == "payment":
+            hints.append("请仔细核对支付信息")
+            hints.append("使用Tab键在支付选项间切换")
+            hints.append("按回车键确认支付")
+        
+        return hints
+    
+    # 模拟的服务调用方法（实际项目中替换为真实的gRPC调用）
+    async def _call_accessible_content(self, request: Dict[str, Any]) -> Dict[str, Any]:
+        """调用无障碍内容转换服务"""
+        await asyncio.sleep(0.1)
+        content_type = request.get('content_type', 'unknown')
+        
+        if content_type == 'medical_resource':
+            return {
+                'accessible_content': '北京协和医院心内科，三甲医院，位于东城区，专业治疗心血管疾病',
+                'content_url': 'https://accessibility.suoke.life/medical/123',
+                'audio_content': b'mock_medical_audio',
+                'tactile_content': b'mock_medical_braille'
+            }
+        elif content_type == 'product_info':
+            return {
+                'accessible_content': '有机红枣，产自新疆和田，富含维生素C，适合气虚体质',
+                'content_url': 'https://accessibility.suoke.life/product/456',
+                'audio_content': b'mock_product_audio',
+                'tactile_content': b'mock_product_braille'
+            }
+        else:
+            return {
+                'accessible_content': '信息已转换为无障碍格式',
+                'content_url': 'https://accessibility.suoke.life/content/789',
+                'audio_content': b'mock_audio_content',
+                'tactile_content': b'mock_braille_content'
+            }
+    
+    async def _call_voice_assistance(self, request: Dict[str, Any]) -> Dict[str, Any]:
+        """调用语音辅助服务"""
+        await asyncio.sleep(0.1)
+        return {
+            'recognized_text': '支付引导请求',
+            'response_text': '支付流程语音引导',
+            'response_audio': b'mock_payment_guidance_audio',
+            'confidence': 0.95
+        }
+    
+    async def _call_screen_reading(self, request: Dict[str, Any]) -> Dict[str, Any]:
+        """调用屏幕阅读服务"""
+        await asyncio.sleep(0.1)
+        context = request.get('context', '')
+        
+        if 'resource_list' in context:
+            return {
+                'screen_description': '当前显示医疗资源列表，包含3个可选项',
+                'elements': [
+                    {
+                        'element_type': 'button',
+                        'content': '预约北京协和医院',
+                        'action': 'click',
+                        'location': {'x': 100, 'y': 100, 'width': 200, 'height': 50}
                     },
-                    "success": True,
-                    "message": "成功获取用户设置"
-                }
-            elif action == "update":
-                result = {
-                    "current_preferences": preferences,
-                    "success": True,
-                    "message": "成功更新用户设置"
-                }
-            else:
-                result = {
-                    "current_preferences": {},
-                    "success": False,
-                    "message": f"不支持的操作: {action}"
-                }
-            
-            logger.info(f"设置管理请求完成: 用户={user_id}, 耗时={time.time() - start_time:.2f}秒")
-            return result
-            
-        except Exception as e:
-            logger.error(f"设置管理请求失败: {str(e)}", exc_info=True)
+                    {
+                        'element_type': 'text',
+                        'content': '评分：4.8分',
+                        'action': 'read',
+                        'location': {'x': 100, 'y': 160, 'width': 100, 'height': 20}
+                    }
+                ],
+                'audio_description': b'mock_resource_screen_audio'
+            }
+        elif 'product_list' in context:
             return {
-                "error": str(e),
-                "current_preferences": {},
-                "success": False,
-                "message": f"处理失败: {str(e)}"
+                'screen_description': '当前显示农产品列表，包含多个有机产品',
+                'elements': [
+                    {
+                        'element_type': 'button',
+                        'content': '购买有机红枣',
+                        'action': 'click',
+                        'location': {'x': 100, 'y': 100, 'width': 150, 'height': 40}
+                    },
+                    {
+                        'element_type': 'text',
+                        'content': '价格：68元/斤',
+                        'action': 'read',
+                        'location': {'x': 100, 'y': 150, 'width': 100, 'height': 20}
+                    }
+                ],
+                'audio_description': b'mock_product_screen_audio'
+            }
+        else:
+            return {
+                'screen_description': '当前显示小克服务界面',
+                'elements': [],
+                'audio_description': b'mock_screen_audio'
             }
     
-    def close(self) -> None:
-        """关闭与无障碍服务的连接"""
+    def close(self):
+        """关闭客户端连接"""
         if self.channel:
-            try:
-                self.channel.close()
-                logger.info("关闭与无障碍服务的连接")
-            except Exception as e:
-                logger.error(f"关闭与无障碍服务的连接失败: {str(e)}", exc_info=True)
+            self.channel.close()
+        logger.info("小克无障碍服务客户端连接已关闭")
+
+
+class MockAccessibilityStub:
+    """模拟的无障碍服务存根（用于开发和测试）"""
+    
+    def __init__(self):
+        logger.info("使用模拟无障碍服务存根")
+    
+    async def AccessibleContent(self, request):
+        """模拟无障碍内容转换"""
+        await asyncio.sleep(0.1)
+        return type('Response', (), {
+            'accessible_content': '模拟无障碍内容',
+            'content_url': 'https://mock.url',
+            'audio_content': b'mock_audio',
+            'tactile_content': b'mock_braille'
+        })()
 
 
 # 单例实例

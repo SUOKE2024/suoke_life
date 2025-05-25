@@ -355,7 +355,7 @@ npm run cache:clear
 
 ### 前端技术
 
-- **核心框架**：[React Native 0.73+](https://reactnative.dev/)
+- **核心框架**：[React Native 0.79+](https://reactnative.dev/)
 - **状态管理**：[Redux Toolkit 2.0.1+](https://redux-toolkit.js.org/)
 - **路由导航**：[React Navigation 6.1.9+](https://reactnavigation.org/)
 - **数据存储**：

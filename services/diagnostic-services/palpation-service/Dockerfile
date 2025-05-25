@@ -1,84 +1,78 @@
-# 多阶段构建 Dockerfile
+# 索克生活 - 触诊服务 Docker 镜像
+FROM python:3.11-slim
 
-# 第1阶段：Python依赖构建
-FROM python:3.12-slim AS builder
-
+# 设置工作目录
 WORKDIR /app
 
+# 设置环境变量
+ENV PYTHONPATH=/app
+ENV PYTHONUNBUFFERED=1
+ENV DEBIAN_FRONTEND=noninteractive
+
 # 安装系统依赖
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y \
     build-essential \
     gcc \
     g++ \
+    cmake \
+    pkg-config \
     libffi-dev \
     libssl-dev \
-    python3-dev \
+    libxml2-dev \
+    libxslt1-dev \
+    libjpeg-dev \
+    libpng-dev \
+    libfreetype6-dev \
+    libblas-dev \
+    liblapack-dev \
+    libatlas-base-dev \
+    gfortran \
+    libhdf5-dev \
+    libopencv-dev \
+    libportaudio2 \
+    libportaudiocpp0 \
+    portaudio19-dev \
+    libasound2-dev \
+    libpulse-dev \
+    libusb-1.0-0-dev \
+    libudev-dev \
+    bluetooth \
+    libbluetooth-dev \
+    bluez \
+    bluez-tools \
+    i2c-tools \
+    curl \
+    wget \
     git \
-    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# 复制并安装依赖
+# 创建非root用户
+RUN useradd -m -u 1000 palpation && \
+    chown -R palpation:palpation /app
+
+# 复制依赖文件
 COPY requirements.txt .
+
+# 安装Python依赖
 RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir wheel setuptools && \
-    pip wheel --no-cache-dir --wheel-dir=/app/wheels -r requirements.txt
-
-# 第2阶段：构建gRPC代码
-FROM builder AS grpc-builder
-
-WORKDIR /app
-
-# 复制proto文件并生成Python代码
-COPY api/grpc/ /app/api/grpc/
-RUN mkdir -p /app/generated && \
-    python -m grpc_tools.protoc \
-    --proto_path=/app/api/grpc \
-    --python_out=/app/generated \
-    --grpc_python_out=/app/generated \
-    /app/api/grpc/*.proto
-
-# 第3阶段：最终镜像
-FROM python:3.12-slim
-
-WORKDIR /app
-
-# 安装运行时依赖
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    libgomp1 \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-# 从构建阶段复制依赖包
-COPY --from=builder /app/wheels /app/wheels
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir /app/wheels/* && \
-    rm -rf /app/wheels
-
-# 从构建阶段复制生成的gRPC代码
-COPY --from=grpc-builder /app/generated /app/api/
+    pip install --no-cache-dir -r requirements.txt
 
 # 复制应用代码
-COPY config/ /app/config/
-COPY internal/ /app/internal/
-COPY pkg/ /app/pkg/
-COPY cmd/ /app/cmd/
-COPY api/grpc/ /app/api/grpc/
+COPY . .
 
-# 创建必要的目录结构
-RUN mkdir -p /app/logs /app/data
+# 创建必要的目录
+RUN mkdir -p logs data config models cache reports monitoring && \
+    chown -R palpation:palpation /app
 
-# 设置环境变量
-ENV PYTHONPATH="/app:${PYTHONPATH}" \
-    PYTHONUNBUFFERED=1 \
-    SERVICE_ENV=production
+# 切换到非root用户
+USER palpation
+
+# 暴露端口
+EXPOSE 8000 8080
 
 # 健康检查
-HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
-    CMD python -c "import socket; socket.socket().connect(('localhost', 50054))" || exit 1
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
 
-# 暴露服务端口
-EXPOSE 50054
-EXPOSE 51054
-
-# 启动服务
-CMD ["python", "-m", "cmd.server"] 
+# 启动命令
+CMD ["python", "main.py"] 

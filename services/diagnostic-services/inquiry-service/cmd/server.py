@@ -33,6 +33,8 @@ from internal.dialogue.dialogue_manager import DialogueManager
 from internal.llm.symptom_extractor import SymptomExtractor
 from internal.llm.tcm_pattern_mapper import TCMPatternMapper
 from internal.llm.llm_client import LLMClient
+from internal.llm.health_risk_assessor import HealthRiskAssessor
+from internal.knowledge.tcm_knowledge_base import TCMKnowledgeBase
 from internal.repository.session_repository import SessionRepository
 from internal.repository.user_repository import UserRepository
 from pkg.utils.config_loader import ConfigLoader
@@ -152,6 +154,10 @@ async def init_application(config: Dict[str, Any]) -> Dict[str, Any]:
     app_components["session_repository"] = session_repository
     app_components["user_repository"] = user_repository
     
+    # 初始化知识库
+    tcm_knowledge_base = TCMKnowledgeBase(config)
+    app_components["tcm_knowledge_base"] = tcm_knowledge_base
+    
     # 初始化LLM客户端
     llm_client = LLMClient(config)
     app_components["llm_client"] = llm_client
@@ -163,6 +169,10 @@ async def init_application(config: Dict[str, Any]) -> Dict[str, Any]:
     # 初始化TCM证型映射器
     tcm_pattern_mapper = TCMPatternMapper(config)
     app_components["tcm_pattern_mapper"] = tcm_pattern_mapper
+    
+    # 初始化健康风险评估器
+    health_risk_assessor = HealthRiskAssessor(config)
+    app_components["health_risk_assessor"] = health_risk_assessor
     
     # 初始化对话管理器
     dialogue_manager = DialogueManager(
@@ -178,6 +188,8 @@ async def init_application(config: Dict[str, Any]) -> Dict[str, Any]:
         dialogue_manager=dialogue_manager,
         symptom_extractor=symptom_extractor,
         tcm_pattern_mapper=tcm_pattern_mapper,
+        health_risk_assessor=health_risk_assessor,
+        tcm_knowledge_base=tcm_knowledge_base,
         config=config
     )
     app_components["servicer"] = servicer
@@ -186,6 +198,8 @@ async def init_application(config: Dict[str, Any]) -> Dict[str, Any]:
     if health_checker.enabled:
         health_checker.register_check("database", session_repository.check_health)
         health_checker.register_check("llm", llm_client.check_health)
+        health_checker.register_check("knowledge_base", tcm_knowledge_base.check_health)
+        health_checker.register_check("risk_assessor", health_risk_assessor.check_health)
     
     return app_components
 

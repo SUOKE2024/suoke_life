@@ -1,45 +1,73 @@
+/**
+ * 索克生活 (Suoke Life) - 主应用组件
+ * @format
+ */
+
 import React from 'react';
 import { StatusBar, useColorScheme } from 'react-native';
-import { Provider as PaperProvider, MD3LightTheme, MD3DarkTheme } from 'react-native-paper';
+import { Provider as PaperProvider, DefaultTheme, MD3DarkTheme } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { Provider as ReduxProvider } from 'react-redux';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { I18nextProvider } from 'react-i18next';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { enableScreens } from 'react-native-screens';
 
-import AppNavigator from './navigation/AppNavigator';
+// Store
 import { store } from './store';
-import i18n from './config/i18n';
-import { lightTheme, darkTheme } from './config/theme';
+
+// Navigation
+import { AppNavigator } from './navigation/AppNavigator';
+
+// Theme
+import { colors } from './constants/theme';
+
+// 启用屏幕优化
+enableScreens();
 
 /**
- * 索克生活APP入口组件
+ * 索克生活 (Suoke Life) - 主应用组件
  * 负责初始化全局提供者和配置
  */
 const App: React.FC = () => {
   const colorScheme = useColorScheme();
   const isDarkMode = colorScheme === 'dark';
 
-  // 合并 React Native Paper 主题与自定义主题
+  // 配置主题
   const paperTheme = isDarkMode 
-    ? { ...MD3DarkTheme, ...darkTheme } 
-    : { ...MD3LightTheme, ...lightTheme };
+    ? { 
+        ...MD3DarkTheme, 
+        colors: { 
+          ...MD3DarkTheme.colors, 
+          primary: colors.primary,
+          accent: colors.secondary,
+        } 
+      } 
+    : { 
+        ...DefaultTheme, 
+        colors: { 
+          ...DefaultTheme.colors, 
+          primary: colors.primary,
+          accent: colors.secondary,
+        } 
+      };
 
   return (
-    <SafeAreaProvider>
-      <ReduxProvider store={store}>
-        <I18nextProvider i18n={i18n}>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        <ReduxProvider store={store}>
           <PaperProvider theme={paperTheme}>
             <NavigationContainer>
               <StatusBar 
                 barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-                backgroundColor={paperTheme.colors.background}
+                backgroundColor={paperTheme.colors.surface}
+                translucent={true}
               />
               <AppNavigator />
             </NavigationContainer>
           </PaperProvider>
-        </I18nextProvider>
-      </ReduxProvider>
-    </SafeAreaProvider>
+        </ReduxProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 };
 

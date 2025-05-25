@@ -6,13 +6,15 @@
 """
 
 import logging
+import asyncio
 from typing import Dict, Any, Optional
+from pathlib import Path
 
 # 导入配置
 from config.config import config
 
 # 导入核心服务
-from internal.service.accessibility_service import AccessibilityService
+from internal.service.optimized_accessibility_service import OptimizedAccessibilityService
 
 # 导入新增服务模块
 from internal.service.edge_computing import EdgeComputingService
@@ -156,36 +158,41 @@ class AccessibilityApp:
             
         return scheduler
         
-    def _init_accessibility_service(self) -> AccessibilityService:
-        """初始化核心无障碍服务"""
-        logger.info("初始化核心无障碍服务")
+    def _init_accessibility_service(self) -> OptimizedAccessibilityService:
+        """
+        初始化无障碍服务
         
-        # 创建核心服务并注入其他服务依赖
-        config_dict = {}
+        Returns:
+            OptimizedAccessibilityService: 无障碍服务实例
+        """
         try:
-            if hasattr(self.config, 'as_dict') and callable(self.config.as_dict):
-                config_dict = self.config.as_dict()
-            else:
-                # 尝试将配置转换为字典
-                logger.warning("配置对象没有as_dict方法，尝试手动转换")
-                for key, value in vars(self.config).items():
-                    if not key.startswith('_'):
-                        config_dict[key] = value
-        except Exception as e:
-            logger.error(f"转换配置为字典失败: {str(e)}")
+            logger.info("初始化无障碍服务")
             
-        service = AccessibilityService(config_dict)
-        
-        # 注入服务依赖
-        service.edge_computing_service = self.edge_computing
-        service.tcm_accessibility_service = self.tcm_accessibility
-        service.dialect_service = self.dialect_service
-        service.agent_coordination = self.agent_coordination
-        service.privacy_service = self.privacy_service
-        service.background_collection_service = self.background_collection
-        service.crisis_alert_service = self.crisis_alert
-        
-        return service
+            # 准备配置
+            config_dict = {
+                "features": self.config.get("features", {}),
+                "models": self.config.get("models", {}),
+                "performance": self.config.get("performance", {}),
+                "cache": self.config.get("cache", {}),
+                "security": self.config.get("security", {})
+            }
+            
+            # 创建服务实例
+            service = OptimizedAccessibilityService(config_dict)
+            
+            # 注入服务依赖
+            service.edge_computing_service = self.edge_computing
+            service.tcm_accessibility_service = self.tcm_accessibility
+            service.dialect_service = self.dialect_service
+            service.agent_coordination = self.agent_coordination
+            service.privacy_service = self.privacy_service
+            service.background_collection_service = self.background_collection
+            service.crisis_alert_service = self.crisis_alert
+            
+            return service
+        except Exception as e:
+            logger.error(f"初始化无障碍服务失败: {str(e)}")
+            return None
         
     def start(self):
         """启动应用服务"""

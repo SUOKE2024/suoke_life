@@ -294,6 +294,18 @@ class BackgroundCollectionService:
                     for data_type in self.data_cache[user_id]:
                         result["data_points"][data_type] = len(self.data_cache[user_id][data_type])
         
+        # 添加电池状态信息
+        battery_level = self._get_battery_level()
+        result["battery_level"] = battery_level
+        
+        # 添加电池优化状态
+        if battery_level <= self.battery_threshold_critical:
+            result["battery_optimization"] = "critical"
+        elif battery_level <= self.battery_threshold_low:
+            result["battery_optimization"] = "low"
+        else:
+            result["battery_optimization"] = "normal"
+        
         return result
     
     def start(self):

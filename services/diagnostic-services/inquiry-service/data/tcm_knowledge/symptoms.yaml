@@ -1,0 +1,228 @@
+# 中医症状数据
+# 包含常见症状及其描述、相关部位和证型关联
+
+symptoms:
+  - id: SYM001
+    name: 头痛
+    description: 头部疼痛，可表现为胀痛、刺痛、隐痛等
+    body_locations:
+      - 头部
+    severity_levels:
+      - 轻度
+      - 中度
+      - 重度
+    associated_patterns:
+      - 风寒证
+      - 风热证
+      - 肝阳上亢
+      - 血瘀证
+      - 痰湿证
+      
+  - id: SYM002
+    name: 发热
+    description: 体温升高，可伴有畏寒、恶寒等症状
+    body_locations:
+      - 全身
+    severity_levels:
+      - 低热
+      - 中热
+      - 高热
+    associated_patterns:
+      - 风寒证
+      - 风热证
+      - 湿热证
+      - 阴虚发热
+      
+  - id: SYM003
+    name: 疲劳
+    description: 精神疲惫，体力不支，活动后加重
+    body_locations:
+      - 全身
+    severity_levels:
+      - 轻度
+      - 中度
+      - 重度
+    associated_patterns:
+      - 气虚证
+      - 脾虚证
+      - 肾虚证
+      - 血虚证
+      
+  - id: SYM004
+    name: 失眠
+    description: 入睡困难或睡眠质量差，易醒多梦
+    body_locations:
+      - 神志
+    severity_levels:
+      - 偶发
+      - 经常
+      - 严重
+    associated_patterns:
+      - 心脾两虚
+      - 心肾不交
+      - 肝火上炎
+      - 痰热扰心
+      
+  - id: SYM005
+    name: 咳嗽
+    description: 喉部或气管受刺激引起的反射性动作
+    body_locations:
+      - 肺部
+      - 咽喉
+    severity_levels:
+      - 轻微
+      - 中度
+      - 严重
+    associated_patterns:
+      - 风寒咳嗽
+      - 风热咳嗽
+      - 痰湿咳嗽
+      - 肺燥咳嗽
+      
+  - id: SYM006
+    name: 食欲不振
+    description: 进食欲望减退，对食物缺乏兴趣
+    body_locations:
+      - 脾胃
+    severity_levels:
+      - 轻度
+      - 中度
+      - 重度
+    associated_patterns:
+      - 脾虚证
+      - 肝郁脾虚
+      - 湿困脾胃
+      - 胃阴虚
+      
+  - id: SYM007
+    name: 腹胀
+    description: 腹部膨胀感，可伴有嗳气、矢气等
+    body_locations:
+      - 腹部
+    severity_levels:
+      - 轻微
+      - 明显
+      - 严重
+    associated_patterns:
+      - 肝郁气滞
+      - 脾虚证
+      - 湿阻中焦
+      - 食积
+      
+  - id: SYM008
+    name: 便秘
+    description: 大便秘结，排便困难或排便间隔时间延长
+    body_locations:
+      - 肠道
+    severity_levels:
+      - 轻度
+      - 中度
+      - 重度
+    associated_patterns:
+      - 肠燥津亏
+      - 气虚便秘
+      - 阳虚便秘
+      - 热结便秘
+      
+  - id: SYM009
+    name: 心悸
+    description: 心跳加快或心跳不规则的自觉症状
+    body_locations:
+      - 心脏
+    severity_levels:
+      - 偶发
+      - 频发
+      - 持续
+    associated_patterns:
+      - 心血虚
+      - 心阳虚
+      - 心脾两虚
+      - 痰火扰心
+      
+  - id: SYM010
+    name: 眩晕
+    description: 头晕目眩，视物旋转，可伴恶心呕吐
+    body_locations:
+      - 头部
+    severity_levels:
+      - 轻微
+      - 中度
+      - 严重
+    associated_patterns:
+      - 肝阳上亢
+      - 气血亏虚
+      - 痰湿中阻
+      - 肾精不足
+      
+  - id: SYM011
+    name: 口干
+    description: 口腔干燥，津液不足的表现
+    body_locations:
+      - 口腔
+    severity_levels:
+      - 轻度
+      - 中度
+      - 重度
+    associated_patterns:
+      - 阴虚证
+      - 热盛伤津
+      - 燥邪犯肺
+      - 湿热证
+      
+  - id: SYM012
+    name: 自汗
+    description: 白天无故出汗，活动后加重
+    body_locations:
+      - 全身
+    severity_levels:
+      - 轻微
+      - 明显
+      - 严重
+    associated_patterns:
+      - 气虚证
+      - 阳虚证
+      - 表虚证
+      
+  - id: SYM013
+    name: 盗汗
+    description: 夜间睡眠时出汗，醒后汗止
+    body_locations:
+      - 全身
+    severity_levels:
+      - 轻度
+      - 中度
+      - 重度
+    associated_patterns:
+      - 阴虚证
+      - 阴虚火旺
+      - 气阴两虚
+      
+  - id: SYM014
+    name: 腰痛
+    description: 腰部疼痛，可影响活动
+    body_locations:
+      - 腰部
+    severity_levels:
+      - 轻微
+      - 中度
+      - 严重
+    associated_patterns:
+      - 肾虚腰痛
+      - 寒湿腰痛
+      - 血瘀腰痛
+      - 湿热腰痛
+      
+  - id: SYM015
+    name: 关节痛
+    description: 关节部位疼痛，可伴肿胀、活动受限
+    body_locations:
+      - 关节
+    severity_levels:
+      - 轻度
+      - 中度
+      - 重度
+    associated_patterns:
+      - 风寒湿痹
+      - 风湿热痹
+      - 痰瘀痹阻
+      - 肝肾亏虚 

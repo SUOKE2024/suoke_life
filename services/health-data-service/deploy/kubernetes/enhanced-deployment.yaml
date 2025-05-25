@@ -1,0 +1,405 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: health-data-service
+  labels:
+    app: health-data-service
+    version: v2.0.0
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: health-data-config
+  namespace: health-data-service
+data:
+  # InfluxDB配置
+  INFLUXDB_URL: "http://influxdb:8086"
+  INFLUXDB_ORG: "suoke-life"
+  INFLUXDB_BUCKET: "health_data"
+  
+  # MongoDB配置
+  MONGODB_URL: "mongodb://mongodb:27017"
+  MONGODB_DATABASE: "health_data"
+  
+  # Redis配置
+  REDIS_HOST: "redis"
+  REDIS_PORT: "6379"
+  REDIS_DB: "2"
+  
+  # Kafka配置
+  KAFKA_BOOTSTRAP_SERVERS: "kafka:9092"
+  
+  # 服务配置
+  SERVICE_PORT: "8082"
+  LOG_LEVEL: "INFO"
+  
+  # 分片配置
+  SHARD_COUNT: "10"
+  REPLICATION_FACTOR: "3"
+  
+  # 缓存配置
+  QUERY_CACHE_TTL: "300"
+  AGGREGATION_CACHE_TTL: "3600"
+  USER_PROFILE_CACHE_TTL: "1800"
+  MAX_CACHE_SIZE: "10000"
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: health-data-secrets
+  namespace: health-data-service
+type: Opaque
+stringData:
+  INFLUXDB_TOKEN: "your-influxdb-token"
+  MONGODB_USERNAME: "health_user"
+  MONGODB_PASSWORD: "secure_password"
+  REDIS_PASSWORD: "redis_password"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: health-data-service
+  namespace: health-data-service
+  labels:
+    app: health-data-service
+    version: v2.0.0
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: health-data-service
+  template:
+    metadata:
+      labels:
+        app: health-data-service
+        version: v2.0.0
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8082"
+        prometheus.io/path: "/api/v1/health/metrics"
+    spec:
+      serviceAccountName: health-data-service
+      containers:
+      - name: health-data-service
+        image: suoke-life/health-data-service:v2.0.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8082
+          name: http
+          protocol: TCP
+        env:
+        - name: SERVICE_NAME
+          value: "health-data-service"
+        - name: SERVICE_VERSION
+          value: "v2.0.0"
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        envFrom:
+        - configMapRef:
+            name: health-data-config
+        - secretRef:
+            name: health-data-secrets
+        resources:
+          requests:
+            cpu: 500m
+            memory: 1Gi
+          limits:
+            cpu: 2000m
+            memory: 4Gi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8082
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8082
+          initialDelaySeconds: 20
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        startupProbe:
+          httpGet:
+            path: /health
+            port: 8082
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 30
+        volumeMounts:
+        - name: data
+          mountPath: /data
+        - name: logs
+          mountPath: /logs
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: health-data-pvc
+      - name: logs
+        emptyDir: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: health-data-service
+  namespace: health-data-service
+  labels:
+    app: health-data-service
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8082
+    targetPort: 8082
+    protocol: TCP
+    name: http
+  selector:
+    app: health-data-service
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: health-data-service
+  namespace: health-data-service
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: health-data-service
+  namespace: health-data-service
+rules:
+- apiGroups: [""]
+  resources: ["configmaps", "secrets"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: health-data-service
+  namespace: health-data-service
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: health-data-service
+subjects:
+- kind: ServiceAccount
+  name: health-data-service
+  namespace: health-data-service
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: health-data-service-hpa
+  namespace: health-data-service
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: health-data-service
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 10
+        periodSeconds: 60
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+      - type: Percent
+        value: 100
+        periodSeconds: 60
+      - type: Pods
+        value: 2
+        periodSeconds: 60
+
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: health-data-service-pdb
+  namespace: health-data-service
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: health-data-service
+
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: health-data-service-netpol
+  namespace: health-data-service
+spec:
+  podSelector:
+    matchLabels:
+      app: health-data-service
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: api-gateway
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+    ports:
+    - protocol: TCP
+      port: 8082
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: data-storage
+    ports:
+    - protocol: TCP
+      port: 8086  # InfluxDB
+    - protocol: TCP
+      port: 27017 # MongoDB
+    - protocol: TCP
+      port: 6379  # Redis
+    - protocol: TCP
+      port: 9092  # Kafka
+  - to:
+    - namespaceSelector: {}
+    ports:
+    - protocol: TCP
+      port: 53   # DNS
+    - protocol: UDP
+      port: 53   # DNS
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: health-data-pvc
+  namespace: health-data-service
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: fast-ssd
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: health-data-service
+  namespace: health-data-service
+  labels:
+    app: health-data-service
+spec:
+  selector:
+    matchLabels:
+      app: health-data-service
+  endpoints:
+  - port: http
+    path: /api/v1/health/metrics
+    interval: 30s
+    scrapeTimeout: 10s
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: health-data-grafana-dashboard
+  namespace: health-data-service
+  labels:
+    grafana_dashboard: "1"
+data:
+  health-data-dashboard.json: |
+    {
+      "dashboard": {
+        "title": "Health Data Service Dashboard",
+        "panels": [
+          {
+            "title": "Write Operations",
+            "targets": [
+              {
+                "expr": "rate(health_data_total_writes[5m])"
+              }
+            ]
+          },
+          {
+            "title": "Read Operations",
+            "targets": [
+              {
+                "expr": "rate(health_data_total_reads[5m])"
+              }
+            ]
+          },
+          {
+            "title": "Cache Hit Rate",
+            "targets": [
+              {
+                "expr": "rate(health_data_cache_hits[5m]) / (rate(health_data_cache_hits[5m]) + rate(health_data_cache_misses[5m]))"
+              }
+            ]
+          },
+          {
+            "title": "Average Response Time",
+            "targets": [
+              {
+                "expr": "health_data_write_duration_seconds_sum / health_data_write_duration_seconds_count"
+              },
+              {
+                "expr": "health_data_read_duration_seconds_sum / health_data_read_duration_seconds_count"
+              }
+            ]
+          },
+          {
+            "title": "Active Streams",
+            "targets": [
+              {
+                "expr": "health_data_active_streams"
+              }
+            ]
+          }
+        ]
+      }
+    } 

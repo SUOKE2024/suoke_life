@@ -19,6 +19,13 @@ import numpy as np
 from typing import Dict, List, Optional, Tuple, Any, Union, Callable, Set
 from enum import Enum, auto
 from dataclasses import dataclass
+from abc import ABC, abstractmethod
+from datetime import datetime
+
+from internal.model.pulse_models import (
+    DeviceInfo, SensorCalibrationData, PulseDataPacket,
+    PulsePosition, PulseSession
+)
 
 logger = logging.getLogger(__name__)
 
@@ -383,581 +390,637 @@ class SignalProcessor:
         width = (right_idx - left_idx) / 100  # 归一化到0-1范围
         return max(0.01, width)
 
-class DeviceAdapter:
-    """
-    设备适配器基类，提供通用的设备数据处理方法
-    """
+class BaseDeviceAdapter(ABC):
+    """设备适配器基类"""
     
-    def __init__(self, config):
+    def __init__(self, device_config: Dict[str, Any]):
         """
         初始化设备适配器
         
         Args:
-            config: 设备配置字典
+            device_config: 设备配置
         """
-        self.config = config
-        self.supported_models = config.get('supported_models', [])
-        self.model_adapters = self._init_model_adapters()
-        logger.info(f"初始化设备适配器，支持{len(self.supported_models)}种设备型号")
-    
-    def _init_model_adapters(self) -> Dict[str, Any]:
-        """
-        初始化各型号设备的适配器
+        self.device_config = device_config
+        self.device_id = device_config.get('device_id', 'unknown')
+        self.device_name = device_config.get('name', 'Unknown Device')
+        self.sampling_rate = device_config.get('sampling_rate', 1000)
+        self.channels = device_config.get('channels', 6)
+        self.is_connected = False
+        self.logger = logging.getLogger(f"{__name__}.{self.__class__.__name__}")
         
-        Returns:
-            Dict: 设备型号到适配器对象的映射
-        """
-        adapters = {}
-        for model_info in self.supported_models:
-            model = model_info.get('model')
-            manufacturer = model_info.get('manufacturer')
-            
-            if model == "WP-100" and manufacturer == "SuokeHealth":
-                adapters[model] = SuokeWP100Adapter(model_info)
-            elif model == "PulseWave Pro" and manufacturer == "TCMDiagnostics":
-                adapters[model] = TCMDiagnosticsPWAdapter(model_info)
-            elif model == "PulseReader 2000" and manufacturer == "MedSense":
-                adapters[model] = MedSensePR2000Adapter(model_info)
-            else:
-                logger.warning(f"未知设备型号: {model}, 制造商: {manufacturer}")
-        
-        return adapters
+    @abstractmethod
+    def connect(self) -> bool:
+        """连接设备"""
+        pass
     
-    def validate_device(self, device_info: Dict[str, Any]) -> bool:
+    @abstractmethod
+    def disconnect(self) -> bool:
+        """断开设备连接"""
+        pass
+    
+    @abstractmethod
+    def calibrate(self, operator: str) -> SensorCalibrationData:
+        """校准设备"""
+        pass
+    
+    @abstractmethod
+    def start_acquisition(self, session_id: str) -> bool:
+        """开始数据采集"""
+        pass
+    
+    @abstractmethod
+    def stop_acquisition(self) -> bool:
+        """停止数据采集"""
+        pass
+    
+    @abstractmethod
+    def read_data(self) -> Optional[PulseDataPacket]:
+        """读取数据"""
+        pass
+    
+    @abstractmethod
+    def get_device_info(self) -> DeviceInfo:
+        """获取设备信息"""
+        pass
+    
+    @abstractmethod
+    def check_health(self) -> Tuple[bool, str]:
+        """检查设备健康状态"""
+        pass
+    
+    def map_channel_to_position(self, channel: int) -> PulsePosition:
         """
-        验证设备信息是否受支持
+        将通道号映射到脉诊位置
         
         Args:
-            device_info: 设备信息字典
+            channel: 通道号 (0-5)
             
         Returns:
-            bool: 如果设备受支持则返回True，否则返回False
+            脉诊位置
         """
-        model = device_info.get('model')
-        firmware_version = device_info.get('firmware_version')
+        channel_position_map = {
+            0: PulsePosition.CUN_LEFT,
+            1: PulsePosition.GUAN_LEFT,
+            2: PulsePosition.CHI_LEFT,
+            3: PulsePosition.CUN_RIGHT,
+            4: PulsePosition.GUAN_RIGHT,
+            5: PulsePosition.CHI_RIGHT
+        }
+        return channel_position_map.get(channel, PulsePosition.CUN_LEFT)
+
+
+class SuokeWP100Adapter(BaseDeviceAdapter):
+    """索克WP-100设备适配器"""
+    
+    def __init__(self, device_config: Dict[str, Any]):
+        super().__init__(device_config)
+        self.firmware_version = "1.2.0"
+        self.current_session_id = None
+        self.acquisition_active = False
         
-        if model not in self.model_adapters:
-            logger.warning(f"不支持的设备型号: {model}")
+    def connect(self) -> bool:
+        """连接设备"""
+        try:
+            # TODO: 实际的设备连接代码
+            # 这里是模拟实现
+            self.logger.info(f"正在连接{self.device_name}...")
+            
+            # 模拟连接过程
+            import time
+            time.sleep(0.5)
+            
+            self.is_connected = True
+            self.logger.info(f"{self.device_name}连接成功")
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"连接{self.device_name}失败: {e}")
+            self.is_connected = False
+            return False
+    
+    def disconnect(self) -> bool:
+        """断开设备连接"""
+        try:
+            if self.acquisition_active:
+                self.stop_acquisition()
+            
+            # TODO: 实际的断开连接代码
+            self.is_connected = False
+            self.logger.info(f"{self.device_name}已断开连接")
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"断开{self.device_name}连接失败: {e}")
+            return False
+    
+    def calibrate(self, operator: str) -> SensorCalibrationData:
+        """校准设备"""
+        if not self.is_connected:
+            raise Exception("设备未连接")
+        
+        self.logger.info(f"开始校准{self.device_name}...")
+        
+        # TODO: 实际的校准代码
+        # 这里是模拟实现
+        calibration_values = []
+        for i in range(self.channels):
+            # 模拟每个通道的校准值
+            baseline = np.random.normal(100, 2)  # 基线压力
+            sensitivity = np.random.normal(1.0, 0.02)  # 灵敏度
+            calibration_values.extend([baseline, sensitivity])
+        
+        calibration_data = SensorCalibrationData(
+            calibration_values=calibration_values,
+            calibration_timestamp=datetime.now(),
+            calibration_operator=operator,
+            calibration_result=True,
+            error_margin=0.02
+        )
+        
+        self.logger.info(f"{self.device_name}校准完成")
+        return calibration_data
+    
+    def start_acquisition(self, session_id: str) -> bool:
+        """开始数据采集"""
+        if not self.is_connected:
+            raise Exception("设备未连接")
+        
+        if self.acquisition_active:
+            self.logger.warning("数据采集已在进行中")
             return False
         
-        # 检查固件版本是否符合要求
-        for supported_model in self.supported_models:
-            if supported_model.get('model') == model:
-                min_firmware = supported_model.get('firmware_min_version')
-                if min_firmware and not self._check_version(firmware_version, min_firmware):
-                    logger.warning(f"设备固件版本过低: {firmware_version}, 最低要求: {min_firmware}")
-                    return False
-                break
-        
-        return True
-    
-    def _check_version(self, version: str, min_version: str) -> bool:
-        """
-        检查版本是否满足最低要求
-        
-        Args:
-            version: 当前版本
-            min_version: 最低要求版本
-            
-        Returns:
-            bool: 如果当前版本高于或等于最低要求则返回True
-        """
         try:
-            current = [int(x) for x in version.split('.')]
-            minimum = [int(x) for x in min_version.split('.')]
+            # TODO: 实际的开始采集代码
+            self.current_session_id = session_id
+            self.acquisition_active = True
+            self.logger.info(f"{self.device_name}开始数据采集，会话ID: {session_id}")
+            return True
             
-            for i in range(max(len(current), len(minimum))):
-                c = current[i] if i < len(current) else 0
-                m = minimum[i] if i < len(minimum) else 0
+        except Exception as e:
+            self.logger.error(f"开始数据采集失败: {e}")
+            return False
+    
+    def stop_acquisition(self) -> bool:
+        """停止数据采集"""
+        if not self.acquisition_active:
+            self.logger.warning("数据采集未在进行中")
+            return False
+        
+        try:
+            # TODO: 实际的停止采集代码
+            self.acquisition_active = False
+            self.logger.info(f"{self.device_name}停止数据采集")
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"停止数据采集失败: {e}")
+            return False
+    
+    def read_data(self) -> Optional[PulseDataPacket]:
+        """读取数据"""
+        if not self.acquisition_active:
+            return None
+        
+        try:
+            # TODO: 实际的数据读取代码
+            # 这里是模拟实现
+            
+            # 模拟6个通道的数据
+            data_packets = []
+            for channel in range(self.channels):
+                # 生成模拟脉搏波形数据
+                t = np.linspace(0, 1, self.sampling_rate)
                 
-                if c > m:
-                    return True
-                elif c < m:
-                    return False
+                # 基础脉搏波形（简化的双峰模型）
+                heart_rate = 72  # 次/分
+                frequency = heart_rate / 60  # Hz
+                
+                # 主波
+                main_wave = 50 * np.sin(2 * np.pi * frequency * t) + 100
+                
+                # 重搏波
+                dicrotic_wave = 15 * np.sin(4 * np.pi * frequency * t - np.pi/4)
+                
+                # 合成脉搏波
+                pressure_data = main_wave + dicrotic_wave
+                
+                # 添加噪声
+                noise = np.random.normal(0, 2, len(pressure_data))
+                pressure_data += noise
+                
+                # 计算速度数据（压力的导数）
+                velocity_data = np.gradient(pressure_data) * self.sampling_rate
+                
+                # 模拟皮肤温度和湿度
+                skin_temperature = 36.5 + np.random.normal(0, 0.5)
+                skin_moisture = 45 + np.random.normal(0, 10)
+                
+                # 创建数据包
+                packet = PulseDataPacket(
+                    session_id=self.current_session_id,
+                    timestamp=datetime.now(),
+                    position=self.map_channel_to_position(channel),
+                    pressure_data=pressure_data,
+                    velocity_data=velocity_data,
+                    skin_temperature=skin_temperature,
+                    skin_moisture=skin_moisture,
+                    quality_indicators={
+                        "signal_strength": 0.95,
+                        "contact_quality": 0.92
+                    }
+                )
+                data_packets.append(packet)
             
-            return True  # 版本相等
+            # 返回第一个通道的数据（实际应用中可能需要返回所有通道）
+            return data_packets[0] if data_packets else None
+            
         except Exception as e:
-            logger.error(f"版本比较错误: {e}")
-            return False
+            self.logger.error(f"读取数据失败: {e}")
+            return None
     
-    def get_adapter_for_device(self, device_info: Dict[str, Any]) -> Any:
-        """
-        获取设备对应的适配器
-        
-        Args:
-            device_info: 设备信息字典
-            
-        Returns:
-            DeviceModelAdapter: 设备型号适配器对象
-            
-        Raises:
-            ValueError: 如果设备不受支持
-        """
-        model = device_info.get('model')
-        
-        if not self.validate_device(device_info):
-            raise ValueError(f"不支持的设备: {model}")
-        
-        return self.model_adapters[model]
+    def get_device_info(self) -> DeviceInfo:
+        """获取设备信息"""
+        return DeviceInfo(
+            device_id=self.device_id,
+            model="WP-100",
+            firmware_version=self.firmware_version,
+            sensor_types=["pressure", "temperature", "moisture"],
+            sampling_rate=self.sampling_rate,
+            channels=self.channels,
+            features=self.device_config.get('features', []),
+            calibration_date=datetime.now()  # 应该从设备读取实际校准日期
+        )
     
-    def preprocess_data(self, data_packet: Dict[str, Any], device_info: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        预处理数据包
+    def check_health(self) -> Tuple[bool, str]:
+        """检查设备健康状态"""
+        if not self.is_connected:
+            return False, "设备未连接"
         
-        Args:
-            data_packet: 原始数据包
-            device_info: 设备信息
-            
-        Returns:
-            Dict: 标准化的数据包
-        """
-        adapter = self.get_adapter_for_device(device_info)
-        return adapter.preprocess_data(data_packet)
-    
-    def calibrate_device(self, calibration_data: Dict[str, Any], device_info: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        校准设备
-        
-        Args:
-            calibration_data: 校准数据
-            device_info: 设备信息
-            
-        Returns:
-            Dict: 校准结果
-        """
-        adapter = self.get_adapter_for_device(device_info)
-        return adapter.calibrate(calibration_data)
-    
-    def validate_calibration(self, device_info: Dict[str, Any], calibration_data: Dict[str, Any]) -> bool:
-        """
-        验证校准数据是否有效
-        
-        Args:
-            device_info: 设备信息
-            calibration_data: 校准数据
-            
-        Returns:
-            bool: 如果校准数据有效则返回True
-        """
-        # 检查校准时间是否在有效期内
-        if 'calibration_timestamp' in calibration_data:
-            calibration_time = calibration_data.get('calibration_timestamp')
-            current_time = int(time.time())
-            calibration_interval = self.config.get('calibration_interval_days', 30) * 24 * 60 * 60
-            
-            if current_time - calibration_time > calibration_interval:
-                logger.warning(f"设备校准已过期，校准时间: {calibration_time}，当前时间: {current_time}")
-                return False
-        
-        # 调用具体型号的校准验证
-        adapter = self.get_adapter_for_device(device_info)
-        return adapter.validate_calibration(calibration_data)
-
-
-class DeviceModelAdapter:
-    """设备型号适配器基类"""
-    
-    def __init__(self, model_config):
-        """初始化设备型号适配器"""
-        self.model_config = model_config
-        self.model = model_config.get('model')
-        self.manufacturer = model_config.get('manufacturer')
-        logger.info(f"初始化设备型号适配器: {self.model}, 制造商: {self.manufacturer}")
-    
-    def preprocess_data(self, data_packet: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        预处理数据包，将厂商特定格式转换为标准格式
-        
-        Args:
-            data_packet: 原始数据包
-            
-        Returns:
-            Dict: 标准化的数据包
-        """
-        raise NotImplementedError("子类必须实现预处理方法")
-    
-    def calibrate(self, calibration_data: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        校准设备
-        
-        Args:
-            calibration_data: 校准数据
-            
-        Returns:
-            Dict: 校准结果
-        """
-        raise NotImplementedError("子类必须实现校准方法")
-    
-    def validate_calibration(self, calibration_data: Dict[str, Any]) -> bool:
-        """
-        验证校准数据
-        
-        Args:
-            calibration_data: 校准数据
-            
-        Returns:
-            bool: 如果校准数据有效则返回True
-        """
-        raise NotImplementedError("子类必须实现校准验证方法")
-
-
-class SuokeWP100Adapter(DeviceModelAdapter):
-    """索克WP-100脉诊仪适配器"""
-    
-    def preprocess_data(self, data_packet: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        预处理索克WP-100脉诊仪数据
-        
-        Args:
-            data_packet: 原始数据包
-            
-        Returns:
-            Dict: 标准化的数据包
-        """
-        try:
-            # 转换数据格式
-            standardized_packet = {
-                'session_id': data_packet.get('sessionId'),
-                'timestamp': int(time.time() * 1000),
-                'pressure_data': data_packet.get('pressureData', []),
-                'velocity_data': data_packet.get('velocityData', []),
-                'position': self._map_position(data_packet.get('position')),
-                'skin_temperature': data_packet.get('skinTemp', 0.0),
-                'skin_moisture': data_packet.get('skinMoisture', 0.0)
-            }
-            
-            # 应用校准系数
-            if 'calibration' in data_packet:
-                calibration_factor = data_packet.get('calibration', 1.0)
-                standardized_packet['pressure_data'] = [p * calibration_factor for p in standardized_packet['pressure_data']]
-            
-            return standardized_packet
-        except Exception as e:
-            logger.error(f"索克WP-100数据预处理失败: {e}")
-            raise
-    
-    def _map_position(self, position_code: str) -> int:
-        """
-        映射设备特定的部位代码到标准位置枚举
-        
-        Args:
-            position_code: 设备特定的部位代码
-            
-        Returns:
-            int: 标准位置枚举值
-        """
-        position_map = {
-            'L1': 1,  # 左寸
-            'L2': 2,  # 左关
-            'L3': 3,  # 左尺
-            'R1': 4,  # 右寸
-            'R2': 5,  # 右关
-            'R3': 6,  # 右尺
-            'UNKNOWN': 0
+        # TODO: 实际的健康检查代码
+        # 检查各项指标
+        checks = {
+            "连接状态": self.is_connected,
+            "传感器状态": True,  # 模拟
+            "电池电量": True,  # 模拟
+            "固件版本": True  # 模拟
         }
         
-        return position_map.get(position_code, 0)
-    
-    def calibrate(self, calibration_data: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        校准索克WP-100脉诊仪
+        failed_checks = [k for k, v in checks.items() if not v]
         
-        Args:
-            calibration_data: 校准数据
-            
-        Returns:
-            Dict: 校准结果
-        """
-        try:
-            # 提取校准值
-            calibration_values = calibration_data.get('calibration_values', [])
-            
-            if not calibration_values or len(calibration_values) < 5:
-                raise ValueError("校准数据不足")
-            
-            # 计算校准系数
-            reference_value = 100.0  # 标准压力参考值
-            measured_value = np.mean(calibration_values)
-            calibration_factor = reference_value / measured_value if measured_value != 0 else 1.0
-            
-            # 返回校准结果
-            return {
-                'calibration_factor': calibration_factor,
-                'reference_value': reference_value,
-                'measured_value': measured_value,
-                'calibration_timestamp': int(time.time()),
-                'success': True
-            }
-        except Exception as e:
-            logger.error(f"索克WP-100校准失败: {e}")
-            return {
-                'success': False,
-                'error': str(e)
-            }
-    
-    def validate_calibration(self, calibration_data: Dict[str, Any]) -> bool:
-        """
-        验证索克WP-100校准数据
+        if failed_checks:
+            return False, f"健康检查失败: {', '.join(failed_checks)}"
         
-        Args:
-            calibration_data: 校准数据
-            
-        Returns:
-            bool: 如果校准数据有效则返回True
-        """
-        # 检查必要字段
-        required_fields = ['calibration_factor', 'calibration_timestamp']
-        if not all(field in calibration_data for field in required_fields):
-            logger.warning("校准数据缺少必要字段")
-            return False
-        
-        # 检查校准系数是否在合理范围内
-        factor = calibration_data.get('calibration_factor', 0)
-        if factor <= 0.5 or factor >= 2.0:
-            logger.warning(f"校准系数超出合理范围: {factor}")
-            return False
-        
-        return True
+        return True, "设备运行正常"
 
 
-class TCMDiagnosticsPWAdapter(DeviceModelAdapter):
-    """TCM Diagnostics PulseWave Pro适配器"""
+class TCMPulseWaveProAdapter(BaseDeviceAdapter):
+    """TCM Diagnostics PulseWave Pro设备适配器"""
     
-    def preprocess_data(self, data_packet: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        预处理TCM Diagnostics PulseWave Pro数据
-        
-        Args:
-            data_packet: 原始数据包
-            
-        Returns:
-            Dict: 标准化的数据包
-        """
+    def __init__(self, device_config: Dict[str, Any]):
+        super().__init__(device_config)
+        self.firmware_version = "2.1.0"
+        self.current_session_id = None
+        self.acquisition_active = False
+    
+    def connect(self) -> bool:
+        """连接设备"""
         try:
-            # TCM Diagnostics设备的数据格式转换
-            # 这里假设TCM设备使用不同的数据结构
-            
-            # 提取波形数据
-            waveform = data_packet.get('waveform', {})
-            pressure = waveform.get('pressure', [])
-            velocity = waveform.get('velocity', [])
-            
-            # 映射位置
-            location = data_packet.get('location', {})
-            position_mapping = {
-                'left_cun': 1,
-                'left_guan': 2,
-                'left_chi': 3,
-                'right_cun': 4,
-                'right_guan': 5,
-                'right_chi': 6
-            }
-            position = position_mapping.get(location.get('name'), 0)
-            
-            # 构建标准格式数据包
-            standardized_packet = {
-                'session_id': data_packet.get('session_id'),
-                'timestamp': data_packet.get('timestamp', int(time.time() * 1000)),
-                'pressure_data': pressure,
-                'velocity_data': velocity,
-                'position': position,
-                'skin_temperature': data_packet.get('environmental', {}).get('temperature', 0.0),
-                'skin_moisture': data_packet.get('environmental', {}).get('humidity', 0.0) / 100.0  # 转换为0-1范围
-            }
-            
-            return standardized_packet
+            self.logger.info(f"正在连接{self.device_name}...")
+            # TODO: 实际的设备连接代码
+            import time
+            time.sleep(0.5)
+            self.is_connected = True
+            self.logger.info(f"{self.device_name}连接成功")
+            return True
         except Exception as e:
-            logger.error(f"TCM Diagnostics数据预处理失败: {e}")
-            raise
+            self.logger.error(f"连接{self.device_name}失败: {e}")
+            self.is_connected = False
+            return False
     
-    def calibrate(self, calibration_data: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        校准TCM Diagnostics PulseWave Pro
-        
-        Args:
-            calibration_data: 校准数据
-            
-        Returns:
-            Dict: 校准结果
-        """
+    def disconnect(self) -> bool:
+        """断开设备连接"""
         try:
-            # TCM Diagnostics设备特有的校准逻辑
-            baseline_measures = calibration_data.get('baseline_measures', [])
-            offset_value = calibration_data.get('offset_value', 0)
-            
-            if not baseline_measures:
-                raise ValueError("校准基线数据不足")
-            
-            # 计算校准参数
-            avg_baseline = np.mean(baseline_measures)
-            scale_factor = 1.0
-            if avg_baseline != 0:
-                scale_factor = 100.0 / avg_baseline
-            
-            # 返回校准结果
-            return {
-                'scale_factor': scale_factor,
-                'offset': offset_value,
-                'baseline_avg': avg_baseline,
-                'calibration_timestamp': int(time.time()),
-                'success': True
-            }
+            if self.acquisition_active:
+                self.stop_acquisition()
+            self.is_connected = False
+            self.logger.info(f"{self.device_name}已断开连接")
+            return True
         except Exception as e:
-            logger.error(f"TCM Diagnostics校准失败: {e}")
-            return {
-                'success': False,
-                'error': str(e)
-            }
+            self.logger.error(f"断开{self.device_name}连接失败: {e}")
+            return False
     
-    def validate_calibration(self, calibration_data: Dict[str, Any]) -> bool:
-        """
-        验证TCM Diagnostics校准数据
+    def calibrate(self, operator: str) -> SensorCalibrationData:
+        """校准设备"""
+        if not self.is_connected:
+            raise Exception("设备未连接")
         
-        Args:
-            calibration_data: 校准数据
-            
-        Returns:
-            bool: 如果校准数据有效则返回True
-        """
-        # 检查必要字段
-        if 'scale_factor' not in calibration_data or 'offset' not in calibration_data:
-            logger.warning("TCM校准数据缺少必要字段")
+        self.logger.info(f"开始校准{self.device_name}...")
+        
+        # 模拟校准过程
+        calibration_values = []
+        for i in range(self.channels):
+            baseline = np.random.normal(95, 3)
+            sensitivity = np.random.normal(0.98, 0.03)
+            calibration_values.extend([baseline, sensitivity])
+        
+        calibration_data = SensorCalibrationData(
+            calibration_values=calibration_values,
+            calibration_timestamp=datetime.now(),
+            calibration_operator=operator,
+            calibration_result=True,
+            error_margin=0.03
+        )
+        
+        self.logger.info(f"{self.device_name}校准完成")
+        return calibration_data
+    
+    def start_acquisition(self, session_id: str) -> bool:
+        """开始数据采集"""
+        if not self.is_connected:
+            raise Exception("设备未连接")
+        
+        if self.acquisition_active:
+            self.logger.warning("数据采集已在进行中")
             return False
         
-        # 检查值是否合理
-        scale_factor = calibration_data.get('scale_factor', 0)
-        if scale_factor <= 0.1 or scale_factor >= 10.0:
-            logger.warning(f"TCM校准比例因子超出合理范围: {scale_factor}")
+        try:
+            self.current_session_id = session_id
+            self.acquisition_active = True
+            self.logger.info(f"{self.device_name}开始数据采集，会话ID: {session_id}")
+            return True
+        except Exception as e:
+            self.logger.error(f"开始数据采集失败: {e}")
+            return False
+    
+    def stop_acquisition(self) -> bool:
+        """停止数据采集"""
+        if not self.acquisition_active:
+            self.logger.warning("数据采集未在进行中")
             return False
         
-        return True
+        try:
+            self.acquisition_active = False
+            self.logger.info(f"{self.device_name}停止数据采集")
+            return True
+        except Exception as e:
+            self.logger.error(f"停止数据采集失败: {e}")
+            return False
+    
+    def read_data(self) -> Optional[PulseDataPacket]:
+        """读取数据"""
+        if not self.acquisition_active:
+            return None
+        
+        try:
+            # 生成模拟数据（采样率较低）
+            t = np.linspace(0, 1, self.sampling_rate)
+            heart_rate = 75
+            frequency = heart_rate / 60
+            
+            # PulseWave Pro的波形特征略有不同
+            main_wave = 45 * np.sin(2 * np.pi * frequency * t) + 105
+            dicrotic_wave = 12 * np.sin(4 * np.pi * frequency * t - np.pi/3)
+            pressure_data = main_wave + dicrotic_wave
+            noise = np.random.normal(0, 1.5, len(pressure_data))
+            pressure_data += noise
+            
+            velocity_data = np.gradient(pressure_data) * self.sampling_rate
+            
+            packet = PulseDataPacket(
+                session_id=self.current_session_id,
+                timestamp=datetime.now(),
+                position=PulsePosition.CUN_LEFT,
+                pressure_data=pressure_data,
+                velocity_data=velocity_data,
+                skin_temperature=36.2 + np.random.normal(0, 0.3),
+                skin_moisture=50 + np.random.normal(0, 8),
+                quality_indicators={
+                    "signal_strength": 0.93,
+                    "contact_quality": 0.90
+                }
+            )
+            
+            return packet
+            
+        except Exception as e:
+            self.logger.error(f"读取数据失败: {e}")
+            return None
+    
+    def get_device_info(self) -> DeviceInfo:
+        """获取设备信息"""
+        return DeviceInfo(
+            device_id=self.device_id,
+            model="PulseWave Pro",
+            firmware_version=self.firmware_version,
+            sensor_types=["pressure", "temperature", "moisture"],
+            sampling_rate=self.sampling_rate,
+            channels=self.channels,
+            features=self.device_config.get('features', []),
+            calibration_date=datetime.now()
+        )
+    
+    def check_health(self) -> Tuple[bool, str]:
+        """检查设备健康状态"""
+        if not self.is_connected:
+            return False, "设备未连接"
+        
+        # 模拟健康检查
+        return True, "设备运行正常"
 
 
-class MedSensePR2000Adapter(DeviceModelAdapter):
-    """MedSense PulseReader 2000适配器"""
+class MedSensePR2000Adapter(BaseDeviceAdapter):
+    """MedSense PulseReader 2000设备适配器"""
     
-    def preprocess_data(self, data_packet: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        预处理MedSense PulseReader 2000数据
-        
-        Args:
-            data_packet: 原始数据包
-            
-        Returns:
-            Dict: 标准化的数据包
-        """
+    def __init__(self, device_config: Dict[str, Any]):
+        super().__init__(device_config)
+        self.firmware_version = "3.0.1"
+        self.current_session_id = None
+        self.acquisition_active = False
+        self.battery_level = 85  # 模拟电池电量
+    
+    def connect(self) -> bool:
+        """连接设备（无线）"""
         try:
-            # MedSense设备的数据可能是JSON字符串
-            if isinstance(data_packet, str):
-                try:
-                    data_packet = json.loads(data_packet)
-                except json.JSONDecodeError:
-                    raise ValueError(f"无效的JSON数据: {data_packet[:100]}...")
-            
-            # 提取波形数据
-            sensor_data = data_packet.get('sensor_data', {})
-            pressure_array = sensor_data.get('pressure_array', [])
-            velocity_array = sensor_data.get('velocity_array', [])
-            
-            # 位置转换
-            position_code = data_packet.get('position', 'UNKNOWN')
-            position_map = {
-                'LC': 1,  # 左寸
-                'LG': 2,  # 左关
-                'LH': 3,  # 左尺
-                'RC': 4,  # 右寸
-                'RG': 5,  # 右关
-                'RH': 6,  # 右尺
-                'UNKNOWN': 0
-            }
-            position = position_map.get(position_code, 0)
-            
-            # 构建标准格式数据包
-            standardized_packet = {
-                'session_id': data_packet.get('session_id'),
-                'timestamp': data_packet.get('timestamp', int(time.time() * 1000)),
-                'pressure_data': pressure_array,
-                'velocity_data': velocity_array,
-                'position': position,
-                'skin_temperature': sensor_data.get('temperature', 0.0),
-                'skin_moisture': sensor_data.get('humidity', 0.0)
-            }
-            
-            # 应用校准
-            if 'calibration' in data_packet:
-                calibration = data_packet.get('calibration', {})
-                offset = calibration.get('offset', 0.0)
-                gain = calibration.get('gain', 1.0)
-                standardized_packet['pressure_data'] = [(p + offset) * gain for p in standardized_packet['pressure_data']]
-            
-            return standardized_packet
+            self.logger.info(f"正在通过蓝牙连接{self.device_name}...")
+            # TODO: 实际的蓝牙连接代码
+            import time
+            time.sleep(0.8)  # 无线连接需要更长时间
+            self.is_connected = True
+            self.logger.info(f"{self.device_name}无线连接成功")
+            return True
         except Exception as e:
-            logger.error(f"MedSense数据预处理失败: {e}")
-            raise
+            self.logger.error(f"连接{self.device_name}失败: {e}")
+            self.is_connected = False
+            return False
     
-    def calibrate(self, calibration_data: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        校准MedSense PulseReader 2000
-        
-        Args:
-            calibration_data: 校准数据
-            
-        Returns:
-            Dict: 校准结果
-        """
+    def disconnect(self) -> bool:
+        """断开设备连接"""
         try:
-            # MedSense设备特有的校准逻辑
-            reference_samples = calibration_data.get('reference_samples', [])
-            
-            if not reference_samples or len(reference_samples) < 10:
-                raise ValueError("校准样本数据不足")
-            
-            # 计算偏移和增益
-            avg_sample = np.mean(reference_samples)
-            std_sample = np.std(reference_samples)
-            
-            offset = -avg_sample if avg_sample != 0 else 0
-            gain = 1.0 / (std_sample / 20.0) if std_sample != 0 else 1.0
-            
-            # 限制增益范围
-            gain = max(0.5, min(gain, 2.0))
-            
-            # 返回校准结果
-            return {
-                'offset': offset,
-                'gain': gain,
-                'avg_sample': avg_sample,
-                'std_sample': std_sample,
-                'calibration_timestamp': int(time.time()),
-                'success': True
-            }
+            if self.acquisition_active:
+                self.stop_acquisition()
+            self.is_connected = False
+            self.logger.info(f"{self.device_name}已断开连接")
+            return True
         except Exception as e:
-            logger.error(f"MedSense校准失败: {e}")
-            return {
-                'success': False,
-                'error': str(e)
-            }
+            self.logger.error(f"断开{self.device_name}连接失败: {e}")
+            return False
     
-    def validate_calibration(self, calibration_data: Dict[str, Any]) -> bool:
-        """
-        验证MedSense校准数据
+    def calibrate(self, operator: str) -> SensorCalibrationData:
+        """校准设备"""
+        if not self.is_connected:
+            raise Exception("设备未连接")
         
-        Args:
-            calibration_data: 校准数据
-            
-        Returns:
-            bool: 如果校准数据有效则返回True
-        """
-        # 检查必要字段
-        required_fields = ['offset', 'gain', 'calibration_timestamp']
-        if not all(field in calibration_data for field in required_fields):
-            logger.warning("MedSense校准数据缺少必要字段")
+        self.logger.info(f"开始校准{self.device_name}...")
+        
+        # PulseReader 2000的校准过程
+        calibration_values = []
+        for i in range(self.channels):
+            baseline = np.random.normal(98, 2.5)
+            sensitivity = np.random.normal(0.95, 0.04)
+            calibration_values.extend([baseline, sensitivity])
+        
+        calibration_data = SensorCalibrationData(
+            calibration_values=calibration_values,
+            calibration_timestamp=datetime.now(),
+            calibration_operator=operator,
+            calibration_result=True,
+            error_margin=0.04  # 精度稍低
+        )
+        
+        self.logger.info(f"{self.device_name}校准完成")
+        return calibration_data
+    
+    def start_acquisition(self, session_id: str) -> bool:
+        """开始数据采集"""
+        if not self.is_connected:
+            raise Exception("设备未连接")
+        
+        # 检查电池电量
+        if self.battery_level < 20:
+            self.logger.warning(f"电池电量低: {self.battery_level}%")
+        
+        if self.acquisition_active:
+            self.logger.warning("数据采集已在进行中")
             return False
         
-        # 检查校准参数是否在合理范围内
-        gain = calibration_data.get('gain', 0)
-        if gain <= 0.2 or gain >= 5.0:
-            logger.warning(f"MedSense增益参数超出合理范围: {gain}")
+        try:
+            self.current_session_id = session_id
+            self.acquisition_active = True
+            self.logger.info(f"{self.device_name}开始数据采集，会话ID: {session_id}")
+            return True
+        except Exception as e:
+            self.logger.error(f"开始数据采集失败: {e}")
+            return False
+    
+    def stop_acquisition(self) -> bool:
+        """停止数据采集"""
+        if not self.acquisition_active:
+            self.logger.warning("数据采集未在进行中")
             return False
         
-        return True 
+        try:
+            self.acquisition_active = False
+            self.logger.info(f"{self.device_name}停止数据采集")
+            return True
+        except Exception as e:
+            self.logger.error(f"停止数据采集失败: {e}")
+            return False
+    
+    def read_data(self) -> Optional[PulseDataPacket]:
+        """读取数据"""
+        if not self.acquisition_active:
+            return None
+        
+        try:
+            # 生成模拟数据（采样率最低）
+            t = np.linspace(0, 1, self.sampling_rate)
+            heart_rate = 70
+            frequency = heart_rate / 60
+            
+            # PulseReader 2000的波形（便携式设备，精度稍低）
+            main_wave = 40 * np.sin(2 * np.pi * frequency * t) + 100
+            dicrotic_wave = 10 * np.sin(4 * np.pi * frequency * t - np.pi/2)
+            pressure_data = main_wave + dicrotic_wave
+            noise = np.random.normal(0, 3, len(pressure_data))  # 噪声较大
+            pressure_data += noise
+            
+            velocity_data = np.gradient(pressure_data) * self.sampling_rate
+            
+            # 模拟电池消耗
+            self.battery_level -= 0.01
+            
+            packet = PulseDataPacket(
+                session_id=self.current_session_id,
+                timestamp=datetime.now(),
+                position=PulsePosition.CUN_LEFT,
+                pressure_data=pressure_data,
+                velocity_data=velocity_data,
+                skin_temperature=36.3 + np.random.normal(0, 0.4),
+                skin_moisture=None,  # 该设备不支持湿度测量
+                quality_indicators={
+                    "signal_strength": 0.88,
+                    "contact_quality": 0.85,
+                    "battery_level": self.battery_level
+                }
+            )
+            
+            return packet
+            
+        except Exception as e:
+            self.logger.error(f"读取数据失败: {e}")
+            return None
+    
+    def get_device_info(self) -> DeviceInfo:
+        """获取设备信息"""
+        return DeviceInfo(
+            device_id=self.device_id,
+            model="PulseReader 2000",
+            firmware_version=self.firmware_version,
+            sensor_types=["pressure", "temperature"],  # 不支持湿度
+            sampling_rate=self.sampling_rate,
+            channels=self.channels,
+            features=self.device_config.get('features', []),
+            calibration_date=datetime.now()
+        )
+    
+    def check_health(self) -> Tuple[bool, str]:
+        """检查设备健康状态"""
+        if not self.is_connected:
+            return False, "设备未连接"
+        
+        # 检查电池电量
+        if self.battery_level < 10:
+            return False, f"电池电量严重不足: {self.battery_level}%"
+        elif self.battery_level < 20:
+            return True, f"电池电量低: {self.battery_level}%"
+        
+        return True, f"设备运行正常，电池电量: {self.battery_level}%"
+
+
+class DeviceAdapterFactory:
+    """设备适配器工厂"""
+    
+    @staticmethod
+    def create_adapter(device_config: Dict[str, Any]) -> BaseDeviceAdapter:
+        """
+        根据设备配置创建适配器
+        
+        Args:
+            device_config: 设备配置
+            
+        Returns:
+            设备适配器实例
+        """
+        device_id = device_config.get('device_id', '')
+        
+        adapter_map = {
+            'suoke_wp100': SuokeWP100Adapter,
+            'tcm_pulsewave_pro': TCMPulseWaveProAdapter,
+            'medsense_pr2000': MedSensePR2000Adapter
+        }
+        
+        adapter_class = adapter_map.get(device_id)
+        if not adapter_class:
+            raise ValueError(f"不支持的设备类型: {device_id}")
+        
+        return adapter_class(device_config) 

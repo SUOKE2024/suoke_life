@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 """
@@ -9,237 +9,302 @@
 import os
 import yaml
 import logging
-import threading
-from typing import Dict, Any, Optional, List
+from typing import Dict, Any, Optional, Union, List
+from pathlib import Path
+from dataclasses import dataclass, field
+import re
+from functools import lru_cache
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_CONFIG_PATH = "config/config.yaml"
-CONFIG_ENV_VAR = "LAOKE_CONFIG_PATH"
-ENV_PREFIX = "LAOKE_"
+@dataclass
+class DatabaseConfig:
+    """数据库配置"""
+    type: str = "postgres"
+    host: str = "localhost"
+    port: int = 5432
+    user: str = "postgres"
+    password: str = ""
+    database: str = "laoke_service"
+    pool_size: int = 10
+    ssl_mode: str = "disable"
+    
+    @property
+    def connection_string(self) -> str:
+        """获取数据库连接字符串"""
+        return f"postgresql://{self.user}:{self.password}@{self.host}:{self.port}/{self.database}"
+
+@dataclass
+class CacheConfig:
+    """缓存配置"""
+    type: str = "redis"
+    host: str = "localhost"
+    port: int = 6379
+    password: str = ""
+    db: int = 0
+    pool_size: int = 10
+    ttl: int = 3600
+    
+    @property
+    def connection_string(self) -> str:
+        """获取Redis连接字符串"""
+        auth = f":{self.password}@" if self.password else ""
+        return f"redis://{auth}{self.host}:{self.port}/{self.db}"
+
+@dataclass
+class ServerConfig:
+    """服务器配置"""
+    host: str = "0.0.0.0"
+    port: int = 8080
+    grpc_port: int = 50051
+    metrics_port: int = 9091
+    debug: bool = False
+    timeout: int = 30
+    cors_origins: List[str] = field(default_factory=lambda: ["*"])
+
+@dataclass
+class LoggingConfig:
+    """日志配置"""
+    level: str = "INFO"
+    format: str = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    file: Optional[str] = None
+    max_size_mb: int = 100
+    backup_count: int = 10
+    console: bool = True
 
 class Config:
-    """配置加载器，用于从YAML文件和环境变量加载配置"""
+    """配置管理器"""
     
-    _instance = None
-    _lock = threading.Lock()
-    
-    def __new__(cls) -> 'Config':
-        """单例模式实现"""
-        with cls._lock:
-            if cls._instance is None:
-                cls._instance = super(Config, cls).__new__(cls)
-                cls._instance._initialized = False
-            return cls._instance
-    
-    def __init__(self):
-        """初始化配置加载器"""
-        # 单例模式下，避免重复初始化
-        if self._initialized:
-            return
+    def __init__(self, config_path: Optional[str] = None):
+        self._config_data: Dict[str, Any] = {}
+        self._env_prefix = "LAOKE_"
+        self._config_loaded = False
         
-        # 配置数据
-        self.config_data = {}
+        # 确定配置文件路径
+        if config_path:
+            self._config_path = Path(config_path)
+        else:
+            self._config_path = self._find_config_file()
         
         # 加载配置
         self._load_config()
-        
-        # 标记为已初始化
-        self._initialized = True
-        logger.info("配置加载器初始化完成")
     
-    def _load_config(self):
-        """从配置文件和环境变量加载配置"""
-        # 1. 加载基础配置文件
-        base_config = self._load_yaml_config(DEFAULT_CONFIG_PATH)
-        self.config_data.update(base_config)
+    def _find_config_file(self) -> Path:
+        """查找配置文件"""
+        # 优先级：环境变量 > 当前目录 > config目录
+        env_path = os.getenv(f"{self._env_prefix}CONFIG_PATH")
+        if env_path:
+            return Path(env_path)
         
-        # 2. 加载环境特定的配置文件
-        env = os.environ.get(f"{ENV_PREFIX}ENV", "development").lower()
-        env_config_path = f"config/config.{env}.yaml"
-        env_config = self._load_yaml_config(env_config_path)
-        self.config_data.update(env_config)
+        # 查找可能的配置文件位置
+        possible_paths = [
+            Path("config.yaml"),
+            Path("config/config.yaml"),
+            Path("../config/config.yaml"),
+            Path("../../config/config.yaml"),
+        ]
         
-        # 3. 加载自定义配置文件（如果指定）
-        custom_config_path = os.environ.get(CONFIG_ENV_VAR, None)
-        if custom_config_path:
-            custom_config = self._load_yaml_config(custom_config_path)
-            self.config_data.update(custom_config)
+        for path in possible_paths:
+            if path.exists():
+                return path
         
-        # 4. 从环境变量覆盖配置
-        self._load_from_env()
-        
-        # 设置关键配置
-        if "service" not in self.config_data:
-            self.config_data["service"] = {}
-        
-        # 确保服务名称和环境设置正确
-        self.config_data["service"]["name"] = self.config_data["service"].get("name", "laoke-service")
-        self.config_data["service"]["env"] = env
-        
-        logger.info(f"已加载配置：服务={self.config_data['service']['name']}，环境={env}")
+        # 如果都找不到，使用默认路径
+        return Path("config/config.yaml")
     
-    def _load_yaml_config(self, config_path: str) -> Dict[str, Any]:
-        """
-        从YAML文件加载配置
-        
-        Args:
-            config_path: 配置文件路径
-            
-        Returns:
-            Dict[str, Any]: 配置数据字典
-        """
-        config = {}
+    def _load_config(self) -> None:
+        """加载配置文件"""
         try:
-            if os.path.exists(config_path):
-                with open(config_path, "r", encoding="utf-8") as file:
-                    config = yaml.safe_load(file) or {}
-                logger.info(f"已加载配置文件: {config_path}")
+            if self._config_path.exists():
+                with open(self._config_path, 'r', encoding='utf-8') as f:
+                    self._config_data = yaml.safe_load(f) or {}
+                logger.info(f"配置文件加载成功: {self._config_path}")
             else:
-                logger.warning(f"配置文件不存在: {config_path}")
+                logger.warning(f"配置文件不存在: {self._config_path}，使用默认配置")
+                self._config_data = {}
+            
+            # 处理环境变量替换
+            self._process_env_variables()
+            self._config_loaded = True
+            
         except Exception as e:
-            logger.error(f"加载配置文件失败: {config_path}, 错误: {str(e)}")
-        
-        return config
+            logger.error(f"配置文件加载失败: {str(e)}")
+            self._config_data = {}
     
-    def _load_from_env(self):
-        """从环境变量加载配置，覆盖文件配置"""
-        for key, value in os.environ.items():
-            # 只处理前缀为 LAOKE_ 的环境变量
-            if key.startswith(ENV_PREFIX):
-                config_key = key[len(ENV_PREFIX):].lower()
+    def _process_env_variables(self) -> None:
+        """处理配置中的环境变量替换"""
+        def replace_env_vars(obj: Any) -> Any:
+            if isinstance(obj, str):
+                # 匹配 ${VAR:default} 格式
+                pattern = r'\$\{([^:}]+)(?::([^}]*))?\}'
                 
-                # 将环境变量名格式转换为配置路径 (例如：LAOKE_DATABASE_HOST => database.host)
-                config_path = config_key.replace("__", ".").replace("_", ".")
+                def replacer(match):
+                    var_name = match.group(1)
+                    default_value = match.group(2) if match.group(2) is not None else ""
+                    return os.getenv(var_name, default_value)
                 
-                # 设置配置值，处理基本的类型转换
-                self._set_nested_value(config_path, self._convert_env_value(value))
+                return re.sub(pattern, replacer, obj)
+            elif isinstance(obj, dict):
+                return {k: replace_env_vars(v) for k, v in obj.items()}
+            elif isinstance(obj, list):
+                return [replace_env_vars(item) for item in obj]
+            else:
+                return obj
+        
+        self._config_data = replace_env_vars(self._config_data)
+    
+    @lru_cache(maxsize=128)
+    def get(self, key: str, default: Any = None) -> Any:
+        """获取配置值，支持点号分隔的嵌套键"""
+        if not self._config_loaded:
+            return default
+        
+        # 首先检查环境变量
+        env_key = f"{self._env_prefix}{key.upper().replace('.', '_')}"
+        env_value = os.getenv(env_key)
+        if env_value is not None:
+            return self._convert_env_value(env_value)
+        
+        # 然后从配置文件获取
+        keys = key.split('.')
+        value = self._config_data
+        
+        try:
+            for k in keys:
+                value = value[k]
+            return value
+        except (KeyError, TypeError):
+            return default
     
     def _convert_env_value(self, value: str) -> Any:
-        """
-        转换环境变量值为适当的类型
-        
-        Args:
-            value: 环境变量字符串值
-            
-        Returns:
-            Any: 转换后的值
-        """
+        """转换环境变量值为适当的类型"""
         # 布尔值
-        if value.lower() in ["true", "yes", "1", "on"]:
-            return True
-        elif value.lower() in ["false", "no", "0", "off"]:
-            return False
+        if value.lower() in ('true', 'false'):
+            return value.lower() == 'true'
         
         # 数字
         try:
-            if "." in value:
+            if '.' in value:
                 return float(value)
             else:
                 return int(value)
         except ValueError:
             pass
         
-        # 列表 (逗号分隔)
-        if "," in value:
-            return [item.strip() for item in value.split(",")]
+        # 列表（逗号分隔）
+        if ',' in value:
+            return [item.strip() for item in value.split(',')]
         
-        # 默认为字符串
         return value
     
-    def _set_nested_value(self, path: str, value: Any):
-        """
-        根据路径设置嵌套字典的值
-        
-        Args:
-            path: 配置路径 (例如 "database.host")
-            value: 要设置的值
-        """
-        parts = path.split(".")
-        current = self.config_data
-        
-        # 遍历路径创建嵌套字典
-        for i, part in enumerate(parts[:-1]):
-            if part not in current:
-                current[part] = {}
-            elif not isinstance(current[part], dict):
-                # 如果当前节点不是字典，则将其转换为字典
-                current[part] = {}
-            current = current[part]
-        
-        # 设置最终值
-        current[parts[-1]] = value
-    
-    def get(self, key: str, default: Any = None) -> Any:
-        """
-        获取配置值
-        
-        Args:
-            key: 配置键路径 (例如 "database.host")
-            default: 默认值
-            
-        Returns:
-            Any: 配置值，如果不存在则返回默认值
-        """
-        parts = key.split(".")
-        current = self.config_data
-        
-        # 遍历路径查找配置
-        for part in parts:
-            if not isinstance(current, dict) or part not in current:
-                return default
-            current = current[part]
-        
-        return current
-    
     def get_section(self, section: str) -> Dict[str, Any]:
-        """
-        获取配置区域
-        
-        Args:
-            section: 配置区域名称
-            
-        Returns:
-            Dict[str, Any]: 配置区域字典
-        """
-        section_data = self.get(section, {})
-        if not isinstance(section_data, dict):
-            return {}
-        return section_data
+        """获取配置段"""
+        return self.get(section, {})
     
-    def get_all(self) -> Dict[str, Any]:
-        """
-        获取所有配置
-        
-        Returns:
-            Dict[str, Any]: 所有配置的字典
-        """
-        return self.config_data
+    def get_database_config(self) -> DatabaseConfig:
+        """获取数据库配置"""
+        db_config = self.get_section('database')
+        return DatabaseConfig(
+            type=db_config.get('type', 'postgres'),
+            host=db_config.get('host', 'localhost'),
+            port=db_config.get('port', 5432),
+            user=db_config.get('user', 'postgres'),
+            password=db_config.get('password', ''),
+            database=db_config.get('database', 'laoke_service'),
+            pool_size=db_config.get('pool_size', 10),
+            ssl_mode=db_config.get('ssl_mode', 'disable')
+        )
     
-    def get_list(self, key: str, default: Optional[List] = None) -> List:
-        """
-        获取列表类型的配置
-        
-        Args:
-            key: 配置键路径
-            default: 默认列表
-            
-        Returns:
-            List: 配置列表
-        """
-        value = self.get(key, default)
-        if value is None:
-            return []
-        if isinstance(value, list):
-            return value
-        return [value]
+    def get_cache_config(self) -> CacheConfig:
+        """获取缓存配置"""
+        cache_config = self.get_section('cache')
+        return CacheConfig(
+            type=cache_config.get('type', 'redis'),
+            host=cache_config.get('host', 'localhost'),
+            port=cache_config.get('port', 6379),
+            password=cache_config.get('password', ''),
+            db=cache_config.get('db', 0),
+            pool_size=cache_config.get('pool_size', 10),
+            ttl=cache_config.get('ttl', 3600)
+        )
     
-    def reload(self):
+    def get_server_config(self) -> ServerConfig:
+        """获取服务器配置"""
+        server_config = self.get_section('server')
+        return ServerConfig(
+            host=server_config.get('host', '0.0.0.0'),
+            port=server_config.get('port', 8080),
+            grpc_port=server_config.get('grpc_port', 50051),
+            metrics_port=server_config.get('metrics_port', 9091),
+            debug=server_config.get('debug', False),
+            timeout=server_config.get('timeout', 30),
+            cors_origins=server_config.get('cors_origins', ['*'])
+        )
+    
+    def get_logging_config(self) -> LoggingConfig:
+        """获取日志配置"""
+        logging_config = self.get_section('logging')
+        return LoggingConfig(
+            level=logging_config.get('level', 'INFO'),
+            format=logging_config.get('format', '%(asctime)s - %(name)s - %(levelname)s - %(message)s'),
+            file=logging_config.get('file'),
+            max_size_mb=logging_config.get('max_size_mb', 100),
+            backup_count=logging_config.get('backup_count', 10),
+            console=logging_config.get('console', True)
+        )
+    
+    def is_development(self) -> bool:
+        """是否为开发环境"""
+        env = self.get('environment', 'development')
+        return env.lower() in ('development', 'dev')
+    
+    def is_production(self) -> bool:
+        """是否为生产环境"""
+        env = self.get('environment', 'development')
+        return env.lower() in ('production', 'prod')
+    
+    def validate(self) -> List[str]:
+        """验证配置的完整性"""
+        errors = []
+        
+        # 检查必需的配置项
+        required_configs = [
+            'service.name',
+            'service.version',
+            'server.host',
+            'server.port'
+        ]
+        
+        for config_key in required_configs:
+            if self.get(config_key) is None:
+                errors.append(f"缺少必需的配置项: {config_key}")
+        
+        # 检查端口范围
+        ports = ['server.port', 'server.grpc_port', 'server.metrics_port']
+        for port_key in ports:
+            port = self.get(port_key)
+            if port and (not isinstance(port, int) or port < 1 or port > 65535):
+                errors.append(f"端口配置无效: {port_key}={port}")
+        
+        # 检查日志级别
+        log_level = self.get('logging.level', 'INFO')
+        valid_levels = ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']
+        if log_level.upper() not in valid_levels:
+            errors.append(f"日志级别无效: {log_level}")
+        
+        return errors
+    
+    def reload(self) -> None:
         """重新加载配置"""
-        # 清空当前配置
-        self.config_data = {}
-        
-        # 重新加载
+        self.get.cache_clear()  # 清除缓存
         self._load_config()
-        
-        logger.info("配置已重新加载") 
+        logger.info("配置已重新加载")
+
+# 全局配置实例
+_config: Optional[Config] = None
+
+def get_config(config_path: Optional[str] = None) -> Config:
+    """获取全局配置实例"""
+    global _config
+    if _config is None:
+        _config = Config(config_path)
+    return _config 

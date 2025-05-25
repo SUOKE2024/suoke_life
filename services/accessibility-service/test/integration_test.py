@@ -13,6 +13,7 @@ import time
 import json
 import logging
 from typing import Dict, Any
+import asyncio
 
 # 设置日志
 logging.basicConfig(
@@ -21,12 +22,12 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# 添加项目根目录到路径
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+# 添加项目根目录到Python路径
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 try:
     # 导入服务实现
-    from internal.service.accessibility_service import AccessibilityService
+    from internal.service.optimized_accessibility_service import OptimizedAccessibilityService
     from internal.integration.agent_adapter import AgentAdapter
     
     # 导入配置
@@ -180,7 +181,7 @@ class AccessibilityIntegrationTest(unittest.TestCase):
         """测试类初始化"""
         if SERVICE_AVAILABLE:
             cls.config = Config()
-            cls.accessibility_service = AccessibilityService(cls.config)
+            cls.accessibility_service = OptimizedAccessibilityService(cls.config)
             cls.agent_adapter = AgentAdapter()
         else:
             cls.config = MockConfig()

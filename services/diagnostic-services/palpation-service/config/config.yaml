@@ -6,14 +6,20 @@ server:
   host: 0.0.0.0
   max_workers: 10
   max_concurrent_rpcs: 100
-  keep_alive_time: 7200  # 秒
-  timeout: 30  # 秒
+  max_message_length: 100  # MB
+  keepalive_time: 7200  # 秒
+  keepalive_timeout: 20  # 秒
 
 # 数据库配置
 database:
   type: mongodb
-  connection_string: mongodb://mongodb:27017
-  name: palpation_db
+  host: ${DB_HOST:localhost}
+  port: ${DB_PORT:27017}
+  database: palpation_db
+  username: ${DB_USERNAME:}
+  password: ${DB_PASSWORD:}
+  connection_pool_size: 10
+  connection_timeout: 5000  # 毫秒
   collections:
     sessions: pulse_sessions
     features: pulse_features
@@ -26,10 +32,13 @@ database:
 # 缓存配置
 cache:
   type: redis
-  host: redis
-  port: 6379
+  host: ${REDIS_HOST:localhost}
+  port: ${REDIS_PORT:6379}
+  password: ${REDIS_PASSWORD:}
+  db: 0
   ttl: 3600  # 秒
-  max_connections: 10
+  max_connections: 50
+  connection_timeout: 5000
 
 # 脉诊分析模型配置
 pulse_analysis:
@@ -39,14 +48,31 @@ pulse_analysis:
   batch_size: 32
   use_gpu: true
   feature_extraction:
-    window_size: 512
-    overlap: 128
+    window_size: 5000  # 样本数
+    overlap_ratio: 0.5
     sampling_rate: 1000
-    low_pass_filter: 20  # Hz
-    high_pass_filter: 0.1  # Hz
+    filter:
+      type: butterworth
+      order: 4
+      low_cutoff: 0.5  # Hz
+      high_cutoff: 40  # Hz
+    time_domain:
+      - amplitude
+      - period
+      - rate
+      - rhythm_regularity
+    frequency_domain:
+      - peak_frequency
+      - power_spectrum
+      - harmonic_analysis
+    wavelet_domain:
+      - energy_distribution
+      - detail_coefficients
   wavelet_transform:
     wavelet_type: db4
     decomposition_level: 5
+  quality_threshold: 0.7
+  minimum_duration: 30  # 秒
 
 # 皮肤触诊分析配置
 skin_analysis:
@@ -63,6 +89,31 @@ skin_analysis:
       name: "背部"
     - id: "skin_feet"
       name: "足部"
+  parameters:
+    moisture:
+      very_dry: 0.2
+      dry: 0.4
+      normal: 0.6
+      moist: 0.8
+      very_moist: 1.0
+    elasticity:
+      poor: 0.2
+      fair: 0.4
+      good: 0.6
+      very_good: 0.8
+      excellent: 1.0
+    temperature:
+      cold: 0.2
+      cool: 0.4
+      normal: 0.6
+      warm: 0.8
+      hot: 1.0
+  texture_mapping:
+    smooth: "光滑"
+    rough: "粗糙"
+    dry: "干燥"
+    oily: "油腻"
+    scaly: "鳞状"
 
 # 腹诊分析配置
 abdominal_analysis:
@@ -96,6 +147,44 @@ abdominal_analysis:
     - id: "abd_lower_right"
       name: "右下腹部"
       organs: ["large_intestine", "appendix"]
+  regions:
+    - id: epigastric
+      name: 上脘
+      meridians: [stomach, spleen]
+    - id: umbilical
+      name: 中脘
+      meridians: [stomach, spleen, kidney]
+    - id: hypogastric
+      name: 下脘
+      meridians: [kidney, bladder, intestine]
+    - id: right_hypochondrium
+      name: 右胁
+      meridians: [liver, gallbladder]
+    - id: left_hypochondrium
+      name: 左胁
+      meridians: [spleen, stomach]
+    - id: right_iliac
+      name: 右少腹
+      meridians: [intestine, appendix]
+    - id: left_iliac
+      name: 左少腹
+      meridians: [intestine, kidney]
+    - id: right_lumbar
+      name: 右腰
+      meridians: [kidney, bladder]
+    - id: left_lumbar
+      name: 左腰
+      meridians: [kidney, bladder]
+  assessment_criteria:
+    tenderness:
+      mild: 0.3
+      moderate: 0.6
+      severe: 0.9
+    tension:
+      relaxed: 0.2
+      normal: 0.5
+      tense: 0.8
+      rigid: 1.0
 
 # 中医证型映射配置
 tcm_pattern_mapping:
@@ -141,6 +230,20 @@ report_generation:
   medical_disclaimer: "本报告仅供参考，不构成医疗诊断。如有疑问请咨询专业医师。"
   logo_path: /app/assets/logo.png
   include_graphs: true
+  templates_path: templates/
+  output_path: reports/
+  formats:
+    - pdf
+    - html
+    - json
+  include_sections:
+    - summary
+    - pulse_analysis
+    - abdominal_findings
+    - skin_assessment
+    - tcm_patterns
+    - recommendations
+    - historical_comparison
 
 # 设备配置
 devices:
@@ -157,12 +260,43 @@ devices:
   calibration_interval_days: 30
   sampling_rate: 1000  # Hz
   resolution: 16  # bits
+  supported:
+    - device_id: suoke_wp100
+      name: 索克WP-100
+      type: pulse_sensor
+      sampling_rate: 1000
+      channels: 6
+      features:
+        - pressure_sensing
+        - skin_temperature
+        - skin_moisture
+    - device_id: tcm_pulsewave_pro
+      name: TCM Diagnostics PulseWave Pro
+      type: pulse_sensor
+      sampling_rate: 500
+      channels: 6
+      features:
+        - pressure_sensing
+        - skin_temperature
+        - skin_moisture
+    - device_id: medsense_pr2000
+      name: MedSense PulseReader 2000
+      type: pulse_sensor
+      sampling_rate: 200
+      channels: 6
+      features:
+        - pressure_sensing
+        - skin_temperature
+  calibration:
+    interval: 86400  # 秒（24小时）
+    threshold: 0.95
+    max_attempts: 3
 
 # 日志配置
 logging:
   level: INFO
-  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-  file: /app/logs/palpation_service.log
+  format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+  file: logs/palpation_service.log
   max_size_mb: 100
   backup_count: 10
   log_to_console: true
@@ -181,19 +315,82 @@ integrations:
     host: xiaoai-service
     port: 50050
     timeout: 10  # 秒
+    enabled: true
+    endpoint: ${XIAOAI_SERVICE_ENDPOINT:localhost:50051}
   look_service:
     host: look-service
     port: 50051
     timeout: 10  # 秒
+    enabled: true
+    endpoint: ${LOOK_SERVICE_ENDPOINT:localhost:50052}
   listen_service:
     host: listen-service
     port: 50052
     timeout: 10  # 秒
+    enabled: true
+    endpoint: ${LISTEN_SERVICE_ENDPOINT:localhost:50054}
   inquiry_service:
     host: inquiry-service
     port: 50053
     timeout: 10  # 秒
+    enabled: true
+    endpoint: ${INQUIRY_SERVICE_ENDPOINT:localhost:50055}
   rag_service:
     host: rag-service
     port: 50055
-    timeout: 10  # 秒 
+    timeout: 10  # 秒
+    enabled: true
+    endpoint: ${RAG_SERVICE_ENDPOINT:localhost:50056}
+  health_check:
+    minimal:
+      - service_status
+    basic:
+      - service_status
+      - database_connection
+      - redis_connection
+    full:
+      - service_status
+      - database_connection
+      - redis_connection
+      - device_connectivity
+      - signal_processing_pipeline
+      - model_availability
+
+# 监控配置
+monitoring:
+  prometheus:
+    enabled: true
+    port: 9093
+    path: /metrics
+  metrics:
+    - pulse_sessions_total
+    - pulse_analysis_duration_seconds
+    - abdominal_analysis_total
+    - skin_analysis_total
+    - device_errors_total
+    - api_request_duration_seconds
+
+# 中医脉象分类
+tcm_pulse_patterns:
+  categories:
+    - name: 浮沉类
+      patterns: [浮脉, 沉脉, 伏脉, 革脉]
+    - name: 迟数类
+      patterns: [迟脉, 缓脉, 数脉, 疾脉]
+    - name: 虚实类
+      patterns: [虚脉, 实脉, 芤脉, 微脉]
+    - name: 长短类
+      patterns: [长脉, 短脉]
+    - name: 滑涩类
+      patterns: [滑脉, 涩脉]
+    - name: 弦紧类
+      patterns: [弦脉, 紧脉]
+    - name: 洪细类
+      patterns: [洪脉, 细脉, 濡脉, 弱脉]
+    - name: 动散类
+      patterns: [动脉, 散脉]
+    - name: 结代促类
+      patterns: [结脉, 代脉, 促脉]
+
+# 环境特定配置覆盖
+environment: ${ENVIRONMENT:development} 

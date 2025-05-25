@@ -1,148 +1,409 @@
+# SuokeBench 服务配置 - 优化版
+# 版本: 1.1.0
+
+# 服务基础配置
+service:
+  name: "suoke-bench-service"
+  version: "1.1.0"
+  description: "索克生活APP专属评测系统 - 优化版"
+  
+# 服务器配置
 server:
-  host: "0.0.0.0"
-  port: 8000
+  http_port: 8000
   grpc_port: 50051
+  host: "0.0.0.0"
   workers: 4
-  debug: false
+  max_request_size: 100MB
+  timeout: 300  # 请求超时时间（秒）
 
-storage:
-  type: "local"  # local, s3, gcs
-  local:
-    data_dir: "data"
-    results_dir: "data/results"
-    reports_dir: "data/reports"
-  s3:
-    bucket: "suoke-bench"
-    region: "ap-northeast-1"
-  gcs:
-    bucket: "suoke-bench"
-    project: "suoke-life"
+# 基准测试配置
+benchmark:
+  max_concurrent_tasks: 8  # 最大并发任务数
+  default_batch_size: 32   # 默认批处理大小
+  task_timeout: 3600       # 任务超时时间（秒）
+  cleanup_interval: 3600   # 清理间隔（秒）
+  max_task_history: 1000   # 最大任务历史记录数
 
-metrics:
-  default_threshold:
-    accuracy: 0.85
-    precision: 0.80
-    recall: 0.80
-    f1: 0.82
-    latency_ms: 200
-    throughput: 100
-  custom_thresholds:
-    tongue_recognition:
-      accuracy: 0.90
-      precision: 0.88
-    face_recognition:
-      accuracy: 0.92
-      recall: 0.90
+# 模型缓存配置
+cache:
+  max_memory_mb: 4096      # 最大内存使用量（MB）
+  max_models: 10           # 最大缓存模型数量
+  ttl_seconds: 3600        # 缓存生存时间（秒）
+  cleanup_interval: 300    # 清理间隔（秒）
+  preload_models: []       # 预加载模型列表
 
-tasks:
-  tcm_diagnosis:
-    enabled: true
-    batch_size: 32
-    timeout: 300
-    metrics:
-      - accuracy
-      - precision
-      - recall
-      - f1
-      - latency_ms
-  tongue_recognition:
-    enabled: true
-    batch_size: 16
-    timeout: 180
-    metrics:
-      - accuracy
-      - precision
-      - recall
-      - f1
-      - latency_ms
-  face_recognition:
-    enabled: true
-    batch_size: 16
-    timeout: 180
-    metrics:
-      - accuracy
-      - precision
-      - recall
-      - f1
-      - latency_ms
-  pulse_recognition:
-    enabled: true
-    batch_size: 32
-    timeout: 240
-    metrics:
-      - accuracy
-      - precision
-      - recall
-      - f1
-      - latency_ms
-  health_plan_generation:
-    enabled: true
-    batch_size: 8
-    timeout: 600
-    metrics:
-      - bleu
-      - rouge
-      - coherence
-      - relevance
-      - latency_ms
-  agent_collaboration:
-    enabled: true
-    batch_size: 4
-    timeout: 900
-    metrics:
-      - task_completion
-      - collaboration_efficiency
-      - response_quality
-      - latency_ms
-  privacy_verification:
-    enabled: true
-    batch_size: 16
-    timeout: 300
-    metrics:
-      - zkp_correctness
-      - privacy_leakage
-      - verification_time
-  edge_performance:
-    enabled: true
-    batch_size: 1
-    timeout: 60
-    metrics:
-      - cpu_usage
-      - memory_usage
-      - battery_impact
-      - latency_ms
-      - throughput
-  dialect_recognition:
-    enabled: true
-    batch_size: 16
-    timeout: 240
-    metrics:
-      - accuracy
-      - precision
-      - recall
-      - f1
-      - latency_ms
+# 监控配置
+monitoring:
+  enabled: true
+  metrics_interval: 30     # 指标收集间隔（秒）
+  prometheus_enabled: true
+  custom_metrics_retention: 86400  # 自定义指标保留时间（秒）
+  
+# 重试和熔断器配置
+resilience:
+  retry:
+    max_attempts: 3
+    base_delay: 1.0
+    max_delay: 60.0
+    strategy: "exponential"  # fixed, exponential, linear, random
+    backoff_factor: 2.0
+    jitter: true
+  
+  circuit_breaker:
+    failure_threshold: 5
+    recovery_timeout: 60.0
+    success_threshold: 3
 
+# 日志配置
 logging:
   level: "INFO"
   format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-  file: "logs/suoke-bench.log"
-  max_size: 100  # MB
-  backup_count: 10
+  file: "logs/server.log"
+  max_size: "100MB"
+  backup_count: 5
 
-monitoring:
-  prometheus:
-    enabled: true
-    port: 9090
-  grafana:
-    enabled: true
-    port: 3000
+# 数据目录配置
+directories:
+  data: "data"
+  reports: "data/reports"
+  cache: "cache"
+  logs: "logs"
+  temp: "temp"
 
+# 数据库配置（如果需要）
+database:
+  enabled: false
+  type: "sqlite"  # sqlite, postgresql, mysql
+  url: "sqlite:///data/suokebench.db"
+  pool_size: 10
+  max_overflow: 20
+
+# 安全配置
 security:
-  api_key_required: true
-  allowed_origins:
-    - "http://localhost:3000"
-    - "https://bench.suoke.life"
-  rate_limit:
+  api_key_required: false
+  rate_limiting:
     enabled: true
-    requests_per_minute: 60
+    requests_per_minute: 100
+  cors:
+    enabled: true
+    origins: ["*"]
+    methods: ["GET", "POST", "PUT", "DELETE"]
+    headers: ["*"]
+
+# 基准测试任务配置
+tasks:
+  # 中医四诊评测
+  tcm_diagnosis:
+    name: "中医四诊智能诊断评测"
+    description: "评估AI在中医四诊（望、闻、问、切）方面的诊断能力"
+    type: "TCM_DIAGNOSIS"
+    enabled: true
+    datasets: ["tcm_cases_v2", "syndrome_patterns"]
+    metrics: ["accuracy", "precision", "recall", "f1_score", "syndrome_accuracy"]
+    tags: ["tcm", "diagnosis", "multimodal"]
+    parameters:
+      batch_size: 16
+      timeout: 300
+      include_confidence: true
+    thresholds:
+      accuracy: 0.85
+      syndrome_accuracy: 0.80
+
+  # 健康方案生成评测
+  health_plan_generation:
+    name: "个性化健康方案生成评测"
+    description: "评估AI生成个性化健康管理方案的质量"
+    type: "HEALTH_PLAN_GENERATION"
+    enabled: true
+    datasets: ["health_profiles", "plan_templates"]
+    metrics: ["completeness", "relevance", "feasibility", "personalization"]
+    tags: ["health", "planning", "personalization"]
+    parameters:
+      batch_size: 8
+      timeout: 600
+      plan_length_limit: 2000
+    thresholds:
+      completeness: 0.85
+      relevance: 0.80
+      feasibility: 0.75
+
+  # 多智能体协作评测
+  agent_collaboration:
+    name: "四大智能体协作评测"
+    description: "评估小艾、小克、老克、索儿四个智能体的协作效果"
+    type: "AGENT_COLLABORATION"
+    enabled: true
+    datasets: ["collaboration_scenarios", "multi_agent_tasks"]
+    metrics: ["efficiency", "consistency", "coverage", "conflict_resolution"]
+    tags: ["agents", "collaboration", "coordination"]
+    parameters:
+      batch_size: 4
+      timeout: 900
+      max_rounds: 10
+    thresholds:
+      efficiency: 0.75
+      consistency: 0.85
+      coverage: 0.90
+
+  # 隐私保护评测
+  privacy_verification:
+    name: "隐私保护与数据安全评测"
+    description: "评估系统在隐私保护和数据安全方面的表现"
+    type: "PRIVACY_VERIFICATION"
+    enabled: true
+    datasets: ["privacy_test_cases", "security_scenarios"]
+    metrics: ["privacy_score", "data_leakage", "anonymization_quality"]
+    tags: ["privacy", "security", "compliance"]
+    parameters:
+      batch_size: 32
+      timeout: 180
+      strict_mode: true
+    thresholds:
+      privacy_score: 0.95
+      data_leakage: 0.0
+      anonymization_quality: 0.90
+
+  # 边缘计算性能评测
+  edge_performance:
+    name: "边缘计算性能评测"
+    description: "评估模型在边缘设备上的性能表现"
+    type: "EDGE_PERFORMANCE"
+    enabled: true
+    datasets: ["edge_test_cases"]
+    metrics: ["latency", "throughput", "memory_usage", "energy_consumption"]
+    tags: ["edge", "performance", "optimization"]
+    parameters:
+      batch_size: 64
+      timeout: 120
+      device_simulation: true
+    thresholds:
+      latency: 100  # ms
+      memory_usage: 512  # MB
+      energy_consumption: 1000  # mJ
+
+# 数据集配置
+datasets:
+  tcm_cases_v2:
+    name: "中医病例数据集 v2"
+    path: "data/datasets/tcm_cases_v2.json"
+    size: 5000
+    format: "json"
+    description: "包含症状、体征、诊断的中医病例"
+
+  syndrome_patterns:
+    name: "证候模式数据集"
+    path: "data/datasets/syndrome_patterns.json"
+    size: 2000
+    format: "json"
+    description: "中医证候识别模式数据"
+
+  health_profiles:
+    name: "健康档案数据集"
+    path: "data/datasets/health_profiles.json"
+    size: 3000
+    format: "json"
+    description: "用户健康档案和需求数据"
+
+  plan_templates:
+    name: "健康方案模板"
+    path: "data/datasets/plan_templates.json"
+    size: 500
+    format: "json"
+    description: "标准健康管理方案模板"
+
+  collaboration_scenarios:
+    name: "协作场景数据集"
+    path: "data/datasets/collaboration_scenarios.json"
+    size: 1000
+    format: "json"
+    description: "多智能体协作场景数据"
+
+  multi_agent_tasks:
+    name: "多智能体任务数据集"
+    path: "data/datasets/multi_agent_tasks.json"
+    size: 800
+    format: "json"
+    description: "需要多智能体协作完成的任务"
+
+  privacy_test_cases:
+    name: "隐私测试用例"
+    path: "data/datasets/privacy_test_cases.json"
+    size: 2000
+    format: "json"
+    description: "隐私保护测试场景"
+
+  security_scenarios:
+    name: "安全场景数据集"
+    path: "data/datasets/security_scenarios.json"
+    size: 1500
+    format: "json"
+    description: "数据安全测试场景"
+
+  edge_test_cases:
+    name: "边缘计算测试用例"
+    path: "data/datasets/edge_test_cases.json"
+    size: 10000
+    format: "json"
+    description: "边缘设备性能测试数据"
+
+# 指标配置
+metrics:
+  accuracy:
+    name: "准确率"
+    description: "预测正确的样本比例"
+    unit: "percentage"
+    higher_is_better: true
+    threshold: 0.8
+
+  precision:
+    name: "精确率"
+    description: "预测为正例中实际为正例的比例"
+    unit: "percentage"
+    higher_is_better: true
+    threshold: 0.8
+
+  recall:
+    name: "召回率"
+    description: "实际正例中被预测为正例的比例"
+    unit: "percentage"
+    higher_is_better: true
+    threshold: 0.8
+
+  f1_score:
+    name: "F1分数"
+    description: "精确率和召回率的调和平均"
+    unit: "percentage"
+    higher_is_better: true
+    threshold: 0.8
+
+  latency:
+    name: "延迟"
+    description: "响应时间"
+    unit: "milliseconds"
+    higher_is_better: false
+    threshold: 100
+
+  throughput:
+    name: "吞吐量"
+    description: "每秒处理请求数"
+    unit: "requests/second"
+    higher_is_better: true
+    threshold: 100
+
+  memory_usage:
+    name: "内存使用量"
+    description: "内存占用"
+    unit: "MB"
+    higher_is_better: false
+    threshold: 512
+
+  syndrome_accuracy:
+    name: "证候识别准确率"
+    description: "中医证候识别的准确率"
+    unit: "percentage"
+    higher_is_better: true
+    threshold: 0.8
+
+  completeness:
+    name: "完整性"
+    description: "方案内容的完整程度"
+    unit: "percentage"
+    higher_is_better: true
+    threshold: 0.85
+
+  relevance:
+    name: "相关性"
+    description: "方案与用户需求的相关程度"
+    unit: "percentage"
+    higher_is_better: true
+    threshold: 0.8
+
+  feasibility:
+    name: "可行性"
+    description: "方案的可执行程度"
+    unit: "percentage"
+    higher_is_better: true
+    threshold: 0.75
+
+  efficiency:
+    name: "协作效率"
+    description: "智能体协作的效率"
+    unit: "percentage"
+    higher_is_better: true
+    threshold: 0.75
+
+  consistency:
+    name: "一致性"
+    description: "智能体输出的一致程度"
+    unit: "percentage"
+    higher_is_better: true
+    threshold: 0.85
+
+  coverage:
+    name: "覆盖度"
+    description: "任务覆盖的完整程度"
+    unit: "percentage"
+    higher_is_better: true
+    threshold: 0.9
+
+  privacy_score:
+    name: "隐私保护分数"
+    description: "隐私保护效果评分"
+    unit: "percentage"
+    higher_is_better: true
+    threshold: 0.95
+
+# 模型配置
+models:
+  default_timeout: 30
+  max_retries: 3
+  supported_types: ["local", "remote_api", "edge"]
+  
+  # 预定义模型配置
+  presets:
+    xiaoai_v1:
+      type: "local"
+      path: "models/xiaoai/v1"
+      config:
+        max_tokens: 2048
+        temperature: 0.7
+    
+    xiaoke_v1:
+      type: "local"
+      path: "models/xiaoke/v1"
+      config:
+        max_tokens: 1024
+        temperature: 0.5
+    
+    laoke_v1:
+      type: "local"
+      path: "models/laoke/v1"
+      config:
+        max_tokens: 4096
+        temperature: 0.3
+    
+    soer_v1:
+      type: "local"
+      path: "models/soer/v1"
+      config:
+        max_tokens: 1024
+        temperature: 0.8
+
+# 报告配置
+reports:
+  default_format: "html"
+  supported_formats: ["html", "pdf", "json", "markdown"]
+  template_dir: "templates/reports"
+  output_dir: "data/reports"
+  include_charts: true
+  include_raw_data: false
+  auto_cleanup: true
+  retention_days: 30
+
+# 开发和调试配置
+development:
+  debug: false
+  hot_reload: false
+  mock_models: false
+  test_mode: false
+  profiling: false

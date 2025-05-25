@@ -1,0 +1,123 @@
+# 性能监控配置
+performance:
+  # 监控开关
+  enabled: true
+  
+  # 性能指标收集
+  metrics:
+    # 响应时间监控
+    response_time:
+      enabled: true
+      percentiles: [50, 90, 95, 99]
+      histogram_buckets: [0.1, 0.5, 1.0, 2.0, 5.0, 10.0]
+    
+    # 吞吐量监控
+    throughput:
+      enabled: true
+      window_size: 60  # 秒
+    
+    # 错误率监控
+    error_rate:
+      enabled: true
+      window_size: 300  # 秒
+      alert_threshold: 0.05  # 5%
+    
+    # 资源使用监控
+    resource_usage:
+      enabled: true
+      cpu_threshold: 80  # %
+      memory_threshold: 85  # %
+      disk_threshold: 90  # %
+  
+  # 性能阈值
+  thresholds:
+    # 服务响应时间阈值（毫秒）
+    response_time:
+      blind_assistance: 2000
+      voice_assistance: 1500
+      sign_language: 3000
+      screen_reading: 1000
+      content_conversion: 2500
+    
+    # 并发请求阈值
+    concurrent_requests:
+      blind_assistance: 10
+      voice_assistance: 8
+      sign_language: 5
+      screen_reading: 15
+      content_conversion: 10
+    
+    # 内存使用阈值（MB）
+    memory_usage:
+      blind_assistance: 512
+      voice_assistance: 256
+      sign_language: 1024
+      screen_reading: 128
+      content_conversion: 256
+  
+  # 性能优化
+  optimization:
+    # 缓存策略
+    cache:
+      enabled: true
+      default_ttl: 3600
+      max_size: 1000
+      eviction_policy: "lru"
+    
+    # 连接池
+    connection_pool:
+      enabled: true
+      max_connections: 20
+      min_connections: 5
+      connection_timeout: 30
+    
+    # 批处理
+    batch_processing:
+      enabled: true
+      batch_size: 10
+      batch_timeout: 100  # 毫秒
+    
+    # 预加载
+    preloading:
+      enabled: true
+      models: ["scene_analysis", "obstacle_detection"]
+      cache_warmup: true
+  
+  # 监控报告
+  reporting:
+    # 日志记录
+    logging:
+      enabled: true
+      level: "INFO"
+      format: "json"
+      file: "logs/performance.log"
+      rotation: "daily"
+    
+    # 指标导出
+    metrics_export:
+      enabled: true
+      format: "prometheus"
+      endpoint: "/metrics"
+      interval: 30  # 秒
+    
+    # 告警
+    alerts:
+      enabled: true
+      channels: ["log", "webhook"]
+      webhook_url: "http://localhost:8080/alerts"
+      
+  # 性能测试
+  testing:
+    # 负载测试
+    load_testing:
+      enabled: false
+      concurrent_users: 50
+      duration: 300  # 秒
+      ramp_up: 60  # 秒
+    
+    # 压力测试
+    stress_testing:
+      enabled: false
+      max_users: 200
+      step_duration: 30  # 秒
+      step_increment: 10 

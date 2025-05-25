@@ -1,337 +1,460 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 """
 老克智能体服务 - 缓存管理器
-提供多级缓存支持：本地内存缓存和Redis分布式缓存
+提供高效的缓存功能，支持Redis和内存缓存
 """
 
 import json
 import logging
-import time
-from typing import Any, Dict, Optional, Union, List, Set, Tuple
 import asyncio
+import time
+from typing import Any, Optional, Dict, Union, List
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
+import hashlib
+import pickle
 from functools import wraps
 
-from cachetools import TTLCache
-import aioredis
+try:
+    import aioredis
+    REDIS_AVAILABLE = True
+except ImportError:
+    REDIS_AVAILABLE = False
 
 from pkg.utils.config import Config
 
 logger = logging.getLogger(__name__)
 
-class CacheManager:
-    """缓存管理器，支持内存缓存和Redis缓存"""
+@dataclass
+class CacheConfig:
+    """缓存配置"""
+    backend: str = "memory"  # memory, redis
+    redis_url: str = "redis://localhost:6379"
+    default_ttl: int = 3600  # 默认过期时间（秒）
+    max_memory_items: int = 10000  # 内存缓存最大条目数
+    key_prefix: str = "laoke:"
+    serializer: str = "json"  # json, pickle
+
+class CacheBackend(ABC):
+    """缓存后端抽象基类"""
     
-    def __init__(self, config: Config):
-        """初始化缓存管理器"""
-        self.config = config
-        self.cache_config = config.get_section('cache')
-        
-        # 初始化内存缓存
-        self.memory_cache_size = self.cache_config.get('memory_cache_size', 10000)
-        self.memory_cache_ttl = self.cache_config.get('memory_cache_ttl', 60)  # 60秒
-        self.memory_cache = TTLCache(maxsize=self.memory_cache_size, ttl=self.memory_cache_ttl)
-        
-        # Redis 配置
-        self.redis_enabled = self.cache_config.get('type', 'memory') == 'redis'
-        self.redis_client = None
-        
-        # 如果启用Redis，异步初始化连接
-        if self.redis_enabled:
-            asyncio.create_task(self._init_redis())
-        
-        logger.info("缓存管理器初始化完成，内存缓存大小：%d，TTL：%d秒，Redis：%s", 
-                 self.memory_cache_size, self.memory_cache_ttl, 
-                 "启用" if self.redis_enabled else "禁用")
+    @abstractmethod
+    async def get(self, key: str) -> Optional[Any]:
+        """获取缓存值"""
+        pass
     
-    async def _init_redis(self):
-        """初始化Redis连接"""
-        try:
-            redis_host = self.cache_config.get('host', 'localhost')
-            redis_port = int(self.cache_config.get('port', 6379))
-            redis_db = int(self.cache_config.get('db', 0))
-            redis_password = self.cache_config.get('password', None)
-            redis_url = f"redis://{redis_host}:{redis_port}/{redis_db}"
-            
-            self.redis_client = await aioredis.from_url(
-                redis_url,
-                password=redis_password
-            )
-            
-            logger.info("Redis缓存连接成功：%s", redis_url)
-        except Exception as e:
-            logger.error("Redis缓存连接失败：%s", str(e))
-            self.redis_enabled = False
+    @abstractmethod
+    async def set(self, key: str, value: Any, ttl: Optional[int] = None) -> bool:
+        """设置缓存值"""
+        pass
+    
+    @abstractmethod
+    async def delete(self, key: str) -> bool:
+        """删除缓存值"""
+        pass
+    
+    @abstractmethod
+    async def exists(self, key: str) -> bool:
+        """检查键是否存在"""
+        pass
+    
+    @abstractmethod
+    async def clear(self) -> bool:
+        """清空缓存"""
+        pass
+    
+    @abstractmethod
+    async def close(self) -> None:
+        """关闭连接"""
+        pass
+
+class MemoryCacheBackend(CacheBackend):
+    """内存缓存后端"""
+    
+    def __init__(self, max_items: int = 10000):
+        self._cache: Dict[str, Dict[str, Any]] = {}
+        self._max_items = max_items
+        self._lock = asyncio.Lock()
     
     async def get(self, key: str) -> Optional[Any]:
-        """
-        从缓存获取值
-        
-        Args:
-            key: 缓存键
+        """获取缓存值"""
+        async with self._lock:
+            if key not in self._cache:
+                return None
             
-        Returns:
-            缓存的值，如果不存在则返回None
-        """
-        # 先从内存缓存获取
-        if key in self.memory_cache:
-            logger.debug("内存缓存命中：%s", key)
-            return self.memory_cache[key]
-        
-        # 如果Redis可用，从Redis获取
-        if self.redis_enabled and self.redis_client:
-            try:
-                value = await self.redis_client.get(key)
-                if value:
-                    logger.debug("Redis缓存命中：%s", key)
-                    # 将值解析为对象并存入内存缓存
-                    deserialized = json.loads(value)
-                    self.memory_cache[key] = deserialized
-                    return deserialized
-            except Exception as e:
-                logger.error("从Redis获取缓存失败，键：%s，错误：%s", key, str(e))
-        
-        return None
+            item = self._cache[key]
+            
+            # 检查是否过期
+            if item['expires_at'] and time.time() > item['expires_at']:
+                del self._cache[key]
+                return None
+            
+            return item['value']
     
-    async def set(self, key: str, value: Any, expire: int = None) -> bool:
-        """
-        设置缓存值
-        
-        Args:
-            key: 缓存键
-            value: 要缓存的值
-            expire: 过期时间（秒），如果为None则使用默认TTL
+    async def set(self, key: str, value: Any, ttl: Optional[int] = None) -> bool:
+        """设置缓存值"""
+        async with self._lock:
+            # 如果缓存已满，删除最旧的条目
+            if len(self._cache) >= self._max_items and key not in self._cache:
+                oldest_key = min(self._cache.keys(), 
+                               key=lambda k: self._cache[k]['created_at'])
+                del self._cache[oldest_key]
             
-        Returns:
-            是否成功设置缓存
-        """
-        # 设置内存缓存
-        self.memory_cache[key] = value
-        
-        # 如果Redis可用，也设置Redis缓存
-        if self.redis_enabled and self.redis_client:
-            try:
-                # 序列化值
-                serialized = json.dumps(value)
-                
-                # 设置过期时间，如果未提供则使用配置中的TTL
-                if expire is None:
-                    expire = int(self.cache_config.get('ttl', 3600))
-                
-                # 设置Redis缓存
-                await self.redis_client.set(key, serialized, ex=expire)
-                logger.debug("Redis缓存已设置：%s，过期时间：%d秒", key, expire)
-                return True
-            except Exception as e:
-                logger.error("设置Redis缓存失败，键：%s，错误：%s", key, str(e))
-                return False
-        
-        return True
+            expires_at = None
+            if ttl:
+                expires_at = time.time() + ttl
+            
+            self._cache[key] = {
+                'value': value,
+                'created_at': time.time(),
+                'expires_at': expires_at
+            }
+            
+            return True
     
     async def delete(self, key: str) -> bool:
-        """
-        删除缓存值
-        
-        Args:
-            key: 缓存键
-            
-        Returns:
-            是否成功删除缓存
-        """
-        # 删除内存缓存
-        if key in self.memory_cache:
-            del self.memory_cache[key]
-        
-        # 如果Redis可用，也删除Redis缓存
-        if self.redis_enabled and self.redis_client:
-            try:
-                await self.redis_client.delete(key)
-                logger.debug("Redis缓存已删除：%s", key)
+        """删除缓存值"""
+        async with self._lock:
+            if key in self._cache:
+                del self._cache[key]
                 return True
-            except Exception as e:
-                logger.error("删除Redis缓存失败，键：%s，错误：%s", key, str(e))
-                return False
-        
-        return True
+            return False
     
     async def exists(self, key: str) -> bool:
-        """
-        检查缓存键是否存在
-        
-        Args:
-            key: 缓存键
-            
-        Returns:
-            缓存键是否存在
-        """
-        # 检查内存缓存
-        if key in self.memory_cache:
+        """检查键是否存在"""
+        return await self.get(key) is not None
+    
+    async def clear(self) -> bool:
+        """清空缓存"""
+        async with self._lock:
+            self._cache.clear()
             return True
-        
-        # 如果Redis可用，检查Redis缓存
-        if self.redis_enabled and self.redis_client:
-            try:
-                return await self.redis_client.exists(key) > 0
-            except Exception as e:
-                logger.error("检查Redis缓存失败，键：%s，错误：%s", key, str(e))
-        
-        return False
     
-    async def clear(self, pattern: str = None) -> bool:
-        """
-        清空缓存
+    async def close(self) -> None:
+        """关闭连接"""
+        await self.clear()
+
+class RedisCacheBackend(CacheBackend):
+    """Redis缓存后端"""
+    
+    def __init__(self, redis_url: str):
+        self._redis_url = redis_url
+        self._redis: Optional[aioredis.Redis] = None
+        self._connected = False
+    
+    async def _ensure_connected(self) -> None:
+        """确保Redis连接"""
+        if not self._connected:
+            try:
+                self._redis = aioredis.from_url(self._redis_url)
+                await self._redis.ping()
+                self._connected = True
+                logger.info("Redis缓存连接成功")
+            except Exception as e:
+                logger.error(f"Redis连接失败: {str(e)}")
+                raise
+    
+    async def get(self, key: str) -> Optional[Any]:
+        """获取缓存值"""
+        await self._ensure_connected()
+        try:
+            value = await self._redis.get(key)
+            if value is None:
+                return None
+            return json.loads(value.decode('utf-8'))
+        except Exception as e:
+            logger.error(f"Redis获取失败: {str(e)}")
+            return None
+    
+    async def set(self, key: str, value: Any, ttl: Optional[int] = None) -> bool:
+        """设置缓存值"""
+        await self._ensure_connected()
+        try:
+            serialized_value = json.dumps(value, ensure_ascii=False)
+            if ttl:
+                await self._redis.setex(key, ttl, serialized_value)
+            else:
+                await self._redis.set(key, serialized_value)
+            return True
+        except Exception as e:
+            logger.error(f"Redis设置失败: {str(e)}")
+            return False
+    
+    async def delete(self, key: str) -> bool:
+        """删除缓存值"""
+        await self._ensure_connected()
+        try:
+            result = await self._redis.delete(key)
+            return result > 0
+        except Exception as e:
+            logger.error(f"Redis删除失败: {str(e)}")
+            return False
+    
+    async def exists(self, key: str) -> bool:
+        """检查键是否存在"""
+        await self._ensure_connected()
+        try:
+            result = await self._redis.exists(key)
+            return result > 0
+        except Exception as e:
+            logger.error(f"Redis检查存在失败: {str(e)}")
+            return False
+    
+    async def clear(self) -> bool:
+        """清空缓存"""
+        await self._ensure_connected()
+        try:
+            await self._redis.flushdb()
+            return True
+        except Exception as e:
+            logger.error(f"Redis清空失败: {str(e)}")
+            return False
+    
+    async def close(self) -> None:
+        """关闭连接"""
+        if self._redis:
+            await self._redis.close()
+            self._connected = False
+
+class CacheManager:
+    """缓存管理器"""
+    
+    def __init__(self, config: Optional[CacheConfig] = None):
+        self.config = config or CacheConfig()
+        self._backend: Optional[CacheBackend] = None
+        self._initialized = False
         
-        Args:
-            pattern: 模式匹配，如果提供则只清除匹配的键
+        # 统计信息
+        self._stats = {
+            'hits': 0,
+            'misses': 0,
+            'sets': 0,
+            'deletes': 0,
+            'errors': 0
+        }
+    
+    async def _ensure_initialized(self) -> None:
+        """确保缓存已初始化"""
+        if not self._initialized:
+            await self._initialize_backend()
+    
+    async def _initialize_backend(self) -> None:
+        """初始化缓存后端"""
+        try:
+            if self.config.backend == "redis" and REDIS_AVAILABLE:
+                self._backend = RedisCacheBackend(self.config.redis_url)
+                logger.info("使用Redis缓存后端")
+            else:
+                if self.config.backend == "redis" and not REDIS_AVAILABLE:
+                    logger.warning("Redis不可用，回退到内存缓存")
+                self._backend = MemoryCacheBackend(self.config.max_memory_items)
+                logger.info("使用内存缓存后端")
             
-        Returns:
-            是否成功清空缓存
-        """
-        # 清空内存缓存
-        if pattern:
-            # 清除匹配的键
-            keys_to_remove = [k for k in self.memory_cache if pattern in k]
-            for key in keys_to_remove:
-                del self.memory_cache[key]
+            self._initialized = True
+            
+        except Exception as e:
+            logger.error(f"缓存后端初始化失败: {str(e)}")
+            # 回退到内存缓存
+            self._backend = MemoryCacheBackend(self.config.max_memory_items)
+            self._initialized = True
+    
+    def _make_key(self, key: str) -> str:
+        """生成完整的缓存键"""
+        return f"{self.config.key_prefix}{key}"
+    
+    def _hash_key(self, key: str) -> str:
+        """对键进行哈希处理（用于长键）"""
+        if len(key) > 250:  # Redis键长度限制
+            return hashlib.md5(key.encode('utf-8')).hexdigest()
+        return key
+    
+    async def get(self, key: str) -> Optional[Any]:
+        """获取缓存值"""
+        await self._ensure_initialized()
+        
+        full_key = self._make_key(self._hash_key(key))
+        
+        try:
+            value = await self._backend.get(full_key)
+            if value is not None:
+                self._stats['hits'] += 1
+                logger.debug(f"缓存命中: {key}")
+                return value
+            else:
+                self._stats['misses'] += 1
+                logger.debug(f"缓存未命中: {key}")
+                return None
+        except Exception as e:
+            self._stats['errors'] += 1
+            logger.error(f"缓存获取错误: {str(e)}")
+            return None
+    
+    async def set(self, key: str, value: Any, ttl: Optional[int] = None) -> bool:
+        """设置缓存值"""
+        await self._ensure_initialized()
+        
+        full_key = self._make_key(self._hash_key(key))
+        cache_ttl = ttl or self.config.default_ttl
+        
+        try:
+            result = await self._backend.set(full_key, value, cache_ttl)
+            if result:
+                self._stats['sets'] += 1
+                logger.debug(f"缓存设置成功: {key}, TTL: {cache_ttl}")
+            return result
+        except Exception as e:
+            self._stats['errors'] += 1
+            logger.error(f"缓存设置错误: {str(e)}")
+            return False
+    
+    async def delete(self, key: str) -> bool:
+        """删除缓存值"""
+        await self._ensure_initialized()
+        
+        full_key = self._make_key(self._hash_key(key))
+        
+        try:
+            result = await self._backend.delete(full_key)
+            if result:
+                self._stats['deletes'] += 1
+                logger.debug(f"缓存删除成功: {key}")
+            return result
+        except Exception as e:
+            self._stats['errors'] += 1
+            logger.error(f"缓存删除错误: {str(e)}")
+            return False
+    
+    async def exists(self, key: str) -> bool:
+        """检查键是否存在"""
+        await self._ensure_initialized()
+        
+        full_key = self._make_key(self._hash_key(key))
+        
+        try:
+            return await self._backend.exists(full_key)
+        except Exception as e:
+            self._stats['errors'] += 1
+            logger.error(f"缓存检查存在错误: {str(e)}")
+            return False
+    
+    async def clear(self) -> bool:
+        """清空缓存"""
+        await self._ensure_initialized()
+        
+        try:
+            result = await self._backend.clear()
+            if result:
+                logger.info("缓存已清空")
+            return result
+        except Exception as e:
+            self._stats['errors'] += 1
+            logger.error(f"缓存清空错误: {str(e)}")
+            return False
+    
+    async def get_or_set(self, key: str, factory_func, ttl: Optional[int] = None) -> Any:
+        """获取缓存值，如果不存在则通过工厂函数生成并缓存"""
+        value = await self.get(key)
+        if value is not None:
+            return value
+        
+        # 生成新值
+        if asyncio.iscoroutinefunction(factory_func):
+            value = await factory_func()
         else:
-            # 清空所有
-            self.memory_cache.clear()
+            value = factory_func()
         
-        # 如果Redis可用，也清空Redis缓存
-        if self.redis_enabled and self.redis_client:
-            try:
-                if pattern:
-                    # 获取匹配的键
-                    keys = await self.redis_client.keys(pattern)
-                    if keys:
-                        await self.redis_client.delete(*keys)
-                else:
-                    # 清空所有（危险操作，生产环境谨慎使用）
-                    await self.redis_client.flushdb()
-                
-                logger.debug("Redis缓存已清空：%s", pattern or "所有")
-                return True
-            except Exception as e:
-                logger.error("清空Redis缓存失败，模式：%s，错误：%s", pattern or "所有", str(e))
-                return False
-        
-        return True
-
-    async def get_hash(self, key: str, field: str) -> Optional[Any]:
-        """
-        从哈希表获取字段值
-        
-        Args:
-            key: 哈希表键
-            field: 字段名
-            
-        Returns:
-            字段值，如果不存在则返回None
-        """
-        # 内存缓存键
-        mem_key = f"{key}:{field}"
-        
-        # 先从内存缓存获取
-        if mem_key in self.memory_cache:
-            return self.memory_cache[mem_key]
-        
-        # 如果Redis可用，从Redis获取
-        if self.redis_enabled and self.redis_client:
-            try:
-                value = await self.redis_client.hget(key, field)
-                if value:
-                    # 将值解析为对象并存入内存缓存
-                    deserialized = json.loads(value)
-                    self.memory_cache[mem_key] = deserialized
-                    return deserialized
-            except Exception as e:
-                logger.error("从Redis哈希表获取缓存失败，键：%s，字段：%s，错误：%s", 
-                           key, field, str(e))
-        
-        return None
+        # 缓存新值
+        await self.set(key, value, ttl)
+        return value
     
-    async def set_hash(self, key: str, field: str, value: Any) -> bool:
-        """
-        设置哈希表字段值
-        
-        Args:
-            key: 哈希表键
-            field: 字段名
-            value: 要缓存的值
-            
-        Returns:
-            是否成功设置缓存
-        """
-        # 内存缓存键
-        mem_key = f"{key}:{field}"
-        
-        # 设置内存缓存
-        self.memory_cache[mem_key] = value
-        
-        # 如果Redis可用，也设置Redis缓存
-        if self.redis_enabled and self.redis_client:
-            try:
-                # 序列化值
-                serialized = json.dumps(value)
-                
-                # 设置Redis哈希表字段
-                await self.redis_client.hset(key, field, serialized)
-                return True
-            except Exception as e:
-                logger.error("设置Redis哈希表缓存失败，键：%s，字段：%s，错误：%s", 
-                           key, field, str(e))
-                return False
-        
-        return True
+    async def mget(self, keys: List[str]) -> Dict[str, Any]:
+        """批量获取缓存值"""
+        result = {}
+        for key in keys:
+            value = await self.get(key)
+            if value is not None:
+                result[key] = value
+        return result
     
-    async def close(self):
+    async def mset(self, items: Dict[str, Any], ttl: Optional[int] = None) -> int:
+        """批量设置缓存值"""
+        success_count = 0
+        for key, value in items.items():
+            if await self.set(key, value, ttl):
+                success_count += 1
+        return success_count
+    
+    def get_stats(self) -> Dict[str, Any]:
+        """获取缓存统计信息"""
+        total_requests = self._stats['hits'] + self._stats['misses']
+        hit_rate = self._stats['hits'] / total_requests if total_requests > 0 else 0
+        
+        return {
+            'hits': self._stats['hits'],
+            'misses': self._stats['misses'],
+            'hit_rate': hit_rate,
+            'sets': self._stats['sets'],
+            'deletes': self._stats['deletes'],
+            'errors': self._stats['errors'],
+            'backend': self.config.backend
+        }
+    
+    def reset_stats(self) -> None:
+        """重置统计信息"""
+        self._stats = {
+            'hits': 0,
+            'misses': 0,
+            'sets': 0,
+            'deletes': 0,
+            'errors': 0
+        }
+    
+    async def close(self) -> None:
         """关闭缓存管理器"""
-        # 关闭Redis连接
-        if self.redis_enabled and self.redis_client:
-            try:
-                await self.redis_client.close()
-                logger.info("Redis缓存连接已关闭")
-            except Exception as e:
-                logger.error("关闭Redis缓存连接失败：%s", str(e))
+        if self._backend:
+            await self._backend.close()
+            logger.info("缓存管理器已关闭")
 
-def cached(ttl: int = 300):
-    """
-    缓存装饰器，用于缓存方法结果
-    
-    Args:
-        ttl: 缓存过期时间（秒）
-        
-    Returns:
-        装饰后的方法
-    """
+def cache_result(key_func=None, ttl: int = 3600):
+    """缓存装饰器"""
     def decorator(func):
         @wraps(func)
-        async def wrapper(self, *args, **kwargs):
-            # 获取缓存管理器
-            cache_manager = getattr(self, 'cache_manager', None)
-            if not cache_manager:
-                # 如果没有缓存管理器，直接调用原方法
-                return await func(self, *args, **kwargs)
-            
-            # 构建缓存键
-            # 使用函数名、参数和关键字参数生成唯一键
-            key_parts = [func.__name__]
-            key_parts.extend([str(arg) for arg in args])
-            key_parts.extend([f"{k}:{v}" for k, v in sorted(kwargs.items())])
-            cache_key = f"cache:{':'.join(key_parts)}"
+        async def wrapper(*args, **kwargs):
+            # 生成缓存键
+            if key_func:
+                cache_key = key_func(*args, **kwargs)
+            else:
+                # 默认键生成策略
+                func_name = func.__name__
+                args_str = str(args) + str(sorted(kwargs.items()))
+                cache_key = f"{func_name}:{hashlib.md5(args_str.encode()).hexdigest()}"
             
             # 尝试从缓存获取
-            cached_value = await cache_manager.get(cache_key)
-            if cached_value is not None:
-                return cached_value
+            cache_manager = CacheManager()
+            cached_result = await cache_manager.get(cache_key)
+            if cached_result is not None:
+                return cached_result
             
-            # 调用原方法
-            result = await func(self, *args, **kwargs)
+            # 执行函数并缓存结果
+            if asyncio.iscoroutinefunction(func):
+                result = await func(*args, **kwargs)
+            else:
+                result = func(*args, **kwargs)
             
-            # 存入缓存
             await cache_manager.set(cache_key, result, ttl)
-            
             return result
+        
         return wrapper
-    return decorator 
+    return decorator
+
+# 全局缓存管理器实例
+_cache_manager: Optional[CacheManager] = None
+
+def get_cache_manager(config: Optional[CacheConfig] = None) -> CacheManager:
+    """获取全局缓存管理器实例"""
+    global _cache_manager
+    if _cache_manager is None:
+        _cache_manager = CacheManager(config)
+    return _cache_manager 

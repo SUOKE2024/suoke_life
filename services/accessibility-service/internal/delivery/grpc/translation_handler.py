@@ -9,7 +9,7 @@ import grpc
 
 from api.grpc import accessibility_pb2 as pb2
 from api.grpc import accessibility_pb2_grpc as pb2_grpc
-from internal.service.accessibility_service import AccessibilityService
+from internal.service.optimized_accessibility_service import OptimizedAccessibilityService
 
 logger = logging.getLogger(__name__)
 
@@ -17,13 +17,14 @@ logger = logging.getLogger(__name__)
 class TranslationHandler:
     """翻译服务gRPC处理器类"""
 
-    def __init__(self, service: AccessibilityService):
+    def __init__(self, service: OptimizedAccessibilityService):
         """初始化翻译服务处理器
 
         Args:
             service: 无障碍服务实例
         """
         self.service = service
+        logger.info("翻译服务处理器初始化完成")
 
     async def speech_translation(self, request: pb2.SpeechTranslationRequest, context: grpc.aio.ServicerContext) -> pb2.SpeechTranslationResponse:
         """处理语音翻译请求

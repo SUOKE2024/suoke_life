@@ -2,20 +2,19 @@ module.exports = {
   preset: 'react-native',
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   transformIgnorePatterns: [
-    'node_modules/(?!(react-native|@react-native|react-native-.*|@react-navigation|react-redux|@reduxjs/toolkit)/)'
+    'node_modules/(?!(react-native|@react-native|react-native-vector-icons|@react-navigation|react-redux|@reduxjs)/)',
   ],
+  setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
   testMatch: [
-    '**/__tests__/**/*.test.(js|jsx|ts|tsx)',
-    '**/?(*.)+(spec|test).(js|jsx|ts|tsx)'
+    '**/__tests__/**/*.(ts|tsx|js)',
+    '**/*.(test|spec).(ts|tsx|js)',
   ],
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+  collectCoverageFrom: [
+    'src/**/*.{ts,tsx}',
+    '!src/**/*.d.ts',
+    '!src/index.tsx',
+  ],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
-  collectCoverageFrom: [
-    'src/**/*.{js,jsx,ts,tsx}',
-    '!src/**/*.d.ts',
-    '!src/**/index.ts',
-  ],
-  testEnvironment: 'node',
-};
+}; 
