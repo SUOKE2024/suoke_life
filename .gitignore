@@ -1,0 +1,5 @@
+# 忽略iOS构建文件和依赖
+ios/Pods/
+ios/build/
+node_modules/
+*.xcuserstate
