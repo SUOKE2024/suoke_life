@@ -100,8 +100,8 @@ class ScientificLibraryInstaller:
         """检查Python版本"""
         logger.info(f"检查Python版本: {self.python_version}")
         
-        if self.python_version < (3, 8):
-            logger.error("需要Python 3.8或更高版本")
+        if self.python_version < (3, 11):
+            logger.error("需要Python 3.11或更高版本")
             return False
         
         logger.info("✅ Python版本检查通过")

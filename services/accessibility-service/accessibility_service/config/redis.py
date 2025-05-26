@@ -1,0 +1,175 @@
+"""
+Redis configuration for accessibility service.
+"""
+
+import os
+from typing import Optional, Dict, Any, List
+from pydantic import Field, validator
+try:
+    from pydantic_settings import BaseSettings
+except ImportError:
+    from pydantic import BaseSettings
+
+
+class RedisConfig(BaseSettings):
+    """Redis configuration settings."""
+    
+    # Connection settings
+    redis_url: str = Field(
+        default="redis://localhost:6379/0",
+        env="REDIS_URL",
+        description="Redis connection URL"
+    )
+    host: str = Field(default="localhost", env="REDIS_HOST", description="Redis host")
+    port: int = Field(default=6379, env="REDIS_PORT", description="Redis port")
+    database: int = Field(default=0, env="REDIS_DB", description="Redis database number")
+    
+    # Authentication
+    password: Optional[str] = Field(default=None, env="REDIS_PASSWORD", description="Redis password")
+    username: Optional[str] = Field(default=None, env="REDIS_USERNAME", description="Redis username")
+    
+    # Connection pool settings
+    max_connections: int = Field(default=50, env="REDIS_MAX_CONNECTIONS", description="Maximum connections")
+    retry_on_timeout: bool = Field(default=True, env="REDIS_RETRY_ON_TIMEOUT", description="Retry on timeout")
+    health_check_interval: int = Field(
+        default=30,
+        env="REDIS_HEALTH_CHECK_INTERVAL",
+        description="Health check interval in seconds"
+    )
+    
+    # Timeout settings
+    socket_timeout: float = Field(default=5.0, env="REDIS_SOCKET_TIMEOUT", description="Socket timeout in seconds")
+    socket_connect_timeout: float = Field(
+        default=5.0,
+        env="REDIS_CONNECT_TIMEOUT",
+        description="Connection timeout in seconds"
+    )
+    
+    # SSL/TLS settings
+    ssl_enabled: bool = Field(default=False, env="REDIS_SSL_ENABLED", description="Enable SSL/TLS")
+    ssl_cert_reqs: Optional[str] = Field(default=None, env="REDIS_SSL_CERT_REQS", description="SSL certificate requirements")
+    ssl_ca_certs: Optional[str] = Field(default=None, env="REDIS_SSL_CA_CERTS", description="SSL CA certificates path")
+    ssl_certfile: Optional[str] = Field(default=None, env="REDIS_SSL_CERTFILE", description="SSL certificate file")
+    ssl_keyfile: Optional[str] = Field(default=None, env="REDIS_SSL_KEYFILE", description="SSL key file")
+    
+    # Caching settings
+    default_ttl: int = Field(default=3600, env="REDIS_DEFAULT_TTL", description="Default TTL in seconds")
+    key_prefix: str = Field(default="accessibility:", env="REDIS_KEY_PREFIX", description="Key prefix")
+    
+    # Specific cache configurations
+    analysis_cache_ttl: int = Field(
+        default=7200,
+        env="REDIS_ANALYSIS_CACHE_TTL",
+        description="Analysis results cache TTL in seconds"
+    )
+    user_cache_ttl: int = Field(
+        default=1800,
+        env="REDIS_USER_CACHE_TTL",
+        description="User data cache TTL in seconds"
+    )
+    session_cache_ttl: int = Field(
+        default=3600,
+        env="REDIS_SESSION_CACHE_TTL",
+        description="Session cache TTL in seconds"
+    )
+    
+    # Performance settings
+    decode_responses: bool = Field(default=True, env="REDIS_DECODE_RESPONSES", description="Decode responses")
+    encoding: str = Field(default="utf-8", env="REDIS_ENCODING", description="Character encoding")
+    
+    class Config:
+        env_file = ".env"
+        env_file_encoding = "utf-8"
+        case_sensitive = False
+    
+    @validator('port')
+    def validate_port(cls, v):
+        """Validate Redis port."""
+        if not 1 <= v <= 65535:
+            raise ValueError("Port must be between 1 and 65535")
+        return v
+    
+    @validator('database')
+    def validate_database(cls, v):
+        """Validate Redis database number."""
+        if not 0 <= v <= 15:
+            raise ValueError("Database number must be between 0 and 15")
+        return v
+    
+    @validator('max_connections')
+    def validate_max_connections(cls, v):
+        """Validate max connections."""
+        if v < 1:
+            raise ValueError("Max connections must be at least 1")
+        if v > 1000:
+            raise ValueError("Max connections should not exceed 1000")
+        return v
+    
+    @property
+    def connection_url(self) -> str:
+        """Get Redis connection URL."""
+        if self.redis_url and self.redis_url != "redis://localhost:6379/0":
+            return self.redis_url
+        
+        # Build URL from components
+        auth = ""
+        if self.username and self.password:
+            auth = f"{self.username}:{self.password}@"
+        elif self.password:
+            auth = f":{self.password}@"
+        
+        scheme = "rediss" if self.ssl_enabled else "redis"
+        return f"{scheme}://{auth}{self.host}:{self.port}/{self.database}"
+    
+    def get_connection_config(self) -> Dict[str, Any]:
+        """Get Redis connection configuration."""
+        config = {
+            'host': self.host,
+            'port': self.port,
+            'db': self.database,
+            'password': self.password,
+            'username': self.username,
+            'socket_timeout': self.socket_timeout,
+            'socket_connect_timeout': self.socket_connect_timeout,
+            'retry_on_timeout': self.retry_on_timeout,
+            'health_check_interval': self.health_check_interval,
+            'decode_responses': self.decode_responses,
+            'encoding': self.encoding,
+        }
+        
+        # Add SSL configuration if enabled
+        if self.ssl_enabled:
+            ssl_config = {
+                'ssl': True,
+                'ssl_cert_reqs': self.ssl_cert_reqs,
+                'ssl_ca_certs': self.ssl_ca_certs,
+                'ssl_certfile': self.ssl_certfile,
+                'ssl_keyfile': self.ssl_keyfile,
+            }
+            config.update({k: v for k, v in ssl_config.items() if v is not None})
+        
+        return config
+    
+    def get_pool_config(self) -> Dict[str, Any]:
+        """Get Redis connection pool configuration."""
+        return {
+            'max_connections': self.max_connections,
+            'retry_on_timeout': self.retry_on_timeout,
+            'health_check_interval': self.health_check_interval,
+        }
+    
+    def get_cache_config(self) -> Dict[str, Any]:
+        """Get cache configuration."""
+        return {
+            'default_ttl': self.default_ttl,
+            'key_prefix': self.key_prefix,
+            'analysis_cache_ttl': self.analysis_cache_ttl,
+            'user_cache_ttl': self.user_cache_ttl,
+            'session_cache_ttl': self.session_cache_ttl,
+        }
+    
+    def get_key(self, key: str, category: str = "") -> str:
+        """Get prefixed cache key."""
+        if category:
+            return f"{self.key_prefix}{category}:{key}"
+        return f"{self.key_prefix}{key}" 

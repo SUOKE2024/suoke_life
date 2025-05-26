@@ -1,6 +1,6 @@
 # ==================== 多阶段构建 - 超级优化版本 ====================
 # 构建阶段 - 使用完整的Python镜像进行构建
-FROM python:3.12-slim as builder
+FROM python:3.13-slim as builder
 
 # 设置构建参数
 ARG BUILD_MODE=production
@@ -38,7 +38,7 @@ RUN pip cache purge && \
     find /opt/venv -name "*.pyo" -delete
 
 # ==================== 运行时阶段 - 使用最小镜像 ====================
-FROM python:3.11-alpine as runtime
+FROM python:3.13-alpine as runtime
 
 # 设置标签
 LABEL maintainer="索克生活团队 <dev@suoke.life>"

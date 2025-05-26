@@ -1,111 +1,64 @@
-/**
- * 错误边界组件
- * 用于捕获和处理React组件树中的JavaScript错误
- */
 
 import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { handleError } from '../../utils/errorHandler';
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 
 interface Props {
   children: ReactNode;
-  fallback?: (error: Error, errorInfo: ErrorInfo) => ReactNode;
-  onError?: (error: Error, errorInfo: ErrorInfo) => void;
 }
 
 interface State {
   hasError: boolean;
-  error: Error | null;
-  errorInfo: ErrorInfo | null;
+  error?: Error;
+  errorInfo?: ErrorInfo;
 }
 
-export class ErrorBoundary extends Component<Props, State> {
+class ErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = {
-      hasError: false,
-      error: null,
-      errorInfo: null,
-    };
+    this.state = { hasError: false };
   }
 
   static getDerivedStateFromError(error: Error): State {
-    return {
-      hasError: true,
-      error,
-      errorInfo: null,
-    };
+    return { hasError: true, error };
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    // 记录错误到错误处理系统
-    handleError(error, {
-      type: 'COMPONENT',
-      severity: 'high',
-      context: {
-        componentStack: errorInfo.componentStack,
-        errorBoundary: true,
-      },
-    });
-
-    // 更新状态
-    this.setState({
-      error,
-      errorInfo,
-    });
-
-    // 调用自定义错误处理函数
-    this.props.onError?.(error, errorInfo);
-
-    // 在开发环境下打印详细错误信息
-    if (__DEV__) {
-      console.error('ErrorBoundary caught an error:', error);
-      console.error('Error Info:', errorInfo);
-    }
+    console.error('ErrorBoundary caught an error:', error, errorInfo);
+    this.setState({ error, errorInfo });
   }
 
-  handleRetry = () => {
-    this.setState({
-      hasError: false,
-      error: null,
-      errorInfo: null,
-    });
+  handleReload = () => {
+    this.setState({ hasError: false, error: undefined, errorInfo: undefined });
+  };
+
+  handleShowDetails = () => {
+    const { error, errorInfo } = this.state;
+    Alert.alert(
+      '错误详情',
+      `错误: ${error?.message || '未知错误'}\n\n堆栈: ${error?.stack || '无堆栈信息'}`,
+      [{ text: '确定' }]
+    );
   };
 
   render() {
     if (this.state.hasError) {
-      // 如果提供了自定义fallback，使用它
-      if (this.props.fallback && this.state.error && this.state.errorInfo) {
-        return this.props.fallback(this.state.error, this.state.errorInfo);
-      }
-
-      // 默认错误UI
       return (
         <View style={styles.container}>
-          <View style={styles.errorContainer}>
-            <Text style={styles.title}>应用遇到了问题</Text>
-            <Text style={styles.subtitle}>
-              很抱歉，应用出现了意外错误。我们已经记录了这个问题。
-            </Text>
-            
-            <TouchableOpacity style={styles.retryButton} onPress={this.handleRetry}>
-              <Text style={styles.retryButtonText}>重试</Text>
-            </TouchableOpacity>
-
-            {__DEV__ && this.state.error && (
-              <ScrollView style={styles.debugContainer}>
-                <Text style={styles.debugTitle}>调试信息:</Text>
-                <Text style={styles.debugText}>
-                  {this.state.error.toString()}
-                </Text>
-                {this.state.errorInfo && (
-                  <Text style={styles.debugText}>
-                    {this.state.errorInfo.componentStack}
-                  </Text>
-                )}
-              </ScrollView>
-            )}
-          </View>
+          <Text style={styles.title}>应用出现错误</Text>
+          <Text style={styles.message}>
+            很抱歉，应用遇到了一个错误。请尝试重新加载。
+          </Text>
+          
+          <TouchableOpacity style={styles.button} onPress={this.handleReload}>
+            <Text style={styles.buttonText}>重新加载</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity 
+            style={[styles.button, styles.detailsButton]} 
+            onPress={this.handleShowDetails}
+          >
+            <Text style={styles.buttonText}>查看详情</Text>
+          </TouchableOpacity>
         </View>
       );
     }
@@ -117,84 +70,39 @@ export class ErrorBoundary extends Component<Props, State> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-  },
-  errorContainer: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 24,
-    maxWidth: 400,
-    width: '100%',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    backgroundColor: '#f5f5f5',
   },
   title: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
     color: '#333',
-    textAlign: 'center',
-    marginBottom: 12,
+    marginBottom: 16,
   },
-  subtitle: {
+  message: {
     fontSize: 16,
     color: '#666',
     textAlign: 'center',
+    marginBottom: 32,
     lineHeight: 24,
-    marginBottom: 24,
   },
-  retryButton: {
+  button: {
     backgroundColor: '#007AFF',
-    borderRadius: 8,
-    paddingVertical: 12,
     paddingHorizontal: 24,
-    alignItems: 'center',
+    paddingVertical: 12,
+    borderRadius: 8,
+    marginBottom: 12,
   },
-  retryButtonText: {
+  detailsButton: {
+    backgroundColor: '#FF9500',
+  },
+  buttonText: {
     color: 'white',
     fontSize: 16,
     fontWeight: '600',
   },
-  debugContainer: {
-    marginTop: 20,
-    maxHeight: 200,
-    backgroundColor: '#f8f8f8',
-    borderRadius: 8,
-    padding: 12,
-  },
-  debugTitle: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 8,
-  },
-  debugText: {
-    fontSize: 12,
-    color: '#666',
-    fontFamily: 'monospace',
-  },
 });
 
-// 高阶组件包装器
-export function withErrorBoundary<P extends object>(
-  Component: React.ComponentType<P>,
-  errorBoundaryProps?: Omit<Props, 'children'>
-) {
-  const WrappedComponent = (props: P) => (
-    <ErrorBoundary {...errorBoundaryProps}>
-      <Component {...props} />
-    </ErrorBoundary>
-  );
-
-  WrappedComponent.displayName = `withErrorBoundary(${Component.displayName || Component.name})`;
-  
-  return WrappedComponent;
-}
+export default ErrorBoundary;

@@ -1,6 +1,6 @@
 # 多阶段构建优化的Dockerfile
 # 阶段1: 构建阶段
-FROM python:3.12-slim as builder
+FROM python:3.13-slim as builder
 
 # 设置构建参数
 ARG BUILD_DATE
@@ -27,7 +27,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # 阶段2: 运行时阶段
-FROM python:3.12-slim as runtime
+FROM python:3.13-slim as runtime
 
 # 设置标签
 LABEL maintainer="suoke-life-team" \

@@ -8,15 +8,11 @@ import {
   SafeAreaView,
   Animated,
   Dimensions,
-  ImageBackground,
-  Image,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useDispatch } from 'react-redux';
-import { AuthStackParamList } from '../../navigation/AuthNavigator';
+import { AuthStackParamList } from '../../types/navigation';
 import { colors, spacing, fonts, borderRadius, shadows } from '../../constants/theme';
-import { devLogin } from '../../store/slices/authSlice';
 
 const { width, height } = Dimensions.get('window');
 
@@ -27,13 +23,13 @@ type WelcomeScreenNavigationProp = NativeStackNavigationProp<
 
 export const WelcomeScreen: React.FC = () => {
   const navigation = useNavigation<WelcomeScreenNavigationProp>();
-  const dispatch = useDispatch();
   
   // 动画值
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(50)).current;
   const logoScaleAnim = useRef(new Animated.Value(0.8)).current;
   const buttonSlideAnim = useRef(new Animated.Value(100)).current;
+  const particleAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     // 启动动画序列
@@ -64,6 +60,15 @@ export const WelcomeScreen: React.FC = () => {
         useNativeDriver: true,
       }),
     ]).start();
+
+    // 粒子动画循环
+    Animated.loop(
+      Animated.timing(particleAnim, {
+        toValue: 1,
+        duration: 3000,
+        useNativeDriver: true,
+      })
+    ).start();
   }, []);
 
   const handleLogin = () => {
@@ -72,13 +77,6 @@ export const WelcomeScreen: React.FC = () => {
 
   const handleRegister = () => {
     navigation.navigate('Register');
-  };
-
-  // 测试登录功能 - 快速进入应用
-  const handleTestLogin = () => {
-    console.log('🚀 启动开发者模式登录...');
-    dispatch(devLogin());
-    console.log('✅ 开发者模式登录成功，即将进入主应用');
   };
 
   return (
@@ -90,12 +88,23 @@ export const WelcomeScreen: React.FC = () => {
         <View style={styles.gradientOverlay} />
       </View>
 
-      {/* 装饰性元素 */}
-      <View style={styles.decorativeElements}>
-        <View style={[styles.circle, styles.circle1]} />
-        <View style={[styles.circle, styles.circle2]} />
-        <View style={[styles.circle, styles.circle3]} />
-      </View>
+      {/* 装饰性粒子元素 */}
+      <Animated.View 
+        style={[
+          styles.decorativeElements,
+          {
+            opacity: particleAnim.interpolate({
+              inputRange: [0, 0.5, 1],
+              outputRange: [0.3, 0.8, 0.3],
+            }),
+          }
+        ]}
+      >
+        <View style={[styles.particle, styles.particle1]} />
+        <View style={[styles.particle, styles.particle2]} />
+        <View style={[styles.particle, styles.particle3]} />
+        <View style={[styles.particle, styles.particle4]} />
+      </Animated.View>
 
       <View style={styles.content}>
         {/* Logo和标题区域 */}
@@ -111,21 +120,12 @@ export const WelcomeScreen: React.FC = () => {
             }
           ]}
         >
-          <TouchableOpacity 
-            style={styles.logoWrapper}
-            onLongPress={handleTestLogin}
-            delayLongPress={2000}
-            activeOpacity={0.8}
-          >
+          <View style={styles.logoWrapper}>
             <View style={styles.logoCircle}>
-              <Image 
-                source={require('../../assets/images/logo.png')}
-                style={styles.logoImage}
-                resizeMode="contain"
-              />
+              <Text style={styles.logoText}>索</Text>
+              <View style={styles.logoGlow} />
             </View>
-            <View style={styles.logoGlow} />
-          </TouchableOpacity>
+          </View>
           
           <Text style={styles.appName}>索克生活</Text>
           <Text style={styles.appNameEn}>Suoke Life</Text>
@@ -155,16 +155,25 @@ export const WelcomeScreen: React.FC = () => {
         >
           <View style={styles.featureRow}>
             <View style={styles.featureItem}>
-              <Text style={styles.featureIcon}>🤖</Text>
+              <View style={[styles.featureIcon, { backgroundColor: colors.agents.xiaoai }]}>
+                <Text style={styles.featureEmoji}>🤖</Text>
+              </View>
               <Text style={styles.featureText}>AI智能体</Text>
+              <Text style={styles.featureDesc}>四大智能助手</Text>
             </View>
             <View style={styles.featureItem}>
-              <Text style={styles.featureIcon}>🏥</Text>
+              <View style={[styles.featureIcon, { backgroundColor: colors.diagnosis.inspection }]}>
+                <Text style={styles.featureEmoji}>🏥</Text>
+              </View>
               <Text style={styles.featureText}>中医四诊</Text>
+              <Text style={styles.featureDesc}>望闻问切</Text>
             </View>
             <View style={styles.featureItem}>
-              <Text style={styles.featureIcon}>📊</Text>
+              <View style={[styles.featureIcon, { backgroundColor: colors.agents.soer }]}>
+                <Text style={styles.featureEmoji}>📊</Text>
+              </View>
               <Text style={styles.featureText}>健康数据</Text>
+              <Text style={styles.featureDesc}>智能分析</Text>
             </View>
           </View>
         </Animated.View>
@@ -198,19 +207,10 @@ export const WelcomeScreen: React.FC = () => {
 
           <Text style={styles.termsText}>
             继续即表示您同意我们的{' '}
-            <Text style={styles.termsLink}>服务条款</Text>
+            <Text style={styles.linkText}>服务条款</Text>
             {' '}和{' '}
-            <Text style={styles.termsLink}>隐私政策</Text>
+            <Text style={styles.linkText}>隐私政策</Text>
           </Text>
-
-          {/* 开发者快速登录按钮 */}
-          <TouchableOpacity
-            style={styles.devButton}
-            onPress={handleTestLogin}
-            activeOpacity={0.7}
-          >
-            <Text style={styles.devButtonText}>🚀 开发者快速登录</Text>
-          </TouchableOpacity>
         </Animated.View>
       </View>
     </SafeAreaView>
@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
   },
   gradientOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(53, 187, 120, 0.9)',
+    backgroundColor: 'rgba(15, 93, 53, 0.8)',
   },
   decorativeElements: {
     position: 'absolute',
@@ -241,75 +241,74 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
-  circle: {
+  particle: {
     position: 'absolute',
-    borderRadius: 100,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
   },
-  circle1: {
-    width: 200,
-    height: 200,
-    top: -100,
-    right: -100,
+  particle1: {
+    top: '20%',
+    left: '15%',
   },
-  circle2: {
-    width: 150,
-    height: 150,
-    bottom: 100,
-    left: -75,
+  particle2: {
+    top: '35%',
+    right: '20%',
   },
-  circle3: {
-    width: 100,
-    height: 100,
-    top: height * 0.3,
-    right: 20,
+  particle3: {
+    top: '60%',
+    left: '25%',
+  },
+  particle4: {
+    top: '75%',
+    right: '15%',
   },
   content: {
     flex: 1,
-    paddingHorizontal: spacing.xl,
-    paddingVertical: spacing.xxl,
+    paddingHorizontal: spacing.lg,
     justifyContent: 'space-between',
+    paddingTop: spacing.xxl * 2,
+    paddingBottom: spacing.xl,
   },
   logoContainer: {
-    flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: spacing.xxl,
+    marginTop: spacing.xxl,
   },
   logoWrapper: {
-    position: 'relative',
-    marginBottom: spacing.xl,
+    alignItems: 'center',
+    marginBottom: spacing.lg,
   },
   logoCircle: {
     width: 120,
     height: 120,
     borderRadius: 60,
-    backgroundColor: colors.surface,
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
     justifyContent: 'center',
     alignItems: 'center',
-    ...shadows.lg,
+    position: 'relative',
+    borderWidth: 2,
+    borderColor: 'rgba(255, 255, 255, 0.3)',
+  },
+  logoText: {
+    fontSize: 48,
+    fontWeight: 'bold',
+    color: colors.white,
+    textAlign: 'center',
   },
   logoGlow: {
     position: 'absolute',
+    width: 140,
+    height: 140,
+    borderRadius: 70,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
     top: -10,
     left: -10,
-    right: -10,
-    bottom: -10,
-    borderRadius: 70,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
-    zIndex: -1,
-  },
-  logoIcon: {
-    fontSize: 48,
-  },
-  logoImage: {
-    width: 80,
-    height: 80,
   },
   appName: {
     fontSize: fonts.size.header,
     fontWeight: 'bold',
-    color: colors.surface,
+    color: colors.white,
     textAlign: 'center',
     marginBottom: spacing.xs,
   },
@@ -317,23 +316,24 @@ const styles = StyleSheet.create({
     fontSize: fonts.size.lg,
     color: 'rgba(255, 255, 255, 0.8)',
     textAlign: 'center',
-    marginBottom: spacing.xl,
+    marginBottom: spacing.lg,
   },
   taglineContainer: {
     alignItems: 'center',
+    marginTop: spacing.md,
   },
   tagline: {
-    fontSize: fonts.size.xl,
-    color: colors.surface,
-    textAlign: 'center',
-    fontWeight: '600',
-    marginBottom: spacing.md,
-  },
-  subtitle: {
     fontSize: fonts.size.md,
     color: 'rgba(255, 255, 255, 0.9)',
     textAlign: 'center',
-    lineHeight: 24,
+    marginBottom: spacing.sm,
+    fontWeight: '500',
+  },
+  subtitle: {
+    fontSize: fonts.size.sm,
+    color: 'rgba(255, 255, 255, 0.7)',
+    textAlign: 'center',
+    lineHeight: fonts.lineHeight.md,
   },
   featuresContainer: {
     marginVertical: spacing.xl,
@@ -348,28 +348,46 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   featureIcon: {
-    fontSize: 32,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
     marginBottom: spacing.sm,
+    ...shadows.md,
+  },
+  featureEmoji: {
+    fontSize: 24,
   },
   featureText: {
     fontSize: fonts.size.sm,
-    color: colors.surface,
+    color: colors.white,
+    fontWeight: '600',
     textAlign: 'center',
-    fontWeight: '500',
+    marginBottom: spacing.xs,
+  },
+  featureDesc: {
+    fontSize: fonts.size.xs,
+    color: 'rgba(255, 255, 255, 0.7)',
+    textAlign: 'center',
   },
   buttonContainer: {
-    paddingBottom: spacing.xl,
+    paddingBottom: spacing.lg,
   },
   loginButton: {
-    backgroundColor: colors.surface,
-    paddingVertical: spacing.lg,
-    paddingHorizontal: spacing.xl,
+    backgroundColor: colors.white,
+    paddingVertical: spacing.md,
     borderRadius: borderRadius.lg,
-    alignItems: 'center',
     marginBottom: spacing.md,
     position: 'relative',
     overflow: 'hidden',
-    ...shadows.md,
+    ...shadows.lg,
+  },
+  loginButtonText: {
+    fontSize: fonts.size.lg,
+    fontWeight: 'bold',
+    color: colors.primary,
+    textAlign: 'center',
   },
   buttonGlow: {
     position: 'absolute',
@@ -378,53 +396,29 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     backgroundColor: 'rgba(53, 187, 120, 0.1)',
-    borderRadius: borderRadius.lg,
-  },
-  loginButtonText: {
-    color: colors.primary,
-    fontSize: fonts.size.lg,
-    fontWeight: 'bold',
-    zIndex: 1,
   },
   registerButton: {
-    backgroundColor: 'transparent',
-    paddingVertical: spacing.lg,
-    paddingHorizontal: spacing.xl,
-    borderRadius: borderRadius.lg,
     borderWidth: 2,
-    borderColor: colors.surface,
-    alignItems: 'center',
+    borderColor: 'rgba(255, 255, 255, 0.5)',
+    paddingVertical: spacing.md,
+    borderRadius: borderRadius.lg,
     marginBottom: spacing.lg,
   },
   registerButtonText: {
-    color: colors.surface,
     fontSize: fonts.size.lg,
     fontWeight: '600',
+    color: colors.white,
+    textAlign: 'center',
   },
   termsText: {
-    fontSize: fonts.size.sm,
+    fontSize: fonts.size.xs,
     color: 'rgba(255, 255, 255, 0.7)',
     textAlign: 'center',
-    lineHeight: 20,
+    lineHeight: fonts.lineHeight.sm,
   },
-  termsLink: {
-    color: colors.surface,
-    fontWeight: '600',
+  linkText: {
+    color: colors.white,
+    fontWeight: '500',
     textDecorationLine: 'underline',
-  },
-  devButton: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    paddingVertical: spacing.md,
-    paddingHorizontal: spacing.lg,
-    borderRadius: borderRadius.md,
-    alignItems: 'center',
-    marginTop: spacing.lg,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.3)',
-  },
-  devButtonText: {
-    color: colors.surface,
-    fontSize: fonts.size.md,
-    fontWeight: '600',
   },
 });

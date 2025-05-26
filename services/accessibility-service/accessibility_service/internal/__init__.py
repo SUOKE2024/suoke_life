@@ -1,0 +1,24 @@
+"""
+内部模块包
+
+包含无障碍服务的核心实现：
+- delivery: API交付层
+- service: 业务逻辑层
+- model: 数据模型层
+- repository: 数据访问层
+- integration: 集成适配层
+- platform: 平台适配层
+- observability: 可观测性
+- security: 安全模块
+- resilience: 弹性恢复
+"""
+
+# 导出核心组件
+from .service.app import AccessibilityService, AccessibilityApp
+from .delivery.grpc_server import AccessibilityServicer
+
+__all__ = [
+    "AccessibilityService",
+    "AccessibilityApp", 
+    "AccessibilityServicer"
+] 

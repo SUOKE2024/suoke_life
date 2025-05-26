@@ -1,27 +1,27 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  TextInput,
   TouchableOpacity,
-  SafeAreaView,
   StatusBar,
-  Alert,
-  ScrollView,
+  SafeAreaView,
+  Animated,
   KeyboardAvoidingView,
   Platform,
-  Animated,
+  ScrollView,
+  Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useDispatch, useSelector } from 'react-redux';
-import { AuthStackParamList } from '../../navigation/AuthNavigator';
-import { register } from '../../store/slices/authSlice';
-import {
-  selectAuthLoading,
-} from '../../store/slices/authSlice';
+import { AuthStackParamList } from '../../types/navigation';
+import { RootState } from '../../types';
 import { colors, spacing, fonts, borderRadius, shadows } from '../../constants/theme';
+import { AuthInput } from '../../components/common/AuthInput';
+import { AuthButton } from '../../components/common/AuthButton';
+import { LoadingScreen } from '../../components/common/LoadingScreen';
+import { authService } from '../../services/authService';
 
 type RegisterScreenNavigationProp = NativeStackNavigationProp<
   AuthStackParamList,
@@ -33,7 +33,7 @@ interface FormData {
   email: string;
   password: string;
   confirmPassword: string;
-  phone: string;
+  phone?: string;
 }
 
 interface FormErrors {
@@ -42,20 +42,13 @@ interface FormErrors {
   password?: string;
   confirmPassword?: string;
   phone?: string;
-}
-
-interface FieldFocus {
-  username: boolean;
-  email: boolean;
-  password: boolean;
-  confirmPassword: boolean;
-  phone: boolean;
+  general?: string;
 }
 
 export const RegisterScreen: React.FC = () => {
   const navigation = useNavigation<RegisterScreenNavigationProp>();
   const dispatch = useDispatch();
-  const loading = useSelector(selectAuthLoading);
+  const { loading } = useSelector((state: RootState) => state.auth);
 
   const [formData, setFormData] = useState<FormData>({
     username: '',
@@ -64,23 +57,16 @@ export const RegisterScreen: React.FC = () => {
     confirmPassword: '',
     phone: '',
   });
-
   const [errors, setErrors] = useState<FormErrors>({});
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [currentStep, setCurrentStep] = useState(1);
-  const [fieldFocus, setFieldFocus] = useState<FieldFocus>({
-    username: false,
-    email: false,
-    password: false,
-    confirmPassword: false,
-    phone: false,
-  });
+  const [agreeToTerms, setAgreeToTerms] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // 动画值
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(30)).current;
-  const progressAnim = useRef(new Animated.Value(0)).current;
+  const shakeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     // 启动入场动画
@@ -98,22 +84,6 @@ export const RegisterScreen: React.FC = () => {
     ]).start();
   }, []);
 
-  useEffect(() => {
-    // 更新进度条
-    const progress = calculateProgress();
-    Animated.timing(progressAnim, {
-      toValue: progress,
-      duration: 300,
-      useNativeDriver: false,
-    }).start();
-  }, [formData]);
-
-  const calculateProgress = (): number => {
-    const fields = ['username', 'email', 'password', 'confirmPassword'];
-    const filledFields = fields.filter(field => formData[field as keyof FormData].trim() !== '');
-    return filledFields.length / fields.length;
-  };
-
   // 表单验证
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -122,28 +92,27 @@ export const RegisterScreen: React.FC = () => {
     if (!formData.username.trim()) {
       newErrors.username = '请输入用户名';
     } else if (formData.username.length < 2) {
-      newErrors.username = '用户名至少2个字符';
+      newErrors.username = '用户名至少需要2个字符';
     } else if (formData.username.length > 20) {
       newErrors.username = '用户名不能超过20个字符';
+    } else if (!/^[a-zA-Z0-9\u4e00-\u9fa5_]+$/.test(formData.username)) {
+      newErrors.username = '用户名只能包含字母、数字、中文和下划线';
     }
 
     // 邮箱验证
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!formData.email.trim()) {
-      newErrors.email = '请输入邮箱';
-    } else if (!emailRegex.test(formData.email)) {
+      newErrors.email = '请输入邮箱地址';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = '请输入有效的邮箱地址';
     }
 
     // 密码验证
     if (!formData.password) {
       newErrors.password = '请输入密码';
-    } else if (formData.password.length < 6) {
-      newErrors.password = '密码至少6个字符';
-    } else if (formData.password.length > 50) {
-      newErrors.password = '密码不能超过50个字符';
-    } else if (!/(?=.*[a-zA-Z])(?=.*\d)/.test(formData.password)) {
-      newErrors.password = '密码必须包含字母和数字';
+    } else if (formData.password.length < 8) {
+      newErrors.password = '密码至少需要8位字符';
+    } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
+      newErrors.password = '密码需要包含大小写字母和数字';
     }
 
     // 确认密码验证
@@ -154,110 +123,135 @@ export const RegisterScreen: React.FC = () => {
     }
 
     // 手机号验证（可选）
-    if (formData.phone.trim()) {
-      const phoneRegex = /^1[3-9]\d{9}$/;
-      if (!phoneRegex.test(formData.phone)) {
-        newErrors.phone = '请输入有效的手机号';
+    if (formData.phone && formData.phone.trim()) {
+      if (!/^1[3-9]\d{9}$/.test(formData.phone)) {
+        newErrors.phone = '请输入有效的手机号码';
       }
+    }
+
+    // 用户协议验证
+    if (!agreeToTerms) {
+      newErrors.general = '请阅读并同意用户协议和隐私政策';
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleInputChange = (field: keyof FormData, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-    // 清除对应字段的错误
-    if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: undefined }));
-    }
+  // 震动动画
+  const triggerShakeAnimation = () => {
+    Animated.sequence([
+      Animated.timing(shakeAnim, {
+        toValue: 10,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+      Animated.timing(shakeAnim, {
+        toValue: -10,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+      Animated.timing(shakeAnim, {
+        toValue: 10,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+      Animated.timing(shakeAnim, {
+        toValue: 0,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+    ]).start();
   };
 
-  const handleFocus = (field: keyof FieldFocus) => {
-    setFieldFocus(prev => ({ ...prev, [field]: true }));
-  };
-
-  const handleBlur = (field: keyof FieldFocus) => {
-    setFieldFocus(prev => ({ ...prev, [field]: false }));
-  };
-
+  // 处理注册
   const handleRegister = async () => {
     if (!validateForm()) {
+      triggerShakeAnimation();
       return;
     }
 
-    try {
-      const registerData = {
-        username: formData.username.trim(),
-        email: formData.email.trim().toLowerCase(),
-        password: formData.password,
-        phone: formData.phone.trim() || undefined,
-      };
+    setIsLoading(true);
+    setErrors({});
 
-      await dispatch(register(registerData) as any);
-      Alert.alert('注册成功', '欢迎加入索克生活！', [
-        { text: '确定', onPress: () => navigation.navigate('Login') },
-      ]);
-    } catch (registerError) {
-      Alert.alert('注册失败', '请检查您的信息并重试');
+    try {
+      const response = await authService.register({
+        username: formData.username.trim(),
+        email: formData.email.trim(),
+        password: formData.password,
+        phone: formData.phone?.trim() || undefined,
+      });
+
+      // 注册成功
+      console.log('注册成功:', response.user.username);
+      Alert.alert(
+        '注册成功',
+        '欢迎加入索克生活！',
+        [
+          {
+            text: '开始体验',
+            onPress: () => {
+              // 这里应该通过Redux更新认证状态
+              // dispatch(registerSuccess(response));
+            },
+          },
+        ]
+      );
+      
+    } catch (error: any) {
+      console.error('注册失败:', error.message);
+      setErrors({ general: error.message || '注册失败，请重试' });
+      triggerShakeAnimation();
+    } finally {
+      setIsLoading(false);
     }
   };
 
+  // 处理登录
   const handleLogin = () => {
     navigation.navigate('Login');
   };
 
+  // 返回欢迎页
   const handleBack = () => {
     navigation.goBack();
   };
 
-  const getPasswordStrength = (password: string): { strength: number; text: string; color: string } => {
-    if (!password) return { strength: 0, text: '', color: colors.textSecondary };
-    
-    let strength = 0;
-    if (password.length >= 6) strength += 1;
-    if (password.length >= 8) strength += 1;
-    if (/[A-Z]/.test(password)) strength += 1;
-    if (/[a-z]/.test(password)) strength += 1;
-    if (/\d/.test(password)) strength += 1;
-    if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+  // 更新表单数据
+  const updateFormData = (field: keyof FormData, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+    // 清除对应字段的错误
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: undefined }));
+    }
+  };
 
-    if (strength <= 2) return { strength: strength / 6, text: '弱', color: colors.error };
-    if (strength <= 4) return { strength: strength / 6, text: '中', color: colors.warning };
-    return { strength: strength / 6, text: '强', color: colors.success };
+  // 检查密码强度
+  const getPasswordStrength = (password: string): { level: number; text: string; color: string } => {
+    if (!password) return { level: 0, text: '', color: colors.textSecondary };
+    
+    let score = 0;
+    if (password.length >= 8) score++;
+    if (/[a-z]/.test(password)) score++;
+    if (/[A-Z]/.test(password)) score++;
+    if (/\d/.test(password)) score++;
+    if (/[^a-zA-Z\d]/.test(password)) score++;
+
+    if (score <= 2) return { level: 1, text: '弱', color: colors.error };
+    if (score <= 3) return { level: 2, text: '中', color: colors.warning };
+    return { level: 3, text: '强', color: colors.success };
   };
 
   const passwordStrength = getPasswordStrength(formData.password);
 
+  if (isLoading) {
+    return <LoadingScreen message="正在注册..." />;
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
-
-      {/* 返回按钮 */}
-      <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-        <Text style={styles.backButtonText}>←</Text>
-      </TouchableOpacity>
-
-      {/* 进度条 */}
-      <View style={styles.progressContainer}>
-        <View style={styles.progressBar}>
-          <Animated.View 
-            style={[
-              styles.progressFill,
-              {
-                width: progressAnim.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: ['0%', '100%'],
-                })
-              }
-            ]} 
-          />
-        </View>
-        <Text style={styles.progressText}>
-          {Math.round(calculateProgress() * 100)}% 完成
-        </Text>
-      </View>
-
+      
       <KeyboardAvoidingView
         style={styles.keyboardAvoid}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -266,250 +260,195 @@ export const RegisterScreen: React.FC = () => {
           style={styles.scrollView}
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
         >
-          <Animated.View 
+          {/* 头部区域 */}
+          <Animated.View
             style={[
-              styles.content,
+              styles.header,
               {
                 opacity: fadeAnim,
-                transform: [{ translateY: slideAnim }]
-              }
+                transform: [{ translateY: slideAnim }],
+              },
             ]}
           >
-            {/* 标题区域 */}
-            <View style={styles.header}>
+            <TouchableOpacity style={styles.backButton} onPress={handleBack}>
+              <Text style={styles.backButtonText}>←</Text>
+            </TouchableOpacity>
+            
+            <View style={styles.titleContainer}>
               <Text style={styles.title}>创建账户</Text>
               <Text style={styles.subtitle}>加入索克生活，开启健康之旅</Text>
             </View>
+          </Animated.View>
 
-            {/* 表单区域 */}
-            <View style={styles.form}>
-              {/* 用户名 */}
-              <View style={styles.inputContainer}>
-                <Text style={[styles.label, fieldFocus.username && styles.labelFocused]}>
-                  用户名 *
-                </Text>
-                <View style={[
-                  styles.inputWrapper,
-                  fieldFocus.username && styles.inputWrapperFocused,
-                  errors.username && styles.inputWrapperError
-                ]}>
-                  <Text style={styles.inputIcon}>👤</Text>
-                  <TextInput
-                    style={styles.input}
-                    value={formData.username}
-                    onChangeText={(value) => handleInputChange('username', value)}
-                    placeholder="请输入用户名"
-                    placeholderTextColor={colors.placeholder}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    maxLength={20}
-                    onFocus={() => handleFocus('username')}
-                    onBlur={() => handleBlur('username')}
-                  />
-                  {formData.username.length > 0 && (
-                    <Text style={styles.inputCounter}>{formData.username.length}/20</Text>
-                  )}
-                </View>
-                {errors.username && (
-                  <Animated.View style={styles.errorContainer}>
-                    <Text style={styles.errorText}>{errors.username}</Text>
-                  </Animated.View>
-                )}
+          {/* 表单区域 */}
+          <Animated.View
+            style={[
+              styles.formContainer,
+              {
+                opacity: fadeAnim,
+                transform: [
+                  { translateY: slideAnim },
+                  { translateX: shakeAnim },
+                ],
+              },
+            ]}
+          >
+            {/* 错误提示 */}
+            {errors.general && (
+              <View style={styles.errorContainer}>
+                <Text style={styles.errorText}>{errors.general}</Text>
               </View>
+            )}
 
-              {/* 邮箱 */}
-              <View style={styles.inputContainer}>
-                <Text style={[styles.label, fieldFocus.email && styles.labelFocused]}>
-                  邮箱地址 *
-                </Text>
-                <View style={[
-                  styles.inputWrapper,
-                  fieldFocus.email && styles.inputWrapperFocused,
-                  errors.email && styles.inputWrapperError
-                ]}>
-                  <Text style={styles.inputIcon}>📧</Text>
-                  <TextInput
-                    style={styles.input}
-                    value={formData.email}
-                    onChangeText={(value) => handleInputChange('email', value)}
-                    placeholder="请输入邮箱地址"
-                    placeholderTextColor={colors.placeholder}
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    onFocus={() => handleFocus('email')}
-                    onBlur={() => handleBlur('email')}
-                  />
-                </View>
-                {errors.email && (
-                  <Animated.View style={styles.errorContainer}>
-                    <Text style={styles.errorText}>{errors.email}</Text>
-                  </Animated.View>
-                )}
-              </View>
+            {/* 用户名输入 */}
+            <AuthInput
+              label="用户名"
+              placeholder="请输入用户名"
+              value={formData.username}
+              onChangeText={(value) => updateFormData('username', value)}
+              error={errors.username}
+              autoCapitalize="none"
+              icon="👤"
+              maxLength={20}
+              counter
+            />
 
-              {/* 密码 */}
-              <View style={styles.inputContainer}>
-                <Text style={[styles.label, fieldFocus.password && styles.labelFocused]}>
-                  密码 *
-                </Text>
-                <View style={[
-                  styles.inputWrapper,
-                  fieldFocus.password && styles.inputWrapperFocused,
-                  errors.password && styles.inputWrapperError
-                ]}>
-                  <Text style={styles.inputIcon}>🔒</Text>
-                  <TextInput
-                    style={styles.input}
-                    value={formData.password}
-                    onChangeText={(value) => handleInputChange('password', value)}
-                    placeholder="请输入密码"
-                    placeholderTextColor={colors.placeholder}
-                    secureTextEntry={!showPassword}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    onFocus={() => handleFocus('password')}
-                    onBlur={() => handleBlur('password')}
-                  />
-                  <TouchableOpacity
-                    style={styles.eyeButton}
-                    onPress={() => setShowPassword(!showPassword)}
-                  >
-                    <Text style={styles.eyeIcon}>
-                      {showPassword ? '👁️' : '👁️‍🗨️'}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-                
-                {/* 密码强度指示器 */}
-                {formData.password.length > 0 && (
-                  <View style={styles.passwordStrengthContainer}>
-                    <View style={styles.passwordStrengthBar}>
-                      <View 
-                        style={[
-                          styles.passwordStrengthFill,
-                          { 
-                            width: `${passwordStrength.strength * 100}%`,
-                            backgroundColor: passwordStrength.color 
-                          }
-                        ]} 
-                      />
-                    </View>
-                    <Text style={[styles.passwordStrengthText, { color: passwordStrength.color }]}>
-                      密码强度: {passwordStrength.text}
-                    </Text>
+            {/* 邮箱输入 */}
+            <AuthInput
+              label="邮箱地址"
+              placeholder="请输入您的邮箱"
+              value={formData.email}
+              onChangeText={(value) => updateFormData('email', value)}
+              error={errors.email}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoComplete="email"
+              icon="📧"
+            />
+
+            {/* 手机号输入（可选） */}
+            <AuthInput
+              label="手机号码（可选）"
+              placeholder="请输入您的手机号"
+              value={formData.phone}
+              onChangeText={(value) => updateFormData('phone', value)}
+              error={errors.phone}
+              keyboardType="phone-pad"
+              icon="📱"
+              maxLength={11}
+            />
+
+            {/* 密码输入 */}
+            <View style={styles.passwordContainer}>
+              <AuthInput
+                label="密码"
+                placeholder="请输入密码"
+                value={formData.password}
+                onChangeText={(value) => updateFormData('password', value)}
+                error={errors.password}
+                secureTextEntry={!showPassword}
+                icon="🔒"
+                rightIcon={showPassword ? "👁️" : "👁️‍🗨️"}
+                onRightIconPress={() => setShowPassword(!showPassword)}
+              />
+              {/* 密码强度指示器 */}
+              {formData.password && (
+                <View style={styles.passwordStrengthContainer}>
+                  <Text style={styles.passwordStrengthLabel}>密码强度：</Text>
+                  <View style={styles.passwordStrengthBar}>
+                    <View
+                      style={[
+                        styles.passwordStrengthFill,
+                        {
+                          width: `${(passwordStrength.level / 3) * 100}%`,
+                          backgroundColor: passwordStrength.color,
+                        },
+                      ]}
+                    />
                   </View>
-                )}
-                
-                {errors.password && (
-                  <Animated.View style={styles.errorContainer}>
-                    <Text style={styles.errorText}>{errors.password}</Text>
-                  </Animated.View>
-                )}
-              </View>
-
-              {/* 确认密码 */}
-              <View style={styles.inputContainer}>
-                <Text style={[styles.label, fieldFocus.confirmPassword && styles.labelFocused]}>
-                  确认密码 *
-                </Text>
-                <View style={[
-                  styles.inputWrapper,
-                  fieldFocus.confirmPassword && styles.inputWrapperFocused,
-                  errors.confirmPassword && styles.inputWrapperError
-                ]}>
-                  <Text style={styles.inputIcon}>🔐</Text>
-                  <TextInput
-                    style={styles.input}
-                    value={formData.confirmPassword}
-                    onChangeText={(value) => handleInputChange('confirmPassword', value)}
-                    placeholder="请再次输入密码"
-                    placeholderTextColor={colors.placeholder}
-                    secureTextEntry={!showConfirmPassword}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    onFocus={() => handleFocus('confirmPassword')}
-                    onBlur={() => handleBlur('confirmPassword')}
-                  />
-                  <TouchableOpacity
-                    style={styles.eyeButton}
-                    onPress={() => setShowConfirmPassword(!showConfirmPassword)}
-                  >
-                    <Text style={styles.eyeIcon}>
-                      {showConfirmPassword ? '👁️' : '👁️‍🗨️'}
-                    </Text>
-                  </TouchableOpacity>
+                  <Text style={[styles.passwordStrengthText, { color: passwordStrength.color }]}>
+                    {passwordStrength.text}
+                  </Text>
                 </View>
-                {errors.confirmPassword && (
-                  <Animated.View style={styles.errorContainer}>
-                    <Text style={styles.errorText}>{errors.confirmPassword}</Text>
-                  </Animated.View>
-                )}
-              </View>
-
-              {/* 手机号（可选） */}
-              <View style={styles.inputContainer}>
-                <Text style={[styles.label, fieldFocus.phone && styles.labelFocused]}>
-                  手机号 (可选)
-                </Text>
-                <View style={[
-                  styles.inputWrapper,
-                  fieldFocus.phone && styles.inputWrapperFocused,
-                  errors.phone && styles.inputWrapperError
-                ]}>
-                  <Text style={styles.inputIcon}>📱</Text>
-                  <TextInput
-                    style={styles.input}
-                    value={formData.phone}
-                    onChangeText={(value) => handleInputChange('phone', value)}
-                    placeholder="请输入手机号"
-                    placeholderTextColor={colors.placeholder}
-                    keyboardType="phone-pad"
-                    maxLength={11}
-                    onFocus={() => handleFocus('phone')}
-                    onBlur={() => handleBlur('phone')}
-                  />
-                </View>
-                {errors.phone && (
-                  <Animated.View style={styles.errorContainer}>
-                    <Text style={styles.errorText}>{errors.phone}</Text>
-                  </Animated.View>
-                )}
-              </View>
-
-              {/* 注册按钮 */}
-              <TouchableOpacity
-                style={[
-                  styles.registerButton,
-                  loading && styles.registerButtonDisabled
-                ]}
-                onPress={handleRegister}
-                disabled={loading}
-                activeOpacity={0.8}
-              >
-                <Text style={styles.registerButtonText}>
-                  {loading ? '注册中...' : '创建账户'}
-                </Text>
-                {loading && <View style={styles.loadingOverlay} />}
-              </TouchableOpacity>
-
-              {/* 服务条款 */}
-              <Text style={styles.termsText}>
-                注册即表示您同意我们的{' '}
-                <Text style={styles.termsLink}>服务条款</Text>
-                {' '}和{' '}
-                <Text style={styles.termsLink}>隐私政策</Text>
-              </Text>
+              )}
             </View>
 
-            {/* 登录链接 */}
-            <View style={styles.footer}>
-              <Text style={styles.footerText}>已有账户？</Text>
+            {/* 确认密码输入 */}
+            <AuthInput
+              label="确认密码"
+              placeholder="请再次输入密码"
+              value={formData.confirmPassword}
+              onChangeText={(value) => updateFormData('confirmPassword', value)}
+              error={errors.confirmPassword}
+              secureTextEntry={!showConfirmPassword}
+              icon="🔒"
+              rightIcon={showConfirmPassword ? "👁️" : "👁️‍🗨️"}
+              onRightIconPress={() => setShowConfirmPassword(!showConfirmPassword)}
+            />
+
+            {/* 用户协议 */}
+            <View style={styles.termsContainer}>
+              <TouchableOpacity
+                style={styles.checkboxContainer}
+                onPress={() => setAgreeToTerms(!agreeToTerms)}
+              >
+                <View style={[styles.checkbox, agreeToTerms && styles.checkboxChecked]}>
+                  {agreeToTerms && <Text style={styles.checkmark}>✓</Text>}
+                </View>
+                <Text style={styles.termsText}>
+                  我已阅读并同意{' '}
+                  <Text style={styles.linkText}>《用户协议》</Text>
+                  {' '}和{' '}
+                  <Text style={styles.linkText}>《隐私政策》</Text>
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* 注册按钮 */}
+            <AuthButton
+              title="创建账户"
+              onPress={handleRegister}
+              loading={isLoading}
+              style={styles.registerButton}
+            />
+
+            {/* 分割线 */}
+            <View style={styles.dividerContainer}>
+              <View style={styles.divider} />
+              <Text style={styles.dividerText}>或</Text>
+              <View style={styles.divider} />
+            </View>
+
+            {/* 第三方注册 */}
+            <View style={styles.socialLoginContainer}>
+              <TouchableOpacity style={styles.socialButton}>
+                <Text style={styles.socialButtonText}>🍎 Apple注册</Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity style={styles.socialButton}>
+                <Text style={styles.socialButtonText}>📱 微信注册</Text>
+              </TouchableOpacity>
+            </View>
+          </Animated.View>
+
+          {/* 底部登录链接 */}
+          <Animated.View
+            style={[
+              styles.footer,
+              {
+                opacity: fadeAnim,
+                transform: [{ translateY: slideAnim }],
+              },
+            ]}
+          >
+            <Text style={styles.footerText}>
+              已有账户？{' '}
               <TouchableOpacity onPress={handleLogin}>
                 <Text style={styles.loginLink}>立即登录</Text>
               </TouchableOpacity>
-            </View>
+            </Text>
           </Animated.View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -522,45 +461,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
   },
-  backButton: {
-    position: 'absolute',
-    top: spacing.lg,
-    left: spacing.lg,
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: colors.surface,
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 1,
-    ...shadows.sm,
-  },
-  backButtonText: {
-    fontSize: 24,
-    color: colors.text,
-  },
-  progressContainer: {
-    paddingHorizontal: spacing.xl,
-    paddingTop: spacing.xxl,
-    paddingBottom: spacing.md,
-  },
-  progressBar: {
-    height: 4,
-    backgroundColor: colors.border,
-    borderRadius: 2,
-    overflow: 'hidden',
-    marginBottom: spacing.sm,
-  },
-  progressFill: {
-    height: '100%',
-    backgroundColor: colors.primary,
-    borderRadius: 2,
-  },
-  progressText: {
-    fontSize: fonts.size.sm,
-    color: colors.textSecondary,
-    textAlign: 'center',
-  },
   keyboardAvoid: {
     flex: 1,
   },
@@ -569,14 +469,27 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-  },
-  content: {
-    flex: 1,
-    paddingHorizontal: spacing.xl,
-    paddingBottom: spacing.xl,
+    paddingHorizontal: spacing.lg,
   },
   header: {
-    marginBottom: spacing.xl,
+    paddingTop: spacing.lg,
+    paddingBottom: spacing.xl,
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: colors.surface,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: spacing.lg,
+    ...shadows.sm,
+  },
+  backButtonText: {
+    fontSize: 20,
+    color: colors.text,
+  },
+  titleContainer: {
     alignItems: 'center',
   },
   title: {
@@ -584,147 +497,144 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: colors.text,
     marginBottom: spacing.sm,
-    textAlign: 'center',
   },
   subtitle: {
-    fontSize: fonts.size.lg,
+    fontSize: fonts.size.md,
     color: colors.textSecondary,
     textAlign: 'center',
   },
-  form: {
-    flex: 1,
-  },
-  inputContainer: {
-    marginBottom: spacing.lg,
-  },
-  label: {
-    fontSize: fonts.size.md,
-    fontWeight: '600',
-    color: colors.textSecondary,
-    marginBottom: spacing.sm,
-  },
-  labelFocused: {
-    color: colors.primary,
-  },
-  inputWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.surface,
-    borderRadius: borderRadius.lg,
-    borderWidth: 2,
-    borderColor: colors.border,
-    paddingHorizontal: spacing.md,
-    ...shadows.sm,
-  },
-  inputWrapperFocused: {
-    borderColor: colors.primary,
-    ...shadows.md,
-  },
-  inputWrapperError: {
-    borderColor: colors.error,
-  },
-  inputIcon: {
-    fontSize: 20,
-    marginRight: spacing.sm,
-  },
-  input: {
+  formContainer: {
     flex: 1,
     paddingVertical: spacing.lg,
-    fontSize: fonts.size.md,
-    color: colors.text,
   },
-  inputCounter: {
+  errorContainer: {
+    backgroundColor: colors.error + '20',
+    borderColor: colors.error,
+    borderWidth: 1,
+    borderRadius: borderRadius.md,
+    padding: spacing.md,
+    marginBottom: spacing.lg,
+  },
+  errorText: {
+    color: colors.error,
     fontSize: fonts.size.sm,
-    color: colors.textSecondary,
-    marginLeft: spacing.sm,
+    textAlign: 'center',
   },
-  eyeButton: {
-    padding: spacing.sm,
-  },
-  eyeIcon: {
-    fontSize: 20,
+  passwordContainer: {
+    marginBottom: spacing.lg,
   },
   passwordStrengthContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginTop: spacing.sm,
+    paddingHorizontal: spacing.sm,
+  },
+  passwordStrengthLabel: {
+    fontSize: fonts.size.xs,
+    color: colors.textSecondary,
+    marginRight: spacing.sm,
   },
   passwordStrengthBar: {
-    height: 3,
+    flex: 1,
+    height: 4,
     backgroundColor: colors.border,
-    borderRadius: 1.5,
+    borderRadius: 2,
+    marginRight: spacing.sm,
     overflow: 'hidden',
-    marginBottom: spacing.xs,
   },
   passwordStrengthFill: {
     height: '100%',
-    borderRadius: 1.5,
+    borderRadius: 2,
   },
   passwordStrengthText: {
     fontSize: fonts.size.xs,
     fontWeight: '500',
+    minWidth: 20,
   },
-  errorContainer: {
-    marginTop: spacing.sm,
+  termsContainer: {
+    marginVertical: spacing.lg,
   },
-  errorText: {
-    fontSize: fonts.size.sm,
-    color: colors.error,
-    marginLeft: spacing.sm,
+  checkboxContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
   },
-  registerButton: {
-    backgroundColor: colors.primary,
-    paddingVertical: spacing.lg,
-    borderRadius: borderRadius.lg,
-    alignItems: 'center',
+  checkbox: {
+    width: 20,
+    height: 20,
+    borderWidth: 2,
+    borderColor: colors.border,
+    borderRadius: 4,
+    marginRight: spacing.sm,
+    marginTop: 2,
     justifyContent: 'center',
-    marginTop: spacing.lg,
-    position: 'relative',
-    overflow: 'hidden',
-    ...shadows.md,
+    alignItems: 'center',
   },
-  registerButtonDisabled: {
-    opacity: 0.7,
+  checkboxChecked: {
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
   },
-  registerButtonText: {
+  checkmark: {
     color: colors.white,
-    fontSize: fonts.size.lg,
+    fontSize: 12,
     fontWeight: 'bold',
   },
-  loadingOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    borderRadius: borderRadius.lg,
-  },
   termsText: {
+    flex: 1,
+    fontSize: fonts.size.sm,
+    color: colors.text,
+    lineHeight: fonts.lineHeight.md,
+  },
+  linkText: {
+    color: colors.primary,
+    fontWeight: '500',
+    textDecorationLine: 'underline',
+  },
+  registerButton: {
+    marginTop: spacing.lg,
+  },
+  dividerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: spacing.xl,
+  },
+  divider: {
+    flex: 1,
+    height: 1,
+    backgroundColor: colors.border,
+  },
+  dividerText: {
+    marginHorizontal: spacing.md,
     fontSize: fonts.size.sm,
     color: colors.textSecondary,
-    textAlign: 'center',
-    marginTop: spacing.md,
-    lineHeight: 20,
   },
-  termsLink: {
+  socialLoginContainer: {
+    gap: spacing.md,
+  },
+  socialButton: {
+    backgroundColor: colors.surface,
+    paddingVertical: spacing.md,
+    borderRadius: borderRadius.lg,
+    borderWidth: 1,
+    borderColor: colors.border,
+    ...shadows.sm,
+  },
+  socialButtonText: {
+    fontSize: fonts.size.md,
+    color: colors.text,
+    textAlign: 'center',
+    fontWeight: '500',
+  },
+  footer: {
+    paddingVertical: spacing.xl,
+    alignItems: 'center',
+  },
+  footerText: {
+    fontSize: fonts.size.sm,
+    color: colors.textSecondary,
+  },
+  loginLink: {
     color: colors.primary,
     fontWeight: '600',
     textDecorationLine: 'underline',
-  },
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: spacing.xl,
-    paddingTop: spacing.lg,
-  },
-  footerText: {
-    fontSize: fonts.size.md,
-    color: colors.textSecondary,
-    marginRight: spacing.sm,
-  },
-  loginLink: {
-    fontSize: fonts.size.md,
-    color: colors.primary,
-    fontWeight: 'bold',
   },
 });

@@ -8,6 +8,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { Provider } from 'react-redux';
 import { store } from './store';
 import { AppNavigator } from './navigation/AppNavigator';
+import ErrorBoundary from './components/common/ErrorBoundary';
 
 const App: React.FC = () => {
   console.log('App 正在渲染...');
@@ -16,7 +17,9 @@ const App: React.FC = () => {
     <Provider store={store}>
       <SafeAreaProvider>
         <NavigationContainer>
+          <ErrorBoundary>
           <AppNavigator />
+        </ErrorBoundary>
         </NavigationContainer>
       </SafeAreaProvider>
     </Provider>

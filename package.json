@@ -70,7 +70,13 @@
     "app:ios": "chmod +x scripts/start-app.sh && ./scripts/start-app.sh ios",
     "app:android": "chmod +x scripts/start-app.sh && ./scripts/start-app.sh android",
     "cleanup": "chmod +x scripts/project-cleanup.sh && ./scripts/project-cleanup.sh",
-    "cleanup:full": "chmod +x scripts/project-cleanup.sh && ./scripts/project-cleanup.sh --reinstall"
+    "cleanup:full": "chmod +x scripts/project-cleanup.sh && ./scripts/project-cleanup.sh --reinstall",
+    "github:update-visibility": "node scripts/update-repo-visibility.js",
+    "github:setup": "npm install @octokit/rest",
+    "github:setup-access": "chmod +x scripts/setup-github-access.sh && ./scripts/setup-github-access.sh",
+    "test:navigation": "node scripts/test-frontend-navigation.js",
+    "diagnose:navigation": "node scripts/diagnose-navigation.js",
+    "fix:frontend": "node scripts/fix-frontend-issues.js"
   },
   "dependencies": {
     "@expo/metro-runtime": "~5.0.4",
@@ -139,6 +145,7 @@
     "babel-jest": "^29.6.3",
     "colors": "^1.4.0",
     "eslint": "^8.19.0",
+    "@octokit/rest": "^20.0.2",
     "jest": "^29.6.3",
     "node-fetch": "^3.3.2",
     "patch-package": "^8.0.0",

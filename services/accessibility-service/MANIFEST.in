@@ -1,0 +1,31 @@
+include README.md
+include LICENSE
+include requirements.txt
+include requirements-core.txt
+include pyproject.toml
+include .pylintrc
+include mypy.ini
+
+# Configuration files
+recursive-include accessibility_service/config *.yaml *.yml *.json
+recursive-include accessibility_service/data *.json *.yaml *.yml
+
+# API definitions
+recursive-include accessibility_service/api *.proto *.py
+
+# Documentation
+recursive-include docs *.md *.rst *.txt
+
+# Scripts
+recursive-include scripts *.py *.sh
+
+# Exclude development and test files
+recursive-exclude tests *
+recursive-exclude test *
+recursive-exclude reports *
+recursive-exclude logs *
+recursive-exclude .github *
+recursive-exclude __pycache__ *
+recursive-exclude *.pyc
+recursive-exclude .pytest_cache *
+recursive-exclude .mypy_cache * 
