@@ -1,245 +1,186 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-小艾服务完整集成测试
-测试所有核心组件的导入和基本功能
+完整集成测试脚本
+验证小艾服务的完整启动和基本功能
 """
 
 import sys
-import traceback
+import os
 import asyncio
+import time
 
-# 添加项目路径
-sys.path.append('.')
+# 添加项目根目录到PYTHONPATH
+sys.path.insert(0, os.path.abspath('.'))
 
-def test_imports():
-    """测试所有核心组件的导入"""
-    print("🔍 开始测试核心组件导入...")
-    
-    tests = [
-        # 核心模型组件
-        ("模型工厂", "from internal.agent.model_factory import get_model_factory"),
-        ("配置管理器", "from internal.agent.model_config_manager import get_model_config_manager"),
-        ("智能体管理器", "from internal.agent.agent_manager import AgentManager"),
-        
-        # gRPC 服务组件
-        ("gRPC 服务实现", "from internal.delivery.xiaoai_service_impl import XiaoAIServiceImpl"),
-        ("服务器启动类", "from cmd.server import XiaoAIServer"),
-        
-        # 存储库组件
-        ("会话存储库", "from internal.repository.session_repository import SessionRepository"),
-        ("诊断存储库", "from internal.repository.diagnosis_repository import DiagnosisRepository"),
-        
-        # 协调器组件
-        ("诊断协调器", "from internal.orchestrator.diagnosis_coordinator import DiagnosisCoordinator"),
-        
-        # 工具组件
-        ("配置加载器", "from pkg.utils.config_loader import get_config"),
-        ("指标收集器", "from pkg.utils.metrics import get_metrics_collector"),
-        
-        # gRPC 生成的代码
-        ("gRPC protobuf", "import api.grpc.xiaoai_service_pb2 as xiaoai_pb2"),
-        ("gRPC 服务", "import api.grpc.xiaoai_service_pb2_grpc as xiaoai_pb2_grpc"),
-    ]
-    
-    success_count = 0
-    total_count = len(tests)
-    
-    for name, import_statement in tests:
-        try:
-            exec(import_statement)
-            print(f"  ✓ {name}")
-            success_count += 1
-        except Exception as e:
-            print(f"  ❌ {name}: {e}")
-    
-    print(f"\n📊 导入测试结果: {success_count}/{total_count} 成功")
-    return success_count == total_count
-
-async def test_model_factory():
-    """测试模型工厂功能"""
-    print("\n🔍 测试模型工厂功能...")
+async def test_complete_integration():
+    """完整集成测试"""
+    print("🚀 开始完整集成测试\n")
     
     try:
-        from internal.agent.model_factory import get_model_factory
+        # 1. 测试配置加载
+        print("1. 测试配置加载...")
+        from pkg.utils.config_loader import get_config
+        config = get_config("config/dev.yaml")
+        print(f"✓ 配置加载成功: {type(config)}")
         
-        # 获取模型工厂实例
-        factory = await get_model_factory()
-        print("  ✓ 模型工厂实例创建成功")
+        # 2. 测试指标收集器
+        print("\n2. 测试指标收集器...")
+        from pkg.utils.metrics import get_metrics_collector
+        metrics = get_metrics_collector()
+        print(f"✓ 指标收集器初始化成功: {type(metrics)}")
         
-        # 测试获取可用模型
-        models = factory.get_available_models()
-        print(f"  ✓ 获取可用模型: {len(models)} 个")
+        # 3. 测试存储库
+        print("\n3. 测试存储库...")
+        from internal.repository.session_repository import SessionRepository
+        from internal.repository.diagnosis_repository import DiagnosisRepository
         
-        # 测试健康状态
-        health = factory.get_model_health_status()
-        print(f"  ✓ 获取健康状态: {len(health)} 个模型")
+        session_repo = SessionRepository()
+        diagnosis_repo = DiagnosisRepository()
+        print(f"✓ 会话存储库: {type(session_repo)}")
+        print(f"✓ 诊断存储库: {type(diagnosis_repo)}")
         
-        return True
-        
-    except Exception as e:
-        print(f"  ❌ 模型工厂测试失败: {e}")
-        traceback.print_exc()
-        return False
-
-async def test_config_manager():
-    """测试配置管理器功能"""
-    print("\n🔍 测试配置管理器功能...")
-    
-    try:
-        from internal.agent.model_config_manager import get_model_config_manager, ConfigScope
-        
-        # 获取配置管理器实例
-        config_manager = await get_model_config_manager()
-        print("  ✓ 配置管理器实例创建成功")
-        
-        # 测试列出系统配置
-        system_configs = await config_manager.list_configs(ConfigScope.SYSTEM)
-        print(f"  ✓ 获取系统配置: {len(system_configs)} 个")
-        
-        return True
-        
-    except Exception as e:
-        print(f"  ❌ 配置管理器测试失败: {e}")
-        traceback.print_exc()
-        return False
-
-async def test_agent_manager():
-    """测试智能体管理器功能"""
-    print("\n🔍 测试智能体管理器功能...")
-    
-    try:
+        # 4. 测试智能体管理器
+        print("\n4. 测试智能体管理器...")
         from internal.agent.agent_manager import AgentManager
         
-        # 创建智能体管理器实例
         agent_manager = AgentManager()
-        print("  ✓ 智能体管理器实例创建成功")
+        print(f"✓ 智能体管理器创建成功: {type(agent_manager)}")
         
         # 异步初始化
         await agent_manager.initialize()
-        print("  ✓ 智能体管理器异步初始化成功")
+        print("✓ 智能体管理器异步初始化成功")
         
-        return True
+        # 5. 测试四诊协调器
+        print("\n5. 测试四诊协调器...")
+        from internal.orchestrator.diagnosis_coordinator import DiagnosisCoordinator
         
-    except Exception as e:
-        print(f"  ❌ 智能体管理器测试失败: {e}")
-        traceback.print_exc()
-        return False
-
-def test_grpc_services():
-    """测试 gRPC 服务组件"""
-    print("\n🔍 测试 gRPC 服务组件...")
-    
-    try:
+        coordinator = DiagnosisCoordinator(agent_manager, diagnosis_repo)
+        print(f"✓ 四诊协调器创建成功: {type(coordinator)}")
+        
+        # 6. 测试服务实现
+        print("\n6. 测试服务实现...")
         from internal.delivery.xiaoai_service_impl import XiaoAIServiceImpl
-        import api.grpc.xiaoai_service_pb2 as xiaoai_pb2
-        import api.grpc.xiaoai_service_pb2_grpc as xiaoai_pb2_grpc
         
-        # 创建服务实现实例
         service_impl = XiaoAIServiceImpl()
-        print("  ✓ gRPC 服务实现创建成功")
+        print(f"✓ 服务实现创建成功: {type(service_impl)}")
         
-        # 测试 protobuf 消息创建
-        request = xiaoai_pb2.ChatRequest(
-            user_id="test_user",
-            message="测试消息",
-            session_id="test_session"
+        # 7. 测试服务器
+        print("\n7. 测试服务器...")
+        from cmd.server import XiaoAIServer
+        
+        server = XiaoAIServer("config/dev.yaml")
+        print(f"✓ 服务器创建成功: {type(server)}")
+        print(f"✓ 服务器配置: {server.host}:{server.port}")
+        
+        # 8. 测试基本聊天功能
+        print("\n8. 测试基本聊天功能...")
+        test_user_id = "test_user_001"
+        test_message = "你好，我想咨询健康问题"
+        
+        chat_result = await agent_manager.chat(test_user_id, test_message)
+        print(f"✓ 聊天功能测试成功")
+        print(f"  用户消息: {test_message}")
+        print(f"  AI回复: {chat_result['message'][:50]}...")
+        print(f"  置信度: {chat_result['confidence']}")
+        
+        # 9. 测试多模态处理
+        print("\n9. 测试多模态处理...")
+        multimodal_input = {
+            'text': '我感觉有点不舒服，请帮我分析一下'
+        }
+        
+        multimodal_result = await agent_manager.process_multimodal_input(
+            test_user_id, multimodal_input
         )
-        print("  ✓ protobuf 消息创建成功")
+        print(f"✓ 多模态处理测试成功")
+        print(f"  处理结果: {multimodal_result['response'][:50]}...")
         
+        # 10. 测试设备状态
+        print("\n10. 测试设备状态...")
+        device_status = await agent_manager.get_device_status()
+        print(f"✓ 设备状态获取成功")
+        print(f"  摄像头可用: {device_status.get('camera', {}).get('available', False)}")
+        print(f"  麦克风可用: {device_status.get('microphone', {}).get('available', False)}")
+        print(f"  屏幕可用: {device_status.get('screen', {}).get('available', False)}")
+        
+        # 11. 测试指标收集
+        print("\n11. 测试指标收集...")
+        metrics_summary = metrics.get_summary()
+        print(f"✓ 指标收集测试成功")
+        print(f"  运行时间: {metrics_summary['uptime_seconds']:.2f}秒")
+        print(f"  请求总数: {metrics_summary['requests_total']}")
+        print(f"  错误总数: {metrics_summary['errors_total']}")
+        
+        # 12. 清理资源
+        print("\n12. 清理资源...")
+        await agent_manager.close()
+        await coordinator.close()
+        print("✓ 资源清理完成")
+        
+        print("\n🎉 完整集成测试成功！")
         return True
         
     except Exception as e:
-        print(f"  ❌ gRPC 服务测试失败: {e}")
+        print(f"\n❌ 集成测试失败: {e}")
+        import traceback
         traceback.print_exc()
         return False
 
-def test_server_startup():
-    """测试服务器启动组件"""
-    print("\n🔍 测试服务器启动组件...")
+async def test_service_startup():
+    """测试服务启动（不实际启动服务器）"""
+    print("\n🔍 测试服务启动流程...\n")
     
     try:
         from cmd.server import XiaoAIServer
         
-        # 创建服务器实例（不启动）
-        server = XiaoAIServer()
-        print("  ✓ 服务器实例创建成功")
+        # 创建服务器实例
+        server = XiaoAIServer("config/dev.yaml")
+        print(f"✓ 服务器实例创建成功")
         
+        # 验证服务器配置
+        print(f"✓ 监听地址: {server.host}:{server.port}")
+        print(f"✓ 工作线程数: {server.max_workers}")
+        print(f"✓ 服务实现: {type(server.service_impl)}")
+        
+        # 验证gRPC服务器配置
+        print(f"✓ gRPC服务器: {type(server.server)}")
+        
+        print("✓ 服务启动流程验证成功")
         return True
         
     except Exception as e:
-        print(f"  ❌ 服务器启动测试失败: {e}")
+        print(f"❌ 服务启动流程验证失败: {e}")
+        import traceback
         traceback.print_exc()
         return False
 
 async def main():
     """主测试函数"""
-    print("🚀 开始小艾服务完整集成测试\n")
+    print("=" * 60)
+    print("小艾服务完整集成测试")
+    print("=" * 60)
     
-    # 测试结果统计
-    test_results = []
+    # 运行完整集成测试
+    integration_ok = await test_complete_integration()
     
-    # 1. 测试导入
-    test_results.append(("导入测试", test_imports()))
+    # 运行服务启动测试
+    startup_ok = await test_service_startup()
     
-    # 2. 测试模型工厂
-    test_results.append(("模型工厂", await test_model_factory()))
+    print("\n" + "=" * 60)
+    print("测试结果汇总")
+    print("=" * 60)
+    print(f"完整集成测试: {'✓ 通过' if integration_ok else '❌ 失败'}")
+    print(f"服务启动测试: {'✓ 通过' if startup_ok else '❌ 失败'}")
     
-    # 3. 测试配置管理器
-    test_results.append(("配置管理器", await test_config_manager()))
-    
-    # 4. 测试智能体管理器
-    test_results.append(("智能体管理器", await test_agent_manager()))
-    
-    # 5. 测试 gRPC 服务
-    test_results.append(("gRPC 服务", test_grpc_services()))
-    
-    # 6. 测试服务器启动
-    test_results.append(("服务器启动", test_server_startup()))
-    
-    # 输出测试结果摘要
-    print("\n" + "="*50)
-    print("📋 测试结果摘要:")
-    print("="*50)
-    
-    success_count = 0
-    for test_name, result in test_results:
-        status = "✓ 通过" if result else "❌ 失败"
-        print(f"  {test_name}: {status}")
-        if result:
-            success_count += 1
-    
-    total_tests = len(test_results)
-    success_rate = (success_count / total_tests) * 100
-    
-    print(f"\n📊 总体结果: {success_count}/{total_tests} 测试通过 ({success_rate:.1f}%)")
-    
-    if success_count == total_tests:
-        print("🎉 所有测试通过！小艾服务集成完成度良好。")
+    if integration_ok and startup_ok:
+        print("\n🎉 所有测试通过！小艾服务已准备就绪！")
+        print("\n📝 启动服务命令:")
+        print("   python3 cmd/server.py --config config/dev.yaml")
+        return True
     else:
-        print("⚠️  部分测试失败，需要进一步修复。")
-    
-    # 输出开发完成度评估
-    print("\n" + "="*50)
-    print("📈 开发完成度评估:")
-    print("="*50)
-    
-    if success_rate >= 90:
-        print("🟢 开发完成度: 优秀 (90%+)")
-        print("   - 核心功能已完成")
-        print("   - 可以进行部署测试")
-    elif success_rate >= 75:
-        print("🟡 开发完成度: 良好 (75-90%)")
-        print("   - 主要功能已完成")
-        print("   - 需要修复少量问题")
-    elif success_rate >= 50:
-        print("🟠 开发完成度: 中等 (50-75%)")
-        print("   - 基础功能已完成")
-        print("   - 需要完善多个组件")
-    else:
-        print("🔴 开发完成度: 较低 (<50%)")
-        print("   - 需要大量开发工作")
-        print("   - 建议优先修复核心问题")
+        print("\n⚠️ 存在问题需要修复")
+        return False
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     asyncio.run(main()) 

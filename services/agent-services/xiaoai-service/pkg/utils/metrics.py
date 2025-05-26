@@ -150,6 +150,51 @@ class MetricsCollector:
             self.error_count = 0
             self.total_response_time = 0.0
             self.start_time = time.time()
+    
+    # 为 AgentManager 添加的专用方法
+    def update_active_sessions(self, count: int):
+        """更新活跃会话数"""
+        self.set_gauge("active_sessions", float(count))
+    
+    def increment_chat_message_count(self, direction: str, message_type: str):
+        """增加聊天消息计数"""
+        tags = {"direction": direction, "type": message_type}
+        self.increment_counter("chat_messages_total", 1.0, tags)
+    
+    def increment_session_count(self, action: str):
+        """增加会话计数"""
+        tags = {"action": action}
+        self.increment_counter("sessions_total", 1.0, tags)
+    
+    def track_multimodal_process(self, input_type: str, status: str, latency: float, input_size: int):
+        """跟踪多模态处理指标"""
+        tags = {"input_type": input_type, "status": status}
+        self.increment_counter("multimodal_processes_total", 1.0, tags)
+        self.record_timer("multimodal_process_duration", latency, tags)
+        self.set_gauge("multimodal_input_size_bytes", float(input_size), tags)
+    
+    def increment_active_requests(self, endpoint: str):
+        """增加活跃请求数"""
+        tags = {"endpoint": endpoint}
+        self.increment_counter("active_requests", 1.0, tags)
+        current_active = self.get_gauge(f"active_requests_{endpoint}")
+        self.set_gauge(f"active_requests_{endpoint}", current_active + 1)
+    
+    def decrement_active_requests(self, endpoint: str):
+        """减少活跃请求数"""
+        tags = {"endpoint": endpoint}
+        self.increment_counter("active_requests", -1.0, tags)
+        current_active = self.get_gauge(f"active_requests_{endpoint}")
+        self.set_gauge(f"active_requests_{endpoint}", max(0, current_active - 1))
+    
+    def track_request(self, protocol: str, endpoint: str, status_code: int, latency: float):
+        """跟踪请求指标"""
+        tags = {"protocol": protocol, "endpoint": endpoint, "status": str(status_code)}
+        self.increment_counter("requests_total", 1.0, tags)
+        self.record_timer("request_duration", latency, tags)
+        
+        if status_code >= 400:
+            self.increment_counter("errors_total", 1.0, tags)
 
 class PerformanceTimer:
     """性能计时器上下文管理器"""
@@ -391,4 +436,109 @@ def track_llm_metrics(model: str = None, model_name: str = None, operation: str 
                 logger.debug(f"LLM指标记录: {model_value} {operation_value}, 成功: {success}, 耗时: {duration:.3f}s, tokens: {tokens}")
         
         return wrapper
-    return decorator 
+    return decorator
+
+def track_service_call_metrics(service: str, method: str = None):
+    """跟踪服务调用指标的装饰器"""
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            start_time = time.time()
+            success = True
+            error_type = None
+            
+            try:
+                result = func(*args, **kwargs)
+                return result
+            except Exception as e:
+                success = False
+                error_type = type(e).__name__
+                raise
+            finally:
+                duration = time.time() - start_time
+                
+                # 记录指标
+                collector = get_metrics_collector()
+                tags = {
+                    "service": service,
+                    "method": method or func.__name__,
+                    "success": str(success).lower()
+                }
+                
+                if error_type:
+                    tags["error_type"] = error_type
+                
+                collector.record_timer(f"service_call_duration", duration, tags)
+                collector.increment_counter(f"service_calls_total", 1.0, tags)
+                
+                if not success:
+                    collector.increment_counter(f"service_call_errors_total", 1.0, tags)
+                
+                logger.debug(f"服务调用指标记录: {service}.{method or func.__name__}, 成功: {success}, 耗时: {duration:.3f}s")
+        
+        return wrapper
+    return decorator
+
+def track_request_metrics(endpoint: str = None, method: str = None):
+    """跟踪请求指标的装饰器"""
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            start_time = time.time()
+            success = True
+            error_type = None
+            status_code = 200
+            
+            try:
+                result = func(*args, **kwargs)
+                return result
+            except Exception as e:
+                success = False
+                error_type = type(e).__name__
+                status_code = 500
+                raise
+            finally:
+                duration = time.time() - start_time
+                
+                # 记录指标
+                collector = get_metrics_collector()
+                tags = {
+                    "endpoint": endpoint or func.__name__,
+                    "method": method or "unknown",
+                    "status_code": str(status_code),
+                    "success": str(success).lower()
+                }
+                
+                if error_type:
+                    tags["error_type"] = error_type
+                
+                collector.record_timer(f"request_duration", duration, tags)
+                collector.increment_counter(f"requests_total", 1.0, tags)
+                
+                if not success:
+                    collector.increment_counter(f"request_errors_total", 1.0, tags)
+                
+                logger.debug(f"请求指标记录: {method} {endpoint}, 状态码: {status_code}, 耗时: {duration:.3f}s")
+        
+        return wrapper
+    return decorator
+
+# 为 AgentManager 添加的专用指标方法
+def update_active_sessions(count: int):
+    """更新活跃会话数"""
+    gauge("active_sessions", float(count))
+
+def increment_chat_message_count(direction: str, message_type: str):
+    """增加聊天消息计数"""
+    tags = {"direction": direction, "type": message_type}
+    increment("chat_messages_total", 1.0, tags)
+
+def increment_session_count(action: str):
+    """增加会话计数"""
+    tags = {"action": action}
+    increment("sessions_total", 1.0, tags)
+
+def track_multimodal_process(input_type: str, status: str, latency: float, input_size: int):
+    """跟踪多模态处理指标"""
+    tags = {"input_type": input_type, "status": status}
+    increment("multimodal_processes_total", 1.0, tags)
+    record_time("multimodal_process_duration", latency, tags)
+    gauge("multimodal_input_size_bytes", float(input_size), tags) 

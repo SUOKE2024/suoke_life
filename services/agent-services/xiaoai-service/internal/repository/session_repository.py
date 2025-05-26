@@ -41,8 +41,8 @@ class SessionRepository:
             self.db = self.client[db_name]
             self.session_collection = self.db[self.session_collection_name]
             
-            # 创建索引
-            self._create_indexes()
+            # 注意：索引创建将在第一次使用时异步执行
+            self._indexes_created = False
             
             logger.info("会话存储库初始化成功")
         except Exception as e:
@@ -81,6 +81,11 @@ class SessionRepository:
         if not self.session_collection:
             logger.error("MongoDB未连接，无法获取会话")
             return None
+        
+        # 确保索引已创建
+        if not self._indexes_created:
+            await self._create_indexes()
+            self._indexes_created = True
         
         try:
             # 查询会话

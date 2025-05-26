@@ -73,18 +73,18 @@ class DiagnosisCoordinator:
         
         # 设置诊断服务的权重
         self.service_weights = {
-            'looking': self.coord_config.get_nested('looking', 'base_weight', default=1.0),
-            'listening': self.coord_config.get_nested('listening', 'base_weight', default=1.0),
-            'inquiry': self.coord_config.get_nested('inquiry', 'base_weight', default=1.5),
-            'palpation': self.coord_config.get_nested('palpation', 'base_weight', default=1.0)
+            'looking': self.config.get_nested('four_diagnosis', 'looking', 'base_weight', default=1.0),
+            'listening': self.config.get_nested('four_diagnosis', 'listening', 'base_weight', default=1.0),
+            'inquiry': self.config.get_nested('four_diagnosis', 'inquiry', 'base_weight', default=1.5),
+            'palpation': self.config.get_nested('four_diagnosis', 'palpation', 'base_weight', default=1.0)
         }
         
         # 诊断服务的启用状态
         self.service_enabled = {
-            'looking': self.coord_config.get_nested('looking', 'enabled', default=True),
-            'listening': self.coord_config.get_nested('listening', 'enabled', default=True),
-            'inquiry': self.coord_config.get_nested('inquiry', 'enabled', default=True),
-            'palpation': self.coord_config.get_nested('palpation', 'base_weight', default=True)
+            'looking': self.config.get_nested('four_diagnosis', 'looking', 'enabled', default=True),
+            'listening': self.config.get_nested('four_diagnosis', 'listening', 'enabled', default=True),
+            'inquiry': self.config.get_nested('four_diagnosis', 'inquiry', 'enabled', default=True),
+            'palpation': self.config.get_nested('four_diagnosis', 'palpation', 'enabled', default=True)
         }
         
         # 初始化gRPC客户端

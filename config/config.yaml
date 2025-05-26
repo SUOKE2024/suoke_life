@@ -1,0 +1,123 @@
+# Integration Service Configuration
+
+app:
+  name: "integration-service"
+  version: "1.0.0"
+  description: "索克生活第三方健康平台集成服务"
+  host: "0.0.0.0"
+  port: 8090
+  debug: false
+  log_level: "INFO"
+
+# Redis 配置
+redis:
+  host: "localhost"
+  port: 6379
+  db: 0
+  password: ""
+  max_connections: 20
+  socket_timeout: 30
+  socket_connect_timeout: 30
+
+# 数据库配置
+database:
+  url: "postgresql://postgres:password@localhost:5432/integration_db"
+  echo: false
+  pool_size: 10
+  max_overflow: 20
+
+# 第三方平台配置
+platforms:
+  apple_health:
+    enabled: true
+    app_id: "your_apple_app_id"
+    team_id: "your_team_id"
+    key_id: "your_key_id"
+    private_key_path: "/path/to/private/key"
+    
+  google_fit:
+    enabled: true
+    client_id: "your_google_client_id"
+    client_secret: "your_google_client_secret"
+    redirect_uri: "http://localhost:8090/auth/google/callback"
+    scopes:
+      - "https://www.googleapis.com/auth/fitness.activity.read"
+      - "https://www.googleapis.com/auth/fitness.body.read"
+      - "https://www.googleapis.com/auth/fitness.sleep.read"
+      
+  fitbit:
+    enabled: true
+    client_id: "your_fitbit_client_id"
+    client_secret: "your_fitbit_client_secret"
+    redirect_uri: "http://localhost:8090/auth/fitbit/callback"
+    
+  xiaomi:
+    enabled: true
+    app_id: "your_xiaomi_app_id"
+    app_secret: "your_xiaomi_app_secret"
+    
+  huawei:
+    enabled: true
+    app_id: "your_huawei_app_id"
+    app_secret: "your_huawei_app_secret"
+    
+  wechat:
+    enabled: true
+    app_id: "your_wechat_app_id"
+    app_secret: "your_wechat_app_secret"
+    
+  alipay:
+    enabled: true
+    app_id: "your_alipay_app_id"
+    private_key_path: "/path/to/alipay/private/key"
+    public_key_path: "/path/to/alipay/public/key"
+
+# 缓存配置
+cache:
+  default_ttl: 3600  # 1小时
+  user_data_ttl: 1800  # 30分钟
+  platform_token_ttl: 7200  # 2小时
+  health_data_ttl: 900  # 15分钟
+
+# API 限流配置
+rate_limit:
+  requests_per_minute: 100
+  requests_per_hour: 1000
+  requests_per_day: 10000
+
+# 监控配置
+monitoring:
+  prometheus:
+    enabled: true
+    port: 9090
+  sentry:
+    enabled: false
+    dsn: ""
+
+# 日志配置
+logging:
+  level: "INFO"
+  format: "json"
+  file_path: "/var/log/integration-service.log"
+  max_size: "100MB"
+  backup_count: 5
+
+# 安全配置
+security:
+  secret_key: "your-secret-key-change-in-production"
+  algorithm: "HS256"
+  access_token_expire_minutes: 30
+  refresh_token_expire_days: 7
+
+# 健康检查配置
+health_check:
+  enabled: true
+  interval: 30
+  timeout: 10
+  
+# 数据同步配置
+sync:
+  batch_size: 100
+  max_retries: 3
+  retry_delay: 5
+  sync_interval: 300  # 5分钟 

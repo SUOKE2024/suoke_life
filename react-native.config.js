@@ -1,13 +1,10 @@
 module.exports = {
   dependencies: {
+    // 完全禁用 sqlite-storage 的自动链接，避免配置警告
     'react-native-sqlite-storage': {
       platforms: {
-        android: {
-          sourceDir:
-            '../node_modules/react-native-sqlite-storage/platforms/android',
-          packageImportPath: 'import org.pgsqlite.SQLitePluginPackage;',
-        },
-        ios: null, // disable iOS platform, other platforms will still autolink if provided
+        android: null,
+        ios: null,
       },
     },
     'react-native-mmkv': {

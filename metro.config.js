@@ -27,9 +27,14 @@ const config = {
       '@i18n': './src/i18n',
       '@assets': './src/assets',
     },
+    // 添加对原生平台的支持
+    platforms: ['ios', 'android', 'native'],
     // 添加对.json文件的支持
-    assetExts: ['bin', 'txt', 'jpg', 'png', 'json', 'mp4', 'mp3', 'wav'],
+    assetExts: ['bin', 'txt', 'jpg', 'png', 'json', 'mp4', 'mp3', 'wav', 'gif', 'webp', 'svg'],
     sourceExts: ['js', 'json', 'ts', 'tsx', 'jsx'],
+  },
+  server: {
+    port: 8081,
   },
 };
 

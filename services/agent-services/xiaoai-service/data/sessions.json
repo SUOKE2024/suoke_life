@@ -235,5 +235,61 @@
     "created_at": 1748226851,
     "last_active": 1748226853,
     "metadata": {}
+  },
+  "c0b06593-1b4a-49fb-9770-9874d44d669f": {
+    "session_id": "c0b06593-1b4a-49fb-9770-9874d44d669f",
+    "user_id": "test_user_001",
+    "history": [
+      {
+        "user_message": "你好，我想咨询健康问题",
+        "assistant_message": "我理解您的担心。让我为您详细分析一下症状，并提供相应的调理建议。",
+        "timestamp": 1748250346
+      }
+    ],
+    "created_at": 1748250345,
+    "last_active": 1748250346,
+    "metadata": {}
+  },
+  "58b5f0e4-c0bb-4dad-9ccd-b0ab05a9acca": {
+    "session_id": "58b5f0e4-c0bb-4dad-9ccd-b0ab05a9acca",
+    "user_id": "test_user_001",
+    "history": [
+      {
+        "user_message": "我感觉有点不舒服，请帮我分析一下",
+        "assistant_message": "根据您的描述，建议您注意休息，保持良好的作息习惯。如有需要，我可以为您安排四诊检查。",
+        "timestamp": 1748250346
+      }
+    ],
+    "created_at": 1748250346,
+    "last_active": 1748250346,
+    "metadata": {}
+  },
+  "0c9d32cc-787d-4684-8a7e-3c9ccee85771": {
+    "session_id": "0c9d32cc-787d-4684-8a7e-3c9ccee85771",
+    "user_id": "test_user_001",
+    "history": [
+      {
+        "user_message": "你好，我想咨询健康问题",
+        "assistant_message": "这种情况在中医理论中比较常见，通过适当的调理可以得到改善。",
+        "timestamp": 1748250690
+      }
+    ],
+    "created_at": 1748250690,
+    "last_active": 1748250690,
+    "metadata": {}
+  },
+  "46387e6f-b356-4c4b-ae44-eae26fbe5801": {
+    "session_id": "46387e6f-b356-4c4b-ae44-eae26fbe5801",
+    "user_id": "test_user_001",
+    "history": [
+      {
+        "user_message": "我感觉有点不舒服，请帮我分析一下",
+        "assistant_message": "根据您的描述，建议您注意休息，保持良好的作息习惯。如有需要，我可以为您安排四诊检查。",
+        "timestamp": 1748250690
+      }
+    ],
+    "created_at": 1748250690,
+    "last_active": 1748250690,
+    "metadata": {}
   }
 }

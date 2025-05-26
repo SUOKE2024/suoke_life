@@ -194,7 +194,7 @@ class XiaoAIServiceImpl(xiaoai_pb2_grpc.XiaoAIServiceServicer):
             elif request.HasField('image'):
                 input_data['image'] = request.image
             elif request.HasField('text'):
-                input_data['text'] = request.text
+                input_data['text'] = request.text.text  # 提取文本内容
             elif request.HasField('sign'):
                 input_data['sign'] = request.sign
             else:

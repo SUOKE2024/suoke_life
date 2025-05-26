@@ -28,7 +28,7 @@ class DiagnosisRepository:
         # 获取MongoDB配置
         mongodb_config = self.config.get_section('database.mongodb')
         self.mongodb_uri = mongodb_config.get('uri', 'mongodb://localhost:27017/xiaoai_db')
-        self.diagnosis_collection_name = mongodb_config.get_nested('collections', 'diagnosis_reports', default='diagnosis_reports')
+        self.diagnosis_collection_name = self.config.get_nested('database', 'mongodb', 'collections', 'diagnosis_reports', default='diagnosis_reports')
         
         # 连接MongoDB
         try:

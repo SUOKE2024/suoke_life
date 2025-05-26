@@ -1,0 +1,25 @@
+{
+  "timestamp": "2025-05-26T01:01:39.590Z",
+  "testType": "functional_test",
+  "platform": "darwin",
+  "results": {
+    "projectStructure": true,
+    "dependencies": true,
+    "nativeConfig": true,
+    "nativeTests": true,
+    "appBuild": false,
+    "performance": true
+  },
+  "summary": {
+    "totalTests": 6,
+    "passed": 5,
+    "failed": 1,
+    "passRate": "83.3"
+  },
+  "recommendations": [
+    "定期运行功能测试以确保稳定性",
+    "监控应用性能指标",
+    "优化Bundle大小",
+    "测试不同设备配置"
+  ]
+}

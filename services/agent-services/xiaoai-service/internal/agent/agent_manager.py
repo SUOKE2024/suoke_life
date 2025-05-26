@@ -158,12 +158,14 @@ class AgentManager:
             except Exception as e:
                 logger.warning(f"设备管理器初始化失败: {e}")
                 self.device_manager = None
+        
+        # 启动定期指标更新任务
+        asyncio.create_task(self._schedule_metric_update())
     
     def _update_active_sessions_metric(self):
         """更新活跃会话数指标"""
         self.metrics.update_active_sessions(len(self.active_sessions))
-        # 设置定期更新
-        asyncio.create_task(self._schedule_metric_update())
+        # 注意：定期更新任务将在 initialize() 方法中启动
     
     async def _schedule_metric_update(self):
         """定期更新指标的任务"""

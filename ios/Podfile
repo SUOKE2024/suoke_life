@@ -78,5 +78,19 @@ target 'SuokeLife' do
         end
       end
     end
+    
+    # 修复 Hermes 脚本阶段警告
+    installer.pods_project.targets.each do |target|
+      if target.name == 'hermes-engine'
+        target.build_phases.each do |build_phase|
+          if build_phase.is_a?(Xcodeproj::Project::Object::PBXShellScriptBuildPhase) && 
+             build_phase.name && build_phase.name.include?('[Hermes]')
+            # 添加输出路径以避免每次构建都运行脚本
+            build_phase.output_paths = ['$(DERIVED_FILE_DIR)/hermes-configured'] if build_phase.output_paths&.empty?
+            puts "✅ 已修复 Hermes 脚本阶段警告"
+          end
+        end
+      end
+    end
   end
 end

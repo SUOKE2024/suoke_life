@@ -15,8 +15,8 @@ const requiredFiles = [
   'android/settings.gradle',
   'android/gradle.properties',
   'android/app/src/main/AndroidManifest.xml',
-  'android/app/src/main/java/com/suokelife/MainActivity.java',
-  'android/app/src/main/java/com/suokelife/MainApplication.java',
+  'android/app/src/main/java/com/suokelife/MainActivity.kt',
+  'android/app/src/main/java/com/suokelife/MainApplication.kt',
   'android/app/src/main/res/values/strings.xml',
   'android/app/src/main/res/values/styles.xml',
   'ios/SuokeLife/Info.plist',
@@ -77,13 +77,18 @@ try {
     'android/app/src/main/AndroidManifest.xml',
     'utf8'
   );
-  if (androidManifest.includes('com.suokelife')) {
+  const buildGradle = fs.readFileSync(
+    'android/app/build.gradle',
+    'utf8'
+  );
+  
+  if (androidManifest.includes('com.suokelife') || buildGradle.includes('com.suokelife')) {
     console.log('✅ Android 包名配置正确');
   } else {
     console.log('❌ Android 包名配置有问题');
   }
 } catch (error) {
-  console.log('❌ Android Manifest 读取失败');
+  console.log('❌ Android 配置文件读取失败');
 }
 
 // 检查iOS配置

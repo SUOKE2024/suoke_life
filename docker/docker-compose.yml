@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  # 基础设施服务
+  consul:
+    image: consul:1.15
+    ports:
+      - "8500:8500"
+    command: agent -server -bootstrap -ui -client=0.0.0.0
+    networks:
+      - suoke-network
+
+  postgres:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=suoke_life
+      - POSTGRES_USER=suoke
+      - POSTGRES_PASSWORD=suoke123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - suoke-network
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - suoke-network
+
+  # API网关 (模拟)
+  api-gateway:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - consul
+    networks:
+      - suoke-network
+
+  # 认证服务 (模拟)
+  auth-service:
+    image: python:3.9-slim
+    ports:
+      - "50052:50052"
+    command: python -m http.server 50052
+    working_dir: /app
+    volumes:
+      - ../services/auth-service:/app
+    networks:
+      - suoke-network
+
+  # 用户服务 (模拟)
+  user-service:
+    image: python:3.9-slim
+    ports:
+      - "50051:50051"
+    command: python -m http.server 50051
+    working_dir: /app
+    volumes:
+      - ../services/user-service:/app
+    networks:
+      - suoke-network
+
+networks:
+  suoke-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

@@ -16,7 +16,7 @@ import grpc
 from concurrent import futures
 
 # 添加项目根目录到PYTHONPATH
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.insert(0, os.path.abspath('.'))
 
 from internal.delivery.xiaoai_service_impl import XiaoAIServiceImpl
 from pkg.utils.config_loader import get_config
@@ -82,8 +82,18 @@ class XiaoAIServer:
         
         self.logger.info("小艾服务器初始化完成，配置加载自: %s", self.config.config_path or "默认配置")
     
-    async def start(self):
-        """启动服务器"""
+    def start(self):
+        """启动服务器（同步方法）"""
+        try:
+            asyncio.run(self._async_start())
+        except KeyboardInterrupt:
+            self.logger.info("接收到中断信号，正在关闭服务器...")
+        except Exception as e:
+            self.logger.error("服务器运行失败: %s", str(e))
+            raise
+    
+    async def _async_start(self):
+        """异步启动服务器"""
         try:
             # 创建gRPC服务器
             self.server = grpc.aio.server(
@@ -164,28 +174,41 @@ class XiaoAIServer:
             
             self.logger.info("服务器已成功关闭")
 
-async def run_server(config_path=None):
-    """
-    运行服务器主函数
-    
-    Args:
-        config_path: 配置文件路径
-    """
-    server = XiaoAIServer(config_path)
-    await server.start()
-
 def main():
     """命令行入口点"""
     parser = argparse.ArgumentParser(description='启动小艾智能体服务')
-    parser.add_argument('--config', type=str, help='配置文件路径')
+    parser.add_argument('--config', '-c', type=str, 
+                       default='config/dev.yaml',
+                       help='配置文件路径 (默认: config/dev.yaml)')
+    parser.add_argument('--host', type=str,
+                       help='监听主机地址')
+    parser.add_argument('--port', type=int,
+                       help='监听端口')
+    
     args = parser.parse_args()
     
     try:
-        asyncio.run(run_server(args.config))
+        # 创建服务器
+        server = XiaoAIServer(args.config)
+        
+        # 如果命令行指定了主机和端口，覆盖配置
+        if args.host:
+            server.host = args.host
+        if args.port:
+            server.port = args.port
+        
+        print(f"🚀 启动小艾服务...")
+        print(f"📍 监听地址: {server.host}:{server.port}")
+        print(f"📁 配置文件: {args.config}")
+        print(f"🔧 工作线程: {server.max_workers}")
+        
+        # 启动服务器
+        server.start()
+        
     except KeyboardInterrupt:
-        pass
+        print("\n⏹️  服务器已停止")
     except Exception as e:
-        logging.error("服务器运行失败: %s", str(e))
+        print(f"❌ 服务器启动失败: {e}")
         sys.exit(1)
 
 if __name__ == '__main__':

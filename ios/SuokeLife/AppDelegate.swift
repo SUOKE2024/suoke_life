@@ -1,4 +1,5 @@
 import UIKit
+import React
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -97,11 +98,41 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   }
 
   @objc func enterAppTapped() {
-    // 这里可以跳转到React Native界面或其他功能
-    print("用户点击了进入应用按钮")
+    print("用户点击了进入应用按钮，启动React Native应用...")
     
-    // 显示提示
-    let alert = UIAlertController(title: "欢迎", message: "欢迎使用索克生活！", preferredStyle: .alert)
+    // 启动React Native应用
+    launchReactNativeApp()
+  }
+  
+  func launchReactNativeApp() {
+    guard let bundleURL = RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index") else {
+      print("❌ 无法获取React Native bundle URL")
+      showErrorAlert(message: "无法启动应用，请检查开发环境")
+      return
+    }
+    
+    print("🚀 启动React Native应用，Bundle URL: \(bundleURL)")
+    
+    let rootView = RCTRootView(
+      bundleURL: bundleURL,
+      moduleName: "SuokeLife",
+      initialProperties: nil,
+      launchOptions: nil
+    )
+    
+    let rootViewController = UIViewController()
+    rootViewController.view = rootView
+    
+    // 平滑过渡到React Native应用
+    UIView.transition(with: self.window!, duration: 0.5, options: .transitionCrossDissolve, animations: {
+      self.window?.rootViewController = rootViewController
+    }, completion: { _ in
+      print("✅ React Native应用启动完成")
+    })
+  }
+  
+  func showErrorAlert(message: String) {
+    let alert = UIAlertController(title: "启动失败", message: message, preferredStyle: .alert)
     alert.addAction(UIAlertAction(title: "确定", style: .default))
     window?.rootViewController?.present(alert, animated: true)
   }
