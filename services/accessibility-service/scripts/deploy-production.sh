@@ -35,8 +35,8 @@ SERVICE_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 PROJECT_ROOT="$(cd "$SERVICE_DIR/../.." && pwd)"
 
 # 阿里云容器镜像仓库配置
-ALIYUN_REGISTRY="registry.cn-hangzhou.aliyuncs.com"
-ALIYUN_NAMESPACE="suoke-life"
+ALIYUN_REGISTRY="suoke-registry.cn-hangzhou.cr.aliyuncs.com"
+ALIYUN_NAMESPACE="suoke"
 SERVICE_NAME="accessibility-service"
 IMAGE_NAME="${ALIYUN_REGISTRY}/${ALIYUN_NAMESPACE}/${SERVICE_NAME}"
 

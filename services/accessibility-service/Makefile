@@ -20,8 +20,8 @@ COMMIT_SHA := $(shell git rev-parse --short HEAD)
 BUILD_TIME := $(shell date -u '+%Y-%m-%d_%H:%M:%S')
 
 # Docker配置
-DOCKER_REGISTRY := registry.cn-hangzhou.aliyuncs.com
-DOCKER_NAMESPACE := suoke-life
+DOCKER_REGISTRY := suoke-registry.cn-hangzhou.cr.aliyuncs.com
+DOCKER_NAMESPACE := suoke
 DOCKER_IMAGE := $(DOCKER_REGISTRY)/$(DOCKER_NAMESPACE)/$(PROJECT_NAME)
 DOCKER_PLATFORMS := linux/amd64,linux/arm64
 

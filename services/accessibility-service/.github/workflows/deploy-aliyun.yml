@@ -13,8 +13,8 @@ on:
         default: 'false'
 
 env:
-  ALIYUN_REGISTRY: registry.cn-hangzhou.aliyuncs.com
-  ALIYUN_NAMESPACE: suoke-life
+  ALIYUN_REGISTRY: suoke-registry.cn-hangzhou.cr.aliyuncs.com
+  ALIYUN_NAMESPACE: suoke
   SERVICE_NAME: accessibility-service
 
 jobs:
