@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -11,12 +11,12 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  Animated,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-// import { useDispatch } from 'react-redux';
 import { AuthStackParamList } from '../../navigation/AuthNavigator';
-import { colors, spacing } from '../../constants/theme';
+import { colors, spacing, fonts, borderRadius, shadows } from '../../constants/theme';
 import { apiClient } from '../../services/apiClient';
 
 type ForgotPasswordScreenNavigationProp = NativeStackNavigationProp<

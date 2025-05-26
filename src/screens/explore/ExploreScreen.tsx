@@ -10,8 +10,9 @@ import {
   TextInput,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { colors } from '../../constants/theme';
+import Icon from '../../components/common/Icon';
+import { colors, spacing, fonts } from '../../constants/theme';
+import AgentChatInterface, { AgentType } from '../../components/common/AgentChatInterface';
 
 // 内容类型
 type ContentType = 'article' | 'video' | 'course' | 'recipe' | 'wisdom' | 'theory';
@@ -178,7 +179,8 @@ const HOT_TOPICS = [
 const ExploreScreen: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<CategoryType | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [laokeChatVisible, setLaokeChatVisible] = useState(false);
+  const [agentChatVisible, setAgentChatVisible] = useState(false);
+  const [accessibilityEnabled, setAccessibilityEnabled] = useState(false);
 
   // 过滤内容
   const filteredContent = LAOKE_WISDOM.filter((item) => {
@@ -208,7 +210,7 @@ const ExploreScreen: React.FC = () => {
 
   // 开始与老克对话
   const startLaokeChat = () => {
-    setLaokeChatVisible(true);
+    setAgentChatVisible(true);
     console.log('Starting chat with Laoke agent');
   };
 
@@ -434,6 +436,15 @@ const ExploreScreen: React.FC = () => {
           />
         </View>
       </ScrollView>
+
+      {/* 老克对话界面 */}
+      <AgentChatInterface
+        visible={agentChatVisible}
+        onClose={() => setAgentChatVisible(false)}
+        agentType="laoke"
+        userId="current_user_id"
+        accessibilityEnabled={accessibilityEnabled}
+      />
     </SafeAreaView>
   );
 };

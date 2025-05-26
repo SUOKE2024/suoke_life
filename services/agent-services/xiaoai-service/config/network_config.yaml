@@ -1,0 +1,332 @@
+# 小艾智能体网络优化配置
+# Network Optimization Configuration for Xiaoai Agent
+
+# WebSocket配置
+websocket:
+  # 服务器配置
+  server:
+    host: "0.0.0.0"
+    port: 8001
+    max_connections: 1000
+    ping_interval: 30  # 心跳间隔（秒）
+    ping_timeout: 10   # 心跳超时（秒）
+    close_timeout: 10  # 关闭超时（秒）
+    
+  # 客户端配置
+  client:
+    connect_timeout: 10
+    read_timeout: 30
+    write_timeout: 10
+    max_message_size: 1048576  # 1MB
+    
+  # 消息配置
+  message:
+    max_queue_size: 1000
+    compression_threshold: 1024  # 超过1KB启用压缩
+    enable_binary: true
+    enable_text: true
+
+# HTTP/2配置
+http2:
+  # 启用HTTP/2
+  enabled: true
+  
+  # 连接配置
+  connection:
+    max_connections: 100
+    max_concurrent_streams: 100
+    initial_window_size: 65536
+    max_frame_size: 16384
+    max_header_list_size: 8192
+    
+  # 超时配置
+  timeout:
+    connect_timeout: 10
+    read_timeout: 30
+    write_timeout: 10
+    pool_timeout: 5
+    
+  # 重试配置
+  retry:
+    max_retries: 3
+    backoff_factor: 0.3
+    status_forcelist: [500, 502, 503, 504]
+
+# 数据压缩配置
+compression:
+  # 启用压缩
+  enabled: true
+  
+  # 压缩算法优先级
+  algorithms:
+    - "br"      # Brotli (最佳压缩率)
+    - "gzip"    # Gzip (兼容性好)
+    - "deflate" # Deflate (备选)
+  
+  # 压缩级别配置
+  levels:
+    brotli:
+      default: 6
+      min: 1
+      max: 11
+    gzip:
+      default: 6
+      min: 1
+      max: 9
+    deflate:
+      default: 6
+      min: 1
+      max: 9
+  
+  # 压缩阈值
+  thresholds:
+    min_size: 512      # 最小压缩大小（字节）
+    max_size: 10485760 # 最大压缩大小（10MB）
+    
+  # MIME类型配置
+  mime_types:
+    - "application/json"
+    - "application/xml"
+    - "text/plain"
+    - "text/html"
+    - "text/css"
+    - "text/javascript"
+    - "application/javascript"
+
+# 连接池配置
+connection_pool:
+  # HTTP连接池
+  http:
+    max_connections: 100
+    max_connections_per_host: 20
+    keepalive_timeout: 30
+    keepalive_expiry: 300
+    
+  # WebSocket连接池
+  websocket:
+    max_connections: 500
+    cleanup_interval: 60
+    idle_timeout: 300
+    
+  # 数据库连接池
+  database:
+    max_connections: 20
+    min_connections: 5
+    acquire_timeout: 30
+    max_inactive_time: 300
+
+# 缓存配置
+cache:
+  # 网络缓存
+  network:
+    enabled: true
+    max_size: 1000
+    ttl: 300  # 5分钟
+    
+  # 响应缓存
+  response:
+    enabled: true
+    max_size: 500
+    ttl: 60   # 1分钟
+    
+  # 连接缓存
+  connection:
+    enabled: true
+    max_size: 200
+    ttl: 600  # 10分钟
+
+# 负载均衡配置
+load_balancing:
+  # 启用负载均衡
+  enabled: false
+  
+  # 负载均衡策略
+  strategy: "round_robin"  # round_robin, least_connections, weighted
+  
+  # 健康检查
+  health_check:
+    enabled: true
+    interval: 30
+    timeout: 5
+    path: "/api/v1/health/"
+    
+  # 服务器列表
+  servers:
+    - host: "localhost"
+      port: 8000
+      weight: 1
+      backup: false
+
+# 安全配置
+security:
+  # TLS/SSL配置
+  tls:
+    enabled: false
+    cert_file: ""
+    key_file: ""
+    ca_file: ""
+    verify_mode: "required"
+    
+  # 速率限制
+  rate_limiting:
+    enabled: true
+    requests_per_minute: 1000
+    burst_size: 100
+    
+  # CORS配置
+  cors:
+    enabled: true
+    allow_origins: ["*"]
+    allow_methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+    allow_headers: ["*"]
+    expose_headers: []
+    allow_credentials: true
+    max_age: 86400
+
+# 监控配置
+monitoring:
+  # 性能监控
+  performance:
+    enabled: true
+    collect_interval: 10
+    metrics_retention: 3600
+    
+  # 网络监控
+  network:
+    enabled: true
+    latency_check_interval: 30
+    bandwidth_check_interval: 60
+    
+  # 连接监控
+  connection:
+    enabled: true
+    check_interval: 15
+    log_connections: true
+    
+  # 错误监控
+  error:
+    enabled: true
+    log_errors: true
+    alert_threshold: 10
+
+# 优化策略
+optimization:
+  # 自适应优化
+  adaptive:
+    enabled: true
+    adjustment_interval: 60
+    performance_threshold: 0.8
+    
+  # 预测性优化
+  predictive:
+    enabled: false
+    model_update_interval: 3600
+    prediction_window: 300
+    
+  # 动态调整
+  dynamic:
+    enabled: true
+    cpu_threshold: 80
+    memory_threshold: 80
+    network_threshold: 80
+
+# 日志配置
+logging:
+  # 网络日志
+  network:
+    enabled: true
+    level: "INFO"
+    file: "logs/network.log"
+    max_size: "100MB"
+    backup_count: 5
+    
+  # 性能日志
+  performance:
+    enabled: true
+    level: "INFO"
+    file: "logs/performance.log"
+    max_size: "50MB"
+    backup_count: 3
+    
+  # 错误日志
+  error:
+    enabled: true
+    level: "ERROR"
+    file: "logs/error.log"
+    max_size: "50MB"
+    backup_count: 5
+
+# 实验性功能
+experimental:
+  # HTTP/3支持
+  http3:
+    enabled: false
+    
+  # QUIC协议
+  quic:
+    enabled: false
+    
+  # 多路复用
+  multiplexing:
+    enabled: true
+    max_streams: 10
+    
+  # 智能路由
+  smart_routing:
+    enabled: false
+    
+  # 边缘缓存
+  edge_caching:
+    enabled: false
+
+# 环境特定配置
+environments:
+  development:
+    websocket:
+      server:
+        host: "localhost"
+        port: 8001
+    http2:
+      enabled: false
+    compression:
+      enabled: false
+    security:
+      tls:
+        enabled: false
+      rate_limiting:
+        enabled: false
+        
+  testing:
+    websocket:
+      server:
+        host: "localhost"
+        port: 8001
+        max_connections: 100
+    monitoring:
+      performance:
+        collect_interval: 5
+        
+  production:
+    websocket:
+      server:
+        host: "0.0.0.0"
+        port: 8001
+        max_connections: 1000
+    http2:
+      enabled: true
+    compression:
+      enabled: true
+    security:
+      tls:
+        enabled: true
+      rate_limiting:
+        enabled: true
+    monitoring:
+      performance:
+        enabled: true
+      network:
+        enabled: true
+      connection:
+        enabled: true
+      error:
+        enabled: true 

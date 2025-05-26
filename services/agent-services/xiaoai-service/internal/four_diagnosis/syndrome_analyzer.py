@@ -14,7 +14,7 @@ from typing import Dict, List, Any, Optional, Tuple
 import asyncio
 
 # 导入依赖
-from internal.agent.model_factory import ModelFactory
+from internal.agent.model_factory import get_model_factory
 from pkg.utils.config_loader import get_config
 from pkg.utils.metrics import get_metrics_collector
 
@@ -36,8 +36,8 @@ class SyndromeAnalyzer:
         self.config = get_config()
         self.metrics = get_metrics_collector()
         
-        # 设置模型工厂
-        self.model_factory = model_factory or ModelFactory()
+        # 设置模型工厂（将在异步方法中初始化）
+        self.model_factory = model_factory
         
         # 加载配置
         differentiation_config = self.config.get_section('differentiation', {})
@@ -54,6 +54,12 @@ class SyndromeAnalyzer:
         self.rules = self._load_differentiation_rules()
         
         logger.info(f"中医辨证分析器初始化完成，规则版本: {self.rules_version}")
+    
+    async def initialize(self):
+        """异步初始化模型工厂"""
+        if self.model_factory is None:
+            self.model_factory = await get_model_factory()
+            logger.info("辨证分析器模型工厂异步初始化完成")
     
     def _load_prompt_templates(self) -> Dict[str, str]:
         """加载提示语模板"""
@@ -324,6 +330,10 @@ class SyndromeAnalyzer:
         Returns:
             List[Dict[str, Any]]: LLM分析的证型列表
         """
+        # 确保模型工厂已初始化
+        if self.model_factory is None:
+            await self.initialize()
+        
         try:
             # 准备四诊数据
             look_data = self._prepare_look_data(fusion_result)

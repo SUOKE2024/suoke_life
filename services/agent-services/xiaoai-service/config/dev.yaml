@@ -1,0 +1,211 @@
+# 小艾智能体服务开发环境配置文件
+
+# 服务配置
+service:
+  name: "xiaoai-service"
+  version: "0.1.0"
+  description: "索克生活APP小艾智能体服务"
+  host: "0.0.0.0"
+  port: 50053
+  debug: true
+
+# 日志配置
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/xiaoai-service.log"
+  max_size_mb: 100
+  backup_count: 5
+
+# 监控配置
+monitoring:
+  prometheus:
+    enabled: false  # 开发环境关闭
+    path: "/metrics"
+    port: 51053
+  health_check:
+    enabled: true
+    path: "/health"
+
+# 性能配置
+performance:
+  max_workers: 4  # 开发环境减少
+  thread_pool_size: 4
+  max_concurrent_requests: 50
+  enable_batching: false  # 开发环境关闭
+  queue_size: 16
+
+# 多模态配置
+multimodal:
+  voice:
+    sample_rate: 16000
+    channels: 1
+    language_detection: false  # 开发环境简化
+    dialect_support: false
+    noise_reduction: false
+  image:
+    max_resolution: [1024, 768]  # 开发环境降低
+    supported_formats: ["jpg", "png"]
+    preprocessing: false
+  text:
+    max_length: 2048  # 开发环境减少
+    language_detection: false
+
+# AI模型配置
+models:
+  llm:
+    primary_model: "gpt-4o-mini"
+    fallback_model: "mock"  # 开发环境使用模拟模型
+    api_key: ""
+    api_base: "https://api.openai.com/v1"
+    org_id: ""
+    temperature: 0.7
+    max_tokens: 1024  # 开发环境减少
+    streaming: false  # 开发环境关闭
+    
+  local_llm:
+    endpoint_url: ""
+    available_models: []
+    default_model: "mock"
+    model_path: ""
+    quantization: "q4_k_m"
+    context_size: 2048
+    temperature: 0.7
+    max_tokens: 512
+    
+  embedding:
+    model: "mock"  # 开发环境使用模拟
+    dimensions: 384
+    normalize: true
+    
+  speech:
+    asr_model: "mock"
+    tts_model: "mock"
+    dialect_classification: "mock"
+    
+  vision:
+    model: "mock"
+    input_size: [224, 224]
+    batch_size: 4  # 开发环境减少
+    device: "cpu"  # 开发环境使用CPU
+
+# 数据库配置 - 开发环境使用文件存储
+database:
+  postgres:
+    enabled: false  # 开发环境关闭
+    uri: ""
+    pool_size: 1
+    max_overflow: 1
+    
+  mongodb:
+    enabled: false  # 开发环境关闭
+    uri: ""
+    collections:
+      user_profiles: "user_profiles"
+      chat_history: "chat_history"
+      diagnosis_reports: "diagnosis_reports"
+      session_data: "session_data"
+      
+  redis:
+    enabled: false  # 开发环境关闭
+    uri: ""
+    ttl_seconds: 3600
+    max_connections: 1
+
+# 文件存储配置（开发环境替代数据库）
+file_storage:
+  enabled: true
+  base_path: "data"
+  session_file: "data/sessions.json"
+  diagnosis_file: "data/diagnosis.json"
+  user_profiles_file: "data/user_profiles.json"
+  chat_history_file: "data/chat_history.json"
+
+# 会话配置
+conversation:
+  max_history_turns: 10  # 开发环境减少
+  persist_history: true
+  context_window_size: 2048  # 开发环境减少
+  system_prompt: "你是小艾，索克生活APP的智能体，专注于中医健康咨询与四诊协调。在开发环境中，你将使用模拟数据进行测试。"
+  session_timeout_minutes: 15  # 开发环境缩短
+
+# 四诊协调配置
+four_diagnosis:
+  coordinator_mode: "sequential"
+  confidence_threshold: 0.5  # 开发环境降低
+  timeout_seconds: 10  # 开发环境缩短
+  retry_count: 1  # 开发环境减少
+  
+  looking:
+    enabled: false  # 开发环境关闭外部服务
+    base_weight: 1.0
+    
+  listening:
+    enabled: false
+    base_weight: 1.0
+    
+  inquiry:
+    enabled: false
+    base_weight: 1.5
+    
+  palpation:
+    enabled: false
+    base_weight: 1.0
+
+# 集成服务配置 - 开发环境使用模拟
+integrations:
+  look_service:
+    enabled: false
+    host: "localhost"
+    port: 50051
+    timeout_ms: 1000
+    retry_count: 1
+    connection_pool_size: 1
+    
+  listen_service:
+    enabled: false
+    host: "localhost"
+    port: 50052
+    timeout_ms: 1000
+    retry_count: 1
+    connection_pool_size: 1
+    
+  inquiry_service:
+    enabled: false
+    host: "localhost"
+    port: 50054
+    timeout_ms: 1000
+    retry_count: 1
+    connection_pool_size: 1
+    
+  palpation_service:
+    enabled: false
+    host: "localhost"
+    port: 50055
+    timeout_ms: 1000
+    retry_count: 1
+    connection_pool_size: 1
+    
+  med_knowledge:
+    enabled: false
+    host: "localhost"
+    port: 50056
+    timeout_ms: 1000
+    retry_count: 1
+    connection_pool_size: 1
+    
+  rag_service:
+    enabled: false
+    host: "localhost"
+    port: 50057
+    timeout_ms: 1000
+    retry_count: 1
+    connection_pool_size: 1
+
+# 开发环境特定配置
+development:
+  mock_services: true  # 启用模拟服务
+  mock_data: true      # 使用模拟数据
+  fast_startup: true   # 快速启动模式
+  skip_validation: true # 跳过某些验证
+  debug_mode: true     # 调试模式 

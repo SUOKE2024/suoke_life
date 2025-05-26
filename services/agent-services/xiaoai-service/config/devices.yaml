@@ -1,0 +1,78 @@
+# 设备配置
+devices:
+  # 摄像头配置
+  camera_enabled: true
+  camera_index: 0          # 摄像头索引
+  camera_width: 640        # 图像宽度
+  camera_height: 480       # 图像高度
+  camera_fps: 30           # 帧率
+  
+  # 麦克风配置
+  microphone_enabled: true
+  sample_rate: 16000       # 采样率
+  channels: 1              # 声道数
+  chunk_size: 1024         # 缓冲区大小
+  audio_format: 16         # 音频格式（16位）
+  
+  # 屏幕配置
+  screen_enabled: true
+  screen_region: null      # 截图区域 [x, y, width, height]，null表示全屏
+  
+  # 安全配置
+  max_recording_duration: 30    # 最大录音时长（秒）
+  max_image_size: 1048576      # 最大图像大小（1MB）
+  
+  # 设备权限检查
+  check_permissions: true
+  
+  # 设备初始化超时
+  init_timeout: 10         # 设备初始化超时时间（秒）
+
+# HTTP服务器配置
+http_server:
+  host: "0.0.0.0"
+  port: 8000
+  cors_origins:
+    - "http://localhost:3000"
+    - "http://localhost:8080"
+    - "http://127.0.0.1:3000"
+    - "http://127.0.0.1:8080"
+  
+  # 文件上传限制
+  max_file_size: 10485760  # 10MB
+  allowed_file_types:
+    - "image/jpeg"
+    - "image/png"
+    - "audio/wav"
+    - "audio/mp3"
+    - "audio/webm"
+
+# 设备依赖库配置
+dependencies:
+  opencv:
+    required: true
+    install_command: "pip install opencv-python"
+    
+  pyaudio:
+    required: true
+    install_command: "pip install pyaudio"
+    
+  pyautogui:
+    required: true
+    install_command: "pip install pyautogui"
+    
+  pillow:
+    required: true
+    install_command: "pip install Pillow"
+
+# 设备测试配置
+testing:
+  # 是否在启动时进行设备测试
+  test_on_startup: false
+  
+  # 测试超时时间
+  test_timeout: 5
+  
+  # 测试参数
+  camera_test_duration: 1    # 摄像头测试时长（秒）
+  microphone_test_duration: 1  # 麦克风测试时长（秒） 

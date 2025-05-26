@@ -13,12 +13,12 @@ import time
 import asyncio
 from typing import Dict, List, Any, Optional, Tuple
 import openai
-from langchain.chains import LLMChain
-from langchain.prompts import ChatPromptTemplate
-from langchain.memory import ConversationBufferMemory
 
-from .model_factory import ModelFactory
+from .model_factory import get_model_factory
 from ..repository.session_repository import SessionRepository
+from ..repository.file_session_repository import FileSessionRepository
+from ..integration.accessibility_client import get_accessibility_client, AccessibilityConfig
+from ..integration.device_manager import get_device_manager, DeviceConfig
 from pkg.utils.config_loader import get_config
 from pkg.utils.metrics import get_metrics_collector, track_llm_metrics
 
@@ -37,8 +37,16 @@ class AgentManager:
         self.config = get_config()
         self.metrics = get_metrics_collector()
         
-        # 设置依赖组件
-        self.session_repository = session_repository or SessionRepository()
+        # 设置依赖组件 - 根据配置选择存储库
+        if session_repository:
+            self.session_repository = session_repository
+        else:
+            # 检查是否启用文件存储
+            file_storage_config = self.config.get_section('file_storage')
+            if file_storage_config.get('enabled', False):
+                self.session_repository = FileSessionRepository()
+            else:
+                self.session_repository = SessionRepository()
         
         # 加载模型配置
         self.llm_config = self.config.get_section('models.llm')
@@ -57,8 +65,14 @@ class AgentManager:
         self.primary_model = self.llm_config.get('primary_model', 'gpt-4o-mini')
         self.fallback_model = self.llm_config.get('fallback_model', 'llama-3-8b')
         
-        # 初始化模型工厂
-        self.model_factory = ModelFactory()
+        # 初始化模型工厂（将在异步方法中初始化）
+        self.model_factory = None
+        
+        # 初始化无障碍服务客户端（将在异步方法中初始化）
+        self.accessibility_client = None
+        
+        # 初始化设备管理器（将在异步方法中初始化）
+        self.device_manager = None
         
         # 活跃会话映射 session_id -> session_data
         self.active_sessions: Dict[str, Dict[str, Any]] = {}
@@ -68,6 +82,82 @@ class AgentManager:
         
         logger.info("智能体管理器初始化完成，主模型: %s, 备用模型: %s", 
                    self.primary_model, self.fallback_model)
+    
+    async def initialize(self):
+        """异步初始化模型工厂和无障碍服务"""
+        # 初始化模型工厂
+        if self.model_factory is None:
+            # 检查开发环境
+            development_config = self.config.get_section('development')
+            if development_config and development_config.get('mock_services', False):
+                # 开发环境使用模拟工厂
+                from .mock_model_factory import get_mock_model_factory
+                self.model_factory = await get_mock_model_factory()
+                logger.info("开发环境：智能体管理器使用模拟模型工厂")
+            else:
+                # 检查是否配置了DeepSeek
+                deepseek_config = self.config.get_section('models.deepseek') or {}
+                llm_config = self.config.get_section('models.llm') or {}
+                
+                # 检查API密钥（优先从环境变量获取）
+                import os
+                api_key = (
+                    os.environ.get('DEEPSEEK_API_KEY') or 
+                    deepseek_config.get('api_key') or 
+                    llm_config.get('api_key')
+                )
+                primary_model = llm_config.get('primary_model', '')
+                
+                # 如果有API密钥且主模型是deepseek或有deepseek配置，使用DeepSeek
+                if api_key and ('deepseek' in primary_model.lower() or deepseek_config or os.environ.get('DEEPSEEK_API_KEY')):
+                    # 使用DeepSeek模型工厂
+                    from .deepseek_model_factory import get_deepseek_model_factory
+                    self.model_factory = await get_deepseek_model_factory()
+                    logger.info("生产环境：智能体管理器使用DeepSeek模型工厂")
+                else:
+                    # 使用通用模型工厂
+                    self.model_factory = await get_model_factory()
+                    logger.info("生产环境：智能体管理器使用通用模型工厂")
+        
+        # 初始化无障碍服务客户端
+        if self.accessibility_client is None:
+            try:
+                # 获取无障碍服务配置
+                accessibility_config = self.config.get_section('accessibility') or {}
+                
+                config = AccessibilityConfig(
+                    service_url=accessibility_config.get('service_url', 'http://localhost:50051'),
+                    timeout=accessibility_config.get('timeout', 30),
+                    enabled=accessibility_config.get('enabled', True)
+                )
+                
+                self.accessibility_client = await get_accessibility_client(config)
+                logger.info("无障碍服务客户端初始化成功")
+                
+            except Exception as e:
+                logger.warning(f"无障碍服务客户端初始化失败: {e}")
+                self.accessibility_client = None
+        
+        # 初始化设备管理器
+        if self.device_manager is None:
+            try:
+                # 获取设备配置
+                device_config = self.config.get_section('devices') or {}
+                
+                config = DeviceConfig(
+                    camera_enabled=device_config.get('camera_enabled', True),
+                    microphone_enabled=device_config.get('microphone_enabled', True),
+                    screen_enabled=device_config.get('screen_enabled', True),
+                    max_recording_duration=device_config.get('max_recording_duration', 30),
+                    max_image_size=device_config.get('max_image_size', 1024 * 1024)
+                )
+                
+                self.device_manager = await get_device_manager(config)
+                logger.info("设备管理器初始化成功")
+                
+            except Exception as e:
+                logger.warning(f"设备管理器初始化失败: {e}")
+                self.device_manager = None
     
     def _update_active_sessions_metric(self):
         """更新活跃会话数指标"""
@@ -293,6 +383,10 @@ class AgentManager:
         Returns:
             Tuple[str, Dict[str, Any]]: 响应文本和元数据
         """
+        # 确保模型工厂已初始化
+        if self.model_factory is None:
+            await self.initialize()
+        
         # 构建提示
         messages = self._build_prompt_messages(context)
         
@@ -390,18 +484,38 @@ class AgentManager:
     
     async def _process_voice_input(self, input_data: Dict[str, Any], user_id: str, session_id: str) -> Dict[str, Any]:
         """处理语音输入"""
+        audio_data = input_data.get('voice', b'')
         logger.info("处理语音输入，用户ID: %s, 会话ID: %s, 数据大小: %d", 
-                   user_id, session_id, len(input_data.get('voice', b'')))
+                   user_id, session_id, len(audio_data))
         
-        # TODO: 实现语音处理逻辑，利用语音识别将语音转换为文本
-        # 这里是简化处理，实际应该调用语音处理服务
         transcribed_text = "这是测试用的语音转文本结果"
+        accessibility_result = None
+        
+        # 使用无障碍服务处理语音输入
+        if self.accessibility_client:
+            try:
+                voice_result = await self.accessibility_client.process_voice_input(
+                    audio_data=audio_data,
+                    user_id=user_id,
+                    context="health_consultation",
+                    language="zh-CN"
+                )
+                
+                if voice_result.get('success'):
+                    transcribed_text = voice_result.get('recognized_text', transcribed_text)
+                    accessibility_result = voice_result
+                    logger.info("无障碍语音识别成功: %s", transcribed_text)
+                else:
+                    logger.warning(f"无障碍语音处理失败: {voice_result.get('error')}")
+                    
+            except Exception as e:
+                logger.error(f"无障碍语音处理异常: {e}")
         
         # 处理文本内容
         chat_result = await self.chat(user_id, transcribed_text, session_id)
         
-        # 返回处理结果
-        return {
+        # 返回处理结果，包含无障碍信息
+        result = {
             'request_id': str(uuid.uuid4()),
             'transcription': transcribed_text,
             'response': chat_result['message'],
@@ -411,15 +525,56 @@ class AgentManager:
                 'timestamp': int(time.time())
             }
         }
+        
+        # 添加无障碍服务结果
+        if accessibility_result:
+            result['accessibility'] = {
+                'voice_recognition': accessibility_result,
+                'audio_response': accessibility_result.get('response_audio', ''),
+                'service_confidence': accessibility_result.get('confidence', 0.0)
+            }
+        
+        return result
     
     async def _process_image_input(self, input_data: Dict[str, Any], user_id: str, session_id: str) -> Dict[str, Any]:
         """处理图像输入"""
+        image_data = input_data.get('image', b'')
         logger.info("处理图像输入，用户ID: %s, 会话ID: %s, 数据大小: %d", 
-                   user_id, session_id, len(input_data.get('image', b'')))
+                   user_id, session_id, len(image_data))
         
-        # TODO: 实现图像处理逻辑，可以是舌象分析、面色分析等
-        # 这里是简化处理，实际应该调用图像处理服务
         image_description = "这是一张舌象图像，舌体淡红，舌苔薄白"
+        accessibility_result = None
+        
+        # 使用无障碍服务处理图像输入
+        if self.accessibility_client:
+            try:
+                image_result = await self.accessibility_client.process_image_input(
+                    image_data=image_data,
+                    user_id=user_id,
+                    image_type="tongue",
+                    context="visual_diagnosis"
+                )
+                
+                if image_result.get('success'):
+                    scene_desc = image_result.get('scene_description', '')
+                    medical_features = image_result.get('medical_features', [])
+                    
+                    if scene_desc:
+                        image_description = scene_desc
+                    
+                    # 整合医学特征信息
+                    if medical_features:
+                        features_text = ", ".join([f"{f.get('type', '')}: {f.get('description', '')}" 
+                                                 for f in medical_features])
+                        image_description += f"。医学特征: {features_text}"
+                    
+                    accessibility_result = image_result
+                    logger.info("无障碍图像分析成功: %s", image_description)
+                else:
+                    logger.warning(f"无障碍图像处理失败: {image_result.get('error')}")
+                    
+            except Exception as e:
+                logger.error(f"无障碍图像处理异常: {e}")
         
         # 构建包含图像分析的提示
         prompt = f"根据以下图像分析结果，给出中医健康建议。图像分析: {image_description}"
@@ -427,8 +582,8 @@ class AgentManager:
         # 处理提示内容
         chat_result = await self.chat(user_id, prompt, session_id)
         
-        # 返回处理结果
-        return {
+        # 返回处理结果，包含无障碍信息
+        result = {
             'request_id': str(uuid.uuid4()),
             'image_analysis': image_description,
             'response': chat_result['message'],
@@ -438,6 +593,17 @@ class AgentManager:
                 'timestamp': int(time.time())
             }
         }
+        
+        # 添加无障碍服务结果
+        if accessibility_result:
+            result['accessibility'] = {
+                'image_analysis': accessibility_result,
+                'audio_guidance': accessibility_result.get('audio_guidance', ''),
+                'navigation_guidance': accessibility_result.get('navigation_guidance', ''),
+                'service_confidence': accessibility_result.get('confidence', 0.0)
+            }
+        
+        return result
     
     async def _process_text_input(self, input_data: Dict[str, Any], user_id: str, session_id: str) -> Dict[str, Any]:
         """处理文本输入"""
@@ -484,6 +650,340 @@ class AgentManager:
             }
         }
     
+    async def generate_accessible_content(self, content: str, user_id: str, 
+                                        content_type: str = "health_advice",
+                                        target_format: str = "audio") -> Dict[str, Any]:
+        """
+        生成无障碍内容
+        
+        Args:
+            content: 原始内容
+            user_id: 用户ID
+            content_type: 内容类型
+            target_format: 目标格式
+            
+        Returns:
+            Dict: 无障碍内容结果
+        """
+        try:
+            if self.accessibility_client:
+                result = await self.accessibility_client.generate_accessible_content(
+                    content=content,
+                    user_id=user_id,
+                    content_type=content_type,
+                    target_format=target_format
+                )
+                
+                if result.get('success'):
+                    logger.info("无障碍内容生成成功，用户ID: %s", user_id)
+                    return {
+                        'success': True,
+                        'accessible_content': result.get('accessible_content', ''),
+                        'audio_content': result.get('audio_content', ''),
+                        'tactile_content': result.get('tactile_content', ''),
+                        'content_url': result.get('content_url', ''),
+                        'metadata': {
+                            'user_id': user_id,
+                            'content_type': content_type,
+                            'target_format': target_format,
+                            'timestamp': int(time.time())
+                        }
+                    }
+                else:
+                    logger.warning(f"无障碍内容生成失败: {result.get('error')}")
+            
+            # 降级处理：返回原始内容
+            return {
+                'success': False,
+                'accessible_content': content,
+                'audio_content': '',
+                'tactile_content': '',
+                'content_url': '',
+                'error': '无障碍服务不可用',
+                'metadata': {
+                    'user_id': user_id,
+                    'content_type': content_type,
+                    'target_format': target_format,
+                    'timestamp': int(time.time())
+                }
+            }
+            
+        except Exception as e:
+            logger.error(f"无障碍内容生成异常: {e}")
+            return {
+                'success': False,
+                'accessible_content': content,
+                'audio_content': '',
+                'tactile_content': '',
+                'content_url': '',
+                'error': str(e),
+                'metadata': {
+                    'user_id': user_id,
+                    'content_type': content_type,
+                    'target_format': target_format,
+                                    'timestamp': int(time.time())
+            }
+        }
+    
+    async def capture_camera_image(self, user_id: str, session_id: str = None) -> Dict[str, Any]:
+        """
+        使用摄像头拍摄照片
+        
+        Args:
+            user_id: 用户ID
+            session_id: 会话ID
+            
+        Returns:
+            Dict: 拍摄结果
+        """
+        try:
+            # 确保设备管理器已初始化
+            if self.device_manager is None:
+                await self.initialize()
+            
+            if not self.device_manager:
+                return {
+                    'success': False,
+                    'error': '设备管理器不可用',
+                    'user_id': user_id,
+                    'session_id': session_id
+                }
+            
+            # 拍摄照片
+            result = await self.device_manager.capture_image()
+            
+            if result:
+                # 使用无障碍服务进行图像分析
+                accessibility_result = None
+                if self.accessibility_client:
+                    try:
+                        accessibility_result = await self.accessibility_client.process_image_input(
+                            image_data=result['image_data'],
+                            user_id=user_id,
+                            image_type="camera_capture",
+                            context="health_consultation"
+                        )
+                    except Exception as e:
+                        logger.warning(f"图像无障碍分析失败: {e}")
+                
+                response = {
+                    'success': True,
+                    'image_data': result,
+                    'user_id': user_id,
+                    'session_id': session_id,
+                    'timestamp': int(time.time())
+                }
+                
+                # 添加无障碍分析结果
+                if accessibility_result and accessibility_result.get('success'):
+                    response['accessibility'] = accessibility_result
+                
+                return response
+            else:
+                return {
+                    'success': False,
+                    'error': '拍摄照片失败',
+                    'user_id': user_id,
+                    'session_id': session_id
+                }
+                
+        except Exception as e:
+            logger.error(f"摄像头拍摄失败: {e}")
+            return {
+                'success': False,
+                'error': str(e),
+                'user_id': user_id,
+                'session_id': session_id
+            }
+    
+    async def record_microphone_audio(self, user_id: str, duration: float = 5.0, 
+                                    session_id: str = None) -> Dict[str, Any]:
+        """
+        使用麦克风录制音频
+        
+        Args:
+            user_id: 用户ID
+            duration: 录音时长（秒）
+            session_id: 会话ID
+            
+        Returns:
+            Dict: 录音结果
+        """
+        try:
+            # 确保设备管理器已初始化
+            if self.device_manager is None:
+                await self.initialize()
+            
+            if not self.device_manager:
+                return {
+                    'success': False,
+                    'error': '设备管理器不可用',
+                    'user_id': user_id,
+                    'session_id': session_id
+                }
+            
+            # 限制录音时长
+            duration = min(duration, 30.0)
+            
+            # 录制音频
+            result = await self.device_manager.record_audio(duration)
+            
+            if result:
+                # 使用无障碍服务进行语音识别
+                accessibility_result = None
+                if self.accessibility_client:
+                    try:
+                        accessibility_result = await self.accessibility_client.process_voice_input(
+                            audio_data=result['wav_data'],
+                            user_id=user_id,
+                            context="microphone_recording",
+                            language="zh-CN"
+                        )
+                    except Exception as e:
+                        logger.warning(f"语音无障碍识别失败: {e}")
+                
+                response = {
+                    'success': True,
+                    'audio_data': result,
+                    'user_id': user_id,
+                    'session_id': session_id,
+                    'timestamp': int(time.time())
+                }
+                
+                # 添加无障碍识别结果
+                if accessibility_result and accessibility_result.get('success'):
+                    response['accessibility'] = accessibility_result
+                    
+                    # 如果识别出文本，可以进一步处理
+                    recognized_text = accessibility_result.get('recognized_text', '')
+                    if recognized_text and session_id:
+                        # 将识别的文本作为聊天输入处理
+                        chat_result = await self.chat(user_id, recognized_text, session_id)
+                        response['chat_response'] = chat_result
+                
+                return response
+            else:
+                return {
+                    'success': False,
+                    'error': '录音失败',
+                    'user_id': user_id,
+                    'session_id': session_id
+                }
+                
+        except Exception as e:
+            logger.error(f"麦克风录音失败: {e}")
+            return {
+                'success': False,
+                'error': str(e),
+                'user_id': user_id,
+                'session_id': session_id
+            }
+    
+    async def capture_screen_image(self, user_id: str, region: Optional[tuple] = None,
+                                 session_id: str = None) -> Dict[str, Any]:
+        """
+        截取屏幕图像
+        
+        Args:
+            user_id: 用户ID
+            region: 截图区域 (x, y, width, height)
+            session_id: 会话ID
+            
+        Returns:
+            Dict: 截图结果
+        """
+        try:
+            # 确保设备管理器已初始化
+            if self.device_manager is None:
+                await self.initialize()
+            
+            if not self.device_manager:
+                return {
+                    'success': False,
+                    'error': '设备管理器不可用',
+                    'user_id': user_id,
+                    'session_id': session_id
+                }
+            
+            # 截取屏幕
+            result = await self.device_manager.capture_screen(region)
+            
+            if result:
+                # 使用无障碍服务进行屏幕阅读
+                accessibility_result = None
+                if self.accessibility_client:
+                    try:
+                        accessibility_result = await self.accessibility_client.provide_screen_reading(
+                            screen_data=result['image_base64'],
+                            user_id=user_id,
+                            context="screen_capture"
+                        )
+                    except Exception as e:
+                        logger.warning(f"屏幕无障碍阅读失败: {e}")
+                
+                response = {
+                    'success': True,
+                    'screen_data': result,
+                    'user_id': user_id,
+                    'session_id': session_id,
+                    'timestamp': int(time.time())
+                }
+                
+                # 添加无障碍阅读结果
+                if accessibility_result and accessibility_result.get('success'):
+                    response['accessibility'] = accessibility_result
+                
+                return response
+            else:
+                return {
+                    'success': False,
+                    'error': '屏幕截图失败',
+                    'user_id': user_id,
+                    'session_id': session_id
+                }
+                
+        except Exception as e:
+            logger.error(f"屏幕截图失败: {e}")
+            return {
+                'success': False,
+                'error': str(e),
+                'user_id': user_id,
+                'session_id': session_id
+            }
+    
+    async def get_device_status(self) -> Dict[str, Any]:
+        """
+        获取设备状态
+        
+        Returns:
+            Dict: 设备状态信息
+        """
+        try:
+            # 确保设备管理器已初始化
+            if self.device_manager is None:
+                await self.initialize()
+            
+            if self.device_manager:
+                return await self.device_manager.get_device_status()
+            else:
+                return {
+                    'camera': {'available': False, 'active': False},
+                    'microphone': {'available': False, 'recording': False},
+                    'screen': {'available': False, 'info': {}},
+                    'initialized': False,
+                    'error': '设备管理器不可用'
+                }
+                
+        except Exception as e:
+            logger.error(f"获取设备状态失败: {e}")
+            return {
+                'camera': {'available': False, 'active': False},
+                'microphone': {'available': False, 'recording': False},
+                'screen': {'available': False, 'info': {}},
+                'initialized': False,
+                'error': str(e)
+            }
+    
     async def close_session(self, session_id: str) -> bool:
         """
         关闭并清理会话
@@ -520,5 +1020,13 @@ class AgentManager:
         
         # 关闭模型工厂
         await self.model_factory.close()
+        
+        # 关闭无障碍服务客户端
+        if self.accessibility_client:
+            await self.accessibility_client.close()
+        
+        # 关闭设备管理器
+        if self.device_manager:
+            await self.device_manager.close()
         
         logger.info("智能体资源已清理") 

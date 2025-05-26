@@ -18,7 +18,7 @@ import asyncio
 from .fusion.engine import Feature
 from pkg.utils.config_loader import get_config
 from pkg.utils.metrics import get_metrics_collector
-from internal.agent.model_factory import ModelFactory
+from internal.agent.model_factory import get_model_factory
 
 # 协议导入
 from xiaoai_service.protos import four_diagnosis_pb2 as diagnosis_pb
@@ -39,8 +39,8 @@ class FeatureExtractor:
         self.config = get_config()
         self.metrics = get_metrics_collector()
         
-        # 设置模型工厂
-        self.model_factory = model_factory or ModelFactory()
+        # 设置模型工厂（将在异步方法中初始化）
+        self.model_factory = model_factory
         
         # 加载配置
         feature_config = self.config.get_section('feature_extraction', {})
@@ -64,6 +64,12 @@ class FeatureExtractor:
         }
         
         logger.info("四诊特征提取器初始化完成")
+    
+    async def initialize(self):
+        """异步初始化模型工厂"""
+        if self.model_factory is None:
+            self.model_factory = await get_model_factory()
+            logger.info("特征提取器模型工厂异步初始化完成")
     
     def _load_prompt_templates(self) -> Dict[str, str]:
         """加载提示语模板"""

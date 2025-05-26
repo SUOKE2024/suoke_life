@@ -1,0 +1,313 @@
+# 小艾智能体端到端测试配置
+# End-to-End Test Configuration for Xiaoai Agent
+
+# 测试环境配置
+environment:
+  # 服务地址
+  http_server:
+    host: "localhost"
+    port: 8000
+    base_url: "http://localhost:8000"
+    
+  websocket_server:
+    host: "localhost"
+    port: 8001
+    base_url: "ws://localhost:8001"
+    
+  # 超时配置
+  timeouts:
+    connection_timeout: 10
+    request_timeout: 30
+    scenario_timeout: 60
+    total_timeout: 300
+
+# 测试场景配置
+scenarios:
+  # 健康咨询完整流程
+  health_consultation:
+    enabled: true
+    timeout: 45
+    critical: true
+    retry_count: 2
+    test_data:
+      user_queries:
+        - "我最近感觉有些疲劳，睡眠质量不好，能帮我分析一下可能的原因吗？"
+        - "我想了解一下如何改善睡眠质量"
+        - "请给我一些健康建议"
+      expected_keywords:
+        - "疲劳"
+        - "睡眠"
+        - "建议"
+        - "健康"
+  
+  # 多模态设备访问流程
+  device_access:
+    enabled: true
+    timeout: 60
+    critical: true
+    retry_count: 1
+    test_data:
+      device_types:
+        - "camera"
+        - "microphone"
+        - "screen"
+      capture_settings:
+        quality: "medium"
+        format: "jpeg"
+        resolution: "640x480"
+  
+  # 网络优化功能验证
+  network_optimization:
+    enabled: true
+    timeout: 30
+    critical: false
+    retry_count: 2
+    test_data:
+      optimization_types:
+        - "compression"
+        - "http2"
+        - "websocket"
+      performance_thresholds:
+        compression_ratio: 0.3
+        latency_ms: 100
+        throughput_rps: 50
+  
+  # 并发用户处理能力
+  concurrent_users:
+    enabled: true
+    timeout: 45
+    critical: true
+    retry_count: 1
+    test_data:
+      user_count: 5
+      messages_per_user: 3
+      success_rate_threshold: 0.8
+      concurrent_timeout: 10
+  
+  # 错误处理和恢复
+  error_handling:
+    enabled: true
+    timeout: 30
+    critical: false
+    retry_count: 1
+    test_data:
+      error_scenarios:
+        - "network_interruption"
+        - "invalid_request"
+        - "timeout_handling"
+        - "malformed_data"
+      recovery_timeout: 5
+  
+  # 性能基准测试
+  performance_benchmark:
+    enabled: true
+    timeout: 60
+    critical: false
+    retry_count: 1
+    test_data:
+      performance_tests:
+        response_time:
+          sample_count: 10
+          threshold_ms: 1000
+        throughput:
+          concurrent_requests: 50
+          threshold_rps: 100
+        resource_usage:
+          cpu_threshold: 80
+          memory_threshold: 80
+        cache_performance:
+          hit_rate_threshold: 70
+
+# 测试数据配置
+test_data:
+  # 用户数据
+  users:
+    test_user_prefix: "e2e_test_user"
+    session_prefix: "e2e_session"
+    cleanup_after_test: true
+    
+  # 消息模板
+  message_templates:
+    health_queries:
+      - "我感觉身体不舒服，能帮我看看吗？"
+      - "最近总是头疼，是什么原因？"
+      - "我想做个健康检查"
+      - "请分析一下我的健康状况"
+    
+    device_requests:
+      - "请帮我拍张照片"
+      - "检查一下摄像头状态"
+      - "录制一段音频"
+      - "截取屏幕内容"
+    
+    chat_messages:
+      - "你好，小艾"
+      - "我需要帮助"
+      - "谢谢你的建议"
+      - "再见"
+
+# 验证规则配置
+validation:
+  # 响应验证
+  response:
+    required_fields:
+      - "success"
+      - "timestamp"
+    optional_fields:
+      - "data"
+      - "message"
+      - "error"
+    
+  # 性能验证
+  performance:
+    response_time_max: 5.0
+    memory_usage_max: 500  # MB
+    cpu_usage_max: 80     # %
+    
+  # 数据验证
+  data:
+    image_formats: ["jpeg", "png", "webp"]
+    audio_formats: ["wav", "mp3", "aac"]
+    max_file_size: 10485760  # 10MB
+
+# 报告配置
+reporting:
+  # 输出格式
+  formats:
+    - "console"
+    - "json"
+    - "html"
+  
+  # 报告详细程度
+  detail_level: "full"  # minimal, standard, full
+  
+  # 保存配置
+  save_results: true
+  results_directory: "test_results"
+  include_screenshots: false
+  include_logs: true
+  
+  # 评分标准
+  scoring:
+    excellent: 90
+    good: 80
+    average: 70
+    poor: 50
+
+# 环境特定配置
+environments:
+  development:
+    scenarios:
+      health_consultation:
+        timeout: 60
+      device_access:
+        enabled: false  # 开发环境可能没有设备
+      network_optimization:
+        timeout: 20
+    validation:
+      performance:
+        response_time_max: 10.0
+        
+  testing:
+    scenarios:
+      health_consultation:
+        timeout: 45
+      device_access:
+        enabled: true
+      concurrent_users:
+        test_data:
+          user_count: 3
+    validation:
+      performance:
+        response_time_max: 3.0
+        
+  staging:
+    scenarios:
+      health_consultation:
+        timeout: 30
+      device_access:
+        enabled: true
+      concurrent_users:
+        test_data:
+          user_count: 10
+    validation:
+      performance:
+        response_time_max: 2.0
+        
+  production:
+    scenarios:
+      health_consultation:
+        timeout: 20
+      device_access:
+        enabled: true
+      concurrent_users:
+        test_data:
+          user_count: 20
+      performance_benchmark:
+        test_data:
+          throughput:
+            concurrent_requests: 100
+            threshold_rps: 200
+    validation:
+      performance:
+        response_time_max: 1.0
+
+# 监控配置
+monitoring:
+  # 实时监控
+  real_time:
+    enabled: true
+    interval: 1  # 秒
+    metrics:
+      - "response_time"
+      - "memory_usage"
+      - "cpu_usage"
+      - "connection_count"
+  
+  # 告警配置
+  alerts:
+    enabled: true
+    thresholds:
+      error_rate: 10  # %
+      response_time: 5000  # ms
+      memory_usage: 80  # %
+      cpu_usage: 90  # %
+
+# 清理配置
+cleanup:
+  # 自动清理
+  auto_cleanup: true
+  
+  # 清理项目
+  items:
+    - "test_users"
+    - "test_sessions"
+    - "temporary_files"
+    - "cache_data"
+    - "log_files"
+  
+  # 保留配置
+  retention:
+    test_results: 30  # 天
+    log_files: 7      # 天
+    cache_data: 1     # 天
+
+# 调试配置
+debug:
+  # 调试模式
+  enabled: false
+  
+  # 详细日志
+  verbose_logging: false
+  
+  # 断点配置
+  breakpoints:
+    on_error: false
+    on_timeout: false
+    on_failure: false
+  
+  # 数据导出
+  export_data:
+    requests: false
+    responses: false
+    metrics: true 

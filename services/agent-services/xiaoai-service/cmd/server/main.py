@@ -40,7 +40,7 @@ from internal.four_diagnosis.feature_extractor import FeatureExtractor
 from internal.four_diagnosis.multimodal_fusion import MultimodalFusion
 from internal.four_diagnosis.syndrome_analyzer import SyndromeAnalyzer
 from internal.four_diagnosis.recommendation.health_advisor import HealthAdvisor
-from internal.agent.model_factory import ModelFactory
+from internal.agent.model_factory import get_model_factory
 
 # 导入工具类
 from pkg.utils.config_manager import get_config_manager
@@ -217,13 +217,17 @@ async def setup_core_components(server):
         server: gRPC服务器实例
     """
     # 创建模型工厂
-    model_factory = ModelFactory()
+    model_factory = await get_model_factory()
     
     # 创建四诊核心组件
     feature_extractor = FeatureExtractor()
     multimodal_fusion = MultimodalFusion()
     syndrome_analyzer = SyndromeAnalyzer(model_factory)
     health_advisor = HealthAdvisor(model_factory)
+    
+    # 异步初始化需要模型工厂的组件
+    await feature_extractor.initialize()
+    await syndrome_analyzer.initialize()
     
     # 创建集成客户端
     look_client = await get_look_service_client()

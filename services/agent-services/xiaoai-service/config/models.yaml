@@ -1,0 +1,355 @@
+# 系统预设大模型配置
+# 管理员可以通过此文件配置系统级别的大模型
+
+# 系统默认配置
+system_defaults:
+  # 默认模型优先级
+  primary_model: "system_openai"
+  fallback_model: "system_local"
+  
+  # 全局配置
+  global_settings:
+    enable_fallback: true
+    max_retries: 3
+    health_check_interval: 60  # 秒
+    cache_ttl: 300  # 秒
+    
+  # 安全配置
+  security:
+    encrypt_api_keys: true
+    api_key_rotation_days: 90
+    max_user_configs: 10
+
+# 系统预设模型配置
+models:
+  # OpenAI 配置
+  system_openai:
+    provider: "openai"
+    model_name: "gpt-4o-mini"
+    api_base: "https://api.openai.com/v1"
+    max_tokens: 4096
+    temperature: 0.7
+    enabled: true
+    priority: 1
+    rate_limit: 60
+    timeout: 30
+    description: "OpenAI GPT-4o-mini 模型，适合日常对话和医疗咨询"
+    features:
+      - "多语言支持"
+      - "医疗知识丰富"
+      - "响应速度快"
+    cost_per_1k_tokens:
+      input: 0.00015
+      output: 0.0006
+    
+  system_openai_gpt4:
+    provider: "openai"
+    model_name: "gpt-4o"
+    api_base: "https://api.openai.com/v1"
+    max_tokens: 8192
+    temperature: 0.7
+    enabled: false  # 默认关闭，成本较高
+    priority: 2
+    rate_limit: 30
+    timeout: 60
+    description: "OpenAI GPT-4o 模型，最强性能，适合复杂医疗分析"
+    features:
+      - "最强推理能力"
+      - "复杂医疗诊断"
+      - "多模态支持"
+    cost_per_1k_tokens:
+      input: 0.005
+      output: 0.015
+
+  # 智谱AI 配置
+  system_zhipu:
+    provider: "zhipu"
+    model_name: "glm-4"
+    api_base: "https://open.bigmodel.cn/api/paas/v4"
+    max_tokens: 4096
+    temperature: 0.7
+    enabled: true
+    priority: 3
+    rate_limit: 60
+    timeout: 30
+    description: "智谱AI GLM-4 模型，中文理解能力强"
+    features:
+      - "中文优化"
+      - "中医知识丰富"
+      - "本土化服务"
+    cost_per_1k_tokens:
+      input: 0.0001
+      output: 0.0002
+    extra_params:
+      do_sample: true
+      top_p: 0.8
+      
+  system_zhipu_air:
+    provider: "zhipu"
+    model_name: "glm-4-air"
+    api_base: "https://open.bigmodel.cn/api/paas/v4"
+    max_tokens: 4096
+    temperature: 0.7
+    enabled: true
+    priority: 4
+    rate_limit: 120
+    timeout: 20
+    description: "智谱AI GLM-4-Air 模型，轻量级高速版本"
+    features:
+      - "响应速度极快"
+      - "成本低廉"
+      - "适合高频调用"
+    cost_per_1k_tokens:
+      input: 0.00001
+      output: 0.00001
+
+  # 百度文心 配置
+  system_baidu:
+    provider: "baidu"
+    model_name: "ernie-bot-4"
+    api_base: "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/"
+    max_tokens: 4096
+    temperature: 0.7
+    enabled: true
+    priority: 5
+    rate_limit: 60
+    timeout: 30
+    description: "百度文心一言4.0，中文能力强，医疗知识丰富"
+    features:
+      - "中文原生支持"
+      - "医疗专业知识"
+      - "国产化部署"
+    cost_per_1k_tokens:
+      input: 0.0001
+      output: 0.0003
+    extra_params:
+      penalty_score: 1.0
+      system_role: "医疗助手"
+
+  # 本地模型配置
+  system_local_llama3_8b:
+    provider: "local"
+    model_name: "llama-3-8b"
+    api_base: "http://llm-service:8080/v1"
+    max_tokens: 4096
+    temperature: 0.7
+    enabled: true
+    priority: 6
+    rate_limit: 30
+    timeout: 60
+    description: "本地部署的 Llama-3-8B 模型，数据安全性高"
+    features:
+      - "本地部署"
+      - "数据不出域"
+      - "无API费用"
+    cost_per_1k_tokens:
+      input: 0.0
+      output: 0.0
+    extra_params:
+      quantization: "q4_k_m"
+      context_length: 4096
+      
+  system_local_llama3_70b:
+    provider: "local"
+    model_name: "llama-3-70b"
+    api_base: "http://llm-service:8080/v1"
+    max_tokens: 4096
+    temperature: 0.7
+    enabled: false  # 默认关闭，资源消耗大
+    priority: 7
+    rate_limit: 10
+    timeout: 120
+    description: "本地部署的 Llama-3-70B 模型，性能强劲"
+    features:
+      - "高性能推理"
+      - "本地部署"
+      - "适合复杂任务"
+    cost_per_1k_tokens:
+      input: 0.0
+      output: 0.0
+
+  # Anthropic Claude 配置（可选）
+  system_claude:
+    provider: "anthropic"
+    model_name: "claude-3-sonnet-20240229"
+    api_base: "https://api.anthropic.com"
+    max_tokens: 4096
+    temperature: 0.7
+    enabled: false  # 默认关闭
+    priority: 8
+    rate_limit: 30
+    timeout: 30
+    description: "Anthropic Claude-3 Sonnet，安全性和准确性高"
+    features:
+      - "高安全性"
+      - "医疗伦理意识强"
+      - "准确性高"
+    cost_per_1k_tokens:
+      input: 0.003
+      output: 0.015
+
+  # Google Gemini 配置（可选）
+  system_gemini:
+    provider: "google"
+    model_name: "gemini-pro"
+    api_base: "https://generativelanguage.googleapis.com/v1beta"
+    max_tokens: 4096
+    temperature: 0.7
+    enabled: false  # 默认关闭
+    priority: 9
+    rate_limit: 60
+    timeout: 30
+    description: "Google Gemini Pro，多模态能力强"
+    features:
+      - "多模态支持"
+      - "图像理解"
+      - "代码生成"
+    cost_per_1k_tokens:
+      input: 0.0005
+      output: 0.0015
+
+# 模型分组配置
+model_groups:
+  # 高性能组（适合复杂医疗分析）
+  high_performance:
+    models:
+      - "system_openai_gpt4"
+      - "system_local_llama3_70b"
+      - "system_claude"
+    description: "高性能模型组，适合复杂医疗诊断和分析"
+    
+  # 标准组（日常使用）
+  standard:
+    models:
+      - "system_openai"
+      - "system_zhipu"
+      - "system_baidu"
+    description: "标准模型组，适合日常医疗咨询"
+    
+  # 经济组（成本优化）
+  economy:
+    models:
+      - "system_zhipu_air"
+      - "system_local_llama3_8b"
+    description: "经济模型组，成本低廉，适合高频调用"
+    
+  # 本地组（数据安全）
+  local_models:
+    models:
+      - "system_local_llama3_8b"
+      - "system_local_llama3_70b"
+    description: "本地模型组，数据不出域，安全性高"
+
+# 使用场景配置
+use_cases:
+  # 四诊协调
+  four_diagnosis:
+    preferred_models:
+      - "system_openai"
+      - "system_zhipu"
+    fallback_models:
+      - "system_local_llama3_8b"
+    requirements:
+      max_tokens: 2048
+      temperature: 0.7
+      
+  # 健康咨询
+  health_consultation:
+    preferred_models:
+      - "system_openai"
+      - "system_baidu"
+    fallback_models:
+      - "system_zhipu_air"
+    requirements:
+      max_tokens: 1024
+      temperature: 0.8
+      
+  # 医疗知识问答
+  medical_qa:
+    preferred_models:
+      - "system_openai_gpt4"
+      - "system_claude"
+    fallback_models:
+      - "system_openai"
+    requirements:
+      max_tokens: 4096
+      temperature: 0.5
+      
+  # 症状分析
+  symptom_analysis:
+    preferred_models:
+      - "system_openai"
+      - "system_zhipu"
+    fallback_models:
+      - "system_local_llama3_8b"
+    requirements:
+      max_tokens: 2048
+      temperature: 0.6
+
+# 监控和告警配置
+monitoring:
+  # 健康检查配置
+  health_check:
+    enabled: true
+    interval: 60  # 秒
+    timeout: 10   # 秒
+    failure_threshold: 3
+    
+  # 性能监控
+  performance:
+    track_response_time: true
+    track_token_usage: true
+    track_error_rate: true
+    alert_thresholds:
+      response_time_ms: 5000
+      error_rate_percent: 5
+      
+  # 成本监控
+  cost_tracking:
+    enabled: true
+    daily_budget_usd: 100
+    monthly_budget_usd: 2000
+    alert_threshold_percent: 80
+
+# 安全配置
+security:
+  # API密钥管理
+  api_keys:
+    encryption_enabled: true
+    rotation_enabled: true
+    rotation_interval_days: 90
+    
+  # 访问控制
+  access_control:
+    require_authentication: true
+    rate_limiting_enabled: true
+    ip_whitelist_enabled: false
+    
+  # 数据保护
+  data_protection:
+    log_sanitization: true
+    pii_detection: true
+    audit_logging: true
+
+# 实验性功能
+experimental:
+  # 自动模型选择
+  auto_model_selection:
+    enabled: false
+    criteria:
+      - "response_time"
+      - "cost"
+      - "accuracy"
+      
+  # 模型微调
+  fine_tuning:
+    enabled: false
+    supported_providers:
+      - "openai"
+      - "local"
+      
+  # 多模型集成
+  ensemble:
+    enabled: false
+    voting_strategy: "majority"
+    confidence_threshold: 0.8 

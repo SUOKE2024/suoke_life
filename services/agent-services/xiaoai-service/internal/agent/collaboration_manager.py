@@ -14,7 +14,7 @@ import asyncio
 from typing import Dict, List, Any, Optional, Tuple
 
 # 导入项目依赖
-from .model_factory import ModelFactory
+from .model_factory import get_model_factory
 from pkg.utils.config_loader import get_config
 from pkg.utils.metrics import get_metrics_collector
 
@@ -77,8 +77,8 @@ class CollaborationManager:
         self.config = get_config()
         self.metrics = get_metrics_collector()
         
-        # 设置模型工厂
-        self.model_factory = model_factory or ModelFactory()
+        # 设置模型工厂（将在异步方法中初始化）
+        self.model_factory = model_factory
         
         # 加载配置
         collaboration_config = self.config.get_section('collaboration', {})
@@ -102,6 +102,12 @@ class CollaborationManager:
         self.agent_clients = {}
         
         logger.info("智能体协作管理器初始化完成")
+    
+    async def initialize(self):
+        """异步初始化模型工厂"""
+        if self.model_factory is None:
+            self.model_factory = await get_model_factory()
+            logger.info("协作管理器模型工厂异步初始化完成")
     
     def register_base_capabilities(self):
         """注册基础智能体能力"""

@@ -28,7 +28,7 @@ class SessionRepository:
         # 获取MongoDB配置
         mongodb_config = self.config.get_section('database.mongodb')
         self.mongodb_uri = mongodb_config.get('uri', 'mongodb://localhost:27017/xiaoai_db')
-        self.session_collection_name = mongodb_config.get_nested('collections', 'session_data', default='session_data')
+        self.session_collection_name = self.config.get_nested('database', 'mongodb', 'collections', 'session_data', default='session_data')
         
         # 获取会话配置
         conversation_config = self.config.get_section('conversation')

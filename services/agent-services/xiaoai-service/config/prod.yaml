@@ -1,0 +1,243 @@
+# 小艾智能体服务生产环境配置文件
+
+# 服务配置
+service:
+  name: "xiaoai-service"
+  version: "0.1.0"
+  description: "索克生活APP小艾智能体服务"
+  host: "0.0.0.0"
+  port: 50053
+  debug: false
+
+# 日志配置
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/xiaoai-service.log"
+  max_size_mb: 100
+  backup_count: 5
+
+# 监控配置
+monitoring:
+  prometheus:
+    enabled: true
+    path: "/metrics"
+    port: 51053
+  health_check:
+    enabled: true
+    path: "/health"
+
+# 性能配置
+performance:
+  max_workers: 8
+  thread_pool_size: 8
+  max_concurrent_requests: 100
+  enable_batching: true
+  queue_size: 32
+
+# 多模态配置
+multimodal:
+  voice:
+    sample_rate: 16000
+    channels: 1
+    language_detection: true
+    dialect_support: true
+    noise_reduction: true
+  image:
+    max_resolution: [2048, 1536]
+    supported_formats: ["jpg", "png", "webp"]
+    preprocessing: true
+  text:
+    max_length: 4096
+    language_detection: true
+
+# AI模型配置
+models:
+  llm:
+    primary_model: "deepseek-chat"
+    fallback_model: "gpt-4o-mini"
+    api_key: "sk-26ac526b8c3b41c2a39bd80a156aaa68"
+    api_base: "https://api.deepseek.com/v1"
+    org_id: ""
+    temperature: 0.7
+    max_tokens: 2048
+    streaming: false
+    
+  # DeepSeek 特定配置
+  deepseek:
+    api_key: "sk-26ac526b8c3b41c2a39bd80a156aaa68"
+    api_base: "https://api.deepseek.com/v1"
+    model: "deepseek-chat"
+    temperature: 0.7
+    max_tokens: 2048
+    top_p: 0.95
+    frequency_penalty: 0.0
+    presence_penalty: 0.0
+    
+  # OpenAI 备用配置
+  openai:
+    api_key: "${OPENAI_API_KEY:}"
+    api_base: "https://api.openai.com/v1"
+    model: "gpt-4o-mini"
+    temperature: 0.7
+    max_tokens: 2048
+    
+  local_llm:
+    endpoint_url: ""
+    available_models: []
+    default_model: "deepseek-chat"
+    model_path: ""
+    quantization: "q4_k_m"
+    context_size: 4096
+    temperature: 0.7
+    max_tokens: 1024
+    
+  embedding:
+    model: "text-embedding-ada-002"
+    dimensions: 1536
+    normalize: true
+    
+  speech:
+    asr_model: "whisper-1"
+    tts_model: "tts-1"
+    dialect_classification: "auto"
+    
+  vision:
+    model: "gpt-4-vision-preview"
+    input_size: [512, 512]
+    batch_size: 8
+    device: "cuda"
+
+# 数据库配置
+database:
+  postgres:
+    enabled: false
+    uri: "${POSTGRES_URI:}"
+    pool_size: 10
+    max_overflow: 20
+    
+  mongodb:
+    enabled: false
+    uri: "${MONGODB_URI:}"
+    collections:
+      user_profiles: "user_profiles"
+      chat_history: "chat_history"
+      diagnosis_reports: "diagnosis_reports"
+      session_data: "session_data"
+      
+  redis:
+    enabled: false
+    uri: "${REDIS_URI:}"
+    ttl_seconds: 3600
+    max_connections: 10
+
+# 文件存储配置（生产环境也可使用）
+file_storage:
+  enabled: true
+  base_path: "data"
+  session_file: "data/sessions.json"
+  diagnosis_file: "data/diagnosis.json"
+  user_profiles_file: "data/user_profiles.json"
+  chat_history_file: "data/chat_history.json"
+
+# 会话配置
+conversation:
+  max_history_turns: 20
+  persist_history: true
+  context_window_size: 4096
+  system_prompt: "你是小艾，索克生活APP的智能体，专注于中医健康咨询与四诊协调。你具备丰富的中医理论知识，能够进行望、闻、问、切四诊分析，为用户提供个性化的健康建议和调理方案。请用温和、专业的语气与用户交流。"
+  session_timeout_minutes: 30
+
+# 四诊协调配置
+four_diagnosis:
+  coordinator_mode: "parallel"
+  confidence_threshold: 0.7
+  timeout_seconds: 30
+  retry_count: 3
+  
+  looking:
+    enabled: true
+    base_weight: 1.0
+    
+  listening:
+    enabled: true
+    base_weight: 1.0
+    
+  inquiry:
+    enabled: true
+    base_weight: 1.5
+    
+  palpation:
+    enabled: true
+    base_weight: 1.0
+
+# 集成服务配置
+integrations:
+  look_service:
+    enabled: false
+    host: "localhost"
+    port: 50051
+    timeout_ms: 5000
+    retry_count: 3
+    connection_pool_size: 5
+    
+  listen_service:
+    enabled: false
+    host: "localhost"
+    port: 50052
+    timeout_ms: 5000
+    retry_count: 3
+    connection_pool_size: 5
+    
+  inquiry_service:
+    enabled: false
+    host: "localhost"
+    port: 50054
+    timeout_ms: 5000
+    retry_count: 3
+    connection_pool_size: 5
+    
+  palpation_service:
+    enabled: false
+    host: "localhost"
+    port: 50055
+    timeout_ms: 5000
+    retry_count: 3
+    connection_pool_size: 5
+    
+  med_knowledge:
+    enabled: false
+    host: "localhost"
+    port: 50056
+    timeout_ms: 5000
+    retry_count: 3
+    connection_pool_size: 5
+    
+  rag_service:
+    enabled: false
+    host: "localhost"
+    port: 50057
+    timeout_ms: 5000
+    retry_count: 3
+    connection_pool_size: 5
+
+# 生产环境特定配置
+development:
+  mock_services: false  # 关闭模拟服务
+  mock_data: false      # 使用真实数据
+  fast_startup: false   # 完整启动模式
+  skip_validation: false # 启用所有验证
+  debug_mode: false     # 关闭调试模式
+
+# 安全配置
+security:
+  api_key_validation: true
+  rate_limiting:
+    enabled: true
+    requests_per_minute: 60
+    burst_size: 10
+  cors:
+    enabled: true
+    allowed_origins: ["*"]
+    allowed_methods: ["GET", "POST"]
+    allowed_headers: ["*"] 

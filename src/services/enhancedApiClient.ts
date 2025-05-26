@@ -2,7 +2,7 @@
 // 支持智能重试、缓存、熔断器、离线队列等高级功能
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import NetInfo from "@react-native-netinfo";
+import NetInfo from "@react-native-community/netinfo";
 import CryptoJS from 'crypto-js';
 
 interface RetryConfig {
@@ -82,8 +82,34 @@ interface EventListener {
   (event: string, ...args: any[]): void;
 }
 
-class EnhancedApiClient {
+// 简单的事件发射器基类
+class EventEmitter {
   private eventListeners: Map<string, EventListener[]> = new Map();
+
+  emit(event: string, ...args: any[]): void {
+    const listeners = this.eventListeners.get(event) || [];
+    listeners.forEach(listener => listener(event, ...args));
+  }
+
+  on(event: string, listener: EventListener): void {
+    if (!this.eventListeners.has(event)) {
+      this.eventListeners.set(event, []);
+    }
+    this.eventListeners.get(event)!.push(listener);
+  }
+
+  off(event: string, listener: EventListener): void {
+    const listeners = this.eventListeners.get(event);
+    if (listeners) {
+      const index = listeners.indexOf(listener);
+      if (index > -1) {
+        listeners.splice(index, 1);
+      }
+    }
+  }
+}
+
+class EnhancedApiClient extends EventEmitter {
   private cache = new Map<string, any>();
   private requestQueue: RequestQueue[] = [];
   private isOnline = true;
@@ -176,7 +202,7 @@ class EnhancedApiClient {
       throw new Error(`Circuit breaker is open for ${endpoint}`);
     }
 
-    let lastError: Error;
+    let lastError: Error = new Error('Unknown error');
     
     for (let attempt = 1; attempt <= this.retryConfig.maxAttempts; attempt++) {
       try {

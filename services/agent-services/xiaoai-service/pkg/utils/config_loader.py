@@ -29,11 +29,14 @@ class ConfigLoader:
         
         # 如果未指定配置路径，尝试从默认位置加载
         if not config_path:
-            # 尝试常见的配置文件位置
+            # 尝试常见的配置文件位置，优先使用开发配置
             possible_paths = [
+                "config/dev.yaml",  # 优先使用开发配置
                 "config/config.yaml",
                 "config.yaml",
+                "../config/dev.yaml",
                 "../config/config.yaml",
+                os.path.join(os.path.dirname(__file__), "../../config/dev.yaml"),
                 os.path.join(os.path.dirname(__file__), "../../config/config.yaml")
             ]
             

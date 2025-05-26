@@ -1,0 +1,70 @@
+# FastAPI 核心框架
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+pydantic-settings==2.1.0
+
+# Redis 缓存
+redis==5.0.1
+aioredis==2.0.1
+
+# HTTP 客户端
+httpx==0.25.2
+aiohttp==3.9.1
+requests==2.31.0
+
+# 数据库
+sqlalchemy==2.0.23
+alembic==1.13.1
+asyncpg==0.29.0
+
+# 健康平台 SDK
+# Apple HealthKit (通过第三方库)
+healthkit-to-sqlite==1.0.1
+
+# Google Fit API
+google-api-python-client==2.108.0
+google-auth-httplib2==0.1.1
+google-auth-oauthlib==1.1.0
+
+# Fitbit API
+fitbit==0.3.1
+
+# 小米运动 API (第三方)
+xiaomi-miio==0.5.12
+
+# 华为健康 API (模拟)
+huawei-health-sdk==1.0.0
+
+# 微信运动 API
+wechat-sdk==0.6.3
+
+# 支付宝运动 API
+alipay-sdk-python==3.7.1
+
+# 其他工具
+celery==5.3.4
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-multipart==0.0.6
+email-validator==2.1.0
+
+# 监控和日志
+prometheus-client==0.19.0
+structlog==23.2.0
+sentry-sdk[fastapi]==1.38.0
+
+# 测试
+pytest==7.4.3
+pytest-asyncio==0.21.1
+pytest-cov==4.1.0
+httpx==0.25.2
+
+# 开发工具
+black==23.11.0
+isort==5.12.0
+flake8==6.1.0
+mypy==1.7.1
+
+# 环境配置
+python-dotenv==1.0.0 

@@ -7,10 +7,19 @@ import {
   TouchableOpacity,
   Alert,
   FlatList,
+  Modal,
+  ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from '../../components/common/Icon';
 import { colors } from '../../constants/theme';
+import XiaoaiChatInterface from './components/XiaoaiChatInterface';
+import DiagnosisModal from './components/DiagnosisModal';
+import EcoServices from './components/EcoServices';
+import SystemMonitorDashboard from './components/SystemMonitorDashboard';
+import WellnessExperience from './components/WellnessExperience';
+import AgentChatInterface, { AgentType } from '../../components/common/AgentChatInterface';
+import { DiagnosisType } from '../../types';
 
 // 服务类型
 interface ServiceItem {
@@ -163,7 +172,15 @@ const OTHER_SERVICES: ServiceItem[] = [
 
 const SuokeScreen: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [xiaoaiChatVisible, setXiaoaiChatVisible] = useState(false);
   const [xiaokeChatVisible, setXiaokeChatVisible] = useState(false);
+  const [accessibilityEnabled, setAccessibilityEnabled] = useState(false);
+  const [diagnosisModalVisible, setDiagnosisModalVisible] = useState(false);
+  const [selectedDiagnosisService, setSelectedDiagnosisService] = useState<ServiceItem | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [ecoServicesVisible, setEcoServicesVisible] = useState(false);
+  const [monitorDashboardVisible, setMonitorDashboardVisible] = useState(false);
+  const [wellnessExperienceVisible, setWellnessExperienceVisible] = useState(false);
 
   // 所有服务
   const allServices = [...DIAGNOSIS_SERVICES, ...OTHER_SERVICES];
@@ -177,6 +194,7 @@ const SuokeScreen: React.FC = () => {
   const categories = [
     { key: 'all', label: '全部', icon: 'view-grid' },
     { key: 'diagnosis', label: '四诊', icon: 'stethoscope' },
+    { key: 'eco', label: '生态服务', icon: 'leaf' },
     { key: 'product', label: '产品', icon: 'package-variant' },
     { key: 'service', label: '服务', icon: 'medical-bag' },
     { key: 'subscription', label: '订阅', icon: 'calendar-check' },
@@ -185,6 +203,36 @@ const SuokeScreen: React.FC = () => {
     { key: 'custom', label: '定制', icon: 'cog' },
     { key: 'supplier', label: '供应商', icon: 'truck' }
   ];
+
+  // 与小艾对话
+  const chatWithXiaoai = async () => {
+    try {
+      console.log('🤖 启动小艾健康诊断对话...');
+      
+      // 初始化小艾对话会话
+      const response = await fetch('http://localhost:8080/api/agents/xiaoai/init', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: 'current_user_id',
+          sessionType: 'health_diagnosis',
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('✅ 小艾对话会话初始化成功:', data);
+        setXiaoaiChatVisible(true);
+      } else {
+        throw new Error('初始化对话会话失败');
+      }
+    } catch (error) {
+      console.error('❌ 启动小艾对话失败:', error);
+      Alert.alert('连接失败', '无法连接到小艾服务，请稍后重试');
+    }
+  };
 
   // 与小克对话
   const chatWithXiaoke = () => {
@@ -207,42 +255,43 @@ const SuokeScreen: React.FC = () => {
 
   // 选择服务
   const selectService = (service: ServiceItem) => {
-    if (!service.available) {
-      Alert.alert('服务暂不可用', '该服务正在准备中，敬请期待！');
-      return;
-    }
-
     if (service.category === 'diagnosis') {
-      startDiagnosisService(service);
+      // 四诊服务使用专门的模态框
+      setSelectedDiagnosisService(service);
+      setDiagnosisModalVisible(true);
     } else {
+      // 其他服务显示信息弹窗
       Alert.alert(
         service.title,
-        `${service.description}\n\n主要功能：\n${service.features.map(f => `• ${f}`).join('\n')}\n\n${service.price ? `价格：${service.price}` : ''}`,
+        `${service.description}\n\n包含功能：\n${service.features.map(f => `• ${f}`).join('\n')}${service.price ? `\n\n价格：${service.price}` : ''}\n\n是否使用此服务？`,
         [
-          { text: '了解更多', onPress: () => console.log(`Learn more about ${service.id}`) },
-          { text: '立即使用', onPress: () => useService(service) }
+          { text: '取消', style: 'cancel' },
+          { text: '使用服务', onPress: () => useService(service) }
         ]
       );
     }
   };
 
-  // 开始诊断服务
-  const startDiagnosisService = (service: ServiceItem) => {
-    Alert.alert(
-      `开始${service.title}`,
-      `${service.description}\n\n包含功能：\n${service.features.map(f => `• ${f}`).join('\n')}\n\n价格：${service.price}\n\n是否开始诊断？`,
-      [
-        { text: '取消', style: 'cancel' },
-        { text: '开始诊断', onPress: () => performDiagnosis(service) }
-      ]
-    );
+  // 开始诊断服务（现在由DiagnosisModal处理）
+  const startDiagnosisService = async (service: ServiceItem) => {
+    // 这个函数现在主要用于向后兼容，实际逻辑在DiagnosisModal中
+    console.log(`Starting diagnosis service: ${service.id}`);
   };
 
-  // 执行诊断
-  const performDiagnosis = (service: ServiceItem) => {
-    Alert.alert('诊断开始', `正在启动${service.title}，请按照指引完成诊断过程...`);
-    // 这里将集成实际的四诊服务
-    console.log(`Starting diagnosis service: ${service.id}`);
+  // 获取诊断类型
+  const getDiagnosisType = (serviceId: string): DiagnosisType => {
+    switch (serviceId) {
+      case 'look_diagnosis':
+        return 'inspection';
+      case 'listen_diagnosis':
+        return 'auscultation';
+      case 'inquiry_diagnosis':
+        return 'inquiry';
+      case 'palpation_diagnosis':
+        return 'palpation';
+      default:
+        return 'inquiry';
+    }
   };
 
   // 使用服务
@@ -267,7 +316,13 @@ const SuokeScreen: React.FC = () => {
             styles.categoryButton,
             selectedCategory === category.key && styles.activeCategoryButton
           ]}
-          onPress={() => setSelectedCategory(category.key)}
+          onPress={() => {
+            if (category.key === 'eco') {
+              setEcoServicesVisible(true);
+            } else {
+              setSelectedCategory(category.key);
+            }
+          }}
         >
           <Icon 
             name={category.icon} 
@@ -337,10 +392,30 @@ const SuokeScreen: React.FC = () => {
           <Text style={styles.title}>SUOKE 服务</Text>
           <Text style={styles.subtitle}>专业健康服务平台</Text>
         </View>
-        <TouchableOpacity style={styles.xiaokeChatButton} onPress={chatWithXiaoke}>
-          <Text style={styles.xiaokeChatEmoji}>👨‍⚕️</Text>
-          <Text style={styles.xiaokeChatText}>小克</Text>
-        </TouchableOpacity>
+        <View style={styles.chatButtons}>
+          <TouchableOpacity style={styles.xiaokeChatButton} onPress={chatWithXiaoai}>
+            <Text style={styles.xiaokeChatEmoji}>🤖</Text>
+            <Text style={styles.xiaokeChatText}>小艾</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.xiaokeChatButton} onPress={chatWithXiaoke}>
+            <Text style={styles.xiaokeChatEmoji}>👨‍⚕️</Text>
+            <Text style={styles.xiaokeChatText}>小克</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={styles.xiaokeChatButton} 
+            onPress={() => setMonitorDashboardVisible(true)}
+          >
+            <Text style={styles.xiaokeChatEmoji}>📊</Text>
+            <Text style={styles.xiaokeChatText}>监控</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={styles.xiaokeChatButton} 
+            onPress={() => setWellnessExperienceVisible(true)}
+          >
+            <Text style={styles.xiaokeChatEmoji}>🏔️</Text>
+            <Text style={styles.xiaokeChatText}>山水养生</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* 小克助手卡片 */}
@@ -370,6 +445,67 @@ const SuokeScreen: React.FC = () => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.servicesContent}
       />
+
+      {/* 小艾聊天界面 */}
+      <XiaoaiChatInterface
+        visible={xiaoaiChatVisible}
+        onClose={() => setXiaoaiChatVisible(false)}
+        userId="current_user"
+      />
+
+      {/* 四诊模态框 */}
+      {selectedDiagnosisService && (
+        <DiagnosisModal
+          visible={diagnosisModalVisible}
+          onClose={() => {
+            setDiagnosisModalVisible(false);
+            setSelectedDiagnosisService(null);
+          }}
+          diagnosisType={getDiagnosisType(selectedDiagnosisService.id)}
+          title={selectedDiagnosisService.title}
+          description={selectedDiagnosisService.description}
+        />
+      )}
+
+      {/* 生态服务模态框 */}
+      <EcoServices
+        visible={ecoServicesVisible}
+        onClose={() => setEcoServicesVisible(false)}
+      />
+
+      {/* 小克对话界面 */}
+      <AgentChatInterface
+        visible={xiaokeChatVisible}
+        onClose={() => setXiaokeChatVisible(false)}
+        agentType="xiaoke"
+        userId="current_user_id"
+        accessibilityEnabled={accessibilityEnabled}
+      />
+
+      {/* 系统监控仪表板 */}
+      <SystemMonitorDashboard
+        visible={monitorDashboardVisible}
+        onClose={() => setMonitorDashboardVisible(false)}
+      />
+
+      {/* 山水养生体验 */}
+      <WellnessExperience
+        visible={wellnessExperienceVisible}
+        onClose={() => setWellnessExperienceVisible(false)}
+      />
+
+      {/* 诊断加载中 */}
+      {loading && (
+        <Modal
+          visible={loading}
+          transparent={true}
+          animationType="fade"
+        >
+          <View style={styles.loadingOverlay}>
+            <ActivityIndicator size="large" color={colors.primary} />
+          </View>
+        </Modal>
+      )}
     </SafeAreaView>
   );
 };
@@ -398,9 +534,14 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     marginTop: 2,
   },
+  chatButtons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   xiaokeChatButton: {
     alignItems: 'center',
     padding: 8,
+    marginLeft: 8,
   },
   xiaokeChatEmoji: {
     fontSize: 24,
@@ -574,6 +715,12 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: 10,
     fontWeight: '600',
+  },
+  loadingOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
 });
 

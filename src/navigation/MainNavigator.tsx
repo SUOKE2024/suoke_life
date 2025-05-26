@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from '../components/common/Icon';
 // import { useTranslation } from 'react-i18next';
 
 // 导入屏幕组件
@@ -13,6 +13,9 @@ import ExploreScreen from '../screens/explore/ExploreScreen';
 
 // 导入详情屏幕
 import { SettingsScreen } from '../screens/profile/SettingsScreen';
+import { ServiceStatusScreen } from '../screens/profile/ServiceStatusScreen';
+import { ServiceManagementScreen } from '../screens/profile/ServiceManagementScreen';
+import { DeveloperPanelScreen } from '../screens/profile/DeveloperPanelScreen';
 
 import { colors } from '../constants/theme';
 
@@ -29,6 +32,9 @@ export type MainTabParamList = {
 export type MainStackParamList = {
   MainTabs: undefined;
   Settings: undefined;
+  ServiceStatus: undefined;
+  ServiceManagement: undefined;
+  DeveloperPanel: undefined;
 };
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
@@ -158,6 +164,30 @@ export const MainNavigator: React.FC = () => {
       <Stack.Screen
         name="Settings"
         component={SettingsScreen}
+        options={{
+          animation: 'slide_from_right',
+        }}
+      />
+
+      <Stack.Screen
+        name="ServiceStatus"
+        component={ServiceStatusScreen}
+        options={{
+          animation: 'slide_from_right',
+        }}
+      />
+
+      <Stack.Screen
+        name="ServiceManagement"
+        component={ServiceManagementScreen}
+        options={{
+          animation: 'slide_from_right',
+        }}
+      />
+
+      <Stack.Screen
+        name="DeveloperPanel"
+        component={DeveloperPanelScreen}
         options={{
           animation: 'slide_from_right',
         }}

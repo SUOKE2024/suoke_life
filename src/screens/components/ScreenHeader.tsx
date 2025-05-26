@@ -8,7 +8,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from '../../components/common/Icon';
 import { colors, spacing, fonts } from '../../constants/theme';
 
 interface ScreenHeaderProps {

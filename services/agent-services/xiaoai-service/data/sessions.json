@@ -1,0 +1,239 @@
+{
+  "test_session_123": {
+    "session_id": "test_session_123",
+    "user_id": "test_user_456",
+    "messages": [
+      {
+        "role": "user",
+        "content": "你好"
+      },
+      {
+        "role": "assistant",
+        "content": "您好！我是小艾"
+      }
+    ],
+    "metadata": {
+      "updated": true
+    },
+    "last_active": 1748225778
+  },
+  "test_chat_session": {
+    "session_id": "test_chat_session",
+    "user_id": "test_user",
+    "history": [
+      {
+        "user_message": "你好，我想咨询健康问题",
+        "assistant_message": "从中医角度来看，您的症状可能与体质有关。建议您多喝温水，避免生冷食物。",
+        "timestamp": 1748224556
+      },
+      {
+        "user_message": "你好，我想咨询健康问题",
+        "assistant_message": "我理解您的担心。让我为您详细分析一下症状，并提供相应的调理建议。",
+        "timestamp": 1748224798
+      },
+      {
+        "user_message": "你好，我想咨询健康问题",
+        "assistant_message": "从中医角度来看，您的症状可能与体质有关。建议您多喝温水，避免生冷食物。",
+        "timestamp": 1748225778
+      }
+    ],
+    "created_at": 1748224526,
+    "last_active": 1748225778,
+    "metadata": {}
+  },
+  "test_deepseek_session": {
+    "session_id": "test_deepseek_session",
+    "user_id": "test_user_deepseek",
+    "history": [
+      {
+        "user_message": "你好，我想了解一下中医养生的基本原则。",
+        "assistant_message": "从中医角度来看，您的症状可能与体质有关。建议您多喝温水，避免生冷食物。",
+        "timestamp": 1748225159
+      },
+      {
+        "user_message": "你好，我想了解一下中医养生的基本原则。",
+        "assistant_message": "根据您的描述，建议您注意休息，保持良好的作息习惯。如有需要，我可以为您安排四诊检查。",
+        "timestamp": 1748225283
+      }
+    ],
+    "created_at": 1748225159,
+    "last_active": 1748225283,
+    "metadata": {}
+  },
+  "test_deepseek_session_1": {
+    "session_id": "test_deepseek_session_1",
+    "user_id": "test_user_deepseek",
+    "history": [
+      {
+        "user_message": "你好，我想了解一下中医的五脏六腑理论。",
+        "assistant_message": "根据您的描述，建议您注意休息，保持良好的作息习惯。如有需要，我可以为您安排四诊检查。",
+        "timestamp": 1748225348
+      },
+      {
+        "user_message": "你好，我想了解一下中医的五脏六腑理论。",
+        "assistant_message": "从中医角度来看，您的症状可能与体质有关。建议您多喝温水，避免生冷食物。",
+        "timestamp": 1748225447
+      }
+    ],
+    "created_at": 1748225348,
+    "last_active": 1748225447,
+    "metadata": {}
+  },
+  "test_deepseek_session_2": {
+    "session_id": "test_deepseek_session_2",
+    "user_id": "test_user_deepseek",
+    "history": [
+      {
+        "user_message": "我最近总是感到头晕、乏力，还有点心悸，从中医角度应该怎么调理？",
+        "assistant_message": "您好！我是小艾，很高兴为您提供健康咨询服务。请告诉我您的具体情况，我会根据中医理论为您分析。",
+        "timestamp": 1748225349
+      },
+      {
+        "user_message": "我最近总是感到头晕、乏力，还有点心悸，从中医角度应该怎么调理？",
+        "assistant_message": "这种情况在中医理论中比较常见，通过适当的调理可以得到改善。",
+        "timestamp": 1748225447
+      }
+    ],
+    "created_at": 1748225348,
+    "last_active": 1748225447,
+    "metadata": {}
+  },
+  "test_forced_session": {
+    "session_id": "test_forced_session",
+    "user_id": "test_user_forced",
+    "history": [],
+    "created_at": 1748225623,
+    "last_active": 1748225623,
+    "metadata": {}
+  },
+  "switch_test_1": {
+    "session_id": "switch_test_1",
+    "user_id": "test_user_switch",
+    "history": [
+      {
+        "user_message": "请简单介绍一下中医的阴阳理论。",
+        "assistant_message": "根据您的描述，建议您注意休息，保持良好的作息习惯。如有需要，我可以为您安排四诊检查。",
+        "timestamp": 1748226351
+      }
+    ],
+    "created_at": 1748226350,
+    "last_active": 1748226351,
+    "metadata": {}
+  },
+  "switch_test_2": {
+    "session_id": "switch_test_2",
+    "user_id": "test_user_switch",
+    "history": [],
+    "created_at": 1748226356,
+    "last_active": 1748226356,
+    "metadata": {}
+  },
+  "switch_test_3": {
+    "session_id": "switch_test_3",
+    "user_id": "test_user_switch",
+    "history": [
+      {
+        "user_message": "请解释中医的气血理论。",
+        "assistant_message": "我理解您的担心。让我为您详细分析一下症状，并提供相应的调理建议。",
+        "timestamp": 1748226357
+      }
+    ],
+    "created_at": 1748226356,
+    "last_active": 1748226357,
+    "metadata": {}
+  },
+  "switch_test_4": {
+    "session_id": "switch_test_4",
+    "user_id": "test_user_switch",
+    "history": [
+      {
+        "user_message": "总结一下中医的基本理论体系。",
+        "assistant_message": "从中医角度来看，您的症状可能与体质有关。建议您多喝温水，避免生冷食物。",
+        "timestamp": 1748226357
+      }
+    ],
+    "created_at": 1748226357,
+    "last_active": 1748226357,
+    "metadata": {}
+  },
+  "config_test_生产配置 (DeepSeek)": {
+    "session_id": "config_test_生产配置 (DeepSeek)",
+    "user_id": "config_test_user",
+    "history": [
+      {
+        "user_message": "你好，请介绍一下自己。",
+        "assistant_message": "您好！我是小艾，很高兴为您提供健康咨询服务。请告诉我您的具体情况，我会根据中医理论为您分析。",
+        "timestamp": 1748226357
+      }
+    ],
+    "created_at": 1748226357,
+    "last_active": 1748226357,
+    "metadata": {}
+  },
+  "config_test_开发配置 (模拟)": {
+    "session_id": "config_test_开发配置 (模拟)",
+    "user_id": "config_test_user",
+    "history": [
+      {
+        "user_message": "你好，请介绍一下自己。",
+        "assistant_message": "根据您的描述，建议您注意休息，保持良好的作息习惯。如有需要，我可以为您安排四诊检查。",
+        "timestamp": 1748226358
+      }
+    ],
+    "created_at": 1748226357,
+    "last_active": 1748226358,
+    "metadata": {}
+  },
+  "env_test_有DeepSeek API KEY": {
+    "session_id": "env_test_有DeepSeek API KEY",
+    "user_id": "env_test_user",
+    "history": [
+      {
+        "user_message": "请简单介绍一下你的能力。",
+        "assistant_message": "这种情况在中医理论中比较常见，通过适当的调理可以得到改善。",
+        "timestamp": 1748226358
+      }
+    ],
+    "created_at": 1748226358,
+    "last_active": 1748226358,
+    "metadata": {}
+  },
+  "env_test_无DeepSeek API KEY": {
+    "session_id": "env_test_无DeepSeek API KEY",
+    "user_id": "env_test_user",
+    "history": [
+      {
+        "user_message": "请简单介绍一下你的能力。",
+        "assistant_message": "根据您的描述，建议您注意休息，保持良好的作息习惯。如有需要，我可以为您安排四诊检查。",
+        "timestamp": 1748226358
+      }
+    ],
+    "created_at": 1748226358,
+    "last_active": 1748226358,
+    "metadata": {}
+  },
+  "quick_test": {
+    "session_id": "quick_test",
+    "user_id": "test_user",
+    "history": [
+      {
+        "user_message": "你好，小艾！",
+        "assistant_message": "这种情况在中医理论中比较常见，通过适当的调理可以得到改善。",
+        "timestamp": 1748226852
+      },
+      {
+        "user_message": "我最近总是感到疲劳，从中医角度应该如何调理？",
+        "assistant_message": "我理解您的担心。让我为您详细分析一下症状，并提供相应的调理建议。",
+        "timestamp": 1748226852
+      },
+      {
+        "user_message": "请简单介绍一下中医的阴阳理论",
+        "assistant_message": "我理解您的担心。让我为您详细分析一下症状，并提供相应的调理建议。",
+        "timestamp": 1748226853
+      }
+    ],
+    "created_at": 1748226851,
+    "last_active": 1748226853,
+    "metadata": {}
+  }
+}

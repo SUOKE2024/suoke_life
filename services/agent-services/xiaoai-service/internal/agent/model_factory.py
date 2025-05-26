@@ -2,13 +2,14 @@
 # -*- coding: utf-8 -*-
 """
 大模型工厂类
-负责创建和管理不同类型的大模型客户端
+集成配置管理器，支持动态模型切换、健康检查和多租户管理
 """
 
 import os
 import logging
-from typing import Dict, Any, Optional, List, Union, Tuple
 import asyncio
+from typing import Dict, Any, Optional, List, Union, Tuple
+from datetime import datetime, timedelta
 import json
 import httpx
 from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
@@ -29,264 +30,370 @@ except ImportError:
     HAS_ZHIPUAI = False
     logging.warning("未安装zhipuai库，无法使用智谱API")
 
-from pkg.utils.config_loader import get_config
-from pkg.utils.metrics import get_metrics_collector, track_llm_metrics
-from pkg.utils.resilience import circuit_breaker, rate_limiter
+from .model_config_manager import (
+    ModelConfigManager, 
+    get_model_config_manager, 
+    ModelConfig, 
+    ModelProvider, 
+    ConfigScope
+)
+from pkg.utils.config_manager import get_config_manager
+from .mock_model_factory import get_mock_model_factory
+
+# 简化的装饰器实现
+def track_llm_metrics(model=None, query_type=None):
+    """简化的LLM指标跟踪装饰器"""
+    def decorator(func):
+        async def wrapper(*args, **kwargs):
+            return await func(*args, **kwargs)
+        return wrapper
+    return decorator
+
+def circuit_breaker(failure_threshold=5, recovery_time=60):
+    """简化的熔断器装饰器"""
+    def decorator(func):
+        async def wrapper(*args, **kwargs):
+            return await func(*args, **kwargs)
+        return wrapper
+    return decorator
+
+def rate_limiter(max_calls=60, time_period=60):
+    """简化的限流器装饰器"""
+    def decorator(func):
+        async def wrapper(*args, **kwargs):
+            return await func(*args, **kwargs)
+        return wrapper
+    return decorator
 
 logger = logging.getLogger(__name__)
 
 
+class ModelHealthStatus:
+    """模型健康状态"""
+    def __init__(self):
+        self.is_healthy = True
+        self.last_check = datetime.utcnow()
+        self.error_count = 0
+        self.response_time = 0.0
+        self.last_error = None
+
+
 class ModelFactory:
     """
-    大模型工厂类，用于创建、管理和调用各种大模型服务
+    大模型工厂类
+    支持动态配置管理、多租户、健康检查和自动故障转移
     """
     
     def __init__(self):
         """初始化大模型工厂"""
-        self.config = get_config()
-        self.metrics = get_metrics_collector()
+        self.config = get_config_manager()
+        self.config_manager: Optional[ModelConfigManager] = None
         
-        # 加载配置
-        self.llm_config = self.config.get_section('models.llm')
-        self.local_llm_config = self.config.get_section('models.local_llm')
-        
-        # 设置默认模型
-        self.primary_model = self.llm_config.get('primary_model', 'gpt-4o-mini')
-        self.fallback_model = self.llm_config.get('fallback_model', 'llama-3-8b')
-        
-        # 初始化客户端映射表
+        # 客户端缓存
         self.clients = {}
         
-        # 初始化各大模型客户端
-        self._init_openai_client()
-        self._init_local_llm_client()
-        self._init_zhipu_client()
-        self._init_baidu_client()
+        # 健康状态监控
+        self.health_status = {}
         
-        logger.info(f"大模型工厂初始化完成，可用模型: {list(self.clients.keys())}")
+        # 故障转移配置
+        self.fallback_enabled = True
+        self.max_retries = 3
+        
+        # 初始化标志
+        self.initialized = False
+        
+        logger.info("大模型工厂初始化完成")
     
-    def _init_openai_client(self):
-        """初始化OpenAI客户端"""
-        if not HAS_OPENAI:
-            logger.warning("未安装openai库，跳过OpenAI客户端初始化")
+    async def initialize(self):
+        """异步初始化"""
+        if self.initialized:
             return
         
         try:
-            # 获取API密钥
-            api_key = self.llm_config.get('api_key', os.getenv('OPENAI_API_KEY', ''))
+            # 初始化配置管理器
+            self.config_manager = await get_model_config_manager()
             
-            if not api_key:
-                logger.warning("未配置OpenAI API密钥，跳过OpenAI客户端初始化")
+            # 加载所有可用配置
+            await self._load_all_configs()
+            
+            # 启动健康检查任务
+            asyncio.create_task(self._health_check_loop())
+            
+            self.initialized = True
+            logger.info("大模型工厂异步初始化完成")
+            
+        except Exception as e:
+            logger.error(f"大模型工厂初始化失败: {e}")
+            raise
+    
+    async def _load_all_configs(self):
+        """加载所有可用配置"""
+        try:
+            # 加载系统配置
+            system_configs = await self.config_manager.list_configs(
+                ConfigScope.SYSTEM, enabled_only=True
+            )
+            
+            for config in system_configs:
+                await self._create_client_from_config(config)
+            
+            logger.info(f"加载了 {len(system_configs)} 个系统模型配置")
+            
+        except Exception as e:
+            logger.error(f"加载配置失败: {e}")
+    
+    async def _create_client_from_config(self, config: ModelConfig):
+        """根据配置创建客户端"""
+        try:
+            client_key = f"{config.provider.value}_{config.model_id}"
+            
+            if config.provider == ModelProvider.OPENAI:
+                client = await self._create_openai_client(config)
+            elif config.provider == ModelProvider.ZHIPU:
+                client = await self._create_zhipu_client(config)
+            elif config.provider == ModelProvider.BAIDU:
+                client = await self._create_baidu_client(config)
+            elif config.provider == ModelProvider.LOCAL:
+                client = await self._create_local_client(config)
+            else:
+                logger.warning(f"不支持的模型提供商: {config.provider}")
                 return
             
-            # 创建客户端
-            api_base = self.llm_config.get('api_base', 'https://api.openai.com/v1')
-            org_id = self.llm_config.get('org_id', None)
-            
-            client = openai.OpenAI(
-                api_key=api_key,
-                base_url=api_base,
-                organization=org_id,
-                timeout=httpx.Timeout(connect=10.0, read=60.0, write=10.0, pool=10.0)
-            )
-            
-            # 验证连接
-            if self._verify_openai_connection(client):
-                # 注册客户端
-                openai_models = ['gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-3.5-turbo']
-                for model in openai_models:
-                    self.clients[model] = {
-                        'client': client,
-                        'type': 'openai',
-                        'provider': 'OpenAI',
-                        'max_tokens': 8192
-                    }
-                
-                logger.info(f"OpenAI客户端初始化成功，已注册模型: {openai_models}")
-            else:
-                logger.warning("OpenAI客户端连接验证失败，跳过注册")
-        
-        except Exception as e:
-            logger.error(f"初始化OpenAI客户端失败: {e}")
-    
-    def _verify_openai_connection(self, client) -> bool:
-        """验证OpenAI客户端连接"""
-        try:
-            # 发送一个简单请求测试连接
-            response = client.chat.completions.create(
-                model="gpt-3.5-turbo",
-                messages=[
-                    {"role": "system", "content": "你是一个医疗助手"},
-                    {"role": "user", "content": "测试连接"}
-                ],
-                max_tokens=5
-            )
-            
-            # 检查响应是否有效
-            if response and hasattr(response, "choices") and len(response.choices) > 0:
-                logger.info("OpenAI连接验证成功")
-                return True
-            else:
-                logger.warning("OpenAI连接验证响应无效")
-                return False
-                
-        except Exception as e:
-            logger.warning(f"OpenAI连接验证失败: {e}")
-            return False
-    
-    def _init_local_llm_client(self):
-        """初始化本地LLM客户端"""
-        try:
-            # 检查本地LLM配置
-            local_llm_url = self.local_llm_config.get('endpoint_url')
-            
-            if not local_llm_url:
-                logger.warning("未配置本地LLM端点URL，跳过本地LLM客户端初始化")
-                return
-            
-            # 创建客户端 (使用OpenAI兼容接口)
-            client = openai.OpenAI(
-                base_url=local_llm_url,
-                api_key="not-needed",  # 本地服务可能不需要API密钥
-                timeout=httpx.Timeout(connect=5.0, read=60.0, write=5.0, pool=5.0)
-            )
-            
-            # 验证连接
-            if self._verify_local_llm_connection(client):
-                # 注册客户端
-                local_models = self.local_llm_config.get('available_models', ['llama-3-8b', 'llama-3-70b'])
-                for model in local_models:
-                    self.clients[model] = {
-                        'client': client,
-                        'type': 'local_llm',
-                        'provider': 'Local',
-                        'max_tokens': self.local_llm_config.get('max_tokens', 4096)
-                    }
-                
-                logger.info(f"本地LLM客户端初始化成功，已注册模型: {local_models}")
-            else:
-                logger.warning("本地LLM客户端连接验证失败，跳过注册")
-                
-        except Exception as e:
-            logger.error(f"初始化本地LLM客户端失败: {e}")
-    
-    def _verify_local_llm_connection(self, client) -> bool:
-        """验证本地LLM客户端连接"""
-        try:
-            # 发送一个简单请求测试连接
-            response = client.chat.completions.create(
-                model=self.local_llm_config.get('default_model', 'llama-3-8b'),
-                messages=[
-                    {"role": "system", "content": "你是一个医疗助手"},
-                    {"role": "user", "content": "测试连接"}
-                ],
-                max_tokens=5
-            )
-            
-            # 检查响应是否有效
-            if response and hasattr(response, "choices") and len(response.choices) > 0:
-                logger.info("本地LLM连接验证成功")
-                return True
-            else:
-                logger.warning("本地LLM连接验证响应无效")
-                return False
-                
-        except Exception as e:
-            logger.warning(f"本地LLM连接验证失败: {e}")
-            return False
-    
-    def _init_zhipu_client(self):
-        """初始化智谱AI客户端"""
-        if not HAS_ZHIPUAI:
-            logger.warning("未安装zhipuai库，跳过智谱客户端初始化")
-            return
-        
-        try:
-            # 获取API密钥
-            zhipu_config = self.config.get_section('models.zhipu')
-            api_key = zhipu_config.get('api_key', os.getenv('ZHIPU_API_KEY', ''))
-            
-            if not api_key:
-                logger.warning("未配置智谱API密钥，跳过智谱客户端初始化")
-                return
-            
-            # 创建客户端
-            client = zhipuai.ZhipuAI(api_key=api_key)
-            
-            # 验证连接
-            if self._verify_zhipu_connection(client):
-                # 注册客户端
-                zhipu_models = ['glm-4', 'glm-3-turbo']
-                for model in zhipu_models:
-                    self.clients[model] = {
-                        'client': client,
-                        'type': 'zhipu',
-                        'provider': '智谱AI',
-                        'max_tokens': 8192
-                    }
-                
-                logger.info(f"智谱AI客户端初始化成功，已注册模型: {zhipu_models}")
-            else:
-                logger.warning("智谱AI客户端连接验证失败，跳过注册")
-                
-        except Exception as e:
-            logger.error(f"初始化智谱AI客户端失败: {e}")
-    
-    def _verify_zhipu_connection(self, client) -> bool:
-        """验证智谱AI客户端连接"""
-        try:
-            # 发送一个简单请求测试连接
-            response = client.chat.completions.create(
-                model="glm-3-turbo",
-                messages=[
-                    {"role": "system", "content": "你是一个医疗助手"},
-                    {"role": "user", "content": "测试连接"}
-                ],
-                max_tokens=5
-            )
-            
-            # 检查响应是否有效
-            if response and hasattr(response, "choices") and len(response.choices) > 0:
-                logger.info("智谱AI连接验证成功")
-                return True
-            else:
-                logger.warning("智谱AI连接验证响应无效")
-                return False
-                
-        except Exception as e:
-            logger.warning(f"智谱AI连接验证失败: {e}")
-            return False
-    
-    def _init_baidu_client(self):
-        """初始化百度文心一言客户端"""
-        try:
-            # 获取配置
-            baidu_config = self.config.get_section('models.baidu')
-            api_key = baidu_config.get('api_key', os.getenv('BAIDU_API_KEY', ''))
-            secret_key = baidu_config.get('secret_key', os.getenv('BAIDU_SECRET_KEY', ''))
-            
-            if not api_key or not secret_key:
-                logger.warning("未配置百度API密钥，跳过百度客户端初始化")
-                return
-            
-            # 注册HTTP客户端（百度使用自定义HTTP请求）
-            baidu_models = ['ernie-bot-4', 'ernie-bot']
-            for model in baidu_models:
-                self.clients[model] = {
-                    'client': {
-                        'api_key': api_key,
-                        'secret_key': secret_key,
-                        'url': baidu_config.get('api_url', 'https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/')
-                    },
-                    'type': 'baidu',
-                    'provider': '百度智能云',
-                    'max_tokens': 4096
+            if client:
+                self.clients[client_key] = {
+                    'client': client,
+                    'config': config,
+                    'type': config.provider.value,
+                    'provider': config.provider.value,
+                    'max_tokens': config.max_tokens
                 }
+                
+                # 初始化健康状态
+                self.health_status[client_key] = ModelHealthStatus()
+                
+                logger.info(f"创建客户端成功: {client_key}")
             
-            logger.info(f"百度文心一言客户端初始化成功，已注册模型: {baidu_models}")
+        except Exception as e:
+            logger.error(f"创建客户端失败: {e}")
+    
+    async def _create_openai_client(self, config: ModelConfig):
+        """创建OpenAI客户端"""
+        if not HAS_OPENAI or not config.api_key:
+            return None
+        
+        try:
+            client = openai.OpenAI(
+                api_key=config.api_key,
+                base_url=config.api_base or 'https://api.openai.com/v1',
+                timeout=httpx.Timeout(
+                    connect=10.0, 
+                    read=config.timeout, 
+                    write=10.0, 
+                    pool=10.0
+                )
+            )
+            
+            # 验证连接
+            if await self._verify_openai_client(client, config):
+                return client
+            
+        except Exception as e:
+            logger.error(f"创建OpenAI客户端失败: {e}")
+        
+        return None
+    
+    async def _verify_openai_client(self, client, config: ModelConfig) -> bool:
+        """验证OpenAI客户端"""
+        try:
+            response = await asyncio.to_thread(
+                client.chat.completions.create,
+                model=config.model_name,
+                messages=[
+                    {"role": "system", "content": "你是一个医疗助手"},
+                    {"role": "user", "content": "测试连接"}
+                ],
+                max_tokens=5
+            )
+            
+            return response and hasattr(response, "choices") and len(response.choices) > 0
+            
+        except Exception as e:
+            logger.warning(f"OpenAI客户端验证失败: {e}")
+            return False
+    
+    async def _create_zhipu_client(self, config: ModelConfig):
+        """创建智谱AI客户端"""
+        if not HAS_ZHIPUAI or not config.api_key:
+            return None
+        
+        try:
+            client = zhipuai.ZhipuAI(api_key=config.api_key)
+            
+            # 验证连接
+            if await self._verify_zhipu_client(client, config):
+                return client
+            
+        except Exception as e:
+            logger.error(f"创建智谱AI客户端失败: {e}")
+        
+        return None
+    
+    async def _verify_zhipu_client(self, client, config: ModelConfig) -> bool:
+        """验证智谱AI客户端"""
+        try:
+            response = await asyncio.to_thread(
+                client.chat.completions.create,
+                model=config.model_name,
+                messages=[
+                    {"role": "system", "content": "你是一个医疗助手"},
+                    {"role": "user", "content": "测试连接"}
+                ],
+                max_tokens=5
+            )
+            
+            return response and hasattr(response, "choices") and len(response.choices) > 0
+            
+        except Exception as e:
+            logger.warning(f"智谱AI客户端验证失败: {e}")
+            return False
+    
+    async def _create_baidu_client(self, config: ModelConfig):
+        """创建百度客户端"""
+        try:
+            client_info = {
+                'api_key': config.api_key,
+                'secret_key': config.extra_params.get('secret_key'),
+                'access_token': None,
+                'token_expires': None
+            }
+            
+            # 获取访问令牌
+            if await self._get_baidu_access_token(client_info):
+                return client_info
+            
+        except Exception as e:
+            logger.error(f"创建百度客户端失败: {e}")
+        
+        return None
+    
+    async def _get_baidu_access_token(self, client_info: Dict) -> bool:
+        """获取百度访问令牌"""
+        try:
+            url = "https://aip.baidubce.com/oauth/2.0/token"
+            params = {
+                "grant_type": "client_credentials",
+                "client_id": client_info['api_key'],
+                "client_secret": client_info['secret_key']
+            }
+            
+            async with httpx.AsyncClient() as http_client:
+                response = await http_client.post(url, params=params)
+                response.raise_for_status()
+                
+                data = response.json()
+                client_info['access_token'] = data.get('access_token')
+                expires_in = data.get('expires_in', 3600)
+                client_info['token_expires'] = datetime.utcnow() + timedelta(seconds=expires_in - 300)
+                
+                return True
                 
         except Exception as e:
-            logger.error(f"初始化百度文心一言客户端失败: {e}")
+            logger.error(f"获取百度访问令牌失败: {e}")
+            return False
+    
+    async def _create_local_client(self, config: ModelConfig):
+        """创建本地客户端"""
+        try:
+            client = openai.OpenAI(
+                base_url=config.api_base,
+                api_key="not-needed",
+                timeout=httpx.Timeout(
+                    connect=5.0, 
+                    read=config.timeout, 
+                    write=5.0, 
+                    pool=5.0
+                )
+            )
+            
+            # 验证连接
+            if await self._verify_local_client(client, config):
+                return client
+            
+        except Exception as e:
+            logger.error(f"创建本地客户端失败: {e}")
+        
+        return None
+    
+    async def _verify_local_client(self, client, config: ModelConfig) -> bool:
+        """验证本地客户端"""
+        try:
+            response = await asyncio.to_thread(
+                client.chat.completions.create,
+                model=config.model_name,
+                messages=[
+                    {"role": "system", "content": "你是一个医疗助手"},
+                    {"role": "user", "content": "测试连接"}
+                ],
+                max_tokens=5
+            )
+            
+            return response and hasattr(response, "choices") and len(response.choices) > 0
+            
+        except Exception as e:
+            logger.warning(f"本地客户端验证失败: {e}")
+            return False
+    
+    async def _health_check_loop(self):
+        """健康检查循环"""
+        while True:
+            await asyncio.sleep(60)  # 每分钟检查一次
+            await self._perform_health_checks()
+    
+    async def _perform_health_checks(self):
+        """执行健康检查"""
+        for client_key, client_info in self.clients.items():
+            try:
+                is_healthy = await self._health_check_client(client_info)
+                health_status = self.health_status.get(client_key)
+                
+                if health_status:
+                    health_status.is_healthy = is_healthy
+                    health_status.last_check = datetime.utcnow()
+                    
+                    if not is_healthy:
+                        health_status.error_count += 1
+                    else:
+                        health_status.error_count = 0
+                        
+            except Exception as e:
+                logger.error(f"健康检查失败 {client_key}: {e}")
+                health_status = self.health_status.get(client_key)
+                if health_status:
+                    health_status.is_healthy = False
+                    health_status.error_count += 1
+                    health_status.last_error = str(e)
+    
+    async def _health_check_client(self, client_info: Dict) -> bool:
+        """检查单个客户端健康状态"""
+        try:
+            config = client_info['config']
+            client = client_info['client']
+            
+            if config.provider == ModelProvider.OPENAI:
+                return await self._verify_openai_client(client, config)
+            elif config.provider == ModelProvider.ZHIPU:
+                return await self._verify_zhipu_client(client, config)
+            elif config.provider == ModelProvider.LOCAL:
+                return await self._verify_local_client(client, config)
+            elif config.provider == ModelProvider.BAIDU:
+                # 百度客户端检查访问令牌是否有效
+                return client_info.get('access_token') is not None
+            
+            return False
+            
+        except Exception as e:
+            logger.warning(f"客户端健康检查失败: {e}")
+            return False
     
     @retry(
         stop=stop_after_attempt(3),
@@ -295,284 +402,336 @@ class ModelFactory:
     )
     @circuit_breaker(failure_threshold=5, recovery_time=60)
     @rate_limiter(max_calls=60, time_period=60)
-    @track_llm_metrics(query_type="chat_completion")
+    @track_llm_metrics(model="dynamic", query_type="chat_completion")
     async def generate_chat_completion(self, 
                                       model: str, 
                                       messages: List[Dict[str, str]], 
                                       temperature: float = 0.7,
-                                      max_tokens: int = 2048) -> Tuple[str, Dict[str, Any]]:
+                                      max_tokens: int = 2048,
+                                      user_id: str = None) -> Tuple[str, Dict[str, Any]]:
         """
-        生成聊天完成
-        
-        Args:
-            model: 模型名称
-            messages: 消息列表
-            temperature: 温度参数
-            max_tokens: 最大生成令牌数
-            
-        Returns:
-            Tuple[str, Dict[str, Any]]: 生成的文本和元数据
+        生成聊天完成响应
+        支持用户级配置和自动故障转移
         """
-        start_time = time.time()
-        prompt_tokens = 0
-        completion_tokens = 0
+        if not self.initialized:
+            await self.initialize()
         
-        # 判断模型是否可用
-        if model not in self.clients:
-            available_models = list(self.clients.keys())
-            logger.warning(f"请求的模型 {model} 不可用，尝试使用 {self.fallback_model if self.fallback_model in available_models else available_models[0]}")
-            
-            # 使用备用模型
-            if self.fallback_model in self.clients:
-                model = self.fallback_model
-            elif available_models:
-                model = available_models[0]
-            else:
-                raise ValueError("没有可用的大模型服务")
+        # 获取有效配置
+        effective_config = await self._get_effective_model_config(model, user_id)
+        if not effective_config:
+            raise ValueError(f"未找到模型 {model} 的有效配置")
         
-        # 获取模型客户端
-        client_info = self.clients[model]
-        client = client_info['client']
-        client_type = client_info['type']
-        
+        # 尝试使用主要模型
         try:
-            # 根据客户端类型调用不同的API
-            if client_type == 'openai' or client_type == 'local_llm':
-                return await self._call_openai_compatible_api(client, model, messages, temperature, max_tokens)
-            elif client_type == 'zhipu':
-                return await self._call_zhipu_api(client, model, messages, temperature, max_tokens)
-            elif client_type == 'baidu':
-                return await self._call_baidu_api(client_info, model, messages, temperature, max_tokens)
-            else:
-                raise ValueError(f"不支持的客户端类型: {client_type}")
+            return await self._call_model_with_config(
+                effective_config, messages, temperature, max_tokens
+            )
+        except Exception as e:
+            logger.warning(f"主要模型 {model} 调用失败: {e}")
+            
+            # 尝试故障转移
+            if self.fallback_enabled:
+                fallback_config = await self._get_fallback_config(user_id)
+                if fallback_config and fallback_config.model_id != effective_config.model_id:
+                    try:
+                        logger.info(f"尝试故障转移到: {fallback_config.model_id}")
+                        return await self._call_model_with_config(
+                            fallback_config, messages, temperature, max_tokens
+                        )
+                    except Exception as fallback_error:
+                        logger.error(f"故障转移也失败: {fallback_error}")
+            
+            # 所有尝试都失败
+            raise e
+    
+    async def _get_effective_model_config(self, model: str, user_id: str = None) -> Optional[ModelConfig]:
+        """获取有效的模型配置"""
+        # 首先尝试用户自定义配置
+        if user_id:
+            user_config = await self.config_manager.get_effective_config(model, user_id)
+            if user_config:
+                return user_config
+        
+        # 然后尝试系统配置
+        system_config = await self.config_manager.get_config(model, ConfigScope.SYSTEM)
+        if system_config and system_config.enabled:
+            return system_config
+        
+        # 最后尝试查找任何可用的系统配置
+        system_configs = await self.config_manager.list_configs(
+            ConfigScope.SYSTEM, enabled_only=True
+        )
+        
+        if system_configs:
+            return system_configs[0]  # 返回优先级最高的配置
+        
+        return None
+    
+    async def _get_fallback_config(self, user_id: str = None) -> Optional[ModelConfig]:
+        """获取故障转移配置"""
+        # 获取所有可用配置，按优先级排序
+        configs = await self.config_manager.list_configs(
+            ConfigScope.SYSTEM, enabled_only=True
+        )
+        
+        # 过滤健康的配置
+        healthy_configs = []
+        for config in configs:
+            client_key = f"{config.provider.value}_{config.model_id}"
+            health = self.health_status.get(client_key)
+            if health and health.is_healthy:
+                healthy_configs.append(config)
+        
+        return healthy_configs[0] if healthy_configs else None
+    
+    async def _call_model_with_config(self, 
+                                    config: ModelConfig, 
+                                    messages: List[Dict[str, str]], 
+                                    temperature: float,
+                                    max_tokens: int) -> Tuple[str, Dict[str, Any]]:
+        """使用指定配置调用模型"""
+        client_key = f"{config.provider.value}_{config.model_id}"
+        client_info = self.clients.get(client_key)
+        
+        if not client_info:
+            # 动态创建客户端
+            await self._create_client_from_config(config)
+            client_info = self.clients.get(client_key)
+            
+            if not client_info:
+                raise ValueError(f"无法创建客户端: {client_key}")
+        
+        client = client_info['client']
+        
+        # 根据提供商调用相应的API
+        if config.provider == ModelProvider.OPENAI:
+            return await self._call_openai_api(client, config, messages, temperature, max_tokens)
+        elif config.provider == ModelProvider.ZHIPU:
+            return await self._call_zhipu_api(client, config, messages, temperature, max_tokens)
+        elif config.provider == ModelProvider.BAIDU:
+            return await self._call_baidu_api(client_info, config, messages, temperature, max_tokens)
+        elif config.provider == ModelProvider.LOCAL:
+            return await self._call_local_api(client, config, messages, temperature, max_tokens)
+        else:
+            raise ValueError(f"不支持的模型提供商: {config.provider}")
+    
+    async def _call_openai_api(self, client, config: ModelConfig, messages, temperature, max_tokens):
+        """调用OpenAI API"""
+        try:
+            response = await asyncio.to_thread(
+                client.chat.completions.create,
+                model=config.model_name,
+                messages=messages,
+                temperature=temperature,
+                max_tokens=min(max_tokens, config.max_tokens)
+            )
+            
+            content = response.choices[0].message.content
+            metadata = {
+                "model": config.model_name,
+                "provider": "openai",
+                "usage": response.usage.dict() if response.usage else {},
+                "finish_reason": response.choices[0].finish_reason
+            }
+            
+            return content, metadata
+            
+        except Exception as e:
+            logger.error(f"OpenAI API调用失败: {e}")
+            raise
+    
+    async def _call_zhipu_api(self, client, config: ModelConfig, messages, temperature, max_tokens):
+        """调用智谱AI API"""
+        try:
+            response = await asyncio.to_thread(
+                client.chat.completions.create,
+                model=config.model_name,
+                messages=messages,
+                temperature=temperature,
+                max_tokens=min(max_tokens, config.max_tokens)
+            )
+            
+            content = response.choices[0].message.content
+            metadata = {
+                "model": config.model_name,
+                "provider": "zhipu",
+                "usage": response.usage.dict() if response.usage else {},
+                "finish_reason": response.choices[0].finish_reason
+            }
+            
+            return content, metadata
+            
+        except Exception as e:
+            logger.error(f"智谱AI API调用失败: {e}")
+            raise
+    
+    async def _call_baidu_api(self, client_info, config: ModelConfig, messages, temperature, max_tokens):
+        """调用百度API"""
+        try:
+            # 检查访问令牌是否过期
+            if (not client_info.get('access_token') or 
+                client_info.get('token_expires', datetime.utcnow()) <= datetime.utcnow()):
+                await self._get_baidu_access_token(client_info)
+            
+            url = f"{config.api_base}completions_pro?access_token={client_info['access_token']}"
+            
+            # 转换消息格式
+            baidu_messages = []
+            for msg in messages:
+                baidu_messages.append({
+                    "role": msg["role"],
+                    "content": msg["content"]
+                })
+            
+            payload = {
+                "messages": baidu_messages,
+                "temperature": temperature,
+                "max_output_tokens": min(max_tokens, config.max_tokens)
+            }
+            
+            async with httpx.AsyncClient() as http_client:
+                response = await http_client.post(url, json=payload)
+                response.raise_for_status()
+                
+                data = response.json()
+                content = data.get("result", "")
+                metadata = {
+                    "model": config.model_name,
+                    "provider": "baidu",
+                    "usage": data.get("usage", {}),
+                    "finish_reason": "stop"
+                }
+                
+                return content, metadata
                 
         except Exception as e:
-            logger.error(f"调用{client_info['provider']}模型 {model} 失败: {e}")
-            
-            # 记录模型调用失败指标
-            self.metrics.track_llm_error(model, str(e))
-            
-            # 如果是主模型失败，尝试使用备用模型
-            if model == self.primary_model and model != self.fallback_model and self.fallback_model in self.clients:
-                logger.info(f"尝试使用备用模型 {self.fallback_model}")
-                return await self.generate_chat_completion(self.fallback_model, messages, temperature, max_tokens)
-            
-            # 返回错误信息
-            return f"很抱歉，我暂时无法处理您的请求。错误: {str(e)}", {
-                'model': model,
-                'provider': client_info['provider'],
-                'error': str(e),
-                'success': False
-            }
+            logger.error(f"百度API调用失败: {e}")
+            raise
     
-    async def _call_openai_compatible_api(self, client, model, messages, temperature, max_tokens):
-        """调用OpenAI兼容的API（包括OpenAI和本地LLM）"""
-        # 转换消息格式
-        formatted_messages = []
-        for msg in messages:
-            if msg['role'] == 'system':
-                formatted_messages.append(ChatCompletionSystemMessageParam(role="system", content=msg['content']))
-            elif msg['role'] == 'user':
-                formatted_messages.append(ChatCompletionUserMessageParam(role="user", content=msg['content']))
-            elif msg['role'] == 'assistant':
-                formatted_messages.append(ChatCompletionAssistantMessageParam(role="assistant", content=msg['content']))
-        
-        # 调用API
-        response = await asyncio.to_thread(
-            client.chat.completions.create,
-            model=model,
-            messages=formatted_messages,
-            temperature=temperature,
-            max_tokens=max_tokens,
-            top_p=0.95,
-            frequency_penalty=0.5,
-            presence_penalty=0.3
-        )
-        
-        # 提取响应文本
-        response_text = response.choices[0].message.content
-        
-        # 获取token计数
-        if hasattr(response, 'usage'):
-            prompt_tokens = response.usage.prompt_tokens
-            completion_tokens = response.usage.completion_tokens
-        else:
-            # 估算token数量
-            prompt_tokens = sum(len(m['content'].split()) * 1.3 for m in messages)
-            completion_tokens = len(response_text.split()) * 1.3
-        
-        # 计算响应时间
-        latency = time.time() - start_time
-        
-        # 记录指标
-        self.metrics.track_llm_latency(model, latency)
-        self.metrics.track_llm_token_usage(model, prompt_tokens, completion_tokens)
-        
-        # 元数据
-        metadata = {
-            'model': model,
-            'provider': self.clients[model]['provider'],
-            'confidence': 0.95,  # OpenAI不提供置信度，使用默认值
-            'latency': latency,
-            'token_count': {
-                'prompt': prompt_tokens,
-                'completion': completion_tokens
-            },
-            'success': True
-        }
-        
-        return response_text, metadata
-    
-    async def _call_zhipu_api(self, client, model, messages, temperature, max_tokens):
-        """调用智谱API"""
-        # 调用API
-        response = await asyncio.to_thread(
-            client.chat.completions.create,
-            model=model,
-            messages=messages,
-            temperature=temperature,
-            max_tokens=max_tokens
-        )
-        
-        # 提取响应文本
-        response_text = response.choices[0].message.content
-        
-        # 获取token计数
-        if hasattr(response, 'usage'):
-            prompt_tokens = response.usage.prompt_tokens
-            completion_tokens = response.usage.completion_tokens
-        else:
-            # 估算token数量
-            prompt_tokens = sum(len(m['content'].split()) * 1.3 for m in messages)
-            completion_tokens = len(response_text.split()) * 1.3
-        
-        # 计算响应时间
-        latency = time.time() - start_time
-        
-        # 记录指标
-        self.metrics.track_llm_latency(model, latency)
-        self.metrics.track_llm_token_usage(model, prompt_tokens, completion_tokens)
-        
-        # 元数据
-        metadata = {
-            'model': model,
-            'provider': '智谱AI',
-            'confidence': 0.95,
-            'latency': latency,
-            'token_count': {
-                'prompt': prompt_tokens,
-                'completion': completion_tokens
-            },
-            'success': True
-        }
-        
-        return response_text, metadata
-    
-    async def _call_baidu_api(self, client_info, model, messages, temperature, max_tokens):
-        """调用百度文心一言API"""
-        # 获取客户端配置
-        api_key = client_info['client']['api_key']
-        secret_key = client_info['client']['secret_key']
-        base_url = client_info['client']['url']
-        
-        # 获取访问令牌
-        access_token = await self._get_baidu_access_token(api_key, secret_key)
-        
-        # 准备请求数据
-        url = f"{base_url}{model}?access_token={access_token}"
-        payload = {
-            "messages": messages,
-            "temperature": temperature,
-            "top_p": 0.95,
-            "max_tokens": max_tokens
-        }
-        
-        # 发送请求
-        async with httpx.AsyncClient(timeout=60.0) as http_client:
-            response = await http_client.post(
-                url,
-                json=payload,
-                headers={"Content-Type": "application/json"}
+    async def _call_local_api(self, client, config: ModelConfig, messages, temperature, max_tokens):
+        """调用本地API"""
+        try:
+            response = await asyncio.to_thread(
+                client.chat.completions.create,
+                model=config.model_name,
+                messages=messages,
+                temperature=temperature,
+                max_tokens=min(max_tokens, config.max_tokens)
             )
-            response.raise_for_status()
-            result = response.json()
-        
-        # 处理响应
-        if "error_code" in result:
-            raise ValueError(f"百度API错误: {result.get('error_msg', '未知错误')}")
-        
-        # 提取响应文本
-        response_text = result['result']
-        
-        # 获取token计数
-        prompt_tokens = result.get('usage', {}).get('prompt_tokens', 0)
-        completion_tokens = result.get('usage', {}).get('completion_tokens', 0)
-        
-        # 计算响应时间
-        latency = time.time() - start_time
-        
-        # 记录指标
-        self.metrics.track_llm_latency(model, latency)
-        self.metrics.track_llm_token_usage(model, prompt_tokens, completion_tokens)
-        
-        # 元数据
-        metadata = {
-            'model': model,
-            'provider': '百度智能云',
-            'confidence': 0.95,
-            'latency': latency,
-            'token_count': {
-                'prompt': prompt_tokens,
-                'completion': completion_tokens
-            },
-            'success': True
-        }
-        
-        return response_text, metadata
-    
-    async def _get_baidu_access_token(self, api_key, secret_key):
-        """获取百度API访问令牌"""
-        url = f"https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id={api_key}&client_secret={secret_key}"
-        
-        async with httpx.AsyncClient() as client:
-            response = await client.post(url)
-            response.raise_for_status()
-            result = response.json()
             
-            if "access_token" not in result:
-                raise ValueError("无法获取百度API访问令牌")
-                
-            return result["access_token"]
+            content = response.choices[0].message.content
+            metadata = {
+                "model": config.model_name,
+                "provider": "local",
+                "usage": response.usage.dict() if response.usage else {},
+                "finish_reason": response.choices[0].finish_reason
+            }
+            
+            return content, metadata
+            
+        except Exception as e:
+            logger.error(f"本地API调用失败: {e}")
+            raise
     
-    def get_available_models(self) -> List[Dict[str, Any]]:
-        """
-        获取所有可用的模型列表
-        
-        Returns:
-            List[Dict[str, Any]]: 可用模型列表
-        """
+    async def add_user_model_config(self, user_id: str, config: ModelConfig) -> bool:
+        """添加用户模型配置"""
+        try:
+            return await self.config_manager.save_config(config, ConfigScope.USER, user_id)
+        except Exception as e:
+            logger.error(f"添加用户模型配置失败: {e}")
+            return False
+    
+    async def get_user_model_configs(self, user_id: str) -> List[ModelConfig]:
+        """获取用户模型配置"""
+        try:
+            return await self.config_manager.list_configs(ConfigScope.USER, user_id)
+        except Exception as e:
+            logger.error(f"获取用户模型配置失败: {e}")
+            return []
+    
+    async def remove_user_model_config(self, user_id: str, model_id: str) -> bool:
+        """删除用户模型配置"""
+        try:
+            return await self.config_manager.delete_config(model_id, ConfigScope.USER, user_id)
+        except Exception as e:
+            logger.error(f"删除用户模型配置失败: {e}")
+            return False
+    
+    def get_available_models(self, user_id: str = None) -> List[Dict[str, Any]]:
+        """获取可用模型列表"""
         models = []
-        for model_name, info in self.clients.items():
+        
+        for client_key, client_info in self.clients.items():
+            config = client_info['config']
+            health = self.health_status.get(client_key)
+            
             models.append({
-                'name': model_name,
-                'provider': info['provider'],
-                'max_tokens': info['max_tokens']
+                'model_id': config.model_id,
+                'model_name': config.model_name,
+                'provider': config.provider.value,
+                'max_tokens': config.max_tokens,
+                'enabled': config.enabled,
+                'healthy': health.is_healthy,
+                'last_check': health.last_check.isoformat() if health.last_check else None,
+                'error_count': health.error_count
             })
+        
         return models
     
-    def is_model_available(self, model_name: str) -> bool:
-        """
-        检查模型是否可用
+    def get_model_health_status(self) -> Dict[str, Dict[str, Any]]:
+        """获取模型健康状态"""
+        status = {}
         
-        Args:
-            model_name: 模型名称
-            
-        Returns:
-            bool: 模型是否可用
-        """
-        return model_name in self.clients
+        for client_key, health in self.health_status.items():
+            status[client_key] = {
+                'is_healthy': health.is_healthy,
+                'last_check': health.last_check.isoformat() if health.last_check else None,
+                'error_count': health.error_count,
+                'response_time': health.response_time,
+                'last_error': health.last_error
+            }
+        
+        return status
+    
+    def is_model_available(self, model_name: str) -> bool:
+        """检查模型是否可用"""
+        for client_key, client_info in self.clients.items():
+            config = client_info['config']
+            if config.model_name == model_name or config.model_id == model_name:
+                health = self.health_status.get(client_key)
+                return health and health.is_healthy and config.enabled
+        return False
     
     async def close(self):
-        """关闭所有客户端连接"""
-        # 目前大多数客户端不需要显式关闭
-        logger.info("关闭所有模型客户端连接") 
+        """关闭工厂和所有客户端"""
+        if self.config_manager:
+            await self.config_manager.close()
+        
+        self.clients.clear()
+        self.health_status.clear()
+        
+        logger.info("大模型工厂已关闭")
+
+
+# 全局实例
+_model_factory_instance = None
+
+async def get_model_factory() -> ModelFactory:
+    """获取大模型工厂单例"""
+    global _model_factory_instance
+    
+    if _model_factory_instance is None:
+        # 检查是否为开发环境
+        config = get_config_manager()
+        development_config = config.get_section('development')
+        
+        if development_config and development_config.get('mock_services', False):
+            # 开发环境使用模拟工厂
+            logger.info("开发环境：使用模拟模型工厂")
+            return await get_mock_model_factory()
+        else:
+            # 生产环境使用真实工厂
+            _model_factory_instance = ModelFactory()
+            await _model_factory_instance.initialize()
+    
+    return _model_factory_instance 

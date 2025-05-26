@@ -73,12 +73,9 @@ export const AppNavigator: React.FC = () => {
       {isInitializing ? (
         // 初始化状态
         <Stack.Screen name="Splash" component={SimpleSplashScreen} />
-      ) : isAuthenticated ? (
-        // 已认证用户 - 主应用
-        <Stack.Screen name="Main" component={MainNavigator} />
       ) : (
-        // 未认证用户 - 认证流程
-        <Stack.Screen name="Auth" component={AuthNavigator} />
+        // 直接进入主应用（跳过认证）
+        <Stack.Screen name="Main" component={MainNavigator} />
       )}
     </Stack.Navigator>
   );

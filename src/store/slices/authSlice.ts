@@ -283,6 +283,33 @@ const authSlice = createSlice({
         state.user = { ...state.user, ...action.payload };
       }
     },
+    // 开发者模式 - 快速登录（用于测试）
+    devLogin: (state) => {
+      state.isAuthenticated = true;
+      state.user = {
+        id: 'dev-user-001',
+        username: '测试用户',
+        email: 'test@suokelife.com',
+        phone: '13800138000',
+        avatar: '',
+        profile: {
+          name: '测试用户',
+          age: 30,
+          gender: 'other',
+          height: 170,
+          weight: 65,
+          constitution: 'balanced',
+          medicalHistory: [],
+          allergies: [],
+        },
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      state.token = 'dev-token-123456';
+      state.refreshToken = 'dev-refresh-token-123456';
+      state.loading = false;
+      state.error = undefined;
+    },
   },
   extraReducers: (builder) => {
     // 登录
@@ -427,7 +454,7 @@ const authSlice = createSlice({
 });
 
 // 导出actions
-export const { clearError, clearAuth, updateUser } = authSlice.actions;
+export const { clearError, clearAuth, updateUser, devLogin } = authSlice.actions;
 
 // 选择器
 export const selectAuth = (state: { auth: AuthState }) => state.auth;

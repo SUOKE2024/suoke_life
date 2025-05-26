@@ -7,10 +7,14 @@ import {
   TouchableOpacity,
   Alert,
   FlatList,
+  Modal,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { colors } from '../../constants/theme';
+import Icon from '../../components/common/Icon';
+import { colors, spacing, fonts } from '../../constants/theme';
+import AgentChatInterface, { AgentType } from '../../components/common/AgentChatInterface';
+import BlockchainHealthData from './components/BlockchainHealthData';
+import ARConstitutionVisualization from './components/ARConstitutionVisualization';
 
 // 生活建议类型
 interface LifeSuggestion {
@@ -207,8 +211,11 @@ const LIFE_PLANS: LifePlan[] = [
 ];
 
 const LifeScreen: React.FC = () => {
-  const [selectedTab, setSelectedTab] = useState<'overview' | 'suggestions' | 'plans'>('overview');
+  const [selectedTab, setSelectedTab] = useState<'overview' | 'suggestions' | 'plans' | 'blockchain' | 'ar'>('overview');
   const [soerChatVisible, setSoerChatVisible] = useState(false);
+  const [accessibilityEnabled, setAccessibilityEnabled] = useState(false);
+  const [blockchainModalVisible, setBlockchainModalVisible] = useState(false);
+  const [arModalVisible, setArModalVisible] = useState(false);
 
   // 与索儿对话
   const chatWithSoer = () => {
@@ -420,12 +427,22 @@ const LifeScreen: React.FC = () => {
       {[
         { key: 'overview', label: '概览', icon: 'view-dashboard' },
         { key: 'suggestions', label: '建议', icon: 'lightbulb' },
-        { key: 'plans', label: '计划', icon: 'calendar-check' }
+        { key: 'plans', label: '计划', icon: 'calendar-check' },
+        { key: 'blockchain', label: '区块链', icon: 'shield-check' },
+        { key: 'ar', label: 'AR体质', icon: 'camera-3d' }
       ].map(tab => (
         <TouchableOpacity
           key={tab.key}
           style={[styles.tabItem, selectedTab === tab.key && styles.activeTabItem]}
-          onPress={() => setSelectedTab(tab.key as any)}
+          onPress={() => {
+            if (tab.key === 'blockchain') {
+              setBlockchainModalVisible(true);
+            } else if (tab.key === 'ar') {
+              setArModalVisible(true);
+            } else {
+              setSelectedTab(tab.key as any);
+            }
+          }}
         >
           <Icon
             name={tab.icon}
@@ -519,6 +536,27 @@ const LifeScreen: React.FC = () => {
           </View>
         )}
       </ScrollView>
+
+      {/* 区块链健康数据模态框 */}
+      <BlockchainHealthData
+        visible={blockchainModalVisible}
+        onClose={() => setBlockchainModalVisible(false)}
+      />
+
+      {/* AR体质可视化模态框 */}
+      <ARConstitutionVisualization
+        visible={arModalVisible}
+        onClose={() => setArModalVisible(false)}
+      />
+
+      {/* 索儿对话界面 */}
+      <AgentChatInterface
+        visible={soerChatVisible}
+        onClose={() => setSoerChatVisible(false)}
+        agentType="soer"
+        userId="current_user_id"
+        accessibilityEnabled={accessibilityEnabled}
+      />
     </SafeAreaView>
   );
 };

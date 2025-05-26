@@ -1,0 +1,273 @@
+syntax = "proto3";
+
+package xiaoai.model_config.v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/suoke-life/xiaoai-service/api/grpc/model_config/v1";
+
+// 模型配置管理服务
+service ModelConfigService {
+  // 添加用户模型配置
+  rpc AddUserModelConfig(AddUserModelConfigRequest) returns (AddUserModelConfigResponse);
+  
+  // 获取用户模型配置列表
+  rpc GetUserModelConfigs(GetUserModelConfigsRequest) returns (GetUserModelConfigsResponse);
+  
+  // 获取指定模型配置
+  rpc GetUserModelConfig(GetUserModelConfigRequest) returns (GetUserModelConfigResponse);
+  
+  // 更新用户模型配置
+  rpc UpdateUserModelConfig(UpdateUserModelConfigRequest) returns (UpdateUserModelConfigResponse);
+  
+  // 删除用户模型配置
+  rpc DeleteUserModelConfig(DeleteUserModelConfigRequest) returns (DeleteUserModelConfigResponse);
+  
+  // 验证模型配置
+  rpc ValidateModelConfig(ValidateModelConfigRequest) returns (ValidateModelConfigResponse);
+  
+  // 获取可用模型列表
+  rpc GetAvailableModels(GetAvailableModelsRequest) returns (GetAvailableModelsResponse);
+  
+  // 获取模型健康状态
+  rpc GetModelHealthStatus(GetModelHealthStatusRequest) returns (GetModelHealthStatusResponse);
+  
+  // 测试模型连接
+  rpc TestModelConnection(TestModelConnectionRequest) returns (TestModelConnectionResponse);
+  
+  // 获取支持的模型提供商
+  rpc GetSupportedProviders(google.protobuf.Empty) returns (GetSupportedProvidersResponse);
+  
+  // 生成聊天完成（内部服务调用）
+  rpc GenerateChatCompletion(GenerateChatCompletionRequest) returns (GenerateChatCompletionResponse);
+}
+
+// 模型提供商枚举
+enum ModelProvider {
+  MODEL_PROVIDER_UNSPECIFIED = 0;
+  MODEL_PROVIDER_OPENAI = 1;
+  MODEL_PROVIDER_ZHIPU = 2;
+  MODEL_PROVIDER_BAIDU = 3;
+  MODEL_PROVIDER_LOCAL = 4;
+  MODEL_PROVIDER_ANTHROPIC = 5;
+  MODEL_PROVIDER_GOOGLE = 6;
+  MODEL_PROVIDER_CUSTOM = 7;
+}
+
+// 模型配置
+message ModelConfig {
+  string model_id = 1;
+  ModelProvider provider = 2;
+  string api_key = 3;
+  string api_base = 4;
+  string model_name = 5;
+  int32 max_tokens = 6;
+  float temperature = 7;
+  bool enabled = 8;
+  int32 priority = 9;
+  int32 rate_limit = 10;
+  int32 timeout = 11;
+  map<string, string> extra_params = 12;
+  google.protobuf.Timestamp created_at = 13;
+  google.protobuf.Timestamp updated_at = 14;
+}
+
+// 模型配置响应（不包含API密钥）
+message ModelConfigResponse {
+  string model_id = 1;
+  ModelProvider provider = 2;
+  string api_base = 3;
+  string model_name = 4;
+  int32 max_tokens = 5;
+  float temperature = 6;
+  bool enabled = 7;
+  int32 priority = 8;
+  int32 rate_limit = 9;
+  int32 timeout = 10;
+  map<string, string> extra_params = 11;
+  google.protobuf.Timestamp created_at = 12;
+  google.protobuf.Timestamp updated_at = 13;
+  bool has_api_key = 14;
+}
+
+// 模型健康状态
+message ModelHealthStatus {
+  string model_id = 1;
+  string provider = 2;
+  bool is_healthy = 3;
+  google.protobuf.Timestamp last_check = 4;
+  int32 error_count = 5;
+  float response_time = 6;
+  string last_error = 7;
+}
+
+// 可用模型信息
+message AvailableModel {
+  string model_id = 1;
+  string model_name = 2;
+  string provider = 3;
+  int32 max_tokens = 4;
+  bool enabled = 5;
+  bool healthy = 6;
+  float response_time = 7;
+  int32 priority = 8;
+}
+
+// 支持的提供商信息
+message SupportedProvider {
+  string provider = 1;
+  string name = 2;
+  string description = 3;
+  bool requires_api_key = 4;
+  repeated string supported_models = 5;
+}
+
+// 聊天消息
+message ChatMessage {
+  string role = 1;
+  string content = 2;
+}
+
+// 聊天完成元数据
+message ChatCompletionMetadata {
+  string model = 1;
+  string provider = 2;
+  map<string, int32> usage = 3;
+  string finish_reason = 4;
+}
+
+// 验证结果
+message ValidationResult {
+  bool valid = 1;
+  repeated string errors = 2;
+  repeated string warnings = 3;
+}
+
+// 请求和响应消息
+
+// 添加用户模型配置
+message AddUserModelConfigRequest {
+  string user_id = 1;
+  ModelConfig config = 2;
+}
+
+message AddUserModelConfigResponse {
+  bool success = 1;
+  string message = 2;
+  string model_id = 3;
+}
+
+// 获取用户模型配置列表
+message GetUserModelConfigsRequest {
+  string user_id = 1;
+  int32 page = 2;
+  int32 page_size = 3;
+  bool enabled_only = 4;
+}
+
+message GetUserModelConfigsResponse {
+  repeated ModelConfigResponse models = 1;
+  int32 total = 2;
+  int32 page = 3;
+  int32 page_size = 4;
+}
+
+// 获取指定模型配置
+message GetUserModelConfigRequest {
+  string user_id = 1;
+  string model_id = 2;
+}
+
+message GetUserModelConfigResponse {
+  ModelConfigResponse config = 1;
+}
+
+// 更新用户模型配置
+message UpdateUserModelConfigRequest {
+  string user_id = 1;
+  string model_id = 2;
+  ModelConfig config = 3;
+}
+
+message UpdateUserModelConfigResponse {
+  bool success = 1;
+  string message = 2;
+  string model_id = 3;
+}
+
+// 删除用户模型配置
+message DeleteUserModelConfigRequest {
+  string user_id = 1;
+  string model_id = 2;
+}
+
+message DeleteUserModelConfigResponse {
+  bool success = 1;
+  string message = 2;
+  string model_id = 3;
+}
+
+// 验证模型配置
+message ValidateModelConfigRequest {
+  string user_id = 1;
+  string model_id = 2;
+  ModelConfig config = 3;
+}
+
+message ValidateModelConfigResponse {
+  ValidationResult result = 1;
+}
+
+// 获取可用模型列表
+message GetAvailableModelsRequest {
+  string user_id = 1;
+}
+
+message GetAvailableModelsResponse {
+  repeated AvailableModel models = 1;
+}
+
+// 获取模型健康状态
+message GetModelHealthStatusRequest {
+  string user_id = 1;
+}
+
+message GetModelHealthStatusResponse {
+  map<string, ModelHealthStatus> health_status = 1;
+}
+
+// 测试模型连接
+message TestModelConnectionRequest {
+  string user_id = 1;
+  string model_id = 2;
+  string test_message = 3;
+}
+
+message TestModelConnectionResponse {
+  bool success = 1;
+  string response = 2;
+  ChatCompletionMetadata metadata = 3;
+  float response_time = 4;
+  string error = 5;
+  google.protobuf.Timestamp timestamp = 6;
+}
+
+// 获取支持的模型提供商
+message GetSupportedProvidersResponse {
+  repeated SupportedProvider providers = 1;
+}
+
+// 生成聊天完成
+message GenerateChatCompletionRequest {
+  string model = 1;
+  repeated ChatMessage messages = 2;
+  float temperature = 3;
+  int32 max_tokens = 4;
+  string user_id = 5;
+}
+
+message GenerateChatCompletionResponse {
+  string content = 1;
+  ChatCompletionMetadata metadata = 2;
+} 

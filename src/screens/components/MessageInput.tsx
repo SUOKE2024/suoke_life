@@ -9,7 +9,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from '../../components/common/Icon';
 import { colors, spacing, borderRadius, fonts } from '../../constants/theme';
 
 interface MessageInputProps {

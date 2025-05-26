@@ -5,13 +5,16 @@ import {
   StyleSheet,
   FlatList,
   TouchableOpacity,
-  Image,
   TextInput,
   Alert,
+  Modal,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { colors } from '../../constants/theme';
+import Icon from '../../components/common/Icon';
+import { colors, spacing, fonts } from '../../constants/theme';
+import AgentChatInterface, { AgentType } from '../../components/common/AgentChatInterface';
+import ContactsList, { Contact } from '../../components/common/ContactsList';
+import AccessibilitySettings from '../../components/common/AccessibilitySettings';
 
 // 聊天频道类型
 interface ChatChannel {
@@ -123,17 +126,89 @@ const CHAT_CHANNELS: ChatChannel[] = [
   }
 ];
 
+// 联系人数据
+const CONTACTS: Contact[] = [
+  {
+    id: 'xiaoai',
+    name: '小艾',
+    type: 'agent',
+    agentType: 'xiaoai',
+    avatar: '🤖',
+    isOnline: true,
+    specialization: '健康诊断与建议',
+  },
+  {
+    id: 'xiaoke',
+    name: '小克',
+    type: 'agent',
+    agentType: 'xiaoke',
+    avatar: '👨‍⚕️',
+    isOnline: true,
+    specialization: '医疗服务管理',
+  },
+  {
+    id: 'laoke',
+    name: '老克',
+    type: 'agent',
+    agentType: 'laoke',
+    avatar: '👴',
+    isOnline: true,
+    specialization: '中医养生教育',
+  },
+  {
+    id: 'soer',
+    name: '索儿',
+    type: 'agent',
+    agentType: 'soer',
+    avatar: '👧',
+    isOnline: true,
+    specialization: '生活方式指导',
+  },
+  {
+    id: 'dr_wang',
+    name: '王医生',
+    type: 'doctor',
+    avatar: '👩‍⚕️',
+    isOnline: false,
+    lastSeen: '1小时前',
+    specialization: '内科诊疗',
+    department: '内科',
+    title: '主任医师',
+  },
+  {
+    id: 'dr_li',
+    name: '李中医',
+    type: 'doctor',
+    avatar: '🧑‍⚕️',
+    isOnline: true,
+    specialization: '中医调理',
+    department: '中医科',
+    title: '副主任医师',
+  },
+  {
+    id: 'user_zhang',
+    name: '张小明',
+    type: 'user',
+    avatar: '👤',
+    isOnline: false,
+    lastSeen: '45分钟前',
+  },
+];
+
 export const HomeScreen: React.FC = () => {
   const [channels, setChannels] = useState<ChatChannel[]>(CHAT_CHANNELS);
   const [searchText, setSearchText] = useState('');
-  const [selectedFilter, setSelectedFilter] = useState<'all' | 'agent' | 'doctor' | 'user' | 'group'>('all');
+  const [agentChatVisible, setAgentChatVisible] = useState(false);
+  const [selectedAgent, setSelectedAgent] = useState<AgentType>('xiaoai');
+  const [contactsVisible, setContactsVisible] = useState(false);
+  const [accessibilitySettingsVisible, setAccessibilitySettingsVisible] = useState(false);
+  const [accessibilityEnabled, setAccessibilityEnabled] = useState(false);
 
   // 过滤聊天频道
   const filteredChannels = channels.filter(channel => {
     const matchesSearch = channel.name.toLowerCase().includes(searchText.toLowerCase()) ||
                          channel.lastMessage.toLowerCase().includes(searchText.toLowerCase());
-    const matchesFilter = selectedFilter === 'all' || channel.type === selectedFilter;
-    return matchesSearch && matchesFilter;
+    return matchesSearch;
   });
 
   // 打开聊天
@@ -153,52 +228,37 @@ export const HomeScreen: React.FC = () => {
   };
 
   // 开始智能体对话
-  const startAgentChat = (channel: ChatChannel) => {
-    // 这里将集成实际的智能体服务
-    console.log(`Starting chat with agent: ${channel.agentType}`);
-    
-    // 清除未读消息
-    setChannels(prev => prev.map(ch => 
-      ch.id === channel.id ? { ...ch, unreadCount: 0 } : ch
-    ));
+  const startAgentChat = async (channel: ChatChannel) => {
+    try {
+      console.log(`🤖 启动与${channel.name}的对话...`);
+      
+      // 清除未读消息
+      setChannels(prev => prev.map(ch => 
+        ch.id === channel.id ? { ...ch, unreadCount: 0 } : ch
+      ));
+
+      // 设置选中的智能体并显示对话界面
+      if (channel.agentType) {
+        setSelectedAgent(channel.agentType);
+        setAgentChatVisible(true);
+        console.log(`🤖 进入${channel.name}对话界面`);
+      }
+
+    } catch (error) {
+      console.error('启动智能体对话失败:', error);
+      Alert.alert('连接失败', `无法连接到${channel.name}服务，请稍后重试`);
+    }
   };
 
-  // 渲染频道过滤器
-  const renderFilters = () => {
-    const filters = [
-      { key: 'all', label: '全部', icon: 'view-list' },
-      { key: 'agent', label: '智能体', icon: 'robot' },
-      { key: 'doctor', label: '医生', icon: 'doctor' },
-      { key: 'user', label: '用户', icon: 'account' },
-      { key: 'group', label: '群组', icon: 'account-group' }
-    ];
-
-    return (
-      <View style={styles.filtersContainer}>
-        {filters.map(filter => (
-          <TouchableOpacity
-            key={filter.key}
-            style={[
-              styles.filterButton,
-              selectedFilter === filter.key && styles.activeFilterButton
-            ]}
-            onPress={() => setSelectedFilter(filter.key as any)}
-          >
-            <Icon 
-              name={filter.icon} 
-              size={16} 
-              color={selectedFilter === filter.key ? colors.primary : colors.textSecondary} 
-            />
-            <Text style={[
-              styles.filterText,
-              selectedFilter === filter.key && styles.activeFilterText
-            ]}>
-              {filter.label}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-    );
+  // 处理联系人点击
+  const handleContactPress = (contact: Contact) => {
+    if (contact.type === 'agent' && contact.agentType) {
+      setSelectedAgent(contact.agentType);
+      setAgentChatVisible(true);
+      setContactsVisible(false);
+    } else {
+      Alert.alert('聊天功能', `即将打开与${contact.name}的聊天`);
+    }
   };
 
   // 渲染聊天频道项
@@ -255,9 +315,27 @@ export const HomeScreen: React.FC = () => {
       {/* 头部 */}
       <View style={styles.header}>
         <Text style={styles.title}>聊天</Text>
-        <TouchableOpacity style={styles.addButton}>
-          <Icon name="plus" size={24} color={colors.primary} />
-        </TouchableOpacity>
+        <View style={styles.headerActions}>
+          <TouchableOpacity 
+            style={styles.headerButton}
+            onPress={() => setAccessibilitySettingsVisible(true)}
+          >
+            <Icon 
+              name="account-voice" 
+              size={24} 
+              color={accessibilityEnabled ? colors.success : colors.textSecondary} 
+            />
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={styles.headerButton}
+            onPress={() => setContactsVisible(true)}
+          >
+            <Icon name="account-multiple" size={24} color={colors.primary} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.headerButton}>
+            <Icon name="plus" size={24} color={colors.primary} />
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* 搜索框 */}
@@ -265,15 +343,12 @@ export const HomeScreen: React.FC = () => {
         <Icon name="magnify" size={20} color={colors.textSecondary} />
         <TextInput
           style={styles.searchInput}
-          placeholder="搜索聊天、联系人..."
+          placeholder="搜索聊天记录..."
           value={searchText}
           onChangeText={setSearchText}
           placeholderTextColor={colors.textSecondary}
         />
       </View>
-
-      {/* 过滤器 */}
-      {renderFilters()}
 
       {/* 聊天频道列表 */}
       <FlatList
@@ -283,12 +358,63 @@ export const HomeScreen: React.FC = () => {
         style={styles.channelsList}
         showsVerticalScrollIndicator={false}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
+        ListEmptyComponent={() => (
+          <View style={styles.emptyState}>
+            <Icon name="message-outline" size={64} color={colors.textSecondary} />
+            <Text style={styles.emptyTitle}>暂无聊天记录</Text>
+            <Text style={styles.emptySubtitle}>点击右上角联系人图标开始聊天</Text>
+          </View>
+        )}
       />
 
       {/* 快速操作按钮 */}
       <TouchableOpacity style={styles.fabButton}>
         <Icon name="message-plus" size={24} color="white" />
       </TouchableOpacity>
+
+      {/* 智能体对话界面 */}
+      <AgentChatInterface
+        visible={agentChatVisible}
+        onClose={() => setAgentChatVisible(false)}
+        agentType={selectedAgent}
+        userId="current_user_id"
+        accessibilityEnabled={accessibilityEnabled}
+      />
+
+      {/* 联系人列表模态框 */}
+      <Modal
+        visible={contactsVisible}
+        animationType="slide"
+        presentationStyle="pageSheet"
+        onRequestClose={() => setContactsVisible(false)}
+      >
+        <SafeAreaView style={styles.modalContainer}>
+          <View style={styles.modalHeader}>
+            <Text style={styles.modalTitle}>联系人</Text>
+            <TouchableOpacity
+              onPress={() => setContactsVisible(false)}
+              style={styles.modalCloseButton}
+            >
+              <Icon name="close" size={24} color={colors.text} />
+            </TouchableOpacity>
+          </View>
+          <ContactsList
+            contacts={CONTACTS}
+            onContactPress={handleContactPress}
+            showSearch={true}
+            groupByType={true}
+            showOnlineStatus={true}
+          />
+        </SafeAreaView>
+      </Modal>
+
+      {/* 无障碍设置模态框 */}
+      <AccessibilitySettings
+        visible={accessibilitySettingsVisible}
+        onClose={() => setAccessibilitySettingsVisible(false)}
+        userId="current_user_id"
+        onSettingsChange={setAccessibilityEnabled}
+      />
     </SafeAreaView>
   );
 };
@@ -312,8 +438,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: colors.text,
   },
-  addButton: {
+  headerActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  headerButton: {
     padding: 8,
+    marginLeft: 8,
   },
   searchContainer: {
     flexDirection: 'row',
@@ -330,32 +461,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: colors.text,
   },
-  filtersContainer: {
-    flexDirection: 'row',
-    paddingHorizontal: 15,
-    marginBottom: 10,
-  },
-  filterButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    marginRight: 8,
-    borderRadius: 15,
-    backgroundColor: colors.surface,
-  },
-  activeFilterButton: {
-    backgroundColor: colors.primary + '20',
-  },
-  filterText: {
-    marginLeft: 4,
-    fontSize: 12,
-    color: colors.textSecondary,
-  },
-  activeFilterText: {
-    color: colors.primary,
-    fontWeight: '600',
-  },
+
   channelsList: {
     flex: 1,
   },
@@ -454,5 +560,46 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
+  },
+  emptyState: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: spacing.xl,
+    paddingVertical: spacing.xxl,
+  },
+  emptyTitle: {
+    fontSize: fonts.size.lg,
+    fontWeight: '600',
+    color: colors.text,
+    marginTop: spacing.md,
+    marginBottom: spacing.sm,
+  },
+  emptySubtitle: {
+    fontSize: fonts.size.md,
+    color: colors.textSecondary,
+    textAlign: 'center',
+    lineHeight: 20,
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: colors.background,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.md,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+  },
+  modalTitle: {
+    fontSize: fonts.size.xl,
+    fontWeight: '600',
+    color: colors.text,
+  },
+  modalCloseButton: {
+    padding: spacing.sm,
   },
 });

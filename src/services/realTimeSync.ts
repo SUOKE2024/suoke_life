@@ -54,8 +54,8 @@ class RealTimeSync extends SimpleEventEmitter {
   private ws: WebSocket | null = null;
   private isConnected = false;
   private reconnectAttempts = 0;
-  private heartbeatTimer: NodeJS.Timeout | null = null;
-  private syncTimer: NodeJS.Timeout | null = null;
+  private heartbeatTimer: ReturnType<typeof setInterval> | null = null;
+  private syncTimer: ReturnType<typeof setInterval> | null = null;
   private pendingSync: Map<string, SyncData> = new Map();
   private localData: Map<string, SyncData> = new Map();
   
