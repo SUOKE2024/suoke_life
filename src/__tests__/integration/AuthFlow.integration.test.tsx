@@ -1,6 +1,9 @@
 import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react-native';
+import { render, fireEvent, waitFor, act } from '@testing-library/react-native';
 import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
+
+// 设置测试环境
+jest.useFakeTimers();
 
 // Mock认证服务
 const mockAuthService = {
@@ -114,18 +117,18 @@ const MockRegisterScreen = ({ navigation }: any) => {
   const handleRegister = async () => {
     const { email, password, confirmPassword, name, phone } = formData;
 
-    if (!email || !password || !name) {
+    if (!email || !password || !name || !phone) {
       Alert.alert('错误', '请填写必填信息');
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      Alert.alert('错误', '两次输入的密码不一致');
       return;
     }
 
     if (password.length < 6) {
       Alert.alert('错误', '密码长度至少6位');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      Alert.alert('错误', '两次输入的密码不一致');
       return;
     }
 
@@ -370,9 +373,11 @@ describe('认证流程集成测试', () => {
       const passwordInput = getByTestId('password-input');
       const loginButton = getByTestId('login-button');
 
-      fireEvent.changeText(emailInput, 'test@example.com');
-      fireEvent.changeText(passwordInput, 'password123');
-      fireEvent.press(loginButton);
+      await act(async () => {
+        fireEvent.changeText(emailInput, 'test@example.com');
+        fireEvent.changeText(passwordInput, 'password123');
+        fireEvent.press(loginButton);
+      });
 
       await waitFor(() => {
         expect(mockAuthService.login).toHaveBeenCalledWith(
@@ -381,9 +386,11 @@ describe('认证流程集成测试', () => {
         );
       });
 
-      expect(mockNavigation.reset).toHaveBeenCalledWith({
-        index: 0,
-        routes: [{ name: 'Main' }],
+      await waitFor(() => {
+        expect(mockNavigation.reset).toHaveBeenCalledWith({
+          index: 0,
+          routes: [{ name: 'Main' }],
+        });
       });
     });
 
@@ -401,9 +408,26 @@ describe('认证流程集成测试', () => {
       const passwordInput = getByTestId('password-input');
       const loginButton = getByTestId('login-button');
 
-      fireEvent.changeText(emailInput, 'test@example.com');
-      fireEvent.changeText(passwordInput, 'wrongpassword');
-      fireEvent.press(loginButton);
+      // 分别设置表单字段
+      act(() => {
+        fireEvent.changeText(emailInput, 'test@example.com');
+      });
+      
+      act(() => {
+        fireEvent.changeText(passwordInput, 'wrongpassword');
+      });
+
+      // 然后按下登录按钮
+      await act(async () => {
+        fireEvent.press(loginButton);
+      });
+
+      await waitFor(() => {
+        expect(mockAuthService.login).toHaveBeenCalledWith(
+          'test@example.com',
+          'wrongpassword'
+        );
+      });
 
       await waitFor(() => {
         expect(Alert.alert).toHaveBeenCalledWith('登录失败', '邮箱或密码错误');
@@ -416,7 +440,10 @@ describe('认证流程集成测试', () => {
       );
 
       const loginButton = getByTestId('login-button');
-      fireEvent.press(loginButton);
+      
+      act(() => {
+        fireEvent.press(loginButton);
+      });
 
       expect(Alert.alert).toHaveBeenCalledWith('错误', '请填写邮箱和密码');
     });
@@ -427,7 +454,10 @@ describe('认证流程集成测试', () => {
       );
 
       const registerLink = getByTestId('register-link');
-      fireEvent.press(registerLink);
+      
+      act(() => {
+        fireEvent.press(registerLink);
+      });
 
       expect(mockNavigation.navigate).toHaveBeenCalledWith('Register');
     });
@@ -438,7 +468,10 @@ describe('认证流程集成测试', () => {
       );
 
       const forgotPasswordLink = getByTestId('forgot-password-link');
-      fireEvent.press(forgotPasswordLink);
+      
+      act(() => {
+        fireEvent.press(forgotPasswordLink);
+      });
 
       expect(mockNavigation.navigate).toHaveBeenCalledWith('ForgotPassword');
     });
@@ -455,13 +488,31 @@ describe('认证流程集成测试', () => {
         <MockRegisterScreen navigation={mockNavigation} />
       );
 
-      fireEvent.changeText(getByTestId('name-input'), '张三');
-      fireEvent.changeText(getByTestId('email-input'), 'test@example.com');
-      fireEvent.changeText(getByTestId('phone-input'), '13800138000');
-      fireEvent.changeText(getByTestId('password-input'), 'password123');
-      fireEvent.changeText(getByTestId('confirm-password-input'), 'password123');
+      // 分别设置表单字段
+      act(() => {
+        fireEvent.changeText(getByTestId('name-input'), '张三');
+      });
+      
+      act(() => {
+        fireEvent.changeText(getByTestId('email-input'), 'test@example.com');
+      });
+      
+      act(() => {
+        fireEvent.changeText(getByTestId('phone-input'), '13800138000');
+      });
+      
+      act(() => {
+        fireEvent.changeText(getByTestId('password-input'), 'password123');
+      });
+      
+      act(() => {
+        fireEvent.changeText(getByTestId('confirm-password-input'), 'password123');
+      });
 
-      fireEvent.press(getByTestId('register-button'));
+      // 然后按下注册按钮
+      await act(async () => {
+        fireEvent.press(getByTestId('register-button'));
+      });
 
       await waitFor(() => {
         expect(mockAuthService.register).toHaveBeenCalledWith({
@@ -472,9 +523,11 @@ describe('认证流程集成测试', () => {
         });
       });
 
-      expect(Alert.alert).toHaveBeenCalledWith('注册成功', '请查收验证邮件');
-      expect(mockNavigation.navigate).toHaveBeenCalledWith('VerifyEmail', {
-        email: 'test@example.com',
+      await waitFor(() => {
+        expect(Alert.alert).toHaveBeenCalledWith('注册成功', '请查收验证邮件');
+        expect(mockNavigation.navigate).toHaveBeenCalledWith('VerifyEmail', {
+          email: 'test@example.com',
+        });
       });
     });
 
@@ -483,12 +536,15 @@ describe('认证流程集成测试', () => {
         <MockRegisterScreen navigation={mockNavigation} />
       );
 
-      fireEvent.changeText(getByTestId('name-input'), '张三');
-      fireEvent.changeText(getByTestId('email-input'), 'test@example.com');
-      fireEvent.changeText(getByTestId('password-input'), 'password123');
-      fireEvent.changeText(getByTestId('confirm-password-input'), 'different');
+      act(() => {
+        fireEvent.changeText(getByTestId('name-input'), '张三');
+        fireEvent.changeText(getByTestId('email-input'), 'test@example.com');
+        fireEvent.changeText(getByTestId('phone-input'), '13800138000');
+        fireEvent.changeText(getByTestId('password-input'), 'password123');
+        fireEvent.changeText(getByTestId('confirm-password-input'), 'different');
 
-      fireEvent.press(getByTestId('register-button'));
+        fireEvent.press(getByTestId('register-button'));
+      });
 
       expect(Alert.alert).toHaveBeenCalledWith('错误', '两次输入的密码不一致');
     });
@@ -498,12 +554,15 @@ describe('认证流程集成测试', () => {
         <MockRegisterScreen navigation={mockNavigation} />
       );
 
-      fireEvent.changeText(getByTestId('name-input'), '张三');
-      fireEvent.changeText(getByTestId('email-input'), 'test@example.com');
-      fireEvent.changeText(getByTestId('password-input'), '123');
-      fireEvent.changeText(getByTestId('confirm-password-input'), '123');
+      act(() => {
+        fireEvent.changeText(getByTestId('name-input'), '张三');
+        fireEvent.changeText(getByTestId('email-input'), 'test@example.com');
+        fireEvent.changeText(getByTestId('phone-input'), '13800138000');
+        fireEvent.changeText(getByTestId('password-input'), '123');
+        fireEvent.changeText(getByTestId('confirm-password-input'), '123');
 
-      fireEvent.press(getByTestId('register-button'));
+        fireEvent.press(getByTestId('register-button'));
+      });
 
       expect(Alert.alert).toHaveBeenCalledWith('错误', '密码长度至少6位');
     });
@@ -513,7 +572,9 @@ describe('认证流程集成测试', () => {
         <MockRegisterScreen navigation={mockNavigation} />
       );
 
-      fireEvent.press(getByTestId('register-button'));
+      act(() => {
+        fireEvent.press(getByTestId('register-button'));
+      });
 
       expect(Alert.alert).toHaveBeenCalledWith('错误', '请填写必填信息');
     });
@@ -530,15 +591,27 @@ describe('认证流程集成测试', () => {
         <MockForgotPasswordScreen navigation={mockNavigation} />
       );
 
-      fireEvent.changeText(getByTestId('email-input'), 'test@example.com');
-      fireEvent.press(getByTestId('send-button'));
+      // 先设置邮箱
+      act(() => {
+        fireEvent.changeText(getByTestId('email-input'), 'test@example.com');
+      });
+
+      // 然后按下发送按钮
+      await act(async () => {
+        fireEvent.press(getByTestId('send-button'));
+      });
 
       await waitFor(() => {
         expect(mockAuthService.resetPassword).toHaveBeenCalledWith('test@example.com');
       });
 
-      expect(Alert.alert).toHaveBeenCalledWith('发送成功', '重置密码邮件已发送');
-      expect(getByTestId('success-message')).toBeTruthy();
+      await waitFor(() => {
+        expect(Alert.alert).toHaveBeenCalledWith('发送成功', '重置密码邮件已发送');
+      });
+
+      await waitFor(() => {
+        expect(getByTestId('success-message')).toBeTruthy();
+      });
     });
 
     it('应该验证邮箱输入', () => {
@@ -561,14 +634,19 @@ describe('认证流程集成测试', () => {
         <MockForgotPasswordScreen navigation={mockNavigation} />
       );
 
-      fireEvent.changeText(getByTestId('email-input'), 'test@example.com');
-      fireEvent.press(getByTestId('send-button'));
+      await act(async () => {
+        fireEvent.changeText(getByTestId('email-input'), 'test@example.com');
+        fireEvent.press(getByTestId('send-button'));
+      });
 
       await waitFor(() => {
         expect(getByTestId('success-message')).toBeTruthy();
       });
 
-      fireEvent.press(getByTestId('resend-button'));
+      act(() => {
+        fireEvent.press(getByTestId('resend-button'));
+      });
+      
       expect(getByTestId('email-input')).toBeTruthy();
     });
   });
@@ -591,8 +669,15 @@ describe('认证流程集成测试', () => {
         />
       );
 
-      fireEvent.changeText(getByTestId('code-input'), '123456');
-      fireEvent.press(getByTestId('verify-button'));
+      // 先设置验证码
+      act(() => {
+        fireEvent.changeText(getByTestId('code-input'), '123456');
+      });
+
+      // 然后按下验证按钮
+      await act(async () => {
+        fireEvent.press(getByTestId('verify-button'));
+      });
 
       await waitFor(() => {
         expect(mockAuthService.verifyCode).toHaveBeenCalledWith(
@@ -601,10 +686,15 @@ describe('认证流程集成测试', () => {
         );
       });
 
-      expect(Alert.alert).toHaveBeenCalledWith('验证成功', '账户已激活');
-      expect(mockNavigation.reset).toHaveBeenCalledWith({
-        index: 0,
-        routes: [{ name: 'Login' }],
+      await waitFor(() => {
+        expect(Alert.alert).toHaveBeenCalledWith('验证成功', '账户已激活');
+      });
+
+      await waitFor(() => {
+        expect(mockNavigation.reset).toHaveBeenCalledWith({
+          index: 0,
+          routes: [{ name: 'Login' }],
+        });
       });
     });
 
@@ -633,7 +723,9 @@ describe('认证流程集成测试', () => {
         />
       );
 
-      fireEvent.press(getByTestId('resend-button'));
+      await act(async () => {
+        fireEvent.press(getByTestId('resend-button'));
+      });
 
       await waitFor(() => {
         expect(mockAuthService.register).toHaveBeenCalledWith({
@@ -654,9 +746,19 @@ describe('认证流程集成测试', () => {
         <MockLoginScreen navigation={mockNavigation} />
       );
 
-      fireEvent.changeText(getByTestId('email-input'), 'test@example.com');
-      fireEvent.changeText(getByTestId('password-input'), 'password123');
-      fireEvent.press(getByTestId('login-button'));
+      // 分别设置表单字段
+      act(() => {
+        fireEvent.changeText(getByTestId('email-input'), 'test@example.com');
+      });
+      
+      act(() => {
+        fireEvent.changeText(getByTestId('password-input'), 'password123');
+      });
+
+      // 然后按下登录按钮
+      await act(async () => {
+        fireEvent.press(getByTestId('login-button'));
+      });
 
       await waitFor(() => {
         expect(Alert.alert).toHaveBeenCalledWith('登录失败', '网络错误，请稍后重试');
@@ -670,12 +772,31 @@ describe('认证流程集成测试', () => {
         <MockRegisterScreen navigation={mockNavigation} />
       );
 
-      fireEvent.changeText(getByTestId('name-input'), '张三');
-      fireEvent.changeText(getByTestId('email-input'), 'test@example.com');
-      fireEvent.changeText(getByTestId('password-input'), 'password123');
-      fireEvent.changeText(getByTestId('confirm-password-input'), 'password123');
+      // 分别设置表单字段
+      act(() => {
+        fireEvent.changeText(getByTestId('name-input'), '张三');
+      });
+      
+      act(() => {
+        fireEvent.changeText(getByTestId('email-input'), 'test@example.com');
+      });
+      
+      act(() => {
+        fireEvent.changeText(getByTestId('phone-input'), '13800138000');
+      });
+      
+      act(() => {
+        fireEvent.changeText(getByTestId('password-input'), 'password123');
+      });
+      
+      act(() => {
+        fireEvent.changeText(getByTestId('confirm-password-input'), 'password123');
+      });
 
-      fireEvent.press(getByTestId('register-button'));
+      // 然后按下注册按钮
+      await act(async () => {
+        fireEvent.press(getByTestId('register-button'));
+      });
 
       await waitFor(() => {
         expect(Alert.alert).toHaveBeenCalledWith('注册失败', '网络错误，请稍后重试');

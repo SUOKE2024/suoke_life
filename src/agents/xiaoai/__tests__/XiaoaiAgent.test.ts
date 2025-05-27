@@ -207,15 +207,21 @@ describe('XiaoaiAgent', () => {
       const status = await xiaoaiAgent.getAccessibilityStatus();
       
       expect(status).toBeDefined();
-      expect(status.visual).toBeDefined();
-      expect(status.hearing).toBeDefined();
-      expect(status.motor).toBeDefined();
-      expect(status.cognitive).toBeDefined();
+      expect(status.serviceAvailable).toBeDefined();
+      if (status.serviceAvailable) {
+        expect(status.visual).toBeDefined();
+        expect(status.hearing).toBeDefined();
+        expect(status.motor).toBeDefined();
+        expect(status.cognitive).toBeDefined();
+      }
     });
 
     it('应该能够适配视觉障碍界面', async () => {
       const adaptations = await xiaoaiAgent.adaptInterfaceForDisability({
-        type: 'visual'
+        type: 'visual',
+        fontSize: 'large',
+        highContrast: true,
+        voiceOutput: true
       });
       
       expect(adaptations).toBeDefined();

@@ -39,9 +39,9 @@ const mockHealthService = {
   
   // Mock数据存储
   const mockStorage = {
-    getItem: jest.fn(),
-    setItem: jest.fn(),
-    removeItem: jest.fn(),
+    getItem: jest.fn().mockResolvedValue(null),
+    setItem: jest.fn().mockResolvedValue(undefined),
+    removeItem: jest.fn().mockResolvedValue(undefined),
   };
   
   // Mock服务已在上面定义
@@ -150,15 +150,26 @@ const mockHealthService = {
           unit: 'bpm',
         };
   
-        mockHealthService.addHealthRecord.mockResolvedValue({
-          success: true,
-          id: 'new-record-id',
+                mockHealthService.addHealthRecord.mockImplementation(async (record) => {
+          // 模拟保存到本地存储
+          const existingData = await mockStorage.getItem('health_data');
+          const healthData = existingData ? JSON.parse(existingData) : {};
+          
+          if (!healthData.vitals) healthData.vitals = {};
+          healthData.vitals.heartRate = record;
+          
+          await mockStorage.setItem('health_data', JSON.stringify(healthData));
+          
+          return {
+            success: true,
+            id: 'new-record-id',
+          };
         });
-  
+
         const addResult = await mockHealthService.addHealthRecord(newVitalRecord);
         expect(addResult.success).toBe(true);
         expect(mockHealthService.addHealthRecord).toHaveBeenCalledWith(newVitalRecord);
-  
+
         // 3. 验证数据已保存到本地存储
         expect(mockStorage.setItem).toHaveBeenCalledWith(
           'health_data',
@@ -563,19 +574,24 @@ const mockHealthService = {
           lastSync: Date.now(),
         };
   
-        mockStorage.getItem.mockResolvedValue(JSON.stringify(localData));
-        mockHealthService.syncHealthData.mockResolvedValue({
-          success: true,
-          synced_records: 5,
-          conflicts: 0,
-          latest_data: cloudData,
+                mockStorage.getItem.mockResolvedValue(JSON.stringify(localData));
+        mockHealthService.syncHealthData.mockImplementation(async () => {
+          // 模拟同步过程中更新本地存储
+          await mockStorage.setItem('health_data', JSON.stringify(cloudData));
+          
+          return {
+            success: true,
+            synced_records: 5,
+            conflicts: 0,
+            latest_data: cloudData,
+          };
         });
-  
+
         const syncResult = await mockHealthService.syncHealthData();
         expect(syncResult.success).toBe(true);
         expect(syncResult.synced_records).toBe(5);
         expect(syncResult.conflicts).toBe(0);
-  
+
         // 验证本地数据已更新
         expect(mockStorage.setItem).toHaveBeenCalledWith(
           'health_data',

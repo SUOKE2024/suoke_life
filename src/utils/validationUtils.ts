@@ -112,10 +112,90 @@ export const validateNumberRange = (
 };
 
 /**
- * 年龄验证
+ * 年龄验证（基于数字）
  */
-export const validateAge = (age: number): boolean => {
+export const validateAgeNumber = (age: number): boolean => {
   return validateNumberRange(age, 0, 150);
+};
+
+/**
+ * 年龄验证（基于出生日期）
+ */
+export const validateAge = (birthDate: string): { isValid: boolean; age?: number; error?: string } => {
+  try {
+    // 先检查日期格式
+    if (!birthDate || typeof birthDate !== 'string') {
+      return { isValid: false, error: '无效的日期格式' };
+    }
+    
+    const birth = new Date(birthDate);
+    const now = new Date();
+    
+    // 检查日期格式是否有效
+    if (isNaN(birth.getTime())) {
+      return {
+        isValid: false,
+        error: '无效的日期格式'
+      };
+    }
+    
+    // 检查是否为未来日期
+    if (birth > now) {
+      return {
+        isValid: false,
+        error: '出生日期不能是未来日期'
+      };
+    }
+    
+    // 检查年份是否合理（不能早于1850年）
+    if (birth.getFullYear() < 1850) {
+      return {
+        isValid: false,
+        error: '出生年份不能早于1850年'
+      };
+    }
+    
+    // 计算年龄
+    let age = now.getFullYear() - birth.getFullYear();
+    const monthDiff = now.getMonth() - birth.getMonth();
+    
+    if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < birth.getDate())) {
+      age--;
+    }
+    
+    // 检查年份是否合理（不能早于1850年）
+    if (birth.getFullYear() < 1850) {
+      return {
+        isValid: false,
+        error: '出生年份不能早于1850年'
+      };
+    }
+    
+    // 检查年龄范围
+    if (age < 0) {
+      return {
+        isValid: false,
+        error: '年龄不能为负数'
+      };
+    }
+    
+    if (age > 150) {
+      return {
+        isValid: false,
+        error: '年龄不能超过150岁'
+      };
+    }
+    
+    return {
+      isValid: true,
+      age
+    };
+  } catch (error) {
+    return {
+      isValid: false,
+      error: '日期解析错误'
+    };
+  }
 };
 
 /**

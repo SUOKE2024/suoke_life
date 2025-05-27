@@ -19,7 +19,7 @@ const mockNetInfo = {
   type: 'wifi',
 };
 
-jest.mock('@react-native-netinfo/netinfo', () => ({
+jest.mock('@react-native-community/netinfo', () => ({
   fetch: jest.fn(() => Promise.resolve(mockNetInfo)),
   addEventListener: jest.fn(() => jest.fn()),
 }));

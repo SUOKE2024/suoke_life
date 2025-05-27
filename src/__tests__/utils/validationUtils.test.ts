@@ -4,13 +4,21 @@ describe('Validation Utils', () => {
   describe('validateEmail', () => {
     const validateEmail = (email: string): boolean => {
       // 更严格的邮箱验证正则表达式
-      const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+      const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
       
       // 额外检查
       if (!email || email.length > 254) return false;
       if (email.includes('..')) return false;
       if (email.startsWith('.') || email.endsWith('.')) return false;
       if (email.includes(' ')) return false;
+      if (!email.includes('@')) return false;
+      if (email.indexOf('@') !== email.lastIndexOf('@')) return false; // 只能有一个@
+      
+      const parts = email.split('@');
+      if (parts.length !== 2) return false;
+      if (parts[0].length === 0 || parts[1].length === 0) return false;
+      if (parts[1].indexOf('.') === -1) return false; // 域名必须有点
+      if (parts[1].startsWith('.') || parts[1].endsWith('.')) return false;
       
       return emailRegex.test(email);
     };
@@ -221,6 +229,11 @@ describe('Validation Utils', () => {
   // 年龄验证
   describe('validateAge', () => {
     const validateAge = (birthDate: string): { isValid: boolean; age?: number; error?: string } => {
+      // 先检查日期格式
+      if (!birthDate || typeof birthDate !== 'string') {
+        return { isValid: false, error: '无效的日期格式' };
+      }
+      
       const birth = new Date(birthDate);
       const today = new Date();
       
@@ -228,8 +241,14 @@ describe('Validation Utils', () => {
         return { isValid: false, error: '无效的日期格式' };
       }
       
+      // 检查是否为未来日期
       if (birth > today) {
-        return { isValid: false, error: '出生日期不能是未来' };
+        return { isValid: false, error: '出生日期不能是未来日期' };
+      }
+      
+      // 检查年份是否合理（不能早于1850年）
+      if (birth.getFullYear() < 1850) {
+        return { isValid: false, error: '出生年份不能早于1850年' };
       }
       
       let age = today.getFullYear() - birth.getFullYear();
@@ -271,11 +290,12 @@ describe('Validation Utils', () => {
     });
 
     it('应该拒绝无效的出生日期', () => {
+      const currentYear = new Date().getFullYear();
       const invalidDates = [
         { date: '2025-01-01', reason: '未来日期' },
         { date: 'invalid-date', reason: '无效格式' },
         { date: '1800-01-01', reason: '过于久远' },
-        { date: '1850-01-01', reason: '年龄超过150岁' },
+        { date: `${currentYear - 152}-01-01`, reason: '年龄超过150岁' },
       ];
 
       invalidDates.forEach(({ date, reason }) => {

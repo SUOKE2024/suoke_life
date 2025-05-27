@@ -45,17 +45,22 @@ jest.mock('@react-navigation/native', () => {
 });
 
 // Mock @react-navigation/bottom-tabs
-jest.mock('@react-navigation/bottom-tabs', () => ({
-  createBottomTabNavigator: () => ({
-    Navigator: ({ children }: any) => <View testID="tab-navigator">{children}</View>,
-    Screen: ({ children, options }: any) => (
-      <View testID={options?.tabBarTestID || 'tab-screen'}>
-        <Text>{options?.tabBarLabel}</Text>
-        {children}
-      </View>
-    ),
-  }),
-}));
+jest.mock('@react-navigation/bottom-tabs', () => {
+  const React = require('react');
+  const { View, Text } = require('react-native');
+  
+  return {
+    createBottomTabNavigator: () => ({
+      Navigator: ({ children }: any) => React.createElement(View, { testID: "tab-navigator" }, children),
+      Screen: ({ children, options }: any) => React.createElement(
+        View,
+        { testID: options?.tabBarTestID || 'tab-screen' },
+        React.createElement(Text, null, options?.tabBarLabel),
+        children
+      ),
+    }),
+  };
+});
 
 const Tab = createBottomTabNavigator();
 

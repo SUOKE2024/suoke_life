@@ -1,3 +1,4 @@
+import React from 'react';
 import { renderHook, act } from '@testing-library/react-native';
 
 // Mock导航Hook
@@ -6,32 +7,37 @@ const useNavigation = () => {
   const [navigationHistory, setNavigationHistory] = React.useState(['Home']);
   const [canGoBack, setCanGoBack] = React.useState(false);
 
-  const navigate = (routeName: string, params?: any) => {
+  const navigate = React.useCallback((routeName: string, params?: any) => {
     setNavigationHistory((prev: string[]) => [...prev, routeName]);
     setCurrentRoute(routeName);
     setCanGoBack(true);
-  };
+  }, []);
 
-  const goBack = () => {
-    if (navigationHistory.length > 1) {
-      const newHistory = navigationHistory.slice(0, -1);
-      setNavigationHistory(newHistory);
-      setCurrentRoute(newHistory[newHistory.length - 1]);
-      setCanGoBack(newHistory.length > 1);
-    }
-  };
+  const goBack = React.useCallback(() => {
+    setNavigationHistory((prev: string[]) => {
+      if (prev.length > 1) {
+        const newHistory = prev.slice(0, -1);
+        setCurrentRoute(newHistory[newHistory.length - 1]);
+        setCanGoBack(newHistory.length > 1);
+        return newHistory;
+      }
+      return prev;
+    });
+  }, []);
 
-  const reset = (routeName: string = 'Home') => {
+  const reset = React.useCallback((routeName: string = 'Home') => {
     setNavigationHistory([routeName]);
     setCurrentRoute(routeName);
     setCanGoBack(false);
-  };
+  }, []);
 
-  const replace = (routeName: string, params?: any) => {
-    const newHistory = [...navigationHistory.slice(0, -1), routeName];
-    setNavigationHistory(newHistory);
-    setCurrentRoute(routeName);
-  };
+  const replace = React.useCallback((routeName: string, params?: any) => {
+    setNavigationHistory((prev: string[]) => {
+      const newHistory = [...prev.slice(0, -1), routeName];
+      setCurrentRoute(routeName);
+      return newHistory;
+    });
+  }, []);
 
   return {
     currentRoute,
@@ -44,32 +50,8 @@ const useNavigation = () => {
   };
 };
 
-// Mock React
-const React = {
-  useState: jest.fn(),
-};
-
-// 设置useState mock
-let stateIndex = 0;
-const mockStates: any[] = [];
-
-React.useState.mockImplementation((initialValue: any) => {
-  const index = stateIndex++;
-  if (mockStates[index] === undefined) {
-    mockStates[index] = initialValue;
-  }
-  
-  const setState = (newValue: any) => {
-    mockStates[index] = typeof newValue === 'function' ? newValue(mockStates[index]) : newValue;
-  };
-  
-  return [mockStates[index], setState];
-});
-
 describe('useNavigation', () => {
   beforeEach(() => {
-    stateIndex = 0;
-    mockStates.length = 0;
     jest.clearAllMocks();
   });
 

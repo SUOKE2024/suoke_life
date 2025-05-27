@@ -1,0 +1,106 @@
+{
+  "search_categories": {
+    "microservices": {
+      "description": "微服务架构最佳实践",
+      "queries": [
+        "microservices best practices go",
+        "microservices architecture patterns",
+        "service mesh istio",
+        "api gateway patterns",
+        "distributed systems patterns"
+      ],
+      "priority": "high"
+    },
+    "react_native": {
+      "description": "React Native移动应用最佳实践",
+      "queries": [
+        "react native best practices",
+        "react native boilerplate",
+        "react native navigation",
+        "react native performance",
+        "react native testing"
+      ],
+      "priority": "high"
+    },
+    "ai_ml": {
+      "description": "AI/ML集成最佳实践",
+      "queries": [
+        "multi agent systems",
+        "langchain python",
+        "machine learning pipeline",
+        "ai agent framework",
+        "llm integration patterns"
+      ],
+      "priority": "high"
+    },
+    "healthcare": {
+      "description": "健康数据管理最佳实践",
+      "queries": [
+        "healthcare data management",
+        "medical data privacy",
+        "fhir healthcare",
+        "health information systems",
+        "medical device integration"
+      ],
+      "priority": "medium"
+    },
+    "blockchain": {
+      "description": "区块链集成最佳实践",
+      "queries": [
+        "blockchain healthcare",
+        "hyperledger fabric",
+        "zero knowledge proofs",
+        "smart contracts healthcare",
+        "blockchain privacy"
+      ],
+      "priority": "medium"
+    },
+    "quality": {
+      "description": "项目质量和监控最佳实践",
+      "queries": [
+        "code quality tools",
+        "software metrics",
+        "performance monitoring",
+        "observability patterns",
+        "testing strategies"
+      ],
+      "priority": "high"
+    },
+    "tcm": {
+      "description": "中医数字化相关项目",
+      "queries": [
+        "traditional chinese medicine ai",
+        "tcm digitalization",
+        "syndrome differentiation",
+        "chinese medicine nlp",
+        "herbal medicine database"
+      ],
+      "priority": "low"
+    },
+    "security": {
+      "description": "安全最佳实践",
+      "queries": [
+        "security best practices",
+        "oauth2 implementation",
+        "jwt security",
+        "api security patterns",
+        "data encryption"
+      ],
+      "priority": "high"
+    }
+  },
+  "evaluation_criteria": {
+    "stars_weight": 0.3,
+    "forks_weight": 0.2,
+    "recent_activity_weight": 0.2,
+    "documentation_weight": 0.15,
+    "license_weight": 0.1,
+    "issues_weight": 0.05
+  },
+  "filters": {
+    "min_stars": 10,
+    "max_age_months": 24,
+    "preferred_languages": ["JavaScript", "TypeScript", "Python", "Go", "Java"],
+    "exclude_archived": true
+  }
+} 
