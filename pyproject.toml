@@ -183,3 +183,17 @@ exclude_lines = [
     "class .*\\bProtocol\\):",
     "@(abc\\.)?abstractmethod",
 ] 
+
+[tool.uv.workspace]
+members = [
+    "services/auth-service",
+    "services/api-gateway",
+    "services/user-service",
+    "services/blockchain-service",
+    "services/agent-services/xiaoai-service",
+    "services/agent-services/xiaoke-service",
+    "services/agent-services/soer-service",
+    "services/health-data-service",
+    "services/corn-maze-service",
+    "services/message-bus",
+]

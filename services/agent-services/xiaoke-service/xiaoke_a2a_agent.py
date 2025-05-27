@@ -13,10 +13,69 @@ import logging
 from typing import Dict, Any, Optional, List
 from python_a2a import A2AServer, AgentCard, skill, agent, TaskStatus, TaskState, Message, TextContent, MessageRole
 
-# 导入小克服务的核心组件
-from internal.scheduler.resource_manager import ResourceManager
-from internal.inventory.product_manager import ProductManager
-from internal.repository.subscription_repository import SubscriptionRepository
+# 简化的模拟组件实现
+class ResourceManager:
+    """资源管理器模拟实现"""
+    def schedule_resources(self, **kwargs):
+        return {
+            "scheduled_resources": [
+                {"id": "res_001", "type": "中医诊所", "name": "康复中医诊所", "distance": "2.5km"},
+                {"id": "res_002", "type": "专科医院", "name": "中医药大学附属医院", "distance": "5.1km"}
+            ],
+            "total": 2
+        }
+    
+    def manage_appointment(self, **kwargs):
+        return {
+            "appointment_id": "apt_001",
+            "status": "confirmed",
+            "time": "2024-01-15 14:00:00",
+            "doctor": "李医生",
+            "location": "康复中医诊所"
+        }
+
+class ProductManager:
+    """产品管理器模拟实现"""
+    def customize_products(self, **kwargs):
+        constitution_type = kwargs.get('constitution_type', '阳虚质')
+        return {
+            "customized_products": [
+                {"id": "prod_001", "name": "温补养生茶", "suitable_for": constitution_type},
+                {"id": "prod_002", "name": "有机红枣", "suitable_for": constitution_type},
+                {"id": "prod_003", "name": "野生枸杞", "suitable_for": constitution_type}
+            ],
+            "total": 3
+        }
+    
+    def trace_product(self, **kwargs):
+        return {
+            "product_id": kwargs.get('product_id'),
+            "trace_info": {
+                "origin": "有机农场",
+                "harvest_date": "2024-01-01",
+                "quality_grade": "A级",
+                "blockchain_hash": "0x123456789abcdef"
+            }
+        }
+    
+    def recommend_products(self, **kwargs):
+        return {
+            "recommendations": [
+                {"id": "rec_001", "name": "季节性养生套餐", "score": 0.95},
+                {"id": "rec_002", "name": "体质调理组合", "score": 0.88}
+            ]
+        }
+
+class SubscriptionRepository:
+    """订阅仓库模拟实现"""
+    def manage_subscription(self, **kwargs):
+        action = kwargs.get('action', 'query')
+        if action == 'create':
+            return {"subscription_id": "sub_001", "status": "active"}
+        elif action == 'cancel':
+            return {"subscription_id": kwargs.get('subscription_id'), "status": "cancelled"}
+        else:
+            return {"subscriptions": [{"id": "sub_001", "type": "月度配送", "status": "active"}]}
 
 logger = logging.getLogger(__name__)
 

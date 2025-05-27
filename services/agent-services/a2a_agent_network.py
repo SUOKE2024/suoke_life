@@ -14,10 +14,17 @@ from typing import Dict, Any, Optional, List
 from python_a2a import AgentNetwork, AgentCard, AIAgentRouter, WorkflowStep, WorkflowContext, Flow
 
 # 导入四大智能体
-from xiaoai_service.xiaoai.a2a_agent import create_xiaoai_a2a_agent
-from xiaoke_service.xiaoke_a2a_agent import create_xiaoke_a2a_agent
-from laoke_service.laoke_a2a_agent import create_laoke_a2a_agent
-from soer_service.soer_a2a_agent import create_soer_a2a_agent
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), 'xiaoai-service'))
+sys.path.append(os.path.join(os.path.dirname(__file__), 'xiaoke-service'))
+sys.path.append(os.path.join(os.path.dirname(__file__), 'laoke-service'))
+sys.path.append(os.path.join(os.path.dirname(__file__), 'soer-service'))
+
+from xiaoai.a2a_agent import create_xiaoai_a2a_agent
+from xiaoke_a2a_agent import create_xiaoke_a2a_agent
+from laoke_a2a_agent import create_laoke_a2a_agent
+from soer_a2a_agent import create_soer_a2a_agent
 
 logger = logging.getLogger(__name__)
 
@@ -35,10 +42,10 @@ class SuokeLifeA2ANetwork:
         self.config = config or {}
         
         # 初始化四大智能体
-        self.xiaoai_agent = create_xiaoai_a2a_agent(config.get("xiaoai", {}))
-        self.xiaoke_agent = create_xiaoke_a2a_agent(config.get("xiaoke", {}))
-        self.laoke_agent = create_laoke_a2a_agent(config.get("laoke", {}))
-        self.soer_agent = create_soer_a2a_agent(config.get("soer", {}))
+        self.xiaoai_agent = create_xiaoai_a2a_agent(self.config.get("xiaoai", {}))
+        self.xiaoke_agent = create_xiaoke_a2a_agent(self.config.get("xiaoke", {}))
+        self.laoke_agent = create_laoke_a2a_agent(self.config.get("laoke", {}))
+        self.soer_agent = create_soer_a2a_agent(self.config.get("soer", {}))
         
         # 创建智能体网络
         self.agent_network = AgentNetwork()
@@ -46,15 +53,8 @@ class SuokeLifeA2ANetwork:
         # 注册智能体到网络
         self._register_agents()
         
-        # 创建 AI 路由器
-        self.ai_router = AIAgentRouter(
-            agents=[
-                self.xiaoai_agent,
-                self.xiaoke_agent,
-                self.laoke_agent,
-                self.soer_agent
-            ]
-        )
+        # 创建 AI 路由器（暂时简化实现）
+        self.ai_router = None  # 需要 LLM 客户端，暂时简化
         
         # 创建工作流管理器
         self.workflows = {}
@@ -74,7 +74,7 @@ class SuokeLifeA2ANetwork:
         ]
         
         for agent_id, agent in agents:
-            self.agent_network.register_agent(agent_id, agent)
+            self.agent_network.add(agent_id, agent)
             logger.info(f"已注册智能体: {agent_id}")
     
     def _define_workflows(self):
@@ -233,14 +233,14 @@ class SuokeLifeA2ANetwork:
             message = user_request.get("message", "")
             request_type = user_request.get("type", "general")
             
-            # 使用 AI 路由器选择合适的智能体或工作流
+            # 根据请求类型选择处理方式
             if request_type == "workflow":
                 # 执行工作流
                 workflow_name = user_request.get("workflow", "健康咨询工作流")
                 result = await self._execute_workflow(workflow_name, user_request)
             else:
-                # 单智能体处理
-                target_agent = await self.ai_router.route_request(user_request)
+                # 简化的智能体选择逻辑
+                target_agent = self._simple_route_request(user_request)
                 result = await self._process_with_agent(target_agent, user_request)
             
             return {
@@ -377,6 +377,28 @@ class SuokeLifeA2ANetwork:
             return any(keyword in message for keyword in ["诊断", "体质", "症状", "不舒服"])
         
         return True
+    
+    def _simple_route_request(self, user_request: Dict[str, Any]) -> str:
+        """
+        简化的请求路由逻辑
+        
+        Args:
+            user_request: 用户请求
+            
+        Returns:
+            目标智能体名称
+        """
+        message = user_request.get("message", "").lower()
+        
+        # 基于关键词的简单路由
+        if any(keyword in message for keyword in ["预约", "医生", "医院", "农产品", "定制", "产品"]):
+            return "xiaoke"
+        elif any(keyword in message for keyword in ["学习", "知识", "教育", "问题", "什么是"]):
+            return "laoke"
+        elif any(keyword in message for keyword in ["健康计划", "营养", "情绪", "传感器", "数据分析"]):
+            return "soer"
+        else:
+            return "xiaoai"  # 默认使用小艾
     
     async def _process_with_agent(self, agent_name: str, user_request: Dict[str, Any]) -> Dict[str, Any]:
         """
