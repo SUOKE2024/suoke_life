@@ -196,4 +196,7 @@ members = [
     "services/health-data-service",
     "services/corn-maze-service",
     "services/message-bus",
+    "services/integration-service",
+    "services/med-knowledge",
+    "services/diagnostic-services/inquiry-service",
 ]

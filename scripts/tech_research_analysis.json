@@ -1,0 +1,894 @@
+[
+  {
+    "name": "Mikaelemmmm/go-zero-looklook",
+    "description": "🔥基于go-zero(go zero) 微服务全技术栈开发最佳实践项目。Develop best practice projects based on the full technology stack of go zero (go zero) microservices.",
+    "language": "Go",
+    "stars": 4734,
+    "forks": 871,
+    "size": 105599,
+    "topics": [
+      "asynq",
+      "dtm",
+      "elasticsearch",
+      "filebeat",
+      "gitlab",
+      "go-queue",
+      "go-stash",
+      "go-zero",
+      "goctl",
+      "golang",
+      "gozero",
+      "grafana",
+      "harbor",
+      "jaeger",
+      "jenkins",
+      "k8s",
+      "kafka",
+      "microservices",
+      "modd",
+      "prometheus"
+    ],
+    "architecture_patterns": [
+      "Clean Architecture"
+    ],
+    "tech_stack": [
+      "Go",
+      "Go Modules"
+    ],
+    "best_practices": [
+      "Comprehensive Documentation",
+      "GitHub Actions CI/CD",
+      "Multi-Container Orchestration"
+    ],
+    "directory_structure": {
+      "directories": [
+        ".github",
+        "app",
+        "data",
+        "deploy",
+        "doc",
+        "pkg"
+      ],
+      "files": [
+        ".gitignore",
+        "LICENSE",
+        "README-cn.md",
+        "README-devport.md",
+        "README.md",
+        "docker-compose-env.yml",
+        "docker-compose.yml",
+        "go.mod",
+        "go.sum",
+        "modd.conf"
+      ],
+      "patterns": []
+    },
+    "key_files": {
+      "README.md": {
+        "type": "README.md",
+        "insights": []
+      },
+      "go.mod": {
+        "type": "go.mod",
+        "insights": [
+          "Go项目",
+          "支持gRPC"
+        ]
+      },
+      "docker-compose.yml": {
+        "type": "docker-compose.yml",
+        "insights": []
+      }
+    }
+  },
+  {
+    "name": "aeraki-mesh/aeraki",
+    "description": "Manage any layer-7 protocols in a Service Mesh.",
+    "language": "Go",
+    "stars": 753,
+    "forks": 141,
+    "size": 5357,
+    "topics": [
+      "brpc",
+      "dubbo",
+      "envoy",
+      "envoyproxy",
+      "istio",
+      "redis",
+      "service-mesh",
+      "servicemesh",
+      "thrift",
+      "trpc"
+    ],
+    "architecture_patterns": [
+      "Microservices Architecture",
+      "Clean Architecture"
+    ],
+    "tech_stack": [
+      "Go",
+      "Go Modules"
+    ],
+    "best_practices": [
+      "Comprehensive Documentation",
+      "Dedicated Documentation Directory",
+      "Test Coverage",
+      "GitHub Actions CI/CD"
+    ],
+    "directory_structure": {
+      "directories": [
+        ".ci",
+        ".github",
+        "cmd",
+        "demo",
+        "docker",
+        "docs",
+        "hack",
+        "internal",
+        "k8s",
+        "manifests",
+        "test"
+      ],
+      "files": [
+        ".gitignore",
+        ".golangci.yml",
+        ".licenserc.yaml",
+        "CODE_OF_CONDUCT.md",
+        "CONTRIBUTING.md",
+        "GOVERNANCE.md",
+        "LICENSE",
+        "MAINTAINERS.md",
+        "Makefile",
+        "README.md",
+        "README.zh-CN.md",
+        "SECURITY.md",
+        "go.mod",
+        "go.sum",
+        "steering.md"
+      ],
+      "patterns": [
+        "Go Standard Project Layout",
+        "Container/Kubernetes Ready",
+        "Documentation Included"
+      ]
+    },
+    "key_files": {
+      "README.md": {
+        "type": "README.md",
+        "insights": []
+      },
+      "go.mod": {
+        "type": "go.mod",
+        "insights": [
+          "Go项目",
+          "使用Gin Web框架",
+          "支持gRPC",
+          "Kubernetes集成"
+        ]
+      },
+      "Makefile": {
+        "type": "Makefile",
+        "insights": []
+      }
+    }
+  },
+  {
+    "name": "vardius/go-api-boilerplate",
+    "description": "Go Server/API boilerplate using best practices DDD CQRS ES gRPC",
+    "language": "Go",
+    "stars": 955,
+    "forks": 137,
+    "size": 10173,
+    "topics": [
+      "api",
+      "best-practices",
+      "boilerplate",
+      "bootstrap",
+      "cqrs",
+      "ddd",
+      "docker",
+      "event-sourcing",
+      "golang",
+      "grpc",
+      "helm",
+      "helm-charts",
+      "kubernetes",
+      "microservices",
+      "oauth2",
+      "oauth2-server",
+      "restful",
+      "rpc",
+      "starter-kit",
+      "telepresence"
+    ],
+    "architecture_patterns": [
+      "Microservices Architecture",
+      "Clean Architecture"
+    ],
+    "tech_stack": [
+      "Go",
+      "Go Modules"
+    ],
+    "best_practices": [
+      "Comprehensive Documentation",
+      "GitHub Actions CI/CD"
+    ],
+    "directory_structure": {
+      "directories": [
+        ".github",
+        "cmd",
+        "k8s",
+        "pkg"
+      ],
+      "files": [
+        ".dockerignore",
+        ".editorconfig",
+        ".gitattributes",
+        ".gitignore",
+        ".hound.yml",
+        ".travis.yml",
+        "LICENSE.md",
+        "Makefile",
+        "README.md",
+        "doc.go",
+        "go.mod",
+        "go.sum"
+      ],
+      "patterns": [
+        "Container/Kubernetes Ready"
+      ]
+    },
+    "key_files": {
+      "README.md": {
+        "type": "README.md",
+        "insights": []
+      },
+      "go.mod": {
+        "type": "go.mod",
+        "insights": [
+          "Go项目",
+          "使用Gin Web框架",
+          "支持gRPC"
+        ]
+      },
+      "Makefile": {
+        "type": "Makefile",
+        "insights": []
+      }
+    }
+  },
+  {
+    "name": "thecodingmachine/react-native-boilerplate",
+    "description": "A React Native template for building solid applications 🐙, using JavaScript 💛 or Typescript 💙 (you choose).",
+    "language": "TypeScript",
+    "stars": 5197,
+    "forks": 899,
+    "size": 33876,
+    "topics": [
+      "architecture",
+      "boilerplate",
+      "boilerplates",
+      "javascript",
+      "react-native",
+      "react-native-boilerplate",
+      "starter-kit",
+      "starter-template",
+      "starterkit",
+      "tanstack-query",
+      "thecodingmachine",
+      "typescript",
+      "typescript-boilerplate",
+      "zod"
+    ],
+    "architecture_patterns": [],
+    "tech_stack": [
+      "TypeScript",
+      "Node.js"
+    ],
+    "best_practices": [
+      "Comprehensive Documentation",
+      "GitHub Actions CI/CD"
+    ],
+    "directory_structure": {
+      "directories": [
+        ".github",
+        ".yarn",
+        "documentation",
+        "template"
+      ],
+      "files": [
+        ".gitignore",
+        ".npmignore",
+        ".yarnrc.yml",
+        "CODE_OF_CONDUCT.md",
+        "LICENSE",
+        "README.md",
+        "SECURITY.md",
+        "package.json",
+        "post-init.script.js",
+        "template.config.js",
+        "yarn.lock"
+      ],
+      "patterns": []
+    },
+    "key_files": {
+      "README.md": {
+        "type": "README.md",
+        "insights": []
+      },
+      "package.json": {
+        "type": "package.json",
+        "insights": [
+          "Node.js项目，依赖数量: 2"
+        ]
+      }
+    }
+  },
+  {
+    "name": "software-mansion/react-native-screens",
+    "description": "Native navigation primitives for your React Native app.",
+    "language": "TypeScript",
+    "stars": 3317,
+    "forks": 561,
+    "size": 86490,
+    "topics": [
+      "react-native",
+      "react-navigation",
+      "typescript"
+    ],
+    "architecture_patterns": [],
+    "tech_stack": [
+      "TypeScript",
+      "Node.js"
+    ],
+    "best_practices": [
+      "Comprehensive Documentation",
+      "Dedicated Documentation Directory",
+      "GitHub Actions CI/CD"
+    ],
+    "directory_structure": {
+      "directories": [
+        ".github",
+        ".husky",
+        ".yarn",
+        "Example",
+        "FabricExample",
+        "TVOSExample",
+        "android",
+        "apps",
+        "common",
+        "cpp",
+        "docs",
+        "gesture-handler",
+        "guides",
+        "ios",
+        "native-stack",
+        "reanimated",
+        "scripts",
+        "src",
+        "windows"
+      ],
+      "files": [
+        ".buckconfig",
+        ".clang-format",
+        ".eslintrc.js",
+        ".flowconfig",
+        ".gitattributes",
+        ".gitignore",
+        ".gitmodules",
+        ".npmignore",
+        ".nvmrc",
+        ".prettierrc.js",
+        ".watchmanconfig",
+        ".yarnrc.yml",
+        "LICENSE",
+        "README-Fabric.md",
+        "README.md",
+        "RNScreens.podspec",
+        "babel.config.js",
+        "jest.config.js",
+        "package.json",
+        "react-native.config.js",
+        "react-navigation",
+        "tsconfig.build.json",
+        "tsconfig.json",
+        "yarn.lock"
+      ],
+      "patterns": [
+        "Documentation Included"
+      ]
+    },
+    "key_files": {
+      "README.md": {
+        "type": "README.md",
+        "insights": []
+      },
+      "package.json": {
+        "type": "package.json",
+        "insights": [
+          "Node.js项目，依赖数量: 3",
+          "TypeScript支持"
+        ]
+      }
+    }
+  },
+  {
+    "name": "infinitered/ignite",
+    "description": "Infinite Red's battle-tested React Native project boilerplate, along with a CLI, component/model generators, and more! 9 years of continuous development and counting.",
+    "language": "TypeScript",
+    "stars": 18587,
+    "forks": 1459,
+    "size": 61389,
+    "topics": [
+      "boilerplate",
+      "cli",
+      "expo",
+      "generator",
+      "mst",
+      "react-native",
+      "react-native-generator"
+    ],
+    "architecture_patterns": [],
+    "tech_stack": [
+      "TypeScript",
+      "Node.js"
+    ],
+    "best_practices": [
+      "Comprehensive Documentation",
+      "Dedicated Documentation Directory",
+      "Test Coverage",
+      "GitHub Actions CI/CD"
+    ],
+    "directory_structure": {
+      "directories": [
+        ".circleci",
+        ".github",
+        ".yarn",
+        "bin",
+        "boilerplate",
+        "docs",
+        "src",
+        "test"
+      ],
+      "files": [
+        ".gitignore",
+        ".nvmrc",
+        ".prettierignore",
+        ".yarnrc.yml",
+        "CODE_OF_CONDUCT.md",
+        "LICENSE",
+        "README.md",
+        "package.json",
+        "template.config.js",
+        "tsconfig.json",
+        "yarn.lock"
+      ],
+      "patterns": [
+        "Documentation Included"
+      ]
+    },
+    "key_files": {
+      "README.md": {
+        "type": "README.md",
+        "insights": []
+      },
+      "package.json": {
+        "type": "package.json",
+        "insights": [
+          "Node.js项目，依赖数量: 4",
+          "TypeScript支持"
+        ]
+      }
+    }
+  },
+  {
+    "name": "MervinPraison/PraisonAI",
+    "description": "PraisonAI is a production-ready Multi AI Agents framework, designed to create AI Agents to automate and solve problems ranging from simple tasks to complex challenges. It provides a low-code solution to streamline the building and management of multi-agent LLM systems, emphasising simplicity, customisation, and effective human-agent collaboration.",
+    "language": "Jupyter Notebook",
+    "stars": 4262,
+    "forks": 612,
+    "size": 23226,
+    "topics": [
+      "agents",
+      "ai",
+      "ai-agent-framework",
+      "ai-agent-sdk",
+      "ai-agents",
+      "ai-agents-framework",
+      "ai-agents-sdk",
+      "ai-framwork",
+      "aiagent",
+      "aiagentframework",
+      "aiagents",
+      "aiagentsframework",
+      "framework",
+      "multi-agent",
+      "multi-agent-collaboration",
+      "multi-agent-system",
+      "multi-agent-systems",
+      "multi-agents",
+      "multi-ai-agent",
+      "multi-ai-agents"
+    ],
+    "architecture_patterns": [],
+    "tech_stack": [
+      "Python",
+      "Node.js"
+    ],
+    "best_practices": [
+      "Comprehensive Documentation",
+      "Dedicated Documentation Directory",
+      "Test Coverage",
+      "GitHub Actions CI/CD",
+      "Configuration Management",
+      "Code Quality Tools"
+    ],
+    "directory_structure": {
+      "directories": [
+        ".github",
+        "cookbooks",
+        "docker",
+        "docs",
+        "examples",
+        "praisonai",
+        "public",
+        "src",
+        "tests"
+      ],
+      "files": [
+        ".cursorrules",
+        ".env.example",
+        ".eslintrc",
+        ".gitignore",
+        ".praisoncontext",
+        ".praisonignore",
+        ".praisoninclude",
+        ".readthedocs.yml",
+        "LICENSE",
+        "README.md",
+        "agents-advanced.yaml",
+        "agents.yaml",
+        "api.py",
+        "config.yaml",
+        "eslint.config.mjs",
+        "mkdocs.yml",
+        "package-lock.json",
+        "package.json",
+        "poetry.lock",
+        "praisonai.rb",
+        "pyproject.toml",
+        "pytest.ini",
+        "requirements.txt",
+        "setup.sh",
+        "tools.py",
+        "uv.lock"
+      ],
+      "patterns": [
+        "Source/Test Separation",
+        "Container/Kubernetes Ready",
+        "Documentation Included",
+        "Example Code Provided"
+      ]
+    },
+    "key_files": {
+      "README.md": {
+        "type": "README.md",
+        "insights": []
+      },
+      "package.json": {
+        "type": "package.json",
+        "insights": [
+          "Node.js项目，依赖数量: 1"
+        ]
+      },
+      "requirements.txt": {
+        "type": "requirements.txt",
+        "insights": [
+          "Python项目"
+        ]
+      },
+      "pyproject.toml": {
+        "type": "pyproject.toml",
+        "insights": [
+          "Python项目",
+          "使用FastAPI框架",
+          "集成LangChain"
+        ]
+      }
+    }
+  },
+  {
+    "name": "BerriAI/litellm",
+    "description": "Python SDK, Proxy Server (LLM Gateway) to call 100+ LLM APIs in OpenAI format - [Bedrock, Azure, OpenAI, VertexAI, Cohere, Anthropic, Sagemaker, HuggingFace, Replicate, Groq]",
+    "language": "Python",
+    "stars": 23207,
+    "forks": 3009,
+    "size": 439672,
+    "topics": [
+      "ai-gateway",
+      "anthropic",
+      "azure-openai",
+      "bedrock",
+      "gateway",
+      "langchain",
+      "llm",
+      "llm-gateway",
+      "llmops",
+      "openai",
+      "openai-proxy",
+      "vertex-ai"
+    ],
+    "architecture_patterns": [],
+    "tech_stack": [
+      "Docker",
+      "Python",
+      "Node.js"
+    ],
+    "best_practices": [
+      "Comprehensive Documentation",
+      "Dedicated Documentation Directory",
+      "Test Coverage",
+      "GitHub Actions CI/CD",
+      "Containerization",
+      "Multi-Container Orchestration",
+      "Configuration Management"
+    ],
+    "directory_structure": {
+      "directories": [
+        ".circleci",
+        ".devcontainer",
+        ".github",
+        "ci_cd",
+        "cookbook",
+        "db_scripts",
+        "deploy",
+        "dist",
+        "docker",
+        "docs",
+        "enterprise",
+        "litellm-js",
+        "litellm-proxy-extras",
+        "litellm",
+        "tests",
+        "ui"
+      ],
+      "files": [
+        ".dockerignore",
+        ".env.example",
+        ".flake8",
+        ".git-blame-ignore-revs",
+        ".gitattributes",
+        ".gitignore",
+        ".pre-commit-config.yaml",
+        "Dockerfile",
+        "LICENSE",
+        "Makefile",
+        "README.md",
+        "codecov.yaml",
+        "docker-compose.yml",
+        "index.yaml",
+        "mcp_servers.json",
+        "model_prices_and_context_window.json",
+        "package-lock.json",
+        "package.json",
+        "poetry.lock",
+        "prometheus.yml",
+        "proxy_server_config.yaml",
+        "pyproject.toml",
+        "pyrightconfig.json",
+        "render.yaml",
+        "requirements.txt",
+        "ruff.toml",
+        "schema.prisma",
+        "security.md"
+      ],
+      "patterns": [
+        "Container/Kubernetes Ready",
+        "Documentation Included"
+      ]
+    },
+    "key_files": {
+      "README.md": {
+        "type": "README.md",
+        "insights": []
+      },
+      "package.json": {
+        "type": "package.json",
+        "insights": [
+          "Node.js项目，依赖数量: 3"
+        ]
+      },
+      "requirements.txt": {
+        "type": "requirements.txt",
+        "insights": [
+          "Python项目",
+          "使用FastAPI框架"
+        ]
+      },
+      "Dockerfile": {
+        "type": "Dockerfile",
+        "insights": [
+          "容器化支持",
+          "多阶段构建"
+        ]
+      },
+      "docker-compose.yml": {
+        "type": "docker-compose.yml",
+        "insights": []
+      },
+      "Makefile": {
+        "type": "Makefile",
+        "insights": []
+      },
+      "pyproject.toml": {
+        "type": "pyproject.toml",
+        "insights": [
+          "Python项目",
+          "使用FastAPI框架"
+        ]
+      }
+    }
+  },
+  {
+    "name": "microsoft/autogen",
+    "description": "A programming framework for agentic AI 🤖 PyPi: autogen-agentchat Discord: https://aka.ms/autogen-discord Office Hour: https://aka.ms/autogen-officehour",
+    "language": "Python",
+    "stars": 45103,
+    "forks": 6838,
+    "size": 145829,
+    "topics": [
+      "agentic",
+      "agentic-agi",
+      "agents",
+      "ai",
+      "autogen",
+      "autogen-ecosystem",
+      "chatgpt",
+      "framework",
+      "llm-agent",
+      "llm-framework"
+    ],
+    "architecture_patterns": [],
+    "tech_stack": [
+      "Python"
+    ],
+    "best_practices": [
+      "Comprehensive Documentation",
+      "Dedicated Documentation Directory",
+      "GitHub Actions CI/CD"
+    ],
+    "directory_structure": {
+      "directories": [
+        ".azure",
+        ".devcontainer",
+        ".github",
+        "docs",
+        "dotnet",
+        "protos",
+        "python"
+      ],
+      "files": [
+        ".gitattributes",
+        ".gitignore",
+        "CODE_OF_CONDUCT.md",
+        "CONTRIBUTING.md",
+        "FAQ.md",
+        "LICENSE",
+        "LICENSE-CODE",
+        "README.md",
+        "SECURITY.md",
+        "SUPPORT.md",
+        "TRANSPARENCY_FAQS.md",
+        "autogen-landing.jpg",
+        "codecov.yml"
+      ],
+      "patterns": [
+        "Documentation Included"
+      ]
+    },
+    "key_files": {
+      "README.md": {
+        "type": "README.md",
+        "insights": []
+      }
+    }
+  },
+  {
+    "name": "mehdihadeli/awesome-software-architecture",
+    "description": "📚 A curated list of awesome articles, videos, and other resources to learn and practice software architecture, patterns, and principles.",
+    "language": null,
+    "stars": 9351,
+    "forks": 784,
+    "size": 3130,
+    "topics": [
+      "architectural-patterns",
+      "architectural-styles",
+      "architecture",
+      "awesome-list",
+      "clean-architecture",
+      "ddd",
+      "ddd-architecture",
+      "design-pattern",
+      "design-patterns",
+      "design-systems",
+      "event-driven-architecture",
+      "microservice",
+      "microservices",
+      "microservices-architecture",
+      "modular-monoliths",
+      "onion-architecture",
+      "oop",
+      "software-architecture",
+      "system-design",
+      "vertical-slice-architecture"
+    ],
+    "architecture_patterns": [],
+    "tech_stack": [],
+    "best_practices": [
+      "Comprehensive Documentation",
+      "Dedicated Documentation Directory",
+      "GitHub Actions CI/CD"
+    ],
+    "directory_structure": {
+      "directories": [
+        ".github",
+        "assets",
+        "docs"
+      ],
+      "files": [
+        "LICENSE",
+        "README.md",
+        "banner.png",
+        "contributing.md",
+        "mkdocs.yml"
+      ],
+      "patterns": [
+        "Documentation Included"
+      ]
+    },
+    "key_files": {
+      "README.md": {
+        "type": "README.md",
+        "insights": []
+      }
+    }
+  },
+  {
+    "name": "DovAmir/awesome-design-patterns",
+    "description": "A curated list of software and architecture related design patterns.",
+    "language": null,
+    "stars": 42678,
+    "forks": 3061,
+    "size": 98,
+    "topics": [
+      "architecture",
+      "awesome",
+      "awesome-list",
+      "cloud-computing",
+      "design-patterns",
+      "gof-patterns",
+      "lists",
+      "microservices",
+      "resources"
+    ],
+    "architecture_patterns": [],
+    "tech_stack": [],
+    "best_practices": [
+      "Comprehensive Documentation"
+    ],
+    "directory_structure": {
+      "directories": [],
+      "files": [
+        "README.md",
+        "_config.yml",
+        "contributing.md"
+      ],
+      "patterns": []
+    },
+    "key_files": {
+      "README.md": {
+        "type": "README.md",
+        "insights": []
+      }
+    }
+  }
+]

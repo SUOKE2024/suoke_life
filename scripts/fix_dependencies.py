@@ -35,6 +35,12 @@ class DependencyFixer:
             "langchain": ">=0.1.0,<1.0.0",
             "langchain-core": ">=0.1.0,<1.0.0",
             "langchain-openai": ">=0.1.0,<1.0.0",
+            # 其他服务版本冲突修复
+            "grpcio": ">=1.59.0",  # corn-maze-service
+            "aiohttp": ">=3.9.1",  # message-bus
+            "grpcio-tools": ">=1.59.0",
+            "grpcio-health-checking": ">=1.59.0",
+            "grpcio-reflection": ">=1.59.0",
         }
     
     def fix_requirements_file(self, file_path: Path) -> bool:
@@ -172,6 +178,8 @@ class DependencyFixer:
             "agent-services/xiaoke-service", 
             "agent-services/laoke-service",
             "agent-services/soer-service",
+            # 其他需要修复的服务
+            "message-bus",
         ]
         
         for service in services_to_fix:

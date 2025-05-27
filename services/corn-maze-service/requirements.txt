@@ -3,10 +3,10 @@ fastapi==0.109.0
 uvicorn==0.25.0
 pydantic==2.5.2
 pydantic-settings==2.1.0
-grpcio==1.51.3
-grpcio-tools==1.51.3
-grpcio-health-checking==1.54.0
-grpcio-reflection==1.54.0
+grpcio>=1.59.0
+grpcio-tools>=1.59.0
+grpcio-health-checking>=1.59.0
+grpcio-reflection>=1.59.0
 protobuf==4.23.1
 PyYAML==6.0
 
