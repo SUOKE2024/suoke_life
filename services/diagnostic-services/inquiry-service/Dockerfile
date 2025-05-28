@@ -1,84 +1,84 @@
-# 多阶段构建 Dockerfile
+# 多阶段构建 Dockerfile for Inquiry Service
+# 使用 Python 3.13.3 和 UV 进行现代化构建
 
-# 第1阶段：Python依赖构建
-FROM python:3.12-slim AS builder
-
-WORKDIR /app
-
-# 安装系统依赖
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    gcc \
-    g++ \
-    libffi-dev \
-    libssl-dev \
-    python3-dev \
-    git \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-# 复制并安装依赖
-COPY requirements.txt .
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir wheel setuptools && \
-    pip wheel --no-cache-dir --wheel-dir=/app/wheels -r requirements.txt
-
-# 第2阶段：构建gRPC代码
-FROM builder AS grpc-builder
-
-WORKDIR /app
-
-# 复制proto文件并生成Python代码
-COPY api/grpc/ /app/api/grpc/
-RUN mkdir -p /app/generated && \
-    python -m grpc_tools.protoc \
-    --proto_path=/app/api/grpc \
-    --python_out=/app/generated \
-    --grpc_python_out=/app/generated \
-    /app/api/grpc/*.proto
-
-# 第3阶段：最终镜像
-FROM python:3.12-slim
-
-WORKDIR /app
-
-# 安装运行时依赖
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    libgomp1 \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-# 从构建阶段复制依赖包
-COPY --from=builder /app/wheels /app/wheels
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir /app/wheels/* && \
-    rm -rf /app/wheels
-
-# 从构建阶段复制生成的gRPC代码
-COPY --from=grpc-builder /app/generated /app/api/
-
-# 复制应用代码
-COPY config/ /app/config/
-COPY internal/ /app/internal/
-COPY pkg/ /app/pkg/
-COPY cmd/ /app/cmd/
-COPY api/grpc/ /app/api/grpc/
-
-# 创建必要的目录结构
-RUN mkdir -p /app/logs /app/data
+# 构建阶段
+FROM python:3.13.3-slim as builder
 
 # 设置环境变量
-ENV PYTHONPATH="/app:${PYTHONPATH}" \
-    PYTHONUNBUFFERED=1 \
-    SERVICE_ENV=production
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV UV_CACHE_DIR=/tmp/uv-cache
+
+# 安装系统依赖和 UV
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    curl \
+    && curl -LsSf https://astral.sh/uv/install.sh | sh \
+    && rm -rf /var/lib/apt/lists/*
+
+# 将 UV 添加到 PATH
+ENV PATH="/root/.cargo/bin:$PATH"
+
+# 设置工作目录
+WORKDIR /app
+
+# 复制项目配置文件
+COPY pyproject.toml uv.lock ./
+
+# 安装依赖到虚拟环境
+RUN uv sync --frozen --no-dev
+
+# 复制源代码
+COPY inquiry_service/ ./inquiry_service/
+COPY README.md ./
+
+# 构建项目
+RUN uv build
+
+# 运行阶段
+FROM python:3.13.3-slim as runtime
+
+# 设置环境变量
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PATH="/app/.venv/bin:$PATH"
+
+# 安装运行时依赖
+RUN apt-get update && apt-get install -y \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# 创建应用用户
+RUN groupadd --gid 1000 app \
+    && useradd --uid 1000 --gid app --shell /bin/bash --create-home app
+
+# 设置工作目录
+WORKDIR /app
+
+# 从构建阶段复制虚拟环境和构建产物
+COPY --from=builder --chown=app:app /app/.venv /app/.venv
+COPY --from=builder --chown=app:app /app/dist /app/dist
+
+# 复制配置文件
+COPY --chown=app:app config/ ./config/
+COPY --chown=app:app data/ ./data/
+
+# 安装构建的包
+RUN /app/.venv/bin/pip install /app/dist/*.whl
+
+# 切换到应用用户
+USER app
+
+# 创建必要的目录
+RUN mkdir -p logs temp
+
+# 暴露端口
+EXPOSE 50052 8080
 
 # 健康检查
 HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
-    CMD python -c "import socket; socket.socket().connect(('localhost', 50052))" || exit 1
+    CMD curl -f http://localhost:8080/health || exit 1
 
-# 暴露服务端口
-EXPOSE 50052
-EXPOSE 51052
-
-# 启动服务
-CMD ["python", "-m", "cmd.server"] 
+# 设置启动命令
+CMD ["inquiry-service"] 

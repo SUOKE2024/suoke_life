@@ -1,0 +1,235 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "suoke-human-review-service"
+version = "1.0.0"
+description = "索克生活人工审核微服务 - 确保医疗健康建议的安全性和准确性"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [
+    { name = "Suoke Life Team", email = "dev@suokelife.com" }
+]
+maintainers = [
+    { name = "Suoke Life Team", email = "dev@suokelife.com" }
+]
+keywords = [
+    "healthcare",
+    "medical-ai",
+    "human-review",
+    "microservice",
+    "traditional-chinese-medicine"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Healthcare Industry",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Medical Science Apps.",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+requires-python = ">=3.13"
+dependencies = [
+    # Web Framework
+    "fastapi>=0.104.1",
+    "uvicorn[standard]>=0.24.0",
+    
+    # Database
+    "sqlalchemy[asyncio]>=2.0.23",
+    "asyncpg>=0.29.0",
+    "alembic>=1.13.0",
+    
+    # Cache & Message Queue
+    "redis>=5.0.1",
+    "aioredis>=2.0.1",
+    "celery>=5.3.4",
+    "kombu>=5.3.4",
+    
+    # Data Validation & Serialization
+    "pydantic>=2.5.0",
+    "pydantic-settings>=2.1.0",
+    
+    # Authentication & Security
+    "python-jose[cryptography]>=3.3.0",
+    "passlib[bcrypt]>=1.7.4",
+    "python-multipart>=0.0.6",
+    "cryptography>=41.0.0",
+    
+    # HTTP Client
+    "httpx>=0.25.0",
+    "aiohttp>=3.9.0",
+    
+    # Monitoring & Observability
+    "prometheus-client>=0.19.0",
+    "structlog>=23.2.0",
+    "opentelemetry-api>=1.21.0",
+    "opentelemetry-sdk>=1.21.0",
+    "opentelemetry-instrumentation-fastapi>=0.42b0",
+    "opentelemetry-instrumentation-sqlalchemy>=0.42b0",
+    "opentelemetry-instrumentation-redis>=0.42b0",
+    
+    # Configuration
+    "python-dotenv>=1.0.0",
+    "pyyaml>=6.0.1",
+    
+    # Utilities
+    "python-dateutil>=2.8.2",
+    "pytz>=2023.3",
+    "click>=8.1.7",
+    "rich>=13.7.0",
+    "typer>=0.9.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    # Testing
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.12.0",
+    "httpx>=0.25.0",  # for testing FastAPI
+    "factory-boy>=3.3.0",
+    
+    # Code Quality
+    "black>=23.0.0",
+    "isort>=5.12.0",
+    "flake8>=6.0.0",
+    "mypy>=1.7.0",
+    "bandit>=1.7.5",
+    "safety>=2.3.0",
+    
+    # Documentation
+    "mkdocs>=1.5.0",
+    "mkdocs-material>=9.4.0",
+    "mkdocstrings[python]>=0.24.0",
+    
+    # Development Tools
+    "pre-commit>=3.5.0",
+    "ipython>=8.17.0",
+    "jupyter>=1.0.0",
+]
+
+production = [
+    # Production WSGI/ASGI servers
+    "gunicorn>=21.2.0",
+    
+    # Production monitoring
+    "sentry-sdk[fastapi]>=1.38.0",
+    
+    # Production database drivers
+    "psycopg2-binary>=2.9.9",
+]
+
+[project.urls]
+Homepage = "https://github.com/suokelife/suoke_life"
+Documentation = "https://docs.suokelife.com/human-review-service"
+Repository = "https://github.com/suokelife/suoke_life"
+Issues = "https://github.com/suokelife/suoke_life/issues"
+
+[project.scripts]
+human-review-service = "human_review_service.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["human_review_service"]
+
+[tool.hatch.version]
+path = "human_review_service/__init__.py"
+
+# Black configuration
+[tool.black]
+line-length = 88
+target-version = ['py313']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+# isort configuration
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+known_first_party = ["human_review_service"]
+known_third_party = ["fastapi", "sqlalchemy", "pydantic", "redis", "celery"]
+
+# mypy configuration
+[tool.mypy]
+python_version = "3.13"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[[tool.mypy.overrides]]
+module = [
+    "celery.*",
+    "kombu.*",
+    "redis.*",
+    "prometheus_client.*",
+]
+ignore_missing_imports = true
+
+# pytest configuration
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q --strict-markers --strict-config"
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+]
+asyncio_mode = "auto"
+
+# Coverage configuration
+[tool.coverage.run]
+source = ["human_review_service"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "*/__pycache__/*",
+    "*/migrations/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
+# Bandit security linter configuration
+[tool.bandit]
+exclude_dirs = ["tests", "migrations"]
+skips = ["B101", "B601"] 

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """
 迷宫数据模型
@@ -7,7 +6,8 @@
 
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Dict, List, Any, Optional, TypedDict, Union
+from typing import Any, TypedDict
+
 
 # 类型定义
 class Position(TypedDict):
@@ -17,8 +17,8 @@ class Position(TypedDict):
 
 class Cell(TypedDict):
     """迷宫单元格"""
-    walls: Dict[str, bool]  # 记录四个方向的墙：north, east, south, west
-    content: Optional[str]  # 单元格内容，如空、障碍物等
+    walls: dict[str, bool]  # 记录四个方向的墙：north, east, south, west
+    content: str | None  # 单元格内容，如空、障碍物等
 
 @dataclass
 class KnowledgeNode:
@@ -29,9 +29,9 @@ class KnowledgeNode:
     type: str  # 知识类型：health_tip, nutrition_fact, tcm_wisdom, etc.
     position: Position
     is_visited: bool
-    icon: Optional[str] = None  # 图标路径
-    related_links: List[str] = field(default_factory=list)  # 相关知识链接
-    media_url: Optional[str] = None  # 媒体内容URL
+    icon: str | None = None  # 图标路径
+    related_links: list[str] = field(default_factory=list)  # 相关知识链接
+    media_url: str | None = None  # 媒体内容URL
 
 @dataclass
 class Challenge:
@@ -44,9 +44,9 @@ class Challenge:
     reward_points: int  # 完成奖励点数
     position: Position
     is_completed: bool
-    prerequisites: List[str] = field(default_factory=list)  # 前置条件
-    time_limit: Optional[int] = None  # 时间限制（秒）
-    hint: Optional[str] = None  # 提示
+    prerequisites: list[str] = field(default_factory=list)  # 前置条件
+    time_limit: int | None = None  # 时间限制（秒）
+    hint: str | None = None  # 提示
 
 @dataclass
 class UserProgress:
@@ -54,8 +54,8 @@ class UserProgress:
     user_id: str
     maze_id: str
     current_position: Position
-    visited_nodes: List[str]  # 已访问的知识节点ID
-    completed_challenges: List[str]  # 已完成的挑战ID
+    visited_nodes: list[str]  # 已访问的知识节点ID
+    completed_challenges: list[str]  # 已完成的挑战ID
     start_time: datetime
     last_updated: datetime
     time_spent: int = 0  # 花费的时间（秒）
@@ -68,8 +68,8 @@ class CompletionReward:
     experience_points: int
     health_points: int
     knowledge_points: int
-    unlocked_content: List[str]
-    achievement_id: Optional[str] = None
+    unlocked_content: list[str]
+    achievement_id: str | None = None
 
 @dataclass
 class Maze:
@@ -79,20 +79,20 @@ class Maze:
     maze_type: str  # 迷宫类型：health_path, nutrition_garden, tcm_journey, balanced_life
     size_x: int
     size_y: int
-    cells: List[List[Cell]]
+    cells: list[list[Cell]]
     start_position: Position
     goal_position: Position
-    knowledge_nodes: List[KnowledgeNode]
-    challenges: List[Challenge]
+    knowledge_nodes: list[KnowledgeNode]
+    challenges: list[Challenge]
     created_at: datetime
     difficulty: int  # 难度级别：1-5
     status: str  # 状态：ACTIVE, COMPLETED, ARCHIVED
     is_public: bool = False  # 是否公开
     description: str = ""  # 迷宫描述
-    tags: List[str] = field(default_factory=list)  # 标签
-    thumbnail_url: Optional[str] = None  # 缩略图URL
-    
-    def to_dict(self) -> Dict[str, Any]:
+    tags: list[str] = field(default_factory=list)  # 标签
+    thumbnail_url: str | None = None  # 缩略图URL
+
+    def to_dict(self) -> dict[str, Any]:
         """
         将迷宫对象转换为字典
         
@@ -146,9 +146,9 @@ class Maze:
             "tags": self.tags,
             "thumbnail_url": self.thumbnail_url
         }
-    
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'Maze':
+    def from_dict(cls, data: dict[str, Any]) -> 'Maze':
         """
         从字典创建迷宫对象
         
@@ -173,7 +173,7 @@ class Maze:
             )
             for node in data.get("knowledge_nodes", [])
         ]
-        
+
         # 处理挑战
         challenges = [
             Challenge(
@@ -191,14 +191,14 @@ class Maze:
             )
             for challenge in data.get("challenges", [])
         ]
-        
+
         # 处理日期时间
         created_at = data.get("created_at")
         if isinstance(created_at, str):
             created_at = datetime.fromisoformat(created_at)
         elif not isinstance(created_at, datetime):
             created_at = datetime.now()
-        
+
         # 创建迷宫对象
         return cls(
             maze_id=data["maze_id"],

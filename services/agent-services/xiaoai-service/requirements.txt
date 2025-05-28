@@ -1,4 +1,4 @@
-# XiaoAI Service 依赖 - Python 3.13 兼容版本
+# Python 3.13.3 兼容版本
 
 # 核心依赖
 grpcio>=1.59.0

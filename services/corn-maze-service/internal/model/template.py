@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """
 迷宫模板模型定义
@@ -7,13 +6,13 @@
 
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Dict, List, Any, Optional
+from typing import Any
 
 
 @dataclass
 class MazeTemplate:
     """迷宫模板模型"""
-    
+
     template_id: str  # 模板ID
     name: str  # 模板名称
     description: str  # 描述
@@ -22,17 +21,17 @@ class MazeTemplate:
     preview_image_url: str  # 预览图URL
     size_x: int  # 宽度
     size_y: int  # 高度
-    cells: List[Dict[str, Any]]  # 迷宫单元格模板
-    start_position: Dict[str, int]  # 起点位置 {x, y}
-    goal_position: Dict[str, int]  # 终点位置 {x, y}
+    cells: list[dict[str, Any]]  # 迷宫单元格模板
+    start_position: dict[str, int]  # 起点位置 {x, y}
+    goal_position: dict[str, int]  # 终点位置 {x, y}
     knowledge_node_count: int  # 知识节点数量
     challenge_count: int  # 挑战数量
     created_at: datetime  # 创建时间
-    tags: List[str] = field(default_factory=list)  # 标签
+    tags: list[str] = field(default_factory=list)  # 标签
     author: str = ""  # 作者
     is_official: bool = False  # 是否官方模板
-    
-    def to_dict(self) -> Dict[str, Any]:
+
+    def to_dict(self) -> dict[str, Any]:
         """转换为字典"""
         return {
             "template_id": self.template_id,
@@ -53,9 +52,9 @@ class MazeTemplate:
             "author": self.author,
             "is_official": self.is_official
         }
-    
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'MazeTemplate':
+    def from_dict(cls, data: dict[str, Any]) -> 'MazeTemplate':
         """从字典创建对象"""
         return cls(
             template_id=data["template_id"],

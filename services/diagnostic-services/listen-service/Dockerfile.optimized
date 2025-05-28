@@ -2,7 +2,7 @@
 # 多阶段构建，支持生产环境优化
 
 # 第一阶段：构建阶段
-FROM python:3.11-slim as builder
+FROM python:3.13.3-slim as builder
 
 # 设置工作目录
 WORKDIR /app
@@ -39,7 +39,7 @@ RUN pip install --upgrade pip setuptools wheel
 RUN pip install --no-cache-dir -r requirements.txt
 
 # 第二阶段：运行阶段
-FROM python:3.11-slim as runtime
+FROM python:3.13.3-slim as runtime
 
 # 设置标签
 LABEL maintainer="Suoke Life Team"

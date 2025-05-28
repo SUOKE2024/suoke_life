@@ -1,6 +1,6 @@
 # Integration Service Dockerfile
 
-FROM python:3.11-slim
+FROM python:3.13.3-slim
 
 # 设置工作目录
 WORKDIR /app
@@ -42,4 +42,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
 EXPOSE 8090
 
 # 启动命令
-CMD ["python", "cmd/server/main.py"] 
+CMD ["python", "cmd/server/main.py"]

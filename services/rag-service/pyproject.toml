@@ -10,7 +10,7 @@ readme = "README.md"
 authors = [
     {name = "Suoke Life Team", email = "team@suokelife.com"}
 ]
-requires-python = ">=3.9,<3.12"
+requires-python = ">=3.13.3"
 dependencies = [
     # 核心框架
     "fastapi>=0.109.0",
@@ -108,6 +108,9 @@ dependencies = [
     "uvloop>=0.19.0; sys_platform != 'win32'",
 ]
 
+classifiers = [
+    "Programming Language :: Python :: 3.13",
+]
 [project.optional-dependencies]
 dev = [
     # 测试
@@ -155,7 +158,7 @@ include = ["services*"]
 
 [tool.black]
 line-length = 100
-target-version = ["py39", "py310", "py311"]
+target-version = ['py313']
 include = '\.pyi?$'
 extend-exclude = '''
 /(
@@ -181,7 +184,7 @@ use_parentheses = true
 ensure_newline_before_comments = true
 
 [tool.mypy]
-python_version = "3.9"
+python_version = "3.13"
 disallow_untyped_defs = true
 disallow_incomplete_defs = true
 check_untyped_defs = true

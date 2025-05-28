@@ -8,7 +8,7 @@ import json
 import logging
 from typing import Dict, Any, Optional, Union, List
 from pathlib import Path
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 import asyncio
@@ -27,7 +27,8 @@ class DatabaseConfig(BaseModel):
     pool_size: int = 10
     timeout: int = 30
     
-    @validator('port')
+    @field_validator('port')
+    @classmethod
     def validate_port(cls, v):
         if not 1 <= v <= 65535:
             raise ValueError('端口号必须在1-65535之间')
@@ -42,7 +43,8 @@ class CacheConfig(BaseModel):
     password: Optional[str] = None
     ttl: int = 300
     
-    @validator('port')
+    @field_validator('port')
+    @classmethod
     def validate_port(cls, v):
         if not 1 <= v <= 65535:
             raise ValueError('端口号必须在1-65535之间')
@@ -55,7 +57,8 @@ class GrpcConfig(BaseModel):
     max_message_length: int = 104857600
     enable_reflection: bool = True
     
-    @validator('max_workers')
+    @field_validator('max_workers')
+    @classmethod
     def validate_max_workers(cls, v):
         if v < 1:
             raise ValueError('最大工作线程数必须大于0')
@@ -67,7 +70,8 @@ class RestConfig(BaseModel):
     cors_origins: List[str] = ["*"]
     api_prefix: str = "/api/v1"
     
-    @validator('port')
+    @field_validator('port')
+    @classmethod
     def validate_port(cls, v):
         if not 1 <= v <= 65535:
             raise ValueError('端口号必须在1-65535之间')
@@ -84,19 +88,22 @@ class ModelConfig(BaseModel):
     top_p: float = 0.9
     temperature: float = 0.7
     
-    @validator('timeout')
+    @field_validator('timeout')
+    @classmethod
     def validate_timeout(cls, v):
         if v < 1:
             raise ValueError('超时时间必须大于0')
         return v
     
-    @validator('top_p')
+    @field_validator('top_p')
+    @classmethod
     def validate_top_p(cls, v):
         if not 0 <= v <= 1:
             raise ValueError('top_p必须在0-1之间')
         return v
     
-    @validator('temperature')
+    @field_validator('temperature')
+    @classmethod
     def validate_temperature(cls, v):
         if not 0 <= v <= 2:
             raise ValueError('temperature必须在0-2之间')

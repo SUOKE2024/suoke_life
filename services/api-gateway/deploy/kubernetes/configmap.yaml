@@ -1,0 +1,205 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: suoke-api-gateway-config
+  labels:
+    app: suoke-api-gateway
+    component: gateway
+data:
+  # 应用配置
+  APP_NAME: "suoke-api-gateway"
+  APP_VERSION: "1.0.0"
+  APP_DESCRIPTION: "索克生活API网关服务"
+  
+  # 服务器配置
+  HOST: "0.0.0.0"
+  PORT: "8000"
+  WORKERS: "4"
+  
+  # gRPC配置
+  GRPC_ENABLED: "true"
+  GRPC_HOST: "0.0.0.0"
+  GRPC_PORT: "50051"
+  
+  # 日志配置
+  LOG_LEVEL: "INFO"
+  LOG_FORMAT: "json"
+  LOG_FILE_ENABLED: "true"
+  LOG_FILE_PATH: "/app/logs/app.log"
+  LOG_FILE_MAX_SIZE: "100MB"
+  LOG_FILE_BACKUP_COUNT: "5"
+  
+  # CORS配置
+  CORS_ENABLED: "true"
+  CORS_ALLOW_CREDENTIALS: "true"
+  CORS_ALLOW_METHODS: "GET,POST,PUT,DELETE,OPTIONS,PATCH"
+  CORS_ALLOW_HEADERS: "Content-Type,Authorization,X-Requested-With,X-Request-ID"
+  CORS_MAX_AGE: "86400"
+  
+  # 限流配置
+  RATE_LIMIT_ENABLED: "true"
+  RATE_LIMIT_DEFAULT_RATE: "100/minute"
+  RATE_LIMIT_BURST_SIZE: "10"
+  RATE_LIMIT_STORAGE_URL: "redis://redis-service:6379/1"
+  
+  # 缓存配置
+  CACHE_ENABLED: "true"
+  CACHE_DEFAULT_TTL: "300"
+  CACHE_MAX_SIZE: "1000"
+  
+  # 熔断器配置
+  CIRCUIT_BREAKER_ENABLED: "true"
+  CIRCUIT_BREAKER_FAILURE_THRESHOLD: "5"
+  CIRCUIT_BREAKER_RECOVERY_TIMEOUT: "60"
+  CIRCUIT_BREAKER_SUCCESS_THRESHOLD: "3"
+  
+  # 重试配置
+  RETRY_ENABLED: "true"
+  RETRY_MAX_ATTEMPTS: "3"
+  RETRY_INITIAL_DELAY: "1.0"
+  RETRY_MAX_DELAY: "10.0"
+  RETRY_MULTIPLIER: "2.0"
+  
+  # 链路追踪配置
+  TRACING_ENABLED: "true"
+  TRACING_SERVICE_NAME: "suoke-api-gateway"
+  TRACING_SAMPLE_RATE: "0.1"
+  TRACING_JAEGER_ENDPOINT: "http://jaeger-collector:14268/api/traces"
+  
+  # 指标配置
+  METRICS_ENABLED: "true"
+  METRICS_PATH: "/metrics"
+  METRICS_PORT: "8000"
+  
+  # 健康检查配置
+  HEALTH_CHECK_ENABLED: "true"
+  HEALTH_CHECK_PATH: "/health"
+  HEALTH_CHECK_INTERVAL: "30"
+  
+  # 服务注册配置
+  SERVICE_REGISTRY_ENABLED: "true"
+  SERVICE_REGISTRY_HEALTH_CHECK_INTERVAL: "30"
+  SERVICE_REGISTRY_HEALTH_CHECK_TIMEOUT: "10"
+  
+  # 安全配置
+  SECURITY_HEADERS_ENABLED: "true"
+  SECURITY_HSTS_ENABLED: "true"
+  SECURITY_HSTS_MAX_AGE: "31536000"
+  SECURITY_CSP_ENABLED: "true"
+  
+  # JWT配置
+  JWT_ALGORITHM: "HS256"
+  JWT_ACCESS_TOKEN_EXPIRE_MINUTES: "30"
+  JWT_REFRESH_TOKEN_EXPIRE_DAYS: "7"
+  
+  # Redis配置
+  REDIS_HOST: "redis-service"
+  REDIS_PORT: "6379"
+  REDIS_DB: "0"
+  REDIS_PASSWORD: ""
+  REDIS_MAX_CONNECTIONS: "20"
+  REDIS_RETRY_ON_TIMEOUT: "true"
+  
+  # 数据库配置（如果需要）
+  DATABASE_ENABLED: "false"
+  
+  # 外部服务配置
+  EXTERNAL_SERVICES_TIMEOUT: "30"
+  EXTERNAL_SERVICES_RETRY_ATTEMPTS: "3"
+  
+  # 开发配置
+  DEBUG: "false"
+  RELOAD: "false"
+  
+  # 配置文件
+  config.yaml: |
+    app:
+      name: "suoke-api-gateway"
+      version: "1.0.0"
+      description: "索克生活API网关服务"
+      
+    server:
+      host: "0.0.0.0"
+      port: 8000
+      workers: 4
+      
+    grpc:
+      enabled: true
+      host: "0.0.0.0"
+      port: 50051
+      
+    logging:
+      level: "INFO"
+      format: "json"
+      file:
+        enabled: true
+        path: "/app/logs/app.log"
+        max_size: "100MB"
+        backup_count: 5
+        
+    cors:
+      enabled: true
+      origins: ["*"]
+      allow_credentials: true
+      allow_methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"]
+      allow_headers: ["Content-Type", "Authorization", "X-Requested-With", "X-Request-ID"]
+      max_age: 86400
+      
+    rate_limit:
+      enabled: true
+      default_rate: "100/minute"
+      burst_size: 10
+      storage_url: "redis://redis-service:6379/1"
+      
+    cache:
+      enabled: true
+      default_ttl: 300
+      max_size: 1000
+      
+    circuit_breaker:
+      enabled: true
+      failure_threshold: 5
+      recovery_timeout: 60
+      success_threshold: 3
+      
+    retry:
+      enabled: true
+      max_attempts: 3
+      initial_delay: 1.0
+      max_delay: 10.0
+      multiplier: 2.0
+      
+    tracing:
+      enabled: true
+      service_name: "suoke-api-gateway"
+      sample_rate: 0.1
+      jaeger_endpoint: "http://jaeger-collector:14268/api/traces"
+      
+    metrics:
+      enabled: true
+      path: "/metrics"
+      port: 8000
+      
+    health:
+      enabled: true
+      path: "/health"
+      interval: 30
+      
+    security:
+      headers_enabled: true
+      hsts_enabled: true
+      hsts_max_age: 31536000
+      csp_enabled: true
+      
+    jwt:
+      algorithm: "HS256"
+      access_token_expire_minutes: 30
+      refresh_token_expire_days: 7
+      
+    redis:
+      host: "redis-service"
+      port: 6379
+      db: 0
+      password: ""
+      max_connections: 20
+      retry_on_timeout: true 

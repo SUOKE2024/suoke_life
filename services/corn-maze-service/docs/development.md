@@ -27,7 +27,7 @@
 1. 克隆仓库并进入项目目录:
 
 ```bash
-git clone https://github.com/suoke-life/corn-maze-service.git
+git clone https://github.com/SUOKE2024/suoke_life.git
 cd corn-maze-service
 ```
 

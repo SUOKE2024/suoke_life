@@ -1,30 +1,27 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """
 迷宫生成模块 - 优化版本
 """
 
+from datetime import datetime
 import logging
 import random
+from typing import Any
 import uuid
-import asyncio
-from datetime import datetime
-from typing import Dict, List, Optional, Tuple, Any
-from functools import lru_cache
 
-from internal.model.maze import Maze, Cell, KnowledgeNode, Challenge, Position
-from pkg.utils.metrics import maze_generation_time, record_maze_generation_error
+from internal.model.maze import Cell, Challenge, KnowledgeNode, Maze
 from pkg.utils.cache import CacheManager
+from pkg.utils.metrics import maze_generation_time, record_maze_generation_error
 
 logger = logging.getLogger(__name__)
 
 class MazeGenerator:
     """迷宫生成器，负责生成各种类型的迷宫"""
-    
+
     MAZE_TYPES = ["health_path", "nutrition_garden", "tcm_journey", "balanced_life"]
-    
-    def __init__(self, cache_manager: Optional[CacheManager] = None):
+
+    def __init__(self, cache_manager: CacheManager | None = None):
         """初始化迷宫生成器"""
         self.cache_manager = cache_manager or CacheManager()
         self.generators = {
@@ -34,7 +31,7 @@ class MazeGenerator:
             "balanced_life": self._generate_balanced_life,
         }
         logger.info("迷宫生成器初始化完成")
-    
+
     @maze_generation_time
     async def generate_maze(
         self,
@@ -43,7 +40,7 @@ class MazeGenerator:
         size_x: int = 10,
         size_y: int = 10,
         difficulty: int = 1,
-        health_attributes: Optional[Dict[str, str]] = None
+        health_attributes: dict[str, str] | None = None
     ) -> Maze:
         """
         生成迷宫
@@ -68,31 +65,31 @@ class MazeGenerator:
             logger.error(error_msg)
             record_maze_generation_error(maze_type, "invalid_user_id")
             raise ValueError(error_msg)
-            
+
         if maze_type not in self.MAZE_TYPES:
             error_msg = f"无效的迷宫类型: {maze_type}，支持的类型: {', '.join(self.MAZE_TYPES)}"
             logger.error(error_msg)
             record_maze_generation_error(maze_type, "invalid_type")
             raise ValueError(error_msg)
-        
+
         if size_x < 3 or size_y < 3:
             error_msg = "迷宫大小不能小于3x3"
             logger.error(error_msg)
             record_maze_generation_error(maze_type, "invalid_size")
             raise ValueError(error_msg)
-        
+
         if difficulty < 1 or difficulty > 5:
             error_msg = "难度级别必须在1-5之间"
             logger.error(error_msg)
             record_maze_generation_error(maze_type, "invalid_difficulty")
             raise ValueError(error_msg)
-        
+
         logger.info(f"为用户 {user_id} 生成迷宫，类型: {maze_type}, 大小: {size_x}x{size_y}, 难度: {difficulty}")
-        
+
         # 检查缓存
         cache_key = f"maze_template:{maze_type}:{size_x}x{size_y}:{difficulty}"
         cached_template = await self.cache_manager.get(cache_key)
-        
+
         try:
             if cached_template:
                 logger.info(f"使用缓存的迷宫模板: {cache_key}")
@@ -102,41 +99,41 @@ class MazeGenerator:
                 generator = self.generators.get(maze_type)
                 if not generator:
                     raise ValueError(f"未找到迷宫类型 {maze_type} 的生成器")
-                    
+
                 maze = await generator(user_id, size_x, size_y, difficulty, health_attributes or {})
-                
+
                 # 缓存模板（不包含用户特定信息）
                 template = self._extract_template(maze)
                 await self.cache_manager.set(cache_key, template, ttl=3600)  # 缓存1小时
-            
+
             logger.info(f"成功生成迷宫 {maze.maze_id}，类型: {maze_type}")
             return maze
-            
+
         except Exception as e:
-            logger.exception(f"生成迷宫时发生错误: {str(e)}")
+            logger.exception(f"生成迷宫时发生错误: {e!s}")
             record_maze_generation_error(maze_type, "generation_failed")
             raise
-    
+
     async def _generate_health_path(
         self,
         user_id: str,
         size_x: int,
         size_y: int,
         difficulty: int,
-        health_attributes: Dict[str, str]
+        health_attributes: dict[str, str]
     ) -> Maze:
         """生成健康路径迷宫"""
         logger.info(f"生成健康路径迷宫，大小: {size_x}x{size_y}")
-        
+
         # 生成基础迷宫结构
         cells = await self._generate_maze_grid(size_x, size_y, difficulty)
-        
+
         # 获取健康相关的知识节点
         knowledge_nodes = await self._get_health_knowledge_nodes(health_attributes, difficulty)
-        
+
         # 生成健康挑战
         challenges = await self._generate_health_challenges(difficulty)
-        
+
         # 创建迷宫对象
         maze = Maze(
             maze_id=str(uuid.uuid4()),
@@ -155,27 +152,27 @@ class MazeGenerator:
             description="探索健康生活的智慧路径",
             tags=["健康", "养生", "预防"]
         )
-        
+
         # 在迷宫中分配内容
         await self._assign_content_to_maze(maze)
-        
+
         return maze
-    
+
     async def _generate_nutrition_garden(
         self,
         user_id: str,
         size_x: int,
         size_y: int,
         difficulty: int,
-        health_attributes: Dict[str, str]
+        health_attributes: dict[str, str]
     ) -> Maze:
         """生成营养花园迷宫"""
         logger.info(f"生成营养花园迷宫，大小: {size_x}x{size_y}")
-        
+
         cells = await self._generate_maze_grid(size_x, size_y, difficulty)
         knowledge_nodes = await self._get_nutrition_knowledge_nodes(health_attributes, difficulty)
         challenges = await self._generate_nutrition_challenges(difficulty)
-        
+
         maze = Maze(
             maze_id=str(uuid.uuid4()),
             user_id=user_id,
@@ -193,25 +190,25 @@ class MazeGenerator:
             description="探索营养科学的奥秘花园",
             tags=["营养", "饮食", "健康"]
         )
-        
+
         await self._assign_content_to_maze(maze)
         return maze
-    
+
     async def _generate_tcm_journey(
         self,
         user_id: str,
         size_x: int,
         size_y: int,
         difficulty: int,
-        health_attributes: Dict[str, str]
+        health_attributes: dict[str, str]
     ) -> Maze:
         """生成中医之旅迷宫"""
         logger.info(f"生成中医之旅迷宫，大小: {size_x}x{size_y}")
-        
+
         cells = await self._generate_maze_grid(size_x, size_y, difficulty)
         knowledge_nodes = await self._get_tcm_knowledge_nodes(health_attributes, difficulty)
         challenges = await self._generate_tcm_challenges(difficulty)
-        
+
         maze = Maze(
             maze_id=str(uuid.uuid4()),
             user_id=user_id,
@@ -229,25 +226,25 @@ class MazeGenerator:
             description="传统中医智慧的探索之旅",
             tags=["中医", "传统医学", "辨证论治"]
         )
-        
+
         await self._assign_content_to_maze(maze)
         return maze
-    
+
     async def _generate_balanced_life(
         self,
         user_id: str,
         size_x: int,
         size_y: int,
         difficulty: int,
-        health_attributes: Dict[str, str]
+        health_attributes: dict[str, str]
     ) -> Maze:
         """生成平衡生活迷宫"""
         logger.info(f"生成平衡生活迷宫，大小: {size_x}x{size_y}")
-        
+
         cells = await self._generate_maze_grid(size_x, size_y, difficulty)
         knowledge_nodes = await self._get_balanced_life_knowledge_nodes(health_attributes, difficulty)
         challenges = await self._generate_balanced_life_challenges(difficulty)
-        
+
         maze = Maze(
             maze_id=str(uuid.uuid4()),
             user_id=user_id,
@@ -265,11 +262,11 @@ class MazeGenerator:
             description="寻找生活平衡的智慧之路",
             tags=["平衡", "生活方式", "身心健康"]
         )
-        
+
         await self._assign_content_to_maze(maze)
         return maze
-    
-    async def _generate_maze_grid(self, width: int, height: int, difficulty: int) -> List[List[Cell]]:
+
+    async def _generate_maze_grid(self, width: int, height: int, difficulty: int) -> list[list[Cell]]:
         """
         使用深度优先搜索算法生成迷宫网格
         
@@ -282,59 +279,59 @@ class MazeGenerator:
             List[List[Cell]]: 迷宫单元格网格
         """
         # 初始化所有单元格，所有墙都关闭
-        cells = [[{"walls": {"north": True, "east": True, "south": True, "west": True}, "content": None} 
+        cells = [[{"walls": {"north": True, "east": True, "south": True, "west": True}, "content": None}
                  for _ in range(width)] for _ in range(height)]
-        
+
         # 使用深度优先搜索生成迷宫
         visited = [[False for _ in range(width)] for _ in range(height)]
         stack = [(0, 0)]
         visited[0][0] = True
-        
+
         directions = [("north", 0, -1), ("east", 1, 0), ("south", 0, 1), ("west", -1, 0)]
         opposite = {"north": "south", "east": "west", "south": "north", "west": "east"}
-        
+
         while stack:
             current_x, current_y = stack[-1]
-            
+
             # 获取未访问的邻居
             neighbors = []
             for direction, dx, dy in directions:
                 nx, ny = current_x + dx, current_y + dy
                 if 0 <= nx < width and 0 <= ny < height and not visited[ny][nx]:
                     neighbors.append((direction, nx, ny))
-            
+
             if neighbors:
                 # 随机选择一个邻居
                 direction, nx, ny = random.choice(neighbors)
-                
+
                 # 移除当前单元格和邻居之间的墙
                 cells[current_y][current_x]["walls"][direction] = False
                 cells[ny][nx]["walls"][opposite[direction]] = False
-                
+
                 # 标记邻居为已访问并加入栈
                 visited[ny][nx] = True
                 stack.append((nx, ny))
             else:
                 # 回溯
                 stack.pop()
-        
+
         # 根据难度添加额外的路径
         if difficulty > 1:
             extra_paths = difficulty * 2
             for _ in range(extra_paths):
                 x, y = random.randint(0, width - 1), random.randint(0, height - 1)
                 direction = random.choice(["north", "east", "south", "west"])
-                
+
                 dx, dy = {"north": (0, -1), "east": (1, 0), "south": (0, 1), "west": (-1, 0)}[direction]
                 nx, ny = x + dx, y + dy
-                
+
                 if 0 <= nx < width and 0 <= ny < height:
                     cells[y][x]["walls"][direction] = False
                     cells[ny][nx]["walls"][opposite[direction]] = False
-        
+
         return cells
-    
-    async def _get_health_knowledge_nodes(self, health_attributes: Dict[str, str], difficulty: int) -> List[KnowledgeNode]:
+
+    async def _get_health_knowledge_nodes(self, health_attributes: dict[str, str], difficulty: int) -> list[KnowledgeNode]:
         """获取健康相关的知识节点"""
         base_nodes = [
             {
@@ -353,10 +350,10 @@ class MazeGenerator:
                 "type": "health_tip"
             }
         ]
-        
+
         # 根据难度和健康属性选择节点
         selected_nodes = base_nodes[:min(len(base_nodes), difficulty + 1)]
-        
+
         knowledge_nodes = []
         for i, node_data in enumerate(selected_nodes):
             knowledge_nodes.append(KnowledgeNode(
@@ -367,10 +364,10 @@ class MazeGenerator:
                 position={"x": 0, "y": 0},  # 位置稍后分配
                 is_visited=False
             ))
-        
+
         return knowledge_nodes
-    
-    async def _get_nutrition_knowledge_nodes(self, health_attributes: Dict[str, str], difficulty: int) -> List[KnowledgeNode]:
+
+    async def _get_nutrition_knowledge_nodes(self, health_attributes: dict[str, str], difficulty: int) -> list[KnowledgeNode]:
         """获取营养相关的知识节点"""
         base_nodes = [
             {
@@ -384,9 +381,9 @@ class MazeGenerator:
                 "type": "nutrition_fact"
             }
         ]
-        
+
         selected_nodes = base_nodes[:min(len(base_nodes), difficulty + 1)]
-        
+
         knowledge_nodes = []
         for node_data in selected_nodes:
             knowledge_nodes.append(KnowledgeNode(
@@ -397,10 +394,10 @@ class MazeGenerator:
                 position={"x": 0, "y": 0},
                 is_visited=False
             ))
-        
+
         return knowledge_nodes
-    
-    async def _get_tcm_knowledge_nodes(self, health_attributes: Dict[str, str], difficulty: int) -> List[KnowledgeNode]:
+
+    async def _get_tcm_knowledge_nodes(self, health_attributes: dict[str, str], difficulty: int) -> list[KnowledgeNode]:
         """获取中医相关的知识节点"""
         base_nodes = [
             {
@@ -414,9 +411,9 @@ class MazeGenerator:
                 "type": "tcm_wisdom"
             }
         ]
-        
+
         selected_nodes = base_nodes[:min(len(base_nodes), difficulty + 1)]
-        
+
         knowledge_nodes = []
         for node_data in selected_nodes:
             knowledge_nodes.append(KnowledgeNode(
@@ -427,10 +424,10 @@ class MazeGenerator:
                 position={"x": 0, "y": 0},
                 is_visited=False
             ))
-        
+
         return knowledge_nodes
-    
-    async def _get_balanced_life_knowledge_nodes(self, health_attributes: Dict[str, str], difficulty: int) -> List[KnowledgeNode]:
+
+    async def _get_balanced_life_knowledge_nodes(self, health_attributes: dict[str, str], difficulty: int) -> list[KnowledgeNode]:
         """获取平衡生活相关的知识节点"""
         base_nodes = [
             {
@@ -444,9 +441,9 @@ class MazeGenerator:
                 "type": "life_balance"
             }
         ]
-        
+
         selected_nodes = base_nodes[:min(len(base_nodes), difficulty + 1)]
-        
+
         knowledge_nodes = []
         for node_data in selected_nodes:
             knowledge_nodes.append(KnowledgeNode(
@@ -457,10 +454,10 @@ class MazeGenerator:
                 position={"x": 0, "y": 0},
                 is_visited=False
             ))
-        
+
         return knowledge_nodes
-    
-    async def _generate_health_challenges(self, difficulty: int) -> List[Challenge]:
+
+    async def _generate_health_challenges(self, difficulty: int) -> list[Challenge]:
         """生成健康相关的挑战"""
         base_challenges = [
             {
@@ -476,9 +473,9 @@ class MazeGenerator:
                 "reward_points": 15
             }
         ]
-        
+
         selected_challenges = base_challenges[:min(len(base_challenges), max(1, difficulty - 1))]
-        
+
         challenges = []
         for challenge_data in selected_challenges:
             challenges.append(Challenge(
@@ -491,10 +488,10 @@ class MazeGenerator:
                 position={"x": 0, "y": 0},
                 is_completed=False
             ))
-        
+
         return challenges
-    
-    async def _generate_nutrition_challenges(self, difficulty: int) -> List[Challenge]:
+
+    async def _generate_nutrition_challenges(self, difficulty: int) -> list[Challenge]:
         """生成营养相关的挑战"""
         base_challenges = [
             {
@@ -504,9 +501,9 @@ class MazeGenerator:
                 "reward_points": 12
             }
         ]
-        
+
         selected_challenges = base_challenges[:max(1, difficulty - 1)]
-        
+
         challenges = []
         for challenge_data in selected_challenges:
             challenges.append(Challenge(
@@ -519,10 +516,10 @@ class MazeGenerator:
                 position={"x": 0, "y": 0},
                 is_completed=False
             ))
-        
+
         return challenges
-    
-    async def _generate_tcm_challenges(self, difficulty: int) -> List[Challenge]:
+
+    async def _generate_tcm_challenges(self, difficulty: int) -> list[Challenge]:
         """生成中医相关的挑战"""
         base_challenges = [
             {
@@ -532,9 +529,9 @@ class MazeGenerator:
                 "reward_points": 15
             }
         ]
-        
+
         selected_challenges = base_challenges[:max(1, difficulty - 1)]
-        
+
         challenges = []
         for challenge_data in selected_challenges:
             challenges.append(Challenge(
@@ -547,10 +544,10 @@ class MazeGenerator:
                 position={"x": 0, "y": 0},
                 is_completed=False
             ))
-        
+
         return challenges
-    
-    async def _generate_balanced_life_challenges(self, difficulty: int) -> List[Challenge]:
+
+    async def _generate_balanced_life_challenges(self, difficulty: int) -> list[Challenge]:
         """生成平衡生活相关的挑战"""
         base_challenges = [
             {
@@ -560,9 +557,9 @@ class MazeGenerator:
                 "reward_points": 10
             }
         ]
-        
+
         selected_challenges = base_challenges[:max(1, difficulty - 1)]
-        
+
         challenges = []
         for challenge_data in selected_challenges:
             challenges.append(Challenge(
@@ -575,9 +572,9 @@ class MazeGenerator:
                 position={"x": 0, "y": 0},
                 is_completed=False
             ))
-        
+
         return challenges
-    
+
     async def _assign_content_to_maze(self, maze: Maze) -> None:
         """在迷宫中分配知识节点和挑战的位置"""
         # 获取可用位置（排除起点和终点）
@@ -587,15 +584,15 @@ class MazeGenerator:
                 if (x, y) != (maze.start_position["x"], maze.start_position["y"]) and \
                    (x, y) != (maze.goal_position["x"], maze.goal_position["y"]):
                     available_positions.append((x, y))
-        
+
         # 随机分配知识节点位置
         random.shuffle(available_positions)
-        
+
         for i, node in enumerate(maze.knowledge_nodes):
             if i < len(available_positions):
                 x, y = available_positions[i]
                 node.position = {"x": x, "y": y}
-        
+
         # 分配挑战位置
         challenge_start_idx = len(maze.knowledge_nodes)
         for i, challenge in enumerate(maze.challenges):
@@ -603,21 +600,21 @@ class MazeGenerator:
             if pos_idx < len(available_positions):
                 x, y = available_positions[pos_idx]
                 challenge.position = {"x": x, "y": y}
-    
-    async def _create_from_template(self, template: Dict[str, Any], user_id: str, health_attributes: Dict[str, str]) -> Maze:
+
+    async def _create_from_template(self, template: dict[str, Any], user_id: str, health_attributes: dict[str, str]) -> Maze:
         """从缓存的模板创建迷宫"""
         # 创建新的迷宫ID
         maze_id = str(uuid.uuid4())
-        
+
         # 从模板复制数据并设置用户特定信息
         maze_data = template.copy()
         maze_data["maze_id"] = maze_id
         maze_data["user_id"] = user_id
         maze_data["created_at"] = datetime.now()
-        
+
         return Maze.from_dict(maze_data)
-    
-    def _extract_template(self, maze: Maze) -> Dict[str, Any]:
+
+    def _extract_template(self, maze: Maze) -> dict[str, Any]:
         """从迷宫中提取模板（移除用户特定信息）"""
         template = maze.to_dict()
         # 移除用户特定信息

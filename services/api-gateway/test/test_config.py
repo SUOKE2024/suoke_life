@@ -10,6 +10,7 @@ import sys
 import tempfile
 import yaml
 from unittest.mock import patch, mock_open
+from pathlib import Path
 
 import pytest
 
@@ -21,6 +22,7 @@ from internal.model.config import (
     GatewayConfig, RouteConfig, ServiceDiscoveryConfig, 
     MiddlewareConfig, CacheConfig, AuthConfig, JwtConfig
 )
+from suoke_api_gateway.core.config import Settings, get_settings
 
 
 class TestConfig:
@@ -241,6 +243,195 @@ class TestConfig:
         assert isinstance(config.middleware.auth, AuthConfig)
         assert isinstance(config.middleware.auth.jwt, JwtConfig)
         assert isinstance(config.cache, CacheConfig)
+
+
+class TestSettings:
+    """配置测试类"""
+    
+    def test_default_settings(self):
+        """测试默认配置"""
+        settings = Settings()
+        
+        assert settings.app_name == "Suoke API Gateway"
+        assert settings.environment == "development"
+        assert settings.debug is True
+        assert settings.server.host == "0.0.0.0"
+        assert settings.server.port == 8000
+    
+    def test_environment_variables(self):
+        """测试环境变量配置"""
+        # 设置环境变量
+        os.environ["APP_NAME"] = "Test Gateway"
+        os.environ["ENVIRONMENT"] = "test"
+        os.environ["DEBUG"] = "false"
+        os.environ["SERVER_PORT"] = "9000"
+        
+        try:
+            settings = Settings()
+            
+            assert settings.app_name == "Test Gateway"
+            assert settings.environment == "test"
+            assert settings.debug is False
+            assert settings.server.port == 9000
+            
+        finally:
+            # 清理环境变量
+            for key in ["APP_NAME", "ENVIRONMENT", "DEBUG", "SERVER_PORT"]:
+                os.environ.pop(key, None)
+    
+    def test_config_file(self):
+        """测试配置文件加载"""
+        config_content = """
+APP_NAME=File Gateway
+ENVIRONMENT=production
+DEBUG=false
+SERVER_HOST=127.0.0.1
+SERVER_PORT=8080
+"""
+        
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.env', delete=False) as f:
+            f.write(config_content)
+            config_file = f.name
+        
+        try:
+            settings = Settings(_env_file=config_file)
+            
+            assert settings.app_name == "File Gateway"
+            assert settings.environment == "production"
+            assert settings.debug is False
+            assert settings.server.host == "127.0.0.1"
+            assert settings.server.port == 8080
+            
+        finally:
+            os.unlink(config_file)
+    
+    def test_redis_url_generation(self):
+        """测试 Redis URL 生成"""
+        settings = Settings(
+            redis_host="localhost",
+            redis_port=6379,
+            redis_db=0,
+            redis_password="secret",
+        )
+        
+        url = settings.get_redis_url()
+        assert url == "redis://:secret@localhost:6379/0"
+        
+        # 测试无密码情况
+        settings.redis_password = None
+        url = settings.get_redis_url()
+        assert url == "redis://localhost:6379/0"
+    
+    def test_database_url_generation(self):
+        """测试数据库 URL 生成"""
+        settings = Settings(
+            database_host="localhost",
+            database_port=5432,
+            database_name="testdb",
+            database_user="testuser",
+            database_password="testpass",
+        )
+        
+        url = settings.get_database_url()
+        assert url == "postgresql://testuser:testpass@localhost:5432/testdb"
+    
+    def test_get_settings_singleton(self):
+        """测试设置单例模式"""
+        settings1 = get_settings()
+        settings2 = get_settings()
+        
+        assert settings1 is settings2
+    
+    def test_jwt_config(self):
+        """测试 JWT 配置"""
+        settings = Settings()
+        
+        assert settings.jwt.algorithm == "HS256"
+        assert settings.jwt.access_token_expire_minutes == 30
+        assert len(settings.jwt.secret_key) > 0
+    
+    def test_rate_limit_config(self):
+        """测试限流配置"""
+        settings = Settings()
+        
+        assert settings.rate_limit.enabled is True
+        assert settings.rate_limit.default_rate == "100/minute"
+        assert settings.rate_limit.burst_rate == "200/minute"
+    
+    def test_monitoring_config(self):
+        """测试监控配置"""
+        settings = Settings()
+        
+        assert settings.monitoring.enabled is True
+        assert settings.monitoring.metrics_path == "/metrics"
+    
+    def test_grpc_config(self):
+        """测试 gRPC 配置"""
+        settings = Settings()
+        
+        assert settings.grpc.enabled is False
+        assert settings.grpc.port == 50051
+    
+    def test_cors_config(self):
+        """测试 CORS 配置"""
+        settings = Settings()
+        
+        assert settings.cors.allow_origins == ["*"]
+        assert settings.cors.allow_methods == ["*"]
+        assert settings.cors.allow_headers == ["*"]
+        assert settings.cors.allow_credentials is True
+
+
+@pytest.fixture
+def temp_config_file():
+    """临时配置文件夹具"""
+    config_content = """
+APP_NAME=Test Gateway
+ENVIRONMENT=test
+DEBUG=true
+SERVER_HOST=0.0.0.0
+SERVER_PORT=8000
+"""
+    
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.env', delete=False) as f:
+        f.write(config_content)
+        yield f.name
+    
+    os.unlink(f.name)
+
+
+def test_config_validation():
+    """测试配置验证"""
+    # 测试无效端口
+    with pytest.raises(ValueError):
+        Settings(server_port=-1)
+    
+    with pytest.raises(ValueError):
+        Settings(server_port=70000)
+    
+    # 测试无效环境
+    with pytest.raises(ValueError):
+        Settings(environment="invalid")
+
+
+def test_service_config():
+    """测试服务配置"""
+    settings = Settings()
+    
+    # 默认应该没有服务配置
+    assert len(settings.services) == 0
+    
+    # 测试添加服务配置
+    os.environ["SERVICES"] = '{"test_service": {"host": "localhost", "port": 8001, "health_check_path": "/health"}}'
+    
+    try:
+        settings = Settings()
+        assert "test_service" in settings.services
+        assert settings.services["test_service"].host == "localhost"
+        assert settings.services["test_service"].port == 8001
+        
+    finally:
+        os.environ.pop("SERVICES", None)
 
 
 if __name__ == "__main__":

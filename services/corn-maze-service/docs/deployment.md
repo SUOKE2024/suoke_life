@@ -36,7 +36,7 @@
 1. 克隆代码库并进入目录
 
 ```bash
-git clone https://github.com/suoke-life/corn-maze-service.git
+git clone https://github.com/SUOKE2024/suoke_life.git
 cd corn-maze-service
 ```
 

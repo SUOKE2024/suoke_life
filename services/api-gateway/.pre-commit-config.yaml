@@ -1,0 +1,106 @@
+# Pre-commit 配置文件
+# 在提交前自动运行代码质量检查和格式化
+
+repos:
+  # Ruff - 快速的 Python linter 和 formatter
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.8.0
+    hooks:
+      # Ruff linter
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix]
+        types_or: [python, pyi, jupyter]
+      # Ruff formatter
+      - id: ruff-format
+        types_or: [python, pyi, jupyter]
+
+  # MyPy - 静态类型检查
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.13.0
+    hooks:
+      - id: mypy
+        additional_dependencies:
+          - types-PyYAML
+          - types-redis
+          - types-requests
+        args: [--ignore-missing-imports]
+
+  # 通用钩子
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      # 检查文件大小
+      - id: check-added-large-files
+        args: ['--maxkb=1000']
+      # 检查 AST 语法
+      - id: check-ast
+      # 检查内置类型注解
+      - id: check-builtin-literals
+      # 检查大小写冲突
+      - id: check-case-conflict
+      # 检查文档字符串是否为第一行
+      - id: check-docstring-first
+      # 检查可执行文件有 shebang
+      - id: check-executables-have-shebangs
+      # 检查 JSON 格式
+      - id: check-json
+      # 检查合并冲突标记
+      - id: check-merge-conflict
+      # 检查 TOML 格式
+      - id: check-toml
+      # 检查 XML 格式
+      - id: check-xml
+      # 检查 YAML 格式
+      - id: check-yaml
+      # 调试语句检查
+      - id: debug-statements
+      # 检测私钥
+      - id: detect-private-key
+      # 文件末尾换行
+      - id: end-of-file-fixer
+      # 修复行尾空格
+      - id: trailing-whitespace
+      # 混合行尾检查
+      - id: mixed-line-ending
+
+  # 安全检查 - Bandit
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.10
+    hooks:
+      - id: bandit
+        args: ['-r', 'suoke_api_gateway/', '-f', 'json', '-o', 'bandit-report.json']
+        exclude: ^tests/
+
+  # 依赖安全检查 - Safety
+  - repo: https://github.com/Lucas-C/pre-commit-hooks-safety
+    rev: v1.3.2
+    hooks:
+      - id: python-safety-dependencies-check
+
+  # 提交信息检查
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: v3.29.0
+    hooks:
+      - id: commitizen
+        stages: [commit-msg]
+
+  # 文档检查
+  - repo: https://github.com/pycqa/pydocstyle
+    rev: 6.3.0
+    hooks:
+      - id: pydocstyle
+        args: [--convention=google]
+        exclude: ^tests/
+
+# 配置选项
+ci:
+  autofix_commit_msg: |
+    [pre-commit.ci] auto fixes from pre-commit.com hooks
+
+    for more information, see https://pre-commit.ci
+  autofix_prs: true
+  autoupdate_branch: ''
+  autoupdate_commit_msg: '[pre-commit.ci] pre-commit autoupdate'
+  autoupdate_schedule: weekly
+  skip: []
+  submodules: false 

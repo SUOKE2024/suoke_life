@@ -40,7 +40,7 @@ curl -X POST "https://auth.suoke.life/services/accessibility/credentials" \
   -d '{
     "service_name": "xiaoai", 
     "description": "小艾智能体与无障碍服务集成", 
-    "contact_email": "xiaoai-team@suoke.life"
+    "contact_email": "song.xu@icloud.com"
   }'
 ```
 
@@ -818,6 +818,6 @@ def update_user_privacy_settings(user_id, settings):
 
 ### 联系支持
 
-技术支持邮箱：accessibility-team@suoke.life
+技术支持邮箱：song.xu@icloud.com
 
-API文档：https://docs.suoke.life/accessibility-service/api 
+API文档：https://github.com/SUOKE2024/suoke_life/tree/main/services/accessibility-service/docs/api 

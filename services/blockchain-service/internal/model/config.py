@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """
 配置加载和模型模块
@@ -7,10 +6,10 @@
 
 import os
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
+from pydantic import BaseModel, validator
 import yaml
-from pydantic import BaseModel, Field, validator
 
 
 class ServerConfig(BaseModel):
@@ -24,7 +23,7 @@ class LoggingConfig(BaseModel):
     """日志配置"""
     level: str = "INFO"
     format: str = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-    file: Optional[str] = None
+    file: str | None = None
     max_size_mb: int = 100
     backup_count: int = 5
 
@@ -96,7 +95,7 @@ class ZkpConfig(BaseModel):
     """零知识证明配置"""
     proving_key_path: str
     verification_key_path: str
-    supported_circuits: List[str]
+    supported_circuits: list[str]
 
 
 class ServiceConfig(BaseModel):
@@ -180,7 +179,7 @@ class AppConfig(BaseModel):
     cache: CacheConfig
 
 
-def load_config(config_path: Union[str, Path]) -> AppConfig:
+def load_config(config_path: str | Path) -> AppConfig:
     """
     从YAML文件加载配置
     
@@ -190,16 +189,16 @@ def load_config(config_path: Union[str, Path]) -> AppConfig:
     Returns:
         应用配置对象
     """
-    with open(config_path, 'r') as f:
+    with open(config_path) as f:
         config_dict = yaml.safe_load(f)
-    
+
     # 递归解析环境变量
     _resolve_env_vars(config_dict)
-    
+
     return AppConfig(**config_dict)
 
 
-def _resolve_env_vars(config_dict: Dict[str, Any]) -> None:
+def _resolve_env_vars(config_dict: dict[str, Any]) -> None:
     """
     递归解析配置中的环境变量
     
@@ -211,4 +210,4 @@ def _resolve_env_vars(config_dict: Dict[str, Any]) -> None:
             _resolve_env_vars(value)
         elif isinstance(value, str) and value.startswith("${") and value.endswith("}"):
             env_var = value[2:-1]
-            config_dict[key] = os.environ.get(env_var, "") 
+            config_dict[key] = os.environ.get(env_var, "")

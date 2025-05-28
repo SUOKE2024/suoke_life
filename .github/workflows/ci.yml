@@ -1,0 +1,227 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+env:
+  PYTHON_VERSION: "3.13.3"
+  NODE_VERSION: "18"
+
+jobs:
+  # Python后端测试
+  backend-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [
+          "services/auth-service",
+          "services/api-gateway", 
+          "services/user-service",
+          "services/agent-services/xiaoai-service",
+          "services/diagnostic-services/inquiry-service"
+        ]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Install uv
+      uses: astral-sh/setup-uv@v2
+      with:
+        version: "latest"
+    
+    - name: Install dependencies
+      run: |
+        cd ${{ matrix.service }}
+        if [ -f "pyproject.toml" ]; then
+          uv sync
+        fi
+    
+    - name: Run tests
+      run: |
+        cd ${{ matrix.service }}
+        if [ -f "pyproject.toml" ]; then
+          uv run pytest tests/ -v --cov=. --cov-report=xml
+        fi
+    
+    - name: Upload coverage
+      uses: codecov/codecov-action@v3
+      with:
+        file: ${{ matrix.service }}/coverage.xml
+        flags: backend-${{ matrix.service }}
+
+  # React Native前端测试
+  frontend-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Run ESLint
+      run: npm run lint
+    
+    - name: Run tests
+      run: npm test -- --coverage --watchAll=false
+    
+    - name: Upload coverage
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage/lcov.info
+        flags: frontend
+
+  # Python版本验证
+  python-version-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Verify Python version consistency
+      run: |
+        python scripts/verify_python_version.py
+        if [ $? -ne 0 ]; then
+          echo "❌ Python版本验证失败"
+          exit 1
+        else
+          echo "✅ Python版本验证通过"
+        fi
+
+  # 代码质量检查
+  code-quality:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Install quality tools
+      run: |
+        pip install black isort flake8 mypy bandit safety
+    
+    - name: Run Black
+      run: black --check --diff .
+    
+    - name: Run isort
+      run: isort --check-only --diff .
+    
+    - name: Run flake8
+      run: flake8 .
+    
+    - name: Run mypy
+      run: mypy . --ignore-missing-imports
+    
+    - name: Run bandit security check
+      run: bandit -r . -f json -o bandit-report.json || true
+    
+    - name: Run safety check
+      run: safety check --json --output safety-report.json || true
+
+  # Docker构建测试
+  docker-build:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    
+    - name: Build Docker images
+      run: |
+        docker build -t suoke-life:latest .
+        docker build -t suoke-life-auth:latest services/auth-service/
+        docker build -t suoke-life-xiaoai:latest services/agent-services/xiaoai-service/
+
+  # 集成测试
+  integration-test:
+    runs-on: ubuntu-latest
+    needs: [backend-test, frontend-test]
+    if: github.event_name == 'push'
+    
+    services:
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: suoke_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: |
+        npm ci
+        pip install -r requirements.txt
+    
+    - name: Run integration tests
+      run: |
+        npm run test:integration
+      env:
+        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/suoke_test
+        REDIS_URL: redis://localhost:6379
+
+  # 部署到开发环境
+  deploy-dev:
+    runs-on: ubuntu-latest
+    needs: [integration-test, python-version-check, code-quality]
+    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Deploy to development
+      run: |
+        echo "🚀 部署到开发环境"
+        # 这里添加实际的部署脚本
+    
+    - name: Notify deployment
+      run: |
+        echo "✅ 开发环境部署完成" 

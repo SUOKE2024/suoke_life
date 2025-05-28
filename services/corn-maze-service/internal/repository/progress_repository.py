@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """
 进度存储库 - 负责用户迷宫进度的存储和检索
 """
 
+from datetime import datetime
 import json
 import logging
 import os
-from typing import Dict, List, Optional, Any, Tuple
-from datetime import datetime
 
 import aiosqlite
 
@@ -19,25 +17,25 @@ logger = logging.getLogger(__name__)
 
 class ProgressRepository:
     """进度存储库，负责用户迷宫进度的存储和检索"""
-    
+
     def __init__(self):
         self.db_path = os.environ.get("MAZE_DB_PATH", "data/maze.db")
         logger.info(f"进度存储库初始化，数据库路径: {self.db_path}")
-    
+
     async def _get_db(self):
         """获取数据库连接"""
         # 确保数据库目录存在
         os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
-        
+
         # 连接数据库
         db = await aiosqlite.connect(self.db_path)
         db.row_factory = aiosqlite.Row
-        
+
         # 初始化表结构
         await self._init_tables(db)
-        
+
         return db
-    
+
     async def _init_tables(self, db):
         """初始化数据库表"""
         await db.execute('''
@@ -58,7 +56,7 @@ class ProgressRepository:
         )
         ''')
         await db.commit()
-    
+
     async def save_progress(self, progress: UserProgress) -> UserProgress:
         """
         保存用户进度
@@ -70,7 +68,7 @@ class ProgressRepository:
             UserProgress: 保存后的用户进度对象
         """
         logger.info(f"保存用户 {progress.user_id} 在迷宫 {progress.maze_id} 中的进度")
-        
+
         db = await self._get_db()
         try:
             # 将复杂结构转换为JSON字符串
@@ -79,7 +77,7 @@ class ProgressRepository:
             completed_challenges_json = json.dumps(progress.completed_challenges)
             acquired_knowledge_json = json.dumps(progress.acquired_knowledge)
             notes_json = json.dumps(progress.notes)
-            
+
             # 准备SQL语句
             query = '''
             INSERT OR REPLACE INTO progress (
@@ -88,7 +86,7 @@ class ProgressRepository:
                 status, steps_taken, start_time, last_active_time, notes
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             '''
-            
+
             # 执行查询
             await db.execute(
                 query,
@@ -101,13 +99,13 @@ class ProgressRepository:
                 )
             )
             await db.commit()
-            
+
             return progress
-        
+
         finally:
             await db.close()
-    
-    async def get_progress(self, user_id: str, maze_id: str) -> Optional[UserProgress]:
+
+    async def get_progress(self, user_id: str, maze_id: str) -> UserProgress | None:
         """
         获取用户进度
         
@@ -119,7 +117,7 @@ class ProgressRepository:
             Optional[UserProgress]: 用户进度对象或None（如果未找到）
         """
         logger.info(f"获取用户 {user_id} 在迷宫 {maze_id} 中的进度")
-        
+
         db = await self._get_db()
         try:
             # 执行查询
@@ -128,18 +126,18 @@ class ProgressRepository:
                 (user_id, maze_id)
             )
             row = await cursor.fetchone()
-            
+
             if not row:
                 logger.warning(f"未找到用户 {user_id} 在迷宫 {maze_id} 中的进度")
                 return None
-            
+
             # 将行数据转换为UserProgress对象
             return self._row_to_progress(row)
-        
+
         finally:
             await db.close()
-    
-    async def get_user_progress_list(self, user_id: str, limit: int = 10, offset: int = 0) -> List[UserProgress]:
+
+    async def get_user_progress_list(self, user_id: str, limit: int = 10, offset: int = 0) -> list[UserProgress]:
         """
         获取用户的所有进度列表
         
@@ -152,7 +150,7 @@ class ProgressRepository:
             List[UserProgress]: 用户进度对象列表
         """
         logger.info(f"获取用户 {user_id} 的进度列表")
-        
+
         db = await self._get_db()
         try:
             # 执行查询
@@ -161,13 +159,13 @@ class ProgressRepository:
                 (user_id, limit, offset)
             )
             rows = await cursor.fetchall()
-            
+
             # 将行数据转换为UserProgress对象列表
             return [self._row_to_progress(row) for row in rows]
-        
+
         finally:
             await db.close()
-    
+
     async def delete_progress(self, user_id: str, maze_id: str) -> bool:
         """
         删除用户进度
@@ -180,7 +178,7 @@ class ProgressRepository:
             bool: 是否成功删除
         """
         logger.info(f"删除用户 {user_id} 在迷宫 {maze_id} 中的进度")
-        
+
         db = await self._get_db()
         try:
             # 执行删除
@@ -189,14 +187,14 @@ class ProgressRepository:
                 (user_id, maze_id)
             )
             await db.commit()
-            
+
             # 检查是否有行被删除
             return cursor.rowcount > 0
-        
+
         finally:
             await db.close()
-    
-    async def get_completed_mazes(self, user_id: str) -> List[str]:
+
+    async def get_completed_mazes(self, user_id: str) -> list[str]:
         """
         获取用户已完成的迷宫ID列表
         
@@ -207,7 +205,7 @@ class ProgressRepository:
             List[str]: 已完成迷宫的ID列表
         """
         logger.info(f"获取用户 {user_id} 已完成的迷宫列表")
-        
+
         db = await self._get_db()
         try:
             # 执行查询
@@ -216,13 +214,13 @@ class ProgressRepository:
                 (user_id,)
             )
             rows = await cursor.fetchall()
-            
+
             # 提取迷宫ID
             return [row["maze_id"] for row in rows]
-        
+
         finally:
             await db.close()
-    
+
     def _row_to_progress(self, row: aiosqlite.Row) -> UserProgress:
         """将数据库行转换为UserProgress对象"""
         return UserProgress(

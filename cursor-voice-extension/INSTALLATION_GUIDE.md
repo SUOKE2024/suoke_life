@@ -264,7 +264,7 @@ Cursor Voice: Start Video Interaction
 ## 📞 支持和反馈
 
 ### 获取帮助
-- 📧 邮箱：support@cursor-voice.com
+- 📧 邮箱：song.xu@icloud.com
 - 💬 GitHub Issues：[项目地址](https://github.com/your-repo/cursor-voice-extension/issues)
 - 📖 文档：[在线文档](https://docs.cursor-voice.com)
 

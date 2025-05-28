@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """
 模板存储库 - 负责迷宫模板的存储和检索
 """
 
+from datetime import datetime
 import json
 import logging
 import os
+from typing import Any
 import uuid
-from typing import Dict, List, Optional, Any, Tuple
-from datetime import datetime
 
 import aiosqlite
 
@@ -20,25 +19,25 @@ logger = logging.getLogger(__name__)
 
 class TemplateRepository:
     """模板存储库，负责迷宫模板的存储和检索"""
-    
+
     def __init__(self):
         self.db_path = os.environ.get("MAZE_DB_PATH", "data/maze.db")
         logger.info(f"模板存储库初始化，数据库路径: {self.db_path}")
-    
+
     async def _get_db(self):
         """获取数据库连接"""
         # 确保数据库目录存在
         os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
-        
+
         # 连接数据库
         db = await aiosqlite.connect(self.db_path)
         db.row_factory = aiosqlite.Row
-        
+
         # 初始化表结构
         await self._init_tables(db)
-        
+
         return db
-    
+
     async def _init_tables(self, db):
         """初始化数据库表"""
         await db.execute('''
@@ -63,25 +62,25 @@ class TemplateRepository:
         )
         ''')
         await db.commit()
-        
+
         # 检查初始数据
         await self._check_initial_templates(db)
-    
+
     async def _check_initial_templates(self, db):
         """检查并加载初始模板数据"""
         # 检查是否有模板数据
         cursor = await db.execute("SELECT COUNT(*) FROM maze_templates")
         count = (await cursor.fetchone())[0]
-        
+
         # 如果没有数据，则加载初始数据
         if count == 0:
             logger.info("模板存储库为空，加载初始模板")
             await self._load_initial_templates(db)
-    
+
     async def _load_initial_templates(self, db):
         """加载初始模板数据"""
         now = datetime.now().isoformat()
-        
+
         # 创建一个简单的5x5迷宫模板
         small_template = {
             "template_id": str(uuid.uuid4()),
@@ -102,7 +101,7 @@ class TemplateRepository:
             "author": "系统",
             "is_official": True
         }
-        
+
         # 创建一个中等大小的10x10迷宫模板
         medium_template = {
             "template_id": str(uuid.uuid4()),
@@ -123,17 +122,17 @@ class TemplateRepository:
             "author": "系统",
             "is_official": True
         }
-        
+
         # 插入模板数据
         templates = [small_template, medium_template]
-        
+
         for template in templates:
             # 转换复杂结构为JSON字符串
             cells_json = json.dumps(template["cells"])
             start_pos_json = json.dumps(template["start_position"])
             goal_pos_json = json.dumps(template["goal_position"])
             tags_json = json.dumps(template["tags"])
-            
+
             # 插入数据
             await db.execute(
                 '''
@@ -152,11 +151,11 @@ class TemplateRepository:
                     template["created_at"], tags_json, template["author"], template["is_official"]
                 )
             )
-        
+
         await db.commit()
         logger.info(f"已加载 {len(templates)} 个初始迷宫模板")
-    
-    def _generate_template_cells(self, width: int, height: int) -> List[Dict[str, Any]]:
+
+    def _generate_template_cells(self, width: int, height: int) -> list[dict[str, Any]]:
         """
         生成简单的模板单元格
         
@@ -168,7 +167,7 @@ class TemplateRepository:
             List[Dict]: 模板单元格列表
         """
         cells = []
-        
+
         # 创建基本迷宫结构
         for y in range(height):
             for x in range(width):
@@ -177,7 +176,7 @@ class TemplateRepository:
                 east_wall = True
                 south_wall = True
                 west_wall = True
-                
+
                 # 创建简单的迷宫路径
                 if (x + y) % 2 == 0:
                     # 偶数和位置，打开东墙和南墙
@@ -187,7 +186,7 @@ class TemplateRepository:
                     # 奇数和位置，打开北墙和西墙
                     north_wall = False
                     west_wall = False
-                
+
                 # 确保边界单元格的外墙保持完整
                 if x == 0:
                     west_wall = True
@@ -197,7 +196,7 @@ class TemplateRepository:
                     east_wall = True
                 if y == height - 1:
                     south_wall = True
-                
+
                 # 设置单元格类型
                 cell_type = "PATH"
                 if x == 0 and y == 0:
@@ -209,7 +208,7 @@ class TemplateRepository:
                     cell_type = "KNOWLEDGE"
                 elif (x * y) % 11 == 0:
                     cell_type = "CHALLENGE"
-                
+
                 cell = {
                     "x": x,
                     "y": y,
@@ -221,9 +220,9 @@ class TemplateRepository:
                     "type": cell_type
                 }
                 cells.append(cell)
-        
+
         return cells
-    
+
     async def save_template(self, template: MazeTemplate) -> MazeTemplate:
         """
         保存迷宫模板
@@ -235,11 +234,11 @@ class TemplateRepository:
             MazeTemplate: 保存后的迷宫模板对象
         """
         logger.info(f"保存迷宫模板 {template.template_id}")
-        
+
         # 如果模板ID为空，生成新ID
         if not template.template_id:
             template.template_id = str(uuid.uuid4())
-        
+
         db = await self._get_db()
         try:
             # 将复杂结构转换为JSON字符串
@@ -247,7 +246,7 @@ class TemplateRepository:
             start_pos_json = json.dumps(template.start_position)
             goal_pos_json = json.dumps(template.goal_position)
             tags_json = json.dumps(template.tags)
-            
+
             # 准备SQL语句
             query = '''
             INSERT OR REPLACE INTO maze_templates (
@@ -257,7 +256,7 @@ class TemplateRepository:
                 created_at, tags, author, is_official
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             '''
-            
+
             # 执行查询
             await db.execute(
                 query,
@@ -270,13 +269,13 @@ class TemplateRepository:
                 )
             )
             await db.commit()
-            
+
             return template
-        
+
         finally:
             await db.close()
-    
-    async def get_template(self, template_id: str) -> Optional[MazeTemplate]:
+
+    async def get_template(self, template_id: str) -> MazeTemplate | None:
         """
         获取迷宫模板
         
@@ -287,7 +286,7 @@ class TemplateRepository:
             Optional[MazeTemplate]: 迷宫模板对象或None（如果未找到）
         """
         logger.info(f"获取迷宫模板 {template_id}")
-        
+
         db = await self._get_db()
         try:
             # 执行查询
@@ -296,24 +295,24 @@ class TemplateRepository:
                 (template_id,)
             )
             row = await cursor.fetchone()
-            
+
             if not row:
                 logger.warning(f"未找到ID为 {template_id} 的迷宫模板")
                 return None
-            
+
             # 将行数据转换为MazeTemplate对象
             return self._row_to_template(row)
-        
+
         finally:
             await db.close()
-    
+
     async def list_templates(
         self,
         maze_type: str = "",
         difficulty: int = 0,
         page: int = 1,
         page_size: int = 10
-    ) -> Tuple[List[MazeTemplate], int]:
+    ) -> tuple[list[MazeTemplate], int]:
         """
         列出迷宫模板
         
@@ -327,49 +326,49 @@ class TemplateRepository:
             Tuple[List[MazeTemplate], int]: 迷宫模板对象列表和总数
         """
         logger.info(f"列出迷宫模板，类型: {maze_type}, 难度: {difficulty}")
-        
+
         db = await self._get_db()
         try:
             # 构建查询条件
             conditions = []
             params = []
-            
+
             if maze_type:
                 conditions.append("maze_type = ?")
                 params.append(maze_type)
-            
+
             if difficulty > 0:
                 conditions.append("difficulty = ?")
                 params.append(difficulty)
-            
+
             # 构建完整的WHERE子句
             where_clause = " AND ".join(conditions) if conditions else "1=1"
-            
+
             # 计算总数
             count_cursor = await db.execute(
                 f"SELECT COUNT(*) FROM maze_templates WHERE {where_clause}",
                 params
             )
             total = (await count_cursor.fetchone())[0]
-            
+
             # 计算偏移量
             offset = (page - 1) * page_size
-            
+
             # 执行分页查询
             cursor = await db.execute(
                 f"SELECT * FROM maze_templates WHERE {where_clause} ORDER BY created_at DESC LIMIT ? OFFSET ?",
                 params + [page_size, offset]
             )
             rows = await cursor.fetchall()
-            
+
             # 将行数据转换为MazeTemplate对象列表
             templates = [self._row_to_template(row) for row in rows]
-            
+
             return templates, total
-        
+
         finally:
             await db.close()
-    
+
     async def delete_template(self, template_id: str) -> bool:
         """
         删除迷宫模板
@@ -381,7 +380,7 @@ class TemplateRepository:
             bool: 是否成功删除
         """
         logger.info(f"删除迷宫模板 {template_id}")
-        
+
         db = await self._get_db()
         try:
             # 执行删除
@@ -390,13 +389,13 @@ class TemplateRepository:
                 (template_id,)
             )
             await db.commit()
-            
+
             # 检查是否有行被删除
             return cursor.rowcount > 0
-        
+
         finally:
             await db.close()
-    
+
     def _row_to_template(self, row: aiosqlite.Row) -> MazeTemplate:
         """将数据库行转换为MazeTemplate对象"""
         return MazeTemplate(

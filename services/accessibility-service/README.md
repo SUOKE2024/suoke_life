@@ -185,5 +185,5 @@ accessibility-service/
 ## 联系我们
 
 - 官方网站: [https://suoke.life](https://suoke.life)
-- 技术支持: support@suoke.life
+- 技术支持: song.xu@icloud.com
 - 问题反馈: github.com/SUOKE2024/accessibility-service/issues 

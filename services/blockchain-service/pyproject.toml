@@ -1,6 +1,311 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [project]
-name = "blockchain-service"
+name = "suoke-blockchain-service"
 version = "0.1.0"
-description = "Add your description here"
-requires-python = ">=3.11"
-dependencies = []
+description = "索克生活区块链服务 - 健康数据的区块链存储、验证和访问控制"
+readme = "README.md"
+license = { text = "Proprietary" }
+authors = [
+    { name = "SuoKe Life Team", email = "dev@suokelife.com" }
+]
+maintainers = [
+    { name = "SuoKe Life Team", email = "dev@suokelife.com" }
+]
+keywords = ["blockchain", "health", "data", "privacy", "zkp"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Healthcare Industry",
+    "License :: Other/Proprietary License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Medical Science Apps.",
+    "Topic :: Security :: Cryptography",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
+requires-python = ">=3.13.3"
+
+dependencies = [
+    # 核心 Web 框架
+    "fastapi>=0.115.0",
+    "pydantic>=2.10.0",
+    "pydantic-settings>=2.6.0",
+    "uvicorn[standard]>=0.32.0",
+    
+    # gRPC 通信
+    "grpcio>=1.68.0",
+    "grpcio-tools>=1.68.0",
+    "grpcio-health-checking>=1.68.0",
+    "grpcio-reflection>=1.68.0",
+    "protobuf>=5.28.0",
+    
+    # 区块链相关
+    "web3>=7.5.0",
+    "py-solc-x>=2.0.3",
+    "eth-account>=0.13.0",
+    "eth-utils>=5.1.0",
+    "hexbytes>=1.2.0",
+    
+    # 加密和安全
+    "cryptography>=43.0.0",
+    "pyjwt>=2.10.0",
+    "pyopenssl>=24.2.1",
+    "coincurve>=20.0.0",
+    
+    # 数据库
+    "sqlalchemy[asyncio]>=2.0.36",
+    "alembic>=1.14.0",
+    "asyncpg>=0.30.0",
+    "psycopg[binary]>=3.2.0",
+    
+    # Redis 缓存
+    "redis[hiredis]>=5.2.0",
+    "aioredis>=2.0.1",
+    
+    # 配置和环境
+    "pyyaml>=6.0.2",
+    "python-dotenv>=1.0.1",
+    "dynaconf>=3.2.6",
+    
+    # 工具和实用程序
+    "tenacity>=9.0.0",
+    "structlog>=24.4.0",
+    "rich>=13.9.0",
+    "typer>=0.15.0",
+    "httpx>=0.28.0",
+    
+    # 监控和可观测性
+    "prometheus-client>=0.21.0",
+    "opentelemetry-api>=1.28.0",
+    "opentelemetry-sdk>=1.28.0",
+    "opentelemetry-exporter-otlp>=1.28.0",
+    "opentelemetry-instrumentation-fastapi>=0.49b2",
+    "opentelemetry-instrumentation-grpc>=0.49b2",
+    "opentelemetry-instrumentation-sqlalchemy>=0.49b2",
+    
+    # 异步支持
+    "asyncio-mqtt>=0.16.2",
+    "aiofiles>=24.1.0",
+    "anyio>=4.6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    # 测试框架
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.24.0",
+    "pytest-cov>=6.0.0",
+    "pytest-mock>=3.14.0",
+    "pytest-xdist>=3.6.0",
+    "pytest-benchmark>=4.0.0",
+    "httpx>=0.28.0",
+    "factory-boy>=3.3.1",
+    
+    # 代码质量
+    "ruff>=0.8.0",
+    "mypy>=1.13.0",
+    "pre-commit>=4.0.0",
+    "bandit[toml]>=1.7.10",
+    "safety>=3.2.0",
+    
+    # 类型检查
+    "types-pyyaml>=6.0.12.20240917",
+    "types-redis>=4.6.0.20240903",
+    "types-protobuf>=5.28.0.20241118",
+    
+    # 文档生成
+    "mkdocs>=1.6.0",
+    "mkdocs-material>=9.5.0",
+    "mkdocstrings[python]>=0.26.0",
+    
+    # 性能分析
+    "py-spy>=0.3.14",
+    "memory-profiler>=0.61.0",
+]
+
+test = [
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.24.0",
+    "pytest-cov>=6.0.0",
+    "pytest-mock>=3.14.0",
+    "pytest-xdist>=3.6.0",
+    "httpx>=0.28.0",
+    "factory-boy>=3.3.1",
+]
+
+docs = [
+    "mkdocs>=1.6.0",
+    "mkdocs-material>=9.5.0",
+    "mkdocstrings[python]>=0.26.0",
+]
+
+[project.scripts]
+blockchain-service = "suoke_blockchain_service.main:app"
+blockchain-cli = "suoke_blockchain_service.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/suokelife/suoke_life"
+Documentation = "https://docs.suokelife.com/blockchain-service"
+Repository = "https://github.com/suokelife/suoke_life"
+Issues = "https://github.com/suokelife/suoke_life/issues"
+
+# Hatch 构建配置
+[tool.hatch.build.targets.wheel]
+packages = ["suoke_blockchain_service"]
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+    "/.github",
+    "/docs",
+    "/tests",
+    "/.pytest_cache",
+    "/.mypy_cache",
+    "/.ruff_cache",
+]
+
+# UV 配置
+[tool.uv]
+dev-dependencies = [
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.24.0",
+    "pytest-cov>=6.0.0",
+    "pytest-mock>=3.14.0",
+    "ruff>=0.8.0",
+    "mypy>=1.13.0",
+    "pre-commit>=4.0.0",
+]
+
+# Ruff 配置
+[tool.ruff]
+target-version = "py313"
+line-length = 88
+indent-width = 4
+
+[tool.ruff.lint]
+select = [
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings
+    "F",      # pyflakes
+    "I",      # isort
+    "B",      # flake8-bugbear
+    "C4",     # flake8-comprehensions
+    "UP",     # pyupgrade
+    "ARG001", # unused-function-argument
+    "SIM",    # flake8-simplify
+    "TCH",    # flake8-type-checking
+    "TID",    # flake8-tidy-imports
+    "Q",      # flake8-quotes
+    "PL",     # pylint
+    "PT",     # flake8-pytest-style
+    "RUF",    # ruff-specific rules
+]
+ignore = [
+    "E501",   # line too long, handled by black
+    "B008",   # do not perform function calls in argument defaults
+    "C901",   # too complex
+    "PLR0913", # too many arguments
+    "PLR0915", # too many statements
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+"tests/**/*" = ["PLR2004", "S101", "TID252"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["suoke_blockchain_service"]
+force-sort-within-sections = true
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+# MyPy 配置
+[tool.mypy]
+python_version = "3.13"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+show_error_codes = true
+
+[[tool.mypy.overrides]]
+module = [
+    "web3.*",
+    "solcx.*",
+    "eth_account.*",
+    "grpc.*",
+    "prometheus_client.*",
+]
+ignore_missing_imports = true
+
+# Pytest 配置
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--cov=suoke_blockchain_service",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+    "--cov-report=xml",
+    "--cov-fail-under=80",
+]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+    "blockchain: marks tests that require blockchain connection",
+]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+
+# Coverage 配置
+[tool.coverage.run]
+source = ["suoke_blockchain_service"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "*/__init__.py",
+    "*/migrations/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
+# Bandit 安全检查配置
+[tool.bandit]
+exclude_dirs = ["tests", "migrations"]
+skips = ["B101", "B601"]
+
+# Pre-commit 配置建议
+# 注意：实际的 pre-commit 配置在 .pre-commit-config.yaml 文件中

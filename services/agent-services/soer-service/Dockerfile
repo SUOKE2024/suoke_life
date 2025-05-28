@@ -1,61 +1,41 @@
-# 使用多阶段构建减少最终镜像大小
-# 构建阶段
-FROM python:3.12-slim as builder
+# 使用 Python 3.13 官方镜像
+FROM python:3.13-slim
 
 # 设置工作目录
 WORKDIR /app
 
-# 安装构建依赖
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
+# 设置环境变量
+ENV PYTHONPATH=/app
+ENV PYTHONUNBUFFERED=1
+ENV ENVIRONMENT=production
+ENV DEBUG=false
+
+# 安装系统依赖
+RUN apt-get update && apt-get install -y \
     gcc \
-    python3-dev \
-    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# 复制并安装依赖
-COPY requirements.txt .
-RUN pip install --no-cache-dir --user -r requirements.txt
+# 复制依赖文件
+COPY requirements-minimal.txt .
 
-# 运行阶段
-FROM python:3.12-slim
+# 安装 Python 依赖
+RUN pip install --no-cache-dir -r requirements-minimal.txt
 
-# 设置时区为上海
-ENV TZ=Asia/Shanghai
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+# 复制应用代码
+COPY soer_service/ ./soer_service/
+COPY run_service.py .
 
-# 创建非root用户
-RUN groupadd -r soer && useradd -r -g soer soer
-
-# 设置工作目录
-WORKDIR /app
-
-# 从构建阶段复制安装好的Python包
-COPY --from=builder /root/.local /home/soer/.local
-ENV PATH=/home/soer/.local/bin:$PATH
-
-# 复制应用程序代码
-COPY . .
-
-# 创建必要的目录并设置权限
-RUN mkdir -p logs \
-    && chown -R soer:soer /app \
-    && chmod -R 755 /app
-
-# 切换到非root用户
+# 创建非 root 用户
+RUN useradd --create-home --shell /bin/bash soer
+RUN chown -R soer:soer /app
 USER soer
 
-# 设置Python环境变量
-ENV PYTHONPATH=/app \
-    PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1
+# 暴露端口
+EXPOSE 8003
 
-# 设置健康检查
-HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:8054/health || exit 1
-
-# 暴露gRPC和REST API端口
-EXPOSE 50054 8054 9098
+# 健康检查
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8003/health || exit 1
 
 # 启动命令
-CMD ["python", "-m", "cmd.server"]
+CMD ["python", "run_service.py"]

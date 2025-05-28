@@ -1,0 +1,461 @@
+# A2A-PraisonAI 混合适配器部署配置
+# 实现索克生活A2A智能体网络与PraisonAI框架的无缝集成
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hybrid-adapter
+  namespace: suoke-life
+  labels:
+    app: hybrid-adapter
+    component: agent-adapter
+    version: v1.0.0
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hybrid-adapter
+  template:
+    metadata:
+      labels:
+        app: hybrid-adapter
+        component: agent-adapter
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8000"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+      - name: adapter
+        image: suoke-life/hybrid-adapter:latest
+        ports:
+        - containerPort: 8000
+          name: http
+        - containerPort: 8080
+          name: admin
+        env:
+        # 全局配置
+        - name: APP_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: global-config
+              key: APP_NAME
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: global-config
+              key: LOG_LEVEL
+        
+        # A2A网络配置
+        - name: A2A_NETWORK_ENABLED
+          value: "true"
+        - name: A2A_XIAOAI_URL
+          value: "http://xiaoai-service:8001"
+        - name: A2A_XIAOKE_URL
+          value: "http://xiaoke-service:8002"
+        - name: A2A_LAOKE_URL
+          value: "http://laoke-service:8003"
+        - name: A2A_SOER_URL
+          value: "http://soer-service:8004"
+        
+        # PraisonAI配置
+        - name: PRAISONAI_ENABLED
+          value: "true"
+        - name: PRAISONAI_ORCHESTRATOR_URL
+          value: "http://agent-orchestrator-service:8000"
+        
+        # LiteLLM网关配置
+        - name: LITELLM_GATEWAY_URL
+          valueFrom:
+            configMapKeyRef:
+              name: global-config
+              key: LITELLM_GATEWAY_URL
+        
+        # Redis配置
+        - name: REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: global-config
+              key: REDIS_HOST
+        - name: REDIS_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: global-config
+              key: REDIS_PORT
+        
+        volumeMounts:
+        - name: adapter-config
+          mountPath: /app/config
+        - name: routing-rules
+          mountPath: /app/rules
+        
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+      
+      volumes:
+      - name: adapter-config
+        configMap:
+          name: hybrid-adapter-config
+      - name: routing-rules
+        configMap:
+          name: routing-rules-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hybrid-adapter-service
+  namespace: suoke-life
+  labels:
+    app: hybrid-adapter
+spec:
+  selector:
+    app: hybrid-adapter
+  ports:
+  - name: http
+    port: 8000
+    targetPort: 8000
+    protocol: TCP
+  - name: admin
+    port: 8080
+    targetPort: 8080
+    protocol: TCP
+  type: ClusterIP
+---
+# 混合适配器配置
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hybrid-adapter-config
+  namespace: suoke-life
+  labels:
+    app: hybrid-adapter-config
+    component: configuration
+data:
+  adapter_config.yaml: |
+    # 混合适配器配置
+    adapter:
+      name: "A2A-PraisonAI Hybrid Adapter"
+      version: "1.0.0"
+      mode: "hybrid"  # a2a_only, praisonai_only, hybrid
+      
+    # 框架配置
+    frameworks:
+      a2a:
+        enabled: true
+        priority: 1  # 医疗专业请求优先级
+        timeout: 30
+        retry_attempts: 3
+        health_check_interval: 30
+        
+      praisonai:
+        enabled: true
+        priority: 2  # 通用请求优先级
+        timeout: 45
+        retry_attempts: 3
+        health_check_interval: 30
+    
+    # 路由策略
+    routing:
+      strategy: "intelligent"  # simple, intelligent, load_balanced
+      fallback_enabled: true
+      load_balancing: true
+      
+    # 消息格式转换
+    message_transformation:
+      enabled: true
+      preserve_metadata: true
+      add_routing_info: true
+      
+    # 监控配置
+    monitoring:
+      metrics_enabled: true
+      tracing_enabled: true
+      performance_logging: true
+      
+    # 缓存配置
+    cache:
+      enabled: true
+      ttl: 300  # 5分钟
+      max_size: 1000
+      
+    # 安全配置
+    security:
+      authentication_required: true
+      rate_limiting: true
+      request_validation: true
+---
+# 路由规则配置
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: routing-rules-config
+  namespace: suoke-life
+  labels:
+    app: routing-rules-config
+    component: configuration
+data:
+  routing_rules.yaml: |
+    # 智能路由规则配置
+    routing_rules:
+      
+      # A2A网络处理的请求类型
+      a2a_routes:
+        medical_requests:
+          keywords: ["四诊", "望诊", "闻诊", "问诊", "切诊", "辨证", "体质"]
+          patterns: [".*中医.*", ".*诊断.*", ".*症状.*"]
+          content_types: ["multimodal", "medical_image", "audio_diagnosis"]
+          agents: ["xiaoai", "xiaoke"]
+          
+        sensor_data:
+          keywords: ["传感器", "生物标志物", "心率", "血压", "体温"]
+          patterns: [".*数据分析.*", ".*健康监测.*"]
+          content_types: ["sensor_data", "biomarker_data"]
+          agents: ["soer"]
+          
+        tcm_knowledge:
+          keywords: ["中医知识", "药材", "方剂", "穴位", "经络"]
+          patterns: [".*中医.*", ".*养生.*", ".*食疗.*"]
+          content_types: ["knowledge_query", "tcm_education"]
+          agents: ["laoke"]
+      
+      # PraisonAI处理的请求类型
+      praisonai_routes:
+        general_consultation:
+          keywords: ["咨询", "建议", "计划", "方案"]
+          patterns: [".*健康计划.*", ".*生活指导.*"]
+          content_types: ["text", "general_query"]
+          workflow: "health_consultation"
+          
+        product_customization:
+          keywords: ["定制", "农产品", "个性化", "推荐"]
+          patterns: [".*产品.*", ".*定制.*", ".*推荐.*"]
+          content_types: ["customization_request"]
+          workflow: "product_customization"
+          
+        workflow_management:
+          keywords: ["工作流", "流程", "协作"]
+          patterns: [".*流程.*", ".*协作.*"]
+          content_types: ["workflow_request"]
+          workflow: "general_workflow"
+      
+      # 路由优先级
+      priority_rules:
+        - condition: "emergency_medical"
+          target: "a2a"
+          priority: 1
+          
+        - condition: "multimodal_input"
+          target: "a2a"
+          priority: 2
+          
+        - condition: "tcm_specific"
+          target: "a2a"
+          priority: 3
+          
+        - condition: "general_workflow"
+          target: "praisonai"
+          priority: 4
+          
+        - condition: "default"
+          target: "praisonai"
+          priority: 5
+      
+      # 负载均衡规则
+      load_balancing:
+        enabled: true
+        strategy: "least_connections"
+        health_check_required: true
+        
+      # 故障转移规则
+      failover:
+        enabled: true
+        max_retries: 3
+        retry_delay: 1.0
+        fallback_target: "praisonai"
+---
+# 消息转换配置
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: message-transform-config
+  namespace: suoke-life
+  labels:
+    app: message-transform-config
+    component: configuration
+data:
+  transform_config.yaml: |
+    # 消息格式转换配置
+    message_transformation:
+      
+      # A2A消息格式
+      a2a_format:
+        required_fields:
+          - "agent_id"
+          - "skill_name"
+          - "parameters"
+          - "context"
+        optional_fields:
+          - "metadata"
+          - "priority"
+          - "timeout"
+        
+        message_structure:
+          type: "a2a_message"
+          version: "1.0"
+          
+      # PraisonAI消息格式
+      praisonai_format:
+        required_fields:
+          - "agent_role"
+          - "task_description"
+          - "inputs"
+          - "workflow_id"
+        optional_fields:
+          - "tools"
+          - "model_config"
+          - "quality_requirements"
+        
+        message_structure:
+          type: "praisonai_message"
+          version: "0.0.1"
+      
+      # 转换映射规则
+      field_mappings:
+        a2a_to_praisonai:
+          agent_id: "agent_role"
+          skill_name: "task_description"
+          parameters: "inputs"
+          context: "workflow_context"
+          
+        praisonai_to_a2a:
+          agent_role: "agent_id"
+          task_description: "skill_name"
+          inputs: "parameters"
+          workflow_context: "context"
+      
+      # 数据类型转换
+      type_conversions:
+        multimodal_data:
+          source_format: "base64"
+          target_format: "file_reference"
+          
+        medical_images:
+          source_format: "binary"
+          target_format: "image_url"
+          
+        sensor_data:
+          source_format: "json"
+          target_format: "structured_data"
+---
+# 性能监控配置
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: adapter-monitoring-config
+  namespace: suoke-life
+  labels:
+    app: adapter-monitoring-config
+    component: configuration
+data:
+  monitoring_config.yaml: |
+    # 适配器性能监控配置
+    monitoring:
+      
+      # 指标收集
+      metrics:
+        enabled: true
+        collection_interval: 15
+        retention_period: "7d"
+        
+        custom_metrics:
+          - name: "adapter_request_total"
+            type: "counter"
+            description: "Total number of requests processed"
+            labels: ["framework", "agent", "status"]
+            
+          - name: "adapter_request_duration"
+            type: "histogram"
+            description: "Request processing duration"
+            labels: ["framework", "agent"]
+            buckets: [0.1, 0.5, 1.0, 2.0, 5.0, 10.0]
+            
+          - name: "adapter_routing_decisions"
+            type: "counter"
+            description: "Routing decisions made"
+            labels: ["source_framework", "target_framework", "reason"]
+            
+          - name: "adapter_transformation_errors"
+            type: "counter"
+            description: "Message transformation errors"
+            labels: ["source_format", "target_format", "error_type"]
+      
+      # 健康检查
+      health_checks:
+        enabled: true
+        check_interval: 30
+        timeout: 5
+        
+        endpoints:
+          - name: "a2a_network"
+            url: "http://xiaoai-service:8001/health"
+            critical: true
+            
+          - name: "praisonai_orchestrator"
+            url: "http://agent-orchestrator-service:8000/health"
+            critical: true
+            
+          - name: "litellm_gateway"
+            url: "http://litellm-gateway-service:4000/health"
+            critical: false
+      
+      # 告警规则
+      alerts:
+        enabled: true
+        
+        rules:
+          - name: "HighErrorRate"
+            condition: "error_rate > 0.1"
+            duration: "5m"
+            severity: "warning"
+            
+          - name: "HighLatency"
+            condition: "p95_latency > 5s"
+            duration: "2m"
+            severity: "warning"
+            
+          - name: "FrameworkDown"
+            condition: "framework_health == 0"
+            duration: "1m"
+            severity: "critical"
+      
+      # 日志配置
+      logging:
+        level: "INFO"
+        format: "json"
+        structured: true
+        
+        log_categories:
+          - "routing_decisions"
+          - "message_transformations"
+          - "performance_metrics"
+          - "error_handling"
+          - "health_checks" 

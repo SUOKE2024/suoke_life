@@ -350,7 +350,7 @@ import (
     "fmt"
     "log"
     
-    pb "github.com/suoke-life/message-bus/api/grpc"
+    pb "github.com/SUOKE2024/suoke_life/services/message-bus/api/grpc"
     "google.golang.org/grpc"
 )
 

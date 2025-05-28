@@ -1,7 +1,7 @@
 # 多阶段构建 Dockerfile
 
 # 第1阶段：Python依赖构建
-FROM python:3.12-slim AS builder
+FROM python:3.13.3-slim AS builder
 
 WORKDIR /app
 
@@ -38,7 +38,7 @@ RUN mkdir -p /app/generated && \
     /app/api/grpc/*.proto
 
 # 第3阶段：最终镜像
-FROM python:3.12-slim
+FROM python:3.13.3-slim
 
 WORKDIR /app
 

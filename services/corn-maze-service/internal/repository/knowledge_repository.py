@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """
 知识存储库 - 负责中医养生知识的存储和检索
@@ -9,7 +8,6 @@ import json
 import logging
 import os
 import uuid
-from typing import Dict, List, Optional, Any, Tuple
 
 import aiosqlite
 
@@ -19,25 +17,25 @@ logger = logging.getLogger(__name__)
 
 class KnowledgeRepository:
     """知识存储库，负责中医养生知识的存储和检索"""
-    
+
     def __init__(self):
         self.db_path = os.environ.get("MAZE_DB_PATH", "data/maze.db")
         logger.info(f"知识存储库初始化，数据库路径: {self.db_path}")
-    
+
     async def _get_db(self):
         """获取数据库连接"""
         # 确保数据库目录存在
         os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
-        
+
         # 连接数据库
         db = await aiosqlite.connect(self.db_path)
         db.row_factory = aiosqlite.Row
-        
+
         # 初始化表结构
         await self._init_tables(db)
-        
+
         return db
-    
+
     async def _init_tables(self, db):
         """初始化数据库表"""
         await db.execute('''
@@ -53,21 +51,21 @@ class KnowledgeRepository:
         )
         ''')
         await db.commit()
-        
+
         # 检查初始数据
         await self._check_initial_data(db)
-    
+
     async def _check_initial_data(self, db):
         """检查并加载初始数据"""
         # 检查是否有知识节点数据
         cursor = await db.execute("SELECT COUNT(*) FROM knowledge_nodes")
         count = (await cursor.fetchone())[0]
-        
+
         # 如果没有数据，则加载初始数据
         if count == 0:
             logger.info("知识存储库为空，加载初始数据")
             await self._load_initial_data(db)
-    
+
     async def _load_initial_data(self, db):
         """加载初始知识数据"""
         # 初始知识节点数据
@@ -113,14 +111,14 @@ class KnowledgeRepository:
                 "related_tags": ["艾灸", "阴阳", "外治法"]
             }
         ]
-        
+
         # 插入初始数据
         for node_data in initial_nodes:
             # 转换复杂结构为JSON
             related_tags_json = json.dumps(node_data["related_tags"])
             references_json = json.dumps(node_data.get("references", []))
             media_links_json = json.dumps(node_data.get("media_links", []))
-            
+
             # 插入数据
             await db.execute(
                 '''
@@ -135,10 +133,10 @@ class KnowledgeRepository:
                     related_tags_json, references_json, media_links_json
                 )
             )
-        
+
         await db.commit()
         logger.info(f"已加载 {len(initial_nodes)} 个初始知识节点")
-    
+
     async def save_knowledge_node(self, node: KnowledgeNode) -> KnowledgeNode:
         """
         保存知识节点
@@ -150,18 +148,18 @@ class KnowledgeRepository:
             KnowledgeNode: 保存后的知识节点对象
         """
         logger.info(f"保存知识节点 {node.node_id}")
-        
+
         # 如果节点ID为空，生成新ID
         if not node.node_id:
             node.node_id = str(uuid.uuid4())
-        
+
         db = await self._get_db()
         try:
             # 将复杂结构转换为JSON字符串
             related_tags_json = json.dumps(node.related_tags)
             references_json = json.dumps(node.references)
             media_links_json = json.dumps(node.media_links)
-            
+
             # 准备SQL语句
             query = '''
             INSERT OR REPLACE INTO knowledge_nodes (
@@ -169,7 +167,7 @@ class KnowledgeRepository:
                 related_tags, references, media_links
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             '''
-            
+
             # 执行查询
             await db.execute(
                 query,
@@ -180,13 +178,13 @@ class KnowledgeRepository:
                 )
             )
             await db.commit()
-            
+
             return node
-        
+
         finally:
             await db.close()
-    
-    async def get_knowledge_node(self, node_id: str) -> Optional[KnowledgeNode]:
+
+    async def get_knowledge_node(self, node_id: str) -> KnowledgeNode | None:
         """
         获取知识节点
         
@@ -197,7 +195,7 @@ class KnowledgeRepository:
             Optional[KnowledgeNode]: 知识节点对象或None（如果未找到）
         """
         logger.info(f"获取知识节点 {node_id}")
-        
+
         db = await self._get_db()
         try:
             # 执行查询
@@ -206,18 +204,18 @@ class KnowledgeRepository:
                 (node_id,)
             )
             row = await cursor.fetchone()
-            
+
             if not row:
                 logger.warning(f"未找到ID为 {node_id} 的知识节点")
                 return None
-            
+
             # 将行数据转换为KnowledgeNode对象
             return self._row_to_knowledge_node(row)
-        
+
         finally:
             await db.close()
-    
-    async def get_knowledge_by_category(self, category: str, limit: int = 10) -> List[KnowledgeNode]:
+
+    async def get_knowledge_by_category(self, category: str, limit: int = 10) -> list[KnowledgeNode]:
         """
         按类别获取知识节点
         
@@ -229,7 +227,7 @@ class KnowledgeRepository:
             List[KnowledgeNode]: 知识节点对象列表
         """
         logger.info(f"获取类别为 {category} 的知识节点")
-        
+
         db = await self._get_db()
         try:
             # 执行查询
@@ -238,14 +236,14 @@ class KnowledgeRepository:
                 (category, limit)
             )
             rows = await cursor.fetchall()
-            
+
             # 将行数据转换为KnowledgeNode对象列表
             return [self._row_to_knowledge_node(row) for row in rows]
-        
+
         finally:
             await db.close()
-    
-    async def search_knowledge(self, query_terms: List[str], limit: int = 10) -> List[KnowledgeNode]:
+
+    async def search_knowledge(self, query_terms: list[str], limit: int = 10) -> list[KnowledgeNode]:
         """
         搜索知识节点
         
@@ -258,36 +256,36 @@ class KnowledgeRepository:
         """
         if not query_terms:
             return []
-        
+
         logger.info(f"搜索知识节点，关键词: {', '.join(query_terms)}")
-        
+
         db = await self._get_db()
         try:
             # 构建查询条件
             conditions = []
             params = []
-            
+
             for term in query_terms:
                 term_pattern = f"%{term}%"
                 conditions.append("(title LIKE ? OR content LIKE ? OR related_tags LIKE ?)")
                 params.extend([term_pattern, term_pattern, term_pattern])
-            
+
             # 构建完整的WHERE子句
             where_clause = " OR ".join(conditions)
-            
+
             # 执行查询
             cursor = await db.execute(
                 f"SELECT * FROM knowledge_nodes WHERE {where_clause} LIMIT ?",
                 params + [limit]
             )
             rows = await cursor.fetchall()
-            
+
             # 将行数据转换为KnowledgeNode对象列表
             return [self._row_to_knowledge_node(row) for row in rows]
-        
+
         finally:
             await db.close()
-    
+
     async def delete_knowledge_node(self, node_id: str) -> bool:
         """
         删除知识节点
@@ -299,7 +297,7 @@ class KnowledgeRepository:
             bool: 是否成功删除
         """
         logger.info(f"删除知识节点 {node_id}")
-        
+
         db = await self._get_db()
         try:
             # 执行删除
@@ -308,13 +306,13 @@ class KnowledgeRepository:
                 (node_id,)
             )
             await db.commit()
-            
+
             # 检查是否有行被删除
             return cursor.rowcount > 0
-        
+
         finally:
             await db.close()
-    
+
     def _row_to_knowledge_node(self, row: aiosqlite.Row) -> KnowledgeNode:
         """将数据库行转换为KnowledgeNode对象"""
         return KnowledgeNode(

@@ -1,0 +1,109 @@
+version: '3.8'
+
+services:
+  # 认证服务
+  auth-service:
+    build: .
+    ports:
+      - "8000:8000"
+      - "9090:9090"  # 指标端口
+    environment:
+      - ENVIRONMENT=development
+      - DEBUG=true
+      - DATABASE__HOST=postgres
+      - DATABASE__NAME=auth_db
+      - DATABASE__USER=auth_user
+      - DATABASE__PASSWORD=auth_password
+      - REDIS__HOST=redis
+      - JWT__SECRET_KEY=dev-secret-key-change-in-production
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - auth-network
+    restart: unless-stopped
+
+  # PostgreSQL数据库
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_DB=auth_db
+      - POSTGRES_USER=auth_user
+      - POSTGRES_PASSWORD=auth_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U auth_user -d auth_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - auth-network
+    restart: unless-stopped
+
+  # Redis缓存
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - auth-network
+    restart: unless-stopped
+
+  # Prometheus监控
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9091:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    networks:
+      - auth-network
+    restart: unless-stopped
+
+  # Grafana仪表板
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
+    networks:
+      - auth-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  auth-network:
+    driver: bridge 

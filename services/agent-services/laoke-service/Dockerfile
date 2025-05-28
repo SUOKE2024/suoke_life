@@ -1,89 +1,72 @@
-# 多阶段构建 Dockerfile
+# 老克智能体服务 Dockerfile
+# 基于 Python 3.13 官方镜像
 
-# 第1阶段：Python依赖构建
-FROM python:3.12-slim AS builder
+FROM python:3.13.3-slim as base
 
-# 设置构建参数
-ARG APP_ENV=production
-ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1 \
-    PIP_NO_CACHE_DIR=off \
-    PIP_DISABLE_PIP_VERSION_CHECK=on \
-    POETRY_VERSION=1.4.2 \
-    POETRY_NO_INTERACTION=1 \
-    POETRY_VIRTUALENVS_CREATE=false
+# 设置环境变量
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
 
-WORKDIR /app
-
-# 安装构建依赖
-RUN apt-get update && apt-get install -y --no-install-recommends \
+# 安装系统依赖
+RUN apt-get update && apt-get install -y \
+    curl \
     build-essential \
-    curl \
-    && rm -rf /var/lib/apt/lists/* \
-    && pip install --no-cache-dir poetry==${POETRY_VERSION}
+    && rm -rf /var/lib/apt/lists/*
 
-# 复制项目元数据
-COPY pyproject.toml poetry.lock* ./
+# 安装 UV
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+ENV PATH="/root/.cargo/bin:$PATH"
 
-# 安装项目依赖
-RUN poetry install --no-dev --no-interaction --no-ansi
-
-# 第2阶段：构建GraphQL和gRPC代码
-FROM builder AS schema-builder
-
+# 设置工作目录
 WORKDIR /app
-
-# 复制GraphQL schema文件并生成Python代码
-COPY api/graphql/ /app/api/graphql/
-RUN mkdir -p /app/generated/graphql
-
-# 复制proto文件并生成Python代码（用于内部服务通信）
-COPY api/grpc/ /app/api/grpc/
-RUN mkdir -p /app/generated/grpc && \
-    python -m grpc_tools.protoc \
-    --proto_path=/app/api/grpc \
-    --python_out=/app/generated/grpc \
-    --grpc_python_out=/app/generated/grpc \
-    /app/api/grpc/*.proto
-
-# 第二阶段 - 最终镜像
-FROM python:3.12-slim
-
-# 设置运行时环境变量
-ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1 \
-    PYTHONPATH=/app \
-    SERVICE_ENV=production
-
-WORKDIR /app
-
-# 安装运行时依赖
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    libpq5 \
-    curl \
-    && rm -rf /var/lib/apt/lists/* \
-    && mkdir -p /app/logs
-
-# 从构建器阶段复制依赖
-COPY --from=builder /usr/local/lib/python3.10/site-packages /usr/local/lib/python3.10/site-packages
-COPY --from=builder /usr/local/bin /usr/local/bin
 
 # 复制项目文件
-COPY . .
+COPY pyproject.toml uv.lock ./
+COPY laoke_service/ ./laoke_service/
+COPY config/ ./config/
+COPY scripts/ ./scripts/
 
-# 添加健康检查
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:8080/v1/health/status || exit 1
+# 创建虚拟环境并安装依赖
+RUN uv venv --python 3.13 && \
+    uv sync --extra performance --extra monitoring
 
-# 创建非特权用户
-RUN groupadd -r laoke && useradd -r -g laoke laoke \
-    && chown -R laoke:laoke /app/logs
-
-# 切换到非特权用户
+# 创建非root用户
+RUN useradd --create-home --shell /bin/bash laoke && \
+    chown -R laoke:laoke /app
 USER laoke
 
-# 暴露端口
-EXPOSE 8080 50051 51051
+# 创建必要的目录
+RUN mkdir -p logs data
 
-# 启动服务
-CMD ["python", "-m", "cmd.server"] 
+# 健康检查
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8080/health || exit 1
+
+# 暴露端口
+EXPOSE 8080 50051 9091
+
+# 设置入口点
+ENTRYPOINT ["uv", "run"]
+CMD ["laoke-server", "--host", "0.0.0.0", "--port", "8080"]
+
+# 多阶段构建 - 开发环境
+FROM base as development
+
+# 安装开发依赖
+RUN uv sync --extra dev --extra performance --extra monitoring
+
+# 开发环境命令
+CMD ["laoke-server", "--host", "0.0.0.0", "--port", "8080", "--reload", "--log-level", "debug"]
+
+# 多阶段构建 - 生产环境
+FROM base as production
+
+# 生产环境优化
+ENV ENVIRONMENT=production \
+    DEBUG=false \
+    LOG_LEVEL=info
+
+# 生产环境命令
+CMD ["laoke-server", "--host", "0.0.0.0", "--port", "8080", "--workers", "4"] 

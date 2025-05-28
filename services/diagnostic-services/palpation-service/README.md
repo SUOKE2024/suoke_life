@@ -527,10 +527,10 @@ grep "ERROR" logs/palpation.log | awk '{print $4}' | sort | uniq -c
 
 ## 联系方式
 
-- **项目维护者**: 索克生活开发团队
+- **项目维护者**: Song Xu <song.xu@icloud.com>
 - **邮箱**: dev@suokelife.com
 - **文档**: https://docs.suokelife.com/palpation-service
-- **问题反馈**: https://github.com/suokelife/palpation-service/issues
+- **问题反馈**: https://github.com/SUOKE2024/suoke_life/issues
 
 ## 更新日志
 

@@ -1,0 +1,111 @@
+# 索克生活项目命名空间
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: suoke-life
+  labels:
+    name: suoke-life
+    project: suoke-life
+    environment: production
+---
+# 全局配置ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: global-config
+  namespace: suoke-life
+  labels:
+    app: global-config
+    component: configuration
+data:
+  # 应用配置
+  APP_NAME: "suoke-life"
+  APP_VERSION: "v1.0.0"
+  APP_ENVIRONMENT: "production"
+  
+  # 服务发现配置
+  SERVICE_DISCOVERY_ENABLED: "true"
+  SERVICE_REGISTRY_URL: "http://consul-service:8500"
+  
+  # 数据库配置
+  DATABASE_HOST: "postgres-service"
+  DATABASE_PORT: "5432"
+  DATABASE_NAME: "suoke_life"
+  DATABASE_SSL_MODE: "require"
+  
+  # Redis配置
+  REDIS_HOST: "redis-service"
+  REDIS_PORT: "6379"
+  REDIS_DB: "0"
+  
+  # LiteLLM网关配置
+  LITELLM_GATEWAY_URL: "http://litellm-gateway-service:4000"
+  LITELLM_ADMIN_URL: "http://litellm-gateway-service:8080"
+  
+  # 监控配置
+  PROMETHEUS_URL: "http://prometheus-service:9090"
+  GRAFANA_URL: "http://grafana-service:3000"
+  
+  # 日志配置
+  LOG_LEVEL: "INFO"
+  LOG_FORMAT: "json"
+  LOG_OUTPUT: "stdout"
+  
+  # 安全配置
+  JWT_EXPIRATION: "24h"
+  CORS_ALLOWED_ORIGINS: "*"
+  RATE_LIMIT_REQUESTS_PER_MINUTE: "100"
+  
+  # 智能体配置
+  AGENT_TIMEOUT: "30s"
+  AGENT_MAX_RETRIES: "3"
+  AGENT_COLLABORATION_ENABLED: "true"
+  
+  # 健康检查配置
+  HEALTH_CHECK_INTERVAL: "30s"
+  HEALTH_CHECK_TIMEOUT: "5s"
+  HEALTH_CHECK_RETRIES: "3"
+---
+# 智能体专用配置
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: agent-config
+  namespace: suoke-life
+  labels:
+    app: agent-config
+    component: configuration
+data:
+  # 小艾配置 - 健康评估专家
+  XIAOAI_MODEL: "gpt-4"
+  XIAOAI_TEMPERATURE: "0.7"
+  XIAOAI_MAX_TOKENS: "4096"
+  XIAOAI_ROLE: "健康评估专家"
+  XIAOAI_SPECIALITY: "health_assessment"
+  
+  # 小克配置 - 症状分析专家
+  XIAOKE_MODEL: "claude-3-sonnet"
+  XIAOKE_TEMPERATURE: "0.7"
+  XIAOKE_MAX_TOKENS: "4096"
+  XIAOKE_ROLE: "症状分析专家"
+  XIAOKE_SPECIALITY: "symptom_analysis"
+  
+  # 老克配置 - 治疗建议专家
+  LAOKE_MODEL: "gpt-4-turbo"
+  LAOKE_TEMPERATURE: "0.7"
+  LAOKE_MAX_TOKENS: "4096"
+  LAOKE_ROLE: "治疗建议专家"
+  LAOKE_SPECIALITY: "treatment_advice"
+  
+  # 索儿配置 - 生活指导专家
+  SOER_MODEL: "gemini-pro"
+  SOER_TEMPERATURE: "0.7"
+  SOER_MAX_TOKENS: "4096"
+  SOER_ROLE: "生活指导专家"
+  SOER_SPECIALITY: "lifestyle_guide"
+  
+  # 协作配置
+  COLLABORATION_MODE: "sequential"
+  COLLABORATION_TIMEOUT: "120s"
+  KNOWLEDGE_SHARING_ENABLED: "true"
+  RESULT_SYNTHESIS_ENABLED: "true" 

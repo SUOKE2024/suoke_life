@@ -1,0 +1,22 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'suoke-services'
+    static_configs:
+      - targets: 
+        - 'host.docker.internal:8080'   # API网关
+        - 'host.docker.internal:50051'  # 用户服务
+        - 'host.docker.internal:50052'  # 认证服务
+        - 'host.docker.internal:50053'  # 小艾服务
+        - 'host.docker.internal:50054'  # 小克服务
+        - 'host.docker.internal:50055'  # 区块链服务
+        - 'host.docker.internal:50056'  # 健康数据服务
+        - 'host.docker.internal:50057'  # 玉米迷宫服务
+        - 'host.docker.internal:50058'  # 消息总线
+        - 'host.docker.internal:50059'  # RAG服务
+        - 'host.docker.internal:50060'  # 索儿服务
+        - 'host.docker.internal:8000'   # 医学知识服务
+        - 'host.docker.internal:8090'   # 集成服务
+        - 'host.docker.internal:9000'   # 老克服务
+        - 'host.docker.internal:9084'   # 医疗资源服务

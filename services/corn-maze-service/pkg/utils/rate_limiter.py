@@ -1,26 +1,23 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """
 API限流器 - 防止恶意请求和系统过载
 """
 
-import time
-import logging
-import asyncio
-from typing import Dict, Optional, Tuple, Any
-from datetime import datetime, timedelta
-from collections import defaultdict, deque
+from collections import deque
 from functools import wraps
+import logging
+import time
+from typing import Any
 
 from pkg.utils.cache import CacheManager
-from pkg.utils.metrics import record_cache_operation, errors_total
+from pkg.utils.metrics import errors_total
 
 logger = logging.getLogger(__name__)
 
 class TokenBucket:
     """令牌桶算法实现"""
-    
+
     def __init__(self, capacity: int, refill_rate: float):
         """
         初始化令牌桶
@@ -33,7 +30,7 @@ class TokenBucket:
         self.refill_rate = refill_rate
         self.tokens = capacity
         self.last_refill = time.time()
-    
+
     def consume(self, tokens: int = 1) -> bool:
         """
         消费令牌
@@ -45,7 +42,7 @@ class TokenBucket:
             bool: 是否成功消费令牌
         """
         now = time.time()
-        
+
         # 补充令牌
         time_passed = now - self.last_refill
         self.tokens = min(
@@ -53,14 +50,14 @@ class TokenBucket:
             self.tokens + time_passed * self.refill_rate
         )
         self.last_refill = now
-        
+
         # 检查是否有足够的令牌
         if self.tokens >= tokens:
             self.tokens -= tokens
             return True
-        
+
         return False
-    
+
     def get_wait_time(self, tokens: int = 1) -> float:
         """
         获取需要等待的时间
@@ -73,13 +70,13 @@ class TokenBucket:
         """
         if self.tokens >= tokens:
             return 0.0
-        
+
         needed_tokens = tokens - self.tokens
         return needed_tokens / self.refill_rate
 
 class SlidingWindowCounter:
     """滑动窗口计数器"""
-    
+
     def __init__(self, window_size: int, max_requests: int):
         """
         初始化滑动窗口计数器
@@ -91,7 +88,7 @@ class SlidingWindowCounter:
         self.window_size = window_size
         self.max_requests = max_requests
         self.requests = deque()
-    
+
     def is_allowed(self) -> bool:
         """
         检查是否允许请求
@@ -100,18 +97,18 @@ class SlidingWindowCounter:
             bool: 是否允许
         """
         now = time.time()
-        
+
         # 清理过期的请求记录
         while self.requests and self.requests[0] <= now - self.window_size:
             self.requests.popleft()
-        
+
         # 检查是否超过限制
         if len(self.requests) < self.max_requests:
             self.requests.append(now)
             return True
-        
+
         return False
-    
+
     def get_reset_time(self) -> float:
         """
         获取重置时间
@@ -121,13 +118,13 @@ class SlidingWindowCounter:
         """
         if not self.requests:
             return time.time()
-        
+
         return self.requests[0] + self.window_size
 
 class RateLimiter:
     """综合限流器"""
-    
-    def __init__(self, cache_manager: Optional[CacheManager] = None):
+
+    def __init__(self, cache_manager: CacheManager | None = None):
         """
         初始化限流器
         
@@ -135,7 +132,7 @@ class RateLimiter:
             cache_manager: 缓存管理器
         """
         self.cache_manager = cache_manager or CacheManager()
-        
+
         # 限流规则配置
         self.rules = {
             # 全局限流
@@ -172,24 +169,24 @@ class RateLimiter:
                 }
             }
         }
-        
+
         # 内存中的限流器实例
-        self.token_buckets: Dict[str, TokenBucket] = {}
-        self.sliding_windows: Dict[str, SlidingWindowCounter] = {}
-        
+        self.token_buckets: dict[str, TokenBucket] = {}
+        self.sliding_windows: dict[str, SlidingWindowCounter] = {}
+
         # 黑名单和白名单
         self.blacklist = set()
         self.whitelist = set()
-        
+
         logger.info("限流器初始化完成")
-    
+
     async def is_allowed(
         self,
         identifier: str,
         limit_type: str = "user",
-        endpoint: Optional[str] = None,
-        ip_address: Optional[str] = None
-    ) -> Tuple[bool, Dict[str, Any]]:
+        endpoint: str | None = None,
+        ip_address: str | None = None
+    ) -> tuple[bool, dict[str, Any]]:
         """
         检查请求是否被允许
         
@@ -209,14 +206,14 @@ class RateLimiter:
                     "reason": "blacklisted",
                     "retry_after": None
                 }
-            
+
             # 检查白名单
             if identifier in self.whitelist or (ip_address and ip_address in self.whitelist):
                 return True, {"reason": "whitelisted"}
-            
+
             # 获取限流规则
             rules = self.rules.get(limit_type, self.rules["user"])
-            
+
             # 检查端点特定限流
             if endpoint and endpoint in self.rules.get("endpoint", {}):
                 endpoint_rules = self.rules["endpoint"][endpoint]
@@ -225,22 +222,22 @@ class RateLimiter:
                 )
                 if not endpoint_allowed:
                     return False, endpoint_info
-            
+
             # 检查通用限流
             general_allowed, general_info = await self._check_general_limit(
                 identifier, limit_type, rules
             )
-            
+
             if not general_allowed:
                 return False, general_info
-            
+
             # 记录成功的请求
             await self._record_request(identifier, limit_type, endpoint)
-            
+
             return True, {"reason": "allowed"}
-            
+
         except Exception as e:
-            logger.error(f"限流检查失败: {str(e)}")
+            logger.error(f"限流检查失败: {e!s}")
             # 出错时允许请求，但记录错误
             errors_total.labels(
                 component="rate_limiter",
@@ -248,16 +245,16 @@ class RateLimiter:
                 severity="warning"
             ).inc()
             return True, {"reason": "error_fallback"}
-    
+
     async def _check_endpoint_limit(
         self,
         identifier: str,
         endpoint: str,
-        rules: Dict[str, int]
-    ) -> Tuple[bool, Dict[str, Any]]:
+        rules: dict[str, int]
+    ) -> tuple[bool, dict[str, Any]]:
         """检查端点特定限流"""
         cache_key = f"rate_limit:endpoint:{endpoint}:{identifier}"
-        
+
         # 检查每分钟限制
         if "requests_per_minute" in rules:
             minute_key = f"{cache_key}:minute"
@@ -270,7 +267,7 @@ class RateLimiter:
                     "endpoint": endpoint,
                     "retry_after": 60
                 }
-        
+
         # 检查每小时限制
         if "requests_per_hour" in rules:
             hour_key = f"{cache_key}:hour"
@@ -283,18 +280,18 @@ class RateLimiter:
                     "endpoint": endpoint,
                     "retry_after": 3600
                 }
-        
+
         return True, {}
-    
+
     async def _check_general_limit(
         self,
         identifier: str,
         limit_type: str,
-        rules: Dict[str, int]
-    ) -> Tuple[bool, Dict[str, Any]]:
+        rules: dict[str, int]
+    ) -> tuple[bool, dict[str, Any]]:
         """检查通用限流"""
         cache_key = f"rate_limit:{limit_type}:{identifier}"
-        
+
         # 检查突发容量（令牌桶）
         if "burst_capacity" in rules:
             bucket_key = f"{cache_key}:burst"
@@ -308,7 +305,7 @@ class RateLimiter:
                     "reason": "burst_limit_exceeded",
                     "retry_after": 1
                 }
-        
+
         # 检查每分钟限制
         if "requests_per_minute" in rules:
             minute_key = f"{cache_key}:minute"
@@ -320,7 +317,7 @@ class RateLimiter:
                     "reason": "minute_limit_exceeded",
                     "retry_after": 60
                 }
-        
+
         # 检查每小时限制
         if "requests_per_hour" in rules:
             hour_key = f"{cache_key}:hour"
@@ -332,9 +329,9 @@ class RateLimiter:
                     "reason": "hour_limit_exceeded",
                     "retry_after": 3600
                 }
-        
+
         return True, {}
-    
+
     async def _check_token_bucket(
         self,
         key: str,
@@ -344,25 +341,25 @@ class RateLimiter:
         """检查令牌桶限流"""
         # 尝试从缓存获取
         bucket_data = await self.cache_manager.get(key)
-        
+
         if bucket_data:
             bucket = TokenBucket(capacity, refill_rate)
             bucket.tokens = bucket_data.get("tokens", capacity)
             bucket.last_refill = bucket_data.get("last_refill", time.time())
         else:
             bucket = TokenBucket(capacity, refill_rate)
-        
+
         # 检查是否可以消费令牌
         allowed = bucket.consume(1)
-        
+
         # 更新缓存
         await self.cache_manager.set(key, {
             "tokens": bucket.tokens,
             "last_refill": bucket.last_refill
         }, ttl=3600)
-        
+
         return allowed
-    
+
     async def _check_sliding_window(
         self,
         key: str,
@@ -372,28 +369,28 @@ class RateLimiter:
         """检查滑动窗口限流"""
         # 尝试从缓存获取
         window_data = await self.cache_manager.get(key)
-        
+
         if window_data:
             window = SlidingWindowCounter(window_size, max_requests)
             window.requests = deque(window_data.get("requests", []))
         else:
             window = SlidingWindowCounter(window_size, max_requests)
-        
+
         # 检查是否允许
         allowed = window.is_allowed()
-        
+
         # 更新缓存
         await self.cache_manager.set(key, {
             "requests": list(window.requests)
         }, ttl=window_size + 60)  # 稍微长一点的TTL
-        
+
         return allowed
-    
+
     async def _record_request(
         self,
         identifier: str,
         limit_type: str,
-        endpoint: Optional[str]
+        endpoint: str | None
     ):
         """记录请求"""
         try:
@@ -404,22 +401,22 @@ class RateLimiter:
                 "last_request": None,
                 "endpoints": {}
             }
-            
+
             stats["total_requests"] += 1
             stats["last_request"] = time.time()
-            
+
             if endpoint:
                 stats["endpoints"][endpoint] = stats["endpoints"].get(endpoint, 0) + 1
-            
+
             await self.cache_manager.set(stats_key, stats, ttl=86400)  # 24小时
-            
+
         except Exception as e:
-            logger.warning(f"记录请求统计失败: {str(e)}")
-    
-    async def add_to_blacklist(self, identifier: str, duration: Optional[int] = None):
+            logger.warning(f"记录请求统计失败: {e!s}")
+
+    async def add_to_blacklist(self, identifier: str, duration: int | None = None):
         """添加到黑名单"""
         self.blacklist.add(identifier)
-        
+
         if duration:
             # 设置临时黑名单
             await self.cache_manager.set(
@@ -427,39 +424,39 @@ class RateLimiter:
                 {"added_at": time.time()},
                 ttl=duration
             )
-        
+
         logger.warning(f"已将 {identifier} 添加到黑名单")
-    
+
     async def remove_from_blacklist(self, identifier: str):
         """从黑名单移除"""
         self.blacklist.discard(identifier)
         await self.cache_manager.delete(f"blacklist:{identifier}")
         logger.info(f"已将 {identifier} 从黑名单移除")
-    
+
     async def add_to_whitelist(self, identifier: str):
         """添加到白名单"""
         self.whitelist.add(identifier)
         logger.info(f"已将 {identifier} 添加到白名单")
-    
-    async def get_rate_limit_stats(self, identifier: str, limit_type: str) -> Dict[str, Any]:
+
+    async def get_rate_limit_stats(self, identifier: str, limit_type: str) -> dict[str, Any]:
         """获取限流统计信息"""
         try:
             stats_key = f"rate_limit_stats:{limit_type}:{identifier}"
             stats = await self.cache_manager.get(stats_key)
-            
+
             if not stats:
                 return {
                     "total_requests": 0,
                     "last_request": None,
                     "endpoints": {}
                 }
-            
+
             return stats
-            
+
         except Exception as e:
-            logger.error(f"获取限流统计失败: {str(e)}")
+            logger.error(f"获取限流统计失败: {e!s}")
             return {}
-    
+
     async def reset_limits(self, identifier: str, limit_type: str):
         """重置限流计数"""
         try:
@@ -468,20 +465,20 @@ class RateLimiter:
                 f"rate_limit:{limit_type}:{identifier}:*",
                 f"rate_limit:endpoint:*:{identifier}:*"
             ]
-            
+
             for pattern in patterns:
                 await self.cache_manager.delete_pattern(pattern)
-            
+
             logger.info(f"已重置 {identifier} 的限流计数")
-            
+
         except Exception as e:
-            logger.error(f"重置限流计数失败: {str(e)}")
+            logger.error(f"重置限流计数失败: {e!s}")
 
 # 装饰器函数
 def rate_limit(
     limit_type: str = "user",
-    endpoint: Optional[str] = None,
-    identifier_func: Optional[callable] = None
+    endpoint: str | None = None,
+    identifier_func: callable | None = None
 ):
     """
     限流装饰器
@@ -496,17 +493,17 @@ def rate_limit(
         async def wrapper(*args, **kwargs):
             # 获取限流器实例
             rate_limiter = RateLimiter()
-            
+
             # 获取标识符
             if identifier_func:
                 identifier = identifier_func(*args, **kwargs)
             else:
                 # 默认从参数中获取user_id
                 identifier = kwargs.get("user_id") or (args[1] if len(args) > 1 else "anonymous")
-            
+
             # 获取IP地址（如果可用）
             ip_address = kwargs.get("ip_address")
-            
+
             # 检查限流
             allowed, info = await rate_limiter.is_allowed(
                 identifier=identifier,
@@ -514,7 +511,7 @@ def rate_limit(
                 endpoint=endpoint or func.__name__,
                 ip_address=ip_address
             )
-            
+
             if not allowed:
                 from fastapi import HTTPException
                 raise HTTPException(
@@ -524,19 +521,19 @@ def rate_limit(
                         "info": info
                     }
                 )
-            
+
             # 执行原函数
             return await func(*args, **kwargs)
-        
+
         return wrapper
     return decorator
 
 # 全局限流器实例
-_rate_limiter: Optional[RateLimiter] = None
+_rate_limiter: RateLimiter | None = None
 
 def get_rate_limiter() -> RateLimiter:
     """获取全局限流器实例"""
     global _rate_limiter
     if _rate_limiter is None:
         _rate_limiter = RateLimiter()
-    return _rate_limiter 
+    return _rate_limiter

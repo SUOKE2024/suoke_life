@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """
 用户进度模型定义
@@ -7,27 +6,27 @@
 
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Dict, List, Any, Optional
+from typing import Any
 
 
 @dataclass
 class UserProgress:
     """用户在迷宫中的进度模型"""
-    
+
     user_id: str  # 用户ID
     maze_id: str  # 迷宫ID
-    current_position: Dict[str, int]  # 当前位置 {x, y}
-    visited_cells: List[str]  # 已访问的单元格
-    completed_challenges: List[str]  # 已完成的挑战
-    acquired_knowledge: List[str]  # 已获取的知识
+    current_position: dict[str, int]  # 当前位置 {x, y}
+    visited_cells: list[str]  # 已访问的单元格
+    completed_challenges: list[str]  # 已完成的挑战
+    acquired_knowledge: list[str]  # 已获取的知识
     completion_percentage: int  # 完成百分比
     status: str  # 状态（进行中、已完成等）
     steps_taken: int  # 已走的步数
     start_time: datetime  # 开始时间
     last_active_time: datetime  # 最后活动时间
-    notes: Dict[str, Any] = field(default_factory=dict)  # 附加笔记
-    
-    def to_dict(self) -> Dict[str, Any]:
+    notes: dict[str, Any] = field(default_factory=dict)  # 附加笔记
+
+    def to_dict(self) -> dict[str, Any]:
         """转换为字典"""
         return {
             "user_id": self.user_id,
@@ -43,9 +42,9 @@ class UserProgress:
             "last_active_time": self.last_active_time,
             "notes": self.notes
         }
-    
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'UserProgress':
+    def from_dict(cls, data: dict[str, Any]) -> 'UserProgress':
         """从字典创建对象"""
         return cls(
             user_id=data["user_id"],

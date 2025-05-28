@@ -232,4 +232,4 @@
 
 **评估团队**: 索克生活技术团队  
 **下次评估**: 建议3个月后进行增强功能评估  
-**联系方式**: accessibility@suoke.life 
+**联系方式**: song.xu@icloud.com 

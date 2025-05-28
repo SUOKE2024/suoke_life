@@ -98,10 +98,10 @@ API使用标准HTTP状态码：
 
 ## 支持
 
-- 📧 邮箱：tech@suoke.life
-- 📖 文档：https://docs.suoke.life
-- 🐛 问题反馈：https://github.com/suoke-life/issues
+- 📧 邮箱：song.xu@icloud.com
+- 📖 文档：https://github.com/SUOKE2024/suoke_life/tree/main/docs
+- 🐛 问题反馈：https://github.com/SUOKE2024/suoke_life/issues
 
 ---
 
-*最后更新：2025-05-24*
+*最后更新：2025-05-27 15:51:51*

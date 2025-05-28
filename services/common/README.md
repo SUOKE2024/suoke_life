@@ -421,9 +421,9 @@ class CircuitBreaker:
 
 ## 联系方式
 
-- 项目主页: https://github.com/suoke-life/platform
-- 文档站点: https://docs.suoke.life
-- 技术支持: tech@suoke.life
+- 项目主页: https://github.com/SUOKE2024/suoke_life
+- 文档站点: https://github.com/SUOKE2024/suoke_life/tree/main/docs
+- 技术支持: song.xu@icloud.com
 
 ---
 

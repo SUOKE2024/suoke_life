@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: suoke-api-gateway
+  labels:
+    app: suoke-api-gateway
+    component: gateway
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+    protocol: TCP
+  - name: grpc
+    port: 50051
+    targetPort: grpc
+    protocol: TCP
+  selector:
+    app: suoke-api-gateway
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: suoke-api-gateway-headless
+  labels:
+    app: suoke-api-gateway
+    component: gateway
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+  - name: http
+    port: 8000
+    targetPort: http
+    protocol: TCP
+  - name: grpc
+    port: 50051
+    targetPort: grpc
+    protocol: TCP
+  selector:
+    app: suoke-api-gateway 

@@ -1,0 +1,133 @@
+version: '3.8'
+
+services:
+  # A2A 智能体网络微服务
+  a2a-network:
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+    container_name: suoke-a2a-network
+    ports:
+      - "5000:5000"  # REST API
+      - "5001:5001"  # Dashboard
+      - "9090:9090"  # Metrics
+    environment:
+      - PYTHONPATH=/app
+      - CONFIG_PATH=/app/config/config.yaml
+    volumes:
+      - ../../config:/app/config
+      - ../../logs:/app/logs
+      - ./config.override.yaml:/app/config/config.override.yaml
+    networks:
+      - suoke-network
+    depends_on:
+      - redis
+      - mongodb
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Redis (可选，用于缓存和消息队列)
+  redis:
+    image: redis:7-alpine
+    container_name: suoke-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - suoke-network
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+
+  # MongoDB (可选，用于数据持久化)
+  mongodb:
+    image: mongo:6
+    container_name: suoke-mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+      - MONGO_INITDB_DATABASE=suoke_a2a_network
+    volumes:
+      - mongodb_data:/data/db
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    networks:
+      - suoke-network
+    restart: unless-stopped
+
+  # Prometheus (可选，用于监控)
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: suoke-prometheus
+    ports:
+      - "9091:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    networks:
+      - suoke-network
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+
+  # Grafana (可选，用于可视化)
+  grafana:
+    image: grafana/grafana:latest
+    container_name: suoke-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./grafana/datasources:/etc/grafana/provisioning/datasources
+    networks:
+      - suoke-network
+    restart: unless-stopped
+    depends_on:
+      - prometheus
+
+  # Nginx (可选，用于反向代理)
+  nginx:
+    image: nginx:alpine
+    container_name: suoke-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./ssl:/etc/nginx/ssl
+    networks:
+      - suoke-network
+    restart: unless-stopped
+    depends_on:
+      - a2a-network
+
+networks:
+  suoke-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+volumes:
+  redis_data:
+    driver: local
+  mongodb_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local 

@@ -278,9 +278,9 @@ python setup.py sdist bdist_wheel
 ## 📞 联系信息
 
 **项目负责人**: 索克生活开发团队  
-**技术支持**: accessibility-service@suoke.life  
-**文档地址**: https://docs.suoke.life/accessibility-service  
-**代码仓库**: https://github.com/suoke-life/accessibility-service  
+**技术支持**: song.xu@icloud.com  
+**文档地址**: https://github.com/SUOKE2024/suoke_life/tree/main/services/accessibility-service/docs  
+**代码仓库**: https://github.com/SUOKE2024/suoke_life  
 
 ---
 

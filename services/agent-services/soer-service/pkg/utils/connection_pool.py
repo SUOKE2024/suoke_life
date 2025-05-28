@@ -7,7 +7,7 @@ import logging
 from typing import Dict, Any, Optional, AsyncContextManager
 from contextlib import asynccontextmanager
 import asyncpg
-import aioredis
+import redis.asyncio as redis
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from sqlalchemy.pool import QueuePool
 import motor.motor_asyncio
@@ -122,7 +122,7 @@ class RedisConnectionPool(ServiceLifecycle):
         """启动Redis连接池"""
         try:
             # 创建连接池
-            self.pool = aioredis.ConnectionPool.from_url(
+            self.pool = redis.ConnectionPool.from_url(
                 f"redis://{self.config.host}:{self.config.port}/{self.config.db}",
                 password=self.config.password,
                 max_connections=20,
@@ -132,7 +132,7 @@ class RedisConnectionPool(ServiceLifecycle):
             )
             
             # 创建Redis客户端
-            self.redis = aioredis.Redis(connection_pool=self.pool)
+            self.redis = redis.Redis(connection_pool=self.pool)
             
             # 测试连接
             await self.redis.ping()

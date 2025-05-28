@@ -1,4 +1,4 @@
-FROM python:3.12-slim-bullseye
+FROM python:3.13.3-slim-bullseye
 
 LABEL maintainer="SUOKE Health Data Service Team"
 LABEL description="索克生活健康数据服务"

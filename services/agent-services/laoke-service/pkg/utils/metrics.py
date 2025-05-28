@@ -256,6 +256,47 @@ class MetricsCollector:
         
         return success_count / total_count
 
+    def measure_execution_time(self, metric_name: str) -> Callable:
+        """
+        测量函数执行时间的装饰器
+        
+        Args:
+            metric_name: 指标名称
+            
+        Returns:
+            Callable: 装饰器函数
+        """
+        def decorator(func):
+            if asyncio.iscoroutinefunction(func):
+                @wraps(func)
+                async def async_wrapper(*args, **kwargs):
+                    start_time = time.time()
+                    try:
+                        result = await func(*args, **kwargs)
+                        duration = time.time() - start_time
+                        self.request_latency.labels(type=metric_name).observe(duration)
+                        return result
+                    except Exception as e:
+                        duration = time.time() - start_time
+                        self.request_latency.labels(type=f"{metric_name}_error").observe(duration)
+                        raise e
+                return async_wrapper
+            else:
+                @wraps(func)
+                def wrapper(*args, **kwargs):
+                    start_time = time.time()
+                    try:
+                        result = func(*args, **kwargs)
+                        duration = time.time() - start_time
+                        self.request_latency.labels(type=metric_name).observe(duration)
+                        return result
+                    except Exception as e:
+                        duration = time.time() - start_time
+                        self.request_latency.labels(type=f"{metric_name}_error").observe(duration)
+                        raise e
+                return wrapper
+        return decorator
+
 def track_request_metrics(request_type: str) -> Callable:
     """
     请求指标跟踪装饰器

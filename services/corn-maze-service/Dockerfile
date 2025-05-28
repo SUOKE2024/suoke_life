@@ -1,85 +1,79 @@
-# 多阶段构建 Dockerfile
+# Corn Maze Service Dockerfile
+# 索克生活迷宫探索微服务容器化配置
 
-# 第1阶段：Python依赖构建
-FROM python:3.12-slim AS builder
-
-WORKDIR /app
-
-# 安装系统依赖
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    gcc \
-    g++ \
-    libffi-dev \
-    libssl-dev \
-    python3-dev \
-    git \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-# 复制并安装依赖
-COPY requirements.txt .
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir wheel setuptools && \
-    pip wheel --no-cache-dir --wheel-dir=/app/wheels -r requirements.txt
-
-# 第2阶段：构建gRPC代码
-FROM builder AS grpc-builder
-
-WORKDIR /app
-
-# 复制proto文件并生成Python代码
-COPY api/grpc/ /app/api/grpc/
-RUN mkdir -p /app/generated && \
-    python -m grpc_tools.protoc \
-    --proto_path=/app/api/grpc \
-    --python_out=/app/generated \
-    --grpc_python_out=/app/generated \
-    /app/api/grpc/*.proto
-
-# 第3阶段：最终镜像
-FROM python:3.12-slim
-
-WORKDIR /app
-
-# 安装运行时依赖
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    libgomp1 \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-# 从构建阶段复制依赖包
-COPY --from=builder /app/wheels /app/wheels
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir /app/wheels/* && \
-    rm -rf /app/wheels
-
-# 从构建阶段复制生成的gRPC代码
-COPY --from=grpc-builder /app/generated /app/api/
-
-# 复制应用代码
-COPY config/ /app/config/
-COPY internal/ /app/internal/
-COPY pkg/ /app/pkg/
-COPY cmd/ /app/cmd/
-COPY api/grpc/ /app/api/grpc/
-COPY data/ /app/data/
-
-# 创建必要的目录结构
-RUN mkdir -p /app/logs
+# 使用官方 Python 3.13 镜像作为基础镜像
+FROM python:3.13.3-slim as base
 
 # 设置环境变量
-ENV PYTHONPATH="/app:${PYTHONPATH}" \
-    PYTHONUNBUFFERED=1 \
-    SERVICE_ENV=production
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
+
+# 安装系统依赖
+RUN apt-get update && apt-get install -y \
+    curl \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# 安装 UV
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+ENV PATH="/root/.cargo/bin:$PATH"
+
+# 设置工作目录
+WORKDIR /app
+
+# 复制项目配置文件
+COPY pyproject.toml uv.lock ./
+
+# 安装 Python 依赖
+RUN uv sync --frozen --no-dev
+
+# 复制源代码
+COPY corn_maze_service/ ./corn_maze_service/
+COPY scripts/ ./scripts/
+
+# 创建必要的目录
+RUN mkdir -p data logs
+
+# 创建非 root 用户
+RUN groupadd -r appuser && useradd -r -g appuser appuser
+RUN chown -R appuser:appuser /app
+USER appuser
+
+# 暴露端口
+EXPOSE 50057 51057 51058
 
 # 健康检查
-HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
-    CMD python -c "import socket; socket.socket().connect(('localhost', 50057))" || exit 1
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:51057/health || exit 1
 
-# 暴露服务端口
-EXPOSE 50057
-EXPOSE 51057
+# 启动命令
+CMD ["uv", "run", "python", "-m", "corn_maze_service.cmd.server.main"]
 
-# 启动服务
-CMD ["python", "-m", "cmd.server"]
+# 多阶段构建 - 开发镜像
+FROM base as development
+
+# 安装开发依赖
+RUN uv sync --frozen
+
+# 开发环境配置
+ENV ENVIRONMENT=development \
+    DEBUG=true \
+    HTTP__RELOAD=true
+
+# 多阶段构建 - 生产镜像
+FROM base as production
+
+# 生产环境配置
+ENV ENVIRONMENT=production \
+    DEBUG=false \
+    HTTP__RELOAD=false
+
+# 设置标签
+LABEL maintainer="Suoke Life Team <dev@suokelife.com>" \
+      version="0.2.0" \
+      description="Corn Maze Service - 索克生活迷宫探索微服务" \
+      org.opencontainers.image.source="https://github.com/suokelife/suoke_life" \
+      org.opencontainers.image.documentation="https://docs.suokelife.com/services/corn-maze" \
+      org.opencontainers.image.vendor="Suoke Life Team"

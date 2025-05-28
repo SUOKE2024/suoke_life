@@ -366,9 +366,9 @@ python test/performance/load_test.py
 
 ## 联系方式
 
-- 项目维护者：索克生活团队
-- 邮箱：dev@suoke.life
-- 文档：https://docs.suoke.life/look-service
+- 项目维护者：Song Xu <song.xu@icloud.com>
+- 邮箱：song.xu@icloud.com
+- 文档：https://github.com/SUOKE2024/suoke_life/tree/main/services/diagnostic-services/look-service
 
 ---
 

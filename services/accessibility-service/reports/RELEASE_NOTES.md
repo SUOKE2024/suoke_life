@@ -301,7 +301,7 @@
 
 ## 反馈与支持
 
-如有任何问题或建议，请联系无障碍服务团队：accessibility-team@suoke.life
+如有任何问题或建议，请联系无障碍服务团队：song.xu@icloud.com
 
 # 索克生活无障碍服务 v1.1.0 发布说明
 
@@ -416,7 +416,7 @@
 
 ## 反馈与支持
 
-如有任何问题或建议，请联系无障碍服务团队：accessibility-team@suoke.life
+如有任何问题或建议，请联系无障碍服务团队：song.xu@icloud.com
 
 ## v0.3.0 (2025-06-15)
 

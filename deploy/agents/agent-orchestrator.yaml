@@ -1,0 +1,317 @@
+# 智能体协调器部署配置
+# 基于PraisonAI框架的多智能体协作系统
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agent-orchestrator
+  namespace: suoke-life
+  labels:
+    app: agent-orchestrator
+    component: agent
+    version: v1.0.0
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: agent-orchestrator
+  template:
+    metadata:
+      labels:
+        app: agent-orchestrator
+        component: agent
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8000"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+      - name: orchestrator
+        image: suoke-life/agent-orchestrator:latest
+        ports:
+        - containerPort: 8000
+          name: http
+        - containerPort: 8080
+          name: admin
+        env:
+        # 全局配置
+        - name: APP_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: global-config
+              key: APP_NAME
+        - name: APP_VERSION
+          valueFrom:
+            configMapKeyRef:
+              name: global-config
+              key: APP_VERSION
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: global-config
+              key: LOG_LEVEL
+        
+        # LiteLLM网关配置
+        - name: LITELLM_GATEWAY_URL
+          valueFrom:
+            configMapKeyRef:
+              name: global-config
+              key: LITELLM_GATEWAY_URL
+        
+        # Redis配置
+        - name: REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: global-config
+              key: REDIS_HOST
+        - name: REDIS_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: global-config
+              key: REDIS_PORT
+        
+        # 智能体配置
+        - name: AGENT_COLLABORATION_ENABLED
+          valueFrom:
+            configMapKeyRef:
+              name: global-config
+              key: AGENT_COLLABORATION_ENABLED
+        - name: COLLABORATION_MODE
+          valueFrom:
+            configMapKeyRef:
+              name: agent-config
+              key: COLLABORATION_MODE
+        - name: COLLABORATION_TIMEOUT
+          valueFrom:
+            configMapKeyRef:
+              name: agent-config
+              key: COLLABORATION_TIMEOUT
+        
+        # 数据库配置
+        - name: DATABASE_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: global-config
+              key: DATABASE_HOST
+        - name: DATABASE_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: global-config
+              key: DATABASE_PORT
+        - name: DATABASE_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: global-config
+              key: DATABASE_NAME
+        - name: DATABASE_USER
+          valueFrom:
+            secretKeyRef:
+              name: database-secrets
+              key: username
+        - name: DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: database-secrets
+              key: password
+        
+        volumeMounts:
+        - name: agent-config
+          mountPath: /app/config
+        - name: shared-knowledge
+          mountPath: /app/knowledge
+        
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+      
+      volumes:
+      - name: agent-config
+        configMap:
+          name: agent-config
+      - name: shared-knowledge
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: agent-orchestrator-service
+  namespace: suoke-life
+  labels:
+    app: agent-orchestrator
+spec:
+  selector:
+    app: agent-orchestrator
+  ports:
+  - name: http
+    port: 8000
+    targetPort: 8000
+    protocol: TCP
+  - name: admin
+    port: 8080
+    targetPort: 8080
+    protocol: TCP
+  type: ClusterIP
+---
+# 智能体协作配置
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: orchestrator-config
+  namespace: suoke-life
+  labels:
+    app: orchestrator-config
+    component: configuration
+data:
+  # PraisonAI配置
+  praisonai_config.yaml: |
+    framework: "praisonai"
+    version: "0.0.1"
+    
+    # 智能体定义
+    agents:
+      xiaoai:
+        role: "健康评估专家"
+        goal: "进行全面的健康状况评估和风险分析"
+        backstory: |
+          你是一位经验丰富的健康评估专家，擅长分析用户的健康数据，
+          包括生理指标、生活习惯、家族病史等，能够准确识别健康风险
+          并提供专业的评估报告。
+        tools:
+          - health_data_analyzer
+          - risk_assessment_tool
+          - biomarker_analyzer
+        model: "gpt-4"
+        temperature: 0.7
+        max_tokens: 4096
+      
+      xiaoke:
+        role: "症状分析专家"
+        goal: "精确分析症状并进行中医辨证论治"
+        backstory: |
+          你是一位中西医结合的症状分析专家，精通中医辨证论治理论，
+          能够根据用户的症状表现，结合现代医学知识，进行准确的
+          症状分析和证候判断。
+        tools:
+          - symptom_analyzer
+          - tcm_diagnosis_tool
+          - syndrome_differentiation
+        model: "claude-3-sonnet"
+        temperature: 0.7
+        max_tokens: 4096
+      
+      laoke:
+        role: "治疗建议专家"
+        goal: "制定个性化的治疗和调理方案"
+        backstory: |
+          你是一位资深的治疗方案专家，具有丰富的临床经验，
+          能够根据健康评估和症状分析结果，制定安全有效的
+          个性化治疗和调理方案。
+        tools:
+          - treatment_planner
+          - herb_prescription_tool
+          - lifestyle_advisor
+        model: "gpt-4-turbo"
+        temperature: 0.7
+        max_tokens: 4096
+      
+      soer:
+        role: "生活指导专家"
+        goal: "提供全方位的健康生活指导"
+        backstory: |
+          你是一位生活方式指导专家，专注于健康生活方式的推广，
+          能够根据个人情况提供饮食、运动、作息等全方位的
+          生活指导建议。
+        tools:
+          - nutrition_planner
+          - exercise_designer
+          - lifestyle_optimizer
+        model: "gemini-pro"
+        temperature: 0.7
+        max_tokens: 4096
+    
+    # 协作流程定义
+    workflows:
+      health_consultation:
+        name: "健康咨询协作流程"
+        description: "四个智能体协作进行健康咨询"
+        steps:
+          - agent: "xiaoai"
+            task: "health_assessment"
+            description: "进行健康状况评估"
+            inputs: ["user_data", "health_history"]
+            outputs: ["assessment_report"]
+          
+          - agent: "xiaoke"
+            task: "symptom_analysis"
+            description: "分析症状并进行辨证"
+            inputs: ["assessment_report", "symptoms"]
+            outputs: ["diagnosis_result"]
+          
+          - agent: "laoke"
+            task: "treatment_planning"
+            description: "制定治疗方案"
+            inputs: ["assessment_report", "diagnosis_result"]
+            outputs: ["treatment_plan"]
+          
+          - agent: "soer"
+            task: "lifestyle_guidance"
+            description: "提供生活指导"
+            inputs: ["assessment_report", "treatment_plan"]
+            outputs: ["lifestyle_plan"]
+        
+        synthesis:
+          enabled: true
+          method: "comprehensive_integration"
+          output_format: "structured_report"
+    
+    # 知识共享配置
+    knowledge_sharing:
+      enabled: true
+      storage_type: "redis"
+      sharing_scope: "session"
+      retention_period: "24h"
+    
+    # 质量控制
+    quality_control:
+      enabled: true
+      validation_rules:
+        - "medical_accuracy_check"
+        - "safety_assessment"
+        - "consistency_validation"
+      confidence_threshold: 0.8
+    
+    # 监控配置
+    monitoring:
+      metrics_enabled: true
+      tracing_enabled: true
+      logging_level: "INFO"
+---
+# 数据库Secret模板
+apiVersion: v1
+kind: Secret
+metadata:
+  name: database-secrets
+  namespace: suoke-life
+type: Opaque
+data:
+  # 注意：这是示例值，实际使用时需要替换
+  username: "c3Vva2VfbGlmZQ=="  # suoke_life (base64)
+  password: "c3Vva2VfcGFzcw=="  # suoke_pass (base64) 

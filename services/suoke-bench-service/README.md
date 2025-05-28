@@ -49,8 +49,8 @@ suoke-bench-service/
 
 ```bash
 # 克隆仓库
-git clone https://github.com/suoke-life/suoke-bench-service.git
-cd suoke-bench-service
+git clone https://github.com/SUOKE2024/suoke_life.git
+cd suoke_life/services/suoke-bench-service
 
 # 安装依赖
 pip install -r requirements.txt
@@ -309,8 +309,8 @@ kubectl apply -f deploy/kubernetes/suoke-bench.yaml
 
 ## 联系与支持
 
-- **问题反馈**: [GitHub Issues](https://github.com/suoke-life/suoke-bench-service/issues)
-- **技术支持**: support@suoke.life
+- **问题反馈**: [GitHub Issues](https://github.com/SUOKE2024/suoke_life/issues)
+- **技术支持**: song.xu@icloud.com
 
 ## 许可证
 

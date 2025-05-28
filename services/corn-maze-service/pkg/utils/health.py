@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """
 健康检查服务
 """
 
+from collections.abc import Callable
+from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 import logging
 import threading
 import time
-from http.server import HTTPServer, BaseHTTPRequestHandler
-from typing import Dict, Any, Callable, List, Optional
+from typing import Any
 
 from pkg.utils.config import get_value
 
@@ -38,7 +38,7 @@ def register_health_check(name: str, check_func: Callable[[], bool]) -> None:
         check_func: 检查函数，返回布尔值表示健康状态
     """
     global _health_checks
-    
+
     with _health_mutex:
         _health_checks.append({
             "name": name,
@@ -47,7 +47,7 @@ def register_health_check(name: str, check_func: Callable[[], bool]) -> None:
             "last_checked": time.time(),
             "failures": 0
         })
-    
+
     logger.info(f"注册健康检查: {name}")
 
 
@@ -59,11 +59,11 @@ def set_status(status: str) -> None:
         status: 健康状态
     """
     global _health_status
-    
+
     with _health_mutex:
         old_status = _health_status
         _health_status = status
-    
+
     logger.info(f"健康状态从 {old_status} 变更为 {status}")
 
 
@@ -78,7 +78,7 @@ def get_status() -> str:
         return _health_status
 
 
-def get_health_report() -> Dict[str, Any]:
+def get_health_report() -> dict[str, Any]:
     """
     获取健康报告
     
@@ -88,7 +88,7 @@ def get_health_report() -> Dict[str, Any]:
     with _health_mutex:
         checks_result = []
         overall_healthy = True
-        
+
         for check in _health_checks:
             checks_result.append({
                 "name": check["name"],
@@ -96,14 +96,14 @@ def get_health_report() -> Dict[str, Any]:
                 "last_checked": check["last_checked"],
                 "failures": check["failures"]
             })
-            
+
             if not check["status"]:
                 overall_healthy = False
-        
+
         status = _health_status
         if status == STATUS_READY and not overall_healthy:
             status = STATUS_NOT_READY
-        
+
         return {
             "status": status,
             "version": get_value("app.version", "1.0.0"),
@@ -116,14 +116,14 @@ def get_health_report() -> Dict[str, Any]:
 def update_health_checks() -> None:
     """更新所有健康检查"""
     global _health_checks
-    
+
     with _health_mutex:
         for check in _health_checks:
             try:
                 result = check["check"]()
                 check["status"] = result
                 check["last_checked"] = time.time()
-                
+
                 if not result:
                     check["failures"] += 1
                     logger.warning(f"健康检查失败: {check['name']}, 连续失败次数: {check['failures']}")
@@ -131,17 +131,17 @@ def update_health_checks() -> None:
                     if check["failures"] > 0:
                         logger.info(f"健康检查恢复: {check['name']}, 之前失败次数: {check['failures']}")
                     check["failures"] = 0
-                
+
             except Exception as e:
                 check["status"] = False
                 check["last_checked"] = time.time()
                 check["failures"] += 1
-                logger.error(f"健康检查出错: {check['name']}, 错误: {str(e)}")
+                logger.error(f"健康检查出错: {check['name']}, 错误: {e!s}")
 
 
 class HealthRequestHandler(BaseHTTPRequestHandler):
     """健康检查HTTP请求处理器"""
-    
+
     def do_GET(self):
         """处理GET请求"""
         if self.path == "/health" or self.path == "/":
@@ -153,25 +153,25 @@ class HealthRequestHandler(BaseHTTPRequestHandler):
         else:
             self.send_response(404)
             self.end_headers()
-    
+
     def _handle_health(self):
         """处理健康检查请求"""
         health_report = get_health_report()
         status_code = 200
-        
+
         if health_report["status"] != STATUS_READY:
             status_code = 503
-        
+
         self.send_response(status_code)
         self.send_header("Content-Type", "application/json")
         self.end_headers()
         self.wfile.write(json.dumps(health_report).encode())
-    
+
     def _handle_ready(self):
         """处理就绪检查请求"""
         status = get_status()
         health_report = get_health_report()
-        
+
         if status == STATUS_READY and health_report["status"] == STATUS_READY:
             self.send_response(200)
             self.send_header("Content-Type", "text/plain")
@@ -182,11 +182,11 @@ class HealthRequestHandler(BaseHTTPRequestHandler):
             self.send_header("Content-Type", "text/plain")
             self.end_headers()
             self.wfile.write(f"Not Ready: {status}".encode())
-    
+
     def _handle_live(self):
         """处理存活检查请求"""
         status = get_status()
-        
+
         if status != STATUS_STOPPING:
             self.send_response(200)
             self.send_header("Content-Type", "text/plain")
@@ -197,7 +197,7 @@ class HealthRequestHandler(BaseHTTPRequestHandler):
             self.send_header("Content-Type", "text/plain")
             self.end_headers()
             self.wfile.write(b"Stopping")
-    
+
     def log_message(self, format, *args):
         """重写日志消息，使用我们的日志系统"""
         logger.debug(f"{self.address_string()} - {format % args}")
@@ -215,15 +215,15 @@ def run_health_server(port: int) -> HTTPServer:
     """
     server = HTTPServer(('', port), HealthRequestHandler)
     logger.info(f"启动健康检查服务器在端口 {port}")
-    
+
     # 启动服务器线程
     server_thread = threading.Thread(target=server.serve_forever, daemon=True)
     server_thread.start()
-    
+
     # 启动健康检查更新线程
     health_thread = threading.Thread(target=_health_check_worker, daemon=True)
     health_thread.start()
-    
+
     return server
 
 
@@ -233,12 +233,12 @@ def _health_check_worker() -> None:
         try:
             update_health_checks()
         except Exception as e:
-            logger.error(f"健康检查更新失败: {str(e)}")
-        
+            logger.error(f"健康检查更新失败: {e!s}")
+
         time.sleep(10)  # 每10秒检查一次
 
 
-def setup_health_server() -> Optional[HTTPServer]:
+def setup_health_server() -> HTTPServer | None:
     """
     设置健康检查服务器
     
@@ -249,11 +249,11 @@ def setup_health_server() -> Optional[HTTPServer]:
     if not health_enabled:
         logger.info("健康检查已禁用")
         return None
-    
+
     health_port = get_value("health.port", 51058)
     server = run_health_server(health_port)
-    
+
     # 注册默认健康检查
     register_health_check("service-status", lambda: get_status() == STATUS_READY)
-    
-    return server 
+
+    return server

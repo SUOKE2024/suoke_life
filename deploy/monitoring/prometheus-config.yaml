@@ -1,0 +1,217 @@
+# Prometheus配置
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: suoke-life
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+      evaluation_interval: 15s
+      external_labels:
+        cluster: 'suoke-life'
+        environment: 'production'
+
+    rule_files:
+      - "/etc/prometheus/rules/*.yml"
+
+    scrape_configs:
+    # Prometheus自身监控
+    - job_name: 'prometheus'
+      static_configs:
+      - targets: ['localhost:9090']
+
+    # Kubernetes API服务器
+    - job_name: 'kubernetes-apiservers'
+      kubernetes_sd_configs:
+      - role: endpoints
+      scheme: https
+      tls_config:
+        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+        action: keep
+        regex: default;kubernetes;https
+
+    # Kubernetes节点监控
+    - job_name: 'kubernetes-nodes'
+      kubernetes_sd_configs:
+      - role: node
+      scheme: https
+      tls_config:
+        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+      relabel_configs:
+      - action: labelmap
+        regex: __meta_kubernetes_node_label_(.+)
+
+    # 索克生活服务监控
+    - job_name: 'suoke-services'
+      kubernetes_sd_configs:
+      - role: pod
+        namespaces:
+          names:
+          - suoke-life
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+        action: keep
+        regex: true
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+        action: replace
+        target_label: __metrics_path__
+        regex: (.+)
+      - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+        action: replace
+        regex: ([^:]+)(?::\d+)?;(\d+)
+        replacement: $1:$2
+        target_label: __address__
+      - action: labelmap
+        regex: __meta_kubernetes_pod_label_(.+)
+      - source_labels: [__meta_kubernetes_namespace]
+        action: replace
+        target_label: kubernetes_namespace
+      - source_labels: [__meta_kubernetes_pod_name]
+        action: replace
+        target_label: kubernetes_pod_name
+
+    # LiteLLM网关监控
+    - job_name: 'litellm-gateway'
+      kubernetes_sd_configs:
+      - role: pod
+        namespaces:
+          names:
+          - suoke-life
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_label_app]
+        action: keep
+        regex: litellm-gateway
+      - source_labels: [__address__]
+        action: replace
+        regex: ([^:]+)(?::\d+)?
+        replacement: $1:4000
+        target_label: __address__
+      - action: labelmap
+        regex: __meta_kubernetes_pod_label_(.+)
+
+    # 智能体服务监控
+    - job_name: 'agent-services'
+      kubernetes_sd_configs:
+      - role: pod
+        namespaces:
+          names:
+          - suoke-life
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_label_component]
+        action: keep
+        regex: agent
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_port]
+        action: replace
+        target_label: __address__
+        regex: (.+)
+        replacement: __address__:$1
+      - action: labelmap
+        regex: __meta_kubernetes_pod_label_(.+)
+      - source_labels: [__meta_kubernetes_pod_label_agent_name]
+        action: replace
+        target_label: agent_name
+
+    # Redis缓存监控
+    - job_name: 'redis'
+      kubernetes_sd_configs:
+      - role: pod
+        namespaces:
+          names:
+          - suoke-life
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_label_app]
+        action: keep
+        regex: redis
+      - source_labels: [__address__]
+        action: replace
+        regex: ([^:]+)(?::\d+)?
+        replacement: $1:6379
+        target_label: __address__
+
+  # 告警规则
+  alert_rules.yml: |
+    groups:
+    - name: suoke-life-alerts
+      rules:
+      # 服务可用性告警
+      - alert: ServiceDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Service {{ $labels.job }} is down"
+          description: "Service {{ $labels.job }} has been down for more than 1 minute."
+
+      # LiteLLM网关告警
+      - alert: LiteLLMHighErrorRate
+        expr: rate(litellm_requests_total{status!="200"}[5m]) / rate(litellm_requests_total[5m]) > 0.1
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "LiteLLM gateway high error rate"
+          description: "LiteLLM gateway error rate is {{ $value | humanizePercentage }} for more than 2 minutes."
+
+      - alert: LiteLLMHighLatency
+        expr: histogram_quantile(0.95, rate(litellm_request_duration_seconds_bucket[5m])) > 5
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "LiteLLM gateway high latency"
+          description: "LiteLLM gateway 95th percentile latency is {{ $value }}s for more than 2 minutes."
+
+      # 智能体服务告警
+      - alert: AgentServiceDown
+        expr: up{job="agent-services"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Agent service {{ $labels.agent_name }} is down"
+          description: "Agent service {{ $labels.agent_name }} has been down for more than 1 minute."
+
+      # 资源使用告警
+      - alert: HighMemoryUsage
+        expr: (container_memory_usage_bytes / container_spec_memory_limit_bytes) > 0.9
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory usage on {{ $labels.pod_name }}"
+          description: "Memory usage is {{ $value | humanizePercentage }} on pod {{ $labels.pod_name }}."
+
+      - alert: HighCPUUsage
+        expr: rate(container_cpu_usage_seconds_total[5m]) > 0.8
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU usage on {{ $labels.pod_name }}"
+          description: "CPU usage is {{ $value | humanizePercentage }} on pod {{ $labels.pod_name }}."
+
+      # Redis缓存告警
+      - alert: RedisDown
+        expr: up{job="redis"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Redis is down"
+          description: "Redis has been down for more than 1 minute."
+
+      - alert: RedisHighMemoryUsage
+        expr: redis_memory_used_bytes / redis_memory_max_bytes > 0.9
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Redis high memory usage"
+          description: "Redis memory usage is {{ $value | humanizePercentage }}." 

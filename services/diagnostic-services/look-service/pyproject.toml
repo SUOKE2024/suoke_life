@@ -2,7 +2,7 @@
 name = "look-service"
 version = "1.0.0"
 description = "look-service - 索克生活微服务"
-requires-python = ">=3.11"
+requires-python = ">=3.13.3"
 dependencies = [
     "fastapi>=0.115.0,<1.0.0",
     "uvicorn[standard]>=0.32.0,<1.0.0",
@@ -18,6 +18,9 @@ dependencies = [
     "tenacity>=9.0.0,<10.0.0",
 ]
 
+classifiers = [
+    "Programming Language :: Python :: 3.13",
+]
 [project.optional-dependencies]
 dev = [
     "pytest>=8.3.0,<9.0.0",
@@ -28,7 +31,7 @@ dev = [
 
 [tool.black]
 line-length = 88
-target-version = ['py311', 'py312', 'py313']
+target-version = ['py313']
 
 [tool.isort]
 profile = "black"

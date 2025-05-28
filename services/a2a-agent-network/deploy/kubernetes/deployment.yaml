@@ -1,0 +1,350 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: a2a-agent-network
+  namespace: suoke-life
+  labels:
+    app: a2a-agent-network
+    version: v1.0.0
+    component: microservice
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: a2a-agent-network
+  template:
+    metadata:
+      labels:
+        app: a2a-agent-network
+        version: v1.0.0
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: a2a-agent-network
+      containers:
+      - name: a2a-agent-network
+        image: suoke-life/a2a-agent-network:v1.0.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 5000
+          protocol: TCP
+        - name: dashboard
+          containerPort: 5001
+          protocol: TCP
+        - name: metrics
+          containerPort: 9090
+          protocol: TCP
+        env:
+        - name: PYTHONPATH
+          value: "/app"
+        - name: CONFIG_PATH
+          value: "/app/config/config.yaml"
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        volumeMounts:
+        - name: config
+          mountPath: /app/config
+          readOnly: true
+        - name: logs
+          mountPath: /app/logs
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+          runAsUser: 1000
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+      volumes:
+      - name: config
+        configMap:
+          name: a2a-agent-network-config
+      - name: logs
+        emptyDir: {}
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - a2a-agent-network
+              topologyKey: kubernetes.io/hostname
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: a2a-agent-network
+  namespace: suoke-life
+  labels:
+    app: a2a-agent-network
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 5000
+    targetPort: http
+    protocol: TCP
+  - name: dashboard
+    port: 5001
+    targetPort: dashboard
+    protocol: TCP
+  - name: metrics
+    port: 9090
+    targetPort: metrics
+    protocol: TCP
+  selector:
+    app: a2a-agent-network
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: a2a-agent-network
+  namespace: suoke-life
+  labels:
+    app: a2a-agent-network
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: a2a-agent-network-config
+  namespace: suoke-life
+  labels:
+    app: a2a-agent-network
+data:
+  config.yaml: |
+    server:
+      host: "0.0.0.0"
+      port: 5000
+      debug: false
+      workers: 4
+      max_connections: 1000
+
+    dashboard:
+      enabled: true
+      host: "0.0.0.0"
+      port: 5001
+      debug: false
+
+    agents:
+      xiaoai:
+        name: "小艾智能体"
+        url: "http://xiaoai-service:5001"
+        timeout: 30
+        retry_count: 3
+        health_check_interval: 60
+        capabilities:
+          - "four_diagnoses_coordination"
+          - "multimodal_input_processing"
+          - "health_records_query"
+          - "voice_interaction"
+          - "accessibility_support"
+      
+      xiaoke:
+        name: "小克智能体"
+        url: "http://xiaoke-service:5002"
+        timeout: 30
+        retry_count: 3
+        health_check_interval: 60
+        capabilities:
+          - "medical_resource_scheduling"
+          - "product_customization"
+          - "food_therapy_recommendation"
+          - "blockchain_traceability"
+          - "subscription_management"
+      
+      laoke:
+        name: "老克智能体"
+        url: "http://laoke-service:5003"
+        timeout: 30
+        retry_count: 3
+        health_check_interval: 60
+        capabilities:
+          - "knowledge_content_management"
+          - "learning_path_planning"
+          - "community_content_management"
+          - "tcm_knowledge_qa"
+          - "content_recommendation"
+      
+      soer:
+        name: "索儿智能体"
+        url: "http://soer-service:5004"
+        timeout: 30
+        retry_count: 3
+        health_check_interval: 60
+        capabilities:
+          - "personalized_health_plan"
+          - "sensor_data_analysis"
+          - "emotion_recognition"
+          - "nutrition_analysis"
+          - "health_companionship"
+
+    workflows:
+      health_consultation:
+        name: "健康咨询工作流"
+        description: "用户健康咨询的完整处理流程"
+        timeout: 300
+        retry_count: 2
+        steps:
+          - id: "reception"
+            agent: "xiaoai"
+            action: "接收用户咨询"
+            timeout: 30
+          - id: "diagnosis_assessment"
+            agent: "xiaoai"
+            action: "诊断体质评估"
+            timeout: 60
+          - id: "knowledge_support"
+            agent: "laoke"
+            action: "提供知识支持"
+            timeout: 45
+          - id: "health_profile"
+            agent: "soer"
+            action: "生成健康画像"
+            timeout: 60
+
+    monitoring:
+      enabled: true
+      metrics_port: 9090
+      health_check_interval: 30
+      performance_metrics:
+        - "request_count"
+        - "request_duration"
+        - "error_rate"
+        - "agent_response_time"
+        - "workflow_success_rate"
+
+    logging:
+      level: "INFO"
+      format: "json"
+      console_output: true
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: a2a-agent-network
+  namespace: suoke-life
+  labels:
+    app: a2a-agent-network
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  tls:
+  - hosts:
+    - a2a.suoke-life.com
+    secretName: a2a-agent-network-tls
+  rules:
+  - host: a2a.suoke-life.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: a2a-agent-network
+            port:
+              number: 5000
+      - path: /dashboard
+        pathType: Prefix
+        backend:
+          service:
+            name: a2a-agent-network
+            port:
+              number: 5001
+
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: a2a-agent-network
+  namespace: suoke-life
+  labels:
+    app: a2a-agent-network
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: a2a-agent-network
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: a2a-agent-network
+  namespace: suoke-life
+  labels:
+    app: a2a-agent-network
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: a2a-agent-network
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80 

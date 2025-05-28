@@ -2,7 +2,7 @@
 # 多阶段构建，优化镜像大小和安全性
 
 # 第一阶段：构建阶段
-FROM python:3.12-slim as builder
+FROM python:3.13.3-slim as builder
 
 # 设置工作目录
 WORKDIR /build
@@ -24,7 +24,7 @@ RUN pip install --no-cache-dir --upgrade pip setuptools wheel
 RUN pip install --no-cache-dir -r requirements.txt
 
 # 第二阶段：运行阶段
-FROM python:3.11-slim as runtime
+FROM python:3.13.3-slim as runtime
 
 # 设置标签
 LABEL maintainer="suoke-life-team"

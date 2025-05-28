@@ -1,452 +1,427 @@
-# 小艾服务 (xiaoai-service)
+# 小艾智能体服务 (XiaoAI Agent Service)
 
-## 概述
+[![Python Version](https://img.shields.io/badge/python-3.13.3-blue.svg)](https://python.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115.0-green.svg)](https://fastapi.tiangolo.com)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Code Style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-小艾服务是索克生活APP的四诊协调智能体服务，作为中医四诊合参的核心，负责整合望、闻、问、切四诊数据，进行中医辨证分析，并提供个性化健康建议。小艾服务是连接医疗诊断与用户健康管理的桥梁，通过多模态传感数据的融合，实现中医治未病理念的数字化实践。
+小艾是索克生活平台的核心AI智能体，专注于提供智能健康管理服务。本服务基于中医"辨证论治未病"的理念，结合现代预防医学技术，为用户提供个性化的全生命周期健康管理。
 
-## 开发状态
+## 🌟 核心特性
 
-**✓ 开发完成度：100%**
+### 🧠 智能诊断
+- **四诊协调**: 集成望、闻、问、切四种诊断方式
+- **辨证论治**: 基于中医理论的智能症候分析
+- **多模态数据**: 支持文本、图像、音频等多种数据输入
+- **个性化建议**: 根据用户体质提供定制化健康建议
 
-所有核心组件均已完成实现，包括：
+### 🔬 技术架构
+- **微服务架构**: 基于 FastAPI 的高性能异步服务
+- **AI 模型集成**: 支持本地和云端 AI 模型
+- **分布式任务**: 基于 Celery 的异步任务处理
+- **实时监控**: 完整的健康检查和监控体系
 
-- ✓ 四诊协调引擎 - 支持顺序和并行协调模式
-- ✓ 多模态融合引擎 - 支持加权、注意力、集成和跨模态等多种融合算法
-- ✓ 辨证分析引擎 - 支持八纲辨证、脏腑辨证、气血津液辨证等多种辨证方法
-- ✓ 健康建议生成器 - 基于辨证和体质分析，提供多维度健康建议
-- ✓ 智能体协作接口 - 实现与其他智能体的通信与协作
-- ✓ 单元测试与集成测试 - 完整的测试覆盖
+### 🛡️ 安全与隐私
+- **数据加密**: 端到端健康数据加密
+- **访问控制**: 基于 JWT 的身份认证
+- **隐私保护**: 符合医疗数据隐私标准
+- **审计日志**: 完整的操作审计追踪
 
-**最近完成的优化：**
+## 📋 系统要求
 
-1. 增强了多模态融合引擎，现支持4种融合算法
-2. 完善了辨证分析引擎，支持知识图谱推理和体质分析
-3. 新增了健康建议生成模块，支持多维度个性化建议
-4. 优化了服务间通信和错误处理
-5. 全面提升了测试覆盖率
+- **Python**: 3.13.3+
+- **数据库**: PostgreSQL 14+
+- **缓存**: Redis 6+
+- **消息队列**: Redis (Celery broker)
+- **操作系统**: Linux, macOS, Windows
 
-## 架构设计
+## 🚀 快速开始
 
-小艾服务采用微服务架构，基于以下核心组件构建：
+### 1. 环境准备
+
+```bash
+# 克隆项目
+git clone https://github.com/suokelife/suoke_life.git
+cd suoke_life/services/agent-services/xiaoai-service
+
+# 确保 Python 3.13.3 已安装
+python --version
+
+# 安装 UV 包管理器
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+### 2. 安装依赖
+
+```bash
+# 安装核心依赖
+make install
+
+# 或安装所有依赖（包括开发和AI依赖）
+make install-all
+```
+
+### 3. 配置环境
+
+```bash
+# 复制环境变量模板
+cp env.example .env
+
+# 编辑配置文件
+vim .env
+```
+
+### 4. 初始化服务
+
+```bash
+# 初始化项目（配置、数据库、缓存等）
+make init
+
+# 或分步初始化
+make init-config
+make init-db
+```
+
+### 5. 启动服务
+
+```bash
+# 启动开发服务器
+make run-dev
+
+# 或启动生产服务器
+make run
+
+# 启动工作进程（另一个终端）
+make run-worker
+```
+
+### 6. 验证安装
+
+```bash
+# 检查服务状态
+make status
+
+# 健康检查
+make health
+
+# 访问 API 文档
+open http://localhost:8000/docs
+```
+
+## 🛠️ 开发指南
+
+### 项目结构
 
 ```
 xiaoai-service/
-├── api/                # API接口定义
-│   ├── grpc/           # gRPC服务接口
-│   └── rest/           # REST API接口
-├── cmd/                # 命令行入口
-│   └── server/         # 服务器启动代码
-├── config/             # 配置文件
-│   └── prompts/        # LLM提示语模板
-├── internal/           # 内部实现
-│   ├── agent/          # 智能体核心
-│   ├── four_diagnosis/ # 四诊相关功能
-│   │   ├── fusion/     # 多模态融合
-│   │   ├── reasoning/  # 辨证推理
-│   │   └── recommendation/ # 健康建议
-│   ├── domain/         # 领域模型
-│   ├── delivery/       # 服务交付层
-│   ├── orchestrator/   # 协调引擎
-│   └── repository/     # 数据仓库
-└── pkg/                # 公共工具包
-    └── utils/          # 工具函数
+├── xiaoai/                     # 主要源码目录
+│   ├── __init__.py            # 包初始化和延迟导入
+│   ├── agent/                 # 智能体核心模块
+│   ├── cli/                   # 命令行接口
+│   ├── config/                # 配置管理
+│   ├── delivery/              # API 交付层
+│   ├── four_diagnosis/        # 四诊协调模块
+│   ├── service/               # 业务服务层
+│   └── utils/                 # 工具函数
+├── tests/                     # 测试代码
+├── config/                    # 配置文件
+├── docs/                      # 文档
+├── scripts/                   # 脚本工具
+├── pyproject.toml            # 项目配置
+├── Makefile                  # 开发工具
+└── README.md                 # 项目说明
 ```
 
-## 功能领域
-
-小艾服务围绕以下核心功能领域构建：
-
-### 1. 四诊协调引擎
-
-作为核心协调组件，负责整合来自各个四诊微服务的数据，管理诊断流程，并确保数据一致性。
-
-- **关键能力**:
-  - 协调四诊微服务调用顺序与优先级
-  - 处理四诊数据的异步收集与关联
-  - 管理四诊会话状态与上下文
-  - 数据流动协调与异常处理
-  - 智能推荐后续诊断路径
-  - 综合评估四诊完整性
-  - 实现四诊数据存储与追踪
-
-### 2. 多模态诊断分析
-
-从各种诊断数据中提取健康特征，处理和融合不同模态的信息，生成统一的健康表征。
-
-- **关键能力**:
-  - 舌象特征分析与分类
-  - 面诊特征提取与解读
-  - 语音健康标记物识别
-  - 脉象波形特征分析
-  - 问诊数据结构化与要点提取
-  - 多模态特征融合
-  - 生物标记物关联分析
-  - 异常模式检测与预警
-  - 跨模态特征相关性分析
-  - 加权、注意力、集成和跨模态融合算法
-
-### 3. 中医辨证引擎
-
-基于四诊合参原则，应用中医理论进行辨证分析，评估体质类型，确定证型。
-
-- **关键能力**:
-  - 八纲辨证（寒热虚实表里阴阳）
-  - 气血津液辨证
-  - 脏腑辨证
-  - 经络辨证
-  - 卫气营血辨证
-  - 六经辨证
-  - 三焦辨证
-  - 体质辨析（九种体质）
-  - 证候推理与确认
-  - 中西医结合分析
-  - 证候一致性验证
-  - 证候关系图谱推理
-
-### 4. 健康分析与建议
-
-根据辨证结果，生成个性化健康状态分析和调理建议，支持用户健康管理。
-
-- **关键能力**:
-  - 整体健康状态评估
-  - 亚健康风险分析
-  - 潜在健康问题预警
-  - 体质偏颇调理建议
-  - 饮食调养建议
-  - 起居养生指导
-  - 情志调理建议
-  - 运动处方生成
-  - 外治法推荐
-  - 穴位按摩指导
-  - 中医养生保健方案
-  - 专业就医建议与提醒
-  - 多维度健康建议生成
-  - 基于体质和证候的个性化方案
-
-### 5. 智能诊间助手
-
-提供智能问答和交互式健康咨询服务，辅助四诊数据收集和解读。
-
-- **关键能力**:
-  - 主诉引导与症状询问
-  - 病史采集与整理
-  - 症状详情探询
-  - 生活习惯评估
-  - 健康信息科普
-  - 诊断解释与疑问解答
-  - 四诊结果通俗解读
-  - 健康教育与宣导
-  - 用户问题分类与处理
-  - 情感支持与心理疏导
-
-### 6. 四诊多模态设备集成
-
-与各种生物传感器和医疗设备集成，实现四诊数据的标准化采集。
-
-- **关键能力**:
-  - 舌诊数据采集设备集成
-  - 面诊图像采集设备集成
-  - 听诊设备集成
-  - 脉诊设备数据接入
-  - 可穿戴设备数据集成
-  - 移动设备传感器接入
-  - 第三方健康设备互操作
-  - 设备数据校准与标准化
-  - 多设备数据同步与关联
-  - 远程设备状态监控
-
-### 7. 智能体协作引擎
-
-管理小艾与其他智能体（小克、老克、索儿）的协作交互，实现分布式决策。
-
-- **关键能力**:
-  - 智能体间消息路由
-  - 协作任务分配与跟踪
-  - 跨智能体知识共享
-  - 协作上下文管理
-  - 分布式决策协调
-  - 任务完成度监控
-  - 冲突处理与协商
-  - 多智能体并行协作
-  - 协作能力动态发现
-
-### 8. 无障碍健康服务
-
-为听障、视障、语障等特殊人群提供定制化健康服务，确保医疗服务平等可及。
-
-- **关键能力**:
-  - 手语识别与翻译
-  - 语音到文本转换与增强
-  - 文本到语音转换优化
-  - 盲文健康信息转换
-  - 触觉反馈健康提示
-  - 简化健康信息呈现
-  - 图像内容口述描述
-  - 认知障碍适配服务
-  - 老年人友好界面适配
-  - 特殊人群专属诊断流程
-
-### 9. 医疗知识库增强
-
-集成中西医结合知识库，支持四诊分析、辨证和健康建议，提供知识支持。
-
-- **关键能力**:
-  - 中医典籍知识库接入
-  - 西医医学知识整合
-  - 药食配伍知识管理
-  - 证型治法知识库
-  - 辨证规则库维护
-  - 体质类型特征库
-  - 经络穴位知识图谱
-  - 健康生活方式指南
-  - 医学研究文献接入
-  - 知识实时更新与验证
-
-### 10. 健康数据分析引擎
-
-分析用户历史健康数据，发现模式与趋势，支持长期健康管理。
-
-- **关键能力**:
-  - 纵向健康数据分析
-  - 健康趋势预测
-  - 体质变化追踪
-  - 健康干预效果评估
-  - 季节性健康变化分析
-  - 生活方式影响评估
-  - 健康风险预警模型
-  - 用药效果分析
-  - 诊疗记录结构化
-  - 健康数据可视化
-  - 个人健康指数计算
-
-## API接口
-
-小艾服务提供以下主要API接口：
-
-### gRPC接口
-
-* `DiagnosisService`: 提供四诊协调与分析服务
-  - `CoordinateDiagnosis`: 协调四诊流程
-  - `ProcessDiagnosisData`: 处理单项诊断数据
-  - `GenerateSyndromeAnalysis`: 生成证型分析
-  - `GetConstitutionAssessment`: 获取体质评估
-
-* `HealthAnalysisService`: 提供健康分析与建议服务
-  - `GenerateHealthAnalysis`: 生成健康分析报告
-  - `GetHealthRecommendations`: 获取健康调理建议
-  - `TrackHealthTrends`: 追踪健康趋势变化
-
-* `AgentCollaborationService`: 提供智能体协作服务
-  - `RouteAgentMessage`: 路由智能体消息
-  - `CoordinateTask`: 协调多智能体任务
-  - `RegisterCapability`: 注册智能体能力
-
-### REST API接口
-
-* `/api/v1/diagnosis/session`: 管理诊断会话
-* `/api/v1/diagnosis/analyze`: 分析诊断数据
-* `/api/v1/health/recommendations`: 获取健康建议
-* `/api/v1/collaboration/tasks`: 管理协作任务
-
-## 依赖服务
-
-小艾服务依赖以下微服务：
-
-* `look-service`: 望诊服务，提供舌诊和面诊分析
-* `listen-service`: 闻诊服务，提供语音和声音分析
-* `inquiry-service`: 问诊服务，提供智能问诊与症状分析
-* `palpation-service`: 切诊服务，提供脉象和触诊分析
-* `med-knowledge`: 医学知识库服务，提供辨证知识支持
-* `message-bus-service`: 消息总线服务，支持智能体间通信
-* `accessibility-service`: 无障碍服务，支持特殊人群健康服务
-* `rag-service`: 检索增强生成服务，提供知识检索支持
-
-## 部署与扩展
-
-小艾服务支持以下部署方式：
-
-* Docker容器部署
-* Kubernetes集群部署
-* 云原生弹性伸缩配置
-
-扩展策略：
-
-* 水平扩展：随请求量增加自动扩展实例
-* GPU自动扩缩容：对于图像分析和多模态融合任务
-* 混合云部署：敏感数据本地处理，非敏感数据云端处理
-
-## 配置指南
-
-服务配置位于`config`目录，主要包含：
-
-* `config.yaml`: 主配置文件
-* `logging.yaml`: 日志配置
-* `prompts/*.txt`: 提示语模板配置
-
-关键配置项：
-
-```yaml
-xiaoai:
-  # 四诊协调配置
-  coordinator:
-    mode: "sequential"  # 'sequential' 或 'parallel'
-    timeout: 30000      # 毫秒
-    priority_weights:
-      look: 0.8
-      listen: 0.7
-      inquiry: 0.9
-      palpation: 0.8
-  
-  # 特征提取配置
-  feature_extraction:
-    min_confidence: 0.6
-    max_features_per_category: 10
-    use_advanced_extraction: true
-  
-  # 多模态融合配置
-  fusion:
-    algorithm: "weighted"  # 'weighted', 'attention', 'ensemble', 'cross_modal'
-    min_confidence_threshold: 0.5
-    use_early_fusion: true
-  
-  # 辨证分析配置
-  differentiation:
-    rules_version: "v2"
-    confidence_threshold: 0.7
-    evidence_requirements: "moderate"  # 'strict', 'moderate', 'lenient'
-    methods:
-      - "eight_principles"
-      - "zang_fu"
-      - "qi_blood_fluid"
-  
-  # 健康建议配置
-  recommendations:
-    max_recommendations: 10
-    min_confidence: 0.6
-    category_limits:
-      diet: 3
-      lifestyle: 2
-      exercise: 2
-      emotion: 2
-      acupoint: 1
-      prevention: 1
-      medical: 1
-  
-  # LLM配置
-  llm:
-    default_model: "gpt-4o"
-    timeout: 15000
-    max_retries: 3
-```
-
-## 使用示例
-
-```python
-# 创建gRPC客户端
-from xiaoai_service.client import XiaoaiClient
-
-client = XiaoaiClient("localhost:50051")
-
-# 创建诊断会话
-session = await client.create_diagnosis_session(user_id="user123")
-
-# 提交舌象图像分析
-tongue_result = await client.submit_tongue_image(
-    session_id=session.session_id,
-    image_url="https://example.com/tongue_image.jpg"
-)
-
-# 提交面诊图像分析
-face_result = await client.submit_face_image(
-    session_id=session.session_id,
-    image_url="https://example.com/face_image.jpg"
-)
-
-# 提交问诊数据
-inquiry_result = await client.submit_inquiry_data(
-    session_id=session.session_id,
-    symptoms=["头痛", "乏力"],
-    duration="三天",
-    chief_complaint="近日头痛加重，伴有乏力"
-)
-
-# 提交脉诊数据
-pulse_result = await client.submit_pulse_data(
-    session_id=session.session_id,
-    pulse_wave_url="https://example.com/pulse_wave.json"
-)
-
-# 获取综合分析结果
-analysis = await client.get_syndrome_analysis(session_id=session.session_id)
-
-# 获取健康建议
-recommendations = await client.get_health_recommendations(
-    user_id="user123",
-    analysis_id=analysis.analysis_id
-)
-
-# 关闭客户端
-await client.close()
-```
-
-## 开发指南
-
-### 环境设置
+### 开发环境设置
 
 ```bash
-# 安装依赖
-pip install -r requirements.txt
+# 完整开发环境设置
+make dev-setup
 
-# 构建服务原型
-python -m grpc_tools.protoc -I./protos --python_out=. --grpc_python_out=. ./protos/xiaoai_service.proto
+# 安装开发依赖
+make install-dev
 
-# 运行服务
-python cmd/server/main.py
+# 安装 AI/ML 依赖
+make install-ai
 ```
 
-### 主要模块开发
-
-1. ✓ **四诊协调引擎**: 已完成
-2. ✓ **特征提取器**: 已完成，支持多种特征提取方法
-3. ✓ **多模态融合引擎**: 已完成，支持4种融合算法
-4. ✓ **中医辨证引擎**: 已完成，支持多种辨证方法
-5. ✓ **健康建议生成器**: 已完成，提供多维度健康建议
-6. ✓ **智能体协作引擎**: 已完成，实现多智能体通信与协作
-
-### 测试指南
+### 代码质量
 
 ```bash
+# 代码格式化
+make format
+
+# 代码检查
+make lint
+
+# 类型检查
+make type-check
+
+# 安全检查
+make security-check
+
+# 运行所有质量检查
+make quality
+```
+
+### 测试
+
+```bash
+# 运行所有测试
+make test
+
 # 运行单元测试
-pytest test/unit
+make test-unit
 
 # 运行集成测试
-pytest test/integration
+make test-integration
 
-# 运行性能测试
-pytest test/performance
+# 生成覆盖率报告
+make test-coverage
+
+# 监视模式（自动运行测试）
+make test-watch
 ```
 
-## 性能指标
+## 📚 API 文档
 
-系统在标准环境下的性能表现：
+### 核心端点
 
-- 多模态融合: 平均处理时间 < 50ms/请求
-- 辨证分析: 平均处理时间 < 100ms/请求
-- 健康建议生成: 平均处理时间 < 30ms/请求
-- 完整流程处理: 平均处理时间 < 200ms/请求
+- **健康检查**: `GET /health`
+- **服务状态**: `GET /status`
+- **四诊分析**: `POST /api/v1/diagnosis/analyze`
+- **健康建议**: `POST /api/v1/advice/generate`
+- **用户画像**: `GET /api/v1/profile/{user_id}`
 
-## 最近更新
+### 认证
 
-- **2023-08-15**: 优化辨证分析引擎，增加知识图谱推理
-- **2023-08-20**: 完善多模态融合算法，新增注意力机制和跨模态融合
-- **2023-08-25**: 新增健康建议生成模块，支持多维度个性化建议
-- **2023-08-30**: 增强异常处理和服务恢复机制
-- **2023-09-01**: 全面提升测试覆盖率，完善集成测试用例
+所有 API 请求需要在 Header 中包含 JWT token：
 
-## 未来规划
+```bash
+Authorization: Bearer <your-jwt-token>
+```
 
-1. **知识库扩展**: 进一步丰富中医知识库，增加更多中医典籍和现代医学研究成果
-2. **多语言支持**: 增加多语言接口，支持国际化需求
-3. **模型优化**: 持续优化辨证和融合算法，提升准确率
-4. **边缘计算**: 支持在低功耗设备上的轻量级部署
-5. **联邦学习**: 引入联邦学习框架，保护用户隐私的同时提升模型性能 
+### 示例请求
+
+```bash
+# 健康检查
+curl -X GET "http://localhost:8000/health"
+
+# 四诊分析
+curl -X POST "http://localhost:8000/api/v1/diagnosis/analyze" \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "user_id": "12345",
+    "symptoms": ["头痛", "失眠"],
+    "images": ["base64-encoded-image"],
+    "audio": "base64-encoded-audio"
+  }'
+```
+
+## 🔧 配置说明
+
+### 环境变量
+
+主要配置项说明：
+
+| 变量名 | 说明 | 默认值 |
+|--------|------|--------|
+| `ENVIRONMENT` | 运行环境 | `development` |
+| `SERVER_PORT` | 服务端口 | `8000` |
+| `DATABASE_URL` | 数据库连接 | `postgresql://...` |
+| `REDIS_URL` | Redis 连接 | `redis://localhost:6379/0` |
+| `LOG_LEVEL` | 日志级别 | `INFO` |
+
+### 配置文件
+
+支持多环境配置文件：
+
+- `config/default.yaml` - 默认配置
+- `config/development.yaml` - 开发环境
+- `config/production.yaml` - 生产环境
+
+## 🐳 Docker 部署
+
+### 构建镜像
+
+```bash
+# 构建 Docker 镜像
+make docker-build
+
+# 运行容器
+make docker-run
+```
+
+### Docker Compose
+
+```yaml
+version: '3.8'
+services:
+  xiaoai-service:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://user:pass@db:5432/xiaoai
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - db
+      - redis
+  
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_DB: xiaoai
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+  
+  redis:
+    image: redis:6-alpine
+```
+
+## 📊 监控和日志
+
+### 健康检查
+
+```bash
+# 基础健康检查
+curl http://localhost:8000/health
+
+# 详细状态检查
+xiaoai status --format json
+```
+
+### 日志管理
+
+```bash
+# 查看实时日志
+tail -f logs/xiaoai.log
+
+# 日志级别配置
+export LOG_LEVEL=DEBUG
+```
+
+### 性能监控
+
+```bash
+# 性能分析
+make profile
+
+# 系统资源监控
+xiaoai health
+```
+
+## 🧪 测试策略
+
+### 测试分类
+
+- **单元测试**: 测试单个函数和类
+- **集成测试**: 测试服务间交互
+- **端到端测试**: 测试完整用户流程
+- **性能测试**: 测试系统性能指标
+
+### 测试覆盖率
+
+目标覆盖率: **80%+**
+
+```bash
+# 生成覆盖率报告
+make test-coverage
+
+# 查看 HTML 报告
+open htmlcov/index.html
+```
+
+## 🚀 部署指南
+
+### 生产环境部署
+
+1. **环境准备**
+   ```bash
+   # 设置生产环境变量
+   export ENVIRONMENT=production
+   export DATABASE_URL=postgresql://...
+   export REDIS_URL=redis://...
+   ```
+
+2. **数据库迁移**
+   ```bash
+   make db-migrate
+   ```
+
+3. **启动服务**
+   ```bash
+   # 启动服务器（多进程）
+   xiaoai-server --workers 4 --host 0.0.0.0 --port 8000
+   
+   # 启动工作进程
+   xiaoai-worker --concurrency 8
+   ```
+
+### Kubernetes 部署
+
+参考 `deploy/kubernetes/` 目录下的配置文件。
+
+## 🤝 贡献指南
+
+### 开发流程
+
+1. Fork 项目
+2. 创建功能分支: `git checkout -b feature/amazing-feature`
+3. 提交更改: `git commit -m 'Add amazing feature'`
+4. 推送分支: `git push origin feature/amazing-feature`
+5. 创建 Pull Request
+
+### 代码规范
+
+- 遵循 PEP 8 代码风格
+- 使用类型注解
+- 编写完整的文档字符串
+- 保持测试覆盖率 80% 以上
+
+### 提交前检查
+
+```bash
+# 运行提交前检查
+make pre-commit
+```
+
+## 📄 许可证
+
+本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情。
+
+## 🆘 支持与帮助
+
+### 常见问题
+
+**Q: 如何重置数据库？**
+```bash
+make db-downgrade
+make db-migrate
+```
+
+**Q: 如何更新依赖？**
+```bash
+uv sync --upgrade
+```
+
+**Q: 如何调试性能问题？**
+```bash
+make profile
+```
+
+### 获取帮助
+
+- 📧 邮箱: dev@suokelife.com
+- 🐛 问题反馈: [GitHub Issues](https://github.com/suokelife/suoke_life/issues)
+- 📖 文档: [在线文档](https://docs.suokelife.com/xiaoai)
+
+### 社区
+
+- 💬 讨论: [GitHub Discussions](https://github.com/suokelife/suoke_life/discussions)
+- 📢 公告: [项目博客](https://blog.suokelife.com)
+
+---
+
+**小艾智能体** - 让健康管理更智能，让生活更美好 ✨ 

@@ -77,7 +77,7 @@ services/rag-service/
 1. 克隆仓库并进入项目目录
 
 ```bash
-git clone https://github.com/suokelife/life.git
+git clone https://github.com/SUOKE2024/suoke_life.git
 cd life/services/rag-service
 ```
 

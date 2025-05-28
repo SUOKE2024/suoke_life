@@ -1,20 +1,19 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """
 模型单元测试
 """
 
-import unittest
-import sys
-import os
 from datetime import datetime
+import os
+import sys
+import unittest
 
 # 添加项目根目录到Python路径
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from internal.model.maze import Maze
 from internal.model.knowledge import KnowledgeNode
+from internal.model.maze import Maze
 from internal.model.progress import UserProgress
 from internal.model.template import MazeTemplate
 
@@ -25,7 +24,7 @@ class TestModels(unittest.TestCase):
     def test_maze_model(self):
         """测试迷宫模型"""
         now = datetime.now()
-        
+
         # 创建测试数据
         maze_data = {
             "maze_id": "test_maze_1",
@@ -52,10 +51,10 @@ class TestModels(unittest.TestCase):
             "description": "测试迷宫",
             "tags": ["测试", "养生"]
         }
-        
+
         # 创建模型实例
         maze = Maze.from_dict(maze_data)
-        
+
         # 验证属性
         self.assertEqual(maze.maze_id, "test_maze_1")
         self.assertEqual(maze.user_id, "user123")
@@ -73,7 +72,7 @@ class TestModels(unittest.TestCase):
         self.assertTrue(maze.is_public)
         self.assertEqual(maze.description, "测试迷宫")
         self.assertEqual(maze.tags, ["测试", "养生"])
-        
+
         # 测试to_dict方法
         maze_dict = maze.to_dict()
         self.assertEqual(maze_dict["maze_id"], "test_maze_1")
@@ -93,10 +92,10 @@ class TestModels(unittest.TestCase):
             "difficulty_level": "2",
             "related_tags": ["春季", "养生"]
         }
-        
+
         # 创建模型实例
         node = KnowledgeNode(**node_data)
-        
+
         # 验证属性
         self.assertEqual(node.node_id, "k1")
         self.assertEqual(node.title, "春季养生")
@@ -104,7 +103,7 @@ class TestModels(unittest.TestCase):
         self.assertEqual(node.category, "四季养生")
         self.assertEqual(node.difficulty_level, "2")
         self.assertEqual(node.related_tags, ["春季", "养生"])
-        
+
         # 测试to_dict方法
         node_dict = node.to_dict()
         self.assertEqual(node_dict["node_id"], "k1")
@@ -114,7 +113,7 @@ class TestModels(unittest.TestCase):
     def test_user_progress_model(self):
         """测试用户进度模型"""
         now = datetime.now()
-        
+
         # 创建测试数据
         progress_data = {
             "user_id": "user123",
@@ -129,10 +128,10 @@ class TestModels(unittest.TestCase):
             "last_active_time": now,
             "score": 150
         }
-        
+
         # 创建模型实例
         progress = UserProgress.from_dict(progress_data)
-        
+
         # 验证属性
         self.assertEqual(progress.user_id, "user123")
         self.assertEqual(progress.maze_id, "maze123")
@@ -146,7 +145,7 @@ class TestModels(unittest.TestCase):
         self.assertEqual(progress.start_time, now)
         self.assertEqual(progress.last_active_time, now)
         self.assertEqual(progress.score, 150)
-        
+
         # 测试to_dict方法
         progress_dict = progress.to_dict()
         self.assertEqual(progress_dict["user_id"], "user123")
@@ -176,10 +175,10 @@ class TestModels(unittest.TestCase):
             "tags": ["春季", "养生", "初级"],
             "preview_image_url": "http://example.com/preview.png"
         }
-        
+
         # 创建模型实例
         template = MazeTemplate.from_dict(template_data)
-        
+
         # 验证属性
         self.assertEqual(template.template_id, "t1")
         self.assertEqual(template.name, "春季养生迷宫")
@@ -195,7 +194,7 @@ class TestModels(unittest.TestCase):
         self.assertEqual(template.challenge_count, 3)
         self.assertEqual(template.tags, ["春季", "养生", "初级"])
         self.assertEqual(template.preview_image_url, "http://example.com/preview.png")
-        
+
         # 测试to_dict方法
         template_dict = template.to_dict()
         self.assertEqual(template_dict["template_id"], "t1")
@@ -205,4 +204,4 @@ class TestModels(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    unittest.main() 
+    unittest.main()

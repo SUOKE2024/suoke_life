@@ -291,7 +291,7 @@ CPU 使用率：< 15%
 1. 📖 查看 [安装指南](INSTALLATION_GUIDE.md)
 2. 🐛 提交 [GitHub Issue](https://github.com/your-repo/cursor-voice-extension/issues)
 3. 💬 加入 [讨论社区](https://github.com/your-repo/cursor-voice-extension/discussions)
-4. 📧 发送邮件至 support@cursor-voice.com
+4. 📧 发送邮件至 song.xu@icloud.com
 
 ---
 

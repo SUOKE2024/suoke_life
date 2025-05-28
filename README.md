@@ -7,9 +7,12 @@
 <div align="center">
   
   [![React Native](https://img.shields.io/badge/React%20Native-0.73+-blue.svg)](https://reactnative.dev/)
+  [![Python](https://img.shields.io/badge/Python-3.13.3-blue.svg)](https://www.python.org/)
   [![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-blue.svg)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
   [![Redux](https://img.shields.io/badge/Redux-4.2.1+-green.svg)](https://redux.js.org/)
   [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+  [![GitHub](https://img.shields.io/badge/GitHub-SUOKE2024/suoke__life-blue.svg)](https://github.com/SUOKE2024/suoke_life)
+  [![Website](https://img.shields.io/badge/Website-suoke__life-green.svg)](https://suoke_life)
   
 </div>
 
@@ -260,11 +263,19 @@ npm run cache:clear
 
 ### 依赖要求
 
+#### 前端开发环境
 - Node.js 16.x 或更高版本
 - npm 8.x 或更高版本
 - 支持的操作系统：macOS 10.15+、Windows 10+、Linux
 - Xcode 14+ (iOS开发)
 - Android Studio 2022+ (Android开发)
+
+#### 后端开发环境
+- **Python 3.13.3** (所有微服务统一版本)
+- Docker 25.0.0+ 和 Docker Compose
+- PostgreSQL 16.0+ (数据库)
+- Redis 7.2+ (缓存)
+- Kubernetes 1.29+ (生产部署)
 
 ### 快速开始
 
@@ -378,7 +389,8 @@ npm run cache:clear
 
 ### 后端技术
 
-- **微服务框架**
+- **核心运行环境**
+  - **Python 3.13.3** (所有微服务统一版本)
   - [FastAPI 0.109.0+](https://fastapi.tiangolo.com/)
   - [gRPC 1.62.0+](https://grpc.io/)
   - [Kubernetes 1.29+](https://kubernetes.io/)
@@ -1422,7 +1434,7 @@ services/
 
 ## 联系我们
 
-如有任何问题或建议，请联系我们：contact@suoke.life 
+如有任何问题或建议，请联系我们：song.xu@icloud.com 
 
 ## SuokeBench 专属评测体系
 
@@ -1789,26 +1801,32 @@ const ChatScreen = () => {
 ### 如何贡献
 
 1. **Fork项目仓库**
-   - 在GitHub上Fork这个仓库到您自己的账号下
+   - 在GitHub上Fork [索克生活仓库](https://github.com/SUOKE2024/suoke_life) 到您自己的账号下
 
-2. **创建开发分支**
+2. **克隆仓库到本地**
+   ```bash
+   git clone git@github.com:SUOKE2024/suoke_life.git
+   cd suoke_life
+   ```
+
+3. **创建开发分支**
    ```bash
    git checkout -b feature/your-feature-name
    ```
 
-3. **提交您的更改**
+4. **提交您的更改**
    ```bash
    git commit -m "feat: 添加新功能描述"
    ```
    请遵循[约定式提交](https://www.conventionalcommits.org/)规范
 
-4. **推送到您的Fork仓库**
+5. **推送到您的Fork仓库**
    ```bash
    git push origin feature/your-feature-name
    ```
 
-5. **创建Pull Request**
-   - 前往GitHub原始仓库，创建新的Pull Request
+6. **创建Pull Request**
+   - 前往GitHub [原始仓库](https://github.com/SUOKE2024/suoke_life)，创建新的Pull Request
    - 清晰描述您的更改和改进点
 
 ### 开发规范
@@ -1833,8 +1851,18 @@ const ChatScreen = () => {
 
 如有任何疑问或建议，欢迎通过以下方式联系我们：
 
-- 电子邮件：contact@suoke.life
-- GitHub Issues：[提交问题](https://github.com/SUOKE2024/suoke_life/issues)
+- **GitHub仓库**: [https://github.com/SUOKE2024/suoke_life](https://github.com/SUOKE2024/suoke_life)
+- **项目网站**: [https://suoke_life](https://suoke_life)
+- **电子邮件**: song.xu@icloud.com
+- **GitHub Issues**: [提交问题](https://github.com/SUOKE2024/suoke_life/issues)
+- **Pull Requests**: [贡献代码](https://github.com/SUOKE2024/suoke_life/pulls)
+
+### 仓库信息
+
+- **HTTPS克隆**: `git clone https://github.com/SUOKE2024/suoke_life.git`
+- **SSH克隆**: `git clone git@github.com:SUOKE2024/suoke_life.git`
+- **组织**: SUOKE2024
+- **仓库名**: suoke_life
 
 感谢您对索克生活项目的支持与贡献！
 

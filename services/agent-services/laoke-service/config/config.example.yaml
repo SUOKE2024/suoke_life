@@ -1,0 +1,108 @@
+# 老克智能体服务配置文件示例
+# 复制此文件为 config.yaml 并根据实际环境修改配置
+
+# 基础配置
+app_name: "老克智能体服务"
+app_version: "1.0.0"
+environment: "development"  # development, staging, production, testing
+debug: true
+
+# 数据库配置
+database:
+  # PostgreSQL 配置
+  postgres_host: "localhost"
+  postgres_port: 5432
+  postgres_user: "laoke"
+  postgres_password: "your_postgres_password"
+  postgres_db: "laoke_service"
+  postgres_pool_size: 10
+  postgres_max_overflow: 20
+  
+  # Redis 配置
+  redis_host: "localhost"
+  redis_port: 6379
+  redis_password: null  # 如果有密码则填写
+  redis_db: 0
+  redis_pool_size: 10
+
+# 服务器配置
+server:
+  host: "0.0.0.0"
+  port: 8080
+  grpc_port: 50051
+  metrics_port: 9091
+  
+  # 性能配置
+  workers: 1
+  max_connections: 1000
+  keepalive_timeout: 5
+  
+  # CORS 配置
+  cors_origins:
+    - "*"  # 生产环境应该配置具体的域名
+  cors_methods:
+    - "*"
+  cors_headers:
+    - "*"
+
+# AI 配置
+ai:
+  # OpenAI 配置
+  openai_api_key: "your_openai_api_key"
+  openai_base_url: null  # 如果使用代理或自定义端点
+  openai_model: "gpt-4"
+  
+  # Anthropic 配置
+  anthropic_api_key: "your_anthropic_api_key"
+  anthropic_model: "claude-3-sonnet-20240229"
+  
+  # 本地模型配置
+  local_model_path: null
+  embedding_model: "sentence-transformers/all-MiniLM-L6-v2"
+  
+  # 向量数据库配置
+  vector_db_type: "chromadb"
+  vector_db_path: "./data/vectordb"
+
+# 日志配置
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: "{time:YYYY-MM-DD HH:mm:ss} | {level} | {name}:{function}:{line} | {message}"
+  rotation: "1 day"
+  retention: "30 days"
+  compression: "gz"
+  
+  # 结构化日志
+  structured: true
+  json_format: false  # 生产环境建议设为 true
+  
+  # 日志文件路径
+  file_path: "./logs/laoke-service.log"
+
+# 监控配置
+monitoring:
+  # Prometheus 配置
+  prometheus_enabled: true
+  prometheus_path: "/metrics"
+  
+  # OpenTelemetry 配置
+  otel_enabled: false
+  otel_endpoint: null
+  otel_service_name: "laoke-service"
+  
+  # Sentry 配置
+  sentry_dsn: null
+  sentry_environment: "development"
+
+# 安全配置
+security:
+  # JWT 配置
+  jwt_secret_key: "your_jwt_secret_key_here"  # 生产环境必须更改
+  jwt_algorithm: "HS256"
+  jwt_expire_minutes: 30
+  
+  # API 密钥配置
+  api_keys: []
+  
+  # 加密配置
+  encryption_key: null 

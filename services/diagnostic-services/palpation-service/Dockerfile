@@ -1,5 +1,5 @@
 # 索克生活 - 触诊服务 Docker 镜像
-FROM python:3.11-slim
+FROM python:3.13.3-slim
 
 # 设置工作目录
 WORKDIR /app

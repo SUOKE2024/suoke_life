@@ -1,0 +1,345 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "laoke-service"
+version = "1.0.0"
+description = "老克智能体服务 - 索克生活平台的知识传播和社区管理智能体"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.13.3"
+authors = [
+    { name = "Suoke Life Team", email = "dev@suokelife.com" },
+]
+keywords = ["ai", "agent", "tcm", "knowledge", "community", "health"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Healthcare Industry",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
+    "Typing :: Typed",
+]
+
+dependencies = [
+    # 核心Web框架
+    "fastapi>=0.115.5,<1.0.0",
+    "uvicorn[standard]>=0.32.1,<1.0.0",
+    "pydantic>=2.9.0,<2.10.0",
+    "pydantic-settings>=2.6.1,<3.0.0",
+    
+    # 数据库和缓存
+    "sqlalchemy>=2.0.36,<3.0.0",
+    "asyncpg>=0.30.0,<1.0.0",
+    "redis>=5.2.0,<6.0.0",
+    "alembic>=1.14.0,<2.0.0",
+    
+    # HTTP客户端和网络
+    "httpx>=0.28.1,<1.0.0",
+    "aiohttp>=3.10.11,<4.0.0",
+    "websockets>=13.1,<14.0",
+    
+    # 配置和环境
+    "python-dotenv>=1.0.1,<2.0.0",
+    "pyyaml>=6.0.2,<7.0.0",
+    "toml>=0.10.2,<1.0.0",
+    
+    # 日志和监控
+    "loguru>=0.7.2,<1.0.0",
+    "structlog>=24.4.0,<25.0.0",
+    "prometheus-client>=0.21.0,<1.0.0",
+    "opentelemetry-api>=1.28.2,<2.0.0",
+    "opentelemetry-sdk>=1.28.2,<2.0.0",
+    "opentelemetry-instrumentation-fastapi>=0.49b2,<1.0.0",
+    
+    # 工具库
+    "tenacity>=9.0.0,<10.0.0",
+    "ujson>=5.10.0,<6.0.0",
+    "orjson>=3.10.12,<4.0.0",
+    "python-multipart>=0.0.12,<1.0.0",
+    "click>=8.1.7,<9.0.0",
+    "rich>=13.9.4,<14.0.0",
+    
+    # 安全和认证
+    "cryptography>=43.0.3,<44.0.0",
+    "python-jose[cryptography]>=3.3.0,<4.0.0",
+    "passlib[bcrypt]>=1.7.4,<2.0.0",
+    
+    # 数据处理
+    "pandas>=2.2.3,<3.0.0",
+    "numpy>=2.1.3,<3.0.0",
+    "scipy>=1.14.1,<2.0.0",
+    
+    # 时间处理
+    "arrow>=1.3.0,<2.0.0",
+    "pendulum>=3.0.0,<4.0.0",
+]
+
+[project.optional-dependencies]
+ai = [
+    # AI/ML依赖 - 可选安装
+    "torch>=2.5.1,<3.0.0",
+    "transformers>=4.46.3,<5.0.0",
+    "sentence-transformers>=3.3.1,<4.0.0",
+    "langchain>=0.3.7,<1.0.0",
+    "langchain-core>=0.3.15,<1.0.0",
+    "langchain-community>=0.3.7,<1.0.0",
+    "openai>=1.55.0,<2.0.0",
+    "anthropic>=0.40.0,<1.0.0",
+    "tiktoken>=0.8.0,<1.0.0",
+    "faiss-cpu>=1.9.0,<2.0.0",
+    "chromadb>=0.5.23,<1.0.0",
+]
+
+dev = [
+    # 测试框架
+    "pytest>=8.3.4,<9.0.0",
+    "pytest-asyncio>=0.24.0,<1.0.0",
+    "pytest-cov>=6.0.0,<7.0.0",
+    "pytest-mock>=3.14.0,<4.0.0",
+    "pytest-xdist>=3.6.0,<4.0.0",
+    "pytest-benchmark>=4.0.0,<5.0.0",
+    "httpx>=0.28.1,<1.0.0",  # 用于测试HTTP客户端
+    
+    # 代码质量工具
+    "ruff>=0.8.4,<1.0.0",
+    "black>=24.10.0,<25.0.0",
+    "isort>=5.13.2,<6.0.0",
+    "mypy>=1.13.0,<2.0.0",
+    "bandit>=1.7.10,<2.0.0",
+    "safety>=3.5.1,<4.0.0",
+    
+    # 类型检查相关
+    "types-redis>=4.6.0.20241004,<5.0.0",
+    "types-pyyaml>=6.0.12.20240917,<7.0.0",
+    "types-requests>=2.32.0.20241016,<3.0.0",
+    
+    # 文档生成
+    "mkdocs>=1.6.1,<2.0.0",
+    "mkdocs-material>=9.5.44,<10.0.0",
+    "mkdocstrings[python]>=0.27.2,<1.0.0",
+    
+    # 开发工具
+    "pre-commit>=4.0.1,<5.0.0",
+    "commitizen>=3.29.1,<4.0.0",
+    "invoke>=2.2.0,<3.0.0",
+]
+
+performance = [
+    # 性能优化依赖
+    "uvloop>=0.21.0,<1.0.0",
+    "cython>=3.0.11,<4.0.0",
+    "psutil>=6.0.0,<7.0.0",
+    "memory-profiler>=0.61.0,<1.0.0",
+    "py-spy>=0.3.14,<1.0.0",
+]
+
+monitoring = [
+    # 监控和可观测性
+    "prometheus-client>=0.21.0,<1.0.0",
+    "grafana-client>=3.7.0,<4.0.0",
+    "jaeger-client>=4.8.0,<5.0.0",
+    "sentry-sdk[fastapi]>=2.18.0,<3.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/suokelife/suoke_life"
+Documentation = "https://docs.suokelife.com/laoke-service"
+Repository = "https://github.com/suokelife/suoke_life"
+Issues = "https://github.com/suokelife/suoke_life/issues"
+Changelog = "https://github.com/suokelife/suoke_life/blob/main/CHANGELOG.md"
+
+[project.scripts]
+laoke-server = "laoke_service.cmd.server.main:main"
+laoke-cli = "laoke_service.cmd.cli.main:main"
+
+[tool.uv]
+dev-dependencies = [
+    "laoke-service[dev,performance,monitoring]",
+]
+
+[tool.uv.sources]
+# 如果需要使用本地开发版本的依赖
+# python-a2a = { path = "../../../common/python-a2a", editable = true }
+
+# Ruff 配置 (替代 flake8, isort 部分功能)
+[tool.ruff]
+target-version = "py313"
+line-length = 88
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+    "ARG", # flake8-unused-arguments
+    "SIM", # flake8-simplify
+    "TCH", # flake8-type-checking
+    "PTH", # flake8-use-pathlib
+    "ERA", # eradicate
+    "PL",  # pylint
+    "RUF", # ruff-specific rules
+]
+ignore = [
+    "E501",   # line too long, handled by black
+    "B008",   # do not perform function calls in argument defaults
+    "C901",   # too complex
+    "PLR0913", # too many arguments
+    "PLR0915", # too many statements
+]
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+]
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]
+"test_*.py" = ["ARG", "S101"]
+
+[tool.ruff.mccabe]
+max-complexity = 10
+
+[tool.ruff.isort]
+known-first-party = ["laoke_service"]
+
+# Black 配置
+[tool.black]
+line-length = 88
+target-version = ['py313']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+# MyPy 配置
+[tool.mypy]
+python_version = "3.13"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+show_error_codes = true
+
+[[tool.mypy.overrides]]
+module = [
+    "uvicorn.*",
+    "redis.*",
+    "sqlalchemy.*",
+    "alembic.*",
+    "prometheus_client.*",
+]
+ignore_missing_imports = true
+
+# Pytest 配置
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--cov=laoke_service",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+    "--cov-report=xml",
+    "--cov-fail-under=80",
+]
+testpaths = ["test"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+asyncio_mode = "auto"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+    "e2e: marks tests as end-to-end tests",
+]
+
+# Coverage 配置
+[tool.coverage.run]
+source = ["laoke_service"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "*/__pycache__/*",
+    "*/migrations/*",
+    "*/venv/*",
+    "*/.venv/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
+# Bandit 安全检查配置
+[tool.bandit]
+exclude_dirs = ["test", "tests", ".venv", "venv"]
+skips = ["B101", "B601"]
+
+# Commitizen 配置
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "1.0.0"
+tag_format = "v$version"
+version_files = [
+    "pyproject.toml:version",
+    "laoke_service/__init__.py:__version__",
+]
+
+# 性能分析配置
+[tool.py-spy]
+duration = 30
+rate = 100
+subprocesses = true

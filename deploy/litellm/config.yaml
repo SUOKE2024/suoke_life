@@ -1,0 +1,109 @@
+# LiteLLM网关配置
+# 统一管理多个LLM API，为索克生活项目的四个智能体提供服务
+
+model_list:
+  # OpenAI模型 - 用于通用对话和分析
+  - model_name: gpt-4
+    litellm_params:
+      model: openai/gpt-4
+      api_key: os.environ/OPENAI_API_KEY
+      max_tokens: 4096
+      temperature: 0.7
+  
+  - model_name: gpt-4-turbo
+    litellm_params:
+      model: openai/gpt-4-turbo-preview
+      api_key: os.environ/OPENAI_API_KEY
+      max_tokens: 4096
+      temperature: 0.7
+  
+  - model_name: gpt-3.5-turbo
+    litellm_params:
+      model: openai/gpt-3.5-turbo
+      api_key: os.environ/OPENAI_API_KEY
+      max_tokens: 4096
+      temperature: 0.7
+
+  # Anthropic Claude模型 - 用于复杂推理和医学分析
+  - model_name: claude-3-sonnet
+    litellm_params:
+      model: anthropic/claude-3-sonnet-20240229
+      api_key: os.environ/ANTHROPIC_API_KEY
+      max_tokens: 4096
+      temperature: 0.7
+  
+  - model_name: claude-3-haiku
+    litellm_params:
+      model: anthropic/claude-3-haiku-20240307
+      api_key: os.environ/ANTHROPIC_API_KEY
+      max_tokens: 4096
+      temperature: 0.7
+
+  # Google Gemini模型 - 用于多模态分析
+  - model_name: gemini-pro
+    litellm_params:
+      model: gemini/gemini-pro
+      api_key: os.environ/GOOGLE_API_KEY
+      max_tokens: 4096
+      temperature: 0.7
+
+# 智能体专用模型映射
+agent_model_mapping:
+  xiaoai:  # 小艾 - 健康评估专家
+    primary: "gpt-4"
+    fallback: ["claude-3-sonnet", "gpt-4-turbo"]
+    use_case: "health_assessment"
+  
+  xiaoke:  # 小克 - 症状分析专家
+    primary: "claude-3-sonnet"
+    fallback: ["gpt-4", "claude-3-haiku"]
+    use_case: "symptom_analysis"
+  
+  laoke:   # 老克 - 治疗建议专家
+    primary: "gpt-4-turbo"
+    fallback: ["claude-3-sonnet", "gpt-4"]
+    use_case: "treatment_advice"
+  
+  soer:    # 索儿 - 生活指导专家
+    primary: "gemini-pro"
+    fallback: ["gpt-3.5-turbo", "claude-3-haiku"]
+    use_case: "lifestyle_guide"
+
+# 负载均衡配置
+router_settings:
+  routing_strategy: "least-busy"
+  retry_policy:
+    max_retries: 3
+    retry_delay: 1.0
+  timeout: 30.0
+
+# 成本控制配置
+budget_manager:
+  max_budget: 1000.0  # 每月最大预算（美元）
+  budget_duration: "1mo"
+  alert_threshold: 0.8  # 80%时发送告警
+
+# 缓存配置
+cache:
+  type: "redis"
+  redis_host: "redis-service"
+  redis_port: 6379
+  ttl: 3600  # 1小时缓存
+
+# 监控配置
+litellm_settings:
+  telemetry: true
+  success_callback: ["prometheus"]
+  failure_callback: ["prometheus"]
+  
+# 日志配置
+logging:
+  level: "INFO"
+  format: "json"
+  
+# 安全配置
+security:
+  api_key_required: true
+  rate_limit:
+    requests_per_minute: 100
+    requests_per_hour: 1000 

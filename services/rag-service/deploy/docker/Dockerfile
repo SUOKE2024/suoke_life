@@ -4,7 +4,7 @@
 # ================================
 # 基础镜像阶段
 # ================================
-FROM python:3.11-slim as base
+FROM python:3.13.3-slim as base
 
 # 设置环境变量
 ENV PYTHONUNBUFFERED=1 \

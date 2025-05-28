@@ -1,4 +1,4 @@
-FROM python:3.12-slim AS builder
+FROM python:3.13.3-slim AS builder
 
 # 安装系统依赖
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -23,7 +23,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
 # 第二阶段，最小化镜像
-FROM python:3.12-slim
+FROM python:3.13.3-slim
 
 # 设置工作目录
 WORKDIR /app

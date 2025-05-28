@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """
 Corn Maze Service 测试客户端
@@ -7,14 +6,12 @@ Corn Maze Service 测试客户端
 该客户端用于测试 Corn Maze Service 的功能，包括创建迷宫、移动、获取用户进度等。
 """
 
-import grpc
 import argparse
-import sys
 import os
+import sys
 import uuid
-import json
-from datetime import datetime
-from typing import Dict, Any
+
+import grpc
 
 # 添加项目根目录到Python路径
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
@@ -29,7 +26,7 @@ except ImportError:
 
 class CornMazeClient:
     """Corn Maze Service 测试客户端"""
-    
+
     def __init__(self, host="localhost", port=50057, use_tls=False):
         """初始化客户端"""
         self.host = host
@@ -37,13 +34,13 @@ class CornMazeClient:
         self.channel = None
         self.stub = None
         self.use_tls = use_tls
-        
+
         self._connect()
-    
+
     def _connect(self):
         """连接到服务器"""
         target = f"{self.host}:{self.port}"
-        
+
         if self.use_tls:
             # 使用SSL/TLS加密连接
             credentials = grpc.ssl_channel_credentials()
@@ -51,25 +48,25 @@ class CornMazeClient:
         else:
             # 使用非加密连接
             self.channel = grpc.insecure_channel(target)
-        
+
         self.stub = corn_maze_pb2_grpc.CornMazeServiceStub(self.channel)
         print(f"连接到 Corn Maze Service: {target}")
-    
+
     def close(self):
         """关闭连接"""
         if self.channel:
             self.channel.close()
             print("连接已关闭")
-    
-    def create_maze(self, user_id=None, maze_type="四季养生", difficulty=2, 
+
+    def create_maze(self, user_id=None, maze_type="四季养生", difficulty=2,
                    health_attributes=None, use_template=False, template_id=None):
         """创建迷宫"""
         if user_id is None:
             user_id = f"test_user_{uuid.uuid4()}"
-        
+
         if health_attributes is None:
             health_attributes = {"体质": "气虚体质", "季节": "春季"}
-        
+
         request = corn_maze_pb2.CreateMazeRequest(
             user_id=user_id,
             maze_type=maze_type,
@@ -77,10 +74,10 @@ class CornMazeClient:
             health_attributes=health_attributes,
             use_template=use_template
         )
-        
+
         if use_template and template_id:
             request.template_id = template_id
-        
+
         print(f"创建{maze_type}迷宫，难度级别: {difficulty}...")
         try:
             response = self.stub.CreateMaze(request)
@@ -92,25 +89,25 @@ class CornMazeClient:
         except grpc.RpcError as e:
             print(f"迷宫创建失败: {e.details()}")
             return None
-    
+
     def get_maze(self, maze_id, user_id):
         """获取迷宫信息"""
         request = corn_maze_pb2.GetMazeRequest(
             maze_id=maze_id,
             user_id=user_id
         )
-        
+
         print(f"获取迷宫 {maze_id} 信息...")
         try:
             response = self.stub.GetMaze(request)
-            print(f"迷宫信息获取成功!")
+            print("迷宫信息获取成功!")
             print(f"迷宫类型: {response.maze_type}")
             print(f"迷宫大小: {response.size_x}x{response.size_y}")
             return response
         except grpc.RpcError as e:
             print(f"获取迷宫信息失败: {e.details()}")
             return None
-    
+
     def move_in_maze(self, maze_id, user_id, direction):
         """在迷宫中移动"""
         # 将方向字符串映射到枚举值
@@ -128,19 +125,19 @@ class CornMazeClient:
             "s": corn_maze_pb2.SOUTH,
             "w": corn_maze_pb2.WEST
         }
-        
+
         # 获取方向枚举值
         dir_value = direction_map.get(direction.lower())
         if dir_value is None:
             print(f"无效的方向: {direction}")
             return None
-        
+
         request = corn_maze_pb2.MoveRequest(
             maze_id=maze_id,
             user_id=user_id,
             direction=dir_value
         )
-        
+
         print(f"在迷宫 {maze_id} 中向 {direction} 移动...")
         try:
             response = self.stub.MoveInMaze(request)
@@ -156,18 +153,18 @@ class CornMazeClient:
         except grpc.RpcError as e:
             print(f"移动请求失败: {e.details()}")
             return None
-    
+
     def get_user_progress(self, user_id, maze_id):
         """获取用户进度"""
         request = corn_maze_pb2.UserProgressRequest(
             user_id=user_id,
             maze_id=maze_id
         )
-        
+
         print(f"获取用户 {user_id} 在迷宫 {maze_id} 中的进度...")
         try:
             response = self.stub.GetUserProgress(request)
-            print(f"进度获取成功!")
+            print("进度获取成功!")
             print(f"当前位置: ({response.current_position.x}, {response.current_position.y})")
             print(f"完成百分比: {response.completion_percentage}%")
             print(f"已访问单元格: {len(response.visited_cells)}")
@@ -177,7 +174,7 @@ class CornMazeClient:
         except grpc.RpcError as e:
             print(f"获取进度失败: {e.details()}")
             return None
-    
+
     def list_maze_templates(self, maze_type="", difficulty=0, page=1, page_size=10):
         """列出迷宫模板"""
         request = corn_maze_pb2.ListMazeTemplatesRequest(
@@ -186,20 +183,20 @@ class CornMazeClient:
             page=page,
             page_size=page_size
         )
-        
+
         filter_msg = []
         if maze_type:
             filter_msg.append(f"类型={maze_type}")
         if difficulty > 0:
             filter_msg.append(f"难度={difficulty}")
-        
+
         filter_str = f"筛选条件: {', '.join(filter_msg)}" if filter_msg else "无筛选条件"
         print(f"获取迷宫模板列表 ({filter_str})...")
-        
+
         try:
             response = self.stub.ListMazeTemplates(request)
             print(f"模板列表获取成功! 总数: {response.total}")
-            
+
             for i, template in enumerate(response.templates, 1):
                 print(f"\n模板 {i}:")
                 print(f"  ID: {template.template_id}")
@@ -207,22 +204,22 @@ class CornMazeClient:
                 print(f"  类型: {template.maze_type}")
                 print(f"  难度: {template.difficulty}")
                 print(f"  尺寸: {template.size_x}x{template.size_y}")
-            
+
             return response
         except grpc.RpcError as e:
             print(f"获取模板列表失败: {e.details()}")
             return None
-    
+
     def get_knowledge_node(self, node_id):
         """获取知识节点"""
         request = corn_maze_pb2.KnowledgeNodeRequest(
             node_id=node_id
         )
-        
+
         print(f"获取知识节点 {node_id}...")
         try:
             response = self.stub.GetKnowledgeNode(request)
-            print(f"知识节点获取成功!")
+            print("知识节点获取成功!")
             print(f"标题: {response.node.title}")
             print(f"分类: {response.node.category}")
             print(f"难度级别: {response.node.difficulty_level}")
@@ -231,8 +228,8 @@ class CornMazeClient:
         except grpc.RpcError as e:
             print(f"获取知识节点失败: {e.details()}")
             return None
-    
-    def record_maze_completion(self, user_id, maze_id, steps_taken=100, 
+
+    def record_maze_completion(self, user_id, maze_id, steps_taken=100,
                               time_spent_seconds=300, knowledge_nodes_discovered=5,
                               challenges_completed=3):
         """记录迷宫完成情况"""
@@ -244,14 +241,14 @@ class CornMazeClient:
             knowledge_nodes_discovered=knowledge_nodes_discovered,
             challenges_completed=challenges_completed
         )
-        
+
         print(f"记录用户 {user_id} 完成迷宫 {maze_id}...")
         try:
             response = self.stub.RecordMazeCompletion(request)
             if response.success:
                 print(f"记录成功! 完成ID: {response.completion_id}")
                 print(f"获得积分: {response.points_earned}")
-                
+
                 if response.rewards:
                     print("获得奖励:")
                     for reward in response.rewards:
@@ -268,10 +265,10 @@ def demo_maze_exploration(client, user_id=None, steps=10):
     """演示迷宫探索流程"""
     if user_id is None:
         user_id = f"demo_user_{uuid.uuid4()}"
-    
+
     print("\n=== 开始迷宫探索演示 ===\n")
     print(f"用户ID: {user_id}")
-    
+
     # 创建迷宫
     maze = client.create_maze(
         user_id=user_id,
@@ -279,49 +276,49 @@ def demo_maze_exploration(client, user_id=None, steps=10):
         difficulty=2,
         health_attributes={"体质": "气虚体质", "季节": "春季"}
     )
-    
+
     if not maze:
         print("演示无法继续，迷宫创建失败")
         return
-    
+
     maze_id = maze.maze_id
-    
+
     # 获取用户初始进度
     progress = client.get_user_progress(user_id, maze_id)
-    
+
     if not progress:
         print("演示无法继续，无法获取用户进度")
         return
-    
+
     # 移动方向顺序
     directions = ["east", "south", "east", "north", "east", "south", "south", "west", "south", "east"]
-    
+
     # 确保我们有足够的方向
     while len(directions) < steps:
         directions.extend(["east", "south", "west", "north"])
-    
+
     # 只保留需要的步数
     directions = directions[:steps]
-    
+
     # 开始移动
     print(f"\n开始移动 ({steps} 步):")
-    
+
     for i, direction in enumerate(directions, 1):
         print(f"\n=== 步骤 {i}/{steps} ===")
         move_result = client.move_in_maze(maze_id, user_id, direction)
-        
+
         if not move_result:
             print(f"步骤 {i} 失败，演示中断")
             break
-        
+
         # 如果遇到知识点，获取知识点详情
         if move_result.event_type == "KNOWLEDGE":
             client.get_knowledge_node(move_result.event_id)
-    
+
     # 获取最终进度
     print("\n=== 最终进度 ===")
     client.get_user_progress(user_id, maze_id)
-    
+
     # 记录迷宫完成情况
     print("\n=== 记录完成情况 ===")
     client.record_maze_completion(
@@ -332,7 +329,7 @@ def demo_maze_exploration(client, user_id=None, steps=10):
         knowledge_nodes_discovered=2,
         challenges_completed=1
     )
-    
+
     print("\n=== 演示结束 ===\n")
 
 
@@ -344,11 +341,11 @@ def main():
     parser.add_argument("--tls", action="store_true", help="使用TLS加密连接")
     parser.add_argument("--demo", action="store_true", help="运行演示模式")
     parser.add_argument("--steps", type=int, default=10, help="演示模式中的移动步数")
-    
+
     args = parser.parse_args()
-    
+
     client = CornMazeClient(host=args.host, port=args.port, use_tls=args.tls)
-    
+
     try:
         if args.demo:
             demo_maze_exploration(client, steps=args.steps)
@@ -365,9 +362,9 @@ def main():
                 print("7. 记录迷宫完成情况")
                 print("8. 运行演示")
                 print("0. 退出")
-                
+
                 choice = input("\n请选择操作 (0-8): ")
-                
+
                 if choice == "0":
                     break
                 elif choice == "1":
@@ -412,4 +409,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main() 
+    main()

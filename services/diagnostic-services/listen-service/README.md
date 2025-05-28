@@ -1,201 +1,338 @@
-# 闻诊服务 (Listen Service)
+# 索克生活闻诊服务
 
-闻诊服务是索克生活 APP 的核心微服务之一，负责中医四诊中的"闻"诊环节。该服务专注于音频处理和分析，提供语音特征提取、声音分析、情绪识别、方言检测和语音转写等功能，为智能体小艾提供听觉感知能力。
+基于AI的中医闻诊音频分析服务，采用Python 3.13.3和现代化技术栈构建。
 
-**开发状态：已完成 (100%)**
+## 功能特性
 
-## 功能特点
-
-- **语音特征分析**：分析语音中的特征（如音调、语速、气息特征等），提取中医相关特性
-- **声音分析**：识别和分析非语言声音（如咳嗽声、呼吸声、心音等）
-- **情绪分析**：从语音中分析情绪状态，支持中医五志（喜、怒、忧、思、恐）分析
-- **方言检测**：识别用户使用的方言类型及地区
-- **语音转写**：将语音转换为文本，支持后续的文本分析
-- **批量分析**：支持一次请求进行多种音频分析，提高效率
-- **四诊合参**：与其他诊断服务（望诊、问诊、切诊）集成，支持中医四诊合参
+- 🎵 **音频特征提取** - 支持多种音频格式的特征分析
+- 🏥 **中医诊断** - 基于传统中医理论的智能诊断
+- 🔄 **缓存系统** - 支持内存和Redis缓存
+- 📊 **性能监控** - 实时性能指标和健康检查
+- 🌐 **双协议支持** - 同时支持REST API和gRPC
+- 🔒 **安全认证** - 支持Token认证和访问控制
+- 📝 **结构化日志** - 基于structlog的现代化日志系统
 
 ## 技术栈
 
-- **开发语言**：Python 3.10+
-- **框架**：gRPC, FastAPI
-- **音频处理**：librosa, parselmouth, soundfile
-- **机器学习**：PyTorch, scikit-learn
-- **数据存储**：MongoDB
-- **缓存**：Redis
-- **监控**：Prometheus, Grafana
-- **容器化**：Docker, Kubernetes
-- **消息队列**：Kafka
-
-## 架构设计
-
-闻诊服务采用分层架构设计：
-
-- **API 层**：提供 gRPC 接口，定义在 `api/grpc/listen_service.proto`
-- **交付层**：实现 gRPC 服务接口，位于 `internal/delivery/`
-- **核心层**：包含音频处理和分析核心逻辑，位于 `internal/audio/`
-- **集成层**：负责与其他服务集成，实现四诊合参，位于 `internal/integration/`
-- **存储层**：负责数据持久化，位于 `internal/repository/`
-- **模型层**：定义数据模型，位于 `internal/model/`
-- **工具层**：提供配置加载、指标收集等功能，位于 `pkg/utils/`
-
-## 系统要求
-
-- Python 3.10 或更高版本
-- 至少 4GB RAM
-- 支持 CUDA 的 GPU（推荐用于生产环境）
-- 足够的磁盘空间用于模型存储（约 2GB）
+- **Python 3.13.3** - 最新Python版本
+- **UV** - 现代化包管理器
+- **FastAPI** - 高性能Web框架
+- **gRPC** - 高效RPC通信
+- **Pydantic v2** - 数据验证和序列化
+- **AsyncIO** - 异步处理
+- **Structlog** - 结构化日志
+- **Pytest** - 测试框架
+- **Ruff** - 代码质量工具
+- **MyPy** - 类型检查
 
 ## 快速开始
 
-### 使用 Docker Compose
+### 环境要求
+
+- Python 3.13.3+
+- UV包管理器
+
+### 安装UV
 
 ```bash
-# 克隆仓库
-git clone https://github.com/SUOKE2024/suoke_life.git
-cd suoke_life/services/listen-service
-
-# 创建环境变量文件
-cp .env-example .env
-
-# 启动服务
-docker-compose up -d
+curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-### 本地开发
+### 安装依赖
 
 ```bash
-# 安装依赖
-pip install -r requirements.txt
+# 开发环境
+make dev
 
-# 启动服务
-python cmd/server.py
+# 生产环境
+make install
 ```
 
-## 模型训练
-
-服务需要多个机器学习模型，可通过提供的训练脚本进行训练：
+### 启动服务
 
 ```bash
-# 训练语音特征分析模型
-python scripts/model_training/train_voice_model.py \
-    --data_dir /path/to/voice/dataset \
-    --config config/model_training/voice_model.yaml \
-    --output_dir models/voice_feature_analyzer
+# 启动REST API服务器
+make run-rest
 
-# 训练声音分析模型
-python scripts/model_training/train_sound_model.py \
-    --data_dir /path/to/sound/dataset \
-    --config config/model_training/sound_model.yaml \
-    --output_dir models/sound_feature_analyzer
+# 启动gRPC服务器
+make run-grpc
 
-# 训练情绪分析模型
-python scripts/model_training/train_emotion_model.py \
-    --data_dir /path/to/emotion/dataset \
-    --config config/model_training/emotion_model.yaml \
-    --output_dir models/emotion_detector
+# 启动混合服务器（同时支持REST和gRPC）
+make run-hybrid
 ```
 
-更多模型训练详情请参阅 `docs/models.md` 文档。
-
-## API 文档
-
-服务使用 gRPC 协议，API 定义位于 `api/grpc/listen_service.proto`。主要接口包括：
-
-- `AnalyzeVoice`：分析语音特征
-- `AnalyzeSound`：分析非语言声音
-- `AnalyzeEmotion`：分析情绪
-- `DetectDialect`：检测方言
-- `TranscribeAudio`：语音转写
-- `BatchAnalyze`：批量分析
-- `HealthCheck`：健康检查
-
-## 集成与四诊合参
-
-闻诊服务支持与其他诊断服务的集成，实现中医四诊合参。主要集成点：
-
-- **与小艾服务集成**：提供诊断结果给智能体小艾
-- **与问诊服务集成**：结合问诊结果增强诊断准确性
-- **与望诊服务集成**：结合望诊结果进行综合分析
-- **与切诊服务集成**：结合切诊结果提高诊断完整性
-
-集成配置位于 `config/integration.yaml`，集成实现位于 `internal/integration/` 目录。
-
-## 性能测试
-
-服务提供性能测试工具，位于 `test/performance/load_test.py`，可用于测试服务在高负载下的表现：
+### 开发模式
 
 ```bash
-# 运行负载测试
-python test/performance/load_test.py \
-    --host localhost \
-    --port 50052 \
-    --test-data /path/to/test/audio \
-    --total-requests 1000 \
-    --concurrency 20 \
-    --output-dir ./test_results
+# 开发模式（自动重载）
+make dev-rest
 ```
 
-## 部署指南
+## API文档
 
-### Docker 部署
+启动服务后，访问以下地址查看API文档：
+
+- **Swagger UI**: http://localhost:8000/docs
+- **ReDoc**: http://localhost:8000/redoc
+- **OpenAPI JSON**: http://localhost:8000/openapi.json
+
+## 主要接口
+
+### 音频分析
 
 ```bash
-# 构建镜像
-docker build -t suoke/listen-service:latest .
-
-# 运行容器
-docker run -d -p 50052:50052 -p 9090:9090 \
-  -v $(pwd)/config:/app/config \
-  -v $(pwd)/models:/app/models \
-  --name listen-service suoke/listen-service:latest
+curl -X POST "http://localhost:8000/api/v1/analyze/audio" \
+  -H "Content-Type: multipart/form-data" \
+  -F "file=@test_audio.wav" \
+  -F "analysis_type=basic"
 ```
 
-### Kubernetes 部署
+### 中医诊断
 
 ```bash
-# 部署到 Kubernetes
-kubectl apply -f deploy/kubernetes/listen-service.yaml
+curl -X POST "http://localhost:8000/api/v1/analyze/tcm" \
+  -H "Content-Type: multipart/form-data" \
+  -F "file=@test_audio.wav" \
+  -F "enable_constitution_analysis=true"
 ```
 
-## 监控
+### 健康检查
 
-服务提供 Prometheus 指标，可通过 `/metrics` 端点访问。主要指标包括：
+```bash
+curl http://localhost:8000/health
+```
 
-- 请求计数和延迟
-- 音频处理时间和大小
-- 模型推理时间和置信度
-- 资源使用情况（CPU、内存、GPU）
-- 错误计数和类型
+### 统计信息
 
-预配置的 Grafana 仪表盘位于 `deploy/grafana/dashboards/`。
+```bash
+curl http://localhost:8000/stats
+```
+
+## 开发工具
+
+### 代码质量
+
+```bash
+# 代码检查
+make lint
+
+# 代码格式化
+make format
+
+# 运行测试
+make test
+
+# 测试覆盖率
+make test-cov
+```
+
+### 测试
+
+```bash
+# 单元测试
+make test
+
+# 集成测试
+make integration-test
+
+# 性能测试
+make perf-test
+
+# 完整测试
+make test-all
+```
+
+### 清理
+
+```bash
+# 清理临时文件
+make clean
+
+# 清理缓存
+make clear-cache
+```
+
+## 项目结构
+
+```
+listen_service/
+├── __init__.py
+├── core/                   # 核心业务逻辑
+│   ├── audio_analyzer.py   # 音频分析器
+│   └── tcm_analyzer.py     # 中医分析器
+├── models/                 # 数据模型
+│   ├── audio_models.py     # 音频相关模型
+│   └── tcm_models.py       # 中医相关模型
+├── config/                 # 配置管理
+│   └── settings.py         # 设置配置
+├── utils/                  # 工具模块
+│   ├── cache.py           # 缓存工具
+│   ├── logging.py         # 日志工具
+│   └── performance.py     # 性能监控
+├── delivery/              # 接口层
+│   ├── grpc_server.py     # gRPC服务器
+│   └── rest_api.py        # REST API
+└── cmd/                   # 命令行工具
+    └── server.py          # 服务器启动器
+```
 
 ## 配置
 
-配置文件位于 `config/` 目录，包括以下主要配置文件：
+### 环境变量
 
-- `config.yaml`：主要服务配置
-- `integration.yaml`：服务集成配置
-- `tcm_knowledge/feature_constitution_map.json`：声音特征与中医体质映射关系
+```bash
+# 服务配置
+LISTEN_SERVICE_HOST=0.0.0.0
+LISTEN_SERVICE_PORT=8000
+LISTEN_SERVICE_GRPC_PORT=50051
 
-## 文档
+# 缓存配置
+CACHE_BACKEND=memory  # memory 或 redis
+REDIS_URL=redis://localhost:6379
 
-详细文档位于 `docs/` 目录：
+# 日志配置
+LOG_LEVEL=INFO
+LOG_FORMAT=json  # json, console, plain
 
-- `models.md`：模型详细说明
-- `api/`：API 使用说明
-- `development/`：开发指南
-- `testing/`：测试指南
+# 认证配置
+AUTH_ENABLED=false
+AUTH_SECRET_KEY=your-secret-key
+```
 
-## 贡献
+### 配置文件
 
-欢迎贡献代码、报告问题或提出改进建议。请遵循以下流程：
+创建 `.env` 文件：
 
-1. Fork 仓库
-2. 创建特性分支 (`git checkout -b feature/amazing-feature`)
-3. 提交更改 (`git commit -m 'Add some amazing feature'`)
-4. 推送到分支 (`git push origin feature/amazing-feature`)
-5. 创建合并请求
+```bash
+cp .env.example .env
+```
+
+## Docker部署
+
+### 构建镜像
+
+```bash
+make docker-build
+```
+
+### 运行容器
+
+```bash
+make docker-run
+```
+
+### Docker Compose
+
+```yaml
+version: '3.8'
+services:
+  listen-service:
+    build: .
+    ports:
+      - "8000:8000"
+      - "50051:50051"
+    environment:
+      - CACHE_BACKEND=redis
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - redis
+  
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+```
+
+## 监控和日志
+
+### 健康检查
+
+```bash
+make health-check
+```
+
+### 性能指标
+
+```bash
+make metrics
+```
+
+### 查看日志
+
+```bash
+make logs
+```
+
+## 中医诊断功能
+
+### 支持的体质类型
+
+- 平和质 - 身体健康平衡
+- 气虚质 - 气力不足
+- 阳虚质 - 阳气不足
+- 阴虚质 - 阴液不足
+- 痰湿质 - 痰湿内盛
+- 湿热质 - 湿热内蕴
+- 血瘀质 - 血液瘀滞
+- 气郁质 - 气机郁滞
+- 特禀质 - 特殊体质
+
+### 情绪状态分析
+
+基于中医五志理论：
+- 喜 - 心志过度
+- 怒 - 肝气郁结
+- 忧 - 肺气不宣
+- 思 - 脾气虚弱
+- 恐 - 肾气不足
+
+### 脏腑功能评估
+
+- 心 - 主血脉，藏神
+- 肝 - 主疏泄，藏血
+- 脾 - 主运化，统血
+- 肺 - 主气，司呼吸
+- 肾 - 主水，藏精
+
+## 贡献指南
+
+1. Fork项目
+2. 创建功能分支
+3. 提交更改
+4. 推送到分支
+5. 创建Pull Request
+
+### 开发流程
+
+```bash
+# 设置开发环境
+make setup-dev
+
+# 开发工作流
+make dev-workflow
+
+# 发布准备
+make release-prep
+```
 
 ## 许可证
 
-Copyright © 2024 SUOKE Life. All rights reserved. 
+MIT License
+
+## 联系方式
+
+- 项目主页: https://github.com/suoke-life/listen-service
+- 问题反馈: https://github.com/suoke-life/listen-service/issues
+- 邮箱: support@suoke.life
+
+## 更新日志
+
+### v1.0.0 (2024-01-XX)
+
+- ✨ 初始版本发布
+- 🎵 音频特征提取功能
+- 🏥 中医诊断分析
+- 🌐 REST API和gRPC支持
+- 📊 性能监控和健康检查
+- 🔄 缓存系统
+- 📝 结构化日志 

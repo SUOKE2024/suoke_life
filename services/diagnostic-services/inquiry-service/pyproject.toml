@@ -1,35 +1,237 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [project]
 name = "inquiry-service"
 version = "1.0.0"
-description = "inquiry-service - 索克生活微服务"
-requires-python = ">=3.11"
+description = "问诊服务 - 索克生活智能健康管理平台的核心诊断服务"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [
+    { name = "Suoke Life Team", email = "dev@suokelife.com" }
+]
+maintainers = [
+    { name = "Suoke Life Team", email = "dev@suokelife.com" }
+]
+keywords = ["tcm", "health", "diagnosis", "ai", "grpc"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Healthcare Industry",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Scientific/Engineering :: Medical Science Apps.",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
+requires-python = ">=3.13.3"
 dependencies = [
+    # Web Framework
     "fastapi>=0.115.0,<1.0.0",
     "uvicorn[standard]>=0.32.0,<1.0.0",
+    
+    # Data Validation & Settings
     "pydantic>=2.10.0,<3.0.0",
     "pydantic-settings>=2.6.0,<3.0.0",
+    
+    # HTTP Client
     "httpx>=0.28.0,<1.0.0",
+    
+    # Database & Cache
     "redis>=5.2.0,<6.0.0",
     "sqlalchemy>=2.0.36,<3.0.0",
     "asyncpg>=0.30.0,<1.0.0",
+    "alembic>=1.13.0,<2.0.0",
+    
+    # Configuration & Environment
     "python-dotenv>=1.0.1,<2.0.0",
     "pyyaml>=6.0.2,<7.0.0",
+    
+    # Logging & Monitoring
     "loguru>=0.7.2,<1.0.0",
+    "structlog>=24.4.0,<25.0.0",
+    "prometheus-client>=0.21.0,<1.0.0",
+    
+    # Reliability & Resilience
     "tenacity>=9.0.0,<10.0.0",
+    "circuit-breaker>=1.0.0,<2.0.0",
+    
+    # gRPC & Protobuf
+    "grpcio>=1.62.0,<2.0.0",
+    "grpcio-tools>=1.62.0,<2.0.0",
+    "protobuf>=5.28.0,<6.0.0",
+    
+    # AI & ML
+    "openai>=1.54.0,<2.0.0",
+    "anthropic>=0.39.0,<1.0.0",
+    "tiktoken>=0.8.0,<1.0.0",
+    
+    # Data Processing
+    "pandas>=2.2.0,<3.0.0",
+    "numpy>=2.1.0,<3.0.0",
+    "scikit-learn>=1.5.0,<2.0.0",
+    
+    # Text Processing
+    "jieba>=0.42.1,<1.0.0",
+    "pypinyin>=0.53.0,<1.0.0",
+    
+    # Utilities
+    "python-dateutil>=2.9.0,<3.0.0",
+    "pytz>=2024.2",
+    "uuid7>=0.1.0,<1.0.0",
 ]
 
 [project.optional-dependencies]
 dev = [
+    # Testing
     "pytest>=8.3.0,<9.0.0",
     "pytest-asyncio>=0.24.0,<1.0.0",
-    "black>=24.10.0,<25.0.0",
-    "isort>=5.13.0,<6.0.0",
+    "pytest-cov>=6.0.0,<7.0.0",
+    "pytest-mock>=3.14.0,<4.0.0",
+    "pytest-xdist>=3.6.0,<4.0.0",
+    "pytest-benchmark>=4.0.0,<5.0.0",
+    "httpx>=0.28.0,<1.0.0",  # For testing HTTP clients
+    
+    # Code Quality
+    "ruff>=0.8.0,<1.0.0",
+    "mypy>=1.13.0,<2.0.0",
+    "pre-commit>=4.0.0,<5.0.0",
+    
+    # Documentation
+    "mkdocs>=1.6.0,<2.0.0",
+    "mkdocs-material>=9.5.0,<10.0.0",
+    "mkdocstrings[python]>=0.26.0,<1.0.0",
+    
+    # Development Tools
+    "ipython>=8.29.0,<9.0.0",
+    "rich>=13.9.0,<14.0.0",
 ]
 
-[tool.black]
-line-length = 88
-target-version = ['py311', 'py312', 'py313']
+production = [
+    # Production monitoring
+    "sentry-sdk[fastapi]>=2.18.0,<3.0.0",
+    "opentelemetry-api>=1.28.0,<2.0.0",
+    "opentelemetry-sdk>=1.28.0,<2.0.0",
+    "opentelemetry-instrumentation-fastapi>=0.49b2,<1.0.0",
+    "opentelemetry-instrumentation-grpc>=0.49b2,<1.0.0",
+]
 
-[tool.isort]
-profile = "black"
-line_length = 88
+[project.urls]
+Homepage = "https://github.com/suokelife/suoke_life"
+Documentation = "https://docs.suokelife.com/services/inquiry-service"
+Repository = "https://github.com/suokelife/suoke_life"
+Issues = "https://github.com/suokelife/suoke_life/issues"
+Changelog = "https://github.com/suokelife/suoke_life/blob/main/CHANGELOG.md"
+
+[project.scripts]
+inquiry-service = "inquiry_service.cmd.server:main"
+
+# Tool configurations
+[tool.ruff]
+target-version = "py313"
+line-length = 88
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+    "ARG", # flake8-unused-arguments
+    "SIM", # flake8-simplify
+    "TCH", # flake8-type-checking
+    "PTH", # flake8-use-pathlib
+    "ERA", # eradicate
+    "PL",  # pylint
+    "RUF", # ruff-specific rules
+]
+ignore = [
+    "E501",   # line too long, handled by formatter
+    "B008",   # do not perform function calls in argument defaults
+    "PLR0913", # too many arguments to function call
+    "PLR0915", # too many statements
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+[tool.ruff.isort]
+known-first-party = ["inquiry_service"]
+force-sort-within-sections = true
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+show_error_codes = true
+
+[[tool.mypy.overrides]]
+module = [
+    "grpc.*",
+    "jieba.*",
+    "pypinyin.*",
+]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--cov=inquiry_service",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+    "--cov-report=xml",
+    "--cov-fail-under=80",
+]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+    "e2e: marks tests as end-to-end tests",
+]
+
+[tool.coverage.run]
+source = ["inquiry_service"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "*/__pycache__/*",
+    "*/migrations/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]

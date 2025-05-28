@@ -1,20 +1,26 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """
 监控指标模块 - 增强版本
 """
 
-import time
-import logging
-import functools
-import asyncio
-from typing import Dict, Any, Optional, Callable, List
-from datetime import datetime, timedelta
 from collections import defaultdict, deque
+from collections.abc import Callable
+from datetime import datetime
+import functools
+import logging
+import time
+from typing import Any
 
 try:
-    from prometheus_client import Counter, Histogram, Gauge, Info, start_http_server, Summary
+    from prometheus_client import (
+        Counter,
+        Gauge,
+        Histogram,
+        Info,
+        Summary,
+        start_http_server,
+    )
     PROMETHEUS_AVAILABLE = True
 except ImportError:
     PROMETHEUS_AVAILABLE = False
@@ -29,7 +35,7 @@ if PROMETHEUS_AVAILABLE:
         'Total number of maze operations',
         ['operation', 'maze_type', 'status']
     )
-    
+
     # 迷宫生成时间直方图
     maze_generation_duration = Histogram(
         'maze_generation_duration_seconds',
@@ -37,7 +43,7 @@ if PROMETHEUS_AVAILABLE:
         ['maze_type', 'difficulty'],
         buckets=[0.1, 0.5, 1.0, 2.0, 5.0, 10.0, 30.0, 60.0]
     )
-    
+
     # API请求时间直方图
     api_request_duration = Histogram(
         'api_request_duration_seconds',
@@ -45,74 +51,74 @@ if PROMETHEUS_AVAILABLE:
         ['method', 'endpoint', 'status'],
         buckets=[0.01, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5, 5.0, 10.0]
     )
-    
+
     # 缓存操作计数器
     cache_operations_total = Counter(
         'cache_operations_total',
         'Total number of cache operations',
         ['operation', 'backend', 'status']
     )
-    
+
     # 数据库操作计数器
     db_operations_total = Counter(
         'db_operations_total',
         'Total number of database operations',
         ['operation', 'table', 'status']
     )
-    
+
     # 活跃迷宫数量
     active_mazes_gauge = Gauge(
         'active_mazes_total',
         'Number of active mazes',
         ['maze_type']
     )
-    
+
     # 用户活跃度
     active_users_gauge = Gauge(
         'active_users_total',
         'Number of active users'
     )
-    
+
     # 错误计数器
     errors_total = Counter(
         'errors_total',
         'Total number of errors',
         ['component', 'error_type', 'severity']
     )
-    
+
     # 系统信息
     system_info = Info(
         'system_info',
         'System information'
     )
-    
+
     # 缓存命中率
     cache_hit_rate = Gauge(
         'cache_hit_rate',
         'Cache hit rate',
         ['cache_type']
     )
-    
+
     # 内存使用量
     memory_usage_bytes = Gauge(
         'memory_usage_bytes',
         'Memory usage in bytes',
         ['component']
     )
-    
+
     # 响应时间摘要
     response_time_summary = Summary(
         'response_time_seconds',
         'Response time summary',
         ['service', 'method']
     )
-    
+
     # 并发连接数
     concurrent_connections = Gauge(
         'concurrent_connections',
         'Number of concurrent connections'
     )
-    
+
     # 队列长度
     queue_length = Gauge(
         'queue_length',
@@ -131,7 +137,7 @@ else:
         def time(self): return self
         def __enter__(self): return self
         def __exit__(self, *args): pass
-    
+
     maze_operations_total = DummyMetric()
     maze_generation_duration = DummyMetric()
     api_request_duration = DummyMetric()
@@ -148,7 +154,7 @@ else:
     queue_length = DummyMetric()
 
 # 内存中的指标存储（用于非Prometheus环境）
-_metrics_store: Dict[str, Any] = {
+_metrics_store: dict[str, Any] = {
     "maze_operations": defaultdict(int),
     "generation_times": deque(maxlen=1000),
     "api_requests": defaultdict(lambda: deque(maxlen=100)),
@@ -172,7 +178,7 @@ def start_metrics_server(port: int = 8000):
         try:
             start_http_server(port)
             logger.info(f"Prometheus指标服务器已启动，端口: {port}")
-            
+
             # 设置系统信息
             system_info.info({
                 'version': '1.0.0',
@@ -180,9 +186,9 @@ def start_metrics_server(port: int = 8000):
                 'python_version': '3.9+',
                 'started_at': datetime.now().isoformat()
             })
-            
+
         except Exception as e:
-            logger.error(f"启动Prometheus指标服务器失败: {str(e)}")
+            logger.error(f"启动Prometheus指标服务器失败: {e!s}")
     else:
         logger.warning("Prometheus不可用，指标服务器未启动")
 
@@ -193,17 +199,17 @@ def maze_generation_time(func: Callable) -> Callable:
         start_time = time.time()
         maze_type = kwargs.get('maze_type', 'unknown')
         difficulty = kwargs.get('difficulty', 0)
-        
+
         try:
             result = await func(*args, **kwargs)
             duration = time.time() - start_time
-            
+
             # 记录Prometheus指标
             maze_generation_duration.labels(
                 maze_type=maze_type,
                 difficulty=str(difficulty)
             ).observe(duration)
-            
+
             # 记录内存指标
             _metrics_store["generation_times"].append({
                 "maze_type": maze_type,
@@ -212,7 +218,7 @@ def maze_generation_time(func: Callable) -> Callable:
                 "timestamp": datetime.now().isoformat(),
                 "success": True
             })
-            
+
             # 检查是否为慢操作
             if duration > 5.0:  # 超过5秒认为是慢操作
                 _performance_tracker["slow_operations"].append({
@@ -222,14 +228,14 @@ def maze_generation_time(func: Callable) -> Callable:
                     "duration": duration,
                     "timestamp": datetime.now().isoformat()
                 })
-            
+
             logger.info(f"迷宫生成完成，类型: {maze_type}, 难度: {difficulty}, 耗时: {duration:.2f}秒")
             return result
-            
+
         except Exception as e:
             duration = time.time() - start_time
             record_maze_generation_error(maze_type, "generation_failed")
-            
+
             # 记录失败的生成尝试
             _metrics_store["generation_times"].append({
                 "maze_type": maze_type,
@@ -239,10 +245,10 @@ def maze_generation_time(func: Callable) -> Callable:
                 "success": False,
                 "error": str(e)
             })
-            
-            logger.error(f"迷宫生成失败，类型: {maze_type}, 难度: {difficulty}, 耗时: {duration:.2f}秒, 错误: {str(e)}")
+
+            logger.error(f"迷宫生成失败，类型: {maze_type}, 难度: {difficulty}, 耗时: {duration:.2f}秒, 错误: {e!s}")
             raise
-    
+
     return wrapper
 
 def api_request_time(endpoint: str):
@@ -253,33 +259,33 @@ def api_request_time(endpoint: str):
             start_time = time.time()
             method = getattr(func, '__name__', 'unknown')
             status = 'success'
-            
+
             try:
                 result = await func(*args, **kwargs)
                 return result
-                
+
             except Exception as e:
                 status = 'error'
                 # 记录错误模式
                 error_pattern = f"{method}:{type(e).__name__}"
                 _performance_tracker["error_patterns"][error_pattern] += 1
                 raise
-                
+
             finally:
                 duration = time.time() - start_time
-                
+
                 # 记录Prometheus指标
                 api_request_duration.labels(
                     method=method,
                     endpoint=endpoint,
                     status=status
                 ).observe(duration)
-                
+
                 response_time_summary.labels(
                     service='maze_service',
                     method=method
                 ).observe(duration)
-                
+
                 # 记录内存指标
                 key = f"{method}:{endpoint}"
                 _metrics_store["api_requests"][key].append({
@@ -287,7 +293,7 @@ def api_request_time(endpoint: str):
                     "status": status,
                     "timestamp": datetime.now().isoformat()
                 })
-                
+
                 # 检查慢请求
                 if duration > 2.0:  # 超过2秒认为是慢请求
                     _performance_tracker["slow_operations"].append({
@@ -298,7 +304,7 @@ def api_request_time(endpoint: str):
                         "status": status,
                         "timestamp": datetime.now().isoformat()
                     })
-        
+
         return wrapper
     return decorator
 
@@ -309,7 +315,7 @@ def record_maze_operation(operation: str, maze_type: str, difficulty: int):
         maze_type=maze_type,
         status='success'
     ).inc()
-    
+
     # 内存指标
     key = f"{operation}:{maze_type}"
     _metrics_store["maze_operations"][key] += 1
@@ -321,13 +327,13 @@ def record_maze_error(operation: str, error_type: str):
         maze_type='unknown',
         status='error'
     ).inc()
-    
+
     errors_total.labels(
         component='maze_service',
         error_type=error_type,
         severity='error'
     ).inc()
-    
+
     # 内存指标
     key = f"{operation}:{error_type}"
     _metrics_store["errors"][key] += 1
@@ -339,7 +345,7 @@ def record_maze_generation_error(maze_type: str, error_type: str):
         error_type=error_type,
         severity='error'
     ).inc()
-    
+
     # 内存指标
     key = f"generation:{maze_type}:{error_type}"
     _metrics_store["errors"][key] += 1
@@ -351,7 +357,7 @@ def record_maze_creation(maze_type: str, difficulty: int):
         maze_type=maze_type,
         status='success'
     ).inc()
-    
+
     # 内存指标
     key = f"create:{maze_type}:{difficulty}"
     _metrics_store["maze_operations"][key] += 1
@@ -363,7 +369,7 @@ def record_cache_operation(operation: str, backend: str, status: str = 'success'
         backend=backend,
         status=status
     ).inc()
-    
+
     # 内存指标
     key = f"{operation}:{backend}:{status}"
     _metrics_store["cache_operations"][key] += 1
@@ -375,7 +381,7 @@ def record_db_operation(operation: str, table: str, status: str = 'success'):
         table=table,
         status=status
     ).inc()
-    
+
     # 内存指标
     key = f"{operation}:{table}:{status}"
     _metrics_store["db_operations"][key] += 1
@@ -383,28 +389,28 @@ def record_db_operation(operation: str, table: str, status: str = 'success'):
 def update_active_mazes_count(maze_type: str, count: int):
     """更新活跃迷宫数量"""
     active_mazes_gauge.labels(maze_type=maze_type).set(count)
-    
+
     # 内存指标
     _metrics_store["system_stats"][f"active_mazes_{maze_type}"] = count
 
 def update_active_users_count(count: int):
     """更新活跃用户数量"""
     active_users_gauge.set(count)
-    
+
     # 内存指标
     _metrics_store["system_stats"]["active_users"] = count
 
 def update_cache_hit_rate(cache_type: str, hit_rate: float):
     """更新缓存命中率"""
     cache_hit_rate.labels(cache_type=cache_type).set(hit_rate)
-    
+
     # 内存指标
     _metrics_store["system_stats"][f"cache_hit_rate_{cache_type}"] = hit_rate
 
 def update_memory_usage(component: str, bytes_used: int):
     """更新内存使用量"""
     memory_usage_bytes.labels(component=component).set(bytes_used)
-    
+
     # 内存指标
     _metrics_store["system_stats"][f"memory_usage_{component}"] = bytes_used
 
@@ -418,7 +424,7 @@ def update_queue_length(queue_type: str, length: int):
     queue_length.labels(queue_type=queue_type).set(length)
     _metrics_store["system_stats"][f"queue_length_{queue_type}"] = length
 
-def get_metrics_summary() -> Dict[str, Any]:
+def get_metrics_summary() -> dict[str, Any]:
     """获取指标摘要"""
     summary = {
         "timestamp": datetime.now().isoformat(),
@@ -426,7 +432,7 @@ def get_metrics_summary() -> Dict[str, Any]:
         "metrics_store": dict(_metrics_store),
         "performance_tracker": dict(_performance_tracker)
     }
-    
+
     # 计算生成时间统计
     if _metrics_store["generation_times"]:
         successful_times = [item["duration"] for item in _metrics_store["generation_times"] if item.get("success", True)]
@@ -439,7 +445,7 @@ def get_metrics_summary() -> Dict[str, Any]:
                 "p95_duration": _calculate_percentile(successful_times, 95),
                 "p99_duration": _calculate_percentile(successful_times, 99)
             }
-    
+
     # 计算错误率
     total_operations = sum(_metrics_store["maze_operations"].values())
     total_errors = sum(_metrics_store["errors"].values())
@@ -447,7 +453,7 @@ def get_metrics_summary() -> Dict[str, Any]:
         summary["error_rate"] = total_errors / (total_operations + total_errors)
     else:
         summary["error_rate"] = 0.0
-    
+
     # 计算API性能统计
     api_stats = {}
     for endpoint, requests in _metrics_store["api_requests"].items():
@@ -461,7 +467,7 @@ def get_metrics_summary() -> Dict[str, Any]:
                 "p95_duration": _calculate_percentile(durations, 95)
             }
     summary["api_stats"] = api_stats
-    
+
     # 慢操作统计
     summary["slow_operations_count"] = len(_performance_tracker["slow_operations"])
     summary["top_error_patterns"] = dict(sorted(
@@ -469,14 +475,14 @@ def get_metrics_summary() -> Dict[str, Any]:
         key=lambda x: x[1],
         reverse=True
     )[:10])
-    
+
     return summary
 
-def _calculate_percentile(data: List[float], percentile: int) -> float:
+def _calculate_percentile(data: list[float], percentile: int) -> float:
     """计算百分位数"""
     if not data:
         return 0.0
-    
+
     sorted_data = sorted(data)
     index = int((percentile / 100.0) * len(sorted_data))
     if index >= len(sorted_data):
@@ -511,12 +517,12 @@ def monitor_performance(component: str):
         async def wrapper(*args, **kwargs):
             start_time = time.time()
             start_memory = _get_memory_usage()
-            
+
             try:
                 result = await func(*args, **kwargs)
                 status = 'success'
                 return result
-                
+
             except Exception as e:
                 status = 'error'
                 errors_total.labels(
@@ -525,12 +531,12 @@ def monitor_performance(component: str):
                     severity='error'
                 ).inc()
                 raise
-                
+
             finally:
                 duration = time.time() - start_time
                 end_memory = _get_memory_usage()
                 memory_delta = end_memory - start_memory
-                
+
                 # 记录性能数据
                 perf_data = {
                     "component": component,
@@ -540,33 +546,34 @@ def monitor_performance(component: str):
                     "status": status,
                     "timestamp": datetime.now().isoformat()
                 }
-                
+
                 _metrics_store["performance_data"][component].append(perf_data)
-                
+
                 # 保持最近1000条记录
                 if len(_metrics_store["performance_data"][component]) > 1000:
                     _metrics_store["performance_data"][component] = _metrics_store["performance_data"][component][-1000:]
-                
+
                 # 记录资源使用
                 _performance_tracker["resource_usage"].append({
                     "timestamp": datetime.now().isoformat(),
                     "memory_usage": end_memory,
                     "active_operations": len(_metrics_store["performance_data"])
                 })
-                
+
                 logger.debug(f"{component}.{func.__name__} - 耗时: {duration:.3f}s, 内存变化: {memory_delta}MB")
-                
+
                 # 更新内存使用量
                 update_memory_usage(component, end_memory)
-        
+
         return wrapper
     return decorator
 
 def _get_memory_usage() -> int:
     """获取当前内存使用量（字节）"""
     try:
-        import psutil
         import os
+
+        import psutil
         process = psutil.Process(os.getpid())
         return process.memory_info().rss
     except:
@@ -580,9 +587,9 @@ def record_health_check(component: str, status: str, duration: float):
         'Health check duration',
         ['component', 'status']
     ) if PROMETHEUS_AVAILABLE else DummyMetric()
-    
+
     health_check_duration.labels(component=component, status=status).observe(duration)
-    
+
     # 内存指标
     key = f"health_check:{component}:{status}"
     _metrics_store["system_stats"][key] = {
@@ -598,9 +605,9 @@ def record_user_action(action: str, user_id: str, maze_type: str = None):
         'Total user actions',
         ['action', 'maze_type']
     ) if PROMETHEUS_AVAILABLE else DummyMetric()
-    
+
     user_actions_total.labels(action=action, maze_type=maze_type or 'unknown').inc()
-    
+
     # 内存指标
     key = f"user_action:{action}:{maze_type or 'unknown'}"
     _metrics_store["maze_operations"][key] += 1

@@ -20,13 +20,13 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.13",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
     "Topic :: Scientific/Engineering :: Medical Science Apps.",
 ]
-requires-python = ">=3.11"
+requires-python = ">=3.13.3"
 dependencies = [
     "fastapi>=0.104.0",
     "uvicorn[standard]>=0.24.0",
@@ -113,7 +113,7 @@ accessibility_service = [
 
 [tool.black]
 line-length = 88
-target-version = ['py311', 'py312', 'py313']
+target-version = ['py313']
 include = '\.pyi?$'
 extend-exclude = '''
 /(

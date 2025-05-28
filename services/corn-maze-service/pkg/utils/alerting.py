@@ -1,27 +1,25 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """
 监控告警系统 - 支持多种告警渠道和规则配置
 """
 
-import asyncio
-import logging
-import time
-import json
-from typing import Dict, List, Optional, Any, Callable, Union
-from datetime import datetime, timedelta
-from enum import Enum
-from dataclasses import dataclass, field
 from abc import ABC, abstractmethod
+import asyncio
+from dataclasses import dataclass, field
+from datetime import datetime
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from enum import Enum
+import logging
+import smtplib
+import time
+from typing import Any
 
 import aiohttp
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-import smtplib
 
 from pkg.utils.cache import CacheManager
-from pkg.utils.metrics import get_metric_value, errors_total
+from pkg.utils.metrics import get_metric_value
 
 logger = logging.getLogger(__name__)
 
@@ -46,13 +44,13 @@ class Alert:
     level: AlertLevel
     status: AlertStatus
     message: str
-    labels: Dict[str, str] = field(default_factory=dict)
-    annotations: Dict[str, str] = field(default_factory=dict)
+    labels: dict[str, str] = field(default_factory=dict)
+    annotations: dict[str, str] = field(default_factory=dict)
     starts_at: datetime = field(default_factory=datetime.now)
-    ends_at: Optional[datetime] = None
-    generator_url: Optional[str] = None
-    
-    def to_dict(self) -> Dict[str, Any]:
+    ends_at: datetime | None = None
+    generator_url: str | None = None
+
+    def to_dict(self) -> dict[str, Any]:
         """转换为字典"""
         return {
             "id": self.id,
@@ -76,15 +74,15 @@ class AlertRule:
     duration: int  # 持续时间（秒）
     level: AlertLevel
     message_template: str
-    labels: Dict[str, str] = field(default_factory=dict)
-    annotations: Dict[str, str] = field(default_factory=dict)
+    labels: dict[str, str] = field(default_factory=dict)
+    annotations: dict[str, str] = field(default_factory=dict)
     enabled: bool = True
-    
+
     def evaluate(self, metric_value: float) -> bool:
         """评估规则"""
         if not self.enabled:
             return False
-        
+
         if self.condition == "gt":  # 大于
             return metric_value > self.threshold
         elif self.condition == "lt":  # 小于
@@ -97,7 +95,7 @@ class AlertRule:
             return metric_value <= self.threshold
         else:
             return False
-    
+
     def format_message(self, metric_value: float, **kwargs) -> str:
         """格式化告警消息"""
         return self.message_template.format(
@@ -108,12 +106,12 @@ class AlertRule:
 
 class AlertChannel(ABC):
     """告警渠道抽象基类"""
-    
+
     @abstractmethod
     async def send_alert(self, alert: Alert) -> bool:
         """发送告警"""
         pass
-    
+
     @abstractmethod
     async def test_connection(self) -> bool:
         """测试连接"""
@@ -121,7 +119,7 @@ class AlertChannel(ABC):
 
 class EmailChannel(AlertChannel):
     """邮件告警渠道"""
-    
+
     def __init__(
         self,
         smtp_host: str,
@@ -129,7 +127,7 @@ class EmailChannel(AlertChannel):
         username: str,
         password: str,
         from_email: str,
-        to_emails: List[str],
+        to_emails: list[str],
         use_tls: bool = True
     ):
         self.smtp_host = smtp_host
@@ -139,7 +137,7 @@ class EmailChannel(AlertChannel):
         self.from_email = from_email
         self.to_emails = to_emails
         self.use_tls = use_tls
-    
+
     async def send_alert(self, alert: Alert) -> bool:
         """发送邮件告警"""
         try:
@@ -148,34 +146,34 @@ class EmailChannel(AlertChannel):
             msg['From'] = self.from_email
             msg['To'] = ', '.join(self.to_emails)
             msg['Subject'] = f"[{alert.level.value.upper()}] {alert.name}"
-            
+
             # 邮件正文
             body = self._format_email_body(alert)
             msg.attach(MIMEText(body, 'html'))
-            
+
             # 发送邮件
             await asyncio.get_event_loop().run_in_executor(
                 None, self._send_email, msg
             )
-            
+
             logger.info(f"邮件告警发送成功: {alert.name}")
             return True
-            
+
         except Exception as e:
-            logger.error(f"邮件告警发送失败: {str(e)}")
+            logger.error(f"邮件告警发送失败: {e!s}")
             return False
-    
+
     def _send_email(self, msg: MIMEMultipart):
         """同步发送邮件"""
         server = smtplib.SMTP(self.smtp_host, self.smtp_port)
-        
+
         if self.use_tls:
             server.starttls()
-        
+
         server.login(self.username, self.password)
         server.send_message(msg)
         server.quit()
-    
+
     def _format_email_body(self, alert: Alert) -> str:
         """格式化邮件正文"""
         return f"""
@@ -198,8 +196,8 @@ class EmailChannel(AlertChannel):
         </body>
         </html>
         """
-    
-    def _format_labels_table(self, labels: Dict[str, str]) -> str:
+
+    def _format_labels_table(self, labels: dict[str, str]) -> str:
         """格式化标签表格"""
         rows = ''.join([f'<tr><td>{k}</td><td>{v}</td></tr>' for k, v in labels.items()])
         return f"""
@@ -208,8 +206,8 @@ class EmailChannel(AlertChannel):
             {rows}
         </table>
         """
-    
-    def _format_annotations_table(self, annotations: Dict[str, str]) -> str:
+
+    def _format_annotations_table(self, annotations: dict[str, str]) -> str:
         """格式化注释表格"""
         rows = ''.join([f'<tr><td>{k}</td><td>{v}</td></tr>' for k, v in annotations.items()])
         return f"""
@@ -218,7 +216,7 @@ class EmailChannel(AlertChannel):
             {rows}
         </table>
         """
-    
+
     async def test_connection(self) -> bool:
         """测试邮件连接"""
         try:
@@ -227,9 +225,9 @@ class EmailChannel(AlertChannel):
             )
             return True
         except Exception as e:
-            logger.error(f"邮件连接测试失败: {str(e)}")
+            logger.error(f"邮件连接测试失败: {e!s}")
             return False
-    
+
     def _test_smtp_connection(self):
         """测试SMTP连接"""
         server = smtplib.SMTP(self.smtp_host, self.smtp_port)
@@ -240,19 +238,19 @@ class EmailChannel(AlertChannel):
 
 class WebhookChannel(AlertChannel):
     """Webhook告警渠道"""
-    
+
     def __init__(
         self,
         url: str,
         method: str = "POST",
-        headers: Optional[Dict[str, str]] = None,
+        headers: dict[str, str] | None = None,
         timeout: float = 30.0
     ):
         self.url = url
         self.method = method.upper()
         self.headers = headers or {"Content-Type": "application/json"}
         self.timeout = timeout
-    
+
     async def send_alert(self, alert: Alert) -> bool:
         """发送Webhook告警"""
         try:
@@ -261,7 +259,7 @@ class WebhookChannel(AlertChannel):
                 "timestamp": datetime.now().isoformat(),
                 "source": "corn-maze-service"
             }
-            
+
             async with aiohttp.ClientSession() as session:
                 async with session.request(
                     self.method,
@@ -276,11 +274,11 @@ class WebhookChannel(AlertChannel):
                     else:
                         logger.error(f"Webhook告警发送失败: HTTP {response.status}")
                         return False
-                        
+
         except Exception as e:
-            logger.error(f"Webhook告警发送失败: {str(e)}")
+            logger.error(f"Webhook告警发送失败: {e!s}")
             return False
-    
+
     async def test_connection(self) -> bool:
         """测试Webhook连接"""
         try:
@@ -289,7 +287,7 @@ class WebhookChannel(AlertChannel):
                 "timestamp": datetime.now().isoformat(),
                 "source": "corn-maze-service"
             }
-            
+
             async with aiohttp.ClientSession() as session:
                 async with session.request(
                     self.method,
@@ -299,17 +297,17 @@ class WebhookChannel(AlertChannel):
                     timeout=aiohttp.ClientTimeout(total=self.timeout)
                 ) as response:
                     return response.status < 400
-                    
+
         except Exception as e:
-            logger.error(f"Webhook连接测试失败: {str(e)}")
+            logger.error(f"Webhook连接测试失败: {e!s}")
             return False
 
 class SlackChannel(AlertChannel):
     """Slack告警渠道"""
-    
+
     def __init__(self, webhook_url: str):
         self.webhook_url = webhook_url
-    
+
     async def send_alert(self, alert: Alert) -> bool:
         """发送Slack告警"""
         try:
@@ -320,7 +318,7 @@ class SlackChannel(AlertChannel):
                 AlertLevel.ERROR: "#ff0000",     # 红色
                 AlertLevel.CRITICAL: "#8b0000"   # 深红色
             }
-            
+
             payload = {
                 "attachments": [
                     {
@@ -344,7 +342,7 @@ class SlackChannel(AlertChannel):
                     }
                 ]
             }
-            
+
             # 添加标签字段
             if alert.labels:
                 for key, value in alert.labels.items():
@@ -353,7 +351,7 @@ class SlackChannel(AlertChannel):
                         "value": value,
                         "short": True
                     })
-            
+
             async with aiohttp.ClientSession() as session:
                 async with session.post(
                     self.webhook_url,
@@ -366,18 +364,18 @@ class SlackChannel(AlertChannel):
                     else:
                         logger.error(f"Slack告警发送失败: HTTP {response.status}")
                         return False
-                        
+
         except Exception as e:
-            logger.error(f"Slack告警发送失败: {str(e)}")
+            logger.error(f"Slack告警发送失败: {e!s}")
             return False
-    
+
     async def test_connection(self) -> bool:
         """测试Slack连接"""
         try:
             test_payload = {
                 "text": "测试消息 - 索克生活监控系统连接正常"
             }
-            
+
             async with aiohttp.ClientSession() as session:
                 async with session.post(
                     self.webhook_url,
@@ -385,30 +383,30 @@ class SlackChannel(AlertChannel):
                     timeout=aiohttp.ClientTimeout(total=30.0)
                 ) as response:
                     return response.status == 200
-                    
+
         except Exception as e:
-            logger.error(f"Slack连接测试失败: {str(e)}")
+            logger.error(f"Slack连接测试失败: {e!s}")
             return False
 
 class AlertManager:
     """告警管理器"""
-    
-    def __init__(self, cache_manager: Optional[CacheManager] = None):
+
+    def __init__(self, cache_manager: CacheManager | None = None):
         self.cache_manager = cache_manager or CacheManager()
-        self.rules: Dict[str, AlertRule] = {}
-        self.channels: Dict[str, AlertChannel] = {}
-        self.active_alerts: Dict[str, Alert] = {}
-        self.rule_states: Dict[str, Dict[str, Any]] = {}
-        
+        self.rules: dict[str, AlertRule] = {}
+        self.channels: dict[str, AlertChannel] = {}
+        self.active_alerts: dict[str, Alert] = {}
+        self.rule_states: dict[str, dict[str, Any]] = {}
+
         # 告警抑制规则
-        self.suppression_rules: List[Dict[str, Any]] = []
-        
+        self.suppression_rules: list[dict[str, Any]] = []
+
         # 运行状态
         self._running = False
-        self._evaluation_task: Optional[asyncio.Task] = None
-        
+        self._evaluation_task: asyncio.Task | None = None
+
         logger.info("告警管理器初始化完成")
-    
+
     def add_rule(self, rule: AlertRule):
         """添加告警规则"""
         self.rules[rule.name] = rule
@@ -418,50 +416,50 @@ class AlertManager:
             "alert_fired": False
         }
         logger.info(f"添加告警规则: {rule.name}")
-    
+
     def remove_rule(self, rule_name: str):
         """移除告警规则"""
         if rule_name in self.rules:
             del self.rules[rule_name]
             del self.rule_states[rule_name]
             logger.info(f"移除告警规则: {rule_name}")
-    
+
     def add_channel(self, name: str, channel: AlertChannel):
         """添加告警渠道"""
         self.channels[name] = channel
         logger.info(f"添加告警渠道: {name}")
-    
+
     def remove_channel(self, name: str):
         """移除告警渠道"""
         if name in self.channels:
             del self.channels[name]
             logger.info(f"移除告警渠道: {name}")
-    
+
     async def start(self, evaluation_interval: int = 30):
         """启动告警管理器"""
         if self._running:
             logger.warning("告警管理器已在运行")
             return
-        
+
         self._running = True
         self._evaluation_task = asyncio.create_task(
             self._evaluation_loop(evaluation_interval)
         )
         logger.info(f"告警管理器已启动，评估间隔: {evaluation_interval}秒")
-    
+
     async def stop(self):
         """停止告警管理器"""
         self._running = False
-        
+
         if self._evaluation_task:
             self._evaluation_task.cancel()
             try:
                 await self._evaluation_task
             except asyncio.CancelledError:
                 pass
-        
+
         logger.info("告警管理器已停止")
-    
+
     async def _evaluation_loop(self, interval: int):
         """评估循环"""
         while self._running:
@@ -471,40 +469,40 @@ class AlertManager:
             except asyncio.CancelledError:
                 break
             except Exception as e:
-                logger.error(f"告警规则评估失败: {str(e)}")
+                logger.error(f"告警规则评估失败: {e!s}")
                 await asyncio.sleep(interval)
-    
+
     async def _evaluate_rules(self):
         """评估所有告警规则"""
         for rule_name, rule in self.rules.items():
             try:
                 await self._evaluate_rule(rule_name, rule)
             except Exception as e:
-                logger.error(f"评估规则 {rule_name} 失败: {str(e)}")
-    
+                logger.error(f"评估规则 {rule_name} 失败: {e!s}")
+
     async def _evaluate_rule(self, rule_name: str, rule: AlertRule):
         """评估单个告警规则"""
         if not rule.enabled:
             return
-        
+
         # 获取指标值（这里需要根据实际的指标系统实现）
         metric_value = await self._get_metric_value(rule_name)
         if metric_value is None:
             return
-        
+
         state = self.rule_states[rule_name]
         current_time = time.time()
-        
+
         # 评估条件
         condition_met = rule.evaluate(metric_value)
-        
+
         if condition_met:
             state["consecutive_violations"] += 1
-            
+
             # 检查是否达到持续时间要求
             if (state["consecutive_violations"] * 30 >= rule.duration and  # 假设评估间隔30秒
                 not state["alert_fired"]):
-                
+
                 # 触发告警
                 alert = Alert(
                     id=f"{rule_name}_{int(current_time)}",
@@ -516,22 +514,22 @@ class AlertManager:
                     annotations=rule.annotations.copy(),
                     starts_at=datetime.now()
                 )
-                
+
                 await self._fire_alert(alert)
                 state["alert_fired"] = True
-                
+
         else:
             # 条件不满足，重置计数器
             if state["alert_fired"]:
                 # 解决告警
                 await self._resolve_alert(rule_name)
                 state["alert_fired"] = False
-            
+
             state["consecutive_violations"] = 0
-        
+
         state["last_evaluation"] = current_time
-    
-    async def _get_metric_value(self, rule_name: str) -> Optional[float]:
+
+    async def _get_metric_value(self, rule_name: str) -> float | None:
         """获取指标值"""
         # 这里应该根据实际的指标系统实现
         # 例如从Prometheus、自定义指标等获取
@@ -546,9 +544,9 @@ class AlertManager:
             else:
                 return 0.0
         except Exception as e:
-            logger.error(f"获取指标值失败: {str(e)}")
+            logger.error(f"获取指标值失败: {e!s}")
             return None
-    
+
     async def _fire_alert(self, alert: Alert):
         """触发告警"""
         # 检查告警抑制
@@ -556,10 +554,10 @@ class AlertManager:
             alert.status = AlertStatus.SUPPRESSED
             logger.info(f"告警被抑制: {alert.name}")
             return
-        
+
         # 存储活跃告警
         self.active_alerts[alert.id] = alert
-        
+
         # 发送到所有渠道
         for channel_name, channel in self.channels.items():
             try:
@@ -569,17 +567,17 @@ class AlertManager:
                 else:
                     logger.error(f"告警发送失败 [{channel_name}]: {alert.name}")
             except Exception as e:
-                logger.error(f"告警发送异常 [{channel_name}]: {str(e)}")
-        
+                logger.error(f"告警发送异常 [{channel_name}]: {e!s}")
+
         # 缓存告警
         await self.cache_manager.set(
             f"alert:{alert.id}",
             alert.to_dict(),
             ttl=86400  # 24小时
         )
-        
+
         logger.info(f"告警已触发: {alert.name}")
-    
+
     async def _resolve_alert(self, rule_name: str):
         """解决告警"""
         # 查找对应的活跃告警
@@ -588,62 +586,62 @@ class AlertManager:
             if alert.name == rule_name:
                 alert_to_resolve = alert
                 break
-        
+
         if alert_to_resolve:
             alert_to_resolve.status = AlertStatus.RESOLVED
             alert_to_resolve.ends_at = datetime.now()
-            
+
             # 发送解决通知
             for channel_name, channel in self.channels.items():
                 try:
                     await channel.send_alert(alert_to_resolve)
                 except Exception as e:
-                    logger.error(f"告警解决通知发送失败 [{channel_name}]: {str(e)}")
-            
+                    logger.error(f"告警解决通知发送失败 [{channel_name}]: {e!s}")
+
             # 从活跃告警中移除
             del self.active_alerts[alert_to_resolve.id]
-            
+
             logger.info(f"告警已解决: {rule_name}")
-    
+
     async def _is_suppressed(self, alert: Alert) -> bool:
         """检查告警是否被抑制"""
         for rule in self.suppression_rules:
             if self._match_suppression_rule(alert, rule):
                 return True
         return False
-    
-    def _match_suppression_rule(self, alert: Alert, rule: Dict[str, Any]) -> bool:
+
+    def _match_suppression_rule(self, alert: Alert, rule: dict[str, Any]) -> bool:
         """匹配抑制规则"""
         # 简单的标签匹配实现
         for key, value in rule.get("matchers", {}).items():
             if alert.labels.get(key) != value:
                 return False
         return True
-    
-    async def get_active_alerts(self) -> List[Alert]:
+
+    async def get_active_alerts(self) -> list[Alert]:
         """获取活跃告警"""
         return list(self.active_alerts.values())
-    
-    async def get_alert_history(self, limit: int = 100) -> List[Dict[str, Any]]:
+
+    async def get_alert_history(self, limit: int = 100) -> list[dict[str, Any]]:
         """获取告警历史"""
         # 从缓存中获取历史告警
         history = []
         # 这里应该实现从缓存或数据库获取历史告警的逻辑
         return history
-    
-    async def test_channels(self) -> Dict[str, bool]:
+
+    async def test_channels(self) -> dict[str, bool]:
         """测试所有告警渠道"""
         results = {}
         for name, channel in self.channels.items():
             try:
                 results[name] = await channel.test_connection()
             except Exception as e:
-                logger.error(f"测试渠道 {name} 失败: {str(e)}")
+                logger.error(f"测试渠道 {name} 失败: {e!s}")
                 results[name] = False
         return results
 
 # 预定义的告警规则
-def get_default_alert_rules() -> List[AlertRule]:
+def get_default_alert_rules() -> list[AlertRule]:
     """获取默认告警规则"""
     return [
         AlertRule(
@@ -689,11 +687,11 @@ def get_default_alert_rules() -> List[AlertRule]:
     ]
 
 # 全局告警管理器
-_alert_manager: Optional[AlertManager] = None
+_alert_manager: AlertManager | None = None
 
 def get_alert_manager() -> AlertManager:
     """获取全局告警管理器"""
     global _alert_manager
     if _alert_manager is None:
         _alert_manager = AlertManager()
-    return _alert_manager 
+    return _alert_manager

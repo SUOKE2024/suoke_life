@@ -2,7 +2,7 @@
 name = "health-data-service"
 version = "0.1.0"
 description = "Add your description here"
-requires-python = ">=3.11"
+requires-python = ">=3.13.3"
 dependencies = [
     "aiocache>=0.12.2",
     "aiohttp>=3.9.1",
@@ -85,4 +85,8 @@ dependencies = [
     "xmltodict>=0.13.0",
     "yoyo-migrations>=8.2.0",
     "zstandard>=0.22.0",
+]
+
+classifiers = [
+    "Programming Language :: Python :: 3.13",
 ]

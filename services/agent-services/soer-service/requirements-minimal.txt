@@ -1,0 +1,16 @@
+# 最小依赖 - 用于基础功能测试
+fastapi>=0.110.0
+uvicorn[standard]>=0.27.1
+pydantic>=2.5.3
+pydantic-settings>=2.0.0
+python-json-logger>=2.0.0
+prometheus-client>=0.19.0
+motor>=3.3.2
+redis>=5.0.1
+asyncpg>=0.29.0
+python-dotenv>=1.0.1
+httpx>=0.25.2
+
+# 测试依赖
+pytest>=8.0.0
+pytest-asyncio>=0.23.4 
