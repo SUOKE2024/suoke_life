@@ -3,8 +3,6 @@ SuokeBench gRPC服务实现
 """
 
 import logging
-import time
-from typing import Dict, List, Optional
 
 import grpc
 
@@ -32,7 +30,7 @@ class SuokeBenchGrpcService(benchmark_pb2_grpc.BenchmarkServiceServicer):
     def __init__(self, config: BenchConfig):
         """
         初始化gRPC服务
-        
+
         Args:
             config: 服务配置
         """
@@ -48,17 +46,17 @@ class SuokeBenchGrpcService(benchmark_pb2_grpc.BenchmarkServiceServicer):
         """
         try:
             logger.info(f"接收到运行基准测试请求: {request.benchmark_id}, {request.model_id}:{request.model_version}")
-            
+
             # 运行基准测试
             run_id = self.benchmark_engine.run_benchmark(
                 benchmark_id=request.benchmark_id,
                 model_id=request.model_id,
                 model_version=request.model_version,
-                parameters={k: v for k, v in request.parameters.items()},
+                parameters=dict(request.parameters.items()),
             )
-            
+
             logger.info(f"基准测试启动成功: {run_id}")
-            
+
             return benchmark_pb2.RunBenchmarkResponse(
                 run_id=run_id,
                 status="RUNNING",
@@ -81,15 +79,15 @@ class SuokeBenchGrpcService(benchmark_pb2_grpc.BenchmarkServiceServicer):
         """
         try:
             logger.info(f"接收到获取基准测试结果请求: {request.run_id}")
-            
+
             # 获取结果
             result = self.benchmark_engine.get_benchmark_result(request.run_id)
-            
+
             if not result:
                 context.set_code(grpc.StatusCode.NOT_FOUND)
                 context.set_details(f"找不到运行ID: {request.run_id}")
                 return benchmark_pb2.GetBenchmarkResultResponse()
-            
+
             # 构建响应
             response = benchmark_pb2.GetBenchmarkResultResponse(
                 run_id=result["run_id"],
@@ -101,16 +99,16 @@ class SuokeBenchGrpcService(benchmark_pb2_grpc.BenchmarkServiceServicer):
                 created_at=result["created_at"],
                 completed_at=result["completed_at"] or "",
             )
-            
+
             # 添加指标
             for name, metric in result["metrics"].items():
                 response.metrics[name].CopyFrom(self._convert_metric(name, metric))
-            
+
             # 如果需要，添加样本详情
             if request.include_details and "samples" in result:
                 for sample in result["samples"]:
                     response.samples.append(self._convert_sample(sample))
-            
+
             logger.info(f"成功获取基准测试结果: {request.run_id}")
             return response
         except Exception as e:
@@ -127,13 +125,13 @@ class SuokeBenchGrpcService(benchmark_pb2_grpc.BenchmarkServiceServicer):
         """
         try:
             logger.info("接收到列出基准测试请求")
-            
+
             # 获取基准测试列表
             benchmarks = self.benchmark_engine.list_benchmarks(
                 task_filter=request.task_filter or None,
                 tag=request.tag or None,
             )
-            
+
             # 构建响应
             response = benchmark_pb2.ListBenchmarksResponse()
             for bench in benchmarks:
@@ -144,10 +142,10 @@ class SuokeBenchGrpcService(benchmark_pb2_grpc.BenchmarkServiceServicer):
                     task=bench["task"],
                     tags=bench["tags"],
                 )
-                
+
                 # 添加支持的指标
                 benchmark_info.metrics.extend(bench["metrics"])
-                
+
                 # 添加支持的参数
                 for param_name, param in bench["parameters"].items():
                     param_info = benchmark_pb2.ParameterInfo(
@@ -156,9 +154,9 @@ class SuokeBenchGrpcService(benchmark_pb2_grpc.BenchmarkServiceServicer):
                         default_value=param.get("default", ""),
                     )
                     benchmark_info.parameters.append(param_info)
-                
+
                 response.benchmarks.append(benchmark_info)
-            
+
             logger.info(f"成功列出 {len(response.benchmarks)} 个基准测试")
             return response
         except Exception as e:
@@ -175,29 +173,29 @@ class SuokeBenchGrpcService(benchmark_pb2_grpc.BenchmarkServiceServicer):
         """
         try:
             logger.info(f"接收到比较基准测试请求: {request.baseline_run_id} vs {request.compare_run_id}")
-            
+
             # 执行比较
             comparison = self.benchmark_engine.compare_benchmarks(
                 baseline_run_id=request.baseline_run_id,
                 compare_run_id=request.compare_run_id,
             )
-            
+
             if not comparison:
                 context.set_code(grpc.StatusCode.NOT_FOUND)
                 context.set_details("找不到一个或多个运行ID")
                 return benchmark_pb2.CompareBenchmarksResponse()
-            
+
             # 构建响应
             response = benchmark_pb2.CompareBenchmarksResponse(
                 baseline_model=f"{comparison['baseline_model']['id']}:{comparison['baseline_model']['version']}",
                 compare_model=f"{comparison['compare_model']['id']}:{comparison['compare_model']['version']}",
                 summary=comparison["summary"],
             )
-            
+
             # 添加指标比较
             for name, metric in comparison["metrics"].items():
                 response.metrics[name].CopyFrom(self._convert_metric_comparison(name, metric))
-            
+
             # 添加样本比较
             for case in comparison["case_comparisons"]:
                 case_comparison = benchmark_pb2.CaseComparison(
@@ -210,8 +208,8 @@ class SuokeBenchGrpcService(benchmark_pb2_grpc.BenchmarkServiceServicer):
                     compare_correct=case["compare_correct"],
                 )
                 response.case_comparisons.append(case_comparison)
-            
-            logger.info(f"成功比较基准测试结果")
+
+            logger.info("成功比较基准测试结果")
             return response
         except Exception as e:
             logger.error(f"比较基准测试失败: {str(e)}")
@@ -227,35 +225,35 @@ class SuokeBenchGrpcService(benchmark_pb2_grpc.BenchmarkServiceServicer):
         """
         try:
             logger.info(f"接收到生成报告请求: {request.run_id}, 格式: {request.format}")
-            
+
             # 首先获取测试结果
             result = self.benchmark_engine.get_benchmark_result(
                 request.run_id, include_details=request.include_samples
             )
-            
+
             if not result:
                 context.set_code(grpc.StatusCode.NOT_FOUND)
                 context.set_details(f"找不到运行ID: {request.run_id}")
                 return benchmark_pb2.GenerateReportResponse()
-            
+
             # 生成报告
             report_path = report_generator.generate_report(
                 result=result,
                 format=request.format,
                 include_samples=request.include_samples,
-                include_metrics=[m for m in request.metrics] if request.metrics else None,
+                include_metrics=list(request.metrics) if request.metrics else None,
             )
-            
+
             if not report_path:
                 context.set_code(grpc.StatusCode.INTERNAL)
                 context.set_details("生成报告失败")
                 return benchmark_pb2.GenerateReportResponse()
-            
+
             # 构建响应
             base_url = "/reports/"
             filename = report_path.split("/")[-1]
             report_url = f"{base_url}{filename}"
-            
+
             return benchmark_pb2.GenerateReportResponse(
                 report_url=report_url,
                 message="报告已生成",
@@ -274,10 +272,10 @@ class SuokeBenchGrpcService(benchmark_pb2_grpc.BenchmarkServiceServicer):
         """
         try:
             logger.info(f"接收到注册模型请求: {request.model_id}:{request.model_version}")
-            
+
             # 转换模型配置
-            model_config = {k: v for k, v in request.model_config.items()}
-            
+            model_config = dict(request.model_config.items())
+
             # 注册模型
             model_registry.register_model(
                 model_id=request.model_id,
@@ -285,9 +283,9 @@ class SuokeBenchGrpcService(benchmark_pb2_grpc.BenchmarkServiceServicer):
                 model_type=request.model_type,
                 model_config=model_config,
             )
-            
+
             logger.info(f"模型注册成功: {request.model_id}:{request.model_version}")
-            
+
             return benchmark_pb2.RegisterModelResponse(
                 status="success",
                 message=f"模型 {request.model_id}:{request.model_version} 注册成功",
@@ -309,10 +307,10 @@ class SuokeBenchGrpcService(benchmark_pb2_grpc.BenchmarkServiceServicer):
         """
         try:
             logger.info("接收到列出模型请求")
-            
+
             # 获取模型列表
             models = model_registry.list_models()
-            
+
             # 构建响应
             response = benchmark_pb2.ListModelsResponse()
             for model in models:
@@ -321,7 +319,7 @@ class SuokeBenchGrpcService(benchmark_pb2_grpc.BenchmarkServiceServicer):
                     model_version=model["model_version"],
                 )
                 response.models.append(model_info)
-            
+
             logger.info(f"成功列出 {len(response.models)} 个模型")
             return response
         except Exception as e:
@@ -338,13 +336,13 @@ class SuokeBenchGrpcService(benchmark_pb2_grpc.BenchmarkServiceServicer):
         """
         try:
             logger.info(f"接收到注销模型请求: {request.model_id}:{request.model_version}")
-            
+
             # 注销模型
             success = model_registry.unregister_model(
                 model_id=request.model_id,
                 model_version=request.model_version,
             )
-            
+
             if not success:
                 context.set_code(grpc.StatusCode.NOT_FOUND)
                 context.set_details(f"找不到模型: {request.model_id}:{request.model_version}")
@@ -352,9 +350,9 @@ class SuokeBenchGrpcService(benchmark_pb2_grpc.BenchmarkServiceServicer):
                     status="error",
                     message=f"找不到模型: {request.model_id}:{request.model_version}",
                 )
-            
+
             logger.info(f"模型注销成功: {request.model_id}:{request.model_version}")
-            
+
             return benchmark_pb2.UnregisterModelResponse(
                 status="success",
                 message=f"模型 {request.model_id}:{request.model_version} 注销成功",
@@ -376,15 +374,15 @@ class SuokeBenchGrpcService(benchmark_pb2_grpc.BenchmarkServiceServicer):
         """
         try:
             logger.info(f"接收到获取运行状态请求: {request.run_id}")
-            
+
             # 获取状态
             status = self.benchmark_engine.get_run_status(request.run_id)
-            
+
             if not status:
                 context.set_code(grpc.StatusCode.NOT_FOUND)
                 context.set_details(f"找不到运行ID: {request.run_id}")
                 return benchmark_pb2.GetRunStatusResponse()
-            
+
             return benchmark_pb2.GetRunStatusResponse(
                 run_id=status["run_id"],
                 status=status["status"],
@@ -407,10 +405,10 @@ class SuokeBenchGrpcService(benchmark_pb2_grpc.BenchmarkServiceServicer):
         """
         try:
             logger.info(f"接收到删除评测记录请求: {request.run_id}")
-            
+
             # 删除评测记录
             success = self.benchmark_engine.delete_run(request.run_id)
-            
+
             if not success:
                 context.set_code(grpc.StatusCode.NOT_FOUND)
                 context.set_details(f"找不到运行ID: {request.run_id}")
@@ -418,9 +416,9 @@ class SuokeBenchGrpcService(benchmark_pb2_grpc.BenchmarkServiceServicer):
                     status="error",
                     message=f"找不到运行ID: {request.run_id}",
                 )
-            
+
             logger.info(f"评测记录删除成功: {request.run_id}")
-            
+
             return benchmark_pb2.DeleteRunResponse(
                 status="success",
                 message=f"评测记录 {request.run_id} 已成功删除",
@@ -442,14 +440,14 @@ class SuokeBenchGrpcService(benchmark_pb2_grpc.BenchmarkServiceServicer):
         """
         try:
             logger.info("接收到获取评测历史请求")
-            
+
             # 获取历史记录
             history = self.benchmark_engine.get_history(
                 benchmark_id=request.benchmark_id or None,
                 model_id=request.model_id or None,
                 limit=request.limit or 10,
             )
-            
+
             # 构建响应
             response = benchmark_pb2.GetHistoryResponse()
             for item in history:
@@ -462,14 +460,14 @@ class SuokeBenchGrpcService(benchmark_pb2_grpc.BenchmarkServiceServicer):
                     created_at=item["created_at"],
                     completed_at=item["completed_at"] or "",
                 )
-                
+
                 # 添加指标摘要
                 if "metrics_summary" in item:
                     for metric_name, metric_value in item["metrics_summary"].items():
                         history_item.metrics_summary[metric_name] = metric_value
-                
+
                 response.history.append(history_item)
-            
+
             logger.info(f"成功获取 {len(response.history)} 条评测历史")
             return response
         except Exception as e:
@@ -478,7 +476,7 @@ class SuokeBenchGrpcService(benchmark_pb2_grpc.BenchmarkServiceServicer):
             context.set_details(f"获取评测历史失败: {str(e)}")
             return benchmark_pb2.GetHistoryResponse()
 
-    def _convert_metric(self, name: str, metric: Dict) -> benchmark_pb2.MetricInfo:
+    def _convert_metric(self, name: str, metric: dict) -> benchmark_pb2.MetricInfo:
         """
         转换指标信息为gRPC消息
         """
@@ -492,7 +490,7 @@ class SuokeBenchGrpcService(benchmark_pb2_grpc.BenchmarkServiceServicer):
             unit=metric.get("unit", ""),
         )
 
-    def _convert_sample(self, sample: Dict) -> benchmark_pb2.SampleResult:
+    def _convert_sample(self, sample: dict) -> benchmark_pb2.SampleResult:
         """
         转换样本结果为gRPC消息
         """
@@ -503,15 +501,15 @@ class SuokeBenchGrpcService(benchmark_pb2_grpc.BenchmarkServiceServicer):
             actual=sample["actual"],
             correct=sample["correct"],
         )
-        
+
         # 添加分数
         if "scores" in sample:
             for name, value in sample["scores"].items():
                 result.scores[name] = float(value)
-        
+
         return result
 
-    def _convert_metric_comparison(self, name: str, metric: Dict) -> benchmark_pb2.MetricComparison:
+    def _convert_metric_comparison(self, name: str, metric: dict) -> benchmark_pb2.MetricComparison:
         """
         转换指标比较为gRPC消息
         """
@@ -524,4 +522,4 @@ class SuokeBenchGrpcService(benchmark_pb2_grpc.BenchmarkServiceServicer):
             difference_percent=float(metric.get("difference_percent", 0)),
             higher_is_better=metric.get("higher_is_better", True),
             unit=metric.get("unit", ""),
-        ) 
+        )

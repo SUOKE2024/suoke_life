@@ -7,8 +7,8 @@ from inquiry_service.core.exceptions import InquiryServiceError
 from inquiry_service.core.logging import setup_logging
 
 __all__ = [
+    "InquiryServiceError",
     "Settings",
     "get_settings",
-    "InquiryServiceError", 
     "setup_logging",
-] 
+]

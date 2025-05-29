@@ -1,30 +1,48 @@
 """
 测试配置文件
 
-包含所有测试的共享夹具和配置。
+提供测试所需的 fixtures 和配置。
 """
 
 from __future__ import annotations
 
 import asyncio
-from collections.abc import AsyncGenerator, Generator
+from typing import TYPE_CHECKING
 from unittest.mock import AsyncMock, MagicMock
 
 from fastapi.testclient import TestClient
 from httpx import AsyncClient
 import pytest
 import pytest_asyncio
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy import MetaData
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.pool import StaticPool
 
 from suoke_blockchain_service.config import Settings
-from suoke_blockchain_service.database import Base
 from suoke_blockchain_service.main import create_app
+
+if TYPE_CHECKING:
+    from collections.abc import AsyncGenerator, Generator
+
+
+class TestBase(DeclarativeBase):
+    """测试数据库模型基类"""
+
+    metadata = MetaData(
+        naming_convention={
+            "ix": "ix_%(column_0_label)s",
+            "uq": "uq_%(table_name)s_%(column_0_name)s",
+            "ck": "ck_%(table_name)s_%(constraint_name)s",
+            "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
+            "pk": "pk_%(table_name)s",
+        }
+    )
 
 
 @pytest.fixture(scope="session")
 def event_loop() -> Generator[asyncio.AbstractEventLoop]:
-    """创建事件循环用于整个测试会话"""
+    """创建事件循环"""
     loop = asyncio.new_event_loop()
     yield loop
     loop.close()
@@ -32,34 +50,11 @@ def event_loop() -> Generator[asyncio.AbstractEventLoop]:
 
 @pytest.fixture
 def test_settings() -> Settings:
-    """测试配置"""
+    """测试设置"""
     return Settings(
-        environment="testing",
+        app_name="Test Blockchain Service",
         debug=True,
-        database=Settings.DatabaseSettings(
-            host="localhost",
-            port=5432,
-            user="test",
-            password="test",
-            database="test_blockchain_service",
-        ),
-        redis=Settings.RedisSettings(
-            host="localhost",
-            port=6379,
-            database=1,
-        ),
-        blockchain=Settings.BlockchainSettings(
-            eth_node_url="http://localhost:8545",
-            chain_id=1337,
-        ),
-        security=Settings.SecuritySettings(
-            jwt_secret_key="test-secret-key",
-        ),
-        monitoring=Settings.MonitoringSettings(
-            enable_metrics=False,
-            enable_tracing=False,
-            log_level="DEBUG",
-        ),
+        environment="test",
     )
 
 
@@ -76,7 +71,7 @@ async def test_db_engine():
 
     # 创建所有表
     async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+        await conn.run_sync(TestBase.metadata.create_all)
 
     yield engine
 
@@ -87,8 +82,6 @@ async def test_db_engine():
 @pytest_asyncio.fixture
 async def test_db_session(test_db_engine) -> AsyncGenerator[AsyncSession]:
     """测试数据库会话"""
-    from sqlalchemy.ext.asyncio import async_sessionmaker
-
     session_factory = async_sessionmaker(
         test_db_engine,
         class_=AsyncSession,
@@ -100,41 +93,16 @@ async def test_db_session(test_db_engine) -> AsyncGenerator[AsyncSession]:
 
 
 @pytest.fixture
-def mock_web3():
-    """模拟 Web3 实例"""
-    mock = MagicMock()
-    mock.eth.chain_id = 1337
-    mock.eth.get_block_number.return_value = 100
-    mock.eth.get_balance.return_value = 1000000000000000000  # 1 ETH
-    mock.eth.gas_price = 20000000000  # 20 Gwei
-    return mock
-
-
-@pytest.fixture
-def mock_redis():
-    """模拟 Redis 客户端"""
-    mock = AsyncMock()
-    mock.ping.return_value = True
-    mock.get.return_value = None
-    mock.set.return_value = True
-    mock.delete.return_value = 1
-    return mock
-
-
-@pytest.fixture
-def test_app(test_settings, monkeypatch):
-    """测试应用实例"""
-    # 使用测试配置
-    monkeypatch.setattr("suoke_blockchain_service.config.settings", test_settings)
-
-    # 创建应用
+def test_app():
+    """测试应用"""
+    # 使用测试设置创建应用
     app = create_app()
     return app
 
 
 @pytest.fixture
 def test_client(test_app) -> TestClient:
-    """测试客户端"""
+    """同步测试客户端"""
     return TestClient(test_app)
 
 
@@ -146,40 +114,68 @@ async def async_test_client(test_app) -> AsyncGenerator[AsyncClient]:
 
 
 @pytest.fixture
+def mock_blockchain_client():
+    """模拟区块链客户端"""
+    mock_client = MagicMock()
+    mock_client.is_connected.return_value = True
+    mock_client.get_block_number.return_value = 12345
+    mock_client.get_balance.return_value = 1000000000000000000  # 1 ETH in wei
+    return mock_client
+
+
+@pytest.fixture
+def mock_redis_client():
+    """模拟 Redis 客户端"""
+    mock_client = AsyncMock()
+    mock_client.ping.return_value = True
+    mock_client.get.return_value = None
+    mock_client.set.return_value = True
+    mock_client.delete.return_value = 1
+    return mock_client
+
+
+@pytest.fixture
+def mock_grpc_server():
+    """模拟 gRPC 服务器"""
+    mock_server = AsyncMock()
+    mock_server.start.return_value = None
+    mock_server.stop.return_value = None
+    mock_server.wait_for_termination.return_value = None
+    return mock_server
+
+
+@pytest.fixture(autouse=True)
+def setup_test_environment(monkeypatch):
+    """设置测试环境"""
+    # 设置测试环境变量
+    monkeypatch.setenv("ENVIRONMENT", "test")
+    monkeypatch.setenv("DEBUG", "true")
+
+
+@pytest.fixture
 def sample_health_data():
     """示例健康数据"""
     return {
         "user_id": "test-user-123",
-        "data_type": "blood_pressure",
-        "data": {
-            "systolic": 120,
-            "diastolic": 80,
-            "timestamp": "2024-01-01T10:00:00Z",
-        },
+        "timestamp": "2024-01-01T00:00:00Z",
+        "data_type": "heart_rate",
+        "value": 72,
+        "unit": "bpm",
         "metadata": {
-            "device_id": "bp-monitor-001",
-            "location": "home",
-        },
+            "device": "smartwatch",
+            "accuracy": "high"
+        }
     }
 
 
 @pytest.fixture
-def sample_blockchain_transaction():
-    """示例区块链交易"""
+def sample_zkp_proof():
+    """示例零知识证明"""
     return {
-        "hash": "0x1234567890abcdef",
-        "block_number": 100,
-        "gas_used": 21000,
-        "status": 1,
-        "from": "0xabcdef1234567890",
-        "to": "0x1234567890abcdef",
+        "proof": "0x1234567890abcdef",
+        "public_inputs": ["0xabcdef", "0x123456"],
+        "verification_key": "0xfedcba0987654321"
     }
-
-
-@pytest.fixture
-def sample_jwt_token():
-    """示例 JWT 令牌"""
-    return "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoidGVzdC11c2VyLTEyMyIsImV4cCI6MTY0MDk5NTIwMH0.test-signature"
 
 
 # 测试标记

@@ -1,14 +1,16 @@
 """gRPC服务存根生成代码"""
 
 import grpc
+
 from . import soer_service_pb2 as soer_service_pb2
 
-class SoerServiceStub(object):
+
+class SoerServiceStub:
     """索儿服务的客户端存根"""
 
     def __init__(self, channel):
         """构造函数
-        
+
         Args:
             channel: 用于gRPC通信的Channel
         """
@@ -54,7 +56,7 @@ class SoerServiceStub(object):
         )
 
 
-class SoerServiceServicer(object):
+class SoerServiceServicer:
     """索儿服务的服务器端实现接口"""
 
     def GenerateHealthPlan(self, request, context):
@@ -152,4 +154,4 @@ def add_SoerServiceServicer_to_server(servicer, server):
     }
     generic_handler = grpc.method_handlers_generic_handler(
         'suoke.soer.v1.SoerService', rpc_method_handlers)
-    server.add_generic_rpc_handlers((generic_handler,)) 
+    server.add_generic_rpc_handlers((generic_handler,))

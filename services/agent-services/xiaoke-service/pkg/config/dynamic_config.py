@@ -1,26 +1,27 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 动态配置管理器
 支持配置热重载、配置版本管理和回滚、环境特定配置覆盖、配置变更通知等功能
 """
 
 import asyncio
-import logging
-import json
-import yaml
-import os
+import contextlib
 import hashlib
+import json
+import logging
+import os
 import time
-from typing import Dict, Any, List, Optional, Callable, Union
-from dataclasses import dataclass, field
+from collections.abc import Callable
+from dataclasses import dataclass
 from datetime import datetime
-from pathlib import Path
 from enum import Enum
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
+from pathlib import Path
+from typing import Any
 
 import aioredis
+import yaml
+from watchdog.events import FileSystemEventHandler
+from watchdog.observers import Observer
 
 logger = logging.getLogger(__name__)
 
@@ -50,7 +51,7 @@ class ConfigVersion:
     timestamp: datetime
     checksum: str
     source: ConfigSource
-    data: Dict[str, Any]
+    data: dict[str, Any]
     description: str = ""
 
 
@@ -104,7 +105,7 @@ class ConfigFileHandler(FileSystemEventHandler):
 class DynamicConfigManager:
     """动态配置管理器"""
 
-    def __init__(self, redis_url: str = None):
+    def __init__(self, redis_url: str | None = None):
         """
         初始化动态配置管理器
 
@@ -112,30 +113,30 @@ class DynamicConfigManager:
             redis_url: Redis连接URL（可选）
         """
         self.redis_url = redis_url
-        self.redis_client: Optional[aioredis.Redis] = None
+        self.redis_client: aioredis.Redis | None = None
 
         # 配置数据
-        self.config_data: Dict[str, Any] = {}
-        self.config_versions: List[ConfigVersion] = []
+        self.config_data: dict[str, Any] = {}
+        self.config_versions: list[ConfigVersion] = []
         self.max_versions = 10  # 最大保留版本数
 
         # 文件监控
-        self.watched_files: Dict[str, ConfigFormat] = {}
-        self.file_observer: Optional[Observer] = None
-        self.file_handler: Optional[ConfigFileHandler] = None
+        self.watched_files: dict[str, ConfigFormat] = {}
+        self.file_observer: Observer | None = None
+        self.file_handler: ConfigFileHandler | None = None
 
         # 变更通知
-        self.change_callbacks: List[Callable] = []
-        self.key_callbacks: Dict[str, List[Callable]] = {}
+        self.change_callbacks: list[Callable] = []
+        self.key_callbacks: dict[str, list[Callable]] = {}
 
         # 环境配置
         self.environment = os.getenv("ENVIRONMENT", "development")
         self.env_prefix = os.getenv("CONFIG_ENV_PREFIX", "XIAOKE_")
 
         # 远程配置
-        self.remote_config_url: Optional[str] = None
+        self.remote_config_url: str | None = None
         self.remote_poll_interval = 60  # 远程配置轮询间隔（秒）
-        self.remote_poll_task: Optional[asyncio.Task] = None
+        self.remote_poll_task: asyncio.Task | None = None
 
         # 配置缓存
         self.cache_enabled = True
@@ -221,7 +222,7 @@ class DynamicConfigManager:
     async def _load_file_config(self, file_path: str, format_type: ConfigFormat):
         """加载文件配置"""
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 content = f.read()
 
             # 解析配置
@@ -280,7 +281,7 @@ class DynamicConfigManager:
             )
             logger.info("加载了 %d 个环境变量配置", len(env_config))
 
-    def _apply_environment_overrides(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    def _apply_environment_overrides(self, data: dict[str, Any]) -> dict[str, Any]:
         """应用环境特定配置覆盖"""
         if not isinstance(data, dict):
             return data
@@ -296,7 +297,7 @@ class DynamicConfigManager:
 
         return data
 
-    def _get_nested_value(self, data: Dict[str, Any], key: str) -> Any:
+    def _get_nested_value(self, data: dict[str, Any], key: str) -> Any:
         """获取嵌套键值"""
         keys = key.split(".")
         current = data
@@ -310,8 +311,8 @@ class DynamicConfigManager:
         return current
 
     def _deep_merge(
-        self, base: Dict[str, Any], override: Dict[str, Any]
-    ) -> Dict[str, Any]:
+        self, base: dict[str, Any], override: dict[str, Any]
+    ) -> dict[str, Any]:
         """深度合并字典"""
         result = base.copy()
 
@@ -376,7 +377,7 @@ class DynamicConfigManager:
 
             # 监控所有配置文件的目录
             watched_dirs = set()
-            for file_path in self.watched_files.keys():
+            for file_path in self.watched_files:
                 dir_path = os.path.dirname(file_path)
                 if dir_path not in watched_dirs:
                     self.file_observer.schedule(
@@ -388,7 +389,7 @@ class DynamicConfigManager:
             logger.info("文件监控已启动，监控 %d 个目录", len(watched_dirs))
 
     async def _update_config(
-        self, new_data: Dict[str, Any], source: ConfigSource, description: str = ""
+        self, new_data: dict[str, Any], source: ConfigSource, description: str = ""
     ):
         """更新配置数据"""
         # 计算变更
@@ -436,13 +437,13 @@ class DynamicConfigManager:
         logger.info("配置已更新，来源: %s, 变更数量: %d", source.value, len(changes))
 
     def _calculate_changes(
-        self, old_data: Dict[str, Any], new_data: Dict[str, Any]
-    ) -> List[ConfigChange]:
+        self, old_data: dict[str, Any], new_data: dict[str, Any]
+    ) -> list[ConfigChange]:
         """计算配置变更"""
         changes = []
 
         def compare_dict(
-            old_dict: Dict[str, Any], new_dict: Dict[str, Any], prefix: str = ""
+            old_dict: dict[str, Any], new_dict: dict[str, Any], prefix: str = ""
         ):
             # 检查新增和修改
             for key, new_value in new_dict.items():
@@ -492,16 +493,16 @@ class DynamicConfigManager:
         compare_dict(old_data, new_data)
         return changes
 
-    def _calculate_checksum(self, data: Dict[str, Any]) -> str:
+    def _calculate_checksum(self, data: dict[str, Any]) -> str:
         """计算配置数据校验和"""
         content = json.dumps(data, sort_keys=True, ensure_ascii=False)
         return hashlib.md5(content.encode("utf-8")).hexdigest()
 
     async def _notify_changes(
         self,
-        changes: List[ConfigChange],
-        old_config: Dict[str, Any],
-        new_config: Dict[str, Any],
+        changes: list[ConfigChange],
+        old_config: dict[str, Any],
+        new_config: dict[str, Any],
     ):
         """通知配置变更"""
         # 全局变更回调
@@ -572,11 +573,11 @@ class DynamicConfigManager:
             self.key_callbacks[key] = []
         self.key_callbacks[key].append(callback)
 
-    def get_all_config(self) -> Dict[str, Any]:
+    def get_all_config(self) -> dict[str, Any]:
         """获取所有配置"""
         return self.config_data.copy()
 
-    def get_versions(self) -> List[ConfigVersion]:
+    def get_versions(self) -> list[ConfigVersion]:
         """获取配置版本历史"""
         return self.config_versions.copy()
 
@@ -640,7 +641,7 @@ class DynamicConfigManager:
             logger.error("导出配置失败: %s", str(e))
             raise
 
-    async def validate_config(self, schema: Dict[str, Any] = None) -> List[str]:
+    async def validate_config(self, schema: dict[str, Any] | None = None) -> list[str]:
         """
         验证配置
 
@@ -680,10 +681,8 @@ class DynamicConfigManager:
         # 停止远程配置轮询
         if self.remote_poll_task:
             self.remote_poll_task.cancel()
-            try:
+            with contextlib.suppress(asyncio.CancelledError):
                 await self.remote_poll_task
-            except asyncio.CancelledError:
-                pass
 
         # 关闭Redis连接
         if self.redis_client:
@@ -693,10 +692,10 @@ class DynamicConfigManager:
 
 
 # 全局配置管理器实例
-_config_manager: Optional[DynamicConfigManager] = None
+_config_manager: DynamicConfigManager | None = None
 
 
-async def get_config_manager(redis_url: str = None) -> DynamicConfigManager:
+async def get_config_manager(redis_url: str | None = None) -> DynamicConfigManager:
     """获取配置管理器实例"""
     global _config_manager
 

@@ -43,36 +43,69 @@
 - Docker（可选，用于容器化部署）
 - Kubernetes（可选，用于集群部署）
 
-### 本地开发环境设置
+## 快速开始
 
-1. 克隆代码库
+### 本地开发
+
+1. 确保已安装Python 3.13.3+和UV包管理器
    ```bash
-   git clone https://github.com/SUOKE2024/suoke_life.git
-   cd services/health-data-service
+   # 安装UV（如果尚未安装）
+   curl -LsSf https://astral.sh/uv/install.sh | sh
    ```
 
-2. 创建并激活虚拟环境
+2. 克隆项目并进入目录
    ```bash
-   python -m venv venv
-   source venv/bin/activate  # Linux/MacOS
-   venv\Scripts\activate     # Windows
+   git clone <repository-url>
+   cd health-data-service
    ```
 
 3. 安装依赖
    ```bash
-   pip install -r requirements.txt
+   uv sync
    ```
 
-4. 配置环境变量
+4. 安装开发依赖
+   ```bash
+   uv sync --group dev
+   ```
+
+5. 配置环境变量
    ```bash
    cp .env.example .env
    # 编辑.env文件，填写必要的配置项
    ```
 
-5. 启动开发服务器
+6. 启动开发服务器
    ```bash
-   python -m cmd.server
+   uv run health-data-service serve --reload
    ```
+
+### 使用 Makefile
+
+项目提供了 Makefile 来简化常用操作：
+
+```bash
+# 安装依赖
+make install
+
+# 安装开发依赖
+make dev
+
+# 运行测试
+make test
+
+# 代码检查
+make lint
+
+# 格式化代码
+make format
+
+# 启动开发服务器
+make run
+
+# 清理缓存文件
+make clean
+```
 
 ### Docker部署
 
@@ -172,38 +205,24 @@ print(response.json())
 
 ```
 health-data-service/
-├── api/                  # API定义
-│   ├── grpc/             # gRPC API
-│   └── rest/             # REST API模型定义
-├── cmd/                  # 命令行入口
-│   └── server/           # 服务器启动
-├── config/               # 配置文件
+├── health_data_service/  # 主要源代码
+│   ├── api/              # API定义
+│   ├── cmd/              # 命令行入口
+│   ├── core/             # 核心配置
+│   ├── models/           # 数据模型
+│   ├── services/         # 业务逻辑
+│   └── utils/            # 工具函数
+├── tests/                # 测试文件
 ├── deploy/               # 部署配置
 │   ├── docker/           # Docker配置
-│   ├── kubernetes/       # Kubernetes配置
-│   └── prometheus/       # 监控配置
-├── docs/                 # 文档
-├── internal/             # 内部实现
-│   ├── delivery/         # 传输层
-│   │   ├── grpc/         # gRPC实现
-│   │   └── rest/         # REST实现
-│   ├── model/            # 数据模型
-│   ├── repository/       # 数据访问
-│   └── service/          # 业务逻辑
-│       ├── analytics/    # 分析引擎
-│       ├── blockchain/   # 区块链集成
-│       └── parsers/      # 数据解析器
-├── pkg/                  # 公共包
-│   └── utils/            # 工具函数
-├── test/                 # 测试
-│   ├── integration/      # 集成测试
-│   └── unit/             # 单元测试
-├── .dockerignore         # Docker忽略文件
-├── .env.example          # 环境变量示例
-├── .gitignore            # Git忽略文件
-├── Dockerfile            # Docker构建文件
-├── README.md             # 项目说明
-└── requirements.txt      # 依赖列表
+│   └── kubernetes/       # Kubernetes配置
+├── scripts/              # 脚本文件
+├── .python-version       # Python版本
+├── pyproject.toml        # 项目配置和依赖
+├── uv.lock              # 依赖锁定文件
+├── Makefile             # 构建脚本
+├── Dockerfile           # Docker构建文件
+└── README.md            # 项目说明
 ```
 
 ## 开发贡献
@@ -216,7 +235,9 @@ health-data-service/
 
 请确保提交前运行测试：
 ```bash
-python -m pytest
+uv run pytest
+# 或者使用 Makefile
+make test
 ```
 
 ## 最近更新功能

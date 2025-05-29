@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 分布式锁管理器
 基于Redis实现分布式锁，支持可重入锁、读写锁，包含自动过期和死锁检测功能
@@ -9,10 +8,10 @@ import asyncio
 import logging
 import time
 import uuid
-from typing import Dict, Any, Optional, Set
+from contextlib import asynccontextmanager, suppress
 from dataclasses import dataclass
-from contextlib import asynccontextmanager
 from enum import Enum
+from typing import Any
 
 import aioredis
 
@@ -72,13 +71,13 @@ class DistributedLock:
         self.acquired_at = None
 
         # 自动延长任务
-        self._extend_task: Optional[asyncio.Task] = None
+        self._extend_task: asyncio.Task | None = None
 
         logger.debug(
             "创建分布式锁: %s, 类型: %s, ID: %s", key, lock_type.value, self.lock_id
         )
 
-    async def acquire(self, timeout: Optional[float] = None) -> bool:
+    async def acquire(self, timeout: float | None = None) -> bool:
         """
         获取锁
 
@@ -207,10 +206,8 @@ class DistributedLock:
             # 停止自动延长任务
             if self._extend_task:
                 self._extend_task.cancel()
-                try:
+                with suppress(asyncio.CancelledError):
                     await self._extend_task
-                except asyncio.CancelledError:
-                    pass
                 self._extend_task = None
 
             if self.lock_type == LockType.EXCLUSIVE:
@@ -391,13 +388,13 @@ class LockManager:
             redis_url: Redis连接URL
         """
         self.redis_url = redis_url
-        self.redis_client: Optional[aioredis.Redis] = None
+        self.redis_client: aioredis.Redis | None = None
 
         # 活跃锁跟踪
-        self.active_locks: Dict[str, DistributedLock] = {}
+        self.active_locks: dict[str, DistributedLock] = {}
 
         # 死锁检测
-        self.deadlock_detector_task: Optional[asyncio.Task] = None
+        self.deadlock_detector_task: asyncio.Task | None = None
 
         # 统计信息
         self.stats = {
@@ -457,7 +454,7 @@ class LockManager:
         key: str,
         lock_type: LockType = LockType.EXCLUSIVE,
         config: LockConfig = None,
-        timeout: Optional[float] = None,
+        timeout: float | None = None,
     ):
         """
         获取锁的上下文管理器
@@ -514,7 +511,7 @@ class LockManager:
             logger.error("强制释放锁失败: %s, 错误: %s", key, str(e))
             return False
 
-    async def get_lock_info(self, key: str) -> Optional[Dict[str, Any]]:
+    async def get_lock_info(self, key: str) -> dict[str, Any] | None:
         """
         获取锁信息
 
@@ -584,7 +581,7 @@ class LockManager:
                 logger.error("死锁检测器错误: %s", str(e))
                 await asyncio.sleep(60)  # 错误后延长检测间隔
 
-    async def get_stats(self) -> Dict[str, Any]:
+    async def get_stats(self) -> dict[str, Any]:
         """获取统计信息"""
         stats = self.stats.copy()
         stats["active_locks_count"] = len(self.active_locks)
@@ -597,10 +594,8 @@ class LockManager:
         # 停止死锁检测
         if self.deadlock_detector_task:
             self.deadlock_detector_task.cancel()
-            try:
+            with suppress(asyncio.CancelledError):
                 await self.deadlock_detector_task
-            except asyncio.CancelledError:
-                pass
 
         # 释放所有活跃锁
         for lock in list(self.active_locks.values()):
@@ -619,7 +614,7 @@ def distributed_lock(
     key: str,
     lock_type: LockType = LockType.EXCLUSIVE,
     config: LockConfig = None,
-    timeout: Optional[float] = None,
+    timeout: float | None = None,
 ):
     """
     分布式锁装饰器
@@ -644,7 +639,7 @@ def distributed_lock(
 
 
 # 全局锁管理器实例
-_lock_manager: Optional[LockManager] = None
+_lock_manager: LockManager | None = None
 
 
 async def get_lock_manager(redis_url: str = "redis://localhost:6379") -> LockManager:

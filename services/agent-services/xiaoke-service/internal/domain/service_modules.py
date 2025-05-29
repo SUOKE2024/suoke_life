@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 小克智能体功能模块定义
 这个文件定义了小克智能体的所有核心功能模块和能力域
 """
 
 import enum
-from typing import Dict, List, Any, Optional, Set, Tuple
 from dataclasses import dataclass, field
 
 
@@ -29,12 +27,12 @@ class Capability:
     description: str  # 能力描述
     status: ModuleStatus  # 能力状态
     llm_prompt_key: str  # 与该能力关联的提示语模板关键字
-    required_integrations: List[str] = field(default_factory=list)  # 所需集成
-    dependencies: List[str] = field(default_factory=list)  # 依赖的其他能力
-    models: List[str] = field(default_factory=list)  # 支持的模型列表
-    metrics: List[str] = field(default_factory=list)  # 相关指标
+    required_integrations: list[str] = field(default_factory=list)  # 所需集成
+    dependencies: list[str] = field(default_factory=list)  # 依赖的其他能力
+    models: list[str] = field(default_factory=list)  # 支持的模型列表
+    metrics: list[str] = field(default_factory=list)  # 相关指标
 
-    def is_available(self, available_integrations: Set[str]) -> bool:
+    def is_available(self, available_integrations: set[str]) -> bool:
         """检查该能力是否可用"""
         if self.status in (ModuleStatus.DISABLED, ModuleStatus.PLANNED):
             return False
@@ -54,10 +52,10 @@ class ServiceModule:
     id: str  # 模块ID
     name: str  # 模块名称
     description: str  # 模块描述
-    capabilities: List[Capability] = field(default_factory=list)  # 能力列表
+    capabilities: list[Capability] = field(default_factory=list)  # 能力列表
     status: ModuleStatus = ModuleStatus.ACTIVE  # 模块状态
 
-    def get_capability(self, capability_id: str) -> Optional[Capability]:
+    def get_capability(self, capability_id: str) -> Capability | None:
         """获取指定ID的能力"""
         for capability in self.capabilities:
             if capability.id == capability_id:
@@ -65,8 +63,8 @@ class ServiceModule:
         return None
 
     def get_available_capabilities(
-        self, available_integrations: Set[str]
-    ) -> List[Capability]:
+        self, available_integrations: set[str]
+    ) -> list[Capability]:
         """获取可用的能力列表"""
         if self.status in (ModuleStatus.DISABLED, ModuleStatus.PLANNED):
             return []
@@ -457,7 +455,7 @@ XIAOKE_MODULES = [
 ]
 
 
-def get_module_by_id(module_id: str) -> Optional[ServiceModule]:
+def get_module_by_id(module_id: str) -> ServiceModule | None:
     """根据ID获取模块"""
     for module in XIAOKE_MODULES:
         if module.id == module_id:
@@ -467,7 +465,7 @@ def get_module_by_id(module_id: str) -> Optional[ServiceModule]:
 
 def get_capability_by_id(
     capability_id: str,
-) -> Optional[Tuple[ServiceModule, Capability]]:
+) -> tuple[ServiceModule, Capability] | None:
     """根据ID获取能力及其所属模块"""
     for module in XIAOKE_MODULES:
         for capability in module.capabilities:
@@ -476,7 +474,7 @@ def get_capability_by_id(
     return None
 
 
-def get_available_modules(available_integrations: Set[str]) -> List[ServiceModule]:
+def get_available_modules(available_integrations: set[str]) -> list[ServiceModule]:
     """获取当前可用的模块列表"""
     result = []
     for module in XIAOKE_MODULES:

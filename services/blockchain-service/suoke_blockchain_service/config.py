@@ -75,7 +75,7 @@ class BlockchainSettings(BaseSettings):
         description="访问控制合约地址"
     )
 
-    # 私钥配置（用于部署和管理）
+    # 私钥配置(用于部署和管理)
     deployer_private_key: str | None = Field(
         default=None,
         description="部署者私钥"
@@ -94,7 +94,7 @@ class GRPCSettings(BaseSettings):
     """gRPC 服务配置"""
 
     host: str = Field(default="0.0.0.0", description="gRPC 服务主机")
-    port: int = Field(default=50055, description="gRPC 服务端口")
+    port: int = Field(default=50055, description="gRPC 服务端口", ge=1, le=65535)
 
     # 服务器配置
     max_workers: int = Field(default=10, description="最大工作线程数")
@@ -121,7 +121,7 @@ class SecuritySettings(BaseSettings):
         description="JWT 密钥"
     )
     jwt_algorithm: str = Field(default="HS256", description="JWT 算法")
-    jwt_expiration_hours: int = Field(default=24, description="JWT 过期时间（小时）")
+    jwt_expiration_hours: int = Field(default=24, description="JWT 过期时间(小时)")
 
     # 加密配置
     encryption_key: str | None = Field(
@@ -155,6 +155,15 @@ class MonitoringSettings(BaseSettings):
     log_format: str = Field(default="json", description="日志格式")
     log_file: str | None = Field(default=None, description="日志文件路径")
 
+    @field_validator("log_level")
+    @classmethod
+    def validate_log_level(cls, v: str) -> str:
+        """验证日志级别"""
+        allowed_levels = {"DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"}
+        if v.upper() not in allowed_levels:
+            raise ValueError(f"Log level must be one of {allowed_levels}")
+        return v.upper()
+
 
 class Settings(BaseSettings):
     """主配置类"""
@@ -185,7 +194,7 @@ class Settings(BaseSettings):
     @classmethod
     def validate_environment(cls, v: str) -> str:
         """验证环境配置"""
-        allowed_envs = {"development", "testing", "staging", "production"}
+        allowed_envs = {"development", "testing", "staging", "production", "test"}
         if v.lower() not in allowed_envs:
             raise ValueError(f"Environment must be one of {allowed_envs}")
         return v.lower()

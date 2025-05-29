@@ -3,9 +3,9 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "listen-service"
+name = "xiaoke-service"
 version = "1.0.0"
-description = "索克生活闻诊服务 - 基于AI的中医闻诊音频分析服务"
+description = "小克智能体服务 - 提供食疗养生和营养管理智能服务"
 readme = "README.md"
 authors = [
     {name = "Song Xu", email = "song.xu@icloud.com"}
@@ -28,6 +28,7 @@ dependencies = [
     # Web框架
     "fastapi>=0.104.0",
     "uvicorn[standard]>=0.24.0",
+    "websockets>=12.0",
     
     # 数据验证和序列化
     "pydantic>=2.5.0",
@@ -47,19 +48,27 @@ dependencies = [
     "grpcio-tools>=1.59.0",
     "protobuf>=4.25.0",
     
-    # 音频处理
-    "numpy>=1.24.0",
-    "scipy>=1.11.0",
-    "librosa>=0.10.0",
-    "soundfile>=0.12.0",
-    "pyaudio>=0.2.11",
+    # 数据库
+    "sqlalchemy>=2.0.23",
+    "alembic>=1.13.1",
+    "asyncpg>=0.29.0",
+    "motor>=3.3.0",
+    "pymongo>=4.6.0",
     
-    # 机器学习
-    "scikit-learn>=1.3.0",
+    # AI和机器学习
+    "openai>=1.0.0",
+    "anthropic>=0.7.0",
+    "langchain>=0.1.0",
+    "langchain-openai>=0.0.5",
+    
+    # 食疗和营养数据
     "pandas>=2.1.0",
+    "numpy>=1.24.0",
+    "scikit-learn>=1.3.0",
     
     # 日志和监控
     "structlog>=23.2.0",
+    "loguru>=0.7.0",
     "prometheus-client>=0.19.0",
     
     # 工具库
@@ -67,10 +76,17 @@ dependencies = [
     "python-multipart>=0.0.6",
     "click>=8.1.0",
     "psutil>=5.9.0",
+    "pyyaml>=6.0",
     
     # 安全
     "python-jose[cryptography]>=3.3.0",
     "passlib[bcrypt]>=1.7.0",
+    
+    # 任务队列
+    "celery>=5.3.4",
+    
+    # A2A协议支持
+    "python-a2a>=0.1.0",
 ]
 
 [project.optional-dependencies]
@@ -113,13 +129,6 @@ docs = [
     "myst-parser>=2.0.0",
 ]
 
-audio = [
-    "tensorflow>=2.13.0",
-    "torch>=2.1.0",
-    "torchaudio>=2.1.0",
-    "transformers>=4.35.0",
-]
-
 monitoring = [
     "opentelemetry-api>=1.21.0",
     "opentelemetry-sdk>=1.21.0",
@@ -134,11 +143,11 @@ Repository = "https://github.com/SUOKE2024/suoke_life"
 "Bug Tracker" = "https://github.com/SUOKE2024/suoke_life/issues"
 
 [project.scripts]
-listen-service = "listen_service.cmd.server:cli"
+xiaoke-service = "xiaoke_service.main:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["listen_service*"]
+include = ["xiaoke_service*"]
 
 [tool.ruff]
 target-version = "py313"
@@ -179,22 +188,27 @@ strict_equality = true
 
 [[tool.mypy.overrides]]
 module = [
-    "librosa.*",
-    "soundfile.*",
-    "pyaudio.*",
     "grpc.*",
     "redis.*",
     "aioredis.*",
     "prometheus_client.*",
-    "scipy.*",
+    "openai.*",
+    "anthropic.*",
+    "langchain.*",
+    "pandas.*",
+    "numpy.*",
     "sklearn.*",
+    "python_a2a.*",
+    "websockets.*",
+    "loguru.*",
+    "yaml.*",
 ]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 minversion = "6.0"
 addopts = "-ra -q --strict-markers --tb=short"
-testpaths = ["tests"]
+testpaths = ["test"]
 python_files = ["test_*.py", "*_test.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
@@ -206,7 +220,7 @@ markers = [
 ]
 
 [tool.coverage.run]
-source = ["listen_service"]
+source = ["xiaoke_service"]
 omit = [
     "*/tests/*",
     "*/test_*",

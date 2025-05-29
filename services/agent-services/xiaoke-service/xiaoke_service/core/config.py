@@ -1,7 +1,7 @@
 """
 配置管理模块
 
-使用 pydantic-settings 进行类型安全的配置管理，
+使用 pydantic-settings 进行类型安全的配置管理,
 支持环境变量、配置文件等多种配置源。
 """
 
@@ -167,7 +167,7 @@ class Settings(BaseSettings):
     service: ServiceSettings = Field(default_factory=ServiceSettings)
 
     def model_dump_json(self, **kwargs: Any) -> str:
-        """序列化配置为JSON，隐藏敏感信息"""
+        """序列化配置为JSON, 隐藏敏感信息"""
         data = self.model_dump(**kwargs)
 
         # 隐藏敏感信息
@@ -191,7 +191,7 @@ class Settings(BaseSettings):
 
 @lru_cache
 def get_settings() -> Settings:
-    """获取配置实例（单例模式）"""
+    """获取配置实例(单例模式)"""
     return Settings()
 
 

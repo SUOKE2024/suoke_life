@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import logging
 import sys
+from typing import Any
 
 import structlog
 
@@ -25,7 +26,7 @@ def configure_logging() -> None:
     )
 
     # 配置 structlog
-    processors = [
+    processors: list[Any] = [
         structlog.stdlib.filter_by_level,
         structlog.stdlib.add_logger_name,
         structlog.stdlib.add_log_level,
@@ -37,10 +38,10 @@ def configure_logging() -> None:
     ]
 
     if settings.monitoring.log_format == "json":
-        # JSON 格式输出（生产环境）
+        # JSON 格式输出(生产环境)
         processors.append(structlog.processors.JSONRenderer())
     else:
-        # 彩色控制台输出（开发环境）
+        # 彩色控制台输出(开发环境)
         processors.extend([
             structlog.dev.ConsoleRenderer(colors=True),
         ])
@@ -53,7 +54,7 @@ def configure_logging() -> None:
     )
 
 
-def get_logger(name: str) -> structlog.BoundLogger:
+def get_logger(name: str) -> Any:
     """获取结构化日志记录器"""
     return structlog.get_logger(name)
 
@@ -62,7 +63,7 @@ class LoggerMixin:
     """日志记录器混入类"""
 
     @property
-    def logger(self) -> structlog.BoundLogger:
+    def logger(self) -> Any:
         """获取当前类的日志记录器"""
         return get_logger(self.__class__.__name__)
 

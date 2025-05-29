@@ -3,7 +3,7 @@
 import grpc
 import warnings
 
-from . import four_diagnosis_pb2 as four__diagnosis__pb2
+from api.grpc import four_diagnosis_pb2 as four__diagnosis__pb2
 
 GRPC_GENERATED_VERSION = '1.71.0'
 GRPC_VERSION = grpc.__version__

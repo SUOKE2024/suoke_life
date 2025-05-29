@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 订阅管理仓库
@@ -7,10 +6,10 @@
 """
 
 import logging
-import uuid
 import random
+import uuid
 from datetime import datetime, timedelta
-from typing import Dict, List, Any, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -28,12 +27,12 @@ class SubscriptionRepository:
         self,
         user_id: str,
         action: str,
-        subscription_id: str = None,
-        plan_id: str = None,
-        payment_method: str = None,
+        subscription_id: str | None = None,
+        plan_id: str | None = None,
+        payment_method: str | None = None,
         billing_cycle: int = 1,
-        metadata: Dict[str, str] = None,
-    ) -> Dict[str, Any]:
+        metadata: dict[str, str] | None = None,
+    ) -> dict[str, Any]:
         """
         管理订阅
 
@@ -142,7 +141,7 @@ class SubscriptionRepository:
         else:
             raise ValueError(f"不支持的操作: {action}")
 
-    def _get_plan_info(self, plan_id: str) -> Dict[str, Any]:
+    def _get_plan_info(self, plan_id: str) -> dict[str, Any]:
         """
         获取计划信息（模拟）
 
@@ -187,7 +186,7 @@ class SubscriptionRepository:
         # 返回计划信息，如果不存在则返回基础计划
         return plans.get(plan_id, plans["basic"])
 
-    def _get_subscription(self, subscription_id: str) -> Dict[str, Any]:
+    def _get_subscription(self, subscription_id: str) -> dict[str, Any]:
         """
         获取订阅信息（模拟）
 

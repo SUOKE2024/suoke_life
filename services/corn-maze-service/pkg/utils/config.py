@@ -6,7 +6,7 @@
 
 import logging
 import os
-import sys
+from pathlib import Path
 from typing import Any
 
 import yaml
@@ -14,230 +14,282 @@ import yaml
 # 初始化日志
 logger = logging.getLogger(__name__)
 
-# 默认配置
-DEFAULT_CONFIG = {
-    "app": {
-        "name": "corn-maze-service",
-        "version": "1.0.0"
-    },
-    "grpc": {
-        "port": 50057,
-        "max_workers": 10,
-        "max_concurrent_rpcs": 100,
-        "max_message_length": 1024 * 1024 * 10  # 10MB
-    },
-    "metrics": {
-        "enabled": True,
-        "port": 51057
-    },
-    "health": {
-        "enabled": True,
-        "port": 51058
-    },
-    "db": {
-        "path": "data/maze.db",
-        "pool_size": 10,
-        "timeout": 30,
-        "journal_mode": "WAL"
-    },
-    "logging": {
-        "level": "INFO",
-        "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-        "file": "logs/corn-maze-service.log",
-        "max_size": 10485760,  # 10MB
-        "backup_count": 5,
-        "stdout": True
-    }
-}
 
-# 加载的当前配置
-_current_config = {}
+class ConfigManager:
+    """配置管理器"""
 
+    def __init__(self):
+        """初始化配置管理器"""
+        self._config: dict[str, Any] = {}
+        self._loaded = False
 
-def get_config() -> dict[str, Any]:
-    """
-    获取当前配置，如果配置未加载则加载配置
-    
-    Returns:
-        Dict: 配置字典
-    """
-    global _current_config
+    def get_config(self) -> dict[str, Any]:
+        """
+        获取当前配置，如果配置未加载则加载配置
 
-    if not _current_config:
-        _current_config = load_config()
+        Returns:
+            Dict: 配置字典
+        """
+        if not self._loaded:
+            self.load_config()
+        return self._config
 
-    return _current_config
+    def load_config(self, config_file: str | None = None) -> dict[str, Any]:
+        """
+        加载配置文件
 
+        Args:
+            config_file: 配置文件路径，如果为None则使用默认配置
 
-def load_config() -> dict[str, Any]:
-    """
-    从不同来源加载配置，优先级从高到低：
-    1. 环境变量
-    2. 命令行参数
-    3. 配置文件
-    4. 默认配置
-    
-    Returns:
-        Dict: 配置字典
-    """
-    config = DEFAULT_CONFIG.copy()
+        Returns:
+            Dict: 配置字典
+        """
+        # 默认配置
+        default_config = {
+            "app": {
+                "name": "Corn Maze Service",
+                "version": "1.0.0",
+                "environment": "development"
+            },
+            "server": {
+                "host": "0.0.0.0",
+                "port": 8080,
+                "workers": 4
+            },
+            "db": {
+                "type": "sqlite",
+                "path": "./data/corn_maze.db",
+                "pool_size": 10
+            },
+            "logging": {
+                "level": "INFO",
+                "file": "./logs/app.log",
+                "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+            },
+            "cache": {
+                "type": "memory",
+                "ttl": 3600
+            }
+        }
 
-    # 从配置文件加载
-    config_file = os.environ.get("CONFIG_FILE", "config/config.yaml")
-    config.update(_load_from_file(config_file))
+        self._config = default_config
 
-    # 从环境变量加载
-    config.update(_load_from_env())
+        # 如果指定了配置文件，则加载并合并
+        if config_file:
+            file_config = self._load_config_from_file(config_file)
+            self._config = self._merge_configs(self._config, file_config)
 
-    # 从命令行参数加载
-    config.update(_load_from_args())
+        # 应用环境变量覆盖
+        self._config = self._apply_env_overrides(self._config)
 
-    # 解析特殊值
-    _parse_special_values(config)
+        # 验证配置
+        self._validate_config(self._config)
 
-    logger.info(f"配置加载完成: {config}")
-    return config
+        # 确保必要的目录存在
+        self._ensure_directories(self._config)
 
+        self._loaded = True
+        return self._config
 
-def _load_from_file(file_path: str) -> dict[str, Any]:
-    """从YAML文件加载配置"""
-    try:
-        if not os.path.exists(file_path):
-            logger.warning(f"配置文件不存在: {file_path}")
+    def _load_config_from_file(self, file_path: str) -> dict[str, Any]:
+        """从YAML文件加载配置"""
+        try:
+            config_path = Path(file_path)
+            if not config_path.exists():
+                logger.warning(f"配置文件不存在: {file_path}")
+                return {}
+
+            with config_path.open(encoding="utf-8") as f:
+                config = yaml.safe_load(f)
+                logger.info(f"从文件加载配置: {file_path}")
+                return config or {}
+
+        except Exception as e:
+            logger.error(f"加载配置文件失败: {e!s}")
             return {}
 
-        with open(file_path, encoding="utf-8") as f:
-            config = yaml.safe_load(f)
-            logger.info(f"从文件加载配置: {file_path}")
-            return config or {}
-    except Exception as e:
-        logger.error(f"加载配置文件失败: {e!s}")
-        return {}
+    def _merge_configs(self, base_config: dict[str, Any], override_config: dict[str, Any]) -> dict[str, Any]:
+        """合并配置字典"""
+        result = base_config.copy()
+
+        for key, value in override_config.items():
+            if key in result and isinstance(result[key], dict) and isinstance(value, dict):
+                result[key] = self._merge_configs(result[key], value)
+            else:
+                result[key] = value
+
+        return result
+
+    def _apply_env_overrides(self, config: dict[str, Any]) -> dict[str, Any]:
+        """应用环境变量覆盖"""
+        # 定义环境变量映射
+        env_mappings = {
+            "APP_NAME": ["app", "name"],
+            "APP_VERSION": ["app", "version"],
+            "ENVIRONMENT": ["app", "environment"],
+            "SERVER_HOST": ["server", "host"],
+            "SERVER_PORT": ["server", "port"],
+            "SERVER_WORKERS": ["server", "workers"],
+            "DB_TYPE": ["db", "type"],
+            "DB_PATH": ["db", "path"],
+            "DB_POOL_SIZE": ["db", "pool_size"],
+            "LOG_LEVEL": ["logging", "level"],
+            "LOG_FILE": ["logging", "file"],
+            "CACHE_TYPE": ["cache", "type"],
+            "CACHE_TTL": ["cache", "ttl"]
+        }
+
+        result = config.copy()
+
+        for env_var, config_path in env_mappings.items():
+            env_value = os.getenv(env_var)
+            if env_value is not None:
+                # 导航到配置路径
+                current = result
+                for key in config_path[:-1]:
+                    if key not in current:
+                        current[key] = {}
+                    current = current[key]
+
+                # 设置值（尝试转换类型）
+                final_key = config_path[-1]
+                try:
+                    # 尝试转换为整数
+                    if env_value.isdigit():
+                        current[final_key] = int(env_value)
+                    # 尝试转换为浮点数
+                    elif "." in env_value and env_value.replace(".", "").isdigit():
+                        current[final_key] = float(env_value)
+                    # 尝试转换为布尔值
+                    elif env_value.lower() in ("true", "false"):
+                        current[final_key] = env_value.lower() == "true"
+                    else:
+                        current[final_key] = env_value
+
+                    logger.debug(f"应用环境变量覆盖: {env_var} -> {'.'.join(config_path)} = {env_value}")
+
+                except Exception as e:
+                    logger.warning(f"环境变量类型转换失败: {env_var} = {env_value}, 错误: {e!s}")
+                    current[final_key] = env_value
+
+        return result
+
+    def _validate_config(self, config: dict[str, Any]) -> None:
+        """验证配置"""
+        # 端口范围常量
+        MIN_PORT = 1
+        MAX_PORT = 65535
+
+        required_keys = [
+            ["app", "name"],
+            ["server", "host"],
+            ["server", "port"],
+            ["db", "type"]
+        ]
+
+        for key_path in required_keys:
+            current = config
+            for key in key_path:
+                if key not in current:
+                    raise ValueError(f"缺少必需的配置项: {'.'.join(key_path)}")
+                current = current[key]
+
+        # 验证端口范围
+        port = config.get("server", {}).get("port", 0)
+        if not (MIN_PORT <= port <= MAX_PORT):
+            raise ValueError(f"无效的端口号: {port}")
+
+        logger.info("配置验证通过")
+
+    def _ensure_directories(self, config: dict[str, Any]) -> None:
+        """确保必要的目录存在"""
+        # 确保数据库目录存在
+        if "db" in config and "path" in config["db"]:
+            db_path = Path(config["db"]["path"])
+            db_path.parent.mkdir(parents=True, exist_ok=True)
+
+        # 确保日志目录存在
+        if "logging" in config and "file" in config["logging"]:
+            log_file = config["logging"]["file"]
+            if log_file:
+                log_path = Path(log_file)
+                log_path.parent.mkdir(parents=True, exist_ok=True)
+
+    def get_value(self, key: str, default: Any = None) -> Any:
+        """
+        获取配置值
+
+        Args:
+            key: 配置键，支持点符号路径，如 'db.path'
+            default: 默认值
+
+        Returns:
+            Any: 配置值
+        """
+        config = self.get_config()
+        keys = key.split(".")
+
+        current = config
+        for k in keys:
+            if isinstance(current, dict) and k in current:
+                current = current[k]
+            else:
+                return default
+
+        return current
 
 
-def _load_from_env() -> dict[str, Any]:
-    """从环境变量加载配置"""
-    env_config = {}
+# 配置管理器单例
+class ConfigManagerSingleton:
+    """配置管理器单例"""
 
-    # 映射环境变量到配置项
-    mappings = {
-        "GRPC_PORT": "grpc.port",
-        "GRPC_MAX_WORKERS": "grpc.max_workers",
-        "METRICS_ENABLED": "metrics.enabled",
-        "METRICS_PORT": "metrics.port",
-        "HEALTH_ENABLED": "health.enabled",
-        "HEALTH_PORT": "health.port",
-        "DB_PATH": "db.path",
-        "DB_POOL_SIZE": "db.pool_size",
-        "DB_TIMEOUT": "db.timeout",
-        "LOGGING_LEVEL": "logging.level",
-        "LOGGING_FILE": "logging.file"
-    }
+    _instance: ConfigManager | None = None
 
-    for env_name, config_path in mappings.items():
-        env_value = os.environ.get(env_name)
-        if env_value is not None:
-            # 设置嵌套路径的值
-            keys = config_path.split(".")
-            current = env_config
-            for key in keys[:-1]:
-                current = current.setdefault(key, {})
-
-            # 转换值的类型
-            value = env_value
-            if env_value.lower() in ("true", "false"):
-                value = env_value.lower() == "true"
-            elif env_value.isdigit():
-                value = int(env_value)
-
-            current[keys[-1]] = value
-
-    return env_config
+    @classmethod
+    def get_instance(cls) -> ConfigManager:
+        """获取配置管理器实例"""
+        if cls._instance is None:
+            cls._instance = ConfigManager()
+        return cls._instance
 
 
-def _load_from_args() -> dict[str, Any]:
-    """从命令行参数加载配置"""
-    args_config = {}
-
-    # 解析命令行参数
-    # 格式: --key=value 或 --key value
-    args = sys.argv[1:]
-    i = 0
-    while i < len(args):
-        arg = args[i]
-
-        # 处理 --key=value 格式
-        if arg.startswith("--") and "=" in arg:
-            key, value = arg[2:].split("=", 1)
-            args_config[key] = _parse_value(value)
-            i += 1
-
-        # 处理 --key value 格式
-        elif arg.startswith("--") and i + 1 < len(args) and not args[i+1].startswith("--"):
-            key = arg[2:]
-            value = args[i+1]
-            args_config[key] = _parse_value(value)
-            i += 2
-
-        # 处理 --flag 格式（布尔标志）
-        elif arg.startswith("--"):
-            key = arg[2:]
-            args_config[key] = True
-            i += 1
-
-        else:
-            i += 1
-
-    return args_config
+# 向后兼容的函数接口
+def get_config() -> dict[str, Any]:
+    """获取当前配置（向后兼容）"""
+    return ConfigManagerSingleton.get_instance().get_config()
 
 
-def _parse_value(value: str) -> Any:
-    """解析字符串值为适当的类型"""
-    if value.lower() in ("true", "false"):
-        return value.lower() == "true"
-
-    if value.isdigit():
-        return int(value)
-
-    try:
-        return float(value)
-    except ValueError:
-        return value
-
-
-def _parse_special_values(config: dict[str, Any]) -> None:
-    """解析配置中的特殊值"""
-    # 确保数据目录存在
-    if "db" in config and "path" in config["db"]:
-        db_path = config["db"]["path"]
-        os.makedirs(os.path.dirname(db_path), exist_ok=True)
-
-    # 确保日志目录存在
-    if "logging" in config and "file" in config["logging"]:
-        log_file = config["logging"]["file"]
-        if log_file:
-            os.makedirs(os.path.dirname(log_file), exist_ok=True)
+def load_config(config_file: str | None = None) -> dict[str, Any]:
+    """加载配置文件（向后兼容）"""
+    return ConfigManagerSingleton.get_instance().load_config(config_file)
 
 
 def get_value(key: str, default: Any = None) -> Any:
-    """
-    获取配置值
-    
-    Args:
-        key: 配置键，支持点符号路径，如 'db.path'
-        default: 默认值
-        
-    Returns:
-        Any: 配置值
-    """
-    config = get_config()
-    keys = key.split(".")
+    """获取配置值（向后兼容）"""
+    return ConfigManagerSingleton.get_instance().get_value(key, default)
 
-    current = config
-    for k in keys:
-        if isinstance(current, dict) and k in current:
-            current = current[k]
-        else:
-            return default
 
-    return current
+# 保留原有的独立函数以供直接使用
+def load_config_from_file(file_path: str) -> dict[str, Any]:
+    """从YAML文件加载配置"""
+    return ConfigManagerSingleton.get_instance()._load_config_from_file(file_path)
+
+
+def merge_configs(base_config: dict[str, Any], override_config: dict[str, Any]) -> dict[str, Any]:
+    """合并配置字典"""
+    return ConfigManagerSingleton.get_instance()._merge_configs(base_config, override_config)
+
+
+def apply_env_overrides(config: dict[str, Any]) -> dict[str, Any]:
+    """应用环境变量覆盖"""
+    return ConfigManagerSingleton.get_instance()._apply_env_overrides(config)
+
+
+def validate_config(config: dict[str, Any]) -> None:
+    """验证配置"""
+    return ConfigManagerSingleton.get_instance()._validate_config(config)
+
+
+def ensure_directories(config: dict[str, Any]) -> None:
+    """确保必要的目录存在"""
+    return ConfigManagerSingleton.get_instance()._ensure_directories(config)

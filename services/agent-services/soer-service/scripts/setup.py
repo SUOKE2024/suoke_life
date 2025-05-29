@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 初始化脚本
 创建服务运行所需的目录结构
 """
-import os
-import logging
 import argparse
-import yaml
 import json
+import logging
+import os
 import shutil
-from typing import Dict, Any, List
+
+import yaml
 
 # 配置日志
 logging.basicConfig(
@@ -63,7 +62,7 @@ DEFAULT_CONFIG = {
         "health_plan": {
             "type": "chat",
             "model_id": "gpt-4o-mini",
-            "endpoint": "https://api.openai.com/v1/chat/completions", 
+            "endpoint": "https://api.openai.com/v1/chat/completions",
             "max_tokens": 2048,
             "temperature": 0.4,
             "system_prompt": "你是索尔，一个专注于健康生活管理的AI助手，基于中医体质和现代健康理论提供个性化的健康计划。"
@@ -77,7 +76,7 @@ DEFAULT_CONFIG = {
             "system_prompt": "你是索尔，一个专注于健康生活管理的AI助手，基于中医体质和现代健康理论提供个性化的生活方式建议。"
         },
         "emotional": {
-            "type": "chat", 
+            "type": "chat",
             "model_id": "gpt-4o-mini",
             "endpoint": "https://api.openai.com/v1/chat/completions",
             "max_tokens": 1536,
@@ -111,7 +110,7 @@ PROMPT_TEMPLATES = {
 
 每个建议应该具体且可执行，并与用户的体质类型相匹配。
 """,
-    
+
     "lifestyle": """
 你是索尔，一个专注于健康生活管理的AI助手。请根据用户当前的情境和环境，提供个性化的生活方式建议。
 
@@ -134,7 +133,7 @@ PROMPT_TEMPLATES = {
 
 每个建议应该考虑用户的体质特点、当前情境和环境因素，并提供具体可行的行动方案。
 """,
-    
+
     "emotional": """
 你是索尔，一个专注于健康生活管理的AI助手。请分析用户当前的情绪状态，并根据中医情志理论提供调节建议。
 
@@ -172,7 +171,7 @@ def create_config_files() -> None:
         with open(config_path, "w", encoding="utf-8") as f:
             yaml.dump(DEFAULT_CONFIG, f, allow_unicode=True, default_flow_style=False)
         logger.info(f"创建配置文件: {config_path}")
-    
+
     # 创建提示词模板
     for name, template in PROMPT_TEMPLATES.items():
         template_path = f"config/prompts/templates/{name}.txt"
@@ -224,7 +223,7 @@ def create_sample_data() -> None:
         },
         "active_plans": []
     }
-    
+
     sample_profile_path = "data/profiles/sample_user.json"
     if not os.path.exists(sample_profile_path):
         with open(sample_profile_path, "w", encoding="utf-8") as f:
@@ -236,24 +235,24 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="索儿智能体服务初始化脚本")
     parser.add_argument("--clean", action="store_true", help="清理现有数据并重新初始化")
     args = parser.parse_args()
-    
+
     # 如果指定了清理，删除现有数据
     if args.clean:
         for directory in REQUIRED_DIRS:
             if os.path.exists(directory):
                 shutil.rmtree(directory)
                 logger.info(f"清理目录: {directory}")
-    
+
     # 创建目录结构
     create_directories()
-    
+
     # 创建配置文件
     create_config_files()
-    
+
     # 创建示例数据
     create_sample_data()
-    
+
     logger.info("初始化完成")
 
 if __name__ == "__main__":
-    main() 
+    main()

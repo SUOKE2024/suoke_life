@@ -178,10 +178,10 @@ async def api_call():
 ### 1. 快速启动
 ```bash
 # 安装依赖
-pip install -r requirements.txt
+uv sync
 
 # 启动服务
-python cmd/server/main.py
+uv run python cmd/server/main.py
 
 # 或使用Docker
 docker build -t suoke-bench .

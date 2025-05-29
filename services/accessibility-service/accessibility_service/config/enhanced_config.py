@@ -1,23 +1,20 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 增强的配置管理器
 支持配置验证、热重载、环境变量管理和类型检查
 """
 
+import asyncio
+import json
 import logging
 import os
+from typing import Any
+
 import yaml
-import json
-from typing import Dict, Any, Optional, List, Union, Type
-from dataclasses import dataclass, field
-from pathlib import Path
-import asyncio
-from watchdog.observers import Observer
+from pydantic import BaseModel, Field, ValidationError
 from watchdog.events import FileSystemEventHandler
-from pydantic import BaseModel, ValidationError, Field
-import re
+from watchdog.observers import Observer
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +32,7 @@ class ModelConfig(BaseModel):
     """模型配置模型"""
     scene_model: str = Field(..., description="场景识别模型")
     sign_language_model: str = Field(..., description="手语识别模型")
-    speech_model: Dict[str, str] = Field(..., description="语音模型配置")
+    speech_model: dict[str, str] = Field(..., description="语音模型配置")
     conversion_model: str = Field(..., description="内容转换模型")
 
 
@@ -43,7 +40,7 @@ class LoggingConfig(BaseModel):
     """日志配置模型"""
     level: str = Field(default="INFO", description="日志级别")
     format: str = Field(..., description="日志格式")
-    file: Optional[str] = Field(None, description="日志文件路径")
+    file: str | None = Field(None, description="日志文件路径")
     max_size_mb: int = Field(default=100, ge=1, description="日志文件最大大小(MB)")
     backup_count: int = Field(default=5, ge=1, description="日志文件备份数量")
 
@@ -62,8 +59,8 @@ class DatabaseConfig(BaseModel):
 class FeatureConfig(BaseModel):
     """功能配置模型"""
     enabled: bool = Field(default=True, description="是否启用")
-    max_image_size: Optional[int] = Field(None, ge=1, description="最大图像大小")
-    confidence_threshold: Optional[float] = Field(None, ge=0.0, le=1.0, description="置信度阈值")
+    max_image_size: int | None = Field(None, ge=1, description="最大图像大小")
+    confidence_threshold: float | None = Field(None, ge=0.0, le=1.0, description="置信度阈值")
 
 
 class CacheConfig(BaseModel):
@@ -97,62 +94,62 @@ class AccessibilityConfig(BaseModel):
     models: ModelConfig
     logging: LoggingConfig
     database: DatabaseConfig
-    features: Dict[str, FeatureConfig] = Field(default_factory=dict)
+    features: dict[str, FeatureConfig] = Field(default_factory=dict)
     cache: CacheConfig = Field(default_factory=CacheConfig)
     model_manager: ModelManagerConfig = Field(default_factory=ModelManagerConfig)
     security: SecurityConfig
-    
+
     class Config:
         extra = "allow"  # 允许额外字段
 
 
 class ConfigFileHandler(FileSystemEventHandler):
     """配置文件变更处理器"""
-    
+
     def __init__(self, config_manager):
         self.config_manager = config_manager
         self.last_modified = {}
-    
+
     def on_modified(self, event):
         if event.is_directory:
             return
-        
+
         file_path = event.src_path
         if not file_path.endswith(('.yaml', '.yml', '.json')):
             return
-        
+
         # 防止重复触发
         current_time = os.path.getmtime(file_path)
         if file_path in self.last_modified and current_time <= self.last_modified[file_path]:
             return
-        
+
         self.last_modified[file_path] = current_time
-        
+
         logger.info(f"配置文件变更: {file_path}")
         asyncio.create_task(self.config_manager.reload_config())
 
 
 class EnhancedConfigManager:
     """增强的配置管理器"""
-    
+
     def __init__(self, config_path: str = None, watch_changes: bool = True):
         self.config_path = config_path or self._find_config_file()
         self.watch_changes = watch_changes
-        self._config: Optional[AccessibilityConfig] = None
-        self._raw_config: Dict[str, Any] = {}
-        self._observer: Optional[Observer] = None
-        self._reload_callbacks: List[callable] = []
-        
+        self._config: AccessibilityConfig | None = None
+        self._raw_config: dict[str, Any] = {}
+        self._observer: Observer | None = None
+        self._reload_callbacks: list[callable] = []
+
         # 环境变量前缀
         self.env_prefix = "ACCESSIBILITY_"
-        
+
         # 加载配置
         self.load_config()
-        
+
         # 启动文件监控
         if self.watch_changes:
             self._start_file_watcher()
-    
+
     def _find_config_file(self) -> str:
         """查找配置文件"""
         possible_paths = [
@@ -161,64 +158,64 @@ class EnhancedConfigManager:
             'config.yaml',
             '/etc/accessibility-service/config.yaml'
         ]
-        
+
         for path in possible_paths:
             if path and os.path.exists(path):
                 return path
-        
+
         raise FileNotFoundError("未找到配置文件")
-    
+
     def load_config(self):
         """加载配置"""
         try:
             logger.info(f"加载配置文件: {self.config_path}")
-            
+
             # 读取原始配置
             self._raw_config = self._load_raw_config()
-            
+
             # 应用环境变量覆盖
             self._apply_env_overrides()
-            
+
             # 验证配置
             self._config = AccessibilityConfig(**self._raw_config)
-            
+
             logger.info("配置加载成功")
-            
+
         except Exception as e:
             logger.error(f"配置加载失败: {str(e)}")
             raise
-    
-    def _load_raw_config(self) -> Dict[str, Any]:
+
+    def _load_raw_config(self) -> dict[str, Any]:
         """加载原始配置"""
-        with open(self.config_path, 'r', encoding='utf-8') as f:
+        with open(self.config_path, encoding='utf-8') as f:
             if self.config_path.endswith('.json'):
                 return json.load(f)
             else:
                 return yaml.safe_load(f)
-    
+
     def _apply_env_overrides(self):
         """应用环境变量覆盖"""
         for key, value in os.environ.items():
             if not key.startswith(self.env_prefix):
                 continue
-            
+
             # 移除前缀并转换为配置路径
             config_key = key[len(self.env_prefix):].lower()
             config_path = config_key.split('_')
-            
+
             # 应用覆盖
             self._set_nested_value(self._raw_config, config_path, self._parse_env_value(value))
-    
-    def _set_nested_value(self, config: Dict[str, Any], path: List[str], value: Any):
+
+    def _set_nested_value(self, config: dict[str, Any], path: list[str], value: Any):
         """设置嵌套配置值"""
         current = config
         for key in path[:-1]:
             if key not in current:
                 current[key] = {}
             current = current[key]
-        
+
         current[path[-1]] = value
-    
+
     def _parse_env_value(self, value: str) -> Any:
         """解析环境变量值"""
         # 尝试解析为JSON
@@ -226,11 +223,11 @@ class EnhancedConfigManager:
             return json.loads(value)
         except json.JSONDecodeError:
             pass
-        
+
         # 尝试解析为布尔值
         if value.lower() in ('true', 'false'):
             return value.lower() == 'true'
-        
+
         # 尝试解析为数字
         try:
             if '.' in value:
@@ -239,33 +236,33 @@ class EnhancedConfigManager:
                 return int(value)
         except ValueError:
             pass
-        
+
         # 返回字符串
         return value
-    
+
     def _start_file_watcher(self):
         """启动文件监控"""
         try:
             self._observer = Observer()
             handler = ConfigFileHandler(self)
-            
+
             config_dir = os.path.dirname(os.path.abspath(self.config_path))
             self._observer.schedule(handler, config_dir, recursive=False)
             self._observer.start()
-            
+
             logger.info(f"配置文件监控已启动: {config_dir}")
-            
+
         except Exception as e:
             logger.warning(f"启动配置文件监控失败: {str(e)}")
-    
+
     async def reload_config(self):
         """重新加载配置"""
         try:
             logger.info("重新加载配置")
-            
+
             old_config = self._config
             self.load_config()
-            
+
             # 通知回调函数
             for callback in self._reload_callbacks:
                 try:
@@ -275,52 +272,52 @@ class EnhancedConfigManager:
                         callback(old_config, self._config)
                 except Exception as e:
                     logger.error(f"配置重载回调失败: {str(e)}")
-            
+
             logger.info("配置重新加载完成")
-            
+
         except Exception as e:
             logger.error(f"配置重新加载失败: {str(e)}")
-    
+
     def add_reload_callback(self, callback: callable):
         """添加配置重载回调"""
         self._reload_callbacks.append(callback)
-    
+
     def remove_reload_callback(self, callback: callable):
         """移除配置重载回调"""
         if callback in self._reload_callbacks:
             self._reload_callbacks.remove(callback)
-    
+
     @property
     def config(self) -> AccessibilityConfig:
         """获取配置"""
         return self._config
-    
+
     def get(self, key: str, default: Any = None) -> Any:
         """获取配置值"""
         try:
             keys = key.split('.')
             value = self._raw_config
-            
+
             for k in keys:
                 value = value[k]
-            
+
             return value
         except (KeyError, TypeError):
             return default
-    
+
     def set(self, key: str, value: Any):
         """设置配置值（仅在内存中）"""
         keys = key.split('.')
         self._set_nested_value(self._raw_config, keys, value)
-        
+
         # 重新验证配置
         try:
             self._config = AccessibilityConfig(**self._raw_config)
         except ValidationError as e:
             logger.error(f"配置验证失败: {str(e)}")
             raise
-    
-    def validate_config(self, config_dict: Dict[str, Any]) -> bool:
+
+    def validate_config(self, config_dict: dict[str, Any]) -> bool:
         """验证配置"""
         try:
             AccessibilityConfig(**config_dict)
@@ -328,34 +325,34 @@ class EnhancedConfigManager:
         except ValidationError as e:
             logger.error(f"配置验证失败: {str(e)}")
             return False
-    
-    def get_config_schema(self) -> Dict[str, Any]:
+
+    def get_config_schema(self) -> dict[str, Any]:
         """获取配置模式"""
         return AccessibilityConfig.schema()
-    
+
     def export_config(self, format: str = 'yaml') -> str:
         """导出配置"""
         if format.lower() == 'json':
             return json.dumps(self._raw_config, indent=2, ensure_ascii=False)
         else:
             return yaml.dump(self._raw_config, default_flow_style=False, allow_unicode=True)
-    
+
     def save_config(self, path: str = None):
         """保存配置到文件"""
         save_path = path or self.config_path
-        
+
         with open(save_path, 'w', encoding='utf-8') as f:
             if save_path.endswith('.json'):
                 json.dump(self._raw_config, f, indent=2, ensure_ascii=False)
             else:
                 yaml.dump(self._raw_config, f, default_flow_style=False, allow_unicode=True)
-        
+
         logger.info(f"配置已保存到: {save_path}")
-    
-    def get_env_vars_info(self) -> List[Dict[str, Any]]:
+
+    def get_env_vars_info(self) -> list[dict[str, Any]]:
         """获取环境变量信息"""
         env_vars = []
-        
+
         def extract_env_vars(obj, prefix=""):
             if isinstance(obj, dict):
                 for key, value in obj.items():
@@ -369,21 +366,21 @@ class EnhancedConfigManager:
                     'config_path': prefix.lower().replace('_', '.'),
                     'type': type(obj).__name__
                 })
-        
+
         extract_env_vars(self._raw_config)
         return env_vars
-    
+
     def cleanup(self):
         """清理资源"""
         if self._observer:
             self._observer.stop()
             self._observer.join()
-        
+
         logger.info("配置管理器清理完成")
 
 
 # 全局配置管理器实例
-config_manager: Optional[EnhancedConfigManager] = None
+config_manager: EnhancedConfigManager | None = None
 
 
 def get_config_manager() -> EnhancedConfigManager:
@@ -401,4 +398,4 @@ def get_config() -> AccessibilityConfig:
 
 def reload_config():
     """重新加载配置"""
-    return get_config_manager().reload_config() 
+    return get_config_manager().reload_config()

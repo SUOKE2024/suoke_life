@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 预约存储库
@@ -8,16 +7,15 @@
 
 import logging
 import uuid
-from datetime import datetime, timedelta
-from typing import Dict, List, Any, Optional
+from datetime import datetime
+from typing import Any
 
 import motor.motor_asyncio
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.future import select
 
-from pkg.utils.config_loader import get_config
 from internal.domain.models import AppointmentStatus
+from pkg.utils.config_loader import get_config
 
 logger = logging.getLogger(__name__)
 
@@ -50,7 +48,7 @@ class AppointmentRepository:
 
         logger.info("预约存储库初始化完成")
 
-    async def create_appointment(self, appointment_data: Dict[str, Any]) -> str:
+    async def create_appointment(self, appointment_data: dict[str, Any]) -> str:
         """
         创建预约
 
@@ -79,12 +77,12 @@ class AppointmentRepository:
             return str(result.inserted_id)
 
         except Exception as e:
-            logger.error(f"创建预约失败: {str(e)}", exc_info=True)
+            logger.error(f"创建预约失败: {e!s}", exc_info=True)
             raise
 
     async def get_appointment_by_id(
         self, appointment_id: str
-    ) -> Optional[Dict[str, Any]]:
+    ) -> dict[str, Any] | None:
         """
         根据ID获取预约
 
@@ -109,11 +107,11 @@ class AppointmentRepository:
             return None
 
         except Exception as e:
-            logger.error(f"查询预约失败: {str(e)}", exc_info=True)
+            logger.error(f"查询预约失败: {e!s}", exc_info=True)
             return None
 
     async def update_appointment(
-        self, appointment_id: str, appointment_data: Dict[str, Any]
+        self, appointment_id: str, appointment_data: dict[str, Any]
     ) -> bool:
         """
         更新预约
@@ -138,7 +136,7 @@ class AppointmentRepository:
             return result.modified_count > 0
 
         except Exception as e:
-            logger.error(f"更新预约失败: {str(e)}", exc_info=True)
+            logger.error(f"更新预约失败: {e!s}", exc_info=True)
             return False
 
     async def delete_appointment(self, appointment_id: str) -> bool:
@@ -161,12 +159,12 @@ class AppointmentRepository:
             return result.deleted_count > 0
 
         except Exception as e:
-            logger.error(f"删除预约失败: {str(e)}", exc_info=True)
+            logger.error(f"删除预约失败: {e!s}", exc_info=True)
             return False
 
     async def get_appointments_by_user(
-        self, user_id: str, status: str = None, page: int = 1, page_size: int = 20
-    ) -> Dict[str, Any]:
+        self, user_id: str, status: str | None = None, page: int = 1, page_size: int = 20
+    ) -> dict[str, Any]:
         """
         获取用户的预约列表
 
@@ -219,7 +217,7 @@ class AppointmentRepository:
             }
 
         except Exception as e:
-            logger.error(f"查询用户预约失败: {str(e)}", exc_info=True)
+            logger.error(f"查询用户预约失败: {e!s}", exc_info=True)
             return {
                 "appointments": [],
                 "page": page,
@@ -229,8 +227,8 @@ class AppointmentRepository:
             }
 
     async def get_appointments_by_doctor(
-        self, doctor_id: str, status: str = None, page: int = 1, page_size: int = 20
-    ) -> Dict[str, Any]:
+        self, doctor_id: str, status: str | None = None, page: int = 1, page_size: int = 20
+    ) -> dict[str, Any]:
         """
         获取医生的预约列表
 
@@ -283,7 +281,7 @@ class AppointmentRepository:
             }
 
         except Exception as e:
-            logger.error(f"查询医生预约失败: {str(e)}", exc_info=True)
+            logger.error(f"查询医生预约失败: {e!s}", exc_info=True)
             return {
                 "appointments": [],
                 "page": page,
@@ -294,7 +292,7 @@ class AppointmentRepository:
 
     async def get_appointments_by_time(
         self, doctor_id: str, time_slot: str
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """
         获取指定时间段的预约
 
@@ -334,7 +332,7 @@ class AppointmentRepository:
             return appointments
 
         except Exception as e:
-            logger.error(f"查询时间段预约失败: {str(e)}", exc_info=True)
+            logger.error(f"查询时间段预约失败: {e!s}", exc_info=True)
             return []
 
     async def update_appointment_status(self, appointment_id: str, status: str) -> bool:
@@ -359,12 +357,12 @@ class AppointmentRepository:
             return result.modified_count > 0
 
         except Exception as e:
-            logger.error(f"更新预约状态失败: {str(e)}", exc_info=True)
+            logger.error(f"更新预约状态失败: {e!s}", exc_info=True)
             return False
 
     async def get_appointments_by_date_range(
         self, doctor_id: str, start_date: str, end_date: str
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """
         获取日期范围内的预约
 
@@ -399,5 +397,5 @@ class AppointmentRepository:
             return appointments
 
         except Exception as e:
-            logger.error(f"查询日期范围预约失败: {str(e)}", exc_info=True)
+            logger.error(f"查询日期范围预约失败: {e!s}", exc_info=True)
             return []

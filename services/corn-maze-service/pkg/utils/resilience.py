@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
 """
-重试和故障恢复工具
+重试和断路器模式实现
+
+提供函数重试和断路器模式的装饰器和工具类
 """
 
 import asyncio
@@ -16,7 +18,6 @@ from typing import Any, TypeVar, cast
 logger = logging.getLogger(__name__)
 
 # 类型定义
-T = TypeVar('T')
 F = TypeVar('F', bound=Callable[..., Any])
 
 def retry(
@@ -27,13 +28,13 @@ def retry(
     exceptions: tuple = (Exception,)
 ) -> Callable[[F], F]:
     """
-    重试装饰器，支持指数退避和抖动
+    重试装饰器
 
     Args:
         max_retries: 最大重试次数
         retry_delay: 初始重试延迟（秒）
         backoff_factor: 退避因子
-        jitter: 抖动因子
+        jitter: 随机抖动因子（0-1）
         exceptions: 需要重试的异常类型
 
     Returns:
@@ -55,14 +56,14 @@ def retry(
                         delay = delay * (1 + random.uniform(-jitter, jitter))
 
                         logger.warning(
-                            f"调用 {func.__name__} 失败，尝试 {attempt+1}/{max_retries}，"
+                            f"调用 {func.__name__} 失败, 尝试 {attempt+1}/{max_retries}, "
                             f"将在 {delay:.2f} 秒后重试: {e!s}"
                         )
 
                         await asyncio.sleep(delay)
                     else:
                         logger.error(
-                            f"调用 {func.__name__} 失败，已达到最大重试次数 {max_retries}: {e!s}"
+                            f"调用 {func.__name__} 失败, 已达到最大重试次数 {max_retries}: {e!s}"
                         )
 
             if last_exception:
@@ -84,14 +85,14 @@ def retry(
                         delay = delay * (1 + random.uniform(-jitter, jitter))
 
                         logger.warning(
-                            f"调用 {func.__name__} 失败，尝试 {attempt+1}/{max_retries}，"
+                            f"调用 {func.__name__} 失败, 尝试 {attempt+1}/{max_retries}, "
                             f"将在 {delay:.2f} 秒后重试: {e!s}"
                         )
 
                         time.sleep(delay)
                     else:
                         logger.error(
-                            f"调用 {func.__name__} 失败，已达到最大重试次数 {max_retries}: {e!s}"
+                            f"调用 {func.__name__} 失败, 已达到最大重试次数 {max_retries}: {e!s}"
                         )
 
             if last_exception:
@@ -109,7 +110,7 @@ def retry(
 class CircuitBreaker:
     """
     断路器模式实现
-    
+
     用于在远程服务调用失败时提供故障隔离
     """
 
@@ -127,7 +128,7 @@ class CircuitBreaker:
     ):
         """
         初始化断路器
-        
+
         Args:
             name: 断路器名称
             failure_threshold: 触发断路器的连续失败次数
@@ -147,15 +148,15 @@ class CircuitBreaker:
     async def execute(self, func: Callable[..., Any], *args: Any, **kwargs: Any) -> Any:
         """
         执行函数，应用断路器逻辑
-        
+
         Args:
             func: 要执行的函数
             *args: 函数参数
             **kwargs: 函数关键字参数
-            
+
         Returns:
             函数返回值
-            
+
         Raises:
             CircuitOpenError: 断路器处于打开状态
             原始异常: 如果函数执行失败并且断路器处于关闭或半开状态
@@ -168,7 +169,7 @@ class CircuitBreaker:
                     logger.info(f"断路器 {self.name} 从 OPEN 变为 HALF_OPEN")
                     self.state = self.HALF_OPEN
                 else:
-                    logger.warning(f"断路器 {self.name} 处于 OPEN 状态，快速失败")
+                    logger.warning(f"断路器 {self.name} 处于 OPEN 状态, 快速失败")
                     raise CircuitOpenError(f"断路器 {self.name} 处于打开状态")
 
         try:
@@ -195,10 +196,10 @@ class CircuitBreaker:
 
                 # 检查是否应该打开断路器
                 if self.state == self.CLOSED and self.failure_count >= self.failure_threshold:
-                    logger.warning(f"断路器 {self.name} 从 CLOSED 变为 OPEN，连续失败 {self.failure_count} 次")
+                    logger.warning(f"断路器 {self.name} 从 CLOSED 变为 OPEN, 连续失败 {self.failure_count} 次")
                     self.state = self.OPEN
                 elif self.state == self.HALF_OPEN:
-                    logger.warning(f"断路器 {self.name} 从 HALF_OPEN 变为 OPEN，测试请求失败")
+                    logger.warning(f"断路器 {self.name} 从 HALF_OPEN 变为 OPEN, 测试请求失败")
                     self.state = self.OPEN
 
             # 重新抛出异常
@@ -219,13 +220,13 @@ def get_circuit_breaker(
 ) -> CircuitBreaker:
     """
     获取或创建断路器
-    
+
     Args:
         name: 断路器名称
         failure_threshold: 触发断路器的连续失败次数
         recovery_timeout: 从OPEN到HALF_OPEN的恢复超时时间（秒）
         expected_exceptions: 计入失败次数的异常类型
-        
+
     Returns:
         CircuitBreaker: 断路器实例
     """
@@ -246,13 +247,13 @@ def with_circuit_breaker(
 ) -> Callable[[F], F]:
     """
     断路器装饰器
-    
+
     Args:
         name: 断路器名称
         failure_threshold: 触发断路器的连续失败次数
         recovery_timeout: 从OPEN到HALF_OPEN的恢复超时时间（秒）
         expected_exceptions: 计入失败次数的异常类型
-        
+
     Returns:
         装饰后的函数
     """
@@ -271,8 +272,15 @@ def with_circuit_breaker(
         @functools.wraps(func)
         def sync_wrapper(*args: Any, **kwargs: Any) -> Any:
             # 同步函数需要用事件循环运行异步断路器
-            loop = asyncio.get_event_loop()
-            return loop.run_until_complete(circuit_breaker.execute(func, *args, **kwargs))
+            try:
+                loop = asyncio.get_event_loop()
+            except RuntimeError:
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+
+            return loop.run_until_complete(
+                circuit_breaker.execute(func, *args, **kwargs)
+            )
 
         # 根据原函数类型选择包装器
         if asyncio.iscoroutinefunction(func):

@@ -8,6 +8,7 @@ from typing import List, Optional
 from sqlalchemy import Boolean, DateTime, Enum as SQLEnum, String, Text, func
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import Table, Column, ForeignKey
 
 from auth_service.models.base import BaseModel
 
@@ -407,8 +408,6 @@ class Permission(BaseModel):
 
 
 # 角色权限关联表
-from sqlalchemy import Table, Column, ForeignKey
-
 role_permissions = Table(
     "role_permissions",
     BaseModel.metadata,

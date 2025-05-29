@@ -9,19 +9,20 @@ ENV PYTHONPATH=/app
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 
-# 安装系统依赖
+# 安装系统依赖和 UV
 RUN apt-get update && apt-get install -y \
     gcc \
     g++ \
     libpq-dev \
     curl \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && pip install --no-cache-dir uv
 
 # 复制依赖文件
-COPY requirements.txt .
+COPY pyproject.toml uv.lock ./
 
-# 安装Python依赖
-RUN pip install --no-cache-dir -r requirements.txt
+# 使用 UV 安装 Python 依赖（使用国内镜像）
+RUN uv sync --frozen --no-dev --index-url https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
 
 # 复制应用代码
 COPY . .
@@ -42,4 +43,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
 EXPOSE 9084
 
 # 启动命令
-CMD ["python", "-m", "cmd.server.main"] 
+CMD ["uv", "run", "python", "-m", "cmd.server.main"] 

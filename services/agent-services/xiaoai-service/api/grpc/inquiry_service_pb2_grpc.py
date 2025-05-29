@@ -3,7 +3,7 @@
 import grpc
 import warnings
 
-from . import inquiry_service_pb2 as inquiry__service__pb2
+from api.grpc import inquiry_service_pb2 as inquiry__service__pb2
 
 GRPC_GENERATED_VERSION = '1.71.0'
 GRPC_VERSION = grpc.__version__

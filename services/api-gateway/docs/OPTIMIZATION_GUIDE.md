@@ -201,11 +201,15 @@ FROM python:3.11-slim
 # 设置工作目录
 WORKDIR /app
 
-# 复制依赖文件
-COPY requirements.txt .
+# 安装 UV
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+ENV PATH="/root/.cargo/bin:$PATH"
+
+# 复制项目配置文件
+COPY pyproject.toml uv.lock ./
 
 # 安装依赖
-RUN pip install --no-cache-dir -r requirements.txt
+RUN uv sync --frozen --no-dev
 
 # 复制应用代码
 COPY . .
@@ -218,7 +222,7 @@ ENV CONFIG_FILE=/app/config/enhanced_config.yaml
 EXPOSE 8080 50050
 
 # 启动命令
-CMD ["python", "cmd/server/main.py"]
+CMD ["uv", "run", "python", "suoke_api_gateway/main.py"]
 ```
 
 #### Kubernetes配置

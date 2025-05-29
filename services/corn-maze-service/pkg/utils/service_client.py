@@ -16,6 +16,7 @@ from urllib.parse import urljoin
 
 import aiohttp
 
+from corn_maze_service.constants import HTTP_BAD_REQUEST
 from pkg.utils.cache import CacheManager
 from pkg.utils.metrics import errors_total, record_service_call
 
@@ -375,7 +376,7 @@ class ServiceClient:
 
         async with self.session.request(method, url, **kwargs) as response:
             # 检查HTTP状态码
-            if response.status >= 400:
+            if response.status >= HTTP_BAD_REQUEST:
                 error_text = await response.text()
                 raise aiohttp.ClientResponseError(
                     request_info=response.request_info,
@@ -529,19 +530,43 @@ class ServiceRegistry:
             cache_manager=self.cache_manager
         )
 
-# 全局服务注册中心
-_service_registry: ServiceRegistry | None = None
+# 服务注册中心单例
+class ServiceRegistrySingleton:
+    """服务注册中心单例"""
+
+    _instance: ServiceRegistry | None = None
+    _lock = asyncio.Lock()
+
+    @classmethod
+    async def get_instance(cls, cache_manager: CacheManager | None = None) -> ServiceRegistry:
+        """获取服务注册中心实例"""
+        if cls._instance is None:
+            async with cls._lock:
+                if cls._instance is None:
+                    cls._instance = ServiceRegistry(cache_manager)
+        return cls._instance
+
+    @classmethod
+    def get_instance_sync(cls, cache_manager: CacheManager | None = None) -> ServiceRegistry:
+        """同步获取服务注册中心实例"""
+        if cls._instance is None:
+            cls._instance = ServiceRegistry(cache_manager)
+        return cls._instance
+
 
 def get_service_registry() -> ServiceRegistry:
-    """获取全局服务注册中心"""
-    global _service_registry
-    if _service_registry is None:
-        _service_registry = ServiceRegistry()
-    return _service_registry
+    """获取全局服务注册中心（向后兼容）"""
+    return ServiceRegistrySingleton.get_instance_sync()
+
+
+async def get_service_registry_async(cache_manager: CacheManager | None = None) -> ServiceRegistry:
+    """异步获取全局服务注册中心"""
+    return await ServiceRegistrySingleton.get_instance(cache_manager)
+
 
 async def register_default_services():
     """注册默认服务"""
-    registry = get_service_registry()
+    registry = await get_service_registry_async()
 
     # 注册索克生活平台的其他服务
     services_config = {

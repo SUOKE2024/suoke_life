@@ -14,11 +14,11 @@
 """
 
 # 导出核心组件
-from .service.app import AccessibilityService, AccessibilityApp
 from .delivery.grpc_server import AccessibilityServicer
+from .service.app import AccessibilityApp, AccessibilityService
 
 __all__ = [
     "AccessibilityService",
-    "AccessibilityApp", 
+    "AccessibilityApp",
     "AccessibilityServicer"
-] 
+]

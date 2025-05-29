@@ -1,29 +1,25 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 弹性工具
 提供断路器、限流器、重试策略等弹性机制
 """
 
-import time
-import logging
-import functools
 import asyncio
-from typing import Callable, Any, Dict, List, Optional
+import functools
+import logging
 import threading
-
-from .config_loader import get_config
+import time
 
 logger = logging.getLogger(__name__)
 
 
 class CircuitBreaker:
-    """断路器，防止系统级联失败"""
+    """断路器, 防止系统级联失败"""
 
     # 断路器状态
     CLOSED = "closed"  # 正常关闭状态
-    OPEN = "open"  # 开路状态，快速失败
-    HALF_OPEN = "half_open"  # 半开状态，尝试恢复
+    OPEN = "open"  # 开路状态, 快速失败
+    HALF_OPEN = "half_open"  # 半开状态, 尝试恢复
 
     def __init__(self, name: str, failure_threshold: int = 5, recovery_time: int = 30):
         """
@@ -32,7 +28,7 @@ class CircuitBreaker:
         Args:
             name: 断路器名称
             failure_threshold: 触发断路的失败阈值
-            recovery_time: 恢复尝试时间（秒）
+            recovery_time: 恢复尝试时间(秒)
         """
         self.name = name
         self.failure_threshold = failure_threshold
@@ -63,7 +59,7 @@ class CircuitBreaker:
     def _record_success(self):
         """记录成功"""
         with self.lock:
-            # 如果是半开状态，成功则恢复到关闭状态
+            # 如果是半开状态, 成功则恢复到关闭状态
             if self.state == self.HALF_OPEN:
                 logger.info(f"断路器 {self.name} 关闭: 恢复正常")
                 self.state = self.CLOSED
@@ -72,7 +68,7 @@ class CircuitBreaker:
     def _check_state(self):
         """检查并更新断路器状态"""
         with self.lock:
-            # 如果是开路状态且已超过恢复时间，尝试半开
+            # 如果是开路状态且已超过恢复时间, 尝试半开
             if self.state == self.OPEN:
                 elapsed = time.time() - self.last_failure_time
                 if elapsed >= self.recovery_time:
@@ -95,7 +91,7 @@ class CircuitBreaker:
 
             # 半开状态只允许一个请求通过
             if self.state == self.HALF_OPEN:
-                # 允许通过后立即切换回开路状态，防止并发请求都通过
+                # 允许通过后立即切换回开路状态, 防止并发请求都通过
                 self.state = self.OPEN
                 return True
 
@@ -132,7 +128,7 @@ def get_circuit_breaker(
     Args:
         name: 断路器名称
         failure_threshold: 触发断路的失败阈值
-        recovery_time: 恢复尝试时间（秒）
+        recovery_time: 恢复尝试时间(秒)
 
     Returns:
         CircuitBreaker: 断路器实例
@@ -151,7 +147,7 @@ def circuit_breaker(failure_threshold: int = 5, recovery_time: int = 30):
 
     Args:
         failure_threshold: 触发断路的失败阈值
-        recovery_time: 恢复尝试时间（秒）
+        recovery_time: 恢复尝试时间(秒)
     """
 
     def decorator(func):
@@ -177,7 +173,7 @@ def circuit_breaker(failure_threshold: int = 5, recovery_time: int = 30):
                 breaker.on_success()
                 return result
 
-            except Exception as e:
+            except Exception:
                 # 记录失败
                 breaker.on_failure()
                 raise
@@ -188,7 +184,7 @@ def circuit_breaker(failure_threshold: int = 5, recovery_time: int = 30):
 
 
 class RateLimiter:
-    """速率限制器，限制请求频率"""
+    """速率限制器, 限制请求频率"""
 
     def __init__(self, name: str, max_calls: int, time_period: int):
         """
@@ -197,13 +193,13 @@ class RateLimiter:
         Args:
             name: 限制器名称
             max_calls: 时间周期内允许的最大调用次数
-            time_period: 时间周期（秒）
+            time_period: 时间周期(秒)
         """
         self.name = name
         self.max_calls = max_calls
         self.time_period = time_period
 
-        # 调用记录 (时间戳, 计数)
+        # 调用记录存储
         self.calls = []
         self.lock = threading.RLock()
 
@@ -261,7 +257,7 @@ def get_rate_limiter(
     Args:
         name: 限制器名称
         max_calls: 时间周期内允许的最大调用次数
-        time_period: 时间周期（秒）
+        time_period: 时间周期(秒)
 
     Returns:
         RateLimiter: 速率限制器实例
@@ -278,7 +274,7 @@ def rate_limiter(max_calls: int = 100, time_period: int = 60):
 
     Args:
         max_calls: 时间周期内允许的最大调用次数
-        time_period: 时间周期（秒）
+        time_period: 时间周期(秒)
     """
 
     def decorator(func):

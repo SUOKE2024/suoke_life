@@ -1,23 +1,20 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 小克服务(XiaoKeService)的gRPC实现
 """
 
 import logging
-import time
 from datetime import datetime
-from typing import Dict, List
 
 import grpc
 from google.protobuf.timestamp_pb2 import Timestamp
 
 from api.grpc import xiaoke_service_pb2, xiaoke_service_pb2_grpc
-from internal.scheduler.resource_manager import ResourceManager
 from internal.inventory.product_manager import ProductManager
+from internal.observability.metrics import measure_time, metrics
 from internal.repository.subscription_repository import SubscriptionRepository
-from internal.observability.metrics import metrics, measure_time
+from internal.scheduler.resource_manager import ResourceManager
 
 logger = logging.getLogger(__name__)
 
@@ -84,10 +81,10 @@ class XiaoKeServiceServicer(xiaoke_service_pb2_grpc.XiaoKeServiceServicer):
             )
 
         except Exception as e:
-            logger.error(f"医疗资源调度失败: {str(e)}", exc_info=True)
+            logger.error(f"医疗资源调度失败: {e!s}", exc_info=True)
             metrics.record_request("ScheduleMedicalResource", status="error")
             context.set_code(grpc.StatusCode.INTERNAL)
-            context.set_details(f"医疗资源调度处理失败: {str(e)}")
+            context.set_details(f"医疗资源调度处理失败: {e!s}")
             return xiaoke_service_pb2.MedicalResourceResponse()
 
     @measure_time("ManageAppointment")
@@ -124,10 +121,10 @@ class XiaoKeServiceServicer(xiaoke_service_pb2_grpc.XiaoKeServiceServicer):
             )
 
         except Exception as e:
-            logger.error(f"预约管理失败: {str(e)}", exc_info=True)
+            logger.error(f"预约管理失败: {e!s}", exc_info=True)
             metrics.record_request("ManageAppointment", status="error")
             context.set_code(grpc.StatusCode.INTERNAL)
-            context.set_details(f"预约管理处理失败: {str(e)}")
+            context.set_details(f"预约管理处理失败: {e!s}")
             return xiaoke_service_pb2.AppointmentResponse()
 
     @measure_time("CustomizeProduct")
@@ -186,10 +183,10 @@ class XiaoKeServiceServicer(xiaoke_service_pb2_grpc.XiaoKeServiceServicer):
             )
 
         except Exception as e:
-            logger.error(f"农产品定制失败: {str(e)}", exc_info=True)
+            logger.error(f"农产品定制失败: {e!s}", exc_info=True)
             metrics.record_request("CustomizeProduct", status="error")
             context.set_code(grpc.StatusCode.INTERNAL)
-            context.set_details(f"农产品定制处理失败: {str(e)}")
+            context.set_details(f"农产品定制处理失败: {e!s}")
             return xiaoke_service_pb2.ProductCustomizationResponse()
 
     @measure_time("TraceProduct")
@@ -235,11 +232,11 @@ class XiaoKeServiceServicer(xiaoke_service_pb2_grpc.XiaoKeServiceServicer):
             )
 
         except Exception as e:
-            logger.error(f"农产品溯源失败: {str(e)}", exc_info=True)
+            logger.error(f"农产品溯源失败: {e!s}", exc_info=True)
             metrics.record_request("TraceProduct", status="error")
             metrics.record_erp_api_call("blockchain_verify", "failure")
             context.set_code(grpc.StatusCode.INTERNAL)
-            context.set_details(f"农产品溯源处理失败: {str(e)}")
+            context.set_details(f"农产品溯源处理失败: {e!s}")
             return xiaoke_service_pb2.ProductTraceResponse()
 
     @measure_time("ProcessPayment")
@@ -279,13 +276,13 @@ class XiaoKeServiceServicer(xiaoke_service_pb2_grpc.XiaoKeServiceServicer):
             )
 
         except Exception as e:
-            logger.error(f"支付处理失败: {str(e)}", exc_info=True)
+            logger.error(f"支付处理失败: {e!s}", exc_info=True)
             metrics.record_request("ProcessPayment", status="error")
             metrics.record_payment(
                 payment_method=request.payment_method, status="FAILED"
             )
             context.set_code(grpc.StatusCode.INTERNAL)
-            context.set_details(f"支付处理失败: {str(e)}")
+            context.set_details(f"支付处理失败: {e!s}")
             return xiaoke_service_pb2.PaymentResponse()
 
     @measure_time("ManageSubscription")
@@ -338,7 +335,7 @@ class XiaoKeServiceServicer(xiaoke_service_pb2_grpc.XiaoKeServiceServicer):
             )
 
         except Exception as e:
-            logger.error(f"订阅管理失败: {str(e)}", exc_info=True)
+            logger.error(f"订阅管理失败: {e!s}", exc_info=True)
             metrics.record_request("ManageSubscription", status="error")
             metrics.record_db_operation(
                 database="postgres",
@@ -346,7 +343,7 @@ class XiaoKeServiceServicer(xiaoke_service_pb2_grpc.XiaoKeServiceServicer):
                 status="failure",
             )
             context.set_code(grpc.StatusCode.INTERNAL)
-            context.set_details(f"订阅管理处理失败: {str(e)}")
+            context.set_details(f"订阅管理处理失败: {e!s}")
             return xiaoke_service_pb2.SubscriptionResponse()
 
     @measure_time("RecommendProducts")
@@ -438,8 +435,8 @@ class XiaoKeServiceServicer(xiaoke_service_pb2_grpc.XiaoKeServiceServicer):
             )
 
         except Exception as e:
-            logger.error(f"商品推荐失败: {str(e)}", exc_info=True)
+            logger.error(f"商品推荐失败: {e!s}", exc_info=True)
             metrics.record_request("RecommendProducts", status="error")
             context.set_code(grpc.StatusCode.INTERNAL)
-            context.set_details(f"商品推荐处理失败: {str(e)}")
+            context.set_details(f"商品推荐处理失败: {e!s}")
             return xiaoke_service_pb2.ProductRecommendationResponse()

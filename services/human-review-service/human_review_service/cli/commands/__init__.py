@@ -8,4 +8,4 @@ CLI Commands
 # 导入所有命令模块，确保它们被注册
 from . import database, reviewer, server
 
-__all__ = ["database", "reviewer", "server"] 
+__all__ = ["database", "reviewer", "server"]

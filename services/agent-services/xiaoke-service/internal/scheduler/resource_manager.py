@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 资源管理器
@@ -7,17 +6,16 @@
 """
 
 import logging
-import uuid
 import time
-import json
-from datetime import datetime, timedelta
-from typing import Dict, List, Any, Optional
+import uuid
+from datetime import datetime
+from typing import Any
 
+from internal.domain.models import AppointmentStatus
+from internal.repository.appointment_repository import AppointmentRepository
+from internal.repository.resource_repository import ResourceRepository
 from pkg.utils.config_loader import get_config
 from pkg.utils.metrics import get_metrics_collector
-from internal.repository.resource_repository import ResourceRepository
-from internal.repository.appointment_repository import AppointmentRepository
-from internal.domain.models import MedicalResourceType, AppointmentStatus
 
 logger = logging.getLogger(__name__)
 
@@ -56,10 +54,10 @@ class ResourceManager:
         resource_type: str,
         constitution_type: str,
         location: str,
-        requirements: List[str],
+        requirements: list[str],
         page_size: int = 10,
         page_number: int = 1,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         调度医疗资源，根据用户需求和体质类型匹配最佳资源
 
@@ -115,7 +113,7 @@ class ResourceManager:
             }
 
         except Exception as e:
-            logger.error(f"资源调度失败: {str(e)}", exc_info=True)
+            logger.error(f"资源调度失败: {e!s}", exc_info=True)
             raise
 
     async def manage_appointment(
@@ -126,8 +124,8 @@ class ResourceManager:
         preferred_time: str,
         symptoms: str,
         constitution_type: str,
-        metadata: Dict[str, str] = None,
-    ) -> Dict[str, Any]:
+        metadata: dict[str, str] | None = None,
+    ) -> dict[str, Any]:
         """
         管理医疗预约
 
@@ -222,16 +220,16 @@ class ResourceManager:
             }
 
         except Exception as e:
-            logger.error(f"预约管理失败: {str(e)}", exc_info=True)
+            logger.error(f"预约管理失败: {e!s}", exc_info=True)
             raise
 
     def _score_resources(
         self,
-        resources: List[Dict[str, Any]],
+        resources: list[dict[str, Any]],
         constitution_type: str,
         location: str,
-        requirements: List[str],
-    ) -> List[Dict[str, Any]]:
+        requirements: list[str],
+    ) -> list[dict[str, Any]]:
         """
         对资源进行评分和排序
 
@@ -279,7 +277,7 @@ class ResourceManager:
         return scored_resources
 
     def _calculate_constitution_match(
-        self, resource: Dict[str, Any], constitution_type: str
+        self, resource: dict[str, Any], constitution_type: str
     ) -> float:
         """计算资源与用户体质的匹配度"""
         # 获取资源支持的体质类型
@@ -302,7 +300,7 @@ class ResourceManager:
         return 0.3
 
     def _calculate_location_proximity(
-        self, resource: Dict[str, Any], location: str
+        self, resource: dict[str, Any], location: str
     ) -> float:
         """计算位置接近度"""
         # 简化实现，实际应使用地理坐标计算距离
@@ -316,7 +314,7 @@ class ResourceManager:
         # 例如基于省市区划分的层级匹配或地理坐标的距离计算
         return 0.4
 
-    def _calculate_availability(self, resource: Dict[str, Any]) -> float:
+    def _calculate_availability(self, resource: dict[str, Any]) -> float:
         """计算资源可用性分数"""
         available_times = resource.get("available_times", [])
 
@@ -327,8 +325,8 @@ class ResourceManager:
         return min(1.0, len(available_times) / 10.0)  # 假设10个时间段为满分
 
     def _check_requirements(
-        self, resource: Dict[str, Any], requirements: List[str]
-    ) -> Dict[str, bool]:
+        self, resource: dict[str, Any], requirements: list[str]
+    ) -> dict[str, bool]:
         """检查资源是否满足特殊需求"""
         result = {}
         specialties = resource.get("specialties", [])
@@ -362,7 +360,7 @@ class ResourceManager:
 
     async def _find_next_available_time(
         self, doctor_id: str, from_time: datetime
-    ) -> Optional[datetime]:
+    ) -> datetime | None:
         """查找医生下一个可用时间"""
         # 获取医生可用时间
         doctor = await self.resource_repo.get_resource_by_id(doctor_id)

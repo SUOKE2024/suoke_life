@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 小艾智能体服务模块定义
 负责定义小艾智能体的功能领域和能力模块
@@ -7,7 +6,7 @@
 
 import logging
 from enum import Enum
-from typing import Dict, List, Optional, Set, Any
+from typing import Any
 
 # 日志配置
 logger = logging.getLogger(__name__)
@@ -15,7 +14,7 @@ logger = logging.getLogger(__name__)
 class ServiceCategory(str, Enum):
     """服务类别枚举"""
     CORE = "core"                     # 核心服务
-    DIAGNOSTIC = "diagnostic"         # 诊断服务 
+    DIAGNOSTIC = "diagnostic"         # 诊断服务
     ANALYSIS = "analysis"             # 分析服务
     COORDINATION = "coordination"     # 协调服务
     INTEGRATION = "integration"       # 集成服务
@@ -31,7 +30,7 @@ class ServiceStatus(str, Enum):
 
 class ServiceModule:
     """服务模块基类"""
-    
+
     def __init__(
         self,
         id: str,
@@ -39,17 +38,17 @@ class ServiceModule:
         description: str,
         category: ServiceCategory,
         status: ServiceStatus = ServiceStatus.ACTIVE,
-        capabilities: Optional[List[str]] = None,
-        depends_on: Optional[List[str]] = None,
-        api_endpoints: Optional[List[str]] = None,
-        required_services: Optional[List[str]] = None,
-        required_models: Optional[List[str]] = None,
-        required_integrations: Optional[List[str]] = None,
-        config_keys: Optional[List[str]] = None
+        capabilities: list[str] | None = None,
+        dependson: list[str] | None = None,
+        apiendpoints: list[str] | None = None,
+        requiredservices: list[str] | None = None,
+        requiredmodels: list[str] | None = None,
+        requiredintegrations: list[str] | None = None,
+        configkeys: list[str] | None = None
     ):
         """
         初始化服务模块
-        
+
         Args:
             id: 模块唯一标识符
             name: 模块名称
@@ -70,14 +69,14 @@ class ServiceModule:
         self.category = category
         self.status = status
         self.capabilities = capabilities or []
-        self.depends_on = depends_on or []
-        self.api_endpoints = api_endpoints or []
-        self.required_services = required_services or []
-        self.required_models = required_models or []
-        self.required_integrations = required_integrations or []
-        self.config_keys = config_keys or []
-    
-    def to_dict(self) -> Dict[str, Any]:
+        self.dependson = depends_on or []
+        self.apiendpoints = api_endpoints or []
+        self.requiredservices = required_services or []
+        self.requiredmodels = required_models or []
+        self.requiredintegrations = required_integrations or []
+        self.configkeys = config_keys or []
+
+    def to_dict(self) -> dict[str, Any]:
         """转换为字典表示"""
         return {
             "id": self.id,
@@ -86,21 +85,21 @@ class ServiceModule:
             "category": self.category,
             "status": self.status,
             "capabilities": self.capabilities,
-            "depends_on": self.depends_on,
-            "api_endpoints": self.api_endpoints,
-            "required_services": self.required_services,
-            "required_models": self.required_models,
-            "required_integrations": self.required_integrations,
+            "depends_on": self.dependson,
+            "api_endpoints": self.apiendpoints,
+            "required_services": self.requiredservices,
+            "required_models": self.requiredmodels,
+            "required_integrations": self.requiredintegrations,
             "config_keys": self.config_keys
         }
 
 # 小艾智能体核心能力定义
-XIAOAI_SERVICE_MODULES = [
+XIAOAISERVICE_MODULES = [
     # 1. 四诊协调引擎 - 核心功能模块
     ServiceModule(
         id="four_diagnosis_coordinator",
         name="四诊协调引擎",
-        description="整合望诊、闻诊、问诊和切诊数据，实现四诊合参，生成综合分析结果",
+        description="整合望诊、闻诊、问诊和切诊数据, 实现四诊合参, 生成综合分析结果",
         category=ServiceCategory.COORDINATION,
         capabilities=[
             "协调四诊微服务调用顺序与优先级",
@@ -113,7 +112,7 @@ XIAOAI_SERVICE_MODULES = [
         ],
         required_services=[
             "look-service",
-            "listen-service", 
+            "listen-service",
             "inquiry-service",
             "palpation-service"
         ],
@@ -127,12 +126,12 @@ XIAOAI_SERVICE_MODULES = [
             "coordinator.priority_weights"
         ]
     ),
-    
+
     # 2. 多模态诊断分析 - 分析服务
     ServiceModule(
         id="multimodal_diagnosis_analysis",
         name="多模态诊断分析",
-        description="对四诊采集的多模态数据进行专业分析，提取健康特征与诊断信息",
+        description="对四诊采集的多模态数据进行专业分析, 提取健康特征与诊断信息",
         category=ServiceCategory.ANALYSIS,
         capabilities=[
             "舌象特征分析与分类",
@@ -157,22 +156,22 @@ XIAOAI_SERVICE_MODULES = [
             "analysis.anomaly_detection.threshold"
         ]
     ),
-    
+
     # 3. 中医辨证引擎 - 核心分析服务
     ServiceModule(
         id="tcm_syndrome_differentiation",
         name="中医辨证引擎",
-        description="基于四诊分析结果进行中医辨证论治，生成证型分析和体质评估",
+        description="基于四诊分析结果进行中医辨证论治, 生成证型分析和体质评估",
         category=ServiceCategory.ANALYSIS,
         capabilities=[
-            "八纲辨证（寒热虚实表里阴阳）",
+            "八纲辨证(寒热虚实表里阴阳)",
             "气血津液辨证",
             "脏腑辨证",
             "经络辨证",
             "卫气营血辨证",
             "六经辨证",
             "三焦辨证",
-            "体质辨析（九种体质）",
+            "体质辨析(九种体质)",
             "证候推理与确认",
             "中西医结合分析"
         ],
@@ -194,7 +193,7 @@ XIAOAI_SERVICE_MODULES = [
             "differentiation.evidence_requirements"
         ]
     ),
-    
+
     # 4. 健康分析与建议 - 分析服务
     ServiceModule(
         id="health_analysis_recommendation",
@@ -232,12 +231,12 @@ XIAOAI_SERVICE_MODULES = [
             "recommendation.suggestion_categories"
         ]
     ),
-    
+
     # 5. 智能诊间助手 - 对话服务
     ServiceModule(
         id="intelligent_diagnosis_assistant",
         name="智能诊间助手",
-        description="提供智能问答和交互式健康咨询，辅助四诊数据收集与解读",
+        description="提供智能问答和交互式健康咨询, 辅助四诊数据收集与解读",
         category=ServiceCategory.DIAGNOSTIC,
         capabilities=[
             "主诉引导与症状询问",
@@ -270,12 +269,12 @@ XIAOAI_SERVICE_MODULES = [
             "assistant.education_content_sources"
         ]
     ),
-    
+
     # 6. 四诊多模态设备集成 - 集成服务
     ServiceModule(
         id="multimodal_device_integration",
         name="四诊多模态设备集成",
-        description="与多种生物传感器和医疗设备集成，实现四诊数据的标准化采集",
+        description="与多种生物传感器和医疗设备集成, 实现四诊数据的标准化采集",
         category=ServiceCategory.INTEGRATION,
         capabilities=[
             "舌诊数据采集设备集成",
@@ -305,12 +304,12 @@ XIAOAI_SERVICE_MODULES = [
             "devices.connection_timeout"
         ]
     ),
-    
+
     # 7. 智能体协作引擎 - 核心服务
     ServiceModule(
         id="agent_collaboration_engine",
         name="智能体协作引擎",
-        description="管理小艾与其他智能体（小克、老克、索儿）的协作交互",
+        description="管理小艾与其他智能体(小克、老克、索儿)的协作交互",
         category=ServiceCategory.CORE,
         capabilities=[
             "智能体间消息路由",
@@ -339,7 +338,7 @@ XIAOAI_SERVICE_MODULES = [
             "collaboration.task_timeout"
         ]
     ),
-    
+
     # 8. 无障碍健康服务 - 无障碍服务
     ServiceModule(
         id="accessible_health_services",
@@ -378,12 +377,12 @@ XIAOAI_SERVICE_MODULES = [
             "accessibility.alternative_formats"
         ]
     ),
-    
+
     # 9. 医疗知识库增强 - 集成服务
     ServiceModule(
         id="medical_knowledge_enhancement",
         name="医疗知识库增强",
-        description="集成中西医结合知识库，支持四诊分析、辨证和健康建议的知识支持",
+        description="集成中西医结合知识库, 支持四诊分析、辨证和健康建议的知识支持",
         category=ServiceCategory.INTEGRATION,
         capabilities=[
             "中医典籍知识库接入",
@@ -411,12 +410,12 @@ XIAOAI_SERVICE_MODULES = [
             "knowledge.retrieval_strategy"
         ]
     ),
-    
+
     # 10. 健康数据分析引擎 - 分析服务
     ServiceModule(
         id="health_data_analytics",
         name="健康数据分析引擎",
-        description="分析用户历史健康数据，发现模式与趋势，支持长期健康管理",
+        description="分析用户历史健康数据, 发现模式与趋势, 支持长期健康管理",
         category=ServiceCategory.ANALYSIS,
         capabilities=[
             "纵向健康数据分析",
@@ -453,49 +452,49 @@ XIAOAI_SERVICE_MODULES = [
     ),
 ]
 
-def get_service_module_by_id(module_id: str) -> Optional[ServiceModule]:
+def get_service_module_by_id(moduleid: str) -> ServiceModule | None:
     """
     通过ID获取服务模块
-    
+
     Args:
         module_id: 模块ID
-        
+
     Returns:
-        ServiceModule或None（如果未找到）
+        ServiceModule或None(如果未找到)
     """
     for module in XIAOAI_SERVICE_MODULES:
         if module.id == module_id:
             return module
     return None
 
-def get_service_modules_by_category(category: ServiceCategory) -> List[ServiceModule]:
+def get_service_modules_by_category(category: ServiceCategory) -> list[ServiceModule]:
     """
     获取特定类别的所有服务模块
-    
+
     Args:
         category: 服务类别
-        
+
     Returns:
         服务模块列表
     """
     return [module for module in XIAOAI_SERVICE_MODULES if module.category == category]
 
-def get_service_modules_by_status(status: ServiceStatus) -> List[ServiceModule]:
+def get_service_modules_by_status(status: ServiceStatus) -> list[ServiceModule]:
     """
     获取特定状态的所有服务模块
-    
+
     Args:
         status: 服务状态
-        
+
     Returns:
         服务模块列表
     """
     return [module for module in XIAOAI_SERVICE_MODULES if module.status == status]
 
-def get_all_capabilities() -> List[str]:
+def get_all_capabilities() -> list[str]:
     """
     获取所有能力列表
-    
+
     Returns:
         能力列表
     """
@@ -504,24 +503,24 @@ def get_all_capabilities() -> List[str]:
         capabilities.update(module.capabilities)
     return list(capabilities)
 
-def get_service_module_dependencies(module_id: str) -> List[ServiceModule]:
+def get_service_module_dependencies(moduleid: str) -> list[ServiceModule]:
     """
     获取指定模块的所有依赖模块
-    
+
     Args:
         module_id: 模块ID
-        
+
     Returns:
         依赖的服务模块列表
     """
-    module = get_service_module_by_id(module_id)
+    module = get_service_module_by_id(moduleid)
     if not module:
         return []
-    
+
     dependencies = []
-    for dep_id in module.depends_on:
-        dep_module = get_service_module_by_id(dep_id)
+    for _dep_id in module.depends_on:
+        depmodule = get_service_module_by_id(depid)
         if dep_module:
-            dependencies.append(dep_module)
-    
-    return dependencies 
+            dependencies.append(depmodule)
+
+    return dependencies

@@ -1,22 +1,21 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 ERP系统集成客户端
 提供与医院ERP系统的对接接口
 """
 
+import json
 import logging
 import os
-import json
-import hashlib
 import time
 import uuid
-from typing import Dict, List, Any, Optional, Tuple
+from typing import Any
+
+import backoff
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
-import backoff
 
 from internal.observability.metrics import metrics
 
@@ -77,7 +76,7 @@ class ERPClient:
     )
     def check_doctor_availability(
         self, doctor_id: str, start_time: str, end_time: str
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         检查医生可用性
 
@@ -111,8 +110,8 @@ class ERPClient:
         appointment_time: str,
         appointment_type: str,
         symptoms: str = "",
-        metadata: Dict[str, str] = None,
-    ) -> Dict[str, Any]:
+        metadata: dict[str, str] | None = None,
+    ) -> dict[str, Any]:
         """
         创建预约
 
@@ -146,7 +145,7 @@ class ERPClient:
     @backoff.on_exception(
         backoff.expo, (requests.exceptions.RequestException, ERPError), max_tries=3
     )
-    def check_inventory(self, product_ids: List[str]) -> Dict[str, Any]:
+    def check_inventory(self, product_ids: list[str]) -> dict[str, Any]:
         """
         检查库存
 
@@ -169,8 +168,8 @@ class ERPClient:
         backoff.expo, (requests.exceptions.RequestException, ERPError), max_tries=3
     )
     def update_order_status(
-        self, order_id: str, status: str, metadata: Dict[str, Any] = None
-    ) -> Dict[str, Any]:
+        self, order_id: str, status: str, metadata: dict[str, Any] | None = None
+    ) -> dict[str, Any]:
         """
         更新订单状态
 
@@ -198,7 +197,7 @@ class ERPClient:
     @backoff.on_exception(
         backoff.expo, (requests.exceptions.RequestException, ERPError), max_tries=3
     )
-    def get_product_details(self, product_id: str) -> Dict[str, Any]:
+    def get_product_details(self, product_id: str) -> dict[str, Any]:
         """
         获取产品详情
 
@@ -222,11 +221,11 @@ class ERPClient:
     def create_order(
         self,
         user_id: str,
-        products: List[Dict[str, Any]],
-        delivery_info: Dict[str, Any] = None,
+        products: list[dict[str, Any]],
+        delivery_info: dict[str, Any] | None = None,
         payment_method: str = "PENDING",
-        metadata: Dict[str, Any] = None,
-    ) -> Dict[str, Any]:
+        metadata: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
         """
         创建订单
 
@@ -263,8 +262,8 @@ class ERPClient:
         giveup=lambda e: getattr(e, "status_code", None) == 404,
     )
     def trace_product(
-        self, product_id: str, batch_id: str = None, trace_token: str = None
-    ) -> Dict[str, Any]:
+        self, product_id: str, batch_id: str | None = None, trace_token: str | None = None
+    ) -> dict[str, Any]:
         """
         产品溯源
 
@@ -292,7 +291,7 @@ class ERPClient:
 
     def _make_api_request(
         self, method: str, endpoint: str, payload=None
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         发起API请求
 
@@ -390,9 +389,9 @@ class ERPClient:
             metrics.record_erp_api_call(endpoint_name, status, latency)
 
             logger.error(
-                f"ERP API请求错误: {method} {endpoint}, 错误: {str(e)}", exc_info=True
+                f"ERP API请求错误: {method} {endpoint}, 错误: {e!s}", exc_info=True
             )
-            raise ERPError(message=f"ERP API请求失败: {str(e)}")
+            raise ERPError(message=f"ERP API请求失败: {e!s}")
 
         except (ValueError, json.JSONDecodeError) as e:
             status = "error"
@@ -407,10 +406,10 @@ class ERPClient:
             metrics.record_erp_api_call(endpoint_name, status, latency)
 
             logger.error(
-                f"ERP API响应解析错误: {method} {endpoint}, 错误: {str(e)}",
+                f"ERP API响应解析错误: {method} {endpoint}, 错误: {e!s}",
                 exc_info=True,
             )
-            raise ERPError(message=f"ERP API响应解析失败: {str(e)}")
+            raise ERPError(message=f"ERP API响应解析失败: {e!s}")
 
         finally:
             if status == "success":

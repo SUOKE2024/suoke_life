@@ -7,7 +7,7 @@
 from datetime import datetime
 import logging
 import random
-from typing import Any
+from typing import Any, ClassVar
 import uuid
 
 from internal.model.maze import Cell, Challenge, KnowledgeNode, Maze
@@ -19,7 +19,15 @@ logger = logging.getLogger(__name__)
 class MazeGenerator:
     """迷宫生成器，负责生成各种类型的迷宫"""
 
-    MAZE_TYPES = ["health_path", "nutrition_garden", "tcm_journey", "balanced_life"]
+    # 迷宫类型常量
+    MAZE_TYPES: ClassVar[list[str]] = ["health_path", "nutrition_garden", "tcm_journey", "balanced_life"]
+
+    # 迷宫尺寸常量
+    MIN_MAZE_SIZE = 3
+
+    # 难度级别常量
+    MIN_DIFFICULTY = 1
+    MAX_DIFFICULTY = 5
 
     def __init__(self, cache_manager: CacheManager | None = None):
         """初始化迷宫生成器"""
@@ -44,7 +52,7 @@ class MazeGenerator:
     ) -> Maze:
         """
         生成迷宫
-        
+
         Args:
             user_id: 用户ID
             maze_type: 迷宫类型
@@ -52,10 +60,10 @@ class MazeGenerator:
             size_y: 迷宫高度
             difficulty: 难度级别(1-5)
             health_attributes: 用户健康属性
-            
+
         Returns:
             Maze: 生成的迷宫对象
-            
+
         Raises:
             ValueError: 如果迷宫类型无效
         """
@@ -67,24 +75,24 @@ class MazeGenerator:
             raise ValueError(error_msg)
 
         if maze_type not in self.MAZE_TYPES:
-            error_msg = f"无效的迷宫类型: {maze_type}，支持的类型: {', '.join(self.MAZE_TYPES)}"
+            error_msg = f"无效的迷宫类型: {maze_type}, 支持的类型: {', '.join(self.MAZE_TYPES)}"
             logger.error(error_msg)
             record_maze_generation_error(maze_type, "invalid_type")
             raise ValueError(error_msg)
 
-        if size_x < 3 or size_y < 3:
-            error_msg = "迷宫大小不能小于3x3"
+        if size_x < self.MIN_MAZE_SIZE or size_y < self.MIN_MAZE_SIZE:
+            error_msg = f"迷宫大小不能小于{self.MIN_MAZE_SIZE}x{self.MIN_MAZE_SIZE}"
             logger.error(error_msg)
             record_maze_generation_error(maze_type, "invalid_size")
             raise ValueError(error_msg)
 
-        if difficulty < 1 or difficulty > 5:
-            error_msg = "难度级别必须在1-5之间"
+        if difficulty < self.MIN_DIFFICULTY or difficulty > self.MAX_DIFFICULTY:
+            error_msg = f"难度级别必须在{self.MIN_DIFFICULTY}-{self.MAX_DIFFICULTY}之间"
             logger.error(error_msg)
             record_maze_generation_error(maze_type, "invalid_difficulty")
             raise ValueError(error_msg)
 
-        logger.info(f"为用户 {user_id} 生成迷宫，类型: {maze_type}, 大小: {size_x}x{size_y}, 难度: {difficulty}")
+        logger.info(f"为用户 {user_id} 生成迷宫, 类型: {maze_type}, 大小: {size_x}x{size_y}, 难度: {difficulty}")
 
         # 检查缓存
         cache_key = f"maze_template:{maze_type}:{size_x}x{size_y}:{difficulty}"
@@ -106,7 +114,7 @@ class MazeGenerator:
                 template = self._extract_template(maze)
                 await self.cache_manager.set(cache_key, template, ttl=3600)  # 缓存1小时
 
-            logger.info(f"成功生成迷宫 {maze.maze_id}，类型: {maze_type}")
+            logger.info(f"成功生成迷宫 {maze.maze_id}, 类型: {maze_type}")
             return maze
 
         except Exception as e:
@@ -123,7 +131,7 @@ class MazeGenerator:
         health_attributes: dict[str, str]
     ) -> Maze:
         """生成健康路径迷宫"""
-        logger.info(f"生成健康路径迷宫，大小: {size_x}x{size_y}")
+        logger.info(f"生成健康路径迷宫, 大小: {size_x}x{size_y}")
 
         # 生成基础迷宫结构
         cells = await self._generate_maze_grid(size_x, size_y, difficulty)
@@ -167,7 +175,7 @@ class MazeGenerator:
         health_attributes: dict[str, str]
     ) -> Maze:
         """生成营养花园迷宫"""
-        logger.info(f"生成营养花园迷宫，大小: {size_x}x{size_y}")
+        logger.info(f"生成营养花园迷宫, 大小: {size_x}x{size_y}")
 
         cells = await self._generate_maze_grid(size_x, size_y, difficulty)
         knowledge_nodes = await self._get_nutrition_knowledge_nodes(health_attributes, difficulty)
@@ -203,7 +211,7 @@ class MazeGenerator:
         health_attributes: dict[str, str]
     ) -> Maze:
         """生成中医之旅迷宫"""
-        logger.info(f"生成中医之旅迷宫，大小: {size_x}x{size_y}")
+        logger.info(f"生成中医之旅迷宫, 大小: {size_x}x{size_y}")
 
         cells = await self._generate_maze_grid(size_x, size_y, difficulty)
         knowledge_nodes = await self._get_tcm_knowledge_nodes(health_attributes, difficulty)
@@ -239,7 +247,7 @@ class MazeGenerator:
         health_attributes: dict[str, str]
     ) -> Maze:
         """生成平衡生活迷宫"""
-        logger.info(f"生成平衡生活迷宫，大小: {size_x}x{size_y}")
+        logger.info(f"生成平衡生活迷宫, 大小: {size_x}x{size_y}")
 
         cells = await self._generate_maze_grid(size_x, size_y, difficulty)
         knowledge_nodes = await self._get_balanced_life_knowledge_nodes(health_attributes, difficulty)
@@ -259,8 +267,8 @@ class MazeGenerator:
             created_at=datetime.now(),
             difficulty=difficulty,
             status="ACTIVE",
-            description="寻找生活平衡的智慧之路",
-            tags=["平衡", "生活方式", "身心健康"]
+            description="平衡生活的智慧迷宫",
+            tags=["平衡", "生活方式", "健康管理"]
         )
 
         await self._assign_content_to_maze(maze)
@@ -269,12 +277,12 @@ class MazeGenerator:
     async def _generate_maze_grid(self, width: int, height: int, difficulty: int) -> list[list[Cell]]:
         """
         使用深度优先搜索算法生成迷宫网格
-        
+
         Args:
             width: 迷宫宽度
             height: 迷宫高度
             difficulty: 难度级别，影响迷宫复杂度
-            
+
         Returns:
             List[List[Cell]]: 迷宫单元格网格
         """
@@ -331,22 +339,22 @@ class MazeGenerator:
 
         return cells
 
-    async def _get_health_knowledge_nodes(self, health_attributes: dict[str, str], difficulty: int) -> list[KnowledgeNode]:
+    async def _get_health_knowledge_nodes(self, _health_attributes: dict[str, str], difficulty: int) -> list[KnowledgeNode]:
         """获取健康相关的知识节点"""
         base_nodes = [
             {
                 "title": "每日饮水量",
-                "content": "成年人每天应该饮用1.5-2升水，有助于维持身体正常代谢。",
+                "content": "成年人每天应该饮用1.5-2升水, 有助于维持身体正常代谢。",
                 "type": "health_tip"
             },
             {
                 "title": "适量运动",
-                "content": "每周至少150分钟中等强度运动，或75分钟高强度运动。",
+                "content": "每周至少150分钟中等强度运动, 或75分钟高强度运动。",
                 "type": "health_tip"
             },
             {
                 "title": "充足睡眠",
-                "content": "成年人每晚需要7-9小时的优质睡眠，有助于身体恢复和免疫力提升。",
+                "content": "成年人每晚需要7-9小时的优质睡眠, 有助于身体恢复和免疫力提升。",
                 "type": "health_tip"
             }
         ]
@@ -355,7 +363,7 @@ class MazeGenerator:
         selected_nodes = base_nodes[:min(len(base_nodes), difficulty + 1)]
 
         knowledge_nodes = []
-        for i, node_data in enumerate(selected_nodes):
+        for _i, node_data in enumerate(selected_nodes):
             knowledge_nodes.append(KnowledgeNode(
                 node_id=str(uuid.uuid4()),
                 title=node_data["title"],
@@ -367,17 +375,17 @@ class MazeGenerator:
 
         return knowledge_nodes
 
-    async def _get_nutrition_knowledge_nodes(self, health_attributes: dict[str, str], difficulty: int) -> list[KnowledgeNode]:
+    async def _get_nutrition_knowledge_nodes(self, _health_attributes: dict[str, str], difficulty: int) -> list[KnowledgeNode]:
         """获取营养相关的知识节点"""
         base_nodes = [
             {
                 "title": "五色搭配",
-                "content": "每餐应包含不同颜色的蔬菜水果，确保营养素的多样性。",
+                "content": "每餐应包含不同颜色的蔬菜水果, 确保营养素的多样性。",
                 "type": "nutrition_fact"
             },
             {
                 "title": "蛋白质摄入",
-                "content": "成年人每公斤体重需要0.8-1.2克蛋白质，可从肉类、豆类、坚果中获取。",
+                "content": "成年人每公斤体重需要0.8-1.2克蛋白质, 可从肉类、豆类、坚果中获取。",
                 "type": "nutrition_fact"
             }
         ]
@@ -397,17 +405,17 @@ class MazeGenerator:
 
         return knowledge_nodes
 
-    async def _get_tcm_knowledge_nodes(self, health_attributes: dict[str, str], difficulty: int) -> list[KnowledgeNode]:
+    async def _get_tcm_knowledge_nodes(self, _health_attributes: dict[str, str], difficulty: int) -> list[KnowledgeNode]:
         """获取中医相关的知识节点"""
         base_nodes = [
             {
                 "title": "五行理论",
-                "content": "木、火、土、金、水五行相生相克，对应人体五脏六腑的平衡。",
+                "content": "木、火、土、金、水五行相生相克, 对应人体五脏六腑的平衡。",
                 "type": "tcm_wisdom"
             },
             {
                 "title": "经络养生",
-                "content": "人体有十二正经和奇经八脉，通过按摩穴位可以调理气血。",
+                "content": "人体有十二正经和奇经八脉, 通过按摩穴位可以调理气血。",
                 "type": "tcm_wisdom"
             }
         ]
@@ -427,17 +435,17 @@ class MazeGenerator:
 
         return knowledge_nodes
 
-    async def _get_balanced_life_knowledge_nodes(self, health_attributes: dict[str, str], difficulty: int) -> list[KnowledgeNode]:
+    async def _get_balanced_life_knowledge_nodes(self, _health_attributes: dict[str, str], difficulty: int) -> list[KnowledgeNode]:
         """获取平衡生活相关的知识节点"""
         base_nodes = [
             {
                 "title": "工作生活平衡",
-                "content": "合理安排工作和休息时间，避免过度劳累，保持身心健康。",
+                "content": "合理安排工作和休息时间, 避免过度劳累, 保持身心健康。",
                 "type": "life_balance"
             },
             {
                 "title": "情绪管理",
-                "content": "学会识别和管理情绪，通过冥想、运动等方式缓解压力。",
+                "content": "学会识别和管理情绪, 通过冥想、运动等方式缓解压力。",
                 "type": "life_balance"
             }
         ]
@@ -601,7 +609,7 @@ class MazeGenerator:
                 x, y = available_positions[pos_idx]
                 challenge.position = {"x": x, "y": y}
 
-    async def _create_from_template(self, template: dict[str, Any], user_id: str, health_attributes: dict[str, str]) -> Maze:
+    async def _create_from_template(self, template: dict[str, Any], user_id: str, _health_attributes: dict[str, str]) -> Maze:
         """从缓存的模板创建迷宫"""
         # 创建新的迷宫ID
         maze_id = str(uuid.uuid4())

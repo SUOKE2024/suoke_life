@@ -19,8 +19,8 @@ __email__ = "dev@suokelife.com"
 from inquiry_service.core.exceptions import InquiryServiceError
 
 __all__ = [
-    "__version__",
+    "InquiryServiceError",
     "__author__",
     "__email__",
-    "InquiryServiceError",
-] 
+    "__version__",
+]

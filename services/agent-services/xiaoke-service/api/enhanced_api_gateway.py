@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 xiaoke-service 增强版API网关
 集成FastAPI、中间件、追踪、监控等功能
@@ -8,24 +7,24 @@ xiaoke-service 增强版API网关
 import asyncio
 import logging
 import time
-from typing import Dict, Any, List
 from contextlib import asynccontextmanager
+from typing import Any
 
-from fastapi import FastAPI, HTTPException, Depends, Request, Response
+import uvicorn
+from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
-import uvicorn
 
 # 导入服务和通用组件
 from services.agent_services.xiaoke_service.internal.service.enhanced_resource_service import (
-    get_resource_service,
-    ResourceRequest,
-    ProductRequest,
     ConstitutionType,
+    ProductRequest,
+    ResourceRequest,
+    get_resource_service,
 )
-from services.common.observability.tracing import get_tracer, trace_middleware
+from services.common.observability.tracing import trace_middleware
 
 logger = logging.getLogger(__name__)
 
@@ -39,7 +38,7 @@ class ResourceRequestModel(BaseModel):
     location: str = Field(None, description="位置")
     constitution_type: str = Field("balanced", description="体质类型")
     urgency_level: str = Field("normal", description="紧急程度")
-    preferences: Dict[str, Any] = Field(default_factory=dict, description="偏好设置")
+    preferences: dict[str, Any] = Field(default_factory=dict, description="偏好设置")
 
 
 class ProductRequestModel(BaseModel):
@@ -48,11 +47,11 @@ class ProductRequestModel(BaseModel):
     user_id: str = Field(..., description="用户ID")
     product_category: str = Field(..., description="产品类别")
     constitution_type: str = Field("balanced", description="体质类型")
-    dietary_restrictions: List[str] = Field(
+    dietary_restrictions: list[str] = Field(
         default_factory=list, description="饮食限制"
     )
     budget_range: str = Field("medium", description="预算范围")
-    preferences: Dict[str, Any] = Field(default_factory=dict, description="偏好设置")
+    preferences: dict[str, Any] = Field(default_factory=dict, description="偏好设置")
 
 
 class HealthResponse(BaseModel):
@@ -243,7 +242,7 @@ async def search_resources(
 
     except Exception as e:
         logger.error(f"资源搜索失败: {e}")
-        raise HTTPException(status_code=500, detail=f"资源搜索失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"资源搜索失败: {e!s}")
 
 
 @app.post("/api/v1/products/recommend")
@@ -285,7 +284,7 @@ async def recommend_products(
 
     except Exception as e:
         logger.error(f"产品推荐失败: {e}")
-        raise HTTPException(status_code=500, detail=f"产品推荐失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"产品推荐失败: {e!s}")
 
 
 @app.get("/api/v1/resources/{resource_id}")
@@ -323,12 +322,12 @@ async def get_resource_details(
 
     except Exception as e:
         logger.error(f"获取资源详情失败: {e}")
-        raise HTTPException(status_code=500, detail=f"获取资源详情失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"获取资源详情失败: {e!s}")
 
 
 @app.post("/api/v1/booking")
 async def create_booking(
-    booking_data: Dict[str, Any],
+    booking_data: dict[str, Any],
     resource_service=Depends(get_resource_service_dependency),
 ):
     """创建预订"""
@@ -358,7 +357,7 @@ async def create_booking(
 
     except Exception as e:
         logger.error(f"创建预订失败: {e}")
-        raise HTTPException(status_code=500, detail=f"创建预订失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"创建预订失败: {e!s}")
 
 
 @app.get("/api/v1/constitution-types")

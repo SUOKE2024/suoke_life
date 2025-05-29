@@ -4,26 +4,26 @@
 定义服务特定的异常类，提供更好的错误处理和调试信息
 """
 
-from typing import Any, Dict, Optional
+from typing import Any
 
 
 class LaoKeServiceError(Exception):
     """老克服务基础异常类"""
-    
+
     def __init__(
         self,
         message: str,
-        error_code: Optional[str] = None,
-        details: Optional[Dict[str, Any]] = None,
-        cause: Optional[Exception] = None,
+        error_code: str | None = None,
+        details: dict[str, Any] | None = None,
+        cause: Exception | None = None,
     ) -> None:
         super().__init__(message)
         self.message = message
         self.error_code = error_code or self.__class__.__name__
         self.details = details or {}
         self.cause = cause
-    
-    def to_dict(self) -> Dict[str, Any]:
+
+    def to_dict(self) -> dict[str, Any]:
         """转换为字典格式"""
         return {
             "error_code": self.error_code,
@@ -31,18 +31,18 @@ class LaoKeServiceError(Exception):
             "details": self.details,
             "cause": str(self.cause) if self.cause else None,
         }
-    
+
     def __str__(self) -> str:
         return f"{self.error_code}: {self.message}"
 
 
 class ConfigurationError(LaoKeServiceError):
     """配置错误"""
-    
+
     def __init__(
         self,
         message: str,
-        config_key: Optional[str] = None,
+        config_key: str | None = None,
         **kwargs: Any,
     ) -> None:
         details = kwargs.pop("details", {})
@@ -53,12 +53,12 @@ class ConfigurationError(LaoKeServiceError):
 
 class ValidationError(LaoKeServiceError):
     """数据验证错误"""
-    
+
     def __init__(
         self,
         message: str,
-        field: Optional[str] = None,
-        value: Optional[Any] = None,
+        field: str | None = None,
+        value: Any | None = None,
         **kwargs: Any,
     ) -> None:
         details = kwargs.pop("details", {})
@@ -71,12 +71,12 @@ class ValidationError(LaoKeServiceError):
 
 class DatabaseError(LaoKeServiceError):
     """数据库操作错误"""
-    
+
     def __init__(
         self,
         message: str,
-        operation: Optional[str] = None,
-        table: Optional[str] = None,
+        operation: str | None = None,
+        table: str | None = None,
         **kwargs: Any,
     ) -> None:
         details = kwargs.pop("details", {})
@@ -89,12 +89,12 @@ class DatabaseError(LaoKeServiceError):
 
 class ExternalServiceError(LaoKeServiceError):
     """外部服务调用错误"""
-    
+
     def __init__(
         self,
         message: str,
-        service_name: Optional[str] = None,
-        status_code: Optional[int] = None,
+        service_name: str | None = None,
+        status_code: int | None = None,
         **kwargs: Any,
     ) -> None:
         details = kwargs.pop("details", {})
@@ -107,7 +107,7 @@ class ExternalServiceError(LaoKeServiceError):
 
 class AuthenticationError(LaoKeServiceError):
     """认证错误"""
-    
+
     def __init__(
         self,
         message: str = "Authentication failed",
@@ -118,12 +118,12 @@ class AuthenticationError(LaoKeServiceError):
 
 class AuthorizationError(LaoKeServiceError):
     """授权错误"""
-    
+
     def __init__(
         self,
         message: str = "Access denied",
-        resource: Optional[str] = None,
-        action: Optional[str] = None,
+        resource: str | None = None,
+        action: str | None = None,
         **kwargs: Any,
     ) -> None:
         details = kwargs.pop("details", {})
@@ -136,12 +136,12 @@ class AuthorizationError(LaoKeServiceError):
 
 class RateLimitError(LaoKeServiceError):
     """速率限制错误"""
-    
+
     def __init__(
         self,
         message: str = "Rate limit exceeded",
-        limit: Optional[int] = None,
-        window: Optional[str] = None,
+        limit: int | None = None,
+        window: str | None = None,
         **kwargs: Any,
     ) -> None:
         details = kwargs.pop("details", {})
@@ -154,12 +154,12 @@ class RateLimitError(LaoKeServiceError):
 
 class AIServiceError(LaoKeServiceError):
     """AI 服务错误"""
-    
+
     def __init__(
         self,
         message: str,
-        model: Optional[str] = None,
-        provider: Optional[str] = None,
+        model: str | None = None,
+        provider: str | None = None,
         **kwargs: Any,
     ) -> None:
         details = kwargs.pop("details", {})
@@ -172,12 +172,12 @@ class AIServiceError(LaoKeServiceError):
 
 class KnowledgeBaseError(LaoKeServiceError):
     """知识库操作错误"""
-    
+
     def __init__(
         self,
         message: str,
-        knowledge_id: Optional[str] = None,
-        operation: Optional[str] = None,
+        knowledge_id: str | None = None,
+        operation: str | None = None,
         **kwargs: Any,
     ) -> None:
         details = kwargs.pop("details", {})
@@ -190,12 +190,12 @@ class KnowledgeBaseError(LaoKeServiceError):
 
 class CommunityError(LaoKeServiceError):
     """社区功能错误"""
-    
+
     def __init__(
         self,
         message: str,
-        user_id: Optional[str] = None,
-        content_id: Optional[str] = None,
+        user_id: str | None = None,
+        content_id: str | None = None,
         **kwargs: Any,
     ) -> None:
         details = kwargs.pop("details", {})
@@ -208,12 +208,12 @@ class CommunityError(LaoKeServiceError):
 
 class LearningPathError(LaoKeServiceError):
     """学习路径错误"""
-    
+
     def __init__(
         self,
         message: str,
-        path_id: Optional[str] = None,
-        user_id: Optional[str] = None,
+        path_id: str | None = None,
+        user_id: str | None = None,
         **kwargs: Any,
     ) -> None:
         details = kwargs.pop("details", {})
@@ -225,7 +225,7 @@ class LearningPathError(LaoKeServiceError):
 
 
 # 异常映射，用于快速查找
-EXCEPTION_MAP = {
+EXCEPTION_MAP: dict[str, type[LaoKeServiceError]] = {
     "configuration": ConfigurationError,
     "validation": ValidationError,
     "database": DatabaseError,
@@ -247,4 +247,4 @@ def create_exception(
 ) -> LaoKeServiceError:
     """创建指定类型的异常"""
     exception_class = EXCEPTION_MAP.get(exception_type, LaoKeServiceError)
-    return exception_class(message, **kwargs) 
+    return exception_class(message, **kwargs)

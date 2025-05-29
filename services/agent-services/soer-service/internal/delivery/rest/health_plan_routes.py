@@ -1,10 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException, status, BackgroundTasks
-from pydantic import BaseModel, Field
-from typing import Dict, List, Optional, Any
-import uuid
 import logging
-import asyncio
-from datetime import datetime, date
+from datetime import datetime
+from typing import Any
+
+from fastapi import APIRouter, BackgroundTasks, HTTPException, status
+from pydantic import BaseModel, Field
 
 # 导入服务层组件
 from internal.lifecycle.plan_generator.plan_generator import PlanGenerator
@@ -23,10 +22,10 @@ class HealthPlanRequest(BaseModel):
     """健康计划请求模型"""
     user_id: str
     constitution_type: str
-    health_goals: List[str]
-    health_data: Dict[str, Any] = Field(default_factory=dict)
-    preferences: Optional[Dict[str, Any]] = None
-    current_season: Optional[str] = None
+    health_goals: list[str]
+    health_data: dict[str, Any] = Field(default_factory=dict)
+    preferences: dict[str, Any] | None = None
+    current_season: str | None = None
 
 class HealthPlanResponse(BaseModel):
     """健康计划响应模型"""
@@ -34,27 +33,27 @@ class HealthPlanResponse(BaseModel):
     user_id: str
     constitution_type: str
     creation_date: str
-    health_goals: List[str]
-    diet_recommendations: List[str]
-    exercise_recommendations: List[str]
-    lifestyle_recommendations: List[str]
-    supplement_recommendations: List[str]
-    schedule: Dict[str, str]
+    health_goals: list[str]
+    diet_recommendations: list[str]
+    exercise_recommendations: list[str]
+    lifestyle_recommendations: list[str]
+    supplement_recommendations: list[str]
+    schedule: dict[str, str]
 
 class HealthPlanProgressRequest(BaseModel):
     """健康计划进度更新请求"""
     user_id: str
     plan_id: str
-    completed_items: List[str]
-    progress_notes: Optional[str] = None
-    timestamp: Optional[str] = None
+    completed_items: list[str]
+    progress_notes: str | None = None
+    timestamp: str | None = None
 
 class HealthPlanProgressResponse(BaseModel):
     """健康计划进度响应"""
     user_id: str
     plan_id: str
     progress_percentage: float
-    next_steps: List[str]
+    next_steps: list[str]
     encouragement_message: str
 
 # 健康计划生成器实例
@@ -75,14 +74,14 @@ async def create_health_plan(plan_request: HealthPlanRequest, background_tasks: 
             plan_request.preferences,
             plan_request.current_season
         )
-        
+
         # 添加后台任务记录健康计划活动
         background_tasks.add_task(
-            log_health_plan_creation, 
-            plan["user_id"], 
+            log_health_plan_creation,
+            plan["user_id"],
             plan["plan_id"]
         )
-        
+
         return plan
     except Exception as e:
         logger.error(f"创建健康计划失败: {str(e)}")
@@ -101,7 +100,7 @@ async def get_health_plan(plan_id: str, user_id: str):
         # 模拟数据，实际应用中需要替换
         if not user_id or not plan_id:
             raise ValueError("用户ID和计划ID不能为空")
-            
+
         # 模拟检索计划
         plan = {
             "plan_id": plan_id,
@@ -122,7 +121,7 @@ async def get_health_plan(plan_id: str, user_id: str):
                 "睡前": "热水泡脚，冥想放松，22:30前入睡"
             }
         }
-        
+
         return plan
     except ValueError as ve:
         raise HTTPException(
@@ -152,7 +151,7 @@ async def update_health_plan_progress(progress: HealthPlanProgressRequest):
             next_steps=["完成今天的有氧运动", "记录今日的饮食情况"],
             encouragement_message="做得很好！你已经完成了75%的计划内容，继续保持！"
         )
-        
+
         return response
     except Exception as e:
         logger.error(f"更新健康计划进度失败: {str(e)}")
@@ -164,4 +163,4 @@ async def update_health_plan_progress(progress: HealthPlanProgressRequest):
 async def log_health_plan_creation(user_id: str, plan_id: str):
     """记录健康计划创建活动的后台任务"""
     logger.info(f"用户 {user_id} 创建了健康计划 {plan_id}")
-    # 这里可以添加更多操作，如发送通知、更新统计等 
+    # 这里可以添加更多操作，如发送通知、更新统计等

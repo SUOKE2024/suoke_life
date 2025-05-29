@@ -2,15 +2,15 @@
 Configuration management for accessibility service.
 """
 
-from .settings import Settings, get_settings
 from .database import DatabaseConfig
-from .redis import RedisConfig
 from .logging import LoggingConfig
+from .redis import RedisConfig
+from .settings import Settings, get_settings
 
 __all__ = [
     "Settings",
     "get_settings",
     "DatabaseConfig",
-    "RedisConfig", 
+    "RedisConfig",
     "LoggingConfig",
-] 
+]

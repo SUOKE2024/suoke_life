@@ -9,24 +9,28 @@ import logging
 import os
 import signal
 import sys
+from cmd.server.api import router as api_router
+from cmd.server.grpc_service import SuokeBenchGrpcService
 from concurrent import futures
-from typing import Optional
 from datetime import datetime
 
 import grpc
-from fastapi import FastAPI, Request, HTTPException
+import uvicorn
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, Response
 from fastapi.staticfiles import StaticFiles
-import uvicorn
 
 from api.grpc import benchmark_pb2_grpc
-from cmd.server.api import router as api_router
-from cmd.server.grpc_service import SuokeBenchGrpcService
-from internal.suokebench.config import BenchConfig, load_config
 from internal.benchmark.model_cache import init_global_cache
-from internal.observability.metrics import init_monitoring, start_global_monitoring, stop_global_monitoring, get_global_metrics
-from internal.resilience.retry import retry, circuit_breaker
+from internal.observability.metrics import (
+    get_global_metrics,
+    init_monitoring,
+    start_global_monitoring,
+    stop_global_monitoring,
+)
+from internal.resilience.retry import retry
+from internal.suokebench.config import BenchConfig, load_config
 
 # 配置日志
 logging.basicConfig(
@@ -41,8 +45,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # 全局变量
-grpc_server: Optional[grpc.Server] = None
-config: Optional[BenchConfig] = None
+grpc_server: grpc.Server | None = None
+config: BenchConfig | None = None
 
 
 # 创建FastAPI应用
@@ -69,11 +73,11 @@ app.add_middleware(
 async def monitor_requests(request: Request, call_next):
     """监控HTTP请求"""
     start_time = time.time()
-    
+
     try:
         response = await call_next(request)
         duration = time.time() - start_time
-        
+
         # 记录请求指标
         metrics = get_global_metrics()
         metrics.record_api_request(
@@ -82,12 +86,12 @@ async def monitor_requests(request: Request, call_next):
             status_code=response.status_code,
             duration=duration
         )
-        
+
         return response
-        
+
     except Exception as e:
         duration = time.time() - start_time
-        
+
         # 记录错误请求
         metrics = get_global_metrics()
         metrics.record_api_request(
@@ -96,9 +100,9 @@ async def monitor_requests(request: Request, call_next):
             status_code=500,
             duration=duration
         )
-        
+
         logger.error(f"请求处理出错: {request.method} {request.url.path} - {str(e)}")
-        raise HTTPException(status_code=500, detail="内部服务器错误")
+        raise HTTPException(status_code=500, detail="内部服务器错误") from e
 
 
 # 注册API路由
@@ -141,7 +145,7 @@ async def health_check():
     try:
         metrics = get_global_metrics()
         cache_stats = get_global_cache().get_cache_stats() if 'get_global_cache' in globals() else {}
-        
+
         return {
             "status": "healthy",
             "timestamp": datetime.now().isoformat(),
@@ -154,7 +158,7 @@ async def health_check():
         }
     except Exception as e:
         logger.error(f"健康检查失败: {e}")
-        raise HTTPException(status_code=503, detail="服务不健康")
+        raise HTTPException(status_code=503, detail="服务不健康") from e
 
 
 @app.get("/metrics", tags=["监控"])
@@ -204,88 +208,88 @@ async def clear_cache():
 def start_grpc_server(port: int = 50051, workers: int = 4) -> grpc.Server:
     """
     启动gRPC服务器（带重试机制）
-    
+
     Args:
         port: gRPC服务端口
         workers: 工作线程数
-        
+
     Returns:
         gRPC服务器实例
     """
     global config
-    
+
     # 加载配置
     config_path = os.environ.get("CONFIG_PATH", "config/config.yaml")
     config = load_config(config_path)
-    
+
     # 创建gRPC服务器
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=workers))
-    
+
     # 注册服务
     service = SuokeBenchGrpcService(config)
     benchmark_pb2_grpc.add_BenchmarkServiceServicer_to_server(service, server)
-    
+
     # 启动服务器
     server.add_insecure_port(f"[::]:{port}")
     server.start()
-    
+
     logger.info(f"gRPC服务启动在端口 {port}")
-    
+
     return server
 
 
 def initialize_services():
     """初始化各种服务组件"""
     global config
-    
+
     # 确保目录存在
     os.makedirs("logs", exist_ok=True)
     os.makedirs("data/reports", exist_ok=True)
     os.makedirs("cache", exist_ok=True)
-    
+
     # 加载配置
     config_path = os.environ.get("CONFIG_PATH", "config/config.yaml")
     config = load_config(config_path)
-    
+
     # 初始化模型缓存
     logger.info("初始化模型缓存...")
-    cache = init_global_cache(
+    _cache = init_global_cache(
         max_memory_mb=4096,
         max_models=10,
         ttl_seconds=3600,
         cleanup_interval=300
     )
-    
+
     # 初始化监控系统
     logger.info("初始化监控系统...")
     metrics, monitor = init_monitoring()
-    
+
     # 设置服务信息
     metrics.set_service_info(
         version="1.1.0",
         build_time=datetime.now().isoformat(),
         git_commit=os.environ.get("GIT_COMMIT", "unknown")
     )
-    
+
     # 启动性能监控
     start_global_monitoring(interval=30)
-    
+
     logger.info("服务组件初始化完成")
 
 
 def signal_handler(signum, frame):
     """信号处理器"""
     logger.info(f"收到信号 {signum}，开始优雅关闭...")
-    
+
     # 停止监控
     stop_global_monitoring()
-    
+
     # 停止gRPC服务器
     global grpc_server
     if grpc_server:
         grpc_server.stop(grace=30)
         logger.info("gRPC服务器已停止")
-    
+
     # 清理缓存
     try:
         from internal.benchmark.model_cache import get_global_cache
@@ -294,7 +298,7 @@ def signal_handler(signum, frame):
         logger.info("缓存已清理")
     except Exception as e:
         logger.error(f"清理缓存失败: {e}")
-    
+
     logger.info("服务已优雅关闭")
     sys.exit(0)
 
@@ -306,7 +310,7 @@ def main():
     # 注册信号处理器
     signal.signal(signal.SIGINT, signal_handler)
     signal.signal(signal.SIGTERM, signal_handler)
-    
+
     # 解析命令行参数
     parser = argparse.ArgumentParser(description="SuokeBench服务 - 优化版")
     parser.add_argument("--http-port", type=int, default=8000, help="HTTP服务端口")
@@ -316,31 +320,31 @@ def main():
     parser.add_argument("--config", type=str, help="配置文件路径")
     parser.add_argument("--log-level", type=str, default="INFO", help="日志级别")
     args = parser.parse_args()
-    
+
     # 设置日志级别
     logging.getLogger().setLevel(getattr(logging, args.log_level.upper()))
-    
+
     # 设置配置文件路径
     if args.config:
         os.environ["CONFIG_PATH"] = args.config
-    
+
     try:
         # 初始化服务组件
         initialize_services()
-        
+
         # 启动gRPC服务
         global grpc_server
         if not args.no_grpc:
             grpc_server = start_grpc_server(args.grpc_port, args.workers)
-        
-        logger.info(f"SuokeBench服务启动完成")
+
+        logger.info("SuokeBench服务启动完成")
         logger.info(f"HTTP服务: http://0.0.0.0:{args.http_port}")
         if not args.no_grpc:
             logger.info(f"gRPC服务: 0.0.0.0:{args.grpc_port}")
         logger.info(f"API文档: http://0.0.0.0:{args.http_port}/docs")
         logger.info(f"健康检查: http://0.0.0.0:{args.http_port}/health")
         logger.info(f"监控指标: http://0.0.0.0:{args.http_port}/metrics")
-        
+
         # 启动FastAPI服务
         uvicorn.run(
             app,
@@ -349,7 +353,7 @@ def main():
             log_level=args.log_level.lower(),
             access_log=True,
         )
-        
+
     except Exception as e:
         logger.error(f"服务启动失败: {e}")
         sys.exit(1)

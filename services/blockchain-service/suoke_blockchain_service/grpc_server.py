@@ -21,9 +21,12 @@ class GRPCServer:
         self._server: aio.Server | None = None
         self._health_servicer = health.HealthServicer()
 
-    async def start(self) -> None:
+    async def start(self, host: str | None = None, port: int | None = None) -> None:
         """启动 gRPC 服务器"""
-        logger.info("启动 gRPC 服务器", port=settings.grpc.port)
+        actual_host = host or settings.grpc.host
+        actual_port = port or settings.grpc.port
+
+        logger.info("启动 gRPC 服务器", host=actual_host, port=actual_port)
 
         # 创建服务器
         self._server = aio.server(
@@ -47,7 +50,7 @@ class GRPCServer:
             # 设置服务状态为健康
             self._health_servicer.set("", health_pb2.HealthCheckResponse.SERVING)
 
-        # 添加反射服务（用于调试）
+        # 添加反射服务(用于调试)
         if settings.grpc.enable_reflection:
             service_names = [
                 "blockchain.BlockchainService",
@@ -62,7 +65,7 @@ class GRPCServer:
         # )
 
         # 绑定端口
-        listen_addr = f"{settings.grpc.host}:{settings.grpc.port}"
+        listen_addr = f"{actual_host}:{actual_port}"
         self._server.add_insecure_port(listen_addr)
 
         # 启动服务器

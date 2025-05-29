@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 laoke-service 增强版API网关
 集成FastAPI、中间件、追踪、监控等功能
@@ -8,22 +7,27 @@ laoke-service 增强版API网关
 import asyncio
 import logging
 import time
-from typing import Dict, Any, List, Optional
 from contextlib import asynccontextmanager
+from typing import Any
 
-from fastapi import FastAPI, HTTPException, Depends, Request, Response
+import uvicorn
+from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
-import uvicorn
 
 # 导入服务和通用组件
 from services.agent_services.laoke_service.internal.service.enhanced_knowledge_service import (
-    get_knowledge_service, KnowledgeRequest, LearningPathRequest, CommunityContentRequest,
-    ContentType, DifficultyLevel, LearningStyle
+    CommunityContentRequest,
+    ContentType,
+    DifficultyLevel,
+    KnowledgeRequest,
+    LearningPathRequest,
+    LearningStyle,
+    get_knowledge_service,
 )
-from services.common.observability.tracing import get_tracer, trace_middleware
+from services.common.observability.tracing import trace_middleware
 
 logger = logging.getLogger(__name__)
 
@@ -32,18 +36,18 @@ class KnowledgeRequestModel(BaseModel):
     """知识搜索请求模型"""
     user_id: str = Field(..., description="用户ID")
     topic: str = Field(..., description="搜索主题")
-    content_type: Optional[str] = Field(None, description="内容类型")
-    difficulty_level: Optional[str] = Field(None, description="难度级别")
-    learning_style: Optional[str] = Field(None, description="学习风格")
-    keywords: Optional[List[str]] = Field(default_factory=list, description="关键词")
+    content_type: str | None = Field(None, description="内容类型")
+    difficulty_level: str | None = Field(None, description="难度级别")
+    learning_style: str | None = Field(None, description="学习风格")
+    keywords: list[str] | None = Field(default_factory=list, description="关键词")
     max_results: int = Field(10, description="最大结果数")
 
 class LearningPathRequestModel(BaseModel):
     """学习路径请求模型"""
     user_id: str = Field(..., description="用户ID")
-    learning_goals: List[str] = Field(..., description="学习目标")
+    learning_goals: list[str] = Field(..., description="学习目标")
     current_level: str = Field("beginner", description="当前水平")
-    preferred_content_types: List[str] = Field(default_factory=list, description="偏好内容类型")
+    preferred_content_types: list[str] = Field(default_factory=list, description="偏好内容类型")
     time_commitment: str = Field("weekly", description="时间投入")
     duration_weeks: int = Field(12, description="持续周数")
 
@@ -51,7 +55,7 @@ class CommunityContentRequestModel(BaseModel):
     """社区内容请求模型"""
     user_id: str = Field(..., description="用户ID")
     content_type: str = Field("all", description="内容类型")
-    category: Optional[str] = Field(None, description="分类")
+    category: str | None = Field(None, description="分类")
     sort_by: str = Field("latest", description="排序方式")
     limit: int = Field(20, description="限制数量")
 
@@ -79,15 +83,15 @@ async def lifespan(app: FastAPI):
     logger.info("laoke-service API网关启动中...")
     app_state['start_time'] = time.time()
     app_state['request_count'] = 0
-    
+
     # 初始化服务
     knowledge_service = await get_knowledge_service()
     app_state['knowledge_service'] = knowledge_service
-    
+
     logger.info("laoke-service API网关启动完成")
-    
+
     yield
-    
+
     # 关闭时清理
     logger.info("laoke-service API网关关闭中...")
     if 'knowledge_service' in app_state:
@@ -126,14 +130,14 @@ app.add_middleware(trace_middleware)
 async def request_counter_middleware(request: Request, call_next):
     """请求计数中间件"""
     app_state['request_count'] = app_state.get('request_count', 0) + 1
-    
+
     start_time = time.time()
     response = await call_next(request)
     process_time = time.time() - start_time
-    
+
     response.headers["X-Process-Time"] = str(process_time)
     response.headers["X-Request-ID"] = f"laoke_{int(time.time() * 1000)}"
-    
+
     return response
 
 # 异常处理器
@@ -184,7 +188,7 @@ async def get_metrics():
     """获取服务指标"""
     knowledge_service = app_state.get('knowledge_service')
     service_stats = knowledge_service.get_health_status() if knowledge_service else {}
-    
+
     return {
         "service": "laoke-service",
         "uptime": time.time() - app_state.get('start_time', time.time()),
@@ -201,7 +205,7 @@ async def search_knowledge(
     """搜索知识内容"""
     if not knowledge_service:
         raise HTTPException(status_code=503, detail="知识服务不可用")
-    
+
     try:
         # 转换请求模型
         service_request = KnowledgeRequest(
@@ -213,10 +217,10 @@ async def search_knowledge(
             keywords=request.keywords,
             max_results=request.max_results
         )
-        
+
         # 调用服务
         result = await knowledge_service.search_knowledge(service_request)
-        
+
         return {
             "success": True,
             "data": {
@@ -229,10 +233,10 @@ async def search_knowledge(
             "processing_time": result.processing_time,
             "timestamp": result.timestamp
         }
-        
+
     except Exception as e:
         logger.error(f"知识搜索失败: {e}")
-        raise HTTPException(status_code=500, detail=f"知识搜索失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"知识搜索失败: {str(e)}") from e
 
 @app.post("/api/v1/learning-path/generate")
 async def generate_learning_path(
@@ -242,7 +246,7 @@ async def generate_learning_path(
     """生成学习路径"""
     if not knowledge_service:
         raise HTTPException(status_code=503, detail="知识服务不可用")
-    
+
     try:
         # 转换请求模型
         service_request = LearningPathRequest(
@@ -253,10 +257,10 @@ async def generate_learning_path(
             time_commitment=request.time_commitment,
             duration_weeks=request.duration_weeks
         )
-        
+
         # 调用服务
         result = await knowledge_service.generate_learning_path(service_request)
-        
+
         return {
             "success": True,
             "data": {
@@ -271,10 +275,10 @@ async def generate_learning_path(
             "processing_time": result.processing_time,
             "timestamp": result.timestamp
         }
-        
+
     except Exception as e:
         logger.error(f"学习路径生成失败: {e}")
-        raise HTTPException(status_code=500, detail=f"学习路径生成失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"学习路径生成失败: {str(e)}") from e
 
 @app.post("/api/v1/community/content")
 async def get_community_content(
@@ -284,7 +288,7 @@ async def get_community_content(
     """获取社区内容"""
     if not knowledge_service:
         raise HTTPException(status_code=503, detail="知识服务不可用")
-    
+
     try:
         # 转换请求模型
         service_request = CommunityContentRequest(
@@ -294,10 +298,10 @@ async def get_community_content(
             sort_by=request.sort_by,
             limit=request.limit
         )
-        
+
         # 调用服务
         result = await knowledge_service.get_community_content(service_request)
-        
+
         return {
             "success": True,
             "data": {
@@ -310,10 +314,10 @@ async def get_community_content(
             "processing_time": result.processing_time,
             "timestamp": result.timestamp
         }
-        
+
     except Exception as e:
         logger.error(f"社区内容获取失败: {e}")
-        raise HTTPException(status_code=500, detail=f"社区内容获取失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"社区内容获取失败: {str(e)}") from e
 
 @app.get("/api/v1/content/{content_id}")
 async def get_content_details(
@@ -323,11 +327,11 @@ async def get_content_details(
     """获取内容详情"""
     if not knowledge_service:
         raise HTTPException(status_code=503, detail="知识服务不可用")
-    
+
     try:
         # 模拟获取内容详情
         await asyncio.sleep(0.1)
-        
+
         return {
             "success": True,
             "data": {
@@ -351,10 +355,10 @@ async def get_content_details(
             },
             "timestamp": time.time()
         }
-        
+
     except Exception as e:
         logger.error(f"获取内容详情失败: {e}")
-        raise HTTPException(status_code=500, detail=f"获取内容详情失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"获取内容详情失败: {str(e)}") from e
 
 @app.get("/api/v1/learning-path/{path_id}")
 async def get_learning_path_details(
@@ -364,11 +368,11 @@ async def get_learning_path_details(
     """获取学习路径详情"""
     if not knowledge_service:
         raise HTTPException(status_code=503, detail="知识服务不可用")
-    
+
     try:
         # 模拟获取学习路径详情
         await asyncio.sleep(0.1)
-        
+
         return {
             "success": True,
             "data": {
@@ -388,7 +392,7 @@ async def get_learning_path_details(
                         "status": "available"
                     },
                     {
-                        "module_id": "mod_02", 
+                        "module_id": "mod_02",
                         "title": "阴阳五行学说",
                         "duration": "2周",
                         "status": "locked"
@@ -402,27 +406,27 @@ async def get_learning_path_details(
             },
             "timestamp": time.time()
         }
-        
+
     except Exception as e:
         logger.error(f"获取学习路径详情失败: {e}")
-        raise HTTPException(status_code=500, detail=f"获取学习路径详情失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"获取学习路径详情失败: {str(e)}") from e
 
 @app.post("/api/v1/learning-path/{path_id}/enroll")
 async def enroll_learning_path(
     path_id: str,
-    user_data: Dict[str, Any],
+    user_data: dict[str, Any],
     knowledge_service = Depends(get_knowledge_service_dependency)
 ):
     """报名学习路径"""
     if not knowledge_service:
         raise HTTPException(status_code=503, detail="知识服务不可用")
-    
+
     try:
         # 模拟报名处理
         await asyncio.sleep(0.2)
-        
+
         enrollment_id = f"enroll_{int(time.time() * 1000)}"
-        
+
         return {
             "success": True,
             "data": {
@@ -441,10 +445,10 @@ async def enroll_learning_path(
             },
             "timestamp": time.time()
         }
-        
+
     except Exception as e:
         logger.error(f"报名学习路径失败: {e}")
-        raise HTTPException(status_code=500, detail=f"报名学习路径失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"报名学习路径失败: {str(e)}") from e
 
 @app.get("/api/v1/content-types")
 async def get_content_types():
@@ -560,4 +564,4 @@ if __name__ == "__main__":
         port=8002,
         reload=True,
         log_level="info"
-    ) 
+    )

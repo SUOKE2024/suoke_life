@@ -1,19 +1,24 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 Prometheus指标控制器
 """
 
-import time
 import os
+import time
+
 import psutil
-import asyncio
 from fastapi import APIRouter, Response
 from prometheus_client import (
-    CollectorRegistry, Counter, Gauge, Histogram, Info, 
-    generate_latest, CONTENT_TYPE_LATEST
+    CONTENT_TYPE_LATEST,
+    CollectorRegistry,
+    Counter,
+    Gauge,
+    Histogram,
+    Info,
+    generate_latest,
 )
+
 from pkg.utils.config import Config
 from pkg.utils.logger import get_logger
 
@@ -23,8 +28,8 @@ registry = CollectorRegistry(auto_describe=True)
 # 创建指标对象
 # 请求计数器
 http_requests_total = Counter(
-    'http_requests_total', 
-    '总HTTP请求数', 
+    'http_requests_total',
+    '总HTTP请求数',
     ['method', 'endpoint', 'status'],
     registry=registry
 )
@@ -137,22 +142,22 @@ last_metrics_update = 0
 async def update_system_metrics():
     """更新系统指标"""
     global last_metrics_update
-    
+
     # 限制更新频率，防止频繁更新影响性能
     current_time = time.time()
     if current_time - last_metrics_update < 2:  # 至少2秒才更新一次
         return
-    
+
     # 更新系统指标
     try:
         # 进程指标
         process_cpu_usage.set(process.cpu_percent())
         process_memory_usage.set(process.memory_percent())
-        
+
         # 系统指标
         system_cpu_usage.set(psutil.cpu_percent())
         system_memory_usage.set(psutil.virtual_memory().percent)
-        
+
         # 更新时间
         last_metrics_update = current_time
     except Exception as e:
@@ -163,16 +168,16 @@ async def update_system_metrics():
 async def metrics():
     """
     提供Prometheus监控指标
-    
+
     返回:
         Response: 包含指标数据的响应
     """
     # 更新系统指标
     await update_system_metrics()
-    
+
     # 生成指标数据
     metrics_data = generate_latest(registry)
-    
+
     # 返回指标
     return Response(
         content=metrics_data,
@@ -188,38 +193,38 @@ async def metrics_middleware(request, call_next):
     # 获取请求路径和方法
     path = request.url.path
     method = request.method
-    
+
     # 开始计时
     start_time = time.time()
-    
+
     # 处理请求
     response = await call_next(request)
-    
+
     # 计算处理时间
     duration_ms = (time.time() - start_time) * 1000
-    
+
     # 记录请求计数和处理时间
     http_requests_total.labels(method=method, endpoint=path, status=response.status_code).inc()
     http_request_duration_ms.labels(method=method, endpoint=path).observe(duration_ms)
-    
+
     # 如果是错误响应，记录错误
     if response.status_code >= 400:
         error_type = "client_error" if response.status_code < 500 else "server_error"
         api_errors_total.labels(endpoint=path, error_type=error_type).inc()
-    
+
     return response
 
 
 def increment_counter(name, labels=None):
     """
     增加计数器
-    
+
     参数:
         name: 计数器名称
         labels: 标签值字典
     """
     labels = labels or {}
-    
+
     if name == "knowledge_search_total":
         http_requests_total.labels(method="GET", endpoint="/api/knowledge/search", status=200).inc()
     elif name == "knowledge_search_error":
@@ -259,7 +264,7 @@ def increment_counter(name, labels=None):
 def observe_latency(name, value_ms):
     """
     记录延迟指标
-    
+
     参数:
         name: 指标名称
         value_ms: 延迟值(毫秒)
@@ -268,4 +273,4 @@ def observe_latency(name, value_ms):
         knowledge_search_latency.observe(value_ms)
     elif name == "http_request_duration":
         # 已在中间件中处理
-        pass 
+        pass

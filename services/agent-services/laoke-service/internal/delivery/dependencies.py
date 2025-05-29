@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 老克智能体服务 - 依赖注入模块
@@ -7,29 +6,29 @@
 """
 
 import logging
-from typing import Optional
+
 from fastapi import Depends, Request
 
 from internal.agent.agent_manager import AgentManager
-from internal.repository.session_repository import SessionRepository
-from internal.repository.knowledge_repository import KnowledgeRepository
-from internal.repository.community_repository import CommunityRepository
-from internal.knowledge.knowledge_service import KnowledgeService
 from internal.community.community_service import CommunityService
-from pkg.utils.metrics import MetricsCollector
+from internal.knowledge.knowledge_service import KnowledgeService
+from internal.repository.community_repository import CommunityRepository
+from internal.repository.knowledge_repository import KnowledgeRepository
+from internal.repository.session_repository import SessionRepository
 from pkg.utils.config import Config
+from pkg.utils.metrics import MetricsCollector
 
 logger = logging.getLogger(__name__)
 
 # 全局实例，只初始化一次
-_agent_manager: Optional[AgentManager] = None
-_session_repository: Optional[SessionRepository] = None
-_knowledge_repository: Optional[KnowledgeRepository] = None
-_community_repository: Optional[CommunityRepository] = None
-_knowledge_service: Optional[KnowledgeService] = None
-_community_service: Optional[CommunityService] = None
-_metrics_collector: Optional[MetricsCollector] = None
-_config: Optional[Config] = None
+_agent_manager: AgentManager | None = None
+_session_repository: SessionRepository | None = None
+_knowledge_repository: KnowledgeRepository | None = None
+_community_repository: CommunityRepository | None = None
+_knowledge_service: KnowledgeService | None = None
+_community_service: CommunityService | None = None
+_metrics_collector: MetricsCollector | None = None
+_config: Config | None = None
 
 def get_config() -> Config:
     """获取配置实例"""
@@ -111,6 +110,6 @@ async def shutdown_resources():
         await _agent_manager.close()
         _agent_manager = None
         logger.info("已关闭智能体管理器")
-    
+
     # 关闭其他资源
-    # TODO: 实现其他资源的关闭逻辑 
+    # TODO: 实现其他资源的关闭逻辑

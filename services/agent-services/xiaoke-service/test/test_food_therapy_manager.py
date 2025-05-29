@@ -1,17 +1,14 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 测试食疗管理器
 """
 
+from unittest.mock import AsyncMock, patch
+
 import pytest
-import json
-import asyncio
-from unittest.mock import patch, MagicMock, AsyncMock
 
 from internal.agent.food_therapy_manager import FoodTherapyManager
-from internal.repository.food_repository import FoodRepository
 
 
 class TestFoodTherapyManager:
@@ -172,7 +169,7 @@ class TestFoodTherapyManager:
 
         # 验证结果
         assert len(result["interactions"]) == 1
-        assert result["has_interactions"] == True
+        assert result["has_interactions"]
         assert result["interactions"][0]["food_name"] == "黑木耳"
         assert result["interactions"][0]["medicine_name"] == "阿司匹林"
 

@@ -3,7 +3,7 @@
 import grpc
 import warnings
 
-from . import syndrome_pb2 as syndrome__pb2
+from api.grpc import syndrome_pb2 as syndrome__pb2
 
 GRPC_GENERATED_VERSION = '1.71.0'
 GRPC_VERSION = grpc.__version__

@@ -1,0 +1,37 @@
+# UV 配置文件 - 索克生活平台通用组件库
+
+# 使用国内镜像源加速包下载
+[[index]]
+url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
+default = true
+
+[[index]]
+url = "https://mirrors.aliyun.com/pypi/simple/"
+
+[[index]]
+url = "https://pypi.douban.com/simple/"
+
+[[index]]
+url = "https://mirrors.cloud.tencent.com/pypi/simple/"
+
+# Python 版本管理
+python-preference = "only-managed"
+python-downloads = "automatic"
+
+# 缓存配置
+cache-dir = ".uv-cache"
+compile-bytecode = true
+
+# 依赖解析配置
+resolution = "highest"
+prerelease = "disallow"
+
+# 开发依赖
+dev-dependencies = [
+    "ruff>=0.7.0",
+    "mypy>=1.13.0",
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.24.0",
+    "pytest-cov>=6.0.0",
+    "pre-commit>=4.0.0",
+] 

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 数据库连接池管理器
 提供PostgreSQL和MongoDB的连接池管理，包含监控和自动重连机制
@@ -8,13 +7,13 @@
 import asyncio
 import logging
 import time
-from typing import Dict, Any, Optional, List
+from contextlib import asynccontextmanager, suppress
 from dataclasses import dataclass
-from contextlib import asynccontextmanager
+from typing import Any
 
 import asyncpg
 import motor.motor_asyncio
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.pool import QueuePool
 
 logger = logging.getLogger(__name__)
@@ -35,7 +34,7 @@ class PostgreSQLConfig:
     max_inactive_connection_lifetime: float = 300.0
     timeout: float = 60.0
     command_timeout: float = 60.0
-    server_settings: Dict[str, str] = None
+    server_settings: dict[str, str] = None
 
 
 @dataclass
@@ -45,14 +44,14 @@ class MongoDBConfig:
     host: str = "localhost"
     port: int = 27017
     database: str = "xiaoke_db"
-    username: Optional[str] = None
-    password: Optional[str] = None
+    username: str | None = None
+    password: str | None = None
     min_pool_size: int = 5
     max_pool_size: int = 20
     max_idle_time_ms: int = 300000
     connect_timeout_ms: int = 20000
     server_selection_timeout_ms: int = 30000
-    replica_set: Optional[str] = None
+    replica_set: str | None = None
 
 
 class ConnectionPoolManager:
@@ -72,12 +71,12 @@ class ConnectionPoolManager:
         self.mongo_config = mongo_config or MongoDBConfig()
 
         # PostgreSQL连接池
-        self.pg_pool: Optional[asyncpg.Pool] = None
+        self.pg_pool: asyncpg.Pool | None = None
         self.sqlalchemy_engine = None
         self.async_session_maker = None
 
         # MongoDB连接
-        self.mongo_client: Optional[motor.motor_asyncio.AsyncIOMotorClient] = None
+        self.mongo_client: motor.motor_asyncio.AsyncIOMotorClient | None = None
         self.mongo_db = None
 
         # 连接池统计
@@ -91,7 +90,7 @@ class ConnectionPoolManager:
         }
 
         # 健康检查任务
-        self._health_check_task: Optional[asyncio.Task] = None
+        self._health_check_task: asyncio.Task | None = None
 
         logger.info("数据库连接池管理器初始化完成")
 
@@ -238,7 +237,7 @@ class ConnectionPoolManager:
         """获取MongoDB集合"""
         return self.get_mongo_db()[collection_name]
 
-    async def execute_pg_query(self, query: str, *args) -> List[Dict[str, Any]]:
+    async def execute_pg_query(self, query: str, *args) -> list[dict[str, Any]]:
         """执行PostgreSQL查询"""
         async with self.get_pg_connection() as conn:
             try:
@@ -262,7 +261,7 @@ class ConnectionPoolManager:
                 self.stats["connection_errors"] += 1
                 raise
 
-    async def get_pg_pool_stats(self) -> Dict[str, Any]:
+    async def get_pg_pool_stats(self) -> dict[str, Any]:
         """获取PostgreSQL连接池统计"""
         if not self.pg_pool:
             return {}
@@ -277,7 +276,7 @@ class ConnectionPoolManager:
             "connections_closed": self.stats["pg_connections_closed"],
         }
 
-    async def get_mongo_stats(self) -> Dict[str, Any]:
+    async def get_mongo_stats(self) -> dict[str, Any]:
         """获取MongoDB连接统计"""
         if not self.mongo_client:
             return {}
@@ -326,7 +325,7 @@ class ConnectionPoolManager:
                 logger.warning("MongoDB健康检查失败: %s", str(e))
                 self.stats["connection_errors"] += 1
 
-    async def get_overall_stats(self) -> Dict[str, Any]:
+    async def get_overall_stats(self) -> dict[str, Any]:
         """获取整体统计信息"""
         pg_stats = await self.get_pg_pool_stats()
         mongo_stats = await self.get_mongo_stats()
@@ -345,10 +344,8 @@ class ConnectionPoolManager:
         # 停止健康检查
         if self._health_check_task:
             self._health_check_task.cancel()
-            try:
+            with suppress(asyncio.CancelledError):
                 await self._health_check_task
-            except asyncio.CancelledError:
-                pass
 
         # 关闭PostgreSQL连接池
         if self.pg_pool:
@@ -366,12 +363,12 @@ class ConnectionPoolManager:
 
 
 # 全局连接池管理器实例
-_connection_pool_manager: Optional[ConnectionPoolManager] = None
+_connection_pool_manager: ConnectionPoolManager | None = None
 
 
 async def get_connection_pool_manager(
-    pg_config: Optional[PostgreSQLConfig] = None,
-    mongo_config: Optional[MongoDBConfig] = None,
+    pg_config: PostgreSQLConfig | None = None,
+    mongo_config: MongoDBConfig | None = None,
 ) -> ConnectionPoolManager:
     """获取连接池管理器实例"""
     global _connection_pool_manager

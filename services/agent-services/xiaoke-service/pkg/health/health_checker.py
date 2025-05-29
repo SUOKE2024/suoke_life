@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 健康检查和服务发现
 提供多层次健康检查、自动故障检测和恢复、健康状态聚合和报告功能
@@ -8,15 +7,15 @@
 import asyncio
 import logging
 import time
-import json
-from typing import Dict, Any, List, Optional, Callable, Set
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
 from abc import ABC, abstractmethod
+from collections.abc import Callable
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from typing import Any
 
-import aioredis
 import aiohttp
+import aioredis
 import asyncpg
 import motor.motor_asyncio
 
@@ -59,10 +58,10 @@ class HealthCheckResult:
     name: str
     status: HealthStatus
     message: str = ""
-    details: Dict[str, Any] = field(default_factory=dict)
+    details: dict[str, Any] = field(default_factory=dict)
     timestamp: datetime = field(default_factory=datetime.now)
     duration: float = 0.0  # 检查耗时（秒）
-    error: Optional[str] = None
+    error: str | None = None
 
 
 class HealthChecker(ABC):
@@ -88,7 +87,7 @@ class HealthChecker(ABC):
         self.last_failure_time = None
 
         # 历史记录
-        self.check_history: List[HealthCheckResult] = []
+        self.check_history: list[HealthCheckResult] = []
         self.max_history = 100
 
         logger.debug("创建健康检查器: %s", name)
@@ -122,7 +121,7 @@ class HealthChecker(ABC):
 
             return result
 
-        except asyncio.TimeoutError:
+        except TimeoutError:
             result = HealthCheckResult(
                 name=self.name,
                 status=HealthStatus.UNHEALTHY,
@@ -140,7 +139,7 @@ class HealthChecker(ABC):
             result = HealthCheckResult(
                 name=self.name,
                 status=HealthStatus.UNHEALTHY,
-                message=f"检查异常: {str(e)}",
+                message=f"检查异常: {e!s}",
                 duration=time.time() - start_time,
                 error=str(e),
             )
@@ -190,7 +189,7 @@ class HealthChecker(ABC):
         if len(self.check_history) > self.max_history:
             self.check_history.pop(0)
 
-    def get_status(self) -> Dict[str, Any]:
+    def get_status(self) -> dict[str, Any]:
         """获取检查器状态"""
         return {
             "name": self.name,
@@ -258,7 +257,7 @@ class DatabaseHealthChecker(HealthChecker):
             return HealthCheckResult(
                 name=self.name,
                 status=HealthStatus.UNHEALTHY,
-                message=f"数据库检查失败: {str(e)}",
+                message=f"数据库检查失败: {e!s}",
                 error=str(e),
             )
 
@@ -293,7 +292,7 @@ class DatabaseHealthChecker(HealthChecker):
             return HealthCheckResult(
                 name=self.name,
                 status=HealthStatus.UNHEALTHY,
-                message=f"PostgreSQL连接失败: {str(e)}",
+                message=f"PostgreSQL连接失败: {e!s}",
                 error=str(e),
             )
 
@@ -331,7 +330,7 @@ class DatabaseHealthChecker(HealthChecker):
             return HealthCheckResult(
                 name=self.name,
                 status=HealthStatus.UNHEALTHY,
-                message=f"MongoDB连接失败: {str(e)}",
+                message=f"MongoDB连接失败: {e!s}",
                 error=str(e),
             )
 
@@ -388,7 +387,7 @@ class RedisHealthChecker(HealthChecker):
             return HealthCheckResult(
                 name=self.name,
                 status=HealthStatus.UNHEALTHY,
-                message=f"Redis连接失败: {str(e)}",
+                message=f"Redis连接失败: {e!s}",
                 error=str(e),
             )
 
@@ -401,7 +400,7 @@ class HTTPHealthChecker(HealthChecker):
         name: str,
         url: str,
         expected_status: int = 200,
-        headers: Dict[str, str] = None,
+        headers: dict[str, str] | None = None,
         config: HealthCheckConfig = None,
     ):
         """
@@ -457,7 +456,7 @@ class HTTPHealthChecker(HealthChecker):
             return HealthCheckResult(
                 name=self.name,
                 status=HealthStatus.UNHEALTHY,
-                message=f"HTTP检查失败: {str(e)}",
+                message=f"HTTP检查失败: {e!s}",
                 error=str(e),
             )
 
@@ -528,7 +527,7 @@ class CustomHealthChecker(HealthChecker):
             return HealthCheckResult(
                 name=self.name,
                 status=HealthStatus.UNHEALTHY,
-                message=f"自定义检查异常: {str(e)}",
+                message=f"自定义检查异常: {e!s}",
                 error=str(e),
             )
 
@@ -538,8 +537,8 @@ class HealthCheckManager:
 
     def __init__(self):
         """初始化健康检查管理器"""
-        self.checkers: Dict[str, HealthChecker] = {}
-        self.check_tasks: Dict[str, asyncio.Task] = {}
+        self.checkers: dict[str, HealthChecker] = {}
+        self.check_tasks: dict[str, asyncio.Task] = {}
         self.is_running = False
 
         # 全局健康状态
@@ -547,7 +546,7 @@ class HealthCheckManager:
         self.last_update_time = None
 
         # 状态变更回调
-        self.status_change_callbacks: List[Callable] = []
+        self.status_change_callbacks: list[Callable] = []
 
         # 统计信息
         self.stats = {
@@ -593,7 +592,7 @@ class HealthCheckManager:
         name: str,
         url: str,
         expected_status: int = 200,
-        headers: Dict[str, str] = None,
+        headers: dict[str, str] | None = None,
         config: HealthCheckConfig = None,
     ):
         """注册HTTP健康检查器"""
@@ -703,7 +702,7 @@ class HealthCheckManager:
                 except Exception as e:
                     logger.error("状态变更回调异常: %s", str(e))
 
-    async def get_health_status(self) -> Dict[str, Any]:
+    async def get_health_status(self) -> dict[str, Any]:
         """获取健康状态"""
         checker_statuses = {}
         for name, checker in self.checkers.items():
@@ -745,12 +744,12 @@ class HealthCheckManager:
             },
         }
 
-    async def check_all_now(self) -> Dict[str, HealthCheckResult]:
+    async def check_all_now(self) -> dict[str, HealthCheckResult]:
         """立即执行所有检查"""
         results = {}
 
         tasks = []
-        for name, checker in self.checkers.items():
+        for _name, checker in self.checkers.items():
             if checker.config.enabled:
                 tasks.append(checker.perform_check())
 
@@ -763,7 +762,7 @@ class HealthCheckManager:
                     results[checker_name] = HealthCheckResult(
                         name=checker_name,
                         status=HealthStatus.UNHEALTHY,
-                        message=f"检查异常: {str(result)}",
+                        message=f"检查异常: {result!s}",
                         error=str(result),
                     )
                 else:
@@ -792,7 +791,7 @@ class HealthCheckManager:
 
 
 # 全局健康检查管理器实例
-_health_check_manager: Optional[HealthCheckManager] = None
+_health_check_manager: HealthCheckManager | None = None
 
 
 def get_health_check_manager() -> HealthCheckManager:

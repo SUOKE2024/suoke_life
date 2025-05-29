@@ -1,78 +1,73 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 
 """
 日志工具
-提供统一的日志配置和辅助函数
+提供统一的日志配置和管理
 """
 
-import os
+import json
 import logging
 import logging.handlers
-import json
-from typing import Dict, Any, Optional
+import sys
+from pathlib import Path
 
 
 def setup_logger(
-    service_name: str = "xiaoke-service",
-    log_level: str = None,
-    log_file: str = None,
-    log_format: str = None,
+    name: str,
+    level: str = "INFO",
+    log_file: str | None = None,
+    format_string: str | None = None,
 ) -> logging.Logger:
     """
     设置日志记录器
 
     Args:
-        service_name: 服务名称
-        log_level: 日志级别
+        name: 日志记录器名称
+        level: 日志级别
         log_file: 日志文件路径
-        log_format: 日志格式
+        format_string: 日志格式字符串
 
     Returns:
-        配置好的日志记录器
+        logging.Logger: 配置好的日志记录器
     """
-    # 从环境变量读取配置
-    log_level = log_level or os.getenv("LOG_LEVEL", "INFO")
-    log_file = log_file or os.getenv("LOG_FILE", "logs/xiaoke-service.log")
+    logger = logging.getLogger(name)
 
-    # 确保日志目录存在
-    os.makedirs(os.path.dirname(log_file), exist_ok=True)
+    # 如果日志文件路径存在, 确保日志目录存在
+    if log_file:
+        log_path = Path(log_file)
+        log_path.parent.mkdir(parents=True, exist_ok=True)
 
     # 设置日志级别
-    level = getattr(logging, log_level)
+    level_map = {
+        "DEBUG": logging.DEBUG,
+        "INFO": logging.INFO,
+        "WARNING": logging.WARNING,
+        "ERROR": logging.ERROR,
+        "CRITICAL": logging.CRITICAL,
+    }
 
-    # 创建记录器
-    logger = logging.getLogger(service_name)
-    logger.setLevel(level)
+    logger.setLevel(level_map.get(level.upper(), logging.INFO))
 
-    # 如果已经有处理器，先清空
+    # 如果已经有处理器, 先清空
     if logger.handlers:
         logger.handlers = []
 
-    # 控制台处理器
-    console_handler = logging.StreamHandler()
-    console_handler.setLevel(level)
+    # 创建格式化器
+    if format_string is None:
+        format_string = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 
-    # 文件处理器
-    file_handler = logging.handlers.RotatingFileHandler(
-        log_file, maxBytes=10 * 1024 * 1024, backupCount=5, encoding="utf-8"
-    )
-    file_handler.setLevel(level)
+    formatter = logging.Formatter(format_string)
 
-    # 设置日志格式
-    if log_format == "json":
-        formatter = JsonFormatter()
-    else:
-        formatter = logging.Formatter(
-            "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-        )
-
+    # 创建控制台处理器
+    console_handler = logging.StreamHandler(sys.stdout)
     console_handler.setFormatter(formatter)
-    file_handler.setFormatter(formatter)
-
-    # 添加处理器
     logger.addHandler(console_handler)
-    logger.addHandler(file_handler)
+
+    # 如果指定了日志文件, 创建文件处理器
+    if log_file:
+        file_handler = logging.FileHandler(log_file, encoding="utf-8")
+        file_handler.setFormatter(formatter)
+        logger.addHandler(file_handler)
 
     return logger
 

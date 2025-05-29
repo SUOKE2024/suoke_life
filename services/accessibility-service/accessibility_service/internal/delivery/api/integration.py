@@ -3,30 +3,28 @@ Integration Management API Routes
 """
 
 from datetime import date
-from typing import List, Optional
-from fastapi import APIRouter, Depends, HTTPException, Query, Path
-from fastapi.responses import RedirectResponse
 
+from fastapi import APIRouter, Depends, HTTPException, Path, Query
+
+from ...model.base import BaseResponse, PaginationParams
 from ...model.user_integration import (
-    UserIntegration, 
-    IntegrationRequest, 
+    IntegrationRequest,
     IntegrationResponse,
-    AuthCallbackRequest,
+    IntegrationStatus,
     PlatformType,
-    IntegrationStatus
+    UserIntegration,
 )
-from ...model.base import BaseResponse, PaginationParams, PaginationResponse
+from ...service.dependencies import get_current_user, get_integration_service
 from ...service.integration_service import IntegrationService
-from ...service.dependencies import get_integration_service, get_current_user
 
 router = APIRouter()
 
 
-@router.get("/", response_model=List[UserIntegration])
+@router.get("/", response_model=list[UserIntegration])
 async def list_user_integrations(
     user_id: str = Depends(get_current_user),
-    platform: Optional[PlatformType] = Query(None, description="平台类型筛选"),
-    status: Optional[IntegrationStatus] = Query(None, description="状态筛选"),
+    platform: PlatformType | None = Query(None, description="平台类型筛选"),
+    status: IntegrationStatus | None = Query(None, description="状态筛选"),
     pagination: PaginationParams = Depends(),
     service: IntegrationService = Depends(get_integration_service)
 ):
@@ -164,9 +162,9 @@ async def disable_integration(
 @router.post("/{integration_id}/sync", response_model=BaseResponse)
 async def trigger_sync(
     integration_id: int = Path(..., description="集成ID"),
-    start_date: Optional[date] = Query(None, description="开始日期"),
-    end_date: Optional[date] = Query(None, description="结束日期"),
-    data_types: Optional[List[str]] = Query(None, description="数据类型"),
+    start_date: date | None = Query(None, description="开始日期"),
+    end_date: date | None = Query(None, description="结束日期"),
+    data_types: list[str] | None = Query(None, description="数据类型"),
     user_id: str = Depends(get_current_user),
     service: IntegrationService = Depends(get_integration_service)
 ):
@@ -179,10 +177,10 @@ async def trigger_sync(
             end_date=end_date,
             data_types=data_types
         )
-        
+
         if not result.success:
             raise HTTPException(status_code=400, detail=result.error_message)
-        
+
         return BaseResponse(
             message=f"同步完成，共同步 {result.synced_count} 条数据"
         )
@@ -226,4 +224,4 @@ async def test_connection(
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"连接测试失败: {str(e)}") 
+        raise HTTPException(status_code=500, detail=f"连接测试失败: {str(e)}")

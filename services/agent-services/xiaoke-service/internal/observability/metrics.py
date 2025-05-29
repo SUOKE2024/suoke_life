@@ -1,20 +1,19 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 小克服务指标采集模块
 """
 
-import time
-from functools import wraps
 import logging
 import os
+import time
+from functools import wraps
 from threading import Lock
 
 # 尝试导入Prometheus客户端库，如果不可用则使用dummy实现
 try:
     import prometheus_client as prom
-    from prometheus_client import Counter, Histogram, Gauge, Summary, CollectorRegistry
+    from prometheus_client import CollectorRegistry, Counter, Gauge, Histogram, Summary
     from prometheus_client.exposition import pushadd_to_gateway
 
     PROMETHEUS_AVAILABLE = True
@@ -71,7 +70,7 @@ class MetricsCollector:
         if cls._instance is None:
             with cls._lock:
                 if cls._instance is None:
-                    cls._instance = super(MetricsCollector, cls).__new__(cls)
+                    cls._instance = super().__new__(cls)
                     cls._instance._initialized = False
         return cls._instance
 
@@ -235,7 +234,7 @@ class MetricsCollector:
             )
             logger.debug(f"指标已推送到 {self.push_gateway_url}")
         except Exception as e:
-            logger.error(f"推送指标失败: {str(e)}", exc_info=True)
+            logger.error(f"推送指标失败: {e!s}", exc_info=True)
 
 
 # 装饰器：测量方法执行时间并记录指标
@@ -252,7 +251,7 @@ def measure_time(endpoint_name):
             try:
                 result = func(*args, **kwargs)
                 return result
-            except Exception as e:
+            except Exception:
                 status = "failure"
                 raise
             finally:

@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 中医证型映射包
@@ -8,4 +7,4 @@
 
 from .pattern_mapper import PatternMapper
 
-__all__ = ['PatternMapper'] 
+__all__ = ["PatternMapper"]

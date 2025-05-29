@@ -1,97 +1,93 @@
 #!/usr/bin/env python3
 """
-开发脚本
+开发工具脚本
 
-提供开发环境的常用命令。
+提供开发、测试、代码检查等常用命令
 """
 
-import argparse
 from pathlib import Path
 import subprocess
 import sys
 
+from corn_maze_service.constants import MIN_COMMAND_ARGS
 
-def run_command(cmd: list[str], cwd: Path = None) -> int:
+
+def run_command(cmd: list[str], cwd: Path | None = None) -> int:
     """运行命令"""
     print(f"Running: {' '.join(cmd)}")
     result = subprocess.run(cmd, cwd=cwd, check=False)
     return result.returncode
 
-
-def install_deps() -> int:
+def install():
     """安装依赖"""
-    return run_command(["uv", "sync", "--dev"])
+    return run_command(["uv", "sync"])
 
-
-def run_server() -> int:
-    """运行服务器"""
+def server():
+    """启动服务器"""
     return run_command(["uv", "run", "python", "-m", "corn_maze_service.cmd.server.main"])
 
-
-def run_tests() -> int:
+def test():
     """运行测试"""
-    return run_command(["uv", "run", "pytest", "tests/", "-v"])
+    return run_command(["uv", "run", "pytest", "-v"])
 
+def lint():
+    """代码检查"""
+    return run_command(["uv", "run", "ruff", "check", "."])
 
-def run_lint() -> int:
-    """运行代码检查"""
-    # 只检查主要代码，忽略测试文件中的魔法数字
-    return run_command(["uv", "run", "ruff", "check", "corn_maze_service/"])
-
-
-def run_format() -> int:
+def format_code():
     """格式化代码"""
-    return run_command(["uv", "run", "ruff", "format", "corn_maze_service/", "tests/"])
+    return run_command(["uv", "run", "ruff", "format", "."])
 
+def type_check():
+    """类型检查"""
+    return run_command(["uv", "run", "mypy", "."])
 
-def run_type_check() -> int:
-    """运行类型检查"""
-    return run_command(["uv", "run", "mypy", "corn_maze_service", "--strict"])
+def run_tests():
+    """运行测试"""
+    return run_command(["uv", "run", "pytest", "-v", "--cov=corn_maze_service"])
 
-
-def run_all_checks() -> int:
+def check_all():
     """运行所有检查"""
     checks = [
-        ("代码检查", run_lint),
-        ("类型检查", run_type_check),
+        ("代码检查", lint),
+        ("类型检查", type_check),
         ("测试", run_tests),
     ]
-    
+
     for name, check_func in checks:
         print(f"\n=== {name} ===")
-        if check_func() != 0:
+        result = check_func()
+        if result != 0:
             print(f"❌ {name} 失败")
             return 1
         print(f"✅ {name} 通过")
-    
-    print("\n🎉 所有检查都通过了！")
-    return 0
 
+    print("\n🎉 所有检查都通过了!")
+    return 0
 
 def main():
     """主函数"""
-    parser = argparse.ArgumentParser(description="开发脚本")
-    parser.add_argument(
-        "command",
-        choices=["install", "server", "test", "lint", "format", "type-check", "check"],
-        help="要执行的命令"
-    )
+    if len(sys.argv) < MIN_COMMAND_ARGS:
+        print("Usage: python scripts/dev.py <command>")
+        print("Commands: install, server, test, lint, format, type-check, check")
+        return 1
 
-    args = parser.parse_args()
-
+    command = sys.argv[1]
     commands = {
-        "install": install_deps,
-        "server": run_server,
-        "test": run_tests,
-        "lint": run_lint,
-        "format": run_format,
-        "type-check": run_type_check,
-        "check": run_all_checks,
+        "install": install,
+        "server": server,
+        "test": test,
+        "lint": lint,
+        "format": format_code,
+        "type-check": type_check,
+        "check": check_all,
     }
 
-    exit_code = commands[args.command]()
-    sys.exit(exit_code)
+    if command not in commands:
+        print(f"Unknown command: {command}")
+        return 1
 
+    return commands[command]()
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

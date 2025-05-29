@@ -1,7 +1,7 @@
 """
 日志配置模块
 
-使用 structlog 和 loguru 提供结构化日志记录，
+使用 structlog 和 loguru 提供结构化日志记录,
 支持JSON格式输出、链路追踪、性能监控等功能。
 """
 

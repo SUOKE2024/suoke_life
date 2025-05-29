@@ -3,7 +3,7 @@
 import grpc
 import warnings
 
-from . import palpation_service_pb2 as palpation__service__pb2
+from api.grpc import palpation_service_pb2 as palpation__service__pb2
 
 GRPC_GENERATED_VERSION = '1.71.0'
 GRPC_VERSION = grpc.__version__

@@ -1,15 +1,14 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 领域模型
 定义服务中使用的领域模型和枚举
 """
 
-from enum import Enum
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Dict, List, Optional, Any
+from enum import Enum
+from typing import Any
 
 
 class MedicalResourceType(str, Enum):
@@ -150,14 +149,14 @@ class Appointment:
     doctor_id: str
     appointment_type: AppointmentType
     preferred_time: datetime
-    confirmed_time: Optional[datetime]
+    confirmed_time: datetime | None
     symptoms: str
     constitution_type: ConstitutionType
     status: AppointmentStatus
-    meeting_link: Optional[str] = None
+    meeting_link: str | None = None
     created_at: datetime = datetime.now()
-    updated_at: Optional[datetime] = None
-    metadata: Dict[str, str] = None
+    updated_at: datetime | None = None
+    metadata: dict[str, str] = None
 
 
 @dataclass
@@ -172,15 +171,15 @@ class Product:
     origin: str
     producer: str
     image_url: str
-    constitution_benefits: Dict[str, str]
-    health_benefits: List[str]
-    seasons: List[str]
-    tags: List[str]
-    categories: List[str]
+    constitution_benefits: dict[str, str]
+    health_benefits: list[str]
+    seasons: list[str]
+    tags: list[str]
+    categories: list[str]
     stock: int
     created_at: datetime = datetime.now()
-    updated_at: Optional[datetime] = None
-    metadata: Dict[str, Any] = None
+    updated_at: datetime | None = None
+    metadata: dict[str, Any] = None
 
 
 @dataclass
@@ -189,16 +188,16 @@ class Order:
 
     id: str
     user_id: str
-    products: List[Dict[str, Any]]
+    products: list[dict[str, Any]]
     total_price: float
     status: OrderStatus
-    payment_method: Optional[PaymentMethod] = None
-    payment_id: Optional[str] = None
-    shipping_address: Optional[str] = None
-    tracking_number: Optional[str] = None
+    payment_method: PaymentMethod | None = None
+    payment_id: str | None = None
+    shipping_address: str | None = None
+    tracking_number: str | None = None
     created_at: datetime = datetime.now()
-    updated_at: Optional[datetime] = None
-    metadata: Dict[str, Any] = None
+    updated_at: datetime | None = None
+    metadata: dict[str, Any] = None
 
 
 @dataclass
@@ -212,10 +211,10 @@ class Payment:
     amount: float
     currency: str
     status: PaymentStatus
-    transaction_id: Optional[str] = None
+    transaction_id: str | None = None
     created_at: datetime = datetime.now()
-    completed_at: Optional[datetime] = None
-    metadata: Dict[str, Any] = None
+    completed_at: datetime | None = None
+    metadata: dict[str, Any] = None
 
 
 @dataclass
@@ -233,8 +232,8 @@ class Subscription:
     amount: float
     auto_renew: bool = True
     created_at: datetime = datetime.now()
-    updated_at: Optional[datetime] = None
-    metadata: Dict[str, Any] = None
+    updated_at: datetime | None = None
+    metadata: dict[str, Any] = None
 
 
 @dataclass
@@ -250,9 +249,9 @@ class FarmingActivity:
     end_time: datetime
     capacity: int
     price: float
-    constitution_benefits: Dict[str, str]
-    health_benefits: List[str]
+    constitution_benefits: dict[str, str]
+    health_benefits: list[str]
     registration_deadline: datetime
     created_at: datetime = datetime.now()
-    updated_at: Optional[datetime] = None
-    metadata: Dict[str, Any] = None
+    updated_at: datetime | None = None
+    metadata: dict[str, Any] = None

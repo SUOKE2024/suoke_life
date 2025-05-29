@@ -4,14 +4,13 @@ API 路由模块
 定义所有的 API 端点
 """
 
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, Field
 
-from laoke_service.core.agent import LaoKeAgent, AgentMessage, AgentResponse
+from laoke_service.core.agent import AgentMessage, LaoKeAgent
 from laoke_service.core.exceptions import LaoKeServiceError
-
 
 # 创建主路由器
 api_router = APIRouter()
@@ -22,25 +21,25 @@ class ChatRequest(BaseModel):
     """聊天请求模型"""
     message: str = Field(description="用户消息")
     message_type: str = Field(default="general_chat", description="消息类型")
-    user_id: Optional[str] = Field(default=None, description="用户ID")
-    context: Optional[Dict[str, Any]] = Field(default=None, description="上下文信息")
-    metadata: Optional[Dict[str, Any]] = Field(default=None, description="元数据")
+    user_id: str | None = Field(default=None, description="用户ID")
+    context: dict[str, Any] | None = Field(default=None, description="上下文信息")
+    metadata: dict[str, Any] | None = Field(default=None, description="元数据")
 
 
 class ChatResponse(BaseModel):
     """聊天响应模型"""
     success: bool = Field(description="是否成功")
     message: str = Field(description="响应消息")
-    data: Optional[Dict[str, Any]] = Field(default=None, description="响应数据")
-    suggestions: List[str] = Field(default_factory=list, description="建议")
-    error_code: Optional[str] = Field(default=None, description="错误代码")
+    data: dict[str, Any] | None = Field(default=None, description="响应数据")
+    suggestions: list[str] = Field(default_factory=list, description="建议")
+    error_code: str | None = Field(default=None, description="错误代码")
 
 
 class KnowledgeQueryRequest(BaseModel):
     """知识查询请求模型"""
     query: str = Field(description="查询关键词")
-    category: Optional[str] = Field(default=None, description="知识分类")
-    difficulty: Optional[str] = Field(default=None, description="难度级别")
+    category: str | None = Field(default=None, description="知识分类")
+    difficulty: str | None = Field(default=None, description="难度级别")
     limit: int = Field(default=10, description="返回数量限制")
 
 
@@ -49,7 +48,7 @@ class LearningPlanRequest(BaseModel):
     goal: str = Field(description="学习目标")
     current_level: str = Field(default="初级", description="当前水平")
     available_time: str = Field(default="30分钟/天", description="可用时间")
-    interests: Optional[List[str]] = Field(default=None, description="兴趣领域")
+    interests: list[str] | None = Field(default=None, description="兴趣领域")
 
 
 class CommunityPostRequest(BaseModel):
@@ -57,7 +56,7 @@ class CommunityPostRequest(BaseModel):
     title: str = Field(description="帖子标题")
     content: str = Field(description="帖子内容")
     category: str = Field(description="帖子分类")
-    tags: Optional[List[str]] = Field(default=None, description="标签")
+    tags: list[str] | None = Field(default=None, description="标签")
 
 
 # 依赖注入
@@ -66,7 +65,7 @@ async def get_agent(request: Request) -> LaoKeAgent:
     agent = getattr(request.app.state, 'agent', None)
     if agent is None:
         raise HTTPException(status_code=503, detail="Agent not available")
-    return agent
+    return agent  # type: ignore[no-any-return]
 
 
 # 聊天相关路由
@@ -83,14 +82,14 @@ async def chat(
             message_type=request.message_type,
             metadata=request.metadata or {}
         )
-        
+
         # 处理消息
         response = await agent.process_message(
             message=agent_message,
             user_id=request.user_id,
             context=request.context
         )
-        
+
         return ChatResponse(
             success=response.success,
             message=response.message,
@@ -98,7 +97,7 @@ async def chat(
             suggestions=response.suggestions,
             error_code=response.error_code
         )
-        
+
     except LaoKeServiceError as e:
         return ChatResponse(
             success=False,
@@ -106,7 +105,7 @@ async def chat(
             error_code=e.error_code
         )
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 # 知识管理相关路由
@@ -127,9 +126,9 @@ async def search_knowledge(
                 "limit": request.limit
             }
         )
-        
+
         response = await agent.process_message(agent_message)
-        
+
         return ChatResponse(
             success=response.success,
             message=response.message,
@@ -137,15 +136,15 @@ async def search_knowledge(
             suggestions=response.suggestions,
             error_code=response.error_code
         )
-        
+
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @api_router.get("/knowledge/categories")
 async def get_knowledge_categories(
     agent: LaoKeAgent = Depends(get_agent)
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """获取知识分类"""
     try:
         # 这里应该从智能体获取实际的分类数据
@@ -156,14 +155,14 @@ async def get_knowledge_categories(
             "养生保健": ["四季养生", "体质养生", "饮食养生", "运动养生"],
             "疾病防治": ["常见病防治", "慢性病管理", "亚健康调理"]
         }
-        
+
         return {
             "success": True,
             "data": {"categories": categories}
         }
-        
+
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 # 学习路径相关路由
@@ -187,9 +186,9 @@ async def create_learning_plan(
                 }
             }
         )
-        
+
         response = await agent.process_message(agent_message)
-        
+
         return ChatResponse(
             success=response.success,
             message=response.message,
@@ -197,15 +196,15 @@ async def create_learning_plan(
             suggestions=response.suggestions,
             error_code=response.error_code
         )
-        
+
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @api_router.get("/learning/paths")
 async def get_learning_paths(
     agent: LaoKeAgent = Depends(get_agent)
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """获取可用的学习路径"""
     try:
         # 这里应该从智能体获取实际的学习路径数据
@@ -235,24 +234,24 @@ async def get_learning_paths(
                 "modules_count": 4
             }
         ]
-        
+
         return {
             "success": True,
             "data": {"learning_paths": paths}
         }
-        
+
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 # 社区相关路由
 @api_router.get("/community/posts")
 async def get_community_posts(
-    category: Optional[str] = None,
+    category: str | None = None,
     limit: int = 10,
     offset: int = 0,
     agent: LaoKeAgent = Depends(get_agent)
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """获取社区帖子"""
     try:
         # 创建社区浏览消息
@@ -266,25 +265,25 @@ async def get_community_posts(
                 "offset": offset
             }
         )
-        
+
         response = await agent.process_message(agent_message)
-        
+
         return {
             "success": response.success,
             "data": response.data,
             "message": response.message
         }
-        
+
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @api_router.post("/community/posts")
 async def create_community_post(
     request: CommunityPostRequest,
-    user_id: Optional[str] = None,
+    user_id: str | None = None,
     agent: LaoKeAgent = Depends(get_agent)
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """创建社区帖子"""
     try:
         # 创建社区发帖消息
@@ -298,24 +297,24 @@ async def create_community_post(
                 "tags": request.tags or []
             }
         )
-        
+
         response = await agent.process_message(agent_message, user_id=user_id)
-        
+
         return {
             "success": response.success,
             "data": response.data,
             "message": response.message
         }
-        
+
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 # 智能体状态相关路由
 @api_router.get("/agent/status")
 async def get_agent_status(
     agent: LaoKeAgent = Depends(get_agent)
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """获取智能体状态"""
     try:
         status = await agent.get_agent_status()
@@ -323,15 +322,15 @@ async def get_agent_status(
             "success": True,
             "data": status
         }
-        
+
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @api_router.get("/agent/capabilities")
 async def get_agent_capabilities(
     agent: LaoKeAgent = Depends(get_agent)
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """获取智能体能力"""
     try:
         capabilities = [
@@ -361,11 +360,11 @@ async def get_agent_capabilities(
                 "endpoints": ["/api/v1/chat"]
             }
         ]
-        
+
         return {
             "success": True,
             "data": {"capabilities": capabilities}
         }
-        
+
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e)) 
+        raise HTTPException(status_code=500, detail=str(e)) from e

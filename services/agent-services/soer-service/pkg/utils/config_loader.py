@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 配置加载工具
 负责从配置文件加载服务配置
 """
 
-import os
 import logging
+import os
+from typing import Any
+
 import yaml
-from typing import Dict, Any, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -48,7 +48,7 @@ DEFAULT_CONFIG = {
         "health_plan": {
             "type": "chat",
             "model_id": "gpt-4o-mini",
-            "endpoint": "https://api.openai.com/v1/chat/completions", 
+            "endpoint": "https://api.openai.com/v1/chat/completions",
             "max_tokens": 2048,
             "temperature": 0.4
         },
@@ -60,7 +60,7 @@ DEFAULT_CONFIG = {
             "temperature": 0.5
         },
         "emotional": {
-            "type": "chat", 
+            "type": "chat",
             "model_id": "gpt-4o-mini",
             "endpoint": "https://api.openai.com/v1/chat/completions",
             "max_tokens": 1536,
@@ -95,55 +95,55 @@ DEFAULT_CONFIG = {
 # 全局配置对象
 _config = None
 
-def load_config(config_path: str) -> Dict[str, Any]:
+def load_config(config_path: str) -> dict[str, Any]:
     """
     从文件加载配置
-    
+
     Args:
         config_path: 配置文件路径
-        
+
     Returns:
         Dict[str, Any]: 配置字典
     """
     global _config
-    
+
     # 如果配置已加载，返回缓存的配置
     if _config is not None:
         return _config
-    
+
     # 初始化为默认配置
     config = DEFAULT_CONFIG.copy()
-    
+
     # 检查配置文件是否存在
     if not os.path.exists(config_path):
         logger.warning(f"配置文件不存在: {config_path}，使用默认配置")
         _config = config
         return config
-    
+
     # 尝试加载配置文件
     try:
-        with open(config_path, 'r', encoding='utf-8') as f:
+        with open(config_path, encoding='utf-8') as f:
             file_config = yaml.safe_load(f)
-            
+
         if file_config:
             # 递归合并配置
             _merge_config(config, file_config)
-            
+
         logger.info(f"成功加载配置文件: {config_path}")
     except Exception as e:
         logger.error(f"加载配置文件失败: {str(e)}")
-    
+
     # 加载环境变量覆盖
     _load_env_overrides(config)
-    
+
     # 缓存配置
     _config = config
     return config
 
-def get_config() -> Dict[str, Any]:
+def get_config() -> dict[str, Any]:
     """
     获取当前配置
-    
+
     Returns:
         Dict[str, Any]: 配置字典
     """
@@ -153,10 +153,10 @@ def get_config() -> Dict[str, Any]:
         return load_config('config/config.yaml')
     return _config
 
-def _merge_config(base: Dict[str, Any], override: Dict[str, Any]) -> None:
+def _merge_config(base: dict[str, Any], override: dict[str, Any]) -> None:
     """
     递归合并配置字典
-    
+
     Args:
         base: 基础配置
         override: 覆盖配置
@@ -167,10 +167,10 @@ def _merge_config(base: Dict[str, Any], override: Dict[str, Any]) -> None:
         else:
             base[key] = value
 
-def _load_env_overrides(config: Dict[str, Any]) -> None:
+def _load_env_overrides(config: dict[str, Any]) -> None:
     """
     从环境变量加载配置覆盖
-    
+
     Args:
         config: 配置字典
     """
@@ -190,12 +190,12 @@ def _load_env_overrides(config: Dict[str, Any]) -> None:
         "SOER_METRICS_ENABLED": ("metrics", "enabled", lambda v: v.lower() == "true"),
         "SOER_OPENAI_API_KEY": ("models", "api_key", str)
     }
-    
+
     for env_var, (section, key, converter) in env_mappings.items():
         if env_var in os.environ:
             try:
                 value = converter(os.environ[env_var])
-                
+
                 # 支持嵌套部分
                 if isinstance(section, str):
                     if section not in config:
@@ -209,26 +209,26 @@ def _load_env_overrides(config: Dict[str, Any]) -> None:
                             current[s] = {}
                         current = current[s]
                     current[section[-1]][key] = value
-                    
+
                 logger.debug(f"从环境变量加载配置: {env_var} -> {section}.{key} = {value}")
             except Exception as e:
                 logger.warning(f"处理环境变量配置失败 {env_var}: {str(e)}")
 
-def reload_config(config_path: str = None) -> Dict[str, Any]:
+def reload_config(config_path: str = None) -> dict[str, Any]:
     """
     重新加载配置
-    
+
     Args:
         config_path: 配置文件路径，如果为None则使用之前的路径
-        
+
     Returns:
         Dict[str, Any]: 更新后的配置字典
     """
     global _config
-    
+
     # 重置配置
     _config = None
-    
+
     # 使用提供的路径或默认路径
     path = config_path or 'config/config.yaml'
     return load_config(path)
@@ -236,22 +236,22 @@ def reload_config(config_path: str = None) -> Dict[str, Any]:
 def get_config_value(path: str, default: Any = None) -> Any:
     """
     获取配置项的值
-    
+
     Args:
         path: 配置项路径，使用点分隔，如"server.grpc_port"
         default: 如果配置项不存在，返回的默认值
-        
+
     Returns:
         Any: 配置项的值
     """
     config = get_config()
     keys = path.split('.')
-    
+
     current = config
     for key in keys:
         if isinstance(current, dict) and key in current:
             current = current[key]
         else:
             return default
-    
+
     return current

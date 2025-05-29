@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from '../../components/common/Icon';
 import { HealthMetric } from '../../types/life';
-import { colors, spacing, fonts, borderRadius } from '../../constants/theme';
+import { colors, spacing, typography, borderRadius } from '../../constants/theme';
 
 interface HealthMetricCardProps {
   metric: HealthMetric;
@@ -105,9 +105,9 @@ const styles = StyleSheet.create({
     marginLeft: spacing.md,
   },
   name: {
-    fontSize: fonts.size.md,
-    fontWeight: '500',
-    color: colors.text,
+    fontSize: typography.fontSize.base,
+    fontWeight: '500' as any,
+    color: colors.textPrimary,
   },
   trendContainer: {
     marginTop: spacing.xs,
@@ -118,11 +118,11 @@ const styles = StyleSheet.create({
     marginBottom: spacing.md,
   },
   value: {
-    fontSize: fonts.size.xxl,
-    fontWeight: 'bold',
+    fontSize: typography.fontSize['3xl'],
+    fontWeight: '700' as any,
   },
   unit: {
-    fontSize: fonts.size.md,
+    fontSize: typography.fontSize.base,
     color: colors.textSecondary,
     marginLeft: spacing.xs,
   },
@@ -140,13 +140,13 @@ const styles = StyleSheet.create({
     borderRadius: 3,
   },
   target: {
-    fontSize: fonts.size.sm,
+    fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
   },
   suggestion: {
-    fontSize: fonts.size.sm,
+    fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
-    lineHeight: fonts.lineHeight.sm,
+    lineHeight: typography.fontSize.sm * typography.lineHeight.normal,
   },
 });
 

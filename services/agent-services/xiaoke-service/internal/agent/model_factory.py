@@ -1,33 +1,30 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 大模型工厂类
 负责创建和管理不同类型的大模型客户端，为小克智能体提供支持
 """
 
-import os
-import logging
-import time
-from typing import Dict, Any, Optional, List, Union, Tuple
 import asyncio
-import json
+import logging
+import os
+import time
+from typing import Any
+
 import httpx
 from tenacity import (
     retry,
+    retry_if_exception_type,
     stop_after_attempt,
     wait_exponential,
-    retry_if_exception_type,
 )
 
 try:
     import openai
     from openai.types.chat import (
-        ChatCompletionUserMessageParam,
-        ChatCompletionSystemMessageParam,
-    )
-    from openai.types.chat import (
         ChatCompletionAssistantMessageParam,
         ChatCompletionMessageParam,
+        ChatCompletionSystemMessageParam,
+        ChatCompletionUserMessageParam,
     )
 
     HAS_OPENAI = True
@@ -334,10 +331,10 @@ class ModelFactory:
     async def generate_chat_completion(
         self,
         model: str,
-        messages: List[Dict[str, str]],
+        messages: list[dict[str, str]],
         temperature: float = 0.7,
         max_tokens: int = 2048,
-    ) -> Tuple[str, Dict[str, Any]]:
+    ) -> tuple[str, dict[str, Any]]:
         """
         生成聊天完成
 
@@ -350,9 +347,7 @@ class ModelFactory:
         Returns:
             Tuple[str, Dict[str, Any]]: 生成的文本和元数据
         """
-        start_time = time.time()
-        prompt_tokens = 0
-        completion_tokens = 0
+        time.time()
 
         # 判断模型是否可用
         if model not in self.clients:
@@ -376,7 +371,7 @@ class ModelFactory:
 
         try:
             # 根据客户端类型调用不同的API
-            if client_type == "openai" or client_type == "local_llm":
+            if client_type in {"openai", "local_llm"}:
                 return await self._call_openai_compatible_api(
                     client, model, messages, temperature, max_tokens
                 )
@@ -409,7 +404,7 @@ class ModelFactory:
                 )
 
             # 返回错误信息
-            return f"很抱歉，我暂时无法处理您的请求。错误: {str(e)}", {
+            return f"很抱歉，我暂时无法处理您的请求。错误: {e!s}", {
                 "model": model,
                 "provider": client_info["provider"],
                 "error": str(e),
@@ -604,7 +599,7 @@ class ModelFactory:
 
             return result["access_token"]
 
-    def get_available_models(self) -> List[Dict[str, Any]]:
+    def get_available_models(self) -> list[dict[str, Any]]:
         """
         获取所有可用的模型列表
 

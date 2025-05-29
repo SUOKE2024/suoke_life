@@ -1,15 +1,14 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 小克(xiaoke)智能体服务实现
 集成无障碍服务，支持医疗资源调度和产品信息的无障碍功能
 """
 
-import logging
 import asyncio
+import logging
 import time
-from typing import Dict, Any, Optional, List, Union
+from typing import Any
 
 # 导入无障碍客户端
 from ..integration.accessibility_client import AccessibilityClient
@@ -20,7 +19,7 @@ logger = logging.getLogger(__name__)
 class XiaokeServiceImpl:
     """小克智能体服务实现，集成无障碍功能"""
 
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
+    def __init__(self, config: dict[str, Any] | None = None):
         """
         初始化小克服务
 
@@ -36,10 +35,10 @@ class XiaokeServiceImpl:
 
     async def schedule_medical_resources_accessible(
         self,
-        resource_request: Dict[str, Any],
+        resource_request: dict[str, Any],
         user_id: str,
-        accessibility_options: Dict[str, Any] = None,
-    ) -> Dict[str, Any]:
+        accessibility_options: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
         """
         医疗资源调度（无障碍版本）
 
@@ -81,7 +80,7 @@ class XiaokeServiceImpl:
             return {
                 "scheduling_result": {},
                 "accessible_content": {
-                    "accessible_content": f"医疗资源调度失败: {str(e)}",
+                    "accessible_content": f"医疗资源调度失败: {e!s}",
                     "success": False,
                     "error": str(e),
                 },
@@ -91,10 +90,10 @@ class XiaokeServiceImpl:
 
     async def customize_agricultural_products_accessible(
         self,
-        customization_request: Dict[str, Any],
+        customization_request: dict[str, Any],
         user_id: str,
-        accessibility_options: Dict[str, Any] = None,
-    ) -> Dict[str, Any]:
+        accessibility_options: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
         """
         农产品定制（无障碍版本）
 
@@ -136,7 +135,7 @@ class XiaokeServiceImpl:
             return {
                 "customization_result": {},
                 "accessible_content": {
-                    "accessible_content": f"农产品定制失败: {str(e)}",
+                    "accessible_content": f"农产品定制失败: {e!s}",
                     "success": False,
                     "error": str(e),
                 },
@@ -146,10 +145,10 @@ class XiaokeServiceImpl:
 
     async def process_payment_accessible(
         self,
-        payment_request: Dict[str, Any],
+        payment_request: dict[str, Any],
         user_id: str,
-        accessibility_options: Dict[str, Any] = None,
-    ) -> Dict[str, Any]:
+        accessibility_options: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
         """
         支付处理（无障碍版本）
 
@@ -189,7 +188,7 @@ class XiaokeServiceImpl:
             return {
                 "payment_result": {},
                 "accessible_content": {
-                    "accessible_content": f"支付处理失败: {str(e)}",
+                    "accessible_content": f"支付处理失败: {e!s}",
                     "success": False,
                     "error": str(e),
                 },
@@ -199,10 +198,10 @@ class XiaokeServiceImpl:
 
     async def manage_subscription_accessible(
         self,
-        subscription_request: Dict[str, Any],
+        subscription_request: dict[str, Any],
         user_id: str,
-        accessibility_options: Dict[str, Any] = None,
-    ) -> Dict[str, Any]:
+        accessibility_options: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
         """
         订阅管理（无障碍版本）
 
@@ -244,7 +243,7 @@ class XiaokeServiceImpl:
             return {
                 "subscription_result": {},
                 "accessible_content": {
-                    "accessible_content": f"订阅管理失败: {str(e)}",
+                    "accessible_content": f"订阅管理失败: {e!s}",
                     "success": False,
                     "error": str(e),
                 },
@@ -254,7 +253,7 @@ class XiaokeServiceImpl:
 
     async def provide_voice_shopping_assistance(
         self, audio_data: bytes, user_id: str, context: str = "shopping"
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         语音购物辅助
 
@@ -321,15 +320,15 @@ class XiaokeServiceImpl:
             logger.error(f"语音购物辅助失败: {e}")
             return {
                 "recognized_text": "",
-                "response_text": f"语音购物辅助失败: {str(e)}",
+                "response_text": f"语音购物辅助失败: {e!s}",
                 "response_audio": b"",
                 "success": False,
                 "error": str(e),
             }
 
     async def generate_accessible_service_catalog(
-        self, catalog_request: Dict[str, Any], user_id: str
-    ) -> Dict[str, Any]:
+        self, catalog_request: dict[str, Any], user_id: str
+    ) -> dict[str, Any]:
         """
         生成无障碍服务目录
 
@@ -393,8 +392,8 @@ class XiaokeServiceImpl:
 
     # 内部辅助方法
     async def _schedule_medical_resources(
-        self, resource_request: Dict[str, Any], user_id: str
-    ) -> Dict[str, Any]:
+        self, resource_request: dict[str, Any], user_id: str
+    ) -> dict[str, Any]:
         """执行医疗资源调度"""
         # 模拟医疗资源调度
         await asyncio.sleep(0.2)
@@ -416,8 +415,8 @@ class XiaokeServiceImpl:
         }
 
     async def _customize_agricultural_products(
-        self, customization_request: Dict[str, Any], user_id: str
-    ) -> Dict[str, Any]:
+        self, customization_request: dict[str, Any], user_id: str
+    ) -> dict[str, Any]:
         """执行农产品定制"""
         # 模拟农产品定制
         await asyncio.sleep(0.15)
@@ -446,8 +445,8 @@ class XiaokeServiceImpl:
         }
 
     async def _process_payment(
-        self, payment_request: Dict[str, Any], user_id: str
-    ) -> Dict[str, Any]:
+        self, payment_request: dict[str, Any], user_id: str
+    ) -> dict[str, Any]:
         """执行支付处理"""
         # 模拟支付处理
         await asyncio.sleep(0.1)
@@ -463,8 +462,8 @@ class XiaokeServiceImpl:
         }
 
     async def _manage_subscription(
-        self, subscription_request: Dict[str, Any], user_id: str
-    ) -> Dict[str, Any]:
+        self, subscription_request: dict[str, Any], user_id: str
+    ) -> dict[str, Any]:
         """执行订阅管理"""
         # 模拟订阅管理
         await asyncio.sleep(0.1)
@@ -499,8 +498,8 @@ class XiaokeServiceImpl:
             return {"error": f"不支持的操作: {action}"}
 
     async def _generate_service_catalog(
-        self, catalog_request: Dict[str, Any], user_id: str
-    ) -> Dict[str, Any]:
+        self, catalog_request: dict[str, Any], user_id: str
+    ) -> dict[str, Any]:
         """生成服务目录"""
         # 模拟服务目录生成
         await asyncio.sleep(0.2)
@@ -547,7 +546,7 @@ class XiaokeServiceImpl:
             "generation_time": time.time(),
         }
 
-    def _extract_medical_request_from_text(self, text: str) -> Dict[str, Any]:
+    def _extract_medical_request_from_text(self, text: str) -> dict[str, Any]:
         """从文本中提取医疗请求"""
         request = {
             "type": "general",
@@ -564,7 +563,7 @@ class XiaokeServiceImpl:
 
         return request
 
-    def _extract_customization_request_from_text(self, text: str) -> Dict[str, Any]:
+    def _extract_customization_request_from_text(self, text: str) -> dict[str, Any]:
         """从文本中提取定制请求"""
         request = {
             "type": "organic_vegetables",
@@ -581,7 +580,7 @@ class XiaokeServiceImpl:
 
         return request
 
-    def _extract_payment_request_from_text(self, text: str) -> Dict[str, Any]:
+    def _extract_payment_request_from_text(self, text: str) -> dict[str, Any]:
         """从文本中提取支付请求"""
         request = {
             "amount": 100.0,

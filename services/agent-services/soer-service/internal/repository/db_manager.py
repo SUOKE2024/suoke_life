@@ -1,18 +1,17 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 数据库连接管理器
 
 提供SQL数据库和Redis缓存的连接管理功能
 """
-import os
+import asyncio
 import logging
 import time
-import asyncio
-from typing import Dict, Any, Optional, Union, List
+from functools import wraps
+from typing import Any
+
 import asyncpg
 import redis.asyncio as redis
-from functools import wraps
 
 from pkg.utils.metrics import track_database_query
 
@@ -21,11 +20,11 @@ logger = logging.getLogger(__name__)
 
 class DBManager:
     """数据库连接管理器"""
-    
-    def __init__(self, config: Dict[str, Any]):
+
+    def __init__(self, config: dict[str, Any]):
         """
         初始化数据库连接管理器
-        
+
         Args:
             config: 数据库配置
         """
@@ -33,12 +32,12 @@ class DBManager:
         self.postgres_pool = None
         self.redis_client = None
         self._initialized = False
-    
+
     async def initialize(self):
         """初始化数据库连接"""
         if self._initialized:
             return
-        
+
         # 初始化Postgres连接池
         postgres_config = self.config.get('postgres', {})
         if postgres_config.get('enabled', True):
@@ -56,7 +55,7 @@ class DBManager:
             except Exception as e:
                 logger.error(f"PostgreSQL连接池初始化失败: {str(e)}")
                 self.postgres_pool = None
-        
+
         # 初始化Redis客户端
         redis_config = self.config.get('redis', {})
         if redis_config.get('enabled', True):
@@ -74,39 +73,39 @@ class DBManager:
             except Exception as e:
                 logger.error(f"Redis客户端初始化失败: {str(e)}")
                 self.redis_client = None
-        
+
         self._initialized = True
-    
+
     async def close(self):
         """关闭数据库连接"""
         if self.postgres_pool:
             await self.postgres_pool.close()
             logger.info("PostgreSQL连接池已关闭")
-        
+
         if self.redis_client:
             await self.redis_client.close()
             logger.info("Redis客户端已关闭")
-    
-    async def execute_query(self, query: str, *args, query_type: str = "select", timeout: float = 30.0) -> List[Dict[str, Any]]:
+
+    async def execute_query(self, query: str, *args, query_type: str = "select", timeout: float = 30.0) -> list[dict[str, Any]]:
         """
         执行SQL查询
-        
+
         Args:
             query: SQL查询语句
             *args: 查询参数
             query_type: 查询类型 (select, insert, update, delete)
             timeout: 查询超时时间（秒）
-        
+
         Returns:
             查询结果列表
-        
+
         Raises:
             asyncpg.PostgresError: 数据库错误
             TimeoutError: 查询超时
         """
         if not self.postgres_pool:
             raise RuntimeError("PostgreSQL连接池未初始化")
-        
+
         start_time = time.time()
         try:
             async with asyncio.timeout(timeout):
@@ -119,7 +118,7 @@ class DBManager:
                         # 对于其他查询类型，返回受影响的行数
                         result = await conn.execute(query, *args)
                         return [{"affected_rows": result}]
-        except asyncio.TimeoutError:
+        except TimeoutError:
             logger.error(f"查询超时: {query}")
             raise TimeoutError(f"查询超时: {query}")
         except Exception as e:
@@ -128,21 +127,21 @@ class DBManager:
         finally:
             duration = time.time() - start_time
             track_database_query(query_type, "postgres", duration)
-    
-    async def cache_get(self, key: str) -> Optional[str]:
+
+    async def cache_get(self, key: str) -> str | None:
         """
         从Redis缓存获取值
-        
+
         Args:
             key: 缓存键
-        
+
         Returns:
             缓存值，如果不存在则返回None
         """
         if not self.redis_client:
             logger.warning("Redis客户端未初始化，无法获取缓存")
             return None
-        
+
         start_time = time.time()
         try:
             value = await self.redis_client.get(key)
@@ -153,23 +152,23 @@ class DBManager:
         finally:
             duration = time.time() - start_time
             track_database_query("get", "redis", duration)
-    
+
     async def cache_set(self, key: str, value: str, expiry: int = 3600) -> bool:
         """
         设置Redis缓存值
-        
+
         Args:
             key: 缓存键
             value: 缓存值
             expiry: 过期时间（秒）
-        
+
         Returns:
             操作是否成功
         """
         if not self.redis_client:
             logger.warning("Redis客户端未初始化，无法设置缓存")
             return False
-        
+
         start_time = time.time()
         try:
             result = await self.redis_client.set(key, value, ex=expiry)
@@ -180,21 +179,21 @@ class DBManager:
         finally:
             duration = time.time() - start_time
             track_database_query("set", "redis", duration)
-    
+
     async def cache_delete(self, key: str) -> bool:
         """
         删除Redis缓存值
-        
+
         Args:
             key: 缓存键
-        
+
         Returns:
             操作是否成功
         """
         if not self.redis_client:
             logger.warning("Redis客户端未初始化，无法删除缓存")
             return False
-        
+
         start_time = time.time()
         try:
             result = await self.redis_client.delete(key)
@@ -208,15 +207,15 @@ class DBManager:
 
 
 # 全局数据库管理器实例
-_db_manager: Optional[DBManager] = None
+_db_manager: DBManager | None = None
 
 def get_db_manager() -> DBManager:
     """
     获取数据库管理器实例
-    
+
     Returns:
         数据库管理器实例
-    
+
     Raises:
         RuntimeError: 数据库管理器未初始化
     """
@@ -225,13 +224,13 @@ def get_db_manager() -> DBManager:
         raise RuntimeError("数据库管理器未初始化，请先调用init_db_manager")
     return _db_manager
 
-async def init_db_manager(config: Dict[str, Any]) -> DBManager:
+async def init_db_manager(config: dict[str, Any]) -> DBManager:
     """
     初始化数据库管理器
-    
+
     Args:
         config: 数据库配置
-    
+
     Returns:
         数据库管理器实例
     """
@@ -244,10 +243,10 @@ async def init_db_manager(config: Dict[str, Any]) -> DBManager:
 def with_db_transaction(func):
     """
     数据库事务装饰器，确保函数在事务中执行
-    
+
     Args:
         func: 要装饰的函数
-    
+
     Returns:
         装饰后的函数
     """
@@ -256,10 +255,10 @@ def with_db_transaction(func):
         db_manager = get_db_manager()
         if not db_manager.postgres_pool:
             raise RuntimeError("PostgreSQL连接池未初始化")
-        
+
         async with db_manager.postgres_pool.acquire() as conn:
             async with conn.transaction():
                 # 将连接传递给被装饰的函数
                 return await func(conn, *args, **kwargs)
-    
-    return wrapper 
+
+    return wrapper

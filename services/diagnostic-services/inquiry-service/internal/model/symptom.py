@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 症状模型
@@ -8,58 +7,62 @@
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Dict, List, Optional, Any
+from typing import Any
 
 
 class SymptomSeverity(str, Enum):
     """症状严重程度枚举"""
-    MILD = "mild"                # 轻度
-    MODERATE = "moderate"        # 中度
-    SEVERE = "severe"            # 重度
+
+    MILD = "mild"  # 轻度
+    MODERATE = "moderate"  # 中度
+    SEVERE = "severe"  # 重度
     VERY_SEVERE = "very_severe"  # 极重度
-    UNKNOWN = "unknown"          # 未知
+    UNKNOWN = "unknown"  # 未知
 
 
 class SymptomDuration(str, Enum):
     """症状持续时间枚举"""
-    ACUTE = "acute"              # 急性 (<2周)
-    SUBACUTE = "subacute"        # 亚急性 (2周-3个月)
-    CHRONIC = "chronic"          # 慢性 (>3个月)
-    RECURRENT = "recurrent"      # 复发性
+
+    ACUTE = "acute"  # 急性 (<2周)
+    SUBACUTE = "subacute"  # 亚急性 (2周-3个月)
+    CHRONIC = "chronic"  # 慢性 (>3个月)
+    RECURRENT = "recurrent"  # 复发性
     INTERMITTENT = "intermittent"  # 间歇性
-    UNKNOWN = "unknown"          # 未知
+    UNKNOWN = "unknown"  # 未知
 
 
 class SymptomTrend(str, Enum):
     """症状变化趋势枚举"""
-    IMPROVING = "improving"      # 改善中
-    WORSENING = "worsening"      # 恶化中
-    STABLE = "stable"            # 稳定
+
+    IMPROVING = "improving"  # 改善中
+    WORSENING = "worsening"  # 恶化中
+    STABLE = "stable"  # 稳定
     FLUCTUATING = "fluctuating"  # 波动
-    UNKNOWN = "unknown"          # 未知
+    UNKNOWN = "unknown"  # 未知
 
 
 @dataclass
 class Symptom:
     """症状模型"""
+
     name: str  # 症状名称
-    description: Optional[str] = None  # 症状描述
-    body_location: Optional[str] = None  # 身体部位
+    description: str | None = None  # 症状描述
+    body_location: str | None = None  # 身体部位
     severity: SymptomSeverity = SymptomSeverity.UNKNOWN  # 严重程度
     duration: SymptomDuration = SymptomDuration.UNKNOWN  # 持续时间
-    duration_value: Optional[int] = None  # 持续时间值（天/周/月）
-    onset_time: Optional[str] = None  # 发作时间
+    duration_value: int | None = None  # 持续时间值（天/周/月）
+    onset_time: str | None = None  # 发作时间
     trend: SymptomTrend = SymptomTrend.UNKNOWN  # 变化趋势
-    aggravating_factors: List[str] = field(default_factory=list)  # 加重因素
-    alleviating_factors: List[str] = field(default_factory=list)  # 缓解因素
-    associated_symptoms: List[str] = field(default_factory=list)  # 相关症状
-    tcm_symptom_names: List[str] = field(default_factory=list)  # 对应的中医症状名称
+    aggravating_factors: list[str] = field(default_factory=list)  # 加重因素
+    alleviating_factors: list[str] = field(default_factory=list)  # 缓解因素
+    associated_symptoms: list[str] = field(default_factory=list)  # 相关症状
+    tcm_symptom_names: list[str] = field(default_factory=list)  # 对应的中医症状名称
     confidence: float = 1.0  # 提取置信度
-    source_text: Optional[str] = None  # 原始文本
+    source_text: str | None = None  # 原始文本
     negated: bool = False  # 是否为否定症状
-    metadata: Dict[str, Any] = field(default_factory=dict)  # 元数据
-    
-    def to_dict(self) -> Dict[str, Any]:
+    metadata: dict[str, Any] = field(default_factory=dict)  # 元数据
+
+    def to_dict(self) -> dict[str, Any]:
         """转换为字典"""
         return {
             "name": self.name,
@@ -77,11 +80,11 @@ class Symptom:
             "confidence": self.confidence,
             "source_text": self.source_text,
             "negated": self.negated,
-            "metadata": self.metadata
+            "metadata": self.metadata,
         }
-    
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'Symptom':
+    def from_dict(cls, data: dict[str, Any]) -> "Symptom":
         """从字典创建症状对象"""
         return cls(
             name=data["name"],
@@ -99,22 +102,22 @@ class Symptom:
             confidence=data.get("confidence", 1.0),
             source_text=data.get("source_text"),
             negated=data.get("negated", False),
-            metadata=data.get("metadata", {})
+            metadata=data.get("metadata", {}),
         )
-    
+
     @staticmethod
-    def extract_structured_symptoms(llm_response: Dict[str, Any]) -> List['Symptom']:
+    def extract_structured_symptoms(llm_response: dict[str, Any]) -> list["Symptom"]:
         """
         从LLM响应中提取结构化症状
-        
+
         Args:
             llm_response: LLM响应的结构化数据
-            
+
         Returns:
             结构化症状列表
         """
         symptoms = []
-        
+
         for symptom_data in llm_response.get("symptoms", []):
             try:
                 # 创建Symptom对象
@@ -124,5 +127,5 @@ class Symptom:
                 # 处理错误，跳过无效数据
                 print(f"提取症状时出错: {e}, 数据: {symptom_data}")
                 continue
-                
-        return symptoms 
+
+        return symptoms

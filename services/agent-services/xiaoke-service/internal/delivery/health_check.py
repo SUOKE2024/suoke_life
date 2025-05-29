@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 健康检查和就绪检查HTTP处理器
@@ -8,10 +7,10 @@
 import json
 import logging
 import os
-from http.server import BaseHTTPRequestHandler, HTTPServer
 import threading
 import time
 import traceback
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
 import psycopg2
 import redis
@@ -222,7 +221,7 @@ xiaoke_service_requests_total{endpoint="RecommendProducts"} 0
                 }
 
         except Exception as e:
-            logger.error(f"PostgreSQL健康检查失败: {str(e)}")
+            logger.error(f"PostgreSQL健康检查失败: {e!s}")
             return HealthStatus.DOWN, {
                 "status": HealthStatus.DOWN,
                 "error": str(e),
@@ -261,7 +260,7 @@ xiaoke_service_requests_total{endpoint="RecommendProducts"} 0
                 }
 
         except Exception as e:
-            logger.error(f"MongoDB健康检查失败: {str(e)}")
+            logger.error(f"MongoDB健康检查失败: {e!s}")
             return HealthStatus.DOWN, {
                 "status": HealthStatus.DOWN,
                 "error": str(e),
@@ -296,7 +295,7 @@ xiaoke_service_requests_total{endpoint="RecommendProducts"} 0
                 }
 
         except Exception as e:
-            logger.error(f"Redis健康检查失败: {str(e)}")
+            logger.error(f"Redis健康检查失败: {e!s}")
             return HealthStatus.DOWN, {
                 "status": HealthStatus.DOWN,
                 "error": str(e),
@@ -328,7 +327,7 @@ xiaoke_service_requests_total{endpoint="RecommendProducts"} 0
                 }
 
         except requests.exceptions.RequestException as e:
-            logger.error(f"ERP健康检查失败: {str(e)}")
+            logger.error(f"ERP健康检查失败: {e!s}")
             return HealthStatus.DOWN, {
                 "status": HealthStatus.DOWN,
                 "error": str(e),

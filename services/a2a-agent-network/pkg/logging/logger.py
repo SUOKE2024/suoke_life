@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import Any
 
 
-def setup_logging(config: dict[str, Any]):
+def setup_logging(config: dict[str, Any]) -> None:
     """
     设置日志配置
 
@@ -39,6 +39,7 @@ def setup_logging(config: dict[str, Any]):
         root_logger.removeHandler(handler)
 
     # 创建格式化器
+    formatter: logging.Formatter
     if format_type == "json":
         formatter = JsonFormatter()
     else:
@@ -101,7 +102,7 @@ def _parse_size(size_str: str) -> int:
 class JsonFormatter(logging.Formatter):
     """JSON 格式化器"""
 
-    def format(self, record):
+    def format(self, record: logging.LogRecord) -> str:
         """格式化日志记录为 JSON"""
         import json
         from datetime import datetime

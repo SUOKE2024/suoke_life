@@ -35,7 +35,7 @@ interface ServiceItem {
   available: boolean;
 }
 
-// 四诊服务配置
+// 五诊服务配置（从四诊升级为五诊）
 const DIAGNOSIS_SERVICES: ServiceItem[] = [
   {
     id: 'look_diagnosis',
@@ -83,6 +83,18 @@ const DIAGNOSIS_SERVICES: ServiceItem[] = [
     description: '结合传感器技术的现代化脉诊和触诊服务',
     features: ['脉象分析', '腹部触诊', '穴位检查', '皮肤触感'],
     price: '¥129',
+    available: true
+  },
+  {
+    id: 'calculation_diagnosis',
+    title: '算诊服务',
+    subtitle: '时间医学智能推演',
+    icon: 'calculator',
+    color: '#8E44AD',
+    category: 'diagnosis',
+    description: '基于传统中医算诊理论，结合五运六气、八字八卦等进行个性化健康分析',
+    features: ['五运六气分析', '八字体质推算', '八卦体质分析', '子午流注时间医学'],
+    price: '¥149',
     available: true
   }
 ];
@@ -193,7 +205,7 @@ const SuokeScreen: React.FC = () => {
   // 分类选项
   const categories = [
     { key: 'all', label: '全部', icon: 'view-grid' },
-    { key: 'diagnosis', label: '四诊', icon: 'stethoscope' },
+    { key: 'diagnosis', label: '五诊', icon: 'stethoscope' },
     { key: 'eco', label: '生态服务', icon: 'leaf' },
     { key: 'product', label: '产品', icon: 'package-variant' },
     { key: 'service', label: '服务', icon: 'medical-bag' },
@@ -256,7 +268,7 @@ const SuokeScreen: React.FC = () => {
   // 选择服务
   const selectService = (service: ServiceItem) => {
     if (service.category === 'diagnosis') {
-      // 四诊服务使用专门的模态框
+      // 五诊服务使用专门的模态框
       setSelectedDiagnosisService(service);
       setDiagnosisModalVisible(true);
     } else {
@@ -289,6 +301,8 @@ const SuokeScreen: React.FC = () => {
         return 'inquiry';
       case 'palpation_diagnosis':
         return 'palpation';
+      case 'calculation_diagnosis':
+        return 'calculation';
       default:
         return 'inquiry';
     }
@@ -453,7 +467,7 @@ const SuokeScreen: React.FC = () => {
         userId="current_user"
       />
 
-      {/* 四诊模态框 */}
+      {/* 五诊模态框 */}
       {selectedDiagnosisService && (
         <DiagnosisModal
           visible={diagnosisModalVisible}
@@ -527,7 +541,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: colors.text,
+    color: colors.textPrimary,
   },
   subtitle: {
     fontSize: 14,
@@ -578,7 +592,7 @@ const styles = StyleSheet.create({
   xiaokeName: {
     fontSize: 16,
     fontWeight: '600',
-    color: colors.text,
+    color: colors.textPrimary,
     marginBottom: 4,
   },
   xiaokeDesc: {
@@ -666,7 +680,7 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: colors.text,
+    color: colors.textPrimary,
     marginBottom: 2,
   },
   cardSubtitle: {

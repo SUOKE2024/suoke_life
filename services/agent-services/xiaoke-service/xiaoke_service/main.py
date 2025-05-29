@@ -1,7 +1,7 @@
 """
 小克智能体服务主入口
 
-基于 FastAPI 构建的现代化微服务，提供中医辨证论治和健康管理功能。
+基于 FastAPI 构建的现代化微服务, 提供中医辨证论治和健康管理功能。
 """
 
 import signal
@@ -73,7 +73,7 @@ def create_app() -> FastAPI:
 
     app = FastAPI(
         title="小克智能体服务",
-        description="索克生活健康管理平台的核心AI智能体，专注于中医辨证论治和个性化健康管理",
+        description="索克生活健康管理平台的核心AI智能体, 专注于中医辨证论治和个性化健康管理",
         version=settings.service.service_version,
         docs_url=settings.service.docs_url if settings.service.debug else None,
         redoc_url=settings.service.redoc_url if settings.service.debug else None,
@@ -96,7 +96,7 @@ def create_app() -> FastAPI:
 def setup_middleware(app: FastAPI) -> None:
     """配置中间件"""
 
-    # 信任主机中间件（安全）
+    # 配置信任主机中间件以提高安全性
     allowed_hosts = (
         ["*"] if settings.service.debug else ["localhost", "127.0.0.1", "testserver"]
     )
@@ -200,7 +200,7 @@ def setup_exception_handlers(app: FastAPI) -> None:
 def setup_signal_handlers() -> None:
     """设置信号处理器"""
 
-    def signal_handler(signum: int, frame) -> None:
+    def signal_handler(signum: int, _frame) -> None:
         logger.info(f"Received signal {signum}, shutting down gracefully...")
         sys.exit(0)
 

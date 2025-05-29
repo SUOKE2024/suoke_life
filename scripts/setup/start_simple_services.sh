@@ -19,7 +19,7 @@ PROJECT_ROOT=$(cd "$(dirname "$0")/.." && pwd)
 cd "$PROJECT_ROOT"
 
 # 虚拟环境路径
-VENV_PATH="$PROJECT_ROOT/venv_py313"
+VENV_PATH="$PROJECT_ROOT/.venv"
 
 # 日志函数
 log_info() {

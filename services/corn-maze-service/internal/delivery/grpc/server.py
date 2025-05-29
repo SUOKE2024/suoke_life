@@ -16,8 +16,8 @@ sys.path.append("api")
 try:
     from api import corn_maze_pb2, corn_maze_pb2_grpc
 except ImportError:
-    print("警告: 无法导入gRPC生成的代码，这在开发时可能是正常的")
-    # 创建模拟的gRPC类，以便开发时不会报错
+    print("警告: 无法导入gRPC生成的代码, 这在开发时可能是正常的")
+    # 创建模拟的gRPC类, 以便开发时不会报错
     class corn_maze_pb2_grpc:
         class CornMazeServiceServicer:
             pass
@@ -40,7 +40,7 @@ class CornMazeServicer(corn_maze_pb2_grpc.CornMazeServiceServicer):
     async def CreateMaze(self, request, context):
         """创建新迷宫"""
         try:
-            logger.info(f"接收到创建迷宫请求，用户ID: {request.user_id}, 类型: {request.maze_type}")
+            logger.info(f"接收到创建迷宫请求, 用户ID: {request.user_id}, 类型: {request.maze_type}")
 
             # 创建迷宫
             maze = await self.maze_service.create_maze(
@@ -64,7 +64,7 @@ class CornMazeServicer(corn_maze_pb2_grpc.CornMazeServiceServicer):
     async def GetMaze(self, request, context):
         """获取迷宫信息"""
         try:
-            logger.info(f"接收到获取迷宫请求，迷宫ID: {request.maze_id}")
+            logger.info(f"接收到获取迷宫请求, 迷宫ID: {request.maze_id}")
 
             # 获取迷宫
             maze = await self.maze_service.get_maze(
@@ -89,7 +89,7 @@ class CornMazeServicer(corn_maze_pb2_grpc.CornMazeServiceServicer):
     async def MoveInMaze(self, request, context):
         """用户在迷宫中移动"""
         try:
-            logger.info(f"接收到移动请求，迷宫ID: {request.maze_id}, 用户ID: {request.user_id}, 方向: {request.direction}")
+            logger.info(f"接收到移动请求, 迷宫ID: {request.maze_id}, 用户ID: {request.user_id}, 方向: {request.direction}")
 
             # 执行移动
             result = await self.progress_service.move_user(
@@ -118,7 +118,7 @@ class CornMazeServicer(corn_maze_pb2_grpc.CornMazeServiceServicer):
     async def GetUserProgress(self, request, context):
         """获取用户在迷宫中的进度"""
         try:
-            logger.info(f"接收到获取用户进度请求，用户ID: {request.user_id}, 迷宫ID: {request.maze_id}")
+            logger.info(f"接收到获取用户进度请求, 用户ID: {request.user_id}, 迷宫ID: {request.maze_id}")
 
             # 获取进度
             progress = await self.progress_service.get_user_progress(
@@ -160,7 +160,7 @@ class CornMazeServicer(corn_maze_pb2_grpc.CornMazeServiceServicer):
     async def ListMazeTemplates(self, request, context):
         """获取可用的迷宫模板"""
         try:
-            logger.info(f"接收到获取迷宫模板列表请求，类型: {request.maze_type}, 难度: {request.difficulty}")
+            logger.info(f"接收到获取迷宫模板列表请求, 类型: {request.maze_type}, 难度: {request.difficulty}")
 
             # 获取模板列表
             templates, total = await self.maze_service.list_templates(
@@ -202,7 +202,7 @@ class CornMazeServicer(corn_maze_pb2_grpc.CornMazeServiceServicer):
     async def RecordMazeCompletion(self, request, context):
         """记录用户完成迷宫挑战"""
         try:
-            logger.info(f"接收到记录迷宫完成请求，用户ID: {request.user_id}, 迷宫ID: {request.maze_id}")
+            logger.info(f"接收到记录迷宫完成请求, 用户ID: {request.user_id}, 迷宫ID: {request.maze_id}")
 
             # 记录完成情况
             result = await self.progress_service.record_completion(
@@ -247,7 +247,7 @@ class CornMazeServicer(corn_maze_pb2_grpc.CornMazeServiceServicer):
     async def GetKnowledgeNode(self, request, context):
         """获取健康知识节点"""
         try:
-            logger.info(f"接收到获取知识节点请求，节点ID: {request.node_id}")
+            logger.info(f"接收到获取知识节点请求, 节点ID: {request.node_id}")
 
             # 获取知识节点
             node = await self.knowledge_service.get_knowledge_node(node_id=request.node_id)

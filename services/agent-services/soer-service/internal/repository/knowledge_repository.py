@@ -1,77 +1,72 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 索儿智能体服务 - 知识存储库
 提供健康知识、生活方式和个性化建议的存储和检索
 """
 
-import uuid
 import logging
-import asyncio
-from datetime import datetime, timezone, timedelta
-from typing import List, Dict, Any, Optional, Tuple, Set
+from typing import Any
 
-import motor.motor_asyncio
-from bson.objectid import ObjectId
-from pymongo.errors import PyMongoError
-
-from pkg.utils.config_loader import get_config
-from pkg.utils.metrics import get_metrics_collector
+from pkg.utils.connection_pool import (
+    DatabaseConnectionPool,
+    RedisConnectionPool,
+    get_pool_manager,
+)
 from pkg.utils.dependency_injection import ServiceLifecycle
-from pkg.utils.connection_pool import get_pool_manager, DatabaseConnectionPool, RedisConnectionPool
-from pkg.utils.error_handling import DatabaseException, retry_async, RetryConfig
+from pkg.utils.error_handling import DatabaseException, RetryConfig, retry_async
+from pkg.utils.metrics import get_metrics_collector
 
 logger = logging.getLogger(__name__)
 metrics = get_metrics_collector()
 
 class KnowledgeRepository(ServiceLifecycle):
     """知识仓储"""
-    
+
     def __init__(self):
-        self.db_pool: Optional[DatabaseConnectionPool] = None
-        self.cache_pool: Optional[RedisConnectionPool] = None
+        self.db_pool: DatabaseConnectionPool | None = None
+        self.cache_pool: RedisConnectionPool | None = None
         self.metrics = get_metrics_collector()
-    
+
     async def start(self) -> None:
         """启动仓储"""
         try:
             pool_manager = get_pool_manager()
             self.db_pool = pool_manager.get_pool('database')
             self.cache_pool = pool_manager.get_pool('redis')
-            
+
             # 确保数据库表存在
             await self._ensure_tables()
-            
+
             logger.info("知识仓储启动成功")
-            
+
         except Exception as e:
             logger.error(f"知识仓储启动失败: {e}")
             raise DatabaseException(f"知识仓储启动失败: {e}")
-    
+
     async def stop(self) -> None:
         """停止仓储"""
         logger.info("知识仓储已停止")
-    
+
     async def health_check(self) -> bool:
         """健康检查"""
         try:
             if not self.db_pool or not self.cache_pool:
                 return False
-            
+
             # 测试数据库连接
             async with self.db_pool.get_session() as session:
                 await session.execute("SELECT 1")
-            
+
             # 测试缓存连接
             await self.cache_pool.ping()
-            
+
             return True
-            
+
         except Exception as e:
             logger.error(f"知识仓储健康检查失败: {e}")
             return False
-    
+
     async def _ensure_tables(self) -> None:
         """确保数据库表存在"""
         # 知识条目表
@@ -96,7 +91,7 @@ class KnowledgeRepository(ServiceLifecycle):
             INDEX idx_knowledge_created_at (created_at)
         );
         """
-        
+
         # 中医体质表
         create_tcm_constitutions_table = """
         CREATE TABLE IF NOT EXISTS tcm_constitutions (
@@ -113,7 +108,7 @@ class KnowledgeRepository(ServiceLifecycle):
             INDEX idx_tcm_constitutions_name (name)
         );
         """
-        
+
         # 症状知识表
         create_symptoms_table = """
         CREATE TABLE IF NOT EXISTS symptoms (
@@ -131,7 +126,7 @@ class KnowledgeRepository(ServiceLifecycle):
             INDEX idx_symptoms_category (category)
         );
         """
-        
+
         # 食物营养表
         create_foods_table = """
         CREATE TABLE IF NOT EXISTS foods (
@@ -150,7 +145,7 @@ class KnowledgeRepository(ServiceLifecycle):
             INDEX idx_foods_category (category)
         );
         """
-        
+
         # 运动方案表
         create_exercises_table = """
         CREATE TABLE IF NOT EXISTS exercises (
@@ -172,7 +167,7 @@ class KnowledgeRepository(ServiceLifecycle):
             INDEX idx_exercises_intensity (intensity_level)
         );
         """
-        
+
         try:
             async with self.db_pool.get_session() as session:
                 await session.execute(create_knowledge_entries_table)
@@ -181,20 +176,20 @@ class KnowledgeRepository(ServiceLifecycle):
                 await session.execute(create_foods_table)
                 await session.execute(create_exercises_table)
                 await session.commit()
-                
+
             logger.info("知识库数据库表检查完成")
-            
+
         except Exception as e:
             logger.error(f"创建知识库数据库表失败: {e}")
             raise DatabaseException(f"创建知识库数据库表失败: {e}")
-    
+
     @retry_async(RetryConfig(max_attempts=3, base_delay=1.0))
     async def search_knowledge(
-        self, 
-        query: str, 
-        category: Optional[str] = None,
+        self,
+        query: str,
+        category: str | None = None,
         limit: int = 10
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """搜索知识条目"""
         try:
             # 先尝试从缓存获取
@@ -202,39 +197,39 @@ class KnowledgeRepository(ServiceLifecycle):
             cached_result = await self._get_cached_search_result(cache_key)
             if cached_result:
                 return cached_result
-            
+
             self.metrics.increment_counter("soer_db_queries", {"operation": "search", "table": "knowledge_entries"})
-            
+
             # 构建搜索查询
             where_conditions = ["status = 'active'"]
             params = {"query": f"%{query}%", "limit": limit}
-            
+
             if category:
                 where_conditions.append("category = :category")
                 params["category"] = category
-            
+
             where_clause = " AND ".join(where_conditions)
-            
+
             search_query = f"""
-            SELECT id, title, content, category, subcategory, tags, source, author, 
+            SELECT id, title, content, category, subcategory, tags, source, author,
                    created_at, updated_at, metadata,
                    ts_rank(to_tsvector('chinese', title || ' ' || content), plainto_tsquery('chinese', :query)) as rank
-            FROM knowledge_entries 
+            FROM knowledge_entries
             WHERE {where_clause}
             AND (
-                title ILIKE :query 
-                OR content ILIKE :query 
+                title ILIKE :query
+                OR content ILIKE :query
                 OR to_tsvector('chinese', title || ' ' || content) @@ plainto_tsquery('chinese', :query)
             )
             ORDER BY rank DESC, created_at DESC
             LIMIT :limit
             """
-            
+
             with self.metrics.timer("soer_db_query_duration", {"operation": "search", "table": "knowledge_entries"}):
                 async with self.db_pool.get_session() as db_session:
                     result = await db_session.execute(search_query, params)
                     rows = result.fetchall()
-            
+
             knowledge_entries = []
             for row in rows:
                 knowledge_entries.append({
@@ -251,18 +246,18 @@ class KnowledgeRepository(ServiceLifecycle):
                     "metadata": json.loads(row.metadata) if row.metadata else {},
                     "relevance_score": float(row.rank) if row.rank else 0.0
                 })
-            
+
             # 缓存搜索结果
             await self._cache_search_result(cache_key, knowledge_entries)
-            
+
             return knowledge_entries
-            
+
         except Exception as e:
             logger.error(f"搜索知识条目失败: {e}")
             raise DatabaseException(f"搜索知识条目失败: {e}")
-    
+
     @retry_async(RetryConfig(max_attempts=3, base_delay=1.0))
-    async def get_tcm_constitution(self, constitution_name: str) -> Optional[Dict[str, Any]]:
+    async def get_tcm_constitution(self, constitution_name: str) -> dict[str, Any] | None:
         """获取中医体质信息"""
         try:
             # 先从缓存获取
@@ -270,25 +265,25 @@ class KnowledgeRepository(ServiceLifecycle):
             cached_result = await self._get_cached_data(cache_key)
             if cached_result:
                 return cached_result
-            
+
             self.metrics.increment_counter("soer_db_queries", {"operation": "select", "table": "tcm_constitutions"})
-            
+
             with self.metrics.timer("soer_db_query_duration", {"operation": "select", "table": "tcm_constitutions"}):
                 async with self.db_pool.get_session() as db_session:
                     query = """
                     SELECT id, name, description, characteristics, dietary_recommendations,
                            lifestyle_recommendations, exercise_recommendations, seasonal_adjustments,
                            created_at, updated_at
-                    FROM tcm_constitutions 
+                    FROM tcm_constitutions
                     WHERE name = :constitution_name
                     """
-                    
+
                     result = await db_session.execute(query, {"constitution_name": constitution_name})
                     row = result.fetchone()
-            
+
             if not row:
                 return None
-            
+
             constitution_data = {
                 "id": str(row.id),
                 "name": row.name,
@@ -301,18 +296,18 @@ class KnowledgeRepository(ServiceLifecycle):
                 "created_at": row.created_at.isoformat(),
                 "updated_at": row.updated_at.isoformat()
             }
-            
+
             # 缓存结果
             await self._cache_data(cache_key, constitution_data, ttl=7200)  # 缓存2小时
-            
+
             return constitution_data
-            
+
         except Exception as e:
             logger.error(f"获取中医体质信息失败: {e}")
             raise DatabaseException(f"获取中医体质信息失败: {e}")
-    
+
     @retry_async(RetryConfig(max_attempts=3, base_delay=1.0))
-    async def get_symptom_info(self, symptom_name: str) -> Optional[Dict[str, Any]]:
+    async def get_symptom_info(self, symptom_name: str) -> dict[str, Any] | None:
         """获取症状信息"""
         try:
             # 先从缓存获取
@@ -320,24 +315,24 @@ class KnowledgeRepository(ServiceLifecycle):
             cached_result = await self._get_cached_data(cache_key)
             if cached_result:
                 return cached_result
-            
+
             self.metrics.increment_counter("soer_db_queries", {"operation": "select", "table": "symptoms"})
-            
+
             with self.metrics.timer("soer_db_query_duration", {"operation": "select", "table": "symptoms"}):
                 async with self.db_pool.get_session() as db_session:
                     query = """
                     SELECT id, name, description, category, severity_levels, related_conditions,
                            tcm_patterns, recommendations, created_at, updated_at
-                    FROM symptoms 
+                    FROM symptoms
                     WHERE name ILIKE :symptom_name
                     """
-                    
+
                     result = await db_session.execute(query, {"symptom_name": f"%{symptom_name}%"})
                     row = result.fetchone()
-            
+
             if not row:
                 return None
-            
+
             symptom_data = {
                 "id": str(row.id),
                 "name": row.name,
@@ -350,24 +345,24 @@ class KnowledgeRepository(ServiceLifecycle):
                 "created_at": row.created_at.isoformat(),
                 "updated_at": row.updated_at.isoformat()
             }
-            
+
             # 缓存结果
             await self._cache_data(cache_key, symptom_data, ttl=3600)  # 缓存1小时
-            
+
             return symptom_data
-            
+
         except Exception as e:
             logger.error(f"获取症状信息失败: {e}")
             raise DatabaseException(f"获取症状信息失败: {e}")
-    
+
     @retry_async(RetryConfig(max_attempts=3, base_delay=1.0))
     async def get_food_recommendations(
-        self, 
-        constitution_type: Optional[str] = None,
-        season: Optional[str] = None,
-        health_goals: Optional[List[str]] = None,
+        self,
+        constitution_type: str | None = None,
+        season: str | None = None,
+        health_goals: list[str] | None = None,
         limit: int = 20
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """获取食物推荐"""
         try:
             # 生成缓存键
@@ -375,38 +370,38 @@ class KnowledgeRepository(ServiceLifecycle):
             cached_result = await self._get_cached_data(cache_key)
             if cached_result:
                 return cached_result
-            
+
             self.metrics.increment_counter("soer_db_queries", {"operation": "select", "table": "foods"})
-            
+
             # 构建查询条件
             where_conditions = []
             params = {"limit": limit}
-            
+
             if constitution_type:
                 where_conditions.append("tcm_properties->>'suitable_constitutions' LIKE :constitution")
                 params["constitution"] = f"%{constitution_type}%"
-            
+
             if season:
                 where_conditions.append("seasonal_suitability->:season IS NOT NULL")
                 params["season"] = season
-            
+
             where_clause = " AND ".join(where_conditions) if where_conditions else "1=1"
-            
+
             query = f"""
             SELECT id, name, category, nutrition_facts, tcm_properties, health_benefits,
                    contraindications, seasonal_suitability, preparation_methods,
                    created_at, updated_at
-            FROM foods 
+            FROM foods
             WHERE {where_clause}
             ORDER BY created_at DESC
             LIMIT :limit
             """
-            
+
             with self.metrics.timer("soer_db_query_duration", {"operation": "select", "table": "foods"}):
                 async with self.db_pool.get_session() as db_session:
                     result = await db_session.execute(query, params)
                     rows = result.fetchall()
-            
+
             foods = []
             for row in rows:
                 food_data = {
@@ -422,7 +417,7 @@ class KnowledgeRepository(ServiceLifecycle):
                     "created_at": row.created_at.isoformat(),
                     "updated_at": row.updated_at.isoformat()
                 }
-                
+
                 # 根据健康目标过滤
                 if health_goals:
                     benefits = food_data.get("health_benefits", [])
@@ -430,24 +425,24 @@ class KnowledgeRepository(ServiceLifecycle):
                         foods.append(food_data)
                 else:
                     foods.append(food_data)
-            
+
             # 缓存结果
             await self._cache_data(cache_key, foods, ttl=1800)  # 缓存30分钟
-            
+
             return foods
-            
+
         except Exception as e:
             logger.error(f"获取食物推荐失败: {e}")
             raise DatabaseException(f"获取食物推荐失败: {e}")
-    
+
     @retry_async(RetryConfig(max_attempts=3, base_delay=1.0))
     async def get_exercise_recommendations(
-        self, 
-        constitution_type: Optional[str] = None,
-        fitness_level: Optional[str] = None,
-        health_goals: Optional[List[str]] = None,
+        self,
+        constitution_type: str | None = None,
+        fitness_level: str | None = None,
+        health_goals: list[str] | None = None,
         limit: int = 10
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """获取运动推荐"""
         try:
             # 生成缓存键
@@ -455,37 +450,37 @@ class KnowledgeRepository(ServiceLifecycle):
             cached_result = await self._get_cached_data(cache_key)
             if cached_result:
                 return cached_result
-            
+
             self.metrics.increment_counter("soer_db_queries", {"operation": "select", "table": "exercises"})
-            
+
             # 构建查询条件
             where_conditions = []
             params = {"limit": limit}
-            
+
             if constitution_type:
                 where_conditions.append(f"'{constitution_type}' = ANY(target_groups)")
-            
+
             if fitness_level:
                 where_conditions.append("intensity_level = :intensity")
                 params["intensity"] = fitness_level
-            
+
             where_clause = " AND ".join(where_conditions) if where_conditions else "1=1"
-            
+
             query = f"""
             SELECT id, name, type, description, instructions, duration_minutes,
                    intensity_level, target_groups, benefits, precautions, equipment_needed,
                    created_at, updated_at
-            FROM exercises 
+            FROM exercises
             WHERE {where_clause}
             ORDER BY created_at DESC
             LIMIT :limit
             """
-            
+
             with self.metrics.timer("soer_db_query_duration", {"operation": "select", "table": "exercises"}):
                 async with self.db_pool.get_session() as db_session:
                     result = await db_session.execute(query, params)
                     rows = result.fetchall()
-            
+
             exercises = []
             for row in rows:
                 exercise_data = {
@@ -503,7 +498,7 @@ class KnowledgeRepository(ServiceLifecycle):
                     "created_at": row.created_at.isoformat(),
                     "updated_at": row.updated_at.isoformat()
                 }
-                
+
                 # 根据健康目标过滤
                 if health_goals:
                     benefits = exercise_data.get("benefits", [])
@@ -511,23 +506,23 @@ class KnowledgeRepository(ServiceLifecycle):
                         exercises.append(exercise_data)
                 else:
                     exercises.append(exercise_data)
-            
+
             # 缓存结果
             await self._cache_data(cache_key, exercises, ttl=1800)  # 缓存30分钟
-            
+
             return exercises
-            
+
         except Exception as e:
             logger.error(f"获取运动推荐失败: {e}")
             raise DatabaseException(f"获取运动推荐失败: {e}")
-    
+
     @retry_async(RetryConfig(max_attempts=3, base_delay=1.0))
     async def get_knowledge_by_category(
-        self, 
-        category: str, 
-        subcategory: Optional[str] = None,
+        self,
+        category: str,
+        subcategory: str | None = None,
         limit: int = 20
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """根据分类获取知识条目"""
         try:
             # 生成缓存键
@@ -535,33 +530,33 @@ class KnowledgeRepository(ServiceLifecycle):
             cached_result = await self._get_cached_data(cache_key)
             if cached_result:
                 return cached_result
-            
+
             self.metrics.increment_counter("soer_db_queries", {"operation": "select", "table": "knowledge_entries"})
-            
+
             # 构建查询条件
             where_conditions = ["status = 'active'", "category = :category"]
             params = {"category": category, "limit": limit}
-            
+
             if subcategory:
                 where_conditions.append("subcategory = :subcategory")
                 params["subcategory"] = subcategory
-            
+
             where_clause = " AND ".join(where_conditions)
-            
+
             query = f"""
             SELECT id, title, content, category, subcategory, tags, source, author,
                    created_at, updated_at, metadata
-            FROM knowledge_entries 
+            FROM knowledge_entries
             WHERE {where_clause}
             ORDER BY created_at DESC
             LIMIT :limit
             """
-            
+
             with self.metrics.timer("soer_db_query_duration", {"operation": "select", "table": "knowledge_entries"}):
                 async with self.db_pool.get_session() as db_session:
                     result = await db_session.execute(query, params)
                     rows = result.fetchall()
-            
+
             knowledge_entries = []
             for row in rows:
                 knowledge_entries.append({
@@ -577,46 +572,46 @@ class KnowledgeRepository(ServiceLifecycle):
                     "updated_at": row.updated_at.isoformat(),
                     "metadata": json.loads(row.metadata) if row.metadata else {}
                 })
-            
+
             # 缓存结果
             await self._cache_data(cache_key, knowledge_entries, ttl=3600)  # 缓存1小时
-            
+
             return knowledge_entries
-            
+
         except Exception as e:
             logger.error(f"根据分类获取知识条目失败: {e}")
             raise DatabaseException(f"根据分类获取知识条目失败: {e}")
-    
+
     # 缓存相关方法
-    def _generate_search_cache_key(self, query: str, category: Optional[str], limit: int) -> str:
+    def _generate_search_cache_key(self, query: str, category: str | None, limit: int) -> str:
         """生成搜索缓存键"""
         key_data = f"search:{query}:{category or 'all'}:{limit}"
         return hashlib.md5(key_data.encode()).hexdigest()
-    
+
     def _generate_food_cache_key(
-        self, 
-        constitution_type: Optional[str], 
-        season: Optional[str], 
-        health_goals: Optional[List[str]], 
+        self,
+        constitution_type: str | None,
+        season: str | None,
+        health_goals: list[str] | None,
         limit: int
     ) -> str:
         """生成食物推荐缓存键"""
         goals_str = ",".join(sorted(health_goals)) if health_goals else "none"
         key_data = f"food_rec:{constitution_type or 'all'}:{season or 'all'}:{goals_str}:{limit}"
         return hashlib.md5(key_data.encode()).hexdigest()
-    
+
     def _generate_exercise_cache_key(
-        self, 
-        constitution_type: Optional[str], 
-        fitness_level: Optional[str], 
-        health_goals: Optional[List[str]], 
+        self,
+        constitution_type: str | None,
+        fitness_level: str | None,
+        health_goals: list[str] | None,
         limit: int
     ) -> str:
         """生成运动推荐缓存键"""
         goals_str = ",".join(sorted(health_goals)) if health_goals else "none"
         key_data = f"exercise_rec:{constitution_type or 'all'}:{fitness_level or 'all'}:{goals_str}:{limit}"
         return hashlib.md5(key_data.encode()).hexdigest()
-    
+
     async def _cache_data(self, cache_key: str, data: Any, ttl: int = 3600) -> None:
         """缓存数据"""
         try:
@@ -624,8 +619,8 @@ class KnowledgeRepository(ServiceLifecycle):
             await self.cache_pool.set(f"knowledge:{cache_key}", cache_data, ttl=ttl)
         except Exception as e:
             logger.warning(f"缓存数据失败: {e}")
-    
-    async def _get_cached_data(self, cache_key: str) -> Optional[Any]:
+
+    async def _get_cached_data(self, cache_key: str) -> Any | None:
         """获取缓存数据"""
         try:
             cached_data = await self.cache_pool.get(f"knowledge:{cache_key}")
@@ -635,11 +630,11 @@ class KnowledgeRepository(ServiceLifecycle):
         except Exception as e:
             logger.warning(f"获取缓存数据失败: {e}")
             return None
-    
-    async def _cache_search_result(self, cache_key: str, results: List[Dict[str, Any]]) -> None:
+
+    async def _cache_search_result(self, cache_key: str, results: list[dict[str, Any]]) -> None:
         """缓存搜索结果"""
         await self._cache_data(f"search:{cache_key}", results, ttl=1800)  # 缓存30分钟
-    
-    async def _get_cached_search_result(self, cache_key: str) -> Optional[List[Dict[str, Any]]]:
+
+    async def _get_cached_search_result(self, cache_key: str) -> list[dict[str, Any]] | None:
         """获取缓存的搜索结果"""
-        return await self._get_cached_data(f"search:{cache_key}") 
+        return await self._get_cached_data(f"search:{cache_key}")

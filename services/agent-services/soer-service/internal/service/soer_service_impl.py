@@ -1,15 +1,14 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 索儿(soer)智能体服务实现
 集成无障碍服务，支持健康计划和传感器数据的无障碍功能
 """
 
-import logging
 import asyncio
+import logging
 import time
-from typing import Dict, Any, Optional, List, Union
+from typing import Any
 
 # 导入无障碍客户端
 from ..integration.accessibility_client import AccessibilityClient
@@ -19,55 +18,55 @@ logger = logging.getLogger(__name__)
 
 class SoerServiceImpl:
     """索儿智能体服务实现，集成无障碍功能"""
-    
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
+
+    def __init__(self, config: dict[str, Any] | None = None):
         """
         初始化索儿服务
-        
+
         Args:
             config: 配置字典
         """
         self.config = config or {}
-        
+
         # 初始化无障碍客户端
         self.accessibility_client = AccessibilityClient(config)
-        
+
         logger.info("索儿智能体服务初始化完成，已集成无障碍功能")
-    
-    async def generate_health_plan_accessible(self, plan_request: Dict[str, Any], 
-                                            user_id: str, accessibility_options: Dict[str, Any] = None) -> Dict[str, Any]:
+
+    async def generate_health_plan_accessible(self, plan_request: dict[str, Any],
+                                            user_id: str, accessibility_options: dict[str, Any] = None) -> dict[str, Any]:
         """
         生成健康计划（无障碍版本）
-        
+
         Args:
             plan_request: 计划请求
             user_id: 用户ID
             accessibility_options: 无障碍选项
-            
+
         Returns:
             无障碍格式的健康计划
         """
         try:
             logger.info(f"生成健康计划（无障碍）: 用户={user_id}")
-            
+
             # 生成健康计划
             plan_result = await self._generate_health_plan(plan_request, user_id)
-            
+
             # 转换为无障碍格式
             accessibility_options = accessibility_options or {}
             target_format = accessibility_options.get('format', 'audio')
-            
+
             accessible_plan = await self.accessibility_client.convert_health_plan_to_accessible(
                 plan_result, user_id, target_format
             )
-            
+
             return {
                 'plan_result': plan_result,
                 'accessible_content': accessible_plan,
                 'success': True,
                 'timestamp': time.time()
             }
-            
+
         except Exception as e:
             logger.error(f"生成健康计划（无障碍）失败: {e}")
             return {
@@ -80,41 +79,41 @@ class SoerServiceImpl:
                 'success': False,
                 'error': str(e)
             }
-    
-    async def analyze_sensor_data_accessible(self, sensor_request: Dict[str, Any], 
-                                           user_id: str, accessibility_options: Dict[str, Any] = None) -> Dict[str, Any]:
+
+    async def analyze_sensor_data_accessible(self, sensor_request: dict[str, Any],
+                                           user_id: str, accessibility_options: dict[str, Any] = None) -> dict[str, Any]:
         """
         传感器数据分析（无障碍版本）
-        
+
         Args:
             sensor_request: 传感器请求
             user_id: 用户ID
             accessibility_options: 无障碍选项
-            
+
         Returns:
             无障碍格式的传感器数据分析
         """
         try:
             logger.info(f"传感器数据分析（无障碍）: 用户={user_id}")
-            
+
             # 分析传感器数据
             analysis_result = await self._analyze_sensor_data(sensor_request, user_id)
-            
+
             # 转换为无障碍格式
             accessibility_options = accessibility_options or {}
             target_format = accessibility_options.get('format', 'audio')
-            
+
             accessible_analysis = await self.accessibility_client.convert_sensor_data_to_accessible(
                 analysis_result, user_id, target_format
             )
-            
+
             return {
                 'analysis_result': analysis_result,
                 'accessible_content': accessible_analysis,
                 'success': True,
                 'timestamp': time.time()
             }
-            
+
         except Exception as e:
             logger.error(f"传感器数据分析（无障碍）失败: {e}")
             return {
@@ -127,41 +126,41 @@ class SoerServiceImpl:
                 'success': False,
                 'error': str(e)
             }
-    
-    async def track_nutrition_accessible(self, nutrition_request: Dict[str, Any], 
-                                       user_id: str, accessibility_options: Dict[str, Any] = None) -> Dict[str, Any]:
+
+    async def track_nutrition_accessible(self, nutrition_request: dict[str, Any],
+                                       user_id: str, accessibility_options: dict[str, Any] = None) -> dict[str, Any]:
         """
         营养追踪（无障碍版本）
-        
+
         Args:
             nutrition_request: 营养请求
             user_id: 用户ID
             accessibility_options: 无障碍选项
-            
+
         Returns:
             无障碍格式的营养追踪结果
         """
         try:
             logger.info(f"营养追踪（无障碍）: 用户={user_id}")
-            
+
             # 执行营养追踪
             tracking_result = await self._track_nutrition(nutrition_request, user_id)
-            
+
             # 转换为无障碍格式
             accessibility_options = accessibility_options or {}
             target_format = accessibility_options.get('format', 'audio')
-            
+
             accessible_tracking = await self.accessibility_client.convert_nutrition_tracking_to_accessible(
                 tracking_result, user_id, target_format
             )
-            
+
             return {
                 'tracking_result': tracking_result,
                 'accessible_content': accessible_tracking,
                 'success': True,
                 'timestamp': time.time()
             }
-            
+
         except Exception as e:
             logger.error(f"营养追踪（无障碍）失败: {e}")
             return {
@@ -174,41 +173,41 @@ class SoerServiceImpl:
                 'success': False,
                 'error': str(e)
             }
-    
-    async def analyze_emotion_accessible(self, emotion_request: Dict[str, Any], 
-                                       user_id: str, accessibility_options: Dict[str, Any] = None) -> Dict[str, Any]:
+
+    async def analyze_emotion_accessible(self, emotion_request: dict[str, Any],
+                                       user_id: str, accessibility_options: dict[str, Any] = None) -> dict[str, Any]:
         """
         情绪分析（无障碍版本）
-        
+
         Args:
             emotion_request: 情绪请求
             user_id: 用户ID
             accessibility_options: 无障碍选项
-            
+
         Returns:
             无障碍格式的情绪分析结果
         """
         try:
             logger.info(f"情绪分析（无障碍）: 用户={user_id}")
-            
+
             # 执行情绪分析
             emotion_result = await self._analyze_emotion(emotion_request, user_id)
-            
+
             # 转换为无障碍格式
             accessibility_options = accessibility_options or {}
             target_format = accessibility_options.get('format', 'audio')
-            
+
             accessible_emotion = await self.accessibility_client.convert_emotion_analysis_to_accessible(
                 emotion_result, user_id, target_format
             )
-            
+
             return {
                 'emotion_result': emotion_result,
                 'accessible_content': accessible_emotion,
                 'success': True,
                 'timestamp': time.time()
             }
-            
+
         except Exception as e:
             logger.error(f"情绪分析（无障碍）失败: {e}")
             return {
@@ -221,37 +220,37 @@ class SoerServiceImpl:
                 'success': False,
                 'error': str(e)
             }
-    
-    async def provide_health_dashboard_accessible(self, dashboard_request: Dict[str, Any], 
-                                                user_id: str) -> Dict[str, Any]:
+
+    async def provide_health_dashboard_accessible(self, dashboard_request: dict[str, Any],
+                                                user_id: str) -> dict[str, Any]:
         """
         提供健康仪表板无障碍支持
-        
+
         Args:
             dashboard_request: 仪表板请求
             user_id: 用户ID
-            
+
         Returns:
             无障碍格式的健康仪表板
         """
         try:
             logger.info(f"提供健康仪表板无障碍支持: 用户={user_id}")
-            
+
             # 获取健康仪表板数据
             dashboard_data = await self._get_health_dashboard_data(dashboard_request, user_id)
-            
+
             # 提供无障碍支持
             accessible_dashboard = await self.accessibility_client.provide_health_dashboard_accessibility(
                 dashboard_data, user_id
             )
-            
+
             return {
                 'dashboard_data': dashboard_data,
                 'accessible_content': accessible_dashboard,
                 'success': True,
                 'timestamp': time.time()
             }
-            
+
         except Exception as e:
             logger.error(f"健康仪表板无障碍支持失败: {e}")
             return {
@@ -260,53 +259,53 @@ class SoerServiceImpl:
                 'success': False,
                 'error': str(e)
             }
-    
-    async def generate_personalized_recommendations_accessible(self, recommendation_request: Dict[str, Any], 
-                                                             user_id: str) -> Dict[str, Any]:
+
+    async def generate_personalized_recommendations_accessible(self, recommendation_request: dict[str, Any],
+                                                             user_id: str) -> dict[str, Any]:
         """
         生成个性化推荐（无障碍版本）
-        
+
         Args:
             recommendation_request: 推荐请求
             user_id: 用户ID
-            
+
         Returns:
             无障碍格式的个性化推荐
         """
         try:
             logger.info(f"生成个性化推荐（无障碍）: 用户={user_id}")
-            
+
             # 生成个性化推荐
             recommendations = await self._generate_personalized_recommendations(recommendation_request, user_id)
-            
+
             # 转换为多种无障碍格式
             accessible_formats = {}
-            
+
             # 音频格式
             audio_result = await self.accessibility_client.convert_health_plan_to_accessible(
                 recommendations, user_id, 'audio'
             )
             accessible_formats['audio'] = audio_result
-            
+
             # 简化文本格式
             simplified_result = await self.accessibility_client.convert_health_plan_to_accessible(
                 recommendations, user_id, 'simplified'
             )
             accessible_formats['simplified'] = simplified_result
-            
+
             # 盲文格式
             braille_result = await self.accessibility_client.convert_health_plan_to_accessible(
                 recommendations, user_id, 'braille'
             )
             accessible_formats['braille'] = braille_result
-            
+
             return {
                 'recommendations': recommendations,
                 'accessible_formats': accessible_formats,
                 'success': True,
                 'timestamp': time.time()
             }
-            
+
         except Exception as e:
             logger.error(f"生成个性化推荐（无障碍）失败: {e}")
             return {
@@ -315,28 +314,28 @@ class SoerServiceImpl:
                 'success': False,
                 'error': str(e)
             }
-    
-    async def monitor_health_metrics_accessible(self, monitoring_request: Dict[str, Any], 
-                                              user_id: str) -> Dict[str, Any]:
+
+    async def monitor_health_metrics_accessible(self, monitoring_request: dict[str, Any],
+                                              user_id: str) -> dict[str, Any]:
         """
         健康指标监控（无障碍版本）
-        
+
         Args:
             monitoring_request: 监控请求
             user_id: 用户ID
-            
+
         Returns:
             无障碍格式的健康指标监控结果
         """
         try:
             logger.info(f"健康指标监控（无障碍）: 用户={user_id}")
-            
+
             # 执行健康指标监控
             monitoring_result = await self._monitor_health_metrics(monitoring_request, user_id)
-            
+
             # 生成无障碍监控报告
             accessible_monitoring = {}
-            
+
             # 为每个指标生成无障碍内容
             for metric_name, metric_data in monitoring_result.get('metrics', {}).items():
                 accessible_metric = await self.accessibility_client.convert_sensor_data_to_accessible(
@@ -349,14 +348,14 @@ class SoerServiceImpl:
                     'audio'
                 )
                 accessible_monitoring[metric_name] = accessible_metric
-            
+
             return {
                 'monitoring_result': monitoring_result,
                 'accessible_monitoring': accessible_monitoring,
                 'success': True,
                 'timestamp': time.time()
             }
-            
+
         except Exception as e:
             logger.error(f"健康指标监控（无障碍）失败: {e}")
             return {
@@ -365,17 +364,17 @@ class SoerServiceImpl:
                 'success': False,
                 'error': str(e)
             }
-    
+
     # 内部辅助方法
-    async def _generate_health_plan(self, plan_request: Dict[str, Any], user_id: str) -> Dict[str, Any]:
+    async def _generate_health_plan(self, plan_request: dict[str, Any], user_id: str) -> dict[str, Any]:
         """生成健康计划"""
         # 模拟健康计划生成
         await asyncio.sleep(0.25)
-        
+
         plan_type = plan_request.get('plan_type', 'comprehensive')
         duration = plan_request.get('duration', '30天')
         goals = plan_request.get('goals', ['减重', '改善睡眠', '增强体质'])
-        
+
         return {
             'plan_id': f"plan_{int(time.time())}",
             'user_id': user_id,
@@ -452,15 +451,15 @@ class SoerServiceImpl:
             ],
             'creation_time': time.time()
         }
-    
-    async def _analyze_sensor_data(self, sensor_request: Dict[str, Any], user_id: str) -> Dict[str, Any]:
+
+    async def _analyze_sensor_data(self, sensor_request: dict[str, Any], user_id: str) -> dict[str, Any]:
         """分析传感器数据"""
         # 模拟传感器数据分析
         await asyncio.sleep(0.15)
-        
+
         sensor_data = sensor_request.get('sensor_data', {})
         data_type = sensor_request.get('data_type', 'mixed')
-        
+
         return {
             'analysis_id': f"analysis_{int(time.time())}",
             'user_id': user_id,
@@ -513,15 +512,15 @@ class SoerServiceImpl:
             'alerts': [],
             'analysis_time': time.time()
         }
-    
-    async def _track_nutrition(self, nutrition_request: Dict[str, Any], user_id: str) -> Dict[str, Any]:
+
+    async def _track_nutrition(self, nutrition_request: dict[str, Any], user_id: str) -> dict[str, Any]:
         """营养追踪"""
         # 模拟营养追踪
         await asyncio.sleep(0.12)
-        
+
         food_items = nutrition_request.get('food_items', [])
         meal_type = nutrition_request.get('meal_type', 'lunch')
-        
+
         return {
             'tracking_id': f"nutrition_{int(time.time())}",
             'user_id': user_id,
@@ -562,15 +561,15 @@ class SoerServiceImpl:
             },
             'tracking_time': time.time()
         }
-    
-    async def _analyze_emotion(self, emotion_request: Dict[str, Any], user_id: str) -> Dict[str, Any]:
+
+    async def _analyze_emotion(self, emotion_request: dict[str, Any], user_id: str) -> dict[str, Any]:
         """情绪分析"""
         # 模拟情绪分析
         await asyncio.sleep(0.1)
-        
-        emotion_data = emotion_request.get('emotion_data', {})
+
+        emotion_request.get('emotion_data', {})
         analysis_type = emotion_request.get('analysis_type', 'comprehensive')
-        
+
         return {
             'analysis_id': f"emotion_{int(time.time())}",
             'user_id': user_id,
@@ -632,12 +631,12 @@ class SoerServiceImpl:
             },
             'analysis_time': time.time()
         }
-    
-    async def _get_health_dashboard_data(self, dashboard_request: Dict[str, Any], user_id: str) -> Dict[str, Any]:
+
+    async def _get_health_dashboard_data(self, dashboard_request: dict[str, Any], user_id: str) -> dict[str, Any]:
         """获取健康仪表板数据"""
         # 模拟健康仪表板数据获取
         await asyncio.sleep(0.18)
-        
+
         return {
             'dashboard_id': f"dashboard_{int(time.time())}",
             'user_id': user_id,
@@ -704,12 +703,12 @@ class SoerServiceImpl:
                 }
             ]
         }
-    
-    async def _generate_personalized_recommendations(self, recommendation_request: Dict[str, Any], user_id: str) -> Dict[str, Any]:
+
+    async def _generate_personalized_recommendations(self, recommendation_request: dict[str, Any], user_id: str) -> dict[str, Any]:
         """生成个性化推荐"""
         # 模拟个性化推荐生成
         await asyncio.sleep(0.2)
-        
+
         return {
             'recommendation_id': f"rec_{int(time.time())}",
             'user_id': user_id,
@@ -758,12 +757,12 @@ class SoerServiceImpl:
             },
             'generation_time': time.time()
         }
-    
-    async def _monitor_health_metrics(self, monitoring_request: Dict[str, Any], user_id: str) -> Dict[str, Any]:
+
+    async def _monitor_health_metrics(self, monitoring_request: dict[str, Any], user_id: str) -> dict[str, Any]:
         """健康指标监控"""
         # 模拟健康指标监控
         await asyncio.sleep(0.14)
-        
+
         return {
             'monitoring_id': f"monitor_{int(time.time())}",
             'user_id': user_id,
@@ -819,9 +818,9 @@ class SoerServiceImpl:
             },
             'monitoring_time': time.time()
         }
-    
+
     def close(self):
         """关闭服务"""
         if self.accessibility_client:
             self.accessibility_client.close()
-        logger.info("索儿智能体服务已关闭") 
+        logger.info("索儿智能体服务已关闭")

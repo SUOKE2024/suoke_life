@@ -4,6 +4,7 @@
 API限流器 - 防止恶意请求和系统过载
 """
 
+import asyncio
 from collections import deque
 from functools import wraps
 import logging
@@ -21,7 +22,7 @@ class TokenBucket:
     def __init__(self, capacity: int, refill_rate: float):
         """
         初始化令牌桶
-        
+
         Args:
             capacity: 桶容量（最大令牌数）
             refill_rate: 令牌补充速率（每秒补充的令牌数）
@@ -34,10 +35,10 @@ class TokenBucket:
     def consume(self, tokens: int = 1) -> bool:
         """
         消费令牌
-        
+
         Args:
             tokens: 需要消费的令牌数
-            
+
         Returns:
             bool: 是否成功消费令牌
         """
@@ -61,10 +62,10 @@ class TokenBucket:
     def get_wait_time(self, tokens: int = 1) -> float:
         """
         获取需要等待的时间
-        
+
         Args:
             tokens: 需要的令牌数
-            
+
         Returns:
             float: 等待时间（秒）
         """
@@ -80,7 +81,7 @@ class SlidingWindowCounter:
     def __init__(self, window_size: int, max_requests: int):
         """
         初始化滑动窗口计数器
-        
+
         Args:
             window_size: 窗口大小（秒）
             max_requests: 窗口内最大请求数
@@ -92,7 +93,7 @@ class SlidingWindowCounter:
     def is_allowed(self) -> bool:
         """
         检查是否允许请求
-        
+
         Returns:
             bool: 是否允许
         """
@@ -112,7 +113,7 @@ class SlidingWindowCounter:
     def get_reset_time(self) -> float:
         """
         获取重置时间
-        
+
         Returns:
             float: 重置时间戳
         """
@@ -127,7 +128,7 @@ class RateLimiter:
     def __init__(self, cache_manager: CacheManager | None = None):
         """
         初始化限流器
-        
+
         Args:
             cache_manager: 缓存管理器
         """
@@ -189,13 +190,13 @@ class RateLimiter:
     ) -> tuple[bool, dict[str, Any]]:
         """
         检查请求是否被允许
-        
+
         Args:
             identifier: 标识符（用户ID、IP等）
             limit_type: 限流类型
             endpoint: API端点
             ip_address: IP地址
-            
+
         Returns:
             Tuple[bool, Dict]: (是否允许, 限流信息)
         """
@@ -482,7 +483,7 @@ def rate_limit(
 ):
     """
     限流装饰器
-    
+
     Args:
         limit_type: 限流类型
         endpoint: API端点名称
@@ -492,7 +493,7 @@ def rate_limit(
         @wraps(func)
         async def wrapper(*args, **kwargs):
             # 获取限流器实例
-            rate_limiter = RateLimiter()
+            rate_limiter = await RateLimiterSingleton.get_instance()
 
             # 获取标识符
             if identifier_func:
@@ -528,12 +529,35 @@ def rate_limit(
         return wrapper
     return decorator
 
-# 全局限流器实例
-_rate_limiter: RateLimiter | None = None
+# 限流器单例
+class RateLimiterSingleton:
+    """限流器单例"""
+
+    _instance: RateLimiter | None = None
+    _lock = asyncio.Lock()
+
+    @classmethod
+    async def get_instance(cls, cache_manager: CacheManager | None = None) -> RateLimiter:
+        """获取限流器实例"""
+        if cls._instance is None:
+            async with cls._lock:
+                if cls._instance is None:
+                    cls._instance = RateLimiter(cache_manager)
+        return cls._instance
+
+    @classmethod
+    def get_instance_sync(cls, cache_manager: CacheManager | None = None) -> RateLimiter:
+        """同步获取限流器实例"""
+        if cls._instance is None:
+            cls._instance = RateLimiter(cache_manager)
+        return cls._instance
+
 
 def get_rate_limiter() -> RateLimiter:
-    """获取全局限流器实例"""
-    global _rate_limiter
-    if _rate_limiter is None:
-        _rate_limiter = RateLimiter()
-    return _rate_limiter
+    """获取全局限流器实例（向后兼容）"""
+    return RateLimiterSingleton.get_instance_sync()
+
+
+async def get_rate_limiter_async(cache_manager: CacheManager | None = None) -> RateLimiter:
+    """异步获取全局限流器实例"""
+    return await RateLimiterSingleton.get_instance(cache_manager)

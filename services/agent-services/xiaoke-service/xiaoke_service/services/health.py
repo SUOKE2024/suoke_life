@@ -4,7 +4,6 @@
 提供应用和依赖服务的健康状态检查。
 """
 
-import asyncio
 import time
 from typing import Any
 
@@ -56,7 +55,7 @@ class HealthChecker:
 
         # 检查缓存连接
         try:
-            cache_status = await self._check_cache()
+            cache_status = await self._check_redis()
             checks["cache"] = cache_status
             if cache_status["status"] != "healthy":
                 overall_status = "not_ready"
@@ -82,48 +81,59 @@ class HealthChecker:
             "timestamp": self.last_check_time,
         }
 
-    async def _check_database(self) -> dict[str, Any]:
+    async def _check_database(self) -> dict:
         """检查数据库连接"""
         try:
-            # TODO: 实现实际的数据库连接检查
-            # 这里应该检查 PostgreSQL, MongoDB 等
-            await asyncio.sleep(0.01)  # 模拟检查延迟
-
+            # 基础数据库连接检查框架
+            # 这里应该实际检查PostgreSQL和MongoDB连接
             return {
                 "status": "healthy",
                 "response_time_ms": 10,
-                "details": {"postgres": "connected", "mongodb": "connected"},
+                "details": "Database connection is healthy"
             }
         except Exception as e:
-            return {"status": "unhealthy", "error": str(e)}
+            logger.error(f"数据库健康检查失败: {e!s}")
+            return {
+                "status": "unhealthy",
+                "error": str(e),
+                "details": "Database connection failed"
+            }
 
-    async def _check_cache(self) -> dict[str, Any]:
-        """检查缓存连接"""
+    async def _check_redis(self) -> dict:
+        """检查Redis连接"""
         try:
-            # TODO: 实现实际的Redis连接检查
-            await asyncio.sleep(0.01)  # 模拟检查延迟
-
+            # 基础Redis连接检查框架
+            # 这里应该实际检查Redis连接
             return {
                 "status": "healthy",
                 "response_time_ms": 5,
-                "details": {"redis": "connected"},
+                "details": "Redis connection is healthy"
             }
         except Exception as e:
-            return {"status": "unhealthy", "error": str(e)}
+            logger.error(f"Redis健康检查失败: {e!s}")
+            return {
+                "status": "unhealthy",
+                "error": str(e),
+                "details": "Redis connection failed"
+            }
 
-    async def _check_ai_service(self) -> dict[str, Any]:
+    async def _check_ai_service(self) -> dict:
         """检查AI服务"""
         try:
-            # TODO: 实现实际的AI服务检查
-            await asyncio.sleep(0.01)  # 模拟检查延迟
-
+            # 基础AI服务检查框架
+            # 这里应该实际检查AI模型服务连接
             return {
                 "status": "healthy",
                 "response_time_ms": 50,
-                "details": {"model_loaded": True, "knowledge_base": "available"},
+                "details": "AI service is healthy"
             }
         except Exception as e:
-            return {"status": "unhealthy", "error": str(e)}
+            logger.error(f"AI服务健康检查失败: {e!s}")
+            return {
+                "status": "unhealthy",
+                "error": str(e),
+                "details": "AI service connection failed"
+            }
 
     async def close(self) -> None:
         """关闭健康检查器"""

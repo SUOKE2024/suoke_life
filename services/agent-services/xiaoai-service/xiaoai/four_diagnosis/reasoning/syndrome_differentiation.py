@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 高级辨证分析引擎
 支持多种辨证方法和知识图谱推理
@@ -7,17 +6,15 @@
 
 import logging
 import time
-import json
-import numpy as np
-from typing import Dict, List, Any, Tuple, Optional, Set
 from dataclasses import dataclass, field
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
 @dataclass
 class SyndromeEvidence:
     """证候证据数据类"""
-    feature_name: str
+    featurename: str
     modality: str
     confidence: float
     weight: float = 1.0
@@ -30,8 +27,8 @@ class Constitution:
     name: str
     score: float
     confidence: float
-    traits: List[Dict[str, Any]] = field(default_factory=list)
-    recommendations: List[str] = field(default_factory=list)
+    traits: list[dict[str, Any]] = field(default_factory=list)
+    recommendations: list[str] = field(default_factory=list)
 
 @dataclass
 class Syndrome:
@@ -40,64 +37,64 @@ class Syndrome:
     score: float
     confidence: float
     category: str
-    evidences: List[SyndromeEvidence] = field(default_factory=list)
+    evidences: list[SyndromeEvidence] = field(default_factory=list)
     mechanism: str = ""
-    pattern_mapping: Dict[str, float] = field(default_factory=dict)
+    patternmapping: dict[str, float] = field(default_factory=dict)
 
 class SyndromeDifferentiationEngine:
     """
     高级辨证分析引擎
-    集成多种辨证方法，支持知识图谱推理
+    集成多种辨证方法, 支持知识图谱推理
     """
-    
+
     # 辨证方法
-    METHOD_EIGHT_PRINCIPLES = "eight_principles"  # 八纲辨证
-    METHOD_ZANG_FU = "zang_fu"  # 脏腑辨证
-    METHOD_QI_BLOOD_FLUID = "qi_blood_fluid"  # 气血津液辨证
-    METHOD_MERIDIAN = "meridian"  # 经络辨证
-    METHOD_SIX_MERIDIANS = "six_meridians"  # 六经辨证
-    METHOD_TRIPLE_ENERGIZER = "triple_energizer"  # 三焦辨证
-    METHOD_WEI_QI_YING_BLOOD = "wei_qi_ying_blood"  # 卫气营血辨证
-    
-    def __init__(self, config: Dict = None):
+    METHODEIGHT_PRINCIPLES = "eight_principles"  # 八纲辨证
+    METHODZANG_FU = "zang_fu"  # 脏腑辨证
+    METHODQI_BLOOD_FLUID = "qi_blood_fluid"  # 气血津液辨证
+    METHODMERIDIAN = "meridian"  # 经络辨证
+    METHODSIX_MERIDIANS = "six_meridians"  # 六经辨证
+    METHODTRIPLE_ENERGIZER = "triple_energizer"  # 三焦辨证
+    METHODWEI_QI_YING_BLOOD = "wei_qi_ying_blood"  # 卫气营血辨证
+
+    def __init__(self, config: dict | None = None):
         """
         初始化辨证分析引擎
-        
+
         Args:
             config: 配置参数
         """
         self.config = config or {}
-        
+
         # 辨证方法配置
-        self.enabled_methods = self.config.get("methods", [
-            self.METHOD_EIGHT_PRINCIPLES,
-            self.METHOD_ZANG_FU,
+        self.enabledmethods = self.config.get("methods", [
+            self.METHODEIGHT_PRINCIPLES,
+            self.METHODZANG_FU,
             self.METHOD_QI_BLOOD_FLUID
         ])
-        
+
         # 置信度阈值
-        self.confidence_threshold = self.config.get("confidence_threshold", 0.6)
-        
+        self.confidencethreshold = self.config.get("confidence_threshold", 0.6)
+
         # 各模态基础权重
-        self.modality_weights = {
+        self.modalityweights = {
             "looking": self.config.get("weights.looking", 1.0),
             "listening": self.config.get("weights.listening", 1.0),
             "inquiry": self.config.get("weights.inquiry", 1.5),
             "palpation": self.config.get("weights.palpation", 1.2)
         }
-        
+
         # 证候知识库
-        self.syndrome_knowledge = self._load_syndrome_knowledge()
-        
+        self.syndromeknowledge = self._load_syndrome_knowledge()
+
         # 体质知识库
-        self.constitution_knowledge = self._load_constitution_knowledge()
-        
+        self.constitutionknowledge = self._load_constitution_knowledge()
+
         # 证候关系图谱
-        self.syndrome_graph = self._load_syndrome_graph()
-        
-        logger.info(f"辨证分析引擎初始化完成，已启用辨证方法: {', '.join(self.enabled_methods)}")
-    
-    def _load_syndrome_knowledge(self) -> Dict[str, Dict]:
+        self.syndromegraph = self._load_syndrome_graph()
+
+        logger.info(f"辨证分析引擎初始化完成, 已启用辨证方法: {', '.join(self.enabledmethods)}")
+
+    def _load_syndrome_knowledge(self) -> dict[str, dict]:
         """加载证候知识库"""
         # 实际应用中从数据库或知识库加载
         # 这里使用示例数据
@@ -106,7 +103,7 @@ class SyndromeDifferentiationEngine:
             "寒证": {
                 "category": "八纲辨证",
                 "features": ["畏寒", "肢冷", "面色苍白", "舌淡", "舌苔白", "脉沉紧"],
-                "mechanism": "阳气不足，或寒邪侵袭",
+                "mechanism": "阳气不足, 或寒邪侵袭",
                 "opposing": ["热证"],
                 "related": ["虚证", "表证"],
                 "treatment_principles": ["温阳散寒"]
@@ -114,7 +111,7 @@ class SyndromeDifferentiationEngine:
             "热证": {
                 "category": "八纲辨证",
                 "features": ["发热", "口渴", "面红", "舌红", "舌苔黄", "脉数"],
-                "mechanism": "阳热亢盛，或热邪侵袭",
+                "mechanism": "阳热亢盛, 或热邪侵袭",
                 "opposing": ["寒证"],
                 "related": ["实证", "里证"],
                 "treatment_principles": ["清热泻火"]
@@ -135,19 +132,19 @@ class SyndromeDifferentiationEngine:
                 "related": ["热证"],
                 "treatment_principles": ["祛邪"]
             },
-            
+
             # 脏腑辨证
             "肝气郁结": {
                 "category": "脏腑辨证",
                 "features": ["胁肋胀痛", "情志不畅", "善太息", "脉弦"],
-                "mechanism": "肝失疏泄，气机郁滞",
+                "mechanism": "肝失疏泄, 气机郁滞",
                 "related": ["实证"],
                 "treatment_principles": ["疏肝理气"]
             },
             "肝阳上亢": {
                 "category": "脏腑辨证",
                 "features": ["头痛", "眩晕", "急躁易怒", "面红", "舌红", "脉弦有力"],
-                "mechanism": "肝阴不足，肝阳上亢",
+                "mechanism": "肝阴不足, 肝阳上亢",
                 "related": ["阴虚", "热证"],
                 "treatment_principles": ["平肝潜阳"]
             },
@@ -166,13 +163,13 @@ class SyndromeDifferentiationEngine:
                 "treatment_principles": ["清热化湿"]
             },
             "心气虚": {
-                "category": "脏腑辨证", 
+                "category": "脏腑辨证",
                 "features": ["心悸", "气短", "自汗", "面色淡白", "舌淡", "脉细弱"],
                 "mechanism": "心气不足",
                 "related": ["虚证"],
                 "treatment_principles": ["益气养心"]
             },
-            
+
             # 气血津液辨证
             "气虚": {
                 "category": "气血津液辨证",
@@ -210,13 +207,13 @@ class SyndromeDifferentiationEngine:
                 "treatment_principles": ["生津润燥"]
             }
         }
-        
+
         return knowledge
-    
-    def _load_constitution_knowledge(self) -> Dict[str, Dict]:
+
+    def _load_constitution_knowledge(self) -> dict[str, dict]:
         """加载体质知识库"""
         # 实际应用中从数据库或知识库加载
-        # 这里使用示例数据，九种体质
+        # 这里使用示例数据, 九种体质
         knowledge = {
             "平和质": {
                 "traits": ["面色润泽", "精力充沛", "体形匀称", "性格平和", "适应力强"],
@@ -264,45 +261,45 @@ class SyndromeDifferentiationEngine:
                 "recommendations": ["避开过敏源", "增强体质", "平衡饮食", "规律生活", "保持记录"]
             }
         }
-        
+
         return knowledge
-    
-    def _load_syndrome_graph(self) -> Dict[str, Dict]:
+
+    def _load_syndrome_graph(self) -> dict[str, dict]:
         """加载证候关系图谱"""
         # 实际应用中可使用知识图谱数据库
         # 这里使用简化的关系映射
         graph = {}
-        
-        # 遍历证候知识，建立关系网络
+
+        # 遍历证候知识, 建立关系网络
         for syndrome, info in self.syndrome_knowledge.items():
             graph[syndrome] = {
                 "opposing": info.get("opposing", []),
                 "related": info.get("related", []),
                 "category": info["category"]
             }
-        
+
         return graph
-    
-    def analyze_syndromes(self, diagnosis_data: Dict[str, Any]) -> Dict[str, Any]:
+
+    def analyze_syndromes(self, diagnosis_data: dict[str, Any]) -> dict[str, Any]:
         """
         分析证候并生成分化结果
-        
+
         Args:
             diagnosis_data: 四诊融合后的数据
-            
+
         Returns:
             Dict: 辨证分析结果
         """
-        start_time = time.time()
-        
+        starttime = time.time()
+
         try:
             # 提取证候和特征
             syndromes = diagnosis_data.get("syndromes", [])
-            modality_weights = diagnosis_data.get("modality_weights", self.modality_weights)
-            
-            # 如果没有输入的证候，返回空结果
+            diagnosis_data.get("modality_weights", self.modalityweights)
+
+            # 如果没有输入的证候, 返回空结果
             if not syndromes:
-                logger.warning("无证候输入数据，无法进行辨证分析")
+                logger.warning("无证候输入数据, 无法进行辨证分析")
                 return {
                     "success": False,
                     "error": "无证候输入数据",
@@ -310,60 +307,60 @@ class SyndromeDifferentiationEngine:
                     "syndromes": [],
                     "constitution": None
                 }
-            
+
             # 收集所有证候证据
-            all_evidences = self._collect_evidences(syndromes)
-            
+            allevidences = self._collect_evidences(syndromes)
+
             # 按辨证方法进行分析
-            method_results = {}
+            methodresults = {}
             for method in self.enabled_methods:
-                method_result = self._analyze_by_method(method, syndromes, all_evidences)
+                self._analyze_by_method(method, syndromes, allevidences)
                 method_results[method] = method_result
-            
+
             # 分析体质
-            constitution = self._analyze_constitution(syndromes, all_evidences)
-            
+            constitution = self._analyze_constitution(syndromes, allevidences)
+
             # 验证证候间一致性
-            validated_syndromes = self._validate_syndrome_consistency(
+            validatedsyndromes = self._validate_syndrome_consistency(
                 [s for results in method_results.values() for s in results]
             )
-            
+
             # 生成核心病机解释
-            mechanism = self._derive_core_mechanism(validated_syndromes)
-            
+            mechanism = self._derive_core_mechanism(validatedsyndromes)
+
             # 构建响应
             response = {
                 "success": True,
                 "methods": list(method_results.keys()),
-                "method_results": method_results,
-                "syndromes": validated_syndromes,
+                "method_results": methodresults,
+                "syndromes": validatedsyndromes,
                 "constitution": constitution,
                 "core_mechanism": mechanism,
-                "processing_time_ms": int((time.time() - start_time) * 1000)
+                "processing_time_ms": int((time.time() - starttime) * 1000)
             }
-            
-            logger.info(f"辨证分析完成，分析方法: {', '.join(self.enabled_methods)}")
+
+            logger.info(f"辨证分析完成, 分析方法: {', '.join(self.enabledmethods)}")
             return response
-            
+
         except Exception as e:
-            logger.error(f"辨证分析失败: {str(e)}")
+            logger.error(f"辨证分析失败: {e!s}")
             return {
                 "success": False,
                 "error": str(e),
                 "methods": [],
                 "syndromes": [],
                 "constitution": None,
-                "processing_time_ms": int((time.time() - start_time) * 1000)
+                "processing_time_ms": int((time.time() - starttime) * 1000)
             }
-    
-    def _collect_evidences(self, syndromes: List[Dict]) -> Dict[str, List[SyndromeEvidence]]:
+
+    def _collect_evidences(self, syndromes: list[dict]) -> dict[str, list[SyndromeEvidence]]:
         """从证候列表中收集证据"""
         evidences = {}
-        
+
         for syndrome in syndromes:
-            syndrome_name = syndrome["name"]
+            syndrome["name"]
             evidences[syndrome_name] = []
-            
+
             # 提取支持特征
             for feature in syndrome.get("supporting_features", []):
                 evidence = SyndromeEvidence(
@@ -373,73 +370,61 @@ class SyndromeDifferentiationEngine:
                     weight=feature.get("weight", 1.0)
                 )
                 evidences[syndrome_name].append(evidence)
-        
+
         return evidences
-    
-    def _analyze_by_method(self, method: str, syndromes: List[Dict], 
-                         evidences: Dict[str, List[SyndromeEvidence]]) -> List[Syndrome]:
+
+    def _analyze_by_method(self, method: str, syndromes: list[dict],
+                         evidences: dict[str, list[SyndromeEvidence]]) -> list[Syndrome]:
         """根据指定辨证方法进行分析"""
         # 按辨证方法筛选证候
-        method_syndromes = []
-        
+
         # 获取该方法对应的证候类别
-        category_map = {
-            self.METHOD_EIGHT_PRINCIPLES: "八纲辨证",
-            self.METHOD_ZANG_FU: "脏腑辨证",
-            self.METHOD_QI_BLOOD_FLUID: "气血津液辨证",
-            self.METHOD_MERIDIAN: "经络辨证",
-            self.METHOD_SIX_MERIDIANS: "六经辨证",
-            self.METHOD_TRIPLE_ENERGIZER: "三焦辨证",
-            self.METHOD_WEI_QI_YING_BLOOD: "卫气营血辨证"
-        }
-        
-        target_category = category_map.get(method)
+
+        targetcategory = category_map.get(method)
         if not target_category:
             return []
-        
+
         # 筛选对应分类的证候
         for syndrome_name in self.syndrome_knowledge:
             info = self.syndrome_knowledge[syndrome_name]
             if info["category"] != target_category:
                 continue
-                
+
             # 计算证候得分
-            score, confidence, matched_evidence = self._score_syndrome(
-                syndrome_name, syndromes, evidences
+            score, confidence, matchedevidence = self._score_syndrome(
+                syndromename, syndromes, evidences
             )
-            
-            # 如果得分超过阈值，添加到结果
+
+            # 如果得分超过阈值, 添加到结果
             if score >= 0.5 and confidence >= self.confidence_threshold:
                 syndrome = Syndrome(
-                    name=syndrome_name,
+                    name=syndromename,
                     score=score,
                     confidence=confidence,
-                    category=target_category,
-                    evidences=matched_evidence,
+                    category=targetcategory,
+                    evidences=matchedevidence,
                     mechanism=info.get("mechanism", "")
                 )
                 method_syndromes.append(syndrome)
-        
+
         # 按得分排序
         method_syndromes.sort(key=lambda x: x.score, reverse=True)
-        
+
         return method_syndromes
-    
-    def _score_syndrome(self, syndrome_name: str, syndromes: List[Dict],
-                      evidences: Dict[str, List[SyndromeEvidence]]) -> Tuple[float, float, List[SyndromeEvidence]]:
+
+    def _score_syndrome(self, syndrome_name: str, syndromes: list[dict],
+                      evidences: dict[str, list[SyndromeEvidence]]) -> tuple[float, float, list[SyndromeEvidence]]:
         """计算证候得分和置信度"""
         # 获取证候定义
         if syndrome_name not in self.syndrome_knowledge:
             return 0.0, 0.0, []
-        
-        syndrome_def = self.syndrome_knowledge[syndrome_name]
-        syndrome_features = set(syndrome_def.get("features", []))
-        
+
+        self.syndrome_knowledge[syndrome_name]
+        syndromefeatures = set(syndrome_def.get("features", []))
+
         # 匹配证据
-        matched_evidence = []
-        total_score = 0.0
-        confidence_sum = 0.0
-        
+        matchedevidence = []
+
         # 检查已有证候是否匹配
         for s in syndromes:
             if s["name"] == syndrome_name:
@@ -452,74 +437,59 @@ class SyndromeDifferentiationEngine:
                         weight=f.get("weight", 1.0)
                     ) for f in s.get("supporting_features", [])
                 ]
-        
+
         # 从所有证候的证据中查找匹配本证候的特征
-        all_evidence_features = []
-        for s_name, evid_list in evidences.items():
+        for _s_name, evid_list in evidences.items():
             for e in evid_list:
                 all_evidence_features.append(e)
-        
+
         # 匹配特征
         for evidence in all_evidence_features:
             if evidence.feature_name in syndrome_features:
                 matched_evidence.append(evidence)
                 total_score += evidence.weight
                 confidence_sum += evidence.confidence
-        
+
         # 计算得分和置信度
         if matched_evidence:
             # 计算匹配率
-            match_ratio = len(matched_evidence) / len(syndrome_features)
-            
+            len(matchedevidence) / len(syndromefeatures)
+
             # 最终得分 = 总分 * 匹配率
-            final_score = total_score * match_ratio
-            
+            finalscore = total_score * match_ratio
+
             # 置信度 = 平均证据置信度 * 匹配率
-            avg_confidence = confidence_sum / len(matched_evidence)
-            final_confidence = avg_confidence * match_ratio
-            
-            return final_score, final_confidence, matched_evidence
-        
+            confidence_sum / len(matchedevidence)
+            finalconfidence = avg_confidence * match_ratio
+
+            return finalscore, finalconfidence, matched_evidence
+
         return 0.0, 0.0, []
-    
-    def _analyze_constitution(self, syndromes: List[Dict], 
-                           evidences: Dict[str, List[SyndromeEvidence]]) -> Optional[Constitution]:
+
+    def _analyze_constitution(self, syndromes: list[dict],
+                           evidences: dict[str, list[SyndromeEvidence]]) -> Constitution | None:
         """分析体质类型"""
         # 提取所有特征
-        all_features = set()
-        for s_name, evid_list in evidences.items():
+        for _s_name, evid_list in evidences.items():
             for e in evid_list:
-                all_features.add(e.feature_name)
-        
+                all_features.add(e.featurename)
+
         # 计算每种体质的匹配度
-        constitution_scores = {}
-        for con_name, con_def in self.constitution_knowledge.items():
-            con_features = set(con_def.get("features", []))
-            con_traits = set(con_def.get("traits", []))
-            
+        for conname, con_def in self.constitution_knowledge.items():
+            confeatures = set(con_def.get("features", []))
+            set(con_def.get("traits", []))
+
             # 计算特征匹配
-            matched_features = all_features.intersection(con_features)
-            feature_match_ratio = len(matched_features) / len(con_features) if con_features else 0
-            
+            matchedfeatures = all_features.intersection(confeatures)
+            len(matchedfeatures) / len(confeatures) if con_features else 0
+
             # 计算证候关联度
-            syndrome_correlation = 0.0
-            constitution_syndrome_map = {
-                "气虚质": ["气虚", "脾气虚", "心气虚"],
-                "阳虚质": ["寒证", "肾阳虚"],
-                "阴虚质": ["阴虚", "肝阴虚", "肺阴虚"],
-                "痰湿质": ["痰湿", "脾胃湿热"],
-                "湿热质": ["湿热", "脾胃湿热", "肝胆湿热"],
-                "血瘀质": ["血瘀", "心血瘀阻"],
-                "气郁质": ["肝气郁结", "气滞"],
-                "特禀质": [],
-                "平和质": []
-            }
-            
+
             # 计算证候关联度
             if con_name in constitution_syndrome_map:
-                related_syndromes = constitution_syndrome_map[con_name]
-                syndrome_names = [s["name"] for s in syndromes]
-                
+                constitution_syndrome_map[con_name]
+                [s["name"] for s in syndromes]
+
                 for rel_synd in related_syndromes:
                     if rel_synd in syndrome_names:
                         # 找到对应证候的得分
@@ -527,33 +497,33 @@ class SyndromeDifferentiationEngine:
                             if s["name"] == rel_synd:
                                 syndrome_correlation += s["score"] * 0.2
                                 break
-            
+
             # 综合得分 = 特征匹配 * 0.7 + 证候关联 * 0.3
-            total_score = feature_match_ratio * 0.7 + syndrome_correlation * 0.3
-            
+            totalscore = feature_match_ratio * 0.7 + syndrome_correlation * 0.3
+
             # 只保留得分超过阈值的体质
             if total_score >= 0.3:
                 constitution_scores[con_name] = {
-                    "score": total_score,
+                    "score": totalscore,
                     "confidence": feature_match_ratio * 0.6 + 0.3,  # 基础置信度
-                    "matched_features": list(matched_features),
+                    "matched_features": list(matchedfeatures),
                     "traits": con_def.get("traits", []),
                     "recommendations": con_def.get("recommendations", [])
                 }
-        
+
         # 选择得分最高的体质
         if constitution_scores:
-            top_constitution = max(constitution_scores.items(), key=lambda x: x[1]["score"])
-            con_name, con_data = top_constitution
-            
+            max(constitution_scores.items(), key=lambda x: x[1]["score"])
+            conname, condata = top_constitution
+
             return Constitution(
-                name=con_name,
+                name=conname,
                 score=con_data["score"],
                 confidence=con_data["confidence"],
                 traits=[{"name": t} for t in con_data["traits"]],
                 recommendations=con_data["recommendations"]
             )
-        
+
         # 默认平和质
         return Constitution(
             name="平和质",
@@ -562,35 +532,28 @@ class SyndromeDifferentiationEngine:
             traits=[{"name": t} for t in self.constitution_knowledge["平和质"]["traits"]],
             recommendations=self.constitution_knowledge["平和质"]["recommendations"]
         )
-    
-    def _validate_syndrome_consistency(self, syndromes: List[Syndrome]) -> List[Dict]:
+
+    def _validate_syndrome_consistency(self, syndromes: list[Syndrome]) -> list[dict]:
         """验证证候之间的一致性"""
         if not syndromes:
             return []
-        
+
         # 去重
-        unique_syndromes = {}
         for s in syndromes:
-            if s.name not in unique_syndromes:
+            if s.name not in unique_syndromes or s.score > unique_syndromes[s.name].score:
                 unique_syndromes[s.name] = s
-            else:
-                # 保留得分较高的
-                if s.score > unique_syndromes[s.name].score:
-                    unique_syndromes[s.name] = s
-        
-        sorted_syndromes = sorted(unique_syndromes.values(), key=lambda x: x.score, reverse=True)
-        
+
+        sortedsyndromes = sorted(unique_syndromes.values(), key=lambda x: x.score, reverse=True)
+
         # 检查矛盾证候
-        consistent_syndromes = []
-        excluded_syndromes = set()
-        
-        for i, syndrome in enumerate(sorted_syndromes):
-            # 如果已被排除，跳过
+
+        for _i, syndrome in enumerate(sortedsyndromes):
+            # 如果已被排除, 跳过
             if syndrome.name in excluded_syndromes:
                 continue
-                
+
             # 添加到结果
-            s_dict = {
+            sdict = {
                 "name": syndrome.name,
                 "score": syndrome.score,
                 "confidence": syndrome.confidence,
@@ -598,21 +561,21 @@ class SyndromeDifferentiationEngine:
                 "mechanism": syndrome.mechanism,
                 "evidences": [
                     {
-                        "feature": e.feature_name,
+                        "feature": e.featurename,
                         "modality": e.modality,
                         "confidence": e.confidence,
                         "weight": e.weight
                     } for e in syndrome.evidences[:5]  # 最重要的5条证据
                 ]
             }
-            consistent_syndromes.append(s_dict)
-            
+            consistent_syndromes.append(sdict)
+
             # 检查是否与其他证候矛盾
             if syndrome.name in self.syndrome_graph:
                 opposing = self.syndrome_graph[syndrome.name].get("opposing", [])
                 for opp in opposing:
                     excluded_syndromes.add(opp)
-        
+
         # 检查并添加证候关系
         for s in consistent_syndromes:
             s["related_syndromes"] = []
@@ -627,40 +590,40 @@ class SyndromeDifferentiationEngine:
                                 "relationship": "related"
                             })
                             break
-        
+
         return consistent_syndromes
-    
-    def _derive_core_mechanism(self, syndromes: List[Dict]) -> str:
+
+    def _derive_core_mechanism(self, syndromes: list[dict]) -> str:
         """推导核心病机"""
         if not syndromes:
             return ""
-        
+
         # 提取所有证候的病机
         mechanisms = []
         for s in syndromes[:3]:  # 仅考虑前3个最重要的证候
-            if "mechanism" in s and s["mechanism"]:
+            if s.get("mechanism"):
                 mechanisms.append(s["mechanism"])
-        
+
         if not mechanisms:
             return ""
-        
+
         # 简单合并病机描述
         if len(mechanisms) == 1:
             return mechanisms[0]
         else:
-            return "；".join(mechanisms)
-            
-    def get_treatment_principles(self, syndromes: List[Dict]) -> List[str]:
+            return ";".join(mechanisms)
+
+    def get_treatment_principles(self, syndromes: list[dict]) -> list[str]:
         """根据证候获取治疗原则"""
         if not syndromes:
             return []
-        
+
         principles = []
         for s in syndromes:
-            syndrome_name = s["name"]
+            s["name"]
             if syndrome_name in self.syndrome_knowledge:
                 treatment = self.syndrome_knowledge[syndrome_name].get("treatment_principles", [])
                 if treatment and treatment not in principles:
                     principles.extend(treatment)
-        
-        return principles 
+
+        return principles

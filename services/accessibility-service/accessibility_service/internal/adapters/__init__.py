@@ -2,20 +2,20 @@
 Platform Adapters for Third-party Health Platforms
 """
 
-from .base import BaseAdapter, AdapterError, AuthenticationError, DataSyncError
+from .adapter_factory import AdapterFactory
+from .alipay import AlipayAdapter
 from .apple_health import AppleHealthAdapter
-from .google_fit import GoogleFitAdapter
+from .base import AdapterError, AuthenticationError, BaseAdapter, DataSyncError
 from .fitbit import FitbitAdapter
-from .xiaomi import XiaomiAdapter
+from .google_fit import GoogleFitAdapter
 from .huawei import HuaweiAdapter
 from .wechat import WeChatAdapter
-from .alipay import AlipayAdapter
-from .adapter_factory import AdapterFactory
+from .xiaomi import XiaomiAdapter
 
 __all__ = [
     "BaseAdapter",
     "AdapterError",
-    "AuthenticationError", 
+    "AuthenticationError",
     "DataSyncError",
     "AppleHealthAdapter",
     "GoogleFitAdapter",
@@ -25,4 +25,4 @@ __all__ = [
     "WeChatAdapter",
     "AlipayAdapter",
     "AdapterFactory",
-] 
+]

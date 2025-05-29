@@ -5,11 +5,12 @@
 """
 
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Any
 from uuid import UUID, uuid4
 
-from pydantic import BaseModel as PydanticBaseModel, Field
-from sqlalchemy import Column, DateTime, String
+from pydantic import BaseModel as PydanticBaseModel
+from pydantic import Field
+from sqlalchemy import Column, DateTime
 from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import func
@@ -20,7 +21,7 @@ SQLAlchemyBase = declarative_base()
 
 class BaseModel(PydanticBaseModel):
     """Pydantic 基础模型类"""
-    
+
     class Config:
         # 允许从 ORM 对象创建
         from_attributes = True
@@ -39,46 +40,40 @@ class BaseModel(PydanticBaseModel):
 
 class TimestampMixin:
     """时间戳混入类"""
-    
+
     created_at = Column(
         DateTime(timezone=True),
         server_default=func.now(),
         nullable=False,
-        comment="创建时间"
+        comment="创建时间",
     )
     updated_at = Column(
         DateTime(timezone=True),
         server_default=func.now(),
         onupdate=func.now(),
         nullable=False,
-        comment="更新时间"
+        comment="更新时间",
     )
 
 
 class UUIDMixin:
     """UUID 混入类"""
-    
-    id = Column(
-        PGUUID(as_uuid=True),
-        primary_key=True,
-        default=uuid4,
-        comment="主键ID"
-    )
+
+    id = Column(PGUUID(as_uuid=True), primary_key=True, default=uuid4, comment="主键ID")
 
 
 class BaseEntity(SQLAlchemyBase, TimestampMixin, UUIDMixin):
     """SQLAlchemy 基础实体类"""
-    
+
     __abstract__ = True
-    
-    def to_dict(self) -> Dict[str, Any]:
+
+    def to_dict(self) -> dict[str, Any]:
         """转换为字典"""
         return {
-            column.name: getattr(self, column.name)
-            for column in self.__table__.columns
+            column.name: getattr(self, column.name) for column in self.__table__.columns
         }
-    
-    def update_from_dict(self, data: Dict[str, Any]) -> None:
+
+    def update_from_dict(self, data: dict[str, Any]) -> None:
         """从字典更新属性"""
         for key, value in data.items():
             if hasattr(self, key):
@@ -87,10 +82,10 @@ class BaseEntity(SQLAlchemyBase, TimestampMixin, UUIDMixin):
 
 class PaginationParams(BaseModel):
     """分页参数"""
-    
+
     page: int = Field(default=1, ge=1, description="页码")
     size: int = Field(default=20, ge=1, le=100, description="每页大小")
-    
+
     @property
     def offset(self) -> int:
         """计算偏移量"""
@@ -99,14 +94,14 @@ class PaginationParams(BaseModel):
 
 class PaginationResult(BaseModel):
     """分页结果"""
-    
+
     total: int = Field(description="总数量")
     page: int = Field(description="当前页码")
     size: int = Field(description="每页大小")
     pages: int = Field(description="总页数")
     has_next: bool = Field(description="是否有下一页")
     has_prev: bool = Field(description="是否有上一页")
-    
+
     @classmethod
     def create(
         cls,
@@ -128,12 +123,12 @@ class PaginationResult(BaseModel):
 
 class APIResponse(BaseModel):
     """API 响应基础类"""
-    
+
     success: bool = Field(description="是否成功")
     message: str = Field(description="响应消息")
     code: str = Field(default="SUCCESS", description="响应代码")
     timestamp: datetime = Field(default_factory=datetime.now, description="响应时间")
-    
+
     @classmethod
     def success_response(
         cls,
@@ -146,7 +141,7 @@ class APIResponse(BaseModel):
             message=message,
             code=code,
         )
-    
+
     @classmethod
     def error_response(
         cls,
@@ -163,9 +158,9 @@ class APIResponse(BaseModel):
 
 class APIDataResponse(APIResponse):
     """带数据的 API 响应"""
-    
-    data: Optional[Any] = Field(default=None, description="响应数据")
-    
+
+    data: Any | None = Field(default=None, description="响应数据")
+
     @classmethod
     def success_with_data(
         cls,
@@ -184,9 +179,9 @@ class APIDataResponse(APIResponse):
 
 class APIPaginatedResponse(APIDataResponse):
     """分页 API 响应"""
-    
-    pagination: Optional[PaginationResult] = Field(default=None, description="分页信息")
-    
+
+    pagination: PaginationResult | None = Field(default=None, description="分页信息")
+
     @classmethod
     def success_with_pagination(
         cls,
@@ -202,4 +197,4 @@ class APIPaginatedResponse(APIDataResponse):
             code=code,
             data=data,
             pagination=pagination,
-        ) 
+        )

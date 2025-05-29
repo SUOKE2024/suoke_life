@@ -10,16 +10,16 @@ __author__ = "Suoke Life Team"
 __email__ = "dev@suokelife.com"
 __description__ = "索克生活人工审核微服务 - 确保医疗健康建议的安全性和准确性"
 
-from .core.models import ReviewTask, Reviewer, ReviewStatus, ReviewPriority, ReviewType
-from .core.service import HumanReviewService
 from .api.main import create_app
+from .core.models import Reviewer, ReviewPriority, ReviewStatus, ReviewTask, ReviewType
+from .core.service import HumanReviewService
 
 __all__ = [
     "ReviewTask",
-    "Reviewer", 
+    "Reviewer",
     "ReviewStatus",
     "ReviewPriority",
     "ReviewType",
     "HumanReviewService",
     "create_app",
-] 
+]

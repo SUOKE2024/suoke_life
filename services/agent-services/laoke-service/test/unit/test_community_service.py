@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 社区服务单元测试
@@ -8,9 +7,10 @@
 import os
 import sys
 import unittest
-from unittest.mock import patch, MagicMock, AsyncMock
-import pytest
 from datetime import datetime
+from unittest.mock import AsyncMock, MagicMock, patch
+
+import pytest
 
 # 添加项目根路径到 Python 路径
 sys.path.insert(0, os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))))
@@ -41,7 +41,7 @@ class TestCommunityService(unittest.TestCase):
                 ]
             }
         }
-        
+
         # 模拟存储库
         self.mock_repository = MagicMock()
         self.mock_repository.get_post_by_id = AsyncMock()
@@ -50,11 +50,11 @@ class TestCommunityService(unittest.TestCase):
         self.mock_repository.update_post = AsyncMock()
         self.mock_repository.add_comment = AsyncMock()
         self.mock_repository.get_trending_posts = AsyncMock()
-        
+
         # 模拟内容审核器
         self.mock_moderator = MagicMock()
         self.mock_moderator.moderate_content = AsyncMock()
-        
+
         # 初始化社区服务
         with patch('internal.community.community_service.Config', return_value=self.mock_config):
             self.community_service = CommunityService()
@@ -82,10 +82,10 @@ class TestCommunityService(unittest.TestCase):
             'comment_count': 5
         }
         self.mock_repository.get_post_by_id.return_value = mock_post
-        
+
         # 调用被测试的方法
         result = await self.community_service.get_post_by_id('123')
-        
+
         # 断言
         assert result == mock_post
         self.mock_repository.get_post_by_id.assert_called_once_with('123')
@@ -101,7 +101,7 @@ class TestCommunityService(unittest.TestCase):
             'category': '中医基础',
             'tags': ['感冒', '调理', '冬季']
         }
-        
+
         # 模拟用户信息
         mock_author = {
             'id': 'user_1',
@@ -109,12 +109,12 @@ class TestCommunityService(unittest.TestCase):
             'displayName': '健康达人',
             'role': 'CONTRIBUTOR'
         }
-        
+
         # 设置模拟返回值 - 获取用户
         mock_user_service = MagicMock()
         mock_user_service.get_user_by_id = AsyncMock(return_value=mock_author)
         self.community_service._user_service = mock_user_service
-        
+
         # 设置模拟返回值 - 审核内容
         self.mock_moderator.moderate_content.return_value = {
             'is_approved': True,
@@ -122,7 +122,7 @@ class TestCommunityService(unittest.TestCase):
             'moderation_level': 'auto_approved',
             'confidence_score': 0.95
         }
-        
+
         # 设置模拟返回值 - 创建帖子
         mock_created_post = {
             'id': '456',
@@ -139,10 +139,10 @@ class TestCommunityService(unittest.TestCase):
             'moderation_status': 'approved'
         }
         self.mock_repository.create_post.return_value = mock_created_post
-        
+
         # 调用被测试的方法
         result = await self.community_service.create_post(post_data)
-        
+
         # 断言
         assert result['id'] == '456'
         assert result['title'] == '如何利用中医调理感冒'
@@ -161,7 +161,7 @@ class TestCommunityService(unittest.TestCase):
             'category': '中医基础',
             'tags': ['问题']
         }
-        
+
         # 模拟用户信息
         mock_author = {
             'id': 'user_1',
@@ -169,12 +169,12 @@ class TestCommunityService(unittest.TestCase):
             'displayName': '健康达人',
             'role': 'CONTRIBUTOR'
         }
-        
+
         # 设置模拟返回值 - 获取用户
         mock_user_service = MagicMock()
         mock_user_service.get_user_by_id = AsyncMock(return_value=mock_author)
         self.community_service._user_service = mock_user_service
-        
+
         # 设置模拟返回值 - 审核内容
         self.mock_moderator.moderate_content.return_value = {
             'is_approved': False,
@@ -182,11 +182,11 @@ class TestCommunityService(unittest.TestCase):
             'moderation_level': 'auto_rejected',
             'confidence_score': 0.92
         }
-        
+
         # 调用被测试的方法
         with pytest.raises(ValueError) as excinfo:
             await self.community_service.create_post(post_data)
-        
+
         # 断言
         assert "内容未通过审核" in str(excinfo.value)
         self.mock_moderator.moderate_content.assert_called_once()
@@ -201,27 +201,27 @@ class TestCommunityService(unittest.TestCase):
             'content': '这篇文章很有帮助，谢谢分享！',
             'author_id': 'user_2'
         }
-        
+
         # 模拟帖子和用户
         mock_post = {
             'id': '123',
             'title': '分享我的艾灸经验',
             'comment_count': 5
         }
-        
+
         mock_author = {
             'id': 'user_2',
             'username': 'tcm_lover',
             'displayName': '中医爱好者'
         }
-        
+
         # 设置模拟返回值
         self.mock_repository.get_post_by_id.return_value = mock_post
-        
+
         mock_user_service = MagicMock()
         mock_user_service.get_user_by_id = AsyncMock(return_value=mock_author)
         self.community_service._user_service = mock_user_service
-        
+
         # 模拟审核
         self.mock_moderator.moderate_content.return_value = {
             'is_approved': True,
@@ -229,7 +229,7 @@ class TestCommunityService(unittest.TestCase):
             'moderation_level': 'auto_approved',
             'confidence_score': 0.98
         }
-        
+
         # 模拟创建评论
         mock_comment = {
             'id': 'comment_1',
@@ -239,10 +239,10 @@ class TestCommunityService(unittest.TestCase):
             'like_count': 0
         }
         self.mock_repository.add_comment.return_value = mock_comment
-        
+
         # 调用被测试的方法
         result = await self.community_service.add_comment(post_id, comment_data)
-        
+
         # 断言
         assert result['id'] == 'comment_1'
         assert result['content'] == '这篇文章很有帮助，谢谢分享！'
@@ -276,10 +276,10 @@ class TestCommunityService(unittest.TestCase):
             }
         ]
         self.mock_repository.get_trending_posts.return_value = mock_trending_posts
-        
+
         # 调用被测试的方法
         results = await self.community_service.get_trending_posts(time_window_hours=24, limit=5)
-        
+
         # 断言
         assert len(results) == 2
         assert results[0]['id'] == '123'
@@ -293,4 +293,4 @@ class TestCommunityService(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main() 
+    unittest.main()

@@ -8,11 +8,12 @@
 - performance: 性能测试
 """
 
-import sys
-import os
-import pytest
 import asyncio
-from typing import Generator
+import os
+import sys
+from collections.abc import Generator
+
+import pytest
 
 # 添加项目根目录到Python路径
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -32,8 +33,11 @@ def event_loop() -> Generator:
 @pytest.fixture
 def sample_accessibility_request():
     """Sample accessibility request for testing."""
-    from accessibility_service.models.accessibility import AccessibilityRequest, AccessibilityType
-    
+    from accessibility_service.models.accessibility import (
+        AccessibilityRequest,
+        AccessibilityType,
+    )
+
     return AccessibilityRequest(
         user_id="test_user_123",
         session_id="test_session_456",

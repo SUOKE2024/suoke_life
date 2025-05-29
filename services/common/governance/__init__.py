@@ -4,20 +4,20 @@
 """
 
 from .circuit_breaker import CircuitBreaker
-from .rate_limiter import RateLimiter, TokenBucketRateLimiter
-from .retry_policy import RetryPolicy, ExponentialBackoffRetry
 from .load_balancer import LoadBalancer, RoundRobinBalancer, WeightedRoundRobinBalancer
-from .service_registry import ServiceRegistry, ConsulServiceRegistry
+from .rate_limiter import RateLimiter, TokenBucketRateLimiter
+from .retry_policy import ExponentialBackoffRetry, RetryPolicy
+from .service_registry import ConsulServiceRegistry, ServiceRegistry
 
 __all__ = [
-    'CircuitBreaker',
-    'RateLimiter',
-    'TokenBucketRateLimiter', 
-    'RetryPolicy',
-    'ExponentialBackoffRetry',
-    'LoadBalancer',
-    'RoundRobinBalancer',
-    'WeightedRoundRobinBalancer',
-    'ServiceRegistry',
-    'ConsulServiceRegistry'
-] 
+    "CircuitBreaker",
+    "ConsulServiceRegistry",
+    "ExponentialBackoffRetry",
+    "LoadBalancer",
+    "RateLimiter",
+    "RetryPolicy",
+    "RoundRobinBalancer",
+    "ServiceRegistry",
+    "TokenBucketRateLimiter",
+    "WeightedRoundRobinBalancer",
+]

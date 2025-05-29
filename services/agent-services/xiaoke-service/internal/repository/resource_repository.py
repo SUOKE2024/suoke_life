@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 资源存储库
@@ -8,16 +7,14 @@
 
 import logging
 import uuid
-from datetime import datetime, timedelta
-from typing import Dict, List, Any, Optional
+from datetime import datetime
+from typing import Any
 
 import motor.motor_asyncio
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.future import select
 
 from pkg.utils.config_loader import get_config
-from internal.domain.models import MedicalResourceType
 
 logger = logging.getLogger(__name__)
 
@@ -50,7 +47,7 @@ class ResourceRepository:
 
         logger.info("资源存储库初始化完成")
 
-    async def get_resources_by_type(self, resource_type: str) -> List[Dict[str, Any]]:
+    async def get_resources_by_type(self, resource_type: str) -> list[dict[str, Any]]:
         """
         根据资源类型获取医疗资源列表
 
@@ -79,10 +76,10 @@ class ResourceRepository:
             return resources
 
         except Exception as e:
-            logger.error(f"查询资源失败: {str(e)}", exc_info=True)
+            logger.error(f"查询资源失败: {e!s}", exc_info=True)
             return []
 
-    async def get_resource_by_id(self, resource_id: str) -> Optional[Dict[str, Any]]:
+    async def get_resource_by_id(self, resource_id: str) -> dict[str, Any] | None:
         """
         根据ID获取医疗资源
 
@@ -107,10 +104,10 @@ class ResourceRepository:
             return None
 
         except Exception as e:
-            logger.error(f"查询资源失败: {str(e)}", exc_info=True)
+            logger.error(f"查询资源失败: {e!s}", exc_info=True)
             return None
 
-    async def create_resource(self, resource_data: Dict[str, Any]) -> str:
+    async def create_resource(self, resource_data: dict[str, Any]) -> str:
         """
         创建医疗资源
 
@@ -139,11 +136,11 @@ class ResourceRepository:
             return str(result.inserted_id)
 
         except Exception as e:
-            logger.error(f"创建资源失败: {str(e)}", exc_info=True)
+            logger.error(f"创建资源失败: {e!s}", exc_info=True)
             raise
 
     async def update_resource(
-        self, resource_id: str, resource_data: Dict[str, Any]
+        self, resource_id: str, resource_data: dict[str, Any]
     ) -> bool:
         """
         更新医疗资源
@@ -168,7 +165,7 @@ class ResourceRepository:
             return result.modified_count > 0
 
         except Exception as e:
-            logger.error(f"更新资源失败: {str(e)}", exc_info=True)
+            logger.error(f"更新资源失败: {e!s}", exc_info=True)
             return False
 
     async def delete_resource(self, resource_id: str) -> bool:
@@ -189,12 +186,12 @@ class ResourceRepository:
             return result.deleted_count > 0
 
         except Exception as e:
-            logger.error(f"删除资源失败: {str(e)}", exc_info=True)
+            logger.error(f"删除资源失败: {e!s}", exc_info=True)
             return False
 
     async def search_resources(
-        self, query: Dict[str, Any], page: int = 1, page_size: int = 20
-    ) -> Dict[str, Any]:
+        self, query: dict[str, Any], page: int = 1, page_size: int = 20
+    ) -> dict[str, Any]:
         """
         搜索医疗资源
 
@@ -236,7 +233,7 @@ class ResourceRepository:
             }
 
         except Exception as e:
-            logger.error(f"搜索资源失败: {str(e)}", exc_info=True)
+            logger.error(f"搜索资源失败: {e!s}", exc_info=True)
             return {
                 "resources": [],
                 "page": page,
@@ -247,7 +244,7 @@ class ResourceRepository:
 
     async def get_available_resources_by_time(
         self, resource_type: str, time_slot: str
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """
         获取指定时间段可用的医疗资源
 
@@ -278,5 +275,5 @@ class ResourceRepository:
             return resources
 
         except Exception as e:
-            logger.error(f"查询可用资源失败: {str(e)}", exc_info=True)
+            logger.error(f"查询可用资源失败: {e!s}", exc_info=True)
             return []

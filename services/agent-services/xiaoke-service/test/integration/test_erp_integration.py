@@ -1,30 +1,35 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 
 """
 ERP系统集成测试
 """
 
-import os
-import unittest
-import warnings
-from unittest import mock
-import pytest
-import requests
 import json
+import os
+import sys
 import uuid
 from datetime import datetime, timedelta
+from pathlib import Path
+from unittest.mock import patch
 
-# 确保能导入项目模块
-import sys
+import pytest
+import requests
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+# 添加项目根目录到Python路径
+project_root = Path(__file__).parent.parent.parent
+sys.path.insert(0, str(project_root))
 
 from integration.erp.erp_client import ERPClient, ERPError
 
 # 常量
 TEST_API_URL = os.getenv("TEST_ERP_API_URL", "https://erp-api-test.suoke.life")
 TEST_API_KEY = os.getenv("TEST_ERP_API_KEY", "test-api-key")
+HTTP_BAD_REQUEST = 400
+HTTP_NOT_FOUND = 404
+EXPECTED_SLOTS_COUNT = 2
+EXPECTED_INVENTORY_COUNT = 2
+EXPECTED_TRACE_RECORDS = 3
+EXPECTED_AVAILABLE_QUANTITY = 150
 
 
 class MockResponse:
@@ -43,24 +48,20 @@ class MockResponse:
             raise requests.exceptions.HTTPError(f"HTTP Error: {self.status_code}")
 
 
-class TestERPClient(unittest.TestCase):
+class TestERPClient(pytest.fixture):
     """ERP客户端测试"""
 
-    def setUp(self):
+    def __init__(self):
         """测试准备"""
         # 初始化客户端
         self.client = ERPClient(api_url=TEST_API_URL, api_key=TEST_API_KEY, timeout=5)
 
         # 模拟请求会话
-        self.session_patch = mock.patch.object(requests.Session, "request")
+        self.session_patch = patch.object(requests.Session, "request")
         self.mock_session = self.session_patch.start()
 
-        # 忽略ResourceWarning
-        warnings.simplefilter("ignore", ResourceWarning)
-
-    def tearDown(self):
-        """测试清理"""
-        self.session_patch.stop()
+    def __call__(self):
+        return self.client
 
     def test_check_doctor_availability(self):
         """测试检查医生可用性"""
@@ -97,23 +98,21 @@ class TestERPClient(unittest.TestCase):
         result = self.client.check_doctor_availability(doctor_id, tomorrow, day_after)
 
         # 验证结果
-        self.assertEqual(result["doctor_id"], doctor_id)
-        self.assertEqual(result["available"], True)
-        self.assertEqual(len(result["available_slots"]), 2)
+        assert result["doctor_id"] == doctor_id
+        assert result["available"]
+        assert len(result["available_slots"]) == EXPECTED_SLOTS_COUNT
 
         # 验证请求
         self.mock_session.assert_called_once()
         args, kwargs = self.mock_session.call_args
 
         # 验证URL和请求方法
-        self.assertEqual(kwargs["method"], "GET")
-        self.assertTrue(
-            kwargs["url"].endswith(f"/api/doctors/{doctor_id}/availability")
-        )
+        assert kwargs["method"] == "GET"
+        assert kwargs["url"].endswith(f"/api/doctors/{doctor_id}/availability")
 
         # 验证请求参数
-        self.assertEqual(kwargs["params"]["start_time"], tomorrow)
-        self.assertEqual(kwargs["params"]["end_time"], day_after)
+        assert kwargs["params"]["start_time"] == tomorrow
+        assert kwargs["params"]["end_time"] == day_after
 
     def test_create_appointment(self):
         """测试创建预约"""
@@ -157,27 +156,27 @@ class TestERPClient(unittest.TestCase):
         )
 
         # 验证结果
-        self.assertEqual(result["appointment_id"], appointment_id)
-        self.assertEqual(result["doctor_id"], doctor_id)
-        self.assertEqual(result["patient_id"], patient_id)
-        self.assertEqual(result["appointment_time"], appointment_time)
-        self.assertEqual(result["status"], "CONFIRMED")
+        assert result["appointment_id"] == appointment_id
+        assert result["doctor_id"] == doctor_id
+        assert result["patient_id"] == patient_id
+        assert result["appointment_time"] == appointment_time
+        assert result["status"] == "CONFIRMED"
 
         # 验证请求
         self.mock_session.assert_called_once()
         args, kwargs = self.mock_session.call_args
 
         # 验证URL和请求方法
-        self.assertEqual(kwargs["method"], "POST")
-        self.assertTrue(kwargs["url"].endswith(f"/api/appointments"))
+        assert kwargs["method"] == "POST"
+        assert kwargs["url"].endswith("/api/appointments")
 
         # 验证请求体
-        self.assertEqual(kwargs["json"]["doctor_id"], doctor_id)
-        self.assertEqual(kwargs["json"]["patient_id"], patient_id)
-        self.assertEqual(kwargs["json"]["appointment_time"], appointment_time)
-        self.assertEqual(kwargs["json"]["appointment_type"], appointment_type)
-        self.assertEqual(kwargs["json"]["symptoms"], symptoms)
-        self.assertEqual(kwargs["json"]["metadata"], {"source": "test"})
+        assert kwargs["json"]["doctor_id"] == doctor_id
+        assert kwargs["json"]["patient_id"] == patient_id
+        assert kwargs["json"]["appointment_time"] == appointment_time
+        assert kwargs["json"]["appointment_type"] == appointment_type
+        assert kwargs["json"]["symptoms"] == symptoms
+        assert kwargs["json"]["metadata"] == {"source": "test"}
 
     def test_check_inventory(self):
         """测试检查库存"""
@@ -213,22 +212,21 @@ class TestERPClient(unittest.TestCase):
         result = self.client.check_inventory(product_ids)
 
         # 验证结果
-        self.assertEqual(len(result["inventory"]), 2)
-        self.assertTrue(result["inventory"]["prod123"]["in_stock"])
-        self.assertFalse(result["inventory"]["prod456"]["in_stock"])
-        self.assertEqual(result["inventory"]["prod123"]["available_quantity"], 150)
-        self.assertEqual(result["inventory"]["prod456"]["available_quantity"], 0)
+        assert len(result["inventory"]) == EXPECTED_INVENTORY_COUNT
+        assert result["inventory"]["prod123"]["in_stock"]
+        assert not result["inventory"]["prod456"]["in_stock"]
+        assert result["inventory"]["prod123"]["available_quantity"] == EXPECTED_AVAILABLE_QUANTITY
 
         # 验证请求
         self.mock_session.assert_called_once()
         args, kwargs = self.mock_session.call_args
 
         # 验证URL和请求方法
-        self.assertEqual(kwargs["method"], "GET")
-        self.assertTrue(kwargs["url"].endswith(f"/api/inventory/check"))
+        assert kwargs["method"] == "GET"
+        assert kwargs["url"].endswith("/api/inventory/check")
 
         # 验证请求参数
-        self.assertEqual(kwargs["params"]["product_ids"], product_ids)
+        assert kwargs["params"]["product_ids"] == product_ids
 
     def test_trace_product(self):
         """测试产品溯源"""
@@ -293,21 +291,21 @@ class TestERPClient(unittest.TestCase):
         result = self.client.trace_product(product_id, batch_id)
 
         # 验证结果
-        self.assertEqual(result["product_name"], "有机燕麦")
-        self.assertEqual(len(result["trace_records"]), 3)
-        self.assertTrue(result["verified"])
+        assert result["product_name"] == "有机燕麦"
+        assert len(result["trace_records"]) == EXPECTED_TRACE_RECORDS
+        assert result["verified"]
 
         # 验证请求
         self.mock_session.assert_called_once()
         args, kwargs = self.mock_session.call_args
 
         # 验证URL和请求方法
-        self.assertEqual(kwargs["method"], "GET")
-        self.assertTrue(kwargs["url"].endswith(f"/api/products/trace"))
+        assert kwargs["method"] == "GET"
+        assert kwargs["url"].endswith("/api/products/trace")
 
         # 验证请求参数
-        self.assertEqual(kwargs["params"]["product_id"], product_id)
-        self.assertEqual(kwargs["params"]["batch_id"], batch_id)
+        assert kwargs["params"]["product_id"] == product_id
+        assert kwargs["params"]["batch_id"] == batch_id
 
     def test_error_handling(self):
         """测试错误处理"""
@@ -317,14 +315,14 @@ class TestERPClient(unittest.TestCase):
         self.mock_session.return_value = MockResponse(error_response, 404)
 
         # 执行测试
-        with self.assertRaises(ERPError) as context:
+        with pytest.raises(ERPError) as context:
             self.client.check_doctor_availability(
                 "nonexistent", "2023-01-01T00:00:00", "2023-01-02T00:00:00"
             )
 
         # 验证异常
-        self.assertTrue("ERP API请求失败" in str(context.exception))
-        self.assertEqual(context.exception.status_code, 404)
+        assert "ERP API请求失败" in str(context.value)
+        assert context.value.status_code == HTTP_NOT_FOUND
 
     def test_connection_error(self):
         """测试连接错误"""
@@ -334,14 +332,14 @@ class TestERPClient(unittest.TestCase):
         )
 
         # 执行测试
-        with self.assertRaises(ERPError) as context:
+        with pytest.raises(ERPError) as context:
             self.client.check_doctor_availability(
                 "doc123", "2023-01-01T00:00:00", "2023-01-02T00:00:00"
             )
 
         # 验证异常
-        self.assertTrue("ERP API请求失败" in str(context.exception))
+        assert "ERP API请求失败" in str(context.value)
 
 
 if __name__ == "__main__":
-    unittest.main()
+    pytest.main()

@@ -1,0 +1,88 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`简化认证流程集成测试 快照测试 应该匹配组件快照 1`] = `
+<div
+  className="css-view-g5y9jx"
+  data-testid="auth-component"
+  dir={null}
+  ref={[Function]}
+>
+  <div
+    className="css-text-146c3p1"
+    data-testid="status-text"
+    dir="auto"
+    ref={[Function]}
+  >
+    idle
+  </div>
+  <div
+    className="css-view-g5y9jx r-transitionProperty-1i6wzkk r-userSelect-lrvibr r-cursor-1loqt21 r-touchAction-1otgn73"
+    data-testid="login-button"
+    dir={null}
+    onClick={[Function]}
+    onContextMenu={[Function]}
+    onKeyDown={[Function]}
+    ref={[Function]}
+    style={
+      {
+        "transitionDuration": "0s",
+      }
+    }
+    tabIndex="0"
+  >
+    <div
+      className="css-text-146c3p1"
+      dir="auto"
+      ref={[Function]}
+    >
+      Login
+    </div>
+  </div>
+  <div
+    className="css-view-g5y9jx r-transitionProperty-1i6wzkk r-userSelect-lrvibr r-cursor-1loqt21 r-touchAction-1otgn73"
+    data-testid="register-button"
+    dir={null}
+    onClick={[Function]}
+    onContextMenu={[Function]}
+    onKeyDown={[Function]}
+    ref={[Function]}
+    style={
+      {
+        "transitionDuration": "0s",
+      }
+    }
+    tabIndex="0"
+  >
+    <div
+      className="css-text-146c3p1"
+      dir="auto"
+      ref={[Function]}
+    >
+      Register
+    </div>
+  </div>
+  <div
+    className="css-view-g5y9jx r-transitionProperty-1i6wzkk r-userSelect-lrvibr r-cursor-1loqt21 r-touchAction-1otgn73"
+    data-testid="logout-button"
+    dir={null}
+    onClick={[Function]}
+    onContextMenu={[Function]}
+    onKeyDown={[Function]}
+    ref={[Function]}
+    style={
+      {
+        "transitionDuration": "0s",
+      }
+    }
+    tabIndex="0"
+  >
+    <div
+      className="css-text-146c3p1"
+      dir="auto"
+      ref={[Function]}
+    >
+      Logout
+    </div>
+  </div>
+</div>
+`;

@@ -1,19 +1,16 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 小克智能体服务 - 诊断知识存储库
 提供中医辨证、症状诊断和健康状态的存储和检索功能
 """
 
-import uuid
 import logging
-import asyncio
-from datetime import datetime, timezone, timedelta
-from typing import List, Dict, Any, Optional, Tuple, Set
+import uuid
+from datetime import UTC, datetime, timedelta
+from typing import Any
 
 import motor.motor_asyncio
-from bson.objectid import ObjectId
 from pymongo.errors import PyMongoError
 
 from pkg.utils.config_loader import get_config
@@ -81,13 +78,13 @@ class DiagnosisRepository:
 
             logger.info("诊断知识存储库索引已初始化")
         except PyMongoError as e:
-            logger.error(f"初始化诊断知识存储库索引失败: {str(e)}")
+            logger.error(f"初始化诊断知识存储库索引失败: {e!s}")
             raise
 
     @metrics.measure_execution_time("diagnosis_repo_create_symptom_pattern")
     async def create_symptom_pattern(
-        self, pattern_data: Dict[str, Any]
-    ) -> Optional[str]:
+        self, pattern_data: dict[str, Any]
+    ) -> str | None:
         """
         创建症状模式
 
@@ -99,14 +96,13 @@ class DiagnosisRepository:
         """
         try:
             # 确保数据中没有"_id"字段
-            if "_id" in pattern_data:
-                del pattern_data["_id"]
+            pattern_data.pop("_id", None)
 
             # 设置ID和创建时间
             pattern_data["pattern_id"] = pattern_data.get(
                 "pattern_id", str(uuid.uuid4())
             )
-            pattern_data["created_at"] = datetime.now(timezone.utc).isoformat()
+            pattern_data["created_at"] = datetime.now(UTC).isoformat()
             pattern_data["updated_at"] = pattern_data["created_at"]
 
             # 插入数据
@@ -114,7 +110,7 @@ class DiagnosisRepository:
 
             return pattern_data["pattern_id"]
         except PyMongoError as e:
-            logger.error(f"创建症状模式失败: {str(e)}")
+            logger.error(f"创建症状模式失败: {e!s}")
             metrics.increment_counter(
                 "diagnosis_repo_errors", {"method": "create_symptom_pattern"}
             )
@@ -123,11 +119,11 @@ class DiagnosisRepository:
     @metrics.measure_execution_time("diagnosis_repo_find_symptom_patterns")
     async def find_symptom_patterns(
         self,
-        category: Optional[str] = None,
-        keywords: Optional[List[str]] = None,
+        category: str | None = None,
+        keywords: list[str] | None = None,
         limit: int = 10,
         offset: int = 0,
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """
         查找症状模式
 
@@ -170,14 +166,14 @@ class DiagnosisRepository:
 
             return patterns
         except PyMongoError as e:
-            logger.error(f"查找症状模式失败: {str(e)}")
+            logger.error(f"查找症状模式失败: {e!s}")
             metrics.increment_counter(
                 "diagnosis_repo_errors", {"method": "find_symptom_patterns"}
             )
             return []
 
     @metrics.measure_execution_time("diagnosis_repo_create_tcm_syndrome")
-    async def create_tcm_syndrome(self, syndrome_data: Dict[str, Any]) -> Optional[str]:
+    async def create_tcm_syndrome(self, syndrome_data: dict[str, Any]) -> str | None:
         """
         创建中医证型
 
@@ -189,14 +185,13 @@ class DiagnosisRepository:
         """
         try:
             # 确保数据中没有"_id"字段
-            if "_id" in syndrome_data:
-                del syndrome_data["_id"]
+            syndrome_data.pop("_id", None)
 
             # 设置ID和创建时间
             syndrome_data["syndrome_id"] = syndrome_data.get(
                 "syndrome_id", str(uuid.uuid4())
             )
-            syndrome_data["created_at"] = datetime.now(timezone.utc).isoformat()
+            syndrome_data["created_at"] = datetime.now(UTC).isoformat()
             syndrome_data["updated_at"] = syndrome_data["created_at"]
 
             # 插入数据
@@ -204,7 +199,7 @@ class DiagnosisRepository:
 
             return syndrome_data["syndrome_id"]
         except PyMongoError as e:
-            logger.error(f"创建中医证型失败: {str(e)}")
+            logger.error(f"创建中医证型失败: {e!s}")
             metrics.increment_counter(
                 "diagnosis_repo_errors", {"method": "create_tcm_syndrome"}
             )
@@ -213,11 +208,11 @@ class DiagnosisRepository:
     @metrics.measure_execution_time("diagnosis_repo_find_tcm_syndromes")
     async def find_tcm_syndromes(
         self,
-        syndrome_type: Optional[str] = None,
-        keywords: Optional[List[str]] = None,
+        syndrome_type: str | None = None,
+        keywords: list[str] | None = None,
         limit: int = 10,
         offset: int = 0,
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """
         查找中医证型
 
@@ -260,14 +255,14 @@ class DiagnosisRepository:
 
             return syndromes
         except PyMongoError as e:
-            logger.error(f"查找中医证型失败: {str(e)}")
+            logger.error(f"查找中医证型失败: {e!s}")
             metrics.increment_counter(
                 "diagnosis_repo_errors", {"method": "find_tcm_syndromes"}
             )
             return []
 
     @metrics.measure_execution_time("diagnosis_repo_get_tcm_syndrome")
-    async def get_tcm_syndrome(self, syndrome_id: str) -> Optional[Dict[str, Any]]:
+    async def get_tcm_syndrome(self, syndrome_id: str) -> dict[str, Any] | None:
         """
         获取中医证型详情
 
@@ -289,7 +284,7 @@ class DiagnosisRepository:
 
             return None
         except PyMongoError as e:
-            logger.error(f"获取中医证型失败: {str(e)}")
+            logger.error(f"获取中医证型失败: {e!s}")
             metrics.increment_counter(
                 "diagnosis_repo_errors", {"method": "get_tcm_syndrome"}
             )
@@ -297,8 +292,8 @@ class DiagnosisRepository:
 
     @metrics.measure_execution_time("diagnosis_repo_save_user_diagnosis")
     async def save_user_diagnosis(
-        self, user_id: str, diagnosis_data: Dict[str, Any]
-    ) -> Optional[str]:
+        self, user_id: str, diagnosis_data: dict[str, Any]
+    ) -> str | None:
         """
         保存用户诊断结果
 
@@ -312,7 +307,7 @@ class DiagnosisRepository:
         try:
             # 添加基本字段
             diagnosis_id = str(uuid.uuid4())
-            now = datetime.now(timezone.utc).isoformat()
+            now = datetime.now(UTC).isoformat()
 
             diagnosis_record = {
                 "diagnosis_id": diagnosis_id,
@@ -334,7 +329,7 @@ class DiagnosisRepository:
 
             return diagnosis_id
         except PyMongoError as e:
-            logger.error(f"保存用户诊断结果失败: {str(e)}")
+            logger.error(f"保存用户诊断结果失败: {e!s}")
             metrics.increment_counter(
                 "diagnosis_repo_errors", {"method": "save_user_diagnosis"}
             )
@@ -343,7 +338,7 @@ class DiagnosisRepository:
     @metrics.measure_execution_time("diagnosis_repo_get_user_diagnosis_history")
     async def get_user_diagnosis_history(
         self, user_id: str, limit: int = 10, offset: int = 0
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """
         获取用户诊断历史
 
@@ -372,7 +367,7 @@ class DiagnosisRepository:
 
             return diagnoses
         except PyMongoError as e:
-            logger.error(f"获取用户诊断历史失败: {str(e)}")
+            logger.error(f"获取用户诊断历史失败: {e!s}")
             metrics.increment_counter(
                 "diagnosis_repo_errors", {"method": "get_user_diagnosis_history"}
             )
@@ -381,7 +376,7 @@ class DiagnosisRepository:
     @metrics.measure_execution_time("diagnosis_repo_get_diagnosis_details")
     async def get_diagnosis_details(
         self, diagnosis_id: str
-    ) -> Optional[Dict[str, Any]]:
+    ) -> dict[str, Any] | None:
         """
         获取诊断详情
 
@@ -416,7 +411,7 @@ class DiagnosisRepository:
 
             return None
         except PyMongoError as e:
-            logger.error(f"获取诊断详情失败: {str(e)}")
+            logger.error(f"获取诊断详情失败: {e!s}")
             metrics.increment_counter(
                 "diagnosis_repo_errors", {"method": "get_diagnosis_details"}
             )
@@ -424,8 +419,8 @@ class DiagnosisRepository:
 
     @metrics.measure_execution_time("diagnosis_repo_save_health_record")
     async def save_health_record(
-        self, user_id: str, record_data: Dict[str, Any]
-    ) -> Optional[str]:
+        self, user_id: str, record_data: dict[str, Any]
+    ) -> str | None:
         """
         保存用户健康记录
 
@@ -439,7 +434,7 @@ class DiagnosisRepository:
         try:
             # 添加基本字段
             record_id = str(uuid.uuid4())
-            now = datetime.now(timezone.utc)
+            now = datetime.now(UTC)
 
             record = {
                 "record_id": record_id,
@@ -458,7 +453,7 @@ class DiagnosisRepository:
 
             return record_id
         except PyMongoError as e:
-            logger.error(f"保存用户健康记录失败: {str(e)}")
+            logger.error(f"保存用户健康记录失败: {e!s}")
             metrics.increment_counter(
                 "diagnosis_repo_errors", {"method": "save_health_record"}
             )
@@ -468,10 +463,10 @@ class DiagnosisRepository:
     async def get_user_health_records(
         self,
         user_id: str,
-        start_date: Optional[str] = None,
-        end_date: Optional[str] = None,
+        start_date: str | None = None,
+        end_date: str | None = None,
         limit: int = 30,
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """
         获取用户健康记录
 
@@ -511,14 +506,14 @@ class DiagnosisRepository:
 
             return records
         except PyMongoError as e:
-            logger.error(f"获取用户健康记录失败: {str(e)}")
+            logger.error(f"获取用户健康记录失败: {e!s}")
             metrics.increment_counter(
                 "diagnosis_repo_errors", {"method": "get_user_health_records"}
             )
             return []
 
     @metrics.measure_execution_time("diagnosis_repo_get_latest_health_record")
-    async def get_latest_health_record(self, user_id: str) -> Optional[Dict[str, Any]]:
+    async def get_latest_health_record(self, user_id: str) -> dict[str, Any] | None:
         """
         获取用户最新的健康记录
 
@@ -542,7 +537,7 @@ class DiagnosisRepository:
 
             return None
         except PyMongoError as e:
-            logger.error(f"获取用户最新健康记录失败: {str(e)}")
+            logger.error(f"获取用户最新健康记录失败: {e!s}")
             metrics.increment_counter(
                 "diagnosis_repo_errors", {"method": "get_latest_health_record"}
             )
@@ -550,8 +545,8 @@ class DiagnosisRepository:
 
     @metrics.measure_execution_time("diagnosis_repo_create_knowledge_item")
     async def create_knowledge_item(
-        self, knowledge_data: Dict[str, Any]
-    ) -> Optional[str]:
+        self, knowledge_data: dict[str, Any]
+    ) -> str | None:
         """
         创建诊断知识条目
 
@@ -563,14 +558,13 @@ class DiagnosisRepository:
         """
         try:
             # 确保数据中没有"_id"字段
-            if "_id" in knowledge_data:
-                del knowledge_data["_id"]
+            knowledge_data.pop("_id", None)
 
             # 设置ID和创建时间
             knowledge_data["knowledge_id"] = knowledge_data.get(
                 "knowledge_id", str(uuid.uuid4())
             )
-            knowledge_data["created_at"] = datetime.now(timezone.utc).isoformat()
+            knowledge_data["created_at"] = datetime.now(UTC).isoformat()
             knowledge_data["updated_at"] = knowledge_data["created_at"]
 
             # 插入数据
@@ -578,7 +572,7 @@ class DiagnosisRepository:
 
             return knowledge_data["knowledge_id"]
         except PyMongoError as e:
-            logger.error(f"创建诊断知识条目失败: {str(e)}")
+            logger.error(f"创建诊断知识条目失败: {e!s}")
             metrics.increment_counter(
                 "diagnosis_repo_errors", {"method": "create_knowledge_item"}
             )
@@ -586,8 +580,8 @@ class DiagnosisRepository:
 
     @metrics.measure_execution_time("diagnosis_repo_search_knowledge")
     async def search_knowledge(
-        self, query: str, category: Optional[str] = None, limit: int = 10
-    ) -> List[Dict[str, Any]]:
+        self, query: str, category: str | None = None, limit: int = 10
+    ) -> list[dict[str, Any]]:
         """
         搜索诊断知识
 
@@ -623,7 +617,7 @@ class DiagnosisRepository:
 
             return results
         except PyMongoError as e:
-            logger.error(f"搜索诊断知识失败: {str(e)}")
+            logger.error(f"搜索诊断知识失败: {e!s}")
             metrics.increment_counter(
                 "diagnosis_repo_errors", {"method": "search_knowledge"}
             )
@@ -632,10 +626,10 @@ class DiagnosisRepository:
     @metrics.measure_execution_time("diagnosis_repo_get_related_knowledge")
     async def get_related_knowledge(
         self,
-        syndrome_id: Optional[str] = None,
-        symptom_ids: Optional[List[str]] = None,
+        syndrome_id: str | None = None,
+        symptom_ids: list[str] | None = None,
         limit: int = 5,
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """
         获取相关诊断知识
 
@@ -669,7 +663,7 @@ class DiagnosisRepository:
 
             return results
         except PyMongoError as e:
-            logger.error(f"获取相关诊断知识失败: {str(e)}")
+            logger.error(f"获取相关诊断知识失败: {e!s}")
             metrics.increment_counter(
                 "diagnosis_repo_errors", {"method": "get_related_knowledge"}
             )
@@ -678,7 +672,7 @@ class DiagnosisRepository:
     @metrics.measure_execution_time("diagnosis_repo_get_user_constitution_type")
     async def get_user_constitution_type(
         self, user_id: str
-    ) -> Optional[Dict[str, Any]]:
+    ) -> dict[str, Any] | None:
         """
         获取用户的体质类型
         基于最近的诊断结果
@@ -715,7 +709,7 @@ class DiagnosisRepository:
 
             return constitution_data
         except PyMongoError as e:
-            logger.error(f"获取用户体质类型失败: {str(e)}")
+            logger.error(f"获取用户体质类型失败: {e!s}")
             metrics.increment_counter(
                 "diagnosis_repo_errors", {"method": "get_user_constitution_type"}
             )
@@ -723,8 +717,8 @@ class DiagnosisRepository:
 
     @metrics.measure_execution_time("diagnosis_repo_find_similar_diagnoses")
     async def find_similar_diagnoses(
-        self, symptoms: List[str], limit: int = 5
-    ) -> List[Dict[str, Any]]:
+        self, symptoms: list[str], limit: int = 5
+    ) -> list[dict[str, Any]]:
         """
         查找相似的诊断记录
 
@@ -767,7 +761,7 @@ class DiagnosisRepository:
 
             return results
         except PyMongoError as e:
-            logger.error(f"查找相似诊断记录失败: {str(e)}")
+            logger.error(f"查找相似诊断记录失败: {e!s}")
             metrics.increment_counter(
                 "diagnosis_repo_errors", {"method": "find_similar_diagnoses"}
             )
@@ -776,7 +770,7 @@ class DiagnosisRepository:
     @metrics.measure_execution_time("diagnosis_repo_analyze_symptom_trend")
     async def analyze_symptom_trend(
         self, user_id: str, symptom: str, days: int = 90
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         分析用户症状趋势
 
@@ -790,7 +784,7 @@ class DiagnosisRepository:
         """
         try:
             # 计算开始日期
-            start_date = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()
+            start_date = (datetime.now(UTC) - timedelta(days=days)).isoformat()
 
             # 查询包含该症状的健康记录
             pipeline = [
@@ -873,7 +867,7 @@ class DiagnosisRepository:
 
             return trend_data
         except PyMongoError as e:
-            logger.error(f"分析用户症状趋势失败: {str(e)}")
+            logger.error(f"分析用户症状趋势失败: {e!s}")
             metrics.increment_counter(
                 "diagnosis_repo_errors", {"method": "analyze_symptom_trend"}
             )
@@ -882,7 +876,7 @@ class DiagnosisRepository:
     @metrics.measure_execution_time("diagnosis_repo_get_common_user_symptoms")
     async def get_common_user_symptoms(
         self, user_id: str, limit: int = 10
-    ) -> List[Dict[str, str]]:
+    ) -> list[dict[str, str]]:
         """
         获取用户常见症状
 
@@ -921,7 +915,7 @@ class DiagnosisRepository:
 
             return results
         except PyMongoError as e:
-            logger.error(f"获取用户常见症状失败: {str(e)}")
+            logger.error(f"获取用户常见症状失败: {e!s}")
             metrics.increment_counter(
                 "diagnosis_repo_errors", {"method": "get_common_user_symptoms"}
             )

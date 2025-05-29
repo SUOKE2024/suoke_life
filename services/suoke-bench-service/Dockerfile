@@ -5,6 +5,10 @@ FROM python:3.13.3-slim as builder
 # 设置工作目录
 WORKDIR /build
 
+# 设置国内镜像源
+RUN sed -i 's/deb.debian.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list.d/debian.sources && \
+    sed -i 's/security.debian.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list.d/debian.sources
+
 # 安装构建依赖
 RUN apt-get update && apt-get install -y \
     build-essential \
@@ -12,20 +16,22 @@ RUN apt-get update && apt-get install -y \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-# 安装 Poetry
-RUN curl -sSL https://install.python-poetry.org | python3 -
+# 安装 UV
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+ENV PATH="/root/.cargo/bin:$PATH"
+
+# 设置 UV 使用国内镜像源
+ENV UV_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
 
 # 复制项目文件
-COPY pyproject.toml poetry.lock ./
+COPY pyproject.toml uv.lock ./
 COPY README.md ./
 
-# 导出依赖
-RUN $HOME/.local/bin/poetry export -f requirements.txt --output requirements.txt --without-hashes
-
-# 安装依赖
-RUN python -m venv /opt/venv
+# 创建虚拟环境并安装依赖
+RUN uv venv /opt/venv
+ENV VIRTUAL_ENV=/opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
-RUN pip install --no-cache-dir -r requirements.txt
+RUN uv sync --no-dev --frozen
 
 # 运行阶段
 FROM python:3.13.3-slim
@@ -33,9 +39,14 @@ FROM python:3.13.3-slim
 # 设置工作目录
 WORKDIR /app
 
+# 设置国内镜像源
+RUN sed -i 's/deb.debian.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list.d/debian.sources && \
+    sed -i 's/security.debian.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list.d/debian.sources
+
 # 安装运行时依赖
 RUN apt-get update && apt-get install -y \
     libgomp1 \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 # 复制虚拟环境

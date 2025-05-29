@@ -1,25 +1,22 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 食疗服务管理器
 负责小克智能体的食疗相关功能，包括食疗方案生成、食药配伍分析、时令食谱推荐等
 """
 
-import os
-import uuid
-import json
 import logging
+import os
 import time
-import asyncio
-import random
-from typing import Dict, List, Any, Optional, Tuple
-from datetime import datetime, timezone
+import uuid
+from datetime import UTC, datetime
+from typing import Any
+
+from internal.repository.food_repository import FoodRepository
+from pkg.utils.config_loader import get_config
+from pkg.utils.metrics import get_metrics_collector, track_llm_metrics
 
 # 导入项目依赖
 from .model_factory import ModelFactory
-from pkg.utils.config_loader import get_config
-from pkg.utils.metrics import get_metrics_collector, track_llm_metrics
-from internal.repository.food_repository import FoodRepository
 
 # 初始化日志
 logger = logging.getLogger(__name__)
@@ -62,7 +59,7 @@ class FoodTherapyManager:
 
         logger.info("食疗服务管理器初始化完成")
 
-    def _load_prompt_templates(self) -> Dict[str, str]:
+    def _load_prompt_templates(self) -> dict[str, str]:
         """加载所有提示语模板文件"""
         templates = {}
 
@@ -79,11 +76,11 @@ class FoodTherapyManager:
         for key, filename in templates_files.items():
             file_path = os.path.join(self.templates_dir, filename)
             try:
-                with open(file_path, "r", encoding="utf-8") as f:
+                with open(file_path, encoding="utf-8") as f:
                     templates[key] = f.read()
                 logger.debug(f"加载提示语模板 {key} 成功")
             except Exception as e:
-                logger.error(f"加载提示语模板 {key} 失败: {str(e)}")
+                logger.error(f"加载提示语模板 {key} 失败: {e!s}")
                 # 设置一个简单的备用提示语
                 templates[key] = (
                     f"你是小克，索克生活APP的医疗资源调度智能体中负责{key}的专家。请根据用户信息提供专业建议。"
@@ -91,7 +88,7 @@ class FoodTherapyManager:
 
         return templates
 
-    def _fill_template(self, template_key: str, params: Dict[str, Any]) -> str:
+    def _fill_template(self, template_key: str, params: dict[str, Any]) -> str:
         """
         填充提示语模板
 
@@ -121,12 +118,12 @@ class FoodTherapyManager:
         self,
         user_id: str,
         constitution_type: str,
-        health_conditions: List[str] = None,
-        preferences: List[str] = None,
-        allergies: List[str] = None,
-        current_medications: List[str] = None,
+        health_conditions: list[str] | None = None,
+        preferences: list[str] | None = None,
+        allergies: list[str] | None = None,
+        current_medications: list[str] | None = None,
         plan_duration: int = 7,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         生成个性化食疗方案
 
@@ -176,11 +173,10 @@ class FoodTherapyManager:
             filtered_foods = []
             for food in suitable_foods:
                 # 过滤过敏源
-                if allergies:
-                    if any(
-                        allergen in food.get("allergens", []) for allergen in allergies
-                    ):
-                        continue
+                if allergies and any(
+                    allergen in food.get("allergens", []) for allergen in allergies
+                ):
+                    continue
 
                 # 过滤药物相互作用
                 if food_drug_interactions:
@@ -253,13 +249,13 @@ class FoodTherapyManager:
             }
 
         except Exception as e:
-            logger.error(f"生成食疗方案失败: {str(e)}", exc_info=True)
+            logger.error(f"生成食疗方案失败: {e!s}", exc_info=True)
             raise
 
     @track_llm_metrics(model="food_therapy", query_type="food_medicine")
     async def analyze_food_medicine_pairing(
-        self, medicine_data: Dict[str, Any], user_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+        self, medicine_data: dict[str, Any], user_data: dict[str, Any]
+    ) -> dict[str, Any]:
         """
         分析食物与药物的配伍关系
 
@@ -323,7 +319,7 @@ class FoodTherapyManager:
                 "medicine_id": medicine_data.get("id", ""),
                 "user_id": user_data.get("user_id", ""),
                 "analysis_text": analysis_text,
-                "created_at": datetime.now(timezone.utc).isoformat(),
+                "created_at": datetime.now(UTC).isoformat(),
                 "metadata": {
                     "model": response_meta.get("model", self.primary_model),
                     "process_time": process_time,
@@ -333,7 +329,7 @@ class FoodTherapyManager:
 
         except Exception as e:
             # 记录错误
-            logger.error(f"分析食药配伍关系失败: {str(e)}")
+            logger.error(f"分析食药配伍关系失败: {e!s}")
             self.metrics.increment_error_count("food_medicine_pairing")
 
             # 返回错误响应
@@ -348,8 +344,8 @@ class FoodTherapyManager:
 
     @track_llm_metrics(model="food_therapy", query_type="seasonal_diet")
     async def adjust_seasonal_diet(
-        self, user_data: Dict[str, Any], season_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+        self, user_data: dict[str, Any], season_data: dict[str, Any]
+    ) -> dict[str, Any]:
         """
         根据季节调整饮食建议
 
@@ -418,7 +414,7 @@ class FoodTherapyManager:
                 "adjustment_text": adjustment_text,
                 "current_season": season_data.get("current_season", ""),
                 "upcoming_season": season_data.get("upcoming_season", ""),
-                "created_at": datetime.now(timezone.utc).isoformat(),
+                "created_at": datetime.now(UTC).isoformat(),
                 "metadata": {
                     "model": response_meta.get("model", self.primary_model),
                     "process_time": process_time,
@@ -428,7 +424,7 @@ class FoodTherapyManager:
 
         except Exception as e:
             # 记录错误
-            logger.error(f"生成季节性饮食调整建议失败: {str(e)}")
+            logger.error(f"生成季节性饮食调整建议失败: {e!s}")
             self.metrics.increment_error_count("seasonal_diet_adjustment")
 
             # 返回错误响应
@@ -445,12 +441,12 @@ class FoodTherapyManager:
         self,
         user_id: str,
         constitution_type: str,
-        health_conditions: List[str] = None,
-        preferences: List[str] = None,
+        health_conditions: list[str] | None = None,
+        preferences: list[str] | None = None,
         difficulty_level: str = "MEDIUM",
         cooking_time: int = 30,
         limit: int = 5,
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """
         推荐适合用户体质的食谱
 
@@ -522,7 +518,7 @@ class FoodTherapyManager:
             return top_recipes
 
         except Exception as e:
-            logger.error(f"推荐食谱失败: {str(e)}", exc_info=True)
+            logger.error(f"推荐食谱失败: {e!s}", exc_info=True)
             return []
 
     def _get_current_season(self) -> str:
@@ -549,8 +545,8 @@ class FoodTherapyManager:
 
     @track_llm_metrics(model="food_therapy", query_type="food_safety")
     async def analyze_food_safety(
-        self, food_data: Dict[str, Any], user_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+        self, food_data: dict[str, Any], user_data: dict[str, Any]
+    ) -> dict[str, Any]:
         """
         分析食品安全性并提供建议
 
@@ -616,7 +612,7 @@ class FoodTherapyManager:
                 "user_id": user_data.get("user_id", ""),
                 "food_id": food_data.get("id", ""),
                 "analysis_text": analysis_text,
-                "created_at": datetime.now(timezone.utc).isoformat(),
+                "created_at": datetime.now(UTC).isoformat(),
                 "metadata": {
                     "model": response_meta.get("model", self.primary_model),
                     "process_time": process_time,
@@ -626,7 +622,7 @@ class FoodTherapyManager:
 
         except Exception as e:
             # 记录错误
-            logger.error(f"分析食品安全性失败: {str(e)}")
+            logger.error(f"分析食品安全性失败: {e!s}")
             self.metrics.increment_error_count("food_safety_analysis")
 
             # 返回错误响应
@@ -641,8 +637,8 @@ class FoodTherapyManager:
 
     @track_llm_metrics(model="food_therapy", query_type="medicinal_diet")
     async def design_medicinal_diet_formulation(
-        self, user_data: Dict[str, Any], health_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+        self, user_data: dict[str, Any], health_data: dict[str, Any]
+    ) -> dict[str, Any]:
         """
         设计个性化药膳方剂
 
@@ -710,7 +706,7 @@ class FoodTherapyManager:
                 "formulation_text": formulation_text,
                 "constitution_type": user_data.get("constitution_type", ""),
                 "target_symptoms": health_data.get("symptoms", ""),
-                "created_at": datetime.now(timezone.utc).isoformat(),
+                "created_at": datetime.now(UTC).isoformat(),
                 "metadata": {
                     "model": response_meta.get("model", self.primary_model),
                     "process_time": process_time,
@@ -720,7 +716,7 @@ class FoodTherapyManager:
 
         except Exception as e:
             # 记录错误
-            logger.error(f"设计药膳方剂失败: {str(e)}")
+            logger.error(f"设计药膳方剂失败: {e!s}")
             self.metrics.increment_error_count("medicinal_diet_formulation")
 
             # 返回错误响应
@@ -734,8 +730,8 @@ class FoodTherapyManager:
 
     @track_llm_metrics(model="food_therapy", query_type="food_rating")
     async def rate_food_for_constitution(
-        self, food_data: Dict[str, Any], user_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+        self, food_data: dict[str, Any], user_data: dict[str, Any]
+    ) -> dict[str, Any]:
         """
         对食材进行体质适应性评分
 
@@ -812,7 +808,7 @@ class FoodTherapyManager:
                 "food_name": food_data.get("name", ""),
                 "rating_text": rating_text,
                 "ratings": ratings,  # 结构化评分数据
-                "created_at": datetime.now(timezone.utc).isoformat(),
+                "created_at": datetime.now(UTC).isoformat(),
                 "metadata": {
                     "model": response_meta.get("model", self.primary_model),
                     "process_time": process_time,
@@ -822,7 +818,7 @@ class FoodTherapyManager:
 
         except Exception as e:
             # 记录错误
-            logger.error(f"评分食材体质适应性失败: {str(e)}")
+            logger.error(f"评分食材体质适应性失败: {e!s}")
             self.metrics.increment_error_count("constitution_food_rating")
 
             # 返回错误响应
@@ -835,7 +831,7 @@ class FoodTherapyManager:
                 "message": "评分食材体质适应性时出现错误，请稍后重试",
             }
 
-    def _extract_ratings_from_text(self, rating_text: str) -> Dict[str, int]:
+    def _extract_ratings_from_text(self, rating_text: str) -> dict[str, int]:
         """
         从评分文本中提取结构化评分数据
 
@@ -899,7 +895,7 @@ class FoodTherapyManager:
                 ratings["allergic"] = int(allergic_match.group(1))
 
         except Exception as e:
-            logger.warning(f"提取评分数据失败: {str(e)}")
+            logger.warning(f"提取评分数据失败: {e!s}")
 
         return ratings
 
@@ -914,10 +910,10 @@ class FoodTherapyManager:
     async def get_products_for_constitution(
         self,
         constitution_type: str,
-        health_conditions: List[str] = None,
-        season: str = None,
+        health_conditions: list[str] | None = None,
+        season: str | None = None,
         limit: int = 10,
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """
         获取适合特定体质的食材产品
 
@@ -993,15 +989,15 @@ class FoodTherapyManager:
             return top_foods
 
         except Exception as e:
-            logger.error(f"获取体质食材匹配失败: {str(e)}", exc_info=True)
+            logger.error(f"获取体质食材匹配失败: {e!s}", exc_info=True)
             return []
 
     def _calculate_food_score(
         self,
-        food: Dict[str, Any],
+        food: dict[str, Any],
         constitution_type: str,
-        health_conditions: List[str] = None,
-        season: str = None,
+        health_conditions: list[str] | None = None,
+        season: str | None = None,
     ) -> float:
         """计算食物匹配分数"""
         score = 0.0
@@ -1036,8 +1032,8 @@ class FoodTherapyManager:
         return min(1.0, score / 10.0)
 
     def _select_meal_foods(
-        self, foods: List[Dict[str, Any]], meal_type: str, count: int
-    ) -> List[Dict[str, Any]]:
+        self, foods: list[dict[str, Any]], meal_type: str, count: int
+    ) -> list[dict[str, Any]]:
         """为特定餐点选择食物"""
         # 按餐点类型过滤
         suitable_for_meal = []
@@ -1072,7 +1068,7 @@ class FoodTherapyManager:
 
         return meal_foods
 
-    def _get_appropriate_portion(self, food: Dict[str, Any], meal_type: str) -> str:
+    def _get_appropriate_portion(self, food: dict[str, Any], meal_type: str) -> str:
         """获取适当的食物份量"""
         # 基于食物类型和餐点确定份量
         if "portion_guide" in food:
@@ -1093,7 +1089,7 @@ class FoodTherapyManager:
         else:
             return "适量"
 
-    def _get_preparation_method(self, food: Dict[str, Any], meal_type: str) -> str:
+    def _get_preparation_method(self, food: dict[str, Any], meal_type: str) -> str:
         """获取食物烹饪方法"""
         # 如果食物有建议的烹饪方法，使用它
         if "recommended_cooking" in food:
@@ -1113,7 +1109,7 @@ class FoodTherapyManager:
 
     def _generate_hydration_recommendation(
         self, constitution_type: str, season: str
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """生成饮水建议"""
         base_water = 1500  # 基础水分摄入量(毫升)
 
@@ -1182,8 +1178,8 @@ class FoodTherapyManager:
         return principles.get(constitution_type, "均衡饮食，根据个人体质特点适当调整")
 
     def _get_focus_nutrients(
-        self, constitution_type: str, health_conditions: List[str] = None
-    ) -> List[Dict[str, str]]:
+        self, constitution_type: str, health_conditions: list[str] | None = None
+    ) -> list[dict[str, str]]:
         """获取重点营养素"""
         base_nutrients = []
 
@@ -1262,8 +1258,8 @@ class FoodTherapyManager:
         return unique_nutrients
 
     def _get_top_foods_to_favor(
-        self, foods: List[Dict[str, Any]], count: int = 5
-    ) -> List[Dict[str, str]]:
+        self, foods: list[dict[str, Any]], count: int = 5
+    ) -> list[dict[str, str]]:
         """获取最适合的食物"""
         # 按评分排序
         sorted_foods = sorted(foods, key=lambda x: x.get("score", 0), reverse=True)
@@ -1277,7 +1273,7 @@ class FoodTherapyManager:
 
         return top_foods
 
-    def _get_foods_to_avoid(self, constitution_type: str) -> List[Dict[str, str]]:
+    def _get_foods_to_avoid(self, constitution_type: str) -> list[dict[str, str]]:
         """获取需要避免的食物"""
         avoid_foods = []
 
@@ -1323,10 +1319,10 @@ class FoodTherapyManager:
     def _get_special_notes(
         self,
         constitution_type: str,
-        health_conditions: List[str] = None,
-        allergies: List[str] = None,
-        medications: List[str] = None,
-    ) -> List[str]:
+        health_conditions: list[str] | None = None,
+        allergies: list[str] | None = None,
+        medications: list[str] | None = None,
+    ) -> list[str]:
         """获取特别注意事项"""
         notes = []
 
@@ -1363,7 +1359,7 @@ class FoodTherapyManager:
         return notes
 
     def _get_recipe_constitution_benefits(
-        self, recipe: Dict[str, Any], constitution_type: str
+        self, recipe: dict[str, Any], constitution_type: str
     ) -> str:
         """获取食谱对特定体质的益处"""
         # 如果食谱已有针对该体质的益处描述，直接返回

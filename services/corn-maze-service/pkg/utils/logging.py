@@ -6,19 +6,19 @@
 
 import logging
 import logging.handlers
-import os
+from pathlib import Path
 import sys
 from typing import Any
 
 from pkg.utils.config import get_value
 
 
-def setup_logging(config: dict[str, Any] | None = None) -> None:
+def setup_logging(_config: dict[str, Any] | None = None) -> None:
     """
     配置日志系统
-    
+
     Args:
-        config: 配置字典，如果为None则使用配置模块加载
+        _config: 配置字典，如果为None则使用配置模块加载（当前未使用）
     """
     # 获取日志配置
     level_name = get_value("logging.level", "INFO")
@@ -45,9 +45,8 @@ def setup_logging(config: dict[str, Any] | None = None) -> None:
     # 添加文件处理程序
     if log_file:
         # 确保日志目录存在
-        log_dir = os.path.dirname(log_file)
-        if log_dir and not os.path.exists(log_dir):
-            os.makedirs(log_dir, exist_ok=True)
+        log_path = Path(log_file)
+        log_path.parent.mkdir(parents=True, exist_ok=True)
 
         # 创建滚动文件处理程序
         file_handler = logging.handlers.RotatingFileHandler(
@@ -71,16 +70,16 @@ def setup_logging(config: dict[str, Any] | None = None) -> None:
     for logger_name in quiet_loggers:
         logging.getLogger(logger_name).setLevel(logging.WARNING)
 
-    logging.getLogger(__name__).info(f"日志系统初始化完成，级别: {level_name}")
+    logging.getLogger(__name__).info(f"日志系统初始化完成, 级别: {level_name}")
 
 
 def get_logger(name: str) -> logging.Logger:
     """
     获取命名日志记录器
-    
+
     Args:
         name: 日志记录器名称
-        
+
     Returns:
         logging.Logger: 日志记录器
     """
@@ -93,7 +92,7 @@ class RequestLogger:
     def __init__(self, method_name: str):
         """
         初始化请求日志记录器
-        
+
         Args:
             method_name: 请求方法名
         """

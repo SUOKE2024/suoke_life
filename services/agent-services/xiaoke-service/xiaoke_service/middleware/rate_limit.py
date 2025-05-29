@@ -29,7 +29,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
 
     def _get_client_key(self, request: Request) -> str:
         """获取客户端标识"""
-        # 优先使用用户ID，否则使用IP地址
+        # 优先使用用户ID, 否则使用IP地址
         user_id = getattr(request.state, "user_id", None)
         if user_id and user_id != "anonymous":
             return f"user:{user_id}"

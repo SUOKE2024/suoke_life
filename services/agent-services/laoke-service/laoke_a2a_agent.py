@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 老克智能体 A2A 协议适配器
 LaoKe Agent A2A Protocol Adapter
@@ -7,11 +6,11 @@ LaoKe Agent A2A Protocol Adapter
 将老克智能体服务包装为符合 A2A 协议的智能体
 """
 
-import asyncio
 import json
 import logging
-from typing import Dict, Any, Optional, List
-from python_a2a import A2AServer, AgentCard, skill, agent, TaskStatus, TaskState, Message, TextContent, MessageRole
+from typing import Any
+
+from python_a2a import A2AServer, AgentCard, TaskState, TaskStatus, agent, skill
 
 logger = logging.getLogger(__name__)
 
@@ -33,11 +32,11 @@ logger = logging.getLogger(__name__)
 )
 class LaoKeA2AAgent(A2AServer):
     """老克智能体 A2A 协议实现"""
-    
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
+
+    def __init__(self, config: dict[str, Any] | None = None):
         """
         初始化老克 A2A 智能体
-        
+
         Args:
             config: 配置字典
         """
@@ -58,19 +57,19 @@ class LaoKeA2AAgent(A2AServer):
                 "google_a2a_compatible": True
             }
         )
-        
+
         # 初始化 A2A 服务器
         super().__init__(agent_card=agent_card)
-        
+
         # 初始化老克服务组件（模拟实现）
         self.knowledge_manager = self._init_knowledge_manager()
         self.learning_planner = self._init_learning_planner()
         self.community_manager = self._init_community_manager()
         self.content_recommender = self._init_content_recommender()
         self.qa_engine = self._init_qa_engine()
-        
+
         logger.info("老克 A2A 智能体初始化完成")
-    
+
     def _init_knowledge_manager(self):
         """初始化知识管理器"""
         return {
@@ -84,7 +83,7 @@ class LaoKeA2AAgent(A2AServer):
             "content_types": ["文章", "视频", "音频", "图片", "互动课程"],
             "difficulty_levels": ["入门", "初级", "中级", "高级", "专家"]
         }
-    
+
     def _init_learning_planner(self):
         """初始化学习规划器"""
         return {
@@ -118,7 +117,7 @@ class LaoKeA2AAgent(A2AServer):
             },
             "assessment_methods": ["知识测试", "实践作业", "案例分析", "同伴评议"]
         }
-    
+
     def _init_community_manager(self):
         """初始化社区管理器"""
         return {
@@ -135,7 +134,7 @@ class LaoKeA2AAgent(A2AServer):
             },
             "engagement_features": ["点赞", "评论", "收藏", "分享", "关注"]
         }
-    
+
     def _init_content_recommender(self):
         """初始化内容推荐器"""
         return {
@@ -151,7 +150,7 @@ class LaoKeA2AAgent(A2AServer):
                 "personalization": 0.1
             }
         }
-    
+
     def _init_qa_engine(self):
         """初始化问答引擎"""
         return {
@@ -178,27 +177,27 @@ class LaoKeA2AAgent(A2AServer):
                 "学习指导": "关于{topic}的学习，建议您{learning_path}。可以参考{resources}。"
             }
         }
-    
+
     @skill(
         name="知识内容管理",
         description="管理中医知识内容，包括内容创建、编辑、分类和质量控制",
         tags=["知识管理", "内容创建", "质量控制"]
     )
-    async def manage_knowledge_content(self, action: str = "query", 
-                                     content_type: str = "", 
+    async def manage_knowledge_content(self, action: str = "query",
+                                     content_type: str = "",
                                      category: str = "",
                                      query: str = "",
-                                     limit: int = 10) -> Dict[str, Any]:
+                                     limit: int = 10) -> dict[str, Any]:
         """
         知识内容管理技能
-        
+
         Args:
             action: 操作类型 (query, create, update, delete)
             content_type: 内容类型
             category: 内容分类
             query: 查询关键词
             limit: 返回数量限制
-            
+
         Returns:
             知识内容管理结果
         """
@@ -207,7 +206,7 @@ class LaoKeA2AAgent(A2AServer):
                 # 查询知识内容
                 results = []
                 categories = self.knowledge_manager["knowledge_categories"]
-                
+
                 if category and category in categories:
                     # 按分类查询
                     topics = categories[category]
@@ -249,14 +248,14 @@ class LaoKeA2AAgent(A2AServer):
                                 "views": 100,
                                 "likes": 20
                             })
-                
+
                 return {
                     "success": True,
                     "action": action,
                     "results": results,
                     "total": len(results)
                 }
-            
+
             elif action == "create":
                 return {
                     "success": True,
@@ -264,18 +263,18 @@ class LaoKeA2AAgent(A2AServer):
                     "message": "知识内容创建成功",
                     "content_id": "content_001"
                 }
-            
+
             else:
                 return {
                     "success": True,
                     "action": action,
                     "message": f"操作 {action} 执行成功"
                 }
-                
+
         except Exception as e:
             logger.error(f"知识内容管理失败: {e}")
             return {"success": False, "error": str(e)}
-    
+
     @skill(
         name="学习路径规划",
         description="为用户规划个性化的中医学习路径，包括课程安排和进度跟踪",
@@ -284,24 +283,24 @@ class LaoKeA2AAgent(A2AServer):
     async def plan_learning_path(self, user_id: str, learning_goal: str,
                                current_level: str = "入门",
                                available_time: str = "30分钟/天",
-                               interests: List[str] = None) -> Dict[str, Any]:
+                               interests: list[str] = None) -> dict[str, Any]:
         """
         学习路径规划技能
-        
+
         Args:
             user_id: 用户ID
             learning_goal: 学习目标
             current_level: 当前水平
             available_time: 可用时间
             interests: 兴趣领域
-            
+
         Returns:
             学习路径规划结果
         """
         try:
             # 根据学习目标选择合适的学习路径
             available_paths = self.learning_planner["learning_paths"]
-            
+
             # 简单的路径匹配逻辑
             selected_path = None
             if "入门" in learning_goal or "基础" in learning_goal:
@@ -316,14 +315,14 @@ class LaoKeA2AAgent(A2AServer):
             else:
                 selected_path = available_paths["中医入门"]
                 path_name = "中医入门"
-            
+
             # 根据可用时间调整学习计划
             time_factor = 1.0
             if "15分钟" in available_time:
                 time_factor = 0.5
             elif "60分钟" in available_time or "1小时" in available_time:
                 time_factor = 2.0
-            
+
             # 生成个性化学习计划
             personalized_modules = []
             for module in selected_path["modules"]:
@@ -336,7 +335,7 @@ class LaoKeA2AAgent(A2AServer):
                     "resources": ["视频课程", "阅读材料", "练习题"],
                     "assessment": "模块测试"
                 })
-            
+
             learning_plan = {
                 "user_id": user_id,
                 "path_name": path_name,
@@ -353,35 +352,35 @@ class LaoKeA2AAgent(A2AServer):
                 ],
                 "created_at": "2024-01-01T00:00:00Z"
             }
-            
+
             return {"success": True, "learning_plan": learning_plan}
-            
+
         except Exception as e:
             logger.error(f"学习路径规划失败: {e}")
             return {"success": False, "error": str(e)}
-    
+
     @skill(
         name="社区内容管理",
         description="管理社区内容，包括内容审核、用户互动和社区活动组织",
         tags=["社区管理", "内容审核", "用户互动"]
     )
     async def manage_community_content(self, action: str, content_id: str = "",
-                                     user_id: str = "", content_data: Dict[str, Any] = None) -> Dict[str, Any]:
+                                     user_id: str = "", content_data: dict[str, Any] = None) -> dict[str, Any]:
         """
         社区内容管理技能
-        
+
         Args:
             action: 操作类型 (review, approve, reject, feature, moderate)
             content_id: 内容ID
             user_id: 用户ID
             content_data: 内容数据
-            
+
         Returns:
             社区内容管理结果
         """
         try:
-            community_sections = self.community_manager["community_sections"]
-            
+            self.community_manager["community_sections"]
+
             if action == "review":
                 # 内容审核
                 review_result = {
@@ -393,7 +392,7 @@ class LaoKeA2AAgent(A2AServer):
                     "review_time": "2024-01-01T00:00:00Z"
                 }
                 return {"success": True, "review_result": review_result}
-            
+
             elif action == "feature":
                 # 推荐内容
                 featured_content = {
@@ -403,7 +402,7 @@ class LaoKeA2AAgent(A2AServer):
                     "featured_position": "首页推荐"
                 }
                 return {"success": True, "featured_content": featured_content}
-            
+
             elif action == "moderate":
                 # 内容管理
                 moderation_actions = [
@@ -413,7 +412,7 @@ class LaoKeA2AAgent(A2AServer):
                     "社区活跃度统计更新"
                 ]
                 return {"success": True, "moderation_actions": moderation_actions}
-            
+
             elif action == "get_stats":
                 # 获取社区统计
                 community_stats = {
@@ -425,41 +424,41 @@ class LaoKeA2AAgent(A2AServer):
                     "trending_topics": ["春季养生", "阳虚调理", "食疗方法"]
                 }
                 return {"success": True, "community_stats": community_stats}
-            
+
             else:
                 return {"success": True, "message": f"操作 {action} 执行成功"}
-                
+
         except Exception as e:
             logger.error(f"社区内容管理失败: {e}")
             return {"success": False, "error": str(e)}
-    
+
     @skill(
         name="中医知识问答",
         description="回答用户的中医相关问题，提供专业的知识解答和建议",
         tags=["知识问答", "专业咨询", "中医知识"]
     )
     async def answer_tcm_question(self, question: str, user_id: str = "",
-                                context: str = "", question_type: str = "general") -> Dict[str, Any]:
+                                context: str = "", question_type: str = "general") -> dict[str, Any]:
         """
         中医知识问答技能
-        
+
         Args:
             question: 用户问题
             user_id: 用户ID
             context: 问题上下文
             question_type: 问题类型
-            
+
         Returns:
             问答结果
         """
         try:
             knowledge_base = self.qa_engine["knowledge_base"]
-            templates = self.qa_engine["response_templates"]
-            
+            self.qa_engine["response_templates"]
+
             # 简单的问题匹配逻辑
             answer = None
             category = None
-            
+
             for cat, qa_pairs in knowledge_base.items():
                 for q, a in qa_pairs.items():
                     if any(keyword in question for keyword in q.split()):
@@ -468,12 +467,12 @@ class LaoKeA2AAgent(A2AServer):
                         break
                 if answer:
                     break
-            
+
             if not answer:
                 # 默认回答
                 answer = "这是一个很好的问题。建议您咨询专业的中医师获得更准确的答案。"
                 category = "通用咨询"
-            
+
             # 生成建议
             suggestions = []
             if "体质" in question:
@@ -484,7 +483,7 @@ class LaoKeA2AAgent(A2AServer):
                 suggestions = ["制定养生计划", "学习四季养生", "培养良好生活习惯"]
             else:
                 suggestions = ["深入学习相关知识", "实践应用", "寻求专业指导"]
-            
+
             # 推荐相关内容
             related_content = []
             if category in knowledge_base:
@@ -496,7 +495,7 @@ class LaoKeA2AAgent(A2AServer):
                             "category": category,
                             "type": "知识问答"
                         })
-            
+
             qa_result = {
                 "question": question,
                 "answer": answer,
@@ -507,38 +506,38 @@ class LaoKeA2AAgent(A2AServer):
                 "expert_review": False,
                 "response_time": "2024-01-01T00:00:00Z"
             }
-            
+
             return {"success": True, "qa_result": qa_result}
-            
+
         except Exception as e:
             logger.error(f"中医知识问答失败: {e}")
             return {"success": False, "error": str(e)}
-    
+
     @skill(
         name="内容推荐",
         description="基于用户兴趣和学习历史推荐个性化的学习内容",
         tags=["个性化推荐", "内容发现", "学习优化"]
     )
     async def recommend_content(self, user_id: str, recommendation_type: str = "learning",
-                              user_interests: List[str] = None,
-                              learning_history: List[str] = None,
-                              limit: int = 10) -> Dict[str, Any]:
+                              user_interests: list[str] = None,
+                              learning_history: list[str] = None,
+                              limit: int = 10) -> dict[str, Any]:
         """
         内容推荐技能
-        
+
         Args:
             user_id: 用户ID
             recommendation_type: 推荐类型 (learning, community, expert)
             user_interests: 用户兴趣
             learning_history: 学习历史
             limit: 推荐数量
-            
+
         Returns:
             内容推荐结果
         """
         try:
             recommendations = []
-            
+
             if recommendation_type == "learning":
                 # 学习内容推荐
                 learning_contents = [
@@ -577,7 +576,7 @@ class LaoKeA2AAgent(A2AServer):
                     }
                 ]
                 recommendations.extend(learning_contents[:limit])
-            
+
             elif recommendation_type == "community":
                 # 社区内容推荐
                 community_contents = [
@@ -603,7 +602,7 @@ class LaoKeA2AAgent(A2AServer):
                     }
                 ]
                 recommendations.extend(community_contents[:limit])
-            
+
             elif recommendation_type == "expert":
                 # 专家内容推荐
                 expert_contents = [
@@ -620,11 +619,11 @@ class LaoKeA2AAgent(A2AServer):
                     }
                 ]
                 recommendations.extend(expert_contents[:limit])
-            
+
             # 计算推荐分数
             for item in recommendations:
                 item["recommendation_score"] = 0.85  # 简化计算
-            
+
             recommendation_result = {
                 "user_id": user_id,
                 "recommendation_type": recommendation_type,
@@ -633,20 +632,20 @@ class LaoKeA2AAgent(A2AServer):
                 "algorithm": "hybrid_recommendation",
                 "generated_at": "2024-01-01T00:00:00Z"
             }
-            
+
             return {"success": True, "recommendation_result": recommendation_result}
-            
+
         except Exception as e:
             logger.error(f"内容推荐失败: {e}")
             return {"success": False, "error": str(e)}
-    
+
     async def handle_task(self, task):
         """
         处理 A2A 任务
-        
+
         Args:
             task: A2A 任务对象
-            
+
         Returns:
             处理后的任务对象
         """
@@ -654,15 +653,15 @@ class LaoKeA2AAgent(A2AServer):
             # 解析消息内容
             message_data = task.message or {}
             content = message_data.get("content", {})
-            
+
             if isinstance(content, dict):
                 text = content.get("text", "")
             else:
                 text = str(content)
-            
+
             # 提取用户ID
             user_id = getattr(task, 'user_id', 'default_user')
-            
+
             # 根据消息内容路由到相应的技能
             if "学习" in text or "课程" in text or "规划" in text:
                 # 学习路径规划请求
@@ -671,47 +670,47 @@ class LaoKeA2AAgent(A2AServer):
                     learning_goal=text,
                     current_level="入门"
                 )
-                
+
             elif "问题" in text or "什么是" in text or "如何" in text or "?" in text or "？" in text:
                 # 知识问答请求
                 result = await self.answer_tcm_question(
                     question=text,
                     user_id=user_id
                 )
-                
+
             elif "推荐" in text or "内容" in text:
                 # 内容推荐请求
                 result = await self.recommend_content(
                     user_id=user_id,
                     recommendation_type="learning"
                 )
-                
+
             elif "社区" in text or "管理" in text:
                 # 社区管理请求
                 result = await self.manage_community_content(
                     action="get_stats",
                     user_id=user_id
                 )
-                
+
             elif "知识" in text or "搜索" in text or "查询" in text:
                 # 知识内容管理请求
                 result = await self.manage_knowledge_content(
                     action="query",
                     query=text
                 )
-                
+
             else:
                 # 通用咨询
                 result = await self._handle_general_consultation(text, user_id)
-            
+
             # 构建响应
             response_text = self._format_response(result)
-            
+
             task.artifacts = [{
                 "parts": [{"type": "text", "text": response_text}]
             }]
             task.status = TaskStatus(state=TaskState.COMPLETED)
-            
+
         except Exception as e:
             logger.error(f"任务处理失败: {e}")
             task.artifacts = [{
@@ -721,10 +720,10 @@ class LaoKeA2AAgent(A2AServer):
                 state=TaskState.FAILED,
                 message={"role": "agent", "content": {"type": "text", "text": f"处理失败: {str(e)}"}}
             )
-        
+
         return task
-    
-    async def _handle_general_consultation(self, text: str, user_id: str) -> Dict[str, Any]:
+
+    async def _handle_general_consultation(self, text: str, user_id: str) -> dict[str, Any]:
         """处理通用咨询"""
         return {
             "response": f"您好！我是老克智能体，专注于中医知识传播和学习指导。关于您的问题：{text}，我可以为您提供以下服务：",
@@ -737,12 +736,12 @@ class LaoKeA2AAgent(A2AServer):
             ],
             "success": True
         }
-    
-    def _format_response(self, result: Dict[str, Any]) -> str:
+
+    def _format_response(self, result: dict[str, Any]) -> str:
         """格式化响应内容"""
         if not result.get("success", True):
             return f"处理失败: {result.get('error', '未知错误')}"
-        
+
         if "response" in result:
             response = result["response"]
             if "services" in result:
@@ -773,7 +772,7 @@ class LaoKeA2AAgent(A2AServer):
             return response
         elif "community_stats" in result:
             stats = result["community_stats"]
-            response = f"社区统计信息：\n"
+            response = "社区统计信息：\n"
             response += f"总帖子数：{stats['total_posts']}\n"
             response += f"活跃用户：{stats['active_users']}\n"
             response += f"参与度：{stats['engagement_rate']*100:.1f}%"
@@ -789,14 +788,14 @@ class LaoKeA2AAgent(A2AServer):
 
 
 # 创建智能体实例的工厂函数
-def create_laoke_a2a_agent(config: Optional[Dict[str, Any]] = None) -> LaoKeA2AAgent:
+def create_laoke_a2a_agent(config: dict[str, Any] | None = None) -> LaoKeA2AAgent:
     """
     创建老克 A2A 智能体实例
-    
+
     Args:
         config: 配置字典
-        
+
     Returns:
         老克 A2A 智能体实例
     """
-    return LaoKeA2AAgent(config) 
+    return LaoKeA2AAgent(config)

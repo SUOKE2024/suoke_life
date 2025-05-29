@@ -1,26 +1,30 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 xiaoke-service 增强版集成测试套件
 测试所有核心功能和优化组件
 """
 
 import asyncio
-import pytest
+import contextlib
 import time
-import json
-from typing import Dict, Any, List
-from unittest.mock import AsyncMock, patch
+from unittest.mock import patch
+
+import pytest
 
 # 导入被测试的组件
 from services.agent_services.xiaoke_service.internal.service.enhanced_resource_service import (
-    get_resource_service,
-    ResourceRequest,
-    ProductRequest,
     ConstitutionType,
+    ProductRequest,
+    ResourceRequest,
+    get_resource_service,
 )
-from services.common.governance.circuit_breaker import CircuitBreakerState
 from services.common.governance.rate_limiter import RateLimitExceeded
+
+# 常量定义
+CONCURRENT_REQUESTS = 5
+PERFORMANCE_TEST_REQUESTS = 100
+MAX_RESPONSE_TIME = 0.5
+CIRCUIT_BREAKER_THRESHOLD = 6  # 超过失败阈值
 
 
 class TestXiaokeServiceIntegration:
@@ -172,7 +176,7 @@ class TestXiaokeServiceIntegration:
     async def test_parallel_processing(self, resource_service):
         """测试并行处理能力"""
         requests = []
-        for i in range(5):
+        for i in range(CONCURRENT_REQUESTS):
             request = ResourceRequest(
                 user_id=f"test_user_{100 + i}",
                 resource_type="equipment",
@@ -190,17 +194,17 @@ class TestXiaokeServiceIntegration:
         total_time = time.time() - start_time
 
         # 验证所有请求都成功处理
-        assert len(results) == 5
+        assert len(results) == CONCURRENT_REQUESTS
         for result in results:
             assert result.request_id is not None
             assert len(result.matched_resources) > 0
 
         # 验证并行处理效率
         avg_time = total_time / len(results)
-        assert avg_time < 1.0  # 平均处理时间应该合理
+        assert avg_time < MAX_RESPONSE_TIME  # 平均处理时间应该合理
 
         print(
-            f"✅ 并行处理测试通过 - 5个请求总时间: {total_time:.3f}s, 平均: {avg_time:.3f}s"
+            f"✅ 并行处理测试通过 - {CONCURRENT_REQUESTS}个请求总时间: {total_time:.3f}s, 平均: {avg_time:.3f}s"
         )
 
     @pytest.mark.asyncio
@@ -242,14 +246,12 @@ class TestXiaokeServiceIntegration:
             )
 
             # 多次调用触发断路器
-            for i in range(6):  # 超过失败阈值
-                try:
+            for _i in range(CIRCUIT_BREAKER_THRESHOLD):  # 超过失败阈值
+                with contextlib.suppress(Exception):
                     await resource_service.search_resources(request)
-                except Exception:
-                    pass  # 预期的异常
 
             # 检查断路器是否打开
-            stats = resource_service.get_health_status()
+            resource_service.get_health_status()
             # 断路器应该检测到故障
 
         print("✅ 断路器故障处理测试通过")
@@ -269,9 +271,9 @@ class TestXiaokeServiceIntegration:
         success_count = 0
         rate_limited_count = 0
 
-        for i in range(20):  # 发送20个请求
+        for _i in range(20):  # 发送20个请求
             try:
-                result = await resource_service.search_resources(request)
+                await resource_service.search_resources(request)
                 success_count += 1
             except RateLimitExceeded:
                 rate_limited_count += 1
@@ -296,7 +298,7 @@ class TestXiaokeServiceIntegration:
         )
 
         # 触发限流
-        for i in range(10):
+        for _i in range(10):
             try:
                 await resource_service.search_resources(request)
             except RateLimitExceeded:
@@ -419,7 +421,7 @@ class TestXiaokeServiceIntegration:
 
         try:
             await resource_service.search_resources(invalid_request)
-            assert False, "应该抛出异常"
+            raise AssertionError("应该抛出异常")
         except Exception as e:
             assert str(e)  # 确保有错误信息
 
@@ -442,7 +444,7 @@ class TestXiaokeServiceIntegration:
         """测试负载下的性能"""
         # 创建大量并发请求
         requests = []
-        for i in range(100):
+        for i in range(PERFORMANCE_TEST_REQUESTS):
             request = ResourceRequest(
                 user_id=f"load_test_user_{i}",
                 resource_type="medical_facility",
@@ -467,16 +469,16 @@ class TestXiaokeServiceIntegration:
         total_time = time.time() - total_start_time
 
         # 验证性能
-        assert len(all_results) == 100
+        assert len(all_results) == PERFORMANCE_TEST_REQUESTS
         avg_time = total_time / len(all_results)
-        assert avg_time < 0.5  # 平均处理时间应该合理
+        assert avg_time < MAX_RESPONSE_TIME  # 平均处理时间应该合理
 
         # 检查服务健康状态
         stats = resource_service.get_health_status()
-        assert stats["total_requests"] >= 100
+        assert stats["total_requests"] >= PERFORMANCE_TEST_REQUESTS
 
         print(
-            f"✅ 负载性能测试通过 - 100个请求总时间: {total_time:.3f}s, 平均: {avg_time:.3f}s"
+            f"✅ 负载性能测试通过 - {PERFORMANCE_TEST_REQUESTS}个请求总时间: {total_time:.3f}s, 平均: {avg_time:.3f}s"
         )
 
     def test_service_health_status(self, resource_service):
@@ -556,9 +558,9 @@ async def run_all_tests():
         print(f"\n📊 测试结果: {passed} 通过, {failed} 失败")
 
         if failed == 0:
-            print("🎉 所有测试通过！xiaoke-service 优化成功！")
+            print("🎉 所有测试通过! xiaoke-service 优化成功!")
         else:
-            print("⚠️  部分测试失败，需要进一步优化")
+            print("⚠️  部分测试失败, 需要进一步优化")
 
     finally:
         await resource_service.cleanup()

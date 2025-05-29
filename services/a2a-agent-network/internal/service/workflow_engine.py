@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 class WorkflowEngine:
     """工作流引擎"""
 
-    def __init__(self, agent_manager: AgentManager):
+    def __init__(self, agent_manager: AgentManager) -> None:
         """
         初始化工作流引擎
 
@@ -90,11 +90,14 @@ class WorkflowEngine:
         execution = WorkflowExecution(
             execution_id=execution_id,
             workflow_id=workflow_id,
-            workflow_name=workflow.name if workflow else workflow_id,
+            workflow_name=workflow.name,
             user_id=user_id,
             context=context or {},
             status=WorkflowStatus.RUNNING,
             start_time=datetime.now(UTC).isoformat(),
+            end_time=None,
+            execution_time=0.0,
+            error=None,
             metadata={"parameters": parameters},
         )
 

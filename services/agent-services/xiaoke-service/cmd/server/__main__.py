@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 小克服务(XiaoKeService)入口点
@@ -22,9 +21,9 @@ load_dotenv()
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 # 导入服务实现
-from internal.delivery.xiaoke_service_impl import XiaoKeServiceServicer
-from internal.delivery.health_check import start_health_server
 from api.grpc import xiaoke_service_pb2_grpc
+from internal.delivery.health_check import start_health_server
+from internal.delivery.xiaoke_service_impl import XiaoKeServiceServicer
 
 # 配置日志
 logging.basicConfig(
@@ -49,7 +48,7 @@ def serve():
     # 启动健康检查服务器
     http_server_host = os.getenv("MONITORING_HOST", "0.0.0.0")
     http_server_port = int(os.getenv("MONITORING_PORT", "51054"))
-    health_server = start_health_server(http_server_host, http_server_port)
+    start_health_server(http_server_host, http_server_port)
 
     # 创建gRPC服务器
     max_workers = int(os.getenv("GRPC_MAX_WORKERS", "10"))

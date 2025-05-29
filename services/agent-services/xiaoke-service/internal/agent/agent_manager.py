@@ -1,26 +1,25 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 智能体管理器
 负责小克智能体的核心逻辑，包括医疗资源调度、治疗计划生成和用药管理
 """
 
-import os
-import uuid
+import asyncio
 import json
 import logging
 import time
-import asyncio
-from typing import Dict, List, Any, Optional, Tuple
+import uuid
+from typing import Any
 
-from .model_factory import ModelFactory
-from pkg.utils.config_loader import get_config
-from pkg.utils.metrics import get_metrics_collector, track_llm_metrics
-from pkg.cache.cache_manager import get_cache_manager, CacheStrategy
-from pkg.resilience.retry_manager import retry, circuit_breaker, RetryStrategy
+from pkg.cache.cache_manager import CacheStrategy, get_cache_manager
 from pkg.observability.enhanced_metrics import (
     get_metrics_collector as get_enhanced_metrics,
 )
+from pkg.resilience.retry_manager import RetryStrategy, retry
+from pkg.utils.config_loader import get_config
+from pkg.utils.metrics import get_metrics_collector, track_llm_metrics
+
+from .model_factory import ModelFactory
 
 logger = logging.getLogger(__name__)
 
@@ -100,8 +99,8 @@ class AgentManager:
         circuit_breaker_name="agent_processing",
     )
     async def process_request(
-        self, user_id: str, request_data: Dict[str, Any], session_id: str = None
-    ) -> Dict[str, Any]:
+        self, user_id: str, request_data: dict[str, Any], session_id: str | None = None
+    ) -> dict[str, Any]:
         """
         处理用户关于医疗资源和治疗的请求
 
@@ -182,8 +181,8 @@ class AgentManager:
             }
 
     async def _generate_treatment_plan(
-        self, user_id: str, request_data: Dict[str, Any], session_id: str
-    ) -> Dict[str, Any]:
+        self, user_id: str, request_data: dict[str, Any], session_id: str
+    ) -> dict[str, Any]:
         """生成治疗方案"""
         # 提取请求中的诊断信息和患者状况
         diagnosis = request_data.get("diagnosis", {})
@@ -238,8 +237,8 @@ class AgentManager:
         }
 
     async def _provide_medicine_info(
-        self, user_id: str, request_data: Dict[str, Any], session_id: str
-    ) -> Dict[str, Any]:
+        self, user_id: str, request_data: dict[str, Any], session_id: str
+    ) -> dict[str, Any]:
         """提供药品信息"""
         # 提取药品名称或其他查询信息
         medicine_name = request_data.get("medicine_name", "")
@@ -290,8 +289,8 @@ class AgentManager:
         }
 
     async def _allocate_medical_resource(
-        self, user_id: str, request_data: Dict[str, Any], session_id: str
-    ) -> Dict[str, Any]:
+        self, user_id: str, request_data: dict[str, Any], session_id: str
+    ) -> dict[str, Any]:
         """医疗资源调度"""
         # 提取资源需求信息
         resource_needs = request_data.get("resource_needs", {})
@@ -346,8 +345,8 @@ class AgentManager:
         }
 
     async def _handle_emergency(
-        self, user_id: str, request_data: Dict[str, Any], session_id: str
-    ) -> Dict[str, Any]:
+        self, user_id: str, request_data: dict[str, Any], session_id: str
+    ) -> dict[str, Any]:
         """处理医疗紧急情况"""
         # 提取紧急情况信息
         emergency_type = request_data.get("emergency_type", "")
@@ -402,8 +401,8 @@ class AgentManager:
         }
 
     async def _process_general_inquiry(
-        self, user_id: str, request_data: Dict[str, Any], session_id: str
-    ) -> Dict[str, Any]:
+        self, user_id: str, request_data: dict[str, Any], session_id: str
+    ) -> dict[str, Any]:
         """处理一般性医疗咨询"""
         # 提取查询内容
         query = request_data.get("message", "")

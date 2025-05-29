@@ -1,26 +1,25 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 小艾智能体核心包
 XiaoAI Agent Core Package
 
-小艾是索克生活平台的核心AI智能体，专注于提供智能健康管理服务。
-本包提供了小艾智能体的核心功能模块，包括：
+小艾是索克生活平台的核心AI智能体, 专注于提供智能健康管理服务。
+本包提供了小艾智能体的核心功能模块, 包括:
 
 - 智能体管理 (Agent Management)
-- 四诊协调 (Four Diagnosis Coordination) 
+- 四诊协调 (Four Diagnosis Coordination)
 - 服务实现 (Service Implementation)
 - 配置管理 (Configuration Management)
 - 工具集成 (Utility Integration)
 
-主要特性：
+主要特性:
 - 基于中医理论的智能诊断
 - 多模态数据处理
 - 个性化健康建议
 - 实时健康监测
 - 预防性健康管理
 
-使用示例：
+使用示例:
     >>> from xiaoai import AgentManager
     >>> manager = AgentManager()
     >>> await manager.initialize()
@@ -30,6 +29,10 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING, Any, Optional
+
+from .agent.agent_manager import AgentManager as _AgentManager
+from .delivery.xiaoai_service_impl import XiaoAIServiceImpl as _XiaoAIServiceImpl
+from .service.xiaoai_service_impl import XiaoaiServiceImpl as _XiaoaiServiceImpl
 
 # 版本信息
 __version__ = "1.0.0"
@@ -42,16 +45,15 @@ logger = logging.getLogger(__name__)
 
 # 类型检查时的导入
 if TYPE_CHECKING:
-    from .agent.agent_manager import AgentManager as _AgentManager
-    from .delivery.xiaoai_service_impl import XiaoAIServiceImpl as _XiaoAIServiceImpl
-    from .four_diagnosis.coordinator.coordinator import FourDiagnosisCoordinator as _FourDiagnosisCoordinator
-    from .service.xiaoai_service_impl import XiaoAIService as _XiaoAIService
+    from .four_diagnosis.coordinator.coordinator import (
+        FourDiagnosisCoordinator,
+    )
 
 # 延迟导入的组件
-_AgentManager: Optional[type[_AgentManager]] = None
-_XiaoAIServiceImpl: Optional[type[_XiaoAIServiceImpl]] = None
-_FourDiagnosisCoordinator: Optional[type[_FourDiagnosisCoordinator]] = None
-_XiaoAIService: Optional[type[_XiaoAIService]] = None
+AgentManager: type[_AgentManager] | None = None
+XiaoAIServiceImpl: type[_XiaoAIServiceImpl] | None = None
+FourDiagnosisCoordinator: type[FourDiagnosisCoordinator] | None = None
+XiaoAIService: type[_XiaoaiServiceImpl] | None = None
 
 
 def _lazy_import_agent_manager() -> type[_AgentManager]:
@@ -60,7 +62,7 @@ def _lazy_import_agent_manager() -> type[_AgentManager]:
     if _AgentManager is None:
         try:
             from .agent.agent_manager import AgentManager
-            _AgentManager = AgentManager
+            AgentManager = AgentManager
         except ImportError as e:
             logger.warning(f"Failed to import AgentManager: {e}")
             raise ImportError(
@@ -76,7 +78,7 @@ def _lazy_import_service_impl() -> type[_XiaoAIServiceImpl]:
     if _XiaoAIServiceImpl is None:
         try:
             from .delivery.xiaoai_service_impl import XiaoAIServiceImpl
-            _XiaoAIServiceImpl = XiaoAIServiceImpl
+            XiaoAIServiceImpl = XiaoAIServiceImpl
         except ImportError as e:
             logger.warning(f"Failed to import XiaoAIServiceImpl: {e}")
             raise ImportError(
@@ -92,7 +94,7 @@ def _lazy_import_coordinator() -> type[_FourDiagnosisCoordinator]:
     if _FourDiagnosisCoordinator is None:
         try:
             from .four_diagnosis.coordinator.coordinator import FourDiagnosisCoordinator
-            _FourDiagnosisCoordinator = FourDiagnosisCoordinator
+            FourDiagnosisCoordinator = FourDiagnosisCoordinator
         except ImportError as e:
             logger.warning(f"Failed to import FourDiagnosisCoordinator: {e}")
             raise ImportError(
@@ -102,20 +104,20 @@ def _lazy_import_coordinator() -> type[_FourDiagnosisCoordinator]:
     return _FourDiagnosisCoordinator
 
 
-def _lazy_import_service() -> type[_XiaoAIService]:
+def _lazy_import_service() -> type[_XiaoaiServiceImpl]:
     """延迟导入 XiaoAIService"""
-    global _XiaoAIService
-    if _XiaoAIService is None:
+    global _XiaoaiServiceImpl
+    if _XiaoaiServiceImpl is None:
         try:
-            from .service.xiaoai_service_impl import XiaoAIService
-            _XiaoAIService = XiaoAIService
+            from .service.xiaoai_service_impl import XiaoaiServiceImpl
+            XiaoaiServiceImpl = XiaoaiServiceImpl
         except ImportError as e:
             logger.warning(f"Failed to import XiaoAIService: {e}")
             raise ImportError(
                 "XiaoAIService is not available. "
                 "Please ensure all dependencies are installed."
             ) from e
-    return _XiaoAIService
+    return _XiaoaiServiceImpl
 
 
 # 公共API
@@ -134,14 +136,14 @@ def get_coordinator() -> type[_FourDiagnosisCoordinator]:
     return _lazy_import_coordinator()
 
 
-def get_service() -> type[_XiaoAIService]:
+def get_service() -> type[_XiaoaiServiceImpl]:
     """获取 XiaoAIService 类"""
     return _lazy_import_service()
 
 
 # 向后兼容的属性访问
 def __getattr__(name: str) -> Any:
-    """动态属性访问，提供向后兼容性"""
+    """动态属性访问, 提供向后兼容性"""
     if name == "AgentManager":
         return get_agent_manager()
     elif name == "XiaoAIServiceImpl":
@@ -156,21 +158,18 @@ def __getattr__(name: str) -> Any:
 
 # 导出的公共API
 __all__ = [
-    # 版本信息
-    "__version__",
+    "AgentManager",
+    "FourDiagnosisCoordinator",
+    "XiaoAIService",
+    "XiaoAIServiceImpl",
     "__author__",
     "__email__",
     "__license__",
-    
-    # 核心组件（通过延迟导入）
-    "AgentManager",
-    "XiaoAIServiceImpl", 
-    "FourDiagnosisCoordinator",
-    "XiaoAIService",
-    
+    # 版本信息
+    "__version__",
     # 工厂函数
     "get_agent_manager",
-    "get_service_impl",
     "get_coordinator",
     "get_service",
-] 
+    "get_service_impl",
+]

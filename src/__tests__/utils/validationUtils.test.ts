@@ -292,10 +292,13 @@ describe('Validation Utils', () => {
     it('应该拒绝无效的出生日期', () => {
       const currentYear = new Date().getFullYear();
       const invalidDates = [
-        { date: '2025-01-01', reason: '未来日期' },
+        { date: `${currentYear + 1}-01-01`, reason: '未来日期' },
         { date: 'invalid-date', reason: '无效格式' },
         { date: '1800-01-01', reason: '过于久远' },
         { date: `${currentYear - 152}-01-01`, reason: '年龄超过150岁' },
+        { date: '', reason: '空字符串' },
+        { date: '2024-13-01', reason: '无效月份' },
+        { date: '2024-01-32', reason: '无效日期' },
       ];
 
       invalidDates.forEach(({ date, reason }) => {

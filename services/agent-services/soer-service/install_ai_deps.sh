@@ -5,7 +5,7 @@ echo "⚠️  这可能需要较长时间，请耐心等待..."
 
 cd "services/agent-services/soer-service"
 
-# 安装AI依赖（可选）
-uv sync --extra ai --no-dev
+# 安装ML依赖（可选）
+uv sync --extra ml --no-dev
 
-echo "✅ AI依赖安装完成！"
+echo "✅ AI/ML依赖安装完成！"

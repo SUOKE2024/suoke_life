@@ -15,17 +15,22 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 RUN groupadd -r suoke -g 1000 && \
     useradd -u 1000 -r -g suoke -s /bin/bash -c "Suoke User" suoke
 
-# 安装系统依赖
+# 安装系统依赖和 UV
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
+    curl \
+    && curl -LsSf https://astral.sh/uv/install.sh | sh \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# 复制依赖文件
-COPY requirements.txt .
+# 将 UV 添加到 PATH
+ENV PATH="/root/.cargo/bin:$PATH"
+
+# 复制项目配置文件
+COPY pyproject.toml uv.lock ./
 
 # 安装Python依赖
-RUN pip install --no-cache-dir -r requirements.txt
+RUN uv sync --frozen --no-dev
 
 # 创建日志目录并设置正确的权限
 RUN mkdir -p /app/logs && \

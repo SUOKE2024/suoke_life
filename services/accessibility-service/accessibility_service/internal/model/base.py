@@ -2,14 +2,16 @@
 Base Model Classes
 """
 
+from abc import ABC
+from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Optional, Dict, Any
-from sqlalchemy import Column, Integer, DateTime, String
+from typing import Any
+
+from pydantic import BaseModel as PydanticBaseModel
+from pydantic import Field
+from sqlalchemy import Column, DateTime, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import func
-from pydantic import BaseModel as PydanticBaseModel, Field
-from dataclasses import dataclass, field
-from abc import ABC, abstractmethod
 
 # SQLAlchemy Base
 SQLAlchemyBase = declarative_base()
@@ -18,11 +20,11 @@ SQLAlchemyBase = declarative_base()
 @dataclass
 class BaseModel(ABC):
     """基础模型类"""
-    id: Optional[str] = None
-    created_at: Optional[datetime] = field(default_factory=datetime.now)
-    updated_at: Optional[datetime] = field(default_factory=datetime.now)
-    
-    def to_dict(self) -> Dict[str, Any]:
+    id: str | None = None
+    created_at: datetime | None = field(default_factory=datetime.now)
+    updated_at: datetime | None = field(default_factory=datetime.now)
+
+    def to_dict(self) -> dict[str, Any]:
         """转换为字典"""
         result = {}
         for key, value in self.__dict__.items():
@@ -31,16 +33,16 @@ class BaseModel(ABC):
             else:
                 result[key] = value
         return result
-    
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]):
+    def from_dict(cls, data: dict[str, Any]):
         """从字典创建实例"""
         # 处理datetime字段
         if 'created_at' in data and isinstance(data['created_at'], str):
             data['created_at'] = datetime.fromisoformat(data['created_at'])
         if 'updated_at' in data and isinstance(data['updated_at'], str):
             data['updated_at'] = datetime.fromisoformat(data['updated_at'])
-        
+
         return cls(**data)
 
 
@@ -49,8 +51,8 @@ class BaseDBModel(BaseModel):
     """数据库模型基类"""
     version: int = 1
     is_active: bool = True
-    extra_metadata: Optional[Dict[str, Any]] = field(default_factory=dict)
-    
+    extra_metadata: dict[str, Any] | None = field(default_factory=dict)
+
     def update_timestamp(self):
         """更新时间戳"""
         self.updated_at = datetime.now()
@@ -60,8 +62,8 @@ class BaseDBModel(BaseModel):
 class BaseRequest(ABC):
     """基础请求模型"""
     user_id: str
-    request_id: Optional[str] = None
-    timestamp: Optional[datetime] = field(default_factory=datetime.now)
+    request_id: str | None = None
+    timestamp: datetime | None = field(default_factory=datetime.now)
 
 
 @dataclass
@@ -69,15 +71,15 @@ class BaseResponse(ABC):
     """基础响应模型"""
     success: bool
     message: str
-    data: Optional[Dict[str, Any]] = None
-    error_code: Optional[str] = None
-    timestamp: Optional[datetime] = field(default_factory=datetime.now)
+    data: dict[str, Any] | None = None
+    error_code: str | None = None
+    timestamp: datetime | None = field(default_factory=datetime.now)
 
 
 class BaseDBModel(SQLAlchemyBase):
     """SQLAlchemy基础模型"""
     __abstract__ = True
-    
+
     id = Column(Integer, primary_key=True, index=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
@@ -87,7 +89,7 @@ class BaseDBModel(SQLAlchemyBase):
 
 class BaseModel(PydanticBaseModel):
     """Pydantic基础模型"""
-    
+
     class Config:
         from_attributes = True
         json_encoders = {
@@ -106,7 +108,7 @@ class PaginationParams(BaseModel):
     """分页参数"""
     page: int = Field(default=1, ge=1, description="页码")
     size: int = Field(default=20, ge=1, le=100, description="每页数量")
-    
+
     @property
     def offset(self) -> int:
         return (self.page - 1) * self.size
@@ -118,7 +120,7 @@ class PaginationResponse(BaseModel):
     page: int = Field(description="当前页码")
     size: int = Field(description="每页数量")
     pages: int = Field(description="总页数")
-    
+
     @classmethod
     def create(cls, total: int, page: int, size: int):
         pages = (total + size - 1) // size
@@ -127,4 +129,4 @@ class PaginationResponse(BaseModel):
             page=page,
             size=size,
             pages=pages
-        ) 
+        )

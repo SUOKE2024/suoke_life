@@ -1,0 +1,6 @@
+Copyright (c) 2024 Suoke Life Team
+
+Licensed under the MIT License.
+See LICENSE file in the project root for full license information.
+
+索克生活触诊服务 - 基于AI的中医触诊智能分析微服务 

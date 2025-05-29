@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import Icon from '../../components/common/Icon';
 import { UserProfile } from '../../types/profile';
-import { colors, spacing, fonts } from '../../constants/theme';
+import { colors, spacing, typography, borderRadius } from '../../constants/theme';
 
 interface ProfileHeaderProps {
   userProfile: UserProfile;
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: colors.disabled,
+    backgroundColor: colors.gray300,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: spacing.lg,
@@ -102,22 +102,22 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xs,
   },
   name: {
-    fontSize: fonts.size.xl,
-    fontWeight: 'bold',
-    color: colors.text,
+    fontSize: typography.fontSize.xl,
+    fontWeight: '700' as any,
+    color: colors.textPrimary,
     marginRight: spacing.sm,
   },
   editButton: {
     padding: spacing.xs,
   },
   memberLevel: {
-    fontSize: fonts.size.md,
+    fontSize: typography.fontSize.base,
     color: colors.primary,
-    fontWeight: '500',
+    fontWeight: '500' as any,
     marginBottom: spacing.xs,
   },
   joinDate: {
-    fontSize: fonts.size.sm,
+    fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
   },
   statsContainer: {
@@ -131,13 +131,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   statValue: {
-    fontSize: fonts.size.xl,
-    fontWeight: 'bold',
-    color: colors.text,
+    fontSize: typography.fontSize.xl,
+    fontWeight: '700' as any,
+    color: colors.textPrimary,
     marginBottom: spacing.xs,
   },
   statLabel: {
-    fontSize: fonts.size.sm,
+    fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
   },
 });

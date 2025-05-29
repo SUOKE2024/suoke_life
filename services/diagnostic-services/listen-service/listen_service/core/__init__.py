@@ -5,13 +5,13 @@
 """
 
 from .audio_analyzer import AudioAnalyzer
-from .tcm_analyzer import TCMFeatureExtractor
 from .emotion_detector import EmotionDetector
+from .tcm_analyzer import TCMFeatureExtractor
 from .voice_processor import VoiceProcessor
 
 __all__ = [
     "AudioAnalyzer",
+    "EmotionDetector",
     "TCMFeatureExtractor",
-    "EmotionDetector", 
     "VoiceProcessor",
-] 
+]

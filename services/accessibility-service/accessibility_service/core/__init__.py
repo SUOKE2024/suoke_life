@@ -2,12 +2,12 @@
 Core accessibility service components.
 """
 
-from .service import AccessibilityService
 from .engine import AccessibilityEngine
 from .processor import AccessibilityProcessor
+from .service import AccessibilityService
 
 __all__ = [
     "AccessibilityService",
-    "AccessibilityEngine", 
+    "AccessibilityEngine",
     "AccessibilityProcessor",
-] 
+]

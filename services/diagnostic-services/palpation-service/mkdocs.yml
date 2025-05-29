@@ -1,0 +1,86 @@
+site_name: 触诊服务文档
+site_description: 索克生活触诊服务 - 基于AI的中医触诊智能分析微服务
+site_author: Suoke Life Team
+site_url: https://docs.suokelife.com/services/palpation
+
+repo_name: suokelife/suoke_life
+repo_url: https://github.com/suokelife/suoke_life
+edit_uri: edit/main/services/diagnostic-services/palpation-service/docs/
+
+theme:
+  name: material
+  language: zh
+  palette:
+    - scheme: default
+      primary: teal
+      accent: teal
+      toggle:
+        icon: material/brightness-7
+        name: 切换到深色模式
+    - scheme: slate
+      primary: teal
+      accent: teal
+      toggle:
+        icon: material/brightness-4
+        name: 切换到浅色模式
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.highlight
+    - search.share
+    - content.code.annotate
+    - content.code.copy
+
+plugins:
+  - search:
+      lang: zh
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: google
+            show_source: true
+            show_root_heading: true
+            show_root_toc_entry: false
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - toc:
+      permalink: true
+
+nav:
+  - 首页: index.md
+  - 快速开始:
+    - 安装: getting-started/installation.md
+    - 配置: getting-started/configuration.md
+    - 运行: getting-started/running.md
+  - API文档:
+    - 概述: api/overview.md
+    - 端点: api/endpoints.md
+    - 数据模型: api/models.md
+  - 架构设计:
+    - 总体架构: architecture/overview.md
+    - 组件设计: architecture/components.md
+    - 数据流: architecture/data-flow.md
+  - 开发指南:
+    - 环境搭建: development/setup.md
+    - 代码规范: development/coding-standards.md
+    - 测试: development/testing.md
+    - 部署: development/deployment.md
+  - API参考:
+    - 主模块: reference/main.md
+    - 配置管理: reference/config.md
+    - 数据处理: reference/processing.md
+  - 故障排除: troubleshooting.md
+  - 更新日志: changelog.md 

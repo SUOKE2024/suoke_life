@@ -1,14 +1,13 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 老克智能体服务 - API集成测试
 测试GraphQL和REST端点的集成功能
 """
 
+from typing import Any
+
 import pytest
-import json
-from typing import Dict, Any
 from httpx import AsyncClient
 
 pytestmark = pytest.mark.asyncio
@@ -19,7 +18,7 @@ async def test_health_endpoint(async_client: AsyncClient):
     测试健康检查端点
     """
     response = await async_client.get("/health/status")
-    
+
     assert response.status_code == 200
     data = response.json()
     assert data["status"] == "UP"
@@ -34,16 +33,16 @@ async def test_metrics_endpoint(async_client: AsyncClient):
     测试指标端点
     """
     response = await async_client.get("/metrics")
-    
+
     assert response.status_code == 200
     assert len(response.content) > 0
     assert response.headers["content-type"] == "text/plain; version=0.0.4"
 
 
-async def test_graphql_knowledge_query(async_client: AsyncClient, mock_knowledge_article: Dict[str, Any]):
+async def test_graphql_knowledge_query(async_client: AsyncClient, mock_knowledge_article: dict[str, Any]):
     """
     测试GraphQL知识查询
-    
+
     需要模拟知识服务组件
     """
     query = """
@@ -57,12 +56,12 @@ async def test_graphql_knowledge_query(async_client: AsyncClient, mock_knowledge
         }
     }
     """
-    
+
     response = await async_client.post(
         "/graphql",
         json={"query": query}
     )
-    
+
     assert response.status_code == 200
     data = response.json()
     assert "data" in data
@@ -70,10 +69,10 @@ async def test_graphql_knowledge_query(async_client: AsyncClient, mock_knowledge
     assert isinstance(data["data"]["knowledgeArticles"], list)
 
 
-async def test_graphql_learning_paths_query(async_client: AsyncClient, mock_learning_path: Dict[str, Any]):
+async def test_graphql_learning_paths_query(async_client: AsyncClient, mock_learning_path: dict[str, Any]):
     """
     测试GraphQL学习路径查询
-    
+
     需要模拟知识服务组件
     """
     query = """
@@ -90,12 +89,12 @@ async def test_graphql_learning_paths_query(async_client: AsyncClient, mock_lear
         }
     }
     """
-    
+
     response = await async_client.post(
         "/graphql",
         json={"query": query}
     )
-    
+
     assert response.status_code == 200
     data = response.json()
     assert "data" in data
@@ -103,10 +102,10 @@ async def test_graphql_learning_paths_query(async_client: AsyncClient, mock_lear
     assert isinstance(data["data"]["learningPaths"], list)
 
 
-async def test_graphql_community_posts_query(async_client: AsyncClient, mock_community_post: Dict[str, Any]):
+async def test_graphql_community_posts_query(async_client: AsyncClient, mock_community_post: dict[str, Any]):
     """
     测试GraphQL社区帖子查询
-    
+
     需要模拟社区服务组件
     """
     query = """
@@ -128,12 +127,12 @@ async def test_graphql_community_posts_query(async_client: AsyncClient, mock_com
         }
     }
     """
-    
+
     response = await async_client.post(
         "/graphql",
         json={"query": query}
     )
-    
+
     assert response.status_code == 200
     data = response.json()
     assert "data" in data
@@ -144,7 +143,7 @@ async def test_graphql_community_posts_query(async_client: AsyncClient, mock_com
 async def test_graphql_agent_interaction_mutation(async_client: AsyncClient):
     """
     测试GraphQL与智能体交互变更
-    
+
     需要模拟代理管理器组件
     """
     mutation = """
@@ -171,15 +170,15 @@ async def test_graphql_agent_interaction_mutation(async_client: AsyncClient):
         }
     }
     """
-    
+
     response = await async_client.post(
         "/graphql",
         json={"query": mutation}
     )
-    
+
     assert response.status_code == 200
     data = response.json()
     assert "data" in data
     assert "agentInteraction" in data["data"]
     assert "responseId" in data["data"]["agentInteraction"]
-    assert "message" in data["data"]["agentInteraction"] 
+    assert "message" in data["data"]["agentInteraction"]

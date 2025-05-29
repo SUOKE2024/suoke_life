@@ -4,10 +4,9 @@
 使用 Pydantic Settings 进行类型安全的配置管理。
 """
 
-import os
 from functools import lru_cache
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from pydantic import BaseSettings, Field, validator
 from pydantic_settings import BaseSettings as PydanticBaseSettings
@@ -84,11 +83,11 @@ class LoggingSettings(BaseSettings):
 class AISettings(BaseSettings):
     """AI服务配置"""
 
-    openai_api_key: Optional[str] = Field(default=None, description="OpenAI API密钥")
+    openai_api_key: str | None = Field(default=None, description="OpenAI API密钥")
     openai_base_url: str = Field(
         default="https://api.openai.com/v1", description="OpenAI API基础URL"
     )
-    anthropic_api_key: Optional[str] = Field(default=None, description="Anthropic API密钥")
+    anthropic_api_key: str | None = Field(default=None, description="Anthropic API密钥")
     default_model: str = Field(default="gpt-4", description="默认AI模型")
     max_tokens: int = Field(default=2048, description="最大token数")
     temperature: float = Field(default=0.7, description="生成温度")
@@ -126,10 +125,8 @@ class MonitoringSettings(BaseSettings):
     enable_metrics: bool = Field(default=True, description="是否启用指标收集")
     metrics_port: int = Field(default=8080, description="指标服务端口")
     enable_tracing: bool = Field(default=False, description="是否启用链路追踪")
-    jaeger_endpoint: Optional[str] = Field(
-        default=None, description="Jaeger端点"
-    )
-    sentry_dsn: Optional[str] = Field(default=None, description="Sentry DSN")
+    jaeger_endpoint: str | None = Field(default=None, description="Jaeger端点")
+    sentry_dsn: str | None = Field(default=None, description="Sentry DSN")
 
     class Config:
         env_prefix = "MONITORING_"
@@ -158,7 +155,7 @@ class Settings(PydanticBaseSettings):
         default="your-secret-key-change-in-production",
         description="应用密钥",
     )
-    allowed_hosts: List[str] = Field(default=["*"], description="允许的主机")
+    allowed_hosts: list[str] = Field(default=["*"], description="允许的主机")
 
     class Config:
         env_file = ".env"
@@ -196,12 +193,12 @@ class Settings(PydanticBaseSettings):
         """获取Redis连接URL"""
         return self.redis.url
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """转换为字典"""
         return self.dict()
 
 
-@lru_cache()
+@lru_cache
 def get_settings() -> Settings:
     """获取配置实例（单例模式）"""
     return Settings()
@@ -213,7 +210,7 @@ def get_config_file_path() -> Path:
     return config_dir / "config.yaml"
 
 
-def load_config_from_file(config_path: Optional[Path] = None) -> Dict[str, Any]:
+def load_config_from_file(config_path: Path | None = None) -> dict[str, Any]:
     """从文件加载配置"""
     import yaml
 
@@ -223,9 +220,9 @@ def load_config_from_file(config_path: Optional[Path] = None) -> Dict[str, Any]:
     if not config_path.exists():
         return {}
 
-    with open(config_path, "r", encoding="utf-8") as f:
+    with open(config_path, encoding="utf-8") as f:
         return yaml.safe_load(f) or {}
 
 
 # 导出配置实例
-settings = get_settings() 
+settings = get_settings()

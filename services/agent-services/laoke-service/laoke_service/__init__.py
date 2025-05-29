@@ -12,7 +12,7 @@ __description__ = "老克智能体服务 - 索克生活平台的知识传播和�
 # 主要组件导出
 from .core.agent import LaoKeAgent
 from .core.config import Settings, get_settings
-from .core.exceptions import LaoKeServiceError, ConfigurationError, ValidationError
+from .core.exceptions import ConfigurationError, LaoKeServiceError, ValidationError
 
 __all__ = [
     "__version__",
@@ -25,4 +25,4 @@ __all__ = [
     "LaoKeServiceError",
     "ConfigurationError",
     "ValidationError",
-] 
+]

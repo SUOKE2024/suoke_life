@@ -1,21 +1,17 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 缓存管理器
 提供统一的缓存接口，支持Redis和内存缓存，包含缓存策略和过期管理
 """
 
 import json
-import time
-import asyncio
 import logging
-from typing import Any, Dict, List, Optional, Union
-from datetime import datetime, timedelta
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any
 
 import aioredis
-from cachetools import TTLCache, LRUCache
+from cachetools import LRUCache, TTLCache
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +31,7 @@ class CacheConfig:
 
     redis_url: str = "redis://localhost:6379"
     redis_db: int = 0
-    redis_password: Optional[str] = None
+    redis_password: str | None = None
     memory_cache_size: int = 1000
     default_ttl: int = 3600  # 默认1小时
     enable_redis: bool = True
@@ -54,7 +50,7 @@ class CacheManager:
             config: 缓存配置
         """
         self.config = config
-        self.redis_client: Optional[aioredis.Redis] = None
+        self.redis_client: aioredis.Redis | None = None
 
         # 初始化内存缓存
         if config.enable_memory:
@@ -105,7 +101,7 @@ class CacheManager:
 
     async def get(
         self, key: str, strategy: CacheStrategy = CacheStrategy.TTL
-    ) -> Optional[Any]:
+    ) -> Any | None:
         """
         获取缓存值
 
@@ -168,7 +164,7 @@ class CacheManager:
         self,
         key: str,
         value: Any,
-        ttl: Optional[int] = None,
+        ttl: int | None = None,
         strategy: CacheStrategy = CacheStrategy.TTL,
     ) -> bool:
         """
@@ -188,7 +184,7 @@ class CacheManager:
 
         try:
             # 序列化值
-            if isinstance(value, (dict, list)):
+            if isinstance(value, dict | list):
                 serialized_value = json.dumps(value, ensure_ascii=False)
             else:
                 serialized_value = str(value)
@@ -293,7 +289,7 @@ class CacheManager:
             if self.memory_cache:
                 keys_to_delete = [
                     k
-                    for k in self.memory_cache.keys()
+                    for k in self.memory_cache
                     if k.startswith(f"{self.config.key_prefix}{pattern}")
                 ]
                 for key in keys_to_delete:
@@ -303,7 +299,7 @@ class CacheManager:
             if self.lru_cache:
                 keys_to_delete = [
                     k
-                    for k in self.lru_cache.keys()
+                    for k in self.lru_cache
                     if k.startswith(f"{self.config.key_prefix}{pattern}")
                 ]
                 for key in keys_to_delete:
@@ -316,7 +312,7 @@ class CacheManager:
             logger.error("清除缓存模式失败，pattern: %s, 错误: %s", pattern, str(e))
             return 0
 
-    async def get_stats(self) -> Dict[str, Any]:
+    async def get_stats(self) -> dict[str, Any]:
         """获取缓存统计信息"""
         stats = self.stats.copy()
 
@@ -344,10 +340,10 @@ class CacheManager:
 
 
 # 全局缓存管理器实例
-_cache_manager: Optional[CacheManager] = None
+_cache_manager: CacheManager | None = None
 
 
-async def get_cache_manager(config: Optional[CacheConfig] = None) -> CacheManager:
+async def get_cache_manager(config: CacheConfig | None = None) -> CacheManager:
     """获取缓存管理器实例"""
     global _cache_manager
 

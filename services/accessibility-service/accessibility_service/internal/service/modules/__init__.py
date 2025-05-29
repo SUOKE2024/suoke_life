@@ -5,6 +5,7 @@
 """
 
 from .blind_assistance import BlindAssistanceModule
+
 # from .sign_language import SignLanguageModule
 # from .voice_assistance import VoiceAssistanceModule
 # from .screen_reading import ScreenReadingModule
@@ -14,10 +15,10 @@ from .blind_assistance import BlindAssistanceModule
 
 __all__ = [
     'BlindAssistanceModule',
-    # 'SignLanguageModule', 
+    # 'SignLanguageModule',
     # 'VoiceAssistanceModule',
     # 'ScreenReadingModule',
     # 'ContentConversionModule',
     # 'TranslationModule',
     # 'SettingsManagerModule'
-] 
+]

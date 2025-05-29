@@ -95,7 +95,7 @@ class Maze:
     def to_dict(self) -> dict[str, Any]:
         """
         将迷宫对象转换为字典
-        
+
         Returns:
             Dict: 迷宫字典表示
         """
@@ -151,10 +151,10 @@ class Maze:
     def from_dict(cls, data: dict[str, Any]) -> 'Maze':
         """
         从字典创建迷宫对象
-        
+
         Args:
             data: 迷宫字典数据
-            
+
         Returns:
             Maze: 迷宫对象
         """

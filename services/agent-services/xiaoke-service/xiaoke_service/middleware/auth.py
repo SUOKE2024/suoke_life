@@ -38,12 +38,26 @@ class AuthMiddleware(BaseHTTPMiddleware):
             response = await call_next(request)
             return response
 
-        # TODO: 实现实际的认证逻辑
-        # 这里可以添加 JWT 验证、API Key 验证等
+        # 基础认证逻辑框架
+        auth_header = request.headers.get("Authorization")
+        api_key = request.headers.get("X-API-Key")
 
-        # 添加用户信息到请求状态
+        # 初始化用户状态
         request.state.user_id = "anonymous"
         request.state.authenticated = False
+
+        # 简单的认证检查
+        if auth_header and auth_header.startswith("Bearer "):
+            # 这里应该验证JWT token
+            token = auth_header.split(" ")[1]
+            if token:  # 简单验证, 实际应该解析JWT
+                request.state.authenticated = True
+                request.state.user_id = "authenticated_user"
+        elif api_key:
+            # 这里应该验证API Key
+            if api_key:  # 简单验证, 实际应该查询数据库
+                request.state.authenticated = True
+                request.state.user_id = f"api_user_{api_key[:8]}"
 
         try:
             response = await call_next(request)

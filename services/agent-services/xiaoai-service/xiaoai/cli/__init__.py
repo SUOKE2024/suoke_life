@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 小艾智能体命令行接口
 XiaoAI Agent Command Line Interface
 
-提供小艾智能体的命令行工具，包括：
+提供小艾智能体的命令行工具, 包括:
 - 服务器启动和管理
 - 工作进程管理
 - 配置管理
 - 健康检查
 - 开发工具
 
-使用示例：
+使用示例:
     $ xiaoai --help
     $ xiaoai-server --port 8000
     $ xiaoai-worker --concurrency 4
@@ -19,9 +18,9 @@ XiaoAI Agent Command Line Interface
 
 from __future__ import annotations
 
-__all__ = [
+_all__ = [
     "main",
-    "run_server", 
+    "run_server",
     "run_worker",
 ]
 

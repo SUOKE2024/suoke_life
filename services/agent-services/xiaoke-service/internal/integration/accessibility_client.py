@@ -1,25 +1,21 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 小克(xiaoke)智能体的无障碍服务客户端适配器
 支持医疗资源和产品信息的无障碍转换
 """
 
-import logging
 import asyncio
-import time
-from typing import Dict, Any, Optional, List, Union
-
-import grpc
-from google.protobuf.json_format import MessageToDict, ParseDict
+import logging
 
 # 导入配置
 import os
 import sys
+from typing import Any
+
+import grpc
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
-from config.config import Config
 
 # 实际项目中需要导入生成的proto文件
 # from accessibility_service.api.grpc import accessibility_pb2 as pb2
@@ -31,7 +27,7 @@ logger = logging.getLogger(__name__)
 class AccessibilityClient:
     """无障碍服务客户端适配器，为小克智能体提供无障碍能力"""
 
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
+    def __init__(self, config: dict[str, Any] | None = None):
         """
         初始化客户端
 
@@ -70,8 +66,8 @@ class AccessibilityClient:
             self.stub = MockAccessibilityStub()  # 使用模拟客户端作为降级
 
     async def convert_medical_resource_to_accessible(
-        self, resource_info: Dict[str, Any], user_id: str, target_format: str = "audio"
-    ) -> Dict[str, Any]:
+        self, resource_info: dict[str, Any], user_id: str, target_format: str = "audio"
+    ) -> dict[str, Any]:
         """
         将医疗资源信息转换为无障碍格式
 
@@ -119,7 +115,7 @@ class AccessibilityClient:
         except Exception as e:
             logger.error(f"医疗资源无障碍转换失败: {e}")
             return {
-                "accessible_content": f"医疗资源信息转换失败: {str(e)}",
+                "accessible_content": f"医疗资源信息转换失败: {e!s}",
                 "content_url": "",
                 "audio_content": b"",
                 "tactile_content": b"",
@@ -128,8 +124,8 @@ class AccessibilityClient:
             }
 
     async def convert_product_info_to_accessible(
-        self, product_info: Dict[str, Any], user_id: str, target_format: str = "audio"
-    ) -> Dict[str, Any]:
+        self, product_info: dict[str, Any], user_id: str, target_format: str = "audio"
+    ) -> dict[str, Any]:
         """
         将农产品信息转换为无障碍格式
 
@@ -179,7 +175,7 @@ class AccessibilityClient:
         except Exception as e:
             logger.error(f"农产品信息无障碍转换失败: {e}")
             return {
-                "accessible_content": f"农产品信息转换失败: {str(e)}",
+                "accessible_content": f"农产品信息转换失败: {e!s}",
                 "content_url": "",
                 "audio_content": b"",
                 "tactile_content": b"",
@@ -188,8 +184,8 @@ class AccessibilityClient:
             }
 
     async def provide_voice_guidance_for_payment(
-        self, payment_info: Dict[str, Any], user_id: str, language: str = "zh-CN"
-    ) -> Dict[str, Any]:
+        self, payment_info: dict[str, Any], user_id: str, language: str = "zh-CN"
+    ) -> dict[str, Any]:
         """
         为支付流程提供语音引导
 
@@ -231,7 +227,7 @@ class AccessibilityClient:
         except Exception as e:
             logger.error(f"支付语音引导失败: {e}")
             return {
-                "guidance_text": f"支付引导生成失败: {str(e)}",
+                "guidance_text": f"支付引导生成失败: {e!s}",
                 "audio_guidance": b"",
                 "confidence": 0.0,
                 "success": False,
@@ -240,10 +236,10 @@ class AccessibilityClient:
 
     async def convert_subscription_info_to_accessible(
         self,
-        subscription_info: Dict[str, Any],
+        subscription_info: dict[str, Any],
         user_id: str,
         target_format: str = "audio",
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         将订阅信息转换为无障碍格式
 
@@ -293,7 +289,7 @@ class AccessibilityClient:
         except Exception as e:
             logger.error(f"订阅信息无障碍转换失败: {e}")
             return {
-                "accessible_content": f"订阅信息转换失败: {str(e)}",
+                "accessible_content": f"订阅信息转换失败: {e!s}",
                 "content_url": "",
                 "audio_content": b"",
                 "tactile_content": b"",
@@ -303,7 +299,7 @@ class AccessibilityClient:
 
     async def provide_screen_reading_for_interface(
         self, screen_data: bytes, user_id: str, interface_type: str = "resource_list"
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         为界面提供屏幕阅读服务
 
@@ -351,7 +347,7 @@ class AccessibilityClient:
         except Exception as e:
             logger.error(f"界面屏幕阅读失败: {e}")
             return {
-                "screen_description": f"界面阅读失败: {str(e)}",
+                "screen_description": f"界面阅读失败: {e!s}",
                 "ui_elements": [],
                 "audio_description": b"",
                 "navigation_hints": [],
@@ -361,10 +357,10 @@ class AccessibilityClient:
 
     async def convert_appointment_info_to_accessible(
         self,
-        appointment_info: Dict[str, Any],
+        appointment_info: dict[str, Any],
         user_id: str,
         target_format: str = "audio",
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         将预约信息转换为无障碍格式
 
@@ -414,7 +410,7 @@ class AccessibilityClient:
         except Exception as e:
             logger.error(f"预约信息无障碍转换失败: {e}")
             return {
-                "accessible_content": f"预约信息转换失败: {str(e)}",
+                "accessible_content": f"预约信息转换失败: {e!s}",
                 "content_url": "",
                 "audio_content": b"",
                 "tactile_content": b"",
@@ -424,8 +420,8 @@ class AccessibilityClient:
 
     def _format_medical_resource_content(
         self,
-        resource_info: Dict[str, Any],
-        response: Dict[str, Any],
+        resource_info: dict[str, Any],
+        response: dict[str, Any],
         target_format: str,
     ) -> str:
         """格式化医疗资源内容"""
@@ -443,7 +439,7 @@ class AccessibilityClient:
             return response.get("accessible_content", f"医疗资源信息：{name}")
 
     def _format_product_content(
-        self, product_info: Dict[str, Any], response: Dict[str, Any], target_format: str
+        self, product_info: dict[str, Any], response: dict[str, Any], target_format: str
     ) -> str:
         """格式化农产品内容"""
         name = product_info.get("name", "未知产品")
@@ -460,8 +456,8 @@ class AccessibilityClient:
 
     def _format_subscription_content(
         self,
-        subscription_info: Dict[str, Any],
-        response: Dict[str, Any],
+        subscription_info: dict[str, Any],
+        response: dict[str, Any],
         target_format: str,
     ) -> str:
         """格式化订阅内容"""
@@ -479,8 +475,8 @@ class AccessibilityClient:
 
     def _format_appointment_content(
         self,
-        appointment_info: Dict[str, Any],
-        response: Dict[str, Any],
+        appointment_info: dict[str, Any],
+        response: dict[str, Any],
         target_format: str,
     ) -> str:
         """格式化预约内容"""
@@ -496,7 +492,7 @@ class AccessibilityClient:
         else:
             return response.get("accessible_content", f"预约信息：{doctor_name}")
 
-    def _generate_payment_guidance_text(self, payment_info: Dict[str, Any]) -> str:
+    def _generate_payment_guidance_text(self, payment_info: dict[str, Any]) -> str:
         """生成支付引导文本"""
         amount = payment_info.get("amount", 0)
         payment_method = payment_info.get("payment_method", "未知支付方式")
@@ -505,8 +501,8 @@ class AccessibilityClient:
         return f"您即将支付{amount}元，使用{payment_method}支付方式，订单号{order_id}。请确认支付信息无误后继续。"
 
     def _enhance_ui_elements_for_xiaoke(
-        self, elements: List[Dict[str, Any]], interface_type: str
-    ) -> List[Dict[str, Any]]:
+        self, elements: list[dict[str, Any]], interface_type: str
+    ) -> list[dict[str, Any]]:
         """为小克界面增强UI元素信息"""
         enhanced_elements = []
 
@@ -551,8 +547,8 @@ class AccessibilityClient:
         return enhanced_elements
 
     def _generate_navigation_hints(
-        self, elements: List[Dict[str, Any]], interface_type: str
-    ) -> List[str]:
+        self, elements: list[dict[str, Any]], interface_type: str
+    ) -> list[str]:
         """生成导航提示"""
         hints = []
 
@@ -574,7 +570,7 @@ class AccessibilityClient:
         return hints
 
     # 模拟的服务调用方法（实际项目中替换为真实的gRPC调用）
-    async def _call_accessible_content(self, request: Dict[str, Any]) -> Dict[str, Any]:
+    async def _call_accessible_content(self, request: dict[str, Any]) -> dict[str, Any]:
         """调用无障碍内容转换服务"""
         await asyncio.sleep(0.1)
         content_type = request.get("content_type", "unknown")
@@ -601,7 +597,7 @@ class AccessibilityClient:
                 "tactile_content": b"mock_braille_content",
             }
 
-    async def _call_voice_assistance(self, request: Dict[str, Any]) -> Dict[str, Any]:
+    async def _call_voice_assistance(self, request: dict[str, Any]) -> dict[str, Any]:
         """调用语音辅助服务"""
         await asyncio.sleep(0.1)
         return {
@@ -611,7 +607,7 @@ class AccessibilityClient:
             "confidence": 0.95,
         }
 
-    async def _call_screen_reading(self, request: Dict[str, Any]) -> Dict[str, Any]:
+    async def _call_screen_reading(self, request: dict[str, Any]) -> dict[str, Any]:
         """调用屏幕阅读服务"""
         await asyncio.sleep(0.1)
         context = request.get("context", "")

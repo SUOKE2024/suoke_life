@@ -1,19 +1,17 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """
 API文档生成器
 自动生成accessibility-service的API文档
 """
 
+import json
 import os
 import sys
-import json
-import yaml
-import inspect
-from typing import Dict, List, Any, Optional
 from datetime import datetime
-import importlib.util
+from typing import Any
+
+import yaml
 
 # 添加服务路径
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'internal', 'service'))
@@ -21,11 +19,11 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'internal', 'servi
 
 class APIDocGenerator:
     """API文档生成器"""
-    
+
     def __init__(self, output_dir: str = "docs/api"):
         """
         初始化文档生成器
-        
+
         Args:
             output_dir: 输出目录
         """
@@ -36,28 +34,28 @@ class APIDocGenerator:
             'description': '索克生活无障碍服务API',
             'base_url': 'https://api.suoke.life/accessibility/v1'
         }
-        
+
         # 确保输出目录存在
         os.makedirs(output_dir, exist_ok=True)
-    
+
     def generate_all_docs(self):
         """生成所有文档"""
         print("🚀 开始生成API文档...")
-        
+
         # 生成OpenAPI规范
         self.generate_openapi_spec()
-        
+
         # 生成Markdown文档
         self.generate_markdown_docs()
-        
+
         # 生成Postman集合
         self.generate_postman_collection()
-        
+
         # 生成SDK示例
         self.generate_sdk_examples()
-        
+
         print(f"✅ API文档生成完成，输出目录: {self.output_dir}")
-    
+
     def generate_openapi_spec(self):
         """生成OpenAPI 3.0规范"""
         spec = {
@@ -93,41 +91,41 @@ class APIDocGenerator:
                 {"ApiKeyAuth": []}
             ]
         }
-        
+
         # 保存OpenAPI规范
         with open(os.path.join(self.output_dir, 'openapi.yaml'), 'w', encoding='utf-8') as f:
             yaml.dump(spec, f, default_flow_style=False, allow_unicode=True)
-        
+
         with open(os.path.join(self.output_dir, 'openapi.json'), 'w', encoding='utf-8') as f:
             json.dump(spec, f, indent=2, ensure_ascii=False)
-        
+
         print("✅ OpenAPI规范生成完成")
-    
-    def _generate_paths(self) -> Dict[str, Any]:
+
+    def _generate_paths(self) -> dict[str, Any]:
         """生成API路径"""
         paths = {}
-        
+
         # 导盲服务API
         paths.update(self._generate_blind_assistance_paths())
-        
+
         # 语音助手API
         paths.update(self._generate_voice_assistance_paths())
-        
+
         # 手语识别API
         paths.update(self._generate_sign_language_paths())
-        
+
         # 屏幕阅读API
         paths.update(self._generate_screen_reading_paths())
-        
+
         # 内容转换API
         paths.update(self._generate_content_conversion_paths())
-        
+
         # 健康检查API
         paths.update(self._generate_health_check_paths())
-        
+
         return paths
-    
-    def _generate_blind_assistance_paths(self) -> Dict[str, Any]:
+
+    def _generate_blind_assistance_paths(self) -> dict[str, Any]:
         """生成导盲服务API路径"""
         return {
             "/blind-assistance/analyze-scene": {
@@ -234,8 +232,8 @@ class APIDocGenerator:
                 }
             }
         }
-    
-    def _generate_voice_assistance_paths(self) -> Dict[str, Any]:
+
+    def _generate_voice_assistance_paths(self) -> dict[str, Any]:
         """生成语音助手API路径"""
         return {
             "/voice-assistance/speech-to-text": {
@@ -308,8 +306,8 @@ class APIDocGenerator:
                 }
             }
         }
-    
-    def _generate_sign_language_paths(self) -> Dict[str, Any]:
+
+    def _generate_sign_language_paths(self) -> dict[str, Any]:
         """生成手语识别API路径"""
         return {
             "/sign-language/recognize": {
@@ -346,8 +344,8 @@ class APIDocGenerator:
                 }
             }
         }
-    
-    def _generate_screen_reading_paths(self) -> Dict[str, Any]:
+
+    def _generate_screen_reading_paths(self) -> dict[str, Any]:
         """生成屏幕阅读API路径"""
         return {
             "/screen-reading/read-content": {
@@ -385,8 +383,8 @@ class APIDocGenerator:
                 }
             }
         }
-    
-    def _generate_content_conversion_paths(self) -> Dict[str, Any]:
+
+    def _generate_content_conversion_paths(self) -> dict[str, Any]:
         """生成内容转换API路径"""
         return {
             "/content-conversion/convert": {
@@ -425,8 +423,8 @@ class APIDocGenerator:
                 }
             }
         }
-    
-    def _generate_health_check_paths(self) -> Dict[str, Any]:
+
+    def _generate_health_check_paths(self) -> dict[str, Any]:
         """生成健康检查API路径"""
         return {
             "/health": {
@@ -468,8 +466,8 @@ class APIDocGenerator:
                 }
             }
         }
-    
-    def _generate_components(self) -> Dict[str, Any]:
+
+    def _generate_components(self) -> dict[str, Any]:
         """生成组件定义"""
         return {
             "schemas": {
@@ -620,14 +618,14 @@ class APIDocGenerator:
                 }
             }
         }
-    
+
     def generate_markdown_docs(self):
         """生成Markdown文档"""
         # 生成主文档
         main_doc = self._generate_main_markdown()
         with open(os.path.join(self.output_dir, 'README.md'), 'w', encoding='utf-8') as f:
             f.write(main_doc)
-        
+
         # 生成各服务的详细文档
         services = [
             ('blind_assistance', '导盲服务'),
@@ -636,14 +634,14 @@ class APIDocGenerator:
             ('screen_reading', '屏幕阅读'),
             ('content_conversion', '内容转换')
         ]
-        
+
         for service_id, service_name in services:
             doc = self._generate_service_markdown(service_id, service_name)
             with open(os.path.join(self.output_dir, f'{service_id}.md'), 'w', encoding='utf-8') as f:
                 f.write(doc)
-        
+
         print("✅ Markdown文档生成完成")
-    
+
     def _generate_main_markdown(self) -> str:
         """生成主Markdown文档"""
         return f"""# {self.service_info['name']} API文档
@@ -652,7 +650,7 @@ class APIDocGenerator:
 
 {self.service_info['description']}
 
-**版本**: {self.service_info['version']}  
+**版本**: {self.service_info['version']}
 **基础URL**: `{self.service_info['base_url']}`
 
 ## 快速开始
@@ -685,7 +683,7 @@ curl -X POST "{self.service_info['base_url']}/blind-assistance/analyze-scene" \\
 
 ### 🦮 [导盲服务](./blind_assistance.md)
 - 场景分析
-- 障碍物检测  
+- 障碍物检测
 - 导航指导
 
 ### 🎤 [语音助手](./voice_assistance.md)
@@ -754,7 +752,7 @@ API使用标准HTTP状态码：
 
 *最后更新：{datetime.now().strftime('%Y-%m-%d')}*
 """
-    
+
     def _generate_service_markdown(self, service_id: str, service_name: str) -> str:
         """生成服务Markdown文档"""
         return f"""# {service_name} API
@@ -801,7 +799,7 @@ curl -X POST "{self.service_info['base_url']}/{service_id}/..." \\
 
 [返回主文档](./README.md)
 """
-    
+
     def generate_postman_collection(self):
         """生成Postman集合"""
         collection = {
@@ -835,13 +833,13 @@ curl -X POST "{self.service_info['base_url']}/{service_id}/..." \\
             ],
             "item": self._generate_postman_items()
         }
-        
+
         with open(os.path.join(self.output_dir, 'postman_collection.json'), 'w', encoding='utf-8') as f:
             json.dump(collection, f, indent=2, ensure_ascii=False)
-        
+
         print("✅ Postman集合生成完成")
-    
-    def _generate_postman_items(self) -> List[Dict[str, Any]]:
+
+    def _generate_postman_items(self) -> list[dict[str, Any]]:
         """生成Postman请求项"""
         return [
             {
@@ -910,25 +908,25 @@ curl -X POST "{self.service_info['base_url']}/{service_id}/..." \\
                 ]
             }
         ]
-    
+
     def generate_sdk_examples(self):
         """生成SDK示例"""
         # 创建SDK目录
         sdk_dir = os.path.join(self.output_dir, 'sdk')
         os.makedirs(sdk_dir, exist_ok=True)
-        
+
         # Python SDK示例
         python_example = self._generate_python_sdk_example()
         with open(os.path.join(sdk_dir, 'python_example.py'), 'w', encoding='utf-8') as f:
             f.write(python_example)
-        
+
         # JavaScript SDK示例
         js_example = self._generate_javascript_sdk_example()
         with open(os.path.join(sdk_dir, 'javascript_example.js'), 'w', encoding='utf-8') as f:
             f.write(js_example)
-        
+
         print("✅ SDK示例生成完成")
-    
+
     def _generate_python_sdk_example(self) -> str:
         """生成Python SDK示例"""
         return '''#!/usr/bin/env python3
@@ -945,11 +943,11 @@ from typing import Optional, Dict, Any
 
 class AccessibilityServiceClient:
     """无障碍服务客户端"""
-    
+
     def __init__(self, base_url: str, token: str):
         """
         初始化客户端
-        
+
         Args:
             base_url: API基础URL
             token: 认证令牌
@@ -960,91 +958,91 @@ class AccessibilityServiceClient:
             'Authorization': f'Bearer {token}',
             'User-Agent': 'SuokeLife-AccessibilityService-Python-SDK/1.0.0'
         })
-    
-    def analyze_scene(self, user_id: str, image_path: str, 
+
+    def analyze_scene(self, user_id: str, image_path: str,
                      location: Optional[Dict[str, float]] = None) -> Dict[str, Any]:
         """
         场景分析
-        
+
         Args:
             user_id: 用户ID
             image_path: 图像文件路径
             location: 位置信息
-        
+
         Returns:
             场景分析结果
         """
         url = f"{self.base_url}/blind-assistance/analyze-scene"
-        
+
         data = {'user_id': user_id}
         if location:
             data['location'] = json.dumps(location)
-        
+
         with open(image_path, 'rb') as f:
             files = {'image': f}
             response = self.session.post(url, data=data, files=files)
-        
+
         response.raise_for_status()
         return response.json()
-    
-    def speech_to_text(self, user_id: str, audio_path: str, 
+
+    def speech_to_text(self, user_id: str, audio_path: str,
                       language: str = 'zh-CN') -> Dict[str, Any]:
         """
         语音转文字
-        
+
         Args:
             user_id: 用户ID
             audio_path: 音频文件路径
             language: 语言代码
-        
+
         Returns:
             转换结果
         """
         url = f"{self.base_url}/voice-assistance/speech-to-text"
-        
+
         data = {
             'user_id': user_id,
             'language': language
         }
-        
+
         with open(audio_path, 'rb') as f:
             files = {'audio': f}
             response = self.session.post(url, data=data, files=files)
-        
+
         response.raise_for_status()
         return response.json()
-    
-    def text_to_speech(self, user_id: str, text: str, 
+
+    def text_to_speech(self, user_id: str, text: str,
                       voice: str = 'female', speed: float = 1.0) -> bytes:
         """
         文字转语音
-        
+
         Args:
             user_id: 用户ID
             text: 要转换的文字
             voice: 语音类型
             speed: 语速
-        
+
         Returns:
             音频数据
         """
         url = f"{self.base_url}/voice-assistance/text-to-speech"
-        
+
         data = {
             'user_id': user_id,
             'text': text,
             'voice': voice,
             'speed': speed
         }
-        
+
         response = self.session.post(url, json=data)
         response.raise_for_status()
         return response.content
-    
+
     def check_health(self) -> Dict[str, Any]:
         """
         检查服务健康状态
-        
+
         Returns:
             健康状态信息
         """
@@ -1061,12 +1059,12 @@ if __name__ == '__main__':
         base_url='https://api.suoke.life/accessibility/v1',
         token='your-jwt-token-here'
     )
-    
+
     try:
         # 检查服务健康状态
         health = client.check_health()
         print(f"服务状态: {health['status']}")
-        
+
         # 场景分析示例
         result = client.analyze_scene(
             user_id='user123',
@@ -1074,33 +1072,33 @@ if __name__ == '__main__':
             location={'latitude': 39.9042, 'longitude': 116.4074}
         )
         print(f"场景分析结果: {result['scene_description']}")
-        
+
         # 语音转文字示例
         stt_result = client.speech_to_text(
             user_id='user123',
             audio_path='speech.wav'
         )
         print(f"识别文字: {stt_result['text']}")
-        
+
         # 文字转语音示例
         audio_data = client.text_to_speech(
             user_id='user123',
             text='欢迎使用索克生活无障碍服务'
         )
-        
+
         with open('output.mp3', 'wb') as f:
             f.write(audio_data)
         print("语音文件已保存为 output.mp3")
-        
+
     except requests.exceptions.RequestException as e:
         print(f"请求失败: {e}")
     except Exception as e:
         print(f"错误: {e}")
 '''
-    
+
     def _generate_javascript_sdk_example(self) -> str:
         """生成JavaScript SDK示例"""
-        return '''/**
+        return r'''/**
  * 索克生活无障碍服务 JavaScript SDK 示例
  */
 
@@ -1128,11 +1126,11 @@ class AccessibilityServiceClient {
      */
     async analyzeScene(userId, imageFile, location = null) {
         const url = `${this.baseUrl}/blind-assistance/analyze-scene`;
-        
+
         const formData = new FormData();
         formData.append('user_id', userId);
         formData.append('image', imageFile);
-        
+
         if (location) {
             formData.append('location', JSON.stringify(location));
         }
@@ -1159,7 +1157,7 @@ class AccessibilityServiceClient {
      */
     async speechToText(userId, audioFile, language = 'zh-CN') {
         const url = `${this.baseUrl}/voice-assistance/speech-to-text`;
-        
+
         const formData = new FormData();
         formData.append('user_id', userId);
         formData.append('audio', audioFile);
@@ -1188,7 +1186,7 @@ class AccessibilityServiceClient {
      */
     async textToSpeech(userId, text, voice = 'female', speed = 1.0) {
         const url = `${this.baseUrl}/voice-assistance/text-to-speech`;
-        
+
         const response = await fetch(url, {
             method: 'POST',
             headers: {
@@ -1216,7 +1214,7 @@ class AccessibilityServiceClient {
      */
     async checkHealth() {
         const url = `${this.baseUrl}/health`;
-        
+
         const response = await fetch(url, {
             method: 'GET',
             headers: this.headers
@@ -1269,7 +1267,7 @@ async function example() {
             'user123',
             '欢迎使用索克生活无障碍服务'
         );
-        
+
         // 播放音频
         const audioUrl = URL.createObjectURL(audioBlob);
         const audio = new Audio(audioUrl);
@@ -1290,14 +1288,14 @@ if (typeof module !== 'undefined' && module.exports) {
 def main():
     """主函数"""
     import argparse
-    
+
     parser = argparse.ArgumentParser(description='生成API文档')
     parser.add_argument('--output', '-o', default='docs/api', help='输出目录')
     args = parser.parse_args()
-    
+
     generator = APIDocGenerator(args.output)
     generator.generate_all_docs()
 
 
 if __name__ == '__main__':
-    main() 
+    main()

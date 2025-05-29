@@ -1,19 +1,16 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 小克智能体服务 - 会话存储库
 提供用户与小克智能体的会话管理和持久化
 """
 
-import uuid
 import logging
-import asyncio
-from datetime import datetime, timezone, timedelta
-from typing import List, Dict, Any, Optional, Tuple
+import uuid
+from datetime import UTC, datetime, timedelta
+from typing import Any
 
 import motor.motor_asyncio
-from bson.objectid import ObjectId
 from pymongo.errors import PyMongoError
 
 from pkg.utils.config_loader import get_config
@@ -71,12 +68,12 @@ class SessionRepository:
 
             logger.info("会话存储库索引已初始化")
         except PyMongoError as e:
-            logger.error(f"初始化会话存储库索引失败: {str(e)}")
+            logger.error(f"初始化会话存储库索引失败: {e!s}")
             raise
 
     @metrics.measure_execution_time("session_repo_create_session")
     async def create_session(
-        self, user_id: str, metadata: Optional[Dict[str, Any]] = None
+        self, user_id: str, metadata: dict[str, Any] | None = None
     ) -> str:
         """
         创建新的会话
@@ -90,7 +87,7 @@ class SessionRepository:
         """
         try:
             session_id = str(uuid.uuid4())
-            now = datetime.now(timezone.utc).isoformat()
+            now = datetime.now(UTC).isoformat()
 
             session_data = {
                 "session_id": session_id,
@@ -110,14 +107,14 @@ class SessionRepository:
 
             return session_id
         except PyMongoError as e:
-            logger.error(f"创建会话失败: {str(e)}")
+            logger.error(f"创建会话失败: {e!s}")
             metrics.increment_counter(
                 "session_repo_errors", {"method": "create_session"}
             )
             raise
 
     @metrics.measure_execution_time("session_repo_find_by_id")
-    async def find_by_id(self, session_id: str) -> Optional[Dict[str, Any]]:
+    async def find_by_id(self, session_id: str) -> dict[str, Any] | None:
         """
         根据ID查找会话
 
@@ -139,14 +136,14 @@ class SessionRepository:
 
             return None
         except PyMongoError as e:
-            logger.error(f"查找会话失败: {str(e)}")
+            logger.error(f"查找会话失败: {e!s}")
             metrics.increment_counter("session_repo_errors", {"method": "find_by_id"})
             return None
 
     @metrics.measure_execution_time("session_repo_find_by_user_id")
     async def find_by_user_id(
         self, user_id: str, limit: int = 10, offset: int = 0
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """
         根据用户ID查找会话列表
 
@@ -175,7 +172,7 @@ class SessionRepository:
 
             return sessions
         except PyMongoError as e:
-            logger.error(f"根据用户ID查找会话失败: {str(e)}")
+            logger.error(f"根据用户ID查找会话失败: {e!s}")
             metrics.increment_counter(
                 "session_repo_errors", {"method": "find_by_user_id"}
             )
@@ -183,7 +180,7 @@ class SessionRepository:
 
     @metrics.measure_execution_time("session_repo_update_session")
     async def update_session(
-        self, session_id: str, update_data: Dict[str, Any]
+        self, session_id: str, update_data: dict[str, Any]
     ) -> bool:
         """
         更新会话信息
@@ -197,7 +194,7 @@ class SessionRepository:
         """
         try:
             # 总是更新updated_at字段
-            update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
+            update_data["updated_at"] = datetime.now(UTC).isoformat()
 
             result = await self.sessions.update_one(
                 {"session_id": session_id}, {"$set": update_data}
@@ -205,7 +202,7 @@ class SessionRepository:
 
             return result.matched_count > 0
         except PyMongoError as e:
-            logger.error(f"更新会话失败: {str(e)}")
+            logger.error(f"更新会话失败: {e!s}")
             metrics.increment_counter(
                 "session_repo_errors", {"method": "update_session"}
             )
@@ -213,7 +210,7 @@ class SessionRepository:
 
     @metrics.measure_execution_time("session_repo_update_diagnosis_state")
     async def update_diagnosis_state(
-        self, session_id: str, diagnosis_state: Dict[str, Any]
+        self, session_id: str, diagnosis_state: dict[str, Any]
     ) -> bool:
         """
         更新诊断状态
@@ -227,21 +224,21 @@ class SessionRepository:
         """
         try:
             # 添加更新时间
-            diagnosis_state["updated_at"] = datetime.now(timezone.utc).isoformat()
+            diagnosis_state["updated_at"] = datetime.now(UTC).isoformat()
 
             result = await self.sessions.update_one(
                 {"session_id": session_id},
                 {
                     "$set": {
                         "diagnosis_state": diagnosis_state,
-                        "updated_at": datetime.now(timezone.utc).isoformat(),
+                        "updated_at": datetime.now(UTC).isoformat(),
                     }
                 },
             )
 
             return result.matched_count > 0
         except PyMongoError as e:
-            logger.error(f"更新诊断状态失败: {str(e)}")
+            logger.error(f"更新诊断状态失败: {e!s}")
             metrics.increment_counter(
                 "session_repo_errors", {"method": "update_diagnosis_state"}
             )
@@ -261,8 +258,8 @@ class SessionRepository:
         try:
             update_data = {
                 "status": "ended",
-                "ended_at": datetime.now(timezone.utc).isoformat(),
-                "updated_at": datetime.now(timezone.utc).isoformat(),
+                "ended_at": datetime.now(UTC).isoformat(),
+                "updated_at": datetime.now(UTC).isoformat(),
             }
 
             result = await self.sessions.update_one(
@@ -271,7 +268,7 @@ class SessionRepository:
 
             return result.matched_count > 0
         except PyMongoError as e:
-            logger.error(f"结束会话失败: {str(e)}")
+            logger.error(f"结束会话失败: {e!s}")
             metrics.increment_counter("session_repo_errors", {"method": "end_session"})
             return False
 
@@ -281,8 +278,8 @@ class SessionRepository:
         session_id: str,
         role: str,
         content: str,
-        metadata: Optional[Dict[str, Any]] = None,
-    ) -> Optional[str]:
+        metadata: dict[str, Any] | None = None,
+    ) -> str | None:
         """
         保存会话消息
 
@@ -309,7 +306,7 @@ class SessionRepository:
 
             # 创建消息
             message_id = str(uuid.uuid4())
-            now = datetime.now(timezone.utc).isoformat()
+            now = datetime.now(UTC).isoformat()
 
             message_data = {
                 "message_id": message_id,
@@ -361,14 +358,14 @@ class SessionRepository:
 
             return message_id
         except PyMongoError as e:
-            logger.error(f"保存消息失败: {str(e)}")
+            logger.error(f"保存消息失败: {e!s}")
             metrics.increment_counter("session_repo_errors", {"method": "save_message"})
             return None
 
     @metrics.measure_execution_time("session_repo_get_messages")
     async def get_messages(
-        self, session_id: str, limit: int = 50, before_id: Optional[str] = None
-    ) -> List[Dict[str, Any]]:
+        self, session_id: str, limit: int = 50, before_id: str | None = None
+    ) -> list[dict[str, Any]]:
         """
         获取会话消息
 
@@ -402,14 +399,14 @@ class SessionRepository:
             # 返回按时间正序排列的消息
             return list(reversed(messages))
         except PyMongoError as e:
-            logger.error(f"获取会话消息失败: {str(e)}")
+            logger.error(f"获取会话消息失败: {e!s}")
             metrics.increment_counter("session_repo_errors", {"method": "get_messages"})
             return []
 
     @metrics.measure_execution_time("session_repo_get_latest_messages")
     async def get_latest_messages(
         self, session_id: str, count: int = 10
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """
         获取最新的消息
 
@@ -437,14 +434,14 @@ class SessionRepository:
             # 返回按时间正序排列的消息
             return list(reversed(messages))
         except PyMongoError as e:
-            logger.error(f"获取最新消息失败: {str(e)}")
+            logger.error(f"获取最新消息失败: {e!s}")
             metrics.increment_counter(
                 "session_repo_errors", {"method": "get_latest_messages"}
             )
             return []
 
     @metrics.measure_execution_time("session_repo_get_diagnosis_messages")
-    async def get_diagnosis_messages(self, session_id: str) -> List[Dict[str, Any]]:
+    async def get_diagnosis_messages(self, session_id: str) -> list[dict[str, Any]]:
         """
         获取诊断相关的消息
 
@@ -467,14 +464,14 @@ class SessionRepository:
 
             return messages
         except PyMongoError as e:
-            logger.error(f"获取诊断消息失败: {str(e)}")
+            logger.error(f"获取诊断消息失败: {e!s}")
             metrics.increment_counter(
                 "session_repo_errors", {"method": "get_diagnosis_messages"}
             )
             return []
 
     @metrics.measure_execution_time("session_repo_get_session_summary")
-    async def get_session_summary(self, session_id: str) -> Optional[Dict[str, Any]]:
+    async def get_session_summary(self, session_id: str) -> dict[str, Any] | None:
         """
         获取会话摘要信息
 
@@ -516,7 +513,7 @@ class SessionRepository:
 
             return summary
         except PyMongoError as e:
-            logger.error(f"获取会话摘要失败: {str(e)}")
+            logger.error(f"获取会话摘要失败: {e!s}")
             metrics.increment_counter(
                 "session_repo_errors", {"method": "get_session_summary"}
             )
@@ -524,8 +521,8 @@ class SessionRepository:
 
     @metrics.measure_execution_time("session_repo_create_memory_anchor")
     async def _create_memory_anchor(
-        self, user_id: str, content: str, topic: str, context: Dict[str, Any]
-    ) -> Optional[str]:
+        self, user_id: str, content: str, topic: str, context: dict[str, Any]
+    ) -> str | None:
         """
         创建记忆锚点（重要的长期记忆）
 
@@ -540,7 +537,7 @@ class SessionRepository:
         """
         try:
             anchor_id = str(uuid.uuid4())
-            now = datetime.now(timezone.utc).isoformat()
+            now = datetime.now(UTC).isoformat()
 
             anchor_data = {
                 "anchor_id": anchor_id,
@@ -560,7 +557,7 @@ class SessionRepository:
             )
             return anchor_id
         except PyMongoError as e:
-            logger.error(f"创建记忆锚点失败: {str(e)}")
+            logger.error(f"创建记忆锚点失败: {e!s}")
             metrics.increment_counter(
                 "session_repo_errors", {"method": "create_memory_anchor"}
             )
@@ -575,9 +572,9 @@ class SessionRepository:
         role: str,
         content: str,
         diagnosis_step: str,
-        symptoms: List[str],
-        diagnosis_data: Dict[str, Any],
-    ) -> Optional[str]:
+        symptoms: list[str],
+        diagnosis_data: dict[str, Any],
+    ) -> str | None:
         """
         更新对话记录集合，用于追踪诊断过程
 
@@ -596,7 +593,7 @@ class SessionRepository:
         """
         try:
             record_id = str(uuid.uuid4())
-            now = datetime.now(timezone.utc).isoformat()
+            now = datetime.now(UTC).isoformat()
 
             # 查找是否存在现有记录
             existing_record = await self.dialogue_records.find_one(
@@ -665,7 +662,7 @@ class SessionRepository:
             )
             return record_id
         except PyMongoError as e:
-            logger.error(f"更新对话记录失败: {str(e)}")
+            logger.error(f"更新对话记录失败: {e!s}")
             metrics.increment_counter(
                 "session_repo_errors", {"method": "update_dialogue_record"}
             )
@@ -673,8 +670,8 @@ class SessionRepository:
 
     @metrics.measure_execution_time("session_repo_get_memory_anchors")
     async def get_memory_anchors(
-        self, user_id: str, topic: Optional[str] = None, limit: int = 10
-    ) -> List[Dict[str, Any]]:
+        self, user_id: str, topic: str | None = None, limit: int = 10
+    ) -> list[dict[str, Any]]:
         """
         获取用户的记忆锚点
 
@@ -706,21 +703,21 @@ class SessionRepository:
                     {
                         "$inc": {"access_count": 1},
                         "$set": {
-                            "last_accessed": datetime.now(timezone.utc).isoformat()
+                            "last_accessed": datetime.now(UTC).isoformat()
                         },
                     },
                 )
 
             return anchors
         except PyMongoError as e:
-            logger.error(f"获取记忆锚点失败: {str(e)}")
+            logger.error(f"获取记忆锚点失败: {e!s}")
             metrics.increment_counter(
                 "session_repo_errors", {"method": "get_memory_anchors"}
             )
             return []
 
     @metrics.measure_execution_time("session_repo_get_dialogue_record")
-    async def get_dialogue_record(self, session_id: str) -> Optional[Dict[str, Any]]:
+    async def get_dialogue_record(self, session_id: str) -> dict[str, Any] | None:
         """
         获取会话的对话记录
 
@@ -742,7 +739,7 @@ class SessionRepository:
 
             return None
         except PyMongoError as e:
-            logger.error(f"获取对话记录失败: {str(e)}")
+            logger.error(f"获取对话记录失败: {e!s}")
             metrics.increment_counter(
                 "session_repo_errors", {"method": "get_dialogue_record"}
             )
@@ -751,7 +748,7 @@ class SessionRepository:
     @metrics.measure_execution_time("session_repo_get_user_dialogue_records")
     async def get_user_dialogue_records(
         self, user_id: str, limit: int = 10
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """
         获取用户的所有对话记录
 
@@ -778,7 +775,7 @@ class SessionRepository:
 
             return records
         except PyMongoError as e:
-            logger.error(f"获取用户对话记录失败: {str(e)}")
+            logger.error(f"获取用户对话记录失败: {e!s}")
             metrics.increment_counter(
                 "session_repo_errors", {"method": "get_user_dialogue_records"}
             )
@@ -797,7 +794,7 @@ class SessionRepository:
         """
         try:
             expire_date = (
-                datetime.now(timezone.utc) - timedelta(days=days)
+                datetime.now(UTC) - timedelta(days=days)
             ).isoformat()
 
             # 删除过期会话关联的消息
@@ -819,7 +816,7 @@ class SessionRepository:
             logger.info(f"删除过期会话: {deleted_count}个")
             return deleted_count
         except PyMongoError as e:
-            logger.error(f"删除过期会话失败: {str(e)}")
+            logger.error(f"删除过期会话失败: {e!s}")
             metrics.increment_counter(
                 "session_repo_errors", {"method": "delete_expired_sessions"}
             )

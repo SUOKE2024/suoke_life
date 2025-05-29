@@ -4,7 +4,7 @@
 定义问诊服务中使用的所有自定义异常类。
 """
 
-from typing import Any, Dict, Optional
+from typing import Any
 
 
 class InquiryServiceError(Exception):
@@ -13,8 +13,8 @@ class InquiryServiceError(Exception):
     def __init__(
         self,
         message: str,
-        error_code: Optional[str] = None,
-        details: Optional[Dict[str, Any]] = None,
+        error_code: str | None = None,
+        details: dict[str, Any] | None = None,
     ) -> None:
         super().__init__(message)
         self.message = message
@@ -30,7 +30,7 @@ class InquiryServiceError(Exception):
 class ConfigurationError(InquiryServiceError):
     """配置错误"""
 
-    def __init__(self, message: str, config_key: Optional[str] = None) -> None:
+    def __init__(self, message: str, config_key: str | None = None) -> None:
         super().__init__(
             message=message,
             error_code="CONFIG_ERROR",
@@ -41,7 +41,7 @@ class ConfigurationError(InquiryServiceError):
 class ValidationError(InquiryServiceError):
     """数据验证错误"""
 
-    def __init__(self, message: str, field: Optional[str] = None) -> None:
+    def __init__(self, message: str, field: str | None = None) -> None:
         super().__init__(
             message=message,
             error_code="VALIDATION_ERROR",
@@ -52,7 +52,7 @@ class ValidationError(InquiryServiceError):
 class ServiceUnavailableError(InquiryServiceError):
     """服务不可用错误"""
 
-    def __init__(self, service_name: str, reason: Optional[str] = None) -> None:
+    def __init__(self, service_name: str, reason: str | None = None) -> None:
         message = f"Service '{service_name}' is unavailable"
         if reason:
             message += f": {reason}"
@@ -66,7 +66,7 @@ class ServiceUnavailableError(InquiryServiceError):
 class SymptomExtractionError(InquiryServiceError):
     """症状提取错误"""
 
-    def __init__(self, message: str, text: Optional[str] = None) -> None:
+    def __init__(self, message: str, text: str | None = None) -> None:
         super().__init__(
             message=message,
             error_code="SYMPTOM_EXTRACTION_ERROR",
@@ -77,7 +77,7 @@ class SymptomExtractionError(InquiryServiceError):
 class TCMPatternMappingError(InquiryServiceError):
     """中医证型映射错误"""
 
-    def __init__(self, message: str, symptoms: Optional[list] = None) -> None:
+    def __init__(self, message: str, symptoms: list | None = None) -> None:
         super().__init__(
             message=message,
             error_code="TCM_PATTERN_MAPPING_ERROR",
@@ -88,7 +88,9 @@ class TCMPatternMappingError(InquiryServiceError):
 class HealthRiskAssessmentError(InquiryServiceError):
     """健康风险评估错误"""
 
-    def __init__(self, message: str, assessment_data: Optional[Dict[str, Any]] = None) -> None:
+    def __init__(
+        self, message: str, assessment_data: dict[str, Any] | None = None
+    ) -> None:
         super().__init__(
             message=message,
             error_code="HEALTH_RISK_ASSESSMENT_ERROR",
@@ -99,7 +101,7 @@ class HealthRiskAssessmentError(InquiryServiceError):
 class KnowledgeBaseError(InquiryServiceError):
     """知识库错误"""
 
-    def __init__(self, message: str, operation: Optional[str] = None) -> None:
+    def __init__(self, message: str, operation: str | None = None) -> None:
         super().__init__(
             message=message,
             error_code="KNOWLEDGE_BASE_ERROR",
@@ -110,7 +112,7 @@ class KnowledgeBaseError(InquiryServiceError):
 class DialogueError(InquiryServiceError):
     """对话管理错误"""
 
-    def __init__(self, message: str, session_id: Optional[str] = None) -> None:
+    def __init__(self, message: str, session_id: str | None = None) -> None:
         super().__init__(
             message=message,
             error_code="DIALOGUE_ERROR",
@@ -125,8 +127,8 @@ class ExternalServiceError(InquiryServiceError):
         self,
         service_name: str,
         message: str,
-        status_code: Optional[int] = None,
-        response_data: Optional[Dict[str, Any]] = None,
+        status_code: int | None = None,
+        response_data: dict[str, Any] | None = None,
     ) -> None:
         super().__init__(
             message=f"External service '{service_name}' error: {message}",
@@ -136,4 +138,4 @@ class ExternalServiceError(InquiryServiceError):
                 "status_code": status_code,
                 "response_data": response_data,
             },
-        ) 
+        )

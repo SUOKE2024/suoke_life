@@ -1,140 +1,177 @@
 # Integration Service
 
-第三方平台集成服务 - 索克生活健康管理平台的核心微服务
+索克生活第三方健康平台集成服务
 
 ## 概述
 
-Integration Service 负责管理与第三方健康平台的集成，包括OAuth认证、数据同步、API适配等功能。
+Integration Service 是索克生活平台的核心组件之一，负责与各种第三方健康平台进行数据集成，为用户提供统一的健康数据管理体验。
 
 ## 支持的平台
 
-- Apple Health - iOS健康应用数据
-- Google Fit - Google健康数据平台  
-- Fitbit - Fitbit设备和应用数据
-- 小米运动 - 小米生态健康数据
-- 华为运动健康 - 华为生态健康数据
-- 微信运动 - 微信运动步数数据
-- 支付宝运动 - 支付宝运动数据
+- **Apple Health** - iOS 健康应用数据集成
+- **Google Fit** - Android 健康数据集成
+- **Fitbit** - 智能手环和健康设备数据
+- **小米健康** - 小米生态健康设备数据
+- **华为健康** - 华为生态健康设备数据
+- **微信运动** - 微信运动步数等数据
+- **支付宝健康** - 支付宝健康相关数据
 
-## 核心功能
+## 技术栈
 
-### 1. 平台集成管理
-- 创建、更新、删除第三方平台集成
-- 管理集成状态和配置
-- 支持批量操作
-
-### 2. OAuth认证
-- 标准OAuth 2.0流程
-- 访问令牌管理和自动刷新
-- 权限范围控制
-
-### 3. 数据同步
-- 自动定时同步
-- 手动触发同步
-- 增量数据更新
-- 同步状态监控
-
-## 技术架构
-
-### 技术栈
-- Python 3.11+
-- FastAPI - Web框架
-- SQLAlchemy - ORM
-- PostgreSQL - 主数据库
-- Redis - 缓存和会话存储
-- Pydantic - 数据验证
-
-### 架构模式
-- 分层架构: API层 → Service层 → Repository层 → Model层
-- 适配器模式: 统一的平台适配器接口
-- 依赖注入: FastAPI依赖管理
-- 异步编程: 全异步架构
-
-## 快速开始
-
-### 1. 安装依赖
-
-```bash
-cd services/integration-service
-pip install -r requirements.txt
-```
-
-### 2. 启动服务
-
-使用快速启动脚本：
-
-```bash
-python scripts/quick_start.py
-```
-
-### 3. 验证服务
-
-访问健康检查：
-
-```bash
-curl http://localhost:8003/api/v1/health
-```
-
-查看API文档：
-
-```
-http://localhost:8003/docs
-```
-
-## API端点
-
-### 健康检查
-- GET /api/v1/health - 服务健康状态
-- GET /api/v1/health/ready - 服务就绪状态
-
-### 平台认证
-- GET /api/v1/auth/platforms - 获取支持的平台列表
-- GET /api/v1/auth/{platform}/url - 获取授权URL
-- GET /api/v1/auth/{platform}/callback - 处理认证回调
-
-### 集成管理
-- GET /api/v1/integrations - 获取用户集成列表
-- POST /api/v1/integrations - 创建新集成
-- GET /api/v1/integrations/{id} - 获取集成详情
-- PUT /api/v1/integrations/{id} - 更新集成配置
-- DELETE /api/v1/integrations/{id} - 删除集成
+- **Python 3.13.3** - 主要编程语言
+- **FastAPI** - Web 框架
+- **SQLAlchemy** - ORM 框架
+- **PostgreSQL** - 主数据库
+- **Redis** - 缓存和会话存储
+- **UV** - 包管理工具
+- **Ruff** - 代码格式化和检查
+- **Pytest** - 测试框架
 
 ## 项目结构
 
 ```
 integration-service/
-├── api/rest/              # REST API路由
-├── cmd/server/            # 应用入口
-├── config/                # 配置文件
-├── internal/              # 内部模块
-│   ├── adapters/          # 平台适配器
-│   ├── model/             # 数据模型
-│   ├── repository/        # 数据访问层
-│   └── service/           # 业务逻辑层
-├── scripts/               # 脚本
-├── test/                  # 测试
-└── requirements.txt       # Python依赖
+├── integration_service/          # 主应用包
+│   ├── models/                   # 数据模型
+│   ├── services/                 # 业务逻辑层
+│   ├── api/                      # API 路由
+│   ├── config.py                 # 配置管理
+│   └── main.py                   # 应用入口
+├── test/                         # 测试文件
+├── config/                       # 配置文件
+├── pyproject.toml               # 项目配置
+├── run.py                       # 启动脚本
+└── README.md                    # 项目说明
 ```
 
-## 开发状态
+## 快速开始
 
-✅ 已完成：
-- 基础架构搭建
-- 数据模型定义
-- 平台适配器框架
-- API路由设计
-- 依赖注入系统
-- 健康检查功能
+### 环境要求
 
-🚧 进行中：
-- 数据库集成
-- Redis缓存
-- 完整的OAuth流程
-- 数据同步功能
+- Python 3.13.3+
+- PostgreSQL 12+
+- Redis 6+
 
-📋 待完成：
-- 单元测试
-- 集成测试
-- 性能优化
-- 监控和日志
-- 部署配置 
+### 安装依赖
+
+```bash
+# 使用 UV 安装依赖
+uv sync
+
+# 或者安装开发依赖
+uv sync --extra dev
+```
+
+### 配置环境变量
+
+```bash
+# 复制环境变量模板
+cp .env.example .env
+
+# 编辑环境变量
+vim .env
+```
+
+### 运行服务
+
+```bash
+# 开发模式
+python run.py
+
+# 或使用 UV
+uv run python run.py
+```
+
+### 运行测试
+
+```bash
+# 运行所有测试
+uv run pytest
+
+# 运行测试并生成覆盖率报告
+uv run pytest --cov=integration_service
+```
+
+## API 文档
+
+服务启动后，可以通过以下地址访问 API 文档：
+
+- Swagger UI: http://localhost:8090/docs
+- ReDoc: http://localhost:8090/redoc
+
+## 开发指南
+
+### 代码规范
+
+项目使用 Ruff 进行代码格式化和检查：
+
+```bash
+# 检查代码
+uv run ruff check integration_service/
+
+# 自动修复
+uv run ruff check integration_service/ --fix
+
+# 格式化代码
+uv run ruff format integration_service/
+```
+
+### 类型检查
+
+使用 MyPy 进行类型检查：
+
+```bash
+uv run mypy integration_service/
+```
+
+### 数据库迁移
+
+使用 Alembic 管理数据库迁移：
+
+```bash
+# 生成迁移文件
+uv run alembic revision --autogenerate -m "描述"
+
+# 执行迁移
+uv run alembic upgrade head
+```
+
+## 部署
+
+### Docker 部署
+
+```bash
+# 构建镜像
+docker build -t integration-service .
+
+# 运行容器
+docker run -p 8090:8090 integration-service
+```
+
+### Kubernetes 部署
+
+参考 `deploy/kubernetes/` 目录下的配置文件。
+
+## 监控和日志
+
+- **健康检查**: `/health`
+- **指标监控**: `/metrics` (Prometheus 格式)
+- **日志**: 使用 structlog 结构化日志
+
+## 贡献指南
+
+1. Fork 项目
+2. 创建功能分支
+3. 提交更改
+4. 推送到分支
+5. 创建 Pull Request
+
+## 许可证
+
+本项目采用 MIT 许可证。详见 LICENSE 文件。
+
+## 联系方式
+
+- 项目主页: https://github.com/suokelife/integration-service
+- 问题反馈: https://github.com/suokelife/integration-service/issues
+- 邮箱: dev@suokelife.com 

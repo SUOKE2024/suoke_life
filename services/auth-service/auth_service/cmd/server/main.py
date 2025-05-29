@@ -1,6 +1,5 @@
 """认证服务主启动文件"""
 
-import asyncio
 import logging
 import signal
 import sys

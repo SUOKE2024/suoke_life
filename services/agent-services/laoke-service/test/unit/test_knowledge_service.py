@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 知识服务单元测试
@@ -8,14 +7,15 @@
 import os
 import sys
 import unittest
-from unittest.mock import patch, MagicMock, AsyncMock
+from unittest.mock import AsyncMock, MagicMock, patch
+
 import pytest
 
 # 添加项目根路径到 Python 路径
 sys.path.insert(0, os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))))
 
-from internal.knowledge.knowledge_service import KnowledgeService
 from internal.knowledge.knowledge_graph import KnowledgeGraph
+from internal.knowledge.knowledge_service import KnowledgeService
 
 
 class TestKnowledgeService(unittest.TestCase):
@@ -25,7 +25,7 @@ class TestKnowledgeService(unittest.TestCase):
         """测试前初始化"""
         # 模拟知识图谱依赖
         self.mock_knowledge_graph = MagicMock(spec=KnowledgeGraph)
-        
+
         # 模拟配置
         self.mock_config = {
             'knowledge': {
@@ -34,14 +34,14 @@ class TestKnowledgeService(unittest.TestCase):
                 'embedding_model': 'text-embedding-3-large'
             }
         }
-        
+
         # 模拟存储库
         self.mock_repository = MagicMock()
         self.mock_repository.get_article_by_id = AsyncMock()
         self.mock_repository.get_articles = AsyncMock()
         self.mock_repository.create_article = AsyncMock()
         self.mock_repository.update_article = AsyncMock()
-        
+
         # 初始化知识服务
         with patch('internal.knowledge.knowledge_service.Config', return_value=self.mock_config):
             self.knowledge_service = KnowledgeService()
@@ -60,10 +60,10 @@ class TestKnowledgeService(unittest.TestCase):
             'tags': ['基础理论', '中医']
         }
         self.mock_repository.get_article_by_id.return_value = mock_article
-        
+
         # 调用被测试的方法
         result = await self.knowledge_service.get_article_by_id('123')
-        
+
         # 断言
         assert result == mock_article
         self.mock_repository.get_article_by_id.assert_called_once_with('123')
@@ -89,22 +89,22 @@ class TestKnowledgeService(unittest.TestCase):
                 'similarity': 0.75
             }
         ]
-        
+
         # 模拟嵌入和搜索
         self.mock_knowledge_graph.generate_embeddings.return_value = mock_embeddings
         self.mock_knowledge_graph.search_similar_content.return_value = mock_results
-        
+
         # 调用被测试的方法
         results = await self.knowledge_service.search_knowledge('中医基础理论', limit=5)
-        
+
         # 断言
         assert len(results) == 2
         assert results[0]['id'] == '123'
         assert results[0]['similarity'] == 0.85
         self.mock_knowledge_graph.generate_embeddings.assert_called_once_with('中医基础理论')
         self.mock_knowledge_graph.search_similar_content.assert_called_once_with(
-            mock_embeddings, 
-            limit=5, 
+            mock_embeddings,
+            limit=5,
             threshold=0.7
         )
 
@@ -118,7 +118,7 @@ class TestKnowledgeService(unittest.TestCase):
             'category': '中药学',
             'tags': ['中药', '概论', '基础知识']
         }
-        
+
         # 设置模拟返回值
         mock_created_article = {
             'id': '789',
@@ -130,14 +130,14 @@ class TestKnowledgeService(unittest.TestCase):
             'view_count': 0
         }
         self.mock_repository.create_article.return_value = mock_created_article
-        
+
         # 模拟嵌入生成
         self.mock_knowledge_graph.generate_embeddings.return_value = [0.1, 0.2, 0.3]
         self.mock_knowledge_graph.store_embeddings.return_value = True
-        
+
         # 调用被测试的方法
         result = await self.knowledge_service.create_article(article_data)
-        
+
         # 断言
         assert result['id'] == '789'
         assert result['title'] == '中药学概论'
@@ -154,10 +154,10 @@ class TestKnowledgeService(unittest.TestCase):
             '阴阳五行',
             '经络学说'
         ]
-        
+
         # 调用被测试的方法
         topics = await self.knowledge_service.get_related_topics('中医基础')
-        
+
         # 断言
         assert len(topics) == 3
         assert '阴阳五行' in topics
@@ -169,7 +169,7 @@ class TestKnowledgeService(unittest.TestCase):
         # 设置模拟数据
         article_id = '123'
         rating = 4
-        
+
         # 设置模拟返回值
         mock_article = {
             'id': '123',
@@ -180,19 +180,19 @@ class TestKnowledgeService(unittest.TestCase):
             'rating': 3.5,
             'rating_count': 2
         }
-        
+
         mock_updated_article = {
             **mock_article,
             'rating': 3.67,  # (3.5*2 + 4)/3 = 3.67
             'rating_count': 3
         }
-        
+
         self.mock_repository.get_article_by_id.return_value = mock_article
         self.mock_repository.update_article.return_value = mock_updated_article
-        
+
         # 调用被测试的方法
         result = await self.knowledge_service.rate_article(article_id, rating)
-        
+
         # 断言
         assert result['rating'] == 3.67
         assert result['rating_count'] == 3
@@ -201,4 +201,4 @@ class TestKnowledgeService(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main() 
+    unittest.main()

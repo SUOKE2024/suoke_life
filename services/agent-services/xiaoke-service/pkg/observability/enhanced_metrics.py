@@ -1,26 +1,25 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 增强的监控和指标收集器
 提供详细的性能监控、业务指标和健康检查功能
 """
 
-import time
 import asyncio
 import logging
-import psutil
-from typing import Dict, Any, List, Optional, Callable
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+import time
 from collections import defaultdict, deque
-from contextlib import asynccontextmanager
+from contextlib import asynccontextmanager, suppress
+from dataclasses import dataclass
+from datetime import datetime
+from typing import Any
 
+import psutil
 from prometheus_client import (
-    Counter,
-    Histogram,
-    Gauge,
-    Info,
     CollectorRegistry,
+    Counter,
+    Gauge,
+    Histogram,
+    Info,
     generate_latest,
 )
 
@@ -231,7 +230,7 @@ class EnhancedMetricsCollector:
             # 简单的健康状态评估
             overall_status = "healthy"
             for component, status in self.health_status.items():
-                if component != "overall" and component != "last_check":
+                if component not in {"overall", "last_check"}:
                     if status == "unhealthy":
                         overall_status = "unhealthy"
                         break
@@ -248,7 +247,7 @@ class EnhancedMetricsCollector:
         """清理过期指标"""
         cutoff_time = time.time() - (self.config.metric_retention_hours * 3600)
 
-        for metric_name, data in self.time_series_metrics.items():
+        for _metric_name, data in self.time_series_metrics.items():
             # 移除过期数据
             while data and data[0][0] < cutoff_time:
                 data.popleft()
@@ -261,7 +260,7 @@ class EnhancedMetricsCollector:
 
         try:
             yield
-        except Exception as e:
+        except Exception:
             status = "error"
             raise
         finally:
@@ -297,7 +296,7 @@ class EnhancedMetricsCollector:
                 self.error_rate.set(error_rate)
 
     def increment_business_metric(
-        self, metric_name: str, value: int = 1, labels: Dict[str, str] = None
+        self, metric_name: str, value: int = 1, labels: dict[str, str] | None = None
     ):
         """增加业务指标"""
         if metric_name in self.business_metrics:
@@ -329,7 +328,7 @@ class EnhancedMetricsCollector:
             self.active_connections.labels(type=connection_type).set(count)
 
     def record_custom_metric(
-        self, name: str, value: float, labels: Dict[str, str] = None
+        self, name: str, value: float, labels: dict[str, str] | None = None
     ):
         """记录自定义指标"""
         timestamp = time.time()
@@ -338,7 +337,7 @@ class EnhancedMetricsCollector:
         self.custom_metrics[name].append(metric_data)
         self.time_series_metrics[name].append((timestamp, value))
 
-    def get_performance_summary(self) -> Dict[str, Any]:
+    def get_performance_summary(self) -> dict[str, Any]:
         """获取性能摘要"""
         request_times = list(self.performance_data["request_times"])
         error_rates = list(self.performance_data["error_rates"])
@@ -358,7 +357,7 @@ class EnhancedMetricsCollector:
 
         return summary
 
-    def _calculate_percentile(self, data: List[float], percentile: int) -> float:
+    def _calculate_percentile(self, data: list[float], percentile: int) -> float:
         """计算百分位数"""
         if not data:
             return 0.0
@@ -369,15 +368,15 @@ class EnhancedMetricsCollector:
 
         return sorted_data[index]
 
-    def get_business_metrics(self) -> Dict[str, Any]:
+    def get_business_metrics(self) -> dict[str, Any]:
         """获取业务指标"""
         return self.business_metrics.copy()
 
-    def get_health_status(self) -> Dict[str, Any]:
+    def get_health_status(self) -> dict[str, Any]:
         """获取健康状态"""
         return self.health_status.copy()
 
-    def get_system_metrics(self) -> Dict[str, Any]:
+    def get_system_metrics(self) -> dict[str, Any]:
         """获取系统指标"""
         try:
             cpu_percent = psutil.cpu_percent()
@@ -404,7 +403,7 @@ class EnhancedMetricsCollector:
 
         return generate_latest(self.registry).decode("utf-8")
 
-    def get_all_metrics(self) -> Dict[str, Any]:
+    def get_all_metrics(self) -> dict[str, Any]:
         """获取所有指标"""
         return {
             "performance": self.get_performance_summary(),
@@ -423,20 +422,18 @@ class EnhancedMetricsCollector:
         """关闭监控"""
         if self._monitoring_task:
             self._monitoring_task.cancel()
-            try:
+            with suppress(asyncio.CancelledError):
                 await self._monitoring_task
-            except asyncio.CancelledError:
-                pass
 
         logger.info("指标收集器已关闭")
 
 
 # 全局指标收集器实例
-_metrics_collector: Optional[EnhancedMetricsCollector] = None
+_metrics_collector: EnhancedMetricsCollector | None = None
 
 
 def get_metrics_collector(
-    config: Optional[MetricConfig] = None,
+    config: MetricConfig | None = None,
 ) -> EnhancedMetricsCollector:
     """获取指标收集器实例"""
     global _metrics_collector

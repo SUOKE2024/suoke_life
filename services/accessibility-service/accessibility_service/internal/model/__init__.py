@@ -12,20 +12,20 @@
 # from .service_request import ServiceRequest
 
 from .base import BaseModel
-from .user_integration import UserIntegration, PlatformAuth
-from .health_data import HealthData, ActivityData, SleepData, HeartRateData
+from .health_data import ActivityData, HealthData, HeartRateData, SleepData
 from .sync_record import SyncRecord, SyncStatus
+from .user_integration import PlatformAuth, UserIntegration
 
 __all__ = [
     # "UserConfig",
     # "ServiceRequest",
     "BaseModel",
     "UserIntegration",
-    "PlatformAuth", 
+    "PlatformAuth",
     "HealthData",
     "ActivityData",
     "SleepData",
     "HeartRateData",
     "SyncRecord",
     "SyncStatus",
-] 
+]

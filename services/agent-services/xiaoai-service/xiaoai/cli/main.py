@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """
 小艾智能体主命令行接口
@@ -11,7 +10,6 @@ XiaoAI Agent Main CLI
 from __future__ import annotations
 
 import sys
-from typing import Optional
 
 import click
 from loguru import logger
@@ -20,7 +18,7 @@ from xiaoai import __version__
 
 
 @click.group()
-@click.version_option(version=__version__, prog_name="xiaoai")
+@click.version_option(version=_version__, prog_name="xiaoai")
 @click.option(
     "--verbose", "-v",
     count=True,
@@ -32,35 +30,35 @@ from xiaoai import __version__
     help="配置文件路径"
 )
 @click.pass_context
-def cli(ctx: click.Context, verbose: int, config: Optional[str]) -> None:
+def cli(ctx: click.Context, verbose: int, config: str | None) -> None:
     """
     小艾智能体命令行工具
-    
-    小艾是索克生活平台的核心AI智能体，专注于提供智能健康管理服务。
+
+    小艾是索克生活平台的核心AI智能体, 专注于提供智能健康管理服务。
     """
     # 确保上下文对象存在
     ctx.ensure_object(dict)
-    
+
     # 设置日志级别
-    log_levels = ["ERROR", "WARNING", "INFO", "DEBUG"]
-    log_level = log_levels[min(verbose, len(log_levels) - 1)]
-    
+    loglevels = ["ERROR", "WARNING", "INFO", "DEBUG"]
+    loglevel = log_levels[min(verbose, len(loglevels) - 1)]
+
     # 配置日志
     logger.remove()  # 移除默认处理器
     logger.add(
         sys.stderr,
-        level=log_level,
+        level=loglevel,
         format="<green>{time:YYYY-MM-DD HH:mm:ss}</green> | "
                "<level>{level: <8}</level> | "
                "<cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - "
                "<level>{message}</level>",
         colorize=True
     )
-    
+
     # 存储配置到上下文
     ctx.obj["config"] = config
     ctx.obj["verbose"] = verbose
-    
+
     logger.info(f"小艾智能体 v{__version__} 启动")
 
 
@@ -71,7 +69,7 @@ def cli(ctx: click.Context, verbose: int, config: Optional[str]) -> None:
     help="服务器绑定地址 (默认: 0.0.0.0)"
 )
 @click.option(
-    "--port", "-p", 
+    "--port", "-p",
     default=8000,
     type=int,
     help="服务器端口 (默认: 8000)"
@@ -91,16 +89,16 @@ def cli(ctx: click.Context, verbose: int, config: Optional[str]) -> None:
 def server(
     ctx: click.Context,
     host: str,
-    port: int, 
+    port: int,
     workers: int,
     reload: bool
 ) -> None:
     """启动小艾智能体服务器"""
     from .server import run_server
-    
+
     logger.info(f"启动服务器: {host}:{port}")
     logger.info(f"工作进程数: {workers}")
-    
+
     run_server(
         host=host,
         port=port,
@@ -130,9 +128,9 @@ def worker(
 ) -> None:
     """启动小艾智能体工作进程"""
     from .worker import run_worker
-    
+
     logger.info(f"启动工作进程: 并发数={concurrency}, 队列={queue}")
-    
+
     run_worker(
         concurrency=concurrency,
         queue=queue,
@@ -150,7 +148,7 @@ def worker(
 def status(format: str) -> None:
     """检查小艾智能体状态"""
     from .status import check_status
-    
+
     logger.info("检查服务状态...")
     check_status(format=format)
 
@@ -170,7 +168,7 @@ def status(format: str) -> None:
 def init(target: str, force: bool) -> None:
     """初始化小艾智能体"""
     from .init import initialize
-    
+
     logger.info(f"初始化 {target}...")
     initialize(target=target, force=force)
 
@@ -179,17 +177,17 @@ def init(target: str, force: bool) -> None:
 @click.option(
     "--check-only",
     is_flag=True,
-    help="仅检查健康状态，不输出详细信息"
+    help="仅检查健康状态, 不输出详细信息"
 )
-def health(check_only: bool) -> None:
+def health(checkonly: bool) -> None:
     """健康检查"""
     from .health import health_check
-    
+
     result = health_check()
-    
+
     if check_only:
         sys.exit(0 if result["healthy"] else 1)
-    
+
     if result["healthy"]:
         click.echo(click.style("✓ 小艾智能体运行正常", fg="green"))
     else:
@@ -204,7 +202,7 @@ def main() -> None:
     try:
         cli()
     except KeyboardInterrupt:
-        logger.info("收到中断信号，正在退出...")
+        logger.info("收到中断信号, 正在退出...")
         sys.exit(0)
     except Exception as e:
         logger.error(f"发生错误: {e}")
@@ -212,4 +210,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main() 
+    main()

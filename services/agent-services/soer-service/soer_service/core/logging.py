@@ -7,7 +7,7 @@
 import logging
 import logging.config
 import sys
-from typing import Dict, Any
+from typing import Any
 
 import structlog
 from pythonjsonlogger.jsonlogger import JsonFormatter
@@ -16,12 +16,12 @@ from pythonjsonlogger.jsonlogger import JsonFormatter
 def setup_logging(log_level: str = "INFO") -> None:
     """
     设置应用日志配置
-    
+
     Args:
         log_level: 日志级别
     """
     # 配置标准库日志
-    logging_config: Dict[str, Any] = {
+    logging_config: dict[str, Any] = {
         "version": 1,
         "disable_existing_loggers": False,
         "formatters": {
@@ -95,14 +95,15 @@ def setup_logging(log_level: str = "INFO") -> None:
             "handlers": ["console"],
         },
     }
-    
+
     # 创建日志目录
     import os
+
     os.makedirs("logs", exist_ok=True)
-    
+
     # 应用配置
     logging.config.dictConfig(logging_config)
-    
+
     # 配置 structlog
     structlog.configure(
         processors=[
@@ -114,8 +115,11 @@ def setup_logging(log_level: str = "INFO") -> None:
             structlog.processors.StackInfoRenderer(),
             structlog.processors.format_exc_info,
             structlog.processors.UnicodeDecoder(),
-            structlog.processors.JSONRenderer() if not sys.stdout.isatty() 
-            else structlog.dev.ConsoleRenderer(),
+            (
+                structlog.processors.JSONRenderer()
+                if not sys.stdout.isatty()
+                else structlog.dev.ConsoleRenderer()
+            ),
         ],
         context_class=dict,
         logger_factory=structlog.stdlib.LoggerFactory(),
@@ -127,11 +131,11 @@ def setup_logging(log_level: str = "INFO") -> None:
 def get_logger(name: str) -> structlog.BoundLogger:
     """
     获取结构化日志记录器
-    
+
     Args:
         name: 日志记录器名称
-        
+
     Returns:
         结构化日志记录器实例
     """
-    return structlog.get_logger(name) 
+    return structlog.get_logger(name)

@@ -5,7 +5,7 @@
 """
 
 import logging
-from typing import Any
+from typing import Any, ClassVar
 
 from internal.maze.generator import MazeGenerator
 from internal.repository.maze_repository import MazeRepository
@@ -20,6 +20,27 @@ logger = logging.getLogger(__name__)
 class MazeService:
     """迷宫服务，负责迷宫的生成和管理"""
 
+    # 业务常量
+    MIN_DIFFICULTY = 1
+    MAX_DIFFICULTY = 5
+    MAX_ACTIVE_MAZES_PER_TYPE = 3
+    MAX_PAGE_SIZE = 100
+    DEFAULT_PAGE_SIZE = 10
+    CACHE_TTL_MAZE = 1800  # 30分钟
+    CACHE_TTL_LIST = 300   # 5分钟
+
+    # 搜索相关常量
+    MIN_SEARCH_QUERY_LENGTH = 2  # 最小搜索关键词长度
+
+    # 难度对应的迷宫尺寸映射
+    DIFFICULTY_SIZE_MAPPING: ClassVar[dict[int, tuple[int, int]]] = {
+        1: (5, 5),
+        2: (7, 7),
+        3: (10, 10),
+        4: (12, 12),
+        5: (15, 15)
+    }
+
     def __init__(
         self,
         maze_repository: MazeRepository | None = None,
@@ -30,7 +51,7 @@ class MazeService:
     ):
         """
         初始化迷宫服务
-        
+
         Args:
             maze_repository: 迷宫存储库
             maze_generator: 迷宫生成器
@@ -61,7 +82,7 @@ class MazeService:
     ) -> dict[str, Any]:
         """
         创建新迷宫
-        
+
         Args:
             user_id: 用户ID
             maze_type: 迷宫类型（health_path, nutrition_garden, tcm_journey, balanced_life）
@@ -69,10 +90,10 @@ class MazeService:
             health_attributes: 用户健康属性
             use_template: 是否使用模板
             template_id: 模板ID（如果使用模板）
-            
+
         Returns:
             Dict: 包含迷宫信息的字典
-            
+
         Raises:
             ValueError: 参数无效时
             Exception: 创建失败时
@@ -84,8 +105,8 @@ class MazeService:
             if not user_id or not maze_type:
                 raise ValueError("用户ID和迷宫类型不能为空")
 
-            if difficulty < 1 or difficulty > 5:
-                raise ValueError("难度级别必须在1-5之间")
+            if difficulty < self.MIN_DIFFICULTY or difficulty > self.MAX_DIFFICULTY:
+                raise ValueError(f"难度级别必须在{self.MIN_DIFFICULTY}-{self.MAX_DIFFICULTY}之间")
 
             if maze_type not in MazeGenerator.MAZE_TYPES:
                 raise ValueError(f"无效的迷宫类型: {maze_type}")
@@ -94,19 +115,12 @@ class MazeService:
             existing_mazes = await self.maze_repo.get_mazes_by_user(user_id, limit=50)
             active_same_type = [m for m in existing_mazes if m.maze_type == maze_type and m.status == "ACTIVE"]
 
-            if len(active_same_type) >= 3:  # 限制每种类型最多3个活跃迷宫
+            if len(active_same_type) >= self.MAX_ACTIVE_MAZES_PER_TYPE:
                 logger.warning(f"用户 {user_id} 已有过多 {maze_type} 类型的活跃迷宫")
-                raise ValueError(f"您已有过多 {maze_type} 类型的活跃迷宫，请先完成现有迷宫")
+                raise ValueError(f"您已有过多 {maze_type} 类型的活跃迷宫, 请先完成现有迷宫")
 
             # 根据难度确定迷宫大小
-            size_mapping = {
-                1: (5, 5),
-                2: (7, 7),
-                3: (10, 10),
-                4: (12, 12),
-                5: (15, 15)
-            }
-            size_x, size_y = size_mapping.get(difficulty, (10, 10))
+            size_x, size_y = self.DIFFICULTY_SIZE_MAPPING.get(difficulty, (10, 10))
 
             # 使用模板或生成新迷宫
             if use_template and template_id:
@@ -122,7 +136,7 @@ class MazeService:
                     health_attributes=health_attributes or {}
                 )
             else:
-                logger.info(f"生成新迷宫，大小为 {size_x}x{size_y}")
+                logger.info(f"生成新迷宫, 大小为 {size_x}x{size_y}")
                 # 生成新迷宫 - 修复方法调用
                 maze = await self.generator.generate_maze(
                     user_id=user_id,
@@ -141,7 +155,7 @@ class MazeService:
 
             # 缓存迷宫信息
             cache_key = f"maze:{saved_maze.maze_id}"
-            await self.cache_manager.set(cache_key, saved_maze.to_dict(), ttl=1800)  # 缓存30分钟
+            await self.cache_manager.set(cache_key, saved_maze.to_dict(), ttl=self.CACHE_TTL_MAZE)
 
             logger.info(f"成功创建迷宫 {saved_maze.maze_id}")
             return saved_maze.to_dict()
@@ -153,16 +167,16 @@ class MazeService:
         except Exception as e:
             logger.exception(f"创建迷宫时发生错误: {e!s}")
             record_maze_error("create", "creation_failed")
-            raise Exception(f"创建迷宫失败: {e!s}")
+            raise Exception(f"创建迷宫失败: {e!s}") from e
 
     async def get_maze(self, maze_id: str, user_id: str) -> dict[str, Any] | None:
         """
         获取迷宫信息
-        
+
         Args:
             maze_id: 迷宫ID
             user_id: 用户ID
-            
+
         Returns:
             Optional[Dict]: 迷宫信息或None（如果未找到）
         """
@@ -200,7 +214,7 @@ class MazeService:
             maze_dict = maze.to_dict()
 
             # 缓存结果
-            await self.cache_manager.set(cache_key, maze_dict, ttl=1800)
+            await self.cache_manager.set(cache_key, maze_dict, ttl=self.CACHE_TTL_MAZE)
 
             record_maze_operation("get", maze.maze_type, maze.difficulty)
             return maze_dict
@@ -212,7 +226,7 @@ class MazeService:
         except Exception as e:
             logger.exception(f"获取迷宫时发生错误: {e!s}")
             record_maze_error("get", "retrieval_failed")
-            raise Exception(f"获取迷宫失败: {e!s}")
+            raise Exception(f"获取迷宫失败: {e!s}") from e
 
     async def get_user_mazes(
         self,
@@ -224,14 +238,14 @@ class MazeService:
     ) -> tuple[list[dict[str, Any]], int]:
         """
         获取用户的迷宫列表
-        
+
         Args:
             user_id: 用户ID
             maze_type: 迷宫类型筛选（可选）
             status: 状态筛选（可选）
             page: 页码
             page_size: 每页数量
-            
+
         Returns:
             Tuple[List[Dict], int]: 迷宫列表和总数
         """
@@ -242,8 +256,8 @@ class MazeService:
                 raise ValueError("用户ID不能为空")
 
             page = max(page, 1)
-            if page_size < 1 or page_size > 100:
-                page_size = 10
+            if page_size < 1 or page_size > self.MAX_PAGE_SIZE:
+                page_size = self.DEFAULT_PAGE_SIZE
 
             # 构建缓存键
             cache_key = f"user_mazes:{user_id}:{maze_type or 'all'}:{status or 'all'}:{page}:{page_size}"
@@ -271,7 +285,7 @@ class MazeService:
 
             # 缓存结果
             result = {"mazes": maze_dicts, "total": total}
-            await self.cache_manager.set(cache_key, result, ttl=300)  # 缓存5分钟
+            await self.cache_manager.set(cache_key, result, ttl=self.CACHE_TTL_LIST)
 
             record_maze_operation("list", maze_type or "all", 0)
             return maze_dicts, total
@@ -283,7 +297,7 @@ class MazeService:
         except Exception as e:
             logger.exception(f"获取用户迷宫列表时发生错误: {e!s}")
             record_maze_error("list", "retrieval_failed")
-            raise Exception(f"获取迷宫列表失败: {e!s}")
+            raise Exception(f"获取迷宫列表失败: {e!s}") from e
 
     async def update_maze(
         self,
@@ -293,12 +307,12 @@ class MazeService:
     ) -> dict[str, Any] | None:
         """
         更新迷宫信息
-        
+
         Args:
             maze_id: 迷宫ID
             user_id: 用户ID（用于验证权限）
             updates: 要更新的字段
-            
+
         Returns:
             Optional[Dict]: 更新后的迷宫信息
         """
@@ -353,16 +367,16 @@ class MazeService:
         except Exception as e:
             logger.exception(f"更新迷宫时发生错误: {e!s}")
             record_maze_error("update", "update_failed")
-            raise Exception(f"更新迷宫失败: {e!s}")
+            raise Exception(f"更新迷宫失败: {e!s}") from e
 
     async def delete_maze(self, maze_id: str, user_id: str) -> bool:
         """
         删除迷宫
-        
+
         Args:
             maze_id: 迷宫ID
             user_id: 用户ID（用于验证权限）
-            
+
         Returns:
             bool: 是否成功删除
         """
@@ -411,12 +425,12 @@ class MazeService:
         except Exception as e:
             logger.exception(f"删除迷宫时发生错误: {e!s}")
             record_maze_error("delete", "deletion_failed")
-            raise Exception(f"删除迷宫失败: {e!s}")
+            raise Exception(f"删除迷宫失败: {e!s}") from e
 
     async def search_mazes(
         self,
         query: str,
-        user_id: str | None = None,
+        _user_id: str | None = None,
         maze_type: str | None = None,
         difficulty: int | None = None,
         page: int = 1,
@@ -424,27 +438,27 @@ class MazeService:
     ) -> tuple[list[dict[str, Any]], int]:
         """
         搜索迷宫
-        
+
         Args:
             query: 搜索关键词
-            user_id: 用户ID（可选，用于个性化搜索）
+            _user_id: 用户ID（可选，用于个性化搜索）
             maze_type: 迷宫类型筛选（可选）
             difficulty: 难度筛选（可选）
             page: 页码
             page_size: 每页数量
-            
+
         Returns:
             Tuple[List[Dict], int]: 搜索结果和总数
         """
         try:
-            logger.info(f"搜索迷宫，关键词: {query}")
+            logger.info(f"搜索迷宫, 关键词: {query}")
 
-            if not query or len(query.strip()) < 2:
-                raise ValueError("搜索关键词至少需要2个字符")
+            if not query or len(query.strip()) < self.MIN_SEARCH_QUERY_LENGTH:
+                raise ValueError(f"搜索关键词至少需要{self.MIN_SEARCH_QUERY_LENGTH}个字符")
 
             page = max(page, 1)
-            if page_size < 1 or page_size > 50:
-                page_size = 10
+            if page_size < 1 or page_size > self.MAX_PAGE_SIZE:
+                page_size = self.DEFAULT_PAGE_SIZE
 
             # 构建缓存键
             cache_key = f"search:{hash(query)}:{maze_type or 'all'}:{difficulty or 'all'}:{page}:{page_size}"
@@ -481,20 +495,20 @@ class MazeService:
         except Exception as e:
             logger.exception(f"搜索迷宫时发生错误: {e!s}")
             record_maze_error("search", "search_failed")
-            raise Exception(f"搜索迷宫失败: {e!s}")
+            raise Exception(f"搜索迷宫失败: {e!s}") from e
 
     async def get_maze_statistics(self, user_id: str | None = None) -> dict[str, Any]:
         """
         获取迷宫统计信息
-        
+
         Args:
-            user_id: 用户ID（可选，如果提供则返回用户特定统计）
-            
+            user_id: 用户ID（可选, 如果提供则返回用户特定统计）
+
         Returns:
             Dict: 统计信息
         """
         try:
-            logger.info(f"获取迷宫统计信息，用户: {user_id or '全局'}")
+            logger.info(f"获取迷宫统计信息, 用户: {user_id or '全局'}")
 
             # 构建缓存键
             cache_key = f"maze_stats:{user_id or 'global'}"
@@ -542,14 +556,14 @@ class MazeService:
                 }
 
             # 缓存结果
-            await self.cache_manager.set(cache_key, stats, ttl=1800)  # 缓存30分钟
+            await self.cache_manager.set(cache_key, stats, ttl=self.CACHE_TTL_MAZE)
 
             return stats
 
         except Exception as e:
             logger.exception(f"获取迷宫统计信息时发生错误: {e!s}")
             record_maze_error("stats", "stats_failed")
-            raise Exception(f"获取统计信息失败: {e!s}")
+            raise Exception(f"获取统计信息失败: {e!s}") from e
 
     async def complete_maze(
         self,
@@ -559,12 +573,12 @@ class MazeService:
     ) -> dict[str, Any]:
         """
         完成迷宫
-        
+
         Args:
             maze_id: 迷宫ID
             user_id: 用户ID
             completion_data: 完成数据（时间、步数等）
-            
+
         Returns:
             Dict: 完成奖励信息
         """
@@ -613,10 +627,10 @@ class MazeService:
                 await self.cache_manager.delete(key)
 
             record_maze_operation("complete", maze.maze_type, maze.difficulty)
-            logger.info(f"用户 {user_id} 成功完成迷宫 {maze_id}，获得奖励: {rewards}")
+            logger.info(f"用户 {user_id} 成功完成迷宫 {maze_id}, 获得奖励: {rewards}")
 
             return {
-                "message": "恭喜完成迷宫！",
+                "message": "恭喜完成迷宫!",
                 "rewards": rewards,
                 "maze_type": maze.maze_type,
                 "difficulty": maze.difficulty
@@ -629,4 +643,4 @@ class MazeService:
         except Exception as e:
             logger.exception(f"完成迷宫时发生错误: {e!s}")
             record_maze_error("complete", "completion_failed")
-            raise Exception(f"完成迷宫失败: {e!s}")
+            raise Exception(f"完成迷宫失败: {e!s}") from e

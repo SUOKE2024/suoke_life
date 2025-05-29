@@ -8,8 +8,8 @@ API Routes
 from fastapi import APIRouter
 
 from .dashboard import router as dashboard_router
-from .reviews import router as reviews_router
 from .reviewers import router as reviewers_router
+from .reviews import router as reviews_router
 from .websocket import router as websocket_router
 
 # 创建主路由器
@@ -21,4 +21,4 @@ router.include_router(reviewers_router, prefix="/reviewers", tags=["Reviewers"])
 router.include_router(dashboard_router, prefix="/dashboard", tags=["Dashboard"])
 router.include_router(websocket_router, prefix="/ws", tags=["WebSocket"])
 
-__all__ = ["router"] 
+__all__ = ["router"]

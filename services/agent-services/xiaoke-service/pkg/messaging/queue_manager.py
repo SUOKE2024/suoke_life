@@ -1,24 +1,24 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 消息队列和异步任务管理器
 支持Redis、RabbitMQ等多种消息队列，提供任务调度、延迟队列、死信队列等功能
 """
 
-import json
-import time
 import asyncio
+import json
 import logging
+import time
 import uuid
-from typing import Dict, Any, Optional, Callable, List, Union
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
 from functools import wraps
+from typing import Any
 
-import aioredis
 import aio_pika
-from aio_pika import Message, DeliveryMode
+import aioredis
+from aio_pika import DeliveryMode, Message
 
 logger = logging.getLogger(__name__)
 
@@ -50,7 +50,7 @@ class TaskConfig:
     timeout: float = 300.0  # 任务超时（秒）
     priority: int = 0  # 优先级，数字越大优先级越高
     delay: float = 0.0  # 延迟执行（秒）
-    ttl: Optional[float] = None  # 任务生存时间
+    ttl: float | None = None  # 任务生存时间
 
 
 @dataclass
@@ -59,15 +59,15 @@ class Task:
 
     id: str
     name: str
-    payload: Dict[str, Any]
+    payload: dict[str, Any]
     config: TaskConfig
     status: TaskStatus = TaskStatus.PENDING
     created_at: datetime = field(default_factory=datetime.now)
-    started_at: Optional[datetime] = None
-    completed_at: Optional[datetime] = None
+    started_at: datetime | None = None
+    completed_at: datetime | None = None
     retry_count: int = 0
-    error_message: Optional[str] = None
-    result: Optional[Any] = None
+    error_message: str | None = None
+    result: Any | None = None
 
 
 class QueueManager:
@@ -92,15 +92,15 @@ class QueueManager:
         self.rabbitmq_url = rabbitmq_url
 
         # 连接对象
-        self.redis_client: Optional[aioredis.Redis] = None
-        self.rabbitmq_connection: Optional[aio_pika.Connection] = None
-        self.rabbitmq_channel: Optional[aio_pika.Channel] = None
+        self.redis_client: aioredis.Redis | None = None
+        self.rabbitmq_connection: aio_pika.Connection | None = None
+        self.rabbitmq_channel: aio_pika.Channel | None = None
 
         # 任务处理器注册表
-        self.task_handlers: Dict[str, Callable] = {}
+        self.task_handlers: dict[str, Callable] = {}
 
         # 工作进程
-        self.workers: List[asyncio.Task] = []
+        self.workers: list[asyncio.Task] = []
         self.is_running = False
 
         # 统计信息
@@ -160,7 +160,7 @@ class QueueManager:
     async def enqueue_task(
         self,
         task_name: str,
-        payload: Dict[str, Any],
+        payload: dict[str, Any],
         config: TaskConfig = None,
         queue_name: str = "default",
     ) -> str:
@@ -216,16 +216,15 @@ class QueueManager:
             await self.redis_client.zadd(
                 f"delayed:{queue_name}", {json.dumps(task_data): execute_at}
             )
+        # 根据优先级入队
+        elif task.config.priority > 0:
+            await self.redis_client.lpush(
+                f"priority:{queue_name}", json.dumps(task_data)
+            )
         else:
-            # 根据优先级入队
-            if task.config.priority > 0:
-                await self.redis_client.lpush(
-                    f"priority:{queue_name}", json.dumps(task_data)
-                )
-            else:
-                await self.redis_client.lpush(
-                    f"queue:{queue_name}", json.dumps(task_data)
-                )
+            await self.redis_client.lpush(
+                f"queue:{queue_name}", json.dumps(task_data)
+            )
 
         # 存储任务详情
         await self.redis_client.hset(f"task:{task.id}", mapping=task_data)
@@ -237,7 +236,7 @@ class QueueManager:
     async def _enqueue_rabbitmq(self, task: Task, queue_name: str):
         """RabbitMQ队列入队"""
         # 声明队列
-        queue = await self.rabbitmq_channel.declare_queue(queue_name, durable=True)
+        await self.rabbitmq_channel.declare_queue(queue_name, durable=True)
 
         task_data = {
             "id": task.id,
@@ -271,7 +270,7 @@ class QueueManager:
             message, routing_key=queue_name
         )
 
-    async def start_workers(self, num_workers: int = 4, queue_names: List[str] = None):
+    async def start_workers(self, num_workers: int = 4, queue_names: list[str] | None = None):
         """
         启动工作进程
 
@@ -329,7 +328,7 @@ class QueueManager:
 
         logger.info("工作进程 %s 已停止", worker_name)
 
-    async def _dequeue_redis(self, queue_name: str) -> Optional[Dict[str, Any]]:
+    async def _dequeue_redis(self, queue_name: str) -> dict[str, Any] | None:
         """Redis队列出队"""
         # 优先处理高优先级队列
         task_json = await self.redis_client.brpop(
@@ -340,7 +339,7 @@ class QueueManager:
             return json.loads(task_json[1])
         return None
 
-    async def _dequeue_rabbitmq(self, queue_name: str) -> Optional[Dict[str, Any]]:
+    async def _dequeue_rabbitmq(self, queue_name: str) -> dict[str, Any] | None:
         """RabbitMQ队列出队"""
         queue = await self.rabbitmq_channel.declare_queue(queue_name, durable=True)
 
@@ -350,7 +349,7 @@ class QueueManager:
                 task_data = json.loads(message.body.decode())
                 await message.ack()
                 return task_data
-        except asyncio.TimeoutError:
+        except TimeoutError:
             pass
 
         return None
@@ -370,7 +369,7 @@ class QueueManager:
                         delayed_queue, 0, current_time, withscores=True
                     )
 
-                    for task_json, score in tasks:
+                    for task_json, _score in tasks:
                         # 移动到正常队列
                         queue_name = delayed_queue.replace("delayed:", "")
                         await self.redis_client.lpush(f"queue:{queue_name}", task_json)
@@ -384,7 +383,7 @@ class QueueManager:
                 logger.error("延迟任务处理器错误: %s", str(e))
                 await asyncio.sleep(5)
 
-    async def _process_task(self, task_data: Dict[str, Any], worker_name: str):
+    async def _process_task(self, task_data: dict[str, Any], worker_name: str):
         """处理任务"""
         task_id = task_data["id"]
         task_name = task_data["name"]
@@ -418,7 +417,7 @@ class QueueManager:
 
             logger.info("任务处理完成: %s (%s)", task_name, task_id)
 
-        except asyncio.TimeoutError:
+        except TimeoutError:
             logger.error("任务超时: %s (%s)", task_name, task_id)
             await self._handle_task_failure(task_data, "任务执行超时")
 
@@ -426,7 +425,7 @@ class QueueManager:
             logger.error("任务处理失败: %s (%s), 错误: %s", task_name, task_id, str(e))
             await self._handle_task_failure(task_data, str(e))
 
-    async def _handle_task_failure(self, task_data: Dict[str, Any], error_message: str):
+    async def _handle_task_failure(self, task_data: dict[str, Any], error_message: str):
         """处理任务失败"""
         task_id = task_data["id"]
         retry_count = task_data.get("retry_count", 0)
@@ -492,7 +491,7 @@ class QueueManager:
                 },
             )
 
-    async def get_task_status(self, task_id: str) -> Optional[Dict[str, Any]]:
+    async def get_task_status(self, task_id: str) -> dict[str, Any] | None:
         """获取任务状态"""
         if self.queue_type == QueueType.REDIS:
             task_data = await self.redis_client.hgetall(f"task:{task_id}")
@@ -509,7 +508,7 @@ class QueueManager:
             return result > 0
         return False
 
-    async def get_queue_stats(self) -> Dict[str, Any]:
+    async def get_queue_stats(self) -> dict[str, Any]:
         """获取队列统计信息"""
         stats = self.stats.copy()
 
@@ -584,7 +583,7 @@ def async_task(task_name: str, config: TaskConfig = None, queue_name: str = "def
 
 
 # 全局队列管理器实例
-_queue_manager: Optional[QueueManager] = None
+_queue_manager: QueueManager | None = None
 
 
 async def get_queue_manager(queue_type: QueueType = QueueType.REDIS) -> QueueManager:

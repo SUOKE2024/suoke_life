@@ -1,18 +1,16 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 测试资源管理器
 """
 
-import pytest
-import json
-import asyncio
-from datetime import datetime, timedelta
-from unittest.mock import patch, MagicMock, AsyncMock
+from datetime import datetime
+from unittest.mock import AsyncMock, patch
 
-from internal.scheduler.resource_manager import ResourceManager
+import pytest
+
 from internal.domain.models import AppointmentStatus, MedicalResourceType
+from internal.scheduler.resource_manager import ResourceManager
 
 
 class TestResourceManager:
@@ -139,7 +137,7 @@ class TestResourceManager:
             doctor_id="doc1",
             appointment_type="ONLINE_CONSULTATION",
             preferred_time="2023-07-01T09:00",
-            symptoms="感冒，咳嗽，发热",
+            symptoms="感冒, 咳嗽, 发热",
             constitution_type="QI_DEFICIENCY",
         )
 
@@ -163,7 +161,7 @@ class TestResourceManager:
             doctor_id="doc1",
             appointment_type="ONLINE_CONSULTATION",
             preferred_time="2023-07-01T09:00",
-            symptoms="头晕，疲劳",
+            symptoms="头晕, 疲劳",
             constitution_type="YANG_DEFICIENCY",
         )
 
@@ -229,8 +227,8 @@ class TestResourceManager:
         # 验证分数
         assert result[0]["score"] > result[1]["score"] > result[2]["score"]
         assert "requirement_match" in result[0]
-        assert result[0]["requirement_match"]["内科"] == True
-        assert result[2]["requirement_match"]["内科"] == False
+        assert result[0]["requirement_match"]["内科"]
+        assert not result[2]["requirement_match"]["内科"]
 
     def test_calculate_constitution_match(self, resource_manager):
         """测试体质匹配度计算"""
@@ -315,20 +313,20 @@ class TestResourceManager:
 
         # 完全匹配
         result1 = resource_manager._check_requirements(resource, ["内科", "外科"])
-        assert result1["内科"] == True
-        assert result1["外科"] == True
+        assert result1["内科"]
+        assert result1["外科"]
 
         # 部分匹配
         result2 = resource_manager._check_requirements(resource, ["内科", "骨科"])
-        assert result2["内科"] == True
-        assert result2["骨科"] == False
+        assert result2["内科"]
+        assert not result2["骨科"]
 
         # 无匹配
         result3 = resource_manager._check_requirements(resource, ["骨科", "神经科"])
-        assert result3["骨科"] == False
-        assert result3["神经科"] == False
+        assert not result3["骨科"]
+        assert not result3["神经科"]
 
         # 无specialties字段
         resource2 = {}
         result4 = resource_manager._check_requirements(resource2, ["内科"])
-        assert result4["内科"] == False
+        assert not result4["内科"]

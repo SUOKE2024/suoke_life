@@ -1,13 +1,13 @@
 """数据模型模块"""
 
-from .nutrition import FoodItem, NutritionAnalysis, DietPlan
-from .health import HealthData, HealthAnalysis, HealthRecommendation
-from .lifestyle import ExercisePlan, SleepAnalysis, StressAssessment
 from .agent import AgentMessage, AgentResponse, ConversationHistory
+from .health import HealthAnalysis, HealthData, HealthRecommendation
+from .lifestyle import ExercisePlan, SleepAnalysis, StressAssessment
+from .nutrition import DietPlan, FoodItem, NutritionAnalysis
 
 __all__ = [
     "FoodItem",
-    "NutritionAnalysis", 
+    "NutritionAnalysis",
     "DietPlan",
     "HealthData",
     "HealthAnalysis",
@@ -17,5 +17,5 @@ __all__ = [
     "StressAssessment",
     "AgentMessage",
     "AgentResponse",
-    "ConversationHistory"
-] 
+    "ConversationHistory",
+]

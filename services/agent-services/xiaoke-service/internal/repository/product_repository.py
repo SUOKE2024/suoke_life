@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 产品存储库
@@ -9,15 +8,13 @@
 import logging
 import uuid
 from datetime import datetime
-from typing import Dict, List, Any, Optional
+from typing import Any
 
 import motor.motor_asyncio
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.future import select
 
 from pkg.utils.config_loader import get_config
-from internal.domain.models import ProductType
 
 logger = logging.getLogger(__name__)
 
@@ -58,7 +55,7 @@ class ProductRepository:
 
         logger.info("产品存储库初始化完成")
 
-    async def get_product_by_id(self, product_id: str) -> Optional[Dict[str, Any]]:
+    async def get_product_by_id(self, product_id: str) -> dict[str, Any] | None:
         """
         根据ID获取产品
 
@@ -83,10 +80,10 @@ class ProductRepository:
             return None
 
         except Exception as e:
-            logger.error(f"查询产品失败: {str(e)}", exc_info=True)
+            logger.error(f"查询产品失败: {e!s}", exc_info=True)
             return None
 
-    async def create_product(self, product_data: Dict[str, Any]) -> str:
+    async def create_product(self, product_data: dict[str, Any]) -> str:
         """
         创建产品
 
@@ -115,11 +112,11 @@ class ProductRepository:
             return str(result.inserted_id)
 
         except Exception as e:
-            logger.error(f"创建产品失败: {str(e)}", exc_info=True)
+            logger.error(f"创建产品失败: {e!s}", exc_info=True)
             raise
 
     async def update_product(
-        self, product_id: str, product_data: Dict[str, Any]
+        self, product_id: str, product_data: dict[str, Any]
     ) -> bool:
         """
         更新产品
@@ -144,7 +141,7 @@ class ProductRepository:
             return result.modified_count > 0
 
         except Exception as e:
-            logger.error(f"更新产品失败: {str(e)}", exc_info=True)
+            logger.error(f"更新产品失败: {e!s}", exc_info=True)
             return False
 
     async def delete_product(self, product_id: str) -> bool:
@@ -165,12 +162,12 @@ class ProductRepository:
             return result.deleted_count > 0
 
         except Exception as e:
-            logger.error(f"删除产品失败: {str(e)}", exc_info=True)
+            logger.error(f"删除产品失败: {e!s}", exc_info=True)
             return False
 
     async def get_products_by_category(
         self, category: str, page: int = 1, page_size: int = 20
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         根据分类获取产品列表
 
@@ -220,7 +217,7 @@ class ProductRepository:
             }
 
         except Exception as e:
-            logger.error(f"查询分类产品失败: {str(e)}", exc_info=True)
+            logger.error(f"查询分类产品失败: {e!s}", exc_info=True)
             return {
                 "products": [],
                 "page": page,
@@ -231,7 +228,7 @@ class ProductRepository:
 
     async def get_seasonal_products(
         self, season: str, limit: int = 10
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """
         获取季节性产品
 
@@ -267,12 +264,12 @@ class ProductRepository:
             return products
 
         except Exception as e:
-            logger.error(f"查询季节性产品失败: {str(e)}", exc_info=True)
+            logger.error(f"查询季节性产品失败: {e!s}", exc_info=True)
             return []
 
     async def get_trace_records(
         self, product_id: str, batch_id: str
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """
         获取产品溯源记录
 
@@ -300,10 +297,10 @@ class ProductRepository:
             return trace_records
 
         except Exception as e:
-            logger.error(f"查询溯源记录失败: {str(e)}", exc_info=True)
+            logger.error(f"查询溯源记录失败: {e!s}", exc_info=True)
             return []
 
-    async def add_trace_record(self, trace_data: Dict[str, Any]) -> str:
+    async def add_trace_record(self, trace_data: dict[str, Any]) -> str:
         """
         添加溯源记录
 
@@ -330,12 +327,12 @@ class ProductRepository:
             return str(result.inserted_id)
 
         except Exception as e:
-            logger.error(f"添加溯源记录失败: {str(e)}", exc_info=True)
+            logger.error(f"添加溯源记录失败: {e!s}", exc_info=True)
             raise
 
     async def search_products(
         self, query_text: str, page: int = 1, page_size: int = 20
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         搜索产品
 
@@ -386,7 +383,7 @@ class ProductRepository:
             }
 
         except Exception as e:
-            logger.error(f"搜索产品失败: {str(e)}", exc_info=True)
+            logger.error(f"搜索产品失败: {e!s}", exc_info=True)
             return {
                 "products": [],
                 "page": page,
@@ -397,7 +394,7 @@ class ProductRepository:
 
     async def get_recommendation_candidates(
         self, constitution_type: str, season: str, limit: int = 30
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """
         获取推荐候选产品
 
@@ -432,5 +429,5 @@ class ProductRepository:
             return products
 
         except Exception as e:
-            logger.error(f"获取推荐产品候选失败: {str(e)}", exc_info=True)
+            logger.error(f"获取推荐产品候选失败: {e!s}", exc_info=True)
             return []

@@ -12,4 +12,4 @@ from .translation_handler import TranslationHandler
 __all__ = [
     "AccessibilityServicer",
     "TranslationHandler"
-] 
+]

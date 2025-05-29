@@ -1,25 +1,26 @@
-import grpc
 import json
 import logging
 import uuid
 from concurrent import futures
 from datetime import datetime
 from enum import Enum
-from typing import Dict, List, Optional, Any, Union
+from typing import Any
+
+import grpc
 
 # gRPC导入将根据实际情况调整
 try:
     import xiaoai_pb2
     import xiaoai_pb2_grpc
 except ImportError:
-    logging.warning("无法导入gRPC生成的模块，请确保已生成xiaoai_pb2和xiaoai_pb2_grpc模块")
+    logging.warning("无法导入gRPC生成的模块, 请确保已生成xiaoai_pb2和xiaoai_pb2_grpc模块")
 
 # 设备类型枚举
 class DeviceType(str, Enum):
-    TONGUE_SCANNER = "tongue_scanner"
-    PULSE_DETECTOR = "pulse_detector"
-    VOICE_RECORDER = "voice_recorder"
-    MOBILE_PHONE = "mobile_phone"
+    TONGUESCANNER = "tongue_scanner"
+    PULSEDETECTOR = "pulse_detector"
+    VOICERECORDER = "voice_recorder"
+    MOBILEPHONE = "mobile_phone"
     TABLET = "tablet"
     WEARABLE = "wearable"
 
@@ -28,7 +29,7 @@ class DeviceType(str, Enum):
 class DataFormat(str, Enum):
     IMAGE = "image"
     AUDIO = "audio"
-    TIME_SERIES = "time_series"
+    TIMESERIES = "time_series"
     TEXT = "text"
     JSON = "json"
     BINARY = "binary"
@@ -48,45 +49,45 @@ class DeviceStatus(str, Enum):
     OFFLINE = "offline"
     BUSY = "busy"
     ERROR = "error"
-    LOW_BATTERY = "low_battery"
+    LOWBATTERY = "low_battery"
 
 
 class DataCollectionRequest:
     """数据收集请求类"""
-    
+
     def __init__(
         self,
-        device_id: str,
-        collection_id: str = None,
-        user_id: str = None,
-        data_type: List[str] = None,
-        duration: float = None,
-        settings: Dict[str, Any] = None,
+        deviceid: str,
+        collectionid: str | None = None,
+        userid: str | None = None,
+        datatype: list[str] | None = None,
+        duration: float | None = None,
+        settings: dict[str, Any] | None = None,
         priority: Priority = Priority.NORMAL,
     ):
-        self.device_id = device_id
-        self.collection_id = collection_id or str(uuid.uuid4())
-        self.user_id = user_id
-        self.data_type = data_type or []
+        self.deviceid = device_id
+        self.collectionid = collection_id or str(uuid.uuid4())
+        self.userid = user_id
+        self.datatype = data_type or []
         self.timestamp = datetime.now().isoformat()
         self.duration = duration  # 秒
         self.settings = settings or {}
         self.priority = priority
-    
-    def to_dict(self) -> Dict[str, Any]:
+
+    def to_dict(self) -> dict[str, Any]:
         return {
-            "device_id": self.device_id,
-            "collection_id": self.collection_id,
-            "user_id": self.user_id,
-            "data_type": self.data_type,
+            "device_id": self.deviceid,
+            "collection_id": self.collectionid,
+            "user_id": self.userid,
+            "data_type": self.datatype,
             "timestamp": self.timestamp,
             "duration": self.duration,
             "settings": self.settings,
             "priority": self.priority.value,
         }
-    
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'DataCollectionRequest':
+    def from_dict(cls, data: dict[str, Any]) -> 'DataCollectionRequest':
         return cls(
             device_id=data["device_id"],
             collection_id=data.get("collection_id"),
@@ -100,35 +101,35 @@ class DataCollectionRequest:
 
 class DataCollectionResponse:
     """数据收集响应类"""
-    
+
     def __init__(
         self,
-        collection_id: str,
+        collectionid: str,
         status: bool,
-        data: Dict[str, Any] = None,
-        error: str = None,
-        device_id: str = None,
-        timestamp: str = None,
+        data: dict[str, Any] | None = None,
+        error: str | None = None,
+        deviceid: str | None = None,
+        timestamp: str | None = None,
     ):
-        self.collection_id = collection_id
+        self.collectionid = collection_id
         self.status = status
         self.data = data or {}
         self.error = error
-        self.device_id = device_id
+        self.deviceid = device_id
         self.timestamp = timestamp or datetime.now().isoformat()
-    
-    def to_dict(self) -> Dict[str, Any]:
+
+    def to_dict(self) -> dict[str, Any]:
         return {
-            "collection_id": self.collection_id,
+            "collection_id": self.collectionid,
             "status": self.status,
             "data": self.data,
             "error": self.error,
-            "device_id": self.device_id,
+            "device_id": self.deviceid,
             "timestamp": self.timestamp,
         }
-    
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'DataCollectionResponse':
+    def from_dict(cls, data: dict[str, Any]) -> 'DataCollectionResponse':
         return cls(
             collection_id=data["collection_id"],
             status=data["status"],
@@ -141,41 +142,41 @@ class DataCollectionResponse:
 
 class DeviceInfo:
     """设备信息类"""
-    
+
     def __init__(
         self,
-        device_id: str,
-        device_type: DeviceType,
-        capabilities: List[str],
+        deviceid: str,
+        devicetype: DeviceType,
+        capabilities: list[str],
         status: DeviceStatus = DeviceStatus.OFFLINE,
-        battery_level: float = None,
-        firmware_version: str = None,
-        last_seen: str = None,
-        user_id: str = None,
+        batterylevel: float | None = None,
+        firmwareversion: str | None = None,
+        lastseen: str | None = None,
+        userid: str | None = None,
     ):
-        self.device_id = device_id
-        self.device_type = device_type
+        self.deviceid = device_id
+        self.devicetype = device_type
         self.capabilities = capabilities
         self.status = status
-        self.battery_level = battery_level
-        self.firmware_version = firmware_version
-        self.last_seen = last_seen or datetime.now().isoformat()
-        self.user_id = user_id
-    
-    def to_dict(self) -> Dict[str, Any]:
+        self.batterylevel = battery_level
+        self.firmwareversion = firmware_version
+        self.lastseen = last_seen or datetime.now().isoformat()
+        self.userid = user_id
+
+    def to_dict(self) -> dict[str, Any]:
         return {
-            "device_id": self.device_id,
+            "device_id": self.deviceid,
             "device_type": self.device_type.value,
             "capabilities": self.capabilities,
             "status": self.status.value,
-            "battery_level": self.battery_level,
-            "firmware_version": self.firmware_version,
-            "last_seen": self.last_seen,
-            "user_id": self.user_id,
+            "battery_level": self.batterylevel,
+            "firmware_version": self.firmwareversion,
+            "last_seen": self.lastseen,
+            "user_id": self.userid,
         }
-    
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'DeviceInfo':
+    def from_dict(cls, data: dict[str, Any]) -> 'DeviceInfo':
         return cls(
             device_id=data["device_id"],
             device_type=DeviceType(data["device_type"]),
@@ -189,20 +190,20 @@ class DeviceInfo:
 
 
 class DeviceCoordinator:
-    """设备协调器，管理与设备的通信和数据收集"""
-    
+    """设备协调器, 管理与设备的通信和数据收集"""
+
     def __init__(self, message_broker=None, storage_service=None):
         self.devices = {}  # device_id -> DeviceInfo
-        self.active_collections = {}  # collection_id -> DataCollectionRequest
-        self.message_broker = message_broker
-        self.storage_service = storage_service
+        self.activecollections = {}  # collection_id -> DataCollectionRequest
+        self.messagebroker = message_broker
+        self.storageservice = storage_service
         self.logger = logging.getLogger("DeviceCoordinator")
-    
+
     def register_device(self, device_info: DeviceInfo) -> bool:
         """注册新设备或更新设备信息"""
         self.devices[device_info.device_id] = device_info
         self.logger.info(f"设备已注册/更新: {device_info.device_id} ({device_info.device_type.value})")
-        
+
         # 发布设备注册事件
         if self.message_broker:
             try:
@@ -213,16 +214,16 @@ class DeviceCoordinator:
                 }
                 self.message_broker.publish_message("devices/events", json.dumps(event))
             except Exception as e:
-                self.logger.error(f"发布设备注册事件失败: {str(e)}")
-        
+                self.logger.error(f"发布设备注册事件失败: {e!s}")
+
         return True
-    
+
     def unregister_device(self, device_id: str) -> bool:
         """注销设备"""
         if device_id in self.devices:
-            device_info = self.devices.pop(device_id)
+            self.devices.pop(deviceid)
             self.logger.info(f"设备已注销: {device_id}")
-            
+
             # 发布设备注销事件
             if self.message_broker:
                 try:
@@ -233,73 +234,72 @@ class DeviceCoordinator:
                     }
                     self.message_broker.publish_message("devices/events", json.dumps(event))
                 except Exception as e:
-                    self.logger.error(f"发布设备注销事件失败: {str(e)}")
-            
+                    self.logger.error(f"发布设备注销事件失败: {e!s}")
+
             return True
         return False
-    
-    def update_device_status(self, device_id: str, status: DeviceStatus, battery_level: float = None) -> bool:
+
+    def update_device_status(self, device_id: str, status: DeviceStatus, batterylevel: float | None = None) -> bool:
         """更新设备状态"""
         if device_id in self.devices:
             device = self.devices[device_id]
-            old_status = device.status
             device.status = status
-            device.last_seen = datetime.now().isoformat()
-            
+            device.lastseen = datetime.now().isoformat()
+
             if battery_level is not None:
-                device.battery_level = battery_level
-            
+                device.batterylevel = battery_level
+
             # 记录重要状态变化
             if old_status != status:
                 self.logger.info(f"设备状态变更: {device_id} {old_status.value} -> {status.value}")
-                
+
                 # 发布状态变更事件
                 if self.message_broker:
                     try:
                         event = {
                             "event_type": "device_status_changed",
-                            "device_id": device_id,
+                            "device_id": deviceid,
                             "old_status": old_status.value,
                             "new_status": status.value,
-                            "battery_level": battery_level,
+                            "battery_level": batterylevel,
                             "timestamp": datetime.now().isoformat(),
                         }
                         self.message_broker.publish_message("devices/events", json.dumps(event))
                     except Exception as e:
-                        self.logger.error(f"发布设备状态变更事件失败: {str(e)}")
-            
+                        self.logger.error(f"发布设备状态变更事件失败: {e!s}")
+
             return True
         return False
-    
-    def get_device_info(self, device_id: str) -> Optional[DeviceInfo]:
+
+    def get_device_info(self, device_id: str) -> DeviceInfo | None:
         """获取设备信息"""
-        return self.devices.get(device_id)
-    
-    def list_devices(self, user_id: str = None, device_type: DeviceType = None) -> List[DeviceInfo]:
+        return self.devices.get(deviceid)
+
+    def list_devices(self, user_id: str | None = None, devicetype: DeviceType = None) -> list[DeviceInfo]:
         """列出设备"""
         devices = list(self.devices.values())
-        
+
         if user_id:
-            devices = [d for d in devices if d.user_id == user_id]
-        
+            devices = [d for d in devices if d.userid == user_id]
+
         if device_type:
-            devices = [d for d in devices if d.device_type == device_type]
-        
+            devices = [d for d in devices if d.devicetype == device_type]
+
         return devices
-    
+
     def request_data_collection(self, request: DataCollectionRequest) -> str:
         """请求数据收集"""
-        device = self.devices.get(request.device_id)
-        
+        device = self.devices.get(request.deviceid)
+
         if not device:
             raise ValueError(f"设备不存在: {request.device_id}")
-        
+
         if device.status != DeviceStatus.ONLINE:
             raise ValueError(f"设备不在线: {request.device_id} (状态: {device.status.value})")
-        
+
         # 存储收集请求
         self.active_collections[request.collection_id] = request
-        
+
         # 发送数据收集请求到设备
         if self.message_broker:
             try:
@@ -308,200 +308,198 @@ class DeviceCoordinator:
                     json.dumps(request.to_dict())
                 )
             except Exception as e:
-                self.logger.error(f"发送数据采集请求失败: {str(e)}")
-                raise RuntimeError(f"发送数据采集请求失败: {str(e)}")
+                self.logger.error(f"发送数据采集请求失败: {e!s}")
+                raise RuntimeError(f"发送数据采集请求失败: {e!s}") from e
         else:
-            raise RuntimeError("未配置消息代理，无法发送请求")
-        
+            raise RuntimeError("未配置消息代理, 无法发送请求") from e
+
         self.logger.info(f"数据收集请求已发送: {request.collection_id} 到设备 {request.device_id}")
         return request.collection_id
-    
+
     def process_data_response(self, response: DataCollectionResponse) -> bool:
         """处理数据收集响应"""
-        collection_id = response.collection_id
-        
+        collectionid = response.collection_id
+
         if collection_id not in self.active_collections:
             self.logger.warning(f"收到未知采集ID响应: {collection_id}")
             return False
-        
-        request = self.active_collections.pop(collection_id)
-        
+
+        request = self.active_collections.pop(collectionid)
+
         # 发布数据收集完成事件
         if self.message_broker:
             try:
                 event = {
                     "event_type": "data_collection_completed",
-                    "collection_id": collection_id,
-                    "device_id": response.device_id or request.device_id,
+                    "collection_id": collectionid,
+                    "device_id": response.device_id or request.deviceid,
                     "status": response.status,
                     "timestamp": datetime.now().isoformat(),
                 }
                 self.message_broker.publish_message("devices/data/events", json.dumps(event))
             except Exception as e:
-                self.logger.error(f"发布数据收集完成事件失败: {str(e)}")
-        
+                self.logger.error(f"发布数据收集完成事件失败: {e!s}")
+
         # 存储收集到的数据
         if response.status and self.storage_service:
             try:
                 metadata = {
-                    "collection_id": collection_id,
-                    "device_id": response.device_id or request.device_id,
-                    "user_id": request.user_id,
-                    "data_type": request.data_type,
+                    "collection_id": collectionid,
+                    "device_id": response.device_id or request.deviceid,
+                    "user_id": request.userid,
+                    "data_type": request.datatype,
                     "timestamp": response.timestamp,
                 }
-                
+
                 self.storage_service.store_data(
-                    collection_id,
+                    collectionid,
                     response.data,
                     metadata
                 )
             except Exception as e:
-                self.logger.error(f"存储采集数据失败: {str(e)}")
+                self.logger.error(f"存储采集数据失败: {e!s}")
                 return False
-        
+
         self.logger.info(f"数据收集完成: {collection_id}, 状态: {'成功' if response.status else '失败'}")
         return True
-    
-    def get_available_devices_for_diagnosis(self, user_id: str) -> Dict[DeviceType, List[DeviceInfo]]:
+
+    def get_available_devices_for_diagnosis(self, user_id: str) -> dict[DeviceType, list[DeviceInfo]]:
         """获取可用于四诊的设备列表"""
         result = {}
-        user_devices = [d for d in self.devices.values() if d.user_id == user_id and d.status == DeviceStatus.ONLINE]
-        
+        [d for d in self.devices.values() if d.userid == user_id and d.status == DeviceStatus.ONLINE]
+
         for device in user_devices:
-            device_type = device.device_type
             if device_type not in result:
                 result[device_type] = []
-            
+
             result[device_type].append(device)
-        
+
         return result
-    
-    def get_device_capabilities(self, device_id: str) -> List[str]:
+
+    def get_device_capabilities(self, device_id: str) -> list[str]:
         """获取设备能力"""
-        device = self.get_device_info(device_id)
+        device = self.get_device_info(deviceid)
         if not device:
             return []
-        
+
         return device.capabilities
-    
-    def get_collection_request(self, collection_id: str) -> Optional[DataCollectionRequest]:
+
+    def get_collection_request(self, collection_id: str) -> DataCollectionRequest | None:
         """获取数据收集请求"""
-        return self.active_collections.get(collection_id)
+        return self.active_collections.get(collectionid)
 
 
-# gRPC服务实现
 class DeviceCoordinatorService(xiaoai_pb2_grpc.DeviceCoordinatorServiceServicer):
     """设备协调gRPC服务"""
-    
+
     def __init__(self, coordinator: DeviceCoordinator):
         self.coordinator = coordinator
-    
+
     def RegisterDevice(self, request, context):
         try:
-            device_info = DeviceInfo(
-                device_id=request.device_id,
-                device_type=DeviceType(request.device_type),
+            deviceinfo = DeviceInfo(
+                device_id=request.deviceid,
+                device_type=DeviceType(request.devicetype),
                 capabilities=list(request.capabilities),
                 status=DeviceStatus(request.status),
-                battery_level=request.battery_level,
-                firmware_version=request.firmware_version,
+                battery_level=request.batterylevel,
+                firmware_version=request.firmwareversion,
                 user_id=request.user_id
             )
-            
-            success = self.coordinator.register_device(device_info)
-            
+
+            success = self.coordinator.register_device(deviceinfo)
+
             return xiaoai_pb2.RegisterDeviceResponse(
                 success=success,
                 error_message="" if success else "注册失败"
             )
         except Exception as e:
             context.set_code(grpc.StatusCode.INTERNAL)
-            context.set_details(f"注册设备时发生错误: {str(e)}")
+            context.set_details(f"注册设备时发生错误: {e!s}")
             return xiaoai_pb2.RegisterDeviceResponse(success=False, error_message=str(e))
-    
+
     def UnregisterDevice(self, request, context):
         try:
-            success = self.coordinator.unregister_device(request.device_id)
-            
+            success = self.coordinator.unregister_device(request.deviceid)
+
             return xiaoai_pb2.UnregisterDeviceResponse(
                 success=success,
                 error_message="" if success else "设备不存在"
             )
         except Exception as e:
             context.set_code(grpc.StatusCode.INTERNAL)
-            context.set_details(f"注销设备时发生错误: {str(e)}")
+            context.set_details(f"注销设备时发生错误: {e!s}")
             return xiaoai_pb2.UnregisterDeviceResponse(success=False, error_message=str(e))
-    
+
     def UpdateDeviceStatus(self, request, context):
         try:
             success = self.coordinator.update_device_status(
-                request.device_id,
+                request.deviceid,
                 DeviceStatus(request.status),
                 request.battery_level if request.HasField("battery_level") else None
             )
-            
+
             return xiaoai_pb2.UpdateDeviceStatusResponse(
                 success=success,
                 error_message="" if success else "设备不存在"
             )
         except Exception as e:
             context.set_code(grpc.StatusCode.INTERNAL)
-            context.set_details(f"更新设备状态时发生错误: {str(e)}")
+            context.set_details(f"更新设备状态时发生错误: {e!s}")
             return xiaoai_pb2.UpdateDeviceStatusResponse(success=False, error_message=str(e))
-    
+
     def RequestDataCollection(self, request, context):
         try:
             settings = {}
             for setting in request.settings:
                 settings[setting.key] = json.loads(setting.value)
-            
-            collection_request = DataCollectionRequest(
-                device_id=request.device_id,
+
+            collectionrequest = DataCollectionRequest(
+                device_id=request.deviceid,
                 collection_id=request.collection_id if request.collection_id else None,
-                user_id=request.user_id,
-                data_type=list(request.data_types),
+                user_id=request.userid,
+                data_type=list(request.datatypes),
                 duration=request.duration,
                 settings=settings,
                 priority=Priority(request.priority)
             )
-            
-            collection_id = self.coordinator.request_data_collection(collection_request)
-            
+
+            self.coordinator.request_data_collection(collectionrequest)
+
             return xiaoai_pb2.RequestDataCollectionResponse(
                 success=True,
                 collection_id=collection_id
             )
         except Exception as e:
             context.set_code(grpc.StatusCode.INTERNAL)
-            context.set_details(f"请求数据收集时发生错误: {str(e)}")
+            context.set_details(f"请求数据收集时发生错误: {e!s}")
             return xiaoai_pb2.RequestDataCollectionResponse(success=False, error_message=str(e))
-    
+
     def ListDevices(self, request, context):
         try:
-            user_id = request.user_id if request.user_id else None
-            device_type = DeviceType(request.device_type) if request.device_type else None
-            
-            devices = self.coordinator.list_devices(user_id, device_type)
-            
+            userid = request.user_id if request.user_id else None
+            devicetype = DeviceType(request.devicetype) if request.device_type else None
+
+            devices = self.coordinator.list_devices(userid, devicetype)
+
             response = xiaoai_pb2.ListDevicesResponse()
             for device in devices:
-                device_pb = xiaoai_pb2.DeviceInfo(
-                    device_id=device.device_id,
+                devicepb = xiaoai_pb2.DeviceInfo(
+                    device_id=device.deviceid,
                     device_type=device.device_type.value,
                     capabilities=device.capabilities,
                     status=device.status.value,
-                    battery_level=device.battery_level,
-                    firmware_version=device.firmware_version,
-                    last_seen=device.last_seen,
+                    battery_level=device.batterylevel,
+                    firmware_version=device.firmwareversion,
+                    last_seen=device.lastseen,
                     user_id=device.user_id
                 )
-                response.devices.append(device_pb)
-            
+                response.devices.append(devicepb)
+
             return response
         except Exception as e:
             context.set_code(grpc.StatusCode.INTERNAL)
-            context.set_details(f"列出设备时发生错误: {str(e)}")
+            context.set_details(f"列出设备时发生错误: {e!s}")
             return xiaoai_pb2.ListDevicesResponse()
 
 
@@ -513,6 +511,6 @@ def start_device_coordinator_service(coordinator: DeviceCoordinator, port: int =
     )
     server.add_insecure_port(f'[::]:{port}')
     server.start()
-    
-    logging.info(f"设备协调服务已启动，监听端口: {port}")
-    return server 
+
+    logging.info(f"设备协调服务已启动, 监听端口: {port}")
+    return server

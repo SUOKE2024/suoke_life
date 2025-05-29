@@ -1,19 +1,18 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 跨平台兼容性检查工具
 用于检测和处理不同操作系统和环境的兼容性问题
 """
 
+import logging
 import os
-import sys
 import platform
 import subprocess
-import logging
-from typing import Dict, List, Optional, Tuple, Any
+import sys
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -46,7 +45,7 @@ class SystemInfo:
     available_memory_gb: float
     cpu_count: int
     has_gpu: bool
-    gpu_info: Optional[str] = None
+    gpu_info: str | None = None
 
 
 @dataclass
@@ -55,17 +54,17 @@ class CompatibilityIssue:
     severity: str  # "error", "warning", "info"
     component: str
     description: str
-    solution: Optional[str] = None
-    workaround: Optional[str] = None
+    solution: str | None = None
+    workaround: str | None = None
 
 
 class PlatformChecker:
     """平台兼容性检查器"""
-    
+
     def __init__(self):
         self.system_info = self._detect_system_info()
-        self.compatibility_issues: List[CompatibilityIssue] = []
-    
+        self.compatibility_issues: list[CompatibilityIssue] = []
+
     def _detect_system_info(self) -> SystemInfo:
         """检测系统信息"""
         # 检测平台类型
@@ -78,7 +77,7 @@ class PlatformChecker:
             platform_type = PlatformType.LINUX
         else:
             platform_type = PlatformType.UNKNOWN
-        
+
         # 检测架构
         machine = platform.machine().lower()
         if machine in ["x86_64", "amd64"]:
@@ -91,7 +90,7 @@ class PlatformChecker:
             architecture = ArchitectureType.I386
         else:
             architecture = ArchitectureType.UNKNOWN
-        
+
         # 检测虚拟环境
         is_virtual_env = (
             hasattr(sys, 'real_prefix') or
@@ -99,11 +98,11 @@ class PlatformChecker:
             os.environ.get('VIRTUAL_ENV') is not None or
             os.environ.get('CONDA_DEFAULT_ENV') is not None
         )
-        
+
         # 检测内存
         try:
             if platform_type == PlatformType.LINUX:
-                with open('/proc/meminfo', 'r') as f:
+                with open('/proc/meminfo') as f:
                     meminfo = f.read()
                     for line in meminfo.split('\n'):
                         if line.startswith('MemTotal:'):
@@ -113,7 +112,7 @@ class PlatformChecker:
                     else:
                         available_memory_gb = 0.0
             elif platform_type == PlatformType.MACOS:
-                result = subprocess.run(['sysctl', 'hw.memsize'], 
+                result = subprocess.run(['sysctl', 'hw.memsize'],
                                       capture_output=True, text=True)
                 if result.returncode == 0:
                     memory_bytes = int(result.stdout.split(':')[1].strip())
@@ -127,10 +126,10 @@ class PlatformChecker:
                 available_memory_gb = 0.0
         except Exception:
             available_memory_gb = 0.0
-        
+
         # 检测GPU
         has_gpu, gpu_info = self._detect_gpu()
-        
+
         return SystemInfo(
             platform_type=platform_type,
             architecture=architecture,
@@ -142,18 +141,18 @@ class PlatformChecker:
             has_gpu=has_gpu,
             gpu_info=gpu_info
         )
-    
-    def _detect_gpu(self) -> Tuple[bool, Optional[str]]:
+
+    def _detect_gpu(self) -> tuple[bool, str | None]:
         """检测GPU信息"""
         try:
             # 尝试检测NVIDIA GPU
-            result = subprocess.run(['nvidia-smi', '--query-gpu=name', '--format=csv,noheader'], 
+            result = subprocess.run(['nvidia-smi', '--query-gpu=name', '--format=csv,noheader'],
                                   capture_output=True, text=True, timeout=5)
             if result.returncode == 0 and result.stdout.strip():
                 return True, f"NVIDIA: {result.stdout.strip()}"
         except (subprocess.TimeoutExpired, FileNotFoundError):
             pass
-        
+
         try:
             # 尝试检测AMD GPU (Linux)
             system = platform.system().lower()
@@ -165,24 +164,24 @@ class PlatformChecker:
                             return True, f"AMD: {line.split(':')[-1].strip()}"
         except (subprocess.TimeoutExpired, FileNotFoundError):
             pass
-        
+
         try:
             # 尝试检测Intel GPU
             system = platform.system().lower()
             if system == "darwin":
-                result = subprocess.run(['system_profiler', 'SPDisplaysDataType'], 
+                result = subprocess.run(['system_profiler', 'SPDisplaysDataType'],
                                       capture_output=True, text=True, timeout=10)
                 if result.returncode == 0 and 'Intel' in result.stdout:
                     return True, "Intel Integrated Graphics"
         except (subprocess.TimeoutExpired, FileNotFoundError):
             pass
-        
+
         return False, None
-    
-    def check_python_compatibility(self) -> List[CompatibilityIssue]:
+
+    def check_python_compatibility(self) -> list[CompatibilityIssue]:
         """检查Python兼容性"""
         issues = []
-        
+
         # 检查Python版本
         python_version = tuple(map(int, platform.python_version().split('.')))
         if python_version < (3, 8):
@@ -201,7 +200,7 @@ class PlatformChecker:
                 solution="确保所有依赖都支持当前Python版本",
                 workaround="考虑使用Python 3.11"
             ))
-        
+
         # 检查虚拟环境
         if not self.system_info.is_virtual_env:
             issues.append(CompatibilityIssue(
@@ -211,13 +210,13 @@ class PlatformChecker:
                 solution="创建并激活虚拟环境",
                 workaround="使用 python -m venv venv && source venv/bin/activate"
             ))
-        
+
         return issues
-    
-    def check_system_requirements(self) -> List[CompatibilityIssue]:
+
+    def check_system_requirements(self) -> list[CompatibilityIssue]:
         """检查系统要求"""
         issues = []
-        
+
         # 检查内存
         if self.system_info.available_memory_gb < 4:
             issues.append(CompatibilityIssue(
@@ -227,7 +226,7 @@ class PlatformChecker:
                 solution="增加系统内存到8GB或更多",
                 workaround="关闭其他应用程序释放内存"
             ))
-        
+
         # 检查CPU核心数
         if self.system_info.cpu_count < 2:
             issues.append(CompatibilityIssue(
@@ -237,13 +236,13 @@ class PlatformChecker:
                 solution="使用多核CPU",
                 workaround="减少并发处理数量"
             ))
-        
+
         return issues
-    
-    def check_platform_specific_issues(self) -> List[CompatibilityIssue]:
+
+    def check_platform_specific_issues(self) -> list[CompatibilityIssue]:
         """检查平台特定问题"""
         issues = []
-        
+
         if self.system_info.platform_type == PlatformType.MACOS:
             # macOS特定检查
             if self.system_info.architecture == ArchitectureType.ARM64:
@@ -254,10 +253,10 @@ class PlatformChecker:
                     solution="使用支持ARM64的依赖版本",
                     workaround="使用Rosetta 2运行x86_64版本"
                 ))
-            
+
             # 检查Xcode命令行工具
             try:
-                subprocess.run(['xcode-select', '--version'], 
+                subprocess.run(['xcode-select', '--version'],
                              capture_output=True, check=True, timeout=5)
             except (subprocess.CalledProcessError, FileNotFoundError):
                 issues.append(CompatibilityIssue(
@@ -267,14 +266,14 @@ class PlatformChecker:
                     solution="安装Xcode命令行工具",
                     workaround="xcode-select --install"
                 ))
-        
+
         elif self.system_info.platform_type == PlatformType.LINUX:
             # Linux特定检查
             # 检查必要的系统库
             required_libs = ['libgl1-mesa-glx', 'libglib2.0-0']
             for lib in required_libs:
                 try:
-                    result = subprocess.run(['dpkg', '-l', lib], 
+                    result = subprocess.run(['dpkg', '-l', lib],
                                           capture_output=True, timeout=5)
                     if result.returncode != 0:
                         issues.append(CompatibilityIssue(
@@ -286,7 +285,7 @@ class PlatformChecker:
                         ))
                 except (subprocess.TimeoutExpired, FileNotFoundError):
                     pass
-        
+
         elif self.system_info.platform_type == PlatformType.WINDOWS:
             # Windows特定检查
             # 检查Visual C++运行时
@@ -295,18 +294,18 @@ class PlatformChecker:
                 # 这里可以添加更多Windows特定的检查
             except ImportError:
                 pass
-        
+
         return issues
-    
-    def check_audio_video_support(self) -> List[CompatibilityIssue]:
+
+    def check_audio_video_support(self) -> list[CompatibilityIssue]:
         """检查音视频支持"""
         issues = []
-        
+
         # 检查音频设备
         try:
             if self.system_info.platform_type == PlatformType.LINUX:
                 # 检查ALSA/PulseAudio
-                result = subprocess.run(['aplay', '-l'], 
+                result = subprocess.run(['aplay', '-l'],
                                       capture_output=True, timeout=5)
                 if result.returncode != 0:
                     issues.append(CompatibilityIssue(
@@ -330,7 +329,7 @@ class PlatformChecker:
                 solution="手动验证音频设备工作正常",
                 workaround="测试系统音频播放功能"
             ))
-        
+
         # 检查摄像头支持
         try:
             import cv2
@@ -360,13 +359,13 @@ class PlatformChecker:
                 solution="检查摄像头驱动和权限",
                 workaround="重启系统或重新连接摄像头"
             ))
-        
+
         return issues
-    
-    def check_network_connectivity(self) -> List[CompatibilityIssue]:
+
+    def check_network_connectivity(self) -> list[CompatibilityIssue]:
         """检查网络连接"""
         issues = []
-        
+
         # 检查基本网络连接
         try:
             import socket
@@ -379,10 +378,9 @@ class PlatformChecker:
                 solution="检查网络连接和防火墙设置",
                 workaround="使用离线模式或配置代理"
             ))
-        
+
         # 检查HTTPS连接
         try:
-            import ssl
             import urllib.request
             urllib.request.urlopen("https://www.google.com", timeout=5)
         except Exception:
@@ -393,29 +391,29 @@ class PlatformChecker:
                 solution="检查SSL证书和代理设置",
                 workaround="配置证书或使用HTTP代理"
             ))
-        
+
         return issues
-    
-    def run_comprehensive_check(self) -> Dict[str, Any]:
+
+    def run_comprehensive_check(self) -> dict[str, Any]:
         """运行全面的兼容性检查"""
         all_issues = []
-        
+
         # 运行各项检查
         all_issues.extend(self.check_python_compatibility())
         all_issues.extend(self.check_system_requirements())
         all_issues.extend(self.check_platform_specific_issues())
         all_issues.extend(self.check_audio_video_support())
         all_issues.extend(self.check_network_connectivity())
-        
+
         # 统计问题
         error_count = sum(1 for issue in all_issues if issue.severity == "error")
         warning_count = sum(1 for issue in all_issues if issue.severity == "warning")
         info_count = sum(1 for issue in all_issues if issue.severity == "info")
-        
+
         # 计算兼容性评分
         total_checks = len(all_issues) + 10  # 假设总共有10个基础检查
         compatibility_score = max(0, (total_checks - error_count * 3 - warning_count) / total_checks * 100)
-        
+
         return {
             "system_info": self.system_info,
             "issues": all_issues,
@@ -428,39 +426,39 @@ class PlatformChecker:
             },
             "recommendations": self._generate_recommendations(all_issues)
         }
-    
-    def _generate_recommendations(self, issues: List[CompatibilityIssue]) -> List[str]:
+
+    def _generate_recommendations(self, issues: list[CompatibilityIssue]) -> list[str]:
         """生成改进建议"""
         recommendations = []
-        
+
         # 基于问题生成建议
         error_issues = [issue for issue in issues if issue.severity == "error"]
         if error_issues:
             recommendations.append("🚨 发现严重兼容性问题，建议优先解决错误级别的问题")
-        
+
         warning_issues = [issue for issue in issues if issue.severity == "warning"]
         if warning_issues:
             recommendations.append("⚠️ 发现兼容性警告，建议在生产环境部署前解决")
-        
+
         # 基于系统信息生成建议
         if self.system_info.available_memory_gb < 8:
             recommendations.append("💾 建议增加系统内存到8GB以获得更好的性能")
-        
+
         if not self.system_info.has_gpu:
             recommendations.append("🎮 考虑使用GPU加速以提升AI模型性能")
-        
+
         if not self.system_info.is_virtual_env:
             recommendations.append("🐍 强烈建议使用虚拟环境隔离依赖")
-        
+
         return recommendations
-    
+
     def print_report(self):
         """打印兼容性报告"""
         result = self.run_comprehensive_check()
-        
+
         print("🔍 索克生活无障碍服务 - 平台兼容性检查报告")
         print("=" * 60)
-        
+
         # 系统信息
         print("\n📋 系统信息:")
         info = result["system_info"]
@@ -471,10 +469,10 @@ class PlatformChecker:
         print(f"  内存: {info.available_memory_gb:.1f} GB")
         print(f"  CPU核心: {info.cpu_count}")
         print(f"  GPU: {'是' if info.has_gpu else '否'} {info.gpu_info or ''}")
-        
+
         # 兼容性评分
         print(f"\n📊 兼容性评分: {result['summary']['compatibility_score']}/100")
-        
+
         # 问题列表
         if result["issues"]:
             print(f"\n⚠️ 发现的问题 ({result['summary']['total_issues']} 个):")
@@ -488,17 +486,17 @@ class PlatformChecker:
                 print()
         else:
             print("\n✅ 未发现兼容性问题")
-        
+
         # 建议
         if result["recommendations"]:
             print("💡 改进建议:")
             for rec in result["recommendations"]:
                 print(f"  • {rec}")
-        
+
         print("\n" + "=" * 60)
 
 
-def check_platform_compatibility() -> Dict[str, Any]:
+def check_platform_compatibility() -> dict[str, Any]:
     """便捷函数：检查平台兼容性"""
     checker = PlatformChecker()
     return checker.run_comprehensive_check()
@@ -507,4 +505,4 @@ def check_platform_compatibility() -> Dict[str, Any]:
 if __name__ == "__main__":
     # 运行兼容性检查
     checker = PlatformChecker()
-    checker.print_report() 
+    checker.print_report()

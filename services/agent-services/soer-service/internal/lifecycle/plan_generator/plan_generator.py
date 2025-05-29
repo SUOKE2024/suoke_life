@@ -1,24 +1,22 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 健康计划生成器
 """
 
 import logging
 import uuid
-import json
-from typing import Dict, Any, List, Optional
 from datetime import datetime, timedelta
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
 class PlanGenerator:
     """健康计划生成器，负责生成个性化健康计划"""
-    
+
     def __init__(self):
         """初始化计划生成器"""
         logger.info("初始化健康计划生成器")
-        
+
         # 计划模板
         self.plan_templates = {
             "阳虚质": {
@@ -204,32 +202,32 @@ class PlanGenerator:
                 ]
             }
         }
-    
-    def generate_health_plan(self, user_id: str, constitution_type: str, 
-                          health_goals: List[str], health_data: Dict[str, Any],
-                          preferences: Dict[str, Any] = None) -> Dict[str, Any]:
+
+    def generate_health_plan(self, user_id: str, constitution_type: str,
+                          health_goals: list[str], health_data: dict[str, Any],
+                          preferences: dict[str, Any] = None) -> dict[str, Any]:
         """
         生成健康计划
-        
+
         Args:
             user_id: 用户ID
             constitution_type: 体质类型
             health_goals: 健康目标
             health_data: 健康数据
             preferences: 偏好设置
-            
+
         Returns:
             Dict[str, Any]: 健康计划
         """
         logger.info(f"为用户 {user_id} 生成健康计划，体质类型: {constitution_type}")
-        
+
         # 确定使用的体质模板
         if constitution_type not in self.plan_templates:
             constitution_type = "平和质"  # 默认使用平和质模板
             logger.warning(f"未找到体质类型 {constitution_type} 的模板，使用平和质模板")
-        
+
         template = self.plan_templates[constitution_type]
-        
+
         # 创建基础计划
         plan = {
             "plan_id": str(uuid.uuid4()),
@@ -247,19 +245,19 @@ class PlanGenerator:
             "supplement_recommendations": template["supplements"],
             "schedule": self._generate_schedule(constitution_type, health_goals, preferences)
         }
-        
+
         # 根据健康数据调整计划
         self._adjust_plan_based_on_health_data(plan, health_data)
-        
+
         # 根据偏好调整计划
         if preferences:
             self._adjust_plan_based_on_preferences(plan, preferences)
-        
+
         logger.info(f"健康计划生成成功，计划ID: {plan['plan_id']}")
         return plan
-    
-    def _generate_schedule(self, constitution_type: str, health_goals: List[str],
-                        preferences: Dict[str, Any] = None) -> Dict[str, str]:
+
+    def _generate_schedule(self, constitution_type: str, health_goals: list[str],
+                        preferences: dict[str, Any] = None) -> dict[str, str]:
         """生成日程安排"""
         # 基础日程
         base_schedule = {
@@ -270,7 +268,7 @@ class PlanGenerator:
             "晚上": "19:00-19:30 晚餐，20:30-21:00 散步",
             "睡前": "22:00-22:30 热水泡脚，放松心情，23:00前睡觉"
         }
-        
+
         # 根据体质类型调整
         if constitution_type == "阳虚质":
             base_schedule["早晨"] = "7:00-7:30 起床，热姜水泡脚"
@@ -279,7 +277,7 @@ class PlanGenerator:
         elif constitution_type == "阴虚质":
             base_schedule["中午"] = "12:00-12:30 午餐(清淡)，13:00-14:00 午休"
             base_schedule["晚上"] = "18:30-19:00 晚餐(七分饱)，20:00-20:30 缓和散步"
-        
+
         # 根据健康目标调整
         if "改善睡眠" in health_goals:
             base_schedule["睡前"] = "21:00-21:30 热水泡脚，冥想放松，22:00前睡觉"
@@ -288,29 +286,29 @@ class PlanGenerator:
             base_schedule["下午"] = "16:00-16:30 茶歇，正念冥想10分钟"
         if "增强体质" in health_goals:
             base_schedule["早晨"] = base_schedule["早晨"] + "，7:30-8:00 体能训练"
-        
+
         # 根据偏好调整
         if preferences and "schedule" in preferences:
             for time_slot, pref in preferences["schedule"].items():
                 if time_slot in base_schedule:
                     base_schedule[time_slot] = pref
-        
+
         return base_schedule
-    
-    def _adjust_plan_based_on_health_data(self, plan: Dict[str, Any], health_data: Dict[str, Any]) -> None:
+
+    def _adjust_plan_based_on_health_data(self, plan: dict[str, Any], health_data: dict[str, Any]) -> None:
         """根据健康数据调整计划"""
         # 身高体重调整
         if "weight" in health_data and "height" in health_data:
             height_m = health_data["height"] / 100
             bmi = health_data["weight"] / (height_m * height_m)
-            
+
             if bmi >= 24:
                 plan["diet_recommendations"].append("控制总热量摄入，减少精制碳水和糖分")
                 plan["exercise_recommendations"].append("增加有氧运动频率，每周至少5次，每次30分钟以上")
             elif bmi < 18.5:
                 plan["diet_recommendations"].append("适度增加热量摄入，增加优质蛋白质来源")
                 plan["exercise_recommendations"].append("增加力量训练，建议每周3-4次")
-        
+
         # 血压调整
         if "blood_pressure" in health_data:
             try:
@@ -321,17 +319,17 @@ class PlanGenerator:
                     plan["supplement_recommendations"].append("益生菌")
             except:
                 pass
-        
+
         # 心率调整
         if "heart_rate" in health_data:
             heart_rate = health_data["heart_rate"]
             if heart_rate > 100:
                 plan["lifestyle_recommendations"].append("增加休息时间，减少咖啡因摄入")
-                plan["exercise_recommendations"] = [rec for rec in plan["exercise_recommendations"] 
+                plan["exercise_recommendations"] = [rec for rec in plan["exercise_recommendations"]
                                                 if "剧烈" not in rec and "强度" not in rec]
                 plan["exercise_recommendations"].append("选择缓和运动，如散步、太极")
-    
-    def _adjust_plan_based_on_preferences(self, plan: Dict[str, Any], preferences: Dict[str, Any]) -> None:
+
+    def _adjust_plan_based_on_preferences(self, plan: dict[str, Any], preferences: dict[str, Any]) -> None:
         """根据偏好调整计划"""
         # 饮食偏好
         if "diet_restrictions" in preferences:
@@ -345,19 +343,19 @@ class PlanGenerator:
                         break
                 if should_keep:
                     adjusted_diet.append(rec)
-            
+
             # 确保至少有3条建议
             while len(adjusted_diet) < 3:
                 adjusted_diet.append("根据个人体质特点，合理搭配膳食")
-            
+
             plan["diet_recommendations"] = adjusted_diet
-        
+
         # 运动偏好
         if "exercise_preferences" in preferences:
             exercise_prefs = preferences["exercise_preferences"]
             for pref in exercise_prefs:
                 plan["exercise_recommendations"].append(f"可选择{pref}作为主要运动方式")
-            
+
             # 保留最多6条建议
             if len(plan["exercise_recommendations"]) > 6:
                 plan["exercise_recommendations"] = plan["exercise_recommendations"][:6]

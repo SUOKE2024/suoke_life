@@ -6,41 +6,42 @@
 
 import logging
 import sys
+from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
-from typing import AsyncGenerator
+from datetime import UTC
 
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 
-from .config.settings import get_settings
 from .api.routes import api_router
+from .config.settings import get_settings
+from .core.database import close_database, init_database
 from .core.logging import setup_logging
 from .core.monitoring import setup_monitoring
-from .core.database import init_database, close_database
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
+async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
     """应用生命周期管理"""
     # 启动时初始化
     settings = get_settings()
     setup_logging(settings.log_level)
-    
+
     logger = logging.getLogger(__name__)
     logger.info("正在启动索儿智能体服务...")
-    
+
     # 初始化数据库连接
     await init_database()
-    
+
     # 设置监控
     setup_monitoring(app)
-    
+
     logger.info("索儿智能体服务启动完成")
-    
+
     yield
-    
+
     # 关闭时清理
     logger.info("正在关闭索儿智能体服务...")
     await close_database()
@@ -50,7 +51,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 def create_app() -> FastAPI:
     """创建 FastAPI 应用实例"""
     settings = get_settings()
-    
+
     app = FastAPI(
         title="索儿智能体服务",
         description="索克生活平台的营养与生活方式管理智能体",
@@ -60,7 +61,7 @@ def create_app() -> FastAPI:
         openapi_url="/openapi.json" if settings.debug else None,
         lifespan=lifespan,
     )
-    
+
     # 添加中间件
     app.add_middleware(
         CORSMiddleware,
@@ -69,15 +70,15 @@ def create_app() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
-    
+
     app.add_middleware(
         TrustedHostMiddleware,
         allowed_hosts=settings.allowed_hosts,
     )
-    
+
     # 注册路由
     app.include_router(api_router, prefix="/api/v1")
-    
+
     # 添加根端点
     @app.get("/")
     async def root():
@@ -86,35 +87,36 @@ def create_app() -> FastAPI:
             "message": "欢迎使用索儿智能体服务",
             "service": "soer-service",
             "version": "0.1.0",
-            "description": "索克生活平台的营养与生活方式管理智能体"
+            "description": "索克生活平台的营养与生活方式管理智能体",
         }
-    
+
     # 添加健康检查端点
     @app.get("/health")
     async def health_check():
         """健康检查端点"""
-        from datetime import datetime, timezone
+        from datetime import datetime
+
         return {
             "status": "healthy",
             "service": "soer-service",
-            "timestamp": datetime.now(timezone.utc).isoformat(),
-            "version": "0.1.0"
+            "timestamp": datetime.now(UTC).isoformat(),
+            "version": "0.1.0",
         }
-    
+
     return app
 
 
 def main() -> None:
     """主函数入口"""
     settings = get_settings()
-    
+
     # 设置日志
     setup_logging(settings.log_level)
     logger = logging.getLogger(__name__)
-    
+
     try:
         logger.info(f"启动索儿智能体服务，监听端口: {settings.port}")
-        
+
         uvicorn.run(
             "soer_service.main:create_app",
             factory=True,
@@ -132,4 +134,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main() 
+    main()

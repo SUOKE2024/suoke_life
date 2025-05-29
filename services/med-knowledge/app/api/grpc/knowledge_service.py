@@ -1,20 +1,18 @@
 import grpc
-from typing import List
-
-from app.core.logger import get_logger
-from app.services.knowledge_service import KnowledgeService
 
 # 导入生成的gRPC模块
-# 注意：需要先使用protoc生成Python代码
+# 注意:需要先使用protoc生成Python代码
 # 这里假设已经生成并放置在正确位置
 from app.api.grpc.generated import knowledge_pb2, knowledge_pb2_grpc
+from app.core.logger import get_logger
+from app.services.knowledge_service import KnowledgeService
 
 logger = get_logger()
 
 
 class MedKnowledgeServicer(knowledge_pb2_grpc.MedKnowledgeServiceServicer):
     """中医知识gRPC服务实现"""
-    
+
     def __init__(self, knowledge_service: KnowledgeService):
         self.service = knowledge_service
 
@@ -24,7 +22,7 @@ class MedKnowledgeServicer(knowledge_pb2_grpc.MedKnowledgeServiceServicer):
             # 优先使用ID查询
             if request.constitution_id:
                 constitution = self.service.get_constitution_by_id(request.constitution_id)
-            # 如果没有ID，尝试使用名称查询
+            # 如果没有ID,尝试使用名称查询
             elif request.constitution_name:
                 # 这需要在repository中添加按名称查询的方法
                 constitutions = self.service.search_knowledge(
@@ -57,14 +55,14 @@ class MedKnowledgeServicer(knowledge_pb2_grpc.MedKnowledgeServiceServicer):
                 preventions=constitution.preventions,
                 food_recommendations=constitution.food_recommendations,
                 food_avoidances=constitution.food_avoidances,
-                prevalence=constitution.prevalence
+                prevalence=constitution.prevalence,
             )
 
             return knowledge_pb2.ConstitutionResponse(constitution=constitution_info)
         except Exception as e:
             logger.error(f"GetConstitutionInfo错误: {e}")
             context.set_code(grpc.StatusCode.INTERNAL)
-            context.set_details(f"服务器内部错误: {str(e)}")
+            context.set_details(f"服务器内部错误: {e!s}")
             return knowledge_pb2.ConstitutionResponse()
 
     def GetSymptomInfo(self, request, context):
@@ -73,11 +71,9 @@ class MedKnowledgeServicer(knowledge_pb2_grpc.MedKnowledgeServiceServicer):
             # 优先使用ID查询
             if request.symptom_id:
                 symptom = self.service.get_symptom_by_id(request.symptom_id)
-            # 如果没有ID，尝试使用名称查询
+            # 如果没有ID,尝试使用名称查询
             elif request.symptom_name:
-                symptoms = self.service.search_knowledge(
-                    request.symptom_name, "Symptom", 1, 0
-                )
+                symptoms = self.service.search_knowledge(request.symptom_name, "Symptom", 1, 0)
                 if symptoms.total > 0:
                     symptom_id = symptoms.data[0].id
                     symptom = self.service.get_symptom_by_id(symptom_id)
@@ -103,14 +99,14 @@ class MedKnowledgeServicer(knowledge_pb2_grpc.MedKnowledgeServiceServicer):
                 related_syndromes=symptom.related_syndromes,
                 related_diseases=symptom.related_diseases,
                 related_constitutions=symptom.related_constitutions,
-                western_medicine_explanation=symptom.western_medicine_explanation
+                western_medicine_explanation=symptom.western_medicine_explanation,
             )
 
             return knowledge_pb2.SymptomResponse(symptom=symptom_info)
         except Exception as e:
             logger.error(f"GetSymptomInfo错误: {e}")
             context.set_code(grpc.StatusCode.INTERNAL)
-            context.set_details(f"服务器内部错误: {str(e)}")
+            context.set_details(f"服务器内部错误: {e!s}")
             return knowledge_pb2.SymptomResponse()
 
     def GetAcupointInfo(self, request, context):
@@ -119,11 +115,9 @@ class MedKnowledgeServicer(knowledge_pb2_grpc.MedKnowledgeServiceServicer):
             # 优先使用ID查询
             if request.acupoint_id:
                 acupoint = self.service.get_acupoint_by_id(request.acupoint_id)
-            # 如果没有ID，尝试使用名称查询
+            # 如果没有ID,尝试使用名称查询
             elif request.acupoint_name:
-                acupoints = self.service.search_knowledge(
-                    request.acupoint_name, "Acupoint", 1, 0
-                )
+                acupoints = self.service.search_knowledge(request.acupoint_name, "Acupoint", 1, 0)
                 if acupoints.total > 0:
                     acupoint_id = acupoints.data[0].id
                     acupoint = self.service.get_acupoint_by_id(acupoint_id)
@@ -151,14 +145,14 @@ class MedKnowledgeServicer(knowledge_pb2_grpc.MedKnowledgeServiceServicer):
                 functions=acupoint.functions,
                 indications=acupoint.indications,
                 manipulation=acupoint.manipulation,
-                cautions=acupoint.cautions
+                cautions=acupoint.cautions,
             )
 
             return knowledge_pb2.AcupointResponse(acupoint=acupoint_info)
         except Exception as e:
             logger.error(f"GetAcupointInfo错误: {e}")
             context.set_code(grpc.StatusCode.INTERNAL)
-            context.set_details(f"服务器内部错误: {str(e)}")
+            context.set_details(f"服务器内部错误: {e!s}")
             return knowledge_pb2.AcupointResponse()
 
     def GetHerbalInfo(self, request, context):
@@ -167,11 +161,9 @@ class MedKnowledgeServicer(knowledge_pb2_grpc.MedKnowledgeServiceServicer):
             # 优先使用ID查询
             if request.herbal_id:
                 herb = self.service.get_herb_by_id(request.herbal_id)
-            # 如果没有ID，尝试使用名称查询
+            # 如果没有ID,尝试使用名称查询
             elif request.herbal_name:
-                herbs = self.service.search_knowledge(
-                    request.herbal_name, "Herb", 1, 0
-                )
+                herbs = self.service.search_knowledge(request.herbal_name, "Herb", 1, 0)
                 if herbs.total > 0:
                     herb_id = herbs.data[0].id
                     herb = self.service.get_herb_by_id(herb_id)
@@ -203,14 +195,14 @@ class MedKnowledgeServicer(knowledge_pb2_grpc.MedKnowledgeServiceServicer):
                 dosage=herb.dosage,
                 cautions=herb.cautions,
                 common_pairs=herb.common_pairs,
-                modern_research=herb.modern_research
+                modern_research=herb.modern_research,
             )
 
             return knowledge_pb2.HerbalResponse(herbal=herbal_info)
         except Exception as e:
             logger.error(f"GetHerbalInfo错误: {e}")
             context.set_code(grpc.StatusCode.INTERNAL)
-            context.set_details(f"服务器内部错误: {str(e)}")
+            context.set_details(f"服务器内部错误: {e!s}")
             return knowledge_pb2.HerbalResponse()
 
     def GetRecommendationsByConstitution(self, request, context):
@@ -239,7 +231,7 @@ class MedKnowledgeServicer(knowledge_pb2_grpc.MedKnowledgeServiceServicer):
                     title=rec.title,
                     description=rec.description,
                     relevance_score=rec.relevance_score,
-                    evidence=rec.evidence
+                    evidence=rec.evidence,
                 )
                 recommendations.append(recommendation)
 
@@ -247,7 +239,7 @@ class MedKnowledgeServicer(knowledge_pb2_grpc.MedKnowledgeServiceServicer):
         except Exception as e:
             logger.error(f"GetRecommendationsByConstitution错误: {e}")
             context.set_code(grpc.StatusCode.INTERNAL)
-            context.set_details(f"服务器内部错误: {str(e)}")
+            context.set_details(f"服务器内部错误: {e!s}")
             return knowledge_pb2.RecommendationResponse()
 
     def SearchKnowledge(self, request, context):
@@ -264,9 +256,7 @@ class MedKnowledgeServicer(knowledge_pb2_grpc.MedKnowledgeServiceServicer):
             entity_type = request.entity_type if request.entity_type else None
 
             # 搜索知识库
-            result = self.service.search_knowledge(
-                request.query, entity_type, limit, offset
-            )
+            result = self.service.search_knowledge(request.query, entity_type, limit, offset)
 
             # 转换为protobuf消息
             results = []
@@ -276,18 +266,15 @@ class MedKnowledgeServicer(knowledge_pb2_grpc.MedKnowledgeServiceServicer):
                     name=item.name,
                     entity_type=item.entity_type,
                     brief=item.brief,
-                    relevance_score=item.relevance_score
+                    relevance_score=item.relevance_score,
                 )
                 results.append(entity)
 
-            return knowledge_pb2.SearchResponse(
-                results=results,
-                total_count=result.total
-            )
+            return knowledge_pb2.SearchResponse(results=results, total_count=result.total)
         except Exception as e:
             logger.error(f"SearchKnowledge错误: {e}")
             context.set_code(grpc.StatusCode.INTERNAL)
-            context.set_details(f"服务器内部错误: {str(e)}")
+            context.set_details(f"服务器内部错误: {e!s}")
             return knowledge_pb2.SearchResponse()
 
     def GetSyndromePathways(self, request, context):
@@ -296,11 +283,9 @@ class MedKnowledgeServicer(knowledge_pb2_grpc.MedKnowledgeServiceServicer):
             # 优先使用ID查询
             if request.syndrome_id:
                 result = self.service.get_syndrome_pathways(request.syndrome_id)
-            # 如果没有ID，尝试使用名称查询
+            # 如果没有ID,尝试使用名称查询
             elif request.syndrome_name:
-                syndromes = self.service.search_knowledge(
-                    request.syndrome_name, "Syndrome", 1, 0
-                )
+                syndromes = self.service.search_knowledge(request.syndrome_name, "Syndrome", 1, 0)
                 if syndromes.total > 0:
                     syndrome_id = syndromes.data[0].id
                     result = self.service.get_syndrome_pathways(syndrome_id)
@@ -312,7 +297,7 @@ class MedKnowledgeServicer(knowledge_pb2_grpc.MedKnowledgeServiceServicer):
                 context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
                 context.set_details("请提供证型ID或名称")
                 return knowledge_pb2.SyndromePathwaysResponse()
-            
+
             if not result.syndrome:
                 context.set_code(grpc.StatusCode.NOT_FOUND)
                 context.set_details(f"找不到ID为'{request.syndrome_id}'的证型")
@@ -325,46 +310,41 @@ class MedKnowledgeServicer(knowledge_pb2_grpc.MedKnowledgeServiceServicer):
                 description=result.syndrome.description,
                 key_symptoms=result.syndrome.key_symptoms,
                 tongue_features=result.syndrome.tongue_features,
-                pulse_features=result.syndrome.pulse_features
+                pulse_features=result.syndrome.pulse_features,
             )
-            
+
             # 转换路径信息
             pathways = []
             for pathway in result.pathways:
                 diagnosis_steps = []
-                
+
                 for step in pathway.steps:
                     evidence = []
                     for ev in step.evidence:
                         evidence_item = knowledge_pb2.DiagnosisEvidence(
-                            type=ev.type,
-                            description=ev.description,
-                            weight=ev.weight
+                            type=ev.type, description=ev.description, weight=ev.weight
                         )
                         evidence.append(evidence_item)
-                    
+
                     step_info = knowledge_pb2.DiagnosisStep(
                         step_number=step.step_number,
                         description=step.description,
                         evidence=evidence,
-                        differential_points=step.differential_points
+                        differential_points=step.differential_points,
                     )
                     diagnosis_steps.append(step_info)
-                
+
                 pathway_info = knowledge_pb2.DiagnosisPathway(
                     id=pathway.id,
                     name=pathway.name,
                     description=pathway.description,
-                    steps=diagnosis_steps
+                    steps=diagnosis_steps,
                 )
                 pathways.append(pathway_info)
-            
-            return knowledge_pb2.SyndromePathwaysResponse(
-                syndrome=syndrome_info,
-                pathways=pathways
-            )
+
+            return knowledge_pb2.SyndromePathwaysResponse(syndrome=syndrome_info, pathways=pathways)
         except Exception as e:
             logger.error(f"GetSyndromePathways错误: {e}")
             context.set_code(grpc.StatusCode.INTERNAL)
-            context.set_details(f"服务器内部错误: {str(e)}")
-            return knowledge_pb2.SyndromePathwaysResponse() 
+            context.set_details(f"服务器内部错误: {e!s}")
+            return knowledge_pb2.SyndromePathwaysResponse()

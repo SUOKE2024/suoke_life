@@ -16,7 +16,7 @@ from .model.workflow import WorkflowDefinition, WorkflowExecution
 from .service.agent_manager import AgentManager
 from .service.workflow_engine import WorkflowEngine
 
-__all__ = [
+__all__: list[str] = [
     "AgentManager",
     "WorkflowEngine",
     "AgentInfo",

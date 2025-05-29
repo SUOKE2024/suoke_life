@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 模型工厂单元测试
@@ -8,7 +7,8 @@
 import os
 import sys
 import unittest
-from unittest.mock import patch, MagicMock, AsyncMock
+from unittest.mock import AsyncMock, MagicMock, patch
+
 import pytest
 
 # 添加项目根路径到 Python 路径
@@ -49,15 +49,15 @@ class TestModelFactory(unittest.TestCase):
                 }
             }
         }
-        
+
         # 模拟OpenAI客户端
         self.mock_openai_client = MagicMock()
         self.mock_openai_client.chat.completions.create = AsyncMock()
-        
+
         # 模拟Ollama客户端
         self.mock_ollama_client = MagicMock()
         self.mock_ollama_client.chat = AsyncMock()
-        
+
         # 初始化模型工厂
         with patch('internal.agent.model_factory.Config', return_value=self.mock_config), \
              patch('internal.agent.model_factory.AsyncOpenAI', return_value=self.mock_openai_client), \
@@ -70,7 +70,7 @@ class TestModelFactory(unittest.TestCase):
         """测试获取OpenAI模型客户端"""
         # 调用被测试的方法
         client = await self.model_factory.get_model_client('openai')
-        
+
         # 断言
         assert client == self.mock_openai_client
 
@@ -79,7 +79,7 @@ class TestModelFactory(unittest.TestCase):
         """测试获取Ollama模型客户端"""
         # 调用被测试的方法
         client = await self.model_factory.get_model_client('ollama')
-        
+
         # 断言
         assert client == self.mock_ollama_client
 
@@ -89,7 +89,7 @@ class TestModelFactory(unittest.TestCase):
         # 调用被测试的方法
         with pytest.raises(ValueError) as excinfo:
             await self.model_factory.get_model_client('invalid_provider')
-        
+
         # 断言
         assert "不支持的模型提供者" in str(excinfo.value)
 
@@ -101,7 +101,7 @@ class TestModelFactory(unittest.TestCase):
         mock_response.choices = [MagicMock()]
         mock_response.choices[0].message.content = "这是OpenAI生成的回复内容"
         self.mock_openai_client.chat.completions.create.return_value = mock_response
-        
+
         # 调用被测试的方法
         prompt = "请解释一下中医的阴阳五行理论"
         result = await self.model_factory.generate_text(
@@ -110,11 +110,11 @@ class TestModelFactory(unittest.TestCase):
             prompt=prompt,
             system_prompt="你是老克，索克生活APP探索频道的智能体"
         )
-        
+
         # 断言
         assert result == "这是OpenAI生成的回复内容"
         self.mock_openai_client.chat.completions.create.assert_called_once()
-        
+
         # 检查调用参数
         call_args = self.mock_openai_client.chat.completions.create.call_args[1]
         assert call_args['model'] == 'gpt-4o-mini'
@@ -130,7 +130,7 @@ class TestModelFactory(unittest.TestCase):
         self.mock_ollama_client.chat.return_value = {
             'message': {'content': '这是Ollama生成的回复内容'}
         }
-        
+
         # 调用被测试的方法
         prompt = "请解释一下中医的经络学说"
         result = await self.model_factory.generate_text(
@@ -139,11 +139,11 @@ class TestModelFactory(unittest.TestCase):
             prompt=prompt,
             system_prompt="你是老克，索克生活APP探索频道的智能体"
         )
-        
+
         # 断言
         assert result == "这是Ollama生成的回复内容"
         self.mock_ollama_client.chat.assert_called_once()
-        
+
         # 检查调用参数
         call_args = self.mock_ollama_client.chat.call_args[1]
         assert call_args['model'] == 'llama-3-8b'
@@ -159,7 +159,7 @@ class TestModelFactory(unittest.TestCase):
         mock_cache = MagicMock()
         mock_cache.get = MagicMock(return_value="来自缓存的回复内容")
         self.model_factory._cache = mock_cache
-        
+
         # 调用被测试的方法
         prompt = "这是一个会命中缓存的提示"
         result = await self.model_factory.generate_text(
@@ -168,7 +168,7 @@ class TestModelFactory(unittest.TestCase):
             prompt=prompt,
             system_prompt="你是老克，索克生活APP探索频道的智能体"
         )
-        
+
         # 断言
         assert result == "来自缓存的回复内容"
         mock_cache.get.assert_called_once()
@@ -182,13 +182,13 @@ class TestModelFactory(unittest.TestCase):
         mock_cache.get = MagicMock(return_value=None)  # 缓存未命中
         mock_cache.set = MagicMock()
         self.model_factory._cache = mock_cache
-        
+
         # 设置模拟API返回值
         mock_response = MagicMock()
         mock_response.choices = [MagicMock()]
         mock_response.choices[0].message.content = "这是新生成的回复内容"
         self.mock_openai_client.chat.completions.create.return_value = mock_response
-        
+
         # 调用被测试的方法
         prompt = "这是一个不会命中缓存的提示"
         result = await self.model_factory.generate_text(
@@ -197,7 +197,7 @@ class TestModelFactory(unittest.TestCase):
             prompt=prompt,
             system_prompt="你是老克，索克生活APP探索频道的智能体"
         )
-        
+
         # 断言
         assert result == "这是新生成的回复内容"
         mock_cache.get.assert_called_once()
@@ -209,19 +209,19 @@ class TestModelFactory(unittest.TestCase):
         """测试从主要提供者回退到次要提供者"""
         # 设置主要提供者(OpenAI)失败
         self.mock_openai_client.chat.completions.create.side_effect = Exception("API错误")
-        
+
         # 设置次要提供者(Ollama)成功
         self.mock_ollama_client.chat.return_value = {
             'message': {'content': '这是Ollama备用模型生成的回复内容'}
         }
-        
+
         # 调用被测试的方法，使用自动回退
         prompt = "请解释中医的辨证论治"
         result = await self.model_factory.generate_text_with_fallback(
             prompt=prompt,
             system_prompt="你是老克，索克生活APP探索频道的智能体"
         )
-        
+
         # 断言
         assert result == "这是Ollama备用模型生成的回复内容"
         self.mock_openai_client.chat.completions.create.assert_called_once()
@@ -229,4 +229,4 @@ class TestModelFactory(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main() 
+    unittest.main()

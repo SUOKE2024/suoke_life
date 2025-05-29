@@ -1,8 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from pydantic import BaseModel
-from typing import Dict, List, Optional, Any
-import time
 import logging
+import time
+
+from fastapi import APIRouter, HTTPException, status
+from pydantic import BaseModel
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +18,7 @@ class HealthStatus(BaseModel):
     status: str
     version: str
     uptime: float
-    services: Dict[str, str]
+    services: dict[str, str]
 
 # 服务启动时间
 START_TIME = time.time()
@@ -35,10 +35,10 @@ async def health_check():
             "cache": "healthy",     # 检查Redis缓存
             "messagebus": "healthy" # 检查消息总线
         }
-        
+
         # 计算运行时间
         uptime = time.time() - START_TIME
-        
+
         return HealthStatus(
             status="healthy",
             version="1.0.0",
@@ -64,4 +64,4 @@ async def liveness_check():
     """
     服务存活检查
     """
-    return {"status": "alive"} 
+    return {"status": "alive"}

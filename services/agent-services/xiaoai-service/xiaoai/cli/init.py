@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 小艾智能体初始化模块
 XiaoAI Agent Initialization Module
@@ -9,9 +8,7 @@ XiaoAI Agent Initialization Module
 
 from __future__ import annotations
 
-import asyncio
 from pathlib import Path
-from typing import Optional
 
 import click
 from loguru import logger
@@ -20,13 +17,13 @@ from loguru import logger
 def initialize(target: str = "all", force: bool = False) -> None:
     """
     初始化小艾智能体
-    
+
     Args:
         target: 初始化目标 (config, database, cache, all)
         force: 是否强制重新初始化
     """
     logger.info(f"开始初始化小艾智能体: {target}")
-    
+
     try:
         if target == "all":
             _init_config(force)
@@ -41,10 +38,10 @@ def initialize(target: str = "all", force: bool = False) -> None:
             _init_cache(force)
         else:
             raise ValueError(f"不支持的初始化目标: {target}")
-        
+
         logger.info("初始化完成")
         click.echo(click.style("✓ 小艾智能体初始化成功", fg="green"))
-        
+
     except Exception as e:
         logger.error(f"初始化失败: {e}")
         click.echo(click.style(f"✗ 初始化失败: {e}", fg="red"))
@@ -54,33 +51,33 @@ def initialize(target: str = "all", force: bool = False) -> None:
 def _init_config(force: bool = False) -> None:
     """初始化配置"""
     logger.info("初始化配置...")
-    
-    config_dir = Path("config")
+
+    Path("config")
     config_dir.mkdir(exist_ok=True)
-    
+
     # 创建默认配置文件
-    default_config = config_dir / "default.yaml"
+    defaultconfig = config_dir / "default.yaml"
     if not default_config.exists() or force:
-        _create_default_config(default_config)
+        _create_default_config(defaultconfig)
         logger.info(f"已创建默认配置文件: {default_config}")
-    
+
     # 创建开发环境配置
-    dev_config = config_dir / "development.yaml"
+    devconfig = config_dir / "development.yaml"
     if not dev_config.exists() or force:
-        _create_dev_config(dev_config)
+        _create_dev_config(devconfig)
         logger.info(f"已创建开发环境配置文件: {dev_config}")
-    
+
     # 创建生产环境配置
-    prod_config = config_dir / "production.yaml"
+    prodconfig = config_dir / "production.yaml"
     if not prod_config.exists() or force:
-        _create_prod_config(prod_config)
+        _create_prod_config(prodconfig)
         logger.info(f"已创建生产环境配置文件: {prod_config}")
 
 
 def _init_database(force: bool = False) -> None:
     """初始化数据库"""
     logger.info("初始化数据库...")
-    
+
     try:
         # 这里应该运行数据库迁移
         # 暂时只是模拟
@@ -95,7 +92,7 @@ def _init_database(force: bool = False) -> None:
 def _init_cache(force: bool = False) -> None:
     """初始化缓存"""
     logger.info("初始化缓存...")
-    
+
     try:
         # 这里应该清理和初始化缓存
         # 暂时只是模拟
@@ -110,7 +107,7 @@ def _init_cache(force: bool = False) -> None:
 def _init_directories(force: bool = False) -> None:
     """初始化目录结构"""
     logger.info("初始化目录结构...")
-    
+
     directories = [
         "logs",
         "data",
@@ -118,16 +115,16 @@ def _init_directories(force: bool = False) -> None:
         "temp",
         "uploads",
     ]
-    
-    for dir_name in directories:
-        dir_path = Path(dir_name)
+
+    for _dir_name in directories:
+        Path(dirname)
         dir_path.mkdir(exist_ok=True)
         logger.info(f"已创建目录: {dir_path}")
 
 
-def _create_default_config(config_path: Path) -> None:
+def _create_default_config(configpath: Path) -> None:
     """创建默认配置文件"""
-    config_content = """# 小艾智能体默认配置
+    configcontent = """# 小艾智能体默认配置
 # XiaoAI Agent Default Configuration
 
 # 服务器配置
@@ -148,7 +145,7 @@ database:
 cache:
   url: "redis://localhost:6379/0"
   max_connections: 10
-  retry_on_timeout: true
+  retryon_timeout: true
 
 # Celery 配置
 celery:
@@ -195,13 +192,13 @@ external_services:
     url: "http://localhost:8004"
     timeout: 30
 """
-    
-    config_path.write_text(config_content, encoding="utf-8")
+
+    config_path.write_text(configcontent, encoding="utf-8")
 
 
-def _create_dev_config(config_path: Path) -> None:
+def _create_dev_config(configpath: Path) -> None:
     """创建开发环境配置文件"""
-    config_content = """# 小艾智能体开发环境配置
+    configcontent = """# 小艾智能体开发环境配置
 # XiaoAI Agent Development Configuration
 
 # 继承默认配置
@@ -221,17 +218,17 @@ logging:
 
 # 开发工具
 dev_tools:
-  enable_debug: true
-  enable_profiling: true
-  mock_external_services: true
+  enabledebug: true
+  enableprofiling: true
+  mockexternal_services: true
 """
-    
-    config_path.write_text(config_content, encoding="utf-8")
+
+    config_path.write_text(configcontent, encoding="utf-8")
 
 
-def _create_prod_config(config_path: Path) -> None:
+def _create_prod_config(configpath: Path) -> None:
     """创建生产环境配置文件"""
-    config_content = """# 小艾智能体生产环境配置
+    configcontent = """# 小艾智能体生产环境配置
 # XiaoAI Agent Production Configuration
 
 # 继承默认配置
@@ -256,25 +253,25 @@ logging:
 
 # 监控配置
 monitoring:
-  enable_metrics: true
+  enablemetrics: true
   metrics_port: 9090
-  enable_tracing: true
-  
+  enabletracing: true
+
 # 安全配置
 security:
   secret_key: "${XIAOAI_SECRET_KEY}"
-  
+
 # 生产环境数据库连接
 database:
   url: "${DATABASE_URL}"
-  
+
 # 生产环境缓存连接
 cache:
   url: "${REDIS_URL}"
 """
-    
-    config_path.write_text(config_content, encoding="utf-8")
+
+    config_path.write_text(configcontent, encoding="utf-8")
 
 
 if __name__ == "__main__":
-    initialize() 
+    initialize()

@@ -3,7 +3,7 @@ import { ServiceItem, CategoryConfig, ServiceCategory } from '../types/suoke';
 // 分类配置
 export const SERVICE_CATEGORIES: CategoryConfig[] = [
   { key: 'all', label: '全部', icon: 'view-grid', color: '#007AFF' },
-  { key: 'diagnosis', label: '四诊', icon: 'stethoscope', color: '#34C759' },
+  { key: 'diagnosis', label: '五诊', icon: 'stethoscope', color: '#34C759' },
   { key: 'eco', label: '生态服务', icon: 'leaf', color: '#32D74B' },
   { key: 'product', label: '产品', icon: 'package-variant', color: '#8E44AD' },
   { key: 'service', label: '服务', icon: 'medical-bag', color: '#E74C3C' },
@@ -14,7 +14,7 @@ export const SERVICE_CATEGORIES: CategoryConfig[] = [
   { key: 'supplier', label: '供应商', icon: 'truck', color: '#34495E' },
 ];
 
-// 四诊服务配置
+// 五诊服务配置（从四诊升级为五诊）
 export const DIAGNOSIS_SERVICES: ServiceItem[] = [
   {
     id: 'look_diagnosis',
@@ -76,9 +76,25 @@ export const DIAGNOSIS_SERVICES: ServiceItem[] = [
     price: '¥129',
     available: true,
     rating: 4.7,
-    reviewCount: 756,
+    reviewCount: 856,
     estimatedTime: '25分钟',
-    tags: ['传感器技术', '精准检测', '专业分析']
+    tags: ['传感器检测', '脉象分析', '专业触诊']
+  },
+  {
+    id: 'calculation_diagnosis',
+    title: '算诊服务',
+    subtitle: '时间医学智能推演',
+    icon: 'calculator',
+    color: '#8E44AD',
+    category: 'diagnosis',
+    description: '基于传统中医算诊理论，结合五运六气、八字八卦等进行个性化健康分析',
+    features: ['五运六气分析', '八字体质推算', '八卦体质分析', '子午流注时间医学'],
+    price: '¥149',
+    available: true,
+    rating: 4.9,
+    reviewCount: 567,
+    estimatedTime: '30分钟',
+    tags: ['传统算诊', '时间医学', '个性化分析', '五运六气']
   }
 ];
 

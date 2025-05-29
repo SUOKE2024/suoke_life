@@ -1,0 +1,279 @@
+{
+  "五运六气分析": {
+    "success": true,
+    "data": {
+      "year_ganzhi": "甲辰",
+      "wuyun": {
+        "name": "土运太过",
+        "characteristics": [
+          "脾胃功能亢进",
+          "湿气偏盛",
+          "肌肉丰满"
+        ]
+      },
+      "liuqi": {
+        "name": "太阳寒水",
+        "characteristics": [
+          "寒水主令",
+          "肾膀胱当令",
+          "万物闭藏"
+        ]
+      }
+    },
+    "message": "2024年五运六气分析完成"
+  },
+  "八字分析": {
+    "success": true,
+    "data": {
+      "bazi": {
+        "year_ganzhi": "庚午",
+        "month_ganzhi": "壬午",
+        "day_ganzhi": "庚辰",
+        "hour_ganzhi": "辛巳",
+        "lunar_date": {
+          "year": 1990,
+          "month": 4,
+          "day": 21,
+          "isleap": false
+        },
+        "wuxing": {
+          "wood": 0,
+          "fire": 3,
+          "earth": 1,
+          "metal": 3,
+          "water": 1,
+          "total": 8,
+          "dominant_element": "火",
+          "weakest_element": "木"
+        }
+      },
+      "constitution": {
+        "constitution_type": "火型体质",
+        "dominant_element": "火",
+        "weakest_element": "木",
+        "characteristics": [
+          "性格活泼",
+          "易兴奋",
+          "面色红润",
+          "心火旺盛"
+        ],
+        "health_risks": [
+          "心血管疾病",
+          "失眠",
+          "口疮"
+        ],
+        "care_advice": [
+          "清心降火",
+          "养心安神",
+          "避免过度兴奋"
+        ],
+        "wuxing_balance": {
+          "status": "偏虚",
+          "description": "wood行偏虚，需要适当补充",
+          "proportions": {
+            "wood": 0.0,
+            "fire": 0.375,
+            "earth": 0.125,
+            "metal": 0.375,
+            "water": 0.125
+          }
+        }
+      }
+    },
+    "message": "八字分析完成"
+  },
+  "八卦体质分析": {
+    "success": true,
+    "data": {
+      "primary_gua": "艮",
+      "constitution_type": "土型体质",
+      "element": "土",
+      "organ_correspondence": "脾、胃",
+      "characteristics": [
+        "稳定",
+        "止静",
+        "内敛"
+      ],
+      "direction": "东北"
+    },
+    "message": "八卦体质分析完成"
+  },
+  "子午流注分析": {
+    "success": true,
+    "data": {
+      "optimal_hours": [
+        "子时(23:00-01:00)",
+        "丑时(01:00-03:00)",
+        "寅时(03:00-05:00)"
+      ],
+      "meridian_flow": [
+        {
+          "time": "子时",
+          "organ": "胆",
+          "element": "木"
+        },
+        {
+          "time": "丑时",
+          "organ": "肝",
+          "element": "木"
+        },
+        {
+          "time": "寅时",
+          "organ": "肺",
+          "element": "金"
+        }
+      ],
+      "current_shichen": {
+        "时间": "09:00-11:00",
+        "脏腑": "脾",
+        "五行": "土",
+        "时辰": "巳时",
+        "当前时间": "09:11"
+      },
+      "recommendations": [
+        "此时适宜养生调理",
+        "避免剧烈运动",
+        "保持心境平和"
+      ]
+    },
+    "message": "子午流注分析完成"
+  },
+  "综合算诊分析": {
+    "success": true,
+    "data": {
+      "wuyun_liuqi": {
+        "year_ganzhi": "甲辰",
+        "wuyun": {
+          "name": "土运太过",
+          "characteristics": [
+            "脾胃功能亢进",
+            "湿气偏盛",
+            "肌肉丰满"
+          ]
+        },
+        "liuqi": {
+          "name": "太阳寒水",
+          "characteristics": [
+            "寒水主令",
+            "肾膀胱当令",
+            "万物闭藏"
+          ]
+        }
+      },
+      "bazi": {
+        "calculation": {
+          "year_ganzhi": "庚午",
+          "month_ganzhi": "壬午",
+          "day_ganzhi": "庚辰",
+          "hour_ganzhi": "辛巳",
+          "lunar_date": {
+            "year": 1990,
+            "month": 4,
+            "day": 21,
+            "isleap": false
+          },
+          "wuxing": {
+            "wood": 0,
+            "fire": 3,
+            "earth": 1,
+            "metal": 3,
+            "water": 1,
+            "total": 8,
+            "dominant_element": "火",
+            "weakest_element": "木"
+          }
+        },
+        "constitution": {
+          "constitution_type": "火型体质",
+          "dominant_element": "火",
+          "weakest_element": "木",
+          "characteristics": [
+            "性格活泼",
+            "易兴奋",
+            "面色红润",
+            "心火旺盛"
+          ],
+          "health_risks": [
+            "心血管疾病",
+            "失眠",
+            "口疮"
+          ],
+          "care_advice": [
+            "清心降火",
+            "养心安神",
+            "避免过度兴奋"
+          ],
+          "wuxing_balance": {
+            "status": "偏虚",
+            "description": "wood行偏虚，需要适当补充",
+            "proportions": {
+              "wood": 0.0,
+              "fire": 0.375,
+              "earth": 0.125,
+              "metal": 0.375,
+              "water": 0.125
+            }
+          }
+        }
+      },
+      "bagua": {
+        "primary_gua": "艮",
+        "constitution_type": "土型体质",
+        "element": "土",
+        "organ_correspondence": "脾、胃",
+        "characteristics": [
+          "稳定",
+          "止静",
+          "内敛"
+        ],
+        "direction": "东北"
+      },
+      "ziwu": {
+        "optimal_hours": [
+          "子时(23:00-01:00)",
+          "丑时(01:00-03:00)",
+          "寅时(03:00-05:00)"
+        ],
+        "meridian_flow": [
+          {
+            "time": "子时",
+            "organ": "胆",
+            "element": "木"
+          },
+          {
+            "time": "丑时",
+            "organ": "肝",
+            "element": "木"
+          },
+          {
+            "time": "寅时",
+            "organ": "肺",
+            "element": "金"
+          }
+        ],
+        "current_shichen": {
+          "时间": "09:00-11:00",
+          "脏腑": "脾",
+          "五行": "土",
+          "时辰": "巳时",
+          "当前时间": "09:11"
+        },
+        "recommendations": [
+          "此时适宜养生调理",
+          "避免剧烈运动",
+          "保持心境平和"
+        ]
+      },
+      "summary": {
+        "primary_constitution": "火型体质",
+        "bagua_constitution": "土型体质",
+        "year_influence": "土运太过",
+        "optimal_treatment_times": [
+          "子时(23:00-01:00)",
+          "丑时(01:00-03:00)"
+        ]
+      }
+    },
+    "message": "综合算诊分析完成"
+  }
+}

@@ -1,0 +1,250 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "calculation-service"
+version = "1.0.0"
+description = "Calculation service for TCM computational diagnosis (算诊) - The fifth diagnostic method in traditional Chinese medicine"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [
+    { name = "Suoke Life Team", email = "dev@suokelife.com" }
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Healthcare Industry",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Medical Science Apps.",
+    "Topic :: Scientific/Engineering :: Astronomy",
+    "Topic :: Scientific/Engineering :: Mathematics",
+]
+requires-python = ">=3.13"
+dependencies = [
+    # Web framework
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "pydantic>=2.10.0",
+    "pydantic-settings>=2.6.0",
+    
+    # HTTP client
+    "httpx>=0.28.0",
+    
+    # Database
+    "asyncpg>=0.30.0",
+    "redis>=5.2.0",
+    "motor>=3.6.0",
+    
+    # Traditional Chinese Medicine calculations
+    "lunardate>=0.2.2",  # 农历计算
+    "chinese-calendar>=1.9.0",  # 中国传统历法
+    "pytz>=2024.2",  # 时区处理
+    "ephem>=4.1.5",  # 天文计算
+    "astral>=3.2",  # 日出日落计算
+    
+    # Mathematical and scientific computing
+    "numpy>=2.2.0",
+    "scipy>=1.14.0",
+    "pandas>=2.2.0",
+    "sympy>=1.13.0",  # 符号数学计算
+    
+    # Machine learning for pattern recognition
+    "scikit-learn>=1.6.0",
+    "xgboost>=2.1.0",
+    
+    # Time series analysis
+    "statsmodels>=0.14.0",
+    
+    # Logging and monitoring
+    "structlog>=24.4.0",
+    "loguru>=0.7.2",
+    "prometheus-client>=0.21.0",
+    
+    # Utilities
+    "python-multipart>=0.0.12",
+    "python-jose[cryptography]>=3.3.0",
+    "passlib[bcrypt]>=1.7.4",
+    "croniter>=3.0.0",  # 时间周期计算
+]
+
+[project.optional-dependencies]
+dev = [
+    # Testing
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.24.0",
+    "pytest-cov>=6.0.0",
+    "pytest-mock>=3.14.0",
+    "httpx>=0.28.0",
+    "pytest-benchmark>=4.0.0",
+    
+    # Code quality
+    "ruff>=0.8.0",
+    "mypy>=1.13.0",
+    "pre-commit>=4.0.0",
+    
+    # Security
+    "safety>=3.2.0",
+    "bandit>=1.8.0",
+    
+    # Type stubs
+    "types-redis>=4.6.0",
+    "types-pytz>=2024.2.0",
+    "pandas-stubs>=2.2.0",
+]
+
+advanced = [
+    # Advanced astronomical calculations
+    "skyfield>=1.49",
+    "astropy>=6.1.0",
+    
+    # Advanced time series
+    "prophet>=1.1.5",
+    "pmdarima>=2.0.4",
+]
+
+cloud = [
+    "boto3>=1.35.0",
+    "google-cloud-storage>=2.18.0",
+    "azure-storage-blob>=12.23.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/suokelife/calculation-service"
+Repository = "https://github.com/suokelife/calculation-service.git"
+Issues = "https://github.com/suokelife/calculation-service/issues"
+
+[project.scripts]
+calculation-service = "calculation_service.cmd.server:main"
+
+# Ruff configuration
+[tool.ruff]
+target-version = "py313"
+line-length = 88
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+    "SIM", # flake8-simplify
+    "TCH", # flake8-type-checking
+]
+ignore = [
+    "E501",  # line too long, handled by formatter
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex
+    "ARG001", # unused function argument (common in API handlers)
+    "ARG002", # unused method argument
+    "B904",  # raise from within except (not always needed)
+    "E402",  # module level import not at top (needed for path manipulation)
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+[tool.ruff.lint.isort]
+known-first-party = ["calculation_service"]
+
+# MyPy configuration
+[tool.mypy]
+python_version = "3.13"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[[tool.mypy.overrides]]
+module = [
+    "lunardate.*",
+    "chinese_calendar.*",
+    "ephem.*",
+    "astral.*",
+    "skyfield.*",
+    "astropy.*",
+    "prophet.*",
+    "pmdarima.*",
+    "croniter.*",
+]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+disallow_untyped_decorators = false
+
+# Pytest configuration
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--disable-warnings",
+    "-ra",
+]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+    "e2e: marks tests as end-to-end tests",
+    "benchmark: marks tests as benchmark tests",
+    "astronomical: marks tests requiring astronomical calculations",
+    "calendar: marks tests involving calendar calculations",
+]
+
+# Coverage configuration
+[tool.coverage.run]
+source = ["calculation_service"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "*/__pycache__/*",
+    "*/migrations/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
+[tool.coverage.html]
+directory = "htmlcov"
+
+# UV configuration for Chinese mirrors
+[tool.uv]
+index-url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
+extra-index-url = [
+    "https://mirrors.aliyun.com/pypi/simple/",
+    "https://pypi.douban.com/simple/",
+] 

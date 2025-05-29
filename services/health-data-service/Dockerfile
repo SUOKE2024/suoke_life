@@ -15,25 +15,27 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=on \
     PYTHONPATH="/app:${PYTHONPATH}"
 
-# 安装系统依赖
+# 安装系统依赖和UV
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     libpq-dev \
     curl \
+    && curl -LsSf https://astral.sh/uv/install.sh | sh \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+# 将UV添加到PATH
+ENV PATH="/root/.cargo/bin:$PATH"
 
 # 创建非root用户
 RUN groupadd -g 1000 appuser && \
     useradd -m -u 1000 -g appuser appuser
 
-# 复制requirements文件
-COPY requirements.txt .
+# 复制项目配置文件
+COPY pyproject.toml uv.lock ./
 
 # 安装依赖
-RUN pip install --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt && \
-    pip install gunicorn
+RUN uv sync --frozen
 
 # 复制应用代码
 COPY --chown=appuser:appuser . .
@@ -57,5 +59,5 @@ ENV LOG_LEVEL=INFO
 EXPOSE 8080 50051 9180
 
 # 启动命令
-ENTRYPOINT ["python", "-m", "cmd.server.main", "--config"]
-CMD ["${CONFIG_PATH}"] 
+ENTRYPOINT ["uv", "run", "health-data-service", "serve"]
+CMD ["--config", "${CONFIG_PATH}"] 

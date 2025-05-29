@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
 class AgentManager:
     """智能体管理器"""
 
-    def __init__(self, config: dict[str, Any]):
+    def __init__(self, config: dict[str, Any]) -> None:
         """
         初始化智能体管理器
 
@@ -41,14 +41,14 @@ class AgentManager:
         self.agent_configs: dict[str, AgentConfig] = {}
         self.agent_metrics: dict[str, AgentMetrics] = {}
         self.session: aiohttp.ClientSession | None = None
-        self._health_check_tasks: dict[str, asyncio.Task] = {}
+        self._health_check_tasks: dict[str, asyncio.Task[None]] = {}
 
         # 初始化智能体配置
         self._load_agent_configs()
 
         logger.info("智能体管理器初始化完成")
 
-    def _load_agent_configs(self):
+    def _load_agent_configs(self) -> None:
         """加载智能体配置"""
         agents_config = self.config.get("agents", {})
 
@@ -67,17 +67,28 @@ class AgentManager:
             agent_info = AgentInfo(
                 id=agent_id,
                 name=config.name,
+                description="",
+                version="1.0.0",
                 url=config.url,
                 status=AgentStatus.OFFLINE,
+                last_heartbeat=None,
             )
             self.agents[agent_id] = agent_info
 
             # 初始化指标
-            self.agent_metrics[agent_id] = AgentMetrics(agent_id=agent_id)
+            self.agent_metrics[agent_id] = AgentMetrics(
+                agent_id=agent_id,
+                request_count=0,
+                success_count=0,
+                error_count=0,
+                avg_response_time=0.0,
+                last_request_time=None,
+                uptime=0.0,
+            )
 
             logger.info(f"已加载智能体配置: {agent_id}")
 
-    async def start(self):
+    async def start(self) -> None:
         """启动智能体管理器"""
         # 创建 HTTP 会话
         self.session = aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=30))
@@ -88,7 +99,7 @@ class AgentManager:
 
         logger.info("智能体管理器已启动")
 
-    async def stop(self):
+    async def stop(self) -> None:
         """停止智能体管理器"""
         # 停止健康检查任务
         for task in self._health_check_tasks.values():
@@ -106,11 +117,11 @@ class AgentManager:
 
         logger.info("智能体管理器已停止")
 
-    async def _start_health_check(self, agent_id: str):
+    async def _start_health_check(self, agent_id: str) -> None:
         """启动智能体健康检查"""
         config = self.agent_configs[agent_id]
 
-        async def health_check_loop():
+        async def health_check_loop() -> None:
             while True:
                 try:
                     await self._perform_health_check(agent_id)
@@ -151,6 +162,7 @@ class AgentManager:
                         status=AgentStatus.ONLINE,
                         response_time=response_time,
                         timestamp=datetime.now(UTC).isoformat(),
+                        error_message=None,
                     )
                 else:
                     agent.status = AgentStatus.ERROR
@@ -200,6 +212,7 @@ class AgentManager:
                 agent_id=agent_id,
                 request_id=request.request_id,
                 timestamp=datetime.now(UTC).isoformat(),
+                execution_time=0.0,
             )
 
         if agent.status != AgentStatus.ONLINE:
@@ -209,6 +222,7 @@ class AgentManager:
                 agent_id=agent_id,
                 request_id=request.request_id,
                 timestamp=datetime.now(UTC).isoformat(),
+                execution_time=0.0,
             )
 
         start_time = time.time()
@@ -235,14 +249,15 @@ class AgentManager:
                 execution_time = time.time() - start_time
 
                 if response.status == 200:
-                    data = await response.json()
+                    response_data = await response.json()
 
                     # 更新指标
                     self._update_metrics(agent_id, True, execution_time)
 
                     return AgentResponse(
                         success=True,
-                        data=data,
+                        data=response_data,
+                        error=None,
                         agent_id=agent_id,
                         request_id=request.request_id,
                         timestamp=datetime.now(UTC).isoformat(),
@@ -274,7 +289,9 @@ class AgentManager:
                 execution_time=execution_time,
             )
 
-    def _update_metrics(self, agent_id: str, success: bool, execution_time: float):
+    def _update_metrics(
+        self, agent_id: str, success: bool, execution_time: float
+    ) -> None:
         """更新智能体指标"""
         metrics = self.agent_metrics[agent_id]
 
@@ -319,8 +336,14 @@ class AgentManager:
             "total_agents": total_count,
             "online_agents": online_count,
             "offline_agents": total_count - online_count,
-            "network_health": online_count / total_count if total_count > 0 else 0,
-            "agents": {
-                agent_id: agent.status.value for agent_id, agent in self.agents.items()
-            },
+            "network_health": online_count / total_count if total_count > 0 else 0.0,
+            "agents": [
+                {
+                    "id": agent.id,
+                    "name": agent.name,
+                    "status": agent.status.value,
+                    "last_heartbeat": agent.last_heartbeat,
+                }
+                for agent in self.agents.values()
+            ],
         }

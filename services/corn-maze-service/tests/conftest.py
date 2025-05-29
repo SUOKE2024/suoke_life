@@ -9,6 +9,7 @@ from __future__ import annotations
 import asyncio
 from collections.abc import AsyncGenerator, Generator
 from pathlib import Path
+import sys
 import tempfile
 from unittest.mock import AsyncMock, MagicMock
 
@@ -17,8 +18,14 @@ from fastapi.testclient import TestClient
 import pytest
 
 from corn_maze_service.config import Settings, get_settings
+from corn_maze_service.constants import MAZE_END_X, MAZE_END_Y
 from corn_maze_service.internal.delivery.http import create_app
+from corn_maze_service.internal.model.maze import Maze, MazeNode, NodeType
 from corn_maze_service.pkg.logging import setup_logging
+
+# 添加项目根目录到Python路径
+project_root = Path(__file__).parent.parent
+sys.path.insert(0, str(project_root))
 
 
 @pytest.fixture(scope="session")
@@ -37,34 +44,28 @@ def temp_dir() -> Generator[Path]:
 
 
 @pytest.fixture
-def test_settings(temp_dir: Path) -> Settings:
+def settings():
     """测试设置"""
     return Settings(
-        app_name="Corn Maze Service Test",
-        app_version="0.2.0-test",
-        debug=True,
-        environment="testing",
-        database={"url": f"sqlite:///{temp_dir}/test.db"},
-        redis={"url": "redis://localhost:6379/15"},  # 使用测试数据库
-        grpc={"port": 50058},  # 使用不同端口避免冲突
-        http={"port": 51058},
-        monitoring={"prometheus_port": 51059, "log_level": "DEBUG"},
+        environment="test",
+        database={"url": "sqlite:///:memory:"},
+        redis={"url": "redis://localhost:6379/1"},
     )
 
 
 @pytest.fixture
-def mock_settings(test_settings: Settings) -> Generator[Settings]:
+def mock_settings(settings: Settings) -> Generator[Settings]:
     """模拟设置"""
     original_get_settings = get_settings
 
     def _get_test_settings():
-        return test_settings
+        return settings
 
     # 替换设置函数
     import corn_maze_service.config
     corn_maze_service.config.get_settings = _get_test_settings
 
-    yield test_settings
+    yield settings
 
     # 恢复原始设置
     corn_maze_service.config.get_settings = original_get_settings
@@ -74,7 +75,7 @@ def mock_settings(test_settings: Settings) -> Generator[Settings]:
 def app(mock_settings: Settings) -> FastAPI:
     """创建测试应用"""
     setup_logging()
-    return create_app()
+    return create_app(mock_settings)
 
 
 @pytest.fixture
@@ -99,53 +100,45 @@ async def db_session():
 
 
 @pytest.fixture
-async def sample_maze():
-    """示例迷宫数据"""
-    from uuid import uuid4
-
-    from corn_maze_service.internal.model import (
-        Maze,
-        MazeDifficulty,
-        MazeNode,
-        MazeTheme,
-        NodeType,
-    )
-
-    # 创建简单的 3x3 迷宫
+def sample_maze():
+    """示例迷宫"""
+    # 创建一个简单的3x3迷宫
     nodes = []
-    for y in range(3):
-        row = []
-        for x in range(3):
+    for x in range(3):
+        for y in range(3):
             if x == 0 and y == 0:
                 node_type = NodeType.START
-            elif x == 2 and y == 2:
+            elif x == MAZE_END_X and y == MAZE_END_Y:
                 node_type = NodeType.END
             elif (x + y) % 2 == 0:
                 node_type = NodeType.PATH
             else:
                 node_type = NodeType.WALL
 
-            row.append(MazeNode(
+            node = MazeNode(
                 x=x,
                 y=y,
-                node_type=node_type
-            ))
-        nodes.append(row)
+                type=node_type,
+                connections=[]
+            )
+            nodes.append(node)
 
-    return Maze(
-        name="Test Maze",
-        description="A test maze",
-        size=3,
-        theme=MazeTheme.HEALTH,
-        difficulty=MazeDifficulty.EASY,
-        creator_id=uuid4(),
+    maze = Maze(
+        id="test-maze-1",
+        name="测试迷宫",
+        description="用于测试的简单迷宫",
+        theme="health",
+        difficulty="easy",
+        size_x=3,
+        size_y=3,
         nodes=nodes,
-        start_position=(0, 0),
-        end_position=(2, 2),
-        total_nodes=9,
-        knowledge_nodes=0,
-        challenge_nodes=0
+        start_x=0,
+        start_y=0,
+        end_x=MAZE_END_X,
+        end_y=MAZE_END_Y
     )
+
+    return maze
 
 
 # Mock 相关夹具

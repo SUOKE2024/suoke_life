@@ -1,12 +1,12 @@
 """生成的协议缓冲代码"""
 
 import sys
+
 _b=sys.version_info[0]<3 and (lambda x:x) or (lambda x:x.encode('latin1'))
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
-from google.protobuf import descriptor_pb2
 
 # @@protoc_insertion_point(imports)
 
@@ -75,8 +75,8 @@ class HealthPlanRequest(_message.Message):
     # 字段实现省略
 
 class HealthPlanResponse(_message.Message):
-    __slots__ = ["plan_id", "diet_recommendations", "exercise_recommendations", 
-                "lifestyle_recommendations", "supplement_recommendations", 
+    __slots__ = ["plan_id", "diet_recommendations", "exercise_recommendations",
+                "lifestyle_recommendations", "supplement_recommendations",
                 "schedule", "confidence_score"]
     # 字段实现省略
 
@@ -108,4 +108,4 @@ _sym_db.RegisterMessage(HealthPlanResponse)
 
 # 其他消息类型注册省略...
 
-# @@protoc_insertion_point(module_scope) 
+# @@protoc_insertion_point(module_scope)

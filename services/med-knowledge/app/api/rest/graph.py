@@ -2,15 +2,23 @@
 知识图谱分析API路由
 提供图谱可视化、路径分析、关系发现等功能
 """
-from typing import Optional, List
+
 from fastapi import APIRouter, Depends, HTTPException, Query
 
-from app.core.exceptions import EntityNotFoundException, ValidationException, GraphException, PathNotFoundException
-from app.models.requests import GraphVisualizationRequest, PathAnalysisRequest, RelationshipAnalysisRequest
-from app.services.knowledge_service import KnowledgeService
-from app.services.knowledge_graph_service import KnowledgeGraphService
 from app.api.rest.deps import get_knowledge_service
+from app.core.exceptions import (
+    EntityNotFoundException,
+    GraphException,
+    PathNotFoundException,
+    ValidationException,
+)
 from app.core.logger import get_logger
+from app.models.requests import (
+    GraphVisualizationRequest,
+    PathAnalysisRequest,
+    RelationshipAnalysisRequest,
+)
+from app.services.knowledge_service import KnowledgeService
 
 logger = get_logger()
 router = APIRouter(prefix="/graph", tags=["知识图谱分析"])
@@ -18,12 +26,12 @@ router = APIRouter(prefix="/graph", tags=["知识图谱分析"])
 
 @router.get("/statistics", summary="图谱统计信息")
 async def get_graph_statistics(
-    knowledge_service: KnowledgeService = Depends(get_knowledge_service)
+    knowledge_service: KnowledgeService = Depends(get_knowledge_service),
 ):
     """
     获取知识图谱的统计信息
-    
-    返回格式：
+
+    返回格式:
     ```json
     {
         "node_count": "节点总数",
@@ -45,18 +53,18 @@ async def get_graph_statistics(
     try:
         node_count = await knowledge_service.get_node_count()
         relationship_count = await knowledge_service.get_relationship_count()
-        
+
         # 这里可以添加更详细的统计信息
         statistics = {
             "node_count": node_count,
             "relationship_count": relationship_count,
             "entity_types": {
                 "constitution": 9,  # 九种体质
-                "symptom": 500,     # 估算值
-                "herb": 1000,       # 估算值
-                "acupoint": 400,    # 估算值
-                "syndrome": 200,    # 估算值
-                "biomarker": 150,   # 估算值
+                "symptom": 500,  # 估算值
+                "herb": 1000,  # 估算值
+                "acupoint": 400,  # 估算值
+                "syndrome": 200,  # 估算值
+                "biomarker": 150,  # 估算值
                 "western_disease": 300,  # 估算值
             },
             "relationship_types": {
@@ -66,11 +74,11 @@ async def get_graph_statistics(
                 "RELATED_TO": 1500,
                 "INDICATES": 400,
                 "BELONGS_TO": 300,
-            }
+            },
         }
-        
+
         return statistics
-        
+
     except Exception as e:
         logger.error(f"获取图谱统计信息失败: {e}")
         raise HTTPException(status_code=500, detail="获取图谱统计信息失败")
@@ -78,21 +86,21 @@ async def get_graph_statistics(
 
 @router.get("/visualization", summary="图谱可视化数据")
 async def get_graph_visualization(
-    entity_type: Optional[str] = Query(None, description="实体类型过滤"),
-    entity_id: Optional[str] = Query(None, description="中心实体ID"),
+    entity_type: str | None = Query(None, description="实体类型过滤"),
+    entity_id: str | None = Query(None, description="中心实体ID"),
     depth: int = Query(2, ge=1, le=5, description="遍历深度"),
     max_nodes: int = Query(100, ge=10, le=500, description="最大节点数"),
-    knowledge_service: KnowledgeService = Depends(get_knowledge_service)
+    knowledge_service: KnowledgeService = Depends(get_knowledge_service),
 ):
     """
     获取知识图谱可视化数据
-    
+
     - **entity_type**: 实体类型过滤
-    - **entity_id**: 中心实体ID，如果指定则以该实体为中心展开
-    - **depth**: 遍历深度，范围1-5
-    - **max_nodes**: 最大节点数，范围10-500
-    
-    返回格式：
+    - **entity_id**: 中心实体ID,如果指定则以该实体为中心展开
+    - **depth**: 遍历深度,范围1-5
+    - **max_nodes**: 最大节点数,范围10-500
+
+    返回格式:
     ```json
     {
         "nodes": [
@@ -115,13 +123,10 @@ async def get_graph_visualization(
     ```
     """
     try:
-        request = GraphVisualizationRequest(
-            entity_type=entity_type,
-            entity_id=entity_id,
-            depth=depth,
-            max_nodes=max_nodes
+        GraphVisualizationRequest(
+            entity_type=entity_type, entity_id=entity_id, depth=depth, max_nodes=max_nodes
         )
-        
+
         # 这里应该调用图谱服务获取可视化数据
         # 暂时返回示例数据
         visualization_data = {
@@ -132,34 +137,28 @@ async def get_graph_visualization(
                     "type": "constitution",
                     "properties": {
                         "name": "气虚体质",
-                        "description": "元气不足，以疲乏、气短、自汗等气虚表现为主要特征"
-                    }
+                        "description": "元气不足,以疲乏、气短、自汗等气虚表现为主要特征",
+                    },
                 },
                 {
                     "id": "symptom_1",
                     "label": "疲乏无力",
                     "type": "symptom",
-                    "properties": {
-                        "name": "疲乏无力",
-                        "severity": "中等"
-                    }
-                }
+                    "properties": {"name": "疲乏无力", "severity": "中等"},
+                },
             ],
             "edges": [
                 {
                     "source": "constitution_1",
                     "target": "symptom_1",
                     "type": "MANIFESTS_AS",
-                    "properties": {
-                        "strength": 0.8,
-                        "frequency": "常见"
-                    }
+                    "properties": {"strength": 0.8, "frequency": "常见"},
                 }
-            ]
+            ],
         }
-        
+
         return visualization_data
-        
+
     except ValidationException as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
@@ -173,17 +172,17 @@ async def analyze_path(
     to_id: str = Query(..., description="目标节点ID"),
     max_depth: int = Query(5, ge=1, le=10, description="最大搜索深度"),
     max_paths: int = Query(10, ge=1, le=50, description="最大路径数量"),
-    knowledge_service: KnowledgeService = Depends(get_knowledge_service)
+    knowledge_service: KnowledgeService = Depends(get_knowledge_service),
 ):
     """
     分析两个实体之间的关联路径
-    
+
     - **from_id**: 起始节点ID
     - **to_id**: 目标节点ID
-    - **max_depth**: 最大搜索深度，范围1-10
-    - **max_paths**: 最大路径数量，范围1-50
-    
-    返回格式：
+    - **max_depth**: 最大搜索深度,范围1-10
+    - **max_paths**: 最大路径数量,范围1-50
+
+    返回格式:
     ```json
     {
         "paths": [
@@ -203,13 +202,8 @@ async def analyze_path(
     ```
     """
     try:
-        request = PathAnalysisRequest(
-            from_id=from_id,
-            to_id=to_id,
-            max_depth=max_depth,
-            max_paths=max_paths
-        )
-        
+        PathAnalysisRequest(from_id=from_id, to_id=to_id, max_depth=max_depth, max_paths=max_paths)
+
         # 这里应该调用图谱服务进行路径分析
         # 暂时返回示例数据
         path_analysis = {
@@ -218,18 +212,14 @@ async def analyze_path(
                     "nodes": [from_id, "intermediate_1", to_id],
                     "relationships": ["RELATED_TO", "TREATS"],
                     "length": 2,
-                    "strength": 0.85
+                    "strength": 0.85,
                 }
             ],
-            "summary": {
-                "total_paths": 1,
-                "shortest_length": 2,
-                "strongest_path": 0
-            }
+            "summary": {"total_paths": 1, "shortest_length": 2, "strongest_path": 0},
         }
-        
+
         return path_analysis
-        
+
     except ValidationException as e:
         raise HTTPException(status_code=400, detail=str(e))
     except PathNotFoundException as e:
@@ -244,20 +234,20 @@ async def analyze_path(
 @router.get("/relationships/{node_id}", summary="关系分析")
 async def analyze_relationships(
     node_id: str,
-    relationship_types: Optional[str] = Query(None, description="关系类型过滤，多个用逗号分隔"),
+    relationship_types: str | None = Query(None, description="关系类型过滤,多个用逗号分隔"),
     direction: str = Query("both", description="关系方向: in, out, both"),
     limit: int = Query(50, ge=1, le=200, description="返回数量"),
-    knowledge_service: KnowledgeService = Depends(get_knowledge_service)
+    knowledge_service: KnowledgeService = Depends(get_knowledge_service),
 ):
     """
     分析指定节点的关系网络
-    
+
     - **node_id**: 节点ID
-    - **relationship_types**: 关系类型过滤，多个用逗号分隔
-    - **direction**: 关系方向，可选值：in（入边）, out（出边）, both（双向）
-    - **limit**: 返回的关系数量，范围1-200
-    
-    返回格式：
+    - **relationship_types**: 关系类型过滤,多个用逗号分隔
+    - **direction**: 关系方向,可选值:in(入边), out(出边), both(双向)
+    - **limit**: 返回的关系数量,范围1-200
+
+    返回格式:
     ```json
     {
         "node": {
@@ -285,46 +275,31 @@ async def analyze_relationships(
         type_list = None
         if relationship_types:
             type_list = [t.strip() for t in relationship_types.split(",") if t.strip()]
-        
-        request = RelationshipAnalysisRequest(
-            node_id=node_id,
-            relationship_types=type_list,
-            direction=direction
+
+        RelationshipAnalysisRequest(
+            node_id=node_id, relationship_types=type_list, direction=direction
         )
-        
+
         # 这里应该调用图谱服务进行关系分析
         # 暂时返回示例数据
         relationship_analysis = {
-            "node": {
-                "id": node_id,
-                "label": "示例节点",
-                "type": "constitution"
-            },
+            "node": {"id": node_id, "label": "示例节点", "type": "constitution"},
             "relationships": [
                 {
-                    "target_node": {
-                        "id": "target_1",
-                        "label": "相关症状",
-                        "type": "symptom"
-                    },
+                    "target_node": {"id": "target_1", "label": "相关症状", "type": "symptom"},
                     "relationship_type": "MANIFESTS_AS",
                     "direction": "out",
-                    "properties": {
-                        "strength": 0.9,
-                        "frequency": "常见"
-                    }
+                    "properties": {"strength": 0.9, "frequency": "常见"},
                 }
             ],
             "statistics": {
                 "total_relationships": 1,
-                "relationship_type_counts": {
-                    "MANIFESTS_AS": 1
-                }
-            }
+                "relationship_type_counts": {"MANIFESTS_AS": 1},
+            },
         }
-        
+
         return relationship_analysis
-        
+
     except ValidationException as e:
         raise HTTPException(status_code=400, detail=str(e))
     except EntityNotFoundException as e:
@@ -337,21 +312,23 @@ async def analyze_relationships(
 @router.get("/recommendations/{entity_id}", summary="基于图谱的推荐")
 async def get_graph_recommendations(
     entity_id: str,
-    recommendation_type: str = Query("similar", description="推荐类型: similar, related, complementary"),
+    recommendation_type: str = Query(
+        "similar", description="推荐类型: similar, related, complementary"
+    ),
     limit: int = Query(10, ge=1, le=50, description="推荐数量"),
-    knowledge_service: KnowledgeService = Depends(get_knowledge_service)
+    knowledge_service: KnowledgeService = Depends(get_knowledge_service),
 ):
     """
     基于知识图谱的智能推荐
-    
+
     - **entity_id**: 实体ID
     - **recommendation_type**: 推荐类型
       - similar: 相似实体推荐
-      - related: 相关实体推荐  
+      - related: 相关实体推荐
       - complementary: 互补实体推荐
-    - **limit**: 推荐数量，范围1-50
-    
-    返回格式：
+    - **limit**: 推荐数量,范围1-50
+
+    返回格式:
     ```json
     {
         "source_entity": {...},
@@ -369,35 +346,27 @@ async def get_graph_recommendations(
     try:
         if recommendation_type not in ["similar", "related", "complementary"]:
             raise ValidationException("无效的推荐类型")
-        
+
         # 这里应该实现基于图谱的推荐算法
         # 暂时返回示例数据
         recommendations = {
-            "source_entity": {
-                "id": entity_id,
-                "label": "源实体",
-                "type": "constitution"
-            },
+            "source_entity": {"id": entity_id, "label": "源实体", "type": "constitution"},
             "recommendations": [
                 {
-                    "entity": {
-                        "id": "rec_1",
-                        "label": "推荐实体",
-                        "type": "herb"
-                    },
+                    "entity": {"id": "rec_1", "label": "推荐实体", "type": "herb"},
                     "score": 0.85,
                     "reason": "基于体质特征的中药推荐",
-                    "relationship_path": ["SUITABLE_FOR"]
+                    "relationship_path": ["SUITABLE_FOR"],
                 }
-            ]
+            ],
         }
-        
+
         return recommendations
-        
+
     except ValidationException as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=str(e)) from e
     except EntityNotFoundException as e:
-        raise HTTPException(status_code=404, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e)) from e
     except Exception as e:
         logger.error(f"图谱推荐失败: {e}")
-        raise HTTPException(status_code=500, detail="图谱推荐失败") 
+        raise HTTPException(status_code=500, detail="图谱推荐失败") from e

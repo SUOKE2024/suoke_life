@@ -8,6 +8,7 @@ from datetime import datetime
 import json
 import logging
 import os
+from pathlib import Path
 
 import aiosqlite
 
@@ -20,12 +21,12 @@ class ProgressRepository:
 
     def __init__(self):
         self.db_path = os.environ.get("MAZE_DB_PATH", "data/maze.db")
-        logger.info(f"进度存储库初始化，数据库路径: {self.db_path}")
+        logger.info(f"进度存储库初始化, 数据库路径: {self.db_path}")
 
     async def _get_db(self):
         """获取数据库连接"""
         # 确保数据库目录存在
-        os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
+        Path(self.db_path).parent.mkdir(parents=True, exist_ok=True)
 
         # 连接数据库
         db = await aiosqlite.connect(self.db_path)
@@ -60,10 +61,10 @@ class ProgressRepository:
     async def save_progress(self, progress: UserProgress) -> UserProgress:
         """
         保存用户进度
-        
+
         Args:
             progress: 用户进度对象
-            
+
         Returns:
             UserProgress: 保存后的用户进度对象
         """
@@ -81,8 +82,8 @@ class ProgressRepository:
             # 准备SQL语句
             query = '''
             INSERT OR REPLACE INTO progress (
-                user_id, maze_id, current_position, visited_cells, 
-                completed_challenges, acquired_knowledge, completion_percentage, 
+                user_id, maze_id, current_position, visited_cells,
+                completed_challenges, acquired_knowledge, completion_percentage,
                 status, steps_taken, start_time, last_active_time, notes
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             '''
@@ -108,11 +109,11 @@ class ProgressRepository:
     async def get_progress(self, user_id: str, maze_id: str) -> UserProgress | None:
         """
         获取用户进度
-        
+
         Args:
             user_id: 用户ID
             maze_id: 迷宫ID
-            
+
         Returns:
             Optional[UserProgress]: 用户进度对象或None（如果未找到）
         """
@@ -140,12 +141,12 @@ class ProgressRepository:
     async def get_user_progress_list(self, user_id: str, limit: int = 10, offset: int = 0) -> list[UserProgress]:
         """
         获取用户的所有进度列表
-        
+
         Args:
             user_id: 用户ID
             limit: 返回结果的最大数量
             offset: 结果偏移量
-            
+
         Returns:
             List[UserProgress]: 用户进度对象列表
         """
@@ -169,11 +170,11 @@ class ProgressRepository:
     async def delete_progress(self, user_id: str, maze_id: str) -> bool:
         """
         删除用户进度
-        
+
         Args:
             user_id: 用户ID
             maze_id: 迷宫ID
-            
+
         Returns:
             bool: 是否成功删除
         """
@@ -197,10 +198,10 @@ class ProgressRepository:
     async def get_completed_mazes(self, user_id: str) -> list[str]:
         """
         获取用户已完成的迷宫ID列表
-        
+
         Args:
             user_id: 用户ID
-            
+
         Returns:
             List[str]: 已完成迷宫的ID列表
         """

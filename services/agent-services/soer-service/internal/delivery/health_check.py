@@ -2,19 +2,18 @@
 健康检查端点
 提供服务状态监控功能
 """
-import logging
 import asyncio
-from typing import Dict, Any, List, Optional
+import logging
 from datetime import datetime
-import json
+from typing import Any
 
-from fastapi import APIRouter, HTTPException, Depends, Response
+from fastapi import APIRouter, HTTPException, Response
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
+from pkg.utils.connection_pool import get_pool_manager
 from pkg.utils.dependency_injection import get_container
 from pkg.utils.metrics import get_metrics_collector
-from pkg.utils.connection_pool import get_pool_manager
 
 logger = logging.getLogger(__name__)
 
@@ -24,38 +23,38 @@ class HealthStatus(BaseModel):
     timestamp: str
     version: str
     uptime_seconds: float
-    checks: Dict[str, Any]
+    checks: dict[str, Any]
 
 class ComponentHealth(BaseModel):
     """组件健康状态"""
     name: str
     status: str
     message: str
-    response_time_ms: Optional[float] = None
-    details: Optional[Dict[str, Any]] = None
+    response_time_ms: float | None = None
+    details: dict[str, Any] | None = None
 
 class HealthChecker:
     """健康检查器"""
-    
+
     def __init__(self):
         self.container = get_container()
         self.metrics = get_metrics_collector()
         self.pool_manager = get_pool_manager()
         self.start_time = datetime.now()
         self.version = "1.0.0"  # 从配置或环境变量获取
-    
+
     async def check_overall_health(self) -> HealthStatus:
         """检查整体健康状态"""
         try:
             # 执行所有健康检查
             checks = await self._run_all_checks()
-            
+
             # 确定整体状态
             overall_status = self._determine_overall_status(checks)
-            
+
             # 计算运行时间
             uptime = (datetime.now() - self.start_time).total_seconds()
-            
+
             return HealthStatus(
                 status=overall_status,
                 timestamp=datetime.now().isoformat(),
@@ -63,7 +62,7 @@ class HealthChecker:
                 uptime_seconds=uptime,
                 checks={check.name: check.dict() for check in checks}
             )
-            
+
         except Exception as e:
             logger.error(f"健康检查失败: {e}")
             return HealthStatus(
@@ -73,11 +72,11 @@ class HealthChecker:
                 uptime_seconds=0,
                 checks={"error": {"status": "unhealthy", "message": str(e)}}
             )
-    
-    async def _run_all_checks(self) -> List[ComponentHealth]:
+
+    async def _run_all_checks(self) -> list[ComponentHealth]:
         """运行所有健康检查"""
         checks = []
-        
+
         # 并发执行所有检查
         check_tasks = [
             self._check_database(),
@@ -87,9 +86,9 @@ class HealthChecker:
             self._check_memory_usage(),
             self._check_disk_space(),
         ]
-        
+
         results = await asyncio.gather(*check_tasks, return_exceptions=True)
-        
+
         for result in results:
             if isinstance(result, ComponentHealth):
                 checks.append(result)
@@ -99,21 +98,21 @@ class HealthChecker:
                     status="unhealthy",
                     message=str(result)
                 ))
-        
+
         return checks
-    
+
     async def _check_database(self) -> ComponentHealth:
         """检查数据库连接"""
         start_time = datetime.now()
-        
+
         try:
             db_pool = self.pool_manager.get_pool('database')
-            
+
             async with db_pool.get_session() as session:
                 await session.execute("SELECT 1")
-            
+
             response_time = (datetime.now() - start_time).total_seconds() * 1000
-            
+
             return ComponentHealth(
                 name="database",
                 status="healthy",
@@ -125,7 +124,7 @@ class HealthChecker:
                     "checked_out": db_pool.pool.checked_out()
                 }
             )
-            
+
         except Exception as e:
             response_time = (datetime.now() - start_time).total_seconds() * 1000
             return ComponentHealth(
@@ -134,20 +133,20 @@ class HealthChecker:
                 message=f"数据库连接失败: {e}",
                 response_time_ms=response_time
             )
-    
+
     async def _check_redis(self) -> ComponentHealth:
         """检查Redis连接"""
         start_time = datetime.now()
-        
+
         try:
             redis_pool = self.pool_manager.get_pool('redis')
             await redis_pool.ping()
-            
+
             response_time = (datetime.now() - start_time).total_seconds() * 1000
-            
+
             # 获取Redis信息
             info = await redis_pool.info()
-            
+
             return ComponentHealth(
                 name="redis",
                 status="healthy",
@@ -159,7 +158,7 @@ class HealthChecker:
                     "redis_version": info.get("redis_version", "unknown")
                 }
             )
-            
+
         except Exception as e:
             response_time = (datetime.now() - start_time).total_seconds() * 1000
             return ComponentHealth(
@@ -168,17 +167,17 @@ class HealthChecker:
                 message=f"Redis连接失败: {e}",
                 response_time_ms=response_time
             )
-    
+
     async def _check_agent_manager(self) -> ComponentHealth:
         """检查智能体管理器"""
         start_time = datetime.now()
-        
+
         try:
             agent_manager = self.container.get_service("agent_manager")
             is_healthy = await agent_manager.health_check()
-            
+
             response_time = (datetime.now() - start_time).total_seconds() * 1000
-            
+
             if is_healthy:
                 return ComponentHealth(
                     name="agent_manager",
@@ -193,7 +192,7 @@ class HealthChecker:
                     message="智能体管理器健康检查失败",
                     response_time_ms=response_time
                 )
-                
+
         except Exception as e:
             response_time = (datetime.now() - start_time).total_seconds() * 1000
             return ComponentHealth(
@@ -202,19 +201,19 @@ class HealthChecker:
                 message=f"智能体管理器检查失败: {e}",
                 response_time_ms=response_time
             )
-    
+
     async def _check_model_factory(self) -> ComponentHealth:
         """检查模型工厂"""
         start_time = datetime.now()
-        
+
         try:
             model_factory = self.container.get_service("model_factory")
             is_healthy = await model_factory.health_check()
-            
+
             response_time = (datetime.now() - start_time).total_seconds() * 1000
-            
+
             loaded_models = model_factory.list_loaded_models()
-            
+
             if is_healthy:
                 return ComponentHealth(
                     name="model_factory",
@@ -233,7 +232,7 @@ class HealthChecker:
                     message="模型工厂健康检查失败",
                     response_time_ms=response_time
                 )
-                
+
         except Exception as e:
             response_time = (datetime.now() - start_time).total_seconds() * 1000
             return ComponentHealth(
@@ -242,15 +241,15 @@ class HealthChecker:
                 message=f"模型工厂检查失败: {e}",
                 response_time_ms=response_time
             )
-    
+
     async def _check_memory_usage(self) -> ComponentHealth:
         """检查内存使用情况"""
         try:
             import psutil
-            
+
             memory = psutil.virtual_memory()
             memory_percent = memory.percent
-            
+
             # 内存使用超过90%认为不健康
             if memory_percent > 90:
                 status = "unhealthy"
@@ -261,7 +260,7 @@ class HealthChecker:
             else:
                 status = "healthy"
                 message = f"内存使用正常: {memory_percent:.1f}%"
-            
+
             return ComponentHealth(
                 name="memory",
                 status=status,
@@ -272,7 +271,7 @@ class HealthChecker:
                     "used_percent": memory_percent
                 }
             )
-            
+
         except ImportError:
             return ComponentHealth(
                 name="memory",
@@ -285,15 +284,15 @@ class HealthChecker:
                 status="unhealthy",
                 message=f"内存检查失败: {e}"
             )
-    
+
     async def _check_disk_space(self) -> ComponentHealth:
         """检查磁盘空间"""
         try:
             import psutil
-            
+
             disk = psutil.disk_usage('/')
             disk_percent = (disk.used / disk.total) * 100
-            
+
             # 磁盘使用超过90%认为不健康
             if disk_percent > 90:
                 status = "unhealthy"
@@ -304,7 +303,7 @@ class HealthChecker:
             else:
                 status = "healthy"
                 message = f"磁盘使用正常: {disk_percent:.1f}%"
-            
+
             return ComponentHealth(
                 name="disk",
                 status=status,
@@ -315,7 +314,7 @@ class HealthChecker:
                     "used_percent": disk_percent
                 }
             )
-            
+
         except ImportError:
             return ComponentHealth(
                 name="disk",
@@ -328,14 +327,14 @@ class HealthChecker:
                 status="unhealthy",
                 message=f"磁盘检查失败: {e}"
             )
-    
-    def _determine_overall_status(self, checks: List[ComponentHealth]) -> str:
+
+    def _determine_overall_status(self, checks: list[ComponentHealth]) -> str:
         """确定整体健康状态"""
         if not checks:
             return "unhealthy"
-        
+
         statuses = [check.status for check in checks]
-        
+
         if "unhealthy" in statuses:
             return "unhealthy"
         elif "warning" in statuses:
@@ -359,7 +358,7 @@ async def health_check():
     """
     try:
         health_status = await health_checker.check_overall_health()
-        
+
         # 根据状态设置HTTP状态码
         if health_status.status == "healthy":
             status_code = 200
@@ -367,12 +366,12 @@ async def health_check():
             status_code = 200  # 警告状态仍返回200
         else:
             status_code = 503  # 服务不可用
-        
+
         return JSONResponse(
             content=health_status.dict(),
             status_code=status_code
         )
-        
+
     except Exception as e:
         logger.error(f"健康检查端点错误: {e}")
         raise HTTPException(status_code=500, detail="健康检查失败")
@@ -391,7 +390,7 @@ async def readiness_check():
             health_checker._check_agent_manager(),
             return_exceptions=True
         )
-        
+
         # 检查是否有关键组件不健康
         for check in checks:
             if isinstance(check, ComponentHealth) and check.status == "unhealthy":
@@ -399,9 +398,9 @@ async def readiness_check():
                     content={"status": "not_ready", "message": f"{check.name}不可用"},
                     status_code=503
                 )
-        
+
         return {"status": "ready", "message": "服务已准备就绪"}
-        
+
     except Exception as e:
         logger.error(f"就绪检查失败: {e}")
         return JSONResponse(
@@ -418,13 +417,13 @@ async def liveness_check():
     try:
         # 简单的存活检查，只要能响应就认为存活
         uptime = (datetime.now() - health_checker.start_time).total_seconds()
-        
+
         return {
             "status": "alive",
             "timestamp": datetime.now().isoformat(),
             "uptime_seconds": uptime
         }
-        
+
     except Exception as e:
         logger.error(f"存活检查失败: {e}")
         raise HTTPException(status_code=500, detail="存活检查失败")
@@ -436,15 +435,15 @@ async def metrics_endpoint():
     返回Prometheus格式的指标
     """
     try:
-        from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
-        
+        from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
+
         metrics_data = generate_latest()
-        
+
         return Response(
             content=metrics_data,
             media_type=CONTENT_TYPE_LATEST
         )
-        
+
     except Exception as e:
         logger.error(f"指标端点错误: {e}")
         raise HTTPException(status_code=500, detail="指标获取失败")
@@ -459,4 +458,4 @@ async def version_info():
         "service": "soer-service",
         "build_time": "2024-01-01T00:00:00Z",  # 从构建时设置
         "git_commit": "unknown"  # 从构建时设置
-    } 
+    }

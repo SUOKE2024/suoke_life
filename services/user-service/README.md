@@ -1,200 +1,188 @@
-# 索克生命平台用户服务
+# 索克生活用户服务 (User Service)
 
-## 简介
+索克生活平台的用户认证、授权和用户数据管理微服务。
 
-用户服务是索克生命平台的核心服务之一，负责管理用户账户、身份验证、授权以及用户相关的数据操作。该服务提供了REST API和gRPC接口，为移动应用和其他微服务提供用户管理功能。
+## 功能特性
 
-## 主要功能
-
-- 用户账户管理（注册、更新、删除）
-- 身份验证与授权（基于JWT）
-- 用户配置文件管理
-- 基于角色的访问控制（RBAC）
-- 多因素认证支持
-- 用户健康数据元数据管理
-- 审计日志记录
-- 设备绑定与管理
+- 用户注册和登录
+- JWT 令牌认证
+- 用户权限管理
+- 用户资料管理
+- 密码加密和验证
+- 会话管理
 
 ## 技术栈
 
-- Python 3.10+
-- FastAPI (REST API)
-- gRPC (服务间通信)
-- SQLite (数据存储)
-- Prometheus (指标收集)
-- JWT (身份验证)
-- Kubernetes (部署环境)
+- **Python**: 3.13.3
+- **Web框架**: FastAPI
+- **数据库**: SQLAlchemy + SQLite/PostgreSQL
+- **缓存**: Redis
+- **认证**: JWT + Passlib
+- **包管理**: UV (Python 包管理器)
+
+## 开发环境设置
+
+### 前置要求
+
+- Python 3.13.3+
+- UV (Python 包管理器)
+- Redis (用于缓存)
+
+### 安装依赖
+
+```bash
+# 使用 UV 安装依赖项
+uv sync
+
+# 激活虚拟环境
+source .venv/bin/activate  # Linux/macOS
+# 或
+.venv\Scripts\activate     # Windows
+```
+
+### 环境配置
+
+复制环境变量模板：
+```bash
+cp .env.example .env
+```
+
+编辑 `.env` 文件，配置必要的环境变量：
+```env
+# 数据库配置
+DATABASE_URL=sqlite:///./user_service.db
+# DATABASE_URL=postgresql://user:password@localhost/user_service
+
+# Redis 配置
+REDIS_URL=redis://localhost:6379
+
+# JWT 配置
+SECRET_KEY=your-secret-key-here
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+
+# 服务配置
+HOST=0.0.0.0
+PORT=8001
+DEBUG=true
+```
+
+### 数据库迁移
+
+```bash
+# 初始化数据库
+alembic init alembic
+
+# 创建迁移文件
+alembic revision --autogenerate -m "Initial migration"
+
+# 执行迁移
+alembic upgrade head
+```
+
+## 运行服务
+
+### 开发模式
+
+```bash
+# 使用 UV 运行
+uv run python -m user_service
+
+# 或者激活虚拟环境后运行
+source .venv/bin/activate
+python -m user_service
+```
+
+### 生产模式
+
+```bash
+# 使用 Uvicorn
+uvicorn user_service.main:app --host 0.0.0.0 --port 8001
+
+# 或者使用 Gunicorn (推荐生产环境)
+gunicorn user_service.main:app -w 4 -k uvicorn.workers.UvicornWorker
+```
+
+## API 文档
+
+服务启动后，可以访问以下地址查看 API 文档：
+
+- Swagger UI: http://localhost:8001/docs
+- ReDoc: http://localhost:8001/redoc
+
+## 测试
+
+```bash
+# 运行所有测试
+uv run pytest
+
+# 运行测试并生成覆盖率报告
+uv run pytest --cov=user_service --cov-report=html
+
+# 运行特定测试文件
+uv run pytest test/test_auth.py
+```
+
+## 代码质量
+
+```bash
+# 代码格式化
+uv run black user_service/
+uv run isort user_service/
+
+# 代码检查
+uv run flake8 user_service/
+uv run mypy user_service/
+
+# 使用 Ruff (推荐)
+uv run ruff check user_service/
+uv run ruff format user_service/
+```
+
+## Docker 部署
+
+```bash
+# 构建镜像
+docker build -t user-service .
+
+# 运行容器
+docker run -p 8001:8001 user-service
+```
 
 ## 项目结构
 
 ```
-services/user-service/
-├── api/                  # API定义
-│   ├── grpc/             # gRPC接口定义
-│   └── rest/             # REST API定义和OpenAPI文档
-├── cmd/                  # 命令行入口
-│   └── server/           # 服务器入口
-├── config/               # 配置文件
-├── deploy/               # 部署相关文件
-│   ├── docker/           # Docker相关配置
-│   └── kubernetes/       # Kubernetes部署配置
-├── internal/             # 内部代码
-│   ├── delivery/         # 传输层 (API处理程序)
-│   ├── model/            # 数据模型
-│   ├── observability/    # 监控和日志记录
-│   ├── repository/       # 数据存储访问层
-│   └── service/          # 业务逻辑层
-├── migrations/           # 数据库迁移脚本
-├── pkg/                  # 可重用包
-│   ├── middleware/       # 中间件组件
-│   └── utils/            # 实用工具
-└── test/                 # 测试文件
-    ├── unit/             # 单元测试
-    └── integration/      # 集成测试
+user-service/
+├── user_service/           # 主要源代码
+│   ├── __init__.py
+│   ├── main.py            # 应用入口
+│   ├── api/               # API 路由
+│   ├── core/              # 核心配置和工具
+│   ├── models/            # 数据模型
+│   ├── schemas/           # Pydantic 模式
+│   ├── services/          # 业务逻辑
+│   └── utils/             # 工具函数
+├── test/                  # 测试文件
+├── migrations/            # 数据库迁移文件
+├── pyproject.toml         # 项目配置和依赖
+├── uv.lock               # 锁定的依赖版本
+├── .python-version       # Python 版本
+└── README.md             # 项目文档
 ```
-
-## 生产就绪特性
-
-该用户服务实现了以下生产就绪特性：
-
-1. **可靠性与容错性**
-   - 健康检查和存活探针
-   - 优雅启动和关闭
-   - 异常处理和恢复机制
-   - 请求重试和超时控制
-
-2. **可伸缩性**
-   - 无状态设计，支持水平扩展
-   - 连接池管理
-   - Kubernetes HPA自动扩缩容
-   - 资源限制和请求配置
-
-3. **可观测性**
-   - 详细日志记录（结构化日志）
-   - Prometheus指标导出
-   - 请求跟踪（每个请求唯一ID）
-   - 健康状态监控和报告
-
-4. **安全性**
-   - JWT认证和授权
-   - 基于角色的访问控制
-   - 密码安全存储与验证
-   - 请求速率限制
-   - 审计日志
-
-5. **可维护性**
-   - 清晰的代码结构和模块化设计
-   - 详细的API文档
-   - 全面的单元测试和集成测试
-   - 版本化API设计
-
-6. **配置管理**
-   - 环境变量配置
-   - 配置文件支持
-   - Kubernetes ConfigMap和Secret集成
-
-## API文档
-
-REST API文档可以通过以下方式访问：
-
-- 开发环境：`http://localhost:8000/docs` 或 `http://localhost:8000/redoc`
-- 测试/生产环境：API文档由API网关提供
-
-## 快速开始
-
-### 环境需求
-- Python 3.10+
-- 虚拟环境工具（如venv、conda）
-- Docker（用于容器化部署）
-
-### 本地开发
-
-1. 克隆仓库并进入用户服务目录
-```bash
-cd services/user-service
-```
-
-2. 创建并激活虚拟环境
-```bash
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-venv\Scripts\activate     # Windows
-```
-
-3. 安装依赖
-```bash
-pip install -r requirements.txt
-pip install -r requirements-dev.txt  # 开发依赖
-```
-
-4. 运行服务
-```bash
-python cmd/server/main.py --config config/config.yaml
-```
-
-5. 访问API文档
-```
-http://localhost:8000/docs
-```
-
-### 使用Docker运行
-
-1. 构建Docker镜像
-```bash
-docker build -t suoke-life/user-service:latest -f deploy/docker/Dockerfile .
-```
-
-2. 运行容器
-```bash
-docker run -p 8000:8000 -p 50051:50051 suoke-life/user-service:latest
-```
-
-### 部署到Kubernetes
-
-```bash
-kubectl apply -f deploy/kubernetes/deployment.yaml
-```
-
-## 测试
-
-### 运行单元测试
-```bash
-pytest test/unit
-```
-
-### 运行集成测试
-```bash
-pytest test/integration
-```
-
-### 运行所有测试并生成覆盖率报告
-```bash
-pytest --cov=internal --cov-report=html
-```
-
-## 审计日志
-
-用户服务包含全面的审计日志系统，记录关键用户操作：
-
-- 用户登录/注销事件
-- 账户创建、修改和删除
-- 密码更改和重置
-- 角色和权限变更
-- 敏感数据访问
-
-审计日志存储在单独的数据库表中，并支持导出和归档功能。
 
 ## 贡献指南
 
-1. 遵循项目的代码风格和架构模式
-2. 提交代码前运行所有测试
-3. 添加适当的文档和注释
-4. 所有API更改必须更新相应的API文档
-5. 遵循提交消息规范
+1. Fork 项目
+2. 创建功能分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 打开 Pull Request
 
-## 版本历史
+## 许可证
 
-- v1.0.0 - 初始版本
-- v1.1.0 - 添加审计日志功能
-- v1.2.0 - 增强RBAC支持
-- v1.3.0 - 添加速率限制和可观测性改进 
+本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情。
+
+## 联系方式
+
+- 项目主页: https://github.com/suokelife/suoke_life
+- 邮箱: dev@suokelife.com 

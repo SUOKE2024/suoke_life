@@ -1,9 +1,10 @@
-from fastapi import APIRouter, Depends, HTTPException, status, File, UploadFile, Form
-from pydantic import BaseModel, Field
-from typing import Dict, List, Optional, Any, Union
+import base64
 import logging
 from datetime import datetime
-import base64
+from typing import Any
+
+from fastapi import APIRouter, File, Form, HTTPException, UploadFile, status
+from pydantic import BaseModel, Field
 
 # 导入服务层组件
 from internal.lifecycle.emotional_analyzer.emotional_service import EmotionalService
@@ -20,16 +21,16 @@ router = APIRouter(
 # 请求和响应模型
 class EmotionalInput(BaseModel):
     input_type: str  # "text", "voice", "physiological"
-    data: Optional[str] = None
-    metadata: Dict[str, Any] = Field(default_factory=dict)
+    data: str | None = None
+    metadata: dict[str, Any] = Field(default_factory=dict)
 
 class EmotionalAnalysisRequest(BaseModel):
     user_id: str
-    inputs: List[EmotionalInput]
-    analysis_context: Optional[str] = None
+    inputs: list[EmotionalInput]
+    analysis_context: str | None = None
 
 class HealthImpact(BaseModel):
-    affected_systems: List[str]
+    affected_systems: list[str]
     tcm_interpretation: str
     severity: float  # 0.0-1.0
 
@@ -40,11 +41,11 @@ class Suggestion(BaseModel):
     is_urgent: bool = False
 
 class EmotionalAnalysisResponse(BaseModel):
-    emotion_scores: Dict[str, float]
+    emotion_scores: dict[str, float]
     primary_emotion: str
     emotional_tendency: str
     health_impact: HealthImpact
-    suggestions: List[Suggestion]
+    suggestions: list[Suggestion]
 
 # 情绪分析服务实例
 emotional_service = EmotionalService()
@@ -66,7 +67,7 @@ async def analyze_emotional_state(request: EmotionalAnalysisRequest):
                     data = base64.b64decode(data)
                 except Exception as e:
                     logger.warning(f"Base64解码失败: {str(e)}")
-            
+
             # 创建格式化的输入
             formatted_input = {
                 "input_type": input_item.input_type,
@@ -74,21 +75,21 @@ async def analyze_emotional_state(request: EmotionalAnalysisRequest):
                 "metadata": input_item.metadata
             }
             inputs.append(formatted_input)
-        
+
         # 调用情绪分析服务
         result = await emotional_service.analyze_emotional_state(
             request.user_id,
             inputs,
             request.analysis_context
         )
-        
+
         # 转换健康影响数据
         health_impact = HealthImpact(
             affected_systems=result["health_impact"]["affected_systems"],
             tcm_interpretation=result["health_impact"]["tcm_interpretation"],
             severity=result["health_impact"]["severity"]
         )
-        
+
         # 转换建议数据
         suggestions = []
         for suggestion_data in result["suggestions"]:
@@ -99,7 +100,7 @@ async def analyze_emotional_state(request: EmotionalAnalysisRequest):
                 is_urgent=suggestion_data.get("is_urgent", False)
             )
             suggestions.append(suggestion)
-        
+
         # 组装响应
         response = EmotionalAnalysisResponse(
             emotion_scores=result["emotion_scores"],
@@ -108,7 +109,7 @@ async def analyze_emotional_state(request: EmotionalAnalysisRequest):
             health_impact=health_impact,
             suggestions=suggestions
         )
-        
+
         return response
     except Exception as e:
         logger.error(f"情绪分析失败: {str(e)}")
@@ -121,7 +122,7 @@ async def analyze_emotional_state(request: EmotionalAnalysisRequest):
 async def analyze_text_emotion(
     user_id: str = Form(...),
     text: str = Form(...),
-    context: Optional[str] = Form(None)
+    context: str | None = Form(None)
 ):
     """
     分析文本情绪
@@ -139,7 +140,7 @@ async def analyze_text_emotion(
             ],
             analysis_context=context
         )
-        
+
         # 调用情绪分析通用接口
         return await analyze_emotional_state(request)
     except Exception as e:
@@ -153,7 +154,7 @@ async def analyze_text_emotion(
 async def analyze_voice_emotion(
     user_id: str = Form(...),
     audio_file: UploadFile = File(...),
-    context: Optional[str] = Form(None)
+    context: str | None = Form(None)
 ):
     """
     分析语音情绪
@@ -162,7 +163,7 @@ async def analyze_voice_emotion(
         # 读取音频文件内容
         audio_data = await audio_file.read()
         audio_base64 = base64.b64encode(audio_data).decode('utf-8')
-        
+
         # 创建情绪分析请求
         request = EmotionalAnalysisRequest(
             user_id=user_id,
@@ -179,7 +180,7 @@ async def analyze_voice_emotion(
             ],
             analysis_context=context
         )
-        
+
         # 调用情绪分析通用接口
         return await analyze_emotional_state(request)
     except Exception as e:
@@ -204,13 +205,13 @@ async def get_tcm_emotion_mappings():
         )
 
 @router.get("/interventions")
-async def get_intervention_strategies(emotion: Optional[str] = None):
+async def get_intervention_strategies(emotion: str | None = None):
     """
     获取情绪干预策略
     """
     try:
         strategies = emotional_service.intervention_strategies
-        
+
         # 如果指定了情绪类型，只返回相关策略
         if emotion:
             if emotion in strategies:
@@ -220,7 +221,7 @@ async def get_intervention_strategies(emotion: Optional[str] = None):
                     status_code=status.HTTP_404_NOT_FOUND,
                     detail=f"未找到'{emotion}'情绪的干预策略"
                 )
-        
+
         return strategies
     except HTTPException:
         raise
@@ -229,4 +230,4 @@ async def get_intervention_strategies(emotion: Optional[str] = None):
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"获取干预策略失败: {str(e)}"
-        ) 
+        )

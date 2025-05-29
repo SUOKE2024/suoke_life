@@ -28,7 +28,7 @@ class LoggingMiddleware(BaseHTTPMiddleware):
         # 记录请求开始时间
         start_time = time.time()
 
-        # 获取用户信息（如果有）
+        # 获取用户信息(如果有)
         user_id = getattr(request.state, "user_id", None)
 
         try:

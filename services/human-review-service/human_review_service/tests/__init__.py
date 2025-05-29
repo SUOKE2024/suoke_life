@@ -5,12 +5,13 @@ Test Module
 提供单元测试、集成测试和端到端测试
 """
 
-import pytest
 import asyncio
 from typing import AsyncGenerator
 
-from ..core.database import init_database, close_database, get_session
+import pytest
+
 from ..core.config import settings
+from ..core.database import close_database, get_session, init_database
 
 
 @pytest.fixture(scope="session")
@@ -26,12 +27,12 @@ async def setup_test_database():
     """设置测试数据库"""
     # 使用测试数据库
     settings.database.url = settings.test_database_url
-    
+
     # 初始化数据库
     await init_database()
-    
+
     yield
-    
+
     # 清理
     await close_database()
 
@@ -40,4 +41,4 @@ async def setup_test_database():
 async def db_session(setup_test_database) -> AsyncGenerator:
     """提供数据库会话"""
     async with get_session() as session:
-        yield session 
+        yield session

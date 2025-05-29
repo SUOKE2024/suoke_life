@@ -22,10 +22,10 @@ class KnowledgeService:
     async def get_knowledge_node(self, node_id: str) -> dict[str, Any] | None:
         """
         获取知识节点
-        
+
         Args:
             node_id: 知识节点ID
-            
+
         Returns:
             Optional[Dict]: 知识节点信息或None（如果未找到）
         """
@@ -42,11 +42,11 @@ class KnowledgeService:
     async def get_knowledge_by_category(self, category: str, limit: int = 10) -> list[dict[str, Any]]:
         """
         按类别获取知识节点
-        
+
         Args:
             category: 知识类别（四季养生、五行平衡、经络调理等）
             limit: 返回结果的最大数量
-            
+
         Returns:
             List[Dict]: 知识节点列表
         """
@@ -59,11 +59,11 @@ class KnowledgeService:
     async def get_knowledge_for_health_profile(self, health_attributes: dict[str, str], limit: int = 5) -> list[dict[str, Any]]:
         """
         根据用户健康属性获取相关知识
-        
+
         Args:
             health_attributes: 用户健康属性（体质、季节、年龄段等）
             limit: 返回结果的最大数量
-            
+
         Returns:
             List[Dict]: 相关知识节点列表
         """
@@ -88,7 +88,7 @@ class KnowledgeService:
 
         # 如果没有有效的查询条件，返回空列表
         if not query_terms:
-            logger.warning("没有有效的健康属性，无法获取相关知识")
+            logger.warning("没有有效的健康属性, 无法获取相关知识")
             return []
 
         # 查询相关知识
@@ -99,10 +99,10 @@ class KnowledgeService:
     async def create_knowledge_node(self, node_data: dict[str, Any]) -> dict[str, Any]:
         """
         创建新的知识节点
-        
+
         Args:
             node_data: 知识节点数据
-            
+
         Returns:
             Dict: 创建的知识节点
         """

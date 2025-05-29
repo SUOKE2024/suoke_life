@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 soer-service 增强版API网关
 集成FastAPI、中间件、追踪、监控等功能
@@ -8,22 +7,27 @@ soer-service 增强版API网关
 import asyncio
 import logging
 import time
-from typing import Dict, Any, List, Optional
 from contextlib import asynccontextmanager
+from typing import Any
 
-from fastapi import FastAPI, HTTPException, Depends, Request, Response
+import uvicorn
+from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
-import uvicorn
 
 # 导入服务和通用组件
 from services.agent_services.soer_service.internal.service.enhanced_health_service import (
-    get_health_service, HealthDataRequest, LifestyleRequest, EmotionAnalysisRequest,
-    SensorDataRequest, DataType, HealthGoal, EmotionType
+    DataType,
+    EmotionAnalysisRequest,
+    HealthDataRequest,
+    HealthGoal,
+    LifestyleRequest,
+    SensorDataRequest,
+    get_health_service,
 )
-from services.common.observability.tracing import get_tracer, trace_middleware
+from services.common.observability.tracing import trace_middleware
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +35,7 @@ logger = logging.getLogger(__name__)
 class HealthDataRequestModel(BaseModel):
     """健康数据分析请求模型"""
     user_id: str = Field(..., description="用户ID")
-    data_types: List[str] = Field(..., description="数据类型列表")
+    data_types: list[str] = Field(..., description="数据类型列表")
     time_range_days: int = Field(7, description="时间范围（天）")
     include_trends: bool = Field(True, description="是否包含趋势分析")
     include_predictions: bool = Field(False, description="是否包含预测")
@@ -39,25 +43,25 @@ class HealthDataRequestModel(BaseModel):
 class LifestyleRequestModel(BaseModel):
     """生活方式建议请求模型"""
     user_id: str = Field(..., description="用户ID")
-    current_habits: Dict[str, Any] = Field(..., description="当前习惯")
-    health_goals: List[str] = Field(..., description="健康目标")
-    constitution_type: Optional[str] = Field(None, description="体质类型")
-    preferences: Optional[Dict[str, Any]] = Field(default_factory=dict, description="偏好设置")
+    current_habits: dict[str, Any] = Field(..., description="当前习惯")
+    health_goals: list[str] = Field(..., description="健康目标")
+    constitution_type: str | None = Field(None, description="体质类型")
+    preferences: dict[str, Any] | None = Field(default_factory=dict, description="偏好设置")
 
 class EmotionAnalysisRequestModel(BaseModel):
     """情绪分析请求模型"""
     user_id: str = Field(..., description="用户ID")
     input_type: str = Field(..., description="输入类型")
     input_data: Any = Field(..., description="输入数据")
-    context: Optional[Dict[str, Any]] = Field(default_factory=dict, description="上下文")
+    context: dict[str, Any] | None = Field(default_factory=dict, description="上下文")
 
 class SensorDataRequestModel(BaseModel):
     """传感器数据处理请求模型"""
     user_id: str = Field(..., description="用户ID")
     device_id: str = Field(..., description="设备ID")
     sensor_type: str = Field(..., description="传感器类型")
-    data_points: List[Dict[str, Any]] = Field(..., description="数据点")
-    timestamp_range: Dict[str, str] = Field(..., description="时间戳范围")
+    data_points: list[dict[str, Any]] = Field(..., description="数据点")
+    timestamp_range: dict[str, str] = Field(..., description="时间戳范围")
 
 class HealthResponse(BaseModel):
     """健康检查响应"""
@@ -83,15 +87,15 @@ async def lifespan(app: FastAPI):
     logger.info("soer-service API网关启动中...")
     app_state['start_time'] = time.time()
     app_state['request_count'] = 0
-    
+
     # 初始化服务
     health_service = await get_health_service()
     app_state['health_service'] = health_service
-    
+
     logger.info("soer-service API网关启动完成")
-    
+
     yield
-    
+
     # 关闭时清理
     logger.info("soer-service API网关关闭中...")
     if 'health_service' in app_state:
@@ -130,14 +134,14 @@ app.add_middleware(trace_middleware)
 async def request_counter_middleware(request: Request, call_next):
     """请求计数中间件"""
     app_state['request_count'] = app_state.get('request_count', 0) + 1
-    
+
     start_time = time.time()
     response = await call_next(request)
     process_time = time.time() - start_time
-    
+
     response.headers["X-Process-Time"] = str(process_time)
     response.headers["X-Request-ID"] = f"soer_{int(time.time() * 1000)}"
-    
+
     return response
 
 # 异常处理器
@@ -188,7 +192,7 @@ async def get_metrics():
     """获取服务指标"""
     health_service = app_state.get('health_service')
     service_stats = health_service.get_health_status() if health_service else {}
-    
+
     return {
         "service": "soer-service",
         "uptime": time.time() - app_state.get('start_time', time.time()),
@@ -205,7 +209,7 @@ async def analyze_health_data(
     """分析健康数据"""
     if not health_service:
         raise HTTPException(status_code=503, detail="健康服务不可用")
-    
+
     try:
         # 转换请求模型
         service_request = HealthDataRequest(
@@ -215,10 +219,10 @@ async def analyze_health_data(
             include_trends=request.include_trends,
             include_predictions=request.include_predictions
         )
-        
+
         # 调用服务
         result = await health_service.analyze_health_data(service_request)
-        
+
         return {
             "success": True,
             "data": {
@@ -232,7 +236,7 @@ async def analyze_health_data(
             "processing_time": result.processing_time,
             "timestamp": result.timestamp
         }
-        
+
     except Exception as e:
         logger.error(f"健康数据分析失败: {e}")
         raise HTTPException(status_code=500, detail=f"健康数据分析失败: {str(e)}")
@@ -245,7 +249,7 @@ async def generate_lifestyle_advice(
     """生成生活方式建议"""
     if not health_service:
         raise HTTPException(status_code=503, detail="健康服务不可用")
-    
+
     try:
         # 转换请求模型
         service_request = LifestyleRequest(
@@ -255,10 +259,10 @@ async def generate_lifestyle_advice(
             constitution_type=request.constitution_type,
             preferences=request.preferences
         )
-        
+
         # 调用服务
         result = await health_service.generate_lifestyle_advice(service_request)
-        
+
         return {
             "success": True,
             "data": {
@@ -272,7 +276,7 @@ async def generate_lifestyle_advice(
             "processing_time": result.processing_time,
             "timestamp": result.timestamp
         }
-        
+
     except Exception as e:
         logger.error(f"生活方式建议生成失败: {e}")
         raise HTTPException(status_code=500, detail=f"生活方式建议生成失败: {str(e)}")
@@ -285,7 +289,7 @@ async def analyze_emotion(
     """分析情绪状态"""
     if not health_service:
         raise HTTPException(status_code=503, detail="健康服务不可用")
-    
+
     try:
         # 转换请求模型
         service_request = EmotionAnalysisRequest(
@@ -294,10 +298,10 @@ async def analyze_emotion(
             input_data=request.input_data,
             context=request.context
         )
-        
+
         # 调用服务
         result = await health_service.analyze_emotion(service_request)
-        
+
         return {
             "success": True,
             "data": {
@@ -310,7 +314,7 @@ async def analyze_emotion(
             "processing_time": result.processing_time,
             "timestamp": result.timestamp
         }
-        
+
     except Exception as e:
         logger.error(f"情绪分析失败: {e}")
         raise HTTPException(status_code=500, detail=f"情绪分析失败: {str(e)}")
@@ -323,7 +327,7 @@ async def process_sensor_data(
     """处理传感器数据"""
     if not health_service:
         raise HTTPException(status_code=503, detail="健康服务不可用")
-    
+
     try:
         # 转换请求模型
         service_request = SensorDataRequest(
@@ -333,10 +337,10 @@ async def process_sensor_data(
             data_points=request.data_points,
             timestamp_range=request.timestamp_range
         )
-        
+
         # 调用服务
         result = await health_service.process_sensor_data(service_request)
-        
+
         return {
             "success": True,
             "data": {
@@ -349,7 +353,7 @@ async def process_sensor_data(
             "processing_time": result.processing_time,
             "timestamp": result.timestamp
         }
-        
+
     except Exception as e:
         logger.error(f"传感器数据处理失败: {e}")
         raise HTTPException(status_code=500, detail=f"传感器数据处理失败: {str(e)}")
@@ -362,11 +366,11 @@ async def get_health_dashboard(
     """获取健康仪表板"""
     if not health_service:
         raise HTTPException(status_code=503, detail="健康服务不可用")
-    
+
     try:
         # 模拟获取健康仪表板数据
         await asyncio.sleep(0.1)
-        
+
         return {
             "success": True,
             "data": {
@@ -408,7 +412,7 @@ async def get_health_dashboard(
             },
             "timestamp": time.time()
         }
-        
+
     except Exception as e:
         logger.error(f"获取健康仪表板失败: {e}")
         raise HTTPException(status_code=500, detail=f"获取健康仪表板失败: {str(e)}")
@@ -422,11 +426,11 @@ async def generate_health_report(
     """生成健康报告"""
     if not health_service:
         raise HTTPException(status_code=503, detail="健康服务不可用")
-    
+
     try:
         # 模拟生成健康报告
         await asyncio.sleep(0.3)
-        
+
         return {
             "success": True,
             "data": {
@@ -466,7 +470,7 @@ async def generate_health_report(
             },
             "timestamp": time.time()
         }
-        
+
     except Exception as e:
         logger.error(f"生成健康报告失败: {e}")
         raise HTTPException(status_code=500, detail=f"生成健康报告失败: {str(e)}")
@@ -610,4 +614,4 @@ if __name__ == "__main__":
         port=8003,
         reload=True,
         log_level="info"
-    ) 
+    )

@@ -1,35 +1,36 @@
 """
 索克生活-医学知识服务主应用
-提供中医知识图谱数据服务，支持中西医结合的健康管理
+提供中医知识图谱数据服务,支持中西医结合的健康管理
 """
+
 import asyncio
+from concurrent import futures
+from contextlib import asynccontextmanager
 import os
 import signal
 import sys
-from concurrent import futures
-from contextlib import asynccontextmanager
 
-import grpc
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.docs import get_swagger_ui_html
+import grpc
 from prometheus_fastapi_instrumentator import Instrumentator
 
-from app.api.rest.router import router as api_router
-from app.api.rest.health import router as health_router
-from app.api.grpc.knowledge_service import MedKnowledgeServicer
 from app.api.grpc.generated import knowledge_pb2_grpc
+from app.api.grpc.knowledge_service import MedKnowledgeServicer
+from app.api.rest.health import router as health_router
+from app.api.rest.router import router as api_router
 from app.core.config import get_settings
+from app.core.container import lifespan_context
 from app.core.logger import get_logger
-from app.core.container import get_container, lifespan_context
 from app.core.middleware import (
-    MetricsMiddleware,
-    LoggingMiddleware,
-    ErrorHandlingMiddleware,
-    SecurityHeadersMiddleware,
     AuthenticationMiddleware,
+    ErrorHandlingMiddleware,
+    LoggingMiddleware,
+    MetricsMiddleware,
+    SecurityHeadersMiddleware,
+    create_rate_limit_handler,
     limiter,
-    create_rate_limit_handler
 )
 
 # 获取配置和日志
@@ -44,19 +45,19 @@ grpc_server = None
 async def lifespan(app: FastAPI):
     """应用生命周期管理"""
     logger.info("索克生活-医学知识服务启动中...")
-    
+
     try:
         # 初始化依赖注入容器
         async with lifespan_context() as container:
             app.state.container = container
-            
+
             # 启动gRPC服务器
             await start_grpc_server(container.knowledge_service)
-            
+
             logger.info("索克生活-医学知识服务启动成功")
-            
+
             yield
-            
+
     except Exception as e:
         logger.error(f"服务启动失败: {e}")
         sys.exit(1)
@@ -71,15 +72,15 @@ app = FastAPI(
     title="索克生活-医学知识服务",
     description="""
     ## 索克生活医学知识服务
-    
-    提供中医知识图谱数据服务，融合传统中医"辨证治未病"理念与现代预防医学技术。
-    
+
+    提供中医知识图谱数据服务,融合传统中医"辨证治未病"理念与现代预防医学技术。
+
     ### 核心功能
-    - **中医基础知识**：体质、症状、穴位、中药、证型等
-    - **知识图谱**：可视化、路径分析、关系探索
-    - **中西医结合**：生物标志物、疾病解析、预防医学证据
-    - **智能推荐**：个性化健康建议和生活方式干预
-    
+    - **中医基础知识**:体质、症状、穴位、中药、证型等
+    - **知识图谱**:可视化、路径分析、关系探索
+    - **中西医结合**:生物标志物、疾病解析、预防医学证据
+    - **智能推荐**:个性化健康建议和生活方式干预
+
     ### 技术特色
     - 高性能异步架构
     - Redis缓存优化
@@ -90,7 +91,7 @@ app = FastAPI(
     version="1.0.0",
     docs_url=None,
     redoc_url="/api/docs",
-    lifespan=lifespan
+    lifespan=lifespan,
 )
 
 # 配置CORS
@@ -102,7 +103,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 添加中间件（顺序很重要）
+# 添加中间件(顺序很重要)
 app.add_middleware(SecurityHeadersMiddleware)
 app.add_middleware(ErrorHandlingMiddleware)
 app.add_middleware(AuthenticationMiddleware)
@@ -131,6 +132,7 @@ if settings.metrics and settings.metrics.enabled:
 app.include_router(health_router)
 app.include_router(api_router)
 
+
 # 自定义Swagger UI路由
 @app.get("/api/docs", include_in_schema=False)
 async def custom_swagger_ui_html():
@@ -148,35 +150,35 @@ async def root():
     return {
         "service": "索克生活-医学知识服务",
         "version": "1.0.0",
-        "description": "提供中医知识图谱数据服务，融合中西医结合的健康管理",
+        "description": "提供中医知识图谱数据服务,融合中西医结合的健康管理",
         "docs": "/api/docs",
         "health": "/api/v1/health",
-        "metrics": "/metrics"
+        "metrics": "/metrics",
     }
 
 
 async def start_grpc_server(knowledge_service):
     """启动gRPC服务器"""
     global grpc_server
-    
+
     try:
         # 创建gRPC服务器
         grpc_server = grpc.aio.server(futures.ThreadPoolExecutor(max_workers=10))
-        
+
         # 注册服务实现
         knowledge_pb2_grpc.add_MedKnowledgeServiceServicer_to_server(
             MedKnowledgeServicer(knowledge_service), grpc_server
         )
-        
+
         # 确定gRPC服务器端口
         grpc_port = int(os.environ.get("GRPC_PORT", "50051"))
         listen_addr = f"[::]:{grpc_port}"
         grpc_server.add_insecure_port(listen_addr)
-        
+
         # 启动服务器
         await grpc_server.start()
         logger.info(f"gRPC服务器已启动于端口 {grpc_port}")
-        
+
     except Exception as e:
         logger.error(f"gRPC服务器启动失败: {e}")
         raise
@@ -185,7 +187,7 @@ async def start_grpc_server(knowledge_service):
 async def stop_grpc_server():
     """停止gRPC服务器"""
     global grpc_server
-    
+
     if grpc_server:
         try:
             await grpc_server.stop(5)  # 5秒内优雅关闭
@@ -196,7 +198,7 @@ async def stop_grpc_server():
 
 def handle_sigterm(*args):
     """处理SIGTERM信号"""
-    logger.info("收到SIGTERM信号，准备关闭服务")
+    logger.info("收到SIGTERM信号,准备关闭服务")
     # 在Kubernetes环境中优雅关闭
     asyncio.create_task(stop_grpc_server())
     sys.exit(0)
@@ -208,10 +210,10 @@ signal.signal(signal.SIGTERM, handle_sigterm)
 
 if __name__ == "__main__":
     import uvicorn
-    
+
     host = settings.server.host
     port = int(os.environ.get("PORT", settings.server.port))
-    
+
     # 配置日志
     log_config = {
         "version": 1,
@@ -242,7 +244,7 @@ if __name__ == "__main__":
             "uvicorn.access": {"handlers": ["access"], "level": "INFO", "propagate": False},
         },
     }
-    
+
     uvicorn.run(
         "app.main:app",
         host=host,
@@ -253,4 +255,4 @@ if __name__ == "__main__":
         access_log=True,
         server_header=False,
         date_header=False,
-    ) 
+    )

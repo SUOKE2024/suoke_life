@@ -1,0 +1,240 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "suoke-common"
+version = "1.0.0"
+description = "索克生活平台通用组件库 - 提供微服务架构所需的所有基础组件"
+authors = [
+    {name = "索克生活技术团队", email = "tech@suokelife.com"}
+]
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.13.3"
+keywords = ["suoke", "microservices", "common", "components", "health"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: System :: Distributed Computing",
+]
+
+dependencies = [
+    # 缓存和性能
+    "cachetools>=5.5.0,<6.0.0",
+    "tenacity>=9.0.0,<10.0.0",
+    
+    # 安全和加密
+    "cryptography>=43.0.0,<44.0.0",
+    "passlib>=1.7.4,<2.0.0",
+    "python-jose[cryptography]>=3.3.0,<4.0.0",
+    "bcrypt>=4.2.0,<5.0.0",
+    
+    # 配置和环境变量管理
+    "pyyaml>=6.0.2,<7.0.0",
+    "python-dotenv>=1.0.1,<2.0.0",
+    "watchdog>=5.0.0,<6.0.0",
+    
+    # 配置中心
+    "python-consul>=1.1.0,<2.0.0",
+    "etcd3>=0.12.0,<1.0.0",
+    
+    # 可观测性
+    "opentelemetry-api>=1.27.0,<2.0.0",
+    "opentelemetry-sdk>=1.27.0,<2.0.0",
+    "opentelemetry-exporter-otlp>=1.27.0,<2.0.0",
+    "prometheus-client>=0.21.0,<1.0.0",
+    
+    # 日志聚合
+    "structlog>=24.4.0,<25.0.0",
+    "python-json-logger>=2.0.7,<3.0.0",
+    "python-logstash>=0.4.8,<1.0.0",
+    "fluent-logger>=0.10.0,<1.0.0",
+    
+    # 异步和并发
+    "aiohttp>=3.10.0,<4.0.0",
+    "httpx>=0.27.0,<1.0.0",
+    
+    # 消息队列
+    "kafka-python>=2.0.2,<3.0.0",
+    "aio-pika>=9.4.0,<10.0.0",
+    
+    # 服务网格和Kubernetes
+    "kubernetes>=31.0.0,<32.0.0",
+    
+    # 数据验证
+    "pydantic>=2.9.0,<3.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    # 测试工具
+    "pytest>=8.3.0,<9.0.0",
+    "pytest-asyncio>=0.24.0,<1.0.0",
+    "pytest-cov>=6.0.0,<7.0.0",
+    "pytest-xdist>=3.6.0,<4.0.0",
+    "freezegun>=1.5.0,<2.0.0",
+    "faker>=30.0.0,<31.0.0",
+    
+    # 代码质量工具
+    "ruff>=0.7.0,<1.0.0",
+    "mypy>=1.13.0,<2.0.0",
+    "pre-commit>=4.0.0,<5.0.0",
+    
+    # 性能分析
+    "py-spy>=0.3.14,<1.0.0",
+    "memory-profiler>=0.61.0,<1.0.0",
+]
+
+test = [
+    "pytest>=8.3.0,<9.0.0",
+    "pytest-asyncio>=0.24.0,<1.0.0",
+    "pytest-cov>=6.0.0,<7.0.0",
+    "pytest-xdist>=3.6.0,<4.0.0",
+    "freezegun>=1.5.0,<2.0.0",
+    "faker>=30.0.0,<31.0.0",
+]
+
+docs = [
+    "mkdocs>=1.6.0,<2.0.0",
+    "mkdocs-material>=9.5.0,<10.0.0",
+    "mkdocstrings[python]>=0.26.0,<1.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/suokelife/suoke_life"
+Documentation = "https://docs.suokelife.com"
+Repository = "https://github.com/suokelife/suoke_life"
+Issues = "https://github.com/suokelife/suoke_life/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["suoke_common"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/suoke_common",
+    "/README.md",
+    "/pyproject.toml",
+]
+
+# Ruff 配置
+[tool.ruff]
+target-version = "py313"
+line-length = 88
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "C4", # flake8-comprehensions
+    "UP", # pyupgrade
+    "ARG", # flake8-unused-arguments
+    "SIM", # flake8-simplify
+    "TCH", # flake8-type-checking
+    "PTH", # flake8-use-pathlib
+    "ERA", # eradicate
+    "PL",  # pylint
+    "RUF", # ruff-specific rules
+]
+ignore = [
+    "E501",  # line too long, handled by black
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex
+    "PLR0913", # too many arguments
+    "PLR0915", # too many statements
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["suoke_common"]
+force-sort-within-sections = true
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+"tests/**/*" = ["PLR2004", "S101", "TID252"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+# MyPy 配置
+[tool.mypy]
+python_version = "3.13"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[[tool.mypy.overrides]]
+module = [
+    "kafka.*",
+    "consul.*",
+    "etcd3.*",
+    "fluent.*",
+    "logstash.*",
+]
+ignore_missing_imports = true
+
+# Pytest 配置
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--cov=suoke_common",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+    "--cov-report=xml",
+    "--cov-fail-under=20",
+]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+]
+asyncio_default_fixture_loop_scope = "function"
+
+# Coverage 配置
+[tool.coverage.run]
+source = ["suoke_common"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "*/__pycache__/*",
+    "*/migrations/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+] 

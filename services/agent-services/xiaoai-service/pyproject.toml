@@ -225,29 +225,6 @@ known_third_party = ["fastapi", "pydantic", "sqlalchemy", "redis", "loguru"]
 [tool.ruff]
 target-version = "py313"
 line-length = 88
-select = [
-    "E",   # pycodestyle errors
-    "W",   # pycodestyle warnings
-    "F",   # pyflakes
-    "I",   # isort
-    "B",   # flake8-bugbear
-    "C4",  # flake8-comprehensions
-    "UP",  # pyupgrade
-    "ARG", # flake8-unused-arguments
-    "SIM", # flake8-simplify
-    "TCH", # flake8-type-checking
-    "PTH", # flake8-use-pathlib
-    "ERA", # eradicate
-    "PL",  # pylint
-    "RUF", # ruff-specific rules
-]
-ignore = [
-    "E501",   # line too long, handled by black
-    "B008",   # do not perform function calls in argument defaults
-    "PLR0913", # too many arguments to function call
-    "PLR0915", # too many statements
-    "PLR2004", # magic value used in comparison
-]
 exclude = [
     ".bzr",
     ".direnv",
@@ -271,7 +248,32 @@ exclude = [
     "__pycache__",
 ]
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+    "ARG", # flake8-unused-arguments
+    "SIM", # flake8-simplify
+    "TCH", # flake8-type-checking
+    "PTH", # flake8-use-pathlib
+    "ERA", # eradicate
+    "PL",  # pylint
+    "RUF", # ruff-specific rules
+]
+ignore = [
+    "E501",   # line too long, handled by black
+    "B008",   # do not perform function calls in argument defaults
+    "PLR0913", # too many arguments to function call
+    "PLR0915", # too many statements
+    "PLR2004", # magic value used in comparison
+]
+
+[tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401"]  # 允许在 __init__.py 中有未使用的导入
 "tests/**/*.py" = ["ARG", "PLR2004"]  # 测试文件中允许一些特殊情况
 
@@ -369,3 +371,25 @@ exclude_lines = [
 [tool.bandit]
 exclude_dirs = ["tests", "venv", ".venv"]
 skips = ["B101", "B601"]  # 跳过 assert 和 shell 注入检查（在测试中常用）
+
+# UV 包管理器配置 - 国内镜像源
+[tool.uv]
+# 主镜像源 - 清华大学
+index-url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+
+# 备用镜像源
+extra-index-url = [
+    "https://mirrors.aliyun.com/pypi/simple/",
+    "https://pypi.douban.com/simple/",
+    "https://mirrors.cloud.tencent.com/pypi/simple/",
+    "https://mirror.baidu.com/pypi/simple/"
+]
+
+# 安装配置
+no-cache = false
+compile-bytecode = true
+upgrade = false
+
+# 解析器配置
+resolution = "highest"
+prerelease = "disallow"

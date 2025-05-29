@@ -91,7 +91,7 @@ class MemoryCache:
         """删除匹配模式的缓存键"""
         try:
             regex = re.compile(pattern.replace('*', '.*'))
-            keys_to_delete = [key for key in self.cache.keys() if regex.match(key)]
+            keys_to_delete = [key for key in self.cache if regex.match(key)]
 
             for key in keys_to_delete:
                 await self.delete(key)
@@ -141,7 +141,7 @@ class MemoryCache:
         now = datetime.now()
         expired_count = 0
 
-        for key, item in self.cache.items():
+        for _key, item in self.cache.items():
             if item["expires_at"] and now > item["expires_at"]:
                 expired_count += 1
 
@@ -168,7 +168,7 @@ class MemoryCache:
                 total_size += sys.getsizeof(item)
                 total_size += sys.getsizeof(item["value"])
             return total_size / (1024 * 1024)
-        except:
+        except Exception:
             return 0.0
 
 class RedisCache:
@@ -247,7 +247,7 @@ class RedisCache:
             redis_key = self._make_key(key)
 
             # 序列化值
-            if isinstance(value, (dict, list)):
+            if isinstance(value, dict | list):
                 serialized_value = json.dumps(value, ensure_ascii=False, default=str)
             else:
                 serialized_value = str(value)
@@ -336,10 +336,10 @@ class RedisCache:
 class CacheManager:
     """缓存管理器 - 统一的缓存接口 - 增强版本"""
 
-    def __init__(self, use_redis: bool = None, redis_url: str = None, fallback_to_memory: bool = True):
+    def __init__(self, use_redis: bool | None = None, redis_url: str | None = None, fallback_to_memory: bool = True):
         """
         初始化缓存管理器
-        
+
         Args:
             use_redis: 是否使用Redis，None表示自动检测
             redis_url: Redis连接URL
@@ -382,7 +382,7 @@ class CacheManager:
             r.ping()
             r.close()
             return True
-        except:
+        except Exception:
             return False
 
     async def get(self, key: str) -> Any | None:
@@ -402,7 +402,7 @@ class CacheManager:
             if self.fallback_backend:
                 try:
                     return await self.fallback_backend.get(key)
-                except:
+                except Exception:
                     pass
             return None
 
@@ -510,24 +510,52 @@ class CacheManager:
         if self.fallback_backend and hasattr(self.fallback_backend, 'close'):
             await self.fallback_backend.close()
 
-# 全局缓存管理器实例
-_cache_manager: CacheManager | None = None
+# 缓存管理器单例
+class CacheManagerSingleton:
+    """缓存管理器单例"""
+
+    _instance: CacheManager | None = None
+    _lock = asyncio.Lock()
+
+    @classmethod
+    async def get_instance(cls, use_redis: bool | None = None, redis_url: str | None = None) -> CacheManager:
+        """获取缓存管理器实例"""
+        if cls._instance is None:
+            async with cls._lock:
+                if cls._instance is None:
+                    cls._instance = CacheManager(use_redis=use_redis, redis_url=redis_url)
+        return cls._instance
+
+    @classmethod
+    def get_instance_sync(cls, use_redis: bool | None = None, redis_url: str | None = None) -> CacheManager:
+        """同步获取缓存管理器实例"""
+        if cls._instance is None:
+            cls._instance = CacheManager(use_redis=use_redis, redis_url=redis_url)
+        return cls._instance
+
+    @classmethod
+    async def close_instance(cls):
+        """关闭缓存管理器实例"""
+        if cls._instance:
+            await cls._instance.close()
+            cls._instance = None
+
 
 def get_cache_manager() -> CacheManager:
-    """获取全局缓存管理器实例"""
-    global _cache_manager
-    if _cache_manager is None:
-        _cache_manager = CacheManager()
-    return _cache_manager
+    """获取全局缓存管理器实例（向后兼容）"""
+    return CacheManagerSingleton.get_instance_sync()
 
-async def init_cache_manager(use_redis: bool = None, redis_url: str = None):
-    """初始化全局缓存管理器"""
-    global _cache_manager
-    _cache_manager = CacheManager(use_redis=use_redis, redis_url=redis_url)
+
+async def get_cache_manager_async(use_redis: bool | None = None, redis_url: str | None = None) -> CacheManager:
+    """异步获取全局缓存管理器实例"""
+    return await CacheManagerSingleton.get_instance(use_redis=use_redis, redis_url=redis_url)
+
+
+async def init_cache_manager(use_redis: bool | None = None, redis_url: str | None = None):
+    """初始化全局缓存管理器（向后兼容）"""
+    await CacheManagerSingleton.get_instance(use_redis=use_redis, redis_url=redis_url)
+
 
 async def close_cache_manager():
-    """关闭全局缓存管理器"""
-    global _cache_manager
-    if _cache_manager:
-        await _cache_manager.close()
-        _cache_manager = None
+    """关闭全局缓存管理器（向后兼容）"""
+    await CacheManagerSingleton.close_instance()

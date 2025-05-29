@@ -1,0 +1,11 @@
+1fcac0c295907f78ea4787d1cc00030f
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = getHeaderTitle;
+function getHeaderTitle(options, fallback) {
+  return typeof options.headerTitle === 'string' ? options.headerTitle : options.title !== undefined ? options.title : fallback;
+}
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJuYW1lcyI6WyJnZXRIZWFkZXJUaXRsZSIsIm9wdGlvbnMiLCJmYWxsYmFjayIsImhlYWRlclRpdGxlIiwidGl0bGUiLCJ1bmRlZmluZWQiXSwic291cmNlcyI6WyIuLi8uLi8uLi9zcmMvSGVhZGVyL2dldEhlYWRlclRpdGxlLnRzeCJdLCJzb3VyY2VzQ29udGVudCI6W251bGxdLCJtYXBwaW5ncyI6Ijs7Ozs7O0FBRWUsU0FBU0EsY0FBY0EsQ0FDcENDLE9BQXVFLEVBQ3ZFQyxRQUFnQixFQUNSO0VBQ1IsT0FBTyxPQUFPRCxPQUFPLENBQUNFLFdBQVcsS0FBSyxRQUFRLEdBQzFDRixPQUFPLENBQUNFLFdBQVcsR0FDbkJGLE9BQU8sQ0FBQ0csS0FBSyxLQUFLQyxTQUFTLEdBQzNCSixPQUFPLENBQUNHLEtBQUssR0FDYkYsUUFBUTtBQUNkIiwiaWdub3JlTGlzdCI6W119

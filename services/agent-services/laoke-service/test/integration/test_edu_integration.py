@@ -1,16 +1,15 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 教育服务集成测试
 """
 
+import json
 import os
 import sys
+from unittest.mock import AsyncMock, patch
+
 import pytest
-import asyncio
-import json
-from unittest.mock import patch, MagicMock, AsyncMock
 
 # 添加项目根路径到 Python 路径
 sys.path.insert(0, os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))))
@@ -63,27 +62,27 @@ async def test_get_course_recommendations(edu_service):
             }
         ]
     }
-    
+
     # 模拟 API 请求
     with patch("httpx.AsyncClient.get") as mock_get:
         mock_get.return_value = AsyncMock()
         mock_get.return_value.raise_for_status = AsyncMock()
         mock_get.return_value.json = AsyncMock(return_value=mock_response)
-        
+
         # 调用服务方法
         user_id = "user-123"
         interests = ["tcm", "acupuncture", "herbal-medicine"]
         result = await edu_service.get_course_recommendations(user_id, interests)
-        
+
         # 验证结果
         assert result == mock_response["courses"]
-        
+
         # 验证 API 调用
         mock_get.assert_called_once()
         args, kwargs = mock_get.call_args
         assert kwargs["headers"]["Authorization"] == "Bearer test-api-key"
         assert "user_id=user-123" in str(kwargs["params"])
-        
+
         # 验证缓存调用
         edu_service.cache_client.get.assert_called_once()
         edu_service.cache_client.set.assert_called_once()
@@ -112,30 +111,30 @@ async def test_generate_learning_path(edu_service):
         "estimated_duration": 25200,
         "difficulty": "beginner"
     }
-    
+
     # 模拟 API 请求
     with patch("httpx.AsyncClient.post") as mock_post:
         mock_post.return_value = AsyncMock()
         mock_post.return_value.raise_for_status = AsyncMock()
         mock_post.return_value.json = AsyncMock(return_value=mock_response)
-        
+
         # 调用服务方法
         user_id = "user-123"
         goal = "掌握中医四诊基本技能"
         result = await edu_service.generate_learning_path(user_id, goal)
-        
+
         # 验证结果
         assert result == mock_response
         assert result["path_id"] == "path-001"
         assert len(result["modules"]) == 2
-        
+
         # 验证 API 调用
         mock_post.assert_called_once()
         args, kwargs = mock_post.call_args
         assert kwargs["headers"]["Authorization"] == "Bearer test-api-key"
         assert kwargs["json"]["user_id"] == "user-123"
         assert kwargs["json"]["goal"] == "掌握中医四诊基本技能"
-        
+
         # 验证缓存调用
         edu_service.cache_client.get.assert_called_once()
         edu_service.cache_client.set.assert_called_once()
@@ -170,29 +169,29 @@ async def test_get_course_details(edu_service):
         "reviews_count": 123,
         "prerequisites": []
     }
-    
+
     # 模拟 API 请求
     with patch("httpx.AsyncClient.get") as mock_get:
         mock_get.return_value = AsyncMock()
         mock_get.return_value.raise_for_status = AsyncMock()
         mock_get.return_value.json = AsyncMock(return_value=mock_response)
-        
+
         # 调用服务方法
         course_id = "course-001"
         result = await edu_service.get_course_details(course_id)
-        
+
         # 验证结果
         assert result == mock_response
         assert result["id"] == "course-001"
         assert result["title"] == "中医基础理论导论"
         assert len(result["modules"]) == 2
-        
+
         # 验证 API 调用
         mock_get.assert_called_once()
         args, kwargs = mock_get.call_args
         assert kwargs["headers"]["Authorization"] == "Bearer test-api-key"
         assert f"/v1/courses/{course_id}" in str(args)
-        
+
         # 验证缓存调用
         edu_service.cache_client.get.assert_called_once()
         edu_service.cache_client.set.assert_called_once()
@@ -223,23 +222,23 @@ async def test_search_courses(edu_service):
         ],
         "total": 2
     }
-    
+
     # 模拟 API 请求
     with patch("httpx.AsyncClient.get") as mock_get:
         mock_get.return_value = AsyncMock()
         mock_get.return_value.raise_for_status = AsyncMock()
         mock_get.return_value.json = AsyncMock(return_value=mock_response)
-        
+
         # 调用服务方法
         query = "中医理论"
         course_type = "tcm_basic"
         difficulty = "beginner"
         result = await edu_service.search_courses(query, course_type, difficulty)
-        
+
         # 验证结果
         assert result == mock_response["results"]
         assert len(result) == 2
-        
+
         # 验证 API 调用
         mock_get.assert_called_once()
         args, kwargs = mock_get.call_args
@@ -247,7 +246,7 @@ async def test_search_courses(edu_service):
         assert "q=中医理论" in str(kwargs["params"])
         assert "type=tcm_basic" in str(kwargs["params"])
         assert "difficulty=beginner" in str(kwargs["params"])
-        
+
         # 验证缓存调用
         edu_service.cache_client.get.assert_called_once()
         edu_service.cache_client.set.assert_called_once()
@@ -269,24 +268,24 @@ async def test_get_educational_content(edu_service):
         "read_time": 600,
         "tags": ["中医理论", "阴阳", "健康"]
     }
-    
+
     # 模拟 API 请求
     with patch("httpx.AsyncClient.get") as mock_get:
         mock_get.return_value = AsyncMock()
         mock_get.return_value.raise_for_status = AsyncMock()
         mock_get.return_value.json = AsyncMock(return_value=mock_response)
-        
+
         # 调用服务方法
         content_type = "tcm"
         topic = "yin-yang"
         format_type = "article"
         result = await edu_service.get_educational_content(content_type, topic, format_type)
-        
+
         # 验证结果
         assert result == mock_response
         assert result["title"] == "阴阳平衡与健康"
         assert result["format"] == "article"
-        
+
         # 验证 API 调用
         mock_get.assert_called_once()
         args, kwargs = mock_get.call_args
@@ -294,7 +293,7 @@ async def test_get_educational_content(edu_service):
         assert "content_type=tcm" in str(kwargs["params"])
         assert "topic=yin-yang" in str(kwargs["params"])
         assert "format=article" in str(kwargs["params"])
-        
+
         # 验证缓存调用
         edu_service.cache_client.get.assert_called_once()
         edu_service.cache_client.set.assert_called_once()
@@ -305,23 +304,23 @@ async def test_track_learning_progress(edu_service):
     """测试跟踪学习进度"""
     # 模拟响应数据
     mock_response = {"success": True}
-    
+
     # 模拟 API 请求
     with patch("httpx.AsyncClient.post") as mock_post:
         mock_post.return_value = AsyncMock()
         mock_post.return_value.raise_for_status = AsyncMock()
         mock_post.return_value.json = AsyncMock(return_value=mock_response)
-        
+
         # 调用服务方法
         user_id = "user-123"
         course_id = "course-001"
         progress = 75.5
         completed = False
         result = await edu_service.track_learning_progress(user_id, course_id, progress, completed)
-        
+
         # 验证结果
         assert result is True
-        
+
         # 验证 API 调用
         mock_post.assert_called_once()
         args, kwargs = mock_post.call_args
@@ -330,7 +329,7 @@ async def test_track_learning_progress(edu_service):
         assert kwargs["json"]["course_id"] == "course-001"
         assert kwargs["json"]["progress"] == 75.5
         assert kwargs["json"]["completed"] is False
-        
+
         # 验证没有调用缓存（因为这是写操作）
         edu_service.cache_client.get.assert_not_called()
 
@@ -348,28 +347,28 @@ async def test_get_learning_statistics(edu_service):
         "last_active": "2023-06-20T15:45:30Z",
         "favorite_topics": ["中医基础", "针灸", "中药学"]
     }
-    
+
     # 模拟 API 请求
     with patch("httpx.AsyncClient.get") as mock_get:
         mock_get.return_value = AsyncMock()
         mock_get.return_value.raise_for_status = AsyncMock()
         mock_get.return_value.json = AsyncMock(return_value=mock_response)
-        
+
         # 调用服务方法
         user_id = "user-123"
         result = await edu_service.get_learning_statistics(user_id)
-        
+
         # 验证结果
         assert result == mock_response
         assert result["courses_started"] == 5
         assert result["courses_completed"] == 3
-        
+
         # 验证 API 调用
         mock_get.assert_called_once()
         args, kwargs = mock_get.call_args
         assert kwargs["headers"]["Authorization"] == "Bearer test-api-key"
         assert f"/v1/learning/statistics/{user_id}" in str(args)
-        
+
         # 验证缓存调用
         edu_service.cache_client.get.assert_called_once()
         edu_service.cache_client.set.assert_called_once()
@@ -388,20 +387,20 @@ async def test_cache_hit(edu_service):
         }
     ]
     edu_service.cache_client.get.return_value = json.dumps(cached_data)
-    
+
     # 直接调用方法（不应该发起API请求）
     with patch("httpx.AsyncClient.get") as mock_get:
         result = await edu_service.get_course_recommendations("user-123", ["tcm"])
-        
+
         # 验证结果从缓存获取
         assert result == cached_data
-        
+
         # 验证未发起API请求
         mock_get.assert_not_called()
-        
+
         # 验证调用了缓存获取
         edu_service.cache_client.get.assert_called_once()
-        
+
         # 验证未写入缓存
         edu_service.cache_client.set.assert_not_called()
 
@@ -412,13 +411,13 @@ async def test_api_error_handling(edu_service):
     # 模拟API错误
     with patch("httpx.AsyncClient.get") as mock_get:
         mock_get.side_effect = Exception("API连接失败")
-        
+
         # 调用服务方法
         result = await edu_service.search_courses("中医")
-        
+
         # 验证返回空列表
         assert result == []
-        
+
         # 验证尝试过从缓存获取
         edu_service.cache_client.get.assert_called_once()
 
@@ -432,16 +431,16 @@ async def test_api_error_with_cache_fallback(edu_service):
         "courses_completed": 3
     }
     edu_service.cache_client.get.return_value = json.dumps(cached_data)
-    
+
     # 模拟API错误
     with patch("httpx.AsyncClient.get") as mock_get:
         mock_get.side_effect = Exception("API连接失败")
-        
+
         # 调用服务方法
         result = await edu_service.get_learning_statistics("user-123")
-        
+
         # 验证返回缓存数据
         assert result == cached_data
-        
+
         # 验证尝试过从缓存获取
-        edu_service.cache_client.get.assert_called_once() 
+        edu_service.cache_client.get.assert_called_once()

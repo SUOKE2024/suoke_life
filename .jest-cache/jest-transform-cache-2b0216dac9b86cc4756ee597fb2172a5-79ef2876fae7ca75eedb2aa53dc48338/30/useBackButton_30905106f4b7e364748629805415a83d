@@ -1,0 +1,9 @@
+6769f8e556ea3df444f96c09cd6bb138
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = useBackButton;
+function useBackButton(_) {}
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJuYW1lcyI6WyJ1c2VCYWNrQnV0dG9uIiwiXyJdLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy91c2VCYWNrQnV0dG9uLnRzeCJdLCJzb3VyY2VzQ29udGVudCI6W251bGxdLCJtYXBwaW5ncyI6Ijs7Ozs7O0FBS2UsU0FBU0EsYUFBYUEsQ0FDbkNDLENBQXlELEVBQ3pELENBRUEiLCJpZ25vcmVMaXN0IjpbXX0=

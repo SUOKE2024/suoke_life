@@ -4,13 +4,14 @@
 """
 import asyncio
 import logging
-import traceback
-import time
-from typing import Any, Callable, Dict, List, Optional, Type, Union
-from enum import Enum
-from dataclasses import dataclass
-from functools import wraps
 import random
+import time
+import traceback
+from collections.abc import Callable
+from dataclasses import dataclass
+from enum import Enum
+from functools import wraps
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -34,23 +35,23 @@ class ErrorCategory(Enum):
 @dataclass
 class ErrorContext:
     """错误上下文信息"""
-    user_id: Optional[str] = None
-    session_id: Optional[str] = None
-    request_id: Optional[str] = None
-    operation: Optional[str] = None
-    additional_data: Optional[Dict[str, Any]] = None
+    user_id: str | None = None
+    session_id: str | None = None
+    request_id: str | None = None
+    operation: str | None = None
+    additional_data: dict[str, Any] | None = None
 
 class SoerServiceException(Exception):
     """索儿服务基础异常"""
-    
+
     def __init__(
         self,
         message: str,
         error_code: str = "UNKNOWN_ERROR",
         severity: ErrorSeverity = ErrorSeverity.MEDIUM,
         category: ErrorCategory = ErrorCategory.UNKNOWN,
-        context: Optional[ErrorContext] = None,
-        cause: Optional[Exception] = None
+        context: ErrorContext | None = None,
+        cause: Exception | None = None
     ):
         super().__init__(message)
         self.message = message
@@ -60,8 +61,8 @@ class SoerServiceException(Exception):
         self.context = context or ErrorContext()
         self.cause = cause
         self.timestamp = time.time()
-    
-    def to_dict(self) -> Dict[str, Any]:
+
+    def to_dict(self) -> dict[str, Any]:
         """转换为字典格式"""
         return {
             "error_code": self.error_code,
@@ -81,7 +82,7 @@ class SoerServiceException(Exception):
 
 class NetworkException(SoerServiceException):
     """网络相关异常"""
-    
+
     def __init__(self, message: str, **kwargs):
         super().__init__(
             message,
@@ -92,7 +93,7 @@ class NetworkException(SoerServiceException):
 
 class DatabaseException(SoerServiceException):
     """数据库相关异常"""
-    
+
     def __init__(self, message: str, **kwargs):
         super().__init__(
             message,
@@ -103,7 +104,7 @@ class DatabaseException(SoerServiceException):
 
 class ExternalAPIException(SoerServiceException):
     """外部API异常"""
-    
+
     def __init__(self, message: str, **kwargs):
         super().__init__(
             message,
@@ -114,7 +115,7 @@ class ExternalAPIException(SoerServiceException):
 
 class ValidationException(SoerServiceException):
     """验证异常"""
-    
+
     def __init__(self, message: str, **kwargs):
         super().__init__(
             message,
@@ -126,7 +127,7 @@ class ValidationException(SoerServiceException):
 
 class BusinessLogicException(SoerServiceException):
     """业务逻辑异常"""
-    
+
     def __init__(self, message: str, **kwargs):
         super().__init__(
             message,
@@ -143,8 +144,8 @@ class RetryConfig:
     max_delay: float = 60.0
     exponential_base: float = 2.0
     jitter: bool = True
-    retryable_exceptions: List[Type[Exception]] = None
-    
+    retryable_exceptions: list[type[Exception]] = None
+
     def __post_init__(self):
         if self.retryable_exceptions is None:
             self.retryable_exceptions = [
@@ -156,20 +157,20 @@ class RetryConfig:
 
 class RetryStrategy:
     """重试策略"""
-    
+
     @staticmethod
     def calculate_delay(attempt: int, config: RetryConfig) -> float:
         """计算重试延迟"""
         delay = config.base_delay * (config.exponential_base ** (attempt - 1))
         delay = min(delay, config.max_delay)
-        
+
         if config.jitter:
             # 添加随机抖动，避免雷群效应
             jitter_range = delay * 0.1
             delay += random.uniform(-jitter_range, jitter_range)
-        
+
         return max(0, delay)
-    
+
     @staticmethod
     def should_retry(exception: Exception, config: RetryConfig) -> bool:
         """判断是否应该重试"""
@@ -179,33 +180,33 @@ def retry_async(config: RetryConfig = None):
     """异步重试装饰器"""
     if config is None:
         config = RetryConfig()
-    
+
     def decorator(func: Callable):
         @wraps(func)
         async def wrapper(*args, **kwargs):
             last_exception = None
-            
+
             for attempt in range(1, config.max_attempts + 1):
                 try:
                     return await func(*args, **kwargs)
                 except Exception as e:
                     last_exception = e
-                    
+
                     if attempt == config.max_attempts:
                         logger.error(f"函数 {func.__name__} 重试 {config.max_attempts} 次后仍然失败")
                         break
-                    
+
                     if not RetryStrategy.should_retry(e, config):
                         logger.warning(f"函数 {func.__name__} 遇到不可重试异常: {e}")
                         break
-                    
+
                     delay = RetryStrategy.calculate_delay(attempt, config)
                     logger.warning(f"函数 {func.__name__} 第 {attempt} 次尝试失败，{delay:.2f}秒后重试: {e}")
-                    
+
                     await asyncio.sleep(delay)
-            
+
             raise last_exception
-        
+
         return wrapper
     return decorator
 
@@ -213,54 +214,54 @@ def retry_sync(config: RetryConfig = None):
     """同步重试装饰器"""
     if config is None:
         config = RetryConfig()
-    
+
     def decorator(func: Callable):
         @wraps(func)
         def wrapper(*args, **kwargs):
             last_exception = None
-            
+
             for attempt in range(1, config.max_attempts + 1):
                 try:
                     return func(*args, **kwargs)
                 except Exception as e:
                     last_exception = e
-                    
+
                     if attempt == config.max_attempts:
                         logger.error(f"函数 {func.__name__} 重试 {config.max_attempts} 次后仍然失败")
                         break
-                    
+
                     if not RetryStrategy.should_retry(e, config):
                         logger.warning(f"函数 {func.__name__} 遇到不可重试异常: {e}")
                         break
-                    
+
                     delay = RetryStrategy.calculate_delay(attempt, config)
                     logger.warning(f"函数 {func.__name__} 第 {attempt} 次尝试失败，{delay:.2f}秒后重试: {e}")
-                    
+
                     time.sleep(delay)
-            
+
             raise last_exception
-        
+
         return wrapper
     return decorator
 
 class ErrorHandler:
     """统一错误处理器"""
-    
+
     def __init__(self):
-        self._error_callbacks: Dict[ErrorCategory, List[Callable]] = {}
-        self._global_callbacks: List[Callable] = []
-    
+        self._error_callbacks: dict[ErrorCategory, list[Callable]] = {}
+        self._global_callbacks: list[Callable] = []
+
     def register_error_callback(self, category: ErrorCategory, callback: Callable) -> None:
         """注册错误回调"""
         if category not in self._error_callbacks:
             self._error_callbacks[category] = []
         self._error_callbacks[category].append(callback)
-    
+
     def register_global_callback(self, callback: Callable) -> None:
         """注册全局错误回调"""
         self._global_callbacks.append(callback)
-    
-    async def handle_error(self, error: Exception, context: Optional[ErrorContext] = None) -> None:
+
+    async def handle_error(self, error: Exception, context: ErrorContext | None = None) -> None:
         """处理错误"""
         # 转换为标准异常格式
         if isinstance(error, SoerServiceException):
@@ -271,10 +272,10 @@ class ErrorHandler:
                 cause=error,
                 context=context
             )
-        
+
         # 记录错误日志
         self._log_error(service_error)
-        
+
         # 执行分类回调
         category_callbacks = self._error_callbacks.get(service_error.category, [])
         for callback in category_callbacks:
@@ -285,7 +286,7 @@ class ErrorHandler:
                     callback(service_error)
             except Exception as e:
                 logger.error(f"错误回调执行失败: {e}")
-        
+
         # 执行全局回调
         for callback in self._global_callbacks:
             try:
@@ -295,7 +296,7 @@ class ErrorHandler:
                     callback(service_error)
             except Exception as e:
                 logger.error(f"全局错误回调执行失败: {e}")
-    
+
     def _log_error(self, error: SoerServiceException) -> None:
         """记录错误日志"""
         log_data = {
@@ -306,7 +307,7 @@ class ErrorHandler:
             "context": error.context.__dict__ if error.context else {},
             "traceback": traceback.format_exc() if error.cause else None
         }
-        
+
         if error.severity == ErrorSeverity.CRITICAL:
             logger.critical("严重错误", extra=log_data)
         elif error.severity == ErrorSeverity.HIGH:
@@ -333,7 +334,7 @@ async def safe_execute_async(func: Callable, *args, default_return=None, **kwarg
         return default_return
 
 # 全局错误处理器实例
-_error_handler: Optional[ErrorHandler] = None
+_error_handler: ErrorHandler | None = None
 
 def get_error_handler() -> ErrorHandler:
     """获取全局错误处理器"""
@@ -345,4 +346,4 @@ def get_error_handler() -> ErrorHandler:
 def setup_error_handler(handler: ErrorHandler) -> None:
     """设置全局错误处理器"""
     global _error_handler
-    _error_handler = handler 
+    _error_handler = handler

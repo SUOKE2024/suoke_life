@@ -1,32 +1,32 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 老克智能体服务 - 测试配置
 提供测试夹具和共享资源
 """
 
-import os
-import pytest
 import asyncio
-from typing import Dict, Any, Generator, AsyncGenerator
+import os
+import sys
+from collections.abc import AsyncGenerator, Generator
+from typing import Any
 
+import pytest
 from fastapi.testclient import TestClient
 from httpx import AsyncClient
 
-import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from pkg.utils.config import Config
-from internal.delivery.dependencies import get_agent_manager, get_knowledge_service, get_community_service
 from cmd.server import app as fastapi_app
+
+from pkg.utils.config import Config
 
 # 测试环境变量
 os.environ["LAOKE_ENV"] = "test"
 os.environ["LAOKE_CONFIG_PATH"] = os.path.abspath(os.path.join(os.path.dirname(__file__), "../config/config.development.yaml"))
 
 @pytest.fixture(scope="session")
-def event_loop() -> Generator[asyncio.AbstractEventLoop, None, None]:
+def event_loop() -> Generator[asyncio.AbstractEventLoop]:
     """创建一个事件循环，供pytest-asyncio使用"""
     loop = asyncio.get_event_loop_policy().new_event_loop()
     yield loop
@@ -41,19 +41,19 @@ def config() -> Config:
     return config
 
 @pytest.fixture
-def test_client() -> Generator[TestClient, None, None]:
+def test_client() -> Generator[TestClient]:
     """创建TestClient实例，用于同步API测试"""
     with TestClient(fastapi_app) as client:
         yield client
 
 @pytest.fixture
-async def async_client() -> AsyncGenerator[AsyncClient, None]:
+async def async_client() -> AsyncGenerator[AsyncClient]:
     """创建AsyncClient实例，用于异步API测试"""
     async with AsyncClient(app=fastapi_app, base_url="http://test") as client:
         yield client
 
 @pytest.fixture
-def test_user_data() -> Dict[str, Any]:
+def test_user_data() -> dict[str, Any]:
     """创建测试用户数据"""
     return {
         "id": "test-user-id",
@@ -63,7 +63,7 @@ def test_user_data() -> Dict[str, Any]:
     }
 
 @pytest.fixture
-def mock_knowledge_article() -> Dict[str, Any]:
+def mock_knowledge_article() -> dict[str, Any]:
     """创建模拟知识文章数据"""
     return {
         "id": "test-article-id",
@@ -78,7 +78,7 @@ def mock_knowledge_article() -> Dict[str, Any]:
     }
 
 @pytest.fixture
-def mock_learning_path() -> Dict[str, Any]:
+def mock_learning_path() -> dict[str, Any]:
     """创建模拟学习路径数据"""
     return {
         "id": "test-path-id",
@@ -102,7 +102,7 @@ def mock_learning_path() -> Dict[str, Any]:
     }
 
 @pytest.fixture
-def mock_community_post() -> Dict[str, Any]:
+def mock_community_post() -> dict[str, Any]:
     """创建模拟社区帖子数据"""
     return {
         "id": "test-post-id",
@@ -132,9 +132,9 @@ def setup_and_teardown():
     # 测试前的设置
     yield
     # 测试后的清理
-    
+
     # 重置单例实例
     from internal.delivery import dependencies
     dependencies._agent_manager = None
     dependencies._knowledge_service = None
-    dependencies._community_service = None 
+    dependencies._community_service = None

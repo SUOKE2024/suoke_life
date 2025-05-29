@@ -9,6 +9,7 @@ import logging
 import signal
 import sys
 from pathlib import Path
+from typing import Any
 
 import yaml
 from flask import Flask
@@ -28,7 +29,7 @@ logger = logging.getLogger(__name__)
 class A2ANetworkService:
     """A2A 智能体网络服务"""
 
-    def __init__(self, config_path: str = None):
+    def __init__(self, config_path: str | None = None) -> None:
         """
         初始化服务
 
@@ -46,7 +47,7 @@ class A2ANetworkService:
 
         logger.info("A2A 智能体网络服务初始化完成")
 
-    def _load_config(self) -> dict:
+    def _load_config(self) -> dict[str, Any]:
         """加载配置文件"""
         try:
             config_file = Path(self.config_path)
@@ -59,7 +60,7 @@ class A2ANetworkService:
                 return self._get_default_config()
 
             with open(config_file, encoding="utf-8") as f:
-                config = yaml.safe_load(f)
+                config: dict[str, Any] = yaml.safe_load(f) or {}
                 logger.info(f"已加载配置文件: {config_file}")
                 return config
 
@@ -67,7 +68,7 @@ class A2ANetworkService:
             logger.error(f"加载配置文件失败: {e}")
             return self._get_default_config()
 
-    def _get_default_config(self) -> dict:
+    def _get_default_config(self) -> dict[str, Any]:
         """获取默认配置"""
         return {
             "server": {"host": "0.0.0.0", "port": 5000, "debug": False},
@@ -96,7 +97,7 @@ class A2ANetworkService:
             "logging": {"level": "INFO"},
         }
 
-    async def start(self):
+    async def start(self) -> None:
         """启动服务"""
         try:
             # 初始化智能体管理器
@@ -124,13 +125,17 @@ class A2ANetworkService:
             # 在单独的线程中运行 Flask
             import threading
 
-            flask_thread = threading.Thread(
-                target=lambda: self.app.run(
-                    host=host, port=port, debug=debug, use_reloader=False
-                ),
-                daemon=True,
-            )
-            flask_thread.start()
+            if self.app is not None:
+                app = self.app  # 类型断言
+                flask_thread = threading.Thread(
+                    target=lambda: app.run(
+                        host=host, port=port, debug=debug, use_reloader=False
+                    ),
+                    daemon=True,
+                )
+                flask_thread.start()
+            else:
+                raise RuntimeError("Flask应用未初始化")
 
             # 等待关闭信号
             await self._shutdown_event.wait()
@@ -139,7 +144,7 @@ class A2ANetworkService:
             logger.error(f"服务启动失败: {e}")
             raise
 
-    async def stop(self):
+    async def stop(self) -> None:
         """停止服务"""
         logger.info("正在停止 A2A 智能体网络服务...")
 
@@ -149,10 +154,10 @@ class A2ANetworkService:
         self._shutdown_event.set()
         logger.info("A2A 智能体网络服务已停止")
 
-    def _setup_signal_handlers(self):
+    def _setup_signal_handlers(self) -> None:
         """设置信号处理器"""
 
-        def signal_handler(signum, frame):
+        def signal_handler(signum: int, frame: Any) -> None:
             logger.info(f"收到信号 {signum}，准备关闭服务...")
             asyncio.create_task(self.stop())
 
@@ -160,7 +165,7 @@ class A2ANetworkService:
         signal.signal(signal.SIGTERM, signal_handler)
 
 
-async def main():
+async def main() -> None:
     """主函数"""
     import argparse
 

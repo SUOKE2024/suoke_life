@@ -6,6 +6,8 @@
 
 from datetime import datetime, timedelta
 import logging
+import os
+from pathlib import Path
 
 try:
     import aiosqlite
@@ -21,8 +23,9 @@ logger = logging.getLogger(__name__)
 class MazeRepository:
     """迷宫数据存储库 - 优化版本"""
 
-    def __init__(self, db_path: str = "data/mazes.db"):
-        self.db_path = db_path
+    def __init__(self):
+        self.db_path = os.environ.get("MAZE_DB_PATH", "data/maze.db")
+        logger.info(f"迷宫存储库初始化, 数据库路径: {self.db_path}")
         self._connection_pool = None
         self._initialized = False
 
@@ -35,7 +38,7 @@ class MazeRepository:
     async def _init_database(self):
         """初始化数据库和索引"""
         if not SQLITE_AVAILABLE:
-            logger.warning("SQLite不可用，使用内存存储")
+            logger.warning("SQLite不可用, 使用内存存储")
             self._mazes = {}
             return
 
@@ -91,14 +94,14 @@ class MazeRepository:
                 # 创建触发器保持FTS同步
                 await db.execute("""
                     CREATE TRIGGER IF NOT EXISTS mazes_fts_insert AFTER INSERT ON mazes BEGIN
-                        INSERT INTO mazes_fts(maze_id, description, tags) 
+                        INSERT INTO mazes_fts(maze_id, description, tags)
                         VALUES (new.maze_id, new.description, new.tags);
                     END
                 """)
 
                 await db.execute("""
                     CREATE TRIGGER IF NOT EXISTS mazes_fts_update AFTER UPDATE ON mazes BEGIN
-                        UPDATE mazes_fts SET description = new.description, tags = new.tags 
+                        UPDATE mazes_fts SET description = new.description, tags = new.tags
                         WHERE maze_id = new.maze_id;
                     END
                 """)
@@ -110,12 +113,17 @@ class MazeRepository:
                 """)
 
                 await db.commit()
-                logger.info("数据库初始化完成，索引已创建")
+                logger.info("数据库初始化完成, 索引已创建")
 
         except Exception as e:
             logger.error(f"数据库初始化失败: {e!s}")
             # 回退到内存存储
             self._mazes = {}
+
+    async def _get_db(self):
+        """获取数据库连接"""
+        # 确保数据库目录存在
+        Path(self.db_path).parent.mkdir(parents=True, exist_ok=True)
 
     async def save_maze(self, maze: Maze) -> Maze:
         """保存迷宫"""
@@ -128,8 +136,8 @@ class MazeRepository:
                     tags_str = ','.join(maze.tags) if maze.tags else ''
 
                     await db.execute("""
-                        INSERT OR REPLACE INTO mazes 
-                        (maze_id, user_id, maze_type, size_x, size_y, difficulty, 
+                        INSERT OR REPLACE INTO mazes
+                        (maze_id, user_id, maze_type, size_x, size_y, difficulty,
                          status, is_public, created_at, updated_at, completed_at,
                          maze_data, description, tags)
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -215,9 +223,9 @@ class MazeRepository:
                     where_clause = " AND ".join(where_conditions)
 
                     query = f"""
-                        SELECT maze_data FROM mazes 
+                        SELECT maze_data FROM mazes
                         WHERE {where_clause}
-                        ORDER BY created_at DESC 
+                        ORDER BY created_at DESC
                         LIMIT ? OFFSET ?
                     """
                     params.extend([limit, offset])
@@ -299,7 +307,7 @@ class MazeRepository:
                         LIMIT ? OFFSET ?
                     """
 
-                    search_params = [fts_query] + params + [limit, offset]
+                    search_params = [fts_query, *params, limit, offset]
                     cursor = await db.execute(search_query, search_params)
                     rows = await cursor.fetchall()
 
@@ -312,7 +320,7 @@ class MazeRepository:
                         WHERE fts MATCH ?
                         {where_clause}
                     """
-                    count_params = [fts_query] + params
+                    count_params = [fts_query, *params]
                     cursor = await db.execute(count_query, count_params)
                     total = (await cursor.fetchone())[0]
 
@@ -402,8 +410,8 @@ class MazeRepository:
             if SQLITE_AVAILABLE and hasattr(self, 'db_path'):
                 async with aiosqlite.connect(self.db_path) as db:
                     cursor = await db.execute("""
-                        SELECT maze_type, COUNT(*) 
-                        FROM mazes 
+                        SELECT maze_type, COUNT(*)
+                        FROM mazes
                         WHERE status = 'ACTIVE'
                         GROUP BY maze_type
                     """)
@@ -431,8 +439,8 @@ class MazeRepository:
             if SQLITE_AVAILABLE and hasattr(self, 'db_path'):
                 async with aiosqlite.connect(self.db_path) as db:
                     cursor = await db.execute("""
-                        DELETE FROM mazes 
-                        WHERE status = 'COMPLETED' 
+                        DELETE FROM mazes
+                        WHERE status = 'COMPLETED'
                         AND completed_at < ?
                     """, (cutoff_date,))
                     await db.commit()

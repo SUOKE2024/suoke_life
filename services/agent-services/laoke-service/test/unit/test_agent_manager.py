@@ -1,14 +1,14 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 老克智能体管理器单元测试
 """
 
-import pytest
 import asyncio
 import uuid
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, patch
+
+import pytest
 
 from internal.agent.agent_manager import AgentManager
 
@@ -72,7 +72,7 @@ class TestAgentManager:
         assert "answer" in result
         assert result["query"] == "中医四诊是什么？"
         assert result["metadata"]["session_id"] == session_id
-        
+
         # 验证模型调用
         model_factory_mock.generate_chat_completion.assert_called_once()
         call_args = model_factory_mock.generate_chat_completion.call_args[1]
@@ -100,7 +100,7 @@ class TestAgentManager:
         assert "content" in result
         assert result["topic"] == "太极拳基础入门"
         assert result["metadata"]["session_id"] == session_id
-        
+
         # 验证模型调用
         model_factory_mock.generate_chat_completion.assert_called_once()
         call_args = model_factory_mock.generate_chat_completion.call_args[1]
@@ -128,7 +128,7 @@ class TestAgentManager:
         assert "suggestion" in result
         assert result["action"] == "advice"
         assert result["metadata"]["session_id"] == session_id
-        
+
         # 验证模型调用
         model_factory_mock.generate_chat_completion.assert_called_once()
         call_args = model_factory_mock.generate_chat_completion.call_args[1]
@@ -156,7 +156,7 @@ class TestAgentManager:
         assert "learning_path" in result
         assert result["goal"] == "学习中医基础理论"
         assert result["metadata"]["session_id"] == session_id
-        
+
         # 验证模型调用
         model_factory_mock.generate_chat_completion.assert_called_once()
         call_args = model_factory_mock.generate_chat_completion.call_args[1]
@@ -181,7 +181,7 @@ class TestAgentManager:
         assert result["success"] is True
         assert "message" in result
         assert result["metadata"]["session_id"] == session_id
-        
+
         # 验证模型调用
         model_factory_mock.generate_chat_completion.assert_called_once()
 
@@ -195,7 +195,7 @@ class TestAgentManager:
             "type": "knowledge_query",
             "query": "中医四诊是什么？"
         }
-        
+
         # 模拟异常
         model_factory_mock.generate_chat_completion.side_effect = Exception("模型调用失败")
 
@@ -206,4 +206,4 @@ class TestAgentManager:
         assert result["success"] is False
         assert "error" in result
         assert "message" in result
-        assert result["metadata"]["session_id"] == session_id 
+        assert result["metadata"]["session_id"] == session_id

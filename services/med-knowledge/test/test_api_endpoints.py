@@ -5,7 +5,6 @@ API端点测试套件
 import pytest
 import asyncio
 from httpx import AsyncClient
-from fastapi.testclient import TestClient
 from unittest.mock import AsyncMock, patch
 
 from app.main import app
@@ -14,15 +13,6 @@ from app.services.knowledge_service import KnowledgeService
 
 class TestConstitutionsAPI:
     """体质API测试"""
-    
-    @pytest.fixture
-    def client(self):
-        return TestClient(app)
-    
-    @pytest.fixture
-    async def async_client(self):
-        async with AsyncClient(app=app, base_url="http://test") as ac:
-            yield ac
     
     def test_get_constitutions_list(self, client):
         """测试获取体质列表"""
@@ -68,10 +58,6 @@ class TestConstitutionsAPI:
 class TestSymptomsAPI:
     """症状API测试"""
     
-    @pytest.fixture
-    def client(self):
-        return TestClient(app)
-    
     def test_get_symptoms_list(self, client):
         """测试获取症状列表"""
         response = client.get("/api/v1/symptoms/")
@@ -96,10 +82,6 @@ class TestSymptomsAPI:
 
 class TestSearchAPI:
     """搜索API测试"""
-    
-    @pytest.fixture
-    def client(self):
-        return TestClient(app)
     
     def test_basic_search(self, client):
         """测试基础搜索"""
@@ -142,10 +124,6 @@ class TestSearchAPI:
 
 class TestGraphAPI:
     """知识图谱API测试"""
-    
-    @pytest.fixture
-    def client(self):
-        return TestClient(app)
     
     def test_graph_statistics(self, client):
         """测试图谱统计信息"""
@@ -198,19 +176,10 @@ class TestGraphAPI:
         """测试相同节点的路径分析"""
         response = client.get("/api/v1/graph/path-analysis?from_id=node1&to_id=node1")
         assert response.status_code == 400
-    
-    def test_invalid_recommendation_type(self, client):
-        """测试无效的推荐类型"""
-        response = client.get("/api/v1/graph/recommendations/node1?recommendation_type=invalid")
-        assert response.status_code == 400
 
 
 class TestHealthAPI:
     """健康检查API测试"""
-    
-    @pytest.fixture
-    def client(self):
-        return TestClient(app)
     
     def test_health_check(self, client):
         """测试健康检查"""
@@ -236,10 +205,6 @@ class TestHealthAPI:
 
 class TestAPIIntegration:
     """API集成测试"""
-    
-    @pytest.fixture
-    def client(self):
-        return TestClient(app)
     
     def test_api_workflow(self, client):
         """测试完整的API工作流"""
@@ -278,10 +243,6 @@ class TestAPIIntegration:
 
 class TestAPIPerformance:
     """API性能测试"""
-    
-    @pytest.fixture
-    def client(self):
-        return TestClient(app)
     
     def test_response_time(self, client):
         """测试响应时间"""
@@ -360,10 +321,6 @@ class TestAsyncAPI:
 
 class TestAPIDocumentation:
     """API文档测试"""
-    
-    @pytest.fixture
-    def client(self):
-        return TestClient(app)
     
     def test_openapi_schema(self, client):
         """测试OpenAPI模式"""

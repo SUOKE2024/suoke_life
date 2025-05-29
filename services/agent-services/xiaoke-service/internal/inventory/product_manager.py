@@ -1,26 +1,23 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 产品管理器
 负责农产品定制、溯源、支付处理和商品推荐等功能
 """
 
-import logging
-import uuid
-import json
-import time
 import hashlib
-import random
+import logging
+import time
+import uuid
 from datetime import datetime, timedelta
-from typing import Dict, List, Any, Optional
+from typing import Any
 
+from internal.agent.food_therapy_manager import FoodTherapyManager
+from internal.repository.blockchain_repository import BlockchainRepository
+from internal.repository.order_repository import OrderRepository
+from internal.repository.product_repository import ProductRepository
 from pkg.utils.config_loader import get_config
 from pkg.utils.metrics import get_metrics_collector
-from internal.repository.product_repository import ProductRepository
-from internal.repository.order_repository import OrderRepository
-from internal.repository.blockchain_repository import BlockchainRepository
-from internal.agent.food_therapy_manager import FoodTherapyManager
 
 logger = logging.getLogger(__name__)
 
@@ -76,14 +73,14 @@ class ProductManager:
         self,
         user_id: str,
         constitution_type: str,
-        health_conditions: List[str],
-        preferences: List[str],
+        health_conditions: list[str],
+        preferences: list[str],
         season: str,
         packaging_preference: str,
         quantity: int,
         need_delivery: bool,
         delivery_address: str,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         定制农产品
 
@@ -177,12 +174,12 @@ class ProductManager:
             }
 
         except Exception as e:
-            logger.error(f"产品定制失败: {str(e)}", exc_info=True)
+            logger.error(f"产品定制失败: {e!s}", exc_info=True)
             raise
 
     async def trace_product(
         self, product_id: str, batch_id: str, trace_token: str
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         农产品溯源
 
@@ -290,7 +287,7 @@ class ProductManager:
             }
 
         except Exception as e:
-            logger.error(f"产品溯源失败: {str(e)}", exc_info=True)
+            logger.error(f"产品溯源失败: {e!s}", exc_info=True)
             raise
 
     async def process_payment(
@@ -300,8 +297,8 @@ class ProductManager:
         payment_method: str,
         amount: float,
         currency: str,
-        metadata: Dict[str, str] = None,
-    ) -> Dict[str, Any]:
+        metadata: dict[str, str] | None = None,
+    ) -> dict[str, Any]:
         """
         处理支付请求
 
@@ -366,7 +363,7 @@ class ProductManager:
             }
 
         except Exception as e:
-            logger.error(f"支付处理失败: {str(e)}", exc_info=True)
+            logger.error(f"支付处理失败: {e!s}", exc_info=True)
             raise
 
     async def recommend_products(
@@ -374,10 +371,10 @@ class ProductManager:
         user_id: str,
         constitution_type: str,
         season: str,
-        health_conditions: List[str],
-        preferences: List[str],
+        health_conditions: list[str],
+        preferences: list[str],
         max_results: int = 10,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         商品推荐
 
@@ -432,7 +429,7 @@ class ProductManager:
             explanation = {
                 "seasonal": f"{season}季节适合食用的优质食材",
                 "constitution": f"适合{constitution_type}体质的特色食材",
-                "personalized": f"根据您的个人情况和偏好定制的推荐",
+                "personalized": "根据您的个人情况和偏好定制的推荐",
             }
 
             # 构建响应
@@ -444,16 +441,16 @@ class ProductManager:
             }
 
         except Exception as e:
-            logger.error(f"产品推荐失败: {str(e)}", exc_info=True)
+            logger.error(f"产品推荐失败: {e!s}", exc_info=True)
             raise
 
     def _customize_product_selection(
         self,
-        constitution_products: List[Dict[str, Any]],
-        seasonal_products: List[Dict[str, Any]],
-        preferences: List[str],
+        constitution_products: list[dict[str, Any]],
+        seasonal_products: list[dict[str, Any]],
+        preferences: list[str],
         target_quantity: int,
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """
         根据用户偏好定制产品选择
 
@@ -507,8 +504,8 @@ class ProductManager:
         return selected_products
 
     async def _apply_packaging_preferences(
-        self, products: List[Dict[str, Any]], packaging_preference: str
-    ) -> List[Dict[str, Any]]:
+        self, products: list[dict[str, Any]], packaging_preference: str
+    ) -> list[dict[str, Any]]:
         """
         应用包装偏好
 
@@ -560,8 +557,8 @@ class ProductManager:
         payment_method: str,
         amount: float,
         currency: str,
-        metadata: Dict[str, str],
-    ) -> Dict[str, Any]:
+        metadata: dict[str, str],
+    ) -> dict[str, Any]:
         """
         根据支付方式处理支付
 
@@ -630,10 +627,10 @@ class ProductManager:
         user_id: str,
         constitution_type: str,
         season: str,
-        health_conditions: List[str],
-        preferences: List[str],
+        health_conditions: list[str],
+        preferences: list[str],
         max_results: int,
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """
         获取个性化产品推荐
 
@@ -709,12 +706,12 @@ class ProductManager:
             return top_products
 
         except Exception as e:
-            logger.error(f"获取个性化推荐失败: {str(e)}", exc_info=True)
+            logger.error(f"获取个性化推荐失败: {e!s}", exc_info=True)
             # 出错时返回空列表
             return []
 
     def _calculate_constitution_match_score(
-        self, product: Dict[str, Any], constitution_type: str
+        self, product: dict[str, Any], constitution_type: str
     ) -> float:
         """计算产品与体质的匹配分数"""
         supported_types = product.get("constitution_benefits", {}).keys()
@@ -738,7 +735,7 @@ class ProductManager:
         return 0.2
 
     def _calculate_season_match_score(
-        self, product: Dict[str, Any], season: str
+        self, product: dict[str, Any], season: str
     ) -> float:
         """计算产品与季节的匹配分数"""
         product_seasons = product.get("seasons", [])
@@ -760,9 +757,9 @@ class ProductManager:
 
     def _calculate_preference_match_score(
         self,
-        product: Dict[str, Any],
-        preferences: List[str],
-        user_history: Dict[str, Any],
+        product: dict[str, Any],
+        preferences: list[str],
+        user_history: dict[str, Any],
     ) -> float:
         """计算产品与用户偏好的匹配分数"""
         # 偏好标签匹配
@@ -797,7 +794,7 @@ class ProductManager:
         return max(preference_score, history_score)
 
     def _calculate_health_match_score(
-        self, product: Dict[str, Any], health_conditions: List[str]
+        self, product: dict[str, Any], health_conditions: list[str]
     ) -> float:
         """计算产品与健康状况的匹配分数"""
         if not health_conditions:
@@ -824,11 +821,11 @@ class ProductManager:
 
     def _generate_recommendation_reason(
         self,
-        product: Dict[str, Any],
+        product: dict[str, Any],
         constitution_type: str,
         season: str,
-        health_conditions: List[str],
-        preferences: List[str],
+        health_conditions: list[str],
+        preferences: list[str],
     ) -> str:
         """生成产品推荐理由"""
         reasons = []

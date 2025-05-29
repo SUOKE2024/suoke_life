@@ -1,31 +1,43 @@
 """
 主应用入口
 
-区块链服务的主要入口点，负责应用的创建和启动。
+区块链服务的主要入口点, 负责应用的创建和启动。
 """
 
 from __future__ import annotations
 
 import asyncio
-from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
+from typing import TYPE_CHECKING
 
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 import typer
 import uvicorn
 
 from .config import settings
 from .database import close_database, init_database
 from .grpc_server import GRPCServer
-from .logging import configure_logging, logger
+from .logging import configure_logging, get_logger
 from .monitoring import setup_monitoring
+
+if TYPE_CHECKING:
+    from collections.abc import AsyncGenerator
+
+logger = get_logger(__name__)
+
+# 创建 Typer 应用
+cli = typer.Typer(
+    name="blockchain-service",
+    help="索克生活区块链服务",
+    add_completion=False,
+)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
     """应用生命周期管理"""
-    logger.info("启动区块链服务", version=settings.app_version)
+    # 启动时初始化
+    logger.info("启动区块链服务")
 
     # 初始化数据库
     await init_database()
@@ -33,151 +45,141 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
     # 设置监控
     setup_monitoring(app)
 
-    # 启动 gRPC 服务器
-    grpc_server = GRPCServer()
-    await grpc_server.start()
-
     logger.info("区块链服务启动完成")
 
     yield
 
-    # 清理资源
-    logger.info("正在关闭区块链服务")
-    await grpc_server.stop()
+    # 关闭时清理
+    logger.info("关闭区块链服务")
     await close_database()
     logger.info("区块链服务已关闭")
 
 
 def create_app() -> FastAPI:
-    """创建 FastAPI 应用实例"""
-
-    # 配置日志
-    configure_logging()
-
+    """创建 FastAPI 应用"""
     app = FastAPI(
         title=settings.app_name,
-        version=settings.app_version,
         description="索克生活区块链服务 - 健康数据的区块链存储、验证和访问控制",
-        lifespan=lifespan,
+        version="0.1.0",
         debug=settings.debug,
+        lifespan=lifespan,
     )
 
-    # 添加 CORS 中间件
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=settings.security.cors_origins,
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
-
-    # 健康检查端点
     @app.get("/health")
-    async def health_check():
+    async def health_check() -> dict[str, str]:
         """健康检查端点"""
-        return {
-            "status": "healthy",
-            "service": settings.app_name,
-            "version": settings.app_version,
-            "environment": settings.environment,
-        }
+        return {"status": "healthy", "service": "blockchain-service"}
 
-    # 就绪检查端点
-    @app.get("/ready")
-    async def readiness_check():
-        """就绪检查端点"""
-        # TODO: 检查数据库连接、区块链连接等
+    @app.get("/")
+    async def root() -> dict[str, str]:
+        """根端点"""
         return {
-            "status": "ready",
-            "service": settings.app_name,
-            "version": settings.app_version,
+            "service": "SuoKe Blockchain Service",
+            "version": "0.1.0",
+            "status": "running"
         }
 
     return app
 
 
-# CLI 应用
-cli_app = typer.Typer(
-    name="blockchain-service",
-    help="索克生活区块链服务命令行工具",
-)
-
-
-@cli_app.command()
+@cli.command()
 def serve(
     host: str = typer.Option(
         settings.grpc.host,
         "--host",
-        "-h",
-        help="服务主机地址",
+        help="gRPC 服务器主机地址",
     ),
     port: int = typer.Option(
         settings.grpc.port,
         "--port",
-        "-p",
-        help="服务端口",
+        help="gRPC 服务器端口",
+    ),
+    http_port: int = typer.Option(
+        8080,
+        "--http-port",
+        help="HTTP 服务器端口",
+    ),
+    workers: int = typer.Option(
+        1,
+        "--workers",
+        help="工作进程数量",
     ),
     reload: bool = typer.Option(
         False,
         "--reload",
-        help="启用自动重载（开发模式）",
+        help="启用自动重载(开发模式)",
     ),
 ) -> None:
     """启动区块链服务"""
-
+    # 配置日志
     configure_logging()
+
     logger.info(
         "启动区块链服务",
         host=host,
-        port=port,
-        environment=settings.environment,
+        grpc_port=port,
+        http_port=http_port,
+        workers=workers,
+        reload=reload,
     )
 
-    # 创建 FastAPI 应用（用于健康检查等）
+    # 创建 FastAPI 应用(用于健康检查等)
     app = create_app()
 
-    # 启动 HTTP 服务器（用于健康检查）
+    # 启动 HTTP 服务器(用于健康检查)
     uvicorn.run(
         app,
-        host="0.0.0.0",
-        port=8080,
-        reload=reload and settings.is_development,
+        host=host,
+        port=http_port,
+        workers=workers,
+        reload=reload,
         log_config=None,  # 使用我们自己的日志配置
     )
 
 
-@cli_app.command()
-def deploy_contracts() -> None:
-    """部署智能合约"""
-    from .blockchain.deployer import ContractDeployer
-
+@cli.command()
+def grpc_serve(
+    host: str = typer.Option(
+        settings.grpc.host,
+        "--host",
+        help="gRPC 服务器主机地址",
+    ),
+    port: int = typer.Option(
+        settings.grpc.port,
+        "--port",
+        help="gRPC 服务器端口",
+    ),
+) -> None:
+    """启动 gRPC 服务器"""
+    # 配置日志
     configure_logging()
-    logger.info("开始部署智能合约")
 
-    deployer = ContractDeployer()
-    asyncio.run(deployer.deploy_all())
+    logger.info("启动 gRPC 服务器", host=host, port=port)
 
-    logger.info("智能合约部署完成")
+    async def run_grpc_server() -> None:
+        """运行 gRPC 服务器"""
+        # 初始化数据库
+        await init_database()
 
+        # 创建并启动 gRPC 服务器
+        server = GRPCServer()
+        await server.start(host, port)
 
-@cli_app.command()
-def migrate_db() -> None:
-    """运行数据库迁移"""
-    from alembic import command
-    from alembic.config import Config
+        try:
+            # 保持服务器运行
+            await server.wait_for_termination()
+        finally:
+            # 清理资源
+            await server.stop()
+            await close_database()
 
-    configure_logging()
-    logger.info("开始数据库迁移")
-
-    alembic_cfg = Config("alembic.ini")
-    command.upgrade(alembic_cfg, "head")
-
-    logger.info("数据库迁移完成")
+    # 运行异步服务器
+    asyncio.run(run_grpc_server())
 
 
 def main() -> None:
-    """主入口点"""
-    cli_app()
+    """主入口函数"""
+    cli()
 
 
 if __name__ == "__main__":

@@ -2,10 +2,13 @@
 智能对话 API 端点
 """
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
+from xiaoke_service.core.logging import get_logger
+
 router = APIRouter()
+logger = get_logger(__name__)
 
 
 class ChatRequest(BaseModel):
@@ -29,17 +32,39 @@ class ChatResponse(BaseModel):
 @router.post("/", response_model=ChatResponse)
 async def chat(request: ChatRequest) -> ChatResponse:
     """智能对话接口"""
-    # TODO: 实现实际的AI对话逻辑
-    return ChatResponse(
-        response=f"小克收到您的消息：{request.message}。这是一个示例回复。",
-        session_id=request.session_id or "default-session",
-        confidence=0.95,
-        suggestions=["了解更多中医知识", "查看健康建议", "预约专家咨询"],
-    )
+    try:
+        logger.info(f"收到对话请求: user_id={request.user_id}, session_id={request.session_id}")
+
+        # 基础对话逻辑框架
+        session_id = request.session_id or f"session_{request.user_id or 'anonymous'}"
+
+        # 这里应该调用实际的AI对话服务
+        response_text = f"小克收到您的消息: {request.message}。正在为您分析健康状况..."
+
+        return ChatResponse(
+            response=response_text,
+            session_id=session_id,
+            confidence=0.85,
+            suggestions=["查看中医体质分析", "获取个性化健康建议", "预约专家咨询"],
+        )
+    except Exception as e:
+        logger.error(f"对话处理失败: {e!s}")
+        raise HTTPException(status_code=500, detail="对话处理失败") from e
 
 
 @router.get("/sessions/{session_id}/history")
 async def get_chat_history(session_id: str) -> dict:
     """获取对话历史"""
-    # TODO: 实现对话历史查询
-    return {"session_id": session_id, "messages": [], "total_count": 0}
+    try:
+        logger.info(f"查询对话历史: session_id={session_id}")
+
+        # 这里应该从数据库查询实际的对话历史
+        return {
+            "session_id": session_id,
+            "messages": [],
+            "total_count": 0,
+            "status": "success"
+        }
+    except Exception as e:
+        logger.error(f"查询对话历史失败: {e!s}")
+        raise HTTPException(status_code=500, detail="查询对话历史失败") from e

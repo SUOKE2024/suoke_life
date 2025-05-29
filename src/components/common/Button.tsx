@@ -54,6 +54,7 @@ export const Button: React.FC<ButtonProps> = ({
     >
       {loading ? (
         <ActivityIndicator
+          testID="activity-indicator"
           size="small"
           color={variant === 'primary' ? colors.surface : colors.primary}
         />

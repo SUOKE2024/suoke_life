@@ -53,10 +53,10 @@ git clone https://github.com/SUOKE2024/suoke_life.git
 cd suoke_life/services/suoke-bench-service
 
 # 安装依赖
-pip install -r requirements.txt
+uv sync
 
-# 开发依赖
-pip install -r requirements-dev.txt
+# 启动服务
+uv run uvicorn cmd.server.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 ### 初始化环境
@@ -69,16 +69,6 @@ make bench.setup
 
 # 或手动运行
 python -m internal.suokebench.setup
-```
-
-### 运行服务
-
-```bash
-# 使用FastAPI启动REST API服务
-make start
-
-# 或手动运行
-uvicorn cmd.server.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 ### 访问API文档
@@ -264,7 +254,7 @@ jobs:
           python-version: '3.10'
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt
+          uv sync
       - name: Run benchmarks
         run: |
           python -m internal.suokebench.runner --ci

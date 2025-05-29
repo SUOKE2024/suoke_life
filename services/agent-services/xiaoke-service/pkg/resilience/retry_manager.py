@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 重试和弹性管理器
 提供智能重试、熔断器模式和错误恢复机制
@@ -7,12 +6,13 @@
 
 import asyncio
 import logging
-import time
 import random
-from typing import Any, Callable, Dict, List, Optional, Type, Union
+import time
+from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum
 from functools import wraps
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -44,7 +44,7 @@ class RetryConfig:
     strategy: RetryStrategy = RetryStrategy.EXPONENTIAL
     backoff_multiplier: float = 2.0
     jitter: bool = True
-    retryable_exceptions: List[Type[Exception]] = None
+    retryable_exceptions: list[type[Exception]] = None
 
 
 @dataclass
@@ -53,7 +53,7 @@ class CircuitBreakerConfig:
 
     failure_threshold: int = 5  # 失败阈值
     recovery_timeout: float = 60.0  # 恢复超时时间
-    expected_exception: Type[Exception] = Exception
+    expected_exception: type[Exception] = Exception
     success_threshold: int = 3  # 半开状态成功阈值
 
 
@@ -107,7 +107,7 @@ class CircuitBreaker:
             self._on_success()
             return result
 
-        except self.config.expected_exception as e:
+        except self.config.expected_exception:
             self._on_failure()
             raise
 
@@ -146,7 +146,7 @@ class RetryManager:
 
     def __init__(self):
         """初始化重试管理器"""
-        self.circuit_breakers: Dict[str, CircuitBreaker] = {}
+        self.circuit_breakers: dict[str, CircuitBreaker] = {}
         self.retry_stats = {
             "total_attempts": 0,
             "successful_retries": 0,
@@ -179,7 +179,7 @@ class RetryManager:
         self,
         func: Callable,
         config: RetryConfig = None,
-        circuit_breaker_name: str = None,
+        circuit_breaker_name: str | None = None,
         *args,
         **kwargs,
     ) -> Any:
@@ -211,11 +211,10 @@ class RetryManager:
                 # 通过熔断器调用函数
                 if circuit_breaker:
                     result = await circuit_breaker.call(func, *args, **kwargs)
+                elif asyncio.iscoroutinefunction(func):
+                    result = await func(*args, **kwargs)
                 else:
-                    if asyncio.iscoroutinefunction(func):
-                        result = await func(*args, **kwargs)
-                    else:
-                        result = func(*args, **kwargs)
+                    result = func(*args, **kwargs)
 
                 if attempt > 0:
                     self.retry_stats["successful_retries"] += 1
@@ -227,13 +226,12 @@ class RetryManager:
                 last_exception = e
 
                 # 检查是否为可重试异常
-                if config.retryable_exceptions:
-                    if not any(
-                        isinstance(e, exc_type)
-                        for exc_type in config.retryable_exceptions
-                    ):
-                        logger.warning("遇到不可重试异常: %s", str(e))
-                        break
+                if config.retryable_exceptions and not any(
+                    isinstance(e, exc_type)
+                    for exc_type in config.retryable_exceptions
+                ):
+                    logger.warning("遇到不可重试异常: %s", str(e))
+                    break
 
                 # 检查是否为熔断器开启异常
                 if isinstance(e, CircuitBreakerOpenException):
@@ -248,30 +246,30 @@ class RetryManager:
                 delay = self._calculate_delay(attempt, config)
 
                 logger.warning(
-                    "第 %d 次尝试失败: %s，%s 秒后重试", attempt + 1, str(e), delay
+                    "第 %d 次尝试失败: %s, %s 秒后重试", attempt + 1, str(e), delay
                 )
 
                 await asyncio.sleep(delay)
 
         # 所有重试都失败
         self.retry_stats["failed_retries"] += 1
-        logger.error("重试失败，已达到最大尝试次数: %d", config.max_attempts)
+        logger.error("重试失败, 已达到最大尝试次数: %d", config.max_attempts)
 
         if last_exception:
             raise last_exception
         else:
-            raise RuntimeError("重试失败，未知错误")
+            raise RuntimeError("重试失败, 未知错误")
 
     def _calculate_delay(self, attempt: int, config: RetryConfig) -> float:
         """
         计算延迟时间
 
         Args:
-            attempt: 当前尝试次数（从0开始）
+            attempt: 当前尝试次数(从0开始)
             config: 重试配置
 
         Returns:
-            延迟时间（秒）
+            延迟时间(秒)
         """
         if config.strategy == RetryStrategy.FIXED:
             delay = config.base_delay
@@ -295,7 +293,7 @@ class RetryManager:
 
         return delay
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """获取重试统计信息"""
         circuit_breaker_stats = {}
         for name, cb in self.circuit_breakers.items():
@@ -320,8 +318,8 @@ def retry(
     strategy: RetryStrategy = RetryStrategy.EXPONENTIAL,
     backoff_multiplier: float = 2.0,
     jitter: bool = True,
-    retryable_exceptions: List[Type[Exception]] = None,
-    circuit_breaker_name: str = None,
+    retryable_exceptions: list[type[Exception]] | None = None,
+    circuit_breaker_name: str | None = None,
 ):
     """
     重试装饰器
@@ -364,7 +362,7 @@ def circuit_breaker(
     name: str,
     failure_threshold: int = 5,
     recovery_timeout: float = 60.0,
-    expected_exception: Type[Exception] = Exception,
+    expected_exception: type[Exception] = Exception,
     success_threshold: int = 3,
 ):
     """
@@ -399,7 +397,7 @@ def circuit_breaker(
 
 
 # 全局重试管理器实例
-_retry_manager: Optional[RetryManager] = None
+_retry_manager: RetryManager | None = None
 
 
 def get_retry_manager() -> RetryManager:

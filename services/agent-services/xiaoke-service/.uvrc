@@ -1,0 +1,16 @@
+# UV 配置文件
+# 使用清华大学 PyPI 镜像源
+index-url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+
+# 额外的镜像源
+extra-index-url = [
+    "https://mirrors.aliyun.com/pypi/simple/",
+    "https://pypi.douban.com/simple/"
+]
+
+# 信任的主机
+trusted-host = [
+    "pypi.tuna.tsinghua.edu.cn",
+    "mirrors.aliyun.com",
+    "pypi.douban.com"
+] 

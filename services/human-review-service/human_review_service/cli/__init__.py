@@ -7,4 +7,4 @@ CLI Tools
 
 from .main import cli
 
-__all__ = ["cli"] 
+__all__ = ["cli"]
