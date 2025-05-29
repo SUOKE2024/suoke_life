@@ -202,3 +202,10 @@ Desktop.ini
 
 # Linux
 *~
+
+# Jest和测试缓存
+.jest-cache/
+test-results/
+
+# Ruff缓存
+.ruff_cache/
