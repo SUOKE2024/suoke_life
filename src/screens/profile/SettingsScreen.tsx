@@ -7,6 +7,9 @@ import { MainStackParamList } from "../../navigation/MainNavigator";
 import React from "react";
 
 
+
+
+
   View,
   Text,
   StyleSheet,

@@ -3,6 +3,9 @@ import { colors, spacing, fonts } from '../../constants/theme';
 import { API_CONFIG } from '../../constants/config';
 
 
+
+
+
 import React, { useState, useEffect } from 'react';
   View,
   Text,
@@ -27,7 +30,7 @@ interface ServiceInfo {
 }
 
 export const ServiceManagementScreen: React.FC = () => {
-  const navigation = useMemo(() => useMemo(() => useMemo(() => useNavigation(), []), []), []);
+  const navigation = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useNavigation(), []), []), []), []), []), []);
   const [loading, setLoading] = useState(false);
   const [services, setServices] = useState<ServiceInfo[]>([]);
   const [autoStart, setAutoStart] = useState(false);
@@ -35,9 +38,9 @@ export const ServiceManagementScreen: React.FC = () => {
   useEffect(() => {
     // 初始化服务列表
     initializeServices();
-  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
+  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
 
-  const initializeServices = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const initializeServices = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     // 创建服务列表
     const servicesList: ServiceInfo[] = [
       // 智能体服务
@@ -151,18 +154,18 @@ export const ServiceManagementScreen: React.FC = () => {
   };
 
   // 检查服务状态
-  const checkServicesStatus = useMemo(() => useMemo(() => useMemo(() => async (servicesList: ServiceInfo[]) => {
-    setLoading(true), []), []), []);
+  const checkServicesStatus = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async (servicesList: ServiceInfo[]) => {
+    setLoading(true), []), []), []), []), []), []);
     
     try {
-      const updatedServices = useMemo(() => useMemo(() => useMemo(() => [...(servicesList || services)], []), []), []);
+      const updatedServices = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => [...(servicesList || services)], []), []), []), []), []), []);
       
       // 使用AbortController实现超时功能
-      const controller = useMemo(() => useMemo(() => useMemo(() => new AbortController(), []), []), []);
-      const timeoutId = useMemo(() => useMemo(() => useMemo(() => setTimeout(() => controller.abort(), 3000), []), []), []);
+      const controller = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => new AbortController(), []), []), []), []), []), []);
+      const timeoutId = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => setTimeout(() => controller.abort(), 3000), []), []), []), []), []), []);
       
       // 并行检查所有服务
-      const checkPromises = useMemo(() => useMemo(() => useMemo(() => updatedServices.map(async (service) => {
+      const checkPromises = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => updatedServices.map(async (service) => {
         try {
           const response = await fetch(`${service.baseUrl}/health`, {
             method: 'GET',
@@ -170,7 +173,7 @@ export const ServiceManagementScreen: React.FC = () => {
               'Accept': 'application/json',
             },
             signal: controller.signal,
-          }), []), []), []);
+          }), []), []), []), []), []), []);
           
           return {
             id: service.id,
@@ -187,12 +190,12 @@ export const ServiceManagementScreen: React.FC = () => {
       });
       
       // 等待所有检查完成
-      const results = useMemo(() => useMemo(() => useMemo(() => await Promise.all(checkPromises), []), []), []);
+      const results = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => await Promise.all(checkPromises), []), []), []), []), []), []);
       clearTimeout(timeoutId);
       
       // 更新服务状态
       results.forEach(result => {
-        const index = useMemo(() => useMemo(() => useMemo(() => updatedServices.findIndex(s => s.id === result.id), []), []), []);
+        const index = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => updatedServices.findIndex(s => s.id === result.id), []), []), []), []), []), []);
         if (index !== -1) {
           updatedServices[index] = {
             ...updatedServices[index],
@@ -212,13 +215,13 @@ export const ServiceManagementScreen: React.FC = () => {
   };
 
   // 启动服务
-  const startService = useMemo(() => useMemo(() => useMemo(() => async (serviceId: string) => {
+  const startService = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async (serviceId: string) => {
     // 更新服务状态为启动中
     setServices(prev => prev.map(s => 
       s.id === serviceId 
         ? { ...s, status: 'starting', lastAction: '正在启动...' } 
         : s
-    )), []), []), []);
+    )), []), []), []), []), []), []);
     
     try {
       // 通常这里会调用后端API启动服务，这里模拟一下
@@ -251,13 +254,13 @@ export const ServiceManagementScreen: React.FC = () => {
   };
 
   // 停止服务
-  const stopService = useMemo(() => useMemo(() => useMemo(() => async (serviceId: string) => {
+  const stopService = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async (serviceId: string) => {
     // 更新服务状态为停止中
     setServices(prev => prev.map(s => 
       s.id === serviceId 
         ? { ...s, status: 'stopping', lastAction: '正在停止...' } 
         : s
-    )), []), []), []);
+    )), []), []), []), []), []), []);
     
     try {
       // 通常这里会调用后端API停止服务，这里模拟一下
@@ -290,13 +293,13 @@ export const ServiceManagementScreen: React.FC = () => {
   };
 
   // 重启服务
-  const restartService = useMemo(() => useMemo(() => useMemo(() => async (serviceId: string) => {
+  const restartService = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async (serviceId: string) => {
     // 更新服务状态为停止中
     setServices(prev => prev.map(s => 
       s.id === serviceId 
         ? { ...s, status: 'stopping', lastAction: '正在重启...' } 
         : s
-    )), []), []), []);
+    )), []), []), []), []), []), []);
     
     try {
       // 通常这里会调用后端API重启服务，这里模拟一下
@@ -329,8 +332,8 @@ export const ServiceManagementScreen: React.FC = () => {
   };
 
   // 启动所有服务
-  const startAllServices = useMemo(() => useMemo(() => useMemo(() => async () => {
-    if (loading) {return, []), []), []);}
+  const startAllServices = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async () => {
+    if (loading) {return, []), []), []), []), []), []);}
     
     setLoading(true);
     Alert.alert('确认', '确定要启动所有服务吗？这可能需要一些时间。', [
@@ -377,8 +380,8 @@ export const ServiceManagementScreen: React.FC = () => {
   };
 
   // 停止所有服务
-  const stopAllServices = useMemo(() => useMemo(() => useMemo(() => async () => {
-    if (loading) {return, []), []), []);}
+  const stopAllServices = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async () => {
+    if (loading) {return, []), []), []), []), []), []);}
     
     setLoading(true);
     Alert.alert('确认', '确定要停止所有服务吗？这将中断所有正在进行的操作。', [
@@ -425,17 +428,17 @@ export const ServiceManagementScreen: React.FC = () => {
   };
 
   // 刷新服务状态
-  const refreshServicesStatus = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const refreshServicesStatus = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     checkServicesStatus(services);
   };
 
   // 返回处理
-  const handleBack = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const handleBack = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     navigation.goBack();
   };
 
   // 获取服务状态样式
-  const getStatusStyle = useMemo(() => useMemo(() => useMemo(() => useCallback( (status: string) => {, []), []), []), []);
+  const getStatusStyle = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (status: string) => {, []), []), []), []), []), []), []);
     switch (status) {
       case 'running':
         return styles.statusRunning;
@@ -451,7 +454,7 @@ export const ServiceManagementScreen: React.FC = () => {
   };
 
   // 获取服务状态文本
-  const getStatusText = useMemo(() => useMemo(() => useMemo(() => useCallback( (status: string) => {, []), []), []), []);
+  const getStatusText = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (status: string) => {, []), []), []), []), []), []), []);
     switch (status) {
       case 'running':
         return '运行中';
@@ -467,8 +470,8 @@ export const ServiceManagementScreen: React.FC = () => {
   };
 
   // 渲染服务项
-  const renderServiceItem = useMemo(() => useMemo(() => useMemo(() => useCallback( (service: ServiceInfo) => {, []), []), []), []);
-    const isDisabled = useMemo(() => useMemo(() => useMemo(() => service.status === 'starting' || service.status === 'stopping', []), []), []);
+  const renderServiceItem = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (service: ServiceInfo) => {, []), []), []), []), []), []), []);
+    const isDisabled = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => service.status === 'starting' || service.status === 'stopping', []), []), []), []), []), []);
     
     return (
       <View key={service.id} style={styles.serviceItem}>
@@ -600,7 +603,7 @@ export const ServiceManagementScreen: React.FC = () => {
   );
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -795,4 +798,4 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
     fontSize: fonts.size.md,
     marginTop: spacing.md,
   },
-}), []), []), []); 
+}), []), []), []), []), []), []); 

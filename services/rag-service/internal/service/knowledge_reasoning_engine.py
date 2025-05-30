@@ -1090,4 +1090,40 @@ class KnowledgeReasoningEngine:
                 "metadata": result.metadata
             })
         
-        return export_data 
+        return export_data
+    
+    async def auto_learn_rules(self):
+        """从推理历史自动挖掘新规则"""
+        # 简化示例：统计高频证据-结论对，自动生成规则
+        evidence_conclusion_count = {}
+        for result in self.reasoning_history:
+            key = tuple(sorted([(e.type.value, e.name) for e in result.evidence_used])) + (result.conclusion,)
+            evidence_conclusion_count[key] = evidence_conclusion_count.get(key, 0) + 1
+        for key, count in evidence_conclusion_count.items():
+            if count > 3:  # 阈值可配置
+                # 自动生成规则
+                evidence_list = [{'type': t, 'name': n} for t, n in key[:-1]]
+                conclusion = key[-1]
+                rule = ReasoningRule(
+                    id=str(uuid.uuid4()),
+                    name=f"AutoLearned-{conclusion}",
+                    description="自动学习生成",
+                    reasoning_type=ReasoningType.SYNDROME_DIFFERENTIATION,
+                    conditions=evidence_list,
+                    conclusions=[{'conclusion': conclusion}],
+                    confidence_weight=0.8,
+                    priority=2,
+                    enabled=True
+                )
+                self.reasoning_rules[rule.id] = rule
+        logger.info("推理规则自动学习完成")
+
+    async def auto_evolve_knowledge(self):
+        """根据推理结果自动补全知识图谱"""
+        # 简化示例：将高置信度结论补全到知识图谱
+        for result in self.reasoning_history:
+            if result.confidence > 0.85:
+                # 假设conclusion为节点名
+                if not self.knowledge_graph.has_node(result.conclusion):
+                    self.knowledge_graph.add_node(result.conclusion, type='auto_evolved')
+        logger.info("知识图谱自进化完成") 

@@ -68,3 +68,29 @@ class HealthDataService(BaseService[HealthData]):
             .order_by(self.model.created_at.desc())
             .first()
         )
+
+
+class HealthDataIntegrationService:
+    """
+    只负责第三方系统对接、数据格式转换与合规校验，不实现业务决策逻辑。
+    所有健康数据、诊断结果等接口均推荐采用FHIR、OpenAPI Schema等标准格式。
+    """
+    def __init__(self):
+        pass
+
+    def receive_external_data(self, data: dict) -> dict:
+        """接收第三方系统数据，转换为FHIR标准格式"""
+        # TODO: 实现数据格式转换
+        fhir_data = self._convert_to_fhir(data)
+        # 合规校验
+        if not self._validate_fhir(fhir_data):
+            raise ValueError("数据不符合FHIR标准")
+        return fhir_data
+
+    def _convert_to_fhir(self, data: dict) -> dict:
+        # TODO: 实现具体转换逻辑
+        return {"resourceType": "Observation", **data}
+
+    def _validate_fhir(self, fhir_data: dict) -> bool:
+        # TODO: 实现FHIR格式校验
+        return "resourceType" in fhir_data

@@ -1,6 +1,10 @@
 module.exports = {
   root: true,
-  extends: ['@react-native'],
+  extends: ['@react-native', 'plugin:security/recommended'],
+  plugins: [
+    'security',
+    'privacy',
+  ],
   rules: {
     // 关闭格式化相关规则
     'prettier/prettier': 'off',
@@ -15,6 +19,15 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     'no-fallthrough': 'warn',
     'no-new': 'warn',
+    // 禁止console输出敏感信息
+    'no-console': [
+      'error',
+      {
+        allow: ['warn', 'error', 'info']
+      }
+    ],
+    // 自定义规则：禁止明文手机号、身份证号等敏感信息
+    'privacy/no-plain-sensitive-data': 'warn',
   },
   env: {
     jest: true,

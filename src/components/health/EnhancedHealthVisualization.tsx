@@ -6,6 +6,9 @@ import { colors, spacing, typography } from '../../constants/theme';
 import { useHealthData } from '../../hooks/useHealthData';
 
 
+
+
+
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
   View,
   Text,
@@ -19,7 +22,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
-const chartWidth = useMemo(() => useMemo(() => useMemo(() => width - spacing.lg * 2, []), []), []);
+const chartWidth = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => width - spacing.lg * 2, []), []), []), []), []), []);
 
 interface HealthMetric {
   id: string;
@@ -189,20 +192,20 @@ export const EnhancedHealthVisualization: React.FC<EnhancedHealthVisualizationPr
     }).start();
   }, []);
 
-  const onRefresh = useMemo(() => useMemo(() => useMemo(() => useCallback(async () => {
-    setRefreshing(true), []), []), []);
+  const onRefresh = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback(async () => {
+    setRefreshing(true), []), []), []), []), []), []);
     await refreshData();
     setRefreshing(false);
   }, [refreshData]);
 
-  const handleMetricPress = useMemo(() => useMemo(() => useMemo(() => useCallback((metric: HealthMetric) => {
-    setSelectedMetric(metric.id), []), []), []);
+  const handleMetricPress = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback((metric: HealthMetric) => {
+    setSelectedMetric(metric.id), []), []), []), []), []), []);
     onMetricPress?.(metric);
   }, [onMetricPress]);
 
-  const getStatusColor = useMemo(() => useMemo(() => useMemo(() => useCallback((status: string) => {
+  const getStatusColor = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback((status: string) => {
     switch (status) {
-      case 'excellent': return colors.health.excellent, []), []), []);
+      case 'excellent': return colors.health.excellent, []), []), []), []), []), []);
       case 'good': return colors.health.good;
       case 'fair': return colors.health.fair;
       case 'poor': return colors.health.poor;
@@ -210,7 +213,7 @@ export const EnhancedHealthVisualization: React.FC<EnhancedHealthVisualizationPr
     }
   }, []);
 
-  const chartConfig = useMemo(() => useMemo(() => useMemo(() => useMemo(() => ({
+  const chartConfig = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => ({
     backgroundColor: colors.surface,
     backgroundGradientFrom: colors.surface,
     backgroundGradientTo: colors.surface,
@@ -225,9 +228,9 @@ export const EnhancedHealthVisualization: React.FC<EnhancedHealthVisualizationPr
       strokeWidth: '2',
       stroke: colors.primary,
     },
-  }), []), []), []), []);
+  }), []), []), []), []), []), []), []);
 
-  const renderMetricCard = useMemo(() => useMemo(() => useMemo(() => useCallback((metric: HealthMetric, index: number) => (
+  const renderMetricCard = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback((metric: HealthMetric, index: number) => (
     <Animated.View
       key={metric.id}
       style={[
@@ -298,10 +301,10 @@ export const EnhancedHealthVisualization: React.FC<EnhancedHealthVisualizationPr
         </Card>
       </TouchableOpacity>
     </Animated.View>
-  ), [animatedValue, handleMetricPress, getStatusColor]), []), []), []);
+  ), [animatedValue, handleMetricPress, getStatusColor]), []), []), []), []), []), []);
 
-  const renderTrendChart = useMemo(() => useMemo(() => useMemo(() => useCallback(() => {
-    const selectedMetricData = healthMetrics.find(m => m.id === selectedMetric), []), []), []);
+  const renderTrendChart = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback(() => {
+    const selectedMetricData = healthMetrics.find(m => m.id === selectedMetric), []), []), []), []), []), []);
     if (!selectedMetricData || selectedMetric === 'overview') {return null;}
 
     return (
@@ -336,7 +339,7 @@ export const EnhancedHealthVisualization: React.FC<EnhancedHealthVisualizationPr
     );
   }, [selectedMetric, healthMetrics, chartConfig, chartWidth]);
 
-  const renderConstitutionAnalysis = useMemo(() => useMemo(() => useMemo(() => useCallback(() => (
+  const renderConstitutionAnalysis = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback(() => (
     <Card style={styles.chartCard}>
       <Text style={styles.chartTitle}>中医体质分析</Text>
       <View style={styles.constitutionChart}>
@@ -370,9 +373,9 @@ export const EnhancedHealthVisualization: React.FC<EnhancedHealthVisualizationPr
         ))}
       </View>
     </Card>
-  ), [constitutionData, chartConfig, chartWidth]), []), []), []);
+  ), [constitutionData, chartConfig, chartWidth]), []), []), []), []), []), []);
 
-  const renderOverviewCharts = useMemo(() => useMemo(() => useMemo(() => useCallback(() => (
+  const renderOverviewCharts = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback(() => (
     <View style={styles.overviewContainer}>
       {/* 健康评分仪表盘 */}
       <Card style={styles.chartCard}>
@@ -412,9 +415,9 @@ export const EnhancedHealthVisualization: React.FC<EnhancedHealthVisualizationPr
         />
       </Card>
     </View>
-  ), [chartConfig, chartWidth]), []), []), []);
+  ), [chartConfig, chartWidth]), []), []), []), []), []), []);
 
-  const renderPeriodSelector = useMemo(() => useMemo(() => useMemo(() => useCallback(() => (
+  const renderPeriodSelector = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback(() => (
     <View style={styles.periodSelector}>
       {(['day', 'week', 'month', 'year'] as const).map((period) => (
         <TouchableOpacity
@@ -437,9 +440,9 @@ export const EnhancedHealthVisualization: React.FC<EnhancedHealthVisualizationPr
         </TouchableOpacity>
       ))}
     </View>
-  ), [selectedPeriod]), []), []), []);
+  ), [selectedPeriod]), []), []), []), []), []), []);
 
-  const renderActionButtons = useMemo(() => useMemo(() => useMemo(() => useCallback(() => (
+  const renderActionButtons = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback(() => (
     <View style={styles.actionButtons}>
       <Button
         title="导出数据"
@@ -456,7 +459,7 @@ export const EnhancedHealthVisualization: React.FC<EnhancedHealthVisualizationPr
         leftIcon={<Ionicons name="share" size={16} color={colors.primary} />}
       />
     </View>
-  ), [onExportData, onShareInsights]), []), []), []);
+  ), [onExportData, onShareInsights]), []), []), []), []), []), []);
 
   if (loading) {
     return (
@@ -516,7 +519,7 @@ export const EnhancedHealthVisualization: React.FC<EnhancedHealthVisualizationPr
   );
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -716,4 +719,4 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
     flex: 1,
     marginHorizontal: spacing.xs,
   },
-}), []), []), []); 
+}), []), []), []), []), []), []); 

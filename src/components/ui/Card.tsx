@@ -105,4 +105,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Card;
+export default React.memo(Card);

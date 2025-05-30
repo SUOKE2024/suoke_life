@@ -4,6 +4,9 @@ import { createWebSocketManager, WebSocketManager } from '../../services/websock
 import { memoryCache, persistentCache, apiCache } from '../../services/cache/cacheManager';
 
 
+
+
+
 /**
  * 索克生活 - 高级功能演示界面
  * 展示GraphQL API、离线模式、WebSocket实时通信和缓存策略
@@ -685,4 +688,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AdvancedFeaturesDemo; 
+export default React.memo(AdvancedFeaturesDemo); 

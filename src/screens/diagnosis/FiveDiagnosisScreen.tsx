@@ -1,11 +1,6 @@
-import { useFocusEffect } from '@react-navigation/native';
+import {
 import { fiveDiagnosisService, FiveDiagnosisInput, FiveDiagnosisResult } from '../../services/fiveDiagnosisService';
 
-
-/**
- * 五诊诊断主界面
- * 提供完整的五诊诊断流程界面
- */
 
 import React, { useState, useEffect, useCallback } from 'react';
   View,
@@ -18,6 +13,11 @@ import React, { useState, useEffect, useCallback } from 'react';
   Dimensions,
   SafeAreaView,
 } from 'react-native';
+
+/**
+ * 五诊诊断主界面
+ * 提供完整的五诊诊断流程界面
+ */
 
 const { width, height } = Dimensions.get('window');
 
@@ -75,7 +75,7 @@ export const FiveDiagnosisScreen: React.FC = () => {
   const [serviceStatus, setServiceStatus] = useState<any>(null);
 
   // 初始化服务
-  useFocusEffect(
+  useEffect(
     useCallback(() => {
       initializeService();
       return () => {
@@ -84,7 +84,7 @@ export const FiveDiagnosisScreen: React.FC = () => {
     }, [])
   );
 
-  const initializeService = useMemo(() => useMemo(() => useMemo(() => async () => {
+  const initializeService = useMemo(() => useMemo(() => useMemo(() => useCallback(async () => {
     try {
       setIsLoading(true), []), []), []);
       await fiveDiagnosisService.initialize();
@@ -96,28 +96,28 @@ export const FiveDiagnosisScreen: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
-  const updateServiceStatus = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
-    const status = useMemo(() => useMemo(() => useMemo(() => fiveDiagnosisService.getServiceStatus(), []), []), []);
+  const updateServiceStatus = useMemo(() => useMemo(() => useMemo(() => useCallback(() => {
+    const status = fiveDiagnosisService.getServiceStatus(), []), []), []);
     setServiceStatus(status);
-  };
+  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项;
 
-  const handleStepPress = useMemo(() => useMemo(() => useMemo(() => useCallback( (stepIndex: number) => {, []), []), []), []);
+  const handleStepPress = useMemo(() => useMemo(() => useMemo(() => useCallback((stepIndex: number) => {
     if (!isInitialized) {
-      Alert.alert('提示', '服务正在初始化，请稍候');
+      Alert.alert('提示', '服务正在初始化，请稍候'), []), []), []);
       return;
     }
     setCurrentStep(stepIndex);
     navigateToStepScreen(diagnosisSteps[stepIndex]);
-  };
+  }, [isInitialized, diagnosisSteps]);
 
-  const navigateToStepScreen = useMemo(() => useMemo(() => useMemo(() => useCallback( (step: DiagnosisStep) => {, []), []), []), []);
+  const navigateToStepScreen = useMemo(() => useMemo(() => useMemo(() => useCallback((step: DiagnosisStep) => {
     // 根据诊法类型导航到相应的界面
     switch (step.id) {
       case 'looking':
         // 导航到望诊界面
-        Alert.alert('望诊', '即将开启望诊功能');
+        Alert.alert('望诊', '即将开启望诊功能'), []), []), []);
         break;
       case 'listening':
         // 导航到闻诊界面
@@ -136,9 +136,9 @@ export const FiveDiagnosisScreen: React.FC = () => {
         Alert.alert('算诊', '即将开启算诊功能');
         break;
     }
-  };
+  }, []);
 
-  const performCompleteDiagnosis = useMemo(() => useMemo(() => useMemo(() => async () => {
+  const performCompleteDiagnosis = useMemo(() => useMemo(() => useMemo(() => useCallback(async () => {
     if (!isInitialized) {
       Alert.alert('提示', '服务未初始化'), []), []), []);
       return;
@@ -188,9 +188,9 @@ export const FiveDiagnosisScreen: React.FC = () => {
       setIsLoading(false);
       updateServiceStatus();
     }
-  };
+  }, [isInitialized, diagnosisSteps]);
 
-  const renderStepCard = useMemo(() => useMemo(() => useMemo(() => (step: DiagnosisStep, index: number) => (
+  const renderStepCard = useMemo(() => useMemo(() => useMemo(() => useCallback((step: DiagnosisStep, index: number) => (
     <TouchableOpacity
       key={step.id}
       style={[
@@ -215,10 +215,10 @@ export const FiveDiagnosisScreen: React.FC = () => {
         )}
       </View>
     </TouchableOpacity>
-  ), []), []), []);
+  ), [currentStep, handleStepPress]), []), []), []);
 
-  const renderDiagnosisResult = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
-    if (!diagnosisResult) {return null;}
+  const renderDiagnosisResult = useMemo(() => useMemo(() => useMemo(() => useCallback(() => {
+    if (!diagnosisResult) {return null, []), []), []);}
 
     return (
       <View style={styles.resultContainer}>
@@ -259,10 +259,10 @@ export const FiveDiagnosisScreen: React.FC = () => {
         </View>
       </View>
     );
-  };
+  }, [diagnosisResult]);
 
-  const renderServiceStatus = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
-    if (!serviceStatus) {return null;}
+  const renderServiceStatus = useMemo(() => useMemo(() => useMemo(() => useCallback(() => {
+    if (!serviceStatus) {return null, []), []), []);}
 
     return (
       <View style={styles.statusContainer}>
@@ -287,7 +287,7 @@ export const FiveDiagnosisScreen: React.FC = () => {
         </View>
       </View>
     );
-  };
+  }, [serviceStatus]);
 
   if (isLoading && !isInitialized) {
     return (
@@ -539,4 +539,4 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   },
 }), []), []), []);
 
-export default FiveDiagnosisScreen; 
+export default React.memo(FiveDiagnosisScreen); 

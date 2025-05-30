@@ -1,6 +1,9 @@
 import { agentCoordinationService, AgentType } from '../../services/agentCoordinationService';
 
 
+
+
+
 /**
  * 四大智能体协作演示界面
  * 展示小艾、小克、老克、索儿的深度集成和协同工作
@@ -119,11 +122,11 @@ export const AgentCollaborationDemoScreen: React.FC = () => {
 
   useEffect(() => {
     initializeService();
-  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
+  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
 
-  const initializeService = useMemo(() => useMemo(() => useMemo(() => async () => {
+  const initializeService = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async () => {
     try {
-      await agentCoordinationService.initialize(), []), []), []);
+      await agentCoordinationService.initialize(), []), []), []), []), []), []);
       setIsInitialized(true);
       console.log('✅ 智能体协调服务初始化完成');
     } catch (error) {
@@ -132,8 +135,8 @@ export const AgentCollaborationDemoScreen: React.FC = () => {
     }
   };
 
-  const runCollaborationScenario = useMemo(() => useMemo(() => useMemo(() => async (scenario: CollaborationScenario) => {
-    if (isRunning || !isInitialized) {return, []), []), []);}
+  const runCollaborationScenario = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async (scenario: CollaborationScenario) => {
+    if (isRunning || !isInitialized) {return, []), []), []), []), []), []);}
 
     try {
       setIsRunning(true);
@@ -170,8 +173,8 @@ export const AgentCollaborationDemoScreen: React.FC = () => {
     }
   };
 
-  const simulateAgentCollaboration = useMemo(() => useMemo(() => useMemo(() => async (scenario: CollaborationScenario) => {
-    const { participants } = scenario, []), []), []);
+  const simulateAgentCollaboration = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async (scenario: CollaborationScenario) => {
+    const { participants } = scenario, []), []), []), []), []), []);
     
     // 阶段1: 智能体分析阶段
     for (const agentId of participants) {
@@ -189,33 +192,33 @@ export const AgentCollaborationDemoScreen: React.FC = () => {
     await simulateCollaborativeDecision(participants, scenario);
   };
 
-  const simulateAgentThinking = useMemo(() => useMemo(() => useMemo(() => async (agentId: AgentType, scenario: CollaborationScenario) => {
-    const agent = agents.find(a => a.id === agentId), []), []), []);
+  const simulateAgentThinking = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async (agentId: AgentType, scenario: CollaborationScenario) => {
+    const agent = agents.find(a => a.id === agentId), []), []), []), []), []), []);
     if (!agent) {return;}
 
     setAgents(prev => prev.map(a => 
       a.id === agentId ? { ...a, status: 'thinking' } : a
     ));
 
-    const thinkingMessages = useMemo(() => useMemo(() => useMemo(() => {
+    const thinkingMessages = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => {
       xiaoai: '正在分析用户症状和健康状况...',
       xiaoke: '正在匹配相关服务和资源...',
       laoke: '正在检索中医知识库和治疗方案...',
       soer: '正在整合生活数据和健康指标...',
-    }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项, []), []);
+    }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项, []), []), []), []), []);
 
     addToLog(agentId, thinkingMessages[agentId], 'thinking');
   };
 
-  const simulateAgentResponse = useMemo(() => useMemo(() => useMemo(() => async (agentId: AgentType, scenario: CollaborationScenario) => {
-    const agent = agents.find(a => a.id === agentId), []), []), []);
+  const simulateAgentResponse = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async (agentId: AgentType, scenario: CollaborationScenario) => {
+    const agent = agents.find(a => a.id === agentId), []), []), []), []), []), []);
     if (!agent) {return;}
 
     setAgents(prev => prev.map(a => 
       a.id === agentId ? { ...a, status: 'responding' } : a
     ));
 
-    const responses = useMemo(() => useMemo(() => useMemo(() => {
+    const responses = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => {
       health_consultation: {
         xiaoai: '基于症状分析，建议进行进一步的专项检查，同时关注睡眠质量和情绪状态。',
         xiaoke: '已为您匹配3位相关专科医生，可预约本周内的线上或线下咨询。',
@@ -237,10 +240,10 @@ export const AgentCollaborationDemoScreen: React.FC = () => {
         laoke: '提供紧急情况下的中医急救指导，如按压相关穴位缓解症状。',
         soer: '已记录紧急情况详情，将持续监测生命体征，为医护人员提供数据支持。',
       },
-    }, []), []), []);
+    }, []), []), []), []), []), []);
 
-    const response = useMemo(() => useMemo(() => useMemo(() => responses[scenario.id as keyof typeof responses]?.[agentId] || 
-                    `${agent.name}正在为您提供专业建议...`, []), []), []);
+    const response = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => responses[scenario.id as keyof typeof responses]?.[agentId] || 
+                    `${agent.name}正在为您提供专业建议...`, []), []), []), []), []), []);
 
     setAgents(prev => prev.map(a => 
       a.id === agentId ? { ...a, response } : a
@@ -249,29 +252,29 @@ export const AgentCollaborationDemoScreen: React.FC = () => {
     addToLog(agentId, response, 'response');
   };
 
-  const simulateCollaborativeDecision = useMemo(() => useMemo(() => useMemo(() => async (participants: AgentType[], scenario: CollaborationScenario) => {
+  const simulateCollaborativeDecision = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async (participants: AgentType[], scenario: CollaborationScenario) => {
     // 设置所有参与者为协作状态
     setAgents(prev => prev.map(a => 
       participants.includes(a.id) ? { ...a, status: 'collaborating' } : a
-    )), []), []), []);
+    )), []), []), []), []), []), []);
 
     addToLog('system', '🤝 智能体开始协作决策...', 'collaboration');
     await new Promise(resolve => setTimeout(resolve, 2000));
 
-    const finalDecisions = useMemo(() => useMemo(() => useMemo(() => {
+    const finalDecisions = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => {
       health_consultation: '经过四位专家协作分析，建议您采用中西医结合的治疗方案，同时调整生活方式。我们将为您安排专业医生咨询和个性化健康管理服务。',
       diagnosis_analysis: '基于五诊分析结果，专家团队一致认为应采用补气健脾的中医调理方案，配合现代医学检查，预计4-6周见效。',
       lifestyle_planning: '为您制定了个性化的健康生活方案，包含有机食材推荐、运动计划和智能监测，将持续优化调整。',
       emergency_response: '紧急响应已启动，医疗资源已调配，同时提供中医急救指导，确保您得到及时有效的救治。',
-    }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项, []), []);
+    }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项, []), []), []), []), []);
 
-    const finalDecision = useMemo(() => useMemo(() => useMemo(() => finalDecisions[scenario.id as keyof typeof finalDecisions] || 
-                         '智能体协作完成，已为您提供综合性解决方案。', []), []), []);
+    const finalDecision = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => finalDecisions[scenario.id as keyof typeof finalDecisions] || 
+                         '智能体协作完成，已为您提供综合性解决方案。', []), []), []), []), []), []);
 
     addToLog('system', `✅ 协作决策: ${finalDecision}`, 'collaboration');
   };
 
-  const addToLog = useMemo(() => useMemo(() => useMemo(() => useCallback( (agentId: AgentType | 'system', message: string, type: 'thinking' | 'response' | 'collaboration') => {, []), []), []), []);
+  const addToLog = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (agentId: AgentType | 'system', message: string, type: 'thinking' | 'response' | 'collaboration') => {, []), []), []), []), []), []), []);
     setCollaborationLog(prev => [...prev, {
       timestamp: Date.now(),
       agentId: agentId as AgentType,
@@ -280,8 +283,8 @@ export const AgentCollaborationDemoScreen: React.FC = () => {
     }]);
   };
 
-  const renderAgentCard = useMemo(() => useMemo(() => useMemo(() => useCallback( (agent: AgentCard) => {, []), []), []), []);
-    const getStatusColor = useMemo(() => useMemo(() => useMemo(() => useCallback( (status: string) => {, []), []), []), []);
+  const renderAgentCard = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (agent: AgentCard) => {, []), []), []), []), []), []), []);
+    const getStatusColor = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (status: string) => {, []), []), []), []), []), []), []);
       switch (status) {
         case 'thinking': return '#FF9800';
         case 'responding': return '#2196F3';
@@ -290,7 +293,7 @@ export const AgentCollaborationDemoScreen: React.FC = () => {
       }
     };
 
-    const getStatusText = useMemo(() => useMemo(() => useMemo(() => useCallback( (status: string) => {, []), []), []), []);
+    const getStatusText = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (status: string) => {, []), []), []), []), []), []), []);
       switch (status) {
         case 'thinking': return '思考中';
         case 'responding': return '响应中';
@@ -347,8 +350,8 @@ export const AgentCollaborationDemoScreen: React.FC = () => {
     );
   };
 
-  const renderScenarioCard = useMemo(() => useMemo(() => useMemo(() => useCallback( (scenario: CollaborationScenario) => {, []), []), []), []);
-    const getComplexityColor = useMemo(() => useMemo(() => useMemo(() => useCallback( (complexity: string) => {, []), []), []), []);
+  const renderScenarioCard = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (scenario: CollaborationScenario) => {, []), []), []), []), []), []), []);
+    const getComplexityColor = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (complexity: string) => {, []), []), []), []), []), []), []);
       switch (complexity) {
         case 'simple': return '#4CAF50';
         case 'medium': return '#FF9800';
@@ -357,7 +360,7 @@ export const AgentCollaborationDemoScreen: React.FC = () => {
       }
     };
 
-    const getComplexityText = useMemo(() => useMemo(() => useMemo(() => useCallback( (complexity: string) => {, []), []), []), []);
+    const getComplexityText = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (complexity: string) => {, []), []), []), []), []), []), []);
       switch (complexity) {
         case 'simple': return '简单';
         case 'medium': return '中等';
@@ -389,7 +392,7 @@ export const AgentCollaborationDemoScreen: React.FC = () => {
           <Text style={styles.participantsLabel}>参与智能体:</Text>
           <View style={styles.participantsList}>
             {scenario.participants.map(agentId => {
-              const agent = useMemo(() => useMemo(() => useMemo(() => agents.find(a => a.id === agentId), []), []), []);
+              const agent = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => agents.find(a => a.id === agentId), []), []), []), []), []), []);
               return (
                 <Text key={agentId} style={styles.participantName}>
                   {agent?.avatar} {agent?.name}
@@ -402,7 +405,7 @@ export const AgentCollaborationDemoScreen: React.FC = () => {
     );
   };
 
-  const renderCollaborationLog = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const renderCollaborationLog = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     if (collaborationLog.length === 0) {return null;}
 
     return (
@@ -410,8 +413,8 @@ export const AgentCollaborationDemoScreen: React.FC = () => {
         <Text style={styles.logTitle}>协作日志</Text>
         <ScrollView style={styles.logScrollView} showsVerticalScrollIndicator={false}>
           {collaborationLog.map((entry, index) => {
-            const agent = useMemo(() => useMemo(() => useMemo(() => agents.find(a => a.id === entry.agentId), []), []), []);
-            const getTypeIcon = useMemo(() => useMemo(() => useMemo(() => useCallback( (type: string) => {, []), []), []), []);
+            const agent = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => agents.find(a => a.id === entry.agentId), []), []), []), []), []), []);
+            const getTypeIcon = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (type: string) => {, []), []), []), []), []), []), []);
               switch (type) {
                 case 'thinking': return '🤔';
                 case 'response': return '💬';
@@ -473,7 +476,7 @@ export const AgentCollaborationDemoScreen: React.FC = () => {
   );
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F5F5F5',
@@ -729,6 +732,6 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
     lineHeight: 20,
     marginLeft: 24,
   },
-}), []), []), []);
+}), []), []), []), []), []), []);
 
-export default AgentCollaborationDemoScreen; 
+export default React.memo(AgentCollaborationDemoScreen); 

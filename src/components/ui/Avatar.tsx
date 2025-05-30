@@ -7,6 +7,9 @@ import React from "react";
 
 
 
+
+
+
 /**
  * 索克生活 - Avatar组件
  * 通用头像组件
@@ -43,7 +46,7 @@ const Avatar: React.FC<AvatarProps> = ({
   imageStyle,
   testID,
 }) => {
-  const getSize = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const getSize = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     if (typeof size === "number") {
       return size;
     }
@@ -62,7 +65,7 @@ const Avatar: React.FC<AvatarProps> = ({
     }
   };
 
-  const avatarSize = useMemo(() => useMemo(() => useMemo(() => getSize(), []), []), []);
+  const avatarSize = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => getSize(), []), []), []), []), []), []);
 
   const avatarStyle: ViewStyle[] = [
     styles.base,
@@ -74,16 +77,16 @@ const Avatar: React.FC<AvatarProps> = ({
     style,
   ].filter(Boolean);
 
-  const getInitials = useMemo(() => useMemo(() => useMemo(() => (name: string): string => {
+  const getInitials = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => (name: string): string => {
     return name
       .split(" ")
       .map((word) => word.charAt(0))
       .join("")
       .toUpperCase()
-      .slice(0, 2), []), []), []);
+      .slice(0, 2), []), []), []), []), []), []);
   };
 
-  const getBackgroundColor = useMemo(() => useMemo(() => useMemo(() => (name: string): string => {
+  const getBackgroundColor = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => (name: string): string => {
     const colors = [
       "#FF6B6B",
       "#4ECDC4",
@@ -93,7 +96,7 @@ const Avatar: React.FC<AvatarProps> = ({
       "#DDA0DD",
       "#98D8C8",
       "#F7DC6F",
-    ], []), []), []);
+    ], []), []), []), []), []), []);
 
     let hash = 0;
     for (let i = 0; i < name.length; i++) {
@@ -153,7 +156,7 @@ const Avatar: React.FC<AvatarProps> = ({
   );
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   base: {
     alignItems: "center",
     justifyContent: "center",
@@ -172,6 +175,6 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   placeholder: {
     backgroundColor: colors.gray200,
   },
-}), []), []), []);
+}), []), []), []), []), []), []);
 
-export default Avatar;
+export default React.memo(Avatar);

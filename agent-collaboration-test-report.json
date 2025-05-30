@@ -1,0 +1,71 @@
+{
+  "timestamp": "2025-05-30T05:18:29.254Z",
+  "summary": {
+    "total": 7,
+    "passed": 3,
+    "failed": 4,
+    "successRate": "42.86%"
+  },
+  "scenarios": [
+    {
+      "name": "健康咨询完整流程",
+      "result": "failed",
+      "duration": 456,
+      "steps": 1,
+      "successfulSteps": 0
+    },
+    {
+      "name": "学习路径规划",
+      "result": "failed",
+      "duration": 1039,
+      "steps": 3,
+      "successfulSteps": 2
+    },
+    {
+      "name": "紧急健康事件处理",
+      "result": "failed",
+      "duration": 599,
+      "steps": 1,
+      "successfulSteps": 0
+    },
+    {
+      "name": "个性化健康方案制定",
+      "result": "failed",
+      "duration": 523,
+      "steps": 1,
+      "successfulSteps": 0
+    },
+    {
+      "name": "智能体状态同步测试",
+      "result": "success",
+      "duration": 991,
+      "steps": 4,
+      "successfulSteps": 4
+    }
+  ],
+  "errors": [
+    {
+      "scenario": "健康咨询完整流程",
+      "error": "协作流程失败"
+    },
+    {
+      "scenario": "学习路径规划",
+      "error": "协作流程失败"
+    },
+    {
+      "scenario": "紧急健康事件处理",
+      "error": "协作流程失败"
+    },
+    {
+      "scenario": "个性化健康方案制定",
+      "error": "协作流程失败"
+    }
+  ],
+  "recommendations": [
+    "优化失败的协作场景",
+    "提升智能体协作稳定性",
+    "定期测试智能体协作功能",
+    "监控智能体性能指标",
+    "优化智能体通信协议"
+  ]
+}

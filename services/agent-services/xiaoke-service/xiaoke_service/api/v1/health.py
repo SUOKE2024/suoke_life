@@ -2,8 +2,9 @@
 健康检查 API 端点
 """
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Request, Body
 from pydantic import BaseModel
+from xiaoke_service.services.health import FourDiagnosisAggregator
 
 router = APIRouter()
 
@@ -36,3 +37,15 @@ async def detailed_health_check() -> dict:
         },
         "timestamp": "2024-01-01T00:00:00Z",
     }
+
+
+@router.post("/four-diagnosis/aggregation")
+async def four_diagnosis_aggregation(
+    request: Request,
+    body: dict = Body(...)
+):
+    """四诊聚合接口，聚合四诊诊断结果"""
+    user_id = body.get("user_id") or "anonymous"
+    diagnosis_request = body.get("diagnosis_request") or body
+    result = await FourDiagnosisAggregator.aggregate(diagnosis_request, user_id)
+    return {"success": True, "data": result}

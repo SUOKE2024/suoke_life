@@ -1,0 +1,140 @@
+{
+  "timestamp": "2025-05-30T05:18:18.843Z",
+  "summary": {
+    "total": 21,
+    "passed": 19,
+    "failed": 2,
+    "successRate": "90.48%"
+  },
+  "details": [
+    {
+      "name": "用户登录",
+      "passed": true,
+      "duration": 578,
+      "error": null
+    },
+    {
+      "name": "用户注册",
+      "passed": true,
+      "duration": 110,
+      "error": null
+    },
+    {
+      "name": "令牌验证",
+      "passed": true,
+      "duration": 607,
+      "error": null
+    },
+    {
+      "name": "密码重置",
+      "passed": true,
+      "duration": 543,
+      "error": null
+    },
+    {
+      "name": "小艾对话",
+      "passed": true,
+      "duration": 874,
+      "error": null
+    },
+    {
+      "name": "小克服务推荐",
+      "passed": true,
+      "duration": 937,
+      "error": null
+    },
+    {
+      "name": "老克知识查询",
+      "passed": true,
+      "duration": 239,
+      "error": null
+    },
+    {
+      "name": "索儿生活建议",
+      "passed": true,
+      "duration": 1013,
+      "error": null
+    },
+    {
+      "name": "智能体状态查询",
+      "passed": true,
+      "duration": 434,
+      "error": null
+    },
+    {
+      "name": "健康数据上传",
+      "passed": true,
+      "duration": 590,
+      "error": null
+    },
+    {
+      "name": "健康报告生成",
+      "passed": true,
+      "duration": 674,
+      "error": null
+    },
+    {
+      "name": "诊断记录查询",
+      "passed": true,
+      "duration": 243,
+      "error": null
+    },
+    {
+      "name": "健康指标分析",
+      "passed": true,
+      "duration": 449,
+      "error": null
+    },
+    {
+      "name": "健康数据上链",
+      "passed": true,
+      "duration": 341,
+      "error": null
+    },
+    {
+      "name": "数据验证",
+      "passed": true,
+      "duration": 814,
+      "error": null
+    },
+    {
+      "name": "隐私数据查询",
+      "passed": true,
+      "duration": 600,
+      "error": null
+    },
+    {
+      "name": "404错误处理",
+      "passed": false,
+      "duration": 338,
+      "error": "状态码不匹配: 期望 404, 实际 200"
+    },
+    {
+      "name": "500错误处理",
+      "passed": true,
+      "duration": 890,
+      "error": null
+    },
+    {
+      "name": "无效参数处理",
+      "passed": false,
+      "duration": 311,
+      "error": "状态码不匹配: 期望 400, 实际 200"
+    }
+  ],
+  "errors": [
+    {
+      "test": "404错误处理",
+      "error": "状态码不匹配: 期望 404, 实际 200"
+    },
+    {
+      "test": "无效参数处理",
+      "error": "状态码不匹配: 期望 400, 实际 200"
+    }
+  ],
+  "recommendations": [
+    "修复失败的API测试",
+    "定期运行API集成测试",
+    "监控API性能指标"
+  ]
+}

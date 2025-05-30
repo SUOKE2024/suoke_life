@@ -4,6 +4,9 @@ import { responsive, touchTarget } from '../../utils/responsive';
 import { animations, createAnimatedValue } from '../../utils/animations';
 
 
+
+
+
 /**
  * 索克生活 - Button组件
  * 统一的按钮组件，支持多种样式和状态
@@ -418,4 +421,4 @@ export const Button: React.FC<ButtonProps> = ({
   );
 };
 
-export default Button; 
+export default React.memo(Button); 

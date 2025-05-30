@@ -6,6 +6,9 @@ import { colors, spacing, typography } from '../../constants/theme';
 import { ApiTestResultsDisplay } from '../../components/demo/ApiTestResultsDisplay';
 
 
+
+
+
 import React, { useState, useEffect } from 'react';
   View,
   Text,
@@ -21,7 +24,7 @@ import React, { useState, useEffect } from 'react';
 const { width } = Dimensions.get('window');
 
 // 模拟测试报告数据
-const mockTestReportData = useMemo(() => useMemo(() => useMemo(() => {
+const mockTestReportData = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => {
   timestamp: new Date().toISOString(),
   summary: {
     total: 51,
@@ -63,7 +66,7 @@ const mockTestReportData = useMemo(() => useMemo(() => useMemo(() => {
     },
     // ... 其他测试结果
   ],
-}, []), []), []);
+}, []), []), []), []), []), []);
 
 interface ApiTestResult {
   name: string;
@@ -76,8 +79,8 @@ interface ApiTestResult {
 }
 
 export const ApiIntegrationDemo: React.FC = () => {
-  const navigation = useMemo(() => useMemo(() => useMemo(() => useNavigation(), []), []), []);
-  const api = useMemo(() => useMemo(() => useMemo(() => useApiIntegration(), []), []), []);
+  const navigation = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useNavigation(), []), []), []), []), []), []);
+  const api = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useApiIntegration(), []), []), []), []), []), []);
 
   const [currentTab, setCurrentTab] = useState<'overview' | 'results' | 'live'>('overview');
   const [testResults, setTestResults] = useState(mockTestReportData);
@@ -87,20 +90,20 @@ export const ApiIntegrationDemo: React.FC = () => {
   useEffect(() => {
     // 加载最新的测试结果
     loadTestResults();
-  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
+  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
 
-  const loadTestResults = useMemo(() => useMemo(() => useMemo(() => async () => {
+  const loadTestResults = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async () => {
     try {
       // 这里可以从实际的API或本地存储加载测试结果
       // 目前使用静态数据
-      setTestResults(mockTestReportData), []), []), []);
+      setTestResults(mockTestReportData), []), []), []), []), []), []);
     } catch (error) {
       console.error('加载测试结果失败:', error);
     }
   };
 
-  const handleRunAllTests = useMemo(() => useMemo(() => useMemo(() => async () => {
-    setIsRunningTests(true), []), []), []);
+  const handleRunAllTests = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async () => {
+    setIsRunningTests(true), []), []), []), []), []), []);
     try {
       Alert.alert(
         '开始测试',
@@ -130,11 +133,11 @@ export const ApiIntegrationDemo: React.FC = () => {
     }
   };
 
-  const handleRetryTest = useMemo(() => useMemo(() => useMemo(() => async (testName: string) => {
+  const handleRetryTest = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async (testName: string) => {
     try {
       // 根据测试名称执行对应的API调用
       if (testName === '健康检查') {
-        await api.healthCheck(), []), []), []);
+        await api.healthCheck(), []), []), []), []), []), []);
       } else if (testName === '获取API版本') {
         await api.getApiVersion();
       }
@@ -145,7 +148,7 @@ export const ApiIntegrationDemo: React.FC = () => {
     }
   };
 
-  const handleViewTestDetails = useMemo(() => useMemo(() => useMemo(() => useCallback( (test: ApiTestResult) => {, []), []), []), []);
+  const handleViewTestDetails = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (test: ApiTestResult) => {, []), []), []), []), []), []), []);
     Alert.alert(
       test.name,
       `状态: ${test.status}\n` +
@@ -157,14 +160,14 @@ export const ApiIntegrationDemo: React.FC = () => {
     );
   };
 
-  const handleRefresh = useMemo(() => useMemo(() => useMemo(() => async () => {
-    setRefreshing(true), []), []), []);
+  const handleRefresh = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async () => {
+    setRefreshing(true), []), []), []), []), []), []);
     await loadTestResults();
     setRefreshing(false);
   };
 
   // TODO: 将内联组件移到组件外部
-const renderHeader = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderHeader = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.header}>
       <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
         <Text style={styles.backButtonText}>← 返回</Text>
@@ -174,10 +177,10 @@ const renderHeader = useMemo(() => useMemo(() => useMemo(() => () => (
         <Text style={styles.refreshButtonText}>刷新</Text>
       </TouchableOpacity>
     </View>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
   // TODO: 将内联组件移到组件外部
-const renderTabBar = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderTabBar = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.tabBar}>
       <TouchableOpacity
         style={[styles.tab, currentTab === 'overview' && styles.activeTab]}
@@ -204,10 +207,10 @@ const renderTabBar = useMemo(() => useMemo(() => useMemo(() => () => (
         </Text>
       </TouchableOpacity>
     </View>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
   // TODO: 将内联组件移到组件外部
-const renderOverview = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderOverview = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <ScrollView
       style={styles.content}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
@@ -300,10 +303,10 @@ const renderOverview = useMemo(() => useMemo(() => useMemo(() => () => (
         </Text>
       </View>
     </ScrollView>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
   // TODO: 将内联组件移到组件外部
-const renderResults = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderResults = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <ApiTestResultsDisplay
       summary={testResults.summary}
       categories={testResults.categories}
@@ -311,10 +314,10 @@ const renderResults = useMemo(() => useMemo(() => useMemo(() => () => (
       onRetryTest={handleRetryTest}
       onViewDetails={handleViewTestDetails}
     />
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
   // TODO: 将内联组件移到组件外部
-const renderLiveTest = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderLiveTest = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <ScrollView style={styles.content}>
       <View style={styles.liveTestCard}>
         <Text style={styles.cardTitle}>🔴 实时API测试</Text>
@@ -335,7 +338,7 @@ const renderLiveTest = useMemo(() => useMemo(() => useMemo(() => () => (
                     { text: '取消', style: 'cancel' },
                     { text: '开始测试', onPress: () => console.log(`Testing ${category}`) },
                   ]
-                ), []), []), []);
+                ), []), []), []), []), []), []);
               }}
             >
               <Text style={styles.categoryButtonText}>{category}</Text>
@@ -389,7 +392,7 @@ const renderLiveTest = useMemo(() => useMemo(() => useMemo(() => () => (
     </ScrollView>
   );
 
-  const renderContent = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const renderContent = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     switch (currentTab) {
       case 'overview':
         return renderOverview();
@@ -411,7 +414,7 @@ const renderLiveTest = useMemo(() => useMemo(() => useMemo(() => () => (
   );
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -623,4 +626,4 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
     fontSize: typography.fontSize.sm,
     fontWeight: 'bold',
   },
-}), []), []), []); 
+}), []), []), []), []), []), []); 

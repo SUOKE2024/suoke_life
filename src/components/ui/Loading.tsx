@@ -48,9 +48,23 @@ const Loading: React.FC<LoadingProps> = ({
     () =>
       useMemo(
         () =>
-          [overlay && styles.overlay, center && styles.center, style].filter(
-            Boolean
-          ) as ViewStyle[],
+          useMemo(
+            () =>
+              useMemo(
+                () =>
+                  useMemo(
+                    () =>
+                      [
+                        overlay && styles.overlay,
+                        center && styles.center,
+                        style,
+                      ].filter(Boolean) as ViewStyle[],
+                    []
+                  ),
+                []
+              ),
+            []
+          ),
         []
       ),
     []
@@ -74,39 +88,51 @@ const styles = useMemo(() => useMemo(
   () =>
     useMemo(
       () =>
-        StyleSheet.create({
-          overlay: {
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(255, 255, 255, 0.8)",
-            zIndex: 1000,
-          },
+        useMemo(
+          () =>
+            useMemo(
+              () =>
+                useMemo(
+                  () =>
+                    StyleSheet.create({
+                      overlay: {
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        backgroundColor: "rgba(255, 255, 255, 0.8)",
+                        zIndex: 1000,
+                      },
 
-          center: {
-            flex: 1,
-            alignItems: "center",
-            justifyContent: "center",
-          },
+                      center: {
+                        flex: 1,
+                        alignItems: "center",
+                        justifyContent: "center",
+                      },
 
-          content: {
-            alignItems: "center",
-            justifyContent: "center",
-          },
+                      content: {
+                        alignItems: "center",
+                        justifyContent: "center",
+                      },
 
-          indicator: {
-            marginBottom: spacing.xs,
-          },
+                      indicator: {
+                        marginBottom: spacing.xs,
+                      },
 
-          text: {
-            textAlign: "center",
-          },
-        }),
+                      text: {
+                        textAlign: "center",
+                      },
+                    }),
+                  []
+                ),
+              []
+            ),
+          []
+        ),
       []
     ),
   []
 ), []);
 
-export default Loading;
+export default React.memo(Loading);

@@ -8,6 +8,9 @@ import { AdvancedHealthDashboard } from './components/AdvancedHealthDashboard';
 import { BlockchainHealthManager } from './components/BlockchainHealthManager';
 
 
+
+
+
 import React, { useState } from 'react';
   View,
   Text,
@@ -223,7 +226,7 @@ const LifeScreen: React.FC = () => {
   const [blockchainManagerVisible, setBlockchainManagerVisible] = useState(false);
 
   // 与索儿对话
-  const chatWithSoer = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const chatWithSoer = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     Alert.alert(
       '与索儿对话',
       '索儿是您的生活方式指导助手，专注于帮助您：\n\n• 制定个性化生活计划\n• 提供健康生活建议\n• 平衡工作与生活\n• 培养良好习惯\n• 提升生活质量\n\n是否开始对话？',
@@ -235,13 +238,13 @@ const LifeScreen: React.FC = () => {
   };
 
   // 开始与索儿对话
-  const startSoerChat = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const startSoerChat = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     setSoerChatVisible(true);
     console.log('Starting chat with Soer agent');
   };
 
   // 完成建议
-  const completeSuggestion = useMemo(() => useMemo(() => useMemo(() => useCallback( (suggestion: LifeSuggestion) => {, []), []), []), []);
+  const completeSuggestion = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (suggestion: LifeSuggestion) => {, []), []), []), []), []), []), []);
     Alert.alert(
       '完成建议',
       `太棒了！您完成了"${suggestion.title}"，索儿为您感到骄傲！\n\n继续保持这样的生活方式，您会越来越健康快乐的！`,
@@ -252,7 +255,7 @@ const LifeScreen: React.FC = () => {
   };
 
   // 查看建议详情
-  const viewSuggestionDetail = useMemo(() => useMemo(() => useMemo(() => useCallback( (suggestion: LifeSuggestion) => {, []), []), []), []);
+  const viewSuggestionDetail = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (suggestion: LifeSuggestion) => {, []), []), []), []), []), []), []);
     Alert.alert(
       suggestion.title,
       `${suggestion.description}\n\n分类：${getCategoryText(suggestion.category)}\n优先级：${getPriorityText(suggestion.priority)}\n预计时间：${suggestion.timeEstimate}\n\n索儿建议您现在就开始行动！`,
@@ -264,7 +267,7 @@ const LifeScreen: React.FC = () => {
   };
 
   // 查看计划详情
-  const viewPlanDetail = useMemo(() => useMemo(() => useMemo(() => useCallback( (plan: LifePlan) => {, []), []), []), []);
+  const viewPlanDetail = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (plan: LifePlan) => {, []), []), []), []), []), []), []);
     Alert.alert(
       plan.title,
       `${plan.description}\n\n进度：${plan.progress}%\n持续时间：${plan.duration}\n分类：${plan.category}\n\n下一步行动：${plan.nextAction}`,
@@ -276,38 +279,38 @@ const LifeScreen: React.FC = () => {
   };
 
   // 执行计划行动
-  const executePlanAction = useMemo(() => useMemo(() => useMemo(() => useCallback( (plan: LifePlan) => {, []), []), []), []);
+  const executePlanAction = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (plan: LifePlan) => {, []), []), []), []), []), []), []);
     Alert.alert('执行行动', `正在执行：${plan.nextAction}\n\n索儿会陪伴您完成这个行动！`);
     console.log(`Execute action for plan: ${plan.id}`);
   };
 
   // 获取分类文本
-  const getCategoryText = useMemo(() => useMemo(() => useMemo(() => useCallback( (category: string) => {, []), []), []), []);
-    const categoryMap = useMemo(() => useMemo(() => useMemo(() => {
+  const getCategoryText = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (category: string) => {, []), []), []), []), []), []), []);
+    const categoryMap = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => {
       diet: '饮食',
       exercise: '运动',
       sleep: '睡眠',
       mental: '心理',
       social: '社交',
       work: '工作',
-    }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项, []), []);
+    }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项, []), []), []), []), []);
     return categoryMap[category as keyof typeof categoryMap] || category;
   };
 
   // 获取优先级文本
-  const getPriorityText = useMemo(() => useMemo(() => useMemo(() => useCallback( (priority: string) => {, []), []), []), []);
-    const priorityMap = useMemo(() => useMemo(() => useMemo(() => {
+  const getPriorityText = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (priority: string) => {, []), []), []), []), []), []), []);
+    const priorityMap = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => {
       high: '高',
       medium: '中',
       low: '低',
-    }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项, []), []);
+    }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项, []), []), []), []), []);
     return priorityMap[priority as keyof typeof priorityMap] || priority;
   };
 
   // 渲染健康指标
-  const renderHealthMetric = useMemo(() => useMemo(() => useMemo(() => useCallback( (metric: HealthMetric) => {, []), []), []), []);
-    const progress = useMemo(() => useMemo(() => useMemo(() => (metric.value / metric.target) * 100, []), []), []);
-    const isOnTarget = useMemo(() => useMemo(() => useMemo(() => progress >= 100, []), []), []);
+  const renderHealthMetric = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (metric: HealthMetric) => {, []), []), []), []), []), []), []);
+    const progress = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => (metric.value / metric.target) * 100, []), []), []), []), []), []);
+    const isOnTarget = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => progress >= 100, []), []), []), []), []), []);
 
     return (
       <View key={metric.id} style={styles.metricCard}>
@@ -348,7 +351,7 @@ const LifeScreen: React.FC = () => {
   };
 
   // 渲染生活建议
-  const renderSuggestion = useMemo(() => useMemo(() => useMemo(() => ({ item }: { item: LifeSuggestion }) => (
+  const renderSuggestion = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => ({ item }: { item: LifeSuggestion }) => (
     <TouchableOpacity 
       style={[styles.suggestionCard, item.completed && styles.completedCard]} 
       onPress={() => viewSuggestionDetail(item)}
@@ -379,10 +382,10 @@ const LifeScreen: React.FC = () => {
         </View>
       )}
     </TouchableOpacity>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
   // 渲染生活计划
-  const renderPlan = useMemo(() => useMemo(() => useMemo(() => ({ item }: { item: LifePlan }) => (
+  const renderPlan = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => ({ item }: { item: LifePlan }) => (
     <TouchableOpacity style={styles.planCard} onPress={() => viewPlanDetail(item)}>
       <View style={styles.planHeader}>
         <View style={[styles.planIcon, { backgroundColor: item.color + '20' }]}>
@@ -414,10 +417,10 @@ const LifeScreen: React.FC = () => {
         </Text>
       </View>
     </TouchableOpacity>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
   // 获取优先级颜色
-  const getPriorityColor = useMemo(() => useMemo(() => useMemo(() => useCallback( (priority: string) => {, []), []), []), []);
+  const getPriorityColor = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (priority: string) => {, []), []), []), []), []), []), []);
     switch (priority) {
       case 'high': return '#FF3B30';
       case 'medium': return '#FF9500';
@@ -428,7 +431,7 @@ const LifeScreen: React.FC = () => {
 
   // 渲染标签栏
   // TODO: 将内联组件移到组件外部
-const renderTabBar = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderTabBar = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.tabBar}>
       {[
         { key: 'overview', label: '概览', icon: 'view-dashboard' },
@@ -442,7 +445,7 @@ const renderTabBar = useMemo(() => useMemo(() => useMemo(() => () => (
           style={[styles.tabItem, selectedTab === tab.key && styles.activeTabItem]}
           onPress={() => {
             if (tab.key === 'blockchain') {
-              setBlockchainModalVisible(true), []), []), []);
+              setBlockchainModalVisible(true), []), []), []), []), []), []);
             } else if (tab.key === 'ar') {
               setArModalVisible(true);
             } else {
@@ -595,7 +598,7 @@ const renderTabBar = useMemo(() => useMemo(() => useMemo(() => () => (
   );
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -922,6 +925,6 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
     fontWeight: '600',
     marginLeft: 4,
   },
-}), []), []), []);
+}), []), []), []), []), []), []);
 
-export default LifeScreen;
+export default React.memo(LifeScreen);

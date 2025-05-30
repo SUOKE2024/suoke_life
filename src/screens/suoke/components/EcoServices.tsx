@@ -3,6 +3,9 @@ import Icon from '../../../components/common/Icon';
 import { colors, spacing } from '../../../constants/theme';
 
 
+
+
+
 import React, { useState, useEffect } from 'react';
   View,
   Text,
@@ -531,30 +534,30 @@ export const EcoServices: React.FC<EcoServicesProps> = ({
   useEffect(() => {
     // 模拟获取用户体质和当前季节
     getCurrentUserInfo();
-  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
+  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
 
-  const getCurrentUserInfo = useMemo(() => useMemo(() => useMemo(() => async () => {
+  const getCurrentUserInfo = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async () => {
     // 这里应该从用户服务获取真实数据
-    setUserConstitution('气虚质'), []), []), []);
+    setUserConstitution('气虚质'), []), []), []), []), []), []);
     setCurrentSeason(getCurrentSeason());
   };
 
-  const getCurrentSeason = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
-    const month = useMemo(() => useMemo(() => useMemo(() => new Date().getMonth() + 1, []), []), []);
+  const getCurrentSeason = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
+    const month = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => new Date().getMonth() + 1, []), []), []), []), []), []);
     if (month >= 3 && month <= 5) {return '春季';}
     if (month >= 6 && month <= 8) {return '夏季';}
     if (month >= 9 && month <= 11) {return '秋季';}
     return '冬季';
   };
 
-  const onRefresh = useMemo(() => useMemo(() => useMemo(() => async () => {
-    setRefreshing(true), []), []), []);
+  const onRefresh = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async () => {
+    setRefreshing(true), []), []), []), []), []), []);
     // 模拟刷新数据
     await new Promise<void>(resolve => setTimeout(() => resolve(), 1000));
     setRefreshing(false);
   };
 
-  const addToCart = useMemo(() => useMemo(() => useMemo(() => useCallback( (product: FarmProduct) => {, []), []), []), []);
+  const addToCart = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (product: FarmProduct) => {, []), []), []), []), []), []), []);
     if (product.stock > 0) {
       setCart(prev => [...prev, product]);
       Alert.alert('添加成功', `${product.name} 已添加到购物车`);
@@ -563,7 +566,7 @@ export const EcoServices: React.FC<EcoServicesProps> = ({
     }
   };
 
-  const viewBlockchainTrace = useMemo(() => useMemo(() => useMemo(() => useCallback( (product: FarmProduct) => {, []), []), []), []);
+  const viewBlockchainTrace = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (product: FarmProduct) => {, []), []), []), []), []), []), []);
     Alert.alert(
       '区块链溯源',
       `${product.name}\n\n溯源记录：\n${product.blockchain.traceability.map(trace => 
@@ -573,7 +576,7 @@ export const EcoServices: React.FC<EcoServicesProps> = ({
     );
   };
 
-  const bookDestination = useMemo(() => useMemo(() => useMemo(() => useCallback( (destination: WellnessDestination) => {, []), []), []), []);
+  const bookDestination = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (destination: WellnessDestination) => {, []), []), []), []), []), []), []);
     if (destination.availability.available) {
       Alert.alert(
         '预订确认',
@@ -593,7 +596,7 @@ export const EcoServices: React.FC<EcoServicesProps> = ({
     }
   };
 
-  const selectNutritionPlan = useMemo(() => useMemo(() => useMemo(() => useCallback( (plan: NutritionPlan) => {, []), []), []), []);
+  const selectNutritionPlan = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (plan: NutritionPlan) => {, []), []), []), []), []), []), []);
     Alert.alert(
       '选择配餐方案',
       `${plan.name}\n\n适用体质：${plan.constitution}\n适用季节：${plan.season}\n\n主要功效：${plan.benefits.join('、')}`,
@@ -610,7 +613,7 @@ export const EcoServices: React.FC<EcoServicesProps> = ({
   };
 
   // TODO: 将内联组件移到组件外部
-const renderFarmTab = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderFarmTab = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <ScrollView 
       style={styles.tabContent}
       refreshControl={
@@ -723,10 +726,10 @@ const renderFarmTab = useMemo(() => useMemo(() => useMemo(() => () => (
         ))}
       </View>
     </ScrollView>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
   // TODO: 将内联组件移到组件外部
-const renderWellnessTab = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderWellnessTab = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <ScrollView style={styles.tabContent}>
       <Text style={styles.sectionTitle}>山水养生 • 自然疗愈</Text>
       <Text style={styles.sectionDesc}>
@@ -787,10 +790,10 @@ const renderWellnessTab = useMemo(() => useMemo(() => useMemo(() => () => (
         ))}
       </View>
     </ScrollView>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
   // TODO: 将内联组件移到组件外部
-const renderNutritionTab = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderNutritionTab = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <ScrollView style={styles.tabContent}>
       <Text style={styles.sectionTitle}>个性化营养配餐</Text>
       <Text style={styles.sectionDesc}>
@@ -841,10 +844,10 @@ const renderNutritionTab = useMemo(() => useMemo(() => useMemo(() => () => (
         ))}
       </View>
     </ScrollView>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
   // TODO: 将内联组件移到组件外部
-const renderCommunityTab = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderCommunityTab = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <ScrollView style={styles.tabContent}>
       <Text style={styles.sectionTitle}>生态社区</Text>
       <Text style={styles.sectionDesc}>
@@ -892,9 +895,9 @@ const renderCommunityTab = useMemo(() => useMemo(() => useMemo(() => () => (
         </View>
       </View>
     </ScrollView>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
-  const getDestinationIcon = useMemo(() => useMemo(() => useMemo(() => useCallback( (type: string) => {, []), []), []), []);
+  const getDestinationIcon = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (type: string) => {, []), []), []), []), []), []), []);
     switch (type) {
       case 'mountain': return 'mountain';
       case 'water': return 'waves';
@@ -907,7 +910,7 @@ const renderCommunityTab = useMemo(() => useMemo(() => useMemo(() => () => (
   };
 
   // TODO: 将内联组件移到组件外部
-const renderTabBar = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderTabBar = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.tabBar}>
       {[
         { key: 'farm', label: '食农结合', icon: 'leaf' },
@@ -934,9 +937,9 @@ const renderTabBar = useMemo(() => useMemo(() => useMemo(() => () => (
         </TouchableOpacity>
       ))}
     </View>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
-  const renderContent = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const renderContent = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     switch (activeTab) {
       case 'farm': return renderFarmTab();
       case 'wellness': return renderWellnessTab();
@@ -978,7 +981,7 @@ const renderTabBar = useMemo(() => useMemo(() => useMemo(() => () => (
   );
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -1490,6 +1493,6 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
     backgroundColor: colors.textSecondary,
     opacity: 0.6,
   },
-}), []), []), []);
+}), []), []), []), []), []), []);
 
-export default EcoServices; 
+export default React.memo(EcoServices); 

@@ -5,6 +5,9 @@ import { colors, spacing, typography } from '../../constants/theme';
 import { useAppSelector, useAppDispatch } from '../../store';
 
 
+
+
+
 import React, { useState, useEffect, useCallback } from 'react';
   View,
   Text,
@@ -54,7 +57,7 @@ export const BlockchainDataManager: React.FC<BlockchainDataManagerProps> = ({
   onRecordPress,
   onUploadComplete,
 }) => {
-  const dispatch = useMemo(() => useMemo(() => useMemo(() => useAppDispatch(), []), []), []);
+  const dispatch = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useAppDispatch(), []), []), []), []), []), []);
   const { profile: user } = useAppSelector(state => state.user);
   
   const [records, setRecords] = useState<BlockchainRecord[]>([]);
@@ -123,15 +126,15 @@ export const BlockchainDataManager: React.FC<BlockchainDataManagerProps> = ({
     }).start();
   }, []);
 
-  const onRefresh = useMemo(() => useMemo(() => useMemo(() => useCallback(async () => {
-    setRefreshing(true), []), []), []);
+  const onRefresh = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback(async () => {
+    setRefreshing(true), []), []), []), []), []), []);
     // 模拟数据刷新
     await new Promise<void>(resolve => setTimeout(() => resolve(), 1500));
     setRefreshing(false);
   }, []);
 
-  const handleUploadData = useMemo(() => useMemo(() => useMemo(() => useCallback(async (request: DataUploadRequest) => {
-    setLoading(true), []), []), []);
+  const handleUploadData = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback(async (request: DataUploadRequest) => {
+    setLoading(true), []), []), []), []), []), []);
     try {
       // 模拟上链过程
       await new Promise<void>(resolve => setTimeout(() => resolve(), 2000));
@@ -162,8 +165,8 @@ export const BlockchainDataManager: React.FC<BlockchainDataManagerProps> = ({
     }
   }, [onUploadComplete]);
 
-  const handleVerifyData = useMemo(() => useMemo(() => useMemo(() => useCallback(async (hash: string) => {
-    setLoading(true), []), []), []);
+  const handleVerifyData = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback(async (hash: string) => {
+    setLoading(true), []), []), []), []), []), []);
     try {
       // 模拟验证过程
       await new Promise<void>(resolve => setTimeout(() => resolve(), 1000));
@@ -175,7 +178,7 @@ export const BlockchainDataManager: React.FC<BlockchainDataManagerProps> = ({
     }
   }, []);
 
-  const getStatusColor = useMemo(() => useMemo(() => useMemo(() => useCallback( (status: string) => {, []), []), []), []);
+  const getStatusColor = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (status: string) => {, []), []), []), []), []), []), []);
     switch (status) {
       case 'confirmed': return colors.success;
       case 'pending': return colors.warning;
@@ -184,7 +187,7 @@ export const BlockchainDataManager: React.FC<BlockchainDataManagerProps> = ({
     }
   };
 
-  const getDataTypeIcon = useMemo(() => useMemo(() => useMemo(() => useCallback( (dataType: string) => {, []), []), []), []);
+  const getDataTypeIcon = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (dataType: string) => {, []), []), []), []), []), []), []);
     switch (dataType) {
       case 'health': return 'fitness';
       case 'diagnosis': return 'medical';
@@ -194,7 +197,7 @@ export const BlockchainDataManager: React.FC<BlockchainDataManagerProps> = ({
     }
   };
 
-  const getDataTypeLabel = useMemo(() => useMemo(() => useMemo(() => useCallback( (dataType: string) => {, []), []), []), []);
+  const getDataTypeLabel = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (dataType: string) => {, []), []), []), []), []), []), []);
     switch (dataType) {
       case 'health': return '健康数据';
       case 'diagnosis': return '诊断记录';
@@ -204,12 +207,12 @@ export const BlockchainDataManager: React.FC<BlockchainDataManagerProps> = ({
     }
   };
 
-  const filteredRecords = useMemo(() => useMemo(() => useMemo(() => selectedTab === 'all' 
+  const filteredRecords = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => selectedTab === 'all' 
     ? records 
-    : records.filter(record => record.dataType === selectedTab), []), []), []);
+    : records.filter(record => record.dataType === selectedTab), []), []), []), []), []), []);
 
   // TODO: 将内联组件移到组件外部
-const renderTabSelector = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderTabSelector = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.tabSelector}>
       {(['all', 'health', 'diagnosis', 'prescription', 'report'] as const).map((tab) => (
         <TouchableOpacity
@@ -231,13 +234,13 @@ const renderTabSelector = useMemo(() => useMemo(() => useMemo(() => () => (
         </TouchableOpacity>
       ))}
     </View>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
-  const renderStatsCards = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
-    const totalRecords = useMemo(() => useMemo(() => useMemo(() => records.length, []), []), []);
-    const confirmedRecords = useMemo(() => useMemo(() => useMemo(() => records.filter(r => r.status === 'confirmed').length, []), []), []);
-    const encryptedRecords = useMemo(() => useMemo(() => useMemo(() => records.filter(r => r.encrypted).length, []), []), []);
-    const sharedRecords = useMemo(() => useMemo(() => useMemo(() => records.filter(r => r.shared).length, []), []), []);
+  const renderStatsCards = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
+    const totalRecords = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => records.length, []), []), []), []), []), []);
+    const confirmedRecords = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => records.filter(r => r.status === 'confirmed').length, []), []), []), []), []), []);
+    const encryptedRecords = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => records.filter(r => r.encrypted).length, []), []), []), []), []), []);
+    const sharedRecords = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => records.filter(r => r.shared).length, []), []), []), []), []), []);
 
     return (
       <View style={styles.statsContainer}>
@@ -261,7 +264,7 @@ const renderTabSelector = useMemo(() => useMemo(() => useMemo(() => () => (
     );
   };
 
-  const renderRecordCard = useMemo(() => useMemo(() => useMemo(() => (record: BlockchainRecord, index: number) => (
+  const renderRecordCard = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => (record: BlockchainRecord, index: number) => (
     <Animated.View
       key={record.id}
       style={[
@@ -354,10 +357,10 @@ const renderTabSelector = useMemo(() => useMemo(() => useMemo(() => () => (
         </View>
       </TouchableOpacity>
     </Animated.View>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
   // TODO: 将内联组件移到组件外部
-const renderUploadModal = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderUploadModal = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <Modal
       visible={uploadModalVisible}
       animationType="slide"
@@ -419,7 +422,7 @@ const renderUploadModal = useMemo(() => useMemo(() => useMemo(() => () => (
                 data: {},
                 encrypt: true,
                 shareWith: [],
-              }), []), []), []);
+              }), []), []), []), []), []), []);
             }}
             style={styles.modalButton}
           />
@@ -481,7 +484,7 @@ const renderUploadModal = useMemo(() => useMemo(() => useMemo(() => () => (
   );
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -756,7 +759,7 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-}), []), []), []);
+}), []), []), []), []), []), []);
 
 // 导出类型
 export type { BlockchainRecord, DataUploadRequest, BlockchainDataManagerProps };

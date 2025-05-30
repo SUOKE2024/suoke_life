@@ -3,16 +3,36 @@
  * 索克生活APP - 架构优化
  */
 
-export { default as ApiIntegrationService } from './ApiIntegrationService';
-export { default as IntegratedApiService } from './IntegratedApiService';
-export { default as accessibilityService } from './accessibilityService';
-export { default as agentCoordinationService } from './agentCoordinationService';
+// 基础服务导出
 export { default as agentService } from './agentService';
-export { default as apiClient } from './apiClient';
-export { default as apiClient.web } from './apiClient.web';
 export { default as authService } from './authService';
-export { default as ecoServicesApi } from './ecoServicesApi';
 export { default as enhancedApiClient } from './enhancedApiClient';
-export { default as fiveDiagnosisService } from './fiveDiagnosisService';
-export { default as mlTrainingService } from './mlTrainingService';
 export { default as realTimeSync } from './realTimeSync';
+
+// UI/UX优化服务完整导出
+export {
+  UIUXOptimizationService,
+  AnimationManager,
+  PerformanceOptimizer,
+  InteractionEnhancer,
+  VisualEffectManager,
+  ResponsiveManager,
+  createUIUXOptimizationService,
+  defaultPerformanceConfig,
+  defaultVisualEffectConfig,
+  defaultResponsiveConfig,
+  defaultThemeConfig,
+} from './uiUxOptimizationService';
+
+// UI/UX优化服务类型导出
+export type {
+  AnimationConfig,
+  AdvancedAnimationType,
+  PerformanceConfig,
+  PerformanceMetrics,
+  PerformanceWarningLevel,
+  InteractionFeedback,
+  VisualEffectConfig,
+  ResponsiveConfig,
+  ThemeConfig,
+} from './uiUxOptimizationService';

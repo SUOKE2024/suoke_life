@@ -3,6 +3,9 @@ import { colors, spacing } from '../../../constants/theme';
 
 
 
+
+
+
 /**
  * 四诊系统导航组件
  * 提供望、闻、问、切四诊功能的统一入口
@@ -90,7 +93,7 @@ export const FourDiagnosisNavigator: React.FC<FourDiagnosisNavigatorProps> = ({
   const [selectedMethod, setSelectedMethod] = useState<DiagnosisMethod | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleMethodSelect = useMemo(() => useMemo(() => useMemo(() => useCallback( (method: DiagnosisMethod) => {, []), []), []), []);
+  const handleMethodSelect = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (method: DiagnosisMethod) => {, []), []), []), []), []), []), []);
     if (method.status === 'maintenance') {
       Alert.alert('系统维护', '该功能正在维护中，请稍后再试');
       return;
@@ -104,8 +107,8 @@ export const FourDiagnosisNavigator: React.FC<FourDiagnosisNavigatorProps> = ({
     setSelectedMethod(method);
   };
 
-  const startDiagnosis = useMemo(() => useMemo(() => useMemo(() => async () => {
-    if (!selectedMethod) {return, []), []), []);}
+  const startDiagnosis = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async () => {
+    if (!selectedMethod) {return, []), []), []), []), []), []);}
 
     setIsLoading(true);
     try {
@@ -120,7 +123,7 @@ export const FourDiagnosisNavigator: React.FC<FourDiagnosisNavigatorProps> = ({
     }
   };
 
-  const renderMethodCard = useMemo(() => useMemo(() => useMemo(() => (method: DiagnosisMethod) => (
+  const renderMethodCard = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => (method: DiagnosisMethod) => (
     <TouchableOpacity
       key={method.id}
       style={[
@@ -168,9 +171,9 @@ export const FourDiagnosisNavigator: React.FC<FourDiagnosisNavigatorProps> = ({
         </View>
       )}
     </TouchableOpacity>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
-  const renderSelectedMethodDetails = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const renderSelectedMethodDetails = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     if (!selectedMethod) {return null;}
 
     return (
@@ -257,7 +260,7 @@ export const FourDiagnosisNavigator: React.FC<FourDiagnosisNavigatorProps> = ({
   );
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -479,4 +482,4 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
     color: 'white',
     marginLeft: spacing.sm,
   },
-}), []), []), []); 
+}), []), []), []), []), []), []); 

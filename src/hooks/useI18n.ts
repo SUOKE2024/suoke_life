@@ -2,6 +2,9 @@ import { i18nManager } from '../i18n/i18nManager';
 import { LocalizationService } from '../i18n/localizationService';
 
 
+
+
+
 /**
  * 索克生活 - 国际化React Hook
  * 提供易用的多语言和地区化功能

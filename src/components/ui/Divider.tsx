@@ -7,6 +7,9 @@ import React from "react";
 
 
 
+
+
+
 /**
  * 索克生活 - Divider组件
  * 分割线组件
@@ -147,4 +150,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Divider;
+export default React.memo(Divider);

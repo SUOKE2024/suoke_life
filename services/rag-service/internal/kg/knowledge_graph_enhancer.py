@@ -8,11 +8,12 @@
 
 import asyncio
 import json
-from typing import Dict, List, Any, Optional, Tuple, Set, Union
+from typing import Dict, List, Any, Optional, Tuple, Set, Union, Literal
 from dataclasses import dataclass, field
 from enum import Enum
 import networkx as nx
 from loguru import logger
+from datetime import datetime
 
 from ..observability.metrics import MetricsCollector
 from ..tcm.tcm_models import (
@@ -104,6 +105,18 @@ class KGQueryResult:
     reasoning_chain: List[str] = field(default_factory=list)
     confidence: float = 0.0
     metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class AuditRecord:
+    entity_id: str
+    entity_type: str
+    action: Literal['add', 'update', 'delete', 'crowdsource']
+    status: Literal['pending', 'approved', 'rejected']
+    submitter: str
+    reviewer: str = ''
+    comment: str = ''
+    timestamp: str = ''
 
 
 class TCMKnowledgeBase:
@@ -910,6 +923,7 @@ class KnowledgeGraphEnhancer:
         self.builder = KnowledgeGraphBuilder(self.knowledge_base)
         self.graph = None
         self.querier = None
+        self.audit_records: List[AuditRecord] = []
     
     async def initialize(self):
         """初始化知识图谱"""
@@ -1134,4 +1148,28 @@ class KnowledgeGraphEnhancer:
             relation_type = relation.relation_type.value
             stats["relation_types"][relation_type] = stats["relation_types"].get(relation_type, 0) + 1
         
-        return stats 
+        return stats
+    
+    def submit_crowdsourced_knowledge(self, entity: KGNode, submitter: str):
+        """用户众包补充知识，待专家审核"""
+        record = AuditRecord(
+            entity_id=entity.id,
+            entity_type=entity.type.value,
+            action='crowdsource',
+            status='pending',
+            submitter=submitter,
+            timestamp=str(datetime.now())
+        )
+        self.audit_records.append(record)
+        logger.info(f"收到众包知识补充，待审核: {entity.name}")
+    
+    def expert_review(self, entity_id: str, approve: bool, reviewer: str, comment: str = ""):
+        """专家审核知识节点或关系"""
+        for record in self.audit_records:
+            if record.entity_id == entity_id and record.status == 'pending':
+                record.status = 'approved' if approve else 'rejected'
+                record.reviewer = reviewer
+                record.comment = comment
+                record.timestamp = str(datetime.now())
+                logger.info(f"专家审核{'通过' if approve else '拒绝'}: {entity_id}")
+                break 

@@ -136,6 +136,11 @@ monitoring = [
     "jaeger-client>=4.8.0",
 ]
 
+security = [
+    "bandit>=1.7.0",
+    "semgrep>=1.0.0"
+]
+
 [project.urls]
 Homepage = "https://github.com/SUOKE2024/suoke_life"
 Documentation = "https://github.com/SUOKE2024/suoke_life/blob/main/README.md"
@@ -246,3 +251,11 @@ precision = 2
 
 [tool.coverage.html]
 directory = "htmlcov"
+
+[tool.bandit]
+# 配置bandit安全扫描
+exclude_dirs = ["tests", "__pycache__"]
+
+[tool.semgrep]
+# 配置semgrep规则
+config = "p/ci"

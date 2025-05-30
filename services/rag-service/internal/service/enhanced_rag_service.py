@@ -42,6 +42,9 @@ from services.common.observability.tracing import (
     get_tracer, trace, SpanKind
 )
 
+# 导入平台组件
+from ..platform.model_manager import get_model_manager, ModelType
+
 class IndexType(Enum):
     """索引类型"""
     FLAT = "FLAT"
@@ -192,6 +195,9 @@ class EnhancedRagService(RagService):
         # 后台任务
         self.background_tasks: List[asyncio.Task] = []
         
+        # 通过模型管理器加载生成模型和嵌入模型
+        self.model_manager = get_model_manager()
+        
         logger.info("增强版RAG服务初始化完成")
     
     async def initialize(self) -> None:
@@ -203,6 +209,21 @@ class EnhancedRagService(RagService):
         
         # 初始化多级缓存
         await self._initialize_multi_level_cache()
+        
+        # 通过模型管理器加载生成模型和嵌入模型
+        if self.model_manager:
+            gen_model = await self.model_manager.get_model(
+                self.config['generator']['model_name'],
+                self.config['generator'].get('model_version')
+            )
+            if gen_model:
+                self.generator = gen_model
+            embed_model = await self.model_manager.get_model(
+                self.config['embedding']['model_name'],
+                self.config['embedding'].get('model_version')
+            )
+            if embed_model:
+                self.embedding_service.set_model(embed_model)
         
         # 启动后台任务
         self._start_background_tasks()
@@ -959,4 +980,10 @@ class EnhancedRagService(RagService):
         # 调用父类关闭方法
         await super().close()
         
-        logger.info("增强版RAG服务已关闭") 
+        logger.info("增强版RAG服务已关闭")
+    
+    async def reload_model(self, model_name: str, version: str = None):
+        """支持热更新指定模型"""
+        if self.model_manager:
+            await self.model_manager.load_model(model_name, version)
+        logger.info(f"模型{model_name}已热更新") 

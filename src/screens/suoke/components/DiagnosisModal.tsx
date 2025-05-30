@@ -5,6 +5,9 @@ import { useAppDispatch, useAppSelector } from '../../../store';
 import { DiagnosisType } from '../../../types';
 
 
+
+
+
 import React, { useState, useEffect } from 'react';
   View,
   Text,
@@ -49,9 +52,9 @@ export const DiagnosisModal: React.FC<DiagnosisModalProps> = ({
   title,
   description,
 }) => {
-  const dispatch = useMemo(() => useMemo(() => useMemo(() => useAppDispatch(), []), []), []);
-  const loading = useMemo(() => useMemo(() => useMemo(() => useAppSelector(selectDiagnosisLoading), []), []), []);
-  const currentSession = useMemo(() => useMemo(() => useMemo(() => useAppSelector(selectCurrentSession), []), []), []);
+  const dispatch = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useAppDispatch(), []), []), []), []), []), []);
+  const loading = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useAppSelector(selectDiagnosisLoading), []), []), []), []), []), []);
+  const currentSession = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useAppSelector(selectCurrentSession), []), []), []), []), []), []);
 
   const [currentStep, setCurrentStep] = useState(0);
   const [sessionId, setSessionId] = useState<string | null>(null);
@@ -64,7 +67,7 @@ export const DiagnosisModal: React.FC<DiagnosisModalProps> = ({
     }
   }, [visible, diagnosisType]);
 
-  const initializeDiagnosisSteps = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const initializeDiagnosisSteps = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     let diagnosisSteps: DiagnosisStep[] = [];
 
     switch (diagnosisType) {
@@ -162,9 +165,9 @@ export const DiagnosisModal: React.FC<DiagnosisModalProps> = ({
     setCurrentStep(0);
   };
 
-  const startDiagnosis = useMemo(() => useMemo(() => useMemo(() => async () => {
+  const startDiagnosis = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async () => {
     try {
-      const result = await dispatch(startDiagnosisSession()), []), []), []);
+      const result = await dispatch(startDiagnosisSession()), []), []), []), []), []), []);
       if (startDiagnosisSession.fulfilled.match(result)) {
         setSessionId(result.payload.id);
         Alert.alert('诊断开始', '诊断会话已启动，请按步骤进行');
@@ -174,11 +177,11 @@ export const DiagnosisModal: React.FC<DiagnosisModalProps> = ({
     }
   };
 
-  const completeStep = useMemo(() => useMemo(() => useMemo(() => async (stepData: any) => {
-    if (!sessionId) {return, []), []), []);}
+  const completeStep = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async (stepData: any) => {
+    if (!sessionId) {return, []), []), []), []), []), []);}
 
     try {
-      const result = useMemo(() => useMemo(() => useMemo(() => await dispatch(
+      const result = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => await dispatch(
         submitDiagnosisData({
           sessionId,
           type: diagnosisType,
@@ -188,11 +191,11 @@ export const DiagnosisModal: React.FC<DiagnosisModalProps> = ({
             timestamp: new Date().toISOString(),
           },
         })
-      ), []), []), []);
+      ), []), []), []), []), []), []);
 
       if (submitDiagnosisData.fulfilled.match(result)) {
         // 更新步骤状态
-        const updatedSteps = useMemo(() => useMemo(() => useMemo(() => [...steps], []), []), []);
+        const updatedSteps = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => [...steps], []), []), []), []), []), []);
         updatedSteps[currentStep].completed = true;
         updatedSteps[currentStep].data = stepData;
         setSteps(updatedSteps);
@@ -210,11 +213,11 @@ export const DiagnosisModal: React.FC<DiagnosisModalProps> = ({
     }
   };
 
-  const completeDiagnosis = useMemo(() => useMemo(() => useMemo(() => async () => {
-    if (!sessionId) {return, []), []), []);}
+  const completeDiagnosis = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async () => {
+    if (!sessionId) {return, []), []), []), []), []), []);}
 
     try {
-      const result = useMemo(() => useMemo(() => useMemo(() => await dispatch(completeDiagnosisSession(sessionId)), []), []), []);
+      const result = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => await dispatch(completeDiagnosisSession(sessionId)), []), []), []), []), []), []);
       if (completeDiagnosisSession.fulfilled.match(result)) {
         Alert.alert(
           '诊断完成',
@@ -227,8 +230,8 @@ export const DiagnosisModal: React.FC<DiagnosisModalProps> = ({
     }
   };
 
-  const renderStepContent = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
-    const step = useMemo(() => useMemo(() => useMemo(() => steps[currentStep], []), []), []);
+  const renderStepContent = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
+    const step = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => steps[currentStep], []), []), []), []), []), []);
     if (!step) {return null;}
 
     switch (step.id) {
@@ -311,7 +314,7 @@ export const DiagnosisModal: React.FC<DiagnosisModalProps> = ({
   };
 
   // TODO: 将内联组件移到组件外部
-const renderProgressBar = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderProgressBar = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.progressContainer}>
       {steps.map((step, index) => (
         <View key={step.id} style={styles.progressItem}>
@@ -335,7 +338,7 @@ const renderProgressBar = useMemo(() => useMemo(() => useMemo(() => () => (
         </View>
       ))}
     </View>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
   return (
     <Modal visible={visible} animationType="slide" presentationStyle="pageSheet">
@@ -382,7 +385,7 @@ const renderProgressBar = useMemo(() => useMemo(() => useMemo(() => () => (
   );
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -511,6 +514,6 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
     color: colors.text,
     backgroundColor: colors.surface,
   },
-}), []), []), []);
+}), []), []), []), []), []), []);
 
-export default DiagnosisModal; 
+export default React.memo(DiagnosisModal); 

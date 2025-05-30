@@ -3,6 +3,9 @@ import Icon from '../../../components/common/Icon';
 import { colors, spacing } from '../../../constants/theme';
 
 
+
+
+
 import React, { useState, useEffect, useRef } from 'react';
   View,
   Text,
@@ -38,7 +41,7 @@ const WellnessExperience: React.FC<WellnessExperienceProps> = ({
 }) => {
   const [selectedScene, setSelectedScene] = useState<WellnessScene | null>(null);
   const [isExperiencing, setIsExperiencing] = useState(false);
-  const fadeAnim = useMemo(() => useMemo(() => useMemo(() => useRef(new Animated.Value(0)).current, []), []), []);
+  const fadeAnim = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useRef(new Animated.Value(0)).current, []), []), []), []), []), []);
 
   // 山水养生场景数据
   const wellnessScenes: WellnessScene[] = [
@@ -90,7 +93,7 @@ const WellnessExperience: React.FC<WellnessExperienceProps> = ({
     }
   }, [visible]);
 
-  const startExperience = useMemo(() => useMemo(() => useMemo(() => useCallback( (scene: WellnessScene) => {, []), []), []), []);
+  const startExperience = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (scene: WellnessScene) => {, []), []), []), []), []), []), []);
     setSelectedScene(scene);
     Alert.alert(
       '开始体验',
@@ -102,7 +105,7 @@ const WellnessExperience: React.FC<WellnessExperienceProps> = ({
     );
   };
 
-  const getSceneIcon = useMemo(() => useMemo(() => useMemo(() => useCallback( (type: string) => {, []), []), []), []);
+  const getSceneIcon = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (type: string) => {, []), []), []), []), []), []), []);
     switch (type) {
       case 'mountain': return 'mountain';
       case 'water': return 'waves';
@@ -112,7 +115,7 @@ const WellnessExperience: React.FC<WellnessExperienceProps> = ({
     }
   };
 
-  const renderSceneCard = useMemo(() => useMemo(() => useMemo(() => (scene: WellnessScene) => (
+  const renderSceneCard = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => (scene: WellnessScene) => (
     <TouchableOpacity
       key={scene.id}
       style={styles.sceneCard}
@@ -158,7 +161,7 @@ const WellnessExperience: React.FC<WellnessExperienceProps> = ({
         </View>
       </View>
     </TouchableOpacity>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
   return (
     <Modal visible={visible} animationType="slide" presentationStyle="pageSheet">
@@ -190,7 +193,7 @@ const WellnessExperience: React.FC<WellnessExperienceProps> = ({
   );
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -320,6 +323,6 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
     color: colors.warning,
     fontWeight: '600',
   },
-}), []), []), []);
+}), []), []), []), []), []), []);
 
-export default WellnessExperience; 
+export default React.memo(WellnessExperience); 

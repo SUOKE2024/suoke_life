@@ -6,10 +6,10 @@ API 路由模块
 
 from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request, Body
 from pydantic import BaseModel, Field
 
-from laoke_service.core.agent import AgentMessage, LaoKeAgent
+from laoke_service.core.agent import AgentMessage, LaoKeAgent, FourDiagnosisAggregator
 from laoke_service.core.exceptions import LaoKeServiceError
 
 # 创建主路由器
@@ -368,3 +368,15 @@ async def get_agent_capabilities(
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e)) from e
+
+
+@api_router.post("/four-diagnosis/aggregation")
+async def four_diagnosis_aggregation(
+    request: Request,
+    body: dict = Body(...)
+):
+    """四诊聚合接口，聚合四诊诊断结果"""
+    user_id = body.get("user_id") or "anonymous"
+    diagnosis_request = body.get("diagnosis_request") or body
+    result = await FourDiagnosisAggregator.aggregate(diagnosis_request, user_id)
+    return {"success": True, "data": result}

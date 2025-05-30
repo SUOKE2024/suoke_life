@@ -1,6 +1,6 @@
 """
 API网关动态路由服务
-支持基于服务发现的动态路由、负载均衡、熔断器、限流等功能
+支持服务发现、负载均衡和健康检查
 """
 import asyncio
 import logging
@@ -26,9 +26,8 @@ class LoadBalanceStrategy(Enum):
     """负载均衡策略"""
     ROUND_ROBIN = "round_robin"
     RANDOM = "random"
-    WEIGHTED_ROUND_ROBIN = "weighted_round_robin"
     LEAST_CONNECTIONS = "least_connections"
-    CONSISTENT_HASH = "consistent_hash"
+    WEIGHTED_ROUND_ROBIN = "weighted_round_robin"
 
 class HealthStatus(Enum):
     """健康状态"""
@@ -54,14 +53,14 @@ class RouteRule:
 
 @dataclass
 class ServiceEndpoint:
-    """服务端点"""
-    instance: ServiceInstance
-    health_status: HealthStatus = HealthStatus.UNKNOWN
-    last_health_check: datetime = field(default_factory=datetime.now)
-    connection_count: int = 0
-    response_time_avg: float = 0.0
-    error_count: int = 0
-    success_count: int = 0
+    """服务端点信息"""
+    address: str
+    port: int
+    service_id: str
+    weight: int = 1
+    connections: int = 0
+    last_used: float = 0
+    health_status: str = "unknown"
 
 class CircuitBreaker:
     """熔断器"""
@@ -122,504 +121,296 @@ class RateLimiter:
         self.requests.append(now)
         return True
 
+class ServiceNotAvailableError(Exception):
+    """服务不可用异常"""
+    pass
+
 class DynamicRouter:
     """动态路由器"""
     
-    def __init__(self):
-        self.consul_client = get_consul_client()
-        self.config_center = get_config_center()
-        self.tracing = get_tracing_manager()
+    def __init__(self, consul_client: ConsulServiceRegistry):
+        self.consul = consul_client
+        self.service_cache: Dict[str, List[ServiceEndpoint]] = {}
+        self.load_balancer_state: Dict[str, int] = {}
+        self.cache_ttl = 30  # 缓存30秒
+        self.last_refresh: Dict[str, float] = {}
+        self.health_check_interval = 10
+        self._running = False
         
-        # 路由规则
-        self.route_rules: List[RouteRule] = []
-        self.service_endpoints: Dict[str, List[ServiceEndpoint]] = {}
-        
-        # 负载均衡状态
-        self.lb_counters: Dict[str, int] = {}
-        self.consistent_hash_ring: Dict[str, List[str]] = {}
-        
-        # 熔断器和限流器
-        self.circuit_breakers: Dict[str, CircuitBreaker] = {}
-        self.rate_limiters: Dict[str, RateLimiter] = {}
-        
-        # HTTP客户端
-        self.http_session = None
-        
-        # 配置
-        self.config = ServiceConfig("api-gateway", self.config_center)
-        
-        # 初始化
-        self._initialize()
-    
-    def _initialize(self):
-        """初始化路由器"""
-        # 加载路由规则
-        self._load_route_rules()
-        
-        # 启动服务发现监听
-        self._start_service_discovery()
-        
-        # 启动健康检查
+    async def start(self):
+        """启动路由器"""
+        self._running = True
+        # 启动后台健康检查任务
         asyncio.create_task(self._health_check_loop())
+        logger.info("Dynamic router started")
         
-        # 启动配置监听
-        self._start_config_watching()
+    async def stop(self):
+        """停止路由器"""
+        self._running = False
+        logger.info("Dynamic router stopped")
         
-        logger.info("Dynamic router initialized")
+    async def get_service_endpoint(
+        self, 
+        service_name: str, 
+        strategy: LoadBalanceStrategy = LoadBalanceStrategy.ROUND_ROBIN
+    ) -> str:
+        """获取服务端点（带负载均衡）"""
+        
+        # 检查缓存是否需要刷新
+        await self._refresh_cache_if_needed(service_name)
+        
+        endpoints = self.service_cache.get(service_name, [])
+        if not endpoints:
+            raise ServiceNotAvailableError(f"Service {service_name} not available")
+        
+        # 过滤健康的端点
+        healthy_endpoints = [ep for ep in endpoints if ep.health_status == "passing"]
+        if not healthy_endpoints:
+            # 如果没有健康的端点，使用所有端点作为降级策略
+            healthy_endpoints = endpoints
+            logger.warning(f"No healthy endpoints for {service_name}, using all endpoints")
+        
+        # 根据策略选择端点
+        endpoint = self._select_endpoint(healthy_endpoints, strategy, service_name)
+        
+        # 更新连接计数和使用时间
+        endpoint.connections += 1
+        endpoint.last_used = time.time()
+        
+        return f"http://{endpoint.address}:{endpoint.port}"
     
-    def _load_route_rules(self):
-        """加载路由规则"""
+    def _select_endpoint(
+        self, 
+        endpoints: List[ServiceEndpoint], 
+        strategy: LoadBalanceStrategy,
+        service_name: str
+    ) -> ServiceEndpoint:
+        """根据策略选择端点"""
+        
+        if strategy == LoadBalanceStrategy.ROUND_ROBIN:
+            index = self.load_balancer_state.get(service_name, 0)
+            endpoint = endpoints[index % len(endpoints)]
+            self.load_balancer_state[service_name] = index + 1
+            return endpoint
+            
+        elif strategy == LoadBalanceStrategy.RANDOM:
+            return random.choice(endpoints)
+            
+        elif strategy == LoadBalanceStrategy.LEAST_CONNECTIONS:
+            return min(endpoints, key=lambda ep: ep.connections)
+            
+        elif strategy == LoadBalanceStrategy.WEIGHTED_ROUND_ROBIN:
+            # 基于权重的轮询
+            total_weight = sum(ep.weight for ep in endpoints)
+            if total_weight == 0:
+                return endpoints[0]
+                
+            # 简化的加权轮询实现
+            current_weight = self.load_balancer_state.get(f"{service_name}_weight", 0)
+            for endpoint in endpoints:
+                current_weight += endpoint.weight
+                if current_weight >= total_weight:
+                    self.load_balancer_state[f"{service_name}_weight"] = 0
+                    return endpoint
+            
+            self.load_balancer_state[f"{service_name}_weight"] = current_weight
+            return endpoints[0]
+            
+        else:
+            return endpoints[0]
+    
+    async def _refresh_cache_if_needed(self, service_name: str):
+        """如果需要则刷新缓存"""
+        now = time.time()
+        last_refresh = self.last_refresh.get(service_name, 0)
+        
+        if now - last_refresh > self.cache_ttl:
+            await self._refresh_service_cache(service_name)
+            self.last_refresh[service_name] = now
+    
+    async def _refresh_service_cache(self, service_name: str):
+        """刷新服务缓存"""
         try:
-            rules_config = self.config.get("route_rules", [])
+            instances = self.consul.discover_service(service_name)
+            endpoints = []
             
-            self.route_rules = []
-            for rule_data in rules_config:
-                rule = RouteRule(**rule_data)
-                self.route_rules.append(rule)
+            for instance in instances:
+                endpoint = ServiceEndpoint(
+                    address=instance["address"],
+                    port=instance["port"],
+                    service_id=instance["service_id"],
+                    weight=int(instance.get("meta", {}).get("weight", 1))
+                )
+                endpoints.append(endpoint)
             
-            # 按优先级排序
-            self.route_rules.sort(key=lambda r: r.priority, reverse=True)
-            
-            logger.info(f"Loaded {len(self.route_rules)} route rules")
+            self.service_cache[service_name] = endpoints
+            logger.debug(f"Refreshed cache for {service_name}: {len(endpoints)} endpoints")
             
         except Exception as e:
-            logger.error(f"Failed to load route rules: {e}")
-    
-    def _start_service_discovery(self):
-        """启动服务发现"""
-        # 获取所有服务
-        services = self.consul_client.get_all_services()
-        
-        for service_name, instances in services.items():
-            self.service_endpoints[service_name] = [
-                ServiceEndpoint(instance=instance)
-                for instance in instances
-            ]
-            
-            # 监听服务变化
-            self.consul_client.watch_service(
-                service_name, 
-                lambda instances, svc=service_name: self._on_service_change(svc, instances)
-            )
-        
-        logger.info(f"Started service discovery for {len(services)} services")
-    
-    def _on_service_change(self, service_name: str, instances: List[ServiceInstance]):
-        """服务变化回调"""
-        self.service_endpoints[service_name] = [
-            ServiceEndpoint(instance=instance)
-            for instance in instances
-        ]
-        
-        # 重建一致性哈希环
-        self._rebuild_consistent_hash_ring(service_name)
-        
-        logger.info(f"Service {service_name} updated: {len(instances)} instances")
-    
-    def _start_config_watching(self):
-        """启动配置监听"""
-        def on_route_rules_change(key, value):
-            logger.info("Route rules configuration changed, reloading...")
-            self._load_route_rules()
-        
-        self.config.watch("route_rules", on_route_rules_change)
+            logger.error(f"Failed to refresh cache for {service_name}: {e}")
     
     async def _health_check_loop(self):
         """健康检查循环"""
-        while True:
+        while self._running:
             try:
-                await self._perform_health_checks()
-                await asyncio.sleep(30)  # 每30秒检查一次
+                await self._check_all_services_health()
+                await asyncio.sleep(self.health_check_interval)
             except Exception as e:
-                logger.error(f"Health check error: {e}")
+                logger.error(f"Health check loop error: {e}")
                 await asyncio.sleep(5)
     
-    async def _perform_health_checks(self):
-        """执行健康检查"""
-        if not self.http_session:
-            self.http_session = aiohttp.ClientSession()
-        
+    async def _check_all_services_health(self):
+        """检查所有服务的健康状态"""
+        for service_name, endpoints in self.service_cache.items():
         tasks = []
-        for service_name, endpoints in self.service_endpoints.items():
             for endpoint in endpoints:
-                task = self._check_endpoint_health(endpoint)
+                task = asyncio.create_task(
+                    self._check_endpoint_health(endpoint)
+                )
                 tasks.append(task)
         
         if tasks:
             await asyncio.gather(*tasks, return_exceptions=True)
     
     async def _check_endpoint_health(self, endpoint: ServiceEndpoint):
-        """检查端点健康状态"""
+        """检查单个端点的健康状态"""
         try:
-            health_url = f"http://{endpoint.instance.address}:{endpoint.instance.port}/health"
+            health_url = f"http://{endpoint.address}:{endpoint.port}/health"
             
-            async with self.http_session.get(health_url, timeout=5) as response:
+            async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=5)) as session:
+                async with session.get(health_url) as response:
                 if response.status == 200:
-                    endpoint.health_status = HealthStatus.HEALTHY
+                        endpoint.health_status = "passing"
                 else:
-                    endpoint.health_status = HealthStatus.UNHEALTHY
-                    
-        except Exception:
-            endpoint.health_status = HealthStatus.UNHEALTHY
-        
-        endpoint.last_health_check = datetime.now()
-    
-    def _rebuild_consistent_hash_ring(self, service_name: str):
-        """重建一致性哈希环"""
-        if service_name not in self.service_endpoints:
-            return
-        
-        ring = []
-        for endpoint in self.service_endpoints[service_name]:
-            if endpoint.health_status == HealthStatus.HEALTHY:
-                # 为每个端点创建多个虚拟节点
-                for i in range(100):
-                    virtual_node = f"{endpoint.instance.address}:{endpoint.instance.port}#{i}"
-                    hash_value = hashlib.md5(virtual_node.encode()).hexdigest()
-                    ring.append(hash_value)
-        
-        ring.sort()
-        self.consistent_hash_ring[service_name] = ring
-    
-    @trace_function("route_request")
-    async def route_request(self, path: str, method: str, headers: Dict[str, str], 
-                           query_params: Dict[str, str], body: bytes = None) -> Dict[str, Any]:
-        """路由请求"""
-        # 查找匹配的路由规则
-        route_rule = self._find_matching_route(path, method, headers, query_params)
-        
-        if not route_rule:
-            return {
-                "status": 404,
-                "error": "No matching route found",
-                "path": path
-            }
-        
-        # 获取服务端点
-        endpoint = await self._select_endpoint(route_rule.service_name, headers, query_params)
-        
-        if not endpoint:
-            return {
-                "status": 503,
-                "error": "No healthy service instances available",
-                "service": route_rule.service_name
-            }
-        
-        # 检查熔断器
-        circuit_breaker = self._get_circuit_breaker(route_rule.service_name)
-        if route_rule.circuit_breaker_enabled and not circuit_breaker.can_execute():
-            return {
-                "status": 503,
-                "error": "Circuit breaker is open",
-                "service": route_rule.service_name
-            }
-        
-        # 检查限流
-        rate_limiter = self._get_rate_limiter(route_rule.service_name)
-        if route_rule.rate_limit_enabled and not rate_limiter.is_allowed():
-            return {
-                "status": 429,
-                "error": "Rate limit exceeded",
-                "service": route_rule.service_name
-            }
-        
-        # 执行请求
-        try:
-            result = await self._execute_request(
-                endpoint, path, method, headers, query_params, body, route_rule
-            )
-            
-            # 记录成功
-            circuit_breaker.record_success()
-            endpoint.success_count += 1
-            
-            return result
+                        endpoint.health_status = "warning"
             
         except Exception as e:
-            # 记录失败
-            circuit_breaker.record_failure()
-            endpoint.error_count += 1
-            
-            logger.error(f"Request failed: {e}")
-            return {
-                "status": 500,
-                "error": str(e),
-                "service": route_rule.service_name
-            }
+            endpoint.health_status = "critical"
+            logger.debug(f"Health check failed for {endpoint.service_id}: {e}")
     
-    def _find_matching_route(self, path: str, method: str, 
-                           headers: Dict[str, str], query_params: Dict[str, str]) -> Optional[RouteRule]:
-        """查找匹配的路由规则"""
-        for rule in self.route_rules:
-            if self._match_route_rule(rule, path, method, headers, query_params):
-                return rule
-        return None
-    
-    def _match_route_rule(self, rule: RouteRule, path: str, method: str,
-                         headers: Dict[str, str], query_params: Dict[str, str]) -> bool:
-        """检查路由规则是否匹配"""
-        # 检查路径
-        if not self._match_path_pattern(rule.path_pattern, path):
-            return False
+    async def route_request(
+        self, 
+        service_name: str, 
+        path: str, 
+        method: str = "GET",
+        headers: Optional[Dict] = None,
+        data: Optional[bytes] = None,
+        params: Optional[Dict] = None
+    ) -> aiohttp.ClientResponse:
+        """路由请求到服务"""
         
-        # 检查方法
-        if rule.method != "*" and rule.method.upper() != method.upper():
-            return False
-        
-        # 检查头部
-        for key, value in rule.headers.items():
-            if headers.get(key) != value:
-                return False
-        
-        # 检查查询参数
-        for key, value in rule.query_params.items():
-            if query_params.get(key) != value:
-                return False
-        
-        return True
-    
-    def _match_path_pattern(self, pattern: str, path: str) -> bool:
-        """匹配路径模式"""
-        import re
-        
-        # 简单的通配符支持
-        pattern = pattern.replace("*", ".*")
-        pattern = f"^{pattern}$"
-        
-        return bool(re.match(pattern, path))
-    
-    async def _select_endpoint(self, service_name: str, headers: Dict[str, str], 
-                             query_params: Dict[str, str]) -> Optional[ServiceEndpoint]:
-        """选择服务端点"""
-        if service_name not in self.service_endpoints:
-            return None
-        
-        endpoints = [ep for ep in self.service_endpoints[service_name] 
-                    if ep.health_status == HealthStatus.HEALTHY]
-        
-        if not endpoints:
-            return None
-        
-        # 获取负载均衡策略
-        lb_strategy = self.config.get(f"services/{service_name}/load_balance_strategy", 
-                                     LoadBalanceStrategy.ROUND_ROBIN.value)
-        
-        if lb_strategy == LoadBalanceStrategy.ROUND_ROBIN.value:
-            return self._round_robin_select(service_name, endpoints)
-        elif lb_strategy == LoadBalanceStrategy.RANDOM.value:
-            return random.choice(endpoints)
-        elif lb_strategy == LoadBalanceStrategy.LEAST_CONNECTIONS.value:
-            return min(endpoints, key=lambda ep: ep.connection_count)
-        elif lb_strategy == LoadBalanceStrategy.CONSISTENT_HASH.value:
-            return self._consistent_hash_select(service_name, endpoints, headers, query_params)
-        else:
-            return self._round_robin_select(service_name, endpoints)
-    
-    def _round_robin_select(self, service_name: str, endpoints: List[ServiceEndpoint]) -> ServiceEndpoint:
-        """轮询选择"""
-        if service_name not in self.lb_counters:
-            self.lb_counters[service_name] = 0
-        
-        index = self.lb_counters[service_name] % len(endpoints)
-        self.lb_counters[service_name] += 1
-        
-        return endpoints[index]
-    
-    def _consistent_hash_select(self, service_name: str, endpoints: List[ServiceEndpoint],
-                               headers: Dict[str, str], query_params: Dict[str, str]) -> ServiceEndpoint:
-        """一致性哈希选择"""
-        # 构建哈希键
-        hash_key = headers.get("X-User-ID") or query_params.get("user_id") or "default"
-        hash_value = hashlib.md5(hash_key.encode()).hexdigest()
-        
-        # 在哈希环中查找
-        ring = self.consistent_hash_ring.get(service_name, [])
-        if not ring:
-            return random.choice(endpoints)
-        
-        # 找到第一个大于等于hash_value的节点
-        for node_hash in ring:
-            if node_hash >= hash_value:
-                # 提取实际的端点地址
-                node_addr = node_hash.split('#')[0]
-                for endpoint in endpoints:
-                    if f"{endpoint.instance.address}:{endpoint.instance.port}" == node_addr:
-                        return endpoint
-        
-        # 如果没找到，返回第一个
-        return endpoints[0]
-    
-    async def _execute_request(self, endpoint: ServiceEndpoint, path: str, method: str,
-                              headers: Dict[str, str], query_params: Dict[str, str],
-                              body: bytes, route_rule: RouteRule) -> Dict[str, Any]:
-        """执行请求"""
-        if not self.http_session:
-            self.http_session = aiohttp.ClientSession()
-        
-        # 构建目标URL
-        target_url = f"http://{endpoint.instance.address}:{endpoint.instance.port}{path}"
+        endpoint_url = await self.get_service_endpoint(service_name)
+        full_url = f"{endpoint_url}{path}"
         
         # 添加追踪头
-        if self.tracing:
-            headers = self.tracing.inject_context(headers.copy())
+        if headers is None:
+            headers = {}
+        headers.update({
+            "X-Request-ID": f"req_{int(time.time() * 1000)}",
+            "X-Forwarded-For": "api-gateway",
+            "X-Service-Name": service_name
+        })
         
-        # 增加连接计数
-        endpoint.connection_count += 1
-        
-        try:
-            start_time = time.time()
-            
-            # 执行请求（带重试）
-            for attempt in range(route_rule.retry_count + 1):
-                try:
-                    async with self.http_session.request(
+        async with aiohttp.ClientSession() as session:
+            async with session.request(
                         method=method,
-                        url=target_url,
+                url=full_url,
                         headers=headers,
-                        params=query_params,
-                        data=body,
-                        timeout=aiohttp.ClientTimeout(total=route_rule.timeout)
+                data=data,
+                params=params,
+                timeout=aiohttp.ClientTimeout(total=30)
                     ) as response:
-                        response_body = await response.read()
-                        
-                        # 更新响应时间
-                        response_time = time.time() - start_time
-                        endpoint.response_time_avg = (
-                            endpoint.response_time_avg * 0.9 + response_time * 0.1
-                        )
-                        
-                        return {
-                            "status": response.status,
-                            "headers": dict(response.headers),
-                            "body": response_body,
-                            "response_time": response_time
-                        }
-                        
-                except asyncio.TimeoutError:
-                    if attempt < route_rule.retry_count:
-                        await asyncio.sleep(0.1 * (attempt + 1))  # 指数退避
-                        continue
-                    raise
-                except Exception as e:
-                    if attempt < route_rule.retry_count:
-                        await asyncio.sleep(0.1 * (attempt + 1))
-                        continue
-                    raise
-        
-        finally:
-            # 减少连接计数
-            endpoint.connection_count -= 1
+                return response
     
-    def _get_circuit_breaker(self, service_name: str) -> CircuitBreaker:
-        """获取熔断器"""
-        if service_name not in self.circuit_breakers:
-            failure_threshold = self.config.get(
-                f"services/{service_name}/circuit_breaker/failure_threshold", 5
-            )
-            recovery_timeout = self.config.get(
-                f"services/{service_name}/circuit_breaker/recovery_timeout", 60.0
-            )
-            
-            self.circuit_breakers[service_name] = CircuitBreaker(
-                failure_threshold=failure_threshold,
-                recovery_timeout=recovery_timeout
-            )
-        
-        return self.circuit_breakers[service_name]
-    
-    def _get_rate_limiter(self, service_name: str) -> RateLimiter:
-        """获取限流器"""
-        if service_name not in self.rate_limiters:
-            max_requests = self.config.get(
-                f"services/{service_name}/rate_limit/max_requests", 100
-            )
-            window_size = self.config.get(
-                f"services/{service_name}/rate_limit/window_size", 60.0
-            )
-            
-            self.rate_limiters[service_name] = RateLimiter(
-                max_requests=max_requests,
-                window_size=window_size
-            )
-        
-        return self.rate_limiters[service_name]
-    
-    def get_service_stats(self) -> Dict[str, Any]:
+    def get_service_stats(self, service_name: str) -> Dict:
         """获取服务统计信息"""
-        stats = {
-            "services": {},
-            "total_endpoints": 0,
-            "healthy_endpoints": 0
+        endpoints = self.service_cache.get(service_name, [])
+        
+        total_endpoints = len(endpoints)
+        healthy_endpoints = len([ep for ep in endpoints if ep.health_status == "passing"])
+        total_connections = sum(ep.connections for ep in endpoints)
+        
+        return {
+            "service_name": service_name,
+            "total_endpoints": total_endpoints,
+            "healthy_endpoints": healthy_endpoints,
+            "total_connections": total_connections,
+            "endpoints": [
+                {
+                    "service_id": ep.service_id,
+                    "address": f"{ep.address}:{ep.port}",
+                    "health_status": ep.health_status,
+                    "connections": ep.connections,
+                    "weight": ep.weight,
+                    "last_used": ep.last_used
+                }
+                for ep in endpoints
+            ]
         }
-        
-        for service_name, endpoints in self.service_endpoints.items():
-            healthy_count = sum(1 for ep in endpoints 
-                              if ep.health_status == HealthStatus.HEALTHY)
-            
-            service_stats = {
-                "total_instances": len(endpoints),
-                "healthy_instances": healthy_count,
-                "circuit_breaker_state": "UNKNOWN",
-                "avg_response_time": 0.0,
-                "success_rate": 0.0
-            }
-            
-            if service_name in self.circuit_breakers:
-                service_stats["circuit_breaker_state"] = self.circuit_breakers[service_name].state
-            
-            if endpoints:
-                total_success = sum(ep.success_count for ep in endpoints)
-                total_error = sum(ep.error_count for ep in endpoints)
-                total_requests = total_success + total_error
-                
-                if total_requests > 0:
-                    service_stats["success_rate"] = total_success / total_requests
-                
-                service_stats["avg_response_time"] = sum(ep.response_time_avg for ep in endpoints) / len(endpoints)
-            
-            stats["services"][service_name] = service_stats
-            stats["total_endpoints"] += len(endpoints)
-            stats["healthy_endpoints"] += healthy_count
-        
-        return stats
     
-    async def shutdown(self):
-        """关闭路由器"""
-        if self.http_session:
-            await self.http_session.close()
+    def reset_connections(self, service_name: Optional[str] = None):
+        """重置连接计数"""
+        if service_name:
+            endpoints = self.service_cache.get(service_name, [])
+            for endpoint in endpoints:
+                endpoint.connections = 0
+        else:
+            for endpoints in self.service_cache.values():
+                for endpoint in endpoints:
+                    endpoint.connections = 0
         
-        logger.info("Dynamic router shutdown")
+        logger.info(f"Reset connections for {service_name or 'all services'}")
 
 # 全局路由器实例
-_dynamic_router = None
+_router_instance = None
 
-def get_dynamic_router() -> DynamicRouter:
-    """获取动态路由器单例"""
-    global _dynamic_router
-    if _dynamic_router is None:
-        _dynamic_router = DynamicRouter()
-    return _dynamic_router
+def get_router(consul_client: ConsulServiceRegistry) -> DynamicRouter:
+    """获取路由器单例"""
+    global _router_instance
+    if _router_instance is None:
+        _router_instance = DynamicRouter(consul_client)
+    return _router_instance
 
 # 使用示例
-if __name__ == "__main__":
     async def main():
-        router = get_dynamic_router()
+    """示例用法"""
+    from ...common.service_registry.consul_client import ConsulServiceRegistry
+    
+    # 创建Consul客户端和路由器
+    consul_client = ConsulServiceRegistry()
+    router = DynamicRouter(consul_client)
+    
+    await router.start()
+    
+    try:
+        # 获取服务端点
+        endpoint = await router.get_service_endpoint(
+            "xiaoai-service", 
+            LoadBalanceStrategy.ROUND_ROBIN
+        )
+        print(f"Selected endpoint: {endpoint}")
         
-        # 模拟请求
-        result = await router.route_request(
-            path="/api/v1/diagnosis",
+        # 路由请求
+        response = await router.route_request(
+            service_name="xiaoai-service",
+            path="/api/v1/diagnose",
             method="POST",
-            headers={"Content-Type": "application/json", "X-User-ID": "user123"},
-            query_params={},
-            body=b'{"symptoms": ["头痛", "乏力"]}'
+            headers={"Content-Type": "application/json"},
+            data=b'{"symptoms": ["headache", "fever"]}'
         )
         
-        print(f"Route result: {result}")
+        print(f"Response status: {response.status}")
         
-        # 获取统计信息
-        stats = router.get_service_stats()
-        print(f"Service stats: {json.dumps(stats, indent=2)}")
+        # 获取服务统计
+        stats = router.get_service_stats("xiaoai-service")
+        print(f"Service stats: {stats}")
         
-        await router.shutdown()
-    
+    except ServiceNotAvailableError as e:
+        print(f"Service error: {e}")
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+    finally:
+        await router.stop()
+
+if __name__ == "__main__":
     asyncio.run(main()) 

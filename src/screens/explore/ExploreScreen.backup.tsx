@@ -4,6 +4,9 @@ import { colors, spacing, fonts } from '../../constants/theme';
 import AgentChatInterface, { AgentType } from '../../components/common/AgentChatInterface';
 
 
+
+
+
 import React, { useState } from 'react';
   View,
   Text,
@@ -38,7 +41,7 @@ interface ContentItem {
 }
 
 // 分类配置
-const CATEGORIES = useMemo(() => useMemo(() => useMemo(() => {
+const CATEGORIES = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => {
   tcm: {
     name: '中医理论',
     icon: 'leaf',
@@ -81,7 +84,7 @@ const CATEGORIES = useMemo(() => useMemo(() => useMemo(() => {
     color: '#E74C3C',
     description: '经络穴位与按摩保健',
   },
-}, []), []), []);
+}, []), []), []), []), []), []);
 
 // 老克的智慧内容
 const LAOKE_WISDOM: ContentItem[] = [
@@ -168,14 +171,14 @@ const LAOKE_WISDOM: ContentItem[] = [
 ];
 
 // 热门话题
-const HOT_TOPICS = useMemo(() => useMemo(() => useMemo(() => [
+const HOT_TOPICS = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => [
   { id: '1', title: '春季养肝', count: 1234, icon: '🌱' },
   { id: '2', title: '中医体质', count: 987, icon: '⚖️' },
   { id: '3', title: '食疗养生', count: 756, icon: '🥗' },
   { id: '4', title: '穴位按摩', count: 654, icon: '👋' },
   { id: '5', title: '太极养生', count: 543, icon: '🥋' },
   { id: '6', title: '本草识别', count: 432, icon: '🌿' },
-], []), []), []);
+], []), []), []), []), []), []);
 
 const ExploreScreen: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<CategoryType | 'all'>('all');
@@ -184,9 +187,9 @@ const ExploreScreen: React.FC = () => {
   const [accessibilityEnabled, setAccessibilityEnabled] = useState(false);
 
   // 过滤内容
-  const filteredContent = useMemo(() => useMemo(() => useMemo(() => LAOKE_WISDOM.filter((item) => {
+  const filteredContent = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => LAOKE_WISDOM.filter((item) => {
     if (selectedCategory !== 'all' && item.category !== selectedCategory) {
-      return false, []), []), []);
+      return false, []), []), []), []), []), []);
     }
     if (searchQuery && !item.title.toLowerCase().includes(searchQuery.toLowerCase())) {
       return false;
@@ -195,10 +198,10 @@ const ExploreScreen: React.FC = () => {
   });
 
   // 精选内容
-  const featuredContent = useMemo(() => useMemo(() => useMemo(() => LAOKE_WISDOM.filter(item => item.featured), []), []), []);
+  const featuredContent = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => LAOKE_WISDOM.filter(item => item.featured), []), []), []), []), []), []);
 
   // 与老克对话
-  const chatWithLaoke = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const chatWithLaoke = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     Alert.alert(
       '与老克对话',
       '老克是您的中医养生教育导师，拥有深厚的中医理论功底，可以为您提供：\n\n• 中医理论解读\n• 个性化养生指导\n• 食疗方案推荐\n• 穴位按摩教学\n• 传统运动指导\n\n是否开始对话？',
@@ -210,13 +213,13 @@ const ExploreScreen: React.FC = () => {
   };
 
   // 开始与老克对话
-  const startLaokeChat = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const startLaokeChat = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     setAgentChatVisible(true);
     console.log('Starting chat with Laoke agent');
   };
 
   // 查看内容详情
-  const viewContent = useMemo(() => useMemo(() => useMemo(() => useCallback( (item: ContentItem) => {, []), []), []), []);
+  const viewContent = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (item: ContentItem) => {, []), []), []), []), []), []), []);
     Alert.alert(
       item.title,
       `${item.subtitle}\n\n作者：${item.author}\n阅读时间：${item.readTime}\n难度：${getDifficultyText(item.difficulty)}\n\n标签：${item.tags.join(' • ')}\n\n${item.likes} 人觉得有用`,
@@ -228,13 +231,13 @@ const ExploreScreen: React.FC = () => {
   };
 
   // 开始学习
-  const startLearning = useMemo(() => useMemo(() => useMemo(() => useCallback( (item: ContentItem) => {, []), []), []), []);
+  const startLearning = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (item: ContentItem) => {, []), []), []), []), []), []), []);
     Alert.alert('开始学习', `正在为您准备《${item.title}》的学习内容...`);
     console.log(`Starting learning: ${item.id}`);
   };
 
   // 获取难度文本
-  const getDifficultyText = useMemo(() => useMemo(() => useMemo(() => useCallback( (difficulty: string) => {, []), []), []), []);
+  const getDifficultyText = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (difficulty: string) => {, []), []), []), []), []), []), []);
     switch (difficulty) {
       case 'beginner': return '入门';
       case 'intermediate': return '进阶';
@@ -244,7 +247,7 @@ const ExploreScreen: React.FC = () => {
   };
 
   // 获取内容类型文本
-  const getContentTypeText = useMemo(() => useMemo(() => useMemo(() => useCallback( (type: ContentType) => {, []), []), []), []);
+  const getContentTypeText = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (type: ContentType) => {, []), []), []), []), []), []), []);
     switch (type) {
       case 'article': return '文章';
       case 'video': return '视频';
@@ -257,11 +260,11 @@ const ExploreScreen: React.FC = () => {
   };
 
   // 渲染分类标签
-  const renderCategoryTab = useMemo(() => useMemo(() => useMemo(() => useCallback( (category: CategoryType | 'all') => {, []), []), []), []);
-    const isSelected = useMemo(() => useMemo(() => useMemo(() => selectedCategory === category, []), []), []);
-    const config = useMemo(() => useMemo(() => useMemo(() => category === 'all'
+  const renderCategoryTab = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (category: CategoryType | 'all') => {, []), []), []), []), []), []), []);
+    const isSelected = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => selectedCategory === category, []), []), []), []), []), []);
+    const config = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => category === 'all'
       ? { name: '全部', icon: 'view-grid', color: colors.primary }
-      : CATEGORIES[category], []), []), []);
+      : CATEGORIES[category], []), []), []), []), []), []);
 
     return (
       <TouchableOpacity
@@ -286,8 +289,8 @@ const ExploreScreen: React.FC = () => {
   };
 
   // 渲染内容卡片
-  const renderContentCard = useMemo(() => useMemo(() => useMemo(() => useCallback( ({ item }: { item: ContentItem }) => {, []), []), []), []);
-    const categoryConfig = useMemo(() => useMemo(() => useMemo(() => CATEGORIES[item.category], []), []), []);
+  const renderContentCard = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( ({ item }: { item: ContentItem }) => {, []), []), []), []), []), []), []);
+    const categoryConfig = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => CATEGORIES[item.category], []), []), []), []), []), []);
 
     return (
       <TouchableOpacity style={styles.contentCard} onPress={() => viewContent(item)}>
@@ -333,7 +336,7 @@ const ExploreScreen: React.FC = () => {
   };
 
   // 渲染热门话题
-  const renderHotTopic = useMemo(() => useMemo(() => useMemo(() => (topic: typeof HOT_TOPICS[0], index: number) => (
+  const renderHotTopic = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => (topic: typeof HOT_TOPICS[0], index: number) => (
     <TouchableOpacity key={topic.id} style={styles.hotTopicItem}>
       <Text style={styles.topicRank}>{index + 1}</Text>
       <Text style={styles.topicIcon}>{topic.icon}</Text>
@@ -343,7 +346,7 @@ const ExploreScreen: React.FC = () => {
       </View>
       <Icon name="trending-up" size={16} color={colors.primary} />
     </TouchableOpacity>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -450,7 +453,7 @@ const ExploreScreen: React.FC = () => {
   );
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -759,6 +762,6 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
     backgroundColor: colors.border,
     marginVertical: 5,
   },
-}), []), []), []);
+}), []), []), []), []), []), []);
 
-export default ExploreScreen;
+export default React.memo(ExploreScreen);

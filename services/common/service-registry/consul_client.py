@@ -11,6 +11,7 @@ import logging
 import socket
 import threading
 import time
+from typing import Dict, List, Optional
 
 import consul
 
@@ -18,21 +19,19 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class ServiceInstance:
-    """服务实例信息"""
-
+class ServiceInfo:
+    """服务信息"""
+    name: str
     service_id: str
-    service_name: str
     address: str
     port: int
-    tags: list[str] = None
-    meta: dict[str, str] = None
-    health_status: str = "passing"
-    last_updated: datetime = None
+    health_check_url: str
+    tags: List[str] = None
+    meta: Dict[str, str] = None
 
 
 class ConsulServiceRegistry:
-    """Consul服务注册中心客户端"""
+    """Consul服务注册客户端"""
 
     def __init__(self, consul_host: str = "localhost", consul_port: int = 8500):
         self.consul = consul.Consul(host=consul_host, port=consul_port)
@@ -42,124 +41,66 @@ class ConsulServiceRegistry:
         self.health_check_interval = 10  # 健康检查间隔10秒
         self._stop_event = threading.Event()
         self._health_check_thread = None
+        self.logger = logger
 
-    def register_service(
-        self,
-        service_name: str,
-        service_id: str,
-        address: str,
-        port: int,
-        health_check_url: str | None = None,
-        tags: list[str] | None = None,
-        meta: dict[str, str] | None = None,
-    ) -> bool:
+    def register_service(self, service_info: ServiceInfo) -> bool:
         """注册服务到Consul"""
         try:
-            # 构建健康检查配置
-            check = None
-            if health_check_url:
-                check = consul.Check.http(
-                    health_check_url, interval="10s", timeout="5s"
+            self.consul.agent.service.register(
+                name=service_info.name,
+                service_id=service_info.service_id,
+                address=service_info.address,
+                port=service_info.port,
+                tags=service_info.tags or [],
+                meta=service_info.meta or {},
+                check=consul.Check.http(
+                    service_info.health_check_url, 
+                    interval="10s",
+                    timeout="5s"
                 )
-            else:
-                # 默认TCP检查
-                check = consul.Check.tcp(
-                    f"{address}:{port}", interval="10s", timeout="3s"
-                )
-
-            # 注册服务
-            success = self.consul.agent.service.register(
-                name=service_name,
-                service_id=service_id,
-                address=address,
-                port=port,
-                tags=tags or [],
-                meta=meta or {},
-                check=check,
             )
-
-            if success:
-                # 记录已注册的服务
-                self.registered_services[service_id] = ServiceInstance(
-                    service_id=service_id,
-                    service_name=service_name,
-                    address=address,
-                    port=port,
-                    tags=tags,
-                    meta=meta,
-                    last_updated=datetime.now(),
-                )
-
-                logger.info(
-                    f"Service registered: {service_name} ({service_id}) at {address}:{port}"
-                )
-
-                # 启动健康检查线程
-                if (
-                    not self._health_check_thread
-                    or not self._health_check_thread.is_alive()
-                ):
-                    self._start_health_check_thread()
-
-                return True
-            else:
-                logger.error(f"Failed to register service: {service_name}")
-                return False
-
+            self.logger.info(f"Service {service_info.service_id} registered successfully")
+            return True
         except Exception as e:
-            logger.error(f"Error registering service {service_name}: {e}")
+            self.logger.error(f"Failed to register service {service_info.service_id}: {e}")
             return False
 
-    def discover_service(
-        self, service_name: str, healthy_only: bool = True
-    ) -> list[ServiceInstance]:
+    def discover_service(self, service_name: str) -> List[Dict]:
         """发现服务实例"""
         try:
-            # 检查缓存
-            cache_key = f"{service_name}_{healthy_only}"
-            if cache_key in self.service_cache:
-                cached_data, cache_time = self.service_cache[cache_key]
-                if datetime.now() - cache_time < timedelta(seconds=self.cache_ttl):
-                    return cached_data
-
-            # 从Consul获取服务实例
-            _, services = self.consul.health.service(service_name, passing=healthy_only)
-
-            instances = []
-            for service in services:
-                service_info = service["Service"]
-                health_info = service["Checks"]
-
-                # 确定健康状态
-                health_status = "passing"
-                for check in health_info:
-                    if check["Status"] != "passing":
-                        health_status = check["Status"]
-                        break
-
-                instance = ServiceInstance(
-                    service_id=service_info["ID"],
-                    service_name=service_info["Service"],
-                    address=service_info["Address"],
-                    port=service_info["Port"],
-                    tags=service_info.get("Tags", []),
-                    meta=service_info.get("Meta", {}),
-                    health_status=health_status,
-                    last_updated=datetime.now(),
-                )
-                instances.append(instance)
-
-            # 更新缓存
-            self.service_cache[cache_key] = (instances, datetime.now())
-
-            logger.debug(
-                f"Discovered {len(instances)} instances for service: {service_name}"
-            )
-            return instances
-
+            _, services = self.consul.health.service(service_name, passing=True)
+            return [
+                {
+                    "address": service["Service"]["Address"],
+                    "port": service["Service"]["Port"],
+                    "service_id": service["Service"]["ID"],
+                    "tags": service["Service"]["Tags"],
+                    "meta": service["Service"]["Meta"]
+                }
+                for service in services
+            ]
         except Exception as e:
-            logger.error(f"Error discovering service {service_name}: {e}")
+            self.logger.error(f"Failed to discover service {service_name}: {e}")
             return []
+
+    def deregister_service(self, service_id: str) -> bool:
+        """注销服务"""
+        try:
+            self.consul.agent.service.deregister(service_id)
+            self.logger.info(f"Service {service_id} deregistered successfully")
+            return True
+        except Exception as e:
+            self.logger.error(f"Failed to deregister service {service_id}: {e}")
+            return False
+
+    def health_check(self, service_id: str) -> bool:
+        """检查服务健康状态"""
+        try:
+            checks = self.consul.health.service(service_id)[1]
+            return all(check["Checks"][0]["Status"] == "passing" for check in checks)
+        except Exception as e:
+            self.logger.error(f"Failed to check health for service {service_id}: {e}")
+            return False
 
     def get_service_endpoint(
         self, service_name: str, load_balance: str = "round_robin"
@@ -182,22 +123,10 @@ class ConsulServiceRegistry:
             # 默认返回第一个
             instance = instances[0]
 
-        return f"http://{instance.address}:{instance.port}"
-
-    def deregister_service(self, service_id: str) -> bool:
-        """注销服务"""
-        try:
-            success = self.consul.agent.service.deregister(service_id)
-            if success and service_id in self.registered_services:
-                del self.registered_services[service_id]
-                logger.info(f"Service deregistered: {service_id}")
-            return success
-        except Exception as e:
-            logger.error(f"Error deregistering service {service_id}: {e}")
-            return False
+        return f"http://{instance['address']}:{instance['port']}"
 
     def watch_service(
-        self, service_name: str, callback: Callable[[list[ServiceInstance]], None]
+        self, service_name: str, callback: Callable[[list[dict]], None]
     ):
         """监听服务变化"""
 
@@ -209,22 +138,8 @@ class ConsulServiceRegistry:
                         service_name, index=index, wait="30s"
                     )
 
-                    instances = []
-                    for service in services:
-                        service_info = service["Service"]
-                        instance = ServiceInstance(
-                            service_id=service_info["ID"],
-                            service_name=service_info["Service"],
-                            address=service_info["Address"],
-                            port=service_info["Port"],
-                            tags=service_info.get("Tags", []),
-                            meta=service_info.get("Meta", {}),
-                            last_updated=datetime.now(),
-                        )
-                        instances.append(instance)
-
                     # 调用回调函数
-                    callback(instances)
+                    callback(services)
 
                 except Exception as e:
                     logger.error(f"Error watching service {service_name}: {e}")
@@ -270,7 +185,7 @@ class ConsulServiceRegistry:
                 try:
                     for service_id, instance in self.registered_services.items():
                         # 执行健康检查
-                        if self._check_service_health(instance):
+                        if self.health_check(service_id):
                             logger.debug(f"Health check passed for {service_id}")
                         else:
                             logger.warning(f"Health check failed for {service_id}")
@@ -286,24 +201,12 @@ class ConsulServiceRegistry:
         )
         self._health_check_thread.start()
 
-    def _check_service_health(self, instance: ServiceInstance) -> bool:
-        """检查服务健康状态"""
-        try:
-            # 简单的TCP连接检查
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(3)
-            result = sock.connect_ex((instance.address, instance.port))
-            sock.close()
-            return result == 0
-        except Exception:
-            return False
-
     def clear_cache(self):
         """清空服务缓存"""
         self.service_cache.clear()
         logger.debug("Service cache cleared")
 
-    def get_all_services(self) -> dict[str, list[ServiceInstance]]:
+    def get_all_services(self) -> dict[str, list[dict]]:
         """获取所有服务"""
         try:
             services = self.consul.agent.services()
@@ -314,15 +217,13 @@ class ConsulServiceRegistry:
                 if service_name not in result:
                     result[service_name] = []
 
-                instance = ServiceInstance(
-                    service_id=service_id,
-                    service_name=service_name,
-                    address=service_info["Address"],
-                    port=service_info["Port"],
-                    tags=service_info.get("Tags", []),
-                    meta=service_info.get("Meta", {}),
-                    last_updated=datetime.now(),
-                )
+                instance = {
+                    "address": service_info["Address"],
+                    "port": service_info["Port"],
+                    "service_id": service_id,
+                    "tags": service_info.get("Tags", []),
+                    "meta": service_info.get("Meta", {})
+                }
                 result[service_name].append(instance)
 
             return result
@@ -370,20 +271,22 @@ if __name__ == "__main__":
 
     # 注册服务
     client.register_service(
-        service_name="xiaoai-service",
-        service_id="xiaoai-service-1",
-        address="127.0.0.1",
-        port=8080,
-        health_check_url="http://127.0.0.1:8080/health",
-        tags=["ai", "tcm", "diagnosis"],
-        meta={"version": "1.0.0", "region": "beijing"},
+        service_info=ServiceInfo(
+            name="xiaoai-service",
+            service_id="xiaoai-service-1",
+            address="127.0.0.1",
+            port=8080,
+            health_check_url="http://127.0.0.1:8080/health",
+            tags=["ai", "tcm", "diagnosis"],
+            meta={"version": "1.0.0", "region": "beijing"},
+        )
     )
 
     # 发现服务
     instances = client.discover_service("xiaoai-service")
     for instance in instances:
         print(
-            f"Found service: {instance.service_name} at {instance.address}:{instance.port}"
+            f"Found service: {instance['service_id']} at {instance['address']}:{instance['port']}"
         )
 
     # 获取服务端点

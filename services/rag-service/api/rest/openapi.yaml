@@ -71,6 +71,58 @@ paths:
         '500':
           $ref: '#/components/responses/InternalError'
 
+  /query_multimodal:
+    post:
+      tags:
+        - query
+      summary: 多模态RAG推理
+      description: 支持文本+图片/音频/视频等多模态输入的RAG推理，自动提取多模态内容特征并参与生成。
+      operationId: queryMultimodal
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  description: 查询文本
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: 多模态文件（图片/音频/视频等）
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  answer:
+                    type: string
+                  references:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DocumentReference'
+                  multimodal_context:
+                    type: array
+                    items:
+                      type: object
+                  retrieval_latency_ms:
+                    type: number
+                  generation_latency_ms:
+                    type: number
+                  total_latency_ms:
+                    type: number
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
   /documents:
     post:
       tags:
@@ -204,6 +256,52 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HealthResponse'
+
+  /documents/upload_multimodal:
+    post:
+      tags:
+        - admin
+      summary: 多模态文件上传
+      description: 支持图片、音频、视频等多模态文件上传，自动提取特征并入库。
+      operationId: uploadDocumentsMultimodal
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: 多模态文件（图片/音频/视频等）
+                collection_name:
+                  type: string
+                  description: 集合名称
+      responses:
+        '200':
+          description: 上传成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  document_ids:
+                    type: array
+                    items:
+                      type: string
+                  count:
+                    type: integer
+                  message:
+                    type: string
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
 
 components:
   schemas:

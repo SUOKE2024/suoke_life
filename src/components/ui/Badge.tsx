@@ -4,6 +4,9 @@ import React from "react";
 
 
 
+
+
+
   colors,
   typography,
   spacing,
@@ -70,15 +73,15 @@ const Badge: React.FC<BadgeProps> = ({
     );
   }
 
-  const badgeStyle = useMemo(() => useMemo(() => useMemo(() => [
+  const badgeStyle = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => [
     styles.base,
     styles[variant],
     styles[size],
     styles[shape],
     style,
-  ].filter(Boolean) as ViewStyle[], []), []), []);
+  ].filter(Boolean) as ViewStyle[], []), []), []), []), []), []);
 
-  const getDisplayText = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const getDisplayText = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     if (count !== undefined) {
       return count > 99 ? "99+" : count.toString();
     }
@@ -100,7 +103,7 @@ const Badge: React.FC<BadgeProps> = ({
   );
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   base: {
     alignItems: "center",
     justifyContent: "center",
@@ -205,6 +208,6 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
     fontSize: typography.fontSize.sm,
     lineHeight: 16,
   },
-}), []), []), []);
+}), []), []), []), []), []), []);
 
-export default Badge;
+export default React.memo(Badge);

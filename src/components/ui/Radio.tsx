@@ -7,6 +7,9 @@ import React from "react";
 
 
 
+
+
+
 /**
  * 索克生活 - Radio组件
  * 单选框组件，用于单选操作
@@ -52,7 +55,7 @@ const Radio: React.FC<RadioProps> = ({
   style,
   testID,
 }) => {
-  const getRadioSize = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const getRadioSize = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     switch (size) {
       case "small":
         return 16;
@@ -63,23 +66,23 @@ const Radio: React.FC<RadioProps> = ({
     }
   };
 
-  const radioSize = useMemo(() => useMemo(() => useMemo(() => getRadioSize(), []), []), []);
+  const radioSize = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => getRadioSize(), []), []), []), []), []), []);
 
-  const handlePress = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const handlePress = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     if (!disabled) {
       onPress();
     }
   };
 
-  const getRadioStyle = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
-    const baseStyle = useMemo(() => useMemo(() => useMemo(() => {
+  const getRadioStyle = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
+    const baseStyle = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => {
       width: radioSize,
       height: radioSize,
       borderRadius: radioSize / 2,
       borderWidth: 2,
       alignItems: "center" as const,
       justifyContent: "center" as const,
-    }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项, []), []);
+    }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项, []), []), []), []), []);
 
     if (disabled) {
       return {
@@ -104,7 +107,7 @@ const Radio: React.FC<RadioProps> = ({
     };
   };
 
-  const renderDot = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const renderDot = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     if (selected) {
       return (
         <View
@@ -120,7 +123,7 @@ const Radio: React.FC<RadioProps> = ({
     return null;
   };
 
-  const renderLabel = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const renderLabel = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     if (!label && !description) {
       return null;
     }
@@ -155,11 +158,11 @@ const Radio: React.FC<RadioProps> = ({
     );
   };
 
-  const containerStyle = useMemo(() => useMemo(() => useMemo(() => [
+  const containerStyle = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => [
     styles.container,
     labelPosition === "left" && styles.containerReverse,
     style,
-  ].filter(Boolean) as ViewStyle[], []), []), []);
+  ].filter(Boolean) as ViewStyle[], []), []), []), []), []), []);
 
   return (
     <TouchableOpacity
@@ -176,7 +179,7 @@ const Radio: React.FC<RadioProps> = ({
   );
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
@@ -203,6 +206,6 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   disabledText: {
     color: colors.gray400,
   },
-}), []), []), []);
+}), []), []), []), []), []), []);
 
-export default Radio;
+export default React.memo(Radio);

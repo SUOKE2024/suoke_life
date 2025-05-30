@@ -5,7 +5,6 @@ import { Contact as ContactsListContact } from '../../components/common/Contacts
 import { colors, spacing, shadows } from '../../constants/theme';
 import { HomeHeader } from '../components/HomeHeader';
 import { SearchBar } from '../components/SearchBar';
-import { ChatChannelItem } from '../components/ChatChannelItem';
 import { EmptyState } from '../../components/common/EmptyState';
 import { LoadingScreen } from '../../components/common/LoadingScreen';
 import Icon from '../../components/common/Icon';
@@ -13,41 +12,52 @@ import NavigationTest from '../../components/NavigationTest';
 import AgentChatInterface from '../../components/common/AgentChatInterface';
 import ContactsList from '../../components/common/ContactsList';
 import AccessibilitySettings from '../../components/common/AccessibilitySettings';
+import {
+import { useNavigation } from '@react-navigation/native';
 
 
 import React, { useState, useCallback, useMemo } from 'react';
   View,
+  Text,
   StyleSheet,
   FlatList,
   TouchableOpacity,
-  Modal,
-  Alert,
+  Image,
+  Dimensions,
 } from 'react-native';
 
 // 类型转换函数
-const convertToContactsListContact = useMemo(() => useMemo(() => useMemo(() => (contact: ChatContact): ContactsListContact | null => {
-  // 过滤掉group类型，因为ContactsList不支持
-  if (contact.type === 'group') {return null, []), []), []);}
-  
+const convertToContactsListContact = useMemo(() => useMemo(() => useMemo(() => useCallback((contact: ChatContact): ContactsListContact | null => {
+  if (!contact.id || !contact.name) {
+    return null, []), []), []);
+  }
+
   return {
     id: contact.id,
     name: contact.name,
-    type: contact.type as 'agent' | 'user' | 'doctor',
-    agentType: contact.agentType,
     avatar: contact.avatar,
-    isOnline: contact.isOnline,
+    status: contact.status || 'offline',
     lastSeen: contact.lastSeen,
-    specialization: contact.specialization,
+    isOnline: contact.status === 'online',
+    phone: contact.phone,
+    email: contact.email,
     department: contact.department,
-    title: contact.title,
+    role: contact.role,
+    tags: contact.tags || [],
+    notes: contact.notes,
+    isFavorite: contact.isFavorite || false,
+    isBlocked: contact.isBlocked || false,
+    createdAt: contact.createdAt || new Date(),
+    updatedAt: contact.updatedAt || new Date(),
   };
-};
+}, []);
 
 // 组件导入
 
 // 现有组件导入
 
 const HomeScreen: React.FC = () => {
+  const navigation = useMemo(() => useMemo(() => useMemo(() => useNavigation(), []), []), []);
   // 聊天相关状态
   const {
     channels,
@@ -73,36 +83,64 @@ const HomeScreen: React.FC = () => {
 
   // 处理频道点击
   const handleChannelPress = useMemo(() => useMemo(() => useMemo(() => useCallback((channel: ChatChannel) => {
-    if (channel.type === 'agent' && channel.agentType) {
-      setSelectedAgent(channel.agentType), []), []), []);
-      setAgentChatVisible(true);
-      startAgentChat(channel.agentType);
-    } else {
-      // 处理其他类型的频道
-      markAsRead(channel.id);
-      Alert.alert('提示', `打开与 ${channel.name} 的聊天`);
+    console.log('频道被点击:', channel.name), []), []), []);
+    
+    // 根据频道类型导航到不同页面
+    switch (channel.id) {
+      case 'xiaoai':
+        navigation.navigate('Chat', { 
+          channelId: channel.id,
+          channelName: channel.name,
+          agentType: 'xiaoai'
+        });
+        break;
+      case 'xiaoke':
+        navigation.navigate('Chat', { 
+          channelId: channel.id,
+          channelName: channel.name,
+          agentType: 'xiaoke'
+        });
+        break;
+      case 'laoke':
+        navigation.navigate('Chat', { 
+          channelId: channel.id,
+          channelName: channel.name,
+          agentType: 'laoke'
+        });
+        break;
+      case 'soer':
+        navigation.navigate('Chat', { 
+          channelId: channel.id,
+          channelName: channel.name,
+          agentType: 'soer'
+        });
+        break;
+      default:
+        navigation.navigate('Chat', { 
+          channelId: channel.id,
+          channelName: channel.name
+        });
     }
-  }, [startAgentChat, markAsRead]);
+  }, [navigation]);
 
   // 处理联系人点击
   const handleContactPress = useMemo(() => useMemo(() => useMemo(() => useCallback((contact: ContactsListContact) => {
-    setContactsVisible(false), []), []), []);
-    
-    if (contact.type === 'agent' && contact.agentType) {
-      setSelectedAgent(contact.agentType);
-      setAgentChatVisible(true);
-      startAgentChat(contact.agentType);
-    } else {
-      Alert.alert('提示', `开始与 ${contact.name} 聊天`);
-    }
-  }, [startAgentChat]);
+    console.log('联系人被点击:', contact.name), []), []), []);
+    navigation.navigate('Chat', { 
+      contactId: contact.id,
+      contactName: contact.name
+    });
+  }, [navigation]);
 
   // 渲染频道项
   const renderChannelItem = useMemo(() => useMemo(() => useMemo(() => useCallback(({ item }: { item: ChatChannel }) => (
-    <ChatChannelItem
-      channel={item}
-      onPress={handleChannelPress}
-    />
+    <TouchableOpacity
+      style={styles.channelItem}
+      onPress={() => handleChannelPress(item)}
+    >
+      <Text style={styles.channelIcon}>{item.icon}</Text>
+      <Text style={styles.channelName}>{item.name}</Text>
+    </TouchableOpacity>
   ), [handleChannelPress]), []), []), []);
 
   // 获取列表项的key
@@ -110,11 +148,34 @@ const HomeScreen: React.FC = () => {
 
   // 空状态组件
   const renderEmptyState = useMemo(() => useMemo(() => useMemo(() => useMemo(() => (
-    <EmptyState
-      icon="message-outline"
-      title="暂无聊天记录"
-      subtitle="点击右上角联系人图标开始聊天"
-    />
+    <View style={styles.emptyContainer}>
+      <Text style={styles.emptyTitle}>欢迎来到索克生活</Text>
+      <Text style={styles.emptySubtitle}>
+        选择一个智能体开始您的健康管理之旅
+      </Text>
+      <View style={styles.agentGrid}>
+        <View style={styles.agentCard}>
+          <Text style={styles.agentIcon}>🤖</Text>
+          <Text style={styles.agentName}>小艾</Text>
+          <Text style={styles.agentDesc}>健康助手</Text>
+        </View>
+        <View style={styles.agentCard}>
+          <Text style={styles.agentIcon}>👨‍⚕️</Text>
+          <Text style={styles.agentName}>小克</Text>
+          <Text style={styles.agentDesc}>诊断专家</Text>
+        </View>
+        <View style={styles.agentCard}>
+          <Text style={styles.agentIcon}>👴</Text>
+          <Text style={styles.agentName}>老克</Text>
+          <Text style={styles.agentDesc}>中医大师</Text>
+        </View>
+        <View style={styles.agentCard}>
+          <Text style={styles.agentIcon}>👧</Text>
+          <Text style={styles.agentName}>索儿</Text>
+          <Text style={styles.agentDesc}>生活伙伴</Text>
+        </View>
+      </View>
+    </View>
   ), []), []), []), []);
 
   // 如果正在加载，显示加载屏幕
@@ -273,6 +334,57 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
     backgroundColor: colors.surface,
     ...shadows.sm,
   },
+  channelItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: spacing.md,
+  },
+  channelIcon: {
+    fontSize: 24,
+    marginRight: spacing.md,
+  },
+  channelName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: spacing.md,
+  },
+  emptySubtitle: {
+    fontSize: 16,
+    textAlign: 'center',
+  },
+  agentGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  agentCard: {
+    width: Dimensions.get('window').width / 2 - spacing.md,
+    padding: spacing.md,
+    margin: spacing.md,
+    backgroundColor: colors.surface,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  agentIcon: {
+    fontSize: 48,
+    marginBottom: spacing.md,
+  },
+  agentName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  agentDesc: {
+    fontSize: 14,
+    textAlign: 'center',
+  },
 }), []), []), []);
 
-export default HomeScreen; 
+export default React.memo(HomeScreen); 

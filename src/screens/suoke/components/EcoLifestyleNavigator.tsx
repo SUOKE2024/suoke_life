@@ -3,6 +3,9 @@ import { colors, spacing } from '../../../constants/theme';
 
 
 
+
+
+
 /**
  * 生态生活导航组件
  * 提供食农结合和山水养生功能的统一入口
@@ -124,22 +127,22 @@ export const EcoLifestyleNavigator: React.FC<EcoLifestyleNavigatorProps> = ({
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'food_agriculture' | 'mountain_wellness'>('all');
   const [selectedService, setSelectedService] = useState<EcoService | null>(null);
 
-  const filteredServices = useMemo(() => useMemo(() => useMemo(() => selectedCategory === 'all' 
+  const filteredServices = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => selectedCategory === 'all' 
     ? ECO_SERVICES 
-    : ECO_SERVICES.filter(service => service.category === selectedCategory), []), []), []);
+    : ECO_SERVICES.filter(service => service.category === selectedCategory), []), []), []), []), []), []);
 
-  const handleServiceSelect = useMemo(() => useMemo(() => useMemo(() => useCallback( (service: EcoService) => {, []), []), []), []);
+  const handleServiceSelect = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (service: EcoService) => {, []), []), []), []), []), []), []);
     setSelectedService(service);
   };
 
-  const startService = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const startService = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     if (!selectedService) {return;}
     onServiceSelect(selectedService.id);
     onClose();
   };
 
   // TODO: 将内联组件移到组件外部
-const renderCategoryTabs = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderCategoryTabs = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.categoryTabs}>
       <TouchableOpacity
         style={[styles.categoryTab, selectedCategory === 'all' && styles.activeCategoryTab]}
@@ -168,9 +171,9 @@ const renderCategoryTabs = useMemo(() => useMemo(() => useMemo(() => () => (
         </Text>
       </TouchableOpacity>
     </View>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
-  const renderServiceCard = useMemo(() => useMemo(() => useMemo(() => (service: EcoService) => (
+  const renderServiceCard = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => (service: EcoService) => (
     <TouchableOpacity
       key={service.id}
       style={[
@@ -203,9 +206,9 @@ const renderCategoryTabs = useMemo(() => useMemo(() => useMemo(() => () => (
         </View>
       )}
     </TouchableOpacity>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
-  const renderServiceDetails = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const renderServiceDetails = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     if (!selectedService) {return null;}
 
     return (
@@ -311,7 +314,7 @@ const renderCategoryTabs = useMemo(() => useMemo(() => useMemo(() => () => (
   );
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -525,4 +528,4 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
     color: 'white',
     marginLeft: spacing.sm,
   },
-}), []), []), []); 
+}), []), []), []), []), []), []); 

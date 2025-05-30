@@ -3,6 +3,9 @@ import Icon from '../../../components/common/Icon';
 import { colors, spacing } from '../../../constants/theme';
 
 
+
+
+
 import React, { useState } from 'react';
   View,
   Text,
@@ -108,30 +111,30 @@ export const BlockchainHealthData: React.FC<BlockchainHealthDataProps> = ({
     },
   ]);
 
-  const encryptData = useMemo(() => useMemo(() => useMemo(() => async () => {
+  const encryptData = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async () => {
     // 模拟数据加密
-    setLoading(true), []), []), []);
+    setLoading(true), []), []), []), []), []), []);
     await new Promise<void>(resolve => setTimeout(() => resolve(), 800));
     setLoading(false);
     Alert.alert('加密完成', '数据已使用AES-256加密算法保护');
   };
 
-  const shareData = useMemo(() => useMemo(() => useMemo(() => async () => {
-    setLoading(true), []), []), []);
+  const shareData = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async () => {
+    setLoading(true), []), []), []), []), []), []);
     await new Promise<void>(resolve => setTimeout(() => resolve(), 1000));
     setLoading(false);
     Alert.alert('共享成功', '数据已安全共享给授权方');
   };
 
-  const backupToBlockchain = useMemo(() => useMemo(() => useMemo(() => async () => {
-    setLoading(true), []), []), []);
+  const backupToBlockchain = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async () => {
+    setLoading(true), []), []), []), []), []), []);
     await new Promise<void>(resolve => setTimeout(() => resolve(), 2000));
     setLoading(false);
     Alert.alert('备份完成', '健康数据已备份到区块链网络');
   };
 
   // TODO: 将内联组件移到组件外部
-const renderDataRecords = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderDataRecords = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <ScrollView style={styles.tabContent}>
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>健康数据记录</Text>
@@ -190,10 +193,10 @@ const renderDataRecords = useMemo(() => useMemo(() => useMemo(() => () => (
         </View>
       ))}
     </ScrollView>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
   // TODO: 将内联组件移到组件外部
-const renderDataSharing = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderDataSharing = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <ScrollView style={styles.tabContent}>
       <Text style={styles.sectionTitle}>数据共享请求</Text>
       
@@ -234,10 +237,10 @@ const renderDataSharing = useMemo(() => useMemo(() => useMemo(() => () => (
         </View>
       ))}
     </ScrollView>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
   // TODO: 将内联组件移到组件外部
-const renderPrivacySettings = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderPrivacySettings = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <ScrollView style={styles.tabContent}>
       <Text style={styles.sectionTitle}>隐私设置</Text>
 
@@ -286,10 +289,10 @@ const renderPrivacySettings = useMemo(() => useMemo(() => useMemo(() => () => (
         </Text>
       </View>
     </ScrollView>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
   // TODO: 将内联组件移到组件外部
-const renderBackupRestore = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderBackupRestore = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <ScrollView style={styles.tabContent}>
       <Text style={styles.sectionTitle}>数据备份与恢复</Text>
 
@@ -328,9 +331,9 @@ const renderBackupRestore = useMemo(() => useMemo(() => useMemo(() => () => (
         </TouchableOpacity>
       </View>
     </ScrollView>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
-  const getRecordIcon = useMemo(() => useMemo(() => useMemo(() => useCallback( (type: string) => {, []), []), []), []);
+  const getRecordIcon = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (type: string) => {, []), []), []), []), []), []), []);
     switch (type) {
       case 'diagnosis': return 'stethoscope';
       case 'vitals': return 'heart-pulse';
@@ -341,7 +344,7 @@ const renderBackupRestore = useMemo(() => useMemo(() => useMemo(() => () => (
     }
   };
 
-  const getRecordColor = useMemo(() => useMemo(() => useMemo(() => useCallback( (type: string) => {, []), []), []), []);
+  const getRecordColor = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (type: string) => {, []), []), []), []), []), []), []);
     switch (type) {
       case 'diagnosis': return colors.primary;
       case 'vitals': return colors.error;
@@ -353,7 +356,7 @@ const renderBackupRestore = useMemo(() => useMemo(() => useMemo(() => () => (
   };
 
   // TODO: 将内联组件移到组件外部
-const renderTabBar = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderTabBar = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.tabBar}>
       {[
         { key: 'records', label: '数据记录', icon: 'database' },
@@ -380,9 +383,9 @@ const renderTabBar = useMemo(() => useMemo(() => useMemo(() => () => (
         </TouchableOpacity>
       ))}
     </View>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
-  const renderContent = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const renderContent = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     switch (activeTab) {
       case 'records': return renderDataRecords();
       case 'sharing': return renderDataSharing();
@@ -420,7 +423,7 @@ const renderTabBar = useMemo(() => useMemo(() => useMemo(() => () => (
   );
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -763,6 +766,6 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
     fontWeight: '600',
     marginLeft: spacing.sm,
   },
-}), []), []), []);
+}), []), []), []), []), []), []);
 
-export default BlockchainHealthData; 
+export default React.memo(BlockchainHealthData); 

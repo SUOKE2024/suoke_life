@@ -73,6 +73,7 @@
 - [贡献指南](#贡献指南)
 - [许可证](#许可证)
 - [联系我们](#联系我们)
+- [隐私合规机制（Privacy Compliance）](#隐私合规机制privacy-compliance)
 
 ## 功能特性
 
@@ -1865,5 +1866,11 @@ const ChatScreen = () => {
 - **仓库名**: suoke_life
 
 感谢您对索克生活项目的支持与贡献！
+
+## 隐私合规机制（Privacy Compliance）
+
+- 健康数据采集、存储、交换严格遵循国际/国内健康数据标准（如HL7、FHIR），便于后续扩展和与第三方系统对接。
+- 已实现前后端FHIR Observation格式转换与校验工具，推荐所有健康数据接口、数据库存储、对外交换均采用FHIR标准格式。
+- 详细设计与用法见 [docs/architecture/privacy_compliance.md](docs/architecture/privacy_compliance.md)
 
 

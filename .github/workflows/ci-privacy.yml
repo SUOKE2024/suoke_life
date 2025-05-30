@@ -1,0 +1,51 @@
+name: Privacy Compliance Check
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+
+jobs:
+  privacy-compliance:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install bandit semgrep
+
+      - name: Bandit 安全与隐私扫描
+        run: bandit -r ./services/ -ll
+
+      - name: Semgrep 代码合规扫描
+        run: semgrep --config p/ci ./services/
+
+      - name: Gitleaks 检查敏感信息泄露
+        uses: gitleaks/gitleaks-action@v2
+        with:
+          config-path: .gitleaks.toml
+          fail: true
+
+      - name: 发送合规报告到邮箱
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.example.com
+          server_port: 465
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: 索克生活隐私合规检测失败
+          to: security@suoke.com
+          from: ci-bot@suoke.com
+          body: |
+            CI合规检测失败，请及时处理。
+            详情见GitHub Actions日志 

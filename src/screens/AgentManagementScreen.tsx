@@ -2,6 +2,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
 
+
+
+
 import React, { useState, useEffect } from 'react';
   View,
   Text,
@@ -125,7 +128,7 @@ const AgentManagementScreen: React.FC = () => {
 
   useEffect(() => {
     initializeService();
-  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
+  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
 
   const initializeService = async () => {
     try {
@@ -509,4 +512,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AgentManagementScreen; 
+export default React.memo(AgentManagementScreen); 

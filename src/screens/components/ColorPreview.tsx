@@ -271,4 +271,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ColorPreview;
+export default React.memo(ColorPreview);

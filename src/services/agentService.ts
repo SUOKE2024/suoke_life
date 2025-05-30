@@ -1,5 +1,7 @@
 import { apiClient } from "./apiClient";
-import { ApiResponse } from "../types";
+import { FourDiagnosisAggregationResult } from "../types/agents";
+
+// import { ApiResponse } from "../types"; // 移除此行，避免类型冲突
 
 // 智能体信息接口
 export interface AgentInfo {
@@ -37,6 +39,18 @@ export interface AgentSuggestion {
   content: string;
   category: string;
   priority: "high" | "medium" | "low";
+}
+
+// API响应类型
+export interface ApiResponse<T = any> {
+  success: boolean;
+  data?: T;
+  message?: string;
+  error?: {
+    message: string;
+    code?: string;
+  };
+  code?: string | number;
 }
 
 class AgentService {
@@ -208,6 +222,28 @@ class AgentService {
       return response.data;
     } catch (error: any) {
       throw new Error(error.message || "健康检查失败");
+    }
+  }
+
+  /**
+   * 获取四诊聚合结果
+   */
+  async getFourDiagnosisAggregation(
+    agentId: string,
+    diagnosisRequest: any
+  ): Promise<FourDiagnosisAggregationResult> {
+    try {
+      const response: ApiResponse<FourDiagnosisAggregationResult> =
+        await apiClient.post(
+          `/agents/${agentId}/four-diagnosis/aggregation`,
+          diagnosisRequest
+        );
+      if (!response.success || !response.data) {
+        throw new Error(response.error?.message || "获取四诊聚合结果失败");
+      }
+      return response.data;
+    } catch (error: any) {
+      throw new Error(error.message || "获取四诊聚合结果失败");
     }
   }
 }

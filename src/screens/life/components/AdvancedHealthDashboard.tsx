@@ -3,6 +3,9 @@ import Icon from '../../../components/common/Icon';
 import { colors, spacing } from '../../../constants/theme';
 
 
+
+
+
 /**
  * 高级健康仪表板组件
  * 提供增强的健康数据可视化功能
@@ -147,12 +150,12 @@ export const AdvancedHealthDashboard: React.FC<AdvancedHealthDashboardProps> = (
     ],
   };
 
-  const progressData = useMemo(() => useMemo(() => useMemo(() => {
+  const progressData = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => {
     labels: ['心率', '血压', '睡眠', '压力', '活动', '水分'],
     data: [0.85, 0.92, 0.78, 0.65, 0.88, 0.75],
-  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项, []), []);
+  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项, []), []), []), []), []);
 
-  const chartConfig = useMemo(() => useMemo(() => useMemo(() => {
+  const chartConfig = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => {
     backgroundColor: colors.background,
     backgroundGradientFrom: colors.background,
     backgroundGradientTo: colors.background,
@@ -167,9 +170,9 @@ export const AdvancedHealthDashboard: React.FC<AdvancedHealthDashboardProps> = (
       strokeWidth: '2',
       stroke: colors.primary,
     },
-  }, []), []), []);
+  }, []), []), []), []), []), []);
 
-  const getStatusColor = useMemo(() => useMemo(() => useMemo(() => useCallback( (status: string) => {, []), []), []), []);
+  const getStatusColor = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (status: string) => {, []), []), []), []), []), []), []);
     switch (status) {
       case 'excellent': return colors.health.excellent;
       case 'good': return colors.health.good;
@@ -179,7 +182,7 @@ export const AdvancedHealthDashboard: React.FC<AdvancedHealthDashboardProps> = (
     }
   };
 
-  const getTrendIcon = useMemo(() => useMemo(() => useMemo(() => useCallback( (trend: string) => {, []), []), []), []);
+  const getTrendIcon = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (trend: string) => {, []), []), []), []), []), []), []);
     switch (trend) {
       case 'up': return 'trending-up';
       case 'down': return 'trending-down';
@@ -189,7 +192,7 @@ export const AdvancedHealthDashboard: React.FC<AdvancedHealthDashboardProps> = (
   };
 
   // TODO: 将内联组件移到组件外部
-const renderPeriodSelector = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderPeriodSelector = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.periodSelector}>
       {(['day', 'week', 'month', 'year'] as const).map((period) => (
         <TouchableOpacity
@@ -211,9 +214,9 @@ const renderPeriodSelector = useMemo(() => useMemo(() => useMemo(() => () => (
         </TouchableOpacity>
       ))}
     </View>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
-  const renderMetricCard = useMemo(() => useMemo(() => useMemo(() => (metric: HealthMetric) => (
+  const renderMetricCard = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => (metric: HealthMetric) => (
     <TouchableOpacity
       key={metric.id}
       style={styles.metricCard}
@@ -241,10 +244,10 @@ const renderPeriodSelector = useMemo(() => useMemo(() => useMemo(() => () => (
       
       <View style={[styles.statusIndicator, { backgroundColor: getStatusColor(metric.status) }]} />
     </TouchableOpacity>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
   // TODO: 将内联组件移到组件外部
-const renderOverviewCharts = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderOverviewCharts = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.chartsContainer}>
       <View style={styles.chartCard}>
         <Text style={styles.chartTitle}>心率趋势</Text>
@@ -302,9 +305,9 @@ const renderOverviewCharts = useMemo(() => useMemo(() => useMemo(() => () => (
         />
       </View>
     </View>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
-  const renderMetricDetail = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const renderMetricDetail = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     if (!selectedMetric) {return null;}
 
     return (
@@ -414,7 +417,7 @@ const renderOverviewCharts = useMemo(() => useMemo(() => useMemo(() => () => (
   );
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -636,4 +639,4 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
     lineHeight: 20,
     marginLeft: spacing.sm,
   },
-}), []), []), []); 
+}), []), []), []), []), []), []); 

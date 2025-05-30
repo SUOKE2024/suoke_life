@@ -6,6 +6,9 @@ import { useAppDispatch, useAppSelector } from '../../store';
 import { ConstitutionType, HealthDataType } from '../../types';
 
 
+
+
+
 import React, { useState, useEffect } from 'react';
   View,
   Text,
@@ -22,7 +25,7 @@ import React, { useState, useEffect } from 'react';
 } from '../../store/slices/diagnosisSlice';
 
 const { width } = Dimensions.get('window');
-const chartWidth = useMemo(() => useMemo(() => useMemo(() => width - spacing.lg * 2, []), []), []);
+const chartWidth = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => width - spacing.lg * 2, []), []), []), []), []), []);
 
 interface HealthMetric {
   id: string;
@@ -45,9 +48,9 @@ interface ConstitutionData {
 }
 
 export const HealthDashboardEnhanced: React.FC = () => {
-  const dispatch = useMemo(() => useMemo(() => useMemo(() => useAppDispatch(), []), []), []);
-  const diagnosisResults = useMemo(() => useMemo(() => useMemo(() => useAppSelector(selectDiagnosisResults), []), []), []);
-  const diagnosisSessions = useMemo(() => useMemo(() => useMemo(() => useAppSelector(selectDiagnosisSessions), []), []), []);
+  const dispatch = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useAppDispatch(), []), []), []), []), []), []);
+  const diagnosisResults = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useAppSelector(selectDiagnosisResults), []), []), []), []), []), []);
+  const diagnosisSessions = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useAppSelector(selectDiagnosisSessions), []), []), []), []), []), []);
 
   const [selectedPeriod, setSelectedPeriod] = useState<'week' | 'month' | 'year'>('week');
   const [refreshing, setRefreshing] = useState(false);
@@ -135,24 +138,24 @@ export const HealthDashboardEnhanced: React.FC = () => {
 
   useEffect(() => {
     loadDiagnosisHistory();
-  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
+  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
 
-  const loadDiagnosisHistory = useMemo(() => useMemo(() => useMemo(() => async () => {
+  const loadDiagnosisHistory = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async () => {
     try {
-      await dispatch(fetchDiagnosisHistory({ limit: 10 })), []), []), []);
+      await dispatch(fetchDiagnosisHistory({ limit: 10 })), []), []), []), []), []), []);
     } catch (error) {
       console.error('加载诊断历史失败:', error);
     }
   };
 
-  const onRefresh = useMemo(() => useMemo(() => useMemo(() => async () => {
-    setRefreshing(true), []), []), []);
+  const onRefresh = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async () => {
+    setRefreshing(true), []), []), []), []), []), []);
     await loadDiagnosisHistory();
     setRefreshing(false);
   };
 
   // TODO: 将内联组件移到组件外部
-const renderOverviewCards = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderOverviewCards = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.overviewContainer}>
       {healthMetrics.map((metric) => (
         <TouchableOpacity
@@ -181,10 +184,10 @@ const renderOverviewCards = useMemo(() => useMemo(() => useMemo(() => () => (
         </TouchableOpacity>
       ))}
     </View>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
-  const renderChart = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
-    const selectedMetricData = useMemo(() => useMemo(() => useMemo(() => healthMetrics.find(m => m.id === selectedMetric), []), []), []);
+  const renderChart = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
+    const selectedMetricData = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => healthMetrics.find(m => m.id === selectedMetric), []), []), []), []), []), []);
     if (!selectedMetricData) {return null;}
 
     return (
@@ -227,7 +230,7 @@ const renderOverviewCards = useMemo(() => useMemo(() => useMemo(() => () => (
   };
 
   // TODO: 将内联组件移到组件外部
-const renderConstitutionAnalysis = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderConstitutionAnalysis = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.constitutionContainer}>
       <Text style={styles.sectionTitle}>中医体质分析</Text>
       <View style={styles.constitutionChart}>
@@ -263,10 +266,10 @@ const renderConstitutionAnalysis = useMemo(() => useMemo(() => useMemo(() => () 
         ))}
       </View>
     </View>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
   // TODO: 将内联组件移到组件外部
-const renderDiagnosisHistory = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderDiagnosisHistory = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.historyContainer}>
       <View style={styles.historyHeader}>
         <Text style={styles.sectionTitle}>五诊记录</Text>
@@ -295,9 +298,9 @@ const renderDiagnosisHistory = useMemo(() => useMemo(() => useMemo(() => () => (
         </TouchableOpacity>
       ))}
     </View>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
-  const getTrendColor = useMemo(() => useMemo(() => useMemo(() => useCallback( (trend: string) => {, []), []), []), []);
+  const getTrendColor = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (trend: string) => {, []), []), []), []), []), []), []);
     switch (trend) {
       case 'up': return colors.success;
       case 'down': return colors.error;
@@ -305,7 +308,7 @@ const renderDiagnosisHistory = useMemo(() => useMemo(() => useMemo(() => () => (
     }
   };
 
-  const getTrendIcon = useMemo(() => useMemo(() => useMemo(() => useCallback( (trend: string) => {, []), []), []), []);
+  const getTrendIcon = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (trend: string) => {, []), []), []), []), []), []), []);
     switch (trend) {
       case 'up': return 'trending-up';
       case 'down': return 'trending-down';
@@ -314,7 +317,7 @@ const renderDiagnosisHistory = useMemo(() => useMemo(() => useMemo(() => () => (
   };
 
   // TODO: 将内联组件移到组件外部
-const renderPeriodSelector = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderPeriodSelector = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.periodSelector}>
       {(['week', 'month', 'year'] as const).map((period) => (
         <TouchableOpacity
@@ -336,7 +339,7 @@ const renderPeriodSelector = useMemo(() => useMemo(() => useMemo(() => () => (
         </TouchableOpacity>
       ))}
     </View>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -383,7 +386,7 @@ const renderPeriodSelector = useMemo(() => useMemo(() => useMemo(() => () => (
   );
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -610,6 +613,6 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
     color: 'white',
     fontWeight: '600',
   },
-}), []), []), []);
+}), []), []), []), []), []), []);
 
-export default HealthDashboardEnhanced; 
+export default React.memo(HealthDashboardEnhanced); 

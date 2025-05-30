@@ -7,6 +7,9 @@ import ContactsList, { Contact } from '../../components/common/ContactsList';
 import AccessibilitySettings from '../../components/common/AccessibilitySettings';
 
 
+
+
+
 import React, { useState, useEffect } from 'react';
   View,
   Text,
@@ -208,14 +211,14 @@ export const HomeScreen: React.FC = () => {
   const [showNavigationTest, setShowNavigationTest] = useState(false);
 
   // 过滤聊天频道
-  const filteredChannels = useMemo(() => useMemo(() => useMemo(() => channels.filter(channel => {
+  const filteredChannels = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => channels.filter(channel => {
     const matchesSearch = channel.name.toLowerCase().includes(searchText.toLowerCase()) ||
-                         channel.lastMessage.toLowerCase().includes(searchText.toLowerCase()), []), []), []);
+                         channel.lastMessage.toLowerCase().includes(searchText.toLowerCase()), []), []), []), []), []), []);
     return matchesSearch;
   });
 
   // 打开聊天
-  const openChat = useMemo(() => useMemo(() => useMemo(() => useCallback( (channel: ChatChannel) => {, []), []), []), []);
+  const openChat = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (channel: ChatChannel) => {, []), []), []), []), []), []), []);
     if (channel.type === 'agent') {
       Alert.alert(
         `与${channel.name}对话`,
@@ -231,9 +234,9 @@ export const HomeScreen: React.FC = () => {
   };
 
   // 开始智能体对话
-  const startAgentChat = useMemo(() => useMemo(() => useMemo(() => async (channel: ChatChannel) => {
+  const startAgentChat = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async (channel: ChatChannel) => {
     try {
-      console.log(`🤖 启动与${channel.name}的对话...`), []), []), []);
+      console.log(`🤖 启动与${channel.name}的对话...`), []), []), []), []), []), []);
       
       // 清除未读消息
       setChannels(prev => prev.map(ch => 
@@ -254,7 +257,7 @@ export const HomeScreen: React.FC = () => {
   };
 
   // 处理联系人点击
-  const handleContactPress = useMemo(() => useMemo(() => useMemo(() => useCallback( (contact: Contact) => {, []), []), []), []);
+  const handleContactPress = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (contact: Contact) => {, []), []), []), []), []), []), []);
     if (contact.type === 'agent' && contact.agentType) {
       setSelectedAgent(contact.agentType);
       setAgentChatVisible(true);
@@ -265,8 +268,8 @@ export const HomeScreen: React.FC = () => {
   };
 
   // 渲染聊天频道项
-  const renderChannelItem = useMemo(() => useMemo(() => useMemo(() => useCallback( ({ item }: { item: ChatChannel }) => {, []), []), []), []);
-    const getChannelColor = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const renderChannelItem = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( ({ item }: { item: ChatChannel }) => {, []), []), []), []), []), []), []);
+    const getChannelColor = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
       switch (item.type) {
         case 'agent':
           return colors.primary;
@@ -459,7 +462,7 @@ export const HomeScreen: React.FC = () => {
   );
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -642,4 +645,4 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   modalCloseButton: {
     padding: spacing.sm,
   },
-}), []), []), []);
+}), []), []), []), []), []), []);

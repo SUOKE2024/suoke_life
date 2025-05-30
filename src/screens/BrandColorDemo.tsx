@@ -2,6 +2,9 @@ import { useTheme } from '../contexts/ThemeContext';
 import { Text, Button, ThemeToggle, Card } from '../components/ui';
 
 
+
+
+
 /**
  * 索克生活品牌色彩演示页面
  * 展示新的索克绿和索克橙品牌色彩系统
@@ -432,4 +435,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BrandColorDemo; 
+export default React.memo(BrandColorDemo); 

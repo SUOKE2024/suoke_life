@@ -4,6 +4,9 @@ import { responsive } from '../../utils/responsive';
 import { animations, createAnimatedValue } from '../../utils/animations';
 
 
+
+
+
 /**
  * 索克生活 - 主题切换组件
  * 支持在浅色和暗黑模式之间切换
@@ -183,4 +186,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ThemeToggle; 
+export default React.memo(ThemeToggle); 

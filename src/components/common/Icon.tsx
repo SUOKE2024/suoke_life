@@ -46,4 +46,4 @@ const IconComponent: React.FC<IconProps> = (props) => {
   }
 };
 
-export default IconComponent;
+export default React.memo(IconComponent);

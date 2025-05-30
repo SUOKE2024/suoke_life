@@ -1,6 +1,9 @@
 import { colors, spacing, borderRadius, fonts } from '../../constants/theme';
 
 
+
+
+
 import React from 'react';
   View,
   Text,
@@ -43,9 +46,9 @@ export const TabSelector: React.FC<TabSelectorProps> = ({
   scrollable = false,
   showBadge = true,
 }) => {
-  const renderTab = useMemo(() => useMemo(() => useMemo(() => useCallback( (tab: TabItem) => {, []), []), []), []);
-    const isSelected = useMemo(() => useMemo(() => useMemo(() => tab.id === selectedTabId, []), []), []);
-    const isDisabled = useMemo(() => useMemo(() => useMemo(() => tab.disabled, []), []), []);
+  const renderTab = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (tab: TabItem) => {, []), []), []), []), []), []), []);
+    const isSelected = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => tab.id === selectedTabId, []), []), []), []), []), []);
+    const isDisabled = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => tab.disabled, []), []), []), []), []), []);
 
     return (
       <TouchableOpacity
@@ -88,11 +91,11 @@ export const TabSelector: React.FC<TabSelectorProps> = ({
     );
   };
 
-  const content = useMemo(() => useMemo(() => useMemo(() => (
+  const content = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => (
     <View style={[styles.container, style]}>
       {tabs.map(renderTab)}
     </View>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
   if (scrollable) {
     return (
@@ -109,7 +112,7 @@ export const TabSelector: React.FC<TabSelectorProps> = ({
   return content;
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flexDirection: 'row',
     backgroundColor: colors.surface,
@@ -185,4 +188,4 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
     backgroundColor: colors.white,
     borderRadius: 2,
   },
-}), []), []), []); 
+}), []), []), []), []), []), []); 

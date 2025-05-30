@@ -6,6 +6,9 @@ import { colors, spacing, typography } from '../../constants/theme';
 import { useAppSelector, useAppDispatch } from '../../store';
 
 
+
+
+
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
   View,
   Text,
@@ -20,7 +23,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
-const chartWidth = useMemo(() => useMemo(() => useMemo(() => width - spacing.lg * 2, []), []), []);
+const chartWidth = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => width - spacing.lg * 2, []), []), []), []), []), []);
 
 interface HealthMetric {
   id: string;
@@ -78,7 +81,7 @@ export const AdvancedHealthDashboard: React.FC<AdvancedHealthDashboardProps> = (
   onExportData,
   onShareInsights,
 }) => {
-  const dispatch = useMemo(() => useMemo(() => useMemo(() => useAppDispatch(), []), []), []);
+  const dispatch = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useAppDispatch(), []), []), []), []), []), []);
   const { data: healthData, loading } = useAppSelector(state => state.health);
   const { profile: user } = useAppSelector(state => state.user);
   
@@ -294,7 +297,7 @@ export const AdvancedHealthDashboard: React.FC<AdvancedHealthDashboardProps> = (
     }).start();
 
     // 启动脉冲动画
-    const pulseAnimationLoop = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+    const pulseAnimationLoop = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
       Animated.sequence([
         Animated.timing(pulseAnimation, {
           toValue: 1.1,
@@ -311,26 +314,26 @@ export const AdvancedHealthDashboard: React.FC<AdvancedHealthDashboardProps> = (
     pulseAnimationLoop();
   }, []);
 
-  const onRefresh = useMemo(() => useMemo(() => useMemo(() => useCallback(async () => {
-    setRefreshing(true), []), []), []);
+  const onRefresh = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback(async () => {
+    setRefreshing(true), []), []), []), []), []), []);
     // 模拟数据刷新
     await new Promise<void>(resolve => setTimeout(() => resolve(), 1500));
     setRefreshing(false);
   }, []);
 
-  const handleMetricPress = useMemo(() => useMemo(() => useMemo(() => useCallback((metric: HealthMetric) => {
-    onMetricPress?.(metric), []), []), []);
+  const handleMetricPress = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback((metric: HealthMetric) => {
+    onMetricPress?.(metric), []), []), []), []), []), []);
   }, [onMetricPress]);
 
-  const handleAlertPress = useMemo(() => useMemo(() => useMemo(() => useCallback((alert: HealthAlert) => {
-    onAlertPress?.(alert), []), []), []);
+  const handleAlertPress = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback((alert: HealthAlert) => {
+    onAlertPress?.(alert), []), []), []), []), []), []);
   }, [onAlertPress]);
 
-  const handleInsightPress = useMemo(() => useMemo(() => useMemo(() => useCallback((insight: AIInsight) => {
-    onInsightPress?.(insight), []), []), []);
+  const handleInsightPress = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback((insight: AIInsight) => {
+    onInsightPress?.(insight), []), []), []), []), []), []);
   }, [onInsightPress]);
 
-  const getStatusColor = useMemo(() => useMemo(() => useMemo(() => useCallback( (status: string) => {, []), []), []), []);
+  const getStatusColor = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (status: string) => {, []), []), []), []), []), []), []);
     switch (status) {
       case 'excellent': return colors.success;
       case 'good': return colors.primary;
@@ -341,7 +344,7 @@ export const AdvancedHealthDashboard: React.FC<AdvancedHealthDashboardProps> = (
     }
   };
 
-  const getAlertColor = useMemo(() => useMemo(() => useMemo(() => useCallback( (type: string) => {, []), []), []), []);
+  const getAlertColor = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (type: string) => {, []), []), []), []), []), []), []);
     switch (type) {
       case 'warning': return colors.warning;
       case 'info': return colors.info;
@@ -352,7 +355,7 @@ export const AdvancedHealthDashboard: React.FC<AdvancedHealthDashboardProps> = (
   };
 
   // TODO: 将内联组件移到组件外部
-const renderPeriodSelector = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderPeriodSelector = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.periodSelector}>
       {(['day', 'week', 'month', 'year'] as const).map((period) => (
         <TouchableOpacity
@@ -374,10 +377,10 @@ const renderPeriodSelector = useMemo(() => useMemo(() => useMemo(() => () => (
         </TouchableOpacity>
       ))}
     </View>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
   // TODO: 将内联组件移到组件外部
-const renderViewSelector = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderViewSelector = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.viewSelector}>
       {(['overview', 'detailed', 'trends', 'insights'] as const).map((view) => (
         <TouchableOpacity
@@ -410,13 +413,13 @@ const renderViewSelector = useMemo(() => useMemo(() => useMemo(() => () => (
         </TouchableOpacity>
       ))}
     </View>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
-  const renderHealthScore = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
-    const overallScore = useMemo(() => useMemo(() => useMemo(() => Math.round(
+  const renderHealthScore = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
+    const overallScore = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => Math.round(
       healthMetrics.reduce((sum, metric) => {
         if (typeof metric.value === 'number') {
-          return sum + (metric.value / (metric.target || 100)) * 100, []), []), []);
+          return sum + (metric.value / (metric.target || 100)) * 100, []), []), []), []), []), []);
         }
         return sum + 75; // 默认分数
       }, 0) / healthMetrics.length
@@ -472,7 +475,7 @@ const renderViewSelector = useMemo(() => useMemo(() => useMemo(() => () => (
     );
   };
 
-  const renderMetricCard = useMemo(() => useMemo(() => useMemo(() => (metric: HealthMetric, index: number) => (
+  const renderMetricCard = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => (metric: HealthMetric, index: number) => (
     <Animated.View
       key={metric.id}
       style={[
@@ -582,10 +585,10 @@ const renderViewSelector = useMemo(() => useMemo(() => useMemo(() => () => (
         )}
       </TouchableOpacity>
     </Animated.View>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
   // TODO: 将内联组件移到组件外部
-const renderAlerts = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderAlerts = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.alertsSection}>
       <Text style={styles.sectionTitle}>健康提醒</Text>
       {healthAlerts.map((alert, index) => (
@@ -621,10 +624,10 @@ const renderAlerts = useMemo(() => useMemo(() => useMemo(() => () => (
         </TouchableOpacity>
       ))}
     </View>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
   // TODO: 将内联组件移到组件外部
-const renderInsights = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderInsights = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.insightsSection}>
       <Text style={styles.sectionTitle}>AI 健康洞察</Text>
       {aiInsights.map((insight, index) => (
@@ -669,7 +672,7 @@ const renderInsights = useMemo(() => useMemo(() => useMemo(() => () => (
         </TouchableOpacity>
       ))}
     </View>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
   if (loading) {
     return (
@@ -736,7 +739,7 @@ const renderInsights = useMemo(() => useMemo(() => useMemo(() => () => (
   );
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -1108,7 +1111,7 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
     color: colors.textSecondary,
     flex: 1,
   },
-}), []), []), []);
+}), []), []), []), []), []), []);
 
 // 导出类型
 export type { HealthMetric, HealthAlert, AIInsight, AdvancedHealthDashboardProps }; 

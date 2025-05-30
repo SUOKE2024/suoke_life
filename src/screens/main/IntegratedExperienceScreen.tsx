@@ -7,6 +7,9 @@ import { colors, spacing, typography } from '../../constants/theme';
 import { AgentType } from '../../services/AgentCoordinationService';
 
 
+
+
+
 import React, { useState, useCallback } from 'react';
   View,
   Text,
@@ -52,53 +55,53 @@ const TABS: TabItem[] = [
 export const IntegratedExperienceScreen: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabType>('agents');
 
-  const handleAgentSelect = useMemo(() => useMemo(() => useMemo(() => useCallback((agentId: AgentType) => {
-    console.log('选择智能体:', agentId), []), []), []);
+  const handleAgentSelect = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback((agentId: AgentType) => {
+    console.log('选择智能体:', agentId), []), []), []), []), []), []);
     // 这里可以添加智能体选择的逻辑
-  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
+  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
 
-  const handleStartChat = useMemo(() => useMemo(() => useMemo(() => useCallback((agentId: AgentType) => {
-    Alert.alert('开始聊天', `即将与${agentId}开始对话`), []), []), []);
+  const handleStartChat = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback((agentId: AgentType) => {
+    Alert.alert('开始聊天', `即将与${agentId}开始对话`), []), []), []), []), []), []);
     // 这里可以添加跳转到聊天界面的逻辑
   }, []);
 
-  const handleViewDetails = useMemo(() => useMemo(() => useMemo(() => useCallback((agentId: AgentType) => {
-    Alert.alert('查看详情', `查看${agentId}的详细信息`), []), []), []);
+  const handleViewDetails = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback((agentId: AgentType) => {
+    Alert.alert('查看详情', `查看${agentId}的详细信息`), []), []), []), []), []), []);
     // 这里可以添加查看智能体详情的逻辑
   }, []);
 
-  const handleMetricPress = useMemo(() => useMemo(() => useMemo(() => useCallback((metric: any) => {
-    console.log('选择健康指标:', metric), []), []), []);
+  const handleMetricPress = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback((metric: any) => {
+    console.log('选择健康指标:', metric), []), []), []), []), []), []);
     // 这里可以添加健康指标详情的逻辑
-  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
+  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
 
-  const handleExportData = useMemo(() => useMemo(() => useMemo(() => useCallback(() => {
-    Alert.alert('导出数据', '健康数据导出功能即将上线'), []), []), []);
+  const handleExportData = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback(() => {
+    Alert.alert('导出数据', '健康数据导出功能即将上线'), []), []), []), []), []), []);
     // 这里可以添加数据导出的逻辑
-  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
+  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
 
-  const handleShareInsights = useMemo(() => useMemo(() => useMemo(() => useCallback(() => {
-    Alert.alert('分享洞察', '健康洞察分享功能即将上线'), []), []), []);
+  const handleShareInsights = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback(() => {
+    Alert.alert('分享洞察', '健康洞察分享功能即将上线'), []), []), []), []), []), []);
     // 这里可以添加分享功能的逻辑
-  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
+  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
 
-  const handleSettingsChange = useMemo(() => useMemo(() => useMemo(() => useCallback((settings: any) => {
-    console.log('设置变更:', settings), []), []), []);
+  const handleSettingsChange = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback((settings: any) => {
+    console.log('设置变更:', settings), []), []), []), []), []), []);
     // 这里可以添加设置变更的处理逻辑
-  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
+  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
 
-  const handleFeedbackSubmit = useMemo(() => useMemo(() => useMemo(() => useCallback((feedback: any) => {
-    console.log('提交反馈:', feedback), []), []), []);
+  const handleFeedbackSubmit = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback((feedback: any) => {
+    console.log('提交反馈:', feedback), []), []), []), []), []), []);
     // 这里可以添加反馈提交的逻辑
-  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
+  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
 
-  const handlePerformanceAlert = useMemo(() => useMemo(() => useMemo(() => useCallback((metrics: any) => {
-    console.log('性能警告:', metrics), []), []), []);
+  const handlePerformanceAlert = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback((metrics: any) => {
+    console.log('性能警告:', metrics), []), []), []), []), []), []);
     // 这里可以添加性能警告的处理逻辑
-  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
+  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
 
   // TODO: 将内联组件移到组件外部
-const renderTabBar = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderTabBar = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.tabBar}>
       {TABS.map((tab) => (
         <TouchableOpacity
@@ -134,9 +137,9 @@ const renderTabBar = useMemo(() => useMemo(() => useMemo(() => () => (
         </TouchableOpacity>
       ))}
     </View>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
-  const renderContent = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const renderContent = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     switch (activeTab) {
       case 'agents':
         return (
@@ -197,7 +200,7 @@ const renderTabBar = useMemo(() => useMemo(() => useMemo(() => () => (
   );
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -296,4 +299,4 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   contentContainer: {
     flex: 1,
   },
-}), []), []), []); 
+}), []), []), []), []), []), []); 

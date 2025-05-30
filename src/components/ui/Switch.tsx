@@ -7,6 +7,9 @@ import React from "react";
 
 
 
+
+
+
 /**
  * 索克生活 - Switch组件
  * 开关组件，用于切换状态
@@ -51,7 +54,7 @@ const Switch: React.FC<SwitchProps> = ({
   style,
   testID,
 }) => {
-  const getSwitchStyle = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const getSwitchStyle = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     switch (size) {
       case "small":
         return {
@@ -67,7 +70,7 @@ const Switch: React.FC<SwitchProps> = ({
   };
 
   // TODO: 将内联组件移到组件外部
-  const renderSwitch = useMemo(() => useMemo(() => useMemo(() => () => (
+  const renderSwitch = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <RNSwitch
       value={value}
       onValueChange={onValueChange}
@@ -81,9 +84,9 @@ const Switch: React.FC<SwitchProps> = ({
       style={getSwitchStyle()}
       testID={testID}
     />
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
-  const renderLabel = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const renderLabel = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     if (!label && !description) {
       return null;
     }
@@ -118,11 +121,11 @@ const Switch: React.FC<SwitchProps> = ({
     );
   };
 
-  const containerStyle = useMemo(() => useMemo(() => useMemo(() => [
+  const containerStyle = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => [
     styles.container,
     labelPosition === "left" && styles.containerReverse,
     style,
-  ].filter(Boolean) as ViewStyle[], []), []), []);
+  ].filter(Boolean) as ViewStyle[], []), []), []), []), []), []);
 
   return (
     <View style={containerStyle}>
@@ -133,7 +136,7 @@ const Switch: React.FC<SwitchProps> = ({
   );
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
@@ -160,6 +163,6 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   disabledText: {
     color: colors.gray400,
   },
-}), []), []), []);
+}), []), []), []), []), []), []);
 
-export default Switch;
+export default React.memo(Switch);

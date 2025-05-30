@@ -1,6 +1,9 @@
 import { colors, spacing, borderRadius, shadows } from '../../constants/theme';
 
 
+
+
+
 /**
  * 索克生活 - Modal组件
  * 模态框组件
@@ -159,4 +162,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Modal; 
+export default React.memo(Modal); 

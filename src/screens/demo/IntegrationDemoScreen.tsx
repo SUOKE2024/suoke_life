@@ -3,6 +3,9 @@ import { mlTrainingService } from '../../services/mlTrainingService';
 import { agentCoordinationService } from '../../services/agentCoordinationService';
 
 
+
+
+
 /**
  * 索克生活集成演示界面
  * 展示五诊算法、机器学习训练和四大智能体协作的完整功能
@@ -71,29 +74,29 @@ export const IntegrationDemoScreen: React.FC = () => {
 
   useEffect(() => {
     updateServiceStatus();
-  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
+  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
 
-  const updateServiceStatus = useMemo(() => useMemo(() => useMemo(() => async () => {
+  const updateServiceStatus = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async () => {
     try {
       setServiceStatus({
         fiveDiagnosis: fiveDiagnosisService.getServiceStatus(),
         mlTraining: mlTrainingService.getServiceStatus(),
         agentCoordination: agentCoordinationService.getServiceStatus(),
-      }), []), []), []);
+      }), []), []), []), []), []), []);
     } catch (error) {
       console.warn('更新服务状态失败:', error);
     }
   };
 
-  const runCompleteDemo = useMemo(() => useMemo(() => useMemo(() => async () => {
-    if (isRunning) {return, []), []), []);}
+  const runCompleteDemo = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async () => {
+    if (isRunning) {return, []), []), []), []), []), []);}
 
     try {
       setIsRunning(true);
       setCurrentStep(0);
 
       // 重置所有步骤状态
-      const resetSteps = useMemo(() => useMemo(() => useMemo(() => demoSteps.map(step => ({ ...step, status: 'pending' as const, result: undefined })), []), []), []);
+      const resetSteps = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => demoSteps.map(step => ({ ...step, status: 'pending' as const, result: undefined })), []), []), []), []), []), []);
       setDemoSteps(resetSteps);
 
       // 步骤1: 初始化服务
@@ -120,16 +123,16 @@ export const IntegrationDemoScreen: React.FC = () => {
     }
   };
 
-  const executeStep = useMemo(() => useMemo(() => useMemo(() => async (stepIndex: number, stepFunction: () => Promise<any>) => {
-    setCurrentStep(stepIndex), []), []), []);
+  const executeStep = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async (stepIndex: number, stepFunction: () => Promise<any>) => {
+    setCurrentStep(stepIndex), []), []), []), []), []), []);
     
     // 更新步骤状态为运行中
-    const updatedSteps = useMemo(() => useMemo(() => useMemo(() => [...demoSteps], []), []), []);
+    const updatedSteps = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => [...demoSteps], []), []), []), []), []), []);
     updatedSteps[stepIndex].status = 'running';
     setDemoSteps(updatedSteps);
 
     try {
-      const result = useMemo(() => useMemo(() => useMemo(() => await stepFunction(), []), []), []);
+      const result = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => await stepFunction(), []), []), []), []), []), []);
       
       // 更新步骤状态为完成
       updatedSteps[stepIndex].status = 'completed';
@@ -149,14 +152,14 @@ export const IntegrationDemoScreen: React.FC = () => {
 
   // 演示步骤实现
 
-  const initializeServices = useMemo(() => useMemo(() => useMemo(() => async () => {
-    console.log('🔧 开始初始化所有服务...'), []), []), []);
+  const initializeServices = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async () => {
+    console.log('🔧 开始初始化所有服务...'), []), []), []), []), []), []);
 
-    const results = useMemo(() => useMemo(() => useMemo(() => {
+    const results = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => {
       fiveDiagnosis: '',
       mlTraining: '',
       agentCoordination: '',
-    }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项, []), []);
+    }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项, []), []), []), []), []);
 
     try {
       // 初始化五诊服务
@@ -187,10 +190,10 @@ export const IntegrationDemoScreen: React.FC = () => {
     return results;
   };
 
-  const demonstrateFiveDiagnosis = useMemo(() => useMemo(() => useMemo(() => async () => {
-    console.log('🔍 开始五诊算法演示...'), []), []), []);
+  const demonstrateFiveDiagnosis = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async () => {
+    console.log('🔍 开始五诊算法演示...'), []), []), []), []), []), []);
 
-    const diagnosisInput = useMemo(() => useMemo(() => useMemo(() => {
+    const diagnosisInput = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => {
       userId: 'demo_user_001',
       sessionId: `demo_session_${Date.now()}`,
       lookingData: {
@@ -221,9 +224,9 @@ export const IntegrationDemoScreen: React.FC = () => {
           stress: '中等压力',
         },
       },
-    }, []), []), []);
+    }, []), []), []), []), []), []);
 
-    const result = useMemo(() => useMemo(() => useMemo(() => await fiveDiagnosisService.performDiagnosis(diagnosisInput), []), []), []);
+    const result = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => await fiveDiagnosisService.performDiagnosis(diagnosisInput), []), []), []), []), []), []);
     
     console.log('✅ 五诊算法演示完成');
     return {
@@ -235,22 +238,22 @@ export const IntegrationDemoScreen: React.FC = () => {
     };
   };
 
-  const demonstrateAgentCollaboration = useMemo(() => useMemo(() => useMemo(() => async () => {
-    console.log('🤝 开始智能体协作演示...'), []), []), []);
+  const demonstrateAgentCollaboration = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async () => {
+    console.log('🤝 开始智能体协作演示...'), []), []), []), []), []), []);
 
-    const diagnosisData = useMemo(() => useMemo(() => useMemo(() => {
+    const diagnosisData = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => {
       userId: 'demo_user_001',
       symptoms: ['疲劳乏力', '气短懒言', '食欲不振'],
       diagnosisResult: {
         primarySyndrome: '气虚证',
         confidence: 0.85,
       },
-    }, []), []), []);
+    }, []), []), []), []), []), []);
 
-    const collaboration = useMemo(() => useMemo(() => useMemo(() => await agentCoordinationService.performCollaborativeDiagnosis(
+    const collaboration = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => await agentCoordinationService.performCollaborativeDiagnosis(
       'demo_user_001',
       diagnosisData
-    ), []), []), []);
+    ), []), []), []), []), []), []);
 
     console.log('✅ 智能体协作演示完成');
     return {
@@ -261,11 +264,11 @@ export const IntegrationDemoScreen: React.FC = () => {
     };
   };
 
-  const demonstrateMLTraining = useMemo(() => useMemo(() => useMemo(() => async () => {
-    console.log('🎯 开始机器学习训练演示...'), []), []), []);
+  const demonstrateMLTraining = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async () => {
+    console.log('🎯 开始机器学习训练演示...'), []), []), []), []), []), []);
 
     // 模拟训练数据
-    const trainingData = useMemo(() => useMemo(() => useMemo(() => [
+    const trainingData = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => [
       {
         id: 'train_001',
         type: 'looking' as const,
@@ -290,9 +293,9 @@ export const IntegrationDemoScreen: React.FC = () => {
           verified: true,
         },
       },
-    ], []), []), []);
+    ], []), []), []), []), []), []);
 
-    const modelConfig = useMemo(() => useMemo(() => useMemo(() => {
+    const modelConfig = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => {
       name: 'five_diagnosis_demo_model',
       type: 'neural_network' as const,
       architecture: {
@@ -312,14 +315,14 @@ export const IntegrationDemoScreen: React.FC = () => {
         validationSplit: 0.2,
         earlyStoppingPatience: 10,
       },
-    }, []), []), []);
+    }, []), []), []), []), []), []);
 
     try {
-      const trainingTask = useMemo(() => useMemo(() => useMemo(() => await mlTrainingService.createTrainingTask(
+      const trainingTask = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => await mlTrainingService.createTrainingTask(
         'demo_five_diagnosis_model',
         modelConfig,
         trainingData
-      ), []), []), []);
+      ), []), []), []), []), []), []);
 
       console.log('✅ 机器学习训练演示完成');
       return {
@@ -341,18 +344,18 @@ export const IntegrationDemoScreen: React.FC = () => {
     }
   };
 
-  const performIntegrationAnalysis = useMemo(() => useMemo(() => useMemo(() => async () => {
-    console.log('📊 开始集成分析...'), []), []), []);
+  const performIntegrationAnalysis = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async () => {
+    console.log('📊 开始集成分析...'), []), []), []), []), []), []);
 
     // 获取所有系统的状态
-    const systemStatus = useMemo(() => useMemo(() => useMemo(() => {
+    const systemStatus = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => {
       fiveDiagnosis: fiveDiagnosisService.getServiceStatus(),
       mlTraining: mlTrainingService.getServiceStatus(),
       agentCoordination: agentCoordinationService.getServiceStatus(),
-    }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项, []), []);
+    }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项, []), []), []), []), []);
 
     // 模拟集成分析结果
-    const integrationResult = useMemo(() => useMemo(() => useMemo(() => {
+    const integrationResult = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => {
       systemHealth: {
         overall: 'excellent',
         fiveDiagnosisAccuracy: 0.92,
@@ -371,7 +374,7 @@ export const IntegrationDemoScreen: React.FC = () => {
         '持续优化算法模型',
         '扩展智能体功能',
       ],
-    }, []), []), []);
+    }, []), []), []), []), []), []);
 
     console.log('✅ 集成分析完成');
     return {
@@ -381,8 +384,8 @@ export const IntegrationDemoScreen: React.FC = () => {
     };
   };
 
-  const renderStepCard = useMemo(() => useMemo(() => useMemo(() => useCallback( (step: DemoStep, index: number) => {, []), []), []), []);
-    const getStatusColor = useMemo(() => useMemo(() => useMemo(() => useCallback( (status: string) => {, []), []), []), []);
+  const renderStepCard = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (step: DemoStep, index: number) => {, []), []), []), []), []), []), []);
+    const getStatusColor = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (status: string) => {, []), []), []), []), []), []), []);
       switch (status) {
         case 'completed': return '#4CAF50';
         case 'running': return '#2196F3';
@@ -391,7 +394,7 @@ export const IntegrationDemoScreen: React.FC = () => {
       }
     };
 
-    const getStatusIcon = useMemo(() => useMemo(() => useMemo(() => useCallback( (status: string) => {, []), []), []), []);
+    const getStatusIcon = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (status: string) => {, []), []), []), []), []), []), []);
       switch (status) {
         case 'completed': return '✅';
         case 'running': return '🔄';
@@ -433,7 +436,7 @@ export const IntegrationDemoScreen: React.FC = () => {
   };
 
   // TODO: 将内联组件移到组件外部
-const renderServiceStatus = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderServiceStatus = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.statusContainer}>
       <Text style={styles.statusTitle}>服务状态</Text>
       <View style={styles.statusGrid}>
@@ -466,7 +469,7 @@ const renderServiceStatus = useMemo(() => useMemo(() => useMemo(() => () => (
         </View>
       </View>
     </View>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -504,7 +507,7 @@ const renderServiceStatus = useMemo(() => useMemo(() => useMemo(() => () => (
   );
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F5F5F5',
@@ -649,6 +652,6 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
     color: '#666',
     lineHeight: 16,
   },
-}), []), []), []);
+}), []), []), []), []), []), []);
 
-export default IntegrationDemoScreen; 
+export default React.memo(IntegrationDemoScreen); 

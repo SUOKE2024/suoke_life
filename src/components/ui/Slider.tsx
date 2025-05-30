@@ -3,6 +3,9 @@ import Text from "./Text";
 import React, { useState, useRef } from "react";
 
 
+
+
+
   View,
   StyleSheet,
   ViewStyle,
@@ -247,4 +250,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Slider;
+export default React.memo(Slider);

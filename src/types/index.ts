@@ -3,6 +3,7 @@
  * 索克生活APP - 架构优化
  */
 
+export { default as agents } from './agents';
 export { default as chat } from './chat';
 export { default as core } from './core';
 export { default as explore } from './explore';

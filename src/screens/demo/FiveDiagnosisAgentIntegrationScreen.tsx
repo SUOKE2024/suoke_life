@@ -2,6 +2,9 @@ import { fiveDiagnosisService, FiveDiagnosisInput, FiveDiagnosisResult } from '.
 import { agentCoordinationService, AgentType } from '../../services/agentCoordinationService';
 
 
+
+
+
 /**
  * 五诊算法与四大智能体深度集成演示界面
  * 展示真实的中医五诊流程与智能体协作的完整场景
@@ -93,7 +96,7 @@ export const FiveDiagnosisAgentIntegrationScreen: React.FC = () => {
 
   useEffect(() => {
     initializeServices();
-  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
+  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
 
   const initializeServices = async () => {
     try {
@@ -356,6 +359,9 @@ export const FiveDiagnosisAgentIntegrationScreen: React.FC = () => {
   };
 
   // TODO: 将内联组件移到组件外部
+// TODO: 将内联组件移到组件外部
+// TODO: 将内联组件移到组件外部
+// TODO: 将内联组件移到组件外部
 // TODO: 将内联组件移到组件外部
 // TODO: 将内联组件移到组件外部
 // TODO: 将内联组件移到组件外部
@@ -924,4 +930,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FiveDiagnosisAgentIntegrationScreen; 
+export default React.memo(FiveDiagnosisAgentIntegrationScreen); 

@@ -318,4 +318,27 @@ npm test -- --verbose --no-cache
 
 - [Jest文档](https://jestjs.io/docs/getting-started)
 - [React Native Testing Library](https://callstack.github.io/react-native-testing-library/)
-- [Testing Best Practices](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library) 
+- [Testing Best Practices](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library)
+
+# 索克生活专项测试目录说明
+
+本目录包含健康数据、AI推理、多Agent协作等专项自动化测试用例模板，覆盖单元、集成、端到端（E2E）各层级。
+
+## 目录结构
+- `health_data/`：健康数据处理相关单元与集成测试
+- `ai_inference/`：AI推理相关单元与端到端测试
+- `agent_collaboration/`：多Agent协作集成测试
+
+## 编写与扩展建议
+- 按业务链路和模块分目录，便于专项维护
+- 用例命名清晰，描述覆盖场景与预期
+- 推荐先补充占位断言，逐步完善真实业务逻辑
+- 可结合Mock、Stub等技术模拟外部依赖
+
+## 运行方式
+- 推荐通过Jest（前端）或统一CI脚本运行
+- 支持单独运行专项测试或全量测试
+
+## 持续优化
+- 随业务演进持续补充新链路、新场景的专项测试
+- 定期复查用例有效性与覆盖率 

@@ -3,6 +3,9 @@ import { colors, spacing } from '../../../constants/theme';
 
 
 
+
+
+
 /**
  * 区块链健康数据管理组件
  * 提供安全的健康数据存储和管理功能
@@ -123,7 +126,7 @@ export const BlockchainHealthManager: React.FC<BlockchainHealthManagerProps> = (
   const [selectedRecord, setSelectedRecord] = useState<HealthDataRecord | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const getTypeIcon = useMemo(() => useMemo(() => useMemo(() => useCallback( (type: string) => {, []), []), []), []);
+  const getTypeIcon = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (type: string) => {, []), []), []), []), []), []), []);
     switch (type) {
       case 'diagnosis': return 'medical-bag';
       case 'medication': return 'pill';
@@ -134,7 +137,7 @@ export const BlockchainHealthManager: React.FC<BlockchainHealthManagerProps> = (
     }
   };
 
-  const getTypeColor = useMemo(() => useMemo(() => useMemo(() => useCallback( (type: string) => {, []), []), []), []);
+  const getTypeColor = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (type: string) => {, []), []), []), []), []), []), []);
     switch (type) {
       case 'diagnosis': return '#E74C3C';
       case 'medication': return '#3498DB';
@@ -145,7 +148,7 @@ export const BlockchainHealthManager: React.FC<BlockchainHealthManagerProps> = (
     }
   };
 
-  const getEntityIcon = useMemo(() => useMemo(() => useMemo(() => useCallback( (type: string) => {, []), []), []), []);
+  const getEntityIcon = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (type: string) => {, []), []), []), []), []), []), []);
     switch (type) {
       case 'hospital': return 'hospital-building';
       case 'doctor': return 'doctor';
@@ -156,8 +159,8 @@ export const BlockchainHealthManager: React.FC<BlockchainHealthManagerProps> = (
     }
   };
 
-  const toggleRecordSharing = useMemo(() => useMemo(() => useMemo(() => async (recordId: string) => {
-    setIsLoading(true), []), []), []);
+  const toggleRecordSharing = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async (recordId: string) => {
+    setIsLoading(true), []), []), []), []), []), []);
     try {
       // 模拟区块链操作
       await new Promise<void>(resolve => setTimeout(() => resolve(), 1000));
@@ -176,8 +179,8 @@ export const BlockchainHealthManager: React.FC<BlockchainHealthManagerProps> = (
     }
   };
 
-  const togglePermission = useMemo(() => useMemo(() => useMemo(() => async (permissionId: string) => {
-    setIsLoading(true), []), []), []);
+  const togglePermission = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async (permissionId: string) => {
+    setIsLoading(true), []), []), []), []), []), []);
     try {
       await new Promise<void>(resolve => setTimeout(() => resolve(), 1000));
       
@@ -196,7 +199,7 @@ export const BlockchainHealthManager: React.FC<BlockchainHealthManagerProps> = (
   };
 
   // TODO: 将内联组件移到组件外部
-const renderTabBar = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderTabBar = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.tabBar}>
       <TouchableOpacity
         style={[styles.tab, activeTab === 'records' && styles.activeTab]}
@@ -240,9 +243,9 @@ const renderTabBar = useMemo(() => useMemo(() => useMemo(() => () => (
         </Text>
       </TouchableOpacity>
     </View>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
-  const renderRecordCard = useMemo(() => useMemo(() => useMemo(() => (record: HealthDataRecord) => (
+  const renderRecordCard = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => (record: HealthDataRecord) => (
     <TouchableOpacity
       key={record.id}
       style={styles.recordCard}
@@ -291,9 +294,9 @@ const renderTabBar = useMemo(() => useMemo(() => useMemo(() => () => (
         </View>
       </View>
     </TouchableOpacity>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
-  const renderPermissionCard = useMemo(() => useMemo(() => useMemo(() => (permission: DataPermission) => (
+  const renderPermissionCard = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => (permission: DataPermission) => (
     <View key={permission.id} style={styles.permissionCard}>
       <View style={styles.permissionHeader}>
         <View style={styles.permissionIcon}>
@@ -328,10 +331,10 @@ const renderTabBar = useMemo(() => useMemo(() => useMemo(() => () => (
         ))}
       </View>
     </View>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
   // TODO: 将内联组件移到组件外部
-const renderSecuritySettings = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderSecuritySettings = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.securityContainer}>
       <View style={styles.securityCard}>
         <View style={styles.securityHeader}>
@@ -376,9 +379,9 @@ const renderSecuritySettings = useMemo(() => useMemo(() => useMemo(() => () => (
         />
       </View>
     </View>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
-  const renderContent = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const renderContent = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     switch (activeTab) {
       case 'records':
         return (
@@ -456,7 +459,7 @@ const renderSecuritySettings = useMemo(() => useMemo(() => useMemo(() => () => (
   );
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -724,4 +727,4 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
     color: 'white',
     marginTop: spacing.md,
   },
-}), []), []), []); 
+}), []), []), []), []), []), []); 

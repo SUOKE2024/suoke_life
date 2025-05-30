@@ -8,6 +8,9 @@ import AccessibilityPanel from '../components/ui/AccessibilityPanel';
 import Modal from '../components/ui/Modal';
 
 
+
+
+
 /**
  * 索克生活 - UI组件演示页面
  * 展示所有新的UI组件和功能
@@ -402,4 +405,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UIDemo; 
+export default React.memo(UIDemo); 

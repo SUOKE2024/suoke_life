@@ -1,13 +1,9 @@
+import {
 import { useNavigation } from '@react-navigation/native';
 import { fiveDiagnosisService, FiveDiagnosisInput, FiveDiagnosisResult } from '../../services/fiveDiagnosisService';
 
 
-/**
- * 五诊算法主界面组件
- * 提供完整的五诊分析用户界面
- */
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
   View,
   Text,
   StyleSheet,
@@ -29,6 +25,11 @@ interface DiagnosisStep {
   completed: boolean;
   data?: any;
 }
+
+/**
+ * 五诊算法主界面组件
+ * 提供完整的五诊分析用户界面
+ */
 
 export const FiveDiagnosisScreen: React.FC = () => {
   const navigation = useMemo(() => useMemo(() => useMemo(() => useNavigation(), []), []), []);
@@ -75,11 +76,7 @@ export const FiveDiagnosisScreen: React.FC = () => {
     },
   ]);
 
-  useEffect(() => {
-    initializeDiagnosisService();
-  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
-
-  const initializeDiagnosisService = useMemo(() => useMemo(() => useMemo(() => async () => {
+  const initializeDiagnosisService = useMemo(() => useMemo(() => useMemo(() => useCallback(async () => {
     try {
       await fiveDiagnosisService.initialize(), []), []), []);
       console.log('五诊算法服务初始化完成');
@@ -87,10 +84,14 @@ export const FiveDiagnosisScreen: React.FC = () => {
       console.error('五诊算法服务初始化失败:', error);
       Alert.alert('初始化失败', '五诊算法服务初始化失败，请重试');
     }
-  };
+  }, []);
 
-  const handleStepPress = useMemo(() => useMemo(() => useMemo(() => useCallback( (stepIndex: number) => {, []), []), []), []);
-    const step = useMemo(() => useMemo(() => useMemo(() => diagnosisSteps[stepIndex], []), []), []);
+  useEffect(() => {
+    initializeDiagnosisService();
+  }, [initializeDiagnosisService]);
+
+  const handleStepPress = useMemo(() => useMemo(() => useMemo(() => useCallback((stepIndex: number) => {
+    const step = diagnosisSteps[stepIndex], []), []), []);
     
     // 暂时使用模拟数据完成步骤，实际应该导航到对应的诊断页面
     switch (step.id) {
@@ -177,10 +178,10 @@ export const FiveDiagnosisScreen: React.FC = () => {
         });
         break;
     }
-  };
+  }, []);
 
-  const handleStepComplete = useMemo(() => useMemo(() => useMemo(() => useCallback( (stepIndex: number, data: any) => {, []), []), []), []);
-    const updatedSteps = useMemo(() => useMemo(() => useMemo(() => [...diagnosisSteps], []), []), []);
+  const handleStepComplete = useMemo(() => useMemo(() => useMemo(() => useCallback((stepIndex: number, data: any) => {
+    const updatedSteps = [...diagnosisSteps], []), []), []);
     updatedSteps[stepIndex].completed = true;
     updatedSteps[stepIndex].data = data;
     setDiagnosisSteps(updatedSteps);
@@ -189,13 +190,13 @@ export const FiveDiagnosisScreen: React.FC = () => {
     if (stepIndex < diagnosisSteps.length - 1) {
       setCurrentStep(stepIndex + 1);
     }
-  };
+  }, []);
 
-  const canPerformAnalysis = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
-    return diagnosisSteps.some(step => step.completed);
-  };
+  const canPerformAnalysis = useMemo(() => useMemo(() => useMemo(() => useCallback(() => {
+    return diagnosisSteps.some(step => step.completed), []), []), []);
+  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项;
 
-  const performAnalysis = useMemo(() => useMemo(() => useMemo(() => async () => {
+  const performAnalysis = useMemo(() => useMemo(() => useMemo(() => useCallback(async () => {
     if (!canPerformAnalysis()) {
       Alert.alert('提示', '请至少完成一项诊断后再进行分析'), []), []), []);
       return;
@@ -227,10 +228,10 @@ export const FiveDiagnosisScreen: React.FC = () => {
     } finally {
       setIsAnalyzing(false);
     }
-  };
+  }, []);
 
-  const showAnalysisResult = useMemo(() => useMemo(() => useMemo(() => useCallback( (result: FiveDiagnosisResult) => {, []), []), []), []);
-    const { primarySyndrome, constitutionType, healthRecommendations } = result;
+  const showAnalysisResult = useMemo(() => useMemo(() => useMemo(() => useCallback((result: FiveDiagnosisResult) => {
+    const { primarySyndrome, constitutionType, healthRecommendations } = result, []), []), []);
     
     Alert.alert(
       '五诊分析结果',
@@ -245,11 +246,11 @@ export const FiveDiagnosisScreen: React.FC = () => {
         { text: '确定', style: 'default' },
       ]
     );
-  };
+  }, []);
 
-  const showDetailedResult = useMemo(() => useMemo(() => useMemo(() => useCallback( (result: FiveDiagnosisResult) => {, []), []), []), []);
+  const showDetailedResult = useMemo(() => useMemo(() => useMemo(() => useCallback((result: FiveDiagnosisResult) => {
     // 这里可以导航到详细结果页面或显示更详细的信息
-    console.log('详细分析结果:', result);
+    console.log('详细分析结果:', result), []), []), []);
     Alert.alert(
       '详细分析结果',
       `会话ID: ${result.sessionId}\n` +
@@ -260,9 +261,9 @@ export const FiveDiagnosisScreen: React.FC = () => {
       `体质特征:\n${result.constitutionType.characteristics.slice(0, 3).join('\n')}\n\n` +
       `健康建议:\n${result.constitutionType.recommendations.slice(0, 3).join('\n')}`
     );
-  };
+  }, []);
 
-  const resetDiagnosis = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const resetDiagnosis = useMemo(() => useMemo(() => useMemo(() => useCallback(() => {
     Alert.alert(
       '重置确认',
       '确定要重置所有诊断数据吗？',
@@ -271,7 +272,7 @@ export const FiveDiagnosisScreen: React.FC = () => {
         {
           text: '确定',
           onPress: () => {
-            const resetSteps = useMemo(() => useMemo(() => useMemo(() => diagnosisSteps.map(step => ({
+            const resetSteps = diagnosisSteps.map(step => ({
               ...step,
               completed: false,
               data: undefined,
@@ -283,15 +284,15 @@ export const FiveDiagnosisScreen: React.FC = () => {
         },
       ]
     );
-  };
+  }, []);
 
-  const getCompletedStepsCount = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
-    return diagnosisSteps.filter(step => step.completed).length;
-  };
+  const getCompletedStepsCount = useMemo(() => useMemo(() => useMemo(() => useCallback(() => {
+    return diagnosisSteps.filter(step => step.completed).length, []), []), []);
+  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项;
 
-  const getProgressPercentage = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
-    return (getCompletedStepsCount() / diagnosisSteps.length) * 100;
-  };
+  const getProgressPercentage = useMemo(() => useMemo(() => useMemo(() => useCallback(() => {
+    return (getCompletedStepsCount() / diagnosisSteps.length) * 100, []), []), []);
+  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -614,4 +615,4 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   },
 }), []), []), []);
 
-export default FiveDiagnosisScreen; 
+export default React.memo(FiveDiagnosisScreen); 

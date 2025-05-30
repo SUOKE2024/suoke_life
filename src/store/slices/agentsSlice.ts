@@ -1,13 +1,21 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { apiClient } from "../../services/apiClient";
-
-
+import type {
   AgentsState,
   AgentMessage,
   AgentType,
   AgentResponse,
-  ApiResponse,
 } from "../../types";
+
+// 使用apiClient的ApiResponse类型
+interface ApiClientResponse<T = any> {
+  success: boolean;
+  data: T;
+  message?: string;
+  code?: string;
+  timestamp?: string;
+}
+
 // import { API_CONFIG } from "../../constants/config";
 
 // 初始状态
@@ -39,7 +47,7 @@ export const sendMessageToAgent = createAsyncThunk<
       // 使用apiClient发送消息到智能体
       const agentEndpoint = `/agents/${agentType}/chat`;
 
-      const response: ApiResponse<AgentResponse> = await apiClient.post(
+      const response: ApiClientResponse<AgentResponse> = await apiClient.post(
         agentEndpoint,
         {
           message: content,
@@ -48,7 +56,7 @@ export const sendMessageToAgent = createAsyncThunk<
       );
 
       if (!response.success) {
-        throw new Error(response.error?.message || "发送消息失败");
+        throw new Error(response.message || "发送消息失败");
       }
 
       // 构造返回的消息
@@ -74,12 +82,12 @@ export const loadConversationHistory = createAsyncThunk<
   { rejectValue: string }
 >("agents/loadHistory", async (agentType, { rejectWithValue }) => {
   try {
-    const response: ApiResponse<AgentMessage[]> = await apiClient.get(
+    const response: ApiClientResponse<AgentMessage[]> = await apiClient.get(
       `/agents/${agentType}/history`
     );
 
     if (!response.success) {
-      throw new Error(response.error?.message || "加载对话历史失败");
+      throw new Error(response.message || "加载对话历史失败");
     }
 
     return {
@@ -97,12 +105,12 @@ export const clearConversation = createAsyncThunk<
   { rejectValue: string }
 >("agents/clearConversation", async (agentType, { rejectWithValue }) => {
   try {
-    const response: ApiResponse = await apiClient.delete(
+    const response: ApiClientResponse = await apiClient.delete(
       `/agents/${agentType}/history`
     );
 
     if (!response.success) {
-      throw new Error(response.error?.message || "清除对话历史失败");
+      throw new Error(response.message || "清除对话历史失败");
     }
 
     return agentType;

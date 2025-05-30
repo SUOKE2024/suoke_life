@@ -40,4 +40,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoadingScreen;
+export default React.memo(LoadingScreen);

@@ -4,6 +4,9 @@ import { responsive, typography } from "../../utils/responsive";
 import React from "react";
 
 
+
+
+
   Text as RNText,
   StyleSheet,
   TextStyle,
@@ -331,4 +334,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Text;
+export default React.memo(Text);

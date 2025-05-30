@@ -4,6 +4,9 @@ import deviceIntegrationTester from '../../utils/deviceIntegrationTest';
 
 
 
+
+
+
 import React, { useState, useEffect } from 'react';
   View,
   Text,
@@ -543,4 +546,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DeviceTestDashboard; 
+export default React.memo(DeviceTestDashboard); 

@@ -5,6 +5,9 @@ import { Card, Button, Switch, Slider, Modal } from '../ui';
 import { colors, spacing, typography } from '../../constants/theme';
 
 
+
+
+
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
   View,
   Text,
@@ -111,9 +114,9 @@ export const UserExperienceOptimizer: React.FC<UserExperienceOptimizerProps> = (
   const [isScreenReaderEnabled, setIsScreenReaderEnabled] = useState(false);
   const [appState, setAppState] = useState<AppStateStatus>(AppState.currentState);
 
-  const performanceTimer = useMemo(() => useMemo(() => useMemo(() => useRef<ReturnType<typeof setTimeout>>(), []), []), []);
-  const renderStartTime = useMemo(() => useMemo(() => useMemo(() => useRef<number>(Date.now()), []), []), []);
-  const animatedValue = useMemo(() => useMemo(() => useMemo(() => useRef(new Animated.Value(0)).current, []), []), []);
+  const performanceTimer = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useRef<ReturnType<typeof setTimeout>>(), []), []), []), []), []), []);
+  const renderStartTime = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useRef<number>(Date.now()), []), []), []), []), []), []);
+  const animatedValue = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useRef(new Animated.Value(0)).current, []), []), []), []), []), []);
 
   // 初始化
   useEffect(() => {
@@ -138,10 +141,10 @@ export const UserExperienceOptimizer: React.FC<UserExperienceOptimizerProps> = (
     }).start();
   }, [personalizationSettings.animationSpeed]);
 
-  const initializeSettings = useMemo(() => useMemo(() => useMemo(() => async () => {
+  const initializeSettings = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async () => {
     try {
-      const savedAccessibility = await AsyncStorage.getItem('accessibility_settings'), []), []), []);
-      const savedPersonalization = useMemo(() => useMemo(() => useMemo(() => await AsyncStorage.getItem('personalization_settings'), []), []), []);
+      const savedAccessibility = await AsyncStorage.getItem('accessibility_settings'), []), []), []), []), []), []);
+      const savedPersonalization = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => await AsyncStorage.getItem('personalization_settings'), []), []), []), []), []), []);
 
       if (savedAccessibility) {
         setAccessibilitySettings(JSON.parse(savedAccessibility));
@@ -155,9 +158,9 @@ export const UserExperienceOptimizer: React.FC<UserExperienceOptimizerProps> = (
     }
   };
 
-  const saveSettings = useMemo(() => useMemo(() => useMemo(() => async (type: 'accessibility' | 'personalization', settings: any) => {
+  const saveSettings = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async (type: 'accessibility' | 'personalization', settings: any) => {
     try {
-      const key = `${type}_settings`, []), []), []);
+      const key = `${type}_settings`, []), []), []), []), []), []);
       await AsyncStorage.setItem(key, JSON.stringify(settings));
       onSettingsChange?.({ type, settings });
     } catch (error) {
@@ -165,9 +168,9 @@ export const UserExperienceOptimizer: React.FC<UserExperienceOptimizerProps> = (
     }
   };
 
-  const checkAccessibilityServices = useMemo(() => useMemo(() => useMemo(() => async () => {
+  const checkAccessibilityServices = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async () => {
     try {
-      const isScreenReaderEnabled = await AccessibilityInfo.isScreenReaderEnabled(), []), []), []);
+      const isScreenReaderEnabled = await AccessibilityInfo.isScreenReaderEnabled(), []), []), []), []), []), []);
       setIsScreenReaderEnabled(isScreenReaderEnabled);
       
       if (isScreenReaderEnabled) {
@@ -178,8 +181,8 @@ export const UserExperienceOptimizer: React.FC<UserExperienceOptimizerProps> = (
     }
   };
 
-  const setupAppStateListener = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
-    const handleAppStateChange = useMemo(() => useMemo(() => useMemo(() => useCallback( (nextAppState: AppStateStatus) => {, []), []), []), []);
+  const setupAppStateListener = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
+    const handleAppStateChange = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (nextAppState: AppStateStatus) => {, []), []), []), []), []), []), []);
       if (appState.match(/inactive|background/) && nextAppState === 'active') {
         // 应用从后台回到前台，重新开始性能监控
         startPerformanceMonitoring();
@@ -187,22 +190,22 @@ export const UserExperienceOptimizer: React.FC<UserExperienceOptimizerProps> = (
       setAppState(nextAppState);
     };
 
-    const subscription = useMemo(() => useMemo(() => useMemo(() => AppState.addEventListener('change', handleAppStateChange), []), []), []);
+    const subscription = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => AppState.addEventListener('change', handleAppStateChange), []), []), []), []), []), []);
     return () => subscription?.remove();
   };
 
-  const startPerformanceMonitoring = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const startPerformanceMonitoring = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     renderStartTime.current = Date.now();
     
     performanceTimer.current = setInterval(() => {
-      const currentMetrics = useMemo(() => useMemo(() => useMemo(() => {
+      const currentMetrics = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => {
         renderTime: Date.now() - renderStartTime.current,
         memoryUsage: Math.random() * 100, // 模拟内存使用
         networkLatency: Math.random() * 200 + 50, // 模拟网络延迟
         errorCount: performanceMetrics.errorCount,
         crashCount: performanceMetrics.crashCount,
         userSatisfaction: performanceMetrics.userSatisfaction,
-      }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项, []), []);
+      }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项, []), []), []), []), []);
 
       setPerformanceMetrics(currentMetrics);
 
@@ -213,8 +216,8 @@ export const UserExperienceOptimizer: React.FC<UserExperienceOptimizerProps> = (
     }, 5000);
   };
 
-  const handleAccessibilityChange = useMemo(() => useMemo(() => useMemo(() => useCallback((key: keyof AccessibilitySettings, value: boolean) => {
-    const newSettings = { ...accessibilitySettings, [key]: value }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项, []), []);
+  const handleAccessibilityChange = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback((key: keyof AccessibilitySettings, value: boolean) => {
+    const newSettings = { ...accessibilitySettings, [key]: value }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项, []), []), []), []), []);
     setAccessibilitySettings(newSettings);
     saveSettings('accessibility', newSettings);
 
@@ -235,15 +238,15 @@ export const UserExperienceOptimizer: React.FC<UserExperienceOptimizerProps> = (
     }
   }, [accessibilitySettings, isScreenReaderEnabled]);
 
-  const handlePersonalizationChange = useMemo(() => useMemo(() => useMemo(() => useCallback((key: keyof PersonalizationSettings, value: any) => {
-    const newSettings = { ...personalizationSettings, [key]: value }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项, []), []);
+  const handlePersonalizationChange = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback((key: keyof PersonalizationSettings, value: any) => {
+    const newSettings = { ...personalizationSettings, [key]: value }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项, []), []), []), []), []);
     setPersonalizationSettings(newSettings);
     saveSettings('personalization', newSettings);
   }, [personalizationSettings]);
 
-  const submitFeedback = useMemo(() => useMemo(() => useMemo(() => useCallback(() => {
+  const submitFeedback = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback(() => {
     if (!feedbackMessage.trim()) {
-      Alert.alert('提示', '请输入反馈内容'), []), []), []);
+      Alert.alert('提示', '请输入反馈内容'), []), []), []), []), []), []);
       return;
     }
 
@@ -264,7 +267,7 @@ export const UserExperienceOptimizer: React.FC<UserExperienceOptimizerProps> = (
     Alert.alert('感谢反馈', '您的反馈已提交，我们会尽快处理');
   }, [feedbackType, feedbackRating, feedbackMessage, onFeedbackSubmit]);
 
-  const renderAccessibilitySettings = useMemo(() => useMemo(() => useMemo(() => useMemo(() => (
+  const renderAccessibilitySettings = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => (
     <Card style={styles.sectionCard}>
       <Text style={styles.sectionTitle}>无障碍设置</Text>
       <Text style={styles.sectionDescription}>
@@ -298,9 +301,9 @@ export const UserExperienceOptimizer: React.FC<UserExperienceOptimizerProps> = (
         ))}
       </View>
     </Card>
-  ), [accessibilitySettings, handleAccessibilityChange]), []), []), []);
+  ), [accessibilitySettings, handleAccessibilityChange]), []), []), []), []), []), []);
 
-  const renderPersonalizationSettings = useMemo(() => useMemo(() => useMemo(() => useMemo(() => (
+  const renderPersonalizationSettings = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => (
     <Card style={styles.sectionCard}>
       <Text style={styles.sectionTitle}>个性化设置</Text>
       <Text style={styles.sectionDescription}>
@@ -374,9 +377,9 @@ export const UserExperienceOptimizer: React.FC<UserExperienceOptimizerProps> = (
         </View>
       </View>
     </Card>
-  ), [personalizationSettings, handlePersonalizationChange]), []), []), []);
+  ), [personalizationSettings, handlePersonalizationChange]), []), []), []), []), []), []);
 
-  const renderPerformanceMonitor = useMemo(() => useMemo(() => useMemo(() => useMemo(() => (
+  const renderPerformanceMonitor = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => (
     <Card style={styles.sectionCard}>
       <Text style={styles.sectionTitle}>性能监控</Text>
       <Text style={styles.sectionDescription}>
@@ -429,9 +432,9 @@ export const UserExperienceOptimizer: React.FC<UserExperienceOptimizerProps> = (
         </View>
       </View>
     </Card>
-  ), [performanceMetrics]), []), []), []);
+  ), [performanceMetrics]), []), []), []), []), []), []);
 
-  const renderFeedbackSection = useMemo(() => useMemo(() => useMemo(() => useMemo(() => (
+  const renderFeedbackSection = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => (
     <Card style={styles.sectionCard}>
       <Text style={styles.sectionTitle}>用户反馈</Text>
       <Text style={styles.sectionDescription}>
@@ -442,7 +445,7 @@ export const UserExperienceOptimizer: React.FC<UserExperienceOptimizerProps> = (
         <Button
           title="报告问题"
           onPress={() => {
-            setFeedbackType('bug'), []), []), []);
+            setFeedbackType('bug'), []), []), []), []), []), []);
             setFeedbackModal(true);
           }}
           variant="outline"
@@ -475,7 +478,7 @@ export const UserExperienceOptimizer: React.FC<UserExperienceOptimizerProps> = (
     </Card>
   ), []);
 
-  const renderQuickActions = useMemo(() => useMemo(() => useMemo(() => useMemo(() => (
+  const renderQuickActions = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => (
     <Card style={styles.sectionCard}>
       <Text style={styles.sectionTitle}>快速操作</Text>
       
@@ -516,7 +519,7 @@ export const UserExperienceOptimizer: React.FC<UserExperienceOptimizerProps> = (
                 reduceMotion: false,
                 voiceOver: false,
                 hapticFeedback: true,
-              }), []), []), []);
+              }), []), []), []), []), []), []);
               setPersonalizationSettings({
                 theme: 'auto',
                 language: 'zh',
@@ -654,7 +657,7 @@ export const UserExperienceOptimizer: React.FC<UserExperienceOptimizerProps> = (
   );
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -872,4 +875,4 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
     flex: 1,
     marginHorizontal: spacing.xs,
   },
-}), []), []), []); 
+}), []), []), []), []), []), []); 

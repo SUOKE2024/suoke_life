@@ -11,6 +11,9 @@ import { LoadingScreen } from '../../components/common/LoadingScreen';
 import AgentChatInterface from '../../components/common/AgentChatInterface';
 
 
+
+
+
 import React, { useState, useCallback } from 'react';
   View,
   StyleSheet,
@@ -97,7 +100,7 @@ const ExploreScreen: React.FC = () => {
   // 与老克对话
   const chatWithLaoke = useCallback(() => {
     setAgentChatVisible(true);
-  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
+  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
 
   // 渲染内容项
   const renderContentItem = useCallback(({ item }: { item: ContentItem }) => (
@@ -204,4 +207,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ExploreScreen; 
+export default React.memo(ExploreScreen); 

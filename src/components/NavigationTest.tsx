@@ -7,6 +7,9 @@ import React from "react";
 
 
 
+
+
+
 const NavigationTest: React.FC = () => {
   const navigation = useNavigation();
 
@@ -100,4 +103,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NavigationTest;
+export default React.memo(NavigationTest);

@@ -1,6 +1,9 @@
 import { colors, spacing, typography } from '../../constants/theme';
 
 
+
+
+
 import React from 'react';
   View,
   Text,
@@ -50,7 +53,7 @@ export const ApiTestResultsDisplay: React.FC<ApiTestResultsDisplayProps> = ({
   onRetryTest,
   onViewDetails,
 }) => {
-  const getStatusColor = useMemo(() => useMemo(() => useMemo(() => useCallback( (status: string) => {, []), []), []), []);
+  const getStatusColor = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (status: string) => {, []), []), []), []), []), []), []);
     switch (status) {
       case 'PASSED':
         return colors.success;
@@ -61,7 +64,7 @@ export const ApiTestResultsDisplay: React.FC<ApiTestResultsDisplayProps> = ({
     }
   };
 
-  const getStatusIcon = useMemo(() => useMemo(() => useMemo(() => useCallback( (status: string) => {, []), []), []), []);
+  const getStatusIcon = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (status: string) => {, []), []), []), []), []), []), []);
     switch (status) {
       case 'PASSED':
         return '✅';
@@ -72,14 +75,14 @@ export const ApiTestResultsDisplay: React.FC<ApiTestResultsDisplayProps> = ({
     }
   };
 
-  const getCategoryColor = useMemo(() => useMemo(() => useMemo(() => useCallback( (successRate: number) => {, []), []), []), []);
+  const getCategoryColor = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (successRate: number) => {, []), []), []), []), []), []), []);
     if (successRate === 100) {return colors.success;}
     if (successRate >= 90) {return colors.warning;}
     return colors.error;
   };
 
   // TODO: 将内联组件移到组件外部
-const renderSummaryCard = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderSummaryCard = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.summaryCard}>
       <Text style={styles.summaryTitle}>📊 测试总览</Text>
       <View style={styles.summaryGrid}>
@@ -115,14 +118,14 @@ const renderSummaryCard = useMemo(() => useMemo(() => useMemo(() => () => (
         </Text>
       </View>
     </View>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
   // TODO: 将内联组件移到组件外部
-const renderCategoriesCard = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderCategoriesCard = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.categoriesCard}>
       <Text style={styles.categoriesTitle}>📋 按类别统计</Text>
       {Object.entries(categories).map(([category, stats]) => {
-        const successRate = (stats.passed / stats.total) * 100, []), []), []);
+        const successRate = (stats.passed / stats.total) * 100, []), []), []), []), []), []);
         return (
           <View key={category} style={styles.categoryItem}>
             <View style={styles.categoryHeader}>
@@ -152,7 +155,7 @@ const renderCategoriesCard = useMemo(() => useMemo(() => useMemo(() => () => (
   );
 
   // TODO: 将内联组件移到组件外部
-const renderTestDetails = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderTestDetails = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.detailsCard}>
       <Text style={styles.detailsTitle}>🔍 测试详情</Text>
       {details.map((test, index) => (
@@ -195,7 +198,7 @@ const renderTestDetails = useMemo(() => useMemo(() => useMemo(() => () => (
         </TouchableOpacity>
       ))}
     </View>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -206,7 +209,7 @@ const renderTestDetails = useMemo(() => useMemo(() => useMemo(() => () => (
   );
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -391,4 +394,4 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
     color: colors.white,
     fontWeight: 'bold',
   },
-}), []), []), []); 
+}), []), []), []), []), []), []); 

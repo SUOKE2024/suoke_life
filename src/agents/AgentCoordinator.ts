@@ -2,6 +2,8 @@ import { XiaoaiAgent } from "./xiaoai/types";
 import { XiaokeAgent } from "./xiaoke/types";
 import { LaokeAgent } from "./laoke/types";
 import { SoerAgent } from "./soer/types";
+import type { EventBus as EventBusType } from "../../services/common/messaging/event_bus";
+import { EventBus as DefaultEventBus } from "../../services/common/messaging/event_bus";
 
 /**
  * 智能体协调器 - 管理四个智能体间的协作
@@ -97,6 +99,7 @@ export class AgentCoordinator {
   private sharedContextStore: Map<string, SharedContext> = new Map();
   private config: AgentCoordinatorConfig;
   private healthCheckTimer?: ReturnType<typeof setInterval>;
+  private eventBus: EventBusType;
 
   constructor(config: Partial<AgentCoordinatorConfig> = {}) {
     this.config = {
@@ -108,8 +111,76 @@ export class AgentCoordinator {
       ...config,
     };
 
+    this.eventBus = new DefaultEventBus("kafka", {}); // 可切换为rabbitmq
     this.initializeAgents();
     this.startHealthChecking();
+    this.registerEventHandlers();
+  }
+
+  /**
+   * 注册事件总线处理器，实现分布式事件驱动协作
+   */
+  private registerEventHandlers() {
+    this.eventBus.subscribe(
+      "agent.task.assign",
+      async (event: { payload: AgentTask }) => {
+        // 任务分配事件，触发本地任务执行
+        const task = event.payload;
+        await this.coordinateTask(task);
+      }
+    );
+    this.eventBus.subscribe(
+      "agent.task.conflict",
+      async (event: { payload: any }) => {
+        // 冲突事件，触发冲突仲裁
+        const conflict = event.payload;
+        await this.resolveConflict(conflict);
+      }
+    );
+    // ...可扩展更多事件
+  }
+
+  /**
+   * 通过事件总线分发任务
+   */
+  async dispatchTask(task: AgentTask) {
+    await this.eventBus.publish("agent.task.assign", {
+      type: "agent.task.assign",
+      payload: task,
+    });
+  }
+
+  /**
+   * 通过事件总线发布冲突事件
+   */
+  async publishConflict(conflict: any) {
+    await this.eventBus.publish("agent.task.conflict", {
+      type: "agent.task.conflict",
+      payload: conflict,
+    });
+  }
+
+  /**
+   * 冲突仲裁（投票/优先级/人工介入）
+   */
+  private async resolveConflict(conflict: any) {
+    // TODO: 实现投票、优先级仲裁、人工介入等策略
+    // 示例：自动投票
+    if (conflict.votes) {
+      const result = this.autoVote(conflict.votes);
+      // ...处理结果
+    } else {
+      // ...人工介入或优先级仲裁
+    }
+  }
+
+  private autoVote(votes: any[]): any {
+    // 简单多数投票
+    const counts: Record<string, number> = {};
+    for (const v of votes) {
+      counts[v] = (counts[v] || 0) + 1;
+    }
+    return Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0];
   }
 
   /**

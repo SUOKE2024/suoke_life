@@ -19,6 +19,7 @@ from .embedding_service import EmbeddingService
 from .cache_service import CacheService
 from .kg_integration_service import KnowledgeGraphIntegrationService
 from ..retriever.kg_enhanced_retriever import KGEnhancedRetriever
+from ..platform.model_manager import get_model_manager, ModelType
 
 
 class RagService:
@@ -48,6 +49,8 @@ class RagService:
         
         # 检查是否启用知识图谱增强
         self.kg_enhanced = config.get('knowledge_graph', {}).get('enabled', False)
+        
+        self.model_manager = get_model_manager()
     
     async def initialize(self) -> None:
         """初始化所有组件"""
@@ -72,12 +75,20 @@ class RagService:
             self.retriever = HybridRetriever(self.config, self.milvus_repository)
         await self.retriever.initialize()
         
-        # 初始化生成器 (基于配置选择本地或远程模型)
-        if self.config['generator']['model_type'] == 'local':
-            self.generator = LocalGenerator(self.config['generator'])
-        else:
-            self.generator = OpenAIGenerator(self.config['generator'])
-        await self.generator.initialize()
+        # 通过模型管理器加载生成模型和嵌入模型
+        if self.model_manager:
+            gen_model = await self.model_manager.get_model(
+                self.config['generator']['model_name'],
+                self.config['generator'].get('model_version')
+            )
+            if gen_model:
+                self.generator = gen_model
+            embed_model = await self.model_manager.get_model(
+                self.config['embedding']['model_name'],
+                self.config['embedding'].get('model_version')
+            )
+            if embed_model:
+                self.embedding_service.set_model(embed_model)
         
         # 初始化缓存服务
         self.cache_service = CacheService(self.config['cache'])
@@ -548,3 +559,9 @@ class RagService:
                 logger.error("Failed to sync documents to vector database")
         
         return sync_results
+    
+    async def reload_model(self, model_name: str, version: str = None):
+        """支持热更新指定模型"""
+        if self.model_manager:
+            await self.model_manager.load_model(model_name, version)
+        logger.info(f"模型{model_name}已热更新")

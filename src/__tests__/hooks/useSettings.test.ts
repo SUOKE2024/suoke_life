@@ -226,7 +226,7 @@ const useSettings = () => {
 
   React.useEffect(() => {
     loadSettings();
-  }, []); // TODO: 检查依赖项; // TODO: 检查依赖项; // TODO: 检查依赖项; // TODO: 检查依赖项; // TODO: 检查依赖项;
+  }, []); // TODO: 检查依赖项; // TODO: 检查依赖项; // TODO: 检查依赖项; // TODO: 检查依赖项; // TODO: 检查依赖项; // TODO: 检查依赖项; // TODO: 检查依赖项; // TODO: 检查依赖项;
 
   return {
     settings,

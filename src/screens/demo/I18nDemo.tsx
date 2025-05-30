@@ -4,6 +4,9 @@ import { SupportedLanguage, CulturalPreferences } from '../../i18n/config';
 import { theme } from '../../constants/theme';
 
 
+
+
+
 /**
  * 索克生活 - 国际化演示界面
  * 展示完整的多语言和地区化功能

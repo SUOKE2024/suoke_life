@@ -4,6 +4,9 @@ import { xiaoaiAgent } from '../../../agents/xiaoai/XiaoaiAgent';
 
 
 
+
+
+
 import React, { useState, useRef, useEffect } from 'react';
   View,
   Text,
@@ -41,8 +44,8 @@ const XiaoaiChatInterface: React.FC<XiaoaiChatInterfaceProps> = ({
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId] = useState(() => `session_${Date.now()}`);
-  const scrollViewRef = useMemo(() => useMemo(() => useMemo(() => useRef<ScrollView>(null), []), []), []);
-  const slideAnim = useMemo(() => useMemo(() => useMemo(() => useRef(new Animated.Value(height)).current, []), []), []);
+  const scrollViewRef = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useRef<ScrollView>(null), []), []), []), []), []), []);
+  const slideAnim = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useRef(new Animated.Value(height)).current, []), []), []), []), []), []);
 
   useEffect(() => {
     if (visible) {
@@ -67,7 +70,7 @@ const XiaoaiChatInterface: React.FC<XiaoaiChatInterfaceProps> = ({
     }
   }, [visible]);
 
-  const initializeChat = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const initializeChat = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     const welcomeMessage: ChatMessage = {
       id: `msg_${Date.now()}`,
       role: 'assistant',
@@ -78,8 +81,8 @@ const XiaoaiChatInterface: React.FC<XiaoaiChatInterfaceProps> = ({
     setMessages([welcomeMessage]);
   };
 
-  const sendMessage = useMemo(() => useMemo(() => useMemo(() => async () => {
-    if (!inputText.trim() || isLoading) {return, []), []), []);}
+  const sendMessage = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async () => {
+    if (!inputText.trim() || isLoading) {return, []), []), []), []), []), []);}
 
     const userMessage: ChatMessage = {
       id: `msg_${Date.now()}`,
@@ -102,7 +105,7 @@ const XiaoaiChatInterface: React.FC<XiaoaiChatInterfaceProps> = ({
       };
 
       // 调用小艾智能体
-      const response = useMemo(() => useMemo(() => useMemo(() => await xiaoaiAgent.chat(userMessage.content, context), []), []), []);
+      const response = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => await xiaoaiAgent.chat(userMessage.content, context), []), []), []), []), []), []);
 
       const assistantMessage: ChatMessage = {
         id: `msg_${Date.now()}`,
@@ -138,8 +141,8 @@ const XiaoaiChatInterface: React.FC<XiaoaiChatInterfaceProps> = ({
     }
   };
 
-  const showActionButtons = useMemo(() => useMemo(() => useMemo(() => useCallback( (actions: any[]) => {, []), []), []), []);
-    const actionTexts = useMemo(() => useMemo(() => useMemo(() => actions.map(action => action.prompt).join('\n\n'), []), []), []);
+  const showActionButtons = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (actions: any[]) => {, []), []), []), []), []), []), []);
+    const actionTexts = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => actions.map(action => action.prompt).join('\n\n'), []), []), []), []), []), []);
     
     Alert.alert(
       '建议的操作',
@@ -151,7 +154,7 @@ const XiaoaiChatInterface: React.FC<XiaoaiChatInterfaceProps> = ({
     );
   };
 
-  const handleActionAccepted = useMemo(() => useMemo(() => useMemo(() => useCallback( (actions: any[]) => {, []), []), []), []);
+  const handleActionAccepted = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (actions: any[]) => {, []), []), []), []), []), []), []);
     // 处理用户接受的操作建议
     actions.forEach(action => {
       if (action.autoStart) {
@@ -161,11 +164,11 @@ const XiaoaiChatInterface: React.FC<XiaoaiChatInterfaceProps> = ({
     });
   };
 
-  const handleSuggestionPress = useMemo(() => useMemo(() => useMemo(() => useCallback( (suggestion: string) => {, []), []), []), []);
+  const handleSuggestionPress = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (suggestion: string) => {, []), []), []), []), []), []), []);
     setInputText(suggestion);
   };
 
-  const scrollToBottom = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const scrollToBottom = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     setTimeout(() => {
       scrollViewRef.current?.scrollToEnd({ animated: true });
     }, 100);
@@ -175,8 +178,8 @@ const XiaoaiChatInterface: React.FC<XiaoaiChatInterfaceProps> = ({
     scrollToBottom();
   }, [messages]);
 
-  const renderMessage = useMemo(() => useMemo(() => useMemo(() => useCallback( (message: ChatMessage) => {, []), []), []), []);
-    const isUser = useMemo(() => useMemo(() => useMemo(() => message.role === 'user', []), []), []);
+  const renderMessage = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (message: ChatMessage) => {, []), []), []), []), []), []), []);
+    const isUser = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => message.role === 'user', []), []), []), []), []), []);
     
     return (
       <View
@@ -340,7 +343,7 @@ const XiaoaiChatInterface: React.FC<XiaoaiChatInterfaceProps> = ({
   );
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   overlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -532,6 +535,6 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
     fontSize: 14,
     color: colors.text,
   },
-}), []), []), []);
+}), []), []), []), []), []), []);
 
-export default XiaoaiChatInterface; 
+export default React.memo(XiaoaiChatInterface); 

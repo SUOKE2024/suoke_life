@@ -4,6 +4,9 @@ import { colors, spacing } from '../../../constants/theme';
 import { monitoringSystem, SystemMetrics, ErrorInfo, HealthCheckResult } from '../../../utils/monitoringSystem';
 
 
+
+
+
 import React, { useState, useEffect } from 'react';
   View,
   Text,
@@ -53,20 +56,20 @@ export const SystemMonitorDashboard: React.FC<SystemMonitorDashboardProps> = ({
     if (visible) {
       loadDashboardData();
       // 每30秒自动刷新
-      const interval = useMemo(() => useMemo(() => useMemo(() => setInterval(loadDashboardData, 30000), []), []), []);
+      const interval = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => setInterval(loadDashboardData, 30000), []), []), []), []), []), []);
       return () => clearInterval(interval);
     }
   }, [visible]);
 
-  const loadDashboardData = useMemo(() => useMemo(() => useMemo(() => async () => {
+  const loadDashboardData = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async () => {
     try {
-      setLoading(true), []), []), []);
+      setLoading(true), []), []), []), []), []), []);
       
       // 初始化监控系统
       await monitoringSystem.initialize();
       
       // 获取系统状态
-      const systemStatus = useMemo(() => useMemo(() => useMemo(() => monitoringSystem.getSystemStatus(), []), []), []);
+      const systemStatus = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => monitoringSystem.getSystemStatus(), []), []), []), []), []), []);
       
       // 模拟获取服务健康状态
       const services: HealthCheckResult[] = [
@@ -129,30 +132,30 @@ export const SystemMonitorDashboard: React.FC<SystemMonitorDashboardProps> = ({
     }
   };
 
-  const onRefresh = useMemo(() => useMemo(() => useMemo(() => async () => {
-    setRefreshing(true), []), []), []);
+  const onRefresh = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async () => {
+    setRefreshing(true), []), []), []), []), []), []);
     await loadDashboardData();
   };
 
-  const getStatusColor = useMemo(() => useMemo(() => useMemo(() => (status: string): string => {
+  const getStatusColor = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => (status: string): string => {
     switch (status) {
-      case 'healthy': return colors.success, []), []), []);
+      case 'healthy': return colors.success, []), []), []), []), []), []);
       case 'degraded': return colors.warning;
       case 'unhealthy': return colors.error;
       default: return colors.textSecondary;
     }
   };
 
-  const getStatusIcon = useMemo(() => useMemo(() => useMemo(() => (status: string): string => {
+  const getStatusIcon = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => (status: string): string => {
     switch (status) {
-      case 'healthy': return 'check-circle', []), []), []);
+      case 'healthy': return 'check-circle', []), []), []), []), []), []);
       case 'degraded': return 'alert-triangle';
       case 'unhealthy': return 'x-circle';
       default: return 'help-circle';
     }
   };
 
-  const renderOverviewTab = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const renderOverviewTab = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     if (!dashboardData) {return null;}
 
     return (
@@ -242,7 +245,7 @@ export const SystemMonitorDashboard: React.FC<SystemMonitorDashboardProps> = ({
     );
   };
 
-  const renderPerformanceTab = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const renderPerformanceTab = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     if (!dashboardData) {return null;}
 
     return (
@@ -297,7 +300,7 @@ export const SystemMonitorDashboard: React.FC<SystemMonitorDashboardProps> = ({
     );
   };
 
-  const renderErrorsTab = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const renderErrorsTab = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     if (!dashboardData) {return null;}
 
     return (
@@ -362,7 +365,7 @@ export const SystemMonitorDashboard: React.FC<SystemMonitorDashboardProps> = ({
     );
   };
 
-  const renderHealthTab = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const renderHealthTab = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     if (!dashboardData) {return null;}
 
     return (
@@ -438,7 +441,7 @@ export const SystemMonitorDashboard: React.FC<SystemMonitorDashboardProps> = ({
   };
 
   // TODO: 将内联组件移到组件外部
-const renderTabBar = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderTabBar = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.tabBar}>
       {[
         { key: 'overview', label: '概览', icon: 'home' },
@@ -465,9 +468,9 @@ const renderTabBar = useMemo(() => useMemo(() => useMemo(() => () => (
         </TouchableOpacity>
       ))}
     </View>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
-  const renderContent = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const renderContent = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     if (loading) {
       return (
         <View style={styles.loadingContainer}>
@@ -512,7 +515,7 @@ const renderTabBar = useMemo(() => useMemo(() => useMemo(() => () => (
   );
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -841,6 +844,6 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
     color: colors.warning,
     marginLeft: spacing.xs,
   },
-}), []), []), []);
+}), []), []), []), []), []), []);
 
-export default SystemMonitorDashboard; 
+export default React.memo(SystemMonitorDashboard); 

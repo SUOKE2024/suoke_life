@@ -7,6 +7,9 @@ import React from "react";
 
 
 
+
+
+
 /**
  * 索克生活 - AgentAvatar组件
  * 智能体头像组件，为四个智能体提供特色头像
@@ -37,7 +40,7 @@ const AgentAvatar: React.FC<AgentAvatarProps> = ({
   style,
   testID,
 }) => {
-  const getSize = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const getSize = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     if (typeof size === "number") {
       return size;
     }
@@ -56,9 +59,9 @@ const AgentAvatar: React.FC<AgentAvatarProps> = ({
     }
   };
 
-  const avatarSize = useMemo(() => useMemo(() => useMemo(() => getSize(), []), []), []);
+  const avatarSize = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => getSize(), []), []), []), []), []), []);
 
-  const getAgentConfig = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const getAgentConfig = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     switch (agent) {
       case "xiaoai":
         return {
@@ -98,9 +101,9 @@ const AgentAvatar: React.FC<AgentAvatarProps> = ({
     }
   };
 
-  const agentConfig = useMemo(() => useMemo(() => useMemo(() => getAgentConfig(), []), []), []);
+  const agentConfig = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => getAgentConfig(), []), []), []), []), []), []);
 
-  const avatarStyle = useMemo(() => useMemo(() => useMemo(() => [
+  const avatarStyle = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => [
     styles.base,
     {
       width: avatarSize,
@@ -109,7 +112,7 @@ const AgentAvatar: React.FC<AgentAvatarProps> = ({
       backgroundColor: agentConfig.backgroundColor,
     },
     style,
-  ].filter(Boolean) as ViewStyle[], []), []), []);
+  ].filter(Boolean) as ViewStyle[], []), []), []), []), []), []);
 
   return (
     <View style={styles.container} testID={testID}>
@@ -143,7 +146,7 @@ const AgentAvatar: React.FC<AgentAvatarProps> = ({
   );
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     position: "relative",
   },
@@ -159,6 +162,6 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
     borderWidth: 2,
     borderColor: colors.white,
   },
-}), []), []), []);
+}), []), []), []), []), []), []);
 
-export default AgentAvatar;
+export default React.memo(AgentAvatar);

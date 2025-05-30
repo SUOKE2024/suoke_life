@@ -6,6 +6,9 @@ import React from "react";
 
 
 
+
+
+
 /**
  * 索克生活 - Container组件
  * 统一的容器布局组件
@@ -51,7 +54,7 @@ const Container: React.FC<ContainerProps> = ({
   style,
   testID,
 }) => {
-  const containerStyle = useMemo(() => useMemo(() => useMemo(() => [
+  const containerStyle = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => [
     styles.base,
     { flexDirection: direction },
     padding && { padding: getPadding(padding) },
@@ -60,7 +63,7 @@ const Container: React.FC<ContainerProps> = ({
     justify && { justifyContent: justify },
     align && { alignItems: align },
     style,
-  ].filter(Boolean) as ViewStyle[], []), []), []);
+  ].filter(Boolean) as ViewStyle[], []), []), []), []), []), []);
 
   return (
     <View style={containerStyle} testID={testID}>
@@ -70,24 +73,24 @@ const Container: React.FC<ContainerProps> = ({
 };
 
 // 辅助函数
-const getPadding = useMemo(() => useMemo(() => useMemo(() => (padding: keyof typeof spacing | number): number => {
+const getPadding = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => (padding: keyof typeof spacing | number): number => {
   if (typeof padding === "number") {
-    return padding, []), []), []);
+    return padding, []), []), []), []), []), []);
   }
   return spacing[padding];
 };
 
-const getMargin = useMemo(() => useMemo(() => useMemo(() => (margin: keyof typeof spacing | number): number => {
+const getMargin = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => (margin: keyof typeof spacing | number): number => {
   if (typeof margin === "number") {
-    return margin, []), []), []);
+    return margin, []), []), []), []), []), []);
   }
   return spacing[margin];
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   base: {
     flexDirection: "column",
   },
-}), []), []), []);
+}), []), []), []), []), []), []);
 
-export default Container;
+export default React.memo(Container);

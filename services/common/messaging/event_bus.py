@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 事件驱动架构 - 消息总线
 支持事件发布订阅、处理器管理、消费者组等功能
@@ -11,7 +12,8 @@ from datetime import datetime
 from enum import Enum
 import json
 import logging
-from typing import Any
+from typing import Any, Callable
+import threading
 
 import aioredis
 
@@ -58,8 +60,11 @@ class EventHandler(ABC):
 class EventBus:
     """事件总线"""
 
-    def __init__(self, redis_client: aioredis.Redis):
-        self.redis = redis_client
+    def __init__(self, backend: str = 'kafka', config: dict = None):
+        self.backend = backend
+        self.config = config or {}
+        self.subscribers = {}
+        self.redis = None
         self.handlers: dict[str, list[EventHandler]] = {}
         self.running = False
         self.consumer_tasks = []
@@ -73,34 +78,23 @@ class EventBus:
 
         logger.info(f"Registered handler for events: {handler.get_event_types()}")
 
-    async def publish(self, event: Event) -> bool:
-        """发布事件"""
-        try:
-            # 序列化事件
-            event_data = {
-                "event_id": event.event_id,
-                "event_type": event.event_type,
-                "source_service": event.source_service,
-                "timestamp": event.timestamp.isoformat(),
-                "data": event.data,
-                "correlation_id": event.correlation_id,
-                "user_id": event.user_id,
-                "metadata": event.metadata or {},
-            }
+    async def publish(self, topic: str, event: dict):
+        """发布事件到指定topic"""
+        # TODO: 实现Kafka/RabbitMQ消息发布
+        print(f"[EventBus] 发布事件到{topic}: {event}")
 
-            # 发布到Redis Stream
-            stream_key = f"events:{event.event_type}"
-            await self.redis.xadd(stream_key, event_data)
+    def subscribe(self, topic: str, handler: Callable[[dict], Any]):
+        """订阅指定topic的事件，handler为回调函数"""
+        if topic not in self.subscribers:
+            self.subscribers[topic] = []
+        self.subscribers[topic].append(handler)
+        # TODO: 实现Kafka/RabbitMQ消息消费监听
+        print(f"[EventBus] 订阅{topic}")
 
-            # 发布到通用事件流
-            await self.redis.xadd("events:all", event_data)
-
-            logger.debug(f"Published event: {event.event_type} ({event.event_id})")
-            return True
-
-        except Exception as e:
-            logger.error(f"Failed to publish event {event.event_id}: {e}")
-            return False
+    def _mock_receive(self, topic: str, event: dict):
+        """模拟接收事件，仅用于本地测试"""
+        for handler in self.subscribers.get(topic, []):
+            threading.Thread(target=handler, args=(event,)).start()
 
     async def start_consuming(self):
         """开始消费事件"""

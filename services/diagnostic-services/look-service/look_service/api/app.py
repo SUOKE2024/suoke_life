@@ -18,6 +18,7 @@ from ..middleware import (
     SecurityMiddleware,
 )
 from .routes import api_router
+from .models import FHIRObservationResponse, LookDiagnosisRequest
 
 logger = get_logger(__name__)
 
@@ -86,6 +87,15 @@ def create_app() -> FastAPI:
         """Readiness check endpoint."""
         # TODO: Add actual readiness checks (database, ML models, etc.)
         return {"status": "ready", "service": "look-service"}
+
+    # 仅暴露标准化诊断API，不处理前端交互
+    @app.post("/api/v1/diagnose/look", response_model=FHIRObservationResponse)
+    def diagnose_look(data: LookDiagnosisRequest):
+        """望诊分析，返回FHIR Observation格式"""
+        # 只做算法分析和标准化结果封装
+        result = look_diagnosis_algorithm(data)
+        fhir_obs = to_fhir_observation_look(data.user_id, result)
+        return FHIRObservationResponse(**fhir_obs)
 
     logger.info("FastAPI application created")
     return app

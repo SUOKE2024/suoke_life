@@ -1,20 +1,21 @@
-import { colors, typography, spacing, borderRadius, components } from '../../constants/theme';
+import {
 import Text from './Text';
+import { colors, spacing, borderRadius, components, typography } from '../../constants/theme';
 
 
-/**
- * 索克生活 - Input组件
- * 统一的输入框组件，支持多种类型和状态
- */
-
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
   TextInput,
   View,
   StyleSheet,
   ViewStyle,
   TextStyle,
-  TouchableOpacity,
+  TouchableOpacity
 } from 'react-native';
+
+/**
+ * 索克生活 - Input组件
+ * 统一的输入框组件，支持多种类型和状态
+ */
 
 export interface InputProps {
   // 基础属性
@@ -83,10 +84,10 @@ const Input: React.FC<InputProps> = ({
   const [isFocused, setIsFocused] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-  const getKeyboardType = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const keyboardType = useMemo(() => useMemo(() => useMemo(() => useMemo(() => {
     switch (type) {
       case 'email':
-        return 'email-address';
+        return 'email-address', []), []), []);
       case 'number':
         return 'numeric';
       case 'phone':
@@ -94,9 +95,9 @@ const Input: React.FC<InputProps> = ({
       default:
         return 'default';
     }
-  };
+  }, [type]);
 
-  const containerStyle = useMemo(() => useMemo(() => useMemo(() => [
+  const containerStyle = useMemo(() => useMemo(() => useMemo(() => useMemo(() => [
     styles.container,
     styles[size],
     styles[variant],
@@ -104,28 +105,28 @@ const Input: React.FC<InputProps> = ({
     error && styles.error,
     disabled && styles.disabled,
     style,
-  ].filter(Boolean) as ViewStyle[], []), []), []);
+  ].filter(Boolean) as ViewStyle[], [size, variant, isFocused, error, disabled, style]), []), []), []);
 
-  const textInputStyle = useMemo(() => useMemo(() => useMemo(() => [
+  const textInputStyle = useMemo(() => useMemo(() => useMemo(() => useMemo(() => [
     styles.input,
     styles[`${size}Input`],
     multiline && styles.multiline,
     inputStyle,
-  ].filter(Boolean) as TextStyle[], []), []), []);
+  ].filter(Boolean) as TextStyle[], [size, multiline, inputStyle]), []), []), []);
 
-  const handleFocus = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
-    setIsFocused(true);
+  const handleFocus = useMemo(() => useMemo(() => useMemo(() => useCallback(() => {
+    setIsFocused(true), []), []), []);
     onFocus?.();
-  };
+  }, [onFocus]);
 
-  const handleBlur = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
-    setIsFocused(false);
+  const handleBlur = useMemo(() => useMemo(() => useMemo(() => useCallback(() => {
+    setIsFocused(false), []), []), []);
     onBlur?.();
-  };
+  }, [onBlur]);
 
-  const togglePasswordVisibility = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
-    setIsPasswordVisible(!isPasswordVisible);
-  };
+  const togglePasswordVisibility = useMemo(() => useMemo(() => useMemo(() => useCallback(() => {
+    setIsPasswordVisible((prev) => !prev), []), []), []);
+  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项;
 
   return (
     <View style={styles.wrapper}>
@@ -148,7 +149,7 @@ const Input: React.FC<InputProps> = ({
           onChangeText={onChangeText}
           placeholder={placeholder}
           placeholderTextColor={colors.gray400}
-          keyboardType={getKeyboardType()}
+          keyboardType={keyboardType}
           secureTextEntry={type === 'password' && !isPasswordVisible}
           multiline={multiline}
           numberOfLines={numberOfLines}
@@ -290,4 +291,4 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   },
 }), []), []), []);
 
-export default Input;
+export default React.memo(Input);

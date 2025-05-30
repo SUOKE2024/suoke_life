@@ -164,6 +164,20 @@ class EnhancedAPIGateway:
                 }
             ).__dict__
 
+        @self.app.post("/api/v1/diagnosis")
+        async def create_diagnosis(request: Request):
+            """发起诊断请求，转发至diagnostic-services，不做算法处理"""
+            body = await request.json()
+            # 仅做参数校验和转发
+            try:
+                diagnosis_request = self._validate_diagnosis_request(body)
+            except Exception as e:
+                return APIResponse(success=False, error=str(e)).__dict__
+            # 通过gRPC/REST调用diagnostic-services
+            # TODO: 替换为实际gRPC/REST客户端调用
+            diagnosis_result = await self._call_diagnostic_service(diagnosis_request)
+            return APIResponse(success=True, data=diagnosis_result).__dict__
+
         @self.app.exception_handler(HTTPException)
         async def http_exception_handler(request: Request, exc: HTTPException):
             """HTTP异常处理器"""
@@ -215,6 +229,16 @@ class EnhancedAPIGateway:
             self.stats['average_response_time'] = (
                 (current_avg * (total_requests - 1) + response_time) / total_requests
             )
+
+    async def _call_diagnostic_service(self, diagnosis_request):
+        """调用diagnostic-services的诊断API，返回诊断结果（伪代码）"""
+        # TODO: 实现gRPC/REST调用diagnostic-services
+        # 示例返回
+        return {
+            "diagnosis_id": "mock_id",
+            "status": "processing",
+            "message": "诊断服务调用成功，实际实现待接入"
+        }
 
     async def start(self, host: str= "0.0.0.0", port: int= 8000):
         """启动API网关"""

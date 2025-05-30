@@ -6,6 +6,9 @@ import React from "react";
 
 
 
+
+
+
 /**
  * 索克生活 - RTL布局支持组件
  * 自动适配RTL语言的布局方向和样式
@@ -35,12 +38,12 @@ export const RTLView: React.FC<RTLViewProps> = ({
   const { isRTL } = useI18n();
 
   // 计算最终样式
-  const computedStyle = useMemo(() => useMemo(() => useMemo(() => [
+  const computedStyle = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => [
     style,
     isRTL ? rtlStyle : ltrStyle,
     reverseDirection && isRTL && styles.reverseDirection,
     mirrorHorizontal && isRTL && styles.mirrorHorizontal,
-  ].filter(Boolean), []), []), []);
+  ].filter(Boolean), []), []), []), []), []), []);
 
   return <View style={computedStyle}>{children}</View>;
 };
@@ -66,13 +69,13 @@ export const RTLFlex: React.FC<
 > = ({ justify = "start", ...props }) => {
   const { isRTL } = useI18n();
 
-  const justifyContentMap = useMemo(() => useMemo(() => useMemo(() => {
+  const justifyContentMap = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => {
     start: isRTL ? "flex-end" : "flex-start",
     end: isRTL ? "flex-start" : "flex-end",
     center: "center",
     between: "space-between",
     around: "space-around",
-  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项, []), []);
+  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项, []), []), []), []), []);
 
   return (
     <RTLView
@@ -132,9 +135,9 @@ export const RTLMargin: React.FC<RTLMarginProps> = ({
 /**
  * RTL自适应文本对齐Hook
  */
-export const useRTLTextAlign = useMemo(() => useMemo(() => useMemo(() => useCallback( (
+export const useRTLTextAlign = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (
   align: "left" | "right" | "center" = "left"
-) => {, []), []), []), []);
+) => {, []), []), []), []), []), []), []);
   const { isRTL } = useI18n();
 
   if (align === "center") {
@@ -153,7 +156,7 @@ export const useRTLTextAlign = useMemo(() => useMemo(() => useMemo(() => useCall
 /**
  * RTL自适应图标方向Hook
  */
-export const useRTLIconDirection = useMemo(() => useMemo(() => useMemo(() => useCallback( (shouldMirror: boolean = true) => {, []), []), []), []);
+export const useRTLIconDirection = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (shouldMirror: boolean = true) => {, []), []), []), []), []), []), []);
   const { isRTL } = useI18n();
 
   return {
@@ -164,7 +167,7 @@ export const useRTLIconDirection = useMemo(() => useMemo(() => useMemo(() => use
 /**
  * RTL自适应动画方向Hook
  */
-export const useRTLAnimationDirection = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+export const useRTLAnimationDirection = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
   const { isRTL } = useI18n();
 
   return {
@@ -178,7 +181,7 @@ export const useRTLAnimationDirection = useMemo(() => useMemo(() => useMemo(() =
 /**
  * RTL自适应边框样式Hook
  */
-export const useRTLBorderStyle = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+export const useRTLBorderStyle = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
   const { isRTL } = useI18n();
 
   return {
@@ -200,7 +203,7 @@ export const useRTLBorderStyle = useMemo(() => useMemo(() => useMemo(() => useCa
 /**
  * RTL自适应位置样式Hook
  */
-export const useRTLPositionStyle = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+export const useRTLPositionStyle = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
   const { isRTL } = useI18n();
 
   return {
@@ -213,7 +216,7 @@ export const useRTLPositionStyle = useMemo(() => useMemo(() => useMemo(() => use
   };
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   row: {
     flexDirection: "row",
   },
@@ -230,4 +233,4 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   mirrorHorizontal: {
     transform: [{ scaleX: -1 }],
   },
-}), []), []), []);
+}), []), []), []), []), []), []);

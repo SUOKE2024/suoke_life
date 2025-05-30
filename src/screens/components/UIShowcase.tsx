@@ -3,6 +3,9 @@ import { colors, spacing } from '../../constants/theme';
 import ColorPreview from './ColorPreview';
 
 
+
+
+
 /**
  * 索克生活 - UI组件展示页面
  * 展示所有UI组件的使用示例
@@ -330,4 +333,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UIShowcase; 
+export default React.memo(UIShowcase); 

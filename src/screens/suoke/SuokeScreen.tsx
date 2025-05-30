@@ -12,6 +12,9 @@ import { EcoLifestyleNavigator } from './components/EcoLifestyleNavigator';
 import { DiagnosisType } from '../../types';
 
 
+
+
+
 import React, { useState } from 'react';
   View,
   Text,
@@ -200,15 +203,15 @@ const SuokeScreen: React.FC = () => {
   const [ecoLifestyleVisible, setEcoLifestyleVisible] = useState(false);
 
   // 所有服务
-  const allServices = useMemo(() => useMemo(() => useMemo(() => [...DIAGNOSIS_SERVICES, ...OTHER_SERVICES], []), []), []);
+  const allServices = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => [...DIAGNOSIS_SERVICES, ...OTHER_SERVICES], []), []), []), []), []), []);
 
   // 过滤服务
-  const filteredServices = useMemo(() => useMemo(() => useMemo(() => selectedCategory === 'all' 
+  const filteredServices = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => selectedCategory === 'all' 
     ? allServices 
-    : allServices.filter(service => service.category === selectedCategory), []), []), []);
+    : allServices.filter(service => service.category === selectedCategory), []), []), []), []), []), []);
 
   // 分类选项
-  const categories = useMemo(() => useMemo(() => useMemo(() => [
+  const categories = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => [
     { key: 'all', label: '全部', icon: 'view-grid' },
     { key: 'diagnosis', label: '五诊', icon: 'stethoscope' },
     { key: 'eco', label: '生态服务', icon: 'leaf' },
@@ -219,15 +222,15 @@ const SuokeScreen: React.FC = () => {
     { key: 'market', label: '市集', icon: 'store' },
     { key: 'custom', label: '定制', icon: 'cog' },
     { key: 'supplier', label: '供应商', icon: 'truck' },
-  ], []), []), []);
+  ], []), []), []), []), []), []);
 
   // 与小艾对话
-  const chatWithXiaoai = useMemo(() => useMemo(() => useMemo(() => async () => {
+  const chatWithXiaoai = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async () => {
     try {
-      console.log('🤖 启动小艾健康诊断对话...'), []), []), []);
+      console.log('🤖 启动小艾健康诊断对话...'), []), []), []), []), []), []);
       
       // 初始化小艾对话会话
-      const response = useMemo(() => useMemo(() => useMemo(() => await fetch('http://localhost:8080/api/agents/xiaoai/init', {
+      const response = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => await fetch('http://localhost:8080/api/agents/xiaoai/init', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -236,10 +239,10 @@ const SuokeScreen: React.FC = () => {
           userId: 'current_user_id',
           sessionType: 'health_diagnosis',
         }),
-      }), []), []), []);
+      }), []), []), []), []), []), []);
 
       if (response.ok) {
-        const data = useMemo(() => useMemo(() => useMemo(() => await response.json(), []), []), []);
+        const data = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => await response.json(), []), []), []), []), []), []);
         console.log('✅ 小艾对话会话初始化成功:', data);
         setXiaoaiChatVisible(true);
       } else {
@@ -252,7 +255,7 @@ const SuokeScreen: React.FC = () => {
   };
 
   // 与小克对话
-  const chatWithXiaoke = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const chatWithXiaoke = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     Alert.alert(
       '与小克对话',
       '小克是您的专业医疗服务管理助手，可以帮助您：\n\n• 选择合适的诊断服务\n• 预约医疗服务\n• 管理健康订阅\n• 推荐健康产品\n\n是否开始对话？',
@@ -264,14 +267,14 @@ const SuokeScreen: React.FC = () => {
   };
 
   // 开始与小克对话
-  const startXiaokeChat = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const startXiaokeChat = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     setXiaokeChatVisible(true);
     // 这里将集成实际的小克智能体服务
     console.log('Starting chat with Xiaoke agent');
   };
 
   // 选择服务
-  const selectService = useMemo(() => useMemo(() => useMemo(() => useCallback( (service: ServiceItem) => {, []), []), []), []);
+  const selectService = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (service: ServiceItem) => {, []), []), []), []), []), []), []);
     if (service.category === 'diagnosis') {
       // 五诊服务使用专门的模态框
       setSelectedDiagnosisService(service);
@@ -290,16 +293,16 @@ const SuokeScreen: React.FC = () => {
   };
 
   // 开始诊断服务（现在由DiagnosisModal处理）
-  const startDiagnosisService = useMemo(() => useMemo(() => useMemo(() => async (service: ServiceItem) => {
+  const startDiagnosisService = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async (service: ServiceItem) => {
     // 这个函数现在主要用于向后兼容，实际逻辑在DiagnosisModal中
-    console.log(`Starting diagnosis service: ${service.id}`), []), []), []);
+    console.log(`Starting diagnosis service: ${service.id}`), []), []), []), []), []), []);
   };
 
   // 获取诊断类型
-  const getDiagnosisType = useMemo(() => useMemo(() => useMemo(() => (serviceId: string): DiagnosisType => {
+  const getDiagnosisType = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => (serviceId: string): DiagnosisType => {
     switch (serviceId) {
       case 'look_diagnosis':
-        return 'inspection', []), []), []);
+        return 'inspection', []), []), []), []), []), []);
       case 'listen_diagnosis':
         return 'auscultation';
       case 'inquiry_diagnosis':
@@ -314,7 +317,7 @@ const SuokeScreen: React.FC = () => {
   };
 
   // 使用服务
-  const useService = useMemo(() => useMemo(() => useMemo(() => useCallback( (service: ServiceItem) => {, []), []), []), []);
+  const useService = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (service: ServiceItem) => {, []), []), []), []), []), []), []);
     Alert.alert('服务启动', `正在为您准备${service.title}服务...`);
     // 这里将集成实际的服务功能
     console.log(`Using service: ${service.id}`);
@@ -322,7 +325,7 @@ const SuokeScreen: React.FC = () => {
 
   // 渲染分类过滤器
   // TODO: 将内联组件移到组件外部
-const renderCategoryFilter = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderCategoryFilter = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <ScrollView 
       horizontal 
       showsHorizontalScrollIndicator={false}
@@ -338,7 +341,7 @@ const renderCategoryFilter = useMemo(() => useMemo(() => useMemo(() => () => (
           ]}
           onPress={() => {
             if (category.key === 'eco') {
-              setEcoServicesVisible(true), []), []), []);
+              setEcoServicesVisible(true), []), []), []), []), []), []);
             } else {
               setSelectedCategory(category.key);
             }
@@ -361,7 +364,7 @@ const renderCategoryFilter = useMemo(() => useMemo(() => useMemo(() => () => (
   );
 
   // 渲染服务卡片
-  const renderServiceCard = useMemo(() => useMemo(() => useMemo(() => ({ item }: { item: ServiceItem }) => (
+  const renderServiceCard = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => ({ item }: { item: ServiceItem }) => (
     <TouchableOpacity 
       style={[styles.serviceCard, { borderLeftColor: item.color }]}
       onPress={() => selectService(item)}
@@ -402,7 +405,7 @@ const renderCategoryFilter = useMemo(() => useMemo(() => useMemo(() => () => (
         <Icon name="chevron-right" size={20} color={colors.textSecondary} />
       </View>
     </TouchableOpacity>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -557,7 +560,7 @@ const renderCategoryFilter = useMemo(() => useMemo(() => useMemo(() => () => (
   );
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -769,6 +772,6 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
-}), []), []), []);
+}), []), []), []), []), []), []);
 
-export default SuokeScreen;
+export default React.memo(SuokeScreen);

@@ -4,6 +4,9 @@ import { responsive, touchTarget } from '../../utils/responsive';
 import Button from './Button';
 
 
+
+
+
 /**
  * 索克生活 - 无障碍设置面板
  * 提供完整的无障碍功能配置界面
@@ -371,4 +374,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AccessibilityPanel; 
+export default React.memo(AccessibilityPanel); 

@@ -5,6 +5,9 @@ import notificationManager from '../../utils/notifications';
 
 
 
+
+
+
 import React, { useState, useEffect } from 'react';
   View,
   Text,
@@ -54,7 +57,7 @@ const NativeFeaturesDemo: React.FC = () => {
 
   useEffect(() => {
     initializeFeatures();
-  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
+  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
 
   /**
    * 初始化所有原生功能
@@ -644,4 +647,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NativeFeaturesDemo; 
+export default React.memo(NativeFeaturesDemo); 

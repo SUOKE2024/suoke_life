@@ -209,3 +209,9 @@ test-results/
 
 # Ruff缓存
 .ruff_cache/
+
+# Backup directories
+.backup/
+
+# Global virtual environment directories
+**/.venv/

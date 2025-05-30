@@ -1,6 +1,6 @@
+import {
 import Icon from './Icon';
-import { colors, spacing, fonts } from '../../constants/theme';
-
+import { colors, spacing, typography } from '../../constants/theme';
 
 
 import React, { useState, useMemo } from 'react';
@@ -46,8 +46,7 @@ const ContactsList: React.FC<ContactsListProps> = ({
 
   // 过滤联系人
   const filteredContacts = useMemo(() => useMemo(() => useMemo(() => useMemo(() => {
-    if (!searchQuery.trim()) {return contacts, []), []), []);}
-    
+    if (!searchQuery.trim()) return contacts, []), []), []);
     return contacts.filter(contact =>
       contact.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (contact.specialization && contact.specialization.toLowerCase().includes(searchQuery.toLowerCase())) ||
@@ -60,21 +59,18 @@ const ContactsList: React.FC<ContactsListProps> = ({
     if (!groupByType) {
       return [{ title: '全部联系人', data: filteredContacts }], []), []), []);
     }
-
     const groups = useMemo(() => useMemo(() => useMemo(() => {
       agent: { title: '智能体助手', data: [] as Contact[] },
       doctor: { title: '医生专家', data: [] as Contact[] },
       user: { title: '用户好友', data: [] as Contact[] },
     }, []), []), []);
-
     filteredContacts.forEach(contact => {
       groups[contact.type].data.push(contact);
     });
-
-    // 只返回有数据的分组
     return Object.values(groups).filter(group => group.data.length > 0);
   }, [filteredContacts, groupByType]);
 
+  // 获取联系人类型图标
   const getContactTypeIcon = useMemo(() => useMemo(() => useMemo(() => useCallback( (type: Contact['type']) => {, []), []), []), []);
     switch (type) {
       case 'agent':
@@ -88,6 +84,7 @@ const ContactsList: React.FC<ContactsListProps> = ({
     }
   };
 
+  // 获取联系人类型颜色
   const getContactTypeColor = useMemo(() => useMemo(() => useMemo(() => useCallback( (type: Contact['type']) => {, []), []), []), []);
     switch (type) {
       case 'agent':
@@ -101,6 +98,7 @@ const ContactsList: React.FC<ContactsListProps> = ({
     }
   };
 
+  // 渲染联系人项
   const renderContactItem = useMemo(() => useMemo(() => useMemo(() => ({ item }: { item: Contact }) => (
     <TouchableOpacity
       style={styles.contactItem}
@@ -113,7 +111,6 @@ const ContactsList: React.FC<ContactsListProps> = ({
           <View style={styles.onlineIndicator} />
         )}
       </View>
-
       <View style={styles.contactInfo}>
         <View style={styles.contactHeader}>
           <Text style={styles.contactName}>{item.name}</Text>
@@ -123,32 +120,27 @@ const ContactsList: React.FC<ContactsListProps> = ({
             color={getContactTypeColor(item.type)}
           />
         </View>
-
         {item.specialization && (
           <Text style={styles.specialization} numberOfLines={1}>
             {item.specialization}
           </Text>
         )}
-
         {item.department && (
           <Text style={styles.department} numberOfLines={1}>
             {item.department}
           </Text>
         )}
-
         {item.title && (
           <Text style={styles.title} numberOfLines={1}>
             {item.title}
           </Text>
         )}
-
         {!item.isOnline && item.lastSeen && (
           <Text style={styles.lastSeen}>
             最后在线: {item.lastSeen}
           </Text>
         )}
       </View>
-
       <View style={styles.contactActions}>
         <TouchableOpacity
           style={styles.actionButton}
@@ -156,7 +148,6 @@ const ContactsList: React.FC<ContactsListProps> = ({
         >
           <Icon name="message" size={20} color={colors.primary} />
         </TouchableOpacity>
-        
         {item.type === 'doctor' && (
           <TouchableOpacity
             style={styles.actionButton}
@@ -169,19 +160,22 @@ const ContactsList: React.FC<ContactsListProps> = ({
     </TouchableOpacity>
   ), []), []), []);
 
+  // 渲染分组标题
   const renderSectionHeader = useMemo(() => useMemo(() => useMemo(() => ({ section }: { section: { title: string } }) => (
     <View style={styles.sectionHeader}>
       <Text style={styles.sectionTitle}>{section.title}</Text>
       <Text style={styles.sectionCount}>
-        {groupedContacts.find(g => g.title === section.title)?.data.length || 0}
+        {groupedContacts.find((g: any) => g.title === section.title)?.data.length || 0}
       </Text>
     </View>
   ), []), []), []);
 
+  // 启动聊天
   const handleStartChat = useMemo(() => useMemo(() => useMemo(() => useCallback( (contact: Contact) => {, []), []), []), []);
     onContactPress(contact);
   };
 
+  // 预约医生
   const handleBookAppointment = useMemo(() => useMemo(() => useMemo(() => useCallback( (contact: Contact) => {, []), []), []), []);
     Alert.alert(
       '预约医生',
@@ -193,6 +187,7 @@ const ContactsList: React.FC<ContactsListProps> = ({
     );
   };
 
+  // 空状态渲染
   // TODO: 将内联组件移到组件外部
 const renderEmptyState = useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.emptyState}>
@@ -250,7 +245,7 @@ const renderEmptyState = useMemo(() => useMemo(() => useMemo(() => () => (
   );
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -269,8 +264,8 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   searchInput: {
     flex: 1,
     marginLeft: spacing.sm,
-    fontSize: fonts.size.md,
-    color: colors.text,
+    fontSize: typography.fontSize.base,
+    color: colors.textPrimary,
   },
   clearButton: {
     padding: spacing.xs,
@@ -289,12 +284,12 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
     borderBottomColor: colors.border,
   },
   sectionTitle: {
-    fontSize: fonts.size.md,
+    fontSize: typography.fontSize.base,
     fontWeight: '600',
-    color: colors.text,
+    color: colors.textPrimary,
   },
   sectionCount: {
-    fontSize: fonts.size.sm,
+    fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
     backgroundColor: colors.surface,
     paddingHorizontal: spacing.sm,
@@ -346,27 +341,27 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
     marginBottom: 2,
   },
   contactName: {
-    fontSize: fonts.size.md,
+    fontSize: typography.fontSize.base,
     fontWeight: '600',
-    color: colors.text,
+    color: colors.textPrimary,
   },
   specialization: {
-    fontSize: fonts.size.sm,
+    fontSize: typography.fontSize.sm,
     color: colors.primary,
     marginBottom: 2,
   },
   department: {
-    fontSize: fonts.size.sm,
+    fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
     marginBottom: 2,
   },
   title: {
-    fontSize: fonts.size.xs,
+    fontSize: typography.fontSize.xs,
     color: colors.textSecondary,
     fontStyle: 'italic',
   },
   lastSeen: {
-    fontSize: fonts.size.xs,
+    fontSize: typography.fontSize.xs,
     color: colors.textSecondary,
     marginTop: 2,
   },
@@ -390,18 +385,18 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
     paddingHorizontal: spacing.xl,
   },
   emptyTitle: {
-    fontSize: fonts.size.lg,
+    fontSize: typography.fontSize.lg,
     fontWeight: '600',
-    color: colors.text,
+    color: colors.textPrimary,
     marginTop: spacing.md,
     marginBottom: spacing.sm,
   },
   emptySubtitle: {
-    fontSize: fonts.size.md,
+    fontSize: typography.fontSize.base,
     color: colors.textSecondary,
     textAlign: 'center',
     lineHeight: 20,
   },
-}), []), []), []);
+}), []), []), []), []);
 
-export default ContactsList; 
+export default React.memo(ContactsList); 

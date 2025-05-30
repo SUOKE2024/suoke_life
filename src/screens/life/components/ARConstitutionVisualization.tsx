@@ -3,6 +3,9 @@ import Icon from '../../../components/common/Icon';
 import { colors, spacing } from '../../../constants/theme';
 
 
+
+
+
 import React, { useState, useRef } from 'react';
   View,
   Text,
@@ -57,8 +60,8 @@ export const ARConstitutionVisualization: React.FC<ARConstitutionVisualizationPr
   const [selectedAcupoint, setSelectedAcupoint] = useState<AcupointData | null>(null);
   const [arMode, setArMode] = useState(false);
 
-  const rotationAnim = useMemo(() => useMemo(() => useMemo(() => useRef(new Animated.ValueXY()).current, []), []), []);
-  const scaleAnim = useMemo(() => useMemo(() => useMemo(() => useRef(new Animated.Value(1)).current, []), []), []);
+  const rotationAnim = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useRef(new Animated.ValueXY()).current, []), []), []), []), []), []);
+  const scaleAnim = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useRef(new Animated.Value(1)).current, []), []), []), []), []), []);
 
   // 模拟体质可视化数据
   const [constitutionData] = useState<ConstitutionVisualization[]>([
@@ -142,7 +145,7 @@ export const ARConstitutionVisualization: React.FC<ARConstitutionVisualizationPr
     },
   ]);
 
-  const startARMode = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const startARMode = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     Alert.alert(
       'AR模式',
       '即将启动AR相机模式，请确保设备支持ARKit/ARCore',
@@ -154,7 +157,7 @@ export const ARConstitutionVisualization: React.FC<ARConstitutionVisualizationPr
   };
 
   // TODO: 将内联组件移到组件外部
-const renderConstitutionView = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderConstitutionView = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.viewContent}>
       <Text style={styles.viewTitle}>体质可视化分析</Text>
       
@@ -216,10 +219,10 @@ const renderConstitutionView = useMemo(() => useMemo(() => useMemo(() => () => (
         ))}
       </View>
     </View>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
   // TODO: 将内联组件移到组件外部
-const renderMeridiansView = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderMeridiansView = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.viewContent}>
       <Text style={styles.viewTitle}>经络系统</Text>
       
@@ -264,10 +267,10 @@ const renderMeridiansView = useMemo(() => useMemo(() => useMemo(() => () => (
         ))}
       </View>
     </View>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
   // TODO: 将内联组件移到组件外部
-const renderAcupointsView = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderAcupointsView = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.viewContent}>
       <Text style={styles.viewTitle}>穴位详解</Text>
       
@@ -337,10 +340,10 @@ const renderAcupointsView = useMemo(() => useMemo(() => useMemo(() => () => (
         </View>
       )}
     </View>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
   // TODO: 将内联组件移到组件外部
-const renderARView = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderARView = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.viewContent}>
       <Text style={styles.viewTitle}>AR增强现实</Text>
       
@@ -400,10 +403,10 @@ const renderARView = useMemo(() => useMemo(() => useMemo(() => () => (
         </View>
       )}
     </View>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
   // TODO: 将内联组件移到组件外部
-const renderTabBar = useMemo(() => useMemo(() => useMemo(() => () => (
+const renderTabBar = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.tabBar}>
       {[
         { key: 'constitution', label: '体质分析', icon: 'human' },
@@ -430,9 +433,9 @@ const renderTabBar = useMemo(() => useMemo(() => useMemo(() => () => (
         </TouchableOpacity>
       ))}
     </View>
-  ), []), []), []);
+  ), []), []), []), []), []), []);
 
-  const renderContent = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+  const renderContent = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
     switch (activeView) {
       case 'constitution': return renderConstitutionView();
       case 'meridians': return renderMeridiansView();
@@ -471,7 +474,7 @@ const renderTabBar = useMemo(() => useMemo(() => useMemo(() => () => (
   );
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -876,6 +879,6 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
     fontWeight: '600',
     marginLeft: spacing.sm,
   },
-}), []), []), []);
+}), []), []), []), []), []), []);
 
-export default ARConstitutionVisualization; 
+export default React.memo(ARConstitutionVisualization); 

@@ -5,6 +5,9 @@ import { colors, spacing, typography } from '../../constants/theme';
 import { AgentCoordinationService, AgentType, AgentStatus } from '../../services/AgentCoordinationService';
 
 
+
+
+
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
   View,
   Text,
@@ -94,7 +97,7 @@ export const AgentIntegrationHub: React.FC<AgentIntegrationHubProps> = ({
   // 初始化服务
   useEffect(() => {
     initializeService();
-  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
+  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
 
   // 启动动画
   useEffect(() => {
@@ -105,9 +108,9 @@ export const AgentIntegrationHub: React.FC<AgentIntegrationHubProps> = ({
     }).start();
   }, []);
 
-  const initializeService = useMemo(() => useMemo(() => useMemo(() => async () => {
+  const initializeService = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async () => {
     try {
-      setLoading(true), []), []), []);
+      setLoading(true), []), []), []), []), []), []);
       await coordinationService.initialize();
       await loadAgentStatuses();
     } catch (error) {
@@ -118,11 +121,11 @@ export const AgentIntegrationHub: React.FC<AgentIntegrationHubProps> = ({
     }
   };
 
-  const loadAgentStatuses = useMemo(() => useMemo(() => useMemo(() => async () => {
+  const loadAgentStatuses = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async () => {
     try {
-      const statuses = await coordinationService.getAgentStatus() as AgentStatus[], []), []), []);
-      const statusMap = useMemo(() => useMemo(() => useMemo(() => statuses.reduce((acc, status) => {
-        acc[status.id] = status, []), []), []);
+      const statuses = await coordinationService.getAgentStatus() as AgentStatus[], []), []), []), []), []), []);
+      const statusMap = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => statuses.reduce((acc, status) => {
+        acc[status.id] = status, []), []), []), []), []), []);
         return acc;
       }, {} as Record<AgentType, AgentStatus>);
       setAgentStatuses(statusMap);
@@ -131,29 +134,29 @@ export const AgentIntegrationHub: React.FC<AgentIntegrationHubProps> = ({
     }
   };
 
-  const onRefresh = useMemo(() => useMemo(() => useMemo(() => useCallback(async () => {
-    setRefreshing(true), []), []), []);
+  const onRefresh = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback(async () => {
+    setRefreshing(true), []), []), []), []), []), []);
     await loadAgentStatuses();
     setRefreshing(false);
   }, []);
 
-  const handleAgentSelect = useMemo(() => useMemo(() => useMemo(() => useCallback((agentId: AgentType) => {
-    setSelectedAgent(agentId), []), []), []);
+  const handleAgentSelect = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback((agentId: AgentType) => {
+    setSelectedAgent(agentId), []), []), []), []), []), []);
     onAgentSelect?.(agentId);
   }, [onAgentSelect]);
 
-  const handleStartChat = useMemo(() => useMemo(() => useMemo(() => useCallback((agentId: AgentType) => {
-    onStartChat?.(agentId), []), []), []);
+  const handleStartChat = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback((agentId: AgentType) => {
+    onStartChat?.(agentId), []), []), []), []), []), []);
   }, [onStartChat]);
 
-  const handleViewDetails = useMemo(() => useMemo(() => useMemo(() => useCallback((agentId: AgentType) => {
-    onViewDetails?.(agentId), []), []), []);
+  const handleViewDetails = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback((agentId: AgentType) => {
+    onViewDetails?.(agentId), []), []), []), []), []), []);
   }, [onViewDetails]);
 
-  const renderAgentCard = useMemo(() => useMemo(() => useMemo(() => useCallback((agentInfo: AgentInfo) => {
-    const status = agentStatuses[agentInfo.id], []), []), []);
-    const isSelected = useMemo(() => useMemo(() => useMemo(() => selectedAgent === agentInfo.id, []), []), []);
-    const isOnline = useMemo(() => useMemo(() => useMemo(() => status?.isOnline ?? false, []), []), []);
+  const renderAgentCard = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback((agentInfo: AgentInfo) => {
+    const status = agentStatuses[agentInfo.id], []), []), []), []), []), []);
+    const isSelected = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => selectedAgent === agentInfo.id, []), []), []), []), []), []);
+    const isOnline = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => status?.isOnline ?? false, []), []), []), []), []), []);
 
     return (
       <Animated.View
@@ -272,9 +275,9 @@ export const AgentIntegrationHub: React.FC<AgentIntegrationHubProps> = ({
     );
   }, [selectedAgent, agentStatuses, animatedValue, handleAgentSelect, handleStartChat, handleViewDetails]);
 
-  const renderSelectedAgentDetails = useMemo(() => useMemo(() => useMemo(() => useMemo(() => {
-    const agentInfo = AGENT_INFO[selectedAgent], []), []), []);
-    const status = useMemo(() => useMemo(() => useMemo(() => agentStatuses[selectedAgent], []), []), []);
+  const renderSelectedAgentDetails = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => {
+    const agentInfo = AGENT_INFO[selectedAgent], []), []), []), []), []), []);
+    const status = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => agentStatuses[selectedAgent], []), []), []), []), []), []);
 
     return (
       <Card style={styles.detailsCard}>
@@ -393,7 +396,7 @@ export const AgentIntegrationHub: React.FC<AgentIntegrationHubProps> = ({
   );
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -649,4 +652,4 @@ const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
     flex: 1,
     marginHorizontal: spacing.xs,
   },
-}), []), []), []); 
+}), []), []), []), []), []), []); 

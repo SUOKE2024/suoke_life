@@ -454,6 +454,23 @@ class ApiClient {
       return false;
     }
   }
+
+  /**
+   * 多模态POST请求（FormData）
+   */
+  async postMultiModal<T = any>(
+    url: string,
+    formData: FormData,
+    config?: Partial<ApiRequest>
+  ): Promise<ApiResponse<T>> {
+    return this.request<T>({
+      url,
+      method: "POST",
+      data: formData,
+      headers: { "Content-Type": "multipart/form-data" },
+      ...config,
+    });
+  }
 }
 
 // 创建单例实例

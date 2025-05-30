@@ -2,6 +2,9 @@ import { colors, spacing, borderRadius, fonts } from '../../constants/theme';
 import { AgentType, AGENTS } from './AgentCard';
 
 
+
+
+
 import React, { memo } from 'react';
   View,
   Text,

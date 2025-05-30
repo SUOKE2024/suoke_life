@@ -9,6 +9,7 @@ import asyncio
 import logging
 import time
 from typing import Any
+import httpx
 
 # 导入无障碍客户端
 from ..integration.accessibility_client import (
@@ -330,61 +331,90 @@ class XiaoaiServiceImpl:
 
     # 内部辅助方法
     async def _coordinate_four_diagnoses(self, diagnosis_request: dict[str, Any], userid: str) -> dict[str, Any]:
-        """执行四诊协调"""
-        # 模拟四诊协调
-        await asyncio.sleep(0.3)
+        """执行四诊协调：并发调用diagnostic-services，聚合结果"""
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            # 假设diagnostic-services各服务的基础URL
+            look_url = "http://diagnostic-look-service:8000/api/routes/analysis/tongue"
+            listen_url = "http://diagnostic-listen-service:8000/diagnose/listen"
+            inquiry_url = "http://diagnostic-inquiry-service:8000/diagnose/inquiry"
+            palpation_url = "http://diagnostic-palpation-service:8000/diagnose/palpation"
 
-        return {
-            'coordination_id': f"coord_{int(time.time())}",
-            'user_id': userid,
-            'diagnosis_results': [
+            # 构造请求体（可根据实际需求调整）
+            look_data = diagnosis_request.get("look", {})
+            listen_data = diagnosis_request.get("listen", {})
+            inquiry_data = diagnosis_request.get("inquiry", {})
+            palpation_data = diagnosis_request.get("palpation", {})
+
+            # 并发请求
+            tasks = [
+                client.post(look_url, json=look_data),
+                client.post(listen_url, json=listen_data),
+                client.post(inquiry_url, json=inquiry_data),
+                client.post(palpation_url, json=palpation_data),
+            ]
+            responses = await asyncio.gather(*tasks, return_exceptions=True)
+
+            diagnosis_results = []
+            for idx, (service, resp) in enumerate(zip([
+                "looking", "listening", "inquiry", "palpation"
+            ], responses)):
+                if isinstance(resp, Exception):
+                    diagnosis_results.append({
+                        "type": service,
+                        "findings": "服务调用失败",
+                        "confidence": 0.0,
+                        "features": [],
+                        "error": str(resp)
+                    })
+                elif resp.status_code == 200:
+                    data = resp.json()
+                    diagnosis_results.append({
+                        "type": service,
+                        "findings": data.get("findings", "无结果"),
+                        "confidence": data.get("confidence", 0.0),
+                        "features": data.get("features", []),
+                        "raw": data
+                    })
+                else:
+                    diagnosis_results.append({
+                        "type": service,
+                        "findings": "服务异常",
+                        "confidence": 0.0,
+                        "features": [],
+                        "error": resp.text
+                    })
+
+            # 简单聚合分析（可扩展为更复杂的规则/AI分析）
+            syndrome_analysis = {
+                "primary_syndrome": "待分析",
+                "secondary_syndrome": "待分析",
+                "confidence": 0.0
+            }
+            constitution_analysis = {
+                "constitution_type": "待分析",
+                "score": 0.0
+            }
+            recommendations = [
                 {
-                    'type': 'looking',
-                    'findings': '舌质偏红, 苔薄白',
-                    'confidence': 0.85,
-                    'features': ['舌红', '苔薄白']
+                    "type": "diet",
+                    "content": "请根据四诊结果调整饮食",
+                    "priority": 1
                 },
                 {
-                    'type': 'listening',
-                    'findings': '声音洪亮, 呼吸平稳',
-                    'confidence': 0.90,
-                    'features': ['声洪亮', '呼吸稳']
-                },
-                {
-                    'type': 'inquiry',
-                    'findings': '头痛, 口干, 睡眠不佳',
-                    'confidence': 0.95,
-                    'features': ['头痛', '口干', '失眠']
-                },
-                {
-                    'type': 'palpation',
-                    'findings': '脉象弦数',
-                    'confidence': 0.80,
-                    'features': ['脉弦', '脉数']
-                }
-            ],
-            'syndrome_analysis': {
-                'primary_syndrome': '肝火上炎',
-                'secondary_syndrome': '阴虚内热',
-                'confidence': 0.88
-            },
-            'constitution_analysis': {
-                'constitution_type': '阴虚质',
-                'score': 0.75
-            },
-            'recommendations': [
-                {
-                    'type': 'diet',
-                    'content': '多食滋阴清热食物, 如银耳、百合',
-                    'priority': 1
-                },
-                {
-                    'type': 'lifestyle',
-                    'content': '保证充足睡眠, 避免熬夜',
-                    'priority': 2
+                    "type": "lifestyle",
+                    "content": "保持良好作息，适度锻炼",
+                    "priority": 2
                 }
             ]
-        }
+
+            return {
+                "coordination_id": f"coord_{int(time.time())}",
+                "user_id": userid,
+                "diagnosis_results": diagnosis_results,
+                "syndrome_analysis": syndrome_analysis,
+                "constitution_analysis": constitution_analysis,
+                "recommendations": recommendations
+            }
 
     async def _query_health_records(self, query_request: dict[str, Any], userid: str) -> dict[str, Any]:
         """执行健康记录查询"""

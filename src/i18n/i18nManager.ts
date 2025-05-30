@@ -6,6 +6,9 @@ import zhCN from './locales/zh.json';
 import enUS from './locales/en.json';
 
 
+
+
+
 /**
  * 索克生活 - 国际化管理器
  * 完整的多语言和地区化管理系统

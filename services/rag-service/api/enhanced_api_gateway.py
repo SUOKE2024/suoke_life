@@ -9,7 +9,7 @@ import asyncio
 import logging
 from typing import Dict, Any, List, Optional
 from datetime import datetime
-from fastapi import FastAPI, HTTPException, Depends, Query, BackgroundTasks, File, UploadFile
+from fastapi import FastAPI, HTTPException, Depends, Query, BackgroundTasks, File, UploadFile, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, StreamingResponse
 from pydantic import BaseModel, Field
@@ -21,6 +21,9 @@ from services.rag_service.internal.service.enhanced_rag_service import (
     EnhancedRagService, IndexType, ShardingStrategy
 )
 from services.rag_service.internal.model.document import Document
+from services.rag_service.internal.multimodal.feature_extractors import (
+    extract_image_text, extract_audio_text, extract_video_keyframes
+)
 
 # 导入通用组件
 from services.common.observability.tracing import (
@@ -550,6 +553,115 @@ async def get_metrics(
         
     except Exception as e:
         logger.error(f"获取指标失败: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/v1/rag/query_multimodal")
+async def query_multimodal(
+    query: str = Form(..., description="查询文本"),
+    files: Optional[List[UploadFile]] = File(None, description="多模态文件（图片/音频/视频等）"),
+    system_prompt: Optional[str] = Form(None),
+    collection_names: Optional[str] = Form(None),
+    generation_params: Optional[str] = Form(None),
+    metadata_filter: Optional[str] = Form(None),
+    user_id: Optional[str] = Form(None),
+    service: EnhancedRagService = Depends(get_rag_service)
+):
+    """
+    多模态RAG推理接口，支持文本+图片/音频/视频联合推理
+    """
+    multimodal_context = []
+    multimodal_texts = []
+    if files:
+        for file in files:
+            content = await file.read()
+            if file.content_type.startswith('image/'):
+                ocr_text = extract_image_text(content)
+                multimodal_context.append({"type": "image", "filename": file.filename, "ocr_text": ocr_text})
+                multimodal_texts.append(ocr_text)
+            elif file.content_type.startswith('audio/'):
+                asr_text = extract_audio_text(content)
+                multimodal_context.append({"type": "audio", "filename": file.filename, "asr_text": asr_text})
+                multimodal_texts.append(asr_text)
+            elif file.content_type.startswith('video/'):
+                keyframes = extract_video_keyframes(content)
+                frame_texts = []
+                for idx, frame_bytes in enumerate(keyframes):
+                    ocr_text = extract_image_text(frame_bytes)
+                    frame_texts.append(ocr_text)
+                multimodal_context.append({"type": "video", "filename": file.filename, "frame_ocr_texts": frame_texts})
+                multimodal_texts.extend(frame_texts)
+            else:
+                multimodal_context.append({"type": "file", "filename": file.filename})
+    # 拼接多模态文本作为RAG上下文
+    full_query = query + "\n" + "\n".join([t for t in multimodal_texts if t])
+    result = await service.query(
+        query=full_query,
+        top_k=5,
+        system_prompt=system_prompt,
+        collection_names=None,
+        generation_params=None,
+        metadata_filter=None,
+        user_id=user_id
+    )
+    return {
+        "answer": result.answer,
+        "references": [ref.__dict__ for ref in result.references],
+        "multimodal_context": multimodal_context,
+        "retrieval_latency_ms": result.retrieval_latency_ms,
+        "generation_latency_ms": result.generation_latency_ms,
+        "total_latency_ms": result.total_latency_ms
+    }
+
+@app.post("/api/v1/rag/documents/upload_multimodal")
+async def upload_documents_multimodal(
+    files: List[UploadFile] = File(...),
+    collection_name: str = Query("default", description="集合名称"),
+    service: EnhancedRagService = Depends(get_rag_service)
+):
+    """
+    多模态文件上传接口，支持图片、音频、视频、PDF等
+    """
+    try:
+        documents = []
+        for file in files:
+            content = await file.read()
+            doc_type = file.content_type.split('/')[0]
+            if doc_type == 'image':
+                ocr_text = extract_image_text(content)
+                text_content = f"图片OCR: {ocr_text}"
+            elif doc_type == 'audio':
+                asr_text = extract_audio_text(content)
+                text_content = f"音频ASR: {asr_text}"
+            elif doc_type == 'video':
+                keyframes = extract_video_keyframes(content)
+                frame_texts = []
+                for idx, frame_bytes in enumerate(keyframes):
+                    ocr_text = extract_image_text(frame_bytes)
+                    frame_texts.append(ocr_text)
+                text_content = f"视频帧OCR: {'; '.join(frame_texts)}"
+            else:
+                text_content = f"文件内容: {file.filename}"
+            document = Document(
+                content=text_content,
+                metadata={
+                    "filename": file.filename,
+                    "content_type": file.content_type,
+                    "upload_time": datetime.now().isoformat()
+                }
+            )
+            documents.append(document)
+        doc_ids = await service.add_documents_batch(
+            documents=documents,
+            collection_name=collection_name
+        )
+        return {
+            "status": "success",
+            "document_ids": doc_ids,
+            "count": len(doc_ids),
+            "message": f"成功上传{len(doc_ids)}个多模态文件"
+        }
+    except Exception as e:
+        logger.error(f"多模态文件上传失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 # 健康检查端点

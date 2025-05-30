@@ -4,6 +4,9 @@ import { MainNavigator } from './MainNavigator';
 import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
 
 
+
+
+
 /**
  * 应用主导航器
  * 负责管理应用的整体导航流程，包括认证状态检查和路由分发
