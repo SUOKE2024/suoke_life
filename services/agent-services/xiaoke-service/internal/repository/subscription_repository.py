@@ -165,7 +165,7 @@ class SubscriptionRepository:
                 "price": 99.9,
                 "included_services": [
                     "高级健康咨询",
-                    "全套四诊分析",
+                    "全套五诊分析",
                     "个性化食谱",
                     "季节性养生方案",
                 ],

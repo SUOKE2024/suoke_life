@@ -46,7 +46,7 @@ class ServiceType(str, Enum):
     API_GATEWAY = "api_gateway"  # API网关
     USER_SERVICE = "user_service"  # 用户服务
     AUTH_SERVICE = "auth_service"  # 认证服务
-    FOUR_DIAGNOSIS = "four_diagnosis"  # 四诊服务
+    FIVE_DIAGNOSIS = "five_diagnosis"  # 五诊服务
     KNOWLEDGE_SERVICE = "knowledge_service"  # 知识服务
     HEALTH_SERVICE = "health_service"  # 健康服务
     AI_SERVICE = "ai_service"  # AI服务
@@ -1411,7 +1411,7 @@ class SuokeBenchmark:
 
         return tester
 
-    def create_four_diagnosis_test(
+    def create_five_diagnosis_test(
         self,
         base_url: str,
         target_rps: int = 50,
@@ -1419,7 +1419,7 @@ class SuokeBenchmark:
         token: str | None = None,
     ) -> PerformanceTester:
         """
-        创建四诊服务测试
+        创建五诊服务测试
 
         Args:
             base_url: 基础URL
@@ -1432,8 +1432,8 @@ class SuokeBenchmark:
         """
         # 创建测试配置
         profile = TestProfile(
-            name="四诊服务性能测试",
-            description="测试四诊服务的性能和响应时间",
+            name="五诊服务性能测试",
+            description="测试五诊服务的性能和响应时间",
             target_rps=target_rps,
             duration=duration,
             success_threshold=98.0,
@@ -1443,7 +1443,7 @@ class SuokeBenchmark:
         # 定义接口列表
         endpoints = [
             EndpointSpec(
-                service_name=ServiceType.FOUR_DIAGNOSIS,
+                service_name=ServiceType.FIVE_DIAGNOSIS,
                 endpoint="/api/v1/diagnosis/tongue/analyze",
                 method="POST",
                 weight=25,
@@ -1453,7 +1453,7 @@ class SuokeBenchmark:
                 },
             ),
             EndpointSpec(
-                service_name=ServiceType.FOUR_DIAGNOSIS,
+                service_name=ServiceType.FIVE_DIAGNOSIS,
                 endpoint="/api/v1/diagnosis/face/analyze",
                 method="POST",
                 weight=20,
@@ -1463,7 +1463,7 @@ class SuokeBenchmark:
                 },
             ),
             EndpointSpec(
-                service_name=ServiceType.FOUR_DIAGNOSIS,
+                service_name=ServiceType.FIVE_DIAGNOSIS,
                 endpoint="/api/v1/diagnosis/voice/analyze",
                 method="POST",
                 weight=15,
@@ -1473,7 +1473,7 @@ class SuokeBenchmark:
                 },
             ),
             EndpointSpec(
-                service_name=ServiceType.FOUR_DIAGNOSIS,
+                service_name=ServiceType.FIVE_DIAGNOSIS,
                 endpoint="/api/v1/diagnosis/pulse/analyze",
                 method="POST",
                 weight=15,
@@ -1483,7 +1483,19 @@ class SuokeBenchmark:
                 },
             ),
             EndpointSpec(
-                service_name=ServiceType.FOUR_DIAGNOSIS,
+                service_name=ServiceType.FIVE_DIAGNOSIS,
+                endpoint="/api/v1/diagnosis/calculation/analyze",
+                method="POST",
+                weight=10,
+                request_generator=lambda: {
+                    "birth_date": "1990-01-01",
+                    "birth_time": "08:00",
+                    "current_season": "spring",
+                    "analysis_type": "full",
+                },
+            ),
+            EndpointSpec(
+                service_name=ServiceType.FIVE_DIAGNOSIS,
                 endpoint="/api/v1/diagnosis/fusion/analyze",
                 method="POST",
                 weight=10,
@@ -1493,10 +1505,11 @@ class SuokeBenchmark:
                     "voice_id": f"voice_{random.randint(1, 1000)}",
                     "pulse_id": f"pulse_{random.randint(1, 1000)}",
                     "inquiry_id": f"inquiry_{random.randint(1, 1000)}",
+                    "calculation_id": f"calc_{random.randint(1, 1000)}",
                 },
             ),
             EndpointSpec(
-                service_name=ServiceType.FOUR_DIAGNOSIS,
+                service_name=ServiceType.FIVE_DIAGNOSIS,
                 endpoint="/api/v1/diagnosis/inquiry/analyze",
                 method="POST",
                 weight=15,
@@ -1577,7 +1590,7 @@ class SuokeBenchmark:
                 method="GET",
                 weight=10,
             ),
-            # 四诊服务
+            # 五诊服务
             EndpointSpec(
                 service_name=ServiceType.API_GATEWAY,
                 endpoint="/api/v1/diagnosis/tongue/analyze",
@@ -1672,7 +1685,7 @@ class SuokeBenchmark:
         logger.info("运行用户服务测试...")
         user_result = await user_tester.run_test()
 
-        logger.info("运行四诊服务测试...")
+        logger.info("运行五诊服务测试...")
         four_diagnosis_result = await four_diagnosis_tester.run_test()
 
         logger.info("运行API网关测试...")

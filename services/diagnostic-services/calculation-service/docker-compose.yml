@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  calculation-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: suoke-calculation-service
+    ports:
+      - "8003:8000"
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8000
+      - DEBUG=false
+      - ENABLE_CACHE=true
+      - CACHE_TTL=3600
+      - RATE_LIMIT_ENABLED=true
+      - RATE_LIMIT_MAX_REQUESTS=100
+      - RATE_LIMIT_WINDOW_SECONDS=60
+      - ALLOWED_ORIGINS=["http://localhost:3000", "http://localhost:8080"]
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - suoke-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.calculation-service.rule=Host(`calculation.suoke.local`)"
+      - "traefik.http.routers.calculation-service.entrypoints=web"
+      - "traefik.http.services.calculation-service.loadbalancer.server.port=8000"
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: diagnostic_services/calculation_service_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  suoke-network:
+    external: true

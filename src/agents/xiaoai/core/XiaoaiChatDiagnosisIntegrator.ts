@@ -1,4 +1,6 @@
-import {
+import { diagnosisServiceClient } from '../services/DiagnosisServiceClient';
+
+
   ChatContext,
   ChatResponse,
   DiagnosisIntent,
@@ -11,9 +13,8 @@ import {
   InquiryResult,
   LookResult,
   ListenResult,
-  PalpationResult
+  PalpationResult,
 } from '../types';
-import { diagnosisServiceClient } from '../services/DiagnosisServiceClient';
 
 /**
  * 小艾智能体聊天中的四诊调用集成器
@@ -78,7 +79,7 @@ export class XiaoaiChatDiagnosisIntegrator {
       '咳嗽', '胸闷', '头痛', '发热', '乏力', '失眠', '腹痛', '恶心', '呕吐',
       '腹泻', '便秘', '心悸', '气短', '眩晕', '耳鸣', '视力模糊', '关节痛',
       '肌肉痛', '皮疹', '瘙痒', '出汗', '怕冷', '怕热', '口干', '口苦',
-      '食欲不振', '消化不良', '月经不调', '痛经'
+      '食欲不振', '消化不良', '月经不调', '痛经',
     ];
 
     // 检测症状关键词
@@ -131,7 +132,7 @@ export class XiaoaiChatDiagnosisIntegrator {
       needsPalpationDiagnosis,
       confidence,
       extractedSymptoms,
-      urgencyLevel: urgencyLevel as 'low' | 'medium' | 'high' | 'emergency'
+      urgencyLevel: urgencyLevel as 'low' | 'medium' | 'high' | 'emergency',
     };
   }
 
@@ -162,7 +163,7 @@ export class XiaoaiChatDiagnosisIntegrator {
         tcmPatterns: [],
         healthProfile: {} as any,
         recommendations: [],
-        confidence: 0.8
+        confidence: 0.8,
       };
       
     } catch (error) {
@@ -246,7 +247,7 @@ export class XiaoaiChatDiagnosisIntegrator {
         syndrome: '待进一步分析',
         pathogenesis: '基于四诊合参的病机分析',
         treatment: '个性化治疗方案',
-        prognosis: '良好'
+        prognosis: '良好',
       },
       healthRecommendations: [
         {
@@ -254,8 +255,8 @@ export class XiaoaiChatDiagnosisIntegrator {
           title: '生活方式调整',
           description: '基于四诊结果的生活建议',
           priority: 'medium',
-          timeframe: '1-2周'
-        }
+          timeframe: '1-2周',
+        },
       ],
       riskFactors: [],
       followUpActions: [
@@ -263,10 +264,10 @@ export class XiaoaiChatDiagnosisIntegrator {
           action: '定期复查',
           timeframe: '1周后',
           priority: 'medium',
-          description: '观察症状变化'
-        }
+          description: '观察症状变化',
+        },
       ],
-      confidence: 0.85
+      confidence: 0.85,
     };
   }
 
@@ -327,7 +328,7 @@ export class XiaoaiChatDiagnosisIntegrator {
         type: 'inquiry',
         prompt: '我想了解一下你的具体症状，可以详细说说吗？',
         autoStart: true,
-        priority: 1
+        priority: 1,
       });
     }
 
@@ -336,7 +337,7 @@ export class XiaoaiChatDiagnosisIntegrator {
         type: 'look',
         prompt: '如果方便的话，可以拍张舌头的照片让我看看吗？',
         optional: true,
-        priority: 2
+        priority: 2,
       });
     }
 
@@ -345,7 +346,7 @@ export class XiaoaiChatDiagnosisIntegrator {
         type: 'listen',
         prompt: '可以录一段咳嗽声或者说话声让我听听吗？',
         optional: true,
-        priority: 3
+        priority: 3,
       });
     }
 
@@ -360,7 +361,7 @@ export class XiaoaiChatDiagnosisIntegrator {
       actions,
       suggestions,
       diagnosisResults,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
   }
 
@@ -371,7 +372,7 @@ export class XiaoaiChatDiagnosisIntegrator {
     return {
       text: '抱歉，我在分析你的情况时遇到了一些技术问题。请稍后再试，或者换个方式描述你的症状。',
       suggestions: ['重新描述症状', '稍后再试', '联系技术支持'],
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
   }
 
@@ -405,10 +406,10 @@ export class XiaoaiChatDiagnosisIntegrator {
   private selectPrimaryImage(images: ImageData[]): ImageData {
     // 优先选择舌象图片，其次是面部图片
     const tongueImage = images.find(img => img.type === 'tongue');
-    if (tongueImage) return tongueImage;
+    if (tongueImage) {return tongueImage;}
     
     const faceImage = images.find(img => img.type === 'face');
-    if (faceImage) return faceImage;
+    if (faceImage) {return faceImage;}
     
     return images[0];
   }
@@ -416,10 +417,10 @@ export class XiaoaiChatDiagnosisIntegrator {
   private selectPrimaryAudio(audioData: AudioData[]): AudioData {
     // 优先选择咳嗽声，其次是语音
     const coughAudio = audioData.find(audio => audio.type === 'cough');
-    if (coughAudio) return coughAudio;
+    if (coughAudio) {return coughAudio;}
     
     const voiceAudio = audioData.find(audio => audio.type === 'voice');
-    if (voiceAudio) return voiceAudio;
+    if (voiceAudio) {return voiceAudio;}
     
     return audioData[0];
   }
@@ -427,7 +428,7 @@ export class XiaoaiChatDiagnosisIntegrator {
   private selectPrimaryPalpationData(palpationData: PalpationData[]): PalpationData {
     // 优先选择脉诊数据
     const pulseData = palpationData.find(data => data.type === 'pulse');
-    if (pulseData) return pulseData;
+    if (pulseData) {return pulseData;}
     
     return palpationData[0];
   }

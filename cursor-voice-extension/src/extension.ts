@@ -20,7 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand('cursor-voice.startVoiceRecognition', startVoiceRecognition),
         vscode.commands.registerCommand('cursor-voice.stopVoiceRecognition', stopVoiceRecognition),
         vscode.commands.registerCommand('cursor-voice.startVideoInteraction', startVideoInteraction),
-        vscode.commands.registerCommand('cursor-voice.toggleVoiceMode', toggleVoiceMode)
+        vscode.commands.registerCommand('cursor-voice.toggleVoiceMode', toggleVoiceMode),
     ];
 
     commands.forEach(command => context.subscriptions.push(command));

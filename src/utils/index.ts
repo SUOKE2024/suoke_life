@@ -1,162 +1,49 @@
 /**
- * 工具函数统一导出
+ * utils 统一导出文件
+ * 索克生活APP - 架构优化
  */
 
-// 存储工具
-export * from './storageUtils';
-
-// 验证工具
-export {
-  validateEmail,
-  validatePassword,
-  validatePhone,
-  validateUsername,
-  validateIdCard,
-  validateRequired,
-  validateNumberRange,
-  validateAge,
-  validateHeight,
-  validateWeight,
-  validateUrl,
-  validateField,
-  type ValidationRule,
-} from './validationUtils';
-
-// 日期工具
-export * from './dateUtils';
-
-// 通用工具函数
-export * from './commonUtils';
-
-// API集成测试工具
-export { apiIntegrationTest } from './apiIntegrationTest';
-
-// 错误处理工具
-export {
-  ErrorHandler,
-  errorHandler,
-  handleError,
-  getErrorStats,
-  clearErrorLog,
-  type ErrorInfo,
-} from './errorHandler';
-
-// 性能监控工具
-export {
-  PerformanceMonitor,
-  performanceMonitor,
-  startPerformanceMeasure,
-  endPerformanceMeasure,
-  recordNetworkPerformance,
-  recordRenderPerformance,
-  recordUserInteraction,
-  getPerformanceStats,
-  getNetworkPerformanceStats,
-  clearPerformanceMetrics,
-  type PerformanceMetric,
-  type NetworkMetric,
-  type RenderMetric,
-  type MemoryMetric,
-  type UserInteractionMetric,
-} from './performanceMonitor';
-
-// 缓存管理工具
-export {
-  CacheManager,
-  cacheManager,
-  setCache,
-  getCache,
-  deleteCache,
-  clearCache,
-  getCacheStats,
-  getCacheDetailedStats,
-  type CacheItem,
-  type CacheOptions,
-  type CacheStats,
-} from './cacheManager';
-
-// 网络优化工具
-export {
-  NetworkOptimizer,
-  networkOptimizer,
-  optimizedRequest,
-  batchRequest,
-  cancelAllNetworkRequests,
-  getNetworkStats,
-  type RequestConfig,
-  type RequestResponse,
-  type BatchRequest,
-} from './networkOptimizer';
-
-// 内存优化工具
-export {
-  MemoryOptimizer,
-  memoryOptimizer,
-  registerComponent,
-  unregisterComponent,
-  registerListener,
-  unregisterListener,
-  getMemoryStats,
-  takeMemorySnapshot,
-  detectMemoryLeaks,
-  type MemorySnapshot,
-  type MemoryLeak,
-  type MemoryOptimizationSuggestion,
-} from './memoryOptimizer';
-
-// 组件性能优化工具
-export {
-  ComponentOptimizer,
-  componentOptimizer,
-  useComponentPerformance,
-  useOptimizedCallback,
-  useOptimizedMemo,
-  withPerformanceMonitoring,
-  getComponentPerformanceData,
-  getComponentOptimizationSuggestions,
-  getComponentPerformanceStats,
-  clearComponentPerformanceData,
-  type ComponentPerformanceData,
-  type RenderOptimizationSuggestion,
-} from './componentOptimizer';
-
-// 状态管理优化工具
-export {
-  StateOptimizer,
-  stateOptimizer,
-  trackStateUpdate,
-  batchStateUpdate,
-  getStatePerformanceData,
-  getStateOptimizationSuggestions,
-  getStateStats,
-  clearStatePerformanceData,
-  type StateChangeEvent,
-  type StatePerformanceData,
-  type StateOptimizationSuggestion,
-} from './stateOptimizer';
-
-// 认证工具
-export {
-  validateEmail as validateAuthEmail,
-  validatePhone as validateAuthPhone,
-  validatePassword as validateAuthPassword,
-  getPasswordStrength,
-  validateUsername as validateAuthUsername,
-  validateVerificationCode,
-  validateLoginForm,
-  validateRegisterForm,
-  type LoginFormData,
-  type LoginFormErrors,
-  type RegisterFormData,
-  type RegisterFormErrors,
-  type ForgotPasswordFormData,
-  type ForgotPasswordFormErrors,
-  getAuthToken,
-  getRefreshToken,
-  clearAuthTokens,
-  isAuthenticated,
-  formatAuthError,
-  generateDeviceId,
-  storeDeviceId,
-  getDeviceId,
-} from './authUtils';
+export { default as ApiOptimizer } from './ApiOptimizer';
+export { default as DataProcessor } from './DataProcessor';
+export { default as NavigationFixer } from './NavigationFixer';
+export { default as RequestCache } from './RequestCache';
+export { default as StorageManager } from './StorageManager';
+export { default as agentCollaborationSystem } from './agentCollaborationSystem';
+export { default as animations } from './animations';
+export { default as apiCache } from './apiCache';
+export { default as apiIntegrationTest } from './apiIntegrationTest';
+export { default as authUtils } from './authUtils';
+export { default as blockchainHealthData } from './blockchainHealthData';
+export { default as cacheManager } from './cacheManager';
+export { default as codeSplitting } from './codeSplitting';
+export { default as commonUtils } from './commonUtils';
+export { default as componentOptimizer } from './componentOptimizer';
+export { default as dateUtils } from './dateUtils';
+export { default as deviceAdapter } from './deviceAdapter';
+export { default as deviceInfo } from './deviceInfo';
+export { default as deviceIntegrationTest } from './deviceIntegrationTest';
+export { default as errorHandler } from './errorHandler';
+export { default as eventEmitter } from './eventEmitter';
+export { default as imageOptimization } from './imageOptimization';
+export { default as lazyLoader } from './lazyLoader';
+export { default as loadingManager } from './loadingManager';
+export { default as memoWrapper } from './memoWrapper';
+export { default as memoryMonitor } from './memoryMonitor';
+export { default as memoryOptimizer } from './memoryOptimizer';
+export { default as monitoringSystem } from './monitoringSystem';
+export { default as nativeModules } from './nativeModules';
+export { default as networkManager } from './networkManager';
+export { default as networkOptimizer } from './networkOptimizer';
+export { default as notifications } from './notifications';
+export { default as performanceMonitor } from './performanceMonitor';
+export { default as performanceOptimizer } from './performanceOptimizer';
+export { default as permissions } from './permissions';
+export { default as responsive } from './responsive';
+export { default as securityManager } from './securityManager';
+export { default as smartCacheStrategy } from './smartCacheStrategy';
+export { default as startupOptimizer } from './startupOptimizer';
+export { default as stateOptimizer } from './stateOptimizer';
+export { default as storageWeb } from './storage.web';
+export { default as storageUtils } from './storageUtils';
+export { default as tcmDiagnosisEngine } from './tcmDiagnosisEngine';
+export { default as validationUtils } from './validationUtils';

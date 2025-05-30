@@ -1,5 +1,16 @@
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useDispatch, useSelector } from 'react-redux';
+import { AuthStackParamList } from '../../types/navigation';
+import { RootState } from '../../types';
+import { colors, spacing, fonts, borderRadius, shadows } from '../../constants/theme';
+import { AuthInput } from '../../components/common/AuthInput';
+import { AuthButton } from '../../components/common/AuthButton';
+import { LoadingScreen } from '../../components/common/LoadingScreen';
+import { authService } from '../../services/authService';
+
+
 import React, { useState, useRef, useEffect } from 'react';
-import {
   View,
   Text,
   StyleSheet,
@@ -12,16 +23,6 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useDispatch, useSelector } from 'react-redux';
-import { AuthStackParamList } from '../../types/navigation';
-import { RootState } from '../../types';
-import { colors, spacing, fonts, borderRadius, shadows } from '../../constants/theme';
-import { AuthInput } from '../../components/common/AuthInput';
-import { AuthButton } from '../../components/common/AuthButton';
-import { LoadingScreen } from '../../components/common/LoadingScreen';
-import { authService } from '../../services/authService';
 
 type RegisterScreenNavigationProp = NativeStackNavigationProp<
   AuthStackParamList,
@@ -139,7 +140,7 @@ export const RegisterScreen: React.FC = () => {
   };
 
   // 震动动画
-  const triggerShakeAnimation = () => {
+  const triggerShakeAnimation = useCallback( () => {, []);
     Animated.sequence([
       Animated.timing(shakeAnim, {
         toValue: 10,
@@ -208,17 +209,17 @@ export const RegisterScreen: React.FC = () => {
   };
 
   // 处理登录
-  const handleLogin = () => {
+  const handleLogin = useCallback( () => {, []);
     navigation.navigate('Login');
   };
 
   // 返回欢迎页
-  const handleBack = () => {
+  const handleBack = useCallback( () => {, []);
     navigation.goBack();
   };
 
   // 更新表单数据
-  const updateFormData = (field: keyof FormData, value: string) => {
+  const updateFormData = useCallback( (field: keyof FormData, value: string) => {, []);
     setFormData(prev => ({ ...prev, [field]: value }));
     // 清除对应字段的错误
     if (errors[field]) {
@@ -228,17 +229,17 @@ export const RegisterScreen: React.FC = () => {
 
   // 检查密码强度
   const getPasswordStrength = (password: string): { level: number; text: string; color: string } => {
-    if (!password) return { level: 0, text: '', color: colors.textSecondary };
+    if (!password) {return { level: 0, text: '', color: colors.textSecondary };}
     
     let score = 0;
-    if (password.length >= 8) score++;
-    if (/[a-z]/.test(password)) score++;
-    if (/[A-Z]/.test(password)) score++;
-    if (/\d/.test(password)) score++;
-    if (/[^a-zA-Z\d]/.test(password)) score++;
+    if (password.length >= 8) {score++;}
+    if (/[a-z]/.test(password)) {score++;}
+    if (/[A-Z]/.test(password)) {score++;}
+    if (/\d/.test(password)) {score++;}
+    if (/[^a-zA-Z\d]/.test(password)) {score++;}
 
-    if (score <= 2) return { level: 1, text: '弱', color: colors.error };
-    if (score <= 3) return { level: 2, text: '中', color: colors.warning };
+    if (score <= 2) {return { level: 1, text: '弱', color: colors.error };}
+    if (score <= 3) {return { level: 2, text: '中', color: colors.warning };}
     return { level: 3, text: '强', color: colors.success };
   };
 

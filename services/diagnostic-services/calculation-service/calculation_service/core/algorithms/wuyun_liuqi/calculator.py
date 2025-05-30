@@ -1,20 +1,22 @@
 """
 五运六气计算器
 
-实现五运六气推演的核心算法
+实现五运六气运气学说的核心算法
 """
 
-from datetime import date, datetime
+from datetime import datetime, date, timedelta
 from typing import Dict, List, Optional, Tuple
+import calendar
 
 from .data import (
-    GANZHI_WUYUN_MAP,
-    LIUQI_SITIAN_ZAIQUAN,
     WUYUN_DATA,
     LIUQI_DATA,
-    YEAR_GANZHI_MAP,
-    DISEASE_WUYUN_LIUQI_MAP,
-    SOLAR_TERMS_LIUQI_MAP
+    JIAZI_NAYIN,
+    YUNQI_DISEASE_MAP,
+    LIUQI_DISEASE_MAP,
+    ZHUKE_QI_TIME,
+    SITIAN_ZAIQUAN,
+    YUNQI_HEHUA
 )
 
 
@@ -25,413 +27,405 @@ class WuyunLiuqiCalculator:
         """初始化计算器"""
         self.tiangan = ["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"]
         self.dizhi = ["子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"]
+        
+        # 运气推算基准年（甲子年）
+        self.base_year = 1984
+        
+        # 六气循环顺序
+        self.liuqi_order = ["厥阴风木", "少阴君火", "太阴湿土", "少阳相火", "阳明燥金", "太阳寒水"]
     
     def get_year_ganzhi(self, year: int) -> str:
-        """
-        获取年份对应的干支
-        
-        Args:
-            year: 年份
-            
-        Returns:
-            干支字符串
-        """
-        if year in YEAR_GANZHI_MAP:
-            return YEAR_GANZHI_MAP[year]
-        
-        # 计算干支（以1984年甲子为基准）
-        base_year = 1984
-        year_diff = year - base_year
-        
+        """获取年份干支"""
+        year_diff = year - self.base_year
         tiangan_index = year_diff % 10
         dizhi_index = year_diff % 12
-        
         return self.tiangan[tiangan_index] + self.dizhi[dizhi_index]
     
-    def get_wuyun_from_ganzhi(self, ganzhi: str) -> str:
+    def get_wuyun(self, year: int) -> Dict:
         """
-        根据干支获取五运
-        
-        Args:
-            ganzhi: 干支
-            
-        Returns:
-            五运类型
-        """
-        return GANZHI_WUYUN_MAP.get(ganzhi, "未知")
-    
-    def get_liuqi_from_dizhi(self, dizhi: str) -> Dict[str, str]:
-        """
-        根据地支获取六气司天在泉
-        
-        Args:
-            dizhi: 地支
-            
-        Returns:
-            包含司天和在泉的字典
-        """
-        # 根据地支确定六气
-        liuqi_map = {
-            "子": "子午", "午": "子午",
-            "丑": "丑未", "未": "丑未", 
-            "寅": "寅申", "申": "寅申",
-            "卯": "卯酉", "酉": "卯酉",
-            "辰": "辰戌", "戌": "辰戌",
-            "巳": "巳亥", "亥": "巳亥"
-        }
-        
-        liuqi_key = liuqi_map.get(dizhi, "子午")
-        return LIUQI_SITIAN_ZAIQUAN.get(liuqi_key, {"司天": "未知", "在泉": "未知"})
-    
-    def calculate_wuyun_liuqi(self, year: int, patient_birth: Optional[date] = None) -> Dict:
-        """
-        计算指定年份的五运六气
-        
-        Args:
-            year: 分析年份
-            patient_birth: 患者出生日期（可选）
-            
-        Returns:
-            五运六气分析结果
-        """
-        # 获取年份干支
-        ganzhi = self.get_year_ganzhi(year)
-        tiangan = ganzhi[0]
-        dizhi = ganzhi[1]
-        
-        # 获取五运
-        wuyun_type = self.get_wuyun_from_ganzhi(ganzhi)
-        wuyun_data = WUYUN_DATA.get(wuyun_type, {})
-        
-        # 获取六气
-        liuqi_info = self.get_liuqi_from_dizhi(dizhi)
-        sitian = liuqi_info["司天"]
-        zaiquan = liuqi_info["在泉"]
-        
-        sitian_data = LIUQI_DATA.get(sitian, {})
-        zaiquan_data = LIUQI_DATA.get(zaiquan, {})
-        
-        # 分析气候影响
-        climate_influence = self._analyze_climate_influence(wuyun_type, sitian, zaiquan)
-        
-        # 预测易发疾病
-        diseases_prone = self._predict_diseases(wuyun_type, sitian, zaiquan)
-        
-        # 生成预防建议
-        prevention_advice = self._generate_prevention_advice(wuyun_data, sitian_data, zaiquan_data)
-        
-        result = {
-            "year": year,
-            "ganzhi": ganzhi,
-            "wuyun": {
-                "type": wuyun_type,
-                "characteristics": wuyun_data.get("特性", []),
-                "diseases_prone": wuyun_data.get("易发疾病", []),
-                "prevention_advice": wuyun_data.get("预防建议", []),
-                "dietary_advice": wuyun_data.get("饮食宜忌", []),
-                "treatment_principle": wuyun_data.get("治疗原则", "")
-            },
-            "liuqi": {
-                "sitian": {
-                    "type": sitian,
-                    "characteristics": sitian_data.get("特性", []),
-                    "climate_features": sitian_data.get("气候特点", []),
-                    "diseases_prone": sitian_data.get("易发疾病", []),
-                    "prevention_advice": sitian_data.get("预防建议", []),
-                    "treatment_principle": sitian_data.get("治疗原则", "")
-                },
-                "zaiquan": {
-                    "type": zaiquan,
-                    "characteristics": zaiquan_data.get("特性", []),
-                    "climate_features": zaiquan_data.get("气候特点", []),
-                    "diseases_prone": zaiquan_data.get("易发疾病", []),
-                    "prevention_advice": zaiquan_data.get("预防建议", []),
-                    "treatment_principle": zaiquan_data.get("治疗原则", "")
-                }
-            },
-            "climate_influence": climate_influence,
-            "diseases_prone": diseases_prone,
-            "prevention_advice": prevention_advice
-        }
-        
-        # 如果提供了患者出生信息，进行个性化分析
-        if patient_birth:
-            result["personalized_analysis"] = self._personalized_analysis(
-                result, patient_birth
-            )
-        
-        return result
-    
-    def _analyze_climate_influence(self, wuyun: str, sitian: str, zaiquan: str) -> str:
-        """
-        分析气候影响
-        
-        Args:
-            wuyun: 五运类型
-            sitian: 司天
-            zaiquan: 在泉
-            
-        Returns:
-            气候影响描述
-        """
-        influences = []
-        
-        # 五运影响
-        if "太过" in wuyun:
-            element = wuyun.replace("运太过", "")
-            influences.append(f"{element}气偏盛")
-        elif "不及" in wuyun:
-            element = wuyun.replace("运不及", "")
-            influences.append(f"{element}气不足")
-        
-        # 六气影响
-        if "风木" in sitian:
-            influences.append("风气主令，多变化")
-        elif "君火" in sitian or "相火" in sitian:
-            influences.append("火气主令，偏温热")
-        elif "湿土" in sitian:
-            influences.append("湿气主令，多雨湿")
-        elif "燥金" in sitian:
-            influences.append("燥气主令，偏干燥")
-        elif "寒水" in sitian:
-            influences.append("寒气主令，偏寒冷")
-        
-        return "，".join(influences) if influences else "气候平和"
-    
-    def _predict_diseases(self, wuyun: str, sitian: str, zaiquan: str) -> List[str]:
-        """
-        预测易发疾病
-        
-        Args:
-            wuyun: 五运类型
-            sitian: 司天
-            zaiquan: 在泉
-            
-        Returns:
-            易发疾病列表
-        """
-        diseases = set()
-        
-        # 从五运数据获取疾病
-        wuyun_data = WUYUN_DATA.get(wuyun, {})
-        diseases.update(wuyun_data.get("易发疾病", []))
-        
-        # 从六气数据获取疾病
-        sitian_data = LIUQI_DATA.get(sitian, {})
-        diseases.update(sitian_data.get("易发疾病", []))
-        
-        zaiquan_data = LIUQI_DATA.get(zaiquan, {})
-        diseases.update(zaiquan_data.get("易发疾病", []))
-        
-        # 从疾病运气关系获取相关疾病
-        for disease, info in DISEASE_WUYUN_LIUQI_MAP.items():
-            related_yunqi = info["相关运气"]
-            if wuyun in related_yunqi or sitian in related_yunqi or zaiquan in related_yunqi:
-                diseases.add(disease)
-        
-        return list(diseases)
-    
-    def _generate_prevention_advice(self, wuyun_data: Dict, sitian_data: Dict, zaiquan_data: Dict) -> List[str]:
-        """
-        生成预防建议
-        
-        Args:
-            wuyun_data: 五运数据
-            sitian_data: 司天数据
-            zaiquan_data: 在泉数据
-            
-        Returns:
-            预防建议列表
-        """
-        advice = set()
-        
-        # 从各数据源收集建议
-        for data in [wuyun_data, sitian_data, zaiquan_data]:
-            advice.update(data.get("预防建议", []))
-        
-        return list(advice)
-    
-    def _personalized_analysis(self, base_result: Dict, birth_date: date) -> Dict:
-        """
-        基于出生信息的个性化分析
-        
-        Args:
-            base_result: 基础分析结果
-            birth_date: 出生日期
-            
-        Returns:
-            个性化分析结果
-        """
-        birth_year = birth_date.year
-        birth_ganzhi = self.get_year_ganzhi(birth_year)
-        birth_wuyun = self.get_wuyun_from_ganzhi(birth_ganzhi)
-        
-        current_wuyun = base_result["wuyun"]["type"]
-        
-        # 分析运气相合相克关系
-        compatibility = self._analyze_wuyun_compatibility(birth_wuyun, current_wuyun)
-        
-        # 生成个性化建议
-        personalized_advice = self._generate_personalized_advice(
-            birth_wuyun, current_wuyun, compatibility
-        )
-        
-        return {
-            "birth_year": birth_year,
-            "birth_ganzhi": birth_ganzhi,
-            "birth_wuyun": birth_wuyun,
-            "current_wuyun": current_wuyun,
-            "compatibility": compatibility,
-            "personalized_advice": personalized_advice
-        }
-    
-    def _analyze_wuyun_compatibility(self, birth_wuyun: str, current_wuyun: str) -> str:
-        """
-        分析五运相合相克关系
-        
-        Args:
-            birth_wuyun: 出生年五运
-            current_wuyun: 当前年五运
-            
-        Returns:
-            相合相克关系描述
-        """
-        # 提取五行元素
-        birth_element = self._extract_element(birth_wuyun)
-        current_element = self._extract_element(current_wuyun)
-        
-        # 五行相生相克关系
-        shengke_map = {
-            ("木", "火"): "相生", ("火", "土"): "相生", ("土", "金"): "相生",
-            ("金", "水"): "相生", ("水", "木"): "相生",
-            ("木", "土"): "相克", ("土", "水"): "相克", ("水", "火"): "相克",
-            ("火", "金"): "相克", ("金", "木"): "相克"
-        }
-        
-        relation = shengke_map.get((birth_element, current_element), "平和")
-        
-        if relation == "相生":
-            return f"出生年{birth_element}运与当前年{current_element}运相生，有利健康"
-        elif relation == "相克":
-            return f"出生年{birth_element}运与当前年{current_element}运相克，需要调理"
-        else:
-            return f"出生年{birth_element}运与当前年{current_element}运关系平和"
-    
-    def _extract_element(self, wuyun: str) -> str:
-        """
-        从五运类型中提取五行元素
-        
-        Args:
-            wuyun: 五运类型
-            
-        Returns:
-            五行元素
-        """
-        if "木运" in wuyun:
-            return "木"
-        elif "火运" in wuyun:
-            return "火"
-        elif "土运" in wuyun:
-            return "土"
-        elif "金运" in wuyun:
-            return "金"
-        elif "水运" in wuyun:
-            return "水"
-        else:
-            return "未知"
-    
-    def _generate_personalized_advice(self, birth_wuyun: str, current_wuyun: str, compatibility: str) -> List[str]:
-        """
-        生成个性化建议
-        
-        Args:
-            birth_wuyun: 出生年五运
-            current_wuyun: 当前年五运
-            compatibility: 相合相克关系
-            
-        Returns:
-            个性化建议列表
-        """
-        advice = []
-        
-        if "相生" in compatibility:
-            advice.extend([
-                "当前运气对您有利，可适当进补",
-                "保持良好的生活习惯",
-                "适度运动，增强体质"
-            ])
-        elif "相克" in compatibility:
-            advice.extend([
-                "当前运气对您不利，需要特别注意调理",
-                "避免过度劳累，注意休息",
-                "饮食宜清淡，避免刺激性食物",
-                "建议寻求专业中医师指导"
-            ])
-        else:
-            advice.extend([
-                "当前运气对您影响中等",
-                "保持规律作息",
-                "注意季节变化，适时调整"
-            ])
-        
-        # 根据具体五运类型添加建议
-        birth_data = WUYUN_DATA.get(birth_wuyun, {})
-        current_data = WUYUN_DATA.get(current_wuyun, {})
-        
-        if birth_data:
-            advice.extend(birth_data.get("预防建议", []))
-        if current_data:
-            advice.extend(current_data.get("预防建议", []))
-        
-        return list(set(advice))  # 去重
-    
-    def get_seasonal_liuqi(self, date_obj: date) -> str:
-        """
-        根据日期获取当前节气对应的六气
-        
-        Args:
-            date_obj: 日期
-            
-        Returns:
-            六气类型
-        """
-        # 简化版本，实际应该根据精确的节气计算
-        month = date_obj.month
-        
-        if month in [1, 2]:
-            return "太阳寒水"
-        elif month in [3, 4]:
-            return "厥阴风木"
-        elif month in [5, 6]:
-            return "少阴君火"
-        elif month in [7, 8]:
-            return "太阴湿土"
-        elif month in [9, 10]:
-            return "阳明燥金"
-        else:  # 11, 12
-            return "太阳寒水"
-
-    def calculate_year_analysis(self, year: int) -> Dict:
-        """
-        计算年份分析（简化版本，用于测试）
+        获取年份五运
         
         Args:
             year: 年份
             
         Returns:
-            年份分析结果
+            五运信息
         """
-        result = self.calculate_wuyun_liuqi(year)
+        ganzhi = self.get_year_ganzhi(year)
+        year_gan = ganzhi[0]
         
-        # 简化返回格式以匹配测试期望
-        return {
-            "year_ganzhi": result["ganzhi"],
-            "wuyun": {
-                "name": result["wuyun"]["type"],
-                "characteristics": result["wuyun"]["characteristics"]
-            },
-            "liuqi": {
-                "name": result["liuqi"]["sitian"]["type"],
-                "characteristics": result["liuqi"]["sitian"]["characteristics"]
+        # 根据年干确定五运
+        wuyun_key = None
+        for key in WUYUN_DATA.keys():
+            if year_gan in key:
+                wuyun_key = key
+                break
+        
+        if wuyun_key:
+            wuyun_info = WUYUN_DATA[wuyun_key].copy()
+            wuyun_info["年干"] = year_gan
+            wuyun_info["年支"] = ganzhi[1]
+            wuyun_info["干支"] = ganzhi
+            
+            # 判断运的强弱
+            wuyun_strength = self._determine_wuyun_strength(year, wuyun_info)
+            wuyun_info.update(wuyun_strength)
+            
+            return wuyun_info
+        
+        return {"运": "未知", "年干": year_gan}
+    
+    def get_sitian_zaiquan(self, year: int) -> Dict:
+        """
+        获取司天在泉
+        
+        Args:
+            year: 年份
+            
+        Returns:
+            司天在泉信息
+        """
+        ganzhi = self.get_year_ganzhi(year)
+        year_zhi = ganzhi[1]
+        
+        # 根据年支确定司天在泉
+        for key, value in SITIAN_ZAIQUAN.items():
+            if year_zhi in key:
+                return {
+                    "年支": year_zhi,
+                    "司天": value["司天"],
+                    "在泉": value["在泉"],
+                    "司天信息": LIUQI_DATA.get(value["司天"], {}),
+                    "在泉信息": LIUQI_DATA.get(value["在泉"], {})
+                }
+        
+        return {"年支": year_zhi, "司天": "未知", "在泉": "未知"}
+    
+    def get_current_qi(self, dt: datetime) -> Dict:
+        """
+        获取当前时期的气
+        
+        Args:
+            dt: 日期时间
+            
+        Returns:
+            当前气信息
+        """
+        month = dt.month
+        
+        # 根据月份确定当前是第几气
+        current_qi = None
+        for qi_name, qi_info in ZHUKE_QI_TIME.items():
+            if month in qi_info["月份"]:
+                current_qi = qi_name
+                break
+        
+        if current_qi:
+            qi_info = ZHUKE_QI_TIME[current_qi]
+            zhuqi = qi_info["主气"]
+            
+            # 获取客气（需要根据年份司天推算）
+            year = dt.year
+            sitian_info = self.get_sitian_zaiquan(year)
+            keqi = self._calculate_keqi(current_qi, sitian_info["司天"])
+            
+            return {
+                "当前气": current_qi,
+                "时间范围": qi_info["时间"],
+                "主气": zhuqi,
+                "客气": keqi,
+                "主气信息": LIUQI_DATA.get(zhuqi, {}),
+                "客气信息": LIUQI_DATA.get(keqi, {}),
+                "月份": qi_info["月份"]
             }
-        } 
+        
+        return {"当前气": "未知", "月份": month}
+    
+    def analyze_current_period(self, dt: datetime = None) -> Dict:
+        """
+        分析当前时期的运气特点
+        
+        Args:
+            dt: 日期时间，默认为当前时间
+            
+        Returns:
+            当前时期运气分析
+        """
+        if dt is None:
+            dt = datetime.now()
+        
+        year = dt.year
+        
+        # 获取五运
+        wuyun_info = self.get_wuyun(year)
+        
+        # 获取司天在泉
+        sitian_info = self.get_sitian_zaiquan(year)
+        
+        # 获取当前气
+        current_qi_info = self.get_current_qi(dt)
+        
+        # 分析运气相合
+        yunqi_relation = self._analyze_yunqi_relation(wuyun_info, sitian_info)
+        
+        # 预测易发疾病
+        disease_prediction = self._predict_diseases(wuyun_info, current_qi_info, yunqi_relation)
+        
+        # 生成调养建议
+        health_advice = self._generate_health_advice(wuyun_info, current_qi_info, disease_prediction)
+        
+        return {
+            "分析时间": dt.strftime("%Y年%m月%d日"),
+            "年份干支": wuyun_info.get("干支", ""),
+            "五运分析": wuyun_info,
+            "司天在泉": sitian_info,
+            "当前气分析": current_qi_info,
+            "运气相合": yunqi_relation,
+            "疾病预测": disease_prediction,
+            "调养建议": health_advice,
+            "总体特点": self._summarize_period_characteristics(wuyun_info, sitian_info, current_qi_info)
+        }
+    
+    def _determine_wuyun_strength(self, year: int, wuyun_info: Dict) -> Dict:
+        """判断五运强弱"""
+        # 简化算法：根据年份和运的特点判断
+        year_last_digit = year % 10
+        
+        if year_last_digit in [4, 9]:  # 甲己年
+            if wuyun_info["运"] == "土运":
+                return {"运势": "平气", "特点": wuyun_info["平气"]}
+        elif year_last_digit in [5, 0]:  # 乙庚年
+            if wuyun_info["运"] == "金运":
+                return {"运势": "太过", "特点": wuyun_info["太过"]}
+        elif year_last_digit in [6, 1]:  # 丙辛年
+            if wuyun_info["运"] == "水运":
+                return {"运势": "不及", "特点": wuyun_info["不及"]}
+        elif year_last_digit in [7, 2]:  # 丁壬年
+            if wuyun_info["运"] == "木运":
+                return {"运势": "太过", "特点": wuyun_info["太过"]}
+        elif year_last_digit in [8, 3]:  # 戊癸年
+            if wuyun_info["运"] == "火运":
+                return {"运势": "不及", "特点": wuyun_info["不及"]}
+        
+        return {"运势": "平气", "特点": "运气平和"}
+    
+    def _calculate_keqi(self, current_qi: str, sitian: str) -> str:
+        """计算客气"""
+        # 根据司天推算客气
+        sitian_index = self.liuqi_order.index(sitian) if sitian in self.liuqi_order else 0
+        
+        qi_mapping = {
+            "初之气": (sitian_index + 2) % 6,
+            "二之气": (sitian_index + 3) % 6,
+            "三之气": (sitian_index + 4) % 6,
+            "四之气": (sitian_index + 5) % 6,
+            "五之气": (sitian_index + 0) % 6,
+            "六之气": (sitian_index + 1) % 6
+        }
+        
+        keqi_index = qi_mapping.get(current_qi, 0)
+        return self.liuqi_order[keqi_index]
+    
+    def _analyze_yunqi_relation(self, wuyun_info: Dict, sitian_info: Dict) -> Dict:
+        """分析运气相合关系"""
+        wuyun = wuyun_info.get("运", "")
+        sitian = sitian_info.get("司天", "")
+        
+        # 获取五行属性
+        wuyun_wuxing = wuyun_info.get("五行", "")
+        sitian_wuxing = LIUQI_DATA.get(sitian, {}).get("五行", "")
+        
+        # 判断相合关系
+        relations = []
+        
+        if wuyun_wuxing == sitian_wuxing:
+            relations.append("天符")
+        
+        # 简化的相合判断
+        if wuyun == "火运" and sitian == "少阴君火":
+            relations.append("太乙天符")
+        
+        if not relations:
+            relations.append("一般")
+        
+        return {
+            "相合类型": relations,
+            "运气关系": f"{wuyun}与{sitian}",
+            "五行关系": f"{wuyun_wuxing}与{sitian_wuxing}",
+            "影响程度": "强" if "天符" in relations else "中等"
+        }
+    
+    def _predict_diseases(self, wuyun_info: Dict, current_qi_info: Dict, yunqi_relation: Dict) -> Dict:
+        """预测易发疾病"""
+        diseases = []
+        
+        # 根据五运预测
+        wuyun = wuyun_info.get("运", "")
+        yunshi = wuyun_info.get("运势", "")
+        wuyun_key = f"{wuyun}{yunshi}"
+        
+        if wuyun_key in YUNQI_DISEASE_MAP:
+            wuyun_diseases = YUNQI_DISEASE_MAP[wuyun_key]["易发疾病"]
+            diseases.extend(wuyun_diseases)
+        
+        # 根据当前气预测
+        keqi = current_qi_info.get("客气", "")
+        keqi_info = LIUQI_DATA.get(keqi, {})
+        
+        if keqi_info.get("太过"):
+            taiguo_key = keqi_info["太过"]
+            if taiguo_key in LIUQI_DISEASE_MAP:
+                qi_diseases = LIUQI_DISEASE_MAP[taiguo_key]["易发疾病"]
+                diseases.extend(qi_diseases)
+        
+        # 去重并限制数量
+        unique_diseases = list(set(diseases))[:6]
+        
+        return {
+            "易发疾病": unique_diseases,
+            "主要原因": [
+                f"{wuyun}{yunshi}",
+                f"{keqi}当令"
+            ],
+            "风险等级": self._assess_disease_risk(yunqi_relation, len(unique_diseases)),
+            "重点防护": unique_diseases[:3] if unique_diseases else []
+        }
+    
+    def _generate_health_advice(self, wuyun_info: Dict, current_qi_info: Dict, disease_prediction: Dict) -> Dict:
+        """生成调养建议"""
+        advice = {
+            "饮食调养": [],
+            "起居调养": [],
+            "情志调养": [],
+            "运动调养": [],
+            "预防措施": []
+        }
+        
+        # 根据五运调养
+        wuyun = wuyun_info.get("运", "")
+        yunshi = wuyun_info.get("运势", "")
+        wuyun_key = f"{wuyun}{yunshi}"
+        
+        if wuyun_key in YUNQI_DISEASE_MAP:
+            wuyun_advice = YUNQI_DISEASE_MAP[wuyun_key]
+            advice["预防措施"].extend(wuyun_advice.get("预防方法", []))
+        
+        # 根据当前气调养
+        keqi = current_qi_info.get("客气", "")
+        keqi_info = LIUQI_DATA.get(keqi, {})
+        
+        if keqi_info:
+            wuxing = keqi_info.get("五行", "")
+            advice["饮食调养"].append(f"适宜{wuxing}行食物")
+            advice["起居调养"].append(f"顺应{keqi_info.get('季节', '')}特点")
+        
+        # 通用建议
+        advice["情志调养"].extend(["保持心情舒畅", "避免情绪波动"])
+        advice["运动调养"].extend(["适度运动", "顺应时令"])
+        
+        return advice
+    
+    def _summarize_period_characteristics(self, wuyun_info: Dict, sitian_info: Dict, current_qi_info: Dict) -> str:
+        """总结时期特点"""
+        wuyun = wuyun_info.get("运", "")
+        yunshi = wuyun_info.get("运势", "")
+        sitian = sitian_info.get("司天", "")
+        current_qi = current_qi_info.get("当前气", "")
+        
+        return f"本年{wuyun}{yunshi}，{sitian}司天，当前{current_qi}，宜顺应天时，注意调养"
+    
+    def _assess_disease_risk(self, yunqi_relation: Dict, disease_count: int) -> str:
+        """评估疾病风险等级"""
+        influence = yunqi_relation.get("影响程度", "中等")
+        
+        if influence == "强" and disease_count >= 4:
+            return "高"
+        elif disease_count >= 3:
+            return "中"
+        else:
+            return "低"
+    
+    def get_yearly_prediction(self, year: int) -> Dict:
+        """
+        获取全年运气预测
+        
+        Args:
+            year: 年份
+            
+        Returns:
+            全年运气预测
+        """
+        # 获取年运
+        wuyun_info = self.get_wuyun(year)
+        sitian_info = self.get_sitian_zaiquan(year)
+        
+        # 分析各个时期
+        periods = []
+        for qi_name, qi_info in ZHUKE_QI_TIME.items():
+            # 模拟该时期的日期
+            month = qi_info["月份"][0]
+            period_date = datetime(year, month, 15)
+            
+            period_analysis = self.analyze_current_period(period_date)
+            periods.append({
+                "时期": qi_name,
+                "时间": qi_info["时间"],
+                "特点": period_analysis["总体特点"],
+                "易发疾病": period_analysis["疾病预测"]["易发疾病"][:3],
+                "调养重点": period_analysis["调养建议"]["预防措施"][:2]
+            })
+        
+        return {
+            "年份": year,
+            "年运总览": {
+                "五运": wuyun_info,
+                "司天在泉": sitian_info
+            },
+            "分期预测": periods,
+            "全年建议": self._generate_yearly_advice(wuyun_info, sitian_info),
+            "重点关注": self._get_yearly_focus(wuyun_info, sitian_info)
+        }
+    
+    def _generate_yearly_advice(self, wuyun_info: Dict, sitian_info: Dict) -> List[str]:
+        """生成全年建议"""
+        advice = []
+        
+        wuyun = wuyun_info.get("运", "")
+        yunshi = wuyun_info.get("运势", "")
+        
+        if yunshi == "太过":
+            advice.append(f"本年{wuyun}太过，宜适度泄耗")
+        elif yunshi == "不及":
+            advice.append(f"本年{wuyun}不及，宜适当补益")
+        
+        advice.extend([
+            "顺应四时变化，调整生活作息",
+            "注意饮食调养，避免偏食",
+            "保持情志平和，适度运动",
+            "定期体检，预防疾病"
+        ])
+        
+        return advice
+    
+    def _get_yearly_focus(self, wuyun_info: Dict, sitian_info: Dict) -> List[str]:
+        """获取全年关注重点"""
+        focus = []
+        
+        # 根据五运确定重点脏腑
+        zangfu = wuyun_info.get("脏腑", "")
+        if zangfu:
+            focus.append(f"重点保养{zangfu}")
+        
+        # 根据司天确定重点
+        sitian = sitian_info.get("司天", "")
+        sitian_zangfu = LIUQI_DATA.get(sitian, {}).get("脏腑", "")
+        if sitian_zangfu:
+            focus.append(f"注意{sitian_zangfu}调理")
+        
+        focus.extend([
+            "防范运气相关疾病",
+            "适应气候变化",
+            "调整生活方式"
+        ])
+        
+        return focus 

@@ -1,13 +1,14 @@
+import { colors, spacing, fonts } from '../../constants/theme';
+import { AgentCard, AgentType } from './AgentCard';
+
+
 import React from 'react';
-import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   ViewStyle,
 } from 'react-native';
-import { colors, spacing, fonts } from '../../constants/theme';
-import { AgentCard, AgentType } from './AgentCard';
 
 interface AgentSelectorProps {
   selectedAgent: AgentType;
@@ -30,7 +31,7 @@ export const AgentSelector: React.FC<AgentSelectorProps> = ({
 }) => {
   const agents: AgentType[] = ['xiaoai', 'xiaoke', 'laoke', 'soer'];
 
-  const renderAgentCards = () => {
+  const renderAgentCards = useCallback( () => {, []);
     return agents.map((agent) => (
       <AgentCard
         key={agent}

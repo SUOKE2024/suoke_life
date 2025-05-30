@@ -1,12 +1,13 @@
+import { colors, spacing, borderRadius, typography } from '../../constants/theme';
+
+
 import React from 'react';
-import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   ViewStyle,
 } from 'react-native';
-import { colors, spacing, borderRadius, fonts } from '../../constants/theme';
 
 export type AgentType = 'xiaoai' | 'xiaoke' | 'laoke' | 'soer';
 
@@ -31,7 +32,7 @@ export const AGENTS: Record<AgentType, AgentInfo> = {
     avatar: '👨‍⚕️',
     color: '#34C759',
     description: '诊断专家',
-    specialty: '中医四诊与现代诊断',
+    specialty: '中医五诊与现代诊断',
   },
   laoke: {
     name: '老克',
@@ -68,7 +69,7 @@ export const AgentCard: React.FC<AgentCardProps> = ({
 }) => {
   const agentInfo = AGENTS[agent];
   
-  const handlePress = () => {
+  const handlePress = useCallback( () => {, []);
     onPress?.(agent);
   };
 
@@ -162,7 +163,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.background,
-    borderRadius: borderRadius.circle,
+    borderRadius: borderRadius.full,
     marginRight: spacing.md,
   },
   avatar: {
@@ -173,16 +174,16 @@ const styles = StyleSheet.create({
   },
   name: {
     fontWeight: 'bold',
-    color: colors.text,
+    color: colors.textPrimary,
     marginBottom: spacing.xs,
   },
   description: {
-    fontSize: fonts.size.sm,
+    fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
     marginBottom: spacing.xs,
   },
   specialty: {
-    fontSize: fonts.size.xs,
+    fontSize: typography.fontSize.xs,
     color: colors.textSecondary,
     fontStyle: 'italic',
   },
@@ -191,7 +192,7 @@ const styles = StyleSheet.create({
     top: spacing.sm,
     right: spacing.sm,
     backgroundColor: colors.primary,
-    borderRadius: borderRadius.circle,
+    borderRadius: borderRadius.full,
     width: 24,
     height: 24,
     justifyContent: 'center',
@@ -199,7 +200,7 @@ const styles = StyleSheet.create({
   },
   selectedText: {
     color: colors.white,
-    fontSize: fonts.size.sm,
+    fontSize: typography.fontSize.sm,
     fontWeight: 'bold',
   },
   // Size variants
@@ -228,12 +229,12 @@ const styles = StyleSheet.create({
     fontSize: 32,
   },
   smallName: {
-    fontSize: fonts.size.sm,
+    fontSize: typography.fontSize.sm,
   },
   mediumName: {
-    fontSize: fonts.size.md,
+    fontSize: typography.fontSize.base,
   },
   largeName: {
-    fontSize: fonts.size.lg,
+    fontSize: typography.fontSize.lg,
   },
 }); 

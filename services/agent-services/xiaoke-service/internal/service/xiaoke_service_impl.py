@@ -513,7 +513,7 @@ class XiaokeServiceImpl:
                     "services": [
                         {
                             "name": "中医诊疗",
-                            "description": "专业中医师提供四诊合参诊疗服务",
+                            "description": "专业中医师提供五诊合参诊疗服务",
                             "price": "200元/次",
                             "availability": "周一至周五 9:00-17:00",
                         },

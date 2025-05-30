@@ -72,7 +72,7 @@ message SyndromeDefinition {
 message SyndromeIdentificationRequest {
   string user_id = 1;              // 用户ID
   
-  // 四诊数据特征
+  // 五诊数据特征
   repeated SymptomFeature symptoms = 2;       // 症状特征
   repeated TongueFeature tongue_features = 3; // 舌象特征
   repeated PulseFeature pulse_features = 4;   // 脉象特征

@@ -1,5 +1,10 @@
+import deviceInfoManager from '../../utils/deviceInfo';
+import { performanceMonitor } from '../../utils/performanceMonitor';
+import deviceIntegrationTester from '../../utils/deviceIntegrationTest';
+
+
+
 import React, { useState, useEffect } from 'react';
-import {
   View,
   Text,
   StyleSheet,
@@ -9,10 +14,6 @@ import {
   ActivityIndicator,
   Dimensions,
 } from 'react-native';
-import deviceInfoManager from '../../utils/deviceInfo';
-import { performanceMonitor } from '../../utils/performanceMonitor';
-import deviceIntegrationTester from '../../utils/deviceIntegrationTest';
-import type { IntegrationTestReport, TestSuite } from '../../utils/deviceIntegrationTest';
 
 const { width } = Dimensions.get('window');
 
@@ -45,7 +46,7 @@ const DeviceTestDashboard: React.FC<DeviceTestDashboardProps> = ({ onTestComplet
     }
   };
 
-  const startPerformanceMonitoring = () => {
+  const startPerformanceMonitoring = useCallback( () => {, []);
     performanceMonitor.startMonitoring(2000);
     
     // 定期更新性能指标
@@ -126,15 +127,15 @@ const DeviceTestDashboard: React.FC<DeviceTestDashboardProps> = ({ onTestComplet
     }
   };
 
-  const clearTestData = () => {
+  const clearTestData = useCallback( () => {, []);
     setTestReport(null);
     performanceMonitor.clearPerformanceData();
     deviceInfoManager.clearPerformanceHistory();
     Alert.alert('数据已清除', '所有测试数据和性能历史已清除');
   };
 
-  const renderDeviceInfo = () => {
-    if (!deviceInfo) return null;
+  const renderDeviceInfo = useCallback( () => {, []);
+    if (!deviceInfo) {return null;}
 
     return (
       <View style={styles.section}>
@@ -163,8 +164,8 @@ const DeviceTestDashboard: React.FC<DeviceTestDashboardProps> = ({ onTestComplet
     );
   };
 
-  const renderPerformanceMetrics = () => {
-    if (!performanceMetrics) return null;
+  const renderPerformanceMetrics = useCallback( () => {, []);
+    if (!performanceMetrics) {return null;}
 
     return (
       <View style={styles.section}>
@@ -174,7 +175,7 @@ const DeviceTestDashboard: React.FC<DeviceTestDashboardProps> = ({ onTestComplet
             <Text style={styles.metricLabel}>内存使用</Text>
             <Text style={[
               styles.metricValue,
-              { color: performanceMetrics.memoryUsage.percentage > 80 ? '#ff4444' : '#4CAF50' }
+              { color: performanceMetrics.memoryUsage.percentage > 80 ? '#ff4444' : '#4CAF50' },
             ]}>
               {performanceMetrics.memoryUsage.percentage.toFixed(1)}%
             </Text>
@@ -183,7 +184,7 @@ const DeviceTestDashboard: React.FC<DeviceTestDashboardProps> = ({ onTestComplet
             <Text style={styles.metricLabel}>CPU使用</Text>
             <Text style={[
               styles.metricValue,
-              { color: performanceMetrics.cpuUsage > 80 ? '#ff4444' : '#4CAF50' }
+              { color: performanceMetrics.cpuUsage > 80 ? '#ff4444' : '#4CAF50' },
             ]}>
               {performanceMetrics.cpuUsage.toFixed(1)}%
             </Text>
@@ -192,7 +193,7 @@ const DeviceTestDashboard: React.FC<DeviceTestDashboardProps> = ({ onTestComplet
             <Text style={styles.metricLabel}>网络延迟</Text>
             <Text style={[
               styles.metricValue,
-              { color: performanceMetrics.networkLatency > 1000 ? '#ff4444' : '#4CAF50' }
+              { color: performanceMetrics.networkLatency > 1000 ? '#ff4444' : '#4CAF50' },
             ]}>
               {performanceMetrics.networkLatency}ms
             </Text>
@@ -201,7 +202,7 @@ const DeviceTestDashboard: React.FC<DeviceTestDashboardProps> = ({ onTestComplet
             <Text style={styles.metricLabel}>渲染时间</Text>
             <Text style={[
               styles.metricValue,
-              { color: performanceMetrics.renderTime > 16 ? '#ff4444' : '#4CAF50' }
+              { color: performanceMetrics.renderTime > 16 ? '#ff4444' : '#4CAF50' },
             ]}>
               {performanceMetrics.renderTime.toFixed(1)}ms
             </Text>
@@ -211,14 +212,14 @@ const DeviceTestDashboard: React.FC<DeviceTestDashboardProps> = ({ onTestComplet
     );
   };
 
-  const renderTestSuite = (suite: TestSuite) => {
+  const renderTestSuite = useCallback( (suite: TestSuite) => {, []);
     return (
       <View key={suite.name} style={styles.testSuite}>
         <View style={styles.testSuiteHeader}>
           <Text style={styles.testSuiteName}>{suite.name}</Text>
           <Text style={[
             styles.testSuiteStatus,
-            { color: suite.passed ? '#4CAF50' : '#ff4444' }
+            { color: suite.passed ? '#4CAF50' : '#ff4444' },
           ]}>
             {suite.passed ? '✅' : '❌'} {suite.passRate.toFixed(1)}%
           </Text>
@@ -230,7 +231,7 @@ const DeviceTestDashboard: React.FC<DeviceTestDashboardProps> = ({ onTestComplet
           <View key={index} style={styles.testItem}>
             <Text style={[
               styles.testName,
-              { color: test.passed ? '#4CAF50' : '#ff4444' }
+              { color: test.passed ? '#4CAF50' : '#ff4444' },
             ]}>
               {test.passed ? '✅' : '❌'} {test.testName}
             </Text>
@@ -244,8 +245,8 @@ const DeviceTestDashboard: React.FC<DeviceTestDashboardProps> = ({ onTestComplet
     );
   };
 
-  const renderTestReport = () => {
-    if (!testReport) return null;
+  const renderTestReport = useCallback( () => {, []);
+    if (!testReport) {return null;}
 
     return (
       <View style={styles.section}>
@@ -260,7 +261,7 @@ const DeviceTestDashboard: React.FC<DeviceTestDashboardProps> = ({ onTestComplet
             <Text style={styles.summaryLabel}>通过率</Text>
             <Text style={[
               styles.summaryValue,
-              { color: testReport.overallResult.passRate >= 90 ? '#4CAF50' : '#ff4444' }
+              { color: testReport.overallResult.passRate >= 90 ? '#4CAF50' : '#ff4444' },
             ]}>
               {testReport.overallResult.passRate.toFixed(1)}%
             </Text>

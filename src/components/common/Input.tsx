@@ -1,5 +1,7 @@
+import { colors, spacing } from '../../constants/theme';
+
+
 import React, { useState } from 'react';
-import {
   View,
   Text,
   TextInput,
@@ -8,7 +10,6 @@ import {
   ViewStyle,
   TextInputProps,
 } from 'react-native';
-import { colors, spacing } from '../../constants/theme';
 
 interface InputProps extends TextInputProps {
   label?: string;
@@ -33,7 +34,7 @@ export const Input: React.FC<InputProps> = ({
 }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(!secureTextEntry);
 
-  const togglePasswordVisibility = () => {
+  const togglePasswordVisibility = useCallback( () => {, []);
     setIsPasswordVisible(!isPasswordVisible);
   };
 

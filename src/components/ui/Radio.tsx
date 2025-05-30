@@ -1,36 +1,41 @@
+import { TouchableOpacity, View, StyleSheet, ViewStyle } from "react-native";
+import { colors, spacing } from "../../constants/theme";
+import Text from "./Text";
+import React from "react";
+
+
+
+
+
 /**
  * 索克生活 - Radio组件
  * 单选框组件，用于单选操作
  */
 
-import React from 'react';
-import { TouchableOpacity, View, StyleSheet, ViewStyle } from 'react-native';
-import { colors, spacing } from '../../constants/theme';
-import Text from './Text';
 
 export interface RadioProps {
   // 基础属性
   selected: boolean;
   onPress: () => void;
   value?: string | number;
-  
+
   // 样式
-  size?: 'small' | 'medium' | 'large';
+  size?: "small" | "medium" | "large";
   color?: string;
-  
+
   // 状态
   disabled?: boolean;
-  
+
   // 标签
   label?: string;
   description?: string;
-  
+
   // 布局
-  labelPosition?: 'left' | 'right';
-  
+  labelPosition?: "left" | "right";
+
   // 自定义样式
   style?: ViewStyle;
-  
+
   // 其他属性
   testID?: string;
 }
@@ -38,43 +43,43 @@ export interface RadioProps {
 const Radio: React.FC<RadioProps> = ({
   selected,
   onPress,
-  size = 'medium',
+  size = "medium",
   color = colors.primary,
   disabled = false,
   label,
   description,
-  labelPosition = 'right',
+  labelPosition = "right",
   style,
   testID,
 }) => {
-  const getRadioSize = () => {
+  const getRadioSize = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
     switch (size) {
-      case 'small':
+      case "small":
         return 16;
-      case 'large':
+      case "large":
         return 24;
       default:
         return 20;
     }
   };
 
-  const radioSize = getRadioSize();
+  const radioSize = useMemo(() => useMemo(() => useMemo(() => getRadioSize(), []), []), []);
 
-  const handlePress = () => {
+  const handlePress = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
     if (!disabled) {
       onPress();
     }
   };
 
-  const getRadioStyle = () => {
-    const baseStyle = {
+  const getRadioStyle = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+    const baseStyle = useMemo(() => useMemo(() => useMemo(() => {
       width: radioSize,
       height: radioSize,
       borderRadius: radioSize / 2,
       borderWidth: 2,
-      alignItems: 'center' as const,
-      justifyContent: 'center' as const,
-    };
+      alignItems: "center" as const,
+      justifyContent: "center" as const,
+    }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项, []), []);
 
     if (disabled) {
       return {
@@ -99,7 +104,7 @@ const Radio: React.FC<RadioProps> = ({
     };
   };
 
-  const renderDot = () => {
+  const renderDot = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
     if (selected) {
       return (
         <View
@@ -115,23 +120,33 @@ const Radio: React.FC<RadioProps> = ({
     return null;
   };
 
-  const renderLabel = () => {
-    if (!label && !description) return null;
-    
+  const renderLabel = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+    if (!label && !description) {
+      return null;
+    }
+
     return (
       <View style={styles.labelContainer}>
         {label && (
-          <Text 
-            variant="body1" 
-            style={disabled ? { ...styles.label, ...styles.disabledText } : styles.label}
+          <Text
+            variant="body1"
+            style={
+              disabled
+                ? { ...styles.label, ...styles.disabledText }
+                : styles.label
+            }
           >
             {label}
           </Text>
         )}
         {description && (
-          <Text 
-            variant="caption" 
-            style={disabled ? { ...styles.description, ...styles.disabledText } : styles.description}
+          <Text
+            variant="caption"
+            style={
+              disabled
+                ? { ...styles.description, ...styles.disabledText }
+                : styles.description
+            }
           >
             {description}
           </Text>
@@ -140,11 +155,11 @@ const Radio: React.FC<RadioProps> = ({
     );
   };
 
-  const containerStyle = [
+  const containerStyle = useMemo(() => useMemo(() => useMemo(() => [
     styles.container,
-    labelPosition === 'left' && styles.containerReverse,
+    labelPosition === "left" && styles.containerReverse,
     style,
-  ].filter(Boolean) as ViewStyle[];
+  ].filter(Boolean) as ViewStyle[], []), []), []);
 
   return (
     <TouchableOpacity
@@ -154,42 +169,40 @@ const Radio: React.FC<RadioProps> = ({
       activeOpacity={0.7}
       testID={testID}
     >
-      {labelPosition === 'left' && renderLabel()}
-      <View style={getRadioStyle()}>
-        {renderDot()}
-      </View>
-      {labelPosition === 'right' && renderLabel()}
+      {labelPosition === "left" && renderLabel()}
+      <View style={getRadioStyle()}>{renderDot()}</View>
+      {labelPosition === "right" && renderLabel()}
     </TouchableOpacity>
   );
 };
 
-const styles = StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginVertical: spacing.xs,
   },
-  
+
   containerReverse: {
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
   },
-  
+
   labelContainer: {
     flex: 1,
     marginLeft: spacing.sm,
   },
-  
+
   label: {
     marginBottom: spacing.xs / 2,
   },
-  
+
   description: {
     color: colors.textTertiary,
   },
-  
+
   disabledText: {
     color: colors.gray400,
   },
-});
+}), []), []), []);
 
-export default Radio; 
+export default Radio;

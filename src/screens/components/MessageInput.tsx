@@ -1,5 +1,9 @@
+import Icon from '../../components/common/Icon';
+import { colors, spacing, borderRadius, fonts } from '../../constants/theme';
+
+
+
 import React, { useState, useRef } from 'react';
-import {
   View,
   Text,
   StyleSheet,
@@ -9,8 +13,6 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import Icon from '../../components/common/Icon';
-import { colors, spacing, borderRadius, fonts } from '../../constants/theme';
 
 interface MessageInputProps {
   onSend: (message: string) => void;
@@ -43,7 +45,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
   const [inputHeight, setInputHeight] = useState(40);
   const inputRef = useRef<TextInput>(null);
 
-  const handleSend = () => {
+  const handleSend = useCallback( () => {, []);
     if (message.trim() && !disabled) {
       onSend(message.trim());
       setMessage('');
@@ -51,7 +53,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
     }
   };
 
-  const handleContentSizeChange = (event: any) => {
+  const handleContentSizeChange = useCallback( (event: any) => {, []);
     if (multiline) {
       const { height } = event.nativeEvent.contentSize;
       setInputHeight(Math.min(Math.max(40, height), 120));

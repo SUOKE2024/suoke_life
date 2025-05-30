@@ -1,15 +1,16 @@
+import { ContentItem } from '../../types/explore';
+import { CONTENT_TYPE_CONFIG, DIFFICULTY_CONFIG } from '../../data/exploreData';
+import Icon from '../../components/common/Icon';
+import { colors, spacing, fonts, borderRadius, shadows } from '../../constants/theme';
+
+
 import React, { memo } from 'react';
-import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   Animated,
 } from 'react-native';
-import { ContentItem } from '../../types/explore';
-import { CONTENT_TYPE_CONFIG, DIFFICULTY_CONFIG } from '../../data/exploreData';
-import Icon from '../../components/common/Icon';
-import { colors, spacing, fonts, borderRadius, shadows } from '../../constants/theme';
 
 interface ContentCardProps {
   item: ContentItem;
@@ -33,16 +34,16 @@ export const ContentCard = memo<ContentCardProps>(({
   const typeConfig = CONTENT_TYPE_CONFIG[item.type];
   const difficultyConfig = DIFFICULTY_CONFIG[item.difficulty];
 
-  const handlePress = () => {
+  const handlePress = useCallback( () => {, []);
     onPress(item);
   };
 
-  const handleBookmark = (e: any) => {
+  const handleBookmark = useCallback( (e: any) => {, []);
     e.stopPropagation();
     onBookmark?.(item);
   };
 
-  const handleLike = (e: any) => {
+  const handleLike = useCallback( (e: any) => {, []);
     e.stopPropagation();
     onLike?.(item);
   };

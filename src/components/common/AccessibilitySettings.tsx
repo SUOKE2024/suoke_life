@@ -1,5 +1,10 @@
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Icon from './Icon';
+import { colors, spacing, fonts } from '../../constants/theme';
+import { accessibilityService, UserPreferences } from '../../services/accessibilityService';
+
+
 import React, { useState, useEffect } from 'react';
-import {
   View,
   Text,
   StyleSheet,
@@ -9,10 +14,6 @@ import {
   Modal,
   Alert,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import Icon from './Icon';
-import { colors, spacing, fonts } from '../../constants/theme';
-import { accessibilityService, UserPreferences } from '../../services/accessibilityService';
 
 interface AccessibilitySettingsProps {
   visible: boolean;
@@ -45,10 +46,10 @@ const AccessibilitySettings: React.FC<AccessibilitySettingsProps> = ({
     }
   }, [visible]);
 
-  const loadUserPreferences = async () => {
+  const loadUserPreferences = useMemo(() => useMemo(() => useMemo(() => async () => {
     try {
-      setLoading(true);
-      const userPrefs = await accessibilityService.getUserPreferences(userId);
+      setLoading(true), []), []), []);
+      const userPrefs = useMemo(() => useMemo(() => useMemo(() => await accessibilityService.getUserPreferences(userId), []), []), []);
       setPreferences(userPrefs);
     } catch (error) {
       console.error('加载用户设置失败:', error);
@@ -58,16 +59,16 @@ const AccessibilitySettings: React.FC<AccessibilitySettingsProps> = ({
     }
   };
 
-  const updatePreferences = async (newPreferences: Partial<UserPreferences>) => {
+  const updatePreferences = useMemo(() => useMemo(() => useMemo(() => async (newPreferences: Partial<UserPreferences>) => {
     try {
-      const updatedPrefs = { ...preferences, ...newPreferences };
+      const updatedPrefs = { ...preferences, ...newPreferences }, []), []), []);
       setPreferences(updatedPrefs);
       
-      const success = await accessibilityService.updateUserPreferences(userId, newPreferences);
+      const success = useMemo(() => useMemo(() => useMemo(() => await accessibilityService.updateUserPreferences(userId, newPreferences), []), []), []);
       if (success) {
-        const hasEnabledFeatures = updatedPrefs.enabledFeatures.length > 0 || 
+        const hasEnabledFeatures = useMemo(() => useMemo(() => useMemo(() => updatedPrefs.enabledFeatures.length > 0 || 
                                   updatedPrefs.screenReader || 
-                                  updatedPrefs.signLanguage;
+                                  updatedPrefs.signLanguage, []), []), []);
         onSettingsChange?.(hasEnabledFeatures);
       } else {
         Alert.alert('错误', '保存设置失败，请重试');
@@ -78,10 +79,10 @@ const AccessibilitySettings: React.FC<AccessibilitySettingsProps> = ({
     }
   };
 
-  const toggleFeature = (feature: string) => {
-    const enabledFeatures = preferences.enabledFeatures.includes(feature)
+  const toggleFeature = useMemo(() => useMemo(() => useMemo(() => useCallback( (feature: string) => {, []), []), []), []);
+    const enabledFeatures = useMemo(() => useMemo(() => useMemo(() => preferences.enabledFeatures.includes(feature)
       ? preferences.enabledFeatures.filter(f => f !== feature)
-      : [...preferences.enabledFeatures, feature];
+      : [...preferences.enabledFeatures, feature], []), []), []);
     
     updatePreferences({ enabledFeatures });
   };
@@ -175,7 +176,7 @@ const AccessibilitySettings: React.FC<AccessibilitySettingsProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -236,6 +237,6 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     lineHeight: 18,
   },
-});
+}), []), []), []);
 
 export default AccessibilitySettings; 

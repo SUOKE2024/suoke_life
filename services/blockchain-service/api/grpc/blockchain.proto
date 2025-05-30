@@ -30,7 +30,7 @@ service BlockchainService {
 // 存储健康数据请求
 message StoreHealthDataRequest {
   string user_id = 1;
-  string data_type = 2; // 例如：体重、血压、四诊数据等
+  string data_type = 2; // 例如：体重、血压、五诊数据等
   bytes data_hash = 3;  // 数据哈希
   bytes encrypted_data = 4; // 加密后的数据
   map<string, string> metadata = 5; // 元数据

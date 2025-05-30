@@ -239,7 +239,7 @@
     {
       "id": "course-007",
       "title": "中医诊断学",
-      "description": "学习中医四诊（望、闻、问、切）方法，掌握中医诊断的基本技能。",
+      "description": "学习中医五诊（望、闻、问、切、算）方法，掌握中医诊断的基本技能。",
       "difficulty": "intermediate",
       "duration": 7200,
       "type": "tcm_clinical",
@@ -278,7 +278,7 @@
       "reviews_count": 112,
       "prerequisites": ["course-001"],
       "imageUrl": "https://example.com/images/diagnosis.jpg",
-      "tags": ["中医诊断", "四诊", "临床技能"]
+      "tags": ["中医诊断", "五诊", "临床技能"]
     },
     {
       "id": "course-008",

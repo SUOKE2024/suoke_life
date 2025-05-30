@@ -1,13 +1,14 @@
+import { ChatChannel } from '../../types/chat';
+import { colors, spacing, fonts, borderRadius } from '../../constants/theme';
+
+
 import React, { memo } from 'react';
-import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   Animated,
 } from 'react-native';
-import { ChatChannel } from '../../types/chat';
-import { colors, spacing, fonts, borderRadius } from '../../constants/theme';
 
 interface ChatChannelItemProps {
   channel: ChatChannel;
@@ -18,9 +19,9 @@ interface ChatChannelItemProps {
 export const ChatChannelItem = memo<ChatChannelItemProps>(({ 
   channel, 
   onPress, 
-  style 
+  style, 
 }) => {
-  const getChannelColor = () => {
+  const getChannelColor = useCallback( () => {, []);
     switch (channel.type) {
       case 'agent':
         switch (channel.agentType) {
@@ -37,7 +38,7 @@ export const ChatChannelItem = memo<ChatChannelItemProps>(({
     }
   };
 
-  const getTypeLabel = () => {
+  const getTypeLabel = useCallback( () => {, []);
     switch (channel.type) {
       case 'agent': return '智能体';
       case 'doctor': return '医生';
@@ -47,7 +48,7 @@ export const ChatChannelItem = memo<ChatChannelItemProps>(({
     }
   };
 
-  const handlePress = () => {
+  const handlePress = useCallback( () => {, []);
     onPress(channel);
   };
 

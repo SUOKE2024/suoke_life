@@ -1,5 +1,10 @@
+import Icon from './Icon';
+import { colors, spacing, fonts } from '../../constants/theme';
+import { accessibilityService, AgentAccessibilityHelper } from '../../services/accessibilityService';
+
+
+
 import React, { useState, useRef, useEffect } from 'react';
-import {
   View,
   Text,
   StyleSheet,
@@ -14,9 +19,6 @@ import {
   Platform,
   ActivityIndicator,
 } from 'react-native';
-import Icon from './Icon';
-import { colors, spacing, fonts } from '../../constants/theme';
-import { accessibilityService, AgentAccessibilityHelper } from '../../services/accessibilityService';
 
 export type AgentType = 'xiaoai' | 'xiaoke' | 'laoke' | 'soer';
 
@@ -44,13 +46,13 @@ interface AgentChatInterfaceProps {
 const { width, height } = Dimensions.get('window');
 
 // 智能体配置
-const AGENT_CONFIG = {
+const AGENT_CONFIG = useMemo(() => useMemo(() => useMemo(() => {
   xiaoai: {
     name: '小艾',
     emoji: '🤖',
     color: '#007AFF',
     specialization: '健康诊断与建议',
-    welcomeMessage: '你好！我是小艾，你的健康助手。我可以帮你进行健康咨询、四诊分析，还能为你提供个性化的健康建议。有什么我可以帮助你的吗？',
+    welcomeMessage: '你好！我是小艾，你的健康助手。我可以帮你进行健康咨询、五诊分析，还能为你提供个性化的健康建议。有什么我可以帮助你的吗？',
     quickReplies: ['我想做健康检查', '最近感觉不舒服', '想了解我的体质', '需要健康建议'],
   },
   xiaoke: {
@@ -77,7 +79,7 @@ const AGENT_CONFIG = {
     welcomeMessage: '嗨！我是索儿，你的生活方式指导助手。我会帮你规划健康的生活安排，提供个性化的生活建议，让你的每一天都充满活力！',
     quickReplies: ['制定生活计划', '健康生活建议', '工作生活平衡', '心情调节方法'],
   },
-};
+}, []), []), []);
 
 const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
   visible,
@@ -93,11 +95,11 @@ const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
   const [sessionId] = useState(() => `session_${Date.now()}`);
   const [isVoiceMode, setIsVoiceMode] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
-  const scrollViewRef = useRef<ScrollView>(null);
-  const slideAnim = useRef(new Animated.Value(height)).current;
+  const scrollViewRef = useMemo(() => useMemo(() => useMemo(() => useRef<ScrollView>(null), []), []), []);
+  const slideAnim = useMemo(() => useMemo(() => useMemo(() => useRef(new Animated.Value(height)).current, []), []), []);
 
-  const agentConfig = AGENT_CONFIG[agentType];
-  const accessibilityHelper = new AgentAccessibilityHelper(accessibilityService, agentType);
+  const agentConfig = useMemo(() => useMemo(() => useMemo(() => AGENT_CONFIG[agentType], []), []), []);
+  const accessibilityHelper = useMemo(() => useMemo(() => useMemo(() => new AgentAccessibilityHelper(accessibilityService, agentType), []), []), []);
 
   useEffect(() => {
     if (visible) {
@@ -128,7 +130,7 @@ const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
     }
   }, [initialMessage, visible]);
 
-  const initializeChat = () => {
+  const initializeChat = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
     const welcomeMessage: ChatMessage = {
       id: `msg_${Date.now()}`,
       role: 'assistant',
@@ -142,9 +144,9 @@ const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
     setMessages([welcomeMessage]);
   };
 
-  const sendMessage = async (messageText?: string) => {
-    const textToSend = messageText || inputText.trim();
-    if (!textToSend || isLoading) return;
+  const sendMessage = useMemo(() => useMemo(() => useMemo(() => async (messageText?: string) => {
+    const textToSend = messageText || inputText.trim(), []), []), []);
+    if (!textToSend || isLoading) {return;}
 
     const userMessage: ChatMessage = {
       id: `msg_${Date.now()}`,
@@ -159,7 +161,7 @@ const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
 
     try {
       // 调用对应的智能体API
-      const response = await callAgentAPI(textToSend);
+      const response = useMemo(() => useMemo(() => useMemo(() => await callAgentAPI(textToSend), []), []), []);
 
       const assistantMessage: ChatMessage = {
         id: `msg_${Date.now()}`,
@@ -187,16 +189,16 @@ const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
     }
   };
 
-  const callAgentAPI = async (message: string) => {
+  const callAgentAPI = useMemo(() => useMemo(() => useMemo(() => async (message: string) => {
     // 根据智能体类型调用不同的API端点
     const apiEndpoints = {
       xiaoai: 'http://localhost:8080/api/agents/xiaoai/chat',
       xiaoke: 'http://localhost:8080/api/agents/xiaoke/chat',
       laoke: 'http://localhost:8080/api/agents/laoke/chat',
       soer: 'http://localhost:8080/api/agents/soer/chat',
-    };
+    }, []), []), []);
 
-    const response = await fetch(apiEndpoints[agentType], {
+    const response = useMemo(() => useMemo(() => useMemo(() => await fetch(apiEndpoints[agentType], {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -210,7 +212,7 @@ const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
           timestamp: Date.now(),
         },
       }),
-    });
+    }), []), []), []);
 
     if (!response.ok) {
       throw new Error(`API调用失败: ${response.status}`);
@@ -219,13 +221,13 @@ const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
     return await response.json();
   };
 
-  const handleQuickReply = (reply: string) => {
+  const handleQuickReply = useMemo(() => useMemo(() => useMemo(() => useCallback( (reply: string) => {, []), []), []), []);
     sendMessage(reply);
   };
 
   // 语音输入处理
-  const handleVoiceInput = async () => {
-    if (!accessibilityEnabled) return;
+  const handleVoiceInput = useMemo(() => useMemo(() => useMemo(() => async () => {
+    if (!accessibilityEnabled) {return, []), []), []);}
 
     try {
       setIsRecording(true);
@@ -241,7 +243,7 @@ const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
   };
 
   // 切换语音模式
-  const toggleVoiceMode = () => {
+  const toggleVoiceMode = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
     if (!accessibilityEnabled) {
       Alert.alert('提示', '请在设置中启用无障碍功能');
       return;
@@ -250,11 +252,11 @@ const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
   };
 
   // 朗读消息
-  const speakMessage = async (message: string) => {
-    if (!accessibilityEnabled) return;
+  const speakMessage = useMemo(() => useMemo(() => useMemo(() => async (message: string) => {
+    if (!accessibilityEnabled) {return, []), []), []);}
 
     try {
-      const audioData = await accessibilityHelper.generateVoiceOutput(message, userId);
+      const audioData = useMemo(() => useMemo(() => useMemo(() => await accessibilityHelper.generateVoiceOutput(message, userId), []), []), []);
       if (audioData) {
         // 播放语音
         console.log('播放语音:', message);
@@ -265,11 +267,11 @@ const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
   };
 
   // 内容无障碍转换
-  const makeContentAccessible = async (content: string, format: 'audio' | 'large-text' | 'high-contrast') => {
-    if (!accessibilityEnabled) return content;
+  const makeContentAccessible = useMemo(() => useMemo(() => useMemo(() => async (content: string, format: 'audio' | 'large-text' | 'high-contrast') => {
+    if (!accessibilityEnabled) {return content, []), []), []);}
 
     try {
-      const response = await accessibilityHelper.makeContentAccessible(content, userId, format);
+      const response = useMemo(() => useMemo(() => useMemo(() => await accessibilityHelper.makeContentAccessible(content, userId, format), []), []), []);
       return response.accessibleContent || content;
     } catch (error) {
       console.error('内容转换失败:', error);
@@ -277,7 +279,7 @@ const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
     }
   };
 
-  const scrollToBottom = () => {
+  const scrollToBottom = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
     setTimeout(() => {
       scrollViewRef.current?.scrollToEnd({ animated: true });
     }, 100);
@@ -287,8 +289,8 @@ const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
     scrollToBottom();
   }, [messages]);
 
-  const renderMessage = (message: ChatMessage) => {
-    const isUser = message.role === 'user';
+  const renderMessage = useMemo(() => useMemo(() => useMemo(() => useCallback( (message: ChatMessage) => {, []), []), []), []);
+    const isUser = useMemo(() => useMemo(() => useMemo(() => message.role === 'user', []), []), []);
     
     return (
       <View
@@ -357,7 +359,7 @@ const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
     );
   };
 
-  const renderQuickReplies = (suggestions: string[]) => (
+  const renderQuickReplies = useMemo(() => useMemo(() => useMemo(() => (suggestions: string[]) => (
     <View style={styles.quickRepliesContainer}>
       <Text style={styles.quickRepliesTitle}>快速回复：</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -374,9 +376,9 @@ const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
         ))}
       </ScrollView>
     </View>
-  );
+  ), []), []), []);
 
-  const handleClose = () => {
+  const handleClose = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
     Animated.spring(slideAnim, {
       toValue: height,
       useNativeDriver: true,
@@ -520,7 +522,7 @@ const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   overlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -735,6 +737,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: spacing.sm,
   },
-});
+}), []), []), []);
 
 export default AgentChatInterface; 

@@ -614,7 +614,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "四诊协调延迟",
+      "title": "五诊协调延迟",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -705,7 +705,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "四诊协调速率",
+      "title": "五诊协调速率",
       "tooltip": {
         "shared": true,
         "sort": 0,

@@ -1,8 +1,15 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import Icon from '../../components/common/Icon';
-import { UserProfile } from '../../types/profile';
-import { colors, spacing, typography, borderRadius } from '../../constants/theme';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import Icon from "../../components/common/Icon";
+import { UserProfile } from "../../types/profile";
+import React from "react";
+
+
+
+  colors,
+  spacing,
+  typography,
+  borderRadius,
+} from "../../constants/theme";
 
 interface ProfileHeaderProps {
   userProfile: UserProfile;
@@ -33,18 +40,16 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           <Text style={styles.memberLevel}>
             {getMemberLevelText(userProfile.memberLevel)}
           </Text>
-          <Text style={styles.joinDate}>
-            加入时间：{userProfile.joinDate}
-          </Text>
+          <Text style={styles.joinDate}>加入时间：{userProfile.joinDate}</Text>
         </View>
       </View>
 
       <View style={styles.statsContainer}>
         <View style={styles.statItem}>
-          <Text 
+          <Text
             style={[
-              styles.statValue, 
-              { color: getHealthScoreColor(userProfile.healthScore) }
+              styles.statValue,
+              { color: getHealthScoreColor(userProfile.healthScore) },
             ]}
           >
             {userProfile.healthScore}
@@ -77,8 +82,8 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.border,
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: spacing.lg,
   },
   avatarContainer: {
@@ -86,8 +91,8 @@ const styles = StyleSheet.create({
     height: 80,
     borderRadius: 40,
     backgroundColor: colors.gray300,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginRight: spacing.lg,
   },
   avatar: {
@@ -97,13 +102,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   nameRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: spacing.xs,
   },
   name: {
     fontSize: typography.fontSize.xl,
-    fontWeight: '700' as any,
+    fontWeight: "700" as any,
     color: colors.textPrimary,
     marginRight: spacing.sm,
   },
@@ -113,7 +118,7 @@ const styles = StyleSheet.create({
   memberLevel: {
     fontSize: typography.fontSize.base,
     color: colors.primary,
-    fontWeight: '500' as any,
+    fontWeight: "500" as any,
     marginBottom: spacing.xs,
   },
   joinDate: {
@@ -121,18 +126,18 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
   },
   statsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
     paddingTop: spacing.lg,
     borderTopWidth: 1,
     borderTopColor: colors.border,
   },
   statItem: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   statValue: {
     fontSize: typography.fontSize.xl,
-    fontWeight: '700' as any,
+    fontWeight: "700" as any,
     color: colors.textPrimary,
     marginBottom: spacing.xs,
   },
@@ -142,4 +147,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default React.memo(ProfileHeader); 
+export default React.memo(ProfileHeader);

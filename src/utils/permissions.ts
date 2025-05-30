@@ -1,25 +1,26 @@
-import { Platform, Alert, Linking } from 'react-native';
-import { 
-  request, 
-  check, 
-  PERMISSIONS, 
-  RESULTS, 
-  Permission,
-  PermissionStatus 
-} from 'react-native-permissions';
+import { Platform, Alert, Linking } from "react-native";
 
-export type PermissionType = 
-  | 'camera' 
-  | 'microphone' 
-  | 'location' 
-  | 'locationWhenInUse'
-  | 'locationAlways'
-  | 'photoLibrary'
-  | 'mediaLibrary'
-  | 'contacts'
-  | 'calendar'
-  | 'reminders'
-  | 'notifications';
+
+  request,
+  check,
+  PERMISSIONS,
+  RESULTS,
+  Permission,
+  PermissionStatus,
+} from "react-native-permissions";
+
+export type PermissionType =
+  | "camera"
+  | "microphone"
+  | "location"
+  | "locationWhenInUse"
+  | "locationAlways"
+  | "photoLibrary"
+  | "mediaLibrary"
+  | "contacts"
+  | "calendar"
+  | "reminders"
+  | "notifications";
 
 export interface PermissionResult {
   granted: boolean;
@@ -32,47 +33,47 @@ class PermissionManager {
    * 获取平台特定的权限
    */
   private getPermission(type: PermissionType): Permission | null {
-    if (Platform.OS === 'ios') {
+    if (Platform.OS === "ios") {
       switch (type) {
-        case 'camera':
+        case "camera":
           return PERMISSIONS.IOS.CAMERA;
-        case 'microphone':
+        case "microphone":
           return PERMISSIONS.IOS.MICROPHONE;
-        case 'location':
-        case 'locationWhenInUse':
+        case "location":
+        case "locationWhenInUse":
           return PERMISSIONS.IOS.LOCATION_WHEN_IN_USE;
-        case 'locationAlways':
+        case "locationAlways":
           return PERMISSIONS.IOS.LOCATION_ALWAYS;
-        case 'photoLibrary':
+        case "photoLibrary":
           return PERMISSIONS.IOS.PHOTO_LIBRARY;
-        case 'mediaLibrary':
+        case "mediaLibrary":
           return PERMISSIONS.IOS.MEDIA_LIBRARY;
-        case 'contacts':
+        case "contacts":
           return PERMISSIONS.IOS.CONTACTS;
-        case 'calendar':
+        case "calendar":
           return PERMISSIONS.IOS.CALENDARS;
-        case 'reminders':
+        case "reminders":
           return PERMISSIONS.IOS.REMINDERS;
         default:
           return null;
       }
-    } else if (Platform.OS === 'android') {
+    } else if (Platform.OS === "android") {
       switch (type) {
-        case 'camera':
+        case "camera":
           return PERMISSIONS.ANDROID.CAMERA;
-        case 'microphone':
+        case "microphone":
           return PERMISSIONS.ANDROID.RECORD_AUDIO;
-        case 'location':
-        case 'locationWhenInUse':
+        case "location":
+        case "locationWhenInUse":
           return PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION;
-        case 'locationAlways':
+        case "locationAlways":
           return PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION;
-        case 'photoLibrary':
-        case 'mediaLibrary':
+        case "photoLibrary":
+        case "mediaLibrary":
           return PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE;
-        case 'contacts':
+        case "contacts":
           return PERMISSIONS.ANDROID.READ_CONTACTS;
-        case 'calendar':
+        case "calendar":
           return PERMISSIONS.ANDROID.READ_CALENDAR;
         default:
           return null;
@@ -86,7 +87,7 @@ class PermissionManager {
    */
   async checkPermission(type: PermissionType): Promise<PermissionResult> {
     const permission = this.getPermission(type);
-    
+
     if (!permission) {
       return {
         granted: false,
@@ -97,7 +98,7 @@ class PermissionManager {
 
     try {
       const status = await check(permission);
-      
+
       return {
         granted: status === RESULTS.GRANTED,
         status,
@@ -118,7 +119,7 @@ class PermissionManager {
    */
   async requestPermission(type: PermissionType): Promise<PermissionResult> {
     const permission = this.getPermission(type);
-    
+
     if (!permission) {
       return {
         granted: false,
@@ -129,7 +130,7 @@ class PermissionManager {
 
     try {
       const status = await request(permission);
-      
+
       return {
         granted: status === RESULTS.GRANTED,
         status,
@@ -148,13 +149,15 @@ class PermissionManager {
   /**
    * 请求多个权限
    */
-  async requestMultiplePermissions(types: PermissionType[]): Promise<Record<PermissionType, PermissionResult>> {
+  async requestMultiplePermissions(
+    types: PermissionType[]
+  ): Promise<Record<PermissionType, PermissionResult>> {
     const results: Record<string, PermissionResult> = {};
-    
+
     for (const type of types) {
       results[type] = await this.requestPermission(type);
     }
-    
+
     return results as Record<PermissionType, PermissionResult>;
   }
 
@@ -163,29 +166,29 @@ class PermissionManager {
    */
   getPermissionDescription(type: PermissionType): string {
     switch (type) {
-      case 'camera':
-        return '相机权限用于拍照、录像和AR功能';
-      case 'microphone':
-        return '麦克风权限用于语音识别和录音功能';
-      case 'location':
-      case 'locationWhenInUse':
-        return '位置权限用于提供基于位置的健康服务';
-      case 'locationAlways':
-        return '后台位置权限用于持续的健康监测';
-      case 'photoLibrary':
-        return '相册权限用于选择和保存图片';
-      case 'mediaLibrary':
-        return '媒体库权限用于访问音视频文件';
-      case 'contacts':
-        return '通讯录权限用于紧急联系人功能';
-      case 'calendar':
-        return '日历权限用于健康提醒和预约管理';
-      case 'reminders':
-        return '提醒权限用于健康计划提醒';
-      case 'notifications':
-        return '通知权限用于健康提醒和消息推送';
+      case "camera":
+        return "相机权限用于拍照、录像和AR功能";
+      case "microphone":
+        return "麦克风权限用于语音识别和录音功能";
+      case "location":
+      case "locationWhenInUse":
+        return "位置权限用于提供基于位置的健康服务";
+      case "locationAlways":
+        return "后台位置权限用于持续的健康监测";
+      case "photoLibrary":
+        return "相册权限用于选择和保存图片";
+      case "mediaLibrary":
+        return "媒体库权限用于访问音视频文件";
+      case "contacts":
+        return "通讯录权限用于紧急联系人功能";
+      case "calendar":
+        return "日历权限用于健康提醒和预约管理";
+      case "reminders":
+        return "提醒权限用于健康计划提醒";
+      case "notifications":
+        return "通知权限用于健康提醒和消息推送";
       default:
-        return '该权限用于应用正常功能';
+        return "该权限用于应用正常功能";
     }
   }
 
@@ -199,22 +202,18 @@ class PermissionManager {
   ): void {
     const description = this.getPermissionDescription(type);
     const title = this.getPermissionTitle(type);
-    
-    Alert.alert(
-      `需要${title}`,
-      description,
-      [
-        {
-          text: '取消',
-          style: 'cancel',
-          onPress: onCancel,
-        },
-        {
-          text: '授权',
-          onPress: onConfirm,
-        },
-      ]
-    );
+
+    Alert.alert(`需要${title}`, description, [
+      {
+        text: "取消",
+        style: "cancel",
+        onPress: onCancel,
+      },
+      {
+        text: "授权",
+        onPress: onConfirm,
+      },
+    ]);
   }
 
   /**
@@ -222,21 +221,17 @@ class PermissionManager {
    */
   showSettingsDialog(type: PermissionType): void {
     const title = this.getPermissionTitle(type);
-    
-    Alert.alert(
-      `${title}被拒绝`,
-      `请在设置中开启${title}以使用相关功能`,
-      [
-        {
-          text: '取消',
-          style: 'cancel',
-        },
-        {
-          text: '去设置',
-          onPress: () => Linking.openSettings(),
-        },
-      ]
-    );
+
+    Alert.alert(`${title}被拒绝`, `请在设置中开启${title}以使用相关功能`, [
+      {
+        text: "取消",
+        style: "cancel",
+      },
+      {
+        text: "去设置",
+        onPress: () => Linking.openSettings(),
+      },
+    ]);
   }
 
   /**
@@ -244,38 +239,40 @@ class PermissionManager {
    */
   private getPermissionTitle(type: PermissionType): string {
     switch (type) {
-      case 'camera':
-        return '相机权限';
-      case 'microphone':
-        return '麦克风权限';
-      case 'location':
-      case 'locationWhenInUse':
-      case 'locationAlways':
-        return '位置权限';
-      case 'photoLibrary':
-        return '相册权限';
-      case 'mediaLibrary':
-        return '媒体库权限';
-      case 'contacts':
-        return '通讯录权限';
-      case 'calendar':
-        return '日历权限';
-      case 'reminders':
-        return '提醒权限';
-      case 'notifications':
-        return '通知权限';
+      case "camera":
+        return "相机权限";
+      case "microphone":
+        return "麦克风权限";
+      case "location":
+      case "locationWhenInUse":
+      case "locationAlways":
+        return "位置权限";
+      case "photoLibrary":
+        return "相册权限";
+      case "mediaLibrary":
+        return "媒体库权限";
+      case "contacts":
+        return "通讯录权限";
+      case "calendar":
+        return "日历权限";
+      case "reminders":
+        return "提醒权限";
+      case "notifications":
+        return "通知权限";
       default:
-        return '权限';
+        return "权限";
     }
   }
 
   /**
    * 智能权限请求 - 包含说明和设置引导
    */
-  async requestPermissionWithDialog(type: PermissionType): Promise<PermissionResult> {
+  async requestPermissionWithDialog(
+    type: PermissionType
+  ): Promise<PermissionResult> {
     // 首先检查当前状态
     const currentStatus = await this.checkPermission(type);
-    
+
     if (currentStatus.granted) {
       return currentStatus;
     }
@@ -315,10 +312,10 @@ class PermissionManager {
     photoLibrary: PermissionResult;
   }> {
     const [camera, microphone, location, photoLibrary] = await Promise.all([
-      this.checkPermission('camera'),
-      this.checkPermission('microphone'),
-      this.checkPermission('location'),
-      this.checkPermission('photoLibrary'),
+      this.checkPermission("camera"),
+      this.checkPermission("microphone"),
+      this.checkPermission("location"),
+      this.checkPermission("photoLibrary"),
     ]);
 
     return {
@@ -339,10 +336,10 @@ class PermissionManager {
     photoLibrary: PermissionResult;
   }> {
     const results = await this.requestMultiplePermissions([
-      'camera',
-      'microphone',
-      'location',
-      'photoLibrary',
+      "camera",
+      "microphone",
+      "location",
+      "photoLibrary",
     ]);
 
     return {
@@ -356,4 +353,4 @@ class PermissionManager {
 
 // 导出单例实例
 export const permissionManager = new PermissionManager();
-export default permissionManager; 
+export default permissionManager;

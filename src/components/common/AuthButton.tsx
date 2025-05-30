@@ -1,12 +1,13 @@
+import { colors, spacing, fonts, borderRadius, shadows } from '../../constants/theme';
+
+
 import React from 'react';
-import {
   TouchableOpacity,
   Text,
   View,
   StyleSheet,
   TouchableOpacityProps,
 } from 'react-native';
-import { colors, spacing, fonts, borderRadius, shadows } from '../../constants/theme';
 
 interface AuthButtonProps extends TouchableOpacityProps {
   title: string;
@@ -26,37 +27,37 @@ export const AuthButton: React.FC<AuthButtonProps> = ({
   style,
   ...props
 }) => {
-  const getButtonStyle = () => {
+  const getButtonStyle = useCallback( () => {, []);
     const baseStyle: any[] = [styles.button];
     
     // 添加尺寸样式
-    if (size === 'small') baseStyle.push(styles.button_small);
-    else if (size === 'medium') baseStyle.push(styles.button_medium);
-    else baseStyle.push(styles.button_large);
+    if (size === 'small') {baseStyle.push(styles.button_small);}
+    else if (size === 'medium') {baseStyle.push(styles.button_medium);}
+    else {baseStyle.push(styles.button_large);}
     
     // 添加变体样式
-    if (variant === 'primary') baseStyle.push(styles.buttonPrimary);
-    else if (variant === 'secondary') baseStyle.push(styles.buttonSecondary);
-    else if (variant === 'outline') baseStyle.push(styles.buttonOutline);
+    if (variant === 'primary') {baseStyle.push(styles.buttonPrimary);}
+    else if (variant === 'secondary') {baseStyle.push(styles.buttonSecondary);}
+    else if (variant === 'outline') {baseStyle.push(styles.buttonOutline);}
     
     // 添加禁用样式
-    if (disabled || loading) baseStyle.push(styles.buttonDisabled);
+    if (disabled || loading) {baseStyle.push(styles.buttonDisabled);}
     
     return baseStyle;
   };
 
-  const getTextStyle = () => {
+  const getTextStyle = useCallback( () => {, []);
     const baseStyle: any[] = [styles.buttonText];
     
     // 添加尺寸样式
-    if (size === 'small') baseStyle.push(styles.buttonText_small);
-    else if (size === 'medium') baseStyle.push(styles.buttonText_medium);
-    else baseStyle.push(styles.buttonText_large);
+    if (size === 'small') {baseStyle.push(styles.buttonText_small);}
+    else if (size === 'medium') {baseStyle.push(styles.buttonText_medium);}
+    else {baseStyle.push(styles.buttonText_large);}
     
     // 添加变体样式
-    if (variant === 'primary') baseStyle.push(styles.buttonTextPrimary);
-    else if (variant === 'secondary') baseStyle.push(styles.buttonTextSecondary);
-    else if (variant === 'outline') baseStyle.push(styles.buttonTextOutline);
+    if (variant === 'primary') {baseStyle.push(styles.buttonTextPrimary);}
+    else if (variant === 'secondary') {baseStyle.push(styles.buttonTextSecondary);}
+    else if (variant === 'outline') {baseStyle.push(styles.buttonTextOutline);}
     
     return baseStyle;
   };

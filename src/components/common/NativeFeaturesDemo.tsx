@@ -1,5 +1,11 @@
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { colors, spacing, fonts } from '../../constants/theme';
+import nativeModulesManager from '../../utils/nativeModules';
+import notificationManager from '../../utils/notifications';
+
+
+
 import React, { useState, useEffect } from 'react';
-import {
   View,
   Text,
   StyleSheet,
@@ -9,10 +15,6 @@ import {
   Switch,
   ActivityIndicator,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { colors, spacing, fonts } from '../../constants/theme';
-import nativeModulesManager from '../../utils/nativeModules';
-import notificationManager from '../../utils/notifications';
 
 interface FeatureStatus {
   available: boolean;
@@ -52,7 +54,7 @@ const NativeFeaturesDemo: React.FC = () => {
 
   useEffect(() => {
     initializeFeatures();
-  }, []);
+  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
 
   /**
    * 初始化所有原生功能
@@ -284,7 +286,7 @@ const NativeFeaturesDemo: React.FC = () => {
   /**
    * 渲染功能状态指示器
    */
-  const renderStatusIndicator = (status: FeatureStatus) => {
+  const renderStatusIndicator = useCallback( (status: FeatureStatus) => {, []);
     if (status.loading) {
       return <ActivityIndicator size="small" color={colors.primary} />;
     }
@@ -307,7 +309,7 @@ const NativeFeaturesDemo: React.FC = () => {
   /**
    * 渲染权限状态
    */
-  const renderPermissionStatus = (granted: boolean) => {
+  const renderPermissionStatus = useCallback( (granted: boolean) => {, []);
     return (
       <Icon
         name={granted ? "shield-check" : "shield-alert"}
@@ -377,7 +379,7 @@ const NativeFeaturesDemo: React.FC = () => {
             {renderStatusIndicator(features.camera)}
           </View>
           <Text style={styles.featureDescription}>
-            测试相机拍照功能，用于四诊中的望诊
+            测试相机拍照功能，用于五诊中的望诊
           </Text>
           <TouchableOpacity
             style={[
@@ -399,7 +401,7 @@ const NativeFeaturesDemo: React.FC = () => {
             {renderStatusIndicator(features.voice)}
           </View>
           <Text style={styles.featureDescription}>
-            测试语音识别功能，用于四诊中的问诊
+            测试语音识别功能，用于五诊中的问诊
           </Text>
           <TouchableOpacity
             style={[

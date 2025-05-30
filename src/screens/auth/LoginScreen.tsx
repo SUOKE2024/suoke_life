@@ -1,5 +1,16 @@
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useDispatch, useSelector } from 'react-redux';
+import { AuthStackParamList } from '../../types/navigation';
+import { RootState } from '../../types';
+import { colors, spacing, fonts, borderRadius, shadows } from '../../constants/theme';
+import { AuthInput } from '../../components/common/AuthInput';
+import { AuthButton } from '../../components/common/AuthButton';
+import { LoadingScreen } from '../../components/common/LoadingScreen';
+import { authService } from '../../services/authService';
+
+
 import React, { useState, useRef, useEffect } from 'react';
-import {
   View,
   Text,
   StyleSheet,
@@ -12,16 +23,6 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useDispatch, useSelector } from 'react-redux';
-import { AuthStackParamList } from '../../types/navigation';
-import { RootState } from '../../types';
-import { colors, spacing, fonts, borderRadius, shadows } from '../../constants/theme';
-import { AuthInput } from '../../components/common/AuthInput';
-import { AuthButton } from '../../components/common/AuthButton';
-import { LoadingScreen } from '../../components/common/LoadingScreen';
-import { authService } from '../../services/authService';
 
 type LoginScreenNavigationProp = NativeStackNavigationProp<
   AuthStackParamList,
@@ -97,7 +98,7 @@ export const LoginScreen: React.FC = () => {
   };
 
   // 震动动画
-  const triggerShakeAnimation = () => {
+  const triggerShakeAnimation = useCallback( () => {, []);
     Animated.sequence([
       Animated.timing(shakeAnim, {
         toValue: 10,
@@ -154,22 +155,22 @@ export const LoginScreen: React.FC = () => {
   };
 
   // 处理忘记密码
-  const handleForgotPassword = () => {
+  const handleForgotPassword = useCallback( () => {, []);
     navigation.navigate('ForgotPassword');
   };
 
   // 处理注册
-  const handleRegister = () => {
+  const handleRegister = useCallback( () => {, []);
     navigation.navigate('Register');
   };
 
   // 返回欢迎页
-  const handleBack = () => {
+  const handleBack = useCallback( () => {, []);
     navigation.goBack();
   };
 
   // 更新表单数据
-  const updateFormData = (field: keyof FormData, value: string) => {
+  const updateFormData = useCallback( (field: keyof FormData, value: string) => {, []);
     setFormData(prev => ({ ...prev, [field]: value }));
     // 清除对应字段的错误
     if (errors[field]) {

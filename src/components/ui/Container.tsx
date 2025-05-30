@@ -1,30 +1,41 @@
+import { View, StyleSheet, ViewStyle } from "react-native";
+import { spacing } from "../../constants/theme";
+import React from "react";
+
+
+
+
+
 /**
  * 索克生活 - Container组件
  * 统一的容器布局组件
  */
 
-import React from 'react';
-import { View, StyleSheet, ViewStyle } from 'react-native';
-import { spacing } from '../../constants/theme';
 
 export interface ContainerProps {
   children: React.ReactNode;
-  
+
   // 布局属性
   padding?: keyof typeof spacing | number;
   margin?: keyof typeof spacing | number;
   flex?: number;
-  
+
   // 对齐方式
-  justify?: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'space-evenly';
-  align?: 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'baseline';
-  
+  justify?:
+    | "flex-start"
+    | "flex-end"
+    | "center"
+    | "space-between"
+    | "space-around"
+    | "space-evenly";
+  align?: "flex-start" | "flex-end" | "center" | "stretch" | "baseline";
+
   // 方向
-  direction?: 'row' | 'column';
-  
+  direction?: "row" | "column";
+
   // 自定义样式
   style?: ViewStyle;
-  
+
   // 其他属性
   testID?: string;
 }
@@ -36,11 +47,11 @@ const Container: React.FC<ContainerProps> = ({
   flex,
   justify,
   align,
-  direction = 'column',
+  direction = "column",
   style,
   testID,
 }) => {
-  const containerStyle = [
+  const containerStyle = useMemo(() => useMemo(() => useMemo(() => [
     styles.base,
     { flexDirection: direction },
     padding && { padding: getPadding(padding) },
@@ -49,7 +60,7 @@ const Container: React.FC<ContainerProps> = ({
     justify && { justifyContent: justify },
     align && { alignItems: align },
     style,
-  ].filter(Boolean) as ViewStyle[];
+  ].filter(Boolean) as ViewStyle[], []), []), []);
 
   return (
     <View style={containerStyle} testID={testID}>
@@ -59,24 +70,24 @@ const Container: React.FC<ContainerProps> = ({
 };
 
 // 辅助函数
-const getPadding = (padding: keyof typeof spacing | number): number => {
-  if (typeof padding === 'number') {
-    return padding;
+const getPadding = useMemo(() => useMemo(() => useMemo(() => (padding: keyof typeof spacing | number): number => {
+  if (typeof padding === "number") {
+    return padding, []), []), []);
   }
   return spacing[padding];
 };
 
-const getMargin = (margin: keyof typeof spacing | number): number => {
-  if (typeof margin === 'number') {
-    return margin;
+const getMargin = useMemo(() => useMemo(() => useMemo(() => (margin: keyof typeof spacing | number): number => {
+  if (typeof margin === "number") {
+    return margin, []), []), []);
   }
   return spacing[margin];
 };
 
-const styles = StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   base: {
-    flexDirection: 'column',
+    flexDirection: "column",
   },
-});
+}), []), []), []);
 
 export default Container;

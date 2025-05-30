@@ -1,0 +1,158 @@
+{
+  "timestamp": "2025-05-30T01:14:31.447Z",
+  "duration": 66,
+  "optimizations": [
+    "创建备份: /Users/songxu/Developer/suoke_life/.backup/backup-2025-05-30T01-13-27-035Z",
+    "代码质量优化完成",
+    "性能优化完成",
+    "架构优化完成"
+  ],
+  "errors": [
+    "最终代码检查失败"
+  ],
+  "config": {
+    "enableCodeQuality": true,
+    "enableTestCoverage": false,
+    "enablePerformance": true,
+    "enableArchitecture": true,
+    "reinstallDependencies": false,
+    "finalLintCheck": true,
+    "runTests": false,
+    "codeQuality": {
+      "autoFixESLint": true,
+      "cleanUnusedImports": true,
+      "fixHooksDependencies": true,
+      "optimizeComponents": true,
+      "formatCode": true
+    },
+    "testCoverage": {
+      "generateMissingTests": true,
+      "enhanceExistingTests": true,
+      "generateIntegrationTests": true,
+      "generatePerformanceTests": true,
+      "updateTestConfig": true,
+      "coverageThreshold": {
+        "global": {
+          "branches": 70,
+          "functions": 70,
+          "lines": 70,
+          "statements": 70
+        },
+        "components": {
+          "branches": 80,
+          "functions": 80,
+          "lines": 80,
+          "statements": 80
+        },
+        "services": {
+          "branches": 75,
+          "functions": 75,
+          "lines": 75,
+          "statements": 75
+        },
+        "hooks": {
+          "branches": 80,
+          "functions": 80,
+          "lines": 80,
+          "statements": 80
+        }
+      }
+    },
+    "performance": {
+      "optimizeComponents": true,
+      "optimizeImages": true,
+      "optimizeCodeSplitting": true,
+      "optimizeMemory": true,
+      "optimizeNetworking": true,
+      "optimizeStorage": true,
+      "thresholds": {
+        "renderTime": 100,
+        "responseTime": 500,
+        "memoryUsage": 52428800,
+        "bundleSize": 10485760
+      }
+    },
+    "architecture": {
+      "optimizeDirectoryStructure": true,
+      "createBarrelExports": true,
+      "optimizeDependencyInjection": true,
+      "createConfigurationManager": true,
+      "optimizeErrorHandling": true,
+      "createTypeDefinitions": true,
+      "generateArchitectureDoc": true,
+      "requiredDirectories": [
+        "src/core",
+        "src/shared",
+        "src/features",
+        "src/infrastructure",
+        "src/presentation"
+      ]
+    },
+    "backup": {
+      "enabled": true,
+      "itemsToBackup": [
+        "src",
+        "package.json",
+        "tsconfig.json",
+        ".eslintrc.js",
+        "jest.config.js"
+      ],
+      "backupLocation": ".backup"
+    },
+    "reporting": {
+      "generateDetailedReport": true,
+      "saveReportToFile": true,
+      "reportFormat": "json",
+      "includeTimestamps": true,
+      "includeMetrics": true
+    },
+    "environment": {
+      "development": {
+        "enableDebugMode": true,
+        "verboseLogging": true,
+        "skipMinification": true
+      },
+      "production": {
+        "enableDebugMode": false,
+        "verboseLogging": false,
+        "skipMinification": false,
+        "enableOptimizations": true
+      }
+    },
+    "agents": {
+      "xiaoai": {
+        "optimizeResponseTime": true,
+        "enableCaching": true,
+        "maxCacheSize": 10485760
+      },
+      "xiaoke": {
+        "optimizeResponseTime": true,
+        "enableCaching": true,
+        "maxCacheSize": 10485760
+      },
+      "laoke": {
+        "optimizeResponseTime": true,
+        "enableCaching": true,
+        "maxCacheSize": 10485760
+      },
+      "soer": {
+        "optimizeResponseTime": true,
+        "enableCaching": true,
+        "maxCacheSize": 10485760
+      }
+    },
+    "fiveDiagnosis": {
+      "optimizeImageProcessing": true,
+      "optimizeAudioProcessing": true,
+      "enableOfflineMode": true,
+      "cacheResults": true,
+      "maxCacheAge": 86400000
+    },
+    "blockchain": {
+      "optimizeTransactions": true,
+      "enableBatching": true,
+      "cacheValidation": true,
+      "maxBatchSize": 100
+    }
+  }
+}

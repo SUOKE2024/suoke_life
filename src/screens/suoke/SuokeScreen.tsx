@@ -1,5 +1,18 @@
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Icon from '../../components/common/Icon';
+import { colors } from '../../constants/theme';
+import XiaoaiChatInterface from './components/XiaoaiChatInterface';
+import DiagnosisModal from './components/DiagnosisModal';
+import EcoServices from './components/EcoServices';
+import SystemMonitorDashboard from './components/SystemMonitorDashboard';
+import WellnessExperience from './components/WellnessExperience';
+import AgentChatInterface, { AgentType } from '../../components/common/AgentChatInterface';
+import { FourDiagnosisNavigator } from './components/FourDiagnosisNavigator';
+import { EcoLifestyleNavigator } from './components/EcoLifestyleNavigator';
+import { DiagnosisType } from '../../types';
+
+
 import React, { useState } from 'react';
-import {
   View,
   Text,
   StyleSheet,
@@ -10,16 +23,6 @@ import {
   Modal,
   ActivityIndicator,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import Icon from '../../components/common/Icon';
-import { colors } from '../../constants/theme';
-import XiaoaiChatInterface from './components/XiaoaiChatInterface';
-import DiagnosisModal from './components/DiagnosisModal';
-import EcoServices from './components/EcoServices';
-import SystemMonitorDashboard from './components/SystemMonitorDashboard';
-import WellnessExperience from './components/WellnessExperience';
-import AgentChatInterface, { AgentType } from '../../components/common/AgentChatInterface';
-import { DiagnosisType } from '../../types';
 
 // 服务类型
 interface ServiceItem {
@@ -47,7 +50,7 @@ const DIAGNOSIS_SERVICES: ServiceItem[] = [
     description: '通过AI视觉技术分析面色、舌象、体态等外在表现',
     features: ['面色分析', '舌象检测', '体态评估', '精神状态评估'],
     price: '¥99',
-    available: true
+    available: true,
   },
   {
     id: 'listen_diagnosis',
@@ -59,7 +62,7 @@ const DIAGNOSIS_SERVICES: ServiceItem[] = [
     description: '通过声纹分析和气味识别技术进行健康评估',
     features: ['语音分析', '呼吸音检测', '咳嗽分析', '气味识别'],
     price: '¥79',
-    available: true
+    available: true,
   },
   {
     id: 'inquiry_diagnosis',
@@ -71,7 +74,7 @@ const DIAGNOSIS_SERVICES: ServiceItem[] = [
     description: '基于中医理论的智能问诊系统，全面了解症状和病史',
     features: ['症状询问', '病史采集', '生活习惯评估', '家族史分析'],
     price: '¥59',
-    available: true
+    available: true,
   },
   {
     id: 'palpation_diagnosis',
@@ -83,7 +86,7 @@ const DIAGNOSIS_SERVICES: ServiceItem[] = [
     description: '结合传感器技术的现代化脉诊和触诊服务',
     features: ['脉象分析', '腹部触诊', '穴位检查', '皮肤触感'],
     price: '¥129',
-    available: true
+    available: true,
   },
   {
     id: 'calculation_diagnosis',
@@ -95,8 +98,8 @@ const DIAGNOSIS_SERVICES: ServiceItem[] = [
     description: '基于传统中医算诊理论，结合五运六气、八字八卦等进行个性化健康分析',
     features: ['五运六气分析', '八字体质推算', '八卦体质分析', '子午流注时间医学'],
     price: '¥149',
-    available: true
-  }
+    available: true,
+  },
 ];
 
 // 其他服务配置
@@ -110,7 +113,7 @@ const OTHER_SERVICES: ServiceItem[] = [
     category: 'product',
     description: '经过专业筛选的健康产品和保健用品',
     features: ['中药材', '保健品', '健康器械', '养生用品'],
-    available: true
+    available: true,
   },
   {
     id: 'medical_services',
@@ -121,7 +124,7 @@ const OTHER_SERVICES: ServiceItem[] = [
     category: 'service',
     description: '提供专业的医疗咨询和健康管理服务',
     features: ['专家咨询', '健康评估', '治疗方案', '康复指导'],
-    available: true
+    available: true,
   },
   {
     id: 'health_subscription',
@@ -133,7 +136,7 @@ const OTHER_SERVICES: ServiceItem[] = [
     description: '定制化的健康管理订阅服务',
     features: ['月度体检', '营养配餐', '运动计划', '健康报告'],
     price: '¥299/月',
-    available: true
+    available: true,
   },
   {
     id: 'appointment_booking',
@@ -144,7 +147,7 @@ const OTHER_SERVICES: ServiceItem[] = [
     category: 'appointment',
     description: '快速预约医生和健康服务',
     features: ['在线挂号', '专家预约', '体检预约', '上门服务'],
-    available: true
+    available: true,
   },
   {
     id: 'health_market',
@@ -155,7 +158,7 @@ const OTHER_SERVICES: ServiceItem[] = [
     category: 'market',
     description: '一站式健康生活用品购物平台',
     features: ['有机食品', '运动器材', '美容护肤', '家居健康'],
-    available: true
+    available: true,
   },
   {
     id: 'custom_service',
@@ -167,7 +170,7 @@ const OTHER_SERVICES: ServiceItem[] = [
     description: '根据个人需求定制专属健康解决方案',
     features: ['体质分析', '方案定制', '跟踪服务', '效果评估'],
     price: '¥999起',
-    available: true
+    available: true,
   },
   {
     id: 'supplier_network',
@@ -178,8 +181,8 @@ const OTHER_SERVICES: ServiceItem[] = [
     category: 'supplier',
     description: '与优质健康产品供应商建立合作关系',
     features: ['供应商认证', '质量保证', '物流配送', '售后服务'],
-    available: true
-  }
+    available: true,
+  },
 ];
 
 const SuokeScreen: React.FC = () => {
@@ -193,17 +196,19 @@ const SuokeScreen: React.FC = () => {
   const [ecoServicesVisible, setEcoServicesVisible] = useState(false);
   const [monitorDashboardVisible, setMonitorDashboardVisible] = useState(false);
   const [wellnessExperienceVisible, setWellnessExperienceVisible] = useState(false);
+  const [fourDiagnosisVisible, setFourDiagnosisVisible] = useState(false);
+  const [ecoLifestyleVisible, setEcoLifestyleVisible] = useState(false);
 
   // 所有服务
-  const allServices = [...DIAGNOSIS_SERVICES, ...OTHER_SERVICES];
+  const allServices = useMemo(() => useMemo(() => useMemo(() => [...DIAGNOSIS_SERVICES, ...OTHER_SERVICES], []), []), []);
 
   // 过滤服务
-  const filteredServices = selectedCategory === 'all' 
+  const filteredServices = useMemo(() => useMemo(() => useMemo(() => selectedCategory === 'all' 
     ? allServices 
-    : allServices.filter(service => service.category === selectedCategory);
+    : allServices.filter(service => service.category === selectedCategory), []), []), []);
 
   // 分类选项
-  const categories = [
+  const categories = useMemo(() => useMemo(() => useMemo(() => [
     { key: 'all', label: '全部', icon: 'view-grid' },
     { key: 'diagnosis', label: '五诊', icon: 'stethoscope' },
     { key: 'eco', label: '生态服务', icon: 'leaf' },
@@ -213,16 +218,16 @@ const SuokeScreen: React.FC = () => {
     { key: 'appointment', label: '预约', icon: 'calendar-clock' },
     { key: 'market', label: '市集', icon: 'store' },
     { key: 'custom', label: '定制', icon: 'cog' },
-    { key: 'supplier', label: '供应商', icon: 'truck' }
-  ];
+    { key: 'supplier', label: '供应商', icon: 'truck' },
+  ], []), []), []);
 
   // 与小艾对话
-  const chatWithXiaoai = async () => {
+  const chatWithXiaoai = useMemo(() => useMemo(() => useMemo(() => async () => {
     try {
-      console.log('🤖 启动小艾健康诊断对话...');
+      console.log('🤖 启动小艾健康诊断对话...'), []), []), []);
       
       // 初始化小艾对话会话
-      const response = await fetch('http://localhost:8080/api/agents/xiaoai/init', {
+      const response = useMemo(() => useMemo(() => useMemo(() => await fetch('http://localhost:8080/api/agents/xiaoai/init', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -231,10 +236,10 @@ const SuokeScreen: React.FC = () => {
           userId: 'current_user_id',
           sessionType: 'health_diagnosis',
         }),
-      });
+      }), []), []), []);
 
       if (response.ok) {
-        const data = await response.json();
+        const data = useMemo(() => useMemo(() => useMemo(() => await response.json(), []), []), []);
         console.log('✅ 小艾对话会话初始化成功:', data);
         setXiaoaiChatVisible(true);
       } else {
@@ -247,26 +252,26 @@ const SuokeScreen: React.FC = () => {
   };
 
   // 与小克对话
-  const chatWithXiaoke = () => {
+  const chatWithXiaoke = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
     Alert.alert(
       '与小克对话',
       '小克是您的专业医疗服务管理助手，可以帮助您：\n\n• 选择合适的诊断服务\n• 预约医疗服务\n• 管理健康订阅\n• 推荐健康产品\n\n是否开始对话？',
       [
         { text: '取消', style: 'cancel' },
-        { text: '开始对话', onPress: () => startXiaokeChat() }
+        { text: '开始对话', onPress: () => startXiaokeChat() },
       ]
     );
   };
 
   // 开始与小克对话
-  const startXiaokeChat = () => {
+  const startXiaokeChat = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
     setXiaokeChatVisible(true);
     // 这里将集成实际的小克智能体服务
     console.log('Starting chat with Xiaoke agent');
   };
 
   // 选择服务
-  const selectService = (service: ServiceItem) => {
+  const selectService = useMemo(() => useMemo(() => useMemo(() => useCallback( (service: ServiceItem) => {, []), []), []), []);
     if (service.category === 'diagnosis') {
       // 五诊服务使用专门的模态框
       setSelectedDiagnosisService(service);
@@ -278,23 +283,23 @@ const SuokeScreen: React.FC = () => {
         `${service.description}\n\n包含功能：\n${service.features.map(f => `• ${f}`).join('\n')}${service.price ? `\n\n价格：${service.price}` : ''}\n\n是否使用此服务？`,
         [
           { text: '取消', style: 'cancel' },
-          { text: '使用服务', onPress: () => useService(service) }
+          { text: '使用服务', onPress: () => useService(service) },
         ]
       );
     }
   };
 
   // 开始诊断服务（现在由DiagnosisModal处理）
-  const startDiagnosisService = async (service: ServiceItem) => {
+  const startDiagnosisService = useMemo(() => useMemo(() => useMemo(() => async (service: ServiceItem) => {
     // 这个函数现在主要用于向后兼容，实际逻辑在DiagnosisModal中
-    console.log(`Starting diagnosis service: ${service.id}`);
+    console.log(`Starting diagnosis service: ${service.id}`), []), []), []);
   };
 
   // 获取诊断类型
-  const getDiagnosisType = (serviceId: string): DiagnosisType => {
+  const getDiagnosisType = useMemo(() => useMemo(() => useMemo(() => (serviceId: string): DiagnosisType => {
     switch (serviceId) {
       case 'look_diagnosis':
-        return 'inspection';
+        return 'inspection', []), []), []);
       case 'listen_diagnosis':
         return 'auscultation';
       case 'inquiry_diagnosis':
@@ -309,14 +314,15 @@ const SuokeScreen: React.FC = () => {
   };
 
   // 使用服务
-  const useService = (service: ServiceItem) => {
+  const useService = useMemo(() => useMemo(() => useMemo(() => useCallback( (service: ServiceItem) => {, []), []), []), []);
     Alert.alert('服务启动', `正在为您准备${service.title}服务...`);
     // 这里将集成实际的服务功能
     console.log(`Using service: ${service.id}`);
   };
 
   // 渲染分类过滤器
-  const renderCategoryFilter = () => (
+  // TODO: 将内联组件移到组件外部
+const renderCategoryFilter = useMemo(() => useMemo(() => useMemo(() => () => (
     <ScrollView 
       horizontal 
       showsHorizontalScrollIndicator={false}
@@ -328,11 +334,11 @@ const SuokeScreen: React.FC = () => {
           key={category.key}
           style={[
             styles.categoryButton,
-            selectedCategory === category.key && styles.activeCategoryButton
+            selectedCategory === category.key && styles.activeCategoryButton,
           ]}
           onPress={() => {
             if (category.key === 'eco') {
-              setEcoServicesVisible(true);
+              setEcoServicesVisible(true), []), []), []);
             } else {
               setSelectedCategory(category.key);
             }
@@ -345,7 +351,7 @@ const SuokeScreen: React.FC = () => {
           />
           <Text style={[
             styles.categoryText,
-            selectedCategory === category.key && styles.activeCategoryText
+            selectedCategory === category.key && styles.activeCategoryText,
           ]}>
             {category.label}
           </Text>
@@ -355,7 +361,7 @@ const SuokeScreen: React.FC = () => {
   );
 
   // 渲染服务卡片
-  const renderServiceCard = ({ item }: { item: ServiceItem }) => (
+  const renderServiceCard = useMemo(() => useMemo(() => useMemo(() => ({ item }: { item: ServiceItem }) => (
     <TouchableOpacity 
       style={[styles.serviceCard, { borderLeftColor: item.color }]}
       onPress={() => selectService(item)}
@@ -396,7 +402,7 @@ const SuokeScreen: React.FC = () => {
         <Icon name="chevron-right" size={20} color={colors.textSecondary} />
       </View>
     </TouchableOpacity>
-  );
+  ), []), []), []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -417,17 +423,24 @@ const SuokeScreen: React.FC = () => {
           </TouchableOpacity>
           <TouchableOpacity 
             style={styles.xiaokeChatButton} 
+            onPress={() => setFourDiagnosisVisible(true)}
+          >
+            <Text style={styles.xiaokeChatEmoji}>🔍</Text>
+            <Text style={styles.xiaokeChatText}>四诊</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={styles.xiaokeChatButton} 
+            onPress={() => setEcoLifestyleVisible(true)}
+          >
+            <Text style={styles.xiaokeChatEmoji}>🌿</Text>
+            <Text style={styles.xiaokeChatText}>生态</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={styles.xiaokeChatButton} 
             onPress={() => setMonitorDashboardVisible(true)}
           >
             <Text style={styles.xiaokeChatEmoji}>📊</Text>
             <Text style={styles.xiaokeChatText}>监控</Text>
-          </TouchableOpacity>
-          <TouchableOpacity 
-            style={styles.xiaokeChatButton} 
-            onPress={() => setWellnessExperienceVisible(true)}
-          >
-            <Text style={styles.xiaokeChatEmoji}>🏔️</Text>
-            <Text style={styles.xiaokeChatText}>山水养生</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -508,6 +521,26 @@ const SuokeScreen: React.FC = () => {
         onClose={() => setWellnessExperienceVisible(false)}
       />
 
+      {/* 四诊系统导航 */}
+      <FourDiagnosisNavigator
+        visible={fourDiagnosisVisible}
+        onClose={() => setFourDiagnosisVisible(false)}
+        onDiagnosisSelect={(diagnosisId) => {
+          console.log('选择诊断方法:', diagnosisId);
+          // 这里可以导航到具体的诊断界面
+        }}
+      />
+
+      {/* 生态生活导航 */}
+      <EcoLifestyleNavigator
+        visible={ecoLifestyleVisible}
+        onClose={() => setEcoLifestyleVisible(false)}
+        onServiceSelect={(serviceId) => {
+          console.log('选择生态服务:', serviceId);
+          // 这里可以导航到具体的服务界面
+        }}
+      />
+
       {/* 诊断加载中 */}
       {loading && (
         <Modal
@@ -524,7 +557,7 @@ const SuokeScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -736,6 +769,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
-});
+}), []), []), []);
 
 export default SuokeScreen;

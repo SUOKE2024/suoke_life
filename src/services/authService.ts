@@ -1,12 +1,13 @@
-import { apiClient } from './apiClient';
-import { ApiResponse, User } from '../types';
-import {
+import { apiClient } from "./apiClient";
+import { ApiResponse, User } from "../types";
+
+
   storeAuthTokens,
   clearAuthTokens,
   getAuthToken,
   getRefreshToken,
   getDeviceId,
-} from '../utils/authUtils';
+} from "../utils/authUtils";
 
 // 登录请求参数
 export interface LoginRequest {
@@ -81,7 +82,7 @@ class AuthService {
       const deviceId = await getDeviceId();
 
       const response: ApiResponse<LoginResponse> = await apiClient.post(
-        '/auth/login',
+        "/auth/login",
         {
           ...credentials,
           deviceId,
@@ -89,7 +90,7 @@ class AuthService {
       );
 
       if (!response.success || !response.data) {
-        throw new Error(response.error?.message || '登录失败');
+        throw new Error(response.error?.message || "登录失败");
       }
 
       // 存储认证令牌
@@ -100,7 +101,7 @@ class AuthService {
 
       return response.data;
     } catch (error: any) {
-      throw new Error(error.message || '登录失败');
+      throw new Error(error.message || "登录失败");
     }
   }
 
@@ -113,7 +114,7 @@ class AuthService {
       const deviceId = await getDeviceId();
 
       const response: ApiResponse<RegisterResponse> = await apiClient.post(
-        '/auth/register',
+        "/auth/register",
         {
           ...userData,
           deviceId,
@@ -121,7 +122,7 @@ class AuthService {
       );
 
       if (!response.success || !response.data) {
-        throw new Error(response.error?.message || '注册失败');
+        throw new Error(response.error?.message || "注册失败");
       }
 
       // 存储认证令牌
@@ -132,7 +133,7 @@ class AuthService {
 
       return response.data;
     } catch (error: any) {
-      throw new Error(error.message || '注册失败');
+      throw new Error(error.message || "注册失败");
     }
   }
 
@@ -142,10 +143,10 @@ class AuthService {
   async logout(): Promise<void> {
     try {
       // 调用服务端登出接口
-      await apiClient.post('/auth/logout');
+      await apiClient.post("/auth/logout");
     } catch (error) {
       // 即使服务端登出失败，也要清除本地令牌
-      console.warn('Server logout failed:', error);
+      console.warn("Server logout failed:", error);
     } finally {
       // 清除本地存储的认证信息
       await clearAuthTokens();
@@ -159,18 +160,18 @@ class AuthService {
     try {
       const refreshToken = await getRefreshToken();
       if (!refreshToken) {
-        throw new Error('No refresh token available');
+        throw new Error("No refresh token available");
       }
 
       const response: ApiResponse<RefreshTokenResponse> = await apiClient.post(
-        '/auth/refresh',
+        "/auth/refresh",
         {
           refreshToken,
         }
       );
 
       if (!response.success || !response.data) {
-        throw new Error(response.error?.message || '刷新令牌失败');
+        throw new Error(response.error?.message || "刷新令牌失败");
       }
 
       // 更新存储的令牌
@@ -183,7 +184,7 @@ class AuthService {
     } catch (error: any) {
       // 刷新失败，清除所有认证信息
       await clearAuthTokens();
-      throw new Error(error.message || '刷新令牌失败');
+      throw new Error(error.message || "刷新令牌失败");
     }
   }
 
@@ -192,15 +193,15 @@ class AuthService {
    */
   async getCurrentUser(): Promise<User> {
     try {
-      const response: ApiResponse<User> = await apiClient.get('/auth/me');
+      const response: ApiResponse<User> = await apiClient.get("/auth/me");
 
       if (!response.success || !response.data) {
-        throw new Error(response.error?.message || '获取用户信息失败');
+        throw new Error(response.error?.message || "获取用户信息失败");
       }
 
       return response.data;
     } catch (error: any) {
-      throw new Error(error.message || '获取用户信息失败');
+      throw new Error(error.message || "获取用户信息失败");
     }
   }
 
@@ -210,15 +211,15 @@ class AuthService {
   async forgotPassword(request: ForgotPasswordRequest): Promise<void> {
     try {
       const response: ApiResponse = await apiClient.post(
-        '/auth/forgot-password',
+        "/auth/forgot-password",
         request
       );
 
       if (!response.success) {
-        throw new Error(response.error?.message || '发送重置邮件失败');
+        throw new Error(response.error?.message || "发送重置邮件失败");
       }
     } catch (error: any) {
-      throw new Error(error.message || '发送重置邮件失败');
+      throw new Error(error.message || "发送重置邮件失败");
     }
   }
 
@@ -228,15 +229,15 @@ class AuthService {
   async verifyResetCode(request: VerifyResetCodeRequest): Promise<void> {
     try {
       const response: ApiResponse = await apiClient.post(
-        '/auth/verify-reset-code',
+        "/auth/verify-reset-code",
         request
       );
 
       if (!response.success) {
-        throw new Error(response.error?.message || '验证码验证失败');
+        throw new Error(response.error?.message || "验证码验证失败");
       }
     } catch (error: any) {
-      throw new Error(error.message || '验证码验证失败');
+      throw new Error(error.message || "验证码验证失败");
     }
   }
 
@@ -246,15 +247,15 @@ class AuthService {
   async resetPassword(request: ResetPasswordRequest): Promise<void> {
     try {
       const response: ApiResponse = await apiClient.post(
-        '/auth/reset-password',
+        "/auth/reset-password",
         request
       );
 
       if (!response.success) {
-        throw new Error(response.error?.message || '重置密码失败');
+        throw new Error(response.error?.message || "重置密码失败");
       }
     } catch (error: any) {
-      throw new Error(error.message || '重置密码失败');
+      throw new Error(error.message || "重置密码失败");
     }
   }
 
@@ -267,7 +268,7 @@ class AuthService {
   ): Promise<void> {
     try {
       const response: ApiResponse = await apiClient.post(
-        '/auth/change-password',
+        "/auth/change-password",
         {
           oldPassword,
           newPassword,
@@ -275,10 +276,10 @@ class AuthService {
       );
 
       if (!response.success) {
-        throw new Error(response.error?.message || '修改密码失败');
+        throw new Error(response.error?.message || "修改密码失败");
       }
     } catch (error: any) {
-      throw new Error(error.message || '修改密码失败');
+      throw new Error(error.message || "修改密码失败");
     }
   }
 
@@ -288,19 +289,19 @@ class AuthService {
   async verifyPassword(password: string): Promise<boolean> {
     try {
       const response: ApiResponse<{ valid: boolean }> = await apiClient.post(
-        '/auth/verify-password',
+        "/auth/verify-password",
         {
           password,
         }
       );
 
       if (!response.success) {
-        throw new Error(response.error?.message || '密码验证失败');
+        throw new Error(response.error?.message || "密码验证失败");
       }
 
       return response.data?.valid || false;
     } catch (error: any) {
-      throw new Error(error.message || '密码验证失败');
+      throw new Error(error.message || "密码验证失败");
     }
   }
 
@@ -319,7 +320,7 @@ class AuthService {
 
       return response.data?.exists || false;
     } catch (error) {
-      console.warn('Check email exists failed:', error);
+      console.warn("Check email exists failed:", error);
       return false;
     }
   }
@@ -339,7 +340,7 @@ class AuthService {
 
       return response.data?.exists || false;
     } catch (error) {
-      console.warn('Check username exists failed:', error);
+      console.warn("Check username exists failed:", error);
       return false;
     }
   }
@@ -350,17 +351,17 @@ class AuthService {
   async sendEmailVerification(email: string): Promise<void> {
     try {
       const response: ApiResponse = await apiClient.post(
-        '/auth/send-email-verification',
+        "/auth/send-email-verification",
         {
           email,
         }
       );
 
       if (!response.success) {
-        throw new Error(response.error?.message || '发送验证码失败');
+        throw new Error(response.error?.message || "发送验证码失败");
       }
     } catch (error: any) {
-      throw new Error(error.message || '发送验证码失败');
+      throw new Error(error.message || "发送验证码失败");
     }
   }
 
@@ -370,7 +371,7 @@ class AuthService {
   async verifyEmailCode(email: string, code: string): Promise<void> {
     try {
       const response: ApiResponse = await apiClient.post(
-        '/auth/verify-email-code',
+        "/auth/verify-email-code",
         {
           email,
           code,
@@ -378,10 +379,10 @@ class AuthService {
       );
 
       if (!response.success) {
-        throw new Error(response.error?.message || '验证码验证失败');
+        throw new Error(response.error?.message || "验证码验证失败");
       }
     } catch (error: any) {
-      throw new Error(error.message || '验证码验证失败');
+      throw new Error(error.message || "验证码验证失败");
     }
   }
 
@@ -410,16 +411,16 @@ class AuthService {
    */
   async logoutAllDevices(): Promise<void> {
     try {
-      const response: ApiResponse = await apiClient.post('/auth/logout-all');
+      const response: ApiResponse = await apiClient.post("/auth/logout-all");
 
       if (!response.success) {
-        throw new Error(response.error?.message || '注销所有设备失败');
+        throw new Error(response.error?.message || "注销所有设备失败");
       }
 
       // 清除本地认证信息
       await clearAuthTokens();
     } catch (error: any) {
-      throw new Error(error.message || '注销所有设备失败');
+      throw new Error(error.message || "注销所有设备失败");
     }
   }
 }

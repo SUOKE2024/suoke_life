@@ -1,8 +1,15 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import Icon from '../../components/common/Icon';
-import { HealthMetric } from '../../types/life';
-import { colors, spacing, typography, borderRadius } from '../../constants/theme';
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import Icon from "../../components/common/Icon";
+import { HealthMetric } from "../../types/life";
+import React from "react";
+
+
+
+  colors,
+  spacing,
+  typography,
+  borderRadius,
+} from "../../constants/theme";
 
 interface HealthMetricCardProps {
   metric: HealthMetric;
@@ -19,26 +26,33 @@ const HealthMetricCard: React.FC<HealthMetricCardProps> = ({
   const isAboveTarget = metric.value >= metric.target;
 
   return (
-    <TouchableOpacity 
-      style={styles.container} 
+    <TouchableOpacity
+      style={styles.container}
       onPress={onPress}
       disabled={!onPress}
     >
       <View style={styles.header}>
-        <View style={[styles.iconContainer, { backgroundColor: metric.color + '20' }]}>
+        <View
+          style={[
+            styles.iconContainer,
+            { backgroundColor: metric.color + "20" },
+          ]}
+        >
           <Icon name={metric.icon} size={20} color={metric.color} />
         </View>
         <View style={styles.headerInfo}>
           <Text style={styles.name}>{metric.name}</Text>
           <View style={styles.trendContainer}>
-            <Icon 
-              name={getTrendIcon(metric.trend)} 
-              size={16} 
+            <Icon
+              name={getTrendIcon(metric.trend)}
+              size={16}
               color={
-                metric.trend === 'up' ? colors.success :
-                metric.trend === 'down' ? colors.error :
-                colors.textSecondary
-              } 
+                metric.trend === "up"
+                  ? colors.success
+                  : metric.trend === "down"
+                  ? colors.error
+                  : colors.textSecondary
+              }
             />
           </View>
         </View>
@@ -53,17 +67,20 @@ const HealthMetricCard: React.FC<HealthMetricCardProps> = ({
 
       <View style={styles.progressContainer}>
         <View style={styles.progressBackground}>
-          <View 
+          <View
             style={[
-              styles.progressFill, 
-              { 
+              styles.progressFill,
+              {
                 width: `${Math.min(progressPercentage, 100)}%`,
-                backgroundColor: isAboveTarget ? colors.success : metric.color
-              }
-            ]} 
+                backgroundColor: isAboveTarget ? colors.success : metric.color,
+              },
+            ]}
           />
         </View>
-        <Text style={styles.target}>目标: {metric.target}{metric.unit}</Text>
+        <Text style={styles.target}>
+          目标: {metric.target}
+          {metric.unit}
+        </Text>
       </View>
 
       <Text style={styles.suggestion} numberOfLines={2}>
@@ -88,17 +105,17 @@ const styles = StyleSheet.create({
     minWidth: 200,
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     marginBottom: spacing.md,
   },
   iconContainer: {
     width: 40,
     height: 40,
     borderRadius: borderRadius.md,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   headerInfo: {
     flex: 1,
@@ -106,20 +123,20 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: typography.fontSize.base,
-    fontWeight: '500' as any,
+    fontWeight: "500" as any,
     color: colors.textPrimary,
   },
   trendContainer: {
     marginTop: spacing.xs,
   },
   valueContainer: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
+    flexDirection: "row",
+    alignItems: "baseline",
     marginBottom: spacing.md,
   },
   value: {
-    fontSize: typography.fontSize['3xl'],
-    fontWeight: '700' as any,
+    fontSize: typography.fontSize["3xl"],
+    fontWeight: "700" as any,
   },
   unit: {
     fontSize: typography.fontSize.base,
@@ -136,7 +153,7 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xs,
   },
   progressFill: {
-    height: '100%',
+    height: "100%",
     borderRadius: 3,
   },
   target: {
@@ -150,4 +167,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default React.memo(HealthMetricCard); 
+export default React.memo(HealthMetricCard);

@@ -1,11 +1,17 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { deviceInfoManager, PerformanceMetrics } from "./deviceInfo";
+
+
+  Platform,
+  InteractionManager,
+  AppState,
+  AppStateStatus,
+} from "react-native";
+
 /**
  * 性能监控工具
  * 监控应用性能指标，包括渲染性能、网络请求、内存使用等
  */
-
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Platform, InteractionManager, AppState, AppStateStatus } from 'react-native';
-import { deviceInfoManager, PerformanceMetrics } from './deviceInfo';
 
 // 声明全局performance对象（React Native环境）
 declare global {
@@ -22,7 +28,7 @@ declare global {
 export interface PerformanceMetric {
   id: string;
   name: string;
-  type: 'render' | 'network' | 'memory' | 'user_interaction' | 'custom';
+  type: "render" | "network" | "memory" | "user_interaction" | "custom";
   startTime: number;
   endTime?: number;
   duration?: number;
@@ -31,7 +37,7 @@ export interface PerformanceMetric {
 }
 
 export interface NetworkMetric extends PerformanceMetric {
-  type: 'network';
+  type: "network";
   url: string;
   method: string;
   status?: number;
@@ -40,21 +46,21 @@ export interface NetworkMetric extends PerformanceMetric {
 }
 
 export interface RenderMetric extends PerformanceMetric {
-  type: 'render';
+  type: "render";
   componentName: string;
   renderCount?: number;
   props?: Record<string, any>;
 }
 
 export interface MemoryMetric extends PerformanceMetric {
-  type: 'memory';
+  type: "memory";
   usedJSHeapSize?: number;
   totalJSHeapSize?: number;
   jsHeapSizeLimit?: number;
 }
 
 export interface UserInteractionMetric extends PerformanceMetric {
-  type: 'user_interaction';
+  type: "user_interaction";
   action: string;
   target: string;
   coordinates?: { x: number; y: number };
@@ -72,12 +78,12 @@ export interface MemoryWarning {
   timestamp: number;
   memoryUsage: number;
   threshold: number;
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: "low" | "medium" | "high" | "critical";
 }
 
 export interface PerformanceAlert {
-  type: 'memory' | 'cpu' | 'battery' | 'network' | 'render';
-  severity: 'warning' | 'error' | 'critical';
+  type: "memory" | "cpu" | "battery" | "network" | "render";
+  severity: "warning" | "error" | "critical";
   message: string;
   timestamp: number;
   metrics: any;
@@ -97,13 +103,13 @@ export class PerformanceMonitor {
   private performanceAlerts: PerformanceAlert[] = [];
   private monitoringInterval: ReturnType<typeof setInterval> | null = null;
   private isMonitoring = false;
-  
+
   // 性能阈值配置
   private thresholds = {
     memory: {
-      warning: 70,    // 70%内存使用率警告
-      error: 85,      // 85%内存使用率错误
-      critical: 95,   // 95%内存使用率严重
+      warning: 70, // 70%内存使用率警告
+      error: 85, // 85%内存使用率错误
+      critical: 95, // 95%内存使用率严重
     },
     cpu: {
       warning: 70,
@@ -111,19 +117,19 @@ export class PerformanceMonitor {
       critical: 95,
     },
     battery: {
-      warning: 20,    // 20%电量警告
-      error: 10,      // 10%电量错误
-      critical: 5,    // 5%电量严重
+      warning: 20, // 20%电量警告
+      error: 10, // 10%电量错误
+      critical: 5, // 5%电量严重
     },
     network: {
-      warning: 1000,  // 1秒网络延迟警告
-      error: 3000,    // 3秒网络延迟错误
+      warning: 1000, // 1秒网络延迟警告
+      error: 3000, // 3秒网络延迟错误
       critical: 5000, // 5秒网络延迟严重
     },
     render: {
-      warning: 16,    // 16ms渲染时间警告
-      error: 32,      // 32ms渲染时间错误
-      critical: 50,   // 50ms渲染时间严重
+      warning: 16, // 16ms渲染时间警告
+      error: 32, // 32ms渲染时间错误
+      critical: 50, // 50ms渲染时间严重
     },
   };
 
@@ -152,10 +158,12 @@ export class PerformanceMonitor {
   startMeasure(
     id: string,
     name: string,
-    type: PerformanceMetric['type'],
+    type: PerformanceMetric["type"],
     metadata?: Record<string, any>
   ): void {
-    if (!this.isEnabled) return;
+    if (!this.isEnabled) {
+      return;
+    }
 
     const metric: PerformanceMetric = {
       id,
@@ -173,7 +181,9 @@ export class PerformanceMonitor {
    * 结束性能测量
    */
   endMeasure(id: string, additionalMetadata?: Record<string, any>): void {
-    if (!this.isEnabled) return;
+    if (!this.isEnabled) {
+      return;
+    }
 
     const metric = this.activeMetrics.get(id);
     if (!metric) {
@@ -183,7 +193,7 @@ export class PerformanceMonitor {
 
     metric.endTime = performance.now();
     metric.duration = metric.endTime - metric.startTime;
-    
+
     if (additionalMetadata) {
       metric.metadata = { ...metric.metadata, ...additionalMetadata };
     }
@@ -204,12 +214,14 @@ export class PerformanceMonitor {
     responseSize?: number,
     requestSize?: number
   ): void {
-    if (!this.isEnabled) return;
+    if (!this.isEnabled) {
+      return;
+    }
 
     const metric: NetworkMetric = {
       id: `network_${Date.now()}_${Math.random()}`,
       name: `${method} ${url}`,
-      type: 'network',
+      type: "network",
       url,
       method,
       status,
@@ -233,12 +245,14 @@ export class PerformanceMonitor {
     renderCount?: number,
     props?: Record<string, any>
   ): void {
-    if (!this.isEnabled) return;
+    if (!this.isEnabled) {
+      return;
+    }
 
     const metric: RenderMetric = {
       id: `render_${componentName}_${Date.now()}`,
       name: `Render ${componentName}`,
-      type: 'render',
+      type: "render",
       componentName,
       renderCount,
       props,
@@ -255,14 +269,16 @@ export class PerformanceMonitor {
    * 记录内存使用情况
    */
   recordMemoryUsage(): void {
-    if (!this.isEnabled) return;
+    if (!this.isEnabled) {
+      return;
+    }
 
     // React Native中获取内存信息的方法有限
     // 这里提供一个基础框架，实际实现可能需要原生模块支持
     const metric: MemoryMetric = {
       id: `memory_${Date.now()}`,
-      name: 'Memory Usage',
-      type: 'memory',
+      name: "Memory Usage",
+      type: "memory",
       startTime: performance.now(),
       endTime: performance.now(),
       duration: 0,
@@ -287,12 +303,14 @@ export class PerformanceMonitor {
     coordinates?: { x: number; y: number },
     metadata?: Record<string, any>
   ): void {
-    if (!this.isEnabled) return;
+    if (!this.isEnabled) {
+      return;
+    }
 
     const metric: UserInteractionMetric = {
       id: `interaction_${Date.now()}_${Math.random()}`,
       name: `${action} on ${target}`,
-      type: 'user_interaction',
+      type: "user_interaction",
       action,
       target,
       coordinates,
@@ -314,12 +332,14 @@ export class PerformanceMonitor {
     duration: number,
     metadata?: Record<string, any>
   ): void {
-    if (!this.isEnabled) return;
+    if (!this.isEnabled) {
+      return;
+    }
 
     const metric: PerformanceMetric = {
       id: `custom_${Date.now()}_${Math.random()}`,
       name,
-      type: 'custom',
+      type: "custom",
       startTime: performance.now() - duration,
       endTime: performance.now(),
       duration,
@@ -343,7 +363,11 @@ export class PerformanceMonitor {
 
     // 在开发环境中输出性能警告
     if (__DEV__ && this.shouldWarnAboutPerformance(metric)) {
-      console.warn(`Performance warning: ${metric.name} took ${metric.duration?.toFixed(2)}ms`);
+      console.warn(
+        `Performance warning: ${metric.name} took ${metric.duration?.toFixed(
+          2
+        )}ms`
+      );
     }
   }
 
@@ -351,14 +375,16 @@ export class PerformanceMonitor {
    * 判断是否应该发出性能警告
    */
   private shouldWarnAboutPerformance(metric: PerformanceMetric): boolean {
-    if (!metric.duration) return false;
+    if (!metric.duration) {
+      return false;
+    }
 
     switch (metric.type) {
-      case 'render':
+      case "render":
         return metric.duration > 16; // 超过一帧的时间
-      case 'network':
+      case "network":
         return metric.duration > 5000; // 超过5秒
-      case 'user_interaction':
+      case "user_interaction":
         return metric.duration > 100; // 超过100ms
       default:
         return metric.duration > 1000; // 超过1秒
@@ -377,10 +403,10 @@ export class PerformanceMonitor {
   } {
     const byType: Record<string, number> = {};
     const durationByType: Record<string, number[]> = {};
-    
-    this.metrics.forEach(metric => {
+
+    this.metrics.forEach((metric) => {
       byType[metric.type] = (byType[metric.type] || 0) + 1;
-      
+
       if (metric.duration) {
         if (!durationByType[metric.type]) {
           durationByType[metric.type] = [];
@@ -390,14 +416,15 @@ export class PerformanceMonitor {
     });
 
     const averageDuration: Record<string, number> = {};
-    Object.keys(durationByType).forEach(type => {
+    Object.keys(durationByType).forEach((type) => {
       const durations = durationByType[type];
-      averageDuration[type] = durations.reduce((a, b) => a + b, 0) / durations.length;
+      averageDuration[type] =
+        durations.reduce((a, b) => a + b, 0) / durations.length;
     });
 
     // 获取最慢的10个操作
     const slowestOperations = [...this.metrics]
-      .filter(m => m.duration)
+      .filter((m) => m.duration)
       .sort((a, b) => (b.duration || 0) - (a.duration || 0))
       .slice(0, 10);
 
@@ -423,15 +450,24 @@ export class PerformanceMonitor {
     slowestRequests: NetworkMetric[];
     errorRequests: NetworkMetric[];
   } {
-    const networkMetrics = this.metrics.filter(m => m.type === 'network') as NetworkMetric[];
-    
+    const networkMetrics = this.metrics.filter(
+      (m) => m.type === "network"
+    ) as NetworkMetric[];
+
     const totalRequests = networkMetrics.length;
-    const successfulRequests = networkMetrics.filter(m => m.status && m.status < 400).length;
-    const errorRequests = networkMetrics.filter(m => m.status && m.status >= 400);
-    
-    const averageResponseTime = networkMetrics.reduce((sum, m) => sum + (m.duration || 0), 0) / totalRequests;
-    const successRate = totalRequests > 0 ? (successfulRequests / totalRequests) * 100 : 0;
-    
+    const successfulRequests = networkMetrics.filter(
+      (m) => m.status && m.status < 400
+    ).length;
+    const errorRequests = networkMetrics.filter(
+      (m) => m.status && m.status >= 400
+    );
+
+    const averageResponseTime =
+      networkMetrics.reduce((sum, m) => sum + (m.duration || 0), 0) /
+      totalRequests;
+    const successRate =
+      totalRequests > 0 ? (successfulRequests / totalRequests) * 100 : 0;
+
     const slowestRequests = [...networkMetrics]
       .sort((a, b) => (b.duration || 0) - (a.duration || 0))
       .slice(0, 10);
@@ -475,12 +511,15 @@ export class PerformanceMonitor {
    */
   private async saveSettings(): Promise<void> {
     try {
-      await AsyncStorage.setItem('performance_monitor_settings', JSON.stringify({
-        isEnabled: this.isEnabled,
-        maxMetrics: this.maxMetrics,
-      }));
+      await AsyncStorage.setItem(
+        "performance_monitor_settings",
+        JSON.stringify({
+          isEnabled: this.isEnabled,
+          maxMetrics: this.maxMetrics,
+        })
+      );
     } catch (error) {
-      console.error('Failed to save performance monitor settings:', error);
+      console.error("Failed to save performance monitor settings:", error);
     }
   }
 
@@ -489,14 +528,16 @@ export class PerformanceMonitor {
    */
   private async loadSettings(): Promise<void> {
     try {
-      const settings = await AsyncStorage.getItem('performance_monitor_settings');
+      const settings = await AsyncStorage.getItem(
+        "performance_monitor_settings"
+      );
       if (settings) {
         const parsed = JSON.parse(settings);
         this.isEnabled = parsed.isEnabled ?? true;
         this.maxMetrics = parsed.maxMetrics ?? 1000;
       }
     } catch (error) {
-      console.error('Failed to load performance monitor settings:', error);
+      console.error("Failed to load performance monitor settings:", error);
     }
   }
 
@@ -513,18 +554,18 @@ export class PerformanceMonitor {
    */
   startMonitoring(interval: number = 5000): void {
     if (this.isMonitoring) {
-      console.warn('性能监控已在运行中');
+      console.warn("性能监控已在运行中");
       return;
     }
 
     this.isMonitoring = true;
-    console.log('🔍 开始性能监控...');
+    console.log("🔍 开始性能监控...");
 
     this.monitoringInterval = setInterval(async () => {
       try {
         await this.collectPerformanceData();
       } catch (error) {
-        console.error('性能数据收集失败:', error);
+        console.error("性能数据收集失败:", error);
       }
     }, interval);
   }
@@ -538,7 +579,7 @@ export class PerformanceMonitor {
       this.monitoringInterval = null;
     }
     this.isMonitoring = false;
-    console.log('⏹️ 性能监控已停止');
+    console.log("⏹️ 性能监控已停止");
   }
 
   /**
@@ -549,7 +590,7 @@ export class PerformanceMonitor {
       const metrics = await deviceInfoManager.getCurrentPerformanceMetrics();
       this.analyzePerformanceMetrics(metrics);
     } catch (error) {
-      console.error('收集性能数据失败:', error);
+      console.error("收集性能数据失败:", error);
     }
   }
 
@@ -559,16 +600,16 @@ export class PerformanceMonitor {
   private analyzePerformanceMetrics(metrics: PerformanceMetrics): void {
     // 检查内存使用
     this.checkMemoryUsage(metrics.memoryUsage);
-    
+
     // 检查CPU使用
     this.checkCpuUsage(metrics.cpuUsage);
-    
+
     // 检查电池消耗
     this.checkBatteryDrain(metrics.batteryDrain);
-    
+
     // 检查网络延迟
     this.checkNetworkLatency(metrics.networkLatency);
-    
+
     // 检查渲染性能
     this.checkRenderTime(metrics.renderTime);
   }
@@ -576,26 +617,43 @@ export class PerformanceMonitor {
   /**
    * 检查内存使用情况
    */
-  private checkMemoryUsage(memoryUsage: PerformanceMetrics['memoryUsage']): void {
+  private checkMemoryUsage(
+    memoryUsage: PerformanceMetrics["memoryUsage"]
+  ): void {
     const percentage = memoryUsage.percentage;
-    let severity: MemoryWarning['severity'] = 'low';
-    
+    let severity: MemoryWarning["severity"] = "low";
+
     if (percentage >= this.thresholds.memory.critical) {
-      severity = 'critical';
-      this.addPerformanceAlert('memory', 'critical', `内存使用率达到${percentage.toFixed(1)}%，应用可能崩溃`, memoryUsage);
+      severity = "critical";
+      this.addPerformanceAlert(
+        "memory",
+        "critical",
+        `内存使用率达到${percentage.toFixed(1)}%，应用可能崩溃`,
+        memoryUsage
+      );
     } else if (percentage >= this.thresholds.memory.error) {
-      severity = 'high';
-      this.addPerformanceAlert('memory', 'error', `内存使用率过高：${percentage.toFixed(1)}%`, memoryUsage);
+      severity = "high";
+      this.addPerformanceAlert(
+        "memory",
+        "error",
+        `内存使用率过高：${percentage.toFixed(1)}%`,
+        memoryUsage
+      );
     } else if (percentage >= this.thresholds.memory.warning) {
-      severity = 'medium';
-      this.addPerformanceAlert('memory', 'warning', `内存使用率较高：${percentage.toFixed(1)}%`, memoryUsage);
+      severity = "medium";
+      this.addPerformanceAlert(
+        "memory",
+        "warning",
+        `内存使用率较高：${percentage.toFixed(1)}%`,
+        memoryUsage
+      );
     }
 
-    if (severity !== 'low') {
+    if (severity !== "low") {
       this.memoryWarnings.push({
         timestamp: Date.now(),
         memoryUsage: percentage,
-        threshold: this.getThresholdForSeverity('memory', severity),
+        threshold: this.getThresholdForSeverity("memory", severity),
         severity,
       });
     }
@@ -606,11 +664,26 @@ export class PerformanceMonitor {
    */
   private checkCpuUsage(cpuUsage: number): void {
     if (cpuUsage >= this.thresholds.cpu.critical) {
-      this.addPerformanceAlert('cpu', 'critical', `CPU使用率过高：${cpuUsage.toFixed(1)}%`, { cpuUsage });
+      this.addPerformanceAlert(
+        "cpu",
+        "critical",
+        `CPU使用率过高：${cpuUsage.toFixed(1)}%`,
+        { cpuUsage }
+      );
     } else if (cpuUsage >= this.thresholds.cpu.error) {
-      this.addPerformanceAlert('cpu', 'error', `CPU使用率较高：${cpuUsage.toFixed(1)}%`, { cpuUsage });
+      this.addPerformanceAlert(
+        "cpu",
+        "error",
+        `CPU使用率较高：${cpuUsage.toFixed(1)}%`,
+        { cpuUsage }
+      );
     } else if (cpuUsage >= this.thresholds.cpu.warning) {
-      this.addPerformanceAlert('cpu', 'warning', `CPU使用率偏高：${cpuUsage.toFixed(1)}%`, { cpuUsage });
+      this.addPerformanceAlert(
+        "cpu",
+        "warning",
+        `CPU使用率偏高：${cpuUsage.toFixed(1)}%`,
+        { cpuUsage }
+      );
     }
   }
 
@@ -619,13 +692,28 @@ export class PerformanceMonitor {
    */
   private checkBatteryDrain(batteryDrain: number): void {
     const batteryLevel = (1 - batteryDrain) * 100;
-    
+
     if (batteryLevel <= this.thresholds.battery.critical) {
-      this.addPerformanceAlert('battery', 'critical', `电池电量严重不足：${batteryLevel.toFixed(1)}%`, { batteryLevel });
+      this.addPerformanceAlert(
+        "battery",
+        "critical",
+        `电池电量严重不足：${batteryLevel.toFixed(1)}%`,
+        { batteryLevel }
+      );
     } else if (batteryLevel <= this.thresholds.battery.error) {
-      this.addPerformanceAlert('battery', 'error', `电池电量不足：${batteryLevel.toFixed(1)}%`, { batteryLevel });
+      this.addPerformanceAlert(
+        "battery",
+        "error",
+        `电池电量不足：${batteryLevel.toFixed(1)}%`,
+        { batteryLevel }
+      );
     } else if (batteryLevel <= this.thresholds.battery.warning) {
-      this.addPerformanceAlert('battery', 'warning', `电池电量较低：${batteryLevel.toFixed(1)}%`, { batteryLevel });
+      this.addPerformanceAlert(
+        "battery",
+        "warning",
+        `电池电量较低：${batteryLevel.toFixed(1)}%`,
+        { batteryLevel }
+      );
     }
   }
 
@@ -633,14 +721,31 @@ export class PerformanceMonitor {
    * 检查网络延迟
    */
   private checkNetworkLatency(networkLatency: number): void {
-    if (networkLatency < 0) return; // 网络不可用
+    if (networkLatency < 0) {
+      return;
+    } // 网络不可用
 
     if (networkLatency >= this.thresholds.network.critical) {
-      this.addPerformanceAlert('network', 'critical', `网络延迟过高：${networkLatency}ms`, { networkLatency });
+      this.addPerformanceAlert(
+        "network",
+        "critical",
+        `网络延迟过高：${networkLatency}ms`,
+        { networkLatency }
+      );
     } else if (networkLatency >= this.thresholds.network.error) {
-      this.addPerformanceAlert('network', 'error', `网络延迟较高：${networkLatency}ms`, { networkLatency });
+      this.addPerformanceAlert(
+        "network",
+        "error",
+        `网络延迟较高：${networkLatency}ms`,
+        { networkLatency }
+      );
     } else if (networkLatency >= this.thresholds.network.warning) {
-      this.addPerformanceAlert('network', 'warning', `网络延迟偏高：${networkLatency}ms`, { networkLatency });
+      this.addPerformanceAlert(
+        "network",
+        "warning",
+        `网络延迟偏高：${networkLatency}ms`,
+        { networkLatency }
+      );
     }
   }
 
@@ -649,11 +754,26 @@ export class PerformanceMonitor {
    */
   private checkRenderTime(renderTime: number): void {
     if (renderTime >= this.thresholds.render.critical) {
-      this.addPerformanceAlert('render', 'critical', `渲染时间过长：${renderTime.toFixed(1)}ms`, { renderTime });
+      this.addPerformanceAlert(
+        "render",
+        "critical",
+        `渲染时间过长：${renderTime.toFixed(1)}ms`,
+        { renderTime }
+      );
     } else if (renderTime >= this.thresholds.render.error) {
-      this.addPerformanceAlert('render', 'error', `渲染时间较长：${renderTime.toFixed(1)}ms`, { renderTime });
+      this.addPerformanceAlert(
+        "render",
+        "error",
+        `渲染时间较长：${renderTime.toFixed(1)}ms`,
+        { renderTime }
+      );
     } else if (renderTime >= this.thresholds.render.warning) {
-      this.addPerformanceAlert('render', 'warning', `渲染时间偏长：${renderTime.toFixed(1)}ms`, { renderTime });
+      this.addPerformanceAlert(
+        "render",
+        "warning",
+        `渲染时间偏长：${renderTime.toFixed(1)}ms`,
+        { renderTime }
+      );
     }
   }
 
@@ -661,8 +781,8 @@ export class PerformanceMonitor {
    * 添加性能警告
    */
   private addPerformanceAlert(
-    type: PerformanceAlert['type'],
-    severity: PerformanceAlert['severity'],
+    type: PerformanceAlert["type"],
+    severity: PerformanceAlert["severity"],
     message: string,
     metrics: any
   ): void {
@@ -686,13 +806,20 @@ export class PerformanceMonitor {
   /**
    * 获取严重程度对应的阈值
    */
-  private getThresholdForSeverity(type: keyof typeof this.thresholds, severity: string): number {
+  private getThresholdForSeverity(
+    type: keyof typeof this.thresholds,
+    severity: string
+  ): number {
     const thresholds = this.thresholds[type];
     switch (severity) {
-      case 'critical': return thresholds.critical;
-      case 'high': return thresholds.error;
-      case 'medium': return thresholds.warning;
-      default: return 0;
+      case "critical":
+        return thresholds.critical;
+      case "high":
+        return thresholds.error;
+      case "medium":
+        return thresholds.warning;
+      default:
+        return 0;
     }
   }
 
@@ -705,7 +832,7 @@ export class PerformanceMonitor {
       startTime: Date.now(),
       metadata,
     };
-    
+
     this.benchmarks.set(name, benchmark);
     console.log(`🏁 开始基准测试: ${name}`);
   }
@@ -722,7 +849,7 @@ export class PerformanceMonitor {
 
     benchmark.endTime = Date.now();
     benchmark.duration = benchmark.endTime - benchmark.startTime;
-    
+
     console.log(`🏆 基准测试完成: ${name} - ${benchmark.duration}ms`);
     return benchmark;
   }
@@ -738,15 +865,15 @@ export class PerformanceMonitor {
   }> {
     return new Promise((resolve) => {
       const startTime = Date.now();
-      
+
       // 测试JS加载时间
       InteractionManager.runAfterInteractions(() => {
         const jsLoadTime = Date.now() - startTime;
-        
+
         // 测试首次渲染时间
         requestAnimationFrame(() => {
           const firstRenderTime = Date.now() - startTime;
-          
+
           resolve({
             coldStart: startTime,
             warmStart: Date.now() - startTime,
@@ -767,7 +894,8 @@ export class PerformanceMonitor {
     memoryGrowth: number;
     averageGrowthPerIteration: number;
   }> {
-    const initialMetrics = await deviceInfoManager.getCurrentPerformanceMetrics();
+    const initialMetrics =
+      await deviceInfoManager.getCurrentPerformanceMetrics();
     const initialMemory = initialMetrics.memoryUsage.used;
 
     // 模拟内存使用操作
@@ -777,10 +905,10 @@ export class PerformanceMonitor {
         id: Math.random(),
         data: new Array(100).fill(Math.random()),
       }));
-      
-             // 等待一小段时间
-       await new Promise<void>(resolve => setTimeout(resolve, 100));
-      
+
+      // 等待一小段时间
+      await new Promise<void>((resolve) => setTimeout(resolve, 100));
+
       // 清理引用
       tempData.length = 0;
     }
@@ -800,19 +928,19 @@ export class PerformanceMonitor {
   /**
    * 设置应用状态监听
    */
-     private setupAppStateListener(): void {
-     const handleAppStateChange = (nextAppState: AppStateStatus) => {
-       if (nextAppState === 'background') {
-         console.log('📱 应用进入后台，暂停性能监控');
-         this.stopMonitoring();
-       } else if (nextAppState === 'active') {
-         console.log('📱 应用回到前台，恢复性能监控');
-         this.startMonitoring();
-       }
-     };
-     
-     AppState.addEventListener('change', handleAppStateChange);
-   }
+  private setupAppStateListener(): void {
+    const handleAppStateChange = (nextAppState: AppStateStatus) => {
+      if (nextAppState === "background") {
+        console.log("📱 应用进入后台，暂停性能监控");
+        this.stopMonitoring();
+      } else if (nextAppState === "active") {
+        console.log("📱 应用回到前台，恢复性能监控");
+        this.startMonitoring();
+      }
+    };
+
+    AppState.addEventListener("change", handleAppStateChange);
+  }
 
   /**
    * 获取性能报告
@@ -828,10 +956,14 @@ export class PerformanceMonitor {
       averageBenchmarkTime: number;
     };
   } {
-    const completedBenchmarks = Array.from(this.benchmarks.values()).filter(b => b.duration !== undefined);
-    const averageBenchmarkTime = completedBenchmarks.length > 0
-      ? completedBenchmarks.reduce((sum, b) => sum + (b.duration || 0), 0) / completedBenchmarks.length
-      : 0;
+    const completedBenchmarks = Array.from(this.benchmarks.values()).filter(
+      (b) => b.duration !== undefined
+    );
+    const averageBenchmarkTime =
+      completedBenchmarks.length > 0
+        ? completedBenchmarks.reduce((sum, b) => sum + (b.duration || 0), 0) /
+          completedBenchmarks.length
+        : 0;
 
     return {
       alerts: [...this.performanceAlerts],
@@ -839,7 +971,9 @@ export class PerformanceMonitor {
       benchmarks: completedBenchmarks,
       summary: {
         totalAlerts: this.performanceAlerts.length,
-        criticalAlerts: this.performanceAlerts.filter(a => a.severity === 'critical').length,
+        criticalAlerts: this.performanceAlerts.filter(
+          (a) => a.severity === "critical"
+        ).length,
         memoryIssues: this.memoryWarnings.length,
         averageBenchmarkTime,
       },
@@ -853,7 +987,7 @@ export class PerformanceMonitor {
     this.performanceAlerts = [];
     this.memoryWarnings = [];
     this.benchmarks.clear();
-    console.log('🧹 性能数据已清除');
+    console.log("🧹 性能数据已清除");
   }
 
   /**
@@ -865,33 +999,33 @@ export class PerformanceMonitor {
 
     // 基于警告生成建议
     if (report.summary.memoryIssues > 0) {
-      suggestions.push('检测到内存使用问题，建议优化内存管理');
-      suggestions.push('考虑使用React.memo()和useMemo()优化组件渲染');
-      suggestions.push('及时清理不需要的事件监听器和定时器');
+      suggestions.push("检测到内存使用问题，建议优化内存管理");
+      suggestions.push("考虑使用React.memo()和useMemo()优化组件渲染");
+      suggestions.push("及时清理不需要的事件监听器和定时器");
     }
 
     if (report.summary.criticalAlerts > 0) {
-      suggestions.push('检测到严重性能问题，建议立即优化');
-      suggestions.push('考虑使用懒加载和代码分割减少初始加载时间');
+      suggestions.push("检测到严重性能问题，建议立即优化");
+      suggestions.push("考虑使用懒加载和代码分割减少初始加载时间");
     }
 
     if (report.summary.averageBenchmarkTime > 1000) {
-      suggestions.push('操作响应时间较长，建议优化算法和数据结构');
-      suggestions.push('考虑使用Web Workers处理耗时操作');
+      suggestions.push("操作响应时间较长，建议优化算法和数据结构");
+      suggestions.push("考虑使用Web Workers处理耗时操作");
     }
 
     // 网络相关建议
-    const networkAlerts = report.alerts.filter(a => a.type === 'network');
+    const networkAlerts = report.alerts.filter((a) => a.type === "network");
     if (networkAlerts.length > 0) {
-      suggestions.push('网络延迟较高，建议实现请求缓存和离线功能');
-      suggestions.push('考虑使用CDN加速静态资源加载');
+      suggestions.push("网络延迟较高，建议实现请求缓存和离线功能");
+      suggestions.push("考虑使用CDN加速静态资源加载");
     }
 
     // 渲染相关建议
-    const renderAlerts = report.alerts.filter(a => a.type === 'render');
+    const renderAlerts = report.alerts.filter((a) => a.type === "render");
     if (renderAlerts.length > 0) {
-      suggestions.push('渲染性能不佳，建议优化组件结构和减少重渲染');
-      suggestions.push('使用FlatList替代ScrollView处理大量数据');
+      suggestions.push("渲染性能不佳，建议优化组件结构和减少重渲染");
+      suggestions.push("使用FlatList替代ScrollView处理大量数据");
     }
 
     return suggestions;
@@ -905,13 +1039,16 @@ export const performanceMonitor = PerformanceMonitor.getInstance();
 export const startPerformanceMeasure = (
   id: string,
   name: string,
-  type: PerformanceMetric['type'],
+  type: PerformanceMetric["type"],
   metadata?: Record<string, any>
 ) => {
   performanceMonitor.startMeasure(id, name, type, metadata);
 };
 
-export const endPerformanceMeasure = (id: string, metadata?: Record<string, any>) => {
+export const endPerformanceMeasure = (
+  id: string,
+  metadata?: Record<string, any>
+) => {
   performanceMonitor.endMeasure(id, metadata);
 };
 
@@ -924,7 +1061,15 @@ export const recordNetworkPerformance = (
   responseSize?: number,
   requestSize?: number
 ) => {
-  performanceMonitor.recordNetworkRequest(url, method, startTime, endTime, status, responseSize, requestSize);
+  performanceMonitor.recordNetworkRequest(
+    url,
+    method,
+    startTime,
+    endTime,
+    status,
+    responseSize,
+    requestSize
+  );
 };
 
 export const recordRenderPerformance = (
@@ -942,7 +1087,12 @@ export const recordUserInteraction = (
   coordinates?: { x: number; y: number },
   metadata?: Record<string, any>
 ) => {
-  performanceMonitor.recordUserInteraction(action, target, coordinates, metadata);
+  performanceMonitor.recordUserInteraction(
+    action,
+    target,
+    coordinates,
+    metadata
+  );
 };
 
 export const getPerformanceStats = () => {
@@ -975,4 +1125,4 @@ export const clearPerformanceData = () => {
 
 export const getOptimizationSuggestions = () => {
   return performanceMonitor.getOptimizationSuggestions();
-}; 
+};

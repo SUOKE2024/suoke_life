@@ -1,5 +1,9 @@
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Icon from '../../components/common/Icon';
+import { colors, spacing, fonts } from '../../constants/theme';
+
+
 import React from 'react';
-import {
   View,
   Text,
   StyleSheet,
@@ -7,9 +11,6 @@ import {
   StatusBar,
   ViewStyle,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import Icon from '../../components/common/Icon';
-import { colors, spacing, fonts } from '../../constants/theme';
 
 interface ScreenHeaderProps {
   title: string;

@@ -1,0 +1,473 @@
+version: '3.8'
+
+# 索克生活五诊系统 Docker Compose 配置
+# Five Diagnosis System Docker Compose Configuration
+
+services:
+  # 🔮 算诊服务 - 核心创新
+  calculation-service:
+    build:
+      context: ./calculation-service
+      dockerfile: Dockerfile
+    container_name: suoke-calculation-service
+    ports:
+      - "8003:8000"
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8000
+      - DEBUG=false
+      - ENABLE_CACHE=true
+      - CACHE_TTL=3600
+      - RATE_LIMIT_ENABLED=true
+      - RATE_LIMIT_MAX_REQUESTS=100
+      - RATE_LIMIT_WINDOW_SECONDS=60
+      - ALLOWED_ORIGINS=["http://localhost:3000", "http://localhost:8080"]
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - ./calculation-service/logs:/app/logs
+      - calculation_data:/app/data
+    networks:
+      - five-diagnosis-network
+    depends_on:
+      - redis
+      - postgres
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.calculation.rule=Host(`calculation.suoke.local`)"
+      - "traefik.http.routers.calculation.entrypoints=web"
+      - "traefik.http.services.calculation.loadbalancer.server.port=8000"
+
+  # 👁️ 望诊服务
+  look-service:
+    build:
+      context: ./look-service
+      dockerfile: Dockerfile
+    container_name: suoke-look-service
+    ports:
+      - "8080:8080"
+    environment:
+      - SERVICE_NAME=look-service
+      - SERVICE_VERSION=1.0.0
+      - HOST=0.0.0.0
+      - PORT=8080
+      - DEBUG=false
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=suoke_user
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=look_service_db
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - ML_MODEL_PATH=/app/models
+      - ML_BATCH_SIZE=32
+      - ML_CONFIDENCE_THRESHOLD=0.8
+    volumes:
+      - ./look-service/uploads:/app/uploads
+      - ./look-service/models:/app/models
+      - look_data:/app/data
+    networks:
+      - five-diagnosis-network
+    depends_on:
+      - postgres
+      - redis
+      - mongodb
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.look.rule=Host(`look.suoke.local`)"
+      - "traefik.http.routers.look.entrypoints=web"
+      - "traefik.http.services.look.loadbalancer.server.port=8080"
+
+  # 👂 闻诊服务
+  listen-service:
+    build:
+      context: ./listen-service
+      dockerfile: Dockerfile
+    container_name: suoke-listen-service
+    ports:
+      - "8000:8000"
+      - "50051:50051"  # gRPC端口
+    environment:
+      - LISTEN_SERVICE_HOST=0.0.0.0
+      - LISTEN_SERVICE_PORT=8000
+      - LISTEN_SERVICE_GRPC_PORT=50051
+      - DEBUG=false
+      - CACHE_BACKEND=redis
+      - REDIS_URL=redis://redis:6379/1
+      - LOG_LEVEL=INFO
+      - LOG_FORMAT=json
+      - AUTH_ENABLED=false
+      - AUTH_SECRET_KEY=${JWT_SECRET_KEY}
+    volumes:
+      - ./listen-service/audio_uploads:/app/uploads
+      - ./listen-service/models:/app/models
+      - listen_data:/app/data
+    networks:
+      - five-diagnosis-network
+    depends_on:
+      - redis
+      - postgres
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.listen.rule=Host(`listen.suoke.local`)"
+      - "traefik.http.routers.listen.entrypoints=web"
+      - "traefik.http.services.listen.loadbalancer.server.port=8000"
+
+  # 💬 问诊服务
+  inquiry-service:
+    build:
+      context: ./inquiry-service
+      dockerfile: Dockerfile
+    container_name: suoke-inquiry-service
+    ports:
+      - "8001:8000"
+      - "50052:50052"  # gRPC端口
+    environment:
+      - INQUIRY_SERVICE_HOST=0.0.0.0
+      - INQUIRY_SERVICE_PORT=8000
+      - INQUIRY_SERVICE_GRPC_PORT=50052
+      - DEBUG=false
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=suoke_user
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=inquiry_service_db
+      - REDIS_URL=redis://redis:6379/2
+      - MONGODB_URL=mongodb://suoke_user:${MONGO_PASSWORD}@mongodb:27017/suoke_knowledge_base
+      - LOG_LEVEL=INFO
+      - NLP_MODEL_PATH=/app/models/nlp
+    volumes:
+      - ./inquiry-service/models:/app/models
+      - ./inquiry-service/knowledge:/app/knowledge
+      - inquiry_data:/app/data
+    networks:
+      - five-diagnosis-network
+    depends_on:
+      - postgres
+      - redis
+      - mongodb
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.inquiry.rule=Host(`inquiry.suoke.local`)"
+      - "traefik.http.routers.inquiry.entrypoints=web"
+      - "traefik.http.services.inquiry.loadbalancer.server.port=8000"
+
+  # 🤲 切诊服务
+  palpation-service:
+    build:
+      context: ./palpation-service
+      dockerfile: Dockerfile
+    container_name: suoke-palpation-service
+    ports:
+      - "8002:8000"
+    environment:
+      - PALPATION_SERVICE_HOST=0.0.0.0
+      - PALPATION_SERVICE_PORT=8000
+      - DEBUG=false
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=suoke_user
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=palpation_service_db
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_DB=3
+      - SENSOR_CONFIG_PATH=/app/config/sensors.yml
+      - ML_MODEL_PATH=/app/models
+    volumes:
+      - ./palpation-service/config:/app/config
+      - ./palpation-service/models:/app/models
+      - ./palpation-service/sensor_data:/app/sensor_data
+      - palpation_data:/app/data
+    networks:
+      - five-diagnosis-network
+    depends_on:
+      - postgres
+      - redis
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.palpation.rule=Host(`palpation.suoke.local`)"
+      - "traefik.http.routers.palpation.entrypoints=web"
+      - "traefik.http.services.palpation.loadbalancer.server.port=8000"
+
+  # 🌐 API网关
+  api-gateway:
+    image: traefik:v2.10
+    container_name: suoke-api-gateway
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--metrics.prometheus=true"
+      - "--metrics.prometheus.addEntryPointsLabels=true"
+      - "--metrics.prometheus.addServicesLabels=true"
+      - "--log.level=INFO"
+      - "--accesslog=true"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8090:8080"  # Traefik Dashboard
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./gateway/config:/etc/traefik
+    networks:
+      - five-diagnosis-network
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dashboard.rule=Host(`gateway.suoke.local`)"
+      - "traefik.http.routers.dashboard.entrypoints=web"
+
+  # 📊 数据库服务
+  postgres:
+    image: postgres:15
+    container_name: suoke-postgres
+    environment:
+      POSTGRES_USER: suoke_user
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: suoke_main_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    networks:
+      - five-diagnosis-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U suoke_user -d suoke_main_db"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 🗄️ Redis缓存
+  redis:
+    image: redis:7-alpine
+    container_name: suoke-redis
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+      - ./redis/config:/usr/local/etc/redis
+    networks:
+      - five-diagnosis-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 🍃 MongoDB知识库
+  mongodb:
+    image: mongo:6
+    container_name: suoke-mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: suoke_user
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_INITDB_DATABASE: suoke_knowledge_base
+    volumes:
+      - mongodb_data:/data/db
+      - ./mongodb/init:/docker-entrypoint-initdb.d
+    ports:
+      - "27017:27017"
+    networks:
+      - five-diagnosis-network
+    restart: unless-stopped
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 🐰 消息队列
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: suoke-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: suoke_user
+      RABBITMQ_DEFAULT_PASS: ${MQ_PASSWORD}
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+      - ./rabbitmq/config:/etc/rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"  # Management UI
+    networks:
+      - five-diagnosis-network
+    restart: unless-stopped
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 📈 监控服务
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: suoke-prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    volumes:
+      - ./monitoring/prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - five-diagnosis-network
+    restart: unless-stopped
+
+  # 📊 Grafana仪表板
+  grafana:
+    image: grafana/grafana:latest
+    container_name: suoke-grafana
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD}
+      GF_USERS_ALLOW_SIGN_UP: false
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards
+    ports:
+      - "3000:3000"
+    networks:
+      - five-diagnosis-network
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+  # 🔍 链路追踪
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: suoke-jaeger
+    environment:
+      COLLECTOR_ZIPKIN_HOST_PORT: :9411
+    ports:
+      - "16686:16686"  # Jaeger UI
+      - "14268:14268"  # Jaeger collector
+      - "9411:9411"    # Zipkin collector
+    networks:
+      - five-diagnosis-network
+    restart: unless-stopped
+
+  # 📝 日志聚合
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+    container_name: suoke-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    networks:
+      - five-diagnosis-network
+    restart: unless-stopped
+
+  # 📊 Kibana日志可视化
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.11.0
+    container_name: suoke-kibana
+    environment:
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    networks:
+      - five-diagnosis-network
+    depends_on:
+      - elasticsearch
+    restart: unless-stopped
+
+# 网络配置
+networks:
+  five-diagnosis-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+# 数据卷配置
+volumes:
+  # 服务数据卷
+  calculation_data:
+    driver: local
+  look_data:
+    driver: local
+  listen_data:
+    driver: local
+  inquiry_data:
+    driver: local
+  palpation_data:
+    driver: local
+  
+  # 数据库数据卷
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  mongodb_data:
+    driver: local
+  rabbitmq_data:
+    driver: local
+  
+  # 监控数据卷
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  elasticsearch_data:
+    driver: local
+
+# 环境变量配置
+# 请在 .env 文件中设置以下变量：
+# POSTGRES_PASSWORD=your_postgres_password
+# REDIS_PASSWORD=your_redis_password
+# MONGO_PASSWORD=your_mongo_password
+# MQ_PASSWORD=your_mq_password
+# JWT_SECRET_KEY=your_jwt_secret_key
+# GRAFANA_PASSWORD=your_grafana_password 

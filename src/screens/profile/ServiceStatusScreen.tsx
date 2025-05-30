@@ -1,5 +1,9 @@
+import { useNavigation } from '@react-navigation/native';
+import { colors, spacing, fonts } from '../../constants/theme';
+import { apiIntegrationTest } from '../../utils/apiIntegrationTest';
+
+
 import React, { useState, useEffect } from 'react';
-import {
   View,
   Text,
   StyleSheet,
@@ -9,9 +13,6 @@ import {
   RefreshControl,
   Alert,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { colors, spacing, fonts } from '../../constants/theme';
-import { apiIntegrationTest } from '../../utils/apiIntegrationTest';
 
 interface ServiceStatus {
   name: string;
@@ -85,13 +86,13 @@ export const ServiceStatusScreen: React.FC = () => {
   };
 
   // 刷新处理
-  const handleRefresh = () => {
+  const handleRefresh = useCallback( () => {, []);
     setRefreshing(true);
     checkServicesStatus();
   };
 
   // 返回处理
-  const handleBack = () => {
+  const handleBack = useCallback( () => {, []);
     navigation.goBack();
   };
 
@@ -163,7 +164,7 @@ export const ServiceStatusScreen: React.FC = () => {
                     styles.statusIndicator,
                     service.status === 'online' ? styles.statusOnline :
                     service.status === 'offline' ? styles.statusOffline :
-                    styles.statusUnknown
+                    styles.statusUnknown,
                   ]} />
                 </View>
                 

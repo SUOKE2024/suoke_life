@@ -1,5 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import {
+import { apiClient } from "../../services/apiClient";
+
+
   DiagnosisState,
   DiagnosisSession,
   DiagnosisData,
@@ -7,7 +9,6 @@ import {
   DiagnosisType,
   ApiResponse,
 } from "../../types";
-import { apiClient } from "../../services/apiClient";
 // import { API_CONFIG } from "../../constants/config";
 
 // 初始状态

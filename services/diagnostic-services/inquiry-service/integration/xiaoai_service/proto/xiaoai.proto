@@ -4,14 +4,14 @@ package xiaoai;
 
 // 小艾服务接口定义
 service XiaoAIService {
-  // 整合四诊数据
-  rpc IntegrateFourDiagnosis(IntegrateDiagnosisRequest) returns (IntegrateDiagnosisResponse) {}
+  // 整合五诊数据
+  rpc IntegrateFiveDiagnosis(IntegrateDiagnosisRequest) returns (IntegrateDiagnosisResponse) {}
   
   // 分析体质
   rpc AnalyzeConstitution(ConstitutionAnalysisRequest) returns (ConstitutionAnalysisResponse) {}
 }
 
-// 整合四诊数据请求
+// 整合五诊数据请求
 message IntegrateDiagnosisRequest {
   string inquiry_data = 1;       // 问诊数据（JSON字符串）
   string look_data = 2;          // 望诊数据（JSON字符串）
@@ -19,7 +19,7 @@ message IntegrateDiagnosisRequest {
   string palpation_data = 4;     // 切诊数据（JSON字符串）
 }
 
-// 整合四诊数据响应
+// 整合五诊数据响应
 message IntegrateDiagnosisResponse {
   string integration_result = 1; // 整合结果（JSON字符串）
   float confidence = 2;          // 置信度

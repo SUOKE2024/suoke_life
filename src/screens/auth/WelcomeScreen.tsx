@@ -1,5 +1,10 @@
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { AuthStackParamList } from '../../types/navigation';
+import { colors, spacing, fonts, borderRadius, shadows } from '../../constants/theme';
+
+
 import React, { useEffect, useRef } from 'react';
-import {
   View,
   Text,
   StyleSheet,
@@ -9,10 +14,6 @@ import {
   Animated,
   Dimensions,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { AuthStackParamList } from '../../types/navigation';
-import { colors, spacing, fonts, borderRadius, shadows } from '../../constants/theme';
 
 const { width, height } = Dimensions.get('window');
 
@@ -71,11 +72,11 @@ export const WelcomeScreen: React.FC = () => {
     ).start();
   }, []);
 
-  const handleLogin = () => {
+  const handleLogin = useCallback( () => {, []);
     navigation.navigate('Login');
   };
 
-  const handleRegister = () => {
+  const handleRegister = useCallback( () => {, []);
     navigation.navigate('Register');
   };
 
@@ -97,7 +98,7 @@ export const WelcomeScreen: React.FC = () => {
               inputRange: [0, 0.5, 1],
               outputRange: [0.3, 0.8, 0.3],
             }),
-          }
+          },
         ]}
       >
         <View style={[styles.particle, styles.particle1]} />
@@ -115,9 +116,9 @@ export const WelcomeScreen: React.FC = () => {
               opacity: fadeAnim,
               transform: [
                 { scale: logoScaleAnim },
-                { translateY: slideAnim }
-              ]
-            }
+                { translateY: slideAnim },
+              ],
+            },
           ]}
         >
           <View style={styles.logoWrapper}>
@@ -133,7 +134,7 @@ export const WelcomeScreen: React.FC = () => {
           <Animated.View 
             style={[
               styles.taglineContainer,
-              { transform: [{ translateY: slideAnim }] }
+              { transform: [{ translateY: slideAnim }] },
             ]}
           >
             <Text style={styles.tagline}>AI驱动的智慧健康管理平台</Text>
@@ -149,8 +150,8 @@ export const WelcomeScreen: React.FC = () => {
             styles.featuresContainer,
             { 
               opacity: fadeAnim,
-              transform: [{ translateY: slideAnim }] 
-            }
+              transform: [{ translateY: slideAnim }], 
+            },
           ]}
         >
           <View style={styles.featureRow}>
@@ -165,8 +166,8 @@ export const WelcomeScreen: React.FC = () => {
               <View style={[styles.featureIcon, { backgroundColor: colors.diagnosis.inspection }]}>
                 <Text style={styles.featureEmoji}>🏥</Text>
               </View>
-              <Text style={styles.featureText}>中医四诊</Text>
-              <Text style={styles.featureDesc}>望闻问切</Text>
+              <Text style={styles.featureText}>中医五诊</Text>
+              <Text style={styles.featureDesc}>望闻问切算</Text>
             </View>
             <View style={styles.featureItem}>
               <View style={[styles.featureIcon, { backgroundColor: colors.agents.soer }]}>
@@ -184,8 +185,8 @@ export const WelcomeScreen: React.FC = () => {
             styles.buttonContainer,
             { 
               opacity: fadeAnim,
-              transform: [{ translateY: buttonSlideAnim }] 
-            }
+              transform: [{ translateY: buttonSlideAnim }], 
+            },
           ]}
         >
           <TouchableOpacity 

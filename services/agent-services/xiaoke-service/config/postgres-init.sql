@@ -236,7 +236,7 @@ CREATE INDEX IF NOT EXISTS idx_user_subscriptions_end_date ON user_subscriptions
 INSERT INTO subscription_plans (id, name, description, price, duration_months, included_services)
 VALUES 
 ('basic', '基础健康会员', '基础健康咨询和体质评估服务', 29.9, 1, '["基础健康咨询", "体质测评", "基础食谱推荐"]'),
-('premium', '健康优享会员', '全面健康管理与个性化服务', 99.9, 1, '["高级健康咨询", "全套四诊分析", "个性化食谱", "季节性养生方案"]'),
+('premium', '健康优享会员', '全面健康管理与个性化服务', 99.9, 1, '["高级健康咨询", "全套五诊分析", "个性化食谱", "季节性养生方案"]'),
 ('family', '家庭健康套餐', '全家人的健康管理服务', 199.9, 1, '["家庭成员体质分析", "家庭共享健康方案", "定制家庭食谱", "农场认养服务"]');
 
 -- 初始化一些示例医生数据

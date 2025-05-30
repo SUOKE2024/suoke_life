@@ -120,7 +120,7 @@ async def test_generate_learning_path(edu_service):
 
         # 调用服务方法
         user_id = "user-123"
-        goal = "掌握中医四诊基本技能"
+        goal = "掌握中医五诊基本技能"
         result = await edu_service.generate_learning_path(user_id, goal)
 
         # 验证结果
@@ -133,7 +133,7 @@ async def test_generate_learning_path(edu_service):
         args, kwargs = mock_post.call_args
         assert kwargs["headers"]["Authorization"] == "Bearer test-api-key"
         assert kwargs["json"]["user_id"] == "user-123"
-        assert kwargs["json"]["goal"] == "掌握中医四诊基本技能"
+        assert kwargs["json"]["goal"] == "掌握中医五诊基本技能"
 
         # 验证缓存调用
         edu_service.cache_client.get.assert_called_once()

@@ -33,7 +33,7 @@ function simulateKeybindingTest() {
     const testResults = [
         { key: 'Cmd+Shift+V', expected: '切换语音模式', status: '待测试' },
         { key: '状态栏点击', expected: '语音模式切换', status: '待测试' },
-        { key: '命令面板', expected: '显示语音命令', status: '待测试' }
+        { key: '命令面板', expected: '显示语音命令', status: '待测试' },
     ];
     
     testResults.forEach((test, index) => {

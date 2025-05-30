@@ -33,7 +33,7 @@ from internal.metrics.tcm_metrics import (
 
 
 class TestTCMMetrics(unittest.TestCase):
-    """中医四诊指标测试。"""
+    """中医五诊指标测试。"""
 
     def setUp(self):
         """测试准备。"""

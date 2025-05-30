@@ -1,101 +1,106 @@
+import { View, StyleSheet, ViewStyle } from "react-native";
+import { colors, borderRadius } from "../../constants/theme";
+import Text from "./Text";
+import React from "react";
+
+
+
+
+
 /**
  * 索克生活 - AgentAvatar组件
  * 智能体头像组件，为四个智能体提供特色头像
  */
 
-import React from 'react';
-import { View, StyleSheet, ViewStyle } from 'react-native';
-import { colors, borderRadius } from '../../constants/theme';
-import Text from './Text';
 
 export interface AgentAvatarProps {
   // 智能体类型
-  agent: 'xiaoai' | 'xiaoke' | 'laoke' | 'soer';
-  
+  agent: "xiaoai" | "xiaoke" | "laoke" | "soer";
+
   // 尺寸
-  size?: 'small' | 'medium' | 'large' | 'xlarge' | number;
-  
+  size?: "small" | "medium" | "large" | "xlarge" | number;
+
   // 状态
   online?: boolean;
-  
+
   // 自定义样式
   style?: ViewStyle;
-  
+
   // 其他属性
   testID?: string;
 }
 
 const AgentAvatar: React.FC<AgentAvatarProps> = ({
   agent,
-  size = 'medium',
+  size = "medium",
   online,
   style,
   testID,
 }) => {
-  const getSize = () => {
-    if (typeof size === 'number') {
+  const getSize = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+    if (typeof size === "number") {
       return size;
     }
-    
+
     switch (size) {
-      case 'small':
+      case "small":
         return 32;
-      case 'medium':
+      case "medium":
         return 48;
-      case 'large':
+      case "large":
         return 64;
-      case 'xlarge':
+      case "xlarge":
         return 96;
       default:
         return 48;
     }
   };
 
-  const avatarSize = getSize();
+  const avatarSize = useMemo(() => useMemo(() => useMemo(() => getSize(), []), []), []);
 
-  const getAgentConfig = () => {
+  const getAgentConfig = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
     switch (agent) {
-      case 'xiaoai':
+      case "xiaoai":
         return {
-          name: '小艾',
-          emoji: '🤖',
+          name: "小艾",
+          emoji: "🤖",
           backgroundColor: colors.primary,
-          description: 'AI助手',
+          description: "AI助手",
         };
-      case 'xiaoke':
+      case "xiaoke":
         return {
-          name: '小克',
-          emoji: '👨‍⚕️',
+          name: "小克",
+          emoji: "👨‍⚕️",
           backgroundColor: colors.secondary,
-          description: '健康顾问',
+          description: "健康顾问",
         };
-      case 'laoke':
+      case "laoke":
         return {
-          name: '老克',
-          emoji: '👴',
+          name: "老克",
+          emoji: "👴",
           backgroundColor: colors.tcm.jade,
-          description: '中医专家',
+          description: "中医专家",
         };
-      case 'soer':
+      case "soer":
         return {
-          name: '索儿',
-          emoji: '🧬',
+          name: "索儿",
+          emoji: "🧬",
           backgroundColor: colors.tcm.gold,
-          description: '数据分析师',
+          description: "数据分析师",
         };
       default:
         return {
-          name: '未知',
-          emoji: '❓',
+          name: "未知",
+          emoji: "❓",
           backgroundColor: colors.gray500,
-          description: '未知智能体',
+          description: "未知智能体",
         };
     }
   };
 
-  const agentConfig = getAgentConfig();
+  const agentConfig = useMemo(() => useMemo(() => useMemo(() => getAgentConfig(), []), []), []);
 
-  const avatarStyle = [
+  const avatarStyle = useMemo(() => useMemo(() => useMemo(() => [
     styles.base,
     {
       width: avatarSize,
@@ -104,7 +109,7 @@ const AgentAvatar: React.FC<AgentAvatarProps> = ({
       backgroundColor: agentConfig.backgroundColor,
     },
     style,
-  ].filter(Boolean) as ViewStyle[];
+  ].filter(Boolean) as ViewStyle[], []), []), []);
 
   return (
     <View style={styles.container} testID={testID}>
@@ -112,13 +117,13 @@ const AgentAvatar: React.FC<AgentAvatarProps> = ({
         <Text
           style={{
             fontSize: avatarSize * 0.4,
-            textAlign: 'center',
+            textAlign: "center",
           }}
         >
           {agentConfig.emoji}
         </Text>
       </View>
-      
+
       {online !== undefined && (
         <View
           style={[
@@ -138,22 +143,22 @@ const AgentAvatar: React.FC<AgentAvatarProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
-    position: 'relative',
+    position: "relative",
   },
-  
+
   base: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    overflow: 'hidden',
+    alignItems: "center",
+    justifyContent: "center",
+    overflow: "hidden",
   },
-  
+
   statusIndicator: {
-    position: 'absolute',
+    position: "absolute",
     borderWidth: 2,
     borderColor: colors.white,
   },
-});
+}), []), []), []);
 
 export default AgentAvatar;

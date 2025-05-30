@@ -1,5 +1,13 @@
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Icon from '../../components/common/Icon';
+import { colors, spacing, fonts } from '../../constants/theme';
+import NavigationTest from '../../components/NavigationTest';
+import AgentChatInterface, { AgentType } from '../../components/common/AgentChatInterface';
+import ContactsList, { Contact } from '../../components/common/ContactsList';
+import AccessibilitySettings from '../../components/common/AccessibilitySettings';
+
+
 import React, { useState, useEffect } from 'react';
-import {
   View,
   Text,
   StyleSheet,
@@ -9,13 +17,6 @@ import {
   Alert,
   Modal,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import Icon from '../../components/common/Icon';
-import { colors, spacing, fonts } from '../../constants/theme';
-import NavigationTest from '../../components/NavigationTest';
-import AgentChatInterface, { AgentType } from '../../components/common/AgentChatInterface';
-import ContactsList, { Contact } from '../../components/common/ContactsList';
-import AccessibilitySettings from '../../components/common/AccessibilitySettings';
 
 // 聊天频道类型
 interface ChatChannel {
@@ -43,7 +44,7 @@ const CHAT_CHANNELS: ChatChannel[] = [
     lastMessageTime: '刚刚',
     unreadCount: 0,
     isOnline: true,
-    specialization: '健康诊断与建议'
+    specialization: '健康诊断与建议',
   },
   {
     id: 'xiaoke',
@@ -55,7 +56,7 @@ const CHAT_CHANNELS: ChatChannel[] = [
     lastMessageTime: '5分钟前',
     unreadCount: 1,
     isOnline: true,
-    specialization: '医疗服务管理'
+    specialization: '医疗服务管理',
   },
   {
     id: 'laoke',
@@ -67,7 +68,7 @@ const CHAT_CHANNELS: ChatChannel[] = [
     lastMessageTime: '10分钟前',
     unreadCount: 0,
     isOnline: true,
-    specialization: '中医养生教育'
+    specialization: '中医养生教育',
   },
   {
     id: 'soer',
@@ -79,7 +80,7 @@ const CHAT_CHANNELS: ChatChannel[] = [
     lastMessageTime: '15分钟前',
     unreadCount: 2,
     isOnline: true,
-    specialization: '生活方式指导'
+    specialization: '生活方式指导',
   },
   {
     id: 'dr_wang',
@@ -90,7 +91,7 @@ const CHAT_CHANNELS: ChatChannel[] = [
     lastMessageTime: '1小时前',
     unreadCount: 0,
     isOnline: false,
-    specialization: '内科主任医师'
+    specialization: '内科主任医师',
   },
   {
     id: 'dr_li',
@@ -101,7 +102,7 @@ const CHAT_CHANNELS: ChatChannel[] = [
     lastMessageTime: '2小时前',
     unreadCount: 1,
     isOnline: true,
-    specialization: '中医科副主任医师'
+    specialization: '中医科副主任医师',
   },
   {
     id: 'health_group',
@@ -112,7 +113,7 @@ const CHAT_CHANNELS: ChatChannel[] = [
     lastMessageTime: '30分钟前',
     unreadCount: 5,
     isOnline: true,
-    specialization: '健康话题讨论'
+    specialization: '健康话题讨论',
   },
   {
     id: 'user_zhang',
@@ -123,8 +124,8 @@ const CHAT_CHANNELS: ChatChannel[] = [
     lastMessageTime: '45分钟前',
     unreadCount: 0,
     isOnline: false,
-    specialization: '普通用户'
-  }
+    specialization: '普通用户',
+  },
 ];
 
 // 联系人数据
@@ -207,21 +208,21 @@ export const HomeScreen: React.FC = () => {
   const [showNavigationTest, setShowNavigationTest] = useState(false);
 
   // 过滤聊天频道
-  const filteredChannels = channels.filter(channel => {
+  const filteredChannels = useMemo(() => useMemo(() => useMemo(() => channels.filter(channel => {
     const matchesSearch = channel.name.toLowerCase().includes(searchText.toLowerCase()) ||
-                         channel.lastMessage.toLowerCase().includes(searchText.toLowerCase());
+                         channel.lastMessage.toLowerCase().includes(searchText.toLowerCase()), []), []), []);
     return matchesSearch;
   });
 
   // 打开聊天
-  const openChat = (channel: ChatChannel) => {
+  const openChat = useMemo(() => useMemo(() => useMemo(() => useCallback( (channel: ChatChannel) => {, []), []), []), []);
     if (channel.type === 'agent') {
       Alert.alert(
         `与${channel.name}对话`,
         `${channel.specialization}\n\n即将进入与${channel.name}的对话界面`,
         [
           { text: '取消', style: 'cancel' },
-          { text: '开始对话', onPress: () => startAgentChat(channel) }
+          { text: '开始对话', onPress: () => startAgentChat(channel) },
         ]
       );
     } else {
@@ -230,9 +231,9 @@ export const HomeScreen: React.FC = () => {
   };
 
   // 开始智能体对话
-  const startAgentChat = async (channel: ChatChannel) => {
+  const startAgentChat = useMemo(() => useMemo(() => useMemo(() => async (channel: ChatChannel) => {
     try {
-      console.log(`🤖 启动与${channel.name}的对话...`);
+      console.log(`🤖 启动与${channel.name}的对话...`), []), []), []);
       
       // 清除未读消息
       setChannels(prev => prev.map(ch => 
@@ -253,7 +254,7 @@ export const HomeScreen: React.FC = () => {
   };
 
   // 处理联系人点击
-  const handleContactPress = (contact: Contact) => {
+  const handleContactPress = useMemo(() => useMemo(() => useMemo(() => useCallback( (contact: Contact) => {, []), []), []), []);
     if (contact.type === 'agent' && contact.agentType) {
       setSelectedAgent(contact.agentType);
       setAgentChatVisible(true);
@@ -264,8 +265,8 @@ export const HomeScreen: React.FC = () => {
   };
 
   // 渲染聊天频道项
-  const renderChannelItem = ({ item }: { item: ChatChannel }) => {
-    const getChannelColor = () => {
+  const renderChannelItem = useMemo(() => useMemo(() => useMemo(() => useCallback( ({ item }: { item: ChatChannel }) => {, []), []), []), []);
+    const getChannelColor = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
       switch (item.type) {
         case 'agent':
           return colors.primary;
@@ -458,7 +459,7 @@ export const HomeScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -641,4 +642,4 @@ const styles = StyleSheet.create({
   modalCloseButton: {
     padding: spacing.sm,
   },
-});
+}), []), []), []);

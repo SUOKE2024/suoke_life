@@ -1,5 +1,9 @@
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Icon from '../../../components/common/Icon';
+import { colors, spacing } from '../../../constants/theme';
+
+
 import React, { useState, useEffect, useRef } from 'react';
-import {
   View,
   Text,
   StyleSheet,
@@ -10,9 +14,6 @@ import {
   Animated,
   Dimensions,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import Icon from '../../../components/common/Icon';
-import { colors, spacing } from '../../../constants/theme';
 
 const { width, height } = Dimensions.get('window');
 
@@ -37,7 +38,7 @@ const WellnessExperience: React.FC<WellnessExperienceProps> = ({
 }) => {
   const [selectedScene, setSelectedScene] = useState<WellnessScene | null>(null);
   const [isExperiencing, setIsExperiencing] = useState(false);
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const fadeAnim = useMemo(() => useMemo(() => useMemo(() => useRef(new Animated.Value(0)).current, []), []), []);
 
   // 山水养生场景数据
   const wellnessScenes: WellnessScene[] = [
@@ -48,7 +49,7 @@ const WellnessExperience: React.FC<WellnessExperienceProps> = ({
       description: '在高山之巅迎接第一缕阳光，感受天地间的纯净能量',
       duration: 30,
       difficulty: 'medium',
-      benefits: ['补充阳气', '振奋精神', '增强体质', '改善睡眠']
+      benefits: ['补充阳气', '振奋精神', '增强体质', '改善睡眠'],
     },
     {
       id: 'forest_bath',
@@ -57,7 +58,7 @@ const WellnessExperience: React.FC<WellnessExperienceProps> = ({
       description: '沉浸在原始森林中，与大自然建立深层连接',
       duration: 45,
       difficulty: 'easy',
-      benefits: ['净化空气', '减压放松', '增强免疫', '改善情绪']
+      benefits: ['净化空气', '减压放松', '增强免疫', '改善情绪'],
     },
     {
       id: 'lake_reflection',
@@ -66,7 +67,7 @@ const WellnessExperience: React.FC<WellnessExperienceProps> = ({
       description: '在宁静的湖水边，感受水的柔和与包容',
       duration: 40,
       difficulty: 'easy',
-      benefits: ['滋阴润燥', '平静心神', '改善睡眠', '调节情绪']
+      benefits: ['滋阴润燥', '平静心神', '改善睡眠', '调节情绪'],
     },
     {
       id: 'temple_zen',
@@ -75,8 +76,8 @@ const WellnessExperience: React.FC<WellnessExperienceProps> = ({
       description: '在千年古寺中体验禅修的智慧与宁静',
       duration: 60,
       difficulty: 'hard',
-      benefits: ['开发智慧', '净化心灵', '增强定力', '减轻压力']
-    }
+      benefits: ['开发智慧', '净化心灵', '增强定力', '减轻压力'],
+    },
   ];
 
   useEffect(() => {
@@ -89,19 +90,19 @@ const WellnessExperience: React.FC<WellnessExperienceProps> = ({
     }
   }, [visible]);
 
-  const startExperience = (scene: WellnessScene) => {
+  const startExperience = useMemo(() => useMemo(() => useMemo(() => useCallback( (scene: WellnessScene) => {, []), []), []), []);
     setSelectedScene(scene);
     Alert.alert(
       '开始体验',
       `即将开始${scene.name}体验\n\n建议体验时长：${scene.duration}分钟\n难度：${scene.difficulty === 'easy' ? '简单' : scene.difficulty === 'medium' ? '中等' : '困难'}\n\n请找一个安静的环境，准备好了吗？`,
       [
         { text: '稍后开始', style: 'cancel' },
-        { text: '开始体验', onPress: () => setIsExperiencing(true) }
+        { text: '开始体验', onPress: () => setIsExperiencing(true) },
       ]
     );
   };
 
-  const getSceneIcon = (type: string) => {
+  const getSceneIcon = useMemo(() => useMemo(() => useMemo(() => useCallback( (type: string) => {, []), []), []), []);
     switch (type) {
       case 'mountain': return 'mountain';
       case 'water': return 'waves';
@@ -111,7 +112,7 @@ const WellnessExperience: React.FC<WellnessExperienceProps> = ({
     }
   };
 
-  const renderSceneCard = (scene: WellnessScene) => (
+  const renderSceneCard = useMemo(() => useMemo(() => useMemo(() => (scene: WellnessScene) => (
     <TouchableOpacity
       key={scene.id}
       style={styles.sceneCard}
@@ -157,7 +158,7 @@ const WellnessExperience: React.FC<WellnessExperienceProps> = ({
         </View>
       </View>
     </TouchableOpacity>
-  );
+  ), []), []), []);
 
   return (
     <Modal visible={visible} animationType="slide" presentationStyle="pageSheet">
@@ -189,7 +190,7 @@ const WellnessExperience: React.FC<WellnessExperienceProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -319,6 +320,6 @@ const styles = StyleSheet.create({
     color: colors.warning,
     fontWeight: '600',
   },
-});
+}), []), []), []);
 
 export default WellnessExperience; 

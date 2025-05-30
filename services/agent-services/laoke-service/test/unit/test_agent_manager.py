@@ -60,7 +60,7 @@ class TestAgentManager:
         session_id = str(uuid.uuid4())
         request_data = {
             "type": "knowledge_query",
-            "query": "中医四诊是什么？",
+            "query": "中医五诊是什么？",
             "knowledge_type": "theory"
         }
 
@@ -70,14 +70,14 @@ class TestAgentManager:
         # 验证结果
         assert result["success"] is True
         assert "answer" in result
-        assert result["query"] == "中医四诊是什么？"
+        assert result["query"] == "中医五诊是什么？"
         assert result["metadata"]["session_id"] == session_id
 
         # 验证模型调用
         model_factory_mock.generate_chat_completion.assert_called_once()
         call_args = model_factory_mock.generate_chat_completion.call_args[1]
         assert call_args["model"] == agent_manager.primary_model
-        assert any("四诊" in msg["content"] for msg in call_args["messages"] if msg["role"] == "user")
+        assert any("五诊" in msg["content"] for msg in call_args["messages"] if msg["role"] == "user")
 
     @pytest.mark.asyncio
     async def test_generate_educational_content(self, agent_manager, model_factory_mock):
@@ -193,7 +193,7 @@ class TestAgentManager:
         session_id = str(uuid.uuid4())
         request_data = {
             "type": "knowledge_query",
-            "query": "中医四诊是什么？"
+            "query": "中医五诊是什么？"
         }
 
         # 模拟异常

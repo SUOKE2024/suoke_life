@@ -1,13 +1,14 @@
+import { colors, spacing, borderRadius, fonts } from '../../constants/theme';
+import { AgentType, AGENTS } from './AgentCard';
+
+
 import React, { memo } from 'react';
-import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   ViewStyle,
 } from 'react-native';
-import { colors, spacing, borderRadius, fonts } from '../../constants/theme';
-import { AgentType, AGENTS } from './AgentCard';
 
 export interface Message {
   id: string;
@@ -38,22 +39,22 @@ export const ChatMessage: React.FC<ChatMessageProps> = memo(({
   const isUser = message.sender === 'user';
   const agent = isUser ? null : AGENTS[message.sender as AgentType];
 
-  const handlePress = () => {
+  const handlePress = useCallback( () => {, []);
     onPress?.(message);
   };
 
-  const handleLongPress = () => {
+  const handleLongPress = useCallback( () => {, []);
     onLongPress?.(message);
   };
 
-  const formatTimestamp = (timestamp: Date) => {
+  const formatTimestamp = useCallback( (timestamp: Date) => {, []);
     return timestamp.toLocaleTimeString('zh-CN', {
       hour: '2-digit',
       minute: '2-digit',
     });
   };
 
-  const getStatusIcon = () => {
+  const getStatusIcon = useCallback( () => {, []);
     switch (message.status) {
       case 'sending':
         return '⏳';

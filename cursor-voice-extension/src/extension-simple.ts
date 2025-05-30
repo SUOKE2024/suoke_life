@@ -16,7 +16,7 @@ export function activate(context: vscode.ExtensionContext) {
         }),
         vscode.commands.registerCommand('cursor-voice.toggleVoiceMode', () => {
             vscode.window.showInformationMessage('语音模式切换 - 功能正常！');
-        })
+        }),
     ];
 
     commands.forEach(command => context.subscriptions.push(command));

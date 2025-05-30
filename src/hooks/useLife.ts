@@ -1,20 +1,20 @@
-import { useState, useCallback, useMemo } from 'react';
 import { Alert } from 'react-native';
-import { 
+
+
+import { useState, useCallback, useMemo } from 'react';
   LifeSuggestion, 
   HealthMetric, 
   LifePlan, 
   LifeHabit, 
   LifeGoal,
-  LifeStats 
+  LifeStats, 
 } from '../types/life';
-import {
   SOER_SUGGESTIONS,
   HEALTH_METRICS,
   LIFE_PLANS,
   LIFE_HABITS,
   LIFE_GOALS,
-  LIFE_STATS
+  LIFE_STATS,
 } from '../data/lifeData';
 
 export const useLife = () => {
@@ -65,7 +65,7 @@ export const useLife = () => {
           ? { text: '已完成', style: 'default' }
           : { 
               text: '开始执行', 
-              onPress: () => completeSuggestion(suggestion)
+              onPress: () => completeSuggestion(suggestion),
             },
       ]
     );
@@ -106,7 +106,7 @@ export const useLife = () => {
               )
             );
             Alert.alert('行动已开始', '继续保持，你做得很棒！');
-          }
+          },
         },
       ]
     );
@@ -185,9 +185,9 @@ export const useLife = () => {
     completed?: boolean
   ) => {
     return suggestions.filter(suggestion => {
-      if (category && suggestion.category !== category) return false;
-      if (priority && suggestion.priority !== priority) return false;
-      if (completed !== undefined && suggestion.completed !== completed) return false;
+      if (category && suggestion.category !== category) {return false;}
+      if (priority && suggestion.priority !== priority) {return false;}
+      if (completed !== undefined && suggestion.completed !== completed) {return false;}
       return true;
     });
   }, [suggestions]);
@@ -257,7 +257,7 @@ export const useLife = () => {
           ? { 
               ...metric, 
               value,
-              trend: value > metric.value ? 'up' : value < metric.value ? 'down' : 'stable'
+              trend: value > metric.value ? 'up' : value < metric.value ? 'down' : 'stable',
             }
           : metric
       )

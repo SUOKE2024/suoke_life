@@ -1,11 +1,14 @@
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { colors, spacing } from '../../constants/theme';
+import ColorPreview from './ColorPreview';
+
+
 /**
  * 索克生活 - UI组件展示页面
  * 展示所有UI组件的使用示例
  */
 
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
-import {
   Button,
   Text,
   Input,
@@ -22,8 +25,6 @@ import {
   Radio,
   Slider,
 } from '../../components/ui';
-import { colors, spacing } from '../../constants/theme';
-import ColorPreview from './ColorPreview';
 
 const UIShowcase: React.FC = () => {
   const [modalVisible, setModalVisible] = useState(false);

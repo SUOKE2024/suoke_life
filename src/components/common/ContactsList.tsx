@@ -1,5 +1,9 @@
+import Icon from './Icon';
+import { colors, spacing, fonts } from '../../constants/theme';
+
+
+
 import React, { useState, useMemo } from 'react';
-import {
   View,
   Text,
   StyleSheet,
@@ -9,8 +13,6 @@ import {
   SectionList,
   Alert,
 } from 'react-native';
-import Icon from './Icon';
-import { colors, spacing, fonts } from '../../constants/theme';
 
 export interface Contact {
   id: string;
@@ -43,8 +45,8 @@ const ContactsList: React.FC<ContactsListProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
 
   // 过滤联系人
-  const filteredContacts = useMemo(() => {
-    if (!searchQuery.trim()) return contacts;
+  const filteredContacts = useMemo(() => useMemo(() => useMemo(() => useMemo(() => {
+    if (!searchQuery.trim()) {return contacts, []), []), []);}
     
     return contacts.filter(contact =>
       contact.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -54,16 +56,16 @@ const ContactsList: React.FC<ContactsListProps> = ({
   }, [contacts, searchQuery]);
 
   // 分组联系人
-  const groupedContacts = useMemo(() => {
+  const groupedContacts = useMemo(() => useMemo(() => useMemo(() => useMemo(() => {
     if (!groupByType) {
-      return [{ title: '全部联系人', data: filteredContacts }];
+      return [{ title: '全部联系人', data: filteredContacts }], []), []), []);
     }
 
-    const groups = {
+    const groups = useMemo(() => useMemo(() => useMemo(() => {
       agent: { title: '智能体助手', data: [] as Contact[] },
       doctor: { title: '医生专家', data: [] as Contact[] },
       user: { title: '用户好友', data: [] as Contact[] },
-    };
+    }, []), []), []);
 
     filteredContacts.forEach(contact => {
       groups[contact.type].data.push(contact);
@@ -73,7 +75,7 @@ const ContactsList: React.FC<ContactsListProps> = ({
     return Object.values(groups).filter(group => group.data.length > 0);
   }, [filteredContacts, groupByType]);
 
-  const getContactTypeIcon = (type: Contact['type']) => {
+  const getContactTypeIcon = useMemo(() => useMemo(() => useMemo(() => useCallback( (type: Contact['type']) => {, []), []), []), []);
     switch (type) {
       case 'agent':
         return 'robot';
@@ -86,7 +88,7 @@ const ContactsList: React.FC<ContactsListProps> = ({
     }
   };
 
-  const getContactTypeColor = (type: Contact['type']) => {
+  const getContactTypeColor = useMemo(() => useMemo(() => useMemo(() => useCallback( (type: Contact['type']) => {, []), []), []), []);
     switch (type) {
       case 'agent':
         return colors.primary;
@@ -99,7 +101,7 @@ const ContactsList: React.FC<ContactsListProps> = ({
     }
   };
 
-  const renderContactItem = ({ item }: { item: Contact }) => (
+  const renderContactItem = useMemo(() => useMemo(() => useMemo(() => ({ item }: { item: Contact }) => (
     <TouchableOpacity
       style={styles.contactItem}
       onPress={() => onContactPress(item)}
@@ -165,33 +167,34 @@ const ContactsList: React.FC<ContactsListProps> = ({
         )}
       </View>
     </TouchableOpacity>
-  );
+  ), []), []), []);
 
-  const renderSectionHeader = ({ section }: { section: { title: string } }) => (
+  const renderSectionHeader = useMemo(() => useMemo(() => useMemo(() => ({ section }: { section: { title: string } }) => (
     <View style={styles.sectionHeader}>
       <Text style={styles.sectionTitle}>{section.title}</Text>
       <Text style={styles.sectionCount}>
         {groupedContacts.find(g => g.title === section.title)?.data.length || 0}
       </Text>
     </View>
-  );
+  ), []), []), []);
 
-  const handleStartChat = (contact: Contact) => {
+  const handleStartChat = useMemo(() => useMemo(() => useMemo(() => useCallback( (contact: Contact) => {, []), []), []), []);
     onContactPress(contact);
   };
 
-  const handleBookAppointment = (contact: Contact) => {
+  const handleBookAppointment = useMemo(() => useMemo(() => useMemo(() => useCallback( (contact: Contact) => {, []), []), []), []);
     Alert.alert(
       '预约医生',
       `即将为您预约${contact.name}${contact.title || '医生'}的诊疗服务`,
       [
         { text: '取消', style: 'cancel' },
-        { text: '确认预约', onPress: () => console.log(`预约${contact.name}`) }
+        { text: '确认预约', onPress: () => console.log(`预约${contact.name}`) },
       ]
     );
   };
 
-  const renderEmptyState = () => (
+  // TODO: 将内联组件移到组件外部
+const renderEmptyState = useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.emptyState}>
       <Icon name="account-search" size={64} color={colors.textSecondary} />
       <Text style={styles.emptyTitle}>
@@ -204,7 +207,7 @@ const ContactsList: React.FC<ContactsListProps> = ({
         }
       </Text>
     </View>
-  );
+  ), []), []), []);
 
   return (
     <View style={styles.container}>
@@ -247,7 +250,7 @@ const ContactsList: React.FC<ContactsListProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -399,6 +402,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 20,
   },
-});
+}), []), []), []);
 
 export default ContactsList; 

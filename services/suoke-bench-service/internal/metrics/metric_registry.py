@@ -134,7 +134,7 @@ class MetricRegistry:
     def _register_default_metrics(self):
         """注册默认指标。"""
 
-        # 中医四诊指标
+        # 中医五诊指标
         self.register("tongue_recognition", TongueRecognitionMetric)
         self.register("face_recognition", FaceRecognitionMetric)
         self.register("pulse_recognition", PulseRecognitionMetric)

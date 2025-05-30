@@ -9,7 +9,7 @@ service XiaoAIService {
   // 流式聊天接口
   rpc ChatStream (ChatRequest) returns (stream ChatResponse);
   
-  // 四诊协调接口
+  // 五诊协调接口
   rpc CoordinateDiagnosis (DiagnosisCoordinationRequest) returns (DiagnosisCoordinationResponse);
   
   // 处理多模态输入接口
@@ -44,7 +44,7 @@ message ChatResponse {
   int64 timestamp = 6;             // 时间戳
 }
 
-// 四诊协调请求
+// 五诊协调请求
 message DiagnosisCoordinationRequest {
   string user_id = 1;                  // 用户ID
   string session_id = 2;               // 会话ID
@@ -59,7 +59,7 @@ message DiagnosisCoordinationRequest {
   map<string, string> settings = 11;   // 诊断设置
 }
 
-// 四诊协调响应
+// 五诊协调响应
 message DiagnosisCoordinationResponse {
   string coordination_id = 1;                    // 协调ID
   repeated DiagnosisResult diagnosis_results = 2; // 诊断结果列表

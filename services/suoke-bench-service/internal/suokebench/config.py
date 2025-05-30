@@ -144,13 +144,13 @@ def create_default_config() -> BenchConfig:
         "log_level": "INFO",
         "datasets": {
             "tcm_4d_sample": {
-                "name": "中医四诊样例数据集",
+                "name": "中医五诊样例数据集",
                 "path": f"{data_root}/tcm_4d_sample",
                 "type": "multimodal",
                 "format": "mixed",
                 "size": 100,
-                "description": "中医四诊数据集样例",
-                "tags": ["中医", "四诊", "样例"],
+                "description": "中医五诊数据集样例",
+                "tags": ["中医", "五诊", "样例"],
             },
             "health_plan_sample": {
                 "name": "健康方案样例数据集",

@@ -1,5 +1,7 @@
+import { colors, spacing, borderRadius, fonts } from '../../constants/theme';
+
+
 import React from 'react';
-import {
   View,
   Text,
   StyleSheet,
@@ -7,7 +9,6 @@ import {
   ScrollView,
   ViewStyle,
 } from 'react-native';
-import { colors, spacing, borderRadius, fonts } from '../../constants/theme';
 
 export interface TabItem {
   id: string;
@@ -42,9 +43,9 @@ export const TabSelector: React.FC<TabSelectorProps> = ({
   scrollable = false,
   showBadge = true,
 }) => {
-  const renderTab = (tab: TabItem) => {
-    const isSelected = tab.id === selectedTabId;
-    const isDisabled = tab.disabled;
+  const renderTab = useMemo(() => useMemo(() => useMemo(() => useCallback( (tab: TabItem) => {, []), []), []), []);
+    const isSelected = useMemo(() => useMemo(() => useMemo(() => tab.id === selectedTabId, []), []), []);
+    const isDisabled = useMemo(() => useMemo(() => useMemo(() => tab.disabled, []), []), []);
 
     return (
       <TouchableOpacity
@@ -87,11 +88,11 @@ export const TabSelector: React.FC<TabSelectorProps> = ({
     );
   };
 
-  const content = (
+  const content = useMemo(() => useMemo(() => useMemo(() => (
     <View style={[styles.container, style]}>
       {tabs.map(renderTab)}
     </View>
-  );
+  ), []), []), []);
 
   if (scrollable) {
     return (
@@ -108,7 +109,7 @@ export const TabSelector: React.FC<TabSelectorProps> = ({
   return content;
 };
 
-const styles = StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flexDirection: 'row',
     backgroundColor: colors.surface,
@@ -184,4 +185,4 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderRadius: 2,
   },
-}); 
+}), []), []), []); 

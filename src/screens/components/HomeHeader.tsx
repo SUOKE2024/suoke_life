@@ -1,12 +1,14 @@
+import Icon from '../../components/common/Icon';
+import { colors, spacing, fonts, shadows } from '../../constants/theme';
+
+
+
 import React, { memo } from 'react';
-import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import Icon from '../../components/common/Icon';
-import { colors, spacing, fonts, shadows } from '../../constants/theme';
 
 interface HomeHeaderProps {
   title: string;

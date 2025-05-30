@@ -1,5 +1,10 @@
+import Icon from '../../../components/common/Icon';
+import { colors } from '../../../constants/theme';
+import { xiaoaiAgent } from '../../../agents/xiaoai/XiaoaiAgent';
+
+
+
 import React, { useState, useRef, useEffect } from 'react';
-import {
   View,
   Text,
   StyleSheet,
@@ -13,10 +18,6 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import Icon from '../../../components/common/Icon';
-import { colors } from '../../../constants/theme';
-import { xiaoaiAgent } from '../../../agents/xiaoai/XiaoaiAgent';
-import {
   ChatContext,
   ChatMessage,
   ChatResponse,
@@ -40,8 +41,8 @@ const XiaoaiChatInterface: React.FC<XiaoaiChatInterfaceProps> = ({
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId] = useState(() => `session_${Date.now()}`);
-  const scrollViewRef = useRef<ScrollView>(null);
-  const slideAnim = useRef(new Animated.Value(height)).current;
+  const scrollViewRef = useMemo(() => useMemo(() => useMemo(() => useRef<ScrollView>(null), []), []), []);
+  const slideAnim = useMemo(() => useMemo(() => useMemo(() => useRef(new Animated.Value(height)).current, []), []), []);
 
   useEffect(() => {
     if (visible) {
@@ -66,19 +67,19 @@ const XiaoaiChatInterface: React.FC<XiaoaiChatInterfaceProps> = ({
     }
   }, [visible]);
 
-  const initializeChat = () => {
+  const initializeChat = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
     const welcomeMessage: ChatMessage = {
       id: `msg_${Date.now()}`,
       role: 'assistant',
-      content: '你好！我是小艾，你的健康助手。我可以帮你进行健康咨询、四诊分析，还能为你提供个性化的健康建议。有什么我可以帮助你的吗？',
+      content: '你好！我是小艾，你的健康助手。我可以帮你进行健康咨询、五诊分析，还能为你提供个性化的健康建议。有什么我可以帮助你的吗？',
       timestamp: Date.now(),
     };
 
     setMessages([welcomeMessage]);
   };
 
-  const sendMessage = async () => {
-    if (!inputText.trim() || isLoading) return;
+  const sendMessage = useMemo(() => useMemo(() => useMemo(() => async () => {
+    if (!inputText.trim() || isLoading) {return, []), []), []);}
 
     const userMessage: ChatMessage = {
       id: `msg_${Date.now()}`,
@@ -101,7 +102,7 @@ const XiaoaiChatInterface: React.FC<XiaoaiChatInterfaceProps> = ({
       };
 
       // 调用小艾智能体
-      const response = await xiaoaiAgent.chat(userMessage.content, context);
+      const response = useMemo(() => useMemo(() => useMemo(() => await xiaoaiAgent.chat(userMessage.content, context), []), []), []);
 
       const assistantMessage: ChatMessage = {
         id: `msg_${Date.now()}`,
@@ -137,20 +138,20 @@ const XiaoaiChatInterface: React.FC<XiaoaiChatInterfaceProps> = ({
     }
   };
 
-  const showActionButtons = (actions: any[]) => {
-    const actionTexts = actions.map(action => action.prompt).join('\n\n');
+  const showActionButtons = useMemo(() => useMemo(() => useMemo(() => useCallback( (actions: any[]) => {, []), []), []), []);
+    const actionTexts = useMemo(() => useMemo(() => useMemo(() => actions.map(action => action.prompt).join('\n\n'), []), []), []);
     
     Alert.alert(
       '建议的操作',
       actionTexts,
       [
         { text: '稍后再说', style: 'cancel' },
-        { text: '好的，继续', onPress: () => handleActionAccepted(actions) }
+        { text: '好的，继续', onPress: () => handleActionAccepted(actions) },
       ]
     );
   };
 
-  const handleActionAccepted = (actions: any[]) => {
+  const handleActionAccepted = useMemo(() => useMemo(() => useMemo(() => useCallback( (actions: any[]) => {, []), []), []), []);
     // 处理用户接受的操作建议
     actions.forEach(action => {
       if (action.autoStart) {
@@ -160,11 +161,11 @@ const XiaoaiChatInterface: React.FC<XiaoaiChatInterfaceProps> = ({
     });
   };
 
-  const handleSuggestionPress = (suggestion: string) => {
+  const handleSuggestionPress = useMemo(() => useMemo(() => useMemo(() => useCallback( (suggestion: string) => {, []), []), []), []);
     setInputText(suggestion);
   };
 
-  const scrollToBottom = () => {
+  const scrollToBottom = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
     setTimeout(() => {
       scrollViewRef.current?.scrollToEnd({ animated: true });
     }, 100);
@@ -174,8 +175,8 @@ const XiaoaiChatInterface: React.FC<XiaoaiChatInterfaceProps> = ({
     scrollToBottom();
   }, [messages]);
 
-  const renderMessage = (message: ChatMessage) => {
-    const isUser = message.role === 'user';
+  const renderMessage = useMemo(() => useMemo(() => useMemo(() => useCallback( (message: ChatMessage) => {, []), []), []), []);
+    const isUser = useMemo(() => useMemo(() => useMemo(() => message.role === 'user', []), []), []);
     
     return (
       <View
@@ -339,7 +340,7 @@ const XiaoaiChatInterface: React.FC<XiaoaiChatInterfaceProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   overlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -531,6 +532,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: colors.text,
   },
-});
+}), []), []), []);
 
 export default XiaoaiChatInterface; 

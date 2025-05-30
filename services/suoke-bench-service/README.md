@@ -11,7 +11,7 @@ SuokeBench 是索克生活APP的专属评测体系，旨在系统性衡量索克
 
 SuokeBench 评测系统提供以下核心功能：
 
-1. **多维度评测**: 全面覆盖中医四诊准确性、健康管理方案生成、多智能体协作、隐私安全和端侧性能等关键维度
+1. **多维度评测**: 全面覆盖中医五诊准确性、健康管理方案生成、多智能体协作、隐私安全和端侧性能等关键维度
 2. **模型集成**: 支持集成本地模型和远程API模型，便于不同模型实现的灵活接入
 3. **可视化分析**: 提供丰富直观的评测报告和结果可视化
 4. **智能体协作评估**: 专门设计的多智能体协作评测指标和方法
@@ -33,7 +33,7 @@ suoke-bench-service/
 │   └── suokebench/        # SuokeBench自研评测框架
 ├── config/                # 配置文件
 ├── data/                  # 测试数据
-│   ├── tcm-4d/            # 中医四诊数据集
+│   ├── tcm-5d/            # 中医五诊数据集
 │   ├── health-plan/       # 健康方案数据集
 │   ├── agent-dialogue/    # 智能体对话数据集
 │   └── privacy-zkp/       # 隐私与安全测试数据集
@@ -98,7 +98,7 @@ make bench.report run_id=run_1234567890 format=html
 
 SuokeBench 评测系统使用四个核心数据集：
 
-1. **TCM-4D Dataset**: 包含舌象图片20k、面色视频5k、脉波形10k、语音问诊记录50h，用于中医四诊模型评测。
+1. **TCM-5D Dataset**: 包含舌象图片20k、面色视频5k、脉波形10k、语音问诊记录50h，用于中医五诊模型评测。
 2. **HealthPlan-TCM**: 结合9种体质与6大生活场景的健康管理案例5k条，用于健康方案生成评测。
 3. **SuokeDialogue**: 多智能体协作对话3k轮，用于评估智能体协同效率。
 4. **Privacy-ZKP Set**: 100组零知识证明与异常场景，用于验证隐私保护模块。
@@ -110,7 +110,7 @@ SuokeBench 评测系统使用四个核心数据集：
 python -m internal.suokebench.setup --download-data all
 
 # 下载特定数据集
-python -m internal.suokebench.setup --download-data tcm-4d
+python -m internal.suokebench.setup --download-data tcm-5d
 ```
 
 ## API使用示例

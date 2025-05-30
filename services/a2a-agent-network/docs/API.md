@@ -79,7 +79,7 @@ GET /api/v1/agents
       "capabilities": [
         {
           "name": "four_diagnoses_coordination",
-          "description": "四诊合参功能",
+          "description": "五诊合参功能",
           "enabled": true
         }
       ],

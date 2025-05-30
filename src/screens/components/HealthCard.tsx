@@ -1,13 +1,15 @@
+import Icon from '../../components/common/Icon';
+import { colors, spacing, borderRadius, fonts } from '../../constants/theme';
+
+
+
 import React from 'react';
-import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   ViewStyle,
 } from 'react-native';
-import Icon from '../../components/common/Icon';
-import { colors, spacing, borderRadius, fonts } from '../../constants/theme';
 
 export interface HealthData {
   id: string;
@@ -39,11 +41,11 @@ export const HealthCard: React.FC<HealthCardProps> = ({
   showTrend = true,
   showDescription = false,
 }) => {
-  const handlePress = () => {
+  const handlePress = useCallback( () => {, []);
     onPress?.(data);
   };
 
-  const getStatusColor = () => {
+  const getStatusColor = useCallback( () => {, []);
     switch (data.status) {
       case 'good':
         return colors.success;
@@ -56,7 +58,7 @@ export const HealthCard: React.FC<HealthCardProps> = ({
     }
   };
 
-  const getTrendIcon = () => {
+  const getTrendIcon = useCallback( () => {, []);
     switch (data.trend) {
       case 'up':
         return 'trending-up';
@@ -69,7 +71,7 @@ export const HealthCard: React.FC<HealthCardProps> = ({
     }
   };
 
-  const getTrendColor = () => {
+  const getTrendColor = useCallback( () => {, []);
     switch (data.trend) {
       case 'up':
         return colors.success;

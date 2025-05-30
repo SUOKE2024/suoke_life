@@ -1,14 +1,15 @@
+import { HotTopic } from '../../types/explore';
+import Icon from '../../components/common/Icon';
+import { colors, spacing, fonts, borderRadius, shadows } from '../../constants/theme';
+
+
 import React, { memo } from 'react';
-import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import { HotTopic } from '../../types/explore';
-import Icon from '../../components/common/Icon';
-import { colors, spacing, fonts, borderRadius, shadows } from '../../constants/theme';
 
 interface HotTopicsProps {
   topics: HotTopic[];
@@ -21,7 +22,7 @@ export const HotTopics = memo<HotTopicsProps>(({
   onTopicPress,
   style,
 }) => {
-  const handleTopicPress = (topic: HotTopic) => {
+  const handleTopicPress = useCallback( (topic: HotTopic) => {, []);
     onTopicPress(topic);
   };
 

@@ -1,5 +1,9 @@
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Icon from '../../components/common/Icon';
+import { colors } from '../../constants/theme';
+
+
 import React, { useState } from 'react';
-import {
   View,
   Text,
   StyleSheet,
@@ -9,9 +13,6 @@ import {
   Switch,
   FlatList,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import Icon from '../../components/common/Icon';
-import { colors } from '../../constants/theme';
 
 // 用户信息类型
 interface UserProfile {
@@ -146,7 +147,7 @@ const HEALTH_ACHIEVEMENTS: HealthAchievement[] = [
   {
     id: 'health_explorer',
     title: '健康探索者',
-    description: '完成首次四诊体验',
+    description: '完成首次五诊体验',
     icon: 'compass',
     color: '#007AFF',
     unlocked: true,
@@ -212,12 +213,12 @@ const MEMBER_BENEFITS: MemberBenefit[] = [
 ];
 
 // 健康统计数据
-const HEALTH_STATS = [
+const HEALTH_STATS = useMemo(() => useMemo(() => useMemo(() => [
   { label: '健康评分', value: USER_PROFILE.healthScore.toString(), icon: 'heart-pulse', unit: '分' },
   { label: '诊断次数', value: USER_PROFILE.totalDiagnosis.toString(), icon: 'stethoscope', unit: '次' },
   { label: '连续打卡', value: USER_PROFILE.consecutiveDays.toString(), icon: 'calendar-check', unit: '天' },
   { label: '健康积分', value: USER_PROFILE.healthPoints.toLocaleString(), icon: 'star', unit: '分' },
-];
+], []), []), []);
 
 const ProfileScreen: React.FC = () => {
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
@@ -226,7 +227,7 @@ const ProfileScreen: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<'overview' | 'agents' | 'achievements' | 'benefits'>('overview');
 
   // 设置项配置
-  const settingsSections = [
+  const settingsSections = useMemo(() => useMemo(() => useMemo(() => [
     {
       title: '健康档案',
       items: [
@@ -411,58 +412,59 @@ const ProfileScreen: React.FC = () => {
         },
       ],
     },
-  ];
+  ], []), []), []);
 
   // 与智能体对话
-  const chatWithAgent = (agent: AgentInteraction) => {
+  const chatWithAgent = useMemo(() => useMemo(() => useMemo(() => useCallback( (agent: AgentInteraction) => {, []), []), []), []);
     Alert.alert(
       `与${agent.agentName}对话`,
       `您与${agent.agentName}已经交互了${agent.totalInteractions}次\n最后交互：${agent.lastInteraction}\n最常使用：${agent.favoriteFeature}\n\n是否继续对话？`,
       [
         { text: '取消', style: 'cancel' },
-        { text: '开始对话', onPress: () => console.log(`Chat with ${agent.agentType}`) }
+        { text: '开始对话', onPress: () => console.log(`Chat with ${agent.agentType}`) },
       ]
     );
   };
 
   // 查看成就详情
-  const viewAchievement = (achievement: HealthAchievement) => {
-    const progressText = achievement.progress && achievement.target 
+  const viewAchievement = useMemo(() => useMemo(() => useMemo(() => useCallback( (achievement: HealthAchievement) => {, []), []), []), []);
+    const progressText = useMemo(() => useMemo(() => useMemo(() => achievement.progress && achievement.target 
       ? `\n\n进度：${achievement.progress}/${achievement.target}`
-      : '';
+      : '', []), []), []);
     
     Alert.alert(
       achievement.title,
       `${achievement.description}${progressText}`,
       [
-        { text: '了解更多', onPress: () => console.log(`View achievement: ${achievement.id}`) }
+        { text: '了解更多', onPress: () => console.log(`View achievement: ${achievement.id}`) },
       ]
     );
   };
 
   // 使用会员特权
-  const useBenefit = (benefit: MemberBenefit) => {
+  const useBenefit = useMemo(() => useMemo(() => useMemo(() => useCallback( (benefit: MemberBenefit) => {, []), []), []), []);
     if (!benefit.available) {
       Alert.alert('特权不可用', '该特权暂时不可用');
       return;
     }
 
-    const usageText = benefit.limit 
+    const usageText = useMemo(() => useMemo(() => useMemo(() => benefit.limit 
       ? `\n\n使用情况：${benefit.used || 0}/${benefit.limit}`
-      : '';
+      : '', []), []), []);
 
     Alert.alert(
       benefit.title,
       `${benefit.description}${usageText}`,
       [
         { text: '取消', style: 'cancel' },
-        { text: '立即使用', onPress: () => console.log(`Use benefit: ${benefit.id}`) }
+        { text: '立即使用', onPress: () => console.log(`Use benefit: ${benefit.id}`) },
       ]
     );
   };
 
   // 渲染用户头像和基本信息
-  const renderUserHeader = () => (
+  // TODO: 将内联组件移到组件外部
+const renderUserHeader = useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.userHeader}>
       <View style={styles.avatarContainer}>
         <Text style={styles.avatarText}>{USER_PROFILE.avatar}</Text>
@@ -501,17 +503,18 @@ const ProfileScreen: React.FC = () => {
         <Icon name="pencil" size={20} color={colors.primary} />
       </TouchableOpacity>
     </View>
-  );
+  ), []), []), []);
 
   // 获取健康评分颜色
-  const getHealthScoreColor = () => {
-    if (USER_PROFILE.healthScore >= 80) return '#34C759';
-    if (USER_PROFILE.healthScore >= 60) return '#FF9500';
+  const getHealthScoreColor = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+    if (USER_PROFILE.healthScore >= 80) {return '#34C759';}
+    if (USER_PROFILE.healthScore >= 60) {return '#FF9500';}
     return '#FF3B30';
   };
 
   // 渲染健康统计
-  const renderHealthStats = () => (
+  // TODO: 将内联组件移到组件外部
+const renderHealthStats = useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.statsContainer}>
       <Text style={styles.statsTitle}>健康统计</Text>
       <View style={styles.statsGrid}>
@@ -525,16 +528,17 @@ const ProfileScreen: React.FC = () => {
         ))}
       </View>
     </View>
-  );
+  ), []), []), []);
 
   // 渲染标签栏
-  const renderTabBar = () => (
+  // TODO: 将内联组件移到组件外部
+const renderTabBar = useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.tabBar}>
       {[
         { key: 'overview', label: '概览', icon: 'view-dashboard' },
         { key: 'agents', label: '智能体', icon: 'robot' },
         { key: 'achievements', label: '成就', icon: 'trophy' },
-        { key: 'benefits', label: '特权', icon: 'crown' }
+        { key: 'benefits', label: '特权', icon: 'crown' },
       ].map(tab => (
         <TouchableOpacity
           key={tab.key}
@@ -548,17 +552,17 @@ const ProfileScreen: React.FC = () => {
           />
           <Text style={[
             styles.tabLabel,
-            selectedTab === tab.key && styles.activeTabLabel
+            selectedTab === tab.key && styles.activeTabLabel,
           ]}>
             {tab.label}
           </Text>
         </TouchableOpacity>
       ))}
     </View>
-  );
+  ), []), []), []);
 
   // 渲染智能体交互卡片
-  const renderAgentCard = ({ item }: { item: AgentInteraction }) => (
+  const renderAgentCard = useMemo(() => useMemo(() => useMemo(() => ({ item }: { item: AgentInteraction }) => (
     <TouchableOpacity style={styles.agentCard} onPress={() => chatWithAgent(item)}>
       <View style={styles.agentHeader}>
         <Text style={styles.agentEmoji}>{item.emoji}</Text>
@@ -574,10 +578,10 @@ const ProfileScreen: React.FC = () => {
         </View>
       </View>
     </TouchableOpacity>
-  );
+  ), []), []), []);
 
   // 渲染成就卡片
-  const renderAchievementCard = ({ item }: { item: HealthAchievement }) => (
+  const renderAchievementCard = useMemo(() => useMemo(() => useMemo(() => ({ item }: { item: HealthAchievement }) => (
     <TouchableOpacity 
       style={[styles.achievementCard, !item.unlocked && styles.lockedCard]} 
       onPress={() => viewAchievement(item)}
@@ -600,7 +604,7 @@ const ProfileScreen: React.FC = () => {
               <View 
                 style={[
                   styles.progressFill, 
-                  { width: `${(item.progress / item.target) * 100}%`, backgroundColor: item.color }
+                  { width: `${(item.progress / item.target) * 100}%`, backgroundColor: item.color },
                 ]} 
               />
             </View>
@@ -612,10 +616,10 @@ const ProfileScreen: React.FC = () => {
         <Icon name="check-circle" size={20} color={item.color} />
       )}
     </TouchableOpacity>
-  );
+  ), []), []), []);
 
   // 渲染会员特权卡片
-  const renderBenefitCard = ({ item }: { item: MemberBenefit }) => (
+  const renderBenefitCard = useMemo(() => useMemo(() => useMemo(() => ({ item }: { item: MemberBenefit }) => (
     <TouchableOpacity 
       style={[styles.benefitCard, !item.available && styles.unavailableCard]} 
       onPress={() => useBenefit(item)}
@@ -637,10 +641,10 @@ const ProfileScreen: React.FC = () => {
         )}
       </View>
     </TouchableOpacity>
-  );
+  ), []), []), []);
 
   // 渲染设置项
-  const renderSettingItem = (item: SettingItem) => (
+  const renderSettingItem = useMemo(() => useMemo(() => useMemo(() => (item: SettingItem) => (
     <TouchableOpacity
       key={item.id}
       style={styles.settingItem}
@@ -671,20 +675,20 @@ const ProfileScreen: React.FC = () => {
         )}
       </View>
     </TouchableOpacity>
-  );
+  ), []), []), []);
 
   // 渲染设置分组
-  const renderSettingsSection = (section: (typeof settingsSections)[0]) => (
+  const renderSettingsSection = useMemo(() => useMemo(() => useMemo(() => (section: (typeof settingsSections)[0]) => (
     <View key={section.title} style={styles.settingsSection}>
       <Text style={styles.sectionTitle}>{section.title}</Text>
       <View style={styles.sectionContent}>
         {section.items.map(renderSettingItem)}
       </View>
     </View>
-  );
+  ), []), []), []);
 
   // 退出登录
-  const handleLogout = () => {
+  const handleLogout = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
     Alert.alert('退出登录', '确定要退出当前账户吗？', [
       { text: '取消', style: 'cancel' },
       {
@@ -767,7 +771,7 @@ const ProfileScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -1163,6 +1167,6 @@ const styles = StyleSheet.create({
     color: '#FF3B30',
     marginLeft: 8,
   },
-});
+}), []), []), []);
 
 export default ProfileScreen;

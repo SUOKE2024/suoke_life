@@ -450,7 +450,7 @@ class AccessibilityClient:
         if '中医' in category:
             aids.append({
                 'type': 'mnemonic',
-                'content': '记忆口诀：望闻问切四诊法',
+                'content': '记忆口诀：望闻问切算五诊法',
                 'format': target_format
             })
             aids.append({
@@ -643,7 +643,7 @@ class AccessibilityClient:
 
         if content_type == 'knowledge_content':
             return {
-                'accessible_content': '中医四诊法包括望、闻、问、切四种诊断方法，是中医诊断的基础',
+                'accessible_content': '中医五诊法包括望、闻、问、切、算五种诊断方法，是中医诊断的基础',
                 'content_url': 'https://accessibility.suoke.life/knowledge/123',
                 'audio_content': b'mock_knowledge_audio',
                 'tactile_content': b'mock_knowledge_braille'
@@ -725,7 +725,7 @@ class AccessibilityClient:
         await asyncio.sleep(0.2)
         return {
             'video_data': b'mock_sign_language_video',
-            'description': '手语视频：中医四诊法的手语表达',
+            'description': '手语视频：中医五诊法的手语表达',
             'key_signs': [
                 {'sign': '中医', 'description': '双手合十表示传统医学'},
                 {'sign': '诊断', 'description': '手指指向眼睛表示观察'},

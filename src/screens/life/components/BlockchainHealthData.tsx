@@ -1,5 +1,9 @@
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Icon from '../../../components/common/Icon';
+import { colors, spacing } from '../../../constants/theme';
+
+
 import React, { useState } from 'react';
-import {
   View,
   Text,
   StyleSheet,
@@ -10,9 +14,6 @@ import {
   ActivityIndicator,
   Switch,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import Icon from '../../../components/common/Icon';
-import { colors, spacing } from '../../../constants/theme';
 
 interface HealthDataRecord {
   id: string;
@@ -55,7 +56,7 @@ export const BlockchainHealthData: React.FC<BlockchainHealthDataProps> = ({
     {
       id: 'record_1',
       type: 'diagnosis',
-      title: '四诊检查结果',
+      title: '五诊检查结果',
       data: { constitution: '平和质', symptoms: ['轻微疲劳'] },
       timestamp: '2024-01-15T10:30:00Z',
       hash: '0x1a2b3c4d5e6f...',
@@ -92,7 +93,7 @@ export const BlockchainHealthData: React.FC<BlockchainHealthDataProps> = ({
     {
       id: 'req_1',
       requester: '张医生 - 中医科',
-      dataTypes: ['四诊结果', '生命体征'],
+      dataTypes: ['五诊结果', '生命体征'],
       purpose: '制定个性化治疗方案',
       duration: '3个月',
       status: 'pending',
@@ -107,29 +108,30 @@ export const BlockchainHealthData: React.FC<BlockchainHealthDataProps> = ({
     },
   ]);
 
-  const encryptData = async () => {
+  const encryptData = useMemo(() => useMemo(() => useMemo(() => async () => {
     // 模拟数据加密
-    setLoading(true);
+    setLoading(true), []), []), []);
     await new Promise<void>(resolve => setTimeout(() => resolve(), 800));
     setLoading(false);
     Alert.alert('加密完成', '数据已使用AES-256加密算法保护');
   };
 
-  const shareData = async () => {
-    setLoading(true);
+  const shareData = useMemo(() => useMemo(() => useMemo(() => async () => {
+    setLoading(true), []), []), []);
     await new Promise<void>(resolve => setTimeout(() => resolve(), 1000));
     setLoading(false);
     Alert.alert('共享成功', '数据已安全共享给授权方');
   };
 
-  const backupToBlockchain = async () => {
-    setLoading(true);
+  const backupToBlockchain = useMemo(() => useMemo(() => useMemo(() => async () => {
+    setLoading(true), []), []), []);
     await new Promise<void>(resolve => setTimeout(() => resolve(), 2000));
     setLoading(false);
     Alert.alert('备份完成', '健康数据已备份到区块链网络');
   };
 
-  const renderDataRecords = () => (
+  // TODO: 将内联组件移到组件外部
+const renderDataRecords = useMemo(() => useMemo(() => useMemo(() => () => (
     <ScrollView style={styles.tabContent}>
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>健康数据记录</Text>
@@ -188,9 +190,10 @@ export const BlockchainHealthData: React.FC<BlockchainHealthDataProps> = ({
         </View>
       ))}
     </ScrollView>
-  );
+  ), []), []), []);
 
-  const renderDataSharing = () => (
+  // TODO: 将内联组件移到组件外部
+const renderDataSharing = useMemo(() => useMemo(() => useMemo(() => () => (
     <ScrollView style={styles.tabContent}>
       <Text style={styles.sectionTitle}>数据共享请求</Text>
       
@@ -199,7 +202,7 @@ export const BlockchainHealthData: React.FC<BlockchainHealthDataProps> = ({
           <View style={styles.requestHeader}>
             <Text style={styles.requesterName}>{request.requester}</Text>
             <View style={[styles.statusBadge, { 
-              backgroundColor: request.status === 'pending' ? colors.warning : colors.success 
+              backgroundColor: request.status === 'pending' ? colors.warning : colors.success, 
             }]}>
               <Text style={styles.statusBadgeText}>
                 {request.status === 'pending' ? '待审批' : '已批准'}
@@ -231,9 +234,10 @@ export const BlockchainHealthData: React.FC<BlockchainHealthDataProps> = ({
         </View>
       ))}
     </ScrollView>
-  );
+  ), []), []), []);
 
-  const renderPrivacySettings = () => (
+  // TODO: 将内联组件移到组件外部
+const renderPrivacySettings = useMemo(() => useMemo(() => useMemo(() => () => (
     <ScrollView style={styles.tabContent}>
       <Text style={styles.sectionTitle}>隐私设置</Text>
 
@@ -282,9 +286,10 @@ export const BlockchainHealthData: React.FC<BlockchainHealthDataProps> = ({
         </Text>
       </View>
     </ScrollView>
-  );
+  ), []), []), []);
 
-  const renderBackupRestore = () => (
+  // TODO: 将内联组件移到组件外部
+const renderBackupRestore = useMemo(() => useMemo(() => useMemo(() => () => (
     <ScrollView style={styles.tabContent}>
       <Text style={styles.sectionTitle}>数据备份与恢复</Text>
 
@@ -323,9 +328,9 @@ export const BlockchainHealthData: React.FC<BlockchainHealthDataProps> = ({
         </TouchableOpacity>
       </View>
     </ScrollView>
-  );
+  ), []), []), []);
 
-  const getRecordIcon = (type: string) => {
+  const getRecordIcon = useMemo(() => useMemo(() => useMemo(() => useCallback( (type: string) => {, []), []), []), []);
     switch (type) {
       case 'diagnosis': return 'stethoscope';
       case 'vitals': return 'heart-pulse';
@@ -336,7 +341,7 @@ export const BlockchainHealthData: React.FC<BlockchainHealthDataProps> = ({
     }
   };
 
-  const getRecordColor = (type: string) => {
+  const getRecordColor = useMemo(() => useMemo(() => useMemo(() => useCallback( (type: string) => {, []), []), []), []);
     switch (type) {
       case 'diagnosis': return colors.primary;
       case 'vitals': return colors.error;
@@ -347,7 +352,8 @@ export const BlockchainHealthData: React.FC<BlockchainHealthDataProps> = ({
     }
   };
 
-  const renderTabBar = () => (
+  // TODO: 将内联组件移到组件外部
+const renderTabBar = useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.tabBar}>
       {[
         { key: 'records', label: '数据记录', icon: 'database' },
@@ -367,16 +373,16 @@ export const BlockchainHealthData: React.FC<BlockchainHealthDataProps> = ({
           />
           <Text style={[
             styles.tabText,
-            activeTab === tab.key && styles.activeTabText
+            activeTab === tab.key && styles.activeTabText,
           ]}>
             {tab.label}
           </Text>
         </TouchableOpacity>
       ))}
     </View>
-  );
+  ), []), []), []);
 
-  const renderContent = () => {
+  const renderContent = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
     switch (activeTab) {
       case 'records': return renderDataRecords();
       case 'sharing': return renderDataSharing();
@@ -414,7 +420,7 @@ export const BlockchainHealthData: React.FC<BlockchainHealthDataProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -757,6 +763,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginLeft: spacing.sm,
   },
-});
+}), []), []), []);
 
 export default BlockchainHealthData; 

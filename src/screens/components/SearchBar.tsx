@@ -1,13 +1,15 @@
+import Icon from '../../components/common/Icon';
+import { colors, spacing, fonts, borderRadius } from '../../constants/theme';
+
+
+
 import React, { memo, useRef, useEffect } from 'react';
-import {
   View,
   TextInput,
   StyleSheet,
   TouchableOpacity,
   Animated,
 } from 'react-native';
-import Icon from '../../components/common/Icon';
-import { colors, spacing, fonts, borderRadius } from '../../constants/theme';
 
 interface SearchBarProps {
   value: string;
@@ -39,7 +41,7 @@ export const SearchBar = memo<SearchBarProps>(({
     }
   }, [autoFocus]);
 
-  const handleFocus = () => {
+  const handleFocus = useCallback( () => {, []);
     Animated.spring(scaleAnim, {
       toValue: 1.02,
       useNativeDriver: true,
@@ -47,7 +49,7 @@ export const SearchBar = memo<SearchBarProps>(({
     onFocus?.();
   };
 
-  const handleBlur = () => {
+  const handleBlur = useCallback( () => {, []);
     Animated.spring(scaleAnim, {
       toValue: 1,
       useNativeDriver: true,
@@ -55,7 +57,7 @@ export const SearchBar = memo<SearchBarProps>(({
     onBlur?.();
   };
 
-  const handleClear = () => {
+  const handleClear = useCallback( () => {, []);
     onChangeText('');
     inputRef.current?.focus();
   };

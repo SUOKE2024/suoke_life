@@ -1,5 +1,10 @@
+import { useNavigation } from '@react-navigation/native';
+import { colors, spacing, typography } from '../../constants/theme';
+import { apiIntegrationTest } from '../../utils/apiIntegrationTest';
+import { ApiIntegrationDemo } from '../demo/ApiIntegrationDemo';
+
+
 import React, { useState, useEffect } from 'react';
-import {
   View,
   Text,
   StyleSheet,
@@ -8,10 +13,9 @@ import {
   Alert,
   Switch,
   Platform,
+  SafeAreaView,
+  RefreshControl,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { colors, spacing, fonts } from '../../constants/theme';
-import {
   errorHandler,
   getErrorStats,
   clearErrorLog,
@@ -20,7 +24,8 @@ import {
   getNetworkPerformanceStats,
   clearPerformanceMetrics,
 } from '../../utils';
-import { apiIntegrationTest } from '../../utils/apiIntegrationTest';
+
+// 导入ApiIntegrationDemo
 
 interface DebugInfo {
   errorStats: ReturnType<typeof getErrorStats>;
@@ -42,9 +47,9 @@ export const DeveloperPanelScreen: React.FC = () => {
 
   useEffect(() => {
     loadDebugInfo();
-  }, []);
+  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
 
-  const loadDebugInfo = () => {
+  const loadDebugInfo = useCallback( () => {, []);
     try {
       const errorStats = getErrorStats();
       const performanceStats = getPerformanceStats();
@@ -69,11 +74,11 @@ export const DeveloperPanelScreen: React.FC = () => {
     }
   };
 
-  const handleBack = () => {
+  const handleBack = useCallback( () => {, []);
     navigation.goBack();
   };
 
-  const handleClearErrorLog = () => {
+  const handleClearErrorLog = useCallback( () => {, []);
     Alert.alert(
       '确认清除',
       '确定要清除所有错误日志吗？',
@@ -91,7 +96,7 @@ export const DeveloperPanelScreen: React.FC = () => {
     );
   };
 
-  const handleClearPerformanceMetrics = () => {
+  const handleClearPerformanceMetrics = useCallback( () => {, []);
     Alert.alert(
       '确认清除',
       '确定要清除所有性能指标吗？',
@@ -109,7 +114,7 @@ export const DeveloperPanelScreen: React.FC = () => {
     );
   };
 
-  const handleTogglePerformanceMonitoring = (enabled: boolean) => {
+  const handleTogglePerformanceMonitoring = useCallback( (enabled: boolean) => {, []);
     setPerformanceEnabled(enabled);
     performanceMonitor.setEnabled(enabled);
     Alert.alert('设置已更新', `性能监控已${enabled ? '启用' : '禁用'}`);
@@ -131,7 +136,7 @@ export const DeveloperPanelScreen: React.FC = () => {
     }
   };
 
-  const handleExportDebugData = () => {
+  const handleExportDebugData = useCallback( () => {, []);
     try {
       const exportData = {
         timestamp: new Date().toISOString(),
@@ -150,8 +155,13 @@ export const DeveloperPanelScreen: React.FC = () => {
     }
   };
 
-  const renderErrorStats = () => {
-    if (!debugInfo?.errorStats) return null;
+  const handleNavigateToApiDemo = useCallback( () => {, []);
+    // 导航到ApiIntegrationDemo
+    navigation.navigate('ApiIntegrationDemo' as never);
+  };
+
+  const renderErrorStats = useCallback( () => {, []);
+    if (!debugInfo?.errorStats) {return null;}
 
     const { total, bySeverity, recent } = debugInfo.errorStats;
 
@@ -184,8 +194,8 @@ export const DeveloperPanelScreen: React.FC = () => {
     );
   };
 
-  const renderPerformanceStats = () => {
-    if (!debugInfo?.performanceStats) return null;
+  const renderPerformanceStats = useCallback( () => {, []);
+    if (!debugInfo?.performanceStats) {return null;}
 
     const { total, byType, averageDuration } = debugInfo.performanceStats;
 
@@ -202,7 +212,7 @@ export const DeveloperPanelScreen: React.FC = () => {
             <Switch
               value={performanceEnabled}
               onValueChange={handleTogglePerformanceMonitoring}
-              trackColor={{ false: colors.disabled, true: colors.primary }}
+              trackColor={{ false: colors.gray400, true: colors.primary }}
               thumbColor={Platform.OS === 'android' ? colors.white : ''}
             />
           </View>
@@ -226,8 +236,8 @@ export const DeveloperPanelScreen: React.FC = () => {
     );
   };
 
-  const renderNetworkStats = () => {
-    if (!debugInfo?.networkStats) return null;
+  const renderNetworkStats = useCallback( () => {, []);
+    if (!debugInfo?.networkStats) {return null;}
 
     const { totalRequests, averageResponseTime, successRate } = debugInfo.networkStats;
 
@@ -247,7 +257,7 @@ export const DeveloperPanelScreen: React.FC = () => {
             <Text style={styles.statLabel}>成功率</Text>
             <Text style={[
               styles.statValue,
-              { color: successRate > 90 ? colors.success : successRate > 70 ? colors.warning : colors.error }
+              { color: successRate > 90 ? colors.success : successRate > 70 ? colors.warning : colors.error },
             ]}>
               {successRate.toFixed(1)}%
             </Text>
@@ -257,8 +267,8 @@ export const DeveloperPanelScreen: React.FC = () => {
     );
   };
 
-  const renderSystemInfo = () => {
-    if (!debugInfo?.systemInfo) return null;
+  const renderSystemInfo = useCallback( () => {, []);
+    if (!debugInfo?.systemInfo) {return null;}
 
     const { platform, version, isDebug, timestamp } = debugInfo.systemInfo;
 
@@ -286,20 +296,23 @@ export const DeveloperPanelScreen: React.FC = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-          <Text style={styles.backButtonText}>返回</Text>
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>开发者面板</Text>
-        <TouchableOpacity onPress={loadDebugInfo} disabled={loading}>
-          <Text style={[styles.refreshButton, loading && styles.disabledText]}>
-            刷新
-          </Text>
-        </TouchableOpacity>
-      </View>
+    <SafeAreaView style={styles.container}>
+      <ScrollView
+        style={styles.scrollView}
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={loadDebugInfo} />
+        }
+      >
+        <View style={styles.header}>
+          <TouchableOpacity onPress={handleBack}>
+            <Text style={styles.backButtonText}>← 返回</Text>
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>开发者面板</Text>
+          <TouchableOpacity onPress={loadDebugInfo}>
+            <Text style={styles.refreshButton}>刷新</Text>
+          </TouchableOpacity>
+        </View>
 
-      <ScrollView style={styles.content}>
         <View style={styles.actionsSection}>
           <TouchableOpacity
             style={[styles.quickActionButton, styles.testButton]}
@@ -319,12 +332,21 @@ export const DeveloperPanelScreen: React.FC = () => {
           </TouchableOpacity>
         </View>
 
+        <View style={styles.demoSection}>
+          <TouchableOpacity
+            style={[styles.quickActionButton, styles.demoButton]}
+            onPress={handleNavigateToApiDemo}
+          >
+            <Text style={styles.quickActionButtonText}>API集成演示</Text>
+          </TouchableOpacity>
+        </View>
+
         {renderSystemInfo()}
         {renderErrorStats()}
         {renderPerformanceStats()}
         {renderNetworkStats()}
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -347,17 +369,17 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     color: colors.primary,
-    fontSize: fonts.size.md,
+    fontSize: typography.fontSize.base,
     fontWeight: 'bold',
   },
   headerTitle: {
-    fontSize: fonts.size.lg,
+    fontSize: typography.fontSize.lg,
     fontWeight: 'bold',
-    color: colors.text,
+    color: colors.textPrimary,
   },
   refreshButton: {
     color: colors.primary,
-    fontSize: fonts.size.md,
+    fontSize: typography.fontSize.base,
     fontWeight: 'bold',
     padding: spacing.sm,
   },
@@ -388,7 +410,7 @@ const styles = StyleSheet.create({
   },
   quickActionButtonText: {
     color: colors.white,
-    fontSize: fonts.size.md,
+    fontSize: typography.fontSize.base,
     fontWeight: 'bold',
   },
   section: {
@@ -405,13 +427,13 @@ const styles = StyleSheet.create({
     }),
   },
   sectionTitle: {
-    fontSize: fonts.size.md,
+    fontSize: typography.fontSize.base,
     fontWeight: 'bold',
-    color: colors.text,
+    color: colors.textPrimary,
     marginBottom: spacing.md,
   },
   subSectionTitle: {
-    fontSize: fonts.size.sm,
+    fontSize: typography.fontSize.sm,
     fontWeight: '600',
     color: colors.textSecondary,
     marginTop: spacing.md,
@@ -426,14 +448,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   statLabel: {
-    fontSize: fonts.size.sm,
+    fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
     marginBottom: 4,
   },
   statValue: {
-    fontSize: fonts.size.lg,
+    fontSize: typography.fontSize.lg,
     fontWeight: 'bold',
-    color: colors.text,
+    color: colors.textPrimary,
   },
   severityItem: {
     flexDirection: 'row',
@@ -441,11 +463,11 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   severityLabel: {
-    fontSize: fonts.size.sm,
-    color: colors.text,
+    fontSize: typography.fontSize.sm,
+    color: colors.textPrimary,
   },
   severityCount: {
-    fontSize: fonts.size.sm,
+    fontSize: typography.fontSize.sm,
     fontWeight: 'bold',
     color: colors.primary,
   },
@@ -456,17 +478,17 @@ const styles = StyleSheet.create({
   },
   typeLabel: {
     flex: 1,
-    fontSize: fonts.size.sm,
-    color: colors.text,
+    fontSize: typography.fontSize.sm,
+    color: colors.textPrimary,
   },
   typeCount: {
-    fontSize: fonts.size.sm,
+    fontSize: typography.fontSize.sm,
     fontWeight: 'bold',
     color: colors.primary,
     marginRight: spacing.md,
   },
   typeAverage: {
-    fontSize: fonts.size.sm,
+    fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
   },
   infoItem: {
@@ -477,12 +499,12 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.border,
   },
   infoLabel: {
-    fontSize: fonts.size.sm,
+    fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
   },
   infoValue: {
-    fontSize: fonts.size.sm,
-    color: colors.text,
+    fontSize: typography.fontSize.sm,
+    color: colors.textPrimary,
     fontWeight: '500',
   },
   actionButton: {
@@ -494,7 +516,18 @@ const styles = StyleSheet.create({
   },
   actionButtonText: {
     color: colors.white,
-    fontSize: fonts.size.sm,
+    fontSize: typography.fontSize.sm,
     fontWeight: 'bold',
+  },
+  demoSection: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: spacing.lg,
+  },
+  demoButton: {
+    backgroundColor: colors.primary,
+  },
+  scrollView: {
+    flex: 1,
   },
 }); 

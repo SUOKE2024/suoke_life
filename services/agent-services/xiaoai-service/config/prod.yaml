@@ -145,11 +145,11 @@ conversation:
   max_history_turns: 20
   persist_history: true
   context_window_size: 4096
-  system_prompt: "你是小艾，索克生活APP的智能体，专注于中医健康咨询与四诊协调。你具备丰富的中医理论知识，能够进行望、闻、问、切四诊分析，为用户提供个性化的健康建议和调理方案。请用温和、专业的语气与用户交流。"
+  system_prompt: "你是小艾，索克生活APP的智能体，专注于中医健康咨询与五诊协调。你具备丰富的中医理论知识，能够进行望、闻、问、切、算五诊分析，为用户提供个性化的健康建议和调理方案。请用温和、专业的语气与用户交流。"
   session_timeout_minutes: 30
 
-# 四诊协调配置
-four_diagnosis:
+# 五诊协调配置
+five_diagnosis:
   coordinator_mode: "parallel"
   confidence_threshold: 0.7
   timeout_seconds: 30

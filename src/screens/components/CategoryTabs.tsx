@@ -1,15 +1,16 @@
+import { CategoryType } from '../../types/explore';
+import { CATEGORIES } from '../../data/exploreData';
+import Icon from '../../components/common/Icon';
+import { colors, spacing, fonts, borderRadius } from '../../constants/theme';
+
+
 import React, { memo } from 'react';
-import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import { CategoryType } from '../../types/explore';
-import { CATEGORIES } from '../../data/exploreData';
-import Icon from '../../components/common/Icon';
-import { colors, spacing, fonts, borderRadius } from '../../constants/theme';
 
 interface CategoryTabsProps {
   selectedCategory: CategoryType | 'all';
@@ -32,11 +33,11 @@ export const CategoryTabs = memo<CategoryTabsProps>(({
     })),
   ];
 
-  const handleCategoryPress = (category: CategoryType | 'all') => {
+  const handleCategoryPress = useCallback( (category: CategoryType | 'all') => {, []);
     onCategorySelect(category);
   };
 
-  const renderCategoryTab = (category: typeof categories[0]) => {
+  const renderCategoryTab = useCallback( (category: typeof categories[0]) => {, []);
     const isSelected = selectedCategory === category.key;
     
     return (

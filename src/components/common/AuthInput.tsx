@@ -1,5 +1,7 @@
+import { colors, spacing, fonts, borderRadius, shadows } from '../../constants/theme';
+
+
 import React from 'react';
-import {
   View,
   Text,
   TextInput,
@@ -8,7 +10,6 @@ import {
   TextInputProps,
   Animated,
 } from 'react-native';
-import { colors, spacing, fonts, borderRadius, shadows } from '../../constants/theme';
 
 interface AuthInputProps extends TextInputProps {
   label: string;
@@ -45,7 +46,7 @@ export const AuthInput: React.FC<AuthInputProps> = ({
       <View style={[
         styles.inputWrapper,
         focused && styles.inputWrapperFocused,
-        error && styles.inputWrapperError
+        error && styles.inputWrapperError,
       ]}>
         {icon && <Text style={styles.inputIcon}>{icon}</Text>}
         <TextInput

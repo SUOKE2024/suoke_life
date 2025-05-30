@@ -1,32 +1,45 @@
+import { View, StyleSheet, ViewStyle } from "react-native";
+import Text from "./Text";
+import React from "react";
+
+
+
+  colors,
+  typography,
+  spacing,
+  borderRadius,
+} from "../../constants/theme";
+
 /**
  * 索克生活 - Badge组件
  * 徽章组件，用于显示状态、数量等信息
  */
 
-import React from 'react';
-import { View, StyleSheet, ViewStyle } from 'react-native';
-import { colors, typography, spacing, borderRadius } from '../../constants/theme';
-import Text from './Text';
-
 export interface BadgeProps {
   // 内容
   children?: React.ReactNode;
   count?: number;
-  
+
   // 样式
-  variant?: 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'error';
-  size?: 'small' | 'medium' | 'large';
-  
+  variant?:
+    | "default"
+    | "primary"
+    | "secondary"
+    | "success"
+    | "warning"
+    | "error";
+  size?: "small" | "medium" | "large";
+
   // 形状
-  shape?: 'circle' | 'rounded' | 'square';
-  
+  shape?: "circle" | "rounded" | "square";
+
   // 状态
   dot?: boolean;
   showZero?: boolean;
-  
+
   // 自定义样式
   style?: ViewStyle;
-  
+
   // 其他属性
   testID?: string;
 }
@@ -34,9 +47,9 @@ export interface BadgeProps {
 const Badge: React.FC<BadgeProps> = ({
   children,
   count,
-  variant = 'default',
-  size = 'medium',
-  shape = 'rounded',
+  variant = "default",
+  size = "medium",
+  shape = "rounded",
   dot = false,
   showZero = false,
   style,
@@ -51,28 +64,23 @@ const Badge: React.FC<BadgeProps> = ({
   if (dot) {
     return (
       <View
-        style={[
-          styles.base,
-          styles.dot,
-          styles[variant],
-          style,
-        ]}
+        style={[styles.base, styles.dot, styles[variant], style]}
         testID={testID}
       />
     );
   }
 
-  const badgeStyle = [
+  const badgeStyle = useMemo(() => useMemo(() => useMemo(() => [
     styles.base,
     styles[variant],
     styles[size],
     styles[shape],
     style,
-  ].filter(Boolean) as ViewStyle[];
+  ].filter(Boolean) as ViewStyle[], []), []), []);
 
-  const getDisplayText = () => {
+  const getDisplayText = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
     if (count !== undefined) {
-      return count > 99 ? '99+' : count.toString();
+      return count > 99 ? "99+" : count.toString();
     }
     return children;
   };
@@ -92,14 +100,14 @@ const Badge: React.FC<BadgeProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   base: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     minWidth: 20,
     paddingHorizontal: spacing.xs,
   },
-  
+
   // 变体样式
   default: {
     backgroundColor: colors.gray500,
@@ -119,7 +127,7 @@ const styles = StyleSheet.create({
   error: {
     backgroundColor: colors.error,
   },
-  
+
   // 尺寸样式
   small: {
     height: 16,
@@ -136,7 +144,7 @@ const styles = StyleSheet.create({
     minWidth: 24,
     paddingHorizontal: spacing.sm,
   },
-  
+
   // 形状样式
   circle: {
     borderRadius: 50,
@@ -147,7 +155,7 @@ const styles = StyleSheet.create({
   square: {
     borderRadius: 0,
   },
-  
+
   // 点状徽章
   dot: {
     width: 8,
@@ -156,14 +164,14 @@ const styles = StyleSheet.create({
     minWidth: 8,
     paddingHorizontal: 0,
   },
-  
+
   // 文本样式
   text: {
     fontFamily: typography.fontFamily.medium,
-    fontWeight: '600',
-    textAlign: 'center',
+    fontWeight: "600",
+    textAlign: "center",
   },
-  
+
   // 变体文本样式
   defaultText: {
     color: colors.white,
@@ -183,7 +191,7 @@ const styles = StyleSheet.create({
   errorText: {
     color: colors.white,
   },
-  
+
   // 尺寸文本样式
   smallText: {
     fontSize: 10,
@@ -197,6 +205,6 @@ const styles = StyleSheet.create({
     fontSize: typography.fontSize.sm,
     lineHeight: 16,
   },
-});
+}), []), []), []);
 
-export default Badge; 
+export default Badge;

@@ -1,10 +1,12 @@
+import { colors, spacing, borderRadius, shadows } from '../../constants/theme';
+
+
 /**
  * 索克生活 - Modal组件
  * 模态框组件
  */
 
 import React from 'react';
-import {
   Modal as RNModal,
   View,
   StyleSheet,
@@ -13,7 +15,6 @@ import {
   TouchableWithoutFeedback,
   Dimensions,
 } from 'react-native';
-import { colors, spacing, borderRadius, shadows } from '../../constants/theme';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -55,7 +56,7 @@ const Modal: React.FC<ModalProps> = ({
   backdropStyle,
   testID,
 }) => {
-  const getModalStyle = () => {
+  const getModalStyle = useCallback( () => {, []);
     const baseStyle = {
       ...styles.modal,
       ...styles[position],
@@ -92,7 +93,7 @@ const Modal: React.FC<ModalProps> = ({
     }
   };
 
-  const handleBackdropPress = () => {
+  const handleBackdropPress = useCallback( () => {, []);
     if (closeOnBackdrop && onClose) {
       onClose();
     }

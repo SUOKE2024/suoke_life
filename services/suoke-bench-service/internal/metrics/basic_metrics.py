@@ -131,7 +131,7 @@ def register_basic_metrics():
         )
     )
 
-    # 中医四诊指标
+    # 中医五诊指标
     metric_registry.register(
         MetricInfo(
             name="tongue_classification_accuracy",
@@ -408,7 +408,7 @@ def compute_exact_match(
         return 0.0
 
 
-# 中医四诊指标实现
+# 中医五诊指标实现
 def compute_tongue_classification_accuracy(
     predictions: Any, targets: Any, params: dict[str, Any] | None = None
 ) -> float:

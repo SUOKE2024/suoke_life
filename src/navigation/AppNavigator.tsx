@@ -1,25 +1,25 @@
+import { createStackNavigator } from '@react-navigation/stack';
+import { useSelector, useDispatch } from 'react-redux';
+import { MainNavigator } from './MainNavigator';
+import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
+
+
 /**
  * 应用主导航器
  * 负责管理应用的整体导航流程，包括认证状态检查和路由分发
  */
 
 import React, { useEffect, useState } from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import { useSelector, useDispatch } from 'react-redux';
 
 // 导航器
-import { AuthNavigator } from './AuthNavigator';
-import { MainNavigator } from './MainNavigator';
 
 // Redux
-import {
   selectIsAuthenticated,
   // selectAuthLoading,
   checkAuthStatus,
 } from '../store/slices/authSlice';
 
 // 简单的启动屏幕组件
-import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
 
 const SimpleSplashScreen: React.FC = () => (
   <View style={styles.splashContainer}>

@@ -1,26 +1,27 @@
-import React, { useState, useCallback } from 'react';
-import {
-  View,
-  StyleSheet,
-  FlatList,
-  RefreshControl,
-  Alert,
-} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useExplore, useContentInteraction } from '../../hooks/useExplore';
 import { ContentItem, HotTopic } from '../../types/explore';
 import { colors, spacing } from '../../constants/theme';
-
-// 组件导入
 import { SearchBar } from '../components/SearchBar';
 import { CategoryTabs } from '../components/CategoryTabs';
 import { ContentCard } from '../components/ContentCard';
 import { HotTopics } from '../components/HotTopics';
 import { EmptyState } from '../../components/common/EmptyState';
 import { LoadingScreen } from '../../components/common/LoadingScreen';
+import AgentChatInterface from '../../components/common/AgentChatInterface';
+
+
+import React, { useState, useCallback } from 'react';
+  View,
+  StyleSheet,
+  FlatList,
+  RefreshControl,
+  Alert,
+} from 'react-native';
+
+// 组件导入
 
 // 现有组件导入
-import AgentChatInterface from '../../components/common/AgentChatInterface';
 
 const ExploreScreen: React.FC = () => {
   // 探索相关状态
@@ -96,7 +97,7 @@ const ExploreScreen: React.FC = () => {
   // 与老克对话
   const chatWithLaoke = useCallback(() => {
     setAgentChatVisible(true);
-  }, []);
+  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
 
   // 渲染内容项
   const renderContentItem = useCallback(({ item }: { item: ContentItem }) => (

@@ -7,7 +7,7 @@ option go_package = "github.com/suoke_life/services/xiaoai-service/api/grpc/xiao
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/any.proto";
 
-// 四诊协调服务
+// 五诊协调服务
 service FourDiagnosisService {
   // 生成诊断报告
   rpc GenerateDiagnosisReport(DiagnosisRequest) returns (DiagnosisReport);

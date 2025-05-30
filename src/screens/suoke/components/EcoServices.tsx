@@ -1,5 +1,9 @@
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Icon from '../../../components/common/Icon';
+import { colors, spacing } from '../../../constants/theme';
+
+
 import React, { useState, useEffect } from 'react';
-import {
   View,
   Text,
   StyleSheet,
@@ -12,9 +16,6 @@ import {
   RefreshControl,
   ActivityIndicator,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import Icon from '../../../components/common/Icon';
-import { colors, spacing } from '../../../constants/theme';
 
 interface EcoServicesProps {
   visible: boolean;
@@ -163,37 +164,37 @@ export const EcoServices: React.FC<EcoServicesProps> = ({
             location: '宁夏中宁有机农场',
             action: '种植播种',
             verifier: '农业部认证机构',
-            hash: '0x1a2b3c4d5e6f...'
+            hash: '0x1a2b3c4d5e6f...',
           },
           {
             timestamp: '2024-09-20 14:30',
             location: '宁夏中宁有机农场',
             action: '有机采摘',
             verifier: '有机认证中心',
-            hash: '0x2b3c4d5e6f7a...'
+            hash: '0x2b3c4d5e6f7a...',
           },
           {
             timestamp: '2024-09-22 09:15',
             location: '专业加工厂',
             action: '清洗包装',
             verifier: 'ISO质量认证',
-            hash: '0x3c4d5e6f7a8b...'
-          }
+            hash: '0x3c4d5e6f7a8b...',
+          },
         ],
-        certifications: ['有机认证', 'GAP认证', '地理标志保护']
+        certifications: ['有机认证', 'GAP认证', '地理标志保护'],
       },
       tcmProperties: {
         nature: '平',
         flavor: '甘',
         meridian: ['肝经', '肾经'],
         functions: ['滋补肝肾', '明目润肺'],
-        constitution: ['气虚质', '阴虚质', '阳虚质']
+        constitution: ['气虚质', '阴虚质', '阳虚质'],
       },
       aiRecommendation: {
         score: 95,
         reason: '根据您的气虚体质，枸杞能有效补气养血',
-        personalizedBenefits: ['改善疲劳', '增强免疫', '护眼明目']
-      }
+        personalizedBenefits: ['改善疲劳', '增强免疫', '护眼明目'],
+      },
     },
     {
       id: 'product_2',
@@ -217,30 +218,30 @@ export const EcoServices: React.FC<EcoServicesProps> = ({
             location: '长白山原始森林',
             action: '野生采集',
             verifier: '林业部门',
-            hash: '0x4d5e6f7a8b9c...'
+            hash: '0x4d5e6f7a8b9c...',
           },
           {
             timestamp: '2024-07-12 16:20',
             location: '专业烘干厂',
             action: '低温烘干',
             verifier: 'GMP认证',
-            hash: '0x5e6f7a8b9c0d...'
-          }
+            hash: '0x5e6f7a8b9c0d...',
+          },
         ],
-        certifications: ['野生认证', 'GMP认证', '重金属检测合格']
+        certifications: ['野生认证', 'GMP认证', '重金属检测合格'],
       },
       tcmProperties: {
         nature: '平',
         flavor: '甘、苦',
         meridian: ['心经', '肺经', '肝经', '肾经'],
         functions: ['补气安神', '止咳平喘'],
-        constitution: ['气虚质', '血瘀质', '痰湿质']
+        constitution: ['气虚质', '血瘀质', '痰湿质'],
       },
       aiRecommendation: {
         score: 88,
         reason: '灵芝对气虚质有很好的补益作用',
-        personalizedBenefits: ['提升免疫力', '改善睡眠', '抗疲劳']
-      }
+        personalizedBenefits: ['提升免疫力', '改善睡眠', '抗疲劳'],
+      },
     },
     {
       id: 'product_3',
@@ -264,30 +265,30 @@ export const EcoServices: React.FC<EcoServicesProps> = ({
             location: '新疆和田有机枣园',
             action: '有机种植',
             verifier: '新疆农业厅',
-            hash: '0x6f7a8b9c0d1e...'
+            hash: '0x6f7a8b9c0d1e...',
           },
           {
             timestamp: '2024-10-15 12:00',
             location: '新疆和田有机枣园',
             action: '人工采摘',
             verifier: '有机认证机构',
-            hash: '0x7a8b9c0d1e2f...'
-          }
+            hash: '0x7a8b9c0d1e2f...',
+          },
         ],
-        certifications: ['有机认证', '地理标志', '绿色食品认证']
+        certifications: ['有机认证', '地理标志', '绿色食品认证'],
       },
       tcmProperties: {
         nature: '温',
         flavor: '甘',
         meridian: ['脾经', '胃经'],
         functions: ['补中益气', '养血安神'],
-        constitution: ['气虚质', '血虚质', '阳虚质']
+        constitution: ['气虚质', '血虚质', '阳虚质'],
       },
       aiRecommendation: {
         score: 92,
         reason: '红枣是气虚质的理想补品',
-        personalizedBenefits: ['补气养血', '健脾益胃', '美容养颜']
-      }
+        personalizedBenefits: ['补气养血', '健脾益胃', '美容养颜'],
+      },
     },
     {
       id: 'product_4',
@@ -311,24 +312,24 @@ export const EcoServices: React.FC<EcoServicesProps> = ({
             location: '长白山原始森林',
             action: '野生采集',
             verifier: '林业认证',
-            hash: '0x8b9c0d1e2f3a...'
-          }
+            hash: '0x8b9c0d1e2f3a...',
+          },
         ],
-        certifications: ['野生认证', '无污染检测', '营养成分检测']
+        certifications: ['野生认证', '无污染检测', '营养成分检测'],
       },
       tcmProperties: {
         nature: '平',
         flavor: '甘',
         meridian: ['肺经', '大肠经'],
         functions: ['润肺止咳', '凉血止血'],
-        constitution: ['阴虚质', '血瘀质', '湿热质']
+        constitution: ['阴虚质', '血瘀质', '湿热质'],
       },
       aiRecommendation: {
         score: 75,
         reason: '黑木耳对您的体质有一定益处',
-        personalizedBenefits: ['润肺清燥', '补血养颜', '降脂减肥']
-      }
-    }
+        personalizedBenefits: ['润肺清燥', '补血养颜', '降脂减肥'],
+      },
+    },
   ]);
 
   // 增强的山水养生目的地数据
@@ -349,18 +350,18 @@ export const EcoServices: React.FC<EcoServicesProps> = ({
         available: true,
         nextAvailable: '2024-12-20',
         capacity: 50,
-        booked: 32
+        booked: 32,
       },
       weatherSuitability: {
         currentScore: 85,
         forecast: '晴朗，适宜养生',
-        bestTime: '春秋两季'
+        bestTime: '春秋两季',
       },
       personalizedScore: {
         score: 92,
         factors: ['适合气虚质', '海拔适宜', '空气质量优'],
-        recommendations: ['建议停留3-5天', '参与太极和禅修', '尝试药膳调理']
-      }
+        recommendations: ['建议停留3-5天', '参与太极和禅修', '尝试药膳调理'],
+      },
     },
     {
       id: 'dest_2',
@@ -378,18 +379,18 @@ export const EcoServices: React.FC<EcoServicesProps> = ({
         available: true,
         nextAvailable: '2024-12-18',
         capacity: 80,
-        booked: 45
+        booked: 45,
       },
       weatherSuitability: {
         currentScore: 78,
         forecast: '多云，温度适宜',
-        bestTime: '四季皆宜'
+        bestTime: '四季皆宜',
       },
       personalizedScore: {
         score: 88,
         factors: ['温泉对气虚有益', '环境舒适', '活动丰富'],
-        recommendations: ['建议温泉浴疗', '配合中医按摩', '品尝湖鲜药膳']
-      }
+        recommendations: ['建议温泉浴疗', '配合中医按摩', '品尝湖鲜药膳'],
+      },
     },
     {
       id: 'dest_3',
@@ -407,18 +408,18 @@ export const EcoServices: React.FC<EcoServicesProps> = ({
         available: true,
         nextAvailable: '2024-12-22',
         capacity: 60,
-        booked: 28
+        booked: 28,
       },
       weatherSuitability: {
         currentScore: 82,
         forecast: '晴转多云，空气质量优',
-        bestTime: '春夏秋三季'
+        bestTime: '春夏秋三季',
       },
       personalizedScore: {
         score: 85,
         factors: ['森林环境有益', '空气质量佳', '活动适中'],
-        recommendations: ['深度森林浴', '学习药材知识', '体验自然冥想']
-      }
+        recommendations: ['深度森林浴', '学习药材知识', '体验自然冥想'],
+      },
     },
     {
       id: 'dest_4',
@@ -436,19 +437,19 @@ export const EcoServices: React.FC<EcoServicesProps> = ({
         available: true,
         nextAvailable: '2024-12-25',
         capacity: 30,
-        booked: 18
+        booked: 18,
       },
       weatherSuitability: {
         currentScore: 88,
         forecast: '晴朗，微风',
-        bestTime: '春秋两季'
+        bestTime: '春秋两季',
       },
       personalizedScore: {
         score: 95,
         factors: ['最适合气虚质', '文化底蕴深厚', '功法传承正宗'],
-        recommendations: ['学习太极拳', '体验道家静坐', '接受中医调理']
-      }
-    }
+        recommendations: ['学习太极拳', '体验道家静坐', '接受中医调理'],
+      },
+    },
   ]);
 
   // 增强的营养配餐方案
@@ -462,7 +463,7 @@ export const EcoServices: React.FC<EcoServicesProps> = ({
         breakfast: ['小米粥配红枣', '蒸蛋羹', '枸杞茶', '核桃仁'],
         lunch: ['黄芪炖鸡汤', '山药炒木耳', '五谷饭', '时令蔬菜'],
         dinner: ['莲子银耳汤', '清蒸鲈鱼', '青菜豆腐', '薏米粥'],
-        snacks: ['红枣桂圆茶', '坚果拼盘', '蜂蜜柠檬水']
+        snacks: ['红枣桂圆茶', '坚果拼盘', '蜂蜜柠檬水'],
       },
       ingredients: farmProducts.slice(0, 3),
       benefits: ['补气健脾', '增强体质', '改善疲劳', '提升免疫'],
@@ -471,9 +472,9 @@ export const EcoServices: React.FC<EcoServicesProps> = ({
         protein: 85,
         carbs: 245,
         fat: 65,
-        fiber: 35
+        fiber: 35,
       },
-      aiOptimized: true
+      aiOptimized: true,
     },
     {
       id: 'plan_2',
@@ -484,7 +485,7 @@ export const EcoServices: React.FC<EcoServicesProps> = ({
         breakfast: ['燕麦粥', '蜂蜜柠檬水', '核桃', '银耳莲子'],
         lunch: ['枸杞炖排骨', '凉拌黄瓜', '薏米饭', '绿豆汤'],
         dinner: ['银耳莲子汤', '清蒸石斑鱼', '菠菜豆腐', '百合粥'],
-        snacks: ['雪梨银耳汤', '葡萄干', '绿茶']
+        snacks: ['雪梨银耳汤', '葡萄干', '绿茶'],
       },
       ingredients: [farmProducts[0], farmProducts[2]],
       benefits: ['滋阴润燥', '清热生津', '美容养颜', '安神助眠'],
@@ -493,10 +494,10 @@ export const EcoServices: React.FC<EcoServicesProps> = ({
         protein: 78,
         carbs: 220,
         fat: 58,
-        fiber: 42
+        fiber: 42,
       },
-      aiOptimized: true
-    }
+      aiOptimized: true,
+    },
   ]);
 
   // 社区动态数据
@@ -511,7 +512,7 @@ export const EcoServices: React.FC<EcoServicesProps> = ({
       comments: 23,
       timestamp: '2小时前',
       tags: ['峨眉山', '太极', '药膳'],
-      type: 'experience'
+      type: 'experience',
     },
     {
       id: 'post_2',
@@ -523,37 +524,37 @@ export const EcoServices: React.FC<EcoServicesProps> = ({
       comments: 15,
       timestamp: '5小时前',
       tags: ['食谱', '气虚质', '养生'],
-      type: 'recipe'
-    }
+      type: 'recipe',
+    },
   ]);
 
   useEffect(() => {
     // 模拟获取用户体质和当前季节
     getCurrentUserInfo();
-  }, []);
+  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
 
-  const getCurrentUserInfo = async () => {
+  const getCurrentUserInfo = useMemo(() => useMemo(() => useMemo(() => async () => {
     // 这里应该从用户服务获取真实数据
-    setUserConstitution('气虚质');
+    setUserConstitution('气虚质'), []), []), []);
     setCurrentSeason(getCurrentSeason());
   };
 
-  const getCurrentSeason = () => {
-    const month = new Date().getMonth() + 1;
-    if (month >= 3 && month <= 5) return '春季';
-    if (month >= 6 && month <= 8) return '夏季';
-    if (month >= 9 && month <= 11) return '秋季';
+  const getCurrentSeason = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+    const month = useMemo(() => useMemo(() => useMemo(() => new Date().getMonth() + 1, []), []), []);
+    if (month >= 3 && month <= 5) {return '春季';}
+    if (month >= 6 && month <= 8) {return '夏季';}
+    if (month >= 9 && month <= 11) {return '秋季';}
     return '冬季';
   };
 
-  const onRefresh = async () => {
-    setRefreshing(true);
+  const onRefresh = useMemo(() => useMemo(() => useMemo(() => async () => {
+    setRefreshing(true), []), []), []);
     // 模拟刷新数据
     await new Promise<void>(resolve => setTimeout(() => resolve(), 1000));
     setRefreshing(false);
   };
 
-  const addToCart = (product: FarmProduct) => {
+  const addToCart = useMemo(() => useMemo(() => useMemo(() => useCallback( (product: FarmProduct) => {, []), []), []), []);
     if (product.stock > 0) {
       setCart(prev => [...prev, product]);
       Alert.alert('添加成功', `${product.name} 已添加到购物车`);
@@ -562,7 +563,7 @@ export const EcoServices: React.FC<EcoServicesProps> = ({
     }
   };
 
-  const viewBlockchainTrace = (product: FarmProduct) => {
+  const viewBlockchainTrace = useMemo(() => useMemo(() => useMemo(() => useCallback( (product: FarmProduct) => {, []), []), []), []);
     Alert.alert(
       '区块链溯源',
       `${product.name}\n\n溯源记录：\n${product.blockchain.traceability.map(trace => 
@@ -572,7 +573,7 @@ export const EcoServices: React.FC<EcoServicesProps> = ({
     );
   };
 
-  const bookDestination = (destination: WellnessDestination) => {
+  const bookDestination = useMemo(() => useMemo(() => useMemo(() => useCallback( (destination: WellnessDestination) => {, []), []), []), []);
     if (destination.availability.available) {
       Alert.alert(
         '预订确认',
@@ -583,8 +584,8 @@ export const EcoServices: React.FC<EcoServicesProps> = ({
             text: '确定预订', 
             onPress: () => {
               Alert.alert('预订成功', '我们会尽快联系您确认详细信息');
-            }
-          }
+            },
+          },
         ]
       );
     } else {
@@ -592,7 +593,7 @@ export const EcoServices: React.FC<EcoServicesProps> = ({
     }
   };
 
-  const selectNutritionPlan = (plan: NutritionPlan) => {
+  const selectNutritionPlan = useMemo(() => useMemo(() => useMemo(() => useCallback( (plan: NutritionPlan) => {, []), []), []), []);
     Alert.alert(
       '选择配餐方案',
       `${plan.name}\n\n适用体质：${plan.constitution}\n适用季节：${plan.season}\n\n主要功效：${plan.benefits.join('、')}`,
@@ -602,13 +603,14 @@ export const EcoServices: React.FC<EcoServicesProps> = ({
           text: '选择此方案', 
           onPress: () => {
             Alert.alert('方案已选择', '已为您定制个性化营养方案');
-          }
-        }
+          },
+        },
       ]
     );
   };
 
-  const renderFarmTab = () => (
+  // TODO: 将内联组件移到组件外部
+const renderFarmTab = useMemo(() => useMemo(() => useMemo(() => () => (
     <ScrollView 
       style={styles.tabContent}
       refreshControl={
@@ -641,7 +643,7 @@ export const EcoServices: React.FC<EcoServicesProps> = ({
             key={product.id}
             style={[
               styles.productCard,
-              product.aiRecommendation && product.aiRecommendation.score > 90 && styles.recommendedCard
+              product.aiRecommendation && product.aiRecommendation.score > 90 && styles.recommendedCard,
             ]}
             onPress={() => Alert.alert('产品详情', `查看${product.name}的详细信息`)}
           >
@@ -704,7 +706,7 @@ export const EcoServices: React.FC<EcoServicesProps> = ({
                 <TouchableOpacity
                   style={[
                     styles.addButton,
-                    product.stock === 0 && styles.disabledButton
+                    product.stock === 0 && styles.disabledButton,
                   ]}
                   onPress={() => addToCart(product)}
                   disabled={product.stock === 0}
@@ -721,9 +723,10 @@ export const EcoServices: React.FC<EcoServicesProps> = ({
         ))}
       </View>
     </ScrollView>
-  );
+  ), []), []), []);
 
-  const renderWellnessTab = () => (
+  // TODO: 将内联组件移到组件外部
+const renderWellnessTab = useMemo(() => useMemo(() => useMemo(() => () => (
     <ScrollView style={styles.tabContent}>
       <Text style={styles.sectionTitle}>山水养生 • 自然疗愈</Text>
       <Text style={styles.sectionDesc}>
@@ -784,9 +787,10 @@ export const EcoServices: React.FC<EcoServicesProps> = ({
         ))}
       </View>
     </ScrollView>
-  );
+  ), []), []), []);
 
-  const renderNutritionTab = () => (
+  // TODO: 将内联组件移到组件外部
+const renderNutritionTab = useMemo(() => useMemo(() => useMemo(() => () => (
     <ScrollView style={styles.tabContent}>
       <Text style={styles.sectionTitle}>个性化营养配餐</Text>
       <Text style={styles.sectionDesc}>
@@ -837,9 +841,10 @@ export const EcoServices: React.FC<EcoServicesProps> = ({
         ))}
       </View>
     </ScrollView>
-  );
+  ), []), []), []);
 
-  const renderCommunityTab = () => (
+  // TODO: 将内联组件移到组件外部
+const renderCommunityTab = useMemo(() => useMemo(() => useMemo(() => () => (
     <ScrollView style={styles.tabContent}>
       <Text style={styles.sectionTitle}>生态社区</Text>
       <Text style={styles.sectionDesc}>
@@ -887,9 +892,9 @@ export const EcoServices: React.FC<EcoServicesProps> = ({
         </View>
       </View>
     </ScrollView>
-  );
+  ), []), []), []);
 
-  const getDestinationIcon = (type: string) => {
+  const getDestinationIcon = useMemo(() => useMemo(() => useMemo(() => useCallback( (type: string) => {, []), []), []), []);
     switch (type) {
       case 'mountain': return 'mountain';
       case 'water': return 'waves';
@@ -901,7 +906,8 @@ export const EcoServices: React.FC<EcoServicesProps> = ({
     }
   };
 
-  const renderTabBar = () => (
+  // TODO: 将内联组件移到组件外部
+const renderTabBar = useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.tabBar}>
       {[
         { key: 'farm', label: '食农结合', icon: 'leaf' },
@@ -921,16 +927,16 @@ export const EcoServices: React.FC<EcoServicesProps> = ({
           />
           <Text style={[
             styles.tabText,
-            activeTab === tab.key && styles.activeTabText
+            activeTab === tab.key && styles.activeTabText,
           ]}>
             {tab.label}
           </Text>
         </TouchableOpacity>
       ))}
     </View>
-  );
+  ), []), []), []);
 
-  const renderContent = () => {
+  const renderContent = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
     switch (activeTab) {
       case 'farm': return renderFarmTab();
       case 'wellness': return renderWellnessTab();
@@ -972,7 +978,7 @@ export const EcoServices: React.FC<EcoServicesProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -1484,6 +1490,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.textSecondary,
     opacity: 0.6,
   },
-});
+}), []), []), []);
 
 export default EcoServices; 

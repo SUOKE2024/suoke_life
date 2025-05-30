@@ -126,11 +126,11 @@ conversation:
   max_history_turns: 10  # 开发环境减少
   persist_history: true
   context_window_size: 2048  # 开发环境减少
-  system_prompt: "你是小艾，索克生活APP的智能体，专注于中医健康咨询与四诊协调。在开发环境中，你将使用模拟数据进行测试。"
+  system_prompt: "你是小艾，索克生活APP的智能体，专注于中医健康咨询与五诊协调。在开发环境中，你将使用模拟数据进行测试。"
   session_timeout_minutes: 15  # 开发环境缩短
 
-# 四诊协调配置
-four_diagnosis:
+# 五诊协调配置
+five_diagnosis:
   coordinator_mode: "sequential"
   confidence_threshold: 0.5  # 开发环境降低
   timeout_seconds: 10  # 开发环境缩短

@@ -67,10 +67,10 @@ def mock_knowledge_article() -> dict[str, Any]:
     """创建模拟知识文章数据"""
     return {
         "id": "test-article-id",
-        "title": "中医四诊基础",
-        "content": "中医四诊是指望、闻、问、切四种诊断方法...",
+        "title": "中医五诊基础",
+        "content": "中医五诊是指望、闻、问、切、算五种诊断方法...",
         "category": "中医基础",
-        "tags": ["四诊", "基础理论"],
+        "tags": ["五诊", "基础理论"],
         "created_at": "2023-01-01T00:00:00Z",
         "rating": 4.5,
         "rating_count": 10,

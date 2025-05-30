@@ -1,40 +1,47 @@
+import { colors, spacing } from "../../constants/theme";
+import Text from "./Text";
+import React, { useState, useRef } from "react";
+
+
+  View,
+  StyleSheet,
+  ViewStyle,
+  PanResponder,
+  Animated,
+} from "react-native";
+
 /**
  * 索克生活 - Slider组件
  * 滑块组件，用于数值选择
  */
 
-import React, { useState, useRef } from 'react';
-import { View, StyleSheet, ViewStyle, PanResponder, Animated } from 'react-native';
-import { colors, spacing } from '../../constants/theme';
-import Text from './Text';
-
 export interface SliderProps {
   // 基础属性
   value: number;
   onValueChange: (value: number) => void;
-  
+
   // 范围
   minimumValue?: number;
   maximumValue?: number;
   step?: number;
-  
+
   // 样式
   trackHeight?: number;
   thumbSize?: number;
   minimumTrackTintColor?: string;
   maximumTrackTintColor?: string;
   thumbTintColor?: string;
-  
+
   // 状态
   disabled?: boolean;
-  
+
   // 标签
   label?: string;
   showValue?: boolean;
-  
+
   // 自定义样式
   style?: ViewStyle;
-  
+
   // 其他属性
   testID?: string;
 }
@@ -61,16 +68,16 @@ const Slider: React.FC<SliderProps> = ({
   const thumbPosition = useRef(new Animated.Value(0)).current;
 
   // 计算当前值对应的位置
-  const getPositionFromValue = (val: number) => {
+  const getPositionFromValue = useCallback( (val: number) => {, []);
     const percentage = (val - minimumValue) / (maximumValue - minimumValue);
     return percentage * (sliderWidth - thumbSize);
   };
 
   // 计算位置对应的值
-  const getValueFromPosition = (position: number) => {
+  const getValueFromPosition = useCallback( (position: number) => {, []);
     const percentage = position / (sliderWidth - thumbSize);
     const rawValue = minimumValue + percentage * (maximumValue - minimumValue);
-    
+
     if (step > 0) {
       return Math.round(rawValue / step) * step;
     }
@@ -78,7 +85,7 @@ const Slider: React.FC<SliderProps> = ({
   };
 
   // 更新滑块位置
-  const updatePosition = (newValue: number) => {
+  const updatePosition = useCallback( (newValue: number) => {, []);
     if (sliderWidth > 0) {
       const position = getPositionFromValue(newValue);
       thumbPosition.setValue(position);
@@ -93,25 +100,31 @@ const Slider: React.FC<SliderProps> = ({
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => !disabled,
     onMoveShouldSetPanResponder: () => !disabled,
-    
+
     onPanResponderGrant: () => {
       setIsDragging(true);
     },
-    
+
     onPanResponderMove: (_, gestureState) => {
-      const newPosition = Math.max(0, Math.min(sliderWidth - thumbSize, gestureState.dx + getPositionFromValue(value)));
+      const newPosition = Math.max(
+        0,
+        Math.min(
+          sliderWidth - thumbSize,
+          gestureState.dx + getPositionFromValue(value)
+        )
+      );
       thumbPosition.setValue(newPosition);
-      
+
       const newValue = getValueFromPosition(newPosition);
       onValueChange(newValue);
     },
-    
+
     onPanResponderRelease: () => {
       setIsDragging(false);
     },
   });
 
-  const handleLayout = (event: any) => {
+  const handleLayout = useCallback( (event: any) => {, []);
     const { width } = event.nativeEvent.layout;
     setSliderWidth(width);
   };
@@ -119,7 +132,7 @@ const Slider: React.FC<SliderProps> = ({
   const minimumTrackWidth = thumbPosition.interpolate({
     inputRange: [0, sliderWidth - thumbSize],
     outputRange: [thumbSize / 2, sliderWidth - thumbSize / 2],
-    extrapolate: 'clamp',
+    extrapolate: "clamp",
   });
 
   return (
@@ -136,7 +149,7 @@ const Slider: React.FC<SliderProps> = ({
           )}
         </View>
       )}
-      
+
       <View style={styles.sliderContainer}>
         <View
           style={[
@@ -159,7 +172,7 @@ const Slider: React.FC<SliderProps> = ({
             ]}
           />
         </View>
-        
+
         <Animated.View
           style={[
             styles.thumb,
@@ -183,41 +196,41 @@ const styles = StyleSheet.create({
   container: {
     marginVertical: spacing.sm,
   },
-  
+
   labelContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: spacing.sm,
   },
-  
+
   label: {
     color: colors.textSecondary,
   },
-  
+
   value: {
     color: colors.primary,
-    fontWeight: '600',
+    fontWeight: "600",
   },
-  
+
   sliderContainer: {
-    position: 'relative',
-    justifyContent: 'center',
+    position: "relative",
+    justifyContent: "center",
   },
-  
+
   track: {
     borderRadius: 2,
   },
-  
+
   minimumTrack: {
-    position: 'absolute',
+    position: "absolute",
     left: 0,
     top: 0,
     borderRadius: 2,
   },
-  
+
   thumb: {
-    position: 'absolute',
+    position: "absolute",
     top: -8,
     shadowColor: colors.black,
     shadowOffset: {
@@ -228,10 +241,10 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
-  
+
   thumbActive: {
     transform: [{ scale: 1.2 }],
   },
 });
 
-export default Slider; 
+export default Slider;

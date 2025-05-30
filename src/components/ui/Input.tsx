@@ -1,10 +1,13 @@
+import { colors, typography, spacing, borderRadius, components } from '../../constants/theme';
+import Text from './Text';
+
+
 /**
  * 索克生活 - Input组件
  * 统一的输入框组件，支持多种类型和状态
  */
 
 import React, { useState } from 'react';
-import {
   TextInput,
   View,
   StyleSheet,
@@ -12,8 +15,6 @@ import {
   TextStyle,
   TouchableOpacity,
 } from 'react-native';
-import { colors, typography, spacing, borderRadius, components } from '../../constants/theme';
-import Text from './Text';
 
 export interface InputProps {
   // 基础属性
@@ -82,7 +83,7 @@ const Input: React.FC<InputProps> = ({
   const [isFocused, setIsFocused] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-  const getKeyboardType = () => {
+  const getKeyboardType = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
     switch (type) {
       case 'email':
         return 'email-address';
@@ -95,7 +96,7 @@ const Input: React.FC<InputProps> = ({
     }
   };
 
-  const containerStyle = [
+  const containerStyle = useMemo(() => useMemo(() => useMemo(() => [
     styles.container,
     styles[size],
     styles[variant],
@@ -103,26 +104,26 @@ const Input: React.FC<InputProps> = ({
     error && styles.error,
     disabled && styles.disabled,
     style,
-  ].filter(Boolean) as ViewStyle[];
+  ].filter(Boolean) as ViewStyle[], []), []), []);
 
-  const textInputStyle = [
+  const textInputStyle = useMemo(() => useMemo(() => useMemo(() => [
     styles.input,
     styles[`${size}Input`],
     multiline && styles.multiline,
     inputStyle,
-  ].filter(Boolean) as TextStyle[];
+  ].filter(Boolean) as TextStyle[], []), []), []);
 
-  const handleFocus = () => {
+  const handleFocus = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
     setIsFocused(true);
     onFocus?.();
   };
 
-  const handleBlur = () => {
+  const handleBlur = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
     setIsFocused(false);
     onBlur?.();
   };
 
-  const togglePasswordVisibility = () => {
+  const togglePasswordVisibility = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
     setIsPasswordVisible(!isPasswordVisible);
   };
 
@@ -187,7 +188,7 @@ const Input: React.FC<InputProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   wrapper: {
     marginBottom: spacing.sm,
   },
@@ -287,6 +288,6 @@ const styles = StyleSheet.create({
   errorText: {
     color: colors.error,
   },
-});
+}), []), []), []);
 
 export default Input;

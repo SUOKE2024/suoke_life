@@ -1,5 +1,11 @@
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Icon from '../../../components/common/Icon';
+import { colors, spacing } from '../../../constants/theme';
+import { useAppDispatch, useAppSelector } from '../../../store';
+import { DiagnosisType } from '../../../types';
+
+
 import React, { useState, useEffect } from 'react';
-import {
   View,
   Text,
   StyleSheet,
@@ -11,11 +17,6 @@ import {
   Image,
   TextInput,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import Icon from '../../../components/common/Icon';
-import { colors, spacing } from '../../../constants/theme';
-import { useAppDispatch, useAppSelector } from '../../../store';
-import {
   startDiagnosisSession,
   submitDiagnosisData,
   completeDiagnosisSession,
@@ -24,7 +25,6 @@ import {
   selectDiagnosisLoading,
   selectCurrentSession,
 } from '../../../store/slices/diagnosisSlice';
-import { DiagnosisType } from '../../../types';
 
 interface DiagnosisModalProps {
   visible: boolean;
@@ -49,9 +49,9 @@ export const DiagnosisModal: React.FC<DiagnosisModalProps> = ({
   title,
   description,
 }) => {
-  const dispatch = useAppDispatch();
-  const loading = useAppSelector(selectDiagnosisLoading);
-  const currentSession = useAppSelector(selectCurrentSession);
+  const dispatch = useMemo(() => useMemo(() => useMemo(() => useAppDispatch(), []), []), []);
+  const loading = useMemo(() => useMemo(() => useMemo(() => useAppSelector(selectDiagnosisLoading), []), []), []);
+  const currentSession = useMemo(() => useMemo(() => useMemo(() => useAppSelector(selectCurrentSession), []), []), []);
 
   const [currentStep, setCurrentStep] = useState(0);
   const [sessionId, setSessionId] = useState<string | null>(null);
@@ -64,7 +64,7 @@ export const DiagnosisModal: React.FC<DiagnosisModalProps> = ({
     }
   }, [visible, diagnosisType]);
 
-  const initializeDiagnosisSteps = () => {
+  const initializeDiagnosisSteps = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
     let diagnosisSteps: DiagnosisStep[] = [];
 
     switch (diagnosisType) {
@@ -162,9 +162,9 @@ export const DiagnosisModal: React.FC<DiagnosisModalProps> = ({
     setCurrentStep(0);
   };
 
-  const startDiagnosis = async () => {
+  const startDiagnosis = useMemo(() => useMemo(() => useMemo(() => async () => {
     try {
-      const result = await dispatch(startDiagnosisSession());
+      const result = await dispatch(startDiagnosisSession()), []), []), []);
       if (startDiagnosisSession.fulfilled.match(result)) {
         setSessionId(result.payload.id);
         Alert.alert('诊断开始', '诊断会话已启动，请按步骤进行');
@@ -174,11 +174,11 @@ export const DiagnosisModal: React.FC<DiagnosisModalProps> = ({
     }
   };
 
-  const completeStep = async (stepData: any) => {
-    if (!sessionId) return;
+  const completeStep = useMemo(() => useMemo(() => useMemo(() => async (stepData: any) => {
+    if (!sessionId) {return, []), []), []);}
 
     try {
-      const result = await dispatch(
+      const result = useMemo(() => useMemo(() => useMemo(() => await dispatch(
         submitDiagnosisData({
           sessionId,
           type: diagnosisType,
@@ -188,11 +188,11 @@ export const DiagnosisModal: React.FC<DiagnosisModalProps> = ({
             timestamp: new Date().toISOString(),
           },
         })
-      );
+      ), []), []), []);
 
       if (submitDiagnosisData.fulfilled.match(result)) {
         // 更新步骤状态
-        const updatedSteps = [...steps];
+        const updatedSteps = useMemo(() => useMemo(() => useMemo(() => [...steps], []), []), []);
         updatedSteps[currentStep].completed = true;
         updatedSteps[currentStep].data = stepData;
         setSteps(updatedSteps);
@@ -210,11 +210,11 @@ export const DiagnosisModal: React.FC<DiagnosisModalProps> = ({
     }
   };
 
-  const completeDiagnosis = async () => {
-    if (!sessionId) return;
+  const completeDiagnosis = useMemo(() => useMemo(() => useMemo(() => async () => {
+    if (!sessionId) {return, []), []), []);}
 
     try {
-      const result = await dispatch(completeDiagnosisSession(sessionId));
+      const result = useMemo(() => useMemo(() => useMemo(() => await dispatch(completeDiagnosisSession(sessionId)), []), []), []);
       if (completeDiagnosisSession.fulfilled.match(result)) {
         Alert.alert(
           '诊断完成',
@@ -227,9 +227,9 @@ export const DiagnosisModal: React.FC<DiagnosisModalProps> = ({
     }
   };
 
-  const renderStepContent = () => {
-    const step = steps[currentStep];
-    if (!step) return null;
+  const renderStepContent = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+    const step = useMemo(() => useMemo(() => useMemo(() => steps[currentStep], []), []), []);
+    if (!step) {return null;}
 
     switch (step.id) {
       case 'face_analysis':
@@ -310,7 +310,8 @@ export const DiagnosisModal: React.FC<DiagnosisModalProps> = ({
     }
   };
 
-  const renderProgressBar = () => (
+  // TODO: 将内联组件移到组件外部
+const renderProgressBar = useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.progressContainer}>
       {steps.map((step, index) => (
         <View key={step.id} style={styles.progressItem}>
@@ -334,7 +335,7 @@ export const DiagnosisModal: React.FC<DiagnosisModalProps> = ({
         </View>
       ))}
     </View>
-  );
+  ), []), []), []);
 
   return (
     <Modal visible={visible} animationType="slide" presentationStyle="pageSheet">
@@ -381,7 +382,7 @@ export const DiagnosisModal: React.FC<DiagnosisModalProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -510,6 +511,6 @@ const styles = StyleSheet.create({
     color: colors.text,
     backgroundColor: colors.surface,
   },
-});
+}), []), []), []);
 
 export default DiagnosisModal; 

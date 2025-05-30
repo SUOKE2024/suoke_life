@@ -13,7 +13,7 @@ function testVoiceRecognition() {
         '新建文件',
         '生成代码：创建一个 React 组件',
         '查找 function',
-        '跳转到第 10 行'
+        '跳转到第 10 行',
     ];
     
     testCommands.forEach((command, index) => {
@@ -32,7 +32,7 @@ function testGestureRecognition() {
         { name: '✌️ 胜利手势', action: '保存文件' },
         { name: '👊 握拳', action: '关闭标签' },
         { name: '👈 向左滑动', action: '上一个标签' },
-        { name: '👉 向右滑动', action: '下一个标签' }
+        { name: '👉 向右滑动', action: '下一个标签' },
     ];
     
     testGestures.forEach((gesture, index) => {
@@ -50,7 +50,7 @@ function testAIAssistant() {
         '这段代码有什么问题？',
         '如何优化这个算法？',
         '帮我写一个排序函数',
-        '解释一下这个错误'
+        '解释一下这个错误',
     ];
     
     testQuestions.forEach((question, index) => {

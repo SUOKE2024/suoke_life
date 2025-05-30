@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: 问诊服务API
   description: |
-    问诊服务是索克生活APP四诊合参体系中的"问诊"部分，负责通过自然语言问答收集用户健康信息，
+    问诊服务是索克生活APP五诊合参体系中的"问诊"部分，负责通过自然语言问答收集用户健康信息，
     提取症状并映射到中医理论体系中。本API提供RESTful接口访问问诊服务功能。
   version: 1.0.0
   contact:
@@ -397,7 +397,7 @@ paths:
   /sessions/{sessionId}/submit-to-xiaoai:
     post:
       summary: 提交问诊结果到小艾服务
-      description: 将问诊结果提交到小艾服务进行四诊合参分析
+      description: 将问诊结果提交到小艾服务进行五诊合参分析
       operationId: submitToXiaoai
       tags:
         - analysis

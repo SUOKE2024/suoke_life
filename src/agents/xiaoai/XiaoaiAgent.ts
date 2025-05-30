@@ -1,4 +1,8 @@
-import {
+import { XiaoaiChatDiagnosisIntegrator } from './core/XiaoaiChatDiagnosisIntegrator';
+import { diagnosisServiceClient } from './services/DiagnosisServiceClient';
+import { accessibilityServiceClient } from './services/AccessibilityServiceClient';
+
+
   XiaoaiAgent,
   ChatContext,
   ChatResponse,
@@ -12,11 +16,8 @@ import {
   PalpationResult,
   FourDiagnosisResults,
   IntegratedDiagnosis,
-  AccessibilityNeeds
+  AccessibilityNeeds,
 } from './types';
-import { XiaoaiChatDiagnosisIntegrator } from './core/XiaoaiChatDiagnosisIntegrator';
-import { diagnosisServiceClient } from './services/DiagnosisServiceClient';
-import { accessibilityServiceClient } from './services/AccessibilityServiceClient';
 
 /**
  * 小艾智能体主类
@@ -28,7 +29,7 @@ export class XiaoaiAgentImpl implements XiaoaiAgent {
     style: 'caring', // 关怀型
     tone: 'warm',    // 温暖的语调
     expertise: 'health', // 健康专业
-    patience: 'high'     // 高耐心
+    patience: 'high',     // 高耐心
   };
 
   constructor() {
@@ -64,7 +65,7 @@ export class XiaoaiAgentImpl implements XiaoaiAgent {
         insights: [] as string[],
         recommendations: [] as string[],
         riskFactors: [] as string[],
-        trends: [] as string[]
+        trends: [] as string[],
       };
 
       // 基于数据类型进行不同的分析
@@ -104,7 +105,7 @@ export class XiaoaiAgentImpl implements XiaoaiAgent {
           title: '定期体检',
           description: '建议每年进行一次全面体检，重点关注心血管和代谢指标',
           priority: 'high',
-          timeframe: '每年一次'
+          timeframe: '每年一次',
         });
       }
 
@@ -114,7 +115,7 @@ export class XiaoaiAgentImpl implements XiaoaiAgent {
           title: '适度运动',
           description: '建议进行低强度有氧运动，如散步、太极等',
           priority: 'medium',
-          timeframe: '每周3-5次'
+          timeframe: '每周3-5次',
         });
       }
 
@@ -125,7 +126,7 @@ export class XiaoaiAgentImpl implements XiaoaiAgent {
           title: '补充铁质',
           description: '注意补充铁质丰富的食物，预防贫血',
           priority: 'medium',
-          timeframe: '日常饮食'
+          timeframe: '日常饮食',
         });
       }
 
@@ -136,7 +137,7 @@ export class XiaoaiAgentImpl implements XiaoaiAgent {
           title: '疾病管理',
           description: '根据既往病史，建议定期随访和监测',
           priority: 'high',
-          timeframe: '按医嘱执行'
+          timeframe: '按医嘱执行',
         });
       }
 
@@ -208,7 +209,7 @@ export class XiaoaiAgentImpl implements XiaoaiAgent {
   async performFourDiagnosisIntegration(data: FourDiagnosisResults): Promise<IntegratedDiagnosis> {
     try {
       // 调用诊断集成器的四诊合参功能
-      return await this.diagnosisIntegrator['performFourDiagnosisIntegration'](data);
+      return await this.diagnosisIntegrator.performFourDiagnosisIntegration(data);
     } catch (error) {
       console.error('四诊合参失败:', error);
       throw error;
@@ -260,7 +261,7 @@ export class XiaoaiAgentImpl implements XiaoaiAgent {
       if (!serviceHealthy) {
         return {
           serviceAvailable: false,
-          error: '无障碍服务不可用'
+          error: '无障碍服务不可用',
         };
       }
 
@@ -270,23 +271,23 @@ export class XiaoaiAgentImpl implements XiaoaiAgent {
         visual: {
           screenReader: false,
           highContrast: false,
-          magnification: false
+          magnification: false,
         },
         hearing: {
           captions: false,
           signLanguage: false,
-          audioDescription: false
+          audioDescription: false,
         },
         motor: {
           voiceControl: false,
           eyeTracking: false,
-          switchControl: false
+          switchControl: false,
         },
         cognitive: {
           simplifiedInterface: false,
           reminders: false,
-          navigationAssist: false
-        }
+          navigationAssist: false,
+        },
       };
     } catch (error) {
       console.error('获取无障碍状态失败:', error);
@@ -306,8 +307,8 @@ export class XiaoaiAgentImpl implements XiaoaiAgent {
           fontSize: disability.fontSize || 'large',
           highContrast: disability.highContrast || true,
           voiceOutput: disability.voiceOutput || true,
-          simplifiedInterface: disability.simplifiedInterface || true
-        }
+          simplifiedInterface: disability.simplifiedInterface || true,
+        },
       };
 
       const adaptations = await accessibilityServiceClient.adaptInterfaceForAccessibility(accessibilityNeeds);
@@ -367,9 +368,9 @@ export class XiaoaiAgentImpl implements XiaoaiAgent {
         '重新描述问题',
         '查看健康建议',
         '联系技术支持',
-        '稍后再试'
+        '稍后再试',
       ],
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
   }
 
@@ -384,19 +385,19 @@ export class XiaoaiAgentImpl implements XiaoaiAgent {
         agent: {
           status: 'healthy',
           personality: this.personality,
-          activeSessions: this.diagnosisIntegrator.getActiveSessionsStatus('current_user')
+          activeSessions: this.diagnosisIntegrator.getActiveSessionsStatus('current_user'),
         },
         services: serviceHealth,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       };
     } catch (error) {
       console.error('获取健康状态失败:', error);
              return {
          agent: {
            status: 'error',
-           error: (error as Error).message
+           error: (error as Error).message,
          },
-         timestamp: Date.now()
+         timestamp: Date.now(),
        };
     }
   }

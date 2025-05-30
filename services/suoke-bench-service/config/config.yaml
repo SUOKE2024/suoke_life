@@ -92,10 +92,10 @@ security:
 
 # 基准测试任务配置
 tasks:
-  # 中医四诊评测
+  # 中医五诊评测
   tcm_diagnosis:
-    name: "中医四诊智能诊断评测"
-    description: "评估AI在中医四诊（望、闻、问、切）方面的诊断能力"
+    name: "中医五诊智能诊断评测"
+    description: "评估AI在中医五诊（望、闻、问、切、算）方面的诊断能力"
     type: "TCM_DIAGNOSIS"
     enabled: true
     datasets: ["tcm_cases_v2", "syndrome_patterns"]

@@ -1,0 +1,463 @@
+networks:
+  suoke-network:
+    driver: bridge
+services:
+  a2a-agent-network:
+    build: ./services/a2a-agent-network
+    depends_on:
+    - postgres
+    - redis
+    - message-bus
+    environment:
+      API_PORT: '8000'
+      DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
+      REDIS_URL: redis://redis:6379/0
+      SERVICE_NAME: a2a-agent-network
+    networks:
+    - suoke-network
+    ports:
+    - 8014:8000
+    restart: unless-stopped
+    volumes:
+    - logs_data:/app/logs
+  accessibility-service:
+    build: ./services/accessibility-service
+    depends_on:
+    - postgres
+    - redis
+    environment:
+      API_PORT: '8000'
+      DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
+      REDIS_URL: redis://redis:6379/0
+      SERVICE_NAME: accessibility-service
+    networks:
+    - suoke-network
+    ports:
+    - 8010:8000
+    restart: unless-stopped
+    volumes:
+    - logs_data:/app/logs
+  agent-services-laoke-service:
+    build: ./services/agent-services/laoke-service
+    depends_on:
+    - postgres
+    - redis
+    - rag-service
+    - health-data-service
+    environment:
+      API_PORT: '8000'
+      DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
+      REDIS_URL: redis://redis:6379/0
+      SERVICE_NAME: agent-services/laoke-service
+    networks:
+    - suoke-network
+    ports:
+    - 8017:8000
+    restart: unless-stopped
+    volumes:
+    - logs_data:/app/logs
+  agent-services-soer-service:
+    build: ./services/agent-services/soer-service
+    depends_on:
+    - postgres
+    - redis
+    - rag-service
+    - health-data-service
+    environment:
+      API_PORT: '8000'
+      DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
+      REDIS_URL: redis://redis:6379/0
+      SERVICE_NAME: agent-services/soer-service
+    networks:
+    - suoke-network
+    ports:
+    - 8018:8000
+    restart: unless-stopped
+    volumes:
+    - logs_data:/app/logs
+  agent-services-xiaoai-service:
+    build: ./services/agent-services/xiaoai-service
+    depends_on:
+    - postgres
+    - redis
+    - rag-service
+    - health-data-service
+    environment:
+      API_PORT: '8000'
+      DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
+      REDIS_URL: redis://redis:6379/0
+      SERVICE_NAME: agent-services/xiaoai-service
+    networks:
+    - suoke-network
+    ports:
+    - 8015:8000
+    restart: unless-stopped
+    volumes:
+    - logs_data:/app/logs
+  agent-services-xiaoke-service:
+    build: ./services/agent-services/xiaoke-service
+    depends_on:
+    - postgres
+    - redis
+    - rag-service
+    - health-data-service
+    environment:
+      API_PORT: '8000'
+      DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
+      REDIS_URL: redis://redis:6379/0
+      SERVICE_NAME: agent-services/xiaoke-service
+    networks:
+    - suoke-network
+    ports:
+    - 8016:8000
+    restart: unless-stopped
+    volumes:
+    - logs_data:/app/logs
+  api-gateway:
+    build: ./services/api-gateway
+    depends_on:
+    - postgres
+    - redis
+    environment:
+      API_PORT: '8000'
+      DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
+      REDIS_URL: redis://redis:6379/0
+      SERVICE_NAME: api-gateway
+    networks:
+    - suoke-network
+    ports:
+    - 8000:8000
+    restart: unless-stopped
+    volumes:
+    - logs_data:/app/logs
+  auth-service:
+    build: ./services/auth-service
+    depends_on:
+    - postgres
+    - redis
+    environment:
+      API_PORT: '8000'
+      DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
+      REDIS_URL: redis://redis:6379/0
+      SERVICE_NAME: auth-service
+    networks:
+    - suoke-network
+    ports:
+    - 8001:8000
+    restart: unless-stopped
+    volumes:
+    - logs_data:/app/logs
+  blockchain-service:
+    build: ./services/blockchain-service
+    depends_on:
+    - postgres
+    - redis
+    - auth-service
+    environment:
+      API_PORT: '8000'
+      DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
+      REDIS_URL: redis://redis:6379/0
+      SERVICE_NAME: blockchain-service
+    networks:
+    - suoke-network
+    ports:
+    - 8003:8000
+    restart: unless-stopped
+    volumes:
+    - logs_data:/app/logs
+  corn-maze-service:
+    build: ./services/corn-maze-service
+    depends_on:
+    - postgres
+    - redis
+    - user-service
+    environment:
+      API_PORT: '8000'
+      DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
+      REDIS_URL: redis://redis:6379/0
+      SERVICE_NAME: corn-maze-service
+    networks:
+    - suoke-network
+    ports:
+    - 8008:8000
+    restart: unless-stopped
+    volumes:
+    - logs_data:/app/logs
+  diagnostic-services-calculation-service:
+    build: ./services/diagnostic-services/calculation-service
+    depends_on:
+    - postgres
+    - redis
+    - diagnostic-services-look-service
+    - diagnostic-services-listen-service
+    - diagnostic-services-inquiry-service
+    - diagnostic-services-palpation-service
+    environment:
+      API_PORT: '8000'
+      DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
+      REDIS_URL: redis://redis:6379/0
+      SERVICE_NAME: diagnostic-services/calculation-service
+    networks:
+    - suoke-network
+    ports:
+    - 8023:8000
+    restart: unless-stopped
+    volumes:
+    - logs_data:/app/logs
+  diagnostic-services-inquiry-service:
+    build: ./services/diagnostic-services/inquiry-service
+    depends_on:
+    - postgres
+    - redis
+    - agent-services-xiaoai-service
+    environment:
+      API_PORT: '8000'
+      DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
+      REDIS_URL: redis://redis:6379/0
+      SERVICE_NAME: diagnostic-services/inquiry-service
+    networks:
+    - suoke-network
+    ports:
+    - 8021:8000
+    restart: unless-stopped
+    volumes:
+    - logs_data:/app/logs
+  diagnostic-services-listen-service:
+    build: ./services/diagnostic-services/listen-service
+    depends_on:
+    - postgres
+    - redis
+    - agent-services-xiaoai-service
+    environment:
+      API_PORT: '8000'
+      DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
+      REDIS_URL: redis://redis:6379/0
+      SERVICE_NAME: diagnostic-services/listen-service
+    networks:
+    - suoke-network
+    ports:
+    - 8020:8000
+    restart: unless-stopped
+    volumes:
+    - logs_data:/app/logs
+  diagnostic-services-look-service:
+    build: ./services/diagnostic-services/look-service
+    depends_on:
+    - postgres
+    - redis
+    - agent-services-xiaoai-service
+    environment:
+      API_PORT: '8000'
+      DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
+      REDIS_URL: redis://redis:6379/0
+      SERVICE_NAME: diagnostic-services/look-service
+    networks:
+    - suoke-network
+    ports:
+    - 8019:8000
+    restart: unless-stopped
+    volumes:
+    - logs_data:/app/logs
+  diagnostic-services-palpation-service:
+    build: ./services/diagnostic-services/palpation-service
+    depends_on:
+    - postgres
+    - redis
+    - agent-services-xiaoai-service
+    environment:
+      API_PORT: '8000'
+      DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
+      REDIS_URL: redis://redis:6379/0
+      SERVICE_NAME: diagnostic-services/palpation-service
+    networks:
+    - suoke-network
+    ports:
+    - 8022:8000
+    restart: unless-stopped
+    volumes:
+    - logs_data:/app/logs
+  health-data-service:
+    build: ./services/health-data-service
+    depends_on:
+    - postgres
+    - redis
+    - auth-service
+    environment:
+      API_PORT: '8000'
+      DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
+      REDIS_URL: redis://redis:6379/0
+      SERVICE_NAME: health-data-service
+    networks:
+    - suoke-network
+    ports:
+    - 8002:8000
+    restart: unless-stopped
+    volumes:
+    - logs_data:/app/logs
+  human-review-service:
+    build: ./services/human-review-service
+    depends_on:
+    - postgres
+    - redis
+    - auth-service
+    environment:
+      API_PORT: '8000'
+      DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
+      REDIS_URL: redis://redis:6379/0
+      SERVICE_NAME: human-review-service
+    networks:
+    - suoke-network
+    ports:
+    - 8011:8000
+    restart: unless-stopped
+    volumes:
+    - logs_data:/app/logs
+  integration-service:
+    build: ./services/integration-service
+    depends_on:
+    - postgres
+    - redis
+    - message-bus
+    environment:
+      API_PORT: '8000'
+      DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
+      REDIS_URL: redis://redis:6379/0
+      SERVICE_NAME: integration-service
+    networks:
+    - suoke-network
+    ports:
+    - 8012:8000
+    restart: unless-stopped
+    volumes:
+    - logs_data:/app/logs
+  med-knowledge:
+    build: ./services/med-knowledge
+    depends_on:
+    - postgres
+    - redis
+    - rag-service
+    environment:
+      API_PORT: '8000'
+      DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
+      REDIS_URL: redis://redis:6379/0
+      SERVICE_NAME: med-knowledge
+    networks:
+    - suoke-network
+    ports:
+    - 8007:8000
+    restart: unless-stopped
+    volumes:
+    - logs_data:/app/logs
+  medical-resource-service:
+    build: ./services/medical-resource-service
+    depends_on:
+    - postgres
+    - redis
+    - user-service
+    environment:
+      API_PORT: '8000'
+      DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
+      REDIS_URL: redis://redis:6379/0
+      SERVICE_NAME: medical-resource-service
+    networks:
+    - suoke-network
+    ports:
+    - 8009:8000
+    restart: unless-stopped
+    volumes:
+    - logs_data:/app/logs
+  message-bus:
+    build: ./services/message-bus
+    depends_on:
+    - postgres
+    - redis
+    environment:
+      API_PORT: '8000'
+      DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
+      REDIS_URL: redis://redis:6379/0
+      SERVICE_NAME: message-bus
+    networks:
+    - suoke-network
+    ports:
+    - 8004:8000
+    restart: unless-stopped
+    volumes:
+    - logs_data:/app/logs
+  postgres:
+    environment:
+      POSTGRES_DB: suoke_db
+      POSTGRES_PASSWORD: suoke123
+      POSTGRES_USER: suoke
+    image: postgres:15
+    networks:
+    - suoke-network
+    ports:
+    - 5432:5432
+    volumes:
+    - postgres_data:/var/lib/postgresql/data
+  rag-service:
+    build: ./services/rag-service
+    depends_on:
+    - postgres
+    - redis
+    - message-bus
+    environment:
+      API_PORT: '8000'
+      DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
+      REDIS_URL: redis://redis:6379/0
+      SERVICE_NAME: rag-service
+    networks:
+    - suoke-network
+    ports:
+    - 8005:8000
+    restart: unless-stopped
+    volumes:
+    - logs_data:/app/logs
+  redis:
+    image: redis:7-alpine
+    networks:
+    - suoke-network
+    ports:
+    - 6379:6379
+    volumes:
+    - redis_data:/data
+  suoke-bench-service:
+    build: ./services/suoke-bench-service
+    depends_on:
+    - postgres
+    - redis
+    environment:
+      API_PORT: '8000'
+      DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
+      REDIS_URL: redis://redis:6379/0
+      SERVICE_NAME: suoke-bench-service
+    networks:
+    - suoke-network
+    ports:
+    - 8013:8000
+    restart: unless-stopped
+    volumes:
+    - logs_data:/app/logs
+  user-service:
+    build: ./services/user-service
+    depends_on:
+    - postgres
+    - redis
+    - auth-service
+    environment:
+      API_PORT: '8000'
+      DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
+      REDIS_URL: redis://redis:6379/0
+      SERVICE_NAME: user-service
+    networks:
+    - suoke-network
+    ports:
+    - 8006:8000
+    restart: unless-stopped
+    volumes:
+    - logs_data:/app/logs
+version: '3.8'
+volumes:
+  logs_data: {}
+  postgres_data: {}
+  redis_data: {}

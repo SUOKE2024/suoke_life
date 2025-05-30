@@ -1,5 +1,10 @@
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Icon from '../../../components/common/Icon';
+import { colors, spacing } from '../../../constants/theme';
+import { monitoringSystem, SystemMetrics, ErrorInfo, HealthCheckResult } from '../../../utils/monitoringSystem';
+
+
 import React, { useState, useEffect } from 'react';
-import {
   View,
   Text,
   StyleSheet,
@@ -10,10 +15,6 @@ import {
   RefreshControl,
   Dimensions,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import Icon from '../../../components/common/Icon';
-import { colors, spacing } from '../../../constants/theme';
-import { monitoringSystem, SystemMetrics, ErrorInfo, HealthCheckResult } from '../../../utils/monitoringSystem';
 
 const { width } = Dimensions.get('window');
 
@@ -52,20 +53,20 @@ export const SystemMonitorDashboard: React.FC<SystemMonitorDashboardProps> = ({
     if (visible) {
       loadDashboardData();
       // 每30秒自动刷新
-      const interval = setInterval(loadDashboardData, 30000);
+      const interval = useMemo(() => useMemo(() => useMemo(() => setInterval(loadDashboardData, 30000), []), []), []);
       return () => clearInterval(interval);
     }
   }, [visible]);
 
-  const loadDashboardData = async () => {
+  const loadDashboardData = useMemo(() => useMemo(() => useMemo(() => async () => {
     try {
-      setLoading(true);
+      setLoading(true), []), []), []);
       
       // 初始化监控系统
       await monitoringSystem.initialize();
       
       // 获取系统状态
-      const systemStatus = monitoringSystem.getSystemStatus();
+      const systemStatus = useMemo(() => useMemo(() => useMemo(() => monitoringSystem.getSystemStatus(), []), []), []);
       
       // 模拟获取服务健康状态
       const services: HealthCheckResult[] = [
@@ -74,50 +75,50 @@ export const SystemMonitorDashboard: React.FC<SystemMonitorDashboardProps> = ({
           status: 'healthy',
           responseTime: 120,
           lastCheck: Date.now(),
-          details: { version: '1.0.0', uptime: '99.9%' }
+          details: { version: '1.0.0', uptime: '99.9%' },
         },
         {
           service: 'xiaoke-service',
           status: 'healthy',
           responseTime: 95,
           lastCheck: Date.now(),
-          details: { version: '1.0.0', uptime: '99.8%' }
+          details: { version: '1.0.0', uptime: '99.8%' },
         },
         {
           service: 'laoke-service',
           status: 'degraded',
           responseTime: 350,
           lastCheck: Date.now(),
-          details: { version: '1.0.0', uptime: '98.5%', issue: '响应时间较慢' }
+          details: { version: '1.0.0', uptime: '98.5%', issue: '响应时间较慢' },
         },
         {
           service: 'soer-service',
           status: 'healthy',
           responseTime: 80,
           lastCheck: Date.now(),
-          details: { version: '1.0.0', uptime: '99.9%' }
+          details: { version: '1.0.0', uptime: '99.9%' },
         },
         {
           service: 'eco-services-api',
           status: 'healthy',
           responseTime: 150,
           lastCheck: Date.now(),
-          details: { version: '1.0.0', uptime: '99.7%' }
+          details: { version: '1.0.0', uptime: '99.7%' },
         },
         {
           service: 'blockchain-service',
           status: 'healthy',
           responseTime: 200,
           lastCheck: Date.now(),
-          details: { version: '1.0.0', uptime: '99.6%' }
-        }
+          details: { version: '1.0.0', uptime: '99.6%' },
+        },
       ];
 
       setDashboardData({
         performance: systemStatus.performance,
         errors: systemStatus.errors,
         health: systemStatus.health,
-        services
+        services,
       });
     } catch (error) {
       console.error('加载仪表板数据失败:', error);
@@ -128,31 +129,31 @@ export const SystemMonitorDashboard: React.FC<SystemMonitorDashboardProps> = ({
     }
   };
 
-  const onRefresh = async () => {
-    setRefreshing(true);
+  const onRefresh = useMemo(() => useMemo(() => useMemo(() => async () => {
+    setRefreshing(true), []), []), []);
     await loadDashboardData();
   };
 
-  const getStatusColor = (status: string): string => {
+  const getStatusColor = useMemo(() => useMemo(() => useMemo(() => (status: string): string => {
     switch (status) {
-      case 'healthy': return colors.success;
+      case 'healthy': return colors.success, []), []), []);
       case 'degraded': return colors.warning;
       case 'unhealthy': return colors.error;
       default: return colors.textSecondary;
     }
   };
 
-  const getStatusIcon = (status: string): string => {
+  const getStatusIcon = useMemo(() => useMemo(() => useMemo(() => (status: string): string => {
     switch (status) {
-      case 'healthy': return 'check-circle';
+      case 'healthy': return 'check-circle', []), []), []);
       case 'degraded': return 'alert-triangle';
       case 'unhealthy': return 'x-circle';
       default: return 'help-circle';
     }
   };
 
-  const renderOverviewTab = () => {
-    if (!dashboardData) return null;
+  const renderOverviewTab = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+    if (!dashboardData) {return null;}
 
     return (
       <ScrollView style={styles.tabContent}>
@@ -241,8 +242,8 @@ export const SystemMonitorDashboard: React.FC<SystemMonitorDashboardProps> = ({
     );
   };
 
-  const renderPerformanceTab = () => {
-    if (!dashboardData) return null;
+  const renderPerformanceTab = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+    if (!dashboardData) {return null;}
 
     return (
       <ScrollView style={styles.tabContent}>
@@ -296,8 +297,8 @@ export const SystemMonitorDashboard: React.FC<SystemMonitorDashboardProps> = ({
     );
   };
 
-  const renderErrorsTab = () => {
-    if (!dashboardData) return null;
+  const renderErrorsTab = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+    if (!dashboardData) {return null;}
 
     return (
       <ScrollView style={styles.tabContent}>
@@ -313,7 +314,7 @@ export const SystemMonitorDashboard: React.FC<SystemMonitorDashboardProps> = ({
                   <Text style={[styles.severityCount, { 
                     color: severity === 'critical' ? colors.error : 
                            severity === 'high' ? colors.warning :
-                           severity === 'medium' ? colors.primary : colors.textSecondary 
+                           severity === 'medium' ? colors.primary : colors.textSecondary, 
                   }]}>
                     {count}
                   </Text>
@@ -361,8 +362,8 @@ export const SystemMonitorDashboard: React.FC<SystemMonitorDashboardProps> = ({
     );
   };
 
-  const renderHealthTab = () => {
-    if (!dashboardData) return null;
+  const renderHealthTab = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+    if (!dashboardData) {return null;}
 
     return (
       <ScrollView style={styles.tabContent}>
@@ -372,7 +373,7 @@ export const SystemMonitorDashboard: React.FC<SystemMonitorDashboardProps> = ({
           {/* 整体健康状态 */}
           <View style={[styles.overallHealthCard, { 
             backgroundColor: getStatusColor(dashboardData.health.overall) + '20',
-            borderColor: getStatusColor(dashboardData.health.overall)
+            borderColor: getStatusColor(dashboardData.health.overall),
           }]}>
             <Icon 
               name={getStatusIcon(dashboardData.health.overall)} 
@@ -380,7 +381,7 @@ export const SystemMonitorDashboard: React.FC<SystemMonitorDashboardProps> = ({
               color={getStatusColor(dashboardData.health.overall)} 
             />
             <Text style={[styles.overallHealthText, { 
-              color: getStatusColor(dashboardData.health.overall) 
+              color: getStatusColor(dashboardData.health.overall), 
             }]}>
               系统整体状态: {dashboardData.health.overall === 'healthy' ? '健康' : 
                            dashboardData.health.overall === 'degraded' ? '降级' : '不健康'}
@@ -436,7 +437,8 @@ export const SystemMonitorDashboard: React.FC<SystemMonitorDashboardProps> = ({
     );
   };
 
-  const renderTabBar = () => (
+  // TODO: 将内联组件移到组件外部
+const renderTabBar = useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.tabBar}>
       {[
         { key: 'overview', label: '概览', icon: 'home' },
@@ -456,16 +458,16 @@ export const SystemMonitorDashboard: React.FC<SystemMonitorDashboardProps> = ({
           />
           <Text style={[
             styles.tabLabel,
-            selectedTab === tab.key && styles.activeTabLabel
+            selectedTab === tab.key && styles.activeTabLabel,
           ]}>
             {tab.label}
           </Text>
         </TouchableOpacity>
       ))}
     </View>
-  );
+  ), []), []), []);
 
-  const renderContent = () => {
+  const renderContent = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
     if (loading) {
       return (
         <View style={styles.loadingContainer}>
@@ -510,7 +512,7 @@ export const SystemMonitorDashboard: React.FC<SystemMonitorDashboardProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -839,6 +841,6 @@ const styles = StyleSheet.create({
     color: colors.warning,
     marginLeft: spacing.xs,
   },
-});
+}), []), []), []);
 
 export default SystemMonitorDashboard; 

@@ -1,11 +1,13 @@
+import Icon from './Icon';
+import { colors, spacing, fonts } from '../../constants/theme';
+
+
+
 import React, { memo } from 'react';
-import {
   View,
   Text,
   StyleSheet,
 } from 'react-native';
-import Icon from './Icon';
-import { colors, spacing, fonts } from '../../constants/theme';
 
 interface EmptyStateProps {
   icon: string;

@@ -1,22 +1,22 @@
-import { useState, useCallback, useMemo } from 'react';
 import { Alert } from 'react-native';
-import { 
+
+
+import { useState, useCallback, useMemo } from 'react';
   UserProfile, 
   AgentInteraction, 
   HealthAchievement, 
   MemberBenefit,
   SettingSection,
   HealthStats,
-  ActivityRecord
+  ActivityRecord,
 } from '../types/profile';
-import {
   USER_PROFILE,
   AGENT_INTERACTIONS,
   HEALTH_ACHIEVEMENTS,
   MEMBER_BENEFITS,
   SETTINGS_SECTIONS,
   HEALTH_STATS,
-  ACTIVITY_RECORDS
+  ACTIVITY_RECORDS,
 } from '../data/profileData';
 
 export const useProfile = () => {
@@ -49,7 +49,7 @@ export const useProfile = () => {
               )
             );
             console.log(`开始与${agent.agentName}聊天`);
-          }
+          },
         },
       ]
     );
@@ -98,7 +98,7 @@ export const useProfile = () => {
               )
             );
             Alert.alert('使用成功', `${benefit.title}已成功使用`);
-          }
+          },
         },
       ]
     );
@@ -142,8 +142,8 @@ export const useProfile = () => {
 
   // 获取健康分数颜色
   const getHealthScoreColor = useCallback((score: number) => {
-    if (score >= 80) return '#34C759';
-    if (score >= 60) return '#FF9500';
+    if (score >= 80) {return '#34C759';}
+    if (score >= 60) {return '#FF9500';}
     return '#FF3B30';
   }, []);
 
@@ -181,8 +181,8 @@ export const useProfile = () => {
   // 过滤成就
   const filterAchievements = useCallback((category?: string, unlocked?: boolean) => {
     return achievements.filter(achievement => {
-      if (category && achievement.category !== category) return false;
-      if (unlocked !== undefined && achievement.unlocked !== unlocked) return false;
+      if (category && achievement.category !== category) {return false;}
+      if (unlocked !== undefined && achievement.unlocked !== unlocked) {return false;}
       return true;
     });
   }, [achievements]);

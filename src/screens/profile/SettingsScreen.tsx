@@ -1,15 +1,22 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { colors, spacing, fonts } from '../../constants/theme';
-import { useDispatch } from 'react-redux';
-import { logout } from '../../store/slices/authSlice';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { MainStackParamList } from '../../navigation/MainNavigator';
+import { useNavigation } from "@react-navigation/native";
+import { colors, spacing, fonts } from "../../constants/theme";
+import { useDispatch } from "react-redux";
+import { logout } from "../../store/slices/authSlice";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { MainStackParamList } from "../../navigation/MainNavigator";
+import React from "react";
+
+
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 
 type SettingsScreenNavigationProp = NativeStackNavigationProp<
   MainStackParamList,
-  'Settings'
+  "Settings"
 >;
 
 export const SettingsScreen: React.FC = () => {
@@ -20,24 +27,24 @@ export const SettingsScreen: React.FC = () => {
     try {
       await dispatch(logout() as any);
     } catch (error) {
-      console.error('登出失败:', error);
+      console.error("登出失败:", error);
     }
   };
 
-  const handleBack = () => {
+  const handleBack = useCallback( () => {, []);
     navigation.goBack();
   };
 
-  const navigateToServiceStatus = () => {
-    navigation.navigate('ServiceStatus');
+  const navigateToServiceStatus = useCallback( () => {, []);
+    navigation.navigate("ServiceStatus");
   };
 
-  const navigateToServiceManagement = () => {
-    navigation.navigate('ServiceManagement');
+  const navigateToServiceManagement = useCallback( () => {, []);
+    navigation.navigate("ServiceManagement");
   };
 
-  const navigateToDeveloperPanel = () => {
-    navigation.navigate('DeveloperPanel');
+  const navigateToDeveloperPanel = useCallback( () => {, []);
+    navigation.navigate("DeveloperPanel");
   };
 
   return (
@@ -79,19 +86,19 @@ export const SettingsScreen: React.FC = () => {
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>系统与开发</Text>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.settingItem}
             onPress={navigateToServiceStatus}
           >
             <Text style={styles.settingText}>服务状态</Text>
           </TouchableOpacity>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.settingItem}
             onPress={navigateToServiceManagement}
           >
             <Text style={styles.settingText}>服务管理</Text>
           </TouchableOpacity>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.settingItem}
             onPress={navigateToDeveloperPanel}
           >
@@ -132,9 +139,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     padding: spacing.md,
     backgroundColor: colors.white,
     borderBottomWidth: 1,
@@ -146,11 +153,11 @@ const styles = StyleSheet.create({
   backButtonText: {
     color: colors.primary,
     fontSize: fonts.size.md,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   headerTitle: {
     fontSize: fonts.size.lg,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: colors.text,
   },
   placeholder: {
@@ -166,7 +173,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: spacing.md,
     ...StyleSheet.flatten({
-      shadowColor: '#000',
+      shadowColor: "#000",
       shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 0.1,
       shadowRadius: 4,
@@ -175,7 +182,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: fonts.size.md,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: colors.textSecondary,
     marginBottom: spacing.md,
   },
@@ -193,11 +200,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.error,
     padding: spacing.md,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: "center",
   },
   logoutButtonText: {
     color: colors.white,
     fontSize: fonts.size.md,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 });

@@ -1,5 +1,21 @@
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useChat, useContacts } from '../../hooks/useChat';
+import { ChatChannel, Contact as ChatContact, AgentType } from '../../types/chat';
+import { Contact as ContactsListContact } from '../../components/common/ContactsList';
+import { colors, spacing, shadows } from '../../constants/theme';
+import { HomeHeader } from '../components/HomeHeader';
+import { SearchBar } from '../components/SearchBar';
+import { ChatChannelItem } from '../components/ChatChannelItem';
+import { EmptyState } from '../../components/common/EmptyState';
+import { LoadingScreen } from '../../components/common/LoadingScreen';
+import Icon from '../../components/common/Icon';
+import NavigationTest from '../../components/NavigationTest';
+import AgentChatInterface from '../../components/common/AgentChatInterface';
+import ContactsList from '../../components/common/ContactsList';
+import AccessibilitySettings from '../../components/common/AccessibilitySettings';
+
+
 import React, { useState, useCallback, useMemo } from 'react';
-import {
   View,
   StyleSheet,
   FlatList,
@@ -7,16 +23,11 @@ import {
   Modal,
   Alert,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useChat, useContacts } from '../../hooks/useChat';
-import { ChatChannel, Contact as ChatContact, AgentType } from '../../types/chat';
-import { Contact as ContactsListContact } from '../../components/common/ContactsList';
-import { colors, spacing, shadows } from '../../constants/theme';
 
 // 类型转换函数
-const convertToContactsListContact = (contact: ChatContact): ContactsListContact | null => {
+const convertToContactsListContact = useMemo(() => useMemo(() => useMemo(() => (contact: ChatContact): ContactsListContact | null => {
   // 过滤掉group类型，因为ContactsList不支持
-  if (contact.type === 'group') return null;
+  if (contact.type === 'group') {return null, []), []), []);}
   
   return {
     id: contact.id,
@@ -33,18 +44,8 @@ const convertToContactsListContact = (contact: ChatContact): ContactsListContact
 };
 
 // 组件导入
-import { HomeHeader } from '../components/HomeHeader';
-import { SearchBar } from '../components/SearchBar';
-import { ChatChannelItem } from '../components/ChatChannelItem';
-import { EmptyState } from '../../components/common/EmptyState';
-import { LoadingScreen } from '../../components/common/LoadingScreen';
-import Icon from '../../components/common/Icon';
 
 // 现有组件导入
-import NavigationTest from '../../components/NavigationTest';
-import AgentChatInterface from '../../components/common/AgentChatInterface';
-import ContactsList from '../../components/common/ContactsList';
-import AccessibilitySettings from '../../components/common/AccessibilitySettings';
 
 const HomeScreen: React.FC = () => {
   // 聊天相关状态
@@ -71,9 +72,9 @@ const HomeScreen: React.FC = () => {
   const [navigationTestVisible, setNavigationTestVisible] = useState(false);
 
   // 处理频道点击
-  const handleChannelPress = useCallback((channel: ChatChannel) => {
+  const handleChannelPress = useMemo(() => useMemo(() => useMemo(() => useCallback((channel: ChatChannel) => {
     if (channel.type === 'agent' && channel.agentType) {
-      setSelectedAgent(channel.agentType);
+      setSelectedAgent(channel.agentType), []), []), []);
       setAgentChatVisible(true);
       startAgentChat(channel.agentType);
     } else {
@@ -84,8 +85,8 @@ const HomeScreen: React.FC = () => {
   }, [startAgentChat, markAsRead]);
 
   // 处理联系人点击
-  const handleContactPress = useCallback((contact: ContactsListContact) => {
-    setContactsVisible(false);
+  const handleContactPress = useMemo(() => useMemo(() => useMemo(() => useCallback((contact: ContactsListContact) => {
+    setContactsVisible(false), []), []), []);
     
     if (contact.type === 'agent' && contact.agentType) {
       setSelectedAgent(contact.agentType);
@@ -97,24 +98,24 @@ const HomeScreen: React.FC = () => {
   }, [startAgentChat]);
 
   // 渲染频道项
-  const renderChannelItem = useCallback(({ item }: { item: ChatChannel }) => (
+  const renderChannelItem = useMemo(() => useMemo(() => useMemo(() => useCallback(({ item }: { item: ChatChannel }) => (
     <ChatChannelItem
       channel={item}
       onPress={handleChannelPress}
     />
-  ), [handleChannelPress]);
+  ), [handleChannelPress]), []), []), []);
 
   // 获取列表项的key
-  const keyExtractor = useCallback((item: ChatChannel) => item.id, []);
+  const keyExtractor = useMemo(() => useMemo(() => useMemo(() => useCallback((item: ChatChannel) => item.id, []), []), []), []);
 
   // 空状态组件
-  const renderEmptyState = useMemo(() => (
+  const renderEmptyState = useMemo(() => useMemo(() => useMemo(() => useMemo(() => (
     <EmptyState
       icon="message-outline"
       title="暂无聊天记录"
       subtitle="点击右上角联系人图标开始聊天"
     />
-  ), []);
+  ), []), []), []), []);
 
   // 如果正在加载，显示加载屏幕
   if (isLoading && channels.length === 0) {
@@ -233,7 +234,7 @@ const HomeScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -272,6 +273,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     ...shadows.sm,
   },
-});
+}), []), []), []);
 
 export default HomeScreen; 

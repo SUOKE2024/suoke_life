@@ -307,7 +307,7 @@ class EnhancedKnowledgeService:
                         'difficulty': DifficultyLevel.INTERMEDIATE.value,
                         'duration': '2小时',
                         'rating': 4.9,
-                        'description': '详细讲解中医四诊方法：望、闻、问、切'
+                        'description': '详细讲解中医五诊方法：望、闻、问、切、算'
                     }
                 ],
                 "养生保健": [

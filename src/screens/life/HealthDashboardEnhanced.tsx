@@ -1,5 +1,12 @@
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { LineChart, BarChart, PieChart } from 'react-native-chart-kit';
+import Icon from '../../components/common/Icon';
+import { colors, spacing } from '../../constants/theme';
+import { useAppDispatch, useAppSelector } from '../../store';
+import { ConstitutionType, HealthDataType } from '../../types';
+
+
 import React, { useState, useEffect } from 'react';
-import {
   View,
   Text,
   StyleSheet,
@@ -9,20 +16,13 @@ import {
   Alert,
   RefreshControl,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { LineChart, BarChart, PieChart } from 'react-native-chart-kit';
-import Icon from '../../components/common/Icon';
-import { colors, spacing } from '../../constants/theme';
-import { useAppDispatch, useAppSelector } from '../../store';
-import {
   selectDiagnosisResults,
   selectDiagnosisSessions,
   fetchDiagnosisHistory,
 } from '../../store/slices/diagnosisSlice';
-import { ConstitutionType, HealthDataType } from '../../types';
 
 const { width } = Dimensions.get('window');
-const chartWidth = width - spacing.lg * 2;
+const chartWidth = useMemo(() => useMemo(() => useMemo(() => width - spacing.lg * 2, []), []), []);
 
 interface HealthMetric {
   id: string;
@@ -45,9 +45,9 @@ interface ConstitutionData {
 }
 
 export const HealthDashboardEnhanced: React.FC = () => {
-  const dispatch = useAppDispatch();
-  const diagnosisResults = useAppSelector(selectDiagnosisResults);
-  const diagnosisSessions = useAppSelector(selectDiagnosisSessions);
+  const dispatch = useMemo(() => useMemo(() => useMemo(() => useAppDispatch(), []), []), []);
+  const diagnosisResults = useMemo(() => useMemo(() => useMemo(() => useAppSelector(selectDiagnosisResults), []), []), []);
+  const diagnosisSessions = useMemo(() => useMemo(() => useMemo(() => useAppSelector(selectDiagnosisSessions), []), []), []);
 
   const [selectedPeriod, setSelectedPeriod] = useState<'week' | 'month' | 'year'>('week');
   const [refreshing, setRefreshing] = useState(false);
@@ -135,23 +135,24 @@ export const HealthDashboardEnhanced: React.FC = () => {
 
   useEffect(() => {
     loadDiagnosisHistory();
-  }, []);
+  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
 
-  const loadDiagnosisHistory = async () => {
+  const loadDiagnosisHistory = useMemo(() => useMemo(() => useMemo(() => async () => {
     try {
-      await dispatch(fetchDiagnosisHistory({ limit: 10 }));
+      await dispatch(fetchDiagnosisHistory({ limit: 10 })), []), []), []);
     } catch (error) {
       console.error('加载诊断历史失败:', error);
     }
   };
 
-  const onRefresh = async () => {
-    setRefreshing(true);
+  const onRefresh = useMemo(() => useMemo(() => useMemo(() => async () => {
+    setRefreshing(true), []), []), []);
     await loadDiagnosisHistory();
     setRefreshing(false);
   };
 
-  const renderOverviewCards = () => (
+  // TODO: 将内联组件移到组件外部
+const renderOverviewCards = useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.overviewContainer}>
       {healthMetrics.map((metric) => (
         <TouchableOpacity
@@ -180,11 +181,11 @@ export const HealthDashboardEnhanced: React.FC = () => {
         </TouchableOpacity>
       ))}
     </View>
-  );
+  ), []), []), []);
 
-  const renderChart = () => {
-    const selectedMetricData = healthMetrics.find(m => m.id === selectedMetric);
-    if (!selectedMetricData) return null;
+  const renderChart = useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []);
+    const selectedMetricData = useMemo(() => useMemo(() => useMemo(() => healthMetrics.find(m => m.id === selectedMetric), []), []), []);
+    if (!selectedMetricData) {return null;}
 
     return (
       <View style={styles.chartContainer}>
@@ -225,7 +226,8 @@ export const HealthDashboardEnhanced: React.FC = () => {
     );
   };
 
-  const renderConstitutionAnalysis = () => (
+  // TODO: 将内联组件移到组件外部
+const renderConstitutionAnalysis = useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.constitutionContainer}>
       <Text style={styles.sectionTitle}>中医体质分析</Text>
       <View style={styles.constitutionChart}>
@@ -261,12 +263,13 @@ export const HealthDashboardEnhanced: React.FC = () => {
         ))}
       </View>
     </View>
-  );
+  ), []), []), []);
 
-  const renderDiagnosisHistory = () => (
+  // TODO: 将内联组件移到组件外部
+const renderDiagnosisHistory = useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.historyContainer}>
       <View style={styles.historyHeader}>
-        <Text style={styles.sectionTitle}>四诊记录</Text>
+        <Text style={styles.sectionTitle}>五诊记录</Text>
         <TouchableOpacity onPress={() => Alert.alert('查看全部', '跳转到完整的诊断历史页面')}>
           <Text style={styles.viewAllText}>查看全部</Text>
         </TouchableOpacity>
@@ -277,13 +280,13 @@ export const HealthDashboardEnhanced: React.FC = () => {
             <Icon name="stethoscope" size={20} color={colors.primary} />
           </View>
           <View style={styles.historyContent}>
-            <Text style={styles.historyTitle}>四诊检查</Text>
+            <Text style={styles.historyTitle}>五诊检查</Text>
             <Text style={styles.historyDate}>
               {new Date(session.startTime).toLocaleDateString()}
             </Text>
           </View>
           <View style={[styles.historyStatus, { 
-            backgroundColor: session.status === 'completed' ? colors.success : colors.warning 
+            backgroundColor: session.status === 'completed' ? colors.success : colors.warning, 
           }]}>
             <Text style={styles.historyStatusText}>
               {session.status === 'completed' ? '已完成' : '进行中'}
@@ -292,9 +295,9 @@ export const HealthDashboardEnhanced: React.FC = () => {
         </TouchableOpacity>
       ))}
     </View>
-  );
+  ), []), []), []);
 
-  const getTrendColor = (trend: string) => {
+  const getTrendColor = useMemo(() => useMemo(() => useMemo(() => useCallback( (trend: string) => {, []), []), []), []);
     switch (trend) {
       case 'up': return colors.success;
       case 'down': return colors.error;
@@ -302,7 +305,7 @@ export const HealthDashboardEnhanced: React.FC = () => {
     }
   };
 
-  const getTrendIcon = (trend: string) => {
+  const getTrendIcon = useMemo(() => useMemo(() => useMemo(() => useCallback( (trend: string) => {, []), []), []), []);
     switch (trend) {
       case 'up': return 'trending-up';
       case 'down': return 'trending-down';
@@ -310,7 +313,8 @@ export const HealthDashboardEnhanced: React.FC = () => {
     }
   };
 
-  const renderPeriodSelector = () => (
+  // TODO: 将内联组件移到组件外部
+const renderPeriodSelector = useMemo(() => useMemo(() => useMemo(() => () => (
     <View style={styles.periodSelector}>
       {(['week', 'month', 'year'] as const).map((period) => (
         <TouchableOpacity
@@ -332,7 +336,7 @@ export const HealthDashboardEnhanced: React.FC = () => {
         </TouchableOpacity>
       ))}
     </View>
-  );
+  ), []), []), []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -372,14 +376,14 @@ export const HealthDashboardEnhanced: React.FC = () => {
         {/* 体质分析 */}
         {renderConstitutionAnalysis()}
 
-        {/* 四诊历史 */}
+        {/* 五诊历史 */}
         {renderDiagnosisHistory()}
       </ScrollView>
     </SafeAreaView>
   );
 };
 
-const styles = StyleSheet.create({
+const styles = useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -606,6 +610,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: '600',
   },
-});
+}), []), []), []);
 
 export default HealthDashboardEnhanced; 

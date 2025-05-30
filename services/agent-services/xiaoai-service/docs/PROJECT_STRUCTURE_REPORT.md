@@ -16,9 +16,9 @@
 - 命令模块：`cmd/__init__.py`
 - 测试包：`tests/__init__.py`
 
-#### 四诊模块完整包结构
+#### 五诊模块完整包结构
 ```
-internal/four_diagnosis/
+internal/five_diagnosis/
 ├── __init__.py
 ├── coordinator/__init__.py
 ├── fusion/__init__.py

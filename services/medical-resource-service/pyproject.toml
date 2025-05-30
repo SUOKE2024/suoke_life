@@ -16,6 +16,12 @@ dependencies = [
     "pyyaml>=6.0.2,<7.0.0",
     "loguru>=0.7.2,<1.0.0",
     "tenacity>=9.0.0,<10.0.0",
+    # 监控和指标
+    "prometheus-client>=0.19.0",
+    "opentelemetry-api>=1.21.0",
+    "opentelemetry-sdk>=1.21.0",
+    "opentelemetry-instrumentation-fastapi>=0.42b0",
+    "sentry-sdk[fastapi]>=1.39.0",
 ]
 
 classifiers = [
@@ -27,6 +33,16 @@ dev = [
     "pytest-asyncio>=0.24.0,<1.0.0",
     "black>=24.10.0,<25.0.0",
     "isort>=5.13.0,<6.0.0",
+]
+
+# 生产环境监控
+monitoring = [
+    "prometheus-client>=0.19.0",
+    "opentelemetry-api>=1.21.0",
+    "opentelemetry-sdk>=1.21.0",
+    "opentelemetry-instrumentation-fastapi>=0.42b0",
+    "opentelemetry-instrumentation-sqlalchemy>=0.42b0",
+    "sentry-sdk[fastapi]>=1.39.0",
 ]
 
 [tool.black]
