@@ -215,3 +215,124 @@ test-results/
 
 # Global virtual environment directories
 **/.venv/
+
+# ===== 项目特定的忽略规则 =====
+
+# 备份文件和目录
+.backup/
+*.backup
+*.backup.*
+*.bak
+*.old
+*.orig
+*.tmp
+
+# 测试和缓存文件
+.jest-cache/
+coverage/
+.nyc_output/
+test-results/
+*.test.log
+
+# 临时报告文件
+*-report.json
+*-test-report.json
+optimization-*.json
+memory-analysis-*.json
+deployment-checklist.json
+performance-config.json
+comprehensive-test-report.json
+api-integration-test-report.json
+e2e-user-flow-test-report.json
+agent-collaboration-test-report.json
+
+# 临时测试文件
+test-*.js
+simple-test.js
+test-uiux-optimization.js
+test-agents-simple.js
+test-single-agent.js
+
+# 构建和编译输出
+build/
+dist/
+out/
+.expo/
+.expo-shared/
+
+# 依赖和包管理
+node_modules/
+.pnp
+.pnp.js
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+
+# Python虚拟环境
+.venv/
+venv/
+env/
+ENV/
+.env/
+
+# iOS特定
+ios/Pods/
+ios/build/
+ios/*.xcworkspace/xcuserdata/
+ios/*.xcodeproj/xcuserdata/
+ios/*.xcodeproj/project.xcworkspace/xcuserdata/
+*.pbxproj.backup
+
+# Android特定
+android/app/build/
+android/build/
+android/.gradle/
+android/local.properties
+
+# React Native特定
+.metro-health-check*
+.haste_cache/
+
+# 编辑器和系统文件
+.vscode/settings.json
+.idea/
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# 日志和调试文件
+*.log
+logs/
+debug.log
+error.log
+access.log
+
+# 临时文件
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+.#*
+
+# 安全和密钥文件
+*.key
+*.pem
+*.p12
+*.keystore
+secrets.json
+.secrets/
+
+# 数据库文件
+*.db
+*.sqlite
+*.sqlite3
+data/
+
+# 监控和分析文件
+.monitoring/
+.analytics/
+performance-*.json
