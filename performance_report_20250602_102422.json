@@ -1,0 +1,57 @@
+{
+  "timestamp": "2025-06-02T10:24:22.120983",
+  "summary": {
+    "total_tests": 3,
+    "average_speedup": 0.33760457625710494,
+    "total_memory_usage_mb": 50.828125,
+    "total_throughput": 158294.88395063335,
+    "cpu_cores": 8,
+    "system_memory_gb": 24.0
+  },
+  "detailed_results": [
+    {
+      "test_name": "JIT编译优化",
+      "execution_time_s": 1.5830059051513672,
+      "memory_usage_mb": 51.125,
+      "throughput": 63.17095828548914,
+      "speedup": 0.001283509508392664,
+      "additional_metrics": {
+        "normal_time": 0.0020318031311035156,
+        "jit_time": 1.5830059051513672,
+        "iterations": 100,
+        "vector_size": 10000
+      }
+    },
+    {
+      "test_name": "进程池优化",
+      "execution_time_s": 1.0370080471038818,
+      "memory_usage_mb": -0.296875,
+      "throughput": 3.857250684959537,
+      "speedup": 0.011530219262922152,
+      "additional_metrics": {
+        "serial_time": 0.011956930160522461,
+        "parallel_time": 1.0370080471038818,
+        "cpu_cores": 8,
+        "tasks_count": 4
+      }
+    },
+    {
+      "test_name": "内存优化",
+      "execution_time_s": 0.06319999694824219,
+      "memory_usage_mb": 0.0,
+      "throughput": 158227.8557416629,
+      "speedup": 1.0,
+      "additional_metrics": {
+        "processed_chunks": 10000,
+        "average_value": 49.953658578506946,
+        "memory_efficiency": 0
+      }
+    }
+  ],
+  "recommendations": [
+    "内存使用效率高，建议继续使用流式处理和生成器模式",
+    "继续监控生产环境性能指标",
+    "定期运行基准测试验证优化效果",
+    "考虑使用缓存机制进一步提升性能"
+  ]
+}

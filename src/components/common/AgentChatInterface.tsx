@@ -1,643 +1,420 @@
-
-interface ApiResponse<T = any /> { data: T;/ , success: boolean;
-  message?: string;
-  code?: number}
-importIcon from './Icon'/import { colors, spacing } from '../../constants/theme'/import { accessibilityService, AgentAccessibilityHelper } from '../../services/accessibilityService'/import* as ImagePicker from 'expo-image-picker';
-import* as DocumentPicker from 'expo-document-picker';
-import { Audio, Video } from 'expo-av';
-import { AgentVoiceInput, AgentEmotionFeedback, AgentChatBubble, ResponsiveContainer } from '../index';/;
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
+import React, { useState, useEffect, useRef } from 'react';
+import { 
+  View, 
+  Text, 
+  StyleSheet, 
+  ScrollView, 
+  TextInput, 
   TouchableOpacity,
-  ScrollView,
-  Alert,
-  Modal,
-  Animated,
-  Dimensions,
   KeyboardAvoidingView,
-  Platform,
-  ActivityIndicator,
-  { Image } from 'react-native'
-importReact,{ useState, useRef, useEffect, useMemo, useCallback } from 'react';
-import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor'/export type AgentType = 'xiaoai' | 'xiaoke' | 'laoke' | 'soe;r';
-interface ChatMessage { id: string,
-  role: 'user' | 'assistant',
-  content: string,
-  timestamp: number;
-  metadata?: {
-    suggestions?: string[];
-    actions?: unknown[];
-    diagnosisResults?: unknown;
-    multimodal?: unknown};
+  Platform
+} from 'react-native';
+
+export interface ChatMessage {
+  id: string;
+  type: 'user' | 'agent';
+  content: string;
+  timestamp: Date;
+  agentType?: 'xiaoai' | 'xiaoke' | 'laoke' | 'soer';
+  status?: 'sending' | 'sent' | 'delivered' | 'failed';
 }
-interface AgentChatInterfaceProps { visible: boolean,
-  onClose: () => void,
-  agentType: AgentType,
-  userId: string;
-  initialMessage?: string,
-  accessibilityEnabled?: boolean}
-const { width, height   } = Dimensions.get('window;';);
-// 智能体配置 * const AGENT_CONFIG = useMemo(() => { */
-  // 性能监控 *   const performanceMonitor = usePerformanceMonitor('AgentChatInterface', { */
-    trackRender: true,
-    trackMemory: true,
-    warnThreshold: 50, // ms *   ;};) */
-  xiaoai: {
-    name: '小艾',
-    emoji: '🤖',
-    color: '#007AFF',
-    specialization: '健康诊断与建议',
-    welcomeMessage: '你好！我是小艾，你的健康助手。我可以帮你进行健康咨询、五诊分析，还能为你提供个性化的健康建议。有什么我可以帮助你的吗？',
-    quickReplies: ['我想做健康检查', '最近感觉不舒服', '想了解我的体质', '需要健康建议']
-  },
-  xiaoke: {
-    name: '小克',
-    emoji: '👨‍⚕️',
-    color: '#34C759',
-    specialization: '医疗服务管理',
-    welcomeMessage: '您好！我是小克，您的专业医疗服务管理助手。我可以帮您选择合适的诊断服务、预约医疗服务、管理健康订阅，还能为您推荐健康产品。',
-    quickReplies: ['预约医生', '查看健康报告', '购买健康产品', '管理订阅服务']
-  },
-  laoke: {
-    name: '老克',
-    emoji: '👴',
-    color: '#8E44AD',
-    specialization: '中医养生教育',
-    welcomeMessage: '小友，你好！老夫是老克，专注中医养生教育多年。中医养生之道，在于顺应自然，调和阴阳。有什么养生问题，尽管问老夫。',
-    quickReplies: ['学习中医理论', '了解养生方法', '体质调养建议', '中药材知识']
-  },
-  soer: {
-    name: '索儿',
-    emoji: '👧',
-    color: '#FF2D92',
-    specialization: '生活方式指导',
-    welcomeMessage: '嗨！我是索儿，你的生活方式指导助手。我会帮你规划健康的生活安排，提供个性化的生活建议，让你的每一天都充满活力！',
-    quickReplies: ['制定生活计划', '健康生活建议', '工作生活平衡', '心情调节方法']
-  },
-    const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, []);
-const AgentChatInterface: React.FC<AgentChatInterfaceProps /> = ({/  visible,
-  onClose,
+
+export interface AgentChatInterfaceProps {
+  agentType: 'xiaoai' | 'xiaoke' | 'laoke' | 'soer';
+  onSendMessage?: (message: string) => void;
+  onMessageReceived?: (message: ChatMessage) => void;
+  initialMessages?: ChatMessage[];
+}
+
+/**
+ * 智能体聊天界面组件
+ * 提供与智能体的实时对话功能
+ */
+export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
   agentType,
-  userId,
-  initialMessage,
-  accessibilityEnabled = false
+  onSendMessage,
+  onMessageReceived,
+  initialMessages = []
 }) => {
-  const [messages, setMessages] = useState<ChatMessage[] />([;];)/  const [inputText, setInputText] = useState<string>(';';);
-  const [isLoading, setIsLoading] = useState<boolean>(fals;e;)
-  const [sessionId] = useState<any>(() => `session_${Date.now()};`;);
-  const [isVoiceMode, setIsVoiceMode] = useState<boolean>(fals;e;);
-  const [isRecording, setIsRecording] = useState<boolean>(fals;e;);
-  const scrollViewRef = useMemo((); => useRef<ScrollView />(null), []);/  const slideAnim = useMemo((); => useRef(new Animated.Value(height);).current, []);
-  const [selectedFiles, setSelectedFiles] = useState<any[]>([;];);
-  const [recording, setRecording] = useState<any>(nul;l;);
-  const [audioFiles, setAudioFiles] = useState<any[]>([;];);
-  const [videoFiles, setVideoFiles] = useState<any[]>([;];);
-  const agentConfig = useMemo((); => useMemo((); => AGENT_CONFIG[agentType], [agentType]), []);
-  const accessibilityHelper = useMemo((); => useMemo((); =>
-    new AgentAccessibilityHelper(accessibilityService, agentType),
-    [agentType]
-  ), []);
-  useEffect((); => {
-    const effectStart = performance.now;(;);
-    if (visible) {
-      // 显示动画 *       Animated.spring(slideAnim, { */
-        toValue: 0,
-        useNativeDriver: true,
-        tension: 100,
-        friction: 8,
-      }).start();
-      // 初始化对话 *       initializeChat(); */
-    } else {
-      // 隐藏动画 *       Animated.spring(slideAnim, { */
-        toValue: height,
-        useNativeDriver: true,
-        tension: 100,
-        friction: 8,
-      }).start();
-    }
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [visible, slideAnim]);
-  useEffect((); => {
-    const effectStart = performance.now;(;);
-    if (initialMessage && visible) {
-      setInputText(initialMessage);
-    }
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [initialMessage, visible]);
-  const initializeChat = useMemo((); => useCallback(() => {
-    const welcomeMessage: ChatMessage = {, id: `msg_${Date.now()  }`,
-      role: 'assistant',
-      content: agentConfig.welcomeMessage,
-      timestamp: Date.now(),
-      metadata: { suggestions: agentConfig.quickReplies  },
-        const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, []);
-    setMessages([welcomeMessage]);
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [agentConfig]);
-  const handlePickImage = useMemo((); => useCallback(async (); => {
-    const result = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ImagePicker.MediaTypeOptions;.;A;l;l  ; }), []);
-    if (!result.canceled && result.assets && result.assets.length > 0) {
-      setSelectedFiles(prev => [...prev, result.assets[0]]);
-    }
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, []);
-  const handlePickFile = useMemo((); => useCallback(async () => {
-    const result = await DocumentPicker.getDocumentAsync({ type: ';*;/;*;'  ; }), [])/    if (result.type === 'success') {
-      setSelectedFiles(prev => [...prev, result]);
-    }
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, []);
-  const handleRecordAudio = useMemo((); => useCallback(async (); => {
-    try {
-      const { status   } = await Audio.requestPermissionsAsync(), ;[;];)
-      if (status !== 'granted') {
-        Alert.alert('权限不足', '请允许麦克风权限');
-        return;
-      }
-      const rec = useMemo((); => new Audio.Recording(), []);
-      await rec.prepareToRecordAsync(Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALIT;Y;);
-      await rec.startAsync;(;);
-      setRecording(rec)
-    } catch (e) {
-      Alert.alert('录音失败', String(e););
-    }
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, []);
-  const handleStopAudio = useMemo((); => useCallback(async (); => {
-    if (!recording) return, [;];);
-    await recording.stopAndUnloadAsync;(;);
-    const uri = useMemo((); => recording.getURI(), [])
-    if (uri) {
-      setAudioFiles(prev => [...prev, { uri, name: `audio_${Date.now()}.wav`, type: 'audio/wav'}])/      setSelectedFiles(prev => [...prev, { uri, name: `audio_${Date.now()}.wav`, type: 'audio/wav'}]);/    }
-    setRecording(null);
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [recording]);
-  const handlePickVideo = useMemo((); => useCallback(async (); => {
-    const result = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ImagePicker.MediaTypeOptions.Vi;d;e;o;s  ; }), []);
-    if (!result.canceled && result.assets && result.assets.length > 0) {
-      setVideoFiles(prev => [...prev, result.assets[0]]);
-      setSelectedFiles(prev => [...prev, result.assets[0]]);
-    }
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, []);
-  const sendMessage = useMemo((); => useCallback(async (messageText?: string); => {
-    const textToSend = messageText || inputText.trim(), [;];);
-    if ((!textToSend && selectedFiles.length === 0) || isLoadin;g;) {return;}
-    setIsLoading(true);
-    try {
-      let multimodalResponse;
-      if (selectedFiles.length > 0) {
-        // 构建FormData *         const formData = useMemo((); => new FormData(), []) */
-        formData.append('query', textToSend);
-        selectedFiles.forEach((file, idx) => {
-          formData.append('files', {
-            uri: file.uri || file.file?.uri,
-            name: file.name || file.file?.name || `file_${idx}`,
-            type: file.mimeType || file.type || 'application/octet-stream',/          } as any);
-        })
-        multimodalResponse = await apiClient.post('/api/v1/rag/query_multimodal', formData, { headers: { 'Content-Type': 'multipart/form-data'   },/        ;};);
-      } else {
-        multimodalResponse = await callAgentAPI(textToSen;d;)
-      }
-      // 展示多模态响应 *       const assistantMessage: ChatMessage = {, id: `msg_${Date.now()  }`, */
-        role: 'assistant',
-        content: multimodalResponse.data?.answer || multimodalResponse.text,
-        timestamp: Date.now(),
-        metadata: { multimodal: multimodalResponse.data?.multimodal_context   }
-      };
-      setMessages(prev => [...prev, assistantMessage]);
-      setSelectedFiles([])
-      setInputText('')
-    } catch (error) {
-      console.error(`与${agentConfig.name}对话失败:`, error)
-      const errorMessage: ChatMessage = {, id: `msg_${Date.now()  }`,
-        role: 'assistant',
-        content: `抱歉，我现在遇到了一些技术问题。请稍后再试，或者换个方式描述你的问题。`,
-        timestamp: Date.now()};
-      setMessages(prev => [...prev, errorMessage]);
-    } finally {
-      setIsLoading(false);
-    }
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [inputText, selectedFiles, isLoading, apiClient, callAgentAPI]);
-  const callAgentAPI = useMemo((); => useCallback(async (message: string); => {
-    // 根据智能体类型调用不同的API端点 *     const apiEndpoints = { */
-      xiaoai: 'http:// , localhost:8080 * api *// agents * xiaoai *//chat',/      xiaoke: 'http:// , localhost:8080 * api *// agents * xiaoke *//chat',/      laoke: 'http:// , localhost:8080 * api *// agents * laoke *//chat',/      soer: 'http:// , localhost:8080 * api *// agents * soer *//chat',/        const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, []);
-    const response = useMemo(() => await fetch(apiEndpoints[agentType], {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',/      },
-      body: JSON.stringify({
-        message,
-        userId,
-        sessionId,
-        context: {
-          previousMessages: messages.slice(-5), // 只发送最近5条消息作为上下文 *         } */
-      })
-    }), [;];)
-    if (!response.ok) {
-      throw new Error(`API调用失败: ${response.status};`;);
-    }
-    return await response.js;o;n;(;);
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [agentType, messages, userId, sessionId]);
-  const handleQuickReply = useMemo((); => useCallback((reply: string); => {
-    sendMessage(reply), []);
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [sendMessage]);
-  // 语音输入处理 *   const handleVoiceInput = useMemo((); => useCallback(async (); => { */
-    if (!accessibilityEnabled) {return, []);}
-    try {
-      setIsRecording(true)
-      // 这里应该集成实际的语音录制功能 *        *// 暂时模拟语音输入* *       Alert.alert('语音输入', '语音输入功能正在开发中，请使用文字输入') * *//
-    } catch (error) {
-      console.error('语音输入失败:', error)
-      Alert.alert('错误', '语音输入失败，请重试');
-    } finally {
-      setIsRecording(false);
-    }
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [accessibilityEnabled]);
-  // 切换语音模式 *   const toggleVoiceMode = useMemo((); => useCallback(() => { */
-    if (!accessibilityEnabled) {
-      Alert.alert('提示', '请在设置中启用无障碍功能'), []);
-      return;
-    }
-    setIsVoiceMode(!isVoiceMode);
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [accessibilityEnabled, isVoiceMode]);
-  // 朗读消息 *   const speakMessage = useMemo((); => useCallback(async (message: string); => { */
-    if (!accessibilityEnabled) {return, []);}
-    try {
-      const audioData = useMemo((); => await accessibilityHelper.generateVoiceOutput(message, userId), [;];)
-      if (audioData) {
-        // 播放语音 *         } */
-    } catch (error) {
-      console.error('语音播放失败:', error);
-    }
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [accessibilityEnabled, accessibilityHelper, userId]);
-  // 内容无障碍转换 *   const makeContentAccessible = useMemo(() => useCallback(async (content: string, format: 'audio' | 'large-text' | 'high-contrast'); => { */
-    if (!accessibilityEnabled) {return content, [;];);}
-    try {
-      const response = useMemo((); => await accessibilityHelper.makeContentAccessible(content, userId, format), [;];);
-      return response.accessibleContent || conte;n;t
-    } catch (error) {
-      console.error('内容转换失败:', error);
-      return conte;n;t;
-    }
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [accessibilityEnabled, accessibilityHelper, userId]);
-  const scrollToBottom = useMemo((); => useCallback((); => {
-    setTimeout((); => {
-      scrollViewRef.current?.scrollToEnd({ animated: true}), []);
-    }, 100);
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [scrollViewRef]);
-  useEffect((); => {
-    const effectStart = performance.now;(;);
+  const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
+  const [inputText, setInputText] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const scrollViewRef = useRef<ScrollView>(null);
+
+  useEffect(() => {
+    // 滚动到底部
     scrollToBottom();
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [messages]);
-  const renderMessage = useMemo((); => useCallback((message: ChatMessage) => {
-    const isUser = message.role === 'user', [;];);
-    // 记录渲染性能 *  */
-    performanceMonitor.recordRender();
+
+  const scrollToBottom = () => {
+    setTimeout(() => {
+      scrollViewRef.current?.scrollToEnd({ animated: true });
+    }, 100);
+  };
+
+  const getAgentName = (type: string): string => {
+    switch (type) {
+      case 'xiaoai':
+        return '小艾';
+      case 'xiaoke':
+        return '小克';
+      case 'laoke':
+        return '老克';
+      case 'soer':
+        return '索儿';
+      default:
+        return '智能助手';
+    }
+  };
+
+  const getAgentColor = (type: string): string => {
+    switch (type) {
+      case 'xiaoai':
+        return '#4CAF50';
+      case 'xiaoke':
+        return '#2196F3';
+      case 'laoke':
+        return '#FF9800';
+      case 'soer':
+        return '#9C27B0';
+      default:
+        return '#757575';
+    }
+  };
+
+  const handleSendMessage = async () => {
+    if (!inputText.trim()) return;
+
+    const userMessage: ChatMessage = {
+      id: `msg-${Date.now()}-user`,
+      type: 'user',
+      content: inputText.trim(),
+      timestamp: new Date(),
+      status: 'sending'
+    };
+
+    // 添加用户消息
+    setMessages(prev => [...prev, userMessage]);
+    setInputText('');
+    
+    // 调用外部发送回调
+    onSendMessage?.(userMessage.content);
+
+    // 模拟智能体回复
+    setIsTyping(true);
+    
+    setTimeout(() => {
+      const agentMessage: ChatMessage = {
+        id: `msg-${Date.now()}-agent`,
+        type: 'agent',
+        content: generateAgentResponse(userMessage.content, agentType),
+        timestamp: new Date(),
+        agentType,
+        status: 'delivered'
+      };
+
+      setMessages(prev => [...prev, agentMessage]);
+      setIsTyping(false);
+      onMessageReceived?.(agentMessage);
+    }, 1000 + Math.random() * 2000); // 1-3秒随机延迟
+  };
+
+  const generateAgentResponse = (userInput: string, type: string): string => {
+    const responses = {
+      xiaoai: [
+        '我正在分析您的症状，请稍等...',
+        '根据您的描述，建议您注意休息和饮食。',
+        '我需要了解更多信息来为您提供准确的建议。',
+        '您的健康状况看起来不错，继续保持！'
+      ],
+      xiaoke: [
+        '让我为您分析一下数据趋势...',
+        '根据数据显示，您的健康指标在正常范围内。',
+        '我建议您定期监测这些指标的变化。',
+        '数据分析完成，为您生成了详细报告。'
+      ],
+      laoke: [
+        '从中医角度来看，您的体质偏向...',
+        '建议您调整作息，注意养生。',
+        '根据辨证论治，为您推荐以下调理方案。',
+        '中医讲究整体调理，需要循序渐进。'
+      ],
+      soer: [
+        '我来为您安排生活服务...',
+        '社区活动安排已为您更新。',
+        '生态服务正在为您协调中。',
+        '您的生活管理计划已优化。'
+      ]
+    };
+
+    const agentResponses = responses[type as keyof typeof responses] || responses.xiaoai;
+    return agentResponses[Math.floor(Math.random() * agentResponses.length)];
+  };
+
+  const renderMessage = (message: ChatMessage) => {
+    const isUser = message.type === 'user';
+    
     return (
-      <AgentChatBubble;
-        key={message.id}
-        agentType={message.role === 'assistant' ? agentType: 'use;r';}
-        message={message.content}
-        isVoice={!!message.metadata?.multimodal?.voice}
-        onPlayVoice={() = /> {// 语音播放逻辑 }}/      />/    );
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [agentType]);
-  const renderQuickReplies = useMemo((); => useCallback((suggestions: string[]); => (
-    <View style={styles.quickRepliesContainer} />/      <Text style={styles.quickRepliesTitle} />快速回复：</Text>/      <ScrollView horizontal showsHorizontalScrollIndicator={false} />/        {suggestions.map((suggestion, index); => (
-          <TouchableOpacity,
-            key={index}
-            style={[styles.quickReplyButton, { borderColor: agentConfig.color}]}
-            onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> handleQuickReply(suggestion)}/          >
-            <Text style={[styles.quickReplyText, { color: agentConfig.color}]} />/              {suggestion}
-            </Text>/          </TouchableOpacity>/        ))}
-      </ScrollView>/    </View>/  ), [agentConfig, handleQuickReply]), []);
-  const handleClose = useMemo((); => useCallback((); => {
-    Animated.spring(slideAnim, {
-      toValue: height,
-      useNativeDriver: true,
-      tension: 100,
-      friction: 8,
-    }).start((); => {
-      onClose(), []);
-      // 清理状态 *       setMessages([]) */
-      setInputText('');
-      setIsLoading(false);
-    });
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [onClose, slideAnim, height]);
-  return (;
-    <ResponsiveContainer style={{ flex;: ;1   }} />/      <Modal
-        visible={visible}
-        transparent={true}
-        animationType="none"
-        onRequestClose={handleClose} />/        <View style={styles.overlay} />/          <Animated.View
-            style={[
-              styles.container,
-{ transform: [{, translateY: slideAnim   }],
-              }
-]} />/            {// 头部 }/            <View style={[styles.header, { backgroundColor: agentConfig.color}]} />/              <View style={styles.headerLeft} />/                <Text style={styles.agentEmojiLarge} />{agentConfig.emoji}</Text>/                <View />/                  <Text style={styles.agentName} />{agentConfig.name}</Text>/                  <Text style={styles.agentSpecialization} />{agentConfig.specialization}</Text>/                </View>/              </View>/              <TouchableOpacity style={styles.closeButton} onPress={handleClose} accessibilityLabel="TODO: 添加无障碍标签" />/                <Icon name="close" size={24} color="white" />/              </TouchableOpacity>/            </View>/,
-            {// 消息列表 }/            <KeyboardAvoidingView
-              style={styles.chatContainer}
-              behavior={Platform.OS === 'ios' ? 'padding' : 'height'} />/              <ScrollView
-                ref={scrollViewRef}
-                style={styles.messagesContainer}
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={styles.messagesContent} />/                {messages.map(msg => (
-                  <AgentChatBubble
-                    key={msg.id}
-                    agentType={msg.role === 'assistant' ? agentType: 'user'}
-                    message={msg.content}
-                    isVoice={!!msg.metadata?.multimodal?.voice}
-                    onPlayVoice={() = /> {// 语音播放逻辑 }}/                  />/                ))}
-                {// 显示快速回复 }/                {messages.length > 0 &&
-                  messages[messages.length - 1].role === 'assistant' &&
-                  messages[messages.length - 1].metadata?.suggestions &&
-                  renderQuickReplies(messages[messages.length - 1].metadata!.suggestions!)}
-                {isLoading && (
-                  <View style={styles.loadingContainer} />/                    <View style={styles.agentAvatar} />/                      <Text style={styles.agentEmoji} />{agentConfig.emoji}</Text>/                    </View>/                    <View style={[styles.messageBubble, styles.assistantBubble, styles.loadingBubble]} />/                      <ActivityIndicator size="small" color={agentConfig.color} />/                      <Text style={styles.loadingText} />正在思考...</Text>/                    </View>/                  </View>/                )}
-              </ScrollView>/
-              {// 输入框 }/              <View style={styles.inputContainer} />/                {// 无障碍功能切换按钮 }/                {accessibilityEnabled && (
-                  <TouchableOpacity
-                    style={[styles.accessibilityToggle, isVoiceMode && { backgroundColor: agentConfig.color + '20'}]}
-                    onPress={toggleVoiceMode}
-                   accessibilityLabel="TODO: 添加无障碍标签" />/                    <Icon name={isVoiceMode ? "microphone" : "microphone-off"}
-                      size={20}
-                      color={isVoiceMode ? agentConfig.color: colors.textSecondary} />/                  </TouchableOpacity>/                )}
-                <TextInput
-                  style={[styles.textInput, accessibilityEnabled && styles.textInputWithAccessibility]}
-                  value={inputText}
-                  onChangeText={setInputText}
-                  placeholder={isVoiceMode ? `语音与${agentConfig.name}对话...` : `与${agentConfig.name}对话...`}
-                  placeholderTextColor={colors.textSecondary}
-                  multiline
-                  maxLength={500}
-                  editable={!isLoading && !isVoiceMode} />/
-                {// 语音输入按钮 }/                {accessibilityEnabled && isVoiceMode && (
-                  <TouchableOpacity
-                    style={[
-                      styles.voiceButton,
-                      { backgroundColor: isRecording ? '#FF3B30' : agentConfig.color}
-                    ]}
-                    onPress={handleVoiceInput}
-                    disabled={isLoading}
-                   accessibilityLabel="TODO: 添加无障碍标签" />/                    <Icon name={isRecording ? "stop" : "microphone"}
-                      size={20}
-                      color="white"
-                    />/                  </TouchableOpacity>/                )}
-                {// 多模态输入按钮区 }/                <View style={{ flexDirection: 'row', marginBottom: 8}} />/                  <TouchableOpacity onPress={handlePickImage} style={{ marginRight: 8}} accessibilityLabel="TODO: 添加无障碍标签" />/                    <Icon name="image" size={24} color={agentConfig.color} />/                  </TouchableOpacity>/                  <TouchableOpacity onPress={handlePickFile} style={{ marginRight: 8}} accessibilityLabel="TODO: 添加无障碍标签" />/                    <Icon name="attachment" size={24} color={agentConfig.color} />/                  </TouchableOpacity>/                  <TouchableOpacity onPress={recording ? handleStopAudio: handleRecordAudio} style={{ marginRight: 8}} accessibilityLabel="TODO: 添加无障碍标签" />/                    <Icon name={recording ? "stop" : "microphone"} size={24} color={agentConfig.color} />/                  </TouchableOpacity>/                  <TouchableOpacity onPress={handlePickVideo} style={{ marginRight: 8}} accessibilityLabel="TODO: 添加无障碍标签" />/                    <Icon name="video" size={24} color={agentConfig.color} />/                  </TouchableOpacity>/                </View>/
-                {// 已选文件预览 }/                {selectedFiles.length > 0 && (
-                  <ScrollView horizontal style={{ marginBottom: 8}} />/                    {selectedFiles.map((file, idx); => (
-                      <View key={idx} style={{ marginRight: 8}} />/                        {file.uri?.match(/\.(jpg|jpeg|png|gif)$/) ? (/                          <Image source={{ uri: file.uri}} style={{ width: 48, height: 48, borderRadius: 8}} / accessibilityLabel="TODO: 添加图片描述" />/                        ): file.uri?.match(/\.(mp4|mov|avi)$/) ? (/                          <Video source= {{, uri: file.uri   }} style={{ width: 64, height: 48, borderRadius: 8}} useNativeControls resizeMode="cover" />/                        ) : file.uri?.match(/\.(wav|mp3|m4a)$/) ? (/                          <TouchableOpacity onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> Audio.Sound.createAsync({, uri: file.uri   }).then(({ sound }); => sound.replayAsync())}>/                            <Icon name="play" size={32} color={agentConfig.color} />/                            <Text style={{ fontSize: 12}} />音频</Text>/                          </TouchableOpacity>/                        ) : (
-<Text style={{ fontSize: 12}} />{file.name || file.file?.name}</Text>/                        )},
-                      </View>/                    ))}
-                  </ScrollView>/                )}
-                {// 发送按钮 }/                {(!isVoiceMode || !accessibilityEnabled) && (
-                  <TouchableOpacity
-                    style={[
-                      styles.sendButton,
-                      { backgroundColor: agentConfig.color},
-                      (!inputText.trim() || isLoading) && styles.sendButtonDisabled
-                    ]}
-                    onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> sendMessage()}/                    disabled={!inputText.trim() || isLoading}
-                  >
-                    <Icon name="send" size={20} color="white" />/                  </TouchableOpacity>/                )}
-              </View>/
-              {// 在输入区下方集成多模态输入和情感反馈 }/              <View style={{ width: '100%'}} />/                <AgentVoiceInput
-                  onResult={text = /> setInputText(text)}/                  accessibilityEnabled={accessibilityEnabled}
-                  style={{ marginBottom: 8}}
-                />/                <AgentEmotionFeedback
-                  onFeedback={type = /> {/                    // 可扩展：将反馈通过事件总线上传后端 *                     }} */
-                  style={{ marginBottom: 8}}
-                />/              </View>/            </KeyboardAvoidingView>/          </Animated.View>/        </View>/      </Modal>/    </ResponsiveContainer>/  );
+      <View key={message.id} style={[styles.messageContainer, isUser ? styles.userMessage : styles.agentMessage]}>
+        {!isUser && (
+          <View style={styles.agentHeader}>
+            <View style={[styles.agentAvatar, { backgroundColor: getAgentColor(message.agentType || agentType) }]}>
+              <Text style={styles.agentAvatarText}>
+                {getAgentName(message.agentType || agentType).charAt(0)}
+              </Text>
+            </View>
+            <Text style={styles.agentName}>
+              {getAgentName(message.agentType || agentType)}
+            </Text>
+          </View>
+        )}
+        
+        <View style={[styles.messageBubble, isUser ? styles.userBubble : styles.agentBubble]}>
+          <Text style={[styles.messageText, isUser ? styles.userText : styles.agentText]}>
+            {message.content}
+          </Text>
+        </View>
+        
+        <Text style={styles.messageTime}>
+          {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+        </Text>
+        
+        {message.status && message.type === 'user' && (
+          <Text style={styles.messageStatus}>
+            {message.status === 'sending' ? '发送中...' : 
+             message.status === 'sent' ? '已发送' :
+             message.status === 'delivered' ? '已送达' : '发送失败'}
+          </Text>
+        )}
+      </View>
+    );
+  };
+
+  const renderTypingIndicator = () => {
+    if (!isTyping) return null;
+    
+    return (
+      <View style={[styles.messageContainer, styles.agentMessage]}>
+        <View style={styles.agentHeader}>
+          <View style={[styles.agentAvatar, { backgroundColor: getAgentColor(agentType) }]}>
+            <Text style={styles.agentAvatarText}>
+              {getAgentName(agentType).charAt(0)}
+            </Text>
+          </View>
+          <Text style={styles.agentName}>
+            {getAgentName(agentType)}
+          </Text>
+        </View>
+        
+        <View style={[styles.messageBubble, styles.agentBubble]}>
+          <View style={styles.typingIndicator}>
+            <View style={styles.typingDot} />
+            <View style={styles.typingDot} />
+            <View style={styles.typingDot} />
+          </View>
+        </View>
+      </View>
+    );
+  };
+
+  return (
+    <KeyboardAvoidingView 
+      style={styles.container} 
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      <View style={styles.header}>
+        <View style={[styles.headerAvatar, { backgroundColor: getAgentColor(agentType) }]}>
+          <Text style={styles.headerAvatarText}>
+            {getAgentName(agentType).charAt(0)}
+          </Text>
+        </View>
+        <View style={styles.headerInfo}>
+          <Text style={styles.headerName}>{getAgentName(agentType)}</Text>
+          <Text style={styles.headerStatus}>在线</Text>
+        </View>
+      </View>
+
+      <ScrollView 
+        ref={scrollViewRef}
+        style={styles.messagesContainer}
+        showsVerticalScrollIndicator={false}
+      >
+        {messages.map(renderMessage)}
+        {renderTypingIndicator()}
+      </ScrollView>
+
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.textInput}
+          value={inputText}
+          onChangeText={setInputText}
+          placeholder={`与${getAgentName(agentType)}对话...`}
+          multiline
+          maxLength={500}
+        />
+        <TouchableOpacity 
+          style={[styles.sendButton, { backgroundColor: getAgentColor(agentType) }]}
+          onPress={handleSendMessage}
+          disabled={!inputText.trim() || isTyping}
+        >
+          <Text style={styles.sendButtonText}>发送</Text>
+        </TouchableOpacity>
+      </View>
+    </KeyboardAvoidingView>
+  );
 };
-const styles = useMemo(() => StyleSheet.create({
-  overlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5);'
-  },
+
+const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
-    marginTop: 50,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    backgroundColor: '#f5f5f5',
   },
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    padding: spacing.lg,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    padding: 16,
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
   },
-  headerLeft: {
-    flexDirection: 'row',
+  headerAvatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: 'center',
     alignItems: 'center',
+    marginRight: 12,
   },
-  agentEmojiLarge: {
-    fontSize: 32,
-    marginRight: spacing.md,
+  headerAvatarText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
-  agentName: {
-    fontSize: fonts.size.lg,
-    fontWeight: '600',
-    color: 'white',
+  headerInfo: {
+    flex: 1,
   },
-  agentSpecialization: {
-    fontSize: fonts.size.xs,
-    color: 'rgba(255, 255, 255, 0.8)',
+  headerName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  headerStatus: {
+    fontSize: 14,
+    color: '#4CAF50',
     marginTop: 2,
   },
-  closeButton: { padding: spacing.sm  },
-  chatContainer: { flex: 1  },
-  messagesContainer: { flex: 1  },
-  messagesContent: { padding: spacing.md  },
+  messagesContainer: {
+    flex: 1,
+    padding: 16,
+  },
   messageContainer: {
-    flexDirection: 'row',
-    marginBottom: spacing.md,
+    marginBottom: 16,
+  },
+  userMessage: {
     alignItems: 'flex-end',
   },
-  userMessage: { justifyContent: 'flex-end'  },
-  assistantMessage: { justifyContent: 'flex-start'  },
+  agentMessage: {
+    alignItems: 'flex-start',
+  },
+  agentHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
   agentAvatar: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: colors.surface,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: spacing.sm,
+    marginRight: 8,
   },
-  agentEmoji: { fontSize: 16  },
-  userAvatar: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: colors.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginLeft: spacing.sm,
+  agentAvatarText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: 'bold',
   },
-  messageBubble: {
-    maxWidth: width * 0.7,
-    padding: spacing.md,
-    borderRadius: 16,
-    borderWidth: 1,
-  },
-  userBubble: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary,
-    borderBottomRightRadius: 4,
-  },
-  assistantBubble: {
-    backgroundColor: colors.surface,
-    borderBottomLeftRadius: 4,
-  },
-  messageText: {
-    fontSize: fonts.size.md,
-    lineHeight: 20,
-  },
-  userText: { color: 'white'  },
-  assistantText: { color: colors.text  },
-  messageTime: {
-    fontSize: fonts.size.xs,
-    color: colors.textSecondary,
-    marginTop: spacing.xs,
-    textAlign: 'right',
-  },
-  quickRepliesContainer: {
-    marginTop: spacing.md,
-    marginBottom: spacing.lg,
-  },
-  quickRepliesTitle: {
-    fontSize: fonts.size.xs,
-    color: colors.textSecondary,
-    marginBottom: spacing.sm,
-    marginLeft: 44, // 对齐消息气泡 *   }, */
-  quickReplyButton: {
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    borderRadius: 20,
-    borderWidth: 1,
-    marginRight: spacing.sm,
-    marginLeft: spacing.xs,
-  },
-  quickReplyText: {
-    fontSize: fonts.size.xs,
+  agentName: {
+    fontSize: 14,
+    color: '#666',
     fontWeight: '500',
   },
-  loadingContainer: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    marginBottom: spacing.md,
+  messageBubble: {
+    maxWidth: '80%',
+    padding: 12,
+    borderRadius: 16,
   },
-  loadingBubble: {
+  userBubble: {
+    backgroundColor: '#007AFF',
+  },
+  agentBubble: {
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+  },
+  messageText: {
+    fontSize: 16,
+    lineHeight: 22,
+  },
+  userText: {
+    color: '#fff',
+  },
+  agentText: {
+    color: '#333',
+  },
+  messageTime: {
+    fontSize: 12,
+    color: '#999',
+    marginTop: 4,
+  },
+  messageStatus: {
+    fontSize: 11,
+    color: '#999',
+    marginTop: 2,
+  },
+  typingIndicator: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingVertical: 8,
   },
-  loadingText: {
-    fontSize: fonts.size.xs,
-    color: colors.textSecondary,
-    marginLeft: spacing.sm,
+  typingDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#999',
+    marginRight: 4,
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'flex-end',
-    padding: spacing.md,
-    backgroundColor: colors.surface,
+    padding: 16,
+    backgroundColor: '#fff',
     borderTopWidth: 1,
-    borderTopColor: colors.border,
+    borderTopColor: '#e0e0e0',
   },
   textInput: {
     flex: 1,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: '#e0e0e0',
     borderRadius: 20,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    marginRight: spacing.sm,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    marginRight: 12,
     maxHeight: 100,
-    fontSize: fonts.size.md,
-    color: colors.text,
-    backgroundColor: colors.background,
+    fontSize: 16,
   },
   sendButton: {
-    width: 40,
-    height: 40,
+    paddingHorizontal: 20,
+    paddingVertical: 12,
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  sendButtonDisabled: { opacity: 0.5  },
-  accessibilityButtons: {
-    flexDirection: 'row',
-    marginTop: spacing.xs,
-    marginBottom: spacing.xs,
+  sendButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
   },
-  accessibilityButton: {
-    padding: spacing.xs,
-    marginRight: spacing.xs,
-    borderRadius: 12,
-    backgroundColor: colors.background,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  accessibilityToggle: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: spacing.sm,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  textInputWithAccessibility: { marginRight: spacing.sm  },
-  voiceButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginLeft: spacing.sm,
-  }
-}), []);
-export default React.memo(AgentChatInterface);
+});
+
+export default AgentChatInterface; 

@@ -1,566 +1,526 @@
-import { agentCoordinationService, AgentType } from '../../services/agentCoordinationService';/;
-// 四大智能体协作演示界面   展示小艾、小克、老克、索儿的深度集成和协同工作
-importReact,{ useState, useEffect } from 'react';
-import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor'/  View,;
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Alert,
-  ActivityIndicator,
-  SafeAreaView,
-  { Dimensions } from 'react-native'
-const { width   } = Dimensions.get('window;';)
-interface AgentCard { id: AgentType,
-  name: string,
-  avatar: string,
-  description: string,
-  specialties: string[],
-  status: 'idle' | 'thinking' | 'responding' | 'collaborating';
-  currentTask?: string,
-  response?: string}
-interface CollaborationScenario { id: string,
-  title: string,
-  description: string,
-  participants: AgentType[],
-  complexity: 'simple' | 'medium' | 'complex'}
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+
+export interface Agent {
+  id: string;
+  name: string;
+  type: 'xiaoai' | 'xiaoke' | 'laoke' | 'soer';
+  status: 'idle' | 'working' | 'collaborating';
+  currentTask?: string;
+}
+
+export interface CollaborationTask {
+  id: string;
+  title: string;
+  description: string;
+  participants: string[];
+  status: 'pending' | 'active' | 'completed';
+  progress: number;
+}
+
+/**
+ * 智能体协作演示屏幕
+ * 展示四个智能体如何协作完成健康管理任务
+ */
 export const AgentCollaborationDemoScreen: React.FC = () => {
-  // 性能监控 *   const performanceMonitor = usePerformanceMonitor('AgentCollaborationDemoScreen', { */
-    trackRender: true,
-    trackMemory: true,
-    warnThreshold: 50, // ms *   ;};); */
-  const [isInitialized, setIsInitialized] = useState<boolean>(fals;e;);
-  const [isRunning, setIsRunning] = useState<boolean>(fals;e;);
-  const [currentScenario, setCurrentScenario] = useState<string | null>(nul;l;)
-  const [agents, setAgents] = useState<AgentCard[] />([/    {;
-      id: 'xiaoai',
-      name: '小艾',
-      avatar: '👩‍⚕️',
-      description: '首页聊天频道版主，提供语音引导、问诊及无障碍服务',
-      specialties: ['语音交互', '中医望诊', '智能问诊', '无障碍服务'],
-      status: 'idle',
-    },
-    {
-      id: 'xiaoke',
-      name: '小克',
-      avatar: '👨‍💼',
-      description: 'SUOKE频道版主，负责服务订阅、农产品预制、供应链管理',
-      specialties: ['名医匹配', '服务订阅', '农产品溯源', '店铺管理'],
-      status: 'idle',
-    },
-    {
-      id: 'laoke',
-      name: '老克',
-      avatar: '👴',
-      description: '探索频道版主，负责知识传播、培训，兼任玉米迷宫NPC',
-      specialties: ['知识传播', '中医教育', 'AR/VR教学', '游戏引导'],/      status: 'idle'
-    },
-    {
-      id: 'soer',
-      name: '索儿',
-      avatar: '🤖',
-      description: 'LIFE频道版主，提供生活健康管理、陪伴服务',
-      specialties: ['健康管理', '生活陪伴', '数据整合', '情感支持'],
-      status: 'idle'},
-  ;];)
-  const [scenarios] = useState<CollaborationScenario[] />([/    {;
-      id: 'health_consultation',
-      title: '健康咨询协作',
-      description: '用户咨询健康问题，四大智能体协同提供专业建议',
-      participants: ['xiaoai', 'xiaoke', 'laoke', 'soer'],
-      complexity: 'medium',
-    },
-    {
-      id: 'diagnosis_analysis',
-      title: '五诊结果分析',
-      description: '基于五诊分析结果，智能体协作制定治疗方案',
-      participants: ['xiaoai', 'laoke', 'soer'],
-      complexity: 'complex',
-    },
-    {
-      id: 'lifestyle_planning',
-      title: '生活方式规划',
-      description: '为用户制定个性化的健康生活方式计划',
-      participants: ['xiaoke', 'soer'],
-      complexity: 'simple',
-    },
-    {
-      id: 'emergency_response',
-      title: '紧急情况响应',
-      description: '处理用户紧急健康状况，快速协调资源',
-      participants: ['xiaoai', 'xiaoke', 'laoke', 'soer'],
-      complexity: 'complex'},
-  ;];);
-  const [collaborationLog, setCollaborationLog] = useState<Array<{ timestamp: numb;er,
-    agentId: AgentType,
-    message: string,
-    type: 'thinking' | 'response' | 'collaboration'} />>([]);/
-  useEffect((); => {
-    const effectStart = performance.now;(;);
-    initializeService();
-  }, []) // TODO: 检查依赖项  * *  TODO: 检查依赖项  * *// TODO: 检查依赖项* * * *  TODO: 检查依赖项  * * * */// TODO: 检查依赖项// TODO: 检查依赖项// TODO: 检查依赖项// TODO: 检查依赖项//, TODO: 检查依赖项//, TODO: 检查依赖项;//// const initializeService = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => async () => {
-    try {
-      await agentCoordinationService.initialize(), [;];);
-      setIsInitialized(true)
-      } catch (error) {
-      console.error('❌ 智能体协调服务初始化失败:', error)
-      Alert.alert('初始化失败', '智能体协调服务初始化失败');
-    }
-  };
-  const runCollaborationScenario = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => async (scenario: CollaborationScenario) => {
-    if (isRunning || !isInitialized) { // JSX content  }/
-    try {
-      setIsRunning(true);
-      setCurrentScenario(scenario.id);
-      setCollaborationLog([]);
-      // 重置智能体状态 *       setAgents(prev => prev.map(agent => ({ */
-        ...agent,
-        status: scenario.participants.includes(agent.id) ? 'thinking' : 'idle',
-        currentTask: scenario.participants.includes(agent.id); ? scenario.title : undefined,
-        response: undefined,
-      })))
-      addToLog('system', '🚀 开始协作场景: ' + scenario.title, 'thinking');
-      // 模拟智能体协作过程 *       await simulateAgentCollaboration(scenari;o;) */
-      Alert.alert('协作完成', `${scenario.title} 协作场景已成功完成！`)
-    } catch (error) {
-      console.error('协作场景执行失败:', error)
-      Alert.alert('协作失败', `协作场景执行失败: ${error}`);
-    } finally {
-      setIsRunning(false);
-      setCurrentScenario(null)
-      // 重置智能体状态 *       setAgents(prev => prev.map(agent => ({ */
-        ...agent,
-        status: 'idle',
-        currentTask: undefined,
-      });));
-    }
-  };
-  const simulateAgentCollaboration = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => async (scenario: CollaborationScenario) => {
-    const { participants   } = scenario, [;];);
-    // 阶段1: 智能体分析阶段 *     for (const agentId of participants) { */
-      await simulateAgentThinking(agentId, scenari;o;);
-      await new Promise(resolve => setTimeout(resolve, 100;0;););
-    }
-    // 阶段2: 智能体响应阶段 *     for (const agentId of participants) { */
-      await simulateAgentResponse(agentId, scenari;o;);
-      await new Promise(resolve => setTimeout(resolve, 150;0;););
-    }
-    // 阶段3: 协作决策阶段 *     await simulateCollaborativeDecision(participants, scenari;o;); */
-  };
-  const simulateAgentThinking = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => async (agentId: AgentType, scenario: CollaborationScenario) => {
-    const agent = agents.find(a => a.id === agentId), [;];);
-    if (!agent) {return}
-    setAgents(prev => prev.map(a =>
-      a.id === agentId ? { ...a, status: 'thinking'} : a););
-    const thinkingMessages = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => {
-    // TODO: Implement memo body *     return nu;l;l; */
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, []); // TODO: 检查依赖项  * *  TODO: 检查依赖项  * *// TODO: 检查依赖项* * * *  TODO: 检查依赖项  * * * */// TODO: 检查依赖项// TODO: 检查依赖项// TODO: 检查依赖项//, TODO: 检查依赖项//, TODO: 检查依赖项, []), []), [])//// addToLog(agentId, thinkingMessages[agentId], 'thinking');
-  };
-  const simulateAgentResponse = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => async (agentId: AgentType, scenario: CollaborationScenario) => {
-    const agent = agents.find(a => a.id === agentId), [;];);
-    if (!agent) {return}
-    setAgents(prev => prev.map(a =>
-      a.id === agentId ? { ...a, status: 'responding'} : a););
-    const responses = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => {
-      health_consultation: {
-        xiaoai: '基于症状分析，建议进行进一步的专项检查，同时关注睡眠质量和情绪状态。',
-        xiaoke: '已为您匹配3位相关专科医生，可预约本周内的线上或线下咨询。',
-        laoke: '根据中医理论，您的症状符合气虚证候，建议采用补气健脾的调理方案。',
-        soer: '建议调整作息时间，增加适量运动，我将为您制定个性化的生活管理计划。',
-      },
-      diagnosis_analysis: {
-        xiaoai: '五诊分析显示气虚证候明显，建议结合现代检查手段进一步确认。',
-        laoke: '建议采用四君子汤加减，配合针灸调理，疗程约4-6周。',
-        soer: '将为您建立健康档案，定期跟踪治疗效果和生活质量改善情况。',
-      },
-      lifestyle_planning: {
-        xiaoke: '根据您的体质特点，推荐适合的有机农产品和食疗方案。',
-        soer: '制定了包含饮食、运动、睡眠的全方位生活管理计划，支持智能设备监测。',
-      },
-      emergency_response: {
-        xiaoai: '已识别紧急情况，正在启动应急响应流程，建议立即就医。',
-        xiaoke: '已联系最近的医疗机构，预计救护车5分钟内到达，同时通知紧急联系人。',
-        laoke: '提供紧急情况下的中医急救指导，如按压相关穴位缓解症状。',
-        soer: '已记录紧急情况详情，将持续监测生命体征，为医护人员提供数据支持。',
-      },
-        const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
+  const [agents, setAgents] = useState<Agent[]>([]);
+  const [tasks, setTasks] = useState<CollaborationTask[]>([]);
+  const [selectedTask, setSelectedTask] = useState<string | null>(null);
+
+  useEffect(() => {
+    initializeDemo();
   }, []);
-    const response = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => responses[scenario.id as keyof typeof responses]?.[agentId] ||
-                    `${agent.name}正在为您提供专业建议...`, []);
-    setAgents(prev => prev.map(a =>
-      a.id === agentId ? { ...a, response } : a
-    );)
-    addToLog(agentId, response, 'response');
+
+  const initializeDemo = () => {
+    // 初始化智能体
+    const initialAgents: Agent[] = [
+      {
+        id: 'xiaoai',
+        name: '小艾',
+        type: 'xiaoai',
+        status: 'idle',
+      },
+      {
+        id: 'xiaoke',
+        name: '小克',
+        type: 'xiaoke',
+        status: 'idle',
+      },
+      {
+        id: 'laoke',
+        name: '老克',
+        type: 'laoke',
+        status: 'idle',
+      },
+      {
+        id: 'soer',
+        name: '索儿',
+        type: 'soer',
+        status: 'idle',
+      },
+    ];
+
+    // 初始化协作任务
+    const initialTasks: CollaborationTask[] = [
+      {
+        id: 'health-assessment',
+        title: '综合健康评估',
+        description: '为用户进行全面的健康状况评估',
+        participants: ['xiaoai', 'xiaoke', 'laoke'],
+        status: 'pending',
+        progress: 0,
+      },
+      {
+        id: 'lifestyle-optimization',
+        title: '生活方式优化',
+        description: '基于健康数据优化用户的生活方式',
+        participants: ['xiaoke', 'laoke', 'soer'],
+        status: 'pending',
+        progress: 0,
+      },
+      {
+        id: 'preventive-care',
+        title: '预防性护理计划',
+        description: '制定个性化的预防性健康护理方案',
+        participants: ['xiaoai', 'laoke', 'soer'],
+        status: 'pending',
+        progress: 0,
+      },
+    ];
+
+    setAgents(initialAgents);
+    setTasks(initialTasks);
   };
-  const simulateCollaborativeDecision = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => async (participants: AgentType[], scenario: CollaborationScenario) => {
-    // 设置所有参与者为协作状态 *     setAgents(prev => prev.map(a => */
-      participants.includes(a.id) ? { ...a, status: 'collaborating'} : a)), [])
-    addToLog('system', '🤝 智能体开始协作决策...', 'collaboration');
-    await new Promise(resolve => setTimeout(resolve, 200;0;););
-    const finalDecisions = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => {
-    // TODO: Implement memo body *     return nu;l;l; */
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, []); // TODO: 检查依赖项  * *  TODO: 检查依赖项  * *// TODO: 检查依赖项* * * *  TODO: 检查依赖项  * * * */// TODO: 检查依赖项// TODO: 检查依赖项// TODO: 检查依赖项//, TODO: 检查依赖项//, TODO: 检查依赖项, []), []), []);//// const finalDecision = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => finalDecisions[scenario.id as keyof typeof finalDecisions] ||
-                         '智能体协作完成，已为您提供综合性解决方案。', [])
-    addToLog('system', `✅ 协作决策: ${finalDecision}`, 'collaboration');
+
+  const startCollaboration = (taskId: string) => {
+    setSelectedTask(taskId);
+    
+    // 更新任务状态
+    setTasks(prev => prev.map(task => 
+      task.id === taskId 
+        ? { ...task, status: 'active' as const }
+        : task
+    ));
+
+    // 更新参与智能体状态
+    const task = tasks.find(t => t.id === taskId);
+    if (task) {
+      setAgents(prev => prev.map(agent => 
+        task.participants.includes(agent.id)
+          ? { 
+              ...agent, 
+              status: 'collaborating' as const,
+              currentTask: task.title
+            }
+          : agent
+      ));
+
+      // 模拟协作进度
+      simulateCollaboration(taskId);
+    }
   };
-  const addToLog = useCallback((); => {
-    setCollaborationLog(prev => [...prev, {
-      timestamp: Date.now(),
-      agentId: agentId as AgentType,
-      message,
-      type
-    }]);
-  };
-  const renderAgentCard = useCallback((); => {
-    const getStatusColor = useCallback(() => {;
-      switch (status) {
-        case 'thinking': return '#FF980;0';
-        case 'responding': return '#2196F;3';
-        case 'collaborating': return '#4CAF5;0';
-        default: return '#9E9E9;E';
+
+  const simulateCollaboration = (taskId: string) => {
+    let progress = 0;
+    const interval = setInterval(() => {
+      progress += 10;
+      
+      setTasks(prev => prev.map(task => 
+        task.id === taskId 
+          ? { ...task, progress }
+          : task
+      ));
+
+      if (progress >= 100) {
+        clearInterval(interval);
+        
+        // 完成任务
+        setTasks(prev => prev.map(task => 
+          task.id === taskId 
+            ? { ...task, status: 'completed' as const, progress: 100 }
+            : task
+        ));
+
+        // 重置智能体状态
+        const task = tasks.find(t => t.id === taskId);
+        if (task) {
+          setAgents(prev => prev.map(agent => 
+            task.participants.includes(agent.id)
+              ? { 
+                  ...agent, 
+                  status: 'idle' as const,
+                  currentTask: undefined
+                }
+              : agent
+          ));
+        }
+
+        setSelectedTask(null);
       }
-    };
-    const getStatusText = useCallback((); => {
-      switch (status) {
-        case 'thinking': return '思考;中';
-        case 'responding': return '响应;中';
-        case 'collaborating': return '协作;中';
-        default: return '空;闲';
-      }
-    };
-    // 记录渲染性能 *  */
-    performanceMonitor.recordRender();
-    return (
-      <View key={agent.id} style={[
-        styles.agentCard,
-        { borderLeftColor: getStatusColor(agent.status)   };
-      ]} />/        <View style={styles.agentHeader} />/          <Text style={styles.agentAvatar} />{agent.avatar}</Text>/          <View style={styles.agentInfo} />/            <Text style={styles.agentName} />{agent.name}</Text>/            <Text style={styles.agentDescription} />{agent.description}</Text>/          </View>/          <View style={[styles.statusBadge, { backgroundColor: getStatusColor(agent.status)   }]} />/            <Text style={styles.statusText} />{getStatusText(agent.status)}</Text>/          </View>/        </View>/;
-        <View style={styles.specialtiesContainer} />/          {agent.specialties.map((specialty, inde;x;); => (
-            <View key={index} style={styles.specialtyTag} />/              <Text style={styles.specialtyText} />{specialty}</Text>/            </View>/          ))}
-        </View>/
-        {agent.currentTask && (
-          <View style={styles.currentTask} />/            <Text style={styles.taskLabel} />当前任务:</Text>/            <Text style={styles.taskText} />{agent.currentTask}</Text>/          </View>/        )}
-        {agent.response && (
-          <View style={styles.responseContainer} />/            <Text style={styles.responseLabel} />专业建议:</Text>/            <Text style={styles.responseText} />{agent.response}</Text>/          </View>/        )}
-        {agent.status === 'thinking' && (
-          <View style={styles.loadingContainer} />/            <ActivityIndicator size="small" color="#FF9800" />/            <Text style={styles.loadingText} />正在分析...</Text>/          </View>/        )}
-      </View>/    );
+    }, 500);
   };
-  const renderScenarioCard = useCallback((); => {
-    const getComplexityColor = useCallback(() => {;
-      switch (complexity) {
-        case 'simple': return '#4CAF5;0';
-        case 'medium': return '#FF980;0';
-        case 'complex': return '#F4433;6';
-        default: return '#9E9E9;E';
-      }
-    };
-    const getComplexityText = useCallback((); => {
-      switch (complexity) {
-        case 'simple': return '简;单';
-        case 'medium': return '中;等';
-        case 'complex': return '复;杂';
-        default: return '未;知';
-      }
-    };
-    return (
-      <TouchableOpacity
-        key={scenario.id}
-        style={[
-          styles.scenarioCard,
-          currentScenario === scenario.id && styles.activeScenarioCard
-        ]}
-        onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> runCollaborationScenario(scenario)}/        disabled={isRunning}
-      >
-        <View style={styles.scenarioHeader} />/          <Text style={styles.scenarioTitle} />{scenario.title}</Text>/          <View style={[styles.complexityBadge, { backgroundColor: getComplexityColor(scenario.complexity)   }]} />/            <Text style={styles.complexityText} />{getComplexityText(scenario.complexity)}</Text>/          </View>/        </View>/
-        <Text style={styles.scenarioDescription} />{scenario.description}</Text>/;
-        <View style={styles.participantsContainer} />/          <Text style={styles.participantsLabel} />参与智能体:</Text>/          <View style={styles.participantsList} />/            {scenario.participants.map(agentId => {;
-              const agent = useMem;o;((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => agents.find(a => a.id === agentId), []);)))))
-              return (
-                <Text key={agentId} style={styles.participantName} />/                  {agent?.avatar} {agent?.name};
-                </Text>/              ;);
-            })}
-          </View>/        </View>/      </TouchableOpacity>/    );
+
+  const getAgentColor = (type: Agent['type']): string => {
+    switch (type) {
+      case 'xiaoai':
+        return '#4CAF50';
+      case 'xiaoke':
+        return '#2196F3';
+      case 'laoke':
+        return '#FF9800';
+      case 'soer':
+        return '#9C27B0';
+      default:
+        return '#757575';
+    }
   };
-  const renderCollaborationLog = useCallback((); => {
-    if (collaborationLog.length === 0) {return nu;l;l;}
-    return (
-      <View style={styles.logContainer} />/        <Text style={styles.logTitle} />协作日志</Text>/        <ScrollView style={styles.logScrollView} showsVerticalScrollIndicator={false} />/          {collaborationLog.map;(;); => {
-            const getTypeIcon = useCallback(() => {;
-              switch (type) {
-                case 'thinking': return '�;�';
-                case 'response': return '�;�';
-                case 'collaboration': return '�;�';
-                default: return '�;�';
-              }
-            };
-            return (
-              <View key={index} style={styles.logEntry} />/                <View style={styles.logHeader} />/                  <Text style={styles.logIcon} />{getTypeIcon(entry.type)}</Text>/                  <Text style={styles.logAgent} />/                    {entry.agentId === 'system' ? '系统' : agent?.name || entry.agentId};
-                  </Text>/                  <Text style={styles.logTime} />/                    {new Date(entry.timestamp).toLocaleTimeString()};
-                  </Text>/                </View>/                <Text style={styles.logMessage} />{entry.message}</Text>/              </View>/            ;);
+
+  const getStatusColor = (status: Agent['status']): string => {
+    switch (status) {
+      case 'idle':
+        return '#757575';
+      case 'working':
+        return '#FF9800';
+      case 'collaborating':
+        return '#4CAF50';
+      default:
+        return '#757575';
+    }
+  };
+
+  const getTaskStatusColor = (status: CollaborationTask['status']): string => {
+    switch (status) {
+      case 'pending':
+        return '#757575';
+      case 'active':
+        return '#2196F3';
+      case 'completed':
+        return '#4CAF50';
+      default:
+        return '#757575';
+    }
+  };
+
+  const renderAgent = (agent: Agent) => (
+    <View key={agent.id} style={styles.agentCard}>
+      <View style={[styles.agentAvatar, { backgroundColor: getAgentColor(agent.type) }]}>
+        <Text style={styles.agentAvatarText}>{agent.name.charAt(0)}</Text>
+      </View>
+      <Text style={styles.agentName}>{agent.name}</Text>
+      <View style={[styles.statusBadge, { backgroundColor: getStatusColor(agent.status) }]}>
+        <Text style={styles.statusText}>{agent.status}</Text>
+      </View>
+      {agent.currentTask && (
+        <Text style={styles.currentTask}>{agent.currentTask}</Text>
+      )}
+    </View>
+  );
+
+  const renderTask = (task: CollaborationTask) => (
+    <View key={task.id} style={styles.taskCard}>
+      <View style={styles.taskHeader}>
+        <Text style={styles.taskTitle}>{task.title}</Text>
+        <View style={[styles.taskStatusBadge, { backgroundColor: getTaskStatusColor(task.status) }]}>
+          <Text style={styles.taskStatusText}>{task.status}</Text>
+        </View>
+      </View>
+      
+      <Text style={styles.taskDescription}>{task.description}</Text>
+      
+      <View style={styles.participantsContainer}>
+        <Text style={styles.participantsLabel}>参与智能体:</Text>
+        <View style={styles.participantsList}>
+          {task.participants.map(participantId => {
+            const agent = agents.find(a => a.id === participantId);
+            return agent ? (
+              <View 
+                key={participantId} 
+                style={[styles.participantBadge, { backgroundColor: getAgentColor(agent.type) }]}
+              >
+                <Text style={styles.participantText}>{agent.name}</Text>
+              </View>
+            ) : null;
           })}
-        </ScrollView>/      </View>/    );
-  }
-  return(<SafeAreaView style={styles.container} />/      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false} />/        <View style={styles.header} />/          <Text style={styles.title} />四大智能体协作演示</Text>/          <Text style={styles.subtitle} />小艾 · 小克 · 老克 · 索儿</Text>/        </View>/
-        {!isInitialized ? (
-          <View style={styles.loadingContainer} />/            <ActivityIndicator size="large" color="#2196F3" />/            <Text style={styles.loadingText} />正在初始化智能体协调服务...</Text>/          </View>/): (;
-          <>;
-            <View style= {styles.agentsContainer} />/              <Text style={styles.sectionTitle} />智能体状态</Text>/              {agents.map(agent => renderAgentCard(agen;t;);)}
-            </View>/
-            <View style={styles.scenariosContainer} />/              <Text style={styles.sectionTitle} />协作场景</Text>/              {scenarios.map(scenario => renderScenarioCard(scenario);)}
-            </View>/
-            {renderCollaborationLog()}
-          </>/        )}
-      </ScrollView>/    </SafeAreaView>/  );
+        </View>
+      </View>
+
+      {task.status === 'active' && (
+        <View style={styles.progressContainer}>
+          <Text style={styles.progressLabel}>进度: {task.progress}%</Text>
+          <View style={styles.progressBar}>
+            <View 
+              style={[styles.progressFill, { width: `${task.progress}%` }]} 
+            />
+          </View>
+        </View>
+      )}
+
+      {task.status === 'pending' && (
+        <TouchableOpacity 
+          style={styles.startButton}
+          onPress={() => startCollaboration(task.id)}
+          disabled={selectedTask !== null}
+        >
+          <Text style={styles.startButtonText}>开始协作</Text>
+        </TouchableOpacity>
+      )}
+
+      {task.status === 'completed' && (
+        <View style={styles.completedBadge}>
+          <Text style={styles.completedText}>✓ 已完成</Text>
+        </View>
+      )}
+    </View>
+  );
+
+  return (
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      <Text style={styles.title}>智能体协作演示</Text>
+      <Text style={styles.subtitle}>
+        观察四个智能体如何协作完成复杂的健康管理任务
+      </Text>
+
+      <Text style={styles.sectionTitle}>智能体状态</Text>
+      <View style={styles.agentsContainer}>
+        {agents.map(renderAgent)}
+      </View>
+
+      <Text style={styles.sectionTitle}>协作任务</Text>
+      <View style={styles.tasksContainer}>
+        {tasks.map(renderTask)}
+      </View>
+
+      <View style={styles.infoContainer}>
+        <Text style={styles.infoTitle}>协作流程说明</Text>
+        <Text style={styles.infoText}>
+          1. 选择一个协作任务开始演示{'\n'}
+          2. 相关智能体将自动参与协作{'\n'}
+          3. 观察任务进度和智能体状态变化{'\n'}
+          4. 任务完成后智能体返回空闲状态
+        </Text>
+      </View>
+    </ScrollView>
+  );
 };
-const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => StyleSheet.create({
+
+const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
-  },
-  scrollView: { flex: 1 },
-  header: {
-    padding: 20,
-    backgroundColor: '#FFFFFF',
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
+    backgroundColor: '#f5f5f5',
+    padding: 16,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#2196F3',
+    color: '#333',
+    textAlign: 'center',
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
     color: '#666',
     textAlign: 'center',
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 40,
-  },
-  loadingText: {
-    marginTop: 16,
-    fontSize: 16,
-    color: '#666',
+    marginBottom: 24,
   },
   sectionTitle: {
     fontSize: 20,
     fontWeight: 'bold',
     color: '#333',
     marginBottom: 16,
+    marginTop: 16,
   },
-  agentsContainer: { margin: 16  },
-  agentCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    borderLeftWidth: 4,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2},
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  agentHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  agentAvatar: {
-    fontSize: 32,
-    marginRight: 12,
-  },
-  agentInfo: { flex: 1 },
-  agentName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 4,
-  },
-  agentDescription: {
-    fontSize: 14,
-    color: '#666',
-    lineHeight: 20,
-  },
-  statusBadge: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-  },
-  statusText: {
-    color: '#FFFFFF',
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
-  specialtiesContainer: {
+  agentsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginBottom: 12,
+    justifyContent: 'space-between',
+    marginBottom: 16,
   },
-  specialtyTag: {
-    backgroundColor: '#E3F2FD',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 8,
-    marginRight: 8,
-    marginBottom: 4,
-  },
-  specialtyText: {
-    fontSize: 12,
-    color: '#1976D2',
-  },
-  currentTask: {
-    backgroundColor: '#FFF3E0',
-    padding: 8,
-    borderRadius: 8,
-    marginBottom: 8,
-  },
-  taskLabel: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    color: '#F57C00',
-    marginBottom: 4,
-  },
-  taskText: {
-    fontSize: 14,
-    color: '#333',
-  },
-  responseContainer: {
-    backgroundColor: '#E8F5E8',
-    padding: 8,
-    borderRadius: 8,
-    marginBottom: 8,
-  },
-  responseLabel: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    color: '#388E3C',
-    marginBottom: 4,
-  },
-  responseText: {
-    fontSize: 14,
-    color: '#333',
-    lineHeight: 20,
-  },
-  scenariosContainer: { margin: 16  },
-  scenarioCard: {
-    backgroundColor: '#FFFFFF',
+  agentCard: {
+    backgroundColor: '#fff',
     borderRadius: 12,
     padding: 16,
+    alignItems: 'center',
+    width: '48%',
     marginBottom: 12,
-    elevation: 2,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2},
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
     shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
-  activeScenarioCard: {
-    borderColor: '#2196F3',
-    borderWidth: 2,
+  agentAvatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 8,
   },
-  scenarioHeader: {
+  agentAvatarText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  agentName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 8,
+  },
+  statusBadge: {
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 12,
+    marginBottom: 8,
+  },
+  statusText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  currentTask: {
+    fontSize: 12,
+    color: '#666',
+    textAlign: 'center',
+  },
+  tasksContainer: {
+    marginBottom: 16,
+  },
+  taskCard: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  taskHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 8,
   },
-  scenarioTitle: {
-    fontSize: 16,
+  taskTitle: {
+    fontSize: 18,
     fontWeight: 'bold',
     color: '#333',
     flex: 1,
   },
-  complexityBadge: {
+  taskStatusBadge: {
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 8,
   },
-  complexityText: {
-    color: '#FFFFFF',
+  taskStatusText: {
+    color: '#fff',
     fontSize: 12,
-    fontWeight: 'bold',
+    fontWeight: '600',
   },
-  scenarioDescription: {
+  taskDescription: {
     fontSize: 14,
     color: '#666',
+    marginBottom: 16,
     lineHeight: 20,
-    marginBottom: 12,
   },
-  participantsContainer: { marginTop: 8  },
+  participantsContainer: {
+    marginBottom: 16,
+  },
   participantsLabel: {
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 4,
+    marginBottom: 8,
   },
   participantsList: {
     flexDirection: 'row',
     flexWrap: 'wrap',
   },
-  participantName: {
-    fontSize: 12,
-    color: '#666',
-    marginRight: 12,
-  },
-  logContainer: {
-    margin: 16,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    padding: 16,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2},
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  logTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 12,
-  },
-  logScrollView: { maxHeight: 300  },
-  logEntry: {
-    marginBottom: 12,
-    paddingBottom: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
-  },
-  logHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  participantBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
+    marginRight: 8,
     marginBottom: 4,
   },
-  logIcon: {
-    fontSize: 16,
-    marginRight: 8,
+  participantText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '600',
   },
-  logAgent: {
+  progressContainer: {
+    marginBottom: 16,
+  },
+  progressLabel: {
     fontSize: 14,
+    color: '#333',
+    marginBottom: 8,
+  },
+  progressBar: {
+    height: 8,
+    backgroundColor: '#e0e0e0',
+    borderRadius: 4,
+    overflow: 'hidden',
+  },
+  progressFill: {
+    height: '100%',
+    backgroundColor: '#4CAF50',
+  },
+  startButton: {
+    backgroundColor: '#2196F3',
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  startButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  completedBadge: {
+    backgroundColor: '#E8F5E8',
+    paddingVertical: 8,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  completedText: {
+    color: '#4CAF50',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  infoContainer: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  infoTitle: {
+    fontSize: 16,
     fontWeight: 'bold',
     color: '#333',
-    flex: 1,
+    marginBottom: 8,
   },
-  logTime: {
-    fontSize: 12,
-    color: '#999',
-  },
-  logMessage: {
+  infoText: {
     fontSize: 14,
     color: '#666',
     lineHeight: 20,
-    marginLeft: 24,
-  }
-}), []);
-export default React.memo(AgentCollaborationDemoScreen);
+  },
+});
+
+export default AgentCollaborationDemoScreen; 

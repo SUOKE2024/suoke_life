@@ -1,331 +1,376 @@
-importReact,{ useState, useEffect, useCallback, useMemo } from 'react';
-import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor'/import {   View,;
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Modal,
-  Alert,
-  RefreshControl,
-  { Dimensions    } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context';
-importIcon from '../../../components/common/Icon'/import { colors, spacing } from '../../../constants/theme'/import { monitoringSystem, SystemMetrics, ErrorInfo, HealthCheckResult } from '../../../utils/monitoringSystem'/;
-const { width   } = Dimensions.get('window;';);
-interface SystemMonitorDashboardProps { visible: boolean,
-  onClose: () => void}
-interface DashboardData {
-  performance: Partial<SystemMetrics />;/, errors: {total: number,
-    bySeverity: Record<string, number>;
-    byScreen: Record<string, number>;
-    recentErrors: ErrorInfo[];
-  }
-  health: { overall: 'healthy' | 'degraded' | 'unhealthy',
-    healthyServices: number,
-    totalServices: number,
-    averageResponseTime: number};
-  services: HealthCheckResult[]
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
+
+const { width } = Dimensions.get('window');
+
+export interface SystemMetric {
+  id: string;
+  name: string;
+  value: number;
+  unit: string;
+  status: 'healthy' | 'warning' | 'critical';
+  threshold: {
+    warning: number;
+    critical: number;
+  };
+  lastUpdated: Date;
 }
-export const SystemMonitorDashboard: React.FC<SystemMonitorDashboardProps /> = ({/  // 性能监控 *   const performanceMonitor = usePerformanceMonitor('SystemMonitorDashboard', ;{; */;
-    trackRender: true,
-    trackMemory: true,
-    warnThreshold: 50, // ms *   }); */
-  visible,
-  onClose
+
+export interface ServiceStatus {
+  id: string;
+  name: string;
+  status: 'online' | 'offline' | 'degraded';
+  uptime: number;
+  responseTime: number;
+  errorRate: number;
+  lastCheck: Date;
+}
+
+export interface SystemAlert {
+  id: string;
+  type: 'error' | 'warning' | 'info';
+  title: string;
+  message: string;
+  timestamp: Date;
+  resolved: boolean;
+}
+
+export interface SystemMonitorDashboardProps {
+  onMetricPress?: (metric: SystemMetric) => void;
+  onServicePress?: (service: ServiceStatus) => void;
+  onAlertPress?: (alert: SystemAlert) => void;
+}
+
+/**
+ * 系统监控仪表板组件
+ * 展示系统性能指标、服务状态和告警信息
+ */
+export const SystemMonitorDashboard: React.FC<SystemMonitorDashboardProps> = ({
+  onMetricPress,
+  onServicePress,
+  onAlertPress
 }) => {
-  const [dashboardData, setDashboardData] = useState<DashboardData | null />(nul;l;);/  const [refreshing, setRefreshing] = useState<boolean>(fals;e;)
-  const [selectedTab, setSelectedTab] = useState<'overview' | 'performance' | 'errors' | 'health'>('overview';);
-  const [loading, setLoading] = useState<boolean>(tru;e;);
-  const loadDashboardData = useCallback(async ;(;); => {
+  const [metrics, setMetrics] = useState<SystemMetric[]>([]);
+  const [services, setServices] = useState<ServiceStatus[]>([]);
+  const [alerts, setAlerts] = useState<SystemAlert[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadSystemData();
+    const interval = setInterval(loadSystemData, 30000); // 每30秒刷新
+    return () => clearInterval(interval);
+  }, []);
+
+  const loadSystemData = async () => {
     try {
-      setLoading(true);
-      // 初始化监控系统 *       await monitoringSystem.initialize;(;); */
-      // 获取系统状态 *       const systemStatus = monitoringSystem.getSystemStatus;(;); */
-      // 模拟获取服务健康状态 *       const services: HealthCheckResult[] = [;{, */
-          service: 'xiaoai-service',
+      // 模拟加载系统监控数据
+      const mockMetrics: SystemMetric[] = [
+        {
+          id: 'cpu-usage',
+          name: 'CPU使用率',
+          value: 45,
+          unit: '%',
           status: 'healthy',
-          responseTime: 120,
-          lastCheck: Date.now(),
-          details: { version: '1.0.0', uptime: '99.9%'}
+          threshold: { warning: 70, critical: 90 },
+          lastUpdated: new Date()
         },
         {
-          service: 'xiaoke-service',
+          id: 'memory-usage',
+          name: '内存使用率',
+          value: 68,
+          unit: '%',
           status: 'healthy',
-          responseTime: 95,
-          lastCheck: Date.now(),
-          details: { version: '1.0.0', uptime: '99.8%'}
+          threshold: { warning: 80, critical: 95 },
+          lastUpdated: new Date()
         },
         {
-          service: 'laoke-service',
-          status: 'degraded',
-          responseTime: 350,
-          lastCheck: Date.now(),
-          details: { version: '1.0.0', uptime: '98.5%', issue: '响应时间较慢'}
+          id: 'disk-usage',
+          name: '磁盘使用率',
+          value: 82,
+          unit: '%',
+          status: 'warning',
+          threshold: { warning: 80, critical: 95 },
+          lastUpdated: new Date()
         },
         {
-          service: 'soer-service',
+          id: 'network-latency',
+          name: '网络延迟',
+          value: 25,
+          unit: 'ms',
           status: 'healthy',
-          responseTime: 80,
-          lastCheck: Date.now(),
-          details: { version: '1.0.0', uptime: '99.9%'}
-        },
-        {
-          service: 'eco-services-api',
-          status: 'healthy',
-          responseTime: 150,
-          lastCheck: Date.now(),
-          details: { version: '1.0.0', uptime: '99.7%'}
-        },
-        {
-          service: 'blockchain-service',
-          status: 'healthy',
-          responseTime: 200,
-          lastCheck: Date.now(),
-          details: { version: '1.0.0', uptime: '99.6%'}
+          threshold: { warning: 100, critical: 200 },
+          lastUpdated: new Date()
         }
       ];
-      setDashboardData({
-        performance: systemStatus.performance,
-        errors: systemStatus.errors,
-        health: systemStatus.health,
-        services
-      })
+
+      const mockServices: ServiceStatus[] = [
+        {
+          id: 'api-gateway',
+          name: 'API网关',
+          status: 'online',
+          uptime: 99.8,
+          responseTime: 120,
+          errorRate: 0.1,
+          lastCheck: new Date()
+        },
+        {
+          id: 'user-service',
+          name: '用户服务',
+          status: 'online',
+          uptime: 99.9,
+          responseTime: 85,
+          errorRate: 0.05,
+          lastCheck: new Date()
+        },
+        {
+          id: 'health-service',
+          name: '健康服务',
+          status: 'degraded',
+          uptime: 98.5,
+          responseTime: 250,
+          errorRate: 1.2,
+          lastCheck: new Date()
+        },
+        {
+          id: 'ai-service',
+          name: 'AI服务',
+          status: 'online',
+          uptime: 99.7,
+          responseTime: 180,
+          errorRate: 0.3,
+          lastCheck: new Date()
+        }
+      ];
+
+      const mockAlerts: SystemAlert[] = [
+        {
+          id: 'alert-001',
+          type: 'warning',
+          title: '磁盘空间不足',
+          message: '系统磁盘使用率已达到82%，建议清理日志文件',
+          timestamp: new Date(Date.now() - 10 * 60 * 1000),
+          resolved: false
+        },
+        {
+          id: 'alert-002',
+          type: 'warning',
+          title: '健康服务响应缓慢',
+          message: '健康服务平均响应时间超过200ms',
+          timestamp: new Date(Date.now() - 5 * 60 * 1000),
+          resolved: false
+        },
+        {
+          id: 'alert-003',
+          type: 'info',
+          title: '系统更新完成',
+          message: 'API网关已成功更新到v2.1.0',
+          timestamp: new Date(Date.now() - 60 * 60 * 1000),
+          resolved: true
+        }
+      ];
+
+      setMetrics(mockMetrics);
+      setServices(mockServices);
+      setAlerts(mockAlerts);
     } catch (error) {
-      console.error('加载仪表板数据失败:', error)
-      Alert.alert('错误', '加载监控数据失败');
+      console.error('加载系统监控数据失败:', error);
     } finally {
       setLoading(false);
-      setRefreshing(false);
     }
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, []);
-  useEffect((); => {
-    const effectStart = performance.now;(;);
-    if (visible) {
-      loadDashboardData();
-      // 每30秒自动刷新 *       const interval = setInterval(loadDashboardData, 3000;0;); */
-      // 记录渲染性能 *  */
-      performanceMonitor.recordRender();
-      return () => clearInterval(interva;l;);
-    }
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [visible, loadDashboardData]);
-  const onRefresh = useCallback(async ;(;); => {
-    setRefreshing(true);
-    await loadDashboardData;(;);
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [loadDashboardData]);
-  const getStatusColor = useCallback((status: strin;g;): string =>  {
+  };
+
+  const getMetricStatusColor = (status: SystemMetric['status']): string => {
     switch (status) {
-      case 'healthy': return colors.succe;s;s
-      case 'degraded': return colors.warni;n;g
-      case 'unhealthy': return colors.err;o;r;
-      default: return colors.textSeconda;r;y;
+      case 'healthy':
+        return '#4CAF50';
+      case 'warning':
+        return '#FF9800';
+      case 'critical':
+        return '#F44336';
+      default:
+        return '#757575';
     }
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, []);
-  const getStatusIcon = useCallback((status: strin;g;): string =>  {
+  };
+
+  const getServiceStatusColor = (status: ServiceStatus['status']): string => {
     switch (status) {
-      case 'healthy': return 'check-circl;e';
-      case 'degraded': return 'alert-triangl;e';
-      case 'unhealthy': return 'x-circl;e';
-      default: return 'help-circl;e';
+      case 'online':
+        return '#4CAF50';
+      case 'degraded':
+        return '#FF9800';
+      case 'offline':
+        return '#F44336';
+      default:
+        return '#757575';
     }
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, []);
-  const renderOverviewTab = useCallback((); => {
-    if (!dashboardData) return n;u;l;l;
-    return (
-      <ScrollView style={styles.tabContent} />/        {// 系统健康状态 }/        <View style={styles.section} />/          <Text style={styles.sectionTitle} />🏥 系统健康状态</Text>/          <View style={[styles.healthCard, { borderLeftColor: getStatusColor(dashboardData.health.overall)   }]} />/            <View style={styles.healthHeader} />/              <Icon,
-                name={getStatusIcon(dashboardData.health.overall)}
-                size={24}
-                color={getStatusColor(dashboardData.health.overall)} />/              <Text style={[styles.healthStatus, { color: getStatusColor(dashboardData.health.overall)   }]} />/                {dashboardData.health.overall === 'healthy' ? '健康' :
-                 dashboardData.health.overall === 'degraded' ? '降级' : '不健康'}
-              </Text>/            </View>/            <Text style={styles.healthDesc} />/              {dashboardData.health.healthyServices}/{dashboardData.health.totalServices} 个服务正常运行/            </Text>/            <Text style={styles.healthDesc} />/              平均响应时间: {dashboardData.health.averageResponseTime.toFixed(0)}ms;
-            </Text>/          </View>/        </View>/
-        {// 关键指标 }/        <View style={styles.section} />/          <Text style={styles.sectionTitle} />📊 关键指标</Text>/          <View style={styles.metricsGrid} />/            <View style={styles.metricCard} />/              <Icon name="zap" size={20} color={colors.primary} />/              <Text style={styles.metricValue} />/                {dashboardData.performance.performance?.apiResponseTime?.toFixed(0) || 0}ms
-              </Text>/              <Text style={styles.metricLabel} />API响应时间</Text>/            </View>/            <View style={styles.metricCard} />/              <Icon name="cpu" size={20} color={colors.warning} />/              <Text style={styles.metricValue} />/                {dashboardData.performance.performance?.memoryUsage?.toFixed(1) || 0}%
-              </Text>/              <Text style={styles.metricLabel} />内存使用率</Text>/            </View>/            <View style={styles.metricCard} />/              <Icon name="alert-circle" size={20} color={colors.error} />/              <Text style={styles.metricValue} />{dashboardData.errors.total}</Text>/              <Text style={styles.metricLabel} />错误总数</Text>/            </View>/            <View style={styles.metricCard} />/              <Icon name="users" size={20} color={colors.success} />/              <Text style={styles.metricValue} />{dashboardData.health.healthyServices}</Text>/              <Text style={styles.metricLabel} />健康服务</Text>/            </View>/          </View>/        </View>/
-        {// 服务状态 }/        <View style={styles.section} />/          <Text style={styles.sectionTitle} />🔧 服务状态</Text>/          {dashboardData.services.map((service); => (
-            <View key={service.service} style={styles.serviceCard} />/              <View style={styles.serviceHeader} />/                <Icon
-                  name={getStatusIcon(service.status)}
-                  size={16}
-                  color={getStatusColor(service.status)} />/                <Text style={styles.serviceName} />{service.service}</Text>/                <Text style={styles.serviceResponseTime} />{service.responseTime}ms</Text>/              </View>/              {service.details?.issue && (
-                <Text style={styles.serviceIssue} />{service.details.issue}</Text>/              )}
-            </View>/          ))}
-        </View>/      </ScrollView>/    );
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [dashboardData, getStatusColor, getStatusIcon]);
-  const renderPerformanceTab = useCallback((); => {
-    if (!dashboardData) return n;u;l;l;
-    return (
-      <ScrollView style={styles.tabContent} />/        <View style={styles.section} />/          <Text style={styles.sectionTitle} />⚡ 性能监控</Text>/;
-          {// 性能指标卡片 }/          <View style={styles.performanceGrid} />/            <View style={styles.performanceCard} />/              <Text style={styles.performanceTitle} />API响应时间</Text>/              <Text style={styles.performanceValue} />/                {dashboardData.performance.performance?.apiResponseTime?.toFixed(0); || 0}ms
-              </Text>/              <Text style={styles.performanceDesc} />平均响应时间</Text>/            </View>/
-            <View style={styles.performanceCard} />/              <Text style={styles.performanceTitle} />内存使用</Text>/              <Text style={styles.performanceValue} />/                {dashboardData.performance.performance?.memoryUsage?.toFixed(1); || 0}%
-              </Text>/              <Text style={styles.performanceDesc} />当前内存占用</Text>/            </View>/
-            <View style={styles.performanceCard} />/              <Text style={styles.performanceTitle} />网络延迟</Text>/              <Text style={styles.performanceValue} />/                {dashboardData.performance.performance?.networkLatency?.toFixed(0); || 0}ms
-              </Text>/              <Text style={styles.performanceDesc} />网络往返时间</Text>/            </View>/
-            <View style={styles.performanceCard} />/              <Text style={styles.performanceTitle} />渲染时间</Text>/              <Text style={styles.performanceValue} />/                {dashboardData.performance.performance?.renderTime?.toFixed(1); || 0}ms
-              </Text>/              <Text style={styles.performanceDesc} />平均渲染时间</Text>/            </View>/          </View>/        </View>/      </ScrollView>/    );
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [dashboardData]);
-  const renderErrorsTab = useCallback((); => {
-    if (!dashboardData) return n;u;l;l;
-    return (
-      <ScrollView style={styles.tabContent} />/        <View style={styles.section} />/          <Text style={styles.sectionTitle} />🚨 错误统计</Text>/;
-          {// 错误严重程度分布 }/          <View style={styles.errorSeverityContainer} />/            <Text style={styles.subsectionTitle} />按严重程度分布</Text>/            <View style={styles.severityGrid} />/              {Object.entries(dashboardData.errors.bySeverity).map(([severity, count;];) => (
-                <View key={severity} style={styles.severityCard} />/                  <Text style={[styles.severityCount, { color: severity === 'critical' ? colors.error : severity === 'high' ? colors.warning: severity === 'medium' ? colors.primary : colors.textSecondary}]} />/                    {count}
-                  </Text>/                  <Text style={styles.severityLabel} />/                    {severity === 'critical' ? '严重' :
-                     severity === 'high' ? '高' :
-                     severity === 'medium' ? '中' : '低'}
-                  </Text>/                </View>/))}
-            </View>/          </View>/
-          {// 最近错误 }/          <View style={styles.recentErrorsContainer} />/            <Text style={styles.subsectionTitle} />最近错误</Text>/            {dashboardData.errors.recentErrors.length === 0 ? (<View style={styles.noErrorsContainer} />/                <Icon name="check-circle" size={48} color={colors.success} />/                <Text style={styles.noErrorsText} />暂无错误记录</Text>/              </View>/            ): (
-              dashboardData.errors.recentErrors.map((error, index) => (
-                <View key= {index} style={styles.errorCard} />/                  <View style={styles.errorHeader} />/                    <Icon,
-                      name="alert-circle"
-                      size={16}
-                      color={error.severity === 'critical' ? colors.error: colors.warning} />/                    <Text style={styles.errorMessage} numberOfLines={1} />/                      {error.message}
-                    </Text>/                    <Text style={styles.errorTime} />/                      {new Date(error.timestamp).toLocaleTimeString()}
-                    </Text>/                  </View>/                  <Text style={styles.errorScreen} />页面: {error.screen}</Text>/                </View>/              ))
-            )}
-          </View>/        </View>/      </ScrollView>/    );
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [dashboardData]);
-  const renderHealthTab = useCallback((); => {
-    if (!dashboardData) return n;u;l;l;
-    return (
-      <ScrollView style={styles.tabContent} />/        <View style={styles.section} />/          <Text style={styles.sectionTitle} />🏥 健康检查</Text>/;
-          {// 整体健康状态 }/          <View style={[styles.overallHealthCard, {;
-            backgroundColor: getStatusColor(dashboardData.health.overal;l;) + '20',
-            borderColor: getStatusColor(dashboardData.health.overall)}]} />/            <Icon
-              name={getStatusIcon(dashboardData.health.overall)}
-              size={32}
-              color={getStatusColor(dashboardData.health.overall)} />/            <Text style={[styles.overallHealthText, { color: getStatusColor(dashboardData.health.overall)  }]} />/              系统整体状态: {dashboardData.health.overall === 'healthy' ? '健康' :
-                           dashboardData.health.overall === 'degraded' ? '降级' : '不健康'}
-            </Text>/          </View>/
-          {// 服务详细状态 }/          <View style={styles.servicesContainer} />/            <Text style={styles.subsectionTitle} />服务详细状态</Text>/            {dashboardData.services.map((service) => (
-              <TouchableOpacity
-                key={service.service}
-                style={styles.serviceDetailCard}
-                onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> Alert.alert('服务详情', JSON.stringify(service.details, null, 2))}/              >
-                <View style={styles.serviceDetailHeader} />/                  <View style={styles.serviceDetailLeft} />/                    <Icon
-                      name={getStatusIcon(service.status)}
-                      size={20}
-                      color={getStatusColor(service.status)} />/                    <Text style={styles.serviceDetailName} />{service.service}</Text>/                  </View>/                  <View style={styles.serviceDetailRight} />/                    <Text style={styles.serviceDetailResponseTime} />/                      {service.responseTime}ms
-                    </Text>/                    <Icon name="chevron-right" size={16} color={colors.textSecondary} />/                  </View>/                </View>/
-                <View style={styles.serviceDetailInfo} />/                  <Text style={styles.serviceDetailText} />/                    最后检查: {new Date(service.lastCheck).toLocaleString()}
-                  </Text>/                  <Text style={styles.serviceDetailText} />/                    运行时间: {service.details?.uptime || 'N/A'}/                  </Text>/                </View>/
-                {service.details?.issue && (
-                  <View style={styles.serviceIssueContainer} />/                    <Icon name="alert-triangle" size={14} color={colors.warning} />/                    <Text style={styles.serviceIssueText} />{service.details.issue}</Text>/                  </View>/                )}
-              </TouchableOpacity>/            ))}
-          </View>/        </View>/      </ScrollView>/    );
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [dashboardData, getStatusColor, getStatusIcon]);
-  const renderTabBar = useMemo(() => (;
-    <View style={styles.tabBar} />/      {[
-        { key: 'overview', label: '概览', icon: 'home'},
-        { key: 'performance', label: '性能', icon: 'zap'},
-        { key: 'errors', label: '错误', icon: 'alert-circle'},
-        { key: 'health', label: '健康', icon: 'heart'}
-      ].map((tab) => (
-        <TouchableOpacity
-          key={tab.key}
-          style={[styles.tabButton, selectedTab === tab.key && styles.activeTabButton]}
-          onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setSelectedTab(tab.key as any)}/        >
-          <Icon
-            name={tab.icon}
-            size={20}
-            color={selectedTab === tab.key ? colors.primary: colors.textSecondary} />/          <Text style={[
-            styles.tabLabel,
-            selectedTab === tab.key && styles.activeTabLabel
-          ]} />/            {tab.label}
-          </Text>/        </TouchableOpacity>/      ))}
-    </View>/  ), [selectedTab]);
-  const renderContent = useCallback((); => {
-    if (loading) {
-      return (
-        <View style={styles.loadingContainer} />/          <Icon name="loader" size={48} color={colors.primary} />/          <Text style={styles.loadingText} />加载监控数据中...</Text>/        </View>/      ;)
+  };
+
+  const getAlertTypeColor = (type: SystemAlert['type']): string => {
+    switch (type) {
+      case 'error':
+        return '#F44336';
+      case 'warning':
+        return '#FF9800';
+      case 'info':
+        return '#2196F3';
+      default:
+        return '#757575';
     }
-    switch (selectedTab) {
-      case 'overview': return renderOverviewTab;(;)
-      case 'performance': return renderPerformanceTab;(;)
-      case 'errors': return renderErrorsTab;(;)
-      case 'health': return renderHealthTab;(;);
-      default: return renderOverviewTab;(;);
+  };
+
+  const getAlertIcon = (type: SystemAlert['type']): string => {
+    switch (type) {
+      case 'error':
+        return '❌';
+      case 'warning':
+        return '⚠️';
+      case 'info':
+        return 'ℹ️';
+      default:
+        return '📋';
     }
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [loading, selectedTab, renderOverviewTab, renderPerformanceTab, renderErrorsTab, renderHealthTab])
+  };
+
+  const renderMetricCard = (metric: SystemMetric) => (
+    <TouchableOpacity
+      key={metric.id}
+      style={styles.metricCard}
+      onPress={() => onMetricPress?.(metric)}
+    >
+      <View style={styles.metricHeader}>
+        <Text style={styles.metricName}>{metric.name}</Text>
+        <View style={[styles.statusDot, { backgroundColor: getMetricStatusColor(metric.status) }]} />
+      </View>
+      <View style={styles.metricValue}>
+        <Text style={[styles.valueText, { color: getMetricStatusColor(metric.status) }]}>
+          {metric.value}
+        </Text>
+        <Text style={styles.unitText}>{metric.unit}</Text>
+      </View>
+      <View style={styles.thresholdInfo}>
+        <Text style={styles.thresholdText}>
+          警告: {metric.threshold.warning}{metric.unit} | 严重: {metric.threshold.critical}{metric.unit}
+        </Text>
+      </View>
+    </TouchableOpacity>
+  );
+
+  const renderServiceCard = (service: ServiceStatus) => (
+    <TouchableOpacity
+      key={service.id}
+      style={styles.serviceCard}
+      onPress={() => onServicePress?.(service)}
+    >
+      <View style={styles.serviceHeader}>
+        <Text style={styles.serviceName}>{service.name}</Text>
+        <View style={[styles.statusBadge, { backgroundColor: getServiceStatusColor(service.status) }]}>
+          <Text style={styles.statusText}>{service.status.toUpperCase()}</Text>
+        </View>
+      </View>
+      <View style={styles.serviceMetrics}>
+        <View style={styles.serviceMetric}>
+          <Text style={styles.metricLabel}>可用性</Text>
+          <Text style={styles.serviceMetricValue}>{service.uptime}%</Text>
+        </View>
+        <View style={styles.serviceMetric}>
+          <Text style={styles.metricLabel}>响应时间</Text>
+          <Text style={styles.serviceMetricValue}>{service.responseTime}ms</Text>
+        </View>
+        <View style={styles.serviceMetric}>
+          <Text style={styles.metricLabel}>错误率</Text>
+          <Text style={styles.serviceMetricValue}>{service.errorRate}%</Text>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+
+  const renderAlertCard = (alert: SystemAlert) => (
+    <TouchableOpacity
+      key={alert.id}
+      style={[styles.alertCard, alert.resolved && styles.resolvedAlert]}
+      onPress={() => onAlertPress?.(alert)}
+    >
+      <View style={styles.alertHeader}>
+        <Text style={styles.alertIcon}>{getAlertIcon(alert.type)}</Text>
+        <View style={styles.alertInfo}>
+          <Text style={[styles.alertTitle, { color: getAlertTypeColor(alert.type) }]}>
+            {alert.title}
+          </Text>
+          <Text style={styles.alertTimestamp}>
+            {alert.timestamp.toLocaleTimeString()}
+          </Text>
+        </View>
+        {alert.resolved && (
+          <View style={styles.resolvedBadge}>
+            <Text style={styles.resolvedText}>已解决</Text>
+          </View>
+        )}
+      </View>
+      <Text style={styles.alertMessage}>{alert.message}</Text>
+    </TouchableOpacity>
+  );
+
+  const renderOverview = () => {
+    const healthyMetrics = metrics.filter(m => m.status === 'healthy').length;
+    const onlineServices = services.filter(s => s.status === 'online').length;
+    const unresolvedAlerts = alerts.filter(a => !a.resolved).length;
+
+    return (
+      <View style={styles.overviewContainer}>
+        <Text style={styles.sectionTitle}>系统概览</Text>
+        <View style={styles.overviewGrid}>
+          <View style={styles.overviewCard}>
+            <Text style={styles.overviewValue}>{healthyMetrics}/{metrics.length}</Text>
+            <Text style={styles.overviewLabel}>健康指标</Text>
+          </View>
+          <View style={styles.overviewCard}>
+            <Text style={styles.overviewValue}>{onlineServices}/{services.length}</Text>
+            <Text style={styles.overviewLabel}>在线服务</Text>
+          </View>
+          <View style={styles.overviewCard}>
+            <Text style={styles.overviewValue}>{unresolvedAlerts}</Text>
+            <Text style={styles.overviewLabel}>待处理告警</Text>
+          </View>
+        </View>
+      </View>
+    );
+  };
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Text style={styles.loadingText}>加载系统监控数据中...</Text>
+      </View>
+    );
+  }
+
   return (
-    <Modal visible={visible} animationType="slide" presentationStyle="pageSheet" />/      <SafeAreaView style={styles.container} />/        {// 头部 }/        <View style={styles.header} />/          <TouchableOpacity onPress={onClose} style={styles.closeButton} accessibilityLabel="TODO: 添加无障碍标签" />/            <Icon name="x" size={24} color={colors.textPrimary} />/          </TouchableOpacity>/          <Text style={styles.title} />系统监控</Text>/          <TouchableOpacity onPress={onRefresh} style={styles.refreshButton} accessibilityLabel="TODO: 添加无障碍标签" />/            <Icon name="refresh-cw" size={20} color={colors.primary} />/          </TouchableOpacity>/        </View>/
-        {// 标签栏 }/        {renderTabBar}
-        {// 内容区域 }/        <ScrollView,
-          style={styles.content}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />/          }
-        >;
-          {renderContent()};
-        </ScrollView>/      </SafeAreaView>/    </Modal>/  ;);
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      {renderOverview()}
+
+      <Text style={styles.sectionTitle}>系统指标</Text>
+      <View style={styles.metricsGrid}>
+        {metrics.map(renderMetricCard)}
+      </View>
+
+      <Text style={styles.sectionTitle}>服务状态</Text>
+      <View style={styles.servicesContainer}>
+        {services.map(renderServiceCard)}
+      </View>
+
+      <Text style={styles.sectionTitle}>系统告警</Text>
+      <View style={styles.alertsContainer}>
+        {alerts.map(renderAlertCard)}
+      </View>
+    </ScrollView>
+  );
 };
-const styles = useMemo(() => StyleSheet.create({;
+
+const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-  },
-  closeButton: { padding: spacing.sm  },
-  title: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: colors.textPrimary,
-  },
-  refreshButton: { padding: spacing.sm  },
-  tabBar: {
-    flexDirection: 'row',
-    backgroundColor: colors.surface,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-  },
-  tabButton: {
-    flex: 1,
-    alignItems: 'center',
-    paddingVertical: spacing.md,
-  },
-  activeTabButton: {
-    borderBottomWidth: 2,
-    borderBottomColor: colors.primary,
-  },
-  tabLabel: {
-    fontSize: 12,
-    color: colors.textSecondary,
-    marginTop: spacing.xs,
-  },
-  activeTabLabel: {
-    color: colors.primary,
-    fontWeight: '600',
-  },
-  content: { flex: 1 },
-  tabContent: {
-    flex: 1,
-    padding: spacing.lg,
+    backgroundColor: '#f5f5f5',
+    padding: 16,
   },
   loadingContainer: {
     flex: 1,
@@ -334,42 +379,48 @@ const styles = useMemo(() => StyleSheet.create({;
   },
   loadingText: {
     fontSize: 16,
-    color: colors.textSecondary,
-    marginTop: spacing.md,
+    color: '#666',
   },
-  section: { marginBottom: spacing.xl  },
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: colors.textPrimary,
-    marginBottom: spacing.md,
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 16,
+    marginTop: 16,
   },
-  subsectionTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: colors.textPrimary,
-    marginBottom: spacing.sm,
+  overviewContainer: {
+    marginBottom: 16,
   },
-  healthCard: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: spacing.lg,
-    borderLeftWidth: 4,
-  },
-  healthHeader: {
+  overviewGrid: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  overviewCard: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 16,
     alignItems: 'center',
-    marginBottom: spacing.sm,
+    flex: 1,
+    marginHorizontal: 4,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
-  healthStatus: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginLeft: spacing.sm,
+  overviewValue: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#4CAF50',
+    marginBottom: 4,
   },
-  healthDesc: {
-    fontSize: 14,
-    color: colors.textSecondary,
-    marginBottom: spacing.xs,
+  overviewLabel: {
+    fontSize: 12,
+    color: '#666',
+    textAlign: 'center',
   },
   metricsGrid: {
     flexDirection: 'row',
@@ -377,236 +428,171 @@ const styles = useMemo(() => StyleSheet.create({;
     justifyContent: 'space-between',
   },
   metricCard: {
-    width: (width - spacing.lg * 2 - spacing.md) / 2,/    backgroundColor: colors.surface,
+    width: (width - 48) / 2,
+    backgroundColor: '#fff',
     borderRadius: 12,
-    padding: spacing.lg,
+    padding: 16,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  metricHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: spacing.md,
+    marginBottom: 8,
+  },
+  metricName: {
+    fontSize: 14,
+    color: '#666',
+    fontWeight: '500',
+    flex: 1,
+  },
+  statusDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
   },
   metricValue: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    marginBottom: 8,
+  },
+  valueText: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: colors.textPrimary,
-    marginVertical: spacing.sm,
   },
-  metricLabel: {
+  unitText: {
     fontSize: 12,
-    color: colors.textSecondary,
-    textAlign: 'center',
+    color: '#999',
+    marginLeft: 4,
+  },
+  thresholdInfo: {
+    marginTop: 4,
+  },
+  thresholdText: {
+    fontSize: 10,
+    color: '#999',
+  },
+  servicesContainer: {
+    marginBottom: 16,
   },
   serviceCard: {
-    backgroundColor: colors.surface,
-    borderRadius: 8,
-    padding: spacing.md,
-    marginBottom: spacing.sm,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   serviceHeader: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: spacing.xs,
+    marginBottom: 12,
   },
   serviceName: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: colors.textPrimary,
-    flex: 1,
-    marginLeft: spacing.sm,
-  },
-  serviceResponseTime: {
-    fontSize: 12,
-    color: colors.textSecondary,
-  },
-  serviceIssue: {
-    fontSize: 12,
-    color: colors.warning,
-    marginTop: spacing.xs,
-  },
-  chartContainer: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: spacing.lg,
-    marginBottom: spacing.lg,
-  },
-  chartTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: colors.textPrimary,
-    marginBottom: spacing.md,
+    color: '#333',
+    flex: 1,
   },
-  chartPlaceholder: {
-    height: 200,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  chartPlaceholderText: {
-    fontSize: 14,
-    color: colors.textSecondary,
-    marginTop: spacing.sm,
-  },
-  performanceDetails: {
-    backgroundColor: colors.surface,
+  statusBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
     borderRadius: 12,
-    padding: spacing.lg,
   },
-  performanceItem: {
+  statusText: {
+    fontSize: 10,
+    color: '#fff',
+    fontWeight: '600',
+  },
+  serviceMetrics: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  serviceMetric: {
     alignItems: 'center',
-    paddingVertical: spacing.sm,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
   },
-  performanceLabel: {
-    fontSize: 14,
-    color: colors.textPrimary,
+  metricLabel: {
+    fontSize: 12,
+    color: '#666',
+    marginBottom: 4,
   },
-  performanceValue: {
+  serviceMetricValue: {
     fontSize: 14,
     fontWeight: '600',
-    color: colors.primary,
+    color: '#333',
   },
-  errorSeverityContainer: { marginBottom: spacing.lg  },
-  severityGrid: {
+  alertsContainer: {
+    marginBottom: 16,
+  },
+  alertCard: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  resolvedAlert: {
+    opacity: 0.7,
+  },
+  alertHeader: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  severityCard: {
-    backgroundColor: colors.surface,
-    borderRadius: 8,
-    padding: spacing.md,
     alignItems: 'center',
-    flex: 1,
-    marginHorizontal: spacing.xs,
+    marginBottom: 8,
   },
-  severityCount: {
+  alertIcon: {
     fontSize: 20,
-    fontWeight: 'bold',
+    marginRight: 12,
   },
-  severityLabel: {
-    fontSize: 12,
-    color: colors.textSecondary,
-    marginTop: spacing.xs,
-  },
-  recentErrorsContainer: { marginBottom: spacing.lg  },
-  noErrorsContainer: {
-    alignItems: 'center',
-    paddingVertical: spacing.xl,
-  },
-  noErrorsText: {
-    fontSize: 16,
-    color: colors.textSecondary,
-    marginTop: spacing.md,
-  },
-  errorCard: {
-    backgroundColor: colors.surface,
-    borderRadius: 8,
-    padding: spacing.md,
-    marginBottom: spacing.sm,
-  },
-  errorHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: spacing.xs,
-  },
-  errorMessage: {
-    fontSize: 14,
-    color: colors.textPrimary,
-    flex: 1,
-    marginLeft: spacing.sm,
-  },
-  errorTime: {
-    fontSize: 12,
-    color: colors.textSecondary,
-  },
-  errorScreen: {
-    fontSize: 12,
-    color: colors.textSecondary,
-  },
-  overallHealthCard: {
-    borderRadius: 12,
-    padding: spacing.lg,
-    alignItems: 'center',
-    marginBottom: spacing.lg,
-    borderWidth: 1,
-  },
-  overallHealthText: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginTop: spacing.sm,
-  },
-  servicesContainer: { marginBottom: spacing.lg  },
-  serviceDetailCard: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: spacing.lg,
-    marginBottom: spacing.md,
-  },
-  serviceDetailHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: spacing.sm,
-  },
-  serviceDetailLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  alertInfo: {
     flex: 1,
   },
-  serviceDetailName: {
+  alertTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: colors.textPrimary,
-    marginLeft: spacing.sm,
+    marginBottom: 2,
   },
-  serviceDetailRight: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  serviceDetailResponseTime: {
-    fontSize: 14,
-    color: colors.textSecondary,
-    marginRight: spacing.sm,
-  },
-  serviceDetailInfo: { marginBottom: spacing.sm  },
-  serviceDetailText: {
+  alertTimestamp: {
     fontSize: 12,
-    color: colors.textSecondary,
-    marginBottom: spacing.xs,
+    color: '#999',
   },
-  serviceIssueContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.warning + '20',
-    borderRadius: 6,
-    padding: spacing.sm,
-  },
-  serviceIssueText: {
-    fontSize: 12,
-    color: colors.warning,
-    marginLeft: spacing.xs,
-  },
-  performanceGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  performanceCard: {
-    width: (width - spacing.lg * 2 - spacing.md) / 2,/    backgroundColor: colors.surface,
+  resolvedBadge: {
+    backgroundColor: '#4CAF50',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
     borderRadius: 12,
-    padding: spacing.lg,
-    alignItems: 'center',
-    marginBottom: spacing.md,
   },
-  performanceTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: colors.textPrimary,
-    marginBottom: spacing.sm,
+  resolvedText: {
+    fontSize: 10,
+    color: '#fff',
+    fontWeight: '500',
   },
-  performanceDesc: {
-    fontSize: 12,
-    color: colors.textSecondary,
-    textAlign: 'center',
-  }
-}), []);
-export default React.memo(SystemMonitorDashboard);
+  alertMessage: {
+    fontSize: 14,
+    color: '#666',
+    lineHeight: 20,
+  },
+});
+
+export default SystemMonitorDashboard; 

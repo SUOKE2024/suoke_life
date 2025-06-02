@@ -1,0 +1,304 @@
+version: '3.8'
+
+services:
+  # Redis服务 - 用于任务队列和结果缓存
+  redis:
+    image: redis:7-alpine
+    container_name: suoke_computing_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    networks:
+      - suoke_computing
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # ZeroMQ代理服务
+  zmq_broker:
+    image: python:3.11-slim
+    container_name: suoke_computing_zmq_broker
+    ports:
+      - "5555:5555"
+      - "5556:5556"
+    volumes:
+      - ./distributed/broker:/app
+    working_dir: /app
+    command: python zmq_broker.py
+    networks:
+      - suoke_computing
+    depends_on:
+      - redis
+
+  # 主节点 - 任务调度和协调
+  master_node:
+    build:
+      context: .
+      dockerfile: distributed/docker/Dockerfile.worker
+    container_name: suoke_computing_master
+    ports:
+      - "8000:8080"
+    environment:
+      - NODE_TYPE=master
+      - REDIS_HOST=redis
+      - ZMQ_FRONTEND_PORT=5555
+      - ZMQ_BACKEND_PORT=5556
+      - WORKER_POOL_SIZE=4
+    volumes:
+      - ./distributed/logs:/app/logs
+      - ./distributed/distributed_computing.py:/app/distributed_computing.py
+      - ./extensions/c_algorithms.py:/app/c_algorithms.py
+      - ./gpu/gpu_acceleration.py:/app/gpu_acceleration.py
+    networks:
+      - suoke_computing
+    depends_on:
+      - redis
+      - zmq_broker
+    restart: unless-stopped
+
+  # 工作节点1 - 中医证候分析
+  worker_tcm:
+    build:
+      context: .
+      dockerfile: distributed/docker/Dockerfile.worker
+    container_name: suoke_computing_worker_tcm
+    ports:
+      - "8001:8080"
+    environment:
+      - NODE_TYPE=worker
+      - WORKER_SPECIALIZATION=tcm_analysis
+      - REDIS_HOST=redis
+      - ZMQ_FRONTEND_PORT=5555
+      - ZMQ_BACKEND_PORT=5556
+      - GPU_ENABLED=false
+    volumes:
+      - ./distributed/logs:/app/logs
+      - ./distributed/distributed_computing.py:/app/distributed_computing.py
+      - ./extensions/c_algorithms.py:/app/c_algorithms.py
+      - ./extensions/c_algorithms:/app/c_algorithms
+    networks:
+      - suoke_computing
+    depends_on:
+      - redis
+      - zmq_broker
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
+
+  # 工作节点2 - 健康数据处理
+  worker_health:
+    build:
+      context: .
+      dockerfile: distributed/docker/Dockerfile.worker
+    container_name: suoke_computing_worker_health
+    ports:
+      - "8002:8080"
+    environment:
+      - NODE_TYPE=worker
+      - WORKER_SPECIALIZATION=health_processing
+      - REDIS_HOST=redis
+      - ZMQ_FRONTEND_PORT=5555
+      - ZMQ_BACKEND_PORT=5556
+      - GPU_ENABLED=false
+    volumes:
+      - ./distributed/logs:/app/logs
+      - ./distributed/distributed_computing.py:/app/distributed_computing.py
+      - ./extensions/c_algorithms.py:/app/c_algorithms.py
+      - ./extensions/c_algorithms:/app/c_algorithms
+    networks:
+      - suoke_computing
+    depends_on:
+      - redis
+      - zmq_broker
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
+
+  # 工作节点3 - 营养优化
+  worker_nutrition:
+    build:
+      context: .
+      dockerfile: distributed/docker/Dockerfile.worker
+    container_name: suoke_computing_worker_nutrition
+    ports:
+      - "8003:8080"
+    environment:
+      - NODE_TYPE=worker
+      - WORKER_SPECIALIZATION=nutrition_optimization
+      - REDIS_HOST=redis
+      - ZMQ_FRONTEND_PORT=5555
+      - ZMQ_BACKEND_PORT=5556
+      - GPU_ENABLED=false
+    volumes:
+      - ./distributed/logs:/app/logs
+      - ./distributed/distributed_computing.py:/app/distributed_computing.py
+      - ./extensions/c_algorithms.py:/app/c_algorithms.py
+      - ./extensions/c_algorithms:/app/c_algorithms
+    networks:
+      - suoke_computing
+    depends_on:
+      - redis
+      - zmq_broker
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
+
+  # GPU工作节点 - 高性能计算
+  worker_gpu:
+    build:
+      context: .
+      dockerfile: distributed/docker/Dockerfile.gpu
+    container_name: suoke_computing_worker_gpu
+    ports:
+      - "8004:8080"
+    environment:
+      - NODE_TYPE=worker
+      - WORKER_SPECIALIZATION=gpu_acceleration
+      - REDIS_HOST=redis
+      - ZMQ_FRONTEND_PORT=5555
+      - ZMQ_BACKEND_PORT=5556
+      - GPU_ENABLED=true
+      - CUDA_VISIBLE_DEVICES=0
+    volumes:
+      - ./distributed/logs:/app/logs
+      - ./distributed/distributed_computing.py:/app/distributed_computing.py
+      - ./gpu/gpu_acceleration.py:/app/gpu_acceleration.py
+    networks:
+      - suoke_computing
+    depends_on:
+      - redis
+      - zmq_broker
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+  # 监控服务 - Prometheus
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: suoke_computing_prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./distributed/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    networks:
+      - suoke_computing
+    restart: unless-stopped
+
+  # 可视化服务 - Grafana
+  grafana:
+    image: grafana/grafana:latest
+    container_name: suoke_computing_grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin123
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./distributed/monitoring/grafana:/etc/grafana/provisioning
+    networks:
+      - suoke_computing
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+  # 日志收集 - ELK Stack
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.8.0
+    container_name: suoke_computing_elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    networks:
+      - suoke_computing
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.8.0
+    container_name: suoke_computing_logstash
+    volumes:
+      - ./distributed/monitoring/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+    ports:
+      - "5044:5044"
+    networks:
+      - suoke_computing
+    depends_on:
+      - elasticsearch
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.8.0
+    container_name: suoke_computing_kibana
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    networks:
+      - suoke_computing
+    depends_on:
+      - elasticsearch
+
+  # 负载均衡 - Nginx
+  nginx:
+    image: nginx:alpine
+    container_name: suoke_computing_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./distributed/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./distributed/nginx/ssl:/etc/nginx/ssl
+    networks:
+      - suoke_computing
+    depends_on:
+      - master_node
+      - worker_tcm
+      - worker_health
+      - worker_nutrition
+      - worker_gpu
+    restart: unless-stopped
+
+networks:
+  suoke_computing:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+volumes:
+  redis_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  elasticsearch_data:
+    driver: local 

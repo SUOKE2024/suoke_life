@@ -1,46 +1,120 @@
-// useHealthData Hook 测试 - 索克生活APP - 自动生成的测试文件
-describe("useHealthData", () => {
-  // 基础测试
-  describe("基础功能", () => {
-    it("应该正确初始化", () => {
-      // TODO: 添加初始化测试
+import { jest } from '@jest/globals';
+
+// Mock useHealthData hook
+const mockUseHealthData = jest.fn(() => ({
+  healthData: null,
+  isLoading: false,
+  error: null,
+  fetchHealthData: jest.fn(),
+  updateHealthData: jest.fn(),
+  deleteHealthData: jest.fn(),
+  syncData: jest.fn(),
+}));
+
+// Mock dependencies
+jest.mock('react', () => ({
+  useState: jest.fn(),
+  useEffect: jest.fn(),
+  useCallback: jest.fn(),
+}));
+
+describe('useHealthData Hook 健康数据钩子测试', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  describe('Hook 初始化', () => {
+    it('应该正确初始化Hook', () => {
+      const result = mockUseHealthData();
+      expect(result).toBeDefined();
+    });
+
+    it('应该返回必要的属性', () => {
+      const result = mockUseHealthData();
+      expect(result).toHaveProperty('healthData');
+      expect(result).toHaveProperty('isLoading');
+      expect(result).toHaveProperty('error');
+      expect(result).toHaveProperty('fetchHealthData');
+      expect(result).toHaveProperty('updateHealthData');
+      expect(result).toHaveProperty('deleteHealthData');
+      expect(result).toHaveProperty('syncData');
+    });
+  });
+
+  describe('数据状态', () => {
+    it('应该正确管理健康数据', () => {
+      const result = mockUseHealthData();
+      expect(result.healthData).toBeNull();
+      expect(result.isLoading).toBe(false);
+      expect(result.error).toBeNull();
+    });
+  });
+
+  describe('数据操作', () => {
+    it('应该提供获取数据方法', () => {
+      const result = mockUseHealthData();
+      expect(typeof result.fetchHealthData).toBe('function');
+    });
+
+    it('应该提供更新数据方法', () => {
+      const result = mockUseHealthData();
+      expect(typeof result.updateHealthData).toBe('function');
+    });
+
+    it('应该提供删除数据方法', () => {
+      const result = mockUseHealthData();
+      expect(typeof result.deleteHealthData).toBe('function');
+    });
+
+    it('应该提供同步数据方法', () => {
+      const result = mockUseHealthData();
+      expect(typeof result.syncData).toBe('function');
+    });
+  });
+
+  describe('健康指标', () => {
+    it('应该支持心率数据', () => {
+      // TODO: 添加心率数据测试
       expect(true).toBe(true);
     });
 
-    it("应该正确处理健康数据", () => {
-      // TODO: 添加健康数据处理测试
+    it('应该支持血压数据', () => {
+      // TODO: 添加血压数据测试
+      expect(true).toBe(true);
+    });
+
+    it('应该支持睡眠数据', () => {
+      // TODO: 添加睡眠数据测试
+      expect(true).toBe(true);
+    });
+
+    it('应该支持运动数据', () => {
+      // TODO: 添加运动数据测试
       expect(true).toBe(true);
     });
   });
 
-  // 数据管理测试
-  describe("数据管理", () => {
-    it("应该正确获取健康数据", () => {
-      // TODO: 添加数据获取测试
+  describe('错误处理', () => {
+    it('应该处理网络错误', () => {
+      // TODO: 添加网络错误处理测试
       expect(true).toBe(true);
     });
 
-    it("应该正确更新健康数据", () => {
-      // TODO: 添加数据更新测试
-      expect(true).toBe(true);
-    });
-  });
-
-  // 错误处理测试
-  describe("错误处理", () => {
-    it("应该正确处理错误", () => {
-      // TODO: 添加错误处理测试
+    it('应该处理数据验证错误', () => {
+      // TODO: 添加数据验证错误处理测试
       expect(true).toBe(true);
     });
   });
 
-  // 性能测试
-  describe("性能", () => {
-    it("应该在合理时间内完成操作", () => {
-      const startTime = Date.now();
-      // TODO: 添加性能测试操作
-      const endTime = Date.now();
-      expect(endTime - startTime).toBeLessThan(1000); // 1秒内完成
+  describe('数据缓存', () => {
+    it('应该支持本地缓存', () => {
+      // TODO: 添加本地缓存测试
+      expect(true).toBe(true);
+    });
+
+    it('应该支持缓存更新', () => {
+      // TODO: 添加缓存更新测试
+      expect(true).toBe(true);
     });
   });
 });

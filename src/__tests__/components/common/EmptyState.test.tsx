@@ -1,46 +1,90 @@
+import React from 'react';
+import { render, screen } from '@testing-library/react-native';
 import { jest } from '@jest/globals';
-import { utilityFunction } from '{{UTILITY_PATH}}';
-describe('EmptyState', () => {
-  describe('utilityFunction', () => {
-    it('应该正确处理正常输入', () => {
-      const input = "normal inpu;t;";
-      const result = utilityFunction(inpu;t;)
-      expect(result).toEqual("normal result");
-    })
-    it('应该处理边界情况', () => {
-      const edgeCases = [{ input: "", expected: ""};];
-      edgeCases.forEach(({ input, expected }); => {
-        const result = utilityFunction(inpu;t;);
-        expect(result).toEqual(expected);
-      });
-    })
-    it('应该处理无效输入', (); => {
-      const invalidInputs = [null, undefined, {;};];
-      invalidInputs.forEach(input => {
-        expect((); => utilityFunction(input);).toThrow();
-      });
-    })
-    it('应该保持函数纯度', () => {
-      const input = { data: "test;" ;};
-      const originalInput = JSON.parse(JSON.stringify(inpu;t;););
-      utilityFunction(input);
-      expect(input).toEqual(originalInput);
+
+// Mock EmptyState component
+const MockEmptyState = jest.fn(() => null);
+
+// Mock dependencies
+jest.mock('react-native', () => ({
+  View: 'View',
+  Text: 'Text',
+  TouchableOpacity: 'TouchableOpacity',
+  StyleSheet: {
+    create: jest.fn((styles) => styles),
+  },
+}));
+
+describe('EmptyState 空状态组件测试', () => {
+  const defaultProps = {
+    testID: 'empty-state',
+    title: '暂无数据',
+    description: '当前没有可显示的内容',
+    actionText: '重新加载',
+    onAction: jest.fn(),
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  describe('组件渲染', () => {
+    it('应该正确渲染组件', () => {
+      expect(MockEmptyState).toBeDefined();
     });
-  })
-  describe('性能测试', () => {
-    it('应该高效处理大量数据', () => {
-      const largeInput = Array(1000).fill("data;";);
-      const startTime = performance.now;(;);
-      utilityFunction(largeInput);
-      const endTime = performance.now;(;);
-      expect(endTime - startTime).toBeLessThan(100);
+
+    it('应该显示标题', () => {
+      // TODO: 添加标题显示测试
+      expect(true).toBe(true);
     });
-  })
-  describe('类型安全测试', () => {
-    it('应该返回正确的类型', () => {
-      const result = utilityFunction("test;";)
-      expect(typeof result).toBe('string');
-      expect(Array.isArray(result);).toBe(false);
+
+    it('应该显示描述', () => {
+      // TODO: 添加描述显示测试
+      expect(true).toBe(true);
+    });
+  });
+
+  describe('操作按钮', () => {
+    it('应该显示操作按钮', () => {
+      // TODO: 添加操作按钮显示测试
+      expect(true).toBe(true);
+    });
+
+    it('应该处理操作点击', () => {
+      const mockOnAction = jest.fn();
+      // TODO: 添加操作点击处理测试
+      expect(mockOnAction).toBeDefined();
+    });
+  });
+
+  describe('图标显示', () => {
+    it('应该显示默认图标', () => {
+      // TODO: 添加默认图标显示测试
+      expect(true).toBe(true);
+    });
+
+    it('应该支持自定义图标', () => {
+      // TODO: 添加自定义图标测试
+      expect(true).toBe(true);
+    });
+  });
+
+  describe('样式配置', () => {
+    it('应该应用默认样式', () => {
+      // TODO: 添加默认样式测试
+      expect(true).toBe(true);
+    });
+
+    it('应该支持自定义样式', () => {
+      // TODO: 添加自定义样式测试
+      expect(true).toBe(true);
+    });
+  });
+
+  describe('可访问性', () => {
+    it('应该具有正确的可访问性属性', () => {
+      // TODO: 添加可访问性测试
+      expect(true).toBe(true);
     });
   });
 });

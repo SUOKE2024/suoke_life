@@ -429,7 +429,15 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-    command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
+    command: redis-server --appendonly yes --maxmemory 2gb --maxmemory-policy allkeys-lru
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '1.0'
+        reservations:
+          memory: 1G
+          cpus: '0.5'
 
   # ================================
   # PostgreSQL数据库
@@ -440,12 +448,13 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=listen_service_dev
+      - POSTGRES_DB: suoke_life
+      - POSTGRES_USER: suoke_user
+      - POSTGRES_PASSWORD: suoke_password
+      - POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
     volumes:
       - postgres-data:/var/lib/postgresql/data
-      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+      - ./deploy/init-scripts:/docker-entrypoint-initdb.d
     networks:
       - suoke-network
     restart: unless-stopped
@@ -454,6 +463,14 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+          cpus: '2.0'
+        reservations:
+          memory: 2G
+          cpus: '1.0'
 
   # ================================
   # Nginx反向代理
@@ -474,6 +491,14 @@ services:
     restart: unless-stopped
     profiles:
       - prod
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
 
   # ================================
   # Prometheus监控
@@ -485,11 +510,27 @@ services:
       - "9090:9090"
     volumes:
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
     networks:
       - suoke-network
     restart: unless-stopped
     profiles:
       - monitoring
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '1.0'
+        reservations:
+          memory: 512M
+          cpus: '0.5'
 
   # ================================
   # Grafana可视化
@@ -502,7 +543,9 @@ services:
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
     volumes:
-      - ./monitoring/grafana:/var/lib/grafana
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
     depends_on:
       - prometheus
     networks:
@@ -510,6 +553,14 @@ services:
     restart: unless-stopped
     profiles:
       - monitoring
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
 
   # ================================
   # Jaeger链路追踪
@@ -521,12 +572,20 @@ services:
       - "16686:16686"
       - "14268:14268"
     environment:
-      - COLLECTOR_OTLP_ENABLED=true
+      - COLLECTOR_ZIPKIN_HTTP_PORT=9411
     networks:
       - suoke-network
     restart: unless-stopped
     profiles:
       - monitoring
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
 
   # ================================
   # ELK日志收集
@@ -534,19 +593,25 @@ services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.8.0
     container_name: suoke-elasticsearch
+    restart: unless-stopped
     environment:
       - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
       - xpack.security.enabled=false
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ports:
       - "9200:9200"
     volumes:
-      - ./elk/elasticsearch:/usr/share/elasticsearch/data
+      - elasticsearch_data:/usr/share/elasticsearch/data
     networks:
       - suoke-network
-    restart: unless-stopped
-    profiles:
-      - logging
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '2.0'
+        reservations:
+          memory: 1G
+          cpus: '1.0'
 
   logstash:
     image: docker.elastic.co/logstash/logstash:8.8.0
@@ -578,6 +643,14 @@ services:
     restart: unless-stopped
     profiles:
       - logging
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '1.0'
+        reservations:
+          memory: 512M
+          cpus: '0.5'
 
   # ================================
   # 消息队列 (RabbitMQ)
@@ -618,4 +691,50 @@ services:
     restart: unless-stopped
     command: server /data --console-address ":9001"
     profiles:
-      - storage 
+      - storage
+
+volumes:
+  redis_data:
+    driver: local
+  postgres_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  elasticsearch_data:
+    driver: local
+
+# 扩展配置
+x-common-variables: &common-variables
+  PYTHONUNBUFFERED: 1
+  PYTHONPATH: /app
+  TZ: Asia/Shanghai
+
+x-agent-service: &agent-service
+  restart: unless-stopped
+  environment:
+    <<: *common-variables
+    REDIS_URL: redis://redis:6379
+    DATABASE_URL: postgresql://suoke_user:suoke_password@postgres:5432/suoke_life
+    MAX_WORKERS: 8
+    ENABLE_JIT: true
+    CACHE_TTL: 300
+  depends_on:
+    - redis
+    - postgres
+  networks:
+    - suoke-network
+  deploy:
+    resources:
+      limits:
+        memory: 4G
+        cpus: '4.0'
+      reservations:
+        memory: 2G
+        cpus: '2.0'
+  healthcheck:
+    test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+    interval: 30s
+    timeout: 10s
+    retries: 3 

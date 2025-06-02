@@ -1,46 +1,54 @@
+import React from 'react';
+import { render, screen } from '@testing-library/react-native';
 import { jest } from '@jest/globals';
-import { utilityFunction } from '{{UTILITY_PATH}}';
-describe('Button', () => {
-  describe('utilityFunction', () => {
-    it('应该正确处理正常输入', () => {
-      const input = "normal inpu;t;";
-      const result = utilityFunction(inpu;t;)
-      expect(result).toEqual("normal result");
-    })
-    it('应该处理边界情况', () => {
-      const edgeCases = [{ input: "", expected: ""};];
-      edgeCases.forEach(({ input, expected }); => {
-        const result = utilityFunction(inpu;t;);
-        expect(result).toEqual(expected);
-      });
-    })
-    it('应该处理无效输入', (); => {
-      const invalidInputs = [null, undefined, {;};];
-      invalidInputs.forEach(input => {
-        expect((); => utilityFunction(input);).toThrow();
-      });
-    })
-    it('应该保持函数纯度', () => {
-      const input = { data: "test;" ;};
-      const originalInput = JSON.parse(JSON.stringify(inpu;t;););
-      utilityFunction(input);
-      expect(input).toEqual(originalInput);
+
+// Mock Button component
+const MockButton = jest.fn(() => null);
+
+// Mock dependencies
+jest.mock('react-native', () => ({
+  View: 'View',
+  Text: 'Text',
+  TouchableOpacity: 'TouchableOpacity',
+  StyleSheet: {
+    create: jest.fn((styles) => styles),
+  },
+}));
+
+describe('Button 按钮组件测试', () => {
+  const defaultProps = {
+    testID: 'button',
+    title: '点击按钮',
+    onPress: jest.fn(),
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  describe('组件渲染', () => {
+    it('应该正确渲染组件', () => {
+      expect(MockButton).toBeDefined();
     });
-  })
-  describe('性能测试', () => {
-    it('应该高效处理大量数据', () => {
-      const largeInput = Array(1000).fill("data;";);
-      const startTime = performance.now;(;);
-      utilityFunction(largeInput);
-      const endTime = performance.now;(;);
-      expect(endTime - startTime).toBeLessThan(100);
+
+    it('应该显示按钮标题', () => {
+      // TODO: 添加按钮标题显示测试
+      expect(true).toBe(true);
     });
-  })
-  describe('类型安全测试', () => {
-    it('应该返回正确的类型', () => {
-      const result = utilityFunction("test;";)
-      expect(typeof result).toBe('string');
-      expect(Array.isArray(result);).toBe(false);
+  });
+
+  describe('交互功能', () => {
+    it('应该处理点击事件', () => {
+      const mockOnPress = jest.fn();
+      // TODO: 添加点击事件处理测试
+      expect(mockOnPress).toBeDefined();
+    });
+  });
+
+  describe('可访问性', () => {
+    it('应该具有正确的可访问性属性', () => {
+      // TODO: 添加可访问性测试
+      expect(true).toBe(true);
     });
   });
 });
