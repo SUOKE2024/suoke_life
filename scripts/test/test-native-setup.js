@@ -81,7 +81,7 @@ try {
     'android/app/build.gradle',
     'utf8'
   );
-  
+
   if (androidManifest.includes('com.suokelife') || buildGradle.includes('com.suokelife')) {
     console.log('✅ Android 包名配置正确');
   } else {

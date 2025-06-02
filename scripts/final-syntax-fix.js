@@ -68,7 +68,7 @@ files.forEach(filePath => {
 
     // 特殊处理：修复注释格式
     content = content.replace(/\/\*\s*([^*\n]+)\s*\*\//g, '// $1');
-    
+
     // 特殊处理：修复对象属性定义
     content = content.replace(/(\w+):\s*([^,}\n]+)(?=\n\s*\w+:)/g, '$1: $2,');
 
@@ -93,4 +93,4 @@ console.log(`📁 总文件数: ${files.length}`);
 console.log(`🔧 已修复文件: ${filesFixed}`);
 console.log(`✨ 总修复数: ${totalFixed}`);
 console.log(`📈 修复率: ${Math.round((totalFixed / files.length) * 100)}%`);
-console.log('🎉 最终语法修复完成！建议运行代码质量检查验证结果。'); 
+console.log('🎉 最终语法修复完成！建议运行代码质量检查验证结果。');

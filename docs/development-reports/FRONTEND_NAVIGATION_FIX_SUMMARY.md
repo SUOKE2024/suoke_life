@@ -139,7 +139,7 @@ App.tsx
 ├── ErrorBoundary
 └── NavigationContainer
     └── AppNavigator
-        ├── SplashScreen (初始化)
+        ├── (启动屏幕已删除)
         └── MainNavigator
             ├── MainTabNavigator (底部标签)
             │   ├── HomeScreen

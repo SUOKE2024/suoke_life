@@ -276,7 +276,6 @@ if (args.includes("--help") || args.includes("-h")) {
   console.log("  npm run dev                 # 启动 Android 开发环境");
   console.log("  npm run dev android         # 启动 Android 开发环境");
   console.log("  npm run dev ios             # 启动 iOS 开发环境");
-  console.log("");
   console.log("此脚本将自动:");
   console.log("  1. 启动 Metro bundler (如果未运行)");
   console.log("  2. 检查开发环境");

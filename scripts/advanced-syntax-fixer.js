@@ -76,7 +76,7 @@ class AdvancedSyntaxFixer {
    */
   analyzeTypeScriptErrors() {
     try {
-      execSync('npx tsc --noEmit --skipLibCheck', { 
+      execSync('npx tsc --noEmit --skipLibCheck', {
         stdio: 'pipe',
         cwd: process.cwd()
       });
@@ -93,7 +93,7 @@ class AdvancedSyntaxFixer {
   parseTypeScriptErrors(output) {
     const errors = [];
     const lines = output.split('\n');
-    
+
     for (const line of lines) {
       const match = line.match(/^(.+?)\((\d+),(\d+)\):\s*error\s+TS(\d+):\s*(.+)$/);
       if (match) {
@@ -107,7 +107,7 @@ class AdvancedSyntaxFixer {
         });
       }
     }
-    
+
     return errors;
   }
 
@@ -123,13 +123,13 @@ class AdvancedSyntaxFixer {
       // 应用所有修复模式
       for (const pattern of this.fixPatterns) {
         const beforeLength = content.length;
-        
+
         if (typeof pattern.replacement === 'function') {
           content = content.replace(pattern.pattern, pattern.replacement);
         } else {
           content = content.replace(pattern.pattern, pattern.replacement);
         }
-        
+
         if (content.length !== beforeLength || content !== originalContent) {
           fixesApplied.push(pattern.name);
         }
@@ -137,10 +137,10 @@ class AdvancedSyntaxFixer {
 
       // 特殊修复：JSX语法错误
       content = this.fixJSXSyntax(content);
-      
+
       // 特殊修复：导入语句
       content = this.fixImportStatements(content);
-      
+
       // 特殊修复：类型定义
       content = this.fixTypeDefinitions(content);
 
@@ -156,7 +156,7 @@ class AdvancedSyntaxFixer {
         console.log(`   应用修复: ${fixesApplied.join(', ')}`);
         return true;
       }
-      
+
       return false;
     } catch (error) {
       console.error(`❌ 修复文件失败: ${filePath}`, error.message);
@@ -258,14 +258,14 @@ class AdvancedSyntaxFixer {
    */
   findTypeScriptFiles(dir) {
     const files = [];
-    
+
     try {
       const items = fs.readdirSync(dir);
-      
+
       for (const item of items) {
         const fullPath = path.join(dir, item);
         const stat = fs.statSync(fullPath);
-        
+
         if (stat.isDirectory()) {
           if (!['node_modules', '.git', '.expo', 'android', 'ios', 'Pods'].includes(item)) {
             files.push(...this.findTypeScriptFiles(fullPath));
@@ -277,7 +277,7 @@ class AdvancedSyntaxFixer {
     } catch (error) {
       console.error(`读取目录失败: ${dir}`, error.message);
     }
-    
+
     return files;
   }
 
@@ -286,28 +286,28 @@ class AdvancedSyntaxFixer {
    */
   async fix() {
     console.log('🔧 开始高级TypeScript语法修复...\n');
-    
+
     const projectRoot = process.cwd();
-    
+
     // 第一步：分析当前错误
     console.log('📊 分析TypeScript编译错误...');
     const errors = this.analyzeTypeScriptErrors();
     console.log(`发现 ${errors.length} 个编译错误`);
-    
+
     // 第二步：查找所有TypeScript文件
     const tsFiles = this.findTypeScriptFiles(projectRoot);
     console.log(`📁 找到 ${tsFiles.length} 个TypeScript文件`);
-    
+
     // 第三步：修复文件
     console.log('\n🔨 开始修复文件...');
     for (const file of tsFiles) {
       this.fixFile(file);
     }
-    
+
     // 第四步：再次检查错误
     console.log('\n🔍 验证修复结果...');
     const remainingErrors = this.analyzeTypeScriptErrors();
-    
+
     this.generateReport(errors.length, remainingErrors.length);
   }
 
@@ -317,13 +317,13 @@ class AdvancedSyntaxFixer {
   generateReport(initialErrors, remainingErrors) {
     console.log('\n📊 高级语法修复报告');
     console.log('='.repeat(50));
-    
+
     console.log(`📈 初始错误数量: ${initialErrors}`);
     console.log(`📉 剩余错误数量: ${remainingErrors}`);
     console.log(`✅ 修复的错误数量: ${initialErrors - remainingErrors}`);
     console.log(`📁 修复的文件数量: ${this.fixedFiles.length}`);
     console.log(`❌ 修复失败的文件: ${this.errors.length}`);
-    
+
     if (this.fixedFiles.length > 0) {
       console.log('\n📝 修复的文件详情:');
       this.fixedFiles.forEach(file => {
@@ -332,14 +332,14 @@ class AdvancedSyntaxFixer {
         console.log(`    内容变化: ${file.changeSize > 0 ? '+' : ''}${file.changeSize} 字符`);
       });
     }
-    
+
     if (this.errors.length > 0) {
       console.log('\n❌ 修复失败的文件:');
       this.errors.forEach(error => {
         console.log(`  ${error.file}: ${error.error}`);
       });
     }
-    
+
     // 保存详细报告
     const report = {
       timestamp: new Date().toISOString(),
@@ -349,21 +349,21 @@ class AdvancedSyntaxFixer {
         fixedErrors: initialErrors - remainingErrors,
         fixedFiles: this.fixedFiles.length,
         failedFiles: this.errors.length,
-        successRate: this.fixedFiles.length > 0 ? 
+        successRate: this.fixedFiles.length > 0 ?
           ((initialErrors - remainingErrors) / initialErrors * 100).toFixed(2) + '%' : '0%'
       },
       fixedFiles: this.fixedFiles,
       errors: this.errors
     };
-    
+
     fs.writeFileSync(
       'ADVANCED_SYNTAX_FIX_REPORT.json',
       JSON.stringify(report, null, 2),
       'utf8'
     );
-    
+
     console.log('\n📄 详细报告已保存到: ADVANCED_SYNTAX_FIX_REPORT.json');
-    
+
     if (remainingErrors < initialErrors) {
       console.log('\n🎉 语法修复取得进展！');
     } else {
@@ -378,4 +378,4 @@ if (require.main === module) {
   fixer.fix().catch(console.error);
 }
 
-module.exports = AdvancedSyntaxFixer; 
+module.exports = AdvancedSyntaxFixer;

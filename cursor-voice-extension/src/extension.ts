@@ -40,7 +40,7 @@ async function startVoiceRecognition() {
     try {
         await voiceService.startRecognition();
         vscode.window.showInformationMessage('语音识别已开始');
-        
+
         // 监听语音识别结果/        voiceService.onRecognitionResult(async (text: string) => {
             await handleVoiceCommand(text);
         });
@@ -62,7 +62,7 @@ async function startVideoInteraction() {
     try {
         await videoService.startVideoCapture();
         vscode.window.showInformationMessage('视频交互已开始');
-        
+
         // 监听手势识别结果/        videoService.onGestureDetected((gesture: string) => {
             handleGestureCommand(gesture);
         });
@@ -81,7 +81,7 @@ async function toggleVoiceMode() {
 
 async function handleVoiceCommand(text: string) {
     console.log(`收到语音命令: ${text}`);
-    
+
     try {
         // 使用 AI 助手解析语音命令/        const command = await aiService.parseVoiceCommand(text);
         await executeCommand(command);
@@ -93,7 +93,7 @@ async function handleVoiceCommand(text: string) {
 
 function handleGestureCommand(gesture: string) {
     console.log(`检测到手势: ${gesture}`);
-    
+
     switch (gesture) {
         case 'swipe_left':
             vscode.commands.executeCommand('workbench.action.previousEditor');
@@ -181,12 +181,12 @@ async function handleNavigation(command: any) {
 async function handleAIChat(command: any) {
     try {
         const response = await aiService.chat(command.message);
-        
+
         // 创建一个新的输出通道显示 AI 回复/        const outputChannel = vscode.window.createOutputChannel('Cursor AI Assistant');
         outputChannel.appendLine(`用户: ${command.message}`);
         outputChannel.appendLine(`AI: ${response}`);
         outputChannel.show();
-        
+
         // 可选：使用语音合成播放回复/        if (vscode.workspace.getConfiguration('cursor-voice').get('enableVoiceFeedback')) {
             await voiceService.speak(response);
         }
@@ -216,4 +216,4 @@ export function deactivate() {
     if (aiService) {
         aiService.dispose();
     }
-} 
+}

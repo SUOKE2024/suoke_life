@@ -14,7 +14,7 @@ console.log('=' * 50);
 // 检查项目结构
 function checkProjectStructure() {
   console.log('\n📁 检查项目结构...');
-  
+
   const requiredDirs = [
     'src',
     'src/screens',
@@ -32,7 +32,7 @@ function checkProjectStructure() {
   ];
 
   let allDirsExist = true;
-  
+
   requiredDirs.forEach(dir => {
     if (fs.existsSync(dir)) {
       console.log(`✅ ${dir}`);
@@ -48,7 +48,7 @@ function checkProjectStructure() {
 // 检查关键文件
 function checkKeyFiles() {
   console.log('\n📄 检查关键文件...');
-  
+
   const requiredFiles = [
     'src/App.tsx',
     'src/navigation/AppNavigator.tsx',
@@ -66,7 +66,7 @@ function checkKeyFiles() {
   ];
 
   let allFilesExist = true;
-  
+
   requiredFiles.forEach(file => {
     if (fs.existsSync(file)) {
       console.log(`✅ ${file}`);
@@ -82,7 +82,7 @@ function checkKeyFiles() {
 // 检查智能体集成
 function checkAgentIntegration() {
   console.log('\n🤖 检查智能体集成...');
-  
+
   const agentFiles = [
     'src/components/common/AgentChatInterface.tsx',
     'src/components/common/ContactsList.tsx',
@@ -91,7 +91,7 @@ function checkAgentIntegration() {
   ];
 
   let agentIntegrationComplete = true;
-  
+
   agentFiles.forEach(file => {
     if (fs.existsSync(file)) {
       console.log(`✅ ${file}`);
@@ -107,7 +107,7 @@ function checkAgentIntegration() {
 // 检查高级功能
 function checkAdvancedFeatures() {
   console.log('\n🚀 检查高级功能...');
-  
+
   const advancedFiles = [
     'src/screens/life/components/BlockchainHealthData.tsx',
     'src/screens/life/components/ARConstitutionVisualization.tsx',
@@ -118,7 +118,7 @@ function checkAdvancedFeatures() {
   ];
 
   let advancedFeaturesComplete = true;
-  
+
   advancedFiles.forEach(file => {
     if (fs.existsSync(file)) {
       console.log(`✅ ${file}`);
@@ -134,10 +134,10 @@ function checkAdvancedFeatures() {
 // 检查package.json依赖
 function checkDependencies() {
   console.log('\n📦 检查依赖配置...');
-  
+
   try {
     const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
-    
+
     const requiredDeps = [
       '@react-navigation/native',
       '@react-navigation/native-stack',
@@ -151,7 +151,7 @@ function checkDependencies() {
     ];
 
     let allDepsPresent = true;
-    
+
     requiredDeps.forEach(dep => {
       if (packageJson.dependencies[dep]) {
         console.log(`✅ ${dep} - ${packageJson.dependencies[dep]}`);
@@ -192,7 +192,7 @@ function main() {
 
   console.log('\n' + '=' * 50);
   console.log(`📊 检查结果: ${passedChecks}/${totalChecks} 通过`);
-  
+
   if (passedChecks === totalChecks) {
     console.log('🎉 所有检查通过！应用已准备就绪');
     console.log('\n🚀 启动应用:');
@@ -201,10 +201,10 @@ function main() {
   } else {
     console.log('❌ 部分检查失败，请修复上述问题');
   }
-  
+
   console.log('=' * 50);
   process.exit(passedChecks === totalChecks ? 0 : 1);
 }
 
 // 运行检查
-main(); 
+main();

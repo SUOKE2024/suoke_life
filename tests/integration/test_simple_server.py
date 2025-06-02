@@ -26,7 +26,7 @@ def create_simple_app() -> FastAPI:
         description="简化的无障碍服务用于测试",
         version="0.1.0"
     )
-    
+
     @app.get("/")
     async def root():
         return {
@@ -34,14 +34,14 @@ def create_simple_app() -> FastAPI:
             "status": "running",
             "message": "无障碍服务测试版本正在运行"
         }
-    
+
     @app.get("/health")
     async def health_check():
         return {
             "status": "healthy",
             "service": "accessibility-service-test"
         }
-    
+
     @app.get("/api/v1/accessibility/test")
     async def test_endpoint():
         return {
@@ -49,21 +49,21 @@ def create_simple_app() -> FastAPI:
             "message": "无障碍服务API测试成功",
             "features": [
                 "导盲服务",
-                "语音辅助", 
+                "语音辅助",
                 "屏幕阅读",
                 "内容转换"
             ]
         }
-    
+
     return app
 
 def main():
     """主函数"""
     logger.info("启动简化的无障碍服务测试服务器...")
-    
+
     try:
         app = create_simple_app()
-        
+
         logger.info("服务器将在 http://localhost:50051 启动")
         uvicorn.run(
             app,
@@ -76,4 +76,4 @@ def main():
         sys.exit(1)
 
 if __name__ == "__main__":
-    main() 
+    main()

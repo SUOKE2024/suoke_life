@@ -15,7 +15,7 @@ const ultimateFixRules = [
     replacement: (match, indent1, prop1, value1, newline, prop2) => {
       const trimmedValue = value1.trim();
       // 检查是否已经有逗号、分号或其他结束符
-      if (!trimmedValue.endsWith(',') && !trimmedValue.endsWith(';') && 
+      if (!trimmedValue.endsWith(',') && !trimmedValue.endsWith(';') &&
           !trimmedValue.endsWith('{') && !trimmedValue.endsWith('[') &&
           !trimmedValue.endsWith('}') && !trimmedValue.endsWith(']') &&
           !trimmedValue.endsWith(')')) {
@@ -89,27 +89,27 @@ const ultimateFixRules = [
 function deepAnalyzeAndFix(content) {
   const lines = content.split('\n');
   const fixedLines = [];
-  
+
   for (let i = 0; i < lines.length; i++) {
     let line = lines[i];
     const nextLine = lines[i + 1];
-    
+
     if (nextLine) {
       // 检查当前行是否是对象属性定义
       const currentMatch = line.match(/^(\s*)(\w+):\s*([^,{}\[\]\n;]+?)$/);
       const nextMatch = nextLine.match(/^(\s*)(\w+):/);
       const nextCloseBrace = nextLine.trim().match(/^[}\]]/);
-      
+
       if (currentMatch && nextMatch && !nextCloseBrace) {
         const [, indent, prop, value] = currentMatch;
         const trimmedValue = value.trim();
-        
+
         // 检查缩进级别是否相同（同级属性）
         const currentIndent = indent.length;
         const nextIndent = nextMatch[1].length;
-        
-        if (currentIndent === nextIndent && 
-            !trimmedValue.endsWith(',') && 
+
+        if (currentIndent === nextIndent &&
+            !trimmedValue.endsWith(',') &&
             !trimmedValue.endsWith(';') &&
             !trimmedValue.endsWith('{') &&
             !trimmedValue.endsWith('[') &&
@@ -119,20 +119,20 @@ function deepAnalyzeAndFix(content) {
           line = `${indent}${prop}: ${trimmedValue},`;
         }
       }
-      
+
       // 检查接口定义
       const interfaceMatch = line.match(/^(\s*)(\w+)(\??):\s*([^,{}\[\]\n;]+?)$/);
       const nextInterfaceMatch = nextLine.match(/^(\s*)(\w+)(\??):/);
-      
+
       if (interfaceMatch && nextInterfaceMatch && !nextCloseBrace) {
         const [, indent, prop, optional, type] = interfaceMatch;
         const trimmedType = type.trim();
-        
+
         const currentIndent = indent.length;
         const nextIndent = nextInterfaceMatch[1].length;
-        
-        if (currentIndent === nextIndent && 
-            !trimmedType.endsWith(',') && 
+
+        if (currentIndent === nextIndent &&
+            !trimmedType.endsWith(',') &&
             !trimmedType.endsWith(';') &&
             !trimmedType.endsWith('{') &&
             !trimmedType.endsWith('[') &&
@@ -145,11 +145,11 @@ function deepAnalyzeAndFix(content) {
       // 检查StyleSheet对象属性
       const styleMatch = line.match(/^(\s*)(\w+):\s*\{$/);
       const nextStyleMatch = nextLine.match(/^(\s*)(\w+):\s*\{/);
-      
+
       if (styleMatch && nextStyleMatch) {
         const currentIndent = styleMatch[1].length;
         const nextIndent = nextStyleMatch[1].length;
-        
+
         if (currentIndent === nextIndent) {
           // 在前一行添加逗号
           if (i > 0 && !fixedLines[fixedLines.length - 1].endsWith(',')) {
@@ -161,10 +161,10 @@ function deepAnalyzeAndFix(content) {
         }
       }
     }
-    
+
     fixedLines.push(line);
   }
-  
+
   return fixedLines.join('\n');
 }
 
@@ -390,4 +390,4 @@ console.log(`📁 目标文件数: ${errorFiles.length}`);
 console.log(`🔧 已修复文件: ${fixedFileCount}`);
 console.log(`✨ 总修复数: ${totalFixCount}`);
 console.log(`📈 修复率: ${((fixedFileCount / errorFiles.length) * 100).toFixed(1)}%`);
-console.log(`🎯 终极对象属性修复完成！建议运行代码质量检查验证结果。`); 
+console.log(`🎯 终极对象属性修复完成！建议运行代码质量检查验证结果。`);

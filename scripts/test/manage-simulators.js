@@ -17,7 +17,6 @@ function showHelp() {
   console.log("  npm run simulator create            # 创建推荐的模拟器");
   console.log("  npm run simulator reset             # 重置所有模拟器");
   console.log("  npm run simulator install-tools     # 安装调试工具");
-  console.log("");
 }
 
 function listAndroidEmulators() {
@@ -309,7 +308,6 @@ function installDebugTools() {
 switch (command) {
   case "list":
     listAndroidEmulators();
-    console.log("");
     listIOSSimulators();
     break;
 

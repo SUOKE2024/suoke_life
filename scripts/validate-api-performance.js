@@ -30,7 +30,7 @@ class ApiClient {
   async makeRequest(endpoint, options = {}) {
     this.requestCount++;
     const cacheKey = `${endpoint}_${JSON.stringify(options)}`;
-    
+
     // 检查缓存
     if (this.cache.has(cacheKey) && !options.skipCache) {
       this.cacheHits++;
@@ -71,14 +71,14 @@ class ApiClient {
   // 带重试的API请求
   async requestWithRetry(endpoint, options = {}, maxRetries = 3) {
     let lastError;
-    
+
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
         return await this.makeRequest(endpoint, options);
       } catch (error) {
         lastError = error;
         this.retryCount++;
-        
+
         if (attempt < maxRetries) {
           const retryDelay = Math.pow(2, attempt - 1) * 1000; // 指数退避
           console.log(`🔄 重试 ${attempt}/${maxRetries} - ${endpoint} (${retryDelay}ms后)`);
@@ -86,7 +86,7 @@ class ApiClient {
         }
       }
     }
-    
+
     throw lastError;
   }
 
@@ -126,13 +126,13 @@ const testEndpoints = [
 // 运行性能测试
 async function runPerformanceTest() {
   const client = new ApiClient();
-  
+
   console.log('\n📊 开始性能测试...\n');
 
   // 第一轮：无缓存请求
   console.log('🔥 第一轮：无缓存请求');
   const round1Start = Date.now();
-  
+
   for (const endpoint of testEndpoints) {
     try {
       const response = await client.requestWithRetry(endpoint);
@@ -141,7 +141,7 @@ async function runPerformanceTest() {
       console.log(`❌ ${endpoint} - ${error.message}`);
     }
   }
-  
+
   const round1Duration = Date.now() - round1Start;
   console.log(`\n⏱️  第一轮总耗时: ${round1Duration}ms\n`);
 
@@ -151,7 +151,7 @@ async function runPerformanceTest() {
   // 第二轮：缓存命中请求
   console.log('💾 第二轮：缓存命中请求');
   const round2Start = Date.now();
-  
+
   for (const endpoint of testEndpoints) {
     try {
       const response = await client.requestWithRetry(endpoint);
@@ -160,7 +160,7 @@ async function runPerformanceTest() {
       console.log(`❌ ${endpoint} - ${error.message}`);
     }
   }
-  
+
   const round2Duration = Date.now() - round2Start;
   console.log(`\n⏱️  第二轮总耗时: ${round2Duration}ms\n`);
 
@@ -179,7 +179,7 @@ async function runPerformanceTest() {
 // 运行错误处理测试
 async function runErrorHandlingTest() {
   console.log('🛡️  错误处理和重试机制测试...\n');
-  
+
   const client = new ApiClient();
   const errorEndpoints = [
     '/error/500',
@@ -205,15 +205,15 @@ async function runErrorHandlingTest() {
 // 运行并发测试
 async function runConcurrencyTest() {
   console.log('\n⚡ 并发请求测试...\n');
-  
+
   const client = new ApiClient();
   const concurrentRequests = 10;
   const endpoint = '/health';
 
   console.log(`🚀 发起 ${concurrentRequests} 个并发请求到 ${endpoint}`);
-  
+
   const startTime = Date.now();
-  const promises = Array(concurrentRequests).fill().map((_, index) => 
+  const promises = Array(concurrentRequests).fill().map((_, index) =>
     client.requestWithRetry(`${endpoint}?id=${index}`)
       .then(response => ({ success: true, response }))
       .catch(error => ({ success: false, error }))
@@ -244,10 +244,10 @@ async function main() {
   try {
     // 性能测试
     const performanceResults = await runPerformanceTest();
-    
+
     // 错误处理测试
     const errorClient = await runErrorHandlingTest();
-    
+
     // 并发测试
     const concurrencyResults = await runConcurrencyTest();
 
@@ -287,7 +287,7 @@ async function main() {
     console.log(`❌ 错误率: ${report.errorHandling.stats.errorRate}%`);
     console.log(`⚡ 并发成功率: ${(concurrencyResults.successful / concurrencyResults.total * 100).toFixed(1)}%`);
     console.log(`\n📄 详细报告已保存到: ${reportPath}`);
-    
+
     console.log('\n🎯 优化建议:');
     report.summary.recommendations.forEach(rec => console.log(`   ${rec}`));
 
@@ -302,4 +302,4 @@ async function main() {
 // 运行测试
 if (require.main === module) {
   main();
-} 
+}

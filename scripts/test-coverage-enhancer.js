@@ -26,25 +26,25 @@ class TestCoverageEnhancer {
     try {
       // 1. 分析当前测试覆盖率
       await this.analyzeCoverage();
-      
+
       // 2. 生成缺失的测试文件
       await this.generateMissingTests();
-      
+
       // 3. 增强现有测试
       await this.enhanceExistingTests();
-      
+
       // 4. 生成集成测试
       await this.generateIntegrationTests();
-      
+
       // 5. 生成性能测试
       await this.generatePerformanceTests();
-      
+
       // 6. 更新测试配置
       await this.updateTestConfig();
-      
+
       // 7. 生成测试报告
       this.generateReport();
-      
+
     } catch (error) {
       console.error('❌ 测试覆盖率提升过程中出现错误:', error.message);
       process.exit(1);
@@ -56,7 +56,7 @@ class TestCoverageEnhancer {
    */
   async analyzeCoverage() {
     console.log('📊 分析当前测试覆盖率...');
-    
+
     try {
       execSync('npm run test:coverage -- --silent', { stdio: 'pipe' });
       console.log('✅ 测试覆盖率分析完成');
@@ -70,15 +70,15 @@ class TestCoverageEnhancer {
    */
   async generateMissingTests() {
     console.log('🔧 生成缺失的测试文件...');
-    
+
     const sourceFiles = this.getAllSourceFiles();
     const existingTests = this.getExistingTestFiles();
-    
+
     let generatedCount = 0;
-    
+
     for (const sourceFile of sourceFiles) {
       const testFile = this.getTestFilePath(sourceFile);
-      
+
       if (!existingTests.includes(testFile)) {
         try {
           await this.generateTestFile(sourceFile, testFile);
@@ -89,7 +89,7 @@ class TestCoverageEnhancer {
         }
       }
     }
-    
+
     console.log(`✅ 生成了 ${generatedCount} 个测试文件`);
   }
 
@@ -98,10 +98,10 @@ class TestCoverageEnhancer {
    */
   async enhanceExistingTests() {
     console.log('⚡ 增强现有测试...');
-    
+
     const existingTests = this.getExistingTestFiles();
     let enhancedCount = 0;
-    
+
     for (const testFile of existingTests) {
       try {
         const enhanced = await this.enhanceTestFile(testFile);
@@ -112,7 +112,7 @@ class TestCoverageEnhancer {
         this.errors.push(`增强测试失败: ${testFile} - ${error.message}`);
       }
     }
-    
+
     console.log(`✅ 增强了 ${enhancedCount} 个测试文件`);
   }
 
@@ -121,23 +121,23 @@ class TestCoverageEnhancer {
    */
   async generateIntegrationTests() {
     console.log('🔗 生成集成测试...');
-    
+
     const integrationTests = [
       'agent-collaboration.integration.test.ts',
       'five-diagnosis.integration.test.ts',
       'blockchain-health.integration.test.ts',
       'user-journey.integration.test.ts'
     ];
-    
+
     for (const testName of integrationTests) {
       const testPath = path.join(this.testDir, 'integration', testName);
-      
+
       if (!fs.existsSync(testPath)) {
         await this.generateIntegrationTest(testName, testPath);
         this.generatedTests.push(testPath);
       }
     }
-    
+
     console.log(`✅ 生成了 ${integrationTests.length} 个集成测试`);
   }
 
@@ -146,23 +146,23 @@ class TestCoverageEnhancer {
    */
   async generatePerformanceTests() {
     console.log('🚀 生成性能测试...');
-    
+
     const performanceTests = [
       'component-rendering.performance.test.ts',
       'agent-response.performance.test.ts',
       'data-processing.performance.test.ts',
       'memory-usage.performance.test.ts'
     ];
-    
+
     for (const testName of performanceTests) {
       const testPath = path.join(this.testDir, 'performance', testName);
-      
+
       if (!fs.existsSync(testPath)) {
         await this.generatePerformanceTest(testName, testPath);
         this.generatedTests.push(testPath);
       }
     }
-    
+
     console.log(`✅ 生成了 ${performanceTests.length} 个性能测试`);
   }
 
@@ -176,9 +176,9 @@ class TestCoverageEnhancer {
     const isHook = relativePath.includes('hooks/');
     const isService = relativePath.includes('services/');
     const isUtil = relativePath.includes('utils/');
-    
+
     let template = '';
-    
+
     if (isComponent) {
       template = this.generateComponentTestTemplate(fileName, relativePath);
     } else if (isHook) {
@@ -190,13 +190,13 @@ class TestCoverageEnhancer {
     } else {
       template = this.generateGenericTestTemplate(fileName, relativePath);
     }
-    
+
     // 确保目录存在
     const testDir = path.dirname(testFile);
     if (!fs.existsSync(testDir)) {
       fs.mkdirSync(testDir, { recursive: true });
     }
-    
+
     fs.writeFileSync(testFile, template);
   }
 
@@ -231,7 +231,7 @@ describe('${fileName}', () => {
           <${fileName} />
         </TestWrapper>
       );
-      
+
       // TODO: 添加具体的渲染断言
       expect(true).toBe(true);
     });
@@ -240,13 +240,13 @@ describe('${fileName}', () => {
       const mockProps = {
         // TODO: 添加组件所需的props
       };
-      
+
       const { getByTestId } = render(
         <TestWrapper>
           <${fileName} {...mockProps} />
         </TestWrapper>
       );
-      
+
       // TODO: 添加props处理断言
       expect(true).toBe(true);
     });
@@ -260,13 +260,13 @@ describe('${fileName}', () => {
           <${fileName} />
         </TestWrapper>
       );
-      
+
       // TODO: 添加交互测试
       // fireEvent.press(getByTestId('button'));
       // await waitFor(() => {
       //   expect(getByTestId('result')).toBeTruthy();
       // });
-      
+
       expect(true).toBe(true);
     });
   });
@@ -324,7 +324,7 @@ describe('${fileName}', () => {
   describe('初始状态', () => {
     it('应该返回正确的初始状态', () => {
       const { result } = renderHook(() => ${fileName}(), { wrapper });
-      
+
       // TODO: 添加初始状态断言
       expect(result.current).toBeDefined();
     });
@@ -334,11 +334,11 @@ describe('${fileName}', () => {
   describe('状态更新', () => {
     it('应该正确更新状态', async () => {
       const { result } = renderHook(() => ${fileName}(), { wrapper });
-      
+
       await act(async () => {
         // TODO: 添加状态更新操作
       });
-      
+
       // TODO: 添加状态更新断言
       expect(true).toBe(true);
     });
@@ -348,7 +348,7 @@ describe('${fileName}', () => {
   describe('副作用', () => {
     it('应该正确处理副作用', async () => {
       const { result } = renderHook(() => ${fileName}(), { wrapper });
-      
+
       // TODO: 添加副作用测试
       expect(true).toBe(true);
     });
@@ -358,7 +358,7 @@ describe('${fileName}', () => {
   describe('错误处理', () => {
     it('应该正确处理错误', async () => {
       const { result } = renderHook(() => ${fileName}(), { wrapper });
-      
+
       // TODO: 添加错误处理测试
       expect(true).toBe(true);
     });
@@ -368,9 +368,9 @@ describe('${fileName}', () => {
   describe('清理', () => {
     it('应该正确清理资源', () => {
       const { unmount } = renderHook(() => ${fileName}(), { wrapper });
-      
+
       unmount();
-      
+
       // TODO: 添加清理断言
       expect(true).toBe(true);
     });
@@ -450,9 +450,9 @@ describe('${fileName}', () => {
   describe('性能', () => {
     it('应该在合理时间内完成操作', async () => {
       const startTime = Date.now();
-      
+
       // TODO: 添加性能测试操作
-      
+
       const endTime = Date.now();
       expect(endTime - startTime).toBeLessThan(1000); // 1秒内完成
     });
@@ -613,7 +613,7 @@ describe('${testName.replace('.integration.test.ts', '')} 集成测试', () => {
     if (!fs.existsSync(testDir)) {
       fs.mkdirSync(testDir, { recursive: true });
     }
-    
+
     fs.writeFileSync(testPath, template);
   }
 
@@ -644,12 +644,12 @@ describe('${testName.replace('.performance.test.ts', '')} 性能测试', () => {
   describe('渲染性能', () => {
     it('组件渲染时间应在阈值内', async () => {
       const startTime = performance.now();
-      
+
       // TODO: 添加组件渲染测试
-      
+
       const endTime = performance.now();
       const renderTime = endTime - startTime;
-      
+
       expect(renderTime).toBeLessThan(PERFORMANCE_THRESHOLD.RENDER_TIME);
     });
   });
@@ -657,12 +657,12 @@ describe('${testName.replace('.performance.test.ts', '')} 性能测试', () => {
   describe('响应性能', () => {
     it('API响应时间应在阈值内', async () => {
       const startTime = performance.now();
-      
+
       // TODO: 添加API调用测试
-      
+
       const endTime = performance.now();
       const responseTime = endTime - startTime;
-      
+
       expect(responseTime).toBeLessThan(PERFORMANCE_THRESHOLD.RESPONSE_TIME);
     });
   });
@@ -679,14 +679,14 @@ describe('${testName.replace('.performance.test.ts', '')} 性能测试', () => {
     it('应该能够处理并发请求', async () => {
       const concurrentRequests = 10;
       const promises = [];
-      
+
       for (let i = 0; i < concurrentRequests; i++) {
         promises.push(
           // TODO: 添加并发请求测试
           Promise.resolve(true)
         );
       }
-      
+
       const results = await Promise.all(promises);
       expect(results.every(result => result === true)).toBe(true);
     });
@@ -698,7 +698,7 @@ describe('${testName.replace('.performance.test.ts', '')} 性能测试', () => {
     if (!fs.existsSync(testDir)) {
       fs.mkdirSync(testDir, { recursive: true });
     }
-    
+
     fs.writeFileSync(testPath, template);
   }
 
@@ -707,20 +707,20 @@ describe('${testName.replace('.performance.test.ts', '')} 性能测试', () => {
    */
   async enhanceTestFile(testFile) {
     const content = fs.readFileSync(testFile, 'utf8');
-    
+
     // 检查是否需要增强
-    const needsEnhancement = 
+    const needsEnhancement =
       !content.includes('describe(') ||
       !content.includes('it(') ||
       content.split('it(').length < 3; // 少于3个测试用例
-    
+
     if (needsEnhancement) {
       // 添加更多测试用例
       const enhancedContent = this.addTestCases(content);
       fs.writeFileSync(testFile, enhancedContent);
       return true;
     }
-    
+
     return false;
   }
 
@@ -740,7 +740,7 @@ describe('${testName.replace('.performance.test.ts', '')} 性能测试', () => {
   });
 `;
     }
-    
+
     if (!content.includes('边界条件测试')) {
       content += `
   // 边界条件测试
@@ -752,7 +752,7 @@ describe('${testName.replace('.performance.test.ts', '')} 性能测试', () => {
   });
 `;
     }
-    
+
     return content;
   }
 
@@ -761,7 +761,7 @@ describe('${testName.replace('.performance.test.ts', '')} 性能测试', () => {
    */
   async updateTestConfig() {
     console.log('⚙️  更新测试配置...');
-    
+
     const jestConfig = {
       preset: 'react-native',
       setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
@@ -809,10 +809,10 @@ describe('${testName.replace('.performance.test.ts', '')} 性能测试', () => {
         '\\.(css|less|scss|sass)$': 'identity-obj-proxy'
       }
     };
-    
+
     const configPath = path.join(__dirname, '../jest.config.enhanced.js');
     const configContent = `module.exports = ${JSON.stringify(jestConfig, null, 2)};`;
-    
+
     fs.writeFileSync(configPath, configContent);
     console.log('✅ 测试配置更新完成');
   }
@@ -822,14 +822,14 @@ describe('${testName.replace('.performance.test.ts', '')} 性能测试', () => {
    */
   getAllSourceFiles() {
     const files = [];
-    
+
     function traverse(dir) {
       const items = fs.readdirSync(dir);
-      
+
       for (const item of items) {
         const fullPath = path.join(dir, item);
         const stat = fs.statSync(fullPath);
-        
+
         if (stat.isDirectory() && !item.startsWith('.') && item !== '__tests__') {
           traverse(fullPath);
         } else if ((item.endsWith('.ts') || item.endsWith('.tsx')) && !item.endsWith('.test.ts') && !item.endsWith('.test.tsx')) {
@@ -837,7 +837,7 @@ describe('${testName.replace('.performance.test.ts', '')} 性能测试', () => {
         }
       }
     }
-    
+
     traverse(this.srcDir);
     return files;
   }
@@ -847,16 +847,16 @@ describe('${testName.replace('.performance.test.ts', '')} 性能测试', () => {
    */
   getExistingTestFiles() {
     const files = [];
-    
+
     function traverse(dir) {
       if (!fs.existsSync(dir)) return;
-      
+
       const items = fs.readdirSync(dir);
-      
+
       for (const item of items) {
         const fullPath = path.join(dir, item);
         const stat = fs.statSync(fullPath);
-        
+
         if (stat.isDirectory()) {
           traverse(fullPath);
         } else if (item.endsWith('.test.ts') || item.endsWith('.test.tsx')) {
@@ -864,7 +864,7 @@ describe('${testName.replace('.performance.test.ts', '')} 性能测试', () => {
         }
       }
     }
-    
+
     traverse(this.testDir);
     return files;
   }
@@ -876,7 +876,7 @@ describe('${testName.replace('.performance.test.ts', '')} 性能测试', () => {
     const relativePath = path.relative(this.srcDir, sourceFile);
     const testFileName = path.basename(sourceFile, path.extname(sourceFile)) + '.test.ts';
     const testDir = path.dirname(relativePath);
-    
+
     return path.join(this.testDir, testDir, testFileName);
   }
 
@@ -888,12 +888,12 @@ describe('${testName.replace('.performance.test.ts', '')} 性能测试', () => {
     console.log('='.repeat(50));
     console.log(`✅ 生成的测试文件数量: ${this.generatedTests.length}`);
     console.log(`❌ 错误数量: ${this.errors.length}`);
-    
+
     if (this.errors.length > 0) {
       console.log('\n❌ 错误详情:');
       this.errors.forEach(error => console.log(`  - ${error}`));
     }
-    
+
     console.log('\n🎉 测试覆盖率提升完成！');
     console.log('建议运行以下命令验证结果:');
     console.log('  npm run test:coverage');
@@ -908,4 +908,4 @@ if (require.main === module) {
   enhancer.enhance().catch(console.error);
 }
 
-module.exports = TestCoverageEnhancer; 
+module.exports = TestCoverageEnhancer;

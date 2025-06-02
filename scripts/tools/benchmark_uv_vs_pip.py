@@ -16,7 +16,7 @@ import statistics
 
 class PerformanceBenchmark:
     """性能基准测试类"""
-    
+
     def __init__(self):
         self.results = {}
         self.test_packages = [
@@ -26,17 +26,17 @@ class PerformanceBenchmark:
             "pydantic>=2.5.0",
             "redis>=5.0.0",
             "httpx>=0.25.0",
-            
+
             # 数据科学包（较大）
             "numpy>=1.26.0",
             "pandas>=2.2.0",
             "scikit-learn>=1.4.0",
-            
+
             # AI/ML包（非常大）
             "torch>=2.1.0",
             "transformers>=4.36.0",
         ]
-    
+
     def run_command_with_timing(self, cmd: List[str], cwd: str = None) -> Tuple[float, bool]:
         """执行命令并测量时间"""
         start_time = time.time()
@@ -56,16 +56,16 @@ class PerformanceBenchmark:
             return float('inf'), False
         except Exception:
             return float('inf'), False
-    
+
     def create_test_environment(self) -> str:
         """创建测试环境"""
         temp_dir = tempfile.mkdtemp(prefix="uv_benchmark_")
-        
+
         # 创建requirements.txt
         requirements_path = Path(temp_dir) / "requirements.txt"
         with open(requirements_path, 'w') as f:
             f.write('\n'.join(self.test_packages))
-        
+
         # 创建pyproject.toml
         pyproject_content = f'''[project]
 name = "benchmark-test"
@@ -76,9 +76,9 @@ requires-python = ">=3.11"
         pyproject_path = Path(temp_dir) / "pyproject.toml"
         with open(pyproject_path, 'w') as f:
             f.write(pyproject_content)
-        
+
         return temp_dir
-    
+
     def benchmark_pip(self, test_dir: str, iterations: int = 3) -> Dict[str, float]:
         """测试pip性能"""
         print("🐍 开始pip性能测试...")
@@ -87,38 +87,38 @@ requires-python = ">=3.11"
             'uninstall_times': [],
             'reinstall_times': []
         }
-        
+
         for i in range(iterations):
             print(f"  第 {i+1}/{iterations} 次测试...")
-            
+
             # 创建虚拟环境
             venv_dir = Path(test_dir) / f"venv_pip_{i}"
             subprocess.run([
                 "python", "-m", "venv", str(venv_dir)
             ], capture_output=True)
-            
+
             pip_cmd = str(venv_dir / "bin" / "pip")
             if os.name == 'nt':  # Windows
                 pip_cmd = str(venv_dir / "Scripts" / "pip.exe")
-            
+
             # 升级pip
             subprocess.run([pip_cmd, "install", "--upgrade", "pip"], capture_output=True)
-            
+
             # 测试安装时间
             install_time, success = self.run_command_with_timing([
                 pip_cmd, "install", "-r", "requirements.txt"
             ], cwd=test_dir)
-            
+
             if success:
                 results['install_times'].append(install_time)
                 print(f"    安装时间: {install_time:.2f}秒")
-                
+
                 # 测试卸载时间
                 uninstall_time, _ = self.run_command_with_timing([
                     pip_cmd, "uninstall", "-y", "-r", "requirements.txt"
                 ], cwd=test_dir)
                 results['uninstall_times'].append(uninstall_time)
-                
+
                 # 测试重新安装时间
                 reinstall_time, _ = self.run_command_with_timing([
                     pip_cmd, "install", "-r", "requirements.txt"
@@ -126,12 +126,12 @@ requires-python = ">=3.11"
                 results['reinstall_times'].append(reinstall_time)
             else:
                 print(f"    安装失败，跳过此次测试")
-            
+
             # 清理
             shutil.rmtree(venv_dir, ignore_errors=True)
-        
+
         return results
-    
+
     def benchmark_uv(self, test_dir: str, iterations: int = 3) -> Dict[str, float]:
         """测试uv性能"""
         print("⚡ 开始uv性能测试...")
@@ -140,32 +140,32 @@ requires-python = ">=3.11"
             'uninstall_times': [],
             'reinstall_times': []
         }
-        
+
         for i in range(iterations):
             print(f"  第 {i+1}/{iterations} 次测试...")
-            
+
             # 创建uv项目
             project_dir = Path(test_dir) / f"uv_project_{i}"
             project_dir.mkdir(exist_ok=True)
-            
+
             # 复制配置文件
             shutil.copy2(Path(test_dir) / "pyproject.toml", project_dir)
-            
+
             # 测试安装时间
             install_time, success = self.run_command_with_timing([
                 "uv", "sync"
             ], cwd=str(project_dir))
-            
+
             if success:
                 results['install_times'].append(install_time)
                 print(f"    安装时间: {install_time:.2f}秒")
-                
+
                 # 测试清理时间（相当于卸载）
                 uninstall_time, _ = self.run_command_with_timing([
                     "rm", "-rf", ".venv"
                 ], cwd=str(project_dir))
                 results['uninstall_times'].append(uninstall_time)
-                
+
                 # 测试重新安装时间
                 reinstall_time, _ = self.run_command_with_timing([
                     "uv", "sync"
@@ -173,17 +173,17 @@ requires-python = ">=3.11"
                 results['reinstall_times'].append(reinstall_time)
             else:
                 print(f"    安装失败，跳过此次测试")
-            
+
             # 清理
             shutil.rmtree(project_dir, ignore_errors=True)
-        
+
         return results
-    
+
     def calculate_stats(self, times: List[float]) -> Dict[str, float]:
         """计算统计数据"""
         if not times:
             return {'mean': 0, 'median': 0, 'min': 0, 'max': 0, 'std': 0}
-        
+
         return {
             'mean': statistics.mean(times),
             'median': statistics.median(times),
@@ -191,26 +191,26 @@ requires-python = ">=3.11"
             'max': max(times),
             'std': statistics.stdev(times) if len(times) > 1 else 0
         }
-    
+
     def generate_report(self, pip_results: Dict, uv_results: Dict) -> str:
         """生成性能对比报告"""
         pip_install_stats = self.calculate_stats(pip_results['install_times'])
         uv_install_stats = self.calculate_stats(uv_results['install_times'])
-        
+
         pip_reinstall_stats = self.calculate_stats(pip_results['reinstall_times'])
         uv_reinstall_stats = self.calculate_stats(uv_results['reinstall_times'])
-        
+
         # 计算性能提升
         if pip_install_stats['mean'] > 0:
             install_speedup = pip_install_stats['mean'] / uv_install_stats['mean']
         else:
             install_speedup = 0
-        
+
         if pip_reinstall_stats['mean'] > 0:
             reinstall_speedup = pip_reinstall_stats['mean'] / uv_reinstall_stats['mean']
         else:
             reinstall_speedup = 0
-        
+
         report = f"""
 # 索克生活项目 - uv vs pip 性能对比报告
 
@@ -258,31 +258,31 @@ requires-python = ">=3.11"
 - **CI/CD**: 构建时间显著减少，特别是包含ML依赖的服务
 - **开发体验**: 更快的依赖安装和环境切换
 """
-        
+
         return report
-    
+
     def run_benchmark(self, iterations: int = 3) -> str:
         """运行完整的性能基准测试"""
         print("🚀 开始uv vs pip性能对比测试")
         print(f"测试包数量: {len(self.test_packages)}")
         print(f"每个工具测试 {iterations} 次")
-        
+
         # 创建测试环境
         test_dir = self.create_test_environment()
         print(f"测试目录: {test_dir}")
-        
+
         try:
             # 测试pip
             pip_results = self.benchmark_pip(test_dir, iterations)
-            
+
             # 测试uv
             uv_results = self.benchmark_uv(test_dir, iterations)
-            
+
             # 生成报告
             report = self.generate_report(pip_results, uv_results)
-            
+
             return report
-            
+
         finally:
             # 清理测试环境
             shutil.rmtree(test_dir, ignore_errors=True)
@@ -290,16 +290,16 @@ requires-python = ">=3.11"
 
 def main():
     import argparse
-    
+
     parser = argparse.ArgumentParser(description="uv vs pip 性能对比测试")
     parser.add_argument("--iterations", type=int, default=3, help="测试迭代次数")
     parser.add_argument("--output", help="输出报告文件路径")
-    
+
     args = parser.parse_args()
-    
+
     benchmark = PerformanceBenchmark()
     report = benchmark.run_benchmark(args.iterations)
-    
+
     if args.output:
         with open(args.output, 'w', encoding='utf-8') as f:
             f.write(report)
@@ -309,4 +309,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main() 
+    main()

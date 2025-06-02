@@ -14,18 +14,18 @@ console.log('🔧 开始修复语法错误...\n');
 // 递归获取所有TypeScript文件
 function getAllTsFiles(dir, files = []) {
   const items = fs.readdirSync(dir);
-  
+
   for (const item of items) {
     const fullPath = path.join(dir, item);
     const stat = fs.statSync(fullPath);
-    
+
     if (stat.isDirectory() && !item.startsWith('.') && item !== 'node_modules') {
       getAllTsFiles(fullPath, files);
     } else if (item.endsWith('.ts') || item.endsWith('.tsx')) {
       files.push(fullPath);
     }
   }
-  
+
   return files;
 }
 
@@ -174,9 +174,9 @@ async function main() {
     for (let i = 0; i < tsFiles.length; i++) {
       const file = tsFiles[i];
       const relativePath = path.relative(process.cwd(), file);
-      
+
       process.stdout.write(`\r修复进度: ${i + 1}/${totalFiles} - ${relativePath}`);
-      
+
       if (fixFile(file)) {
         fixedCount++;
       }
@@ -211,4 +211,4 @@ module.exports = {
   fixConsoleStatements,
   fixFunctionBodies,
   fixFile,
-}; 
+};

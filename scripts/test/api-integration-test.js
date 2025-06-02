@@ -90,23 +90,23 @@ async function mockApiCall(endpoint, method = 'GET', data = null) {
  */
 async function runApiTest(testCase) {
   const { name, endpoint, method, data, expectedStatus, expectedData } = testCase;
-  
+
   try {
     console.log(`  🧪 测试: ${name}`);
-    
+
     const startTime = Date.now();
     const response = await mockApiCall(endpoint, method, data);
     const duration = Date.now() - startTime;
-    
+
     let passed = true;
     let errorMessage = '';
-    
+
     // 验证状态码
     if (expectedStatus && response.status !== expectedStatus) {
       passed = false;
       errorMessage = `状态码不匹配: 期望 ${expectedStatus}, 实际 ${response.status}`;
     }
-    
+
     // 验证响应数据
     if (expectedData && passed) {
       for (const key in expectedData) {
@@ -117,9 +117,9 @@ async function runApiTest(testCase) {
         }
       }
     }
-    
+
     testResults.total++;
-    
+
     if (passed) {
       testResults.passed++;
       console.log(`    ✅ 通过 (${duration}ms)`);
@@ -128,14 +128,14 @@ async function runApiTest(testCase) {
       console.log(`    ❌ 失败: ${errorMessage}`);
       testResults.errors.push({ test: name, error: errorMessage });
     }
-    
+
     testResults.details.push({
       name,
       passed,
       duration,
       error: errorMessage || null
     });
-    
+
   } catch (error) {
     testResults.total++;
     testResults.failed++;
@@ -149,7 +149,7 @@ async function runApiTest(testCase) {
  */
 async function testAuthService() {
   console.log('\n🔐 认证服务API测试');
-  
+
   const authTests = [
     {
       name: '用户登录',
@@ -180,7 +180,7 @@ async function testAuthService() {
       expectedStatus: 200
     }
   ];
-  
+
   for (const test of authTests) {
     await runApiTest(test);
   }
@@ -191,7 +191,7 @@ async function testAuthService() {
  */
 async function testAgentService() {
   console.log('\n🤖 智能体服务API测试');
-  
+
   const agentTests = [
     {
       name: '小艾对话',
@@ -227,7 +227,7 @@ async function testAgentService() {
       expectedStatus: 200
     }
   ];
-  
+
   for (const test of agentTests) {
     await runApiTest(test);
   }
@@ -238,13 +238,13 @@ async function testAgentService() {
  */
 async function testHealthService() {
   console.log('\n💊 健康数据服务API测试');
-  
+
   const healthTests = [
     {
       name: '健康数据上传',
       endpoint: '/health/data',
       method: 'POST',
-      data: { 
+      data: {
         type: 'vitals',
         data: { heartRate: 72, bloodPressure: '120/80' }
       },
@@ -270,7 +270,7 @@ async function testHealthService() {
       expectedStatus: 200
     }
   ];
-  
+
   for (const test of healthTests) {
     await runApiTest(test);
   }
@@ -281,13 +281,13 @@ async function testHealthService() {
  */
 async function testBlockchainService() {
   console.log('\n⛓️  区块链服务API测试');
-  
+
   const blockchainTests = [
     {
       name: '健康数据上链',
       endpoint: '/blockchain/store',
       method: 'POST',
-      data: { 
+      data: {
         type: 'health_record',
         data: { patientId: '123', diagnosis: 'test' }
       },
@@ -307,7 +307,7 @@ async function testBlockchainService() {
       expectedStatus: 200
     }
   ];
-  
+
   for (const test of blockchainTests) {
     await runApiTest(test);
   }
@@ -318,7 +318,7 @@ async function testBlockchainService() {
  */
 async function testErrorHandling() {
   console.log('\n⚠️  错误处理测试');
-  
+
   const errorTests = [
     {
       name: '404错误处理',
@@ -340,7 +340,7 @@ async function testErrorHandling() {
       expectedStatus: 400
     }
   ];
-  
+
   for (const test of errorTests) {
     await runApiTest(test);
   }
@@ -351,7 +351,7 @@ async function testErrorHandling() {
  */
 async function testPerformance() {
   console.log('\n⚡ API性能测试');
-  
+
   const performanceTests = [
     {
       name: '并发请求测试',
@@ -360,15 +360,15 @@ async function testPerformance() {
         for (let i = 0; i < 10; i++) {
           promises.push(mockApiCall('/agents/xiaoai/chat', 'POST', { message: `测试消息${i}` }));
         }
-        
+
         const startTime = Date.now();
         const results = await Promise.all(promises);
         const duration = Date.now() - startTime;
-        
+
         const allSuccessful = results.every(r => r.status === 200);
-        
+
         console.log(`    ${allSuccessful ? '✅' : '❌'} 并发请求 (${duration}ms, ${results.length}个请求)`);
-        
+
         testResults.total++;
         if (allSuccessful) {
           testResults.passed++;
@@ -383,10 +383,10 @@ async function testPerformance() {
         const startTime = Date.now();
         await mockApiCall('/health/data');
         const duration = Date.now() - startTime;
-        
+
         const passed = duration < 2000; // 2秒内响应
         console.log(`    ${passed ? '✅' : '❌'} 响应时间 (${duration}ms)`);
-        
+
         testResults.total++;
         if (passed) {
           testResults.passed++;
@@ -396,7 +396,7 @@ async function testPerformance() {
       }
     }
   ];
-  
+
   for (const test of performanceTests) {
     await test.test();
   }
@@ -418,26 +418,26 @@ function generateTestReport() {
     errors: testResults.errors,
     recommendations: []
   };
-  
+
   // 生成建议
   if (testResults.failed > 0) {
     report.recommendations.push('修复失败的API测试');
   }
-  
+
   if (testResults.passed / testResults.total < 0.9) {
     report.recommendations.push('提升API稳定性和可靠性');
   }
-  
+
   report.recommendations.push('定期运行API集成测试');
   report.recommendations.push('监控API性能指标');
-  
+
   try {
     fs.writeFileSync('api-integration-test-report.json', JSON.stringify(report, null, 2));
     console.log('\n📄 API集成测试报告已保存到: api-integration-test-report.json');
   } catch (error) {
     console.warn('⚠️  无法保存测试报告');
   }
-  
+
   return report;
 }
 
@@ -446,7 +446,7 @@ function generateTestReport() {
  */
 async function runApiIntegrationTests() {
   console.log('开始API集成测试...\n');
-  
+
   try {
     await testAuthService();
     await testAgentService();
@@ -454,30 +454,30 @@ async function runApiIntegrationTests() {
     await testBlockchainService();
     await testErrorHandling();
     await testPerformance();
-    
+
     console.log('\n📊 API集成测试结果');
     console.log('=====================================');
     console.log(`总测试数: ${testResults.total}`);
     console.log(`通过: ${testResults.passed}`);
     console.log(`失败: ${testResults.failed}`);
     console.log(`成功率: ${((testResults.passed / testResults.total) * 100).toFixed(2)}%`);
-    
+
     if (testResults.errors.length > 0) {
       console.log('\n❌ 失败的测试:');
       testResults.errors.forEach(error => {
         console.log(`  - ${error.test}: ${error.error}`);
       });
     }
-    
+
     const report = generateTestReport();
-    
+
     console.log('\n💡 建议:');
     report.recommendations.forEach(rec => {
       console.log(`  - ${rec}`);
     });
-    
+
     console.log('\n✅ API集成测试完成！');
-    
+
   } catch (error) {
     console.error('❌ 测试执行失败:', error.message);
     process.exit(1);
@@ -489,4 +489,4 @@ if (require.main === module) {
   runApiIntegrationTests();
 }
 
-module.exports = { runApiIntegrationTests, testResults }; 
+module.exports = { runApiIntegrationTests, testResults };

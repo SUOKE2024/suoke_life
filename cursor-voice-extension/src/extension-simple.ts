@@ -34,4 +34,4 @@ export function activate(context: vscode.ExtensionContext) {
 
 export function deactivate() {
     console.log('Cursor Voice Interaction 扩展已停用');
-} 
+}

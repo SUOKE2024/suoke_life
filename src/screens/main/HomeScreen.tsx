@@ -1,45 +1,31 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
-  TouchableOpacity,
   FlatList,
+  TouchableOpacity,
   Image,
-  Alert,
-  RefreshControl,
   TextInput,
   Platform,
+  StatusBar,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { colors, typography, spacing, borderRadius, shadows } from '../../constants/theme';
-// import { Divider } from '../../components/ui';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-// 联系人类型定义
-export interface Contact {
+// 聊天项类型定义
+interface ChatItem {
   id: string;
   name: string;
-  avatar?: string;
-  type: 'agent' | 'doctor' | 'user' | 'supplier' | 'service';
-  status: 'online' | 'offline' | 'busy' | 'away';
-  lastMessage?: string;
-  lastMessageTime?: string;
-  unreadCount?: number;
-  specialty?: string; // 医生专业或智能体特长
-  verified?: boolean; // 是否认证
-  vip?: boolean; // 是否VIP
-}
-
-// 联系人分组
-export interface ContactGroup {
-  id: string;
-  title: string;
-  icon: string;
-  contacts: Contact[];
-  collapsed?: boolean;
+  avatar: string;
+  message: string;
+  time: string;
+  unread: number;
+  type: 'agent' | 'doctor' | 'user';
+  isOnline?: boolean;
+  tag?: string;
 }
 
 type MainTabParamList = {
@@ -52,436 +38,220 @@ type MainTabParamList = {
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<MainTabParamList, 'Home'>;
 
-// 简单的分割线组件
-const Divider: React.FC<{ style?: any }> = ({ style }) => (
-  <View style={[{ height: 1, backgroundColor: colors.border }, style]} />
-);
-
 const HomeScreen: React.FC = () => {
   const navigation = useNavigation<HomeScreenNavigationProp>();
-  
-  const [searchText, setSearchText] = useState('');
-  const [refreshing, setRefreshing] = useState(false);
-  const [contactGroups, setContactGroups] = useState<ContactGroup[]>([]);
-  const [filteredContacts, setFilteredContacts] = useState<Contact[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [chatList, setChatList] = useState<ChatItem[]>([]);
 
-  // 初始化联系人数据
-  const initializeContacts = useCallback(() => {
-    const groups: ContactGroup[] = [
+  // 加载聊天列表
+  useEffect(() => {
+    // 模拟从API获取数据
+    const mockChatList: ChatItem[] = [
+      // 智能体
       {
-        id: 'agents',
-        title: '四大智能体',
-        icon: '🤖',
-        contacts: [
-          {
-            id: 'xiaoai',
-            name: '小艾',
-            type: 'agent',
-            status: 'online',
-            lastMessage: '您好！我是小艾，您的健康管理助手',
-            lastMessageTime: '刚刚',
-            unreadCount: 0,
-            specialty: '健康管理·AI助手',
-            verified: true,
-          },
-          {
-            id: 'xiaoke',
-            name: '小克',
-            type: 'agent',
-            status: 'online',
-            lastMessage: '为您提供专业的中医诊断服务',
-            lastMessageTime: '2分钟前',
-            unreadCount: 1,
-            specialty: '中医诊断·辨证论治',
-            verified: true,
-          },
-          {
-            id: 'laoke',
-            name: '老克',
-            type: 'agent',
-            status: 'online',
-            lastMessage: '传统中医智慧，现代科技应用',
-            lastMessageTime: '5分钟前',
-            unreadCount: 0,
-            specialty: '中医养生·经验传承',
-            verified: true,
-          },
-          {
-            id: 'soer',
-            name: '索儿',
-            type: 'agent',
-            status: 'online',
-            lastMessage: '生活方式指导，健康习惯养成',
-            lastMessageTime: '10分钟前',
-            unreadCount: 2,
-            specialty: '生活指导·习惯养成',
-            verified: true,
-          },
-        ],
+        id: 'xiaoai',
+        name: '小艾',
+        avatar: '🤖',
+        message: '您的健康报告已生成，点击查看详情',
+        time: '09:30',
+        unread: 1,
+        type: 'agent',
+        isOnline: true,
+        tag: '健康助手'
       },
       {
-        id: 'doctors',
-        title: '名医专家',
-        icon: '👨‍⚕️',
-        contacts: [
-          {
-            id: 'doctor1',
-            name: '张明华',
-            type: 'doctor',
-            status: 'online',
-            lastMessage: '您的检查报告已出，建议...',
-            lastMessageTime: '1小时前',
-            unreadCount: 1,
-            specialty: '中医内科·主任医师',
-            verified: true,
-            vip: true,
-          },
-          {
-            id: 'doctor2',
-            name: '李慧敏',
-            type: 'doctor',
-            status: 'busy',
-            lastMessage: '今天的针灸治疗效果如何？',
-            lastMessageTime: '2小时前',
-            unreadCount: 0,
-            specialty: '针灸科·副主任医师',
-            verified: true,
-          },
-          {
-            id: 'doctor3',
-            name: '王德仁',
-            type: 'doctor',
-            status: 'offline',
-            lastMessage: '按时服药，注意饮食调理',
-            lastMessageTime: '昨天',
-            unreadCount: 0,
-            specialty: '中药调理·主治医师',
-            verified: true,
-          },
-        ],
+        id: 'xiaoke',
+        name: '小克',
+        avatar: '🧘‍♂️',
+        message: '根据您的脉象，建议多注意休息',
+        time: '昨天',
+        unread: 0,
+        type: 'agent',
+        isOnline: true,
+        tag: '中医辨证'
       },
       {
-        id: 'users',
-        title: '健康伙伴',
-        icon: '👥',
-        contacts: [
-          {
-            id: 'user1',
-            name: '健康小组',
-            type: 'user',
-            status: 'online',
-            lastMessage: '大家今天的运动打卡情况如何？',
-            lastMessageTime: '30分钟前',
-            unreadCount: 5,
-            specialty: '健康交流群',
-          },
-          {
-            id: 'user2',
-            name: '陈晓明',
-            type: 'user',
-            status: 'away',
-            lastMessage: '谢谢你的健康建议！',
-            lastMessageTime: '1小时前',
-            unreadCount: 0,
-            specialty: '健康伙伴',
-          },
-        ],
+        id: 'laoke',
+        name: '老克',
+        avatar: '👨‍⚕️',
+        message: '已为您制定新的康复计划，请查收',
+        time: '昨天',
+        unread: 2,
+        type: 'agent',
+        isOnline: false,
+        tag: '健康顾问'
       },
       {
-        id: 'suppliers',
-        title: '健康服务',
-        icon: '🏪',
-        contacts: [
-          {
-            id: 'supplier1',
-            name: '索克健康商城',
-            type: 'supplier',
-            status: 'online',
-            lastMessage: '您关注的产品有新优惠！',
-            lastMessageTime: '3小时前',
-            unreadCount: 1,
-            specialty: '健康产品·官方商城',
-            verified: true,
-          },
-          {
-            id: 'supplier2',
-            name: '中医养生馆',
-            type: 'supplier',
-            status: 'online',
-            lastMessage: '本周养生课程安排已更新',
-            lastMessageTime: '6小时前',
-            unreadCount: 0,
-            specialty: '养生服务·线下体验',
-            verified: true,
-          },
-        ],
+        id: 'soer',
+        name: '索儿',
+        avatar: '🏃‍♀️',
+        message: '今天的运动目标已完成80%，继续加油！',
+        time: '周一',
+        unread: 0,
+        type: 'agent',
+        isOnline: true,
+        tag: '生活教练'
+      },
+      // 名医
+      {
+        id: 'doctor1',
+        name: '张医生',
+        avatar: '👩‍⚕️',
+        message: '您的检查结果已出，一切正常',
+        time: '周二',
+        unread: 0,
+        type: 'doctor',
+        tag: '中医内科'
       },
       {
-        id: 'services',
-        title: '系统服务',
-        icon: '⚙️',
-        contacts: [
-          {
-            id: 'service1',
-            name: '健康报告',
-            type: 'service',
-            status: 'online',
-            lastMessage: '您的月度健康报告已生成',
-            lastMessageTime: '今天',
-            unreadCount: 1,
-            specialty: '数据分析·健康报告',
-          },
-          {
-            id: 'service2',
-            name: '预约提醒',
-            type: 'service',
-            status: 'online',
-            lastMessage: '明天下午2点的复诊提醒',
-            lastMessageTime: '今天',
-            unreadCount: 0,
-            specialty: '智能提醒·预约管理',
-          },
-        ],
+        id: 'doctor2',
+        name: '李教授',
+        avatar: '👨‍⚕️',
+        message: '请按照方案坚持服药，下周复诊',
+        time: '上周',
+        unread: 0,
+        type: 'doctor',
+        tag: '针灸专家'
+      },
+      // 用户
+      {
+        id: 'user1',
+        name: '健康小组',
+        avatar: '👥',
+        message: '[王医生]: 分享了一篇养生文章',
+        time: '周三',
+        unread: 3,
+        type: 'user'
+      },
+      {
+        id: 'user2',
+        name: '家人健康群',
+        avatar: '👪',
+        message: '[妈妈]: 今天按时吃药了吗？',
+        time: '3/15',
+        unread: 0,
+        type: 'user'
       },
     ];
 
-    setContactGroups(groups);
+    setChatList(mockChatList);
   }, []);
 
-  // 搜索联系人
-  const searchContacts = useCallback((text: string) => {
-    if (!text.trim()) {
-      setFilteredContacts([]);
-      return;
-    }
+  // 过滤聊天列表
+  const filteredChatList = chatList.filter(chat => 
+    chat.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    chat.message.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-    const allContacts = contactGroups.flatMap(group => group.contacts);
-    const filtered = allContacts.filter(contact =>
-      contact.name.toLowerCase().includes(text.toLowerCase()) ||
-      contact.specialty?.toLowerCase().includes(text.toLowerCase())
-    );
-    setFilteredContacts(filtered);
-  }, [contactGroups]);
-
-  // 刷新联系人列表
-  const onRefresh = useCallback(async () => {
-    setRefreshing(true);
-    try {
-      // 模拟网络请求
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      initializeContacts();
-    } catch (error) {
-      Alert.alert('刷新失败', '请检查网络连接后重试');
-    } finally {
-      setRefreshing(false);
-    }
-  }, [initializeContacts]);
-
-  // 切换分组折叠状态
-  const toggleGroupCollapse = useCallback((groupId: string) => {
-    setContactGroups(prev =>
-      prev.map(group =>
-        group.id === groupId
-          ? { ...group, collapsed: !group.collapsed }
-          : group
-      )
-    );
-  }, []);
-
-  // 处理联系人点击
-  const handleContactPress = useCallback((contact: Contact) => {
-    // TODO: 导航到聊天界面
-    Alert.alert('开始聊天', `即将与 ${contact.name} 开始对话`);
-  }, []);
-
-  // 获取状态指示器颜色
-  const getStatusColor = (status: Contact['status']) => {
-    switch (status) {
-      case 'online': return colors.success;
-      case 'busy': return colors.warning;
-      case 'away': return colors.gray400;
-      case 'offline': return colors.gray300;
-      default: return colors.gray300;
-    }
+  // 处理聊天项点击
+  const handleChatItemPress = (chatItem: ChatItem) => {
+    console.log(`打开与${chatItem.name}的聊天`);
+    // TODO: 导航到聊天页面
+    // navigation.navigate('ChatDetail', { chatId: chatItem.id });
   };
 
-  // 获取联系人类型图标
-  const getContactTypeIcon = (type: Contact['type']) => {
-    switch (type) {
-      case 'agent': return '🤖';
-      case 'doctor': return '👨‍⚕️';
-      case 'user': return '👤';
-      case 'supplier': return '🏪';
-      case 'service': return '⚙️';
-      default: return '👤';
-    }
-  };
-
-  // 渲染联系人项
-  const renderContactItem = ({ item: contact }: { item: Contact }) => (
-    <TouchableOpacity
-      style={styles.contactItem}
-      onPress={() => handleContactPress(contact)}
+  // 渲染聊天项
+  const renderChatItem = ({ item }: { item: ChatItem }) => (
+    <TouchableOpacity 
+      style={styles.chatItem}
+      onPress={() => handleChatItemPress(item)}
       activeOpacity={0.7}
     >
-      <View style={styles.contactAvatar}>
-        <View style={styles.avatarContainer}>
-          <Text style={styles.avatarText}>
-            {getContactTypeIcon(contact.type)}
+      {/* 头像 */}
+      <View style={styles.avatarContainer}>
+        {item.type === 'agent' ? (
+          <Text style={styles.avatarText}>{item.avatar}</Text>
+        ) : (
+          <View style={styles.avatarImageContainer}>
+            <Text style={styles.avatarText}>{item.avatar}</Text>
+          </View>
+        )}
+        {item.isOnline !== undefined && (
+          <View 
+            style={[
+              styles.onlineIndicator, 
+              { backgroundColor: item.isOnline ? '#4CAF50' : '#9E9E9E' }
+            ]} 
+          />
+        )}
+      </View>
+
+      {/* 聊天内容 */}
+      <View style={styles.chatContent}>
+        <View style={styles.chatHeader}>
+          <Text style={styles.chatName}>{item.name}</Text>
+          <Text style={styles.chatTime}>{item.time}</Text>
+        </View>
+        
+        <View style={styles.messageRow}>
+          <Text 
+            style={styles.chatMessage}
+            numberOfLines={1}
+            ellipsizeMode="tail"
+          >
+            {item.message}
           </Text>
-          {contact.verified && (
-            <View style={styles.verifiedBadge}>
-              <Text style={styles.verifiedIcon}>✓</Text>
+          
+          {item.unread > 0 && (
+            <View style={styles.unreadBadge}>
+              <Text style={styles.unreadText}>
+                {item.unread > 99 ? '99+' : item.unread}
+              </Text>
             </View>
           )}
         </View>
-        <View style={[styles.statusIndicator, { backgroundColor: getStatusColor(contact.status) }]} />
-      </View>
-
-      <View style={styles.contactInfo}>
-        <View style={styles.contactHeader}>
-          <Text style={styles.contactName}>{contact.name}</Text>
-          <View style={styles.contactMeta}>
-            {contact.vip && (
-              <View style={styles.vipBadge}>
-                <Text style={styles.vipText}>VIP</Text>
-              </View>
-            )}
-            {contact.lastMessageTime && (
-              <Text style={styles.messageTime}>{contact.lastMessageTime}</Text>
-            )}
+        
+        {item.tag && (
+          <View style={styles.tagContainer}>
+            <Text style={styles.tagText}>{item.tag}</Text>
           </View>
-        </View>
-
-        <View style={styles.contactDetails}>
-          <Text style={styles.specialty} numberOfLines={1}>
-            {contact.specialty}
-          </Text>
-          {contact.lastMessage && (
-            <Text style={styles.lastMessage} numberOfLines={1}>
-              {contact.lastMessage}
-            </Text>
-          )}
-        </View>
+        )}
       </View>
-
-      {contact.unreadCount && contact.unreadCount > 0 && (
-        <View style={styles.unreadBadge}>
-          <Text style={styles.unreadText}>
-            {contact.unreadCount > 99 ? '99+' : contact.unreadCount}
-          </Text>
-        </View>
-      )}
     </TouchableOpacity>
   );
 
-  // 渲染分组
-  const renderContactGroup = (group: ContactGroup) => (
-    <View key={group.id} style={styles.groupContainer}>
-      <TouchableOpacity
-        style={styles.groupHeader}
-        onPress={() => toggleGroupCollapse(group.id)}
-        activeOpacity={0.7}
-      >
-        <View style={styles.groupTitleContainer}>
-          <Text style={styles.groupIcon}>{group.icon}</Text>
-          <Text style={styles.groupTitle}>{group.title}</Text>
-          <Text style={styles.groupCount}>({group.contacts.length})</Text>
-        </View>
-        <Text style={[styles.collapseIcon, group.collapsed && styles.collapseIconRotated]}>
-          ▼
-        </Text>
-      </TouchableOpacity>
-
-      {!group.collapsed && (
-        <View style={styles.groupContent}>
-          {group.contacts.map((contact, index) => (
-            <View key={contact.id}>
-              {renderContactItem({ item: contact })}
-              {index < group.contacts.length - 1 && <Divider style={styles.contactDivider} />}
-            </View>
-          ))}
-        </View>
-      )}
-    </View>
-  );
-
-  useEffect(() => {
-    initializeContacts();
-  }, [initializeContacts]);
-
-  useEffect(() => {
-    searchContacts(searchText);
-  }, [searchText, searchContacts]);
-
   return (
     <SafeAreaView style={styles.container}>
-      {/* 头部搜索栏 */}
+      <StatusBar barStyle="dark-content" backgroundColor="#f6f6f6" />
+      
+      {/* 头部 */}
       <View style={styles.header}>
-        <View style={styles.searchContainer}>
-          <Text style={styles.searchIcon}>🔍</Text>
-          <TextInput
-            style={styles.searchInput}
-            placeholder="搜索联系人、专业、服务..."
-            placeholderTextColor={colors.textSecondary}
-            value={searchText}
-            onChangeText={setSearchText}
-            returnKeyType="search"
-          />
-          {searchText.length > 0 && (
-            <TouchableOpacity
-              style={styles.clearButton}
-              onPress={() => setSearchText('')}
-            >
-              <Text style={styles.clearIcon}>✕</Text>
-            </TouchableOpacity>
-          )}
-        </View>
+        <Text style={styles.headerTitle}>聊天</Text>
+        <TouchableOpacity style={styles.headerButton}>
+          <Icon name="plus" size={24} color="#2E7D32" />
+        </TouchableOpacity>
       </View>
-
-      {/* 联系人列表 */}
-      <ScrollView
-        style={styles.content}
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            tintColor={colors.primary}
-            colors={[colors.primary]}
-          />
-        }
-      >
-        {searchText.length > 0 ? (
-          // 搜索结果
-          <View style={styles.searchResults}>
-            <Text style={styles.searchResultsTitle}>
-              搜索结果 ({filteredContacts.length})
-            </Text>
-            {filteredContacts.length > 0 ? (
-              filteredContacts.map((contact, index) => (
-                <View key={contact.id}>
-                  {renderContactItem({ item: contact })}
-                  {index < filteredContacts.length - 1 && <Divider style={styles.contactDivider} />}
-                </View>
-              ))
-            ) : (
-              <View style={styles.emptyState}>
-                <Text style={styles.emptyIcon}>🔍</Text>
-                <Text style={styles.emptyTitle}>未找到相关联系人</Text>
-                <Text style={styles.emptyDescription}>
-                  尝试使用其他关键词搜索
-                </Text>
-              </View>
-            )}
-          </View>
-        ) : (
-          // 分组联系人列表
-          <View style={styles.groupsList}>
-            {contactGroups.map(renderContactGroup)}
-          </View>
+      
+      {/* 搜索栏 */}
+      <View style={styles.searchContainer}>
+        <Icon name="magnify" size={20} color="#999999" style={styles.searchIcon} />
+        <TextInput
+          style={styles.searchInput}
+          placeholder="搜索"
+          placeholderTextColor="#999999"
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+        />
+        {searchQuery !== '' && (
+          <TouchableOpacity onPress={() => setSearchQuery('')}>
+            <Icon name="close-circle" size={16} color="#CCCCCC" />
+          </TouchableOpacity>
         )}
-      </ScrollView>
+      </View>
+      
+      {/* 聊天列表 */}
+      <FlatList
+        data={filteredChatList}
+        renderItem={renderChatItem}
+        keyExtractor={item => item.id}
+        style={styles.chatList}
+        showsVerticalScrollIndicator={false}
+        ListEmptyComponent={
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>暂无聊天记录</Text>
+          </View>
+        }
+      />
     </SafeAreaView>
   );
 };
@@ -489,253 +259,154 @@ const HomeScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: '#f6f6f6',
   },
-
-  // 头部搜索栏
   header: {
-    backgroundColor: colors.surface,
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    backgroundColor: '#f6f6f6',
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333333',
+  },
+  headerButton: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.gray100,
-    borderRadius: borderRadius.lg,
-    paddingHorizontal: spacing.md,
-    height: 40,
+    backgroundColor: '#EBEBEB',
+    borderRadius: 8,
+    marginHorizontal: 16,
+    marginVertical: 8,
+    paddingHorizontal: 12,
+    height: 36,
   },
   searchIcon: {
-    fontSize: typography.fontSize.base,
-    marginRight: spacing.sm,
+    marginRight: 6,
   },
   searchInput: {
     flex: 1,
-    fontSize: typography.fontSize.base,
-    color: colors.textPrimary,
-    fontFamily: typography.fontFamily.regular,
+    height: 36,
+    fontSize: 14,
+    color: '#333333',
+    padding: 0,
   },
-  clearButton: {
-    padding: spacing.xs,
-  },
-  clearIcon: {
-    fontSize: typography.fontSize.sm,
-    color: colors.textSecondary,
-  },
-
-  // 内容区域
-  content: {
+  chatList: {
     flex: 1,
+    backgroundColor: '#FFFFFF',
   },
-
-  // 分组样式
-  groupsList: {
-    paddingVertical: spacing.sm,
-  },
-  groupContainer: {
-    marginBottom: spacing.sm,
-  },
-  groupHeader: {
+  chatItem: {
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-    backgroundColor: colors.surfaceSecondary,
-  },
-  groupTitleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  groupIcon: {
-    fontSize: typography.fontSize.lg,
-    marginRight: spacing.sm,
-  },
-  groupTitle: {
-    fontSize: typography.fontSize.base,
-    fontWeight: typography.fontWeight.medium,
-    color: colors.textPrimary,
-    fontFamily: typography.fontFamily.medium,
-  },
-  groupCount: {
-    fontSize: typography.fontSize.sm,
-    color: colors.textSecondary,
-    marginLeft: spacing.xs,
-    fontFamily: typography.fontFamily.regular,
-  },
-  collapseIcon: {
-    fontSize: typography.fontSize.sm,
-    color: colors.textSecondary,
-    transform: [{ rotate: '0deg' }],
-  },
-  collapseIconRotated: {
-    transform: [{ rotate: '-90deg' }],
-  },
-  groupContent: {
-    backgroundColor: colors.surface,
-  },
-
-  // 联系人项样式
-  contactItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-    backgroundColor: colors.surface,
-  },
-  contactAvatar: {
-    position: 'relative',
-    marginRight: spacing.md,
+    padding: 12,
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#EEEEEE',
   },
   avatarContainer: {
+    position: 'relative',
+    marginRight: 12,
+  },
+  avatarImageContainer: {
     width: 48,
     height: 48,
-    borderRadius: 24,
-    backgroundColor: colors.gray100,
+    borderRadius: 4,
     justifyContent: 'center',
     alignItems: 'center',
-    position: 'relative',
+    backgroundColor: '#f0f0f0',
+    overflow: 'hidden',
+  },
+  avatarImage: {
+    width: 48,
+    height: 48,
+    borderRadius: 4,
   },
   avatarText: {
-    fontSize: typography.fontSize.xl,
+    fontSize: 32,
   },
-  verifiedBadge: {
+  onlineIndicator: {
     position: 'absolute',
-    bottom: -2,
-    right: -2,
-    width: 16,
-    height: 16,
-    borderRadius: 8,
-    backgroundColor: colors.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: colors.surface,
+    bottom: 0,
+    right: 0,
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#FFFFFF',
   },
-  verifiedIcon: {
-    fontSize: 8,
-    color: colors.white,
-    fontWeight: typography.fontWeight.bold,
-  },
-  statusIndicator: {
-    position: 'absolute',
-    top: 2,
-    right: 2,
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    borderWidth: 2,
-    borderColor: colors.surface,
-  },
-
-  // 联系人信息
-  contactInfo: {
+  chatContent: {
     flex: 1,
+    justifyContent: 'center',
   },
-  contactHeader: {
+  chatHeader: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: spacing.xs,
+    alignItems: 'center',
+    marginBottom: 6,
   },
-  contactName: {
-    fontSize: typography.fontSize.base,
-    fontWeight: typography.fontWeight.medium,
-    color: colors.textPrimary,
-    fontFamily: typography.fontFamily.medium,
+  chatName: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#333333',
   },
-  contactMeta: {
+  chatTime: {
+    fontSize: 12,
+    color: '#999999',
+  },
+  messageRow: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
-  vipBadge: {
-    backgroundColor: colors.warning,
-    paddingHorizontal: spacing.xs,
-    paddingVertical: 2,
-    borderRadius: borderRadius.sm,
-    marginRight: spacing.xs,
+  chatMessage: {
+    flex: 1,
+    fontSize: 14,
+    color: '#666666',
+    marginRight: 8,
   },
-  vipText: {
-    fontSize: 10,
-    color: colors.white,
-    fontWeight: typography.fontWeight.bold,
-  },
-  messageTime: {
-    fontSize: typography.fontSize.xs,
-    color: colors.textSecondary,
-    fontFamily: typography.fontFamily.regular,
-  },
-  contactDetails: {
-    gap: spacing.xs,
-  },
-  specialty: {
-    fontSize: typography.fontSize.sm,
-    color: colors.primary,
-    fontFamily: typography.fontFamily.regular,
-  },
-  lastMessage: {
-    fontSize: typography.fontSize.sm,
-    color: colors.textSecondary,
-    fontFamily: typography.fontFamily.regular,
-  },
-
-  // 未读消息徽章
   unreadBadge: {
-    backgroundColor: colors.error,
-    minWidth: 20,
-    height: 20,
-    borderRadius: 10,
+    minWidth: 18,
+    height: 18,
+    borderRadius: 9,
+    backgroundColor: '#FF3B30',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: spacing.xs,
+    paddingHorizontal: 5,
   },
   unreadText: {
-    fontSize: typography.fontSize.xs,
-    color: colors.white,
-    fontWeight: typography.fontWeight.bold,
+    fontSize: 11,
+    color: '#FFFFFF',
+    fontWeight: '500',
   },
-
-  // 分割线
-  contactDivider: {
-    marginLeft: spacing.lg + 48 + spacing.md, // 对齐联系人信息
+  tagContainer: {
+    backgroundColor: '#F0F0F0',
+    borderRadius: 4,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    marginTop: 4,
+    alignSelf: 'flex-start',
   },
-
-  // 搜索结果
-  searchResults: {
-    padding: spacing.lg,
+  tagText: {
+    fontSize: 10,
+    color: '#666666',
   },
-  searchResultsTitle: {
-    fontSize: typography.fontSize.lg,
-    fontWeight: typography.fontWeight.medium,
-    color: colors.textPrimary,
-    marginBottom: spacing.md,
-    fontFamily: typography.fontFamily.medium,
-  },
-
-  // 空状态
-  emptyState: {
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: spacing['2xl'],
+    padding: 50,
   },
-  emptyIcon: {
-    fontSize: typography.fontSize['4xl'],
-    marginBottom: spacing.md,
-  },
-  emptyTitle: {
-    fontSize: typography.fontSize.lg,
-    fontWeight: typography.fontWeight.medium,
-    color: colors.textPrimary,
-    marginBottom: spacing.sm,
-    fontFamily: typography.fontFamily.medium,
-  },
-  emptyDescription: {
-    fontSize: typography.fontSize.base,
-    color: colors.textSecondary,
+  emptyText: {
+    fontSize: 14,
+    color: '#999999',
     textAlign: 'center',
-    fontFamily: typography.fontFamily.regular,
   },
 });
 

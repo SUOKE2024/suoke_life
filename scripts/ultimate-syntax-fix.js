@@ -19,7 +19,7 @@ const ultimateFixRules = [
       return match;
     }
   },
-  
+
   // 修复导出语句缺少分号
   {
     name: '导出语句缺少分号',
@@ -81,7 +81,7 @@ const specialFileRules = {
     content = content.replace(/const CONFIG_VERSION = '1\.0\.;0;';/g, "const CONFIG_VERSION = '1.0.0';");
     return content;
   },
-  
+
   'src/agents/AgentCoordinator.tsx': (content) => {
     // 修复导入语句
     content = content.replace(/(import\s+[^;\n]+)(?!\s*;)(\n)/g, '$1;$2');
@@ -132,7 +132,7 @@ function fixComplexObjectProperties(content) {
     if (inObject && nextLine && objectDepth > 0) {
       const currentIndent = line.match(/^(\s*)/)[1];
       const nextIndent = nextLine.match(/^(\s*)/)[1];
-      
+
       // 检查当前行是否是属性定义
       const propertyMatch = line.match(/^(\s*)(\w+):\s*([^,{}\n]+)$/);
       const nextPropertyMatch = nextLine.match(/^(\s*)(\w+):/);
@@ -161,18 +161,18 @@ function cleanupSyntax(content) {
   // 清理多余的逗号
   content = content.replace(/,(\s*[}\]])/g, '$1');
   content = content.replace(/,(\s*\))/g, '$1');
-  
+
   // 清理多余的分号
   content = content.replace(/;;+/g, ';');
-  
+
   // 清理错误的注释格式
   content = content.replace(/\/\*\s*\*\//g, '//');
   content = content.replace(/\/\*\s*([^*]+)\s*\*\//g, '// $1');
-  
+
   // 清理错误的字符
   content = content.replace(/;,/g, ',');
   content = content.replace(/,;/g, ',');
-  
+
   return content;
 }
 
@@ -253,4 +253,4 @@ console.log(`📁 总文件数: ${files.length}`);
 console.log(`🔧 已修复文件: ${filesFixed}`);
 console.log(`✨ 总修复数: ${totalFixed}`);
 console.log(`📈 修复率: ${Math.round((totalFixed / files.length) * 100)}%`);
-console.log('🚀 终极语法修复完成！建议运行代码质量检查验证结果。'); 
+console.log('🚀 终极语法修复完成！建议运行代码质量检查验证结果。');

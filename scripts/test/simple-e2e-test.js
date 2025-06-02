@@ -47,7 +47,7 @@ function apiRequest(method, endpoint, data = null, headers = {}) {
     const url = new URL(endpoint, TEST_CONFIG.API_BASE_URL);
     const isHttps = url.protocol === 'https:';
     const httpModule = isHttps ? https : http;
-    
+
     const options = {
       hostname: url.hostname,
       port: url.port || (isHttps ? 443 : 80),
@@ -67,11 +67,11 @@ function apiRequest(method, endpoint, data = null, headers = {}) {
 
     const req = httpModule.request(options, (res) => {
       let responseData = '';
-      
+
       res.on('data', (chunk) => {
         responseData += chunk;
       });
-      
+
       res.on('end', () => {
         try {
           const parsedData = responseData ? JSON.parse(responseData) : {};
@@ -113,7 +113,7 @@ function apiRequest(method, endpoint, data = null, headers = {}) {
 async function runTest(testName, testFn) {
   testResults.total++;
   logger.test(`执行测试: ${testName}`);
-  
+
   try {
     await testFn();
     testResults.passed++;
@@ -130,15 +130,15 @@ async function runTest(testName, testFn) {
  */
 async function testApiGatewayHealth() {
   const response = await apiRequest('GET', '/health');
-  
+
   if (!response.ok) {
     throw new Error(`API网关健康检查失败: ${response.status}`);
   }
-  
+
   if (!response.data.status || response.data.status !== 'ok') {
     throw new Error('API网关状态异常');
   }
-  
+
   if (!response.data.total_services || response.data.total_services < 19) {
     throw new Error(`服务数量不足: ${response.data.total_services}/19`);
   }
@@ -153,21 +153,21 @@ async function testUserAuthentication() {
     email: TEST_CONFIG.TEST_USER.email,
     password: TEST_CONFIG.TEST_USER.password
   });
-  
+
   if (!loginResponse.ok) {
     throw new Error(`用户登录失败: ${loginResponse.status}`);
   }
-  
+
   // 检查响应格式，可能token在不同字段中
-  const token = loginResponse.data.token || 
-                loginResponse.data.access_token || 
+  const token = loginResponse.data.token ||
+                loginResponse.data.access_token ||
                 loginResponse.data.authToken ||
                 'mock_token_for_testing';
-  
+
   if (!token) {
     throw new Error('登录响应缺少认证令牌');
   }
-  
+
   // 保存令牌用于后续测试
   TEST_CONFIG.AUTH_TOKEN = token;
 }
@@ -177,7 +177,7 @@ async function testUserAuthentication() {
  */
 async function testAgentServices() {
   const agents = ['xiaoai', 'xiaoke', 'laoke', 'soer'];
-  
+
   for (const agent of agents) {
     const response = await apiRequest('POST', `/api/agents/${agent}/init`, {
       userId: 'test_user_001',
@@ -185,17 +185,17 @@ async function testAgentServices() {
     }, {
       'Authorization': `Bearer ${TEST_CONFIG.AUTH_TOKEN}`
     });
-    
+
     if (!response.ok) {
       throw new Error(`${agent}智能体初始化失败: ${response.status}`);
     }
-    
+
     // 检查响应格式，可能sessionId在不同字段中
-    const sessionId = response.data.sessionId || 
-                     response.data.session_id || 
+    const sessionId = response.data.sessionId ||
+                     response.data.session_id ||
                      response.data.id ||
                      `mock_session_${agent}_${Date.now()}`;
-    
+
     if (!sessionId) {
       throw new Error(`${agent}智能体响应缺少会话ID`);
     }
@@ -212,7 +212,7 @@ async function testDiagnosisServices() {
     { service: 'inquiry', name: '问诊' },
     { service: 'palpation', name: '切诊' }
   ];
-  
+
   for (const { service, name } of diagnosisServices) {
     const response = await apiRequest('POST', `/api/diagnosis/${service}/start`, {
       userId: 'test_user_001',
@@ -220,23 +220,23 @@ async function testDiagnosisServices() {
     }, {
       'Authorization': `Bearer ${TEST_CONFIG.AUTH_TOKEN}`
     });
-    
+
     if (!response.ok) {
       throw new Error(`${name}服务启动失败: ${response.status}`);
     }
-    
+
     // 检查响应格式，可能diagnosisId在不同字段中
-    const diagnosisId = response.data.diagnosisId || 
-                       response.data.diagnosis_id || 
+    const diagnosisId = response.data.diagnosisId ||
+                       response.data.diagnosis_id ||
                        response.data.id ||
                        response.data.sessionId ||
                        response.data.session_id ||
                        `mock_diagnosis_${service}_${Date.now()}`;
-    
+
     if (!diagnosisId) {
       // 如果没有ID字段，检查是否有成功状态
-      if (response.data.status === 'success' || 
-          response.data.message || 
+      if (response.data.status === 'success' ||
+          response.data.message ||
           response.data.result) {
         logger.warn(`${name}服务启动成功，但响应格式不标准`);
         continue;
@@ -260,26 +260,26 @@ async function testHealthDataStorage() {
       timestamp: new Date().toISOString()
     }
   };
-  
+
   const response = await apiRequest('POST', '/api/health-data/records', healthData, {
     'Authorization': `Bearer ${TEST_CONFIG.AUTH_TOKEN}`
   });
-  
+
   if (!response.ok) {
     throw new Error(`健康数据存储失败: ${response.status}`);
   }
-  
+
   // 检查响应格式，可能recordId在不同字段中
-  const recordId = response.data.recordId || 
-                  response.data.record_id || 
+  const recordId = response.data.recordId ||
+                  response.data.record_id ||
                   response.data.id ||
                   response.data.dataId ||
                   `mock_record_${Date.now()}`;
-  
+
   if (!recordId) {
     // 如果没有ID字段，检查是否有成功状态
-    if (response.data.status === 'success' || 
-        response.data.message || 
+    if (response.data.status === 'success' ||
+        response.data.message ||
         response.data.result) {
       logger.warn('健康数据存储成功，但响应格式不标准');
       return;
@@ -294,33 +294,33 @@ async function testHealthDataStorage() {
 async function runE2ETests() {
   logger.info('🚀 开始索克生活 APP 端到端功能测试');
   logger.info(`📡 API服务地址: ${TEST_CONFIG.API_BASE_URL}`);
-  
+
   console.log('\n' + '='.repeat(60));
-  
+
   // 执行核心测试
   await runTest('API网关健康检查', testApiGatewayHealth);
   await runTest('用户认证流程', testUserAuthentication);
   await runTest('智能体服务初始化', testAgentServices);
   await runTest('四诊服务功能', testDiagnosisServices);
   await runTest('健康数据存储', testHealthDataStorage);
-  
+
   // 输出测试结果
   console.log('\n' + '='.repeat(60));
   logger.info('📊 测试结果统计:');
   console.log(`   总计: ${testResults.total} 个测试`);
   console.log(`   通过: ${testResults.passed} 个测试`);
   console.log(`   失败: ${testResults.failed} 个测试`);
-  
+
   if (testResults.failed > 0) {
     console.log('\n❌ 失败的测试:');
     testResults.errors.forEach(({ test, error }) => {
       console.log(`   • ${test}: ${error}`);
     });
   }
-  
+
   const successRate = ((testResults.passed / testResults.total) * 100).toFixed(1);
   console.log(`\n🎯 测试通过率: ${successRate}%`);
-  
+
   if (testResults.failed === 0) {
     logger.success('🎉 所有测试通过！索克生活 APP 核心功能运行正常');
   } else {
@@ -337,4 +337,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { runE2ETests }; 
+module.exports = { runE2ETests };

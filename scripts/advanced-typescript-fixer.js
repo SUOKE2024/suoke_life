@@ -97,7 +97,7 @@ class AdvancedTypeScriptFixer {
   parseErrors(output) {
     const errors = [];
     const lines = output.split('\n');
-    
+
     for (const line of lines) {
       const match = line.match(/^(.+?)\((\d+),(\d+)\):\s*error\s+TS(\d+):\s*(.+)$/);
       if (match) {
@@ -111,7 +111,7 @@ class AdvancedTypeScriptFixer {
         });
       }
     }
-    
+
     return errors;
   }
 
@@ -121,9 +121,9 @@ class AdvancedTypeScriptFixer {
   fixSpecificError(error, content) {
     const { code, message, line, column } = error;
     const lines = content.split('\n');
-    
+
     if (line > lines.length) return content;
-    
+
     const errorLine = lines[line - 1];
     let fixedLine = errorLine;
 
@@ -137,19 +137,19 @@ class AdvancedTypeScriptFixer {
           fixedLine = this.fixMissingColon(errorLine, column);
         }
         break;
-        
+
       case 'TS1003': // 期望标识符
         fixedLine = this.fixIdentifierError(errorLine, column);
         break;
-        
+
       case 'TS1128': // 期望声明或语句
         fixedLine = this.fixDeclarationError(errorLine);
         break;
-        
+
       case 'TS1434': // 意外的关键字或标识符
         fixedLine = this.fixUnexpectedKeyword(errorLine, column);
         break;
-        
+
       case 'TS1109': // 期望表达式
         fixedLine = this.fixExpressionError(errorLine, column);
         break;
@@ -159,7 +159,7 @@ class AdvancedTypeScriptFixer {
       lines[line - 1] = fixedLine;
       return lines.join('\n');
     }
-    
+
     return content;
   }
 
@@ -168,15 +168,15 @@ class AdvancedTypeScriptFixer {
    */
   fixMissingComma(line, column) {
     if (column > line.length) return line;
-    
+
     // 在对象属性或数组元素后添加逗号
     const beforeColumn = line.substring(0, column - 1);
     const afterColumn = line.substring(column - 1);
-    
+
     if (beforeColumn.match(/\w+\s*:\s*[^,}]+$/)) {
       return beforeColumn + ',' + afterColumn;
     }
-    
+
     return line;
   }
 
@@ -246,7 +246,7 @@ class AdvancedTypeScriptFixer {
    */
   applyFixPatterns(content) {
     let fixedContent = content;
-    
+
     for (const pattern of this.fixPatterns) {
       try {
         if (typeof pattern.replacement === 'function') {
@@ -258,7 +258,7 @@ class AdvancedTypeScriptFixer {
         console.warn(`应用修复模式 "${pattern.name}" 时出错:`, error.message);
       }
     }
-    
+
     return fixedContent;
   }
 
@@ -278,7 +278,7 @@ class AdvancedTypeScriptFixer {
       fixedContent = this.applyFixPatterns(fixedContent);
 
       // 获取该文件的特定错误并修复
-      const errors = this.getTypeScriptErrors().filter(error => 
+      const errors = this.getTypeScriptErrors().filter(error =>
         error.file.endsWith(filePath) || filePath.endsWith(error.file)
       );
 
@@ -322,16 +322,16 @@ class AdvancedTypeScriptFixer {
    */
   findTypeScriptFiles() {
     const files = [];
-    
+
     const scanDirectory = (dir) => {
       if (!fs.existsSync(dir)) return;
-      
+
       const items = fs.readdirSync(dir);
-      
+
       for (const item of items) {
         const fullPath = path.join(dir, item);
         const stat = fs.statSync(fullPath);
-        
+
         if (stat.isDirectory()) {
           if (!item.startsWith('.') && item !== 'node_modules') {
             scanDirectory(fullPath);
@@ -344,7 +344,7 @@ class AdvancedTypeScriptFixer {
 
     scanDirectory('src');
     scanDirectory('cursor-voice-extension');
-    
+
     return files;
   }
 
@@ -405,4 +405,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = AdvancedTypeScriptFixer; 
+module.exports = AdvancedTypeScriptFixer;

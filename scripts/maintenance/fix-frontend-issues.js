@@ -92,7 +92,6 @@ function fixNavigationTypes() {
   const navigationTypesContent = `
 // 导航类型定义
 export type RootStackParamList = {
-  Splash: undefined;
   Auth: undefined;
   Main: undefined;
 };

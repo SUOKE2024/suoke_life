@@ -61,7 +61,7 @@
 - ✅ `src/i18n/locales/en.json` - 英文翻译
 
 #### 9. 屏幕组件 (基础结构)
-- ✅ `src/screens/SplashScreen.tsx` - 启动屏幕
+- ❌ `src/screens/SplashScreen.tsx` - 启动屏幕 (已删除)
 - ✅ `src/screens/auth/` - 认证相关屏幕
   - WelcomeScreen.tsx
   - LoginScreen.tsx

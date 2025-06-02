@@ -32,14 +32,14 @@ function analyzeDirectory(dirPath, basePath = '') {
 
   try {
     const items = fs.readdirSync(dirPath);
-    
+
     for (const item of items) {
       const fullPath = path.join(dirPath, item);
       const relativePath = path.join(basePath, item);
-      
+
       try {
         const stats = fs.statSync(fullPath);
-        
+
         if (stats.isDirectory()) {
           // 递归分析子目录
           const subResults = analyzeDirectory(fullPath, relativePath);
@@ -52,7 +52,7 @@ function analyzeDirectory(dirPath, basePath = '') {
         } else if (stats.isFile() && (item.endsWith('.ts') || item.endsWith('.tsx') || item.endsWith('.js') || item.endsWith('.jsx'))) {
           results.totalFiles++;
           results.totalSize += stats.size;
-          
+
           // 分类文件类型
           if (relativePath.includes('components') || item.includes('Component') || item.includes('Screen')) {
             results.componentFiles++;
@@ -61,7 +61,7 @@ function analyzeDirectory(dirPath, basePath = '') {
           } else if (relativePath.includes('utils') || relativePath.includes('hooks')) {
             results.utilFiles++;
           }
-          
+
           // 记录大文件
           if (stats.size > 50 * 1024) { // 大于50KB的文件
             results.largeFiles.push({
@@ -191,4 +191,4 @@ try {
   console.warn('⚠️  无法保存报告文件');
 }
 
-console.log('\n✅ 内存分析完成！'); 
+console.log('\n✅ 内存分析完成！');

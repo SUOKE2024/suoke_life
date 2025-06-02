@@ -68,7 +68,7 @@ async function makeRequest(method, endpoint, data = null, headers = {}) {
   try {
     const response = await fetch(url, options);
     const responseData = await response.json();
-    
+
     return {
       success: response.ok,
       status: response.status,
@@ -92,12 +92,12 @@ class IntegrationTests {
 
   async runTest(name, testFunction) {
     logInfo(`Running: ${name}`);
-    
+
     try {
       const startTime = Date.now();
       const result = await testFunction();
       const duration = Date.now() - startTime;
-      
+
       if (result.success) {
         logSuccess(`${name} (${duration}ms)`);
         this.results.push({ name, status: 'PASS', duration });
@@ -114,7 +114,7 @@ class IntegrationTests {
   // 1. 健康检查测试
   async testHealthCheck() {
     const response = await makeRequest('GET', '/health');
-    
+
     if (!response.success) {
       return { success: false, message: 'Health check failed' };
     }
@@ -127,9 +127,9 @@ class IntegrationTests {
     // 验证所有服务都是健康的
     const unhealthyServices = data.services.filter(service => service.status !== 'healthy');
     if (unhealthyServices.length > 0) {
-      return { 
-        success: false, 
-        message: `Unhealthy services: ${unhealthyServices.map(s => s.service).join(', ')}` 
+      return {
+        success: false,
+        message: `Unhealthy services: ${unhealthyServices.map(s => s.service).join(', ')}`
       };
     }
 
@@ -139,7 +139,7 @@ class IntegrationTests {
   // 2. 用户认证测试
   async testUserAuthentication() {
     const response = await makeRequest('POST', '/api/auth/login', TEST_CONFIG.testUser);
-    
+
     if (!response.success) {
       return { success: false, message: 'Login request failed' };
     }
@@ -151,7 +151,7 @@ class IntegrationTests {
 
     // 保存token用于后续测试
     this.authToken = data.token;
-    
+
     // 验证token
     const verifyResponse = await makeRequest('POST', '/api/auth/verify', { token: data.token });
     if (!verifyResponse.success || !verifyResponse.data.valid) {
@@ -184,11 +184,11 @@ class IntegrationTests {
     const userData = data.data;
     const requiredFields = ['id', 'email', 'name', 'health_profile'];
     const missingFields = requiredFields.filter(field => !userData[field]);
-    
+
     if (missingFields.length > 0) {
-      return { 
-        success: false, 
-        message: `Missing user data fields: ${missingFields.join(', ')}` 
+      return {
+        success: false,
+        message: `Missing user data fields: ${missingFields.join(', ')}`
       };
     }
 
@@ -223,9 +223,9 @@ class IntegrationTests {
 
     const failedAgents = results.filter(r => !r.success);
     if (failedAgents.length > 0) {
-      return { 
-        success: false, 
-        message: `Failed agents: ${failedAgents.map(r => r.agent).join(', ')}` 
+      return {
+        success: false,
+        message: `Failed agents: ${failedAgents.map(r => r.agent).join(', ')}`
       };
     }
 
@@ -260,9 +260,9 @@ class IntegrationTests {
 
     const failedDiagnosis = results.filter(r => !r.success);
     if (failedDiagnosis.length > 0) {
-      return { 
-        success: false, 
-        message: `Failed diagnosis: ${failedDiagnosis.map(r => r.type).join(', ')}` 
+      return {
+        success: false,
+        message: `Failed diagnosis: ${failedDiagnosis.map(r => r.type).join(', ')}`
       };
     }
 
@@ -294,9 +294,9 @@ class IntegrationTests {
     // 检查是否有响应时间超过阈值的请求
     const slowRequests = performanceResults.filter(r => r.responseTime > 1000); // 1秒阈值
     if (slowRequests.length > 0) {
-      return { 
-        success: false, 
-        message: `Slow requests detected: ${slowRequests.map(r => `${r.endpoint} (${r.responseTime}ms)`).join(', ')}` 
+      return {
+        success: false,
+        message: `Slow requests detected: ${slowRequests.map(r => `${r.endpoint} (${r.responseTime}ms)`).join(', ')}`
       };
     }
 
@@ -325,12 +325,12 @@ class IntegrationTests {
 
     for (const test of errorTests) {
       const response = await test.request();
-      
+
       // 对于错误测试，我们期望得到适当的错误响应
       if (response.success && response.data.success) {
-        return { 
-          success: false, 
-          message: `${test.name} should have failed but succeeded` 
+        return {
+          success: false,
+          message: `${test.name} should have failed but succeeded`
         };
       }
     }
@@ -366,7 +366,7 @@ class IntegrationTests {
       const color = result.status === 'PASS' ? 'green' : 'red';
       const duration = result.duration ? ` (${result.duration}ms)` : '';
       log(`${icon} ${result.name}: ${result.status}${duration}`, color);
-      
+
       if (result.error) {
         log(`  Error: ${result.error}`, 'red');
       }
@@ -388,11 +388,11 @@ class IntegrationTests {
 
     const reportPath = path.join(__dirname, '..', 'test-results', 'integration-test-report.json');
     const reportDir = path.dirname(reportPath);
-    
+
     if (!fs.existsSync(reportDir)) {
       fs.mkdirSync(reportDir, { recursive: true });
     }
-    
+
     fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
     log(`\n📄 Test report saved to: ${reportPath}`, 'blue');
 
@@ -406,7 +406,7 @@ async function main() {
     // 检查后端服务是否运行
     logInfo('Checking backend service availability...');
     const healthResponse = await makeRequest('GET', '/health');
-    
+
     if (!healthResponse.success) {
       logError('Backend service is not available. Please start the mock service first.');
       logInfo('Run: python3 scripts/localTest.py');
@@ -439,4 +439,4 @@ if (require.main === module) {
   main();
 }
 
-module.exports = { IntegrationTests, makeRequest }; 
+module.exports = { IntegrationTests, makeRequest };

@@ -10,13 +10,13 @@ console.log('==================');
 // 检查设备连接状态
 function checkDeviceConnection() {
   console.log('\n📱 检查设备连接状态...');
-  
+
   try {
     // 检查iOS模拟器
     const iosDevices = execSync('xcrun simctl list devices | grep "Booted"', { encoding: 'utf8' });
     const iosCount = iosDevices.split('\n').filter(line => line.trim()).length;
     console.log(`✅ iOS设备/模拟器: ${iosCount}个已启动`);
-    
+
     // 检查Android设备
     try {
       const androidDevices = execSync('adb devices', { encoding: 'utf8' });
@@ -25,7 +25,7 @@ function checkDeviceConnection() {
     } catch (error) {
       console.log('⚠️  Android设备: 无法检查连接状态');
     }
-    
+
     return iosCount > 0;
   } catch (error) {
     console.log('❌ 设备连接检查失败');
@@ -36,7 +36,7 @@ function checkDeviceConnection() {
 // 运行Metro服务器
 function startMetroServer() {
   console.log('\n🔄 启动Metro服务器...');
-  
+
   try {
     // 检查Metro是否已经运行
     const metroCheck = execSync('lsof -ti:8081', { encoding: 'utf8' }).trim();
@@ -47,14 +47,14 @@ function startMetroServer() {
   } catch (error) {
     // Metro未运行，启动它
     console.log('🚀 启动新的Metro服务器...');
-    
+
     const metro = spawn('npx', ['react-native', 'start'], {
       stdio: 'pipe',
       detached: true
     });
-    
+
     metro.unref();
-    
+
     // 等待Metro启动
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -68,39 +68,39 @@ function startMetroServer() {
 // 运行设备测试
 async function runDeviceTests() {
   console.log('\n🧪 运行设备集成测试...');
-  
+
   try {
     // 创建测试结果目录
     const testResultsDir = path.join(process.cwd(), 'test-results');
     if (!fs.existsSync(testResultsDir)) {
       fs.mkdirSync(testResultsDir, { recursive: true });
     }
-    
+
     // 运行设备测试脚本
     console.log('📋 执行设备功能验证...');
     execSync('node scripts/validate-device-features.js', { stdio: 'inherit' });
-    
+
     // 运行原生功能测试
     console.log('\n🔧 测试原生功能...');
     execSync('npm run test:native', { stdio: 'inherit' });
-    
+
     console.log('\n✅ 设备测试完成！');
-    
+
     // 生成测试报告
     generateTestReport();
-    
+
   } catch (error) {
     console.error('❌ 设备测试失败:', error.message);
     return false;
   }
-  
+
   return true;
 }
 
 // 生成测试报告
 function generateTestReport() {
   console.log('\n📊 生成测试报告...');
-  
+
   const timestamp = new Date().toISOString();
   const report = {
     timestamp,
@@ -118,13 +118,13 @@ function generateTestReport() {
       '测试不同设备型号'
     ]
   };
-  
+
   // 保存测试报告
   const reportPath = path.join(process.cwd(), 'test-results', `device-test-${Date.now()}.json`);
   fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
-  
+
   console.log(`📄 测试报告已保存: ${reportPath}`);
-  
+
   // 显示测试总结
   console.log('\n📈 测试总结:');
   console.log(`   测试时间: ${new Date(timestamp).toLocaleString()}`);
@@ -138,7 +138,7 @@ function generateTestReport() {
 function showOptimizationRecommendations() {
   console.log('\n💡 性能优化建议:');
   console.log('================');
-  
+
   const recommendations = [
     {
       category: '内存优化',
@@ -177,7 +177,7 @@ function showOptimizationRecommendations() {
       ]
     }
   ];
-  
+
   recommendations.forEach(rec => {
     console.log(`\n🎯 ${rec.category}:`);
     rec.items.forEach(item => {
@@ -191,22 +191,22 @@ async function main() {
   try {
     console.log('🔍 索克生活设备测试执行器');
     console.log('============================');
-    
+
     // 1. 检查设备连接
     const hasDevices = checkDeviceConnection();
     if (!hasDevices) {
       console.log('⚠️  建议: 启动iOS模拟器以获得最佳测试体验');
     }
-    
+
     // 2. 启动Metro服务器
     await startMetroServer();
-    
+
     // 3. 运行设备测试
     const testSuccess = await runDeviceTests();
-    
+
     // 4. 显示优化建议
     showOptimizationRecommendations();
-    
+
     if (testSuccess) {
       console.log('\n🎉 设备测试执行完成！');
       console.log('📋 查看详细报告: DEVICE_VALIDATION_REPORT.md');
@@ -215,7 +215,7 @@ async function main() {
       console.log('\n❌ 设备测试执行失败！');
       process.exit(1);
     }
-    
+
   } catch (error) {
     console.error('💥 执行过程中发生错误:', error);
     process.exit(1);
@@ -223,4 +223,4 @@ async function main() {
 }
 
 // 运行主函数
-main(); 
+main();

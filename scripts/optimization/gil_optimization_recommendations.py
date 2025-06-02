@@ -27,11 +27,11 @@ class GILIssue:
 
 class GILOptimizationAnalyzer:
     """GIL优化分析器"""
-    
+
     def __init__(self, project_root: str):
         self.project_root = Path(project_root)
         self.issues: List[GILIssue] = []
-        
+
         # 定义问题模式
         self.patterns = {
             'thread_pool_executor': {
@@ -45,11 +45,11 @@ class GILOptimizationAnalyzer:
                 'description': '显式线程锁可能导致GIL竞争'
             }
         }
-    
+
     def analyze_file(self, file_path: Path) -> List[GILIssue]:
         """分析单个文件"""
         issues = []
-        
+
         try:
             with open(file_path, 'r', encoding='utf-8') as f:
                 content = f.read()
@@ -57,20 +57,20 @@ class GILOptimizationAnalyzer:
         except Exception as e:
             print(f"无法读取文件 {file_path}: {e}")
             return issues
-        
+
         # 检查每个模式
         for pattern_name, pattern_info in self.patterns.items():
             matches = re.finditer(pattern_info['pattern'], content, re.MULTILINE | re.IGNORECASE)
-            
+
             for match in matches:
                 # 找到匹配的行号
                 line_number = content[:match.start()].count('\n') + 1
                 current_line = lines[line_number - 1] if line_number <= len(lines) else ""
-                
+
                 # 生成优化建议
                 suggested_fix = self._generate_fix_suggestion(pattern_name, current_line)
                 performance_impact = self._estimate_performance_impact(pattern_name)
-                
+
                 issue = GILIssue(
                     file_path=str(file_path.relative_to(self.project_root)),
                     line_number=line_number,
@@ -81,11 +81,11 @@ class GILOptimizationAnalyzer:
                     suggested_fix=suggested_fix,
                     performance_impact=performance_impact
                 )
-                
+
                 issues.append(issue)
-        
+
         return issues
-    
+
     def _generate_fix_suggestion(self, pattern_name: str, current_line: str) -> str:
         """生成修复建议"""
         suggestions = {
@@ -128,9 +128,9 @@ manager = multiprocessing.Manager()
 shared_dict = manager.dict()
 """
         }
-        
+
         return suggestions.get(pattern_name, f"当前代码: {current_line}\n建议: 考虑使用ProcessPoolExecutor或异步I/O优化")
-    
+
     def _estimate_performance_impact(self, pattern_name: str) -> str:
         """估算性能影响"""
         impacts = {
@@ -138,53 +138,53 @@ shared_dict = manager.dict()
             'threading_lock': "中等影响：可能导致线程竞争和上下文切换开销"
         }
         return impacts.get(pattern_name, "影响程度待评估")
-    
+
     def analyze_project(self) -> List[GILIssue]:
         """分析整个项目"""
         print("🔍 开始分析项目GIL问题...")
-        
+
         # 查找所有Python文件
         python_files = list(self.project_root.rglob("*.py"))
-        
+
         # 排除某些目录
         excluded_dirs = {'.git', '__pycache__', '.pytest_cache', 'node_modules', 'venv', '.venv'}
         python_files = [
-            f for f in python_files 
+            f for f in python_files
             if not any(excluded in f.parts for excluded in excluded_dirs)
         ]
-        
+
         print(f"找到 {len(python_files)} 个Python文件")
-        
+
         all_issues = []
         for file_path in python_files:
             file_issues = self.analyze_file(file_path)
             all_issues.extend(file_issues)
-            
+
             if file_issues:
                 print(f"  📄 {file_path.relative_to(self.project_root)}: {len(file_issues)} 个问题")
-        
+
         self.issues = all_issues
         return all_issues
-    
+
     def generate_report(self, output_file: str = "gil_optimization_report.json") -> Dict[str, Any]:
         """生成优化报告"""
         # 按严重程度分组
         high_severity = [issue for issue in self.issues if issue.severity == 'high']
         medium_severity = [issue for issue in self.issues if issue.severity == 'medium']
         low_severity = [issue for issue in self.issues if issue.severity == 'low']
-        
+
         # 按文件分组
         files_with_issues = {}
         for issue in self.issues:
             if issue.file_path not in files_with_issues:
                 files_with_issues[issue.file_path] = []
             files_with_issues[issue.file_path].append(issue)
-        
+
         # 生成统计信息
         issue_types = {}
         for issue in self.issues:
             issue_types[issue.issue_type] = issue_types.get(issue.issue_type, 0) + 1
-        
+
         report = {
             'analysis_timestamp': __import__('time').strftime('%Y-%m-%d %H:%M:%S'),
             'summary': {
@@ -213,19 +213,19 @@ shared_dict = manager.dict()
             ],
             'optimization_recommendations': self._generate_optimization_plan()
         }
-        
+
         # 保存报告
         with open(output_file, 'w', encoding='utf-8') as f:
             json.dump(report, f, indent=2, ensure_ascii=False)
-        
+
         print(f"\n📊 优化报告已保存到: {output_file}")
         return report
-    
+
     def _generate_optimization_plan(self) -> Dict[str, Any]:
         """生成优化计划"""
         high_issues = [issue for issue in self.issues if issue.severity == 'high']
         medium_issues = [issue for issue in self.issues if issue.severity == 'medium']
-        
+
         return {
             'phase_1_immediate': {
                 'description': '立即优化（1-2周）',
@@ -257,34 +257,34 @@ shared_dict = manager.dict()
                 'estimated_performance_gain': '80-200%'
             }
         }
-    
+
     def print_summary(self):
         """打印分析摘要"""
         print("\n" + "="*60)
         print("🎯 GIL优化分析摘要")
         print("="*60)
-        
+
         high_count = len([i for i in self.issues if i.severity == 'high'])
         medium_count = len([i for i in self.issues if i.severity == 'medium'])
         low_count = len([i for i in self.issues if i.severity == 'low'])
-        
+
         print(f"总问题数: {len(self.issues)}")
         print(f"🔴 高优先级: {high_count}")
         print(f"🟡 中优先级: {medium_count}")
         print(f"🟢 低优先级: {low_count}")
-        
+
         # 显示最严重的问题
         if high_count > 0:
             print(f"\n⚠️  发现 {high_count} 个高优先级GIL问题，建议立即优化")
             print("\n🔥 最严重的问题:")
             for i, issue in enumerate([i for i in self.issues if i.severity == 'high'][:5], 1):
                 print(f"  {i}. {issue.file_path}:{issue.line_number} - {issue.description}")
-        
+
         # 按问题类型统计
         issue_types = {}
         for issue in self.issues:
             issue_types[issue.issue_type] = issue_types.get(issue.issue_type, 0) + 1
-        
+
         if issue_types:
             print(f"\n📊 问题类型分布:")
             for issue_type, count in sorted(issue_types.items(), key=lambda x: x[1], reverse=True):
@@ -295,16 +295,16 @@ def main():
     """主函数"""
     project_root = os.getcwd()
     analyzer = GILOptimizationAnalyzer(project_root)
-    
+
     # 分析项目
     issues = analyzer.analyze_project()
-    
+
     # 打印摘要
     analyzer.print_summary()
-    
+
     # 生成报告
     report = analyzer.generate_report()
-    
+
     # 显示优化建议
     print(f"\n💡 优化计划:")
     for phase, details in report['optimization_recommendations'].items():
@@ -315,4 +315,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main() 
+    main()

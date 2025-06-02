@@ -154,7 +154,7 @@ async function main() {
     'scripts/fix-remaining-syntax-errors.js - 剩余语法错误修复',
     'scripts/fix-test-files.js - 测试文件修复'
   ];
-  
+
   scripts.forEach((script, index) => {
     const scriptFile = script.split(' - ')[0];
     const description = script.split(' - ')[1];
@@ -194,4 +194,4 @@ if (require.main === module) {
     console.error('❌ 运行总结脚本时出错:', error);
     process.exit(1);
   });
-} 
+}

@@ -43,14 +43,14 @@ class MockUIInteraction {
   async navigate(screen, data = {}) {
     // 模拟导航延迟
     await new Promise(resolve => setTimeout(resolve, Math.random() * 300 + 100));
-    
+
     this.navigationHistory.push({
       from: this.currentScreen,
       to: screen,
       timestamp: new Date().toISOString(),
       data
     });
-    
+
     this.currentScreen = screen;
     return { success: true, screen, data };
   }
@@ -58,26 +58,26 @@ class MockUIInteraction {
   async inputData(field, value) {
     // 模拟输入延迟
     await new Promise(resolve => setTimeout(resolve, Math.random() * 200 + 50));
-    
+
     return { success: true, field, value };
   }
 
   async submitForm(formData) {
     // 模拟表单提交
     await new Promise(resolve => setTimeout(resolve, Math.random() * 1000 + 500));
-    
+
     // 模拟验证
     if (formData.email && !formData.email.includes('@')) {
       return { success: false, error: '邮箱格式不正确' };
     }
-    
+
     return { success: true, data: formData };
   }
 
   async waitForElement(selector, timeout = 5000) {
     // 模拟等待元素出现
     await new Promise(resolve => setTimeout(resolve, Math.random() * 1000 + 200));
-    
+
     // 模拟元素查找
     const found = Math.random() > 0.1; // 90% 成功率
     return { found, selector };
@@ -96,7 +96,7 @@ class MockBackendService {
 
   async login(credentials) {
     await new Promise(resolve => setTimeout(resolve, Math.random() * 1000 + 300));
-    
+
     if (credentials.email === 'test@example.com' && credentials.password === 'password123') {
       return {
         success: true,
@@ -108,43 +108,43 @@ class MockBackendService {
         }
       };
     }
-    
+
     return { success: false, error: '用户名或密码错误' };
   }
 
   async register(userData) {
     await new Promise(resolve => setTimeout(resolve, Math.random() * 1500 + 500));
-    
+
     if (this.users.has(userData.email)) {
       return { success: false, error: '用户已存在' };
     }
-    
+
     const user = {
       id: Date.now().toString(),
       ...userData,
       createdAt: new Date().toISOString()
     };
-    
+
     this.users.set(userData.email, user);
     return { success: true, user };
   }
 
   async uploadHealthData(data) {
     await new Promise(resolve => setTimeout(resolve, Math.random() * 800 + 200));
-    
+
     const record = {
       id: Date.now().toString(),
       ...data,
       timestamp: new Date().toISOString()
     };
-    
+
     this.healthRecords.set(record.id, record);
     return { success: true, record };
   }
 
   async getHealthAnalysis(userId) {
     await new Promise(resolve => setTimeout(resolve, Math.random() * 2000 + 1000));
-    
+
     return {
       success: true,
       analysis: {
@@ -158,14 +158,14 @@ class MockBackendService {
 
   async bookAppointment(appointmentData) {
     await new Promise(resolve => setTimeout(resolve, Math.random() * 1200 + 400));
-    
+
     const appointment = {
       id: Date.now().toString(),
       ...appointmentData,
       status: 'confirmed',
       createdAt: new Date().toISOString()
     };
-    
+
     this.appointments.set(appointment.id, appointment);
     return { success: true, appointment };
   }
@@ -315,9 +315,9 @@ const userFlows = [
         action: async (ui, backend) => {
           // 模拟智能体处理时间
           await new Promise(resolve => setTimeout(resolve, 2000));
-          return { 
-            success: true, 
-            response: '根据您的症状，建议进行体检。我来为您推荐合适的服务。' 
+          return {
+            success: true,
+            response: '根据您的症状，建议进行体检。我来为您推荐合适的服务。'
           };
         }
       },
@@ -367,9 +367,9 @@ const userFlows = [
         name: '获取学习资源',
         action: async (ui, backend) => {
           await new Promise(resolve => setTimeout(resolve, 1500));
-          return { 
-            success: true, 
-            resources: ['中医基础理论', '养生功法', '食疗方案'] 
+          return {
+            success: true,
+            resources: ['中医基础理论', '养生功法', '食疗方案']
           };
         }
       },
@@ -453,10 +453,10 @@ const userFlows = [
         name: '保存到区块链',
         action: async (ui, backend) => {
           await new Promise(resolve => setTimeout(resolve, 1500));
-          return { 
-            success: true, 
+          return {
+            success: true,
             hash: 'blockchain-hash-123',
-            verified: true 
+            verified: true
           };
         }
       }
@@ -470,11 +470,11 @@ const userFlows = [
 async function runUserFlowTest(flow) {
   console.log(`\n🎬 测试流程: ${flow.name}`);
   console.log(`   描述: ${flow.description}`);
-  
+
   const ui = new MockUIInteraction();
   const backend = new MockBackendService();
   const startTime = Date.now();
-  
+
   const flowResult = {
     name: flow.name,
     startTime,
@@ -483,16 +483,16 @@ async function runUserFlowTest(flow) {
     error: null,
     duration: 0
   };
-  
+
   try {
     for (let i = 0; i < flow.steps.length; i++) {
       const step = flow.steps[i];
       console.log(`     ${i + 1}. ${step.name}...`);
-      
+
       const stepStartTime = Date.now();
       const result = await step.action(ui, backend);
       const stepDuration = Date.now() - stepStartTime;
-      
+
       const stepResult = {
         name: step.name,
         success: result.success !== false,
@@ -500,9 +500,9 @@ async function runUserFlowTest(flow) {
         result: result,
         error: result.error || null
       };
-      
+
       flowResult.steps.push(stepResult);
-      
+
       if (!stepResult.success) {
         console.log(`        ❌ 失败: ${stepResult.error}`);
         flowResult.result = 'failed';
@@ -511,15 +511,15 @@ async function runUserFlowTest(flow) {
       } else {
         console.log(`        ✅ 成功 (${stepDuration}ms)`);
       }
-      
+
       // 步骤间延迟
       await new Promise(resolve => setTimeout(resolve, 100));
     }
-    
+
     flowResult.duration = Date.now() - startTime;
-    
+
     e2eResults.total++;
-    
+
     if (flowResult.result === 'success') {
       e2eResults.passed++;
       console.log(`   ✅ 流程完成 (${flowResult.duration}ms)`);
@@ -531,22 +531,22 @@ async function runUserFlowTest(flow) {
         error: flowResult.error
       });
     }
-    
+
     e2eResults.userFlows.push(flowResult);
     return flowResult;
-    
+
   } catch (error) {
     flowResult.result = 'error';
     flowResult.error = error.message;
     flowResult.duration = Date.now() - startTime;
-    
+
     e2eResults.total++;
     e2eResults.failed++;
     e2eResults.errors.push({
       flow: flow.name,
       error: error.message
     });
-    
+
     console.log(`   ❌ 流程异常: ${error.message}`);
     return flowResult;
   }
@@ -557,7 +557,7 @@ async function runUserFlowTest(flow) {
  */
 async function runPerformanceTests() {
   console.log('\n⚡ 用户流程性能测试');
-  
+
   const performanceFlow = {
     name: '性能压力测试',
     description: '模拟多用户并发操作',
@@ -572,11 +572,11 @@ async function runPerformanceTests() {
               password: 'password123'
             }));
           }
-          
+
           const results = await Promise.all(promises);
           const successCount = results.filter(r => r.success).length;
-          
-          return { 
+
+          return {
             success: successCount >= 8, // 80% 成功率
             successCount,
             total: 10
@@ -594,11 +594,11 @@ async function runPerformanceTests() {
               steps: Math.floor(Math.random() * 1000)
             }))
           };
-          
+
           const startTime = Date.now();
           const result = await backend.uploadHealthData(largeData);
           const duration = Date.now() - startTime;
-          
+
           return {
             success: result.success && duration < 5000, // 5秒内完成
             duration
@@ -607,7 +607,7 @@ async function runPerformanceTests() {
       }
     ]
   };
-  
+
   await runUserFlowTest(performanceFlow);
 }
 
@@ -616,7 +616,7 @@ async function runPerformanceTests() {
  */
 async function runErrorHandlingTests() {
   console.log('\n⚠️  错误处理测试');
-  
+
   const errorFlow = {
     name: '错误处理测试',
     description: '测试各种错误情况的处理',
@@ -628,7 +628,7 @@ async function runErrorHandlingTests() {
             email: 'invalid@example.com',
             password: 'wrongpassword'
           });
-          
+
           // 期望失败
           return { success: !result.success };
         }
@@ -654,14 +654,14 @@ async function runErrorHandlingTests() {
           const result = await backend.uploadHealthData({
             invalidData: 'this should fail'
           });
-          
+
           // 应该处理错误数据
           return { success: true };
         }
       }
     ]
   };
-  
+
   await runUserFlowTest(errorFlow);
 }
 
@@ -672,11 +672,11 @@ function calculatePerformanceStats() {
   const durations = e2eResults.userFlows
     .filter(flow => flow.result === 'success')
     .map(flow => flow.duration);
-  
+
   if (durations.length > 0) {
-    e2eResults.performance.averageFlowTime = 
+    e2eResults.performance.averageFlowTime =
       durations.reduce((sum, duration) => sum + duration, 0) / durations.length;
-    
+
     e2eResults.performance.slowestFlow = Math.max(...durations);
     e2eResults.performance.fastestFlow = Math.min(...durations);
   }
@@ -687,7 +687,7 @@ function calculatePerformanceStats() {
  */
 function generateE2EReport() {
   calculatePerformanceStats();
-  
+
   const report = {
     timestamp: new Date().toISOString(),
     summary: {
@@ -712,31 +712,31 @@ function generateE2EReport() {
     errors: e2eResults.errors,
     recommendations: []
   };
-  
+
   // 生成建议
   if (e2eResults.failed > 0) {
     report.recommendations.push('修复失败的用户流程');
   }
-  
+
   if (e2eResults.performance.averageFlowTime > 10000) {
     report.recommendations.push('优化流程性能，减少响应时间');
   }
-  
+
   if (e2eResults.passed / e2eResults.total < 0.9) {
     report.recommendations.push('提升用户流程稳定性');
   }
-  
+
   report.recommendations.push('定期进行端到端测试');
   report.recommendations.push('监控用户体验指标');
   report.recommendations.push('优化关键用户路径');
-  
+
   try {
     fs.writeFileSync('e2e-user-flow-test-report.json', JSON.stringify(report, null, 2));
     console.log('\n📄 端到端测试报告已保存到: e2e-user-flow-test-report.json');
   } catch (error) {
     console.warn('⚠️  无法保存测试报告');
   }
-  
+
   return report;
 }
 
@@ -745,48 +745,48 @@ function generateE2EReport() {
  */
 async function runE2EUserFlowTests() {
   console.log('开始端到端用户流程测试...\n');
-  
+
   try {
     // 运行主要用户流程测试
     for (const flow of userFlows) {
       await runUserFlowTest(flow);
     }
-    
+
     // 运行性能测试
     await runPerformanceTests();
-    
+
     // 运行错误处理测试
     await runErrorHandlingTests();
-    
+
     console.log('\n📊 端到端测试结果');
     console.log('=====================================');
     console.log(`总流程数: ${e2eResults.total}`);
     console.log(`通过: ${e2eResults.passed}`);
     console.log(`失败: ${e2eResults.failed}`);
     console.log(`成功率: ${((e2eResults.passed / e2eResults.total) * 100).toFixed(2)}%`);
-    
+
     if (e2eResults.performance.averageFlowTime > 0) {
       console.log(`平均流程时间: ${Math.round(e2eResults.performance.averageFlowTime)}ms`);
       console.log(`最快流程: ${e2eResults.performance.fastestFlow}ms`);
       console.log(`最慢流程: ${e2eResults.performance.slowestFlow}ms`);
     }
-    
+
     if (e2eResults.errors.length > 0) {
       console.log('\n❌ 失败的流程:');
       e2eResults.errors.forEach(error => {
         console.log(`  - ${error.flow}: ${error.error}`);
       });
     }
-    
+
     const report = generateE2EReport();
-    
+
     console.log('\n💡 建议:');
     report.recommendations.forEach(rec => {
       console.log(`  - ${rec}`);
     });
-    
+
     console.log('\n✅ 端到端用户流程测试完成！');
-    
+
   } catch (error) {
     console.error('❌ 测试执行失败:', error.message);
     process.exit(1);
@@ -798,4 +798,4 @@ if (require.main === module) {
   runE2EUserFlowTests();
 }
 
-module.exports = { runE2EUserFlowTests, e2eResults }; 
+module.exports = { runE2EUserFlowTests, e2eResults };

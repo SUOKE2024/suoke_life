@@ -54,7 +54,7 @@ const NavigationTest: React.FC = () => {
     <View style={styles.container}>
       <Text style={styles.title}>导航测试</Text>
       <Text style={styles.subtitle}>点击按钮测试各个页面的导航</Text>
-      
+
       {testNavigations.map((nav) => (
         <TouchableOpacity
           key={nav.name}
@@ -64,7 +64,7 @@ const NavigationTest: React.FC = () => {
           <Text style={styles.buttonText}>测试 {nav.label}</Text>
         </TouchableOpacity>
       ))}
-      
+
       <TouchableOpacity
         style={[styles.button, styles.resetButton]}
         onPress={() => {
@@ -132,14 +132,14 @@ export default NavigationTest;
 
 function addTestToHomeScreen() {
   const homeScreenPath = 'src/screens/main/HomeScreen.tsx';
-  
+
   if (!fs.existsSync(homeScreenPath)) {
     log('❌ HomeScreen.tsx 不存在', 'red');
     return false;
   }
 
   let content = fs.readFileSync(homeScreenPath, 'utf8');
-  
+
   // 检查是否已经添加了测试组件
   if (content.includes('NavigationTest')) {
     log('⚠️  导航测试组件已存在于 HomeScreen', 'yellow');
@@ -172,7 +172,7 @@ function addTestToHomeScreen() {
         >
           <Text style={{ color: 'white', fontSize: 12 }}>导航测试</Text>
         </TouchableOpacity>
-        
+
         {showNavigationTest && (
           <Modal
             visible={showNavigationTest}
@@ -202,8 +202,8 @@ function addTestToHomeScreen() {
   if (matches && matches.length > 0) {
     const lastStateIndex = content.lastIndexOf(matches[matches.length - 1]);
     const insertIndex = content.indexOf('\n', lastStateIndex) + 1;
-    content = content.slice(0, insertIndex) + 
-      "  const [showNavigationTest, setShowNavigationTest] = useState(false);\n" + 
+    content = content.slice(0, insertIndex) +
+      "  const [showNavigationTest, setShowNavigationTest] = useState(false);\n" +
       content.slice(insertIndex);
   }
 
@@ -300,7 +300,7 @@ async function runNavigationTest() {
   // 2. 修改 HomeScreen 添加测试入口
   log('\n🔧 添加测试入口...', 'blue');
   const success = addTestToHomeScreen();
-  
+
   if (!success) {
     log('❌ 无法添加测试入口', 'red');
     return;
@@ -308,7 +308,7 @@ async function runNavigationTest() {
 
   // 3. 检查 Metro bundler 状态
   log('\n🚀 检查 Metro bundler...', 'blue');
-  
+
   try {
     const response = await fetch('http://localhost:8081/status');
     if (response.ok) {
@@ -348,4 +348,4 @@ async function runNavigationTest() {
 runNavigationTest().catch(error => {
   log(`测试过程中发生错误: ${error.message}`, 'red');
   process.exit(1);
-}); 
+});

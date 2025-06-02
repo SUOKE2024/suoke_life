@@ -100,13 +100,13 @@ files.forEach(filePath => {
     // 特殊处理：修复复杂的对象属性定义错误
     // 修复StyleSheet对象定义
     content = content.replace(/(StyleSheet\.create\(\{[\s\S]*?)(\w+:\s*\{[^}]*\})(\n\s*)(\w+:\s*\{)/g, '$1$2,$3$4');
-    
+
     // 修复React组件props类型定义
     content = content.replace(/(React\.FC<\{[\s\S]*?)(\w+:\s*[^,}\n;]+)(\n\s*)(\w+:)/g, '$1$2,$3$4');
-    
+
     // 修复接口定义
     content = content.replace(/(interface\s+\w+\s*\{[\s\S]*?)(\w+:\s*[^,}\n;]+)(\n\s*)(\w+:)/g, '$1$2,$3$4');
-    
+
     // 修复类型定义
     content = content.replace(/(type\s+\w+\s*=\s*\{[\s\S]*?)(\w+:\s*[^,}\n;]+)(\n\s*)(\w+:)/g, '$1$2,$3$4');
 
@@ -128,4 +128,4 @@ console.log('==================================================');
 console.log(`📁 总文件数: ${files.length}`);
 console.log(`🔧 已修复文件: ${filesFixed}`);
 console.log(`✨ 总修复数: ${totalFixed}`);
-console.log('🎉 对象属性定义修复完成！'); 
+console.log('🎉 对象属性定义修复完成！');

@@ -74,7 +74,7 @@ async function makeRequest(method, endpoint, data = null, headers = {}) {
   try {
     const response = await fetch(url, options);
     const responseData = await response.json();
-    
+
     return {
       success: response.ok,
       status: response.status,
@@ -99,12 +99,12 @@ class ExtendedIntegrationTests {
 
   async runTest(name, testFunction) {
     logInfo(`Running: ${name}`);
-    
+
     try {
       const startTime = Date.now();
       const result = await testFunction();
       const duration = Date.now() - startTime;
-      
+
       if (result.success) {
         logSuccess(`${name} (${duration}ms)`);
         this.results.push({ name, status: 'PASS', duration, details: result.details });
@@ -122,7 +122,7 @@ class ExtendedIntegrationTests {
   async testAccessibilityService() {
     // 获取无障碍配置
     const getConfigResponse = await makeRequest('GET', `/api/accessibility/config?user_id=${TEST_CONFIG.testUser.id}`);
-    
+
     if (!getConfigResponse.success || !getConfigResponse.data.success) {
       return { success: false, message: 'Failed to get accessibility config' };
     }
@@ -141,8 +141,8 @@ class ExtendedIntegrationTests {
       return { success: false, message: 'Failed to update accessibility config' };
     }
 
-    return { 
-      success: true, 
+    return {
+      success: true,
       details: {
         features: getConfigResponse.data.features,
         updated_config: updateConfigResponse.data.updated_config
@@ -178,8 +178,8 @@ class ExtendedIntegrationTests {
       return { success: false, message: 'Failed to verify blockchain data' };
     }
 
-    return { 
-      success: true, 
+    return {
+      success: true,
       details: {
         block_id: blockId,
         data_hash: storeResponse.data.data_hash,
@@ -218,8 +218,8 @@ class ExtendedIntegrationTests {
       return { success: false, message: 'Failed to get health records' };
     }
 
-    return { 
-      success: true, 
+    return {
+      success: true,
       details: {
         record_id: storeResponse.data.record_id,
         records_count: getResponse.data.count,
@@ -247,8 +247,8 @@ class ExtendedIntegrationTests {
       return { success: false, message: 'Incomplete medical knowledge response' };
     }
 
-    return { 
-      success: true, 
+    return {
+      success: true,
       details: {
         symptom: queryResponse.data.symptom,
         knowledge: knowledge,
@@ -281,8 +281,8 @@ class ExtendedIntegrationTests {
       return { success: false, message: 'Failed to find doctors' };
     }
 
-    return { 
-      success: true, 
+    return {
+      success: true,
       details: {
         hospitals: hospitalResponse.data.resources,
         doctors: doctorResponse.data.resources,
@@ -318,8 +318,8 @@ class ExtendedIntegrationTests {
       return { success: false, message: 'Failed to publish message' };
     }
 
-    return { 
-      success: true, 
+    return {
+      success: true,
       details: {
         topic: 'health_alerts',
         message_id: publishResponse.data.message_id,
@@ -350,8 +350,8 @@ class ExtendedIntegrationTests {
       return { success: false, message: 'Low quality RAG response' };
     }
 
-    return { 
-      success: true, 
+    return {
+      success: true,
       details: {
         query: response.query,
         response: response.response,
@@ -381,8 +381,8 @@ class ExtendedIntegrationTests {
       return { success: false, message: 'Poor benchmark performance' };
     }
 
-    return { 
-      success: true, 
+    return {
+      success: true,
       details: {
         benchmark_id: results.benchmark_id,
         performance_score: results.results.performance_score,
@@ -417,8 +417,8 @@ class ExtendedIntegrationTests {
       return { success: false, message: 'Failed to update game progress' };
     }
 
-    return { 
-      success: true, 
+    return {
+      success: true,
       details: {
         session_id: sessionId,
         difficulty: startResponse.data.difficulty,
@@ -484,14 +484,14 @@ class ExtendedIntegrationTests {
       const totalSteps = integrationSteps.length;
 
       if (successfulSteps < totalSteps * 0.8) {
-        return { 
-          success: false, 
-          message: `Integration test failed: ${successfulSteps}/${totalSteps} steps successful` 
+        return {
+          success: false,
+          message: `Integration test failed: ${successfulSteps}/${totalSteps} steps successful`
         };
       }
 
-      return { 
-        success: true, 
+      return {
+        success: true,
         details: {
           total_steps: totalSteps,
           successful_steps: successfulSteps,
@@ -534,7 +534,7 @@ class ExtendedIntegrationTests {
   // 基础测试方法（从原测试脚本复制）
   async testHealthCheck() {
     const response = await makeRequest('GET', '/health');
-    
+
     if (!response.success) {
       return { success: false, message: 'Health check failed' };
     }
@@ -547,14 +547,14 @@ class ExtendedIntegrationTests {
     // 验证所有服务都是健康的
     const unhealthyServices = data.services.filter(service => service.status !== 'healthy');
     if (unhealthyServices.length > 0) {
-      return { 
-        success: false, 
-        message: `Unhealthy services: ${unhealthyServices.map(s => s.service).join(', ')}` 
+      return {
+        success: false,
+        message: `Unhealthy services: ${unhealthyServices.map(s => s.service).join(', ')}`
       };
     }
 
-    return { 
-      success: true, 
+    return {
+      success: true,
       details: {
         total_services: data.total_services,
         healthy_services: data.services.length
@@ -564,7 +564,7 @@ class ExtendedIntegrationTests {
 
   async testUserAuthentication() {
     const response = await makeRequest('POST', '/api/auth/login', TEST_CONFIG.testUser);
-    
+
     if (!response.success) {
       return { success: false, message: 'Login request failed' };
     }
@@ -575,7 +575,7 @@ class ExtendedIntegrationTests {
     }
 
     this.authToken = data.token;
-    
+
     return { success: true, details: { token_received: true } };
   }
 
@@ -590,15 +590,15 @@ class ExtendedIntegrationTests {
     const total = this.results.length;
 
     // 按类别分组显示结果
-    const basicTests = this.results.filter(r => 
+    const basicTests = this.results.filter(r =>
       r.name.includes('Health Check') || r.name.includes('Authentication')
     );
-    const extendedTests = this.results.filter(r => 
-      !r.name.includes('Health Check') && 
-      !r.name.includes('Authentication') && 
+    const extendedTests = this.results.filter(r =>
+      !r.name.includes('Health Check') &&
+      !r.name.includes('Authentication') &&
       !r.name.includes('Integration')
     );
-    const integrationTests = this.results.filter(r => 
+    const integrationTests = this.results.filter(r =>
       r.name.includes('Integration')
     );
 
@@ -621,7 +621,7 @@ class ExtendedIntegrationTests {
         const color = result.status === 'PASS' ? 'green' : 'red';
         const duration = result.duration ? ` (${result.duration}ms)` : '';
         log(`  ${icon} ${result.name}: ${result.status}${duration}`, color);
-        
+
         if (result.error) {
           log(`    Error: ${result.error}`, 'red');
         }
@@ -636,7 +636,7 @@ class ExtendedIntegrationTests {
         const color = result.status === 'PASS' ? 'green' : 'red';
         const duration = result.duration ? ` (${result.duration}ms)` : '';
         log(`  ${icon} ${result.name}: ${result.status}${duration}`, color);
-        
+
         if (result.details && result.details.success_rate) {
           log(`    Success Rate: ${result.details.success_rate}`, 'blue');
         }
@@ -653,16 +653,16 @@ class ExtendedIntegrationTests {
     // 新增服务统计
     const newServicesPassed = extendedTests.filter(r => r.status === 'PASS').length;
     const newServicesTotal = extendedTests.length;
-    log(`New Services Integration: ${newServicesPassed}/${newServicesTotal} (${((newServicesPassed / newServicesTotal) * 100).toFixed(1)}%)`, 
+    log(`New Services Integration: ${newServicesPassed}/${newServicesTotal} (${((newServicesPassed / newServicesTotal) * 100).toFixed(1)}%)`,
         newServicesPassed === newServicesTotal ? 'green' : 'yellow');
 
     // 保存扩展测试报告
     const report = {
       timestamp: new Date().toISOString(),
-      summary: { 
-        total, 
-        passed, 
-        failed, 
+      summary: {
+        total,
+        passed,
+        failed,
         errors,
         new_services_passed: newServicesPassed,
         new_services_total: newServicesTotal
@@ -677,11 +677,11 @@ class ExtendedIntegrationTests {
 
     const reportPath = path.join(__dirname, '..', 'test-results', 'extended-integration-test-report.json');
     const reportDir = path.dirname(reportPath);
-    
+
     if (!fs.existsSync(reportDir)) {
       fs.mkdirSync(reportDir, { recursive: true });
     }
-    
+
     fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
     log(`\n📄 Extended test report saved to: ${reportPath}`, 'blue');
 
@@ -695,7 +695,7 @@ async function main() {
     // 检查扩展后端服务是否运行
     logInfo('Checking extended backend service availability...');
     const healthResponse = await makeRequest('GET', '/health');
-    
+
     if (!healthResponse.success) {
       logError('Extended backend service is not available. Please start the extended mock service first.');
       logInfo('Run: python3 scripts/extendedIntegrationTest.py');
@@ -734,4 +734,4 @@ if (require.main === module) {
   main();
 }
 
-module.exports = { ExtendedIntegrationTests, makeRequest }; 
+module.exports = { ExtendedIntegrationTests, makeRequest };

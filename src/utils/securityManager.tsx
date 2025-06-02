@@ -1,4 +1,139 @@
 import React from 'react';
+import { Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import CryptoJS from 'crypto-js';
+
+// 安全配置
+const SECURITY_CONFIG = {
+  ENCRYPTION_KEY: 'suoke_life_security_key_2024',
+  SESSION_TIMEOUT: 30 * 60 * 1000, // 30分钟
+  MAX_LOGIN_ATTEMPTS: 5,
+  AUDIT_LOG_MAX_SIZE: 1000,
+  PASSWORD_MIN_LENGTH: 8,
+};
+
+// 设备信息接口
+export interface DeviceInfo {
+  platform: string;
+  version: string;
+  model: string;
+  uniqueId: string;
+  isJailbroken?: boolean;
+  isEmulator?: boolean;
+}
+
+// 用户会话接口
+export interface UserSession {
+  userId: string;
+  sessionId: string;
+  startTime: number;
+  lastActivity: number;
+  deviceInfo: DeviceInfo;
+  permissions: string[];
+  biometricEnabled: boolean;
+}
+
+// 安全策略接口
+export interface SecurityPolicy {
+  requireBiometric: boolean;
+  sessionTimeout: number;
+  maxLoginAttempts: number;
+  passwordComplexity: {
+    minLength: number;
+    requireUppercase: boolean;
+    requireLowercase: boolean;
+    requireNumbers: boolean;
+    requireSpecialChars: boolean;
+  };
+  dataEncryption: {
+    enabled: boolean;
+    algorithm: string;
+    keyRotationInterval: number;
+  };
+  auditLogging: {
+    enabled: boolean;
+    logLevel: "basic" | "detailed" | "verbose";
+    retentionDays: number;
+  };
+}
+
+// 安全事件接口
+export interface SecurityEvent {
+  id: string;
+  type: string;
+  userId?: string;
+  timestamp: number;
+  details: Record<string, any>;
+  severity: "low" | "medium" | "high" | "critical";
+  deviceInfo?: DeviceInfo;
+}
+
+// 加密管理器
+class EncryptionManager {
+  private static instance: EncryptionManager;
+  private encryptionKey: string;
+
+  private constructor() {
+    this.encryptionKey = SECURITY_CONFIG.ENCRYPTION_KEY;
+  }
+
+  static getInstance(): EncryptionManager {
+    if (!EncryptionManager.instance) {
+      EncryptionManager.instance = new EncryptionManager();
+    }
+    return EncryptionManager.instance;
+  }
+
+  // 加密数据
+  encrypt(data: any): string {
+    try {
+      const jsonString = JSON.stringify(data);
+      const encrypted = CryptoJS.AES.encrypt(jsonString, this.encryptionKey).toString();
+      return encrypted;
+    } catch (error) {
+      console.error('数据加密失败:', error);
+      throw new Error('数据加密失败');
+    }
+  }
+
+  // 解密数据
+  decrypt(encryptedData: string): any {
+    try {
+      const decrypted = CryptoJS.AES.decrypt(encryptedData, this.encryptionKey);
+      const jsonString = decrypted.toString(CryptoJS.enc.Utf8);
+      return JSON.parse(jsonString);
+    } catch (error) {
+      console.error('数据解密失败:', error);
+      throw new Error('数据解密失败');
+    }
+  }
+
+  // 生成哈希
+  generateHash(data: string): string {
+    return CryptoJS.SHA256(data).toString();
+  }
+
+  // 验证哈希
+  verifyHash(data: string, hash: string): boolean {
+    const computedHash = this.generateHash(data);
+    return computedHash === hash;
+  }
+}
+
+// 访问控制管理器
+class AccessControlManager {
+  private static instance: AccessControlManager;
+  private permissions: Map<string, string[]> = new Map();
+  private roles: Map<string, string[]> = new Map();
+
+  private constructor() {
+    this.initializeDefaultRoles();
+  }
+
+  static getInstance(): AccessControlManager {
+    if (!AccessControlManager.instance) {
+      AccessControlManager.instance = new AccessControlManager();
+    }
 import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor';
 importAsyncStorage from "@react-native-async-storage/async-storage"/importCryptoJS from "crypto-js";
 import {   Alert   } from 'react-native';

@@ -65,7 +65,7 @@ async function apiRequest(method, endpoint, data = null, headers = {}) {
   try {
     const response = await fetch(url, options);
     const responseData = await response.json();
-    
+
     return {
       status: response.status,
       ok: response.ok,
@@ -82,7 +82,7 @@ async function apiRequest(method, endpoint, data = null, headers = {}) {
 async function runTest(testName, testFn) {
   testResults.total++;
   logger.test(`执行测试: ${testName}`);
-  
+
   try {
     await testFn();
     testResults.passed++;
@@ -99,11 +99,11 @@ async function runTest(testName, testFn) {
  */
 async function testApiGatewayHealth() {
   const response = await apiRequest('GET', '/health');
-  
+
   if (!response.ok) {
     throw new Error(`API网关健康检查失败: ${response.status}`);
   }
-  
+
   if (!response.data.status || response.data.status !== 'healthy') {
     throw new Error('API网关状态异常');
   }
@@ -118,23 +118,23 @@ async function testUserAuthentication() {
     email: TEST_CONFIG.TEST_USER.email,
     password: TEST_CONFIG.TEST_USER.password
   });
-  
+
   if (!loginResponse.ok) {
     throw new Error(`用户登录失败: ${loginResponse.status}`);
   }
-  
+
   if (!loginResponse.data.token) {
     throw new Error('登录响应缺少认证令牌');
   }
-  
+
   // 保存令牌用于后续测试
   TEST_CONFIG.AUTH_TOKEN = loginResponse.data.token;
-  
+
   // 测试令牌验证
   const verifyResponse = await apiRequest('GET', '/api/auth/verify', null, {
     'Authorization': `Bearer ${TEST_CONFIG.AUTH_TOKEN}`
   });
-  
+
   if (!verifyResponse.ok) {
     throw new Error(`令牌验证失败: ${verifyResponse.status}`);
   }
@@ -145,7 +145,7 @@ async function testUserAuthentication() {
  */
 async function testAgentServices() {
   const agents = ['xiaoai', 'xiaoke', 'laoke', 'soer'];
-  
+
   for (const agent of agents) {
     const response = await apiRequest('POST', `/api/agents/${agent}/init`, {
       userId: 'test_user_001',
@@ -153,11 +153,11 @@ async function testAgentServices() {
     }, {
       'Authorization': `Bearer ${TEST_CONFIG.AUTH_TOKEN}`
     });
-    
+
     if (!response.ok) {
       throw new Error(`${agent}智能体初始化失败: ${response.status}`);
     }
-    
+
     if (!response.data.sessionId) {
       throw new Error(`${agent}智能体响应缺少会话ID`);
     }
@@ -174,7 +174,7 @@ async function testDiagnosisServices() {
     { service: 'inquiry', name: '问诊' },
     { service: 'palpation', name: '切诊' }
   ];
-  
+
   for (const { service, name } of diagnosisServices) {
     const response = await apiRequest('POST', `/api/diagnosis/${service}/start`, {
       userId: 'test_user_001',
@@ -182,11 +182,11 @@ async function testDiagnosisServices() {
     }, {
       'Authorization': `Bearer ${TEST_CONFIG.AUTH_TOKEN}`
     });
-    
+
     if (!response.ok) {
       throw new Error(`${name}服务启动失败: ${response.status}`);
     }
-    
+
     if (!response.data.diagnosisId) {
       throw new Error(`${name}服务响应缺少诊断ID`);
     }
@@ -207,27 +207,27 @@ async function testHealthDataStorage() {
       timestamp: new Date().toISOString()
     }
   };
-  
+
   const response = await apiRequest('POST', '/api/health-data/records', healthData, {
     'Authorization': `Bearer ${TEST_CONFIG.AUTH_TOKEN}`
   });
-  
+
   if (!response.ok) {
     throw new Error(`健康数据存储失败: ${response.status}`);
   }
-  
+
   if (!response.data.recordId) {
     throw new Error('健康数据存储响应缺少记录ID');
   }
-  
+
   // 测试数据查询
-  const queryResponse = await apiRequest('GET', 
-    `/api/health-data/records?user_id=test_user_001&record_type=vital_signs`, 
+  const queryResponse = await apiRequest('GET',
+    `/api/health-data/records?user_id=test_user_001&record_type=vital_signs`,
     null, {
       'Authorization': `Bearer ${TEST_CONFIG.AUTH_TOKEN}`
     }
   );
-  
+
   if (!queryResponse.ok) {
     throw new Error(`健康数据查询失败: ${queryResponse.status}`);
   }
@@ -245,27 +245,27 @@ async function testBlockchainVerification() {
       timestamp: new Date().toISOString()
     }
   };
-  
+
   // 存储数据到区块链
   const storeResponse = await apiRequest('POST', '/api/blockchain/store', testData, {
     'Authorization': `Bearer ${TEST_CONFIG.AUTH_TOKEN}`
   });
-  
+
   if (!storeResponse.ok) {
     throw new Error(`区块链数据存储失败: ${storeResponse.status}`);
   }
-  
+
   const dataId = storeResponse.data.id;
-  
+
   // 验证数据完整性
   const verifyResponse = await apiRequest('GET', `/api/blockchain/verify/${dataId}`, null, {
     'Authorization': `Bearer ${TEST_CONFIG.AUTH_TOKEN}`
   });
-  
+
   if (!verifyResponse.ok) {
     throw new Error(`区块链数据验证失败: ${verifyResponse.status}`);
   }
-  
+
   if (!verifyResponse.data.verified) {
     throw new Error('区块链数据完整性验证失败');
   }
@@ -280,15 +280,15 @@ async function testRAGService() {
     context: 'health_knowledge',
     userId: 'test_user_001'
   };
-  
+
   const response = await apiRequest('POST', '/api/rag/generate', query, {
     'Authorization': `Bearer ${TEST_CONFIG.AUTH_TOKEN}`
   });
-  
+
   if (!response.ok) {
     throw new Error(`RAG问答服务失败: ${response.status}`);
   }
-  
+
   if (!response.data.answer) {
     throw new Error('RAG服务响应缺少答案');
   }
@@ -300,9 +300,9 @@ async function testRAGService() {
 async function runE2ETests() {
   logger.info('🚀 开始索克生活 APP 端到端功能测试');
   logger.info(`📡 API服务地址: ${TEST_CONFIG.API_BASE_URL}`);
-  
+
   console.log('\n' + '='.repeat(60));
-  
+
   // 执行所有测试
   await runTest('API网关健康检查', testApiGatewayHealth);
   await runTest('用户认证流程', testUserAuthentication);
@@ -311,24 +311,24 @@ async function runE2ETests() {
   await runTest('健康数据存储', testHealthDataStorage);
   await runTest('区块链数据验证', testBlockchainVerification);
   await runTest('RAG智能问答', testRAGService);
-  
+
   // 输出测试结果
   console.log('\n' + '='.repeat(60));
   logger.info('📊 测试结果统计:');
   console.log(`   总计: ${testResults.total} 个测试`);
   console.log(`   通过: ${testResults.passed} 个测试`.green);
   console.log(`   失败: ${testResults.failed} 个测试`.red);
-  
+
   if (testResults.failed > 0) {
     console.log('\n❌ 失败的测试:');
     testResults.errors.forEach(({ test, error }) => {
       console.log(`   • ${test}: ${error}`.red);
     });
   }
-  
+
   const successRate = ((testResults.passed / testResults.total) * 100).toFixed(1);
   console.log(`\n🎯 测试通过率: ${successRate}%`);
-  
+
   if (testResults.failed === 0) {
     logger.success('🎉 所有测试通过！索克生活 APP 核心功能运行正常');
   } else {
@@ -345,4 +345,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { runE2ETests }; 
+module.exports = { runE2ETests };

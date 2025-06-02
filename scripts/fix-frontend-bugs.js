@@ -9,17 +9,17 @@ console.log('🔧 开始修复前端Bug...\n');
 // 1. 修复ErrorBoundary的React.memo问题
 function fixErrorBoundary() {
   console.log('📝 修复ErrorBoundary...');
-  
+
   const errorBoundaryPath = 'src/components/common/ErrorBoundary.tsx';
   if (fs.existsSync(errorBoundaryPath)) {
     let content = fs.readFileSync(errorBoundaryPath, 'utf8');
-    
+
     // 移除React.memo包装
     content = content.replace(
       'export default React.memo(ErrorBoundary);',
       'export default ErrorBoundary;'
     );
-    
+
     fs.writeFileSync(errorBoundaryPath, content);
     console.log('✅ ErrorBoundary修复完成');
   }
@@ -28,7 +28,7 @@ function fixErrorBoundary() {
 // 2. 创建Logger服务替换console输出
 function createLoggerService() {
   console.log('📝 创建Logger服务...');
-  
+
   const loggerContent = `/**
  * 统一日志服务
  * 在开发环境输出到控制台，生产环境可发送到监控服务
@@ -83,7 +83,7 @@ class Logger {
     if (__DEV__ && level >= this.logLevel) {
       const timestamp = entry.timestamp.toISOString();
       const levelName = LogLevel[level];
-      
+
       switch (level) {
         case LogLevel.DEBUG:
           console.log(\`[\${timestamp}] DEBUG: \${message}\`, context || '');
@@ -170,11 +170,11 @@ export const log = {
 // 3. 修复useHealthData hook的依赖项问题
 function fixUseHealthDataHook() {
   console.log('📝 修复useHealthData hook...');
-  
+
   const hookPath = 'src/hooks/useHealthData.ts';
   if (fs.existsSync(hookPath)) {
     let content = fs.readFileSync(hookPath, 'utf8');
-    
+
     // 修复addHealthData的依赖项
     content = content.replace(
       /const addHealthData = useCallback\(\(data: HealthData\) => \{[\s\S]*?\}, \[\]\); \/\/ TODO:.*$/m,
@@ -182,7 +182,7 @@ function fixUseHealthDataHook() {
     setHealthData((prev) => [...prev, data]);
   }, []);`
     );
-    
+
     // 修复removeHealthData的依赖项
     content = content.replace(
       /const removeHealthData = useCallback\(\(id: string\) => \{[\s\S]*?\}, \[\]\); \/\/ TODO:.*$/m,
@@ -190,7 +190,7 @@ function fixUseHealthDataHook() {
     setHealthData((prev) => prev.filter((item) => item.id !== id));
   }, []);`
     );
-    
+
     fs.writeFileSync(hookPath, content);
     console.log('✅ useHealthData hook修复完成');
   }
@@ -199,11 +199,11 @@ function fixUseHealthDataHook() {
 // 4. 更新App.tsx使用Logger
 function updateAppWithLogger() {
   console.log('📝 更新App.tsx使用Logger...');
-  
+
   const appPath = 'src/App.tsx';
   if (fs.existsSync(appPath)) {
     let content = fs.readFileSync(appPath, 'utf8');
-    
+
     // 添加Logger导入
     if (!content.includes('import { log }')) {
       content = content.replace(
@@ -212,13 +212,13 @@ function updateAppWithLogger() {
 import { log } from "./services/Logger";`
       );
     }
-    
+
     // 替换console.log
     content = content.replace(
       'console.log("App 正在渲染...");',
       'log.debug("App 正在渲染...");'
     );
-    
+
     fs.writeFileSync(appPath, content);
     console.log('✅ App.tsx更新完成');
   }
@@ -227,7 +227,7 @@ import { log } from "./services/Logger";`
 // 5. 创建类型安全的API接口
 function createTypeSafeApiInterfaces() {
   console.log('📝 创建类型安全的API接口...');
-  
+
   const typesContent = `/**
  * API相关的类型定义
  * 替换any类型，提供类型安全
@@ -369,11 +369,11 @@ export interface AccessibilitySettings {
 // 6. 更新ESLint配置
 function updateESLintConfig() {
   console.log('📝 更新ESLint配置...');
-  
+
   const eslintPath = '.eslintrc.js';
   if (fs.existsSync(eslintPath)) {
     let content = fs.readFileSync(eslintPath, 'utf8');
-    
+
     // 添加react-hooks/exhaustive-deps规则
     if (!content.includes('react-hooks/exhaustive-deps')) {
       content = content.replace(
@@ -381,7 +381,7 @@ function updateESLintConfig() {
         'react-hooks/exhaustive-deps": "error"'
       );
     }
-    
+
     // 添加TypeScript严格规则
     const newRules = `
     // TypeScript严格规则
@@ -389,20 +389,20 @@ function updateESLintConfig() {
     '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     '@typescript-eslint/explicit-function-return-type': 'warn',
     '@typescript-eslint/no-non-null-assertion': 'error',
-    
+
     // React性能规则
     'react/jsx-no-bind': 'warn',
     'react/jsx-no-literals': 'off',
     'react/no-array-index-key': 'warn',
-    
+
     // 内存泄漏预防
     'react-hooks/exhaustive-deps': 'error',`;
-    
+
     content = content.replace(
       'privacy/no-plain-sensitive-data": "warn",',
       `privacy/no-plain-sensitive-data": "warn",${newRules}`
     );
-    
+
     fs.writeFileSync(eslintPath, content);
     console.log('✅ ESLint配置更新完成');
   }
@@ -411,7 +411,7 @@ function updateESLintConfig() {
 // 7. 创建性能监控Hook
 function createPerformanceMonitoringHook() {
   console.log('📝 创建性能监控Hook...');
-  
+
   const hookContent = `import { useEffect, useRef, useState } from 'react';
 import { log } from '../services/Logger';
 
@@ -441,7 +441,7 @@ export const usePerformanceMonitor = ({
 
   useEffect(() => {
     const renderTime = performance.now() - renderStartTime.current;
-    
+
     const newMetrics: PerformanceMetrics = {
       renderTime,
       componentName,
@@ -483,7 +483,7 @@ export const withPerformanceMonitor = <P extends object>(
   };
 
   WithPerformanceMonitor.displayName = \`withPerformanceMonitor(\${WrappedComponent.displayName || WrappedComponent.name})\`;
-  
+
   return WithPerformanceMonitor;
 };
 `;
@@ -496,7 +496,7 @@ export const withPerformanceMonitor = <P extends object>(
 // 8. 创建内存泄漏检测工具
 function createMemoryLeakDetector() {
   console.log('📝 创建内存泄漏检测工具...');
-  
+
   const detectorContent = `/**
  * 内存泄漏检测工具
  * 帮助识别和预防常见的内存泄漏问题
@@ -586,7 +586,7 @@ class ReferenceTracker {
     this.listeners.forEach((listener, key) => {
       this.removeListener(key);
     });
-    
+
     this.timers.clear();
     this.intervals.clear();
     this.listeners.clear();
@@ -604,7 +604,7 @@ export const useMemoryLeakDetector = (componentName: string) => {
     return () => {
       const unmountTime = Date.now();
       const lifeTime = unmountTime - mountTime.current;
-      
+
       log.debug(\`组件卸载: \${componentName}\`, {
         lifeTime: \`\${lifeTime}ms\`,
         leakReport: tracker.current.getLeakReport(),
@@ -624,7 +624,7 @@ export const useMemoryLeakDetector = (componentName: string) => {
     clearTimer: (timer: NodeJS.Timeout) => tracker.current.clearTimer(timer),
     trackInterval: (interval: NodeJS.Timeout) => tracker.current.trackInterval(interval, componentName),
     clearInterval: (interval: NodeJS.Timeout) => tracker.current.clearInterval(interval),
-    trackListener: (element: any, event: string, handler: any) => 
+    trackListener: (element: any, event: string, handler: any) =>
       tracker.current.trackListener(element, event, handler, componentName),
     getLeakReport: () => tracker.current.getLeakReport(),
   };
@@ -640,7 +640,7 @@ export const useSafeTimer = (componentName: string) => {
       callback();
       timers.current.delete(timer);
     }, delay);
-    
+
     timers.current.add(timer);
     trackTimer(timer);
     return timer;
@@ -751,4 +751,4 @@ module.exports = {
   updateESLintConfig,
   createPerformanceMonitoringHook,
   createMemoryLeakDetector,
-}; 
+};

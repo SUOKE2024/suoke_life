@@ -35,10 +35,10 @@ const logger = {
  */
 function execCommand(command, options = {}) {
   try {
-    const result = execSync(command, { 
-      encoding: 'utf8', 
+    const result = execSync(command, {
+      encoding: 'utf8',
       stdio: 'pipe',
-      ...options 
+      ...options
     });
     return { success: true, output: result.trim() };
   } catch (error) {
@@ -52,7 +52,7 @@ function execCommand(command, options = {}) {
 function checkFileExists(filePath, description) {
   checkResults.total++;
   const fullPath = path.resolve(filePath);
-  
+
   if (fs.existsSync(fullPath)) {
     checkResults.passed++;
     logger.success(`${description}: ${filePath}`);
@@ -71,7 +71,7 @@ function checkFileExists(filePath, description) {
 function checkCommand(command, description) {
   checkResults.total++;
   const result = execCommand(`which ${command}`);
-  
+
   if (result.success) {
     checkResults.passed++;
     logger.success(`${description}: ${result.output}`);
@@ -89,13 +89,13 @@ function checkCommand(command, description) {
  */
 function checkNodeEnvironment() {
   logger.check('检查Node.js环境...');
-  
+
   // 检查Node.js版本
   const nodeResult = execCommand('node --version');
   if (nodeResult.success) {
     const nodeVersion = nodeResult.output.replace('v', '');
     const majorVersion = parseInt(nodeVersion.split('.')[0]);
-    
+
     if (majorVersion >= 18) {
       checkResults.passed++;
       logger.success(`Node.js版本: ${nodeResult.output} ✓`);
@@ -110,7 +110,7 @@ function checkNodeEnvironment() {
     logger.error('Node.js未安装');
   }
   checkResults.total++;
-  
+
   // 检查npm版本
   const npmResult = execCommand('npm --version');
   if (npmResult.success) {
@@ -129,7 +129,7 @@ function checkNodeEnvironment() {
  */
 function checkReactNativeEnvironment() {
   logger.check('检查React Native环境...');
-  
+
   // 检查React Native CLI
   checkResults.total++;
   const rnResult = execCommand('npx react-native --version');
@@ -141,15 +141,15 @@ function checkReactNativeEnvironment() {
     checkResults.issues.push('React Native CLI不可用');
     logger.error('React Native CLI: npx react-native 命令不可用');
   }
-  
+
   // 检查Watchman
   if (process.platform === 'darwin') {
     checkCommand('watchman', 'Watchman');
   }
-  
+
   // 检查Metro
   const metroConfig = checkFileExists('metro.config.js', 'Metro配置文件');
-  
+
   // 检查package.json
   const packageJson = checkFileExists('package.json', 'package.json');
   if (packageJson) {
@@ -181,9 +181,9 @@ function checkIOSEnvironment() {
     logger.warn('跳过iOS环境检查 (非macOS系统)');
     return;
   }
-  
+
   logger.check('检查iOS开发环境...');
-  
+
   // 检查Xcode
   const xcodeResult = execCommand('xcode-select -p');
   if (xcodeResult.success) {
@@ -195,15 +195,15 @@ function checkIOSEnvironment() {
     logger.error('Xcode未安装或未配置');
   }
   checkResults.total++;
-  
+
   // 检查CocoaPods
   checkCommand('pod', 'CocoaPods');
-  
+
   // 检查iOS项目文件
   checkFileExists('ios/SuokeLife.xcworkspace', 'iOS工作空间');
   checkFileExists('ios/Podfile', 'Podfile');
   checkFileExists('ios/Podfile.lock', 'Podfile.lock');
-  
+
   // 检查iOS模拟器
   const simulatorResult = execCommand('xcrun simctl list devices available');
   if (simulatorResult.success) {
@@ -221,7 +221,7 @@ function checkIOSEnvironment() {
  */
 function checkAndroidEnvironment() {
   logger.check('检查Android开发环境...');
-  
+
   // 检查ANDROID_HOME环境变量
   const androidHome = process.env.ANDROID_HOME;
   if (androidHome && fs.existsSync(androidHome)) {
@@ -233,10 +233,10 @@ function checkAndroidEnvironment() {
     logger.error('ANDROID_HOME环境变量未设置或路径不存在');
   }
   checkResults.total++;
-  
+
   // 检查adb
   checkCommand('adb', 'Android Debug Bridge (adb)');
-  
+
   // 检查Java
   const javaResult = execCommand('java -version');
   if (javaResult.success) {
@@ -248,19 +248,19 @@ function checkAndroidEnvironment() {
     logger.error('Java运行时环境不可用');
   }
   checkResults.total++;
-  
+
   // 检查Android项目文件
   checkFileExists('android/build.gradle', 'Android根build.gradle');
   checkFileExists('android/app/build.gradle', 'Android应用build.gradle');
   checkFileExists('android/gradle.properties', 'gradle.properties');
-  
+
   // 检查Android设备/模拟器
   const devicesResult = execCommand('adb devices');
   if (devicesResult.success) {
-    const devices = devicesResult.output.split('\n').filter(line => 
+    const devices = devicesResult.output.split('\n').filter(line =>
       line.includes('\tdevice') || line.includes('\temulator')
     );
-    
+
     if (devices.length > 0) {
       checkResults.passed++;
       logger.success(`Android设备/模拟器: ${devices.length}个可用`);
@@ -280,7 +280,7 @@ function checkAndroidEnvironment() {
  */
 function checkProjectDependencies() {
   logger.check('检查项目依赖...');
-  
+
   // 检查node_modules
   if (fs.existsSync('node_modules')) {
     checkResults.passed++;
@@ -291,7 +291,7 @@ function checkProjectDependencies() {
     logger.error('node_modules目录不存在，请运行 npm install');
   }
   checkResults.total++;
-  
+
   // 检查iOS依赖
   if (process.platform === 'darwin' && fs.existsSync('ios/Pods')) {
     checkResults.passed++;
@@ -312,13 +312,13 @@ function generateFixSuggestions() {
   if (checkResults.issues.length === 0) {
     return;
   }
-  
+
   console.log('\n' + '='.repeat(60));
   logger.info('🔧 修复建议:');
-  
+
   checkResults.issues.forEach((issue, index) => {
     console.log(`${index + 1}. ${issue}`);
-    
+
     // 提供具体的修复建议
     if (issue.includes('Node.js')) {
       console.log('   💡 请访问 https://nodejs.org 下载最新版本');
@@ -341,16 +341,16 @@ function generateFixSuggestions() {
  */
 function runNativeSetupCheck() {
   logger.info('🚀 开始索克生活 APP 原生项目配置检查');
-  
+
   console.log('\n' + '='.repeat(60));
-  
+
   // 执行所有检查
   checkNodeEnvironment();
   checkReactNativeEnvironment();
   checkIOSEnvironment();
   checkAndroidEnvironment();
   checkProjectDependencies();
-  
+
   // 输出检查结果
   console.log('\n' + '='.repeat(60));
   logger.info('📊 检查结果统计:');
@@ -358,13 +358,13 @@ function runNativeSetupCheck() {
   console.log(`   通过: ${checkResults.passed} 项`.green);
   console.log(`   失败: ${checkResults.failed} 项`.red);
   console.log(`   警告: ${checkResults.warnings} 项`.yellow);
-  
+
   const successRate = ((checkResults.passed / checkResults.total) * 100).toFixed(1);
   console.log(`\n🎯 配置完成度: ${successRate}%`);
-  
+
   // 生成修复建议
   generateFixSuggestions();
-  
+
   if (checkResults.failed === 0) {
     logger.success('🎉 原生项目配置检查通过！可以开始开发');
   } else {
@@ -378,4 +378,4 @@ if (require.main === module) {
   runNativeSetupCheck();
 }
 
-module.exports = { runNativeSetupCheck }; 
+module.exports = { runNativeSetupCheck };

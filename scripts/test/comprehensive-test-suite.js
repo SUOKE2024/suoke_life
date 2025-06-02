@@ -37,11 +37,11 @@ const comprehensiveResults = {
 async function runAPIIntegrationTests() {
   console.log('\n🔗 开始API集成测试...');
   const startTime = Date.now();
-  
+
   try {
     // 模拟API集成测试
     const { runApiIntegrationTests } = require('./api-integration-test.js');
-    
+
     // 由于是模拟测试，我们直接模拟结果
     const mockResults = {
       total: 21,
@@ -64,15 +64,15 @@ async function runAPIIntegrationTests() {
         { name: '响应时间测试', passed: true, duration: 456 }
       ]
     };
-    
+
     comprehensiveResults.testSuites.api.status = 'completed';
     comprehensiveResults.testSuites.api.results = mockResults;
     comprehensiveResults.testSuites.api.duration = Date.now() - startTime;
-    
+
     console.log(`   ✅ API集成测试完成: ${mockResults.passed}/${mockResults.total} 通过`);
-    
+
     return mockResults;
-    
+
   } catch (error) {
     comprehensiveResults.testSuites.api.status = 'failed';
     comprehensiveResults.testSuites.api.duration = Date.now() - startTime;
@@ -80,7 +80,7 @@ async function runAPIIntegrationTests() {
       suite: 'API集成测试',
       error: error.message
     });
-    
+
     console.log(`   ❌ API集成测试失败: ${error.message}`);
     return null;
   }
@@ -92,7 +92,7 @@ async function runAPIIntegrationTests() {
 async function runAgentCollaborationTests() {
   console.log('\n🤖 开始智能体协作测试...');
   const startTime = Date.now();
-  
+
   try {
     // 模拟智能体协作测试
     const mockResults = {
@@ -109,15 +109,15 @@ async function runAgentCollaborationTests() {
         { name: '负载均衡测试', result: 'success', duration: 2345, steps: 1 }
       ]
     };
-    
+
     comprehensiveResults.testSuites.agents.status = 'completed';
     comprehensiveResults.testSuites.agents.results = mockResults;
     comprehensiveResults.testSuites.agents.duration = Date.now() - startTime;
-    
+
     console.log(`   ✅ 智能体协作测试完成: ${mockResults.passed}/${mockResults.total} 通过`);
-    
+
     return mockResults;
-    
+
   } catch (error) {
     comprehensiveResults.testSuites.agents.status = 'failed';
     comprehensiveResults.testSuites.agents.duration = Date.now() - startTime;
@@ -125,7 +125,7 @@ async function runAgentCollaborationTests() {
       suite: '智能体协作测试',
       error: error.message
     });
-    
+
     console.log(`   ❌ 智能体协作测试失败: ${error.message}`);
     return null;
   }
@@ -137,7 +137,7 @@ async function runAgentCollaborationTests() {
 async function runE2EUserFlowTests() {
   console.log('\n🎯 开始端到端用户流程测试...');
   const startTime = Date.now();
-  
+
   try {
     // 模拟端到端测试
     const mockResults = {
@@ -159,16 +159,16 @@ async function runE2EUserFlowTests() {
         fastestFlow: 2345
       }
     };
-    
+
     comprehensiveResults.testSuites.e2e.status = 'completed';
     comprehensiveResults.testSuites.e2e.results = mockResults;
     comprehensiveResults.testSuites.e2e.duration = Date.now() - startTime;
-    
+
     console.log(`   ✅ 端到端测试完成: ${mockResults.passed}/${mockResults.total} 通过`);
     console.log(`   📊 平均流程时间: ${mockResults.performance.averageFlowTime}ms`);
-    
+
     return mockResults;
-    
+
   } catch (error) {
     comprehensiveResults.testSuites.e2e.status = 'failed';
     comprehensiveResults.testSuites.e2e.duration = Date.now() - startTime;
@@ -176,7 +176,7 @@ async function runE2EUserFlowTests() {
       suite: '端到端测试',
       error: error.message
     });
-    
+
     console.log(`   ❌ 端到端测试失败: ${error.message}`);
     return null;
   }
@@ -189,7 +189,7 @@ function calculateComprehensiveStats() {
   let totalTests = 0;
   let totalPassed = 0;
   let totalFailed = 0;
-  
+
   // API测试统计
   if (comprehensiveResults.testSuites.api.results) {
     const api = comprehensiveResults.testSuites.api.results;
@@ -197,7 +197,7 @@ function calculateComprehensiveStats() {
     totalPassed += api.passed;
     totalFailed += api.failed;
   }
-  
+
   // 智能体测试统计
   if (comprehensiveResults.testSuites.agents.results) {
     const agents = comprehensiveResults.testSuites.agents.results;
@@ -205,7 +205,7 @@ function calculateComprehensiveStats() {
     totalPassed += agents.passed;
     totalFailed += agents.failed;
   }
-  
+
   // 端到端测试统计
   if (comprehensiveResults.testSuites.e2e.results) {
     const e2e = comprehensiveResults.testSuites.e2e.results;
@@ -213,7 +213,7 @@ function calculateComprehensiveStats() {
     totalPassed += e2e.passed;
     totalFailed += e2e.failed;
   }
-  
+
   comprehensiveResults.summary = {
     totalTests,
     totalPassed,
@@ -227,37 +227,37 @@ function calculateComprehensiveStats() {
  */
 function generateRecommendations() {
   const recommendations = [];
-  
+
   // 基于成功率生成建议
   if (comprehensiveResults.summary.overallSuccessRate < 90) {
     recommendations.push('整体测试成功率偏低，需要重点关注失败的测试用例');
   }
-  
+
   // 基于各测试套件状态生成建议
   if (comprehensiveResults.testSuites.api.status === 'failed') {
     recommendations.push('API集成测试失败，检查后端服务状态和网络连接');
   }
-  
+
   if (comprehensiveResults.testSuites.agents.status === 'failed') {
     recommendations.push('智能体协作测试失败，检查智能体服务和协调机制');
   }
-  
+
   if (comprehensiveResults.testSuites.e2e.status === 'failed') {
     recommendations.push('端到端测试失败，检查用户界面和完整流程');
   }
-  
+
   // 性能相关建议
   const e2eResults = comprehensiveResults.testSuites.e2e.results;
   if (e2eResults && e2eResults.performance.averageFlowTime > 5000) {
     recommendations.push('用户流程平均时间较长，建议优化性能');
   }
-  
+
   // 通用建议
   recommendations.push('定期运行综合测试套件');
   recommendations.push('建立持续集成测试流水线');
   recommendations.push('监控生产环境关键指标');
   recommendations.push('根据测试结果优化系统架构');
-  
+
   comprehensiveResults.recommendations = recommendations;
 }
 
@@ -267,10 +267,10 @@ function generateRecommendations() {
 function generateComprehensiveReport() {
   comprehensiveResults.endTime = Date.now();
   comprehensiveResults.totalDuration = comprehensiveResults.endTime - comprehensiveResults.startTime;
-  
+
   calculateComprehensiveStats();
   generateRecommendations();
-  
+
   const report = {
     timestamp: new Date().toISOString(),
     duration: comprehensiveResults.totalDuration,
@@ -311,14 +311,14 @@ function generateComprehensiveReport() {
     errors: comprehensiveResults.errors,
     recommendations: comprehensiveResults.recommendations
   };
-  
+
   try {
     fs.writeFileSync('comprehensive-test-report.json', JSON.stringify(report, null, 2));
     console.log('\n📄 综合测试报告已保存到: comprehensive-test-report.json');
   } catch (error) {
     console.warn('⚠️  无法保存综合测试报告');
   }
-  
+
   return report;
 }
 
@@ -333,9 +333,9 @@ function displayTestSummary() {
   console.log(`通过: ${comprehensiveResults.summary.totalPassed}`);
   console.log(`失败: ${comprehensiveResults.summary.totalFailed}`);
   console.log(`整体成功率: ${comprehensiveResults.summary.overallSuccessRate}%`);
-  
+
   console.log('\n📋 各测试套件状态:');
-  
+
   // API测试状态
   const apiStatus = comprehensiveResults.testSuites.api.status === 'completed' ? '✅' : '❌';
   const apiResults = comprehensiveResults.testSuites.api.results;
@@ -344,7 +344,7 @@ function displayTestSummary() {
   } else {
     console.log(`  ${apiStatus} API集成测试: 失败`);
   }
-  
+
   // 智能体测试状态
   const agentsStatus = comprehensiveResults.testSuites.agents.status === 'completed' ? '✅' : '❌';
   const agentsResults = comprehensiveResults.testSuites.agents.results;
@@ -353,7 +353,7 @@ function displayTestSummary() {
   } else {
     console.log(`  ${agentsStatus} 智能体协作测试: 失败`);
   }
-  
+
   // 端到端测试状态
   const e2eStatus = comprehensiveResults.testSuites.e2e.status === 'completed' ? '✅' : '❌';
   const e2eResults = comprehensiveResults.testSuites.e2e.results;
@@ -362,7 +362,7 @@ function displayTestSummary() {
   } else {
     console.log(`  ${e2eStatus} 端到端测试: 失败`);
   }
-  
+
   // 显示错误
   if (comprehensiveResults.errors.length > 0) {
     console.log('\n❌ 测试错误:');
@@ -370,7 +370,7 @@ function displayTestSummary() {
       console.log(`  - ${error.suite}: ${error.error}`);
     });
   }
-  
+
   // 显示建议
   console.log('\n💡 优化建议:');
   comprehensiveResults.recommendations.forEach(rec => {
@@ -383,27 +383,27 @@ function displayTestSummary() {
  */
 async function runComprehensiveTestSuite() {
   console.log('开始运行综合测试套件...\n');
-  
+
   try {
     // 运行所有测试套件
     await runAPIIntegrationTests();
     await runAgentCollaborationTests();
     await runE2EUserFlowTests();
-    
+
     // 生成综合报告
     const report = generateComprehensiveReport();
-    
+
     // 显示结果摘要
     displayTestSummary();
-    
+
     console.log('\n✅ 综合测试套件执行完成！');
-    
+
     // 根据结果设置退出码
     if (comprehensiveResults.summary.overallSuccessRate < 80) {
       console.log('⚠️  测试成功率低于80%，请检查失败的测试用例');
       process.exit(1);
     }
-    
+
   } catch (error) {
     console.error('❌ 综合测试套件执行失败:', error.message);
     process.exit(1);
@@ -415,10 +415,10 @@ if (require.main === module) {
   runComprehensiveTestSuite();
 }
 
-module.exports = { 
-  runComprehensiveTestSuite, 
+module.exports = {
+  runComprehensiveTestSuite,
   comprehensiveResults,
   runAPIIntegrationTests,
   runAgentCollaborationTests,
   runE2EUserFlowTests
-}; 
+};

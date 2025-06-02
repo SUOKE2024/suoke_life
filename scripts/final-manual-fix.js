@@ -91,24 +91,24 @@ function fixFile(filePath, errorLines) {
       if (index >= 0 && index < lines.length) {
         const line = lines[index];
         const originalLine = line;
-        
+
         // 检查是否是对象属性定义
         const propertyMatch = line.match(/^(\s*)(\w+):\s*([^,{}\[\]\n;]+?)(\s*)$/);
         if (propertyMatch) {
           const [, indent, prop, value, trailing] = propertyMatch;
           const trimmedValue = value.trim();
-          
+
           // 检查下一行是否是同级属性或对象结束
           const nextLine = lines[index + 1];
           if (nextLine) {
             const nextPropertyMatch = nextLine.match(/^(\s*)(\w+):/);
             const nextCloseBrace = nextLine.trim().match(/^[}\]]/);
-            
+
             // 如果下一行是同级属性且当前行没有逗号
             if (nextPropertyMatch && !trimmedValue.endsWith(',') && !trimmedValue.endsWith(';')) {
               const currentIndent = indent.length;
               const nextIndent = nextPropertyMatch[1].length;
-              
+
               if (currentIndent === nextIndent) {
                 lines[index] = `${indent}${prop}: ${trimmedValue},`;
                 fixCount++;
@@ -117,23 +117,23 @@ function fixFile(filePath, errorLines) {
             }
           }
         }
-        
+
         // 检查是否是接口属性定义
         const interfaceMatch = line.match(/^(\s*)(\w+)(\??):\s*([^,{}\[\]\n;]+?)(\s*)$/);
         if (interfaceMatch) {
           const [, indent, prop, optional, type, trailing] = interfaceMatch;
           const trimmedType = type.trim();
-          
+
           // 检查下一行
           const nextLine = lines[index + 1];
           if (nextLine) {
             const nextInterfaceMatch = nextLine.match(/^(\s*)(\w+)(\??):/);
             const nextCloseBrace = nextLine.trim().match(/^[}\]]/);
-            
+
             if (nextInterfaceMatch && !trimmedType.endsWith(',') && !trimmedType.endsWith(';')) {
               const currentIndent = indent.length;
               const nextIndent = nextInterfaceMatch[1].length;
-              
+
               if (currentIndent === nextIndent) {
                 lines[index] = `${indent}${prop}${optional}: ${trimmedType},`;
                 fixCount++;
@@ -175,22 +175,22 @@ function fixFileGeneric(filePath) {
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
       const nextLine = lines[i + 1];
-      
+
       if (nextLine) {
         // 检查对象属性定义
         const propertyMatch = line.match(/^(\s*)(\w+):\s*([^,{}\[\]\n;]+?)(\s*)$/);
         const nextPropertyMatch = nextLine.match(/^(\s*)(\w+):/);
         const nextCloseBrace = nextLine.trim().match(/^[}\]]/);
-        
+
         if (propertyMatch && nextPropertyMatch && !nextCloseBrace) {
           const [, indent, prop, value] = propertyMatch;
           const trimmedValue = value.trim();
-          
+
           const currentIndent = indent.length;
           const nextIndent = nextPropertyMatch[1].length;
-          
-          if (currentIndent === nextIndent && 
-              !trimmedValue.endsWith(',') && 
+
+          if (currentIndent === nextIndent &&
+              !trimmedValue.endsWith(',') &&
               !trimmedValue.endsWith(';') &&
               !trimmedValue.endsWith('{') &&
               !trimmedValue.endsWith('[')) {
@@ -236,4 +236,4 @@ console.log(`📁 目标文件数: ${Object.keys(specificErrorFixes).length}`);
 console.log(`🔧 已修复文件: ${fixedFileCount}`);
 console.log(`✨ 总修复数: ${totalFixCount}`);
 console.log(`📈 修复率: ${((fixedFileCount / Object.keys(specificErrorFixes).length) * 100).toFixed(1)}%`);
-console.log(`🎯 最终手动修复完成！建议运行代码质量检查验证结果。`); 
+console.log(`🎯 最终手动修复完成！建议运行代码质量检查验证结果。`);

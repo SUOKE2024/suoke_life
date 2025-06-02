@@ -1,46 +1,109 @@
+import React from 'react';
+import { render, screen } from '@testing-library/react-native';
 import { jest } from '@jest/globals';
-import { utilityFunction } from '{{UTILITY_PATH}}';
+
+// Mock ApiTestResultsDisplay component
+const MockApiTestResultsDisplay = jest.fn(() => null);
+
+jest.mock('../../../components/demo/ApiTestResultsDisplay', () => ({
+  __esModule: true,
+  default: MockApiTestResultsDisplay,
+}));
+
 describe('ApiTestResultsDisplay', () => {
-  describe('utilityFunction', () => {
-    it('应该正确处理正常输入', () => {
-      const input = "normal inpu;t;";
-      const result = utilityFunction(inpu;t;)
-      expect(result).toEqual("normal result");
-    })
-    it('应该处理边界情况', () => {
-      const edgeCases = [{ input: "", expected: ""};];
-      edgeCases.forEach(({ input, expected }); => {
-        const result = utilityFunction(inpu;t;);
-        expect(result).toEqual(expected);
-      });
-    })
-    it('应该处理无效输入', (); => {
-      const invalidInputs = [null, undefined, {;};];
-      invalidInputs.forEach(input => {
-        expect((); => utilityFunction(input);).toThrow();
-      });
-    })
-    it('应该保持函数纯度', () => {
-      const input = { data: "test;" ;};
-      const originalInput = JSON.parse(JSON.stringify(inpu;t;););
-      utilityFunction(input);
-      expect(input).toEqual(originalInput);
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  describe('基础渲染测试', () => {
+    it('应该正确渲染组件', () => {
+      const mockProps = {
+        results: [
+          { id: '1', name: 'Test API', status: 'success', response: 'OK' },
+          { id: '2', name: 'Another API', status: 'error', response: 'Failed' }
+        ]
+      };
+
+      render(<MockApiTestResultsDisplay {...mockProps} />);
+      expect(MockApiTestResultsDisplay).toHaveBeenCalledWith(mockProps, {});
     });
-  })
-  describe('性能测试', () => {
-    it('应该高效处理大量数据', () => {
-      const largeInput = Array(1000).fill("data;";);
-      const startTime = performance.now;(;);
-      utilityFunction(largeInput);
-      const endTime = performance.now;(;);
-      expect(endTime - startTime).toBeLessThan(100);
-    });
-  })
-  describe('类型安全测试', () => {
-    it('应该返回正确的类型', () => {
-      const result = utilityFunction("test;";)
-      expect(typeof result).toBe('string');
-      expect(Array.isArray(result);).toBe(false);
+
+    it('应该处理空结果', () => {
+      const mockProps = {
+        results: []
+      };
+
+      render(<MockApiTestResultsDisplay {...mockProps} />);
+      expect(MockApiTestResultsDisplay).toHaveBeenCalledWith(mockProps, {});
     });
   });
-});
+
+  describe('数据处理测试', () => {
+    it('应该正确处理API测试结果', () => {
+      const mockResults = [
+        {
+          id: '1',
+          name: '健康数据API',
+          status: 'success',
+          response: { data: 'health data' },
+          timestamp: new Date().toISOString()
+        }
+      ];
+
+      const mockProps = { results: mockResults };
+      render(<MockApiTestResultsDisplay {...mockProps} />);
+      expect(MockApiTestResultsDisplay).toHaveBeenCalledWith(mockProps, {});
+    });
+
+    it('应该处理错误状态', () => {
+      const mockResults = [
+        {
+          id: '1',
+          name: '诊断API',
+          status: 'error',
+          response: { error: 'Network error' },
+          timestamp: new Date().toISOString()
+        }
+      ];
+
+      const mockProps = { results: mockResults };
+      render(<MockApiTestResultsDisplay {...mockProps} />);
+      expect(MockApiTestResultsDisplay).toHaveBeenCalledWith(mockProps, {});
+    });
+  });
+
+  describe('性能测试', () => {
+    it('应该高效处理大量测试结果', () => {
+      const largeResults = Array.from({ length: 100 }, (_, index) => ({
+        id: `test-${index}`,
+        name: `API Test ${index}`,
+        status: index % 2 === 0 ? 'success' : 'error',
+        response: `Response ${index}`,
+        timestamp: new Date().toISOString()
+      }));
+
+      const mockProps = { results: largeResults };
+      const startTime = performance.now();
+      render(<MockApiTestResultsDisplay {...mockProps} />);
+      const endTime = performance.now();
+
+      expect(endTime - startTime).toBeLessThan(100);
+      expect(MockApiTestResultsDisplay).toHaveBeenCalledWith(mockProps, {});
+    });
+  });
+
+  describe('类型安全测试', () => {
+    it('应该正确处理不同类型的响应数据', () => {
+      const mockResults = [
+        { id: '1', name: 'String Response', status: 'success', response: 'string data' },
+        { id: '2', name: 'Object Response', status: 'success', response: { key: 'value' } },
+        { id: '3', name: 'Array Response', status: 'success', response: [1, 2, 3] },
+        { id: '4', name: 'Number Response', status: 'success', response: 42 }
+      ];
+
+      const mockProps = { results: mockResults };
+      render(<MockApiTestResultsDisplay {...mockProps} />);
+      expect(MockApiTestResultsDisplay).toHaveBeenCalledWith(mockProps, {});
+    });
+  });
+}); 

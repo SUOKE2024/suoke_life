@@ -76,7 +76,7 @@ function checkMetroServer() {
   return new Promise((resolve) => {
     console.log('🌐 检查Metro服务器状态...');
     const { spawn } = require('child_process');
-    
+
     const curl = spawn('curl', ['-s', 'http://localhost:8081/status'], {
       stdio: 'pipe'
     });
@@ -101,7 +101,7 @@ function checkMetroServer() {
 // 检查关键文件
 function checkCriticalFiles() {
   console.log('📁 检查关键文件...');
-  
+
   const criticalFiles = [
     'src/App.tsx',
     'package.json',
@@ -110,7 +110,7 @@ function checkCriticalFiles() {
   ];
 
   let allFilesExist = true;
-  
+
   criticalFiles.forEach(file => {
     const filePath = path.join(projectRoot, file);
     if (fs.existsSync(filePath)) {
@@ -127,7 +127,7 @@ function checkCriticalFiles() {
 // 主测试函数
 async function runQuickTest() {
   console.log('开始快速测试...\n');
-  
+
   try {
     // 1. 检查关键文件
     const filesOk = checkCriticalFiles();
@@ -151,7 +151,7 @@ async function runQuickTest() {
     console.log(`Metro服务器: ${metroOk ? '✅' : '❌'}`);
     console.log(`TypeScript检查: ${typeCheckOk ? '✅' : '❌'}`);
     console.log(`单元测试: ${testsOk ? '✅' : '❌'}`);
-    
+
     if (filesOk && metroOk) {
       console.log('\n🎉 应用基本功能正常！');
       console.log('💡 提示: Metro服务器正在运行，您可以:');
@@ -168,4 +168,4 @@ async function runQuickTest() {
 }
 
 // 启动测试
-runQuickTest(); 
+runQuickTest();

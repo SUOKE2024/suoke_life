@@ -35,7 +35,7 @@ function getCurrentTimestamp() {
 function getProjectInfo() {
   const packagePath = path.join(process.cwd(), 'package.json');
   const packageJson = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
-  
+
   return {
     name: packageJson.name,
     version: packageJson.version,
@@ -53,8 +53,8 @@ function runCommand(command, options = {}) {
     });
     return { success: true, output };
   } catch (error) {
-    return { 
-      success: false, 
+    return {
+      success: false,
       error: error.message,
       output: error.stdout || '',
     };
@@ -64,11 +64,11 @@ function runCommand(command, options = {}) {
 // 解析 Jest 覆盖率报告
 function parseCoverageReport() {
   const coveragePath = path.join(process.cwd(), 'coverage/coverage-summary.json');
-  
+
   if (!fs.existsSync(coveragePath)) {
     return null;
   }
-  
+
   try {
     const coverage = JSON.parse(fs.readFileSync(coveragePath, 'utf8'));
     return coverage.total;
@@ -81,11 +81,11 @@ function parseCoverageReport() {
 // 解析 Jest 测试结果
 function parseTestResults() {
   const resultsPath = path.join(process.cwd(), 'test-results.json');
-  
+
   if (!fs.existsSync(resultsPath)) {
     return null;
   }
-  
+
   try {
     const results = JSON.parse(fs.readFileSync(resultsPath, 'utf8'));
     return results;
@@ -233,7 +233,7 @@ function generateHtmlReport(reportData) {
             <p>生成时间: ${reportData.timestamp}</p>
             <p>项目版本: ${reportData.project.version}</p>
         </div>
-        
+
         <div class="content">
             <div class="section">
                 <h2>📊 测试概览</h2>
@@ -324,7 +324,7 @@ function generateHtmlReport(reportData) {
                     <p><strong>名称:</strong> ${reportData.project.name}</p>
                     <p><strong>描述:</strong> ${reportData.project.description}</p>
                     <p><strong>版本:</strong> ${reportData.project.version}</p>
-                    
+
                     <h3>测试环境</h3>
                     <p><strong>Node.js:</strong> ${process.version}</p>
                     <p><strong>平台:</strong> ${process.platform}</p>
@@ -332,7 +332,7 @@ function generateHtmlReport(reportData) {
                 </div>
             </div>
         </div>
-        
+
         <div class="footer">
             <p>© 2024 索克生活 - 自动化测试报告</p>
             <p>报告生成于 ${new Date().toLocaleString('zh-CN')}</p>
@@ -400,7 +400,7 @@ async function generateTestReport() {
   console.log(`   通过测试: ${reportData.summary.passedTests}`);
   console.log(`   失败测试: ${reportData.summary.failedTests}`);
   console.log(`   测试套件: ${reportData.summary.testSuites}`);
-  
+
   if (coverage) {
     console.log(`   语句覆盖率: ${coverage.statements.pct}%`);
     console.log(`   分支覆盖率: ${coverage.branches.pct}%`);
@@ -430,4 +430,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { generateTestReport }; 
+module.exports = { generateTestReport };

@@ -78,9 +78,9 @@ export class VideoInteractionService {
             }
 
             // 将视频帧绘制到画布/            this.context.drawImage(this.videoElement, 0, 0, this.canvas!.width, this.canvas!.height);
-            
+
             // 获取图像数据/            const imageData = this.context.getImageData(0, 0, this.canvas!.width, this.canvas!.height);
-            
+
             // 简单的手势识别逻辑（这里可以集成更复杂的 ML 模型）/            const gesture = this.detectGesture(imageData);
             if (gesture && this.onGestureCallback) {
                 this.onGestureCallback(gesture);
@@ -95,7 +95,7 @@ export class VideoInteractionService {
     }
 
     private detectGesture(imageData: ImageData): string | null  {
-        // 这是一个简化的手势识别示例/        // 在实际应用中，你可能需要使用 TensorFlow.js 或 MediaPipe 等库/        
+        // 这是一个简化的手势识别示例/        // 在实际应用中，你可能需要使用 TensorFlow.js 或 MediaPipe 等库/
         const data = imageData.data;
         let brightPixels = 0;
         const threshold = 200;
@@ -144,4 +144,4 @@ export class VideoInteractionService {
     // 检查是否正在捕获视频/    isCapturingVideo(): boolean {
         return this.isCapturing;
     }
-} 
+}

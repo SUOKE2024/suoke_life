@@ -91,30 +91,30 @@ function fixFileTargeted(filePath, errorLines) {
       if (index >= 0 && index < lines.length) {
         const line = lines[index];
         const trimmedLine = line.trim();
-        
+
         // 跳过空行和注释行
         if (!trimmedLine || trimmedLine.startsWith('//') || trimmedLine.startsWith('/*')) {
           return;
         }
-        
+
         // 检查是否是对象属性定义（更精确的匹配）
         const propertyMatch = line.match(/^(\s*)([a-zA-Z_$][a-zA-Z0-9_$]*)\s*:\s*([^,{}\[\]\n;]+?)(\s*)$/);
         if (propertyMatch) {
           const [, indent, prop, value, trailing] = propertyMatch;
           const trimmedValue = value.trim();
-          
+
           // 检查下一行是否是同级属性或对象结束
           const nextLine = lines[index + 1];
           if (nextLine) {
             const nextTrimmed = nextLine.trim();
             const nextPropertyMatch = nextLine.match(/^(\s*)([a-zA-Z_$][a-zA-Z0-9_$]*)\s*:/);
             const nextCloseBrace = nextTrimmed.match(/^[}\]]/);
-            
+
             // 如果下一行是同级属性且当前行没有逗号
             if (nextPropertyMatch && !trimmedValue.endsWith(',') && !trimmedValue.endsWith(';')) {
               const currentIndent = indent.length;
               const nextIndent = nextPropertyMatch[1].length;
-              
+
               if (currentIndent === nextIndent) {
                 lines[index] = `${indent}${prop}: ${trimmedValue},`;
                 fixCount++;
@@ -132,24 +132,24 @@ function fixFileTargeted(filePath, errorLines) {
             }
           }
         }
-        
+
         // 检查是否是接口属性定义
         const interfaceMatch = line.match(/^(\s*)([a-zA-Z_$][a-zA-Z0-9_$]*)\s*(\??):\s*([^,{}\[\]\n;]+?)(\s*)$/);
         if (interfaceMatch) {
           const [, indent, prop, optional, type, trailing] = interfaceMatch;
           const trimmedType = type.trim();
-          
+
           // 检查下一行
           const nextLine = lines[index + 1];
           if (nextLine) {
             const nextTrimmed = nextLine.trim();
             const nextInterfaceMatch = nextLine.match(/^(\s*)([a-zA-Z_$][a-zA-Z0-9_$]*)\s*(\??):/);
             const nextCloseBrace = nextTrimmed.match(/^[}\]]/);
-            
+
             if (nextInterfaceMatch && !trimmedType.endsWith(',') && !trimmedType.endsWith(';')) {
               const currentIndent = indent.length;
               const nextIndent = nextInterfaceMatch[1].length;
-              
+
               if (currentIndent === nextIndent) {
                 lines[index] = `${indent}${prop}${optional}: ${trimmedType};`;
                 fixCount++;
@@ -189,10 +189,10 @@ console.log(`📁 处理 ${Object.keys(targetFiles).length} 个目标文件\n`);
 Object.entries(targetFiles).forEach(([filePath, errorLines]) => {
   console.log(`\n🔧 处理文件: ${filePath}`);
   console.log(`   目标行号: ${errorLines.join(', ')}`);
-  
+
   const fixCount = fixFileTargeted(filePath, errorLines);
   processedFileCount++;
-  
+
   if (fixCount > 0) {
     totalFixCount += fixCount;
     fixedFileCount++;
@@ -205,4 +205,4 @@ console.log(`📁 处理文件数: ${processedFileCount}`);
 console.log(`🔧 修复文件数: ${fixedFileCount}`);
 console.log(`✨ 总修复数: ${totalFixCount}`);
 console.log(`📈 修复率: ${((fixedFileCount / processedFileCount) * 100).toFixed(1)}%`);
-console.log(`🎯 针对性修复完成！建议运行代码质量检查验证结果。`); 
+console.log(`🎯 针对性修复完成！建议运行代码质量检查验证结果。`);

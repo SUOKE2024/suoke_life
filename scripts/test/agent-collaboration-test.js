@@ -35,7 +35,7 @@ class MockAgent {
   async processMessage(message, context = {}) {
     // 模拟处理延迟
     await new Promise(resolve => setTimeout(resolve, Math.random() * 500 + 100));
-    
+
     const response = {
       agentId: this.name,
       timestamp: new Date().toISOString(),
@@ -43,7 +43,7 @@ class MockAgent {
       confidence: Math.random() * 0.3 + 0.7, // 0.7-1.0
       nextActions: this.suggestNextActions(message, context)
     };
-    
+
     this.memory.push({ input: message, output: response, context });
     return response;
   }
@@ -55,25 +55,25 @@ class MockAgent {
           return '根据您的症状，我建议进行进一步检查。让我为您安排相关服务。';
         }
         return '您好！我是小艾，专注于健康监测和诊断。有什么可以帮助您的吗？';
-      
+
       case 'xiaoke':
         if (message.includes('服务') || message.includes('预约')) {
           return '我已为您找到合适的医疗资源，正在安排预约。';
         }
         return '我是小克，负责服务推荐和资源匹配。让我为您提供最佳方案。';
-      
+
       case 'laoke':
         if (message.includes('知识') || message.includes('学习')) {
           return '这里有相关的中医知识和现代医学资料，我来为您详细解释。';
         }
         return '我是老克，专门负责知识传播和教育。有什么想了解的吗？';
-      
+
       case 'soer':
         if (message.includes('生活') || message.includes('习惯')) {
           return '基于您的情况，我建议调整作息和饮食习惯，我会持续陪伴您。';
         }
         return '我是索儿，关注您的生活方式和日常健康管理。';
-      
+
       default:
         return '智能体响应';
     }
@@ -81,7 +81,7 @@ class MockAgent {
 
   suggestNextActions(message, context) {
     const actions = [];
-    
+
     switch (this.name) {
       case 'xiaoai':
         if (message.includes('症状')) {
@@ -104,7 +104,7 @@ class MockAgent {
         }
         break;
     }
-    
+
     return actions;
   }
 }
@@ -137,7 +137,7 @@ class MockAgentCoordinator {
       for (const step of scenario.steps) {
         const stepResult = await this.executeStep(step, userInput, collaboration);
         collaboration.steps.push(stepResult);
-        
+
         // 如果步骤失败，停止执行
         if (!stepResult.success) {
           collaboration.result = 'failed';
@@ -151,7 +151,7 @@ class MockAgentCoordinator {
 
       collaboration.duration = Date.now() - collaboration.startTime;
       this.collaborationHistory.push(collaboration);
-      
+
       return collaboration;
 
     } catch (error) {
@@ -164,7 +164,7 @@ class MockAgentCoordinator {
 
   async executeStep(step, userInput, collaboration) {
     const { agent, action, expectedOutput } = step;
-    
+
     try {
       const agentInstance = this.agents[agent];
       if (!agentInstance) {
@@ -178,7 +178,7 @@ class MockAgentCoordinator {
       };
 
       const response = await agentInstance.processMessage(userInput, context);
-      
+
       const stepResult = {
         agent,
         action,
@@ -215,15 +215,15 @@ class MockAgentCoordinator {
   validateOutput(response, expectedOutput) {
     // 简单的输出验证
     if (expectedOutput.contains) {
-      return expectedOutput.contains.some(keyword => 
+      return expectedOutput.contains.some(keyword =>
         response.message.includes(keyword)
       );
     }
-    
+
     if (expectedOutput.confidence) {
       return response.confidence >= expectedOutput.confidence;
     }
-    
+
     return true;
   }
 }
@@ -402,12 +402,12 @@ async function runCollaborationTest(scenario) {
   console.log(`\n🎭 测试场景: ${scenario.name}`);
   console.log(`   描述: ${scenario.description}`);
   console.log(`   用户输入: "${scenario.userInput}"`);
-  
+
   const coordinator = new MockAgentCoordinator();
   const result = await coordinator.executeCollaboration(scenario, scenario.userInput);
-  
+
   collaborationResults.total++;
-  
+
   if (result.result === 'success') {
     collaborationResults.passed++;
     console.log(`   ✅ 协作成功 (${result.duration}ms)`);
@@ -419,7 +419,7 @@ async function runCollaborationTest(scenario) {
       error: result.error || '协作流程失败'
     });
   }
-  
+
   // 显示详细步骤
   result.steps.forEach((step, index) => {
     const status = step.success ? '✅' : '❌';
@@ -428,7 +428,7 @@ async function runCollaborationTest(scenario) {
       console.log(`        错误: ${step.error}`);
     }
   });
-  
+
   collaborationResults.scenarios.push(result);
   return result;
 }
@@ -438,7 +438,7 @@ async function runCollaborationTest(scenario) {
  */
 async function testCommunicationProtocol() {
   console.log('\n📡 智能体通信协议测试');
-  
+
   const coordinator = new MockAgentCoordinator();
   const testMessages = [
     { from: 'xiaoai', to: 'xiaoke', message: '需要为用户安排体检服务' },
@@ -446,14 +446,14 @@ async function testCommunicationProtocol() {
     { from: 'laoke', to: 'soer', message: '为用户制定体检后的生活调整建议' },
     { from: 'soer', to: 'xiaoai', message: '用户生活习惯数据已更新' }
   ];
-  
+
   let communicationSuccess = 0;
-  
+
   for (const msg of testMessages) {
     try {
       const fromAgent = coordinator.agents[msg.from];
       const toAgent = coordinator.agents[msg.to];
-      
+
       if (fromAgent && toAgent) {
         const response = await toAgent.processMessage(msg.message, { from: msg.from });
         console.log(`   ✅ ${msg.from} → ${msg.to}: 通信成功`);
@@ -465,7 +465,7 @@ async function testCommunicationProtocol() {
       console.log(`   ❌ ${msg.from} → ${msg.to}: ${error.message}`);
     }
   }
-  
+
   collaborationResults.total++;
   if (communicationSuccess === testMessages.length) {
     collaborationResults.passed++;
@@ -481,16 +481,16 @@ async function testCommunicationProtocol() {
  */
 async function testLoadBalancingAndFailover() {
   console.log('\n⚖️  负载均衡和故障转移测试');
-  
+
   const coordinator = new MockAgentCoordinator();
-  
+
   // 模拟高负载
   console.log('   测试高负载处理...');
   const promises = [];
   for (let i = 0; i < 20; i++) {
     promises.push(coordinator.agents.xiaoai.processMessage(`并发测试消息${i}`));
   }
-  
+
   try {
     const results = await Promise.all(promises);
     const successCount = results.filter(r => r.message).length;
@@ -498,22 +498,22 @@ async function testLoadBalancingAndFailover() {
   } catch (error) {
     console.log(`   ❌ 高负载测试失败: ${error.message}`);
   }
-  
+
   // 模拟智能体故障
   console.log('   测试故障转移...');
   coordinator.agents.xiaoai.status = 'offline';
-  
+
   try {
     // 尝试使用备用智能体
-    const backupResponse = await coordinator.agents.xiaoke.processMessage('健康咨询请求', { 
+    const backupResponse = await coordinator.agents.xiaoke.processMessage('健康咨询请求', {
       originalAgent: 'xiaoai',
-      isFailover: true 
+      isFailover: true
     });
     console.log('   ✅ 故障转移成功');
   } catch (error) {
     console.log(`   ❌ 故障转移失败: ${error.message}`);
   }
-  
+
   collaborationResults.total++;
   collaborationResults.passed++; // 简化处理，实际应该根据测试结果判断
 }
@@ -540,27 +540,27 @@ function generateCollaborationReport() {
     errors: collaborationResults.errors,
     recommendations: []
   };
-  
+
   // 生成建议
   if (collaborationResults.failed > 0) {
     report.recommendations.push('优化失败的协作场景');
   }
-  
+
   if (collaborationResults.passed / collaborationResults.total < 0.9) {
     report.recommendations.push('提升智能体协作稳定性');
   }
-  
+
   report.recommendations.push('定期测试智能体协作功能');
   report.recommendations.push('监控智能体性能指标');
   report.recommendations.push('优化智能体通信协议');
-  
+
   try {
     fs.writeFileSync('agent-collaboration-test-report.json', JSON.stringify(report, null, 2));
     console.log('\n📄 智能体协作测试报告已保存到: agent-collaboration-test-report.json');
   } catch (error) {
     console.warn('⚠️  无法保存测试报告');
   }
-  
+
   return report;
 }
 
@@ -569,42 +569,42 @@ function generateCollaborationReport() {
  */
 async function runAgentCollaborationTests() {
   console.log('开始智能体协作测试...\n');
-  
+
   try {
     // 运行协作场景测试
     for (const scenario of collaborationScenarios) {
       await runCollaborationTest(scenario);
     }
-    
+
     // 运行通信协议测试
     await testCommunicationProtocol();
-    
+
     // 运行负载均衡和故障转移测试
     await testLoadBalancingAndFailover();
-    
+
     console.log('\n📊 智能体协作测试结果');
     console.log('=====================================');
     console.log(`总测试数: ${collaborationResults.total}`);
     console.log(`通过: ${collaborationResults.passed}`);
     console.log(`失败: ${collaborationResults.failed}`);
     console.log(`成功率: ${((collaborationResults.passed / collaborationResults.total) * 100).toFixed(2)}%`);
-    
+
     if (collaborationResults.errors.length > 0) {
       console.log('\n❌ 失败的测试:');
       collaborationResults.errors.forEach(error => {
         console.log(`  - ${error.scenario}: ${error.error}`);
       });
     }
-    
+
     const report = generateCollaborationReport();
-    
+
     console.log('\n💡 建议:');
     report.recommendations.forEach(rec => {
       console.log(`  - ${rec}`);
     });
-    
+
     console.log('\n✅ 智能体协作测试完成！');
-    
+
   } catch (error) {
     console.error('❌ 测试执行失败:', error.message);
     process.exit(1);
@@ -616,4 +616,4 @@ if (require.main === module) {
   runAgentCollaborationTests();
 }
 
-module.exports = { runAgentCollaborationTests, collaborationResults }; 
+module.exports = { runAgentCollaborationTests, collaborationResults };

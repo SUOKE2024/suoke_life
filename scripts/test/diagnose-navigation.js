@@ -43,7 +43,7 @@ function checkExportPattern(content, componentName) {
     `export { ${componentName} }`,
     `export.*${componentName}`
   ];
-  
+
   return patterns.some(pattern => {
     const regex = new RegExp(pattern);
     return regex.test(content);
@@ -56,7 +56,7 @@ function checkImportPattern(content, componentName) {
     `import.*{.*${componentName}.*}.*from`,
     `import ${componentName} from`
   ];
-  
+
   return patterns.some(pattern => {
     const regex = new RegExp(pattern);
     return regex.test(content);
@@ -72,7 +72,7 @@ async function diagnoseNavigation() {
 
   // 1. 检查主要文件是否存在
   log('\n📁 检查核心文件...', 'blue');
-  
+
   const coreFiles = [
     'src/App.tsx',
     'src/navigation/AppNavigator.tsx',
@@ -92,7 +92,7 @@ async function diagnoseNavigation() {
 
   // 2. 检查屏幕组件
   log('\n📱 检查屏幕组件...', 'blue');
-  
+
   const screens = [
     { name: 'HomeScreen', path: 'src/screens/main/HomeScreen.tsx', exportType: 'named' },
     { name: 'SuokeScreen', path: 'src/screens/suoke/SuokeScreen.tsx', exportType: 'default' },
@@ -127,14 +127,14 @@ async function diagnoseNavigation() {
 
   // 3. 检查导航器中的导入
   log('\n🧭 检查导航器导入...', 'blue');
-  
+
   const mainNavigatorPath = 'src/navigation/MainNavigator.tsx';
   if (checkFileExists(mainNavigatorPath)) {
     const content = readFileContent(mainNavigatorPath);
     if (content) {
       const screenImports = [
         'HomeScreen',
-        'SuokeScreen', 
+        'SuokeScreen',
         'LifeScreen',
         'ProfileScreen',
         'ExploreScreen'
@@ -154,7 +154,7 @@ async function diagnoseNavigation() {
 
   // 4. 检查依赖包
   log('\n📦 检查导航相关依赖...', 'blue');
-  
+
   const packageJsonPath = 'package.json';
   if (checkFileExists(packageJsonPath)) {
     const packageContent = readFileContent(packageJsonPath);
@@ -182,7 +182,7 @@ async function diagnoseNavigation() {
 
   // 5. 检查 TypeScript 配置
   log('\n⚙️  检查 TypeScript 配置...', 'blue');
-  
+
   const tsconfigPath = 'tsconfig.json';
   if (checkFileExists(tsconfigPath)) {
     const content = readFileContent(tsconfigPath);
@@ -204,7 +204,7 @@ async function diagnoseNavigation() {
 
   // 6. 检查常见的导航问题
   log('\n🔧 检查常见导航问题...', 'blue');
-  
+
   // 检查是否有循环导入
   const appNavigatorPath = 'src/navigation/AppNavigator.tsx';
   if (checkFileExists(appNavigatorPath)) {
@@ -222,7 +222,7 @@ async function diagnoseNavigation() {
   // 7. 生成诊断报告
   log('\n📊 诊断报告', 'magenta');
   log('================================', 'magenta');
-  
+
   if (issues.length === 0 && warnings.length === 0) {
     log('🎉 恭喜！未发现导航相关问题', 'green');
   } else {
@@ -232,7 +232,7 @@ async function diagnoseNavigation() {
         log(`   ${index + 1}. ${issue}`, 'red');
       });
     }
-    
+
     if (warnings.length > 0) {
       log(`\n⚠️  发现 ${warnings.length} 个警告:`, 'yellow');
       warnings.forEach((warning, index) => {
@@ -245,19 +245,19 @@ async function diagnoseNavigation() {
   if (issues.length > 0 || warnings.length > 0) {
     log('\n🛠️  修复建议:', 'cyan');
     log('================================', 'cyan');
-    
+
     if (issues.some(issue => issue.includes('缺少屏幕组件'))) {
       log('1. 检查屏幕组件文件是否存在，路径是否正确', 'cyan');
     }
-    
+
     if (issues.some(issue => issue.includes('导入'))) {
       log('2. 检查导入语句的语法，确保导出类型匹配（named vs default）', 'cyan');
     }
-    
+
     if (issues.some(issue => issue.includes('依赖'))) {
       log('3. 运行 npm install 安装缺失的依赖', 'cyan');
     }
-    
+
     log('4. 清理缓存: npm run clean', 'cyan');
     log('5. 重新安装依赖: rm -rf node_modules && npm install', 'cyan');
     log('6. 重启 Metro bundler: npm start -- --reset-cache', 'cyan');
@@ -270,4 +270,4 @@ async function diagnoseNavigation() {
 diagnoseNavigation().catch(error => {
   log(`诊断过程中发生错误: ${error.message}`, 'red');
   process.exit(1);
-}); 
+});

@@ -4,32 +4,31 @@
 处理剩余服务并生成最终报告
 """
 
-import os
 import subprocess
 from pathlib import Path
 from typing import Dict, List
 
 class QuickMigrationFinisher:
     """快速迁移完成器"""
-    
+
     def __init__(self, project_root: str):
         self.project_root = Path(project_root)
         self.services_dir = self.project_root / "services"
-        
+
         # 剩余需要迁移的服务
         self.remaining_services = [
             "diagnostic-services/inquiry-service",
-            "diagnostic-services/look-service", 
+            "diagnostic-services/look-service",
             "diagnostic-services/listen-service",
             "diagnostic-services/palpation-service",
             "medical-resource-service",
         ]
-        
+
         # 已完成迁移的服务
         self.completed_services = [
             "auth-service",
             "api-gateway",
-            "user-service", 
+            "user-service",
             "blockchain-service",
             "health-data-service",
             "corn-maze-service",
@@ -39,10 +38,10 @@ class QuickMigrationFinisher:
             "med-knowledge",
             "agent-services/xiaoai-service",
             "agent-services/xiaoke-service",
-            "agent-services/laoke-service", 
+            "agent-services/laoke-service",
             "agent-services/soer-service",
         ]
-    
+
     def create_minimal_pyproject_for_service(self, service_path: Path, service_name: str) -> bool:
         """为服务创建最小化pyproject.toml"""
         config = f'''[project]
@@ -81,30 +80,30 @@ target-version = ['py311', 'py312', 'py313']
 profile = "black"
 line_length = 88
 '''
-        
+
         pyproject_path = service_path / "pyproject.toml"
         with open(pyproject_path, 'w', encoding='utf-8') as f:
             f.write(config)
-        
+
         return True
-    
+
     def quick_migrate_service(self, service_name: str) -> bool:
         """快速迁移单个服务"""
         service_path = self.services_dir / service_name
         if not service_path.exists():
             print(f"❌ 服务不存在: {service_name}")
             return False
-        
+
         print(f"🚀 快速迁移: {service_name}")
-        
+
         # 备份原始文件
         if (service_path / "requirements.txt").exists():
             backup_path = service_path / "requirements-backup.txt"
             subprocess.run(["cp", str(service_path / "requirements.txt"), str(backup_path)])
-        
+
         # 创建最小化配置
         self.create_minimal_pyproject_for_service(service_path, service_name.split('/')[-1])
-        
+
         # 初始化uv项目（如果需要）
         try:
             result = subprocess.run(
@@ -118,7 +117,7 @@ line_length = 88
                 print(f"  ⚠️  uv初始化警告: {result.stderr}")
         except subprocess.TimeoutExpired:
             print(f"  ⏰ uv初始化超时")
-        
+
         # 快速锁定依赖（不安装）
         try:
             result = subprocess.run(
@@ -137,11 +136,11 @@ line_length = 88
         except subprocess.TimeoutExpired:
             print(f"  ⏰ 依赖锁定超时")
             return False
-    
+
     def migrate_remaining_services(self) -> Dict[str, bool]:
         """迁移所有剩余服务"""
         results = {}
-        
+
         for service_name in self.remaining_services:
             try:
                 success = self.quick_migrate_service(service_name)
@@ -149,18 +148,18 @@ line_length = 88
             except Exception as e:
                 print(f"  ❌ 迁移失败: {str(e)}")
                 results[service_name] = False
-        
+
         return results
-    
+
     def generate_final_report(self, migration_results: Dict[str, bool]) -> str:
         """生成最终迁移报告"""
         report_path = self.project_root / "uv_migration_complete_report.md"
-        
+
         total_services = len(self.completed_services) + len(migration_results)
         successful_completed = len(self.completed_services)
         successful_new = sum(migration_results.values())
         total_successful = successful_completed + successful_new
-        
+
         report_content = f"""# 索克生活项目 - uv迁移完成报告
 
 ## 🎉 迁移总结
@@ -192,11 +191,11 @@ line_length = 88
 ## 🆕 本次迁移的服务
 
 """
-        
+
         for service, success in migration_results.items():
             status = "✅" if success else "❌"
             report_content += f"- {status} {service}\n"
-        
+
         report_content += f"""
 
 ## 🚀 性能提升
@@ -271,43 +270,43 @@ line_length = 88
 
 ---
 
-*报告生成时间: 2025-05-27*  
-*迁移工具: uv + 自动化脚本*  
+*报告生成时间: 2025-05-27*
+*迁移工具: uv + 自动化脚本*
 *项目: 索克生活 (Suoke Life)*
 """
-        
+
         with open(report_path, 'w', encoding='utf-8') as f:
             f.write(report_content)
-        
+
         return str(report_path)
 
 
 def main():
     finisher = QuickMigrationFinisher(".")
-    
+
     print("🚀 开始快速完成索克生活项目uv迁移...")
-    
+
     # 迁移剩余服务
     migration_results = finisher.migrate_remaining_services()
-    
+
     # 生成最终报告
     report_path = finisher.generate_final_report(migration_results)
-    
+
     print("\n📊 本次迁移结果:")
     for service, success in migration_results.items():
         status = "✅ 成功" if success else "❌ 失败"
         print(f"  {service}: {status}")
-    
+
     successful_count = sum(migration_results.values())
     total_count = len(migration_results)
-    
+
     print(f"\n📝 最终报告: {report_path}")
     print(f"🎉 快速迁移完成: {successful_count}/{total_count} 服务成功")
-    
+
     # 统计总体成果
     total_completed = len(finisher.completed_services) + successful_count
     total_services = len(finisher.completed_services) + total_count
-    
+
     print(f"\n🏆 项目总体迁移成果:")
     print(f"  总服务数: {total_services}")
     print(f"  成功迁移: {total_completed}")
@@ -316,4 +315,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main() 
+    main()

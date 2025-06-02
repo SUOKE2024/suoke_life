@@ -336,3 +336,128 @@ data/
 .monitoring/
 .analytics/
 performance-*.json
+
+# ===== 防止冗余文件产生的新增规则 =====
+
+# 开发报告文件（防止未来产生）
+*_REPORT.md
+*_REPORT.json
+*_COMPREHENSIVE_REPORT.md
+*_OPTIMIZATION_REPORT.md
+*_IMPLEMENTATION_REPORT.md
+*_COMPLETION_REPORT.md
+*_PROGRESS_REPORT.md
+*_ANALYSIS_REPORT.md
+*_FIX_REPORT.*
+*_STATUS.md
+*_GUIDE.md
+*_HISTORY.md
+PROJECT_CLEANUP_*.md
+CLEANUP_PLAN.md
+DEPLOYMENT.md
+PROJECT_STATUS.md
+OPTIMIZATION_GUIDE.md
+UI_COMPONENT_LIBRARY.md
+BRAND_COLOR_UPDATE.md
+
+# 性能和分析报告
+performance_report_*.json
+gil_*.json
+gil_optimization_report.json
+gil_performance_report.json
+PERFORMANCE_BENCHMARKS_REPORT.json
+ULTIMATE_OPTIMIZATION_REPORT.json
+CODE_QUALITY_REPORT.json
+CODE_QUALITY_ENHANCEMENT_REPORT.json
+TEST_IMPLEMENTATION_ENHANCEMENT_REPORT.json
+ADVANCED_SYNTAX_FIX_REPORT.json
+CRITICAL_SYNTAX_FIX_REPORT.json
+SYNTAX_FIX_REPORT.json
+FILE_EXTENSION_FIX_REPORT.json
+
+# 重复的配置文件
+jest.config.enhanced.js
+optimize.config.js
+requirements-optimized.txt
+requirements-minimal.txt
+requirements-core.txt
+*.config.backup.js
+*.config.old.js
+
+# 重复的Docker文件
+docker-compose.optimized.yml
+docker-compose.optimized-*.yml
+Dockerfile.optimized
+Dockerfile.backup
+Dockerfile.old
+
+# 清理备份目录
+cleanup_backup*/
+.cleanup_backup/
+backup*/
+
+# 临时开发文件
+*.draft
+*.draft.*
+*.wip
+*.wip.*
+*.todo
+*.notes
+*.scratch
+
+# 测试输出文件
+test_output/
+test_results/
+*.test.output
+*.spec.output
+
+# 调试和分析文件
+*.debug
+*.trace
+*.profile
+*.heap
+*.memory
+*.cpu
+
+# 自动生成的文档
+auto_generated_docs/
+generated_api_docs/
+*.auto.md
+
+# 临时脚本和工具
+temp_*.sh
+temp_*.py
+temp_*.js
+cleanup_*.sh
+fix_*.sh
+migrate_*.sh
+test_*.sh
+
+# 编辑器临时文件
+*.sublime-workspace
+*.sublime-project
+.vscode/launch.json
+.vscode/tasks.json
+.vscode/c_cpp_properties.json
+.vscode/settings.json
+
+# 系统和缓存文件
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+.fseventsd
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+*.lnk

@@ -25,19 +25,19 @@ console.log('• 尝试手动执行命令验证功能');
 // 模拟快捷键测试/function simulateKeybindingTest()  {
     console.log('');
     console.log('🧪 模拟快捷键测试...');
-    
+
     const testResults = [
         { key: 'Cmd+Shift+V', expected: '切换语音模式', status: '待测试' ;},
         { key: '状态栏点击', expected: '语音模式切换', status: '待测试' ;},
         { key: '命令面板', expected: '显示语音命令', status: '待测试' ;},
     ];
-    
+
     testResults.forEach((test, index) => {
         setTimeout(() => {
             console.log(`${index + 1}. ${test.key} -> ${test.expected} [${test.status}]`);
         }, index * 500);
     });
-    
+
     setTimeout(() => {
         console.log('');
         console.log('✅ 请在 Cursor IDE 中手动测试上述功能');
@@ -45,4 +45,4 @@ console.log('• 尝试手动执行命令验证功能');
     }, testResults.length * 500 + 1000);
 }
 
-simulateKeybindingTest(); 
+simulateKeybindingTest();

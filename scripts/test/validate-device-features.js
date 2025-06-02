@@ -29,10 +29,10 @@ function addTestResult(name, status, details = '', recommendation = '') {
     recommendation,
     timestamp: new Date().toISOString()
   };
-  
+
   validationResults.tests.push(result);
   validationResults.summary.total++;
-  
+
   if (status === 'pass') {
     validationResults.summary.passed++;
     console.log(`✅ ${name}: ${details}`);
@@ -54,7 +54,7 @@ function addTestResult(name, status, details = '', recommendation = '') {
 // 1. 验证项目结构
 function validateProjectStructure() {
   console.log('\n📁 验证项目结构...');
-  
+
   const requiredFiles = [
     'src/utils/deviceInfo.ts',
     'src/utils/performanceMonitor.ts',
@@ -63,7 +63,7 @@ function validateProjectStructure() {
     'package.json',
     'app.json'
   ];
-  
+
   requiredFiles.forEach(file => {
     if (fs.existsSync(file)) {
       addTestResult(`文件存在: ${file}`, 'pass', '文件结构正确');
@@ -76,7 +76,7 @@ function validateProjectStructure() {
 // 2. 验证依赖安装
 function validateDependencies() {
   console.log('\n📦 验证依赖安装...');
-  
+
   const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
   const requiredDeps = [
     'react-native-device-info',
@@ -86,9 +86,9 @@ function validateDependencies() {
     '@react-native-community/geolocation',
     'react-native-push-notification'
   ];
-  
+
   const allDeps = { ...packageJson.dependencies, ...packageJson.devDependencies };
-  
+
   requiredDeps.forEach(dep => {
     if (allDeps[dep]) {
       addTestResult(`依赖已安装: ${dep}`, 'pass', `版本: ${allDeps[dep]}`);
@@ -101,7 +101,7 @@ function validateDependencies() {
 // 3. 验证TypeScript编译
 function validateTypeScript() {
   console.log('\n🔧 验证TypeScript编译...');
-  
+
   try {
     execSync('npx tsc --noEmit --skipLibCheck', { stdio: 'pipe' });
     addTestResult('TypeScript编译', 'pass', '所有类型检查通过');
@@ -115,19 +115,19 @@ function validateTypeScript() {
 // 4. 验证原生配置
 function validateNativeConfiguration() {
   console.log('\n📱 验证原生配置...');
-  
+
   // 检查Android配置
   const androidManifest = 'android/app/src/main/AndroidManifest.xml';
   if (fs.existsSync(androidManifest)) {
     const manifestContent = fs.readFileSync(androidManifest, 'utf8');
-    
+
     // 检查权限
     const requiredPermissions = [
       'android.permission.CAMERA',
       'android.permission.RECORD_AUDIO',
       'android.permission.ACCESS_FINE_LOCATION'
     ];
-    
+
     requiredPermissions.forEach(permission => {
       if (manifestContent.includes(permission)) {
         addTestResult(`Android权限: ${permission}`, 'pass', '权限已配置');
@@ -138,19 +138,19 @@ function validateNativeConfiguration() {
   } else {
     addTestResult('Android配置', 'fail', 'AndroidManifest.xml不存在', '检查Android项目结构');
   }
-  
+
   // 检查iOS配置
   const iosInfoPlist = 'ios/SuokeLife/Info.plist';
   if (fs.existsSync(iosInfoPlist)) {
     const plistContent = fs.readFileSync(iosInfoPlist, 'utf8');
-    
+
     // 检查权限描述
     const requiredKeys = [
       'NSCameraUsageDescription',
       'NSMicrophoneUsageDescription',
       'NSLocationWhenInUseUsageDescription'
     ];
-    
+
     requiredKeys.forEach(key => {
       if (plistContent.includes(key)) {
         addTestResult(`iOS权限: ${key}`, 'pass', '权限描述已配置');
@@ -166,16 +166,16 @@ function validateNativeConfiguration() {
 // 5. 验证测试脚本
 function validateTestScripts() {
   console.log('\n🧪 验证测试脚本...');
-  
+
   const testScripts = [
     'test:native',
     'test:device',
     'test:device:android',
     'test:device:ios'
   ];
-  
+
   const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
-  
+
   testScripts.forEach(script => {
     if (packageJson.scripts && packageJson.scripts[script]) {
       addTestResult(`测试脚本: ${script}`, 'pass', '脚本已配置');
@@ -188,24 +188,24 @@ function validateTestScripts() {
 // 6. 验证设备连接
 function validateDeviceConnection() {
   console.log('\n📱 验证设备连接...');
-  
+
   try {
     // 检查Android设备
     const adbDevices = execSync('adb devices', { encoding: 'utf8' });
     const androidDevices = adbDevices.split('\n').filter(line => line.includes('\tdevice')).length;
-    
+
     if (androidDevices > 0) {
       addTestResult('Android设备连接', 'pass', `${androidDevices}个设备已连接`);
     } else {
       addTestResult('Android设备连接', 'warning', '无Android设备连接', '连接Android设备或启动模拟器');
     }
-    
+
     // 检查iOS设备
     if (process.platform === 'darwin') {
       try {
         const xcrunDevices = execSync('xcrun simctl list devices | grep "Booted"', { encoding: 'utf8' });
         const iosDevices = xcrunDevices.split('\n').filter(line => line.trim()).length;
-        
+
         if (iosDevices > 0) {
           addTestResult('iOS设备连接', 'pass', `${iosDevices}个设备/模拟器已启动`);
         } else {
@@ -223,26 +223,26 @@ function validateDeviceConnection() {
 // 7. 性能基准测试
 function validatePerformanceBenchmarks() {
   console.log('\n⚡ 验证性能基准...');
-  
+
   // 检查性能监控文件大小
   const perfMonitorFile = 'src/utils/performanceMonitor.ts';
   if (fs.existsSync(perfMonitorFile)) {
     const stats = fs.statSync(perfMonitorFile);
     const sizeKB = Math.round(stats.size / 1024);
-    
+
     if (sizeKB < 100) {
       addTestResult('性能监控文件大小', 'pass', `${sizeKB}KB - 合理大小`);
     } else {
       addTestResult('性能监控文件大小', 'warning', `${sizeKB}KB - 文件较大`, '考虑代码分割');
     }
   }
-  
+
   // 检查测试文件复杂度
   const testFile = 'src/utils/deviceIntegrationTest.ts';
   if (fs.existsSync(testFile)) {
     const content = fs.readFileSync(testFile, 'utf8');
     const lineCount = content.split('\n').length;
-    
+
     if (lineCount < 1000) {
       addTestResult('测试文件复杂度', 'pass', `${lineCount}行 - 合理复杂度`);
     } else {
@@ -254,13 +254,13 @@ function validatePerformanceBenchmarks() {
 // 8. 生成优化建议
 function generateOptimizationRecommendations() {
   console.log('\n💡 生成优化建议...');
-  
+
   const recommendations = [];
-  
+
   // 基于测试结果生成建议
   const failedTests = validationResults.tests.filter(t => t.status === 'fail');
   const warningTests = validationResults.tests.filter(t => t.status === 'warning');
-  
+
   if (failedTests.length > 0) {
     recommendations.push('🔴 立即修复失败的测试项目');
     failedTests.forEach(test => {
@@ -269,7 +269,7 @@ function generateOptimizationRecommendations() {
       }
     });
   }
-  
+
   if (warningTests.length > 0) {
     recommendations.push('🟡 考虑优化警告项目');
     warningTests.forEach(test => {
@@ -278,7 +278,7 @@ function generateOptimizationRecommendations() {
       }
     });
   }
-  
+
   // 通用优化建议
   recommendations.push('🚀 性能优化建议:');
   recommendations.push('   - 定期运行集成测试');
@@ -286,14 +286,14 @@ function generateOptimizationRecommendations() {
   recommendations.push('   - 优化内存使用');
   recommendations.push('   - 实施代码分割');
   recommendations.push('   - 使用懒加载策略');
-  
+
   return recommendations;
 }
 
 // 生成详细报告
 function generateDetailedReport() {
   const recommendations = generateOptimizationRecommendations();
-  
+
   const report = `
 # 索克生活设备功能验证报告
 
@@ -345,13 +345,13 @@ ${recommendations.join('\n')}
 **报告生成时间**: ${new Date().toLocaleString()}
 **验证工具版本**: 1.0.0
   `;
-  
+
   // 保存报告
   const reportPath = path.join(process.cwd(), 'DEVICE_VALIDATION_REPORT.md');
   fs.writeFileSync(reportPath, report.trim());
-  
+
   console.log(`\n📄 详细报告已保存: ${reportPath}`);
-  
+
   return report;
 }
 
@@ -359,7 +359,7 @@ ${recommendations.join('\n')}
 async function runValidation() {
   try {
     console.log('🚀 开始设备功能验证...\n');
-    
+
     validateProjectStructure();
     validateDependencies();
     validateTypeScript();
@@ -367,25 +367,25 @@ async function runValidation() {
     validateTestScripts();
     validateDeviceConnection();
     validatePerformanceBenchmarks();
-    
+
     console.log('\n📊 验证总结:');
     console.log(`   总测试数: ${validationResults.summary.total}`);
     console.log(`   ✅ 通过: ${validationResults.summary.passed}`);
     console.log(`   ❌ 失败: ${validationResults.summary.failed}`);
     console.log(`   ⚠️  警告: ${validationResults.summary.warnings}`);
     console.log(`   📈 通过率: ${((validationResults.summary.passed / validationResults.summary.total) * 100).toFixed(1)}%`);
-    
+
     generateDetailedReport();
-    
+
     // 返回验证状态
     const success = validationResults.summary.failed === 0;
     console.log(`\n🎯 验证${success ? '成功' : '失败'}！`);
-    
+
     if (!success) {
       console.log('💡 请查看详细报告并修复失败的项目');
       process.exit(1);
     }
-    
+
   } catch (error) {
     console.error('❌ 验证过程中发生错误:', error);
     process.exit(1);
@@ -393,4 +393,4 @@ async function runValidation() {
 }
 
 // 运行验证
-runValidation(); 
+runValidation();

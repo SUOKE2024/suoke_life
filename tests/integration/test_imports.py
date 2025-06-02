@@ -19,24 +19,24 @@ def test_relative_imports():
         from internal.service.implementations.voice_assistance_impl import VoiceAssistanceServiceImpl
         from internal.service.coordinators.accessibility_coordinator import AccessibilityServiceCoordinator
         from internal.service.factories.accessibility_factory import AccessibilityServiceFactory
-        
+
         print('✅ 核心服务导入成功')
-        
+
         # 测试接口导入
         from internal.service.interfaces import (
-            IBlindAssistanceService, IVoiceAssistanceService, 
+            IBlindAssistanceService, IVoiceAssistanceService,
             IScreenReadingService, ISignLanguageService
         )
-        
+
         print('✅ 接口导入成功')
-        
+
         # 测试装饰器导入
         from internal.service.decorators import performance_monitor, error_handler, cache_result
-        
+
         print('✅ 装饰器导入成功')
-        
+
         return True
-        
+
     except ImportError as e:
         print(f'❌ 相对导入失败: {e}')
         import traceback
@@ -45,4 +45,4 @@ def test_relative_imports():
 
 if __name__ == "__main__":
     result = test_relative_imports()
-    exit(0 if result else 1) 
+    exit(0 if result else 1)

@@ -1,7 +1,6 @@
-import { useTheme } from '../../contexts/ThemeContext'/import { useAccessibility } from '../../contexts/AccessibilityContext'/import { responsive, touchTarget } from '../../utils/responsive'/import { animations, createAnimatedValue } from '../../utils/animations';/;
-// 索克生活 - Button组件   统一的按钮组件，支持多种样式和状态
-importReact,{ useRef, useEffect } from 'react';
-import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor'/  TouchableOpacity,;
+import React, { useRef, useEffect, useCallback } from 'react';
+import {
+  TouchableOpacity,
   Text,
   StyleSheet,
   ViewStyle,
@@ -9,35 +8,57 @@ import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor'/  Touchab
   ActivityIndicator,
   Animated,
   Platform,
-  { AccessibilityRole } from 'react-native'
-// 按钮变体类型 * export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'success' | 'warnin;g'; */;
-// 按钮尺寸类型 * export type ButtonSize = 'small' | 'medium' | 'large' | 'xlarg;e'; */;
-// 按钮形状类型 * export type ButtonShape = 'rounded' | 'square' | 'circl;e'; */;
-// 按钮属性接口 * export interface ButtonProps {; */;
-  // 基础属性 *   title?: string; */
+  AccessibilityRole
+} from 'react-native';
+import { usePerformanceMonitor } from '../../hooks/usePerformanceMonitor';
+
+// 按钮变体类型
+export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'success' | 'warning';
+
+// 按钮尺寸类型
+export type ButtonSize = 'small' | 'medium' | 'large' | 'xlarge';
+
+// 按钮形状类型
+export type ButtonShape = 'rounded' | 'square' | 'circle';
+
+// 按钮属性接口
+export interface ButtonProps {
+  // 基础属性
+  title?: string;
   onPress?: () => void;
   disabled?: boolean;
   loading?: boolean;
-  // 样式属性 *   variant?: ButtonVariant; */
+  
+  // 样式属性
+  variant?: ButtonVariant;
   size?: ButtonSize;
   shape?: ButtonShape;
   fullWidth?: boolean;
-  // 图标属性 *   leftIcon?: React.ReactNode; */
+  
+  // 图标属性
+  leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   iconOnly?: boolean;
-  // 动画属性 *   animationType?: 'none' | 'scale' | 'bounce' | 'pulse'; */
+  
+  // 动画属性
+  animationType?: 'none' | 'scale' | 'bounce' | 'pulse';
   hapticFeedback?: boolean;
-  // 无障碍属性 *   accessibilityLabel?: string; */
+  
+  // 无障碍属性
+  accessibilityLabel?: string;
   accessibilityHint?: string;
   accessibilityRole?: AccessibilityRole;
-  // 自定义样式 *   style?: ViewStyle; */
+  
+  // 自定义样式
+  style?: ViewStyle;
   textStyle?: TextStyle;
-  // 其他属性 *   testID?: string */
-  children?: React.ReactNode}
-export const Button: React.FC<ButtonProps accessibilityLabel="TODO: 添加无障碍标签" /> = ({/  // 性能监控 *   const performanceMonitor = usePerformanceMonitor('Button', ;{; */;
-    trackRender: true,
-    trackMemory: true,
-    warnThreshold: 50, // ms *   }) */
+  
+  // 其他属性
+  testID?: string;
+  children?: React.ReactNode;
+}
+
+export const Button: React.FC<ButtonProps> = ({
   title,
   onPress,
   disabled = false,
@@ -59,110 +80,159 @@ export const Button: React.FC<ButtonProps accessibilityLabel="TODO: 添加无障
   testID,
   children
 }) => {
-  const { theme   } = useTheme;(;);
-  const { config, triggerHapticFeedback, announceForAccessibility   } = useAccessibility;(;);
-  // 动画值 *   const scaleValue = useRef(createAnimatedValue(1);).current; */
-  const opacityValue = useRef(createAnimatedValue(1);).current;
-  // 处理按钮按下 *   const handlePressIn = useCallback((); => { */
-    // TODO: Implement function body *       const effectEnd = performance.now;(;); */
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, []);
-    if (disabled || loading) {return}
-    // 触觉反馈 *     if (hapticFeedback && config.hapticFeedbackEnabled) { */
-      triggerHapticFeedback('light')
-    }
-    // 动画效果 *     switch (animationType) { */
+  // 性能监控
+  const performanceMonitor = usePerformanceMonitor({
+    componentName: 'Button',
+    trackRender: true,
+    trackMemory: true,
+    warnThreshold: 50, // ms
+  });
+
+  // 动画值
+  const scaleValue = useRef(new Animated.Value(1)).current;
+  const opacityValue = useRef(new Animated.Value(1)).current;
+
+  // 处理按钮按下
+  const handlePressIn = useCallback(() => {
+    if (disabled || loading) return;
+    
+    // 动画效果
+    switch (animationType) {
       case 'scale':
-        scaleValue.setValue(0.95);
-        break
+        Animated.timing(scaleValue, {
+          toValue: 0.95,
+          duration: 100,
+          useNativeDriver: true,
+        }).start();
+        break;
       case 'bounce':
-        animations.bounce(scaleValue).start();
-        break
+        Animated.spring(scaleValue, {
+          toValue: 0.95,
+          useNativeDriver: true,
+        }).start();
+        break;
       case 'pulse':
-        animations.pulse(scaleValue).start();
+        Animated.sequence([
+          Animated.timing(opacityValue, {
+            toValue: 0.7,
+            duration: 100,
+            useNativeDriver: true,
+          }),
+          Animated.timing(opacityValue, {
+            toValue: 1,
+            duration: 100,
+            useNativeDriver: true,
+          }),
+        ]).start();
         break;
     }
-  };
-  // 处理按钮释放 *   const handlePressOut = useCallback((); => { */
-    // TODO: Implement function body *       const effectEnd = performance.now;(;); */
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, []);
-    if (disabled || loading) {return}
-    // 恢复动画 *     if (animationType === 'scale') { */
-      scaleValue.setValue(1);
+  }, [disabled, loading, animationType, scaleValue, opacityValue]);
+
+  // 处理按钮释放
+  const handlePressOut = useCallback(() => {
+    if (disabled || loading) return;
+    
+    // 恢复动画
+    if (animationType === 'scale' || animationType === 'bounce') {
+      Animated.timing(scaleValue, {
+        toValue: 1,
+        duration: 100,
+        useNativeDriver: true,
+      }).start();
     }
-  };
-  // 处理按钮点击 *   const handlePress = useCallback((); => { */
-    // TODO: Implement function body *       const effectEnd = performance.now;(;); */
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, []);
-    if (disabled || loading) {return}
-    // 无障碍公告 *     if (config.screenReaderEnabled && title) { */
-      announceForAccessibility(`${title} 按钮已激活`);
-    }
+  }, [disabled, loading, animationType, scaleValue]);
+
+  // 处理按钮点击
+  const handlePress = useCallback(() => {
+    if (disabled || loading) return;
     onPress?.();
-  }
-  // 获取按钮样式 *   const getButtonStyles = (): ViewStyle => { */
-    const baseStyles: ViewStyle = {,;
+  }, [disabled, loading, onPress]);
+
+  // 获取按钮样式
+  const getButtonStyles = (): ViewStyle => {
+    const baseStyles: ViewStyle = {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
       borderWidth: 1,
-      borderColor: 'transparent'};
-    // 尺寸样式 *     const sizeStyles = getSizeStyles;(;); */
-    // 变体样式 *     const variantStyles = getVariantStyles;(;); */
-    // 形状样式 *     const shapeStyles = getShapeStyles;(;); */
-    // 响应式样式 *     const responsiveStyles: ViewStyle = {, */
-      minHeight: touchTarget.ensureMinimumSize(sizeStyles.minHeight as number || 44),
-      minWidth: fullWidth ? '100%' : touchTarget.ensureMinimumSize(sizeStyles.minWidth as number || 44)};
-    // 禁用状态样式 *     const disabledStyles: ViewStyle = disabled ? {, opacity: 0.5  } : {}; */
+      borderColor: 'transparent',
+    };
+
+    // 尺寸样式
+    const sizeStyles = getSizeStyles();
+    
+    // 变体样式
+    const variantStyles = getVariantStyles();
+    
+    // 形状样式
+    const shapeStyles = getShapeStyles();
+
+    // 响应式样式
+    const responsiveStyles: ViewStyle = {
+      minHeight: sizeStyles.minHeight || 44,
+      minWidth: fullWidth ? '100%' : sizeStyles.minWidth || 44,
+      width: fullWidth ? '100%' : undefined,
+    };
+
+    // 禁用状态样式
+    const disabledStyles: ViewStyle = disabled ? { opacity: 0.5 } : {};
+
     return {
       ...baseStyles,
       ...sizeStyles,
       ...variantStyles,
       ...shapeStyles,
       ...responsiveStyles,
-      ...disabledStyle;s
-    ;};
+      ...disabledStyles,
+    };
   };
-  // 获取尺寸样式 *   const getSizeStyles = (): ViewStyle => { */
-    const sizes = {;
+
+  // 获取尺寸样式
+  const getSizeStyles = (): ViewStyle => {
+    const sizes = {
       small: {
-        paddingHorizontal: responsive.width(12),
-        paddingVertical: responsive.height(8),
-        minHeight: responsive.height(32),
-        minWidth: responsive.width(64)},
+        paddingHorizontal: 12,
+        paddingVertical: 8,
+        minHeight: 32,
+        minWidth: 64,
+      },
       medium: {
-        paddingHorizontal: responsive.width(16),
-        paddingVertical: responsive.height(12),
-        minHeight: responsive.height(44),
-        minWidth: responsive.width(88)},
+        paddingHorizontal: 16,
+        paddingVertical: 12,
+        minHeight: 44,
+        minWidth: 88,
+      },
       large: {
-        paddingHorizontal: responsive.width(20),
-        paddingVertical: responsive.height(16),
-        minHeight: responsive.height(52),
-        minWidth: responsive.width(112)},
+        paddingHorizontal: 20,
+        paddingVertical: 16,
+        minHeight: 52,
+        minWidth: 112,
+      },
       xlarge: {
-        paddingHorizontal: responsive.width(24),
-        paddingVertical: responsive.height(20),
-        minHeight: responsive.height(60),
-        minWidth: responsive.width(136)}
-    ;};
-    return sizes[siz;e;];
-  }
-  // 获取变体样式 *   const getVariantStyles = (): ViewStyle => { */
-    const variants = {;
+        paddingHorizontal: 24,
+        paddingVertical: 20,
+        minHeight: 60,
+        minWidth: 136,
+      },
+    };
+
+    return sizes[size];
+  };
+
+  // 获取变体样式
+  const getVariantStyles = (): ViewStyle => {
+    const variants = {
       primary: {
-        backgroundColor: theme.colors.primary,
-        borderColor: theme.colors.primary,
+        backgroundColor: '#007AFF',
+        borderColor: '#007AFF',
       },
       secondary: {
-        backgroundColor: theme.colors.secondary,
-        borderColor: theme.colors.secondary,
+        backgroundColor: '#5856D6',
+        borderColor: '#5856D6',
       },
       outline: {
         backgroundColor: 'transparent',
-        borderColor: theme.colors.primary,
+        borderColor: '#007AFF',
         borderWidth: 1,
       },
       ghost: {
@@ -170,132 +240,154 @@ export const Button: React.FC<ButtonProps accessibilityLabel="TODO: 添加无障
         borderColor: 'transparent',
       },
       danger: {
-        backgroundColor: theme.colors.error,
-        borderColor: theme.colors.error,
+        backgroundColor: '#FF3B30',
+        borderColor: '#FF3B30',
       },
       success: {
-        backgroundColor: theme.colors.success,
-        borderColor: theme.colors.success,
+        backgroundColor: '#34C759',
+        borderColor: '#34C759',
       },
       warning: {
-        backgroundColor: theme.colors.warning,
-        borderColor: theme.colors.warning}
-    ;};
-    return variants[varian;t;];
-  };
-  // 获取形状样式 *   const getShapeStyles = (): ViewStyle => { */;
-    const shapes = { rounded: {;
-        borderRadius: theme.borderRadius.;m;d ; },
-      square: { borderRadius: 0  },
-      circle: { borderRadius: theme.borderRadius.full  }
+        backgroundColor: '#FF9500',
+        borderColor: '#FF9500',
+      },
     };
-    return shapes[shap;e;];
-  }
-  // 获取文本样式 *   const getTextStyles = (): TextStyle => { */
-    const baseStyles: TextStyle = {,;
-      fontFamily: theme.typography.fontFamily.medium,
-      textAlign: 'center;'
-    ;};
-    // 尺寸文本样式 *     const sizeTextStyles = { */
+
+    return variants[variant];
+  };
+
+  // 获取形状样式
+  const getShapeStyles = (): ViewStyle => {
+    const shapes = {
+      rounded: {
+        borderRadius: 8,
+      },
+      square: {
+        borderRadius: 0,
+      },
+      circle: {
+        borderRadius: 50,
+      },
+    };
+
+    return shapes[shape];
+  };
+
+  // 获取文本样式
+  const getTextStyles = (): TextStyle => {
+    const baseStyles: TextStyle = {
+      fontWeight: '600',
+      textAlign: 'center',
+    };
+
+    // 尺寸文本样式
+    const sizeTextStyles = {
       small: {
-        fontSize: responsive.fontSize(theme.typography.fontSize.sm),
-        lineHeight: responsive.fontSize(theme.typography.fontSize.sm * 1.4)},
+        fontSize: 14,
+        lineHeight: 20,
+      },
       medium: {
-        fontSize: responsive.fontSize(theme.typography.fontSize.base),
-        lineHeight: responsive.fontSize(theme.typography.fontSize.base * 1.4)},
+        fontSize: 16,
+        lineHeight: 24,
+      },
       large: {
-        fontSize: responsive.fontSize(theme.typography.fontSize.lg),
-        lineHeight: responsive.fontSize(theme.typography.fontSize.lg * 1.4)},
+        fontSize: 18,
+        lineHeight: 28,
+      },
       xlarge: {
-        fontSize: responsive.fontSize(theme.typography.fontSize.xl),
-        lineHeight: responsive.fontSize(theme.typography.fontSize.xl * 1.4)}
-    ;};
-    // 变体文本颜色 *     const variantTextStyles = { primary: { color: theme.colors.onPrimary   }, */
-      secondary: { color: theme.colors.onSecondary   },
-      outline: { color: theme.colors.primary   },
-      ghost: { color: theme.colors.primary   },
-      danger: { color: theme.colors.onPrimary   },
-      success: { color: theme.colors.onPrimary   },
-      warning: { color: theme.colors.onPrimary}
-    ;};
-    // 无障碍字体缩放 *     const accessibilityStyles: TextStyle = config.largeFontEnabled ? {, fontSize: sizeTextStyles[size].fontSize * config.fontScale  } : {}; */
+        fontSize: 20,
+        lineHeight: 32,
+      },
+    };
+
+    // 变体文本样式
+    const variantTextStyles = {
+      primary: {
+        color: '#FFFFFF',
+      },
+      secondary: {
+        color: '#FFFFFF',
+      },
+      outline: {
+        color: '#007AFF',
+      },
+      ghost: {
+        color: '#007AFF',
+      },
+      danger: {
+        color: '#FFFFFF',
+      },
+      success: {
+        color: '#FFFFFF',
+      },
+      warning: {
+        color: '#FFFFFF',
+      },
+    };
+
     return {
       ...baseStyles,
       ...sizeTextStyles[size],
       ...variantTextStyles[variant],
-      ...accessibilityStyle;s
-    ;};
+    };
   };
-  // 生成无障碍标签 *   const generateAccessibilityLabel = (): string => { */;
-    if (accessibilityLabel) {return accessibilityL;a;b;e;l}
-    let label = title || '按;钮;'
+
+  // 渲染内容
+  const renderContent = () => {
     if (loading) {
-      label += ', 加载中'
-    }
-    if (disabled) {
-      label += ', 已禁用';
-    }
-    return lab;e;l;
-  };
-  // 生成无障碍提示 *   const generateAccessibilityHint = (): string => { */;
-    if (accessibilityHint) {return accessibility;H;i;n;t}
-    if (disabled) {
-      return '此按钮当前不可;用;'
-    }
-    if (loading) {
-      return '正在处理，请稍;候;'
-    }
-    return '双击激;活;';
-  };
-  // 渲染按钮内容 *   const renderContent = useCallback((); => { */
-    // TODO: Implement function body *       const effectEnd = performance.now;(;); */
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, []);
-    if (loading) {
-      // 记录渲染性能 *  */
-      performanceMonitor.recordRender();
       return (
         <ActivityIndicator
-          size={size === 'small' ? 'small' : 'large'};
-          color={getTextStyles().color} />;/      ;);
+          size="small"
+          color={variant === 'outline' || variant === 'ghost' ? '#007AFF' : '#FFFFFF'}
+        />
+      );
     }
-    if (iconOnly && (leftIcon || rightIcon)) {
-      return leftIcon || rightIc;o;n;
-    }
-    return (<>;
-        {leftIcon && (;
-          <Animated.View style={{ marginRight: title ? responsive.width(8);: 0   }} />/             {leftIcon}
-          </Animated.View>/        )}
-        {(title || children) && (
-          <Text style={[getTextStyles(), textStyle]} />/            {children || title}
-          </Text>/        )}
-        {rightIcon && (<Animated.View style={{ marginLeft: title ? responsive.width(8);: 0   }} />/             {rightIcon}
-          </Animated.View>/        )}
-      </>/    );
+
+    return (
+      <>
+        {leftIcon && <Text style={styles.icon}>{leftIcon}</Text>}
+        {!iconOnly && title && (
+          <Text style={[getTextStyles(), textStyle]}>
+            {title}
+          </Text>
+        )}
+        {children}
+        {rightIcon && <Text style={styles.icon}>{rightIcon}</Text>}
+      </>
+    );
   };
+
   return (
-    <TouchableOpacity,
+    <Animated.View
       style={[
-        getButtonStyles(),
-        style,
-        { transform: [{, scale: scaleValue   }],
+        {
+          transform: [{ scale: scaleValue }],
           opacity: opacityValue,
-        }
+        },
       ]}
-      onPress={handlePress}
-      onPressIn={handlePressIn}
-      onPressOut={handlePressOut}
-      disabled={disabled || loading}
-      activeOpacity={0.8}
-      accessible={true}
-      accessibilityRole={accessibilityRole}
-      accessibilityLabel={generateAccessibilityLabel()}
-      accessibilityHint={generateAccessibilityHint()}
-      accessibilityState={{
-        disabled: disabled || loading,
-        busy: loading,
-      }};
-      testID={testID} />/      {renderContent()};
-    </TouchableOpacity>/  ;);
+    >
+      <TouchableOpacity
+        style={[getButtonStyles(), style]}
+        onPress={handlePress}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        disabled={disabled || loading}
+        accessibilityLabel={accessibilityLabel || title}
+        accessibilityHint={accessibilityHint}
+        accessibilityRole={accessibilityRole}
+        testID={testID}
+        activeOpacity={0.8}
+      >
+        {renderContent()}
+      </TouchableOpacity>
+    </Animated.View>
+  );
 };
-export default React.memo(Button);
+
+const styles = StyleSheet.create({
+  icon: {
+    marginHorizontal: 4,
+  },
+});
+
+export default Button;

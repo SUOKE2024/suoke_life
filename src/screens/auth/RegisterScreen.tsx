@@ -8,6 +8,8 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
+  Keyboard,
+  Animated,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -38,6 +40,7 @@ const RegisterScreen: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<{[key: string]: string}>({});
   const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const buttonScale = new Animated.Value(1);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -110,11 +113,27 @@ const RegisterScreen: React.FC = () => {
       return;
     }
 
+    Keyboard.dismiss();
     setLoading(true);
+    
+    // 按钮动画
+    Animated.sequence([
+      Animated.timing(buttonScale, {
+        toValue: 0.95,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+      Animated.timing(buttonScale, {
+        toValue: 1,
+        duration: 100,
+        useNativeDriver: true,
+      })
+    ]).start();
+    
     try {
       // TODO: 实现实际的注册逻辑
       // 这里应该调用用户服务
-      await new Promise(resolve => setTimeout(resolve, 2000)); // 模拟网络请求
+      await new Promise(resolve => setTimeout(resolve, 1500)); // 模拟网络请求
       
       Alert.alert('注册成功', '欢迎加入索克生活！请查收邮箱验证邮件。', [
         { text: '确定', onPress: () => {
@@ -138,6 +157,14 @@ const RegisterScreen: React.FC = () => {
 
   const toggleTermsAgreement = () => {
     setAgreedToTerms(!agreedToTerms);
+  };
+
+  const showTermsAndConditions = () => {
+    Alert.alert(
+      '服务条款与隐私政策',
+      '索克生活平台尊重并保护所有用户的个人隐私权。为了给您提供更准确、更有针对性的服务，本平台会按照本隐私权政策的规定使用和披露您的个人信息。本平台将以高度的勤勉、审慎义务对待这些信息。除本隐私权政策另有规定外，在未征得您事先许可的情况下，本平台不会将这些信息对外披露或向第三方提供。',
+      [{ text: '我知道了', style: 'default' }]
+    );
   };
 
   return (
@@ -171,67 +198,108 @@ const RegisterScreen: React.FC = () => {
           {/* 表单区域 */}
           <View style={styles.formSection}>
             <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>用户名</Text>
-              <View style={styles.inputWrapper}>
-                <Text style={styles.inputText}>{formData.username || '请输入用户名'}</Text>
-              </View>
-              {errors.username && <Text style={styles.errorText}>{errors.username}</Text>}
+              <Input
+                label="用户名"
+                value={formData.username}
+                onChangeText={(value) => handleInputChange('username', value)}
+                placeholder="请输入用户名"
+                error={!!errors.username}
+                errorMessage={errors.username}
+                testID="username-input"
+              />
             </View>
 
             <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>邮箱地址</Text>
-              <View style={styles.inputWrapper}>
-                <Text style={styles.inputText}>{formData.email || '请输入邮箱地址'}</Text>
-              </View>
-              {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
+              <Input
+                label="邮箱地址"
+                value={formData.email}
+                onChangeText={(value) => handleInputChange('email', value)}
+                placeholder="请输入邮箱地址"
+                type="email"
+                error={!!errors.email}
+                errorMessage={errors.email}
+                testID="email-input"
+              />
             </View>
 
             <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>手机号</Text>
-              <View style={styles.inputWrapper}>
-                <Text style={styles.inputText}>{formData.phone || '请输入手机号'}</Text>
-              </View>
-              {errors.phone && <Text style={styles.errorText}>{errors.phone}</Text>}
+              <Input
+                label="手机号"
+                value={formData.phone}
+                onChangeText={(value) => handleInputChange('phone', value)}
+                placeholder="请输入手机号"
+                type="phone"
+                error={!!errors.phone}
+                errorMessage={errors.phone}
+                testID="phone-input"
+              />
             </View>
 
             <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>密码</Text>
-              <View style={styles.inputWrapper}>
-                <Text style={styles.inputText}>{formData.password ? '••••••••' : '请输入密码'}</Text>
-              </View>
-              {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
+              <Input
+                label="密码"
+                value={formData.password}
+                onChangeText={(value) => handleInputChange('password', value)}
+                placeholder="请输入密码"
+                type="password"
+                error={!!errors.password}
+                errorMessage={errors.password}
+                testID="password-input"
+              />
             </View>
 
             <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>确认密码</Text>
-              <View style={styles.inputWrapper}>
-                <Text style={styles.inputText}>{formData.confirmPassword ? '••••••••' : '请再次输入密码'}</Text>
-              </View>
-              {errors.confirmPassword && <Text style={styles.errorText}>{errors.confirmPassword}</Text>}
+              <Input
+                label="确认密码"
+                value={formData.confirmPassword}
+                onChangeText={(value) => handleInputChange('confirmPassword', value)}
+                placeholder="请再次输入密码"
+                type="password"
+                error={!!errors.confirmPassword}
+                errorMessage={errors.confirmPassword}
+                testID="confirm-password-input"
+              />
             </View>
 
             {/* 服务条款 */}
             <View style={styles.termsContainer}>
               <TouchableOpacity style={styles.checkbox} onPress={toggleTermsAgreement}>
-                <Text style={styles.checkboxText}>{agreedToTerms ? '✓' : ''}</Text>
+                <View style={[
+                  styles.checkboxInner, 
+                  agreedToTerms ? styles.checkboxChecked : {}
+                ]}>
+                  {agreedToTerms && <Text style={styles.checkboxText}>✓</Text>}
+                </View>
               </TouchableOpacity>
               <Text style={styles.termsText}>
-                我已阅读并同意
-                <Text style={styles.termsLink}>《服务条款》</Text>
-                和
-                <Text style={styles.termsLink}>《隐私政策》</Text>
+                我已阅读并同意{' '}
+                <Text style={styles.termsLink} onPress={showTermsAndConditions}>《服务条款》</Text>
+                {' '}和{' '}
+                <Text style={styles.termsLink} onPress={showTermsAndConditions}>《隐私政策》</Text>
               </Text>
             </View>
 
-            <Button
-              title="注册"
-              variant="primary"
-              size="large"
-              fullWidth
-              loading={loading}
-              onPress={handleRegister}
-              style={styles.registerButton}
-            />
+            <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
+              <Button
+                title={loading ? "注册中..." : "注册"}
+                variant="primary"
+                size="large"
+                fullWidth
+                loading={loading}
+                onPress={handleRegister}
+                style={styles.registerButton}
+              />
+            </Animated.View>
+          </View>
+
+          {/* 已有账户提示 */}
+          <View style={styles.loginSection}>
+            <Text style={styles.loginText}>
+              已有账户？{' '}
+              <Text style={styles.loginLink} onPress={handleLogin}>
+                立即登录
+              </Text>
+            </Text>
           </View>
 
           {/* 健康承诺 */}
@@ -248,19 +316,13 @@ const RegisterScreen: React.FC = () => {
               </View>
               <View style={styles.promiseItem}>
                 <Text style={styles.promiseIcon}>🌿</Text>
-                <Text style={styles.promiseText}>中医智慧指导</Text>
+                <Text style={styles.promiseText}>中医智慧结合</Text>
+              </View>
+              <View style={styles.promiseItem}>
+                <Text style={styles.promiseIcon}>👨‍⚕️</Text>
+                <Text style={styles.promiseText}>专业健康指导</Text>
               </View>
             </View>
-          </View>
-
-          {/* 登录提示 */}
-          <View style={styles.loginSection}>
-            <Text style={styles.loginText}>
-              已有账户？
-              <Text style={styles.loginLink} onPress={handleLogin}>
-                立即登录
-              </Text>
-            </Text>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -282,6 +344,7 @@ const styles = StyleSheet.create({
   scrollContent: {
     flexGrow: 1,
     paddingHorizontal: spacing.lg,
+    paddingBottom: spacing.xl,
   },
 
   // 头部区域
@@ -324,7 +387,7 @@ const styles = StyleSheet.create({
     fontFamily: typography.fontFamily.bold,
   },
   title: {
-    fontSize: typography.fontSize['3xl'],
+    fontSize: typography.fontSize['2xl'],
     fontWeight: '700',
     color: colors.textPrimary,
     marginBottom: spacing.sm,
@@ -339,115 +402,57 @@ const styles = StyleSheet.create({
 
   // 表单区域
   formSection: {
-    paddingVertical: spacing.lg,
+    paddingVertical: spacing.md,
   },
   inputContainer: {
-    marginBottom: spacing.lg,
+    marginBottom: spacing.md,
   },
-  inputLabel: {
-    fontSize: typography.fontSize.sm,
-    color: colors.textSecondary,
-    marginBottom: spacing.xs,
-    fontFamily: typography.fontFamily.medium,
-  },
-  inputWrapper: {
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: borderRadius.md,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    backgroundColor: colors.surface,
-    minHeight: 48,
-    justifyContent: 'center',
-  },
-  inputText: {
-    fontSize: typography.fontSize.base,
-    color: colors.textPrimary,
-    fontFamily: typography.fontFamily.regular,
-  },
-  errorText: {
-    fontSize: typography.fontSize.sm,
-    color: colors.error,
-    marginTop: spacing.xs,
-    fontFamily: typography.fontFamily.regular,
-  },
-
-  // 服务条款
   termsContainer: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
-    marginBottom: spacing.xl,
+    alignItems: 'center',
+    marginVertical: spacing.lg,
   },
   checkbox: {
+    padding: spacing.xs,
+    marginRight: spacing.sm,
+  },
+  checkboxInner: {
     width: 20,
     height: 20,
+    borderRadius: 4,
     borderWidth: 1,
     borderColor: colors.border,
-    borderRadius: 4,
-    justifyContent: 'center',
     alignItems: 'center',
-    marginRight: spacing.sm,
-    backgroundColor: colors.surface,
+    justifyContent: 'center',
+  },
+  checkboxChecked: {
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
   },
   checkboxText: {
-    fontSize: typography.fontSize.sm,
-    color: colors.primary,
-    fontWeight: '600',
+    color: colors.white,
+    fontSize: 14,
+    fontWeight: 'bold',
   },
   termsText: {
     flex: 1,
     fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
-    lineHeight: typography.lineHeight.normal * typography.fontSize.sm,
     fontFamily: typography.fontFamily.regular,
   },
   termsLink: {
     color: colors.primary,
     fontWeight: '600',
-  },
-  registerButton: {
-    marginBottom: spacing.lg,
-  },
-
-  // 健康承诺
-  promiseSection: {
-    paddingVertical: spacing.lg,
-    backgroundColor: colors.surfaceSecondary,
-    borderRadius: borderRadius.lg,
-    padding: spacing.lg,
-    marginVertical: spacing.lg,
-  },
-  promiseTitle: {
-    fontSize: typography.fontSize.lg,
-    fontWeight: '600',
-    color: colors.textPrimary,
-    textAlign: 'center',
-    marginBottom: spacing.md,
     fontFamily: typography.fontFamily.medium,
   },
-  promiseList: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
-  promiseItem: {
-    alignItems: 'center',
-    flex: 1,
-  },
-  promiseIcon: {
-    fontSize: typography.fontSize.xl,
-    marginBottom: spacing.xs,
-  },
-  promiseText: {
-    fontSize: typography.fontSize.sm,
-    color: colors.textSecondary,
-    textAlign: 'center',
-    fontFamily: typography.fontFamily.regular,
+  registerButton: {
+    marginTop: spacing.md,
   },
 
-  // 登录提示
+  // 已有账户提示
   loginSection: {
     alignItems: 'center',
-    paddingVertical: spacing.xl,
+    paddingVertical: spacing.lg,
   },
   loginText: {
     fontSize: typography.fontSize.base,
@@ -457,6 +462,42 @@ const styles = StyleSheet.create({
   loginLink: {
     color: colors.primary,
     fontWeight: '600',
+    fontFamily: typography.fontFamily.medium,
+  },
+
+  // 健康承诺
+  promiseSection: {
+    paddingTop: spacing.xl,
+  },
+  promiseTitle: {
+    fontSize: typography.fontSize.lg,
+    fontWeight: '600',
+    color: colors.textPrimary,
+    marginBottom: spacing.lg,
+    textAlign: 'center',
+    fontFamily: typography.fontFamily.medium,
+  },
+  promiseList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  promiseItem: {
+    width: '48%',
+    backgroundColor: colors.surface,
+    padding: spacing.md,
+    borderRadius: borderRadius.md,
+    marginBottom: spacing.md,
+    alignItems: 'center',
+    ...shadows.sm,
+  },
+  promiseIcon: {
+    fontSize: 24,
+    marginBottom: spacing.xs,
+  },
+  promiseText: {
+    fontSize: typography.fontSize.sm,
+    color: colors.textPrimary,
     fontFamily: typography.fontFamily.medium,
   },
 });

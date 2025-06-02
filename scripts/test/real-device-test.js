@@ -34,10 +34,10 @@ function addTestResult(name, status, details = '', metrics = {}) {
     metrics,
     timestamp: new Date().toISOString()
   };
-  
+
   testResults.tests.push(result);
   testResults.summary.total++;
-  
+
   if (status === 'pass') {
     testResults.summary.passed++;
     console.log(`✅ ${name}: ${details}`);
@@ -48,7 +48,7 @@ function addTestResult(name, status, details = '', metrics = {}) {
     testResults.summary.warnings++;
     console.log(`⚠️  ${name}: ${details}`);
   }
-  
+
   if (Object.keys(metrics).length > 0) {
     console.log(`   📊 指标: ${JSON.stringify(metrics)}`);
   }
@@ -57,10 +57,10 @@ function addTestResult(name, status, details = '', metrics = {}) {
 // 1. 验证设备连接
 function verifyDeviceConnection() {
   console.log('\n📱 验证设备连接...');
-  
+
   try {
     const devices = execSync('xcrun devicectl list devices', { encoding: 'utf8' });
-    
+
     if (devices.includes('Song的iPhone') && devices.includes('connected')) {
       addTestResult(
         '设备连接状态',
@@ -87,11 +87,11 @@ function verifyDeviceConnection() {
 // 2. 验证应用安装状态
 function verifyAppInstallation() {
   console.log('\n📦 验证应用安装状态...');
-  
+
   try {
     // 检查应用是否已安装
     const result = execSync('xcrun devicectl list apps --device 00008101-00117CAA0211001E | grep com.suokelife.app || echo "not found"', { encoding: 'utf8' });
-    
+
     if (result.includes('com.suokelife.app')) {
       addTestResult(
         '应用安装状态',
@@ -118,15 +118,15 @@ function verifyAppInstallation() {
 // 3. 测试应用启动性能
 function testAppLaunchPerformance() {
   console.log('\n⚡ 测试应用启动性能...');
-  
+
   try {
     const startTime = Date.now();
-    
+
     // 启动应用
     execSync('xcrun devicectl device install app --device 00008101-00117CAA0211001E /Users/songxu/Library/Developer/Xcode/DerivedData/SuokeLife-*/Build/Products/Debug-iphoneos/SuokeLife.app 2>/dev/null || echo "already installed"', { encoding: 'utf8' });
-    
+
     const launchTime = Date.now() - startTime;
-    
+
     addTestResult(
       '应用启动性能',
       launchTime < 3000 ? 'pass' : launchTime < 5000 ? 'warning' : 'fail',
@@ -145,13 +145,13 @@ function testAppLaunchPerformance() {
 // 4. 验证设备权限
 function verifyDevicePermissions() {
   console.log('\n🔐 验证设备权限...');
-  
+
   const permissions = [
     { name: '相机权限', key: 'camera' },
     { name: '麦克风权限', key: 'microphone' },
     { name: '位置权限', key: 'location' }
   ];
-  
+
   permissions.forEach(permission => {
     // 在真机上，权限需要用户手动授权，这里只能验证配置
     addTestResult(
@@ -166,7 +166,7 @@ function verifyDevicePermissions() {
 // 5. 测试设备硬件功能
 function testDeviceHardware() {
   console.log('\n🔧 测试设备硬件功能...');
-  
+
   const hardwareFeatures = [
     { name: '摄像头', available: true },
     { name: '麦克风', available: true },
@@ -175,7 +175,7 @@ function testDeviceHardware() {
     { name: '陀螺仪', available: true },
     { name: 'Face ID', available: true }
   ];
-  
+
   hardwareFeatures.forEach(feature => {
     addTestResult(
       `硬件功能: ${feature.name}`,
@@ -189,12 +189,12 @@ function testDeviceHardware() {
 // 6. 测试网络连接
 function testNetworkConnectivity() {
   console.log('\n🌐 测试网络连接...');
-  
+
   try {
     const startTime = Date.now();
     execSync('ping -c 1 8.8.8.8', { stdio: 'pipe' });
     const pingTime = Date.now() - startTime;
-    
+
     addTestResult(
       '网络连接',
       pingTime < 1000 ? 'pass' : 'warning',
@@ -213,17 +213,17 @@ function testNetworkConnectivity() {
 // 7. 验证性能优化效果
 function verifyPerformanceOptimizations() {
   console.log('\n🚀 验证性能优化效果...');
-  
+
   const optimizations = [
     'memoWrapper.ts',
-    'lazyLoader.ts', 
+    'lazyLoader.ts',
     'memoryMonitor.ts',
     'startupOptimizer.ts',
     'deviceAdapter.ts'
   ];
-  
+
   let optimizedCount = 0;
-  
+
   optimizations.forEach(opt => {
     if (fs.existsSync(`src/utils/${opt}`)) {
       optimizedCount++;
@@ -240,7 +240,7 @@ function verifyPerformanceOptimizations() {
       );
     }
   });
-  
+
   const optimizationRate = (optimizedCount / optimizations.length * 100).toFixed(1);
   addTestResult(
     '性能优化完成度',
@@ -253,9 +253,9 @@ function verifyPerformanceOptimizations() {
 // 8. 生成真机测试报告
 function generateRealDeviceReport() {
   console.log('\n📊 生成真机测试报告...');
-  
+
   const passRate = (testResults.summary.passed / testResults.summary.total * 100).toFixed(1);
-  
+
   const report = `
 # 索克生活真机测试报告
 
@@ -330,19 +330,19 @@ ${testResults.tests
 **测试环境**: 真实设备 (${testResults.device.model})
 **测试状态**: ${passRate >= 90 ? '优秀' : passRate >= 80 ? '良好' : passRate >= 70 ? '需要改进' : '需要修复'}
   `;
-  
+
   const reportPath = 'REAL_DEVICE_TEST_REPORT.md';
   fs.writeFileSync(reportPath, report.trim());
-  
+
   console.log(`📄 真机测试报告已保存: ${reportPath}`);
-  
+
   // 保存JSON数据
   const jsonPath = path.join('test-results', `real-device-test-${Date.now()}.json`);
   if (!fs.existsSync('test-results')) {
     fs.mkdirSync('test-results', { recursive: true });
   }
   fs.writeFileSync(jsonPath, JSON.stringify(testResults, null, 2));
-  
+
   return { passRate, report };
 }
 
@@ -351,31 +351,31 @@ async function main() {
   try {
     console.log('🔍 索克生活真机测试验证器');
     console.log('==============================');
-    
+
     // 1. 验证设备连接
     verifyDeviceConnection();
-    
+
     // 2. 验证应用安装状态
     verifyAppInstallation();
-    
+
     // 3. 测试应用启动性能
     testAppLaunchPerformance();
-    
+
     // 4. 验证设备权限
     verifyDevicePermissions();
-    
+
     // 5. 测试设备硬件功能
     testDeviceHardware();
-    
+
     // 6. 测试网络连接
     testNetworkConnectivity();
-    
+
     // 7. 验证性能优化效果
     verifyPerformanceOptimizations();
-    
+
     // 8. 生成真机测试报告
     const { passRate } = generateRealDeviceReport();
-    
+
     // 显示测试总结
     console.log('\n🎯 真机测试总结:');
     console.log(`   设备: ${testResults.device.name} (${testResults.device.model})`);
@@ -386,7 +386,7 @@ async function main() {
     console.log(`   ⚠️  警告: ${testResults.summary.warnings}`);
     console.log(`   ❌ 失败: ${testResults.summary.failed}`);
     console.log(`   📈 通过率: ${passRate}%`);
-    
+
     if (passRate >= 90) {
       console.log('\n🎉 真机测试结果优秀！应用在真实设备上表现良好！');
       console.log('📱 建议: 进行用户体验测试和性能监控');
@@ -397,10 +397,10 @@ async function main() {
       console.log('\n⚠️  真机测试需要改进');
       console.log('🔧 建议: 修复失败的测试项');
     }
-    
+
     console.log('\n📋 查看详细报告: REAL_DEVICE_TEST_REPORT.md');
     console.log('📊 测试数据: test-results/ 目录');
-    
+
   } catch (error) {
     console.error('💥 真机测试过程中发生错误:', error);
     process.exit(1);
@@ -408,4 +408,4 @@ async function main() {
 }
 
 // 运行主函数
-main(); 
+main();

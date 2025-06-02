@@ -75,7 +75,7 @@ export class AIAssistantService {
         }
 
         // 代码生成命令
-        if (lowerText.includes('生成代码') || lowerText.includes('generate code') || 
+        if (lowerText.includes('生成代码') || lowerText.includes('generate code') ||
             lowerText.includes('写一个') || lowerText.includes('create function')) {
             return {
                 type: 'code_generation',
@@ -202,4 +202,4 @@ export class AIAssistantService {
             '运行代码'
         ];
     }
-} 
+}

@@ -3,12 +3,14 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { MainNavigator } from './MainNavigator';
 import { AuthNavigator } from './AuthNavigator';
+import AgentDemoScreen from '../screens/demo/AgentDemoScreen';
 // 应用主导航器   负责管理应用的整体导航流程，包括认证状态检查和路由分发
 const Stack = createStackNavigator()
 const AppNavigator: React.FC = () => {
   // 简单的认证状态管理（后续可以集成到Redux或Context中）
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDemoMode, setIsDemoMode] = useState(false);
 
   // 检查认证状态
   useEffect(() => {
@@ -39,32 +41,78 @@ const AppNavigator: React.FC = () => {
   }
 
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-        animationEnabled: true,
-      }}
-    >
-      {isAuthenticated ? (
-        // 已认证用户显示主应用
-        <Stack.Screen 
-          name="Main" 
-          component={MainNavigator}
-          options={{
-            animationTypeForReplace: 'push',
-          }}
-        />
-      ) : (
-        // 未认证用户显示认证流程
-        <Stack.Screen 
-          name="Auth" 
-          component={AuthNavigator}
-          options={{
-            animationTypeForReplace: 'pop',
-          }}
-        />
-      )}
-    </Stack.Navigator>
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+          animationEnabled: true,
+        }}
+      >
+        {isAuthenticated || isDemoMode ? (
+          // 已认证用户或演示模式显示主应用
+          <>
+            <Stack.Screen 
+              name="Main" 
+              component={MainNavigator}
+              options={{
+                animationTypeForReplace: 'push',
+              }}
+            />
+            <Stack.Screen 
+              name="AgentDemo" 
+              component={AgentDemoScreen}
+              options={{
+                cardStyleInterpolator: ({ current, layouts }) => {
+                  return {
+                    cardStyle: {
+                      transform: [
+                        {
+                          translateX: current.progress.interpolate({
+                            inputRange: [0, 1],
+                            outputRange: [layouts.screen.width, 0],
+                          }),
+                        },
+                      ],
+                    },
+                  };
+                },
+              }}
+            />
+          </>
+        ) : (
+          // 未认证用户显示认证流程
+          <>
+            <Stack.Screen 
+              name="Auth" 
+              component={AuthNavigator}
+              options={{
+                animationTypeForReplace: 'pop',
+              }}
+            />
+            <Stack.Screen 
+              name="AgentDemo" 
+              component={AgentDemoScreen}
+              options={{
+                cardStyleInterpolator: ({ current, layouts }) => {
+                  return {
+                    cardStyle: {
+                      transform: [
+                        {
+                          translateX: current.progress.interpolate({
+                            inputRange: [0, 1],
+                            outputRange: [layouts.screen.width, 0],
+                          }),
+                        },
+                      ],
+                    },
+                  };
+                },
+              }}
+            />
+          </>
+        )}
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 export default AppNavigator;

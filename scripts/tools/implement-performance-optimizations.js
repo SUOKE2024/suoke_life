@@ -10,25 +10,25 @@ console.log('========================');
 // 读取测试报告
 function readTestReports() {
   console.log('\n📊 分析测试报告...');
-  
+
   const reports = {
     functional: null,
     device: null,
     validation: null
   };
-  
+
   // 读取功能测试报告
   if (fs.existsSync('FUNCTIONAL_TEST_REPORT.md')) {
     reports.functional = fs.readFileSync('FUNCTIONAL_TEST_REPORT.md', 'utf8');
     console.log('✅ 功能测试报告已读取');
   }
-  
+
   // 读取设备验证报告
   if (fs.existsSync('DEVICE_VALIDATION_REPORT.md')) {
     reports.device = fs.readFileSync('DEVICE_VALIDATION_REPORT.md', 'utf8');
     console.log('✅ 设备验证报告已读取');
   }
-  
+
   // 读取最新的JSON测试报告
   const testResultsDir = 'test-results';
   if (fs.existsSync(testResultsDir)) {
@@ -36,21 +36,21 @@ function readTestReports() {
       .filter(f => f.endsWith('.json'))
       .sort()
       .reverse();
-    
+
     if (files.length > 0) {
       const latestReport = path.join(testResultsDir, files[0]);
       reports.validation = JSON.parse(fs.readFileSync(latestReport, 'utf8'));
       console.log(`✅ 最新测试报告已读取: ${files[0]}`);
     }
   }
-  
+
   return reports;
 }
 
 // 1. 内存优化
 function implementMemoryOptimizations() {
   console.log('\n💾 实施内存优化...');
-  
+
   // 创建React.memo优化的组件包装器
   const memoWrapperPath = 'src/utils/memoWrapper.ts';
   if (!fs.existsSync(memoWrapperPath)) {
@@ -72,23 +72,23 @@ export function withMemo<T extends React.ComponentType<any>>(
  */
 export function deepEqual(obj1: any, obj2: any): boolean {
   if (obj1 === obj2) return true;
-  
+
   if (obj1 == null || obj2 == null) return false;
-  
+
   if (typeof obj1 !== typeof obj2) return false;
-  
+
   if (typeof obj1 !== 'object') return obj1 === obj2;
-  
+
   const keys1 = Object.keys(obj1);
   const keys2 = Object.keys(obj2);
-  
+
   if (keys1.length !== keys2.length) return false;
-  
+
   for (const key of keys1) {
     if (!keys2.includes(key)) return false;
     if (!deepEqual(obj1[key], obj2[key])) return false;
   }
-  
+
   return true;
 }
 
@@ -98,21 +98,21 @@ export function deepEqual(obj1: any, obj2: any): boolean {
 export function shallowEqual(obj1: any, obj2: any): boolean {
   const keys1 = Object.keys(obj1);
   const keys2 = Object.keys(obj2);
-  
+
   if (keys1.length !== keys2.length) return false;
-  
+
   for (const key of keys1) {
     if (obj1[key] !== obj2[key]) return false;
   }
-  
+
   return true;
 }
 `;
-    
+
     fs.writeFileSync(memoWrapperPath, memoWrapperContent.trim());
     console.log('✅ 创建了React.memo优化工具');
   }
-  
+
   // 创建懒加载工具
   const lazyLoaderPath = 'src/utils/lazyLoader.ts';
   if (!fs.existsSync(lazyLoaderPath)) {
@@ -128,13 +128,13 @@ export function withLazyLoading<T extends React.ComponentType<any>>(
   fallback?: React.ComponentType
 ): React.ComponentType {
   const LazyComponent = React.lazy(importFunc);
-  
+
   const FallbackComponent = fallback || (() => (
     <View style={styles.loadingContainer}>
       <ActivityIndicator size="large" color="#2196F3" />
     </View>
   ));
-  
+
   return (props: any) => (
     <Suspense fallback={<FallbackComponent />}>
       <LazyComponent {...props} />
@@ -148,14 +148,14 @@ export function withLazyLoading<T extends React.ComponentType<any>>(
 export function useImageLazyLoading(imageUri: string) {
   const [loaded, setLoaded] = React.useState(false);
   const [error, setError] = React.useState(false);
-  
+
   React.useEffect(() => {
     const img = new Image();
     img.onload = () => setLoaded(true);
     img.onerror = () => setError(true);
     img.src = imageUri;
   }, [imageUri]);
-  
+
   return { loaded, error };
 }
 
@@ -168,11 +168,11 @@ const styles = StyleSheet.create({
   },
 });
 `;
-    
+
     fs.writeFileSync(lazyLoaderPath, lazyLoaderContent.trim());
     console.log('✅ 创建了懒加载工具');
   }
-  
+
   // 创建内存监控工具
   const memoryMonitorPath = 'src/utils/memoryMonitor.ts';
   if (!fs.existsSync(memoryMonitorPath)) {
@@ -190,18 +190,18 @@ class MemoryMonitor {
   private listeners: ((warning: MemoryWarning) => void)[] = [];
   private monitoring = false;
   private interval: NodeJS.Timeout | null = null;
-  
+
   startMonitoring(intervalMs = 5000) {
     if (this.monitoring) return;
-    
+
     this.monitoring = true;
     this.interval = setInterval(() => {
       this.checkMemoryUsage();
     }, intervalMs);
-    
+
     console.log('🔍 内存监控已启动');
   }
-  
+
   stopMonitoring() {
     if (this.interval) {
       clearInterval(this.interval);
@@ -210,25 +210,25 @@ class MemoryMonitor {
     this.monitoring = false;
     console.log('⏹️ 内存监控已停止');
   }
-  
+
   private checkMemoryUsage() {
     if (typeof global.gc === 'function') {
       global.gc();
     }
-    
+
     const memUsage = process.memoryUsage();
     const heapUsedMB = memUsage.heapUsed / 1024 / 1024;
     const heapTotalMB = memUsage.heapTotal / 1024 / 1024;
     const usagePercent = (heapUsedMB / heapTotalMB) * 100;
-    
+
     let level: 'low' | 'medium' | 'high' = 'low';
-    
+
     if (usagePercent > 80) {
       level = 'high';
     } else if (usagePercent > 60) {
       level = 'medium';
     }
-    
+
     if (level !== 'low') {
       const warning: MemoryWarning = {
         level,
@@ -236,23 +236,23 @@ class MemoryMonitor {
         heapUsed: heapUsedMB,
         heapTotal: heapTotalMB
       };
-      
+
       this.notifyListeners(warning);
       DeviceEventEmitter.emit('memoryWarning', warning);
     }
   }
-  
+
   addListener(callback: (warning: MemoryWarning) => void) {
     this.listeners.push(callback);
   }
-  
+
   removeListener(callback: (warning: MemoryWarning) => void) {
     const index = this.listeners.indexOf(callback);
     if (index > -1) {
       this.listeners.splice(index, 1);
     }
   }
-  
+
   private notifyListeners(warning: MemoryWarning) {
     this.listeners.forEach(listener => {
       try {
@@ -262,7 +262,7 @@ class MemoryMonitor {
       }
     });
   }
-  
+
   getCurrentUsage() {
     const memUsage = process.memoryUsage();
     return {
@@ -277,7 +277,7 @@ class MemoryMonitor {
 export const memoryMonitor = new MemoryMonitor();
 export default memoryMonitor;
 `;
-    
+
     fs.writeFileSync(memoryMonitorPath, memoryMonitorContent.trim());
     console.log('✅ 创建了内存监控工具');
   }
@@ -286,7 +286,7 @@ export default memoryMonitor;
 // 2. 启动优化
 function implementStartupOptimizations() {
   console.log('\n⚡ 实施启动优化...');
-  
+
   // 创建启动优化管理器
   const startupOptimizerPath = 'src/utils/startupOptimizer.ts';
   if (!fs.existsSync(startupOptimizerPath)) {
@@ -302,55 +302,55 @@ class StartupOptimizer {
   private tasks: Map<string, StartupTask> = new Map();
   private completed: Set<string> = new Set();
   private running: Set<string> = new Set();
-  
+
   /**
    * 注册启动任务
    */
   registerTask(task: StartupTask) {
     this.tasks.set(task.name, task);
   }
-  
+
   /**
    * 执行启动优化
    */
   async optimize() {
     console.log('🚀 开始启动优化...');
     const startTime = Date.now();
-    
+
     // 按优先级排序任务
     const sortedTasks = this.getSortedTasks();
-    
+
     // 执行关键任务（同步）
     await this.executeCriticalTasks(sortedTasks);
-    
+
     // 异步执行其他任务
     this.executeNonCriticalTasks(sortedTasks);
-    
+
     const duration = Date.now() - startTime;
     console.log(\`✅ 启动优化完成，耗时: \${duration}ms\`);
   }
-  
+
   private getSortedTasks(): StartupTask[] {
     const priorityOrder = { critical: 0, high: 1, medium: 2, low: 3 };
-    
+
     return Array.from(this.tasks.values()).sort((a, b) => {
       return priorityOrder[a.priority] - priorityOrder[b.priority];
     });
   }
-  
+
   private async executeCriticalTasks(tasks: StartupTask[]) {
     const criticalTasks = tasks.filter(task => task.priority === 'critical');
-    
+
     for (const task of criticalTasks) {
       if (this.canExecuteTask(task)) {
         await this.executeTask(task);
       }
     }
   }
-  
+
   private executeNonCriticalTasks(tasks: StartupTask[]) {
     const nonCriticalTasks = tasks.filter(task => task.priority !== 'critical');
-    
+
     // 使用requestIdleCallback或setTimeout延迟执行
     const executeDelayed = () => {
       if (typeof requestIdleCallback !== 'undefined') {
@@ -359,10 +359,10 @@ class StartupOptimizer {
         setTimeout(() => this.executeBatch(nonCriticalTasks), 100);
       }
     };
-    
+
     executeDelayed();
   }
-  
+
   private async executeBatch(tasks: StartupTask[]) {
     for (const task of tasks) {
       if (this.canExecuteTask(task)) {
@@ -374,27 +374,27 @@ class StartupOptimizer {
       }
     }
   }
-  
+
   private canExecuteTask(task: StartupTask): boolean {
     if (this.completed.has(task.name) || this.running.has(task.name)) {
       return false;
     }
-    
+
     if (task.dependencies) {
       return task.dependencies.every(dep => this.completed.has(dep));
     }
-    
+
     return true;
   }
-  
+
   private async executeTask(task: StartupTask) {
     this.running.add(task.name);
-    
+
     try {
       const startTime = Date.now();
       await task.execute();
       const duration = Date.now() - startTime;
-      
+
       console.log(\`✅ 启动任务完成: \${task.name} (\${duration}ms)\`);
       this.completed.add(task.name);
     } finally {
@@ -406,11 +406,11 @@ class StartupOptimizer {
 export const startupOptimizer = new StartupOptimizer();
 export default startupOptimizer;
 `;
-    
+
     fs.writeFileSync(startupOptimizerPath, startupOptimizerContent.trim());
     console.log('✅ 创建了启动优化管理器');
   }
-  
+
   // 创建代码分割工具
   const codeSplittingPath = 'src/utils/codeSplitting.ts';
   if (!fs.existsSync(codeSplittingPath)) {
@@ -422,7 +422,7 @@ import React from 'react';
  */
 export class DynamicImporter {
   private cache = new Map<string, Promise<any>>();
-  
+
   /**
    * 动态导入模块
    */
@@ -430,13 +430,13 @@ export class DynamicImporter {
     if (this.cache.has(modulePath)) {
       return this.cache.get(modulePath);
     }
-    
+
     const importPromise = import(modulePath);
     this.cache.set(modulePath, importPromise);
-    
+
     return importPromise;
   }
-  
+
   /**
    * 预加载模块
    */
@@ -449,7 +449,7 @@ export class DynamicImporter {
       }
     });
   }
-  
+
   /**
    * 清理缓存
    */
@@ -473,10 +473,10 @@ export function createLazyFeature<T>(
   fallback?: T
 ): () => Promise<T> {
   let cached: T | null = null;
-  
+
   return async () => {
     if (cached) return cached;
-    
+
     try {
       const module = await importFunc();
       cached = module.default;
@@ -491,7 +491,7 @@ export function createLazyFeature<T>(
 
 export const dynamicImporter = new DynamicImporter();
 `;
-    
+
     fs.writeFileSync(codeSplittingPath, codeSplittingContent.trim());
     console.log('✅ 创建了代码分割工具');
   }
@@ -500,7 +500,7 @@ export const dynamicImporter = new DynamicImporter();
 // 3. 用户体验优化
 function implementUXOptimizations() {
   console.log('\n🎨 实施用户体验优化...');
-  
+
   // 创建加载状态管理器
   const loadingManagerPath = 'src/utils/loadingManager.ts';
   if (!fs.existsSync(loadingManagerPath)) {
@@ -525,22 +525,22 @@ const LoadingContext = createContext<LoadingContextType | null>(null);
  */
 export const LoadingProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [loadingStates, setLoadingStates] = useState<LoadingState>({});
-  
+
   const setLoading = (key: string, loading: boolean) => {
     setLoadingStates(prev => ({
       ...prev,
       [key]: loading
     }));
   };
-  
+
   const isLoading = (key: string) => {
     return loadingStates[key] || false;
   };
-  
+
   const isAnyLoading = () => {
     return Object.values(loadingStates).some(loading => loading);
   };
-  
+
   return (
     <LoadingContext.Provider value={{
       loadingStates,
@@ -572,7 +572,7 @@ export const useAsyncOperation = <T extends any[], R>(
   key: string
 ) => {
   const { setLoading } = useLoading();
-  
+
   return async (...args: T): Promise<R> => {
     setLoading(key, true);
     try {
@@ -584,11 +584,11 @@ export const useAsyncOperation = <T extends any[], R>(
   };
 };
 `;
-    
+
     fs.writeFileSync(loadingManagerPath, loadingManagerContent.trim());
     console.log('✅ 创建了加载状态管理器');
   }
-  
+
   // 创建错误边界组件
   const errorBoundaryPath = 'src/components/common/ErrorBoundary.tsx';
   if (!fs.existsSync(errorBoundaryPath)) {
@@ -702,7 +702,7 @@ const styles = StyleSheet.create({
 
 export default ErrorBoundary;
 `;
-    
+
     fs.writeFileSync(errorBoundaryPath, errorBoundaryContent.trim());
     console.log('✅ 创建了错误边界组件');
   }
@@ -711,7 +711,7 @@ export default ErrorBoundary;
 // 4. 设备兼容性优化
 function implementCompatibilityOptimizations() {
   console.log('\n📱 实施设备兼容性优化...');
-  
+
   // 创建设备适配工具
   const deviceAdapterPath = 'src/utils/deviceAdapter.ts';
   if (!fs.existsSync(deviceAdapterPath)) {
@@ -731,10 +731,10 @@ interface DeviceSpecs {
 
 class DeviceAdapter {
   private specs: DeviceSpecs;
-  
+
   constructor() {
     const { width, height } = Dimensions.get('window');
-    
+
     this.specs = {
       screenWidth: width,
       screenHeight: height,
@@ -745,14 +745,14 @@ class DeviceAdapter {
       hasNotch: DeviceInfo.hasNotch(),
     };
   }
-  
+
   /**
    * 获取设备规格
    */
   getSpecs(): DeviceSpecs {
     return this.specs;
   }
-  
+
   /**
    * 响应式尺寸计算
    */
@@ -761,7 +761,7 @@ class DeviceAdapter {
     const scale = this.specs.screenWidth / baseWidth;
     return Math.round(size * scale);
   }
-  
+
   /**
    * 字体大小适配
    */
@@ -772,7 +772,7 @@ class DeviceAdapter {
     );
     return Math.round(size * scale);
   }
-  
+
   /**
    * 安全区域适配
    */
@@ -784,21 +784,21 @@ class DeviceAdapter {
       right: 0,
     };
   }
-  
+
   /**
    * 检查是否为小屏设备
    */
   isSmallScreen(): boolean {
     return this.specs.screenWidth < 375 || this.specs.screenHeight < 667;
   }
-  
+
   /**
    * 检查是否为大屏设备
    */
   isLargeScreen(): boolean {
     return this.specs.screenWidth > 414 || this.specs.isTablet;
   }
-  
+
   /**
    * 获取适配的布局配置
    */
@@ -810,14 +810,14 @@ class DeviceAdapter {
       borderRadius: this.responsive(8),
     };
   }
-  
+
   /**
    * 性能级别检测
    */
   getPerformanceLevel(): 'low' | 'medium' | 'high' {
     const totalPixels = this.specs.screenWidth * this.specs.screenHeight;
     const pixelDensity = totalPixels * this.specs.pixelRatio;
-    
+
     if (pixelDensity > 2000000) return 'high';
     if (pixelDensity > 1000000) return 'medium';
     return 'low';
@@ -827,11 +827,11 @@ class DeviceAdapter {
 export const deviceAdapter = new DeviceAdapter();
 export default deviceAdapter;
 `;
-    
+
     fs.writeFileSync(deviceAdapterPath, deviceAdapterContent.trim());
     console.log('✅ 创建了设备适配工具');
   }
-  
+
   // 创建网络状态管理器
   const networkManagerPath = 'src/utils/networkManager.ts';
   if (!fs.existsSync(networkManagerPath)) {
@@ -852,9 +852,9 @@ class NetworkManager {
     type: 'unknown',
     isInternetReachable: false,
   };
-  
+
   private listeners: ((state: NetworkState) => void)[] = [];
-  
+
   /**
    * 初始化网络监控
    */
@@ -866,49 +866,49 @@ class NetworkManager {
         isInternetReachable: state.isInternetReachable || false,
         strength: state.details?.strength,
       };
-      
+
       this.notifyListeners();
       DeviceEventEmitter.emit('networkStateChange', this.currentState);
     });
-    
+
     console.log('🌐 网络状态监控已初始化');
   }
-  
+
   /**
    * 获取当前网络状态
    */
   getCurrentState(): NetworkState {
     return this.currentState;
   }
-  
+
   /**
    * 检查是否在线
    */
   isOnline(): boolean {
     return this.currentState.isConnected && this.currentState.isInternetReachable;
   }
-  
+
   /**
    * 检查是否为WiFi连接
    */
   isWiFi(): boolean {
     return this.currentState.type === 'wifi';
   }
-  
+
   /**
    * 检查是否为移动网络
    */
   isCellular(): boolean {
     return this.currentState.type === 'cellular';
   }
-  
+
   /**
    * 添加网络状态监听器
    */
   addListener(callback: (state: NetworkState) => void) {
     this.listeners.push(callback);
   }
-  
+
   /**
    * 移除网络状态监听器
    */
@@ -918,7 +918,7 @@ class NetworkManager {
       this.listeners.splice(index, 1);
     }
   }
-  
+
   private notifyListeners() {
     this.listeners.forEach(listener => {
       try {
@@ -928,21 +928,21 @@ class NetworkManager {
       }
     });
   }
-  
+
   /**
    * 网络质量评估
    */
   getNetworkQuality(): 'poor' | 'fair' | 'good' | 'excellent' {
     if (!this.isOnline()) return 'poor';
-    
+
     if (this.isWiFi()) return 'excellent';
-    
+
     if (this.currentState.strength) {
       if (this.currentState.strength > 80) return 'excellent';
       if (this.currentState.strength > 60) return 'good';
       if (this.currentState.strength > 40) return 'fair';
     }
-    
+
     return 'poor';
   }
 }
@@ -950,7 +950,7 @@ class NetworkManager {
 export const networkManager = new NetworkManager();
 export default networkManager;
 `;
-    
+
     fs.writeFileSync(networkManagerPath, networkManagerContent.trim());
     console.log('✅ 创建了网络状态管理器');
   }
@@ -959,7 +959,7 @@ export default networkManager;
 // 5. 生成优化报告
 function generateOptimizationReport() {
   console.log('\n📊 生成优化报告...');
-  
+
   const timestamp = new Date().toISOString();
   const report = `
 # 索克生活性能优化实施报告
@@ -1093,12 +1093,12 @@ if (networkManager.isOnline()) {
 **报告生成时间**: ${new Date().toLocaleString()}
 **优化工具版本**: 1.0.0
   `;
-  
+
   const reportPath = 'PERFORMANCE_OPTIMIZATION_IMPLEMENTATION_REPORT.md';
   fs.writeFileSync(reportPath, report.trim());
-  
+
   console.log(`📄 优化报告已保存: ${reportPath}`);
-  
+
   return report;
 }
 
@@ -1107,30 +1107,30 @@ async function main() {
   try {
     console.log('🔍 索克生活性能优化实施器');
     console.log('==============================');
-    
+
     // 1. 读取测试报告
     const reports = readTestReports();
-    
+
     // 2. 实施内存优化
     implementMemoryOptimizations();
-    
+
     // 3. 实施启动优化
     implementStartupOptimizations();
-    
+
     // 4. 实施用户体验优化
     implementUXOptimizations();
-    
+
     // 5. 实施设备兼容性优化
     implementCompatibilityOptimizations();
-    
+
     // 6. 生成优化报告
     generateOptimizationReport();
-    
+
     console.log('\n🎉 性能优化实施完成！');
     console.log('📋 查看详细报告: PERFORMANCE_OPTIMIZATION_IMPLEMENTATION_REPORT.md');
     console.log('🔧 优化工具已创建在 src/utils/ 目录');
     console.log('📱 请按照报告中的使用建议集成到应用中');
-    
+
   } catch (error) {
     console.error('💥 优化实施过程中发生错误:', error);
     process.exit(1);
@@ -1138,4 +1138,4 @@ async function main() {
 }
 
 // 运行主函数
-main(); 
+main();

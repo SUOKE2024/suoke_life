@@ -14,56 +14,56 @@ const manualFixRules = [
     pattern: /;(\s*;)+/g,
     replacement: ';'
   },
-  
+
   // 修复多余的分号
   {
     name: '修复多余分号',
     pattern: /(\w+)\s*;\s*;/g,
     replacement: '$1'
   },
-  
+
   // 修复对象属性值中的错误分号
   {
     name: '修复对象属性值错误分号',
     pattern: /:\s*([^,{}\[\]\n;]+?)\s*;\s*([;}])/g,
     replacement: ': $1$2'
   },
-  
+
   // 修复字符串中的错误分号
   {
     name: '修复字符串错误分号',
     pattern: /(['"`][^'"`]*);([^'"`]*['"`])/g,
     replacement: '$1$2'
   },
-  
+
   // 修复数组中的错误分号
   {
     name: '修复数组错误分号',
     pattern: /\[\s*;([^;\]]*)\s*;\s*\]/g,
     replacement: '[$1]'
   },
-  
+
   // 修复函数参数中的错误分号
   {
     name: '修复函数参数错误分号',
     pattern: /\(\s*;([^;)]*)\s*;\s*\)/g,
     replacement: '($1)'
   },
-  
+
   // 修复对象属性定义中的错误分号
   {
     name: '修复对象属性定义错误分号',
     pattern: /(\w+):\s*([^,{}\[\]\n;]+?)\s*;\s*([,}])/g,
     replacement: '$1: $2$3'
   },
-  
+
   // 修复注释中的错误语法
   {
     name: '修复注释错误语法',
     pattern: /\/\*\s*\*\s*([^*]+)\s*\*\s*\*\//g,
     replacement: '// $1'
   },
-  
+
   // 修复导入语句缺少分号
   {
     name: '修复导入语句缺少分号',
@@ -91,34 +91,34 @@ const specialFileFixRules = {
     content = content.replace(/total;: ;(\d+)/g, 'total: $1');
     content = content.replace(/generated: tr;u;e/g, 'generated: true');
     content = content.replace(/version: "([^"]+);"/g, 'version: "$1"');
-    
+
     return content;
   },
-  
+
   'src/agents/xiaoai/XiaoaiAgentImpl.tsx': (content) => {
     // 修复导入语句
     content = content.replace(/(import\s+[^;\n]+)(?!\s*;)(\n)/g, '$1;$2');
     return content;
   },
-  
+
   'src/services/enhancedI18nService.tsx': (content) => {
     // 修复导入语句
     content = content.replace(/(import\s+[^;\n]+)(?!\s*;)(\n)/g, '$1;$2');
     return content;
   },
-  
+
   'src/services/mlTrainingService.tsx': (content) => {
     // 修复导入语句
     content = content.replace(/(import\s+[^;\n]+)(?!\s*;)(\n)/g, '$1;$2');
     return content;
   },
-  
+
   'src/utils/codeSplitting.tsx': (content) => {
     // 修复导入语句
     content = content.replace(/(import\s+[^;\n]+)(?!\s*;)(\n)/g, '$1;$2');
     return content;
   },
-  
+
   'src/utils/lazyLoader.tsx': (content) => {
     // 修复导入语句
     content = content.replace(/(import\s+[^;\n]+)(?!\s*;)(\n)/g, '$1;$2');
@@ -130,31 +130,31 @@ const specialFileFixRules = {
 function deepFixObjectProperties(content) {
   const lines = content.split('\n');
   const fixedLines = [];
-  
+
   for (let i = 0; i < lines.length; i++) {
     let line = lines[i];
     const nextLine = lines[i + 1];
-    
+
     // 修复对象属性后缺少逗号的情况
     if (nextLine) {
       const propertyMatch = line.match(/^(\s*)(\w+):\s*([^,{}\[\]\n;]+)$/);
       const nextPropertyMatch = nextLine.match(/^(\s*)(\w+):/);
       const nextCloseBrace = nextLine.trim().match(/^[}\]]/);
-      
+
       if (propertyMatch && (nextPropertyMatch || nextCloseBrace)) {
         const [, indent, prop, value] = propertyMatch;
         const trimmedValue = value.trim();
-        
+
         // 如果下一行是同级属性且当前行没有逗号
         if (nextPropertyMatch && !trimmedValue.endsWith(',') && !trimmedValue.endsWith(';')) {
           line = `${indent}${prop}: ${trimmedValue},`;
         }
       }
     }
-    
+
     fixedLines.push(line);
   }
-  
+
   return fixedLines.join('\n');
 }
 
@@ -235,4 +235,4 @@ console.log(`📁 总文件数: ${files.length}`);
 console.log(`🔧 已修复文件: ${fixedFileCount}`);
 console.log(`✨ 总修复数: ${totalFixCount}`);
 console.log(`📈 修复率: ${((totalFixCount / files.length) * 100).toFixed(1)}%`);
-console.log(`🔧 手动语法修复完成！建议运行代码质量检查验证结果。`); 
+console.log(`🔧 手动语法修复完成！建议运行代码质量检查验证结果。`);

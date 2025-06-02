@@ -19,9 +19,9 @@ export class VoiceRecognitionService {
             console.log('window 对象不存在，语音识别不可用');
             return;
         }
-        
+
         const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-        
+
         if (!SpeechRecognition) {
             console.warn('浏览器不支持语音识别');
             return;
@@ -39,7 +39,7 @@ export class VoiceRecognitionService {
 
         this.recognition.onresult = (event: any) => {
             let finalTranscript = '';
-            
+
             for (let i = event.resultIndex; i < event.results.length; i++) {
                 const transcript = event.results[i][0].transcript;
                 if (event.results[i].isFinal) {
@@ -129,4 +129,4 @@ export class VoiceRecognitionService {
         }
         this.onResultCallback = undefined;
     }
-} 
+}

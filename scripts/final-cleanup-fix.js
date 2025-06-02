@@ -154,10 +154,10 @@ files.forEach(filePath => {
     // 修复对象属性定义中的复杂错误
     content = content.replace(/(\w+):\s*\{,/g, '$1: {');
     content = content.replace(/(\w+):\s*([^,}\n]+),(\n\s*)(\w+):\s*\{,/g, '$1: $2,$3$4: {');
-    
+
     // 修复函数参数中的错误
     content = content.replace(/(\w+):\s*([^,)\n]+);,/g, '$1: $2,');
-    
+
     // 修复接口定义中的错误
     content = content.replace(/(interface\s+\w+\s*\{[\s\S]*?)(\w+):\s*([^,}\n;]+);,/g, '$1$2: $3,');
 

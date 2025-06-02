@@ -6,7 +6,7 @@ const defaultConfig = getDefaultConfig(__dirname);
 const config = {
   // 性能优化配置
   maxWorkers: require('os').cpus().length,
-  
+
   // 缓存配置
   cacheStores: [
     {
@@ -16,7 +16,7 @@ const config = {
       },
     },
   ],
-  
+
   // 解析器配置
   resolver: {
     ...defaultConfig.resolver,
@@ -60,7 +60,7 @@ const config = {
       path.resolve(__dirname, 'node_modules'),
     ],
   },
-  
+
   // 转换器配置
   transformer: {
     ...defaultConfig.transformer,
@@ -91,7 +91,7 @@ const config = {
     // 启用代码分割
     unstable_enablePackageExports: true,
   },
-  
+
   // 序列化器配置
   serializer: {
     ...defaultConfig.serializer,
@@ -108,16 +108,16 @@ const config = {
     // 启用增量构建
     getPolyfills: () => [],
   },
-  
+
   // 监视器配置
   watchFolders: [
     path.resolve(__dirname, 'src'),
     path.resolve(__dirname, 'node_modules'),
   ],
-  
+
   // 重置缓存配置
   resetCache: false,
-  
+
   // 服务器配置
   server: {
     port: 8081,

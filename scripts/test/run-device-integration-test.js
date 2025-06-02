@@ -17,16 +17,16 @@ if (!fs.existsSync(packageJsonPath)) {
 // 检查设备连接
 function checkDeviceConnection() {
   console.log('📱 检查设备连接...');
-  
+
   try {
     // 检查Android设备
     const adbDevices = execSync('adb devices', { encoding: 'utf8' });
     const androidDevices = adbDevices.split('\n')
       .filter(line => line.includes('\tdevice'))
       .length;
-    
+
     console.log(`📱 Android设备: ${androidDevices}个`);
-    
+
     // 检查iOS设备 (仅在macOS上)
     let iosDevices = 0;
     if (process.platform === 'darwin') {
@@ -38,7 +38,7 @@ function checkDeviceConnection() {
         console.log('📱 iOS设备/模拟器: 0个');
       }
     }
-    
+
     if (androidDevices === 0 && iosDevices === 0) {
       console.warn('⚠️  未检测到连接的设备，请确保：');
       console.warn('   - Android设备已连接并启用USB调试');
@@ -46,7 +46,7 @@ function checkDeviceConnection() {
       console.warn('   - 或者iOS设备已连接并信任此电脑');
       return false;
     }
-    
+
     return true;
   } catch (error) {
     console.error('❌ 检查设备连接失败:', error.message);
@@ -57,7 +57,7 @@ function checkDeviceConnection() {
 // 检查依赖
 function checkDependencies() {
   console.log('📦 检查依赖...');
-  
+
   const requiredDeps = [
     'react-native-device-info',
     'react-native-permissions',
@@ -66,19 +66,19 @@ function checkDependencies() {
     '@react-native-community/geolocation',
     'react-native-push-notification',
   ];
-  
+
   const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
   const allDeps = { ...packageJson.dependencies, ...packageJson.devDependencies };
-  
+
   const missingDeps = requiredDeps.filter(dep => !allDeps[dep]);
-  
+
   if (missingDeps.length > 0) {
     console.error('❌ 缺少必要依赖:');
     missingDeps.forEach(dep => console.error(`   - ${dep}`));
     console.error('请运行: npm install');
     return false;
   }
-  
+
   console.log('✅ 所有依赖已安装');
   return true;
 }
@@ -86,20 +86,20 @@ function checkDependencies() {
 // 构建应用
 function buildApp(platform) {
   console.log(`🔨 构建${platform}应用...`);
-  
+
   try {
     if (platform === 'android') {
-      execSync('npx react-native run-android --variant=debug', { 
+      execSync('npx react-native run-android --variant=debug', {
         stdio: 'inherit',
         timeout: 300000 // 5分钟超时
       });
     } else if (platform === 'ios') {
-      execSync('npx react-native run-ios --simulator="iPhone 14"', { 
+      execSync('npx react-native run-ios --simulator="iPhone 14"', {
         stdio: 'inherit',
         timeout: 300000 // 5分钟超时
       });
     }
-    
+
     console.log(`✅ ${platform}应用构建成功`);
     return true;
   } catch (error) {
@@ -111,13 +111,13 @@ function buildApp(platform) {
 // 运行测试
 function runTests() {
   console.log('🧪 运行集成测试...');
-  
+
   // 创建测试结果目录
   const testResultsDir = path.join(process.cwd(), 'test-results');
   if (!fs.existsSync(testResultsDir)) {
     fs.mkdirSync(testResultsDir);
   }
-  
+
   // 生成测试脚本
   const testScript = `
 import { AppRegistry } from 'react-native';
@@ -129,40 +129,40 @@ const TestRunner = () => {
       try {
         console.log('🧪 开始集成测试...');
         const report = await deviceIntegrationTester.runFullIntegrationTest();
-        
+
         // 生成报告
         const reportText = deviceIntegrationTester.generateTestReport(report);
         console.log('📊 测试报告:');
         console.log(reportText);
-        
+
         // 保存报告到文件
         const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
         const reportPath = \`./test-results/integration-test-\${timestamp}.md\`;
         require('fs').writeFileSync(reportPath, reportText);
         console.log(\`📄 报告已保存到: \${reportPath}\`);
-        
+
       } catch (error) {
         console.error('❌ 测试失败:', error);
       }
     };
-    
+
     // 延迟执行，等待应用完全启动
     setTimeout(runTests, 3000);
   }, []);
-  
+
   return null;
 };
 
 AppRegistry.registerComponent('TestRunner', () => TestRunner);
   `;
-  
+
   const testScriptPath = path.join(process.cwd(), 'TestRunner.js');
   fs.writeFileSync(testScriptPath, testScript);
-  
+
   console.log('✅ 测试脚本已生成');
   console.log('📱 请在设备上查看测试结果');
   console.log('📊 测试报告将保存在 test-results/ 目录中');
-  
+
   // 清理临时文件
   setTimeout(() => {
     if (fs.existsSync(testScriptPath)) {
@@ -283,7 +283,7 @@ performanceMonitor.endBenchmark('user_login');
 ---
 生成时间: ${new Date().toLocaleString()}
   `;
-  
+
   const guidePath = path.join(process.cwd(), 'PERFORMANCE_OPTIMIZATION_GUIDE.md');
   fs.writeFileSync(guidePath, optimizationGuide.trim());
   console.log('📖 性能优化指南已生成: PERFORMANCE_OPTIMIZATION_GUIDE.md');
@@ -293,34 +293,34 @@ performanceMonitor.endBenchmark('user_login');
 async function main() {
   const args = process.argv.slice(2);
   const platform = args[0] || 'android'; // 默认Android
-  
+
   console.log(`🎯 目标平台: ${platform}`);
-  
+
   // 检查依赖
   if (!checkDependencies()) {
     process.exit(1);
   }
-  
+
   // 检查设备连接
   if (!checkDeviceConnection()) {
     console.log('⚠️  继续执行，但建议连接真实设备进行测试');
   }
-  
+
   // 生成优化指南
   generateOptimizationGuide();
-  
+
   // 构建应用
   if (args.includes('--build')) {
     if (!buildApp(platform)) {
       process.exit(1);
     }
   }
-  
+
   // 运行测试
   if (args.includes('--test')) {
     runTests();
   }
-  
+
   console.log('');
   console.log('🎉 集成测试准备完成！');
   console.log('');
@@ -350,4 +350,4 @@ process.on('unhandledRejection', (reason, promise) => {
 main().catch(error => {
   console.error('❌ 脚本执行失败:', error);
   process.exit(1);
-}); 
+});

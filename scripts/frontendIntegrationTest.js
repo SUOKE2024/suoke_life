@@ -66,7 +66,7 @@ class FrontendIntegrationTest {
       const urlObj = new URL(url);
       const isHttps = urlObj.protocol === 'https:';
       const client = isHttps ? https : http;
-      
+
       const requestOptions = {
         hostname: urlObj.hostname,
         port: urlObj.port || (isHttps ? 443 : 80),
@@ -117,12 +117,12 @@ class FrontendIntegrationTest {
    */
   async testServiceHealth(serviceName, serviceUrl) {
     this.results.total++;
-    
+
     try {
       console.log(`🔍 测试 ${serviceName} 健康检查...`);
-      
+
       const response = await this.makeRequest(`${serviceUrl}/health`);
-      
+
       if (response.ok) {
         console.log(colors.green(`✅ ${serviceName} 健康检查通过`));
         this.results.passed++;
@@ -146,10 +146,10 @@ class FrontendIntegrationTest {
    */
   async testApiGateway() {
     console.log(colors.cyan('\n📡 测试API网关...'));
-    
+
     // 测试网关健康检查
     await this.testServiceHealth('API Gateway', TEST_CONFIG.services.gateway);
-    
+
     // 测试网关路由
     this.results.total++;
     try {
@@ -172,9 +172,9 @@ class FrontendIntegrationTest {
    */
   async testAgentServices() {
     console.log(colors.cyan('\n🤖 测试智能体服务...'));
-    
+
     const agents = ['xiaoai', 'xiaoke', 'laoke', 'soer'];
-    
+
     for (const agent of agents) {
       await this.testServiceHealth(agent.toUpperCase(), TEST_CONFIG.services[agent]);
     }
@@ -185,9 +185,9 @@ class FrontendIntegrationTest {
    */
   async testDiagnosisServices() {
     console.log(colors.cyan('\n🔍 测试五诊断服务...'));
-    
+
     const services = ['look', 'listen', 'inquiry', 'palpation', 'calculation'];
-    
+
     for (const service of services) {
       await this.testServiceHealth(service.toUpperCase(), TEST_CONFIG.services[service]);
     }
@@ -198,9 +198,9 @@ class FrontendIntegrationTest {
    */
   async testCoreServices() {
     console.log(colors.cyan('\n🏗️ 测试核心服务...'));
-    
+
     const coreServices = ['auth', 'user', 'health', 'blockchain', 'rag'];
-    
+
     for (const service of coreServices) {
       await this.testServiceHealth(service.toUpperCase(), TEST_CONFIG.services[service]);
     }
@@ -211,13 +211,13 @@ class FrontendIntegrationTest {
    */
   async testFrontendConfig() {
     console.log(colors.cyan('\n⚙️ 测试前端配置...'));
-    
+
     this.results.total++;
-    
+
     try {
       // 检查前端配置文件
       const configPath = path.join(__dirname, '../src/constants/config.ts');
-      
+
       if (fs.existsSync(configPath)) {
         const configContent = fs.readFileSync(configPath, 'utf8');
         if (configContent.includes('suoke.life')) {
@@ -246,16 +246,16 @@ class FrontendIntegrationTest {
     console.log(colors.green(`通过: ${this.results.passed}`));
     console.log(colors.red(`失败: ${this.results.failed}`));
     console.log(`成功率: ${((this.results.passed / this.results.total) * 100).toFixed(2)}%`);
-    
+
     if (this.results.errors.length > 0) {
       console.log(colors.bold(colors.red('\n❌ 错误详情:')));
       this.results.errors.forEach(error => {
         console.log(colors.red(`  - ${error}`));
       });
     }
-    
+
     console.log('\n' + '='.repeat(50));
-    
+
     if (this.results.failed === 0) {
       console.log(colors.bold(colors.green('🎉 所有测试通过！')));
       return 0;
@@ -271,28 +271,28 @@ class FrontendIntegrationTest {
   async runAllTests() {
     console.log(colors.bold(colors.cyan('🚀 开始前端集成测试...')));
     console.log('='.repeat(50));
-    
+
     try {
       // 测试API网关
       await this.testApiGateway();
-      
+
       // 测试核心服务
       await this.testCoreServices();
-      
+
       // 测试智能体服务
       await this.testAgentServices();
-      
+
       // 测试诊断服务
       await this.testDiagnosisServices();
-      
+
       // 测试前端配置
       await this.testFrontendConfig();
-      
+
     } catch (error) {
       console.log(colors.bold(colors.red(`💥 测试过程中发生错误: ${error.message}`)));
       this.results.failed++;
     }
-    
+
     return this.generateReport();
   }
 }
@@ -312,4 +312,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = FrontendIntegrationTest; 
+module.exports = FrontendIntegrationTest;

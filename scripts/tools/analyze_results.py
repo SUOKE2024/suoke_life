@@ -25,12 +25,12 @@ def analyze_results():
     for category, keywords in categories.items():
         print(f'\n📂 {category.upper()} 相关项目:')
         relevant_projects = []
-        
+
         for project in data:
             name_desc = (project['name'] + ' ' + project.get('description', '')).lower()
             if any(keyword in name_desc for keyword in keywords):
                 relevant_projects.append(project)
-        
+
         # 按评分排序，取前5个
         relevant_projects.sort(key=lambda x: x['score'], reverse=True)
         for i, project in enumerate(relevant_projects[:5], 1):
@@ -42,7 +42,7 @@ def analyze_results():
     # 总体统计
     print('\n📊 总体统计:')
     print(f'总项目数: {len(data)}')
-    
+
     recommendations = {}
     for item in data:
         rec = item.get('recommendation', '未知')
@@ -57,10 +57,10 @@ def analyze_results():
     for item in data:
         lang = item.get('language') or '多语言'
         languages[lang] = languages.get(lang, 0) + 1
-    
+
     sorted_langs = sorted(languages.items(), key=lambda x: x[1], reverse=True)
     for lang, count in sorted_langs[:10]:
         print(f'{lang}: {count}个项目')
 
 if __name__ == "__main__":
-    analyze_results() 
+    analyze_results()
