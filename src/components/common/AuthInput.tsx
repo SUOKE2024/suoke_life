@@ -1,21 +1,13 @@
-import { colors, spacing, fonts, borderRadius, shadows } from '../../constants/theme';
-
-
-
-
-
-import React from 'react';
-  View,
+import { colors, spacing, fonts, borderRadius, shadows } from '../../constants/theme';/;
+importReact from 'react';
+import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor'/  View,;
   Text,
   TextInput,
   TouchableOpacity,
   StyleSheet,
   TextInputProps,
-  Animated,
-} from 'react-native';
-
-interface AuthInputProps extends TextInputProps {
-  label: string;
+  { Animated } from 'react-native';
+interface AuthInputProps extends TextInputProps { label: string;
   error?: string;
   icon?: string;
   rightIcon?: string;
@@ -23,11 +15,12 @@ interface AuthInputProps extends TextInputProps {
   focused?: boolean;
   onFocus?: () => void;
   onBlur?: () => void;
-  counter?: boolean;
-  maxLength?: number;
-}
-
-export const AuthInput: React.FC<AuthInputProps> = ({
+  counter?: boolean,
+  maxLength?: number}
+export const AuthInput: React.FC<AuthInputProps /> = ({/  // 性能监控 *   const performanceMonitor = usePerformanceMonitor('AuthInput', ;{; */;
+    trackRender: true,
+    trackMemory: false,
+    warnThreshold: 50, // ms *   }); */
   label,
   error,
   icon,
@@ -41,18 +34,15 @@ export const AuthInput: React.FC<AuthInputProps> = ({
   value,
   ...props
 }) => {
+  // 记录渲染性能 *  */
+  performanceMonitor.recordRender()
   return (
-    <View style={styles.container}>
-      <Text style={[styles.label, focused && styles.labelFocused]}>
-        {label}
-      </Text>
-      <View style={[
+    <View style={styles.container} />/      <Text style={[styles.label, focused && styles.labelFocused]} />/        {label}
+      </Text>/      <View style={[
         styles.inputWrapper,
         focused && styles.inputWrapperFocused,
-        error && styles.inputWrapperError,
-      ]}>
-        {icon && <Text style={styles.inputIcon}>{icon}</Text>}
-        <TextInput
+        error && styles.inputWrapperError
+      ]} />/        {icon && <Text style={styles.inputIcon} />{icon}</Text>}/        <TextInput
           style={styles.input}
           value={value}
           placeholderTextColor={colors.placeholder}
@@ -60,41 +50,26 @@ export const AuthInput: React.FC<AuthInputProps> = ({
           onBlur={onBlur}
           maxLength={maxLength}
           {...props}
-        />
-        {counter && maxLength && value && (
-          <Text style={styles.inputCounter}>{value.length}/{maxLength}</Text>
-        )}
+        />/        {counter && maxLength && value && (
+          <Text style={styles.inputCounter} />{value.length}/{maxLength}</Text>/        )}
         {rightIcon && (
           <TouchableOpacity
             style={styles.rightIconButton}
             onPress={onRightIconPress}
-          >
-            <Text style={styles.rightIcon}>{rightIcon}</Text>
-          </TouchableOpacity>
-        )}
-      </View>
-      {error && (
-        <Animated.View style={styles.errorContainer}>
-          <Text style={styles.errorText}>{error}</Text>
-        </Animated.View>
-      )}
-    </View>
-  );
+           accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.rightIcon} />{rightIcon}</Text>/          </TouchableOpacity>/        )}
+      </View>/      {error && (;
+        <Animated.View style={styles.errorContainer} />/          <Text style={styles.errorText} />{error}</Text>/        </Animated.View>/      )};
+    </View>/  ;);
 };
-
-const styles = StyleSheet.create({
-  container: {
-    marginBottom: spacing.lg,
-  },
+const styles = StyleSheet.create({ container: {,
+    marginBottom: spacing.;l;g  },
   label: {
     fontSize: fonts.size.md,
     fontWeight: '600',
     color: colors.textSecondary,
     marginBottom: spacing.sm,
   },
-  labelFocused: {
-    color: colors.primary,
-  },
+  labelFocused: { color: colors.primary  },
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -103,15 +78,13 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: colors.border,
     paddingHorizontal: spacing.md,
-    ...shadows.sm,
+    ...shadows.sm
   },
   inputWrapperFocused: {
     borderColor: colors.primary,
-    ...shadows.md,
+    ...shadows.md
   },
-  inputWrapperError: {
-    borderColor: colors.error,
-  },
+  inputWrapperError: { borderColor: colors.error  },
   inputIcon: {
     fontSize: 20,
     marginRight: spacing.sm,
@@ -127,18 +100,12 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     marginLeft: spacing.sm,
   },
-  rightIconButton: {
-    padding: spacing.sm,
-  },
-  rightIcon: {
-    fontSize: 20,
-  },
-  errorContainer: {
-    marginTop: spacing.sm,
-  },
+  rightIconButton: { padding: spacing.sm  },
+  rightIcon: { fontSize: 20  },
+  errorContainer: { marginTop: spacing.sm  },
   errorText: {
     fontSize: fonts.size.sm,
     color: colors.error,
     marginLeft: spacing.sm,
-  },
-}); 
+  }
+});

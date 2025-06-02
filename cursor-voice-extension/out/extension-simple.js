@@ -11,7 +11,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
+    Object.defineProperty(o, "default", { enumerable: true, value: v ;});
 }) : function(o, v) {
     o.default = v;
 });
@@ -22,13 +22,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-Object.defineProperty(exports, "__esModule", { value: true });
+Object.defineProperty(exports, "__esModule", { value: true ;});
 exports.deactivate = exports.activate = void 0;
 const vscode = __importStar(require("vscode"));
 function activate(context) {
     console.log('Cursor Voice Interaction 扩展已激活 (简化版)');
-    // 注册命令
-    const commands = [
+    // 注册命令/    const commands = [
         vscode.commands.registerCommand('cursor-voice.startVoiceRecognition', () => {
             vscode.window.showInformationMessage('语音识别功能需要在 webview 中使用');
         }),
@@ -43,8 +42,7 @@ function activate(context) {
         }),
     ];
     commands.forEach(command => context.subscriptions.push(command));
-    // 创建状态栏项
-    const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
+    // 创建状态栏项/    const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
     statusBarItem.text = "🎤 语音";
     statusBarItem.command = 'cursor-voice.toggleVoiceMode';
     statusBarItem.tooltip = '点击切换语音模式';

@@ -6,6 +6,7 @@
 
 from __future__ import annotations
 
+from typing import Union, List, Optional
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -36,7 +37,7 @@ class RedisSettings(BaseSettings):
 
     host: str = Field(default="localhost", description="Redis 主机")
     port: int = Field(default=6379, description="Redis 端口")
-    password: str | None = Field(default=None, description="Redis 密码")
+    password: Optional[str] = Field(default=None, description="Redis 密码")
     database: int = Field(default=0, description="Redis 数据库")
 
     # 连接池配置
@@ -62,21 +63,21 @@ class BlockchainSettings(BaseSettings):
     chain_id: int = Field(default=1337, description="链 ID")
 
     # 智能合约地址
-    health_data_storage_address: str | None = Field(
+    health_data_storage_address: Optional[str] = Field(
         default=None,
         description="健康数据存储合约地址"
     )
-    zkp_verifier_address: str | None = Field(
+    zkp_verifier_address: Optional[str] = Field(
         default=None,
         description="零知识证明验证合约地址"
     )
-    access_control_address: str | None = Field(
+    access_control_address: Optional[str] = Field(
         default=None,
         description="访问控制合约地址"
     )
 
     # 私钥配置(用于部署和管理)
-    deployer_private_key: str | None = Field(
+    deployer_private_key: Optional[str] = Field(
         default=None,
         description="部署者私钥"
     )
@@ -124,13 +125,13 @@ class SecuritySettings(BaseSettings):
     jwt_expiration_hours: int = Field(default=24, description="JWT 过期时间(小时)")
 
     # 加密配置
-    encryption_key: str | None = Field(
+    encryption_key: Optional[str] = Field(
         default=None,
         description="数据加密密钥"
     )
 
     # CORS 配置
-    cors_origins: list[str] = Field(
+    cors_origins: List[str] = Field(
         default=["*"],
         description="允许的 CORS 源"
     )
@@ -145,7 +146,7 @@ class MonitoringSettings(BaseSettings):
 
     # OpenTelemetry 配置
     enable_tracing: bool = Field(default=True, description="启用链路追踪")
-    jaeger_endpoint: str | None = Field(
+    jaeger_endpoint: Optional[str] = Field(
         default=None,
         description="Jaeger 端点"
     )
@@ -153,7 +154,7 @@ class MonitoringSettings(BaseSettings):
     # 日志配置
     log_level: str = Field(default="INFO", description="日志级别")
     log_format: str = Field(default="json", description="日志格式")
-    log_file: str | None = Field(default=None, description="日志文件路径")
+    log_file: Optional[str] = Field(default=None, description="日志文件路径")
 
     @field_validator("log_level")
     @classmethod

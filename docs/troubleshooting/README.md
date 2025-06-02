@@ -1,63 +1,127 @@
 # 故障排除指南
 
-本目录包含索克生活项目开发和部署过程中常见问题的解决方案。
+## 🐛 常见问题解决方案
 
-## 📋 问题分类
+### TypeScript错误
 
-### 🍎 iOS 相关问题
-- [`iOS_BUILD_WARNINGS_FIX.md`](iOS_BUILD_WARNINGS_FIX.md) - iOS构建警告修复
-- [`HERMES_WARNING_FIX.md`](HERMES_WARNING_FIX.md) - Hermes引擎警告修复
+#### 问题：大量TypeScript编译错误
+**解决方案：**
+1. 运行自动修复脚本：`node scripts/fix-typescript-errors.js`
+2. 检查导入路径是否正确
+3. 确保所有依赖项已安装
 
-### 🤖 Android 相关问题
-- 待添加Android特定问题解决方案
+#### 问题：类型定义缺失
+**解决方案：**
+1. 检查 `src/types/api.ts` 是否存在
+2. 添加缺失的类型定义
+3. 使用 `any` 类型作为临时解决方案
 
-### 🔧 构建问题
-- 依赖冲突解决
-- 编译错误修复
-- 环境配置问题
+### 性能问题
 
-### 🚀 部署问题
-- 容器化部署问题
-- 服务启动失败
-- 网络连接问题
+#### 问题：组件渲染缓慢
+**解决方案：**
+1. 使用性能监控Hook检查渲染时间
+2. 优化组件的依赖项
+3. 使用 `React.memo` 和 `useMemo`
 
-### 🐍 Python 后端问题
-- 版本兼容性问题
-- 依赖管理问题
-- 服务间通信问题
+#### 问题：内存泄漏
+**解决方案：**
+1. 使用内存泄漏检测工具
+2. 确保清理定时器和事件监听器
+3. 检查useEffect的清理函数
 
-## 🆘 快速诊断
+### 测试问题
 
-### 常见错误模式
-1. **构建失败**: 检查依赖版本和环境配置
-2. **运行时错误**: 查看日志文件和错误堆栈
-3. **性能问题**: 使用性能分析工具
-4. **网络问题**: 检查防火墙和端口配置
+#### 问题：测试失败
+**解决方案：**
+1. 运行 `node scripts/enhance-test-suite.js` 生成测试
+2. 检查测试环境配置
+3. 更新测试用例以匹配代码变更
 
-### 诊断工具
-- 日志分析脚本
-- 环境检查工具
-- 性能监控工具
+#### 问题：测试覆盖率低
+**解决方案：**
+1. 为关键组件添加测试
+2. 使用自动生成的测试模板
+3. 设置测试覆盖率目标
 
-## 📝 报告问题
+### 构建问题
 
-如果遇到新的问题：
+#### 问题：构建失败
+**解决方案：**
+1. 清理缓存：`npm run clean`
+2. 重新安装依赖：`npm install`
+3. 检查构建配置文件
 
-1. **搜索现有解决方案**: 先查看本目录下的文档
-2. **收集信息**: 
-   - 错误日志
-   - 环境信息
-   - 复现步骤
-3. **创建Issue**: 在GitHub仓库中创建详细的问题报告
-4. **更新文档**: 问题解决后，更新相关文档
+#### 问题：Metro bundler错误
+**解决方案：**
+1. 重启Metro：`npx react-native start --reset-cache`
+2. 检查 `metro.config.js` 配置
+3. 清理node_modules并重新安装
 
-## 🔗 相关资源
+## 🔧 调试技巧
 
-- [开发指南](../guides/)
-- [项目文档](../README.md)
-- [GitHub Issues](https://github.com/SUOKE2024/suoke_life/issues)
+### 1. 使用Logger服务
+```typescript
+import { Logger } from '../services/Logger';
 
----
+// 调试组件状态
+Logger.debug('Component state', { state });
 
-**最后更新**: 2025-05-27 15:51:51  
-**维护者**: Song Xu <song.xu@icloud.com> 
+// 跟踪API调用
+Logger.info('API call started', { endpoint });
+```
+
+### 2. 性能监控
+```typescript
+// 监控组件性能
+const performanceMonitor = usePerformanceMonitor('ComponentName');
+performanceMonitor.recordRender();
+```
+
+### 3. 内存泄漏检测
+```typescript
+// 检测内存泄漏
+import { memoryLeakDetector } from '../utils/memoryLeakDetector';
+memoryLeakDetector.generateReport();
+```
+
+## 📊 监控和分析
+
+### 性能监控
+- 查看控制台中的性能警告
+- 使用性能报告器生成详细报告
+- 设置性能阈值和警告
+
+### 错误监控
+- 使用Logger服务记录错误
+- 检查错误边界捕获的错误
+- 分析错误模式和频率
+
+### 内存监控
+- 定期检查内存使用情况
+- 使用内存泄漏检测工具
+- 监控组件卸载时的清理
+
+## 🚨 紧急情况处理
+
+### 应用崩溃
+1. 检查错误边界日志
+2. 查看崩溃报告
+3. 回滚到稳定版本
+
+### 性能严重下降
+1. 运行性能分析
+2. 识别性能瓶颈
+3. 优化关键路径
+
+### 内存泄漏严重
+1. 使用内存分析工具
+2. 识别泄漏源
+3. 修复资源清理问题
+
+## 📞 获取帮助
+
+1. 查看项目文档
+2. 检查GitHub Issues
+3. 联系开发团队
+4. 参考React Native官方文档

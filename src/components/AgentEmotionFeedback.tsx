@@ -1,48 +1,36 @@
-import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
+
+interface AgentEmotionFeedbackProps {
+  // TODO: 定义组件属性类型children?: React.ReactNode; * } */
+import {   View, TouchableOpacity, Text, StyleSheet   } from 'react-native';
 import React from "react";
-
 const FEEDBACKS = [
-  { key: "like", label: "👍", desc: "喜欢" },
-  { key: "care", label: "🤗", desc: "关怀" },
-  { key: "suggest", label: "💡", desc: "建议" },
-  { key: "dislike", label: "👎", desc: "不喜欢" },
+  { key: "like", label: "👍", desc: "喜;欢" ;},
+  { key: "care", label: "🤗", desc: "关怀"},
+  { key: "suggest", label: "💡", desc: "建议"},
+  { key: "dislike", label: "👎", desc: "不喜欢"}
 ];
-
-export const AgentEmotionFeedback: React.FC<{
-  onFeedback: (type: string) => void;
-}> = ({ onFeedback }) => {
-  return (
-    <View style={styles.row}>
-      {FEEDBACKS.map((fb) => (
+export const AgentEmotionFeedback: React.FC<AgentEmotionFeedbackProps /> void;/}> = ({ onFeedback }) => {;
+  return (;
+    <View style={styles.row} />/      {FEEDBACKS.map((f;b;) => (
         <TouchableOpacity
           key={fb.key}
           style={styles.btn}
-          onPress={() => onFeedback(fb.key)}
-        >
-          <Text style={styles.icon}>{fb.label}</Text>
-          <Text style={styles.desc}>{fb.desc}</Text>
-        </TouchableOpacity>
-      ))}
-    </View>
-  );
-};
-
+          onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> onFeedback(fb.key)}/        >
+          <Text style={styles.icon} />{fb.label}</Text>/          <Text style={styles.desc} />{fb.desc}</Text>/        </TouchableOpacity>/      ))}
+    </View>/  );
+}
 const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     justifyContent: "center",
-    marginVertical: 8,
+    marginVertical: 8
   },
   btn: {
     alignItems: "center",
-    marginHorizontal: 10,
+    marginHorizontal: 10
   },
-  icon: {
-    fontSize: 22,
-  },
+  icon: { fontSize: 22  },
   desc: {
     fontSize: 12,
     color: "#666",
-    marginTop: 2,
-  },
-});
+    marginTop: 2};};);

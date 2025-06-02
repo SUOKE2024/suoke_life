@@ -1,222 +1,124 @@
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { AuthStackParamList } from '../../types/navigation';
-import { colors, spacing, fonts, borderRadius, shadows } from '../../constants/theme';
-
-
-
-
-
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
+import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
-  StatusBar,
-  SafeAreaView,
-  Animated,
+  ScrollView,
+  Image,
   Dimensions,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { Button } from '../../components/ui/Button';
+import { colors, typography, spacing, borderRadius, shadows } from '../../constants/theme';
 
-const { width, height } = Dimensions.get('window');
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
-type WelcomeScreenNavigationProp = NativeStackNavigationProp<
-  AuthStackParamList,
-  'Welcome'
->;
+type AuthStackParamList = {
+  Welcome: undefined;
+  Login: undefined;
+  Register: undefined;
+  ForgotPassword: undefined;
+};
 
-export const WelcomeScreen: React.FC = () => {
+type WelcomeScreenNavigationProp = NativeStackNavigationProp<AuthStackParamList, 'Welcome'>;
+
+const WelcomeScreen: React.FC = () => {
   const navigation = useNavigation<WelcomeScreenNavigationProp>();
-  
-  // 动画值
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(50)).current;
-  const logoScaleAnim = useRef(new Animated.Value(0.8)).current;
-  const buttonSlideAnim = useRef(new Animated.Value(100)).current;
-  const particleAnim = useRef(new Animated.Value(0)).current;
 
-  useEffect(() => {
-    // 启动动画序列
-    Animated.sequence([
-      // Logo动画
-      Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(logoScaleAnim, {
-          toValue: 1,
-          duration: 800,
-          useNativeDriver: true,
-        }),
-      ]),
-      // 文本动画
-      Animated.timing(slideAnim, {
-        toValue: 0,
-        duration: 600,
-        useNativeDriver: true,
-      }),
-      // 按钮动画
-      Animated.timing(buttonSlideAnim, {
-        toValue: 0,
-        duration: 500,
-        useNativeDriver: true,
-      }),
-    ]).start();
-
-    // 粒子动画循环
-    Animated.loop(
-      Animated.timing(particleAnim, {
-        toValue: 1,
-        duration: 3000,
-        useNativeDriver: true,
-      })
-    ).start();
-  }, []);
-
-  const handleLogin = useCallback( () => {, []);
+  const handleLogin = () => {
     navigation.navigate('Login');
   };
 
-  const handleRegister = useCallback( () => {, []);
+  const handleRegister = () => {
     navigation.navigate('Register');
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
-      
-      {/* 渐变背景 */}
-      <View style={styles.gradientBackground}>
-        <View style={styles.gradientOverlay} />
-      </View>
-
-      {/* 装饰性粒子元素 */}
-      <Animated.View 
-        style={[
-          styles.decorativeElements,
-          {
-            opacity: particleAnim.interpolate({
-              inputRange: [0, 0.5, 1],
-              outputRange: [0.3, 0.8, 0.3],
-            }),
-          },
-        ]}
+      <ScrollView 
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
       >
-        <View style={[styles.particle, styles.particle1]} />
-        <View style={[styles.particle, styles.particle2]} />
-        <View style={[styles.particle, styles.particle3]} />
-        <View style={[styles.particle, styles.particle4]} />
-      </Animated.View>
-
-      <View style={styles.content}>
-        {/* Logo和标题区域 */}
-        <Animated.View 
-          style={[
-            styles.logoContainer,
-            {
-              opacity: fadeAnim,
-              transform: [
-                { scale: logoScaleAnim },
-                { translateY: slideAnim },
-              ],
-            },
-          ]}
-        >
-          <View style={styles.logoWrapper}>
-            <View style={styles.logoCircle}>
-              <Text style={styles.logoText}>索</Text>
-              <View style={styles.logoGlow} />
+        {/* 品牌标识区域 */}
+        <View style={styles.brandSection}>
+          <View style={styles.logoContainer}>
+            <View style={styles.logoPlaceholder}>
+              <Text style={styles.logoText}>索克</Text>
+              <Text style={styles.logoSubText}>SUOKE</Text>
             </View>
           </View>
           
-          <Text style={styles.appName}>索克生活</Text>
-          <Text style={styles.appNameEn}>Suoke Life</Text>
-          
-          <Animated.View 
-            style={[
-              styles.taglineContainer,
-              { transform: [{ translateY: slideAnim }] },
-            ]}
-          >
-            <Text style={styles.tagline}>AI驱动的智慧健康管理平台</Text>
-            <Text style={styles.subtitle}>
-              融合中医智慧与现代科技{'\n'}开启您的健康新生活
+          <Text style={styles.brandTitle}>索克生活</Text>
+          <Text style={styles.brandSubtitle}>AI驱动的智慧健康管理平台</Text>
+        </View>
+
+        {/* 核心价值展示 */}
+        <View style={styles.featuresSection}>
+          <View style={styles.featureCard}>
+            <View style={styles.featureIcon}>
+              <Text style={styles.featureIconText}>🧠</Text>
+            </View>
+            <Text style={styles.featureTitle}>四智能体协同</Text>
+            <Text style={styles.featureDescription}>
+              小艾、小克、老克、索儿四大AI智能体，为您提供全方位健康管理
             </Text>
-          </Animated.View>
-        </Animated.View>
-
-        {/* 特色功能展示 */}
-        <Animated.View 
-          style={[
-            styles.featuresContainer,
-            { 
-              opacity: fadeAnim,
-              transform: [{ translateY: slideAnim }], 
-            },
-          ]}
-        >
-          <View style={styles.featureRow}>
-            <View style={styles.featureItem}>
-              <View style={[styles.featureIcon, { backgroundColor: colors.agents.xiaoai }]}>
-                <Text style={styles.featureEmoji}>🤖</Text>
-              </View>
-              <Text style={styles.featureText}>AI智能体</Text>
-              <Text style={styles.featureDesc}>四大智能助手</Text>
-            </View>
-            <View style={styles.featureItem}>
-              <View style={[styles.featureIcon, { backgroundColor: colors.diagnosis.inspection }]}>
-                <Text style={styles.featureEmoji}>🏥</Text>
-              </View>
-              <Text style={styles.featureText}>中医五诊</Text>
-              <Text style={styles.featureDesc}>望闻问切算</Text>
-            </View>
-            <View style={styles.featureItem}>
-              <View style={[styles.featureIcon, { backgroundColor: colors.agents.soer }]}>
-                <Text style={styles.featureEmoji}>📊</Text>
-              </View>
-              <Text style={styles.featureText}>健康数据</Text>
-              <Text style={styles.featureDesc}>智能分析</Text>
-            </View>
           </View>
-        </Animated.View>
 
-        {/* 按钮区域 */}
-        <Animated.View 
-          style={[
-            styles.buttonContainer,
-            { 
-              opacity: fadeAnim,
-              transform: [{ translateY: buttonSlideAnim }], 
-            },
-          ]}
-        >
-          <TouchableOpacity 
-            style={styles.loginButton} 
+          <View style={styles.featureCard}>
+            <View style={styles.featureIcon}>
+              <Text style={styles.featureIconText}>🌿</Text>
+            </View>
+            <Text style={styles.featureTitle}>中医智慧数字化</Text>
+            <Text style={styles.featureDescription}>
+              传统中医"辨证论治未病"理念与现代预防医学完美结合
+            </Text>
+          </View>
+
+          <View style={styles.featureCard}>
+            <View style={styles.featureIcon}>
+              <Text style={styles.featureIconText}>🔒</Text>
+            </View>
+            <Text style={styles.featureTitle}>区块链数据安全</Text>
+            <Text style={styles.featureDescription}>
+              零知识健康数据验证，保护您的隐私安全
+            </Text>
+          </View>
+        </View>
+
+        {/* 操作按钮区域 */}
+        <View style={styles.actionSection}>
+          <Button
+            title="立即登录"
+            variant="primary"
+            size="large"
+            fullWidth
             onPress={handleLogin}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.loginButtonText}>立即登录</Text>
-            <View style={styles.buttonGlow} />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.registerButton}
+            style={styles.loginButton}
+          />
+          
+          <Button
+            title="注册账号"
+            variant="outline"
+            size="large"
+            fullWidth
             onPress={handleRegister}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.registerButtonText}>创建账户</Text>
-          </TouchableOpacity>
+            style={styles.registerButton}
+          />
+        </View>
 
-          <Text style={styles.termsText}>
-            继续即表示您同意我们的{' '}
-            <Text style={styles.linkText}>服务条款</Text>
-            {' '}和{' '}
-            <Text style={styles.linkText}>隐私政策</Text>
+        {/* 底部信息 */}
+        <View style={styles.footerSection}>
+          <Text style={styles.footerText}>
+            开启您的智慧健康生活之旅
           </Text>
-        </Animated.View>
-      </View>
+          <Text style={styles.versionText}>
+            版本 1.0.0
+          </Text>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -224,205 +126,128 @@ export const WelcomeScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.primary,
+    backgroundColor: colors.background,
   },
-  gradientBackground: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: colors.primary,
-  },
-  gradientOverlay: {
+  scrollView: {
     flex: 1,
-    backgroundColor: 'rgba(15, 93, 53, 0.8)',
   },
-  decorativeElements: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
-  particle: {
-    position: 'absolute',
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
-  },
-  particle1: {
-    top: '20%',
-    left: '15%',
-  },
-  particle2: {
-    top: '35%',
-    right: '20%',
-  },
-  particle3: {
-    top: '60%',
-    left: '25%',
-  },
-  particle4: {
-    top: '75%',
-    right: '15%',
-  },
-  content: {
-    flex: 1,
+  scrollContent: {
+    flexGrow: 1,
     paddingHorizontal: spacing.lg,
-    justifyContent: 'space-between',
-    paddingTop: spacing.xxl * 2,
+  },
+  
+  // 品牌标识区域
+  brandSection: {
+    alignItems: 'center',
+    paddingTop: spacing['2xl'],
     paddingBottom: spacing.xl,
   },
   logoContainer: {
-    alignItems: 'center',
-    marginTop: spacing.xxl,
-  },
-  logoWrapper: {
-    alignItems: 'center',
     marginBottom: spacing.lg,
   },
-  logoCircle: {
+  logoPlaceholder: {
     width: 120,
     height: 120,
     borderRadius: 60,
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    backgroundColor: colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
-    position: 'relative',
-    borderWidth: 2,
-    borderColor: 'rgba(255, 255, 255, 0.3)',
+    ...shadows.lg,
   },
   logoText: {
-    fontSize: 48,
-    fontWeight: 'bold',
+    fontSize: typography.fontSize['3xl'],
+    fontWeight: '700',
     color: colors.white,
-    textAlign: 'center',
+    fontFamily: typography.fontFamily.bold,
   },
-  logoGlow: {
-    position: 'absolute',
-    width: 140,
-    height: 140,
-    borderRadius: 70,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    top: -10,
-    left: -10,
-  },
-  appName: {
-    fontSize: fonts.size.header,
-    fontWeight: 'bold',
+  logoSubText: {
+    fontSize: typography.fontSize.sm,
     color: colors.white,
-    textAlign: 'center',
-    marginBottom: spacing.xs,
+    opacity: 0.9,
+    fontFamily: typography.fontFamily.medium,
   },
-  appNameEn: {
-    fontSize: fonts.size.lg,
-    color: 'rgba(255, 255, 255, 0.8)',
-    textAlign: 'center',
-    marginBottom: spacing.lg,
-  },
-  taglineContainer: {
-    alignItems: 'center',
-    marginTop: spacing.md,
-  },
-  tagline: {
-    fontSize: fonts.size.md,
-    color: 'rgba(255, 255, 255, 0.9)',
-    textAlign: 'center',
+  brandTitle: {
+    fontSize: typography.fontSize['4xl'],
+    fontWeight: '700',
+    color: colors.textPrimary,
     marginBottom: spacing.sm,
-    fontWeight: '500',
+    fontFamily: typography.fontFamily.bold,
   },
-  subtitle: {
-    fontSize: fonts.size.sm,
-    color: 'rgba(255, 255, 255, 0.7)',
+  brandSubtitle: {
+    fontSize: typography.fontSize.lg,
+    color: colors.textSecondary,
     textAlign: 'center',
-    lineHeight: fonts.lineHeight.md,
+    lineHeight: typography.lineHeight.relaxed * typography.fontSize.lg,
+    fontFamily: typography.fontFamily.regular,
   },
-  featuresContainer: {
-    marginVertical: spacing.xl,
+
+  // 功能特性区域
+  featuresSection: {
+    paddingVertical: spacing.xl,
   },
-  featureRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+  featureCard: {
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.lg,
+    padding: spacing.lg,
+    marginBottom: spacing.md,
     alignItems: 'center',
-  },
-  featureItem: {
-    alignItems: 'center',
-    flex: 1,
+    ...shadows.sm,
   },
   featureIcon: {
     width: 60,
     height: 60,
     borderRadius: 30,
+    backgroundColor: colors.primaryLight,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: spacing.sm,
-    ...shadows.md,
+    marginBottom: spacing.md,
   },
-  featureEmoji: {
-    fontSize: 24,
+  featureIconText: {
+    fontSize: typography.fontSize['2xl'],
   },
-  featureText: {
-    fontSize: fonts.size.sm,
-    color: colors.white,
+  featureTitle: {
+    fontSize: typography.fontSize.xl,
     fontWeight: '600',
-    textAlign: 'center',
-    marginBottom: spacing.xs,
+    color: colors.textPrimary,
+    marginBottom: spacing.sm,
+    fontFamily: typography.fontFamily.medium,
   },
-  featureDesc: {
-    fontSize: fonts.size.xs,
-    color: 'rgba(255, 255, 255, 0.7)',
+  featureDescription: {
+    fontSize: typography.fontSize.base,
+    color: colors.textSecondary,
     textAlign: 'center',
+    lineHeight: typography.lineHeight.relaxed * typography.fontSize.base,
+    fontFamily: typography.fontFamily.regular,
   },
-  buttonContainer: {
-    paddingBottom: spacing.lg,
+
+  // 操作按钮区域
+  actionSection: {
+    paddingVertical: spacing.xl,
   },
   loginButton: {
-    backgroundColor: colors.white,
-    paddingVertical: spacing.md,
-    borderRadius: borderRadius.lg,
     marginBottom: spacing.md,
-    position: 'relative',
-    overflow: 'hidden',
-    ...shadows.lg,
-  },
-  loginButtonText: {
-    fontSize: fonts.size.lg,
-    fontWeight: 'bold',
-    color: colors.primary,
-    textAlign: 'center',
-  },
-  buttonGlow: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(53, 187, 120, 0.1)',
   },
   registerButton: {
-    borderWidth: 2,
-    borderColor: 'rgba(255, 255, 255, 0.5)',
-    paddingVertical: spacing.md,
-    borderRadius: borderRadius.lg,
     marginBottom: spacing.lg,
   },
-  registerButtonText: {
-    fontSize: fonts.size.lg,
-    fontWeight: '600',
-    color: colors.white,
-    textAlign: 'center',
+
+  // 底部信息
+  footerSection: {
+    alignItems: 'center',
+    paddingBottom: spacing.xl,
   },
-  termsText: {
-    fontSize: fonts.size.xs,
-    color: 'rgba(255, 255, 255, 0.7)',
+  footerText: {
+    fontSize: typography.fontSize.base,
+    color: colors.textSecondary,
     textAlign: 'center',
-    lineHeight: fonts.lineHeight.sm,
+    marginBottom: spacing.sm,
+    fontFamily: typography.fontFamily.regular,
   },
-  linkText: {
-    color: colors.white,
-    fontWeight: '500',
-    textDecorationLine: 'underline',
+  versionText: {
+    fontSize: typography.fontSize.sm,
+    color: colors.textTertiary,
+    fontFamily: typography.fontFamily.regular,
   },
 });
+
+export default WelcomeScreen; 

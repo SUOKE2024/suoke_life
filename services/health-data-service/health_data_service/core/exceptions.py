@@ -1,6 +1,6 @@
 """自定义异常类"""
 
-from typing import Any
+from typing import Any, Dict, Optional, Union
 
 
 class HealthDataServiceError(Exception):
@@ -9,8 +9,8 @@ class HealthDataServiceError(Exception):
     def __init__(
         self,
         message: str,
-        error_code: str | None = None,
-        details: dict[str, Any] | None = None,
+        error_code: Optional[str] = None,
+        details: Optional[Dict[str, Any]] = None,
     ) -> None:
         self.message = message
         self.error_code = error_code or "UNKNOWN_ERROR"
@@ -24,8 +24,8 @@ class ValidationError(HealthDataServiceError):
     def __init__(
         self,
         message: str = "数据验证失败",
-        field: str | None = None,
-        value: Any | None = None,
+        field: Optional[str] = None,
+        value: Optional[Any] = None,
         **kwargs: Any,
     ) -> None:
         details = {"field": field, "value": value, **kwargs}
@@ -38,8 +38,8 @@ class DatabaseError(HealthDataServiceError):
     def __init__(
         self,
         message: str = "数据库操作失败",
-        operation: str | None = None,
-        table: str | None = None,
+        operation: Optional[str] = None,
+        table: Optional[str] = None,
         **kwargs: Any,
     ) -> None:
         details = {"operation": operation, "table": table, **kwargs}
@@ -52,8 +52,8 @@ class CacheError(HealthDataServiceError):
     def __init__(
         self,
         message: str = "缓存操作失败",
-        key: str | None = None,
-        operation: str | None = None,
+        key: Optional[str] = None,
+        operation: Optional[str] = None,
         **kwargs: Any,
     ) -> None:
         details = {"key": key, "operation": operation, **kwargs}
@@ -73,7 +73,7 @@ class AuthorizationError(HealthDataServiceError):
     def __init__(
         self,
         message: str = "权限不足",
-        required_permission: str | None = None,
+        required_permission: Optional[str] = None,
         **kwargs: Any,
     ) -> None:
         details = {"required_permission": required_permission, **kwargs}
@@ -86,8 +86,8 @@ class NotFoundError(HealthDataServiceError):
     def __init__(
         self,
         message: str = "资源未找到",
-        resource_type: str | None = None,
-        resource_id: str | None = None,
+        resource_type: Optional[str] = None,
+        resource_id: Optional[str] = None,
         **kwargs: Any,
     ) -> None:
         details = {"resource_type": resource_type, "resource_id": resource_id, **kwargs}
@@ -100,8 +100,8 @@ class ConflictError(HealthDataServiceError):
     def __init__(
         self,
         message: str = "资源冲突",
-        resource_type: str | None = None,
-        conflict_field: str | None = None,
+        resource_type: Optional[str] = None,
+        conflict_field: Optional[str] = None,
         **kwargs: Any,
     ) -> None:
         details = {"resource_type": resource_type, "conflict_field": conflict_field, **kwargs}
@@ -114,8 +114,8 @@ class ExternalServiceError(HealthDataServiceError):
     def __init__(
         self,
         message: str = "外部服务调用失败",
-        service_name: str | None = None,
-        status_code: int | None = None,
+        service_name: Optional[str] = None,
+        status_code: Optional[int] = None,
         **kwargs: Any,
     ) -> None:
         details = {"service_name": service_name, "status_code": status_code, **kwargs}
@@ -128,8 +128,8 @@ class ModelInferenceError(HealthDataServiceError):
     def __init__(
         self,
         message: str = "模型推理失败",
-        model_name: str | None = None,
-        model_version: str | None = None,
+        model_name: Optional[str] = None,
+        model_version: Optional[str] = None,
         **kwargs: Any,
     ) -> None:
         details = {"model_name": model_name, "model_version": model_version, **kwargs}
@@ -142,8 +142,8 @@ class RateLimitError(HealthDataServiceError):
     def __init__(
         self,
         message: str = "请求频率过高",
-        limit: int | None = None,
-        window: int | None = None,
+        limit: Optional[int] = None,
+        window: Optional[int] = None,
         **kwargs: Any,
     ) -> None:
         details = {"limit": limit, "window": window, **kwargs}
@@ -156,7 +156,7 @@ class ConfigurationError(HealthDataServiceError):
     def __init__(
         self,
         message: str = "配置错误",
-        config_key: str | None = None,
+        config_key: Optional[str] = None,
         **kwargs: Any,
     ) -> None:
         details = {"config_key": config_key, **kwargs}

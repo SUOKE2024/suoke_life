@@ -1,15 +1,11 @@
-// Cursor Voice Extension 功能测试脚本
-console.log('🎤 Cursor 语音视频交互扩展测试');
+// Cursor Voice Extension 功能测试脚本/console.log('🎤 Cursor 语音视频交互扩展测试');
 
-// 测试语音识别功能
-function testVoiceRecognition() {
+// 测试语音识别功能/function testVoiceRecognition() {
     console.log('📢 测试语音识别功能...');
     
-    // 模拟语音命令
-    const testCommands = [
+    // 模拟语音命令/    const testCommands = [
         '你好',
-        '打开文件 src/App.js',
-        '保存文件',
+        '打开文件 src/App.js',/        '保存文件',
         '新建文件',
         '生成代码：创建一个 React 组件',
         '查找 function',
@@ -23,16 +19,15 @@ function testVoiceRecognition() {
     });
 }
 
-// 测试手势识别功能
-function testGestureRecognition() {
+// 测试手势识别功能/function testGestureRecognition() {
     console.log('👋 测试手势识别功能...');
     
     const testGestures = [
-        { name: '👍 点赞', action: '格式化代码' },
-        { name: '✌️ 胜利手势', action: '保存文件' },
-        { name: '👊 握拳', action: '关闭标签' },
-        { name: '👈 向左滑动', action: '上一个标签' },
-        { name: '👉 向右滑动', action: '下一个标签' },
+        { name: '👍 点赞', action: '格式化代码' ;},
+        { name: '✌️ 胜利手势', action: '保存文件' ;},
+        { name: '👊 握拳', action: '关闭标签' ;},
+        { name: '👈 向左滑动', action: '上一个标签' ;},
+        { name: '👉 向右滑动', action: '下一个标签' ;},
     ];
     
     testGestures.forEach((gesture, index) => {
@@ -42,8 +37,7 @@ function testGestureRecognition() {
     });
 }
 
-// 测试 AI 助手功能
-function testAIAssistant() {
+// 测试 AI 助手功能/function testAIAssistant() {
     console.log('🤖 测试 AI 助手功能...');
     
     const testQuestions = [
@@ -60,8 +54,7 @@ function testAIAssistant() {
     });
 }
 
-// 主测试函数
-function runTests() {
+// 主测试函数/function runTests() {
     console.log('🚀 开始执行 Cursor Voice Extension 功能测试...\n');
     
     setTimeout(() => {
@@ -89,5 +82,4 @@ function runTests() {
     }, 20000);
 }
 
-// 启动测试
-runTests(); 
+// 启动测试/runTests(); 

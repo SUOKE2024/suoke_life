@@ -1,82 +1,86 @@
-import Icon from '../../components/common/Icon';
+importIcon from '../../components/common/Icon';
 import { colors, spacing, fonts, borderRadius } from '../../constants/theme';
-
-
-
-
-
-
-import React, { memo, useRef, useEffect } from 'react';
+importReact,{ memo, useRef, useEffect } from 'react';
+import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor';
   View,
   TextInput,
   StyleSheet,
   TouchableOpacity,
-  Animated,
-} from 'react-native';
-
-interface SearchBarProps {
-  value: string;
+  { Animated } from 'react-native';
+interface SearchBarProps { value: string,
   onChangeText: (text: string) => void;
   placeholder?: string;
   autoFocus?: boolean;
   onFocus?: () => void;
   onBlur?: () => void;
-  style?: any;
-}
-
-export const SearchBar = memo<SearchBarProps>(({
+  style?: unknown}
+export const SearchBar = memo<SearchBarProps />(;(;{
   value,
   onChangeText,
   placeholder = '搜索聊天记录...',
   autoFocus = false,
   onFocus,
   onBlur,
-  style,
+  style
 }) => {
-  const inputRef = useRef<TextInput>(null);
-  const scaleAnim = useRef(new Animated.Value(1)).current;
-
-  useEffect(() => {
+  const inputRef = useRef<TextInput />(nul;l;);
+  const scaleAnim = useRef(new Animated.Value(1);).current;
+  useEffect((); => {
+    const effectStart = performance.now;(;)
+  // 性能监控
+  const performanceMonitor = usePerformanceMonitor('SearchBar', {;
+    trackRender: true,
+    trackMemory: false,
+    warnThreshold: 50, // ms ;};);
     if (autoFocus) {
-      setTimeout(() => {
+      setTimeout((); => {
         inputRef.current?.focus();
       }, 100);
     }
+      const effectEnd = performance.now;(;);
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [autoFocus]);
-
-  const handleFocus = useCallback( () => {, []);
+  const handleFocus = useCallback((); => {
+    // TODO: Implement function body
+      const effectEnd = performance.now;(;);
+    performanceMonitor.recordEffect(effectEnd - effectStart);
+  }, []);
     Animated.spring(scaleAnim, {
       toValue: 1.02,
       useNativeDriver: true,
     }).start();
     onFocus?.();
   };
-
-  const handleBlur = useCallback( () => {, []);
+  const handleBlur = useCallback((); => {
+    // TODO: Implement function body,
+      const effectEnd = performance.now;(;);
+    performanceMonitor.recordEffect(effectEnd - effectStart);
+  }, []);
     Animated.spring(scaleAnim, {
       toValue: 1,
       useNativeDriver: true,
     }).start();
     onBlur?.();
   };
-
-  const handleClear = useCallback( () => {, []);
+  const handleClear = useCallback((); => {
+    // TODO: Implement function body
+      const effectEnd = performance.now;(;);
+    performanceMonitor.recordEffect(effectEnd - effectStart);
+  }, [])
     onChangeText('');
     inputRef.current?.focus();
   };
-
+  // 记录渲染性能
+  performanceMonitor.recordRender()
   return (
-    <Animated.View
+    <Animated.View,
       style={[
         styles.container,
         style,
-        {
-          transform: [{ scale: scaleAnim }],
-        },
-      ]}
-    >
+        { transform: [{, scale: scaleAnim   }]
+        }
+      ]} />
       <Icon name="search" size={20} color={colors.textSecondary} style={styles.searchIcon} />
-      
       <TextInput
         ref={inputRef}
         style={styles.input}
@@ -91,18 +95,14 @@ export const SearchBar = memo<SearchBarProps>(({
         autoCorrect={false}
         autoCapitalize="none"
       />
-
       {value.length > 0 && (
-        <TouchableOpacity onPress={handleClear} style={styles.clearButton}>
+        <TouchableOpacity onPress={handleClear} style={styles.clearButton} />
           <Icon name="close-circle" size={20} color={colors.textSecondary} />
-        </TouchableOpacity>
-      )}
-    </Animated.View>
-  );
-});
-
-SearchBar.displayName = 'SearchBar';
-
+        </TouchableOpacity>)};
+    </Animated.View;>
+  ;);
+})
+SearchBar.displayName = 'SearchBar'
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
@@ -116,9 +116,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
   },
-  searchIcon: {
-    marginRight: spacing.sm,
-  },
+  searchIcon: { marginRight: spacing.sm  },
   input: {
     flex: 1,
     fontSize: fonts.size.md,
@@ -127,6 +125,4 @@ const styles = StyleSheet.create({
   },
   clearButton: {
     marginLeft: spacing.sm,
-    padding: spacing.xs,
-  },
-}); 
+    padding: spacing.xs};};);

@@ -1,0 +1,211 @@
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: xiaoai-agent-vpa
+  namespace: suoke-life
+  labels:
+    app: xiaoai-agent
+    component: ai-agent
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: xiaoai-agent
+  updatePolicy:
+    updateMode: "Auto"
+    minReplicas: 2
+  resourcePolicy:
+    containerPolicies:
+    - containerName: xiaoai-agent
+      minAllowed:
+        cpu: "1"
+        memory: "4Gi"
+      maxAllowed:
+        cpu: "8"
+        memory: "32Gi"
+      controlledResources: ["cpu", "memory"]
+      controlledValues: RequestsAndLimits
+    - containerName: model-server
+      minAllowed:
+        cpu: "2"
+        memory: "8Gi"
+        nvidia.com/gpu: "1"
+      maxAllowed:
+        cpu: "16"
+        memory: "64Gi"
+        nvidia.com/gpu: "4"
+      controlledResources: ["cpu", "memory", "nvidia.com/gpu"]
+      controlledValues: RequestsAndLimits
+
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: xiaoke-agent-vpa
+  namespace: suoke-life
+  labels:
+    app: xiaoke-agent
+    component: ai-agent
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: xiaoke-agent
+  updatePolicy:
+    updateMode: "Auto"
+    minReplicas: 2
+  resourcePolicy:
+    containerPolicies:
+    - containerName: xiaoke-agent
+      minAllowed:
+        cpu: "0.5"
+        memory: "2Gi"
+      maxAllowed:
+        cpu: "4"
+        memory: "16Gi"
+      controlledResources: ["cpu", "memory"]
+      controlledValues: RequestsAndLimits
+    - containerName: health-analyzer
+      minAllowed:
+        cpu: "1"
+        memory: "4Gi"
+      maxAllowed:
+        cpu: "8"
+        memory: "32Gi"
+      controlledResources: ["cpu", "memory"]
+      controlledValues: RequestsAndLimits
+
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: laoke-agent-vpa
+  namespace: suoke-life
+  labels:
+    app: laoke-agent
+    component: ai-agent
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: laoke-agent
+  updatePolicy:
+    updateMode: "Auto"
+    minReplicas: 1
+  resourcePolicy:
+    containerPolicies:
+    - containerName: laoke-agent
+      minAllowed:
+        cpu: "1"
+        memory: "4Gi"
+      maxAllowed:
+        cpu: "6"
+        memory: "24Gi"
+      controlledResources: ["cpu", "memory"]
+      controlledValues: RequestsAndLimits
+    - containerName: tcm-diagnosis-engine
+      minAllowed:
+        cpu: "2"
+        memory: "8Gi"
+        nvidia.com/gpu: "0.5"
+      maxAllowed:
+        cpu: "12"
+        memory: "48Gi"
+        nvidia.com/gpu: "2"
+      controlledResources: ["cpu", "memory", "nvidia.com/gpu"]
+      controlledValues: RequestsAndLimits
+
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: soer-agent-vpa
+  namespace: suoke-life
+  labels:
+    app: soer-agent
+    component: ai-agent
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: soer-agent
+  updatePolicy:
+    updateMode: "Auto"
+    minReplicas: 1
+  resourcePolicy:
+    containerPolicies:
+    - containerName: soer-agent
+      minAllowed:
+        cpu: "0.25"
+        memory: "1Gi"
+      maxAllowed:
+        cpu: "2"
+        memory: "8Gi"
+      controlledResources: ["cpu", "memory"]
+      controlledValues: RequestsAndLimits
+    - containerName: wellness-recommender
+      minAllowed:
+        cpu: "0.5"
+        memory: "2Gi"
+      maxAllowed:
+        cpu: "4"
+        memory: "16Gi"
+      controlledResources: ["cpu", "memory"]
+      controlledValues: RequestsAndLimits
+
+---
+# 诊断服务VPA配置
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: diagnostic-services-vpa
+  namespace: suoke-life
+  labels:
+    app: diagnostic-services
+    component: medical-diagnosis
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: diagnostic-services
+  updatePolicy:
+    updateMode: "Auto"
+    minReplicas: 3
+  resourcePolicy:
+    containerPolicies:
+    - containerName: look-service
+      minAllowed:
+        cpu: "0.5"
+        memory: "2Gi"
+      maxAllowed:
+        cpu: "4"
+        memory: "16Gi"
+      controlledResources: ["cpu", "memory"]
+      controlledValues: RequestsAndLimits
+    - containerName: listen-service
+      minAllowed:
+        cpu: "1"
+        memory: "4Gi"
+      maxAllowed:
+        cpu: "8"
+        memory: "32Gi"
+      controlledResources: ["cpu", "memory"]
+      controlledValues: RequestsAndLimits
+    - containerName: inquiry-service
+      minAllowed:
+        cpu: "0.5"
+        memory: "2Gi"
+      maxAllowed:
+        cpu: "4"
+        memory: "16Gi"
+      controlledResources: ["cpu", "memory"]
+      controlledValues: RequestsAndLimits
+    - containerName: palpation-service
+      minAllowed:
+        cpu: "0.5"
+        memory: "2Gi"
+      maxAllowed:
+        cpu: "4"
+        memory: "16Gi"
+      controlledResources: ["cpu", "memory"]
+      controlledValues: RequestsAndLimits 

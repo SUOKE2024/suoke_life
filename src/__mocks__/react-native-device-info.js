@@ -1,3 +1,4 @@
+// react-native-device-info.js   索克生活APP - 自动生成的类型安全文件     @description TODO: 添加文件描述; @author 索克生活开发团队;   @version 1.0.0;
 export default {
   getUniqueId: jest.fn(() => Promise.resolve('mock-unique-id')),
   getDeviceId: jest.fn(() => 'mock-device-id'),
@@ -43,8 +44,6 @@ export default {
   isAirplaneMode: jest.fn(() => Promise.resolve(false)),
   hasSystemFeature: jest.fn(() => Promise.resolve(true)),
   getSystemAvailableFeatures: jest.fn(() => Promise.resolve([])),
-  isLocationEnabled: jest.fn(() => Promise.resolve(true)),
-  isHeadphonesConnected: jest.fn(() => Promise.resolve(false)),
   isMouseConnected: jest.fn(() => Promise.resolve(false)),
   isKeyboardConnected: jest.fn(() => Promise.resolve(false)),
   getBootloader: jest.fn(() => Promise.resolve('mock-bootloader')),
@@ -62,5 +61,5 @@ export default {
   getIncremental: jest.fn(() => Promise.resolve('mock-incremental')),
   supported32BitAbis: jest.fn(() => Promise.resolve([])),
   supported64BitAbis: jest.fn(() => Promise.resolve([])),
-  supportedAbis: jest.fn(() => Promise.resolve([])),
-}; 
+  supportedAbis: jest.fn(() => Promise.resolve([]))
+};

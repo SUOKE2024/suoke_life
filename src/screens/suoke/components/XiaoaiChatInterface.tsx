@@ -1,14 +1,5 @@
-import Icon from '../../../components/common/Icon';
-import { colors } from '../../../constants/theme';
-import { xiaoaiAgent } from '../../../agents/xiaoai/XiaoaiAgent';
-
-
-
-
-
-
-import React, { useState, useRef, useEffect } from 'react';
-  View,
+importReact,{ useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor'/import {   View,;
   Text,
   StyleSheet,
   TextInput,
@@ -19,334 +10,222 @@ import React, { useState, useRef, useEffect } from 'react';
   Animated,
   Dimensions,
   KeyboardAvoidingView,
-  Platform,
-} from 'react-native';
-  ChatContext,
+  { Platform    } from 'react-native'
+importIcon from '../../../components/common/Icon'/import { colors } from '../../../constants/theme'/import { xiaoaiAgent } from '../../../agents/xiaoai/XiaoaiAgent'/import { ChatContext,;
   ChatMessage,
   ChatResponse,
-  UserProfile,
-} from '../../../agents/xiaoai/types';
-
-interface XiaoaiChatInterfaceProps {
-  visible: boolean;
-  onClose: () => void;
-  userId: string;
-}
-
-const { width, height } = Dimensions.get('window');
-
-const XiaoaiChatInterface: React.FC<XiaoaiChatInterfaceProps> = ({
+  UserProfile } from '../../../agents/xiaoai/types'/
+interface XiaoaiChatInterfaceProps { visible: boolean,
+  onClose: () => void,
+  userId: string}
+const { width, height   } = Dimensions.get('window;';)
+const XiaoaiChatInterface: React.FC<XiaoaiChatInterfaceProps /> = ({/  // 性能监控 *   const performanceMonitor = usePerformanceMonitor('XiaoaiChatInterface', { */;
+    trackRender: true,
+    trackMemory: true,
+    warnThreshold: 50, // ms *   ;};); */
   visible,
   onClose,
-  userId,
+  userId
 }) => {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [inputText, setInputText] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [sessionId] = useState(() => `session_${Date.now()}`);
-  const scrollViewRef = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useRef<ScrollView>(null), []), []), []), []), []), []);
-  const slideAnim = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useRef(new Animated.Value(height)).current, []), []), []), []), []), []);
-
-  useEffect(() => {
+  const [messages, setMessages] = useState<ChatMessage[] />([;];)/  const [inputText, setInputText] = useState<string>(';';);
+  const [isLoading, setIsLoading] = useState<boolean>(fals;e;)
+  const [sessionId] = useState<any>(() => `session_${Date.now()};`;);
+  const scrollViewRef = useRef<ScrollView />(nul;l;);/  const slideAnim = useRef(new Animated.Value(heigh;t;);).current;
+  const initializeChat = useCallback(() => {;
+    const welcomeMessage: ChatMessage = {, id: `msg_${Date.now()  }`,;
+      role: 'assistant',
+      content: '你好！我是小艾，你的健康助手。我可以帮你进行健康咨询、五诊分析，还能为你提供个性化的健康建议。有什么我可以帮助你的吗？',
+      timestamp: Date.now()};
+    setMessages([welcomeMessage]);
+      const effectEnd = performance.now;(;);
+    performanceMonitor.recordEffect(effectEnd - effectStart);
+  }, []);
+  useEffect((); => {
+    const effectStart = performance.now;(;);
     if (visible) {
-      // 显示动画
-      Animated.spring(slideAnim, {
+      // 显示动画 *       Animated.spring(slideAnim, { */
         toValue: 0,
         useNativeDriver: true,
         tension: 100,
         friction: 8,
       }).start();
-
-      // 初始化对话
-      initializeChat();
+      // 初始化对话 *       initializeChat(); */
     } else {
-      // 隐藏动画
-      Animated.spring(slideAnim, {
+      // 隐藏动画 *       Animated.spring(slideAnim, { */
         toValue: height,
         useNativeDriver: true,
         tension: 100,
         friction: 8,
       }).start();
     }
-  }, [visible]);
-
-  const initializeChat = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
-    const welcomeMessage: ChatMessage = {
-      id: `msg_${Date.now()}`,
-      role: 'assistant',
-      content: '你好！我是小艾，你的健康助手。我可以帮你进行健康咨询、五诊分析，还能为你提供个性化的健康建议。有什么我可以帮助你的吗？',
-      timestamp: Date.now(),
-    };
-
-    setMessages([welcomeMessage]);
-  };
-
-  const sendMessage = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async () => {
-    if (!inputText.trim() || isLoading) {return, []), []), []), []), []), []);}
-
-    const userMessage: ChatMessage = {
-      id: `msg_${Date.now()}`,
+      const effectEnd = performance.now;(;);
+    performanceMonitor.recordEffect(effectEnd - effectStart);
+  }, [visible, initializeChat, slideAnim]);
+  const sendMessage = useCallback(async ;(;); => {
+    if (!inputText.trim(); || isLoading) {
+      return
+    }
+    const userMessage: ChatMessage = {, id: `msg_${Date.now()  }`,;
       role: 'user',
       content: inputText.trim(),
-      timestamp: Date.now(),
-    };
-
-    setMessages(prev => [...prev, userMessage]);
+      timestamp: Date.now()};
+    setMessages(prev => [...prev, userMessage])
     setInputText('');
     setIsLoading(true);
-
     try {
-      // 构建聊天上下文
-      const context: ChatContext = {
+      // 构建聊天上下文 *       const context: ChatContext = { */
         userId,
         sessionId,
         conversationHistory: [...messages, userMessage],
-        timestamp: Date.now(),
-      };
-
-      // 调用小艾智能体
-      const response = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => await xiaoaiAgent.chat(userMessage.content, context), []), []), []), []), []), []);
-
-      const assistantMessage: ChatMessage = {
-        id: `msg_${Date.now()}`,
+        timestamp: Date.now()};
+      // 调用小艾智能体 *       const response = await xiaoaiAgent.chat(userMessage.content, cont;e;x;t;) */
+      const assistantMessage: ChatMessage = {, id: `msg_${Date.now()  }`,;
         role: 'assistant',
         content: response.text,
         timestamp: response.timestamp,
         metadata: {
           diagnosisResults: response.diagnosisResults,
           suggestions: response.suggestions,
-        },
+        }
       };
-
       setMessages(prev => [...prev, assistantMessage]);
-
-      // 如果有建议的操作，显示快捷按钮
-      if (response.actions && response.actions.length > 0) {
-        showActionButtons(response.actions);
+      // 如果有建议的操作，显示快捷按钮 *       if (response.actions && response.actions.length > 0) { */
+        showActionButtons(response.actions)
       }
-
     } catch (error) {
-      console.error('发送消息失败:', error);
-      
-      const errorMessage: ChatMessage = {
-        id: `msg_${Date.now()}`,
+      console.error('发送消息失败:', error)
+      const errorMessage: ChatMessage = {, id: `msg_${Date.now()  }`,;
         role: 'assistant',
         content: '抱歉，我现在遇到了一些技术问题。请稍后再试，或者换个方式描述你的问题。',
-        timestamp: Date.now(),
-      };
-
+        timestamp: Date.now()};
       setMessages(prev => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const showActionButtons = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (actions: any[]) => {, []), []), []), []), []), []), []);
-    const actionTexts = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => actions.map(action => action.prompt).join('\n\n'), []), []), []), []), []), []);
-    
+      const effectEnd = performance.now;(;);
+    performanceMonitor.recordEffect(effectEnd - effectStart);
+  }, [inputText, isLoading, userId, sessionId, messages]);
+  const showActionButtons = useCallback((actions: unknown[;];) => {
+    const actionTexts = actions.map(action => action.description).join('\n;';)
     Alert.alert(
       '建议的操作',
       actionTexts,
       [
-        { text: '稍后再说', style: 'cancel' },
-        { text: '好的，继续', onPress: () => handleActionAccepted(actions) },
+        { text: '稍后再说', style: 'cancel'},
+        { text: '好的，继续', onPress: (); => handleActionAccepted(actions) }
       ]
     );
-  };
-
-  const handleActionAccepted = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (actions: any[]) => {, []), []), []), []), []), []), []);
-    // 处理用户接受的操作建议
-    actions.forEach(action => {
+      const effectEnd = performance.now;(;);
+    performanceMonitor.recordEffect(effectEnd - effectStart);
+  }, []);
+  const handleActionAccepted = useCallback((actions: unknown[;];); => {
+    // 处理用户接受的操作建议 *     actions.forEach(action => { */
       if (action.autoStart) {
-        // 自动开始某些操作
-        console.log('自动开始操作:', action.type);
-      }
+        // 自动开始某些操作 *         } */
     });
-  };
-
-  const handleSuggestionPress = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (suggestion: string) => {, []), []), []), []), []), []), []);
+      const effectEnd = performance.now;(;);
+    performanceMonitor.recordEffect(effectEnd - effectStart);
+  }, []);
+  const handleSuggestionPress = useCallback((suggestion: strin;g;); => {
     setInputText(suggestion);
-  };
-
-  const scrollToBottom = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
-    setTimeout(() => {
-      scrollViewRef.current?.scrollToEnd({ animated: true });
+      const effectEnd = performance.now;(;);
+    performanceMonitor.recordEffect(effectEnd - effectStart);
+  }, []);
+  const scrollToBottom = useCallback((); => {
+    setTimeout((); => {
+      scrollViewRef.current?.scrollToEnd({ animated: true});
     }, 100);
-  };
-
-  useEffect(() => {
+      const effectEnd = performance.now;(;);
+    performanceMonitor.recordEffect(effectEnd - effectStart);
+  }, []);
+  useEffect((); => {
+    const effectStart = performance.now;(;);
     scrollToBottom();
-  }, [messages]);
-
-  const renderMessage = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (message: ChatMessage) => {, []), []), []), []), []), []), []);
-    const isUser = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => message.role === 'user', []), []), []), []), []), []);
-    
+      const effectEnd = performance.now;(;);
+    performanceMonitor.recordEffect(effectEnd - effectStart);
+  }, [messages, scrollToBottom]);
+  const renderMessage = useCallback((message: ChatMessag;e;) => {
+    const isUser = message.role === 'use;r;';
+    // 记录渲染性能 *  */
+    performanceMonitor.recordRender();
     return (
-      <View
+      <View,
         key={message.id}
         style={[
           styles.messageContainer,
-          isUser ? styles.userMessage : styles.assistantMessage,
-        ]}
-      >
-        <View style={[
+          isUser ? styles.userMessage : styles.assistantMessage
+        ]} />/        <View style={[
           styles.messageBubble,
-          isUser ? styles.userBubble : styles.assistantBubble,
-        ]}>
-          <Text style={[
+          isUser ? styles.userBubble : styles.assistantBubble
+        ]} />/          <Text style={[
             styles.messageText,
-            isUser ? styles.userText : styles.assistantText,
-          ]}>
-            {message.content}
-          </Text>
-          
-          {/* 显示诊断结果 */}
-          {message.metadata?.diagnosisResults && (
-            <View style={styles.diagnosisResults}>
-              <Text style={styles.diagnosisTitle}>诊断分析</Text>
-              {message.metadata.diagnosisResults.integrated && (
-                <Text style={styles.diagnosisText}>
-                  {message.metadata.diagnosisResults.integrated.overallAssessment}
-                </Text>
-              )}
-            </View>
-          )}
-          
-          {/* 显示建议 */}
-          {message.metadata?.suggestions && message.metadata.suggestions.length > 0 && (
-            <View style={styles.suggestionsContainer}>
-              <Text style={styles.suggestionsTitle}>建议操作：</Text>
-              {message.metadata.suggestions.map((suggestion, index) => (
+            isUser ? styles.userText : styles.assistantText
+          ]} />/            {message.content}
+          </Text>/;
+          {// 显示诊断结果 }/          {message.metadata?.diagnosisResults && (;
+            <View style={styles.diagnosisContainer} />/              <Text style={styles.diagnosisTitle} />诊断结果:</Text>/              {message.metadata.diagnosisResults.map((result, inde;x;); => (
+                <Text key={index} style={styles.diagnosisText} />/                  • {result}
+                </Text>/              ))}
+            </View>/          )}
+          {// 显示建议 }/          {message.metadata?.suggestions && message.metadata.suggestions.length > 0 && (
+            <View style={styles.suggestionsContainer} />/              <Text style={styles.suggestionsTitle} />建议:</Text>/              {message.metadata.suggestions.map((suggestion, index) => (
                 <TouchableOpacity
                   key={index}
                   style={styles.suggestionButton}
-                  onPress={() => handleSuggestionPress(suggestion)}
-                >
-                  <Text style={styles.suggestionText}>{suggestion}</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          )}
-        </View>
-        
-        <Text style={styles.timestamp}>
-          {new Date(message.timestamp).toLocaleTimeString()}
-        </Text>
-      </View>
-    );
-  };
-
+                  onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> handleSuggestionPress(suggestion)}/                >
+                  <Text style={styles.suggestionText} />{suggestion}</Text>/                </TouchableOpacity>/              ))}
+            </View>/          )}
+        </View>/
+        <Text style={styles.messageTime} />/          {new Date(message.timestamp).toLocaleTimeString()}
+        </Text>/      </View>/    );
+      const effectEnd = performance.now;(;);
+    performanceMonitor.recordEffect(effectEnd - effectStart);
+  }, [handleSuggestionPress])
   return (
     <Modal
       visible={visible}
-      transparent
       animationType="none"
-      onRequestClose={onClose}
-    >
-      <View style={styles.overlay}>
-        <Animated.View
+      transparent
+      onRequestClose={onClose} />/      <View style={styles.overlay} />/        <Animated.View
           style={[
             styles.container,
-            {
-              transform: [{ translateY: slideAnim }],
-            },
-          ]}
-        >
-          {/* 头部 */}
-          <View style={styles.header}>
-            <View style={styles.headerLeft}>
-              <View style={styles.avatarContainer}>
-                <Icon name="robot" size={24} color={colors.white} />
-              </View>
-              <View>
-                <Text style={styles.headerTitle}>小艾</Text>
-                <Text style={styles.headerSubtitle}>健康助手</Text>
-              </View>
-            </View>
-            
-            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-              <Icon name="close" size={24} color={colors.text} />
-            </TouchableOpacity>
-          </View>
-
-          {/* 消息列表 */}
-          <ScrollView
-            ref={scrollViewRef}
-            style={styles.messagesContainer}
-            showsVerticalScrollIndicator={false}
-          >
-            {messages.map(renderMessage)}
-            
-            {isLoading && (
-              <View style={styles.loadingContainer}>
-                <View style={styles.loadingBubble}>
-                  <Text style={styles.loadingText}>小艾正在思考...</Text>
-                </View>
-              </View>
-            )}
-          </ScrollView>
-
-          {/* 输入区域 */}
-          <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={styles.inputContainer}
-          >
-            <View style={styles.inputRow}>
-              <TextInput
-                style={styles.textInput}
-                value={inputText}
-                onChangeText={setInputText}
-                placeholder="输入你的健康问题..."
-                placeholderTextColor={colors.textSecondary}
-                multiline
-                maxLength={500}
-                onSubmitEditing={sendMessage}
-                blurOnSubmit={false}
-              />
-              
-              <TouchableOpacity
-                style={[
-                  styles.sendButton,
-                  (!inputText.trim() || isLoading) && styles.sendButtonDisabled,
-                ]}
-                onPress={sendMessage}
-                disabled={!inputText.trim() || isLoading}
-              >
-                <Icon 
-                  name="send" 
-                  size={20} 
-                  color={(!inputText.trim() || isLoading) ? colors.textSecondary : colors.white} 
-                />
-              </TouchableOpacity>
-            </View>
-            
-            {/* 快捷建议 */}
-            <ScrollView
-              horizontal
-              style={styles.quickSuggestions}
-              showsHorizontalScrollIndicator={false}
-            >
-              {['我感觉头痛', '最近失眠', '想做体检', '查看舌象', '听听咳嗽'].map((suggestion, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={styles.quickSuggestionButton}
-                  onPress={() => handleSuggestionPress(suggestion)}
-                >
-                  <Text style={styles.quickSuggestionText}>{suggestion}</Text>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-          </KeyboardAvoidingView>
-        </Animated.View>
-      </View>
-    </Modal>
-  );
+            { transform: [{, translateY: slideAnim   }]
+            }
+          ]} />/          {// 头部 }/          <View style={styles.header} />/            <View style={styles.headerLeft} />/              <View style={styles.avatarContainer} />/                <Icon name="user" size={24} color={colors.primary} />/              </View>/              <View />/                <Text style={styles.headerTitle} />小艾健康助手</Text>/                <Text style={styles.headerSubtitle} />/                  {isLoading ? '正在思考...' : '在线'}
+                </Text>/              </View>/            </View>/            <TouchableOpacity onPress={onClose} style={styles.closeButton} accessibilityLabel="TODO: 添加无障碍标签" />/              <Icon name="x" size={24} color={colors.textSecondary} />/            </TouchableOpacity>/          </View>/
+          {// 消息列表 }/          <KeyboardAvoidingView
+            style={styles.chatContainer}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'} />/            <ScrollView
+              ref={scrollViewRef}
+              style={styles.messagesContainer}
+              showsVerticalScrollIndicator={false} />/              {messages.map(renderMessage)}
+              {// 加载指示器 }/              {isLoading && (
+                <View style={styles.loadingContainer} />/                  <View style={styles.loadingBubble} />/                    <Text style={styles.loadingText} />小艾正在思考...</Text>/                  </View>/                </View>/              )}
+            </ScrollView>/
+            {// 输入区域 }/            <View style={styles.inputContainer} />/              <View style={styles.inputWrapper} />/                <TextInput
+                  style={styles.textInput}
+                  value={inputText}
+                  onChangeText={setInputText}
+                  placeholder="输入你的健康问题..."
+                  placeholderTextColor={colors.textSecondary}
+                  multiline
+                  maxLength={500} />/                <TouchableOpacity
+                  style={[;
+                    styles.sendButton,
+                    (!inputText.trim;(;); || isLoading) && styles.sendButtonDisabled
+                  ]}
+                  onPress={sendMessage}
+                  disabled={!inputText.trim() || isLoading}
+                 accessibilityLabel="TODO: 添加无障碍标签" />/                  <Iconname="send"
+                    size={20}
+                    color={
+                      !inputText.trim(); || isLoading
+                        ? colors.textSecondary: colors.white} />/                </TouchableOpacity>/              </View>/            </View>/          </KeyboardAvoidingView>/        </Animated.View>/      </View>/    </Modal>/);
 };
-
-const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo(() => StyleSheet.create({;
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.5);',
     justifyContent: 'flex-end',
   },
   container: {
@@ -387,22 +266,14 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
     fontSize: 14,
     color: colors.textSecondary,
   },
-  closeButton: {
-    padding: 8,
-  },
+  closeButton: { padding: 8  },
   messagesContainer: {
     flex: 1,
     padding: 16,
   },
-  messageContainer: {
-    marginBottom: 16,
-  },
-  userMessage: {
-    alignItems: 'flex-end',
-  },
-  assistantMessage: {
-    alignItems: 'flex-start',
-  },
+  messageContainer: { marginBottom: 16  },
+  userMessage: { alignItems: 'flex-end'  },
+  assistantMessage: { alignItems: 'flex-start'  },
   messageBubble: {
     maxWidth: '80%',
     padding: 12,
@@ -422,18 +293,14 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
     fontSize: 16,
     lineHeight: 22,
   },
-  userText: {
-    color: colors.white,
-  },
-  assistantText: {
-    color: colors.text,
-  },
+  userText: { color: colors.white  },
+  assistantText: { color: colors.text  },
   timestamp: {
     fontSize: 12,
     color: colors.textSecondary,
     marginTop: 4,
   },
-  diagnosisResults: {
+  diagnosisContainer: {
     marginTop: 8,
     padding: 8,
     backgroundColor: colors.background,
@@ -449,9 +316,7 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
     fontSize: 14,
     color: colors.text,
   },
-  suggestionsContainer: {
-    marginTop: 8,
-  },
+  suggestionsContainer: { marginTop: 8  },
   suggestionsTitle: {
     fontSize: 14,
     fontWeight: 'bold',
@@ -491,7 +356,7 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
     borderTopColor: colors.border,
     padding: 16,
   },
-  inputRow: {
+  inputWrapper: {
     flexDirection: 'row',
     alignItems: 'flex-end',
     marginBottom: 12,
@@ -516,25 +381,12 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
     justifyContent: 'center',
     alignItems: 'center',
   },
-  sendButtonDisabled: {
-    backgroundColor: colors.border,
-  },
-  quickSuggestions: {
-    flexDirection: 'row',
-  },
-  quickSuggestionButton: {
-    backgroundColor: colors.background,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 16,
-    marginRight: 8,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  quickSuggestionText: {
-    fontSize: 14,
-    color: colors.text,
-  },
-}), []), []), []), []), []), []);
-
-export default React.memo(XiaoaiChatInterface); 
+  sendButtonDisabled: { backgroundColor: colors.border  },
+  chatContainer: { flex: 1 },
+  messageTime: {
+    fontSize: 12,
+    color: colors.textSecondary,
+    marginTop: 4,
+  }
+}), []);
+export default React.memo(XiaoaiChatInterface);

@@ -1,0 +1,268 @@
+# 小艾智能体的LLM模型配置示例
+apiVersion: suoke.life/v1
+kind: AIModel
+metadata:
+  name: xiaoai-llm-model
+  namespace: suoke-life
+  labels:
+    agent: xiaoai
+    model-type: llm
+    version: v2.1.0
+spec:
+  modelName: "xiaoai-conversation-llm"
+  version: "v2.1.0"
+  agentType: "xiaoai"
+  modelType: "llm"
+  framework: "huggingface"
+  repository:
+    url: "https://huggingface.co/suoke/xiaoai-llm-v2"
+    branch: "main"
+    commit: "abc123def456"
+  deployment:
+    replicas: 3
+    resources:
+      requests:
+        cpu: "2"
+        memory: "8Gi"
+        nvidia.com/gpu: "1"
+      limits:
+        cpu: "4"
+        memory: "16Gi"
+        nvidia.com/gpu: "1"
+    strategy: "RollingUpdate"
+  validation:
+    enabled: true
+    testDataset: "/data/xiaoai/test-conversations"
+    metrics:
+      accuracy: 0.92
+      precision: 0.89
+      recall: 0.94
+      f1Score: 0.91
+  monitoring:
+    enabled: true
+    metricsPort: 8080
+    healthCheckPath: "/health"
+
+---
+# 小克智能体的健康分析模型配置示例
+apiVersion: suoke.life/v1
+kind: AIModel
+metadata:
+  name: xiaoke-health-analysis
+  namespace: suoke-life
+  labels:
+    agent: xiaoke
+    model-type: classification
+    version: v1.5.2
+spec:
+  modelName: "xiaoke-health-classifier"
+  version: "v1.5.2"
+  agentType: "xiaoke"
+  modelType: "classification"
+  framework: "pytorch"
+  repository:
+    url: "https://github.com/suoke-life/xiaoke-models"
+    branch: "release/v1.5"
+    commit: "def789ghi012"
+  deployment:
+    replicas: 2
+    resources:
+      requests:
+        cpu: "1"
+        memory: "4Gi"
+      limits:
+        cpu: "2"
+        memory: "8Gi"
+    strategy: "BlueGreen"
+  validation:
+    enabled: true
+    testDataset: "/data/xiaoke/health-test-data"
+    metrics:
+      accuracy: 0.88
+      precision: 0.85
+      recall: 0.90
+      f1Score: 0.87
+  monitoring:
+    enabled: true
+    metricsPort: 8081
+    healthCheckPath: "/health"
+
+---
+# 老克智能体的中医诊断模型配置示例
+apiVersion: suoke.life/v1
+kind: AIModel
+metadata:
+  name: laoke-tcm-diagnosis
+  namespace: suoke-life
+  labels:
+    agent: laoke
+    model-type: tcm-diagnosis
+    version: v3.0.1
+spec:
+  modelName: "laoke-tcm-expert"
+  version: "v3.0.1"
+  agentType: "laoke"
+  modelType: "tcm-diagnosis"
+  framework: "tensorflow"
+  repository:
+    url: "https://github.com/suoke-life/laoke-tcm-models"
+    branch: "main"
+    commit: "ghi345jkl678"
+  deployment:
+    replicas: 2
+    resources:
+      requests:
+        cpu: "1.5"
+        memory: "6Gi"
+        nvidia.com/gpu: "0.5"
+      limits:
+        cpu: "3"
+        memory: "12Gi"
+        nvidia.com/gpu: "1"
+    strategy: "Canary"
+  validation:
+    enabled: true
+    testDataset: "/data/laoke/tcm-diagnosis-test"
+    metrics:
+      accuracy: 0.91
+      precision: 0.88
+      recall: 0.93
+      f1Score: 0.90
+  monitoring:
+    enabled: true
+    metricsPort: 8082
+    healthCheckPath: "/health"
+
+---
+# 索儿智能体的养生推荐模型配置示例
+apiVersion: suoke.life/v1
+kind: AIModel
+metadata:
+  name: soer-wellness-recommender
+  namespace: suoke-life
+  labels:
+    agent: soer
+    model-type: regression
+    version: v1.3.0
+spec:
+  modelName: "soer-wellness-engine"
+  version: "v1.3.0"
+  agentType: "soer"
+  modelType: "regression"
+  framework: "onnx"
+  repository:
+    url: "https://github.com/suoke-life/soer-models"
+    branch: "stable"
+    commit: "jkl901mno234"
+  deployment:
+    replicas: 1
+    resources:
+      requests:
+        cpu: "0.5"
+        memory: "2Gi"
+      limits:
+        cpu: "1"
+        memory: "4Gi"
+    strategy: "RollingUpdate"
+  validation:
+    enabled: true
+    testDataset: "/data/soer/wellness-test-data"
+    metrics:
+      accuracy: 0.86
+      precision: 0.83
+      recall: 0.88
+      f1Score: 0.85
+  monitoring:
+    enabled: true
+    metricsPort: 8083
+    healthCheckPath: "/health"
+
+---
+# 模型版本管理示例
+apiVersion: suoke.life/v1
+kind: ModelVersion
+metadata:
+  name: xiaoai-llm-v2-1-0
+  namespace: suoke-life
+  labels:
+    model: xiaoai-llm-model
+    version: v2.1.0
+spec:
+  modelRef: "xiaoai-llm-model"
+  version: "v2.1.0"
+  description: "小艾对话模型v2.1.0版本，优化了多轮对话能力"
+  changelog:
+    - "增强多轮对话上下文理解"
+    - "优化响应速度，减少延迟20%"
+    - "修复情感识别准确性问题"
+    - "增加健康咨询专业术语支持"
+  rollbackEnabled: true
+  autoPromotion:
+    enabled: true
+    criteria:
+      minAccuracy: 0.90
+      minUptime: "24h"
+      maxErrorRate: 0.05
+  canaryDeployment:
+    enabled: true
+    trafficPercentage: 20
+    duration: "2h"
+
+---
+# 模型注册表配置示例
+apiVersion: suoke.life/v1
+kind: ModelRegistry
+metadata:
+  name: suoke-model-registry
+  namespace: suoke-life
+  labels:
+    registry-type: primary
+spec:
+  name: "suoke-central-registry"
+  endpoint: "https://models.suoke.life/registry"
+  authentication:
+    type: "token"
+    secretRef:
+      name: "model-registry-token"
+      namespace: "suoke-life"
+  storage:
+    type: "s3"
+    config:
+      bucket: "suoke-ai-models"
+      region: "us-west-2"
+      endpoint: "https://s3.amazonaws.com"
+  syncPolicy:
+    enabled: true
+    interval: "30m"
+    retryPolicy:
+      maxRetries: 5
+      backoffMultiplier: 1.5
+
+---
+# HuggingFace模型注册表配置
+apiVersion: suoke.life/v1
+kind: ModelRegistry
+metadata:
+  name: huggingface-registry
+  namespace: suoke-life
+  labels:
+    registry-type: external
+spec:
+  name: "huggingface-hub"
+  endpoint: "https://huggingface.co"
+  authentication:
+    type: "token"
+    secretRef:
+      name: "huggingface-token"
+      namespace: "suoke-life"
+  storage:
+    type: "gcs"
+    config:
+      bucket: "suoke-hf-cache"
+      project: "suoke-ai-project"
+  syncPolicy:
+    enabled: true
+    interval: "1h"
+    retryPolicy:
+      maxRetries: 3
+      backoffMultiplier: 2.0 

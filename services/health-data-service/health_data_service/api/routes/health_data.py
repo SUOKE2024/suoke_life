@@ -1,6 +1,6 @@
 """健康数据API路由"""
 
-from typing import Any
+from typing import Any, Dict, Optional
 
 from fastapi import APIRouter
 from fastapi import Depends
@@ -80,8 +80,8 @@ async def get_health_data(
 
 @router.get("/health-data", response_model=PaginatedResponse)
 async def list_health_data(
-    user_id: int | None = Query(None, description="用户ID"),
-    data_type: DataType | None = Query(None, description="数据类型"),
+    user_id: Optional[int] = Query(None, description="用户ID"),
+    data_type: Optional[DataType] = Query(None, description="数据类型"),
     page: int = Query(1, ge=1, description="页码"),
     page_size: int = Query(20, ge=1, le=100, description="每页大小"),
     service: HealthDataService = Depends(get_health_data_service),
@@ -89,7 +89,7 @@ async def list_health_data(
     """获取健康数据列表"""
     try:
         skip = (page - 1) * page_size
-        filters: dict[str, Any] = {}
+        filters: Dict[str, Any] = {}
         if user_id:
             filters["user_id"] = user_id
         if data_type:
@@ -117,7 +117,7 @@ async def list_health_data(
 @router.get("/users/{user_id}/health-data", response_model=PaginatedResponse)
 async def get_user_health_data(
     user_id: int,
-    data_type: DataType | None = Query(None, description="数据类型"),
+    data_type: Optional[DataType] = Query(None, description="数据类型"),
     page: int = Query(1, ge=1, description="页码"),
     page_size: int = Query(20, ge=1, le=100, description="每页大小"),
     service: HealthDataService = Depends(get_health_data_service),

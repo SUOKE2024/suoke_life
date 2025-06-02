@@ -23,9 +23,266 @@ volumes:
     driver: local
   listen-service-models:
     driver: local
+  ai-models-registry:
+    driver: local
+  model-cache:
+    driver: local
+  model-artifacts:
+    driver: local
 
 # 服务配置
 services:
+  # ================================
+  # AI模型版本管理服务
+  # ================================
+  model-registry:
+    image: suoke/model-registry:v1.2.0
+    container_name: suoke-model-registry
+    ports:
+      - "8090:8090"
+      - "9090:9090"  # Metrics端口
+    environment:
+      - ENVIRONMENT=production
+      - LOG_LEVEL=INFO
+      - REGISTRY_STORAGE_TYPE=s3
+      - REGISTRY_S3_BUCKET=suoke-ai-models
+      - REGISTRY_S3_REGION=us-west-2
+      - REGISTRY_DATABASE_URL=postgresql://postgres:password@postgres:5432/model_registry
+      - REGISTRY_CACHE_BACKEND=redis
+      - REGISTRY_CACHE_URL=redis://redis:6379/1
+      - MODEL_VALIDATION_ENABLED=true
+      - MODEL_METRICS_ENABLED=true
+      - HUGGINGFACE_HUB_CACHE=/app/cache/huggingface
+      - PYTORCH_HUB_CACHE=/app/cache/pytorch
+    volumes:
+      - ai-models-registry:/app/registry
+      - model-cache:/app/cache
+      - model-artifacts:/app/artifacts
+      - ./config/model-registry:/app/config
+    depends_on:
+      - redis
+      - postgres
+    networks:
+      - suoke-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8090/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    profiles:
+      - ai-models
+      - prod
+
+  # ================================
+  # AI模型服务器 - 小艾智能体
+  # ================================
+  xiaoai-model-server:
+    image: suoke/xiaoai-model-server:v2.1.0
+    container_name: suoke-xiaoai-model-server
+    ports:
+      - "8100:8100"
+      - "50100:50100"  # gRPC端口
+    environment:
+      - MODEL_NAME=xiaoai-conversation-llm
+      - MODEL_VERSION=v2.1.0
+      - MODEL_FRAMEWORK=huggingface
+      - MODEL_REGISTRY_URL=http://model-registry:8090
+      - INFERENCE_BATCH_SIZE=4
+      - INFERENCE_MAX_LENGTH=2048
+      - GPU_MEMORY_FRACTION=0.8
+      - ENABLE_MODEL_CACHING=true
+      - ENABLE_METRICS=true
+    volumes:
+      - model-cache:/app/cache
+      - ./models/xiaoai:/app/models
+    depends_on:
+      - model-registry
+    networks:
+      - suoke-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '4.0'
+          memory: 16G
+        reservations:
+          cpus: '2.0'
+          memory: 8G
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8100/health"]
+      interval: 30s
+      timeout: 15s
+      retries: 3
+    profiles:
+      - ai-models
+      - prod
+
+  # ================================
+  # AI模型服务器 - 小克智能体
+  # ================================
+  xiaoke-model-server:
+    image: suoke/xiaoke-model-server:v1.5.2
+    container_name: suoke-xiaoke-model-server
+    ports:
+      - "8101:8101"
+      - "50101:50101"  # gRPC端口
+    environment:
+      - MODEL_NAME=xiaoke-health-classifier
+      - MODEL_VERSION=v1.5.2
+      - MODEL_FRAMEWORK=pytorch
+      - MODEL_REGISTRY_URL=http://model-registry:8090
+      - INFERENCE_BATCH_SIZE=8
+      - ENABLE_MODEL_CACHING=true
+      - ENABLE_METRICS=true
+    volumes:
+      - model-cache:/app/cache
+      - ./models/xiaoke:/app/models
+    depends_on:
+      - model-registry
+    networks:
+      - suoke-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 8G
+        reservations:
+          cpus: '1.0'
+          memory: 4G
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8101/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    profiles:
+      - ai-models
+      - prod
+
+  # ================================
+  # AI模型服务器 - 老克智能体
+  # ================================
+  laoke-model-server:
+    image: suoke/laoke-model-server:v3.0.1
+    container_name: suoke-laoke-model-server
+    ports:
+      - "8102:8102"
+      - "50102:50102"  # gRPC端口
+    environment:
+      - MODEL_NAME=laoke-tcm-expert
+      - MODEL_VERSION=v3.0.1
+      - MODEL_FRAMEWORK=tensorflow
+      - MODEL_REGISTRY_URL=http://model-registry:8090
+      - INFERENCE_BATCH_SIZE=4
+      - TCM_KNOWLEDGE_BASE_PATH=/app/knowledge/tcm
+      - ENABLE_MODEL_CACHING=true
+      - ENABLE_METRICS=true
+    volumes:
+      - model-cache:/app/cache
+      - ./models/laoke:/app/models
+      - ./knowledge/tcm:/app/knowledge/tcm
+    depends_on:
+      - model-registry
+    networks:
+      - suoke-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '3.0'
+          memory: 12G
+        reservations:
+          cpus: '1.5'
+          memory: 6G
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8102/health"]
+      interval: 30s
+      timeout: 15s
+      retries: 3
+    profiles:
+      - ai-models
+      - prod
+
+  # ================================
+  # AI模型服务器 - 索儿智能体
+  # ================================
+  soer-model-server:
+    image: suoke/soer-model-server:v1.3.0
+    container_name: suoke-soer-model-server
+    ports:
+      - "8103:8103"
+      - "50103:50103"  # gRPC端口
+    environment:
+      - MODEL_NAME=soer-wellness-engine
+      - MODEL_VERSION=v1.3.0
+      - MODEL_FRAMEWORK=onnx
+      - MODEL_REGISTRY_URL=http://model-registry:8090
+      - INFERENCE_BATCH_SIZE=16
+      - WELLNESS_KNOWLEDGE_BASE_PATH=/app/knowledge/wellness
+      - ENABLE_MODEL_CACHING=true
+      - ENABLE_METRICS=true
+    volumes:
+      - model-cache:/app/cache
+      - ./models/soer:/app/models
+      - ./knowledge/wellness:/app/knowledge/wellness
+    depends_on:
+      - model-registry
+    networks:
+      - suoke-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 4G
+        reservations:
+          cpus: '0.5'
+          memory: 2G
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8103/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    profiles:
+      - ai-models
+      - prod
+
+  # ================================
+  # 模型版本控制器
+  # ================================
+  model-version-controller:
+    image: suoke/model-version-controller:v1.0.0
+    container_name: suoke-model-version-controller
+    ports:
+      - "8110:8110"
+    environment:
+      - CONTROLLER_MODE=standalone
+      - MODEL_REGISTRY_URL=http://model-registry:8090
+      - KUBERNETES_ENABLED=false
+      - DOCKER_ENABLED=true
+      - DOCKER_SOCKET=/var/run/docker.sock
+      - CANARY_DEPLOYMENT_ENABLED=true
+      - AUTO_ROLLBACK_ENABLED=true
+      - VALIDATION_TIMEOUT=300s
+      - PROMOTION_TIMEOUT=600s
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./config/model-controller:/app/config
+    depends_on:
+      - model-registry
+    networks:
+      - suoke-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8110/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    profiles:
+      - ai-models
+      - prod
+
   # ================================
   # 闻诊服务 - 开发环境
   # ================================
@@ -45,6 +302,11 @@ services:
       - CACHE_BACKEND=redis
       - REDIS_URL=redis://redis:6379
       - DATABASE_URL=postgresql://postgres:password@postgres:5432/listen_service_dev
+      - MODEL_REGISTRY_URL=http://model-registry:8090
+      - XIAOAI_MODEL_URL=http://xiaoai-model-server:8100
+      - XIAOKE_MODEL_URL=http://xiaoke-model-server:8101
+      - LAOKE_MODEL_URL=http://laoke-model-server:8102
+      - SOER_MODEL_URL=http://soer-model-server:8103
     volumes:
       - .:/app
       - listen-service-logs:/app/logs
@@ -53,6 +315,7 @@ services:
     depends_on:
       - redis
       - postgres
+      - model-registry
     networks:
       - suoke-network
     restart: unless-stopped
@@ -86,6 +349,11 @@ services:
       - DATABASE_URL=postgresql://postgres:password@postgres:5432/listen_service_prod
       - PERFORMANCE_MONITORING=true
       - ENABLE_METRICS=true
+      - MODEL_REGISTRY_URL=http://model-registry:8090
+      - XIAOAI_MODEL_URL=http://xiaoai-model-server:8100
+      - XIAOKE_MODEL_URL=http://xiaoke-model-server:8101
+      - LAOKE_MODEL_URL=http://laoke-model-server:8102
+      - SOER_MODEL_URL=http://soer-model-server:8103
     volumes:
       - listen-service-logs:/app/logs
       - listen-service-data:/app/data
@@ -93,6 +361,11 @@ services:
     depends_on:
       - redis
       - postgres
+      - model-registry
+      - xiaoai-model-server
+      - xiaoke-model-server
+      - laoke-model-server
+      - soer-model-server
     networks:
       - suoke-network
     restart: unless-stopped
@@ -129,8 +402,10 @@ services:
       - CACHE_BACKEND=memory
       - TEST_MODE=true
       - DATABASE_URL=postgresql://postgres:password@postgres:5432/listen_service_test
+      - MODEL_REGISTRY_URL=http://model-registry:8090
     depends_on:
       - postgres
+      - model-registry
     networks:
       - suoke-network
     profiles:

@@ -1,0 +1,439 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: aimodels.suoke.life
+  labels:
+    app: suoke-life
+    component: ai-model-management
+spec:
+  group: suoke.life
+  versions:
+  - name: v1
+    served: true
+    storage: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties:
+              modelName:
+                type: string
+                description: "AI模型名称"
+              version:
+                type: string
+                description: "模型版本号"
+              agentType:
+                type: string
+                enum: ["xiaoai", "xiaoke", "laoke", "soer"]
+                description: "关联的智能体类型"
+              modelType:
+                type: string
+                enum: ["llm", "embedding", "classification", "regression", "tcm-diagnosis"]
+                description: "模型类型"
+              framework:
+                type: string
+                enum: ["pytorch", "tensorflow", "onnx", "huggingface"]
+                description: "模型框架"
+              repository:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    description: "模型仓库URL"
+                  branch:
+                    type: string
+                    description: "模型分支"
+                  commit:
+                    type: string
+                    description: "提交哈希"
+                required: ["url"]
+              deployment:
+                type: object
+                properties:
+                  replicas:
+                    type: integer
+                    minimum: 1
+                    maximum: 10
+                    description: "部署副本数"
+                  resources:
+                    type: object
+                    properties:
+                      requests:
+                        type: object
+                        properties:
+                          cpu:
+                            type: string
+                          memory:
+                            type: string
+                          nvidia.com/gpu:
+                            type: string
+                      limits:
+                        type: object
+                        properties:
+                          cpu:
+                            type: string
+                          memory:
+                            type: string
+                          nvidia.com/gpu:
+                            type: string
+                  strategy:
+                    type: string
+                    enum: ["RollingUpdate", "BlueGreen", "Canary"]
+                    default: "RollingUpdate"
+                    description: "部署策略"
+              validation:
+                type: object
+                properties:
+                  enabled:
+                    type: boolean
+                    default: true
+                  testDataset:
+                    type: string
+                    description: "测试数据集路径"
+                  metrics:
+                    type: object
+                    properties:
+                      accuracy:
+                        type: number
+                        minimum: 0
+                        maximum: 1
+                      precision:
+                        type: number
+                        minimum: 0
+                        maximum: 1
+                      recall:
+                        type: number
+                        minimum: 0
+                        maximum: 1
+                      f1Score:
+                        type: number
+                        minimum: 0
+                        maximum: 1
+              monitoring:
+                type: object
+                properties:
+                  enabled:
+                    type: boolean
+                    default: true
+                  metricsPort:
+                    type: integer
+                    default: 8080
+                  healthCheckPath:
+                    type: string
+                    default: "/health"
+            required: ["modelName", "version", "agentType", "modelType"]
+          status:
+            type: object
+            properties:
+              phase:
+                type: string
+                enum: ["Pending", "Downloading", "Validating", "Deploying", "Ready", "Failed"]
+                description: "模型状态"
+              message:
+                type: string
+                description: "状态消息"
+              lastUpdated:
+                type: string
+                format: date-time
+                description: "最后更新时间"
+              deploymentStatus:
+                type: object
+                properties:
+                  readyReplicas:
+                    type: integer
+                  totalReplicas:
+                    type: integer
+                  conditions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                        status:
+                          type: string
+                        lastTransitionTime:
+                          type: string
+                          format: date-time
+                        reason:
+                          type: string
+                        message:
+                          type: string
+              validationResults:
+                type: object
+                properties:
+                  passed:
+                    type: boolean
+                  metrics:
+                    type: object
+                    properties:
+                      accuracy:
+                        type: number
+                      precision:
+                        type: number
+                      recall:
+                        type: number
+                      f1Score:
+                        type: number
+                  timestamp:
+                    type: string
+                    format: date-time
+    additionalPrinterColumns:
+    - name: Agent
+      type: string
+      jsonPath: .spec.agentType
+    - name: Version
+      type: string
+      jsonPath: .spec.version
+    - name: Type
+      type: string
+      jsonPath: .spec.modelType
+    - name: Status
+      type: string
+      jsonPath: .status.phase
+    - name: Age
+      type: date
+      jsonPath: .metadata.creationTimestamp
+  scope: Namespaced
+  names:
+    plural: aimodels
+    singular: aimodel
+    kind: AIModel
+    shortNames:
+    - aim
+
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: modelversions.suoke.life
+  labels:
+    app: suoke-life
+    component: ai-model-management
+spec:
+  group: suoke.life
+  versions:
+  - name: v1
+    served: true
+    storage: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties:
+              modelRef:
+                type: string
+                description: "关联的AI模型名称"
+              version:
+                type: string
+                description: "版本号"
+              description:
+                type: string
+                description: "版本描述"
+              changelog:
+                type: array
+                items:
+                  type: string
+                description: "变更日志"
+              rollbackEnabled:
+                type: boolean
+                default: true
+                description: "是否允许回滚"
+              autoPromotion:
+                type: object
+                properties:
+                  enabled:
+                    type: boolean
+                    default: false
+                  criteria:
+                    type: object
+                    properties:
+                      minAccuracy:
+                        type: number
+                        minimum: 0
+                        maximum: 1
+                      minUptime:
+                        type: string
+                        description: "最小运行时间"
+                      maxErrorRate:
+                        type: number
+                        minimum: 0
+                        maximum: 1
+              canaryDeployment:
+                type: object
+                properties:
+                  enabled:
+                    type: boolean
+                    default: false
+                  trafficPercentage:
+                    type: integer
+                    minimum: 1
+                    maximum: 100
+                    default: 10
+                  duration:
+                    type: string
+                    default: "1h"
+                    description: "金丝雀部署持续时间"
+            required: ["modelRef", "version"]
+          status:
+            type: object
+            properties:
+              phase:
+                type: string
+                enum: ["Draft", "Testing", "Canary", "Production", "Deprecated", "Rollback"]
+                description: "版本状态"
+              promotionHistory:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    fromPhase:
+                      type: string
+                    toPhase:
+                      type: string
+                    timestamp:
+                      type: string
+                      format: date-time
+                    reason:
+                      type: string
+              metrics:
+                type: object
+                properties:
+                  accuracy:
+                    type: number
+                  latency:
+                    type: string
+                  throughput:
+                    type: number
+                  errorRate:
+                    type: number
+                  uptime:
+                    type: string
+    additionalPrinterColumns:
+    - name: Model
+      type: string
+      jsonPath: .spec.modelRef
+    - name: Version
+      type: string
+      jsonPath: .spec.version
+    - name: Phase
+      type: string
+      jsonPath: .status.phase
+    - name: Age
+      type: date
+      jsonPath: .metadata.creationTimestamp
+  scope: Namespaced
+  names:
+    plural: modelversions
+    singular: modelversion
+    kind: ModelVersion
+    shortNames:
+    - mv
+
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: modelregistries.suoke.life
+  labels:
+    app: suoke-life
+    component: ai-model-management
+spec:
+  group: suoke.life
+  versions:
+  - name: v1
+    served: true
+    storage: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties:
+              name:
+                type: string
+                description: "模型注册表名称"
+              endpoint:
+                type: string
+                description: "注册表端点"
+              authentication:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    enum: ["none", "basic", "token", "oauth2"]
+                  secretRef:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      namespace:
+                        type: string
+              storage:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    enum: ["s3", "gcs", "azure", "local", "nfs"]
+                  config:
+                    type: object
+                    additionalProperties:
+                      type: string
+              syncPolicy:
+                type: object
+                properties:
+                  enabled:
+                    type: boolean
+                    default: true
+                  interval:
+                    type: string
+                    default: "1h"
+                  retryPolicy:
+                    type: object
+                    properties:
+                      maxRetries:
+                        type: integer
+                        default: 3
+                      backoffMultiplier:
+                        type: number
+                        default: 2.0
+            required: ["name", "endpoint"]
+          status:
+            type: object
+            properties:
+              connected:
+                type: boolean
+              lastSync:
+                type: string
+                format: date-time
+              modelCount:
+                type: integer
+              errors:
+                type: array
+                items:
+                  type: string
+    additionalPrinterColumns:
+    - name: Endpoint
+      type: string
+      jsonPath: .spec.endpoint
+    - name: Connected
+      type: boolean
+      jsonPath: .status.connected
+    - name: Models
+      type: integer
+      jsonPath: .status.modelCount
+    - name: Last Sync
+      type: string
+      jsonPath: .status.lastSync
+  scope: Namespaced
+  names:
+    plural: modelregistries
+    singular: modelregistry
+    kind: ModelRegistry
+    shortNames:
+    - mr 

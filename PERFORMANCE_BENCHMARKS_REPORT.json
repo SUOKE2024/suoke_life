@@ -1,0 +1,71 @@
+{
+  "timestamp": "2025-05-30T13:58:06.358Z",
+  "benchmarks": {
+    "component": {
+      "renderTime": {
+        "excellent": 16,
+        "good": 33,
+        "acceptable": 50,
+        "poor": 100
+      },
+      "memoryUsage": {
+        "excellent": 10,
+        "good": 25,
+        "acceptable": 50,
+        "poor": 100
+      },
+      "bundleSize": {
+        "excellent": 100,
+        "good": 250,
+        "acceptable": 500,
+        "poor": 1000
+      }
+    },
+    "api": {
+      "responseTime": {
+        "excellent": 200,
+        "good": 500,
+        "acceptable": 1000,
+        "poor": 2000
+      },
+      "throughput": {
+        "excellent": 1000,
+        "good": 500,
+        "acceptable": 100,
+        "poor": 50
+      },
+      "errorRate": {
+        "excellent": 0.1,
+        "good": 1,
+        "acceptable": 5,
+        "poor": 10
+      }
+    },
+    "agent": {
+      "decisionTime": {
+        "excellent": 500,
+        "good": 1000,
+        "acceptable": 2000,
+        "poor": 5000
+      },
+      "accuracy": {
+        "excellent": 95,
+        "good": 90,
+        "acceptable": 85,
+        "poor": 80
+      },
+      "learningRate": {
+        "excellent": 0.9,
+        "good": 0.7,
+        "acceptable": 0.5,
+        "poor": 0.3
+      }
+    }
+  },
+  "files": [
+    "src/config/performance-benchmarks.ts",
+    "src/utils/performanceMonitor.ts",
+    "src/utils/performanceReporter.ts",
+    "src/__tests__/performance/benchmarks.test.ts"
+  ]
+}

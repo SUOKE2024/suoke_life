@@ -1,15 +1,7 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
-import { Card, Button, Loading, Input } from '../ui';
-import { colors, spacing, typography } from '../../constants/theme';
-import { useAppSelector, useAppDispatch } from '../../store';
-
-
-
-
-
-import React, { useState, useEffect, useCallback } from 'react';
-  View,
+import { Ionicons } from '@expo/vector-icons'/import { Card, Button, Loading, Input } from '../ui'/import { colors, spacing, typography } from '../../constants/theme'/import { useAppSelector, useAppDispatch } from '../../store';/;
+importReact,{ useState, useEffect, useCallback } from 'react';
+import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor'/  View,;
   Text,
   StyleSheet,
   ScrollView,
@@ -18,59 +10,47 @@ import React, { useState, useEffect, useCallback } from 'react';
   Animated,
   RefreshControl,
   Alert,
-  Modal,
-} from 'react-native';
-
-const { width } = Dimensions.get('window');
-
-interface BlockchainRecord {
-  id: string;
-  hash: string;
-  timestamp: Date;
-  dataType: 'health' | 'diagnosis' | 'prescription' | 'report';
-  title: string;
-  description: string;
-  size: number;
-  status: 'pending' | 'confirmed' | 'failed';
+  { Modal } from 'react-native'
+const { width   } = Dimensions.get('window;';)
+interface BlockchainRecord { id: string,
+  hash: string,
+  timestamp: Date,
+  dataType: 'health' | 'diagnosis' | 'prescription' | 'report',
+  title: string,
+  description: string,
+  size: number,
+  status: 'pending' | 'confirmed' | 'failed',
   confirmations: number;
   gasUsed?: number;
-  txHash?: string;
-  encrypted: boolean;
-  shared: boolean;
-}
-
-interface DataUploadRequest {
-  dataType: 'health' | 'diagnosis' | 'prescription' | 'report';
-  title: string;
-  description: string;
-  data: any;
-  encrypt: boolean;
+  txHash?: string,
+  encrypted: boolean,
+  shared: boolean}
+interface DataUploadRequest { dataType: 'health' | 'diagnosis' | 'prescription' | 'report',
+  title: string,
+  description: string,
+  data: unknown,
+  encrypt: boolean,
   shareWith: string[];
-}
-
+  }
 interface BlockchainDataManagerProps {
-  onRecordPress?: (record: BlockchainRecord) => void;
-  onUploadComplete?: (record: BlockchainRecord) => void;
-}
-
-export const BlockchainDataManager: React.FC<BlockchainDataManagerProps> = ({
+  onRecordPress?: (record: BlockchainRecord) => void,
+  onUploadComplete?: (record: BlockchainRecord) => void}
+export const BlockchainDataManager: React.FC<BlockchainDataManagerProps /> = ({/  // 性能监控 *   const performanceMonitor = usePerformanceMonitor('BlockchainDataManager', ;{; */;
+    trackRender: true,
+    trackMemory: true,
+    warnThreshold: 50, // ms *   }); */
   onRecordPress,
-  onUploadComplete,
+  onUploadComplete
 }) => {
-  const dispatch = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useAppDispatch(), []), []), []), []), []), []);
-  const { profile: user } = useAppSelector(state => state.user);
-  
-  const [records, setRecords] = useState<BlockchainRecord[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [refreshing, setRefreshing] = useState(false);
-  const [uploadModalVisible, setUploadModalVisible] = useState(false);
-  const [verifyModalVisible, setVerifyModalVisible] = useState(false);
-  const [selectedTab, setSelectedTab] = useState<'all' | 'health' | 'diagnosis' | 'prescription' | 'report'>('all');
-  const [animatedValue] = useState(new Animated.Value(0));
-
-  // 模拟区块链记录数据
-  const mockRecords: BlockchainRecord[] = [
-    {
+  const dispatch = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useAppDispatch(), []);)))))
+  const { profile: user} = useAppSelector(state => state.use;r;);
+  const [records, setRecords] = useState<BlockchainRecord[] />([;];);/  const [loading, setLoading] = useState<boolean>(fals;e;);
+  const [refreshing, setRefreshing] = useState<boolean>(fals;e;);
+  const [uploadModalVisible, setUploadModalVisible] = useState<boolean>(fals;e;);
+  const [verifyModalVisible, setVerifyModalVisible] = useState<boolean>(fals;e;)
+  const [selectedTab, setSelectedTab] = useState<'all' | 'health' | 'diagnosis' | 'prescription' | 'report'>('all';);
+  const [animatedValue] = useState<any>(new Animated.Value(0););
+  // 模拟区块链记录数据 *   const mockRecords: BlockchainRecord[] = [;{, */
       id: '1',
       hash: '0x1a2b3c4d5e6f7890abcdef1234567890abcdef12',
       timestamp: new Date(),
@@ -112,34 +92,26 @@ export const BlockchainDataManager: React.FC<BlockchainDataManagerProps> = ({
       confirmations: 0,
       encrypted: false,
       shared: false,
-    },
+    }
   ];
-
-  useEffect(() => {
+  useEffect((); => {
+    const effectStart = performance.now;(;);
     setRecords(mockRecords);
-    
-    // 启动动画
-    Animated.timing(animatedValue, {
+    // 启动动画 *     Animated.timing(animatedValue, { */
       toValue: 1,
       duration: 800,
       useNativeDriver: true,
     }).start();
+      const effectEnd = performance.now;(;);
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-
-  const onRefresh = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback(async () => {
-    setRefreshing(true), []), []), []), []), []), []);
-    // 模拟数据刷新
-    await new Promise<void>(resolve => setTimeout(() => resolve(), 1500));
-    setRefreshing(false);
-  }, []);
-
-  const handleUploadData = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback(async (request: DataUploadRequest) => {
-    setLoading(true), []), []), []), []), []), []);
+  const onRefresh = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useCallback(const async = ;(;); => {
+  // TODO: Implement function *}; */
+  const handleUploadData = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useCallback(async (request: DataUploadRequest); => {
+    setLoading(true), []);
     try {
-      // 模拟上链过程
-      await new Promise<void>(resolve => setTimeout(() => resolve(), 2000));
-      
-      const newRecord: BlockchainRecord = {
+      // 模拟上链过程 *       await new Promise<void>(resolve => setTimeout((); => resolve(), 2000)) */
+      const newRecord: BlockchainRecord = {,
         id: Date.now().toString(),
         hash: '0x' + Math.random().toString(16).substr(2, 40),
         timestamp: new Date(),
@@ -152,346 +124,160 @@ export const BlockchainDataManager: React.FC<BlockchainDataManagerProps> = ({
         encrypted: request.encrypt,
         shared: request.shareWith.length > 0,
       };
-      
       setRecords(prev => [newRecord, ...prev]);
       onUploadComplete?.(newRecord);
-      setUploadModalVisible(false);
-      
-      Alert.alert('上链成功', '数据已成功提交到区块链网络');
+      setUploadModalVisible(false)
+      Alert.alert('上链成功', '数据已成功提交到区块链网络')
     } catch (error) {
       Alert.alert('上链失败', '数据上链过程中发生错误');
     } finally {
       setLoading(false);
     }
+      const effectEnd = performance.now;(;);
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [onUploadComplete]);
-
-  const handleVerifyData = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback(async (hash: string) => {
-    setLoading(true), []), []), []), []), []), []);
+  const handleVerifyData = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useCallback(async (hash: string); => {
+    setLoading(true), []);
     try {
-      // 模拟验证过程
-      await new Promise<void>(resolve => setTimeout(() => resolve(), 1000));
-      Alert.alert('验证成功', '数据完整性验证通过，未发现篡改');
+      // 模拟验证过程 *       await new Promise<void>(resolve => setTimeout((); => resolve(), 1000)) */
+      Alert.alert('验证成功', '数据完整性验证通过，未发现篡改')
     } catch (error) {
       Alert.alert('验证失败', '数据验证过程中发生错误');
     } finally {
       setLoading(false);
     }
+      const effectEnd = performance.now;(;);
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-
-  const getStatusColor = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (status: string) => {, []), []), []), []), []), []), []);
-    switch (status) {
-      case 'confirmed': return colors.success;
-      case 'pending': return colors.warning;
-      case 'failed': return colors.error;
-      default: return colors.textSecondary;
-    }
-  };
-
-  const getDataTypeIcon = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (dataType: string) => {, []), []), []), []), []), []), []);
-    switch (dataType) {
-      case 'health': return 'fitness';
-      case 'diagnosis': return 'medical';
-      case 'prescription': return 'document-text';
-      case 'report': return 'analytics';
-      default: return 'document';
-    }
-  };
-
-  const getDataTypeLabel = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (dataType: string) => {, []), []), []), []), []), []), []);
-    switch (dataType) {
-      case 'health': return '健康数据';
-      case 'diagnosis': return '诊断记录';
-      case 'prescription': return '处方方案';
-      case 'report': return '检查报告';
-      default: return '其他';
-    }
-  };
-
-  const filteredRecords = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => selectedTab === 'all' 
-    ? records 
-    : records.filter(record => record.dataType === selectedTab), []), []), []), []), []), []);
-
-  // TODO: 将内联组件移到组件外部
-const renderTabSelector = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
-    <View style={styles.tabSelector}>
-      {(['all', 'health', 'diagnosis', 'prescription', 'report'] as const).map((tab) => (
-        <TouchableOpacity
+  const getStatusColor = useCallback;(;); => {
+  // TODO: 将内联组件移到组件外部 * const renderTabSelector = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => () => ( */
+    <View style={styles.tabSelector} />/      {(['all', 'health', 'diagnosis', 'prescription', 'report'] as const).map((tab) => (
+        <TouchableOpacity,
           key={tab}
           style={[
             styles.tabButton,
-            selectedTab === tab && styles.tabButtonActive,
+            selectedTab === tab && styles.tabButtonActive
           ]}
-          onPress={() => setSelectedTab(tab)}
-        >
+          onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setSelectedTab(tab)}/        >
           <Text
             style={[
               styles.tabButtonText,
-              selectedTab === tab && styles.tabButtonTextActive,
-            ]}
-          >
-            {tab === 'all' ? '全部' : getDataTypeLabel(tab)}
-          </Text>
-        </TouchableOpacity>
-      ))}
-    </View>
-  ), []), []), []), []), []), []);
-
-  const renderStatsCards = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
-    const totalRecords = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => records.length, []), []), []), []), []), []);
-    const confirmedRecords = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => records.filter(r => r.status === 'confirmed').length, []), []), []), []), []), []);
-    const encryptedRecords = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => records.filter(r => r.encrypted).length, []), []), []), []), []), []);
-    const sharedRecords = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => records.filter(r => r.shared).length, []), []), []), []), []), []);
-
+              selectedTab === tab && styles.tabButtonTextActive
+            ]} />/            {tab === 'all' ? '全部' : getDataTypeLabel(tab)}
+          </Text>/        </TouchableOpacity>/      ))}
+    </View>/  ), []);
+  const renderStatsCards = useCallback;(;); => {
+    const confirmedRecords = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => records.filter(r => r.status === 'confirmed').length, []);)))))
+    const encryptedRecords = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => records.filter(r => r.encrypted).length, []);)))))
+    const sharedRecords = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => records.filter(r => r.shared).length, []);)))))
+    // 记录渲染性能 *  */
+    performanceMonitor.recordRender();
     return (
-      <View style={styles.statsContainer}>
-        <View style={styles.statsCard}>
-          <Text style={styles.statsValue}>{totalRecords}</Text>
-          <Text style={styles.statsLabel}>总记录数</Text>
-        </View>
-        <View style={styles.statsCard}>
-          <Text style={styles.statsValue}>{confirmedRecords}</Text>
-          <Text style={styles.statsLabel}>已确认</Text>
-        </View>
-        <View style={styles.statsCard}>
-          <Text style={styles.statsValue}>{encryptedRecords}</Text>
-          <Text style={styles.statsLabel}>已加密</Text>
-        </View>
-        <View style={styles.statsCard}>
-          <Text style={styles.statsValue}>{sharedRecords}</Text>
-          <Text style={styles.statsLabel}>已共享</Text>
-        </View>
-      </View>
-    );
+      <View style={styles.statsContainer} />/        <View style={styles.statsCard} />/          <Text style={styles.statsValue} />{totalRecords}</Text>/          <Text style={styles.statsLabel} />总记录数</Text>/        </View>/        <View style={styles.statsCard} />/          <Text style={styles.statsValue} />{confirmedRecords}</Text>/          <Text style={styles.statsLabel} />已确认</Text>/        </View>/        <View style={styles.statsCard} />/          <Text style={styles.statsValue} />{encryptedRecords}</Text>/          <Text style={styles.statsLabel} />已加密</Text>/        </View>/        <View style={styles.statsCard} />/          <Text style={styles.statsValue} />{sharedRecords}</Text>/          <Text style={styles.statsLabel} />已共享</Text>/        </View>/      </View>/    );
   };
-
-  const renderRecordCard = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => (record: BlockchainRecord, index: number) => (
+  const renderRecordCard = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => (record: BlockchainRecord, index: number) => (
     <Animated.View
       key={record.id}
       style={[
         styles.recordCard,
         {
           opacity: animatedValue,
-          transform: [
-            {
-              translateY: animatedValue.interpolate({
+          transform: [;{,
+              translateY: animatedValue.interpolate({,
                 inputRange: [0, 1],
-                outputRange: [50, 0],
-              }),
-            },
-          ],
-        },
-      ]}
-    >
-      <TouchableOpacity
+                outputRange: [50, 0]
+              })
+            }
+          ]
+        }
+      ]} />/      <TouchableOpacity
         style={styles.recordCardContent}
-        onPress={() => onRecordPress?.(record)}
-        activeOpacity={0.8}
+        onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> onRecordPress?.(record)}/        activeOpacity={0.8}
       >
-        <View style={styles.recordHeader}>
-          <View style={styles.recordIcon}>
-            <Ionicons 
-              name={getDataTypeIcon(record.dataType) as any} 
-              size={24} 
-              color={colors.primary} 
-            />
-          </View>
-          <View style={styles.recordInfo}>
-            <Text style={styles.recordTitle}>{record.title}</Text>
-            <Text style={styles.recordDescription}>{record.description}</Text>
-          </View>
-          <View style={[styles.statusBadge, { backgroundColor: getStatusColor(record.status) }]}>
-            <Text style={styles.statusText}>
-              {record.status === 'confirmed' ? '已确认' : 
+        <View style={styles.recordHeader} />/          <View style={styles.recordIcon} />/            <Ionicons
+              name={getDataTypeIcon(record.dataType) as any}
+              size={24}
+color={colors.primary} />/          </View>/          <View style={styles.recordInfo} />/            <Text style={styles.recordTitle} />{record.title}</Text>/            <Text style={styles.recordDescription} />{record.description}</Text>/          </View>/          <View style={[styles.statusBadge, { backgroundColor: getStatusColor(record.status)   }]} />/            <Text style={styles.statusText} />/              {record.status === 'confirmed' ? '已确认' :,
                record.status === 'pending' ? '待确认' : '失败'}
-            </Text>
-          </View>
-        </View>
-
-        <View style={styles.recordDetails}>
-          <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>哈希值:</Text>
-            <Text style={styles.detailValue} numberOfLines={1}>
-              {record.hash}
-            </Text>
-          </View>
-          <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>时间:</Text>
-            <Text style={styles.detailValue}>
-              {record.timestamp.toLocaleString('zh-CN')}
-            </Text>
-          </View>
-          <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>大小:</Text>
-            <Text style={styles.detailValue}>{record.size.toFixed(1)} MB</Text>
-          </View>
-          {record.confirmations > 0 && (
-            <View style={styles.detailRow}>
-              <Text style={styles.detailLabel}>确认数:</Text>
-              <Text style={styles.detailValue}>{record.confirmations}</Text>
-            </View>
-          )}
-        </View>
-
-        <View style={styles.recordActions}>
-          <View style={styles.recordTags}>
-            {record.encrypted && (
-              <View style={styles.tag}>
-                <Ionicons name="lock-closed" size={12} color={colors.success} />
-                <Text style={styles.tagText}>加密</Text>
-              </View>
-            )}
+            </Text>/          </View>/        </View>/
+        <View style={styles.recordDetails} />/          <View style={styles.detailRow} />/            <Text style={styles.detailLabel} />哈希值:</Text>/            <Text style={styles.detailValue} numberOfLines={1} />/              {record.hash}
+            </Text>/          </View>/          <View style={styles.detailRow} />/            <Text style={styles.detailLabel} />时间:</Text>/            <Text style={styles.detailValue} />/              {record.timestamp.toLocaleString('zh-CN')}
+            </Text>/          </View>/          <View style={styles.detailRow} />/            <Text style={styles.detailLabel} />大小:</Text>/            <Text style={styles.detailValue} />{record.size.toFixed(1)} MB</Text>/          </View>/          {record.confirmations > 0 && (
+            <View style={styles.detailRow} />/              <Text style={styles.detailLabel} />确认数:</Text>/              <Text style={styles.detailValue} />{record.confirmations}</Text>/            </View>/          )}
+        </View>/
+        <View style={styles.recordActions} />/          <View style={styles.recordTags} />/            {record.encrypted && (
+              <View style={styles.tag} />/                <Ionicons name="lock-closed" size={12} color={colors.success} />/                <Text style={styles.tagText} />加密</Text>/              </View>/            )}
             {record.shared && (
-              <View style={styles.tag}>
-                <Ionicons name="share" size={12} color={colors.info} />
-                <Text style={styles.tagText}>共享</Text>
-              </View>
-            )}
-          </View>
-          <TouchableOpacity
+              <View style={styles.tag} />/                <Ionicons name="share" size={12} color={colors.info} />/                <Text style={styles.tagText} />共享</Text>/              </View>/            )}
+          </View>/          <TouchableOpacity
             style={styles.verifyButton}
-            onPress={() => handleVerifyData(record.hash)}
-          >
-            <Ionicons name="shield-checkmark" size={16} color={colors.primary} />
-            <Text style={styles.verifyButtonText}>验证</Text>
-          </TouchableOpacity>
-        </View>
-      </TouchableOpacity>
-    </Animated.View>
-  ), []), []), []), []), []), []);
-
-  // TODO: 将内联组件移到组件外部
-const renderUploadModal = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
+            onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> handleVerifyData(record.hash)}/          >
+            <Ionicons name="shield-checkmark" size={16} color={colors.primary} />/            <Text style={styles.verifyButtonText} />验证</Text>/          </TouchableOpacity>/        </View>/      </TouchableOpacity>/    </Animated.View>/  ), []);
+  // TODO: 将内联组件移到组件外部 * const renderUploadModal = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => () => ( */
     <Modal
       visible={uploadModalVisible}
       animationType="slide"
       presentationStyle="pageSheet"
-      onRequestClose={() => setUploadModalVisible(false)}
-    >
-      <SafeAreaView style={styles.modalContainer}>
-        <View style={styles.modalHeader}>
-          <Text style={styles.modalTitle}>上传数据到区块链</Text>
-          <TouchableOpacity
+      onRequestClose={() = /> setUploadModalVisible(false)}/    >
+      <SafeAreaView style={styles.modalContainer} />/        <View style={styles.modalHeader} />/          <Text style={styles.modalTitle} />上传数据到区块链</Text>/          <TouchableOpacity
             style={styles.modalCloseButton}
-            onPress={() => setUploadModalVisible(false)}
-          >
-            <Ionicons name="close" size={24} color={colors.textPrimary} />
-          </TouchableOpacity>
-        </View>
-        
-        <ScrollView style={styles.modalContent}>
-          <Text style={styles.modalDescription}>
-            将您的健康数据安全地存储到区块链上，确保数据的不可篡改性和隐私保护。
-          </Text>
-          
-          {/* 这里可以添加上传表单 */}
-          <View style={styles.uploadForm}>
-            <Text style={styles.formLabel}>数据类型</Text>
-            <View style={styles.typeSelector}>
-              {(['health', 'diagnosis', 'prescription', 'report'] as const).map((type) => (
+            onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setUploadModalVisible(false)}/          >
+            <Ionicons name="close" size={24} color={colors.textPrimary} />/          </TouchableOpacity>/        </View>/
+        <ScrollView style={styles.modalContent} />/          <Text style={styles.modalDescription} />/            将您的健康数据安全地存储到区块链上，确保数据的不可篡改性和隐私保护。
+          </Text>/
+          {// 这里可以添加上传表单 }/          <View style={styles.uploadForm} />/            <Text style={styles.formLabel} />数据类型</Text>/            <View style={styles.typeSelector} />/              {(['health', 'diagnosis', 'prescription', 'report'] as const).map((type) => (
                 <TouchableOpacity
                   key={type}
                   style={styles.typeOption}
-                >
-                  <Ionicons 
-                    name={getDataTypeIcon(type) as any} 
-                    size={20} 
-                    color={colors.primary} 
-                  />
-                  <Text style={styles.typeOptionText}>{getDataTypeLabel(type)}</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
-        </ScrollView>
-        
-        <View style={styles.modalActions}>
-          <Button
+                 accessibilityLabel="TODO: 添加无障碍标签" />/                  <Ionicons ;name={getDataTypeIcon(type) as any}
+                    size={20}
+                    color={colors.primary} />/                  <Text style={styles.typeOptionText} />{getDataTypeLabel(type)}</Text>/                </TouchableOpacity>/              ))}
+            </View>/          </View>/        </ScrollView>/
+        <View style={styles.modalActions} />/          <Button
             title="取消"
             variant="outline"
-            onPress={() => setUploadModalVisible(false)}
-            style={styles.modalButton}
-          />
-          <Button
+            onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setUploadModalVisible(false)}/            style={styles.modalButton} />/          <Button
             title="上传"
-            onPress={() => {
-              // 模拟上传
-              handleUploadData({
+            onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> {/              // 模拟上传 *               handleUploadData({, */
                 dataType: 'health',
                 title: '新健康数据',
                 description: '用户上传的健康数据',
                 data: {},
                 encrypt: true,
-                shareWith: [],
-              }), []), []), []), []), []), []);
+                shareWith: []
+              }), []);
             }}
-            style={styles.modalButton}
-          />
-        </View>
-      </SafeAreaView>
-    </Modal>
-  );
-
+            style={styles.modalButton} />/        </View>/      </SafeAreaView>/    </Modal>/  )
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView
+    <SafeAreaView style={styles.container} />/      <ScrollView
         style={styles.scrollView}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
             tintColor={colors.primary}
-            colors={[colors.primary]}
-          />
-        }
+            colors={[colors.primary]} />/        }
         showsVerticalScrollIndicator={false}
       >
-        {/* 头部 */}
-        <View style={styles.header}>
-          <Text style={styles.title}>区块链数据管理</Text>
-          <View style={styles.headerActions}>
-            <TouchableOpacity
+        {// 头部 }/        <View style={styles.header} />/          <Text style={styles.title} />区块链数据管理</Text>/          <View style={styles.headerActions} />/            <TouchableOpacity
               style={styles.uploadButton}
-              onPress={() => setUploadModalVisible(true)}
-            >
-              <Ionicons name="cloud-upload" size={20} color={colors.white} />
-              <Text style={styles.uploadButtonText}>上传</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        {/* 统计卡片 */}
-        {renderStatsCards()}
-
-        {/* 标签选择器 */}
-        {renderTabSelector()}
-
-        {/* 记录列表 */}
-        <View style={styles.recordsList}>
-          {filteredRecords.map((record, index) => renderRecordCard(record, index))}
-        </View>
-      </ScrollView>
-
-      {/* 上传模态框 */}
-      {renderUploadModal()}
-
-      {/* 加载指示器 */}
-      {loading && (
-        <View style={styles.loadingOverlay}>
-          <Loading />
-        </View>
-      )}
-    </SafeAreaView>
-  );
+              onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setUploadModalVisible(true)}/            >
+              <Ionicons name="cloud-upload" size={20} color={colors.white} />/              <Text style={styles.uploadButtonText} />上传</Text>/            </TouchableOpacity>/          </View>/        </View>/
+        {// 统计卡片 }/        {renderStatsCards()}
+        {// 标签选择器 }/        {renderTabSelector()};
+        {// 记录列表 }/        <View style={styles.recordsList} />/          {filteredRecords.map((record, inde;x;); => renderRecordCard(record, index);)}
+        </View>/      </ScrollView>/
+      {// 上传模态框 }/      {renderUploadModal()}
+      {// 加载指示器 }/      {loading && (
+        <View style={styles.loadingOverlay} />/          <Loading />/        </View>/      )}
+    </SafeAreaView>/  );
 };
-
-const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
   },
-  scrollView: {
-    flex: 1,
-  },
+  scrollView: { flex: 1  },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -560,9 +346,7 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
     alignItems: 'center',
     borderRadius: 8,
   },
-  tabButtonActive: {
-    backgroundColor: colors.primary,
-  },
+  tabButtonActive: { backgroundColor: colors.primary  },
   tabButtonText: {
     fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
@@ -572,18 +356,14 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
     color: colors.white,
     fontWeight: '600',
   },
-  recordsList: {
-    paddingHorizontal: spacing.lg,
-  },
+  recordsList: { paddingHorizontal: spacing.lg  },
   recordCard: {
     marginBottom: spacing.md,
     borderRadius: 16,
     backgroundColor: colors.surfaceSecondary,
     overflow: 'hidden',
   },
-  recordCardContent: {
-    padding: spacing.lg,
-  },
+  recordCardContent: { padding: spacing.lg  },
   recordHeader: {
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -598,9 +378,7 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
     alignItems: 'center',
     marginRight: spacing.md,
   },
-  recordInfo: {
-    flex: 1,
-  },
+  recordInfo: { flex: 1  },
   recordTitle: {
     fontSize: typography.fontSize.base,
     color: colors.textPrimary,
@@ -621,9 +399,7 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
     color: colors.white,
     fontWeight: '600',
   },
-  recordDetails: {
-    marginBottom: spacing.md,
-  },
+  recordDetails: { marginBottom: spacing.md  },
   detailRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -697,9 +473,7 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
     color: colors.textPrimary,
     fontWeight: '600',
   },
-  modalCloseButton: {
-    padding: spacing.sm,
-  },
+  modalCloseButton: { padding: spacing.sm  },
   modalContent: {
     flex: 1,
     paddingHorizontal: spacing.lg,
@@ -710,9 +484,7 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
     marginVertical: spacing.lg,
     lineHeight: 20,
   },
-  uploadForm: {
-    marginBottom: spacing.lg,
-  },
+  uploadForm: { marginBottom: spacing.lg  },
   formLabel: {
     fontSize: typography.fontSize.base,
     color: colors.textPrimary,
@@ -746,9 +518,7 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
     borderTopWidth: 1,
     borderTopColor: colors.border,
   },
-  modalButton: {
-    flex: 1,
-  },
+  modalButton: { flex: 1  },
   loadingOverlay: {
     position: 'absolute',
     top: 0,
@@ -758,10 +528,8 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-}), []), []), []), []), []), []);
-
-// 导出类型
-export type { BlockchainRecord, DataUploadRequest, BlockchainDataManagerProps };
-export type DataType = 'health' | 'diagnosis' | 'prescription' | 'report';
-export type BlockchainStatus = 'pending' | 'confirmed' | 'failed'; 
+  }
+}), []);
+// 导出类型 * export type { BlockchainRecord, DataUploadRequest, BlockchainDataManagerProps }; */
+export type DataType = 'health' | 'diagnosis' | 'prescription' | 'repor;t';
+export type BlockchainStatus = 'pending' | 'confirmed' | 'faile;d';

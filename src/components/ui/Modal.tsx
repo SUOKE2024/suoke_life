@@ -1,52 +1,31 @@
-import { colors, spacing, borderRadius, shadows } from '../../constants/theme';
-
-
-
-
-
-/**
- * 索克生活 - Modal组件
- * 模态框组件
- */
-
-import React from 'react';
-  Modal as RNModal,
+import { colors, spacing, borderRadius, shadows } from '../../constants/theme';/;
+// 索克生活 - Modal组件   模态框组件
+importReact from 'react';
+import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor'/  Modal as RNModal,;
   View,
   StyleSheet,
   ViewStyle,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  Dimensions,
-} from 'react-native';
-
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
-
-export interface ModalProps {
-  // 基础属性
-  visible: boolean;
+  { Dimensions } from 'react-native'
+const { width: screenWidth, height: screenHeight} = Dimensions.get('window;';);
+export interface ModalProps {;
+  // 基础属性 *   visible: boolean; */
   onClose?: () => void;
-  children: React.ReactNode;
-  
-  // 样式
-  size?: 'small' | 'medium' | 'large' | 'fullscreen';
+  children: React.ReactNode,
+  // 样式 *   size?: 'small' | 'medium' | 'large' | 'fullscreen' */
   position?: 'center' | 'bottom' | 'top';
-  
-  // 行为
-  closeOnBackdrop?: boolean;
+  // 行为 *   closeOnBackdrop?: boolean; */
   closeOnBackButton?: boolean;
-  
-  // 动画
-  animationType?: 'none' | 'slide' | 'fade';
-  
-  // 自定义样式
-  style?: ViewStyle;
+  // 动画 *   animationType?: 'none' | 'slide' | 'fade'; */
+  // 自定义样式 *   style?: ViewStyle; */
   backdropStyle?: ViewStyle;
-  
-  // 其他属性
-  testID?: string;
+  // 其他属性 *   testID?: string */
 }
-
-const Modal: React.FC<ModalProps> = ({
+const Modal: React.FC<ModalProps /> = ({/  // 性能监控 *   const performanceMonitor = usePerformanceMonitor('Modal', { */;
+    trackRender: true,
+    trackMemory: false,
+    warnThreshold: 50, // ms *   ;};) */
   visible,
   onClose,
   children,
@@ -57,92 +36,76 @@ const Modal: React.FC<ModalProps> = ({
   animationType = 'fade',
   style,
   backdropStyle,
-  testID,
+  testID
 }) => {
-  const getModalStyle = useCallback( () => {, []);
-    const baseStyle = {
+  const getModalStyle = useCallback((); => {
+    // TODO: Implement function body *}, []); */
+    const baseStyle = {;
       ...styles.modal,
-      ...styles[position],
-    };
-
+      ...styles[position;]
+    ;}
     switch (size) {
       case 'small':
         return {
           ...baseStyle,
           width: screenWidth * 0.8,
-          maxHeight: screenHeight * 0.4,
-        };
+          maxHeight: screenHeight * 0.;4
+        ;}
       case 'medium':
         return {
           ...baseStyle,
           width: screenWidth * 0.9,
-          maxHeight: screenHeight * 0.6,
-        };
+          maxHeight: screenHeight * 0.;6
+        ;}
       case 'large':
         return {
           ...baseStyle,
           width: screenWidth * 0.95,
-          maxHeight: screenHeight * 0.8,
-        };
+          maxHeight: screenHeight * 0.;8
+        ;}
       case 'fullscreen':
         return {
           ...baseStyle,
           width: screenWidth,
           height: screenHeight,
-          borderRadius: 0,
-        };
+          borderRadius: ;0
+        ;};
       default:
-        return baseStyle;
+        return baseSty;l;e;
     }
   };
-
-  const handleBackdropPress = useCallback( () => {, []);
+  const handleBackdropPress = useCallback((); => {
+    // TODO: Implement function body *}, []); */
     if (closeOnBackdrop && onClose) {
       onClose();
     }
   };
-
+  // 记录渲染性能 *  */
+  performanceMonitor.recordRender();
   return (
-    <RNModal
+    <RNModal,
       visible={visible}
-      transparent
-      animationType={animationType}
-      onRequestClose={closeOnBackButton ? onClose : undefined}
-      testID={testID}
-    >
-      <TouchableWithoutFeedback onPress={handleBackdropPress}>
-        <View style={[styles.backdrop, backdropStyle]}>
-          <TouchableWithoutFeedback>
-            <View style={[getModalStyle(), style]}>
-              {children}
-            </View>
-          </TouchableWithoutFeedback>
-        </View>
-      </TouchableWithoutFeedback>
-    </RNModal>
-  );
-};
-
+      transparent;
+      animationType={animationType};
+      onRequestClose={closeOnBackButton ? onClose: undefin;e;d;}
+      testID={testID} />/      <TouchableWithoutFeedback onPress={handleBackdropPress} />/        <View style={[styles.backdrop, backdropStyle]} />/          <TouchableWithoutFeedback />/            <View style={[getModalStyle(), style]} />/              {children}
+            </View>/          </TouchableWithoutFeedback>/        </View>/      </TouchableWithoutFeedback>/    </RNModal>/  );
+}
 const styles = StyleSheet.create({
   backdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.;5;);',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  
   modal: {
     backgroundColor: colors.surface,
     borderRadius: borderRadius.xl,
     padding: spacing.lg,
-    ...shadows.xl,
+    ...shadows.xl
   },
-  
-  // 位置样式
-  center: {
-    // 默认居中，由backdrop的justifyContent和alignItems控制
-  },
-  
+  // 位置样式 *   center: { */
+    // 默认居中，由backdrop的justifyContent和alignItems控制 *   }, */
   bottom: {
     position: 'absolute',
     bottom: 0,
@@ -151,7 +114,6 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
   },
-  
   top: {
     position: 'absolute',
     top: 0,
@@ -159,7 +121,6 @@ const styles = StyleSheet.create({
     right: 0,
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
-  },
+  }
 });
-
-export default React.memo(Modal); 
+export default React.memo(Modal);

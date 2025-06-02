@@ -1,211 +1,170 @@
-import { TouchableOpacity, View, StyleSheet, ViewStyle } from "react-native";
-import { colors, spacing } from "../../constants/theme";
-import Text from "./Text";
-import React from "react";
-
-
-
-
-
-
-
+import React, { useMemo, useCallback } from 'react';
+import { TouchableOpacity, View, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native';
+import { useTheme } from '../../contexts/ThemeContext';
 
 /**
- * 索克生活 - Radio组件
+ * 索克生活 - Radio组件;
  * 单选框组件，用于单选操作
  */
-
-
 export interface RadioProps {
-  // 基础属性
+  value: string;
   selected: boolean;
-  onPress: () => void;
-  value?: string | number;
-
-  // 样式
-  size?: "small" | "medium" | "large";
-  color?: string;
-
-  // 状态
-  disabled?: boolean;
-
-  // 标签
+  onSelect: (value: string) => void;
   label?: string;
   description?: string;
-
-  // 布局
-  labelPosition?: "left" | "right";
-
-  // 自定义样式
+  disabled?: boolean;
+  size?: 'small' | 'medium' | 'large';
+  labelPosition?: 'left' | 'right';
   style?: ViewStyle;
-
-  // 其他属性
-  testID?: string;
+  labelStyle?: TextStyle;
+  descriptionStyle?: TextStyle;
 }
 
-const Radio: React.FC<RadioProps> = ({
+export const Radio: React.FC<RadioProps> = ({
+  value,
   selected,
-  onPress,
-  size = "medium",
-  color = colors.primary,
-  disabled = false,
+  onSelect,
   label,
   description,
-  labelPosition = "right",
+  disabled = false,
+  size = 'medium',
+  labelPosition = 'right',
   style,
-  testID,
+  labelStyle,
+  descriptionStyle,
 }) => {
-  const getRadioSize = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
+  const { colors, spacing } = useTheme();
+
+  const handlePress = useCallback(() => {
+    if (!disabled) {
+      onSelect(value);
+    }
+  }, [disabled, onSelect, value]);
+
+  const getRadioSize = useCallback(() => {
     switch (size) {
-      case "small":
+      case 'small':
         return 16;
-      case "large":
+      case 'large':
         return 24;
       default:
         return 20;
     }
-  };
+  }, [size]);
 
-  const radioSize = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => getRadioSize(), []), []), []), []), []), []);
+  const getDotSize = useCallback(() => {
+    const radioSize = getRadioSize();
+    return radioSize * 0.5;
+  }, [getRadioSize]);
 
-  const handlePress = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
-    if (!disabled) {
-      onPress();
-    }
-  };
-
-  const getRadioStyle = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
-    const baseStyle = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => {
+  const getRadioStyle = useCallback((): ViewStyle => {
+    const radioSize = getRadioSize();
+    return {
       width: radioSize,
       height: radioSize,
       borderRadius: radioSize / 2,
       borderWidth: 2,
-      alignItems: "center" as const,
-      justifyContent: "center" as const,
-    }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项, []), []), []), []), []);
-
-    if (disabled) {
-      return {
-        ...baseStyle,
-        backgroundColor: colors.gray100,
-        borderColor: colors.gray300,
-      };
-    }
-
-    if (selected) {
-      return {
-        ...baseStyle,
-        backgroundColor: colors.surface,
-        borderColor: color,
-      };
-    }
-
-    return {
-      ...baseStyle,
-      backgroundColor: colors.surface,
-      borderColor: colors.border,
+      borderColor: selected 
+        ? (disabled ? colors.gray400 : colors.primary)
+        : (disabled ? colors.gray300 : colors.border),
+      backgroundColor: selected 
+        ? (disabled ? colors.gray400 : colors.primary)
+        : 'transparent',
+      justifyContent: 'center',
+      alignItems: 'center',
     };
-  };
+  }, [selected, disabled, colors, getRadioSize]);
 
-  const renderDot = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
-    if (selected) {
-      return (
-        <View
-          style={{
-            width: radioSize * 0.5,
-            height: radioSize * 0.5,
-            borderRadius: (radioSize * 0.5) / 2,
-            backgroundColor: disabled ? colors.gray400 : color,
-          }}
-        />
-      );
-    }
-    return null;
-  };
+  const renderDot = useCallback(() => {
+    if (!selected) return null;
+    
+    const dotSize = getDotSize();
+    return (
+      <View
+        style={{
+          width: dotSize,
+          height: dotSize,
+          borderRadius: dotSize / 2,
+          backgroundColor: colors.white,
+        }}
+      />
+    );
+  }, [selected, getDotSize, colors.white]);
 
-  const renderLabel = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
-    if (!label && !description) {
-      return null;
-    }
+  const renderLabel = useCallback(() => {
+    if (!label && !description) return null;
 
     return (
       <View style={styles.labelContainer}>
         {label && (
           <Text
-            variant="body1"
-            style={
-              disabled
-                ? { ...styles.label, ...styles.disabledText }
-                : styles.label
-            }
+            style={[
+              styles.label,
+              { color: disabled ? colors.textDisabled : colors.text },
+              labelStyle,
+            ]}
           >
             {label}
           </Text>
         )}
         {description && (
           <Text
-            variant="caption"
-            style={
-              disabled
-                ? { ...styles.description, ...styles.disabledText }
-                : styles.description
-            }
+            style={[
+              styles.description,
+              { color: colors.textTertiary },
+              descriptionStyle,
+            ]}
           >
             {description}
           </Text>
         )}
       </View>
     );
-  };
+  }, [label, description, disabled, colors, labelStyle, descriptionStyle]);
 
-  const containerStyle = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => [
+  const containerStyle = useMemo(() => [
     styles.container,
-    labelPosition === "left" && styles.containerReverse,
+    {
+      opacity: disabled ? 0.6 : 1,
+      flexDirection: labelPosition === 'left' ? 'row-reverse' : 'row',
+    },
     style,
-  ].filter(Boolean) as ViewStyle[], []), []), []), []), []), []);
+  ].filter(Boolean) as ViewStyle[], [disabled, labelPosition, style]);
 
   return (
     <TouchableOpacity
       style={containerStyle}
       onPress={handlePress}
       disabled={disabled}
-      activeOpacity={0.7}
-      testID={testID}
+      accessibilityRole="radio"
+      accessibilityState={{ checked: selected, disabled }}
+      accessibilityLabel="TODO: 添加无障碍标签"
     >
-      {labelPosition === "left" && renderLabel()}
+      {labelPosition === 'left' && renderLabel()}
       <View style={getRadioStyle()}>{renderDot()}</View>
-      {labelPosition === "right" && renderLabel()}
+      {labelPosition === 'right' && renderLabel()}
     </TouchableOpacity>
   );
 };
 
-const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginVertical: spacing.xs,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 8,
   },
-
-  containerReverse: {
-    justifyContent: "space-between",
-  },
-
   labelContainer: {
     flex: 1,
-    marginLeft: spacing.sm,
+    marginHorizontal: 12,
   },
-
   label: {
-    marginBottom: spacing.xs / 2,
+    fontSize: 16,
+    fontWeight: '500',
   },
-
   description: {
-    color: colors.textTertiary,
+    fontSize: 14,
+    marginTop: 2,
   },
+});
 
-  disabledText: {
-    color: colors.gray400,
-  },
-}), []), []), []), []), []), []);
-
-export default React.memo(Radio);
+export default Radio;

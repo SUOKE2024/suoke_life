@@ -1,7 +1,8 @@
+import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Icon from "../components/common/Icon";
-import HomeScreen from "../screens/main/HomeScreen";
+import { HomeScreen } from "../screens/main";
 import SuokeScreen from "../screens/suoke/SuokeScreen";
 import LifeScreen from "../screens/life/LifeScreen";
 import ProfileScreen from "../screens/profile/ProfileScreen";
@@ -12,79 +13,63 @@ import { ServiceManagementScreen } from "../screens/profile/ServiceManagementScr
 import { DeveloperPanelScreen } from "../screens/profile/DeveloperPanelScreen";
 import { ApiIntegrationDemo } from "../screens/demo/ApiIntegrationDemo";
 import { colors } from "../constants/theme";
-import React from "react";
-
-// import { useTranslation } from 'react-i18next';
-
-// 导入屏幕组件
-
-// 导入详情屏幕
-
-// 导入演示屏幕
-
+import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor';
 // 主导航参数类型
 export type MainTabParamList = {
-  Home: undefined;
-  Suoke: undefined;
-  Explore: undefined;
-  Life: undefined;
-  Profile: undefined;
-};
-
+  Home: undefined,
+  Suoke: undefined,
+  Explore: undefined,
+  Life: undefined,
+  Profile: undefined};
 // 堆栈导航参数类型
 export type MainStackParamList = {
-  MainTabs: undefined;
-  Settings: undefined;
-  ServiceStatus: undefined;
-  ServiceManagement: undefined;
-  DeveloperPanel: undefined;
-  ApiIntegrationDemo: undefined;
-};
-
+  MainTabs: undefined,
+  Settings: undefined,
+  ServiceStatus: undefined,
+  ServiceManagement: undefined,
+  DeveloperPanel: undefined,
+  ApiIntegrationDemo: undefined};
 const Tab = createBottomTabNavigator<MainTabParamList>();
 const Stack = createNativeStackNavigator<MainStackParamList>();
-
 // 图标渲染函数
 const getTabBarIcon = ({
   route,
   focused,
   color,
-  size,
+  size
 }: {
-  route: any;
-  focused: boolean;
-  color: string;
-  size: number;
-}) => {
-  let iconName: string;
-
+  route: any,
+  focused: boolean,
+  color: string,
+  size: number}) => {
+  let iconName: string
   switch (route.name) {
     case "Home":
       iconName = focused ? "chat" : "chat-outline";
-      break;
+      break
     case "Suoke":
       iconName = focused ? "stethoscope" : "stethoscope";
-      break;
+      break
     case "Explore":
       iconName = focused ? "compass" : "compass-outline";
-      break;
+      break
     case "Life":
       iconName = focused ? "heart-pulse" : "heart-outline";
-      break;
+      break
     case "Profile":
       iconName = focused ? "account" : "account-outline";
-      break;
-    default:
-      iconName = "help-circle-outline";
-  }
-
+      break
+    default: iconName = "help-circle-outline"}
   return <Icon name={iconName} size={size} color={color} />;
-};
-
+}
 // 底部标签导航器
 const MainTabNavigator: React.FC = () => {
-  // const { t } = useTranslation();
-
+  // 性能监控
+  const metrics = usePerformanceMonitor({
+    componentName: 'MainNavigator',
+    enableMemoryMonitoring: false,
+    threshold: 100
+})
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -99,57 +84,42 @@ const MainTabNavigator: React.FC = () => {
           borderTopColor: colors.border,
           paddingBottom: 8,
           paddingTop: 8,
-          height: 70,
-        },
+          height: 70
+},
         tabBarLabelStyle: {
           fontSize: 12,
-          fontWeight: "600",
-        },
+          fontWeight: "600"
+}
       })}
     >
       <Tab.Screen
         name="Home"
         component={HomeScreen}
-        options={{
-          tabBarLabel: "聊天",
-        }}
+        options={{ tabBarLabel: "聊天" }}
       />
-
       <Tab.Screen
         name="Suoke"
         component={SuokeScreen}
-        options={{
-          tabBarLabel: "SUOKE",
-        }}
+        options={{ tabBarLabel: "SUOKE" }}
       />
-
       <Tab.Screen
         name="Explore"
         component={ExploreScreen}
-        options={{
-          tabBarLabel: "探索",
-        }}
+        options={{ tabBarLabel: "探索" }}
       />
-
       <Tab.Screen
         name="Life"
         component={LifeScreen}
-        options={{
-          tabBarLabel: "LIFE",
-        }}
+        options={{ tabBarLabel: "LIFE" }}
       />
-
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}
-        options={{
-          tabBarLabel: "我的",
-        }}
+        options={{ tabBarLabel: "我的" }}
       />
     </Tab.Navigator>
   );
-};
-
+}
 // 主导航器
 export const MainNavigator: React.FC = () => {
   return (
@@ -159,55 +129,38 @@ export const MainNavigator: React.FC = () => {
         headerShown: false,
         animation: "slide_from_right",
         gestureEnabled: true,
-        gestureDirection: "horizontal",
-      }}
+        gestureDirection: "horizontal"
+}}
     >
       <Stack.Screen
         name="MainTabs"
         component={MainTabNavigator}
-        options={{
-          gestureEnabled: false,
-        }}
+        options={{ gestureEnabled: false }}
       />
-
       <Stack.Screen
         name="Settings"
         component={SettingsScreen}
-        options={{
-          animation: "slide_from_right",
-        }}
+        options={{ animation: "slide_from_right" }}
       />
-
       <Stack.Screen
         name="ServiceStatus"
         component={ServiceStatusScreen}
-        options={{
-          animation: "slide_from_right",
-        }}
+        options={{ animation: "slide_from_right" }}
       />
-
       <Stack.Screen
         name="ServiceManagement"
         component={ServiceManagementScreen}
-        options={{
-          animation: "slide_from_right",
-        }}
+        options={{ animation: "slide_from_right" }}
       />
-
       <Stack.Screen
         name="DeveloperPanel"
         component={DeveloperPanelScreen}
-        options={{
-          animation: "slide_from_right",
-        }}
+        options={{ animation: "slide_from_right" }}
       />
-
       <Stack.Screen
         name="ApiIntegrationDemo"
         component={ApiIntegrationDemo}
-        options={{
-          animation: "slide_from_right",
-        }}
+        options={{ animation: "slide_from_right" }}
       />
     </Stack.Navigator>
   );

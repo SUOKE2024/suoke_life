@@ -1,251 +1,168 @@
-import {
-import Icon from './Icon';
-import { colors, spacing, typography } from '../../constants/theme';
-
-
-import React, { useState, useMemo } from 'react';
-  View,
+importIcon from './Icon'/import { colors, spacing, typography } from '../../constants/theme'/;
+importReact,{ useState, useMemo } from 'react';
+import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor'/  View,;
   Text,
   StyleSheet,
   FlatList,
   TouchableOpacity,
   TextInput,
   SectionList,
-  Alert,
-} from 'react-native';
-
-export interface Contact {
-  id: string;
-  name: string;
-  type: 'agent' | 'doctor' | 'user';
-  avatar: string;
+  { Alert } from 'react-native'
+export interface Contact { id: string,
+  name: string,
+  type: 'agent' | 'doctor' | 'user',
+  avatar: string,
   isOnline: boolean;
   lastSeen?: string;
-  specialization?: string;
+  specialization?: string,
   agentType?: 'xiaoai' | 'xiaoke' | 'laoke' | 'soer';
   department?: string;
-  title?: string;
-}
-
-interface ContactsListProps {
-  contacts: Contact[];
+  title?: string}
+interface ContactsListProps { contacts: Contact[],
   onContactPress: (contact: Contact) => void;
   showSearch?: boolean;
-  groupByType?: boolean;
-  showOnlineStatus?: boolean;
-}
-
-const ContactsList: React.FC<ContactsListProps> = ({
+  groupByType?: boolean,
+  showOnlineStatus?: boolean}
+const ContactsList: React.FC<ContactsListProps /> = ({/  // 性能监控 *   const performanceMonitor = usePerformanceMonitor('ContactsList', { */,
+    trackRender: true,
+    trackMemory: true,
+    warnThreshold: 50, // ms *   ;};) */
   contacts,
   onContactPress,
   showSearch = true,
   groupByType = true,
-  showOnlineStatus = true,
+  showOnlineStatus = true
 }) => {
-  const [searchQuery, setSearchQuery] = useState('');
-
-  // 过滤联系人
-  const filteredContacts = useMemo(() => useMemo(() => useMemo(() => useMemo(() => {
-    if (!searchQuery.trim()) return contacts, []), []), []);
-    return contacts.filter(contact =>
-      contact.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (contact.specialization && contact.specialization.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (contact.department && contact.department.toLowerCase().includes(searchQuery.toLowerCase()))
+  const [searchQuery, setSearchQuery] = useState<string>(';';);
+  // 过滤联系人 *   const filteredContacts = useMemo((); => useMemo((); => useMemo((); => useMemo((); => { */
+    if (!searchQuery.trim();) return contacts, [;];);
+    return contacts.filter(contact =>;
+      contact.name.toLowerCase().includes(searchQuery.toLowerCase;(;);) ||
+      (contact.specialization && contact.specialization.toLowerCase().includes(searchQuery.toLowerCase();)) ||
+      (contact.department && contact.department.toLowerCase().includes(searchQuery.toLowerCase();))
     );
   }, [contacts, searchQuery]);
-
-  // 分组联系人
-  const groupedContacts = useMemo(() => useMemo(() => useMemo(() => useMemo(() => {
+  // 分组联系人 *   const groupedContacts = useMemo((); => useMemo((); => useMemo((); => useMemo(() => { */
     if (!groupByType) {
-      return [{ title: '全部联系人', data: filteredContacts }], []), []), []);
+      return [{ title: '全部联系人', data: filteredContac;t;s ;}], []);
     }
-    const groups = useMemo(() => useMemo(() => useMemo(() => {
+    const groups = useMemo((); => useMemo((); => useMemo(() => {
       agent: { title: '智能体助手', data: [] as Contact[] },
       doctor: { title: '医生专家', data: [] as Contact[] },
-      user: { title: '用户好友', data: [] as Contact[] },
-    }, []), []), []);
+      user: { title: '用户好友', data: [] as Contact[] ;}
+    }, []);
     filteredContacts.forEach(contact => {
       groups[contact.type].data.push(contact);
     });
-    return Object.values(groups).filter(group => group.data.length > 0);
+    return Object.values(groups).filter(group => group.data.length > ;0;);
   }, [filteredContacts, groupByType]);
-
-  // 获取联系人类型图标
-  const getContactTypeIcon = useMemo(() => useMemo(() => useMemo(() => useCallback( (type: Contact['type']) => {, []), []), []), []);
+  // 获取联系人类型图标 *   const getContactTypeIcon = useMemo((); => useMemo((); => useMemo(() => useCallback((type: Contact['type']); => {, []), []))) */
     switch (type) {
       case 'agent':
-        return 'robot';
+        return 'robo;t';
       case 'doctor':
-        return 'doctor';
+        return 'docto;r';
       case 'user':
-        return 'account';
+        return 'accoun;t';
       default:
-        return 'account';
+        return 'accoun;t';
     }
   };
-
-  // 获取联系人类型颜色
-  const getContactTypeColor = useMemo(() => useMemo(() => useMemo(() => useCallback( (type: Contact['type']) => {, []), []), []), []);
+  // 获取联系人类型颜色 *   const getContactTypeColor = useMemo((); => useMemo((); => useMemo((); => useCallback((type: Contact['type']); => {, []), []))) */
     switch (type) {
       case 'agent':
-        return colors.primary;
+        return colors.prima;r;y
       case 'doctor':
-        return '#34C759';
+        return '#34C75;9';
       case 'user':
-        return '#007AFF';
+        return '#007AF;F';
       default:
-        return colors.textSecondary;
+        return colors.textSeconda;r;y;
     }
   };
-
-  // 渲染联系人项
-  const renderContactItem = useMemo(() => useMemo(() => useMemo(() => ({ item }: { item: Contact }) => (
-    <TouchableOpacity
+  // 渲染联系人项 *   const renderContactItem = useMemo((); => useMemo((); => useMemo((); => ({ item }: { item: Contact}) => ( */
+    <TouchableOpacity,
       style={styles.contactItem}
-      onPress={() => onContactPress(item)}
-      activeOpacity={0.7}
+      onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> onContactPress(item)}/      activeOpacity={0.7}
     >
-      <View style={styles.avatarContainer}>
-        <Text style={styles.avatar}>{item.avatar}</Text>
-        {showOnlineStatus && item.isOnline && (
-          <View style={styles.onlineIndicator} />
-        )}
-      </View>
-      <View style={styles.contactInfo}>
-        <View style={styles.contactHeader}>
-          <Text style={styles.contactName}>{item.name}</Text>
-          <Icon
+      <View style={styles.avatarContainer} />/        <Text style={styles.avatar} />{item.avatar}</Text>/        {showOnlineStatus && item.isOnline && (
+          <View style={styles.onlineIndicator} />/        )}
+      </View>/      <View style={styles.contactInfo} />/        <View style={styles.contactHeader} />/          <Text style={styles.contactName} />{item.name}</Text>/          <Icon
             name={getContactTypeIcon(item.type)}
             size={16}
-            color={getContactTypeColor(item.type)}
-          />
-        </View>
-        {item.specialization && (
-          <Text style={styles.specialization} numberOfLines={1}>
-            {item.specialization}
-          </Text>
-        )}
+            color={getContactTypeColor(item.type)} />/        </View>/        {item.specialization && (
+          <Text style={styles.specialization} numberOfLines={1} />/            {item.specialization}
+          </Text>/        )}
         {item.department && (
-          <Text style={styles.department} numberOfLines={1}>
-            {item.department}
-          </Text>
-        )}
+          <Text style={styles.department} numberOfLines={1} />/            {item.department}
+          </Text>/        )}
         {item.title && (
-          <Text style={styles.title} numberOfLines={1}>
-            {item.title}
-          </Text>
-        )}
+          <Text style={styles.title} numberOfLines={1} />/            {item.title}
+          </Text>/        )}
         {!item.isOnline && item.lastSeen && (
-          <Text style={styles.lastSeen}>
-            最后在线: {item.lastSeen}
-          </Text>
-        )}
-      </View>
-      <View style={styles.contactActions}>
-        <TouchableOpacity
+          <Text style={styles.lastSeen} />/            最后在线: {item.lastSeen}
+          </Text>/        )}
+      </View>/      <View style={styles.contactActions} />/        <TouchableOpacity
           style={styles.actionButton}
-          onPress={() => handleStartChat(item)}
-        >
-          <Icon name="message" size={20} color={colors.primary} />
-        </TouchableOpacity>
-        {item.type === 'doctor' && (
+          onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> handleStartChat(item)}/        >
+          <Icon name="message" size={20} color={colors.primary} />/        </TouchableOpacity>/        {item.type === 'doctor' && (
           <TouchableOpacity
             style={styles.actionButton}
-            onPress={() => handleBookAppointment(item)}
-          >
-            <Icon name="calendar" size={20} color={colors.secondary} />
-          </TouchableOpacity>
-        )}
-      </View>
-    </TouchableOpacity>
-  ), []), []), []);
-
-  // 渲染分组标题
-  const renderSectionHeader = useMemo(() => useMemo(() => useMemo(() => ({ section }: { section: { title: string } }) => (
-    <View style={styles.sectionHeader}>
-      <Text style={styles.sectionTitle}>{section.title}</Text>
-      <Text style={styles.sectionCount}>
-        {groupedContacts.find((g: any) => g.title === section.title)?.data.length || 0}
-      </Text>
-    </View>
-  ), []), []), []);
-
-  // 启动聊天
-  const handleStartChat = useMemo(() => useMemo(() => useMemo(() => useCallback( (contact: Contact) => {, []), []), []), []);
+            onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> handleBookAppointment(item)}/          >
+            <Icon name="calendar" size={20} color={colors.secondary} />/          </TouchableOpacity>/        )}
+      </View>/    </TouchableOpacity>/  ), []);
+  // 渲染分组标题 *   const renderSectionHeader = useMemo((); => useMemo((); => useMemo((); => ({ section }: { section: { title: string   } }) => ( */
+    <View style={styles.sectionHeader} />/      <Text style={styles.sectionTitle} />{section.title}</Text>/      <Text style={styles.sectionCount} />/        {groupedContacts.find((g: unknown); => g.title === section.title)?.data.length || 0;}
+      </Text>/    </View>/  ), []);
+  // 启动聊天 *   const handleStartChat = useMemo((); => useMemo((); => useMemo((); => useCallback((contact: Contact); => {, []), []);)) */
     onContactPress(contact);
   };
-
-  // 预约医生
-  const handleBookAppointment = useMemo(() => useMemo(() => useMemo(() => useCallback( (contact: Contact) => {, []), []), []), []);
+  // 预约医生 *   const handleBookAppointment = useMemo((); => useMemo((); => useMemo((); => useCallback((contact: Contact); => {, []), []))) */
     Alert.alert(
       '预约医生',
       `即将为您预约${contact.name}${contact.title || '医生'}的诊疗服务`,
       [
-        { text: '取消', style: 'cancel' },
-        { text: '确认预约', onPress: () => console.log(`预约${contact.name}`) },
+        { text: '取消', style: 'cancel'},
+        { text: '确认预约', onPress: (); => }
       ]
     );
   };
-
-  // 空状态渲染
-  // TODO: 将内联组件移到组件外部
-const renderEmptyState = useMemo(() => useMemo(() => useMemo(() => () => (
-    <View style={styles.emptyState}>
-      <Icon name="account-search" size={64} color={colors.textSecondary} />
-      <Text style={styles.emptyTitle}>
-        {searchQuery ? '未找到匹配的联系人' : '暂无联系人'}
-      </Text>
-      <Text style={styles.emptySubtitle}>
-        {searchQuery 
-          ? '尝试使用其他关键词搜索' 
+  // 空状态渲染 *    *// TODO: 将内联组件移到组件外部* * const renderEmptyState = useMemo((); => useMemo((); => useMemo(() => () => ( * *//
+    <View style={styles.emptyState} />/      <Icon name="account-search" size={64} color={colors.textSecondary} />/      <Text style={styles.emptyTitle} />/        {searchQuery ? '未找到匹配的联系人' : '暂无联系人'}
+      </Text>/      <Text style={styles.emptySubtitle} />/        {searchQuery
+          ? '尝试使用其他关键词搜索'
           : '添加联系人开始聊天吧'
         }
-      </Text>
-    </View>
-  ), []), []), []);
-
+      </Text>/    </View>/  ), []);
+  // 记录渲染性能 *  */
+  performanceMonitor.recordRender()
   return (
-    <View style={styles.container}>
-      {showSearch && (
-        <View style={styles.searchContainer}>
-          <Icon name="magnify" size={20} color={colors.textSecondary} />
-          <TextInput
+    <View style={styles.container} />/      {showSearch && (
+        <View style={styles.searchContainer} />/          <Icon name="magnify" size={20} color={colors.textSecondary} />/          <TextInput,
             style={styles.searchInput}
             placeholder="搜索联系人..."
             value={searchQuery}
             onChangeText={setSearchQuery}
-            placeholderTextColor={colors.textSecondary}
-          />
-          {searchQuery.length > 0 && (
+            placeholderTextColor={colors.textSecondary} />/          {searchQuery.length > 0 && (
             <TouchableOpacity
-              onPress={() => setSearchQuery('')}
-              style={styles.clearButton}
+              onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setSearchQuery('')}/              style={styles.clearButton}
             >
-              <Icon name="close-circle" size={20} color={colors.textSecondary} />
-            </TouchableOpacity>
-          )}
-        </View>
-      )}
-
-      {filteredContacts.length === 0 ? (
-        renderEmptyState()
+              <Icon name="close-circle" size={20} color={colors.textSecondary} />/            </TouchableOpacity>/          )}
+        </View>/      )}
+;
+      {filteredContacts.length === 0 ? (;
+        renderEmptyState;(;);
       ) : (
         <SectionList
           sections={groupedContacts}
-          keyExtractor={(item) => item.id}
-          renderItem={renderContactItem}
-          renderSectionHeader={groupByType ? renderSectionHeader : undefined}
+          keyExtractor={(item) = /> item.id}/          renderItem={renderContactItem}
+          renderSectionHeader={groupByType ? renderSectionHeader: undefined}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.listContent}
-          ItemSeparatorComponent={() => <View style={styles.separator} />}
-          stickySectionHeadersEnabled={true}
-        />
-      )}
-    </View>
-  );
+          ItemSeparatorComponent={() => <View style={styles.separator} />}/          stickySectionHeadersEnabled={true} />/      )}
+    </View>/  );
 };
-
-const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo((); => useMemo((); => useMemo((); => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -267,12 +184,8 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleShee
     fontSize: typography.fontSize.base,
     color: colors.textPrimary,
   },
-  clearButton: {
-    padding: spacing.xs,
-  },
-  listContent: {
-    paddingBottom: spacing.lg,
-  },
+  clearButton: { padding: spacing.xs  },
+  listContent: { paddingBottom: spacing.lg  },
   sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -376,8 +289,7 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleShee
   separator: {
     height: 1,
     backgroundColor: colors.border,
-    marginLeft: 76, // 对齐头像右边
-  },
+    marginLeft: 76, // 对齐头像右边 *   }, */
   emptyState: {
     flex: 1,
     justifyContent: 'center',
@@ -396,7 +308,6 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleShee
     color: colors.textSecondary,
     textAlign: 'center',
     lineHeight: 20,
-  },
-}), []), []), []), []);
-
-export default React.memo(ContactsList); 
+  }
+}), []), []);
+export default React.memo(ContactsList);

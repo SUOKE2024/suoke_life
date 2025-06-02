@@ -1,535 +1,241 @@
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { AuthStackParamList } from '../../types/navigation';
-import { colors, spacing, fonts, borderRadius, shadows } from '../../constants/theme';
-import { AuthInput } from '../../components/common/AuthInput';
-import { AuthButton } from '../../components/common/AuthButton';
-import { LoadingScreen } from '../../components/common/LoadingScreen';
-import { authService } from '../../services/authService';
-
-
-
-
-
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
+import {
   View,
   Text,
   StyleSheet,
+  ScrollView,
   TouchableOpacity,
-  StatusBar,
-  SafeAreaView,
-  Animated,
+  Alert,
   KeyboardAvoidingView,
   Platform,
-  ScrollView,
-  Alert,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { Button } from '../../components/ui/Button';
+import { colors, typography, spacing, borderRadius, shadows } from '../../constants/theme';
 
-type ForgotPasswordScreenNavigationProp = NativeStackNavigationProp<
-  AuthStackParamList,
-  'ForgotPassword'
->;
+type AuthStackParamList = {
+  Welcome: undefined;
+  Login: undefined;
+  Register: undefined;
+  ForgotPassword: undefined;
+};
 
-type Step = 'email' | 'verification' | 'reset';
+type ForgotPasswordScreenNavigationProp = NativeStackNavigationProp<AuthStackParamList, 'ForgotPassword'>;
 
-interface FormData {
-  email: string;
-  verificationCode: string;
-  newPassword: string;
-  confirmPassword: string;
-}
-
-interface FormErrors {
-  email?: string;
-  verificationCode?: string;
-  newPassword?: string;
-  confirmPassword?: string;
-  general?: string;
-}
-
-export const ForgotPasswordScreen: React.FC = () => {
+const ForgotPasswordScreen: React.FC = () => {
   const navigation = useNavigation<ForgotPasswordScreenNavigationProp>();
+  
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
+  const [error, setError] = useState('');
 
-  const [currentStep, setCurrentStep] = useState<Step>('email');
-  const [formData, setFormData] = useState<FormData>({
-    email: '',
-    verificationCode: '',
-    newPassword: '',
-    confirmPassword: '',
-  });
-  const [errors, setErrors] = useState<FormErrors>({});
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [countdown, setCountdown] = useState(0);
-
-  // 动画值
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(30)).current;
-  const shakeAnim = useRef(new Animated.Value(0)).current;
-  const stepProgressAnim = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    // 启动入场动画
-    Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 800,
-        useNativeDriver: true,
-      }),
-      Animated.timing(slideAnim, {
-        toValue: 0,
-        duration: 600,
-        useNativeDriver: true,
-      }),
-    ]).start();
-  }, []);
-
-  useEffect(() => {
-    // 更新步骤进度动画
-    const stepValue = currentStep === 'email' ? 0 : currentStep === 'verification' ? 0.5 : 1;
-    Animated.timing(stepProgressAnim, {
-      toValue: stepValue,
-      duration: 300,
-      useNativeDriver: false,
-    }).start();
-  }, [currentStep]);
-
-  useEffect(() => {
-    // 倒计时逻辑
-    let timer: ReturnType<typeof setTimeout>;
-    if (countdown > 0) {
-      timer = setTimeout(() => setCountdown(countdown - 1), 1000);
-    }
-    return () => {
-      if (timer) {clearTimeout(timer);}
-    };
-  }, [countdown]);
-
-  // 表单验证
-  const validateEmail = (): boolean => {
-    const newErrors: FormErrors = {};
-
-    if (!formData.email.trim()) {
-      newErrors.email = '请输入邮箱地址';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = '请输入有效的邮箱地址';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   };
 
-  const validateVerificationCode = (): boolean => {
-    const newErrors: FormErrors = {};
-
-    if (!formData.verificationCode.trim()) {
-      newErrors.verificationCode = '请输入验证码';
-    } else if (formData.verificationCode.length !== 6) {
-      newErrors.verificationCode = '验证码应为6位数字';
-    } else if (!/^\d{6}$/.test(formData.verificationCode)) {
-      newErrors.verificationCode = '验证码只能包含数字';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const validatePassword = (): boolean => {
-    const newErrors: FormErrors = {};
-
-    if (!formData.newPassword) {
-      newErrors.newPassword = '请输入新密码';
-    } else if (formData.newPassword.length < 8) {
-      newErrors.newPassword = '密码至少需要8位字符';
-    } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.newPassword)) {
-      newErrors.newPassword = '密码需要包含大小写字母和数字';
-    }
-
-    if (!formData.confirmPassword) {
-      newErrors.confirmPassword = '请确认新密码';
-    } else if (formData.newPassword !== formData.confirmPassword) {
-      newErrors.confirmPassword = '两次输入的密码不一致';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  // 震动动画
-  const triggerShakeAnimation = useCallback( () => {, []);
-    Animated.sequence([
-      Animated.timing(shakeAnim, {
-        toValue: 10,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-      Animated.timing(shakeAnim, {
-        toValue: -10,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-      Animated.timing(shakeAnim, {
-        toValue: 10,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-      Animated.timing(shakeAnim, {
-        toValue: 0,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-    ]).start();
-  };
-
-  // 发送验证码
-  const handleSendVerificationCode = async () => {
-    if (!validateEmail()) {
-      triggerShakeAnimation();
+  const handleSendResetEmail = async () => {
+    if (!email.trim()) {
+      setError('请输入邮箱地址');
       return;
     }
 
-    setIsLoading(true);
-    setErrors({});
-
-    try {
-      await authService.forgotPassword({ email: formData.email.trim() });
-      setCurrentStep('verification');
-      setCountdown(60); // 60秒倒计时
-      Alert.alert('验证码已发送', '请查看您的邮箱并输入验证码');
-    } catch (error: any) {
-      console.error('发送验证码失败:', error.message);
-      setErrors({ general: error.message || '发送验证码失败，请重试' });
-      triggerShakeAnimation();
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // 验证验证码
-  const handleVerifyCode = async () => {
-    if (!validateVerificationCode()) {
-      triggerShakeAnimation();
+    if (!validateEmail(email)) {
+      setError('请输入有效的邮箱地址');
       return;
     }
 
-    setIsLoading(true);
-    setErrors({});
+    setError('');
+    setLoading(true);
 
     try {
-      await authService.verifyResetCode({
-        email: formData.email.trim(),
-        code: formData.verificationCode.trim(),
-      });
-      setCurrentStep('reset');
-    } catch (error: any) {
-      console.error('验证码验证失败:', error.message);
-      setErrors({ general: error.message || '验证码错误，请重试' });
-      triggerShakeAnimation();
+      // TODO: 实现实际的重置密码逻辑
+      // 这里应该调用认证服务
+      await new Promise(resolve => setTimeout(resolve, 2000)); // 模拟网络请求
+      
+      setEmailSent(true);
+    } catch (error) {
+      Alert.alert('发送失败', '发送重置邮件时出现错误，请重试');
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
-  // 重置密码
-  const handleResetPassword = async () => {
-    if (!validatePassword()) {
-      triggerShakeAnimation();
-      return;
-    }
-
-    setIsLoading(true);
-    setErrors({});
-
+  const handleResendEmail = async () => {
+    setLoading(true);
     try {
-      await authService.resetPassword({
-        email: formData.email.trim(),
-        code: formData.verificationCode.trim(),
-        newPassword: formData.newPassword,
-      });
-
-      Alert.alert(
-        '密码重置成功',
-        '您的密码已成功重置，请使用新密码登录',
-        [
-          {
-            text: '去登录',
-            onPress: () => navigation.navigate('Login'),
-          },
-        ]
-      );
-    } catch (error: any) {
-      console.error('密码重置失败:', error.message);
-      setErrors({ general: error.message || '密码重置失败，请重试' });
-      triggerShakeAnimation();
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      Alert.alert('重发成功', '重置邮件已重新发送，请查收邮箱');
+    } catch (error) {
+      Alert.alert('重发失败', '重发邮件时出现错误，请重试');
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
-  // 重新发送验证码
-  const handleResendCode = async () => {
-    if (countdown > 0) {return;}
+  const handleBackToLogin = () => {
+    navigation.navigate('Login');
+  };
 
-    setIsLoading(true);
-    try {
-      await authService.forgotPassword({ email: formData.email.trim() });
-      setCountdown(60);
-      Alert.alert('验证码已重新发送', '请查看您的邮箱');
-    } catch (error: any) {
-      Alert.alert('发送失败', error.message || '重新发送验证码失败');
-    } finally {
-      setIsLoading(false);
+  const handleBack = () => {
+    navigation.goBack();
+  };
+
+  const handleEmailChange = (value: string) => {
+    setEmail(value);
+    if (error) {
+      setError('');
     }
   };
 
-  // 返回上一步
-  const handleBack = useCallback( () => {, []);
-    if (currentStep === 'email') {
-      navigation.goBack();
-    } else if (currentStep === 'verification') {
-      setCurrentStep('email');
-    } else {
-      setCurrentStep('verification');
-    }
-  };
+  if (emailSent) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <ScrollView 
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          {/* 成功状态 */}
+          <View style={styles.successContainer}>
+            <View style={styles.successIcon}>
+              <Text style={styles.successIconText}>✉️</Text>
+            </View>
+            
+            <Text style={styles.successTitle}>邮件已发送</Text>
+            <Text style={styles.successMessage}>
+              我们已向 {email} 发送了密码重置邮件。
+              {'\n\n'}
+              请查收邮箱并点击邮件中的链接来重置您的密码。
+              {'\n\n'}
+              如果您没有收到邮件，请检查垃圾邮件文件夹。
+            </Text>
 
-  // 更新表单数据
-  const updateFormData = useCallback( (field: keyof FormData, value: string) => {, []);
-    setFormData(prev => ({ ...prev, [field]: value }));
-    // 清除对应字段的错误
-    if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: undefined }));
-    }
-  };
+            <View style={styles.actionButtons}>
+              <Button
+                title="重新发送邮件"
+                variant="outline"
+                size="large"
+                fullWidth
+                loading={loading}
+                onPress={handleResendEmail}
+                style={styles.resendButton}
+              />
+              
+              <Button
+                title="返回登录"
+                variant="primary"
+                size="large"
+                fullWidth
+                onPress={handleBackToLogin}
+                style={styles.backToLoginButton}
+              />
+            </View>
 
-  // 获取当前步骤信息
-  const getStepInfo = useCallback( () => {, []);
-    switch (currentStep) {
-      case 'email':
-        return {
-          title: '忘记密码',
-          subtitle: '请输入您的邮箱地址，我们将发送验证码',
-          buttonText: '发送验证码',
-          onPress: handleSendVerificationCode,
-        };
-      case 'verification':
-        return {
-          title: '验证邮箱',
-          subtitle: `验证码已发送至 ${formData.email}`,
-          buttonText: '验证',
-          onPress: handleVerifyCode,
-        };
-      case 'reset':
-        return {
-          title: '重置密码',
-          subtitle: '请设置您的新密码',
-          buttonText: '重置密码',
-          onPress: handleResetPassword,
-        };
-    }
-  };
-
-  const stepInfo = getStepInfo();
-
-  if (isLoading) {
-    return <LoadingScreen message="处理中..." />;
+            {/* 帮助信息 */}
+            <View style={styles.helpSection}>
+              <Text style={styles.helpTitle}>需要帮助？</Text>
+              <Text style={styles.helpText}>
+                如果您仍然无法重置密码，请联系我们的客服团队获取帮助。
+              </Text>
+              <TouchableOpacity style={styles.contactButton}>
+                <Text style={styles.contactButtonText}>联系客服</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    );
   }
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
-      
-      <KeyboardAvoidingView
+      <KeyboardAvoidingView 
         style={styles.keyboardAvoid}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        <ScrollView
+        <ScrollView 
           style={styles.scrollView}
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
           {/* 头部区域 */}
-          <Animated.View
-            style={[
-              styles.header,
-              {
-                opacity: fadeAnim,
-                transform: [{ translateY: slideAnim }],
-              },
-            ]}
-          >
+          <View style={styles.header}>
             <TouchableOpacity style={styles.backButton} onPress={handleBack}>
               <Text style={styles.backButtonText}>←</Text>
             </TouchableOpacity>
             
-            <View style={styles.titleContainer}>
-              <Text style={styles.title}>{stepInfo.title}</Text>
-              <Text style={styles.subtitle}>{stepInfo.subtitle}</Text>
-            </View>
-
-            {/* 步骤进度指示器 */}
-            <View style={styles.progressContainer}>
-              <View style={styles.progressBar}>
-                <Animated.View
-                  style={[
-                    styles.progressFill,
-                    {
-                      width: stepProgressAnim.interpolate({
-                        inputRange: [0, 1],
-                        outputRange: ['33%', '100%'],
-                      }),
-                    },
-                  ]}
-                />
-              </View>
-              <View style={styles.stepIndicators}>
-                <View style={[styles.stepDot, styles.stepDotActive]}>
-                  <Text style={styles.stepDotText}>1</Text>
-                </View>
-                <View style={[styles.stepDot, currentStep !== 'email' && styles.stepDotActive]}>
-                  <Text style={[styles.stepDotText, currentStep !== 'email' && styles.stepDotTextActive]}>2</Text>
-                </View>
-                <View style={[styles.stepDot, currentStep === 'reset' && styles.stepDotActive]}>
-                  <Text style={[styles.stepDotText, currentStep === 'reset' && styles.stepDotTextActive]}>3</Text>
-                </View>
+            <View style={styles.iconContainer}>
+              <View style={styles.iconPlaceholder}>
+                <Text style={styles.iconText}>🔑</Text>
               </View>
             </View>
-          </Animated.View>
+            
+            <Text style={styles.title}>忘记密码</Text>
+            <Text style={styles.subtitle}>
+              输入您的邮箱地址，我们将发送重置密码的链接给您
+            </Text>
+          </View>
 
           {/* 表单区域 */}
-          <Animated.View
-            style={[
-              styles.formContainer,
-              {
-                opacity: fadeAnim,
-                transform: [
-                  { translateY: slideAnim },
-                  { translateX: shakeAnim },
-                ],
-              },
-            ]}
-          >
-            {/* 错误提示 */}
-            {errors.general && (
-              <View style={styles.errorContainer}>
-                <Text style={styles.errorText}>{errors.general}</Text>
+          <View style={styles.formSection}>
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputLabel}>邮箱地址</Text>
+              <View style={[styles.inputWrapper, error && styles.inputError]}>
+                <Text style={styles.inputText}>{email || '请输入您的邮箱地址'}</Text>
               </View>
-            )}
-
-            {/* 步骤1: 邮箱输入 */}
-            {currentStep === 'email' && (
-              <View style={styles.stepContent}>
-                <AuthInput
-                  label="邮箱地址"
-                  placeholder="请输入您的邮箱"
-                  value={formData.email}
-                  onChangeText={(value) => updateFormData('email', value)}
-                  error={errors.email}
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                  autoComplete="email"
-                  icon="📧"
-                />
-              </View>
-            )}
-
-            {/* 步骤2: 验证码输入 */}
-            {currentStep === 'verification' && (
-              <View style={styles.stepContent}>
-                <AuthInput
-                  label="验证码"
-                  placeholder="请输入6位验证码"
-                  value={formData.verificationCode}
-                  onChangeText={(value) => updateFormData('verificationCode', value)}
-                  error={errors.verificationCode}
-                  keyboardType="number-pad"
-                  maxLength={6}
-                  icon="🔢"
-                />
-
-                {/* 重新发送验证码 */}
-                <View style={styles.resendContainer}>
-                  <Text style={styles.resendText}>
-                    没有收到验证码？{' '}
-                  </Text>
-                  <TouchableOpacity
-                    onPress={handleResendCode}
-                    disabled={countdown > 0}
-                  >
-                    <Text style={[styles.resendLink, countdown > 0 && styles.resendLinkDisabled]}>
-                      {countdown > 0 ? `${countdown}s后重新发送` : '重新发送'}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            )}
-
-            {/* 步骤3: 密码重置 */}
-            {currentStep === 'reset' && (
-              <View style={styles.stepContent}>
-                <AuthInput
-                  label="新密码"
-                  placeholder="请输入新密码"
-                  value={formData.newPassword}
-                  onChangeText={(value) => updateFormData('newPassword', value)}
-                  error={errors.newPassword}
-                  secureTextEntry={!showPassword}
-                  icon="🔒"
-                  rightIcon={showPassword ? "👁️" : "👁️‍🗨️"}
-                  onRightIconPress={() => setShowPassword(!showPassword)}
-                />
-
-                <AuthInput
-                  label="确认新密码"
-                  placeholder="请再次输入新密码"
-                  value={formData.confirmPassword}
-                  onChangeText={(value) => updateFormData('confirmPassword', value)}
-                  error={errors.confirmPassword}
-                  secureTextEntry={!showConfirmPassword}
-                  icon="🔒"
-                  rightIcon={showConfirmPassword ? "👁️" : "👁️‍🗨️"}
-                  onRightIconPress={() => setShowConfirmPassword(!showConfirmPassword)}
-                />
-
-                {/* 密码要求提示 */}
-                <View style={styles.passwordRequirements}>
-                  <Text style={styles.requirementsTitle}>密码要求：</Text>
-                  <Text style={styles.requirementItem}>• 至少8位字符</Text>
-                  <Text style={styles.requirementItem}>• 包含大写字母</Text>
-                  <Text style={styles.requirementItem}>• 包含小写字母</Text>
-                  <Text style={styles.requirementItem}>• 包含数字</Text>
-                </View>
-              </View>
-            )}
-
-            {/* 操作按钮 */}
-            <AuthButton
-              title={stepInfo.buttonText}
-              onPress={stepInfo.onPress}
-              loading={isLoading}
-              style={styles.actionButton}
-            />
-          </Animated.View>
-
-          {/* 底部帮助信息 */}
-          <Animated.View
-            style={[
-              styles.footer,
-              {
-                opacity: fadeAnim,
-                transform: [{ translateY: slideAnim }],
-              },
-            ]}
-          >
-            <View style={styles.helpContainer}>
-              <Text style={styles.helpText}>
-                遇到问题？{' '}
-                <Text style={styles.helpLink}>联系客服</Text>
-              </Text>
+              {error && <Text style={styles.errorText}>{error}</Text>}
             </View>
-          </Animated.View>
+
+            <Button
+              title="发送重置邮件"
+              variant="primary"
+              size="large"
+              fullWidth
+              loading={loading}
+              onPress={handleSendResetEmail}
+              style={styles.sendButton}
+            />
+          </View>
+
+          {/* 安全提示 */}
+          <View style={styles.securitySection}>
+            <Text style={styles.securityTitle}>安全提示</Text>
+            <View style={styles.securityList}>
+              <View style={styles.securityItem}>
+                <Text style={styles.securityIcon}>🔒</Text>
+                <Text style={styles.securityText}>
+                  重置链接将在24小时后失效
+                </Text>
+              </View>
+              <View style={styles.securityItem}>
+                <Text style={styles.securityIcon}>📧</Text>
+                <Text style={styles.securityText}>
+                  邮件将从官方邮箱发送
+                </Text>
+              </View>
+              <View style={styles.securityItem}>
+                <Text style={styles.securityIcon}>🛡️</Text>
+                <Text style={styles.securityText}>
+                  您的账户信息受到严格保护
+                </Text>
+              </View>
+            </View>
+          </View>
+
+          {/* 其他选项 */}
+          <View style={styles.alternativeSection}>
+            <Text style={styles.alternativeText}>
+              记起密码了？
+              <Text style={styles.loginLink} onPress={handleBackToLogin}>
+                返回登录
+              </Text>
+            </Text>
+          </View>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -551,155 +257,228 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     paddingHorizontal: spacing.lg,
   },
+
+  // 头部区域
   header: {
+    alignItems: 'center',
     paddingTop: spacing.lg,
     paddingBottom: spacing.xl,
   },
   backButton: {
+    position: 'absolute',
+    left: 0,
+    top: spacing.lg,
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.gray100,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: spacing.lg,
-    ...shadows.sm,
   },
   backButtonText: {
-    fontSize: 20,
-    color: colors.text,
+    fontSize: typography.fontSize.xl,
+    color: colors.textPrimary,
   },
-  titleContainer: {
-    alignItems: 'center',
+  iconContainer: {
     marginBottom: spacing.lg,
+  },
+  iconPlaceholder: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: colors.warning,
+    justifyContent: 'center',
+    alignItems: 'center',
+    ...shadows.md,
+  },
+  iconText: {
+    fontSize: typography.fontSize['2xl'],
   },
   title: {
-    fontSize: fonts.size.header,
-    fontWeight: 'bold',
-    color: colors.text,
+    fontSize: typography.fontSize['3xl'],
+    fontWeight: '700',
+    color: colors.textPrimary,
     marginBottom: spacing.sm,
+    fontFamily: typography.fontFamily.bold,
   },
   subtitle: {
-    fontSize: fonts.size.md,
+    fontSize: typography.fontSize.base,
     color: colors.textSecondary,
     textAlign: 'center',
-    lineHeight: fonts.lineHeight.md,
+    lineHeight: typography.lineHeight.relaxed * typography.fontSize.base,
+    fontFamily: typography.fontFamily.regular,
   },
-  progressContainer: {
-    marginTop: spacing.lg,
-  },
-  progressBar: {
-    height: 4,
-    backgroundColor: colors.border,
-    borderRadius: 2,
-    overflow: 'hidden',
-    marginBottom: spacing.md,
-  },
-  progressFill: {
-    height: '100%',
-    backgroundColor: colors.primary,
-    borderRadius: 2,
-  },
-  stepIndicators: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  stepDot: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: colors.border,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  stepDotActive: {
-    backgroundColor: colors.primary,
-  },
-  stepDotText: {
-    fontSize: fonts.size.sm,
-    fontWeight: 'bold',
-    color: colors.textSecondary,
-  },
-  stepDotTextActive: {
-    color: colors.white,
-  },
-  formContainer: {
-    flex: 1,
+
+  // 表单区域
+  formSection: {
     paddingVertical: spacing.lg,
   },
-  errorContainer: {
-    backgroundColor: colors.error + '20',
-    borderColor: colors.error,
-    borderWidth: 1,
-    borderRadius: borderRadius.md,
-    padding: spacing.md,
-    marginBottom: spacing.lg,
+  inputContainer: {
+    marginBottom: spacing.xl,
   },
-  errorText: {
-    color: colors.error,
-    fontSize: fonts.size.sm,
-    textAlign: 'center',
-  },
-  stepContent: {
-    marginBottom: spacing.lg,
-  },
-  resendContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: spacing.md,
-  },
-  resendText: {
-    fontSize: fonts.size.sm,
-    color: colors.textSecondary,
-  },
-  resendLink: {
-    fontSize: fonts.size.sm,
-    color: colors.primary,
-    fontWeight: '500',
-    textDecorationLine: 'underline',
-  },
-  resendLinkDisabled: {
-    color: colors.textSecondary,
-    textDecorationLine: 'none',
-  },
-  passwordRequirements: {
-    backgroundColor: colors.surface,
-    borderRadius: borderRadius.md,
-    padding: spacing.md,
-    marginTop: spacing.md,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  requirementsTitle: {
-    fontSize: fonts.size.sm,
-    fontWeight: '600',
-    color: colors.text,
-    marginBottom: spacing.sm,
-  },
-  requirementItem: {
-    fontSize: fonts.size.xs,
+  inputLabel: {
+    fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
     marginBottom: spacing.xs,
+    fontFamily: typography.fontFamily.medium,
   },
-  actionButton: {
-    marginTop: spacing.lg,
+  inputWrapper: {
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: borderRadius.md,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    backgroundColor: colors.surface,
+    minHeight: 48,
+    justifyContent: 'center',
   },
-  footer: {
+  inputError: {
+    borderColor: colors.error,
+  },
+  inputText: {
+    fontSize: typography.fontSize.base,
+    color: colors.textPrimary,
+    fontFamily: typography.fontFamily.regular,
+  },
+  errorText: {
+    fontSize: typography.fontSize.sm,
+    color: colors.error,
+    marginTop: spacing.xs,
+    fontFamily: typography.fontFamily.regular,
+  },
+  sendButton: {
+    marginBottom: spacing.lg,
+  },
+
+  // 安全提示
+  securitySection: {
+    backgroundColor: colors.surfaceSecondary,
+    borderRadius: borderRadius.lg,
+    padding: spacing.lg,
+    marginVertical: spacing.lg,
+  },
+  securityTitle: {
+    fontSize: typography.fontSize.lg,
+    fontWeight: '600',
+    color: colors.textPrimary,
+    marginBottom: spacing.md,
+    fontFamily: typography.fontFamily.medium,
+  },
+  securityList: {
+    gap: spacing.md,
+  },
+  securityItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  securityIcon: {
+    fontSize: typography.fontSize.lg,
+    marginRight: spacing.sm,
+  },
+  securityText: {
+    flex: 1,
+    fontSize: typography.fontSize.sm,
+    color: colors.textSecondary,
+    fontFamily: typography.fontFamily.regular,
+  },
+
+  // 其他选项
+  alternativeSection: {
+    alignItems: 'center',
     paddingVertical: spacing.xl,
+  },
+  alternativeText: {
+    fontSize: typography.fontSize.base,
+    color: colors.textSecondary,
+    fontFamily: typography.fontFamily.regular,
+  },
+  loginLink: {
+    color: colors.primary,
+    fontWeight: '600',
+    fontFamily: typography.fontFamily.medium,
+  },
+
+  // 成功状态
+  successContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: spacing['2xl'],
+  },
+  successIcon: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    backgroundColor: colors.success,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: spacing.xl,
+    ...shadows.lg,
+  },
+  successIconText: {
+    fontSize: typography.fontSize['4xl'],
+  },
+  successTitle: {
+    fontSize: typography.fontSize['3xl'],
+    fontWeight: '700',
+    color: colors.textPrimary,
+    marginBottom: spacing.lg,
+    fontFamily: typography.fontFamily.bold,
+  },
+  successMessage: {
+    fontSize: typography.fontSize.base,
+    color: colors.textSecondary,
+    textAlign: 'center',
+    lineHeight: typography.lineHeight.relaxed * typography.fontSize.base,
+    marginBottom: spacing['2xl'],
+    fontFamily: typography.fontFamily.regular,
+  },
+  actionButtons: {
+    width: '100%',
+    marginBottom: spacing.xl,
+  },
+  resendButton: {
+    marginBottom: spacing.md,
+  },
+  backToLoginButton: {
+    marginBottom: spacing.lg,
+  },
+
+  // 帮助信息
+  helpSection: {
+    backgroundColor: colors.surfaceSecondary,
+    borderRadius: borderRadius.lg,
+    padding: spacing.lg,
+    width: '100%',
     alignItems: 'center',
   },
-  helpContainer: {
-    alignItems: 'center',
+  helpTitle: {
+    fontSize: typography.fontSize.lg,
+    fontWeight: '600',
+    color: colors.textPrimary,
+    marginBottom: spacing.sm,
+    fontFamily: typography.fontFamily.medium,
   },
   helpText: {
-    fontSize: fonts.size.sm,
+    fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
+    textAlign: 'center',
+    marginBottom: spacing.md,
+    fontFamily: typography.fontFamily.regular,
   },
-  helpLink: {
+  contactButton: {
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.sm,
+    borderRadius: borderRadius.md,
+    borderWidth: 1,
+    borderColor: colors.primary,
+  },
+  contactButtonText: {
+    fontSize: typography.fontSize.sm,
     color: colors.primary,
-    fontWeight: '500',
-    textDecorationLine: 'underline',
+    fontWeight: '600',
+    fontFamily: typography.fontFamily.medium,
   },
-}); 
+});
+
+export default ForgotPasswordScreen; 

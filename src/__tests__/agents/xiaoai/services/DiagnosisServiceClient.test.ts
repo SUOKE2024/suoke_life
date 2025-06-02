@@ -1,12 +1,7 @@
-import DiagnosisServiceClient from "../../agents/xiaoai/services/DiagnosisServiceClient";
+import DiagnosisServiceClient from "../../../agents/xiaoai/services/DiagnosisServiceClient";
 
-/**
- * DiagnosisServiceClient 服务测试
- * 索克生活APP - 自动生成的测试文件
- */
-
+// DiagnosisServiceClient 服务测试 - 索克生活APP - 自动生成的测试文件
 // Mock外部依赖
-jest.mock("axios");
 jest.mock("@react-native-async-storage/async-storage");
 
 describe("DiagnosisServiceClient", () => {
@@ -65,9 +60,7 @@ describe("DiagnosisServiceClient", () => {
   describe("性能", () => {
     it("应该在合理时间内完成操作", async () => {
       const startTime = Date.now();
-
       // TODO: 添加性能测试操作
-
       const endTime = Date.now();
       expect(endTime - startTime).toBeLessThan(1000); // 1秒内完成
     });

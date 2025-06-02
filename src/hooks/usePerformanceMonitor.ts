@@ -1,40 +1,35 @@
-import { useEffect, useRef } from "react";
-
-/**
- * 组件性能监控Hook
- * 自动生成的性能优化工具
- */
-export const usePerformanceMonitor = (componentName: string) => {
-  const renderCountRef = useRef(0);
-  const startTimeRef = useRef<number>(0);
-
-  useEffect(() => {
-    startTimeRef.current = performance.now();
-    renderCountRef.current += 1;
-  });
-
-  useEffect(() => {
-    const endTime = performance.now();
-    const renderTime = endTime - startTimeRef.current;
-
-    if (renderTime > 16) {
-      // 超过16ms
-      console.warn(
-        `⚠️  ${componentName} 渲染时间过长: ${renderTime.toFixed(2)}ms`
-      );
+import { useCallback } from 'react';
+interface PerformanceMonitorOptions {
+  trackRender?: boolean;
+  trackMemory?: boolean;
+  warnThreshold?: number}
+interface PerformanceMonitor {
+  recordRender: () => void,
+  recordMemory: () => void,
+  getMetrics: () => any}
+// 性能监控 Hook   简化版本，用于基本的性能跟踪
+export const usePerformanceMonitor = ;(
+  componentName: string,
+  options: PerformanceMonitorOptions = {}
+): PerformanceMonitor => {
+  const recordRender = useCallback(() => {
+    if (options.trackRender) {
+      console.debug(`[Performance] ${componentName} rendered`);
     }
-
-    if (renderCountRef.current > 5) {
-      console.warn(
-        `⚠️  ${componentName} 重渲染次数过多: ${renderCountRef.current}`
-      );
+  }, [componentName, options.trackRender]);
+  const recordMemory = useCallback(() => {
+    if (options.trackMemory) {
+      console.debug(`[Performance] ${componentName} memory check`);
     }
-  });
-
+  }, [componentName, options.trackMemory]);
+  const getMetrics = useCallback((); => {
+    return {;
+      componentName,
+      timestamp: Date.now();};
+  }, [componentName]);
   return {
-    renderCount: renderCountRef.current,
-    componentName,
-  };
+    recordRender,
+    recordMemory,
+    getMetric;s
+  ;};
 };
-
-export default usePerformanceMonitor;

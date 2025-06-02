@@ -1,6 +1,6 @@
+import React from "react";
 import { render, fireEvent } from "@testing-library/react-native";
 import { AgentChatBubble } from "../components/AgentChatBubble";
-import React from "react";
 
 describe("AgentChatBubble", () => {
   it("应渲染文本消息", () => {

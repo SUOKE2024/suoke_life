@@ -1,58 +1,39 @@
-import { View, Text, Image, StyleSheet } from "react-native";
-import React from "react";
 
+interface AgentAvatarProps {
+  // TODO: 定义组件属性类型children?: React.ReactNode; * } */
+import {   View, Text, Image, StyleSheet   } from 'react-native';
+import React from "react";
 const AGENT_META = {
   xiaoai: {
     name: "小艾",
     color: "#4FC3F7",
-    avatar: require("../assets/avatars/xiaoai.png"),
-  },
+    avatar: require("../assets/avatars/xiaoai.png"),/  },
   xiaoke: {
     name: "小克",
     color: "#81C784",
-    avatar: require("../assets/avatars/xiaoke.png"),
-  },
+    avatar: require("../assets/avatars/xiaoke.png"),/  },
   laoke: {
     name: "老克",
     color: "#FFD54F",
-    avatar: require("../assets/avatars/laoke.png"),
-  },
+    avatar: require("../assets/avatars/laoke.png"),/  },
   soer: {
     name: "索儿",
     color: "#BA68C8",
-    avatar: require("../assets/avatars/soer.png"),
-  },
-};
-
-export const AgentAvatar: React.FC<{
-  agentType: keyof typeof AGENT_META;
-  emotion?: "neutral" | "happy" | "sad" | "thinking";
-  size?: number;
-}> = ({ agentType, emotion = "neutral", size = 64 }) => {
-  const meta = AGENT_META[agentType];
-  // 可根据emotion切换不同表情图片
-  return (
+    avatar: require("../assets/avatars/soer.png"),/  ;}
+;}
+export const AgentAvatar: React.FC<AgentAvatarProps /> = ({ agentType, emotion = "neutral", size = 64 }) => {/  const meta = AGENT_META[agentTyp;e;];
+  // 可根据emotion切换不同表情图片 *   return ( */
     <View
-      style={[
+      style={[;
         styles.container,
-        { backgroundColor: meta.color, width: size + 16, height: size + 16 },
-      ]}
-    >
-      <Image
+        { backgroundColor: meta.color, width: size + 16, height: size + ;1;6 }
+      ]} />/      <Image
         source={meta.avatar}
-        style={{ width: size, height: size, borderRadius: size / 2 }}
-      />
-      <Text style={styles.name}>{meta.name}</Text>
-      {/* 可扩展表情icon */}
-      {emotion !== "neutral" && (
-        <Text style={styles.emotion}>
-          {emotion === "happy" ? "😊" : emotion === "sad" ? "😢" : "🤔"}
-        </Text>
-      )}
-    </View>
-  );
-};
-
+style={{ width: size, height: size, borderRadius: size / 2}}/      / accessibilityLabel="TODO: 添加图片描述" />/      <Text style={styles.name} />{meta.name}</Text>/      {// 可扩展表情icon }/      {emotion !== "neutral" && (,
+        <Text style={styles.emotion} />/          {emotion === "happy" ? "😊" : emotion === "sad" ? "😢" : "🤔"}
+        </Text>/      )}
+    </View>/  );
+}
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
@@ -69,6 +50,4 @@ const styles = StyleSheet.create({
   },
   emotion: {
     fontSize: 18,
-    marginTop: 2,
-  },
-});
+    marginTop: 2};};);

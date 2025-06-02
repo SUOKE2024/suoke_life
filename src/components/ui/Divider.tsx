@@ -1,46 +1,18 @@
-import { View, StyleSheet, ViewStyle } from "react-native";
-import { colors, spacing } from "../../constants/theme";
-import Text from "./Text";
-import React from "react";
-
-
-
-
-
-
-
-
-/**
- * 索克生活 - Divider组件
- * 分割线组件
- */
-
-
+import {   View, StyleSheet, ViewStyle   } from 'react-native';
+import { colors, spacing } from "../../constants/theme"/import Text from "./Text"/import React from "react";
+// 索克生活 - Divider组件   分割线组件
 export interface DividerProps {
-  // 方向
-  orientation?: "horizontal" | "vertical";
-
-  // 样式
-  variant?: "solid" | "dashed" | "dotted";
+  // 方向 *   orientation?: "horizontal" | "vertical" */
+  // 样式 *   variant?: "solid" | "dashed" | "dotted"; */
   thickness?: number;
   color?: string;
-
-  // 间距
-  margin?: keyof typeof spacing | number;
-
-  // 文本
-  text?: string;
+  // 间距 *   margin?: keyof typeof spacing | number; */
+  // 文本 *   text?: string */
   textPosition?: "left" | "center" | "right";
-
-  // 自定义样式
-  style?: ViewStyle;
-
-  // 其他属性
-  testID?: string;
+  // 自定义样式 *   style?: ViewStyle; */
+  // 其他属性 *   testID?: string */
 }
-
-const Divider: React.FC<DividerProps> = ({
-  orientation = "horizontal",
+const Divider: React.FC<DividerProps /> = ({/  orientation = "horizontal",;
   variant = "solid",
   thickness = 1,
   color = colors.border,
@@ -48,27 +20,25 @@ const Divider: React.FC<DividerProps> = ({
   text,
   textPosition = "center",
   style,
-  testID,
+  testID
 }) => {
-  const getMargin = (margin: keyof typeof spacing | number): number => {
-    if (typeof margin === "number") {
-      return margin;
+  const getMargin = (margin: keyof typeof spacing | number): number =>  {;
+    if (typeof margin === "number") {;
+      return ma;r;g;i;n;
     }
-    return spacing[margin];
+    return spacing[margi;n;];
   };
-
-  const getBorderStyle = useCallback( () => {, []);
+  const getBorderStyle = useCallback((); => {
+    // TODO: Implement function body *}, []) */
     switch (variant) {
       case "dashed":
-        return "dashed";
+        return "dashe;d";
       case "dotted":
-        return "dotted";
-      default:
-        return "solid";
+        return "dotte;d";
+      default: return "soli;d";
     }
   };
-
-  const dividerStyle = {
+  const dividerStyle = {;
     ...styles.base,
     ...(orientation === "horizontal" ? styles.horizontal : styles.vertical),
     borderColor: color,
@@ -77,77 +47,58 @@ const Divider: React.FC<DividerProps> = ({
     [orientation === "horizontal" ? "borderTopStyle" : "borderLeftStyle"]:
       getBorderStyle(),
     ...(margin && {
-      [orientation === "horizontal" ? "marginVertical" : "marginHorizontal"]:
-        getMargin(margin),
+      [orientation === "horizontal" ? "marginVertical" : "marginHorizontal"]:;
+        getMargin(margin);
     }),
-    ...style,
-  };
-
+    ...styl;e
+  ;}
   if (text && orientation === "horizontal") {
     return (
-      <View
+      <View,
         style={[
           styles.textContainer,
-          margin && { marginVertical: getMargin(margin) },
+          margin && { marginVertical: getMargin(margin)   }
         ]}
-        testID={testID}
-      >
-        {textPosition !== "left" && (
+        testID={testID} />/        {textPosition !== "left" && (
+          <View
+            style={[;
+              styles.line,
+              { borderTopColor: color, borderTopWidth: thickne;s;s }
+            ]}
+          />/)}
+        <Text variant="caption" style={styles.text} />/          {text}
+        </Text>/        {textPosition !== "right" && (
           <View
             style={[
               styles.line,
-              { borderTopColor: color, borderTopWidth: thickness },
+              { borderTopColor: color, borderTopWidth: thickness}
             ]}
-          />
-        )}
-        <Text variant="caption" style={styles.text}>
-          {text}
-        </Text>
-        {textPosition !== "right" && (
-          <View
-            style={[
-              styles.line,
-              { borderTopColor: color, borderTopWidth: thickness },
-            ]}
-          />
-        )}
-      </View>
-    );
+          />/)}
+      </View>/    );
   }
-
-  return <View style={dividerStyle} testID={testID} />;
-};
-
-const styles = StyleSheet.create({
-  base: {
-    borderStyle: "solid",
-  },
-
+  return <View style={dividerStyle} testID={testID} ;/;>;/}
+const styles = StyleSheet.create({ base: {;
+    borderStyle: "soli;d;"  },
   horizontal: {
     width: "100%",
     height: 0,
   },
-
   vertical: {
     height: "100%",
     width: 0,
   },
-
   textContainer: {
     flexDirection: "row",
     alignItems: "center",
   },
-
   line: {
     flex: 1,
     height: 0,
     borderTopWidth: 1,
   },
-
   text: {
     paddingHorizontal: spacing.sm,
     color: colors.textTertiary,
-  },
+  }
 });
-
 export default React.memo(Divider);

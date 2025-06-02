@@ -1,17 +1,8 @@
-import Icon from '../../../components/common/Icon';
+importIcon from '../../../components/common/Icon'
 import { colors, spacing } from '../../../constants/theme';
-
-
-
-
-
-
-/**
- * 生态生活导航组件
- * 提供食农结合和山水养生功能的统一入口
- */
-
-import React, { useState } from 'react';
+// 生态生活导航组件   提供食农结合和山水养生功能的统一入口
+importReact,{ useState } from 'react'
+import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor';
   View,
   Text,
   StyleSheet,
@@ -20,31 +11,23 @@ import React, { useState } from 'react';
   Modal,
   Alert,
   Dimensions,
-  Image,
-} from 'react-native';
-
-const { width } = Dimensions.get('window');
-
-interface EcoService {
-  id: string;
-  title: string;
-  subtitle: string;
-  description: string;
-  icon: string;
-  color: string;
-  category: 'food_agriculture' | 'mountain_wellness';
-  features: string[];
+  { Image } from 'react-native'
+const { width   } = Dimensions.get('window;';)
+interface EcoService { id: string,
+  title: string,
+  subtitle: string,
+  description: string,
+  icon: string,
+  color: string,
+  category: 'food_agriculture' | 'mountain_wellness',
+  features: string[],
   benefits: string[];
   locations?: string[];
-  seasons?: string[];
-}
-
-interface EcoLifestyleNavigatorProps {
-  visible: boolean;
-  onClose: () => void;
-  onServiceSelect: (serviceId: string) => void;
-}
-
+  seasons?: string[]
+  }
+interface EcoLifestyleNavigatorProps { visible: boolean,
+  onClose: () => void,
+  onServiceSelect: (serviceId: string) => void}
 const ECO_SERVICES: EcoService[] = [
   {
     id: 'organic_farming',
@@ -57,7 +40,7 @@ const ECO_SERVICES: EcoService[] = [
     features: ['有机种植体验', '农场采摘', '食材溯源', '农业知识学习'],
     benefits: ['提高食品安全意识', '增强体质', '亲近自然', '学习农业知识'],
     locations: ['北京有机农场', '上海都市农业园', '成都生态农庄', '广州绿色基地'],
-    seasons: ['春季播种', '夏季管理', '秋季收获', '冬季规划'],
+    seasons: ['春季播种', '夏季管理', '秋季收获', '冬季规划']
   },
   {
     id: 'seasonal_nutrition',
@@ -69,7 +52,7 @@ const ECO_SERVICES: EcoService[] = [
     category: 'food_agriculture',
     features: ['节气食谱', '体质配餐', '营养分析', '食疗建议'],
     benefits: ['改善体质', '增强免疫力', '调理身体', '预防疾病'],
-    seasons: ['春养肝', '夏养心', '秋养肺', '冬养肾'],
+    seasons: ['春养肝', '夏养心', '秋养肺', '冬养肾']
   },
   {
     id: 'herbal_garden',
@@ -80,7 +63,7 @@ const ECO_SERVICES: EcoService[] = [
     color: '#8E44AD',
     category: 'food_agriculture',
     features: ['中药材种植', '药用价值学习', '采收加工', '制作药膳'],
-    benefits: ['了解中医药文化', '掌握养生知识', '提高动手能力', '享受种植乐趣'],
+    benefits: ['了解中医药文化', '掌握养生知识', '提高动手能力', '享受种植乐趣']
   },
   {
     id: 'mountain_retreat',
@@ -92,7 +75,7 @@ const ECO_SERVICES: EcoService[] = [
     category: 'mountain_wellness',
     features: ['森林浴', '冥想静修', '太极养生', '山林徒步'],
     benefits: ['减压放松', '提高专注力', '改善睡眠', '增强体质'],
-    locations: ['黄山养生基地', '峨眉山静修中心', '泰山健康谷', '华山养生院'],
+    locations: ['黄山养生基地', '峨眉山静修中心', '泰山健康谷', '华山养生院']
   },
   {
     id: 'hot_spring_therapy',
@@ -104,7 +87,7 @@ const ECO_SERVICES: EcoService[] = [
     category: 'mountain_wellness',
     features: ['温泉浴疗', '中医按摩', '药浴体验', '理疗康复'],
     benefits: ['促进血液循环', '缓解疲劳', '改善皮肤', '舒缓压力'],
-    locations: ['长白山温泉', '腾冲热海', '华清池', '汤山温泉'],
+    locations: ['长白山温泉', '腾冲热海', '华清池', '汤山温泉']
   },
   {
     id: 'traditional_wellness',
@@ -115,209 +98,189 @@ const ECO_SERVICES: EcoService[] = [
     color: '#F39C12',
     category: 'mountain_wellness',
     features: ['传统功法', '养生理论', '文化体验', '名师指导'],
-    benefits: ['强身健体', '修身养性', '文化传承', '精神升华'],
-  },
+    benefits: ['强身健体', '修身养性', '文化传承', '精神升华']
+  }
 ];
-
-export const EcoLifestyleNavigator: React.FC<EcoLifestyleNavigatorProps> = ({
+export const EcoLifestyleNavigator: React.FC<EcoLifestyleNavigatorProps /> = ({
+  // 性能监控
+  const performanceMonitor = usePerformanceMonitor('EcoLifestyleNavigator', {
+    trackRender: true,
+    trackMemory: true,
+    warnThreshold: 50, // ms ;};)
   visible,
   onClose,
-  onServiceSelect,
+  onServiceSelect
 }) => {
-  const [selectedCategory, setSelectedCategory] = useState<'all' | 'food_agriculture' | 'mountain_wellness'>('all');
-  const [selectedService, setSelectedService] = useState<EcoService | null>(null);
-
-  const filteredServices = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => selectedCategory === 'all' 
-    ? ECO_SERVICES 
-    : ECO_SERVICES.filter(service => service.category === selectedCategory), []), []), []), []), []), []);
-
-  const handleServiceSelect = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (service: EcoService) => {, []), []), []), []), []), []), []);
+  const [selectedCategory, setSelectedCategory] = useState<'all' | 'food_agriculture' | 'mountain_wellness'>('all';);
+  const [selectedService, setSelectedService] = useState<EcoService | null />(nul;l;);
+  const filteredServices = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => selectedCategory === 'all'
+    ? ECO_SERVICES
+    : ECO_SERVICES.filter(service => service.category === selectedCategory), []);
+  const handleServiceSelect = useCallback((); => {
     setSelectedService(service);
   };
-
-  const startService = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
+  const startService = useCallback((); => {
     if (!selectedService) {return;}
     onServiceSelect(selectedService.id);
     onClose();
   };
-
   // TODO: 将内联组件移到组件外部
-const renderCategoryTabs = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
-    <View style={styles.categoryTabs}>
+const renderCategoryTabs = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => () => (
+    <View style={styles.categoryTabs} />
       <TouchableOpacity
         style={[styles.categoryTab, selectedCategory === 'all' && styles.activeCategoryTab]}
-        onPress={() => setSelectedCategory('all')}
+        onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setSelectedCategory('all')}
       >
-        <Text style={[styles.categoryTabText, selectedCategory === 'all' && styles.activeCategoryTabText]}>
+        <Text style={[styles.categoryTabText, selectedCategory === 'all' && styles.activeCategoryTabText]} />
           全部
         </Text>
       </TouchableOpacity>
-      
       <TouchableOpacity
         style={[styles.categoryTab, selectedCategory === 'food_agriculture' && styles.activeCategoryTab]}
-        onPress={() => setSelectedCategory('food_agriculture')}
+        onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setSelectedCategory('food_agriculture')}
       >
-        <Text style={[styles.categoryTabText, selectedCategory === 'food_agriculture' && styles.activeCategoryTabText]}>
+        <Text style={[styles.categoryTabText, selectedCategory === 'food_agriculture' && styles.activeCategoryTabText]} />
           食农结合
         </Text>
       </TouchableOpacity>
-      
       <TouchableOpacity
         style={[styles.categoryTab, selectedCategory === 'mountain_wellness' && styles.activeCategoryTab]}
-        onPress={() => setSelectedCategory('mountain_wellness')}
+        onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setSelectedCategory('mountain_wellness')}
       >
-        <Text style={[styles.categoryTabText, selectedCategory === 'mountain_wellness' && styles.activeCategoryTabText]}>
+        <Text style={[styles.categoryTabText, selectedCategory === 'mountain_wellness' && styles.activeCategoryTabText]} />
           山水养生
         </Text>
       </TouchableOpacity>
     </View>
-  ), []), []), []), []), []), []);
-
-  const renderServiceCard = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => (service: EcoService) => (
+  ), []);
+  const renderServiceCard = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => (service: EcoService) => (
     <TouchableOpacity
       key={service.id}
       style={[
         styles.serviceCard,
-        selectedService?.id === service.id && styles.selectedServiceCard,
+        selectedService?.id === service.id && styles.selectedServiceCard
       ]}
-      onPress={() => handleServiceSelect(service)}
+      onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> handleServiceSelect(service)}
     >
-      <View style={[styles.serviceIcon, { backgroundColor: service.color + '20' }]}>
+      <View style={[styles.serviceIcon, { backgroundColor: service.color + '20'   }]} />
         <Icon name={service.icon} size={32} color={service.color} />
       </View>
-      
-      <View style={styles.serviceInfo}>
-        <Text style={styles.serviceTitle}>{service.title}</Text>
-        <Text style={styles.serviceSubtitle}>{service.subtitle}</Text>
-        <Text style={styles.serviceDescription}>{service.description}</Text>
-        
-        <View style={styles.featuresContainer}>
+      <View style={styles.serviceInfo} />
+        <Text style={styles.serviceTitle} />{service.title}</Text>
+        <Text style={styles.serviceSubtitle} />{service.subtitle}</Text>
+        <Text style={styles.serviceDescription} />{service.description}</Text>
+        <View style={styles.featuresContainer} />
           {service.features.slice(0, 3).map((feature, index) => (
-            <View key={index} style={styles.featureTag}>
-              <Text style={styles.featureText}>{feature}</Text>
+            <View key={index} style={styles.featureTag} />
+              <Text style={styles.featureText} />{feature}</Text>
             </View>
           ))}
         </View>
       </View>
-      
       {selectedService?.id === service.id && (
-        <View style={styles.selectedIndicator}>
+        <View style={styles.selectedIndicator} />
           <Icon name="check-circle" size={24} color={colors.primary} />
         </View>
       )}
     </TouchableOpacity>
-  ), []), []), []), []), []), []);
-
-  const renderServiceDetails = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
-    if (!selectedService) {return null;}
-
+  ), []);
+  const renderServiceDetails = useCallback((); => {
+    if (!selectedService) {return nu;l;l;}
+    // 记录渲染性能
+    performanceMonitor.recordRender()
     return (
-      <View style={styles.detailsContainer}>
-        <Text style={styles.detailsTitle}>服务详情</Text>
-        
-        <View style={styles.detailsCard}>
-          <View style={styles.detailsHeader}>
-            <View style={[styles.detailsIcon, { backgroundColor: selectedService.color + '20' }]}>
+      <View style={styles.detailsContainer} />
+        <Text style={styles.detailsTitle} />服务详情</Text>
+        <View style={styles.detailsCard} />
+          <View style={styles.detailsHeader} />
+            <View style={[styles.detailsIcon, { backgroundColor: selectedService.color + '20'   }]} />
               <Icon name={selectedService.icon} size={24} color={selectedService.color} />
             </View>
-            <View style={styles.detailsInfo}>
-              <Text style={styles.detailsName}>{selectedService.title}</Text>
-              <Text style={styles.detailsSubtitle}>{selectedService.subtitle}</Text>
+            <View style={styles.detailsInfo} />
+              <Text style={styles.detailsName} />{selectedService.title}</Text>
+              <Text style={styles.detailsSubtitle} />{selectedService.subtitle}</Text>
             </View>
           </View>
-          
-          <Text style={styles.detailsDescription}>{selectedService.description}</Text>
-          
-          <View style={styles.detailsSection}>
-            <Text style={styles.detailsSectionTitle}>服务特色</Text>
-            {selectedService.features.map((feature, index) => (
-              <Text key={index} style={styles.detailsItem}>• {feature}</Text>
+          <Text style={styles.detailsDescription} />{selectedService.description}</Text>
+          <View style={styles.detailsSection} />;
+            <Text style={styles.detailsSectionTitle} />服务特色</Text>
+            {selectedService.features.map((feature, inde;x;); => (
+              <Text key={index} style={styles.detailsItem} />• {feature}</Text>
             ))}
           </View>
-          
-          <View style={styles.detailsSection}>
-            <Text style={styles.detailsSectionTitle}>健康益处</Text>
-            {selectedService.benefits.map((benefit, index) => (
-              <Text key={index} style={styles.detailsItem}>• {benefit}</Text>
+          <View style={styles.detailsSection} />
+            <Text style={styles.detailsSectionTitle} />健康益处</Text>
+            {selectedService.benefits.map((benefit, index); => (
+              <Text key={index} style={styles.detailsItem} />• {benefit}</Text>
             ))}
           </View>
-          
           {selectedService.locations && (
-            <View style={styles.detailsSection}>
-              <Text style={styles.detailsSectionTitle}>推荐地点</Text>
-              {selectedService.locations.map((location, index) => (
-                <Text key={index} style={styles.detailsItem}>• {location}</Text>
+            <View style={styles.detailsSection} />
+              <Text style={styles.detailsSectionTitle} />推荐地点</Text>
+              {selectedService.locations.map((location, index); => (
+                <Text key={index} style={styles.detailsItem} />• {location}</Text>
               ))}
             </View>
           )}
-          
           {selectedService.seasons && (
-            <View style={styles.detailsSection}>
-              <Text style={styles.detailsSectionTitle}>时令特色</Text>
-              {selectedService.seasons.map((season, index) => (
-                <Text key={index} style={styles.detailsItem}>• {season}</Text>
+            <View style={styles.detailsSection} />
+              <Text style={styles.detailsSectionTitle} />时令特色</Text>
+              {selectedService.seasons.map((season, index); => (
+                <Text key={index} style={styles.detailsItem} />• {season}</Text>
               ))}
             </View>
           )}
         </View>
       </View>
     );
-  };
-
+  }
   return (
     <Modal
       visible={visible}
       animationType="slide"
       presentationStyle="pageSheet"
-      onRequestClose={onClose}
-    >
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+      onRequestClose={onClose} />
+      <View style={styles.container} />
+        <View style={styles.header} />
+          <TouchableOpacity onPress={onClose} style={styles.closeButton} accessibilityLabel="TODO: 添加无障碍标签" />
             <Icon name="close" size={24} color={colors.textPrimary} />
           </TouchableOpacity>
-          <Text style={styles.title}>生态生活</Text>
+          <Text style={styles.title} />生态生活</Text>
           <View style={styles.placeholder} />
         </View>
-
-        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-          <View style={styles.introSection}>
-            <Text style={styles.introTitle}>食农结合 · 山水养生</Text>
-            <Text style={styles.introDescription}>
+        <ScrollView style={styles.content} showsVerticalScrollIndicator={false} />
+          <View style={styles.introSection} />
+            <Text style={styles.introTitle} />食农结合 · 山水养生</Text>
+            <Text style={styles.introDescription} />
               回归自然，体验生态生活方式。通过食农结合和山水养生，
               在自然环境中获得身心健康，感受传统文化的智慧。
             </Text>
           </View>
-
           {renderCategoryTabs()}
-
-          <View style={styles.servicesSection}>
+          <View style={styles.servicesSection} />
             {filteredServices.map(renderServiceCard)}
           </View>
-
           {renderServiceDetails()}
         </ScrollView>
-
         {selectedService && (
-          <View style={styles.footer}>
+          <View style={styles.footer} />
             <TouchableOpacity
               style={styles.startButton}
               onPress={startService}
-            >
+             accessibilityLabel="TODO: 添加无障碍标签" />
               <Icon name="leaf" size={20} color="white" />
-              <Text style={styles.startButtonText}>开始体验</Text>
+              <Text style={styles.startButtonText} />开始体验</Text>
             </TouchableOpacity>
           </View>
-        )}
+        )};
       </View>
-    </Modal>
-  );
+    </Modal;>
+  ;);
 };
-
-const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: colors.background
   },
   header: {
     flexDirection: 'row',
@@ -326,67 +289,57 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: colors.border
   },
-  closeButton: {
-    padding: spacing.sm,
-  },
+  closeButton: { padding: spacing.sm  },
   title: {
     fontSize: 18,
     fontWeight: '600',
-    color: colors.textPrimary,
+    color: colors.textPrimary
   },
-  placeholder: {
-    width: 40,
-  },
+  placeholder: { width: 40  },
   content: {
     flex: 1,
-    paddingHorizontal: spacing.lg,
+    paddingHorizontal: spacing.lg
   },
   introSection: {
     paddingVertical: spacing.lg,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   introTitle: {
     fontSize: 24,
     fontWeight: 'bold',
     color: colors.textPrimary,
-    marginBottom: spacing.sm,
+    marginBottom: spacing.sm
   },
   introDescription: {
     fontSize: 16,
     color: colors.textSecondary,
     textAlign: 'center',
-    lineHeight: 24,
+    lineHeight: 24
   },
   categoryTabs: {
     flexDirection: 'row',
     backgroundColor: colors.gray100,
     borderRadius: 12,
     padding: spacing.xs,
-    marginBottom: spacing.lg,
+    marginBottom: spacing.lg
   },
   categoryTab: {
     flex: 1,
     paddingVertical: spacing.sm,
     paddingHorizontal: spacing.md,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: 'center'
   },
-  activeCategoryTab: {
-    backgroundColor: colors.primary,
-  },
+  activeCategoryTab: { backgroundColor: colors.primary  },
   categoryTabText: {
     fontSize: 14,
     fontWeight: '500',
-    color: colors.textSecondary,
+    color: colors.textSecondary
   },
-  activeCategoryTabText: {
-    color: 'white',
-  },
-  servicesSection: {
-    paddingBottom: spacing.lg,
-  },
+  activeCategoryTabText: { color: 'white'  },
+  servicesSection: { paddingBottom: spacing.lg  },
   serviceCard: {
     flexDirection: 'row',
     backgroundColor: colors.surface,
@@ -394,11 +347,11 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
     padding: spacing.md,
     marginBottom: spacing.md,
     borderWidth: 2,
-    borderColor: 'transparent',
+    borderColor: 'transparent'
   },
   selectedServiceCard: {
     borderColor: colors.primary,
-    backgroundColor: colors.primary + '10',
+    backgroundColor: colors.primary + '10'
   },
   serviceIcon: {
     width: 60,
@@ -406,31 +359,29 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
     borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: spacing.md,
+    marginRight: spacing.md
   },
-  serviceInfo: {
-    flex: 1,
-  },
+  serviceInfo: { flex: 1  },
   serviceTitle: {
     fontSize: 18,
     fontWeight: '600',
     color: colors.textPrimary,
-    marginBottom: spacing.xs,
+    marginBottom: spacing.xs
   },
   serviceSubtitle: {
     fontSize: 14,
     color: colors.textSecondary,
-    marginBottom: spacing.sm,
+    marginBottom: spacing.sm
   },
   serviceDescription: {
     fontSize: 14,
     color: colors.textSecondary,
     lineHeight: 20,
-    marginBottom: spacing.sm,
+    marginBottom: spacing.sm
   },
   featuresContainer: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexWrap: 'wrap'
   },
   featureTag: {
     backgroundColor: colors.gray100,
@@ -438,35 +389,33 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
     paddingVertical: spacing.xs,
     borderRadius: 8,
     marginRight: spacing.xs,
-    marginBottom: spacing.xs,
+    marginBottom: spacing.xs
   },
   featureText: {
     fontSize: 12,
-    color: colors.textSecondary,
+    color: colors.textSecondary
   },
   selectedIndicator: {
     position: 'absolute',
     top: spacing.sm,
-    right: spacing.sm,
+    right: spacing.sm
   },
-  detailsContainer: {
-    marginTop: spacing.lg,
-  },
+  detailsContainer: { marginTop: spacing.lg  },
   detailsTitle: {
     fontSize: 18,
     fontWeight: '600',
     color: colors.textPrimary,
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
   detailsCard: {
     backgroundColor: colors.surface,
     borderRadius: 12,
-    padding: spacing.lg,
+    padding: spacing.lg
   },
   detailsHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
   detailsIcon: {
     width: 48,
@@ -474,45 +423,41 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
     borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: spacing.md,
+    marginRight: spacing.md
   },
-  detailsInfo: {
-    flex: 1,
-  },
+  detailsInfo: { flex: 1  },
   detailsName: {
     fontSize: 18,
     fontWeight: '600',
-    color: colors.textPrimary,
+    color: colors.textPrimary
   },
   detailsSubtitle: {
     fontSize: 14,
-    color: colors.textSecondary,
+    color: colors.textSecondary
   },
   detailsDescription: {
     fontSize: 16,
     color: colors.textSecondary,
     lineHeight: 24,
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
-  detailsSection: {
-    marginBottom: spacing.md,
-  },
+  detailsSection: { marginBottom: spacing.md  },
   detailsSectionTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: colors.textPrimary,
-    marginBottom: spacing.sm,
+    marginBottom: spacing.sm
   },
   detailsItem: {
     fontSize: 14,
     color: colors.textSecondary,
     marginBottom: spacing.xs,
-    lineHeight: 20,
+    lineHeight: 20
   },
   footer: {
     padding: spacing.lg,
     borderTopWidth: 1,
-    borderTopColor: colors.border,
+    borderTopColor: colors.border
   },
   startButton: {
     flexDirection: 'row',
@@ -520,12 +465,12 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
     justifyContent: 'center',
     backgroundColor: colors.primary,
     paddingVertical: spacing.md,
-    borderRadius: 12,
+    borderRadius: 12
   },
   startButtonText: {
     fontSize: 16,
     fontWeight: '600',
     color: 'white',
-    marginLeft: spacing.sm,
-  },
-}), []), []), []), []), []), []); 
+    marginLeft: spacing.sm
+  }
+}), []);

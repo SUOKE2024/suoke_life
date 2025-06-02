@@ -1,6 +1,6 @@
+import React from "react";
 import { render, fireEvent } from "@testing-library/react-native";
 import { AgentEmotionFeedback } from "../components/AgentEmotionFeedback";
-import React from "react";
 
 describe("AgentEmotionFeedback", () => {
   it("点击反馈按钮应触发回调", () => {

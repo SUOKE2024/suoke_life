@@ -1,14 +1,9 @@
-import { performanceMonitor } from "./performanceMonitor";
-
-/**
- * 应用状态管理优化工具
- * 提供状态更新优化、状态变化追踪、状态性能监控等功能
- */
-
+// 状态优化器工具 - 提供状态更新优化、状态变化追踪、状态性能监控等功能
+// 应用状态管理优化工具   提供状态更新优化、状态变化追踪、状态性能监控等功能
 export interface StateChangeEvent {
   stateName: string;
-  oldValue: any;
-  newValue: any;
+  oldValue: unknown;
+  newValue: unknown;
   timestamp: number;
   duration: number;
   source: string;
@@ -32,17 +27,22 @@ export interface StateOptimizationSuggestion {
   impact: number;
 }
 
-/**
- * 状态优化器类
- */
+// 批量更新项接口
+interface BatchUpdateItem {
+  update: unknown;
+  resolve: () => void;
+}
+
+// 状态优化器类
 export class StateOptimizer {
   private static instance: StateOptimizer;
-  private stateData: Map<string, StatePerformanceData> = new Map();
-  private stateHistory: Map<string, StateChangeEvent[]> = new Map();
-  private updateTimers: Map<string, number> = new Map();
-  private batchedUpdates: Map<string, any[]> = new Map();
-  private batchTimer: any = null;
-  private readonly batchDelay = 16; // 16ms批量延迟（一帧时间）
+  private stateData = new Map<string, StatePerformanceData>();
+  private stateHistory = new Map<string, StateChangeEvent[]>();
+  private activeUpdates = new Map<string, number>();
+  private batchedUpdates = new Map<string, BatchUpdateItem[]>();
+  private batchTimer: NodeJS.Timeout | null = null;
+  private readonly batchDelay = 16; // 16ms批量延迟
+  private readonly maxHistorySize = 100;
 
   private constructor() {}
 
@@ -53,38 +53,52 @@ export class StateOptimizer {
     return StateOptimizer.instance;
   }
 
-  /**
-   * 开始状态更新计时
-   */
+  // 开始状态更新跟踪
   startStateUpdate(stateName: string): void {
-    const startTime = performance.now();
-    this.updateTimers.set(stateName, startTime);
+    this.activeUpdates.set(stateName, Date.now());
   }
 
-  /**
-   * 结束状态更新计时
-   */
+  // 结束状态更新跟踪
   endStateUpdate(
     stateName: string,
-    oldValue: any,
-    newValue: any,
+    oldValue: unknown,
+    newValue: unknown,
     source: string = "unknown"
   ): void {
-    const endTime = performance.now();
-    const startTime = this.updateTimers.get(stateName);
+    const startTime = this.activeUpdates.get(stateName);
+    if (!startTime) return;
 
-    if (!startTime) {
-      return;
-    }
-
-    const duration = endTime - startTime;
-    this.updateTimers.delete(stateName);
+    const duration = Date.now() - startTime;
+    this.activeUpdates.delete(stateName);
 
     // 检查是否为不必要的更新
     const isUnnecessary = this.isUnnecessaryUpdate(oldValue, newValue);
 
-    // 记录状态变化事件
-    const changeEvent: StateChangeEvent = {
+    // 记录状态变化历史
+    this.recordStateChange(stateName, oldValue, newValue, duration, source);
+
+    // 更新性能数据
+    this.updatePerformanceData(stateName, duration, isUnnecessary);
+  }
+
+  // 检查是否为不必要的更新
+  private isUnnecessaryUpdate(oldValue: unknown, newValue: unknown): boolean {
+    try {
+      return JSON.stringify(oldValue) === JSON.stringify(newValue);
+    } catch {
+      return oldValue === newValue;
+    }
+  }
+
+  // 记录状态变化
+  private recordStateChange(
+    stateName: string,
+    oldValue: unknown,
+    newValue: unknown,
+    duration: number,
+    source: string
+  ): void {
+    const event: StateChangeEvent = {
       stateName,
       oldValue,
       newValue,
@@ -93,66 +107,37 @@ export class StateOptimizer {
       source,
     };
 
-    this.recordStateChange(changeEvent, isUnnecessary);
+    const history = this.stateHistory.get(stateName) || [];
+    history.push(event);
 
-    // 记录到性能监控器
-    performanceMonitor.recordUserInteraction(
-      "state_update",
-      stateName,
-      undefined,
-      { duration, source }
-    );
-  }
-
-  /**
-   * 检查是否为不必要的更新
-   */
-  private isUnnecessaryUpdate(oldValue: any, newValue: any): boolean {
-    // 深度比较检查值是否真的发生了变化
-    try {
-      return JSON.stringify(oldValue) === JSON.stringify(newValue);
-    } catch (error) {
-      // 如果无法序列化，使用浅比较
-      return oldValue === newValue;
+    // 限制历史记录大小
+    if (history.length > this.maxHistorySize) {
+      history.shift();
     }
+
+    this.stateHistory.set(stateName, history);
   }
 
-  /**
-   * 记录状态变化
-   */
-  private recordStateChange(
-    changeEvent: StateChangeEvent,
+  // 更新性能数据
+  private updatePerformanceData(
+    stateName: string,
+    duration: number,
     isUnnecessary: boolean
   ): void {
-    const { stateName, duration } = changeEvent;
-
-    // 更新状态历史
-    const history = this.stateHistory.get(stateName) || [];
-    history.push(changeEvent);
-
-    // 限制历史记录数量
-    if (history.length > 100) {
-      history.splice(0, history.length - 100);
-    }
-    this.stateHistory.set(stateName, history);
-
-    // 更新性能数据
     const existing = this.stateData.get(stateName);
-
+    
     if (existing) {
       const newUpdateCount = existing.updateCount + 1;
-      const newAverageUpdateTime =
-        (existing.averageUpdateTime * existing.updateCount + duration) /
-        newUpdateCount;
-
+      const newAverageTime = 
+        (existing.averageUpdateTime * existing.updateCount + duration) / newUpdateCount;
+      
       this.stateData.set(stateName, {
         ...existing,
         updateCount: newUpdateCount,
-        averageUpdateTime: newAverageUpdateTime,
+        averageUpdateTime: newAverageTime,
         lastUpdateTime: duration,
         totalChanges: existing.totalChanges + 1,
-        unnecessaryUpdates:
-          existing.unnecessaryUpdates + (isUnnecessary ? 1 : 0),
+        unnecessaryUpdates: existing.unnecessaryUpdates + (isUnnecessary ? 1 : 0),
         timestamp: Date.now(),
       });
     } else {
@@ -168,15 +153,13 @@ export class StateOptimizer {
     }
   }
 
-  /**
-   * 批量状态更新
-   */
-  batchStateUpdate(stateName: string, update: any): Promise<void> {
+  // 批量状态更新
+  batchStateUpdate(stateName: string, update: unknown): Promise<void> {
     return new Promise((resolve) => {
       const updates = this.batchedUpdates.get(stateName) || [];
       updates.push({ update, resolve });
       this.batchedUpdates.set(stateName, updates);
-
+      
       if (!this.batchTimer) {
         this.batchTimer = setTimeout(() => {
           this.processBatchedUpdates();
@@ -185,9 +168,7 @@ export class StateOptimizer {
     });
   }
 
-  /**
-   * 处理批量更新
-   */
+  // 处理批量更新
   private processBatchedUpdates(): void {
     if (this.batchTimer) {
       clearTimeout(this.batchTimer);
@@ -196,17 +177,13 @@ export class StateOptimizer {
 
     this.batchedUpdates.forEach((updates, stateName) => {
       if (updates.length > 0) {
-        // 合并所有更新
-        const mergedUpdate = updates.reduce((acc, { update }) => {
-          return { ...acc, ...update };
-        }, {});
+                 // 合并所有更新
+         const mergedUpdate = updates.reduce((acc, { update }) => {
+           return { ...acc, ...(update as object) };
+         }, {} as Record<string, unknown>);
 
         // 执行合并后的更新
         this.startStateUpdate(`${stateName}_batch`);
-
-        // 这里应该调用实际的状态更新逻辑
-        // 由于这是一个通用工具，具体的更新逻辑需要在使用时提供
-
         this.endStateUpdate(`${stateName}_batch`, {}, mergedUpdate, "batch");
 
         // 解析所有Promise
@@ -217,9 +194,7 @@ export class StateOptimizer {
     this.batchedUpdates.clear();
   }
 
-  /**
-   * 获取状态性能数据
-   */
+  // 获取状态性能数据
   getStatePerformanceData(stateName?: string): StatePerformanceData[] {
     if (stateName) {
       const data = this.stateData.get(stateName);
@@ -228,17 +203,13 @@ export class StateOptimizer {
     return Array.from(this.stateData.values());
   }
 
-  /**
-   * 获取状态变化历史
-   */
+  // 获取状态变化历史
   getStateHistory(stateName: string, limit: number = 50): StateChangeEvent[] {
     const history = this.stateHistory.get(stateName) || [];
     return history.slice(-limit);
   }
 
-  /**
-   * 获取优化建议
-   */
+  // 获取优化建议
   getOptimizationSuggestions(): StateOptimizationSuggestion[] {
     const suggestions: StateOptimizationSuggestion[] = [];
 
@@ -307,9 +278,7 @@ export class StateOptimizer {
     return suggestions.sort((a, b) => b.impact - a.impact);
   }
 
-  /**
-   * 获取状态统计
-   */
+  // 获取状态统计
   getStateStats(): {
     totalStates: number;
     totalUpdates: number;
@@ -321,10 +290,7 @@ export class StateOptimizer {
   } {
     const states = Array.from(this.stateData.values());
     const totalStates = states.length;
-    const totalUpdates = states.reduce(
-      (sum, state) => sum + state.updateCount,
-      0
-    );
+    const totalUpdates = states.reduce((sum, state) => sum + state.updateCount, 0);
     const totalUnnecessaryUpdates = states.reduce(
       (sum, state) => sum + state.unnecessaryUpdates,
       0
@@ -332,8 +298,7 @@ export class StateOptimizer {
 
     const averageUpdateTime =
       states.length > 0
-        ? states.reduce((sum, state) => sum + state.averageUpdateTime, 0) /
-          states.length
+        ? states.reduce((sum, state) => sum + state.averageUpdateTime, 0) / states.length
         : 0;
 
     const unnecessaryUpdateRate =
@@ -360,9 +325,7 @@ export class StateOptimizer {
     };
   }
 
-  /**
-   * 清除状态数据
-   */
+  // 清除状态数据
   clearStateData(stateName?: string): void {
     if (stateName) {
       this.stateData.delete(stateName);
@@ -373,13 +336,19 @@ export class StateOptimizer {
     }
   }
 
-  /**
-   * 导出状态数据
-   */
+  // 导出状态数据
   exportStateData(): {
     performanceData: StatePerformanceData[];
     history: Record<string, StateChangeEvent[]>;
-    stats: ReturnType<typeof this.getStateStats>;
+         stats: {
+       totalStates: number;
+       totalUpdates: number;
+       averageUpdateTime: number;
+       unnecessaryUpdateRate: number;
+       slowestStates: StatePerformanceData[];
+       mostUpdatedStates: StatePerformanceData[];
+       suggestions: StateOptimizationSuggestion[];
+     };
     timestamp: number;
   } {
     const history: Record<string, StateChangeEvent[]> = {};
@@ -402,8 +371,8 @@ export const stateOptimizer = StateOptimizer.getInstance();
 // 便捷函数
 export const trackStateUpdate = (
   stateName: string,
-  oldValue: any,
-  newValue: any,
+  oldValue: unknown,
+  newValue: unknown,
   source?: string
 ) => {
   stateOptimizer.startStateUpdate(stateName);
@@ -413,7 +382,7 @@ export const trackStateUpdate = (
   }, 0);
 };
 
-export const batchStateUpdate = (stateName: string, update: any) => {
+export const batchStateUpdate = (stateName: string, update: unknown) => {
   return stateOptimizer.batchStateUpdate(stateName, update);
 };
 

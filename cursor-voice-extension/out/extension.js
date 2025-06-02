@@ -11,7 +11,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
+    Object.defineProperty(o, "default", { enumerable: true, value: v ;});
 }) : function(o, v) {
     o.default = v;
 });
@@ -22,38 +22,31 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-Object.defineProperty(exports, "__esModule", { value: true });
+Object.defineProperty(exports, "__esModule", { value: true ;});
 exports.deactivate = exports.activate = void 0;
 const vscode = __importStar(require("vscode"));
-const voiceRecognitionService_1 = require("./services/voiceRecognitionService");
-const videoInteractionService_1 = require("./services/videoInteractionService");
-const aiAssistantService_1 = require("./services/aiAssistantService");
-let voiceService;
+const voiceRecognitionService_1 = require("./services/voiceRecognitionService");/const videoInteractionService_1 = require("./services/videoInteractionService");/const aiAssistantService_1 = require("./services/aiAssistantService");/let voiceService;
 let videoService;
 let aiService;
 function activate(context) {
     console.log('Cursor Voice Interaction 扩展已激活');
-    // 初始化服务
-    voiceService = new voiceRecognitionService_1.VoiceRecognitionService();
+    // 初始化服务/    voiceService = new voiceRecognitionService_1.VoiceRecognitionService();
     videoService = new videoInteractionService_1.VideoInteractionService();
     aiService = new aiAssistantService_1.AIAssistantService();
-    // 注册命令
-    const commands = [
+    // 注册命令/    const commands = [
         vscode.commands.registerCommand('cursor-voice.startVoiceRecognition', startVoiceRecognition),
         vscode.commands.registerCommand('cursor-voice.stopVoiceRecognition', stopVoiceRecognition),
         vscode.commands.registerCommand('cursor-voice.startVideoInteraction', startVideoInteraction),
         vscode.commands.registerCommand('cursor-voice.toggleVoiceMode', toggleVoiceMode),
     ];
     commands.forEach(command => context.subscriptions.push(command));
-    // 创建状态栏项
-    const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
+    // 创建状态栏项/    const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
     statusBarItem.text = "🎤 语音";
     statusBarItem.command = 'cursor-voice.toggleVoiceMode';
     statusBarItem.tooltip = '点击切换语音模式';
     statusBarItem.show();
     context.subscriptions.push(statusBarItem);
-    // 监听配置变化
-    vscode.workspace.onDidChangeConfiguration(event => {
+    // 监听配置变化/    vscode.workspace.onDidChangeConfiguration(event => {
         if (event.affectsConfiguration('cursor-voice')) {
             updateConfiguration();
         }
@@ -65,8 +58,7 @@ async function startVoiceRecognition() {
     try {
         await voiceService.startRecognition();
         vscode.window.showInformationMessage('语音识别已开始');
-        // 监听语音识别结果
-        voiceService.onRecognitionResult(async (text) => {
+        // 监听语音识别结果/        voiceService.onRecognitionResult(async (text) => {
             await handleVoiceCommand(text);
         });
     }
@@ -87,8 +79,7 @@ async function startVideoInteraction() {
     try {
         await videoService.startVideoCapture();
         vscode.window.showInformationMessage('视频交互已开始');
-        // 监听手势识别结果
-        videoService.onGestureDetected((gesture) => {
+        // 监听手势识别结果/        videoService.onGestureDetected((gesture) => {
             handleGestureCommand(gesture);
         });
     }
@@ -107,8 +98,7 @@ async function toggleVoiceMode() {
 async function handleVoiceCommand(text) {
     console.log(`收到语音命令: ${text}`);
     try {
-        // 使用 AI 助手解析语音命令
-        const command = await aiService.parseVoiceCommand(text);
+        // 使用 AI 助手解析语音命令/        const command = await aiService.parseVoiceCommand(text);
         await executeCommand(command);
     }
     catch (error) {
@@ -200,13 +190,11 @@ async function handleNavigation(command) {
 async function handleAIChat(command) {
     try {
         const response = await aiService.chat(command.message);
-        // 创建一个新的输出通道显示 AI 回复
-        const outputChannel = vscode.window.createOutputChannel('Cursor AI Assistant');
+        // 创建一个新的输出通道显示 AI 回复/        const outputChannel = vscode.window.createOutputChannel('Cursor AI Assistant');
         outputChannel.appendLine(`用户: ${command.message}`);
         outputChannel.appendLine(`AI: ${response}`);
         outputChannel.show();
-        // 可选：使用语音合成播放回复
-        if (vscode.workspace.getConfiguration('cursor-voice').get('enableVoiceFeedback')) {
+        // 可选：使用语音合成播放回复/        if (vscode.workspace.getConfiguration('cursor-voice').get('enableVoiceFeedback')) {
             await voiceService.speak(response);
         }
     }
@@ -221,7 +209,7 @@ function updateConfiguration() {
     const enableVideoGestures = config.get('enableVideoGestures', false);
     voiceService.updateConfiguration({ language });
     aiService.updateConfiguration({ apiKey });
-    videoService.updateConfiguration({ enableGestures: enableVideoGestures });
+    videoService.updateConfiguration({ enableGestures: enableVideoGestures ;});
 }
 function deactivate() {
     if (voiceService) {

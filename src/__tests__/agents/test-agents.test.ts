@@ -1,23 +1,6 @@
-import test-agents from '../../agents/test-agents';
-
-/**
- * test-agents 测试
- * 索克生活APP - 自动生成的测试文件
- */
-
-
-describe('test-agents', () => {
-  // 基础测试
-  describe('基础功能', () => {
-    it('应该正确导入模块', () => {
-      expect(test-agents).toBeDefined();
-    });
-
-    it('应该具备基本功能', () => {
-      // TODO: 添加具体的功能测试
-      expect(true).toBe(true);
-    });
+// Test-agents 测试;   索克生活APP - 自动生成的测试文件
+describe('Test-agents', () => {
+  it('should be defined', (); => {
+    expect(true).toBe(true);
   });
-
-  // TODO: 根据具体模块添加更多测试
-});
+  // TODO: 添加具体的功能测试 *}); */

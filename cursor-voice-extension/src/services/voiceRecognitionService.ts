@@ -6,8 +6,7 @@ export class VoiceRecognitionService {
     private language: string = 'zh-CN';
 
     constructor() {
-        // 在 VS Code 扩展环境中，需要检查 window 对象是否存在
-        if (typeof window !== 'undefined') {
+        // 在 VS Code 扩展环境中，需要检查 window 对象是否存在/        if (typeof window !== 'undefined') {
             this.speechSynthesis = window.speechSynthesis;
             this.initializeRecognition();
         } else {
@@ -16,8 +15,7 @@ export class VoiceRecognitionService {
     }
 
     private initializeRecognition() {
-        // 检查浏览器是否支持语音识别
-        if (typeof window === 'undefined') {
+        // 检查浏览器是否支持语音识别/        if (typeof window === 'undefined') {
             console.log('window 对象不存在，语音识别不可用');
             return;
         }
@@ -96,7 +94,7 @@ export class VoiceRecognitionService {
         return this.recognizing;
     }
 
-    async speak(text: string): Promise<void> {
+    async speak(text: string): Promise<void>  {
         return new Promise((resolve, reject) => {
             if (!this.speechSynthesis) {
                 reject(new Error('语音合成不可用'));
@@ -116,7 +114,7 @@ export class VoiceRecognitionService {
         });
     }
 
-    updateConfiguration(config: { language?: string }): void {
+    updateConfiguration(config: { language?: string }): void  {
         if (config.language) {
             this.language = config.language;
             if (this.recognition) {

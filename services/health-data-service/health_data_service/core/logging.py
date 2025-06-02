@@ -1,8 +1,13 @@
-"""日志管理模块"""
+#!/usr/bin/env python3
+"""
+日志配置模块
+
+提供统一的日志配置和记录功能。
+"""
 
 import sys
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional, Tuple
 
 from loguru import logger
 
@@ -68,7 +73,7 @@ def setup_logging() -> None:
         )
 
 
-def get_logger(name: str | None = None) -> Any:
+def get_logger(name: Optional[str] = None) -> Any:
     """获取日志记录器
 
     Args:
@@ -87,7 +92,7 @@ def log_request(
     url: str,
     status_code: int,
     duration: float,
-    user_id: str | None = None,
+    user_id: Optional[str] = None,
     **kwargs: Any,
 ) -> None:
     """记录HTTP请求日志
@@ -121,9 +126,9 @@ def log_database_operation(
     operation: str,
     table: str,
     duration: float,
-    affected_rows: int | None = None,
-    service: str | None = None,
-    error: str | None = None,
+    affected_rows: Optional[int] = None,
+    service: Optional[str] = None,
+    error: Optional[str] = None,
     **kwargs: Any,
 ) -> None:
     """记录数据库操作日志"""
@@ -146,10 +151,10 @@ def log_database_operation(
 
 def log_ml_inference(
     model_name: str,
-    input_shape: tuple,
+    input_shape: Tuple,
     duration: float,
     success: bool = True,
-    error: str | None = None,
+    error: Optional[str] = None,
     **kwargs: Any,
 ) -> None:
     """记录机器学习推理日志
@@ -182,8 +187,8 @@ def log_ml_inference(
 def log_cache_operation(
     operation: str,
     key: str,
-    hit: bool | None = None,
-    duration: float | None = None,
+    hit: Optional[bool] = None,
+    duration: Optional[float] = None,
     **kwargs: Any,
 ) -> None:
     """记录缓存操作日志

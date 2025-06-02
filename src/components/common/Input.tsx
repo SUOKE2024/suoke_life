@@ -1,19 +1,12 @@
-import { colors, spacing } from '../../constants/theme';
-
-
-
-
-
-import React, { useState } from 'react';
+import { colors, spacing } from '../../constants/theme';/;
+importReact,{ useState } from 'react';
   View,
   Text,
   TextInput,
   StyleSheet,
   TouchableOpacity,
   ViewStyle,
-  TextInputProps,
-} from 'react-native';
-
+  { TextInputProps } from 'react-native';
 interface InputProps extends TextInputProps {
   label?: string;
   error?: string;
@@ -21,11 +14,8 @@ interface InputProps extends TextInputProps {
   rightIcon?: React.ReactNode;
   containerStyle?: ViewStyle;
   inputStyle?: ViewStyle;
-  showPassword?: boolean;
-}
-
-export const Input: React.FC<InputProps> = ({
-  label,
+  showPassword?: boolean}
+export const Input: React.FC<InputProps /> = ({/  label,
   error,
   leftIcon,
   rightIcon,
@@ -35,53 +25,34 @@ export const Input: React.FC<InputProps> = ({
   secureTextEntry,
   ...props
 }) => {
-  const [isPasswordVisible, setIsPasswordVisible] = useState(!secureTextEntry);
-
-  const togglePasswordVisibility = useCallback( () => {, []);
+  const [isPasswordVisible, setIsPasswordVisible] = useState<any>(!secureTextEntr;y;);
+  const togglePasswordVisibility = useCallback((); => {
+    // TODO: Implement function body *}, []); */
     setIsPasswordVisible(!isPasswordVisible);
   };
-
   return (
-    <View style={[styles.container, containerStyle]}>
-      {label && <Text style={styles.label}>{label}</Text>}
-
-      <View
-        style={[styles.inputContainer, error ? styles.inputError : undefined]}
-      >
-        {leftIcon && <View style={styles.leftIcon}>{leftIcon}</View>}
-
-        <TextInput
+    <View style={[styles.container, containerStyle]} />/      {label && <Text style={styles.label} />{label}</Text>}/;
+      <View;
+        style={[styles.inputContainer, error ? styles.inputError: undefine;d;]} />/        {leftIcon && <View style={styles.leftIcon} />{leftIcon}</View>}/
+        <TextInput,
           style={[styles.input, inputStyle]}
           secureTextEntry={secureTextEntry && !isPasswordVisible}
           placeholderTextColor={colors.textSecondary}
           {...props}
-        />
-
+        />/
         {showPassword && secureTextEntry && (
           <TouchableOpacity
             style={styles.rightIcon}
             onPress={togglePasswordVisibility}
-          >
-            <Text style={styles.passwordToggle}>
-              {isPasswordVisible ? '隐藏' : '显示'}
-            </Text>
-          </TouchableOpacity>
-        )}
-
+           accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.passwordToggle} />/              {isPasswordVisible ? '隐藏' : '显示'}
+            </Text>/          </TouchableOpacity>/        )}
         {rightIcon && !showPassword && (
-          <View style={styles.rightIcon}>{rightIcon}</View>
-        )}
-      </View>
-
-      {error && <Text style={styles.errorText}>{error}</Text>}
-    </View>
-  );
+          <View style={styles.rightIcon} />{rightIcon}</View>/        )}
+      </View>/
+      {error && <Text style={styles.errorText} />{error}</Text>}/    </View>/  );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    marginBottom: spacing.md,
-  },
+const styles = StyleSheet.create({ container: {,
+    marginBottom: spacing.;m;d  },
   label: {
     fontSize: 16,
     fontWeight: '600',
@@ -97,21 +68,15 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     paddingHorizontal: spacing.md,
   },
-  inputError: {
-    borderColor: colors.error,
-  },
+  inputError: { borderColor: colors.error  },
   input: {
     flex: 1,
     paddingVertical: spacing.md,
     fontSize: 16,
     color: colors.text,
   },
-  leftIcon: {
-    marginRight: spacing.sm,
-  },
-  rightIcon: {
-    marginLeft: spacing.sm,
-  },
+  leftIcon: { marginRight: spacing.sm  },
+  rightIcon: { marginLeft: spacing.sm  },
   passwordToggle: {
     fontSize: 14,
     color: colors.primary,
@@ -121,5 +86,5 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: colors.error,
     marginTop: spacing.xs,
-  },
+  }
 });

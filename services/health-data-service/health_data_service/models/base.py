@@ -1,7 +1,7 @@
 """基础数据模型"""
 
 from datetime import datetime
-from typing import Any
+from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel
 from pydantic import ConfigDict
@@ -17,9 +17,9 @@ class BaseEntity(BaseModel):
         arbitrary_types_allowed=True,
     )
 
-    id: int | None = Field(default=None, description="主键ID")
-    created_at: datetime | None = Field(default=None, description="创建时间")
-    updated_at: datetime | None = Field(default=None, description="更新时间")
+    id: Optional[int] = Field(default=None, description="主键ID")
+    created_at: Optional[datetime] = Field(default=None, description="创建时间")
+    updated_at: Optional[datetime] = Field(default=None, description="更新时间")
 
 
 class BaseRequest(BaseModel):
@@ -50,12 +50,12 @@ class PaginatedResponse(BaseResponse):
     page: int = Field(description="当前页码")
     page_size: int = Field(description="每页大小")
     total_pages: int = Field(description="总页数")
-    data: list[Any] = Field(description="数据列表")
+    data: List[Any] = Field(description="数据列表")
 
     @classmethod
     def create(
         cls,
-        data: list[Any],
+        data: List[Any],
         total: int,
         page: int,
         page_size: int,
@@ -77,5 +77,5 @@ class ErrorResponse(BaseModel):
     """错误响应模型"""
 
     success: bool = Field(default=False, description="请求是否成功")
-    error: dict[str, Any] = Field(description="错误信息")
+    error: Dict[str, Any] = Field(description="错误信息")
     timestamp: datetime = Field(default_factory=datetime.now, description="响应时间")

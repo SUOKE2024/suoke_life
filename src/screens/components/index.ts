@@ -1,7 +1,2 @@
-export { AgentCard } from "./AgentCard";
-export { ChatMessage } from "./ChatMessage";
-export { ScreenHeader } from "./ScreenHeader";
-export { TabSelector } from "./TabSelector";
-export { HealthCard } from "./HealthCard";
-export { AgentSelector } from "./AgentSelector";
-export { MessageInput } from "./MessageInput";
+// index.ts   索克生活APP - 自动生成的类型安全文件     @description TODO: 添加文件描述; @author 索克生活开发团队   @version 1.0.0
+export { AgentCard } from "./AgentCard"/export { ChatMessage } from "./ChatMessage"/export { ScreenHeader } from "./ScreenHeader"/export { TabSelector } from "./TabSelector"/export { HealthCard } from "./HealthCard"/export { AgentSelector } from "./AgentSelector"/export { MessageInput } from "./MessageInput";/;

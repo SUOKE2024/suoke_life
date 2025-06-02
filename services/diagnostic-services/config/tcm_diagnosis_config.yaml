@@ -1,0 +1,345 @@
+# 中医诊断系统配置文件
+# TCM Diagnosis System Configuration
+
+# 系统基本配置
+system:
+  name: "TCM Diagnosis System"
+  version: "1.0.0"
+  description: "中医辨证数字化诊断系统"
+  debug: true
+  log_level: "INFO"
+
+# 服务配置
+services:
+  calculation_service:
+    host: "localhost"
+    port: 8000
+    base_url: "http://localhost:8000"
+    timeout: 30
+    max_retries: 3
+    
+  palpation_service:
+    host: "localhost"
+    port: 8001
+    base_url: "http://localhost:8001"
+    timeout: 30
+    max_retries: 3
+    
+  knowledge_service:
+    host: "localhost"
+    port: 8002
+    base_url: "http://localhost:8002"
+    timeout: 30
+    max_retries: 3
+
+# 舌象分析配置
+tongue_analysis:
+  # 图像预处理参数
+  image_preprocessing:
+    target_size: [400, 300]
+    gaussian_blur_kernel: 5
+    bilateral_filter:
+      d: 9
+      sigma_color: 75
+      sigma_space: 75
+    
+  # 舌体分割参数
+  tongue_segmentation:
+    hsv_lower: [0, 30, 50]
+    hsv_upper: [20, 255, 255]
+    morphology_kernel_size: 5
+    min_contour_area: 1000
+    
+  # 颜色分析参数
+  color_analysis:
+    color_ranges:
+      pale_white: [[0, 0, 200], [180, 30, 255]]
+      light_red: [[0, 50, 150], [10, 150, 255]]
+      red: [[0, 100, 100], [10, 255, 255]]
+      crimson: [[170, 100, 100], [180, 255, 200]]
+      purple: [[120, 50, 50], [150, 255, 200]]
+      blue_purple: [[100, 50, 50], [130, 255, 200]]
+    confidence_threshold: 0.6
+    
+  # 舌苔分析参数
+  coating_analysis:
+    texture_features:
+      - "contrast"
+      - "dissimilarity"
+      - "homogeneity"
+      - "energy"
+    thickness_threshold: 0.3
+    moisture_threshold: 0.5
+    
+  # 异常区域检测参数
+  abnormal_detection:
+    spot_detection:
+      min_radius: 3
+      max_radius: 15
+      threshold: 0.8
+    crack_detection:
+      line_threshold: 50
+      min_line_length: 20
+      max_line_gap: 5
+
+# 脉象分析配置
+pulse_analysis:
+  # 数据预处理参数
+  data_preprocessing:
+    sampling_rate: 1000
+    filter_type: "bandpass"
+    low_freq: 0.5
+    high_freq: 10.0
+    filter_order: 4
+    
+  # 峰值检测参数
+  peak_detection:
+    height_threshold: 0.3
+    distance_threshold: 300  # 最小峰值间距(毫秒)
+    prominence_threshold: 0.1
+    
+  # 特征提取参数
+  feature_extraction:
+    window_size: 1000
+    overlap: 0.5
+    frequency_bands:
+      - [0.5, 2.0]   # 基频带
+      - [2.0, 5.0]   # 二次谐波
+      - [5.0, 10.0]  # 高频成分
+      
+  # 脉型分类参数
+  pulse_classification:
+    rate_ranges:
+      slow: [40, 60]      # 迟脉
+      normal: [60, 100]   # 正常
+      fast: [100, 150]    # 数脉
+    strength_threshold: 0.5
+    depth_threshold: 0.5
+    confidence_threshold: 0.6
+
+# 传感器配置
+sensors:
+  # 默认传感器设置
+  default_settings:
+    sampling_rate: 1000
+    buffer_size: 1000
+    data_format: "ascii_csv"
+    timeout: 5.0
+    
+  # 质量阈值
+  quality_thresholds:
+    excellent: 0.9
+    good: 0.7
+    fair: 0.5
+    poor: 0.3
+    
+  # 校准参数
+  calibration:
+    auto_calibration: true
+    calibration_duration: 10  # 秒
+    reference_pressure: 1.0
+    
+  # 预定义传感器配置
+  predefined_configs:
+    mock_sensor:
+      device_id: "mock_sensor"
+      device_name: "模拟传感器"
+      connection_type: "mock"
+      enabled: true
+      
+    serial_sensor:
+      device_id: "serial_pulse_sensor"
+      device_name: "串口脉象传感器"
+      connection_type: "serial"
+      connection_params:
+        port: "/dev/ttyUSB0"
+        baudrate: 9600
+        timeout: 1.0
+      enabled: false
+      
+    bluetooth_sensor:
+      device_id: "bt_pulse_sensor"
+      device_name: "蓝牙脉象传感器"
+      connection_type: "bluetooth"
+      connection_params:
+        device_address: "00:11:22:33:44:55"
+        service_uuid: "12345678-1234-1234-1234-123456789abc"
+      enabled: false
+
+# 知识图谱配置
+knowledge_graph:
+  # 实体配置
+  entities:
+    max_entities: 10000
+    similarity_threshold: 0.8
+    fuzzy_match_threshold: 0.6
+    
+  # 关系配置
+  relations:
+    max_relations: 50000
+    confidence_threshold: 0.7
+    
+  # 推理配置
+  reasoning:
+    max_inference_depth: 5
+    min_evidence_count: 2
+    confidence_aggregation: "weighted_average"
+    
+  # 预置知识库
+  knowledge_base:
+    symptoms_file: "data/symptoms.json"
+    syndromes_file: "data/syndromes.json"
+    formulas_file: "data/formulas.json"
+    herbs_file: "data/herbs.json"
+    
+  # 证候分类配置
+  syndrome_classification:
+    primary_threshold: 0.7
+    secondary_threshold: 0.5
+    max_secondary_count: 3
+
+# 综合诊断配置
+comprehensive_diagnosis:
+  # 多模态融合参数
+  multimodal_fusion:
+    tongue_weight: 0.4
+    pulse_weight: 0.4
+    symptom_weight: 0.2
+    
+  # 置信度计算
+  confidence_calculation:
+    min_confidence: 0.3
+    confidence_boost: 0.1  # 多模态一致性加成
+    
+  # 治疗建议生成
+  treatment_recommendations:
+    max_recommendations: 5
+    priority_threshold: 0.6
+    include_lifestyle: true
+    include_diet: true
+    include_exercise: true
+
+# 数据存储配置
+data_storage:
+  # 图像存储
+  image_storage:
+    base_path: "/data/images"
+    max_size_mb: 10
+    formats: ["jpg", "png"]
+    compression_quality: 85
+    
+  # 波形数据存储
+  waveform_storage:
+    base_path: "/data/waveforms"
+    format: "numpy"
+    compression: true
+    
+  # 诊断结果存储
+  diagnosis_storage:
+    base_path: "/data/diagnoses"
+    format: "json"
+    retention_days: 365
+
+# 性能配置
+performance:
+  # 并发处理
+  concurrency:
+    max_workers: 4
+    queue_size: 100
+    
+  # 缓存配置
+  cache:
+    enabled: true
+    max_size: 1000
+    ttl_seconds: 3600
+    
+  # 超时配置
+  timeouts:
+    tongue_analysis: 30
+    pulse_analysis: 20
+    comprehensive_diagnosis: 60
+
+# 安全配置
+security:
+  # API安全
+  api_security:
+    enable_cors: true
+    allowed_origins: ["*"]
+    rate_limiting:
+      enabled: true
+      requests_per_minute: 60
+      
+  # 数据加密
+  data_encryption:
+    enabled: false
+    algorithm: "AES-256"
+    
+  # 访问控制
+  access_control:
+    require_authentication: false
+    jwt_secret: "your-secret-key"
+    token_expiry_hours: 24
+
+# 监控配置
+monitoring:
+  # 健康检查
+  health_check:
+    enabled: true
+    interval_seconds: 30
+    
+  # 指标收集
+  metrics:
+    enabled: true
+    collection_interval: 60
+    
+  # 日志配置
+  logging:
+    level: "INFO"
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    file_path: "/logs/tcm_diagnosis.log"
+    max_file_size_mb: 100
+    backup_count: 5
+
+# 测试配置
+testing:
+  # 单元测试
+  unit_tests:
+    mock_data_path: "/tests/data"
+    test_image_path: "/tests/images"
+    test_waveform_path: "/tests/waveforms"
+    
+  # 集成测试
+  integration_tests:
+    test_duration_seconds: 30
+    performance_threshold_ms: 1000
+    
+  # 基准测试
+  benchmarks:
+    tongue_analysis_max_time: 2.0
+    pulse_analysis_max_time: 1.0
+    comprehensive_diagnosis_max_time: 3.0
+
+# 部署配置
+deployment:
+  # 容器配置
+  docker:
+    base_image: "python:3.9-slim"
+    working_dir: "/app"
+    expose_ports: [8000, 8001, 8002]
+    
+  # Kubernetes配置
+  kubernetes:
+    namespace: "tcm-diagnosis"
+    replicas: 2
+    resources:
+      requests:
+        cpu: "500m"
+        memory: "1Gi"
+      limits:
+        cpu: "2000m"
+        memory: "4Gi"
+        
+  # 环境变量
+  environment:
+    PYTHONPATH: "/app"
+    TZ: "Asia/Shanghai" 

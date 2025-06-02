@@ -1,7 +1,4 @@
-/**
- * Web平台存储工具
- * 提供与AsyncStorage兼容的API
- */
+// Web平台存储工具 - 提供与AsyncStorage兼容的API
 
 // 简单的内存存储作为fallback
 const memoryStorage: { [key: string]: string } = {};

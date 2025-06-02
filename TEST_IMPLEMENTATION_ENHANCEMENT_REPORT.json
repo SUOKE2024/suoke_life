@@ -1,0 +1,1522 @@
+{
+  "timestamp": "2025-05-30T13:58:00.896Z",
+  "enhancedTests": 301,
+  "errors": 0,
+  "testTypes": {
+    "component": 99,
+    "hook": 11,
+    "service": 27,
+    "agent": 45,
+    "utility": 119
+  },
+  "details": {
+    "enhancedTests": [
+      {
+        "sourceFile": "src/App.tsx",
+        "testFile": "src/__tests__/App.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/agents/AgentCoordinator.tsx",
+        "testFile": "src/__tests__/agents/AgentCoordinator.test.tsx",
+        "type": "service"
+      },
+      {
+        "sourceFile": "src/agents/AgentManager.tsx",
+        "testFile": "src/__tests__/agents/AgentManager.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/agents/base/BaseAgent.ts",
+        "testFile": "src/__tests__/agents/base/BaseAgent.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/agents/config/agents.config.tsx",
+        "testFile": "src/__tests__/agents/config/agents.config.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/agents/examples/AgentUsageExample.ts",
+        "testFile": "src/__tests__/agents/examples/AgentUsageExample.test.tsx",
+        "type": "service"
+      },
+      {
+        "sourceFile": "src/agents/factory/AgentFactory.tsx",
+        "testFile": "src/__tests__/agents/factory/AgentFactory.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/agents/index.tsx",
+        "testFile": "src/__tests__/agents/index.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/agents/interfaces/StandardAgentInterface.tsx",
+        "testFile": "src/__tests__/agents/interfaces/StandardAgentInterface.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/agents/laoke/LaokeAgent.tsx",
+        "testFile": "src/__tests__/agents/laoke/LaokeAgent.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/agents/laoke/LaokeAgentImpl.tsx",
+        "testFile": "src/__tests__/agents/laoke/LaokeAgentImpl.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/agents/laoke/index.ts",
+        "testFile": "src/__tests__/agents/laoke/index.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/agents/soer/SoerAgent.tsx",
+        "testFile": "src/__tests__/agents/soer/SoerAgent.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/agents/soer/SoerAgentImpl.ts",
+        "testFile": "src/__tests__/agents/soer/SoerAgentImpl.test.tsx",
+        "type": "service"
+      },
+      {
+        "sourceFile": "src/agents/soer/index.ts",
+        "testFile": "src/__tests__/agents/soer/index.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/agents/test-agents.ts",
+        "testFile": "src/__tests__/agents/test-agents.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/agents/types.ts",
+        "testFile": "src/__tests__/agents/types.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/agents/xiaoai/XiaoaiAgent.tsx",
+        "testFile": "src/__tests__/agents/xiaoai/XiaoaiAgent.test.tsx",
+        "type": "service"
+      },
+      {
+        "sourceFile": "src/agents/xiaoai/XiaoaiAgentImpl.tsx",
+        "testFile": "src/__tests__/agents/xiaoai/XiaoaiAgentImpl.test.tsx",
+        "type": "service"
+      },
+      {
+        "sourceFile": "src/agents/xiaoai/config/XiaoaiConfigManager.tsx",
+        "testFile": "src/__tests__/agents/xiaoai/config/XiaoaiConfigManager.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/agents/xiaoai/core/XiaoaiChatDiagnosisIntegrator.tsx",
+        "testFile": "src/__tests__/agents/xiaoai/core/XiaoaiChatDiagnosisIntegrator.test.tsx",
+        "type": "service"
+      },
+      {
+        "sourceFile": "src/agents/xiaoai/index.ts",
+        "testFile": "src/__tests__/agents/xiaoai/index.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/agents/xiaoai/services/AccessibilityServiceClient.tsx",
+        "testFile": "src/__tests__/agents/xiaoai/services/AccessibilityServiceClient.test.tsx",
+        "type": "service"
+      },
+      {
+        "sourceFile": "src/agents/xiaoai/services/DiagnosisServiceClient.tsx",
+        "testFile": "src/__tests__/agents/xiaoai/services/DiagnosisServiceClient.test.tsx",
+        "type": "service"
+      },
+      {
+        "sourceFile": "src/agents/xiaoai/types.tsx",
+        "testFile": "src/__tests__/agents/xiaoai/types.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/agents/xiaoke/XiaokeAgent.tsx",
+        "testFile": "src/__tests__/agents/xiaoke/XiaokeAgent.test.tsx",
+        "type": "service"
+      },
+      {
+        "sourceFile": "src/agents/xiaoke/XiaokeAgentImpl.tsx",
+        "testFile": "src/__tests__/agents/xiaoke/XiaokeAgentImpl.test.tsx",
+        "type": "service"
+      },
+      {
+        "sourceFile": "src/agents/xiaoke/index.ts",
+        "testFile": "src/__tests__/agents/xiaoke/index.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/agents/zkp_health_report.tsx",
+        "testFile": "src/__tests__/agents/zkp_health_report.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/algorithms/FiveDiagnosisEngine.tsx",
+        "testFile": "src/__tests__/algorithms/FiveDiagnosisEngine.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/algorithms/config/AlgorithmConfig.tsx",
+        "testFile": "src/__tests__/algorithms/config/AlgorithmConfig.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/algorithms/examples/FiveDiagnosisExample.ts",
+        "testFile": "src/__tests__/algorithms/examples/FiveDiagnosisExample.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/algorithms/knowledge/TCMKnowledgeBase.ts",
+        "testFile": "src/__tests__/algorithms/knowledge/TCMKnowledgeBase.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/algorithms/modules/CalculationDiagnosisAlgorithm.tsx",
+        "testFile": "src/__tests__/algorithms/modules/CalculationDiagnosisAlgorithm.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/algorithms/modules/DiagnosisFusionAlgorithm.tsx",
+        "testFile": "src/__tests__/algorithms/modules/DiagnosisFusionAlgorithm.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/algorithms/modules/InquiryDiagnosisAlgorithm.tsx",
+        "testFile": "src/__tests__/algorithms/modules/InquiryDiagnosisAlgorithm.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/algorithms/modules/ListeningDiagnosisAlgorithm.tsx",
+        "testFile": "src/__tests__/algorithms/modules/ListeningDiagnosisAlgorithm.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/algorithms/modules/LookingDiagnosisAlgorithm.tsx",
+        "testFile": "src/__tests__/algorithms/modules/LookingDiagnosisAlgorithm.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/algorithms/modules/PalpationDiagnosisAlgorithm.tsx",
+        "testFile": "src/__tests__/algorithms/modules/PalpationDiagnosisAlgorithm.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/algorithms/monitoring/PerformanceMonitor.ts",
+        "testFile": "src/__tests__/algorithms/monitoring/PerformanceMonitor.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/algorithms/quality/QualityController.tsx",
+        "testFile": "src/__tests__/algorithms/quality/QualityController.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/architecture/ArchitectureOptimizer.tsx",
+        "testFile": "src/__tests__/architecture/ArchitectureOptimizer.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/components/AgentAvatar.tsx",
+        "testFile": "src/__tests__/components/AgentAvatar.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/components/AgentChatBubble.tsx",
+        "testFile": "src/__tests__/components/AgentChatBubble.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/components/AgentEmotionFeedback.tsx",
+        "testFile": "src/__tests__/components/AgentEmotionFeedback.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/components/AgentVoiceInput.tsx",
+        "testFile": "src/__tests__/components/AgentVoiceInput.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/components/HealthPathwayVisualizer.tsx",
+        "testFile": "src/__tests__/components/HealthPathwayVisualizer.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/components/HealthTrendChart.tsx",
+        "testFile": "src/__tests__/components/HealthTrendChart.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/components/NavigationTest.tsx",
+        "testFile": "src/__tests__/components/NavigationTest.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/components/ResponsiveContainer.tsx",
+        "testFile": "src/__tests__/components/ResponsiveContainer.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/components/agents/AgentIntegrationHub.tsx",
+        "testFile": "src/__tests__/components/agents/AgentIntegrationHub.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/components/blockchain/BlockchainDataManager.tsx",
+        "testFile": "src/__tests__/components/blockchain/BlockchainDataManager.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/components/blockchain/index.ts",
+        "testFile": "src/__tests__/components/blockchain/index.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/components/common/AccessibilitySettings.tsx",
+        "testFile": "src/__tests__/components/common/AccessibilitySettings.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/components/common/AgentChatInterface.tsx",
+        "testFile": "src/__tests__/components/common/AgentChatInterface.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/components/common/AuthButton.tsx",
+        "testFile": "src/__tests__/components/common/AuthButton.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/components/common/AuthInput.tsx",
+        "testFile": "src/__tests__/components/common/AuthInput.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/components/common/Button.tsx",
+        "testFile": "src/__tests__/components/common/Button.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/components/common/ContactsList.tsx",
+        "testFile": "src/__tests__/components/common/ContactsList.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/components/common/DeviceTestDashboard.tsx",
+        "testFile": "src/__tests__/components/common/DeviceTestDashboard.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/components/common/EmptyState.tsx",
+        "testFile": "src/__tests__/components/common/EmptyState.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/components/common/ErrorBoundary.tsx",
+        "testFile": "src/__tests__/components/common/ErrorBoundary.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/components/common/Icon.tsx",
+        "testFile": "src/__tests__/components/common/Icon.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/components/common/Input.tsx",
+        "testFile": "src/__tests__/components/common/Input.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/components/common/LazyComponents.tsx",
+        "testFile": "src/__tests__/components/common/LazyComponents.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/components/common/LoadingScreen.tsx",
+        "testFile": "src/__tests__/components/common/LoadingScreen.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/components/common/NativeFeaturesDemo.tsx",
+        "testFile": "src/__tests__/components/common/NativeFeaturesDemo.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/components/common/UserExperienceOptimizer.tsx",
+        "testFile": "src/__tests__/components/common/UserExperienceOptimizer.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/components/common/index.ts",
+        "testFile": "src/__tests__/components/common/index.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/components/demo/ApiTestResultsDisplay.tsx",
+        "testFile": "src/__tests__/components/demo/ApiTestResultsDisplay.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/components/diagnosis/FiveDiagnosisScreen.tsx",
+        "testFile": "src/__tests__/components/diagnosis/FiveDiagnosisScreen.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/components/health/AdvancedHealthDashboard.tsx",
+        "testFile": "src/__tests__/components/health/AdvancedHealthDashboard.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/components/health/EnhancedHealthVisualization.tsx",
+        "testFile": "src/__tests__/components/health/EnhancedHealthVisualization.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/components/health/index.ts",
+        "testFile": "src/__tests__/components/health/index.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/components/index.ts",
+        "testFile": "src/__tests__/components/index.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/components/ui/AccessibilityPanel.tsx",
+        "testFile": "src/__tests__/components/ui/AccessibilityPanel.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/components/ui/AgentAvatar.tsx",
+        "testFile": "src/__tests__/components/ui/AgentAvatar.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/components/ui/Avatar.tsx",
+        "testFile": "src/__tests__/components/ui/Avatar.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/components/ui/Badge.tsx",
+        "testFile": "src/__tests__/components/ui/Badge.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/components/ui/Button.tsx",
+        "testFile": "src/__tests__/components/ui/Button.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/components/ui/Card.tsx",
+        "testFile": "src/__tests__/components/ui/Card.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/components/ui/Checkbox.tsx",
+        "testFile": "src/__tests__/components/ui/Checkbox.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/components/ui/Container.tsx",
+        "testFile": "src/__tests__/components/ui/Container.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/components/ui/Divider.tsx",
+        "testFile": "src/__tests__/components/ui/Divider.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/components/ui/EnhancedButton.tsx",
+        "testFile": "src/__tests__/components/ui/EnhancedButton.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/components/ui/Input.tsx",
+        "testFile": "src/__tests__/components/ui/Input.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/components/ui/Loading.tsx",
+        "testFile": "src/__tests__/components/ui/Loading.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/components/ui/Modal.tsx",
+        "testFile": "src/__tests__/components/ui/Modal.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/components/ui/PerformanceMonitor.tsx",
+        "testFile": "src/__tests__/components/ui/PerformanceMonitor.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/components/ui/RTLView.tsx",
+        "testFile": "src/__tests__/components/ui/RTLView.test.tsx",
+        "type": "hook"
+      },
+      {
+        "sourceFile": "src/components/ui/Radio.tsx",
+        "testFile": "src/__tests__/components/ui/Radio.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/components/ui/Slider.tsx",
+        "testFile": "src/__tests__/components/ui/Slider.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/components/ui/Switch.tsx",
+        "testFile": "src/__tests__/components/ui/Switch.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/components/ui/Text.tsx",
+        "testFile": "src/__tests__/components/ui/Text.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/components/ui/ThemeToggle.tsx",
+        "testFile": "src/__tests__/components/ui/ThemeToggle.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/components/ui/UserExperienceEnhancer.tsx",
+        "testFile": "src/__tests__/components/ui/UserExperienceEnhancer.test.tsx",
+        "type": "hook"
+      },
+      {
+        "sourceFile": "src/components/ui/index.ts",
+        "testFile": "src/__tests__/components/ui/index.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/config/performance.ts",
+        "testFile": "src/__tests__/config/performance.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/constants/config.ts",
+        "testFile": "src/__tests__/constants/config.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/constants/theme.ts",
+        "testFile": "src/__tests__/constants/theme.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/contexts/AccessibilityContext.tsx",
+        "testFile": "src/__tests__/contexts/AccessibilityContext.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/contexts/LoadingContext.tsx",
+        "testFile": "src/__tests__/contexts/LoadingContext.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/contexts/ThemeContext.tsx",
+        "testFile": "src/__tests__/contexts/ThemeContext.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/core/ConfigurationManager.tsx",
+        "testFile": "src/__tests__/core/ConfigurationManager.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/core/DIContainer.tsx",
+        "testFile": "src/__tests__/core/DIContainer.test.tsx",
+        "type": "service"
+      },
+      {
+        "sourceFile": "src/core/ErrorHandler.ts",
+        "testFile": "src/__tests__/core/ErrorHandler.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/core/cache/CacheManager.tsx",
+        "testFile": "src/__tests__/core/cache/CacheManager.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/core/coordination/AgentCoordinator.tsx",
+        "testFile": "src/__tests__/core/coordination/AgentCoordinator.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/core/error/ErrorHandler.tsx",
+        "testFile": "src/__tests__/core/error/ErrorHandler.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/core/monitoring/PerformanceMonitor.tsx",
+        "testFile": "src/__tests__/core/monitoring/PerformanceMonitor.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/core/security/SecurityManager.tsx",
+        "testFile": "src/__tests__/core/security/SecurityManager.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/core/validation/DataValidator.tsx",
+        "testFile": "src/__tests__/core/validation/DataValidator.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/data/exploreData.tsx",
+        "testFile": "src/__tests__/data/exploreData.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/data/lifeData.ts",
+        "testFile": "src/__tests__/data/lifeData.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/data/mockData.ts",
+        "testFile": "src/__tests__/data/mockData.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/data/profileData.ts",
+        "testFile": "src/__tests__/data/profileData.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/data/suokeData.ts",
+        "testFile": "src/__tests__/data/suokeData.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/health/health.ts",
+        "testFile": "src/__tests__/health/health.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/hooks/index.ts",
+        "testFile": "src/__tests__/hooks/index.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/hooks/useAgent.tsx",
+        "testFile": "src/__tests__/hooks/useAgent.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/hooks/useApiIntegration.tsx",
+        "testFile": "src/__tests__/hooks/useApiIntegration.test.tsx",
+        "type": "hook"
+      },
+      {
+        "sourceFile": "src/hooks/useChat.tsx",
+        "testFile": "src/__tests__/hooks/useChat.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/hooks/useExplore.tsx",
+        "testFile": "src/__tests__/hooks/useExplore.test.tsx",
+        "type": "hook"
+      },
+      {
+        "sourceFile": "src/hooks/useHealthData.tsx",
+        "testFile": "src/__tests__/hooks/useHealthData.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/hooks/useI18n.tsx",
+        "testFile": "src/__tests__/hooks/useI18n.test.tsx",
+        "type": "hook"
+      },
+      {
+        "sourceFile": "src/hooks/useLife.tsx",
+        "testFile": "src/__tests__/hooks/useLife.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/hooks/useNetworkStatus.tsx",
+        "testFile": "src/__tests__/hooks/useNetworkStatus.test.tsx",
+        "type": "hook"
+      },
+      {
+        "sourceFile": "src/hooks/usePerformanceMonitor.tsx",
+        "testFile": "src/__tests__/hooks/usePerformanceMonitor.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/hooks/useProfile.tsx",
+        "testFile": "src/__tests__/hooks/useProfile.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/hooks/useScreenNavigation.ts",
+        "testFile": "src/__tests__/hooks/useScreenNavigation.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/i18n/config.tsx",
+        "testFile": "src/__tests__/i18n/config.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/i18n/i18nManager.tsx",
+        "testFile": "src/__tests__/i18n/i18nManager.test.tsx",
+        "type": "service"
+      },
+      {
+        "sourceFile": "src/i18n/index.ts",
+        "testFile": "src/__tests__/i18n/index.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/i18n/localizationService.ts",
+        "testFile": "src/__tests__/i18n/localizationService.test.tsx",
+        "type": "service"
+      },
+      {
+        "sourceFile": "src/infrastructure/config/EnvironmentManager.tsx",
+        "testFile": "src/__tests__/infrastructure/config/EnvironmentManager.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/infrastructure/logging/LoggingSystem.tsx",
+        "testFile": "src/__tests__/infrastructure/logging/LoggingSystem.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/infrastructure/monitoring/MonitoringDeployment.ts",
+        "testFile": "src/__tests__/infrastructure/monitoring/MonitoringDeployment.test.tsx",
+        "type": "service"
+      },
+      {
+        "sourceFile": "src/navigation/AppNavigator.tsx",
+        "testFile": "src/__tests__/navigation/AppNavigator.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/navigation/AuthNavigator.tsx",
+        "testFile": "src/__tests__/navigation/AuthNavigator.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/navigation/LazyRoutes.tsx",
+        "testFile": "src/__tests__/navigation/LazyRoutes.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/navigation/MainNavigator.tsx",
+        "testFile": "src/__tests__/navigation/MainNavigator.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/screens/AgentManagementScreen.tsx",
+        "testFile": "src/__tests__/screens/AgentManagementScreen.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/screens/BrandColorDemo.tsx",
+        "testFile": "src/__tests__/screens/BrandColorDemo.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/screens/UIDemo.tsx",
+        "testFile": "src/__tests__/screens/UIDemo.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/screens/UIUXDemoScreen.tsx",
+        "testFile": "src/__tests__/screens/UIUXDemoScreen.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/screens/auth/ForgotPasswordScreen.tsx",
+        "testFile": "src/__tests__/screens/auth/ForgotPasswordScreen.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/screens/auth/LoginScreen.tsx",
+        "testFile": "src/__tests__/screens/auth/LoginScreen.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/screens/auth/RegisterScreen.tsx",
+        "testFile": "src/__tests__/screens/auth/RegisterScreen.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/screens/auth/WelcomeScreen.tsx",
+        "testFile": "src/__tests__/screens/auth/WelcomeScreen.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/screens/auth/index.ts",
+        "testFile": "src/__tests__/screens/auth/index.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/screens/components/AgentCard.tsx",
+        "testFile": "src/__tests__/screens/components/AgentCard.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/screens/components/AgentSelector.tsx",
+        "testFile": "src/__tests__/screens/components/AgentSelector.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/screens/components/CategoryTabs.tsx",
+        "testFile": "src/__tests__/screens/components/CategoryTabs.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/screens/components/ChatChannelItem.tsx",
+        "testFile": "src/__tests__/screens/components/ChatChannelItem.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/screens/components/ChatMessage.tsx",
+        "testFile": "src/__tests__/screens/components/ChatMessage.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/screens/components/ColorPreview.tsx",
+        "testFile": "src/__tests__/screens/components/ColorPreview.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/screens/components/ContentCard.tsx",
+        "testFile": "src/__tests__/screens/components/ContentCard.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/screens/components/HealthCard.tsx",
+        "testFile": "src/__tests__/screens/components/HealthCard.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/screens/components/HealthMetricCard.tsx",
+        "testFile": "src/__tests__/screens/components/HealthMetricCard.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/screens/components/HomeHeader.tsx",
+        "testFile": "src/__tests__/screens/components/HomeHeader.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/screens/components/HotTopics.tsx",
+        "testFile": "src/__tests__/screens/components/HotTopics.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/screens/components/LifeSuggestionCard.tsx",
+        "testFile": "src/__tests__/screens/components/LifeSuggestionCard.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/screens/components/MessageInput.tsx",
+        "testFile": "src/__tests__/screens/components/MessageInput.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/screens/components/ProfileHeader.tsx",
+        "testFile": "src/__tests__/screens/components/ProfileHeader.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/screens/components/ScreenHeader.tsx",
+        "testFile": "src/__tests__/screens/components/ScreenHeader.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/screens/components/SearchBar.tsx",
+        "testFile": "src/__tests__/screens/components/SearchBar.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/screens/components/TabSelector.tsx",
+        "testFile": "src/__tests__/screens/components/TabSelector.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/screens/components/UIShowcase.tsx",
+        "testFile": "src/__tests__/screens/components/UIShowcase.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/screens/components/index.ts",
+        "testFile": "src/__tests__/screens/components/index.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/screens/demo/AdvancedFeaturesDemo.tsx",
+        "testFile": "src/__tests__/screens/demo/AdvancedFeaturesDemo.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/screens/demo/AgentCollaborationDemoScreen.tsx",
+        "testFile": "src/__tests__/screens/demo/AgentCollaborationDemoScreen.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/screens/demo/ApiIntegrationDemo.tsx",
+        "testFile": "src/__tests__/screens/demo/ApiIntegrationDemo.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/screens/demo/FiveDiagnosisAgentIntegrationScreen.tsx",
+        "testFile": "src/__tests__/screens/demo/FiveDiagnosisAgentIntegrationScreen.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/screens/demo/I18nDemo.tsx",
+        "testFile": "src/__tests__/screens/demo/I18nDemo.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/screens/demo/IntegrationDemoScreen.tsx",
+        "testFile": "src/__tests__/screens/demo/IntegrationDemoScreen.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/screens/diagnosis/FiveDiagnosisScreen.tsx",
+        "testFile": "src/__tests__/screens/diagnosis/FiveDiagnosisScreen.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/screens/explore/ExploreScreen.tsx",
+        "testFile": "src/__tests__/screens/explore/ExploreScreen.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/screens/life/HealthDashboard.tsx",
+        "testFile": "src/__tests__/screens/life/HealthDashboard.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/screens/life/HealthDashboardEnhanced.tsx",
+        "testFile": "src/__tests__/screens/life/HealthDashboardEnhanced.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/screens/life/LifeScreen.tsx",
+        "testFile": "src/__tests__/screens/life/LifeScreen.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/screens/life/components/ARConstitutionVisualization.tsx",
+        "testFile": "src/__tests__/screens/life/components/ARConstitutionVisualization.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/screens/life/components/AdvancedHealthDashboard.tsx",
+        "testFile": "src/__tests__/screens/life/components/AdvancedHealthDashboard.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/screens/life/components/BlockchainHealthData.tsx",
+        "testFile": "src/__tests__/screens/life/components/BlockchainHealthData.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/screens/life/components/BlockchainHealthManager.tsx",
+        "testFile": "src/__tests__/screens/life/components/BlockchainHealthManager.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/screens/main/HomeScreen.tsx",
+        "testFile": "src/__tests__/screens/main/HomeScreen.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/screens/main/IntegratedExperienceScreen.tsx",
+        "testFile": "src/__tests__/screens/main/IntegratedExperienceScreen.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/screens/profile/DeveloperPanelScreen.tsx",
+        "testFile": "src/__tests__/screens/profile/DeveloperPanelScreen.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/screens/profile/ProfileScreen.tsx",
+        "testFile": "src/__tests__/screens/profile/ProfileScreen.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/screens/profile/ServiceManagementScreen.tsx",
+        "testFile": "src/__tests__/screens/profile/ServiceManagementScreen.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/screens/profile/ServiceStatusScreen.tsx",
+        "testFile": "src/__tests__/screens/profile/ServiceStatusScreen.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/screens/profile/SettingsScreen.tsx",
+        "testFile": "src/__tests__/screens/profile/SettingsScreen.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/screens/suoke/SuokeScreen.tsx",
+        "testFile": "src/__tests__/screens/suoke/SuokeScreen.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/screens/suoke/components/DiagnosisModal.tsx",
+        "testFile": "src/__tests__/screens/suoke/components/DiagnosisModal.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/screens/suoke/components/EcoLifestyleNavigator.tsx",
+        "testFile": "src/__tests__/screens/suoke/components/EcoLifestyleNavigator.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/screens/suoke/components/EcoServices.tsx",
+        "testFile": "src/__tests__/screens/suoke/components/EcoServices.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/screens/suoke/components/FourDiagnosisNavigator.tsx",
+        "testFile": "src/__tests__/screens/suoke/components/FourDiagnosisNavigator.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/screens/suoke/components/SystemMonitorDashboard.tsx",
+        "testFile": "src/__tests__/screens/suoke/components/SystemMonitorDashboard.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/screens/suoke/components/WellnessExperience.tsx",
+        "testFile": "src/__tests__/screens/suoke/components/WellnessExperience.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/screens/suoke/components/XiaoaiChatInterface.tsx",
+        "testFile": "src/__tests__/screens/suoke/components/XiaoaiChatInterface.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/services/ApiIntegrationService.tsx",
+        "testFile": "src/__tests__/services/ApiIntegrationService.test.tsx",
+        "type": "service"
+      },
+      {
+        "sourceFile": "src/services/IntegratedApiService.tsx",
+        "testFile": "src/__tests__/services/IntegratedApiService.test.tsx",
+        "type": "service"
+      },
+      {
+        "sourceFile": "src/services/Logger.ts",
+        "testFile": "src/__tests__/services/Logger.test.tsx",
+        "type": "service"
+      },
+      {
+        "sourceFile": "src/services/accessibilityService.tsx",
+        "testFile": "src/__tests__/services/accessibilityService.test.tsx",
+        "type": "service"
+      },
+      {
+        "sourceFile": "src/services/advancedAnalyticsService.tsx",
+        "testFile": "src/__tests__/services/advancedAnalyticsService.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/services/agentCoordinationService.tsx",
+        "testFile": "src/__tests__/services/agentCoordinationService.test.tsx",
+        "type": "service"
+      },
+      {
+        "sourceFile": "src/services/agentService.tsx",
+        "testFile": "src/__tests__/services/agentService.test.tsx",
+        "type": "service"
+      },
+      {
+        "sourceFile": "src/services/aiModelOptimizationService.tsx",
+        "testFile": "src/__tests__/services/aiModelOptimizationService.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/services/api/ErrorHandler.ts",
+        "testFile": "src/__tests__/services/api/ErrorHandler.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/services/api/agentApiService.tsx",
+        "testFile": "src/__tests__/services/api/agentApiService.test.tsx",
+        "type": "service"
+      },
+      {
+        "sourceFile": "src/services/apiClient.tsx",
+        "testFile": "src/__tests__/services/apiClient.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/services/apiClient.web.tsx",
+        "testFile": "src/__tests__/services/apiClient.web.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/services/authService.tsx",
+        "testFile": "src/__tests__/services/authService.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/services/cache/cacheManager.tsx",
+        "testFile": "src/__tests__/services/cache/cacheManager.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/services/concurrency/ConcurrencyManager.tsx",
+        "testFile": "src/__tests__/services/concurrency/ConcurrencyManager.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/services/ecoServicesApi.tsx",
+        "testFile": "src/__tests__/services/ecoServicesApi.test.tsx",
+        "type": "service"
+      },
+      {
+        "sourceFile": "src/services/enhancedApiClient.tsx",
+        "testFile": "src/__tests__/services/enhancedApiClient.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/services/enhancedI18nService.tsx",
+        "testFile": "src/__tests__/services/enhancedI18nService.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/services/fiveDiagnosisService.tsx",
+        "testFile": "src/__tests__/services/fiveDiagnosisService.test.tsx",
+        "type": "service"
+      },
+      {
+        "sourceFile": "src/services/graphql/client.tsx",
+        "testFile": "src/__tests__/services/graphql/client.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/services/index.ts",
+        "testFile": "src/__tests__/services/index.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/services/logisticsService.tsx",
+        "testFile": "src/__tests__/services/logisticsService.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/services/medicalApiService.tsx",
+        "testFile": "src/__tests__/services/medicalApiService.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/services/mlTrainingService.tsx",
+        "testFile": "src/__tests__/services/mlTrainingService.test.tsx",
+        "type": "service"
+      },
+      {
+        "sourceFile": "src/services/monitoring/MonitoringService.tsx",
+        "testFile": "src/__tests__/services/monitoring/MonitoringService.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/services/offline/offlineManager.tsx",
+        "testFile": "src/__tests__/services/offline/offlineManager.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/services/paymentService.tsx",
+        "testFile": "src/__tests__/services/paymentService.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/services/performance/PerformanceOptimizer.tsx",
+        "testFile": "src/__tests__/services/performance/PerformanceOptimizer.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/services/realTimeSync.tsx",
+        "testFile": "src/__tests__/services/realTimeSync.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/services/testing/AutomatedTestService.tsx",
+        "testFile": "src/__tests__/services/testing/AutomatedTestService.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/services/uiUxOptimizationService.tsx",
+        "testFile": "src/__tests__/services/uiUxOptimizationService.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/services/websocket/websocketManager.tsx",
+        "testFile": "src/__tests__/services/websocket/websocketManager.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/setupTests.ts",
+        "testFile": "src/__tests__/setupTests.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/store/index.tsx",
+        "testFile": "src/__tests__/store/index.test.tsx",
+        "type": "hook"
+      },
+      {
+        "sourceFile": "src/store/middleware/apiMiddleware.ts",
+        "testFile": "src/__tests__/store/middleware/apiMiddleware.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/store/middleware/persistMiddleware.ts",
+        "testFile": "src/__tests__/store/middleware/persistMiddleware.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/store/slices/agentsSlice.tsx",
+        "testFile": "src/__tests__/store/slices/agentsSlice.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/store/slices/authSlice.tsx",
+        "testFile": "src/__tests__/store/slices/authSlice.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/store/slices/diagnosisSlice.tsx",
+        "testFile": "src/__tests__/store/slices/diagnosisSlice.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/store/slices/healthSlice.tsx",
+        "testFile": "src/__tests__/store/slices/healthSlice.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/store/slices/uiSlice.tsx",
+        "testFile": "src/__tests__/store/slices/uiSlice.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/store/slices/userSlice.tsx",
+        "testFile": "src/__tests__/store/slices/userSlice.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/types/agents.tsx",
+        "testFile": "src/__tests__/types/agents.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/types/api.tsx",
+        "testFile": "src/__tests__/types/api.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/types/chat.ts",
+        "testFile": "src/__tests__/types/chat.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/types/core.tsx",
+        "testFile": "src/__tests__/types/core.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/types/explore.ts",
+        "testFile": "src/__tests__/types/explore.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/types/index.ts",
+        "testFile": "src/__tests__/types/index.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/types/life.ts",
+        "testFile": "src/__tests__/types/life.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/types/navigation.tsx",
+        "testFile": "src/__tests__/types/navigation.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/types/profile.ts",
+        "testFile": "src/__tests__/types/profile.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/types/suoke.ts",
+        "testFile": "src/__tests__/types/suoke.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/utils/ApiOptimizer.tsx",
+        "testFile": "src/__tests__/utils/ApiOptimizer.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/utils/DataProcessor.tsx",
+        "testFile": "src/__tests__/utils/DataProcessor.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/utils/NavigationFixer.tsx",
+        "testFile": "src/__tests__/utils/NavigationFixer.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/utils/RequestCache.tsx",
+        "testFile": "src/__tests__/utils/RequestCache.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/utils/StorageManager.tsx",
+        "testFile": "src/__tests__/utils/StorageManager.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/utils/agentCollaborationSystem.tsx",
+        "testFile": "src/__tests__/utils/agentCollaborationSystem.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/utils/animations.ts",
+        "testFile": "src/__tests__/utils/animations.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/utils/apiCache.ts",
+        "testFile": "src/__tests__/utils/apiCache.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/utils/apiIntegrationTest.tsx",
+        "testFile": "src/__tests__/utils/apiIntegrationTest.test.tsx",
+        "type": "service"
+      },
+      {
+        "sourceFile": "src/utils/authUtils.ts",
+        "testFile": "src/__tests__/utils/authUtils.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/utils/blockchainHealthData.tsx",
+        "testFile": "src/__tests__/utils/blockchainHealthData.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/utils/cacheManager.tsx",
+        "testFile": "src/__tests__/utils/cacheManager.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/utils/codeSplitting.tsx",
+        "testFile": "src/__tests__/utils/codeSplitting.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/utils/commonUtils.tsx",
+        "testFile": "src/__tests__/utils/commonUtils.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/utils/componentOptimizer.tsx",
+        "testFile": "src/__tests__/utils/componentOptimizer.test.tsx",
+        "type": "hook"
+      },
+      {
+        "sourceFile": "src/utils/dateUtils.ts",
+        "testFile": "src/__tests__/utils/dateUtils.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/utils/deviceAdapter.ts",
+        "testFile": "src/__tests__/utils/deviceAdapter.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/utils/deviceInfo.tsx",
+        "testFile": "src/__tests__/utils/deviceInfo.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/utils/deviceIntegrationTest.tsx",
+        "testFile": "src/__tests__/utils/deviceIntegrationTest.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/utils/errorHandler.ts",
+        "testFile": "src/__tests__/utils/errorHandler.test.tsx",
+        "type": "service"
+      },
+      {
+        "sourceFile": "src/utils/eventEmitter.ts",
+        "testFile": "src/__tests__/utils/eventEmitter.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/utils/fhir.ts",
+        "testFile": "src/__tests__/utils/fhir.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/utils/imageOptimization.ts",
+        "testFile": "src/__tests__/utils/imageOptimization.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/utils/index.ts",
+        "testFile": "src/__tests__/utils/index.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/utils/lazyLoader.tsx",
+        "testFile": "src/__tests__/utils/lazyLoader.test.tsx",
+        "type": "hook"
+      },
+      {
+        "sourceFile": "src/utils/loadingManager.tsx",
+        "testFile": "src/__tests__/utils/loadingManager.test.tsx",
+        "type": "hook"
+      },
+      {
+        "sourceFile": "src/utils/memoWrapper.tsx",
+        "testFile": "src/__tests__/utils/memoWrapper.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/utils/memoryLeakDetector.tsx",
+        "testFile": "src/__tests__/utils/memoryLeakDetector.test.tsx",
+        "type": "hook"
+      },
+      {
+        "sourceFile": "src/utils/memoryMonitor.tsx",
+        "testFile": "src/__tests__/utils/memoryMonitor.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/utils/memoryOptimizer.ts",
+        "testFile": "src/__tests__/utils/memoryOptimizer.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/utils/monitoringSystem.tsx",
+        "testFile": "src/__tests__/utils/monitoringSystem.test.tsx",
+        "type": "service"
+      },
+      {
+        "sourceFile": "src/utils/nativeModules.tsx",
+        "testFile": "src/__tests__/utils/nativeModules.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/utils/networkManager.ts",
+        "testFile": "src/__tests__/utils/networkManager.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/utils/networkOptimizer.tsx",
+        "testFile": "src/__tests__/utils/networkOptimizer.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/utils/notifications.tsx",
+        "testFile": "src/__tests__/utils/notifications.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/utils/performanceMonitor.ts",
+        "testFile": "src/__tests__/utils/performanceMonitor.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/utils/performanceOptimizer.tsx",
+        "testFile": "src/__tests__/utils/performanceOptimizer.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/utils/performanceReporter.ts",
+        "testFile": "src/__tests__/utils/performanceReporter.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/utils/performanceReporter.tsx",
+        "testFile": "src/__tests__/utils/performanceReporter.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/utils/permissions.tsx",
+        "testFile": "src/__tests__/utils/permissions.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/utils/privacy.ts",
+        "testFile": "src/__tests__/utils/privacy.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/utils/responsive.tsx",
+        "testFile": "src/__tests__/utils/responsive.test.tsx",
+        "type": "component"
+      },
+      {
+        "sourceFile": "src/utils/securityManager.tsx",
+        "testFile": "src/__tests__/utils/securityManager.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/utils/smartCacheStrategy.tsx",
+        "testFile": "src/__tests__/utils/smartCacheStrategy.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/utils/startupOptimizer.ts",
+        "testFile": "src/__tests__/utils/startupOptimizer.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/utils/stateOptimizer.ts",
+        "testFile": "src/__tests__/utils/stateOptimizer.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/utils/storage.web.ts",
+        "testFile": "src/__tests__/utils/storage.web.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/utils/storageUtils.tsx",
+        "testFile": "src/__tests__/utils/storageUtils.test.tsx",
+        "type": "utility"
+      },
+      {
+        "sourceFile": "src/utils/tcmDiagnosisEngine.tsx",
+        "testFile": "src/__tests__/utils/tcmDiagnosisEngine.test.tsx",
+        "type": "agent"
+      },
+      {
+        "sourceFile": "src/utils/validationUtils.ts",
+        "testFile": "src/__tests__/utils/validationUtils.test.tsx",
+        "type": "utility"
+      }
+    ],
+    "errors": []
+  }
+}

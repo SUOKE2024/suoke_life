@@ -1,12 +1,7 @@
-import AccessibilityServiceClient from "../../agents/xiaoai/services/AccessibilityServiceClient";
+import AccessibilityServiceClient from "../../../agents/xiaoai/services/AccessibilityServiceClient";
 
-/**
- * AccessibilityServiceClient 服务测试
- * 索克生活APP - 自动生成的测试文件
- */
-
+// AccessibilityServiceClient 服务测试 - 索克生活APP - 自动生成的测试文件
 // Mock外部依赖
-jest.mock("axios");
 jest.mock("@react-native-async-storage/async-storage");
 
 describe("AccessibilityServiceClient", () => {
@@ -65,9 +60,7 @@ describe("AccessibilityServiceClient", () => {
   describe("性能", () => {
     it("应该在合理时间内完成操作", async () => {
       const startTime = Date.now();
-
       // TODO: 添加性能测试操作
-
       const endTime = Date.now();
       expect(endTime - startTime).toBeLessThan(1000); // 1秒内完成
     });

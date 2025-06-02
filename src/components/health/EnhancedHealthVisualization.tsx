@@ -1,16 +1,8 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
-import { LineChart, BarChart, PieChart, ProgressChart } from 'react-native-chart-kit';
-import { Card, Button, Loading } from '../ui';
-import { colors, spacing, typography } from '../../constants/theme';
-import { useHealthData } from '../../hooks/useHealthData';
-
-
-
-
-
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
-  View,
+import { Ionicons } from '@expo/vector-icons'/import { LineChart, BarChart, PieChart, ProgressChart } from 'react-native-chart-kit';
+import { Card, Button, Loading } from '../ui'/import { colors, spacing, typography } from '../../constants/theme'/import { useHealthData } from '../../hooks/useHealthData';/;
+importReact,{ useState, useEffect, useCallback, useMemo } from 'react';
+import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor'/  View,;
   Text,
   StyleSheet,
   ScrollView,
@@ -18,55 +10,45 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
   Dimensions,
   Animated,
   RefreshControl,
-  Alert,
-} from 'react-native';
-
-const { width, height } = Dimensions.get('window');
-const chartWidth = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => width - spacing.lg * 2, []), []), []), []), []), []);
-
+  { Alert } from 'react-native'
+const { width, height   } = Dimensions.get('window;';);
+const chartWidth = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => width - spacing.lg * 2, []))))))
 interface HealthMetric {
-  id: string;
-  name: string;
-  value: number | string;
-  unit: string;
-  trend: 'up' | 'down' | 'stable';
-  trendValue: string;
-  color: string;
-  icon: string;
-  data: number[];
+  // 性能监控 *   const performanceMonitor = usePerformanceMonitor('EnhancedHealthVisualization', { */
+    trackRender: true,
+    trackMemory: true,
+    warnThreshold: 50, // ms *   ;};) */
+  id: string,
+  name: string,
+  value: number | string,
+  unit: string,
+  trend: 'up' | 'down' | 'stable',
+  trendValue: string,
+  color: string,
+  icon: string,
+  data: number[],
   status: 'excellent' | 'good' | 'fair' | 'poor';
   target?: number;
-  description?: string;
-}
-
-interface ConstitutionData {
-  type: string;
-  name: string;
-  percentage: number;
-  color: string;
-  description: string;
-}
-
+  description?: string}
+interface ConstitutionData { type: string,
+  name: string,
+  percentage: number,
+  color: string,
+  description: string}
 interface EnhancedHealthVisualizationProps {
   onMetricPress?: (metric: HealthMetric) => void;
   onExportData?: () => void;
-  onShareInsights?: () => void;
-}
-
-export const EnhancedHealthVisualization: React.FC<EnhancedHealthVisualizationProps> = ({
-  onMetricPress,
+  onShareInsights?: () => void}
+export const EnhancedHealthVisualization: React.FC<EnhancedHealthVisualizationProps /> = ({/  onMetricPress,
   onExportData,
-  onShareInsights,
+  onShareInsights
 }) => {
-  const { healthData, loading, refreshData } = useHealthData();
-  const [selectedPeriod, setSelectedPeriod] = useState<'day' | 'week' | 'month' | 'year'>('week');
-  const [selectedMetric, setSelectedMetric] = useState<string>('overview');
-  const [refreshing, setRefreshing] = useState(false);
-  const [animatedValue] = useState(new Animated.Value(0));
-
-  // 模拟健康指标数据
-  const [healthMetrics] = useState<HealthMetric[]>([
-    {
+  const { healthData, loading, refreshData   } = useHealthData;(;)
+  const [selectedPeriod, setSelectedPeriod] = useState<'day' | 'week' | 'month' | 'year'>('week';);
+  const [selectedMetric, setSelectedMetric] = useState<string>('overview';);
+  const [refreshing, setRefreshing] = useState<boolean>(fals;e;);
+  const [animatedValue] = useState<any>(new Animated.Value(0););
+  // 模拟健康指标数据 *   const [healthMetrics] = useState<HealthMetric[]  *// >([ * { */
       id: 'heart_rate',
       name: '心率',
       value: 72,
@@ -83,8 +65,7 @@ export const EnhancedHealthVisualization: React.FC<EnhancedHealthVisualizationPr
     {
       id: 'blood_pressure',
       name: '血压',
-      value: '120/80',
-      unit: 'mmHg',
+      value: '120/80',/      unit: 'mmHg',
       trend: 'down',
       trendValue: '-2%',
       color: '#4ECDC4',
@@ -147,13 +128,9 @@ export const EnhancedHealthVisualization: React.FC<EnhancedHealthVisualizationPr
       data: [72, 74, 76, 78, 77, 78, 80],
       status: 'fair',
       target: 85,
-      description: '营养摄入基本均衡，建议增加蔬果',
-    },
-  ]);
-
-  // 体质分析数据
-  const [constitutionData] = useState<ConstitutionData[]>([
-    {
+      description: '营养摄入基本均衡，建议增加蔬果'},
+  ;];)
+  // 体质分析数据 *   const [constitutionData] = useState<ConstitutionData[]  *// >([ * { */
       type: 'balanced',
       name: '平和质',
       percentage: 35,
@@ -179,173 +156,116 @@ export const EnhancedHealthVisualization: React.FC<EnhancedHealthVisualizationPr
       name: '阳虚质',
       percentage: 20,
       color: '#A8E6CF',
-      description: '阳气不足，偏寒凉',
-    },
-  ]);
-
-  useEffect(() => {
-    // 启动动画
-    Animated.timing(animatedValue, {
+      description: '阳气不足，偏寒凉'};];);
+  useEffect((); => {
+    const effectStart = performance.now;(;);
+    // 启动动画 *     Animated.timing(animatedValue, { */
       toValue: 1,
       duration: 800,
       useNativeDriver: true,
     }).start();
+      const effectEnd = performance.now;(;);
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-
-  const onRefresh = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback(async () => {
-    setRefreshing(true), []), []), []), []), []), []);
-    await refreshData();
+  const onRefresh = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useCallback(async (); => {
+    setRefreshing(true), []);
+    await refreshData;(;);
     setRefreshing(false);
+      const effectEnd = performance.now;(;);
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [refreshData]);
-
-  const handleMetricPress = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback((metric: HealthMetric) => {
-    setSelectedMetric(metric.id), []), []), []), []), []), []);
+  const handleMetricPress = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useCallback(); => {
     onMetricPress?.(metric);
+      const effectEnd = performance.now;(;);
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [onMetricPress]);
-
-  const getStatusColor = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback((status: string) => {
-    switch (status) {
-      case 'excellent': return colors.health.excellent, []), []), []), []), []), []);
-      case 'good': return colors.health.good;
-      case 'fair': return colors.health.fair;
-      case 'poor': return colors.health.poor;
-      default: return colors.textSecondary;
+  const getStatusColor = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useCallback() => {
+      case 'good': return colors.health.go;o;d
+      case 'fair': return colors.health.fa;i;r
+      case 'poor': return colors.health.po;o;r;
+      default: return colors.textSeconda;r;y;
     }
+      const effectEnd = performance.now;(;);
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-
-  const chartConfig = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => ({
+  const chartConfig = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => ({
     backgroundColor: colors.surface,
     backgroundGradientFrom: colors.surface,
     backgroundGradientTo: colors.surface,
     decimalPlaces: 0,
-    color: (opacity = 1) => `rgba(53, 187, 120, ${opacity})`,
+    color: (opacity = 1) => `rgba(53, 187, 120, ${opacity});`,
     labelColor: (opacity = 1) => `rgba(107, 114, 128, ${opacity})`,
-    style: {
-      borderRadius: 16,
-    },
+    style: { borderRadius: 16  },
     propsForDots: {
       r: '4',
       strokeWidth: '2',
       stroke: colors.primary,
-    },
-  }), []), []), []), []), []), []), []);
-
-  const renderMetricCard = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback((metric: HealthMetric, index: number) => (
-    <Animated.View
+    }
+  }), []), []);
+  const renderMetricCard = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useCallback((metric: HealthMetric, index: number); => (
+    <Animated.View,
       key={metric.id}
       style={[
         styles.metricCard,
         {
           opacity: animatedValue,
-          transform: [
-            {
-              translateY: animatedValue.interpolate({
+          transform: [;{,
+              translateY: animatedValue.interpolate({,
                 inputRange: [0, 1],
-                outputRange: [50, 0],
-              }),
-            },
-          ],
-        },
-      ]}
-    >
-      <TouchableOpacity
-        onPress={() => handleMetricPress(metric)}
-        activeOpacity={0.8}
+                outputRange: [50, 0]
+              })
+            }
+          ]
+        }
+      ]} />/      <TouchableOpacity
+        onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> handleMetricPress(metric)}/        activeOpacity={0.8}
       >
-        <Card style={[styles.metricCardContent, { borderLeftColor: metric.color }]}>
-          <View style={styles.metricHeader}>
-            <View style={[styles.metricIcon, { backgroundColor: metric.color + '20' }]}>
-              <Ionicons name={metric.icon as any} size={24} color={metric.color} />
-            </View>
-            <View style={styles.metricInfo}>
-              <Text style={styles.metricName}>{metric.name}</Text>
-              <View style={styles.metricValueContainer}>
-                <Text style={[styles.metricValue, { color: metric.color }]}>
-                  {metric.value}
-                </Text>
-                <Text style={styles.metricUnit}>{metric.unit}</Text>
-              </View>
-            </View>
-            <View style={styles.metricTrend}>
-              <View style={[
+        <Card style={[styles.metricCardContent, { borderLeftColor: metric.color}]} />/          <View style={styles.metricHeader} />/            <View style={[styles.metricIcon, { backgroundColor: metric.color + '20'}]} />/              <Ionicons name={metric.icon as any} size={24} color={metric.color} />/            </View>/            <View style={styles.metricInfo} />/              <Text style={styles.metricName} />{metric.name}</Text>/              <View style={styles.metricValueContainer} />/                <Text style={[styles.metricValue, { color: metric.color}]} />/                  {metric.value}
+                </Text>/                <Text style={styles.metricUnit} />{metric.unit}</Text>/              </View>/            </View>/            <View style={styles.metricTrend} />/              <View style={[
                 styles.trendIndicator,
-                { backgroundColor: metric.trend === 'up' ? colors.success : 
-                                 metric.trend === 'down' ? colors.error : colors.warning },
-              ]}>
-                <Ionicons 
-                  name={metric.trend === 'up' ? 'trending-up' : 
-                        metric.trend === 'down' ? 'trending-down' : 'remove'} 
-                  size={16} 
-                  color="white" 
-                />
-              </View>
-              <Text style={styles.trendValue}>{metric.trendValue}</Text>
-            </View>
-          </View>
-
-          <View style={styles.metricProgress}>
-            <View style={styles.progressBar}>
-              <View 
+                { backgroundColor: metric.trend === 'up' ? colors.success : metric.trend === 'down' ? colors.error: colors.warning}
+              ]} />/                <Ionicons
+                  name={metric.trend === 'up' ? 'trending-up' :
+                        metric.trend === 'down' ? 'trending-down' : 'remove'}
+                  size={16}
+                  color="white"
+                />/              </View>/              <Text style={styles.trendValue} />{metric.trendValue}</Text>/            </View>/          </View>/
+          <View style={styles.metricProgress} />/            <View style={styles.progressBar} />/              <View
                 style={[
                   styles.progressFill,
-                  { 
-                    width: `${typeof metric.value === 'number' && metric.target ? 
-                      Math.min((metric.value / metric.target) * 100, 100) : 75}%`,
-                    backgroundColor: getStatusColor(metric.status),
-                  },
-                ]} 
-              />
-            </View>
-            <Text style={styles.statusText}>{metric.description}</Text>
-          </View>
-        </Card>
-      </TouchableOpacity>
-    </Animated.View>
-  ), [animatedValue, handleMetricPress, getStatusColor]), []), []), []), []), []), []);
-
-  const renderTrendChart = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback(() => {
-    const selectedMetricData = healthMetrics.find(m => m.id === selectedMetric), []), []), []), []), []), []);
-    if (!selectedMetricData || selectedMetric === 'overview') {return null;}
-
+                  {
+                    width: `${typeof metric.value === 'number' && metric.target ?
+                      Math.min((metric.value / metric.target) * 100, 100) : 75}%`,/                    backgroundColor: getStatusColor(metric.status)}
+                ]}
+              />/            </View>/            <Text style={styles.statusText} />{metric.description}</Text>/          </View>/        </Card>/      </TouchableOpacity>/    </Animated.View>/  ), [animatedValue, handleMetricPress, getStatusColor]), []);
+  const renderTrendChart = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useCallback(); => {
+    if (!selectedMetricData || selectedMetric === 'overview') {return nu;l;l;}
+    // 记录渲染性能 *  */
+    performanceMonitor.recordRender()
     return (
-      <Card style={styles.chartCard}>
-        <View style={styles.chartHeader}>
-          <Text style={styles.chartTitle}>{selectedMetricData.name}趋势</Text>
-          <TouchableOpacity onPress={() => setSelectedMetric('overview')}>
-            <Ionicons name="close" size={24} color={colors.textSecondary} />
-          </TouchableOpacity>
-        </View>
-        <LineChart
+      <Card style={styles.chartCard} />/        <View style={styles.chartHeader} />/          <Text style={styles.chartTitle} />{selectedMetricData.name}趋势</Text>/          <TouchableOpacity onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setSelectedMetric('overview')}>/            <Ionicons name="close" size={24} color={colors.textSecondary} />/          </TouchableOpacity>/        </View>/        <LineChart
           data={{
             labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
-            datasets: [
-              {
+            datasets;: ;[{,
                 data: selectedMetricData.data,
-                color: () => selectedMetricData.color,
-                strokeWidth: 3,
-              },
-            ],
+                color: () = /> selectedMetricData.color,/                strokeWidth: 3
+              }
+            ]
           }}
           width={chartWidth}
           height={220}
           chartConfig={{
             ...chartConfig,
-            color: (opacity = 1) => `${selectedMetricData.color}${Math.round(opacity * 255).toString(16)}`,
+            color: (opacity = 1) => `${selectedMetricData.color}${Math.round(opacity * 255).toString(16)}`
           }}
           bezier
-          style={styles.chart}
-        />
-      </Card>
-    );
+          style={styles.chart} />/      </Card>/    );
+      const effectEnd = performance.now;(;);
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [selectedMetric, healthMetrics, chartConfig, chartWidth]);
-
-  const renderConstitutionAnalysis = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback(() => (
-    <Card style={styles.chartCard}>
-      <Text style={styles.chartTitle}>中医体质分析</Text>
-      <View style={styles.constitutionChart}>
-        <PieChart
-          data={constitutionData.map(item => ({
-            name: item.name,
+  const renderConstitutionAnalysis = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useCallback((); => (
+    <Card style={styles.chartCard} />/      <Text style={styles.chartTitle} />中医体质分析</Text>/      <View style={styles.constitutionChart} />/        <PieChart
+          data={constitutionData.map(item = /> ({/            name: item.name,
             population: item.percentage,
             color: item.color,
             legendFontColor: colors.textSecondary,
@@ -358,133 +278,68 @@ export const EnhancedHealthVisualization: React.FC<EnhancedHealthVisualizationPr
           backgroundColor="transparent"
           paddingLeft="15"
           absolute
-        />
-      </View>
-      <View style={styles.constitutionLegend}>
-        {constitutionData.map((item) => (
-          <View key={item.type} style={styles.constitutionItem}>
-            <View style={[styles.constitutionDot, { backgroundColor: item.color }]} />
-            <View style={styles.constitutionInfo}>
-              <Text style={styles.constitutionName}>{item.name}</Text>
-              <Text style={styles.constitutionDescription}>{item.description}</Text>
-            </View>
-            <Text style={styles.constitutionPercentage}>{item.percentage}%</Text>
-          </View>
-        ))}
-      </View>
-    </Card>
-  ), [constitutionData, chartConfig, chartWidth]), []), []), []), []), []), []);
-
-  const renderOverviewCharts = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback(() => (
-    <View style={styles.overviewContainer}>
-      {/* 健康评分仪表盘 */}
-      <Card style={styles.chartCard}>
-        <Text style={styles.chartTitle}>健康评分</Text>
-        <ProgressChart
+        />/      </View>/      <View style={styles.constitutionLegend} />/        {constitutionData.map((item); => (
+<View key={item.type} style={styles.constitutionItem} />/            <View style={[styles.constitutionDot, { backgroundColor: item.color}]} />/            <View style={styles.constitutionInfo} />/              <Text style={styles.constitutionName} />{item.name}</Text>/              <Text style={styles.constitutionDescription} />{item.description}</Text>/            </View>/            <Text style={styles.constitutionPercentage} />{item.percentage}%</Text>/          </View>/        ))},
+      </View>/    </Card>/  ), [constitutionData, chartConfig, chartWidth]), []);
+  const renderOverviewCharts = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useCallback(() => (
+    <View style={styles.overviewContainer} />/      {// 健康评分仪表盘 }/      <Card style={styles.chartCard} />/        <Text style={styles.chartTitle} />健康评分</Text>/        <ProgressChart
           data={{
             labels: ['心率', '血压', '睡眠', '压力', '活动', '营养'],
-            data: [0.85, 0.92, 0.78, 0.65, 0.88, 0.75],
+            data: [0.85, 0.92, 0.78, 0.65, 0.88, 0.75]
           }}
           width={chartWidth}
           height={200}
           chartConfig={chartConfig}
           hideLegend={false}
-          style={styles.chart}
-        />
-      </Card>
-
-      {/* 活动量统计 */}
-      <Card style={styles.chartCard}>
-        <Text style={styles.chartTitle}>活动量统计</Text>
-        <BarChart
+          style={styles.chart} />/      </Card>/
+      {// 活动量统计 }/      <Card style={styles.chartCard} />/        <Text style={styles.chartTitle} />活动量统计</Text>/        <BarChart
           data={{
             labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
-            datasets: [
-              {
+            datasets: [{,
                 data: [7200, 7800, 8100, 8500, 8200, 8500, 8800],
-                color: () => colors.primary,
-              },
-            ],
+                color: () = /> colors.primary,/              }
+            ]
           }}
           width={chartWidth}
           height={200}
           chartConfig={chartConfig}
           yAxisLabel=""
           yAxisSuffix="步"
-          style={styles.chart}
-        />
-      </Card>
-    </View>
-  ), [chartConfig, chartWidth]), []), []), []), []), []), []);
-
-  const renderPeriodSelector = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback(() => (
-    <View style={styles.periodSelector}>
-      {(['day', 'week', 'month', 'year'] as const).map((period) => (
+          style={styles.chart} />/      </Card>/    </View>/  ), [chartConfig, chartWidth]), []);
+  const renderPeriodSelector = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useCallback(() => (
+    <View style={styles.periodSelector} />/      {(['day', 'week', 'month', 'year'] as const).map((period) => (
         <TouchableOpacity
           key={period}
           style={[
             styles.periodButton,
-            selectedPeriod === period && styles.activePeriodButton,
+            selectedPeriod === period && styles.activePeriodButton
           ]}
-          onPress={() => setSelectedPeriod(period)}
-        >
+          onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setSelectedPeriod(period)}/        >
           <Text
             style={[
               styles.periodText,
-              selectedPeriod === period && styles.activePeriodText,
-            ]}
-          >
-            {period === 'day' ? '日' : period === 'week' ? '周' : 
+              selectedPeriod === period && styles.activePeriodText
+            ]} />/            {period === 'day' ? '日' : period === 'week' ? '周' :
              period === 'month' ? '月' : '年'}
-          </Text>
-        </TouchableOpacity>
-      ))}
-    </View>
-  ), [selectedPeriod]), []), []), []), []), []), []);
-
-  const renderActionButtons = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback(() => (
-    <View style={styles.actionButtons}>
-      <Button
+          </Text>/        </TouchableOpacity>/      ))}
+    </View>/  ), [selectedPeriod]), []);
+  const renderActionButtons = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useCallback(() => (
+    <View style={styles.actionButtons} />/      <Button
         title="导出数据"
-        onPress={onExportData || (() => Alert.alert('功能开发中', '数据导出功能即将上线'))}
-        style={styles.actionButton}
+        onPress={onExportData || (() = accessibilityLabel="TODO: 添加无障碍标签" /> Alert.alert('功能开发中', '数据导出功能即将上线'))}/        style={styles.actionButton}
         variant="outline"
-        leftIcon={<Ionicons name="download" size={16} color={colors.primary} />}
-      />
-      <Button
+        leftIcon={<Ionicons name="download" size={16} color={colors.primary} />}/      />/      <Button
         title="分享洞察"
-        onPress={onShareInsights || (() => Alert.alert('功能开发中', '分享功能即将上线'))}
-        style={styles.actionButton}
+        onPress={onShareInsights || (() = accessibilityLabel="TODO: 添加无障碍标签" /> Alert.alert('功能开发中', '分享功能即将上线'))}/        style={styles.actionButton}
         variant="outline"
-        leftIcon={<Ionicons name="share" size={16} color={colors.primary} />}
-      />
-    </View>
-  ), [onExportData, onShareInsights]), []), []), []), []), []), []);
-
+        leftIcon={<Ionicons name="share" size={16} color={colors.primary} />}/      />/    </View>/  ), [onExportData, onShareInsights]), []);
   if (loading) {
     return (
-      <SafeAreaView style={styles.container}>
-        <Loading text="正在加载健康数据..." />
-      </SafeAreaView>
-    );
+      <SafeAreaView style={styles.container} />/        <Loading text="正在加载健康数据..." />/      </SafeAreaView>/    ;)
   }
-
   return (
-    <SafeAreaView style={styles.container}>
-      {/* 头部 */}
-      <View style={styles.header}>
-        <View>
-          <Text style={styles.title}>健康数据可视化</Text>
-          <Text style={styles.subtitle}>全面了解您的健康状态</Text>
-        </View>
-        <TouchableOpacity onPress={() => Alert.alert('设置', '健康数据设置')}>
-          <Ionicons name="settings" size={24} color={colors.textPrimary} />
-        </TouchableOpacity>
-      </View>
-
-      {/* 时间段选择器 */}
-      {renderPeriodSelector()}
-
+    <SafeAreaView style={styles.container} />/      {// 头部 }/      <View style={styles.header} />/        <View />/          <Text style={styles.title} />健康数据可视化</Text>/          <Text style={styles.subtitle} />全面了解您的健康状态</Text>/        </View>/        <TouchableOpacity onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> Alert.alert('设置', '健康数据设置')}>/          <Ionicons name="settings" size={24} color={colors.textPrimary} />/        </TouchableOpacity>/      </View>/
+      {// 时间段选择器 }/      {renderPeriodSelector()}
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
@@ -493,33 +348,19 @@ export const EnhancedHealthVisualization: React.FC<EnhancedHealthVisualizationPr
             refreshing={refreshing}
             onRefresh={onRefresh}
             colors={[colors.primary]}
-            tintColor={colors.primary}
-          />
-        }
+            tintColor={colors.primary} />/        }
         showsVerticalScrollIndicator={false}
       >
-        {/* 健康指标卡片 */}
-        <View style={styles.metricsGrid}>
-          {healthMetrics.map(renderMetricCard)}
-        </View>
-
-        {/* 趋势图表 */}
-        {renderTrendChart()}
-
-        {/* 概览图表 */}
-        {selectedMetric === 'overview' && renderOverviewCharts()}
-
-        {/* 体质分析 */}
-        {renderConstitutionAnalysis()}
-
-        {/* 操作按钮 */}
-        {renderActionButtons()}
-      </ScrollView>
-    </SafeAreaView>
-  );
+        {// 健康指标卡片 }/        <View style={styles.metricsGrid} />/          {healthMetrics.map(renderMetricCard)}
+        </View>/
+        {// 趋势图表 }/        {renderTrendChart()}
+        {// 概览图表 }/        {selectedMetric === 'overview' && renderOverviewCharts()}
+        {// 体质分析 }/        {renderConstitutionAnalysis()}
+;
+        {// 操作按钮 }/        {renderActionButtons()};
+      </ScrollView>/    </SafeAreaView>/  ;);
 };
-
-const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -558,32 +399,18 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
     borderRadius: 20,
     backgroundColor: colors.gray100,
   },
-  activePeriodButton: {
-    backgroundColor: colors.primary,
-  },
+  activePeriodButton: { backgroundColor: colors.primary  },
   periodText: {
     fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
     fontWeight: '500',
   },
-  activePeriodText: {
-    color: colors.white,
-  },
-  scrollView: {
-    flex: 1,
-  },
-  scrollContent: {
-    padding: spacing.lg,
-  },
-  metricsGrid: {
-    marginBottom: spacing.lg,
-  },
-  metricCard: {
-    marginBottom: spacing.md,
-  },
-  metricCardContent: {
-    borderLeftWidth: 4,
-  },
+  activePeriodText: { color: colors.white  },
+  scrollView: { flex: 1  },
+  scrollContent: { padding: spacing.lg  },
+  metricsGrid: { marginBottom: spacing.lg  },
+  metricCard: { marginBottom: spacing.md  },
+  metricCardContent: { borderLeftWidth: 4  },
   metricHeader: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -597,9 +424,7 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
     justifyContent: 'center',
     marginRight: spacing.md,
   },
-  metricInfo: {
-    flex: 1,
-  },
+  metricInfo: { flex: 1  },
   metricName: {
     fontSize: typography.fontSize.base,
     fontWeight: '600',
@@ -619,9 +444,7 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
     fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
   },
-  metricTrend: {
-    alignItems: 'center',
-  },
+  metricTrend: { alignItems: 'center'  },
   trendIndicator: {
     width: 32,
     height: 32,
@@ -635,9 +458,7 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
     color: colors.textSecondary,
     fontWeight: '600',
   },
-  metricProgress: {
-    marginTop: spacing.sm,
-  },
+  metricProgress: { marginTop: spacing.sm  },
   progressBar: {
     height: 6,
     backgroundColor: colors.gray200,
@@ -652,9 +473,7 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
     fontSize: typography.fontSize.xs,
     color: colors.textSecondary,
   },
-  chartCard: {
-    marginBottom: spacing.lg,
-  },
+  chartCard: { marginBottom: spacing.lg  },
   chartHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -666,19 +485,13 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
     fontWeight: '600',
     color: colors.textPrimary,
   },
-  chart: {
-    borderRadius: 16,
-  },
-  overviewContainer: {
-    marginBottom: spacing.lg,
-  },
+  chart: { borderRadius: 16  },
+  overviewContainer: { marginBottom: spacing.lg  },
   constitutionChart: {
     alignItems: 'center',
     marginBottom: spacing.md,
   },
-  constitutionLegend: {
-    marginTop: spacing.md,
-  },
+  constitutionLegend: { marginTop: spacing.md  },
   constitutionItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -692,9 +505,7 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
     borderRadius: 6,
     marginRight: spacing.md,
   },
-  constitutionInfo: {
-    flex: 1,
-  },
+  constitutionInfo: { flex: 1  },
   constitutionName: {
     fontSize: typography.fontSize.base,
     fontWeight: '600',
@@ -718,5 +529,5 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
   actionButton: {
     flex: 1,
     marginHorizontal: spacing.xs,
-  },
-}), []), []), []), []), []), []); 
+  }
+}), []);

@@ -1,5 +1,5 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+Object.defineProperty(exports, "__esModule", { value: true ;});
 exports.VideoInteractionService = void 0;
 class VideoInteractionService {
     constructor() {
@@ -9,14 +9,12 @@ class VideoInteractionService {
     }
     async initializeVideo() {
         try {
-            // 创建视频元素
-            this.videoElement = document.createElement('video');
+            // 创建视频元素/            this.videoElement = document.createElement('video');
             this.videoElement.width = 640;
             this.videoElement.height = 480;
             this.videoElement.autoplay = true;
             this.videoElement.muted = true;
-            // 创建画布用于图像处理
-            this.canvas = document.createElement('canvas');
+            // 创建画布用于图像处理/            this.canvas = document.createElement('canvas');
             this.canvas.width = 640;
             this.canvas.height = 480;
             this.context = this.canvas.getContext('2d') || undefined;
@@ -31,20 +29,16 @@ class VideoInteractionService {
             return;
         }
         try {
-            // 请求摄像头权限
-            this.stream = await navigator.mediaDevices.getUserMedia({
+            // 请求摄像头权限/            this.stream = await navigator.mediaDevices.getUserMedia({
                 video: {
                     width: { ideal: 640 },
                     height: { ideal: 480 },
-                    facingMode: 'user'
-                },
-                audio: false
-            });
+                    facingMode: 'user';},
+                audio: false;});
             if (this.videoElement) {
                 this.videoElement.srcObject = this.stream;
                 this.isCapturing = true;
-                // 开始手势识别
-                if (this.enableGestures) {
+                // 开始手势识别/                if (this.enableGestures) {
                     this.startGestureRecognition();
                 }
             }
@@ -71,39 +65,28 @@ class VideoInteractionService {
             if (!this.isCapturing || !this.videoElement || !this.context) {
                 return;
             }
-            // 将视频帧绘制到画布
-            this.context.drawImage(this.videoElement, 0, 0, this.canvas.width, this.canvas.height);
-            // 获取图像数据
-            const imageData = this.context.getImageData(0, 0, this.canvas.width, this.canvas.height);
-            // 简单的手势识别逻辑（这里可以集成更复杂的 ML 模型）
-            const gesture = this.detectGesture(imageData);
+            // 将视频帧绘制到画布/            this.context.drawImage(this.videoElement, 0, 0, this.canvas.width, this.canvas.height);
+            // 获取图像数据/            const imageData = this.context.getImageData(0, 0, this.canvas.width, this.canvas.height);
+            // 简单的手势识别逻辑（这里可以集成更复杂的 ML 模型）/            const gesture = this.detectGesture(imageData);
             if (gesture && this.onGestureCallback) {
                 this.onGestureCallback(gesture);
             }
-            // 继续处理下一帧
-            if (this.isCapturing) {
+            // 继续处理下一帧/            if (this.isCapturing) {
                 requestAnimationFrame(processFrame);
             }
         };
-        // 开始处理帧
-        requestAnimationFrame(processFrame);
+        // 开始处理帧/        requestAnimationFrame(processFrame);
     }
     detectGesture(imageData) {
-        // 这是一个简化的手势识别示例
-        // 在实际应用中，你可能需要使用 TensorFlow.js 或 MediaPipe 等库
-        const data = imageData.data;
+        // 这是一个简化的手势识别示例/        // 在实际应用中，你可能需要使用 TensorFlow.js 或 MediaPipe 等库/        const data = imageData.data;
         let brightPixels = 0;
         const threshold = 200;
-        // 简单的亮度检测
-        for (let i = 0; i < data.length; i += 4) {
-            const brightness = (data[i] + data[i + 1] + data[i + 2]) / 3;
-            if (brightness > threshold) {
+        // 简单的亮度检测/        for (let i = 0; i < data.length; i += 4) {
+            const brightness = (data[i] + data[i + 1] + data[i + 2]) / 3;/            if (brightness > threshold) {
                 brightPixels++;
             }
         }
-        const brightRatio = brightPixels / (imageData.width * imageData.height);
-        // 基于亮度比例的简单手势判断
-        if (brightRatio > 0.3) {
+        const brightRatio = brightPixels / (imageData.width * imageData.height);/        // 基于亮度比例的简单手势判断/        if (brightRatio > 0.3) {
             return 'thumbs_up';
         }
         else if (brightRatio > 0.2) {
@@ -126,16 +109,13 @@ class VideoInteractionService {
         this.stopVideoCapture();
         this.onGestureCallback = undefined;
     }
-    // 获取当前视频帧作为图像
-    captureFrame() {
+    // 获取当前视频帧作为图像/    captureFrame() {
         if (!this.canvas || !this.context || !this.videoElement) {
             return null;
         }
         this.context.drawImage(this.videoElement, 0, 0, this.canvas.width, this.canvas.height);
-        return this.canvas.toDataURL('image/jpeg', 0.8);
-    }
-    // 检查是否正在捕获视频
-    isCapturingVideo() {
+        return this.canvas.toDataURL('image/jpeg', 0.8);/    }
+    // 检查是否正在捕获视频/    isCapturingVideo() {
         return this.isCapturing;
     }
 }

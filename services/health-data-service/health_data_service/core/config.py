@@ -1,11 +1,13 @@
-"""配置管理模块"""
+#!/usr/bin/env python3
+"""
+健康数据服务配置模块
 
-from typing import Any
+提供应用程序的配置管理，支持环境变量和配置文件。
+"""
 
-from pydantic import Field
-from pydantic import field_validator
-from pydantic_settings import BaseSettings
-from pydantic_settings import SettingsConfigDict
+from typing import Any, Dict, List, Optional, Union
+from pydantic import Field, field_validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class DatabaseSettings(BaseSettings):
@@ -25,7 +27,7 @@ class DatabaseSettings(BaseSettings):
 
     @property
     def url(self) -> str:
-        """获取数据库连接URL"""
+        """获取异步数据库连接URL"""
         return f"postgresql+asyncpg://{self.user}:{self.password}@{self.host}:{self.port}/{self.name}"
 
     @property
@@ -40,7 +42,7 @@ class RedisSettings(BaseSettings):
     host: str = Field(default="localhost", description="Redis主机")
     port: int = Field(default=6379, description="Redis端口")
     db: int = Field(default=0, description="Redis数据库")
-    password: str | None = Field(default=None, description="Redis密码")
+    password: Optional[str] = Field(default=None, description="Redis密码")
 
     # 连接池配置
     max_connections: int = Field(default=100, description="最大连接数")
@@ -68,9 +70,9 @@ class APISettings(BaseSettings):
     workers: int = Field(default=1, description="工作进程数")
 
     # CORS配置
-    cors_origins: list[str] = Field(default=["*"], description="CORS允许的源")
-    cors_methods: list[str] = Field(default=["*"], description="CORS允许的方法")
-    cors_headers: list[str] = Field(default=["*"], description="CORS允许的头部")
+    cors_origins: List[str] = Field(default=["*"], description="CORS允许的源")
+    cors_methods: List[str] = Field(default=["*"], description="CORS允许的方法")
+    cors_headers: List[str] = Field(default=["*"], description="CORS允许的头部")
 
     # 限流配置
     rate_limit_requests: int = Field(default=100, description="每分钟请求限制")
@@ -145,7 +147,7 @@ class MonitoringSettings(BaseSettings):
 
     # OpenTelemetry配置
     otel_enabled: bool = Field(default=False, description="启用OpenTelemetry")
-    otel_endpoint: str | None = Field(default=None, description="OTEL端点")
+    otel_endpoint: Optional[str] = Field(default=None, description="OTEL端点")
     otel_service_name: str = Field(
         default="health-data-service", description="服务名称"
     )
@@ -159,10 +161,10 @@ class MLSettings(BaseSettings):
     model_timeout: int = Field(default=30, description="模型推理超时时间(秒)")
 
     # ONNX配置
-    onnx_providers: list[str] = Field(
+    onnx_providers: List[str] = Field(
         default=["CPUExecutionProvider"], description="ONNX执行提供者"
     )
-    onnx_session_options: dict[str, Any] = Field(
+    onnx_session_options: Dict[str, Any] = Field(
         default_factory=dict, description="ONNX会话选项"
     )
 
@@ -216,7 +218,7 @@ class Settings(BaseSettings):
 
     # 兼容性属性
     @property
-    def ALLOWED_HOSTS(self) -> list[str]:  # noqa: N802
+    def ALLOWED_HOSTS(self) -> List[str]:  # noqa: N802
         """允许的主机列表"""
         return self.api.cors_origins
 
@@ -236,5 +238,5 @@ class Settings(BaseSettings):
         return self.debug
 
 
-# 全局配置实例
+# 全局设置实例
 settings = Settings()

@@ -214,7 +214,7 @@ ignore_missing_imports = true
 # Pytest 配置
 [tool.pytest.ini_options]
 minversion = "7.0"
-addopts = "-ra -q --strict-markers --tb=short --cov=health_data_service --cov-report=term-missing --cov-report=html"
+addopts = "-ra -q --strict-markers --tb=short"
 testpaths = ["tests"]
 python_files = ["test_*.py", "*_test.py"]
 python_classes = ["Test*"]

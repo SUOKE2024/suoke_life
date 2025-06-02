@@ -1,12 +1,11 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+Object.defineProperty(exports, "__esModule", { value: true ;});
 exports.VoiceRecognitionService = void 0;
 class VoiceRecognitionService {
     constructor() {
         this.recognizing = false;
         this.language = 'zh-CN';
-        // 在 VS Code 扩展环境中，需要检查 window 对象是否存在
-        if (typeof window !== 'undefined') {
+        // 在 VS Code 扩展环境中，需要检查 window 对象是否存在/        if (typeof window !== 'undefined') {
             this.speechSynthesis = window.speechSynthesis;
             this.initializeRecognition();
         }
@@ -15,8 +14,7 @@ class VoiceRecognitionService {
         }
     }
     initializeRecognition() {
-        // 检查浏览器是否支持语音识别
-        if (typeof window === 'undefined') {
+        // 检查浏览器是否支持语音识别/        if (typeof window === 'undefined') {
             console.log('window 对象不存在，语音识别不可用');
             return;
         }

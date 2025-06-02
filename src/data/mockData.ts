@@ -1,8 +1,5 @@
-import { ChatChannel, Contact, ChatMessage } from "../types/chat";
-
-// 模拟聊天频道数据
-export const MOCK_CHAT_CHANNELS: ChatChannel[] = [
-  {
+import { ChatChannel, Contact, ChatMessage } from "../types/chat";/;
+// 模拟聊天频道数据 * export const MOCK_CHAT_CHANNELS: ChatChannel[] = [;{, */
     id: "xiaoai",
     name: "小艾",
     type: "agent",
@@ -12,7 +9,7 @@ export const MOCK_CHAT_CHANNELS: ChatChannel[] = [
     lastMessageTime: "刚刚",
     unreadCount: 0,
     isOnline: true,
-    specialization: "健康诊断与建议",
+    specialization: "健康诊断与建议"
   },
   {
     id: "xiaoke",
@@ -24,7 +21,7 @@ export const MOCK_CHAT_CHANNELS: ChatChannel[] = [
     lastMessageTime: "5分钟前",
     unreadCount: 1,
     isOnline: true,
-    specialization: "医疗服务管理",
+    specialization: "医疗服务管理"
   },
   {
     id: "laoke",
@@ -36,7 +33,7 @@ export const MOCK_CHAT_CHANNELS: ChatChannel[] = [
     lastMessageTime: "10分钟前",
     unreadCount: 0,
     isOnline: true,
-    specialization: "中医养生教育",
+    specialization: "中医养生教育"
   },
   {
     id: "soer",
@@ -48,7 +45,7 @@ export const MOCK_CHAT_CHANNELS: ChatChannel[] = [
     lastMessageTime: "15分钟前",
     unreadCount: 2,
     isOnline: true,
-    specialization: "生活方式指导",
+    specialization: "生活方式指导"
   },
   {
     id: "dr_wang",
@@ -59,7 +56,7 @@ export const MOCK_CHAT_CHANNELS: ChatChannel[] = [
     lastMessageTime: "1小时前",
     unreadCount: 0,
     isOnline: false,
-    specialization: "内科主任医师",
+    specialization: "内科主任医师"
   },
   {
     id: "dr_li",
@@ -70,7 +67,7 @@ export const MOCK_CHAT_CHANNELS: ChatChannel[] = [
     lastMessageTime: "2小时前",
     unreadCount: 1,
     isOnline: true,
-    specialization: "中医科副主任医师",
+    specialization: "中医科副主任医师"
   },
   {
     id: "health_group",
@@ -81,7 +78,7 @@ export const MOCK_CHAT_CHANNELS: ChatChannel[] = [
     lastMessageTime: "30分钟前",
     unreadCount: 5,
     isOnline: true,
-    specialization: "健康话题讨论",
+    specialization: "健康话题讨论"
   },
   {
     id: "user_zhang",
@@ -92,20 +89,17 @@ export const MOCK_CHAT_CHANNELS: ChatChannel[] = [
     lastMessageTime: "45分钟前",
     unreadCount: 0,
     isOnline: false,
-    specialization: "普通用户",
-  },
+    specialization: "普通用户"
+  }
 ];
-
-// 模拟联系人数据
-export const MOCK_CONTACTS: Contact[] = [
-  {
+// 模拟联系人数据 * export const MOCK_CONTACTS: Contact[] = [;{, */
     id: "xiaoai",
     name: "小艾",
     type: "agent",
     agentType: "xiaoai",
     avatar: "🤖",
     isOnline: true,
-    specialization: "健康诊断与建议",
+    specialization: "健康诊断与建议"
   },
   {
     id: "xiaoke",
@@ -114,7 +108,7 @@ export const MOCK_CONTACTS: Contact[] = [
     agentType: "xiaoke",
     avatar: "👨‍⚕️",
     isOnline: true,
-    specialization: "医疗服务管理",
+    specialization: "医疗服务管理"
   },
   {
     id: "laoke",
@@ -123,7 +117,7 @@ export const MOCK_CONTACTS: Contact[] = [
     agentType: "laoke",
     avatar: "👴",
     isOnline: true,
-    specialization: "中医养生教育",
+    specialization: "中医养生教育"
   },
   {
     id: "soer",
@@ -132,7 +126,7 @@ export const MOCK_CONTACTS: Contact[] = [
     agentType: "soer",
     avatar: "👧",
     isOnline: true,
-    specialization: "生活方式指导",
+    specialization: "生活方式指导"
   },
   {
     id: "dr_wang",
@@ -143,7 +137,7 @@ export const MOCK_CONTACTS: Contact[] = [
     lastSeen: "1小时前",
     specialization: "内科诊疗",
     department: "内科",
-    title: "主任医师",
+    title: "主任医师"
   },
   {
     id: "dr_li",
@@ -153,7 +147,7 @@ export const MOCK_CONTACTS: Contact[] = [
     isOnline: true,
     specialization: "中医调理",
     department: "中医科",
-    title: "副主任医师",
+    title: "副主任医师"
   },
   {
     id: "user_zhang",
@@ -161,14 +155,11 @@ export const MOCK_CONTACTS: Contact[] = [
     type: "user",
     avatar: "👤",
     isOnline: false,
-    lastSeen: "45分钟前",
-  },
+    lastSeen: "45分钟前"
+  }
 ];
-
-// 模拟聊天消息数据
-export const MOCK_MESSAGES: Record<string, ChatMessage[]> = {
-  xiaoai: [
-    {
+// 模拟聊天消息数据 * export const MOCK_MESSAGES: Record<string, ChatMessage[]> = {; */;
+  xiaoai: [{,
       id: "msg_1",
       channelId: "xiaoai",
       senderId: "xiaoai",
@@ -177,11 +168,10 @@ export const MOCK_MESSAGES: Record<string, ChatMessage[]> = {
       content: "您好！我是小艾，您的健康助手。有什么可以帮助您的吗？",
       timestamp: new Date().toISOString(),
       type: "text",
-      isRead: true,
-    },
+      isRead: true
+    }
   ],
-  xiaoke: [
-    {
+  xiaoke: [{,
       id: "msg_2",
       channelId: "xiaoke",
       senderId: "xiaoke",
@@ -190,11 +180,10 @@ export const MOCK_MESSAGES: Record<string, ChatMessage[]> = {
       content: "我可以为您提供专业的医疗服务和健康管理",
       timestamp: new Date(Date.now() - 5 * 60 * 1000).toISOString(),
       type: "text",
-      isRead: false,
-    },
+      isRead: false
+    }
   ],
-  laoke: [
-    {
+  laoke: [{,
       id: "msg_3",
       channelId: "laoke",
       senderId: "laoke",
@@ -203,11 +192,10 @@ export const MOCK_MESSAGES: Record<string, ChatMessage[]> = {
       content: "中医养生之道，在于顺应自然，调和阴阳",
       timestamp: new Date(Date.now() - 10 * 60 * 1000).toISOString(),
       type: "text",
-      isRead: true,
-    },
+      isRead: true
+    }
   ],
-  soer: [
-    {
+  soer: [{,
       id: "msg_4",
       channelId: "soer",
       senderId: "soer",
@@ -216,39 +204,37 @@ export const MOCK_MESSAGES: Record<string, ChatMessage[]> = {
       content: "今天的生活安排我来帮您规划吧！",
       timestamp: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
       type: "text",
-      isRead: false,
-    },
-  ],
+      isRead: false
+    }
+  ]
 };
-
-// 智能体配置
-export const AGENT_CONFIGS = {
+// 智能体配置 * export const AGENT_CONFIGS = ;{; */
   xiaoai: {
     name: "小艾",
     avatar: "🤖",
     color: "#007AFF",
     description: "健康诊断与建议",
-    capabilities: ["健康评估", "症状分析", "建议提供", "数据解读"],
+    capabilities: ["健康评估", "症状分析", "建议提供", "数据解读"]
   },
   xiaoke: {
     name: "小克",
     avatar: "👨‍⚕️",
     color: "#34C759",
     description: "医疗服务管理",
-    capabilities: ["预约管理", "医疗记录", "用药提醒", "康复指导"],
+    capabilities: ["预约管理", "医疗记录", "用药提醒", "康复指导"]
   },
   laoke: {
     name: "老克",
     avatar: "👴",
     color: "#FF9500",
     description: "中医养生教育",
-    capabilities: ["中医理论", "养生指导", "食疗建议", "运动推荐"],
+    capabilities: ["中医理论", "养生指导", "食疗建议", "运动推荐"]
   },
   soer: {
     name: "索儿",
     avatar: "👧",
     color: "#FF2D92",
     description: "生活方式指导",
-    capabilities: ["生活规划", "习惯养成", "目标设定", "进度跟踪"],
-  },
+    capabilities: ["生活规划", "习惯养成", "目标设定", "进度跟踪"]
+  }
 } as const;

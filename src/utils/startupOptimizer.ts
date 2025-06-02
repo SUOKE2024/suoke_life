@@ -1,84 +1,58 @@
-interface StartupTask {
+// 启动任务接口
+export interface StartupTask {
   name: string;
-  priority: "critical" | "high" | "medium" | "low";
-  execute: () => Promise<void> | void;
-  dependencies?: string[];
+  priority: number;
+  dependencies: string[];
+  execute: () => Promise<void>;
+  timeout?: number;
+  critical?: boolean;
 }
 
-class StartupOptimizer {
-  private tasks: Map<string, StartupTask> = new Map();
-  private completed: Set<string> = new Set();
-  private running: Set<string> = new Set();
+// 启动优化器类
+export class StartupOptimizer {
+  private static instance: StartupOptimizer;
+  private tasks = new Map<string, StartupTask>();
+  private completed = new Set<string>();
+  private running = new Set<string>();
+  private failed = new Set<string>();
+  private metrics = new Map<string, number>();
 
-  /**
-   * 注册启动任务
-   */
-  registerTask(task: StartupTask) {
+  private constructor() {}
+
+  static getInstance(): StartupOptimizer {
+    if (!StartupOptimizer.instance) {
+      StartupOptimizer.instance = new StartupOptimizer();
+    }
+    return StartupOptimizer.instance;
+  }
+
+  // 注册启动任务
+  registerTask(task: StartupTask): void {
     this.tasks.set(task.name, task);
   }
 
-  /**
-   * 执行启动优化
-   */
-  async optimize() {
-    console.log("🚀 开始启动优化...");
-    const startTime = Date.now();
+  // 执行所有任务
+  async executeAll(): Promise<void> {
+    const criticalTasks = Array.from(this.tasks.values()).filter(task => task.critical);
+    const nonCriticalTasks = Array.from(this.tasks.values()).filter(task => !task.critical);
 
-    // 按优先级排序任务
-    const sortedTasks = this.getSortedTasks();
+    // 先执行关键任务
+    await this.executeBatch(criticalTasks);
 
-    // 执行关键任务（同步）
-    await this.executeCriticalTasks(sortedTasks);
-
-    // 异步执行其他任务
-    this.executeNonCriticalTasks(sortedTasks);
-
-    const duration = Date.now() - startTime;
-    console.log(`✅ 启动优化完成，耗时: ${duration}ms`);
-  }
-
-  private getSortedTasks(): StartupTask[] {
-    const priorityOrder = { critical: 0, high: 1, medium: 2, low: 3 };
-
-    return Array.from(this.tasks.values()).sort((a, b) => {
-      return priorityOrder[a.priority] - priorityOrder[b.priority];
-    });
-  }
-
-  private async executeCriticalTasks(tasks: StartupTask[]) {
-    const criticalTasks = tasks.filter((task) => task.priority === "critical");
-
-    for (const task of criticalTasks) {
-      if (this.canExecuteTask(task)) {
-        await this.executeTask(task);
-      }
+    // 延迟执行非关键任务
+    if (nonCriticalTasks.length > 0) {
+      setTimeout(() => this.executeBatch(nonCriticalTasks), 100);
     }
   }
 
-  private executeNonCriticalTasks(tasks: StartupTask[]) {
-    const nonCriticalTasks = tasks.filter(
-      (task) => task.priority !== "critical"
-    );
-
-    // 使用requestIdleCallback或setTimeout延迟执行
-    const executeDelayed = () => {
-      if (typeof requestIdleCallback !== "undefined") {
-        requestIdleCallback(() => this.executeBatch(nonCriticalTasks));
-      } else {
-        setTimeout(() => this.executeBatch(nonCriticalTasks), 100);
-      }
-    };
-
-    executeDelayed();
-  }
-
-  private async executeBatch(tasks: StartupTask[]) {
+  private async executeBatch(tasks: StartupTask[]): Promise<void> {
     for (const task of tasks) {
       if (this.canExecuteTask(task)) {
         try {
           await this.executeTask(task);
         } catch (error) {
-          console.error(`启动任务执行失败: ${task.name}`, error);
+          console.error(`Task ${task.name} failed:`, error);
+          this.failed.add(task.name);
         }
       }
     }
@@ -88,29 +62,48 @@ class StartupOptimizer {
     if (this.completed.has(task.name) || this.running.has(task.name)) {
       return false;
     }
-
-    if (task.dependencies) {
-      return task.dependencies.every((dep) => this.completed.has(dep));
+    
+    if (task.dependencies.length === 0) {
+      return true;
     }
-
-    return true;
+    
+    return task.dependencies.every((dep) => this.completed.has(dep));
   }
 
-  private async executeTask(task: StartupTask) {
+  private async executeTask(task: StartupTask): Promise<void> {
     this.running.add(task.name);
-
     try {
       const startTime = Date.now();
       await task.execute();
       const duration = Date.now() - startTime;
-
-      console.log(`✅ 启动任务完成: ${task.name} (${duration}ms)`);
+      
+      this.metrics.set(task.name, duration);
       this.completed.add(task.name);
-    } finally {
       this.running.delete(task.name);
+      
+      console.log(`Task ${task.name} completed in ${duration}ms`);
+    } catch (error) {
+      this.running.delete(task.name);
+      this.failed.add(task.name);
+      throw error;
     }
+  }
+
+  // 获取执行统计
+  getMetrics(): Record<string, number> {
+    return Object.fromEntries(this.metrics);
+  }
+
+  // 重置状态
+  reset(): void {
+    this.tasks.clear();
+    this.completed.clear();
+    this.running.clear();
+    this.failed.clear();
+    this.metrics.clear();
   }
 }
 
-export const startupOptimizer = new StartupOptimizer();
+// 导出单例实例
+export const startupOptimizer = StartupOptimizer.getInstance();
 export default startupOptimizer;

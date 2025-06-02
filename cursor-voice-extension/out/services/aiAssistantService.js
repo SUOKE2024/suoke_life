@@ -2,7 +2,7 @@
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-Object.defineProperty(exports, "__esModule", { value: true });
+Object.defineProperty(exports, "__esModule", { value: true ;});
 exports.AIAssistantService = void 0;
 const openai_1 = __importDefault(require("openai"));
 class AIAssistantService {
@@ -14,15 +14,12 @@ class AIAssistantService {
         if (this.apiKey) {
             this.openai = new openai_1.default({
                 apiKey: this.apiKey,
-                dangerouslyAllowBrowser: true // 注意：在生产环境中不建议这样做
-            });
+                dangerouslyAllowBrowser: true // 注意：在生产环境中不建议这样做/            ;});
         }
     }
     async parseVoiceCommand(text) {
-        // 简单的命令解析逻辑
-        const lowerText = text.toLowerCase();
-        // 文件操作命令
-        if (lowerText.includes('打开文件') || lowerText.includes('open file')) {
+        // 简单的命令解析逻辑/        const lowerText = text.toLowerCase();
+        // 文件操作命令/        if (lowerText.includes('打开文件') || lowerText.includes('open file')) {
             return {
                 type: 'file_operation',
                 action: 'open',
@@ -32,52 +29,40 @@ class AIAssistantService {
         if (lowerText.includes('保存') || lowerText.includes('save')) {
             return {
                 type: 'file_operation',
-                action: 'save'
-            };
+                action: 'save';};
         }
         if (lowerText.includes('新建文件') || lowerText.includes('new file')) {
             return {
                 type: 'file_operation',
-                action: 'new'
-            };
+                action: 'new';};
         }
-        // 导航命令
-        if (lowerText.includes('跳转到') || lowerText.includes('goto')) {
+        // 导航命令/        if (lowerText.includes('跳转到') || lowerText.includes('goto')) {
             return {
                 type: 'navigation',
-                action: 'goto_line'
-            };
+                action: 'goto_line';};
         }
         if (lowerText.includes('查找') || lowerText.includes('find')) {
             return {
                 type: 'navigation',
-                action: 'find'
-            };
+                action: 'find';};
         }
         if (lowerText.includes('替换') || lowerText.includes('replace')) {
             return {
                 type: 'navigation',
-                action: 'replace'
-            };
+                action: 'replace';};
         }
-        // 代码生成命令
-        if (lowerText.includes('生成代码') || lowerText.includes('generate code') ||
+        // 代码生成命令/        if (lowerText.includes('生成代码') || lowerText.includes('generate code') ||
             lowerText.includes('写一个') || lowerText.includes('create function')) {
             return {
                 type: 'code_generation',
-                prompt: text
-            };
+                prompt: text;};
         }
-        // 默认为 AI 对话
-        return {
+        // 默认为 AI 对话/        return {
             type: 'ai_chat',
-            message: text
-        };
+            message: text;};
     }
     extractFilePath(text) {
-        // 简单的文件路径提取逻辑
-        const pathMatch = text.match(/["']([^"']+)["']/);
-        return pathMatch ? pathMatch[1] : '';
+        // 简单的文件路径提取逻辑/        const pathMatch = text.match(/["']([^"']+)["']/);/        return pathMatch ? pathMatch[1] : '';
     }
     async generateCode(prompt, language) {
         if (!this.openai) {
@@ -86,19 +71,16 @@ class AIAssistantService {
         try {
             const response = await this.openai.chat.completions.create({
                 model: 'gpt-3.5-turbo',
-                messages: [
-                    {
+                messages: [;{
                         role: 'system',
                         content: `你是一个专业的${language}程序员。请根据用户的要求生成简洁、高质量的代码。只返回代码，不要包含解释。`
                     },
                     {
                         role: 'user',
-                        content: prompt
-                    }
+                        content: prompt;}
                 ],
                 max_tokens: 1000,
-                temperature: 0.7
-            });
+                temperature: 0.7;});
             return response.choices[0]?.message?.content || '';
         }
         catch (error) {
@@ -107,25 +89,20 @@ class AIAssistantService {
     }
     async chat(message) {
         if (!this.openai) {
-            // 如果没有 OpenAI，返回简单的回复
-            return this.getSimpleResponse(message);
+            // 如果没有 OpenAI，返回简单的回复/            return this.getSimpleResponse(message);
         }
         try {
             const response = await this.openai.chat.completions.create({
                 model: 'gpt-3.5-turbo',
-                messages: [
-                    {
+                messages: [;{
                         role: 'system',
-                        content: '你是 Cursor IDE 的智能助手，专门帮助用户进行代码开发和编程相关的问题。请用中文回答。'
-                    },
+                        content: '你是 Cursor IDE 的智能助手，专门帮助用户进行代码开发和编程相关的问题。请用中文回答。';},
                     {
                         role: 'user',
-                        content: message
-                    }
+                        content: message;}
                 ],
                 max_tokens: 500,
-                temperature: 0.7
-            });
+                temperature: 0.7;});
             return response.choices[0]?.message?.content || '抱歉，我无法理解您的问题。';
         }
         catch (error) {
@@ -155,12 +132,10 @@ class AIAssistantService {
     dispose() {
         this.openai = undefined;
     }
-    // 检查 AI 服务是否可用
-    isAvailable() {
+    // 检查 AI 服务是否可用/    isAvailable() {
         return !!this.openai;
     }
-    // 获取支持的命令列表
-    getSupportedCommands() {
+    // 获取支持的命令列表/    getSupportedCommands() {
         return [
             '打开文件 "文件路径"',
             '保存文件',

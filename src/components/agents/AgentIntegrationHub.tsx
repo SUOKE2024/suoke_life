@@ -1,15 +1,7 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
-import { AgentAvatar, Button, Card, Loading } from '../ui';
-import { colors, spacing, typography } from '../../constants/theme';
-import { AgentCoordinationService, AgentType, AgentStatus } from '../../services/AgentCoordinationService';
-
-
-
-
-
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
-  View,
+import { Ionicons } from '@expo/vector-icons'/import { AgentAvatar, Button, Card, Loading } from '../ui'/import { colors, spacing, typography } from '../../constants/theme'/import { AgentCoordinationService, AgentType, AgentStatus } from '../../services/AgentCoordinationService';/
+importReact,{ useState, useEffect, useCallback, useMemo } from 'react'
+import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor'/  View,;
   Text,
   StyleSheet,
   ScrollView,
@@ -17,30 +9,21 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
   Dimensions,
   Animated,
   Alert,
-  RefreshControl,
-} from 'react-native';
-
-const { width, height } = Dimensions.get('window');
-
-interface AgentInfo {
-  id: AgentType;
-  name: string;
-  description: string;
-  specialties: string[];
-  color: string;
-  gradient: string[];
-  icon: string;
-  avatar: string;
-}
-
+  { RefreshControl } from 'react-native'
+const { width, height   } = Dimensions.get('window;';);
+interface AgentInfo { id: AgentType,
+  name: string,
+  description: string,
+  specialties: string[],
+  color: string,
+  gradient: string[],
+  icon: string,
+  avatar: string}
 interface AgentIntegrationHubProps {
   onAgentSelect?: (agentId: AgentType) => void;
-  onStartChat?: (agentId: AgentType) => void;
-  onViewDetails?: (agentId: AgentType) => void;
-}
-
-const AGENT_INFO: Record<AgentType, AgentInfo> = {
-  xiaoai: {
+  onStartChat?: (agentId: AgentType) => void
+  onViewDetails?: (agentId: AgentType) => void}
+const AGENT_INFO: Record<AgentType, AgentInfo /> = {/  xiaoai: {
     id: 'xiaoai',
     name: '小艾',
     description: '健康助手 & 首页聊天频道版主',
@@ -48,7 +31,7 @@ const AGENT_INFO: Record<AgentType, AgentInfo> = {
     color: '#4CAF50',
     gradient: ['#4CAF50', '#66BB6A'],
     icon: 'chatbubble-ellipses',
-    avatar: '🤖',
+    avatar: '🤖'
   },
   xiaoke: {
     id: 'xiaoke',
@@ -58,7 +41,7 @@ const AGENT_INFO: Record<AgentType, AgentInfo> = {
     color: '#2196F3',
     gradient: ['#2196F3', '#42A5F5'],
     icon: 'storefront',
-    avatar: '🛍️',
+    avatar: '🛍️'
   },
   laoke: {
     id: 'laoke',
@@ -68,7 +51,7 @@ const AGENT_INFO: Record<AgentType, AgentInfo> = {
     color: '#FF9800',
     gradient: ['#FF9800', '#FFB74D'],
     icon: 'library',
-    avatar: '📚',
+    avatar: '📚'
   },
   soer: {
     id: 'soer',
@@ -78,280 +61,159 @@ const AGENT_INFO: Record<AgentType, AgentInfo> = {
     color: '#E91E63',
     gradient: ['#E91E63', '#F06292'],
     icon: 'heart',
-    avatar: '💝',
-  },
-};
-
-export const AgentIntegrationHub: React.FC<AgentIntegrationHubProps> = ({
+    avatar: '💝'
+  }
+}
+export const AgentIntegrationHub: React.FC<AgentIntegrationHubProps /> = ({/  // 性能监控 *   const performanceMonitor = usePerformanceMonitor('AgentIntegrationHub', ;{; */;
+    trackRender: true,
+    trackMemory: true,
+    warnThreshold: 50, // ms *   }) */
   onAgentSelect,
   onStartChat,
-  onViewDetails,
+  onViewDetails
 }) => {
-  const [selectedAgent, setSelectedAgent] = useState<AgentType>('xiaoai');
-  const [agentStatuses, setAgentStatuses] = useState<Record<AgentType, AgentStatus>>({} as any);
-  const [loading, setLoading] = useState(false);
-  const [refreshing, setRefreshing] = useState(false);
-  const [coordinationService] = useState(() => new AgentCoordinationService());
-  const [animatedValue] = useState(new Animated.Value(0));
-
-  // 初始化服务
-  useEffect(() => {
+  const [selectedAgent, setSelectedAgent] = useState<AgentType />('xiaoai;';);/  const [agentStatuses, setAgentStatuses] = useState<Record<AgentType, AgentStatus />>({} as an;y;);/  const [loading, setLoading] = useState<boolean>(fals;e;);
+  const [refreshing, setRefreshing] = useState<boolean>(fals;e;);
+  const [coordinationService] = useState<any>(() => new AgentCoordinationService;(;););
+  const [animatedValue] = useState<any>(new Animated.Value(0););
+  // 初始化服务 *   useEffect((); => { */
+    const effectStart = performance.now;(;);
     initializeService();
-  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
-
-  // 启动动画
-  useEffect(() => {
+  }, []) // TODO: 检查依赖项  * *  TODO: 检查依赖项  * *// TODO: 检查依赖项* * * *  TODO: 检查依赖项  * * * */// TODO: 检查依赖项// TODO: 检查依赖项// TODO: 检查依赖项// TODO: 检查依赖项// , TODO: 检查依赖项// , TODO: 检查依赖项;////  // 启动动画 *   useEffect((); => { */
+    const effectStart = performance.now;(;);
     Animated.timing(animatedValue, {
       toValue: 1,
       duration: 800,
-      useNativeDriver: true,
+      useNativeDriver: true
     }).start();
+      const effectEnd = performance.now;(;);
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-
-  const initializeService = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async () => {
+  const initializeService = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => async () => {
     try {
-      setLoading(true), []), []), []), []), []), []);
-      await coordinationService.initialize();
-      await loadAgentStatuses();
+      setLoading(true), []);
+      await coordinationService.initialize;(;);
+      await loadAgentStatuses;(;)
     } catch (error) {
-      console.error('初始化智能体服务失败:', error);
+      console.error('初始化智能体服务失败:', error)
       Alert.alert('错误', '智能体服务初始化失败');
     } finally {
       setLoading(false);
     }
   };
-
-  const loadAgentStatuses = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async () => {
+  const loadAgentStatuses = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => async () => {
     try {
-      const statuses = await coordinationService.getAgentStatus() as AgentStatus[], []), []), []), []), []), []);
-      const statusMap = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => statuses.reduce((acc, status) => {
-        acc[status.id] = status, []), []), []), []), []), []);
-        return acc;
-      }, {} as Record<AgentType, AgentStatus>);
-      setAgentStatuses(statusMap);
+      const statuses = await coordinationService.getAgentStat;u;s;(;); as AgentStatus[], []);
+      const statusMap = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => statuses.reduce(); => {
+        return a;c;c;
+      }, {} as Record<AgentType, AgentStatus />);/      setAgentStatuses(statusMap)
     } catch (error) {
       console.error('加载智能体状态失败:', error);
     }
   };
-
-  const onRefresh = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback(async () => {
-    setRefreshing(true), []), []), []), []), []), []);
-    await loadAgentStatuses();
-    setRefreshing(false);
-  }, []);
-
-  const handleAgentSelect = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback((agentId: AgentType) => {
-    setSelectedAgent(agentId), []), []), []), []), []), []);
+  const onRefresh = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useCallback(const async = ;(;); => {
+  // TODO: Implement function *}; */
+  const handleAgentSelect = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useCallback(); => {
     onAgentSelect?.(agentId);
+      const effectEnd = performance.now;(;);
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [onAgentSelect]);
-
-  const handleStartChat = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback((agentId: AgentType) => {
-    onStartChat?.(agentId), []), []), []), []), []), []);
+  const handleStartChat = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useCallback(); => {
+      const effectEnd = performance.now;(;);
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [onStartChat]);
-
-  const handleViewDetails = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback((agentId: AgentType) => {
-    onViewDetails?.(agentId), []), []), []), []), []), []);
+  const handleViewDetails = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useCallback(); => {
+      const effectEnd = performance.now;(;);
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [onViewDetails]);
-
-  const renderAgentCard = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback((agentInfo: AgentInfo) => {
-    const status = agentStatuses[agentInfo.id], []), []), []), []), []), []);
-    const isSelected = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => selectedAgent === agentInfo.id, []), []), []), []), []), []);
-    const isOnline = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => status?.isOnline ?? false, []), []), []), []), []), []);
-
+  const renderAgentCard = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useCallback(); => {
+    const isSelected = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => selectedAgent === agentInfo.id, []);)))))
+    const isOnline = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => status?.isOnline ?? false, []);)))))
+    // 记录渲染性能 *  */
+    performanceMonitor.recordRender();
     return (
-      <Animated.View
+      <Animated.View,
         key={agentInfo.id}
         style={[
           styles.agentCard,
           isSelected && styles.selectedAgentCard,
-          { backgroundColor: agentInfo.color },
+          { backgroundColor: agentInfo.col;o;r  ; },
           {
             opacity: animatedValue,
-            transform: [
-              {
-                translateY: animatedValue.interpolate({
+            transform: [;{,
+                translateY: animatedValue.interpolate({,
                   inputRange: [0, 1],
-                  outputRange: [50, 0],
-                }),
-              },
-            ],
-          },
-        ]}
-      >
-        <TouchableOpacity
-          onPress={() => handleAgentSelect(agentInfo.id)}
-          activeOpacity={0.8}
+                  outputRange: [50, 0]
+                })
+              }
+            ]
+          }
+        ]} />/        <TouchableOpacity
+          onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> handleAgentSelect(agentInfo.id)}/          activeOpacity={0.8}
           style={styles.agentCardContent}
         >
-          {/* 状态指示器 */}
-          <View style={[
+          {// 状态指示器 }/          <View style={[
             styles.statusIndicator,
-            { backgroundColor: isOnline ? '#4CAF50' : '#F44336' },
-          ]} />
-
-          {/* 智能体头像 */}
-          <View style={styles.agentAvatarContainer}>
-            <AgentAvatar
+            { backgroundColor: isOnline ? '#4CAF50' : '#F44336'}
+          ]} />/
+          {// 智能体头像 }/          <View style={styles.agentAvatarContainer} />/            <AgentAvatar
               agent={agentInfo.id}
               size={60}
               online={isOnline}
-              style={styles.agentAvatar}
-            />
-            <Text style={styles.agentEmoji}>{agentInfo.avatar}</Text>
-          </View>
-
-          {/* 智能体信息 */}
-          <View style={styles.agentInfo}>
-            <Text style={styles.agentName}>{agentInfo.name}</Text>
-            <Text style={styles.agentDescription}>{agentInfo.description}</Text>
-            
-            {/* 专长标签 */}
-            <View style={styles.specialtiesContainer}>
-              {agentInfo.specialties.slice(0, 2).map((specialty, index) => (
-                <View key={index} style={styles.specialtyTag}>
-                  <Text style={styles.specialtyText}>{specialty}</Text>
-                </View>
-              ))}
-            </View>
-
-            {/* 性能指标 */}
-            {status && (
-              <View style={styles.metricsContainer}>
-                <View style={styles.metric}>
-                  <Text style={styles.metricLabel}>工作负载</Text>
-                  <View style={styles.progressBar}>
-                    <View 
+              style={styles.agentAvatar} />/            <Text style={styles.agentEmoji} />{agentInfo.avatar}</Text>/          </View>/
+          {// 智能体信息 }/          <View style={styles.agentInfo} />/            <Text style={styles.agentName} />{agentInfo.name}</Text>/            <Text style={styles.agentDescription} />{agentInfo.description}</Text>/
+            {// 专长标签 }/            <View style={styles.specialtiesContainer} />/              {agentInfo.specialties.slice(0, 2).map((specialty, index) => (
+                <View key={index} style={styles.specialtyTag} />/                  <Text style={styles.specialtyText} />{specialty}</Text>/                </View>/              ))}
+            </View>/
+            {// 性能指标 }/            {status && (
+              <View style={styles.metricsContainer} />/                <View style={styles.metric} />/                  <Text style={styles.metricLabel} />工作负载</Text>/                  <View style={styles.progressBar} />/                    <View
                       style={[
                         styles.progressFill,
-                        { 
-                          width: `${status.workload}%`,
-                          backgroundColor: status.workload > 80 ? '#F44336' : 
-                                         status.workload > 60 ? '#FF9800' : '#4CAF50',
-                        },
-                      ]} 
-                    />
-                  </View>
-                  <Text style={styles.metricValue}>{status.workload}%</Text>
-                </View>
-                
-                <View style={styles.metricsRow}>
-                  <View style={styles.smallMetric}>
-                    <Text style={styles.smallMetricLabel}>准确率</Text>
-                    <Text style={styles.smallMetricValue}>
-                      {(status.performance.accuracy * 100).toFixed(1)}%
-                    </Text>
-                  </View>
-                  <View style={styles.smallMetric}>
-                    <Text style={styles.smallMetricLabel}>响应</Text>
-                    <Text style={styles.smallMetricValue}>
-                      {status.performance.responseTime}ms
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            )}
-          </View>
-
-          {/* 操作按钮 */}
-          <View style={styles.actionButtons}>
-            <TouchableOpacity
+                        { width: `${status.workload  }%`,
+                          backgroundColor: status.workload /> 80 ? '#F44336' : /                                         status.workload > 60 ? '#FF9800' : '#4CAF50'
+                        }
+                      ]}
+                    />/                  </View>/                  <Text style={styles.metricValue} />{status.workload}%</Text>/                </View>/
+                <View style={styles.metricsRow} />/                  <View style={styles.smallMetric} />/                    <Text style={styles.smallMetricLabel} />准确率</Text>/                    <Text style={styles.smallMetricValue} />/                      {(status.performance.accuracy * 100).toFixed(1)}%
+                    </Text>/                  </View>/                  <View style={styles.smallMetric} />/                    <Text style={styles.smallMetricLabel} />响应</Text>/                    <Text style={styles.smallMetricValue} />/                      {status.performance.responseTime}ms
+                    </Text>/                  </View>/                </View>/              </View>/            )}
+          </View>/
+          {// 操作按钮 }/          <View style={styles.actionButtons} />/            <TouchableOpacity
               style={[styles.actionButton, styles.chatButton]}
-              onPress={() => handleStartChat(agentInfo.id)}
-            >
-              <Ionicons name="chatbubble" size={16} color="white" />
-              <Text style={styles.actionButtonText}>聊天</Text>
-            </TouchableOpacity>
-            
+              onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> handleStartChat(agentInfo.id)}/            >
+              <Ionicons name="chatbubble" size={16} color="white" />/              <Text style={styles.actionButtonText} />聊天</Text>/            </TouchableOpacity>/
             <TouchableOpacity
               style={[styles.actionButton, styles.detailButton]}
-              onPress={() => handleViewDetails(agentInfo.id)}
-            >
-              <Ionicons name="information-circle" size={16} color={agentInfo.color} />
-              <Text style={[styles.actionButtonText, { color: agentInfo.color }]}>详情</Text>
-            </TouchableOpacity>
-          </View>
-        </TouchableOpacity>
-      </Animated.View>
-    );
+              onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> handleViewDetails(agentInfo.id)}/            >
+              <Ionicons name="information-circle" size={16} color={agentInfo.color} />/              <Text style={[styles.actionButtonText, { color: agentInfo.color}]} />详情</Text>/            </TouchableOpacity>/          </View>/        </TouchableOpacity>/      </Animated.View>/    );
+      const effectEnd = performance.now;(;);
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [selectedAgent, agentStatuses, animatedValue, handleAgentSelect, handleStartChat, handleViewDetails]);
-
-  const renderSelectedAgentDetails = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => {
-    const agentInfo = AGENT_INFO[selectedAgent], []), []), []), []), []), []);
-    const status = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => agentStatuses[selectedAgent], []), []), []), []), []), []);
-
+  const renderSelectedAgentDetails = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(); => {
+    const status = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => agentStatuses[selectedAgent], []))))))
     return (
-      <Card style={styles.detailsCard}>
-        <View style={styles.detailsHeader}>
-          <AgentAvatar agent={selectedAgent} size={40} online={status?.isOnline} />
-          <View style={styles.detailsHeaderText}>
-            <Text style={styles.detailsTitle}>{agentInfo.name} 详细信息</Text>
-            <Text style={styles.detailsSubtitle}>
-              {status?.isOnline ? '在线' : '离线'} • 
-              {status?.currentTask ? ` 执行中: ${status.currentTask}` : ' 空闲中'}
-            </Text>
-          </View>
-        </View>
-
-        <View style={styles.detailsContent}>
-          <Text style={styles.sectionTitle}>专业领域</Text>
-          <View style={styles.specialtiesGrid}>
-            {agentInfo.specialties.map((specialty, index) => (
-              <View key={index} style={styles.specialtyChip}>
-                <Text style={styles.specialtyChipText}>{specialty}</Text>
-              </View>
-            ))}
-          </View>
-
+      <Card style={styles.detailsCard} />/        <View style={styles.detailsHeader} />/          <AgentAvatar agent={selectedAgent} size={40} online={status?.isOnline} />/          <View style={styles.detailsHeaderText} />/            <Text style={styles.detailsTitle} />{agentInfo.name} 详细信息</Text>/            <Text style={styles.detailsSubtitle} />/              {status?.isOnline ? '在线' : '离线'} •
+              {status?.currentTask ? ` 执行中: ${status.currentTask}` : ' 空闲中'};
+            </Text>/          </View>/        </View>/;
+        <View style={styles.detailsContent} />/          <Text style={styles.sectionTitle} />专业领域</Text>/          <View style={styles.specialtiesGrid} />/            {agentInfo.specialties.map((specialty, inde;x;); => (
+              <View key={index} style={styles.specialtyChip} />/                <Text style={styles.specialtyChipText} />{specialty}</Text>/              </View>/            ))}
+          </View>/
           {status && (
             <>
-              <Text style={styles.sectionTitle}>性能状态</Text>
-              <View style={styles.performanceGrid}>
-                <View style={styles.performanceItem}>
-                  <Text style={styles.performanceLabel}>准确率</Text>
-                  <Text style={styles.performanceValue}>
-                    {(status.performance.accuracy * 100).toFixed(1)}%
-                  </Text>
-                </View>
-                <View style={styles.performanceItem}>
-                  <Text style={styles.performanceLabel}>响应时间</Text>
-                  <Text style={styles.performanceValue}>
-                    {status.performance.responseTime}ms
-                  </Text>
-                </View>
-                <View style={styles.performanceItem}>
-                  <Text style={styles.performanceLabel}>满意度</Text>
-                  <Text style={styles.performanceValue}>
-                    {(status.performance.userSatisfaction * 100).toFixed(1)}%
-                  </Text>
-                </View>
-                <View style={styles.performanceItem}>
-                  <Text style={styles.performanceLabel}>工作负载</Text>
-                  <Text style={styles.performanceValue}>{status.workload}%</Text>
-                </View>
-              </View>
-            </>
-          )}
-        </View>
-      </Card>
-    );
+              <Text style={styles.sectionTitle} />性能状态</Text>/              <View style={styles.performanceGrid} />/                <View style={styles.performanceItem} />/                  <Text style={styles.performanceLabel} />准确率</Text>/                  <Text style={styles.performanceValue} />/                    {(status.performance.accuracy * 100).toFixed(1)}%
+                  </Text>/                </View>/                <View style={styles.performanceItem} />/                  <Text style={styles.performanceLabel} />响应时间</Text>/                  <Text style={styles.performanceValue} />/                    {status.performance.responseTime}ms
+                  </Text>/                </View>/                <View style={styles.performanceItem} />/                  <Text style={styles.performanceLabel} />满意度</Text>/                  <Text style={styles.performanceValue} />/                    {(status.performance.userSatisfaction * 100).toFixed(1)}%
+                  </Text>/                </View>/                <View style={styles.performanceItem} />/                  <Text style={styles.performanceLabel} />工作负载</Text>/                  <Text style={styles.performanceValue} />{status.workload}%</Text>/                </View>/              </View>/            </>/          )}
+        </View>/      </Card>/    );
+      const effectEnd = performance.now;(;);
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [selectedAgent, agentStatuses]);
-
   if (loading) {
     return (
-      <SafeAreaView style={styles.container}>
-        <Loading text="正在初始化智能体服务..." />
-      </SafeAreaView>
-    );
+      <SafeAreaView style={styles.container} />/        <Loading text="正在初始化智能体服务..." />/      </SafeAreaView>/    ;)
   }
-
   return (
-    <SafeAreaView style={styles.container}>
-      {/* 头部 */}
-      <View style={styles.header}>
-        <Text style={styles.title}>智能体中心</Text>
-        <Text style={styles.subtitle}>四大智能体为您提供专业服务</Text>
-      </View>
-
+    <SafeAreaView style={styles.container} />/      {// 头部 }/      <View style={styles.header} />/        <Text style={styles.title} />智能体中心</Text>/        <Text style={styles.subtitle} />四大智能体为您提供专业服务</Text>/      </View>/
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
@@ -360,95 +222,70 @@ export const AgentIntegrationHub: React.FC<AgentIntegrationHubProps> = ({
             refreshing={refreshing}
             onRefresh={onRefresh}
             colors={[colors.primary]}
-            tintColor={colors.primary}
-          />
-        }
+            tintColor={colors.primary} />/        }
         showsVerticalScrollIndicator={false}
       >
-        {/* 智能体卡片网格 */}
-        <View style={styles.agentsGrid}>
-          {Object.values(AGENT_INFO).map(renderAgentCard)}
-        </View>
-
-        {/* 选中智能体的详细信息 */}
-        {renderSelectedAgentDetails}
-
-        {/* 快速操作 */}
-        <Card style={styles.quickActionsCard}>
-          <Text style={styles.sectionTitle}>快速操作</Text>
-          <View style={styles.quickActions}>
-            <Button
+        {// 智能体卡片网格 }/        <View style={styles.agentsGrid} />/          {Object.values(AGENT_INFO).map(renderAgentCard)}
+        </View>/
+        {// 选中智能体的详细信息 }/        {renderSelectedAgentDetails}
+        {// 快速操作 }/        <Card style={styles.quickActionsCard} />/          <Text style={styles.sectionTitle} />快速操作</Text>/          <View style={styles.quickActions} />/            <Button
               title="开始协作任务"
-              onPress={() => Alert.alert('功能开发中', '智能体协作功能即将上线')}
-              style={styles.quickActionButton}
+              onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> Alert.alert('功能开发中', '智能体协作功能即将上线')}/              style={styles.quickActionButton}
               variant="outline"
-            />
-            <Button
+            />/            <Button
               title="查看协作历史"
-              onPress={() => Alert.alert('功能开发中', '协作历史功能即将上线')}
-              style={styles.quickActionButton}
-              variant="outline"
-            />
-          </View>
-        </Card>
-      </ScrollView>
-    </SafeAreaView>
-  );
+              onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> Alert.alert('功能开发中', '协作历史功能即将上线')}/              style={styles.quickActionButton}
+              variant="outline";
+            />/          </View>/        </Card>/      </ScrollView>/    </SafeAreaView>/  ;);
 };
-
-const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: colors.background
   },
   header: {
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
     backgroundColor: colors.surface,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: colors.border
   },
   title: {
     fontSize: typography.fontSize['2xl'],
     fontWeight: '700',
     color: colors.textPrimary,
-    marginBottom: spacing.xs,
+    marginBottom: spacing.xs
   },
   subtitle: {
     fontSize: typography.fontSize.base,
-    color: colors.textSecondary,
+    color: colors.textSecondary
   },
-  scrollView: {
-    flex: 1,
-  },
-  scrollContent: {
-    padding: spacing.lg,
-  },
+  scrollView: { flex: 1  },
+  scrollContent: { padding: spacing.lg  },
   agentsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    marginBottom: spacing.lg,
+    marginBottom: spacing.lg
   },
   agentCard: {
-    width: (width - spacing.lg * 3) / 2,
-    marginBottom: spacing.md,
+    width: (width - spacing.lg * 3) / 2,/    marginBottom: spacing.md,
     borderRadius: 16,
     overflow: 'hidden',
     elevation: 4,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 2},
     shadowOpacity: 0.1,
-    shadowRadius: 8,
+    shadowRadius: 8
   },
   selectedAgentCard: {
     elevation: 8,
     shadowOpacity: 0.2,
-    shadowRadius: 12,
+    shadowRadius: 12
   },
   agentCardContent: {
     padding: spacing.md,
-    minHeight: 200,
+    minHeight: 200
   },
   statusIndicator: {
     position: 'absolute',
@@ -458,97 +295,87 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
     height: 12,
     borderRadius: 6,
     borderWidth: 2,
-    borderColor: 'white',
+    borderColor: 'white'
   },
   agentAvatarContainer: {
     alignItems: 'center',
-    marginBottom: spacing.sm,
+    marginBottom: spacing.sm
   },
-  agentAvatar: {
-    marginBottom: spacing.xs,
-  },
-  agentEmoji: {
-    fontSize: 24,
-  },
-  agentInfo: {
-    flex: 1,
-  },
+  agentAvatar: { marginBottom: spacing.xs  },
+  agentEmoji: { fontSize: 24  },
+  agentInfo: { flex: 1  },
   agentName: {
     fontSize: typography.fontSize.lg,
     fontWeight: '700',
     color: 'white',
     textAlign: 'center',
-    marginBottom: spacing.xs,
+    marginBottom: spacing.xs
   },
   agentDescription: {
     fontSize: typography.fontSize.xs,
     color: 'rgba(255, 255, 255, 0.9)',
     textAlign: 'center',
-    marginBottom: spacing.sm,
+    marginBottom: spacing.sm
   },
   specialtiesContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
-    marginBottom: spacing.sm,
+    marginBottom: spacing.sm
   },
   specialtyTag: {
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     paddingHorizontal: spacing.xs,
     paddingVertical: 2,
     borderRadius: 8,
-    margin: 2,
+    margin: 2
   },
   specialtyText: {
     fontSize: 10,
-    color: 'white',
+    color: 'white'
   },
-  metricsContainer: {
-    marginBottom: spacing.sm,
-  },
-  metric: {
-    marginBottom: spacing.xs,
-  },
+  metricsContainer: { marginBottom: spacing.sm  },
+  metric: { marginBottom: spacing.xs  },
   metricLabel: {
     fontSize: 10,
     color: 'rgba(255, 255, 255, 0.8)',
-    marginBottom: 2,
+    marginBottom: 2
   },
   progressBar: {
     height: 4,
     backgroundColor: 'rgba(255, 255, 255, 0.3)',
     borderRadius: 2,
-    marginBottom: 2,
+    marginBottom: 2
   },
   progressFill: {
     height: '100%',
-    borderRadius: 2,
+    borderRadius: 2
   },
   metricValue: {
     fontSize: 10,
     color: 'white',
-    textAlign: 'right',
+    textAlign: 'right'
   },
   metricsRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   smallMetric: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   smallMetricLabel: {
     fontSize: 9,
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: 'rgba(255, 255, 255, 0.8)'
   },
   smallMetricValue: {
     fontSize: 10,
     color: 'white',
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   actionButtons: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   actionButton: {
     flex: 1,
@@ -558,70 +385,67 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
     paddingVertical: spacing.xs,
     paddingHorizontal: spacing.sm,
     borderRadius: 8,
-    marginHorizontal: 2,
+    marginHorizontal: 2
   },
   chatButton: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: 'rgba(255, 255, 255, 0.2)'
   },
   detailButton: {
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)'
   },
   actionButtonText: {
     fontSize: 12,
     color: 'white',
-    marginLeft: spacing.xs,
+    marginLeft: spacing.xs
   },
-  detailsCard: {
-    marginBottom: spacing.lg,
-  },
+  detailsCard: { marginBottom: spacing.lg  },
   detailsHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
   detailsHeaderText: {
     marginLeft: spacing.sm,
-    flex: 1,
+    flex: 1
   },
   detailsTitle: {
     fontSize: typography.fontSize.lg,
     fontWeight: '700',
-    color: colors.textPrimary,
+    color: colors.textPrimary
   },
   detailsSubtitle: {
     fontSize: typography.fontSize.base,
-    color: colors.textSecondary,
+    color: colors.textSecondary
   },
   detailsContent: {
-    // 内容样式
-  },
+    // 内容样式 *   }, */
   sectionTitle: {
     fontSize: typography.fontSize.lg,
     fontWeight: '600',
     color: colors.textPrimary,
-    marginBottom: spacing.sm,
+    marginBottom: spacing.sm
   },
   specialtiesGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
   specialtyChip: {
     backgroundColor: colors.primary + '20',
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs,
     borderRadius: 16,
-    margin: 4,
+    margin: 4
   },
   specialtyChipText: {
     fontSize: typography.fontSize.xs,
-    color: colors.primary,
+    color: colors.primary
   },
   performanceGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
   performanceItem: {
     width: '48%',
@@ -629,27 +453,25 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
     padding: spacing.sm,
     borderRadius: 8,
     marginBottom: spacing.xs,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   performanceLabel: {
     fontSize: typography.fontSize.xs,
     color: colors.textSecondary,
-    marginBottom: spacing.xs,
+    marginBottom: spacing.xs
   },
   performanceValue: {
     fontSize: typography.fontSize.lg,
     fontWeight: '700',
-    color: colors.textPrimary,
+    color: colors.textPrimary
   },
-  quickActionsCard: {
-    marginBottom: spacing.lg,
-  },
+  quickActionsCard: { marginBottom: spacing.lg  },
   quickActions: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   quickActionButton: {
     flex: 1,
-    marginHorizontal: spacing.xs,
-  },
-}), []), []), []), []), []), []); 
+    marginHorizontal: spacing.xs
+  }
+}), []);

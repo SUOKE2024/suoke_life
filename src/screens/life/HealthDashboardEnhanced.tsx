@@ -1,64 +1,47 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LineChart, BarChart, PieChart } from 'react-native-chart-kit';
-import Icon from '../../components/common/Icon';
-import { colors, spacing } from '../../constants/theme';
-import { useAppDispatch, useAppSelector } from '../../store';
-import { ConstitutionType, HealthDataType } from '../../types';
-
-
-
-
-
-import React, { useState, useEffect } from 'react';
-  View,
+importIcon from '../../components/common/Icon'/import { colors, spacing } from '../../constants/theme'/import { useAppDispatch, useAppSelector } from '../../store'/import { ConstitutionType, HealthDataType } from '../../types'/;
+importReact,{ useState, useEffect } from 'react';
+import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor'/  View,;
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
   Dimensions,
   Alert,
-  RefreshControl,
-} from 'react-native';
+  { RefreshControl } from 'react-native'
   selectDiagnosisResults,
   selectDiagnosisSessions,
-  fetchDiagnosisHistory,
-} from '../../store/slices/diagnosisSlice';
-
-const { width } = Dimensions.get('window');
-const chartWidth = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => width - spacing.lg * 2, []), []), []), []), []), []);
-
+  { fetchDiagnosisHistory } from '../../store/slices/diagnosisSlice'/const { width   } = Dimensions.get('window;';);
+const chartWidth = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => width - spacing.lg * 2, []))))))
 interface HealthMetric {
-  id: string;
-  title: string;
-  value: string;
-  unit: string;
-  trend: 'up' | 'down' | 'stable';
-  trendValue: string;
-  color: string;
-  icon: string;
+  // 性能监控 *   const performanceMonitor = usePerformanceMonitor('HealthDashboardEnhanced', { */
+    trackRender: true,
+    trackMemory: true,
+    warnThreshold: 50, // ms *   ;};) */
+  id: string,
+  title: string,
+  value: string,
+  unit: string,
+  trend: 'up' | 'down' | 'stable',
+  trendValue: string,
+  color: string,
+  icon: string,
   data: number[];
 }
-
-interface ConstitutionData {
-  type: ConstitutionType;
-  name: string;
-  percentage: number;
-  color: string;
-  description: string;
-}
-
-export const HealthDashboardEnhanced: React.FC = () => {
-  const dispatch = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useAppDispatch(), []), []), []), []), []), []);
-  const diagnosisResults = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useAppSelector(selectDiagnosisResults), []), []), []), []), []), []);
-  const diagnosisSessions = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useAppSelector(selectDiagnosisSessions), []), []), []), []), []), []);
-
-  const [selectedPeriod, setSelectedPeriod] = useState<'week' | 'month' | 'year'>('week');
-  const [refreshing, setRefreshing] = useState(false);
-  const [selectedMetric, setSelectedMetric] = useState<string>('overview');
-
-  // 模拟健康数据
-  const [healthMetrics] = useState<HealthMetric[]>([
-    {
+interface ConstitutionData { type: ConstitutionType,
+  name: string,
+  percentage: number,
+  color: string,
+  description: string}
+export const HealthDashboardEnhanced: React.FC = () => {;
+  const dispatch = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useAppDispatch(), []);)))))
+  const diagnosisResults = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useAppSelector(selectDiagnosisResults), []);)))))
+  const diagnosisSessions = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useAppSelector(selectDiagnosisSessions), []))))))
+  const [selectedPeriod, setSelectedPeriod] = useState<'week' | 'month' | 'year'>('week';);
+  const [refreshing, setRefreshing] = useState<boolean>(fals;e;);
+  const [selectedMetric, setSelectedMetric] = useState<string>('overview';);
+  // 模拟健康数据 *   const [healthMetrics] = useState<HealthMetric[]  *// >([ * { */
       id: 'heart_rate',
       title: '心率',
       value: '72',
@@ -67,18 +50,17 @@ export const HealthDashboardEnhanced: React.FC = () => {
       trendValue: '0%',
       color: '#FF6B6B',
       icon: 'heart',
-      data: [68, 70, 72, 71, 73, 72, 74],
+      data: [68, 70, 72, 71, 73, 72, 74]
     },
     {
       id: 'blood_pressure',
       title: '血压',
-      value: '120/80',
-      unit: 'mmHg',
+      value: '120/80',/      unit: 'mmHg',
       trend: 'down',
       trendValue: '-2%',
       color: '#4ECDC4',
       icon: 'medical-bag',
-      data: [125, 123, 122, 120, 121, 120, 118],
+      data: [125, 123, 122, 120, 121, 120, 118]
     },
     {
       id: 'sleep_quality',
@@ -89,7 +71,7 @@ export const HealthDashboardEnhanced: React.FC = () => {
       trendValue: '+5%',
       color: '#45B7D1',
       icon: 'sleep',
-      data: [78, 80, 82, 85, 83, 85, 87],
+      data: [78, 80, 82, 85, 83, 85, 87]
     },
     {
       id: 'stress_level',
@@ -100,13 +82,10 @@ export const HealthDashboardEnhanced: React.FC = () => {
       trendValue: '-8%',
       color: '#96CEB4',
       icon: 'brain',
-      data: [45, 42, 38, 35, 37, 35, 33],
+      data: [45, 42, 38, 35, 37, 35, 33];
     },
-  ]);
-
-  // 体质分析数据
-  const [constitutionData] = useState<ConstitutionData[]>([
-    {
+  ;];)
+  // 体质分析数据 *   const [constitutionData] = useState<ConstitutionData[]  *// >([ * { */
       type: 'balanced',
       name: '平和质',
       percentage: 35,
@@ -132,77 +111,48 @@ export const HealthDashboardEnhanced: React.FC = () => {
       name: '阳虚质',
       percentage: 20,
       color: '#A8E6CF',
-      description: '阳气不足，偏寒凉',
-    },
-  ]);
-
-  useEffect(() => {
+      description: '阳气不足，偏寒凉'};];);
+  useEffect((); => {
+    const effectStart = performance.now;(;);
     loadDiagnosisHistory();
-  }, []) // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项 // TODO: 检查依赖项;
-
-  const loadDiagnosisHistory = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async () => {
+  }, []) // TODO: 检查依赖项  * *  TODO: 检查依赖项  * *// TODO: 检查依赖项* * * *  TODO: 检查依赖项  * * * */// TODO: 检查依赖项// TODO: 检查依赖项// TODO: 检查依赖项// TODO: 检查依赖项//, TODO: 检查依赖项//, TODO: 检查依赖项;//// const loadDiagnosisHistory = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => async () => {
     try {
-      await dispatch(fetchDiagnosisHistory({ limit: 10 })), []), []), []), []), []), []);
+      await dispatch(fetchDiagnosisHistory({ limit: ;1;0  ; });), [])
     } catch (error) {
       console.error('加载诊断历史失败:', error);
     }
   };
-
-  const onRefresh = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => async () => {
-    setRefreshing(true), []), []), []), []), []), []);
-    await loadDiagnosisHistory();
+  const onRefresh = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => async () => {
+    setRefreshing(true), []);
+    await loadDiagnosisHistory;(;);
     setRefreshing(false);
   };
-
-  // TODO: 将内联组件移到组件外部
-const renderOverviewCards = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
-    <View style={styles.overviewContainer}>
-      {healthMetrics.map((metric) => (
+  // TODO: 将内联组件移到组件外部 * const renderOverviewCards = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => () => ( */
+    <View style={styles.overviewContainer} />/      {healthMetrics.map((metric) => (
         <TouchableOpacity
           key={metric.id}
-          style={[styles.metricCard, { borderLeftColor: metric.color }]}
-          onPress={() => setSelectedMetric(metric.id)}
-        >
-          <View style={styles.metricHeader}>
-            <Icon name={metric.icon} size={24} color={metric.color} />
-            <View style={[styles.trendBadge, { backgroundColor: getTrendColor(metric.trend) }]}>
-              <Icon
+          style={[styles.metricCard, { borderLeftColor: metric.color}]}
+          onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setSelectedMetric(metric.id)}/        >
+          <View style={styles.metricHeader} />/            <Icon name={metric.icon} size={24} color={metric.color} />/            <View style={[styles.trendBadge, { backgroundColor: getTrendColor(metric.trend)   }]} />/              <Icon
                 name={getTrendIcon(metric.trend)}
                 size={12}
                 color="white"
-              />
-              <Text style={styles.trendText}>{metric.trendValue}</Text>
-            </View>
-          </View>
-          <Text style={styles.metricTitle}>{metric.title}</Text>
-          <View style={styles.metricValueContainer}>
-            <Text style={[styles.metricValue, { color: metric.color }]}>
-              {metric.value}
-            </Text>
-            <Text style={styles.metricUnit}>{metric.unit}</Text>
-          </View>
-        </TouchableOpacity>
-      ))}
-    </View>
-  ), []), []), []), []), []), []);
-
-  const renderChart = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( () => {, []), []), []), []), []), []), []);
-    const selectedMetricData = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => healthMetrics.find(m => m.id === selectedMetric), []), []), []), []), []), []);
-    if (!selectedMetricData) {return null;}
-
+              />/              <Text style={styles.trendText} />{metric.trendValue}</Text>/            </View>/          </View>/          <Text style={styles.metricTitle} />{metric.title}</Text>/          <View style={styles.metricValueContainer} />/            <Text style={[styles.metricValue, { color: metric.color}]} />/              {metric.value}
+            </Text>/            <Text style={styles.metricUnit} />{metric.unit}</Text>/          </View>/        </TouchableOpacity>/))}
+    </View>/  ), []);
+  const renderChart = useCallback;(;); => {
+    if (!selectedMetricData) {return nu;l;l;}
+    // 记录渲染性能 *  */
+    performanceMonitor.recordRender();
     return (
-      <View style={styles.chartContainer}>
-        <Text style={styles.chartTitle}>{selectedMetricData.title}趋势</Text>
-        <LineChart
+      <View style={styles.chartContainer} />/        <Text style={styles.chartTitle} />{selectedMetricData.title}趋势</Text>/        <LineChart
           data={{
             labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
-            datasets: [
-              {
+            datasets;: ;[{,
                 data: selectedMetricData.data,
-                color: () => selectedMetricData.color,
-                strokeWidth: 3,
-              },
-            ],
+                color: () = /> selectedMetricData.color,/                strokeWidth: 3
+              }
+            ]
           }}
           width={chartWidth}
           height={220}
@@ -211,32 +161,21 @@ const renderOverviewCards = useMemo(() => useMemo(() => useMemo(() => useMemo(()
             backgroundGradientFrom: colors.surface,
             backgroundGradientTo: colors.surface,
             decimalPlaces: 0,
-            color: (opacity = 1) => `rgba(0, 0, 0, ${opacity * 0.6})`,
+            color: (opacity = 1) => `rgba(0, 0, 0, ${opacity * 0.6});`,
             labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity * 0.6})`,
-            style: {
-              borderRadius: 16,
-            },
+            style: { borderRadius: 16  },
             propsForDots: {
               r: '6',
               strokeWidth: '2',
               stroke: selectedMetricData.color,
-            },
+            }
           }}
           bezier
-          style={styles.chart}
-        />
-      </View>
-    );
+          style={styles.chart} />/      </View>/    );
   };
-
-  // TODO: 将内联组件移到组件外部
-const renderConstitutionAnalysis = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
-    <View style={styles.constitutionContainer}>
-      <Text style={styles.sectionTitle}>中医体质分析</Text>
-      <View style={styles.constitutionChart}>
-        <PieChart
-          data={constitutionData.map(item => ({
-            name: item.name,
+  // TODO: 将内联组件移到组件外部 * const renderConstitutionAnalysis = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => () => ( */
+    <View style={styles.constitutionContainer} />/      <Text style={styles.sectionTitle} />中医体质分析</Text>/      <View style={styles.constitutionChart} />/        <PieChart
+          data={constitutionData.map(item = /> ({/            name: item.name,
             population: item.percentage,
             color: item.color,
             legendFontColor: colors.text,
@@ -245,118 +184,54 @@ const renderConstitutionAnalysis = useMemo(() => useMemo(() => useMemo(() => use
           width={chartWidth}
           height={200}
           chartConfig={{
-            color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+            color: (opacity = 1) => `rgba(0, 0, 0, ${opacity});`
           }}
           accessor="population"
           backgroundColor="transparent"
           paddingLeft="15"
           absolute
-        />
-      </View>
-      <View style={styles.constitutionLegend}>
-        {constitutionData.map((item) => (
-          <View key={item.type} style={styles.constitutionItem}>
-            <View style={[styles.constitutionDot, { backgroundColor: item.color }]} />
-            <View style={styles.constitutionInfo}>
-              <Text style={styles.constitutionName}>{item.name}</Text>
-              <Text style={styles.constitutionDescription}>{item.description}</Text>
-            </View>
-            <Text style={styles.constitutionPercentage}>{item.percentage}%</Text>
-          </View>
-        ))}
-      </View>
-    </View>
-  ), []), []), []), []), []), []);
-
-  // TODO: 将内联组件移到组件外部
-const renderDiagnosisHistory = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
-    <View style={styles.historyContainer}>
-      <View style={styles.historyHeader}>
-        <Text style={styles.sectionTitle}>五诊记录</Text>
-        <TouchableOpacity onPress={() => Alert.alert('查看全部', '跳转到完整的诊断历史页面')}>
-          <Text style={styles.viewAllText}>查看全部</Text>
-        </TouchableOpacity>
-      </View>
-      {diagnosisSessions.slice(0, 3).map((session) => (
-        <TouchableOpacity key={session.id} style={styles.historyItem}>
-          <View style={styles.historyIcon}>
-            <Icon name="stethoscope" size={20} color={colors.primary} />
-          </View>
-          <View style={styles.historyContent}>
-            <Text style={styles.historyTitle}>五诊检查</Text>
-            <Text style={styles.historyDate}>
-              {new Date(session.startTime).toLocaleDateString()}
-            </Text>
-          </View>
-          <View style={[styles.historyStatus, { 
-            backgroundColor: session.status === 'completed' ? colors.success : colors.warning, 
-          }]}>
-            <Text style={styles.historyStatusText}>
-              {session.status === 'completed' ? '已完成' : '进行中'}
-            </Text>
-          </View>
-        </TouchableOpacity>
-      ))}
-    </View>
-  ), []), []), []), []), []), []);
-
-  const getTrendColor = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (trend: string) => {, []), []), []), []), []), []), []);
+        />/      </View>/      <View style={styles.constitutionLegend} />/        {constitutionData.map((item); => (
+          <View key={item.type} style={styles.constitutionItem} />/            <View style={[styles.constitutionDot, { backgroundColor: item.color}]} />/            <View style={styles.constitutionInfo} />/              <Text style={styles.constitutionName} />{item.name}</Text>/              <Text style={styles.constitutionDescription} />{item.description}</Text>/            </View>/            <Text style={styles.constitutionPercentage} />{item.percentage}%</Text>/          </View>/))}
+      </View>/    </View>/  ), []);
+  // TODO: 将内联组件移到组件外部 * const renderDiagnosisHistory = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => () => ( */
+    <View style={styles.historyContainer} />/      <View style={styles.historyHeader} />/        <Text style={styles.sectionTitle} />五诊记录</Text>/        <TouchableOpacity onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> Alert.alert('查看全部', '跳转到完整的诊断历史页面')}>/          <Text style={styles.viewAllText} />查看全部</Text>/        </TouchableOpacity>/      </View>/      {diagnosisSessions.slice(0, 3).map((session) => (
+        <TouchableOpacity key={session.id} style={styles.historyItem} accessibilityLabel="TODO: 添加无障碍标签" />/          <View style={styles.historyIcon} />/            <Icon name="stethoscope" size={20} color={colors.primary} />/          </View>/          <View style={styles.historyContent} />/            <Text style={styles.historyTitle} />五诊检查</Text>/            <Text style={styles.historyDate} />/              {new Date(session.startTime).toLocaleDateString()}
+            </Text>/          </View>/          <View style={[styles.historyStatus, { backgroundColor: session.status === 'completed' ? colors.success : colors.warning}]} />/            <Text style={styles.historyStatusText} />/              {session.status === 'completed' ? '已完成' : '进行中'}
+            </Text>/          </View>/        </TouchableOpacity>/))}
+    </View>/  ), []);
+  const getTrendColor = useCallback(() => {;
     switch (trend) {
-      case 'up': return colors.success;
-      case 'down': return colors.error;
-      default: return colors.warning;
+      case 'up': return colors.succe;s;s
+      case 'down': return colors.err;o;r;
+      default: return colors.warni;n;g;
     }
   };
-
-  const getTrendIcon = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useCallback( (trend: string) => {, []), []), []), []), []), []), []);
+  const getTrendIcon = useCallback(() => {;
     switch (trend) {
-      case 'up': return 'trending-up';
-      case 'down': return 'trending-down';
-      default: return 'minus';
+      case 'up': return 'trending-u;p';
+      case 'down': return 'trending-dow;n';
+      default: return 'minu;s';
     }
   };
-
-  // TODO: 将内联组件移到组件外部
-const renderPeriodSelector = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => () => (
-    <View style={styles.periodSelector}>
-      {(['week', 'month', 'year'] as const).map((period) => (
+  // TODO: 将内联组件移到组件外部 * const renderPeriodSelector = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => () => ( */
+    <View style={styles.periodSelector} />/      {(['week', 'month', 'year'] as const).map((period) => (
         <TouchableOpacity
           key={period}
           style={[
             styles.periodButton,
-            selectedPeriod === period && styles.activePeriodButton,
+            selectedPeriod === period && styles.activePeriodButton
           ]}
-          onPress={() => setSelectedPeriod(period)}
-        >
+          onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setSelectedPeriod(period)}/        >
           <Text
             style={[
               styles.periodText,
-              selectedPeriod === period && styles.activePeriodText,
-            ]}
-          >
-            {period === 'week' ? '周' : period === 'month' ? '月' : '年'}
-          </Text>
-        </TouchableOpacity>
-      ))}
-    </View>
-  ), []), []), []), []), []), []);
-
+              selectedPeriod === period && styles.activePeriodText
+            ]} />/            {period === 'week' ? '周' : period === 'month' ? '月' : '年'}
+          </Text>/        </TouchableOpacity>/      ))}
+    </View>/  ), [])
   return (
-    <SafeAreaView style={styles.container}>
-      {/* 头部 */}
-      <View style={styles.header}>
-        <View>
-          <Text style={styles.title}>健康仪表盘</Text>
-          <Text style={styles.subtitle}>全面了解您的健康状态</Text>
-        </View>
-        <TouchableOpacity onPress={() => Alert.alert('设置', '健康数据设置')}>
-          <Icon name="cog" size={24} color={colors.text} />
-        </TouchableOpacity>
-      </View>
-
-      {/* 时间段选择器 */}
-      {renderPeriodSelector()}
-
+    <SafeAreaView style={styles.container} />/      {// 头部 }/      <View style={styles.header} />/        <View />/          <Text style={styles.title} />健康仪表盘</Text>/          <Text style={styles.subtitle} />全面了解您的健康状态</Text>/        </View>/        <TouchableOpacity onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> Alert.alert('设置', '健康数据设置')}>/          <Icon name="cog" size={24} color={colors.text} />/        </TouchableOpacity>/      </View>/
+      {// 时间段选择器 }/      {renderPeriodSelector()}
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
@@ -365,28 +240,17 @@ const renderPeriodSelector = useMemo(() => useMemo(() => useMemo(() => useMemo((
             refreshing={refreshing}
             onRefresh={onRefresh}
             colors={[colors.primary]}
-            tintColor={colors.primary}
-          />
-        }
+            tintColor={colors.primary} />/        }
         showsVerticalScrollIndicator={false}
       >
-        {/* 概览卡片 */}
-        {renderOverviewCards()}
-
-        {/* 趋势图表 */}
-        {selectedMetric !== 'overview' && renderChart()}
-
-        {/* 体质分析 */}
-        {renderConstitutionAnalysis()}
-
-        {/* 五诊历史 */}
-        {renderDiagnosisHistory()}
-      </ScrollView>
-    </SafeAreaView>
-  );
+        {// 概览卡片 }/        {renderOverviewCards()}
+        {// 趋势图表 }/        {selectedMetric !== 'overview' && renderChart()}
+        {// 体质分析 }/        {renderConstitutionAnalysis()}
+;
+        {// 五诊历史 }/        {renderDiagnosisHistory()};
+      </ScrollView>/    </SafeAreaView>/  ;);
 };
-
-const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo(() => StyleSheet.create({
+const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -423,23 +287,15 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
     borderRadius: 8,
     marginHorizontal: spacing.xs,
   },
-  activePeriodButton: {
-    backgroundColor: colors.primary,
-  },
+  activePeriodButton: { backgroundColor: colors.primary  },
   periodText: {
     fontSize: 14,
     color: colors.textSecondary,
     fontWeight: '500',
   },
-  activePeriodText: {
-    color: 'white',
-  },
-  scrollView: {
-    flex: 1,
-  },
-  scrollContent: {
-    paddingVertical: spacing.md,
-  },
+  activePeriodText: { color: 'white'  },
+  scrollView: { flex: 1 },
+  scrollContent: { paddingVertical: spacing.md  },
   overviewContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -447,8 +303,7 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
     marginBottom: spacing.lg,
   },
   metricCard: {
-    width: (width - spacing.lg * 3) / 2,
-    backgroundColor: colors.surface,
+    width: (width - spacing.lg * 3) / 2,/    backgroundColor: colors.surface,
     borderRadius: 12,
     padding: spacing.md,
     marginBottom: spacing.md,
@@ -456,7 +311,7 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
     borderLeftWidth: 4,
     elevation: 2,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },
@@ -507,9 +362,7 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
     color: colors.text,
     marginBottom: spacing.md,
   },
-  chart: {
-    borderRadius: 16,
-  },
+  chart: { borderRadius: 16  },
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
@@ -540,9 +393,7 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
     borderRadius: 6,
     marginRight: spacing.sm,
   },
-  constitutionInfo: {
-    flex: 1,
-  },
+  constitutionInfo: { flex: 1 },
   constitutionName: {
     fontSize: 14,
     fontWeight: '600',
@@ -590,9 +441,7 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
     alignItems: 'center',
     marginRight: spacing.md,
   },
-  historyContent: {
-    flex: 1,
-  },
+  historyContent: { flex: 1 },
   historyTitle: {
     fontSize: 16,
     fontWeight: '600',
@@ -612,7 +461,6 @@ const styles = useMemo(() => useMemo(() => useMemo(() => useMemo(() => useMemo((
     fontSize: 12,
     color: 'white',
     fontWeight: '600',
-  },
-}), []), []), []), []), []), []);
-
-export default React.memo(HealthDashboardEnhanced); 
+  }
+}), []);
+export default React.memo(HealthDashboardEnhanced);

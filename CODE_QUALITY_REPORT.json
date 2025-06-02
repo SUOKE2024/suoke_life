@@ -1,0 +1,1399 @@
+{
+  "timestamp": "2025-05-30T23:20:07.968Z",
+  "stats": {
+    "totalFiles": 310,
+    "checkedFiles": 310,
+    "errorFiles": 63,
+    "warningFiles": 0
+  },
+  "errors": [
+    {
+      "file": "src/components/ui/AccessibilityPanel.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 30
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 40
+        }
+      ]
+    },
+    {
+      "file": "src/components/ui/Button.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 105
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 128
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 153
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 194
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 213
+        }
+      ]
+    },
+    {
+      "file": "src/components/ui/Card.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 4
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 39
+        }
+      ]
+    },
+    {
+      "file": "src/components/ui/Modal.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 107
+        }
+      ]
+    },
+    {
+      "file": "src/components/ui/PerformanceMonitor.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 17
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 24
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 44
+        }
+      ]
+    },
+    {
+      "file": "src/components/ui/RTLView.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 130
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 145
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 159
+        }
+      ]
+    },
+    {
+      "file": "src/components/ui/Slider.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 187
+        }
+      ]
+    },
+    {
+      "file": "src/components/ui/Text.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 7
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 78
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 185
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 214
+        }
+      ]
+    },
+    {
+      "file": "src/components/ui/UserExperienceEnhancer.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 30
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 42
+        }
+      ]
+    },
+    {
+      "file": "src/contexts/ThemeContext.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 143
+        }
+      ]
+    },
+    {
+      "file": "src/core/ConfigurationManager.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 5
+        }
+      ]
+    },
+    {
+      "file": "src/core/DIContainer.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 27
+        }
+      ]
+    },
+    {
+      "file": "src/i18n/config.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 28
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 256
+        }
+      ]
+    },
+    {
+      "file": "src/i18n/i18nManager.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 18
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 99
+        }
+      ]
+    },
+    {
+      "file": "src/infrastructure/config/EnvironmentManager.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 391
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 394
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 423
+        }
+      ]
+    },
+    {
+      "file": "src/screens/BrandColorDemo.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 68
+        }
+      ]
+    },
+    {
+      "file": "src/screens/auth/RegisterScreen.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 265
+        }
+      ]
+    },
+    {
+      "file": "src/screens/auth/WelcomeScreen.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 114
+        }
+      ]
+    },
+    {
+      "file": "src/screens/components/ColorPreview.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 72
+        }
+      ]
+    },
+    {
+      "file": "src/screens/components/SearchBar.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 80
+        }
+      ]
+    },
+    {
+      "file": "src/screens/components/UIShowcase.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 19
+        }
+      ]
+    },
+    {
+      "file": "src/screens/demo/AdvancedFeaturesDemo.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 23
+        }
+      ]
+    },
+    {
+      "file": "src/screens/demo/AgentCollaborationDemoScreen.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 140
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 144
+        }
+      ]
+    },
+    {
+      "file": "src/screens/demo/ApiIntegrationDemo.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 172
+        }
+      ]
+    },
+    {
+      "file": "src/screens/demo/FiveDiagnosisAgentIntegrationScreen.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 339
+        }
+      ]
+    },
+    {
+      "file": "src/screens/life/HealthDashboardEnhanced.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 194
+        }
+      ]
+    },
+    {
+      "file": "src/screens/life/components/AdvancedHealthDashboard.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 236
+        }
+      ]
+    },
+    {
+      "file": "src/screens/profile/ProfileScreen.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 12
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 23
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 30
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 38
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 46
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 458
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 467
+        }
+      ]
+    },
+    {
+      "file": "src/screens/suoke/components/SystemMonitorDashboard.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 146
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 212
+        }
+      ]
+    },
+    {
+      "file": "src/screens/suoke/components/XiaoaiChatInterface.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 76
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 192
+        }
+      ]
+    },
+    {
+      "file": "src/services/ApiIntegrationService.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 4
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 9
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 21
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 30
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 38
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 57
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 67
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 82
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 97
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 102
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 122
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 129
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 170
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 257
+        }
+      ]
+    },
+    {
+      "file": "src/services/IntegratedApiService.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 4
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 9
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 21
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 30
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 38
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 57
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 67
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 82
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 131
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 162
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 252
+        }
+      ]
+    },
+    {
+      "file": "src/services/accessibilityService.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 11
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 64
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 80
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 253
+        }
+      ]
+    },
+    {
+      "file": "src/services/advancedAnalyticsService.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 73
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 159
+        }
+      ]
+    },
+    {
+      "file": "src/services/agentService.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 3
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 15
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 20
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 123
+        }
+      ]
+    },
+    {
+      "file": "src/services/apiClient.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 17
+        }
+      ]
+    },
+    {
+      "file": "src/services/ecoServicesApi.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 210
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 238
+        }
+      ]
+    },
+    {
+      "file": "src/services/enhancedApiClient.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 7
+        }
+      ]
+    },
+    {
+      "file": "src/services/graphql/client.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 35
+        }
+      ]
+    },
+    {
+      "file": "src/services/logisticsService.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 53
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 96
+        }
+      ]
+    },
+    {
+      "file": "src/services/medicalApiService.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 25
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 39
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 85
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 202
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 445
+        }
+      ]
+    },
+    {
+      "file": "src/services/offline/offlineManager.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 30
+        }
+      ]
+    },
+    {
+      "file": "src/services/paymentService.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 47
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 57
+        }
+      ]
+    },
+    {
+      "file": "src/services/realTimeSync.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 3
+        }
+      ]
+    },
+    {
+      "file": "src/services/uiUxOptimizationService.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 682
+        }
+      ]
+    },
+    {
+      "file": "src/services/websocket/websocketManager.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 44
+        }
+      ]
+    },
+    {
+      "file": "src/setupTests.ts",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 93
+        }
+      ]
+    },
+    {
+      "file": "src/store/middleware/apiMiddleware.ts",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 27
+        }
+      ]
+    },
+    {
+      "file": "src/store/middleware/persistMiddleware.ts",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 12
+        }
+      ]
+    },
+    {
+      "file": "src/store/slices/diagnosisSlice.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 93
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 112
+        }
+      ]
+    },
+    {
+      "file": "src/types/core.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 30
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 58
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 63
+        }
+      ]
+    },
+    {
+      "file": "src/utils/agentCollaborationSystem.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 415
+        }
+      ]
+    },
+    {
+      "file": "src/utils/animations.ts",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 260
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 279
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 286
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 298
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 321
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 326
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 343
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 373
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 386
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 389
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 394
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 398
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 403
+        }
+      ]
+    },
+    {
+      "file": "src/utils/blockchainHealthData.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 9
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 35
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 239
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 255
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 441
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 539
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 542
+        }
+      ]
+    },
+    {
+      "file": "src/utils/errorHandler.ts",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 9
+        }
+      ]
+    },
+    {
+      "file": "src/utils/monitoringSystem.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 504
+        }
+      ]
+    },
+    {
+      "file": "src/utils/nativeModules.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 5
+        }
+      ]
+    },
+    {
+      "file": "src/utils/performanceOptimizer.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 30
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 559
+        }
+      ]
+    },
+    {
+      "file": "src/utils/performanceReporter.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 88
+        }
+      ]
+    },
+    {
+      "file": "src/utils/responsive.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 86
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 90
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 92
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 98
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 102
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 106
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 109
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 111
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 175
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 178
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 184
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 193
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 203
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 210
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 223
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 232
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 236
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 243
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 246
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 254
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 259
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 266
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 273
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 283
+        }
+      ]
+    },
+    {
+      "file": "src/utils/securityManager.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 242
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 433
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 444
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 475
+        }
+      ]
+    },
+    {
+      "file": "src/utils/smartCacheStrategy.tsx",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 8
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 20
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 88
+        },
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 118
+        }
+      ]
+    },
+    {
+      "file": "src/utils/stateOptimizer.ts",
+      "errors": [
+        {
+          "type": "syntax",
+          "rule": "object-property",
+          "message": "对象属性定义可能有语法错误",
+          "line": 52
+        }
+      ]
+    }
+  ],
+  "warnings": [],
+  "summary": {
+    "totalIssues": 178,
+    "qualityScore": 0
+  }
+}

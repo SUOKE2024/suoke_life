@@ -1,122 +1,36 @@
-import Icon from '../../components/common/Icon';
-import { colors, spacing, fonts, shadows } from '../../constants/theme';
-
-
-
-
-
-
-import React, { memo } from 'react';
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
-
-interface HomeHeaderProps {
-  title: string;
-  unreadCount?: number;
-  onContactsPress: () => void;
-  onAccessibilityPress: () => void;
-  onNavigationTestPress: () => void;
-}
-
-export const HomeHeader = memo<HomeHeaderProps>(({
-  title,
-  unreadCount = 0,
-  onContactsPress,
-  onAccessibilityPress,
-  onNavigationTestPress,
-}) => {
+import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+export const HomeHeader: React.FC = () => {
   return (
     <View style={styles.container}>
-      <View style={styles.titleContainer}>
-        <Text style={styles.title}>{title}</Text>
-        {unreadCount > 0 && (
-          <View style={styles.unreadBadge}>
-            <Text style={styles.unreadText}>
-              {unreadCount > 99 ? '99+' : unreadCount}
-            </Text>
-          </View>
-        )}
-      </View>
-
-      <View style={styles.actions}>
-        <TouchableOpacity
-          style={styles.actionButton}
-          onPress={onNavigationTestPress}
-          activeOpacity={0.7}
-        >
-          <Icon name="navigation" size={24} color={colors.text} />
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.actionButton}
-          onPress={onAccessibilityPress}
-          activeOpacity={0.7}
-        >
-          <Icon name="accessibility" size={24} color={colors.text} />
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.actionButton}
-          onPress={onContactsPress}
-          activeOpacity={0.7}
-        >
-          <Icon name="account-group" size={24} color={colors.text} />
-        </TouchableOpacity>
-      </View>
+      <Text style={styles.title}>索克生活</Text>
+      <TouchableOpacity style={styles.menuButton}>
+        <Text style={styles.menuIcon}>☰</Text>
+      </TouchableOpacity>
     </View>
   );
-});
-
-HomeHeader.displayName = 'HomeHeader';
-
+}
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-    backgroundColor: colors.background,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: 'white',
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-    ...shadows.sm,
-  },
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    borderBottomColor: '#e0e0e0'
   },
   title: {
-    fontSize: fonts.size.header,
+    fontSize: 20,
     fontWeight: 'bold',
-    color: colors.text,
+    color: '#333'
   },
-  unreadBadge: {
-    backgroundColor: colors.error,
-    borderRadius: 10,
-    minWidth: 20,
-    height: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: spacing.xs,
-    marginLeft: spacing.sm,
+  menuButton: {
+    padding: 8
   },
-  unreadText: {
-    color: colors.white,
-    fontSize: fonts.size.xs,
-    fontWeight: 'bold',
-  },
-  actions: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  actionButton: {
-    padding: spacing.sm,
-    marginLeft: spacing.xs,
-    borderRadius: 20,
-    backgroundColor: colors.surface,
-    ...shadows.sm,
-  },
-}); 
+  menuIcon: {
+    fontSize: 18,
+    color: '#666'
+  }
+});
