@@ -7,6 +7,7 @@
 import asyncio
 from typing import TYPE_CHECKING
 from unittest.mock import AsyncMock, MagicMock
+from collections.abc import AsyncGenerator, Generator
 
 from fastapi.testclient import TestClient
 from httpx import AsyncClient
@@ -19,9 +20,6 @@ from sqlalchemy.pool import StaticPool
 
 from suoke_blockchain_service.config import Settings
 from suoke_blockchain_service.main import create_app
-
-if TYPE_CHECKING:
-    from collections.abc import AsyncGenerator, Generator
 
 class TestBase(DeclarativeBase):
     """测试数据库模型基类"""

@@ -14,7 +14,7 @@ from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-from ..domain.models import ConstitutionType, ResourceType, UrgencyLevel
+from ..domain.models import ResourceType, UrgencyLevel
 from .resource_management_service import (
     AvailabilityStatus,
     DoctorLevel,
@@ -35,7 +35,7 @@ class SchedulingStrategy(Enum):
     PRIORITY_BASED = "priority"  # 基于优先级
     ROUND_ROBIN = "round_robin"  # 轮转调度
     LOAD_BALANCED = "load_balanced"  # 负载均衡
-    CONSTITUTION_OPTIMIZED = "constitution"  # 体质优化
+    # CONSTITUTION_OPTIMIZED removed
     MULTI_CRITERIA = "multi_criteria"  # 多准则决策
 
 class AppointmentStatus(Enum):
@@ -56,7 +56,7 @@ class LoadBalancingMethod(Enum):
     WEIGHTED_ROUND_ROBIN = "weighted_rr"  # 加权轮询
     LEAST_RESPONSE_TIME = "least_rt"  # 最短响应时间
     RESOURCE_BASED = "resource_based"  # 基于资源
-    CONSTITUTION_AWARE = "constitution_aware"  # 体质感知
+    # CONSTITUTION_AWARE removed
 
 @dataclass
 class AppointmentRequest:
@@ -64,7 +64,7 @@ class AppointmentRequest:
 
     request_id: str
     user_id: str
-    constitution_type: ConstitutionType
+    # constitution_type field removed
     symptoms: List[str]
     preferred_resource_category: ResourceCategory
     preferred_time_slots: List[Dict[str, str]]
@@ -149,7 +149,7 @@ class ResourceSchedulingService:
 
         # 调度策略
         self.current_strategy = SchedulingStrategy.MULTI_CRITERIA
-        self.load_balancing_method = LoadBalancingMethod.CONSTITUTION_AWARE
+        self.load_balancing_method = LoadBalancingMethod.RESOURCE_BASED
 
         # 调度指标
         self.scheduling_metrics = SchedulingMetrics(
@@ -163,8 +163,8 @@ class ResourceSchedulingService:
             cost_efficiency=0.0,
         )
 
-        # 体质-资源匹配权重
-        self.constitution_weights = self._initialize_constitution_weights()
+        # 资源匹配权重配置
+        self.resource_weights = self._initialize_resource_weights()
 
         # 时间段权重
         self.time_slot_weights = self._initialize_time_weights()
@@ -177,58 +177,32 @@ class ResourceSchedulingService:
 
         logger.info("智能资源调度服务初始化完成")
 
-    def _initialize_constitution_weights(
-        self,
-    ) -> Dict[ConstitutionType, Dict[str, float]]:
-        """初始化体质匹配权重"""
+    def _initialize_resource_weights(self) -> Dict[str, Dict[str, float]]:
+        """初始化资源匹配权重"""
         return {
-            ConstitutionType.QI_DEFICIENCY: {
-                "tcm_doctor": 0.9,
-                "herbal_medicine": 0.8,
+            "general_medicine": {
+                "doctor": 0.9,
+                "medical_equipment": 0.8,
+                "hospital": 0.9,
+                "clinic": 0.7,
+            },
+            "emergency_care": {
+                "emergency_doctor": 1.0,
+                "emergency_equipment": 0.9,
+                "emergency_room": 1.0,
+                "ambulance": 0.8,
+            },
+            "specialist_care": {
+                "specialist_doctor": 0.9,
+                "specialized_equipment": 0.8,
+                "specialist_clinic": 0.8,
+                "hospital": 0.7,
+            },
+            "preventive_care": {
+                "general_doctor": 0.8,
+                "screening_equipment": 0.9,
                 "wellness_center": 0.7,
-                "rehabilitation_center": 0.6,
-            },
-            ConstitutionType.YANG_DEFICIENCY: {
-                "tcm_doctor": 0.9,
-                "thermal_therapy": 0.8,
-                "herbal_medicine": 0.8,
-                "wellness_center": 0.7,
-            },
-            ConstitutionType.YIN_DEFICIENCY: {
-                "tcm_doctor": 0.9,
-                "herbal_medicine": 0.8,
-                "hydration_therapy": 0.7,
-                "wellness_center": 0.7,
-            },
-            ConstitutionType.PHLEGM_DAMPNESS: {
-                "tcm_doctor": 0.9,
-                "detox_equipment": 0.8,
-                "herbal_medicine": 0.8,
-                "rehabilitation_center": 0.6,
-            },
-            ConstitutionType.DAMP_HEAT: {
-                "tcm_doctor": 0.9,
-                "cooling_therapy": 0.8,
-                "herbal_medicine": 0.8,
-                "wellness_center": 0.7,
-            },
-            ConstitutionType.BLOOD_STASIS: {
-                "tcm_doctor": 0.9,
-                "circulation_equipment": 0.8,
-                "herbal_medicine": 0.7,
-                "rehabilitation_center": 0.7,
-            },
-            ConstitutionType.QI_STAGNATION: {
-                "tcm_doctor": 0.9,
-                "stress_relief": 0.8,
-                "herbal_medicine": 0.7,
-                "wellness_center": 0.8,
-            },
-            ConstitutionType.ALLERGIC: {
-                "allergy_specialist": 0.9,
-                "allergy_testing": 0.8,
-                "herbal_medicine": 0.6,
-                "wellness_center": 0.5,
+                "clinic": 0.6,
             },
         }
 
@@ -560,15 +534,13 @@ class ResourceSchedulingService:
             wait_score = min(wait_time_hours / 24.0, 1.0)  # 最多24小时满分
             score += wait_score * 0.3
 
-            # 体质匹配权重
-            constitution_score = self._get_constitution_priority(
-                request.constitution_type
-            )
-            score += constitution_score * 0.2
-
-            # 症状严重程度权重
+            # 症状严重程度权重（增加权重）
             symptom_score = self._assess_symptom_severity(request.symptoms)
-            score += symptom_score * 0.1
+            score += symptom_score * 0.2
+
+            # 用户偏好权重
+            preference_score = 0.5  # 默认偏好分数
+            score += preference_score * 0.1
 
             return score
 
@@ -576,20 +548,19 @@ class ResourceSchedulingService:
             logger.error(f"计算优先级分数失败: {e}")
             return 0.5
 
-    def _get_constitution_priority(self, constitution_type: ConstitutionType) -> float:
-        """获取体质优先级"""
-        # 某些体质类型可能需要更紧急的关注
-        priority_map = {
-            ConstitutionType.QI_DEFICIENCY: 0.8,
-            ConstitutionType.YANG_DEFICIENCY: 0.7,
-            ConstitutionType.YIN_DEFICIENCY: 0.7,
-            ConstitutionType.PHLEGM_DAMPNESS: 0.6,
-            ConstitutionType.DAMP_HEAT: 0.6,
-            ConstitutionType.BLOOD_STASIS: 0.8,
-            ConstitutionType.QI_STAGNATION: 0.5,
-            ConstitutionType.ALLERGIC: 0.9,
-        }
-        return priority_map.get(constitution_type, 0.5)
+    def _get_symptom_category_priority(self, symptoms: List[str]) -> float:
+        """获取症状类别优先级"""
+        # 基于症状类别确定优先级
+        emergency_symptoms = ["胸痛", "呼吸困难", "意识模糊", "剧烈头痛", "大出血"]
+        urgent_symptoms = ["高热", "严重腹痛", "持续呕吐", "严重头痛"]
+        
+        for symptom in symptoms:
+            if any(emergency in symptom for emergency in emergency_symptoms):
+                return 1.0
+            elif any(urgent in symptom for urgent in urgent_symptoms):
+                return 0.8
+        
+        return 0.5
 
     def _assess_symptom_severity(self, symptoms: List[str]) -> float:
         """评估症状严重程度"""
@@ -617,7 +588,6 @@ class ResourceSchedulingService:
             # 搜索合适的资源
             resources = await self.resource_service.search_resources(
                 resource_category=request.preferred_resource_category,
-                constitution_type=request.constitution_type,
                 symptoms=request.symptoms,
                 location=request.location,
                 max_distance_km=request.max_distance_km,
@@ -694,8 +664,7 @@ class ResourceSchedulingService:
                 return await self._multi_criteria_selection(request, resources)
             elif self.current_strategy == SchedulingStrategy.LOAD_BALANCED:
                 return await self._load_balanced_selection(request, resources)
-            elif self.current_strategy == SchedulingStrategy.CONSTITUTION_OPTIMIZED:
-                return await self._constitution_optimized_selection(request, resources)
+            # CONSTITUTION_OPTIMIZED strategy removed
             elif self.current_strategy == SchedulingStrategy.PRIORITY_BASED:
                 return await self._priority_based_selection(request, resources)
             else:
@@ -803,9 +772,7 @@ class ResourceSchedulingService:
                 # 基于权重的轮询选择
                 return await self._weighted_round_robin_selection(request, resources)
 
-            elif self.load_balancing_method == LoadBalancingMethod.CONSTITUTION_AWARE:
-                # 体质感知的负载均衡
-                return await self._constitution_aware_selection(request, resources)
+            # CONSTITUTION_AWARE method removed
 
             else:
                 # 默认轮询
@@ -815,22 +782,22 @@ class ResourceSchedulingService:
             logger.error(f"负载均衡选择失败: {e}")
             return None
 
-    async def _constitution_optimized_selection(
+    async def _symptom_based_selection(
         self, request: AppointmentRequest, resources: List[Dict[str, Any]]
     ) -> Optional[Dict[str, Any]]:
-        """体质优化选择"""
+        """基于症状的选择"""
         try:
-            constitution_weights = self.constitution_weights.get(
-                request.constitution_type, {}
-            )
+            # 根据症状类别获取权重
+            symptom_category = self._categorize_symptoms(request.symptoms)
+            resource_weights = self.resource_weights.get(symptom_category, {})
 
             best_resource = None
             best_score = -1
 
             for resource in resources:
-                # 基于体质匹配计算分数
+                # 基于症状匹配计算分数
                 resource_type = resource.get("resource_type", "")
-                weight = constitution_weights.get(resource_type, 0.5)
+                weight = resource_weights.get(resource_type, 0.5)
 
                 # 结合匹配度
                 match_score = resource.get("match_score", 0.5)
@@ -843,7 +810,7 @@ class ResourceSchedulingService:
             return best_resource
 
         except Exception as e:
-            logger.error(f"体质优化选择失败: {e}")
+            logger.error(f"基于症状的选择失败: {e}")
             return None
 
     async def _priority_based_selection(
@@ -912,41 +879,29 @@ class ResourceSchedulingService:
             logger.error(f"加权轮询选择失败: {e}")
             return None
 
-    async def _constitution_aware_selection(
-        self, request: AppointmentRequest, resources: List[Dict[str, Any]]
-    ) -> Optional[Dict[str, Any]]:
-        """体质感知选择"""
-        try:
-            # 结合体质匹配和负载均衡
-            best_resource = None
-            best_score = -1
-
-            constitution_weights = self.constitution_weights.get(
-                request.constitution_type, {}
-            )
-
-            for resource in resources:
-                # 体质匹配分数
-                resource_type = resource.get("resource_type", "")
-                constitution_score = constitution_weights.get(resource_type, 0.5)
-
-                # 负载分数
-                resource_id = resource["resource_id"]
-                load = self.resource_loads.get(resource_id)
-                load_score = 1.0 - load.utilization_rate if load else 1.0
-
-                # 综合分数
-                total_score = constitution_score * 0.6 + load_score * 0.4
-
-                if total_score > best_score:
-                    best_score = total_score
-                    best_resource = resource
-
-            return best_resource
-
-        except Exception as e:
-            logger.error(f"体质感知选择失败: {e}")
-            return None
+    def _categorize_symptoms(self, symptoms: List[str]) -> str:
+        """将症状分类"""
+        emergency_keywords = ["胸痛", "呼吸困难", "意识模糊", "大出血", "剧烈头痛"]
+        specialist_keywords = ["心脏", "肺部", "神经", "骨科", "皮肤", "眼科", "耳鼻喉"]
+        
+        # 检查是否为紧急症状
+        for symptom in symptoms:
+            if any(keyword in symptom for keyword in emergency_keywords):
+                return "emergency_care"
+        
+        # 检查是否需要专科治疗
+        for symptom in symptoms:
+            if any(keyword in symptom for keyword in specialist_keywords):
+                return "specialist_care"
+        
+        # 检查是否为预防性护理
+        preventive_keywords = ["体检", "筛查", "预防", "健康检查"]
+        for symptom in symptoms:
+            if any(keyword in symptom for keyword in preventive_keywords):
+                return "preventive_care"
+        
+        # 默认为一般医疗
+        return "general_medicine"
 
     async def _find_best_time_slot(
         self, request: AppointmentRequest, resource: Dict[str, Any]

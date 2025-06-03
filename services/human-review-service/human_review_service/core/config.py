@@ -108,6 +108,55 @@ class MonitoringSettings(BaseSettings):
     log_level: str = Field(default="INFO", description="日志级别")
     log_format: str = Field(default="json", description="日志格式（json/text）")
 
+class NotificationSettings(BaseSettings):
+    """通知配置"""
+
+    model_config = SettingsConfigDict(env_prefix="NOTIFICATION_")
+
+    # 通知开关
+    enable_email: bool = Field(default=True, description="启用邮件通知")
+    enable_websocket: bool = Field(default=True, description="启用WebSocket通知")
+    enable_webhook: bool = Field(default=False, description="启用Webhook通知")
+    enable_sms: bool = Field(default=False, description="启用短信通知")
+
+    # 邮件配置
+    smtp_host: str = Field(default="smtp.gmail.com", description="SMTP服务器")
+    smtp_port: int = Field(default=587, description="SMTP端口")
+    smtp_user: str = Field(default="", description="SMTP用户名")
+    smtp_password: str = Field(default="", description="SMTP密码")
+    from_email: str = Field(default="noreply@suokelife.com", description="发件人邮箱")
+    use_tls: bool = Field(default=True, description="使用TLS")
+
+    # Webhook配置
+    webhook_urls: Optional[Dict[str, str]] = Field(
+        default=None, description="Webhook URL配置"
+    )
+    webhook_timeout: int = Field(default=30, description="Webhook超时时间")
+    webhook_retry_times: int = Field(default=3, description="Webhook重试次数")
+
+    # 短信配置
+    sms_provider: str = Field(default="aliyun", description="短信服务提供商")
+    sms_access_key: str = Field(default="", description="短信访问密钥")
+    sms_secret_key: str = Field(default="", description="短信密钥")
+    sms_sign_name: str = Field(default="索克生活", description="短信签名")
+
+    # 通知模板
+    templates: Dict[str, str] = Field(
+        default={
+            "task_assigned": "您有新的审核任务需要处理",
+            "task_completed": "审核任务已完成",
+            "task_expired": "审核任务已过期",
+            "system_alert": "系统告警通知"
+        },
+        description="通知模板"
+    )
+
+    # 通知限制
+    rate_limit_per_minute: int = Field(default=60, description="每分钟通知限制")
+    rate_limit_per_hour: int = Field(default=1000, description="每小时通知限制")
+    batch_size: int = Field(default=100, description="批量发送大小")
+
+
 class CelerySettings(BaseSettings):
     """Celery配置"""
 
@@ -176,6 +225,7 @@ class Settings(BaseSettings):
     security: SecuritySettings = Field(default_factory=SecuritySettings)
     review: ReviewSettings = Field(default_factory=ReviewSettings)
     monitoring: MonitoringSettings = Field(default_factory=MonitoringSettings)
+    notification: NotificationSettings = Field(default_factory=NotificationSettings)
     celery: CelerySettings = Field(default_factory=CelerySettings)
 
     @field_validator("environment")

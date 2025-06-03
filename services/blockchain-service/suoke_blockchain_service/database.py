@@ -6,16 +6,12 @@
 
 from contextlib import asynccontextmanager
 from typing import TYPE_CHECKING
+from collections.abc import AsyncGenerator
 
-from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.ext.asyncio import AsyncSession, AsyncEngine, async_sessionmaker, create_async_engine
 
 from .config import settings
 from .logging import get_logger
-
-if TYPE_CHECKING:
-    from collections.abc import AsyncGenerator
-
-    from sqlalchemy.ext.asyncio import AsyncEngine
 
 logger = get_logger(__name__)
 

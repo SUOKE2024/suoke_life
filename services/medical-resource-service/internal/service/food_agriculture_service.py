@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
-from ..domain.models import ConstitutionType
+# ConstitutionType import removed
 
 logger = logging.getLogger(__name__)
 

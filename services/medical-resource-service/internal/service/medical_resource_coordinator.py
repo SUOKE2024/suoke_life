@@ -12,7 +12,7 @@ from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
 from ..agent.xiaoke_agent import XiaokeAgent
-from ..domain.models import ConstitutionType
+# ConstitutionType import removed
 from .personalized_medical_service import PersonalizedMedicalService
 from .quality_control_service import QualityControlService
 from .resource_management_service import ResourceManagementService

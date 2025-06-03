@@ -371,3 +371,49 @@ class DashboardData(BaseModel):
     # 趋势数据
     hourly_stats: Optional[List[Dict[str, Any]]] = None
     daily_stats: Optional[List[Dict[str, Any]]] = None
+
+
+class PaginatedResponse(BaseModel):
+    """分页响应模型"""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    items: List[Any]
+    total: int
+    page: int
+    size: int
+    pages: int
+
+
+class ReviewerWorkload(BaseModel):
+    """审核员工作负载模型"""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    reviewer_id: str
+    current_tasks: int
+    max_concurrent_tasks: int
+    utilization_rate: float
+    pending_tasks: int
+    completed_today: int
+    average_completion_time: float
+
+
+class DashboardStatistics(BaseModel):
+    """仪表板统计模型"""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    total_tasks: int
+    pending_tasks: int
+    in_progress_tasks: int
+    completed_tasks: int
+    approved_tasks: int
+    rejected_tasks: int
+    total_reviewers: int
+    active_reviewers: int
+    average_review_time: float
+    average_accuracy_rate: float
+    tasks_completed_today: int
+    high_priority_pending: int
+    system_load: float

@@ -18,19 +18,7 @@ class ResourceType(Enum):
     MEDICINE = "medicine"
 
 
-class ConstitutionType(Enum):
-    """中医体质类型"""
-
-    CONSTITUTION_TYPE_UNSPECIFIED = "unspecified"
-    PING_HE = "平和质"
-    QI_XU = "气虚质"
-    YANG_XU = "阳虚质"
-    YIN_XU = "阴虚质"
-    TAN_SHI = "痰湿质"
-    SHI_RE = "湿热质"
-    XUE_YU = "血瘀质"
-    QI_YU = "气郁质"
-    TE_BING = "特禀质"
+# ConstitutionType removed - no longer using TCM constitution analysis
 
 
 class AppointmentStatus(Enum):
@@ -171,27 +159,14 @@ class Doctor(Resource):
     total_patients: int = 0
     certifications: List[str] = field(default_factory=list)
     bio: str = ""
-    tcm_specialist: bool = False  # 是否为中医专家
-    constitution_specialties: List[ConstitutionType] = field(default_factory=list)
+    # TCM-related fields removed
     consultation_fee: float = 0.0
     languages: List[str] = field(default_factory=lambda: ["中文"])
 
     def __post_init__(self):
         self.type = ResourceType.DOCTOR
 
-    def add_constitution_specialty(self, constitution: ConstitutionType):
-        """添加体质专长"""
-        if constitution not in self.constitution_specialties:
-            self.constitution_specialties.append(constitution)
-            self.updated_at = datetime.now()
-
-    def can_treat_constitution(self, constitution: ConstitutionType) -> bool:
-        """判断是否能治疗特定体质"""
-        return (
-            constitution in self.constitution_specialties
-            or ConstitutionType.PING_HE in self.constitution_specialties
-            or self.tcm_specialist
-        )
+    # TCM constitution methods removed
 
 
 @dataclass
@@ -317,7 +292,7 @@ class Appointment:
     notes: str = ""
     urgency: UrgencyLevel = UrgencyLevel.MEDIUM
     symptoms: str = ""
-    user_constitution: ConstitutionType = ConstitutionType.CONSTITUTION_TYPE_UNSPECIFIED
+    # user_constitution field removed
     diagnosis: str = ""
     treatment_plan: str = ""
     prescription: str = ""
@@ -393,7 +368,7 @@ class TreatmentPlan:
     id: str = field(default_factory=lambda: str(uuid4()))
     patient_id: str = ""
     doctor_id: str = ""
-    constitution_type: ConstitutionType = ConstitutionType.CONSTITUTION_TYPE_UNSPECIFIED
+    # constitution_type field removed
     symptoms: List[str] = field(default_factory=list)
     diagnosis: str = ""
     treatment_type: str = ""  # 中医、西医、综合
@@ -501,7 +476,7 @@ class HealthProfile:
     """健康档案"""
 
     user_id: str
-    constitution_type: ConstitutionType = ConstitutionType.CONSTITUTION_TYPE_UNSPECIFIED
+    # constitution fields removed
     constitution_confidence: float = 0.0
     chronic_conditions: List[str] = field(default_factory=list)
     allergies: List[str] = field(default_factory=list)
@@ -514,11 +489,7 @@ class HealthProfile:
     health_goals: List[str] = field(default_factory=list)
     last_updated: datetime = field(default_factory=datetime.now)
 
-    def update_constitution(self, constitution: ConstitutionType, confidence: float):
-        """更新体质信息"""
-        self.constitution_type = constitution
-        self.constitution_confidence = confidence
-        self.last_updated = datetime.now()
+    # update_constitution method removed
 
     def add_chronic_condition(self, condition: str):
         """添加慢性疾病"""
@@ -540,7 +511,6 @@ def create_doctor(
     hospital: str,
     department: str,
     specialties: List[str],
-    tcm_specialist: bool = False,
 ) -> Doctor:
     """创建医生实例"""
     doctor = Doctor(
@@ -549,7 +519,6 @@ def create_doctor(
         hospital=hospital,
         department=department,
         specialties=specialties,
-        tcm_specialist=tcm_specialist,
     )
     return doctor
 
@@ -577,7 +546,6 @@ def create_appointment(
 def create_treatment_plan(
     patient_id: str,
     doctor_id: str,
-    constitution_type: ConstitutionType,
     symptoms: List[str],
     treatment_type: str = "综合",
 ) -> TreatmentPlan:
@@ -585,7 +553,6 @@ def create_treatment_plan(
     plan = TreatmentPlan(
         patient_id=patient_id,
         doctor_id=doctor_id,
-        constitution_type=constitution_type,
         symptoms=symptoms,
         treatment_type=treatment_type,
     )

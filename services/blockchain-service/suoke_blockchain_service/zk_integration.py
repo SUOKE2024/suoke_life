@@ -477,6 +477,38 @@ class ZKBlockchainService:
 # 全局服务实例
 _zk_blockchain_service = None
 
+class ZKProofGenerator:
+    """零知识证明生成器"""
+    
+    def __init__(self):
+        self.zk_service = get_zk_service()
+    
+    async def generate_proof(self, data: Dict[str, Any], circuit_id: str) -> Dict[str, Any]:
+        """生成零知识证明"""
+        # 简化实现，实际应该调用真正的ZK证明生成
+        return {
+            "proof": {"a": [1, 2], "b": [3, 4], "c": [5, 6]},
+            "public_inputs": [1, 2, 3],
+            "verification_key": {"alpha": [1, 2]}
+        }
+
+class ZKProofVerifier:
+    """零知识证明验证器"""
+    
+    def __init__(self):
+        self.zk_service = get_zk_service()
+    
+    async def verify_proof(
+        self, 
+        proof: Dict[str, Any], 
+        public_inputs: List[int], 
+        verification_key: Dict[str, Any], 
+        circuit_id: str
+    ) -> bool:
+        """验证零知识证明"""
+        # 简化实现，实际应该调用真正的ZK证明验证
+        return True
+
 def get_zk_blockchain_service() -> ZKBlockchainService:
     """获取零知识区块链服务实例"""
     global _zk_blockchain_service

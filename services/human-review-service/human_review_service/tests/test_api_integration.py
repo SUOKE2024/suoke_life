@@ -7,6 +7,7 @@ API Integration Tests
 
 from uuid import uuid4
 
+from human_review_service.core.models import (
     ReviewerCreate,
     ReviewerDB,
     ReviewerStatus,

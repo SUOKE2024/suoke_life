@@ -7,6 +7,7 @@
 import asyncio
 from contextlib import asynccontextmanager
 from typing import TYPE_CHECKING
+from collections.abc import AsyncGenerator
 
 from fastapi import FastAPI
 import typer
@@ -17,9 +18,6 @@ from .database import close_database, init_database
 from .grpc_server import GRPCServer
 from .logging import configure_logging, get_logger
 from .monitoring import setup_monitoring
-
-if TYPE_CHECKING:
-    from collections.abc import AsyncGenerator
 
 logger = get_logger(__name__)
 

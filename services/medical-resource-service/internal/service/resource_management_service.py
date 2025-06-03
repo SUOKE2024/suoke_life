@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, List, Optional, Set, Tuple
 
-from ..domain.models import ConstitutionType, ResourceType
+from ..domain.models import ResourceType
 
 logger = logging.getLogger(__name__)
 

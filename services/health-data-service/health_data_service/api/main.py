@@ -8,6 +8,7 @@
 - API文档生成
 """
 
+import asyncio
 import logging
 import signal
 import sys
@@ -41,21 +42,29 @@ from health_data_service.core.exceptions import NotFoundError
 from health_data_service.core.exceptions import ValidationError
 
 # 配置日志
-logging.basicConfig(level=logging.INFO)
-logger.add(
-    "logs/health_data_service.log",
-    rotation="1 day",
-    retention="30 days",
-    level="INFO",
-    format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {name}:{function}:{line} | {message}",
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
+logger = logging.getLogger(__name__)
 
 # Prometheus 指标
 REQUEST_COUNT = Counter(
-    "http_requests_total", "Total HTTP requests", ["method", "endpoint", "status"]
+    'health_data_requests_total',
+    'Total number of requests',
+    ['method', 'endpoint', 'status']
 )
+
 REQUEST_DURATION = Histogram(
-    "http_request_duration_seconds", "HTTP request duration", ["method", "endpoint"]
+    'health_data_request_duration_seconds',
+    'Request duration in seconds',
+    ['method', 'endpoint']
+)
+
+ERROR_COUNT = Counter(
+    'health_data_errors_total',
+    'Total number of errors',
+    ['error_type']
 )
 
 

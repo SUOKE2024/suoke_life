@@ -1,0 +1,452 @@
+"""
+区块链客户端模块
+
+提供与以太坊区块链的集成功能，包括智能合约交互、交易处理等。
+"""
+
+import asyncio
+import json
+from typing import Any, Dict, List, Optional, Tuple
+from decimal import Decimal
+from dataclasses import dataclass
+
+from web3 import Web3
+from web3.contract import Contract
+from web3.exceptions import TransactionNotFound, BlockNotFound
+from eth_account import Account
+from eth_utils import to_checksum_address, is_address
+import aiofiles
+
+from .config import settings
+from .logging import get_logger
+from .monitoring import record_blockchain_operation
+
+logger = get_logger(__name__)
+
+@dataclass
+class TransactionReceipt:
+    """交易回执"""
+    transaction_hash: str
+    block_number: int
+    block_hash: str
+    gas_used: int
+    status: int
+    contract_address: Optional[str] = None
+    logs: List[Dict[str, Any]] = None
+
+@dataclass
+class ContractInfo:
+    """合约信息"""
+    name: str
+    address: str
+    abi: List[Dict[str, Any]]
+    contract: Contract
+
+class BlockchainClient:
+    """区块链客户端"""
+
+    def __init__(self) -> None:
+        self.w3: Optional[Web3] = None
+        self.contracts: Dict[str, ContractInfo] = {}
+        self.account: Optional[Account] = None
+        self._is_connected = False
+
+    async def initialize(self) -> None:
+        """初始化区块链客户端"""
+        try:
+            logger.info("初始化区块链客户端", node_url=settings.blockchain.eth_node_url)
+            
+            # 连接到以太坊节点
+            self.w3 = Web3(Web3.HTTPProvider(settings.blockchain.eth_node_url))
+            
+            # 检查连接
+            if not self.w3.is_connected():
+                raise ConnectionError("无法连接到以太坊节点")
+            
+            # 验证链ID
+            chain_id = self.w3.eth.chain_id
+            if chain_id != settings.blockchain.chain_id:
+                logger.warning(
+                    "链ID不匹配",
+                    expected=settings.blockchain.chain_id,
+                    actual=chain_id
+                )
+            
+            # 设置账户
+            if settings.blockchain.deployer_private_key:
+                self.account = Account.from_key(settings.blockchain.deployer_private_key)
+                logger.info("账户已设置", address=self.account.address)
+            
+            # 加载智能合约
+            await self._load_contracts()
+            
+            self._is_connected = True
+            logger.info("区块链客户端初始化完成")
+            record_blockchain_operation("client_init", "success")
+            
+        except Exception as e:
+            logger.error("区块链客户端初始化失败", error=str(e))
+            record_blockchain_operation("client_init", "failed")
+            raise
+
+    async def _load_contracts(self) -> None:
+        """加载智能合约"""
+        contracts_config = [
+            {
+                "name": "HealthDataStorage",
+                "address": settings.blockchain.health_data_storage_address,
+                "abi_file": "contracts/HealthDataStorage.json"
+            },
+            {
+                "name": "ZKPVerifier", 
+                "address": settings.blockchain.zkp_verifier_address,
+                "abi_file": "contracts/ZKPVerifier.json"
+            },
+            {
+                "name": "AccessControl",
+                "address": settings.blockchain.access_control_address,
+                "abi_file": "contracts/AccessControl.json"
+            }
+        ]
+        
+        for contract_config in contracts_config:
+            if contract_config["address"]:
+                try:
+                    await self._load_contract(
+                        contract_config["name"],
+                        contract_config["address"],
+                        contract_config["abi_file"]
+                    )
+                except Exception as e:
+                    logger.warning(
+                        "加载合约失败",
+                        contract=contract_config["name"],
+                        error=str(e)
+                    )
+
+    async def _load_contract(self, name: str, address: str, abi_file: str) -> None:
+        """加载单个智能合约"""
+        try:
+            # 读取ABI文件
+            abi = await self._read_contract_abi(abi_file)
+            
+            # 验证地址
+            if not is_address(address):
+                raise ValueError(f"无效的合约地址: {address}")
+            
+            checksum_address = to_checksum_address(address)
+            
+            # 创建合约实例
+            contract = self.w3.eth.contract(
+                address=checksum_address,
+                abi=abi
+            )
+            
+            # 验证合约是否存在
+            code = self.w3.eth.get_code(checksum_address)
+            if code == b'':
+                raise ValueError(f"地址 {checksum_address} 没有部署合约")
+            
+            self.contracts[name] = ContractInfo(
+                name=name,
+                address=checksum_address,
+                abi=abi,
+                contract=contract
+            )
+            
+            logger.info("合约加载成功", name=name, address=checksum_address)
+            
+        except Exception as e:
+            logger.error("加载合约失败", name=name, address=address, error=str(e))
+            raise
+
+    async def _read_contract_abi(self, abi_file: str) -> List[Dict[str, Any]]:
+        """读取合约ABI文件"""
+        try:
+            async with aiofiles.open(abi_file, 'r') as f:
+                content = await f.read()
+                return json.loads(content)
+        except FileNotFoundError:
+            # 如果ABI文件不存在，返回默认ABI
+            logger.warning("ABI文件不存在，使用默认ABI", file=abi_file)
+            return self._get_default_abi()
+
+    def _get_default_abi(self) -> List[Dict[str, Any]]:
+        """获取默认ABI（简化版本）"""
+        return [
+            {
+                "inputs": [],
+                "name": "getTotalRecords",
+                "outputs": [{"type": "uint256"}],
+                "stateMutability": "view",
+                "type": "function"
+            }
+        ]
+
+    async def store_health_data(
+        self,
+        data_hash: str,
+        data_type: str,
+        ipfs_hash: str,
+        encryption_key_hash: str
+    ) -> str:
+        """存储健康数据到区块链"""
+        try:
+            if "HealthDataStorage" not in self.contracts:
+                raise ValueError("HealthDataStorage合约未加载")
+            
+            contract = self.contracts["HealthDataStorage"].contract
+            
+            # 构建交易
+            function = contract.functions.storeHealthData(
+                bytes.fromhex(data_hash.replace('0x', '')),
+                data_type,
+                ipfs_hash,
+                bytes.fromhex(encryption_key_hash.replace('0x', ''))
+            )
+            
+            # 发送交易
+            tx_hash = await self._send_transaction(function)
+            
+            logger.info("健康数据存储交易已发送", tx_hash=tx_hash)
+            record_blockchain_operation("store_health_data", "success")
+            
+            return tx_hash
+            
+        except Exception as e:
+            logger.error("存储健康数据失败", error=str(e))
+            record_blockchain_operation("store_health_data", "failed")
+            raise
+
+    async def verify_health_data(self, record_id: int, data_hash: str) -> bool:
+        """验证健康数据完整性"""
+        try:
+            if "HealthDataStorage" not in self.contracts:
+                raise ValueError("HealthDataStorage合约未加载")
+            
+            contract = self.contracts["HealthDataStorage"].contract
+            
+            # 调用合约函数
+            result = contract.functions.verifyHealthData(
+                record_id,
+                bytes.fromhex(data_hash.replace('0x', ''))
+            ).call()
+            
+            logger.info("健康数据验证完成", record_id=record_id, valid=result)
+            record_blockchain_operation("verify_health_data", "success")
+            
+            return result
+            
+        except Exception as e:
+            logger.error("验证健康数据失败", error=str(e))
+            record_blockchain_operation("verify_health_data", "failed")
+            raise
+
+    async def grant_access(self, record_id: int, grantee_address: str) -> str:
+        """授权访问健康数据"""
+        try:
+            if "HealthDataStorage" not in self.contracts:
+                raise ValueError("HealthDataStorage合约未加载")
+            
+            contract = self.contracts["HealthDataStorage"].contract
+            
+            # 验证地址
+            if not is_address(grantee_address):
+                raise ValueError(f"无效的地址: {grantee_address}")
+            
+            checksum_address = to_checksum_address(grantee_address)
+            
+            # 构建交易
+            function = contract.functions.grantAccess(record_id, checksum_address)
+            
+            # 发送交易
+            tx_hash = await self._send_transaction(function)
+            
+            logger.info("访问授权交易已发送", tx_hash=tx_hash, record_id=record_id)
+            record_blockchain_operation("grant_access", "success")
+            
+            return tx_hash
+            
+        except Exception as e:
+            logger.error("授权访问失败", error=str(e))
+            record_blockchain_operation("grant_access", "failed")
+            raise
+
+    async def revoke_access(self, record_id: int, grantee_address: str) -> str:
+        """撤销访问授权"""
+        try:
+            if "HealthDataStorage" not in self.contracts:
+                raise ValueError("HealthDataStorage合约未加载")
+            
+            contract = self.contracts["HealthDataStorage"].contract
+            
+            # 验证地址
+            if not is_address(grantee_address):
+                raise ValueError(f"无效的地址: {grantee_address}")
+            
+            checksum_address = to_checksum_address(grantee_address)
+            
+            # 构建交易
+            function = contract.functions.revokeAccess(record_id, checksum_address)
+            
+            # 发送交易
+            tx_hash = await self._send_transaction(function)
+            
+            logger.info("撤销授权交易已发送", tx_hash=tx_hash, record_id=record_id)
+            record_blockchain_operation("revoke_access", "success")
+            
+            return tx_hash
+            
+        except Exception as e:
+            logger.error("撤销访问失败", error=str(e))
+            record_blockchain_operation("revoke_access", "failed")
+            raise
+
+    async def verify_zkp(
+        self,
+        circuit_id: str,
+        proof: Dict[str, Any],
+        public_inputs: List[int]
+    ) -> str:
+        """验证零知识证明"""
+        try:
+            if "ZKPVerifier" not in self.contracts:
+                raise ValueError("ZKPVerifier合约未加载")
+            
+            contract = self.contracts["ZKPVerifier"].contract
+            
+            # 构建证明结构
+            proof_struct = (
+                [proof["a"][0], proof["a"][1]],
+                [proof["b"][0], proof["b"][1]],
+                [proof["c"][0], proof["c"][1]]
+            )
+            
+            # 构建交易
+            function = contract.functions.verifyProof(
+                circuit_id,
+                proof_struct,
+                public_inputs
+            )
+            
+            # 发送交易
+            tx_hash = await self._send_transaction(function)
+            
+            logger.info("零知识证明验证交易已发送", tx_hash=tx_hash)
+            record_blockchain_operation("verify_zkp", "success")
+            
+            return tx_hash
+            
+        except Exception as e:
+            logger.error("零知识证明验证失败", error=str(e))
+            record_blockchain_operation("verify_zkp", "failed")
+            raise
+
+    async def _send_transaction(self, function) -> str:
+        """发送交易"""
+        if not self.account:
+            raise ValueError("账户未设置")
+        
+        # 构建交易参数
+        transaction = function.build_transaction({
+            'from': self.account.address,
+            'gas': settings.blockchain.gas_limit,
+            'gasPrice': settings.blockchain.gas_price,
+            'nonce': self.w3.eth.get_transaction_count(self.account.address),
+            'chainId': settings.blockchain.chain_id
+        })
+        
+        # 签名交易
+        signed_txn = self.w3.eth.account.sign_transaction(
+            transaction, 
+            private_key=self.account.key
+        )
+        
+        # 发送交易
+        tx_hash = self.w3.eth.send_raw_transaction(signed_txn.rawTransaction)
+        
+        return tx_hash.hex()
+
+    async def wait_for_transaction_receipt(
+        self, 
+        tx_hash: str, 
+        timeout: int = 120
+    ) -> TransactionReceipt:
+        """等待交易确认"""
+        try:
+            receipt = self.w3.eth.wait_for_transaction_receipt(
+                tx_hash, 
+                timeout=timeout
+            )
+            
+            return TransactionReceipt(
+                transaction_hash=receipt['transactionHash'].hex(),
+                block_number=receipt['blockNumber'],
+                block_hash=receipt['blockHash'].hex(),
+                gas_used=receipt['gasUsed'],
+                status=receipt['status'],
+                contract_address=receipt.get('contractAddress'),
+                logs=[dict(log) for log in receipt.get('logs', [])]
+            )
+            
+        except Exception as e:
+            logger.error("等待交易确认失败", tx_hash=tx_hash, error=str(e))
+            raise
+
+    async def get_block_number(self) -> int:
+        """获取当前区块号"""
+        return self.w3.eth.block_number
+
+    async def get_balance(self, address: str) -> Decimal:
+        """获取地址余额"""
+        if not is_address(address):
+            raise ValueError(f"无效的地址: {address}")
+        
+        balance_wei = self.w3.eth.get_balance(to_checksum_address(address))
+        return Decimal(self.w3.from_wei(balance_wei, 'ether'))
+
+    async def get_transaction(self, tx_hash: str) -> Dict[str, Any]:
+        """获取交易信息"""
+        try:
+            tx = self.w3.eth.get_transaction(tx_hash)
+            return dict(tx)
+        except TransactionNotFound:
+            raise ValueError(f"交易不存在: {tx_hash}")
+
+    async def get_block(self, block_identifier) -> Dict[str, Any]:
+        """获取区块信息"""
+        try:
+            block = self.w3.eth.get_block(block_identifier)
+            return dict(block)
+        except BlockNotFound:
+            raise ValueError(f"区块不存在: {block_identifier}")
+
+    def is_connected(self) -> bool:
+        """检查连接状态"""
+        return self._is_connected and self.w3 and self.w3.is_connected()
+
+    async def close(self) -> None:
+        """关闭连接"""
+        self._is_connected = False
+        logger.info("区块链客户端连接已关闭")
+
+# 全局客户端实例
+_blockchain_client: Optional[BlockchainClient] = None
+
+async def get_blockchain_client() -> BlockchainClient:
+    """获取区块链客户端实例"""
+    global _blockchain_client
+    
+    if _blockchain_client is None:
+        _blockchain_client = BlockchainClient()
+        await _blockchain_client.initialize()
+    
+    return _blockchain_client
+
+async def close_blockchain_client() -> None:
+    """关闭区块链客户端"""
+    global _blockchain_client
+    
+    if _blockchain_client:
+        await _blockchain_client.close()
+        _blockchain_client = None 

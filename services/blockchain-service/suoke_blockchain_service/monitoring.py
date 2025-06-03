@@ -5,7 +5,7 @@
 """
 
 import time
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Callable
 
 from fastapi import FastAPI, Request, Response
 from opentelemetry import trace
@@ -166,9 +166,13 @@ def record_database_operation(operation: str, status: str) -> None:
     """记录数据库操作指标"""
     DATABASE_OPERATIONS.labels(operation=operation, status=status).inc()
 
-def record_grpc_request(method: str, status: str) -> None:
+def record_grpc_request(method: str, status: str = "success") -> None:
     """记录 gRPC 请求指标"""
     GRPC_REQUESTS.labels(method=method, status=status).inc()
+
+def record_operation_metrics(operation: str, status: str) -> None:
+    """记录操作指标"""
+    BLOCKCHAIN_OPERATIONS.labels(operation=operation, status=status).inc()
 
 # 健康检查
 class HealthChecker:
@@ -202,5 +206,5 @@ class HealthChecker:
 
         return status
 
-# 全局健康检查器
+# 全局健康检查器实例
 health_checker = HealthChecker()

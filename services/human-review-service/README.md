@@ -19,8 +19,11 @@
 - **数据库**: PostgreSQL + SQLAlchemy (异步ORM)
 - **缓存**: Redis
 - **消息队列**: Redis Pub/Sub
+- **通知系统**: 邮件/WebSocket/Webhook多渠道通知
+- **性能优化**: 查询缓存、连接池优化、性能监控
+- **安全加固**: JWT认证、权限控制、数据加密、审计日志
 - **监控**: Prometheus + Grafana
-- **容器化**: Docker + Docker Compose
+- **容器化**: Docker + Docker Compose + Kubernetes
 - **包管理**: UV (现代Python包管理器)
 
 ## 快速开始

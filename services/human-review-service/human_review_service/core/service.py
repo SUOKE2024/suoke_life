@@ -16,6 +16,7 @@ from sqlalchemy.orm import selectinload
 
 from .assignment_engine import AssignmentEngine
 from .config import settings
+from .notification import NotificationService
 from .models import (
     DashboardData,
     ReviewDecision,
@@ -41,17 +42,17 @@ logger = structlog.get_logger(__name__)
 class HumanReviewService:
     """人工审核核心服务"""
 
-    def __init__(self, session: Optional[AsyncSession] = None):
+    def __init__(self, session: Optional[AsyncSession] = None, redis_client=None):
         """初始化服务
 
         Args:
             session: 可选的数据库会话，主要用于测试
+            redis_client: 可选的Redis客户端，用于通知服务
         """
         self.risk_engine = RiskAssessmentEngine()
         self.assignment_engine = AssignmentEngine()
         self._session = session
-        # 暂时注释掉通知服务，稍后实现
-        # self.notification_service = NotificationService()
+        self.notification_service = NotificationService(redis_client=redis_client)
 
     async def submit_review(
         self, review_data: ReviewTaskCreate, session: AsyncSession
@@ -253,13 +254,22 @@ class HumanReviewService:
             comments=decision.comments,
         )
 
-        # 发送通知 (暂时注释掉)
-        # await self.notification_service.send_review_completed_notification(
-        #     task_id=task_id,
-        #     user_id=db_task.user_id,
-        #     decision=decision.decision,
-        #     comments=decision.comments
-        # )
+        # 发送任务完成通知
+        try:
+            task_obj = ReviewTask.model_validate(db_task)
+            reviewer_obj = await self.get_reviewer(reviewer_id, session)
+            if reviewer_obj:
+                await self.notification_service.notify_task_completed(
+                    task=task_obj,
+                    reviewer=reviewer_obj
+                )
+        except Exception as e:
+            logger.warning(
+                "Failed to send task completion notification",
+                task_id=task_id,
+                reviewer_id=reviewer_id,
+                error=str(e)
+            )
 
         task = ReviewTask.model_validate(db_task)
 
@@ -338,13 +348,21 @@ class HumanReviewService:
             details={"assigned_to": reviewer_id},
         )
 
-        # 发送通知 (暂时注释掉)
-        # await self.notification_service.send_task_assigned_notification(
-        #     task_id=task_id,
-        #     reviewer_id=reviewer_id,
-        #     review_type=db_task.review_type,
-        #     priority=db_task.priority
-        # )
+        # 发送任务分配通知
+        try:
+            task_obj = ReviewTask.model_validate(db_task)
+            reviewer_obj = Reviewer.model_validate(reviewer_db)
+            await self.notification_service.notify_task_assigned(
+                task=task_obj,
+                reviewer=reviewer_obj
+            )
+        except Exception as e:
+            logger.warning(
+                "Failed to send task assignment notification",
+                task_id=task_id,
+                reviewer_id=reviewer_id,
+                error=str(e)
+            )
 
         task = ReviewTask.model_validate(db_task)
 

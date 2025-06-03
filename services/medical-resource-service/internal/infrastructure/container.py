@@ -12,16 +12,16 @@ from typing import Any, Callable, Dict, List, Optional, Type, TypeVar
 import structlog
 
 from ..agent.decision_engine import DecisionEngine
-from ..agent.learning_module import LearningModule
+# LearningModule import removed
 from ..agent.xiaoke_agent import XiaokeAgent
 from ..service.food_agriculture_service import FoodAgricultureService
 from ..service.medical_resource_coordinator import MedicalResourceCoordinator
-from ..service.personalized_medical_service import PersonalizedMedicalService
+# PersonalizedMedicalService import removed
 from ..service.quality_control_service import QualityControlService
 from ..service.resource_management_service import ResourceManagementService
 from ..service.resource_scheduling_service import ResourceSchedulingService
-from ..service.tcm_knowledge_service import TCMKnowledgeService
-from ..service.wellness_tourism_service import WellnessTourismService
+# TCMKnowledgeService import removed
+# WellnessTourismService import removed
 from .cache_manager import SmartCacheManager
 from .config_manager import ConfigManager
 from .performance_monitor import PerformanceMonitor
@@ -341,18 +341,12 @@ def init_container(config: Dict[str, Any]) -> DependencyInjectionContainer:
     )
 
     # 注册智能体服务
-    container.register(
-        "learning_module",
-        LearningModule,
-        dependencies=["config_manager"],
-        singleton=True,
-        lifecycle=True,
-    )
+    # learning_module registration removed
 
     container.register(
         "decision_engine",
         DecisionEngine,
-        dependencies=["config_manager", "learning_module"],
+                    dependencies=["config_manager"],
         singleton=True,
         lifecycle=True,
     )
@@ -360,7 +354,7 @@ def init_container(config: Dict[str, Any]) -> DependencyInjectionContainer:
     container.register(
         "xiaoke_agent",
         XiaokeAgent,
-        dependencies=["config_manager", "decision_engine", "learning_module"],
+        dependencies=["config_manager", "decision_engine"],
         singleton=True,
         lifecycle=True,
     )
@@ -382,13 +376,7 @@ def init_container(config: Dict[str, Any]) -> DependencyInjectionContainer:
         lifecycle=True,
     )
 
-    container.register(
-        "personalized_medical_service",
-        PersonalizedMedicalService,
-        dependencies=["config_manager", "xiaoke_agent", "cache_manager"],
-        singleton=True,
-        lifecycle=True,
-    )
+    # personalized_medical_service registration removed
 
     container.register(
         "quality_control_service",
@@ -398,13 +386,7 @@ def init_container(config: Dict[str, Any]) -> DependencyInjectionContainer:
         lifecycle=True,
     )
 
-    container.register(
-        "tcm_knowledge_service",
-        TCMKnowledgeService,
-        dependencies=["config_manager", "xiaoke_agent", "cache_manager"],
-        singleton=True,
-        lifecycle=True,
-    )
+    # tcm_knowledge_service registration removed
 
     container.register(
         "food_agriculture_service",
@@ -414,13 +396,7 @@ def init_container(config: Dict[str, Any]) -> DependencyInjectionContainer:
         lifecycle=True,
     )
 
-    container.register(
-        "wellness_tourism_service",
-        WellnessTourismService,
-        dependencies=["config_manager", "cache_manager"],
-        singleton=True,
-        lifecycle=True,
-    )
+    # wellness_tourism_service registration removed
 
     # 注册协调器服务
     container.register(
@@ -430,7 +406,6 @@ def init_container(config: Dict[str, Any]) -> DependencyInjectionContainer:
             "config_manager",
             "resource_management_service",
             "resource_scheduling_service",
-            "personalized_medical_service",
             "quality_control_service",
             "xiaoke_agent",
         ],

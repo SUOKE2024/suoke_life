@@ -84,6 +84,9 @@ class BlockchainSettings(BaseSettings):
     # 确认配置
     confirmation_blocks: int = Field(default=1, description="确认区块数")
     transaction_timeout: int = Field(default=120, description="交易超时时间")
+    
+    # 数据限制
+    max_data_size: int = Field(default=10 * 1024 * 1024, description="最大数据大小(字节)")  # 10MB
 
 class GRPCSettings(BaseSettings):
     """gRPC 服务配置"""
@@ -128,6 +131,13 @@ class SecuritySettings(BaseSettings):
         default=["*"],
         description="允许的 CORS 源"
     )
+
+class IPFSSettings(BaseSettings):
+    """IPFS配置"""
+
+    node_url: str = Field(default="http://localhost:5001", description="IPFS节点URL")
+    timeout: int = Field(default=30, description="请求超时时间")
+    chunk_size: int = Field(default=1024 * 1024, description="数据块大小")  # 1MB
 
 class MonitoringSettings(BaseSettings):
     """监控配置"""
@@ -181,6 +191,7 @@ class Settings(BaseSettings):
     grpc: GRPCSettings = Field(default_factory=GRPCSettings)
     security: SecuritySettings = Field(default_factory=SecuritySettings)
     monitoring: MonitoringSettings = Field(default_factory=MonitoringSettings)
+    ipfs: IPFSSettings = Field(default_factory=IPFSSettings)
 
     @field_validator("environment")
     @classmethod
