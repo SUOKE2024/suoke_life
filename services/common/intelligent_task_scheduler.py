@@ -13,8 +13,6 @@ from typing import Dict, List, Any, Optional, Callable, Union
 from dataclasses import dataclass, asdict
 from datetime import datetime, timedelta
 from enum import Enum
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
-import numpy as np
 from collections import defaultdict, deque
 import heapq
 import threading
@@ -26,7 +24,6 @@ from numba import jit
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-
 class TaskPriority(Enum):
     """任务优先级"""
     CRITICAL = 1    # 紧急任务
@@ -34,7 +31,6 @@ class TaskPriority(Enum):
     NORMAL = 3      # 普通优先级
     LOW = 4         # 低优先级
     BACKGROUND = 5  # 后台任务
-
 
 class TaskStatus(Enum):
     """任务状态"""
@@ -45,14 +41,12 @@ class TaskStatus(Enum):
     CANCELLED = "cancelled"
     TIMEOUT = "timeout"
 
-
 class AgentType(Enum):
     """智能体类型"""
     XIAOAI = "xiaoai"      # AI推理专家
     XIAOKE = "xiaoke"      # 健康监测专家
     LAOKE = "laoke"        # 中医养生专家
     SOER = "soer"          # 生活服务专家
-
 
 @dataclass
 class Task:
@@ -85,7 +79,6 @@ class Task:
             return self.priority.value < other.priority.value
         return self.created_at < other.created_at
 
-
 @dataclass
 class AgentInfo:
     """智能体信息"""
@@ -105,7 +98,6 @@ class AgentInfo:
             self.last_heartbeat = datetime.now()
         if self.capabilities is None:
             self.capabilities = []
-
 
 class LoadBalancer:
     """负载均衡器"""
@@ -222,7 +214,6 @@ class LoadBalancer:
                 }
             return stats
 
-
 class TaskQueue:
     """智能任务队列"""
     
@@ -310,7 +301,6 @@ class TaskQueue:
                 "total_pending": sum(len(queue) for queue in self.priority_queues.values())
             }
             return stats
-
 
 class IntelligentTaskScheduler:
     """智能任务调度器"""
@@ -571,10 +561,8 @@ class IntelligentTaskScheduler:
             "timestamp": datetime.now().isoformat()
         }
 
-
 # 全局调度器实例
 scheduler = IntelligentTaskScheduler()
-
 
 async def initialize_scheduler(redis_url: Optional[str] = None):
     """初始化全局调度器"""
@@ -583,7 +571,6 @@ async def initialize_scheduler(redis_url: Optional[str] = None):
     await scheduler.initialize()
     await scheduler.start_scheduler()
     return scheduler
-
 
 async def shutdown_scheduler():
     """关闭全局调度器"""

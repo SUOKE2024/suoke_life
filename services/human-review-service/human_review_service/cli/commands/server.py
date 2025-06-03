@@ -5,9 +5,7 @@ Server Management Commands
 提供服务器的启动、停止、重启等管理功能
 """
 
-import asyncio
 import os
-import signal
 import sys
 import time
 from pathlib import Path
@@ -29,12 +27,10 @@ console = Console()
 # PID文件路径
 PID_FILE = Path("/tmp/human_review_service.pid")
 
-
 @click.group()
 def server():
     """服务器管理命令"""
     pass
-
 
 @server.command()
 @click.option("--host", default="0.0.0.0", help="服务器主机地址")
@@ -48,7 +44,6 @@ def start(host: str, port: int, workers: int, daemon: bool, log_file: str):
         start_daemon(host, port, workers, log_file)
     else:
         start_foreground(host, port, workers)
-
 
 def start_foreground(host: str, port: int, workers: int):
     """前台启动服务器"""
@@ -71,7 +66,6 @@ def start_foreground(host: str, port: int, workers: int):
     except Exception as e:
         console.print(f"[red]启动失败: {e}[/red]")
         sys.exit(1)
-
 
 def start_daemon(host: str, port: int, workers: int, log_file: Optional[str]):
     """守护进程模式启动服务器"""
@@ -112,7 +106,6 @@ def start_daemon(host: str, port: int, workers: int, log_file: Optional[str]):
     except Exception as e:
         logger.error("Daemon startup failed", error=str(e))
         sys.exit(1)
-
 
 @server.command()
 @click.option("--force", "-f", is_flag=True, help="强制停止")
@@ -159,7 +152,6 @@ def stop(force: bool):
         console.print(f"[red]停止服务失败: {e}[/red]")
         sys.exit(1)
 
-
 @server.command()
 def restart():
     """重启服务器"""
@@ -172,7 +164,6 @@ def restart():
 
     # 重新启动
     start.callback(host="0.0.0.0", port=8000, workers=1, daemon=True, log_file=None)
-
 
 @server.command()
 def status():
@@ -214,7 +205,6 @@ def status():
         remove_pid()
     except Exception as e:
         console.print(f"[red]获取状态失败: {e}[/red]")
-
 
 @server.command()
 @click.option("--interval", default=5, type=int, help="刷新间隔（秒）")
@@ -275,7 +265,6 @@ def monitor(interval: int):
     except KeyboardInterrupt:
         console.print("\n[yellow]监控已停止[/yellow]")
 
-
 @server.command()
 def logs():
     """查看服务日志"""
@@ -285,9 +274,7 @@ def logs():
     # 可以集成tail -f 或者读取日志文件
     console.print("[yellow]⚠️ 日志查看功能需要根据具体日志配置实现[/yellow]")
 
-
 # 辅助函数
-
 
 def is_running() -> bool:
     """检查服务是否运行"""
@@ -302,7 +289,6 @@ def is_running() -> bool:
     except (ValueError, FileNotFoundError):
         return False
 
-
 def get_pid() -> Optional[int]:
     """获取服务PID"""
     if not PID_FILE.exists():
@@ -314,7 +300,6 @@ def get_pid() -> Optional[int]:
     except (ValueError, FileNotFoundError):
         return None
 
-
 def save_pid(pid: int):
     """保存PID到文件"""
     try:
@@ -323,7 +308,6 @@ def save_pid(pid: int):
     except Exception as e:
         logger.error("Failed to save PID", error=str(e))
 
-
 def remove_pid():
     """删除PID文件"""
     try:
@@ -331,7 +315,6 @@ def remove_pid():
             PID_FILE.unlink()
     except Exception as e:
         logger.error("Failed to remove PID file", error=str(e))
-
 
 def format_duration(seconds: float) -> str:
     """格式化时间间隔"""

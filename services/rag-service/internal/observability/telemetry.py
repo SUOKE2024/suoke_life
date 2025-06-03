@@ -5,12 +5,10 @@
 遥测模块，实现OpenTelemetry分布式追踪和指标收集
 """
 
-import os
 import socket
 from typing import Dict, Optional
 from functools import wraps
 import time
-import logging
 import asyncio
 
 from opentelemetry import trace, metrics
@@ -27,7 +25,6 @@ from opentelemetry.instrumentation.redis import RedisInstrumentor
 from prometheus_client import Counter, Histogram, start_http_server
 
 from loguru import logger
-
 
 class Telemetry:
     """遥测服务类，管理分布式追踪和指标收集"""
@@ -366,7 +363,6 @@ class Telemetry:
             await asyncio.shield(asyncio.to_thread(self.meter_provider.shutdown))
         
         logger.info("Telemetry service closed")
-
 
 def trace_method(method_name=None):
     """

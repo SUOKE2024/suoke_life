@@ -6,7 +6,6 @@
 """
 
 import asyncio
-import time
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
@@ -21,7 +20,6 @@ from suoke_api_gateway.utils.retry import (
     RetryManager, RetryError, ExponentialBackoffStrategy,
     FixedDelayStrategy, retry
 )
-
 
 class TestCacheManager:
     """缓存管理器测试"""
@@ -130,7 +128,6 @@ class TestCacheManager:
         assert stats.hit_count == 100
         assert stats.miss_count == 20
         assert stats.hit_rate == 83.33333333333334  # 100/(100+20)*100
-
 
 class TestCircuitBreaker:
     """熔断器测试"""
@@ -260,7 +257,6 @@ class TestCircuitBreaker:
         breaker = circuit_breaker_manager.get_circuit_breaker("test_service")
         assert breaker.state == CircuitState.OPEN
 
-
 class TestRetryManager:
     """重试管理器测试"""
     
@@ -358,7 +354,6 @@ class TestRetryManager:
         
         with pytest.raises(PermanentError):
             await retry_manager.execute(func_with_permanent_error)
-
 
 if __name__ == "__main__":
     pytest.main(["-v", "test_utils.py"]) 

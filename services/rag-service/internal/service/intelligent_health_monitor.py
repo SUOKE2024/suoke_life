@@ -7,26 +7,18 @@
 
 import asyncio
 import time
-import json
-import numpy as np
 from typing import Dict, List, Any, Optional, Tuple, Union, Set, Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from datetime import datetime, timedelta
 from loguru import logger
-import pandas as pd
 from sklearn.ensemble import IsolationForest, RandomForestClassifier
-from sklearn.preprocessing import StandardScaler, MinMaxScaler
-from sklearn.cluster import DBSCAN
-from sklearn.decomposition import PCA
 from scipy import stats
-from scipy.signal import find_peaks, savgol_filter
 import warnings
 warnings.filterwarnings('ignore')
 
 from ..observability.metrics import MetricsCollector
 from ..observability.tracing import trace_operation, SpanKind
-
 
 class HealthMetricType(str, Enum):
     """健康指标类型"""
@@ -46,7 +38,6 @@ class HealthMetricType(str, Enum):
     MEDICATION_ADHERENCE = "medication_adherence"   # 用药依从性
     SYMPTOM_SEVERITY = "symptom_severity"           # 症状严重程度
 
-
 class AlertLevel(str, Enum):
     """预警级别"""
     INFO = "info"           # 信息
@@ -55,7 +46,6 @@ class AlertLevel(str, Enum):
     HIGH = "high"           # 高级
     CRITICAL = "critical"   # 危急
     EMERGENCY = "emergency" # 紧急
-
 
 class MonitoringFrequency(str, Enum):
     """监测频率"""
@@ -66,14 +56,12 @@ class MonitoringFrequency(str, Enum):
     WEEKLY = "weekly"           # 每周
     MONTHLY = "monthly"         # 每月
 
-
 class TrendDirection(str, Enum):
     """趋势方向"""
     IMPROVING = "improving"     # 改善
     STABLE = "stable"           # 稳定
     DECLINING = "declining"     # 恶化
     FLUCTUATING = "fluctuating" # 波动
-
 
 class AnomalyType(str, Enum):
     """异常类型"""
@@ -83,7 +71,6 @@ class AnomalyType(str, Enum):
     THRESHOLD_BREACH = "threshold_breach" # 阈值突破
     MISSING_DATA = "missing_data"       # 数据缺失
     SENSOR_ERROR = "sensor_error"       # 传感器错误
-
 
 @dataclass
 class HealthMetric:
@@ -99,7 +86,6 @@ class HealthMetric:
     confidence: float = 1.0                         # 数据置信度
     quality_score: float = 1.0                      # 数据质量分数
     metadata: Dict[str, Any] = field(default_factory=dict)
-
 
 @dataclass
 class HealthThreshold:
@@ -117,7 +103,6 @@ class HealthThreshold:
     condition_specific: Optional[str] = None
     created_at: datetime = field(default_factory=datetime.now)
     updated_at: datetime = field(default_factory=datetime.now)
-
 
 @dataclass
 class HealthAlert:
@@ -140,7 +125,6 @@ class HealthAlert:
     resolved_at: Optional[datetime] = None
     metadata: Dict[str, Any] = field(default_factory=dict)
 
-
 @dataclass
 class HealthTrend:
     """健康趋势"""
@@ -158,7 +142,6 @@ class HealthTrend:
     prediction_next_month: Optional[float] = None
     created_at: datetime = field(default_factory=datetime.now)
 
-
 @dataclass
 class AnomalyDetection:
     """异常检测结果"""
@@ -175,7 +158,6 @@ class AnomalyDetection:
     context: Dict[str, Any] = field(default_factory=dict)
     resolved: bool = False
 
-
 @dataclass
 class MonitoringProfile:
     """监测配置文件"""
@@ -189,7 +171,6 @@ class MonitoringProfile:
     privacy_settings: Dict[str, Any] = field(default_factory=dict)
     created_at: datetime = field(default_factory=datetime.now)
     updated_at: datetime = field(default_factory=datetime.now)
-
 
 class HealthDataProcessor:
     """健康数据处理器"""
@@ -369,7 +350,6 @@ class HealthDataProcessor:
             HealthMetricType.SYMPTOM_SEVERITY: "score"
         }
         return units.get(metric_type, "unit")
-
 
 class AnomalyDetector:
     """异常检测器"""
@@ -680,7 +660,6 @@ class AnomalyDetector:
         
         return anomalies
 
-
 class TrendAnalyzer:
     """趋势分析器"""
     
@@ -816,7 +795,6 @@ class TrendAnalyzer:
         else:
             # 对于血压、心率等，需要在正常范围内
             return False  # 保守处理
-
 
 class AlertEngine:
     """预警引擎"""
@@ -1162,7 +1140,6 @@ class AlertEngine:
             "如异常持续，请咨询医生",
             "增加监测频率以确认趋势"
         ]
-
 
 class IntelligentHealthMonitor:
     """智能健康监测引擎"""
@@ -1603,7 +1580,6 @@ class IntelligentHealthMonitor:
             logger.error(f"获取监测统计失败: {e}")
             return {}
 
-
 def initialize_health_monitor(
     config: Dict[str, Any],
     metrics_collector: Optional[MetricsCollector] = None
@@ -1611,10 +1587,8 @@ def initialize_health_monitor(
     """初始化智能健康监测引擎"""
     return IntelligentHealthMonitor(config, metrics_collector)
 
-
 # 全局实例
 _health_monitor_instance: Optional[IntelligentHealthMonitor] = None
-
 
 def get_health_monitor() -> Optional[IntelligentHealthMonitor]:
     """获取健康监测引擎实例"""

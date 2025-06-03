@@ -2,12 +2,10 @@
 优化的日志工具模块
 支持结构化日志、性能监控、中医特色日志记录
 """
-import os
 import sys
 import json
 import time
 import logging
-import logging.handlers
 from typing import Dict, Any, Optional
 from pathlib import Path
 from datetime import datetime

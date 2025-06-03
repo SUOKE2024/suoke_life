@@ -5,7 +5,6 @@
 """
 
 import subprocess
-import time
 from pathlib import Path
 from typing import List, Dict
 
@@ -265,7 +264,6 @@ echo "🎉 所有智能体服务AI依赖安装完成！"
         subprocess.run(["chmod", "+x", str(script_path)])
         return str(script_path)
 
-
 def main():
     migrator = LightweightMigrator(".")
 
@@ -292,7 +290,6 @@ def main():
     success_count = sum(results.values())
     total_count = len(results)
     print(f"\n🎉 轻量级迁移完成: {success_count}/{total_count} 服务成功迁移")
-
 
 if __name__ == "__main__":
     main()

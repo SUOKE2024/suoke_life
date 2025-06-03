@@ -5,14 +5,12 @@
 """
 import asyncio
 import json
-import csv
 import sys
 import argparse
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 from datetime import datetime
 
-import pandas as pd
 from neo4j import AsyncGraphDatabase
 import yaml
 
@@ -22,7 +20,6 @@ sys.path.append(str(Path(__file__).parent.parent))
 from app.core.config import get_settings
 from app.core.logger import get_logger
 from app.core.exceptions import DataImportException, DatabaseException
-
 
 class DataImporter:
     """数据导入器"""
@@ -573,7 +570,6 @@ class DataImporter:
                     self.logger.error(f"导入生活方式干预记录失败: {record.get('id', 'unknown')} - {e}")
                     self.stats["failed_imports"] += 1
 
-
 async def main():
     """主函数"""
     parser = argparse.ArgumentParser(description="医学知识数据导入工具")
@@ -611,7 +607,6 @@ async def main():
     
     finally:
         await importer.close()
-
 
 if __name__ == "__main__":
     asyncio.run(main()) 

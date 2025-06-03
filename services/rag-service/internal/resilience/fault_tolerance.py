@@ -8,7 +8,6 @@
 import asyncio
 import time
 import uuid
-import json
 from typing import Dict, List, Any, Optional, Callable, Union
 from dataclasses import dataclass, field
 from enum import Enum
@@ -17,7 +16,6 @@ from loguru import logger
 
 from ..observability.metrics import MetricsCollector
 
-
 class HealthStatus(str, Enum):
     """健康状态"""
     HEALTHY = "healthy"         # 健康
@@ -25,7 +23,6 @@ class HealthStatus(str, Enum):
     UNHEALTHY = "unhealthy"     # 不健康
     CRITICAL = "critical"       # 严重
     UNKNOWN = "unknown"         # 未知
-
 
 class FailureType(str, Enum):
     """故障类型"""
@@ -36,7 +33,6 @@ class FailureType(str, Enum):
     RESOURCE_EXHAUSTED = "resource_exhausted"  # 资源耗尽
     DEPENDENCY_FAILURE = "dependency_failure"  # 依赖失败
 
-
 class RecoveryStrategy(str, Enum):
     """恢复策略"""
     RETRY = "retry"             # 重试
@@ -44,7 +40,6 @@ class RecoveryStrategy(str, Enum):
     CIRCUIT_BREAKER = "circuit_breaker"  # 断路器
     BULKHEAD = "bulkhead"       # 舱壁隔离
     TIMEOUT = "timeout"         # 超时控制
-
 
 @dataclass
 class HealthCheck:
@@ -74,7 +69,6 @@ class HealthCheck:
             "metadata": self.metadata
         }
 
-
 @dataclass
 class FailureRecord:
     """故障记录"""
@@ -102,7 +96,6 @@ class FailureRecord:
             "resolution_time": self.resolution_time
         }
 
-
 @dataclass
 class RetryConfig:
     """重试配置"""
@@ -121,7 +114,6 @@ class RetryConfig:
             delay *= (0.5 + random.random() * 0.5)  # 添加50%的随机抖动
         
         return delay
-
 
 class RetryManager:
     """重试管理器"""
@@ -181,7 +173,6 @@ class RetryManager:
         """获取重试统计"""
         return self.retry_stats.copy()
 
-
 class FallbackManager:
     """降级管理器"""
     
@@ -229,7 +220,6 @@ class FallbackManager:
         """获取降级统计"""
         return self.fallback_stats.copy()
 
-
 class TimeoutManager:
     """超时管理器"""
     
@@ -265,7 +255,6 @@ class TimeoutManager:
     def get_timeout_statistics(self) -> Dict[str, int]:
         """获取超时统计"""
         return self.timeout_stats.copy()
-
 
 class BulkheadManager:
     """舱壁隔离管理器"""
@@ -315,7 +304,6 @@ class BulkheadManager:
     def get_bulkhead_statistics(self) -> Dict[str, Dict[str, int]]:
         """获取舱壁隔离统计"""
         return self.pool_stats.copy()
-
 
 class HealthMonitor:
     """健康监控器"""
@@ -434,7 +422,6 @@ class HealthMonitor:
             "checks": checks_status,
             "timestamp": time.time()
         }
-
 
 class FailureDetector:
     """故障检测器"""
@@ -559,7 +546,6 @@ class FailureDetector:
             "service_statistics": service_stats,
             "timestamp": current_time
         }
-
 
 class FaultToleranceManager:
     """容错管理器"""
@@ -702,10 +688,8 @@ class FaultToleranceManager:
             "timestamp": time.time()
         }
 
-
 # 全局容错管理器实例
 _fault_tolerance_manager: Optional[FaultToleranceManager] = None
-
 
 def initialize_fault_tolerance_manager(
     metrics_collector: Optional[MetricsCollector] = None
@@ -715,11 +699,9 @@ def initialize_fault_tolerance_manager(
     _fault_tolerance_manager = FaultToleranceManager(metrics_collector)
     return _fault_tolerance_manager
 
-
 def get_fault_tolerance_manager() -> Optional[FaultToleranceManager]:
     """获取容错管理器实例"""
     return _fault_tolerance_manager
-
 
 # 容错装饰器
 def fault_tolerant(
@@ -750,7 +732,6 @@ def fault_tolerant(
         return wrapper
     return decorator
 
-
 def health_check(check_id: str, name: str, interval: float = 30.0, timeout: float = 5.0):
     """健康检查装饰器"""
     def decorator(func: Callable):
@@ -767,7 +748,6 @@ def health_check(check_id: str, name: str, interval: float = 30.0, timeout: floa
         return func
     
     return decorator
-
 
 def fallback_handler(service_name: str):
     """降级处理器装饰器"""

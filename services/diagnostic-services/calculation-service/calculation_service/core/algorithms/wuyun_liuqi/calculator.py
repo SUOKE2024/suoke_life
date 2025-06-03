@@ -6,7 +6,6 @@
 
 from datetime import datetime, date, timedelta
 from typing import Dict, List, Optional, Tuple
-import calendar
 
 from .data import (
     WUYUN_DATA,
@@ -18,7 +17,6 @@ from .data import (
     SITIAN_ZAIQUAN,
     YUNQI_HEHUA
 )
-
 
 class WuyunLiuqiCalculator:
     """五运六气计算器"""

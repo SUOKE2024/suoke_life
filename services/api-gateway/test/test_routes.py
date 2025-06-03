@@ -10,7 +10,6 @@ import asyncio
 import json
 import os
 import sys
-import time
 from unittest.mock import AsyncMock, MagicMock, Mock, patch
 
 import pytest
@@ -23,7 +22,6 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 
 from internal.delivery.rest.routes import setup_routes
 from internal.model.config import GatewayConfig, RouteConfig
-
 
 @pytest.fixture
 def gateway_config():
@@ -77,14 +75,12 @@ def gateway_config():
         ]
     )
 
-
 @pytest.fixture
 def mock_service_registry():
     """创建模拟服务注册表"""
     registry = MagicMock()
     registry.get_endpoint.return_value = ("localhost", 8000)
     return registry
-
 
 @pytest.fixture
 def gateway_app(gateway_config, mock_service_registry):
@@ -99,12 +95,10 @@ def gateway_app(gateway_config, mock_service_registry):
     
     return app
 
-
 @pytest.fixture
 def gateway_client(gateway_app):
     """创建网关客户端"""
     return TestClient(gateway_app)
-
 
 @pytest.mark.asyncio
 class TestRoutesErrorHandling:
@@ -325,7 +319,6 @@ class TestRoutesErrorHandling:
             assert 0.05 in delays
             assert 0.1 in delays
             assert 0.2 in delays
-
 
 if __name__ == "__main__":
     pytest.main(["-v", __file__])

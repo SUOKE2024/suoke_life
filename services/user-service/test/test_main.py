@@ -2,14 +2,11 @@
 用户服务主模块测试
 """
 
-import pytest
 from user_service.main import main
-
 
 def test_main_function_exists():
     """测试主函数是否存在"""
     assert callable(main)
-
 
 def test_main_function_runs():
     """测试主函数是否能正常运行"""
@@ -20,7 +17,6 @@ def test_main_function_runs():
     except Exception:
         # 如果有异常，我们仍然认为测试通过，因为这只是一个基本的存在性测试
         assert True
-
 
 class TestUserService:
     """用户服务测试类"""

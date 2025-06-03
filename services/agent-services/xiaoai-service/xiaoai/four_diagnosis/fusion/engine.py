@@ -9,10 +9,8 @@ from dataclasses import dataclass, field
 from typing import Any
 
 # 导入Proto定义
-from ...api.grpc import four_diagnosis_pb2 as diagnosis_pb
 
 logger = logging.getLogger(__name__)
-
 
 @dataclass
 class Feature:
@@ -23,7 +21,6 @@ class Feature:
     source: str
     category: str
 
-
 @dataclass
 class ConflictInfo:
     """冲突信息"""
@@ -31,7 +28,6 @@ class ConflictInfo:
     values: list[dict[str, Any]]  # [{value, source, confidence}]
     resolvedvalue: str
     resolutionmethod: str
-
 
 @dataclass
 class FusionContext:
@@ -42,7 +38,6 @@ class FusionContext:
     features: dict[str, list[Feature]] = field(default_factory=dict)
     conflicts: list[ConflictInfo] = field(default_factory=list)
     creationtime: int = field(default_factory=lambda: int(time.time()))
-
 
 class MultimodalFusionEngine:
     """多模态融合引擎"""

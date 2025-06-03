@@ -9,7 +9,6 @@ import hashlib
 import hmac
 import json
 import logging
-import time
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
@@ -23,12 +22,8 @@ import aiohttp
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-from cryptography.hazmat.primitives.serialization import Encoding, PrivateFormat, NoEncryption
-from cryptography.hazmat.primitives.asymmetric import rsa
-from cryptography.hazmat.primitives import serialization
 
 logger = logging.getLogger(__name__)
-
 
 class MessageType(Enum):
     """消息类型"""
@@ -41,14 +36,12 @@ class MessageType(Enum):
     SYSTEM_EVENT = "system_event"
     AUDIT_TRAIL = "audit_trail"
 
-
 class DataSensitivity(Enum):
     """数据敏感度级别"""
     PUBLIC = "public"           # 公开
     INTERNAL = "internal"       # 内部
     CONFIDENTIAL = "confidential"  # 机密
     RESTRICTED = "restricted"   # 限制级
-
 
 class BlockchainNetwork(Enum):
     """区块链网络类型"""
@@ -57,7 +50,6 @@ class BlockchainNetwork(Enum):
     POLYGON = "polygon"
     BSC = "bsc"
     PRIVATE = "private"
-
 
 class MessageStatus(Enum):
     """消息状态"""
@@ -70,7 +62,6 @@ class MessageStatus(Enum):
     DELIVERED = "delivered"
     FAILED = "failed"
 
-
 @dataclass
 class EncryptionConfig:
     """加密配置"""
@@ -79,7 +70,6 @@ class EncryptionConfig:
     iterations: int = 100000
     salt_length: int = 32
     iv_length: int = 16
-
 
 @dataclass
 class BlockchainConfig:
@@ -92,7 +82,6 @@ class BlockchainConfig:
     gas_price: int = 20000000000  # 20 Gwei
     confirmation_blocks: int = 3
 
-
 @dataclass
 class IPFSConfig:
     """IPFS配置"""
@@ -100,7 +89,6 @@ class IPFSConfig:
     api_url: str = "http://localhost:5001"
     pin_content: bool = True
     timeout: int = 30
-
 
 @dataclass
 class SecureMessage:
@@ -145,7 +133,6 @@ class SecureMessage:
         }
         self.status_history.append(status_record)
 
-
 @dataclass
 class MessageDeliveryReceipt:
     """消息投递回执"""
@@ -156,7 +143,6 @@ class MessageDeliveryReceipt:
     ipfs_accessible: bool
     signature_valid: bool
     decryption_successful: bool
-
 
 class BlockchainMessageBus:
     """区块链消息总线"""
@@ -868,10 +854,8 @@ class BlockchainMessageBus:
         if self.redis:
             await self.redis.close()
 
-
 # 全局区块链消息总线实例
 _blockchain_message_bus: Optional[BlockchainMessageBus] = None
-
 
 async def get_blockchain_message_bus() -> BlockchainMessageBus:
     """获取全局区块链消息总线"""
@@ -893,7 +877,6 @@ async def get_blockchain_message_bus() -> BlockchainMessageBus:
     
     return _blockchain_message_bus
 
-
 async def send_health_data_message(
     sender_id: str,
     recipient_id: str,
@@ -911,7 +894,6 @@ async def send_health_data_message(
         data_sensitivity=DataSensitivity.CONFIDENTIAL,
         metadata=metadata
     )
-
 
 async def send_agent_decision_message(
     agent_id: str,

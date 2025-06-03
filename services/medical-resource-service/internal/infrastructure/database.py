@@ -3,13 +3,11 @@
 支持PostgreSQL、Redis和MongoDB的统一连接管理
 """
 
-import asyncio
 import logging
 from contextlib import asynccontextmanager
 from typing import Any, Dict, Optional
 
 import aioredis
-import asyncpg
 from motor.motor_asyncio import AsyncIOMotorClient
 from sqlalchemy import MetaData
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
@@ -20,7 +18,6 @@ logger = logging.getLogger(__name__)
 # SQLAlchemy基类
 Base = declarative_base()
 metadata = MetaData()
-
 
 class DatabaseManager:
     """数据库连接管理器"""
@@ -242,10 +239,8 @@ class DatabaseManager:
         except Exception as e:
             logger.error(f"关闭数据库连接失败: {e}")
 
-
 # 全局数据库管理器实例
 db_manager: Optional[DatabaseManager] = None
-
 
 async def init_database(config: Dict[str, Any]) -> DatabaseManager:
     """初始化数据库管理器"""
@@ -253,7 +248,6 @@ async def init_database(config: Dict[str, Any]) -> DatabaseManager:
     db_manager = DatabaseManager(config)
     await db_manager.initialize()
     return db_manager
-
 
 def get_database_manager() -> DatabaseManager:
     """获取数据库管理器实例"""

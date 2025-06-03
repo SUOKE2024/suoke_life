@@ -8,7 +8,6 @@ import logging
 import os
 import sys
 import traceback
-from datetime import datetime
 from typing import Any, Dict, Optional, Union
 
 # 日志级别映射
@@ -27,7 +26,6 @@ LOG_FILE = os.getenv("USER_SERVICE_LOG_FILE", "logs/user-service.log")
 
 # 确保日志目录存在
 os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)
-
 
 class Logger:
     """
@@ -147,10 +145,8 @@ class Logger:
         
         self.logger.critical(self._format_message(message, extra))
 
-
 # 创建默认日志记录器
 default_logger = Logger("user_service")
-
 
 def get_logger(name: str) -> Logger:
     """

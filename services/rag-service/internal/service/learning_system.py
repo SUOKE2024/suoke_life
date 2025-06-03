@@ -4,9 +4,7 @@
 从用户反馈、交互数据和系统性能中持续学习，优化RAG系统
 """
 
-import asyncio
 import json
-import math
 import pickle
 from datetime import datetime, timedelta
 from enum import Enum
@@ -14,15 +12,12 @@ from typing import Dict, List, Optional, Any, Tuple, Set
 from dataclasses import dataclass, asdict
 from collections import defaultdict, deque
 
-import numpy as np
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
 from sklearn.linear_model import LogisticRegression
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from sklearn.model_selection import train_test_split
-import redis.asyncio as redis
 from loguru import logger
-
 
 class FeedbackType(Enum):
     """反馈类型"""
@@ -31,7 +26,6 @@ class FeedbackType(Enum):
     NEUTRAL = "neutral"
     CORRECTION = "correction"
     CLARIFICATION = "clarification"
-
 
 class LearningObjective(Enum):
     """学习目标"""
@@ -42,7 +36,6 @@ class LearningObjective(Enum):
     RESPONSE_TIME = "response_time"  # 响应时间
     USER_SATISFACTION = "user_satisfaction"  # 用户满意度
 
-
 class ModelType(Enum):
     """模型类型"""
     RETRIEVAL_RANKING = "retrieval_ranking"
@@ -50,7 +43,6 @@ class ModelType(Enum):
     QUERY_UNDERSTANDING = "query_understanding"
     PERSONALIZATION = "personalization"
     RESPONSE_ROUTING = "response_routing"
-
 
 @dataclass
 class UserFeedback:
@@ -66,7 +58,6 @@ class UserFeedback:
     metadata: Dict[str, Any]
     timestamp: datetime
 
-
 @dataclass
 class InteractionData:
     """交互数据"""
@@ -81,7 +72,6 @@ class InteractionData:
     user_engagement: Dict[str, Any]
     timestamp: datetime
 
-
 @dataclass
 class LearningExample:
     """学习样本"""
@@ -91,7 +81,6 @@ class LearningExample:
     objective: LearningObjective
     weight: float
     created_at: datetime
-
 
 @dataclass
 class ModelPerformance:
@@ -105,7 +94,6 @@ class ModelPerformance:
     mae: float  # 平均绝对误差
     rmse: float  # 均方根误差
     last_updated: datetime
-
 
 class LearningSystem:
     """实时学习系统"""

@@ -13,8 +13,6 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any
 
-import numpy as np
-
 # 导入通用组件
 from services.common.governance.circuit_breaker import (
     CircuitBreakerConfig,

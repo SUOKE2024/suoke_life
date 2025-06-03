@@ -4,8 +4,6 @@
 """
 
 import asyncio
-import json
-import logging
 import time
 from collections import defaultdict, deque
 from contextlib import asynccontextmanager
@@ -19,7 +17,6 @@ from prometheus_client import CollectorRegistry, Counter, Gauge, Histogram
 
 logger = structlog.get_logger(__name__)
 
-
 @dataclass
 class PerformanceMetric:
     """性能指标"""
@@ -30,7 +27,6 @@ class PerformanceMetric:
     timestamp: datetime = field(default_factory=datetime.now)
     tags: Dict[str, str] = field(default_factory=dict)
     description: str = ""
-
 
 @dataclass
 class SystemMetrics:
@@ -46,7 +42,6 @@ class SystemMetrics:
     process_count: int
     timestamp: datetime = field(default_factory=datetime.now)
 
-
 @dataclass
 class ServiceMetrics:
     """服务指标"""
@@ -60,7 +55,6 @@ class ServiceMetrics:
     queue_size: int
     cache_hit_rate: float
     timestamp: datetime = field(default_factory=datetime.now)
-
 
 class MetricsCollector:
     """指标收集器"""
@@ -244,7 +238,6 @@ class MetricsCollector:
 
         return summary
 
-
 class SystemMonitor:
     """系统监控器"""
 
@@ -278,7 +271,6 @@ class SystemMonitor:
             network_io_bytes_recv=network_io.bytes_recv,
             process_count=process_count,
         )
-
 
 class PerformanceProfiler:
     """性能分析器"""
@@ -322,7 +314,6 @@ class PerformanceProfiler:
             profile_id: current_time - start_time
             for profile_id, start_time in self.active_profiles.items()
         }
-
 
 class AlertManager:
     """告警管理器"""
@@ -397,7 +388,6 @@ class AlertManager:
             return "medium"
         else:
             return "low"
-
 
 class PerformanceMonitor:
     """性能监控主类"""

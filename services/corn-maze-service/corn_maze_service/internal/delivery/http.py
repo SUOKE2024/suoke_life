@@ -4,8 +4,6 @@ HTTP API 服务
 使用 FastAPI 提供 RESTful API 接口。
 """
 
-from __future__ import annotations
-
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 from datetime import UTC
@@ -22,14 +20,12 @@ from corn_maze_service.pkg.logging import get_logger
 
 logger = get_logger(__name__)
 
-
 # API 模型定义
 class HealthResponse(BaseModel):
     """健康检查响应"""
     status: str = Field(description="服务状态")
     version: str = Field(description="服务版本")
     timestamp: str = Field(description="检查时间")
-
 
 class MazeCreateRequest(BaseModel):
     """创建迷宫请求"""
@@ -39,7 +35,6 @@ class MazeCreateRequest(BaseModel):
     theme: str = Field(default="health", description="迷宫主题")
     difficulty: str = Field(default="normal", description="难度级别")
     is_public: bool = Field(default=False, description="是否公开")
-
 
 class MazeResponse(BaseModel):
     """迷宫响应"""
@@ -53,7 +48,6 @@ class MazeResponse(BaseModel):
     created_at: str = Field(description="创建时间")
     updated_at: str = Field(description="更新时间")
 
-
 class MazeListResponse(BaseModel):
     """迷宫列表响应"""
     mazes: list[MazeResponse] = Field(description="迷宫列表")
@@ -61,13 +55,11 @@ class MazeListResponse(BaseModel):
     page: int = Field(description="当前页")
     size: int = Field(description="页大小")
 
-
 class ErrorResponse(BaseModel):
     """错误响应"""
     error: str = Field(description="错误类型")
     message: str = Field(description="错误消息")
     details: dict[str, Any] | None = Field(default=None, description="错误详情")
-
 
 def create_app(lifespan: Any = None) -> FastAPI:
     """创建 FastAPI 应用"""
@@ -103,7 +95,6 @@ def create_app(lifespan: Any = None) -> FastAPI:
 
     return app
 
-
 def setup_middleware(app: FastAPI, settings: Any) -> None:
     """设置中间件"""
     # CORS 中间件
@@ -121,7 +112,6 @@ def setup_middleware(app: FastAPI, settings: Any) -> None:
             TrustedHostMiddleware,
             allowed_hosts=["*"]  # 在生产环境中应该配置具体的主机
         )
-
 
 def setup_routes(app: FastAPI) -> None:
     """设置路由"""
@@ -208,7 +198,6 @@ def setup_routes(app: FastAPI) -> None:
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Maze {maze_id} not found"
         )
-
 
 def setup_exception_handlers(app: FastAPI) -> None:
     """设置异常处理器"""

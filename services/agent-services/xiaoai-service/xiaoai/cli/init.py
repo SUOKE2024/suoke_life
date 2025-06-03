@@ -6,13 +6,10 @@ XiaoAI Agent Initialization Module
 提供小艾智能体的初始化功能。
 """
 
-from __future__ import annotations
-
 from pathlib import Path
 
 import click
 from loguru import logger
-
 
 def initialize(target: str = "all", force: bool = False) -> None:
     """
@@ -47,7 +44,6 @@ def initialize(target: str = "all", force: bool = False) -> None:
         click.echo(click.style(f"✗ 初始化失败: {e}", fg="red"))
         raise
 
-
 def _init_config(force: bool = False) -> None:
     """初始化配置"""
     logger.info("初始化配置...")
@@ -73,7 +69,6 @@ def _init_config(force: bool = False) -> None:
         _create_prod_config(prodconfig)
         logger.info(f"已创建生产环境配置文件: {prod_config}")
 
-
 def _init_database(force: bool = False) -> None:
     """初始化数据库"""
     logger.info("初始化数据库...")
@@ -88,7 +83,6 @@ def _init_database(force: bool = False) -> None:
         logger.error(f"数据库初始化失败: {e}")
         raise
 
-
 def _init_cache(force: bool = False) -> None:
     """初始化缓存"""
     logger.info("初始化缓存...")
@@ -102,7 +96,6 @@ def _init_cache(force: bool = False) -> None:
     except Exception as e:
         logger.error(f"缓存初始化失败: {e}")
         raise
-
 
 def _init_directories(force: bool = False) -> None:
     """初始化目录结构"""
@@ -120,7 +113,6 @@ def _init_directories(force: bool = False) -> None:
         Path(dirname)
         dir_path.mkdir(exist_ok=True)
         logger.info(f"已创建目录: {dir_path}")
-
 
 def _create_default_config(configpath: Path) -> None:
     """创建默认配置文件"""
@@ -195,7 +187,6 @@ external_services:
 
     config_path.write_text(configcontent, encoding="utf-8")
 
-
 def _create_dev_config(configpath: Path) -> None:
     """创建开发环境配置文件"""
     configcontent = """# 小艾智能体开发环境配置
@@ -224,7 +215,6 @@ dev_tools:
 """
 
     config_path.write_text(configcontent, encoding="utf-8")
-
 
 def _create_prod_config(configpath: Path) -> None:
     """创建生产环境配置文件"""
@@ -271,7 +261,6 @@ cache:
 """
 
     config_path.write_text(configcontent, encoding="utf-8")
-
 
 if __name__ == "__main__":
     initialize()

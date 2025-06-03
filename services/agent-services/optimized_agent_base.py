@@ -12,28 +12,22 @@ from abc import ABC, abstractmethod
 from typing import Dict, List, Any, Optional, Union, Callable
 from dataclasses import dataclass, asdict
 from datetime import datetime
-import numpy as np
 import json
 import uuid
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
-from multiprocessing import shared_memory
-import aiohttp
 import aioredis
 import asyncpg
 from aiohttp import web, ClientSession
 import psutil
 from numba import jit
-from contextlib import asynccontextmanager
 import threading
 from functools import wraps, lru_cache
 import pickle
 import hashlib
 
-
 # 配置日志
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
 
 @dataclass
 class AgentRequest:
@@ -51,7 +45,6 @@ class AgentRequest:
         if self.created_at is None:
             self.created_at = datetime.now()
 
-
 @dataclass
 class AgentResponse:
     """智能体响应数据结构"""
@@ -68,7 +61,6 @@ class AgentResponse:
     def __post_init__(self):
         if self.completed_at is None:
             self.completed_at = datetime.now()
-
 
 class PerformanceProfiler:
     """性能分析器"""
@@ -175,7 +167,6 @@ class PerformanceProfiler:
         with self.lock:
             return self.profiles.copy()
 
-
 class OptimizedCache:
     """优化缓存系统"""
     
@@ -274,7 +265,6 @@ class OptimizedCache:
             'local_cache_size': len(self.local_cache)
         }
 
-
 class JITOptimizedAlgorithms:
     """JIT优化算法库"""
     
@@ -327,7 +317,6 @@ class JITOptimizedAlgorithms:
                     result[i, j] += a[i, k] * b[k, j]
         
         return result
-
 
 class OptimizedAgentBase(ABC):
     """优化后的智能体基础类"""
@@ -650,7 +639,6 @@ class OptimizedAgentBase(ABC):
         
         logger.info(f"智能体 {self.agent_name} 已关闭")
 
-
 # 工具函数
 def cpu_intensive_task(func: Callable) -> Callable:
     """CPU密集型任务装饰器"""
@@ -660,7 +648,6 @@ def cpu_intensive_task(func: Callable) -> Callable:
         return await loop.run_in_executor(self.cpu_pool, func, self, *args, **kwargs)
     return wrapper
 
-
 def io_intensive_task(func: Callable) -> Callable:
     """I/O密集型任务装饰器"""
     @wraps(func)
@@ -668,7 +655,6 @@ def io_intensive_task(func: Callable) -> Callable:
         loop = asyncio.get_event_loop()
         return await loop.run_in_executor(self.io_pool, func, self, *args, **kwargs)
     return wrapper
-
 
 def cached_result(ttl: int = 300):
     """缓存结果装饰器"""

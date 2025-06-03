@@ -3,7 +3,6 @@ api-gateway 主入口文件
 """
 
 import uvicorn
-from fastapi import FastAPI
 from api_gateway.api.main import create_app
 
 def main():

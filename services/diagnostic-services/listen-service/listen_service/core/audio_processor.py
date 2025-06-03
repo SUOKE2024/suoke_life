@@ -8,13 +8,10 @@ import base64
 from io import BytesIO
 
 import librosa
-import numpy as np
-import soundfile as sf
 from loguru import logger
 from scipy import signal
 
 from ..models.audio_models import AudioQuality, AudioType
-
 
 class AudioProcessor:
     """音频处理器"""

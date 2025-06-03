@@ -5,8 +5,6 @@
 """
 
 from datetime import datetime, date
-from typing import Dict, Any, Optional
-
 
 def calculate_age(birth_year: int, birth_month: int, birth_day: int, 
                  reference_date: datetime = None) -> int:
@@ -36,7 +34,6 @@ def calculate_age(birth_year: int, birth_month: int, birth_day: int,
     
     return age
 
-
 def get_zodiac_sign(birth_month: int, birth_day: int) -> str:
     """
     获取星座
@@ -65,7 +62,6 @@ def get_zodiac_sign(birth_month: int, birth_day: int) -> str:
     
     return "摩羯座"  # 默认返回
 
-
 def get_chinese_zodiac(birth_year: int) -> str:
     """
     获取生肖
@@ -78,7 +74,6 @@ def get_chinese_zodiac(birth_year: int) -> str:
     """
     zodiac_animals = ["鼠", "牛", "虎", "兔", "龙", "蛇", "马", "羊", "猴", "鸡", "狗", "猪"]
     return zodiac_animals[(birth_year - 1900) % 12]
-
 
 def get_season_by_month(month: int) -> str:
     """
@@ -99,7 +94,6 @@ def get_season_by_month(month: int) -> str:
     else:
         return "冬季"
 
-
 def get_time_period(hour: int) -> str:
     """
     根据小时获取时段
@@ -118,7 +112,6 @@ def get_time_period(hour: int) -> str:
         return "晚上"
     else:
         return "深夜"
-
 
 def convert_to_chinese_hour(hour: int) -> str:
     """
@@ -141,7 +134,6 @@ def convert_to_chinese_hour(hour: int) -> str:
     else:
         return time_periods[(hour + 1) // 2]
 
-
 def get_wuxing_by_year(year: int) -> str:
     """
     根据年份获取五行属性
@@ -159,7 +151,6 @@ def get_wuxing_by_year(year: int) -> str:
     }
     return wuxing_map[year_mod]
 
-
 def calculate_lunar_age(birth_year: int, current_year: int) -> int:
     """
     计算虚岁
@@ -173,7 +164,6 @@ def calculate_lunar_age(birth_year: int, current_year: int) -> int:
     """
     return current_year - birth_year + 1
 
-
 def is_leap_year(year: int) -> bool:
     """
     判断是否为闰年
@@ -185,7 +175,6 @@ def is_leap_year(year: int) -> bool:
         是否为闰年
     """
     return year % 4 == 0 and (year % 100 != 0 or year % 400 == 0)
-
 
 def get_days_in_month(year: int, month: int) -> int:
     """
@@ -204,7 +193,6 @@ def get_days_in_month(year: int, month: int) -> int:
         return 29
     else:
         return days_in_month[month - 1]
-
 
 def format_duration(seconds: float) -> str:
     """
@@ -227,7 +215,6 @@ def format_duration(seconds: float) -> str:
         hours = seconds / 3600
         return f"{hours:.1f}小时"
 
-
 def safe_divide(numerator: float, denominator: float, default: float = 0.0) -> float:
     """
     安全除法，避免除零错误
@@ -243,7 +230,6 @@ def safe_divide(numerator: float, denominator: float, default: float = 0.0) -> f
     if denominator == 0:
         return default
     return numerator / denominator
-
 
 def normalize_score(score: float, min_score: float, max_score: float) -> float:
     """
@@ -262,7 +248,6 @@ def normalize_score(score: float, min_score: float, max_score: float) -> float:
     
     normalized = (score - min_score) / (max_score - min_score)
     return max(0.0, min(1.0, normalized))
-
 
 def get_health_level(score: float) -> str:
     """

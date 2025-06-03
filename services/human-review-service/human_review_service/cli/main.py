@@ -7,7 +7,6 @@ CLI Main Entry
 
 import asyncio
 import sys
-from pathlib import Path
 from typing import Optional
 
 import click
@@ -22,7 +21,6 @@ from .commands import database, reviewer, server
 
 logger = structlog.get_logger(__name__)
 console = Console()
-
 
 @click.group()
 @click.option("--config", "-c", type=click.Path(exists=True), help="配置文件路径")
@@ -54,7 +52,6 @@ def cli(ctx: click.Context, config: Optional[str], verbose: bool):
         console.print(f"环境: {settings.environment}")
         console.print("\n使用 --help 查看可用命令")
 
-
 @cli.command()
 @click.option("--host", default="0.0.0.0", help="服务器主机地址")
 @click.option("--port", default=8000, type=int, help="服务器端口")
@@ -82,7 +79,6 @@ def serve(host: str, port: int, reload: bool, workers: int):
     except Exception as e:
         console.print(f"[red]启动失败: {e}[/red]")
         sys.exit(1)
-
 
 @cli.command()
 def info():
@@ -113,7 +109,6 @@ def info():
     table.add_row("日志级别", settings.monitoring.log_level)
 
     console.print(table)
-
 
 @cli.command()
 @click.option("--check-db", is_flag=True, help="检查数据库连接")
@@ -153,7 +148,6 @@ def health(check_db: bool, check_redis: bool):
         console.print(f"[red]健康检查失败: {e}[/red]")
         sys.exit(1)
 
-
 @cli.command()
 def version():
     """显示版本信息"""
@@ -161,12 +155,10 @@ def version():
         f"[bold green]{settings.app_name}[/bold green] v{settings.app_version}"
     )
 
-
 # 注册子命令组
 cli.add_command(database.db)
 cli.add_command(reviewer.reviewer)
 cli.add_command(server.server)
-
 
 if __name__ == "__main__":
     cli()

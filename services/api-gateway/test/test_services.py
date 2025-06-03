@@ -6,12 +6,9 @@
 """
 
 import asyncio
-import time
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
-from fastapi import FastAPI
-from fastapi.testclient import TestClient
 
 from suoke_api_gateway.core.config import Settings
 from suoke_api_gateway.models.gateway import ServiceInstance
@@ -21,7 +18,6 @@ from suoke_api_gateway.services.load_balancer import (
 )
 from suoke_api_gateway.services.proxy import ProxyService
 from suoke_api_gateway.services.service_registry import ServiceRegistry
-
 
 class TestServiceRegistry:
     """服务注册中心测试"""
@@ -129,7 +125,6 @@ class TestServiceRegistry:
         assert health["healthy_instances"] == 1
         assert health["total_instances"] == 2
         assert health["health_ratio"] == 0.5
-
 
 class TestLoadBalancer:
     """负载均衡器测试"""
@@ -242,7 +237,6 @@ class TestLoadBalancer:
             assert selected.healthy is True
             assert selected.id != "service-2"
 
-
 class TestProxyService:
     """代理服务测试"""
     
@@ -345,7 +339,6 @@ class TestProxyService:
             )
             
             assert response.status_code == 502  # Bad Gateway
-
 
 if __name__ == "__main__":
     pytest.main(["-v", "test_services.py"]) 

@@ -1,13 +1,9 @@
 """
 简单的健康检查测试
 """
-import pytest
 from unittest.mock import Mock, patch, AsyncMock
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
-
-from app.api.rest.health import router as health_router
-
 
 def test_health_check_simple():
     """测试简单的健康检查"""
@@ -31,7 +27,6 @@ def test_health_check_simple():
         assert "timestamp" in data
         assert "version" in data
 
-
 def test_health_check_direct():
     """直接测试健康检查函数"""
     from app.api.rest.health import health_check
@@ -44,7 +39,6 @@ def test_health_check_direct():
     assert "timestamp" in result
     assert "version" in result
 
-
 def test_liveness_check_direct():
     """直接测试存活检查函数"""
     from app.api.rest.health import liveness_check
@@ -56,7 +50,6 @@ def test_liveness_check_direct():
     assert result["alive"] is True
     assert "response_time" in result
     assert "timestamp" in result
-
 
 if __name__ == "__main__":
     test_health_check_simple()

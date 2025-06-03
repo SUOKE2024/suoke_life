@@ -5,8 +5,6 @@
 """
 
 import os
-import re
-from pathlib import Path
 
 def fix_logger_names(directory: str):
     """修复目录中所有 Python 文件的 logger 名称错误"""

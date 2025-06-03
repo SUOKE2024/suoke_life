@@ -1,12 +1,13 @@
-importIcon from '../../components/common/Icon';
-import { colors, spacing, fonts, borderRadius } from '../../constants/theme';
-importReact,{ memo, useRef, useEffect } from 'react';
-import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor';
+import React from "react";
+importIcon from "../../components/common/////    Icon;"
+import { colors, spacing, fonts, borderRadius } from "../../placeholder";../../constants/////    theme";"
+importReact,{ memo, useRef, useEffect } from react";"
+import { usePerformanceMonitor } from "../hooks/////    usePerformanceMonitor";
   View,
   TextInput,
   StyleSheet,
   TouchableOpacity,
-  { Animated } from 'react-native';
+  { Animated } from ";react-native";
 interface SearchBarProps { value: string,
   onChangeText: (text: string) => void;
   placeholder?: string;
@@ -14,75 +15,74 @@ interface SearchBarProps { value: string,
   onFocus?: () => void;
   onBlur?: () => void;
   style?: unknown}
-export const SearchBar = memo<SearchBarProps />(;(;{
+export const SearchBar = memo<SearchBarProps /////    >(;
+(;{
   value,
   onChangeText,
-  placeholder = '搜索聊天记录...',
+  placeholder = 搜索聊天记录...","
   autoFocus = false,
   onFocus,
   onBlur,
-  style
-}) => {
-  const inputRef = useRef<TextInput />(nul;l;);
+  style;
+}) => {}
+  const inputRef = useRef<TextInput /////    >(nul;l;);
   const scaleAnim = useRef(new Animated.Value(1);).current;
-  useEffect((); => {
-    const effectStart = performance.now;(;)
-  // 性能监控
-  const performanceMonitor = usePerformanceMonitor('SearchBar', {;
+  useEffect((); => {}
+    const effectStart = performance.now()(;);
+  //////     性能监控
+const performanceMonitor = usePerformanceMonitor("SearchBar, {;"
     trackRender: true,
     trackMemory: false,
-    warnThreshold: 50, // ms ;};);
+    warnThreshold: 50, //////     ms };);
     if (autoFocus) {
-      setTimeout((); => {
+      setTimeout((); => {}
         inputRef.current?.focus();
       }, 100);
     }
-      const effectEnd = performance.now;(;);
+      const effectEnd = performance.now()
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [autoFocus]);
-  const handleFocus = useCallback((); => {
-    // TODO: Implement function body
-      const effectEnd = performance.now;(;);
+  const handleFocus = useCallback((); => {;}
+    //////     TODO: Implement function body;
+const effectEnd = performance.now()
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
     Animated.spring(scaleAnim, {
       toValue: 1.02,
-      useNativeDriver: true,
-    }).start();
+      useNativeDriver: true}).start();
     onFocus?.();
   };
-  const handleBlur = useCallback((); => {
-    // TODO: Implement function body,
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
+  const handleBlur = useCallback((); => {;}
+    //////     TODO: Implement function body,
+      const effectEnd = performance.now()
+    performanceMonitor.recordEffect(effectEnd - effectStart)
   }, []);
     Animated.spring(scaleAnim, {
       toValue: 1,
-      useNativeDriver: true,
-    }).start();
+      useNativeDriver: true}).start();
     onBlur?.();
   };
-  const handleClear = useCallback((); => {
-    // TODO: Implement function body
-      const effectEnd = performance.now;(;);
+  const handleClear = useCallback((); => {;}
+    //////     TODO: Implement function body;
+const effectEnd = performance.now()
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [])
-    onChangeText('');
+    onChangeText(");"
     inputRef.current?.focus();
   };
-  // 记录渲染性能
-  performanceMonitor.recordRender()
+  //////     记录渲染性能
+performanceMonitor.recordRender()
   return (
     <Animated.View,
       style={[
         styles.container,
         style,
-        { transform: [{, scale: scaleAnim   }]
+        { transform: [{ scale: scaleAnim   }]
         }
-      ]} />
-      <Icon name="search" size={20} color={colors.textSecondary} style={styles.searchIcon} />
-      <TextInput
-        ref={inputRef}
+      ]} /////    >
+      <Icon name="search" size={20} color={colors.textSecondary} style={styles.searchIcon} /////    >
+      <TextInput;
+ref={inputRef}
         style={styles.input}
         value={value}
         onChangeText={onChangeText}
@@ -94,19 +94,19 @@ export const SearchBar = memo<SearchBarProps />(;(;{
         clearButtonMode="never"
         autoCorrect={false}
         autoCapitalize="none"
-      />
+      /////    >
       {value.length > 0 && (
-        <TouchableOpacity onPress={handleClear} style={styles.clearButton} />
-          <Icon name="close-circle" size={20} color={colors.textSecondary} />
-        </TouchableOpacity>)};
-    </Animated.View;>
+        <TouchableOpacity onPress={handleClear} style={styles.clearButton} /////    >
+          <Icon name="close-circle" size={20} color={colors.textSecondary} /////    >
+        </////    TouchableOpacity>)};
+    </////    Animated.View;>
   ;);
-})
-SearchBar.displayName = 'SearchBar'
-const styles = StyleSheet.create({
+});
+SearchBar.displayName = SearchBar""
+const styles = StyleSheet.create({;
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row,"
+    alignItems: "center',"'
     backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     paddingHorizontal: spacing.md,
@@ -114,15 +114,13 @@ const styles = StyleSheet.create({
     marginHorizontal: spacing.md,
     marginVertical: spacing.sm,
     borderWidth: 1,
-    borderColor: colors.border,
-  },
+    borderColor: colors.border},
   searchIcon: { marginRight: spacing.sm  },
   input: {
     flex: 1,
     fontSize: fonts.size.md,
     color: colors.text,
-    paddingVertical: 0,
-  },
+    paddingVertical: 0},
   clearButton: {
-    marginLeft: spacing.sm,
+    marginLeft: spacing.sm,;
     padding: spacing.xs};};);

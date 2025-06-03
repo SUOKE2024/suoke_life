@@ -17,8 +17,6 @@ import pytest
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
-from api.grpc import inquiry_service_pb2 as pb2
-from api.grpc import inquiry_service_pb2_grpc as pb2_grpc
 from internal.delivery.inquiry_service_impl import InquiryServiceServicer
 from internal.dialogue.dialogue_manager import DialogueManager
 from internal.llm.llm_client import LLMClient
@@ -26,7 +24,6 @@ from internal.llm.symptom_extractor import SymptomExtractor
 from internal.llm.tcm_pattern_mapper import TCMPatternMapper
 from internal.repository.session_repository import SessionRepository
 from internal.repository.user_repository import UserRepository
-
 
 class TestGRPCService:
     """gRPC服务集成测试类"""
@@ -371,7 +368,6 @@ class TestGRPCService:
         assert len(response.long_term_risks) > 0
         assert len(response.prevention_strategies) > 0
         assert response.overall_risk_score > 0
-
 
 if __name__ == "__main__":
     pytest.main(["-xvs", __file__])

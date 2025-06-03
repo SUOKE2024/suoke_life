@@ -7,7 +7,6 @@
 
 import asyncio
 import time
-import json
 import uuid
 from typing import Dict, List, Any, Optional, Callable
 from dataclasses import dataclass, field
@@ -18,7 +17,6 @@ from loguru import logger
 
 from ..observability.metrics import MetricsCollector
 
-
 class ServiceStatus(str, Enum):
     """服务状态"""
     HEALTHY = "healthy"         # 健康
@@ -27,14 +25,12 @@ class ServiceStatus(str, Enum):
     STOPPING = "stopping"      # 停止中
     UNKNOWN = "unknown"         # 未知
 
-
 class DiscoveryBackend(str, Enum):
     """服务发现后端"""
     CONSUL = "consul"           # Consul
     ETCD = "etcd"              # etcd
     KUBERNETES = "kubernetes"   # Kubernetes
     MEMORY = "memory"          # 内存（测试用）
-
 
 @dataclass
 class ServiceInstance:
@@ -78,7 +74,6 @@ class ServiceInstance:
             "address": self.address
         }
 
-
 @dataclass
 class HealthCheck:
     """健康检查配置"""
@@ -89,7 +84,6 @@ class HealthCheck:
     method: str = "GET"
     headers: Dict[str, str] = field(default_factory=dict)
     expected_status: int = 200
-
 
 class ServiceRegistry:
     """服务注册表"""
@@ -323,7 +317,6 @@ class ServiceRegistry:
             result[service_name] = list(instances.values())
         return result
 
-
 class HealthChecker:
     """健康检查器"""
     
@@ -411,7 +404,6 @@ class HealthChecker:
                 {"service": instance.name, "status": "error"}
             )
 
-
 class LoadBalancer:
     """负载均衡器"""
     
@@ -462,7 +454,6 @@ class LoadBalancer:
         """最少连接选择"""
         # 简化实现，实际应该跟踪连接数
         return min(instances, key=lambda x: x.metadata.get("connections", 0))
-
 
 class ServiceDiscovery:
     """服务发现主类"""
@@ -570,10 +561,8 @@ class ServiceDiscovery:
             "services": service_stats
         }
 
-
 # 全局服务发现实例
 _service_discovery: Optional[ServiceDiscovery] = None
-
 
 def initialize_service_discovery(
     backend: DiscoveryBackend = DiscoveryBackend.MEMORY,
@@ -583,7 +572,6 @@ def initialize_service_discovery(
     global _service_discovery
     _service_discovery = ServiceDiscovery(backend, metrics_collector)
     return _service_discovery
-
 
 def get_service_discovery() -> Optional[ServiceDiscovery]:
     """获取服务发现实例"""

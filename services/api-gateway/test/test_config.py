@@ -10,7 +10,6 @@ import sys
 import tempfile
 import yaml
 from unittest.mock import patch, mock_open
-from pathlib import Path
 
 import pytest
 
@@ -23,7 +22,6 @@ from internal.model.config import (
     MiddlewareConfig, CacheConfig, AuthConfig, JwtConfig
 )
 from suoke_api_gateway.core.config import Settings, get_settings
-
 
 class TestConfig:
     """配置测试类"""
@@ -244,7 +242,6 @@ class TestConfig:
         assert isinstance(config.middleware.auth.jwt, JwtConfig)
         assert isinstance(config.cache, CacheConfig)
 
-
 class TestSettings:
     """配置测试类"""
     
@@ -381,7 +378,6 @@ SERVER_PORT=8080
         assert settings.cors.allow_headers == ["*"]
         assert settings.cors.allow_credentials is True
 
-
 @pytest.fixture
 def temp_config_file():
     """临时配置文件夹具"""
@@ -399,7 +395,6 @@ SERVER_PORT=8000
     
     os.unlink(f.name)
 
-
 def test_config_validation():
     """测试配置验证"""
     # 测试无效端口
@@ -412,7 +407,6 @@ def test_config_validation():
     # 测试无效环境
     with pytest.raises(ValueError):
         Settings(environment="invalid")
-
 
 def test_service_config():
     """测试服务配置"""
@@ -432,7 +426,6 @@ def test_service_config():
         
     finally:
         os.environ.pop("SERVICES", None)
-
 
 if __name__ == "__main__":
     pytest.main(["-v", "test_config.py"]) 

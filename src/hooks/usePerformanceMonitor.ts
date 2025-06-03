@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback } from "react";
 
 interface PerformanceMonitorOptions {
   componentName?: string;
@@ -21,29 +21,31 @@ export const usePerformanceMonitor = (
   options: PerformanceMonitorOptions = {}
 ): PerformanceMonitor => {
   const componentName = options.componentName || 'Unknown';
-  
+
   const recordRender = useCallback(() => {
     if (options.trackRender) {
-      console.debug(`[Performance] ${componentName} rendered`);
+      // TODO: 实际的渲染性能记录逻辑
+      console.log(`[Performance] ${componentName} rendered at ${Date.now()}`);
     }
   }, [componentName, options.trackRender]);
 
   const recordMemory = useCallback(() => {
     if (options.trackMemory || options.enableMemoryMonitoring) {
-      console.debug(`[Performance] ${componentName} memory check`);
+      // TODO: 实际的内存监控逻辑
+      console.log(`[Performance] ${componentName} memory check at ${Date.now()}`);
     }
   }, [componentName, options.trackMemory, options.enableMemoryMonitoring]);
 
   const getMetrics = useCallback(() => {
     return {
       componentName,
-      timestamp: Date.now(),
+      timestamp: Date.now()
     };
   }, [componentName]);
 
   return {
     recordRender,
     recordMemory,
-    getMetrics,
+    getMetrics
   };
 };

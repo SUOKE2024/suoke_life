@@ -5,13 +5,10 @@
 中医辨证分析器 - 实现中医辨证论治的数字化分析
 """
 
-import asyncio
-import re
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass
 from enum import Enum
 import jieba
-import jieba.posseg as pseg
 from loguru import logger
 
 from ..service.embedding_service import EmbeddingService
@@ -19,7 +16,6 @@ from ..model.tcm_models import (
     Syndrome, SyndromePattern, ConstitutionType, 
     SymptomCategory, TreatmentPrinciple
 )
-
 
 class SyndromeType(Enum):
     """证型分类"""
@@ -34,7 +30,6 @@ class SyndromeType(Enum):
     FENG_HAN = "风寒"        # 风寒证
     FENG_RE = "风热"         # 风热证
 
-
 @dataclass
 class SymptomAnalysis:
     """症状分析结果"""
@@ -44,7 +39,6 @@ class SymptomAnalysis:
     confidence: float  # 0-1
     related_organs: List[str]
     pathological_factors: List[str]
-
 
 @dataclass
 class SyndromeAnalysisResult:
@@ -57,7 +51,6 @@ class SyndromeAnalysisResult:
     constitution_tendency: ConstitutionType
     reasoning_chain: List[str]  # 推理链
     recommendations: Dict[str, Any]
-
 
 class SyndromeAnalyzer:
     """中医辨证分析器"""

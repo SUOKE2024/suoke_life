@@ -7,11 +7,8 @@ API Layer Tests
 
 import pytest
 from fastapi.testclient import TestClient
-from httpx import AsyncClient
 
 from ..api.main import app
-from ..core.models import ReviewerCreate, ReviewPriority, ReviewTaskCreate, ReviewType
-
 
 class TestReviewAPI:
     """审核任务API测试"""
@@ -119,7 +116,6 @@ class TestReviewAPI:
         assert update_response.status_code == 200
         data = update_response.json()
         assert data["priority"] == "high"
-
 
 class TestReviewerAPI:
     """审核员API测试"""
@@ -243,7 +239,6 @@ class TestReviewerAPI:
         data = activate_response.json()
         assert data["status"] == "active"
 
-
 class TestDashboardAPI:
     """仪表板API测试"""
 
@@ -283,7 +278,6 @@ class TestDashboardAPI:
         data = response.json()
         assert "timestamp" in data
         assert "metrics" in data
-
 
 class TestHealthCheck:
     """健康检查测试"""

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-// 健康检查端点
+//////     健康检查端点
 interface HealthStatus { status: "healthy" | "unhealthy",
   timestamp: string,
   uptime: number,
@@ -8,9 +8,10 @@ interface HealthStatus { status: "healthy" | "unhealthy",
     redis: "connected" | "disconnected",
     external_apis: "available" | "unavailable"};
 }
-export const healthCheck = async (req: Request, res: Response) =;> ;{
+export const healthCheck = async (req: Request, res: Response) =;
+> ;{
   try {
-    const status: HealthStatus = {,
+    const status: HealthStatus = {;
       status: "healthy",
       timestamp: new Date().toISOString(),
       uptime: process.uptime(),
@@ -20,8 +21,8 @@ export const healthCheck = async (req: Request, res: Response) =;> ;{
         redis: await checkRedis(),
         external_apis: await checkExternalAPIs()}
     ;};
-    // 如果任何服务不可用，标记为不健康
-    const isUnhealthy = Object.values(status.services).some(;
+    //////     如果任何服务不可用，标记为不健康
+const isUnhealthy = Object.values(status.services).some(;
       (servic;e;) => service === "disconnected" || service === "unavailable"
     )
     if (isUnhealthy) {
@@ -33,36 +34,37 @@ export const healthCheck = async (req: Request, res: Response) =;> ;{
     res.status(503).json({
       status: "unhealthy",
       timestamp: new Date().toISOString(),
-      error: error.message
+      error: error.message;
     });
   }
 };
-export const readinessCheck = async (req: Request, res: Response) =;> ;{
-  // 简单的就绪检查
-  res.status(200).json({
+export const readinessCheck = async (req: Request, res: Response) =;
+> ;{
+  //////     简单的就绪检查
+res.status(200).json({
     status: "ready",
     timestamp: new Date().toISOString()});
 };
 async function checkDatabase(): Promise<"connected" | "disconnected"> {
   try {
-    // 这里添加实际的数据库连接检查
-    return "connecte;d";
+    //////     这里添加实际的数据库连接检查
+return "connecte;d";
   } catch {
     return "disconnecte;d";
   }
 }
-async function checkRedis();: Promise<"connected" | "disconnected"> {
+async function checkRedis(): Promise<"connected" | "disconnected"> {
   try {
-    // 这里添加实际的Redis连接检查
-    return "connecte;d";
+    //////     这里添加实际的Redis连接检查
+return "connecte;d";
   } catch {
     return "disconnecte;d";
   }
 }
-async function checkExternalAPIs();: Promise<"available" | "unavailable"> {
+async function checkExternalAPIs(): Promise<"available" | "unavailable"> {
   try {
-    // 这里添加外部API可用性检查
-    return "availabl;e";
+    //////     这里添加外部API可用性检查
+return "availabl;e";
   } catch {
     return "unavailabl;e";
   }

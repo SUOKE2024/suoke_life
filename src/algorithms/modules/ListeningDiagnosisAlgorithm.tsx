@@ -1,8 +1,9 @@
-import React from 'react';
-import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor';
-import { ListeningConfig } from "../config/AlgorithmConfig"/import { TCMKnowledgeBase } from "../knowledge/TCMKnowledgeBase";/;
-// 闻诊算法模块     实现中医闻诊功能，包括声音、气味、呼吸分析     @author 索克生活技术团队   @version 1.0.0
-export interface ListeningData {;
+import React from "react";
+import { ListeningConfig } from "../../placeholder";../config/AlgorithmConfig";/import { TCMKnowledgeBase } from "../knowledge/////    TCMKnowledgeBase";"
+//////
+//////     闻诊算法模块     实现中医闻诊功能，包括声音、气味、呼吸分析     @author 索克生活技术团队   @version 1.0.0;
+export interface ListeningData  {;
+;
   voiceRecording?: AudioData;
   breathingRecording?: AudioData;
   coughRecording?: AudioData;
@@ -14,8 +15,8 @@ export interface AudioData { data: ArrayBuffer,
   sampleRate: number,
   channels: number,
   duration: number}
-export interface ListeningResult { confidence: number,
-  features: ListeningFeatures,
+export interface ListeningResult { confidence: number,;
+  features: ListeningFeatures,;
   analysis: string;
   voiceAnalysis?: VoiceAnalysis;
   breathingAnalysis?: BreathingAnalysis;
@@ -39,8 +40,8 @@ export interface CoughFeatures { frequency: number,
   type: string,
   wetness: string,
   timing: string}
-export interface VoiceAnalysis { toneAnalysis: {pitch: { value: number, significance: string},
-    volume: { value: number, significance: string},
+export interface VoiceAnalysis { toneAnalysis: {pitch: { value: number, significance: string},;
+    volume: { value: number, significance: string},;
     clarity: { value: string, significance: string};
   };
   emotionalState: { energy: string,
@@ -53,8 +54,8 @@ export interface VoiceAnalysis { toneAnalysis: {pitch: { value: number, signific
     spleen: string};
   syndromeIndications: string[];
 }
-export interface BreathingAnalysis { respiratoryAssessment: {rate: { value: number, significance: string},
-    depth: { value: string, significance: string},
+export interface BreathingAnalysis { respiratoryAssessment: {rate: { value: number, significance: string},;
+    depth: { value: string, significance: string},;
     rhythm: { value: string, significance: string};
   };
   qiAssessment: { qiStrength: string,
@@ -65,8 +66,8 @@ export interface BreathingAnalysis { respiratoryAssessment: {rate: { value: numb
     heart: string};
   syndromeIndications: string[];
 }
-export interface CoughAnalysis { coughCharacteristics: {type: { value: string, significance: string},
-    wetness: { value: string, significance: string},
+export interface CoughAnalysis { coughCharacteristics: {type: { value: string, significance: string},;
+    wetness: { value: string, significance: string},;
     timing: { value: string, significance: string};
   };
   pathogenAnalysis: { windCold: number,
@@ -83,11 +84,12 @@ export interface UserProfile { age: number,
   height: number,
   weight: number,
   occupation: string,
-  medicalHistory: string[],
-  allergies: string[],
+  medicalHistory: string[],;
+  allergies: string[],;
   medications: string[];
   }
-// 闻诊算法类export class ListeningDiagnosisAlgorithm {;
+//////     闻诊算法类export class ListeningDiagnosisAlgorithm {;
+;
   private config: ListeningConfig;
   private knowledgeBase: TCMKnowledgeBase;
   private voiceAnalyzer!: VoiceAnalyzer;
@@ -98,79 +100,79 @@ export interface UserProfile { age: number,
     this.knowledgeBase = knowledgeBase;
     this.initializeAnalyzers();
   }
-  // /    初始化分析器  private initializeAnalyzers();: void {
+  //////     初始化分析器  private initializeAnalyzers(): void {
     this.voiceAnalyzer = new VoiceAnalyzer(
       this.config.models.voiceAnalysis,
-      this.knowledgeBase
+      this.knowledgeBase;
     );
     this.breathingAnalyzer = new BreathingAnalyzer(
       this.config.models.breathingAnalysis,
-      this.knowledgeBase
+      this.knowledgeBase;
     );
     this.coughAnalyzer = new CoughAnalyzer(
       this.config.models.coughAnalysis,
-      this.knowledgeBase
+      this.knowledgeBase;
     );
   }
-  // /    执行闻诊分析  public async analyze(data: ListeningData,
-    userProfile?: UserProfile
-  ): Promise<ListeningResult />  {
+  //////     执行闻诊分析  public async analyze(data: ListeningData,
+    userProfile?: UserProfile;
+  ): Promise<ListeningResult /////    >  {
     if (!this.config.enabled) {
-      throw new Error("闻诊功能未启用;";)
+      throw new Error("闻诊功能未启用";)
     }
     try {
       this.emit("algorithm:progress", {
         stage: "preprocessing",
-        progress: 0.1
+        progress: 0.1;
       });
-      // 音频预处理 *       const processedData = await this.preprocessAudio(d;a;t;a;) */
+      // 音频预处理 //////     const processedData = await this.preprocessAudio(da;t;a;)
       this.emit("algorithm:progress", {
         stage: "feature_extraction",
-        progress: 0.3
+        progress: 0.3;
       });
-      // 特征提取 *       const features = await this.extractFeatures(processedD;a;t;a;) */
+      // 特征提取 //////     const features = await this.extractFeatures(processedDa;t;a;)
       this.emit("algorithm:progress", { stage: "analysis", progress: 0.6});
-      // 执行各项分析 *       const analyses = await this.performAnalyses( */
+      // 执行各项分析 //////     const analyses = await this.performAnalyses(
         processedData,
         features,
-        userProf;i;l;e
+        userProf;i;l;e;
       ;)
       this.emit("algorithm:progress", { stage: "integration", progress: 0.8});
-      // 整合分析结果 *       const result = await this.integrateResults(features, analy;s;e;s;) */
+      // 整合分析结果 //////     const result = await this.integrateResults(features, analys;e;s;)
       this.emit("algorithm:progress", { stage: "completed", progress: 1.0});
-      return resu;l;t
+      return resu;l;t;
     } catch (error) {
       this.emit("algorithm:error", { error, stage: "listening_analysis"});
-      throw err;o;r;
+      throw error;
     }
   }
-  // /    音频预处理  private async preprocessAudio(data: ListeningData;);: Promise<ProcessedListeningData />  {
-    const processed: ProcessedListeningData = {}
-    // 处理语音录音 *     if (data.voiceRecording) { */
+  // 音频预处理  private async preprocessAudio(data: ListeningData);: Promise<ProcessedListeningData /////    >  {
+    const processed: ProcessedListeningData = {};
+    // 处理语音录音 //////     if (data.voiceRecording) {
       processed.voiceRecording = await this.preprocessAudioData(
         data.voiceRecording,
-        "voice;"
+        "voice"
       ;)
     }
-    // 处理呼吸录音 *     if (data.breathingRecording) { */
+    // 处理呼吸录音 //////     if (data.breathingRecording) {
       processed.breathingRecording = await this.preprocessAudioData(
         data.breathingRecording,
-        "breathing;"
+        "breathing"
       ;)
     }
-    // 处理咳嗽录音 *     if (data.coughRecording) { */
+    // 处理咳嗽录音 //////     if (data.coughRecording) {
       processed.coughRecording = await this.preprocessAudioData(
         data.coughRecording,
-        "cough;"
+        "cough"
       ;);
     }
     return process;e;d;
   }
-  // /    音频数据预处理  private async preprocessAudioData(audio: AudioData,
-    type: string;);: Promise<ProcessedAudioData />  {
-    // 音频降噪 *     const denoised = await this.denoiseAudio(au;d;i;o;); */
-    // 音频标准化 *     const normalized = await this.normalizeAudio(denoi;s;e;d;); */
-    // 音频分段 *     const segmented = await this.segmentAudio(normalized, t;y;p;e;); */
+  //////     音频数据预处理  private async preprocessAudioData(audio: AudioData,
+    type: string);: Promise<ProcessedAudioData /////    >  {
+    // 音频降噪 //////     const denoised = await this.denoiseAudio(aud;i;o;);
+    // 音频标准化 //////     const normalized = await this.normalizeAudio(denois;e;d;);
+    // 音频分段 //////     const segmented = await this.segmentAudio(normalized, ty;p;e;);
     return {
       original: audio,
       processed: segmented,
@@ -181,93 +183,93 @@ export interface UserProfile { age: number,
         processingTime: Date.now()}
     ;};
   }
-  // /    特征提取  private async extractFeatures(data: ProcessedListeningData;): Promise<ListeningFeatures />  {
-    const features: ListeningFeatures = {,
+  // 特征提取  private async extractFeatures(data: ProcessedListeningData): Promise<ListeningFeatures /////    >  {
+    const features: ListeningFeatures = {;
       voice: {
         pitch: 0,
         volume: 0,
-        tone: "",
-        clarity: "",
-        rhythm: "",
+        tone: ","
+        clarity: ","
+        rhythm: ","
         emotion: ""
       },
-      breathing: { rate: 0, depth: "", rhythm: "", sound: "", effort: ""},
-      cough: { frequency: 0, intensity: "", type: "", wetness: "", timing: ""}
+      breathing: { rate: 0, depth: ", rhythm: ", sound: ", effort: "},
+      cough: { frequency: 0, intensity: ", type: ", wetness: ", timing: "}
     };
-    // 提取语音特征 *     if (data.voiceRecording) { */
+    // 提取语音特征 //////     if (data.voiceRecording) {
       features.voice = await this.voiceAnalyzer.extractFeatures(
-        data.voiceRecordin;g
+        data.voiceRecording;
       ;);
     }
-    // 提取呼吸特征 *     if (data.breathingRecording) { */
+    // 提取呼吸特征 //////     if (data.breathingRecording) {
       features.breathing = await this.breathingAnalyzer.extractFeatures(
-        data.breathingRecordin;g
+        data.breathingRecording;
       ;);
     }
-    // 提取咳嗽特征 *     if (data.coughRecording) { */
+    // 提取咳嗽特征 //////     if (data.coughRecording) {
       features.cough = await this.coughAnalyzer.extractFeatures(
-        data.coughRecordin;g
+        data.coughRecording;
       ;);
     }
     return featur;e;s;
   }
-  // /    执行各项分析  private async performAnalyses(data: ProcessedListeningData,
+  //////     执行各项分析  private async performAnalyses(data: ProcessedListeningData,
     features: ListeningFeatures,
-    userProfile?: UserProfile
-  );: Promise<AnalysisResults />  {
+    userProfile?: UserProfile;
+  ): Promise<AnalysisResults /////    >  {
     const results: AnalysisResults = {};
-    // 语音分析 *     if (data.voiceRecording) { */
+    // 语音分析 //////     if (data.voiceRecording) {
       results.voiceAnalysis = await this.voiceAnalyzer.analyze(
         features.voice,
-        userProfil;e
+        userProfile;
       ;);
     }
-    // 呼吸分析 *     if (data.breathingRecording) { */
+    // 呼吸分析 //////     if (data.breathingRecording) {
       results.breathingAnalysis = await this.breathingAnalyzer.analyze(
         features.breathing,
-        userProfil;e
+        userProfile;
       ;);
     }
-    // 咳嗽分析 *     if (data.coughRecording) { */
+    // 咳嗽分析 //////     if (data.coughRecording) {
       results.coughAnalysis = await this.coughAnalyzer.analyze(
         features.cough,
-        userProfil;e
+        userProfile;
       ;);
     }
     return resul;t;s;
   }
-  // /    整合分析结果  private async integrateResults(features: ListeningFeatures,
-    analyses: AnalysisResults;);: Promise<ListeningResult />  {
-    // 计算整体置信度 *     const confidence = this.calculateOverallConfidence(analyse;s;); */
-    // 生成综合分析 *     const analysis = await this.generateComprehensiveAnalysis(analy;s;e;s;); */
+  //////     整合分析结果  private async integrateResults(features: ListeningFeatures,
+    analyses: AnalysisResults);: Promise<ListeningResult /////    >  {
+    // 计算整体置信度 //////     const confidence = this.calculateOverallConfidence(analyses;);
+    // 生成综合分析 //////     const analysis = await this.generateComprehensiveAnalysis(analys;e;s;);
     return {
       confidence,
       features,
       analysis,
       voiceAnalysis: analyses.voiceAnalysis,
       breathingAnalysis: analyses.breathingAnalysis,
-      coughAnalysis: analyses.coughAnalysi;s
+      coughAnalysis: analyses.coughAnalysi;s;
     ;};
   }
-  // /    计算整体置信度  private calculateOverallConfidence(analyses: AnalysisResults);: number  {
+  //////     计算整体置信度  private calculateOverallConfidence(analyses: AnalysisResults): number  {
     const confidences: number[] = [];
-    // 基于各项分析的完整性和一致性计算置信度 *     if (analyses.voiceAnalysis) { */
-      confidences.push(0.8);
-    } // 语音分析权重 *     if (analyses.breathingAnalysis) { */
-      confidences.push(0.9);
-    } // 呼吸分析权重 *     if (analyses.coughAnalysis) { */
-      confidences.push(0.7);
-    } // 咳嗽分析权重 *  */
+    // 基于各项分析的完整性和一致性计算置信度 //////     if (analyses.voiceAnalysis) {
+      confidences.push(0.8)
+    } // 语音分析权重 //////     if (analyses.breathingAnalysis) {
+      confidences.push(0.9)
+    } // 呼吸分析权重 //////     if (analyses.coughAnalysis) {
+      confidences.push(0.7)
+    } // 咳嗽分析权重 //////
     if (confidences.length === 0) {
-      return 0;.;5;
+      return 0.;5;
     }
-    // 记录渲染性能
-    performanceMonitor.recordRender();
+    //////     记录渲染性能
+performanceMonitor.recordRender();
     return (;
-      confidences.reduce((sum, con;f;); => sum + conf, 0) / confidences.length/    );
+      confidences.reduce((sum, con;f;); => sum + conf, 0) / confidences.length/////        );
   }
-  // /    生成综合分析  private async generateComprehensiveAnalysis(analyses: AnalysisResults;);: Promise<string>  {
-    const analysisTexts: string[] = []
+  //////     生成综合分析  private async generateComprehensiveAnalysis(analyses: AnalysisResults);: Promise<string>  {
+    const analysisTexts: string[] = [];
     if (analyses.voiceAnalysis) {
       analysisTexts.push(
         `语音分析：音调${analyses.voiceAnalysis.toneAnalysis.pitch.value}Hz，情绪状态${analyses.voiceAnalysis.emotionalState.mood}`
@@ -275,41 +277,41 @@ export interface UserProfile { age: number,
     }
     if (analyses.breathingAnalysis) {
       analysisTexts.push(
-        `呼吸分析：呼吸频率${analyses.breathingAnalysis.respiratoryAssessment.rate.value}次/分，气机${analyses.breathingAnalysis.qiAssessment.qiFlow}`/      )
+        `呼吸分析：呼吸频率${analyses.breathingAnalysis.respiratoryAssessment.rate.value}次/分，气机${analyses.breathingAnalysis.qiAssessment.qiFlow}`/////          )
     }
     if (analyses.coughAnalysis) {
       analysisTexts.push(
         `咳嗽分析：${analyses.coughAnalysis.coughCharacteristics.type.value}，${analyses.coughAnalysis.coughCharacteristics.wetness.value}`
       );
     }
-    // 使用知识库生成综合分析 *     const comprehensiveAnalysis = */;
-      await this.knowledgeBase.generateCalculationAnalysis({ listeningAnalysis: anal;y;s;e;s ; })
-    return [...analysisTexts, "", "综合闻诊分析：", comprehensiveAnalysis].join(
+    // 使用知识库生成综合分析 //////     const comprehensiveAnalysis =
+      await this.knowledgeBase.generateCalculationAnalysis({ listeningAnalysis: anal;y;s;e;s ; });
+    return [...analysisTexts, ", "综合闻诊分析：", comprehensiveAnalysis].join("
       "\n;"
     ;);
   }
-  // 音频处理方法（简化实现） *   private async denoiseAudio(audio: AudioData);: Promise<AudioData  *// >  {
-    // 实现音频降噪逻辑 *     return aud;i;o;  *// 占位符* *   } * *//
-  private async normalizeAudio(audio: AudioData);: Promise<AudioData />  {
-    // 实现音频标准化逻辑 *     return aud;i;o;  *// 占位符* *   } * *//
+  // 音频处理方法（简化实现） // private async denoiseAudio(audio: AudioData): Promise<AudioData  /////     >  {
+    // 实现音频降噪逻辑 // return audi;o;  / 占位符* // } * /////
+  private async normalizeAudio(audio: AudioData): Promise<AudioData /////    >  {
+    // 实现音频标准化逻辑 // return audi;o;  / 占位符* // } * /////
   private async segmentAudio(audio: AudioData,
-    type: string;);: Promise<AudioData />  {
-    // 实现音频分段逻辑 *     return aud;i;o;  *// 占位符* *   } * *//
-  // /    模拟事件发射  public on(event: string, callback: (data: unknown); => void): void {
-    // 简化的事件处理 *   } */
-  public emit(event: string, data?: unknown);: void  {
-    // 简化的事件发射 *   } */
-  // /    清理资源  public async cleanup();: Promise<void> {
-    // 清理分析器资源 *     await Promise.all( */
+    type: string);: Promise<AudioData /////    >  {
+    // 实现音频分段逻辑 // return audi;o;  / 占位符* // } * /////
+  //////     模拟事件发射  public on(event: string, callback: (data: unknown) => void): void {
+    // 简化的事件处理 //////     }
+  public emit(event: string, data?: unknown): void  {
+    // 简化的事件发射 //////     }
+  //////     清理资源  public async cleanup(): Promise<void> {
+    // 清理分析器资源 //////     await Promise.all(
       [
         this.voiceAnalyzer.cleanup?.(),
         this.breathingAnalyzer.cleanup?.(),
         this.coughAnalyzer.cleanup?.()
-      ].filter(Boolea;n;);
+      ].filter(Boolean;);
     );
   }
 }
-// 辅助类型定义 * interface ProcessedListeningData { */
+// 辅助类型定义 * interface ProcessedListeningData { ////
   voiceRecording?: ProcessedAudioData;
   breathingRecording?: ProcessedAudioData;
   coughRecording?: ProcessedAudioData}
@@ -323,19 +325,19 @@ interface AnalysisResults {
   voiceAnalysis?: VoiceAnalysis;
   breathingAnalysis?: BreathingAnalysis;
   coughAnalysis?: CoughAnalysis}
-// 分析器类（简化实现） * class VoiceAnalyzer { */
+// 分析器类（简化实现） * class VoiceAnalyzer { ////
   constructor(private config: unknown, private knowledgeBase: TCMKnowledgeBase) {}
-  async extractFeatures(audio: ProcessedAudioData): Promise<VoiceFeatures />  {
-    // 实现语音特征提取 *     return { */
-      pitch: 150, // Hz *       volume: 65,  *// dB* *       tone: "平和", * *//
+  async extractFeatures(audio: ProcessedAudioData): Promise<VoiceFeatures /////    >  {
+    // 实现语音特征提取 //////     return {
+      pitch: 150, // Hz // volume: 65,  / dB* // tone: "平和", * /////
       clarity: "清晰",
       rhythm: "规律",
-      emotion: "平静"};
+      emotion: "平静"}
   }
   async analyze(features: VoiceFeatures,
-    userProfile?: UserProfile
-  );: Promise<VoiceAnalysis />  {
-    // 实现语音分析 *     return { */;
+    userProfile?: UserProfile;
+  );: Promise<VoiceAnalysis /////    >  {
+    // 实现语音分析 //////     return {
       toneAnalysis: {
         pitch: { value: features.pitch, significance: "音调正常，肺气充;足" ;},
         volume: { value: features.volume, significance: "音量适中，气机通畅"},
@@ -359,21 +361,21 @@ interface AnalysisResults {
       syndromeIndications: ["气机调畅"]
     };
   }
-  async cleanup();: Promise<void> {}
+  async cleanup(): Promise<void> {}
 }
 class BreathingAnalyzer {
   constructor(private config: unknown, private knowledgeBase: TCMKnowledgeBase) {}
-  async extractFeatures(audio: ProcessedAudioData): Promise<BreathingFeatures />  {
-    // 实现呼吸特征提取 *     return { */
-      rate: 16, // 次 * 分 *// depth: "适中",
+  async extractFeatures(audio: ProcessedAudioData): Promise<BreathingFeatures /////    >  {
+    // 实现呼吸特征提取 //////     return {
+      rate: 16, // 次 * 分 /////     depth: "适中",
       rhythm: "规律",
       sound: "平和",
-      effort: "轻松"};
+      effort: "轻松"}
   }
   async analyze(features: BreathingFeatures,
-    userProfile?: UserProfile
-  );: Promise<BreathingAnalysis />  {
-    // 实现呼吸分析 *     return { */;
+    userProfile?: UserProfile;
+  );: Promise<BreathingAnalysis /////    >  {
+    // 实现呼吸分析 //////     return {
       respiratoryAssessment: {
         rate: { value: features.rate, significance: "呼吸频率正;常" ;},
         depth: {
@@ -388,7 +390,7 @@ class BreathingAnalyzer {
       qiAssessment: {
         qiStrength: "充足",
         qiFlow: "通畅",
-        qiDeficiency: false
+        qiDeficiency: false;
       },
       organFunction: {
         lung: "宣发肃降正常",
@@ -398,21 +400,21 @@ class BreathingAnalyzer {
       syndromeIndications: ["肺气充足", "肾纳气正常"]
     };
   }
-  async cleanup();: Promise<void> {}
+  async cleanup(): Promise<void> {}
 }
 class CoughAnalyzer {
   constructor(private config: unknown, private knowledgeBase: TCMKnowledgeBase) {}
-  async extractFeatures(audio: ProcessedAudioData): Promise<CoughFeatures />  {
-    // 实现咳嗽特征提取 *     return { */
-      frequency: 0, // 无咳嗽 *       intensity: "无", */
+  async extractFeatures(audio: ProcessedAudioData): Promise<CoughFeatures /////    >  {
+    // 实现咳嗽特征提取 //////     return {
+      frequency: 0, // 无咳嗽 //////     intensity: "无",
       type: "无",
       wetness: "无",
-      timing: "无"};
+      timing: "无"}
   }
   async analyze(features: CoughFeatures,
-    userProfile?: UserProfile
-  );: Promise<CoughAnalysis />  {
-    // 实现咳嗽分析 *     return { */;
+    userProfile?: UserProfile;
+  );: Promise<CoughAnalysis /////    >  {
+    // 实现咳嗽分析 //////     return {
       coughCharacteristics: {
         type: { value: features.type, significance: "无咳嗽，肺气清;肃" ;},
         wetness: { value: features.wetness, significance: "无痰湿"},
@@ -422,7 +424,7 @@ class CoughAnalyzer {
         windCold: 0,
         windHeat: 0,
         dryness: 0,
-        phlegmDampness: 0
+        phlegmDampness: 0;
       },
       organInvolvement: {
         lung: "正常",
@@ -432,6 +434,6 @@ class CoughAnalyzer {
       syndromeIndications: ["肺气清肃"]
     };
   }
-  async cleanup();: Promise<void> {}
+  async cleanup(): Promise<void> {}
 }
 export default ListeningDiagnosisAlgorithm;

@@ -6,7 +6,6 @@ Review Tasks Routes
 """
 
 from typing import List, Optional
-from uuid import UUID
 
 import structlog
 from fastapi import APIRouter, Depends, HTTPException, Query, status
@@ -27,7 +26,6 @@ from ...core.service import HumanReviewService
 logger = structlog.get_logger(__name__)
 
 router = APIRouter()
-
 
 @router.post(
     "/",
@@ -74,7 +72,6 @@ async def submit_review(
             detail=f"Failed to submit review: {str(e)}",
         )
 
-
 @router.get(
     "/{task_id}",
     response_model=ReviewTask,
@@ -117,7 +114,6 @@ async def get_review(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to get review task: {str(e)}",
         )
-
 
 @router.get(
     "/",
@@ -179,7 +175,6 @@ async def list_reviews(
             detail=f"Failed to list review tasks: {str(e)}",
         )
 
-
 @router.put(
     "/{task_id}",
     response_model=ReviewTask,
@@ -226,7 +221,6 @@ async def update_review(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to update review task: {str(e)}",
         )
-
 
 @router.post(
     "/{task_id}/assign",
@@ -280,7 +274,6 @@ async def assign_review(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to assign review task: {str(e)}",
         )
-
 
 @router.post(
     "/{task_id}/complete",
@@ -345,7 +338,6 @@ async def complete_review(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to complete review task: {str(e)}",
         )
-
 
 @router.delete(
     "/{task_id}",

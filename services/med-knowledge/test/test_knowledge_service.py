@@ -1,5 +1,4 @@
 import pytest
-import asyncio
 from unittest.mock import AsyncMock, MagicMock, patch
 
 from app.models.entities import (
@@ -10,7 +9,6 @@ from app.models.entities import (
     LifestyleIntervention, LifestyleInterventionListResponse
 )
 from app.services.knowledge_service import KnowledgeService
-
 
 class TestKnowledgeService:
     """知识服务测试类"""

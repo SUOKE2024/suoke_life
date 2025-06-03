@@ -12,7 +12,6 @@ from typing import Any
 try:
     from kafka import KafkaAdminClient, KafkaConsumer, KafkaProducer
     from kafka.admin import ConfigResource, ConfigResourceType, NewTopic
-    from kafka.errors import KafkaError
 
     HAS_KAFKA = True
 except ImportError:
@@ -29,7 +28,6 @@ from .message_queue import (
 )
 
 logger = logging.getLogger(__name__)
-
 
 class KafkaMessageQueue(MessageQueue):
     """Kafka消息队列实现"""

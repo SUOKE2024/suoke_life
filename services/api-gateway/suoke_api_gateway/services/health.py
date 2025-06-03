@@ -10,7 +10,6 @@ from datetime import datetime, timedelta
 from typing import Dict, List, Optional
 
 import httpx
-import redis.asyncio as redis
 from pydantic import BaseModel
 
 from ..core.config import Settings
@@ -19,14 +18,12 @@ from ..models.gateway import HealthCheckResult
 
 logger = get_logger(__name__)
 
-
 class HealthStatus(BaseModel):
     """健康状态模型"""
     status: str  # healthy, unhealthy, degraded
     timestamp: datetime
     details: Dict[str, HealthCheckResult]
     overall_score: float  # 0-100
-
 
 class HealthService:
     """健康检查服务"""

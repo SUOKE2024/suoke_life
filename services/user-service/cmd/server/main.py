@@ -4,11 +4,9 @@
 """
 import argparse
 import asyncio
-import json
 import logging
 import os
 import signal
-import sys
 import time
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -32,12 +30,10 @@ from internal.service.user_service import UserService
 from pkg.middleware.rate_limit import add_rate_limit_middleware
 from pkg.middleware.rbac import RBACMiddleware
 
-
 # 全局变量
 logger = logging.getLogger(__name__)
 grpc_server = None
 shutdown_event = asyncio.Event()
-
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -98,7 +94,6 @@ async def lifespan(app: FastAPI):
     shutdown_event.set()
     logger.info("用户服务已正常关闭")
 
-
 def load_config(config_path: str) -> Dict[str, Any]:
     """
     加载配置文件
@@ -145,7 +140,6 @@ def load_config(config_path: str) -> Dict[str, Any]:
     
     return config
 
-
 def setup_signal_handlers():
     """
     设置信号处理器
@@ -162,7 +156,6 @@ def setup_signal_handlers():
     # 在Windows上SIGTSTP不可用
     if hasattr(signal, "SIGTSTP"):
         signal.signal(signal.SIGTSTP, handle_signal)  # Ctrl+Z
-
 
 def create_app(config_path: str) -> FastAPI:
     """
@@ -328,7 +321,6 @@ def create_app(config_path: str) -> FastAPI:
     
     return app
 
-
 async def main():
     """
     主函数
@@ -373,7 +365,6 @@ async def main():
     logger.info("等待服务关闭...")
     await shutdown_event.wait()
     logger.info("服务已完全关闭")
-
 
 if __name__ == "__main__":
     asyncio.run(main()) 

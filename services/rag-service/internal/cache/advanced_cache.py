@@ -8,7 +8,6 @@
 
 import asyncio
 import hashlib
-import json
 import time
 from typing import Dict, List, Any, Optional, Union, Tuple, Callable
 from dataclasses import dataclass, field
@@ -19,14 +18,12 @@ from loguru import logger
 
 from ..observability.metrics import MetricsCollector
 
-
 class CacheLevel(str, Enum):
     """缓存层级"""
     L1_MEMORY = "l1_memory"          # L1内存缓存
     L2_REDIS = "l2_redis"            # L2 Redis缓存
     L3_DISK = "l3_disk"              # L3磁盘缓存
     L4_DISTRIBUTED = "l4_distributed"  # L4分布式缓存
-
 
 class CacheStrategy(str, Enum):
     """缓存策略"""
@@ -36,14 +33,12 @@ class CacheStrategy(str, Enum):
     ADAPTIVE = "adaptive"            # 自适应策略
     TCM_SEMANTIC = "tcm_semantic"    # 中医语义缓存
 
-
 class InvalidationStrategy(str, Enum):
     """失效策略"""
     TIME_BASED = "time_based"        # 基于时间
     VERSION_BASED = "version_based"  # 基于版本
     DEPENDENCY_BASED = "dependency_based"  # 基于依赖
     SEMANTIC_BASED = "semantic_based"  # 基于语义
-
 
 @dataclass
 class CacheEntry:
@@ -70,7 +65,6 @@ class CacheEntry:
         self.last_accessed = time.time()
         self.access_count += 1
 
-
 @dataclass
 class CacheStats:
     """缓存统计"""
@@ -85,7 +79,6 @@ class CacheStats:
         """命中率"""
         total = self.hits + self.misses
         return self.hits / total if total > 0 else 0.0
-
 
 class CacheBackend(ABC):
     """缓存后端抽象基类"""
@@ -114,7 +107,6 @@ class CacheBackend(ABC):
     async def get_stats(self) -> CacheStats:
         """获取统计信息"""
         pass
-
 
 class MemoryCache(CacheBackend):
     """内存缓存后端"""
@@ -196,7 +188,6 @@ class MemoryCache(CacheBackend):
         lru_key = min(self.cache.keys(), key=lambda k: self.cache[k].last_accessed)
         await self.delete(lru_key)
         self.stats.evictions += 1
-
 
 class RedisCache(CacheBackend):
     """Redis缓存后端"""
@@ -286,7 +277,6 @@ class RedisCache(CacheBackend):
         """获取统计信息"""
         return self.stats
 
-
 class SemanticCacheManager:
     """语义缓存管理器"""
     
@@ -333,7 +323,6 @@ class SemanticCacheManager:
     
     def _cosine_similarity(self, vec1: List[float], vec2: List[float]) -> float:
         """计算余弦相似度"""
-        import numpy as np
         
         vec1 = np.array(vec1)
         vec2 = np.array(vec2)
@@ -346,7 +335,6 @@ class SemanticCacheManager:
             return 0.0
         
         return dot_product / (norm1 * norm2)
-
 
 class CachePrewarmer:
     """缓存预热器"""
@@ -427,7 +415,6 @@ class CachePrewarmer:
             except Exception as e:
                 logger.error(f"定期预热任务失败: {e}")
                 await asyncio.sleep(300)  # 出错后等待5分钟再试
-
 
 class AdvancedCacheManager:
     """高级缓存管理器"""

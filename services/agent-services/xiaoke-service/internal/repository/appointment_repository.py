@@ -10,7 +10,6 @@ import uuid
 from datetime import datetime
 from typing import Any
 
-import motor.motor_asyncio
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -18,7 +17,6 @@ from internal.domain.models import AppointmentStatus
 from pkg.utils.config_loader import get_config
 
 logger = logging.getLogger(__name__)
-
 
 class AppointmentRepository:
     """预约存储库"""

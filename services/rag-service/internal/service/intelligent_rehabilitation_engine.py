@@ -6,24 +6,16 @@
 结合中医康复理念和现代康复医学，为用户制定科学的康复训练计划
 """
 
-import asyncio
-import json
-import numpy as np
 from typing import Dict, List, Any, Optional, Tuple, Union, Set, Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from datetime import datetime, timedelta
 from loguru import logger
-import pandas as pd
-from sklearn.cluster import KMeans
-from sklearn.preprocessing import StandardScaler
-from sklearn.metrics.pairwise import cosine_similarity
 import warnings
 warnings.filterwarnings('ignore')
 
 from ..observability.metrics import MetricsCollector
 from ..observability.tracing import trace_operation, SpanKind
-
 
 class RehabilitationType(str, Enum):
     """康复类型"""
@@ -35,7 +27,6 @@ class RehabilitationType(str, Enum):
     CARDIAC_REHABILITATION = "cardiac_rehabilitation" # 心脏康复
     NEUROLOGICAL_REHABILITATION = "neurological_rehabilitation" # 神经康复
     RESPIRATORY_REHABILITATION = "respiratory_rehabilitation" # 呼吸康复
-
 
 class ExerciseType(str, Enum):
     """运动类型"""
@@ -52,14 +43,12 @@ class ExerciseType(str, Enum):
     TCM_TAICHI = "tcm_taichi"                      # 中医太极
     TCM_MASSAGE = "tcm_massage"                    # 中医按摩
 
-
 class DifficultyLevel(str, Enum):
     """难度级别"""
     BEGINNER = "beginner"           # 初级
     INTERMEDIATE = "intermediate"   # 中级
     ADVANCED = "advanced"           # 高级
     EXPERT = "expert"               # 专家级
-
 
 class ProgressStatus(str, Enum):
     """进度状态"""
@@ -69,7 +58,6 @@ class ProgressStatus(str, Enum):
     PAUSED = "paused"               # 暂停
     MODIFIED = "modified"           # 已修改
     DISCONTINUED = "discontinued"   # 已停止
-
 
 class InjuryType(str, Enum):
     """损伤类型"""
@@ -82,7 +70,6 @@ class InjuryType(str, Enum):
     RESPIRATORY = "respiratory"             # 呼吸系统
     METABOLIC = "metabolic"                 # 代谢性疾病
 
-
 class TCMConstitution(str, Enum):
     """中医体质类型"""
     BALANCED = "balanced"                   # 平和质
@@ -94,7 +81,6 @@ class TCMConstitution(str, Enum):
     BLOOD_STASIS = "blood_stasis"           # 血瘀质
     QI_STAGNATION = "qi_stagnation"         # 气郁质
     SPECIAL_CONSTITUTION = "special_constitution" # 特禀质
-
 
 @dataclass
 class PatientProfile:
@@ -122,7 +108,6 @@ class PatientProfile:
     def __post_init__(self):
         self.bmi = self.weight / ((self.height / 100) ** 2)
 
-
 @dataclass
 class Exercise:
     """运动项目"""
@@ -148,7 +133,6 @@ class Exercise:
     tcm_meridians: List[str] = field(default_factory=list)  # 相关经络
     tcm_acupoints: List[str] = field(default_factory=list)  # 相关穴位
 
-
 @dataclass
 class RehabilitationSession:
     """康复训练课程"""
@@ -169,7 +153,6 @@ class RehabilitationSession:
         total_duration += sum(ex.duration_minutes for ex in self.warm_up_exercises)
         total_duration += sum(ex.duration_minutes for ex in self.cool_down_exercises)
         self.total_duration_minutes = total_duration
-
 
 @dataclass
 class RehabilitationPlan:
@@ -194,7 +177,6 @@ class RehabilitationPlan:
     def __post_init__(self):
         self.total_weeks = (self.end_date - self.start_date).days // 7
 
-
 @dataclass
 class ProgressRecord:
     """进度记录"""
@@ -216,7 +198,6 @@ class ProgressRecord:
     side_effects: List[str] = field(default_factory=list)
     satisfaction_rating: int = 5            # 满意度 (1-10)
 
-
 @dataclass
 class AssessmentResult:
     """评估结果"""
@@ -232,7 +213,6 @@ class AssessmentResult:
     overall_progress: float = 0.0
     recommendations: List[str] = field(default_factory=list)
     next_assessment_date: Optional[datetime] = None
-
 
 class ExerciseLibrary:
     """运动库"""
@@ -378,7 +358,6 @@ class ExerciseLibrary:
             precautions=["不要过度用力", "保持放松"],
             benefits=["改善肺功能", "减少焦虑", "促进放松"]
         )
-
 
 class RehabilitationPlanGenerator:
     """康复计划生成器"""
@@ -762,7 +741,6 @@ class RehabilitationPlanGenerator:
                         session.exercises.append(tcm_exercise)
         
         return plan
-
 
 class ProgressTracker:
     """进度跟踪器"""
@@ -1162,7 +1140,6 @@ class ProgressTracker:
         
         return recommendations
 
-
 class IntelligentRehabilitationEngine:
     """智能康复训练引擎"""
     
@@ -1515,7 +1492,6 @@ class IntelligentRehabilitationEngine:
             logger.error(f"Error getting rehabilitation statistics: {str(e)}")
             raise
 
-
 def initialize_rehabilitation_engine(
     config: Dict[str, Any],
     metrics_collector: Optional[MetricsCollector] = None
@@ -1523,10 +1499,8 @@ def initialize_rehabilitation_engine(
     """初始化智能康复训练引擎"""
     return IntelligentRehabilitationEngine(config, metrics_collector)
 
-
 # 全局实例
 _rehabilitation_engine = None
-
 
 def get_rehabilitation_engine() -> Optional[IntelligentRehabilitationEngine]:
     """获取智能康复训练引擎实例"""

@@ -15,7 +15,6 @@ from typing import Any
 from internal.agent.model_factory import get_model_factory
 
 # 协议导入
-from ...api.grpc import four_diagnosis_pb2 as diagnosis_pb
 from ..utils.config_loader import get_config
 from ..utils.metrics import get_metrics_collector
 
@@ -62,7 +61,6 @@ class SyndromeAnalyzer:
         """加载提示语模板"""
         self.config.get_section('paths.prompts', 'config/prompts')
         templates = {}
-
 
         for key, filename in template_files.items():
             try:

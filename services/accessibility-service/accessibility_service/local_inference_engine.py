@@ -8,18 +8,14 @@ import logging
 import time
 from typing import Dict, List, Optional, Any, Tuple
 from pathlib import Path
-import numpy as np
-import onnxruntime as ort
 from dataclasses import dataclass
 from enum import Enum
 import threading
 import queue
-import json
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
 
 class ModelType(Enum):
     """模型类型枚举"""
@@ -29,7 +25,6 @@ class ModelType(Enum):
     LIFESTYLE_RECOMMENDATION = "lifestyle_recommendation"
     ACCESSIBILITY_ENHANCEMENT = "accessibility_enhancement"
 
-
 class InferenceStatus(Enum):
     """推理状态枚举"""
     PENDING = "pending"
@@ -37,7 +32,6 @@ class InferenceStatus(Enum):
     COMPLETED = "completed"
     FAILED = "failed"
     CANCELLED = "cancelled"
-
 
 @dataclass
 class ModelInfo:
@@ -52,7 +46,6 @@ class ModelInfo:
     is_quantized: bool = False
     metadata: Dict[str, Any] = None
 
-
 @dataclass
 class InferenceRequest:
     """推理请求"""
@@ -62,7 +55,6 @@ class InferenceRequest:
     priority: int = 1  # 1=低, 2=中, 3=高
     timeout: float = 30.0
     callback: Optional[callable] = None
-
 
 @dataclass
 class InferenceResult:
@@ -75,7 +67,6 @@ class InferenceResult:
     confidence: Optional[float] = None
     timestamp: float = None
     metadata: Dict[str, Any] = None
-
 
 class LocalInferenceEngine:
     """本地推理引擎"""
@@ -497,7 +488,6 @@ class LocalInferenceEngine:
         
         logger.info("资源清理完成")
 
-
 class AccessibilityInferenceService:
     """无障碍推理服务 - 为无障碍功能提供AI推理支持"""
     
@@ -570,7 +560,6 @@ class AccessibilityInferenceService:
         
         return {'error': '推理失败'}
 
-
 # 使用示例
 async def main():
     """主函数示例"""
@@ -591,7 +580,6 @@ async def main():
     finally:
         # 关闭服务
         await service.shutdown()
-
 
 if __name__ == "__main__":
     asyncio.run(main()) 

@@ -4,23 +4,20 @@ exports.VoiceRecognitionService = void 0;
 class VoiceRecognitionService {
     constructor() {
         this.recognizing = false;
-        this.language = 'zh-CN';
-        // 在 VS Code 扩展环境中，需要检查 window 对象是否存在/        if (typeof window !== 'undefined') {
-            this.speechSynthesis = window.speechSynthesis;
+        this.language = "zh-CN;
+        // 在 VS Code 扩展环境中，需要检查 window 对象是否存在/        if (typeof window !== "undefined") {
+            this.speechSynthesis = window.speechSynthesis
             this.initializeRecognition();
         }
         else {
-            console.log('语音功能在 VS Code 扩展环境中不可用，需要在 webview 中使用');
-        }
+            }
     }
     initializeRecognition() {
-        // 检查浏览器是否支持语音识别/        if (typeof window === 'undefined') {
-            console.log('window 对象不存在，语音识别不可用');
+        // 检查浏览器是否支持语音识别/        if (typeof window === "undefined) {
             return;
         }
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (!SpeechRecognition) {
-            console.warn('浏览器不支持语音识别');
             return;
         }
         this.recognition = new SpeechRecognition();
@@ -28,11 +25,10 @@ class VoiceRecognitionService {
         this.recognition.interimResults = true;
         this.recognition.lang = this.language;
         this.recognition.onstart = () => {
-            console.log('语音识别已开始');
             this.recognizing = true;
         };
         this.recognition.onresult = (event) => {
-            let finalTranscript = '';
+            let finalTranscript = ";
             for (let i = event.resultIndex; i < event.results.length; i++) {
                 const transcript = event.results[i][0].transcript;
                 if (event.results[i].isFinal) {
@@ -44,20 +40,17 @@ class VoiceRecognitionService {
             }
         };
         this.recognition.onerror = (event) => {
-            console.error('语音识别错误:', event.error);
             this.recognizing = false;
         };
         this.recognition.onend = () => {
-            console.log('语音识别已结束');
             this.recognizing = false;
         };
     }
     async startRecognition() {
         if (!this.recognition) {
-            throw new Error('语音识别不可用');
+            throw new Error("语音识别不可用");
         }
         if (this.recognizing) {
-            console.log('语音识别已在运行');
             return;
         }
         try {

@@ -1,21 +1,23 @@
-import { AgentType, AGENTS } from "../screens/components/AgentCard"/import { useState, useCallback } from "react";
-import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor';
+import React from "react";
+import { AgentType, AGENTS } from "../screens/components/AgentCard";/////    import { useState, useCallback } from "react";
+import { usePerformanceMonitor } from "../hooks/////    usePerformanceMonitor";
 export interface UseAgentReturn {
   selectedAgent: AgentType,
   setSelectedAgent: (agent: AgentType) => void,
   switchAgent: (agent: AgentType) => void,
-  getAgentInfo: (agent: AgentType) => (typeof AGENTS)[AgentType],
-  generateAgentResponse: (userInput: string, agent: AgentType) => string}
-export const useAgent = (initialAgent: AgentType = "xiaoa;i;";): UseAgentReturn =>  {;
-  const [selectedAgent, setSelectedAgent] = useState<AgentType />(initialAgen;t;);/
-  const switchAgent = useCallback(() => {
-  // 性能监控
-  const performanceMonitor = usePerformanceMonitor('useAgent', {
+  getAgentInfo: (agent: AgentType) => (typeof AGENTS)[AgentType],;
+  generateAgentResponse: (userInput: string, agent: AgentType) => string};
+export const useAgent = (initialAgent: AgentType = ";"
+xiaoa;i;";): UseAgentReturn => {;}"
+  const [selectedAgent, setSelectedAgent] = useState<AgentType />(initialAgen;t;);//////
+  const switchAgent = useCallback(() => {;}
+  //////     性能监控
+const performanceMonitor = usePerformanceMonitor("useAgent', {;"'
     trackRender: true,
-    trackMemory: false,
-    warnThreshold: 100, // ms ;};);
-    // TODO: Implement function body *}, []);  *// TODO: 检查依赖项;* * *  TODO: 检查依赖项;  * * */// TODO: 检查依赖项;* * * *  TODO: 检查依赖项;  * * * */// TODO: 检查依赖项;// TODO: 检查依赖项;// TODO: 检查依赖项;// TODO: 检查依赖项;// , TODO: 检查依赖项;// , TODO: 检查依赖项;//// const getAgentInfo = useCallback((); => {
-    // TODO: Implement function body *}, []);  *// TODO: 检查依赖项;* * *  TODO: 检查依赖项;  * * */// TODO: 检查依赖项;* * * *  TODO: 检查依赖项;  * * * */// TODO: 检查依赖项;// TODO: 检查依赖项;// TODO: 检查依赖项;// TODO: 检查依赖项;// , TODO: 检查依赖项;// , TODO: 检查依赖项;//// const generateAgentResponse = useCallback((userInput: string, agent: AgentTyp;e;);: string =>  {
+    trackMemory: false,;
+    warnThreshold: 100, //////     ms };);
+    // TODO: Implement function body *}, [])  / TODO: 检查依赖项* * // TODO: 检查依赖项;  * * / TODO: 检查依赖项* * * // TODO: 检查依赖项;  * * * / TODO: 检查依赖项// TODO: 检查依赖项// TODO: 检查依赖项// TODO: 检查依赖项// , TODO: 检查依赖项// , TODO: 检查依赖项// //////     const getAgentInfo = useCallback(() => {}
+    // TODO: Implement function body *}, [])  / TODO: 检查依赖项* * // TODO: 检查依赖项;  * * / TODO: 检查依赖项* * * // TODO: 检查依赖项;  * * * / TODO: 检查依赖项// TODO: 检查依赖项// TODO: 检查依赖项// TODO: 检查依赖项// , TODO: 检查依赖项// , TODO: 检查依赖项// //////     const generateAgentResponse = useCallback((userInput: string, agent: AgentType;);: string => {}
       const responses = {;
         xiaoai;: ;["我理解您的关注。让我为您分析一下健康状况。",
           "根据您的描述，我建议您注意以下几点...",
@@ -43,7 +45,7 @@ export const useAgent = (initialAgent: AgentType = "xiaoa;i;";): UseAgentReturn 
         ]
       };
       const agentResponses = responses[agen;t;];
-      const randomIndex = Math.floor(Math.random;(;); * agentResponses.length);
+      const randomIndex = Math.floor(Math.random * agentResponses.length);
       return agentResponses[randomInde;x;];
     },
     []
@@ -53,6 +55,6 @@ export const useAgent = (initialAgent: AgentType = "xiaoa;i;";): UseAgentReturn 
     setSelectedAgent,
     switchAgent,
     getAgentInfo,
-    generateAgentRespons;e
+    generateAgentRespons;e;
   ;};
 };

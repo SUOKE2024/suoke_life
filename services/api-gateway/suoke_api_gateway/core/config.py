@@ -5,16 +5,12 @@
 支持环境变量、配置文件等多种配置源。
 """
 
-from __future__ import annotations
-
-import os
 from functools import lru_cache
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
 from pydantic import BaseModel, Field, validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
-
 
 class DatabaseConfig(BaseModel):
     """数据库配置"""
@@ -25,7 +21,6 @@ class DatabaseConfig(BaseModel):
     pool_timeout: int = Field(default=30, description="连接池超时时间")
     pool_recycle: int = Field(default=3600, description="连接回收时间")
 
-
 class RedisConfig(BaseModel):
     """Redis 配置"""
     
@@ -35,7 +30,6 @@ class RedisConfig(BaseModel):
     socket_timeout: int = Field(default=5, description="Socket超时时间")
     socket_connect_timeout: int = Field(default=5, description="连接超时时间")
 
-
 class JWTConfig(BaseModel):
     """JWT 配置"""
     
@@ -43,7 +37,6 @@ class JWTConfig(BaseModel):
     algorithm: str = Field(default="HS256", description="加密算法")
     access_token_expire_minutes: int = Field(default=30, description="访问令牌过期时间(分钟)")
     refresh_token_expire_days: int = Field(default=7, description="刷新令牌过期时间(天)")
-
 
 class CORSConfig(BaseModel):
     """CORS 配置"""
@@ -53,14 +46,12 @@ class CORSConfig(BaseModel):
     allow_methods: List[str] = Field(default=["*"], description="允许的方法")
     allow_headers: List[str] = Field(default=["*"], description="允许的头部")
 
-
 class RateLimitConfig(BaseModel):
     """限流配置"""
     
     enabled: bool = Field(default=True, description="是否启用限流")
     default_rate: str = Field(default="100/minute", description="默认限流速率")
     storage_url: str = Field(default="redis://localhost:6379/1", description="存储URL")
-
 
 class MonitoringConfig(BaseModel):
     """监控配置"""
@@ -69,7 +60,6 @@ class MonitoringConfig(BaseModel):
     prometheus_port: int = Field(default=9090, description="Prometheus端口")
     jaeger_endpoint: Optional[str] = Field(default=None, description="Jaeger端点")
     log_level: str = Field(default="INFO", description="日志级别")
-
 
 class ServiceConfig(BaseModel):
     """服务配置"""
@@ -81,7 +71,6 @@ class ServiceConfig(BaseModel):
     timeout: int = Field(default=30, description="请求超时时间")
     retry_count: int = Field(default=3, description="重试次数")
 
-
 class GRPCConfig(BaseModel):
     """gRPC 配置"""
     
@@ -90,7 +79,6 @@ class GRPCConfig(BaseModel):
     port: int = Field(default=50051, description="gRPC服务端口")
     max_workers: int = Field(default=10, description="最大工作线程数")
     reflection: bool = Field(default=True, description="是否启用反射")
-
 
 class Settings(BaseSettings):
     """应用程序设置"""
@@ -201,12 +189,10 @@ class Settings(BaseSettings):
         """移除服务配置"""
         self.services.pop(name, None)
 
-
 @lru_cache()
 def get_settings() -> Settings:
     """获取应用程序设置（单例模式）"""
     return Settings()
-
 
 def load_config_from_file(config_path: Union[str, Path]) -> Dict[str, Any]:
     """从文件加载配置"""
@@ -224,7 +210,6 @@ def load_config_from_file(config_path: Union[str, Path]) -> Dict[str, Any]:
             return json.load(f)
         else:
             raise ValueError(f"Unsupported config file format: {config_path.suffix}")
-
 
 def create_settings_from_file(config_path: Union[str, Path]) -> Settings:
     """从配置文件创建设置"""

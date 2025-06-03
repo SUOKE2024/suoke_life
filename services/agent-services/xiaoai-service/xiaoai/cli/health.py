@@ -6,12 +6,9 @@ XiaoAI Agent Health Check Module
 提供小艾智能体的健康检查功能。
 """
 
-from __future__ import annotations
-
 from typing import Any
 
 from loguru import logger
-
 
 def health_check() -> dict[str, Any]:
     """
@@ -72,7 +69,6 @@ def health_check() -> dict[str, Any]:
 
     return result
 
-
 def _check_database_health() -> dict[str, Any]:
     """检查数据库健康状态"""
     try:
@@ -111,7 +107,6 @@ def _check_database_health() -> dict[str, Any]:
             "error": f"数据库连接失败: {e!s}"
         }
 
-
 def _check_cache_health() -> dict[str, Any]:
     """检查缓存健康状态"""
     try:
@@ -139,7 +134,6 @@ def _check_cache_health() -> dict[str, Any]:
             "error": f"缓存连接失败: {e!s}"
         }
 
-
 def _check_message_queue_health() -> dict[str, Any]:
     """检查消息队列健康状态"""
     try:
@@ -159,7 +153,6 @@ def _check_message_queue_health() -> dict[str, Any]:
             "healthy": False,
             "error": f"消息队列检查失败: {e!s}"
         }
-
 
 def _check_ai_models_health() -> dict[str, Any]:
     """检查AI模型健康状态"""
@@ -189,7 +182,6 @@ def _check_ai_models_health() -> dict[str, Any]:
             "healthy": False,
             "error": f"AI模型检查失败: {e!s}"
         }
-
 
 def _check_external_services_health() -> dict[str, Any]:
     """检查外部服务健康状态"""
@@ -221,7 +213,6 @@ def _check_external_services_health() -> dict[str, Any]:
             "healthy": False,
             "error": f"外部服务检查失败: {e!s}"
         }
-
 
 def _check_system_resources() -> dict[str, Any]:
     """检查系统资源状态"""
@@ -277,7 +268,6 @@ def _check_system_resources() -> dict[str, Any]:
             "healthy": False,
             "error": f"系统资源检查失败: {e!s}"
         }
-
 
 if __name__ == "__main__":
     result = health_check()

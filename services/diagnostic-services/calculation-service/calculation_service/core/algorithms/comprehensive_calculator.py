@@ -7,13 +7,11 @@
 
 from datetime import datetime, date, timedelta
 from typing import Dict, List, Optional, Tuple, Any
-import json
 
 from .wuyun_liuqi import WuyunLiuqiCalculator
 from .ziwu_liuzhu import ZiwuLiuzhuCalculator
 from .constitution import ConstitutionCalculator
 from .bagua import BaguaCalculator
-
 
 class ComprehensiveCalculationService:
     """综合算诊计算服务"""

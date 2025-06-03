@@ -1,15 +1,23 @@
-import React from 'react';
-import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor';
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"/import { apiClient } from "../../services/apiClient";/
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { apiClient } from "../../services/apiClient";
+import {
   AgentsState,
   AgentMessage,
   AgentType,
-  { AgentResponse } from "../../types";//  *  使用apiClient的ApiResponse类型 *// interface ApiClientResponse<T = any  * > { success: boolean; *// , data: T;
+  AgentResponse
+} from "../../types";
+
+// 使用apiClient的ApiResponse类型
+interface ApiClientResponse<T = any> {
+  success: boolean;
+  data: T;
   message?: string;
-  code?: string
-  timestamp?: string}
-// import { API_CONFIG } from ".. * .. *// constants * config"; *//
-// 初始状态 * const initialState: AgentsState = {, */
+  code?: string;
+  timestamp?: string;
+}
+
+// 初始状态
+const initialState: AgentsState = {
   conversations: {
     xiaoai: [],
     xiaoke: [],
@@ -20,26 +28,32 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"/
   loading: false,
   error: undefined
 };
-// 异步thunk actions * export const sendMessageToAgent = createAsyncThun;k;<; */;
+
+// 异步thunk actions
+export const sendMessageToAgent = createAsyncThunk<
   AgentMessage,
-  { agentType: AgentType,
-    content: string
-    type?: "text" | "image" | "audio" | "file"},
-  { rejectValue: string}
+  { agentType: AgentType; content: string; type?: "text" | "image" | "audio" | "file" },
+  { rejectValue: string }
 >(
-  "agents/sendMessage",/  async ({ agentType, content, type = "text" }, { rejectWithValue }) => {
+  "agents/sendMessage",
+  async ({ agentType, content, type = "text" }, { rejectWithValue }) => {
     try {
-      // 使用apiClient发送消息到智能体 *       const agentEndpoint = ` *// agents * ${agentType} *//cha;t`;/
-      const response: ApiClientResponse<AgentResponse /> = await apiClient.post(/        agentEndpoint,
+      // 使用apiClient发送消息到智能体
+      const agentEndpoint = `/agents/${agentType}/chat`;
+      const response: ApiClientResponse<AgentResponse> = await apiClient.post(
+        agentEndpoint,
         {
           message: content,
           type
-        ;}
-      ;);
+        }
+      );
+
       if (!response.success) {
-        throw new Error(response.message || "发送消息失败";);
+        throw new Error(response.message || "发送消息失败");
       }
-      // 构造返回的消息 *       const agentMessage: AgentMessage = {, */
+
+      // 构造返回的消息
+      const agentMessage: AgentMessage = {
         id: Date.now().toString(),
         agentType,
         content: response.data?.data?.response || "抱歉，我现在无法回复。",
@@ -47,72 +61,86 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"/
         timestamp: new Date().toISOString(),
         metadata: response.data?.data
       };
-      return agentMessa;g;e
-    } catch (error: unknown) {
-      return rejectWithValue(error.message || "发送消息失败;";);
+
+      return agentMessage;
+    } catch (error: any) {
+      return rejectWithValue(error.message || "发送消息失败");
     }
   }
 );
-export const loadConversationHistory = createAsyncThun;k;<;
-  { agentType: AgentType, messages: AgentMessage[]   },
+
+export const loadConversationHistory = createAsyncThunk<
+  { agentType: AgentType; messages: AgentMessage[] },
   AgentType,
-  { rejectValue: string}
->("agents/loadHistory", async (agentType, { rejectWithValue }) => {/  try {
-    const response: ApiClientResponse<AgentMessage[] /> = await apiClient.get(/      `/agents/${agentType}/history`;/    ;)
+  { rejectValue: string }
+>("agents/loadHistory", async (agentType, { rejectWithValue }) => {
+  try {
+    const response: ApiClientResponse<AgentMessage[]> = await apiClient.get(
+      `/agents/${agentType}/history`
+    );
+
     if (!response.success) {
-      throw new Error(response.message || "加载对话历史失败;";);
+      throw new Error(response.message || "加载对话历史失败");
     }
-    return {;
+
+    return {
       agentType,
-      messages: response.data || [;]
-    ;}
-  } catch (error: unknown) {
-    return rejectWithValue(error.message || "加载对话历史失败;";);
+      messages: response.data || []
+    };
+  } catch (error: any) {
+    return rejectWithValue(error.message || "加载对话历史失败");
   }
 });
-export const clearConversation = createAsyncThun;k;<
+
+export const clearConversation = createAsyncThunk<
   AgentType,
   AgentType,
-  { rejectValue: string}
->("agents/clearConversation", async (agentType, { rejectWithValue }) => {/  try {
+  { rejectValue: string }
+>("agents/clearConversation", async (agentType, { rejectWithValue }) => {
+  try {
     const response: ApiClientResponse = await apiClient.delete(
-      `/agents/${agentType}/history`;/    ;)
+      `/agents/${agentType}/history`
+    );
+
     if (!response.success) {
-      throw new Error(response.message || "清除对话历史失败;";);
+      throw new Error(response.message || "清除对话历史失败");
     }
-    return agentTy;p;e
-  } catch (error: unknown) {
-    return rejectWithValue(error.message || "清除对话历史失败;";);
+
+    return agentType;
+  } catch (error: any) {
+    return rejectWithValue(error.message || "清除对话历史失败");
   }
-})
-// 创建slice * const agentsSlice = createSlice({ */
+});
+
+// 创建slice
+const agentsSlice = createSlice({
   name: "agents",
   initialState,
   reducers: {
-    setActiveAgent: (state, action: PayloadAction<AgentType /;>;); => {/      state.activeAgent = action.payload;
+    setActiveAgent: (state, action: PayloadAction<AgentType>) => {
+      state.activeAgent = action.payload;
     },
     addUserMessage: (
       state,
-      action: PayloadAction<{, agentType: AgentType,
-        content: string
-        type?: "text" | "image" | "audio" | "file"}>
+      action: PayloadAction<{ agentType: AgentType; content: string; type?: "text" | "image" | "audio" | "file" }>
     ) => {
-      const { agentType, content, type = "text"   } = action.paylo;a;d;
-      const userMessage: AgentMessage = {,
+      const { agentType, content, type = "text" } = action.payload;
+      const userMessage: AgentMessage = {
         id: Date.now().toString(),
         agentType,
         content,
         type,
-        timestamp: new Date().toISOString()};
+        timestamp: new Date().toISOString()
+      };
       state.conversations[agentType].push(userMessage);
     },
     removeMessage: (
       state,
-      action: PayloadAction<{, agentType: AgentType, messageId: string}>
+      action: PayloadAction<{ agentType: AgentType; messageId: string }>
     ) => {
-      const { agentType, messageId   } = action.paylo;a;d;
+      const { agentType, messageId } = action.payload;
       state.conversations[agentType] = state.conversations[agentType].filter(
-        (message); => message.id !== messageId
+        (message) => message.id !== messageId
       );
     },
     clearError: (state) => {
@@ -120,13 +148,11 @@ export const clearConversation = createAsyncThun;k;<
     },
     updateMessage: (
       state,
-      action: PayloadAction<{, agentType: AgentType,
-        messageId: string,
-        updates: Partial<AgentMessage />;/        }>
+      action: PayloadAction<{ agentType: AgentType; messageId: string; updates: Partial<AgentMessage> }>
     ) => {
-      const { agentType, messageId, updates   } = action.paylo;a;d;
-      const messageIndex = state.conversations[agentType].findIndex(;
-        (ms;g;); => msg.id === messageId
+      const { agentType, messageId, updates } = action.payload;
+      const messageIndex = state.conversations[agentType].findIndex(
+        (msg) => msg.id === messageId
       );
       if (messageIndex >= 0) {
         state.conversations[agentType][messageIndex] = {
@@ -137,67 +163,70 @@ export const clearConversation = createAsyncThun;k;<
     }
   },
   extraReducers: (builder) => {
-    // 发送消息给智能体 *     builder */
-      .addCase(sendMessageToAgent.pending, (state); => {
+    // 发送消息给智能体
+    builder
+      .addCase(sendMessageToAgent.pending, (state) => {
         state.loading = true;
         state.error = undefined;
       })
-      .addCase(sendMessageToAgent.fulfilled, (state, action); => {
+      .addCase(sendMessageToAgent.fulfilled, (state, action) => {
         state.loading = false;
         state.conversations[action.payload.agentType].push(action.payload);
         state.error = undefined;
       })
-      .addCase(sendMessageToAgent.rejected, (state, action); => {
+      .addCase(sendMessageToAgent.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
-    // 加载对话历史 *     builder */
-      .addCase(loadConversationHistory.pending, (state); => {
+
+    // 加载对话历史
+    builder
+      .addCase(loadConversationHistory.pending, (state) => {
         state.loading = true;
         state.error = undefined;
       })
-      .addCase(loadConversationHistory.fulfilled, (state, action); => {
+      .addCase(loadConversationHistory.fulfilled, (state, action) => {
         state.loading = false;
         state.conversations[action.payload.agentType] = action.payload.messages;
         state.error = undefined;
       })
-      .addCase(loadConversationHistory.rejected, (state, action); => {
+      .addCase(loadConversationHistory.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
-    // 清除对话 *     builder */
-      .addCase(clearConversation.pending, (state); => {
+
+    // 清除对话
+    builder
+      .addCase(clearConversation.pending, (state) => {
         state.loading = true;
         state.error = undefined;
       })
-      .addCase(clearConversation.fulfilled, (state, action); => {
+      .addCase(clearConversation.fulfilled, (state, action) => {
         state.loading = false;
         state.conversations[action.payload] = [];
         state.error = undefined;
       })
-      .addCase(clearConversation.rejected, (state, action); => {
+      .addCase(clearConversation.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
   }
 });
-// 导出actions * export const { ; */;
+
+// 导出actions
+export const {
   setActiveAgent,
   addUserMessage,
   removeMessage,
   clearError,
   updateMessage
-  } = agentsSlice.actio;n;s;
-// 选择器 * export const selectAgents = (state: { agents: AgentsState }) => state.agen;t;s; */;
-export const selectActiveAgent = (state: { agents: AgentsState }) ;=;>;
-  state.agents.activeAgent;
-export const selectConversations = (state: { agents: AgentsState }) ;=;>;
-  state.agents.conversations;
-export const selectConversation =;
-  (agentType: AgentType) => (state: { agents: AgentsState }) =>
-    state.agents.conversations[agentType];
-export const selectAgentsLoading = (state: { agents: AgentsState }) ;=;>;
-  state.agents.loading;
-export const selectAgentsError = (state: { agents: AgentsState }) ;=;>;
-  state.agents.error;
-// 导出reducer * export default agentsSlice.reducer; */;
+} = agentsSlice.actions;
+
+// 选择器
+export const selectAgents = (state: { agents: AgentsState }) => state.agents;
+export const selectActiveAgent = (state: { agents: AgentsState }) => state.agents.activeAgent;
+export const selectConversations = (state: { agents: AgentsState }) => state.agents.conversations;
+export const selectAgentLoading = (state: { agents: AgentsState }) => state.agents.loading;
+export const selectAgentError = (state: { agents: AgentsState }) => state.agents.error;
+
+export default agentsSlice.reducer;

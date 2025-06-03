@@ -5,10 +5,6 @@
 健康数据分析器 - 提供全面的健康数据分析和个性化建议
 """
 
-import json
-import asyncio
-import numpy as np
-import pandas as pd
 from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from enum import Enum
@@ -18,7 +14,6 @@ import statistics
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 from sklearn.ensemble import IsolationForest
-
 
 class HealthDataType(Enum):
     """健康数据类型"""
@@ -33,7 +28,6 @@ class HealthDataType(Enum):
     EXERCISE = "exercise"                # 运动
     SLEEP = "sleep"                      # 睡眠
 
-
 class RiskLevel(Enum):
     """风险等级"""
     LOW = "low"          # 低风险
@@ -41,14 +35,12 @@ class RiskLevel(Enum):
     HIGH = "high"        # 高风险
     CRITICAL = "critical" # 危急
 
-
 class TrendDirection(Enum):
     """趋势方向"""
     IMPROVING = "improving"    # 改善
     STABLE = "stable"         # 稳定
     DECLINING = "declining"   # 恶化
     FLUCTUATING = "fluctuating" # 波动
-
 
 @dataclass
 class HealthMetric:
@@ -61,7 +53,6 @@ class HealthMetric:
     category: Optional[str] = None
     source: Optional[str] = None
 
-
 @dataclass
 class HealthTrend:
     """健康趋势"""
@@ -71,7 +62,6 @@ class HealthTrend:
     confidence: float
     time_period: timedelta
     significant_changes: List[Dict[str, Any]] = field(default_factory=list)
-
 
 @dataclass
 class RiskAssessment:
@@ -83,7 +73,6 @@ class RiskAssessment:
     recommendations: List[str] = field(default_factory=list)
     time_horizon: Optional[str] = None
 
-
 @dataclass
 class HealthInsight:
     """健康洞察"""
@@ -94,7 +83,6 @@ class HealthInsight:
     actionable: bool
     recommendations: List[str] = field(default_factory=list)
     related_metrics: List[str] = field(default_factory=list)
-
 
 @dataclass
 class HealthReport:
@@ -108,7 +96,6 @@ class HealthReport:
     recommendations: List[str] = field(default_factory=list)
     next_checkup_date: Optional[datetime] = None
     summary: Optional[str] = None
-
 
 class HealthDataAnalyzer:
     """健康数据分析器"""

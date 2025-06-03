@@ -15,19 +15,14 @@ from dataclasses import dataclass, asdict
 from datetime import datetime, timedelta
 from enum import Enum
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor, as_completed
-import numpy as np
 from collections import defaultdict, deque
 import psutil
 import aioredis
-import pickle
 import multiprocessing
-from contextlib import asynccontextmanager
-import weakref
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
 
 class ProcessingMode(Enum):
     """处理模式"""
@@ -37,7 +32,6 @@ class ProcessingMode(Enum):
     ASYNC_DISTRIBUTED = "async_distributed" # 异步分布式处理
     HYBRID = "hybrid"                   # 混合模式
 
-
 class TaskType(Enum):
     """任务类型"""
     CPU_INTENSIVE = "cpu_intensive"     # CPU密集型
@@ -46,14 +40,12 @@ class TaskType(Enum):
     NETWORK_INTENSIVE = "network_intensive" # 网络密集型
     MIXED = "mixed"                     # 混合型
 
-
 class Priority(Enum):
     """优先级"""
     URGENT = 1      # 紧急
     HIGH = 2        # 高
     NORMAL = 3      # 普通
     LOW = 4         # 低
-
 
 @dataclass
 class HybridTask:
@@ -79,7 +71,6 @@ class HybridTask:
         if self.created_at is None:
             self.created_at = datetime.now()
 
-
 @dataclass
 class WorkerNode:
     """工作节点信息"""
@@ -96,7 +87,6 @@ class WorkerNode:
     def __post_init__(self):
         if self.last_heartbeat is None:
             self.last_heartbeat = datetime.now()
-
 
 class LocalProcessor:
     """本地处理器"""
@@ -348,7 +338,6 @@ class LocalProcessor:
         self.process_pool.shutdown(wait=True)
         logger.info("本地处理器已关闭")
 
-
 class DistributedProcessor:
     """分布式处理器"""
     
@@ -509,7 +498,6 @@ class DistributedProcessor:
                                      if w.status == "active"])
             }
 
-
 class TaskRouter:
     """任务路由器"""
     
@@ -570,7 +558,6 @@ class TaskRouter:
                 'memory_percent': memory_percent
             }
         }
-
 
 class PerformanceMonitor:
     """性能监控器"""
@@ -659,7 +646,6 @@ class PerformanceMonitor:
             'metrics_count': len(self.metrics_history),
             'monitoring_duration_minutes': len(self.metrics_history) * self.monitoring_interval / 60
         }
-
 
 class HybridArchitecture:
     """混合架构主类"""
@@ -806,10 +792,8 @@ class HybridArchitecture:
         self.local_processor.shutdown()
         logger.info("混合架构已关闭")
 
-
 # 全局实例
 _hybrid_architecture: Optional[HybridArchitecture] = None
-
 
 async def initialize_hybrid_architecture(redis_url: Optional[str] = None,
                                        max_local_workers: Optional[int] = None,
@@ -827,11 +811,9 @@ async def initialize_hybrid_architecture(redis_url: Optional[str] = None,
     
     return _hybrid_architecture
 
-
 async def get_hybrid_architecture() -> Optional[HybridArchitecture]:
     """获取混合架构实例"""
     return _hybrid_architecture
-
 
 async def shutdown_hybrid_architecture():
     """关闭混合架构"""

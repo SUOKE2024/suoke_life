@@ -21,8 +21,6 @@ try:
     import sys
     # 添加项目根目录到路径以便导入 api 模块
     sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
-    import api.grpc.xiaoai_service_pb2 as xiaoai_pb2
-    import api.grpc.xiaoai_service_pb2_grpc as xiaoai_pb2_grpc
 except ImportError:
     logging.error("无法导入gRPC生成的代码, 请确保先生成protobuf代码")
     raise

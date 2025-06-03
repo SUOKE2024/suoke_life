@@ -13,7 +13,6 @@ import re
 from typing import Any
 
 try:
-    import redis.asyncio as redis
     REDIS_AVAILABLE = True
 except ImportError:
     REDIS_AVAILABLE = False
@@ -540,21 +539,17 @@ class CacheManagerSingleton:
             await cls._instance.close()
             cls._instance = None
 
-
 def get_cache_manager() -> CacheManager:
     """获取全局缓存管理器实例（向后兼容）"""
     return CacheManagerSingleton.get_instance_sync()
-
 
 async def get_cache_manager_async(use_redis: bool | None = None, redis_url: str | None = None) -> CacheManager:
     """异步获取全局缓存管理器实例"""
     return await CacheManagerSingleton.get_instance(use_redis=use_redis, redis_url=redis_url)
 
-
 async def init_cache_manager(use_redis: bool | None = None, redis_url: str | None = None):
     """初始化全局缓存管理器（向后兼容）"""
     await CacheManagerSingleton.get_instance(use_redis=use_redis, redis_url=redis_url)
-
 
 async def close_cache_manager():
     """关闭全局缓存管理器（向后兼容）"""

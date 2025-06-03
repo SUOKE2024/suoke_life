@@ -14,7 +14,6 @@ from datetime import datetime, timedelta
 import aiohttp
 import aioredis
 from aiohttp import web, ClientSession, ClientTimeout
-from aiohttp.web_middlewares import cors_handler
 from aiohttp_cors import setup as cors_setup, ResourceOptions
 import jwt
 from functools import wraps
@@ -22,17 +21,13 @@ import hashlib
 import uuid
 import psutil
 from collections import defaultdict, deque
-import weakref
 import asyncpg
-from contextlib import asynccontextmanager
 import ssl
 import certifi
-
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
 
 @dataclass
 class ServiceEndpoint:
@@ -53,7 +48,6 @@ class ServiceEndpoint:
         if self.last_health_check is None:
             self.last_health_check = datetime.now()
 
-
 @dataclass
 class RequestMetrics:
     """请求指标"""
@@ -67,7 +61,6 @@ class RequestMetrics:
     status_code: int = 0
     error_message: Optional[str] = None
     user_id: Optional[str] = None
-
 
 class CircuitBreaker:
     """熔断器"""
@@ -118,7 +111,6 @@ class CircuitBreaker:
         
         if self.failure_count >= self.failure_threshold:
             self.state = "OPEN"
-
 
 class LoadBalancer:
     """智能负载均衡器"""
@@ -211,7 +203,6 @@ class LoadBalancer:
                 logger.info(f"标记端点为健康: {service_name} -> {endpoint_url}")
                 break
 
-
 class RateLimiter:
     """速率限制器"""
     
@@ -234,7 +225,6 @@ class RateLimiter:
         current_requests = results[1]
         
         return current_requests < limit
-
 
 class CacheManager:
     """缓存管理器"""
@@ -276,7 +266,6 @@ class CacheManager:
         
         key_string = "|".join(key_parts)
         return f"api_cache:{hashlib.md5(key_string.encode()).hexdigest()}"
-
 
 class MetricsCollector:
     """指标收集器"""
@@ -330,7 +319,6 @@ class MetricsCollector:
                 "requests_per_second": total_requests / time_window,
                 "service_stats": dict(service_stats)
             }
-
 
 class OptimizedAsyncGateway:
     """优化后的异步API网关"""
@@ -777,7 +765,6 @@ class OptimizedAsyncGateway:
         
         logger.info("异步API网关已关闭")
 
-
 # 使用示例
 async def main():
     """主函数"""
@@ -788,7 +775,6 @@ async def main():
     )
     
     await gateway.start_server(host="0.0.0.0", port=8000)
-
 
 if __name__ == "__main__":
     asyncio.run(main()) 

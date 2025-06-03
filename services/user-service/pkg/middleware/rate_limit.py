@@ -5,7 +5,6 @@
 import asyncio
 import logging
 import time
-from datetime import datetime
 from typing import Dict, Optional, List, Tuple, Any, Union
 
 from fastapi import FastAPI, Request, Response, HTTPException
@@ -16,7 +15,6 @@ from internal.observability.metrics import prometheus_metrics
 
 # 日志记录器
 logger = logging.getLogger(__name__)
-
 
 class TokenBucket:
     """令牌桶算法实现"""
@@ -101,7 +99,6 @@ class TokenBucket:
         wait_time = additional_tokens_needed / self.fill_rate
         
         return wait_time
-
 
 class RateLimiter:
     """速率限制器"""
@@ -262,7 +259,6 @@ class RateLimiter:
         # 所有检查都通过
         return True, 0, "allowed"
 
-
 class RateLimitMiddleware(BaseHTTPMiddleware):
     """
     速率限制中间件
@@ -391,7 +387,6 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         
         # 默认
         return "unknown"
-
 
 def add_rate_limit_middleware(app: FastAPI) -> RateLimiter:
     """

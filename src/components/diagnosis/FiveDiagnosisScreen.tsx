@@ -1,157 +1,162 @@
-importReact,{ useState, useEffect, useCallback, useMemo } from 'react';
-import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor'/import {   View,;
+import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor";
+import {
+  View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
   Alert,
-  { Dimensions    } from 'react-native'
-import { useNavigation } from '@react-navigation/native'/importIcon from '../common/Icon'/import { colors, spacing } from '../../constants/theme'/import { fiveDiagnosisService } from '../../services/fiveDiagnosisService'/import { DiagnosisStep,;
-  FiveDiagnosisResult,
-  DiagnosisInput } from '../../types/diagnosis'/
-const { width   } = Dimensions.get('window;';)
+  { Dimensions } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { Icon } from "../common/Icon";
+import { colors, spacing } from "../../constants/theme";
+import { fiveDiagnosisService } from "../../services/fiveDiagnosisService";
+import { DiagnosisStep, FiveDiagnosisResult, DiagnosisInput } from "../../types/diagnosis";
+
+const { width } = Dimensions.get("window");
+
 interface FiveDiagnosisScreenProps {
-  onComplete?: (result: FiveDiagnosisResult) => void}
-const FiveDiagnosisScreen: React.FC<FiveDiagnosisScreenProps /> = ({/  // 性能监控 *   const performanceMonitor = usePerformanceMonitor('FiveDiagnosisScreen', { */,
-    trackRender: true,
-    trackMemory: true,
-    warnThreshold: 50, // ms *   ;};); */
-  onComplete
+  onComplete?: (result: FiveDiagnosisResult) => void;
+}
+
+const FiveDiagnosisScreen: React.FC<FiveDiagnosisScreenProps> = ({
+  onComplete,
 }) => {
-  const navigation = useNavigation;(;);
+  const navigation = useNavigation();
   const [currentStep, setCurrentStep] = useState<number>(0);
-  const [stepData, setStepData] = useState<Record<number, any />>({;};);/  const [isAnalyzing, setIsAnalyzing] = useState<boolean>(fals;e;);
-  const [analysisResult, setAnalysisResult] = useState<FiveDiagnosisResult | null />(nul;l;);/  const [isServiceInitialized, setIsServiceInitialized] = useState<boolean>(fals;e;);
-  const diagnosisSteps: DiagnosisStep[] = [{,
-      id: 'look',
-      title: '望诊',
-      description: '观察面色、舌象、体态等',
-      icon: 'eye',
-      component: 'LookDiagnosisComponent',
+  const [stepData, setStepData] = useState<Record<number, any>>({});
+  const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false);
+  const [analysisResult, setAnalysisResult] = useState<FiveDiagnosisResult | null>(null);
+  const [isServiceInitialized, setIsServiceInitialized] = useState<boolean>(false);
+
+  const diagnosisSteps: DiagnosisStep[] = [
+    {
+      id: "look",
+      title: "望诊",
+      description: "观察面色、舌象、体态等,",
+      icon: "eye",
+      component: LookDiagnosisComponent
     },
     {
-      id: 'listen',
-      title: '闻诊',
-      description: '听声音、闻气味',
-      icon: 'ear',
-      component: 'ListenDiagnosisComponent',
+      id: "listen",
+      title: "闻诊",
+      description: "听声音、闻气味",
+      icon: "ear",
+      component: "ListenDiagnosisComponent"
     },
     {
-      id: 'inquiry',
-      title: '问诊',
-      description: '询问症状、病史等',
-      icon: 'message-circle',
-      component: 'InquiryDiagnosisComponent',
+      id: "inquiry",
+      title: "问诊,",
+      description: "询问症状、病史等",
+      icon: "message-circle",
+      component: "InquiryDiagnosisComponent"
     },
     {
-      id: 'palpation',
-      title: '切诊',
-      description: '脉诊、按诊等',
-      icon: 'hand',
-      component: 'PalpationDiagnosisComponent',
+      id: "palpation",
+      title: "切诊",
+      description: "脉诊、按诊等,",
+      icon: "hand",
+      component: PalpationDiagnosisComponent
     },
     {
-      id: 'calculation',
-      title: '数诊',
-      description: '数据分析、量化诊断',
-      icon: 'bar-chart',
-      component: 'CalculationDiagnosisComponent',
+      id: "calculation",
+      title: "数诊",
+      description: "数据分析、量化诊断",
+      icon: "bar-chart",
+      component: "CalculationDiagnosisComponent"
     }
   ];
-  const initializeDiagnosisService = useCallback(async ;(;); => {
+
+  const initializeDiagnosisService = useCallback(async () => {
     try {
-      await fiveDiagnosisService.initialize;(;);
-      setIsServiceInitialized(true)
+      await fiveDiagnosisService.initialize;
+      setIsServiceInitialized(true);
     } catch (error) {
-      console.error('初始化五诊服务失败:', error)
-      Alert.alert('错误', '初始化诊断服务失败，请重试');
+      Alert.alert("错误", "初始化诊断服务失败，请重试");
     }
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  useEffect((); => {
-    const effectStart = performance.now;(;);
+
+  useEffect(() => {
+    const effectStart = performance.now();
     initializeDiagnosisService();
-      const effectEnd = performance.now;(;);
+    const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [initializeDiagnosisService]);
-  const handleStepPress = useCallback((stepIndex: numbe;r;); => {
+
+  const handleStepPress = useCallback((stepIndex: number) => {
     if (stepIndex <= currentStep + 1) {
       setCurrentStep(stepIndex);
     }
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [currentStep]);
-  const handleStepComplete = useCallback((stepIndex: number, data: unknow;n;); => {
+
+  const handleStepComplete = useCallback((stepIndex: number, data: unknown) => {
     setStepData(prev => ({
       ...prev,
       [stepIndex]: data
-    }););
+    }));
     if (stepIndex === currentStep && stepIndex < diagnosisSteps.length - 1) {
       setCurrentStep(stepIndex + 1);
     }
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [currentStep, diagnosisSteps.length]);
-  const canPerformAnalysis = useCallback((); => {
-    return Object.keys(stepData).length >;= ;3; // 至少完成3个步骤 *       const effectEnd = performance.now;(;); */
-    performanceMonitor.recordEffect(effectEnd - effectStart);
+
+  const canPerformAnalysis = useCallback(() => {
+    return Object.keys(stepData).length > 3; // 至少完成3个步骤
   }, [stepData]);
-  const performAnalysis = useCallback(async ;(;); => {
+
+  const performAnalysis = useCallback(async () => {
     if (!canPerformAnalysis() || !isServiceInitialized) {
-      Alert.alert('提示', '请至少完成3个诊断步骤后再进行分析');
+      Alert.alert("提示", "请至少完成3个诊断步骤后再进行分析");
       return;
     }
     setIsAnalyzing(true);
     try {
-      const input: DiagnosisInput = {,
+      const input: DiagnosisInput = {
         lookData: stepData[0],
         listenData: stepData[1],
         inquiryData: stepData[2],
         palpationData: stepData[3],
         calculationData: stepData[4],
-        timestamp: Date.now()};
-      const result = await fiveDiagnosisService.performDiagnosis(in;p;u;t;);
+        timestamp: Date.now()
+      };
+      const result = await fiveDiagnosisService.performDiagnosis(input);
       setAnalysisResult(result);
       showAnalysisResult(result);
       if (onComplete) {
-        onComplete(result)
+        onComplete(result);
       }
     } catch (error) {
-      console.error('诊断分析失败:', error)
-      Alert.alert('错误', '诊断分析失败，请重试');
+      Alert.alert("错误", "诊断分析失败，请重试");
     } finally {
       setIsAnalyzing(false);
     }
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [canPerformAnalysis, isServiceInitialized, stepData, onComplete]);
-  const showAnalysisResult = useCallback((result: FiveDiagnosisResul;t;) => {
+
+  const showAnalysisResult = useCallback((result: FiveDiagnosisResult) => {
     Alert.alert(
-      '诊断结果',
+      "诊断结果",
       `综合评估: ${result.overallAssessment}\n\n主要症候: ${result.primarySyndrome}`,
       [
-        { text: '查看详情', onPress: () => showDetailedResult(result) },
-        { text: '确定', style: 'default'}
+        { text: "查看详情", onPress: () => showDetailedResult(result) },
+        { text: "确定", style: "default" }
       ]
     );
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  const showDetailedResult = useCallback((result: FiveDiagnosisResul;t;); => {
-    // 这里可以导航到详细结果页面 *     const effectEnd = performance.now;(;); */
-    performanceMonitor.recordEffect(effectEnd - effectStart);
+
+  const showDetailedResult = useCallback((result: FiveDiagnosisResult) => {
+    // 这里可以导航到详细结果页面
   }, []);
+
   const resetDiagnosis = useCallback(() => {
     Alert.alert(
-      '重置诊断',
-      '确定要重置所有诊断数据吗？',
+      "重置诊断",
+      "确定要重置所有诊断数据吗？,",
       [
-        { text: '取消', style: 'cancel'},
+        { text: "取消", style: "cancel" },
         {
-          text: '确定',
-          style: 'destructive',
-          onPress: (); => {
+          text: "确定,",
+          style: "destructive",
+          onPress: () => {
             setCurrentStep(0);
             setStepData({});
             setAnalysisResult(null);
@@ -159,28 +164,27 @@ const FiveDiagnosisScreen: React.FC<FiveDiagnosisScreenProps /> = ({/  // 性能
         }
       ]
     );
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  const getCompletedStepsCount = useCallback((); => {
-    return Object.keys(stepData).leng;t;h;
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
+
+  const getCompletedStepsCount = useCallback(() => {
+    return Object.keys(stepData).length;
   }, [stepData]);
-  const getProgressPercentage = useCallback((); => {
-    // 记录渲染性能 *  */
+
+  const getProgressPercentage = useCallback(() => {
+    // 记录渲染性能
     performanceMonitor.recordRender();
-    return (getCompletedStepsCount;(;); / diagnosisSteps.length) * 100;/      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
+    return (getCompletedStepsCount() / diagnosisSteps.length) * 100;
   }, [getCompletedStepsCount, diagnosisSteps.length]);
-  const renderStepIndicator = useCallback((); => {
-    return (;
-      <View style={styles.stepIndicator} />/        {diagnosisSteps.map((step, inde;x;); => {
-          const isCompleted = stepData[index] !== undefin;e;d;
-          const isCurrent = index === currentSt;e;p;
-          const isAccessible = index <= currentStep ;+ ;1
+
+  const renderStepIndicator = useCallback(() => {
+    return (
+      <View style={styles.stepIndicator}>
+        {diagnosisSteps.map((step, index) => {
+          const isCompleted = stepData[index] !== undefined;
+          const isCurrent = index === currentStep;
+          const isAccessible = index <= currentStep + 1;
           return (
-            <TouchableOpacity,
+            <TouchableOpacity
               key={step.id}
               style={[
                 styles.stepButton,
@@ -188,238 +192,307 @@ const FiveDiagnosisScreen: React.FC<FiveDiagnosisScreenProps /> = ({/  // 性能
                 isCurrent && styles.stepCurrent,
                 !isAccessible && styles.stepDisabled
               ]}
-              onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> handleStepPress(index)}/              disabled={!isAccessible}
+              onPress={() => handleStepPress(index)}
+              accessibilityLabel="TODO: 添加无障碍标签"
+              disabled={!isAccessible}
             >
               <Icon
                 name={step.icon}
                 size={20}
-                color={;
-                  isCompleted;
-                    ? colors.white: isCurre;n;t;? colors.primary: isAccessible;? colors.textSecondary: colors.border} />/              <Text
+                color={
+                  isCompleted
+                    ? colors.white
+                    : isCurrent
+                    ? colors.primary
+                    : isAccessible
+                    ? colors.textSecondary
+                    : colors.border
+                }
+              />
+              <Text
                 style={[
                   styles.stepTitle,
                   isCompleted && styles.stepTitleCompleted,
                   isCurrent && styles.stepTitleCurrent,
                   !isAccessible && styles.stepTitleDisabled
-                ]} />/                {step.title}
-              </Text>/            </TouchableOpacity>/          );
+                ]}
+              >
+                {step.title}
+              </Text>
+            </TouchableOpacity>
+          );
         })}
-      </View>/    );
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
+      </View>
+    );
   }, [diagnosisSteps, stepData, currentStep, handleStepPress]);
-  const renderCurrentStep = useCallback((); => {
-    const step = diagnosisSteps[currentSte;p;];
-    if (!step) return n;u;l;l;
+
+  const renderCurrentStep = useCallback(() => {
+    const step = diagnosisSteps[currentStep];
+    if (!step) return null;
     return (
-      <View style={styles.stepContent} />/        <View style={styles.stepHeader} />/          <Icon name={step.icon} size={32} color={colors.primary} />/          <View style={styles.stepInfo} />/            <Text style={styles.stepName} />{step.title}</Text>/            <Text style={styles.stepDescription} />{step.description}</Text>/          </View>/        </View>/
-        {// 这里应该根据step.component渲染对应的诊断组件 }/        <View style={styles.stepComponent} />/          <Text style={styles.placeholderText} />/            {step.title}诊断组件将在这里显示
-          </Text>/          <TouchableOpacity;
-            style={styles.mockCompleteButton}
-            onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> handleStepComplete(currentStep, { mockData: tr;u;e  ; })}/          >
-            <Text style={styles.mockCompleteButtonText} />模拟完成此步骤</Text>/          </TouchableOpacity>/        </View>/      </View>/    );
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
+      <View style={styles.stepContent}>
+        <View style={styles.stepHeader}>
+          <Icon name={step.icon} size={32} color={colors.primary} />
+          <View style={styles.stepInfo}>
+            <Text style={styles.stepName}>{step.title}</Text>
+            <Text style={styles.stepDescription}>{step.description}</Text>
+          </View>
+        </View>
+        <View style={styles.stepComponent}>
+          <Text style={styles.placeholderText}>
+            {step.title}诊断组件将在这里显示
+          </Text>
+        </View>
+        <TouchableOpacity
+          style={styles.mockCompleteButton}
+          onPress={() => handleStepComplete(currentStep, { mockData: true })}
+          accessibilityLabel="TODO: 添加无障碍标签"
+        >
+          <Text style={styles.mockCompleteButtonText}>模拟完成此步骤</Text>
+        </TouchableOpacity>
+      </View>
+    );
   }, [diagnosisSteps, currentStep, handleStepComplete]);
-  const renderProgressBar = useCallback((); => {
-    const progress = getProgressPercentage;(;);
+
+  const renderProgressBar = useCallback(() => {
+    const progress = getProgressPercentage();
     return (
-      <View style={styles.progressContainer} />/        <View style={styles.progressBar} />/          <View style={[styles.progressFill, { width: `${progress  }%` }]} />/        </View>/        <Text style={styles.progressText} />/          {getCompletedStepsCount()}/{diagnosisSteps.length} 步骤完成/        </Text>/      </View>/    ;);
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
+      <View style={styles.progressContainer}>
+        <View style={styles.progressBar} />
+        <View style={[styles.progressFill, { width: `${progress}%` }]} />
+        <Text style={styles.progressText}>
+          {getCompletedStepsCount()}/{diagnosisSteps.length} 步骤完成
+        </Text>
+      </View>
+    );
   }, [getProgressPercentage, getCompletedStepsCount, diagnosisSteps.length]);
+
   const renderActionButtons = useCallback(() => {
     return (
-      <View style={styles.actionButtons} />/        <TouchableOpacity
+      <View style={styles.actionButtons}>
+        <TouchableOpacity
           style={[styles.actionButton, styles.resetButton]}
           onPress={resetDiagnosis}
-         accessibilityLabel="TODO: 添加无障碍标签" />/          <Icon name="refresh-cw" size={16} color={colors.textSecondary} />/          <Text style={styles.resetButtonText} />重置</Text>/        </TouchableOpacity>/
+          accessibilityLabel="TODO: 添加无障碍标签"
+        >
+          <Icon name="refresh-cw" size={16} color={colors.textSecondary} />
+          <Text style={styles.resetButtonText}>重置</Text>
+        </TouchableOpacity>
         <TouchableOpacity
           style={[
             styles.actionButton,
             styles.analyzeButton,
-            (!canPerformAnalysis;(;); || isAnalyzing) && styles.analyzeButtonDisabled
+            (!canPerformAnalysis || isAnalyzing) && styles.analyzeButtonDisabled
           ]}
           onPress={performAnalysis}
           disabled={!canPerformAnalysis() || isAnalyzing}
-         accessibilityLabel="TODO: 添加无障碍标签" />/          <Iconname="zap"
+          accessibilityLabel="TODO: 添加无障碍标签"
+        >
+          <Icon
+            name="zap"
             size={16}
             color={
-              !canPerformAnalysis(); || isAnalyzing
-                ? colors.textSecondary: colors.white} />/          <Text
-            style={[
-              styles.analyzeButtonText,
-              (!canPerformAnalysis() || isAnalyzing) && styles.analyzeButtonTextDisabled
-            ]} />/            {isAnalyzing ? '分析中...' : '开始分析'}
-          </Text>/        </TouchableOpacity>/      </View>/    );
-      const effectEnd = performance.now;(;);
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [resetDiagnosis, canPerformAnalysis, isAnalyzing, performAnalysis])
+              !canPerformAnalysis() || isAnalyzing
+                ? colors.textSecondary
+                : colors.white
+            }
+          />
+          <Text>
+            {isAnalyzing ? "分析中..." : "开始分析"}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }, [resetDiagnosis, canPerformAnalysis, isAnalyzing, performAnalysis]);
+
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false} />/      {// 头部 }/      <View style={styles.header} />/        <TouchableOpacity
-          onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> navigation.goBack()}/          style={styles.backButton}
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      {// 头部 }
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.backButton}
+          accessibilityLabel="TODO: 添加无障碍标签"
         >
-          <Icon name="arrow-left" size={24} color={colors.textPrimary} />/        </TouchableOpacity>/        <Text style={styles.headerTitle} />五诊合参</Text>/        <View style={styles.headerRight} />/      </View>/
-      {// 进度条 }/      {renderProgressBar()}
-      {// 步骤指示器 }/      {renderStepIndicator()}
-      {// 当前步骤内容 }/      {renderCurrentStep()}
-      {// 操作按钮 }/      {renderActionButtons()}
-      {// 结果显示 }/      {analysisResult && (
-        <View style={styles.resultContainer} />/          <Text style={styles.resultTitle} />诊断结果</Text>/          <Text style={styles.resultText} />/            {analysisResult.overallAssessment};
-          </Text>/        </View>/      )};
-    </ScrollView>/  ;);
-}
+          <Icon name="arrow-left" size={24} color={colors.textPrimary} />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>五诊合参</Text>
+        <View style={styles.headerRight} />
+      </View>
+      {// 进度条 }
+      {renderProgressBar()}
+      {// 步骤指示器 }
+      {renderStepIndicator()}
+      {// 当前步骤内容 }
+      {renderCurrentStep()}
+      {// 操作按钮 }
+      {renderActionButtons()}
+      {// 结果显示 }
+      {analysisResult && (
+        <View style={styles.resultContainer}>
+          <Text style={styles.resultTitle}>诊断结果</Text>
+          <Text style={styles.resultText}>
+            {analysisResult.overallAssessment}
+          </Text>
+        </View>
+      )}
+    </ScrollView>
+  );
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: colors.background
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: colors.border
   },
-  backButton: { padding: spacing.sm  },
+  backButton: { padding: spacing.sm },
   headerTitle: {
     fontSize: 18,
-    fontWeight: '600',
-    color: colors.textPrimary,
+    fontWeight: "600",
+    color: colors.textPrimary
   },
-  headerRight: { width: 40  },
+  headerRight: { width: 40 },
   progressContainer: {
     paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
+    paddingVertical: spacing.md
   },
   progressBar: {
     height: 4,
     backgroundColor: colors.border,
     borderRadius: 2,
-    marginBottom: spacing.sm,
+    marginBottom: spacing.sm
   },
   progressFill: {
-    height: '100%',
+    height: "100%",
     backgroundColor: colors.primary,
-    borderRadius: 2,
+    borderRadius: 2
   },
   progressText: {
     fontSize: 12,
     color: colors.textSecondary,
-    textAlign: 'center',
+    textAlign: "center"
   },
   stepIndicator: {
-    flexDirection: 'row',
+    flexDirection: "row",
     paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
+    paddingVertical: spacing.md
   },
   stepButton: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
     paddingVertical: spacing.sm,
     marginHorizontal: spacing.xs,
     borderRadius: 8,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.surface
   },
-  stepCompleted: { backgroundColor: colors.primary  },
+  stepCompleted: { backgroundColor: colors.primary },
   stepCurrent: {
     backgroundColor: colors.surface,
     borderWidth: 2,
-    borderColor: colors.primary,
+    borderColor: colors.primary
   },
-  stepDisabled: { backgroundColor: colors.border  },
+  stepDisabled: { backgroundColor: colors.border },
   stepTitle: {
     fontSize: 12,
     color: colors.textSecondary,
-    marginTop: spacing.xs,
+    marginTop: spacing.xs
   },
-  stepTitleCompleted: { color: colors.white  },
+  stepTitleCompleted: { color: colors.white },
   stepTitleCurrent: {
     color: colors.primary,
-    fontWeight: '600',
+    fontWeight: "600"
   },
-  stepTitleDisabled: { color: colors.textTertiary  },
+  stepTitleDisabled: { color: colors.textTertiary },
   stepContent: {
     margin: spacing.lg,
     backgroundColor: colors.surface,
     borderRadius: 12,
-    padding: spacing.lg,
+    padding: spacing.lg
   },
   stepHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: spacing.lg,
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: spacing.lg
   },
   stepInfo: {
     marginLeft: spacing.md,
-    flex: 1,
+    flex: 1
   },
   stepName: {
     fontSize: 18,
-    fontWeight: '600',
-    color: colors.textPrimary,
+    fontWeight: "600",
+    color: colors.textPrimary
   },
   stepDescription: {
     fontSize: 14,
     color: colors.textSecondary,
-    marginTop: spacing.xs,
+    marginTop: spacing.xs
   },
   stepComponent: {
     minHeight: 200,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center"
   },
   placeholderText: {
     fontSize: 16,
     color: colors.textSecondary,
-    textAlign: 'center',
-    marginBottom: spacing.lg,
+    textAlign: "center",
+    marginBottom: spacing.lg
   },
   mockCompleteButton: {
     backgroundColor: colors.primary,
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
-    borderRadius: 8,
+    borderRadius: 8
   },
   mockCompleteButtonText: {
     color: colors.white,
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600"
   },
   actionButtons: {
-    flexDirection: 'row',
+    flexDirection: "row",
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
-    gap: spacing.md,
+    gap: spacing.md
   },
   actionButton: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     paddingVertical: spacing.md,
     borderRadius: 8,
-    gap: spacing.sm,
+    gap: spacing.sm
   },
   resetButton: {
     backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.border
   },
   resetButtonText: {
     color: colors.textSecondary,
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600"
   },
+  analyzeButton: { backgroundColor: colors.primary },
+  analyzeButtonDisabled: { backgroundColor: colors.border },
+    fontWeight: "600},"
   analyzeButton: { backgroundColor: colors.primary  },
   analyzeButtonDisabled: { backgroundColor: colors.border  },
   analyzeButtonText: {
     color: colors.white,
     fontSize: 16,
-    fontWeight: '600',
-  },
+    fontWeight: "600"},
   analyzeButtonTextDisabled: { color: colors.textSecondary  },
   resultContainer: {
     margin: spacing.lg,
@@ -427,16 +500,14 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: spacing.lg,
     borderLeftWidth: 4,
-    borderLeftColor: colors.success,
-  },
+    borderLeftColor: colors.success},
   resultTitle: {
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: 600","
     color: colors.textPrimary,
-    marginBottom: spacing.md,
-  },
+    marginBottom: spacing.md},
   resultText: {
     fontSize: 16,
-    color: colors.textSecondary,
+    color: colors.textSecondary,;
     lineHeight: 24};};);
 export default React.memo(FiveDiagnosisScreen);

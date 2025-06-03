@@ -3,11 +3,8 @@
 from dataclasses import dataclass
 from typing import Any
 
-import numpy as np
-
 from .agent_metrics import MetricResult
 from .metrics import Metric
-
 
 @dataclass
 class PrivacyTestCase:
@@ -21,7 +18,6 @@ class PrivacyTestCase:
     expected_output: dict[str, Any]  # 期望输出
     attack_vectors: list[str]  # 攻击向量
 
-
 @dataclass
 class ZKPTestCase:
     """零知识证明测试用例数据类。"""
@@ -32,7 +28,6 @@ class ZKPTestCase:
     private_input: dict[str, Any]  # 私密输入
     expected_result: bool  # 期望结果
     verification_time: float  # 验证时间(ms)
-
 
 @dataclass
 class PrivacyTestResult:
@@ -46,7 +41,6 @@ class PrivacyTestResult:
     mitigation_success: bool | None  # 缓解措施是否成功
     execution_time: float  # 执行时间(ms)
 
-
 @dataclass
 class ZKPTestResult:
     """零知识证明测试结果数据类。"""
@@ -57,7 +51,6 @@ class ZKPTestResult:
     generation_time: float  # 生成时间(ms)
     verification_time: float  # 验证时间(ms)
     proof_size: int  # 证明大小(bytes)
-
 
 class PrivacyVerificationMetric(Metric):
     """隐私验证评测指标。"""

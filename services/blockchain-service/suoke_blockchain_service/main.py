@@ -4,8 +4,6 @@
 区块链服务的主要入口点, 负责应用的创建和启动。
 """
 
-from __future__ import annotations
-
 import asyncio
 from contextlib import asynccontextmanager
 from typing import TYPE_CHECKING
@@ -32,7 +30,6 @@ cli = typer.Typer(
     add_completion=False,
 )
 
-
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
     """应用生命周期管理"""
@@ -53,7 +50,6 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
     logger.info("关闭区块链服务")
     await close_database()
     logger.info("区块链服务已关闭")
-
 
 def create_app() -> FastAPI:
     """创建 FastAPI 应用"""
@@ -80,7 +76,6 @@ def create_app() -> FastAPI:
         }
 
     return app
-
 
 @cli.command()
 def serve(
@@ -136,7 +131,6 @@ def serve(
         log_config=None,  # 使用我们自己的日志配置
     )
 
-
 @cli.command()
 def grpc_serve(
     host: str = typer.Option(
@@ -176,11 +170,9 @@ def grpc_serve(
     # 运行异步服务器
     asyncio.run(run_grpc_server())
 
-
 def main() -> None:
     """主入口函数"""
     cli()
-
 
 if __name__ == "__main__":
     main()

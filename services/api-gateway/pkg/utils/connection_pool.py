@@ -13,11 +13,9 @@ from typing import Dict, Optional, Set
 from dataclasses import dataclass
 from urllib.parse import urlparse
 
-import aiohttp
 from aiohttp import ClientSession, ClientTimeout, TCPConnector
 
 logger = logging.getLogger(__name__)
-
 
 @dataclass
 class ConnectionPoolConfig:
@@ -31,7 +29,6 @@ class ConnectionPoolConfig:
     cleanup_interval: float = 60.0
     max_idle_time: float = 300.0
 
-
 @dataclass
 class PoolStats:
     """连接池统计信息"""
@@ -41,7 +38,6 @@ class PoolStats:
     created_connections: int = 0
     closed_connections: int = 0
     failed_connections: int = 0
-
 
 class SmartConnectionPool:
     """
@@ -194,7 +190,6 @@ class SmartConnectionPool:
         
         return total_stats
 
-
 class ConnectionPoolManager:
     """
     连接池管理器
@@ -242,7 +237,6 @@ class ConnectionPoolManager:
     def get_all_stats(self) -> Dict[str, Dict[str, PoolStats]]:
         """获取所有连接池统计信息"""
         return {name: pool.get_stats() for name, pool in self._pools.items()}
-
 
 # 全局连接池管理器实例
 connection_pool_manager = ConnectionPoolManager() 

@@ -7,22 +7,17 @@ import asyncio
 import json
 import logging
 import struct
-import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, asdict
 from datetime import datetime
 from enum import Enum
 from typing import Dict, List, Optional, Any, Callable, Union
-import numpy as np
 from concurrent.futures import ThreadPoolExecutor
 import serial
 import socket
 import bluetooth
-import usb.core
-import usb.util
 
 logger = logging.getLogger(__name__)
-
 
 class SensorConnectionType(Enum):
     """传感器连接类型"""
@@ -33,7 +28,6 @@ class SensorConnectionType(Enum):
     ETHERNET = "ethernet"
     MOCK = "mock"
 
-
 class SensorStatus(Enum):
     """传感器状态"""
     DISCONNECTED = "disconnected"
@@ -43,7 +37,6 @@ class SensorStatus(Enum):
     ERROR = "error"
     CALIBRATING = "calibrating"
 
-
 class DataQuality(Enum):
     """数据质量等级"""
     EXCELLENT = "excellent"
@@ -51,7 +44,6 @@ class DataQuality(Enum):
     FAIR = "fair"
     POOR = "poor"
     INVALID = "invalid"
-
 
 @dataclass
 class SensorConfig:
@@ -64,7 +56,6 @@ class SensorConfig:
     data_format: str
     calibration_params: Dict[str, float]
     quality_thresholds: Dict[str, float]
-
 
 @dataclass
 class SensorReading:
@@ -87,7 +78,6 @@ class SensorReading:
         if isinstance(self.processed_value, np.ndarray):
             result['processed_value'] = self.processed_value.tolist()
         return result
-
 
 class SensorInterface(ABC):
     """传感器接口基类"""
@@ -170,7 +160,6 @@ class SensorInterface(ABC):
                 return DataQuality.FAIR
         
         return DataQuality.GOOD
-
 
 class SerialSensorInterface(SensorInterface):
     """串口传感器接口"""
@@ -336,7 +325,6 @@ class SerialSensorInterface(SensorInterface):
         
         return readings
 
-
 class BluetoothSensorInterface(SensorInterface):
     """蓝牙传感器接口"""
     
@@ -452,7 +440,6 @@ class BluetoothSensorInterface(SensorInterface):
         """解析蓝牙数据"""
         # 使用与串口相同的解析逻辑
         return super().parse_data(raw_data)
-
 
 class WiFiSensorInterface(SensorInterface):
     """WiFi传感器接口"""
@@ -571,7 +558,6 @@ class WiFiSensorInterface(SensorInterface):
         # 使用与串口相同的解析逻辑
         return super().parse_data(raw_data)
 
-
 class MockSensorInterface(SensorInterface):
     """模拟传感器接口（用于测试）"""
     
@@ -670,7 +656,6 @@ class MockSensorInterface(SensorInterface):
         """解析模拟数据"""
         # 模拟传感器不需要解析原始数据
         return []
-
 
 class SensorManager:
     """传感器管理器"""
@@ -838,7 +823,6 @@ class SensorManager:
             except Exception as e:
                 logger.error(f"数据处理器执行失败: {e}")
 
-
 # 预定义的传感器配置
 PREDEFINED_SENSOR_CONFIGS = {
     "pressure_sensor_1": SensorConfig(
@@ -926,7 +910,6 @@ PREDEFINED_SENSOR_CONFIGS = {
         }
     )
 }
-
 
 def create_sensor_manager_with_defaults() -> SensorManager:
     """创建带有默认传感器配置的传感器管理器"""

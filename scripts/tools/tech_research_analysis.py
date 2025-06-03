@@ -6,7 +6,6 @@
 
 import requests
 import json
-import os
 from typing import Dict, List, Any
 import time
 
@@ -312,7 +311,6 @@ def main():
                 print(f"   架构模式: {', '.join(analysis['architecture_patterns'])}")
                 print(f"   技术栈: {', '.join(analysis['tech_stack'])}")
                 print(f"   最佳实践: {', '.join(analysis['best_practices'][:3])}...")
-                print()
 
             # 避免API限制
             time.sleep(2)

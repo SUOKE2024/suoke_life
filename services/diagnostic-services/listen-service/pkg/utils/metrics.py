@@ -10,7 +10,6 @@ from typing import Dict, List, Any, Optional, Callable, Union
 from prometheus_client import Counter, Histogram, Gauge, Summary, REGISTRY, push_to_gateway, Info, CollectorRegistry, generate_latest, start_http_server
 from collections import defaultdict, deque
 from dataclasses import dataclass
-from datetime import datetime, timedelta
 
 logger = logging.getLogger(__name__)
 
@@ -532,7 +531,6 @@ def configure(
         _push_thread.start()
         logger.info(f"启动指标推送线程，目标: {_config['push_gateway']}, 间隔: {_config['push_interval']}秒")
 
-
 def _make_name(name: str) -> str:
     """
     创建完整的指标名称
@@ -551,7 +549,6 @@ def _make_name(name: str) -> str:
     parts.append(name)
     return "_".join(parts)
 
-
 def _push_metrics_loop():
     """推送指标循环"""
     while not _push_thread_stop_event.is_set():
@@ -569,7 +566,6 @@ def _push_metrics_loop():
         
         # 等待下一次推送
         _push_thread_stop_event.wait(_config["push_interval"])
-
 
 def counter(name: str, description: str, labels: List[str] = None) -> Counter:
     """
@@ -598,7 +594,6 @@ def counter(name: str, description: str, labels: List[str] = None) -> Counter:
     
     return _metrics[key]
 
-
 def gauge(name: str, description: str, labels: List[str] = None) -> Gauge:
     """
     创建或获取仪表盘指标
@@ -625,7 +620,6 @@ def gauge(name: str, description: str, labels: List[str] = None) -> Gauge:
         )
     
     return _metrics[key]
-
 
 def histogram(
     name: str,
@@ -661,7 +655,6 @@ def histogram(
     
     return _metrics[key]
 
-
 def summary(
     name: str,
     description: str,
@@ -693,7 +686,6 @@ def summary(
     
     return _metrics[key]
 
-
 def increment_counter(name: str, labels: Dict[str, str] = None, value: float = 1.0):
     """
     增加计数器值
@@ -714,7 +706,6 @@ def increment_counter(name: str, labels: Dict[str, str] = None, value: float = 1
             metric.inc(value)
     except Exception as e:
         logger.error(f"增加计数器失败: {name}, 错误: {str(e)}", exc_info=True)
-
 
 def set_gauge(name: str, value: float, labels: Dict[str, str] = None):
     """
@@ -737,7 +728,6 @@ def set_gauge(name: str, value: float, labels: Dict[str, str] = None):
     except Exception as e:
         logger.error(f"设置仪表盘失败: {name}, 错误: {str(e)}", exc_info=True)
 
-
 def observe_histogram(name: str, value: float, labels: Dict[str, str] = None):
     """
     观察直方图值
@@ -758,7 +748,6 @@ def observe_histogram(name: str, value: float, labels: Dict[str, str] = None):
             metric.observe(value)
     except Exception as e:
         logger.error(f"观察直方图失败: {name}, 错误: {str(e)}", exc_info=True)
-
 
 def observe_summary(name: str, value: float, labels: Dict[str, str] = None):
     """
@@ -781,7 +770,6 @@ def observe_summary(name: str, value: float, labels: Dict[str, str] = None):
     except Exception as e:
         logger.error(f"观察摘要失败: {name}, 错误: {str(e)}", exc_info=True)
 
-
 class DummyMetric:
     """
     空指标类，用于指标收集禁用时
@@ -794,7 +782,6 @@ class DummyMetric:
     
     def labels(self, *args, **kwargs):
         return self
-
 
 def timed(
     name: str = None,
@@ -885,7 +872,6 @@ def timed(
     
     return decorator
 
-
 def grpc_metrics(
     namespace: str = None,
     service_name: str = None
@@ -963,7 +949,6 @@ def grpc_metrics(
         return servicer_class
     
     return decorator
-
 
 def init_from_config(config: Dict[str, Any]):
     """

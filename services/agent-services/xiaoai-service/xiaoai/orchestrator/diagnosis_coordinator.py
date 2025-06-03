@@ -21,16 +21,6 @@ from ..utils.metrics import track_service_call_metrics
 # 导入生成的gRPC客户端
 # 注意: 这些导入会在proto文件编译后生成
 try:
-    import api.grpc.inquiry_service_pb2 as inquiry_pb2
-    import api.grpc.inquiry_service_pb2_grpc as inquiry_pb2_grpc
-    import api.grpc.listen_service_pb2 as listen_pb2
-    import api.grpc.listen_service_pb2_grpc as listen_pb2_grpc
-    import api.grpc.look_service_pb2 as look_pb2
-    import api.grpc.look_service_pb2_grpc as look_pb2_grpc
-    import api.grpc.palpation_service_pb2 as palpation_pb2
-    import api.grpc.palpation_service_pb2_grpc as palpation_pb2_grpc
-    import api.grpc.xiaoai_service_pb2 as xiaoai_pb2
-    import api.grpc.xiaoai_service_pb2_grpc as xiaoai_pb2_grpc
 except ImportError:
     logging.warning("无法导入gRPC客户端, 请确保proto文件已编译")
 

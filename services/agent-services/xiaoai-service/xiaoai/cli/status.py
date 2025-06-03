@@ -6,8 +6,6 @@ XiaoAI Agent Status Check Module
 提供小艾智能体的状态检查和监控功能。
 """
 
-from __future__ import annotations
-
 import json
 from typing import Any
 
@@ -15,7 +13,6 @@ import click
 import yaml
 from loguru import logger
 from tabulate import tabulate
-
 
 def check_status(format: str = "table") -> dict[str, Any]:
     """
@@ -68,7 +65,6 @@ def check_status(format: str = "table") -> dict[str, Any]:
 
     return status_data
 
-
 def _check_database_status() -> dict[str, Any]:
     """检查数据库状态"""
     try:
@@ -85,7 +81,6 @@ def _check_database_status() -> dict[str, Any]:
             "status": "unhealthy",
             "error": str(e),
         }
-
 
 def _check_cache_status() -> dict[str, Any]:
     """检查缓存状态"""
@@ -105,7 +100,6 @@ def _check_cache_status() -> dict[str, Any]:
             "error": str(e),
         }
 
-
 def _check_message_queue_status() -> dict[str, Any]:
     """检查消息队列状态"""
     try:
@@ -123,7 +117,6 @@ def _check_message_queue_status() -> dict[str, Any]:
             "status": "unhealthy",
             "error": str(e),
         }
-
 
 def _check_ai_models_status() -> dict[str, Any]:
     """检查AI模型状态"""
@@ -144,7 +137,6 @@ def _check_ai_models_status() -> dict[str, Any]:
             "status": "unhealthy",
             "error": str(e),
         }
-
 
 def _check_external_services_status() -> dict[str, Any]:
     """检查外部服务状态"""
@@ -170,7 +162,6 @@ def _check_external_services_status() -> dict[str, Any]:
             "error": str(e),
         }
 
-
 def _output_status(statusdata: dict[str, Any], format: str) -> None:
     """
     输出状态信息
@@ -187,7 +178,6 @@ def _output_status(statusdata: dict[str, Any], format: str) -> None:
         _output_table_format(statusdata)
     else:
         click.echo(f"不支持的输出格式: {format}")
-
 
 def _output_table_format(statusdata: dict[str, Any]) -> None:
     """
@@ -233,7 +223,6 @@ def _output_table_format(statusdata: dict[str, Any]) -> None:
     # 错误信息
     if "error" in status_data:
         click.echo(click.style(f"\n错误: {status_data['error']}", fg="red"))
-
 
 if __name__ == "__main__":
     check_status()

@@ -15,7 +15,6 @@ from datetime import datetime
 from enum import Enum, auto
 from typing import Any
 
-import numpy as np
 from internal.model.pulse_models import (
     DeviceInfo,
     PulseDataPacket,
@@ -25,7 +24,6 @@ from internal.model.pulse_models import (
 
 logger = logging.getLogger(__name__)
 
-
 class DeviceType(Enum):
     """脉诊设备类型枚举"""
 
@@ -34,7 +32,6 @@ class DeviceType(Enum):
     MOBILE = auto()  # 移动设备
     PROTOTYPE = auto()  # 原型设备
     SIMULATOR = auto()  # 模拟器
-
 
 class PressurePosition(Enum):
     """按压位置枚举"""
@@ -50,7 +47,6 @@ class PressurePosition(Enum):
     RIGHT_GUAN = "右关"
     RIGHT_CHI = "右尺"
 
-
 @dataclass
 class DeviceCapability:
     """设备能力描述"""
@@ -62,7 +58,6 @@ class DeviceCapability:
     wireless: bool  # 是否支持无线连接
     battery_powered: bool  # 是否电池供电
     requires_calibration: bool  # 是否需要校准
-
 
 @dataclass
 class SignalMetadata:
@@ -79,7 +74,6 @@ class SignalMetadata:
     pressure_level: int  # 1-轻按, 2-中按, 3-重按
     calibrated: bool
     custom_metadata: dict
-
 
 class SignalProcessor:
     """信号处理器"""
@@ -387,7 +381,6 @@ class SignalProcessor:
         width = (right_idx - left_idx) / 100  # 归一化到0-1范围
         return max(0.01, width)
 
-
 class BaseDeviceAdapter(ABC):
     """设备适配器基类"""
 
@@ -465,7 +458,6 @@ class BaseDeviceAdapter(ABC):
             5: PulsePosition.CHI_RIGHT,
         }
         return channel_position_map.get(channel, PulsePosition.CUN_LEFT)
-
 
 class SuokeWP100Adapter(BaseDeviceAdapter):
     """索克WP-100设备适配器"""
@@ -668,7 +660,6 @@ class SuokeWP100Adapter(BaseDeviceAdapter):
 
         return True, "设备运行正常"
 
-
 class TCMPulseWaveProAdapter(BaseDeviceAdapter):
     """TCM Diagnostics PulseWave Pro设备适配器"""
 
@@ -820,7 +811,6 @@ class TCMPulseWaveProAdapter(BaseDeviceAdapter):
 
         # 模拟健康检查
         return True, "设备运行正常"
-
 
 class MedSensePR2000Adapter(BaseDeviceAdapter):
     """MedSense PulseReader 2000设备适配器"""
@@ -990,7 +980,6 @@ class MedSensePR2000Adapter(BaseDeviceAdapter):
             return True, f"电池电量低: {self.battery_level}%"
 
         return True, f"设备运行正常，电池电量: {self.battery_level}%"
-
 
 class DeviceAdapterFactory:
     """设备适配器工厂"""

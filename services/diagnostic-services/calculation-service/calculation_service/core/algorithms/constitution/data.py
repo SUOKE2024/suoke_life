@@ -4,8 +4,6 @@
 包含五行体质特征、八字与体质对应关系等数据
 """
 
-from typing import Dict, List
-
 # 五行体质特征数据
 CONSTITUTION_DATA = {
     "木质体质": {

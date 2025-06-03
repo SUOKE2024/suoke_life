@@ -6,7 +6,6 @@
 
 import asyncio
 import json
-import math
 import statistics
 from datetime import datetime, timedelta
 from enum import Enum
@@ -14,13 +13,10 @@ from typing import Dict, List, Optional, Any, Tuple, Set
 from dataclasses import dataclass, asdict
 from collections import defaultdict, Counter
 
-import numpy as np
 from sklearn.metrics import precision_score, recall_score, f1_score, ndcg_score
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-import redis.asyncio as redis
 from loguru import logger
-
 
 class EvaluationMetric(Enum):
     """评估指标"""
@@ -50,7 +46,6 @@ class EvaluationMetric(Enum):
     ERROR_RATE = "error_rate"
     AVAILABILITY = "availability"
 
-
 class EvaluationLevel(Enum):
     """评估级别"""
     COMPONENT = "component"  # 组件级别
@@ -58,14 +53,12 @@ class EvaluationLevel(Enum):
     USER = "user"          # 用户级别
     BUSINESS = "business"   # 业务级别
 
-
 class EvaluationMethod(Enum):
     """评估方法"""
     AUTOMATIC = "automatic"      # 自动评估
     HUMAN = "human"             # 人工评估
     HYBRID = "hybrid"           # 混合评估
     SIMULATION = "simulation"    # 仿真评估
-
 
 @dataclass
 class EvaluationCase:
@@ -79,7 +72,6 @@ class EvaluationCase:
     evaluation_criteria: List[str] # 评估标准
     created_at: datetime
 
-
 @dataclass
 class EvaluationResult:
     """评估结果"""
@@ -92,7 +84,6 @@ class EvaluationResult:
     evaluator: str
     timestamp: datetime
 
-
 @dataclass
 class SystemEvaluation:
     """系统评估"""
@@ -104,7 +95,6 @@ class SystemEvaluation:
     results: Dict[EvaluationMetric, float]
     summary: Dict[str, Any]
     status: str
-
 
 class EvaluationFramework:
     """高级评估框架"""
@@ -774,7 +764,6 @@ class EvaluationFramework:
         except Exception as e:
             logger.error(f"存储系统评估失败: {e}")
 
-
 class RetrievalEvaluator:
     """检索评估器"""
     
@@ -927,7 +916,6 @@ class RetrievalEvaluator:
             "mrr": mrr,
             "first_relevant_rank": first_relevant_rank
         }
-
 
 class GenerationEvaluator:
     """生成评估器"""
@@ -1123,7 +1111,6 @@ class GenerationEvaluator:
             logger.error(f"计算安全性失败: {e}")
             return 0.0, {"error": str(e)}
 
-
 class UserExperienceEvaluator:
     """用户体验评估器"""
     
@@ -1297,7 +1284,6 @@ class UserExperienceEvaluator:
             "success_rate": success_rate,
             "indicators": success_indicators
         }
-
 
 class SystemPerformanceEvaluator:
     """系统性能评估器"""

@@ -13,13 +13,11 @@ from enum import Enum
 from typing import Any
 
 from loguru import logger
-import numpy as np
 
 from ..common.base import BaseService
 from ..common.cache import cached
 from ..common.exceptions import InquiryServiceError
 from ..common.metrics import counter, memory_optimized, timer
-
 
 class FlowStage(Enum):
     """问诊流程阶段"""
@@ -32,7 +30,6 @@ class FlowStage(Enum):
     RISK_ASSESSMENT = "risk_assessment"  # 风险评估
     CONCLUSION = "conclusion"  # 结论总结
 
-
 class QuestionPriority(Enum):
     """问题优先级"""
 
@@ -42,7 +39,6 @@ class QuestionPriority(Enum):
     LOW = "low"  # 低优先级
     OPTIONAL = "optional"  # 可选问题
 
-
 class DecisionType(Enum):
     """决策类型"""
 
@@ -51,7 +47,6 @@ class DecisionType(Enum):
     BRANCH_EXPLORATION = "branch_exploration"  # 分支探索
     EMERGENCY_PROTOCOL = "emergency_protocol"  # 紧急处理
     CONCLUDE_INQUIRY = "conclude_inquiry"  # 结束问诊
-
 
 @dataclass
 class QuestionTemplate:
@@ -67,7 +62,6 @@ class QuestionTemplate:
     validation_rules: list[str]
     metadata: dict[str, Any] = field(default_factory=dict)
 
-
 @dataclass
 class FlowDecision:
     """流程决策"""
@@ -78,7 +72,6 @@ class FlowDecision:
     reasoning: str
     confidence: float
     metadata: dict[str, Any] = field(default_factory=dict)
-
 
 @dataclass
 class InquiryContext:
@@ -95,7 +88,6 @@ class InquiryContext:
     confidence_scores: dict[str, float]
     stage_history: list[tuple[FlowStage, datetime]]
     metadata: dict[str, Any] = field(default_factory=dict)
-
 
 class IntelligentFlowManager(BaseService):
     """智能问诊流程管理器"""

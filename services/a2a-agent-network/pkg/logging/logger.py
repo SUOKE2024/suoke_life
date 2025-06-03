@@ -5,12 +5,10 @@ Logging Configuration Module
 """
 
 import logging
-import logging.handlers
 import sys
 from datetime import UTC
 from pathlib import Path
 from typing import Any
-
 
 def setup_logging(config: dict[str, Any]) -> None:
     """
@@ -76,7 +74,6 @@ def setup_logging(config: dict[str, Any]) -> None:
     logging.getLogger("aiohttp").setLevel(logging.WARNING)
     logging.getLogger("werkzeug").setLevel(logging.WARNING)
 
-
 def _parse_size(size_str: str) -> int:
     """
     解析大小字符串
@@ -97,7 +94,6 @@ def _parse_size(size_str: str) -> int:
         return int(size_str[:-2]) * 1024 * 1024 * 1024
     else:
         return int(size_str)
-
 
 class JsonFormatter(logging.Formatter):
     """JSON 格式化器"""
@@ -130,7 +126,6 @@ class JsonFormatter(logging.Formatter):
             log_entry["agent_id"] = record.agent_id
 
         return json.dumps(log_entry, ensure_ascii=False)
-
 
 def get_logger(name: str) -> logging.Logger:
     """

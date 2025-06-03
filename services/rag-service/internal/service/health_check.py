@@ -10,14 +10,12 @@ import time
 from typing import Dict, Optional, List, Tuple, Any
 from enum import Enum
 import logging
-import json
 
 import aiohttp
 from redis.asyncio import Redis
 import qdrant_client
 
 from services.rag_service.internal.observability.telemetry import trace_method
-
 
 class HealthStatus(Enum):
     """健康状态枚举"""
@@ -26,14 +24,12 @@ class HealthStatus(Enum):
     DEGRADED = "degraded"  # 组件部分功能可用
     UNKNOWN = "unknown"  # 组件状态未知
 
-
 class ComponentType(Enum):
     """组件类型枚举"""
     DATABASE = "database"  # 数据库
     CACHE = "cache"  # 缓存
     API = "api"  # 外部API
     SERVICE = "service"  # 内部服务
-
 
 class HealthCheckComponent:
     """健康检查组件基类"""
@@ -75,7 +71,6 @@ class HealthCheckComponent:
             "lastCheckTime": self.last_check_time,
             "details": self.status_details
         }
-
 
 class VectorDBHealthCheck(HealthCheckComponent):
     """向量数据库健康检查组件"""
@@ -133,7 +128,6 @@ class VectorDBHealthCheck(HealthCheckComponent):
         self.status_details = details
         return self.last_status, details
 
-
 class RedisHealthCheck(HealthCheckComponent):
     """Redis健康检查组件"""
     
@@ -178,7 +172,6 @@ class RedisHealthCheck(HealthCheckComponent):
         
         self.status_details = details
         return self.last_status, details
-
 
 class OpenAIHealthCheck(HealthCheckComponent):
     """OpenAI API健康检查组件"""
@@ -234,7 +227,6 @@ class OpenAIHealthCheck(HealthCheckComponent):
         
         self.status_details = details
         return self.last_status, details
-
 
 class HealthCheckService:
     """健康检查服务"""

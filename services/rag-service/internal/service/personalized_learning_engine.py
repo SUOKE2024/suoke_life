@@ -5,23 +5,16 @@
 个性化学习引擎 - 提供自适应学习、知识图谱构建、学习路径规划
 """
 
-import asyncio
 import time
-import json
-import numpy as np
 from typing import Dict, List, Any, Optional, Tuple, Union, Set
 from dataclasses import dataclass, field
 from enum import Enum
 from datetime import datetime, timedelta
 from loguru import logger
-import networkx as nx
-from sklearn.cluster import KMeans
-from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 from ..observability.metrics import MetricsCollector
 from ..observability.tracing import trace_operation, SpanKind
-
 
 class LearningObjectiveType(str, Enum):
     """学习目标类型"""
@@ -34,7 +27,6 @@ class LearningObjectiveType(str, Enum):
     LIFESTYLE_OPTIMIZATION = "lifestyle_optimization"   # 生活方式优化
     SYMPTOM_MANAGEMENT = "symptom_management"           # 症状管理
 
-
 class LearningStyle(str, Enum):
     """学习风格"""
     VISUAL = "visual"                   # 视觉型
@@ -43,14 +35,12 @@ class LearningStyle(str, Enum):
     READING_WRITING = "reading_writing" # 读写型
     MULTIMODAL = "multimodal"           # 多模态
 
-
 class DifficultyLevel(str, Enum):
     """难度级别"""
     BEGINNER = "beginner"       # 初级
     INTERMEDIATE = "intermediate" # 中级
     ADVANCED = "advanced"       # 高级
     EXPERT = "expert"           # 专家级
-
 
 class LearningStatus(str, Enum):
     """学习状态"""
@@ -60,7 +50,6 @@ class LearningStatus(str, Enum):
     MASTERED = "mastered"           # 已掌握
     NEEDS_REVIEW = "needs_review"   # 需要复习
     STRUGGLING = "struggling"       # 困难中
-
 
 class ContentType(str, Enum):
     """内容类型"""
@@ -72,7 +61,6 @@ class ContentType(str, Enum):
     CASE_STUDY = "case_study"       # 案例研究
     SIMULATION = "simulation"       # 模拟
     PRACTICE = "practice"           # 练习
-
 
 @dataclass
 class LearningObjective:
@@ -88,7 +76,6 @@ class LearningObjective:
     assessment_criteria: List[str] = field(default_factory=list)
     tags: List[str] = field(default_factory=list)
     metadata: Dict[str, Any] = field(default_factory=dict)
-
 
 @dataclass
 class LearningContent:
@@ -106,7 +93,6 @@ class LearningContent:
     prerequisites: List[str] = field(default_factory=list)
     created_at: datetime = field(default_factory=datetime.now)
     updated_at: datetime = field(default_factory=datetime.now)
-
 
 @dataclass
 class LearnerProfile:
@@ -128,7 +114,6 @@ class LearnerProfile:
     created_at: datetime = field(default_factory=datetime.now)
     updated_at: datetime = field(default_factory=datetime.now)
 
-
 @dataclass
 class LearningProgress:
     """学习进度"""
@@ -146,7 +131,6 @@ class LearningProgress:
     notes: str = ""
     feedback: Dict[str, Any] = field(default_factory=dict)
 
-
 @dataclass
 class LearningPath:
     """学习路径"""
@@ -162,7 +146,6 @@ class LearningPath:
     updated_at: datetime = field(default_factory=datetime.now)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
-
 @dataclass
 class LearningRecommendation:
     """学习推荐"""
@@ -176,7 +159,6 @@ class LearningRecommendation:
     priority: int = 1                               # 优先级
     valid_until: Optional[datetime] = None
     metadata: Dict[str, Any] = field(default_factory=dict)
-
 
 class KnowledgeGraph:
     """知识图谱"""
@@ -278,7 +260,6 @@ class KnowledgeGraph:
             logger.error(f"计算概念难度失败: {e}")
             return 0.5
 
-
 class AdaptiveLearningEngine:
     """自适应学习引擎"""
     
@@ -360,7 +341,6 @@ class AdaptiveLearningEngine:
         # 按适合度排序
         sorted_content = sorted(content_with_scores, key=lambda x: x[1], reverse=True)
         return [content_id for content_id, _ in sorted_content]
-
 
 class LearningPathPlanner:
     """学习路径规划器"""
@@ -521,7 +501,6 @@ class LearningPathPlanner:
             return DifficultyLevel.ADVANCED
         else:
             return DifficultyLevel.EXPERT
-
 
 class PersonalizedLearningEngine:
     """个性化学习引擎主类"""
@@ -1235,10 +1214,8 @@ class PersonalizedLearningEngine:
             logger.error(f"获取下一个学习推荐失败: {e}")
             return None
 
-
 # 全局学习引擎实例
 _learning_engine: Optional[PersonalizedLearningEngine] = None
-
 
 def initialize_learning_engine(
     config: Dict[str, Any],
@@ -1248,7 +1225,6 @@ def initialize_learning_engine(
     global _learning_engine
     _learning_engine = PersonalizedLearningEngine(config, metrics_collector)
     return _learning_engine
-
 
 def get_learning_engine() -> Optional[PersonalizedLearningEngine]:
     """获取学习引擎实例"""

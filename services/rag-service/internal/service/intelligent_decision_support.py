@@ -5,25 +5,16 @@
 智能决策支持系统 - 提供多维度决策分析、风险评估、方案比较、智能建议
 """
 
-import asyncio
 import time
-import json
-import numpy as np
 from typing import Dict, List, Any, Optional, Tuple, Union, Set
 from dataclasses import dataclass, field
 from enum import Enum
 from datetime import datetime, timedelta
 from loguru import logger
-import pandas as pd
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingRegressor
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import cross_val_score
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
 from ..observability.metrics import MetricsCollector
 from ..observability.tracing import trace_operation, SpanKind
-
 
 class DecisionType(str, Enum):
     """决策类型"""
@@ -38,7 +29,6 @@ class DecisionType(str, Enum):
     TCM_THERAPY = "tcm_therapy"                         # 中医疗法
     SURGICAL_DECISION = "surgical_decision"             # 手术决策
 
-
 class RiskLevel(str, Enum):
     """风险级别"""
     VERY_LOW = "very_low"       # 极低风险
@@ -48,14 +38,12 @@ class RiskLevel(str, Enum):
     VERY_HIGH = "very_high"     # 极高风险
     CRITICAL = "critical"       # 危急风险
 
-
 class DecisionUrgency(str, Enum):
     """决策紧急程度"""
     ROUTINE = "routine"         # 常规
     URGENT = "urgent"           # 紧急
     EMERGENCY = "emergency"     # 急诊
     CRITICAL = "critical"       # 危急
-
 
 class EvidenceLevel(str, Enum):
     """证据级别"""
@@ -67,7 +55,6 @@ class EvidenceLevel(str, Enum):
     LEVEL_3B = "3b"             # 病例系列研究
     LEVEL_4 = "4"               # 专家意见
     LEVEL_5 = "5"               # 机制推理
-
 
 @dataclass
 class DecisionCriteria:
@@ -82,7 +69,6 @@ class DecisionCriteria:
     higher_is_better: bool = True
     mandatory: bool = False
     metadata: Dict[str, Any] = field(default_factory=dict)
-
 
 @dataclass
 class DecisionOption:
@@ -102,7 +88,6 @@ class DecisionOption:
     evidence_sources: List[str] = field(default_factory=list)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
-
 @dataclass
 class RiskFactor:
     """风险因素"""
@@ -118,7 +103,6 @@ class RiskFactor:
     time_horizon: Optional[str] = None              # 时间范围
     evidence_level: Optional[EvidenceLevel] = None
     metadata: Dict[str, Any] = field(default_factory=dict)
-
 
 @dataclass
 class DecisionContext:
@@ -141,7 +125,6 @@ class DecisionContext:
     risk_tolerance: str = "moderate"
     timestamp: datetime = field(default_factory=datetime.now)
 
-
 @dataclass
 class DecisionAnalysis:
     """决策分析结果"""
@@ -155,7 +138,6 @@ class DecisionAnalysis:
     confidence_level: float = 0.0                   # 置信度
     uncertainty_factors: List[str] = field(default_factory=list)
     sensitivity_analysis: Dict[str, float] = field(default_factory=dict)
-
 
 @dataclass
 class DecisionRecommendation:
@@ -174,7 +156,6 @@ class DecisionRecommendation:
     processing_time: float = 0.0
     timestamp: datetime = field(default_factory=datetime.now)
     metadata: Dict[str, Any] = field(default_factory=dict)
-
 
 class MultiCriteriaDecisionAnalyzer:
     """多标准决策分析器"""
@@ -546,7 +527,6 @@ class MultiCriteriaDecisionAnalyzer:
         
         return sensitivity
 
-
 class RiskAssessmentEngine:
     """风险评估引擎"""
     
@@ -819,7 +799,6 @@ class RiskAssessmentEngine:
             if risk_score <= threshold:
                 return level
         return RiskLevel.CRITICAL
-
 
 class IntelligentDecisionSupport:
     """智能决策支持系统"""
@@ -1493,7 +1472,6 @@ class IntelligentDecisionSupport:
             logger.error(f"获取决策统计失败: {e}")
             return {}
 
-
 def initialize_decision_support(
     config: Dict[str, Any],
     metrics_collector: Optional[MetricsCollector] = None
@@ -1501,10 +1479,8 @@ def initialize_decision_support(
     """初始化智能决策支持系统"""
     return IntelligentDecisionSupport(config, metrics_collector)
 
-
 # 全局实例
 _decision_support_instance: Optional[IntelligentDecisionSupport] = None
-
 
 def get_decision_support() -> Optional[IntelligentDecisionSupport]:
     """获取决策支持系统实例"""

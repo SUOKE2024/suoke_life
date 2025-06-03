@@ -1,69 +1,68 @@
-importNetInfo from "@react-native-community/netinfo"
+importNetInfo from "@react-native-community/////    netinfo";
 import {   DeviceEventEmitter   } from 'react-native';
 interface NetworkState { isConnected: boolean,
   type: string,
-  isInternetReachable: boolean
-  strength?: number}
+  isInternetReachable: boolean;
+strength?: number}
 class NetworkManager {
-  private currentState: NetworkState = {,
+  private currentState: NetworkState = {
     isConnected: false,
     type: "unknown",
-    isInternetReachable: false
+    isInternetReachable: false;
   };
   private listeners: ((state: NetworkState) => void)[] = [];
-  // 初始化网络监控
-  initialize() {
-    NetInfo.addEventListener((state); => {
+  //////     初始化网络监控
+initialize() {
+    NetInfo.addEventListener((state); => {}
       this.currentState = {
         isConnected: state.isConnected || false,
         type: state.type,
         isInternetReachable: state.isInternetReachable || false,
-        strength: state.details?.strength
+        strength: state.details?.strength;
       };
       this.notifyListeners()
       DeviceEventEmitter.emit("networkStateChange", this.currentState);
     });
     }
-  // 获取当前网络状态
-  getCurrentState();: NetworkState {
+  //////     获取当前网络状态
+getCurrentState(): NetworkState {
     return this.currentSta;t;e;
   }
-  // 检查是否在线
-  isOnline();: boolean {
+  //////     检查是否在线
+isOnline(): boolean {
     return (;
-      this.currentState.isConnected && this.currentState.isInternetReachabl;e
+      this.currentState.isConnected && this.currentState.isInternetReachabl;e;
     ;);
   }
-  // 检查是否为WiFi连接
-  isWiFi(): boolean {
+  //////     检查是否为WiFi连接
+isWiFi(): boolean {
     return this.currentState.type === "wif;i;";
   }
-  // 检查是否为移动网络
-  isCellular(): boolean {
+  //////     检查是否为移动网络
+isCellular(): boolean {
     return this.currentState.type === "cellula;r;";
   }
-  // 添加网络状态监听器
-  addListener(callback: (state: NetworkState); => void) {
+  //////     添加网络状态监听器
+addListener(callback: (state: NetworkState); => void) {
     this.listeners.push(callback);
   }
-  // 移除网络状态监听器
-  removeListener(callback: (state: NetworkState); => void) {
+  //////     移除网络状态监听器
+removeListener(callback: (state: NetworkState); => void) {
     const index = this.listeners.indexOf(callbac;k;);
     if (index > -1) {
       this.listeners.splice(index, 1);
     }
   }
   private notifyListeners() {
-    this.listeners.forEach((listener); => {
+    this.listeners.forEach((listener); => {}
       try {
         listener(this.currentState)
       } catch (error) {
-        console.error("网络状态监听器错误:", error);
-      }
+        }
     });
   }
-  // 网络质量评估
-  getNetworkQuality(): "poor" | "fair" | "good" | "excellent" {
+  //////     网络质量评估
+getNetworkQuality(): "poor" | "fair" | "good" | "excellent" {
     if (!this.isOnline()) {
       return "poo;r;";
     }
@@ -84,5 +83,5 @@ class NetworkManager {
     return "poo;r;";
   }
 }
-export const networkManager = new NetworkManager;(;);
+export const networkManager = new NetworkManager;
 export default networkManager;

@@ -5,8 +5,6 @@
 
 import asyncio
 import json
-import logging
-import pickle
 import uuid
 from abc import ABC, abstractmethod
 from dataclasses import asdict, dataclass, field
@@ -15,10 +13,8 @@ from enum import Enum
 from typing import Any, Callable, Dict, List, Optional, Union
 
 import structlog
-from tenacity import retry, stop_after_attempt, wait_exponential
 
 logger = structlog.get_logger(__name__)
-
 
 class EventStatus(Enum):
     """事件状态"""
@@ -29,7 +25,6 @@ class EventStatus(Enum):
     FAILED = "failed"
     RETRYING = "retrying"
 
-
 class EventPriority(Enum):
     """事件优先级"""
 
@@ -37,7 +32,6 @@ class EventPriority(Enum):
     NORMAL = 2
     HIGH = 3
     CRITICAL = 4
-
 
 @dataclass
 class Event:
@@ -82,7 +76,6 @@ class Event:
         event.metadata = data.get("metadata", {})
         return event
 
-
 @dataclass
 class EventHandler:
     """事件处理器"""
@@ -108,7 +101,6 @@ class EventHandler:
         except Exception as e:
             logger.error(f"事件处理器 {self.handler_id} 处理失败: {e}")
             raise
-
 
 class EventStore(ABC):
     """事件存储抽象基类"""
@@ -137,7 +129,6 @@ class EventStore(ABC):
     async def get_failed_events(self, limit: int = 100) -> List[Event]:
         """获取失败事件"""
         pass
-
 
 class MemoryEventStore(EventStore):
     """内存事件存储"""
@@ -184,7 +175,6 @@ class MemoryEventStore(EventStore):
         ]
         failed_events.sort(key=lambda e: e.timestamp, reverse=True)
         return failed_events[:limit]
-
 
 class RedisEventStore(EventStore):
     """Redis事件存储"""
@@ -279,7 +269,6 @@ class RedisEventStore(EventStore):
         except Exception as e:
             logger.error(f"获取失败事件失败: {e}")
             return []
-
 
 class EventBus:
     """事件总线"""
@@ -563,10 +552,8 @@ class EventBus:
 
         return stats
 
-
 # 全局事件总线实例
 _event_bus: Optional[EventBus] = None
-
 
 async def init_event_bus(
     config: Dict[str, Any], event_store: Optional[EventStore] = None
@@ -578,13 +565,11 @@ async def init_event_bus(
     await _event_bus.initialize(event_store)
     return _event_bus
 
-
 def get_event_bus() -> EventBus:
     """获取全局事件总线"""
     if _event_bus is None:
         raise RuntimeError("事件总线未初始化，请先调用 init_event_bus")
     return _event_bus
-
 
 # 装饰器支持
 def event_handler(

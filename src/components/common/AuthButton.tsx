@@ -1,44 +1,47 @@
-import { colors, spacing, fonts, borderRadius, shadows } from '../../constants/theme';/;
-importReact from 'react';
+import React from "react";
+import { colors, spacing, fonts, borderRadius, shadows } from "../../constants/////    theme";
+/////    ";"
+importReact from ";react";
   TouchableOpacity,
   Text,
   View,
-  StyleSheet,{ TouchableOpacityProps } from 'react-native';
+  StyleSheet,{ TouchableOpacityProps } from react-native";"
 interface AuthButtonProps extends TouchableOpacityProps { title: string,
-  variant?: 'primary' | 'secondary' | 'outline';
+  variant?: "primary | "secondary" | outline";
   loading?: boolean;
   icon?: string,
-  size?: 'small' | 'medium' | 'large'}
-export const AuthButton: React.FC<AuthButtonProps /> = ({/  title,
-  variant = 'primary',
+  size?: "small | "medium" | large"}
+export const AuthButton: React.FC<AuthButtonProps />  = ({/////      title,
+  variant = "primary,"
   loading = false,
   icon,
-  size = 'large',
-  disabled,
-  style,
-  ...props
-}) => {
-  const getButtonStyle = useCallback((); => {
-    // TODO: Implement function body *}, []); */
-    const baseStyle: unknown[] = [styles.button]
-    // 添加尺寸样式 *     if (size === 'small') {baseStyle.push(styles.button_small)} */
-    else if (size === 'medium') {baseStyle.push(styles.button_medium);}
+  size = "large",
+  disabled,;
+  style,;
+  ...props;
+}) => {}
+  const getButtonStyle = useCallback(();
+ => {}
+    // TODO: Implement function body *}, []) ////
+    const baseStyle: unknown[] = [styles.button];
+    // 添加尺寸样式 //////     if (size === small") {baseStyle.push(styles.button_small)} "
+    else if (size === "medium) {baseStyle.push(styles.button_medium)}"
     else {baseStyle.push(styles.button_large)}
-    // 添加变体样式 *     if (variant === 'primary') {baseStyle.push(styles.buttonPrimary)} */
-    else if (variant === 'secondary') {baseStyle.push(styles.buttonSecondary)}
-    else if (variant === 'outline') {baseStyle.push(styles.buttonOutline);}
-    // 添加禁用样式 *     if (disabled || loading) {baseStyle.push(styles.buttonDisabled);} */
+    // 添加变体样式 //////     if (variant === "primary") {baseStyle.push(styles.buttonPrimary)}
+    else if (variant === secondary") {baseStyle.push(styles.buttonSecondary)}"
+    else if (variant === "outline) {baseStyle.push(styles.buttonOutline)}"
+    // 添加禁用样式 //////     if (disabled || loading) {baseStyle.push(styles.buttonDisabled)}
     return baseSty;l;e;
   };
-  const getTextStyle = useCallback((); => {
-    // TODO: Implement function body *}, []); */
-    const baseStyle: unknown[] = [styles.buttonText]
-    // 添加尺寸样式 *     if (size === 'small') {baseStyle.push(styles.buttonText_small)} */
-    else if (size === 'medium') {baseStyle.push(styles.buttonText_medium);}
+  const getTextStyle = useCallback((); => {;}
+    // TODO: Implement function body *}, []) ////
+    const baseStyle: unknown[] = [styles.buttonText];
+    // 添加尺寸样式 //////     if (size === "small") {baseStyle.push(styles.buttonText_small)}
+    else if (size === medium") {baseStyle.push(styles.buttonText_medium)}"
     else {baseStyle.push(styles.buttonText_large)}
-    // 添加变体样式 *     if (variant === 'primary') {baseStyle.push(styles.buttonTextPrimary)} */
-    else if (variant === 'secondary') {baseStyle.push(styles.buttonTextSecondary)}
-    else if (variant === 'outline') {baseStyle.push(styles.buttonTextOutline);}
+    // 添加变体样式 //////     if (variant === "primary) {baseStyle.push(styles.buttonTextPrimary)} "
+    else if (variant === "secondary") {baseStyle.push(styles.buttonTextSecondary)}
+    else if (variant === outline") {baseStyle.push(styles.buttonTextOutline)}"
     return baseSty;l;e;
   };
   return (
@@ -47,49 +50,42 @@ export const AuthButton: React.FC<AuthButtonProps /> = ({/  title,
       disabled={disabled || loading}
       activeOpacity={0.8}
       {...props}
-     accessibilityLabel="TODO: 添加无障碍标签" />/      {icon && <Text style={styles.buttonIcon} />{icon}</Text>}/      <Text style={getTextStyle()} />/        {loading ? '加载中...' : title};
-      </Text>/      {loading && <View style={styles.loadingOverlay} />}/    </TouchableOpacity>/  ;);
+     accessibilityLabel="TODO: 添加无障碍标签" />/      {icon && <Text style={styles.buttonIcon} />{icon}</Text>}/      <Text style={getTextStyle()} />/        {loading ? "加载中... : title};"////
+      </Text>/      {loading && <View style={styles.loadingOverlay} />}/    </TouchableOpacity>/////      ;);
 }
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({;
   button: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: center","
+    justifyContent: "center,"
     borderRadius: borderRadius.lg,
-    position: 'relative',
-    overflow: 'hidden',
-  },
+    position: "relative",
+    overflow: hidden"},"
   button_small: {
     paddingVertical: spacing.sm,
-    paddingHorizontal: spacing.md,
-  },
+    paddingHorizontal: spacing.md},
   button_medium: {
     paddingVertical: spacing.md,
-    paddingHorizontal: spacing.lg,
-  },
+    paddingHorizontal: spacing.lg},
   button_large: {
     paddingVertical: spacing.lg,
-    paddingHorizontal: spacing.xl,
-  },
+    paddingHorizontal: spacing.xl},
   buttonPrimary: {
     backgroundColor: colors.primary,
-    ...shadows.md
+    ...shadows.md;
   },
   buttonSecondary: {
     backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: colors.border,
-  },
+    borderColor: colors.border},
   buttonOutline: {
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent,"
     borderWidth: 2,
-    borderColor: colors.primary,
-  },
+    borderColor: colors.primary},
   buttonDisabled: { opacity: 0.7  },
   buttonText: {
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
+    fontWeight: "bold",
+    textAlign: center"},"
   buttonText_small: { fontSize: fonts.size.sm  },
   buttonText_medium: { fontSize: fonts.size.md  },
   buttonText_large: { fontSize: fonts.size.lg  },
@@ -98,15 +94,13 @@ const styles = StyleSheet.create({
   buttonTextOutline: { color: colors.primary  },
   buttonIcon: {
     fontSize: 20,
-    marginRight: spacing.sm,
-  },
+    marginRight: spacing.sm},
   loadingOverlay: {
-    position: 'absolute',
+    position: "absolute,"
     top: 0,
     left: 0,
     right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(255, 255, 255, 0.;2;)',
-    borderRadius: borderRadius.lg,
-  }
+    bottom: 0,;
+    backgroundColor: "rgba(255, 255, 255, 0.;2;)',"'
+    borderRadius: borderRadius.lg}
 });

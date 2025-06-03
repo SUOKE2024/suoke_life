@@ -7,20 +7,16 @@
 """
 
 import asyncio
-import json
 from typing import Dict, List, Any, Optional, Tuple, Set, Union, Literal
 from dataclasses import dataclass, field
 from enum import Enum
-import networkx as nx
 from loguru import logger
 from datetime import datetime
 
 from ..observability.metrics import MetricsCollector
-from ..tcm.tcm_models import (
     ConstitutionType, SyndromeType, TreatmentPrinciple,
     HerbalFormula, SingleHerb
 )
-
 
 class NodeType(str, Enum):
     """节点类型"""
@@ -36,7 +32,6 @@ class NodeType(str, Enum):
     TREATMENT = "treatment"               # 治疗方法
     PRINCIPLE = "principle"               # 治疗原则
     CONCEPT = "concept"                   # 概念
-
 
 class RelationType(str, Enum):
     """关系类型"""
@@ -56,7 +51,6 @@ class RelationType(str, Enum):
     COMPATIBLE_WITH = "compatible_with"   # 配伍
     INCOMPATIBLE_WITH = "incompatible_with"  # 相克
 
-
 @dataclass
 class KGNode:
     """知识图谱节点"""
@@ -71,7 +65,6 @@ class KGNode:
     created_at: str = ""
     updated_at: str = ""
 
-
 @dataclass
 class KGRelation:
     """知识图谱关系"""
@@ -84,7 +77,6 @@ class KGRelation:
     source: str = ""
     created_at: str = ""
 
-
 @dataclass
 class KGQuery:
     """知识图谱查询"""
@@ -94,7 +86,6 @@ class KGQuery:
     constraints: Dict[str, Any] = field(default_factory=dict)
     max_depth: int = 3
     max_results: int = 100
-
 
 @dataclass
 class KGQueryResult:
@@ -106,7 +97,6 @@ class KGQueryResult:
     confidence: float = 0.0
     metadata: Dict[str, Any] = field(default_factory=dict)
 
-
 @dataclass
 class AuditRecord:
     entity_id: str
@@ -117,7 +107,6 @@ class AuditRecord:
     reviewer: str = ''
     comment: str = ''
     timestamp: str = ''
-
 
 class TCMKnowledgeBase:
     """中医知识库"""
@@ -385,7 +374,6 @@ class TCMKnowledgeBase:
                 "description": "通过刺激穴位调节人体功能"
             }
         }
-
 
 class KnowledgeGraphBuilder:
     """知识图谱构建器"""
@@ -702,7 +690,6 @@ class KnowledgeGraphBuilder:
             **relation.__dict__
         )
 
-
 class KnowledgeGraphQuerier:
     """知识图谱查询器"""
     
@@ -912,7 +899,6 @@ class KnowledgeGraphQuerier:
                 related_nodes.append(related_id)
         
         return related_nodes
-
 
 class KnowledgeGraphEnhancer:
     """知识图谱增强器"""

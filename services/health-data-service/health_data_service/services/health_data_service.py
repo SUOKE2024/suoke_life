@@ -1,7 +1,5 @@
 """健康数据服务"""
 
-from __future__ import annotations
-
 import contextlib
 import time
 from datetime import datetime
@@ -21,7 +19,6 @@ from health_data_service.models import UpdateHealthDataRequest
 from health_data_service.models import VitalSigns
 
 from .base import BaseService
-
 
 class HealthDataService(BaseService[HealthData, CreateHealthDataRequest, UpdateHealthDataRequest]):
     """健康数据服务"""
@@ -241,7 +238,6 @@ class HealthDataService(BaseService[HealthData, CreateHealthDataRequest, UpdateH
         # 调用 list 方法并返回结果
         result: tuple[list[HealthData], int] = await self.list(skip=skip, limit=limit, **filters)
         return result
-
 
 class VitalSignsService(BaseService[VitalSigns, CreateVitalSignsRequest, dict]):
     """生命体征服务"""

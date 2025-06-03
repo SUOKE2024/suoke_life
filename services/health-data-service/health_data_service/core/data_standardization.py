@@ -7,16 +7,13 @@
 """
 
 import json
-import re
 from dataclasses import dataclass, field
 from datetime import datetime, date
 from enum import Enum
 from typing import Dict, List, Optional, Any, Union, Tuple
 import logging
-from decimal import Decimal, InvalidOperation
 
 logger = logging.getLogger(__name__)
-
 
 class DataType(Enum):
     """数据类型枚举"""
@@ -36,14 +33,12 @@ class DataType(Enum):
     TCM_PALPATION = "tcm_palpation"  # 切诊数据（脉象、触诊等）
     TCM_CALCULATION = "tcm_calculation"  # 算诊数据（子午流注、八字体质等）
 
-
 class DataQuality(Enum):
     """数据质量等级"""
     HIGH = "high"  # 高质量
     MEDIUM = "medium"  # 中等质量
     LOW = "low"  # 低质量
     INVALID = "invalid"  # 无效数据
-
 
 @dataclass
 class ValidationRule:
@@ -53,7 +48,6 @@ class ValidationRule:
     parameters: Dict[str, Any]
     error_message: str
     severity: str = "error"  # error, warning, info
-
 
 @dataclass
 class StandardizedData:
@@ -68,7 +62,6 @@ class StandardizedData:
     metadata: Dict[str, Any] = field(default_factory=dict)
     timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
 
-
 @dataclass
 class HealthDataSchema:
     """健康数据模式"""
@@ -79,7 +72,6 @@ class HealthDataSchema:
     validation_rules: List[ValidationRule]
     transformation_rules: Dict[str, str]
     description: str
-
 
 class HealthDataStandardizer:
     """健康数据标准化器"""
@@ -994,10 +986,8 @@ class HealthDataStandardizer:
             ]
         }
 
-
 # 全局标准化器实例
 _standardizer = None
-
 
 def get_standardizer() -> HealthDataStandardizer:
     """获取健康数据标准化器实例"""
@@ -1006,43 +996,35 @@ def get_standardizer() -> HealthDataStandardizer:
         _standardizer = HealthDataStandardizer()
     return _standardizer
 
-
 # 便捷函数
 def standardize_vital_signs(data: Dict[str, Any]) -> StandardizedData:
     """标准化生命体征数据"""
     return get_standardizer().standardize_data(data, DataType.VITAL_SIGNS)
 
-
 def standardize_lab_results(data: Dict[str, Any]) -> StandardizedData:
     """标准化检验结果数据"""
     return get_standardizer().standardize_data(data, DataType.LAB_RESULTS)
 
-
 def standardize_wearable_data(data: Dict[str, Any]) -> StandardizedData:
     """标准化可穿戴设备数据"""
     return get_standardizer().standardize_data(data, DataType.WEARABLE_DATA)
-
 
 # 中医五诊数据标准化便捷函数
 def standardize_tcm_look_data(data: Dict[str, Any]) -> StandardizedData:
     """标准化中医望诊数据"""
     return get_standardizer().standardize_data(data, DataType.TCM_LOOK)
 
-
 def standardize_tcm_listen_data(data: Dict[str, Any]) -> StandardizedData:
     """标准化中医闻诊数据"""
     return get_standardizer().standardize_data(data, DataType.TCM_LISTEN)
-
 
 def standardize_tcm_inquiry_data(data: Dict[str, Any]) -> StandardizedData:
     """标准化中医问诊数据"""
     return get_standardizer().standardize_data(data, DataType.TCM_INQUIRY)
 
-
 def standardize_tcm_palpation_data(data: Dict[str, Any]) -> StandardizedData:
     """标准化中医切诊数据"""
     return get_standardizer().standardize_data(data, DataType.TCM_PALPATION)
-
 
 def standardize_tcm_calculation_data(data: Dict[str, Any]) -> StandardizedData:
     """标准化中医算诊数据"""

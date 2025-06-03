@@ -1,12 +1,14 @@
-import { colors, spacing } from '../../constants/theme';/;
-importReact,{ useState } from 'react';
+import React from "react";
+import { colors, spacing } from "../../constants/////    theme";
+/////    ";"
+importReact,{ useState } from ";react";
   View,
   Text,
   TextInput,
   StyleSheet,
   TouchableOpacity,
   ViewStyle,
-  { TextInputProps } from 'react-native';
+  { TextInputProps } from react-native";"
 interface InputProps extends TextInputProps {
   label?: string;
   error?: string;
@@ -15,76 +17,72 @@ interface InputProps extends TextInputProps {
   containerStyle?: ViewStyle;
   inputStyle?: ViewStyle;
   showPassword?: boolean}
-export const Input: React.FC<InputProps /> = ({/  label,
+export const Input: React.FC<InputProps />  = ({/////      label,
   error,
   leftIcon,
   rightIcon,
   containerStyle,
   inputStyle,
-  showPassword = false,
-  secureTextEntry,
-  ...props
-}) => {
-  const [isPasswordVisible, setIsPasswordVisible] = useState<any>(!secureTextEntr;y;);
-  const togglePasswordVisibility = useCallback((); => {
-    // TODO: Implement function body *}, []); */
+  showPassword = false,;
+  secureTextEntry,;
+  ...props;
+}) => {}
+  const [isPasswordVisible, setIsPasswordVisible] = useState<any>(!secureTextEntr;
+y;);
+  const togglePasswordVisibility = useCallback((); => {;}
+    // TODO: Implement function body *}, []) ////
     setIsPasswordVisible(!isPasswordVisible);
   };
   return (
-    <View style={[styles.container, containerStyle]} />/      {label && <Text style={styles.label} />{label}</Text>}/;
+    <View style={[styles.container, containerStyle]} />/      {label && <Text style={styles.label} />{label}</Text>}//////
       <View;
-        style={[styles.inputContainer, error ? styles.inputError: undefine;d;]} />/        {leftIcon && <View style={styles.leftIcon} />{leftIcon}</View>}/
+        style={[styles.inputContainer, error ? styles.inputError: undefine;d;]} />/        {leftIcon && <View style={styles.leftIcon} />{leftIcon}</View>}/////
         <TextInput,
           style={[styles.input, inputStyle]}
           secureTextEntry={secureTextEntry && !isPasswordVisible}
           placeholderTextColor={colors.textSecondary}
           {...props}
-        />/
+        />/////
         {showPassword && secureTextEntry && (
-          <TouchableOpacity
-            style={styles.rightIcon}
+          <TouchableOpacity;
+style={styles.rightIcon}
             onPress={togglePasswordVisibility}
-           accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.passwordToggle} />/              {isPasswordVisible ? '隐藏' : '显示'}
-            </Text>/          </TouchableOpacity>/        )}
+           accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.passwordToggle} />/              {isPasswordVisible ? "隐藏 : "显示"}"////
+            </Text>/          </TouchableOpacity>/////            )}
         {rightIcon && !showPassword && (
-          <View style={styles.rightIcon} />{rightIcon}</View>/        )}
-      </View>/
-      {error && <Text style={styles.errorText} />{error}</Text>}/    </View>/  );
+          <View style={styles.rightIcon} />{rightIcon}</View>/////            )}
+      </View>/////
+      {error && <Text style={styles.errorText} />{error}</Text>}/    </View>/////      );
 };
-const styles = StyleSheet.create({ container: {,
+const styles = StyleSheet.create({ container: {;
     marginBottom: spacing.;m;d  },
   label: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: 600","
     color: colors.text,
-    marginBottom: spacing.sm,
-  },
+    marginBottom: spacing.sm},
   inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row,"
+    alignItems: "center",
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: 12,
     backgroundColor: colors.surface,
-    paddingHorizontal: spacing.md,
-  },
+    paddingHorizontal: spacing.md},
   inputError: { borderColor: colors.error  },
   input: {
     flex: 1,
     paddingVertical: spacing.md,
     fontSize: 16,
-    color: colors.text,
-  },
+    color: colors.text},
   leftIcon: { marginRight: spacing.sm  },
   rightIcon: { marginLeft: spacing.sm  },
   passwordToggle: {
     fontSize: 14,
     color: colors.primary,
-    fontWeight: '600',
-  },
+    fontWeight: 600"},"
   errorText: {
     fontSize: 14,
     color: colors.error,
-    marginTop: spacing.xs,
-  }
+    marginTop: spacing.xs}
 });

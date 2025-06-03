@@ -2,14 +2,11 @@
 操作日志和审计日志存储库
 用于记录用户操作、系统事件和关键流程的日志信息
 """
-import json
 import logging
-import time
 import uuid
 from datetime import datetime
 from typing import Dict, List, Optional, Union, Any
 
-import aiosqlite
 from sqlalchemy import create_engine, select, desc
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
@@ -22,7 +19,6 @@ from internal.repository.models import UserAuditLog, OperationLog, Base
 
 # 日志记录器
 logger = logging.getLogger(__name__)
-
 
 class AuditLogRepository:
     """
@@ -194,7 +190,6 @@ class AuditLogRepository:
         except SQLAlchemyError as e:
             logger.error(f"获取用户审计日志数量失败: {str(e)}")
             raise RepositoryError(f"获取用户审计日志数量失败: {str(e)}")
-
 
 class OperationLogRepository:
     """

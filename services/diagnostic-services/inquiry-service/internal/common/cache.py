@@ -12,14 +12,12 @@ import logging
 from typing import Any
 
 try:
-    import redis.asyncio as redis
 
     REDIS_AVAILABLE = True
 except ImportError:
     REDIS_AVAILABLE = False
 
 from .exceptions import ConfigurationError, ServiceUnavailableError
-
 
 @dataclass
 class CacheEntry:
@@ -42,7 +40,6 @@ class CacheEntry:
         """更新访问时间和计数"""
         self.last_accessed = datetime.now()
         self.access_count += 1
-
 
 class MemoryCache:
     """内存缓存实现"""
@@ -149,7 +146,6 @@ class MemoryCache:
 
         await self.delete(lru_key)
         self._logger.debug(f"LRU淘汰: {lru_key}")
-
 
 class RedisCache:
     """Redis缓存实现"""
@@ -309,7 +305,6 @@ class RedisCache:
         except Exception as e:
             self._logger.error(f"Redis统计信息获取失败: {e!s}")
             return {}
-
 
 class CacheManager:
     """缓存管理器"""

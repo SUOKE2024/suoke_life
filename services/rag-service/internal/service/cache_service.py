@@ -4,14 +4,9 @@
 import time
 import pickle
 import hashlib
-import asyncio
 from typing import Any, Dict, Optional, List, Tuple, Union
-from functools import lru_cache
 import redis
 from loguru import logger
-
-from ..model.document import Document
-
 
 class LocalCache:
     """本地内存缓存实现"""
@@ -88,7 +83,6 @@ class LocalCache:
         """清空缓存"""
         self.cache.clear()
         self.access_times.clear()
-
 
 class RedisCache:
     """Redis缓存实现"""
@@ -183,7 +177,6 @@ class RedisCache:
         if self.client:
             self.client.close()
             self.client = None
-
 
 class CacheService:
     """

@@ -4,15 +4,11 @@ gRPC 服务器模块
 提供区块链服务的 gRPC 接口实现。
 """
 
-from __future__ import annotations
-
 from grpc import aio
 from grpc_health.v1 import health, health_pb2, health_pb2_grpc
 from grpc_reflection.v1alpha import reflection
 
 from .config import settings
-from .logging import grpc_logger as logger
-
 
 class GRPCServer:
     """gRPC 服务器"""
@@ -83,7 +79,6 @@ class GRPCServer:
         """等待服务器终止"""
         if self._server:
             await self._server.wait_for_termination()
-
 
 # TODO: 实现具体的区块链服务接口
 # class BlockchainServicer(blockchain_pb2_grpc.BlockchainServiceServicer):

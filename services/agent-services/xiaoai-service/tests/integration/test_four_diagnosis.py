@@ -29,8 +29,6 @@ from xiaoai_service.internal.four_diagnosis.reasoning.engine import TCMReasoning
 from xiaoai_service.internal.four_diagnosis.validation.validator import (
     DiagnosticValidator,
 )
-from xiaoai_service.protos import four_diagnosis_pb2 as diagnosis_pb
-
 
 @pytest.mark.asyncio
 class TestFourDiagnosisCoordinator:

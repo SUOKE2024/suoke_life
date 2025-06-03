@@ -3,21 +3,15 @@
 实现食疗与农业结合的健康管理功能
 """
 
-import asyncio
-import json
 import logging
-from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
-import numpy as np
-
 from ..domain.models import ConstitutionType
 
 logger = logging.getLogger(__name__)
-
 
 class SeasonType(Enum):
     """季节类型"""
@@ -26,7 +20,6 @@ class SeasonType(Enum):
     SUMMER = "summer"  # 夏季
     AUTUMN = "autumn"  # 秋季
     WINTER = "winter"  # 冬季
-
 
 class FoodCategory(Enum):
     """食物类别"""
@@ -40,7 +33,6 @@ class FoodCategory(Enum):
     NUTS_SEEDS = "nuts_seeds"  # 坚果种子类
     BEVERAGES = "beverages"  # 饮品类
 
-
 class FoodNature(Enum):
     """食物性质"""
 
@@ -49,7 +41,6 @@ class FoodNature(Enum):
     NEUTRAL = "neutral"  # 平性
     COOL = "cool"  # 凉性
     COLD = "cold"  # 寒性
-
 
 class FoodTaste(Enum):
     """食物味道"""
@@ -60,7 +51,6 @@ class FoodTaste(Enum):
     SPICY = "spicy"  # 辛味
     SALTY = "salty"  # 咸味
 
-
 class AgricultureType(Enum):
     """农业类型"""
 
@@ -70,7 +60,6 @@ class AgricultureType(Enum):
     GREENHOUSE = "greenhouse"  # 温室农业
     PERMACULTURE = "permaculture"  # 永续农业
 
-
 class CultivationMethod(Enum):
     """种植方法"""
 
@@ -79,7 +68,6 @@ class CultivationMethod(Enum):
     AQUAPONICS = "aquaponics"  # 鱼菜共生
     VERTICAL = "vertical"  # 垂直农业
     COMPANION = "companion"  # 伴生种植
-
 
 @dataclass
 class NutritionalInfo:
@@ -94,7 +82,6 @@ class NutritionalInfo:
     minerals: Dict[str, float]
     antioxidants: List[str]
     glycemic_index: Optional[int] = None
-
 
 @dataclass
 class FoodItem:
@@ -115,7 +102,6 @@ class FoodItem:
     origin_region: str
     created_at: datetime = field(default_factory=datetime.now)
 
-
 @dataclass
 class FoodTherapyPlan:
     """食疗方案"""
@@ -131,7 +117,6 @@ class FoodTherapyPlan:
     precautions: List[str]
     progress_indicators: List[str]
     created_at: datetime = field(default_factory=datetime.now)
-
 
 @dataclass
 class AgriculturalProduct:
@@ -155,7 +140,6 @@ class AgriculturalProduct:
     price_per_kg: float
     availability_status: str
 
-
 @dataclass
 class NutritionalAnalysis:
     """营养分析"""
@@ -176,7 +160,6 @@ class NutritionalAnalysis:
     supplement_recommendations: List[str]
     analysis_date: datetime = field(default_factory=datetime.now)
 
-
 @dataclass
 class PlantingGuidance:
     """种植指导"""
@@ -196,7 +179,6 @@ class PlantingGuidance:
     quality_optimization: List[str]
     post_harvest_handling: List[str]
     created_at: datetime = field(default_factory=datetime.now)
-
 
 class FoodAgricultureService:
     """

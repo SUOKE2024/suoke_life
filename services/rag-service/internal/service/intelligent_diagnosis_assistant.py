@@ -6,28 +6,21 @@
 结合症状分析、疾病预测、诊断建议、治疗方案推荐等功能
 """
 
-import asyncio
-import json
-import numpy as np
 from typing import Dict, List, Any, Optional, Tuple, Union, Set, Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from datetime import datetime, timedelta
 from loguru import logger
-import pandas as pd
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
 from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import StandardScaler, LabelEncoder
-from sklearn.model_selection import cross_val_score
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 import warnings
 warnings.filterwarnings('ignore')
 
 from ..observability.metrics import MetricsCollector
 from ..observability.tracing import trace_operation, SpanKind
-
 
 class SymptomSeverity(str, Enum):
     """症状严重程度"""
@@ -37,7 +30,6 @@ class SymptomSeverity(str, Enum):
     SEVERE = "severe"       # 严重
     CRITICAL = "critical"   # 危急
 
-
 class DiagnosisConfidence(str, Enum):
     """诊断置信度"""
     VERY_LOW = "very_low"       # 很低 (0-20%)
@@ -45,7 +37,6 @@ class DiagnosisConfidence(str, Enum):
     MODERATE = "moderate"       # 中等 (40-60%)
     HIGH = "high"               # 高 (60-80%)
     VERY_HIGH = "very_high"     # 很高 (80-100%)
-
 
 class DiagnosisType(str, Enum):
     """诊断类型"""
@@ -55,7 +46,6 @@ class DiagnosisType(str, Enum):
     PRELIMINARY = "preliminary"             # 初步诊断
     CONFIRMED = "confirmed"                 # 确诊
     SUSPECTED = "suspected"                 # 疑似
-
 
 class TreatmentType(str, Enum):
     """治疗类型"""
@@ -68,14 +58,12 @@ class TreatmentType(str, Enum):
     PSYCHOLOGICAL = "psychological"         # 心理治疗
     PREVENTIVE = "preventive"              # 预防措施
 
-
 class UrgencyLevel(str, Enum):
     """紧急程度"""
     ROUTINE = "routine"         # 常规
     URGENT = "urgent"           # 紧急
     EMERGENT = "emergent"       # 急诊
     CRITICAL = "critical"       # 危急
-
 
 @dataclass
 class Symptom:
@@ -94,7 +82,6 @@ class Symptom:
     onset_time: Optional[datetime] = None
     metadata: Dict[str, Any] = field(default_factory=dict)
 
-
 @dataclass
 class MedicalHistory:
     """病史"""
@@ -107,7 +94,6 @@ class MedicalHistory:
     surgical_history: List[str] = field(default_factory=list)
     immunization_history: List[str] = field(default_factory=list)
     lifestyle_factors: Dict[str, Any] = field(default_factory=dict)
-
 
 @dataclass
 class PhysicalExamination:
@@ -123,7 +109,6 @@ class PhysicalExamination:
     skin: Dict[str, Any] = field(default_factory=dict)
     examination_date: datetime = field(default_factory=datetime.now)
 
-
 @dataclass
 class LaboratoryResult:
     """实验室检查结果"""
@@ -134,7 +119,6 @@ class LaboratoryResult:
     abnormal: bool = False
     test_date: datetime = field(default_factory=datetime.now)
     interpretation: Optional[str] = None
-
 
 @dataclass
 class DiagnosisCandidate:
@@ -152,7 +136,6 @@ class DiagnosisCandidate:
     prognosis: Optional[str] = None
     complications: List[str] = field(default_factory=list)
 
-
 @dataclass
 class TCMSyndrome:
     """中医证型"""
@@ -168,7 +151,6 @@ class TCMSyndrome:
     treatment_principle: Optional[str] = None
     recommended_formulas: List[str] = field(default_factory=list)
     confidence: float = 0.0
-
 
 @dataclass
 class TreatmentRecommendation:
@@ -187,7 +169,6 @@ class TreatmentRecommendation:
     expected_outcomes: List[str] = field(default_factory=list)
     alternative_treatments: List[str] = field(default_factory=list)
 
-
 @dataclass
 class DiagnosisResult:
     """诊断结果"""
@@ -204,7 +185,6 @@ class DiagnosisResult:
     created_at: datetime = field(default_factory=datetime.now)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
-
 @dataclass
 class DiagnosisSession:
     """诊断会话"""
@@ -220,7 +200,6 @@ class DiagnosisSession:
     status: str = "active"                   # active, completed, cancelled
     created_at: datetime = field(default_factory=datetime.now)
     updated_at: datetime = field(default_factory=datetime.now)
-
 
 class SymptomAnalyzer:
     """症状分析器"""
@@ -442,7 +421,6 @@ class SymptomAnalyzer:
             return UrgencyLevel.URGENT
         else:
             return UrgencyLevel.ROUTINE
-
 
 class DiseasePredictor:
     """疾病预测器"""
@@ -716,7 +694,6 @@ class DiseasePredictor:
         
         return test_recommendations.get(disease_name, ["血常规", "尿常规"])
 
-
 class TCMDiagnosisEngine:
     """中医诊断引擎"""
     
@@ -927,7 +904,6 @@ class TCMDiagnosisEngine:
         # 按置信度排序
         syndromes.sort(key=lambda x: x.confidence, reverse=True)
         return syndromes
-
 
 class TreatmentRecommendationEngine:
     """治疗建议引擎"""
@@ -1235,7 +1211,6 @@ class TreatmentRecommendationEngine:
             contraindications.append("孕妇禁用")
         
         return contraindications
-
 
 class IntelligentDiagnosisAssistant:
     """智能诊断辅助引擎主类"""
@@ -1619,7 +1594,6 @@ class IntelligentDiagnosisAssistant:
             logger.error(f"获取诊断统计失败: {e}")
             return {}
 
-
 def initialize_diagnosis_assistant(
     config: Dict[str, Any],
     metrics_collector: Optional[MetricsCollector] = None
@@ -1628,10 +1602,8 @@ def initialize_diagnosis_assistant(
     assistant = IntelligentDiagnosisAssistant(config, metrics_collector)
     return assistant
 
-
 # 全局实例
 _diagnosis_assistant: Optional[IntelligentDiagnosisAssistant] = None
-
 
 def get_diagnosis_assistant() -> Optional[IntelligentDiagnosisAssistant]:
     """获取智能诊断辅助引擎实例"""

@@ -6,26 +6,16 @@
 结合现代慢病管理理念和中医"治未病"思想，为慢性疾病患者提供个性化的综合管理方案
 """
 
-import asyncio
-import json
-import numpy as np
 from typing import Dict, List, Any, Optional, Tuple, Union, Set, Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from datetime import datetime, timedelta, date
 from loguru import logger
-import pandas as pd
-from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.preprocessing import StandardScaler
-from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.cluster import KMeans
 import warnings
 warnings.filterwarnings('ignore')
 
 from ..observability.metrics import MetricsCollector
 from ..observability.tracing import trace_operation, SpanKind
-
 
 class ChronicDiseaseType(str, Enum):
     """慢性疾病类型"""
@@ -44,7 +34,6 @@ class ChronicDiseaseType(str, Enum):
     OBESITY = "obesity"                         # 肥胖症
     METABOLIC_SYNDROME = "metabolic_syndrome"   # 代谢综合征
 
-
 class DiseaseStage(str, Enum):
     """疾病分期"""
     EARLY = "early"                # 早期
@@ -55,7 +44,6 @@ class DiseaseStage(str, Enum):
     REMISSION = "remission"        # 缓解期
     EXACERBATION = "exacerbation"  # 急性加重期
 
-
 class ManagementGoal(str, Enum):
     """管理目标"""
     CONTROL = "control"                    # 控制病情
@@ -64,7 +52,6 @@ class ManagementGoal(str, Enum):
     SLOW_PROGRESSION = "slow_progression"  # 延缓进展
     SYMPTOM_RELIEF = "symptom_relief"      # 症状缓解
     FUNCTIONAL_IMPROVEMENT = "functional_improvement"  # 功能改善
-
 
 class InterventionType(str, Enum):
     """干预类型"""
@@ -78,14 +65,12 @@ class InterventionType(str, Enum):
     TCM = "tcm"                          # 中医治疗
     REHABILITATION = "rehabilitation"      # 康复治疗
 
-
 class AlertLevel(str, Enum):
     """预警级别"""
     LOW = "low"                    # 低风险
     MEDIUM = "medium"              # 中风险
     HIGH = "high"                  # 高风险
     CRITICAL = "critical"          # 危急
-
 
 @dataclass
 class ChronicDisease:
@@ -120,7 +105,6 @@ class ChronicDisease:
     
     # 更新时间
     last_updated: datetime = field(default_factory=datetime.now)
-
 
 @dataclass
 class ManagementPlan:
@@ -175,7 +159,6 @@ class ManagementPlan:
     created_by: str = "system"
     last_updated: datetime = field(default_factory=datetime.now)
 
-
 @dataclass
 class MonitoringData:
     """监测数据"""
@@ -214,7 +197,6 @@ class MonitoringData:
     # 备注
     notes: Optional[str] = None
 
-
 @dataclass
 class RiskAlert:
     """风险预警"""
@@ -246,7 +228,6 @@ class RiskAlert:
     resolution_notes: Optional[str] = None
     resolved_date: Optional[datetime] = None
     resolved_by: Optional[str] = None
-
 
 @dataclass
 class TreatmentOutcome:
@@ -288,7 +269,6 @@ class TreatmentOutcome:
     
     # 下一步建议
     next_steps: List[str] = field(default_factory=list)
-
 
 class ChronicDiseaseAnalyzer:
     """慢性疾病分析器"""
@@ -647,7 +627,6 @@ class ChronicDiseaseAnalyzer:
             confidence_scores.append(confidence)
         
         return np.mean(confidence_scores)
-
 
 class ManagementPlanGenerator:
     """管理计划生成器"""
@@ -1405,7 +1384,6 @@ class ManagementPlanGenerator:
         }
         
         return frequency_mapping.get(disease.current_stage, 30)
-
 
 class IntelligentChronicDiseaseManager:
     """智能慢病管理引擎"""
@@ -2335,7 +2313,6 @@ class IntelligentChronicDiseaseManager:
         
         return np.mean(adherence_scores)
 
-
 def initialize_chronic_disease_manager(
     config: Dict[str, Any],
     metrics_collector: Optional[MetricsCollector] = None
@@ -2349,10 +2326,8 @@ def initialize_chronic_disease_manager(
         logger.error(f"创建智能慢病管理引擎失败: {e}")
         raise
 
-
 # 全局实例
 _chronic_disease_manager = None
-
 
 def get_chronic_disease_manager() -> Optional[IntelligentChronicDiseaseManager]:
     """获取智能慢病管理引擎实例"""

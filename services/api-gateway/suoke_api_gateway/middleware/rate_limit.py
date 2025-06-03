@@ -5,9 +5,7 @@
 """
 
 import time
-from typing import Optional
 
-import redis.asyncio as redis
 from fastapi import Request, Response, status
 from limits import RateLimitItemPerSecond, parse
 from limits.storage import RedisStorage
@@ -17,7 +15,6 @@ from ..core.config import get_settings
 from ..core.logging import get_logger, log_security_event
 
 logger = get_logger(__name__)
-
 
 class RateLimitMiddleware(BaseHTTPMiddleware):
     """限流中间件"""

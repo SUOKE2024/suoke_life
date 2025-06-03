@@ -1,7 +1,5 @@
 import torch
-import torch.nn.functional as F
 from torch import nn
-
 
 class ModalityEncoder(nn.Module):
     """各个模态数据的特征编码器基类"""
@@ -17,7 +15,6 @@ class ModalityEncoder(nn.Module):
 
     def forward(self, x):
         return self.encoder(x)
-
 
 class TongueImageEncoder(ModalityEncoder):
     """舌象图像编码器"""
@@ -53,7 +50,6 @@ class TongueImageEncoder(ModalityEncoder):
         x = self.cnn(x)
         return self.fc(x)
 
-
 class VoiceEncoder(ModalityEncoder):
     """声音特征编码器"""
 
@@ -87,7 +83,6 @@ class VoiceEncoder(ModalityEncoder):
         lasthidden = hidden[-2:].transpose(0, 1).contiguous().view(-1, self.rnn.hidden_size * 2)
         return self.fc(lasthidden)
 
-
 class PulseEncoder(ModalityEncoder):
     """脉象特征编码器"""
 
@@ -119,7 +114,6 @@ class PulseEncoder(ModalityEncoder):
         x = self.conv_layers(x)
         x = x.squeeze(-1)  # 去除最后一个维度
         return self.fc(x)
-
 
 class InquiryEncoder(ModalityEncoder):
     """问诊信息编码器"""
@@ -158,7 +152,6 @@ class InquiryEncoder(ModalityEncoder):
         clsoutput = output[0]  # [batchsize, embedding_dim]
 
         return self.fc(clsoutput)
-
 
 class CrossModalAttention(nn.Module):
     """跨模态注意力机制"""
@@ -234,7 +227,6 @@ class CrossModalAttention(nn.Module):
         out = self.norm2(out + residual)
 
         return out
-
 
 class MultimodalFusionModule(nn.Module):
     """多模态特征融合模块"""
@@ -396,7 +388,6 @@ class MultimodalFusionModule(nn.Module):
                 'constitution_probs': constitutionprobs,
                 'tcm_features': outputs['tcm_features']
             }
-
 
 # 设备端轻量级模型
 class MultimodalLiteModule(nn.Module):

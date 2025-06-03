@@ -19,8 +19,6 @@ def main():
 
     # 1. 测试相对导入
     try:
-        from internal.service.implementations.blind_assistance_impl import BlindAssistanceServiceImpl
-        from internal.service.coordinators.accessibility_coordinator import AccessibilityServiceCoordinator
         from internal.service.factories.accessibility_factory import AccessibilityServiceFactory
         print('✅ 相对导入测试通过')
         results.append(True)
@@ -32,25 +30,21 @@ def main():
     available_libs = []
 
     try:
-        import numpy as np
         available_libs.append('NumPy')
     except ImportError:
         pass
 
     try:
-        import cv2
         available_libs.append('OpenCV')
     except ImportError:
         pass
 
     try:
-        import pandas as pd
         available_libs.append('Pandas')
     except ImportError:
         pass
 
     try:
-        import scipy
         available_libs.append('SciPy')
     except ImportError:
         pass

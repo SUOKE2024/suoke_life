@@ -6,26 +6,16 @@
 结合现代预防医学和中医"治未病"理论，为用户提供个性化的疾病预防和健康维护方案
 """
 
-import asyncio
-import json
-import numpy as np
 from typing import Dict, List, Any, Optional, Tuple, Union, Set, Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from datetime import datetime, timedelta, date
 from loguru import logger
-import pandas as pd
-from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.preprocessing import StandardScaler
-from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.cluster import KMeans
 import warnings
 warnings.filterwarnings('ignore')
 
 from ..observability.metrics import MetricsCollector
 from ..observability.tracing import trace_operation, SpanKind
-
 
 class RiskLevel(str, Enum):
     """风险等级"""
@@ -34,7 +24,6 @@ class RiskLevel(str, Enum):
     MODERATE = "moderate"          # 中等风险
     HIGH = "high"                  # 高风险
     VERY_HIGH = "very_high"        # 极高风险
-
 
 class DiseaseCategory(str, Enum):
     """疾病类别"""
@@ -49,13 +38,11 @@ class DiseaseCategory(str, Enum):
     INFECTIOUS = "infectious"                   # 感染性疾病
     AUTOIMMUNE = "autoimmune"                   # 自身免疫疾病
 
-
 class PreventionStrategy(str, Enum):
     """预防策略"""
     PRIMARY = "primary"            # 一级预防（病因预防）
     SECONDARY = "secondary"        # 二级预防（早期发现）
     TERTIARY = "tertiary"          # 三级预防（康复预防）
-
 
 class ScreeningType(str, Enum):
     """筛查类型"""
@@ -67,7 +54,6 @@ class ScreeningType(str, Enum):
     FUNCTIONAL_TEST = "functional_test"         # 功能检查
     PSYCHOLOGICAL_ASSESSMENT = "psychological"   # 心理评估
 
-
 class VaccineType(str, Enum):
     """疫苗类型"""
     ROUTINE = "routine"            # 常规疫苗
@@ -75,7 +61,6 @@ class VaccineType(str, Enum):
     OCCUPATIONAL = "occupational"  # 职业疫苗
     HIGH_RISK = "high_risk"        # 高危人群疫苗
     SEASONAL = "seasonal"          # 季节性疫苗
-
 
 class TCMConstitution(str, Enum):
     """中医体质类型"""
@@ -88,7 +73,6 @@ class TCMConstitution(str, Enum):
     BLOOD_STASIS = "blood_stasis"               # 血瘀质
     QI_STAGNATION = "qi_stagnation"             # 气郁质
     SPECIAL_DIATHESIS = "special_diathesis"     # 特禀质
-
 
 @dataclass
 class RiskFactor:
@@ -103,7 +87,6 @@ class RiskFactor:
     source: str                                 # 数据来源
     last_updated: datetime
     notes: Optional[str] = None
-
 
 @dataclass
 class DiseaseRiskAssessment:
@@ -125,7 +108,6 @@ class DiseaseRiskAssessment:
     time_horizon: int = 10                      # 预测时间范围（年）
     recommendations: List[str] = field(default_factory=list)
     next_assessment_date: Optional[datetime] = None
-
 
 @dataclass
 class PreventionPlan:
@@ -170,7 +152,6 @@ class PreventionPlan:
     created_by: str = "system"
     last_updated: datetime = field(default_factory=datetime.now)
 
-
 @dataclass
 class ScreeningRecommendation:
     """筛查建议"""
@@ -189,7 +170,6 @@ class ScreeningRecommendation:
     cost_estimate: Optional[float] = None
     insurance_coverage: Optional[str] = None
     provider_recommendations: List[str] = field(default_factory=list)
-
 
 @dataclass
 class VaccinationRecommendation:
@@ -210,7 +190,6 @@ class VaccinationRecommendation:
     booster_required: bool = False
     travel_requirement: bool = False
     priority: str = "routine"
-
 
 @dataclass
 class EnvironmentalRiskAssessment:
@@ -245,7 +224,6 @@ class EnvironmentalRiskAssessment:
     high_risk_factors: List[str] = field(default_factory=list)
     recommendations: List[str] = field(default_factory=list)
 
-
 @dataclass
 class FamilyHealthHistory:
     """家族健康史"""
@@ -259,7 +237,6 @@ class FamilyHealthHistory:
     genetic_test_results: Dict[str, Any] = field(default_factory=dict)
     lifestyle_factors: Dict[str, Any] = field(default_factory=dict)
     last_updated: datetime = field(default_factory=datetime.now)
-
 
 @dataclass
 class PreventionOutcome:
@@ -291,7 +268,6 @@ class PreventionOutcome:
     
     # 下一步建议
     next_steps: List[str] = field(default_factory=list)
-
 
 class RiskPredictor:
     """风险预测器"""
@@ -813,7 +789,6 @@ class RiskPredictor:
         days = intervals.get(risk_level, 365)
         return datetime.now() + timedelta(days=days)
 
-
 class PreventionPlanGenerator:
     """预防计划生成器"""
     
@@ -1324,7 +1299,6 @@ class PreventionPlanGenerator:
         
         return criteria
 
-
 class IntelligentPreventiveMedicineEngine:
     """智能预防医学引擎"""
     
@@ -1682,7 +1656,6 @@ class IntelligentPreventiveMedicineEngine:
             logger.error(f"获取预防医学统计信息失败: {e}")
             raise
 
-
 def initialize_preventive_medicine_engine(
     config: Dict[str, Any],
     metrics_collector: Optional[MetricsCollector] = None
@@ -1691,10 +1664,8 @@ def initialize_preventive_medicine_engine(
     engine = IntelligentPreventiveMedicineEngine(config, metrics_collector)
     return engine
 
-
 # 全局引擎实例
 _preventive_medicine_engine: Optional[IntelligentPreventiveMedicineEngine] = None
-
 
 def get_preventive_medicine_engine() -> Optional[IntelligentPreventiveMedicineEngine]:
     """获取智能预防医学引擎实例"""

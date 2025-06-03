@@ -6,15 +6,10 @@
 支持静态配置、Consul和Kubernetes服务发现
 """
 
-import asyncio
 import logging
-import random
 from typing import Dict, List, Optional, Tuple
 
-import aiohttp
 # 导入自定义修补模块
-from pkg.utils.consul_patch import *
-import consul.aio
 from kubernetes_asyncio import client, config
 
 from internal.model.config import GatewayConfig, ServiceConfig, ServiceEndpointConfig
@@ -99,7 +94,6 @@ class ServiceRegistry:
         # 在子类中实现
         pass
 
-
 class ConsulServiceRegistry(ServiceRegistry):
     """基于Consul的服务注册表"""
     
@@ -175,7 +169,6 @@ class ConsulServiceRegistry(ServiceRegistry):
         except Exception as e:
             logger.error(f"从Consul刷新服务失败: {str(e)}")
 
-
 class KubernetesServiceRegistry(ServiceRegistry):
     """基于Kubernetes的服务注册表"""
     
@@ -198,7 +191,6 @@ class KubernetesServiceRegistry(ServiceRegistry):
         if self.api_client is None:
             try:
                 # 加载配置 - 使用正确的导入路径
-                import kubernetes_asyncio.config as k8s_config
                 await k8s_config.load_kube_config()
                 self.api_client = client.CoreV1Api()
             except Exception as e:
@@ -266,7 +258,6 @@ class KubernetesServiceRegistry(ServiceRegistry):
             
         except Exception as e:
             logger.error(f"从Kubernetes刷新服务失败: {str(e)}")
-        
 
 def create_service_registry(config):
     """

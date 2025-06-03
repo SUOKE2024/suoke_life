@@ -22,7 +22,6 @@ from tenacity import (
 )
 
 # 导入生成的gRPC代码
-from .xiaoai_pb2 import *
 from .xiaoai_pb2_grpc import XiaoaiServiceStub
 
 logger = logging.getLogger(__name__)
@@ -34,7 +33,6 @@ circuit_breaker = pybreaker.CircuitBreaker(
     exclude=[grpc.RpcError],  # 排除某些错误类型
     name="xiaoai_service",
 )
-
 
 class XiaoaiServiceClient:
     """小艾服务客户端"""

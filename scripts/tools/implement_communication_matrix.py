@@ -4,14 +4,12 @@
 基于 services/COMMUNICATION_MATRIX_IMPLEMENTATION_PLAN.md
 """
 
-import os
 import sys
 import yaml
 import json
 import subprocess
 import time
 from pathlib import Path
-from typing import Dict, List, Any
 
 class CommunicationMatrixImplementer:
     """通信矩阵实施器"""

@@ -4,13 +4,11 @@
 管理算诊微服务的配置参数
 """
 
-import os
 from functools import lru_cache
 from typing import List
 
 from pydantic import Field
 from pydantic_settings import BaseSettings
-
 
 class Settings(BaseSettings):
     """应用配置"""
@@ -93,12 +91,10 @@ class Settings(BaseSettings):
         env_file_encoding = "utf-8"
         case_sensitive = True
 
-
 @lru_cache()
 def get_settings() -> Settings:
     """获取配置实例"""
     return Settings()
-
 
 # 创建全局配置实例
 settings = get_settings()

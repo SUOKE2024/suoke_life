@@ -8,17 +8,11 @@ import sys
 import argparse
 import logging
 import json
-import numpy as np
-import pandas as pd
 import torch
-import torch.nn as nn
-import torch.optim as optim
 from torch.utils.data import Dataset, DataLoader
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support
-import matplotlib.pyplot as plt
 import librosa
-import soundfile as sf
 import yaml
 from tqdm import tqdm
 

@@ -19,7 +19,6 @@ from xiaoai.delivery.xiaoai_service_impl import XiaoAIServiceImpl
 from xiaoai.orchestrator.diagnosis_coordinator import DiagnosisCoordinator
 
 try:
-    import api.grpc.xiaoai_service_pb2 as xiaoai_pb2
 except ImportError:
     logging.error("无法导入gRPC生成的代码。请确保先运行 'python -m grpc_tools.protoc' 命令来生成。")
     sys.exit(1)

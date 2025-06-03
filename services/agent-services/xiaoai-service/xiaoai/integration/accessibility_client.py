@@ -20,7 +20,6 @@ import aiohttp
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
 try:
-    from config.config import Config
 except ImportError:
     # 如果导入失败, 创建一个简单的配置类
     class Config:
@@ -61,7 +60,6 @@ class AccessibilityServiceClient:
             self.session = aiohttp.ClientSession(
                 timeout=aiohttp.ClientTimeout(total=self.config.timeout)
             )
-
 
             # 测试连接
             await self.health_check()
@@ -411,7 +409,6 @@ async def close_accessibility_client():
     if _accessibility_client:
         await _accessibility_client.close()
 
-
 class MockAccessibilityStub:
     """模拟的无障碍服务存根(用于开发和测试)"""
 
@@ -427,7 +424,6 @@ class MockAccessibilityStub:
             'response_audio': b'mock_audio',
             'confidence': 0.9
         })()
-
 
 # 单例实例
 accessibilityclient = AccessibilityServiceClient()

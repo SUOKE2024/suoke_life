@@ -1,4 +1,4 @@
-// 全局错误处理器   索克生活APP - 架构优化
+//////     全局错误处理器   索克生活APP - 架构优化
 export enum ErrorType {;
   NETWORK = "NETWORK",
   VALIDATION = "VALIDATION",
@@ -8,8 +8,8 @@ export enum ErrorType {;
   SYSTEM = "SYSTEM",
   UNKNOWN = "UNKNOWN"
 }
-export interface AppError { type: ErrorType,
-  code: string,
+export interface AppError { type: ErrorType,;
+  code: string,;
   message: string;
   details?: unknown;
   timestamp: Date;
@@ -17,16 +17,16 @@ export interface AppError { type: ErrorType,
 class ErrorHandler {
   private static instance: ErrorHandler;
   private errorListeners: ((error: AppError) => void)[] = [];
-  static getInstance();: ErrorHandler {
+  static getInstance(): ErrorHandler {
     if (!ErrorHandler.instance) {
       ErrorHandler.instance = new ErrorHandler();
     }
-    return ErrorHandler.instan;c;e;
+    return ErrorHandler.instance;
   }
   handleError(error: Error | AppError, context?: string);: AppError  {
     const appError = this.normalizeError(error, contex;t;);
-    // 记录错误 *     this.logError(appError); */
-    // 通知监听器 *     this.notifyListeners(appError); */
+    // 记录错误 //////     this.logError(appError)
+    // 通知监听器 //////     this.notifyListeners(appError)
     return appErr;o;r;
   }
   addErrorListener(listener: (error: AppError); => void): void {
@@ -37,19 +37,19 @@ class ErrorHandler {
   }
   private normalizeError(error: Error | AppError, context?: string);: AppError  {
     if (this.isAppError(error);) {
-      return err;o;r;
+      return error;
     }
-    // 根据错误类型分类 *     let type = ErrorType.UNKNO;W;N */
-    let code = "UNKNOWN_ERRO;R;"
+    // 根据错误类型分类 //////     let type = ErrorType.UNKNOW;N;
+    let code = "UNKNOWN_ERRO;R;";
     if (error.message.includes("Network");) {
-      type = ErrorType.NETWORK
-      code = "NETWORK_ERROR"
+      type = ErrorType.NETWORK;
+code = "NETWORK_ERROR"
     } else if (error.message.includes("Unauthorized");) {
-      type = ErrorType.AUTHENTICATION
-      code = "AUTH_ERROR"
+      type = ErrorType.AUTHENTICATION;
+code = "AUTH_ERROR"
     } else if (error.message.includes("Forbidden");) {
-      type = ErrorType.AUTHORIZATION
-      code = "PERMISSION_ERROR";
+      type = ErrorType.AUTHORIZATION;
+code = "PERMISSION_ERROR";
     }
     return {
       type,
@@ -57,7 +57,7 @@ class ErrorHandler {
       message: error.message,
       details: { context, originalError: error.na;m;e ;},
       timestamp: new Date(),
-      stack: error.stack
+      stack: error.stack;
     };
   }
   private isAppError(error: unknown);: error is AppError  {
@@ -66,35 +66,28 @@ class ErrorHandler {
     ;);
   }
   private logError(error: AppError);: void  {
-    console.error("应用错误:", {
-      type: error.type,
-      code: error.code,
-      message: error.message,
-      timestamp: error.timestamp,
-      details: error.details
-    })
-    // 在生产环境中，这里可以发送到错误监控服务 *     if (process.env.NODE_ENV === "production") { */
-      // 发送到错误监控服务 *       this.sendToErrorService(error); */
+    // 在生产环境中，这里可以发送到错误监控服务 //////     if (process.env.NODE_ENV === "production") {
+      // 发送到错误监控服务 //////     this.sendToErrorService(error)
     }
   }
   private notifyListeners(error: AppError);: void  {
-    this.errorListeners.forEach((listener); => {
+    this.errorListeners.forEach((listener); => {}
       try {
         listener(error)
       } catch (e) {
-        console.error("错误监听器执行失败:", e);
-      }
+        }
     });
   }
   private sendToErrorService(error: AppError);: void  {
-    // 实现错误上报逻辑 *      *// 例如发送到 Sentry, Bugsnag 等服务* *   } * *//
+    // 实现错误上报逻辑 // / 例如发送到 Sentry, Bugsnag 等服务* // } * /////
 }
-// React Hook for error handling * export const useErrorHandler = () =;> ;{; */;
-  const errorHandler = ErrorHandler.getInstance;(;);
+// React Hook for error handling * export const useErrorHandler = () =////   ;
+> ;{; /////
+  const errorHandler = ErrorHandler.getInstance;
   return {
-    handleError: (error: Error, context?: string) =>
+    handleError: (error: Error, context?: string) => {}
       errorHandler.handleError(error, context),
-    addErrorListener: (listener: (error: AppError) => void) =>
+    addErrorListener: (listener: (error: AppError) => void) => {}
       errorHandler.addErrorListener(listener),
     removeErrorListener: (listener: (error: AppError) => void) =>;
       errorHandler.removeErrorListener(listener;);};

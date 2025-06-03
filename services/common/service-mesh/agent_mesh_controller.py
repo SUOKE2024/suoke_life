@@ -8,7 +8,6 @@ import asyncio
 import json
 import logging
 import random
-import time
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
@@ -25,7 +24,6 @@ from ..service_registry.agent_discovery import (
 
 logger = logging.getLogger(__name__)
 
-
 class LoadBalancingStrategy(Enum):
     """负载均衡策略"""
     ROUND_ROBIN = "round_robin"           # 轮询
@@ -36,13 +34,11 @@ class LoadBalancingStrategy(Enum):
     CAPABILITY_BASED = "capability_based" # 基于能力的路由
     INTELLIGENT = "intelligent"           # 智能路由
 
-
 class CircuitBreakerState(Enum):
     """熔断器状态"""
     CLOSED = "closed"       # 关闭（正常）
     OPEN = "open"          # 开启（熔断）
     HALF_OPEN = "half_open" # 半开（试探）
-
 
 class HealthStatus(Enum):
     """健康状态"""
@@ -50,7 +46,6 @@ class HealthStatus(Enum):
     DEGRADED = "degraded"
     UNHEALTHY = "unhealthy"
     UNKNOWN = "unknown"
-
 
 @dataclass
 class ServiceMetrics:
@@ -84,7 +79,6 @@ class ServiceMetrics:
         if self.success_count == 0:
             return 0.0
         return self.total_response_time / self.success_count
-
 
 @dataclass
 class CircuitBreaker:
@@ -142,7 +136,6 @@ class CircuitBreaker:
             self.state = CircuitBreakerState.OPEN
             self.state_change_time = datetime.now()
 
-
 @dataclass
 class RoutingRule:
     """路由规则"""
@@ -156,7 +149,6 @@ class RoutingRule:
     priority: int = 0
     enabled: bool = True
 
-
 @dataclass
 class RequestContext:
     """请求上下文"""
@@ -168,7 +160,6 @@ class RequestContext:
     session_id: Optional[str] = None
     metadata: Dict[str, Any] = field(default_factory=dict)
     timestamp: datetime = field(default_factory=datetime.now)
-
 
 class AgentMeshController:
     """智能体服务网格控制器"""
@@ -945,10 +936,8 @@ class AgentMeshController:
         if self.redis:
             await self.redis.close()
 
-
 # 全局服务网格控制器实例
 _agent_mesh_controller: Optional[AgentMeshController] = None
-
 
 async def get_agent_mesh_controller() -> AgentMeshController:
     """获取全局智能体服务网格控制器"""
@@ -957,7 +946,6 @@ async def get_agent_mesh_controller() -> AgentMeshController:
         _agent_mesh_controller = AgentMeshController()
         await _agent_mesh_controller.initialize()
     return _agent_mesh_controller
-
 
 async def route_agent_request(
     source_service: str,

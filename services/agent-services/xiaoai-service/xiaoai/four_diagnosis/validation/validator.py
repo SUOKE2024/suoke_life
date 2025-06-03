@@ -5,10 +5,8 @@
 import logging
 
 # 导入Proto定义
-from ...api.grpc import four_diagnosis_pb2 as diagnosis_pb
 
 logger = logging.getLogger(__name__)
-
 
 class DiagnosticValidator:
     """诊断结果验证器"""

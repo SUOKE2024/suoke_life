@@ -1,55 +1,25 @@
-import React from 'react';
-import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor';
-
-// 模拟的性能监控器
-const performanceMonitor = {
-  recordMetric: (name: string, value: number) => {
-    console.log(`Performance metric ${name}: ${value}ms`);
-  },
-  recordRender: () => {
-    console.log('Render performance recorded');
-  }
-};
-
-// 模拟的安全管理器
-const securityManager = {
-  logSecurityEvent: (event: any) => {
-    console.log('Security event logged:', event);
-  }
-};
-
-// 模拟的智能体协作系统
-const agentCollaborationSystem = {
-  createCollaborationTask: async (type: string, data: any, priority: string) => {
-    console.log(`Collaboration task created: ${type}`, data);
-  }
-};
-
-// 中医基础理论配置
-const TCM_CONFIG = {
-  FIVE_ELEMENTS: ["木", "火", "土", "金", "水"],
+import React from "react";
+木", "火", "土", "金", "水"],"
   EIGHT_PRINCIPLES: ["阴", "阳", "表", "里", "寒", "热", "虚", "实"],
   QI_BLOOD_PATTERNS: ["气虚", "气滞", "血虚", "血瘀"],
   ORGAN_SYSTEMS: ["心", "肝", "脾", "肺", "肾", "胆", "胃", "小肠", "大肠", "膀胱", "三焦"],
-  MERIDIANS: 12
+  MERIDIANS: 12;
 };
-
-// 症状类型
-export interface Symptom {
+//////     症状类型
+export interface Symptom {;
   id: string;
   name: string;
   category: | "inspection" | "auscultation" | "inquiry" | "palpation" | "calculation";
-  severity: 1 | 2 | 3 | 4 | 5; // 1-轻微, 5-严重
-  duration: number;
+  severity: 1 | 2 | 3 | 4 | 5; //////     1-轻微, 5-严重
+duration: number;
   frequency: "occasional" | "frequent" | "constant";
   location?: string;
   quality?: string;
   triggers?: string[];
   relievers?: string[];
 }
-
-// 五诊数据
-export interface FiveDiagnosisData {
+//////     五诊数据
+export interface FiveDiagnosisData {;
   inspection: InspectionData;
   auscultation: AuscultationData;
   inquiry: InquiryData;
@@ -57,49 +27,48 @@ export interface FiveDiagnosisData {
   calculation: CalculationData;
   additional: AdditionalData;
 }
-
-export interface InspectionData {
-  complexion: string; // 面色
-  tongue: TongueData;
-  spirit: string; // 神态
-  body_build: string; // 体型
-  posture: string; // 姿态
-  movements: string; // 动作
+export interface InspectionData {;
+  complexion: string;
+ //////     面色
+tongue: TongueData;
+  spirit: string; //////     神态
+body_build: string; //////     体型
+posture: string; //////     姿态
+movements: string; //////     动作
 }
-
-export interface TongueData {
-  body_color: string; // 舌体颜色
-  coating_color: string; // 苔色
-  coating_thickness: string; // 苔厚薄
-  moisture: string; // 润燥
-  texture: string; // 质地
-  shape: string; // 形状
-  size: string; // 大小
+export interface TongueData {;
+  body_color: string;
+ //////     舌体颜色
+coating_color: string; //////     苔色
+coating_thickness: string; //////     苔厚薄
+moisture: string; //////     润燥
+texture: string; //////     质地
+shape: string; //////     形状
+size: string; //////     大小
 }
-
-export interface AuscultationData {
-  voice: string; // 声音
-  breathing: string; // 呼吸
-  cough: string; // 咳嗽
-  speech: string; // 语言
-  odor: string; // 气味
+export interface AuscultationData {;
+  voice: string;
+ //////     声音
+breathing: string; //////     呼吸
+cough: string; //////     咳嗽
+speech: string; //////     语言
+odor: string; //////     气味
 }
-
-export interface InquiryData {
-  chief_complaint: string; // 主诉
-  present_illness: string; // 现病史
-  past_history: string; // 既往史
-  family_history: string; // 家族史
-  personal_history: string; // 个人史
-  symptoms: Symptom[];
+export interface InquiryData {;
+  chief_complaint: string;
+ //////     主诉
+present_illness: string; //////     现病史
+past_history: string; //////     既往史
+family_history: string; //////     家族史
+personal_history: string; //////     个人史
+symptoms: Symptom[];
   sleep: SleepData;
   appetite: AppetiteData;
   bowel_movement: BowelData;
   urination: UrinationData;
   menstruation?: MenstruationData;
 }
-
-export interface SleepData {
+export interface SleepData {;
   quality: string;
   duration: number;
   difficulty_falling_asleep: boolean;
@@ -107,24 +76,21 @@ export interface SleepData {
   early_awakening: boolean;
   dreams: string;
 }
-
-export interface AppetiteData {
+export interface AppetiteData {;
   appetite: string;
   taste: string;
   thirst: string;
   food_preferences: string[];
   food_aversions: string[];
 }
-
-export interface BowelData {
+export interface BowelData {;
   frequency: string;
   consistency: string;
   color: string;
   odor: string;
   difficulty: boolean;
 }
-
-export interface UrinationData {
+export interface UrinationData {;
   frequency: string;
   color: string;
   clarity: string;
@@ -132,8 +98,7 @@ export interface UrinationData {
   urgency: boolean;
   pain: boolean;
 }
-
-export interface MenstruationData {
+export interface MenstruationData {;
   cycle_length: number;
   duration: number;
   flow: string;
@@ -142,112 +107,102 @@ export interface MenstruationData {
   pain: boolean;
   regularity: string;
 }
-
-export interface PalpationData {
+export interface PalpationData {;
   pulse: PulseData;
   abdomen: AbdomenData;
   acupoints: AcupointData[];
 }
-
-export interface PulseData {
-  rate: number; // 脉率
-  rhythm: string; // 节律
-  strength: string; // 力度
-  depth: string; // 深浅
-  width: string; // 宽窄
-  length: string; // 长短
-  quality: string; // 脉象
-  position: "left" | "right" | "both";
+export interface PulseData {;
+  rate: number;
+ //////     脉率
+rhythm: string; //////     节律
+strength: string; //////     力度
+depth: string; //////     深浅
+width: string; //////     宽窄
+length: string; //////     长短
+quality: string; //////     脉象
+position: "left" | "right" | "both";
 }
-
-export interface AbdomenData {
+export interface AbdomenData {;
   tenderness: string[];
   masses: string[];
   distension: boolean;
   temperature: string;
   elasticity: string;
 }
-
-export interface AcupointData {
+export interface AcupointData {;
   point: string;
   tenderness: boolean;
   temperature: string;
   texture: string;
 }
-
-export interface CalculationData {
-  birthDate: string; // 出生日期
-  birthTime: string; // 出生时辰
-  currentSeason: SeasonType; // 当前季节
-  lunarCalendar: LunarData; // 农历信息
-  fiveElements: FiveElementsData; // 五行分析
-  yinYangBalance: YinYangData; // 阴阳平衡
-  qiFlowAnalysis: QiFlowData; // 气机分析
+export interface CalculationData {;
+  birthDate: string;
+ //////     出生日期
+birthTime: string; //////     出生时辰
+currentSeason: SeasonType; //////     当前季节
+lunarCalendar: LunarData; //////     农历信息
+fiveElements: FiveElementsData; //////     五行分析
+yinYangBalance: YinYangData; //////     阴阳平衡
+qiFlowAnalysis: QiFlowData; //////     气机分析
 }
-
-export interface LunarData {
+export interface LunarData {;
   year: string;
   month: string;
   day: string;
   hour: string;
-  zodiac: string; // 生肖
-  heavenlyStem: string; // 天干
-  earthlyBranch: string; // 地支
+  zodiac: string; //////     生肖
+heavenlyStem: string; //////     天干
+earthlyBranch: string; //////     地支
 }
-
-export interface FiveElementsData {
-  wood: number; // 木
-  fire: number; // 火
-  earth: number; // 土
-  metal: number; // 金
-  water: number; // 水
-  dominantElement: string;
+export interface FiveElementsData {;
+  wood: number;
+ //////     木
+fire: number; //////     火
+earth: number; //////     土
+metal: number; //////     金
+water: number; //////     水
+dominantElement: string;
   deficientElement: string;
 }
-
-export interface YinYangData {
+export interface YinYangData {;
   yinScore: number;
   yangScore: number;
   balance: "yin_excess" | "yang_excess" | "balanced";
   tendency: string;
 }
-
-export interface QiFlowData {
+export interface QiFlowData {;
   meridianFlow: Record<string, number>;
   blockages: string[];
   deficiencies: string[];
   recommendations: string[];
 }
-
-export interface AdditionalData {
-  // Additional data fields would be defined here
+export interface AdditionalData {;
+  //////     Additional data fields would be defined here;
 }
-
-// 辨证结果
-export interface SyndromePattern {
+//////     辨证结果
+export interface SyndromePattern {;
   id: string;
   name: string;
   category: string;
   description: string;
-  pathogenesis: string; // 病机
-  main_symptoms: string[];
+  pathogenesis: string; //////     病机
+main_symptoms: string[];
   secondary_symptoms: string[];
   tongue_pulse: string;
   confidence: number;
   severity: "mild" | "moderate" | "severe";
 }
-
-// 治疗原则
-export interface TreatmentPrinciple {
+//////     治疗原则
+export interface TreatmentPrinciple {;
   id: string;
   name: string;
   description: string;
   methods: string[];
   contraindications: string[];
 }
-
-// 方剂
-export interface Prescription {
+//////     方剂
+export interface Prescription {;
   id: string;
   name: string;
   category: string;
@@ -260,25 +215,22 @@ export interface Prescription {
   preparation: string;
   administration: string;
 }
-
-export interface HerbComponent {
+export interface HerbComponent {;
   herb: string;
   dosage: string;
   unit: string;
   processing: string;
   function: string;
 }
-
-export interface PrescriptionModification {
+export interface PrescriptionModification {;
   condition: string;
   modification: string;
   herbs_to_add?: HerbComponent[];
   herbs_to_remove?: string[];
   dosage_changes?: { herb: string; new_dosage: string }[];
 }
-
-// 生活调理建议
-export interface LifestyleRecommendation {
+//////     生活调理建议
+export interface LifestyleRecommendation {;
   category: "diet" | "exercise" | "emotion" | "sleep" | "environment";
   recommendations: string[];
   foods_to_eat: string[];
@@ -287,9 +239,8 @@ export interface LifestyleRecommendation {
   acupoint_massage: string[];
   seasonal_adjustments: Record<SeasonType, string[]>;
 }
-
-// 诊断结果
-export interface TCMDiagnosisResult {
+//////     诊断结果
+export interface TCMDiagnosisResult {;
   patient_id: string;
   diagnosis_date: number;
   constitution: ConstitutionType;
@@ -301,32 +252,28 @@ export interface TCMDiagnosisResult {
   confidence: number;
   reasoning: string;
 }
-
-export interface FollowUpPlan {
+export interface FollowUpPlan {;
   next_visit: number;
   monitoring_points: string[];
   warning_signs: string[];
   self_care_instructions: string[];
 }
-
-// 体质辨识引擎
+//////     体质辨识引擎
 class ConstitutionIdentificationEngine {
   private static instance: ConstitutionIdentificationEngine;
-
   static getInstance(): ConstitutionIdentificationEngine {
     if (!ConstitutionIdentificationEngine.instance) {
       ConstitutionIdentificationEngine.instance = new ConstitutionIdentificationEngine();
     }
     return ConstitutionIdentificationEngine.instance;
   }
-
   identifyConstitution(
     inspectionData: InspectionData,
     inquiryData: InquiryData,
-    palpationData: PalpationData
+    palpationData: PalpationData;
   ): { constitution: ConstitutionType; confidence: number; characteristics: string[] } {
-    // 体质辨识逻辑
-    const scores: Record<ConstitutionType, number> = {
+    //////     体质辨识逻辑
+const scores: Record<ConstitutionType, number> = {;
       "平和质": 0,
       "气虚质": 0,
       "阳虚质": 0,
@@ -335,36 +282,32 @@ class ConstitutionIdentificationEngine {
       "湿热质": 0,
       "血瘀质": 0,
       "气郁质": 0,
-      "特禀质": 0
+      "特禀质": 0;
     };
-
-    // 基于面色判断
-    if (inspectionData.complexion.includes("萎黄") || inspectionData.complexion.includes("淡白")) {
+    //////     基于面色判断
+if (inspectionData.complexion.includes("萎黄") || inspectionData.complexion.includes("淡白")) {
       scores["气虚质"] += 0.3;
     }
     if (inspectionData.complexion.includes("晦暗") || inspectionData.complexion.includes("青紫")) {
       scores["血瘀质"] += 0.3;
     }
-
-    // 基于舌象判断
-    if (inspectionData.tongue.body_color.includes("淡")) {
+    //////     基于舌象判断
+if (inspectionData.tongue.body_color.includes("淡")) {
       scores["气虚质"] += 0.2;
       scores["阳虚质"] += 0.2;
     }
     if (inspectionData.tongue.coating_thickness.includes("厚腻")) {
       scores["痰湿质"] += 0.3;
     }
-
-    // 基于脉象判断
-    if (palpationData.pulse.strength.includes("弱") || palpationData.pulse.strength.includes("虚")) {
+    //////     基于脉象判断
+if (palpationData.pulse.strength.includes("弱") || palpationData.pulse.strength.includes("虚")) {
       scores["气虚质"] += 0.3;
     }
     if (palpationData.pulse.quality.includes("滑")) {
       scores["痰湿质"] += 0.2;
     }
-
-    // 基于症状判断
-    for (const symptom of inquiryData.symptoms) {
+    //////     基于症状判断
+for (const symptom of inquiryData.symptoms) {
       if (symptom.name.includes("乏力") || symptom.name.includes("气短")) {
         scores["气虚质"] += 0.2;
       }
@@ -375,21 +318,17 @@ class ConstitutionIdentificationEngine {
         scores["阴虚质"] += 0.2;
       }
     }
-
-    // 找出得分最高的体质
-    const maxScore = Math.max(...Object.values(scores));
-    const constitution = Object.keys(scores).find(
-      key => scores[key as ConstitutionType] === maxScore
+    //////     找出得分最高的体质
+const maxScore = Math.max(...Object.values(scores));
+    const constitution = Object.keys(scores).find(;
+      key => scores[key as ConstitutionType] === maxScore;
     ) as ConstitutionType;
-
     const confidence = Math.min(maxScore, 1.0);
     const characteristics = this.getConstitutionCharacteristics(constitution);
-
     return { constitution, confidence, characteristics };
   }
-
   private getConstitutionCharacteristics(constitution: ConstitutionType): string[] {
-    const characteristicsMap: Record<ConstitutionType, string[]> = {
+    const characteristicsMap: Record<ConstitutionType, string[]> = {;
       "平和质": ["体态适中", "面色润泽", "精力充沛", "睡眠良好"],
       "气虚质": ["容易疲劳", "气短懒言", "容易出汗", "抵抗力差"],
       "阳虚质": ["畏寒怕冷", "手足不温", "精神不振", "大便溏薄"],
@@ -400,32 +339,27 @@ class ConstitutionIdentificationEngine {
       "气郁质": ["神情抑郁", "情感脆弱", "烦闷不乐", "胸胁胀满"],
       "特禀质": ["过敏体质", "遗传缺陷", "胎传异常", "药物过敏"]
     };
-
     return characteristicsMap[constitution] || [];
   }
 }
-
-// 辨证引擎
+//////     辨证引擎
 class SyndromePatternEngine {
   private static instance: SyndromePatternEngine;
-
   static getInstance(): SyndromePatternEngine {
     if (!SyndromePatternEngine.instance) {
       SyndromePatternEngine.instance = new SyndromePatternEngine();
     }
     return SyndromePatternEngine.instance;
   }
-
   identifyPatterns(
     inspectionData: InspectionData,
     auscultationData: AuscultationData,
     inquiryData: InquiryData,
-    palpationData: PalpationData
+    palpationData: PalpationData;
   ): SyndromePattern[] {
     const patterns: SyndromePattern[] = [];
-
-    // 气虚证
-    if (this.checkQiDeficiency(inquiryData, palpationData)) {
+    //////     气虚证
+if (this.checkQiDeficiency(inquiryData, palpationData)) {
       patterns.push({
         id: "qi_deficiency",
         name: "气虚证",
@@ -439,9 +373,8 @@ class SyndromePatternEngine {
         severity: "moderate"
       });
     }
-
-    // 血瘀证
-    if (this.checkBloodStasis(inspectionData, inquiryData, palpationData)) {
+    //////     血瘀证
+if (this.checkBloodStasis(inspectionData, inquiryData, palpationData)) {
       patterns.push({
         id: "blood_stasis",
         name: "血瘀证",
@@ -455,74 +388,59 @@ class SyndromePatternEngine {
         severity: "moderate"
       });
     }
-
     return patterns.sort((a, b) => b.confidence - a.confidence);
   }
-
   private checkQiDeficiency(inquiryData: InquiryData, palpationData: PalpationData): boolean {
     let score = 0;
-
-    // 检查主要症状
-    for (const symptom of inquiryData.symptoms) {
+    //////     检查主要症状
+for (const symptom of inquiryData.symptoms) {
       if (symptom.name.includes("乏力") || symptom.name.includes("疲劳")) score += 0.3;
       if (symptom.name.includes("气短") || symptom.name.includes("呼吸困难")) score += 0.3;
       if (symptom.name.includes("自汗") || symptom.name.includes("出汗")) score += 0.2;
     }
-
-    // 检查脉象
-    if (palpationData.pulse.strength.includes("弱") || palpationData.pulse.strength.includes("虚")) {
+    //////     检查脉象
+if (palpationData.pulse.strength.includes("弱") || palpationData.pulse.strength.includes("虚")) {
       score += 0.3;
     }
-
     return score >= 0.6;
   }
-
   private checkBloodStasis(
     inspectionData: InspectionData,
     inquiryData: InquiryData,
-    palpationData: PalpationData
+    palpationData: PalpationData;
   ): boolean {
     let score = 0;
-
-    // 检查面色
-    if (inspectionData.complexion.includes("晦暗") || inspectionData.complexion.includes("青紫")) {
+    //////     检查面色
+if (inspectionData.complexion.includes("晦暗") || inspectionData.complexion.includes("青紫")) {
       score += 0.3;
     }
-
-    // 检查舌象
-    if (inspectionData.tongue.body_color.includes("紫") || inspectionData.tongue.body_color.includes("暗")) {
+    //////     检查舌象
+if (inspectionData.tongue.body_color.includes("紫") || inspectionData.tongue.body_color.includes("暗")) {
       score += 0.3;
     }
-
-    // 检查症状
-    for (const symptom of inquiryData.symptoms) {
+    //////     检查症状
+for (const symptom of inquiryData.symptoms) {
       if (symptom.name.includes("疼痛") && symptom.name.includes("固定")) score += 0.3;
       if (symptom.name.includes("瘀斑") || symptom.name.includes("紫斑")) score += 0.2;
     }
-
-    // 检查脉象
-    if (palpationData.pulse.quality.includes("涩") || palpationData.pulse.quality.includes("结")) {
+    //////     检查脉象
+if (palpationData.pulse.quality.includes("涩") || palpationData.pulse.quality.includes("结")) {
       score += 0.2;
     }
-
     return score >= 0.6;
   }
 }
-
-// 方剂引擎
+//////     方剂引擎
 class PrescriptionEngine {
   private static instance: PrescriptionEngine;
-
   static getInstance(): PrescriptionEngine {
     if (!PrescriptionEngine.instance) {
       PrescriptionEngine.instance = new PrescriptionEngine();
     }
     return PrescriptionEngine.instance;
   }
-
   generatePrescriptions(patterns: SyndromePattern[]): Prescription[] {
     const prescriptions: Prescription[] = [];
-
     for (const pattern of patterns.slice(0, 2)) {
       if (pattern.name.includes("气虚")) {
         prescriptions.push(this.getQiTonicPrescription());
@@ -530,10 +448,8 @@ class PrescriptionEngine {
         prescriptions.push(this.getBloodActivatingPrescription());
       }
     }
-
     return prescriptions;
   }
-
   private getQiTonicPrescription(): Prescription {
     return {
       id: "si_jun_zi_tang",
@@ -562,7 +478,6 @@ class PrescriptionEngine {
       administration: "温服，每日2次"
     };
   }
-
   private getBloodActivatingPrescription(): Prescription {
     return {
       id: "xue_fu_zhu_yu_tang",
@@ -586,27 +501,23 @@ class PrescriptionEngine {
     };
   }
 }
-
-// 主诊断引擎
-export class TCMDiagnosisEngine {
+//////     主诊断引擎
+export class TCMDiagnosisEngine {;
   private static instance: TCMDiagnosisEngine;
   private constitutionEngine: ConstitutionIdentificationEngine;
   private syndromeEngine: SyndromePatternEngine;
   private prescriptionEngine: PrescriptionEngine;
-
   private constructor() {
     this.constitutionEngine = ConstitutionIdentificationEngine.getInstance();
     this.syndromeEngine = SyndromePatternEngine.getInstance();
     this.prescriptionEngine = PrescriptionEngine.getInstance();
   }
-
   static getInstance(): TCMDiagnosisEngine {
     if (!TCMDiagnosisEngine.instance) {
       TCMDiagnosisEngine.instance = new TCMDiagnosisEngine();
     }
     return TCMDiagnosisEngine.instance;
   }
-
   async performDiagnosis(
     patientId: string,
     inspectionData: InspectionData,
@@ -614,61 +525,51 @@ export class TCMDiagnosisEngine {
     inquiryData: InquiryData,
     palpationData: PalpationData,
     calculationData: CalculationData,
-    additionalData?: AdditionalData
+    additionalData?: AdditionalData;
   ): Promise<TCMDiagnosisResult> {
     try {
-      // 记录性能开始
-      const startTime = performance.now();
-
-      // 1. 体质辨识
-      const constitutionResult = this.constitutionEngine.identifyConstitution(
+      //////     记录性能开始
+const startTime = performance.now();
+      //////     1. 体质辨识
+const constitutionResult = this.constitutionEngine.identifyConstitution(;
         inspectionData,
         inquiryData,
-        palpationData
+        palpationData;
       );
-
-      // 2. 辨证分析
-      const syndromePatterns = this.syndromeEngine.identifyPatterns(
+      //////     2. 辨证分析
+const syndromePatterns = this.syndromeEngine.identifyPatterns(;
         inspectionData,
         auscultationData,
         inquiryData,
-        palpationData
+        palpationData;
       );
-
-      // 3. 治疗原则
-      const principles = this.generateTreatmentPrinciples(syndromePatterns);
-
-      // 4. 方剂推荐
-      const prescriptions = this.prescriptionEngine.generatePrescriptions(syndromePatterns);
-
-      // 5. 生活调理建议
-      const lifestyleRecommendations = this.generateLifestyleRecommendations(
+      //////     3. 治疗原则
+const principles = this.generateTreatmentPrinciples(syndromePatterns);
+      //////     4. 方剂推荐
+const prescriptions = this.prescriptionEngine.generatePrescriptions(syndromePatterns);
+      //////     5. 生活调理建议
+const lifestyleRecommendations = this.generateLifestyleRecommendations(;
         constitutionResult.constitution,
         syndromePatterns,
-        calculationData.currentSeason
+        calculationData.currentSeason;
       );
-
-      // 6. 随访计划
-      const followUpPlan = this.generateFollowUpPlan(syndromePatterns);
-
-      // 7. 计算总体置信度
-      const overallConfidence = this.calculateOverallConfidence(
+      //////     6. 随访计划
+const followUpPlan = this.generateFollowUpPlan(syndromePatterns);
+      //////     7. 计算总体置信度
+const overallConfidence = this.calculateOverallConfidence(;
         constitutionResult.confidence,
-        syndromePatterns
+        syndromePatterns;
       );
-
-      // 8. 生成诊断推理
-      const reasoning = this.generateReasoning(
+      //////     8. 生成诊断推理
+const reasoning = this.generateReasoning(;
         constitutionResult,
         syndromePatterns,
-        principles
+        principles;
       );
-
-      // 记录性能结束
-      const endTime = performance.now();
-      performanceMonitor.recordMetric('tcm_diagnosis_duration', endTime - startTime);
-
-      const result: TCMDiagnosisResult = {
+      //////     记录性能结束
+const endTime = performance.now();
+      performanceMonitor.recordMetric("tcm_diagnosis_duration', endTime - startTime);"'
+      const result: TCMDiagnosisResult = {;
         patient_id: patientId,
         diagnosis_date: Date.now(),
         constitution: constitutionResult.constitution,
@@ -678,42 +579,36 @@ export class TCMDiagnosisEngine {
         lifestyle_recommendations: lifestyleRecommendations,
         follow_up_plan: followUpPlan,
         confidence: overallConfidence,
-        reasoning
+        reasoning;
       };
-
-      // 记录诊断事件
-      securityManager.logSecurityEvent({
+      //////     记录诊断事件
+securityManager.logSecurityEvent({
         type: "data_access",
         userId: patientId,
         details: {
           action: "tcm_diagnosis_performed",
           constitution: constitutionResult.constitution,
           syndrome_count: syndromePatterns.length,
-          confidence: overallConfidence
+          confidence: overallConfidence;
         },
         severity: "low"
       });
-
-      // 创建智能体协作任务进行验证
-      await agentCollaborationSystem.createCollaborationTask(
+      //////     创建智能体协作任务进行验证
+await agentCollaborationSystem.createCollaborationTask(
         "health_diagnosis",
         {
           diagnosis_result: result,
-          validation_required: true
+          validation_required: true;
         },
         "medium"
       );
-
       return result;
     } catch (error) {
-      console.error("中医诊断失败:", error);
       throw new Error("中医诊断过程中发生错误");
     }
   }
-
   private generateTreatmentPrinciples(patterns: SyndromePattern[]): TreatmentPrinciple[] {
     const principles: TreatmentPrinciple[] = [];
-
     for (const pattern of patterns.slice(0, 3)) {
       if (pattern.name.includes("气虚")) {
         principles.push({
@@ -741,16 +636,14 @@ export class TCMDiagnosisEngine {
         });
       }
     }
-
     return principles;
   }
-
   private generateLifestyleRecommendations(
     constitution: ConstitutionType,
     patterns: SyndromePattern[],
-    season: SeasonType
+    season: SeasonType;
   ): LifestyleRecommendation {
-    const baseRecommendations: LifestyleRecommendation = {
+    const baseRecommendations: LifestyleRecommendation = {;
       category: "diet",
       recommendations: [],
       foods_to_eat: [],
@@ -764,9 +657,8 @@ export class TCMDiagnosisEngine {
         冬季: ["温阳补肾", "适当进补"]
       }
     };
-
-    // 根据体质调整
-    if (constitution === "气虚质") {
+    //////     根据体质调整
+if (constitution === "气虚质") {
       baseRecommendations.foods_to_eat.push("山药", "大枣", "黄芪", "人参");
       baseRecommendations.foods_to_avoid.push("生冷食物", "辛辣刺激");
       baseRecommendations.exercises.push("太极拳", "八段锦", "散步");
@@ -777,9 +669,8 @@ export class TCMDiagnosisEngine {
       baseRecommendations.exercises.push("瑜伽", "游泳", "慢跑");
       baseRecommendations.acupoint_massage.push("三阴交", "太溪", "照海");
     }
-
-    // 根据证候调整
-    for (const pattern of patterns) {
+    //////     根据证候调整
+for (const pattern of patterns) {
       if (pattern.name.includes("肝气郁结")) {
         baseRecommendations.recommendations.push(
           "保持心情舒畅",
@@ -788,20 +679,16 @@ export class TCMDiagnosisEngine {
         baseRecommendations.acupoint_massage.push("太冲", "期门", "膻中");
       }
     }
-
     return baseRecommendations;
   }
-
   private generateFollowUpPlan(patterns: SyndromePattern[]): FollowUpPlan {
     const severity = patterns[0]?.severity || "mild";
-    let nextVisitDays = 14; // 默认2周
-
-    if (severity === "severe") {
-      nextVisitDays = 7; // 1周
+    let nextVisitDays = 14; //////     默认2周;
+if (severity === "severe") {
+      nextVisitDays = 7; //////     1周
     } else if (severity === "mild") {
-      nextVisitDays = 30; // 1个月
+      nextVisitDays = 30 //////     1个月
     }
-
     return {
       next_visit: Date.now() + nextVisitDays * 24 * 60 * 60 * 1000,
       monitoring_points: [
@@ -825,9 +712,8 @@ export class TCMDiagnosisEngine {
         "适量运动",
         "情志调摄"
       ]
-    };
+    }
   }
-
   private calculateOverallConfidence(
     constitutionConfidence: number,
     patterns: SyndromePattern[]
@@ -835,18 +721,14 @@ export class TCMDiagnosisEngine {
     if (patterns.length === 0) {
       return constitutionConfidence;
     }
-
-    const avgPatternConfidence =
-      patterns.reduce((sum, p) => sum + p.confidence, 0) / patterns.length;
-
-    // 记录渲染性能
-    performanceMonitor.recordRender();
-
-    return (constitutionConfidence + avgPatternConfidence) / 2;
+    const avgPatternConfidence =;
+      patterns.reduce((sum, p) => sum + p.confidence, 0) /////     patterns.length;
+    //////     记录渲染性能
+performanceMonitor.recordRender();
+    return (constitutionConfidence + avgPatternConfidence) /////     2;
   }
-
   private generateReasoning(
-    constitutionResult: { 
+    constitutionResult: {
       constitution: ConstitutionType;
       confidence: number;
       characteristics: string[];
@@ -855,34 +737,28 @@ export class TCMDiagnosisEngine {
     principles: TreatmentPrinciple[]
   ): string {
     let reasoning = `基于五诊合参的综合分析：\n\n`;
-
     reasoning += `1. 体质辨识：患者为${
-      constitutionResult.constitution
+      constitutionResult.constitution;
     }，置信度${(constitutionResult.confidence * 100).toFixed(1)}%\n`;
-    reasoning += `   主要特征：${constitutionResult.characteristics
+    reasoning += `   主要特征：${constitutionResult.characteristics;
       .slice(0, 3)
       .join("、")}\n\n`;
-
     reasoning += `2. 证候分析：\n`;
-    patterns.slice(0, 3).forEach((pattern, index) => {
+    patterns.slice(0, 3).forEach((pattern, index) => {}
       reasoning += `   ${index + 1}. ${pattern.name}（${
-        pattern.category
+        pattern.category;
       }）- 置信度${(pattern.confidence * 100).toFixed(1)}%\n`;
       reasoning += `      病机：${pattern.pathogenesis}\n`;
     });
-
-    reasoning += `\n3. 治疗原则：${principles
+    reasoning += `\n3. 治疗原则：${principles;
       .map((p) => p.name)
       .join("、")}\n\n`;
-
     reasoning += `4. 诊断依据：结合患者的症状表现、舌脉象征，运用中医理论进行综合分析得出上述诊断。`;
-
     return reasoning;
   }
-
-  // 获取中医知识库信息
-  getTCMKnowledge(category: "constitution" | "syndrome" | "herb" | "acupoint"): unknown {
-    const knowledge = {
+  //////     获取中医知识库信息
+getTCMKnowledge(category: "constitution" | "syndrome" | "herb" | "acupoint"): unknown {
+    const knowledge = {;
       constitution: {
         types: [
           "平和质",
@@ -914,12 +790,10 @@ export class TCMDiagnosisEngine {
       acupoint: {
         categories: ["十二经穴", "奇穴", "阿是穴"],
         description: "针灸治疗的基础穴位体系"
-      }
+      };
     };
-
     return knowledge[category];
   }
 }
-
-// 导出单例实例
+//////     导出单例实例
 export const tcmDiagnosisEngine = TCMDiagnosisEngine.getInstance();

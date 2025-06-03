@@ -7,11 +7,9 @@ API网关的gRPC服务实现
 """
 
 import logging
-from typing import Dict, List, Optional
 
 import grpc
 import httpx
-from google.protobuf.json_format import MessageToDict
 
 # 由于缺少生成的模块，创建MockResponse模块和基类以便测试
 class MockResponse:
@@ -73,9 +71,7 @@ def add_ApiGatewayServicer_to_server(servicer, server):
 from internal.model.config import GatewayConfig, RouteConfig
 from internal.service.service_registry import ServiceRegistry
 
-
 logger = logging.getLogger(__name__)
-
 
 class ApiGatewayService(ApiGatewayServicer):
     """API网关gRPC服务实现"""
@@ -245,7 +241,6 @@ class ApiGatewayService(ApiGatewayServicer):
     async def close(self):
         """关闭HTTP客户端"""
         await self.http_client.aclose()
-
 
 def register_servicer(server, service_registry, config):
     """

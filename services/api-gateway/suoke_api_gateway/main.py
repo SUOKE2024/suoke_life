@@ -22,19 +22,16 @@ from .core.logging import get_logger, setup_logging
 console = Console()
 logger = get_logger(__name__)
 
-
 def handle_shutdown(signum, frame):
     """处理关闭信号"""
     logger.info(f"Received signal {signum}, shutting down gracefully...")
     sys.exit(0)
-
 
 @click.group()
 @click.version_option(version="0.1.0", prog_name="suoke-api-gateway")
 def cli():
     """索克生活 API 网关服务"""
     pass
-
 
 @cli.command()
 @click.option(
@@ -150,7 +147,6 @@ def run(
         logger.error("Failed to start server", error=str(e), exc_info=True)
         sys.exit(1)
 
-
 @cli.command()
 @click.option(
     "--config",
@@ -173,7 +169,6 @@ def dev(config: Optional[Path]):
         log_level="DEBUG",
         access_log=True,
     )
-
 
 @cli.command()
 @click.option(
@@ -204,7 +199,6 @@ def check(config: Optional[Path]):
         console.print(f"[red]✗[/red] 检查失败: {e}")
         sys.exit(1)
 
-
 def show_startup_info(settings: Settings) -> None:
     """显示启动信息"""
     table = Table(title="Suoke API Gateway 启动信息")
@@ -225,7 +219,6 @@ def show_startup_info(settings: Settings) -> None:
     
     console.print(table)
 
-
 def show_config_info(settings: Settings) -> None:
     """显示配置信息"""
     table = Table(title="配置信息")
@@ -241,14 +234,12 @@ def show_config_info(settings: Settings) -> None:
     
     console.print(table)
 
-
 async def check_dependencies(settings: Settings) -> None:
     """检查依赖服务"""
     console.print("检查依赖服务...")
     
     # 检查 Redis 连接
     try:
-        import redis.asyncio as redis
         r = redis.from_url(settings.get_redis_url())
         await r.ping()
         console.print("[green]✓[/green] Redis 连接正常")
@@ -270,11 +261,9 @@ async def check_dependencies(settings: Settings) -> None:
         except Exception as e:
             console.print(f"[red]✗[/red] 服务 {service_name} 不可达: {e}")
 
-
 def main() -> None:
     """主入口函数"""
     cli()
-
 
 if __name__ == "__main__":
     main() 

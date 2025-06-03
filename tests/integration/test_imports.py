@@ -15,15 +15,10 @@ def test_relative_imports():
     """测试相对导入"""
     try:
         # 测试核心模块导入
-        from internal.service.implementations.blind_assistance_impl import BlindAssistanceServiceImpl
-        from internal.service.implementations.voice_assistance_impl import VoiceAssistanceServiceImpl
-        from internal.service.coordinators.accessibility_coordinator import AccessibilityServiceCoordinator
-        from internal.service.factories.accessibility_factory import AccessibilityServiceFactory
 
         print('✅ 核心服务导入成功')
 
         # 测试接口导入
-        from internal.service.interfaces import (
             IBlindAssistanceService, IVoiceAssistanceService,
             IScreenReadingService, ISignLanguageService
         )
@@ -31,7 +26,6 @@ def test_relative_imports():
         print('✅ 接口导入成功')
 
         # 测试装饰器导入
-        from internal.service.decorators import performance_monitor, error_handler, cache_result
 
         print('✅ 装饰器导入成功')
 

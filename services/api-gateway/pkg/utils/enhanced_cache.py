@@ -16,18 +16,15 @@ from dataclasses import dataclass, asdict
 from typing import Any, Dict, List, Optional, Union, Callable
 from enum import Enum
 
-import redis.asyncio as redis
 from fastapi import Request, Response
 
 logger = logging.getLogger(__name__)
-
 
 class CacheLevel(Enum):
     """缓存级别"""
     L1_MEMORY = "l1_memory"
     L2_REDIS = "l2_redis"
     L3_PERSISTENT = "l3_persistent"
-
 
 @dataclass
 class CacheConfig:
@@ -43,7 +40,6 @@ class CacheConfig:
     cache_warming_enabled: bool = True
     cache_warming_interval: int = 300  # 5分钟
 
-
 @dataclass
 class CacheItem:
     """缓存项"""
@@ -56,7 +52,6 @@ class CacheItem:
     size: int = 0
     compressed: bool = False
 
-
 @dataclass
 class CacheStats:
     """缓存统计"""
@@ -67,7 +62,6 @@ class CacheStats:
     evictions: int = 0
     memory_usage: int = 0
     item_count: int = 0
-
 
 class CacheBackend(ABC):
     """缓存后端抽象基类"""
@@ -101,7 +95,6 @@ class CacheBackend(ABC):
     def get_stats(self) -> CacheStats:
         """获取缓存统计"""
         pass
-
 
 class MemoryCache(CacheBackend):
     """内存缓存后端"""
@@ -235,7 +228,6 @@ class MemoryCache(CacheBackend):
         
         self._stats.item_count = len(self._cache)
 
-
 class RedisCache(CacheBackend):
     """Redis缓存后端"""
     
@@ -335,7 +327,6 @@ class RedisCache(CacheBackend):
     def get_stats(self) -> CacheStats:
         """获取缓存统计"""
         return self._stats
-
 
 class MultiLevelCache:
     """
@@ -469,7 +460,6 @@ class MultiLevelCache:
                 await callback()
             except Exception as e:
                 logger.error(f"缓存预热回调执行失败: {e}")
-
 
 class SmartCacheManager:
     """

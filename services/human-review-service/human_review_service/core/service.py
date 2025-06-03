@@ -5,8 +5,6 @@ Core Business Service
 实现人工审核系统的主要业务逻辑
 """
 
-import asyncio
-import logging
 from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional, Tuple
 from uuid import uuid4
@@ -18,7 +16,6 @@ from sqlalchemy.orm import selectinload
 
 from .assignment_engine import AssignmentEngine
 from .config import settings
-from .database import get_session
 from .models import (
     DashboardData,
     ReviewDecision,
@@ -40,7 +37,6 @@ from .models import (
 from .risk_assessment import RiskAssessmentEngine
 
 logger = structlog.get_logger(__name__)
-
 
 class HumanReviewService:
     """人工审核核心服务"""

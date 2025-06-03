@@ -5,8 +5,6 @@
 """
 
 import os
-import re
-from pathlib import Path
 
 def fix_name_errors(directory: str):
     """修复目录中所有 Python 文件的 __name__ 相关错误"""

@@ -9,6 +9,7 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import { AccessibilityProvider } from "./contexts/AccessibilityContext";
 import { usePerformanceMonitor } from "./hooks/usePerformanceMonitor";
 import { log } from "./services/Logger";
+
 // 索克生活 (Suoke Life) - 主应用组件
 const App: React.FC = () => {
   // 性能监控

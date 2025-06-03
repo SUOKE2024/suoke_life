@@ -35,7 +35,6 @@ async def test_agent_manager_with_deepseek():
         print(f"    模拟服务: {dev_config.get('mock_services')}")
 
         # 临时替换全局配置
-        import pkg.utils.config_loader
         from internal.agent.agent_manager import AgentManager
         original_get_config = pkg.utils.config_loader.get_config
         pkg.utils.config_loader.get_config = lambda path=None: config

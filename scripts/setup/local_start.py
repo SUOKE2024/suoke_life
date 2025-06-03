@@ -8,7 +8,6 @@ import os
 import sys
 import time
 import subprocess
-import threading
 import signal
 from pathlib import Path
 from typing import Dict, List, Optional
@@ -305,7 +304,6 @@ class LocalServiceManager:
         self.stop_all_services()
         sys.exit(0)
 
-
 def main():
     """主函数"""
     import argparse
@@ -342,7 +340,6 @@ def main():
         except KeyboardInterrupt:
             print("\n收到停止信号...")
             manager.stop_all_services()
-
 
 if __name__ == "__main__":
     main() 

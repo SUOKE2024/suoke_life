@@ -24,12 +24,9 @@ from internal.signal.pulse_processor import PulseProcessor
 from internal.signal.skin_analyzer import SkinAnalyzer
 
 # 导入生成的gRPC代码
-from api.grpc import palpation_service_pb2 as pb2
-from api.grpc import palpation_service_pb2_grpc as pb2_grpc
 from pkg.utils.metrics import MetricsCollector
 
 logger = logging.getLogger(__name__)
-
 
 class PalpationServiceImpl(pb2_grpc.PalpationServiceServicer):
     """切诊服务实现类"""
@@ -387,7 +384,6 @@ class PalpationServiceImpl(pb2_grpc.PalpationServiceServicer):
                     continue
 
                 # 提取特征
-                import numpy as np
 
                 features_result = self.pulse_processor.extract_features(
                     np.array(pressure_data), position

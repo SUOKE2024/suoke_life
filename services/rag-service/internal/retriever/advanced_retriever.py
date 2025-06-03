@@ -10,7 +10,6 @@ import re
 from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass
 from enum import Enum
-import numpy as np
 from loguru import logger
 
 from ..model.document import Document, DocumentMetadata
@@ -18,7 +17,6 @@ from ..service.embedding_service import EmbeddingService
 from ..repository.milvus_repository import MilvusRepository
 from ..observability.metrics import MetricsCollector
 from ..resilience.circuit_breaker import CircuitBreakerService
-
 
 class RetrievalStrategy(str, Enum):
     """检索策略枚举"""
@@ -28,7 +26,6 @@ class RetrievalStrategy(str, Enum):
     SEMANTIC_ENHANCED = "semantic_enhanced"  # 语义增强检索
     TCM_SPECIALIZED = "tcm_specialized"  # 中医专业检索
     MULTIMODAL = "multimodal"           # 多模态检索
-
 
 @dataclass
 class RetrievalContext:
@@ -43,7 +40,6 @@ class RetrievalContext:
     enable_reranking: bool = True
     enable_explanation: bool = False
 
-
 @dataclass
 class RetrievalResult:
     """检索结果"""
@@ -53,7 +49,6 @@ class RetrievalResult:
     total_time: float
     explanation: Optional[str] = None
     metadata: Optional[Dict[str, Any]] = None
-
 
 class QueryAnalyzer:
     """查询分析器"""
@@ -132,7 +127,6 @@ class QueryAnalyzer:
         keywords = [word for word in words if len(word) > 1 and word not in stopwords]
         return keywords
 
-
 class StrategySelector:
     """策略选择器"""
     
@@ -193,7 +187,6 @@ class StrategySelector:
     def _should_use_keyword(self, context: RetrievalContext, analysis: Dict[str, Any]) -> bool:
         """是否使用关键词检索"""
         return len(analysis["keywords"]) == 1
-
 
 class QueryProcessor:
     """查询处理器"""
@@ -260,7 +253,6 @@ class QueryProcessor:
             return f"{query} (相关症状: {symptoms})"
         
         return query
-
 
 class ResultProcessor:
     """结果处理器"""
@@ -428,7 +420,6 @@ class ResultProcessor:
             explanation = f"使用{strategy.value}策略检索到此文档"
             if hasattr(doc.metadata, 'explanation'):
                 doc.metadata.explanation = explanation
-
 
 class AdvancedRetriever:
     """高级检索器"""

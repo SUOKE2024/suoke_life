@@ -37,7 +37,6 @@ def analyze_results():
             print(f'  {i}. {project["name"]} (⭐{project["stars"]}) - {project["recommendation"]}')
             print(f'     {project["description"][:80]}...')
             print(f'     语言: {project["language"] or "多语言"}, 许可: {project["license"]}')
-            print()
 
     # 总体统计
     print('\n📊 总体统计:')

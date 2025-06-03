@@ -14,8 +14,8 @@ from grpc_health.v1 import health_pb2_grpc
 
 # 导入生成的gRPC代码
 try:
-    from api.grpc import message_bus_pb2 as pb
-    from api.grpc import message_bus_pb2_grpc as pb_grpc
+    from ...api.grpc import message_bus_pb2 as pb
+    from ...api.grpc import message_bus_pb2_grpc as pb_grpc
 except ImportError:
     # 假设客户端在外部项目中使用
     try:

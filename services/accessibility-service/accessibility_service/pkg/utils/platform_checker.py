@@ -16,14 +16,12 @@ from typing import Any
 
 logger = logging.getLogger(__name__)
 
-
 class PlatformType(Enum):
     """平台类型枚举"""
     WINDOWS = "windows"
     MACOS = "macos"
     LINUX = "linux"
     UNKNOWN = "unknown"
-
 
 class ArchitectureType(Enum):
     """架构类型枚举"""
@@ -32,7 +30,6 @@ class ArchitectureType(Enum):
     ARM = "arm"
     I386 = "i386"
     UNKNOWN = "unknown"
-
 
 @dataclass
 class SystemInfo:
@@ -47,7 +44,6 @@ class SystemInfo:
     has_gpu: bool
     gpu_info: str | None = None
 
-
 @dataclass
 class CompatibilityIssue:
     """兼容性问题"""
@@ -56,7 +52,6 @@ class CompatibilityIssue:
     description: str
     solution: str | None = None
     workaround: str | None = None
-
 
 class PlatformChecker:
     """平台兼容性检查器"""
@@ -290,7 +285,6 @@ class PlatformChecker:
             # Windows特定检查
             # 检查Visual C++运行时
             try:
-                import winreg
                 # 这里可以添加更多Windows特定的检查
             except ImportError:
                 pass
@@ -381,7 +375,6 @@ class PlatformChecker:
 
         # 检查HTTPS连接
         try:
-            import urllib.request
             urllib.request.urlopen("https://www.google.com", timeout=5)
         except Exception:
             issues.append(CompatibilityIssue(
@@ -495,12 +488,10 @@ class PlatformChecker:
 
         print("\n" + "=" * 60)
 
-
 def check_platform_compatibility() -> dict[str, Any]:
     """便捷函数：检查平台兼容性"""
     checker = PlatformChecker()
     return checker.run_comprehensive_check()
-
 
 if __name__ == "__main__":
     # 运行兼容性检查

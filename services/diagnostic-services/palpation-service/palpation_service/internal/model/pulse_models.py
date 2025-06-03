@@ -9,9 +9,6 @@ from datetime import datetime
 from enum import Enum
 from typing import Any
 
-import numpy as np
-
-
 class PulsePosition(Enum):
     """脉诊位置枚举"""
 
@@ -21,7 +18,6 @@ class PulsePosition(Enum):
     CUN_RIGHT = "寸右"
     GUAN_RIGHT = "关右"
     CHI_RIGHT = "尺右"
-
 
 class PulseWaveType(Enum):
     """脉象类型枚举"""
@@ -52,7 +48,6 @@ class PulseWaveType(Enum):
     REGULARLY_INTERMITTENT = "结代脉"
     IRREGULARLY_INTERMITTENT = "促代脉"
 
-
 @dataclass
 class DeviceInfo:
     """设备信息"""
@@ -66,7 +61,6 @@ class DeviceInfo:
     features: list[str] = field(default_factory=list)
     calibration_date: datetime | None = None
 
-
 @dataclass
 class SensorCalibrationData:
     """传感器校准数据"""
@@ -76,7 +70,6 @@ class SensorCalibrationData:
     calibration_operator: str
     calibration_result: bool = True
     error_margin: float = 0.05
-
 
 @dataclass
 class PulseSession:
@@ -93,7 +86,6 @@ class PulseSession:
     calibration_data: SensorCalibrationData | None = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
-
 @dataclass
 class PulseDataPacket:
     """脉搏数据包"""
@@ -106,7 +98,6 @@ class PulseDataPacket:
     skin_temperature: float | None = None
     skin_moisture: float | None = None
     quality_indicators: dict[str, float] = field(default_factory=dict)
-
 
 @dataclass
 class PulseFeature:
@@ -129,7 +120,6 @@ class PulseFeature:
             "description": self.description,
             "confidence": self.confidence,
         }
-
 
 @dataclass
 class TimedomainFeatures:
@@ -157,7 +147,6 @@ class TimedomainFeatures:
             PulseFeature("面积", self.area, "mmHg·s", position, "脉搏波形下的面积"),
         ]
 
-
 @dataclass
 class FrequencydomainFeatures:
     """频域特征"""
@@ -182,7 +171,6 @@ class FrequencydomainFeatures:
 
         return features
 
-
 @dataclass
 class WaveletFeatures:
     """小波域特征"""
@@ -205,7 +193,6 @@ class WaveletFeatures:
 
         return features
 
-
 @dataclass
 class PulseQualityMetrics:
     """脉搏质量指标"""
@@ -218,7 +205,6 @@ class PulseQualityMetrics:
     baseline_drift: float = 0.0  # 基线漂移
     motion_artifact: float = 0.0  # 运动伪影
 
-
 @dataclass
 class TCMPulsePattern:
     """中医脉象模式"""
@@ -229,7 +215,6 @@ class TCMPulsePattern:
     description: str
     related_conditions: list[str] = field(default_factory=list)
     supporting_features: list[str] = field(default_factory=list)
-
 
 @dataclass
 class OrganCondition:
@@ -242,7 +227,6 @@ class OrganCondition:
     description: str
     related_symptoms: list[str] = field(default_factory=list)
     recommendations: list[str] = field(default_factory=list)
-
 
 @dataclass
 class PulseAnalysisResult:
@@ -259,7 +243,6 @@ class PulseAnalysisResult:
     recommendations: list[str] = field(default_factory=list)
     warnings: list[str] = field(default_factory=list)
 
-
 @dataclass
 class PulseTrend:
     """脉象趋势"""
@@ -274,7 +257,6 @@ class PulseTrend:
     stable_aspects: list[str]
     overall_trend: str
     visualization_data: dict[str, Any] | None = None
-
 
 @dataclass
 class PulseComparison:

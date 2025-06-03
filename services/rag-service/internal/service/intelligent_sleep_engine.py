@@ -6,23 +6,16 @@
 结合中医睡眠养生理念和现代睡眠科学，为用户提供个性化睡眠健康管理
 """
 
-import asyncio
-import json
-import numpy as np
 from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from enum import Enum
 from datetime import datetime, timedelta, time
 from loguru import logger
-import pandas as pd
-from sklearn.cluster import KMeans
-from sklearn.preprocessing import StandardScaler
 import warnings
 warnings.filterwarnings('ignore')
 
 from ..observability.metrics import MetricsCollector
 from ..observability.tracing import trace_operation, SpanKind
-
 
 class SleepStage(str, Enum):
     """睡眠阶段"""
@@ -32,7 +25,6 @@ class SleepStage(str, Enum):
     REM_SLEEP = "rem_sleep"         # 快速眼动睡眠
     UNKNOWN = "unknown"             # 未知
 
-
 class SleepQuality(str, Enum):
     """睡眠质量"""
     EXCELLENT = "excellent"         # 优秀 (90-100分)
@@ -40,7 +32,6 @@ class SleepQuality(str, Enum):
     FAIR = "fair"                   # 一般 (70-79分)
     POOR = "poor"                   # 较差 (60-69分)
     VERY_POOR = "very_poor"         # 很差 (0-59分)
-
 
 class SleepDisorder(str, Enum):
     """睡眠障碍类型"""
@@ -54,7 +45,6 @@ class SleepDisorder(str, Enum):
     SNORING = "snoring"                     # 打鼾
     NONE = "none"                           # 无
 
-
 class TCMSleepPattern(str, Enum):
     """中医睡眠证型"""
     HEART_KIDNEY_DISHARMONY = "heart_kidney_disharmony"     # 心肾不交
@@ -64,7 +54,6 @@ class TCMSleepPattern(str, Enum):
     KIDNEY_YIN_DEFICIENCY = "kidney_yin_deficiency"         # 肾阴虚
     PHLEGM_HEAT = "phlegm_heat"                             # 痰热
     NORMAL = "normal"                                       # 正常
-
 
 @dataclass
 class SleepData:
@@ -110,7 +99,6 @@ class SleepData:
     pulse_condition: Optional[str] = None           # 脉象
     created_at: datetime = field(default_factory=datetime.now)
 
-
 @dataclass
 class SleepAnalysis:
     """睡眠分析结果"""
@@ -146,7 +134,6 @@ class SleepAnalysis:
     recommendations: List[str] = field(default_factory=list)
     priority_actions: List[str] = field(default_factory=list)
 
-
 @dataclass
 class SleepGoal:
     """睡眠目标"""
@@ -158,7 +145,6 @@ class SleepGoal:
     progress_percentage: float = 0.0
     is_achieved: bool = False
     created_at: datetime = field(default_factory=datetime.now)
-
 
 @dataclass
 class SleepIntervention:
@@ -176,7 +162,6 @@ class SleepIntervention:
     # 中医相关
     tcm_principles: List[str] = field(default_factory=list)
     suitable_constitutions: List[str] = field(default_factory=list)
-
 
 class SleepDataProcessor:
     """睡眠数据处理器"""
@@ -388,7 +373,6 @@ class SleepDataProcessor:
             return "declining"
         else:
             return "stable"
-
 
 class SleepAnalyzer:
     """睡眠分析器"""
@@ -892,7 +876,6 @@ class SleepAnalyzer:
         
         return priority_actions
 
-
 class IntelligentSleepEngine:
     """智能睡眠管理引擎主类"""
     
@@ -1141,10 +1124,8 @@ class IntelligentSleepEngine:
             logger.error(f"获取睡眠统计失败: {e}")
             return {"error": str(e)}
 
-
 # 全局睡眠管理引擎实例
 _sleep_engine: Optional[IntelligentSleepEngine] = None
-
 
 def initialize_sleep_engine(
     config: Dict[str, Any],
@@ -1154,7 +1135,6 @@ def initialize_sleep_engine(
     global _sleep_engine
     _sleep_engine = IntelligentSleepEngine(config, metrics_collector)
     return _sleep_engine
-
 
 def get_sleep_engine() -> Optional[IntelligentSleepEngine]:
     """获取睡眠管理引擎实例"""

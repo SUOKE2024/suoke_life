@@ -4,7 +4,6 @@
 """
 
 import asyncio
-import logging
 import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
@@ -19,14 +18,12 @@ from motor.motor_asyncio import AsyncIOMotorClient
 
 logger = structlog.get_logger(__name__)
 
-
 class DatabaseType(Enum):
     """数据库类型"""
 
     POSTGRESQL = "postgresql"
     REDIS = "redis"
     MONGODB = "mongodb"
-
 
 class ConnectionStatus(Enum):
     """连接状态"""
@@ -35,7 +32,6 @@ class ConnectionStatus(Enum):
     DEGRADED = "degraded"
     UNHEALTHY = "unhealthy"
     DISCONNECTED = "disconnected"
-
 
 @dataclass
 class ConnectionMetrics:
@@ -48,7 +44,6 @@ class ConnectionMetrics:
     average_response_time: float = 0.0
     last_health_check: datetime = field(default_factory=datetime.now)
     status: ConnectionStatus = ConnectionStatus.DISCONNECTED
-
 
 @dataclass
 class DatabaseConfig:
@@ -66,7 +61,6 @@ class DatabaseConfig:
     retry_delay: float = 1.0
     health_check_interval: int = 60
     connection_timeout: int = 10
-
 
 class DatabaseConnection(ABC):
     """数据库连接抽象基类"""
@@ -102,7 +96,6 @@ class DatabaseConnection(ABC):
     async def execute_query(self, query: str, *args) -> Any:
         """执行查询"""
         pass
-
 
 class PostgreSQLConnection(DatabaseConnection):
     """PostgreSQL连接"""
@@ -207,7 +200,6 @@ class PostgreSQLConnection(DatabaseConnection):
         async with self.get_connection() as conn:
             return await conn.fetch(query, *args)
 
-
 class RedisConnection(DatabaseConnection):
     """Redis连接"""
 
@@ -309,7 +301,6 @@ class RedisConnection(DatabaseConnection):
         finally:
             await redis_client.close()
 
-
 class MongoDBConnection(DatabaseConnection):
     """MongoDB连接"""
 
@@ -409,7 +400,6 @@ class MongoDBConnection(DatabaseConnection):
             return await method(*args, **kwargs)
         else:
             raise ValueError(f"不支持的MongoDB操作: {operation}")
-
 
 class DatabasePoolManager:
     """数据库连接池管理器"""
@@ -542,10 +532,8 @@ class DatabasePoolManager:
         self.connections.clear()
         logger.info("所有数据库连接已关闭")
 
-
 # 全局数据库池管理器实例
 _pool_manager: Optional[DatabasePoolManager] = None
-
 
 async def init_database_pools(config: Dict[str, Any]) -> DatabasePoolManager:
     """初始化全局数据库连接池管理器"""
@@ -555,13 +543,11 @@ async def init_database_pools(config: Dict[str, Any]) -> DatabasePoolManager:
     await _pool_manager.initialize()
     return _pool_manager
 
-
 def get_database_pool_manager() -> DatabasePoolManager:
     """获取全局数据库连接池管理器"""
     if _pool_manager is None:
         raise RuntimeError("数据库连接池管理器未初始化，请先调用 init_database_pools")
     return _pool_manager
-
 
 async def get_database_connection(name: str) -> DatabaseConnection:
     """获取数据库连接的便捷函数"""

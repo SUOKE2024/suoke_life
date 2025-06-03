@@ -4,10 +4,8 @@
 验证基础优化效果
 """
 
-import asyncio
 import time
 import multiprocessing
-import numpy as np
 import json
 import logging
 from typing import Dict, List, Any
@@ -21,7 +19,6 @@ from numba import jit
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-
 @dataclass
 class BenchmarkResult:
     """基准测试结果"""
@@ -32,7 +29,6 @@ class BenchmarkResult:
     speedup: float
     additional_metrics: Dict[str, Any]
 
-
 @jit(nopython=True)
 def jit_vector_similarity(vec1: np.ndarray, vec2: np.ndarray) -> float:
     """JIT优化的向量相似度计算"""
@@ -41,19 +37,16 @@ def jit_vector_similarity(vec1: np.ndarray, vec2: np.ndarray) -> float:
     norm2 = np.linalg.norm(vec2)
     return dot_product / (norm1 * norm2)
 
-
 @jit(nopython=True)
 def jit_matrix_multiply(matrix1: np.ndarray, matrix2: np.ndarray) -> np.ndarray:
     """JIT优化的矩阵乘法"""
     return np.dot(matrix1, matrix2)
-
 
 def cpu_intensive_task(data_size: int) -> float:
     """CPU密集型任务"""
     data = np.random.rand(data_size, data_size)
     result = np.sum(np.dot(data, data.T))
     return result
-
 
 class SimpleBenchmark:
     """简化性能基准测试"""
@@ -320,13 +313,11 @@ class SimpleBenchmark:
         
         return recommendations
 
-
 def main():
     """主函数"""
     benchmark = SimpleBenchmark()
     report = benchmark.run_all_benchmarks()
     return report
-
 
 if __name__ == "__main__":
     main() 

@@ -14,14 +14,12 @@ from typing import Any, Dict, List, Optional, Set, Callable
 from uuid import uuid4
 
 import aioredis
-from pydantic import BaseModel
 
 from ..common.service_registry.agent_discovery import (
     AgentType, CapabilityType, AgentServiceRegistry, get_agent_registry
 )
 
 logger = logging.getLogger(__name__)
-
 
 class DecisionType(Enum):
     """决策类型"""
@@ -33,14 +31,12 @@ class DecisionType(Enum):
     PREVENTIVE_CARE = "preventive_care"           # 预防保健
     SYNDROME_DIFFERENTIATION = "syndrome_diff"     # 中医辨证
 
-
 class DecisionPriority(Enum):
     """决策优先级"""
     EMERGENCY = "emergency"      # 紧急
     HIGH = "high"               # 高
     MEDIUM = "medium"           # 中
     LOW = "low"                 # 低
-
 
 class DecisionStatus(Enum):
     """决策状态"""
@@ -50,14 +46,12 @@ class DecisionStatus(Enum):
     FAILED = "failed"          # 失败
     CANCELLED = "cancelled"     # 已取消
 
-
 class VotingStrategy(Enum):
     """投票策略"""
     UNANIMOUS = "unanimous"     # 一致同意
     MAJORITY = "majority"       # 多数决
     WEIGHTED = "weighted"       # 加权投票
     EXPERT_LEAD = "expert_lead" # 专家主导
-
 
 @dataclass
 class DecisionContext:
@@ -71,7 +65,6 @@ class DecisionContext:
     constraints: Dict[str, Any] = field(default_factory=dict)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
-
 @dataclass
 class AgentVote:
     """智能体投票"""
@@ -82,7 +75,6 @@ class AgentVote:
     reasoning: str
     supporting_evidence: List[str] = field(default_factory=list)
     timestamp: datetime = field(default_factory=datetime.now)
-
 
 @dataclass
 class DecisionRequest:
@@ -97,7 +89,6 @@ class DecisionRequest:
     created_at: datetime = field(default_factory=datetime.now)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
-
 @dataclass
 class DecisionResult:
     """决策结果"""
@@ -109,7 +100,6 @@ class DecisionResult:
     execution_plan: Dict[str, Any] = field(default_factory=dict)
     completed_at: Optional[datetime] = None
     error_message: Optional[str] = None
-
 
 class CollaborativeDecisionBus:
     """协同决策总线"""
@@ -641,10 +631,8 @@ class CollaborativeDecisionBus:
         if self.redis:
             await self.redis.close()
 
-
 # 全局决策总线实例
 _decision_bus: Optional[CollaborativeDecisionBus] = None
-
 
 async def get_decision_bus() -> CollaborativeDecisionBus:
     """获取全局协同决策总线"""
@@ -653,7 +641,6 @@ async def get_decision_bus() -> CollaborativeDecisionBus:
         _decision_bus = CollaborativeDecisionBus()
         await _decision_bus.initialize()
     return _decision_bus
-
 
 async def submit_collaborative_decision(
     decision_type: DecisionType,

@@ -9,13 +9,11 @@ import time
 from typing import Dict, List, Any, Optional
 from fastapi import FastAPI, HTTPException, Depends, Query, Body, Path, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
 from fastapi.middleware.gzip import GZipMiddleware
 from pydantic import BaseModel, Field
 from loguru import logger
 
 from ...service.rag_service import RagService
-
 
 # 请求和响应模型
 class DocumentModel(BaseModel):
@@ -26,7 +24,6 @@ class DocumentModel(BaseModel):
     score: float = Field(0.0, description="相关性分数")
     source: Optional[str] = Field(None, description="文档来源")
 
-
 class DocumentReferenceModel(BaseModel):
     """文档引用模型"""
     id: str = Field(..., description="文档ID")
@@ -34,7 +31,6 @@ class DocumentReferenceModel(BaseModel):
     source: str = Field(..., description="文档来源")
     url: Optional[str] = Field(None, description="文档URL")
     snippet: str = Field(..., description="引用片段")
-
 
 class SearchRequest(BaseModel):
     """搜索请求"""
@@ -46,12 +42,10 @@ class SearchRequest(BaseModel):
     rerank: bool = Field(False, description="是否重排序")
     user_id: Optional[str] = Field(None, description="用户ID")
 
-
 class SearchResponse(BaseModel):
     """搜索响应"""
     documents: List[DocumentModel] = Field(..., description="检索到的文档")
     latency_ms: float = Field(..., description="延迟(毫秒)")
-
 
 class GenerateRequest(BaseModel):
     """生成请求"""
@@ -61,13 +55,11 @@ class GenerateRequest(BaseModel):
     generation_params: Optional[Dict[str, Any]] = Field(None, description="生成参数")
     user_id: Optional[str] = Field(None, description="用户ID")
 
-
 class GenerateResponse(BaseModel):
     """生成响应"""
     answer: str = Field(..., description="生成的回答")
     references: List[DocumentReferenceModel] = Field(..., description="引用的文档")
     latency_ms: float = Field(..., description="延迟(毫秒)")
-
 
 class QueryRequest(BaseModel):
     """查询请求"""
@@ -79,7 +71,6 @@ class QueryRequest(BaseModel):
     metadata_filter: Optional[Dict[str, Any]] = Field(None, description="元数据过滤条件")
     user_id: Optional[str] = Field(None, description="用户ID")
 
-
 class QueryResponse(BaseModel):
     """查询响应"""
     answer: str = Field(..., description="生成的回答")
@@ -88,13 +79,11 @@ class QueryResponse(BaseModel):
     generation_latency_ms: float = Field(..., description="生成延迟(毫秒)")
     total_latency_ms: float = Field(..., description="总延迟(毫秒)")
 
-
 class AddDocumentRequest(BaseModel):
     """添加文档请求"""
     document: DocumentModel = Field(..., description="要添加的文档")
     collection_name: str = Field("default", description="集合名称")
     reindex: bool = Field(True, description="是否重新索引")
-
 
 class AddDocumentResponse(BaseModel):
     """添加文档响应"""
@@ -102,24 +91,20 @@ class AddDocumentResponse(BaseModel):
     success: bool = Field(..., description="是否成功")
     message: str = Field(..., description="消息")
 
-
 class DeleteDocumentRequest(BaseModel):
     """删除文档请求"""
     document_id: str = Field(..., description="文档ID")
     collection_name: str = Field("default", description="集合名称")
-
 
 class DeleteDocumentResponse(BaseModel):
     """删除文档响应"""
     success: bool = Field(..., description="是否成功")
     message: str = Field(..., description="消息")
 
-
 class HealthResponse(BaseModel):
     """健康检查响应"""
     status: str = Field(..., description="服务状态")
     details: Dict[str, str] = Field(..., description="详细信息")
-
 
 def create_app(config: Dict[str, Any]) -> FastAPI:
     """

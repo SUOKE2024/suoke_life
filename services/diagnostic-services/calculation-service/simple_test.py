@@ -18,7 +18,6 @@ def test_basic_imports():
         print("测试基本导入...")
         
         # 测试五运六气数据
-        from calculation_service.core.algorithms.wuyun_liuqi.data import (
             TIANGAN, DIZHI, WUYUN_MAPPING, LIUQI_MAPPING
         )
         print("✓ 五运六气数据导入成功")

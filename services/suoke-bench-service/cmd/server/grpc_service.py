@@ -7,7 +7,6 @@ import logging
 import grpc
 
 from api.grpc import benchmark_pb2, benchmark_pb2_grpc
-from internal.benchmark.benchmark_service import BenchmarkService as BenchEngine
 from internal.benchmark.model_interface import model_registry
 from internal.evaluation.report_generator import ReportGenerator
 from internal.metrics.basic_metrics import register_basic_metrics
@@ -20,7 +19,6 @@ register_basic_metrics()
 report_generator = ReportGenerator()
 
 logger = logging.getLogger(__name__)
-
 
 class SuokeBenchGrpcService(benchmark_pb2_grpc.BenchmarkServiceServicer):
     """

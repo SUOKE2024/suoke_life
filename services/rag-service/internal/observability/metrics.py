@@ -11,7 +11,6 @@ from typing import Dict, Any, Optional, List
 from dataclasses import dataclass, field
 from collections import defaultdict, deque
 from contextlib import asynccontextmanager
-import threading
 from datetime import datetime, timedelta
 
 from prometheus_client import (
@@ -21,14 +20,12 @@ from prometheus_client import (
 )
 from loguru import logger
 
-
 @dataclass
 class MetricPoint:
     """指标数据点"""
     timestamp: datetime
     value: float
     labels: Dict[str, str] = field(default_factory=dict)
-
 
 @dataclass
 class PerformanceStats:
@@ -41,7 +38,6 @@ class PerformanceStats:
     p99_response_time: float = 0.0
     cache_hit_rate: float = 0.0
     error_rate: float = 0.0
-
 
 class MetricsCollector:
     """指标收集器"""

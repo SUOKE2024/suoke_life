@@ -4,8 +4,6 @@
 提供 Prometheus 指标、OpenTelemetry 追踪和健康检查功能。
 """
 
-from __future__ import annotations
-
 import time
 from typing import TYPE_CHECKING, Any
 
@@ -59,7 +57,6 @@ GRPC_REQUESTS = Counter(
     ["method", "status"]
 )
 
-
 def setup_tracing() -> None:
     """设置 OpenTelemetry 追踪"""
     if not settings.monitoring.enable_tracing:
@@ -89,7 +86,6 @@ def setup_tracing() -> None:
 
     logger.info("OpenTelemetry 追踪设置完成")
 
-
 def setup_instrumentation() -> None:
     """设置自动化仪表"""
     if not settings.monitoring.enable_tracing:
@@ -113,7 +109,6 @@ def setup_instrumentation() -> None:
         logger.warning("gRPC 仪表设置失败", error=str(e))
 
     logger.info("自动化仪表设置完成")
-
 
 def setup_monitoring(app: FastAPI) -> None:
     """设置监控"""
@@ -163,21 +158,17 @@ def setup_monitoring(app: FastAPI) -> None:
 
     logger.info("监控设置完成")
 
-
 def record_blockchain_operation(operation: str, status: str) -> None:
     """记录区块链操作指标"""
     BLOCKCHAIN_OPERATIONS.labels(operation=operation, status=status).inc()
-
 
 def record_database_operation(operation: str, status: str) -> None:
     """记录数据库操作指标"""
     DATABASE_OPERATIONS.labels(operation=operation, status=status).inc()
 
-
 def record_grpc_request(method: str, status: str) -> None:
     """记录 gRPC 请求指标"""
     GRPC_REQUESTS.labels(method=method, status=status).inc()
-
 
 # 健康检查
 class HealthChecker:
@@ -210,7 +201,6 @@ class HealthChecker:
                 status["status"] = "unhealthy"
 
         return status
-
 
 # 全局健康检查器
 health_checker = HealthChecker()

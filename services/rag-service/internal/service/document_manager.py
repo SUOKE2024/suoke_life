@@ -9,7 +9,6 @@ import asyncio
 import json
 import uuid
 import hashlib
-import mimetypes
 from typing import Dict, List, Any, Optional, Tuple, Set, Union, BinaryIO
 from dataclasses import dataclass, field
 from enum import Enum
@@ -17,25 +16,16 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from loguru import logger
 import aiofiles
-import aiofiles.os
-from PIL import Image
 import fitz  # PyMuPDF
 import docx
-import pandas as pd
-import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.cluster import KMeans
-from sklearn.metrics.pairwise import cosine_similarity
 import jieba
-import jieba.analyse
-import redis.asyncio as redis
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, String, DateTime, Integer, Text, Float, Boolean, JSON
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
-
 
 class DocumentType(Enum):
     """文档类型"""
@@ -55,7 +45,6 @@ class DocumentType(Enum):
     TCM_PRESCRIPTION = "tcm_prescription" # 中医处方
     RESEARCH_PAPER = "research_paper"     # 研究论文
 
-
 class DocumentStatus(Enum):
     """文档状态"""
     PENDING = "pending"              # 待处理
@@ -64,7 +53,6 @@ class DocumentStatus(Enum):
     FAILED = "failed"               # 处理失败
     ARCHIVED = "archived"           # 已归档
     DELETED = "deleted"             # 已删除
-
 
 class DocumentCategory(Enum):
     """文档分类"""
@@ -84,7 +72,6 @@ class DocumentCategory(Enum):
     MEDICAL_DEVICE = "medical_device"           # 医疗器械
     REGULATION = "regulation"                   # 法规政策
 
-
 class ProcessingPriority(Enum):
     """处理优先级"""
     LOW = 1
@@ -92,7 +79,6 @@ class ProcessingPriority(Enum):
     HIGH = 3
     URGENT = 4
     CRITICAL = 5
-
 
 @dataclass
 class DocumentMetadata:
@@ -113,7 +99,6 @@ class DocumentMetadata:
     confidence_score: float = 0.0
     custom_fields: Dict[str, Any] = field(default_factory=dict)
 
-
 @dataclass
 class DocumentVersion:
     """文档版本"""
@@ -126,7 +111,6 @@ class DocumentVersion:
     file_path: str
     metadata: DocumentMetadata
 
-
 @dataclass
 class DocumentChunk:
     """文档块"""
@@ -138,7 +122,6 @@ class DocumentChunk:
     end_position: int
     chunk_type: str  # paragraph, section, table, etc.
     metadata: Dict[str, Any] = field(default_factory=dict)
-
 
 class DocumentModel(Base):
     """文档数据模型"""
@@ -162,7 +145,6 @@ class DocumentModel(Base):
     current_version = Column(String)
     is_active = Column(Boolean, default=True)
 
-
 class DocumentVersionModel(Base):
     """文档版本数据模型"""
     __tablename__ = "document_versions"
@@ -177,7 +159,6 @@ class DocumentVersionModel(Base):
     created_by = Column(String)
     metadata = Column(JSON)
     is_current = Column(Boolean, default=False)
-
 
 class DocumentChunkModel(Base):
     """文档块数据模型"""
@@ -194,7 +175,6 @@ class DocumentChunkModel(Base):
     metadata = Column(JSON)
     created_at = Column(DateTime, default=datetime.utcnow)
     vector_id = Column(String)  # 向量数据库中的ID
-
 
 class DocumentManager:
     """文档管理器"""

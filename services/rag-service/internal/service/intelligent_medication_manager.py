@@ -6,24 +6,16 @@
 结合现代药物治疗学和中医用药理论，为用户提供安全、有效的个性化用药管理方案
 """
 
-import asyncio
-import json
-import numpy as np
 from typing import Dict, List, Any, Optional, Tuple, Union, Set, Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from datetime import datetime, timedelta, time
 from loguru import logger
-import pandas as pd
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.preprocessing import StandardScaler
-from sklearn.metrics.pairwise import cosine_similarity
 import warnings
 warnings.filterwarnings('ignore')
 
 from ..observability.metrics import MetricsCollector
 from ..observability.tracing import trace_operation, SpanKind
-
 
 class MedicationType(str, Enum):
     """药物类型"""
@@ -33,7 +25,6 @@ class MedicationType(str, Enum):
     SUPPLEMENT = "supplement"                   # 营养补充剂
     VACCINE = "vaccine"                        # 疫苗
     BIOLOGICAL = "biological"                  # 生物制剂
-
 
 class MedicationForm(str, Enum):
     """药物剂型"""
@@ -47,7 +38,6 @@ class MedicationForm(str, Enum):
     POWDER = "powder"                         # 散剂
     DECOCTION = "decoction"                   # 汤剂
 
-
 class AdministrationRoute(str, Enum):
     """给药途径"""
     ORAL = "oral"                             # 口服
@@ -59,14 +49,12 @@ class AdministrationRoute(str, Enum):
     RECTAL = "rectal"                         # 直肠给药
     SUBLINGUAL = "sublingual"                 # 舌下含服
 
-
 class MedicationStatus(str, Enum):
     """用药状态"""
     ACTIVE = "active"                         # 正在使用
     PAUSED = "paused"                         # 暂停使用
     DISCONTINUED = "discontinued"             # 已停用
     COMPLETED = "completed"                   # 已完成疗程
-
 
 class InteractionSeverity(str, Enum):
     """相互作用严重程度"""
@@ -75,14 +63,12 @@ class InteractionSeverity(str, Enum):
     MAJOR = "major"                          # 严重
     CONTRAINDICATED = "contraindicated"      # 禁忌
 
-
 class AdherenceLevel(str, Enum):
     """依从性水平"""
     EXCELLENT = "excellent"                   # 优秀 (>95%)
     GOOD = "good"                            # 良好 (85-95%)
     FAIR = "fair"                            # 一般 (70-85%)
     POOR = "poor"                            # 差 (<70%)
-
 
 @dataclass
 class Medication:
@@ -130,7 +116,6 @@ class Medication:
     # 更新时间
     last_updated: datetime = field(default_factory=datetime.now)
 
-
 @dataclass
 class Prescription:
     """处方信息"""
@@ -173,7 +158,6 @@ class Prescription:
     # 更新时间
     last_updated: datetime = field(default_factory=datetime.now)
 
-
 @dataclass
 class MedicationAdherence:
     """用药依从性记录"""
@@ -205,7 +189,6 @@ class MedicationAdherence:
     # 备注
     notes: Optional[str] = None
 
-
 @dataclass
 class DrugInteraction:
     """药物相互作用"""
@@ -230,7 +213,6 @@ class DrugInteraction:
     
     # 参考文献
     references: List[str] = field(default_factory=list)
-
 
 @dataclass
 class MedicationAlert:
@@ -258,7 +240,6 @@ class MedicationAlert:
     # 状态
     status: str = "active"                    # active, acknowledged, resolved
 
-
 @dataclass
 class MedicationReview:
     """用药审查"""
@@ -282,7 +263,6 @@ class MedicationReview:
     
     # 下次审查时间
     next_review_date: Optional[datetime] = None
-
 
 class MedicationDatabase:
     """药物数据库"""
@@ -441,7 +421,6 @@ class MedicationDatabase:
                 "target_bp": "130/80"
             }
         }
-
 
 class MedicationAnalyzer:
     """用药分析器"""
@@ -887,7 +866,6 @@ class MedicationAnalyzer:
         
         return adjustments
 
-
 class InteractionChecker:
     """相互作用检查器"""
     
@@ -944,7 +922,6 @@ class InteractionChecker:
                 })
         
         return interactions
-
 
 class AdherenceAnalyzer:
     """依从性分析器"""
@@ -1068,7 +1045,6 @@ class AdherenceAnalyzer:
             recommendations.append("咨询医生是否有更经济的替代方案")
         
         return recommendations
-
 
 class MedicationScheduler:
     """用药调度器"""
@@ -1310,7 +1286,6 @@ class MedicationScheduler:
             suggestions.append("建议调整用药时间以避免冲突")
         
         return suggestions
-
 
 class IntelligentMedicationManager:
     """智能用药管理引擎"""
@@ -1866,7 +1841,6 @@ class IntelligentMedicationManager:
             logger.error(f"获取用药统计信息失败: {e}")
             raise
 
-
 def initialize_medication_manager(
     config: Dict[str, Any],
     metrics_collector: Optional[MetricsCollector] = None
@@ -1880,10 +1854,8 @@ def initialize_medication_manager(
         logger.error(f"创建智能用药管理引擎失败: {e}")
         raise
 
-
 # 全局实例
 _medication_manager = None
-
 
 def get_medication_manager() -> Optional[IntelligentMedicationManager]:
     """获取智能用药管理引擎实例"""

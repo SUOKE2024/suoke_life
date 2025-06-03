@@ -19,8 +19,6 @@ from datetime import datetime
 from enum import Enum
 from typing import Any
 
-import redis.asyncio as redis
-
 logger = logging.getLogger(__name__)
 
 class TaskStatus(Enum):

@@ -4,7 +4,6 @@
 模拟后端微服务，验证前后端集成功能
 """
 
-import asyncio
 import json
 import logging
 import time

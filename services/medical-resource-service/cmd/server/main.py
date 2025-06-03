@@ -5,7 +5,6 @@
 
 import asyncio
 import logging
-import os
 import signal
 import sys
 from pathlib import Path
@@ -24,8 +23,6 @@ sys.path.insert(0, str(project_root))
 
 from api.rest.handlers import router
 from internal.infrastructure.container import get_container, init_container
-from internal.infrastructure.database import init_database
-
 
 # 配置日志
 def setup_logging(config: Dict[str, Any]):
@@ -51,9 +48,7 @@ def setup_logging(config: Dict[str, Any]):
         ],
     )
 
-
 logger = logging.getLogger(__name__)
-
 
 class MedicalResourceService:
     """医疗资源微服务主类"""
@@ -374,7 +369,6 @@ class MedicalResourceService:
         except Exception as e:
             logger.error(f"关闭服务失败: {e}")
 
-
 async def main():
     """主函数"""
     try:
@@ -389,7 +383,6 @@ async def main():
     except Exception as e:
         logger.error(f"服务运行失败: {e}")
         sys.exit(1)
-
 
 if __name__ == "__main__":
     asyncio.run(main())

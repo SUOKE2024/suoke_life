@@ -8,14 +8,12 @@ import asyncio
 from typing import AsyncIterator, Dict, List, Optional
 
 import grpc
-from grpc import aio
 
 from ..core.config import Settings
 from ..core.logging import get_logger
 from ..services.service_registry import ServiceRegistry
 
 logger = get_logger(__name__)
-
 
 class GatewayService:
     """gRPC 网关服务实现"""
@@ -200,7 +198,6 @@ class GatewayService:
             logger.error("Failed to start event stream", error=str(e), exc_info=True)
             context.set_code(grpc.StatusCode.INTERNAL)
             context.set_details(f"Internal error: {str(e)}")
-
 
 # 注意：这个文件需要根据实际的 protobuf 定义来完善
 # 以下是可能需要的 protobuf 定义示例：

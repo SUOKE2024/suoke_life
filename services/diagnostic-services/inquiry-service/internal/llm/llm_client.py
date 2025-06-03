@@ -13,7 +13,6 @@ from typing import Any
 # 条件导入aiohttp和httpx
 try:
     import aiohttp
-    import httpx
 
     EXTERNAL_LIBS_AVAILABLE = True
 except ImportError:
@@ -21,7 +20,6 @@ except ImportError:
     logging.warning("aiohttp或httpx库未安装，LLM客户端将仅在Mock模式下工作")
 
 logger = logging.getLogger(__name__)
-
 
 class LLMClient:
     """LLM客户端类，负责与大语言模型交互"""

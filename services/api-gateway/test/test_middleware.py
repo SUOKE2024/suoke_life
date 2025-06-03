@@ -5,7 +5,6 @@
 中间件测试
 """
 
-import asyncio
 import time
 from unittest.mock import AsyncMock, MagicMock, patch
 
@@ -19,7 +18,6 @@ from suoke_api_gateway.middleware.logging import LoggingMiddleware
 from suoke_api_gateway.middleware.rate_limit import RateLimitMiddleware
 from suoke_api_gateway.middleware.security import SecurityMiddleware
 from suoke_api_gateway.middleware.tracing import TracingMiddleware
-
 
 class TestAuthMiddleware:
     """认证中间件测试"""
@@ -99,7 +97,6 @@ class TestAuthMiddleware:
         assert response.status_code == 200
         assert response.json()["user_id"] == "test-user-id"
 
-
 class TestLoggingMiddleware:
     """日志中间件测试"""
     
@@ -142,7 +139,6 @@ class TestLoggingMiddleware:
         response = client.get("/test")
         assert "X-Request-ID" in response.headers
         assert "X-Process-Time" in response.headers
-
 
 class TestRateLimitMiddleware:
     """限流中间件测试"""
@@ -197,7 +193,6 @@ class TestRateLimitMiddleware:
             assert response.status_code == 200
             # 注意：由于测试环境的限制，这些头部可能不会出现
 
-
 class TestSecurityMiddleware:
     """安全中间件测试"""
     
@@ -226,7 +221,6 @@ class TestSecurityMiddleware:
         assert response.headers["X-XSS-Protection"] == "1; mode=block"
         assert "Referrer-Policy" in response.headers
         assert "Permissions-Policy" in response.headers
-
 
 class TestTracingMiddleware:
     """链路追踪中间件测试"""
@@ -272,7 +266,6 @@ class TestTracingMiddleware:
         assert response.status_code == 200
         # 健康检查端点不应该有追踪头部
         assert "X-Trace-ID" not in response.headers
-
 
 if __name__ == "__main__":
     pytest.main(["-v", "test_middleware.py"]) 

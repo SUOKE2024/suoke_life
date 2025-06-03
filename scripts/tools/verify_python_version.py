@@ -7,9 +7,7 @@
 
 import re
 import sys
-import json
 from pathlib import Path
-from typing import Dict, List, Tuple, Any
 import logging
 
 # 配置日志

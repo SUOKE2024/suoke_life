@@ -17,8 +17,6 @@ from httpx import AsyncClient
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from cmd.server import app as fastapi_app
-
 from pkg.utils.config import Config
 
 # 测试环境变量

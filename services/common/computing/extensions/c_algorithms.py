@@ -5,11 +5,9 @@
 """
 
 import ctypes
-import numpy as np
 import os
 import platform
 from typing import Optional, Tuple, List, Dict, Any
-from pathlib import Path
 import logging
 from dataclasses import dataclass
 from enum import Enum
@@ -18,7 +16,6 @@ import tempfile
 
 logger = logging.getLogger(__name__)
 
-
 class AlgorithmType(Enum):
     """算法类型"""
     TCM_SYNDROME = "tcm_syndrome"           # 中医证候分析
@@ -26,7 +23,6 @@ class AlgorithmType(Enum):
     NUTRITION_OPT = "nutrition_opt"         # 营养优化
     BIOMETRIC_PROC = "biometric_proc"       # 生物标志物处理
     PATTERN_MATCH = "pattern_match"         # 模式匹配
-
 
 @dataclass
 class CExtensionConfig:
@@ -37,7 +33,6 @@ class CExtensionConfig:
     use_openmp: bool = True
     use_simd: bool = True
     debug_mode: bool = False
-
 
 class CAlgorithmExtension:
     """C算法扩展管理器"""
@@ -711,7 +706,6 @@ int pattern_matching(
             except:
                 pass
 
-
 # 全局C扩展实例
 _c_extension = None
 
@@ -722,7 +716,6 @@ def get_c_extension(config: Optional[CExtensionConfig] = None) -> CAlgorithmExte
         _c_extension = CAlgorithmExtension(config)
     return _c_extension
 
-
 # 便捷函数接口
 def tcm_syndrome_analysis_c(symptoms: np.ndarray, weights: np.ndarray, 
                            patterns: np.ndarray) -> np.ndarray:
@@ -730,12 +723,10 @@ def tcm_syndrome_analysis_c(symptoms: np.ndarray, weights: np.ndarray,
     ext = get_c_extension()
     return ext.tcm_syndrome_analysis(symptoms, weights, patterns)
 
-
 def health_data_normalize_c(data: np.ndarray) -> np.ndarray:
     """健康数据标准化（C扩展）"""
     ext = get_c_extension()
     return ext.health_data_normalize(data)
-
 
 def nutrition_optimization_c(user_profile: np.ndarray, 
                             food_database: np.ndarray) -> np.ndarray:
@@ -743,20 +734,17 @@ def nutrition_optimization_c(user_profile: np.ndarray,
     ext = get_c_extension()
     return ext.nutrition_optimization(user_profile, food_database)
 
-
 def biomarker_processing_c(biomarkers: np.ndarray, 
                           reference: np.ndarray) -> np.ndarray:
     """生物标志物处理（C扩展）"""
     ext = get_c_extension()
     return ext.biomarker_processing(biomarkers, reference)
 
-
 def pattern_matching_c(data: np.ndarray, patterns: np.ndarray, 
                       threshold: float = 0.8) -> List[Tuple[int, int, float]]:
     """模式匹配（C扩展）"""
     ext = get_c_extension()
     return ext.pattern_matching(data, patterns, threshold)
-
 
 if __name__ == "__main__":
     # 测试C扩展

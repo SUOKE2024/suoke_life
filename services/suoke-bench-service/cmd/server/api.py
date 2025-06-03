@@ -9,7 +9,6 @@ from datetime import datetime
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, UploadFile, Path, BackgroundTasks
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
-from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from internal.benchmark.benchmark_service import BenchmarkService, get_global_executor
@@ -37,7 +36,6 @@ config: BenchConfig = load_config(config_path)
 # 创建服务实例
 benchmark_service = BenchmarkService(config)
 
-
 # 请求模型
 class RunBenchmarkRequest(BaseModel):
     """运行基准测试请求"""
@@ -46,18 +44,15 @@ class RunBenchmarkRequest(BaseModel):
     model_version: str = Field(..., description="模型版本")
     parameters: Optional[Dict[str, str]] = Field(default=None, description="附加参数")
 
-
 class GetResultRequest(BaseModel):
     """获取结果请求"""
     run_id: str = Field(..., description="运行ID")
     include_details: bool = Field(default=False, description="是否包含详细结果")
 
-
 class CompareBenchmarksRequest(BaseModel):
     """比较基准测试请求"""
     baseline_run_id: str = Field(..., description="基线运行ID")
     compare_run_id: str = Field(..., description="对比运行ID")
-
 
 class ReportRequest(BaseModel):
     """生成报告请求"""
@@ -66,7 +61,6 @@ class ReportRequest(BaseModel):
     include_samples: bool = Field(default=True, description="是否包含样本")
     metrics: Optional[List[str]] = Field(default=None, description="要包含的指标")
 
-
 class ModelRegistrationRequest(BaseModel):
     """模型注册请求"""
     model_id: str = Field(..., description="模型ID")
@@ -74,14 +68,12 @@ class ModelRegistrationRequest(BaseModel):
     model_type: str = Field(..., description="模型类型(local或remote_api)")
     model_config: Dict[str, Union[str, int, float, bool, None]] = Field(..., description="模型配置")
 
-
 class SettingsRequest(BaseModel):
     """更新设置请求"""
     data_dir: Optional[str] = Field(default=None, description="数据目录")
     report_dir: Optional[str] = Field(default=None, description="报告保存目录")
     parallel_runs: Optional[int] = Field(default=None, description="最大并行评测数")
     log_level: Optional[str] = Field(default=None, description="日志级别")
-
 
 # 新增的请求和响应模型
 class BenchmarkRequest(BaseModel):
@@ -92,13 +84,11 @@ class BenchmarkRequest(BaseModel):
     test_data: List[Dict[str, Any]] = Field(..., description="测试数据")
     config: Optional[Dict[str, Any]] = Field(default=None, description="测试配置")
 
-
 class BenchmarkResponse(BaseModel):
     """基准测试响应"""
     task_id: str = Field(..., description="任务ID")
     status: str = Field(..., description="任务状态")
     message: str = Field(..., description="响应消息")
-
 
 class TaskStatusResponse(BaseModel):
     """任务状态响应"""
@@ -109,18 +99,15 @@ class TaskStatusResponse(BaseModel):
     error_message: Optional[str] = Field(default=None, description="错误消息")
     results: Optional[Dict[str, Any]] = Field(default=None, description="测试结果")
 
-
 class TaskListResponse(BaseModel):
     """任务列表响应"""
     tasks: List[Dict[str, Any]] = Field(..., description="任务列表")
     total: int = Field(..., description="总数量")
 
-
 class MetricsResponse(BaseModel):
     """指标响应"""
     timestamp: str = Field(..., description="时间戳")
     metrics: Dict[str, Any] = Field(..., description="指标数据")
-
 
 class CacheStatsResponse(BaseModel):
     """缓存统计响应"""
@@ -128,7 +115,6 @@ class CacheStatsResponse(BaseModel):
     total_memory_mb: float = Field(..., description="总内存使用量(MB)")
     memory_usage_percent: float = Field(..., description="内存使用百分比")
     models: Dict[str, Any] = Field(..., description="模型详情")
-
 
 # API端点
 @router.post("/run", summary="运行基准测试")
@@ -156,7 +142,6 @@ async def run_benchmark(request: RunBenchmarkRequest):
     except Exception as e:
         logging.error(f"运行基准测试失败: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @router.post("/result", summary="获取基准测试结果")
 async def get_result(request: GetResultRequest):
@@ -189,7 +174,6 @@ async def get_result(request: GetResultRequest):
         logging.error(f"获取基准测试结果失败: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @router.get("/benchmarks", summary="列出可用基准测试")
 async def list_benchmarks(
     task_filter: Optional[str] = Query(None, description="任务类型过滤"),
@@ -212,7 +196,6 @@ async def list_benchmarks(
     except Exception as e:
         logging.error(f"列出基准测试失败: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @router.post("/compare", summary="比较基准测试结果")
 async def compare_benchmarks(request: CompareBenchmarksRequest):
@@ -239,7 +222,6 @@ async def compare_benchmarks(request: CompareBenchmarksRequest):
     except Exception as e:
         logging.error(f"比较基准测试失败: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @router.post("/report", summary="生成评测报告")
 async def generate_report(request: ReportRequest):
@@ -292,7 +274,6 @@ async def generate_report(request: ReportRequest):
         logging.error(f"生成报告失败: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @router.get("/report/{filename}", summary="获取报告文件")
 async def get_report(filename: str):
     """
@@ -304,7 +285,6 @@ async def get_report(filename: str):
         raise HTTPException(status_code=404, detail="报告不存在")
         
     return FileResponse(report_path)
-
 
 @router.post("/models/register", summary="注册模型")
 async def register_model(request: ModelRegistrationRequest):
@@ -328,7 +308,6 @@ async def register_model(request: ModelRegistrationRequest):
         logging.error(f"注册模型失败: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @router.get("/models", summary="列出已注册模型")
 async def list_models():
     """
@@ -340,7 +319,6 @@ async def list_models():
     except Exception as e:
         logging.error(f"列出模型失败: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @router.delete("/models/{model_id}/{model_version}", summary="注销模型")
 async def unregister_model(model_id: str, model_version: str):
@@ -362,7 +340,6 @@ async def unregister_model(model_id: str, model_version: str):
     except Exception as e:
         logging.error(f"注销模型失败: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @router.post("/upload-dataset", summary="上传数据集")
 async def upload_dataset(
@@ -393,7 +370,6 @@ async def upload_dataset(
         logging.error(f"上传数据集失败: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @router.get("/tasks", summary="获取任务类型")
 async def get_task_types():
     """
@@ -416,7 +392,6 @@ async def get_task_types():
             {"id": k, "name": v} for k, v in task_types.items()
         ]
     }
-
 
 @router.get("/history", summary="获取评测历史")
 async def get_benchmark_history(
@@ -450,7 +425,6 @@ async def get_benchmark_history(
         logging.error(f"获取评测历史失败: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @router.get("/runs/{run_id}/status", summary="检查评测状态")
 async def check_run_status(run_id: str):
     """
@@ -468,7 +442,6 @@ async def check_run_status(run_id: str):
     except Exception as e:
         logging.error(f"检查运行状态失败: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @router.delete("/runs/{run_id}", summary="删除评测记录")
 async def delete_run(run_id: str):
@@ -490,7 +463,6 @@ async def delete_run(run_id: str):
     except Exception as e:
         logging.error(f"删除评测记录失败: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
-
 
 # Web UI 路由
 @router.get("/ui/dashboard", summary="获取仪表盘数据")
@@ -535,7 +507,6 @@ async def get_dashboard_data():
         logging.error(f"获取仪表盘数据失败: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @router.get("/ui/metrics-stats", summary="获取指标统计数据")
 async def get_metrics_stats(
     benchmark_id: Optional[str] = Query(None, description="基准测试ID"),
@@ -554,7 +525,6 @@ async def get_metrics_stats(
     except Exception as e:
         logging.error(f"获取指标统计数据失败: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
-
 
 # 新增Web界面API端点
 @router.get("/stats", summary="获取统计数据")
@@ -585,7 +555,6 @@ async def get_stats():
         logging.error(f"获取统计数据失败: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @router.get("/recent-runs", summary="获取最近运行记录")
 async def get_recent_runs(limit: int = Query(5, description="返回数量限制")):
     """
@@ -610,7 +579,6 @@ async def get_recent_runs(limit: int = Query(5, description="返回数量限制"
     except Exception as e:
         logging.error(f"获取最近运行记录失败: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @router.get("/results", summary="获取结果列表")
 async def get_results_list(
@@ -661,7 +629,6 @@ async def get_results_list(
     except Exception as e:
         logging.error(f"获取结果列表失败: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @router.get("/reports", summary="获取报告列表")
 async def get_reports_list():
@@ -719,7 +686,6 @@ async def get_reports_list():
         logging.error(f"获取报告列表失败: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @router.get("/result-ui", summary="获取结果Web界面")
 async def get_result_ui(run_id: str):
     """
@@ -759,7 +725,6 @@ async def get_result_ui(run_id: str):
         logging.error(f"获取结果UI失败: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @router.get("/agent-performance", summary="获取智能体性能数据")
 async def get_agent_performance():
     """
@@ -795,7 +760,6 @@ async def get_agent_performance():
     except Exception as e:
         logging.error(f"获取智能体性能数据失败: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @router.get("/task-distribution", summary="获取任务分布数据")
 async def get_task_distribution():
@@ -833,7 +797,6 @@ async def get_task_distribution():
         logging.error(f"获取任务分布数据失败: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @router.get("/settings", summary="获取当前设置")
 async def get_settings():
     """
@@ -852,7 +815,6 @@ async def get_settings():
     except Exception as e:
         logging.error(f"获取设置失败: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @router.post("/settings", summary="更新系统设置")
 async def update_settings(request: SettingsRequest):
@@ -883,7 +845,6 @@ async def update_settings(request: SettingsRequest):
     except Exception as e:
         logging.error(f"更新设置失败: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
-
 
 # 基准测试相关接口
 @router.post("/benchmarks/submit", response_model=BenchmarkResponse)
@@ -934,7 +895,6 @@ async def submit_benchmark(request: BenchmarkRequest, background_tasks: Backgrou
         logger.error(f"提交基准测试失败: {str(e)}")
         raise HTTPException(status_code=500, detail=f"提交基准测试失败: {str(e)}")
 
-
 @router.get("/benchmarks/tasks/{task_id}", response_model=TaskStatusResponse)
 async def get_task_status(task_id: str = Path(..., description="任务ID")):
     """
@@ -960,7 +920,6 @@ async def get_task_status(task_id: str = Path(..., description="任务ID")):
     except Exception as e:
         logger.error(f"获取任务状态失败: {str(e)}")
         raise HTTPException(status_code=500, detail=f"获取任务状态失败: {str(e)}")
-
 
 @router.get("/benchmarks/tasks", response_model=TaskListResponse)
 async def list_tasks(
@@ -996,7 +955,6 @@ async def list_tasks(
         logger.error(f"列出任务失败: {str(e)}")
         raise HTTPException(status_code=500, detail=f"列出任务失败: {str(e)}")
 
-
 @router.get("/benchmarks/tasks/{task_id}/result")
 async def get_task_result(task_id: str = Path(..., description="任务ID")):
     """
@@ -1024,7 +982,6 @@ async def get_task_result(task_id: str = Path(..., description="任务ID")):
     except Exception as e:
         logger.error(f"获取任务结果失败: {str(e)}")
         raise HTTPException(status_code=500, detail=f"获取任务结果失败: {str(e)}")
-
 
 @router.post("/benchmarks/tasks/{task_id}/report")
 async def generate_report(task_id: str = Path(..., description="任务ID")):
@@ -1057,7 +1014,6 @@ async def generate_report(task_id: str = Path(..., description="任务ID")):
         logger.error(f"生成报告失败: {str(e)}")
         raise HTTPException(status_code=500, detail=f"生成报告失败: {str(e)}")
 
-
 # 缓存管理接口
 @router.get("/cache/stats", response_model=CacheStatsResponse)
 async def get_cache_stats():
@@ -1076,7 +1032,6 @@ async def get_cache_stats():
     except Exception as e:
         logger.error(f"获取缓存统计失败: {str(e)}")
         raise HTTPException(status_code=500, detail=f"获取缓存统计失败: {str(e)}")
-
 
 @router.post("/cache/clear")
 async def clear_cache():
@@ -1098,7 +1053,6 @@ async def clear_cache():
     except Exception as e:
         logger.error(f"清空缓存失败: {str(e)}")
         raise HTTPException(status_code=500, detail=f"清空缓存失败: {str(e)}")
-
 
 @router.post("/cache/preload")
 async def preload_models(model_configs: Dict[str, str]):
@@ -1138,7 +1092,6 @@ async def preload_models(model_configs: Dict[str, str]):
         logger.error(f"预加载模型失败: {str(e)}")
         raise HTTPException(status_code=500, detail=f"预加载模型失败: {str(e)}")
 
-
 # 监控和指标接口
 @router.get("/metrics/summary", response_model=MetricsResponse)
 async def get_metrics_summary():
@@ -1160,7 +1113,6 @@ async def get_metrics_summary():
     except Exception as e:
         logger.error(f"获取指标摘要失败: {str(e)}")
         raise HTTPException(status_code=500, detail=f"获取指标摘要失败: {str(e)}")
-
 
 @router.get("/metrics/custom/{metric_name}")
 async def get_custom_metric(
@@ -1197,7 +1149,6 @@ async def get_custom_metric(
         logger.error(f"获取自定义指标失败: {str(e)}")
         raise HTTPException(status_code=500, detail=f"获取自定义指标失败: {str(e)}")
 
-
 @router.post("/metrics/custom")
 async def record_custom_metric(
     name: str = Query(..., description="指标名称"),
@@ -1229,7 +1180,6 @@ async def record_custom_metric(
     except Exception as e:
         logger.error(f"记录自定义指标失败: {str(e)}")
         raise HTTPException(status_code=500, detail=f"记录自定义指标失败: {str(e)}")
-
 
 # 系统管理接口
 @router.get("/system/info")
@@ -1285,7 +1235,6 @@ async def get_system_info():
         logger.error(f"获取系统信息失败: {str(e)}")
         raise HTTPException(status_code=500, detail=f"获取系统信息失败: {str(e)}")
 
-
 @router.post("/system/cleanup")
 async def cleanup_system():
     """
@@ -1313,13 +1262,11 @@ async def cleanup_system():
         logger.error(f"系统清理失败: {str(e)}")
         raise HTTPException(status_code=500, detail=f"系统清理失败: {str(e)}")
 
-
 # 错误处理
 @router.get("/test/error")
 async def test_error():
     """测试错误处理（仅用于开发调试）"""
     raise HTTPException(status_code=500, detail="这是一个测试错误")
-
 
 @router.get("/test/timeout")
 async def test_timeout():
@@ -1327,7 +1274,6 @@ async def test_timeout():
     import asyncio
     await asyncio.sleep(10)  # 模拟长时间操作
     return {"message": "操作完成"}
-
 
 # 健康检查
 @router.get("/health/detailed")

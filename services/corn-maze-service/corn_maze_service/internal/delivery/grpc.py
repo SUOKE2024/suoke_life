@@ -4,12 +4,9 @@ gRPC 服务实现
 提供 gRPC 接口的服务实现。
 """
 
-from __future__ import annotations
-
 from corn_maze_service.pkg.logging import get_logger
 
 logger = get_logger(__name__)
-
 
 class CornMazeServicer:
     """Corn Maze gRPC 服务实现"""

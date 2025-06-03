@@ -5,7 +5,6 @@
 """
 
 import json
-import subprocess
 from typing import Dict, List, Any
 from pathlib import Path
 

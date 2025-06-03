@@ -12,7 +12,6 @@ from datetime import datetime
 
 from fastapi import APIRouter, Request, Depends, HTTPException
 from fastapi.responses import HTMLResponse, JSONResponse
-from fastapi.templating import Jinja2Templates
 
 from ..services.websocket_manager import get_websocket_manager
 from ..services.oauth2_provider import get_oauth2_provider
@@ -26,7 +25,6 @@ router = APIRouter(prefix="/admin", tags=["admin"])
 
 # 模板引擎（如果需要的话）
 # templates = Jinja2Templates(directory="templates")
-
 
 @router.get("/", response_class=HTMLResponse)
 async def admin_dashboard(request: Request):
@@ -295,7 +293,6 @@ async def admin_dashboard(request: Request):
     
     return HTMLResponse(content=html_content)
 
-
 @router.get("/overview")
 async def admin_overview(
     websocket_manager = Depends(get_websocket_manager),
@@ -333,7 +330,6 @@ async def admin_overview(
         logger.error("Failed to get admin overview", error=str(e))
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @router.get("/config")
 async def admin_config() -> Dict[str, Any]:
     """
@@ -370,7 +366,6 @@ async def admin_config() -> Dict[str, Any]:
     except Exception as e:
         logger.error("Failed to get admin config", error=str(e))
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @router.get("/logs")
 async def admin_logs(
@@ -420,7 +415,6 @@ async def admin_logs(
     except Exception as e:
         logger.error("Failed to get admin logs", error=str(e))
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @router.post("/maintenance")
 async def admin_maintenance(

@@ -10,14 +10,11 @@ from pathlib import Path
 from typing import Any
 
 import jinja2
-import plotly.express as px
-import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
 from internal.suokebench.config import load_config
 
 logger = logging.getLogger(__name__)
-
 
 class ReportGenerator:
     """评测报告生成器"""
@@ -399,7 +396,6 @@ class ReportGenerator:
 
         return str(report_file)
 
-
 def main():
     """主函数"""
     # 解析命令行参数
@@ -420,7 +416,6 @@ def main():
     report_path = generator.generate(args.run_id, args.format)
 
     print(f"报告已生成: {report_path}")
-
 
 if __name__ == "__main__":
     main()

@@ -9,7 +9,6 @@
 import asyncio
 import hashlib
 import hmac
-import json
 import logging
 import time
 from dataclasses import dataclass, field
@@ -23,7 +22,6 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from starlette.status import HTTP_401_UNAUTHORIZED, HTTP_429_TOO_MANY_REQUESTS
 
 logger = logging.getLogger(__name__)
-
 
 @dataclass
 class SecurityConfig:
@@ -54,7 +52,6 @@ class SecurityConfig:
     timestamp_header: str = "X-Timestamp"
     signature_tolerance: int = 300  # 时间戳容忍度（秒）
 
-
 @dataclass
 class RateLimitRule:
     """限流规则"""
@@ -63,7 +60,6 @@ class RateLimitRule:
     window: int
     burst: int = 0
     priority: int = 0
-
 
 @dataclass
 class SecurityMetrics:
@@ -75,7 +71,6 @@ class SecurityMetrics:
     signature_failures: int = 0
     suspicious_ips: Set[str] = field(default_factory=set)
     blocked_ips: Set[str] = field(default_factory=set)
-
 
 class TokenBucket:
     """令牌桶算法实现"""
@@ -102,7 +97,6 @@ class TokenBucket:
                 return True
             return False
 
-
 class SlidingWindowCounter:
     """滑动窗口计数器"""
     
@@ -127,7 +121,6 @@ class SlidingWindowCounter:
                 return True
             
             return False
-
 
 class EnhancedJWTHandler:
     """增强的JWT处理器"""
@@ -245,7 +238,6 @@ class EnhancedJWTHandler:
         
         self.blacklisted_tokens = valid_tokens
 
-
 class SmartRateLimiter:
     """智能限流器"""
     
@@ -356,7 +348,6 @@ class SmartRateLimiter:
         except re.error:
             return path.startswith(pattern)
 
-
 class DDoSProtector:
     """DDoS防护器"""
     
@@ -431,7 +422,6 @@ class DDoSProtector:
                 self.ip_stats[ip]["suspicious_score"] = 0
                 logger.info(f"IP {ip} 已解封")
 
-
 class RequestSignatureVerifier:
     """请求签名验证器"""
     
@@ -488,7 +478,6 @@ class RequestSignatureVerifier:
         except Exception as e:
             logger.error(f"签名验证失败: {e}")
             return False
-
 
 class EnhancedSecurityManager:
     """增强安全管理器"""

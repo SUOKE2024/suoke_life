@@ -4,21 +4,14 @@
 基于用户画像、健康数据、行为模式和中医体质理论提供个性化健康建议
 """
 
-import asyncio
-import json
-import math
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Dict, List, Optional, Any, Tuple, Set
 from dataclasses import dataclass, asdict
 from collections import defaultdict, Counter
 
-import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.cluster import KMeans
 from loguru import logger
-
 
 class RecommendationType(Enum):
     """推荐类型"""
@@ -31,14 +24,12 @@ class RecommendationType(Enum):
     MEDICATION = "medication"
     CHECKUP = "checkup"
 
-
 class PersonalityType(Enum):
     """个性类型"""
     CONSERVATIVE = "conservative"  # 保守型
     MODERATE = "moderate"         # 温和型
     AGGRESSIVE = "aggressive"     # 积极型
     CAUTIOUS = "cautious"        # 谨慎型
-
 
 class HealthGoal(Enum):
     """健康目标"""
@@ -50,7 +41,6 @@ class HealthGoal(Enum):
     IMMUNITY_BOOST = "immunity_boost"
     CHRONIC_MANAGEMENT = "chronic_management"
     PREVENTION = "prevention"
-
 
 @dataclass
 class UserProfile:
@@ -72,7 +62,6 @@ class UserProfile:
     created_at: datetime
     updated_at: datetime
 
-
 @dataclass
 class HealthData:
     """健康数据"""
@@ -85,7 +74,6 @@ class HealthData:
     mood_data: Dict[str, Any]      # 情绪数据
     timestamp: datetime
 
-
 @dataclass
 class BehaviorPattern:
     """行为模式"""
@@ -97,7 +85,6 @@ class BehaviorPattern:
     engagement_level: float        # 参与度
     compliance_rate: float         # 依从性
     last_updated: datetime
-
 
 @dataclass
 class Recommendation:
@@ -113,7 +100,6 @@ class Recommendation:
     metadata: Dict[str, Any]
     created_at: datetime
     expires_at: Optional[datetime] = None
-
 
 class PersonalizationEngine:
     """个性化推荐引擎"""

@@ -12,7 +12,6 @@ from threading import Lock
 
 # 尝试导入Prometheus客户端库，如果不可用则使用dummy实现
 try:
-    import prometheus_client as prom
     from prometheus_client import CollectorRegistry, Counter, Gauge, Histogram, Summary
     from prometheus_client.exposition import pushadd_to_gateway
 
@@ -55,9 +54,7 @@ except ImportError:
     def pushadd_to_gateway(*args, **kwargs):
         pass
 
-
 logger = logging.getLogger(__name__)
-
 
 class MetricsCollector:
     """服务指标收集器"""
@@ -236,7 +233,6 @@ class MetricsCollector:
         except Exception as e:
             logger.error(f"推送指标失败: {e!s}", exc_info=True)
 
-
 # 装饰器：测量方法执行时间并记录指标
 def measure_time(endpoint_name):
     """测量方法执行时间并记录指标的装饰器"""
@@ -261,7 +257,6 @@ def measure_time(endpoint_name):
         return wrapper
 
     return decorator
-
 
 # 导出单例实例以便全局使用
 metrics = MetricsCollector()

@@ -8,16 +8,11 @@ import pytest
 import grpc
 import tempfile
 import os
-import numpy as np
-import soundfile as sf
-from concurrent import futures
-from unittest.mock import patch, MagicMock
 
 from listen_service.delivery.grpc_server import ListenServiceGRPCServer
 from listen_service.core.audio_analyzer import AudioAnalyzer
 from listen_service.core.tcm_analyzer import TCMFeatureExtractor
 from listen_service.utils.cache import AudioCache, MemoryCache
-
 
 class TestListenServiceIntegration:
     """闻诊服务集成测试"""
@@ -142,7 +137,6 @@ class TestListenServiceIntegration:
         """测试健康检查集成功能"""
         # 暂时跳过，原因同上
         pytest.skip("需要完整的 protobuf 定义才能执行")
-
 
 @pytest.mark.performance
 class TestListenServicePerformance:

@@ -8,8 +8,6 @@ import logging
 import time
 from typing import Any
 
-import motor.motor_asyncio
-
 from ..utils.config_loader import get_config
 from ..utils.metrics import track_db_metrics
 

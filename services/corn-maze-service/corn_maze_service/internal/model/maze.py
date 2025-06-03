@@ -4,15 +4,12 @@
 定义迷宫相关的数据结构和业务模型。
 """
 
-from __future__ import annotations
-
 from datetime import UTC, datetime
 from enum import Enum
 from typing import Any
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field, field_validator
-
 
 class MazeTheme(str, Enum):
     """迷宫主题枚举"""
@@ -21,14 +18,12 @@ class MazeTheme(str, Enum):
     TCM = "tcm"
     BALANCE = "balance"
 
-
 class MazeDifficulty(str, Enum):
     """迷宫难度枚举"""
     EASY = "easy"
     NORMAL = "normal"
     HARD = "hard"
     EXPERT = "expert"
-
 
 class NodeType(str, Enum):
     """节点类型枚举"""
@@ -40,7 +35,6 @@ class NodeType(str, Enum):
     CHALLENGE = "challenge"
     TREASURE = "treasure"
 
-
 class MazeNode(BaseModel):
     """迷宫节点"""
     model_config = {"use_enum_values": True}
@@ -51,7 +45,6 @@ class MazeNode(BaseModel):
     content: dict[str, Any] | None = Field(default=None, description="节点内容")
     is_visited: bool = Field(default=False, description="是否已访问")
     connections: list[tuple[int, int]] = Field(default_factory=list, description="连接的节点坐标")
-
 
 class Maze(BaseModel):
     """迷宫模型"""
@@ -124,7 +117,6 @@ class Maze(BaseModel):
                 neighbors.append(node)
         return neighbors
 
-
 class UserMaze(BaseModel):
     """用户迷宫关联"""
     id: UUID = Field(default_factory=uuid4, description="关联ID")
@@ -139,14 +131,12 @@ class UserMaze(BaseModel):
     created_at: datetime = Field(default_factory=lambda: datetime.now(UTC), description="创建时间")
     last_accessed_at: datetime | None = Field(default=None, description="最后访问时间")
 
-
 class ProgressStatus(str, Enum):
     """进度状态枚举"""
     NOT_STARTED = "not_started"
     IN_PROGRESS = "in_progress"
     COMPLETED = "completed"
     ABANDONED = "abandoned"
-
 
 class MazeProgress(BaseModel):
     """迷宫进度"""

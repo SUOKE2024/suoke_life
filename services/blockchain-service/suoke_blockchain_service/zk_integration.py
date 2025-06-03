@@ -5,8 +5,6 @@
 将零知识验证功能集成到区块链服务中，提供健康数据的隐私保护存储和验证。
 """
 
-import asyncio
-import json
 from dataclasses import dataclass, asdict
 from datetime import datetime
 from typing import Dict, List, Optional, Any, Tuple
@@ -45,14 +43,12 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
-
 class BlockchainTransactionType(Enum):
     """区块链交易类型"""
     HEALTH_DATA_PROOF = "health_data_proof"
     PROOF_VERIFICATION = "proof_verification"
     DATA_ACCESS_GRANT = "data_access_grant"
     DATA_ACCESS_REVOKE = "data_access_revoke"
-
 
 @dataclass
 class BlockchainTransaction:
@@ -67,7 +63,6 @@ class BlockchainTransaction:
     block_height: Optional[int] = None
     confirmed: bool = False
 
-
 @dataclass
 class HealthDataBlock:
     """健康数据区块"""
@@ -78,7 +73,6 @@ class HealthDataBlock:
     timestamp: str
     nonce: int
     block_hash: str
-
 
 class ZKBlockchainService:
     """零知识区块链服务"""
@@ -480,10 +474,8 @@ class ZKBlockchainService:
         import hashlib
         return hashlib.sha256(data.encode()).hexdigest()
 
-
 # 全局服务实例
 _zk_blockchain_service = None
-
 
 def get_zk_blockchain_service() -> ZKBlockchainService:
     """获取零知识区块链服务实例"""
@@ -491,7 +483,6 @@ def get_zk_blockchain_service() -> ZKBlockchainService:
     if _zk_blockchain_service is None:
         _zk_blockchain_service = ZKBlockchainService()
     return _zk_blockchain_service
-
 
 # 便捷函数
 async def store_health_proof_on_blockchain(
@@ -502,7 +493,6 @@ async def store_health_proof_on_blockchain(
     """将健康数据证明存储到区块链"""
     service = get_zk_blockchain_service()
     return await service.submit_health_data_proof(user_id, proof, metadata)
-
 
 async def verify_health_proof_from_blockchain(
     data_hash: str,

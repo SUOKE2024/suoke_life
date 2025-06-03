@@ -19,7 +19,6 @@ from typing import Any
 
 import aiohttp
 import jwt
-import redis.asyncio as redis
 from aiohttp import ClientSession, web
 
 logger = logging.getLogger(__name__)

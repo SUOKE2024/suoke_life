@@ -6,7 +6,6 @@
 
 from datetime import datetime, time, timedelta
 from typing import Dict, List, Optional, Tuple
-import calendar
 
 from .data import (
     MERIDIAN_TIME_MAP,
@@ -16,7 +15,6 @@ from .data import (
     MERIDIAN_ORGAN_MAP,
     DISEASE_OPTIMAL_TIME
 )
-
 
 class ZiwuLiuzhuCalculator:
     """子午流注计算器"""

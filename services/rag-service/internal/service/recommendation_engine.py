@@ -5,24 +5,17 @@
 智能推荐引擎 - 提供个性化健康建议、中医方案推荐、生活方式指导
 """
 
-import asyncio
 import time
-import json
-import numpy as np
 from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from enum import Enum
 from datetime import datetime, timedelta
 from loguru import logger
-import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.decomposition import LatentDirichletAllocation
-from sklearn.cluster import KMeans
 
 from ..observability.metrics import MetricsCollector
 from ..observability.tracing import trace_operation, SpanKind
-
 
 class RecommendationType(str, Enum):
     """推荐类型"""
@@ -37,7 +30,6 @@ class RecommendationType(str, Enum):
     CONSTITUTION = "constitution"                   # 体质调理
     SEASONAL = "seasonal"                           # 季节养生
 
-
 class RecommendationStrategy(str, Enum):
     """推荐策略"""
     COLLABORATIVE_FILTERING = "collaborative_filtering"     # 协同过滤
@@ -49,7 +41,6 @@ class RecommendationStrategy(str, Enum):
     DEEP_LEARNING = "deep_learning"                         # 深度学习
     TCM_SYNDROME = "tcm_syndrome"                           # 中医辨证
 
-
 class ConfidenceLevel(str, Enum):
     """置信度级别"""
     VERY_LOW = "very_low"      # 很低 (0-0.2)
@@ -57,7 +48,6 @@ class ConfidenceLevel(str, Enum):
     MEDIUM = "medium"          # 中等 (0.4-0.6)
     HIGH = "high"              # 高 (0.6-0.8)
     VERY_HIGH = "very_high"    # 很高 (0.8-1.0)
-
 
 @dataclass
 class UserProfile:
@@ -79,7 +69,6 @@ class UserProfile:
     occupation: Optional[str] = None
     created_at: datetime = field(default_factory=datetime.now)
     updated_at: datetime = field(default_factory=datetime.now)
-
 
 @dataclass
 class RecommendationItem:
@@ -105,7 +94,6 @@ class RecommendationItem:
     effectiveness_rate: Optional[float] = None
     metadata: Dict[str, Any] = field(default_factory=dict)
 
-
 @dataclass
 class RecommendationContext:
     """推荐上下文"""
@@ -125,7 +113,6 @@ class RecommendationContext:
     mood: Optional[str] = None
     emergency_level: int = 0                        # 0-5级紧急程度
 
-
 @dataclass
 class RecommendationResult:
     """推荐结果"""
@@ -142,7 +129,6 @@ class RecommendationResult:
     next_check_time: Optional[datetime] = None
     timestamp: datetime = field(default_factory=datetime.now)
     metadata: Dict[str, Any] = field(default_factory=dict)
-
 
 class CollaborativeFilteringEngine:
     """协同过滤推荐引擎"""
@@ -251,7 +237,6 @@ class CollaborativeFilteringEngine:
         
         return sorted_recommendations
 
-
 class ContentBasedEngine:
     """基于内容的推荐引擎"""
     
@@ -309,7 +294,6 @@ class ContentBasedEngine:
             recommendations.append((item_id, score))
         
         return recommendations
-
 
 class TCMSyndromeEngine:
     """中医辨证推荐引擎"""
@@ -564,7 +548,6 @@ class TCMSyndromeEngine:
             return ConfidenceLevel.LOW
         else:
             return ConfidenceLevel.VERY_LOW
-
 
 class RecommendationEngine:
     """智能推荐引擎主类"""
@@ -1131,10 +1114,8 @@ class RecommendationEngine:
             "active_users": len(self.user_profiles)
         }
 
-
 # 全局推荐引擎实例
 _recommendation_engine: Optional[RecommendationEngine] = None
-
 
 def initialize_recommendation_engine(
     config: Dict[str, Any],
@@ -1144,7 +1125,6 @@ def initialize_recommendation_engine(
     global _recommendation_engine
     _recommendation_engine = RecommendationEngine(config, metrics_collector)
     return _recommendation_engine
-
 
 def get_recommendation_engine() -> Optional[RecommendationEngine]:
     """获取推荐引擎实例"""

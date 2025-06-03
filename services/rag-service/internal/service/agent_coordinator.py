@@ -13,10 +13,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from datetime import datetime, timedelta
 from loguru import logger
-import numpy as np
 from collections import defaultdict, deque
-import redis.asyncio as redis
-
 
 class AgentType(Enum):
     """智能体类型"""
@@ -24,7 +21,6 @@ class AgentType(Enum):
     XIAOKE = "xiaoke"      # 小克 - 专业诊断，负责症状分析和初步诊断
     LAOKE = "laoke"        # 老克 - 资深专家，负责复杂病例和深度分析
     SOER = "soer"          # 索儿 - 健康管理，负责预防保健和生活指导
-
 
 class TaskType(Enum):
     """任务类型"""
@@ -39,7 +35,6 @@ class TaskType(Enum):
     DATA_ANALYSIS = "data_analysis"                  # 数据分析
     EDUCATION = "education"                          # 健康教育
 
-
 class TaskPriority(Enum):
     """任务优先级"""
     LOW = 1
@@ -47,7 +42,6 @@ class TaskPriority(Enum):
     HIGH = 3
     URGENT = 4
     EMERGENCY = 5
-
 
 class TaskStatus(Enum):
     """任务状态"""
@@ -59,14 +53,12 @@ class TaskStatus(Enum):
     CANCELLED = "cancelled"      # 已取消
     ESCALATED = "escalated"      # 已升级
 
-
 class CollaborationMode(Enum):
     """协作模式"""
     SEQUENTIAL = "sequential"    # 顺序协作
     PARALLEL = "parallel"        # 并行协作
     HIERARCHICAL = "hierarchical" # 层次协作
     CONSENSUS = "consensus"       # 共识协作
-
 
 @dataclass
 class Task:
@@ -90,7 +82,6 @@ class Task:
     results: Dict[str, Any] = field(default_factory=dict)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
-
 @dataclass
 class AgentCapability:
     """智能体能力"""
@@ -104,7 +95,6 @@ class AgentCapability:
     success_rate: float    # 成功率 (0-1)
     specialties: List[str] = field(default_factory=list)
 
-
 @dataclass
 class CollaborationResult:
     """协作结果"""
@@ -117,7 +107,6 @@ class CollaborationResult:
     execution_time: timedelta
     success: bool
     error_message: Optional[str] = None
-
 
 class AgentCoordinator:
     """智能体协调器"""

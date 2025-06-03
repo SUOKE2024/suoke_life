@@ -13,13 +13,10 @@ import uuid
 from datetime import datetime
 
 import aiohttp
-import matplotlib.pyplot as plt
-import numpy as np
 from tqdm.asyncio import tqdm_asyncio
 
 # 确保能够导入应用代码
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
-
 
 # 配置参数
 DEFAULT_REST_URL = "http://localhost:8054"
@@ -332,7 +329,6 @@ class LoadTester:
         plt.tight_layout()
         plt.savefig(chart_file)
 
-
 async def main():
     """主函数"""
     parser = argparse.ArgumentParser(description="索儿服务负载测试")
@@ -352,7 +348,6 @@ async def main():
 
     # 生成报告
     tester.generate_report()
-
 
 if __name__ == "__main__":
     asyncio.run(main())

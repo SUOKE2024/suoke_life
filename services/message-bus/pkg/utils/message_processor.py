@@ -8,10 +8,8 @@
 
 import asyncio
 import gzip
-import json
 import logging
 import time
-import uuid
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum
@@ -20,12 +18,9 @@ from collections import deque
 import threading
 from concurrent.futures import ThreadPoolExecutor
 
-import aiokafka
 from aiokafka import AIOKafkaProducer, AIOKafkaConsumer
-import aioredis
 
 logger = logging.getLogger(__name__)
-
 
 class CompressionType(Enum):
     """压缩类型"""
@@ -34,14 +29,12 @@ class CompressionType(Enum):
     SNAPPY = "snappy"
     LZ4 = "lz4"
 
-
 class MessagePriority(Enum):
     """消息优先级"""
     LOW = 1
     NORMAL = 2
     HIGH = 3
     CRITICAL = 4
-
 
 @dataclass
 class ProcessorConfig:
@@ -69,7 +62,6 @@ class ProcessorConfig:
     # 监控配置
     metrics_enabled: bool = True
     stats_interval: float = 30.0
-
 
 @dataclass
 class MessageEnvelope:
@@ -113,7 +105,6 @@ class MessageEnvelope:
             compression_type=CompressionType(data['compression_type']) if data.get('compression_type') else None
         )
 
-
 @dataclass
 class ProcessingStats:
     """处理统计信息"""
@@ -125,7 +116,6 @@ class ProcessingStats:
     compression_ratio: float = 0.0
     memory_usage: int = 0
     queue_size: int = 0
-
 
 class MessageCompressor:
     """消息压缩器"""
@@ -144,7 +134,6 @@ class MessageCompressor:
                 return gzip.compress(data)
         elif compression_type == CompressionType.LZ4:
             try:
-                import lz4.frame
                 return lz4.frame.compress(data)
             except ImportError:
                 logger.warning("lz4 not available, falling back to gzip")
@@ -166,14 +155,12 @@ class MessageCompressor:
                 return data
         elif compression_type == CompressionType.LZ4:
             try:
-                import lz4.frame
                 return lz4.frame.decompress(data)
             except ImportError:
                 logger.warning("lz4 not available")
                 return data
         else:
             return data
-
 
 class MemoryPool:
     """内存池管理器"""
@@ -218,7 +205,6 @@ class MemoryPool:
         with self._lock:
             return self._stats.copy()
 
-
 class MessageProcessor(ABC):
     """消息处理器抽象基类"""
     
@@ -231,7 +217,6 @@ class MessageProcessor(ABC):
     async def process_batch(self, messages: List[MessageEnvelope]) -> List[bool]:
         """批处理消息"""
         pass
-
 
 class HighPerformanceMessageProcessor:
     """
@@ -567,7 +552,6 @@ class HighPerformanceMessageProcessor:
             for priority, queue in self._priority_queues.items()
         }
 
-
 class KafkaMessageProcessor(MessageProcessor):
     """Kafka消息处理器"""
     
@@ -616,7 +600,6 @@ class KafkaMessageProcessor(MessageProcessor):
             results = [False] * len(messages)
         
         return results
-
 
 # 消息处理器工厂
 class MessageProcessorFactory:

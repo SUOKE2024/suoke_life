@@ -1,7 +1,6 @@
 import logging
 from typing import Any
 
-import networkx as nx
 from neo4j import GraphDatabase
 from py2neo import Graph
 

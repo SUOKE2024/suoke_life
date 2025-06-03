@@ -6,7 +6,6 @@
 
 import argparse
 import sys
-import os
 from pathlib import Path
 
 # 添加项目根目录到Python路径
@@ -14,7 +13,6 @@ project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
 from palpation_service.config import get_settings
-
 
 def start_simple_service():
     """启动简化版服务"""
@@ -29,7 +27,6 @@ def start_simple_service():
     except Exception as e:
         print(f"❌ 启动失败: {e}")
         sys.exit(1)
-
 
 def start_full_service():
     """启动完整版服务"""
@@ -46,7 +43,6 @@ def start_full_service():
         print(f"❌ 启动失败: {e}")
         print("💡 提示: 如果遇到依赖问题，请尝试使用简化版: --mode simple")
         sys.exit(1)
-
 
 def show_service_info():
     """显示服务信息"""
@@ -77,7 +73,6 @@ def show_service_info():
     print(f"curl {base_url}/health")
     print(f"curl {base_url}/config")
     print()
-
 
 def main():
     """主函数"""
@@ -121,7 +116,6 @@ def main():
         start_simple_service()
     elif args.mode == "full":
         start_full_service()
-
 
 if __name__ == "__main__":
     main() 

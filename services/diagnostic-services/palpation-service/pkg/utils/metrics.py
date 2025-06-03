@@ -212,7 +212,6 @@ class MetricsCollector:
             # 汇总直方图
             for name, values in self.histograms.items():
                 if values:
-                    import numpy as np
                     summary['histograms'][name] = {
                         'count': len(values),
                         'mean': np.mean(values),

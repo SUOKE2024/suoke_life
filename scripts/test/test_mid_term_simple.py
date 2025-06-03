@@ -7,18 +7,14 @@
 import asyncio
 import time
 import logging
-import numpy as np
-import multiprocessing
 from datetime import datetime
 from typing import Dict, Any, List
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 from numba import jit
-import psutil
 
 # 配置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
-
 
 @jit(nopython=True)
 def _jit_normalize_func(data: np.ndarray) -> np.ndarray:
@@ -29,7 +25,6 @@ def _jit_normalize_func(data: np.ndarray) -> np.ndarray:
         return (data - mean) / std
     else:
         return data.astype(data.dtype)
-
 
 @jit(nopython=True)
 def _jit_syndrome_scores_func(symptoms: np.ndarray, weights: np.ndarray) -> np.ndarray:
@@ -49,7 +44,6 @@ def _jit_syndrome_scores_func(symptoms: np.ndarray, weights: np.ndarray) -> np.n
         scores[i] = np.dot(weighted_symptoms[:4], syndrome_patterns[i])
 
     return scores / np.sum(scores) if np.sum(scores) > 0 else scores
-
 
 class SimplifiedTaskScheduler:
     """简化的任务调度器"""
@@ -100,7 +94,6 @@ class SimplifiedTaskScheduler:
             "completed_tasks": len(self.completed_tasks),
             "pending_tasks": len(self.tasks) - len(self.completed_tasks)
         }
-
 
 class SimplifiedSharedMemoryProcessor:
     """简化的共享内存处理器"""
@@ -186,7 +179,6 @@ class SimplifiedSharedMemoryProcessor:
             "max_memory_mb": self.max_memory / (1024 * 1024),
             "usage_percentage": (self.total_memory / self.max_memory) * 100
         }
-
 
 class SimplifiedHybridArchitecture:
     """简化的混合架构"""
@@ -289,7 +281,6 @@ class SimplifiedHybridArchitecture:
             "thread_pool_size": self.max_threads,
             "process_pool_size": self.max_processes
         }
-
 
 class MidTermTester:
     """中期实施任务测试器"""
@@ -653,12 +644,10 @@ class MidTermTester:
 
         print("="*80)
 
-
 async def main():
     """主函数"""
     tester = MidTermTester()
     await tester.run_all_tests()
-
 
 if __name__ == "__main__":
     asyncio.run(main())

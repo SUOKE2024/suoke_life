@@ -16,8 +16,6 @@ from enum import Enum
 from pathlib import Path
 from typing import Any
 
-import numpy as np
-import pandas as pd
 from sklearn.cluster import KMeans
 
 # 机器学习库
@@ -32,8 +30,6 @@ from sklearn.preprocessing import StandardScaler
 # 时序分析库
 try:
     from statsmodels.tsa.arima.model import ARIMA
-    from statsmodels.tsa.seasonal import seasonal_decompose
-    from statsmodels.tsa.stattools import adfuller
 
     STATSMODELS_AVAILABLE = True
 except ImportError:
@@ -41,7 +37,6 @@ except ImportError:
     warnings.warn("statsmodels not available, time series analysis will be limited")
 
 logger = logging.getLogger(__name__)
-
 
 class PredictionType(Enum):
     """预测类型枚举"""
@@ -52,7 +47,6 @@ class PredictionType(Enum):
     CONSTITUTION_EVOLUTION = "constitution_evolution"  # 体质演变
     INTERVENTION_EFFECT = "intervention_effect"  # 干预效果
 
-
 class RiskLevel(Enum):
     """风险等级枚举"""
 
@@ -60,7 +54,6 @@ class RiskLevel(Enum):
     MEDIUM = "medium"
     HIGH = "high"
     CRITICAL = "critical"
-
 
 class ModelType(Enum):
     """模型类型枚举"""
@@ -71,7 +64,6 @@ class ModelType(Enum):
     ARIMA = "arima"
     ISOLATION_FOREST = "isolation_forest"
     KMEANS = "kmeans"
-
 
 @dataclass
 class PredictionResult:
@@ -90,7 +82,6 @@ class PredictionResult:
     created_at: datetime
     metadata: dict[str, Any] = field(default_factory=dict)
 
-
 @dataclass
 class HealthTrend:
     """健康趋势"""
@@ -100,7 +91,6 @@ class HealthTrend:
     key_indicators: list[str]
     projected_timeline: dict[str, float]  # 时间点 -> 预测值
     confidence: float
-
 
 @dataclass
 class RiskAssessment:
@@ -112,7 +102,6 @@ class RiskAssessment:
     protective_factors: list[str]
     time_to_risk: int | None  # 预计多少天后可能出现风险
     mitigation_strategies: list[str]
-
 
 class PredictiveAnalyzer:
     """预测性分析器"""

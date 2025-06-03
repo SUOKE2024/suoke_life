@@ -5,6 +5,7 @@
 """
 
 import asyncio
+import logging
 from datetime import date, datetime, time
 from typing import Dict, List, Optional, Any
 from uuid import uuid4
@@ -17,11 +18,9 @@ from ..core.models.calculation import (
     ConstitutionAnalysisModel,
     ComprehensiveAnalysisModel
 )
-from ..core.models.patient import BaziModel, WuxingModel
 from ..utils.bazi_calculator import BaziCalculator
 from ..utils.bagua_calculator import BaguaCalculator
 from ..utils.ziwu_calculator import ZiwuCalculator
-
 
 class CalculationService:
     """算诊计算服务"""

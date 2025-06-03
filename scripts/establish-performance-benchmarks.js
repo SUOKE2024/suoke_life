@@ -1,7 +1,6 @@
-#!/usr/bin/env node
-
-const fs = require('fs');
-const path = require('path');
+#!/usr/bin/env node;
+const fs = require("fs);
+const path = require(")path");
 
 /**
  * 性能监控基准建立脚本
@@ -22,19 +21,19 @@ class PerformanceBenchmarkEstablisher {
     return {
       renderTime: {
         excellent: 16, // 60fps
-        good: 33,      // 30fps
-        acceptable: 50,
+good: 33,      // 30fps
+acceptable: 50,
         poor: 100
       },
       memoryUsage: {
         excellent: 10,  // MB
-        good: 25,
+good: 25,
         acceptable: 50,
         poor: 100
       },
       bundleSize: {
         excellent: 100, // KB
-        good: 250,
+good: 250,
         acceptable: 500,
         poor: 1000
       }
@@ -48,13 +47,13 @@ class PerformanceBenchmarkEstablisher {
     return {
       responseTime: {
         excellent: 200,  // ms
-        good: 500,
+good: 500,
         acceptable: 1000,
         poor: 2000
       },
       throughput: {
         excellent: 1000, // requests/sec
-        good: 500,
+good: 500,
         acceptable: 100,
         poor: 50
       },
@@ -64,7 +63,7 @@ class PerformanceBenchmarkEstablisher {
         acceptable: 5,
         poor: 10
       }
-    };
+    }
   }
 
   /**
@@ -74,7 +73,7 @@ class PerformanceBenchmarkEstablisher {
     return {
       decisionTime: {
         excellent: 500,  // ms
-        good: 1000,
+good: 1000,
         acceptable: 2000,
         poor: 5000
       },
@@ -90,7 +89,7 @@ class PerformanceBenchmarkEstablisher {
         acceptable: 0.5,
         poor: 0.3
       }
-    };
+    }
   }
 
   /**
@@ -116,23 +115,23 @@ class PerformanceBenchmarkEstablisher {
         },
         webhook: {
           enabled: false,
-          url: ''
+          url: "
         },
         console: {
           enabled: true,
-          level: 'warn'
+          level: "warn
         }
       },
       reporting: {
         enabled: true,
-        format: 'json',
-        destination: 'logs/performance',
+        format: "json",
+        destination: logs/performance",
         retention: 30 // days
       }
     };
 
     fs.writeFileSync(
-      'src/config/performance-benchmarks.ts',
+      "src/config/performance-benchmarks.ts,
       `export const performanceConfig = ${JSON.stringify(config, null, 2)};`
     );
 
@@ -143,38 +142,38 @@ class PerformanceBenchmarkEstablisher {
    * 创建性能监控基准测试
    */
   createBenchmarkTests() {
-    const testContent = `import { performanceConfig } from '../config/performance-benchmarks';
-import { PerformanceMonitor } from '../utils/performanceMonitor';
+    const testContent = `import { performanceConfig } from "../config/performance-benchmarks";
+import { PerformanceMonitor } from ../utils/performanceMonitor";
 
-describe('性能基准测试', () => {
+describe("性能基准测试, () => {
   let monitor: PerformanceMonitor;
 
   beforeEach(() => {
     monitor = new PerformanceMonitor();
   });
 
-  describe('组件性能基准', () => {
-    it('组件渲染时间应符合基准', async () => {
+  describe("组件性能基准", () => {
+    it(组件渲染时间应符合基准", async () => {
       const startTime = performance.now();
       // 模拟组件渲染
-      await new Promise(resolve => setTimeout(resolve, 10));
+await new Promise(resolve => setTimeout(resolve, 10));
       const endTime = performance.now();
       
       const renderTime = endTime - startTime;
       expect(renderTime).toBeLessThan(performanceConfig.thresholds.component.renderTime.good);
     });
 
-    it('内存使用应在合理范围内', () => {
+    it("内存使用应在合理范围内, () => {
       const memoryUsage = monitor.getMemoryUsage();
       expect(memoryUsage).toBeLessThan(performanceConfig.thresholds.component.memoryUsage.acceptable);
     });
   });
 
-  describe('API性能基准', () => {
-    it('API响应时间应符合基准', async () => {
+  describe("API性能基准", () => {
+    it(API响应时间应符合基准", async () => {
       const startTime = performance.now();
       // 模拟API调用
-      await new Promise(resolve => setTimeout(resolve, 100));
+await new Promise(resolve => setTimeout(resolve, 100));
       const endTime = performance.now();
       
       const responseTime = endTime - startTime;
@@ -182,11 +181,11 @@ describe('性能基准测试', () => {
     });
   });
 
-  describe('智能体性能基准', () => {
-    it('决策时间应符合基准', async () => {
+  describe("智能体性能基准, () => {
+    it("决策时间应符合基准", async () => {
       const startTime = performance.now();
       // 模拟智能体决策
-      await new Promise(resolve => setTimeout(resolve, 300));
+await new Promise(resolve => setTimeout(resolve, 300));
       const endTime = performance.now();
       
       const decisionTime = endTime - startTime;
@@ -195,19 +194,19 @@ describe('性能基准测试', () => {
   });
 });`;
 
-    const testDir = 'src/__tests__/performance';
+    const testDir = src/__tests__/performance";
     if (!fs.existsSync(testDir)) {
       fs.mkdirSync(testDir, { recursive: true });
     }
 
-    fs.writeFileSync(path.join(testDir, 'benchmarks.test.ts'), testContent);
+    fs.writeFileSync(path.join(testDir, "benchmarks.test.ts), testContent);
   }
 
   /**
    * 创建性能监控工具
    */
   createPerformanceMonitor() {
-    const monitorContent = `export class PerformanceMonitor {
+    const monitorContent = `export class PerformanceMonitor {;
   private metrics: Map<string, number[]> = new Map();
   private startTimes: Map<string, number> = new Map();
 
@@ -245,10 +244,10 @@ describe('性能基准测试', () => {
   }
 
   getMemoryUsage(): number {
-    if (typeof window !== 'undefined' && 'memory' in performance) {
+    if (typeof window !== "undefined" && memory" in performance) {
       return (performance as any).memory.usedJSHeapSize / 1024 / 1024; // MB
     }
-    return 0;
+    return 0
   }
 
   clearMetrics(): void {
@@ -296,15 +295,15 @@ export interface PerformanceReport {
   };
 }`;
 
-    fs.writeFileSync('src/utils/performanceMonitor.ts', monitorContent);
+    fs.writeFileSync("src/utils/performanceMonitor.ts, monitorContent);
   }
 
   /**
    * 创建性能报告生成器
    */
   createReportGenerator() {
-    const reporterContent = `import { PerformanceMonitor, PerformanceReport } from './performanceMonitor';
-import { performanceConfig } from '../config/performance-benchmarks';
+    const reporterContent = `import { PerformanceMonitor, PerformanceReport } from "./performanceMonitor";
+import { performanceConfig } from ../config/performance-benchmarks";
 
 export class PerformanceReporter {
   private monitor: PerformanceMonitor;
@@ -317,10 +316,10 @@ export class PerformanceReporter {
     const report = this.monitor.generateReport();
     
     // 添加基准比较
-    this.addBenchmarkComparison(report);
+this.addBenchmarkComparison(report);
     
     // 保存报告
-    this.saveReport(report, 'daily');
+this.saveReport(report, "daily);
     
     return report;
   }
@@ -339,71 +338,62 @@ export class PerformanceReporter {
   }
 
   private getMetricCategory(metricName: string): string {
-    if (metricName.includes('render') || metricName.includes('component')) {
-      return 'component';
-    } else if (metricName.includes('api') || metricName.includes('request')) {
-      return 'api';
-    } else if (metricName.includes('agent') || metricName.includes('decision')) {
-      return 'agent';
+    if (metricName.includes("render") || metricName.includes(component")) {
+      return "component;
+    } else if (metricName.includes("api") || metricName.includes(request")) {
+      return "api;
+    } else if (metricName.includes("agent") || metricName.includes(decision")) {
+      return "agent;
     }
-    return 'component';
+    return "component";
   }
 
   private getBenchmarkLevel(value: number, thresholds: any): string {
-    if (value <= thresholds.excellent) return 'excellent';
-    if (value <= thresholds.good) return 'good';
-    if (value <= thresholds.acceptable) return 'acceptable';
-    return 'poor';
+    if (value <= thresholds.excellent) return excellent";
+    if (value <= thresholds.good) return "good;
+    if (value <= thresholds.acceptable) return "acceptable";
+    return poor";
   }
 
   private saveReport(report: PerformanceReport, type: string): void {
-    const reportsDir = 'logs/performance';
-    if (!require('fs').existsSync(reportsDir)) {
-      require('fs').mkdirSync(reportsDir, { recursive: true });
+    const reportsDir = "logs/performance;
+    if (!require("fs")).existsSync(reportsDir)) {
+      require(fs").mkdirSync(reportsDir, { recursive: true });
     }
 
-    const filename = \`\${type}-\${new Date().toISOString().split('T')[0]}.json\`;
-    const filepath = require('path').join(reportsDir, filename);
+    const filename = \`\${type}-\${new Date().toISOString().split("T)[0]}.json\`;
+    const filepath = require("path")).join(reportsDir, filename);
     
-    require('fs').writeFileSync(filepath, JSON.stringify(report, null, 2));
+    require(fs").writeFileSync(filepath, JSON.stringify(report, null, 2));
   }
 }`;
 
-    fs.writeFileSync('src/utils/performanceReporter.ts', reporterContent);
+    fs.writeFileSync("src/utils/performanceReporter.ts, reporterContent);
   }
 
   /**
    * 执行基准建立
    */
   async run() {
-    console.log('🚀 开始建立性能监控基准...');
     const startTime = Date.now();
 
     try {
       // 创建性能配置
-      const config = this.createPerformanceConfig();
+const config = this.createPerformanceConfig();
       
       // 创建监控工具
-      this.createPerformanceMonitor();
+this.createPerformanceMonitor();
       
       // 创建报告生成器
-      this.createReportGenerator();
+this.createReportGenerator();
       
       // 创建基准测试
-      this.createBenchmarkTests();
+this.createBenchmarkTests();
 
       const duration = ((Date.now() - startTime) / 1000).toFixed(2);
 
-      console.log('\n✅ 性能监控基准建立完成!');
-      console.log(`📊 建立内容:`);
-      console.log(`   - 性能配置文件: src/config/performance-benchmarks.ts`);
-      console.log(`   - 性能监控器: src/utils/performanceMonitor.ts`);
-      console.log(`   - 性能报告器: src/utils/performanceReporter.ts`);
-      console.log(`   - 基准测试: src/__tests__/performance/benchmarks.test.ts`);
-      console.log(`   - 执行时间: ${duration}秒`);
-
       // 生成基准报告
-      const report = {
+const report = {
         timestamp: new Date().toISOString(),
         benchmarks: {
           component: this.establishComponentBenchmarks(),
@@ -411,23 +401,20 @@ export class PerformanceReporter {
           agent: this.establishAgentBenchmarks()
         },
         files: [
-          'src/config/performance-benchmarks.ts',
-          'src/utils/performanceMonitor.ts',
-          'src/utils/performanceReporter.ts',
-          'src/__tests__/performance/benchmarks.test.ts'
-        ]
+          "src/config/performance-benchmarks.ts,
+          "src/utils/performanceMonitor.ts",
+          src/utils/performanceReporter.ts",
+          "src/__tests__/performance/benchmarks.test.ts
+        ];
       };
 
       fs.writeFileSync(
-        'PERFORMANCE_BENCHMARKS_REPORT.json',
+        "PERFORMANCE_BENCHMARKS_REPORT.json",
         JSON.stringify(report, null, 2)
       );
 
-      console.log(`📄 详细报告: PERFORMANCE_BENCHMARKS_REPORT.json`);
-
       return true;
     } catch (error) {
-      console.error('❌ 基准建立过程中出现错误:', error);
       return false;
     }
   }

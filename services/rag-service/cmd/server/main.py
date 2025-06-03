@@ -75,9 +75,9 @@ class RAGService:
             
             logger.info("RAG服务初始化完成")
             
-    except Exception as e:
+        except Exception as e:
             logger.error(f"RAG服务初始化失败: {e}")
-        raise
+            raise
 
     async def _create_fastapi_app(self) -> FastAPI:
         """创建FastAPI应用"""
@@ -322,7 +322,7 @@ class RAGService:
             
             logger.info("资源清理完成")
         
-    except Exception as e:
+        except Exception as e:
             logger.error(f"资源清理失败: {e}")
 
 

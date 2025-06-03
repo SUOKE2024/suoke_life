@@ -14,12 +14,10 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Dict, List, Optional, Tuple
-from collections import defaultdict
 
 import aiohttp
 
 logger = logging.getLogger(__name__)
-
 
 class LoadBalancerAlgorithm(Enum):
     """负载均衡算法"""
@@ -33,7 +31,6 @@ class LoadBalancerAlgorithm(Enum):
     CONSISTENT_HASH = "consistent_hash"
     RESPONSE_TIME = "response_time"
 
-
 @dataclass
 class EndpointConfig:
     """端点配置"""
@@ -46,7 +43,6 @@ class EndpointConfig:
     health_check_interval: int = 30
     health_check_timeout: int = 5
     health_check_retries: int = 3
-
 
 @dataclass
 class EndpointStats:
@@ -62,7 +58,6 @@ class EndpointStats:
     is_healthy: bool = True
     weight_factor: float = 1.0  # 动态权重因子
 
-
 @dataclass
 class LoadBalancerConfig:
     """负载均衡器配置"""
@@ -73,7 +68,6 @@ class LoadBalancerConfig:
     weight_adjustment_interval: int = 60
     max_weight_factor: float = 2.0
     min_weight_factor: float = 0.1
-
 
 class LoadBalancerStrategy(ABC):
     """负载均衡策略抽象基类"""
@@ -87,7 +81,6 @@ class LoadBalancerStrategy(ABC):
     ) -> Optional[EndpointConfig]:
         """选择端点"""
         pass
-
 
 class RoundRobinStrategy(LoadBalancerStrategy):
     """轮询策略"""
@@ -113,7 +106,6 @@ class RoundRobinStrategy(LoadBalancerStrategy):
         endpoint = healthy_endpoints[self._current_index % len(healthy_endpoints)]
         self._current_index += 1
         return endpoint
-
 
 class WeightedRoundRobinStrategy(LoadBalancerStrategy):
     """加权轮询策略"""
@@ -166,7 +158,6 @@ class WeightedRoundRobinStrategy(LoadBalancerStrategy):
         
         return selected_endpoint
 
-
 class LeastConnectionsStrategy(LoadBalancerStrategy):
     """最少连接策略"""
     
@@ -198,7 +189,6 @@ class LeastConnectionsStrategy(LoadBalancerStrategy):
                 selected_endpoint = endpoint
         
         return selected_endpoint
-
 
 class WeightedLeastConnectionsStrategy(LoadBalancerStrategy):
     """加权最少连接策略"""
@@ -235,7 +225,6 @@ class WeightedLeastConnectionsStrategy(LoadBalancerStrategy):
         
         return selected_endpoint
 
-
 class RandomStrategy(LoadBalancerStrategy):
     """随机策略"""
     
@@ -255,7 +244,6 @@ class RandomStrategy(LoadBalancerStrategy):
             return None
         
         return random.choice(healthy_endpoints)
-
 
 class WeightedRandomStrategy(LoadBalancerStrategy):
     """加权随机策略"""
@@ -300,7 +288,6 @@ class WeightedRandomStrategy(LoadBalancerStrategy):
         
         return healthy_endpoints[-1]
 
-
 class IPHashStrategy(LoadBalancerStrategy):
     """IP哈希策略"""
     
@@ -326,7 +313,6 @@ class IPHashStrategy(LoadBalancerStrategy):
         hash_value = hash(client_ip)
         index = hash_value % len(healthy_endpoints)
         return healthy_endpoints[index]
-
 
 class ResponseTimeStrategy(LoadBalancerStrategy):
     """响应时间策略"""
@@ -362,7 +348,6 @@ class ResponseTimeStrategy(LoadBalancerStrategy):
                 selected_endpoint = endpoint
         
         return selected_endpoint
-
 
 class SmartLoadBalancer:
     """
@@ -623,7 +608,6 @@ class SmartLoadBalancer:
             logger.info(f"负载均衡算法已切换为: {algorithm.value}")
         else:
             logger.error(f"不支持的负载均衡算法: {algorithm}")
-
 
 # 负载均衡器工厂
 class LoadBalancerFactory:

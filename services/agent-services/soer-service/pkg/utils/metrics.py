@@ -16,10 +16,6 @@ from prometheus_client import (
     CollectorRegistry,
     generate_latest,
 )
-from prometheus_client import Counter as PrometheusCounter
-from prometheus_client import Gauge as PrometheusGauge
-from prometheus_client import Histogram as PrometheusHistogram
-from prometheus_client import Info as PrometheusInfo
 
 from pkg.utils.dependency_injection import ServiceLifecycle
 
@@ -413,7 +409,6 @@ def initialize_metrics(config: dict[str, Any]):
     except Exception as e:
         logger.error(f"启动指标服务器失败: {str(e)}")
 
-
 def track_api_request(method: str, endpoint: str, status_code: int, duration: float):
     """
     记录API请求指标
@@ -438,7 +433,6 @@ def track_api_request(method: str, endpoint: str, status_code: int, duration: fl
     except Exception as e:
         logger.error(f"记录API请求指标失败: {str(e)}")
 
-
 def track_health_plan_generation(constitution_type: str, status: str = "success"):
     """
     记录健康计划生成指标
@@ -455,7 +449,6 @@ def track_health_plan_generation(constitution_type: str, status: str = "success"
     except Exception as e:
         logger.error(f"记录健康计划生成指标失败: {str(e)}")
 
-
 def track_emotional_analysis(input_type: str, status: str = "success"):
     """
     记录情绪分析指标
@@ -471,7 +464,6 @@ def track_emotional_analysis(input_type: str, status: str = "success"):
         ).inc()
     except Exception as e:
         logger.error(f"记录情绪分析指标失败: {str(e)}")
-
 
 def track_llm_api_call(model: str, duration: float, status: str = "success",
                         input_tokens: int = 0, output_tokens: int = 0):
@@ -507,7 +499,6 @@ def track_llm_api_call(model: str, duration: float, status: str = "success",
     except Exception as e:
         logger.error(f"记录LLM API调用指标失败: {str(e)}")
 
-
 def track_database_query(query_type: str, database: str, duration: float):
     """
     记录数据库查询指标
@@ -525,7 +516,6 @@ def track_database_query(query_type: str, database: str, duration: float):
     except Exception as e:
         logger.error(f"记录数据库查询指标失败: {str(e)}")
 
-
 def update_active_connections(connection_type: str, count: int):
     """
     更新活动连接计数
@@ -540,7 +530,6 @@ def update_active_connections(connection_type: str, count: int):
         ).set(count)
     except Exception as e:
         logger.error(f"更新活动连接计数失败: {str(e)}")
-
 
 def track_function_time(module: str = "unknown"):
     """
@@ -569,7 +558,6 @@ def track_function_time(module: str = "unknown"):
                     logger.error(f"记录函数执行时间指标失败: {str(e)}")
         return wrapper
     return decorator
-
 
 def track_async_function_time(module: str = "unknown"):
     """

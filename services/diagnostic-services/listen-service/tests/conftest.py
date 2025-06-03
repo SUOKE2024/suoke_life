@@ -6,21 +6,13 @@
 """
 
 import asyncio
-import os
-import tempfile
-from pathlib import Path
-from typing import AsyncGenerator, Generator, Dict, Any
 import uuid
 
-import numpy as np
 import pytest
-import pytest_asyncio
 from unittest.mock import AsyncMock, MagicMock
-import librosa
 
 # 测试配置
 pytest_plugins = ["pytest_asyncio"]
-
 
 @pytest.fixture(scope="session")
 def event_loop():
@@ -28,7 +20,6 @@ def event_loop():
     loop = asyncio.get_event_loop_policy().new_event_loop()
     yield loop
     loop.close()
-
 
 @pytest.fixture(scope="session")
 def test_settings():
@@ -43,7 +34,6 @@ def test_settings():
         server={"port": 50053},  # 使用不同端口避免冲突
         logging={"level": "DEBUG", "console_enabled": True, "file_enabled": False},
     )
-
 
 @pytest.fixture
 def mock_audio_analyzer():
@@ -96,7 +86,6 @@ def mock_audio_analyzer():
     
     return analyzer
 
-
 @pytest.fixture
 def sample_audio_data():
     """生成示例音频数据"""
@@ -115,7 +104,6 @@ def sample_audio_data():
         "frequency": frequency,
     }
 
-
 @pytest.fixture
 def audio_analysis_request():
     """音频分析请求示例"""
@@ -133,7 +121,6 @@ def audio_analysis_request():
         tcm_analysis_enabled=True,
         use_cache=False,  # 测试时禁用缓存
     )
-
 
 # 测试标记
 def pytest_configure(config):

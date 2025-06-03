@@ -21,7 +21,6 @@ from ..models.tcm_models import TCMDiagnosis
 
 logger = structlog.get_logger(__name__)
 
-
 @dataclass
 class CacheEntry:
     """缓存条目"""
@@ -43,7 +42,6 @@ class CacheEntry:
         """记录访问"""
         self.access_count += 1
         self.last_accessed = time.time()
-
 
 class CacheBackend(ABC):
     """缓存后端抽象基类"""
@@ -77,7 +75,6 @@ class CacheBackend(ABC):
     async def get_stats(self) -> dict[str, Any]:
         """获取缓存统计"""
         pass
-
 
 class MemoryCache(CacheBackend):
     """内存缓存后端"""
@@ -206,7 +203,6 @@ class MemoryCache(CacheBackend):
         except Exception:
             return 0
 
-
 class RedisCache(CacheBackend):
     """Redis缓存后端"""
 
@@ -228,7 +224,6 @@ class RedisCache(CacheBackend):
         """获取Redis连接"""
         if self.redis is None:
             try:
-                import redis.asyncio as redis
 
                 self.redis = redis.from_url(self.redis_url, decode_responses=False)
                 await self.redis.ping()
@@ -356,7 +351,6 @@ class RedisCache(CacheBackend):
         except Exception as e:
             logger.error("获取Redis统计失败", error=str(e))
             return self.stats
-
 
 class AudioCache:
     """音频分析缓存管理器"""
@@ -589,7 +583,6 @@ class AudioCache:
         except Exception as e:
             logger.error("清空缓存失败", error=str(e))
             return False
-
 
 # 缓存装饰器
 def cache_result(

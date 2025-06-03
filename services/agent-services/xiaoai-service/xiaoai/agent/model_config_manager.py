@@ -13,7 +13,6 @@ from typing import Any
 from cryptography.fernet import Fernet
 
 try:
-    import redis.asyncio as redis
 except ImportError:
     redis = None
 
@@ -29,7 +28,6 @@ from ..utils.metrics import get_metrics_collector
 
 logger = logging.getLogger(__name__)
 
-
 class ModelProvider(Enum):
     """模型提供商枚举"""
     OPENAI = "openai"
@@ -40,13 +38,11 @@ class ModelProvider(Enum):
     GOOGLE = "google"
     CUSTOM = "custom"
 
-
 class ConfigScope(Enum):
     """配置作用域枚举"""
     SYSTEM = "system"  # 系统级配置
     USER = "user"      # 用户级配置
     TENANT = "tenant"  # 租户级配置
-
 
 @dataclass
 class ModelConfig:
@@ -73,7 +69,6 @@ class ModelConfig:
             self.createdat = datetime.utcnow()
         if self.updated_at is None:
             self.updatedat = datetime.utcnow()
-
 
 class ModelConfigManager:
     """
@@ -554,10 +549,8 @@ class ModelConfigManager:
         except Exception as e:
             logger.error(f"关闭连接失败: {e}")
 
-
 # 全局实例
 config_manager = None
-
 
 async def get_model_config_manager() -> ModelConfigManager:
     """获取模型配置管理器实例"""

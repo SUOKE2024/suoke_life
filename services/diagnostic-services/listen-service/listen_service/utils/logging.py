@@ -6,7 +6,6 @@
 
 import json
 import logging
-import logging.handlers
 import sys
 import time
 from datetime import datetime
@@ -14,7 +13,6 @@ from pathlib import Path
 
 import structlog
 from structlog.types import FilteringBoundLogger
-
 
 def setup_logging(
     level: str = "INFO",
@@ -156,7 +154,6 @@ def setup_logging(
 
     return logger
 
-
 def _configure_third_party_loggers():
     """配置第三方库的日志级别"""
     # 设置第三方库日志级别，避免过多噪音
@@ -172,7 +169,6 @@ def _configure_third_party_loggers():
 
     for logger_name, level in third_party_loggers.items():
         logging.getLogger(logger_name).setLevel(level)
-
 
 class JSONFormatter(logging.Formatter):
     """JSON格式化器"""
@@ -235,7 +231,6 @@ class JSONFormatter(logging.Formatter):
 
         return json.dumps(log_entry, ensure_ascii=False, default=str)
 
-
 class ColoredFormatter(logging.Formatter):
     """彩色控制台格式化器"""
 
@@ -276,7 +271,6 @@ class ColoredFormatter(logging.Formatter):
 
         return formatted
 
-
 class PlainFormatter(logging.Formatter):
     """纯文本格式化器"""
 
@@ -286,7 +280,6 @@ class PlainFormatter(logging.Formatter):
             datefmt="%Y-%m-%d %H:%M:%S",
             style="{",
         )
-
 
 class PerformanceLogger:
     """性能日志记录器"""
@@ -329,7 +322,6 @@ class PerformanceLogger:
         self.logger.info(
             "性能指标", metric_name=metric_name, metric_value=value, **kwargs
         )
-
 
 class AuditLogger:
     """审计日志记录器"""
@@ -391,7 +383,6 @@ class AuditLogger:
             cache_hit=hit,
             **kwargs,
         )
-
 
 class SecurityLogger:
     """安全日志记录器"""
@@ -456,7 +447,6 @@ class SecurityLogger:
             **kwargs,
         )
 
-
 class LogContext:
     """日志上下文管理器"""
 
@@ -478,11 +468,9 @@ class LogContext:
                 exc_info=True,
             )
 
-
 def get_logger(name: str | None = None) -> FilteringBoundLogger:
     """获取logger实例"""
     return structlog.get_logger(name)
-
 
 def log_function_call(
     logger: FilteringBoundLogger | None = None,
@@ -534,7 +522,6 @@ def log_function_call(
         return wrapper
 
     return decorator
-
 
 # 全局logger实例
 performance_logger = PerformanceLogger()

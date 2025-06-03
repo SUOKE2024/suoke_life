@@ -1,16 +1,13 @@
-import React from 'react';
-import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor';
-// 小艾智能体类型定义 - 健康助手 & 首页聊天频道版主 * *  * *// 基于README.md智能体描述全面更新//
-// 基础数据类型 * export interface AudioData { data: ArrayBuffer | string, */,
-  format: "wav" | "mp3" | "aac" | "opus",
+import React from "react";
+wav" | "mp3" | "aac" | "opus","
   sampleRate: number,
   duration: number,
   channels: number,
   quality?: "low" | "medium" | "high",
   metadata?: AudioMetadata}
 export interface ImageData { data: ArrayBuffer | string,
-  format: "jpg" | "png" | "webp" | "raw",
-  width: number,
+  format: "jpg" | "png" | "webp" | "raw",;
+  width: number,;
   height: number;
   quality?: number;
   metadata?: ImageMetadata,
@@ -23,8 +20,8 @@ export interface VideoData { data: ArrayBuffer | string,
   frameRate: number,
   quality?: "low" | "medium" | "high",
   metadata?: VideoMetadata}
-export interface PalpationData { id: string,
-  type: "pulse" | "abdominal" | "skin" | "acupoint" | "other",
+export interface PalpationData { id: string,;
+  type: "pulse" | "abdominal" | "skin" | "acupoint" | "other",;
   sensorData: unknown;
   pressure?: number;
   temperature?: number;
@@ -35,16 +32,16 @@ export interface PalpationData { id: string,
     deviceId?: string;
     calibration?: unknown};
 }
-// 用户相关类型 * export interface UserProfile { id: string, */;
+// 用户相关类型 * export interface UserProfile { id: string, ////
   basicInfo: BasicUserInfo,
-  healthProfile: HealthProfile,
-  preferences: UserPreferences,
+  healthProfile: HealthProfile,;
+  preferences: UserPreferences,;
   medicalHistory: MedicalHistoryItem[];
   constitution?: ConstitutionResult;
   accessibilityNeeds?: AccessibilityNeeds,
   culturalBackground?: CulturalBackground}
-export interface BasicUserInfo { name: string,
-  age: number,
+export interface BasicUserInfo { name: string,;
+  age: number,;
   gender: "male" | "female" | "other";
   height?: number;
   weight?: number;
@@ -68,9 +65,9 @@ export interface UserPreferences { communicationStyle: "formal" | "casual" | "me
   notificationPreferences: NotificationPreferences,
   accessibilityPreferences: AccessibilityPreferences,
   culturalPreferences: CulturalPreferences}
-// 聊天相关类型 * export interface ChatContext { userId: string, */;
-  sessionId: string,
-  conversationHistory: ChatMessage[],
+// 聊天相关类型 * export interface ChatContext { userId: string, ////
+  sessionId: string,;
+  conversationHistory: ChatMessage[],;
   userProfile: UserProfile;
   currentSymptoms?: string[];
   healthContext?: HealthContext;
@@ -80,8 +77,8 @@ export interface UserPreferences { communicationStyle: "formal" | "casual" | "me
   emotionalState?: EmotionalState,
   environmentContext?: EnvironmentContext}
 export interface ChatMessage { id: string,
-  role: "user" | "assistant",
-  content: string,
+  role: "user" | "assistant",;
+  content: string,;
   timestamp: number;
   metadata?: unknown}
 export interface ChatResponse { text: string;
@@ -93,11 +90,11 @@ export interface ChatResponse { text: string;
   healthInsights?: HealthInsight[];
   accessibilitySupport?: AccessibilitySupport;
   emotionalSupport?: EmotionalSupport}
-export interface ChatAction { type: string,
+export interface ChatAction { type: string,;
   label: string;
   data?: unknown}
-// 语音相关类型 * export interface VoiceResponse { transcription: string, */;
-  confidence: number,
+// 语音相关类型 * export interface VoiceResponse { transcription: string, ////  ;
+  confidence: number,;
   language: string;
   dialect?: string;
   emotionalTone?: EmotionalTone;
@@ -105,23 +102,26 @@ export interface ChatAction { type: string,
   response: ChatResponse}
 export interface VoiceProfile { gender: "male" | "female" | "neutral",
   age: "child" | "adult" | "elderly",
-  tone: "warm" | "professional" | "friendly" | "calm",
-  speed: "slow" | "normal" | "fast",
+  tone: "warm" | "professional" | "friendly" | "calm",;
+  speed: "slow" | "normal" | "fast",;
   language: string;
   dialect?: string}
-export interface VoiceHealthIndicators {;
+export interface VoiceHealthIndicators  {;
+;
   stressLevel?: number;
   fatigueLevel?: number;
   respiratoryHealth?: string;
   emotionalState?: string;
   voiceQuality?: string}
-// 四诊结果集合 * export interface FourDiagnosisResults {; */;
+// 四诊结果集合 * export interface FourDiagnosisResults {////  ;
+ /////    ;
   inquiry?: InquiryResult;
   look?: LookResult;
   listen?: ListenResult;
   palpation?: PalpationResult;
   integrated?: IntegratedDiagnosis}
-// 中医诊断相关类型 * export interface LookResult {; */;
+// 中医诊断相关类型 * export interface LookResult {////  ;
+ /////    ;
   faceAnalysis?: FaceAnalysis;
   tongueAnalysis?: TongueAnalysis;
   bodyAnalysis?: BodyAnalysis;
@@ -131,8 +131,8 @@ export interface VoiceHealthIndicators {;
   tcmFindings: TCMFindings}
 export interface FaceAnalysis { complexion: string,
   colorAnalysis: ColorAnalysis,
-  facialFeatures: FacialFeatures,
-  emotionalState: string,
+  facialFeatures: FacialFeatures,;
+  emotionalState: string,;
   healthIndicators: string[];
   }
 export interface TongueAnalysis { tongueBody: TongueBodyAnalysis,
@@ -143,8 +143,8 @@ export interface TongueAnalysis { tongueBody: TongueBodyAnalysis,
 export interface BodyAnalysis { posture: string,
   movement: string,
   vitality: string,
-  skinCondition: string,
-  overallHealth: string}
+  skinCondition: string,;
+  overallHealth: string};
 export interface ListenResult { voiceAnalysis: VoiceAnalysis;
   breathingPattern?: BreathingAnalysis;
   coughAnalysis?: CoughAnalysis;
@@ -155,8 +155,8 @@ export interface ListenResult { voiceAnalysis: VoiceAnalysis;
 export interface InquiryResult { symptoms: SymptomAnalysis[],
   constitutionType: ConstitutionType,
   healthConcerns: HealthConcern[],
-  riskFactors: RiskFactor[],
-  recommendations: string[],
+  riskFactors: RiskFactor[],;
+  recommendations: string[],;
   followUpQuestions: string[];
   tcmSyndrome?: TCMSyndrome}
 export interface PalpationResult { pulseAnalysis: PulseAnalysis,
@@ -167,8 +167,8 @@ export interface PalpationResult { pulseAnalysis: PulseAnalysis,
 export interface IntegratedDiagnosis { lookFindings: LookResult,
   listenFindings: ListenResult,
   inquiryFindings: InquiryResult,
-  palpationFindings: PalpationResult,
-  integratedAssessment: string,
+  palpationFindings: PalpationResult,;
+  integratedAssessment: string,;
   tcmDiagnosis: TCMDiagnosis;
   westernMedicineCorrelation?: WesternMedicineCorrelation;
   treatmentPrinciples: string[],
@@ -176,7 +176,8 @@ export interface IntegratedDiagnosis { lookFindings: LookResult,
   lifestyleRecommendations: LifestyleRecommendation[],
   followUpPlan: FollowUpPlan,
   confidence: number}
-// 健康数据相关类型 * export interface HealthDataInput {; */;
+// 健康数据相关类型 * export interface HealthDataInput {////  ;
+ /////    ;
   vitalSigns?: VitalSigns;
   symptoms?: string[];
   lifestyle?: LifestyleData;
@@ -187,8 +188,8 @@ export interface IntegratedDiagnosis { lookFindings: LookResult,
 export interface HealthAnalysis { summary: string,
   insights: HealthInsight[],
   riskAssessment: RiskAssessment,
-  trends: HealthTrend[],
-  recommendations: HealthRecommendation[],
+  trends: HealthTrend[],;
+  recommendations: HealthRecommendation[],;
   alerts: HealthAlert[];
   tcmAssessment?: TCMHealthAssessment}
 export interface HealthTrends { timeRange: TimeRange,
@@ -202,32 +203,33 @@ export interface HealthRecommendation { category: | "diet"| "exercise"| "lifesty
     | "tcm"
     | "mental_health"
   title: string,
-  description: string,
-  priority: "low" | "medium" | "high" | "urgent",
+  description: string,;
+  priority: "low" | "medium" | "high" | "urgent",;
   timeframe: string;
   evidence?: string;
   tcmRationale?: string,
   implementation?: ImplementationGuide}
-// 无障碍服务相关类型 * export interface AccessibilityFeature { type: "visual" | "auditory" | "motor" | "cognitive" | "speech"; */;
+// 无障碍服务相关类型 * export interface AccessibilityFeature { type: "visual" | "auditory" | "motor" | "cognitive" | "speech"////
+ /////
   subtype?: string,
-  severity: "mild" | "moderate" | "severe",
-  preferences: AccessibilityPreferences}
+  severity: "mild" | "moderate" | "severe",;
+  preferences: AccessibilityPreferences};
 export interface NavigationGuidance { instructions: string[];
   audioGuidance?: string;
   hapticFeedback?: HapticPattern[];
   visualCues?: VisualCue[];
   landmarks?: Landmark[];
   }
-export interface SignLanguageResult { recognizedSigns: RecognizedSign[],
-  confidence: number,
+export interface SignLanguageResult { recognizedSigns: RecognizedSign[],;
+  confidence: number,;
   translation: string;
   response?: ChatResponse}
 export interface InterfaceAdaptation { visualAdaptations: VisualAdaptation[],
-  audioAdaptations: AudioAdaptation[],
-  interactionAdaptations: InteractionAdaptation[],
+  audioAdaptations: AudioAdaptation[],;
+  interactionAdaptations: InteractionAdaptation[],;
   contentAdaptations: ContentAdaptation[];
   }
-// 体质评估相关类型 * export interface ConstitutionAssessmentData { physicalCharacteristics: PhysicalCharacteristics, */;
+// 体质评估相关类型 * export interface ConstitutionAssessmentData { physicalCharacteristics: PhysicalCharacteristics, ////
   psychologicalTraits: PsychologicalTraits,
   lifestyle: LifestyleData,
   symptoms: string[],
@@ -238,8 +240,8 @@ export interface ConstitutionResult { primaryConstitution: ConstitutionType,
   constitutionScore: ConstitutionScore,
   characteristics: string[],
   strengths: string[],
-  weaknesses: string[],
-  recommendations: ConstitutionRecommendation[],
+  weaknesses: string[],;
+  recommendations: ConstitutionRecommendation[],;
   seasonalGuidance: SeasonalGuidance[];
   }
 export interface CalculationResult { diagnosis: string,
@@ -249,7 +251,7 @@ export interface CalculationResult { diagnosis: string,
   treatmentPrinciples: string[],
   prescriptionRecommendations: PrescriptionRecommendation[],
   prognosisAssessment: PrognosisAssessment}
-// 智能体协作相关类型 * export interface AgentTask { taskId: string, */,
+// 智能体协作相关类型 * export interface AgentTask { taskId: string, ,////
   type: "diagnosis" | "recommendation" | "education" | "service" | "lifestyle",
   priority: "low" | "medium" | "high" | "urgent",
   requiredAgents: AgentType[],
@@ -259,11 +261,13 @@ export interface CalculationResult { diagnosis: string,
 export interface AgentCoordinationResult { taskId: string,
   status: "pending" | "in_progress" | "completed" | "failed",
   results: AgentTaskResult[];
+;
   aggregatedResult?: unknown;
   recommendations?: string[]
   }
-export type AgentType = "xiaoai" | "xiaoke" | "laoke" | "soe;r";
-// 其他支持类型 * export interface PersonalityTraits { style: "caring" | "professional" | "friendly" | "authoritative", */,
+export type AgentType = "xiaoai" | "xiaoke" | "laoke" | "so;e;"
+r";"
+// 其他支持类型 * export interface PersonalityTraits { style: "caring" | "professional" | "friendly" | "authoritative", ,////
   tone: "warm" | "neutral" | "energetic" | "calm",
   expertise: "health" | "medical" | "wellness" | "general",
   patience: "low" | "medium" | "high",
@@ -276,9 +280,10 @@ export interface AgentHealthStatus { status: "healthy" | "degraded" | "error",
   lastUpdate: Date,
   activeConnections: number,
   memoryUsage: number,
-  errors: AgentError[];
+  errors: AgentError[]
   }
-// 中医相关类型 * export interface TCMFindings {; */;
+// 中医相关类型 * export interface TCMFindings {////  ;
+ /////    ;
   syndrome?: string;
   pattern?: string;
   organSystems?: string[];
@@ -290,238 +295,241 @@ export interface TCMDiagnosis { mainSyndrome: string,
   organSystems: string[],
   pathogenesis: string,
   treatmentPrinciples: string[],
-  prognosis: string,
-  confidence: number}
-export type ConstitutionType = | "balanced" // 平和质 *   | "qi_deficiency"  *// 气虚质* *   | "yang_deficiency"  * */// 阳虚质* *   | "yin_deficiency"  * */// 阴虚质* *   | "phlegm_dampness"  * */// 痰湿质* *   | "damp_heat"  * */// 湿热质* *   | "blood_stasis"  * */// 血瘀质* *   | "qi_stagnation"  * */// 气郁质* *   | "special_diathesi;s";  * */// 特禀质* * ; * *//;
-// 错误处理 * export interface AgentError { code: string, */;
-  message: string,
-  timestamp: Date,
+  prognosis: string,;
+  confidence: number};
+export type ConstitutionType = | "balanced" // 平和质 // | "qi_deficiency"  / 气虚质* // | "yang_deficiency"  * // 阳虚质* // | "yin_deficiency"  * // 阴虚质* // | "phlegm_dampness"  * // 痰湿质* // | "damp_heat"  * // 湿热质* // | "blood_stasis"  * // 血瘀质* // | "qi_stagnation"  * // 气郁质* //////     | "special_diathesi;"
+s";  * / 特禀质* // * /////     "
+// 错误处理 * export interface AgentError { code: string, ////
+  message: string,;
+  timestamp: Date,;
   severity: "low" | "medium" | "high" | "critical";
   context?: unknown}
-// 时间相关 * export interface TimeRange { start: Date, */;
+// 时间相关 * export interface TimeRange { start: Date, ////
   end: Date,
   granularity?: "hour" | "day" | "week" | "month" | "year"}
-// 小艾智能体接口 * export interface XiaoaiAgent {; */;
-  // 核心聊天功能 *   chat(message: string, context: ChatContext);: Promise<ChatResponse  *// >;
-  // 多语种语音交互 *   processVoiceInput( */
-    audioData: AudioData,
-    language?: string,
-    dialect?: string
-  );: Promise<VoiceResponse />;
+// 小艾智能体接口 * export interface XiaoaiAgent {////
+ /////
+  // 核心聊天功能 // chat(message: string, context: ChatContext): Promise<ChatResponse  /////     >
+  // 多语种语音交互 //////     processVoiceInput(
+    audioData: AudioData,;
+    language?: string,;
+    dialect?: string;
+  ): Promise<VoiceResponse /////    >;
   synthesizeVoice(
     text: string,
     language?: string,
-    voice?: VoiceProfile
-  );: Promise<AudioData />
-  // 中医四诊合参功能 *   performLookDiagnosis( */
+    voice?: VoiceProfile;
+  );: Promise<AudioData /////    >
+  // 中医四诊合参功能 //////     performLookDiagnosis(
     imageData: ImageData,
-    type: "face" | "tongue" | "body");: Promise<LookResult />
+    type: "face" | "tongue" | "body"): Promise<LookResult /////    >
   performListenDiagnosis(
     audioData: AudioData,
-    type: "voice" | "cough" | "breathing" | "other");: Promise<ListenResult />;
+    type: "voice" | "cough" | "breathing" | "other");: Promise<ListenResult /////    >;
   performInquiryDiagnosis(
     userId: string,
     symptoms?: string[]
-  );: Promise<InquiryResult />;
-  performPalpationDiagnosis(data: PalpationData);: Promise<PalpationResult />;
+  );: Promise<InquiryResult /////    >;
+  performPalpationDiagnosis(data: PalpationData);: Promise<PalpationResult /////    >;
   integrateFourDiagnosis(
-    results: FourDiagnosisResults);: Promise<IntegratedDiagnosis />;
-  // 健康数据分析 *   analyzeHealthData(data: HealthDataInput);: Promise<HealthAnalysis  *// >;
+    results: FourDiagnosisResults);: Promise<IntegratedDiagnosis /////    >;
+  // 健康数据分析 // analyzeHealthData(data: HealthDataInput): Promise<HealthAnalysis  /////     >
   generateHealthRecommendations(
-    profile: UserProfile);: Promise<HealthRecommendation[] />;
+    profile: UserProfile);: Promise<HealthRecommendation[] /////    >;
   trackHealthTrends(
     userId: string,
-    timeRange: TimeRange);: Promise<HealthTrends />;
-  // 医疗记录管理 *   createMedicalRecord(data: MedicalRecordInput);: Promise<MedicalRecord  *// >;
+    timeRange: TimeRange);: Promise<HealthTrends /////    >;
+  // 医疗记录管理 // createMedicalRecord(data: MedicalRecordInput): Promise<MedicalRecord  /////     >
   updateMedicalRecord(
     recordId: string,
-    updates: Partial<MedicalRecord />);: Promise<MedicalRecord />;/  getMedicalHistory(,
+    updates: Partial<MedicalRecord />);: Promise<MedicalRecord />;/////      getMedicalHistory(,
     userId: string,
-    filters?: MedicalHistoryFilters
-  );: Promise<MedicalRecord[] />;
-  generateHealthReport(userId: string, type: ReportType);: Promise<HealthReport />;
-  // 无障碍服务 *   enableAccessibilityFeature(feature: AccessibilityFeature);: Promise<void>; */
+    filters?: MedicalHistoryFilters;
+  );: Promise<MedicalRecord[] /////    >;
+  generateHealthReport(userId: string, type: ReportType);: Promise<HealthReport /////    >;
+  // 无障碍服务 //////     enableAccessibilityFeature(feature: AccessibilityFeature): Promise<void>;
   provideNavigationAssistance(
-    context: NavigationContext);: Promise<NavigationGuidance />;
-  recognizeSignLanguage(videoData: VideoData);: Promise<SignLanguageResult />;
+    context: NavigationContext);: Promise<NavigationGuidance /////    >;
+  recognizeSignLanguage(videoData: VideoData);: Promise<SignLanguageResult /////    >;
   adaptInterfaceForDisability(
-    disability: DisabilityType);: Promise<InterfaceAdaptation />;
-  provideElderlyFriendlyInterface();: Promise<ElderlyInterfaceConfig />;
-  // 体质评估与算诊 *   assessConstitution( */
-    data: ConstitutionAssessmentData);: Promise<ConstitutionResult />;
+    disability: DisabilityType);: Promise<InterfaceAdaptation /////    >;
+  provideElderlyFriendlyInterface(): Promise<ElderlyInterfaceConfig /////    >;
+  // 体质评估与算诊 //////     assessConstitution(
+    data: ConstitutionAssessmentData): Promise<ConstitutionResult /////    >;
   performCalculationDiagnosis(
     symptoms: string[],
-    context: DiagnosisContext);: Promise<CalculationResult />;
+    context: DiagnosisContext);: Promise<CalculationResult /////    >;
   generateTreatmentPlan(
     diagnosis: IntegratedDiagnosis,
-    userProfile: UserProfile);: Promise<TreatmentPlan />;
-  // 智能体协作 *   coordinateWithOtherAgents(task: AgentTask);: Promise<AgentCoordinationResult  *// >;
+    userProfile: UserProfile);: Promise<TreatmentPlan /////    >;
+  // 智能体协作 // coordinateWithOtherAgents(task: AgentTask): Promise<AgentCoordinationResult  /////     >
   shareUserContext(
     targetAgent: AgentType,
     context: SharedContext);: Promise<void>;
-  // 个性化设置 *   setPersonality(traits: PersonalityTraits);: void; */
-  getPersonality();: PersonalityTraits;
-  // 状态管理 *   getHealthStatus();: Promise<AgentHealthStatus  *// >;
+  // 个性化设置 //////     setPersonality(traits: PersonalityTraits): void;
+  getPersonality(): PersonalityTraits;
+  // 状态管理 // getHealthStatus(): Promise<AgentHealthStatus  /////     >
   cleanup(userId: string);: Promise<void>}
-// 占位符类型定义 - 需要在其他文件中完整定义 * export interface AudioMetadata {; */;
+// 占位符类型定义 - 需要在其他文件中完整定义 * export interface AudioMetadata {////
+ /////
   [key: string]: unknown}
-export interface ImageMetadata {;
+export interface ImageMetadata  {
   [key: string]: unknown}
-export interface VideoMetadata {;
+export interface VideoMetadata  {
   [key: string]: unknown}
-export interface HealthContext {;
+export interface HealthContext  {
   [key: string]: unknown}
-export interface AccessibilityNeeds {;
+export interface AccessibilityNeeds  {
   [key: string]: unknown}
-export interface EmotionalState {;
+export interface EmotionalState  {
   [key: string]: unknown}
-export interface EnvironmentContext {;
+export interface EnvironmentContext  {
   [key: string]: unknown}
-export interface DiagnosticRecommendation {;
+export interface DiagnosticRecommendation  {
   [key: string]: unknown}
-export interface HealthInsight {;
+export interface HealthInsight  {
   [key: string]: unknown}
-export interface AccessibilitySupport {;
+export interface AccessibilitySupport  {
   [key: string]: unknown}
-export interface EmotionalSupport {;
+export interface EmotionalSupport  {
   [key: string]: unknown}
-export interface EmotionalTone {;
+export interface EmotionalTone  {
   [key: string]: unknown}
-export interface ColorAnalysis {;
+export interface ColorAnalysis  {
   [key: string]: unknown}
-export interface FacialFeatures {;
+export interface FacialFeatures  {
   [key: string]: unknown}
-export interface TongueBodyAnalysis {;
+export interface TongueBodyAnalysis  {
   [key: string]: unknown}
-export interface TongueCoatingAnalysis {;
+export interface TongueCoatingAnalysis  {
   [key: string]: unknown}
-export interface TongueShapeAnalysis {;
+export interface TongueShapeAnalysis  {
   [key: string]: unknown}
-export interface TongueMovementAnalysis {;
+export interface TongueMovementAnalysis  {
   [key: string]: unknown}
-export interface VoiceAnalysis {;
+export interface VoiceAnalysis  {
   [key: string]: unknown}
-export interface BreathingAnalysis {;
+export interface BreathingAnalysis  {
   [key: string]: unknown}
-export interface CoughAnalysis {;
+export interface CoughAnalysis  {
   [key: string]: unknown}
-export interface HeartSoundAnalysis {;
+export interface HeartSoundAnalysis  {
   [key: string]: unknown}
-export interface SymptomAnalysis {;
+export interface SymptomAnalysis  {
   [key: string]: unknown}
-export interface HealthConcern {;
+export interface HealthConcern  {
   [key: string]: unknown}
-export interface RiskFactor {;
+export interface RiskFactor  {
   [key: string]: unknown}
-export interface TCMSyndrome {;
+export interface TCMSyndrome  {
   [key: string]: unknown}
-export interface PulseAnalysis {;
+export interface PulseAnalysis  {
   [key: string]: unknown}
-export interface PressurePointAnalysis {;
+export interface PressurePointAnalysis  {
   [key: string]: unknown}
-export interface WesternMedicineCorrelation {;
+export interface WesternMedicineCorrelation  {
   [key: string]: unknown}
-export interface Treatment {;
+export interface Treatment  {
   [key: string]: unknown}
-export interface LifestyleRecommendation {;
+export interface LifestyleRecommendation  {
   [key: string]: unknown}
-export interface FollowUpPlan {;
+export interface FollowUpPlan  {
   [key: string]: unknown}
-export interface VitalSigns {;
+export interface VitalSigns  {
   [key: string]: unknown}
-export interface LifestyleData {;
+export interface LifestyleData  {
   [key: string]: unknown}
-export interface MedicalHistoryItem {;
+export interface MedicalHistoryItem  {
   [key: string]: unknown}
-export interface LabResult {;
+export interface LabResult  {
   [key: string]: unknown}
-export interface DeviceData {;
+export interface DeviceData  {
   [key: string]: unknown}
-export interface EnvironmentalData {;
+export interface EnvironmentalData  {
   [key: string]: unknown}
-export interface RiskAssessment {;
+export interface RiskAssessment  {
   [key: string]: unknown}
-export interface HealthTrend {;
+export interface HealthTrend  {
   [key: string]: unknown}
-export interface HealthAlert {;
+export interface HealthAlert  {
   [key: string]: unknown}
-export interface TCMHealthAssessment {;
+export interface TCMHealthAssessment  {
   [key: string]: unknown}
-export interface HealthPattern {;
+export interface HealthPattern  {
   [key: string]: unknown}
-export interface HealthPrediction {;
+export interface HealthPrediction  {
   [key: string]: unknown}
-export interface ImplementationGuide {;
+export interface ImplementationGuide  {
   [key: string]: unknown}
-export interface AccessibilityPreferences {;
+export interface AccessibilityPreferences  {
   [key: string]: unknown}
-export interface HapticPattern {;
+export interface HapticPattern  {
   [key: string]: unknown}
-export interface VisualCue {;
+export interface VisualCue  {
   [key: string]: unknown}
-export interface Landmark {;
+export interface Landmark  {
   [key: string]: unknown}
-export interface RecognizedSign {;
+export interface RecognizedSign  {
   [key: string]: unknown}
-export interface VisualAdaptation {;
+export interface VisualAdaptation  {
   [key: string]: unknown}
-export interface AudioAdaptation {;
+export interface AudioAdaptation  {
   [key: string]: unknown}
-export interface InteractionAdaptation {;
+export interface InteractionAdaptation  {
   [key: string]: unknown}
-export interface ContentAdaptation {;
+export interface ContentAdaptation  {
   [key: string]: unknown}
-export interface PhysicalCharacteristics {;
+export interface PhysicalCharacteristics  {
   [key: string]: unknown}
-export interface PsychologicalTraits {;
+export interface PsychologicalTraits  {
   [key: string]: unknown}
-export interface EnvironmentalFactors {;
+export interface EnvironmentalFactors  {
   [key: string]: unknown}
-export interface ConstitutionScore {;
+export interface ConstitutionScore  {
   [key: string]: unknown}
-export interface ConstitutionRecommendation {;
+export interface ConstitutionRecommendation  {
   [key: string]: unknown}
-export interface SeasonalGuidance {;
+export interface SeasonalGuidance  {
   [key: string]: unknown}
-export interface PrescriptionRecommendation {;
+export interface PrescriptionRecommendation  {
   [key: string]: unknown}
-export interface PrognosisAssessment {;
+export interface PrognosisAssessment  {
   [key: string]: unknown}
-export interface TaskContext {;
+export interface TaskContext  {
   [key: string]: unknown}
-export interface AgentTaskResult {;
+export interface AgentTaskResult  {
   [key: string]: unknown}
-export interface Location {;
+export interface Location  {
   [key: string]: unknown}
-export interface Medication {;
+export interface Medication  {
   [key: string]: unknown}
-export interface HealthGoal {;
+export interface HealthGoal  {
   [key: string]: unknown}
-export interface NotificationPreferences {;
+export interface NotificationPreferences  {
   [key: string]: unknown}
-export interface CulturalPreferences {;
+export interface CulturalPreferences  {
   [key: string]: unknown}
-export interface CulturalBackground {;
+export interface CulturalBackground  {
   [key: string]: unknown}
-export interface MedicalRecord {;
+export interface MedicalRecord  {
   [key: string]: unknown}
-export interface MedicalRecordInput {;
+export interface MedicalRecordInput  {
   [key: string]: unknown}
-export interface MedicalHistoryFilters {;
+export interface MedicalHistoryFilters  {
   [key: string]: unknown}
-export interface ReportType {;
+export interface ReportType  {
   [key: string]: unknown}
-export interface HealthReport {;
+export interface HealthReport  {
   [key: string]: unknown}
-export interface NavigationContext {;
+export interface NavigationContext  {
   [key: string]: unknown}
-export interface DisabilityType {;
+export interface DisabilityType  {
   [key: string]: unknown}
-export interface ElderlyInterfaceConfig {;
+export interface ElderlyInterfaceConfig  {
   [key: string]: unknown}
-export interface DiagnosisContext {;
+export interface DiagnosisContext  {
   [key: string]: unknown}
-export interface TreatmentPlan {;
+export interface TreatmentPlan  {
   [key: string]: unknown}
-export interface SharedContext {;
-  [key: string]: unknown}
+export interface SharedContext  {;
+  [key: string]: unknown};

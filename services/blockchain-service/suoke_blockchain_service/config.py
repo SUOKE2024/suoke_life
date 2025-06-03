@@ -4,12 +4,9 @@
 使用 Pydantic Settings 进行类型安全的配置管理。
 """
 
-from __future__ import annotations
-
 from typing import Union, List, Optional
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
-
 
 class DatabaseSettings(BaseSettings):
     """数据库配置"""
@@ -31,7 +28,6 @@ class DatabaseSettings(BaseSettings):
         """构建数据库连接 URL"""
         return f"postgresql+asyncpg://{self.user}:{self.password}@{self.host}:{self.port}/{self.database}"
 
-
 class RedisSettings(BaseSettings):
     """Redis 配置"""
 
@@ -50,7 +46,6 @@ class RedisSettings(BaseSettings):
         """构建 Redis 连接 URL"""
         auth = f":{self.password}@" if self.password else ""
         return f"redis://{auth}{self.host}:{self.port}/{self.database}"
-
 
 class BlockchainSettings(BaseSettings):
     """区块链配置"""
@@ -90,7 +85,6 @@ class BlockchainSettings(BaseSettings):
     confirmation_blocks: int = Field(default=1, description="确认区块数")
     transaction_timeout: int = Field(default=120, description="交易超时时间")
 
-
 class GRPCSettings(BaseSettings):
     """gRPC 服务配置"""
 
@@ -111,7 +105,6 @@ class GRPCSettings(BaseSettings):
     # 健康检查
     enable_health_check: bool = Field(default=True, description="启用健康检查")
     enable_reflection: bool = Field(default=True, description="启用反射")
-
 
 class SecuritySettings(BaseSettings):
     """安全配置"""
@@ -135,7 +128,6 @@ class SecuritySettings(BaseSettings):
         default=["*"],
         description="允许的 CORS 源"
     )
-
 
 class MonitoringSettings(BaseSettings):
     """监控配置"""
@@ -164,7 +156,6 @@ class MonitoringSettings(BaseSettings):
         if v.upper() not in allowed_levels:
             raise ValueError(f"Log level must be one of {allowed_levels}")
         return v.upper()
-
 
 class Settings(BaseSettings):
     """主配置类"""
@@ -210,10 +201,8 @@ class Settings(BaseSettings):
         """是否为开发环境"""
         return self.environment == "development"
 
-
 # 全局配置实例
 settings = Settings()
-
 
 def get_settings() -> Settings:
     """获取配置实例"""

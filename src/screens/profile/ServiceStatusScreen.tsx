@@ -1,56 +1,58 @@
-import { useNavigation } from '@react-navigation/native'/import { colors, spacing, fonts } from '../../constants/theme'/import { apiIntegrationTest } from '../../utils/apiIntegrationTest';/
-importReact,{ useState, useEffect } from 'react'
-import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor'/  View,;
+import React from "react";
+import { useNavigation } from "@react-navigation/native/import { colors, spacing, fonts  } from ";";../../constants/theme";/import { apiIntegrationTest } from ../../utils/////    apiIntegrationTest";"
+/////
+importReact,{ useState, useEffect } from "react"
+import { usePerformanceMonitor  } from "../../placeholder";../hooks/usePerformanceMonitor";/////      View,;"
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
   RefreshControl,
-  { Alert } from 'react-native'
+  { Alert } from react-native""
 interface ServiceStatus { name: string,
-  status: 'online' | 'offline' | 'unknown';
+  status: "online | "offline" | unknown";
   responseTime?: number;
   lastChecked: Date}
-export const ServiceStatusScreen: React.FC = () => {
-  // 性能监控 *   const performanceMonitor = usePerformanceMonitor('ServiceStatusScreen', { */
-    trackRender: true,
-    trackMemory: true,
-    warnThreshold: 50, // ms *   ;};); */
-  const navigation = useNavigation;(;);
+export const ServiceStatusScreen: React.FC  = () => {}
+  // 性能监控 //////     const performanceMonitor = usePerformanceMonitor("ServiceStatusScreen, { "
+    trackRender: true,;
+    trackMemory: true,;
+    warnThreshold: 50, // ms //////     };);
+  const navigation = useNavigation;
   const [loading, setLoading] = useState<boolean>(tru;e;);
   const [refreshing, setRefreshing] = useState<boolean>(fals;e;);
-  const [services, setServices] = useState<ServiceStatus[] />([;];);/  const [lastUpdate, setLastUpdate] = useState<Date />(new Date;(;););/
-  // 初始化服务列表 *   useEffect((); => { */
-    const effectStart = performance.now;(;);
-    const initialServices: ServiceStatus[] = [{, name: '认证服务', status: 'unknown', lastChecked: new Date() },
-      { name: '用户服务', status: 'unknown', lastChecked: new Date() },
-      { name: '健康数据服务', status: 'unknown', lastChecked: new Date() },
-      { name: '小艾服务', status: 'unknown', lastChecked: new Date() },
-      { name: '小克服务', status: 'unknown', lastChecked: new Date() },
-      { name: '老克服务', status: 'unknown', lastChecked: new Date() },
-      { name: '索儿服务', status: 'unknown', lastChecked: new Date() },
-      { name: '望诊服务', status: 'unknown', lastChecked: new Date() },
-      { name: '闻诊服务', status: 'unknown', lastChecked: new Date() },
-      { name: '问诊服务', status: 'unknown', lastChecked: new Date() },
-      { name: '切诊服务', status: 'unknown', lastChecked: new Date() }
+  const [services, setServices] = useState<ServiceStatus[] />([;];);/  const [lastUpdate, setLastUpdate] = useState<Date />(new Date);//////
+  // 初始化服务列表 //////     useEffect(() => {}
+    const effectStart = performance.now()
+    const initialServices: ServiceStatus[] = [{ name: "认证服务", status: unknown", lastChecked: new Date() },;"
+      { name: "用户服务, status: "unknown", lastChecked: new Date() },"
+      { name: 健康数据服务", status: "unknown, lastChecked: new Date() },
+      { name: "小艾服务", status: unknown", lastChecked: new Date() },"
+      { name: "小克服务, status: "unknown", lastChecked: new Date() },"
+      { name: 老克服务", status: "unknown, lastChecked: new Date() },
+      { name: "索儿服务", status: unknown", lastChecked: new Date() },"
+      { name: "望诊服务, status: "unknown", lastChecked: new Date() },"
+      { name: 闻诊服务", status: "unknown, lastChecked: new Date() },
+      { name: "问诊服务", status: unknown", lastChecked: new Date() },"
+      { name: "切诊服务, status: "unknown", lastChecked: new Date() }"
     ];
     setServices(initialServices);
     checkServicesStatus();
-      const effectEnd = performance.now;(;);
+      const effectEnd = performance.now()
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  // 检查服务状态 *   const checkServicesStatus = async () => { */;
+  // 检查服务状态 //////     const checkServicesStatus = async() => {}
     setLoading(tru;e;);
     try {
-      // 运行测试 *       const report = await apiIntegrationTest.runAllTes;t;s;(;); */
-      // 更新服务状态 *       setServices(prevServices => { */
-        return prevServices.map(service => {;
-          // 查找对应的测试结果 *           const result = report.results.find(r => r.service === service.n;a;m;e;) */
+      // 运行测试 //////     const report = await apiIntegrationTest.runAllTest;s;
+      // 更新服务状态 //////     setServices(prevServices => {}
+        return prevServices.map(service => {}
+          // 查找对应的测试结果 //////     const result = report.results.find(r => r.service === service.na;m;e;)
           if (result) {
             return {
               ...service,
-              status: result.success ? 'online' : 'offline',
+              status: result.success ? online" : "offline,
               responseTime: result.responseTime,
               lastChecked: new Date(;);};
           }
@@ -59,140 +61,139 @@ export const ServiceStatusScreen: React.FC = () => {
       });
       setLastUpdate(new Date();)
     } catch (error) {
-      console.error('服务检查失败:', error)
-      Alert.alert('错误', '服务状态检查失败，请稍后重试。');
+      Alert.alert(错误", "服务状态检查失败，请稍后重试。);
     } finally {
       setLoading(false);
       setRefreshing(false);
     }
   };
-  // 刷新处理 *   const handleRefresh = useCallback((); => { */
-    // TODO: Implement function body *       const effectEnd = performance.now;(;); */
-    performanceMonitor.recordEffect(effectEnd - effectStart);
+  // 刷新处理 //////     const handleRefresh = useCallback(() => {}
+    // TODO: Implement function body //////     const effectEnd = performance.now;
+    performanceMonitor.recordEffect(effectEnd - effectStart)
   }, []);
     setRefreshing(true);
     checkServicesStatus();
   };
-  // 返回处理 *   const handleBack = useCallback((); => { */
-    // TODO: Implement function body *       const effectEnd = performance.now;(;); */
-    performanceMonitor.recordEffect(effectEnd - effectStart);
+  // 返回处理 //////     const handleBack = useCallback(() => {}
+    // TODO: Implement function body //////     const effectEnd = performance.now;
+    performanceMonitor.recordEffect(effectEnd - effectStart)
   }, []);
     navigation.goBack();
   };
-  // 运行快速检查 *   const runQuickCheck = async () => { */;
+  // 运行快速检查 //////     const runQuickCheck = async() => {}
     setLoading(tru;e;);
     try {
-      const result = await apiIntegrationTest.quickHealthChe;c;k;(;)
+      const result = await apiIntegrationTest.quickHealthChe;c;k;(;);
       Alert.alert(
-        result.success ? '检查成功' : '检查警告',
+        result.success ? "检查成功" : 检查警告","
         result.message,
-        [{ text: '确定', onPress: (); => }]
+        [{ text: "确定, onPress: (); => }]"
       )
     } catch (error: unknown) {
-      Alert.alert('错误', `快速检查失败: ${error.message}`);
+      Alert.alert("错误", `快速检查失败: ${error.message}`);
     } finally {
       setLoading(false);
     }
   };
-  // 记录渲染性能 *  */
+  // 记录渲染性能 //////
   performanceMonitor.recordRender()
   return (
-    <View style={styles.container} />/      <View style={styles.header} />/        <TouchableOpacity onPress={handleBack} style={styles.backButton} accessibilityLabel="TODO: 添加无障碍标签" />/          <Text style={styles.backButtonText} />返回</Text>/        </TouchableOpacity>/        <Text style={styles.headerTitle} />服务状态</Text>/        <View style={styles.placeholder} />/      </View>/
+    <View style={styles.container} />/      <View style={styles.header} />/        <TouchableOpacity onPress={handleBack} style={styles.backButton} accessibilityLabel="TODO: 添加无障碍标签" />/          <Text style={styles.backButtonText} />返回</Text>/        </TouchableOpacity>/        <Text style={styles.headerTitle} />服务状态</Text>/        <View style={styles.placeholder} />/      </View>/////
       <ScrollView,
         style={styles.content}
         refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
+          <RefreshControl;
+refreshing={refreshing}
             onRefresh={handleRefresh}
             colors={[colors.primary]}
-            tintColor={colors.primary} />/        }
+            tintColor={colors.primary} />/////            }
       >
-        <View style={styles.statusHeader} />/          <Text style={styles.lastUpdateText} />/            最后更新: {lastUpdate.toLocaleTimeString()}
-          </Text>/          <TouchableOpacity
-            style={styles.quickCheckButton}
+        <View style={styles.statusHeader} />/          <Text style={styles.lastUpdateText} />/////                最后更新: {lastUpdate.toLocaleTimeString()}
+          </Text>/////              <TouchableOpacity;
+style={styles.quickCheckButton}
             onPress={runQuickCheck}
             disabled={loading}
-           accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.quickCheckButtonText} />快速检查</Text>/          </TouchableOpacity>/        </View>/
-        {loading && !refreshing ? (<View style={styles.loadingContainer} />/            <ActivityIndicator size="large" color={colors.primary} />/            <Text style={styles.loadingText} />检查服务状态中...</Text>/          </View>/        ): (;
-          <View style= {styles.servicesContainer} />/            {services.map((service, inde;x;) => (
-              <View key={index} style={styles.serviceItem} />/                <View style={styles.serviceHeader} />/                  <Text style={styles.serviceName} />{service.name}</Text>/                  <View style={[
+           accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.quickCheckButtonText} />快速检查</Text>/          </TouchableOpacity>/        </View>/////
+        {loading && !refreshing ? (<View style={styles.loadingContainer} />/            <ActivityIndicator size="large" color={colors.primary} />/            <Text style={styles.loadingText} />检查服务状态中...</Text>/          </View>/////            ): (;
+          <View style= {styles.servicesContainer} />/////                {services.map((service, inde;x;) => (
+              <View key={index} style={styles.serviceItem} />/                <View style={styles.serviceHeader} />/                  <Text style={styles.serviceName} />{service.name}</Text>///                    <View style={[ ///  >
                     styles.statusIndicator,
-                    service.status === 'online' ? styles.statusOnline: service.status === 'offline' ? styles.statusOffline :styles.statusUnknown
-                  ]} />/                </View>/
-                <View style={styles.serviceDetails} />/                  <Text style={styles.serviceStatus} />/                    状态: {
-                      service.status === 'online' ? '在线' :
-                      service.status === 'offline' ? '离线' :
-                      '未知'
+                    service.status === online" ? styles.statusOnline: service.status === "offline ? styles.statusOffline :styles.statusUnknown;
+                  ]} />/                </View>/////
+                <View style={styles.serviceDetails} />/                  <Text style={styles.serviceStatus} />/////                        状态: {
+                      service.status === "online" ? 在线" :"
+                      service.status === "offline ? "离线" :"
+                      未知""
                     }
-                  </Text>/                  {service.responseTime && (
-                    <Text style={styles.serviceResponseTime} />/                      响应时间: {service.responseTime}ms
-                    </Text>/                  )}
-                  <Text style={styles.serviceLastChecked} />/                    检查时间: {service.lastChecked.toLocaleTimeString()}
-                  </Text>/                </View>/              </View>/            ))}
-          </View>/        )}
-      </ScrollView>/    </View>/  );
+                  </Text>/////                      {service.responseTime && (
+                    <Text style={styles.serviceResponseTime} />/////                          响应时间: {service.responseTime}ms;
+                    </Text>/////                      )}
+                  <Text style={styles.serviceLastChecked} />/////                        检查时间: {service.lastChecked.toLocaleTimeString()}
+                  </Text>/                </View>/              </View>/////                ))}
+          </View>/////            )}
+      </ScrollView>/    </View>/////      );
 }
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({;
   container: {
     flex: 1,
-    backgroundColor: colors.background
+    backgroundColor: colors.background;
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row,"
+    alignItems: "center",
+    justifyContent: space-between","
     padding: spacing.md,
     backgroundColor: colors.white,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border
+    borderBottomColor: colors.border;
   },
   backButton: { padding: spacing.sm  },
   backButtonText: {
     color: colors.primary,
     fontSize: fonts.size.md,
-    fontWeight: 'bold'
+    fontWeight: "bold"
   },
   headerTitle: {
     fontSize: fonts.size.lg,
-    fontWeight: 'bold',
-    color: colors.text
+    fontWeight: "bold",
+    color: colors.text;
   },
   placeholder: { width: 50  },
   content: {
     flex: 1,
-    padding: spacing.md
+    padding: spacing.md;
   },
   loadingContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: spacing.xl
+    justifyContent: center","
+    alignItems: "center,"
+    padding: spacing.xl;
   },
   loadingText: {
     marginTop: spacing.md,
     fontSize: fonts.size.md,
-    color: colors.textSecondary
+    color: colors.textSecondary;
   },
   statusHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: spacing.md
+    flexDirection: "row",
+    justifyContent: space-between","
+    alignItems: "center,"
+    marginBottom: spacing.md;
   },
   lastUpdateText: {
     fontSize: fonts.size.sm,
-    color: colors.textSecondary
+    color: colors.textSecondary;
   },
   quickCheckButton: {
     backgroundColor: colors.primary,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
-    borderRadius: 4
+    borderRadius: 4;
   },
   quickCheckButtonText: {
     color: colors.white,
     fontSize: fonts.size.sm,
-    fontWeight: 'bold'
+    fontWeight: "bold"
   },
   servicesContainer: { marginBottom: spacing.xl  },
   serviceItem: {
@@ -201,28 +202,28 @@ const styles = StyleSheet.create({
     padding: spacing.md,
     marginBottom: spacing.md,
     ...StyleSheet.flatten({
-      shadowColor: '#000',
+      shadowColor: #000",;"
       shadowOffset: { width: 0, height;: ;2 ;},
       shadowOpacity: 0.1,
       shadowRadius: 4,
-      elevation: 2
-    })
+      elevation: 2;
+    });
   },
   serviceHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: spacing.sm
+    flexDirection: "row,"
+    justifyContent: "space-between",
+    alignItems: center","
+    marginBottom: spacing.sm;
   },
   serviceName: {
     fontSize: fonts.size.md,
     fontWeight: 'bold',
-    color: colors.text
+    color: colors.text;
   },
   statusIndicator: {
     width: 12,
     height: 12,
-    borderRadius: 6
+    borderRadius: 6;
   },
   statusOnline: { backgroundColor: colors.success  },
   statusOffline: { backgroundColor: colors.error  },
@@ -231,15 +232,15 @@ const styles = StyleSheet.create({
   serviceStatus: {
     fontSize: fonts.size.sm,
     color: colors.textSecondary,
-    marginBottom: 4
+    marginBottom: 4;
   },
   serviceResponseTime: {
     fontSize: fonts.size.sm,
     color: colors.textSecondary,
-    marginBottom: 4
+    marginBottom: 4;
   },
   serviceLastChecked: {
     fontSize: fonts.size.sm,
-    color: colors.textSecondary
+    color: colors.textSecondary;
   }
 });

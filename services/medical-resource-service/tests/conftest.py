@@ -4,7 +4,6 @@
 
 import pytest
 from fastapi.testclient import TestClient
-from unittest.mock import Mock
 
 @pytest.fixture
 def client():

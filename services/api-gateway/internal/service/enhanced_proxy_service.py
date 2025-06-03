@@ -7,13 +7,10 @@
 """
 
 import asyncio
-import json
 import logging
 import time
-import traceback
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-import aiohttp
 from fastapi import Request, Response
 from fastapi.responses import JSONResponse, StreamingResponse
 
@@ -31,7 +28,6 @@ from pkg.utils.metrics_collector import MetricsCollector, RequestMetrics
 from pkg.utils.circuit_breaker import CircuitBreaker, CircuitBreakerRegistry
 
 logger = logging.getLogger(__name__)
-
 
 class EnhancedProxyService:
     """

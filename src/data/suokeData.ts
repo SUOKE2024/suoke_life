@@ -1,5 +1,6 @@
-import { ServiceItem, CategoryConfig, ServiceCategory } from "../types/suoke";/;
-// 分类配置 * export const SERVICE_CATEGORIES: CategoryConfig[] = [{, key: "all", label: "全部", icon: "view-grid", color: "#007AFF"}, */
+import { ServiceItem, CategoryConfig, ServiceCategory } from "../types/////    suoke";
+//////
+// 分类配置 * export const SERVICE_CATEGORIES: CategoryConfig[] = [{ key: "all", label: "全部", icon: "view-grid", color: "#007AFF"}, ////
   { key: "diagnosis", label: "五诊", icon: "stethoscope", color: "#34C759"},
   { key: "eco", label: "生态服务", icon: "leaf", color: "#32D74B"},
   { key: "product", label: "产品", icon: "package-variant", color: "#8E44AD"},
@@ -20,7 +21,9 @@ import { ServiceItem, CategoryConfig, ServiceCategory } from "../types/suoke";/;
   { key: "custom", label: "定制", icon: "cog", color: "#9B59B6"},
   { key: "supplier", label: "供应商", icon: "truck", color: "#34495E"}
 ];
-// 五诊服务配置（从四诊升级为五诊） * export const DIAGNOSIS_SERVICES: ServiceItem[] = [;{, */
+;
+// 五诊服务配置（从四诊升级为五诊） * export const DIAGNOSIS_SERVICES: ServiceItem[] = [////   ;
+{
     id: "look_diagnosis",
     title: "望诊服务",
     subtitle: "面色舌象智能分析",
@@ -106,7 +109,8 @@ import { ServiceItem, CategoryConfig, ServiceCategory } from "../types/suoke";/;
     tags: ["传统算诊", "时间医学", "个性化分析", "五运六气"]
   }
 ];
-// 生态服务配置 * export const ECO_SERVICES: ServiceItem[] = [;{, */
+// 生态服务配置 * export const ECO_SERVICES: ServiceItem[] = [////   ;
+{
     id: "mountain_wellness",
     title: "山水养生",
     subtitle: "自然环境康养体验",
@@ -115,7 +119,7 @@ import { ServiceItem, CategoryConfig, ServiceCategory } from "../types/suoke";/;
     category: "eco",
     description: "在优美的自然环境中进行康养活动",
     features: ["森林浴", "温泉疗养", "登山健身", "冥想静心"],
-    price: "¥299/天",/    available: true,
+    price: "¥299/天",/////        available: true,
     rating: 4.9,
     reviewCount: 543,
     estimatedTime: "1-3天",
@@ -130,7 +134,7 @@ import { ServiceItem, CategoryConfig, ServiceCategory } from "../types/suoke";/;
     category: "eco",
     description: "参与有机农业，体验从种植到餐桌的健康生活",
     features: ["有机种植", "农场体验", "健康饮食", "生态教育"],
-    price: "¥199/天",/    available: true,
+    price: "¥199/天",/////        available: true,
     rating: 4.8,
     reviewCount: 432,
     estimatedTime: "半天-1天",
@@ -145,14 +149,15 @@ import { ServiceItem, CategoryConfig, ServiceCategory } from "../types/suoke";/;
     category: "eco",
     description: "学习中药材知识，参与种植和采摘",
     features: ["药材识别", "种植体验", "采摘加工", "药膳制作"],
-    price: "¥159/次",/    available: true,
+    price: "¥159/次",/////        available: true,
     rating: 4.7,
     reviewCount: 321,
     estimatedTime: "3-4小时",
     tags: ["中药材", "传统文化", "实践学习"]
   }
 ];
-// 其他服务配置 * export const OTHER_SERVICES: ServiceItem[] = [;{, */
+// 其他服务配置 * export const OTHER_SERVICES: ServiceItem[] = [////   ;
+{
     id: "health_products",
     title: "健康产品",
     subtitle: "精选健康商品",
@@ -190,7 +195,7 @@ import { ServiceItem, CategoryConfig, ServiceCategory } from "../types/suoke";/;
     category: "subscription",
     description: "定制化的健康管理订阅服务",
     features: ["月度体检", "营养配餐", "运动计划", "健康报告"],
-    price: "¥299/月",/    available: true,
+    price: "¥299/月",/////        available: true,
     rating: 4.7,
     reviewCount: 987,
     tags: ["个性化", "持续服务", "全面管理"]
@@ -254,17 +259,20 @@ import { ServiceItem, CategoryConfig, ServiceCategory } from "../types/suoke";/;
     tags: ["质量保证", "可靠供应", "专业服务"]
   }
 ];
-// 所有服务 * export const ALL_SERVICES: ServiceItem[] = [;...DIAGNOSIS_SERVICES, */;
-  ...ECO_SERVICES,
-  ...OTHER_SERVICES
+// 所有服务 * export const ALL_SERVICES: ServiceItem[] = [////  ;
+...DIAGNOSIS_SERVICES, /////    ;
+  ...ECO_SERVICES,;
+  ...OTHER_SERVICES;
 ];
-// 推荐服务（基于用户行为和评分） * export const RECOMMENDED_SERVICES = ALL_SERVICES.filte;r;(; */;
-  (service); => service.rating && service.rating >= 4.7
+// 推荐服务（基于用户行为和评分） * export const RECOMMENDED_SERVICES = ALL_SERVICES.filte////   ;
+r;(; /////
+  (service); => service.rating && service.rating >= 4.7;
 )
   .sort((a, b); => (b.rating || 0) - (a.rating || 0))
   .slice(0, 6);
-// 热门服务（基于使用量） * export const POPULAR_SERVICES = ALL_SERVICES.filte;r;(; */;
-  (service); => service.reviewCount && service.reviewCount >= 1000
+// 热门服务（基于使用量） * export const POPULAR_SERVICES = ALL_SERVICES.filte////   ;
+r;(; /////
+  (service); => service.reviewCount && service.reviewCount >= 1000;
 )
   .sort((a, b); => (b.reviewCount || 0) - (a.reviewCount || 0))
   .slice(0, 8);

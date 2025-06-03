@@ -5,15 +5,8 @@ API Integration Tests
 测试所有API端点的功能和错误处理
 """
 
-from datetime import datetime
 from uuid import uuid4
 
-import pytest
-from fastapi.testclient import TestClient
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from ..api.main import app
-from ..core.models import (
     ReviewerCreate,
     ReviewerDB,
     ReviewerStatus,
@@ -23,7 +16,6 @@ from ..core.models import (
     ReviewTaskDB,
     ReviewType,
 )
-
 
 class TestReviewerAPI:
     """审核员API测试"""
@@ -138,7 +130,6 @@ class TestReviewerAPI:
 
         data = response2.json()
         assert "detail" in data
-
 
 class TestReviewTaskAPI:
     """审核任务API测试"""
@@ -327,7 +318,6 @@ class TestReviewTaskAPI:
         data = response.json()
         assert "detail" in data
 
-
 class TestDashboardAPI:
     """仪表板API测试"""
 
@@ -383,7 +373,6 @@ class TestDashboardAPI:
         assert "daily_stats" in data
         assert isinstance(data["hourly_stats"], list)
         assert isinstance(data["daily_stats"], list)
-
 
 class TestErrorHandling:
     """错误处理测试"""
@@ -442,7 +431,6 @@ class TestErrorHandling:
         data = response.json()
         assert "detail" in data
 
-
 class TestPagination:
     """分页测试"""
 
@@ -481,7 +469,6 @@ class TestPagination:
         data = response.json()
         assert data["page"] == 1
         assert data["size"] == 20
-
 
 class TestFiltering:
     """过滤测试"""

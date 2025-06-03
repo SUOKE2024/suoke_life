@@ -1,4 +1,5 @@
-// 配置管理器   索克生活APP - 架构优化
+import React from "react";
+//////     配置管理器   索克生活APP - 架构优化
 interface AppConfig { api: {baseUrl: string,
     timeout: number,
     retryAttempts: number};
@@ -28,74 +29,68 @@ class ConfigurationManager {
     this.config = this.loadDefaultConfig();
     this.loadEnvironmentConfig();
   }
-  static getInstance();: ConfigurationManager {
+  static getInstance(): ConfigurationManager {
     if (!ConfigurationManager.instance) {
       ConfigurationManager.instance = new ConfigurationManager();
     }
-    return ConfigurationManager.instan;c;e;
+    return ConfigurationManager.instance;
   }
-  get<K extends keyof AppConfig />(key: K): AppConfig[K]  {/    return this.config[ke;y;];
+  get<K extends keyof AppConfig />(key: K): AppConfig[K]  {/////        return this.config[key];
   }
-  set<K extends keyof AppConfig />(key: K, value: AppConfig[K]): void  {/    this.config[key] = value;
+  set<K extends keyof AppConfig />(key: K, value: AppConfig[K]): void  {/////        this.config[key] = value;
   }
   getNestedValue(path: string);: unknown  {
-    return path.split(".").reduce((obj, ke;y;); => obj?.[key], this.config);
+    return path.split(".").reduce((obj, key); => obj?.[key], this.config);
   }
   setNestedValue(path: string, value: unknown): void  {
     const keys = path.split(".;";);
-    const lastKey = keys.pop;(;);!;
-    const target = keys.reduce((obj, ke;y;); => {
+    const lastKey = keys.pop!;
+    const target = keys.reduce((obj, key); => {;}
       if (!obj[key]) obj[key;] ;= {};
-      return obj[ke;y;];
+      return obj[key];
     }, this.config as any);
     target[lastKey] = value;
   }
   private loadDefaultConfig(): AppConfig {
     return {
       api: {
-        baseUrl: "https:// api.suokelife.com", *         timeout: 10000, */
-        retryAttempts: 3,
-      },
+        baseUrl: "https:// api.suokelife.com", //////     timeout: 10000,
+        retryAttempts: 3},
       agents: {
         xiaoai: {
           enabled: true,
-          model: "gpt-4",
-        },
+          model: "gpt-4"},
         xiaoke: {
           enabled: true,
-          model: "gpt-4",
-        },
+          model: "gpt-4"},
         laoke: {
           enabled: true,
-          model: "gpt-4",
-        },
+          model: "gpt-4"},
         soer: {
           enabled: true,
-          model: "gpt-4",
-        }
+          model: "gpt-4"}
       },
       features: {
         fiveDiagnosis: true,
         blockchain: true,
-        offlineMode: false,
-      },
+        offlineMode: false},
       performance: {
         enableMemoryMonitoring: true,
         enablePerformanceTracking: true,
-        maxCacheSize: 100 * 1024 * 1024, // 100MB *       }, */
+        maxCacheSize: 100 * 1024 * 1024, // 100MB //////     },
       security: {
         enableEncryption: true,
-        tokenExpiration: 24 * 60 * 60 * 1000, // 24小时 *       } *;/
+        tokenExpiration: 24 * 60 * 60 * 1000, // 24小时 //////     }
     ;};
   }
-  private loadEnvironmentConfig();: void {
-    // 从环境变量加载配置 *     if (process.env.API_BASE_URL) { */
+  private loadEnvironmentConfig(): void {
+    // 从环境变量加载配置 //////     if (process.env.API_BASE_URL) {
       this.config.api.baseUrl = process.env.API_BASE_URL;
     }
     if (process.env.API_TIMEOUT) {
       this.config.api.timeout = parseInt(process.env.API_TIMEOUT, 10);
     }
-    // 可以添加更多环境变量配置 *   } */
+    // 可以添加更多环境变量配置 //////     }
 }
 export default ConfigurationManager;
 export type { AppConfig };

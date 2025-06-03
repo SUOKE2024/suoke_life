@@ -8,7 +8,6 @@ import logging
 import uvicorn
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
 from contextlib import asynccontextmanager
 
 from .api.routes import router
@@ -24,7 +23,6 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 settings = get_settings()
-
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -56,7 +54,6 @@ async def lifespan(app: FastAPI):
         logger.info("缓存已清理")
     
     logger.info("算诊服务已关闭")
-
 
 # 创建FastAPI应用
 app = FastAPI(
@@ -118,7 +115,6 @@ app.add_middleware(
 # 注册路由
 app.include_router(router)
 
-
 @app.get("/", summary="服务根路径")
 async def root():
     """服务根路径"""
@@ -146,12 +142,10 @@ async def root():
         "cache_enabled": settings.ENABLE_CACHE
     }
 
-
 @app.get("/ping", summary="服务状态检查")
 async def ping():
     """简单的服务状态检查"""
     return {"status": "ok", "message": "pong", "timestamp": "2024-01-15T10:00:00Z"}
-
 
 @app.get("/cache/stats", summary="缓存统计信息")
 async def cache_stats():
@@ -166,7 +160,6 @@ async def cache_stats():
         "message": "缓存统计信息获取成功"
     }
 
-
 @app.post("/cache/clear", summary="清理缓存")
 async def clear_cache():
     """清理所有缓存"""
@@ -178,7 +171,6 @@ async def clear_cache():
         "success": True,
         "message": "缓存已清理"
     }
-
 
 @app.post("/cache/cleanup", summary="清理过期缓存")
 async def cleanup_expired_cache():
@@ -192,7 +184,6 @@ async def cleanup_expired_cache():
         "data": {"cleaned_items": cleaned_count},
         "message": f"已清理 {cleaned_count} 个过期缓存项"
     }
-
 
 if __name__ == "__main__":
     uvicorn.run(

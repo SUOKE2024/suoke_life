@@ -1,8 +1,7 @@
-#!/usr/bin/env node
-
-const fs = require('fs');
-const path = require('path');
-const { execSync } = require('child_process');
+#!/usr/bin/env node;
+const fs = require("fs);
+const path = require(")path");
+const { execSync } = require(child_process");
 
 /**
  * 智能代码质量提升脚本
@@ -15,43 +14,43 @@ class CodeQualityEnhancer {
     this.errors = [];
     this.qualityRules = [
       {
-        name: '移除any类型',
+        name: "移除any类型,
         pattern: /:\s*any\b/g,
-        replacement: ': unknown',
-        severity: 'high'
+        replacement: ": unknown",
+        severity: high"
       },
       {
-        name: '添加React.FC类型',
+        name: "添加React.FC类型,
         pattern: /const\s+(\w+)\s*=\s*\(\s*{\s*([^}]*)\s*}\s*\)\s*=>/g,
-        replacement: 'const $1: React.FC<{ $2 }> = ({ $2 }) =>',
-        severity: 'medium'
+        replacement: "const $1: React.FC<{ $2 }> = ({ $2 }) =>",
+        severity: medium"
       },
       {
-        name: '添加useState类型',
+        name: "添加useState类型,
         pattern: /useState\(\s*([^)]+)\s*\)/g,
         replacement: (match, initial) => {
           const type = this.inferType(initial);
           return `useState<${type}>(${initial})`;
         },
-        severity: 'medium'
+        severity: "medium"
       },
       {
-        name: '移除console.log',
+        name: 移除console.log",
         pattern: /console\.log\([^)]*\);?\s*\n?/g,
-        replacement: '',
-        severity: 'low'
+        replacement: ",
+        severity: "low"
       },
       {
-        name: '添加useCallback依赖',
-        pattern: /useCallback\(\s*([^,]+),\s*\[\s*\]\s*\)/g,
-        replacement: 'useCallback($1, [])',
-        severity: 'medium'
+        name: 添加useCallback依赖",
+        pattern: /useCallback\(\s*([^]+),\s*\[\s*\]\s*\)/g,
+        replacement: "useCallback($1, []),
+        severity: "medium"
       },
       {
-        name: '添加useMemo依赖',
-        pattern: /useMemo\(\s*([^,]+),\s*\[\s*\]\s*\)/g,
-        replacement: 'useMemo($1, [])',
-        severity: 'medium'
+        name: 添加useMemo依赖",
+        pattern: /useMemo\(\s*([^]+),\s*\[\s*\]\s*\)/g,
+        replacement: "useMemo($1, []),
+        severity: "medium"
       }
     ];
   }
@@ -62,29 +61,29 @@ class CodeQualityEnhancer {
   inferType(value) {
     value = value.trim();
     
-    if (value === 'null') return 'null';
-    if (value === 'undefined') return 'undefined';
-    if (value === 'true' || value === 'false') return 'boolean';
-    if (/^\d+$/.test(value)) return 'number';
-    if (/^['"`].*['"`]$/.test(value)) return 'string';
-    if (value.startsWith('[')) return 'any[]';
-    if (value.startsWith('{')) return 'object';
+    if (value === null") return "null;
+    if (value === "undefined") return undefined";
+    if (value === "true || value === "false") return boolean";
+    if (/^\d+$/.test(value)) return "number;
+    if (/^["`].*["`]$/.test(value)) return string";
+    if (value.startsWith("[)) return "any[]";
+    if (value.startsWith({")) return "object;
     
-    return 'any';
+    return "any";
   }
 
   /**
    * 分析文件复杂度
    */
   analyzeComplexity(content) {
-    const lines = content.split('\n');
+    const lines = content.split(\n");
     const complexity = {
       lines: lines.length,
       functions: (content.match(/function\s+\w+|const\s+\w+\s*=\s*\(/g) || []).length,
       components: (content.match(/const\s+[A-Z]\w*\s*[:=]/g) || []).length,
       hooks: (content.match(/use[A-Z]\w*/g) || []).length,
       imports: (content.match(/^import\s+/gm) || []).length,
-      exports: (content.match(/^export\s+/gm) || []).length
+      exports: (content.match(/^export\s+/gm) || []).length;
     };
     
     complexity.score = Math.min(100, 
@@ -104,13 +103,13 @@ class CodeQualityEnhancer {
     const fileName = path.basename(filePath, path.extname(filePath));
     
     // 为组件添加Props接口
-    if (content.includes('React.FC') || content.includes('FunctionComponent')) {
+if (content.includes("React.FC) || content.includes("FunctionComponent")) {
       const propsMatch = content.match(/const\s+(\w+):\s*React\.FC<([^>]*)>/);
       if (propsMatch && !content.includes(`interface ${propsMatch[1]}Props`)) {
         const interfaceDefinition = `
-interface ${propsMatch[1]}Props {
+interface ${propsMatch[1]}Props {;
   // TODO: 定义组件属性类型
-  children?: React.ReactNode;
+children?: React.ReactNode;
 }
 
 `;
@@ -123,10 +122,10 @@ interface ${propsMatch[1]}Props {
     }
     
     // 为API响应添加类型
-    if (content.includes('fetch(') || content.includes('axios.')) {
-      if (!content.includes('interface ApiResponse')) {
+if (content.includes(fetch(") || content.includes("axios.)) {
+      if (!content.includes("interface ApiResponse")) {
         const apiInterface = `
-interface ApiResponse<T = any> {
+interface ApiResponse<T = any> {;
   data: T;
   success: boolean;
   message?: string;
@@ -146,9 +145,9 @@ interface ApiResponse<T = any> {
    */
   optimizePerformance(content) {
     // 添加React.memo包装
-    if (content.includes('export default') && content.includes('React.FC')) {
+if (content.includes(export default") && content.includes("React.FC)) {
       const componentMatch = content.match(/const\s+(\w+):\s*React\.FC/);
-      if (componentMatch && !content.includes('React.memo')) {
+      if (componentMatch && !content.includes("React.memo")) {
         content = content.replace(
           `export default ${componentMatch[1]}`,
           `export default React.memo(${componentMatch[1]})`
@@ -157,20 +156,20 @@ interface ApiResponse<T = any> {
     }
     
     // 优化useState初始化
-    content = content.replace(
+content = content.replace(
       /useState\(\s*\[\s*\]\s*\)/g,
-      'useState<any[]>(() => [])'
+      useState<any[]>(() => [])"
     );
     
     content = content.replace(
       /useState\(\s*\{\s*\}\s*\)/g,
-      'useState<object>(() => ({}))'
+      "useState<object>(() => ({}))
     );
     
     // 添加useCallback包装事件处理器
-    content = content.replace(
+content = content.replace(
       /const\s+(\w*[Hh]andler?\w*)\s*=\s*\(([^)]*)\)\s*=>\s*{/g,
-      'const $1 = useCallback(($2) => {'
+      "const $1 = useCallback(($2) => {"
     );
     
     return content;
@@ -181,17 +180,16 @@ interface ApiResponse<T = any> {
    */
   addErrorHandling(content) {
     // 为async函数添加try-catch
-    content = content.replace(
+content = content.replace(
       /(const\s+\w+\s*=\s*async\s*\([^)]*\)\s*=>\s*{)([^}]*)(})/gs,
       (match, start, body, end) => {
-        if (!body.includes('try') && !body.includes('catch')) {
+        if (!body.includes(try") && !body.includes("catch)) {
           return `${start}
   try {${body}
   } catch (error) {
-    console.error('Error in async function:', error);
     // TODO: 添加适当的错误处理
   }
-${end}`;
+${end}`
         }
         return match;
       }
@@ -205,10 +203,10 @@ ${end}`;
    */
   addAccessibilitySupport(content) {
     // 为按钮添加accessibilityLabel
-    content = content.replace(
+content = content.replace(
       /<(TouchableOpacity|Button|Pressable)([^>]*?)>/g,
       (match, component, props) => {
-        if (!props.includes('accessibilityLabel')) {
+        if (!props.includes(accessibilityLabel")) {
           return `<${component}${props} accessibilityLabel="TODO: 添加无障碍标签">`;
         }
         return match;
@@ -216,10 +214,10 @@ ${end}`;
     );
     
     // 为图片添加accessibilityLabel
-    content = content.replace(
+content = content.replace(
       /<Image([^>]*?)>/g,
       (match, props) => {
-        if (!props.includes('accessibilityLabel')) {
+        if (!props.includes("accessibilityLabel)) {
           return `<Image${props} accessibilityLabel="TODO: 添加图片描述">`;
         }
         return match;
@@ -234,16 +232,16 @@ ${end}`;
    */
   enhanceFile(filePath) {
     try {
-      let content = fs.readFileSync(filePath, 'utf8');
+      let content = fs.readFileSync(filePath, "utf8");
       const originalContent = content;
       const complexity = this.analyzeComplexity(content);
       const enhancements = [];
 
       // 应用质量规则
-      for (const rule of this.qualityRules) {
+for (const rule of this.qualityRules) {
         const beforeContent = content;
         
-        if (typeof rule.replacement === 'function') {
+        if (typeof rule.replacement === function") {
           content = content.replace(rule.pattern, rule.replacement);
         } else {
           content = content.replace(rule.pattern, rule.replacement);
@@ -255,32 +253,32 @@ ${end}`;
       }
 
       // 根据文件类型应用特定增强
-      const ext = path.extname(filePath);
-      const isComponent = content.includes('React.FC') || content.includes('export default');
-      const isHook = path.basename(filePath).startsWith('use');
-      const isService = filePath.includes('service') || filePath.includes('api');
+const ext = path.extname(filePath);
+      const isComponent = content.includes("React.FC) || content.includes("export default");
+      const isHook = path.basename(filePath).startsWith(use");
+      const isService = filePath.includes("service) || filePath.includes("api");
 
-      if (ext === '.tsx' && isComponent) {
+      if (ext === .tsx" && isComponent) {
         content = this.addTypeDefinitions(content, filePath);
         content = this.optimizePerformance(content);
         content = this.addAccessibilitySupport(content);
-        enhancements.push('组件优化');
+        enhancements.push("组件优化);
       }
 
       if (isHook) {
         content = this.addTypeDefinitions(content, filePath);
-        enhancements.push('Hook类型增强');
+        enhancements.push("Hook类型增强");
       }
 
       if (isService) {
         content = this.addErrorHandling(content);
         content = this.addTypeDefinitions(content, filePath);
-        enhancements.push('服务层增强');
+        enhancements.push(服务层增强");
       }
 
       // 添加文件头注释
-      if (!content.includes('/**') && !content.includes('//')) {
-        const fileName = path.basename(filePath);
+if (!content.includes("/**) && !content.includes("// ")) {
+        const fileName = path.basename(filePath)
         const fileComment = `/**
  * ${fileName}
  * 索克生活APP - 自动生成的类型安全文件
@@ -289,15 +287,15 @@ ${end}`;
  * @author 索克生活开发团队
  * @version 1.0.0
  */
-
+;
 `;
         content = fileComment + content;
-        enhancements.push('添加文件注释');
+        enhancements.push(添加文件注释");
       }
 
       // 如果有改动，保存文件
-      if (content !== originalContent) {
-        fs.writeFileSync(filePath, content, 'utf8');
+if (content !== originalContent) {
+        fs.writeFileSync(filePath, content, "utf8);
         
         this.enhancedFiles.push({
           file: filePath,
@@ -307,19 +305,17 @@ ${end}`;
           qualityScore: this.calculateQualityScore(content)
         });
         
-        console.log(`✅ 增强文件: ${filePath}`);
-        console.log(`   复杂度评分: ${complexity.score.toFixed(1)}`);
-        console.log(`   应用增强: ${enhancements.join(', ')}`);
+        }`);
+        }`);
         return true;
       }
       
       return false;
     } catch (error) {
-      console.error(`❌ 增强文件失败: ${filePath}`, error.message);
       this.errors.push({
         file: filePath,
         error: error.message,
-        type: 'enhance'
+        type: enhance"
       });
       return false;
     }
@@ -332,7 +328,7 @@ ${end}`;
     let score = 100;
     
     // 扣分项
-    const anyCount = (content.match(/:\s*any\b/g) || []).length;
+const anyCount = (content.match(/:\s*any\b/g) || []).length;
     const consoleCount = (content.match(/console\./g) || []).length;
     const todoCount = (content.match(/TODO|FIXME/gi) || []).length;
     
@@ -341,12 +337,12 @@ ${end}`;
     score -= todoCount * 1;
     
     // 加分项
-    if (content.includes('interface ')) score += 10;
-    if (content.includes('type ')) score += 5;
-    if (content.includes('React.memo')) score += 5;
-    if (content.includes('useCallback')) score += 3;
-    if (content.includes('useMemo')) score += 3;
-    if (content.includes('accessibilityLabel')) score += 5;
+if (content.includes("interface )) score += 10;
+    if (content.includes("type ")) score += 5;
+    if (content.includes(React.memo")) score += 5;
+    if (content.includes("useCallback)) score += 3;
+    if (content.includes("useMemo")) score += 3;
+    if (content.includes(accessibilityLabel")) score += 5;
     
     return Math.max(0, Math.min(100, score));
   }
@@ -365,16 +361,15 @@ ${end}`;
         const stat = fs.statSync(fullPath);
         
         if (stat.isDirectory()) {
-          if (!['node_modules', '.git', '.expo', 'android', 'ios', 'Pods', '__tests__'].includes(item)) {
+          if (!["node_modules, ".git", .expo", "android, "ios", Pods", "__tests__].includes(item)) {
             files.push(...this.findSourceFiles(fullPath));
           }
-        } else if (/\.(ts|tsx|js|jsx)$/.test(item) && !item.endsWith('.d.ts')) {
+        } else if (/\.(ts|tsx|js|jsx)$/.test(item) && !item.endsWith(".d.ts")) {
           files.push(fullPath);
         }
       }
     } catch (error) {
-      console.error(`读取目录失败: ${dir}`, error.message);
-    }
+      }
     
     return files;
   }
@@ -385,7 +380,7 @@ ${end}`;
   generateQualityReport() {
     const totalFiles = this.enhancedFiles.length + this.errors.length;
     const avgQualityScore = this.enhancedFiles.length > 0 
-      ? this.enhancedFiles.reduce((sum, file) => sum + file.qualityScore, 0) / this.enhancedFiles.length
+      ? this.enhancedFiles.reduce((sum, file) => sum + file.qualityScore, 0) / this.enhancedFiles.length;
       : 0;
     
     const enhancementStats = {};
@@ -395,34 +390,27 @@ ${end}`;
       });
     });
 
-    console.log('\n📊 代码质量提升报告');
-    console.log('='.repeat(50));
-    console.log(`📁 处理文件总数: ${totalFiles}`);
-    console.log(`✅ 成功增强文件: ${this.enhancedFiles.length}`);
-    console.log(`❌ 处理失败文件: ${this.errors.length}`);
-    console.log(`📈 平均质量评分: ${avgQualityScore.toFixed(1)}/100`);
+    );
+    }/100`);
     
     if (Object.keys(enhancementStats).length > 0) {
-      console.log('\n🔧 应用的增强类型:');
       Object.entries(enhancementStats)
         .sort(([,a], [,b]) => b - a)
         .forEach(([enhancement, count]) => {
-          console.log(`  ${enhancement}: ${count} 个文件`);
-        });
+          });
     }
     
     if (this.enhancedFiles.length > 0) {
-      console.log('\n🏆 质量评分最高的文件:');
       this.enhancedFiles
         .sort((a, b) => b.qualityScore - a.qualityScore)
         .slice(0, 5)
         .forEach(file => {
-          console.log(`  ${file.file}: ${file.qualityScore.toFixed(1)}/100`);
+          }/100`);
         });
     }
     
     // 保存详细报告
-    const report = {
+const report = {
       timestamp: new Date().toISOString(),
       summary: {
         totalFiles,
@@ -432,49 +420,37 @@ ${end}`;
         enhancementStats
       },
       enhancedFiles: this.enhancedFiles,
-      errors: this.errors
+      errors: this.errors;
     };
     
     fs.writeFileSync(
-      'CODE_QUALITY_ENHANCEMENT_REPORT.json',
+      "CODE_QUALITY_ENHANCEMENT_REPORT.json,
       JSON.stringify(report, null, 2),
-      'utf8'
+      "utf8"
     );
     
-    console.log('\n📄 详细报告已保存到: CODE_QUALITY_ENHANCEMENT_REPORT.json');
-  }
+    }
 
   /**
    * 执行代码质量提升
    */
   async enhance() {
-    console.log('🚀 开始代码质量提升...\n');
-    
     const projectRoot = process.cwd();
-    const sourceFiles = this.findSourceFiles(path.join(projectRoot, 'src'));
-    
-    console.log(`📁 找到 ${sourceFiles.length} 个源文件`);
+    const sourceFiles = this.findSourceFiles(path.join(projectRoot, "src"));
     
     // 按文件类型分组处理
-    const componentFiles = sourceFiles.filter(f => f.includes('components') || f.includes('screens'));
-    const hookFiles = sourceFiles.filter(f => path.basename(f).startsWith('use'));
-    const serviceFiles = sourceFiles.filter(f => f.includes('service') || f.includes('api'));
+const componentFiles = sourceFiles.filter(f => f.includes(components") || f.includes("screens));
+    const hookFiles = sourceFiles.filter(f => path.basename(f).startsWith("use"));
+    const serviceFiles = sourceFiles.filter(f => f.includes(service") || f.includes("api));
     const otherFiles = sourceFiles.filter(f => 
       !componentFiles.includes(f) && 
       !hookFiles.includes(f) && 
-      !serviceFiles.includes(f)
+      !serviceFiles.includes(f);
     );
-    
-    console.log(`📦 组件文件: ${componentFiles.length}`);
-    console.log(`🪝 Hook文件: ${hookFiles.length}`);
-    console.log(`🔧 服务文件: ${serviceFiles.length}`);
-    console.log(`📄 其他文件: ${otherFiles.length}`);
-    
-    console.log('\n🔨 开始增强文件...');
     
     // 优先处理核心文件
     [...serviceFiles, ...hookFiles, ...componentFiles, ...otherFiles].forEach(file => {
-      this.enhanceFile(file);
+      this.enhanceFile(file)
     });
     
     this.generateQualityReport();

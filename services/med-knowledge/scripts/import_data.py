@@ -13,9 +13,7 @@ import logging
 from datetime import datetime
 import argparse
 from pathlib import Path
-from typing import Dict, List, Any, Optional
 
-import neo4j
 from neo4j import GraphDatabase
 from dotenv import load_dotenv
 
@@ -37,7 +35,6 @@ DATA_DIR = Path(__file__).parent.parent / "data"
 NEO4J_URI = os.getenv("NEO4J_URI", "bolt://localhost:7687")
 NEO4J_USER = os.getenv("NEO4J_USER", "neo4j")
 NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "password")
-
 
 class Neo4jImporter:
     """Neo4j数据导入工具"""
@@ -333,7 +330,6 @@ class Neo4jImporter:
         
         logger.info("实体间关系创建完成")
 
-
 def parse_args():
     """解析命令行参数"""
     parser = argparse.ArgumentParser(description="Med Knowledge Service数据导入工具")
@@ -346,7 +342,6 @@ def parse_args():
     parser.add_argument("--relationships", action="store_true", help="创建实体间关系")
     
     return parser.parse_args()
-
 
 def main():
     """主函数"""
@@ -390,7 +385,6 @@ def main():
         importer.close()
         
     logger.info("数据导入完成")
-
 
 if __name__ == "__main__":
     main() 

@@ -15,10 +15,7 @@ import logging
 from typing import Any, Callable
 import threading
 
-import aioredis
-
 logger = logging.getLogger(__name__)
-
 
 class EventType(Enum):
     USER_REGISTERED = "user.registered"
@@ -27,7 +24,6 @@ class EventType(Enum):
     HEALTH_RECORD_UPDATED = "health_record.updated"
     RECOMMENDATION_GENERATED = "recommendation.generated"
     SYSTEM_ALERT = "system.alert"
-
 
 @dataclass
 class Event:
@@ -42,7 +38,6 @@ class Event:
     user_id: str = None
     metadata: dict[str, Any] = None
 
-
 class EventHandler(ABC):
     """事件处理器抽象基类"""
 
@@ -55,7 +50,6 @@ class EventHandler(ABC):
     def get_event_types(self) -> list[str]:
         """获取处理的事件类型"""
         pass
-
 
 class EventBus:
     """事件总线"""
@@ -196,7 +190,6 @@ class EventBus:
         except Exception as e:
             logger.error(f"Failed to process message {msg_id}: {e}")
 
-
 # 具体事件处理器示例
 class DiagnosisEventHandler(EventHandler):
     """诊断事件处理器"""
@@ -230,7 +223,6 @@ class DiagnosisEventHandler(EventHandler):
         except Exception as e:
             logger.error(f"Failed to handle diagnosis event: {e}")
             return False
-
 
 class UserEventHandler(EventHandler):
     """用户事件处理器"""
@@ -289,7 +281,6 @@ class UserEventHandler(EventHandler):
         logger.info(f"Processed user login for {user_id}")
         return True
 
-
 class HealthRecordEventHandler(EventHandler):
     """健康记录事件处理器"""
 
@@ -337,7 +328,6 @@ class HealthRecordEventHandler(EventHandler):
         except Exception as e:
             logger.error(f"Failed to handle health record event: {e}")
             return False
-
 
 class SystemAlertEventHandler(EventHandler):
     """系统告警事件处理器"""

@@ -8,7 +8,6 @@ import requests
 import json
 import time
 from typing import List, Dict
-import os
 
 class GitHubBestPracticesSearcher:
     def __init__(self, token: str = None):
@@ -188,7 +187,6 @@ def main():
         print(f"   描述: {result['description'][:100]}...")
         print(f"   评分: {result['score']}/10 - {result['recommendation']}")
         print(f"   ⭐{result['stars']} 🍴{result['forks']} 📝{result['language']}")
-        print()
 
 if __name__ == "__main__":
     main() 

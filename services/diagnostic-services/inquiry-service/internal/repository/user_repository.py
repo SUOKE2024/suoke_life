@@ -9,11 +9,9 @@ import logging
 import time
 from typing import Any
 
-import motor.motor_asyncio
 import pymongo
 
 logger = logging.getLogger(__name__)
-
 
 class UserRepository:
     """用户存储库类，负责用户数据的存储和查询"""

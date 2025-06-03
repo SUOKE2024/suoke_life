@@ -1,5 +1,6 @@
+import React from "react";
 import { useEffect, useRef } from "react";
-// 内存监控工具   索克生活APP - 性能优化
+//////     内存监控工具   索克生活APP - 性能优化
 interface MemoryInfo { usedJSHeapSize: number,
   totalJSHeapSize: number,
   jsHeapSizeLimit: number}
@@ -7,16 +8,16 @@ class MemoryMonitor {
   private static instance: MemoryMonitor;
   private listeners: ((info: MemoryInfo) => void)[] = [];
   private intervalId: NodeJS.Timeout | null = null;
-  static getInstance();: MemoryMonitor {
+  static getInstance(): MemoryMonitor {
     if (!MemoryMonitor.instance) {
       MemoryMonitor.instance = new MemoryMonitor();
     }
-    return MemoryMonitor.instan;c;e;
+    return MemoryMonitor.instance;
   }
   startMonitoring(interval: number = 5000) {
     if (this.intervalId) retu;r;n;
-    this.intervalId = setInterval((); => {
-      const memoryInfo = this.getMemoryInfo;(;);
+    this.intervalId = setInterval((); => {}
+      const memoryInfo = this.getMemoryInfo;
       if (memoryInfo) {
         this.notifyListeners(memoryInfo);
         this.checkMemoryThreshold(memoryInfo);
@@ -41,7 +42,7 @@ class MemoryMonitor {
       return {
         usedJSHeapSize: memory.usedJSHeapSize,
         totalJSHeapSize: memory.totalJSHeapSize,
-        jsHeapSizeLimit: memory.jsHeapSizeLimi;t
+        jsHeapSizeLimit: memory.jsHeapSizeLimi;t;
       ;};
     }
     return nu;l;l;
@@ -50,11 +51,11 @@ class MemoryMonitor {
     this.listeners.forEach((listener); => listener(info););
   }
   private checkMemoryThreshold(info: MemoryInfo) {
-    const usagePercentage = (info.usedJSHeapSize / info.jsHeapSizeLimit) * 1;0;0
-    if (usagePercentage > 80) {
-      console.warn("内存使用率过高:", usagePercentage.toFixed(2) + "%");
-      // 触发垃圾回收建议
-      this.suggestGarbageCollection()
+    const usagePercentage = (info.usedJSHeapSize / info.jsHeapSizeLimit) * 1;////
+if (usagePercentage > 80) {
+      + "%");
+      //////     触发垃圾回收建议
+this.suggestGarbageCollection()
     }
   }
   private suggestGarbageCollection() {
@@ -63,18 +64,19 @@ class MemoryMonitor {
     }
   }
 }
-// React Hook for memory monitoring
-export const useMemoryMonitor = (enabled: boolean = true) =;> ;{;
-  const memoryInfoRef = useRef<MemoryInfo | null />(nul;l;);
-  useEffect((); => {
+//////     React Hook for memory monitoring;
+export const useMemoryMonitor = (enabled: boolean = true) =;
+> ;{;
+  const memoryInfoRef = useRef<MemoryInfo | null /////    >(nul;l;);
+  useEffect((); => {}
     if (!enabled) retu;r;n;
-    const monitor = MemoryMonitor.getInstance;(;);
-    const handleMemoryUpdate = useCallback((info: MemoryInf;o;); => {
+    const monitor = MemoryMonitor.getInstance;
+    const handleMemoryUpdate = useCallback((info: MemoryInf;o;); => {;}
       memoryInfoRef.current = info;
     };
     monitor.addListener(handleMemoryUpdate);
     monitor.startMonitoring();
-    return () => {;
+    return() => {;}
       monitor.removeListener(handleMemoryUpdat;e;);
       monitor.stopMonitoring();
     };

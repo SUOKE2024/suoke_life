@@ -14,11 +14,8 @@ import uuid
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional, Set, Callable, Union
-from collections import defaultdict
-import hashlib
 
 logger = logging.getLogger(__name__)
-
 
 class TransactionState(Enum):
     """事务状态"""
@@ -31,7 +28,6 @@ class TransactionState(Enum):
     ABORTED = "aborted"
     TIMEOUT = "timeout"
 
-
 class TransactionType(Enum):
     """事务类型"""
     LOCAL = "local"           # 本地事务
@@ -39,14 +35,12 @@ class TransactionType(Enum):
     SAGA = "saga"            # Saga事务
     TCC = "tcc"              # Try-Confirm-Cancel
 
-
 class IsolationLevel(Enum):
     """隔离级别"""
     READ_UNCOMMITTED = "read_uncommitted"
     READ_COMMITTED = "read_committed"
     REPEATABLE_READ = "repeatable_read"
     SERIALIZABLE = "serializable"
-
 
 @dataclass
 class TransactionMessage:
@@ -84,7 +78,6 @@ class TransactionMessage:
             max_retries=data.get('max_retries', 3)
         )
 
-
 @dataclass
 class TransactionParticipant:
     """事务参与者"""
@@ -105,7 +98,6 @@ class TransactionParticipant:
             'last_heartbeat': self.last_heartbeat,
             'metadata': self.metadata
         }
-
 
 @dataclass
 class Transaction:
@@ -170,7 +162,6 @@ class Transaction:
             'max_retries': self.max_retries
         }
 
-
 @dataclass
 class TransactionConfig:
     """事务配置"""
@@ -201,7 +192,6 @@ class TransactionConfig:
     cleanup_interval: float = 300.0  # 5分钟
     max_completed_transactions: int = 10000
 
-
 class TransactionStorage:
     """事务存储接口"""
     
@@ -224,7 +214,6 @@ class TransactionStorage:
     async def list_transactions(self, state: Optional[TransactionState] = None) -> List[Transaction]:
         """列出事务"""
         raise NotImplementedError
-
 
 class RedisTransactionStorage(TransactionStorage):
     """Redis事务存储"""
@@ -384,7 +373,6 @@ class RedisTransactionStorage(TransactionStorage):
         except Exception as e:
             logger.error(f"列出事务失败: {e}")
             return []
-
 
 class TwoPhaseCommitCoordinator:
     """两阶段提交协调器"""
@@ -561,7 +549,6 @@ class TwoPhaseCommitCoordinator:
         # 这里应该实现实际的网络请求
         await asyncio.sleep(0.1)
         return True
-
 
 class TransactionManager:
     """
@@ -924,7 +911,6 @@ class TransactionManager:
     def list_active_transactions(self) -> List[Dict[str, Any]]:
         """列出活跃事务"""
         return [tx.to_dict() for tx in self.active_transactions.values()]
-
 
 class TransactionManagerFactory:
     """事务管理器工厂"""

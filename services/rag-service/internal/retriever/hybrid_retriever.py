@@ -5,17 +5,14 @@
 混合检索器模块，实现向量检索与关键词检索的融合
 """
 
-import time
 import re
 from typing import Any, Dict, List, Optional, Tuple
-import numpy as np
 from rank_bm25 import BM25Okapi
 from loguru import logger
 
 from .base import BaseRetriever
 from ..model.document import Document, RetrieveResult
 from ..repository.milvus_repository import MilvusRepository
-
 
 class HybridRetriever(BaseRetriever):
     """

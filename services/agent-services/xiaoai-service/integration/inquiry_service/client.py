@@ -2,11 +2,8 @@
 
 """问诊服务客户端集成"""
 
-
 import grpc
 from google.protobuf.any_pb2 import Any
-from xiaoai_service.protos import inquiry_service_pb2 as inquiry_pb
-from xiaoai_service.protos import inquiry_service_pb2_grpc as inquiry_grpc
 
 # 使用loguru logger
 

@@ -8,7 +8,6 @@ OAuth2/OIDC 认证提供者
 """
 
 import time
-import uuid
 import hashlib
 import secrets
 import base64
@@ -27,7 +26,6 @@ from ..core.config import get_settings
 logger = get_logger(__name__)
 settings = get_settings()
 
-
 class GrantType(Enum):
     """授权类型"""
     AUTHORIZATION_CODE = "authorization_code"
@@ -36,20 +34,17 @@ class GrantType(Enum):
     IMPLICIT = "implicit"
     PASSWORD = "password"
 
-
 class ResponseType(Enum):
     """响应类型"""
     CODE = "code"
     TOKEN = "token"
     ID_TOKEN = "id_token"
 
-
 class TokenType(Enum):
     """令牌类型"""
     ACCESS_TOKEN = "access_token"
     REFRESH_TOKEN = "refresh_token"
     ID_TOKEN = "id_token"
-
 
 @dataclass
 class OAuthClient:
@@ -79,7 +74,6 @@ class OAuthClient:
     def validate_response_type(self, response_type: str) -> bool:
         """验证响应类型"""
         return response_type in self.response_types
-
 
 @dataclass
 class AuthorizationCode:
@@ -118,7 +112,6 @@ class AuthorizationCode:
         
         return False
 
-
 @dataclass
 class AccessToken:
     """访问令牌"""
@@ -146,7 +139,6 @@ class AccessToken:
             "scope": self.scope,
         }
 
-
 @dataclass
 class RefreshToken:
     """刷新令牌"""
@@ -164,7 +156,6 @@ class RefreshToken:
         """检查是否过期"""
         return time.time() > self.expires_at
 
-
 @dataclass
 class IDToken:
     """ID 令牌"""
@@ -180,7 +171,6 @@ class IDToken:
     def is_expired(self) -> bool:
         """检查是否过期"""
         return time.time() > self.expires_at
-
 
 class OAuth2Provider:
     """OAuth2/OIDC 提供者"""
@@ -725,10 +715,8 @@ class OAuth2Provider:
             "id_tokens": len(self.id_tokens),
         }
 
-
 # 全局 OAuth2 提供者实例
 oauth2_provider = OAuth2Provider()
-
 
 def get_oauth2_provider() -> OAuth2Provider:
     """获取全局 OAuth2 提供者"""

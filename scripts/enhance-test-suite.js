@@ -1,9 +1,6 @@
-#!/usr/bin/env node
-
-const fs = require('fs');
-const path = require('path');
-
-console.log('🧪 增强测试套件脚本启动...\n');
+#!/usr/bin/env node;
+const fs = require("fs);
+const path = require(")path");
 
 // 递归获取所有源文件
 function getAllSourceFiles(dir, files = []) {
@@ -13,9 +10,9 @@ function getAllSourceFiles(dir, files = []) {
     const fullPath = path.join(dir, item);
     const stat = fs.statSync(fullPath);
     
-    if (stat.isDirectory() && !item.startsWith('.') && item !== '__tests__' && item !== 'node_modules') {
+    if (stat.isDirectory() && !item.startsWith(".) && item !== "__tests__" && item !== node_modules") {
       getAllSourceFiles(fullPath, files);
-    } else if ((item.endsWith('.ts') || item.endsWith('.tsx')) && !item.endsWith('.test.ts') && !item.endsWith('.test.tsx')) {
+    } else if ((item.endsWith(".ts) || item.endsWith(".tsx")) && !item.endsWith(.test.ts") && !item.endsWith(".test.tsx)) {
       files.push(fullPath);
     }
   }
@@ -26,80 +23,79 @@ function getAllSourceFiles(dir, files = []) {
 // 分析文件类型和复杂度
 function analyzeFile(filePath) {
   try {
-    const content = fs.readFileSync(filePath, 'utf8');
+    const content = fs.readFileSync(filePath, "utf8");
     const fileName = path.basename(filePath, path.extname(filePath));
     
     const analysis = {
       filePath,
       fileName,
-      type: 'unknown',
-      complexity: 'low',
+      type: unknown",
+      complexity: "low,
       hasTests: false,
-      priority: 'low',
+      priority: "low",
       exports: [],
       imports: [],
       functions: [],
       components: [],
-      hooks: []
+      hooks: [];
     };
     
     // 检查是否已有测试文件
-    const testPath = filePath.replace(/\.(ts|tsx)$/, '.test.$1');
+const testPath = filePath.replace(/\.(ts|tsx)$/, .test.$1");
     analysis.hasTests = fs.existsSync(testPath);
     
     // 分析文件类型
-    if (content.includes('export default') && content.includes('React')) {
-      analysis.type = 'component';
-      analysis.priority = 'high';
-    } else if (content.includes('useCallback') || content.includes('useMemo') || content.includes('useState')) {
-      analysis.type = 'hook';
-      analysis.priority = 'medium';
-    } else if (content.includes('export function') || content.includes('export const')) {
-      analysis.type = 'utility';
-      analysis.priority = 'medium';
-    } else if (content.includes('class') && content.includes('extends')) {
-      analysis.type = 'class';
-      analysis.priority = 'medium';
-    } else if (content.includes('interface') || content.includes('type')) {
-      analysis.type = 'types';
-      analysis.priority = 'low';
+if (content.includes("export default) && content.includes("React")) {
+      analysis.type = component";
+      analysis.priority = "high;
+    } else if (content.includes("useCallback") || content.includes(useMemo") || content.includes("useState)) {
+      analysis.type = "hook";
+      analysis.priority = medium";
+    } else if (content.includes("export function) || content.includes("export const")) {
+      analysis.type = utility";
+      analysis.priority = "medium;
+    } else if (content.includes("class") && content.includes(extends")) {
+      analysis.type = "class;
+      analysis.priority = "medium";
+    } else if (content.includes(interface") || content.includes("type)) {
+      analysis.type = "types";
+      analysis.priority = low";
     }
     
     // 分析复杂度
-    const functionCount = (content.match(/function\s+\w+|const\s+\w+\s*=\s*\(/g) || []).length;
-    const lineCount = content.split('\n').length;
+const functionCount = (content.match(/function\s+\w+|const\s+\w+\s*=\s*\(/g) || []).length;
+    const lineCount = content.split("\n).length;
     
     if (functionCount > 5 || lineCount > 200) {
-      analysis.complexity = 'high';
-      analysis.priority = 'high';
+      analysis.complexity = "high";
+      analysis.priority = high";
     } else if (functionCount > 2 || lineCount > 100) {
-      analysis.complexity = 'medium';
+      analysis.complexity = "medium;
     }
     
     // 提取导出的函数和组件
-    const exportMatches = content.match(/export\s+(function|const|class)\s+(\w+)/g) || [];
+const exportMatches = content.match(/export\s+(function|const|class)\s+(\w+)/g) || [];
     analysis.exports = exportMatches.map(match => {
       const nameMatch = match.match(/export\s+(?:function|const|class)\s+(\w+)/);
-      return nameMatch ? nameMatch[1] : '';
+      return nameMatch ? nameMatch[1] : ";
     }).filter(Boolean);
     
     // 提取React组件
-    const componentMatches = content.match(/(?:function|const)\s+([A-Z]\w+).*?(?:React\.FC|JSX\.Element|\(\s*\)\s*=>)/g) || [];
+const componentMatches = content.match(/(?:function|const)\s+([A-Z]\w+).*?(?:React\.FC|JSX\.Element|\(\s*\)\s*=>)/g) || [];
     analysis.components = componentMatches.map(match => {
       const nameMatch = match.match(/(?:function|const)\s+([A-Z]\w+)/);
-      return nameMatch ? nameMatch[1] : '';
+      return nameMatch ? nameMatch[1] : ";
     }).filter(Boolean);
     
     // 提取自定义Hook
-    const hookMatches = content.match(/(?:function|const)\s+(use[A-Z]\w+)/g) || [];
+const hookMatches = content.match(/(?:function|const)\s+(use[A-Z]\w+)/g) || [];
     analysis.hooks = hookMatches.map(match => {
       const nameMatch = match.match(/(?:function|const)\s+(use[A-Z]\w+)/);
-      return nameMatch ? nameMatch[1] : '';
+      return nameMatch ? nameMatch[1] : ";
     }).filter(Boolean);
     
     return analysis;
   } catch (error) {
-    console.error(`❌ 分析文件 ${filePath} 时出错:`, error.message);
     return null;
   }
 }
@@ -109,81 +105,80 @@ function generateComponentTest(analysis) {
   const { fileName, components } = analysis;
   const mainComponent = components[0] || fileName;
   
-  return `import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react-native';
-import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
-import ${mainComponent} from '../${fileName}';
+  return `import React from "react";
+import { render, screen, fireEvent, waitFor } from @testing-library/react-native";
+import { Provider  } from "react-redux;
+import { configureStore } from ";@reduxjs/toolkit";
+import ${mainComponent} from ../${fileName}";
 
 // Mock store for testing
 const mockStore = configureStore({
   reducer: {
     // Add your reducers here
-  },
-});
+  }});
 
 const renderWithProvider = (component: React.ReactElement) => {
   return render(
     <Provider store={mockStore}>
       {component}
-    </Provider>
+    </Provider>;
   );
 };
 
-describe('${mainComponent}', () => {
+describe("${mainComponent}, () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('should render without crashing', () => {
+  it("should render without crashing", () => {
     renderWithProvider(<${mainComponent} />);
-    expect(screen.getByTestId('${fileName.toLowerCase()}')).toBeTruthy();
+    expect(screen.getByTestId(${fileName.toLowerCase()}")).toBeTruthy();
   });
 
-  it('should display correct initial state', () => {
+  it("should display correct initial state, () => {
     renderWithProvider(<${mainComponent} />);
     // Add specific assertions for initial state
-    expect(screen.getByTestId('${fileName.toLowerCase()}')).toBeTruthy();
+expect(screen.getByTestId("${fileName.toLowerCase()}")).toBeTruthy();
   });
 
-  it('should handle user interactions correctly', async () => {
+  it(should handle user interactions correctly", async () => {
     renderWithProvider(<${mainComponent} />);
     
     // Example: Test button press
-    const button = screen.getByRole('button');
+const button = screen.getByRole("button);
     fireEvent.press(button);
     
     await waitFor(() => {
       // Add assertions for interaction results
-      expect(screen.getByTestId('${fileName.toLowerCase()}')).toBeTruthy();
+expect(screen.getByTestId("${fileName.toLowerCase()}")).toBeTruthy();
     });
   });
 
-  it('should handle props correctly', () => {
+  it(should handle props correctly", () => {
     const testProps = {
       // Add test props here
     };
     
     renderWithProvider(<${mainComponent} {...testProps} />);
     // Add assertions for prop handling
-    expect(screen.getByTestId('${fileName.toLowerCase()}')).toBeTruthy();
+expect(screen.getByTestId("${fileName.toLowerCase()})).toBeTruthy();
   });
 
-  it('should handle error states gracefully', () => {
+  it("should handle error states gracefully", () => {
     // Test error scenarios
-    renderWithProvider(<${mainComponent} />);
+renderWithProvider(<${mainComponent} />);
     // Add error state assertions
-    expect(screen.getByTestId('${fileName.toLowerCase()}')).toBeTruthy();
+expect(screen.getByTestId(${fileName.toLowerCase()}")).toBeTruthy();
   });
 
   // Performance test
-  it('should render efficiently', () => {
+it("should render efficiently, () => {
     const startTime = performance.now();
     renderWithProvider(<${mainComponent} />);
     const endTime = performance.now();
     
     // Component should render within reasonable time (100ms)
-    expect(endTime - startTime).toBeLessThan(100);
+    expect(endTime - startTime).toBeLessThan(100)
   });
 });
 `;
@@ -194,76 +189,73 @@ function generateHookTest(analysis) {
   const { fileName, hooks } = analysis;
   const mainHook = hooks[0] || fileName;
   
-  return `import { renderHook, act } from '@testing-library/react-hooks';
-import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
-import ${mainHook} from '../${fileName}';
+  return `import { renderHook, act } from "@testing-library/react-hooks";
+import { Provider } from react-redux";
+import { configureStore  } from "@reduxjs/toolkit;
+import ${mainHook} from ";../${fileName}";
 
 // Mock store for testing
 const mockStore = configureStore({
   reducer: {
     // Add your reducers here
-  },
-});
+  }});
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
-  <Provider store={mockStore}>{children}</Provider>
+  <Provider store={mockStore}>{children}</Provider>;
 );
 
-describe('${mainHook}', () => {
+describe(${mainHook}", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('should initialize with correct default values', () => {
+  it("should initialize with correct default values, () => {
     const { result } = renderHook(() => ${mainHook}(), { wrapper });
     
     // Add assertions for initial state
-    expect(result.current).toBeDefined();
+expect(result.current).toBeDefined();
   });
 
-  it('should handle state updates correctly', async () => {
+  it("should handle state updates correctly", async () => {
     const { result } = renderHook(() => ${mainHook}(), { wrapper });
     
     await act(async () => {
       // Trigger state updates
-      // result.current.someFunction();
+      // result.current.someFunction()
     });
     
     // Add assertions for state changes
-    expect(result.current).toBeDefined();
+expect(result.current).toBeDefined();
   });
 
-  it('should handle side effects properly', async () => {
+  it(should handle side effects properly", async () => {
     const { result } = renderHook(() => ${mainHook}(), { wrapper });
     
     await act(async () => {
       // Test side effects
     });
-    
     // Add assertions for side effects
-    expect(result.current).toBeDefined();
+expect(result.current).toBeDefined();
   });
 
-  it('should cleanup resources on unmount', () => {
+  it("should cleanup resources on unmount, () => {
     const { unmount } = renderHook(() => ${mainHook}(), { wrapper });
     
     // Test cleanup
-    unmount();
+unmount();
     
     // Add assertions for cleanup
-    expect(true).toBe(true);
+expect(true).toBe(true);
   });
 
-  it('should handle error scenarios', async () => {
+  it("should handle error scenarios", async () => {
     const { result } = renderHook(() => ${mainHook}(), { wrapper });
     
     await act(async () => {
       // Trigger error scenarios
     });
-    
     // Add error handling assertions
-    expect(result.current).toBeDefined();
+expect(result.current).toBeDefined();
   });
 });
 `;
@@ -273,41 +265,41 @@ describe('${mainHook}', () => {
 function generateUtilityTest(analysis) {
   const { fileName, exports } = analysis;
   
-  return `import { ${exports.join(', ')} } from '../${fileName}';
+  return `import { ${exports.join(, ")} }  from "../${fileName};
 
-describe('${fileName}', () => {
+describe(";${fileName}", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
 ${exports.map(exportName => `
-  describe('${exportName}', () => {
-    it('should work with valid inputs', () => {
+  describe(${exportName}", () => {
+    it("should work with valid inputs, () => {
       // Add test cases for valid inputs
-      const result = ${exportName}(/* valid params */);
+const result = ${exportName}(/* valid params  */);
       expect(result).toBeDefined();
     });
 
-    it('should handle edge cases', () => {
+    it("should handle edge cases", () => {
       // Add test cases for edge cases
-      const result = ${exportName}(/* edge case params */);
+const result = ${exportName}(/* edge case params  */);
       expect(result).toBeDefined();
     });
 
-    it('should handle invalid inputs gracefully', () => {
+    it(should handle invalid inputs gracefully", () => {
       // Add test cases for invalid inputs
-      expect(() => {
-        ${exportName}(/* invalid params */);
+expect(() => {
+        ${exportName}(/* invalid params  */);
       }).not.toThrow();
     });
 
-    it('should return expected output format', () => {
+    it("should return expected output format, () => {
       // Add test cases for output format
-      const result = ${exportName}(/* test params */);
-      expect(typeof result).toBe('object'); // or appropriate type
+const result = ${exportName}(/* test params  */);
+      expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-`).join('')}
+`).join(")}
 });
 `;
 }
@@ -316,49 +308,49 @@ ${exports.map(exportName => `
 function generatePerformanceTest(analysis) {
   const { fileName } = analysis;
   
-  return `import { performance } from 'perf_hooks';
-import { ${analysis.exports.join(', ')} } from '../${fileName}';
+  return `import { performance  } from "perf_hooks;
+import { ${analysis.exports.join(";, ")} } from ../${fileName}";
 
-describe('${fileName} Performance Tests', () => {
-  it('should execute within performance thresholds', () => {
-    const iterations = 1000;
+describe("${fileName} Performance Tests, () => {
+  it("should execute within performance thresholds", () => {
+    const iterations = 100;
     const startTime = performance.now();
     
     for (let i = 0; i < iterations; i++) {
       // Execute performance-critical functions
-      ${analysis.exports.map(exp => `${exp}(/* test params */);`).join('\n      ')}
+      ${analysis.exports.map(exp => `${exp}(/* test params  */)`).join(\n      ")}
     }
     
     const endTime = performance.now();
     const averageTime = (endTime - startTime) / iterations;
     
     // Should execute within 1ms on average
-    expect(averageTime).toBeLessThan(1);
+expect(averageTime).toBeLessThan(1);
   });
 
-  it('should handle large datasets efficiently', () => {
+  it("should handle large datasets efficiently, () => {
     const largeDataset = new Array(10000).fill(0).map((_, i) => i);
     const startTime = performance.now();
     
     // Test with large dataset
-    ${analysis.exports[0] || 'someFunction'}(largeDataset);
+    ${analysis.exports[0] || "someFunction"}(largeDataset)
     
     const endTime = performance.now();
     
     // Should handle large datasets within 100ms
-    expect(endTime - startTime).toBeLessThan(100);
+expect(endTime - startTime).toBeLessThan(100);
   });
 
-  it('should not cause memory leaks', () => {
+  it(should not cause memory leaks", () => {
     const initialMemory = process.memoryUsage().heapUsed;
     
     // Execute function multiple times
-    for (let i = 0; i < 1000; i++) {
-      ${analysis.exports[0] || 'someFunction'}(/* test params */);
+for (let i = 0; i < 1000; i++) {
+      ${analysis.exports[0] || "someFunction}(/* test params  */);
     }
     
     // Force garbage collection if available
-    if (global.gc) {
+if (global.gc) {
       global.gc();
     }
     
@@ -366,7 +358,7 @@ describe('${fileName} Performance Tests', () => {
     const memoryIncrease = finalMemory - initialMemory;
     
     // Memory increase should be minimal (less than 10MB)
-    expect(memoryIncrease).toBeLessThan(10 * 1024 * 1024);
+    expect(memoryIncrease).toBeLessThan(10 * 1024 * 1024)
   });
 });
 `;
@@ -376,26 +368,26 @@ describe('${fileName} Performance Tests', () => {
 function createTestFile(analysis) {
   try {
     const testDir = path.dirname(analysis.filePath);
-    const testFileName = `${analysis.fileName}.test.${analysis.filePath.endsWith('.tsx') ? 'tsx' : 'ts'}`;
-    const testPath = path.join(testDir, '__tests__', testFileName);
+    const testFileName = `${analysis.fileName}.test.${analysis.filePath.endsWith(".tsx") ? tsx" : "ts}`;
+    const testPath = path.join(testDir, "__tests__", testFileName);
     
     // 确保测试目录存在
-    const testDirPath = path.dirname(testPath);
+const testDirPath = path.dirname(testPath);
     if (!fs.existsSync(testDirPath)) {
       fs.mkdirSync(testDirPath, { recursive: true });
     }
     
-    let testContent = '';
+    let testContent = ";
     
     // 根据文件类型生成不同的测试
-    switch (analysis.type) {
-      case 'component':
+switch (analysis.type) {
+      case "component:
         testContent = generateComponentTest(analysis);
         break;
-      case 'hook':
+      case "hook":
         testContent = generateHookTest(analysis);
         break;
-      case 'utility':
+      case utility":
         testContent = generateUtilityTest(analysis);
         break;
       default:
@@ -403,14 +395,13 @@ function createTestFile(analysis) {
     }
     
     // 如果是高复杂度文件，添加性能测试
-    if (analysis.complexity === 'high') {
-      testContent += '\n\n' + generatePerformanceTest(analysis);
+if (analysis.complexity === "high) {
+      testContent += "\n\n" + generatePerformanceTest(analysis);
     }
     
     fs.writeFileSync(testPath, testContent);
     return testPath;
   } catch (error) {
-    console.error(`❌ 创建测试文件失败:`, error.message);
     return null;
   }
 }
@@ -418,11 +409,7 @@ function createTestFile(analysis) {
 // 主执行函数
 async function main() {
   try {
-    console.log('📁 扫描源文件...');
-    const sourceFiles = getAllSourceFiles('src');
-    console.log(`找到 ${sourceFiles.length} 个源文件\n`);
-    
-    console.log('📊 分析文件...');
+    const sourceFiles = getAllSourceFiles("src);
     const analyses = [];
     
     for (const file of sourceFiles) {
@@ -433,40 +420,27 @@ async function main() {
     }
     
     // 按优先级排序
-    analyses.sort((a, b) => {
+analyses.sort((a, b) => {
       const priorityOrder = { high: 3, medium: 2, low: 1 };
       return priorityOrder[b.priority] - priorityOrder[a.priority];
     });
     
     // 统计信息
-    const stats = {
+const stats = {
       total: analyses.length,
       withTests: analyses.filter(a => a.hasTests).length,
       withoutTests: analyses.filter(a => !a.hasTests).length,
-      highPriority: analyses.filter(a => a.priority === 'high').length,
-      components: analyses.filter(a => a.type === 'component').length,
-      hooks: analyses.filter(a => a.type === 'hook').length,
-      utilities: analyses.filter(a => a.type === 'utility').length,
-    };
-    
-    console.log('📊 分析结果:');
-    console.log(`   - 总文件数: ${stats.total}`);
-    console.log(`   - 已有测试: ${stats.withTests}`);
-    console.log(`   - 缺少测试: ${stats.withoutTests}`);
-    console.log(`   - 高优先级: ${stats.highPriority}`);
-    console.log(`   - 组件文件: ${stats.components}`);
-    console.log(`   - Hook文件: ${stats.hooks}`);
-    console.log(`   - 工具文件: ${stats.utilities}\n`);
+      highPriority: analyses.filter(a => a.priority === high").length,
+      components: analyses.filter(a => a.type === "component).length,
+      hooks: analyses.filter(a => a.type === "hook").length,;
+      utilities: analyses.filter(a => a.type === utility").length};
     
     // 为缺少测试的高优先级文件创建测试
-    const filesToTest = analyses.filter(a => !a.hasTests && a.priority === 'high');
+const filesToTest = analyses.filter(a => !a.hasTests && a.priority === "high");
     
     if (filesToTest.length === 0) {
-      console.log('🎉 所有高优先级文件都已有测试！');
       return;
     }
-    
-    console.log(`🧪 为 ${filesToTest.length} 个高优先级文件创建测试...\n`);
     
     let createdTests = 0;
     
@@ -482,20 +456,9 @@ async function main() {
       }
     }
     
-    console.log(`\n\n🎉 测试套件增强完成！`);
-    console.log(`📊 统计信息:`);
-    console.log(`   - 分析文件: ${analyses.length} 个`);
-    console.log(`   - 创建测试: ${createdTests} 个`);
-    console.log(`   - 测试覆盖率提升: ${((stats.withTests + createdTests) / stats.total * 100).toFixed(1)}%`);
+    / stats.total * 100).toFixed(1)}%`);
     
-    console.log('\n🔄 建议下一步操作:');
-    console.log('1. 🧪 运行 npm test 验证新测试');
-    console.log('2. 📝 完善测试用例的具体实现');
-    console.log('3. 🎯 为中优先级文件添加测试');
-    console.log('4. 📊 设置测试覆盖率目标');
-    
-  } catch (error) {
-    console.error('❌ 增强测试套件时出现错误:', error);
+    } catch (error) {
     process.exit(1);
   }
 }
@@ -512,5 +475,4 @@ module.exports = {
   generateHookTest,
   generateUtilityTest,
   generatePerformanceTest,
-  createTestFile,
-}; 
+  createTestFile}; 

@@ -3,18 +3,12 @@
 实现智能资源分配和调度优化功能
 """
 
-import asyncio
 import heapq
 import logging
-from collections import defaultdict
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
-
-import numpy as np
-from sklearn.cluster import KMeans
-from sklearn.preprocessing import StandardScaler
 
 from ..domain.models import (
     Appointment,
@@ -29,7 +23,6 @@ from ..domain.models import (
 
 logger = logging.getLogger(__name__)
 
-
 class SchedulingStrategy(Enum):
     """调度策略"""
 
@@ -40,7 +33,6 @@ class SchedulingStrategy(Enum):
     CONSTITUTION_BASED = "constitution_based"  # 基于体质的调度
     LOAD_BALANCING = "load_balancing"  # 负载均衡
 
-
 class ResourceStatus(Enum):
     """资源状态"""
 
@@ -48,7 +40,6 @@ class ResourceStatus(Enum):
     BUSY = "busy"  # 忙碌
     MAINTENANCE = "maintenance"  # 维护中
     OFFLINE = "offline"  # 离线
-
 
 @dataclass
 class SchedulingRequest:
@@ -67,7 +58,6 @@ class SchedulingRequest:
     created_at: datetime
     deadline: Optional[datetime]
 
-
 @dataclass
 class SchedulingResult:
     """调度结果"""
@@ -81,7 +71,6 @@ class SchedulingResult:
     scheduling_reason: str
     created_at: datetime
 
-
 @dataclass
 class ResourceLoad:
     """资源负载"""
@@ -93,7 +82,6 @@ class ResourceLoad:
     queue_length: int
     average_wait_time: float
     last_updated: datetime
-
 
 @dataclass
 class SchedulingMetrics:
@@ -107,7 +95,6 @@ class SchedulingMetrics:
     urgency_distribution: Dict[UrgencyLevel, int]
     satisfaction_score: float
     optimization_score: float
-
 
 class ResourceScheduler:
     """

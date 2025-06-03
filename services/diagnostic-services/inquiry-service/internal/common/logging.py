@@ -7,7 +7,6 @@
 from datetime import datetime
 import json
 import logging
-import logging.handlers
 import os
 import sys
 from typing import Any
@@ -18,7 +17,6 @@ try:
     STRUCTLOG_AVAILABLE = True
 except ImportError:
     STRUCTLOG_AVAILABLE = False
-
 
 class JSONFormatter(logging.Formatter):
     """JSON格式化器"""
@@ -45,7 +43,6 @@ class JSONFormatter(logging.Formatter):
 
         return json.dumps(log_data, ensure_ascii=False)
 
-
 class ContextFilter(logging.Filter):
     """上下文过滤器，添加额外的上下文信息"""
 
@@ -60,7 +57,6 @@ class ContextFilter(logging.Filter):
 
         record.extra_fields.update(self.context)
         return True
-
 
 class InquiryLogger:
     """问诊服务专用日志器"""
@@ -124,7 +120,6 @@ class InquiryLogger:
         kwargs["exc_info"] = True
         self._log_with_context("ERROR", message, **kwargs)
 
-
 def setup_logging(config: dict[str, Any]) -> None:
     """设置日志配置"""
     # 获取配置
@@ -183,11 +178,9 @@ def setup_logging(config: dict[str, Any]) -> None:
 
     print(f"日志系统初始化完成，级别: {level}")
 
-
 def get_logger(name: str, config: dict[str, Any] | None = None) -> InquiryLogger:
     """获取问诊服务日志器"""
     return InquiryLogger(name, config)
-
 
 def setup_structlog(config: dict[str, Any]) -> None:
     """设置structlog（如果可用）"""
@@ -212,7 +205,6 @@ def setup_structlog(config: dict[str, Any]) -> None:
         wrapper_class=structlog.stdlib.BoundLogger,
         cache_logger_on_first_use=True,
     )
-
 
 class LoggingMiddleware:
     """日志中间件"""
@@ -255,7 +247,6 @@ class LoggingMiddleware:
                 duration_seconds=duration,
             )
             raise
-
 
 def log_function_call(
     logger: InquiryLogger, include_args: bool = False, include_result: bool = False
@@ -321,7 +312,6 @@ def log_function_call(
             return sync_wrapper
 
     return decorator
-
 
 class AuditLogger:
     """审计日志器"""

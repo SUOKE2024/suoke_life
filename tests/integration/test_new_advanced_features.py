@@ -5,7 +5,6 @@
 """
 
 import sys
-import json
 from pathlib import Path
 
 def test_blockchain_health_data_component():
@@ -231,10 +230,8 @@ def main():
         try:
             if test():
                 passed += 1
-            print()
         except Exception as e:
             print(f"❌ 测试失败: {e}")
-            print()
 
     print("=" * 60)
     print(f"📊 测试结果: {passed}/{total} 通过")

@@ -78,7 +78,6 @@ def test_native_features_configuration():
 
 def print_summary(results):
     """打印测试总结"""
-    print()
     print("📊 原生功能配置统计:")
     print(f"- 权限管理系统: {'✅ 已实现' if results['permissions'] else '❌ 未实现'}")
     print(f"- 原生模块集成: {'✅ 已实现' if results['native_modules'] else '❌ 未实现'}")
@@ -92,7 +91,6 @@ def print_summary(results):
     else:
         print("- 配置文档: ❌ 未完成")
 
-    print()
     print("🎯 支持的原生功能:")
     print("- 📷 相机权限和拍照功能")
     print("- 🎤 麦克风权限和语音识别")
@@ -106,7 +104,6 @@ def print_summary(results):
     completed_features = sum(results.values())
     completion_rate = (completed_features / total_features) * 100
 
-    print()
     print(f"📈 完成度: {completed_features}/{total_features} ({completion_rate:.1f}%)")
 
     if completion_rate == 100:
@@ -117,7 +114,6 @@ def print_summary(results):
 
 def check_package_dependencies():
     """检查package.json中的原生模块依赖"""
-    print()
     print("📦 检查原生模块依赖...")
 
     package_file = 'package.json'
@@ -159,5 +155,4 @@ if __name__ == "__main__":
     # 检查依赖包
     check_package_dependencies()
 
-    print()
     print("🎉 验证完成！")

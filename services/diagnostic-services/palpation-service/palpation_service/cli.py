@@ -8,26 +8,21 @@
 import asyncio
 import sys
 from pathlib import Path
-from typing import Optional
 
 import click
 import uvicorn
 from rich.console import Console
 from rich.table import Table
 
-from .config import get_settings
 from .main import PalpationService
 
-
 console = Console()
-
 
 @click.group()
 @click.version_option(version="1.0.0")
 def cli() -> None:
     """索克生活触诊服务 CLI 工具"""
     pass
-
 
 @cli.command()
 @click.option(
@@ -99,7 +94,6 @@ def serve(
         console.print(f"[red]服务启动失败: {e}[/red]")
         sys.exit(1)
 
-
 @cli.command()
 @click.option(
     "--config-dir",
@@ -143,7 +137,6 @@ def check_config(config_dir: str) -> None:
     else:
         console.print("[red]配置文件检查失败[/red]")
         sys.exit(1)
-
 
 @cli.command()
 @click.option(
@@ -201,7 +194,6 @@ def health(output_format: str) -> None:
     
     asyncio.run(check_health())
 
-
 @cli.command()
 @click.option(
     "--test-type",
@@ -245,7 +237,6 @@ def test(test_type: str, coverage: bool, verbose: bool) -> None:
         console.print(f"[red]测试失败: {e}[/red]")
         sys.exit(1)
 
-
 @cli.command()
 @click.option(
     "--check-only",
@@ -275,7 +266,6 @@ def lint(check_only: bool) -> None:
         except subprocess.CalledProcessError as e:
             console.print(f"[red]✗ {description} 失败: {e}[/red]")
 
-
 @cli.command()
 def docs() -> None:
     """生成文档"""
@@ -290,7 +280,6 @@ def docs() -> None:
     except subprocess.CalledProcessError as e:
         console.print(f"[red]文档生成失败: {e}[/red]")
         sys.exit(1)
-
 
 @cli.command()
 @click.option(
@@ -313,11 +302,9 @@ def docs_serve(port: int) -> None:
         console.print(f"[red]文档服务器启动失败: {e}[/red]")
         sys.exit(1)
 
-
 def dev_main() -> None:
     """开发环境主入口"""
     cli()
-
 
 if __name__ == "__main__":
     cli() 

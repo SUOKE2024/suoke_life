@@ -1,18 +1,21 @@
-import React from 'react';
-import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor';
-import { apiClient } from "./apiClient";/;
-// 高级数据分析服务   索克生活APP - 健康数据分析和预测服务
-// 数据分析类型 * export type AnalysisType = | "health_trend"  *// 健康趋势分析* *   | "risk_assessment"  * */// 风险评估* *   | "pattern_recognition"  * */// 模式识别* *   | "predictive_modeling"  * */// 预测建模* *   | "correlation_analysis"  * */// 相关性分析* *   | "anomaly_detection"  * */// 异常检测* *   | "cohort_analysis"  * */// 队列分析* *   | "survival_analysis"  * */// 生存分析* *   | "time_series"  * */// 时间序列分析* *   | "clustering"  * */// 聚类分析* *   | "classification"  * */// 分类分析* *   | "regression"  * */// 回归分析* *   | "deep_learning"  * */// 深度学习分析* *   | "nlp_analysis"  * */// 自然语言处理分析* *   | "image_analysi;s";  * */// 图像分析* * ; * *//;
-// 数据源类型 * export interface DataSource {; */;
+import React from "react";
+import { usePerformanceMonitor } from "../../placeholder";../hooks/////    usePerformanceMonitor";"
+import { apiClient } from "./////    apiClient";
+//////
+//////     高级数据分析服务   索克生活APP - 健康数据分析和预测服务
+// 数据分析类型 * export type AnalysisType = | "health_trend"  / 健康趋势分析* // | "risk_assessment"  * // 风险评估* // | "pattern_recognition"  * // 模式识别* // | "predictive_modeling"  * // 预测建模* // | "correlation_analysis"  * // 相关性分析* // | "anomaly_detection"  * // 异常检测* // | "cohort_analysis"  * // 队列分析* // | "survival_analysis"  * // 生存分析* // | "time_series"  * // 时间序列分析* // | "clustering"  * // 聚类分析* // | "classification"  * // 分类分析* // | "regression"  * // 回归分析* // | "deep_learning"  * // 深度学习分析* // | "nlp_analysis"  * // 自然语言处理分析* //////     | "image_analysi;"
+s";  * / 图像分析* // * /////     "
+// 数据源类型 * export interface DataSource {////
+ /////
   id: string,
-  name: string,
-  type: "database" | "api" | "file" | "stream" | "sensor" | "manual",
+  name: string,;
+  type: "database" | "api" | "file" | "stream" | "sensor" | "manual",;
   connection: {url?: string;
     credentials?: Record<string, any>;
     headers?: Record<string, string>;
     parameters?: Record<string, any>;
   }
-  schema: { fields: Array<{,
+  schema: { fields: Array<{
       name: string,
       type: "string" | "number" | "boolean" | "date" | "array" | "object",
       required: boolean;
@@ -20,9 +23,9 @@ import { apiClient } from "./apiClient";/;
     primaryKey?: string;
     indexes?: string[];
   };
-  refreshRate: number // 分钟 *, lastUpdated: string, */
+  refreshRate: number // 分钟 *, lastUpdated: string, ////
   status: "active" | "inactive" | "error"}
-// 分析配置 * export interface AnalysisConfig { id: string, */;
+// 分析配置 * export interface AnalysisConfig { id: string, ////
   name: string,
   description: string,
   type: AnalysisType,
@@ -36,8 +39,8 @@ import { apiClient } from "./apiClient";/;
         | "lt"
         | "lte"
         | "in"
-        | "nin"
-        | "contains"
+        | "nin";
+        | "contains";
         | "regex";
       value: unknown}>;
     groupBy?: string[]
@@ -62,7 +65,7 @@ import { apiClient } from "./apiClient";/;
     timezone?: string}
   notifications?:  { enabled: boolean,
     recipients: string[],
-    conditions: Array<{,
+    conditions: Array<{
       metric: string,
       threshold: number,
       operator: "gt" | "lt" | "eq"}>;
@@ -70,16 +73,16 @@ import { apiClient } from "./apiClient";/;
   createdAt: string,
   updatedAt: string,
   createdBy: string}
-// 分析结果 * export interface AnalysisResult { id: string, */
-  configId: string,
-  status: "running" | "completed" | "failed" | "cancelled",
+// 分析结果 * export interface AnalysisResult { id: string, ////
+  configId: string,;
+  status: "running" | "completed" | "failed" | "cancelled",;
   startTime: string;
   endTime?: string;
-  duration?: number; // 秒 *   results: {summary: {totalRecords: number, */
+  duration?: number; // 秒 //////     results: {summary: {totalRecords: number,
       processedRecords: number,
       errorRecords: number,
       insights: string[],
-      recommendations: string[];
+      recommendations: string[]
       };
     data: {
       raw?: unknown[];
@@ -113,7 +116,7 @@ import { apiClient } from "./apiClient";/;
         examples: unknown[];
         }>;
     }
-    visualizations: Array<{,
+    visualizations: Array<{
       id: string,
       type:   | "line"| "bar",
         | "scatter"
@@ -148,7 +151,7 @@ import { apiClient } from "./apiClient";/;
       performance: Record<string, number>;
       serialized?: string};
   }
-  logs: Array<{, timestamp: string,
+  logs: Array<{ timestamp: string,
     level: "info" | "warning" | "error",
     message: string;
     details?: unknown}>;
@@ -156,7 +159,7 @@ import { apiClient } from "./apiClient";/;
     message: string;
     stack?: string};
 }
-// 仪表板配置 * export interface DashboardConfig { id: string, */
+// 仪表板配置 * export interface DashboardConfig { id: string, ////
   name: string,
   description: string,
   layout: {rows: number,
@@ -167,11 +170,11 @@ import { apiClient } from "./apiClient";/;
         column: number,
         rowSpan: number,
         columnSpan: number};
-      config: {
+      config: {;
         title?: string;
         analysisId?: string;
         visualizationId?: string;
-        refreshRate?: number; // 秒 *         filters?: Record<string, any>; */
+        refreshRate?: number; // 秒 // filters?: Record<string, any> ////
         style?: Record<string, any>;
       };
     }>;
@@ -184,14 +187,14 @@ import { apiClient } from "./apiClient";/;
   createdAt: string,
   updatedAt: string,
   createdBy: string}
-// 报告配置 * export interface ReportConfig {; */
+// 报告配置 * export interface ReportConfig {////
   id: string,
   name: string,
   description: string,
   template: {sections: Array<{id: string,
       type:   | "title"| "summary"| "chart",
-        | "table"
-        | "text"
+        | "table";
+        | "text";
         | "recommendations";
       title?: string;
       content?: string;
@@ -220,8 +223,8 @@ import { apiClient } from "./apiClient";/;
   createdAt: string,
   updatedAt: string,
   createdBy: string}
-// 高级数据分析服务类 * class AdvancedAnalyticsService { */
-  private dataSources: Map<string, DataSource> = new Map();
+// 高级数据分析服务类 * class AdvancedAnalyticsService { ////
+  private dataSources: Map<string, DataSource> = new Map()
   private analysisConfigs: Map<string, AnalysisConfig> = new Map();
   private analysisResults: Map<string, AnalysisResult> = new Map();
   private dashboards: Map<string, DashboardConfig> = new Map();
@@ -230,61 +233,56 @@ import { apiClient } from "./apiClient";/;
   constructor() {
     this.initializeService();
   }
-  // /    初始化服务  private async initializeService();: Promise<void> {
+  //////     初始化服务  private async initializeService(): Promise<void> {
     try {
-      // 加载数据源 *       await this.loadDataSources;(;); */
-      // 加载分析配置 *       await this.loadAnalysisConfigs;(;); */
-      // 加载仪表板 *       await this.loadDashboards;(;); */
-      // 加载报告配置 *       await this.loadReports;(;); */
-      // 启动定时任务 *       this.startScheduledTasks() */
+      // 加载数据源 //////     await this.loadDataSources;
+      // 加载分析配置 //////     await this.loadAnalysisConfigs;
+      // 加载仪表板 //////     await this.loadDashboards;
+      // 加载报告配置 //////     await this.loadReports;
+      // 启动定时任务 //////     this.startScheduledTasks()
     } catch (error) {
-      console.error("Failed to initialize advanced analytics service: ", error)
-    }
+      }
   }
-  // /    创建数据源  async createDataSource(dataSource: Omit<DataSource, "id" | "lastUpdated" | "status" />/  ): Promise<DataSource />  {
+  // 创建数据源  async createDataSource(dataSource: Omit<DataSource, "id" | "lastUpdated" | "status" />/  ): Promise<DataSource /////    >  {
     try {
-      const id = this.generateId("ds;";)
+      const id = this.generateId("ds";);
       const newDataSource: DataSource = {;
         id,
         ...dataSource,
         lastUpdated: new Date().toISOString(),
-        status: "active",
-      };
+        status: "active"};
       this.dataSources.set(id, newDataSource)
-      // 保存到后端 *       await apiClient.post(" *// api * v1 *//analytics/data-sources", newDataSourc;e;);/
-      // 测试连接 *       await this.testDataSourceConnection(i;d;); */
-      return newDataSour;c;e
+      // 保存到后端 // await apiClient.post(" / api * v1 /analytics/data-sources", newDataSource;);/////
+      // 测试连接 //////     await this.testDataSourceConnection(id;);
+      return newDataSour;c;e;
     } catch (error) {
-      console.error("Failed to create data source: ", error);
-      throw err;o;r
+      throw err;o;r;
     }
   }
-  // /    创建分析配置  async createAnalysisConfig(config: Omit<AnalysisConfig, "id" | "createdAt" | "updatedAt" />/  ): Promise<AnalysisConfig />  {
+  // 创建分析配置  async createAnalysisConfig(config: Omit<AnalysisConfig, "id" | "createdAt" | "updatedAt" />/  ): Promise<AnalysisConfig /////    >  {
     try {
-      const id = this.generateId("ac;";);
-      const now = new Date().toISOString;(;);
+      const id = this.generateId("ac";);
+      const now = new Date().toISOString;
       const newConfig: AnalysisConfig = {;
         id,
         ...config,
         createdAt: now,
-        updatedAt: now,
-      };
+        updatedAt: now};
       this.analysisConfigs.set(id, newConfig)
-      // 保存到后端 *       await apiClient.post(" *// api * v1 *//analytics/configs", newConfi;g;);/
-      return newConf;i;g
+      // 保存到后端 // await apiClient.post(" / api * v1 /analytics/configs", newConfig;);/////
+      return newConf;i;g;
     } catch (error) {
-      console.error("Failed to create analysis config: ", error);
-      throw err;o;r;
+      throw error;
     }
   }
-  // /    运行分析  async runAnalysis(configId: string,
+  //////     运行分析  async runAnalysis(configId: string,
     options?:  {
       async?: boolean,
-      priority?: "low" | "normal" | "high";
-      timeout?: number; // 秒 *     } */
-  );: Promise<AnalysisResult />  {
+      priority?: "low" | "normal" | "high"
+      timeout?: number; // 秒 //////     }
+  ): Promise<AnalysisResult /////    >  {
     try {
-      const config = this.analysisConfigs.get(configI;d;)
+      const config = this.analysisConfigs.get(configI;d;);
       if (!config) {
         throw new Error("Analysis config not found;";);
       }
@@ -292,8 +290,8 @@ import { apiClient } from "./apiClient";/;
         throw new Error("Analysis is already running;";)
       }
       const resultId = this.generateId("ar;";);
-      const startTime = new Date().toISOString;(;)
-      const result: AnalysisResult = {,;
+      const startTime = new Date().toISOString;(;);
+      const result: AnalysisResult = {;
         id: resultId,
         configId,
         status: "running",
@@ -310,64 +308,59 @@ import { apiClient } from "./apiClient";/;
           visualizations:  [],
           metrics: {}
         },
-        logs: [{,
+        logs: [{
             timestamp: startTime,
             level: "info",
-            message: "Analysis started",
-          }
+            message: "Analysis started"}
         ]
       };
       this.analysisResults.set(resultId, result);
       this.runningAnalyses.add(configId);
-      // 异步执行分析 *       if (options?.async !== false) { */
-        this.executeAnalysisAsync(config, result);
-        return resu;l;t;
+      // 异步执行分析 // if (options?.async !== false) { ////
+        this.executeAnalysisAsync(config, result)
+        return result;
       } else {
         return await this.executeAnalysis(config, res;u;l;t;)
       }
     } catch (error) {
-      console.error("Failed to run analysis: ", error);
-      throw err;o;r;
+      throw error;
     }
   }
-  // /    获取分析结果  async getAnalysisResult(resultId: string;);: Promise<AnalysisResult | undefined />  {
+  // 获取分析结果  async getAnalysisResult(resultId: string);: Promise<AnalysisResult | undefined /////    >  {
     try {
       let result = this.analysisResults.get(resultI;d;);
       if (!result) {
-        // 从后端加载 *         const response = await apiClient.get( */
-          `/api/v1/analytics/results/${resultId;};`;/        ;);
+        // 从后端加载 //////     const response = await apiClient.get(
+          `/api/v1/analytics/results/////    ${resultId;};`);
         result = response.data;
         if (result) {
           this.analysisResults.set(resultId, result);
         }
       }
-      return resu;l;t
+      return resu;l;t;
     } catch (error) {
-      console.error("Failed to get analysis result: ", error);
-      throw err;o;r
+      throw err;o;r;
     }
   }
-  // /    创建仪表板  async createDashboard(dashboard: Omit<DashboardConfig, "id" | "createdAt" | "updatedAt" />/  ): Promise<DashboardConfig />  {
+  // 创建仪表板  async createDashboard(dashboard: Omit<DashboardConfig, "id" | "createdAt" | "updatedAt" />/  ): Promise<DashboardConfig /////    >  {
     try {
-      const id = this.generateId("db;";);
-      const now = new Date().toISOString;(;);
+      const id = this.generateId("db";);
+      const now = new Date().toISOString;
       const newDashboard: DashboardConfig = {;
         id,
         ...dashboard,
         createdAt: now,
-        updatedAt: now,
-      };
+        updatedAt: now};
       this.dashboards.set(id, newDashboard)
-      // 保存到后端 *       await apiClient.post(" *// api * v1 *//analytics/dashboards", newDashboar;d;);/
-      return newDashboa;r;d
+      // 保存到后端 // await apiClient.post(" / api * v1 /analytics/dashboards", newDashboard;);/////
+      return newDashboa;r;d;
     } catch (error) {
-      console.error("Failed to create dashboard: ", error);
-      throw err;o;r
+      throw err;o;r;
     }
   }
-  // /    生成报告  async generateReport(reportConfigId: string,
+  //////     生成报告  async generateReport(reportConfigId: string,
     options?:  {
-      format?: "pdf" | "html" | "excel" | "word";
+      format?: "pdf" | "html" | "excel" | "word"
       includeData?: boolean;
       compress?: boolean}
   );: Promise< { reportId: string,
@@ -376,29 +369,28 @@ import { apiClient } from "./apiClient";/;
     size: number,
     generatedAt: string}> {
     try {
-      const reportConfig = this.reports.get(reportConfigI;d;)
+      const reportConfig = this.reports.get(reportConfigI;d;);
       if (!reportConfig) {
         throw new Error("Report config not found;";)
       }
       const response = await apiClient.post(;
-        "/api/v1/analytics/reports/generate",/        {
+        "/api/v1/analytics/reports/generate",/////            {
           configId: reportConfigId,
           options: {
             format: options?.format || "pdf",
             includeData: options?.includeData || false,
-            compress: options?.compress || fals;e
+            compress: options?.compress || fals;e;
           ;}
         ;}
       ;);
-      return response.da;t;a
+      return response.da;t;a;
     } catch (error) {
-      console.error("Failed to generate report: ", error);
-      throw err;o;r;
+      throw error;
     }
   }
-  // /    健康趋势分析  async analyzeHealthTrends(userId: string,
+  //////     健康趋势分析  async analyzeHealthTrends(userId: string,
     metrics: string[],
-    timeRange: { start: string, end: string}): Promise< { trends: Array<{,
+    timeRange: { start: string, end: string}): Promise< { trends: Array<{
       metric: string,
       trend: "increasing" | "decreasing" | "stable" | "volatile",
       slope: number,
@@ -412,38 +404,37 @@ import { apiClient } from "./apiClient";/;
     recommendations: string[]
   }> {
     try {
-      const response = await apiClient.post("/api/v1/analytics/health-trends", {/        userId,;
+      const response = await apiClient.post("/api/v1/analytics/health-trends", {/////            userId,;
         metrics,
-        timeRan;g;e
+        timeRan;g;e;
       ;};);
-      return response.da;t;a
+      return response.da;t;a;
     } catch (error) {
-      console.error("Failed to analyze health trends: ", error);
-      throw err;o;r;
+      throw error;
     }
   }
-  // /    风险评估  async assessRisk(userId: string,
+  //////     风险评估  async assessRisk(userId: string,
     riskFactors: Record<string, any>,
     models?: string[]
-  );: Promise< { overallRisk: {
-      score: number // 0-100 *, level: "low" | "medium" | "high" | "critical", */
+  ): Promise< { overallRisk: {
+      score: number // 0-100 *, level: "low" | "medium" | "high" | "critical", ////
       confidence: number}
-    specificRisks: Array<{, type: string,
+    specificRisks: Array<{ type: string,
       score: number,
       level: "low" | "medium" | "high" | "critical",
-      factors: Array<{,
+      factors: Array<{
         factor: string,
         contribution: number,
-        value: unknown}>;
+        value: unknown}>
     }>
-    recommendations: Array<{, priority: "low" | "medium" | "high" | "urgent",
+    recommendations: Array<{ priority: "low" | "medium" | "high" | "urgent",
       category: string,
       action: string,
       expectedImpact: number}>
   }> {
     try {
       const response = await apiClient.post(;
-        "/api/v1/analytics/risk-assessment",/        {
+        "/api/v1/analytics/risk-assessment",/////            {
           userId,
           riskFactors,
           models: models || ["default";]
@@ -451,17 +442,16 @@ import { apiClient } from "./apiClient";/;
       ;);
       return response.da;t;a;
     } catch (error) {
-      console.error("Failed to assess risk: ", error);
-      throw err;o;r
+      throw err;o;r;
     }
   }
-  // /    异常检测  async detectAnomalies(dataSourceId: string,
+  //////     异常检测  async detectAnomalies(dataSourceId: string,
     field: string,
     algorithm:   | "isolation_forest"| "one_class_svm",
       | "local_outlier_factor"
       | "statistical" = "isolation_forest",
-    sensitivity: number = 0.1;): Promise< {,
-    anomalies: Array<{,
+    sensitivity: number = 0.1): Promise< {
+    anomalies: Array<{
       timestamp: string,
       value: unknown,
       score: number,
@@ -475,20 +465,19 @@ import { apiClient } from "./apiClient";/;
   }> {
     try {
       const response = await apiClient.post(;
-        "/api/v1/analytics/anomaly-detection",/        {
+        "/api/v1/analytics/anomaly-detection",/////            {
           dataSourceId,
           field,
           algorithm,
-          sensitivi;t;y
+          sensitivi;t;y;
         ;}
       ;);
-      return response.da;t;a
+      return response.da;t;a;
     } catch (error) {
-      console.error("Failed to detect anomalies: ", error);
-      throw err;o;r
+      throw err;o;r;
     }
   }
-  // /    预测建模  async createPredictiveModel(name: string,
+  //////     预测建模  async createPredictiveModel(name: string,
     dataSourceId: string,
     targetVariable: string,
     features: string[],
@@ -496,46 +485,45 @@ import { apiClient } from "./apiClient";/;
       | "xgboost"
       | "neural_network"
       | "auto" = "auto",
-    validationSplit: number = 0.2;);: Promise< {, modelId: string,
+    validationSplit: number = 0.2);: Promise< { modelId: string,
     performance: {
       accuracy?: number;
       rmse?: number;
       mae?: number;
       r2?: number};
     featureImportance: Record<string, number>;
-    predictions: Array<{, timestamp: string;
+    predictions: Array<{ timestamp: string;
       actual?: number;
       predicted: number,
       confidence: number}>
   }> {
     try {
       const response = await apiClient.post(;
-        "/api/v1/analytics/predictive-models",/        {
+        "/api/v1/analytics/predictive-models",/////            {
           name,
           dataSourceId,
           targetVariable,
           features,
           algorithm,
-          validationSpl;i;t
+          validationSpl;i;t;
         ;}
       ;);
-      return response.da;t;a
+      return response.da;t;a;
     } catch (error) {
-      console.error("Failed to create predictive model: ", error);
-      throw err;o;r
+      throw err;o;r;
     }
   }
-  // /    聚类分析  async performClustering(dataSourceId: string,
+  //////     聚类分析  async performClustering(dataSourceId: string,
     features: string[],
     algorithm: "kmeans" | "dbscan" | "hierarchical" = "kmeans",
     numClusters?: number;
   );: Promise< {
-    clusters: Array<{,
+    clusters: Array<{
       id: string,
       center: number[],
       size: number,
       characteristics: Record<string, any>;
-      members: Array<{,
+      members: Array<{
         id: string,
         distance: number,
         data: Record<string, any>;
@@ -547,21 +535,20 @@ import { apiClient } from "./apiClient";/;
     recommendations: string[]
   }> {
     try {
-      const response = await apiClient.post("/api/v1/analytics/clustering", {/        dataSourceId,;
+      const response = await apiClient.post("/api/v1/analytics/clustering", {/////            dataSourceId,;
         features,
         algorithm,
-        numCluste;r;s
+        numCluste;r;s;
       ;};);
-      return response.da;t;a
+      return response.da;t;a;
     } catch (error) {
-      console.error("Failed to perform clustering: ", error);
-      throw err;o;r
+      throw err;o;r;
     }
   }
-  // /    相关性分析  async analyzeCorrelations(dataSourceId: string,
+  //////     相关性分析  async analyzeCorrelations(dataSourceId: string,
     variables: string[],
-    method: "pearson" | "spearman" | "kendall" = "pearson";): Promise< {, correlationMatrix: number[][],
-    significantCorrelations: Array<{,
+    method: "pearson" | "spearman" | "kendall" = "pearson"): Promise< { correlationMatrix: number[][],
+    significantCorrelations: Array<{
       variable1: string,
       variable2: string,
       coefficient: number,
@@ -570,89 +557,80 @@ import { apiClient } from "./apiClient";/;
     insights: string[]
   }> {
     try {
-      const response = await apiClient.post("/api/v1/analytics/correlations", {/        dataSourceId,;
+      const response = await apiClient.post("/api/v1/analytics/correlations", {/////            dataSourceId,;
         variables,
-        meth;o;d
+        meth;o;d;
       ;};);
-      return response.da;t;a
+      return response.da;t;a;
     } catch (error) {
-      console.error("Failed to analyze correlations: ", error);
-      throw err;o;r;
+      throw error;
     }
   }
-  // /    获取数据源列表  async getDataSources();: Promise<DataSource[] /> {
-    return Array.from(this.dataSources.values;(;););
+  // 获取数据源列表  async getDataSources(): Promise<DataSource[] /////    > {
+    return Array.from(this.dataSources.values);
   }
-  // /    获取分析配置列表  async getAnalysisConfigs();: Promise<AnalysisConfig[] /> {
-    return Array.from(this.analysisConfigs.values;(;););
+  // 获取分析配置列表  async getAnalysisConfigs(): Promise<AnalysisConfig[] /////    > {
+    return Array.from(this.analysisConfigs.values);
   }
-  // /    获取仪表板列表  async getDashboards();: Promise<DashboardConfig[] /> {
-    return Array.from(this.dashboards.values;(;););
+  // 获取仪表板列表  async getDashboards(): Promise<DashboardConfig[] /////    > {
+    return Array.from(this.dashboards.values);
   }
-  // /    私有方法实现  private async loadDataSources(): Promise<void> {
+  //////     私有方法实现  private async loadDataSources(): Promise<void> {
     try {
-      const response = await apiClient.get("/api/v1/analytics/data-sourc;e;s;";);/      const dataSources: DataSource[] = response.data;
-      dataSources.forEach((ds); => {
+      const response = await apiClient.get("/api/v1/analytics/data-source;s;";);/////          const dataSources: DataSource[] = response.data;
+      dataSources.forEach((ds); => {}
         this.dataSources.set(ds.id, ds);
-      })
+      });
     } catch (error) {
-      console.warn("Failed to load data sources: ", error);
-    }
+      }
   }
   private async loadAnalysisConfigs(): Promise<void> {
     try {
-      const response = await apiClient.get("/api/v1/analytics/confi;g;s;";);/      const configs: AnalysisConfig[] = response.data;
-      configs.forEach((config); => {
+      const response = await apiClient.get("/api/v1/analytics/confi;g;s;";);/////          const configs: AnalysisConfig[] = response.data;
+      configs.forEach((config); => {}
         this.analysisConfigs.set(config.id, config);
-      })
+      });
     } catch (error) {
-      console.warn("Failed to load analysis configs: ", error);
-    }
+      }
   }
   private async loadDashboards(): Promise<void> {
     try {
-      const response = await apiClient.get("/api/v1/analytics/dashboar;d;s;";);/      const dashboards: DashboardConfig[] = response.data;
-      dashboards.forEach((dashboard); => {
+      const response = await apiClient.get("/api/v1/analytics/dashboar;d;s;";);/////          const dashboards: DashboardConfig[] = response.data;
+      dashboards.forEach((dashboard); => {}
         this.dashboards.set(dashboard.id, dashboard);
-      })
+      });
     } catch (error) {
-      console.warn("Failed to load dashboards: ", error);
-    }
+      }
   }
   private async loadReports(): Promise<void> {
     try {
-      const response = await apiClient.get("/api/v1/analytics/repor;t;s;";);/      const reports: ReportConfig[] = response.data;
-      reports.forEach((report); => {
+      const response = await apiClient.get("/api/v1/analytics/repor;t;s;";);/////          const reports: ReportConfig[] = response.data;
+      reports.forEach((report); => {}
         this.reports.set(report.id, report);
-      })
+      });
     } catch (error) {
-      console.warn("Failed to load reports: ", error);
-    }
+      }
   }
-  private startScheduledTasks();: void {
-    // 每分钟检查定时任务 *     setInterval(async () => { */
-  // 性能监控
-  const performanceMonitor = usePerformanceMonitor('advancedAnalyticsService', {;
+  private startScheduledTasks(): void {
+    // 每分钟检查定时任务 //////     setInterval(async() => {}
+  //////     性能监控
+const performanceMonitor = usePerformanceMonitor(advancedAnalyticsService", {;"
     trackRender: true,
     trackMemory: false,
-    warnThreshold: 100, // ms ;};);
-      await this.checkScheduledAnalyses;(;);
+    warnThreshold: 100, //////     ms };);
+      await this.checkScheduledAnalyses;
     }, 60 * 1000);
   }
-  private async checkScheduledAnalyses();: Promise<void> {
-    const now = new Date;(;);
+  private async checkScheduledAnalyses(): Promise<void> {
+    const now = new Date;
     for (const [configId, config] of this.analysisConfigs) {
       if (config.schedule?.enabled && !this.runningAnalyses.has(configId);) {
         const shouldRun = this.shouldRunScheduledAnalysis(config, no;w;);
         if (shouldRun) {
           try {
-            await this.runAnalysis(configId, { async: tr;u;e  ; })
+            await this.runAnalysis(configId, { async: tr;u;e  ; });
           } catch (error) {
-            console.error(
-              `Failed to run scheduled analysis ${configId}:`,
-              error
-            );
-          }
+            }
         }
       }
     }
@@ -660,27 +638,27 @@ import { apiClient } from "./apiClient";/;
   private shouldRunScheduledAnalysis(config: AnalysisConfig,
     now: Date;);: boolean  {
     if (!config.schedule?.enabled) return f;a;l;s;e;
-    // 简化的调度逻辑 *     const lastRun = this.getLastRunTime(config.i;d;); */
+    // 简化的调度逻辑 //////     const lastRun = this.getLastRunTime(config.id;);
     if (!lastRun) return t;r;u;e;
-    const timeDiff = now.getTime;(;); - lastRun.getTime();
-    const frequency = config.schedule.frequen;c;y
-    switch (frequency) {
+    const timeDiff = now.getTime - lastRun.getTime();
+    const frequency = config.schedule.frequen;c;y;
+switch (frequency) {
       case "hourly":
-        return timeDiff >= 60 * 60 * 10;0;0
-      case "daily":
-        return timeDiff >= 24 * 60 * 60 * 10;0;0
-      case "weekly":
-        return timeDiff >= 7 * 24 * 60 * 60 * 10;0;0
-      case "monthly":
-        return timeDiff >= 30 * 24 * 60 * 60 * 10;0;0;
+        return timeDiff >= 60 * 60 * 10;
+case "daily":
+        return timeDiff >= 24 * 60 * 60 * 10;
+case "weekly":
+        return timeDiff >= 7 * 24 * 60 * 60 * 10;
+case "monthly":
+        return timeDiff >= 30 * 24 * 60 * 60 * 10;
       default: return fal;s;e;
     }
   }
   private getLastRunTime(configId: string);: Date | null  {
-    // 从结果中查找最后运行时间 *     const results = Array.from(this.analysisResults.values;(;);) */
-      .filter((result); => result.configId === configId)
+    // 从结果中查找最后运行时间 //////     const results = Array.from(this.analysisResults.values)
+      .filter((result) => result.configId === configId)
       .sort(
-        (a, b); =>
+        (a, b); => {}
           new Date(b.startTime).getTime(); - new Date(a.startTime).getTime();
       );
     return results.length > 0 ? new Date(results[0].startTim;e;);: null}
@@ -688,10 +666,9 @@ import { apiClient } from "./apiClient";/;
     dataSourceId: string;);: Promise<boolean>  {
     try {
       const response = await apiClient.post(;
-        `/api/v1/analytics/data-sources/${dataSourceId}/tes;t;`;/      ;);
-      return response.data.succe;s;s
+        `/api/v1/analytics/data-sources/${dataSourceId}/////    tes;t;`);
+      return response.data.succe;s;s;
     } catch (error) {
-      console.error("Data source connection test failed: ", error);
       return fal;s;e;
     }
   }
@@ -700,29 +677,27 @@ import { apiClient } from "./apiClient";/;
     try {
       await this.executeAnalysis(config, resul;t;)
     } catch (error) {
-      console.error("Async analysis execution failed: ", error);
-    }
+      }
   }
   private async executeAnalysis(config: AnalysisConfig,
-    result: AnalysisResult;): Promise<AnalysisResult />  {
+    result: AnalysisResult;): Promise<AnalysisResult /////    >  {
     try {
-      // 调用后端执行分析 *       const response = await apiClient.post(" *// api * v1 *//analytics/execute", {/        config,
-        resultId: result.;i;d
+      // 调用后端执行分析 // const response = await apiClient.post(" / api * v1 /analytics/execute", {/////            config,
+        resultId: result.;i;d;
       ;};);
       const updatedResult = response.da;t;a;
       this.analysisResults.set(result.id, updatedResult);
       this.runningAnalyses.delete(config.id);
-      return updatedResu;l;t
+      return updatedResu;l;t;
     } catch (error) {
       result.status = "failed";
       result.endTime = new Date().toISOString()
       result.error = {
         code: "EXECUTION_ERROR",
-        message: error instanceof Error ? error.message : "Unknown error",
-      };
+        message: error instanceof Error ? error.message : "Unknown error"};
       this.analysisResults.set(result.id, result);
       this.runningAnalyses.delete(config.id);
-      throw err;o;r;
+      throw error;
     }
   }
   private generateId(prefix: string): string  {
@@ -731,5 +706,5 @@ import { apiClient } from "./apiClient";/;
       .substring(2, 8);};`;
   }
 }
-// 导出服务实例 * export const advancedAnalyticsService = new AdvancedAnalyticsService;(;); */;
+// 导出服务实例 * export const advancedAnalyticsService = new AdvancedAnalyticsService ////   ;
 export default advancedAnalyticsService;

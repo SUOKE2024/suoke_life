@@ -5,11 +5,8 @@
 将所有微服务的Python版本统一更新为3.13.3
 """
 
-import os
 import re
-import glob
 from pathlib import Path
-from typing import List, Dict, Any
 import logging
 
 # 配置日志
@@ -381,12 +378,10 @@ class PythonVersionUpdater:
         from datetime import datetime
         return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-
 def main():
     """主函数"""
     updater = PythonVersionUpdater()
     updater.update_all()
-
 
 if __name__ == "__main__":
     main() 

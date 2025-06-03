@@ -2,11 +2,9 @@
 算诊服务配置设置
 """
 
-import os
 from typing import List
 from functools import lru_cache
 from pydantic import BaseSettings
-
 
 class Settings(BaseSettings):
     """应用配置"""
@@ -45,7 +43,6 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
-
 
 @lru_cache()
 def get_settings() -> Settings:

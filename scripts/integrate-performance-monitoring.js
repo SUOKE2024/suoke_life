@@ -1,9 +1,6 @@
-#!/usr/bin/env node
-
-const fs = require('fs');
-const path = require('path');
-
-console.log('📊 性能监控集成脚本启动...\n');
+#!/usr/bin/env node;
+const fs = require("fs);
+const path = require(")path");
 
 // 递归获取所有React组件文件
 function getAllComponentFiles(dir, files = []) {
@@ -13,9 +10,9 @@ function getAllComponentFiles(dir, files = []) {
     const fullPath = path.join(dir, item);
     const stat = fs.statSync(fullPath);
     
-    if (stat.isDirectory() && !item.startsWith('.') && item !== 'node_modules') {
+    if (stat.isDirectory() && !item.startsWith(".) && item !== "node_modules") {
       getAllComponentFiles(fullPath, files);
-    } else if (item.endsWith('.tsx') && !item.endsWith('.test.tsx')) {
+    } else if (item.endsWith(.tsx") && !item.endsWith(".test.tsx)) {
       files.push(fullPath);
     }
   }
@@ -26,61 +23,60 @@ function getAllComponentFiles(dir, files = []) {
 // 分析组件是否需要性能监控
 function analyzeComponent(filePath) {
   try {
-    const content = fs.readFileSync(filePath, 'utf8');
-    const fileName = path.basename(filePath, '.tsx');
+    const content = fs.readFileSync(filePath, "utf8");
+    const fileName = path.basename(filePath, .tsx");
     
     const analysis = {
       filePath,
       fileName,
       needsMonitoring: false,
-      priority: 'low',
+      priority: "low,
       reasons: [],
       hasMonitoring: false,
-      complexity: 'low',
+      complexity: "low",
       renderCount: 0,
-      stateCount: 0,
-      effectCount: 0,
-    };
+      stateCount: 0,;
+      effectCount: 0};
     
     // 检查是否已经有性能监控
-    analysis.hasMonitoring = content.includes('usePerformanceMonitor');
+analysis.hasMonitoring = content.includes(usePerformanceMonitor");
     
     // 分析组件复杂度
-    const useStateCount = (content.match(/useState/g) || []).length;
+const useStateCount = (content.match(/useState/g) || []).length;
     const useEffectCount = (content.match(/useEffect/g) || []).length;
     const useMemoCount = (content.match(/useMemo/g) || []).length;
     const useCallbackCount = (content.match(/useCallback/g) || []).length;
     const renderCount = (content.match(/return\s*\(/g) || []).length;
-    const lineCount = content.split('\n').length;
+    const lineCount = content.split("\n).length;
     
     analysis.stateCount = useStateCount;
     analysis.effectCount = useEffectCount;
     analysis.renderCount = renderCount;
     
     // 判断是否需要性能监控
-    const complexityFactors = [];
+const complexityFactors = [];
     
     // 高状态管理复杂度
-    if (useStateCount > 3) {
-      complexityFactors.push('多状态管理');
+if (useStateCount > 3) {
+      complexityFactors.push("多状态管理");
       analysis.needsMonitoring = true;
     }
     
     // 多副作用
-    if (useEffectCount > 2) {
-      complexityFactors.push('多副作用');
+if (useEffectCount > 2) {
+      complexityFactors.push(多副作用");
       analysis.needsMonitoring = true;
     }
     
     // 大量优化Hook
-    if (useMemoCount + useCallbackCount > 3) {
-      complexityFactors.push('大量优化Hook');
+if (useMemoCount + useCallbackCount > 3) {
+      complexityFactors.push("大量优化Hook);
       analysis.needsMonitoring = true;
     }
     
     // 大文件
-    if (lineCount > 200) {
-      complexityFactors.push('大文件');
+if (lineCount > 200) {
+      complexityFactors.push("大文件");
       analysis.needsMonitoring = true;
     }
     
@@ -101,45 +97,44 @@ function analyzeComponent(filePath) {
     ];
     
     if (criticalPatterns.some(pattern => pattern.test(fileName))) {
-      complexityFactors.push('关键组件');
+      complexityFactors.push(关键组件");
       analysis.needsMonitoring = true;
-      analysis.priority = 'high';
+      analysis.priority = "high;
     }
     
     // 包含复杂渲染逻辑
-    if (content.includes('FlatList') || content.includes('ScrollView') || content.includes('VirtualizedList')) {
-      complexityFactors.push('列表渲染');
+if (content.includes("FlatList") || content.includes(ScrollView") || content.includes("VirtualizedList)) {
+      complexityFactors.push("列表渲染");
       analysis.needsMonitoring = true;
-      analysis.priority = 'high';
+      analysis.priority = high";
     }
     
     // 包含动画
-    if (content.includes('Animated') || content.includes('useSharedValue') || content.includes('withTiming')) {
-      complexityFactors.push('动画组件');
+if (content.includes("Animated) || content.includes("useSharedValue") || content.includes(withTiming")) {
+      complexityFactors.push("动画组件);
       analysis.needsMonitoring = true;
-      analysis.priority = 'high';
+      analysis.priority = "high";
     }
     
     // 网络请求
-    if (content.includes('fetch') || content.includes('axios') || content.includes('useQuery')) {
-      complexityFactors.push('网络请求');
+if (content.includes(fetch") || content.includes("axios) || content.includes("useQuery")) {
+      complexityFactors.push(网络请求");
       analysis.needsMonitoring = true;
     }
     
     analysis.reasons = complexityFactors;
     
     // 设置复杂度等级
-    if (complexityFactors.length >= 3) {
-      analysis.complexity = 'high';
-      analysis.priority = 'high';
+if (complexityFactors.length >= 3) {
+      analysis.complexity = "high;
+      analysis.priority = "high";
     } else if (complexityFactors.length >= 2) {
-      analysis.complexity = 'medium';
-      analysis.priority = 'medium';
+      analysis.complexity = medium";
+      analysis.priority = "medium;
     }
     
     return analysis;
   } catch (error) {
-    console.error(`❌ 分析组件 ${filePath} 时出错:`, error.message);
     return null;
   }
 }
@@ -147,38 +142,38 @@ function analyzeComponent(filePath) {
 // 为组件添加性能监控
 function addPerformanceMonitoring(filePath, analysis) {
   try {
-    let content = fs.readFileSync(filePath, 'utf8');
+    let content = fs.readFileSync(filePath, "utf8");
     const originalContent = content;
     
     // 如果已经有性能监控，跳过
-    if (analysis.hasMonitoring) {
+if (analysis.hasMonitoring) {
       return false;
     }
     
     // 添加性能监控Hook导入
-    if (!content.includes('usePerformanceMonitor')) {
+if (!content.includes(usePerformanceMonitor")) {
       // 查找现有的import语句
-      const importMatch = content.match(/import.*from\s+['"]react['"];?\s*\n/);
+const importMatch = content.match(/import.*from\s+["]react["];?\s*\n/);
       if (importMatch) {
-        const importStatement = "import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor';\n";
+        const importStatement = "import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor";\n";
         content = content.replace(importMatch[0], importMatch[0] + importStatement);
       } else {
         // 如果没有React import，在文件开头添加
-        const importStatement = "import React from 'react';\nimport { usePerformanceMonitor } from '../hooks/usePerformanceMonitor';\n\n";
+const importStatement = "import React from react";\nimport { usePerformanceMonitor } from "../hooks/usePerformanceMonitor;\n\n";
         content = importStatement + content;
       }
     }
     
     // 在组件函数内添加性能监控Hook
-    const componentMatch = content.match(/((?:function|const)\s+\w+.*?(?:React\.FC|JSX\.Element|\(\s*\)\s*=>).*?\{)/s);
+const componentMatch = content.match(/((?:function|const)\s+\w+.*?(?:React\.FC|JSX\.Element|\(\s*\)\s*=>).*?\{)/s);
     if (componentMatch) {
       const componentStart = componentMatch[1];
-      const monitoringCode = `
+      const monitoringCode =  `;
   // 性能监控
-  const performanceMonitor = usePerformanceMonitor('${analysis.fileName}', {
+const performanceMonitor = usePerformanceMonitor("${analysis.fileName}", {
     trackRender: true,
-    trackMemory: ${analysis.complexity === 'high'},
-    warnThreshold: ${analysis.priority === 'high' ? 50 : 100}, // ms
+    trackMemory: ${analysis.complexity === high"},
+    warnThreshold: ${analysis.priority === "high ? 50 : 100}, // ms
   });
 `;
       
@@ -186,7 +181,7 @@ function addPerformanceMonitoring(filePath, analysis) {
     }
     
     // 在return语句前添加性能记录
-    const returnMatch = content.match(/(\s+)(return\s*\()/);
+const returnMatch = content.match(/(\s+)(return\s*\()/);
     if (returnMatch) {
       const indent = returnMatch[1];
       const performanceCode = `${indent}// 记录渲染性能
@@ -198,7 +193,7 @@ ${indent}`;
     }
     
     // 如果有useEffect，添加副作用监控
-    if (analysis.effectCount > 0) {
+if (analysis.effectCount > 0) {
       content = content.replace(
         /useEffect\(\(\) => \{/g,
         `useEffect(() => {
@@ -214,14 +209,13 @@ ${indent}`;
     }
     
     // 如果内容有变化，写回文件
-    if (content !== originalContent) {
+if (content !== originalContent) {
       fs.writeFileSync(filePath, content);
       return true;
     }
     
     return false;
   } catch (error) {
-    console.error(`❌ 为组件 ${filePath} 添加性能监控时出错:`, error.message);
     return false;
   }
 }
@@ -233,33 +227,33 @@ function createPerformanceConfig() {
  * 索克生活APP - 性能监控设置
  */
 
-export interface PerformanceConfig {
+export interface PerformanceConfig {;
   // 全局性能监控开关
-  enabled: boolean;
+enabled: boolean;
   
   // 开发环境配置
-  development: {
+development: {
     trackRender: boolean;
     trackMemory: boolean;
     trackNetwork: boolean;
     logToConsole: boolean;
     warnThreshold: number; // ms
-    errorThreshold: number; // ms
-  };
+errorThreshold: number; // ms
+  }
   
   // 生产环境配置
-  production: {
+production: {
     trackRender: boolean;
     trackMemory: boolean;
     trackNetwork: boolean;
     logToConsole: boolean;
     warnThreshold: number; // ms
-    errorThreshold: number; // ms
-    reportToAnalytics: boolean;
+errorThreshold: number; // ms
+reportToAnalytics: boolean;
   };
   
   // 组件特定配置
-  components: {
+components: {
     [componentName: string]: {
       enabled: boolean;
       warnThreshold?: number;
@@ -278,8 +272,7 @@ export const performanceConfig: PerformanceConfig = {
     trackNetwork: true,
     logToConsole: true,
     warnThreshold: 50,
-    errorThreshold: 100,
-  },
+    errorThreshold: 100},
   
   production: {
     trackRender: true,
@@ -288,59 +281,51 @@ export const performanceConfig: PerformanceConfig = {
     logToConsole: false,
     warnThreshold: 100,
     errorThreshold: 200,
-    reportToAnalytics: true,
-  },
+    reportToAnalytics: true},
   
   components: {
     // 关键组件的特殊配置
-    'HomeScreen': {
+    "HomeScreen": {
       enabled: true,
       warnThreshold: 30,
       trackMemory: true,
-      customMetrics: ['userInteraction', 'dataLoad'],
-    },
+      customMetrics: [userInteraction", "dataLoad]},
     
-    'ProfileScreen': {
+    "ProfileScreen": {
       enabled: true,
       warnThreshold: 50,
-      trackMemory: true,
-    },
+      trackMemory: true},
     
-    'HealthDashboard': {
+    HealthDashboard": {
       enabled: true,
       warnThreshold: 40,
       trackMemory: true,
-      customMetrics: ['chartRender', 'dataUpdate'],
-    },
+      customMetrics: ["chartRender, "dataUpdate"]},
     
-    'AgentChat': {
+    AgentChat": {
       enabled: true,
       warnThreshold: 30,
       trackMemory: true,
-      customMetrics: ['messageRender', 'scrollPerformance'],
-    },
-  },
-};
+      customMetrics: ["messageRender, "scrollPerformance"]}}}
 
 // 性能阈值配置
 export const performanceThresholds = {
-  render: {
+  render: {;
     good: 16, // 60fps
-    warning: 33, // 30fps
-    critical: 50, // 20fps
+warning: 33, // 30fps
+critical: 50, // 20fps
   },
   
   memory: {
     warning: 50 * 1024 * 1024, // 50MB
-    critical: 100 * 1024 * 1024, // 100MB
+critical: 100 * 1024 * 1024, // 100MB
   },
   
   network: {
     good: 1000, // 1s
-    warning: 3000, // 3s
-    critical: 5000, // 5s
-  },
-};
+warning: 3000, // 3s
+critical: 5000, // 5s
+  }}
 
 // 获取组件性能配置
 export function getComponentConfig(componentName: string) {
@@ -351,15 +336,14 @@ export function getComponentConfig(componentName: string) {
   return {
     ...baseConfig,
     ...componentConfig,
-    enabled: performanceConfig.enabled && (componentConfig.enabled !== false),
-  };
+    enabled: performanceConfig.enabled && (componentConfig.enabled !== false)};
 }
 `;
 
-  const configPath = 'src/config/performance.ts';
+  const configPath = src/config/performance.ts";
   
   // 确保目录存在
-  const configDir = path.dirname(configPath);
+const configDir = path.dirname(configPath);
   if (!fs.existsSync(configDir)) {
     fs.mkdirSync(configDir, { recursive: true });
   }
@@ -374,16 +358,16 @@ function createPerformanceReporter() {
  * 性能报告生成器
  * 索克生活APP - 性能数据收集和报告
  */
-
-import { performanceThresholds } from '../config/performance';
+;
+import { performanceThresholds  } from "../config/performance;
 
 export interface PerformanceMetric {
   componentName: string;
-  metricType: 'render' | 'memory' | 'network' | 'effect';
+  metricType: ";render" | memory" | "network | "effect";
   value: number;
   timestamp: number;
   threshold?: number;
-  severity: 'good' | 'warning' | 'critical';
+  severity: good" | "warning | "critical";
 }
 
 export interface PerformanceReport {
@@ -415,54 +399,52 @@ class PerformanceReporter {
   }
 
   // 记录性能指标
-  recordMetric(metric: Omit<PerformanceMetric, 'timestamp' | 'severity'>) {
+recordMetric(metric: Omit<PerformanceMetric, timestamp" | "severity>) {
     const severity = this.calculateSeverity(metric.metricType, metric.value);
     
     const fullMetric: PerformanceMetric = {
       ...metric,
       timestamp: Date.now(),
-      severity,
-    };
+      severity};
 
     this.metrics.push(fullMetric);
 
     // 在开发环境中实时警告
-    if (__DEV__ && severity !== 'good') {
-      console.warn(\`Performance Warning: \${metric.componentName} \${metric.metricType} took \${metric.value}ms\`);
-    }
+if (__DEV__ && severity !== "good") {
+      }
   }
 
-  private calculateSeverity(type: string, value: number): 'good' | 'warning' | 'critical' {
+  private calculateSeverity(type: string, value: number): good" | "warning | "critical" {
     const thresholds = performanceThresholds[type as keyof typeof performanceThresholds];
     
-    if (!thresholds) return 'good';
+    if (!thresholds) return good";
     
-    if (value >= thresholds.critical) return 'critical';
-    if (value >= thresholds.warning) return 'warning';
-    return 'good';
+    if (value >= thresholds.critical) return "critical;
+    if (value >= thresholds.warning) return "warning";
+    return good";
   }
 
   // 生成性能报告
-  generateReport(): PerformanceReport {
+generateReport(): PerformanceReport {
     const endTime = Date.now();
-    const renderMetrics = this.metrics.filter(m => m.metricType === 'render');
+    const renderMetrics = this.metrics.filter(m => m.metricType === "render);
     
     const slowComponents = Array.from(new Set(
       this.metrics
-        .filter(m => m.severity === 'critical')
-        .map(m => m.componentName)
+        .filter(m => m.severity === "critical")
+        .map(m => m.componentName);
     ));
 
     const memoryLeaks = Array.from(new Set(
       this.metrics
-        .filter(m => m.metricType === 'memory' && m.severity !== 'good')
-        .map(m => m.componentName)
+        .filter(m => m.metricType === memory" && m.severity !== "good)
+        .map(m => m.componentName);
     ));
 
-    const criticalIssues = this.metrics.filter(m => m.severity === 'critical').length;
+    const criticalIssues = this.metrics.filter(m => m.severity === "critical").length;
     
     const averageRenderTime = renderMetrics.length > 0
-      ? renderMetrics.reduce((sum, m) => sum + m.value, 0) / renderMetrics.length
+      ? renderMetrics.reduce((sum, m) => sum + m.value, 0) / renderMetrics.length;
       : 0;
 
     return {
@@ -475,49 +457,44 @@ class PerformanceReporter {
         slowComponents,
         memoryLeaks,
         criticalIssues,
-        averageRenderTime,
-      },
-    };
+        averageRenderTime}};
   }
 
   // 导出报告到文件（开发环境）
   exportReport() {
-    if (!__DEV__) return;
+    if (!__DEV__) return
 
     const report = this.generateReport();
     const reportJson = JSON.stringify(report, null, 2);
     
     // 在开发环境中保存到本地
-    console.log('Performance Report:', report.summary);
-    
-    // 可以扩展为保存到文件或发送到分析服务
-    return report;
+// 可以扩展为保存到文件或发送到分析服务
+return report;
   }
 
   // 清除旧指标
-  clearMetrics() {
+clearMetrics() {
     this.metrics = [];
     this.startTime = Date.now();
   }
 
   // 获取组件性能统计
-  getComponentStats(componentName: string) {
+getComponentStats(componentName: string) {
     const componentMetrics = this.metrics.filter(m => m.componentName === componentName);
     
     if (componentMetrics.length === 0) {
       return null;
     }
 
-    const renderMetrics = componentMetrics.filter(m => m.metricType === 'render');
-    const memoryMetrics = componentMetrics.filter(m => m.metricType === 'memory');
+    const renderMetrics = componentMetrics.filter(m => m.metricType === "render);
+    const memoryMetrics = componentMetrics.filter(m => m.metricType === "memory");
 
     return {
       totalRenders: renderMetrics.length,
       averageRenderTime: renderMetrics.reduce((sum, m) => sum + m.value, 0) / renderMetrics.length,
       maxRenderTime: Math.max(...renderMetrics.map(m => m.value)),
       memoryUsage: memoryMetrics.length > 0 ? memoryMetrics[memoryMetrics.length - 1].value : 0,
-      criticalIssues: componentMetrics.filter(m => m.severity === 'critical').length,
-    };
+      criticalIssues: componentMetrics.filter(m => m.severity === critical").length};
   }
 }
 
@@ -527,12 +504,12 @@ export const performanceReporter = new PerformanceReporter();
 // 定期生成报告（开发环境）
 if (__DEV__) {
   setInterval(() => {
-    performanceReporter.exportReport();
+    performanceReporter.exportReport()
   }, 60000); // 每分钟生成一次报告
 }
-`;
+`
 
-  const reporterPath = 'src/utils/performanceReporter.ts';
+  const reporterPath = "src/utils/performanceReporter.ts;
   fs.writeFileSync(reporterPath, reporterContent);
   return reporterPath;
 }
@@ -540,11 +517,7 @@ if (__DEV__) {
 // 主执行函数
 async function main() {
   try {
-    console.log('📁 扫描React组件文件...');
-    const componentFiles = getAllComponentFiles('src');
-    console.log(`找到 ${componentFiles.length} 个组件文件\n`);
-    
-    console.log('📊 分析组件性能需求...');
+    const componentFiles = getAllComponentFiles(src");
     const analyses = [];
     
     for (const file of componentFiles) {
@@ -555,44 +528,28 @@ async function main() {
     }
     
     // 按优先级排序
-    analyses.sort((a, b) => {
+analyses.sort((a, b) => {
       const priorityOrder = { high: 3, medium: 2, low: 1 };
       return priorityOrder[b.priority] - priorityOrder[a.priority];
     });
     
     // 统计信息
-    const stats = {
+const stats = {
       total: analyses.length,
       needsMonitoring: analyses.filter(a => a.needsMonitoring).length,
       hasMonitoring: analyses.filter(a => a.hasMonitoring).length,
-      highPriority: analyses.filter(a => a.priority === 'high').length,
-      mediumPriority: analyses.filter(a => a.priority === 'medium').length,
-    };
-    
-    console.log('📊 分析结果:');
-    console.log(`   - 总组件数: ${stats.total}`);
-    console.log(`   - 需要监控: ${stats.needsMonitoring}`);
-    console.log(`   - 已有监控: ${stats.hasMonitoring}`);
-    console.log(`   - 高优先级: ${stats.highPriority}`);
-    console.log(`   - 中优先级: ${stats.mediumPriority}\n`);
+      highPriority: analyses.filter(a => a.priority === "high").length,;
+      mediumPriority: analyses.filter(a => a.priority === medium").length};
     
     // 创建配置文件
-    console.log('📝 创建性能监控配置...');
-    const configPath = createPerformanceConfig();
-    console.log(`✅ 配置文件已创建: ${configPath}`);
-    
+const configPath = createPerformanceConfig();
     const reporterPath = createPerformanceReporter();
-    console.log(`✅ 报告器已创建: ${reporterPath}\n`);
-    
     // 为需要监控的组件添加性能监控
-    const componentsToMonitor = analyses.filter(a => a.needsMonitoring && !a.hasMonitoring);
+const componentsToMonitor = analyses.filter(a => a.needsMonitoring && !a.hasMonitoring);
     
     if (componentsToMonitor.length === 0) {
-      console.log('🎉 所有需要监控的组件都已集成性能监控！');
       return;
     }
-    
-    console.log(`📊 为 ${componentsToMonitor.length} 个组件集成性能监控...\n`);
     
     let integratedCount = 0;
     
@@ -607,27 +564,15 @@ async function main() {
       }
     }
     
-    console.log(`\n\n🎉 性能监控集成完成！`);
-    console.log(`📊 统计信息:`);
-    console.log(`   - 分析组件: ${analyses.length} 个`);
-    console.log(`   - 集成监控: ${integratedCount} 个`);
-    console.log(`   - 监控覆盖率: ${((stats.hasMonitoring + integratedCount) / stats.total * 100).toFixed(1)}%`);
+    / stats.total * 100).toFixed(1)}%`);
     
     // 显示高优先级组件的监控原因
-    console.log('\n🔍 高优先级组件监控原因:');
-    const highPriorityComponents = analyses.filter(a => a.priority === 'high' && a.needsMonitoring);
+const highPriorityComponents = analyses.filter(a => a.priority === "high" && a.needsMonitoring);
     highPriorityComponents.slice(0, 10).forEach(comp => {
-      console.log(`   - ${comp.fileName}: ${comp.reasons.join(', ')}`);
+      }`);
     });
     
-    console.log('\n🔄 建议下一步操作:');
-    console.log('1. 🧪 运行应用测试性能监控功能');
-    console.log('2. 📊 查看性能报告和警告');
-    console.log('3. 🎯 设置性能基准和警告阈值');
-    console.log('4. 📈 集成到CI/CD流程进行持续监控');
-    
-  } catch (error) {
-    console.error('❌ 集成性能监控时出现错误:', error);
+    } catch (error) {
     process.exit(1);
   }
 }
@@ -642,5 +587,4 @@ module.exports = {
   analyzeComponent,
   addPerformanceMonitoring,
   createPerformanceConfig,
-  createPerformanceReporter,
-}; 
+  createPerformanceReporter}; 

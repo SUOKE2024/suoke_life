@@ -12,10 +12,8 @@ import uuid
 import grpc
 
 # 导入生成的gRPC代码
-from api.grpc import palpation_service_pb2 as pb2
 
 logger = logging.getLogger(__name__)
-
 
 class ComprehensiveAnalysisHandler:
     """综合分析处理器"""

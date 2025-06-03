@@ -27,7 +27,6 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 # 导入生成的gRPC代码
 # 需要先生成proto文件的Python代码
 # python -m grpc_tools.protoc -I./api/grpc --python_out=. --grpc_python_out=. ./api/grpc/inquiry_service.proto
-from api.grpc import inquiry_service_pb2_grpc as pb2_grpc
 from internal.delivery.inquiry_service_impl import InquiryServiceServicer
 from internal.dialogue.dialogue_manager import DialogueManager
 from internal.knowledge.tcm_knowledge_base import TCMKnowledgeBase
@@ -39,7 +38,6 @@ from internal.repository.session_repository import SessionRepository
 from internal.repository.user_repository import UserRepository
 from pkg.utils.config_loader import ConfigLoader
 from pkg.utils.metrics import MetricsCollector
-
 
 # 配置日志
 def setup_logging(config: dict):
@@ -78,7 +76,6 @@ def setup_logging(config: dict):
     logging.getLogger("asyncio").setLevel(logging.WARNING)
 
     return logging.getLogger("inquiry_service")
-
 
 # 应用环境变量到配置
 def apply_env_to_config(config: dict) -> dict:
@@ -154,7 +151,6 @@ def apply_env_to_config(config: dict) -> dict:
 
     return config
 
-
 async def init_application(config: dict[str, Any]) -> dict[str, Any]:
     """初始化应用"""
     app_components = {}
@@ -223,7 +219,6 @@ async def init_application(config: dict[str, Any]) -> dict[str, Any]:
         )
 
     return app_components
-
 
 async def run_server():
     """异步运行服务器"""
@@ -372,7 +367,6 @@ async def run_server():
         logger.error(f"启动服务器时发生错误: {e!s}", exc_info=True)
         sys.exit(1)
 
-
 def serve():
     """启动gRPC服务器"""
     # Python 3.12和更高版本在Windows上有不同的默认策略
@@ -393,7 +387,6 @@ def serve():
             pass
         finally:
             loop.close()
-
 
 if __name__ == "__main__":
     serve()

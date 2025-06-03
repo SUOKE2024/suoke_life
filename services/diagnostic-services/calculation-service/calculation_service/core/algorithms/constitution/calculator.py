@@ -6,7 +6,6 @@
 
 from datetime import datetime, date
 from typing import Dict, List, Optional, Tuple
-import calendar
 
 from .data import (
     CONSTITUTION_DATA,
@@ -19,7 +18,6 @@ from .data import (
     CONSTITUTION_TREATMENT,
     CONSTITUTION_DISEASE_TENDENCY
 )
-
 
 class ConstitutionCalculator:
     """八字体质分析计算器"""

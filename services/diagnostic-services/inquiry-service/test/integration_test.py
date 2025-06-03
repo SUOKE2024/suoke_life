@@ -13,10 +13,6 @@ import grpc
 # 添加项目路径
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), ".")))
 
-from api.grpc import inquiry_service_pb2 as pb2
-from api.grpc import inquiry_service_pb2_grpc as pb2_grpc
-
-
 async def test_inquiry_service():
     """测试问诊服务的核心功能"""
 
@@ -180,7 +176,6 @@ async def test_inquiry_service():
     finally:
         await channel.close()
 
-
 async def test_batch_analysis():
     """测试批量分析功能"""
     channel = grpc.aio.insecure_channel("localhost:50052")
@@ -208,7 +203,6 @@ async def test_batch_analysis():
         print(f"批量分析测试失败: {e!s}")
     finally:
         await channel.close()
-
 
 async def test_medical_history_analysis():
     """测试病史分析功能"""
@@ -263,7 +257,6 @@ async def test_medical_history_analysis():
     finally:
         await channel.close()
 
-
 def main():
     """主函数"""
     if len(sys.argv) > 1:
@@ -277,7 +270,6 @@ def main():
     else:
         # 运行主要测试
         asyncio.run(test_inquiry_service())
-
 
 if __name__ == "__main__":
     main()

@@ -1,6 +1,5 @@
 """数据库管理器"""
 
-import asyncio
 from typing import AsyncGenerator, Optional
 
 import structlog
@@ -13,7 +12,6 @@ from auth_service.config.settings import DatabaseSettings
 from auth_service.models.base import BaseModel
 
 logger = structlog.get_logger(__name__)
-
 
 class DatabaseManager:
     """数据库管理器"""
@@ -142,10 +140,8 @@ class DatabaseManager:
         """获取同步引擎"""
         return self._sync_engine
 
-
 # 全局数据库管理器实例
 _db_manager: Optional[DatabaseManager] = None
-
 
 def get_db_manager() -> DatabaseManager:
     """获取数据库管理器实例"""
@@ -154,12 +150,10 @@ def get_db_manager() -> DatabaseManager:
         raise RuntimeError("数据库管理器未初始化")
     return _db_manager
 
-
 def set_db_manager(manager: DatabaseManager) -> None:
     """设置数据库管理器实例"""
     global _db_manager
     _db_manager = manager
-
 
 async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
     """获取数据库会话的依赖注入函数"""

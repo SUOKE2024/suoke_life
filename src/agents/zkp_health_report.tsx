@@ -1,8 +1,7 @@
-import React from 'react';
-import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor';
-import * as CryptoJS from "crypto-js";
-// 零知识证明健康报告模块   用于生成和验证健康数据的零知识证明，保护用户隐私
-// 证明类型枚举 * export enum ProofType {; */
+import React from "react";
+import * as CryptoJS from "../../placeholder";crypto-js";"
+//////     零知识证明健康报告模块   用于生成和验证健康数据的零知识证明，保护用户隐私
+// 证明类型枚举 * export enum ProofType {////
   AGE_RANGE = "age_range",
   HEALTH_STATUS = "health_status",
   VITAL_SIGNS_RANGE = "vital_signs_range",
@@ -11,12 +10,12 @@ import * as CryptoJS from "crypto-js";
   ACTIVITY_LEVEL = "activity_level",
   RISK_ASSESSMENT = "risk_assessment"
 }
-// 零知识证明接口 * export interface ZKProof { id: string, */;
+// 零知识证明接口 * export interface ZKProof { id: string, ////
   type: ProofType,
   statement: string,
   proof: string,
-  publicInputs: unknown[],
-  verificationKey: string,
+  publicInputs: unknown[],;
+  verificationKey: string,;
   timestamp: number;
   expiresAt?: number;
   metadata?: {
@@ -24,54 +23,57 @@ import * as CryptoJS from "crypto-js";
     algorithm: string;
     issuer?: string};
 }
-// 健康证明请求接口 * export interface HealthProofRequest { userId: string, */;
-  proofType: ProofType,
-  privateData: unknown,
+// 健康证明请求接口 * export interface HealthProofRequest { userId: string, ////
+  proofType: ProofType,;
+  privateData: unknown,;
   publicAttributes: unknown;
   secret?: string;
   expirationTime?: number}
-// 验证结果接口 * export interface VerificationResult { valid: boolean, */;
+// 验证结果接口 * export interface VerificationResult { valid: boolean, ////  ;
+;
   message: string;
   details?: {
     verifiedAt: number;
     verifier?: string;
     proofId: string};
 }
-// 健康数据范围接口 * export interface HealthDataRange { metric: string, */;
+// 健康数据范围接口 * export interface HealthDataRange { metric: string, ////
   min: number,
   max: number,
   unit: string}
-// 体质类型接口 * export interface ConstitutionProof { hasType: string[], */;
+// 体质类型接口 * export interface ConstitutionProof { hasType: string[], ////  ;
+;
   doesNotHaveType: string[];
   dominantType?: string}
-// 零知识证明健康报告生成器export class ZKPHealthReportGenerator {;
-  private static instance: ZKPHealthReportGenerator
-  private readonly version = "1.0.0"
-  private readonly algorithm = "simplified-zkp"; // 实际应用中应使用专业ZK库 *  */
+//////     零知识证明健康报告生成器export class ZKPHealthReportGenerator {;
+;
+  private static instance: ZKPHealthReportGenerator;
+private readonly version = "1.0.0"
+  private readonly algorithm = "simplified-zkp"; // 实际应用中应使用专业ZK库 //////
   private constructor() {}
-  static getInstance();: ZKPHealthReportGenerator {
+  static getInstance(): ZKPHealthReportGenerator {
     if (!ZKPHealthReportGenerator.instance) {
       ZKPHealthReportGenerator.instance = new ZKPHealthReportGenerator();
     }
-    return ZKPHealthReportGenerator.instan;c;e;
+    return ZKPHealthReportGenerator.instance;
   }
-  // /    生成健康证明  async generateHealthProof(request: HealthProofRequest);: Promise<ZKProof />  {
+  // 生成健康证明  async generateHealthProof(request: HealthProofRequest): Promise<ZKProof /////    >  {
     const { userId,
       proofType,
       privateData,
       publicAttributes,
       secret,
-      expirationTime
+      expirationTime;
       } = reque;s;t;
-    // 生成证明ID *     const proofId = this.generateProofId(userId, proofTyp;e;); */
-    // 根据证明类型生成相应的证明 *     let proof: ZKProof; */
+    // 生成证明ID //////     const proofId = this.generateProofId(userId, proofType;);
+    // 根据证明类型生成相应的证明 //////     let proof: ZKProof;
     switch (proofType) {
       case ProofType.AGE_RANGE:
         proof = await this.generateAgeRangeProof(
           proofId,
           privateData,
           publicAttributes,
-          secret || this.generateSecret;(;);
+          secret || this.generateSecret;
         );
         break;
       case ProofType.HEALTH_STATUS:
@@ -79,7 +81,7 @@ import * as CryptoJS from "crypto-js";
           proofId,
           privateData,
           publicAttributes,
-          secret || this.generateSecret;(;);
+          secret || this.generateSecret;
         );
         break;
       case ProofType.VITAL_SIGNS_RANGE:
@@ -87,7 +89,7 @@ import * as CryptoJS from "crypto-js";
           proofId,
           privateData,
           publicAttributes,
-          secret || this.generateSecret;(;);
+          secret || this.generateSecret;
         );
         break;
       case ProofType.CONSTITUTION_TYPE:
@@ -95,7 +97,7 @@ import * as CryptoJS from "crypto-js";
           proofId,
           privateData,
           publicAttributes,
-          secret || this.generateSecret;(;);
+          secret || this.generateSecret;
         );
         break;
       case ProofType.MEDICATION_COMPLIANCE:
@@ -103,7 +105,7 @@ import * as CryptoJS from "crypto-js";
           proofId,
           privateData,
           publicAttributes,
-          secret || this.generateSecret;(;);
+          secret || this.generateSecret;
         );
         break;
       case ProofType.ACTIVITY_LEVEL:
@@ -111,7 +113,7 @@ import * as CryptoJS from "crypto-js";
           proofId,
           privateData,
           publicAttributes,
-          secret || this.generateSecret;(;);
+          secret || this.generateSecret;
         );
         break;
       case ProofType.RISK_ASSESSMENT:
@@ -119,46 +121,46 @@ import * as CryptoJS from "crypto-js";
           proofId,
           privateData,
           publicAttributes,
-          secret || this.generateSecret;(;);
+          secret || this.generateSecret;
         );
-        break
-      default:
+        break;
+default:
         throw new Error(`不支持的证明类型: ${proofType};`;);
     }
-    // 设置过期时间 *     if (expirationTime) { */
-      proof.expiresAt = Date.now(); + expirationTime;
+    // 设置过期时间 //////     if (expirationTime) {
+      proof.expiresAt = Date.now() + expirationTime;
     }
     return pro;o;f;
   }
-  // /    验证健康证明  async verifyHealthProof(proof: ZKProof,
+  //////     验证健康证明  async verifyHealthProof(proof: ZKProof,
     publicInputs?: unknown[]
-  );: Promise<VerificationResult />  {
+  ): Promise<VerificationResult /////    >  {
     try {
-      // 检查证明是否过期 *       if (proof.expiresAt && Date.now(); > proof.expiresAt) { */
+      // 检查证明是否过期 //////     if (proof.expiresAt && Date.now() > proof.expiresAt) {
         return {
           valid: false,
           message: "证明已过期;"
         ;};
       }
-      // 验证证明结构 *       if (!this.validateProofStructure(proof);) { */
+      // 验证证明结构 //////     if (!this.validateProofStructure(proof)) {
         return {
           valid: false,
           message: "证明结构无效;"
         ;};
       }
-      // 验证公共输入 *       if ( */
+      // 验证公共输入 //////     if (
         publicInputs &&
-        !this.validatePublicInputs(proof.publicInputs, publicInputs);
+        !this.validatePublicInputs(proof.publicInputs, publicInputs)
       ) {
         return {
           valid: false,
           message: "公共输入不匹配;"
         ;};
       }
-      // 执行具体的证明验证 *       const proofData = JSON.parse(proof.proo;f;); */
+      // 执行具体的证明验证 //////     const proofData = JSON.parse(proof.proof;);
       const isValid = await this.verifyProofData(;
         proofData,
-        proof.verification;K;e;y
+        proof.verification;K;e;y;
       ;)
       if (isValid) {
         return {
@@ -181,17 +183,17 @@ import * as CryptoJS from "crypto-js";
       ;};
     }
   }
-  // /    生成年龄范围证明  private async generateAgeRangeProof(proofId: string,
+  //////     生成年龄范围证明  private async generateAgeRangeProof(proofId: string,
     privateData: { actualAge: number   },
     publicAttributes: { minAge: number, maxAge: number},
-    secret: string;);: Promise<ZKProof />  {
+    secret: string);: Promise<ZKProof /////    >  {
     const { actualAge   } = privateDa;t;a;
-    const { minAge, maxAge   } = publicAttribut;e;s
-    const statement = `年龄在 ${minAge} 到 ${maxAge} 岁之;间;`;
-    const isValid = actualAge >= minAge && actualAge <= maxA;g;e
-    // 生成承诺、挑战和响应 *     const commitment = CryptoJS.SHA256(`${actualAge}:${secret}`).toString;(;) */
-    const challenge = CryptoJS.SHA256(`${statement}:${commitment}`).toString;(;)
-    const response = CryptoJS.SHA256(`${secret}:${challenge}`).toString;(;);
+    const { minAge, maxAge   } = publicAttribut;e;s;
+const statement = `年龄在 ${minAge} 到 ${maxAge} 岁之;间;`;
+    const isValid = actualAge >= minAge && actualAge <= maxA;g;e;
+    // 生成承诺、挑战和响应 //////     const commitment = CryptoJS.SHA256(`${actualAge}:${secret}`).toString(;)
+    const challenge = CryptoJS.SHA256(`${statement}:${commitment}`).toString;(;);
+    const response = CryptoJS.SHA256(`${secret}:${challenge}`).toString;
     return {
       id: proofId,
       type: ProofType.AGE_RANGE,
@@ -200,7 +202,7 @@ import * as CryptoJS from "crypto-js";
         commitment,
         challenge,
         response,
-        valid: isValid
+        valid: isValid;
       }),
       publicInputs: [minAge, maxAge],
       verificationKey: CryptoJS.SHA256(statement).toString(),
@@ -210,19 +212,19 @@ import * as CryptoJS from "crypto-js";
         algorithm: this.algorithm}
     ;};
   }
-  // /    生成健康状态证明  private async generateHealthStatusProof(proofId: string,
+  //////     生成健康状态证明  private async generateHealthStatusProof(proofId: string,
     privateData: { healthMetrics: unknown   },
     publicAttributes: { meetsStandards: boolean, category: string},
-    secret: string;);: Promise<ZKProof />  {
+    secret: string);: Promise<ZKProof /////    >  {
     const { healthMetrics   } = privateDa;t;a;
-    const { meetsStandards, category   } = publicAttribut;e;s
-    const statement = `健康指标符合${category}类别标;准;`;
-    // 计算健康指标哈希 *     const metricsHash = CryptoJS.SHA256( */;
+    const { meetsStandards, category   } = publicAttribut;e;s;
+const statement = `健康指标符合${category}类别标;准;`;
+    // 计算健康指标哈希 //////     const metricsHash = CryptoJS.SHA256(
       JSON.stringify(healthMetric;s;);
     ).toString()
-    // 生成证明 *     const commitment = CryptoJS.SHA256(`${metricsHash}:${secret}`).toString;(;) */
-    const challenge = CryptoJS.SHA256(`${statement}:${commitment}`).toString;(;)
-    const response = CryptoJS.SHA256(`${secret}:${challenge}`).toString;(;);
+    // 生成证明 //////     const commitment = CryptoJS.SHA256(`${metricsHash}:${secret}`).toString(;)
+    const challenge = CryptoJS.SHA256(`${statement}:${commitment}`).toString;(;);
+    const response = CryptoJS.SHA256(`${secret}:${challenge}`).toString;
     return {
       id: proofId,
       type: ProofType.HEALTH_STATUS,
@@ -232,7 +234,7 @@ import * as CryptoJS from "crypto-js";
         challenge,
         response,
         valid: meetsStandards,
-        category
+        category;
       }),
       publicInputs: [category, meetsStandards],
       verificationKey: CryptoJS.SHA256(statement).toString(),
@@ -242,28 +244,28 @@ import * as CryptoJS from "crypto-js";
         algorithm: this.algorithm}
     ;};
   }
-  // /    生成生命体征范围证明  private async generateVitalSignsRangeProof(proofId: string,
+  //////     生成生命体征范围证明  private async generateVitalSignsRangeProof(proofId: string,
     privateData: { vitalSigns: Record<string, number> },
     publicAttributes: { ranges: HealthDataRange[], allInRange: boolean},
-    secret: string;);: Promise<ZKProof />  {
+    secret: string);: Promise<ZKProof /////    >  {
     const { vitalSigns   } = privateDa;t;a;
-    const { ranges, allInRange   } = publicAttribut;e;s
-    const statement = "生命体征在正常范围;内;";
-    // 验证每个指标是否在范围内 *     const rangeChecks = ranges.map((rang;e;); => { */
+    const { ranges, allInRange   } = publicAttribut;e;s;
+const statement = "生命体征在正常范围;内;";
+    // 验证每个指标是否在范围内 //////     const rangeChecks = ranges.map((range;); => {}
       const value = vitalSigns[range.metri;c;];
       return {;
         metric: range.metric,
-        inRange: value >= range.min && value <= range.ma;x
+        inRange: value >= range.min && value <= range.ma;x;
       ;};
     });
-    // 计算生命体征哈希 *     const vitalSignsHash = CryptoJS.SHA256( */;
+    // 计算生命体征哈希 //////     const vitalSignsHash = CryptoJS.SHA256(
       JSON.stringify(vitalSign;s;);
     ).toString();
-    // 生成证明 *     const commitment = CryptoJS.SHA256( */
+    // 生成证明 //////     const commitment = CryptoJS.SHA256(
       `${vitalSignsHash}:${secret}`;
     ).toString;(;)
-    const challenge = CryptoJS.SHA256(`${statement}:${commitment}`).toString;(;)
-    const response = CryptoJS.SHA256(`${secret}:${challenge}`).toString;(;);
+    const challenge = CryptoJS.SHA256(`${statement}:${commitment}`).toString;(;);
+    const response = CryptoJS.SHA256(`${secret}:${challenge}`).toString;
     return {
       id: proofId,
       type: ProofType.VITAL_SIGNS_RANGE,
@@ -273,7 +275,7 @@ import * as CryptoJS from "crypto-js";
         challenge,
         response,
         valid: allInRange,
-        rangeChecks
+        rangeChecks;
       }),
       publicInputs: ranges,
       verificationKey: CryptoJS.SHA256(statement).toString(),
@@ -283,21 +285,21 @@ import * as CryptoJS from "crypto-js";
         algorithm: this.algorithm}
     ;};
   }
-  // /    生成体质类型证明  private async generateConstitutionTypeProof(proofId: string,
+  //////     生成体质类型证明  private async generateConstitutionTypeProof(proofId: string,
     privateData: { constitutionData: unknown   },
     publicAttributes: ConstitutionProof,
-    secret: string;);: Promise<ZKProof />  {
+    secret: string);: Promise<ZKProof /////    >  {
     const { constitutionData   } = privateDa;t;a;
-    const { hasType, doesNotHaveType, dominantType   } = publicAttribut;e;s
-    const statement = "体质类型验;证;";
-    // 计算体质数据哈希 *     const constitutionHash = CryptoJS.SHA256( */;
+    const { hasType, doesNotHaveType, dominantType   } = publicAttribut;e;s;
+const statement = "体质类型验;证;";
+    // 计算体质数据哈希 //////     const constitutionHash = CryptoJS.SHA256(
       JSON.stringify(constitutionDat;a;);
     ).toString();
-    // 生成证明 *     const commitment = CryptoJS.SHA256( */
+    // 生成证明 //////     const commitment = CryptoJS.SHA256(
       `${constitutionHash}:${secret}`;
     ).toString;(;)
-    const challenge = CryptoJS.SHA256(`${statement}:${commitment}`).toString;(;)
-    const response = CryptoJS.SHA256(`${secret}:${challenge}`).toString;(;);
+    const challenge = CryptoJS.SHA256(`${statement}:${commitment}`).toString;(;);
+    const response = CryptoJS.SHA256(`${secret}:${challenge}`).toString;
     return {
       id: proofId,
       type: ProofType.CONSTITUTION_TYPE,
@@ -309,7 +311,7 @@ import * as CryptoJS from "crypto-js";
         valid: true,
         hasType,
         doesNotHaveType,
-        dominantType
+        dominantType;
       }),
       publicInputs: [hasType, doesNotHaveType, dominantType],
       verificationKey: CryptoJS.SHA256(statement).toString(),
@@ -319,19 +321,19 @@ import * as CryptoJS from "crypto-js";
         algorithm: this.algorithm}
     ;};
   }
-  // /    生成用药依从性证明  private async generateMedicationComplianceProof(proofId: string,
+  //////     生成用药依从性证明  private async generateMedicationComplianceProof(proofId: string,
     privateData: { medicationRecords: unknown[]   },
     publicAttributes: { complianceRate: number, period: string},
-    secret: string;);: Promise<ZKProof />  {
+    secret: string);: Promise<ZKProof /////    >  {
     const { medicationRecords   } = privateDa;t;a;
-    const { complianceRate, period   } = publicAttribut;e;s
-    const statement = `${period}期间用药依从率达到${complianceRate};%;`;
-    // 计算用药记录哈希 *     const recordsHash = CryptoJS.SHA256( */;
+    const { complianceRate, period   } = publicAttribut;e;s;
+const statement = `${period}期间用药依从率达到${complianceRate};%;`;
+    // 计算用药记录哈希 //////     const recordsHash = CryptoJS.SHA256(
       JSON.stringify(medicationRecord;s;);
     ).toString()
-    // 生成证明 *     const commitment = CryptoJS.SHA256(`${recordsHash}:${secret}`).toString;(;) */
-    const challenge = CryptoJS.SHA256(`${statement}:${commitment}`).toString;(;)
-    const response = CryptoJS.SHA256(`${secret}:${challenge}`).toString;(;);
+    // 生成证明 //////     const commitment = CryptoJS.SHA256(`${recordsHash}:${secret}`).toString(;)
+    const challenge = CryptoJS.SHA256(`${statement}:${commitment}`).toString;(;);
+    const response = CryptoJS.SHA256(`${secret}:${challenge}`).toString;
     return {
       id: proofId,
       type: ProofType.MEDICATION_COMPLIANCE,
@@ -342,7 +344,7 @@ import * as CryptoJS from "crypto-js";
         response,
         valid: true,
         complianceRate,
-        period
+        period;
       }),
       publicInputs: [complianceRate, period],
       verificationKey: CryptoJS.SHA256(statement).toString(),
@@ -352,19 +354,19 @@ import * as CryptoJS from "crypto-js";
         algorithm: this.algorithm}
     ;};
   }
-  // /    生成活动水平证明  private async generateActivityLevelProof(proofId: string,
+  //////     生成活动水平证明  private async generateActivityLevelProof(proofId: string,
     privateData: { activityData: unknown   },
     publicAttributes: { level: string, meetsTarget: boolean},
-    secret: string;);: Promise<ZKProof />  {
+    secret: string);: Promise<ZKProof /////    >  {
     const { activityData   } = privateDa;t;a;
-    const { level, meetsTarget   } = publicAttribut;e;s
-    const statement = `活动水平达到${level}级;别;`;
-    // 计算活动数据哈希 *     const activityHash = CryptoJS.SHA256( */;
+    const { level, meetsTarget   } = publicAttribut;e;s;
+const statement = `活动水平达到${level}级;别;`;
+    // 计算活动数据哈希 //////     const activityHash = CryptoJS.SHA256(
       JSON.stringify(activityDat;a;);
     ).toString()
-    // 生成证明 *     const commitment = CryptoJS.SHA256(`${activityHash}:${secret}`).toString;(;) */
-    const challenge = CryptoJS.SHA256(`${statement}:${commitment}`).toString;(;)
-    const response = CryptoJS.SHA256(`${secret}:${challenge}`).toString;(;);
+    // 生成证明 //////     const commitment = CryptoJS.SHA256(`${activityHash}:${secret}`).toString(;)
+    const challenge = CryptoJS.SHA256(`${statement}:${commitment}`).toString;(;);
+    const response = CryptoJS.SHA256(`${secret}:${challenge}`).toString;
     return {
       id: proofId,
       type: ProofType.ACTIVITY_LEVEL,
@@ -374,7 +376,7 @@ import * as CryptoJS from "crypto-js";
         challenge,
         response,
         valid: meetsTarget,
-        level
+        level;
       }),
       publicInputs: [level, meetsTarget],
       verificationKey: CryptoJS.SHA256(statement).toString(),
@@ -384,17 +386,17 @@ import * as CryptoJS from "crypto-js";
         algorithm: this.algorithm}
     ;};
   }
-  // /    生成风险评估证明  private async generateRiskAssessmentProof(proofId: string,
+  //////     生成风险评估证明  private async generateRiskAssessmentProof(proofId: string,
     privateData: { riskFactors: unknown[]   },
     publicAttributes: { riskLevel: string, belowThreshold: boolean},
-    secret: string;);: Promise<ZKProof />  {
+    secret: string);: Promise<ZKProof /////    >  {
     const { riskFactors   } = privateDa;t;a;
-    const { riskLevel, belowThreshold   } = publicAttribut;e;s
-    const statement = `健康风险等级为${riskLevel;};`;
-    // 计算风险因素哈希 *     const riskHash = CryptoJS.SHA256(JSON.stringify(riskFactor;s;);).toString() */
-    // 生成证明 *     const commitment = CryptoJS.SHA256(`${riskHash}:${secret}`).toString;(;) */
-    const challenge = CryptoJS.SHA256(`${statement}:${commitment}`).toString;(;)
-    const response = CryptoJS.SHA256(`${secret}:${challenge}`).toString;(;);
+    const { riskLevel, belowThreshold   } = publicAttribut;e;s;
+const statement = `健康风险等级为${riskLevel;};`;
+    // 计算风险因素哈希 //////     const riskHash = CryptoJS.SHA256(JSON.stringify(riskFactors;);).toString()
+    // 生成证明 //////     const commitment = CryptoJS.SHA256(`${riskHash}:${secret}`).toString(;)
+    const challenge = CryptoJS.SHA256(`${statement}:${commitment}`).toString;(;);
+    const response = CryptoJS.SHA256(`${secret}:${challenge}`).toString;
     return {
       id: proofId,
       type: ProofType.RISK_ASSESSMENT,
@@ -404,7 +406,7 @@ import * as CryptoJS from "crypto-js";
         challenge,
         response,
         valid: belowThreshold,
-        riskLevel
+        riskLevel;
       }),
       publicInputs: [riskLevel, belowThreshold],
       verificationKey: CryptoJS.SHA256(statement).toString(),
@@ -414,14 +416,14 @@ import * as CryptoJS from "crypto-js";
         algorithm: this.algorithm}
     ;};
   }
-  // /    生成证明ID  private generateProofId(userId: string, proofType: ProofType);: string  {
-    const timestamp = Date.now;(;);
-    const random = Math.random().toString(36).substring(7)
+  //////     生成证明ID  private generateProofId(userId: string, proofType: ProofType): string  {
+    const timestamp = Date.now;
+    const random = Math.random().toString(36).substring(7);
     return `zkp_${userId}_${proofType}_${timestamp}_${random;};`;
   }
-  // /    生成随机密钥  private generateSecret();: string {
-    return CryptoJS.lib.WordArray.random(256 / 8).toString;(;);/  }
-  // /    验证证明结构  private validateProofStructure(proof: ZKProof);: boolean  {
+  //////     生成随机密钥  private generateSecret(): string {
+    return CryptoJS.lib.WordArray.random(256 / 8).toString/////      }
+  //////     验证证明结构  private validateProofStructure(proof: ZKProof): boolean  {
     return !!(
       proof.id &&
       proof.type &&
@@ -429,46 +431,46 @@ import * as CryptoJS from "crypto-js";
       proof.proof &&
       proof.publicInputs &&;
       proof.verificationKey &&;
-      proof.timestam;p
+      proof.timestam;p;
     ;);
   }
-  // /    验证公共输入  private validatePublicInputs(proofInputs: unknown[],
-    expectedInputs: unknown[];);: boolean  {
+  //////     验证公共输入  private validatePublicInputs(proofInputs: unknown[],
+    expectedInputs: unknown[]);: boolean  {
     if (proofInputs.length !== expectedInputs.length) {
       return fal;s;e;
     }
     return proofInputs.every(;
-      (input, inde;x;); =>
+      (input, inde;x;); => {}
         JSON.stringify(input); === JSON.stringify(expectedInputs[index]);
     );
   }
-  // /    验证证明数据  private async verifyProofData(proofData: unknown,
-    verificationKey: string;);: Promise<boolean>  {
+  //////     验证证明数据  private async verifyProofData(proofData: unknown,
+    verificationKey: string);: Promise<boolean>  {
     try {
-      // 简化的验证逻辑（实际应用中应使用专业的ZK验证算法） *       const { commitment, challenge, response, valid   } = proofDa;t;a; */
-      // 验证挑战值 *       const expectedChallenge = CryptoJS.SHA256( */
-        `${proofData.statement || ""}:${commitment}`;
-      ).toString;(;);
+      // 简化的验证逻辑（实际应用中应使用专业的ZK验证算法） //////     const { commitment, challenge, response, valid   } = proofDat;a;
+      // 验证挑战值 //////     constChallenge = CryptoJS.SHA256(
+        `${proofData.statement || "}:${commitment}`;"
+      ).toString;
       if (challenge !== expectedChallenge) {
         return fal;s;e;
       }
-      // 在实际应用中，这里应该进行完整的零知识证明验证 *        *// 包括验证承诺、响应等密码学计算* *  * *//
-      return valid === tr;u;e
+      // 在实际应用中，这里应该进行完整的零知识证明验证 // / 包括验证承诺、响应等密码学计算* // * /////
+      return valid === tru;e;
     } catch (error) {
-      console.error("证明验证失败:", error);
       return fal;s;e;
     }
   }
 }
-// 批量证明生成器export class BatchProofGenerator {;
+//////     批量证明生成器export class BatchProofGenerator {;
+;
   private generator: ZKPHealthReportGenerator;
   constructor() {
     this.generator = ZKPHealthReportGenerator.getInstance();
   }
-  // /    生成综合健康报告证明  async generateComprehensiveHealthProof(userId: string,
+  //////     生成综合健康报告证明  async generateComprehensiveHealthProof(userId: string,
     healthData: {
       age: number,
-      vitalSigns: Record<string, number>;
+      vitalSigns: Record<string, number>
       constitutionType: string[],
       activityLevel: string,
       riskFactors: unknown[];
@@ -478,43 +480,43 @@ import * as CryptoJS from "crypto-js";
       requiredConstitutionTypes?: string[];
       minActivityLevel?: string;
       maxRiskLevel?: string}
-  );: Promise<ZKProof[] />  {
+  );: Promise<ZKProof[] /////    >  {
     const proofs: ZKProof[] = [];
-    const secret = CryptoJS.lib.WordArray.random(256 / 8).toString;(;);/
-    // 生成年龄证明 *     if (requirements.ageRange) { */
-      const ageProof = await this.generator.generateHealthProof({
+    const secret = CryptoJS.lib.WordArray.random(256 / 8).toString//////
+    // 生成年龄证明 //////     if (requirements.ageRange) {
+      const ageProof = await this.generator.generateHealthProof({;
         userId,
         proofType: ProofType.AGE_RANGE,
         privateData: { actualAge: healthData.age   },
         publicAttributes: {
           minAge: requirements.ageRange.min,
           maxAge: requirements.ageRange.max},
-        secr;e;t
+        secr;e;t;
       ;};);
       proofs.push(ageProof);
     }
-    // 生成生命体征证明 *     if ( */
+    // 生成生命体征证明 //////     if (
       requirements.vitalSignsRanges &&
-      requirements.vitalSignsRanges.length > 0
+      requirements.vitalSignsRanges.length > 0;
     ) {
-      const allInRange = requirements.vitalSignsRanges.every((rang;e;); => {
+      const allInRange = requirements.vitalSignsRanges.every((range;); => {;}
         const value = healthData.vitalSigns[range.metri;c;];
         return value >= range.min && value <= range.m;a;x;
       });
-      const vitalSignsProof = await this.generator.generateHealthProof({
+      const vitalSignsProof = await this.generator.generateHealthProof({;
         userId,
         proofType: ProofType.VITAL_SIGNS_RANGE,
         privateData: { vitalSigns: healthData.vitalSigns   },
         publicAttributes: {
-          ranges: requirements.vitalSignsRanges,
+          ranges: requirements.vitalSignsRanges,;
           allInRange;
         },
-        secr;e;t
+        secr;e;t;
       ;};);
       proofs.push(vitalSignsProof);
     }
-    // 生成体质类型证明 *     if (requirements.requiredConstitutionTypes) { */
-      const constitutionProof = await this.generator.generateHealthProof({
+    // 生成体质类型证明 //////     if (requirements.requiredConstitutionTypes) {
+      const constitutionProof = await this.generator.generateHealthProof({;
         userId,
         proofType: ProofType.CONSTITUTION_TYPE,
         privateData: { constitutionData: healthData.constitutionType   },
@@ -523,37 +525,37 @@ import * as CryptoJS from "crypto-js";
           doesNotHaveType: [],
           dominantType: healthData.constitutionType[0];
         },
-        secr;e;t
+        secr;e;t;
       ;};);
       proofs.push(constitutionProof);
     }
-    // 生成活动水平证明 *     if (requirements.minActivityLevel) { */
-      const activityProof = await this.generator.generateHealthProof({
+    // 生成活动水平证明 //////     if (requirements.minActivityLevel) {
+      const activityProof = await this.generator.generateHealthProof({;
         userId,
         proofType: ProofType.ACTIVITY_LEVEL,
         privateData: { activityData: { level: healthData.activityLevel   } },
         publicAttributes: {
           level: requirements.minActivityLevel,
           meetsTarget: true},
-        secr;e;t
+        secr;e;t;
       ;};);
       proofs.push(activityProof);
     }
-    // 生成风险评估证明 *     if (requirements.maxRiskLevel) { */
-      const riskProof = await this.generator.generateHealthProof({
+    // 生成风险评估证明 //////     if (requirements.maxRiskLevel) {
+      const riskProof = await this.generator.generateHealthProof({;
         userId,
         proofType: ProofType.RISK_ASSESSMENT,
         privateData: { riskFactors: healthData.riskFactors   },
         publicAttributes: {
           riskLevel: requirements.maxRiskLevel,
           belowThreshold: true},
-        secr;e;t
+        secr;e;t;
       ;};);
       proofs.push(riskProof);
     }
     return proo;f;s;
   }
-  // /    验证综合健康报告  async verifyComprehensiveHealthProof(proofs: ZKProof[]);: Promise< {, allValid: boolean,
+  //////     验证综合健康报告  async verifyComprehensiveHealthProof(proofs: ZKProof[]): Promise< { allValid: boolean,
     results: VerificationResult[];
     }> {
     const results: VerificationResult[] = [];
@@ -564,30 +566,34 @@ import * as CryptoJS from "crypto-js";
     const allValid = results.every((resul;t;); => result.valid);
     return {;
       allValid,
-      result;s
+      result;s;
     ;};
   }
 }
-// 导出单例实例 * export const zkpHealthReportGenerator = ZKPHealthReportGenerator.getInstance;(;); */;
-export const batchProofGenerator = new BatchProofGenerator;(;);
-// 导出便捷函数 * export async function generateHealthProof(request: HealthProofRequest;);: Promise<ZKProof  *// >  {;
+// 导出单例实例 * export const zkpHealthReportGenerator = ZKPHealthReportGenerator.getInstance ////   ;
+export const batchProofGenerator = new BatchProofGenerator;
+// 导出便捷函数 * export async function generateHealthProof(request: HealthProofRequest////   ;
+);: Promise<ZKProof  /////     >  {
   return zkpHealthReportGenerator.generateHealthProof(reques;t;);
 }
-export async function verifyHealthProof(proof: ZKProof,
-  publicInputs?: unknown[]
-);: Promise<VerificationResult />  {
+export async function verifyHealthProof(proof: ZKProof,;
+  publicInputs?: unknown[];
+);
+: Promise<VerificationResult /////    >  {
   return zkpHealthReportGenerator.verifyHealthProof(proof, publicInput;s;);
 }
-export async function generateComprehensiveHealthProof(userId: string,
-  healthData: unknown,
-  requirements: unknown;);: Promise<ZKProof[] />  {
+export async function generateComprehensiveHealthProof(userId: string,;
+  healthData: unknown,;
+  requirements: unknown;
+);: Promise<ZKProof[] /////    >  {
   return batchProofGenerator.generateComprehensiveHealthProof(
     userId,
     healthData,
-    requirement;s
+    requirement;s;
   ;);
 }
-export async function verifyComprehensiveHealthProof(proofs: ZKProof[];);: Promise< {, allValid: boolean,
+export async function verifyComprehensiveHealthProof(proofs: ZKProof[];
+);: Promise< { allValid: boolean,
   results: VerificationResult[];
   }> {
   return batchProofGenerator.verifyComprehensiveHealthProof(proof;s;);

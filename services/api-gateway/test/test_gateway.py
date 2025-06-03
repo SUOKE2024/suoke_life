@@ -5,8 +5,6 @@
 API网关单元测试
 """
 
-import json
-import logging
 import os
 import sys
 import time
@@ -16,7 +14,6 @@ from unittest.mock import AsyncMock, MagicMock, Mock, patch
 import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
-from httpx import Response
 from fastapi.responses import JSONResponse
 
 # 添加项目根目录到Python路径
@@ -27,9 +24,7 @@ from internal.model.config import GatewayConfig, RouteConfig, MiddlewareConfig, 
 from internal.service.service_registry import ServiceRegistry
 from pkg.utils.auth import JWTManager, TokenPayload
 from pkg.utils.cache import CacheKey, CacheItem, CacheManager
-from pkg.utils.config import load_config
 from pkg.utils.rewrite import PathRewriter
-
 
 # 创建测试应用
 @pytest.fixture
@@ -66,12 +61,10 @@ def app():
     
     return app
 
-
 @pytest.fixture
 def client(app):
     """创建测试客户端"""
     return TestClient(app)
-
 
 class TestGateway:
     """API网关测试类"""
@@ -119,7 +112,6 @@ class TestGateway:
         assert response.json()["status"] == "ok"
         assert response.json()["server"] == "api-gateway"
 
-
 @pytest.fixture
 def jwt_manager():
     """创建JWT管理器"""
@@ -133,7 +125,6 @@ def jwt_manager():
     )
     
     return JWTManager(config)
-
 
 class TestAuth:
     """认证相关测试"""
@@ -222,7 +213,6 @@ class TestAuth:
         except ValueError:
             pass
 
-
 class TestPathRewriter:
     """路径重写测试"""
     
@@ -254,7 +244,6 @@ class TestPathRewriter:
         # 测试不同服务
         result = rewriter.rewrite_path("other-service", "/api/users/123/profile")
         assert result == "/api/users/123/profile"
-
 
 class TestCache:
     """缓存测试"""
@@ -347,7 +336,6 @@ class TestCache:
         assert key.query_params == {"q": "test", "page": "1"}
         assert key.headers == {"accept-language": "zh-CN"}
         assert "user-agent" not in key.headers
-
 
 if __name__ == "__main__":
     unittest.main() 

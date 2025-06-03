@@ -5,8 +5,6 @@
 
 import asyncio
 import hashlib
-import json
-import logging
 import pickle
 import time
 from abc import ABC, abstractmethod
@@ -15,15 +13,11 @@ from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Callable, Dict, Generic, List, Optional, TypeVar, Union
 
-import redis.asyncio as redis
 import structlog
-from aiocache import Cache, cached
-from aiocache.serializers import JsonSerializer, PickleSerializer
 
 logger = structlog.get_logger(__name__)
 
 T = TypeVar("T")
-
 
 class CacheLevel(Enum):
     """缓存级别"""
@@ -32,7 +26,6 @@ class CacheLevel(Enum):
     REDIS = "redis"  # Redis缓存
     DISTRIBUTED = "distributed"  # 分布式缓存
 
-
 class CacheStrategy(Enum):
     """缓存策略"""
 
@@ -40,7 +33,6 @@ class CacheStrategy(Enum):
     LFU = "lfu"  # 最少使用频率
     TTL = "ttl"  # 基于时间
     ADAPTIVE = "adaptive"  # 自适应策略
-
 
 @dataclass
 class CacheEntry:
@@ -55,7 +47,6 @@ class CacheEntry:
     size_bytes: int = 0
     tags: List[str] = field(default_factory=list)
     metadata: Dict[str, Any] = field(default_factory=dict)
-
 
 @dataclass
 class CacheStats:
@@ -72,7 +63,6 @@ class CacheStats:
         """命中率"""
         total = self.hit_count + self.miss_count
         return self.hit_count / total if total > 0 else 0.0
-
 
 class CacheBackend(ABC):
     """缓存后端抽象基类"""
@@ -106,7 +96,6 @@ class CacheBackend(ABC):
     async def get_stats(self) -> CacheStats:
         """获取缓存统计"""
         pass
-
 
 class MemoryCacheBackend(CacheBackend):
     """内存缓存后端"""
@@ -230,7 +219,6 @@ class MemoryCacheBackend(CacheBackend):
             await self._remove_entry(key)
             self.stats.eviction_count += 1
 
-
 class RedisCacheBackend(CacheBackend):
     """Redis缓存后端"""
 
@@ -343,7 +331,6 @@ class RedisCacheBackend(CacheBackend):
         """获取缓存统计"""
         return self.stats
 
-
 class MultiLevelCache:
     """多层缓存"""
 
@@ -392,7 +379,6 @@ class MultiLevelCache:
             results.append(result)
 
         return all(results)
-
 
 class SmartCacheManager:
     """智能缓存管理器"""
@@ -621,7 +607,6 @@ class SmartCacheManager:
                 await backend.close()
 
         logger.info("缓存管理器已关闭")
-
 
 # 缓存装饰器
 def cache_result(

@@ -20,7 +20,6 @@ from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, List, Optional, Set, Tuple
 
-import numpy as np
 from geopy.distance import geodesic
 from loguru import logger
 
@@ -37,7 +36,6 @@ from services.common.governance.rate_limiter import (
 )
 from services.common.observability.tracing import SpanKind, get_tracer, trace
 
-
 class ResourceType(Enum):
     """资源类型"""
 
@@ -47,7 +45,6 @@ class ResourceType(Enum):
     MEDICINE = "medicine"
     BED = "bed"
     ROOM = "room"
-
 
 class SpecialtyType(Enum):
     """专科类型"""
@@ -61,7 +58,6 @@ class SpecialtyType(Enum):
     NEUROLOGY = "neurology"  # 神经科
     ORTHOPEDICS = "orthopedics"  # 骨科
 
-
 class ResourceStatus(Enum):
     """资源状态"""
 
@@ -69,7 +65,6 @@ class ResourceStatus(Enum):
     BUSY = "busy"
     OFFLINE = "offline"
     MAINTENANCE = "maintenance"
-
 
 class Priority(Enum):
     """优先级"""
@@ -79,7 +74,6 @@ class Priority(Enum):
     HIGH = 3
     URGENT = 4
     EMERGENCY = 5
-
 
 @dataclass
 class Location:
@@ -91,7 +85,6 @@ class Location:
     city: str = ""
     district: str = ""
 
-
 @dataclass
 class TimeSlot:
     """时间段"""
@@ -99,7 +92,6 @@ class TimeSlot:
     start_time: datetime
     end_time: datetime
     available: bool = True
-
 
 @dataclass
 class Doctor:
@@ -118,7 +110,6 @@ class Doctor:
     skills: List[str] = field(default_factory=list)
     languages: List[str] = field(default_factory=list)
 
-
 @dataclass
 class Hospital:
     """医院资源"""
@@ -133,7 +124,6 @@ class Hospital:
     rating: float = 0.0
     contact_info: Dict[str, str] = field(default_factory=dict)
 
-
 @dataclass
 class Equipment:
     """设备资源"""
@@ -147,7 +137,6 @@ class Equipment:
     maintenance_schedule: List[TimeSlot] = field(default_factory=list)
     booking_slots: List[TimeSlot] = field(default_factory=list)
 
-
 @dataclass
 class Medicine:
     """药品资源"""
@@ -160,7 +149,6 @@ class Medicine:
     unit_price: float = 0.0
     expiry_date: datetime = field(default_factory=datetime.now)
     pharmacy_locations: List[str] = field(default_factory=list)
-
 
 @dataclass
 class ResourceRequest:
@@ -178,7 +166,6 @@ class ResourceRequest:
     requirements: Dict[str, Any] = field(default_factory=dict)
     created_at: datetime = field(default_factory=datetime.now)
 
-
 @dataclass
 class ResourceMatch:
     """资源匹配结果"""
@@ -192,7 +179,6 @@ class ResourceMatch:
     confidence: float = 1.0
     reasons: List[str] = field(default_factory=list)
 
-
 @dataclass
 class ResourceAllocation:
     """资源分配结果"""
@@ -204,7 +190,6 @@ class ResourceAllocation:
     processing_time_ms: float
     recommendations: List[str]
 
-
 @dataclass
 class BatchResourceRequest:
     """批量资源请求"""
@@ -213,7 +198,6 @@ class BatchResourceRequest:
     requests: List[ResourceRequest]
     priority: Priority = Priority.NORMAL
     created_at: datetime = field(default_factory=datetime.now)
-
 
 class EnhancedMedicalResourceService:
     """增强版医疗资源服务"""

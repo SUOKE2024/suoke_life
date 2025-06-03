@@ -7,9 +7,7 @@
 
 from typing import List, Dict, Any, Optional, Union
 from dataclasses import dataclass, field
-from datetime import datetime
 import uuid
-
 
 @dataclass
 class Document:
@@ -44,7 +42,6 @@ class Document:
             vector=data.get("vector", None)
         )
 
-
 @dataclass
 class DocumentReference:
     """文档引用模型，用于生成答案时引用的文档来源"""
@@ -76,7 +73,6 @@ class DocumentReference:
             snippet=data.get("snippet", "")
         )
 
-
 @dataclass
 class RetrieveResult:
     """检索结果"""
@@ -90,7 +86,6 @@ class RetrieveResult:
             "documents": [doc.to_dict() for doc in self.documents],
             "latency_ms": self.latency_ms
         }
-
 
 @dataclass
 class GenerateResult:
@@ -107,7 +102,6 @@ class GenerateResult:
             "references": [ref.to_dict() for ref in self.references],
             "latency_ms": self.latency_ms
         }
-
 
 @dataclass
 class QueryResult:
@@ -128,7 +122,6 @@ class QueryResult:
             "generation_latency_ms": self.generation_latency_ms,
             "total_latency_ms": self.total_latency_ms
         }
-
 
 @dataclass
 class QueryRequest:

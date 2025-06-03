@@ -5,11 +5,8 @@ API端点测试套件
 import pytest
 import asyncio
 from httpx import AsyncClient
-from unittest.mock import AsyncMock, patch
 
 from app.main import app
-from app.services.knowledge_service import KnowledgeService
-
 
 class TestConstitutionsAPI:
     """体质API测试"""
@@ -54,7 +51,6 @@ class TestConstitutionsAPI:
         response = client.get("/api/v1/constitutions/?offset=-1")
         assert response.status_code == 422
 
-
 class TestSymptomsAPI:
     """症状API测试"""
     
@@ -78,7 +74,6 @@ class TestSymptomsAPI:
         data = response.json()
         assert data["limit"] == 10
         assert data["offset"] == 5
-
 
 class TestSearchAPI:
     """搜索API测试"""
@@ -120,7 +115,6 @@ class TestSearchAPI:
         long_query = "a" * 201  # 超过200字符限制
         response = client.get(f"/api/v1/search/?q={long_query}")
         assert response.status_code == 422
-
 
 class TestGraphAPI:
     """知识图谱API测试"""
@@ -177,7 +171,6 @@ class TestGraphAPI:
         response = client.get("/api/v1/graph/path-analysis?from_id=node1&to_id=node1")
         assert response.status_code == 400
 
-
 class TestHealthAPI:
     """健康检查API测试"""
     
@@ -201,7 +194,6 @@ class TestHealthAPI:
         assert response.status_code == 200
         data = response.json()
         assert "alive" in data
-
 
 class TestAPIIntegration:
     """API集成测试"""
@@ -239,7 +231,6 @@ class TestAPIIntegration:
         response = client.options("/api/v1/constitutions/")
         # 根据CORS配置检查相应的头
         assert response.status_code in [200, 405]
-
 
 class TestAPIPerformance:
     """API性能测试"""
@@ -290,7 +281,6 @@ class TestAPIPerformance:
         total_time = end_time - start_time
         assert total_time < 5.0  # 10个并发请求应在5秒内完成
 
-
 @pytest.mark.asyncio
 class TestAsyncAPI:
     """异步API测试"""
@@ -318,7 +308,6 @@ class TestAsyncAPI:
                 if not isinstance(response, Exception):
                     assert response.status_code == 200
 
-
 class TestAPIDocumentation:
     """API文档测试"""
     
@@ -342,7 +331,6 @@ class TestAPIDocumentation:
         response = client.get("/redoc")
         assert response.status_code == 200
         assert "text/html" in response.headers["content-type"]
-
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"]) 

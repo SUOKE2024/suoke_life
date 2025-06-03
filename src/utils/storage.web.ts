@@ -1,8 +1,6 @@
-// Web平台存储工具 - 提供与AsyncStorage兼容的API
-
-// 简单的内存存储作为fallback
+//////     Web平台存储工具 - 提供与AsyncStorage兼容的API;
+//////     简单的内存存储作为fallback;
 const memoryStorage: { [key: string]: string } = {};
-
 class WebStorage {
   private isLocalStorageAvailable(): boolean {
     try {
@@ -14,7 +12,6 @@ class WebStorage {
       return false;
     }
   }
-
   async getItem(key: string): Promise<string | null> {
     try {
       if (this.isLocalStorageAvailable()) {
@@ -22,11 +19,9 @@ class WebStorage {
       }
       return memoryStorage[key] || null;
     } catch (error) {
-      console.warn("WebStorage getItem error:", error);
       return memoryStorage[key] || null;
     }
   }
-
   async setItem(key: string, value: string): Promise<void> {
     try {
       if (this.isLocalStorageAvailable()) {
@@ -35,11 +30,9 @@ class WebStorage {
         memoryStorage[key] = value;
       }
     } catch (error) {
-      console.warn("WebStorage setItem error:", error);
       memoryStorage[key] = value;
     }
   }
-
   async removeItem(key: string): Promise<void> {
     try {
       if (this.isLocalStorageAvailable()) {
@@ -47,17 +40,14 @@ class WebStorage {
       }
       delete memoryStorage[key];
     } catch (error) {
-      console.warn("WebStorage removeItem error:", error);
       delete memoryStorage[key];
     }
   }
-
   async multiRemove(keys: string[]): Promise<void> {
     for (const key of keys) {
       await this.removeItem(key);
     }
   }
-
   async clear(): Promise<void> {
     try {
       if (this.isLocalStorageAvailable()) {
@@ -65,11 +55,9 @@ class WebStorage {
       }
       Object.keys(memoryStorage).forEach((key) => delete memoryStorage[key]);
     } catch (error) {
-      console.warn("WebStorage clear error:", error);
       Object.keys(memoryStorage).forEach((key) => delete memoryStorage[key]);
     }
   }
-
   async getAllKeys(): Promise<string[]> {
     try {
       if (this.isLocalStorageAvailable()) {
@@ -77,10 +65,8 @@ class WebStorage {
       }
       return Object.keys(memoryStorage);
     } catch (error) {
-      console.warn("WebStorage getAllKeys error:", error);
       return Object.keys(memoryStorage);
     }
   }
 }
-
 export const webStorage = new WebStorage();

@@ -16,8 +16,6 @@ import uuid
 from pathlib import Path
 from unittest.mock import MagicMock
 
-import matplotlib.pyplot as plt
-
 # 添加项目根目录到Python路径
 project_root = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(project_root))
@@ -28,7 +26,6 @@ from internal.four_diagnosis.multimodal_fusion import MultimodalFusion
 from internal.four_diagnosis.recommendation.health_advisor import HealthAdvisor
 from internal.four_diagnosis.syndrome_analyzer import SyndromeAnalyzer
 from internal.orchestrator.four_diagnosis_coordinator import FourDiagnosisCoordinator
-from xiaoai_service.protos import four_diagnosis_pb2 as diagnosis_pb
 
 logging.basicConfig(level=logging.INFO)
 # 使用loguru logger

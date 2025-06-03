@@ -5,7 +5,6 @@
 
 import asyncio
 import heapq
-import json
 import logging
 import uuid
 from collections import defaultdict, deque
@@ -14,9 +13,6 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
-
-import numpy as np
-import pandas as pd
 
 from ..domain.models import ConstitutionType, ResourceType, UrgencyLevel
 from .resource_management_service import (
@@ -31,7 +27,6 @@ from .resource_management_service import (
 
 logger = logging.getLogger(__name__)
 
-
 class SchedulingStrategy(Enum):
     """调度策略"""
 
@@ -43,7 +38,6 @@ class SchedulingStrategy(Enum):
     CONSTITUTION_OPTIMIZED = "constitution"  # 体质优化
     MULTI_CRITERIA = "multi_criteria"  # 多准则决策
 
-
 class AppointmentStatus(Enum):
     """预约状态"""
 
@@ -54,7 +48,6 @@ class AppointmentStatus(Enum):
     CANCELLED = "cancelled"  # 已取消
     RESCHEDULED = "rescheduled"  # 已改期
 
-
 class LoadBalancingMethod(Enum):
     """负载均衡方法"""
 
@@ -64,7 +57,6 @@ class LoadBalancingMethod(Enum):
     LEAST_RESPONSE_TIME = "least_rt"  # 最短响应时间
     RESOURCE_BASED = "resource_based"  # 基于资源
     CONSTITUTION_AWARE = "constitution_aware"  # 体质感知
-
 
 @dataclass
 class AppointmentRequest:
@@ -83,7 +75,6 @@ class AppointmentRequest:
     location: Dict[str, float]
     created_at: datetime = field(default_factory=datetime.now)
     status: AppointmentStatus = AppointmentStatus.PENDING
-
 
 @dataclass
 class ScheduledAppointment:
@@ -104,7 +95,6 @@ class ScheduledAppointment:
     created_at: datetime = field(default_factory=datetime.now)
     updated_at: datetime = field(default_factory=datetime.now)
 
-
 @dataclass
 class ResourceLoad:
     """资源负载"""
@@ -117,7 +107,6 @@ class ResourceLoad:
     queue_length: int
     average_wait_time: float
     last_updated: datetime = field(default_factory=datetime.now)
-
 
 @dataclass
 class SchedulingMetrics:
@@ -132,7 +121,6 @@ class SchedulingMetrics:
     user_satisfaction: float
     cost_efficiency: float
     last_updated: datetime = field(default_factory=datetime.now)
-
 
 class ResourceSchedulingService:
     """

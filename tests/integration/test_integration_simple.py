@@ -6,7 +6,6 @@
 
 import asyncio
 import aiohttp
-import json
 
 async def test_simple_integration():
     """简化的集成测试"""

@@ -9,7 +9,6 @@ import logging
 from datetime import UTC, datetime
 from typing import Any
 
-import motor.motor_asyncio
 from bson.objectid import ObjectId
 from pymongo.errors import PyMongoError
 

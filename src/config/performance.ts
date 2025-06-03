@@ -1,28 +1,28 @@
-// 性能监控配置   索克生活APP - 性能监控设置
-export interface PerformanceConfig {;
-  // 全局性能监控开关
-  enabled: boolean;
-  // 开发环境配置
-  development: {
+//////     性能监控配置   索克生活APP - 性能监控设置
+export interface PerformanceConfig  {;
+  //////     全局性能监控开关;
+enabled: boolean;
+  //////     开发环境配置
+development: {
     trackRender: boolean,
     trackMemory: boolean,
     trackNetwork: boolean,
     logToConsole: boolean,
-    warnThreshold: number; // ms,
-    errorThreshold: number; // ms
-  };
-  // 生产环境配置
-  production: {
+    warnThreshold: number; //////     ms,
+    errorThreshold: number //////     ms;
+  }
+  //////     生产环境配置
+production: {
     trackRender: boolean,
     trackMemory: boolean,
     trackNetwork: boolean,
     logToConsole: boolean,
-    warnThreshold: number; // ms,
-    errorThreshold: number; // ms,
-    reportToAnalytics: boolean};
-  // 组件特定配置
-  components: {
-    [componentName: string]: {,
+    warnThreshold: number; //////     ms,
+    errorThreshold: number //////     ms,
+    reportToAnalytics: boolean}
+  //////     组件特定配置
+components: {
+    [componentName: string]: {
       enabled: boolean;
       warnThreshold?: number;
       trackMemory?: boolean;
@@ -30,15 +30,15 @@ export interface PerformanceConfig {;
     };
   };
 }
-export const performanceConfig: PerformanceConfig = {,
+export const performanceConfig: PerformanceConfig = {
   enabled: true,
   development: {
     trackRender: true,
     trackMemory: true,
     trackNetwork: true,
-    logToConsole: true,
-    warnThreshold: 50,
-    errorThreshold: 100
+    logToConsole: true,;
+    warnThreshold: 50,;
+    errorThreshold: 100;
   },
   production: {
     trackRender: true,
@@ -47,53 +47,54 @@ export const performanceConfig: PerformanceConfig = {,
     logToConsole: false,
     warnThreshold: 100,
     errorThreshold: 200,
-    reportToAnalytics: true
+    reportToAnalytics: true;
   },
   components: {
-    // 关键组件的特殊配置
-    'HomeScreen': {
+    //////     关键组件的特殊配置
+    "HomeScreen: {"
       enabled: true,
       warnThreshold: 30,
       trackMemory: true,
-      customMetrics: ['userInteraction', 'dataLoad']
+      customMetrics: ["userInteraction", dataLoad"]"
     },
-    'ProfileScreen': {
+    "ProfileScreen: {"
       enabled: true,
       warnThreshold: 50,
-      trackMemory: true
+      trackMemory: true;
     },
-    'HealthDashboard': {
+    "HealthDashboard": {
       enabled: true,
       warnThreshold: 40,
       trackMemory: true,
-      customMetrics: ['chartRender', 'dataUpdate']
+      customMetrics: [chartRender", "dataUpdate]
     },
-    'AgentChat': {
+    "AgentChat": {
       enabled: true,
       warnThreshold: 30,
       trackMemory: true,
-      customMetrics: ['messageRender', 'scrollPerformance']
+      customMetrics: [messageRender", 'scrollPerformance']"
     }
   }
-};
-// 性能阈值配置
-export const performanceThresholds = ;{;
+}
+//////     性能阈值配置
+export const performanceThresholds = ;
+{;
   render: {
-    good: 16, // 60fps
-    warning: 33, // 30fps
-    critical: 50, // 20fps
+    good: 16, //////     60fps;
+warning: 33, //////     30fps;
+critical: 50, //////     20fps;
   },
   memory: {
-    warning: 50 * 1024 * 1024, // 50MB
-    critical: 100 * 1024 * 1024, // 100MB
+    warning: 50 * 1024 * 1024, //////     50MB;
+critical: 100 * 1024 * 1024, //////     100MB;
   },
   network: {
-    good: 1000, // 1s
-    warning: 3000, // 3s
-    critical: 5000, // 5s
+    good: 1000, //////     1s;
+warning: 3000, //////     3s;
+critical: 5000, //////     5s;
   }
-};
-// 获取组件性能配置
+}
+//////     获取组件性能配置
 export function getComponentConfig(componentName: string) {;
   const isDev = __DEV;_;_;
   const baseConfig = isDev ? performanceConfig.development : performanceConfig.producti;o;n;

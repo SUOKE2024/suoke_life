@@ -2,9 +2,6 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from integration.xiaoai_service import xiaoai_pb2 as xiaoai__pb2
-
-
 class XiaoAIServiceStub(object):
     """小艾服务接口定义
     """
@@ -26,7 +23,6 @@ class XiaoAIServiceStub(object):
                 response_deserializer=xiaoai__pb2.ConstitutionAnalysisResponse.FromString,
                 )
 
-
 class XiaoAIServiceServicer(object):
     """小艾服务接口定义
     """
@@ -45,7 +41,6 @@ class XiaoAIServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-
 def add_XiaoAIServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'IntegrateFourDiagnosis': grpc.unary_unary_rpc_method_handler(
@@ -62,7 +57,6 @@ def add_XiaoAIServiceServicer_to_server(servicer, server):
     generic_handler = grpc.method_handlers_generic_handler(
             'xiaoai.XiaoAIService', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
-
 
  # This class is part of an EXPERIMENTAL API.
 class XiaoAIService(object):

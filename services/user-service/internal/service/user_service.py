@@ -4,7 +4,6 @@
 该模块实现了用户服务的核心业务逻辑。
 """
 import logging
-import uuid
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
 from uuid import UUID
@@ -24,7 +23,6 @@ from internal.repository.exceptions import (DatabaseError, DeviceAlreadyBoundErr
                                      UserNotFoundError)
 
 logger = logging.getLogger(__name__)
-
 
 # 定义用户仓库接口协议
 from typing import Protocol, Union, TypeVar
@@ -67,7 +65,6 @@ class UserRepositoryProtocol(Protocol):
     async def unbind_device(self, user_id: UUID, device_id: str) -> bool: ...
     
     async def get_user_devices(self, user_id: UUID) -> List[DeviceInfo]: ...
-
 
 class UserService:
     """用户服务类"""

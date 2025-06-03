@@ -12,9 +12,6 @@ import grpc
 # 添加项目根目录到PYTHONPATH
 sys.path.insert(0, Path().resolve())
 
-import api.grpc.xiaoai_service_pb2 as xiaoai_pb2
-
-
 async def test_chat_service():
     """测试聊天服务"""
     print("🔍 测试小艾聊天服务...\n")

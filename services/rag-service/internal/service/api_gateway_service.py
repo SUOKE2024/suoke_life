@@ -16,14 +16,10 @@ from datetime import datetime, timedelta
 from loguru import logger
 import aiohttp
 import grpc
-import grpc.aio
-from grpc_reflection.v1alpha import reflection
 import websockets
-import redis.asyncio as redis
 from prometheus_client import Counter, Histogram, Gauge
 import jwt
 from cryptography.fernet import Fernet
-
 
 class ServiceType(Enum):
     """服务类型"""
@@ -38,7 +34,6 @@ class ServiceType(Enum):
     DIAGNOSTIC_SERVICES = "diagnostic-services"      # 诊断服务
     MED_KNOWLEDGE = "med-knowledge"                  # 医学知识库
 
-
 class CommunicationProtocol(Enum):
     """通信协议"""
     HTTP_REST = "http_rest"      # HTTP REST API
@@ -46,7 +41,6 @@ class CommunicationProtocol(Enum):
     WEBSOCKET = "websocket"     # WebSocket
     MESSAGE_QUEUE = "mq"        # 消息队列
     GRAPHQL = "graphql"         # GraphQL
-
 
 class RequestMethod(Enum):
     """请求方法"""
@@ -56,7 +50,6 @@ class RequestMethod(Enum):
     DELETE = "DELETE"
     PATCH = "PATCH"
 
-
 class AuthType(Enum):
     """认证类型"""
     NONE = "none"               # 无认证
@@ -65,7 +58,6 @@ class AuthType(Enum):
     OAUTH2 = "oauth2"           # OAuth2
     BASIC = "basic"             # 基础认证
     CUSTOM = "custom"           # 自定义认证
-
 
 @dataclass
 class ServiceEndpoint:
@@ -82,7 +74,6 @@ class ServiceEndpoint:
     circuit_breaker_enabled: bool = True
     rate_limit: Optional[int] = None
     metadata: Dict[str, Any] = field(default_factory=dict)
-
 
 @dataclass
 class ServiceRequest:
@@ -101,7 +92,6 @@ class ServiceRequest:
     user_id: Optional[str] = None
     trace_id: Optional[str] = None
 
-
 @dataclass
 class ServiceResponse:
     """服务响应"""
@@ -115,7 +105,6 @@ class ServiceResponse:
     timestamp: datetime = field(default_factory=datetime.now)
     trace_id: Optional[str] = None
 
-
 @dataclass
 class CircuitBreakerState:
     """断路器状态"""
@@ -128,7 +117,6 @@ class CircuitBreakerState:
     failure_threshold: int = 5
     success_threshold: int = 3
     timeout_duration: timedelta = timedelta(minutes=1)
-
 
 class APIGatewayService:
     """API网关集成服务"""

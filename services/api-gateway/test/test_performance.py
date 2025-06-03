@@ -5,7 +5,6 @@
 API网关性能测试
 """
 
-import asyncio
 import os
 import sys
 import time
@@ -14,7 +13,6 @@ from concurrent.futures import ThreadPoolExecutor
 from typing import List, Dict, Any, Tuple
 
 import pytest
-import requests
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
@@ -24,7 +22,6 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 from internal.model.config import GatewayConfig, RouteConfig, CacheConfig, RateLimitConfig
 from internal.delivery.rest.routes import setup_routes
 from internal.service.service_registry import ServiceRegistry
-
 
 class PerformanceTest:
     """性能测试基类"""
@@ -138,7 +135,6 @@ class PerformanceTest:
             "p95_response_time": p95_response_time,
             "p99_response_time": p99_response_time
         }
-
 
 class TestGatewayPerformance:
     """API网关性能测试类"""
@@ -343,7 +339,6 @@ class TestGatewayPerformance:
         # 理论上，缓存应该提高性能
         assert results_with_cache['avg_response_time'] <= results_no_cache['avg_response_time'], "缓存应减少平均响应时间"
         assert results_with_cache['throughput'] >= results_no_cache['throughput'], "缓存应提高吞吐量"
-
 
 if __name__ == "__main__":
     from unittest.mock import MagicMock

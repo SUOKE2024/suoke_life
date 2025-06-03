@@ -1,6 +1,6 @@
-import React from 'react';
-import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor';
-import { apiClient } from '../../services/apiClient';/
+import React from "react";
+import { apiClient } from ../../services/////    apiClient";"
+/////
   XiaokeAgent,
   ServiceRecommendation,
   DoctorMatch,
@@ -8,43 +8,42 @@ import { apiClient } from '../../services/apiClient';/
   SupplyChainInfo,
   AppointmentInfo,
   UserProfile,
-  { ServiceContext } from './types';//
- * 小克智能体主类;
+  { ServiceContext } from "./types;// * 小克智能体主类"////
  * SUOKE频道版主，负责服务订阅、农产品预制、供应链管理等商业化服务
- */export class XiaokeAgentImpl implements XiaokeAgent {
-  private personality: unknown = {,
-    style: 'professional', // 专业型 *     tone: 'efficient',      *// 高效的语调* *     expertise: 'business',  * */// 商业专业* *     approach: 'service-oriented',  * */// 服务导向* *   } * *//
-  private serviceEndpoint = '/api/agents/xiaoke';/
+ export class XiaokeAgentImpl implements XiaokeAgent {;
+  private personality: unknown = {;
+    style: ";"
+professional", // 专业型 // tone: efficient",      / 高效的语调* // expertise: "business,  * // 商业专业* // approach: "service-oriented",  * // 服务导向* // } * /////    "
+  private serviceEndpoint = /api/agents/xiaoke"/////    "
   constructor() {
-    // 初始化小克智能体 *   } */
-  // /    核心消息处理功能  async processMessage(message: string,
+    // 初始化小克智能体 //////     }
+  //////     核心消息处理功能  async processMessage(message: string,
     context: ServiceContext,
     userId?: string,
-    sessionId?: string
+    sessionId?: string;
   ): Promise<any>  {
     try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/message`, {/        text: message,
+      const response = await apiClient.post(`${this.serviceEndpoint}/message`, {/////            text: message,;
         context,
         user_id: userId,
-        session_id: session;I;d
+        session_id: session;I;d;
       ;};);
-      // 应用个性化风格 *       response.data.text = this.applyPersonalityToResponse(response.data.text, context); */
-      return response.da;t;a
+      // 应用个性化风格 //////     response.data.text = this.applyPersonalityToResponse(response.data.text, context)
+      return response.da;t;a;
     } catch (error) {
-      console.error('小克消息处理失败:', error);
       return this.generateFallbackResponse(message, contex;t;);
     }
   }
-  // /    推荐服务  async recommendServices(userProfile: UserProfile,
+  //////     推荐服务  async recommendServices(userProfile: UserProfile,
     healthData?: unknown,
-    preferences?: unknown
-  ): Promise<ServiceRecommendation[] />  {
+    preferences?: unknown;
+  ): Promise<ServiceRecommendation[] /////    >  {
     try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/recommend-service`, {/        user_profile: userProfile,
+      const response = await apiClient.post(`${this.serviceEndpoint}/recommend-service`, {/////            user_profile: userProfile,;
         health_data: healthData,
-        preferences: preferenc;e;s
+        preferences: preferenc;e;s;
       ;};);
-      return response.data.map((rec: unknow;n;); => ({,
+      return response.data.map((rec: unknow;n;); => ({
         id: rec.id,
         name: rec.name,
         category: rec.category,
@@ -57,25 +56,24 @@ import { apiClient } from '../../services/apiClient';/
         benefits: rec.benefits || [],
         requirements: rec.requirements || [],
         estimatedDuration: rec.estimated_duration,
-        location: rec.location
+        location: rec.location;
       }))
     } catch (error) {
-      console.error('服务推荐失败:', error);
       return [;];
     }
   }
-  // /    匹配医生  async matchDoctors(symptoms: string[],
+  //////     匹配医生  async matchDoctors(symptoms: string[],
     specialty?: string,
     location?: string,
-    preferences?: unknown
-  ): Promise<DoctorMatch[] />  {
+    preferences?: unknown;
+  ): Promise<DoctorMatch[] /////    >  {
     try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/match-doctor`, {/        symptoms,
+      const response = await apiClient.post(`${this.serviceEndpoint}/match-doctor`, {/////            symptoms,;
         specialty,
         location,
-        preferenc;e;s
+        preferenc;e;s;
       ;};);
-      return response.data.map((match: unknow;n;); => ({,
+      return response.data.map((match: unknow;n;); => ({
         doctorId: match.doctor_id,
         name: match.name,
         specialty: match.specialty,
@@ -89,16 +87,15 @@ import { apiClient } from '../../services/apiClient';/
         certifications: match.certifications || [],
         reviews: match.reviews || [],
         location: match.location,
-        distance: match.distance
+        distance: match.distance;
       }))
     } catch (error) {
-      console.error('医生匹配失败:', error);
       return [;];
     }
   }
-  // /    获取产品信息  async getProductInfo(productId: string): Promise<ProductInfo | null />  {
+  // 获取产品信息  async getProductInfo(productId: string): Promise<ProductInfo | null /////    >  {
     try {
-      const response = await apiClient.get(`${this.serviceEndpoint}/products/${productI;d;};`;);/
+      const response = await apiClient.get(`${this.serviceEndpoint}/products/${productId;};`;);//////
       return {
         id: response.data.id,
         name: response.data.name,
@@ -113,26 +110,25 @@ import { apiClient } from '../../services/apiClient';/
         availability: response.data.availability,
         rating: response.data.rating,
         reviews: response.data.reviews || [],
-        supplyChain: response.data.supply_chai;n
+        supplyChain: response.data.supply_chai;n;
       ;}
     } catch (error) {
-      console.error('获取产品信息失败:', error);
       return nu;l;l;
     }
   }
-  // /    搜索产品  async searchProducts(query: string,
+  //////     搜索产品  async searchProducts(query: string,
     filters?: {
       category?: string;
       priceRange?: [number, number];
       location?: string;
       organic?: boolean;
       inStock?: boolean}
-  ): Promise<ProductInfo[] />  {
+  ): Promise<ProductInfo[] /////    >  {
     try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/products/search`, {/        query,
-        filte;r;s
+      const response = await apiClient.post(`${this.serviceEndpoint}/products/search`, {/////            query,;
+        filte;r;s;
       ;};);
-      return response.data.map((product: unknow;n;); => ({,
+      return response.data.map((product: unknow;n;); => ({
         id: product.id,
         name: product.name,
         category: product.category,
@@ -146,19 +142,18 @@ import { apiClient } from '../../services/apiClient';/
         availability: product.availability,
         rating: product.rating,
         reviews: product.reviews || [],
-        supplyChain: product.supply_chain
+        supplyChain: product.supply_chain;
       }))
     } catch (error) {
-      console.error('产品搜索失败:', error);
       return [;];
     }
   }
-  // /    获取供应链信息  async getSupplyChainInfo(productId: string): Promise<SupplyChainInfo | null />  {
+  // 获取供应链信息  async getSupplyChainInfo(productId: string): Promise<SupplyChainInfo | null /////    >  {
     try {
-      const response = await apiClient.get(`${this.serviceEndpoint}/supply-chain/${productI;d;};`;);/
+      const response = await apiClient.get(`${this.serviceEndpoint}/supply-chain/${productId;};`;);//////
       return {;
         productId: response.data.product_id,
-        stages: response.data.stages.map((stage: unknow;n;); => ({,
+        stages: response.data.stages.map((stage: unknow;n;); => ({
           id: stage.id,
           name: stage.name,
           description: stage.description,
@@ -168,28 +163,27 @@ import { apiClient } from '../../services/apiClient';/
           certifications: stage.certifications || [],
           quality: stage.quality,
           temperature: stage.temperature,
-          humidity: stage.humidity
+          humidity: stage.humidity;
         })),
         blockchainHash: response.data.blockchain_hash,
         verificationStatus: response.data.verification_status,
         traceabilityScore: response.data.traceability_score,
-        sustainabilityMetrics: response.data.sustainability_metrics
+        sustainabilityMetrics: response.data.sustainability_metrics;
       }
     } catch (error) {
-      console.error('获取供应链信息失败:', error);
-      return nu;l;l
+      return nu;l;l;
     }
   }
-  // /    创建预约  async createAppointment(doctorId: string,
+  //////     创建预约  async createAppointment(doctorId: string,
     timeSlot: Date,
-    type: 'consultation' | 'checkup' | 'follow-up',
-    notes?: string
-  ): Promise<AppointmentInfo | null />  {
+    type: "consultation | "checkup" | follow-up",
+    notes?: string;
+  ): Promise<AppointmentInfo | null /////    >  {
     try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/appointments`, {/        doctor_id: doctorId,
+      const response = await apiClient.post(`${this.serviceEndpoint}/appointments`, {/////            doctor_id: doctorId,;
         time_slot: timeSlot.toISOString(),
         type,
-        not;e;s
+        not;e;s;
       ;};);
       return {
         id: response.data.id,
@@ -204,14 +198,13 @@ import { apiClient } from '../../services/apiClient';/
         reminders: response.data.reminders || [],
         createdAt: new Date(response.data.created_at;);}
     } catch (error) {
-      console.error('创建预约失败:', error);
       return nu;l;l;
     }
   }
-  // /    获取用户预约列表  async getUserAppointments(userId: string): Promise<AppointmentInfo[] />  {
+  // 获取用户预约列表  async getUserAppointments(userId: string): Promise<AppointmentInfo[] /////    >  {
     try {
-      const response = await apiClient.get(`${this.serviceEndpoint}/appointments/user/${userI;d;};`;);/
-      return response.data.map((appointment: unknow;n;); => ({,
+      const response = await apiClient.get(`${this.serviceEndpoint}/appointments/user/${userId;};`;);//////
+      return response.data.map((appointment: unknow;n;); => ({
         id: appointment.id,
         doctorId: appointment.doctor_id,
         patientId: appointment.patient_id,
@@ -224,41 +217,38 @@ import { apiClient } from '../../services/apiClient';/
         reminders: appointment.reminders || [],
         createdAt: new Date(appointment.created_at)}))
     } catch (error) {
-      console.error('获取用户预约失败:', error);
       return [;]
     }
   }
-  // /    订阅服务  async subscribeToService(serviceId: string,
-    plan: 'basic' | 'premium' | 'enterprise',
-    duration: number // 月数 *   ): Promise< {, subscriptionId: string, */
+  //////     订阅服务  async subscribeToService(serviceId: string,
+    plan: basic" | "premium | "enterprise",
+    duration: number // 月数 //////     ): Promise< { subscriptionId: string,
     status: string,
     startDate: Date,
     endDate: Date,
     paymentInfo: unknown} | null> {
     try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/services/subscribe`, {/        service_id: serviceId,
+      const response = await apiClient.post(`${this.serviceEndpoint}/services/subscribe`, {/////            service_id: serviceId,;
         plan,
-        durati;o;n
+        durati;o;n;
       ;};);
       return {
         subscriptionId: response.data.subscription_id,
         status: response.data.status,
         startDate: new Date(response.data.start_date),
         endDate: new Date(response.data.end_date),
-        paymentInfo: response.data.payment_inf;o
+        paymentInfo: response.data.payment_inf;o;
       ;}
     } catch (error) {
-      console.error('服务订阅失败:', error);
       return nu;l;l;
     }
   }
-  // /    获取智能体状态  async getStatus(): Promise<any> {
+  //////     获取智能体状态  async getStatus(): Promise<any> {
     try {
-      const response = await apiClient.get(`${this.serviceEndpoint}/stat;u;s;`;);/      return response.da;t;a
+      const response = await apiClient.get(`${this.serviceEndpoint}/statu;s;`;);/////          return response.da;t;a;
     } catch (error) {
-      console.error('获取小克状态失败:', error)
       return {
-        status: 'offline',
+        status: "offline",
         capabilities: [],
         performance: {
           accuracy: 0,
@@ -267,37 +257,36 @@ import { apiClient } from '../../services/apiClient';/
       ;};
     }
   }
-  // /    设置个性化特征  setPersonality(traits: unknown);: void  {
+  //////     设置个性化特征  setPersonality(traits: unknown): void  {
     this.personality = { ...this.personality, ...traits };
   }
-  // /    应用个性化风格到响应  private applyPersonalityToResponse(text: string, context: ServiceContext);: string  {
-    // 根据小克的专业高效风格调整响应 *     let styledText = te;x;t */
-    // 添加专业性表达 *     if (context.type === 'service_inquiry') { */
+  //////     应用个性化风格到响应  private applyPersonalityToResponse(text: string, context: ServiceContext): string  {
+    // 根据小克的专业高效风格调整响应 //////     let styledText = tex;t;
+    // 添加专业性表达 //////     if (context.type === service_inquiry") { "
       styledText = `基于您的需求，我为您推荐以下专业服务：${styledText}`
-    } else if (context.type === 'product_search') {
+    } else if (context.type === "product_search) {"
       styledText = `经过精准匹配，为您找到以下优质产品：${styledText}`
     }
-    // 添加效率导向的结尾 *     if (!styledText.includes('如需')) { */
-      styledText += ' 如需进一步了解或预约服务，我可以立即为您安排。';
+    // 添加效率导向的结尾 //////     if (!styledText.includes("如需")) {
+      styledText +=  如需进一步了解或预约服务，我可以立即为您安排。""
     }
     return styledTe;x;t;
   }
-  // /    生成备用响应  private generateFallbackResponse(message: string, context: ServiceContext): unknown  {
+  //////     生成备用响应  private generateFallbackResponse(message: string, context: ServiceContext): unknown  {
     return {
-      text: '抱歉，我暂时无法处理您的请求。作为您的专业服务顾问，我建议您稍后重试，或者我可以为您转接人工客服。',
-      type: 'fallback',
-      suggestions;: ;['查看热门服务',
-        '浏览推荐产品',
-        '联系客服',
-        '查看我的订单'
+      text: "抱歉，我暂时无法处理您的请求。作为您的专业服务顾问，我建议您稍后重试，或者我可以为您转接人工客服。,"
+      type: "fallback",
+      suggestions: ;[查看热门服务","
+        "浏览推荐产品,"
+        "联系客服",
+        查看我的订单""
       ],
       timestamp: Date.now()};
   }
-  // /    清理资源  async cleanup(userId: string): Promise<void>  {
+  //////     清理资源  async cleanup(userId: string): Promise<void>  {
     try {
-      // 清理用户相关的缓存和临时数据 *       } catch (error) { */
-      console.error('清理小克资源失败:', error);
-    }
+      // 清理用户相关的缓存和临时数据 //////     } catch (error) {
+      }
   }
 }
-// 导出单例实例 * export const xiaokeAgent = new XiaokeAgentImpl;(;); */;
+// 导出单例实例 * export const xiaokeAgent = new XiaokeAgentImpl ////   ;

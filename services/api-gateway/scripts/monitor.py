@@ -8,7 +8,6 @@ API 网关监控脚本
 """
 
 import asyncio
-import time
 import json
 import argparse
 from typing import Dict, Any, List
@@ -16,15 +15,11 @@ from datetime import datetime, timedelta
 from pathlib import Path
 
 import httpx
-import psutil
 from rich.console import Console
-from rich.table import Table
 from rich.live import Live
 from rich.panel import Panel
-from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.layout import Layout
 from rich.text import Text
-
 
 class GatewayMonitor:
     """API 网关监控器"""
@@ -424,7 +419,6 @@ class GatewayMonitor:
         
         print(f"📊 指标数据已导出到: {output_path}")
 
-
 async def main():
     """主函数"""
     parser = argparse.ArgumentParser(description="API 网关监控工具")
@@ -485,7 +479,6 @@ async def main():
         await monitor.run_simple()
     else:
         await monitor.run_dashboard()
-
 
 if __name__ == "__main__":
     asyncio.run(main()) 

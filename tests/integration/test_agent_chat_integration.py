@@ -7,7 +7,6 @@
 import os
 import re
 import sys
-from pathlib import Path
 
 def check_file_exists(file_path):
     """检查文件是否存在"""

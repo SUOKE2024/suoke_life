@@ -4,20 +4,15 @@
 支持CUDA、OpenCL等GPU计算加速
 """
 
-import numpy as np
 import time
 import logging
 import platform
 from typing import Dict, Any, List, Optional, Union, Tuple, Callable
 from dataclasses import dataclass
 from enum import Enum
-import threading
-import asyncio
-from concurrent.futures import ThreadPoolExecutor
 import psutil
 
 logger = logging.getLogger(__name__)
-
 
 class GPUBackend(Enum):
     """GPU后端类型"""
@@ -27,7 +22,6 @@ class GPUBackend(Enum):
     VULKAN = "vulkan"       # Vulkan
     CPU_FALLBACK = "cpu"    # CPU回退
 
-
 class ComputeType(Enum):
     """计算类型"""
     MATRIX_MULTIPLY = "matrix_multiply"
@@ -36,7 +30,6 @@ class ComputeType(Enum):
     REDUCTION = "reduction"
     ELEMENT_WISE = "element_wise"
     CUSTOM_KERNEL = "custom_kernel"
-
 
 @dataclass
 class GPUDevice:
@@ -51,7 +44,6 @@ class GPUDevice:
     max_blocks_per_grid: Optional[int] = None
     is_available: bool = True
 
-
 @dataclass
 class GPUConfig:
     """GPU配置"""
@@ -62,7 +54,6 @@ class GPUConfig:
     enable_profiling: bool = False
     fallback_to_cpu: bool = True
     optimization_level: int = 2
-
 
 class GPUMemoryManager:
     """GPU内存管理器"""
@@ -82,7 +73,6 @@ class GPUMemoryManager:
         """初始化GPU后端"""
         if self.backend == GPUBackend.CUDA:
             try:
-                import cupy as cp
                 self.cp = cp
                 self.device = cp.cuda.Device(self.device_id)
                 self.device.use()
@@ -93,7 +83,6 @@ class GPUMemoryManager:
         
         elif self.backend == GPUBackend.OPENCL:
             try:
-                import pyopencl as cl
                 self.cl = cl
                 self.context = cl.create_some_context()
                 self.queue = cl.CommandQueue(self.context)
@@ -112,7 +101,6 @@ class GPUMemoryManager:
             return array
         
         elif self.backend == GPUBackend.OPENCL:
-            import pyopencl as cl
             buffer = cl.Buffer(
                 self.context, 
                 cl.mem_flags.READ_WRITE, 
@@ -152,7 +140,6 @@ class GPUMemoryManager:
                 "allocated_by_manager": self.total_allocated,
                 "peak_memory": self.peak_memory
             }
-
 
 class GPUKernelManager:
     """GPU内核管理器"""
@@ -266,7 +253,6 @@ class GPUKernelManager:
         '''
         
         try:
-            import cupy as cp
             
             # 编译内核
             self.compiled_kernels['tcm_syndrome_analysis'] = cp.RawKernel(
@@ -337,7 +323,6 @@ class GPUKernelManager:
         '''
         
         try:
-            import pyopencl as cl
             
             program = cl.Program(self.memory_manager.context, opencl_kernel_code).build()
             
@@ -371,7 +356,6 @@ class GPUKernelManager:
         kernel(grid_size, block_size, args)
         
         # 同步等待完成
-        import cupy as cp
         cp.cuda.Stream.null.synchronize()
     
     def _execute_opencl_kernel(self, kernel, *args, **kwargs):
@@ -381,7 +365,6 @@ class GPUKernelManager:
         
         kernel(self.memory_manager.queue, global_size, local_size, *args)
         self.memory_manager.queue.finish()
-
 
 class GPUAccelerator:
     """GPU加速器主类"""
@@ -409,7 +392,6 @@ class GPUAccelerator:
         """检测可用的GPU设备"""
         # 检测CUDA设备
         try:
-            import cupy as cp
             device_count = cp.cuda.runtime.getDeviceCount()
             
             for i in range(device_count):
@@ -437,7 +419,6 @@ class GPUAccelerator:
         
         # 检测OpenCL设备
         try:
-            import pyopencl as cl
             
             platforms = cl.get_platforms()
             device_id = 0
@@ -526,7 +507,6 @@ class GPUAccelerator:
     def _tcm_syndrome_analysis_cuda(self, symptoms: np.ndarray, weights: np.ndarray, 
                                    patterns: np.ndarray) -> np.ndarray:
         """CUDA版本的中医证候分析"""
-        import cupy as cp
         
         # 转换到GPU
         symptoms_gpu = cp.asarray(symptoms, dtype=cp.float32)
@@ -561,7 +541,6 @@ class GPUAccelerator:
     def _tcm_syndrome_analysis_opencl(self, symptoms: np.ndarray, weights: np.ndarray, 
                                      patterns: np.ndarray) -> np.ndarray:
         """OpenCL版本的中医证候分析"""
-        import pyopencl as cl
         
         # 创建缓冲区
         symptoms_buf = cl.Buffer(
@@ -635,7 +614,6 @@ class GPUAccelerator:
     
     def _health_data_normalize_cuda(self, data: np.ndarray) -> np.ndarray:
         """CUDA版本的健康数据标准化"""
-        import cupy as cp
         
         # 转换到GPU
         data_gpu = cp.asarray(data, dtype=cp.float32)
@@ -669,7 +647,6 @@ class GPUAccelerator:
         stds = np.std(data, axis=0).astype(np.float32)
         
         # 创建缓冲区
-        import pyopencl as cl
         
         data_buf = cl.Buffer(
             self.memory_manager.context,
@@ -736,7 +713,6 @@ class GPUAccelerator:
     def _nutrition_optimization_cuda(self, user_profile: np.ndarray, 
                                     food_database: np.ndarray) -> np.ndarray:
         """CUDA版本的营养优化"""
-        import cupy as cp
         
         # 转换到GPU
         user_profile_gpu = cp.asarray(user_profile, dtype=cp.float32)
@@ -844,7 +820,6 @@ class GPUAccelerator:
         
         logger.info("GPU资源已清理")
 
-
 # 全局GPU加速器实例
 _gpu_accelerator = None
 
@@ -855,7 +830,6 @@ def get_gpu_accelerator(config: Optional[GPUConfig] = None) -> GPUAccelerator:
         _gpu_accelerator = GPUAccelerator(config)
     return _gpu_accelerator
 
-
 # 便捷函数接口
 def tcm_syndrome_analysis_gpu(symptoms: np.ndarray, weights: np.ndarray, 
                              patterns: np.ndarray) -> np.ndarray:
@@ -863,19 +837,16 @@ def tcm_syndrome_analysis_gpu(symptoms: np.ndarray, weights: np.ndarray,
     accelerator = get_gpu_accelerator()
     return accelerator.tcm_syndrome_analysis_gpu(symptoms, weights, patterns)
 
-
 def health_data_normalize_gpu(data: np.ndarray) -> np.ndarray:
     """GPU加速的健康数据标准化"""
     accelerator = get_gpu_accelerator()
     return accelerator.health_data_normalize_gpu(data)
-
 
 def nutrition_optimization_gpu(user_profile: np.ndarray, 
                               food_database: np.ndarray) -> np.ndarray:
     """GPU加速的营养优化"""
     accelerator = get_gpu_accelerator()
     return accelerator.nutrition_optimization_gpu(user_profile, food_database)
-
 
 if __name__ == "__main__":
     # 测试GPU加速

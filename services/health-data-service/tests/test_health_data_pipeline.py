@@ -8,8 +8,6 @@
 import asyncio
 import json
 import pytest
-from datetime import datetime
-from typing import Dict, Any
 
 # 导入测试模块
 import sys
@@ -43,7 +41,6 @@ from health_data_service.services.health_data_pipeline import (
     process_tcm_palpation_data,
     process_tcm_calculation_data
 )
-
 
 class TestHealthDataPipeline:
     """健康数据流水线测试类"""
@@ -445,7 +442,6 @@ class TestHealthDataPipeline:
         print(f"本命卦: {tcm_calculation_data['life_hexagram']}")
         print("✅ 中医算诊数据流水线测试通过")
 
-
 class TestDataStandardization:
     """数据标准化测试类"""
     
@@ -488,7 +484,6 @@ class TestDataStandardization:
         
         print("✅ 检验结果标准化测试通过")
 
-
 async def run_comprehensive_test():
     """运行综合测试"""
     print("🚀 开始健康数据流水线综合测试")
@@ -525,7 +520,6 @@ async def run_comprehensive_test():
         print(f"\n❌ 测试失败: {e}")
         raise
 
-
 def demo_health_data_processing():
     """演示健康数据处理"""
     print("\n📊 健康数据处理演示")
@@ -560,7 +554,6 @@ def demo_health_data_processing():
         print(f"\n{data_name}数据:")
         for key, value in data_values.items():
             print(f"  {key}: {value}")
-
 
 if __name__ == "__main__":
     # 演示数据处理

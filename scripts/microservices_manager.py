@@ -12,7 +12,6 @@
 """
 
 import os
-import json
 import yaml
 import asyncio
 import aiohttp
@@ -22,7 +21,6 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Any
 from dataclasses import dataclass, asdict
 from datetime import datetime
-import concurrent.futures
 import signal
 import sys
 

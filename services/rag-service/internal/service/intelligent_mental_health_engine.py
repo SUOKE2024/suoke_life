@@ -6,26 +6,16 @@
 结合现代心理学理论和中医情志理论，为用户提供个性化的心理健康评估、情绪管理和心理干预建议
 """
 
-import asyncio
-import json
-import numpy as np
 from typing import Dict, List, Any, Optional, Tuple, Union, Set, Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from datetime import datetime, timedelta
 from loguru import logger
-import pandas as pd
-from sklearn.cluster import KMeans
-from sklearn.preprocessing import StandardScaler
-from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.linear_model import LogisticRegression
 import warnings
 warnings.filterwarnings('ignore')
 
 from ..observability.metrics import MetricsCollector
 from ..observability.tracing import trace_operation, SpanKind
-
 
 class MentalHealthCondition(str, Enum):
     """心理健康状况"""
@@ -34,7 +24,6 @@ class MentalHealthCondition(str, Enum):
     FAIR = "fair"                  # 一般
     POOR = "poor"                  # 较差
     CRITICAL = "critical"          # 危急
-
 
 class EmotionType(str, Enum):
     """情绪类型"""
@@ -51,7 +40,6 @@ class EmotionType(str, Enum):
     GUILT = "guilt"                # 内疚
     SHAME = "shame"                # 羞耻
 
-
 class TCMEmotion(str, Enum):
     """中医七情"""
     JOY = "joy"                    # 喜
@@ -62,7 +50,6 @@ class TCMEmotion(str, Enum):
     FEAR = "fear"                  # 恐
     FRIGHT = "fright"              # 惊
 
-
 class StressLevel(str, Enum):
     """压力水平"""
     MINIMAL = "minimal"            # 极低
@@ -70,7 +57,6 @@ class StressLevel(str, Enum):
     MODERATE = "moderate"          # 中等
     HIGH = "high"                  # 高
     SEVERE = "severe"              # 严重
-
 
 class InterventionType(str, Enum):
     """干预类型"""
@@ -85,14 +71,12 @@ class InterventionType(str, Enum):
     TCM_THERAPY = "tcm_therapy"                         # 中医疗法
     LIFESTYLE_CHANGE = "lifestyle_change"               # 生活方式改变
 
-
 class RiskLevel(str, Enum):
     """风险等级"""
     LOW = "low"                    # 低风险
     MODERATE = "moderate"          # 中等风险
     HIGH = "high"                  # 高风险
     CRITICAL = "critical"          # 危急风险
-
 
 class AssessmentType(str, Enum):
     """评估类型"""
@@ -104,7 +88,6 @@ class AssessmentType(str, Enum):
     BEHAVIORAL_ASSESSMENT = "behavioral_assessment"     # 行为评估
     TCM_EMOTION_ASSESSMENT = "tcm_emotion_assessment"   # 中医情志评估
     COMPREHENSIVE = "comprehensive"                     # 综合评估
-
 
 @dataclass
 class EmotionRecord:
@@ -119,7 +102,6 @@ class EmotionRecord:
     physical_symptoms: List[str] = field(default_factory=list)
     coping_strategies: List[str] = field(default_factory=list)
     notes: Optional[str] = None
-
 
 @dataclass
 class MoodEntry:
@@ -137,7 +119,6 @@ class MoodEntry:
     meditation_minutes: int = 0             # 冥想时长
     notes: Optional[str] = None
 
-
 @dataclass
 class PsychologicalAssessment:
     """心理评估"""
@@ -152,7 +133,6 @@ class PsychologicalAssessment:
     follow_up_date: Optional[datetime] = None
     assessor: str = "system"
     notes: Optional[str] = None
-
 
 @dataclass
 class TCMEmotionAnalysis:
@@ -169,7 +149,6 @@ class TCMEmotionAnalysis:
     herbal_recommendations: List[str] = field(default_factory=list)
     acupoint_recommendations: List[str] = field(default_factory=list)
     lifestyle_adjustments: List[str] = field(default_factory=list)
-
 
 @dataclass
 class InterventionPlan:
@@ -190,7 +169,6 @@ class InterventionPlan:
     created_by: str = "system"
     status: str = "active"
 
-
 @dataclass
 class CrisisAssessment:
     """危机评估"""
@@ -205,7 +183,6 @@ class CrisisAssessment:
     emergency_level: RiskLevel = RiskLevel.LOW
     requires_immediate_intervention: bool = False
     professional_referral_needed: bool = False
-
 
 class EmotionAnalyzer:
     """情绪分析器"""
@@ -477,7 +454,6 @@ class EmotionAnalyzer:
             ]
         }
         return adjustments.get(dominant_emotion, [])
-
 
 class MentalHealthAssessor:
     """心理健康评估器"""
@@ -949,7 +925,6 @@ class MentalHealthAssessor:
         }
         return datetime.now() + timedelta(days=days_map[risk_level])
 
-
 class CrisisInterventionSystem:
     """危机干预系统"""
     
@@ -1318,7 +1293,6 @@ class CrisisInterventionSystem:
         
         return actions
 
-
 class InterventionPlanGenerator:
     """干预计划生成器"""
     
@@ -1640,7 +1614,6 @@ class InterventionPlanGenerator:
         ])
         
         return activities
-
 
 class IntelligentMentalHealthEngine:
     """智能心理健康引擎"""
@@ -2177,7 +2150,6 @@ class IntelligentMentalHealthEngine:
             logger.error(f"获取心理健康统计信息失败: {e}")
             raise
 
-
 def initialize_mental_health_engine(
     config: Dict[str, Any],
     metrics_collector: Optional[MetricsCollector] = None
@@ -2185,7 +2157,6 @@ def initialize_mental_health_engine(
     """初始化智能心理健康引擎"""
     engine = IntelligentMentalHealthEngine(config, metrics_collector)
     return engine
-
 
 def get_mental_health_engine() -> Optional[IntelligentMentalHealthEngine]:
     """获取智能心理健康引擎实例"""

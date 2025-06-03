@@ -6,17 +6,12 @@
 """
 
 import logging
-import logging.config
-import sys
 from pathlib import Path
 from typing import Any, Dict, Optional
 
 import structlog
-from rich.console import Console
-from rich.logging import RichHandler
 
 from .config import Settings
-
 
 def setup_logging(settings: Optional[Settings] = None) -> None:
     """设置日志配置"""
@@ -106,7 +101,6 @@ def setup_logging(settings: Optional[Settings] = None) -> None:
     # 配置 structlog
     configure_structlog(settings)
 
-
 def configure_structlog(settings: Settings) -> None:
     """配置 structlog"""
     
@@ -146,11 +140,9 @@ def configure_structlog(settings: Settings) -> None:
         cache_logger_on_first_use=True,
     )
 
-
 def get_logger(name: str) -> structlog.stdlib.BoundLogger:
     """获取结构化日志器"""
     return structlog.get_logger(name)
-
 
 class LoggerMixin:
     """日志器混入类"""
@@ -159,7 +151,6 @@ class LoggerMixin:
     def logger(self) -> structlog.stdlib.BoundLogger:
         """获取当前类的日志器"""
         return get_logger(self.__class__.__name__)
-
 
 def log_request_response(
     method: str,
@@ -186,7 +177,6 @@ def log_request_response(
         **kwargs,
     )
 
-
 def log_error(
     error: Exception,
     context: Optional[Dict[str, Any]] = None,
@@ -208,7 +198,6 @@ def log_error(
         exc_info=True,
     )
 
-
 def log_performance(
     operation: str,
     duration: float,
@@ -223,7 +212,6 @@ def log_performance(
         duration_ms=round(duration * 1000, 2),
         **kwargs,
     )
-
 
 def log_security_event(
     event_type: str,

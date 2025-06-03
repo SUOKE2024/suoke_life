@@ -11,11 +11,9 @@ import asyncio
 import base64
 import hashlib
 import secrets
-import urllib.parse
 from typing import Dict, Any, Optional
 
 import httpx
-
 
 class OAuth2Client:
     """OAuth2 客户端"""
@@ -268,7 +266,6 @@ class OAuth2Client:
             
             return response
 
-
 async def demo_client_credentials():
     """演示客户端凭证流程"""
     print("=== 客户端凭证流程演示 ===")
@@ -319,7 +316,6 @@ async def demo_client_credentials():
     
     except Exception as e:
         print(f"✗ 错误: {e}")
-
 
 async def demo_authorization_code():
     """演示授权码流程"""
@@ -392,7 +388,6 @@ async def demo_authorization_code():
     except Exception as e:
         print(f"✗ 错误: {e}")
 
-
 async def demo_openid_connect():
     """演示 OpenID Connect"""
     print("=== OpenID Connect 演示 ===")
@@ -428,7 +423,6 @@ async def demo_openid_connect():
     except Exception as e:
         print(f"✗ 错误: {e}")
 
-
 async def interactive_demo():
     """交互式演示"""
     print("OAuth2 客户端示例")
@@ -454,11 +448,9 @@ async def interactive_demo():
     else:
         print("无效选择")
 
-
 async def main():
     """主函数"""
     await interactive_demo()
-
 
 if __name__ == "__main__":
     try:

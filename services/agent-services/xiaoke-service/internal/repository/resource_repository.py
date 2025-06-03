@@ -10,14 +10,12 @@ import uuid
 from datetime import datetime
 from typing import Any
 
-import motor.motor_asyncio
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
 from pkg.utils.config_loader import get_config
 
 logger = logging.getLogger(__name__)
-
 
 class ResourceRepository:
     """医疗资源存储库"""

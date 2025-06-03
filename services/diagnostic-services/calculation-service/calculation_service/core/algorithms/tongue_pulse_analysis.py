@@ -3,17 +3,14 @@
 实现中医舌诊和脉诊的数字化分析算法
 """
 
-import numpy as np
 import cv2
 from typing import Dict, List, Tuple, Optional, Any
 from dataclasses import dataclass
 from enum import Enum
 import logging
 from datetime import datetime
-import json
 
 logger = logging.getLogger(__name__)
-
 
 class TongueColor(Enum):
     """舌色分类"""
@@ -23,7 +20,6 @@ class TongueColor(Enum):
     CRIMSON = "绛"
     PURPLE = "紫"
     BLUE_PURPLE = "青紫"
-
 
 class TongueCoating(Enum):
     """舌苔分类"""
@@ -35,7 +31,6 @@ class TongueCoating(Enum):
     DRY = "燥苔"
     PEELED = "剥苔"
     MIRROR = "镜面舌"
-
 
 class PulseType(Enum):
     """脉象分类"""
@@ -50,7 +45,6 @@ class PulseType(Enum):
     WIRY = "弦脉"
     TIGHT = "紧脉"
 
-
 @dataclass
 class TongueAnalysisResult:
     """舌诊分析结果"""
@@ -64,7 +58,6 @@ class TongueAnalysisResult:
     abnormal_areas: List[Dict[str, Any]]
     timestamp: datetime
 
-
 @dataclass
 class PulseAnalysisResult:
     """脉诊分析结果"""
@@ -77,7 +70,6 @@ class PulseAnalysisResult:
     confidence: float
     waveform_features: Dict[str, float]
     timestamp: datetime
-
 
 class TongueImageAnalyzer:
     """舌象图像分析器"""
@@ -402,7 +394,6 @@ class TongueImageAnalyzer:
         
         return cracks
 
-
 class PulseWaveformAnalyzer:
     """脉象波形分析器"""
     
@@ -675,7 +666,6 @@ class PulseWaveformAnalyzer:
             confidence = 0.5
         
         return pulse_type, confidence
-
 
 class TonguePulseCalculationEngine:
     """舌脉象计算引擎"""

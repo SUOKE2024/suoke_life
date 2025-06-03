@@ -8,7 +8,6 @@ from contextlib import asynccontextmanager
 from typing import Any
 
 from neo4j import AsyncGraphDatabase
-import redis.asyncio as redis
 
 from app.core.config import get_settings
 from app.core.logger import get_logger
@@ -16,7 +15,6 @@ from app.repositories.neo4j_repository import Neo4jRepository
 from app.services.cache_service import CacheService
 from app.services.knowledge_service import KnowledgeService
 from app.services.metrics_service import MetricsService
-
 
 class Container:
     """依赖注入容器"""
@@ -170,10 +168,8 @@ class Container:
         """获取监控服务"""
         return self._instances.get("metrics_service")
 
-
 # 全局容器实例
 _container: Container | None = None
-
 
 def get_container() -> Container:
     """获取全局容器实例"""
@@ -181,7 +177,6 @@ def get_container() -> Container:
     if _container is None:
         _container = Container()
     return _container
-
 
 @asynccontextmanager
 async def lifespan_context() -> AsyncGenerator[Container]:

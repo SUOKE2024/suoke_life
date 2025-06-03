@@ -8,9 +8,6 @@
 
 import asyncio
 import base64
-import hashlib
-import hmac
-import json
 import logging
 import time
 import uuid
@@ -19,14 +16,11 @@ from enum import Enum
 from typing import Any, Dict, List, Optional, Set, Tuple, Union, Callable
 from collections import defaultdict, deque
 import threading
-from datetime import datetime, timedelta
 
 try:
     from cryptography.fernet import Fernet
     from cryptography.hazmat.primitives import hashes, serialization
     from cryptography.hazmat.primitives.asymmetric import rsa, padding
-    from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
-    from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
     from cryptography.hazmat.backends import default_backend
     CRYPTOGRAPHY_AVAILABLE = True
 except ImportError:
@@ -42,7 +36,6 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
-
 class SecurityLevel(Enum):
     """安全级别"""
     NONE = "none"
@@ -51,14 +44,12 @@ class SecurityLevel(Enum):
     HIGH = "high"
     CRITICAL = "critical"
 
-
 class EncryptionType(Enum):
     """加密类型"""
     NONE = "none"
     SYMMETRIC = "symmetric"
     ASYMMETRIC = "asymmetric"
     HYBRID = "hybrid"
-
 
 class AuthMethod(Enum):
     """认证方法"""
@@ -67,7 +58,6 @@ class AuthMethod(Enum):
     JWT = "jwt"
     OAUTH2 = "oauth2"
     MUTUAL_TLS = "mutual_tls"
-
 
 class AuditEventType(Enum):
     """审计事件类型"""
@@ -79,7 +69,6 @@ class AuditEventType(Enum):
     DECRYPTION = "decryption"
     ACCESS_DENIED = "access_denied"
     SECURITY_VIOLATION = "security_violation"
-
 
 @dataclass
 class SecurityConfig:
@@ -121,7 +110,6 @@ class SecurityConfig:
     ip_whitelist: Set[str] = field(default_factory=set)
     ip_blacklist: Set[str] = field(default_factory=set)
 
-
 @dataclass
 class User:
     """用户信息"""
@@ -158,7 +146,6 @@ class User:
             'metadata': self.metadata
         }
 
-
 @dataclass
 class AuditEvent:
     """审计事件"""
@@ -189,7 +176,6 @@ class AuditEvent:
             'details': self.details,
             'sensitive_data_masked': self.sensitive_data_masked
         }
-
 
 class EncryptionManager:
     """加密管理器"""
@@ -466,7 +452,6 @@ class EncryptionManager:
                     if key_id in self.asymmetric_keys:
                         self._generate_asymmetric_key_pair(key_id)
 
-
 class AuthenticationManager:
     """认证管理器"""
     
@@ -619,7 +604,6 @@ class AuthenticationManager:
         logger.info(f"停用用户: {user_id}")
         return True
 
-
 class AuthorizationManager:
     """授权管理器"""
     
@@ -705,7 +689,6 @@ class AuthorizationManager:
             permissions.update(user_perms)
         
         return permissions
-
 
 class AuditLogger:
     """审计日志记录器"""
@@ -808,7 +791,6 @@ class AuditLogger:
         
         violations.sort(key=lambda x: x.timestamp, reverse=True)
         return violations[:limit]
-
 
 class SecurityManager:
     """
@@ -1131,7 +1113,6 @@ class SecurityManager:
         """获取安全违规事件"""
         violations = self.audit_logger.get_security_violations()
         return [violation.to_dict() for violation in violations]
-
 
 # 安全管理器工厂
 class SecurityManagerFactory:

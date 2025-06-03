@@ -6,24 +6,17 @@
 结合现代康复医学和中医传统康复理念，为用户提供科学的康复训练方案
 """
 
-import asyncio
-import json
-import numpy as np
 from typing import Dict, List, Any, Optional, Tuple, Union, Set, Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from datetime import datetime, timedelta
 from loguru import logger
-import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import mean_squared_error, r2_score
 import warnings
 warnings.filterwarnings('ignore')
 
 from ..observability.metrics import MetricsCollector
 from ..observability.tracing import trace_operation, SpanKind
-
 
 class RehabilitationType(str, Enum):
     """康复类型"""
@@ -38,7 +31,6 @@ class RehabilitationType(str, Enum):
     TCM_REHAB = "tcm_rehab"                        # 中医康复
     SPORTS_REHAB = "sports_rehab"                  # 运动康复
 
-
 class ExerciseType(str, Enum):
     """运动类型"""
     STRENGTH_TRAINING = "strength_training"         # 力量训练
@@ -52,7 +44,6 @@ class ExerciseType(str, Enum):
     COGNITIVE = "cognitive"                         # 认知训练
     RELAXATION = "relaxation"                       # 放松训练
 
-
 class DifficultyLevel(str, Enum):
     """难度级别"""
     BEGINNER = "beginner"       # 初级
@@ -60,7 +51,6 @@ class DifficultyLevel(str, Enum):
     MODERATE = "moderate"       # 中等
     HARD = "hard"               # 困难
     EXPERT = "expert"           # 专家级
-
 
 class ProgressStatus(str, Enum):
     """进度状态"""
@@ -71,7 +61,6 @@ class ProgressStatus(str, Enum):
     CANCELLED = "cancelled"         # 取消
     MODIFIED = "modified"           # 已修改
 
-
 class AssessmentType(str, Enum):
     """评估类型"""
     INITIAL = "initial"             # 初始评估
@@ -79,7 +68,6 @@ class AssessmentType(str, Enum):
     FINAL = "final"                 # 最终评估
     PERIODIC = "periodic"           # 定期评估
     EMERGENCY = "emergency"         # 紧急评估
-
 
 @dataclass
 class RehabilitationGoal:
@@ -96,7 +84,6 @@ class RehabilitationGoal:
     achievement_date: Optional[datetime] = None
     progress_percentage: float = 0.0
     metadata: Dict[str, Any] = field(default_factory=dict)
-
 
 @dataclass
 class Exercise:
@@ -119,7 +106,6 @@ class Exercise:
     video_url: Optional[str] = None
     image_url: Optional[str] = None
 
-
 @dataclass
 class TrainingSession:
     """训练会话"""
@@ -140,7 +126,6 @@ class TrainingSession:
     notes: Optional[str] = None
     status: ProgressStatus = ProgressStatus.NOT_STARTED
     metadata: Dict[str, Any] = field(default_factory=dict)
-
 
 @dataclass
 class RehabilitationPlan:
@@ -163,7 +148,6 @@ class RehabilitationPlan:
     created_by: Optional[str] = None                # 创建者（医生/治疗师）
     approved_by: Optional[str] = None               # 审批者
     metadata: Dict[str, Any] = field(default_factory=dict)
-
 
 @dataclass
 class FunctionalAssessment:
@@ -203,7 +187,6 @@ class FunctionalAssessment:
     recommendations: List[str] = field(default_factory=list)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
-
 @dataclass
 class ProgressMetrics:
     """进度指标"""
@@ -236,7 +219,6 @@ class ProgressMetrics:
     success_probability: Optional[float] = None
     
     metadata: Dict[str, Any] = field(default_factory=dict)
-
 
 class ExerciseLibrary:
     """运动库"""
@@ -479,7 +461,6 @@ class ExerciseLibrary:
         
         return filtered_exercises
 
-
 class PlanGenerator:
     """计划生成器"""
     
@@ -689,7 +670,6 @@ class PlanGenerator:
                 return 60  # 年轻人，可以延长
         
         return base_duration
-
 
 class ProgressTracker:
     """进度跟踪器"""
@@ -945,7 +925,6 @@ class ProgressTracker:
         # 计算综合成功概率
         success_probability = np.mean(factors)
         return min(max(success_probability, 0.1), 0.95)  # 限制在10%-95%之间
-
 
 class IntelligentRehabilitationTrainer:
     """智能康复训练引擎主类"""
@@ -1492,7 +1471,6 @@ class IntelligentRehabilitationTrainer:
             logger.error(f"获取康复统计失败: {e}")
             return {}
 
-
 def initialize_rehabilitation_trainer(
     config: Dict[str, Any],
     metrics_collector: Optional[MetricsCollector] = None
@@ -1501,10 +1479,8 @@ def initialize_rehabilitation_trainer(
     trainer = IntelligentRehabilitationTrainer(config, metrics_collector)
     return trainer
 
-
 # 全局实例
 _rehabilitation_trainer: Optional[IntelligentRehabilitationTrainer] = None
-
 
 def get_rehabilitation_trainer() -> Optional[IntelligentRehabilitationTrainer]:
     """获取智能康复训练引擎实例"""

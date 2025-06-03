@@ -4,7 +4,6 @@
 """
 
 import asyncio
-import json
 import logging
 import uuid
 from dataclasses import dataclass, field
@@ -21,7 +20,6 @@ from .resource_scheduling_service import ResourceSchedulingService
 
 logger = logging.getLogger(__name__)
 
-
 class ServiceType(Enum):
     """服务类型"""
 
@@ -30,7 +28,6 @@ class ServiceType(Enum):
     PERSONALIZED_MEDICAL = "personalized_medical"
     QUALITY_CONTROL = "quality_control"
     XIAOKE_AGENT = "xiaoke_agent"
-
 
 class RequestType(Enum):
     """请求类型"""
@@ -41,7 +38,6 @@ class RequestType(Enum):
     RESOURCE_SEARCH = "resource_search"  # 资源搜索
     QUALITY_ASSESSMENT = "quality_assessment"  # 质量评估
     HEALTH_MONITORING = "health_monitoring"  # 健康监测
-
 
 @dataclass
 class ServiceRequest:
@@ -57,7 +53,6 @@ class ServiceRequest:
     expires_at: Optional[datetime] = None
     callback_url: Optional[str] = None
 
-
 @dataclass
 class ServiceResponse:
     """服务响应"""
@@ -70,7 +65,6 @@ class ServiceResponse:
     error_message: Optional[str] = None
     processing_time: float = 0.0
     created_at: datetime = field(default_factory=datetime.now)
-
 
 @dataclass
 class ComprehensiveHealthPlan:
@@ -89,7 +83,6 @@ class ComprehensiveHealthPlan:
     success_probability: float
     created_at: datetime = field(default_factory=datetime.now)
     updated_at: datetime = field(default_factory=datetime.now)
-
 
 class MedicalResourceCoordinator:
     """

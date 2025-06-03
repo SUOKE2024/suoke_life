@@ -5,7 +5,6 @@
 本地生成器实现
 """
 
-import os
 import re
 import asyncio
 from typing import List, Dict, Any, Optional, AsyncGenerator, Tuple
@@ -15,7 +14,6 @@ from loguru import logger
 
 from ..model.document import Document, DocumentReference
 from .base import BaseGenerator
-
 
 class LocalGenerator(BaseGenerator):
     """

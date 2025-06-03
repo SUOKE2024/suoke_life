@@ -7,7 +7,6 @@
 
 import os
 import sys
-import time
 from datetime import datetime, timedelta, UTC
 
 import jwt
@@ -15,7 +14,6 @@ import pytest
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from fastapi.testclient import TestClient
-from unittest.mock import patch, MagicMock
 
 # 添加项目根目录到Python路径
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -23,7 +21,6 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 from pkg.utils.auth import JWTManager, TokenPayload, extract_token_from_header
 from internal.model.config import JwtConfig, AuthConfig, MiddlewareConfig
 from internal.delivery.rest.middleware import AuthMiddleware
-
 
 class TestSecurity:
     """安全测试类"""
@@ -362,7 +359,6 @@ class TestSecurity:
             new_payload = jwt_manager.validate_token(new_access_token)
             assert new_payload.type == "access"
             assert new_payload.sub == "user123"
-
 
 if __name__ == "__main__":
     pytest.main(["-v", "test_security.py"]) 

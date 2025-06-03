@@ -6,24 +6,16 @@
 结合中医运动养生理念和现代运动科学，为用户制定科学的运动训练计划
 """
 
-import asyncio
-import json
-import numpy as np
 from typing import Dict, List, Any, Optional, Tuple, Union, Set, Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from datetime import datetime, timedelta
 from loguru import logger
-import pandas as pd
-from sklearn.cluster import KMeans
-from sklearn.preprocessing import StandardScaler
-from sklearn.metrics.pairwise import cosine_similarity
 import warnings
 warnings.filterwarnings('ignore')
 
 from ..observability.metrics import MetricsCollector
 from ..observability.tracing import trace_operation, SpanKind
-
 
 class ExerciseType(str, Enum):
     """运动类型"""
@@ -43,7 +35,6 @@ class ExerciseType(str, Enum):
     TCM_WUQINXI = "tcm_wuqinxi"            # 中医五禽戏
     TCM_BADUANJIN = "tcm_baduanjin"        # 中医八段锦
 
-
 class IntensityLevel(str, Enum):
     """强度级别"""
     VERY_LOW = "very_low"       # 极低强度 (40-50% HRmax)
@@ -53,7 +44,6 @@ class IntensityLevel(str, Enum):
     VERY_HIGH = "very_high"     # 极高强度 (85-95% HRmax)
     MAXIMUM = "maximum"         # 最大强度 (95-100% HRmax)
 
-
 class FitnessLevel(str, Enum):
     """健身水平"""
     BEGINNER = "beginner"           # 初学者
@@ -62,7 +52,6 @@ class FitnessLevel(str, Enum):
     ADVANCED = "advanced"           # 高级
     EXPERT = "expert"               # 专家级
     ELITE = "elite"                 # 精英级
-
 
 class TrainingGoal(str, Enum):
     """训练目标"""
@@ -79,7 +68,6 @@ class TrainingGoal(str, Enum):
     HEALTH_MAINTENANCE = "health_maintenance" # 健康维持
     TCM_WELLNESS = "tcm_wellness"           # 中医养生
 
-
 class EquipmentType(str, Enum):
     """器械类型"""
     BODYWEIGHT = "bodyweight"               # 自重
@@ -94,7 +82,6 @@ class EquipmentType(str, Enum):
     FUNCTIONAL_TOOLS = "functional_tools"   # 功能性工具
     NONE = "none"                           # 无器械
 
-
 class WorkoutStatus(str, Enum):
     """训练状态"""
     PLANNED = "planned"             # 已计划
@@ -104,7 +91,6 @@ class WorkoutStatus(str, Enum):
     PAUSED = "paused"               # 已暂停
     CANCELLED = "cancelled"         # 已取消
     MODIFIED = "modified"           # 已修改
-
 
 class TCMConstitution(str, Enum):
     """中医体质类型"""
@@ -117,7 +103,6 @@ class TCMConstitution(str, Enum):
     BLOOD_STASIS = "blood_stasis"           # 血瘀质
     QI_STAGNATION = "qi_stagnation"         # 气郁质
     SPECIAL_CONSTITUTION = "special_constitution" # 特禀质
-
 
 @dataclass
 class UserFitnessProfile:
@@ -153,7 +138,6 @@ class UserFitnessProfile:
         if self.max_heart_rate is None:
             self.max_heart_rate = 220 - self.age
 
-
 @dataclass
 class Exercise:
     """运动项目"""
@@ -185,7 +169,6 @@ class Exercise:
     tcm_constitution_suitability: List[TCMConstitution] = field(default_factory=list)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
-
 @dataclass
 class WorkoutSession:
     """训练课程"""
@@ -206,7 +189,6 @@ class WorkoutSession:
     prerequisites: List[str] = field(default_factory=list)
     session_notes: Optional[str] = None
     created_at: datetime = field(default_factory=datetime.now)
-
 
 @dataclass
 class TrainingPlan:
@@ -230,7 +212,6 @@ class TrainingPlan:
     created_by: str = "system"
     notes: Optional[str] = None
     metadata: Dict[str, Any] = field(default_factory=dict)
-
 
 @dataclass
 class WorkoutLog:
@@ -257,7 +238,6 @@ class WorkoutLog:
     challenges: List[str] = field(default_factory=list)
     status: WorkoutStatus = WorkoutStatus.COMPLETED
     created_at: datetime = field(default_factory=datetime.now)
-
 
 @dataclass
 class FitnessAssessment:
@@ -286,7 +266,6 @@ class FitnessAssessment:
     next_assessment_date: Optional[datetime] = None
     assessor: Optional[str] = None
     notes: Optional[str] = None
-
 
 @dataclass
 class ProgressMetrics:
@@ -323,7 +302,6 @@ class ProgressMetrics:
     predicted_goal_achievement: Dict[str, datetime] = field(default_factory=dict)
     injury_risk_score: Optional[float] = None
     burnout_risk_score: Optional[float] = None
-
 
 class ExerciseLibrary:
     """运动库"""
@@ -690,7 +668,6 @@ class ExerciseLibrary:
             return min(candidates, key=lambda x: x.difficulty_level)
         
         return None
-
 
 class WorkoutPlanGenerator:
     """训练计划生成器"""
@@ -1242,7 +1219,6 @@ class WorkoutPlanGenerator:
         
         return plan
 
-
 class ProgressTracker:
     """进度跟踪器"""
     
@@ -1681,7 +1657,6 @@ class ProgressTracker:
         
         return recommendations
 
-
 class IntelligentExerciseEngine:
     """智能运动训练引擎主类"""
     
@@ -2086,10 +2061,8 @@ class IntelligentExerciseEngine:
             logger.error(f"获取运动统计失败: {e}")
             return {"error": str(e)}
 
-
 # 全局运动训练引擎实例
 _exercise_engine: Optional[IntelligentExerciseEngine] = None
-
 
 def initialize_exercise_engine(
     config: Dict[str, Any],
@@ -2099,7 +2072,6 @@ def initialize_exercise_engine(
     global _exercise_engine
     _exercise_engine = IntelligentExerciseEngine(config, metrics_collector)
     return _exercise_engine
-
 
 def get_exercise_engine() -> Optional[IntelligentExerciseEngine]:
     """获取运动训练引擎实例"""

@@ -4,7 +4,6 @@
 修复uv迁移过程中的版本冲突问题
 """
 
-import os
 import re
 from pathlib import Path
 from typing import Dict, List, Tuple
@@ -187,7 +186,6 @@ class DependencyFixer:
         
         return results
 
-
 def main():
     fixer = DependencyFixer(".")
     
@@ -201,7 +199,6 @@ def main():
         print(f"  {service}: {status}")
     
     print("\n✨ 依赖修复完成！")
-
 
 if __name__ == "__main__":
     main() 

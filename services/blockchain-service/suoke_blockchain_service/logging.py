@@ -4,8 +4,6 @@
 使用 structlog 提供结构化日志记录功能。
 """
 
-from __future__ import annotations
-
 import logging
 import sys
 from typing import Any
@@ -13,7 +11,6 @@ from typing import Any
 import structlog
 
 from .config import settings
-
 
 def configure_logging() -> None:
     """配置结构化日志"""
@@ -53,11 +50,9 @@ def configure_logging() -> None:
         cache_logger_on_first_use=True,
     )
 
-
 def get_logger(name: str) -> Any:
     """获取结构化日志记录器"""
     return structlog.get_logger(name)
-
 
 class LoggerMixin:
     """日志记录器混入类"""
@@ -66,7 +61,6 @@ class LoggerMixin:
     def logger(self) -> Any:
         """获取当前类的日志记录器"""
         return get_logger(self.__class__.__name__)
-
 
 # 预配置的日志记录器
 logger = get_logger("blockchain_service")

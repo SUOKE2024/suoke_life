@@ -5,7 +5,6 @@ RAG服务增强版API网关
 提供RESTful API接口，支持检索增强生成、文档管理、批量处理和性能监控
 """
 
-import asyncio
 import logging
 from typing import Dict, Any, List, Optional
 from datetime import datetime

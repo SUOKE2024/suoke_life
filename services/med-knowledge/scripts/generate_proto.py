@@ -4,11 +4,9 @@
 使用方法: python scripts/generate_proto.py
 """
 
-import os
 import subprocess
 import sys
 from pathlib import Path
-
 
 def main():
     # 确定项目根目录
@@ -51,7 +49,6 @@ def main():
         print(f"发生错误: {e}", file=sys.stderr)
         return 1
 
-
 def fix_imports(output_dir):
     """修复生成的Python文件中的导入语句"""
     pb2_file = list(output_dir.glob("*_pb2.py"))[0]
@@ -75,7 +72,6 @@ def fix_imports(output_dir):
             f.write(content)
         
         print(f"修复了 {pb2_grpc_file} 中的导入语句")
-
 
 if __name__ == "__main__":
     sys.exit(main()) 

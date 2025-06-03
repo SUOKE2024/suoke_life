@@ -3,9 +3,7 @@ from typing import List, Optional, Dict, Any
 import json
 import logging
 import time
-from datetime import datetime, timedelta
 from confluent_kafka import Producer, Consumer, KafkaError, KafkaException
-from confluent_kafka.admin import AdminClient, NewTopic
 import asyncio
 from aiokafka import AIOKafkaProducer, AIOKafkaConsumer
 from aiokafka.errors import KafkaError

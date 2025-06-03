@@ -5,10 +5,8 @@ Consul服务发现客户端
 
 from collections.abc import Callable
 from dataclasses import dataclass
-from datetime import datetime, timedelta
 import json
 import logging
-import socket
 import threading
 import time
 from typing import Dict, List, Optional
@@ -16,7 +14,6 @@ from typing import Dict, List, Optional
 import consul
 
 logger = logging.getLogger(__name__)
-
 
 @dataclass
 class ServiceInfo:
@@ -28,7 +25,6 @@ class ServiceInfo:
     health_check_url: str
     tags: List[str] = None
     meta: Dict[str, str] = None
-
 
 class ConsulServiceRegistry:
     """Consul服务注册客户端"""
@@ -249,10 +245,8 @@ class ConsulServiceRegistry:
 
         logger.info("Consul client shutdown complete")
 
-
 # 全局实例
 _consul_client = None
-
 
 def get_consul_client(
     consul_host: str = "localhost", consul_port: int = 8500
@@ -262,7 +256,6 @@ def get_consul_client(
     if _consul_client is None:
         _consul_client = ConsulServiceRegistry(consul_host, consul_port)
     return _consul_client
-
 
 # 使用示例
 if __name__ == "__main__":

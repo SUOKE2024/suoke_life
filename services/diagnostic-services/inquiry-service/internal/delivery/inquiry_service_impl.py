@@ -14,8 +14,6 @@ import grpc
 # 导入生成的gRPC代码
 # 需要先生成proto文件的Python代码
 # python -m grpc_tools.protoc -I./api/grpc --python_out=. --grpc_python_out=. ./api/grpc/inquiry_service.proto
-from api.grpc import inquiry_service_pb2 as pb2
-from api.grpc import inquiry_service_pb2_grpc as pb2_grpc
 
 from ..dialogue.dialogue_manager import DialogueManager
 from ..knowledge.tcm_knowledge_base import TCMKnowledgeBase
@@ -24,7 +22,6 @@ from ..llm.symptom_extractor import SymptomExtractor
 from ..llm.tcm_pattern_mapper import TCMPatternMapper
 
 logger = logging.getLogger(__name__)
-
 
 class InquiryServiceServicer(pb2_grpc.InquiryServiceServicer):
     """问诊服务的gRPC实现类"""

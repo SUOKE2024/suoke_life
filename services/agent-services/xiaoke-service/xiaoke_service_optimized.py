@@ -7,7 +7,6 @@
 import asyncio
 import os
 import sys
-import numpy as np
 from typing import Dict, Any, List
 from datetime import datetime, timedelta
 
@@ -16,7 +15,6 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '../'))
 
 from optimized_agent_base import OptimizedAgentBase, AgentRequest, cpu_intensive_task, cached_result
 from aiohttp import web
-
 
 class XiaokeOptimizedService(OptimizedAgentBase):
     """小克智能体优化服务 - 健康监测专家"""
@@ -521,7 +519,6 @@ class XiaokeOptimizedService(OptimizedAgentBase):
             }
         })
 
-
 async def main():
     """主函数"""
     service = XiaokeOptimizedService()
@@ -530,7 +527,6 @@ async def main():
     host = os.getenv("HOST", "0.0.0.0")
     
     await service.start_server(host=host, port=port)
-
 
 if __name__ == "__main__":
     asyncio.run(main()) 

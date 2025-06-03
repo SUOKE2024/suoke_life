@@ -7,15 +7,12 @@
 """
 
 import asyncio
-import json
 from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from enum import Enum
-import numpy as np
 from loguru import logger
 
 from ..observability.metrics import MetricsCollector
-
 
 class AgentType(str, Enum):
     """智能体类型"""
@@ -23,7 +20,6 @@ class AgentType(str, Enum):
     XIAOKE = "xiaoke"          # 小克 - 专业诊断，负责症状分析和辨证论治
     LAOKE = "laoke"            # 老克 - 资深专家，负责复杂病例和治疗方案
     SOER = "soer"              # 索儿 - 健康管理，负责预防保健和生活指导
-
 
 class TaskType(str, Enum):
     """任务类型"""
@@ -36,7 +32,6 @@ class TaskType(str, Enum):
     EDUCATION = "education"                    # 健康教育
     MONITORING = "monitoring"                  # 健康监测
 
-
 class UrgencyLevel(str, Enum):
     """紧急程度"""
     LOW = "low"                # 低
@@ -44,14 +39,12 @@ class UrgencyLevel(str, Enum):
     HIGH = "high"              # 高
     CRITICAL = "critical"      # 紧急
 
-
 class ComplexityLevel(str, Enum):
     """复杂程度"""
     SIMPLE = "simple"          # 简单
     MODERATE = "moderate"      # 中等
     COMPLEX = "complex"        # 复杂
     EXPERT = "expert"          # 专家级
-
 
 @dataclass
 class RoutingRequest:
@@ -68,7 +61,6 @@ class RoutingRequest:
     multimodal_data: List[Dict[str, Any]] = field(default_factory=list)
     timestamp: str = ""
 
-
 @dataclass
 class AgentCapability:
     """智能体能力"""
@@ -83,7 +75,6 @@ class AgentCapability:
     performance_score: float = 1.0
     specializations: List[str] = field(default_factory=list)
 
-
 @dataclass
 class RoutingDecision:
     """路由决策"""
@@ -95,7 +86,6 @@ class RoutingDecision:
     estimated_duration: float = 0.0
     resource_requirements: Dict[str, Any] = field(default_factory=dict)
 
-
 @dataclass
 class CollaborationPlan:
     """协作计划"""
@@ -105,7 +95,6 @@ class CollaborationPlan:
     communication_protocol: str = "async"
     quality_gates: List[Dict[str, Any]] = field(default_factory=list)
     fallback_strategy: str = "escalate"
-
 
 class AgentManager:
     """智能体管理器"""
@@ -219,7 +208,6 @@ class AgentManager:
         """获取智能体性能分数"""
         capability = self.agents.get(agent_type)
         return capability.performance_score if capability else 0.0
-
 
 class TaskAnalyzer:
     """任务分析器"""
@@ -421,7 +409,6 @@ class TaskAnalyzer:
             return UrgencyLevel.HIGH
         else:
             return UrgencyLevel.CRITICAL
-
 
 class RoutingEngine:
     """路由引擎"""
@@ -739,7 +726,6 @@ class RoutingEngine:
         
         return base_duration
 
-
 class CollaborationOrchestrator:
     """协作编排器"""
     
@@ -964,7 +950,6 @@ class CollaborationOrchestrator:
             return "escalate_to_expert"
         else:
             return "retry_with_different_agent"
-
 
 class IntelligentRouter:
     """智能路由器主类"""

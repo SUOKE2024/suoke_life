@@ -5,15 +5,12 @@
 """
 
 import pytest
-import numpy as np
-from unittest.mock import Mock, AsyncMock, patch
 import asyncio
 
 from listen_service.core.audio_analyzer import AudioAnalyzer, AudioProcessor
 from listen_service.models.audio_models import (
     AudioMetadata, AudioFormat, AnalysisRequest, VoiceFeatures
 )
-
 
 class TestAudioProcessor:
     """音频处理器测试"""
@@ -93,7 +90,6 @@ class TestAudioProcessor:
                     assert isinstance(sub_value, (int, float, np.number))
             else:
                 assert isinstance(value, (int, float, np.number))
-
 
 class TestAudioAnalyzer:
     """音频分析器测试"""
@@ -256,7 +252,6 @@ class TestAudioAnalyzer:
         # 无效数据（太短）
         short_data = (np.random.randn(10) * 32767).astype(np.int16).tobytes()
         assert analyzer._validate_audio_data(short_data, min_duration=1.0) is False
-
 
 @pytest.mark.integration
 class TestAudioAnalyzerIntegration:

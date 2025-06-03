@@ -4,8 +4,6 @@
 包含八卦与人体脏腑对应关系、方位、疾病等数据
 """
 
-from typing import Dict, List
-
 # 八卦基础数据
 BAGUA_DATA = {
     "乾": {

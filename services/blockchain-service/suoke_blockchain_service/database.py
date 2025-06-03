@@ -4,8 +4,6 @@
 提供异步数据库连接池和会话管理功能。
 """
 
-from __future__ import annotations
-
 from contextlib import asynccontextmanager
 from typing import TYPE_CHECKING
 
@@ -24,7 +22,6 @@ logger = get_logger(__name__)
 # 全局数据库引擎和会话工厂
 _engine = None
 _session_factory = None
-
 
 class DatabaseManager:
     """数据库管理器"""
@@ -92,7 +89,6 @@ class DatabaseManager:
             finally:
                 await session.close()
 
-
 # 全局数据库管理器实例
 db_manager = DatabaseManager()
 
@@ -101,28 +97,23 @@ async def init_database() -> None:
     """初始化数据库连接"""
     await db_manager.init_database()
 
-
 async def close_database() -> None:
     """关闭数据库连接"""
     await db_manager.close_database()
-
 
 def get_engine() -> AsyncEngine:
     """获取数据库引擎"""
     return db_manager.get_engine()
 
-
 def get_session_factory() -> async_sessionmaker[AsyncSession]:
     """获取会话工厂"""
     return db_manager.get_session_factory()
-
 
 @asynccontextmanager
 async def get_database_session() -> AsyncGenerator[AsyncSession]:
     """获取数据库会话上下文管理器"""
     async with db_manager.get_session() as session:
         yield session
-
 
 async def get_async_session() -> AsyncSession:
     """获取异步数据库会话(用于依赖注入)"""

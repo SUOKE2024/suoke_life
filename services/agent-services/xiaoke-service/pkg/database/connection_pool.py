@@ -12,12 +12,10 @@ from dataclasses import dataclass
 from typing import Any
 
 import asyncpg
-import motor.motor_asyncio
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.pool import QueuePool
 
 logger = logging.getLogger(__name__)
-
 
 @dataclass
 class PostgreSQLConfig:
@@ -36,7 +34,6 @@ class PostgreSQLConfig:
     command_timeout: float = 60.0
     server_settings: dict[str, str] = None
 
-
 @dataclass
 class MongoDBConfig:
     """MongoDB配置"""
@@ -52,7 +49,6 @@ class MongoDBConfig:
     connect_timeout_ms: int = 20000
     server_selection_timeout_ms: int = 30000
     replica_set: str | None = None
-
 
 class ConnectionPoolManager:
     """数据库连接池管理器"""
@@ -361,10 +357,8 @@ class ConnectionPoolManager:
             self.mongo_client.close()
             logger.info("MongoDB连接已关闭")
 
-
 # 全局连接池管理器实例
 _connection_pool_manager: ConnectionPoolManager | None = None
-
 
 async def get_connection_pool_manager(
     pg_config: PostgreSQLConfig | None = None,
@@ -378,7 +372,6 @@ async def get_connection_pool_manager(
         await _connection_pool_manager.initialize()
 
     return _connection_pool_manager
-
 
 async def close_connection_pool_manager():
     """关闭连接池管理器"""

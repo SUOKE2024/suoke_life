@@ -5,10 +5,7 @@ import logging
 from datetime import datetime, timedelta
 from typing import Any
 
-import numpy as np
-
 logger = logging.getLogger(__name__)
-
 
 class SensorAnalysisService:
     """传感器数据分析服务"""

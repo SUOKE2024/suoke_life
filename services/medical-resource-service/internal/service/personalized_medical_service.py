@@ -3,8 +3,6 @@
 实现中医辨证论治服务匹配、现代医学检查项目推荐、综合食疗方案制定和康复资源配置
 """
 
-import asyncio
-import json
 import logging
 import uuid
 from collections import defaultdict
@@ -13,15 +11,11 @@ from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-import numpy as np
-import pandas as pd
-
 from ..domain.models import ConstitutionType, ResourceType, UrgencyLevel
 from .food_agriculture_service import FoodAgricultureService
 from .resource_management_service import ResourceCategory, ResourceManagementService
 
 logger = logging.getLogger(__name__)
-
 
 class TreatmentApproach(Enum):
     """治疗方法"""
@@ -32,7 +26,6 @@ class TreatmentApproach(Enum):
     FOOD_THERAPY = "food_therapy"  # 食疗养生
     REHABILITATION = "rehabilitation"  # 康复治疗
     PREVENTIVE_CARE = "preventive_care"  # 预防保健
-
 
 class SyndromeType(Enum):
     """中医证型"""
@@ -47,7 +40,6 @@ class SyndromeType(Enum):
     WIND_COLD_SYNDROME = "wind_cold"  # 风寒证
     WIND_HEAT_SYNDROME = "wind_heat"  # 风热证
 
-
 class ExaminationType(Enum):
     """检查类型"""
 
@@ -60,7 +52,6 @@ class ExaminationType(Enum):
     PATHOLOGICAL_EXAMINATION = "pathology"  # 病理检查
     GENETIC_TESTING = "genetic"  # 基因检测
 
-
 class RehabilitationType(Enum):
     """康复类型"""
 
@@ -72,7 +63,6 @@ class RehabilitationType(Enum):
     MASSAGE_THERAPY = "massage"  # 推拿按摩
     EXERCISE_THERAPY = "exercise"  # 运动治疗
     MUSIC_THERAPY = "music_therapy"  # 音乐治疗
-
 
 @dataclass
 class PatientProfile:
@@ -93,7 +83,6 @@ class PatientProfile:
     created_at: datetime = field(default_factory=datetime.now)
     updated_at: datetime = field(default_factory=datetime.now)
 
-
 @dataclass
 class SyndromeAnalysis:
     """证候分析"""
@@ -108,7 +97,6 @@ class SyndromeAnalysis:
     recommended_formulas: List[str]
     analysis_date: datetime = field(default_factory=datetime.now)
 
-
 @dataclass
 class ExaminationRecommendation:
     """检查推荐"""
@@ -122,7 +110,6 @@ class ExaminationRecommendation:
     estimated_cost: float
     estimated_duration: int  # minutes
     recommended_facility: Optional[str] = None
-
 
 @dataclass
 class TreatmentPlan:
@@ -143,7 +130,6 @@ class TreatmentPlan:
     created_at: datetime = field(default_factory=datetime.now)
     updated_at: datetime = field(default_factory=datetime.now)
 
-
 @dataclass
 class TreatmentProgress:
     """治疗进展"""
@@ -160,7 +146,6 @@ class TreatmentProgress:
     doctor_notes: str
     next_assessment_date: datetime
     plan_adjustments: List[str]
-
 
 class PersonalizedMedicalService:
     """

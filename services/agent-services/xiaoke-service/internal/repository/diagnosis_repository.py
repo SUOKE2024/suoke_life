@@ -10,7 +10,6 @@ import uuid
 from datetime import UTC, datetime, timedelta
 from typing import Any
 
-import motor.motor_asyncio
 from pymongo.errors import PyMongoError
 
 from pkg.utils.config_loader import get_config
@@ -18,7 +17,6 @@ from pkg.utils.metrics import get_metrics_collector
 
 logger = logging.getLogger(__name__)
 metrics = get_metrics_collector()
-
 
 class DiagnosisRepository:
     """诊断知识存储库，提供中医辨证、症状诊断和健康状态的存储和检索功能"""

@@ -1,6 +1,5 @@
 """安全中间件"""
 
-import time
 from typing import Callable
 
 import structlog
@@ -8,7 +7,6 @@ from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
 
 logger = structlog.get_logger(__name__)
-
 
 class SecurityMiddleware(BaseHTTPMiddleware):
     """安全中间件"""

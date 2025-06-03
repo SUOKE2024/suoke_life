@@ -24,8 +24,6 @@ from opentelemetry.instrumentation.requests import RequestsInstrumentor
 from opentelemetry.instrumentation.asyncpg import AsyncPGInstrumentor
 from opentelemetry.instrumentation.redis import RedisInstrumentor
 from opentelemetry.propagate import inject, extract
-from opentelemetry.trace.status import Status, StatusCode
-
 
 class SpanKind(str, Enum):
     """Span类型"""
@@ -35,14 +33,12 @@ class SpanKind(str, Enum):
     PRODUCER = "producer"       # 生产者
     CONSUMER = "consumer"       # 消费者
 
-
 class SpanStatus(str, Enum):
     """Span状态"""
     OK = "ok"                   # 成功
     ERROR = "error"             # 错误
     TIMEOUT = "timeout"         # 超时
     CANCELLED = "cancelled"     # 取消
-
 
 @dataclass
 class SpanContext:
@@ -54,7 +50,6 @@ class SpanContext:
     tags: Dict[str, Any] = field(default_factory=dict)
     logs: List[Dict[str, Any]] = field(default_factory=list)
 
-
 @dataclass
 class TraceEvent:
     """追踪事件"""
@@ -62,7 +57,6 @@ class TraceEvent:
     name: str
     attributes: Dict[str, Any] = field(default_factory=dict)
     level: str = "info"
-
 
 @dataclass
 class SpanData:
@@ -80,7 +74,6 @@ class SpanData:
     logs: List[TraceEvent] = field(default_factory=list)
     references: List[Dict[str, Any]] = field(default_factory=list)
 
-
 class TracingConfig:
     """追踪配置"""
     
@@ -97,7 +90,6 @@ class TracingConfig:
         self.sampling_rate = sampling_rate
         self.max_tag_value_length = max_tag_value_length
         self.enabled = enabled
-
 
 class SpanManager:
     """Span管理器"""
@@ -200,7 +192,6 @@ class SpanManager:
     def get_completed_spans(self, limit: int = 100) -> List[SpanData]:
         """获取已完成的Span"""
         return self.completed_spans[-limit:]
-
 
 class TracingInstrumentation:
     """追踪工具"""
@@ -466,10 +457,8 @@ class TracingInstrumentation:
             except Exception as e:
                 logger.error(f"追踪资源清理失败: {e}")
 
-
 # 全局追踪实例
 _tracing_instance: Optional[TracingInstrumentation] = None
-
 
 def initialize_tracing(config: TracingConfig) -> TracingInstrumentation:
     """初始化追踪"""
@@ -477,11 +466,9 @@ def initialize_tracing(config: TracingConfig) -> TracingInstrumentation:
     _tracing_instance = TracingInstrumentation(config)
     return _tracing_instance
 
-
 def get_tracer() -> Optional[TracingInstrumentation]:
     """获取追踪器实例"""
     return _tracing_instance
-
 
 def trace_operation(
     operation_name: str,
@@ -495,7 +482,6 @@ def trace_operation(
         return func
     return decorator
 
-
 # 便捷的追踪装饰器
 def trace_rag_operation(operation_name: str, tags: Optional[Dict[str, Any]] = None):
     """RAG操作追踪装饰器"""
@@ -505,7 +491,6 @@ def trace_rag_operation(operation_name: str, tags: Optional[Dict[str, Any]] = No
         tags={**(tags or {}), "component": "rag"}
     )
 
-
 def trace_tcm_operation(operation_name: str, tags: Optional[Dict[str, Any]] = None):
     """中医操作追踪装饰器"""
     return trace_operation(
@@ -513,7 +498,6 @@ def trace_tcm_operation(operation_name: str, tags: Optional[Dict[str, Any]] = No
         kind=SpanKind.INTERNAL,
         tags={**(tags or {}), "component": "tcm"}
     )
-
 
 def trace_agent_operation(agent_name: str, operation_name: str, tags: Optional[Dict[str, Any]] = None):
     """智能体操作追踪装饰器"""

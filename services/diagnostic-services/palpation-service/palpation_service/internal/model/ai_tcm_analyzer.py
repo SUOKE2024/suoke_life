@@ -12,10 +12,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any
 
-import numpy as np
-
 logger = logging.getLogger(__name__)
-
 
 class ConstitutionType(Enum):
     """体质类型枚举"""
@@ -29,7 +26,6 @@ class ConstitutionType(Enum):
     BLOOD_STASIS = "血瘀质"  # 血瘀质
     QI_STAGNATION = "气郁质"  # 气郁质
     SPECIAL_DIATHESIS = "特禀质"  # 特禀质
-
 
 class PatternType(Enum):
     """证型枚举"""
@@ -61,7 +57,6 @@ class PatternType(Enum):
     LUNG_PATTERN = "肺系证型"
     KIDNEY_PATTERN = "肾系证型"
 
-
 @dataclass
 class PulseCharacteristics:
     """脉象特征"""
@@ -73,7 +68,6 @@ class PulseCharacteristics:
     width: str  # 脉形 (细/正常/洪)
     tension: str  # 脉势 (缓/正常/紧)
     smoothness: str  # 脉流 (滑/涩)
-
 
 @dataclass
 class TCMPattern:
@@ -88,7 +82,6 @@ class TCMPattern:
     treatment_principle: str
     lifestyle_advice: list[str]
 
-
 @dataclass
 class HealthAssessment:
     """健康评估结果"""
@@ -99,7 +92,6 @@ class HealthAssessment:
     risk_factors: list[str]
     recommendations: list[str]
     follow_up_interval: int  # 建议复查间隔(天)
-
 
 class AITCMAnalyzer:
     """AI增强的中医证型分析器"""

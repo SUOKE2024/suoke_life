@@ -14,8 +14,6 @@ from typing import Any, Dict, List, Optional, Set, Callable
 from uuid import uuid4
 
 import aioredis
-import aiohttp
-from pydantic import BaseModel
 
 from ..service_registry.agent_discovery import (
     AgentType, AgentServiceRegistry, get_agent_registry
@@ -32,14 +30,12 @@ from ..service_mesh.agent_mesh_controller import (
 
 logger = logging.getLogger(__name__)
 
-
 class GovernanceLevel(Enum):
     """治理级别"""
     BASIC = "basic"           # 基础治理
     STANDARD = "standard"     # 标准治理
     ADVANCED = "advanced"     # 高级治理
     ENTERPRISE = "enterprise" # 企业级治理
-
 
 class ServiceTier(Enum):
     """服务等级"""
@@ -48,13 +44,11 @@ class ServiceTier(Enum):
     STANDARD = "standard"     # 标准服务
     DEVELOPMENT = "development" # 开发服务
 
-
 class AlertLevel(Enum):
     """告警级别"""
     CRITICAL = "critical"
     WARNING = "warning"
     INFO = "info"
-
 
 @dataclass
 class GovernanceConfig:
@@ -71,7 +65,6 @@ class GovernanceConfig:
     enable_rate_limiting: bool = True
     enable_security_policies: bool = True
     metadata: Dict[str, Any] = field(default_factory=dict)
-
 
 @dataclass
 class ServiceGovernancePolicy:
@@ -90,7 +83,6 @@ class ServiceGovernancePolicy:
     health_check_interval: int = 30
     metadata: Dict[str, Any] = field(default_factory=dict)
 
-
 @dataclass
 class GovernanceMetrics:
     """治理指标"""
@@ -108,7 +100,6 @@ class GovernanceMetrics:
     circuit_breaker_open: int
     metadata: Dict[str, Any] = field(default_factory=dict)
 
-
 @dataclass
 class GovernanceAlert:
     """治理告警"""
@@ -121,7 +112,6 @@ class GovernanceAlert:
     timestamp: datetime = field(default_factory=datetime.now)
     resolved: bool = False
     resolved_at: Optional[datetime] = None
-
 
 class MicroserviceGovernance:
     """微服务治理体系"""
@@ -681,10 +671,8 @@ class MicroserviceGovernance:
         if self.redis:
             await self.redis.close()
 
-
 # 全局治理体系实例
 _governance: Optional[MicroserviceGovernance] = None
-
 
 async def get_microservice_governance(
     governance_level: GovernanceLevel = GovernanceLevel.STANDARD
@@ -696,7 +684,6 @@ async def get_microservice_governance(
         _governance = MicroserviceGovernance(config)
         await _governance.initialize()
     return _governance
-
 
 async def initialize_suoke_governance() -> MicroserviceGovernance:
     """初始化索克生活微服务治理体系"""

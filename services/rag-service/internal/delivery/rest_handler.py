@@ -6,7 +6,6 @@ REST API处理器
 提供完整的RAG服务API接口
 """
 
-import asyncio
 import time
 import uuid
 from typing import Dict, List, Any, Optional
@@ -22,7 +21,6 @@ from ..routing.intelligent_router import (
 )
 from ..integration.api_gateway import APIGateway, ServiceType
 from ..tcm.tcm_models import ConstitutionType, SyndromeType
-
 
 # 请求模型
 class RAGQueryRequest(BaseModel):
@@ -40,7 +38,6 @@ class RAGQueryRequest(BaseModel):
     temperature: float = Field(default=0.7, description="生成温度")
     stream: bool = Field(default=False, description="是否流式响应")
 
-
 class TCMAnalysisRequest(BaseModel):
     """中医分析请求"""
     symptoms: List[str] = Field(..., description="症状列表")
@@ -49,7 +46,6 @@ class TCMAnalysisRequest(BaseModel):
     medical_history: List[str] = Field(default_factory=list, description="病史")
     current_medications: List[str] = Field(default_factory=list, description="当前用药")
     lifestyle_factors: Dict[str, Any] = Field(default_factory=dict, description="生活方式因素")
-
 
 class HerbRecommendationRequest(BaseModel):
     """中药推荐请求"""
@@ -62,7 +58,6 @@ class HerbRecommendationRequest(BaseModel):
     gender: Optional[str] = Field(None, description="性别")
     pregnancy_status: Optional[bool] = Field(None, description="是否怀孕")
 
-
 class DocumentIndexRequest(BaseModel):
     """文档索引请求"""
     content: str = Field(..., description="文档内容")
@@ -71,14 +66,12 @@ class DocumentIndexRequest(BaseModel):
     metadata: Dict[str, Any] = Field(default_factory=dict, description="元数据")
     document_type: str = Field(default="general", description="文档类型")
 
-
 class KnowledgeGraphQueryRequest(BaseModel):
     """知识图谱查询请求"""
     entity: str = Field(..., description="实体名称")
     relation_types: List[str] = Field(default_factory=list, description="关系类型")
     max_depth: int = Field(default=2, description="最大查询深度")
     limit: int = Field(default=50, description="结果限制")
-
 
 # 响应模型
 class RAGQueryResponse(BaseModel):
@@ -93,7 +86,6 @@ class RAGQueryResponse(BaseModel):
     follow_up_questions: List[str] = Field(default_factory=list, description="后续问题")
     metadata: Dict[str, Any] = Field(default_factory=dict, description="元数据")
 
-
 class TCMAnalysisResponse(BaseModel):
     """中医分析响应"""
     request_id: str = Field(..., description="请求ID")
@@ -103,7 +95,6 @@ class TCMAnalysisResponse(BaseModel):
     lifestyle_recommendations: List[str] = Field(..., description="生活建议")
     reasoning_chain: List[str] = Field(..., description="推理链")
     confidence: float = Field(..., description="置信度")
-
 
 class HerbRecommendationResponse(BaseModel):
     """中药推荐响应"""
@@ -115,7 +106,6 @@ class HerbRecommendationResponse(BaseModel):
     contraindications: List[str] = Field(default_factory=list, description="禁忌症")
     monitoring_advice: List[str] = Field(default_factory=list, description="监测建议")
 
-
 class ServiceStatusResponse(BaseModel):
     """服务状态响应"""
     status: str = Field(..., description="服务状态")
@@ -123,7 +113,6 @@ class ServiceStatusResponse(BaseModel):
     uptime: float = Field(..., description="运行时间")
     components: Dict[str, str] = Field(..., description="组件状态")
     statistics: Dict[str, Any] = Field(default_factory=dict, description="统计信息")
-
 
 def create_rest_handler(
     container: Container,

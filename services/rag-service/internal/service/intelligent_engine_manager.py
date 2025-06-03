@@ -19,8 +19,6 @@ from datetime import datetime, timedelta
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Dict, List, Optional, Any, Type, Callable, Union
-import json
-import weakref
 from collections import defaultdict, deque
 import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -30,7 +28,6 @@ from ..observability.tracing import trace_operation, SpanKind
 from ..cache.advanced_cache import AdvancedCacheManager
 from ..resilience.circuit_breaker import CircuitBreaker
 
-
 class EngineStatus(str, Enum):
     """引擎状态"""
     INITIALIZING = "initializing"           # 初始化中
@@ -39,7 +36,6 @@ class EngineStatus(str, Enum):
     PAUSED = "paused"                       # 暂停
     ERROR = "error"                         # 错误
     STOPPED = "stopped"                     # 已停止
-
 
 class EngineType(str, Enum):
     """引擎类型"""
@@ -54,7 +50,6 @@ class EngineType(str, Enum):
     KNOWLEDGE_GRAPH = "knowledge_graph"     # 知识图谱
     ROUTING = "routing"                     # 智能路由
 
-
 class EngineCapability(str, Enum):
     """引擎能力"""
     ASSESSMENT = "assessment"               # 评估能力
@@ -65,7 +60,6 @@ class EngineCapability(str, Enum):
     OPTIMIZATION = "optimization"           # 优化能力
     LEARNING = "learning"                   # 学习能力
     INTEGRATION = "integration"             # 集成能力
-
 
 @dataclass
 class EngineMetadata:
@@ -82,7 +76,6 @@ class EngineMetadata:
     max_concurrent_requests: int = 100
     timeout_seconds: int = 30
     priority: int = 1  # 优先级，数字越大优先级越高
-
 
 @dataclass
 class EngineInstance:
@@ -111,7 +104,6 @@ class EngineInstance:
             return 0.0
         return self.error_count / self.request_count
 
-
 @dataclass
 class EngineRequest:
     """引擎请求"""
@@ -126,7 +118,6 @@ class EngineRequest:
     user_id: Optional[str] = None
     context: Dict[str, Any] = field(default_factory=dict)
 
-
 @dataclass
 class EngineResponse:
     """引擎响应"""
@@ -138,7 +129,6 @@ class EngineResponse:
     processing_time: float = 0.0
     completed_at: datetime = field(default_factory=datetime.now)
     metadata: Dict[str, Any] = field(default_factory=dict)
-
 
 class EngineRegistry:
     """引擎注册表"""
@@ -226,7 +216,6 @@ class EngineRegistry:
             if engine_id in self._engines:
                 self._engines[engine_id].status = status
 
-
 class EngineLoadBalancer:
     """引擎负载均衡器"""
     
@@ -278,7 +267,6 @@ class EngineLoadBalancer:
         """优先级选择"""
         return max(engines, key=lambda e: e.metadata.priority)
 
-
 class EngineDataBus:
     """引擎数据总线"""
     
@@ -329,7 +317,6 @@ class EngineDataBus:
         with self._lock:
             if topic in self._subscribers and callback in self._subscribers[topic]:
                 self._subscribers[topic].remove(callback)
-
 
 class IntelligentEngineManager:
     """智能引擎管理器"""
@@ -817,7 +804,6 @@ class IntelligentEngineManager:
             self.logger.error(f"获取引擎健康状态失败: {e}")
             return {"error": str(e)}
 
-
 def initialize_engine_manager(
     config: Dict[str, Any],
     metrics_collector: Optional[MetricsCollector] = None,
@@ -826,15 +812,12 @@ def initialize_engine_manager(
     """初始化智能引擎管理器"""
     return IntelligentEngineManager(config, metrics_collector, cache_manager)
 
-
 # 全局引擎管理器实例
 _engine_manager: Optional[IntelligentEngineManager] = None
-
 
 def get_engine_manager() -> Optional[IntelligentEngineManager]:
     """获取全局引擎管理器实例"""
     return _engine_manager
-
 
 def set_engine_manager(manager: IntelligentEngineManager):
     """设置全局引擎管理器实例"""

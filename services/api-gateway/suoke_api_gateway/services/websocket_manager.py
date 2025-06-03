@@ -19,10 +19,8 @@ from fastapi import WebSocket, WebSocketDisconnect
 from starlette.websockets import WebSocketState
 
 from ..core.logging import get_logger
-from ..utils.metrics import record_cache_operation
 
 logger = get_logger(__name__)
-
 
 class MessageType(Enum):
     """消息类型"""
@@ -34,7 +32,6 @@ class MessageType(Enum):
     ROOM_LEAVE = "room_leave"
     PING = "ping"
     PONG = "pong"
-
 
 @dataclass
 class WebSocketConnection:
@@ -56,7 +53,6 @@ class WebSocketConnection:
             self.connected_at = time.time()
         if self.last_ping is None:
             self.last_ping = time.time()
-
 
 @dataclass
 class WebSocketMessage:
@@ -94,7 +90,6 @@ class WebSocketMessage:
             room=data.get("room"),
             timestamp=data.get("timestamp", time.time()),
         )
-
 
 class WebSocketManager:
     """WebSocket 连接管理器"""
@@ -530,10 +525,8 @@ class WebSocketManager:
             "uptime": time.time() - connection.connected_at,
         }
 
-
 # 全局 WebSocket 管理器实例
 websocket_manager = WebSocketManager()
-
 
 def get_websocket_manager() -> WebSocketManager:
     """获取全局 WebSocket 管理器"""

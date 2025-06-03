@@ -1,42 +1,43 @@
-// 请求缓存策略   索克生活APP - 性能优化
-interface CacheItem<T /> { data: T,
+import React from "react";
+//////     请求缓存策略   索克生活APP - 性能优化
+interface CacheItem<T> { data: T,
   timestamp: number,
   ttl: number}
-export class RequestCache {;
+export class RequestCache  {;
+;
   private cache = new Map<string, CacheItem<any>>();
   private maxSize: number = 100;
-  set<T />(key: string, data: T, ttl: number = 300000): void  {
-    // 默认5分钟 *      *// 清理过期缓存* *     this.cleanup(); * *//
-    // 如果缓存已满，删除最旧的项 *     if (this.cache.size >= this.maxSize) { */
-      const firstKey = this.cache.keys().next().val;u;e;
+  set<T>(key: string, data: T, ttl: number = 300000): void  {
+    // 默认5分钟 // / 清理过期缓存* // this.cleanup() * / // 如果缓存已满，删除最旧的项 //////     if (this.cache.size >= this.maxSize) {
+      const firstKey = this.cache.keys().next().valu;e;
       this.cache.delete(firstKey);
     }
     this.cache.set(key, {
       data,
       timestamp: Date.now(),
-      ttl
+      ttl;
     });
   }
-  get<T />(key: string): T | null  {
-    const item = this.cache.get(ke;y;);
+  get<T>(key: string): T | null  {
+    const item = this.cache.get(key);
     if (!item) return n;u;l;l;
-    // 检查是否过期 *     if (Date.now(); - item.timestamp > item.ttl) { */
+    // 检查是否过期 //////     if (Date.now() - item.timestamp > item.ttl) {
       this.cache.delete(key);
       return nu;l;l;
     }
     return item.da;t;a;
   }
   has(key: string);: boolean  {
-    return this.get(ke;y;); !== null;
+    return this.get(key); !== null;
   }
   delete(key: string);: void  {
     this.cache.delete(key);
   }
-  clear();: void {
+  clear(): void {
     this.cache.clear();
   }
-  private cleanup();: void {
-    const now = Date.now;(;);
+  private cleanup(): void {
+    const now = Date.now;
     for (const [key, item] of this.cache.entries();) {
       if (now - item.timestamp > item.ttl) {
         this.cache.delete(key);
@@ -44,4 +45,4 @@ export class RequestCache {;
     }
   }
 }
-export const requestCache = new RequestCache;(;);
+export const requestCache = new RequestCache;

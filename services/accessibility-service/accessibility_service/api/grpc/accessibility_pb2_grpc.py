@@ -2,7 +2,6 @@
 """Client and server classes corresponding to protobuf-defined services."""
 
 import grpc
-from api.grpc import accessibility_pb2 as accessibility__pb2
 
 GRPC_GENERATED_VERSION = '1.71.0'
 GRPC_VERSION = grpc.__version__
@@ -22,7 +21,6 @@ if _version_not_supported:
         + f' Please upgrade your grpc module to grpcio>={GRPC_GENERATED_VERSION}'
         + f' or downgrade your generated code using grpcio-tools<={GRPC_VERSION}.'
     )
-
 
 class AccessibilityServiceStub:
     """无障碍服务API
@@ -64,7 +62,6 @@ class AccessibilityServiceStub:
                 request_serializer=accessibility__pb2.SettingsRequest.SerializeToString,
                 response_deserializer=accessibility__pb2.SettingsResponse.FromString,
                 _registered_method=True)
-
 
 class AccessibilityServiceServicer:
     """无障碍服务API
@@ -112,7 +109,6 @@ class AccessibilityServiceServicer:
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-
 def add_AccessibilityServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'BlindAssistance': grpc.unary_unary_rpc_method_handler(
@@ -150,7 +146,6 @@ def add_AccessibilityServiceServicer_to_server(servicer, server):
             'suoke.accessibility.v1.AccessibilityService', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
     server.add_registered_method_handlers('suoke.accessibility.v1.AccessibilityService', rpc_method_handlers)
-
 
  # This class is part of an EXPERIMENTAL API.
 class AccessibilityService:

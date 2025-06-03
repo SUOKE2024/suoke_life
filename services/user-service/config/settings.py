@@ -2,11 +2,9 @@
 应用配置管理
 使用Pydantic Settings进行配置管理
 """
-import os
 from typing import List, Optional
 from pydantic import BaseSettings, Field, validator
 from functools import lru_cache
-
 
 class DatabaseSettings(BaseSettings):
     """数据库配置"""
@@ -46,7 +44,6 @@ class DatabaseSettings(BaseSettings):
     class Config:
         env_prefix = "DB_"
 
-
 class RedisSettings(BaseSettings):
     """Redis配置"""
     
@@ -72,7 +69,6 @@ class RedisSettings(BaseSettings):
     
     class Config:
         env_prefix = "REDIS_"
-
 
 class SecuritySettings(BaseSettings):
     """安全配置"""
@@ -110,7 +106,6 @@ class SecuritySettings(BaseSettings):
     class Config:
         env_prefix = "SECURITY_"
 
-
 class LoggingSettings(BaseSettings):
     """日志配置"""
     
@@ -132,7 +127,6 @@ class LoggingSettings(BaseSettings):
     class Config:
         env_prefix = "LOG_"
 
-
 class MonitoringSettings(BaseSettings):
     """监控配置"""
     
@@ -150,7 +144,6 @@ class MonitoringSettings(BaseSettings):
     
     class Config:
         env_prefix = "MONITORING_"
-
 
 class CacheSettings(BaseSettings):
     """缓存配置"""
@@ -171,7 +164,6 @@ class CacheSettings(BaseSettings):
     
     class Config:
         env_prefix = "CACHE_"
-
 
 class AppSettings(BaseSettings):
     """应用配置"""
@@ -228,7 +220,6 @@ class AppSettings(BaseSettings):
     class Config:
         env_prefix = "APP_"
 
-
 class Settings(BaseSettings):
     """主配置类"""
     
@@ -245,12 +236,10 @@ class Settings(BaseSettings):
         env_file_encoding = "utf-8"
         case_sensitive = False
 
-
 @lru_cache()
 def get_settings() -> Settings:
     """获取配置实例（单例模式）"""
     return Settings()
-
 
 # 全局配置实例
 settings = get_settings() 

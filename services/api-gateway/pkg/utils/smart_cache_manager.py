@@ -17,13 +17,10 @@ import time
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Pattern, Set, Tuple, Union
 from collections import OrderedDict
-from contextlib import asynccontextmanager
 
-import redis.asyncio as redis
 from redis.asyncio import Redis
 
 logger = logging.getLogger(__name__)
-
 
 @dataclass
 class CacheRule:
@@ -34,7 +31,6 @@ class CacheRule:
     priority: int = 0
     compress: bool = False
     tags: Set[str] = field(default_factory=set)
-
 
 @dataclass
 class CacheStats:
@@ -48,7 +44,6 @@ class CacheStats:
     redis_usage: int = 0
     compression_ratio: float = 0.0
     avg_response_time: float = 0.0
-
 
 @dataclass
 class SmartCacheConfig:
@@ -82,7 +77,6 @@ class SmartCacheConfig:
     async_write: bool = True
     write_behind_delay: float = 0.1
     batch_write_size: int = 50
-
 
 class MemoryCache:
     """内存缓存实现"""
@@ -175,7 +169,6 @@ class MemoryCache:
             'max_items': self.max_items,
             'utilization': self._size / self.max_size if self.max_size > 0 else 0
         }
-
 
 class SmartCacheManager:
     """智能缓存管理器"""

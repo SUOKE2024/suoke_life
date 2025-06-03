@@ -7,7 +7,6 @@
 import sys
 import subprocess
 import shutil
-import json
 from pathlib import Path
 from typing import List, Dict, Optional
 import argparse
@@ -328,7 +327,6 @@ CMD ["python", "-m", "main"]
 
         return success_count == total_count
 
-
 def main():
     parser = argparse.ArgumentParser(description="索克生活项目uv迁移工具")
     parser.add_argument("--project-root", default=".", help="项目根目录")
@@ -345,7 +343,6 @@ def main():
 
     success = migrator.run_migration(args.services)
     sys.exit(0 if success else 1)
-
 
 if __name__ == "__main__":
     main()

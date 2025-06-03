@@ -5,20 +5,14 @@ Revises:
 Create Date: 2024-05-22 14:30:00.000000
 
 """
-import uuid
-from datetime import datetime
 
 from alembic import op
-import sqlalchemy as sa
-from sqlalchemy.sql import table, column
-
 
 # revision identifiers, used by Alembic.
 revision = '001'
 down_revision = None
 branch_labels = None
 depends_on = None
-
 
 def upgrade():
     """升级数据库架构，添加审计和操作日志表"""
@@ -127,7 +121,6 @@ def upgrade():
     except Exception as e:
         print(f"添加健康摘要表字段时出错: {e}")
         print("如果这些列已经存在，可以忽略此错误")
-
 
 def downgrade():
     """回滚数据库架构更改"""

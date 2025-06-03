@@ -19,16 +19,12 @@ from enum import Enum
 from typing import Any
 
 import aiohttp
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
 
 # 设置日志记录
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
-
 
 class TestPhase(str, Enum):
     """测试阶段枚举"""
@@ -38,7 +34,6 @@ class TestPhase(str, Enum):
     PEAK = "peak"  # 峰值阶段
     RAMP_DOWN = "ramp_down"  # 减压阶段
     COOLDOWN = "cooldown"  # 冷却阶段
-
 
 class ServiceType(str, Enum):
     """服务类型枚举"""
@@ -50,7 +45,6 @@ class ServiceType(str, Enum):
     KNOWLEDGE_SERVICE = "knowledge_service"  # 知识服务
     HEALTH_SERVICE = "health_service"  # 健康服务
     AI_SERVICE = "ai_service"  # AI服务
-
 
 class RequestResult:
     """请求结果类"""
@@ -120,7 +114,6 @@ class RequestResult:
             "phase": self.phase.value if self.phase else None,
             "metadata": self.metadata,
         }
-
 
 class TestProfile:
     """测试配置文件类"""
@@ -265,7 +258,6 @@ class TestProfile:
         ) / self.cooldown_duration
         return self.target_rps * 0.25 * (1.0 - progress)
 
-
 class EndpointSpec:
     """接口规格类"""
 
@@ -308,7 +300,6 @@ class EndpointSpec:
 
         # 默认返回空请求数据
         return {}
-
 
 class TestResult:
     """测试结果类"""
@@ -959,7 +950,6 @@ class TestResult:
             and self.p95_response_time <= self.profile.p95_threshold
         )
 
-
 class PerformanceTester:
     """性能测试器类"""
 
@@ -1253,7 +1243,6 @@ class PerformanceTester:
             self.results.append(result)
 
             return result
-
 
 class SuokeBenchmark:
     """索克基准测试类"""
@@ -2058,7 +2047,6 @@ class SuokeBenchmark:
         report_path = os.path.join(output_dir, "summary_report.html")
         with open(report_path, "w", encoding="utf-8") as f:
             f.write(html_content)
-
 
 # 直接运行示例
 if __name__ == "__main__":

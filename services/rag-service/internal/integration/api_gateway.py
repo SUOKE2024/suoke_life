@@ -7,7 +7,6 @@ API网关集成模块
 """
 
 import asyncio
-import json
 import time
 from typing import Dict, List, Any, Optional, Union, Tuple
 from dataclasses import dataclass, field
@@ -18,7 +17,6 @@ from loguru import logger
 
 from ..observability.metrics import MetricsCollector
 from ..resilience.circuit_breaker import CircuitBreakerService
-
 
 class ServiceType(str, Enum):
     """服务类型"""
@@ -32,7 +30,6 @@ class ServiceType(str, Enum):
     AGENT_SERVICES = "agent-services"                # 智能体服务
     MED_KNOWLEDGE = "med-knowledge"                  # 医学知识库
 
-
 class CommunicationProtocol(str, Enum):
     """通信协议"""
     HTTP_REST = "http_rest"      # HTTP REST API
@@ -40,14 +37,12 @@ class CommunicationProtocol(str, Enum):
     WEBSOCKET = "websocket"     # WebSocket
     MESSAGE_QUEUE = "message_queue"  # 消息队列
 
-
 class RequestType(str, Enum):
     """请求类型"""
     SYNC = "sync"               # 同步请求
     ASYNC = "async"             # 异步请求
     STREAMING = "streaming"     # 流式请求
     BATCH = "batch"             # 批量请求
-
 
 @dataclass
 class ServiceEndpoint:
@@ -61,7 +56,6 @@ class ServiceEndpoint:
     retry_count: int = 3
     health_check_path: str = "/health"
     metadata: Dict[str, Any] = field(default_factory=dict)
-
 
 @dataclass
 class ServiceRequest:
@@ -78,7 +72,6 @@ class ServiceRequest:
     priority: int = 1  # 1-10, 10最高
     metadata: Dict[str, Any] = field(default_factory=dict)
 
-
 @dataclass
 class ServiceResponse:
     """服务响应"""
@@ -91,7 +84,6 @@ class ServiceResponse:
     response_time: float = 0.0
     metadata: Dict[str, Any] = field(default_factory=dict)
 
-
 @dataclass
 class ServiceHealth:
     """服务健康状态"""
@@ -102,7 +94,6 @@ class ServiceHealth:
     error_count: int = 0
     success_count: int = 0
     metadata: Dict[str, Any] = field(default_factory=dict)
-
 
 class ServiceRegistry:
     """服务注册表"""
@@ -324,7 +315,6 @@ class ServiceRegistry:
         
         return None
 
-
 class LoadBalancer:
     """负载均衡器"""
     
@@ -370,7 +360,6 @@ class LoadBalancer:
         """最少连接选择"""
         # 简化实现，实际应该跟踪连接数
         return endpoints[0]
-
 
 class HTTPClient:
     """HTTP客户端"""
@@ -437,7 +426,6 @@ class HTTPClient:
                 response_time=time.time() - start_time
             )
 
-
 class GRPCClient:
     """gRPC客户端"""
     
@@ -500,7 +488,6 @@ class GRPCClient:
         for channel in self.channels.values():
             await channel.close()
         self.channels.clear()
-
 
 class HealthChecker:
     """健康检查器"""
@@ -584,7 +571,6 @@ class HealthChecker:
             )
             self.service_registry.update_health_status(endpoint, health)
 
-
 class RequestQueue:
     """请求队列"""
     
@@ -612,7 +598,6 @@ class RequestQueue:
     def empty(self) -> bool:
         """队列是否为空"""
         return self.queue.empty()
-
 
 class APIGateway:
     """API网关主类"""
@@ -966,7 +951,6 @@ class APIGateway:
         
         return stats
 
-
 # 便捷函数
 async def create_api_gateway(
     metrics_collector: MetricsCollector,
@@ -976,7 +960,6 @@ async def create_api_gateway(
     gateway = APIGateway(metrics_collector, circuit_breaker)
     await gateway.__aenter__()
     return gateway
-
 
 async def send_service_request(
     gateway: APIGateway,

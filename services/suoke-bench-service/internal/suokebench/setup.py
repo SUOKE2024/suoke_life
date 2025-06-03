@@ -11,7 +11,6 @@ from internal.suokebench.config import load_config
 
 logger = logging.getLogger(__name__)
 
-
 class BenchSetup:
     """评测环境设置"""
 
@@ -103,7 +102,6 @@ class BenchSetup:
 
         # 尝试使用TensorFlow检测GPU
         try:
-            import tensorflow as tf
 
             gpus = tf.config.list_physical_devices("GPU")
             if gpus:
@@ -435,7 +433,6 @@ class BenchSetup:
 
 © {{ timestamp[:4] }} 索克生活. SuokeBench评测报告""")
 
-
 def main():
     """主函数"""
     # 解析命令行参数
@@ -446,7 +443,6 @@ def main():
     # 创建并运行设置
     setup = BenchSetup(args.config)
     setup.setup()
-
 
 if __name__ == "__main__":
     main()

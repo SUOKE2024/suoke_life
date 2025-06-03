@@ -5,7 +5,6 @@
 """
 
 import pytest
-import asyncio
 from datetime import datetime
 from fastapi.testclient import TestClient
 
@@ -18,7 +17,6 @@ from calculation_service.core.algorithms.wuyun_liuqi.calculator import WuyunLiuq
 from calculation_service.utils.validators import validate_birth_info
 from calculation_service.utils.formatters import format_analysis_result
 from calculation_service.utils.cache import cache_manager
-
 
 class TestCalculationService:
     """算诊服务综合测试类"""
@@ -382,7 +380,6 @@ class TestCalculationService:
         # 测试清理过期缓存
         response = client.post("/cache/cleanup")
         assert response.status_code == 200
-
 
 if __name__ == "__main__":
     # 运行测试

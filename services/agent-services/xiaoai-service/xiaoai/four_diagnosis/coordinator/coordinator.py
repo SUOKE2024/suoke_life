@@ -70,8 +70,6 @@ except ImportError:
 
 # 导入Proto定义
 try:
-    from ...api.grpc import four_diagnosis_pb2 as diagnosis_pb
-    from ...api.grpc import four_diagnosis_pb2_grpc as diagnosis_grpc
 except ImportError:
     # 创建模拟proto类
     class MockProto:
@@ -99,7 +97,6 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
-
 @dataclass
 class DiagnosisProgress:
     """诊断进度"""
@@ -114,7 +111,6 @@ class DiagnosisProgress:
     overallprogress: float = 0.0
     statusmessage: str = "等待诊断数据"
     lastupdated: int = field(default_factory=lambda: int(time.time()))
-
 
 class FourDiagnosisCoordinator:
     """四诊协调器"""

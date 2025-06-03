@@ -5,9 +5,6 @@
 异常处理等组件。
 """
 
-from __future__ import annotations
-
-import asyncio
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
@@ -17,14 +14,8 @@ from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import JSONResponse
 from prometheus_client import make_asgi_app
-from starlette.middleware.base import BaseHTTPMiddleware
 
 from ..api.routes import api_router
-from ..api.websocket import router as websocket_router
-from ..api.oauth2 import router as oauth2_router
-from ..api.tracing import router as tracing_router
-from ..api.admin import router as admin_router
-from ..api.metrics import router as metrics_router
 from ..middleware.auth import AuthMiddleware
 from ..middleware.logging import LoggingMiddleware
 from ..middleware.rate_limit import RateLimitMiddleware
@@ -36,9 +27,7 @@ from ..services.service_registry import ServiceRegistry
 from .config import Settings, get_settings
 from .logging import get_logger, setup_logging
 
-
 logger = get_logger(__name__)
-
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
@@ -89,7 +78,6 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
         
         logger.info("API Gateway shutdown complete")
 
-
 def create_app(settings: Settings | None = None) -> FastAPI:
     """创建 FastAPI 应用程序实例"""
     if settings is None:
@@ -123,7 +111,6 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     
     return app
 
-
 def setup_middleware(app: FastAPI, settings: Settings) -> None:
     """设置中间件"""
     
@@ -152,7 +139,6 @@ def setup_middleware(app: FastAPI, settings: Settings) -> None:
     app.add_middleware(LoggingMiddleware)  # 请求日志
     app.add_middleware(RateLimitMiddleware)  # 限流
     app.add_middleware(AuthMiddleware)  # 认证
-
 
 def setup_routes(app: FastAPI, settings: Settings) -> None:
     """设置路由"""
@@ -209,7 +195,6 @@ def setup_routes(app: FastAPI, settings: Settings) -> None:
             "docs": "/docs" if settings.is_development() else None,
         }
 
-
 def setup_exception_handlers(app: FastAPI) -> None:
     """设置异常处理器"""
     
@@ -257,7 +242,6 @@ def setup_exception_handlers(app: FastAPI) -> None:
                 "method": request.method,
             }
         )
-
 
 # 用于开发的便捷函数
 def create_dev_app() -> FastAPI:

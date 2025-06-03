@@ -7,13 +7,11 @@
 
 import json
 import logging
-import logging.handlers
 import os
 import sys
 from datetime import datetime
 
 from .config import Config
-
 
 def setup_logger(logger: logging.Logger, level: str = "INFO") -> None:
     """

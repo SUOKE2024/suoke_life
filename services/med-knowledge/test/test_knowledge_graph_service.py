@@ -1,9 +1,7 @@
 import pytest
-import asyncio
 from unittest.mock import AsyncMock, MagicMock, patch
 
 from app.services.knowledge_graph_service import KnowledgeGraphService
-
 
 class TestKnowledgeGraphService:
     """知识图谱服务测试类"""

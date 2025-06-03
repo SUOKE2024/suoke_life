@@ -9,10 +9,8 @@ from dataclasses import dataclass
 from typing import Any
 
 # 导入Proto定义
-from ...api.grpc import four_diagnosis_pb2 as diagnosis_pb
 
 logger = logging.getLogger(__name__)
-
 
 @dataclass
 class SyndromeRule:
@@ -24,7 +22,6 @@ class SyndromeRule:
     minrequired: int
     weight: float = 1.0
 
-
 @dataclass
 class ConstitutionRule:
     """体质规则"""
@@ -34,7 +31,6 @@ class ConstitutionRule:
     contrafeatures: list[str]
     minrequired: int
     weight: float = 1.0
-
 
 class TCMReasoningEngine:
     """TCM辨证推理引擎"""

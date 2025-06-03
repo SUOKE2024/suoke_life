@@ -4,8 +4,6 @@ Pytest 配置文件
 提供测试夹具和配置。
 """
 
-from __future__ import annotations
-
 import asyncio
 from collections.abc import AsyncGenerator, Generator
 from pathlib import Path
@@ -27,7 +25,6 @@ from corn_maze_service.pkg.logging import setup_logging
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-
 @pytest.fixture(scope="session")
 def event_loop() -> Generator[asyncio.AbstractEventLoop]:
     """创建事件循环"""
@@ -35,13 +32,11 @@ def event_loop() -> Generator[asyncio.AbstractEventLoop]:
     yield loop
     loop.close()
 
-
 @pytest.fixture(scope="session")
 def temp_dir() -> Generator[Path]:
     """创建临时目录"""
     with tempfile.TemporaryDirectory() as tmp_dir:
         yield Path(tmp_dir)
-
 
 @pytest.fixture
 def settings():
@@ -52,7 +47,6 @@ def settings():
         redis={"url": "redis://localhost:6379/1"},
     )
 
-
 @pytest.fixture
 def mock_settings(settings: Settings) -> Generator[Settings]:
     """模拟设置"""
@@ -62,7 +56,6 @@ def mock_settings(settings: Settings) -> Generator[Settings]:
         return settings
 
     # 替换设置函数
-    import corn_maze_service.config
     corn_maze_service.config.get_settings = _get_test_settings
 
     yield settings
@@ -70,19 +63,16 @@ def mock_settings(settings: Settings) -> Generator[Settings]:
     # 恢复原始设置
     corn_maze_service.config.get_settings = original_get_settings
 
-
 @pytest.fixture
 def app(mock_settings: Settings) -> FastAPI:
     """创建测试应用"""
     setup_logging()
     return create_app(mock_settings)
 
-
 @pytest.fixture
 def client(app: FastAPI) -> TestClient:
     """创建测试客户端"""
     return TestClient(app)
-
 
 @pytest.fixture
 async def async_client(app: FastAPI) -> AsyncGenerator[TestClient]:
@@ -90,14 +80,12 @@ async def async_client(app: FastAPI) -> AsyncGenerator[TestClient]:
     async with TestClient(app) as client:
         yield client
 
-
 # 数据库相关夹具
 @pytest.fixture
 async def db_session():
     """数据库会话"""
     # TODO: 实现数据库会话创建
     pass
-
 
 @pytest.fixture
 def sample_maze():
@@ -140,7 +128,6 @@ def sample_maze():
 
     return maze
 
-
 # Mock 相关夹具
 @pytest.fixture
 def mock_openai():
@@ -157,7 +144,6 @@ def mock_openai():
     )
     return mock
 
-
 @pytest.fixture
 def mock_redis():
     """模拟 Redis 客户端"""
@@ -166,7 +152,6 @@ def mock_redis():
     mock.set.return_value = True
     mock.delete.return_value = 1
     return mock
-
 
 # 标记定义
 pytest.mark.unit = pytest.mark.unit

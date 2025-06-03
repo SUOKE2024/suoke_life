@@ -9,12 +9,10 @@ import time
 from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional, Set, Union
 import jwt
-from passlib.hash import pbkdf2_sha256
 from passlib.context import CryptContext
 import logging
 
 logger = logging.getLogger(__name__)
-
 
 class PasswordManager:
     """密码管理器"""
@@ -91,7 +89,6 @@ class PasswordManager:
             "strength": strength,
             "feedback": feedback
         }
-
 
 class JWTManager:
     """JWT令牌管理器"""
@@ -171,7 +168,6 @@ class JWTManager:
             logger.error(f"解码令牌失败: {e}")
             return None
 
-
 class PermissionManager:
     """权限管理器"""
     
@@ -233,7 +229,6 @@ class PermissionManager:
             return True
         
         return False
-
 
 class SecurityUtils:
     """安全工具类"""
@@ -300,7 +295,6 @@ class SecurityUtils:
         for char in dangerous_chars:
             text = text.replace(char, "")
         return text.strip()
-
 
 class RateLimiter:
     """限流器"""

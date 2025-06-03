@@ -4,7 +4,6 @@
 管理PostgreSQL、MongoDB、Redis等数据库连接。
 """
 
-import redis.asyncio as redis
 from motor.motor_asyncio import AsyncIOMotorClient
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
@@ -14,7 +13,6 @@ from xiaoke_service.core.exceptions import DatabaseError
 from xiaoke_service.core.logging import get_logger
 
 logger = get_logger(__name__)
-
 
 class DatabaseManager:
     """数据库管理器"""

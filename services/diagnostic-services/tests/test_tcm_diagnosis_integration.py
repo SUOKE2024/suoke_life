@@ -4,13 +4,9 @@
 """
 
 import pytest
-import numpy as np
 import cv2
 import asyncio
-import json
 from datetime import datetime
-from unittest.mock import Mock, patch
-import tempfile
 import os
 
 # 导入测试模块
@@ -33,7 +29,6 @@ from palpation_service.internal.sensor_interface import (
     MockSensorInterface,
     create_sensor_manager_with_defaults
 )
-
 
 class TestTCMDiagnosisIntegration:
     """中医诊断系统集成测试类"""
@@ -418,7 +413,6 @@ class TestTCMDiagnosisIntegration:
         # 验证注销成功
         assert "test_sensor" not in sensor_manager.sensors
 
-
 def test_integration_workflow():
     """测试完整的集成工作流程"""
     print("\n=== 中医诊断系统集成测试 ===")
@@ -465,7 +459,6 @@ def test_integration_workflow():
     print("10. 配置管理测试通过")
     
     print("\n=== 所有集成测试通过！ ===")
-
 
 if __name__ == "__main__":
     # 运行集成测试

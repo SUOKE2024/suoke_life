@@ -1,8 +1,6 @@
 """
 SQLite用户仓库单元测试
 """
-import asyncio
-import os
 import pytest
 import uuid
 from datetime import datetime

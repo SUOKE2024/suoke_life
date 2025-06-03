@@ -10,7 +10,6 @@ RAG服务负载测试脚本
 
 import argparse
 import asyncio
-import json
 import random
 import time
 from dataclasses import dataclass
@@ -18,10 +17,7 @@ from typing import Dict, List, Any, Optional
 import statistics
 
 import aiohttp
-import matplotlib.pyplot as plt
-import numpy as np
 from loguru import logger
-
 
 @dataclass
 class TestResult:
@@ -31,7 +27,6 @@ class TestResult:
     response_time: float
     success: bool
     error: Optional[str] = None
-
 
 class LoadTester:
     """负载测试器类"""
@@ -357,7 +352,6 @@ class LoadTester:
         plt.savefig("load_test_results.png")
         logger.info("Charts saved to load_test_results.png")
 
-
 def parse_args():
     """解析命令行参数"""
     parser = argparse.ArgumentParser(description="RAG服务负载测试")
@@ -367,7 +361,6 @@ def parse_args():
     parser.add_argument("--ramp-up", type=int, default=5, help="用户递增时间（秒）")
     
     return parser.parse_args()
-
 
 async def main():
     """主函数"""
@@ -382,7 +375,6 @@ async def main():
     
     await tester.run()
     tester.generate_report()
-
 
 if __name__ == "__main__":
     # 配置日志

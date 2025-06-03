@@ -10,16 +10,10 @@
 5. 创建监控和测试配置
 """
 
-import os
-import json
-import yaml
-import shutil
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass, asdict
 from datetime import datetime
-import subprocess
-import sys
 
 @dataclass
 class ServiceStatus:

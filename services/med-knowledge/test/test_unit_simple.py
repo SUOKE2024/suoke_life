@@ -9,7 +9,6 @@ from app.services.knowledge_service import KnowledgeService
 from app.services.cache_service import CacheService
 from app.services.metrics_service import MetricsService
 
-
 def test_knowledge_service_init():
     """测试知识服务初始化"""
     mock_repository = Mock()
@@ -26,7 +25,6 @@ def test_knowledge_service_init():
     assert service.cache_service == mock_cache
     assert service.metrics_service == mock_metrics
 
-
 def test_cache_service_init():
     """测试缓存服务初始化"""
     mock_redis = Mock()
@@ -37,7 +35,6 @@ def test_cache_service_init():
     assert service.redis == mock_redis
     assert service.default_ttl == ttl
 
-
 def test_metrics_service_init():
     """测试监控服务初始化"""
     service = MetricsService()
@@ -46,7 +43,6 @@ def test_metrics_service_init():
     assert hasattr(service, 'record_http_request')
     assert hasattr(service, 'record_db_operation')
     assert hasattr(service, 'record_cache_operation')
-
 
 @pytest.mark.asyncio
 async def test_cache_service_basic_operations():
@@ -81,13 +77,11 @@ async def test_cache_service_basic_operations():
     assert result is True
     mock_redis.exists.assert_called_once_with("test_key")
 
-
 def test_import_statements():
     """测试重要模块的导入"""
     # 测试核心模块导入
     from app.core.config import get_settings
     from app.core.logger import get_logger
-    from app.core.container import get_container
     
     # 测试服务模块导入
     from app.services.knowledge_service import KnowledgeService
@@ -95,11 +89,9 @@ def test_import_statements():
     from app.services.metrics_service import MetricsService
     
     # 测试API模块导入
-    from app.api.rest.health import router as health_router
     
     # 如果能执行到这里，说明导入都成功了
     assert True
-
 
 def test_config_loading():
     """测试配置加载"""
@@ -112,7 +104,6 @@ def test_config_loading():
     assert hasattr(settings, 'database')
     assert hasattr(settings, 'cache')
     assert hasattr(settings, 'security')
-
 
 def test_logger_creation():
     """测试日志器创建"""

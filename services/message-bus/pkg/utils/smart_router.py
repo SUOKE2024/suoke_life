@@ -7,7 +7,6 @@
 """
 
 import asyncio
-import json
 import logging
 import re
 import time
@@ -23,7 +22,6 @@ from .message_processor import MessageEnvelope, MessagePriority
 
 logger = logging.getLogger(__name__)
 
-
 class RoutingStrategy(Enum):
     """路由策略"""
     ROUND_ROBIN = "round_robin"
@@ -35,14 +33,12 @@ class RoutingStrategy(Enum):
     GEOGRAPHIC = "geographic"
     RANDOM = "random"
 
-
 class RouteStatus(Enum):
     """路由状态"""
     ACTIVE = "active"
     INACTIVE = "inactive"
     DEGRADED = "degraded"
     MAINTENANCE = "maintenance"
-
 
 @dataclass
 class RouteEndpoint:
@@ -74,7 +70,6 @@ class RouteEndpoint:
             self.health_score > 0.5 and
             self.current_connections < self.max_connections
         )
-
 
 @dataclass
 class RoutingRule:
@@ -173,7 +168,6 @@ class RoutingRule:
         
         return False
 
-
 @dataclass
 class RoutingConfig:
     """路由配置"""
@@ -190,7 +184,6 @@ class RoutingConfig:
     session_timeout: float = 300.0
     metrics_enabled: bool = True
 
-
 class RoutingStrategy(ABC):
     """路由策略抽象基类"""
     
@@ -203,7 +196,6 @@ class RoutingStrategy(ABC):
     ) -> Optional[RouteEndpoint]:
         """选择路由端点"""
         pass
-
 
 class RoundRobinStrategy(RoutingStrategy):
     """轮询路由策略"""
@@ -226,7 +218,6 @@ class RoundRobinStrategy(RoutingStrategy):
         endpoint = available_endpoints[self._current_index % len(available_endpoints)]
         self._current_index += 1
         return endpoint
-
 
 class WeightedRoundRobinStrategy(RoutingStrategy):
     """加权轮询路由策略"""
@@ -271,7 +262,6 @@ class WeightedRoundRobinStrategy(RoutingStrategy):
         
         return selected_endpoint
 
-
 class LeastConnectionsStrategy(RoutingStrategy):
     """最少连接路由策略"""
     
@@ -289,7 +279,6 @@ class LeastConnectionsStrategy(RoutingStrategy):
         
         # 选择连接数最少的端点
         return min(available_endpoints, key=lambda ep: ep.current_connections)
-
 
 class ContentBasedStrategy(RoutingStrategy):
     """基于内容的路由策略"""
@@ -333,7 +322,6 @@ class ContentBasedStrategy(RoutingStrategy):
         
         return target_endpoints
 
-
 class HashBasedStrategy(RoutingStrategy):
     """基于哈希的路由策略"""
     
@@ -366,7 +354,6 @@ class HashBasedStrategy(RoutingStrategy):
         index = int(hash_value, 16) % len(available_endpoints)
         return available_endpoints[index]
 
-
 class PriorityBasedStrategy(RoutingStrategy):
     """基于优先级的路由策略"""
     
@@ -392,7 +379,6 @@ class PriorityBasedStrategy(RoutingStrategy):
         else:
             # 普通消息使用轮询
             return random.choice(available_endpoints)
-
 
 class SmartMessageRouter:
     """
@@ -785,7 +771,6 @@ class SmartMessageRouter:
         if endpoint:
             endpoint.status = status
             logger.info(f"端点 {endpoint.name} 状态更新为: {status.value}")
-
 
 # 路由器工厂
 class RouterFactory:

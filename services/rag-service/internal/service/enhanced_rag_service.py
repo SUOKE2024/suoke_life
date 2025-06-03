@@ -18,18 +18,12 @@ from datetime import datetime, timedelta
 from dataclasses import dataclass, field
 from enum import Enum
 from collections import defaultdict
-import numpy as np
 from loguru import logger
 
 # 导入基础服务
 from .rag_service import RagService
 from ..model.document import Document, DocumentReference, RetrieveResult, GenerateResult, QueryResult
-from ..retriever.hybrid_retriever import HybridRetriever
-from ..generator.openai_generator import OpenAIGenerator
-from ..generator.local_generator import LocalGenerator
 from ..repository.milvus_repository import MilvusRepository
-from .embedding_service import EmbeddingService
-from .cache_service import CacheService
 
 # 导入通用组件
 from services.common.governance.circuit_breaker import (

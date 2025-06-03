@@ -7,10 +7,6 @@
 from datetime import date, time, datetime
 from typing import Dict, Optional, Tuple
 import lunardate
-from chinese_calendar import is_workday
-
-from ..core.models.patient import BaziModel, WuxingModel
-
 
 class BaziCalculator:
     """八字计算器"""

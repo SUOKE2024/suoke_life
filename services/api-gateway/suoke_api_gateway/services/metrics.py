@@ -4,7 +4,6 @@
 收集和暴露 Prometheus 指标。
 """
 
-import time
 from typing import Dict, Optional
 
 from prometheus_client import Counter, Gauge, Histogram, Info
@@ -13,7 +12,6 @@ from ..core.config import Settings
 from ..core.logging import get_logger
 
 logger = get_logger(__name__)
-
 
 class MetricsService:
     """指标监控服务"""

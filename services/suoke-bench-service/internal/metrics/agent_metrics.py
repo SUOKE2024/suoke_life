@@ -3,10 +3,7 @@
 from dataclasses import dataclass
 from typing import Any
 
-import numpy as np
-
 from .metrics import Metric
-
 
 @dataclass
 class MetricResult:
@@ -22,7 +19,6 @@ class MetricResult:
         """是否通过阈值。"""
         return self.value >= self.threshold
 
-
 @dataclass
 class DialogueTurn:
     """对话轮次数据类。"""
@@ -36,7 +32,6 @@ class DialogueTurn:
     response_time: float  # 响应时间(ms)
     context_relevance: float  # 上下文相关度
 
-
 @dataclass
 class TaskCompletion:
     """任务完成情况数据类。"""
@@ -47,7 +42,6 @@ class TaskCompletion:
     steps: list[str]  # 完成步骤
     agent_contributions: dict[str, float]  # 各智能体贡献度
     user_satisfaction: float | None  # 用户满意度
-
 
 class AgentCollaborationMetric(Metric):
     """智能体协作评测指标。"""

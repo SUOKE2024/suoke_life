@@ -14,9 +14,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
 import psycopg2
-import psycopg2.extras
 from psycopg2 import sql
-
 
 class DatabaseMigrator:
     """数据库迁移器"""
@@ -356,7 +354,6 @@ class DatabaseMigrator:
             if self.pg_conn:
                 self.pg_conn.close()
 
-
 def setup_logging(level: str = "INFO") -> None:
     """设置日志"""
     logging.basicConfig(
@@ -367,7 +364,6 @@ def setup_logging(level: str = "INFO") -> None:
             logging.FileHandler('migration.log', encoding='utf-8')
         ]
     )
-
 
 def main() -> None:
     """主函数"""
@@ -398,7 +394,6 @@ def main() -> None:
     except Exception as e:
         logging.error(f"迁移失败: {e}")
         sys.exit(1)
-
 
 if __name__ == "__main__":
     main() 

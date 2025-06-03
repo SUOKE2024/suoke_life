@@ -1,11 +1,11 @@
-import React from 'react';
-import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor';
-importAsyncStorage from "@react-native-async-storage/async-storage"/import {   Alert   } from 'react-native';
-// 监控数据类型定义 * export interface SystemMetrics { timestamp: number, */;
+import React from "react";
+import { usePerformanceMonitor } from "../../placeholder";../hooks/////    usePerformanceMonitor";"
+importAsyncStorage from "@react-native-async-storage/async-storage";/////    import {   Alert   } from "react-native";";"
+// 监控数据类型定义 * export interface SystemMetrics { timestamp: number, ////
   performance: {memoryUsage: number,
     cpuUsage: number,
-    networkLatency: number,
-    renderTime: number,
+    networkLatency: number,;
+    renderTime: number,;
     apiResponseTime: number};
   errors: {
     count: number,
@@ -20,7 +20,8 @@ importAsyncStorage from "@react-native-async-storage/async-storage"/import {   A
     nutritionPlanSelections: number,
     blockchainVerifications: number};
 }
-export interface ErrorInfo {;
+export interface ErrorInfo  {;
+;
   message: string;
   stack?: string;
   timestamp: number,
@@ -33,33 +34,34 @@ export interface AlertRule { id: string,
   name: string,
   metric: string,
   threshold: number,
-  operator: ">" | "<" | "=" | ">=" | "<=",
-  enabled: boolean,
-  cooldown: number; // 冷却时间（毫秒） *   lastTriggered?: number, */
-  actions: AlertAction[];
+  operator: ">" | "<" | "=" | ">=" | "<=",;
+  enabled: boolean,;
+  cooldown: number;
+ // 冷却时间（毫秒） // lastTriggered?: number, ////
+  actions: AlertAction[]
   }
-export interface AlertAction {
-  type: "notification" | "log" | "api_call" | "user_notification",
+export interface AlertAction {;
+  type: "notification" | "log" | "api_call" | "user_notification",;
   config: Record<string, any>;
 }
 export interface HealthCheckResult {
   service: string,
-  status: "healthy" | "degraded" | "unhealthy",
-  responseTime: number,
+  status: "healthy" | "degraded" | "unhealthy",;
+  responseTime: number,;
   lastCheck: number;
   details?: Record<string, any>;
 }
-// 性能监控类 * class PerformanceTracker { */
+// 性能监控类 * class PerformanceTracker { ////
   private static instance: PerformanceTracker;
   private metrics: SystemMetrics[] = [];
   private maxMetricsHistory = 1000;
-  static getInstance();: PerformanceTracker {
+  static getInstance(): PerformanceTracker {
     if (!PerformanceTracker.instance) {
       PerformanceTracker.instance = new PerformanceTracker();
     }
-    return PerformanceTracker.instan;c;e;
+    return PerformanceTracker.instance;
   }
-  recordMetric(metric: Partial<SystemMetrics />);: void  {/    const timestamp = Date.now;(;);
+  recordMetric(metric: Partial<SystemMetrics />);: void  {/////        const timestamp = Date.now;
     const currentMetric: SystemMetrics = {;
       timestamp,
       performance: {
@@ -68,44 +70,44 @@ export interface HealthCheckResult {
         networkLatency: 0,
         renderTime: 0,
         apiResponseTime: 0,
-        ...metric.performance
+        ...metric.performance;
       },
       errors: {
         count: 0,
         types: {},
-        ...metric.errors
+        ...metric.errors;
       },
       user: {
         activeTime: 0,
         screenViews: {},
         interactions: 0,
-        ...metric.user
+        ...metric.user;
       },
       business: {
         farmProductViews: 0,
         wellnessBookings: 0,
         nutritionPlanSelections: 0,
         blockchainVerifications: 0,
-        ...metric.business
+        ...metric.business;
       }
     };
     this.metrics.push(currentMetric);
-    // 保持历史记录在限制范围内 *     if (this.metrics.length > this.maxMetricsHistory) { */
-      this.metrics.splice(0, this.metrics.length - this.maxMetricsHistory);
+    // 保持历史记录在限制范围内 //////     if (this.metrics.length > this.maxMetricsHistory) {
+      this.metrics.splice(0, this.metrics.length - this.maxMetricsHistory)
     }
-    // 持久化最新指标 *     this.persistMetrics(); */
+    // 持久化最新指标 //////     this.persistMetrics()
   }
   getMetrics(timeRange?:  { start: number, end: number});: SystemMetrics[]  {
     if (!timeRange) {
       return [...this.metric;s;];
     }
     return this.metrics.filter(;
-      (metri;c;); =>
-        metric.timestamp >= timeRange.start && metric.timestamp <= timeRange.end
+      (metri;c;); => {}
+        metric.timestamp >= timeRange.start && metric.timestamp <= timeRange.end;
     );
   }
   getAverageMetrics(timeRange?:  { start: number,
-    end: number});: Partial<SystemMetrics />  {/    const metrics = this.getMetrics(timeRang;e;);
+    end: number});: Partial<SystemMetrics />  {/////        const metrics = this.getMetrics(timeRang;e;);
     if (metrics.length === 0) {
       return {;};
     }
@@ -117,23 +119,21 @@ export interface HealthCheckResult {
           cpuUsage: acc.performance.cpuUsage + metric.performance.cpuUsage,
           networkLatency: acc.performance.networkLatency + metric.performance.networkLatency,
           renderTime: acc.performance.renderTime + metric.performance.renderTime,
-          apiResponseTime: acc.performance.apiResponseTime +;metric.performance.apiResponseTime
+          apiResponseTime: acc.performance.apiResponseTime +;metric.performance.apiResponseTime;
         },
         errors: {
           count: acc.errors.count + metric.errors.count,
-          types: acc.errors.types,
-        },
+          types: acc.errors.types},
         user: {
           activeTime: acc.user.activeTime + metric.user.activeTime,
           screenViews: acc.user.screenViews,
-          interactions: acc.user.interactions + metric.user.interactions,
-        },
+          interactions: acc.user.interactions + metric.user.interactions},
         business: {
           farmProductViews:
             acc.business.farmProductViews + metric.business.farmProductViews,
           wellnessBookings: acc.business.wellnessBookings + metric.business.wellnessBookings,
           nutritionPlanSelections: acc.business.nutritionPlanSelections +;metric.business.nutritionPlanSelections,
-          blockchainVerifications: acc.business.blockchainVerifications +;metric.business.blockchainVerifications
+          blockchainVerifications: acc.business.blockchainVerifications +;metric.business.blockchainVerifications;
         }
       }),
       {
@@ -142,41 +142,38 @@ export interface HealthCheckResult {
           cpuUsage: 0,
           networkLatency: 0,
           renderTime: 0,
-          apiResponseTime: 0,
-        },
+          apiResponseTime: 0},
         errors: { count: 0, types: {} },
         user: { activeTime: 0, screenViews: {}, interactions: 0},
         business: {
           farmProductViews: 0,
           wellnessBookings: 0,
           nutritionPlanSelections: 0,
-          blockchainVerifications: 0,
-        }
+          blockchainVerifications: 0}
       }
     );
     const count = metrics.leng;t;h;
     return {
       performance: {
-        memoryUsage: sum.performance.memoryUsage / count,/        cpuUsage: sum.performance.cpuUsage / count,/        networkLatency: sum.performance.networkLatency / count,/        renderTime: sum.performance.renderTime / count,/        apiResponseTime: sum.performance.apiResponseTime / count,/      },
+        memoryUsage: sum.performance.memoryUsage / count,/        cpuUsage: sum.performance.cpuUsage / count,/        networkLatency: sum.performance.networkLatency / count,/        renderTime: sum.performance.renderTime / count,/        apiResponseTime: sum.performance.apiResponseTime / count,/////          },
       errors: {
-        count: sum.errors.count / count,/        types: sum.errors.types
+        count: sum.errors.count / count,/////            types: sum.errors.types;
       },
       user: {
-        activeTime: sum.user.activeTime / count,/        screenViews: sum.user.screenViews,
-        interactions: sum.user.interactions / count,/      },
+        activeTime: sum.user.activeTime / count,/////            screenViews: sum.user.screenViews,
+        interactions: sum.user.interactions / count,/////          },
       business: {
-        farmProductViews: sum.business.farmProductViews / count,/        wellnessBookings: sum.business.wellnessBookings / count,/        nutritionPlanSelections: sum.business.nutritionPlanSelections / count,/        blockchainVerifications: sum.business.blockchainVerifications / count,/      ;}
+        farmProductViews: sum.business.farmProductViews / count,/        wellnessBookings: sum.business.wellnessBookings / count,/        nutritionPlanSelections: sum.business.nutritionPlanSelections / count,/        blockchainVerifications: sum.business.blockchainVerifications / count,/////          ;}
     ;};
   }
-  private async persistMetrics();: Promise<void> {
+  private async persistMetrics(): Promise<void> {
     try {
-      const recentMetrics = this.metrics.slice(-10;0;) // 只保存最近100条 *       await AsyncStorage.setItem( */
+      const recentMetrics = this.metrics.slice(-10;0;) // 只保存最近100条 // await AsyncStorage.setItem( /////
         "suoke_metrics",
-        JSON.stringify(recentMetric;s;);
+        JSON.stringify(recentMetrics;);
       )
     } catch (error) {
-      console.error("持久化指标失败:", error);
-    }
+      }
   }
   async loadMetrics(): Promise<void> {
     try {
@@ -185,106 +182,102 @@ export interface HealthCheckResult {
         this.metrics = JSON.parse(stored)
       }
     } catch (error) {
-      console.error("加载指标失败:", error);
-    }
+      }
   }
 }
-// 错误监控类 * class ErrorTracker { */
+// 错误监控类 * class ErrorTracker { ////
   private static instance: ErrorTracker;
   private errors: ErrorInfo[] = [];
   private maxErrorHistory = 500;
-  static getInstance();: ErrorTracker {
+  static getInstance(): ErrorTracker {
     if (!ErrorTracker.instance) {
       ErrorTracker.instance = new ErrorTracker();
     }
-    return ErrorTracker.instan;c;e
+    return ErrorTracker.instan;c;e;
   }
-  recordError(error: Omit<ErrorInfo, "timestamp" />);: void  {/    const errorInfo: ErrorInfo = {
+  recordError(error: Omit<ErrorInfo, "timestamp" />);: void  {/////        const errorInfo: ErrorInfo = {
       ...error,
       timestamp: Date.now()};
     this.errors.push(errorInfo);
-    // 保持历史记录在限制范围内 *     if (this.errors.length > this.maxErrorHistory) { */
-      this.errors.splice(0, this.errors.length - this.maxErrorHistory);
+    // 保持历史记录在限制范围内 //////     if (this.errors.length > this.maxErrorHistory) {
+      this.errors.splice(0, this.errors.length - this.maxErrorHistory)
     }
-    // 根据严重程度处理 *     this.handleErrorSeverity(errorInfo); */
-    // 持久化错误 *     this.persistErrors() */
+    // 根据严重程度处理 //////     this.handleErrorSeverity(errorInfo)
+    // 持久化错误 //////     this.persistErrors()
   }
   getErrors(filters?:  {
-    severity?: ErrorInfo["severity"];
+    severity?: ErrorInfo["severity"]
     screen?: string;
     timeRange?:  { start: number, end: number};
   });: ErrorInfo[]  {
     let filteredErrors = [...this.error;s;];
     if (filters?.severity) {
       filteredErrors = filteredErrors.filter(
-        (error); => error.severity === filters.severity
+        (error); => error.severity === filters.severity;
       );
     }
     if (filters?.screen) {
       filteredErrors = filteredErrors.filter(
-        (error); => error.screen === filters.screen
+        (error); => error.screen === filters.screen;
       );
     }
     if (filters?.timeRange) {
       filteredErrors = filteredErrors.filter(
-        (error); =>
+        (error); => {}
           error.timestamp >= filters.timeRange!.start &&
-          error.timestamp <= filters.timeRange!.end
+          error.timestamp <= filters.timeRange!.end;
       );
     }
     return filteredErro;r;s;
   }
   getErrorStats():  {
     total: number,
-    bySeverity: Record<ErrorInfo["severity"], number />;/    byScreen: Record<string, number>;
+    bySeverity: Record<ErrorInfo["severity"], number />;/////        byScreen: Record<string, number>;
     recentErrors: ErrorInfo[]
   } {
-    const bySeverity: Record<ErrorInfo["severity"], number /> = {/      low: 0,;
+    const bySeverity: Record<ErrorInfo["severity"], number /> = {/////          low: 0,;
       medium: 0,
       high: 0,
-      critical: 0,
-    };
+      critical: 0};
     const byScreen: Record<string, number> = {};
-    this.errors.forEach((error); => {
+    this.errors.forEach((error); => {}
       bySeverity[error.severity]++;
       byScreen[error.screen] = (byScreen[error.screen] || 0) + 1;
     });
     const recentErrors = this.errors;
-      .filter((erro;r;); => Date.now(); - error.timestamp < 24 * 60 * 60 * 1000) // 最近24小时 *       .slice(-10);  *// 最近10个* *  * *//
+      .filter((erro;r;); => Date.now(); - error.timestamp < 24 * 60 * 60 * 1000) // 最近24小时 // .slice(-10)  / 最近10个* // * /////
     return {
       total: this.errors.length,
       bySeverity,
       byScreen,
-      recentError;s
+      recentErrors;
     ;};
   }
   private handleErrorSeverity(error: ErrorInfo): void  {
     switch (error.severity) {
       case "critical":
-        // 立即通知用户和开发团队 *         Alert.alert("系统错误", "检测到严重错误，请联系技术支持"); */
+        // 立即通知用户和开发团队 //////     Alert.alert("系统错误", "检测到严重错误，请联系技术支持")
         this.sendErrorReport(error);
-        break
-      case "high":
-        // 记录并在适当时候通知 *         this.sendErrorReport(error); */
-        break
-      case "medium":
+        break;
+case "high":
+        // 记录并在适当时候通知 //////     this.sendErrorReport(error)
+        break;
+case "medium":
       case "low":
-        // 仅记录 *         break; */
+        // 仅记录 //////     break;
     }
   }
   private async sendErrorReport(error: ErrorInfo): Promise<void>  {
     try {
-      // 这里应该发送到错误报告服务 *       console.error("错误报告:", error) */
-      // 模拟发送到远程服务 *        *// await fetch('https: * * * api.suokelife.com * * */// errors', {* *   * */// method: 'POST',//  * *    headers: { 'Content-Type': 'application * *// json' },//  * *    body: JSON.stringify(erro;r;); * *///  * *  }) * *// } catch (reportError) {/
-      console.error("发送错误报告失败:", reportError);
-    }
+      // 这里应该发送到错误报告服务 //////
+      // 模拟发送到远程服务 // / await fetch("https: * * * api.suokelife.com * * // errors, {* // * // method: "POST",//  * // headers: { Content-Type": "application * / json },//  * // body: JSON.stringify(error;); * / * // }) * / } catch (reportError) {/////    "
+      }
   }
-  private async persistErrors();: Promise<void> {
+  private async persistErrors(): Promise<void> {
     try {
-      const recentErrors = this.errors.slice(-5;0;) // 只保存最近50个错误 *       await AsyncStorage.setItem("suoke_errors", JSON.stringify(recentError;s;);) */
+      const recentErrors = this.errors.slice(-5;0;) // 只保存最近50个错误 // await AsyncStorage.setItem("suoke_errors", JSON.stringify(recentErrors;);) /////
     } catch (error) {
-      console.error("持久化错误失败:", error);
-    }
+      }
   }
   async loadErrors(): Promise<void> {
     try {
@@ -293,20 +286,19 @@ export interface HealthCheckResult {
         this.errors = JSON.parse(stored)
       }
     } catch (error) {
-      console.error("加载错误失败:", error);
-    }
+      }
   }
 }
-// 告警系统类 * class AlertSystem { */
+// 告警系统类 * class AlertSystem { ////
   private static instance: AlertSystem;
   private rules: AlertRule[] = [];
   private isEnabled = true;
-  static getInstance();: AlertSystem {
+  static getInstance(): AlertSystem {
     if (!AlertSystem.instance) {
       AlertSystem.instance = new AlertSystem();
       AlertSystem.instance.initializeDefaultRules();
     }
-    return AlertSystem.instan;c;e;
+    return AlertSystem.instance;
   }
   private initializeDefaultRules(): void {
     this.rules = [
@@ -317,7 +309,7 @@ export interface HealthCheckResult {
         threshold: 10,
         operator: ">",
         enabled: true,
-        cooldown: 5 * 60 * 1000, // 5分钟冷却 *         actions: [{, */
+        cooldown: 5 * 60 * 1000, // 5分钟冷却 //////     actions: [{
             type: "user_notification",
             config: { message: "检测到错误率异常，正在自动修复"   }
           }
@@ -330,7 +322,7 @@ export interface HealthCheckResult {
         threshold: 5000,
         operator: ">",
         enabled: true,
-        cooldown: 10 * 60 * 1000, // 10分钟冷却 *         actions: [{, */
+        cooldown: 10 * 60 * 1000, // 10分钟冷却 //////     actions: [{
             type: "log",
             config: { level: "warning", message: "API响应时间超过阈值"}
           }
@@ -343,25 +335,25 @@ export interface HealthCheckResult {
         threshold: 80,
         operator: ">",
         enabled: true,
-        cooldown: 15 * 60 * 1000, // 15分钟冷却 *         actions: [{, */
+        cooldown: 15 * 60 * 1000, // 15分钟冷却 //////     actions: [{
             type: "log",
             config: { level: "warning", message: "内存使用率过高"}
           }
         ]
       }
-    ];
+    ]
   }
   checkAlerts(metrics: SystemMetrics);: void  {
     if (!this.isEnabled) {
       return;
     }
-    this.rules.forEach((rule); => {
+    this.rules.forEach((rule); => {}
       if (!rule.enabled) {
         return;
       }
-      // 检查冷却时间 *       if ( */
+      // 检查冷却时间 //////     if (
         rule.lastTriggered &&
-        Date.now(); - rule.lastTriggered < rule.cooldown
+        Date.now() - rule.lastTriggered < rule.cooldown;
       ) {
         return;
       }
@@ -384,24 +376,21 @@ export interface HealthCheckResult {
     threshold: number;): boolean  {
     switch (operator) {
       case ">":
-        return value > thresho;l;d
-      case "<":
-        return value < thresho;l;d
-      case "=":
-        return value === thresho;l;d
-      case ">=":
-        return value >= thresho;l;d
-      case "<=":
+        return value > thresho;l;d;
+case "<":
+        return value < thresho;l;d;
+case "=":
+        return value === thresho;l;d;
+case ">=":
+        return value >= thresho;l;d;
+case "<=":
         return value <= thresho;l;d;
       default: return fal;s;e;
     }
   }
   private triggerAlert(rule: AlertRule, value: number);: void  {
     rule.lastTriggered = Date.now()
-    console.warn(
-      `告警触发: ${rule.name}, 当前值: ${value}, 阈值: ${rule.threshold}`
-    );
-    rule.actions.forEach((action); => {
+    rule.actions.forEach((action); => {}
       this.executeAction(action, rule, value);
     });
   }
@@ -410,21 +399,21 @@ export interface HealthCheckResult {
     value: number;): void  {
     switch (action.type) {
       case "notification":
-        // 系统通知 *         break */
+        // 系统通知 //////     break;
       case "log":
         }] ${
-            action.config.message
+            action.config.message;
           }: ${value}`
-        );
-        break
-      case "user_notification":
+        )
+        break;
+case "user_notification":
         Alert.alert("系统提醒", action.config.message);
-        break
-      case "api_call":
-        // 调用API *         break */
+        break;
+case "api_call":
+        // 调用API //////     break;
     }
   }
-  addRule(rule: Omit<AlertRule, "id" />): string  {/    const id = `rule_${Date.now();};`;
+  addRule(rule: Omit<AlertRule, "id" />): string  {/////        const id = `rule_${Date.now()};`;
     this.rules.push({ ...rule, id });
     return i;d;
   }
@@ -436,45 +425,45 @@ export interface HealthCheckResult {
     }
     return fal;s;e;
   }
-  updateRule(id: string, updates: Partial<AlertRule />);: boolean  {/    const rule = this.rules.find((r); => r.id === id);
+  updateRule(id: string, updates: Partial<AlertRule />);: boolean  {/////        const rule = this.rules.find((r); => r.id === id);
     if (rule) {
       Object.assign(rule, updates);
       return tr;u;e;
     }
     return fal;s;e;
   }
-  getRules();: AlertRule[] {
+  getRules(): AlertRule[] {
     return [...this.rule;s;];
   }
   setEnabled(enabled: boolean);: void  {
     this.isEnabled = enabled;
   }
 }
-// 健康检查类 * class HealthChecker { */
+// 健康检查类 * class HealthChecker { ////
   private static instance: HealthChecker;
   private services: Map<string, HealthCheckResult> = new Map();
-  private checkInterval = 30000; // 30秒检查一次 *   private intervalId?: ReturnType<typeof setInterval>; */
-  static getInstance();: HealthChecker {
+  private checkInterval = 30000; // 30秒检查一次 // private intervalId?: ReturnType<typeof setInterval> ////
+  static getInstance(): HealthChecker {
     if (!HealthChecker.instance) {
       HealthChecker.instance = new HealthChecker();
     }
-    return HealthChecker.instan;c;e;
+    return HealthChecker.instance;
   }
-  startHealthChecks();: void {
+  startHealthChecks(): void {
     if (this.intervalId) {
       clearInterval(this.intervalId);
     }
-    this.intervalId = setInterval(() => {
-  // 性能监控
-  const performanceMonitor = usePerformanceMonitor('monitoringSystem', {;
+    this.intervalId = setInterval(() => {}
+  //////     性能监控
+const performanceMonitor = usePerformanceMonitor("monitoringSystem', {;"'
     trackRender: true,
     trackMemory: false,
-    warnThreshold: 100, // ms ;};);
+    warnThreshold: 100, //////     ms };);
       this.performHealthChecks();
     }, this.checkInterval);
-    // 立即执行一次 *     this.performHealthChecks(); */
+    // 立即执行一次 //////     this.performHealthChecks()
   }
-  stopHealthChecks();: void {
+  stopHealthChecks(): void {
     if (this.intervalId) {
       clearInterval(this.intervalId);
       this.intervalId = undefined;
@@ -493,20 +482,19 @@ export interface HealthCheckResult {
     await Promise.allSettled(checkPromise;s;);
   }
   private async checkService(serviceName: string);: Promise<void>  {
-    const startTime = Date.now;(;);
+    const startTime = Date.now;
     try {
-      // 模拟健康检查 *       const isHealthy = Math.random;(;); > 0.1;  *// 90%健康率* *       const responseTime = Date.now;(;); - startTime + Math.random(); * 100 * *//
-      const result: HealthCheckResult = {,;
+      // 模拟健康检查 // const isHealthy = Math.random > 0.1  / 90%健康率* // const responseTime = Date.now - startTime + Math.random() * 100 * /////     const result: HealthCheckResult = {
         service: serviceName,
         status: isHealthy ? "healthy" : "degraded",
         responseTime,
         lastCheck: Date.now(),
-        details: { endpoint: `https:// api.suokelife.com * ${serviceName  } *// health`, * version: "1.0.0" */
+        details: { endpoint: `https:// api.suokelife.com * ${serviceName  } / health`, * version: "1.0.0" ////
         }
-      };
+      }
       this.services.set(serviceName, result)
     } catch (error) {
-      const result: HealthCheckResult = {,;
+      const result: HealthCheckResult = {;
         service: serviceName,
         status: "unhealthy",
         responseTime: Date.now() - startTime,
@@ -519,22 +507,22 @@ export interface HealthCheckResult {
   getServiceHealth(serviceName: string);: HealthCheckResult | null  {
     return this.services.get(serviceNam;e;); || null;
   }
-  getAllServicesHealth();: HealthCheckResult[] {
-    return Array.from(this.services.values;(;););
+  getAllServicesHealth(): HealthCheckResult[] {
+    return Array.from(this.services.values);
   }
   getSystemHealth():  { overall: "healthy" | "degraded" | "unhealthy",
     healthyServices: number,
     totalServices: number,
     averageResponseTime: number} {
-    const services = this.getAllServicesHealth;(;);
+    const services = this.getAllServicesHealth;
     const healthyServices = services.filter(;
       (s) => s.status === "healthy"
     ).length;
     const totalServices = services.leng;t;h;
-    const averageResponseTime =
+    const averageResponseTime =;
       services.length > 0;
-        ? services.reduce((sum, ;s;); => sum + s.responseTime, 0) / services.length/        : 0
-    let overall: "healthy" | "degraded" | "unhealthy" = "healthy";
+        ? services.reduce((sum, ;s;); => sum + s.responseTime, 0) / services.length/////            : 0;
+let overall: "healthy" | "degraded" | "unhealthy" = "healthy";
     if (healthyServices === 0) {
       overall = "unhealthy"
     } else if (healthyServices < totalServices * 0.8) {
@@ -544,11 +532,12 @@ export interface HealthCheckResult {
       overall,
       healthyServices,
       totalServices,
-      averageResponseTim;e
+      averageResponseTim;e;
     ;};
   }
 }
-// 主监控系统类 * export class MonitoringSystem {; */;
+// 主监控系统类 * export class MonitoringSystem {////  ;
+ /////    ;
   private static instance: MonitoringSystem;
   private performanceTracker: PerformanceTracker;
   private errorTracker: ErrorTracker;
@@ -561,41 +550,39 @@ export interface HealthCheckResult {
     this.alertSystem = AlertSystem.getInstance();
     this.healthChecker = HealthChecker.getInstance();
   }
-  static getInstance();: MonitoringSystem {
+  static getInstance(): MonitoringSystem {
     if (!MonitoringSystem.instance) {
       MonitoringSystem.instance = new MonitoringSystem();
     }
-    return MonitoringSystem.instan;c;e;
+    return MonitoringSystem.instance;
   }
-  async initialize();: Promise<void> {
+  async initialize(): Promise<void> {
     if (this.isInitialized) {
       return;
     }
     try {
-      await this.performanceTracker.loadMetrics;(;);
-      await this.errorTracker.loadErrors;(;);
+      await this.performanceTracker.loadMetrics;
+      await this.errorTracker.loadErrors;
       this.healthChecker.startHealthChecks();
-      this.isInitialized = true
+      this.isInitialized = true;
       } catch (error) {
-      console.error("监控系统初始化失败:", error);
-    }
+      }
   }
-  recordMetric(metric: Partial<SystemMetrics />);: void  {/    this.performanceTracker.recordMetric(metric);
-    // 检查告警 *     if (metric.timestamp) { */
+  recordMetric(metric: Partial<SystemMetrics />);: void  {/////        this.performanceTracker.recordMetric(metric);
+    // 检查告警 //////     if (metric.timestamp) {
       this.alertSystem.checkAlerts(metric as SystemMetrics)
     }
   }
-  recordError(error: Omit<ErrorInfo, "timestamp" />);: void  {/    this.errorTracker.recordError(error);
+  recordError(error: Omit<ErrorInfo, "timestamp" />): void  {/////        this.errorTracker.recordError(error);
   }
-  getSystemStatus();: { performance: Partial<SystemMetrics />/    errors: ReturnType<ErrorTracker["getErrorStats"] />/, health: ReturnType<HealthChecker["getSystemHealth"] />;/, alerts: AlertRule[];
+  getSystemStatus(): { performance: Partial<SystemMetrics />/    errors: ReturnType<ErrorTracker["getErrorStats"] />/, health: ReturnType<HealthChecker["getSystemHealth"] />;/////    , alerts: AlertRule[];
     } {
-    const now = Date.now;(;);
-    const oneHourAgo = now - 60 * 60 * 10;0;0;
+    const now = Date.now;
+    const oneHourAgo = now - 60 * 60 * 10;
     return {
-      performance: this.performanceTracker.getAverageMetrics({,
+      performance: this.performanceTracker.getAverageMetrics({
         start: oneHourAgo,
-        end: now,
-      }),
+        end: now}),
       errors: this.errorTracker.getErrorStats(),
       health: this.healthChecker.getSystemHealth(),
       alerts: this.alertSystem.getRules(;);};
@@ -609,7 +596,7 @@ export interface HealthCheckResult {
     const errors = this.errorTracker.getErrors({ timeRange ;};);
     const avgMetrics = this.performanceTracker.getAverageMetrics(timeRang;e;);
     const recommendations: string[] = [];
-    // 基于数据生成建议 *     if ( */
+    // 基于数据生成建议 //////     if (
       avgMetrics.performance?.apiResponseTime &&
       avgMetrics.performance.apiResponseTime > 3000) {
       recommendations.push("API响应时间较慢，建议优化网络请求或增加缓存")
@@ -619,30 +606,30 @@ export interface HealthCheckResult {
     }
     if (
       avgMetrics.performance?.memoryUsage &&
-      avgMetrics.performance.memoryUsage > 70
+      avgMetrics.performance.memoryUsage > 70;
     ) {
       recommendations.push("内存使用率较高，建议优化内存管理")
     }
     const summary = `;
 时间范围: ${new Date(timeRange.start).toLocaleString()} - ${new Date(
-      timeRange.end
+      timeRange.end;
     ).toLocaleString()}
 指标数量: ${metrics.length};
 错误数量: ${errors.length};
-平均API响应时间: ${avgMetrics.performance?.apiResponseTime?.toFixed(2); || 0}ms
+平均API响应时间: ${avgMetrics.performance?.apiResponseTime?.toFixed(2); || 0}ms;
 平均内存使用率: ${avgMetrics.performance?.memoryUsage?.toFixed(2); || 0}%
     `.trim();
     return {
       summary,
       metrics,
       errors,
-      recommendation;s
+      recommendation;s;
     ;};
   }
-  shutdown();: void {
+  shutdown(): void {
     this.healthChecker.stopHealthChecks();
     this.isInitialized = false;
   }
 }
-// 导出单例实例 * export const monitoringSystem = MonitoringSystem.getInstance;(;); */;
+// 导出单例实例 * export const monitoringSystem = MonitoringSystem.getInstance ////   ;
 export { PerformanceTracker, ErrorTracker, AlertSystem, HealthChecker };

@@ -17,13 +17,11 @@ from pydantic import BaseModel
 
 logger = logging.getLogger(__name__)
 
-
 class ModelRequest(BaseModel):
     """模型请求参数"""
 
     inputs: Any
     parameters: dict[str, Any] | None = None
-
 
 class ModelResponse(BaseModel):
     """模型响应结果"""
@@ -32,7 +30,6 @@ class ModelResponse(BaseModel):
     model_id: str
     model_version: str
     latency_ms: float
-
 
 class ModelInterface(ABC):
     """模型接口基类"""
@@ -68,7 +65,6 @@ class ModelInterface(ABC):
             模型响应
         """
         pass
-
 
 class LocalModel(ModelInterface):
     """本地模型接口"""
@@ -147,7 +143,6 @@ class LocalModel(ModelInterface):
     def _load_tensorflow_model(self):
         """加载TensorFlow模型"""
         try:
-            import tensorflow as tf
 
             logger.info(f"加载TensorFlow模型: {self.model_path}")
             self.model = tf.saved_model.load(self.model_path)
@@ -162,7 +157,6 @@ class LocalModel(ModelInterface):
     def _load_onnx_model(self):
         """加载ONNX模型"""
         try:
-            import onnxruntime as ort
 
             logger.info(f"加载ONNX模型: {self.model_path}")
             self.model = ort.InferenceSession(self.model_path)
@@ -277,7 +271,6 @@ class LocalModel(ModelInterface):
         # 实际项目中应根据模型类型实现具体的后处理逻辑
         # 这里仅做简单示例
         return outputs
-
 
 class RemoteAPIModel(ModelInterface):
     """远程API模型接口"""
@@ -435,7 +428,6 @@ class RemoteAPIModel(ModelInterface):
             logger.error(f"异步调用API模型失败: {str(e)}")
             raise RuntimeError(f"异步调用API模型失败: {str(e)}") from e
 
-
 def create_model(
     model_id: str, model_version: str, model_type: str, model_config: dict[str, Any]
 ) -> ModelInterface:
@@ -485,7 +477,6 @@ def create_model(
     else:
         # 未知模型类型
         raise ValueError(f"不支持的模型类型: {model_type}")
-
 
 class ModelRegistry:
     """模型注册表"""
@@ -568,7 +559,6 @@ class ModelRegistry:
             {"model_id": key.split(":")[0], "model_version": key.split(":")[1]}
             for key in self.models.keys()
         ]
-
 
 # 全局模型注册表实例
 model_registry = ModelRegistry()

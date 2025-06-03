@@ -8,12 +8,10 @@
 import logging
 from typing import Any
 
-import numpy as np
 import pywt
 from scipy import signal
 
 logger = logging.getLogger(__name__)
-
 
 class PulseProcessor:
     """脉诊信号处理器，负责脉搏波形的处理和分析"""

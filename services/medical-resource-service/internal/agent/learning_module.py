@@ -15,12 +15,9 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import joblib
-import numpy as np
-import pandas as pd
 from sklearn.cluster import DBSCAN, KMeans
 from sklearn.decomposition import PCA
 from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
-from sklearn.feature_selection import RFE, SelectKBest, f_classif
 from sklearn.linear_model import LogisticRegression, SGDClassifier
 from sklearn.metrics import (
     accuracy_score,
@@ -33,14 +30,12 @@ from sklearn.metrics import (
 )
 from sklearn.model_selection import GridSearchCV, cross_val_score, train_test_split
 from sklearn.neural_network import MLPClassifier
-from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, MinMaxScaler, StandardScaler
 from sklearn.svm import SVC
 
 from ..domain.models import ConstitutionType, ResourceType
 
 logger = logging.getLogger(__name__)
-
 
 class LearningType(Enum):
     """学习类型"""
@@ -54,7 +49,6 @@ class LearningType(Enum):
     ACTIVE = "active"  # 主动学习
     FEDERATED = "federated"  # 联邦学习
     META = "meta"  # 元学习
-
 
 class ModelType(Enum):
     """模型类型"""
@@ -72,7 +66,6 @@ class ModelType(Enum):
     OUTCOME_PREDICTOR = "outcome_predictor"
     RESOURCE_UTILIZATION = "resource_utilization"
 
-
 class AlgorithmType(Enum):
     """算法类型"""
 
@@ -89,7 +82,6 @@ class AlgorithmType(Enum):
     ENSEMBLE = "ensemble"
     DEEP_LEARNING = "deep_learning"
 
-
 class FeatureType(Enum):
     """特征类型"""
 
@@ -102,7 +94,6 @@ class FeatureType(Enum):
     ECONOMIC = "economic"  # 经济特征
     GENETIC = "genetic"  # 遗传特征
 
-
 class DataQuality(Enum):
     """数据质量等级"""
 
@@ -111,7 +102,6 @@ class DataQuality(Enum):
     FAIR = "fair"  # 一般 (70-85%)
     POOR = "poor"  # 较差 (50-70%)
     UNUSABLE = "unusable"  # 不可用 (<50%)
-
 
 @dataclass
 class LearningMetrics:
@@ -136,7 +126,6 @@ class LearningMetrics:
     validation_curve: Optional[List[float]] = None
     timestamp: datetime = field(default_factory=datetime.now)
 
-
 @dataclass
 class LearningData:
     """学习数据"""
@@ -154,7 +143,6 @@ class LearningData:
     preprocessing_steps: List[str] = field(default_factory=list)
     outliers_removed: int = 0
     missing_values_handled: int = 0
-
 
 @dataclass
 class ModelPerformance:
@@ -176,7 +164,6 @@ class ModelPerformance:
     fairness_metrics: Dict[str, float] = field(default_factory=dict)
     last_updated: datetime = field(default_factory=datetime.now)
 
-
 @dataclass
 class LearningTask:
     """学习任务"""
@@ -196,7 +183,6 @@ class LearningTask:
     progress: float = 0.0
     estimated_duration: Optional[timedelta] = None
 
-
 @dataclass
 class FeatureEngineering:
     """特征工程配置"""
@@ -210,7 +196,6 @@ class FeatureEngineering:
     temporal_features: bool
     custom_transformations: List[str]
 
-
 @dataclass
 class ModelEnsemble:
     """模型集成"""
@@ -221,7 +206,6 @@ class ModelEnsemble:
     weights: List[float]
     meta_learner: Optional[str] = None
     performance: Optional[ModelPerformance] = None
-
 
 class LearningModule:
     """

@@ -2,7 +2,6 @@
 医疗资源服务REST API处理器
 """
 
-import json
 import logging
 from datetime import datetime
 from typing import Any, Dict, List, Optional
@@ -27,7 +26,6 @@ logger = logging.getLogger(__name__)
 # 路由器
 router = APIRouter()
 
-
 # 请求/响应模型
 class SearchRequest(BaseModel):
     """搜索请求"""
@@ -37,7 +35,6 @@ class SearchRequest(BaseModel):
     constitution: Optional[str] = Field(None, description="体质类型")
     limit: int = Field(20, description="返回结果数量")
 
-
 class TreatmentRecommendationRequest(BaseModel):
     """治疗推荐请求"""
 
@@ -45,7 +42,6 @@ class TreatmentRecommendationRequest(BaseModel):
     symptoms: List[str] = Field(..., description="症状列表")
     syndrome: Optional[str] = Field(None, description="证候")
     severity: Optional[str] = Field("moderate", description="严重程度")
-
 
 class FoodRecommendationRequest(BaseModel):
     """食疗推荐请求"""
@@ -57,7 +53,6 @@ class FoodRecommendationRequest(BaseModel):
         default_factory=list, description="饮食限制"
     )
 
-
 class WellnessRecommendationRequest(BaseModel):
     """养生推荐请求"""
 
@@ -65,7 +60,6 @@ class WellnessRecommendationRequest(BaseModel):
     wellness_type: Optional[str] = Field(None, description="养生类型")
     location_preference: Optional[str] = Field(None, description="地点偏好")
     duration: Optional[int] = Field(None, description="时长（天）")
-
 
 class ResourceSchedulingRequest(BaseModel):
     """资源调度请求"""
@@ -79,14 +73,12 @@ class ResourceSchedulingRequest(BaseModel):
         default_factory=list, description="特殊要求"
     )
 
-
 class AgentQueryRequest(BaseModel):
     """智能体查询请求"""
 
     user_id: str = Field(..., description="用户ID")
     query: str = Field(..., description="查询内容")
     context: Dict[str, Any] = Field(default_factory=dict, description="上下文信息")
-
 
 class AppointmentRequest(BaseModel):
     """预约请求"""
@@ -99,7 +91,6 @@ class AppointmentRequest(BaseModel):
     symptoms: List[str] = Field(default_factory=list, description="症状描述")
     special_requirements: Optional[str] = Field(None, description="特殊要求")
 
-
 class HealthAssessmentRequest(BaseModel):
     """健康评估请求"""
 
@@ -111,9 +102,7 @@ class HealthAssessmentRequest(BaseModel):
     medical_history: Dict[str, Any] = Field(default_factory=dict, description="病史")
     preferences: Dict[str, Any] = Field(default_factory=dict, description="偏好设置")
 
-
 # API端点
-
 
 @router.get("/health")
 async def health_check():
@@ -138,7 +127,6 @@ async def health_check():
             "error": str(e),
         }
 
-
 @router.get("/agent/status")
 async def get_agent_status():
     """获取智能体状态"""
@@ -149,7 +137,6 @@ async def get_agent_status():
     except Exception as e:
         logger.error(f"获取智能体状态失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @router.post("/agent/query")
 async def query_agent(request: AgentQueryRequest):
@@ -163,7 +150,6 @@ async def query_agent(request: AgentQueryRequest):
     except Exception as e:
         logger.error(f"智能体查询失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @router.post("/tcm/search")
 async def search_tcm_knowledge(request: SearchRequest):
@@ -197,7 +183,6 @@ async def search_tcm_knowledge(request: SearchRequest):
         logger.error(f"搜索中医知识失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @router.get("/tcm/formula/{formula_id}")
 async def get_formula_details(formula_id: str = Path(..., description="方剂ID")):
     """获取方剂详情"""
@@ -213,7 +198,6 @@ async def get_formula_details(formula_id: str = Path(..., description="方剂ID"
     except Exception as e:
         logger.error(f"获取方剂详情失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @router.get("/tcm/herb/{herb_id}")
 async def get_herb_details(
@@ -233,7 +217,6 @@ async def get_herb_details(
         logger.error(f"获取中药详情失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @router.get("/tcm/acupoint/{acupoint_id}")
 async def get_acupoint_details(
     acupoint_id: str = Path(..., description="穴位ID"),
@@ -251,7 +234,6 @@ async def get_acupoint_details(
     except Exception as e:
         logger.error(f"获取穴位详情失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @router.post("/tcm/recommend")
 async def recommend_treatment(request: TreatmentRecommendationRequest):
@@ -281,7 +263,6 @@ async def recommend_treatment(request: TreatmentRecommendationRequest):
         logger.error(f"推荐治疗方案失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @router.get("/tcm/statistics")
 async def get_tcm_statistics(
     tcm_service: TCMKnowledgeService = Depends(get_tcm_service),
@@ -293,7 +274,6 @@ async def get_tcm_statistics(
     except Exception as e:
         logger.error(f"获取统计信息失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @router.post("/food/recommend")
 async def recommend_food_therapy(request: FoodRecommendationRequest):
@@ -322,7 +302,6 @@ async def recommend_food_therapy(request: FoodRecommendationRequest):
     except Exception as e:
         logger.error(f"推荐食疗方案失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @router.get("/food/seasonal")
 async def get_seasonal_foods(
@@ -353,7 +332,6 @@ async def get_seasonal_foods(
         logger.error(f"获取季节性食材失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @router.get("/food/nutrition/{food_id}")
 async def get_nutrition_analysis(
     food_id: str = Path(..., description="食物ID"),
@@ -371,7 +349,6 @@ async def get_nutrition_analysis(
     except Exception as e:
         logger.error(f"获取营养分析失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @router.post("/wellness/recommend")
 async def recommend_wellness_tourism(request: WellnessRecommendationRequest):
@@ -401,7 +378,6 @@ async def recommend_wellness_tourism(request: WellnessRecommendationRequest):
         logger.error(f"推荐养生旅游失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @router.get("/wellness/destinations")
 async def get_wellness_destinations(
     wellness_type: Optional[str] = Query(None, description="养生类型"),
@@ -422,7 +398,6 @@ async def get_wellness_destinations(
         logger.error(f"获取养生目的地失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @router.get("/wellness/destination/{destination_id}")
 async def get_destination_details(
     destination_id: str = Path(..., description="目的地ID"),
@@ -440,7 +415,6 @@ async def get_destination_details(
     except Exception as e:
         logger.error(f"获取目的地详情失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @router.post("/resource/schedule")
 async def schedule_resource(request: ResourceSchedulingRequest):
@@ -471,7 +445,6 @@ async def schedule_resource(request: ResourceSchedulingRequest):
         logger.error(f"资源调度失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @router.get("/resource/status")
 async def get_resource_status(
     resource_type: Optional[str] = Query(None, description="资源类型"),
@@ -497,7 +470,6 @@ async def get_resource_status(
         logger.error(f"获取资源状态失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @router.get("/resource/queue")
 async def get_scheduling_queue(
     scheduler: ResourceScheduler = Depends(get_scheduler_service),
@@ -510,7 +482,6 @@ async def get_scheduling_queue(
     except Exception as e:
         logger.error(f"获取调度队列失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @router.post("/appointments")
 async def create_appointment(request: AppointmentRequest):
@@ -543,7 +514,6 @@ async def create_appointment(request: AppointmentRequest):
         logger.error(f"创建预约失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @router.get("/appointments/{user_id}")
 async def get_user_appointments(
     user_id: str = Path(..., description="用户ID"),
@@ -562,7 +532,6 @@ async def get_user_appointments(
     except Exception as e:
         logger.error(f"获取用户预约失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @router.post("/health/assessment")
 async def create_health_assessment(request: HealthAssessmentRequest):
@@ -584,7 +553,6 @@ async def create_health_assessment(request: HealthAssessmentRequest):
     except Exception as e:
         logger.error(f"创建健康评估失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @router.get("/resources")
 async def search_resources(
@@ -632,7 +600,6 @@ async def search_resources(
         logger.error(f"搜索医疗资源失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @router.get("/statistics")
 async def get_service_statistics():
     """获取服务统计信息"""
@@ -644,7 +611,6 @@ async def get_service_statistics():
     except Exception as e:
         logger.error(f"获取服务统计失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-
 
 # 异常处理器
 @router.exception_handler(HTTPException)
@@ -661,7 +627,6 @@ async def http_exception_handler(request, exc):
             },
         },
     )
-
 
 @router.exception_handler(Exception)
 async def general_exception_handler(request, exc):

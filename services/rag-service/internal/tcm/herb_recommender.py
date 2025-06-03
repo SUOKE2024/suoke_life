@@ -10,7 +10,6 @@ import asyncio
 from typing import Dict, List, Any, Optional, Tuple, Set
 from dataclasses import dataclass, field
 from enum import Enum
-import json
 from loguru import logger
 
 from .tcm_models import (
@@ -19,7 +18,6 @@ from .tcm_models import (
 )
 from ..observability.metrics import MetricsCollector
 
-
 class RecommendationType(str, Enum):
     """推荐类型"""
     FORMULA = "formula"              # 方剂推荐
@@ -27,14 +25,12 @@ class RecommendationType(str, Enum):
     COMBINATION = "combination"      # 组合推荐
     MODIFICATION = "modification"    # 加减推荐
 
-
 class SafetyLevel(str, Enum):
     """安全等级"""
     SAFE = "safe"                    # 安全
     CAUTION = "caution"              # 谨慎使用
     WARNING = "warning"              # 警告
     CONTRAINDICATED = "contraindicated"  # 禁忌
-
 
 @dataclass
 class HerbData:
@@ -53,7 +49,6 @@ class HerbData:
     drug_interactions: List[str] = field(default_factory=list)
     special_populations: Dict[str, str] = field(default_factory=dict)  # 特殊人群用药
 
-
 @dataclass
 class FormulaData:
     """方剂数据"""
@@ -70,7 +65,6 @@ class FormulaData:
     contraindications: List[str] = field(default_factory=list)
     precautions: List[str] = field(default_factory=list)
 
-
 @dataclass
 class RecommendationResult:
     """推荐结果"""
@@ -86,7 +80,6 @@ class RecommendationResult:
     monitoring_suggestions: List[str] = field(default_factory=list)
     confidence_score: float = 0.0
     reasoning: str = ""
-
 
 class HerbDatabase:
     """中药数据库"""
@@ -255,7 +248,6 @@ class HerbDatabase:
             }
         }
 
-
 class SyndromeFormulaMapper:
     """证型-方剂映射器"""
     
@@ -278,7 +270,6 @@ class SyndromeFormulaMapper:
     def get_formulas_for_syndrome(self, syndrome_type: SyndromeType) -> List[str]:
         """获取证型对应的方剂"""
         return self.syndrome_formula_map.get(syndrome_type, [])
-
 
 class CompatibilityChecker:
     """配伍检查器"""
@@ -313,7 +304,6 @@ class CompatibilityChecker:
                 warnings.append(f"十九畏：{herb1}与{herb2}相畏，慎重同用")
         
         return is_safe, warnings
-
 
 class SafetyChecker:
     """安全性检查器"""
@@ -387,7 +377,6 @@ class SafetyChecker:
                         safety_level = SafetyLevel.CONTRAINDICATED
         
         return safety_level, warnings
-
 
 class PersonalizationEngine:
     """个性化引擎"""
@@ -527,7 +516,6 @@ class PersonalizationEngine:
                 adjustments[herb] = 0.8
         
         return adjustments
-
 
 class HerbRecommender:
     """中药推荐器"""

@@ -6,8 +6,6 @@ XiaoAI Agent Server Module
 提供小艾智能体的服务器启动和管理功能。
 """
 
-from __future__ import annotations
-
 import signal
 import sys
 from pathlib import Path
@@ -16,7 +14,6 @@ import uvicorn
 from loguru import logger
 
 from xiaoai.config.dynamic_config_manager import DynamicConfigManager
-
 
 def run_server(
     host: str = "0.0.0.0",
@@ -82,7 +79,6 @@ def run_server(
     except Exception as e:
         logger.error(f"服务器启动失败: {e}")
         sys.exit(1)
-
 
 if __name__ == "__main__":
     run_server()

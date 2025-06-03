@@ -7,7 +7,6 @@
 """
 
 import asyncio
-import json
 import logging
 import time
 from dataclasses import dataclass, field
@@ -15,7 +14,6 @@ from enum import Enum
 from typing import Any, Dict, List, Optional, Set, Callable, Union
 from collections import defaultdict, deque
 import threading
-from datetime import datetime, timedelta
 
 try:
     from prometheus_client import Counter, Histogram, Gauge, Summary, CollectorRegistry, generate_latest
@@ -25,17 +23,12 @@ except ImportError:
     logger.warning("Prometheus client not available, metrics will be limited")
 
 try:
-    from opentelemetry import trace, metrics
-    from opentelemetry.exporter.prometheus import PrometheusMetricReader
-    from opentelemetry.sdk.metrics import MeterProvider
-    from opentelemetry.sdk.trace import TracerProvider
     OPENTELEMETRY_AVAILABLE = True
 except ImportError:
     OPENTELEMETRY_AVAILABLE = False
     logger.warning("OpenTelemetry not available, distributed tracing will be disabled")
 
 logger = logging.getLogger(__name__)
-
 
 class MetricType(Enum):
     """指标类型"""
@@ -44,14 +37,12 @@ class MetricType(Enum):
     HISTOGRAM = "histogram"
     SUMMARY = "summary"
 
-
 class AlertLevel(Enum):
     """告警级别"""
     INFO = "info"
     WARNING = "warning"
     ERROR = "error"
     CRITICAL = "critical"
-
 
 @dataclass
 class MetricConfig:
@@ -77,7 +68,6 @@ class MetricConfig:
     # 自定义指标
     custom_metrics: List[Dict[str, Any]] = field(default_factory=list)
 
-
 @dataclass
 class MetricPoint:
     """指标数据点"""
@@ -96,7 +86,6 @@ class MetricPoint:
             'labels': self.labels,
             'type': self.metric_type.value
         }
-
 
 @dataclass
 class Alert:
@@ -128,7 +117,6 @@ class Alert:
             'resolved': self.resolved,
             'resolved_at': self.resolved_at
         }
-
 
 class MetricCollector:
     """指标收集器"""
@@ -189,7 +177,6 @@ class MetricCollector:
         index = int(len(values) * percentile / 100)
         return values[min(index, len(values) - 1)]
 
-
 class MessageBusMetrics:
     """消息总线专用指标"""
     
@@ -236,7 +223,6 @@ class MessageBusMetrics:
         self.active_connections = MetricCollector("active_connections")
         self.queue_depth = MetricCollector("queue_depth")
         self.circuit_breaker_state = MetricCollector("circuit_breaker_state")
-
 
 class PrometheusExporter:
     """Prometheus指标导出器"""
@@ -327,7 +313,6 @@ class PrometheusExporter:
             return ""
         
         return generate_latest(self.registry).decode('utf-8')
-
 
 class AlertManager:
     """告警管理器"""
@@ -421,7 +406,6 @@ class AlertManager:
         with self._lock:
             return list(self.alert_history)[-limit:]
 
-
 class PerformanceAnalyzer:
     """性能分析器"""
     
@@ -484,7 +468,6 @@ class PerformanceAnalyzer:
         # 按持续时间排序
         slow_ops.sort(key=lambda x: x['duration'], reverse=True)
         return slow_ops[:limit]
-
 
 class EnhancedMetricsCollector:
     """
@@ -758,7 +741,6 @@ class EnhancedMetricsCollector:
         if name not in self.custom_collectors:
             self.custom_collectors[name] = MetricCollector(name)
         return self.custom_collectors[name]
-
 
 # 监控系统工厂
 class MetricsFactory:

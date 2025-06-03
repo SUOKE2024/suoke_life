@@ -7,8 +7,6 @@
 import logging
 from typing import Optional
 
-import motor.motor_asyncio
-import redis.asyncio as redis
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from ..config.settings import get_settings
@@ -21,7 +19,6 @@ mongodb_database: motor.motor_asyncio.AsyncIOMotorDatabase | None = None
 redis_client: redis.Redis | None = None
 postgres_engine: Optional = None
 postgres_session_factory: async_sessionmaker | None = None
-
 
 async def init_database() -> None:
     """初始化数据库连接"""
@@ -38,7 +35,6 @@ async def init_database() -> None:
         await init_postgres(settings.postgres_url)
 
     logger.info("数据库连接初始化完成")
-
 
 async def close_database() -> None:
     """关闭数据库连接"""
@@ -62,7 +58,6 @@ async def close_database() -> None:
         postgres_engine = None
         logger.info("PostgreSQL 连接已关闭")
 
-
 async def init_mongodb(url: str, database_name: str) -> None:
     """
     初始化 MongoDB 连接
@@ -85,7 +80,6 @@ async def init_mongodb(url: str, database_name: str) -> None:
         logger.error(f"MongoDB 连接失败: {e}")
         raise
 
-
 async def init_redis(url: str) -> None:
     """
     初始化 Redis 连接
@@ -105,7 +99,6 @@ async def init_redis(url: str) -> None:
     except Exception as e:
         logger.error(f"Redis 连接失败: {e}")
         raise
-
 
 async def init_postgres(url: str) -> None:
     """
@@ -141,7 +134,6 @@ async def init_postgres(url: str) -> None:
         logger.error(f"PostgreSQL 连接失败: {e}")
         raise
 
-
 def get_mongodb() -> motor.motor_asyncio.AsyncIOMotorDatabase:
     """
     获取 MongoDB 数据库实例
@@ -152,7 +144,6 @@ def get_mongodb() -> motor.motor_asyncio.AsyncIOMotorDatabase:
     if mongodb_database is None:
         raise RuntimeError("MongoDB 未初始化")
     return mongodb_database
-
 
 def get_redis() -> redis.Redis:
     """
@@ -165,7 +156,6 @@ def get_redis() -> redis.Redis:
         raise RuntimeError("Redis 未初始化")
     return redis_client
 
-
 def get_postgres_session() -> AsyncSession:
     """
     获取 PostgreSQL 会话
@@ -176,7 +166,6 @@ def get_postgres_session() -> AsyncSession:
     if postgres_session_factory is None:
         raise RuntimeError("PostgreSQL 未初始化")
     return postgres_session_factory()
-
 
 # 数据库健康检查函数
 async def check_mongodb_health() -> bool:
@@ -189,7 +178,6 @@ async def check_mongodb_health() -> bool:
         pass
     return False
 
-
 async def check_redis_health() -> bool:
     """检查 Redis 健康状态"""
     try:
@@ -199,7 +187,6 @@ async def check_redis_health() -> bool:
     except Exception:
         pass
     return False
-
 
 async def check_postgres_health() -> bool:
     """检查 PostgreSQL 健康状态"""

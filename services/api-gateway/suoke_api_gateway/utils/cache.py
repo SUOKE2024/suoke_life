@@ -5,18 +5,15 @@
 """
 
 import json
-import time
 from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional, Union
 
-import redis.asyncio as redis
 from pydantic import BaseModel
 
 from ..core.config import Settings
 from ..core.logging import get_logger
 
 logger = get_logger(__name__)
-
 
 class CacheItem(BaseModel):
     """缓存项模型"""
@@ -27,7 +24,6 @@ class CacheItem(BaseModel):
     accessed_at: datetime
     access_count: int = 0
 
-
 class CacheStats(BaseModel):
     """缓存统计信息"""
     total_keys: int
@@ -36,7 +32,6 @@ class CacheStats(BaseModel):
     hit_rate: float
     memory_usage: int
     expired_keys: int
-
 
 class CacheManager:
     """缓存管理器"""

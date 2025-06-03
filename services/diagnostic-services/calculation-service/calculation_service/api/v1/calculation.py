@@ -11,19 +11,16 @@ from fastapi import APIRouter, HTTPException, Depends, BackgroundTasks
 from pydantic import BaseModel, Field
 
 from ...core.algorithms.wuyun_liuqi import WuyunLiuqiCalculator
-from ...core.models.calculation import (
     WuyunLiuqiModel,
     BaguaAnalysisModel,
     ZiwuLiuzhuModel,
     ConstitutionAnalysisModel,
     ComprehensiveAnalysisModel
 )
-from ...core.models.patient import PatientInfoModel, BirthInfoModel
 from ...services.calculation import CalculationService
 from ...utils.validators import validate_date_range, validate_patient_info
 
 router = APIRouter()
-
 
 class WuyunLiuqiRequest(BaseModel):
     """五运六气分析请求"""
@@ -31,13 +28,11 @@ class WuyunLiuqiRequest(BaseModel):
     patient_birth: Optional[date] = Field(default=None, description="患者出生日期")
     analysis_date: Optional[date] = Field(default=None, description="分析日期")
 
-
 class BaguaAnalysisRequest(BaseModel):
     """八卦分析请求"""
     birth_date: date = Field(description="出生日期")
     birth_time: Optional[str] = Field(default=None, description="出生时间(HH:MM)")
     birth_location: Optional[Dict] = Field(default=None, description="出生地点")
-
 
 class ZiwuLiuzhuRequest(BaseModel):
     """子午流注分析请求"""
@@ -45,14 +40,12 @@ class ZiwuLiuzhuRequest(BaseModel):
     treatment_type: str = Field(description="治疗类型")
     date: Optional[date] = Field(default=None, description="分析日期")
 
-
 class ComprehensiveAnalysisRequest(BaseModel):
     """综合算诊分析请求"""
     patient_info: Dict = Field(description="患者信息")
     current_symptoms: Optional[List[str]] = Field(default=None, description="当前症状")
     analysis_date: Optional[date] = Field(default=None, description="分析日期")
     analysis_options: Optional[Dict] = Field(default=None, description="分析选项")
-
 
 @router.post("/wuyun-liuqi", response_model=Dict, summary="五运六气分析")
 async def analyze_wuyun_liuqi(
@@ -94,7 +87,6 @@ async def analyze_wuyun_liuqi(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"五运六气分析失败: {str(e)}")
 
-
 @router.post("/bagua-constitution", response_model=Dict, summary="八卦体质分析")
 async def analyze_bagua_constitution(
     request: BaguaAnalysisRequest,
@@ -134,7 +126,6 @@ async def analyze_bagua_constitution(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"八卦体质分析失败: {str(e)}")
 
-
 @router.post("/ziwu-liuzhu", response_model=Dict, summary="子午流注时间分析")
 async def analyze_ziwu_liuzhu(
     request: ZiwuLiuzhuRequest,
@@ -172,7 +163,6 @@ async def analyze_ziwu_liuzhu(
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"子午流注分析失败: {str(e)}")
-
 
 @router.post("/comprehensive-analysis", response_model=Dict, summary="综合算诊分析")
 async def comprehensive_analysis(
@@ -216,7 +206,6 @@ async def comprehensive_analysis(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"综合算诊分析失败: {str(e)}")
 
-
 @router.get("/year-ganzhi/{year}", response_model=Dict, summary="获取年份干支")
 async def get_year_ganzhi(year: int):
     """
@@ -249,7 +238,6 @@ async def get_year_ganzhi(year: int):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"获取年份干支失败: {str(e)}")
 
-
 @router.get("/current-liuqi", response_model=Dict, summary="获取当前六气")
 async def get_current_liuqi():
     """
@@ -274,7 +262,6 @@ async def get_current_liuqi():
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"获取当前六气失败: {str(e)}")
-
 
 @router.get("/analysis-history/{patient_id}", response_model=Dict, summary="获取分析历史")
 async def get_analysis_history(
@@ -309,7 +296,6 @@ async def get_analysis_history(
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"获取分析历史失败: {str(e)}")
-
 
 @router.delete("/analysis/{analysis_id}", response_model=Dict, summary="删除分析记录")
 async def delete_analysis(

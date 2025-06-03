@@ -9,9 +9,6 @@ import asyncio
 import pytest
 import time
 from datetime import datetime
-from typing import List, Dict, Any
-import json
-import numpy as np
 
 from services.rag_service.internal.service.enhanced_rag_service import (
     EnhancedRagService, IndexType, ShardingStrategy, CacheLevel

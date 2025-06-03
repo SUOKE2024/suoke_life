@@ -6,7 +6,6 @@ gRPC服务器
 提供高性能的RAG服务接口
 """
 
-import asyncio
 import time
 import uuid
 from typing import Dict, List, Any, Optional, AsyncIterator
@@ -15,7 +14,6 @@ from grpc import aio
 from loguru import logger
 
 from ..container import Container
-
 
 # 模拟的protobuf消息类（实际应该从生成的pb2文件导入）
 class QueryRequest:
@@ -28,7 +26,6 @@ class QueryRequest:
         self.temperature = 0.7
         self.stream = False
 
-
 class QueryResponse:
     def __init__(self, request_id: str, answer: str, sources: List[Dict[str, Any]] = None):
         self.request_id = request_id
@@ -37,13 +34,11 @@ class QueryResponse:
         self.confidence = 0.0
         self.processing_time = 0.0
 
-
 class StreamChunk:
     def __init__(self, chunk: str, is_final: bool = False):
         self.chunk = chunk
         self.is_final = is_final
         self.timestamp = time.time()
-
 
 class TCMAnalysisRequest:
     def __init__(self, symptoms: List[str], user_id: str):
@@ -53,7 +48,6 @@ class TCMAnalysisRequest:
         self.medical_history = []
         self.current_medications = []
 
-
 class TCMAnalysisResponse:
     def __init__(self, request_id: str, syndrome_analysis: Dict[str, Any]):
         self.request_id = request_id
@@ -62,11 +56,9 @@ class TCMAnalysisResponse:
         self.treatment_principles = []
         self.confidence = 0.0
 
-
 class HealthRequest:
     def __init__(self):
         pass
-
 
 class HealthResponse:
     def __init__(self, status: str, components: Dict[str, str]):
@@ -74,7 +66,6 @@ class HealthResponse:
         self.components = components
         self.version = "1.2.0"
         self.timestamp = time.time()
-
 
 class RAGServicer:
     """RAG服务gRPC实现"""
@@ -271,7 +262,6 @@ class RAGServicer:
             logger.error(f"gRPC健康检查失败: {e}")
             await context.abort(grpc.StatusCode.INTERNAL, f"健康检查失败: {str(e)}")
 
-
 class RAGGRPCServer:
     """RAG gRPC服务器"""
     
@@ -327,7 +317,6 @@ class RAGGRPCServer:
         """等待服务器终止"""
         if self.server:
             await self.server.wait_for_termination()
-
 
 class GRPCInterceptor:
     """gRPC拦截器"""
@@ -454,7 +443,6 @@ class GRPCInterceptor:
             logger.error(f"gRPC流式请求失败: {method_name}, 错误: {e}")
             raise
 
-
 async def create_grpc_server(container: Container) -> RAGGRPCServer:
     """
     创建gRPC服务器
@@ -476,7 +464,6 @@ async def create_grpc_server(container: Container) -> RAGGRPCServer:
         logger.error(f"创建gRPC服务器失败: {e}")
         raise
 
-
 # 便捷函数
 async def start_grpc_service(
     container: Container,
@@ -495,7 +482,6 @@ async def start_grpc_service(
     server = await create_grpc_server(container)
     await server.start(listen_addr)
     return server
-
 
 # 示例protobuf定义（实际应该在单独的.proto文件中定义）
 PROTO_DEFINITION = """

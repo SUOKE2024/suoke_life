@@ -8,13 +8,11 @@
 import os
 import time
 from typing import Dict, List, Any, Optional
-import numpy as np
 import torch
 from sentence_transformers import SentenceTransformer
 from loguru import logger
 
 from ..model.document import Document
-
 
 class EmbeddingService:
     """

@@ -18,8 +18,6 @@ import pytest
 # 添加项目根目录到路径以便导入模块
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.resolve()))
 
-import api.grpc.corn_maze_pb2 as pb2
-import api.grpc.corn_maze_pb2_grpc as pb2_grpc
 from internal.delivery.grpc.server import setup_grpc_server
 from internal.maze.generator import MazeGenerator
 from internal.repository.maze_repository import MazeRepository

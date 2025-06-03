@@ -7,19 +7,16 @@
 import asyncio
 import time
 import multiprocessing
-import numpy as np
 import json
 import logging
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass
 from datetime import datetime
 import aiohttp
-import redis.asyncio as aioredis
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 import psutil
 import uuid
 import statistics
-from numba import jit
 import sys
 import os
 
@@ -28,18 +25,14 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '../../'))
 
 # 导入优化后的组件
 try:
-    from services.agent_services.optimized_inference_engine import OptimizedInferenceEngine, InferenceRequest
-    from services.api_gateway.optimized_async_gateway import OptimizedAsyncGateway
     from services.agent_services.optimized_agent_base import OptimizedAgentBase, JITOptimizedAlgorithms
 except ImportError as e:
     print(f"导入错误: {e}")
     print("请确保已创建优化后的组件文件")
 
-
 # 配置日志
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
 
 @dataclass
 class BenchmarkResult:
@@ -51,7 +44,6 @@ class BenchmarkResult:
     success_rate: float
     error_count: int
     additional_metrics: Dict[str, Any]
-
 
 class OptimizationBenchmark:
     """优化性能基准测试"""
@@ -613,7 +605,6 @@ class OptimizationBenchmark:
         
         return recommendations
 
-
 async def main():
     """主函数"""
     print("🚀 索克生活 - 优化性能基准测试")
@@ -657,9 +648,7 @@ async def main():
                 hit_rate = result['additional_metrics'].get('cache_hit_rate', 0.0)
                 print(f"    加速比: {speedup:.2f}x")
                 print(f"    缓存命中率: {hit_rate:.2%}")
-            
-            print()
-        
+
         print(f"💡 优化建议:")
         for i, recommendation in enumerate(report['recommendations'], 1):
             print(f"  {i}. {recommendation}")
@@ -674,7 +663,6 @@ async def main():
     except Exception as e:
         logger.error(f"基准测试失败: {e}")
         raise
-
 
 if __name__ == "__main__":
     asyncio.run(main()) 

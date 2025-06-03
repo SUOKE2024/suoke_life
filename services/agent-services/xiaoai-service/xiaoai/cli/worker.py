@@ -6,8 +6,6 @@ XiaoAI Agent Worker Module
 提供小艾智能体的后台工作进程管理功能。
 """
 
-from __future__ import annotations
-
 import signal
 import sys
 from pathlib import Path
@@ -16,7 +14,6 @@ from celery import Celery
 from loguru import logger
 
 from xiaoai.config.dynamic_config_manager import DynamicConfigManager
-
 
 def create_celery_app(configmanager: DynamicConfigManager) -> Celery:
     """
@@ -63,7 +60,6 @@ def create_celery_app(configmanager: DynamicConfigManager) -> Celery:
     ])
 
     return app
-
 
 def run_worker(
     concurrency: int = 4,
@@ -122,7 +118,6 @@ def run_worker(
     except Exception as e:
         logger.error(f"工作进程启动失败: {e}")
         sys.exit(1)
-
 
 if __name__ == "__main__":
     run_worker()

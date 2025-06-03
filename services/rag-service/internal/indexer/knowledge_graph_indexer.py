@@ -6,21 +6,16 @@
 """
 
 import asyncio
-import json
 from typing import Dict, List, Any, Optional, Tuple, Set
 from dataclasses import dataclass, asdict
 from enum import Enum
-import networkx as nx
 from loguru import logger
-import numpy as np
 
 from ..service.embedding_service import EmbeddingService
-from ..model.tcm_models import (
     KnowledgeGraphNode, KnowledgeGraphRelation, 
     Syndrome, SingleHerb, HerbFormula, Symptom,
     ConstitutionType, PathologicalFactor
 )
-
 
 class NodeType(Enum):
     """节点类型"""
@@ -35,7 +30,6 @@ class NodeType(Enum):
     PATHOLOGY = "pathology"  # 病理因素
     TREATMENT = "treatment"  # 治疗方法
     DISEASE = "disease"  # 疾病
-
 
 class RelationType(Enum):
     """关系类型"""
@@ -53,7 +47,6 @@ class RelationType(Enum):
     COMPATIBLE_WITH = "compatible_with"  # 配伍
     INCOMPATIBLE_WITH = "incompatible_with"  # 相反
 
-
 @dataclass
 class GraphNode:
     """图节点"""
@@ -64,7 +57,6 @@ class GraphNode:
     embedding: Optional[List[float]] = None
     aliases: List[str] = None
     description: str = ""
-
 
 @dataclass
 class GraphRelation:
@@ -77,7 +69,6 @@ class GraphRelation:
     weight: float = 1.0
     confidence: float = 1.0
 
-
 @dataclass
 class GraphQuery:
     """图查询"""
@@ -88,7 +79,6 @@ class GraphQuery:
     max_depth: int = 2
     max_results: int = 50
 
-
 @dataclass
 class GraphQueryResult:
     """图查询结果"""
@@ -98,7 +88,6 @@ class GraphQueryResult:
     subgraph: Dict[str, Any]  # 子图结构
     confidence: float
     reasoning: List[str]
-
 
 class KnowledgeGraphIndexer:
     """知识图谱索引器"""

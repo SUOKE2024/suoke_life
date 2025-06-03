@@ -5,7 +5,6 @@
 
 import asyncio
 import inspect
-import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Any, Callable, Dict, List, Optional, Type, TypeVar
@@ -31,7 +30,6 @@ logger = structlog.get_logger(__name__)
 
 T = TypeVar("T")
 
-
 class ServiceLifecycle(ABC):
     """服务生命周期接口"""
 
@@ -55,7 +53,6 @@ class ServiceLifecycle(ABC):
         """清理资源"""
         pass
 
-
 @dataclass
 class ServiceDefinition:
     """服务定义"""
@@ -69,7 +66,6 @@ class ServiceDefinition:
     def __post_init__(self):
         if self.dependencies is None:
             self.dependencies = []
-
 
 class DependencyInjectionContainer:
     """依赖注入容器"""
@@ -321,7 +317,6 @@ class DependencyInjectionContainer:
             "is_started": self.is_started,
         }
 
-
 def init_container(config: Dict[str, Any]) -> DependencyInjectionContainer:
     """初始化依赖注入容器"""
     container = DependencyInjectionContainer(config)
@@ -446,17 +441,14 @@ def init_container(config: Dict[str, Any]) -> DependencyInjectionContainer:
     logger.info("依赖注入容器配置完成")
     return container
 
-
 # 全局容器实例
 _container: Optional[DependencyInjectionContainer] = None
-
 
 def get_container() -> DependencyInjectionContainer:
     """获取全局容器实例"""
     if _container is None:
         raise RuntimeError("容器未初始化，请先调用 init_container")
     return _container
-
 
 async def init_global_container(config: Dict[str, Any]) -> DependencyInjectionContainer:
     """初始化全局容器"""

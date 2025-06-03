@@ -7,13 +7,10 @@ from fastapi import FastAPI, HTTPException, UploadFile, File, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any, Union
-import numpy as np
 import cv2
 import json
 import logging
 from datetime import datetime
-import asyncio
-from io import BytesIO
 
 from ..core.algorithms.tongue_pulse_analysis import (
     TonguePulseCalculationEngine,

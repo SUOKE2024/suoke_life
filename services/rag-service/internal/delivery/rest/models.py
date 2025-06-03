@@ -6,9 +6,7 @@ REST API 数据模型
 """
 
 from typing import Dict, List, Any, Optional
-from datetime import datetime
 from pydantic import BaseModel, Field
-
 
 class DocumentReference(BaseModel):
     """文档引用"""
@@ -17,7 +15,6 @@ class DocumentReference(BaseModel):
     source: str = Field(..., description="文档来源")
     url: Optional[str] = Field(None, description="文档URL")
     snippet: str = Field(..., description="相关片段")
-
 
 class QueryRequest(BaseModel):
     """查询请求"""
@@ -29,7 +26,6 @@ class QueryRequest(BaseModel):
     metadataFilter: Optional[Dict[str, str]] = Field(None, description="元数据过滤")
     userId: Optional[str] = Field(None, description="用户ID")
 
-
 class QueryResponse(BaseModel):
     """查询响应"""
     answer: str = Field(..., description="生成的回答")
@@ -38,7 +34,6 @@ class QueryResponse(BaseModel):
     generationLatencyMs: float = Field(..., description="生成耗时(毫秒)")
     totalLatencyMs: float = Field(..., description="总耗时(毫秒)")
 
-
 class AddDocumentRequest(BaseModel):
     """添加文档请求"""
     content: str = Field(..., description="文档内容")
@@ -46,19 +41,16 @@ class AddDocumentRequest(BaseModel):
     reindex: Optional[bool] = Field(False, description="是否重新索引")
     collectionName: Optional[str] = Field("default", description="集合名称")
 
-
 class AddDocumentResponse(BaseModel):
     """添加文档响应"""
     documentId: str = Field(..., description="文档ID")
     success: bool = Field(..., description="是否成功")
     message: Optional[str] = Field(None, description="消息")
 
-
 class DeleteDocumentResponse(BaseModel):
     """删除文档响应"""
     success: bool = Field(..., description="是否成功")
     message: Optional[str] = Field(None, description="消息")
-
 
 class DocumentMetadata(BaseModel):
     """文档元数据"""
@@ -68,14 +60,12 @@ class DocumentMetadata(BaseModel):
     createdAt: Optional[str] = Field(None, description="创建时间")
     updatedAt: Optional[str] = Field(None, description="更新时间")
 
-
 class ListDocumentsResponse(BaseModel):
     """文档列表响应"""
     documents: List[DocumentMetadata] = Field(..., description="文档列表")
     total: int = Field(..., description="文档总数")
     page: int = Field(1, description="当前页码")
     pageSize: int = Field(20, description="每页数量")
-
 
 class Collection(BaseModel):
     """知识集合"""
@@ -84,11 +74,9 @@ class Collection(BaseModel):
     description: Optional[str] = Field(None, description="集合描述")
     lastUpdated: Optional[str] = Field(None, description="最后更新时间")
 
-
 class ListCollectionsResponse(BaseModel):
     """集合列表响应"""
     collections: List[Collection] = Field(..., description="集合列表")
-
 
 class HealthResponse(BaseModel):
     """健康检查响应"""

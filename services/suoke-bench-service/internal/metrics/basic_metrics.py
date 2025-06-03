@@ -8,7 +8,6 @@ import logging
 import re
 from typing import Any
 
-import numpy as np
 from sklearn.metrics import (
     accuracy_score,
     f1_score,
@@ -19,7 +18,6 @@ from sklearn.metrics import (
 from internal.metrics.metric_registry import MetricInfo, metric_registry
 
 logger = logging.getLogger(__name__)
-
 
 def register_basic_metrics():
     """注册基础指标"""
@@ -241,7 +239,6 @@ def register_basic_metrics():
         )
     )
 
-
 # 基础分类指标实现
 def compute_accuracy(
     predictions: Any, targets: Any, params: dict[str, Any] | None = None
@@ -262,7 +259,6 @@ def compute_accuracy(
     except Exception as e:
         logger.error(f"计算准确率失败: {str(e)}")
         return 0.0
-
 
 def compute_precision(
     predictions: Any, targets: Any, params: dict[str, Any] | None = None
@@ -285,7 +281,6 @@ def compute_precision(
         logger.error(f"计算精确率失败: {str(e)}")
         return 0.0
 
-
 def compute_recall(
     predictions: Any, targets: Any, params: dict[str, Any] | None = None
 ) -> float:
@@ -306,7 +301,6 @@ def compute_recall(
     except Exception as e:
         logger.error(f"计算召回率失败: {str(e)}")
         return 0.0
-
 
 def compute_f1(
     predictions: Any, targets: Any, params: dict[str, Any] | None = None
@@ -329,7 +323,6 @@ def compute_f1(
         logger.error(f"计算F1分数失败: {str(e)}")
         return 0.0
 
-
 # 回归指标实现
 def compute_mae(
     predictions: Any, targets: Any, params: dict[str, Any] | None = None
@@ -351,7 +344,6 @@ def compute_mae(
         logger.error(f"计算平均绝对误差失败: {str(e)}")
         return float("inf")
 
-
 def compute_mse(
     predictions: Any, targets: Any, params: dict[str, Any] | None = None
 ) -> float:
@@ -371,7 +363,6 @@ def compute_mse(
     except Exception as e:
         logger.error(f"计算均方误差失败: {str(e)}")
         return float("inf")
-
 
 # 生成指标实现
 def compute_exact_match(
@@ -406,7 +397,6 @@ def compute_exact_match(
     except Exception as e:
         logger.error(f"计算精确匹配率失败: {str(e)}")
         return 0.0
-
 
 # 中医五诊指标实现
 def compute_tongue_classification_accuracy(
@@ -467,7 +457,6 @@ def compute_tongue_classification_accuracy(
         logger.error(f"计算舌象分类准确率失败: {str(e)}")
         return 0.0
 
-
 def compute_syndrome_classification_accuracy(
     predictions: Any, targets: Any, params: dict[str, Any] | None = None
 ) -> float:
@@ -498,7 +487,6 @@ def compute_syndrome_classification_accuracy(
         logger.error(f"计算中医辩证分类准确率失败: {str(e)}")
         return 0.0
 
-
 # 性能指标实现
 def compute_latency(
     predictions: Any, targets: Any, params: dict[str, Any] | None = None
@@ -527,7 +515,6 @@ def compute_latency(
     except Exception as e:
         logger.error(f"计算推理延迟失败: {str(e)}")
         return float("inf")
-
 
 def compute_throughput(
     predictions: Any, targets: Any, params: dict[str, Any] | None = None
@@ -562,7 +549,6 @@ def compute_throughput(
     except Exception as e:
         logger.error(f"计算吞吐量失败: {str(e)}")
         return 0.0
-
 
 # 多智能体协作指标实现
 def compute_collaboration_efficiency(
@@ -635,7 +621,6 @@ def compute_collaboration_efficiency(
         logger.error(f"计算协作效率失败: {str(e)}")
         return 0.0
 
-
 # 隐私指标实现
 def compute_privacy_leakage(
     predictions: Any, targets: Any, params: dict[str, Any] | None = None
@@ -668,7 +653,6 @@ def compute_privacy_leakage(
     except Exception as e:
         logger.error(f"计算隐私泄露率失败: {str(e)}")
         return 0.0
-
 
 # 健康方案生成指标实现
 def compute_health_plan_quality(
@@ -730,7 +714,6 @@ def compute_health_plan_quality(
     except Exception as e:
         logger.error(f"计算健康方案质量失败: {str(e)}")
         return 0.0
-
 
 def _evaluate_plan_section(pred_section, target_section):
     """

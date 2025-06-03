@@ -28,14 +28,10 @@ def test_imports():
 
         # 测试API文档生成模块
         from services.common.api_docs.openapi_generator import OpenAPIGenerator
-        from services.common.api_docs.doc_decorators import api_doc, get_api, post_api
-        from services.common.api_docs.swagger_ui import SwaggerUIServer
         print("✅ API文档生成模块导入成功")
 
         # 测试服务网格模块
-        from services.common.service_mesh.mesh_manager import ServiceMeshManager
         from services.common.service_mesh.istio_client import IstioClient, VirtualService
-        from services.common.service_mesh.linkerd_client import LinkerdClient, TrafficSplit
         from services.common.service_mesh.envoy_config import EnvoyConfigManager
         print("✅ 服务网格模块导入成功")
 

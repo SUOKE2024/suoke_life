@@ -26,8 +26,6 @@ from internal.four_diagnosis.recommendation.health_advisor import HealthAdvisor
 from internal.four_diagnosis.syndrome_analyzer import SyndromeAnalyzer
 from internal.orchestrator.four_diagnosis_coordinator import FourDiagnosisCoordinator
 from pkg.utils.config_loader import get_config
-from xiaoai_service.protos import four_diagnosis_pb2 as diagnosis_pb
-from xiaoai_service.protos import xiaoai_service_pb2 as service_pb
 
 logging.basicConfig(level=logging.DEBUG)
 # 使用loguru logger

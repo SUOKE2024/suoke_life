@@ -5,16 +5,12 @@
 健康检查API处理器
 """
 
-from typing import Dict, Any
-import json
 import time
 
 from aiohttp import web
-from loguru import logger
 
 from services.rag_service.internal.service.health_check import HealthCheckService, HealthStatus
 from services.rag_service.internal.observability.telemetry import trace_method
-
 
 class HealthHandler:
     """健康检查API处理器"""

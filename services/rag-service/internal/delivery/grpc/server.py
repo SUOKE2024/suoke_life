@@ -8,7 +8,6 @@ gRPC 服务实现
 import time
 from typing import Dict, Any, List
 import grpc
-import asyncio
 from loguru import logger
 
 # 以下导入语句在proto文件编译后需要替换为实际的导入
@@ -17,7 +16,6 @@ from loguru import logger
 
 from ...service.rag_service import RagService
 from ...model.document import Document, DocumentReference
-
 
 class RagServicer:
     """

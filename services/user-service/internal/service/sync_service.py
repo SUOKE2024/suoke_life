@@ -15,9 +15,7 @@ from internal.model.user import (User, UserHealthSummary, DeviceInfo, UserStatus
                           UserRole, ConstitutionType, HealthMetric)
 from internal.repository.sqlite_user_repository import SQLiteUserRepository
 from internal.repository.postgres_user_repository import PostgresUserRepository
-from internal.repository.exceptions import (UserNotFoundError, UserAlreadyExistsError, 
                                      DeviceNotFoundError, DeviceAlreadyBoundError)
-
 
 class SyncDirection(str, Enum):
     """同步方向枚举"""
@@ -25,13 +23,11 @@ class SyncDirection(str, Enum):
     REMOTE_TO_LOCAL = "remote_to_local"  # 远程到本地
     BIDIRECTIONAL = "bidirectional"      # 双向同步
 
-
 class EntityType(str, Enum):
     """实体类型枚举"""
     USER = "user"
     HEALTH_SUMMARY = "health_summary"
     DEVICE = "device"
-
 
 class ConflictResolutionStrategy(str, Enum):
     """冲突解决策略枚举"""
@@ -39,7 +35,6 @@ class ConflictResolutionStrategy(str, Enum):
     REMOTE_WINS = "remote_wins"  # 远程数据优先
     NEWEST_WINS = "newest_wins"  # 最新修改优先
     MANUAL = "manual"            # 手动解决
-
 
 class SyncConflict:
     """数据同步冲突记录"""
@@ -70,7 +65,6 @@ class SyncConflict:
         self.resolution = None  # 'local', 'remote', 'merged'
         self.merged_value = None
 
-
 class SyncResult:
     """同步结果"""
     
@@ -93,7 +87,6 @@ class SyncResult:
         self.error_message: Optional[str] = None
         self.timestamp = datetime.utcnow()
 
-
 class SyncMetadata:
     """同步元数据"""
     
@@ -111,7 +104,6 @@ class SyncMetadata:
         self.local_hash: Optional[str] = None
         self.remote_hash: Optional[str] = None
         self.sync_status = "synced"  # synced, pending, conflict
-
 
 class SyncService:
     """数据同步服务"""
@@ -863,14 +855,12 @@ class SyncService:
             # 返回空字符串表示计算失败
             return ""
 
-
 # 离线操作管理
 class OperationType(str, Enum):
     """操作类型枚举"""
     CREATE = "create"
     UPDATE = "update"
     DELETE = "delete"
-
 
 class OfflineOperation:
     """离线操作记录"""
@@ -901,7 +891,6 @@ class OfflineOperation:
         self.timestamp = timestamp or datetime.utcnow()
         self.synced = False
         self.sync_timestamp = None
-
 
 class OfflineOperationManager:
     """离线操作管理器"""

@@ -1,7 +1,5 @@
 """基础服务类"""
 
-from __future__ import annotations
-
 from abc import ABC
 from abc import abstractmethod
 from typing import Any
@@ -14,7 +12,6 @@ from health_data_service.core.logging import log_database_operation
 T = TypeVar("T")
 CreateT = TypeVar("CreateT")
 UpdateT = TypeVar("UpdateT")
-
 
 class BaseService(ABC, Generic[T, CreateT, UpdateT]):
     """基础服务类"""

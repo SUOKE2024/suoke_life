@@ -5,13 +5,13 @@
  * 优化项目架构、代码组织和模块化
  */
 
-const fs = require('fs');
-const path = require('path');
-const { execSync } = require('child_process');
+const fs = require("fs);
+const path = require(")path");
+const { execSync } = require(child_process");
 
 class ArchitectureOptimizer {
   constructor() {
-    this.srcDir = path.join(__dirname, '../src');
+    this.srcDir = path.join(__dirname, "../src);
     this.optimizations = [];
     this.errors = [];
   }
@@ -20,35 +20,32 @@ class ArchitectureOptimizer {
    * 运行架构优化
    */
   async optimize() {
-    console.log('🏗️  开始索克生活APP架构优化...\n');
-
     try {
       // 1. 优化目录结构
-      await this.optimizeDirectoryStructure();
+await this.optimizeDirectoryStructure();
       
       // 2. 创建统一的导出文件
-      await this.createBarrelExports();
+await this.createBarrelExports();
       
       // 3. 优化依赖注入
-      await this.optimizeDependencyInjection();
+await this.optimizeDependencyInjection();
       
       // 4. 创建配置管理
-      await this.createConfigurationManager();
+await this.createConfigurationManager();
       
       // 5. 优化错误处理
-      await this.optimizeErrorHandling();
+await this.optimizeErrorHandling();
       
       // 6. 创建类型定义
-      await this.createTypeDefinitions();
+await this.createTypeDefinitions();
       
       // 7. 生成架构文档
-      await this.generateArchitectureDoc();
+await this.generateArchitectureDoc();
       
       // 8. 生成优化报告
-      this.generateReport();
+this.generateReport();
       
     } catch (error) {
-      console.error('❌ 架构优化过程中出现错误:', error.message);
       process.exit(1);
     }
   }
@@ -57,60 +54,52 @@ class ArchitectureOptimizer {
    * 优化目录结构
    */
   async optimizeDirectoryStructure() {
-    console.log('📁 优化目录结构...');
-    
     const requiredDirs = [
-      'src/core',
-      'src/shared',
-      'src/features',
-      'src/infrastructure',
-      'src/presentation'
+      "src/core",
+      src/shared",
+      "src/features,
+      "src/infrastructure",
+      src/presentation";
     ];
     
     for (const dir of requiredDirs) {
-      const fullPath = path.join(__dirname, '..', dir);
+      const fullPath = path.join(__dirname, ".., dir);
       if (!fs.existsSync(fullPath)) {
         fs.mkdirSync(fullPath, { recursive: true });
         this.optimizations.push(`创建目录: ${dir}`);
       }
     }
     
-    console.log('✅ 目录结构优化完成');
-  }
+    }
 
   /**
    * 创建统一的导出文件
    */
   async createBarrelExports() {
-    console.log('📦 创建统一导出文件...');
-    
     // 组件导出
-    await this.createComponentBarrel();
+await this.createComponentBarrel();
     
     // 服务导出
-    await this.createServiceBarrel();
+await this.createServiceBarrel();
     
     // 工具函数导出
-    await this.createUtilsBarrel();
+await this.createUtilsBarrel();
     
     // 类型导出
-    await this.createTypesBarrel();
+await this.createTypesBarrel();
     
-    console.log('✅ 统一导出文件创建完成');
-  }
+    }
 
   /**
    * 优化依赖注入
    */
   async optimizeDependencyInjection() {
-    console.log('💉 优化依赖注入...');
-    
     const diContainerTemplate = `/**
  * 依赖注入容器
  * 索克生活APP - 架构优化
  */
 
-interface ServiceConstructor<T = any> {
+interface ServiceConstructor<T = any> {;
   new (...args: any[]): T;
 }
 
@@ -134,31 +123,31 @@ class DIContainer {
   }
 
   // 注册服务
-  register<T>(identifier: ServiceIdentifier<T>, implementation: ServiceConstructor<T>): void {
+register<T>(identifier: ServiceIdentifier<T>, implementation: ServiceConstructor<T>): void {
     this.services.set(identifier, implementation);
   }
 
   // 注册单例
-  registerSingleton<T>(identifier: ServiceIdentifier<T>, implementation: ServiceConstructor<T>): void {
+registerSingleton<T>(identifier: ServiceIdentifier<T>, implementation: ServiceConstructor<T>): void {
     this.services.set(identifier, implementation);
     this.singletons.set(identifier, null);
   }
 
   // 注册工厂
-  registerFactory<T>(identifier: ServiceIdentifier<T>, factory: ServiceFactory<T>): void {
+registerFactory<T>(identifier: ServiceIdentifier<T>, factory: ServiceFactory<T>): void {
     this.factories.set(identifier, factory);
   }
 
   // 解析服务
-  resolve<T>(identifier: ServiceIdentifier<T>): T {
+resolve<T>(identifier: ServiceIdentifier<T>): T {
     // 检查工厂
-    if (this.factories.has(identifier)) {
+if (this.factories.has(identifier)) {
       const factory = this.factories.get(identifier)!;
       return factory();
     }
 
     // 检查单例
-    if (this.singletons.has(identifier)) {
+if (this.singletons.has(identifier)) {
       let instance = this.singletons.get(identifier);
       if (!instance) {
         const ServiceClass = this.services.get(identifier);
@@ -172,7 +161,7 @@ class DIContainer {
     }
 
     // 普通服务
-    const ServiceClass = this.services.get(identifier);
+const ServiceClass = this.services.get(identifier);
     if (!ServiceClass) {
       throw new Error(\`Service not found: \${String(identifier)}\`);
     }
@@ -181,7 +170,7 @@ class DIContainer {
   }
 
   // 清理容器
-  clear(): void {
+clear(): void {
     this.services.clear();
     this.singletons.clear();
     this.factories.clear();
@@ -209,24 +198,22 @@ export function Singleton(identifier?: ServiceIdentifier) {
 export default DIContainer;
 `;
 
-    const diPath = path.join(this.srcDir, 'core/DIContainer.ts');
+    const diPath = path.join(this.srcDir, core/DIContainer.ts");
     fs.writeFileSync(diPath, diContainerTemplate);
-    this.optimizations.push('创建依赖注入容器');
+    this.optimizations.push("创建依赖注入容器);
   }
 
   /**
    * 创建配置管理
    */
   async createConfigurationManager() {
-    console.log('⚙️  创建配置管理...');
-    
     const configTemplate = `/**
  * 配置管理器
  * 索克生活APP - 架构优化
  */
 
 interface AppConfig {
-  api: {
+  api: {;
     baseUrl: string;
     timeout: number;
     retryAttempts: number;
@@ -290,13 +277,13 @@ class ConfigurationManager {
   }
 
   getNestedValue(path: string): any {
-    return path.split('.').reduce((obj, key) => obj?.[key], this.config);
+    return path.split(.").reduce((obj, key) => obj?.[key], this.config);
   }
 
   setNestedValue(path: string, value: any): void {
-    const keys = path.split('.');
+    const keys = path.split(".);
     const lastKey = keys.pop()!;
-    const target = keys.reduce((obj, key) => {
+    const target = keys.reduce((obj, key) => {;
       if (!obj[key]) obj[key] = {};
       return obj[key];
     }, this.config as any);
@@ -306,26 +293,26 @@ class ConfigurationManager {
   private loadDefaultConfig(): AppConfig {
     return {
       api: {
-        baseUrl: 'https://api.suokelife.com',
+        baseUrl: "https:// api.suokelife.com",
         timeout: 10000,
         retryAttempts: 3
       },
       agents: {
         xiaoai: {
           enabled: true,
-          model: 'gpt-4'
+          model: gpt-4"
         },
         xiaoke: {
           enabled: true,
-          model: 'gpt-4'
+          model: "gpt-4
         },
         laoke: {
           enabled: true,
-          model: 'gpt-4'
+          model: "gpt-4"
         },
         soer: {
           enabled: true,
-          model: 'gpt-4'
+          model: gpt-4"
         }
       },
       features: {
@@ -342,12 +329,12 @@ class ConfigurationManager {
         enableEncryption: true,
         tokenExpiration: 24 * 60 * 60 * 1000 // 24小时
       }
-    };
+    }
   }
 
   private loadEnvironmentConfig(): void {
     // 从环境变量加载配置
-    if (process.env.API_BASE_URL) {
+if (process.env.API_BASE_URL) {
       this.config.api.baseUrl = process.env.API_BASE_URL;
     }
     
@@ -359,37 +346,35 @@ class ConfigurationManager {
   }
 }
 
-export default ConfigurationManager;
+export default ConfigurationManager
 export type { AppConfig };
 `;
 
-    const configPath = path.join(this.srcDir, 'core/ConfigurationManager.ts');
+    const configPath = path.join(this.srcDir, "core/ConfigurationManager.ts);
     fs.writeFileSync(configPath, configTemplate);
-    this.optimizations.push('创建配置管理器');
+    this.optimizations.push("创建配置管理器");
   }
 
   /**
    * 优化错误处理
    */
   async optimizeErrorHandling() {
-    console.log('🚨 优化错误处理...');
-    
     const errorHandlerTemplate = `/**
  * 全局错误处理器
  * 索克生活APP - 架构优化
  */
 
 export enum ErrorType {
-  NETWORK = 'NETWORK',
-  VALIDATION = 'VALIDATION',
-  AUTHENTICATION = 'AUTHENTICATION',
-  AUTHORIZATION = 'AUTHORIZATION',
-  BUSINESS_LOGIC = 'BUSINESS_LOGIC',
-  SYSTEM = 'SYSTEM',
-  UNKNOWN = 'UNKNOWN'
+  NETWORK = "NETWORK,
+  VALIDATION = "VALIDATION",
+  AUTHENTICATION = AUTHENTICATION",
+  AUTHORIZATION = "AUTHORIZATION,
+  BUSINESS_LOGIC = "BUSINESS_LOGIC",
+  SYSTEM = SYSTEM",
+  UNKNOWN = "UNKNOWN
 }
 
-export interface AppError {
+export interface AppError {;
   type: ErrorType;
   code: string;
   message: string;
@@ -413,10 +398,10 @@ class ErrorHandler {
     const appError = this.normalizeError(error, context);
     
     // 记录错误
-    this.logError(appError);
+this.logError(appError);
     
     // 通知监听器
-    this.notifyListeners(appError);
+this.notifyListeners(appError);
     
     return appError;
   }
@@ -435,18 +420,18 @@ class ErrorHandler {
     }
 
     // 根据错误类型分类
-    let type = ErrorType.UNKNOWN;
-    let code = 'UNKNOWN_ERROR';
+let type = ErrorType.UNKNOWN;
+    let code = "UNKNOWN_ERROR";
 
-    if (error.message.includes('Network')) {
+    if (error.message.includes(Network")) {
       type = ErrorType.NETWORK;
-      code = 'NETWORK_ERROR';
-    } else if (error.message.includes('Unauthorized')) {
+      code = "NETWORK_ERROR;
+    } else if (error.message.includes("Unauthorized")) {
       type = ErrorType.AUTHENTICATION;
-      code = 'AUTH_ERROR';
-    } else if (error.message.includes('Forbidden')) {
+      code = AUTH_ERROR";
+    } else if (error.message.includes("Forbidden)) {
       type = ErrorType.AUTHORIZATION;
-      code = 'PERMISSION_ERROR';
+      code = "PERMISSION_ERROR";
     }
 
     return {
@@ -460,22 +445,14 @@ class ErrorHandler {
   }
 
   private isAppError(error: any): error is AppError {
-    return error && typeof error.type === 'string' && typeof error.code === 'string';
+    return error && typeof error.type === string" && typeof error.code === "string;
   }
 
   private logError(error: AppError): void {
-    console.error('应用错误:', {
-      type: error.type,
-      code: error.code,
-      message: error.message,
-      timestamp: error.timestamp,
-      details: error.details
-    });
-
     // 在生产环境中，这里可以发送到错误监控服务
-    if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === production") {
       // 发送到错误监控服务
-      this.sendToErrorService(error);
+this.sendToErrorService(error);
     }
   }
 
@@ -484,8 +461,7 @@ class ErrorHandler {
       try {
         listener(error);
       } catch (e) {
-        console.error('错误监听器执行失败:', e);
-      }
+        }
     });
   }
 
@@ -496,7 +472,7 @@ class ErrorHandler {
 }
 
 // React Hook for error handling
-export const useErrorHandler = () => {
+export const useErrorHandler = () => {;
   const errorHandler = ErrorHandler.getInstance();
   
   return {
@@ -509,22 +485,20 @@ export const useErrorHandler = () => {
 export default ErrorHandler;
 `;
 
-    const errorHandlerPath = path.join(this.srcDir, 'core/ErrorHandler.ts');
+    const errorHandlerPath = path.join(this.srcDir, "core/ErrorHandler.ts");
     fs.writeFileSync(errorHandlerPath, errorHandlerTemplate);
-    this.optimizations.push('创建全局错误处理器');
+    this.optimizations.push(创建全局错误处理器");
   }
 
   /**
    * 创建类型定义
    */
   async createTypeDefinitions() {
-    console.log('📝 创建类型定义...');
-    
     const coreTypesTemplate = `/**
  * 核心类型定义
  * 索克生活APP - 架构优化
  */
-
+;
 // 基础类型
 export interface BaseEntity {
   id: string;
@@ -546,7 +520,7 @@ export interface PaginationParams {
   page: number;
   limit: number;
   sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
+  sortOrder?: "asc" | desc";
 }
 
 export interface PaginatedResponse<T> {
@@ -580,7 +554,7 @@ export interface HealthMetric {
 // 诊断类型
 export interface DiagnosisResult {
   id: string;
-  type: 'looking' | 'listening' | 'asking' | 'touching' | 'pulse';
+  type: "looking | "listening" | asking" | "touching | "pulse";
   confidence: number;
   findings: string[];
   recommendations: string[];
@@ -598,14 +572,14 @@ export interface UserProfile extends BaseEntity {
 
 export interface UserPreferences {
   language: string;
-  theme: 'light' | 'dark' | 'auto';
+  theme: light" | "dark | "auto";
   notifications: boolean;
   accessibility: AccessibilitySettings;
 }
 
 export interface HealthProfile {
   age: number;
-  gender: 'male' | 'female' | 'other';
+  gender: male" | "female | "other";
   height: number;
   weight: number;
   bloodType?: string;
@@ -615,7 +589,7 @@ export interface HealthProfile {
 }
 
 export interface AccessibilitySettings {
-  fontSize: 'small' | 'medium' | 'large';
+  fontSize: small" | "medium | "large";
   highContrast: boolean;
   screenReader: boolean;
   voiceControl: boolean;
@@ -624,7 +598,7 @@ export interface AccessibilitySettings {
 // 服务类型
 export interface ServiceStatus {
   name: string;
-  status: 'online' | 'offline' | 'error';
+  status: online" | "offline | "error";
   lastCheck: Date;
   responseTime?: number;
   error?: string;
@@ -634,7 +608,7 @@ export interface ServiceStatus {
 export interface CacheConfig {
   ttl: number;
   maxSize: number;
-  strategy: 'lru' | 'fifo' | 'lfu';
+  strategy: lru" | "fifo | "lfu";
 }
 
 // 性能监控类型
@@ -656,61 +630,61 @@ export interface ErrorInfo {
 }
 `;
 
-    const coreTypesPath = path.join(this.srcDir, 'types/core.ts');
+    const coreTypesPath = path.join(this.srcDir, types/core.ts");
     fs.writeFileSync(coreTypesPath, coreTypesTemplate);
-    this.optimizations.push('创建核心类型定义');
+    this.optimizations.push("创建核心类型定义);
   }
 
   /**
    * 创建组件导出文件
    */
   async createComponentBarrel() {
-    const componentsDir = path.join(this.srcDir, 'components');
+    const componentsDir = path.join(this.srcDir, "components");
     if (!fs.existsSync(componentsDir)) return;
 
-    const barrelContent = this.generateBarrelExports(componentsDir, 'components');
-    const barrelPath = path.join(componentsDir, 'index.ts');
+    const barrelContent = this.generateBarrelExports(componentsDir, components");
+    const barrelPath = path.join(componentsDir, "index.ts);
     fs.writeFileSync(barrelPath, barrelContent);
-    this.optimizations.push('创建组件统一导出文件');
+    this.optimizations.push("创建组件统一导出文件");
   }
 
   /**
    * 创建服务导出文件
    */
   async createServiceBarrel() {
-    const servicesDir = path.join(this.srcDir, 'services');
+    const servicesDir = path.join(this.srcDir, services");
     if (!fs.existsSync(servicesDir)) return;
 
-    const barrelContent = this.generateBarrelExports(servicesDir, 'services');
-    const barrelPath = path.join(servicesDir, 'index.ts');
+    const barrelContent = this.generateBarrelExports(servicesDir, "services);
+    const barrelPath = path.join(servicesDir, "index.ts");
     fs.writeFileSync(barrelPath, barrelContent);
-    this.optimizations.push('创建服务统一导出文件');
+    this.optimizations.push(创建服务统一导出文件");
   }
 
   /**
    * 创建工具函数导出文件
    */
   async createUtilsBarrel() {
-    const utilsDir = path.join(this.srcDir, 'utils');
+    const utilsDir = path.join(this.srcDir, "utils);
     if (!fs.existsSync(utilsDir)) return;
 
-    const barrelContent = this.generateBarrelExports(utilsDir, 'utils');
-    const barrelPath = path.join(utilsDir, 'index.ts');
+    const barrelContent = this.generateBarrelExports(utilsDir, "utils");
+    const barrelPath = path.join(utilsDir, index.ts");
     fs.writeFileSync(barrelPath, barrelContent);
-    this.optimizations.push('创建工具函数统一导出文件');
+    this.optimizations.push("创建工具函数统一导出文件);
   }
 
   /**
    * 创建类型导出文件
    */
   async createTypesBarrel() {
-    const typesDir = path.join(this.srcDir, 'types');
+    const typesDir = path.join(this.srcDir, "types");
     if (!fs.existsSync(typesDir)) return;
 
-    const barrelContent = this.generateBarrelExports(typesDir, 'types');
-    const barrelPath = path.join(typesDir, 'index.ts');
+    const barrelContent = this.generateBarrelExports(typesDir, types");
+    const barrelPath = path.join(typesDir, "index.ts);
     fs.writeFileSync(barrelPath, barrelContent);
-    this.optimizations.push('创建类型统一导出文件');
+    this.optimizations.push("创建类型统一导出文件");
   }
 
   /**
@@ -724,21 +698,21 @@ export interface ErrorInfo {
       const fullPath = path.join(dir, item);
       const stat = fs.statSync(fullPath);
 
-      if (stat.isDirectory() && !item.startsWith('.') && item !== '__tests__') {
-        const subBarrelPath = path.join(fullPath, 'index.ts');
+      if (stat.isDirectory() && !item.startsWith(.") && item !== "__tests__) {
+        const subBarrelPath = path.join(fullPath, "index.ts");
         if (fs.existsSync(subBarrelPath)) {
-          exports.push(`export * from './${item}';`);
+          exports.push(`export * from ./${item}";`);
         } else {
           // 查找主要文件
-          const mainFile = this.findMainFile(fullPath, item);
+const mainFile = this.findMainFile(fullPath, item);
           if (mainFile) {
-            exports.push(`export { default as ${item} } from './${item}/${mainFile}';`);
+            exports.push(`export { default as ${item} } from "./${item}/${mainFile};`);
           }
         }
-      } else if (item.endsWith('.tsx') || item.endsWith('.ts')) {
-        const fileName = item.replace(/\.(tsx?|ts)$/, '');
-        if (fileName !== 'index') {
-          exports.push(`export { default as ${fileName} } from './${fileName}';`);
+      } else if (item.endsWith(".tsx") || item.endsWith(.ts")) {
+        const fileName = item.replace(/\.(tsx?|ts)$/, ");
+        if (fileName !== "index") {
+          exports.push(`export { default as ${fileName} } from ./${fileName}";`);
         }
       }
     }
@@ -748,7 +722,7 @@ export interface ErrorInfo {
  * 索克生活APP - 架构优化
  */
 
-${exports.join('\n')}
+${exports.join("\n)}
 `;
   }
 
@@ -760,13 +734,13 @@ ${exports.join('\n')}
     const possibleNames = [
       `${dirName}.tsx`,
       `${dirName}.ts`,
-      'index.tsx',
-      'index.ts'
+      "index.tsx",
+      index.ts";
     ];
 
     for (const name of possibleNames) {
       if (files.includes(name)) {
-        return name.replace(/\.(tsx?|ts)$/, '');
+        return name.replace(/\.(tsx?|ts)$/, ");
       }
     }
 
@@ -777,12 +751,9 @@ ${exports.join('\n')}
    * 生成架构文档
    */
   async generateArchitectureDoc() {
-    console.log('📚 生成架构文档...');
-    
     const architectureDoc = `# 索克生活APP架构文档
-
-## 架构概览
-
+;
+## 架构概览;
 索克生活APP采用分层架构设计，主要包含以下层次：
 
 ### 1. 表现层 (Presentation Layer)
@@ -940,33 +911,25 @@ ${exports.join('\n')}
 - 更快的启动时间
 `;
 
-    const docPath = path.join(__dirname, '../docs/ARCHITECTURE.md');
+    const docPath = path.join(__dirname, ../docs/ARCHITECTURE.md");
     fs.writeFileSync(docPath, architectureDoc);
-    this.optimizations.push('生成架构文档');
+    this.optimizations.push("生成架构文档);
   }
 
   /**
    * 生成优化报告
    */
   generateReport() {
-    console.log('\n📊 架构优化报告');
-    console.log('='.repeat(50));
-    console.log(`✅ 完成的优化项目: ${this.optimizations.length}`);
-    console.log(`❌ 错误数量: ${this.errors.length}`);
-    
+    );
     if (this.optimizations.length > 0) {
-      console.log('\n✅ 优化项目:');
-      this.optimizations.forEach(opt => console.log(`  - ${opt}`));
+      this.optimizations.forEach(opt => );
     }
     
     if (this.errors.length > 0) {
-      console.log('\n❌ 错误详情:');
-      this.errors.forEach(error => console.log(`  - ${error}`));
+      this.errors.forEach(error => );
     }
     
-    console.log('\n🎉 架构优化完成！');
-    console.log('建议查看生成的架构文档: docs/ARCHITECTURE.md');
-  }
+    }
 }
 
 // 运行架构优化

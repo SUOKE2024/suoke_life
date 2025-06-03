@@ -7,8 +7,6 @@
 import asyncio
 import time
 import multiprocessing
-import threading
-import numpy as np
 import psutil
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 from multiprocessing import shared_memory
@@ -16,8 +14,6 @@ from typing import List, Dict, Any, Callable
 import json
 from dataclasses import dataclass
 from numba import jit
-import pickle
-
 
 @dataclass
 class BenchmarkResult:
@@ -27,7 +23,6 @@ class BenchmarkResult:
     cpu_utilization: float
     throughput: float
     scalability_score: float
-
 
 class CrossProcessBenchmark:
     """跨进程性能基准测试"""
@@ -478,7 +473,6 @@ class CrossProcessBenchmark:
                 print(f"    可扩展性: {result.scalability_score:.2f}x")
                 print(f"    内存使用: {result.memory_usage:.1f}MB")
 
-
 def main():
     """主函数"""
     benchmark = CrossProcessBenchmark()
@@ -496,7 +490,6 @@ def main():
     print("\n💡 优化建议:")
     for i, recommendation in enumerate(report['recommendations'], 1):
         print(f"  {i}. {recommendation}")
-
 
 if __name__ == "__main__":
     main() 

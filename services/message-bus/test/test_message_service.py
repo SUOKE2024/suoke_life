@@ -2,12 +2,9 @@
 消息服务单元测试
 """
 
-import asyncio
 import json
 import logging
-import os
 import pytest
-import uuid
 from datetime import datetime, timedelta
 from unittest.mock import AsyncMock, MagicMock, patch
 

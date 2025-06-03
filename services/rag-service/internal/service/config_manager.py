@@ -16,14 +16,8 @@ from enum import Enum
 from datetime import datetime, timedelta
 from pathlib import Path
 from loguru import logger
-import redis.asyncio as redis
-from pydantic import BaseModel, ValidationError, validator
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
-import hashlib
-import threading
-from contextlib import asynccontextmanager
-
 
 class ConfigFormat(Enum):
     """配置文件格式"""
@@ -32,7 +26,6 @@ class ConfigFormat(Enum):
     TOML = "toml"
     ENV = "env"
     INI = "ini"
-
 
 class ConfigSource(Enum):
     """配置源"""
@@ -44,14 +37,12 @@ class ConfigSource(Enum):
     ETCD = "etcd"              # etcd
     KUBERNETES = "kubernetes"   # Kubernetes ConfigMap
 
-
 class ConfigPriority(Enum):
     """配置优先级"""
     LOW = 1
     MEDIUM = 2
     HIGH = 3
     CRITICAL = 4
-
 
 @dataclass
 class ConfigItem:
@@ -70,7 +61,6 @@ class ConfigItem:
     tags: List[str] = field(default_factory=list)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
-
 @dataclass
 class ConfigChangeEvent:
     """配置变更事件"""
@@ -81,7 +71,6 @@ class ConfigChangeEvent:
     timestamp: datetime = field(default_factory=datetime.now)
     user_id: Optional[str] = None
     reason: Optional[str] = None
-
 
 class ConfigValidator:
     """配置验证器"""
@@ -139,7 +128,6 @@ class ConfigValidator:
         """验证枚举值"""
         return value in allowed_values
 
-
 class ConfigFileWatcher(FileSystemEventHandler):
     """配置文件监控器"""
     
@@ -167,7 +155,6 @@ class ConfigFileWatcher(FileSystemEventHandler):
             
             # 异步重新加载配置
             asyncio.create_task(self.config_manager._reload_config_file(file_path))
-
 
 class ConfigManager:
     """配置管理器"""

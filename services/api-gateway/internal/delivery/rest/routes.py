@@ -8,7 +8,6 @@ REST API路由模块
 
 import logging
 import time
-from typing import Dict, List, Optional
 
 import httpx
 from fastapi import APIRouter, Depends, FastAPI, Header, HTTPException, Request, Response
@@ -19,7 +18,6 @@ from internal.model.config import GatewayConfig, RouteConfig
 from internal.service.service_registry import ServiceRegistry
 from pkg.utils.cache import CacheKey, CacheManager
 from pkg.utils.rewrite import PathRewriter, create_path_rewriter
-
 
 logger = logging.getLogger(__name__)
 
@@ -171,7 +169,6 @@ async def proxy_request(request: Request, service_name: str, path: str) -> Respo
             status_code=503,
             content={"detail": f"请求服务 {service_name} 失败: {str(e)}"}
         )
-
 
 def setup_routes(app: FastAPI, config: GatewayConfig):
     """设置路由"""

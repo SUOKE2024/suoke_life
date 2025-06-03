@@ -12,15 +12,12 @@ from functools import wraps
 import logging
 from typing import Any, TypeVar
 
-from aiomysql import create_pool as create_mysql_pool
 import aioredis
 import asyncpg
-import motor.motor_asyncio
 
 logger = logging.getLogger(__name__)
 
 T = TypeVar("T")
-
 
 class AsyncBatcher:
     """批量处理异步请求，减少 I/O 开销"""
@@ -141,7 +138,6 @@ class AsyncBatcher:
             "is_running": self._process_task is not None,
         }
 
-
 @dataclass
 class ConnectionPoolConfig:
     """连接池配置"""
@@ -151,7 +147,6 @@ class ConnectionPoolConfig:
     timeout: float = 5.0
     max_queries: int = 50000
     max_inactive_connection_lifetime: float = 300.0
-
 
 class ConnectionPoolManager:
     """统一管理各种连接池"""
@@ -376,15 +371,12 @@ class ConnectionPoolManager:
 
         return health
 
-
 # 全局连接池管理器
 _global_pool_manager = ConnectionPoolManager()
-
 
 async def get_pool_manager() -> ConnectionPoolManager:
     """获取全局连接池管理器"""
     return _global_pool_manager
-
 
 # 装饰器：自动批处理
 def batch_process(batch_size: int = 100, timeout: float = 0.1):

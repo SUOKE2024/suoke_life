@@ -12,10 +12,8 @@ from datetime import datetime, timedelta
 import grpc
 
 # 导入生成的gRPC代码
-from api.grpc import palpation_service_pb2 as pb2
 
 logger = logging.getLogger(__name__)
-
 
 class BatchAnalysisHandler:
     """批量分析处理器"""

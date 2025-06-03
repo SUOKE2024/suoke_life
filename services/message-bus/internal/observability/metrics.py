@@ -1,7 +1,6 @@
 """
 指标收集模块，提供Prometheus指标采集功能
 """
-import time
 import logging
 import asyncio
 import threading
@@ -503,7 +502,6 @@ class MetricsService:
         status = 'success' if 200 <= status_code < 400 else 'error'
         api_requests.labels(endpoint=endpoint, method=method, status=status).inc()
         api_request_latency.labels(endpoint=endpoint, method=method).observe(duration)
-
 
 # 装饰器
 def track_time(metric_fn, *args, **kwargs):

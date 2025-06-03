@@ -3,21 +3,16 @@
 
 该测试验证REST和gRPC接口的端到端功能
 """
-import json
 import os
 import pytest
-import uuid
 import grpc
 from httpx import AsyncClient
-import asyncio
-from datetime import datetime
 
 # 添加项目根目录到Python路径
 import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from internal.model.user import UserStatus, UserRole
 from cmd.server.main import app, init_repositories
 from internal.service.user_service import UserService
 from protobuf.suoke.user.v1 import user_pb2, user_pb2_grpc

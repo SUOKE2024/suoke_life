@@ -5,11 +5,9 @@
 A/B测试框架 - 用于测试不同的RAG策略和中医算法
 """
 
-import asyncio
 import time
 import uuid
 import hashlib
-import json
 from typing import Dict, List, Any, Optional, Callable, Union
 from dataclasses import dataclass, field
 from enum import Enum
@@ -17,7 +15,6 @@ import random
 from loguru import logger
 
 from ..observability.metrics import MetricsCollector
-
 
 class ExperimentStatus(str, Enum):
     """实验状态"""
@@ -27,7 +24,6 @@ class ExperimentStatus(str, Enum):
     COMPLETED = "completed"     # 完成
     CANCELLED = "cancelled"     # 取消
 
-
 class TrafficSplitType(str, Enum):
     """流量分割类型"""
     RANDOM = "random"           # 随机分割
@@ -36,7 +32,6 @@ class TrafficSplitType(str, Enum):
     GEOGRAPHIC = "geographic"   # 基于地理位置
     DEVICE_TYPE = "device_type" # 基于设备类型
 
-
 class MetricType(str, Enum):
     """指标类型"""
     CONVERSION = "conversion"   # 转化率
@@ -44,7 +39,6 @@ class MetricType(str, Enum):
     PERFORMANCE = "performance" # 性能
     ACCURACY = "accuracy"       # 准确性
     SATISFACTION = "satisfaction" # 满意度
-
 
 @dataclass
 class ExperimentVariant:
@@ -67,7 +61,6 @@ class ExperimentVariant:
             "is_control": self.is_control
         }
 
-
 @dataclass
 class ExperimentMetric:
     """实验指标"""
@@ -88,7 +81,6 @@ class ExperimentMetric:
             "improvement_threshold": self.improvement_threshold,
             "statistical_significance": self.statistical_significance
         }
-
 
 @dataclass
 class Experiment:
@@ -137,7 +129,6 @@ class Experiment:
             "tags": self.tags
         }
 
-
 @dataclass
 class ExperimentResult:
     """实验结果"""
@@ -161,7 +152,6 @@ class ExperimentResult:
             "metadata": self.metadata
         }
 
-
 @dataclass
 class VariantStatistics:
     """变体统计"""
@@ -180,7 +170,6 @@ class VariantStatistics:
             "conversion_rate": self.conversion_rate,
             "confidence_interval": self.confidence_interval
         }
-
 
 class TrafficSplitter:
     """流量分割器"""
@@ -232,7 +221,6 @@ class TrafficSplitter:
                 return variant
         
         return experiment.variants[0]
-
 
 class ExperimentStorage:
     """实验存储"""
@@ -300,7 +288,6 @@ class ExperimentStorage:
     async def get_assignment(self, user_id: str, experiment_id: str) -> Optional[str]:
         """获取用户分配"""
         return self.assignments.get(user_id, {}).get(experiment_id)
-
 
 class StatisticalAnalyzer:
     """统计分析器"""
@@ -432,7 +419,6 @@ class StatisticalAnalyzer:
         y = 1.0 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * ((-x * x) ** 0.5).real
         
         return sign * y
-
 
 class ABTestingFramework:
     """A/B测试框架主类"""
@@ -745,10 +731,8 @@ class ABTestingFramework:
             "active_experiments": len(self.active_experiments_cache)
         }
 
-
 # 全局A/B测试实例
 _ab_testing_framework: Optional[ABTestingFramework] = None
-
 
 def initialize_ab_testing(metrics_collector: Optional[MetricsCollector] = None) -> ABTestingFramework:
     """初始化A/B测试框架"""
@@ -756,11 +740,9 @@ def initialize_ab_testing(metrics_collector: Optional[MetricsCollector] = None) 
     _ab_testing_framework = ABTestingFramework(metrics_collector)
     return _ab_testing_framework
 
-
 def get_ab_testing_framework() -> Optional[ABTestingFramework]:
     """获取A/B测试框架实例"""
     return _ab_testing_framework
-
 
 # 便捷的装饰器
 def ab_test_variant(experiment_name: str, variant_config_key: str = "config"):

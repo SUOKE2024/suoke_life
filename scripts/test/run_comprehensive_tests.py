@@ -10,9 +10,7 @@
 """
 
 import asyncio
-import subprocess
 import sys
-import os
 import json
 import time
 from datetime import datetime
@@ -460,7 +458,6 @@ if __name__ == "__main__":
         for i, recommendation in enumerate(report['recommendations'], 1):
             print(f"{i}. {recommendation}")
 
-
 async def main():
     """主函数"""
     parser = argparse.ArgumentParser(description='索克生活综合测试运行器')
@@ -492,7 +489,6 @@ async def main():
     except Exception as e:
         print(f"❌ 测试运行失败: {str(e)}")
         sys.exit(1)
-
 
 if __name__ == "__main__":
     asyncio.run(main())

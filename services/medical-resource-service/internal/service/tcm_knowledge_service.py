@@ -4,7 +4,6 @@
 """
 
 import logging
-import re
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from enum import Enum
@@ -13,7 +12,6 @@ from typing import Any, Dict, List, Optional, Tuple
 from ..domain.models import ConstitutionType, ResourceType
 
 logger = logging.getLogger(__name__)
-
 
 class TCMCategory(Enum):
     """中医知识类别"""
@@ -26,7 +24,6 @@ class TCMCategory(Enum):
     TREATMENT = "treatment"  # 治法
     DIAGNOSIS = "diagnosis"  # 诊断
     CONSTITUTION = "constitution"  # 体质
-
 
 class TCMProperty(Enum):
     """中药性味"""
@@ -46,7 +43,6 @@ class TCMProperty(Enum):
     SALTY = "咸"
     BLAND = "淡"
 
-
 class MeridianType(Enum):
     """经络类型"""
 
@@ -63,7 +59,6 @@ class MeridianType(Enum):
     GALLBLADDER = "胆经"
     LIVER = "肝经"
 
-
 @dataclass
 class TCMKnowledge:
     """中医知识条目"""
@@ -79,7 +74,6 @@ class TCMKnowledge:
     references: List[str]
     created_at: datetime
     updated_at: datetime
-
 
 @dataclass
 class TCMFormula:
@@ -100,7 +94,6 @@ class TCMFormula:
     clinical_applications: List[str]
     modern_research: List[str]
     created_at: datetime
-
 
 @dataclass
 class TCMHerb:
@@ -124,7 +117,6 @@ class TCMHerb:
     quality_standards: Dict[str, Any]
     created_at: datetime
 
-
 @dataclass
 class TCMAcupoint:
     """穴位"""
@@ -145,7 +137,6 @@ class TCMAcupoint:
     precautions: List[str]
     created_at: datetime
 
-
 @dataclass
 class TCMSyndrome:
     """中医证候"""
@@ -162,7 +153,6 @@ class TCMSyndrome:
     differential_diagnosis: List[str]
     prognosis: str
     created_at: datetime
-
 
 @dataclass
 class TCMDiagnosis:
@@ -182,7 +172,6 @@ class TCMDiagnosis:
     follow_up_plan: str
     created_at: datetime
     created_by: str
-
 
 class TCMKnowledgeService:
     """

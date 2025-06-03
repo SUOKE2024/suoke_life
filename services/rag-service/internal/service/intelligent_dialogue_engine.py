@@ -5,9 +5,7 @@
 智能对话引擎 - 提供多轮对话、上下文理解、意图识别、情感分析
 """
 
-import asyncio
 import time
-import json
 import re
 from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field
@@ -15,12 +13,10 @@ from enum import Enum
 from datetime import datetime, timedelta
 from loguru import logger
 import jieba
-import jieba.posseg as pseg
 from collections import defaultdict, deque
 
 from ..observability.metrics import MetricsCollector
 from ..observability.tracing import trace_operation, SpanKind
-
 
 class DialogueState(str, Enum):
     """对话状态"""
@@ -33,7 +29,6 @@ class DialogueState(str, Enum):
     FOLLOW_UP = "follow_up"                 # 随访
     EMERGENCY = "emergency"                 # 紧急情况
     CLOSING = "closing"                     # 结束对话
-
 
 class IntentType(str, Enum):
     """意图类型"""
@@ -50,7 +45,6 @@ class IntentType(str, Enum):
     CHITCHAT = "chitchat"                          # 闲聊
     COMPLAINT = "complaint"                        # 投诉
 
-
 class EmotionType(str, Enum):
     """情感类型"""
     POSITIVE = "positive"       # 积极
@@ -64,7 +58,6 @@ class EmotionType(str, Enum):
     CONFUSED = "confused"       # 困惑
     ANGRY = "angry"             # 愤怒
 
-
 class ResponseType(str, Enum):
     """回复类型"""
     INFORMATIVE = "informative"         # 信息性
@@ -75,7 +68,6 @@ class ResponseType(str, Enum):
     URGENT = "urgent"                   # 紧急性
     EDUCATIONAL = "educational"         # 教育性
     CONVERSATIONAL = "conversational"   # 对话性
-
 
 @dataclass
 class DialogueContext:
@@ -96,7 +88,6 @@ class DialogueContext:
     updated_at: datetime = field(default_factory=datetime.now)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
-
 @dataclass
 class UserMessage:
     """用户消息"""
@@ -110,7 +101,6 @@ class UserMessage:
     emotion: Optional[EmotionType] = None
     confidence: float = 0.0
     metadata: Dict[str, Any] = field(default_factory=dict)
-
 
 @dataclass
 class SystemResponse:
@@ -126,7 +116,6 @@ class SystemResponse:
     timestamp: datetime = field(default_factory=datetime.now)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
-
 @dataclass
 class DialogueSession:
     """对话会话"""
@@ -140,7 +129,6 @@ class DialogueSession:
     summary: str = ""
     outcome: Optional[str] = None
     satisfaction_score: Optional[float] = None
-
 
 class IntentClassifier:
     """意图识别器"""
@@ -278,7 +266,6 @@ class IntentClassifier:
         cleaned = re.sub(r'[^\u4e00-\u9fa5a-zA-Z0-9\s]', '', text)
         return cleaned.strip()
 
-
 class EntityExtractor:
     """实体提取器"""
     
@@ -395,7 +382,6 @@ class EntityExtractor:
             logger.error(f"实体提取失败: {e}")
             return {}
 
-
 class EmotionAnalyzer:
     """情感分析器"""
     
@@ -503,7 +489,6 @@ class EmotionAnalyzer:
         except Exception as e:
             logger.error(f"情感分析失败: {e}")
             return EmotionType.NEUTRAL, 0.0
-
 
 class DialogueStateManager:
     """对话状态管理器"""
@@ -622,7 +607,6 @@ class DialogueStateManager:
         except Exception as e:
             logger.error(f"状态转换失败: {e}")
             return current_state
-
 
 class ResponseGenerator:
     """回复生成器"""
@@ -959,7 +943,6 @@ class ResponseGenerator:
         
         return min(confidence, 1.0)
 
-
 class IntelligentDialogueEngine:
     """智能对话引擎主类"""
     
@@ -1285,10 +1268,8 @@ class IntelligentDialogueEngine:
             logger.error(f"获取对话统计失败: {e}")
             return {}
 
-
 # 全局对话引擎实例
 _dialogue_engine: Optional[IntelligentDialogueEngine] = None
-
 
 def initialize_dialogue_engine(
     config: Dict[str, Any],
@@ -1298,7 +1279,6 @@ def initialize_dialogue_engine(
     global _dialogue_engine
     _dialogue_engine = IntelligentDialogueEngine(config, metrics_collector)
     return _dialogue_engine
-
 
 def get_dialogue_engine() -> Optional[IntelligentDialogueEngine]:
     """获取对话引擎实例"""

@@ -11,7 +11,6 @@ import uuid
 from typing import Dict, Any, Optional
 
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, HTTPException, Depends, Query
-from fastapi.responses import JSONResponse
 
 from ..services.websocket_manager import (
     get_websocket_manager,
@@ -24,7 +23,6 @@ from ..core.logging import get_logger
 logger = get_logger(__name__)
 
 router = APIRouter(prefix="/ws", tags=["websocket"])
-
 
 @router.websocket("/connect")
 async def websocket_endpoint(
@@ -108,7 +106,6 @@ async def websocket_endpoint(
         # 清理连接
         await ws_manager.disconnect(connection_id)
 
-
 @router.post("/send/{connection_id}")
 async def send_to_connection(
     connection_id: str,
@@ -142,7 +139,6 @@ async def send_to_connection(
     except Exception as e:
         logger.error("Failed to send message to connection", error=str(e))
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @router.post("/send/user/{user_id}")
 async def send_to_user(
@@ -178,7 +174,6 @@ async def send_to_user(
     except Exception as e:
         logger.error("Failed to send message to user", error=str(e))
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @router.post("/broadcast/room/{room}")
 async def broadcast_to_room(
@@ -220,7 +215,6 @@ async def broadcast_to_room(
         logger.error("Failed to broadcast to room", error=str(e))
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @router.post("/broadcast/all")
 async def broadcast_to_all(
     message_data: Dict[str, Any],
@@ -255,7 +249,6 @@ async def broadcast_to_all(
         logger.error("Failed to broadcast to all", error=str(e))
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @router.post("/room/{room}/join/{connection_id}")
 async def join_room(
     room: str,
@@ -285,7 +278,6 @@ async def join_room(
     except Exception as e:
         logger.error("Failed to join room", error=str(e))
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @router.post("/room/{room}/leave/{connection_id}")
 async def leave_room(
@@ -317,7 +309,6 @@ async def leave_room(
         logger.error("Failed to leave room", error=str(e))
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @router.get("/stats")
 async def get_websocket_stats(
     ws_manager: WebSocketManager = Depends(get_websocket_manager),
@@ -339,7 +330,6 @@ async def get_websocket_stats(
     except Exception as e:
         logger.error("Failed to get WebSocket stats", error=str(e))
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @router.get("/connections")
 async def list_connections(
@@ -385,7 +375,6 @@ async def list_connections(
         logger.error("Failed to list connections", error=str(e))
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @router.get("/connection/{connection_id}")
 async def get_connection_info(
     connection_id: str,
@@ -416,7 +405,6 @@ async def get_connection_info(
     except Exception as e:
         logger.error("Failed to get connection info", error=str(e))
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @router.delete("/connection/{connection_id}")
 async def disconnect_connection(
@@ -451,7 +439,6 @@ async def disconnect_connection(
         logger.error("Failed to disconnect connection", error=str(e))
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @router.get("/rooms")
 async def list_rooms(
     ws_manager: WebSocketManager = Depends(get_websocket_manager),
@@ -484,7 +471,6 @@ async def list_rooms(
     except Exception as e:
         logger.error("Failed to list rooms", error=str(e))
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @router.get("/health")
 async def websocket_health_check(

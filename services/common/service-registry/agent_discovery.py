@@ -11,13 +11,10 @@ import time
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional, Set
-import redis.asyncio as redis
 from datetime import datetime, timedelta
 import hashlib
-import uuid
 
 logger = logging.getLogger(__name__)
-
 
 class AgentType(Enum):
     """智能体类型"""
@@ -25,7 +22,6 @@ class AgentType(Enum):
     XIAOKE = "xiaoke"      # 小克 - 症状分析与初诊
     LAOKE = "laoke"        # 老克 - 深度诊断与治疗
     SOER = "soer"          # 索儿 - 生活方式与养生
-
 
 class CapabilityType(Enum):
     """智能体能力类型"""
@@ -38,14 +34,12 @@ class CapabilityType(Enum):
     DATA_ANALYSIS = "data_analysis"                # 数据分析
     KNOWLEDGE_QUERY = "knowledge_query"            # 知识查询
 
-
 class ServiceStatus(Enum):
     """服务状态"""
     HEALTHY = "healthy"
     DEGRADED = "degraded"
     UNHEALTHY = "unhealthy"
     OFFLINE = "offline"
-
 
 @dataclass
 class AgentCapability:
@@ -56,7 +50,6 @@ class AgentCapability:
     success_rate: float      # 成功率 0.0-1.0
     specializations: List[str] = field(default_factory=list)  # 专业领域
     constraints: Dict[str, Any] = field(default_factory=dict)  # 约束条件
-
 
 @dataclass
 class AgentServiceInfo:
@@ -131,7 +124,6 @@ class AgentServiceInfo:
             load_factor=data.get('load_factor', 0.0)
         )
 
-
 @dataclass
 class ServiceDiscoveryQuery:
     """服务发现查询"""
@@ -145,7 +137,6 @@ class ServiceDiscoveryQuery:
     max_load_factor: float = 0.8
     prefer_local: bool = False
     locality_preference: Optional[str] = None
-
 
 class AgentServiceRegistry:
     """智能体服务注册中心"""
@@ -574,7 +565,6 @@ class AgentServiceRegistry:
             except Exception as e:
                 logger.error(f"清理过期服务失败: {e}")
 
-
 # 预定义的智能体能力配置
 AGENT_CAPABILITIES = {
     AgentType.XIAOAI: [
@@ -649,7 +639,6 @@ AGENT_CAPABILITIES = {
         )
     ]
 }
-
 
 def create_agent_service_info(
     agent_type: AgentType,

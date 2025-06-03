@@ -1,13 +1,9 @@
-import {;
-render, fireEvent;
-} from "@testing-library/react-native";/import {;
-HealthPathwayVisualizer
-} from "../components/HealthPathwayVisualizer"/import React from "react";
-describe("HealthPathwayVisualizer", () => {
-it("应高亮当前及之前阶段", () => {,
+import React from "react";
+//describe("HealthPathwayVisualizer", () => {
+it("应高亮当前及之前阶段", () => {
     const { getByText
   } = render(
-      <HealthPathwayVisualizer currentStage="regulation">;/    ;)
+      <HealthPathwayVisualizer currentStage="regulation">);
     expect(getByText("检测").props.style).toEqual(
       expect.arrayContaining([expect.objectContaining({
 fontWeight: "bold"})])
@@ -16,17 +12,17 @@ fontWeight: "bold"})])
       expect.arrayContaining([expect.objectContaining({
 fontWeight: "bold"})])
     );
-  })
-  it("点击节点应触发回调", (); => {
-const onStagePress = jest.fn;(;)
+  });
+  it("点击节点应触发回调", () => {
+const onStagePress = jest.fn;(;);
     const { getByText
   } = render(
-      <HealthPathwayVisualizer
-        currentStage="inspection"
+      <HealthPathwayVisualizer;
+currentStage="inspection"
         onStagePress={
 onStagePress
-}
-     >;/    ;)
+});
+     >);
     fireEvent.press(getByText("检测");)
     expect(onStagePress).toHaveBeenCalledWith("inspection");
   });

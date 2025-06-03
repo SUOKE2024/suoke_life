@@ -19,7 +19,6 @@ from tenacity import (
 
 try:
     import openai
-    from openai.types.chat import (
         ChatCompletionAssistantMessageParam,
         ChatCompletionMessageParam,
         ChatCompletionSystemMessageParam,
@@ -47,7 +46,6 @@ from .model_config_manager import (
     ModelProvider,
 )
 
-
 def track_llm_metrics(model=None, query_type=None):
     """简化的LLM指标跟踪装饰器"""
     def decorator(func):
@@ -74,7 +72,6 @@ def rate_limiter(max_calls=60, time_period=60):
 
 logger = logging.getLogger(__name__)
 
-
 class ModelHealthStatus:
     """模型健康状态"""
     def __init__(self):
@@ -83,7 +80,6 @@ class ModelHealthStatus:
         self.errorcount = 0
         self.responsetime = 0.0
         self.lasterror = None
-
 
 class ModelFactory:
     """
@@ -716,7 +712,6 @@ class ModelFactory:
         self.health_status.clear()
 
         logger.info("大模型工厂已关闭")
-
 
 # 全局实例
 model_factory_instance = None

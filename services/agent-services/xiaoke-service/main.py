@@ -6,7 +6,6 @@
 SUOKE频道版主，负责服务订阅、农产品预制、供应链管理等商业化服务
 """
 
-import asyncio
 import uvicorn
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
@@ -28,11 +27,9 @@ from xiaoke_service.delivery.api.supply_chain import supply_chain_router
 from xiaoke_service.observability.monitoring import setup_monitoring
 from xiaoke_service.platform.lifecycle import AgentLifecycleManager
 
-
 # 全局变量
 xiaoke_agent: XiaokeAgent = None
 lifecycle_manager: AgentLifecycleManager = None
-
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -73,7 +70,6 @@ async def lifespan(app: FastAPI):
             await lifecycle_manager.cleanup()
         logger.info("🔄 小克智能体服务已停止")
 
-
 def create_app() -> FastAPI:
     """创建FastAPI应用"""
     settings = get_settings()
@@ -105,17 +101,14 @@ def create_app() -> FastAPI:
     
     return app
 
-
 def get_xiaoke_agent() -> XiaokeAgent:
     """获取小克智能体实例"""
     if xiaoke_agent is None:
         raise HTTPException(status_code=503, detail="小克智能体服务未就绪")
     return xiaoke_agent
 
-
 # 创建应用实例
 app = create_app()
-
 
 @app.get("/")
 async def root():
@@ -134,12 +127,10 @@ async def root():
         ]
     }
 
-
 @app.get("/agent/status")
 async def get_agent_status(agent: XiaokeAgent = Depends(get_xiaoke_agent)):
     """获取智能体状态"""
     return await agent.get_status()
-
 
 @app.post("/agent/message")
 async def send_message(
@@ -159,7 +150,6 @@ async def send_message(
         logger.error(f"处理消息失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @app.post("/agent/recommend-service")
 async def recommend_service(
     request: dict,
@@ -176,7 +166,6 @@ async def recommend_service(
     except Exception as e:
         logger.error(f"服务推荐失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @app.post("/agent/match-doctor")
 async def match_doctor(
@@ -196,7 +185,6 @@ async def match_doctor(
         logger.error(f"医生匹配失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
 def main():
     """主函数"""
     settings = get_settings()
@@ -211,7 +199,6 @@ def main():
         log_level="info" if settings.debug else "warning",
         access_log=settings.debug
     )
-
 
 if __name__ == "__main__":
     main() 

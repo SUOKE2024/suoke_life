@@ -4,7 +4,7 @@
   LifePlan,
   LifeHabit,
   LifeGoal,
-  { LifeStats } from "../types/life";//  *  索儿的生活建议 *// export const SOER_SUGGESTIONS: LifeSuggestion[] = [{,
+  { LifeStats } from "../types/life";// // 索儿的生活建议 /////     export const SOER_SUGGESTIONS: LifeSuggestion[] = [{
     id: "morning_routine",
     title: "建立晨间仪式",
     description: "每天早上花15分钟做伸展运动，喝一杯温水，为新的一天做好准备",
@@ -83,7 +83,9 @@
     steps: ["选择合适的时间", "准备聊天话题", "真诚表达关心"]
   }
 ];
-// 健康指标数据 * export const HEALTH_METRICS: HealthMetric[] = [;{, */
+;
+// 健康指标数据 * export const HEALTH_METRICS: HealthMetric[] = [////   ;
+{
     id: "mood",
     name: "心情指数",
     value: 85,
@@ -93,7 +95,7 @@
     color: "#FF9500",
     trend: "up",
     suggestion: "保持积极心态，今天心情不错！",
-    history: [{, date: "2024-01-01", value: 75},
+    history: [{ date: "2024-01-01", value: 75},
       { date: "2024-01-02", value: 80},
       { date: "2024-01-03", value: 85}
     ]
@@ -108,7 +110,7 @@
     color: "#34C759",
     trend: "stable",
     suggestion: "适当休息，补充能量",
-    history: [{, date: "2024-01-01", value: 70},
+    history: [{ date: "2024-01-01", value: 70},
       { date: "2024-01-02", value: 72},
       { date: "2024-01-03", value: 72}
     ]
@@ -123,7 +125,7 @@
     color: "#FF2D92",
     trend: "down",
     suggestion: "压力稍高，建议放松一下",
-    history: [{, date: "2024-01-01", value: 40},
+    history: [{ date: "2024-01-01", value: 40},
       { date: "2024-01-02", value: 38},
       { date: "2024-01-03", value: 35}
     ]
@@ -138,13 +140,14 @@
     color: "#5856D6",
     trend: "up",
     suggestion: "工作生活平衡良好",
-    history: [{, date: "2024-01-01", value: 70},
+    history: [{ date: "2024-01-01", value: 70},
       { date: "2024-01-02", value: 75},
       { date: "2024-01-03", value: 78}
     ]
   }
 ];
-// 生活计划数据 * export const LIFE_PLANS: LifePlan[] = [;{, */
+// 生活计划数据 * export const LIFE_PLANS: LifePlan[] = [////   ;
+{
     id: "healthy_lifestyle",
     title: "健康生活方式养成",
     description: "建立规律作息，培养健康饮食和运动习惯",
@@ -156,7 +159,7 @@
     nextAction: "完成今日晨练",
     startDate: "2024-01-01",
     endDate: "2024-01-21",
-    milestones: [{,
+    milestones: [{
         id: "week1",
         title: "第一周目标",
         description: "建立基础作息规律",
@@ -177,7 +180,7 @@
         title: "第三周目标",
         description: "完善饮食结构",
         targetDate: "2024-01-21",
-        completed: false
+        completed: false;
       }
     ],
     rewards: ["健康徽章", "专属称号", "健康积分"]
@@ -194,7 +197,7 @@
     nextAction: "设置工作边界",
     startDate: "2024-01-01",
     endDate: "2024-01-30",
-    milestones: [{,
+    milestones: [{
         id: "boundaries",
         title: "设定工作边界",
         description: "明确工作时间和休息时间",
@@ -207,7 +210,7 @@
         title: "培养兴趣爱好",
         description: "每周至少2小时兴趣活动",
         targetDate: "2024-01-20",
-        completed: false
+        completed: false;
       }
     ],
     rewards: ["时间管理大师", "生活平衡者", "效率提升奖"]
@@ -224,7 +227,7 @@
     nextAction: "今日冥想练习",
     startDate: "2024-01-01",
     endDate: "2024-01-14",
-    milestones: [{,
+    milestones: [{
         id: "basic",
         title: "基础冥想",
         description: "掌握基本冥想技巧",
@@ -237,13 +240,14 @@
         title: "进阶练习",
         description: "尝试不同冥想方法",
         targetDate: "2024-01-14",
-        completed: false
+        completed: false;
       }
     ],
     rewards: ["正念大师", "内心平静奖", "专注力提升"]
   }
 ];
-// 生活习惯数据 * export const LIFE_HABITS: LifeHabit[] = [;{, */
+// 生活习惯数据 * export const LIFE_HABITS: LifeHabit[] = [////   ;
+{
     id: "morning_exercise",
     name: "晨间运动",
     description: "每天早上进行15分钟运动",
@@ -295,7 +299,8 @@
     }
   }
 ];
-// 生活目标数据 * export const LIFE_GOALS: LifeGoal[] = [;{, */
+// 生活目标数据 * export const LIFE_GOALS: LifeGoal[] = [////   ;
+{
     id: "fitness_goal",
     title: "提升身体素质",
     description: "通过规律运动和健康饮食，提升整体身体素质",
@@ -304,7 +309,7 @@
     progress: 65,
     targetDate: "2024-06-01",
     status: "active",
-    subGoals: [{, id: "weight", title: "减重5公斤", completed: false},
+    subGoals: [{ id: "weight", title: "减重5公斤", completed: false},
       {
         id: "endurance",
         title: "提升心肺功能",
@@ -323,7 +328,7 @@
     progress: 40,
     targetDate: "2024-12-31",
     status: "active",
-    subGoals: [{, id: "certification", title: "获得专业认证", completed: false},
+    subGoals: [{ id: "certification", title: "获得专业认证", completed: false},
       {
         id: "networking",
         title: "扩展职业网络",
@@ -334,13 +339,13 @@
     ]
   }
 ];
-// 生活统计数据 * export const LIFE_STATS: LifeStats = {, */;
+// 生活统计数据 * export const LIFE_STATS: LifeStats = { ////
   totalSuggestions: 156,
   completedSuggestions: 89,
   activePlans: 3,
   completedPlans: 8,
   currentStreak: 15,
-  longestStreak: 32,
-  averageScore: 78.5,
-  improvementRate: 12.3
+  longestStreak: 32,;
+  averageScore: 78.5,;
+  improvementRate: 12.3;
 };

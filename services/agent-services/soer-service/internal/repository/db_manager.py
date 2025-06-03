@@ -11,7 +11,6 @@ from functools import wraps
 from typing import Any
 
 import asyncpg
-import redis.asyncio as redis
 
 from pkg.utils.metrics import track_database_query
 
@@ -204,7 +203,6 @@ class DBManager:
         finally:
             duration = time.time() - start_time
             track_database_query("delete", "redis", duration)
-
 
 # 全局数据库管理器实例
 _db_manager: DBManager | None = None

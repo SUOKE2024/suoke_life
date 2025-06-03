@@ -7,15 +7,12 @@ XiaoAI Agent Main CLI
 提供小艾智能体的主要命令行功能。
 """
 
-from __future__ import annotations
-
 import sys
 
 import click
 from loguru import logger
 
 from xiaoai import __version__
-
 
 @click.group()
 @click.version_option(version=_version__, prog_name="xiaoai")
@@ -60,7 +57,6 @@ def cli(ctx: click.Context, verbose: int, config: str | None) -> None:
     ctx.obj["verbose"] = verbose
 
     logger.info(f"小艾智能体 v{__version__} 启动")
-
 
 @cli.command()
 @click.option(
@@ -107,7 +103,6 @@ def server(
         config=ctx.obj.get("config")
     )
 
-
 @cli.command()
 @click.option(
     "--concurrency", "-c",
@@ -137,7 +132,6 @@ def worker(
         config=ctx.obj.get("config")
     )
 
-
 @cli.command()
 @click.option(
     "--format", "-f",
@@ -151,7 +145,6 @@ def status(format: str) -> None:
 
     logger.info("检查服务状态...")
     check_status(format=format)
-
 
 @cli.command()
 @click.option(
@@ -171,7 +164,6 @@ def init(target: str, force: bool) -> None:
 
     logger.info(f"初始化 {target}...")
     initialize(target=target, force=force)
-
 
 @cli.command()
 @click.option(
@@ -196,7 +188,6 @@ def health(checkonly: bool) -> None:
             click.echo(click.style(f"  - {issue}", fg="red"))
         sys.exit(1)
 
-
 def main() -> None:
     """主入口点"""
     try:
@@ -207,7 +198,6 @@ def main() -> None:
     except Exception as e:
         logger.error(f"发生错误: {e}")
         sys.exit(1)
-
 
 if __name__ == "__main__":
     main()

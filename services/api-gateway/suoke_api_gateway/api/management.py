@@ -4,8 +4,6 @@
 提供网关管理功能，如服务注册、配置管理等。
 """
 
-from typing import Dict, List
-
 from fastapi import APIRouter, HTTPException, Request, status
 from pydantic import BaseModel
 
@@ -19,7 +17,6 @@ logger = get_logger(__name__)
 
 management_router = APIRouter()
 
-
 class ServiceRegistrationRequest(BaseModel):
     """服务注册请求模型"""
     name: str
@@ -29,7 +26,6 @@ class ServiceRegistrationRequest(BaseModel):
     timeout: int = 30
     retry_count: int = 3
 
-
 class ServiceUpdateRequest(BaseModel):
     """服务更新请求模型"""
     host: str = None
@@ -37,7 +33,6 @@ class ServiceUpdateRequest(BaseModel):
     health_check_path: str = None
     timeout: int = None
     retry_count: int = None
-
 
 @management_router.post("/services", status_code=status.HTTP_201_CREATED)
 async def register_service(
@@ -88,7 +83,6 @@ async def register_service(
             detail="Failed to register service"
         )
 
-
 @management_router.delete("/services/{service_name}/instances/{instance_id}")
 async def deregister_service(
     service_name: str,
@@ -134,7 +128,6 @@ async def deregister_service(
             detail="Failed to deregister service"
         )
 
-
 @management_router.get("/services")
 async def list_all_services(request: Request):
     """列出所有服务及其详细信息"""
@@ -166,7 +159,6 @@ async def list_all_services(request: Request):
     
     return result
 
-
 @management_router.get("/health")
 async def get_gateway_health(request: Request):
     """获取网关整体健康状态"""
@@ -196,7 +188,6 @@ async def get_gateway_health(request: Request):
             detail="Failed to get health status"
         )
 
-
 @management_router.get("/metrics/summary")
 async def get_metrics_summary(request: Request):
     """获取指标摘要"""
@@ -220,7 +211,6 @@ async def get_metrics_summary(request: Request):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to get metrics summary"
         )
-
 
 @management_router.post("/services/{service_name}/health-check")
 async def trigger_health_check(service_name: str, request: Request):
@@ -261,7 +251,6 @@ async def trigger_health_check(service_name: str, request: Request):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to trigger health check"
         )
-
 
 @management_router.get("/config")
 async def get_gateway_config(request: Request):

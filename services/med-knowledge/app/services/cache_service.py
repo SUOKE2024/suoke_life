@@ -8,10 +8,8 @@ import pickle
 from typing import Any
 
 from pydantic import BaseModel
-import redis.asyncio as redis
 
 from app.core.logger import get_logger
-
 
 class CacheService:
     """缓存服务"""
@@ -200,7 +198,6 @@ class CacheService:
             self.logger.info("Redis连接已关闭")
         except Exception as e:
             self.logger.error(f"关闭Redis连接失败: {e}")
-
 
 class CacheKeys:
     """缓存键名常量"""

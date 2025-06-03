@@ -6,7 +6,6 @@
 探索频道版主，负责知识传播、培训和博物馆导览，兼任玉米迷宫NPC
 """
 
-import asyncio
 import uvicorn
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
@@ -28,11 +27,9 @@ from laoke_service.delivery.api.maze import maze_router
 from laoke_service.observability.monitoring import setup_monitoring
 from laoke_service.platform.lifecycle import AgentLifecycleManager
 
-
 # 全局变量
 laoke_agent: LaokeAgent = None
 lifecycle_manager: AgentLifecycleManager = None
-
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -73,7 +70,6 @@ async def lifespan(app: FastAPI):
             await lifecycle_manager.cleanup()
         logger.info("🔄 老克智能体服务已停止")
 
-
 def create_app() -> FastAPI:
     """创建FastAPI应用"""
     settings = get_settings()
@@ -105,17 +101,14 @@ def create_app() -> FastAPI:
     
     return app
 
-
 def get_laoke_agent() -> LaokeAgent:
     """获取老克智能体实例"""
     if laoke_agent is None:
         raise HTTPException(status_code=503, detail="老克智能体服务未就绪")
     return laoke_agent
 
-
 # 创建应用实例
 app = create_app()
-
 
 @app.get("/")
 async def root():
@@ -134,12 +127,10 @@ async def root():
         ]
     }
 
-
 @app.get("/agent/status")
 async def get_agent_status(agent: LaokeAgent = Depends(get_laoke_agent)):
     """获取智能体状态"""
     return await agent.get_status()
-
 
 @app.post("/agent/message")
 async def send_message(
@@ -159,7 +150,6 @@ async def send_message(
         logger.error(f"处理消息失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @app.post("/agent/search-knowledge")
 async def search_knowledge(
     request: dict,
@@ -177,7 +167,6 @@ async def search_knowledge(
     except Exception as e:
         logger.error(f"知识搜索失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @app.post("/agent/create-learning-path")
 async def create_learning_path(
@@ -197,7 +186,6 @@ async def create_learning_path(
         logger.error(f"创建学习路径失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @app.post("/agent/maze-interaction")
 async def maze_interaction(
     request: dict,
@@ -216,7 +204,6 @@ async def maze_interaction(
         logger.error(f"迷宫交互失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
 def main():
     """主函数"""
     settings = get_settings()
@@ -231,7 +218,6 @@ def main():
         log_level="info" if settings.debug else "warning",
         access_log=settings.debug
     )
-
 
 if __name__ == "__main__":
     main() 

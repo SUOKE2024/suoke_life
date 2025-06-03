@@ -1,7 +1,7 @@
-// useScreenNavigation.ts   索克生活APP - 自动生成的类型安全文件     @description TODO: 添加文件描述; @author 索克生活开发团队   @version 1.0.0
-import { useNavigation } from "@react-navigation/native"/import {   Alert   } from 'react-native';
+//////     useScreenNavigation.ts   索克生活APP - 自动生成的类型安全文件     @description TODO: 添加文件描述 @author 索克生活开发团队   @version 1.0.0;
+import { useNavigation } from "@react-navigation/native";/////    import {   Alert   } from 'react-native';
 import { useCallback } from "react";
-export interface UseScreenNavigationReturn {;
+export interface UseScreenNavigationReturn  {
   goBack: () => void,
   goToHome: () => void,
   goToProfile: () => void,
@@ -10,60 +10,61 @@ export interface UseScreenNavigationReturn {;
   goToRegister: () => void,
   showAlert: (title: string, message: string, onConfirm?: () => void) => void,
   showConfirm: (title: string,
-    message: string,
-    onConfirm: () => void,
-    onCancel?: () => void
+    message: string,;
+    onConfirm: () => void,;
+    onCancel?: () => void;
   ) => void;
 }
-export const useScreenNavigation = (): UseScreenNavigationReturn =;> ;{;
-  const navigation = useNavigation;(;);
-  const goBack = useCallback((); => {
+export const useScreenNavigation = (): UseScreenNavigationReturn =;
+> ;{;
+  const navigation = useNavigation;
+  const goBack = useCallback((); => {;}
     if (navigation.canGoBack();) {
       navigation.goBack();
     }
   }, [navigation]);
-  const goToHome = useCallback(() => {
+  const goToHome = useCallback(() => {;}
     navigation.navigate("Home" as never);
   }, [navigation]);
-  const goToProfile = useCallback(() => {
+  const goToProfile = useCallback(() => {;}
     navigation.navigate("Profile" as never);
   }, [navigation]);
-  const goToSettings = useCallback(() => {
+  const goToSettings = useCallback(() => {;}
     navigation.navigate("Settings" as never);
   }, [navigation]);
-  const goToLogin = useCallback(() => {
+  const goToLogin = useCallback(() => {;}
     navigation.navigate("Login" as never);
   }, [navigation]);
-  const goToRegister = useCallback(() => {
+  const goToRegister = useCallback(() => {;}
     navigation.navigate("Register" as never);
   }, [navigation]);
   const showAlert = useCallback(;
-    (title: string, message: string, onConfirm?: ;(;) => void) => {
+    (title: string, message: string, onConfirm?: ;(;) => void) => {}
       Alert.alert(title, message, [
         {
           text: "确定",
-          onPress: onConfirm
+          onPress: onConfirm;
         }
       ]);
     },
     []
   );
-  const showConfirm = useCallback(
+  const showConfirm = useCallback(;
     (
       title: string,
-      message: string,
+      message: string,;
       onConfirm: ;(;) => void,
-      onCancel?: () => void
-    ) => {
+      onCancel?: () => void;
+    ) => {}
       Alert.alert(title, message, [
         {
           text: "取消",
           style: "cancel",
-          onPress: onCancel
+          onPress: onCancel;
         },
         {
           text: "确定",
-          onPress: onConfirm
+          onPress: onConfirm;
         }
       ]);
     },
@@ -77,6 +78,6 @@ export const useScreenNavigation = (): UseScreenNavigationReturn =;> ;{;
     goToLogin,
     goToRegister,
     showAlert,
-    showConfir;m
+    showConfir;m;
   ;};
 };

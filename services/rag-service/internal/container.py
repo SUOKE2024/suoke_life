@@ -6,7 +6,6 @@
 """
 
 from dependency_injector import containers, providers
-from dependency_injector.wiring import Provide, inject
 from typing import Dict, Any
 
 from .service.rag_service import RagService
@@ -25,7 +24,6 @@ from .resilience.circuit_breaker import CircuitBreakerService
 from .tcm.syndrome_analyzer import SyndromeAnalyzer
 from .tcm.herb_recommender import HerbRecommender
 from .tcm.pulse_analyzer import PulseAnalyzer
-
 
 class Container(containers.DeclarativeContainer):
     """依赖注入容器"""
@@ -147,7 +145,6 @@ class Container(containers.DeclarativeContainer):
         circuit_breaker_service=circuit_breaker_service
     )
 
-
 def create_container(config: Dict[str, Any]) -> Container:
     """
     创建并配置依赖注入容器
@@ -170,10 +167,8 @@ def create_container(config: Dict[str, Any]) -> Container:
     
     return container
 
-
 # 全局容器实例
 container: Container = None
-
 
 def get_container() -> Container:
     """获取全局容器实例"""
@@ -181,7 +176,6 @@ def get_container() -> Container:
     if container is None:
         raise RuntimeError("Container not initialized. Call create_container() first.")
     return container
-
 
 def init_container(config: Dict[str, Any]) -> None:
     """初始化全局容器"""

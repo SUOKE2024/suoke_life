@@ -3,10 +3,7 @@ import logging
 import time
 from typing import Dict, Any, Optional
 from enum import Enum
-import json
-import aiohttp
 from aiohttp import web
-import grpc
 from grpc_health.v1 import health_pb2, health_pb2_grpc
 
 from internal.service.message_service import MessageService

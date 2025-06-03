@@ -3,17 +3,14 @@ PostgreSQL用户仓库实现模块
 
 该模块实现了基于PostgreSQL的用户数据仓库，作为服务端主数据源。
 """
-import json
 import logging
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple, Any, Union
 from uuid import UUID
 
-import sqlalchemy as sa
 from sqlalchemy import create_engine, and_, or_, select, update, delete, insert, func
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID, JSONB
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
 
 from internal.model.user import (User, UserHealthSummary, DeviceInfo, UserStatus,
@@ -22,7 +19,6 @@ from internal.repository.exceptions import (UserNotFoundError, UserAlreadyExists
                                      DeviceNotFoundError, DeviceAlreadyBoundError,
                                      DatabaseError)
 from internal.repository.models import Base, User as UserModel, HealthSummary as HealthSummaryModel, Device as DeviceModel
-
 
 class PostgresUserRepository:
     """PostgreSQL用户仓库实现"""

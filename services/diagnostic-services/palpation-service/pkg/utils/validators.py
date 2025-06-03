@@ -5,9 +5,7 @@
 """
 
 import re
-import numpy as np
 from typing import Any, Dict, List, Union, Optional
-
 
 def validate_user_id(user_id: str) -> bool:
     """
@@ -26,7 +24,6 @@ def validate_user_id(user_id: str) -> bool:
     pattern = r'^[0-9a-fA-F]{24}$|^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
     return bool(re.match(pattern, user_id))
 
-
 def validate_session_id(session_id: str) -> bool:
     """
     验证会话ID格式
@@ -43,7 +40,6 @@ def validate_session_id(session_id: str) -> bool:
     # 会话ID应为24位十六进制字符串(MongoDB ObjectId格式)或UUID格式
     pattern = r'^[0-9a-fA-F]{24}$|^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
     return bool(re.match(pattern, session_id))
-
 
 def validate_pulse_data(pulse_data: List[float]) -> bool:
     """
@@ -76,7 +72,6 @@ def validate_pulse_data(pulse_data: List[float]) -> bool:
         
     return True
 
-
 def validate_position(position: str) -> bool:
     """
     验证脉诊位置是否有效
@@ -92,7 +87,6 @@ def validate_position(position: str) -> bool:
         'right_cun', 'right_guan', 'right_chi'
     ]
     return position in valid_positions
-
 
 def validate_abdominal_region(region: str) -> bool:
     """
@@ -111,7 +105,6 @@ def validate_abdominal_region(region: str) -> bool:
     ]
     return region in valid_regions
 
-
 def validate_skin_region(region: str) -> bool:
     """
     验证皮肤触诊区域是否有效
@@ -128,7 +121,6 @@ def validate_skin_region(region: str) -> bool:
         'leg', 'foot'
     ]
     return region in valid_regions
-
 
 def validate_abdominal_data(data: Dict[str, Any]) -> bool:
     """
@@ -165,7 +157,6 @@ def validate_abdominal_data(data: Dict[str, Any]) -> bool:
         return False
         
     return True
-
 
 def validate_skin_data(data: Dict[str, Any]) -> bool:
     """

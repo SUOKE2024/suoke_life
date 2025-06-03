@@ -3,12 +3,10 @@
 from dataclasses import dataclass
 from typing import Any
 
-import numpy as np
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 
 from .agent_metrics import MetricResult
 from .metrics import Metric
-
 
 @dataclass
 class TongueFeature:
@@ -21,7 +19,6 @@ class TongueFeature:
     cracks: list[str]  # 裂纹
     spots: list[dict[str, Any]]  # 斑点
 
-
 @dataclass
 class FaceFeature:
     """面色特征数据类。"""
@@ -30,7 +27,6 @@ class FaceFeature:
     luster: str  # 光泽
     expression: str  # 神态
     areas: dict[str, str]  # 面部分区特征
-
 
 @dataclass
 class PulseFeature:
@@ -42,7 +38,6 @@ class PulseFeature:
     width: str  # 脉宽
     depth: str  # 脉位深浅
     length: str  # 脉长短
-
 
 class TongueRecognitionMetric(Metric):
     """舌象识别评测指标。"""
@@ -199,7 +194,6 @@ class TongueRecognitionMetric(Metric):
         intersection = self._calculate_spot_intersection(spot1, spot2)
         return area1 + area2 - intersection
 
-
 class FaceRecognitionMetric(Metric):
     """面色识别评测指标。"""
 
@@ -276,7 +270,6 @@ class FaceRecognitionMetric(Metric):
             accuracies.append(area_matches / len(common_areas))
 
         return np.mean(accuracies)
-
 
 class PulseRecognitionMetric(Metric):
     """脉象识别评测指标。"""
@@ -361,7 +354,6 @@ class PulseRecognitionMetric(Metric):
     def _calculate_frequency_rmse(self, pred: list[float], true: list[float]) -> float:
         """计算脉率的均方根误差。"""
         return np.sqrt(np.mean((np.array(pred) - np.array(true)) ** 2))
-
 
 class ConstitutionClassificationMetric(Metric):
     """体质辨识评测指标。"""

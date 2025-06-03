@@ -5,13 +5,11 @@ Configuration Management
 使用 Pydantic Settings 管理应用配置和环境变量
 """
 
-import os
 from functools import lru_cache
 from typing import Any, Dict, List, Optional
 
 from pydantic import Field, field_validator, validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
-
 
 class DatabaseSettings(BaseSettings):
     """数据库配置"""
@@ -32,7 +30,6 @@ class DatabaseSettings(BaseSettings):
     pool_recycle: int = Field(default=3600, description="连接回收时间")
     echo: bool = Field(default=False, description="是否打印SQL语句")
 
-
 class RedisSettings(BaseSettings):
     """Redis配置"""
 
@@ -43,7 +40,6 @@ class RedisSettings(BaseSettings):
     timeout: int = Field(default=5, description="连接超时时间")
     retry_on_timeout: bool = Field(default=True, description="超时重试")
     decode_responses: bool = Field(default=True, description="解码响应")
-
 
 class SecuritySettings(BaseSettings):
     """安全配置"""
@@ -67,7 +63,6 @@ class SecuritySettings(BaseSettings):
         if len(v) < 32:
             raise ValueError("Secret key must be at least 32 characters long")
         return v
-
 
 class ReviewSettings(BaseSettings):
     """审核配置"""
@@ -101,7 +96,6 @@ class ReviewSettings(BaseSettings):
         description="必须人工审核的类型",
     )
 
-
 class MonitoringSettings(BaseSettings):
     """监控配置"""
 
@@ -113,7 +107,6 @@ class MonitoringSettings(BaseSettings):
     metrics_retention_days: int = Field(default=30, description="指标保留天数")
     log_level: str = Field(default="INFO", description="日志级别")
     log_format: str = Field(default="json", description="日志格式（json/text）")
-
 
 class CelerySettings(BaseSettings):
     """Celery配置"""
@@ -147,7 +140,6 @@ class CelerySettings(BaseSettings):
     worker_prefetch_multiplier: int = Field(default=1, description="工作进程预取倍数")
     task_acks_late: bool = Field(default=True, description="延迟确认任务")
     worker_disable_rate_limits: bool = Field(default=False, description="禁用速率限制")
-
 
 class Settings(BaseSettings):
     """主配置类"""
@@ -221,26 +213,21 @@ class Settings(BaseSettings):
         """获取测试数据库URL"""
         return self.database.test_url
 
-
 @lru_cache()
 def get_settings() -> Settings:
     """获取配置实例（缓存）"""
     return Settings()
 
-
 # 全局配置实例
 settings = get_settings()
-
 
 def get_database_url() -> str:
     """获取数据库URL"""
     return settings.database.url
 
-
 def get_redis_url() -> str:
     """获取Redis URL"""
     return settings.redis.url
-
 
 def get_celery_config() -> Dict[str, Any]:
     """获取Celery配置"""
@@ -258,7 +245,6 @@ def get_celery_config() -> Dict[str, Any]:
         "task_acks_late": settings.celery.task_acks_late,
         "worker_disable_rate_limits": settings.celery.worker_disable_rate_limits,
     }
-
 
 def get_cors_config() -> Dict[str, Any]:
     """获取CORS配置"""

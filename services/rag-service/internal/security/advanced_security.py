@@ -5,13 +5,11 @@
 高级安全机制 - 认证、授权、加密和审计功能
 """
 
-import asyncio
 import time
 import uuid
 import hashlib
 import hmac
 import secrets
-import json
 from typing import Dict, List, Any, Optional, Callable, Union
 from dataclasses import dataclass, field
 from enum import Enum
@@ -25,7 +23,6 @@ from loguru import logger
 
 from ..observability.metrics import MetricsCollector
 
-
 class AuthMethod(str, Enum):
     """认证方法"""
     JWT = "jwt"                 # JWT令牌
@@ -33,7 +30,6 @@ class AuthMethod(str, Enum):
     OAUTH2 = "oauth2"           # OAuth2
     BASIC = "basic"             # 基础认证
     CERTIFICATE = "certificate" # 证书认证
-
 
 class Permission(str, Enum):
     """权限类型"""
@@ -43,7 +39,6 @@ class Permission(str, Enum):
     ADMIN = "admin"             # 管理
     EXECUTE = "execute"         # 执行
 
-
 class ResourceType(str, Enum):
     """资源类型"""
     DOCUMENT = "document"       # 文档
@@ -52,7 +47,6 @@ class ResourceType(str, Enum):
     USER_DATA = "user_data"     # 用户数据
     SYSTEM = "system"           # 系统
     API = "api"                 # API
-
 
 class AuditAction(str, Enum):
     """审计动作"""
@@ -64,7 +58,6 @@ class AuditAction(str, Enum):
     DELETE = "delete"           # 删除
     QUERY = "query"             # 查询
     EXPORT = "export"           # 导出
-
 
 @dataclass
 class User:
@@ -93,7 +86,6 @@ class User:
             "metadata": self.metadata
         }
 
-
 @dataclass
 class Role:
     """角色"""
@@ -112,7 +104,6 @@ class Role:
             "permissions": self.permissions,
             "created_at": self.created_at
         }
-
 
 @dataclass
 class AccessToken:
@@ -136,7 +127,6 @@ class AccessToken:
             "scopes": self.scopes,
             "metadata": self.metadata
         }
-
 
 @dataclass
 class AuditLog:
@@ -166,7 +156,6 @@ class AuditLog:
             "details": self.details,
             "success": self.success
         }
-
 
 class PasswordHasher:
     """密码哈希器"""
@@ -219,7 +208,6 @@ class PasswordHasher:
         except Exception as e:
             logger.error(f"密码验证失败: {e}")
             return False
-
 
 class JWTManager:
     """JWT管理器"""
@@ -289,7 +277,6 @@ class JWTManager:
         )
         
         return self.create_token(user, payload.get("scopes", []))
-
 
 class EncryptionManager:
     """加密管理器"""
@@ -376,7 +363,6 @@ class EncryptionManager:
             return hashlib.md5(data.encode()).hexdigest()
         else:
             raise ValueError(f"不支持的哈希算法: {algorithm}")
-
 
 class PermissionManager:
     """权限管理器"""
@@ -485,7 +471,6 @@ class PermissionManager:
         
         return list(permissions)
 
-
 class AuditLogger:
     """审计日志记录器"""
     
@@ -570,7 +555,6 @@ class AuditLogger:
         filtered_logs.sort(key=lambda x: x.timestamp, reverse=True)
         
         return filtered_logs[:limit]
-
 
 class SecurityManager:
     """安全管理器"""
@@ -858,10 +842,8 @@ class SecurityManager:
             "total_audit_logs": len(self.audit_logger.logs)
         }
 
-
 # 全局安全管理器实例
 _security_manager: Optional[SecurityManager] = None
-
 
 def initialize_security_manager(
     secret_key: str,
@@ -872,11 +854,9 @@ def initialize_security_manager(
     _security_manager = SecurityManager(secret_key, metrics_collector)
     return _security_manager
 
-
 def get_security_manager() -> Optional[SecurityManager]:
     """获取安全管理器实例"""
     return _security_manager
-
 
 # 安全装饰器
 def require_auth(func: Callable):
@@ -898,7 +878,6 @@ def require_auth(func: Callable):
         return await func(*args, **kwargs)
     
     return wrapper
-
 
 def require_permission(resource_type: ResourceType, permission: Permission):
     """需要特定权限的装饰器"""
@@ -922,7 +901,6 @@ def require_permission(resource_type: ResourceType, permission: Permission):
         
         return wrapper
     return decorator
-
 
 def audit_action(action: AuditAction, resource_type: ResourceType):
     """审计动作装饰器"""

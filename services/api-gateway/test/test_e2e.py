@@ -13,12 +13,9 @@ import sys
 import time
 from unittest.mock import AsyncMock, MagicMock, Mock, patch
 
-import jwt
 import pytest
 from fastapi import FastAPI, Request, Response
 from fastapi.testclient import TestClient
-from httpx import AsyncClient
-from starlette.middleware.base import BaseHTTPMiddleware
 
 # 添加项目根目录到Python路径
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -29,7 +26,6 @@ from internal.model.config import AuthConfig, CacheConfig, GatewayConfig, JwtCon
 from internal.service.service_registry import ServiceRegistry
 from pkg.utils.auth import JWTManager
 from pkg.utils.cache import CacheManager
-
 
 # 模拟服务器
 class MockServiceServer:
@@ -80,13 +76,11 @@ class MockServiceServer:
         """获取测试客户端"""
         return TestClient(self.app)
 
-
 # 创建模拟服务，用于测试
 @pytest.fixture
 def mock_service():
     """创建模拟服务"""
     return MockServiceServer()
-
 
 # 创建JWT管理器和令牌
 @pytest.fixture
@@ -99,24 +93,20 @@ def jwt_config():
         refresh_expire_minutes=60 * 24
     )
 
-
 @pytest.fixture
 def jwt_manager(jwt_config):
     """创建JWT管理器"""
     return JWTManager(jwt_config)
-
 
 @pytest.fixture
 def access_token(jwt_manager):
     """创建访问令牌"""
     return jwt_manager.create_access_token("test-user", roles=["user"])
 
-
 @pytest.fixture
 def admin_token(jwt_manager):
     """创建管理员令牌"""
     return jwt_manager.create_access_token("admin-user", roles=["admin", "user"])
-
 
 # 创建网关配置
 @pytest.fixture
@@ -185,14 +175,12 @@ def gateway_config(jwt_config):
         )
     )
 
-
 @pytest.fixture
 def mock_service_registry(mock_service):
     """创建模拟服务注册表"""
     registry = MagicMock(spec=ServiceRegistry)
     registry.get_endpoint.return_value = ("localhost", 8000)
     return registry
-
 
 @pytest.fixture
 def gateway_app(gateway_config, mock_service_registry):
@@ -218,12 +206,10 @@ def gateway_app(gateway_config, mock_service_registry):
     
     return app
 
-
 @pytest.fixture
 def gateway_client(gateway_app):
     """创建网关客户端"""
     return TestClient(gateway_app)
-
 
 # 模拟HTTP请求
 class MockResponse:
@@ -237,7 +223,6 @@ class MockResponse:
     @property
     def text(self):
         return self.content.decode('utf-8') if isinstance(self.content, bytes) else self.content
-
 
 # 使用unittest.IsolatedAsyncio来运行异步测试
 @pytest.mark.asyncio
@@ -321,7 +306,6 @@ class TestGatewayE2E:
             assert "id" in response.json()
             assert response.json()["id"] == "public"
 
-
 # 更简化的测试方法，重点测试整合而不是每个细节
 @pytest.mark.asyncio
 class TestGatewayIntegration:
@@ -357,7 +341,6 @@ class TestGatewayIntegration:
             
             assert response.status_code == 200
             assert response.json()["success"] is True
-
 
 if __name__ == "__main__":
     # 使用单进程模式运行，避免复杂的多进程问题

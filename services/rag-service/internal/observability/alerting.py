@@ -7,18 +7,15 @@
 
 import asyncio
 import time
-import json
 import statistics
 from typing import Dict, List, Any, Optional, Callable, Union, Tuple
 from dataclasses import dataclass, field
 from enum import Enum
 from collections import deque, defaultdict
-import numpy as np
 from loguru import logger
 
 from .metrics import MetricsCollector
 from .tracing import trace_operation, SpanKind
-
 
 class AlertSeverity(str, Enum):
     """告警严重程度"""
@@ -28,14 +25,12 @@ class AlertSeverity(str, Enum):
     CRITICAL = "critical"                   # 严重
     EMERGENCY = "emergency"                 # 紧急
 
-
 class AlertStatus(str, Enum):
     """告警状态"""
     ACTIVE = "active"                       # 活跃
     ACKNOWLEDGED = "acknowledged"           # 已确认
     RESOLVED = "resolved"                   # 已解决
     SUPPRESSED = "suppressed"               # 已抑制
-
 
 class AlertType(str, Enum):
     """告警类型"""
@@ -47,7 +42,6 @@ class AlertType(str, Enum):
     HEALTH_CHECK = "health_check"           # 健康检查
     PERFORMANCE = "performance"             # 性能告警
     SECURITY = "security"                   # 安全告警
-
 
 @dataclass
 class AlertRule:
@@ -90,7 +84,6 @@ class AlertRule:
             "max_alerts_per_hour": self.max_alerts_per_hour
         }
 
-
 @dataclass
 class Alert:
     """告警实例"""
@@ -132,7 +125,6 @@ class Alert:
             "metadata": self.metadata
         }
 
-
 class AnomalyDetector:
     """异常检测器"""
     
@@ -171,7 +163,6 @@ class AnomalyDetector:
         is_anomaly = z_score > self.sensitivity
         
         return is_anomaly, z_score
-
 
 class TrendAnalyzer:
     """趋势分析器"""
@@ -216,7 +207,6 @@ class TrendAnalyzer:
             trend = "decreasing"
         
         return trend, slope
-
 
 class PredictiveAnalyzer:
     """预测分析器"""
@@ -275,7 +265,6 @@ class PredictiveAnalyzer:
         
         will_breach = predicted_value > threshold
         return will_breach, predicted_value
-
 
 class AlertManager:
     """告警管理器"""
@@ -712,7 +701,6 @@ class AlertManager:
             "suppressed_rules": len(self.suppressed_rules)
         }
 
-
 # 通知器实现
 class WebhookNotifier:
     """Webhook通知器"""
@@ -744,7 +732,6 @@ class WebhookNotifier:
         except Exception as e:
             logger.error(f"Webhook通知异常: {e}")
 
-
 class EmailNotifier:
     """邮件通知器"""
     
@@ -757,10 +744,8 @@ class EmailNotifier:
         # 这里应该实现实际的邮件发送逻辑
         logger.info(f"邮件通知: {action} - {alert.rule_name}")
 
-
 # 全局告警管理器实例
 _alert_manager: Optional[AlertManager] = None
-
 
 def initialize_alert_manager(
     metrics_collector: Optional[MetricsCollector] = None
@@ -770,11 +755,9 @@ def initialize_alert_manager(
     _alert_manager = AlertManager(metrics_collector)
     return _alert_manager
 
-
 def get_alert_manager() -> Optional[AlertManager]:
     """获取告警管理器实例"""
     return _alert_manager
-
 
 # 便捷函数
 def create_threshold_rule(
@@ -796,7 +779,6 @@ def create_threshold_rule(
         condition=condition,
         threshold=threshold
     )
-
 
 def create_anomaly_rule(
     rule_id: str,

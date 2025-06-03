@@ -15,16 +15,11 @@ import statistics
 from typing import Dict, List, Any, Optional
 from datetime import datetime, timedelta
 from dataclasses import dataclass, asdict
-from concurrent.futures import ThreadPoolExecutor
 
-import httpx
 import aiohttp
 from rich.console import Console
 from rich.table import Table
 from rich.progress import Progress, BarColumn, TextColumn, TimeRemainingColumn
-from rich.panel import Panel
-from rich.text import Text
-
 
 @dataclass
 class TestResult:
@@ -43,7 +38,6 @@ class TestResult:
     errors: Dict[str, int]
     status_codes: Dict[int, int]
 
-
 @dataclass
 class TestConfig:
     """测试配置"""
@@ -56,7 +50,6 @@ class TestConfig:
     duration: Optional[int] = None  # 测试持续时间（秒）
     timeout: float = 30.0
     ramp_up_time: int = 0  # 渐进加压时间（秒）
-
 
 class PerformanceTester:
     """性能测试器"""
@@ -390,7 +383,6 @@ class PerformanceTester:
         
         self.console.print(f"📄 测试结果已导出到: {output_file}")
 
-
 async def run_benchmark_suite(base_url: str) -> None:
     """运行基准测试套件"""
     console = Console()
@@ -475,7 +467,6 @@ async def run_benchmark_suite(base_url: str) -> None:
         )
     
     console.print(summary_table)
-
 
 async def main():
     """主函数"""
@@ -579,7 +570,6 @@ async def main():
     
     if args.export:
         tester.export_results(result, args.export)
-
 
 if __name__ == "__main__":
     asyncio.run(main()) 

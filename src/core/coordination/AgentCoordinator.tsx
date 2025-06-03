@@ -1,13 +1,20 @@
-import React from 'react';
-import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor';
-import { errorHandler, ErrorType } from "../error/ErrorHandler";/
-  performanceMonitor,
-  { PerformanceCategory } from "../monitoring/PerformanceMonitor";//
+import React from "react";
+import { usePerformanceMonitor } from "../../hooks/usePerformanceMonitor";
+import { errorHandler, ErrorType } from "../error/ErrorHandler";
+import { performanceMonitor, PerformanceCategory } from "../monitoring/PerformanceMonitor";
+
+/**
  * 索克生活 - 智能体协调系统
  * 实现四个智能体（小艾、小克、老克、索儿）之间的协作和任务分配
  */
+
 export enum AgentType {
-  XIAOAI = "XIAOAI", // 小艾 - 健康助手 & 首页聊天频道版主 *   XIAOKE = "XIAOKE",  *// 小克 - 中医诊断专家* *   LAOKE = "LAOKE",  * */// 老克 - 资深健康顾问* *   SOER = "SOER",  * */// 索儿 - 生活方式指导师* * } * *//
+  XIAOAI = "XIAOAI", // 小艾 - 健康助手 & 首页聊天频道版主
+  XIAOKE = "XIAOKE", // 小克 - 中医诊断专家
+  LAOKE = "LAOKE", // 老克 - 资深健康顾问
+  SOER = "SOER", // 索儿 - 生活方式指导师
+}
+
 export enum TaskType {
   HEALTH_CONSULTATION = "HEALTH_CONSULTATION",
   DIAGNOSIS = "DIAGNOSIS",
@@ -17,13 +24,15 @@ export enum TaskType {
   USER_INTERACTION = "USER_INTERACTION",
   KNOWLEDGE_SHARING = "KNOWLEDGE_SHARING"
 }
-export enum TaskPriority {;
+
+export enum TaskPriority {
   LOW = 1,
   MEDIUM = 2,
   HIGH = 3,
   URGENT = 4,
   EMERGENCY = 5
 }
+
 export enum TaskStatus {
   PENDING = "PENDING",
   ASSIGNED = "ASSIGNED",
@@ -32,87 +41,123 @@ export enum TaskStatus {
   FAILED = "FAILED",
   CANCELLED = "CANCELLED"
 }
-export interface AgentCapability { type: TaskType,
-  proficiency: number; // 0-1之间，表示熟练度 *  , maxConcurrentTasks: number, */
-  averageProcessingTime: number; // 毫秒 *  , specializations: string[]; */
-  }
-export interface AgentStatus { id: string,
-  type: AgentType,
-  isOnline: boolean,
-  currentLoad: number; // 0-1之间，表示当前负载 *  , capabilities: AgentCapability[], */
-  activeTasks: string[],
-  lastHeartbeat: number,
-  performance: {successRate: number,
-    averageResponseTime: number,
-    totalTasksCompleted: number};
+
+export interface AgentCapability {
+  type: TaskType;
+  proficiency: number; // 0-1之间，表示熟练度
+  maxConcurrentTasks: number;
+  averageProcessingTime: number; // 毫秒
+  specializations: string[];
 }
-export interface Task { id: string,
-  type: TaskType,
-  priority: TaskPriority,
+
+export interface AgentStatus {
+  id: string;
+  type: AgentType;
+  isOnline: boolean;
+  currentLoad: number; // 0-1之间，表示当前负载
+  capabilities: AgentCapability[];
+  activeTasks: string[];
+  lastHeartbeat: number;
+  performance: {
+    successRate: number;
+    averageResponseTime: number;
+    totalTasksCompleted: number;
+  };
+}
+
+export interface Task {
+  id: string;
+  type: TaskType;
+  priority: TaskPriority;
   status: TaskStatus;
   assignedAgent?: AgentType;
-  requesterUserId: string,
-  data: unknown,
-  metadata: {createdAt: number;
+  requesterUserId: string;
+  data: unknown;
+  metadata: {
+    createdAt: number;
     assignedAt?: number;
     startedAt?: number;
     completedAt?: number;
     estimatedDuration?: number;
-    actualDuration?: number};
-  dependencies?: string[]; // 依赖的其他任务ID *   collaborators?: AgentType[];  *// 需要协作的其他智能体* *   result?: unknown; * *//
-  error?: unknown}
-export interface CoordinationRule {;
-  id: string,
-  name: string,
-  condition: (task: Task, agents: Map<AgentType, AgentStatus />) => boolean;/  action: (task: Task, agents: Map<AgentType, AgentStatus />) => AgentType | null/  priority: number}
-export interface CollaborationRequest { id: string,
-  fromAgent: AgentType,
-  toAgent: AgentType,
-  taskId: string,
-  requestType: "CONSULTATION" | "HANDOVER" | "ASSISTANCE" | "KNOWLEDGE_SHARE",
-  data: unknown,
-  timestamp: number,
-  status: "PENDING" | "ACCEPTED" | "REJECTED" | "COMPLETED"}
-export class AgentCoordinator {;
+    actualDuration?: number;
+  };
+  dependencies?: string[]; // 依赖的其他任务ID
+  collaborators?: AgentType[]; // 需要协作的其他智能体
+  result?: unknown;
+  error?: unknown;
+}
+
+export interface CoordinationRule {
+  id: string;
+  name: string;
+  condition: (task: Task, agents: Map<AgentType, AgentStatus>) => boolean;
+  action: (task: Task, agents: Map<AgentType, AgentStatus>) => AgentType | null;
+  priority: number;
+}
+
+export interface CollaborationRequest {
+  id: string;
+  fromAgent: AgentType;
+  toAgent: AgentType;
+  taskId: string;
+  requestType: "CONSULTATION" | "HANDOVER" | "ASSISTANCE" | "KNOWLEDGE_SHARE";
+  data: unknown;
+  timestamp: number;
+  status: "PENDING" | "ACCEPTED" | "REJECTED" | "COMPLETED";
+}
+
+export class AgentCoordinator {
   private static instance: AgentCoordinator;
-  private agents: Map<AgentType, AgentStatus /> = new Map();/  private tasks: Map<string, Task> = new Map();
+  private agents: Map<AgentType, AgentStatus> = new Map();
+  private tasks: Map<string, Task> = new Map();
   private coordinationRules: CoordinationRule[] = [];
   private collaborationRequests: Map<string, CollaborationRequest> = new Map();
   private taskQueue: Task[] = [];
   private isRunning: boolean = false;
   private coordinationInterval: NodeJS.Timeout | null = null;
+
   private constructor() {
     this.setupDefaultRules();
     this.initializeAgents();
   }
-  public static getInstance();: AgentCoordinator {
+
+  public static getInstance(): AgentCoordinator {
     if (!AgentCoordinator.instance) {
       AgentCoordinator.instance = new AgentCoordinator();
     }
-    return AgentCoordinator.instan;c;e;
+    return AgentCoordinator.instance;
   }
-  // /    启动协调系统  public start();: void {
+
+  // 启动协调系统
+  public start(): void {
     if (this.isRunning) {
       return;
     }
+
     this.isRunning = true;
-    this.coordinationInterval = setInterval((); => {
+    this.coordinationInterval = setInterval(() => {
       this.processTaskQueue();
       this.monitorAgentHealth();
       this.optimizeTaskDistribution();
     }, 1000);
-    }
-  // /    停止协调系统  public stop();: void {
+  }
+
+  // 停止协调系统
+  public stop(): void {
     if (!this.isRunning) {
       return;
     }
+
     this.isRunning = false;
     if (this.coordinationInterval) {
       clearInterval(this.coordinationInterval);
       this.coordinationInterval = null;
     }
-    }
-  // /    提交任务  public async submitTask(type: TaskType,
+  }
+
+  // 提交任务
+  public async submitTask(
+    type: TaskType,
     priority: TaskPriority,
     requesterUserId: string,
     data: unknown,
@@ -121,9 +166,9 @@ export class AgentCoordinator {;
       dependencies?: string[];
       collaborators?: AgentType[];
     } = {}
-  );: Promise<string>  {
-    const taskId = this.generateTaskId;(;);
-    const task: Task = {,
+  ): Promise<string> {
+    const taskId = this.generateTaskId();
+    const task: Task = {
       id: taskId,
       type,
       priority,
@@ -137,90 +182,131 @@ export class AgentCoordinator {;
       dependencies: options.dependencies,
       collaborators: options.collaborators
     };
+
     this.tasks.set(taskId, task);
     this.taskQueue.push(task);
-    this.sortTaskQueue()
-    `
-    );
-    // 立即尝试分配任务 *     await this.processTaskQueue;(;); */
-    return task;I;d;
+    this.sortTaskQueue();
+
+    // 立即尝试分配任务
+    await this.processTaskQueue();
+    return taskId;
   }
-  // /    获取任务状态  public getTaskStatus(taskId: string);: Task | null  {
-    return this.tasks.get(taskI;d;); || null;
+
+  // 获取任务状态
+  public getTaskStatus(taskId: string): Task | null {
+    return this.tasks.get(taskId) || null;
   }
-  // /    取消任务  public cancelTask(taskId: string);: boolean  {
-    const task = this.tasks.get(taskI;d;);
+
+  // 取消任务
+  public cancelTask(taskId: string): boolean {
+    const task = this.tasks.get(taskId);
     if (!task) {
-      return fal;s;e;
+      return false;
     }
+
     if (task.status === TaskStatus.IN_PROGRESS) {
-      // 通知智能体停止任务 *       this.notifyAgentTaskCancellation(task); */
+      // 通知智能体停止任务
+      this.notifyAgentTaskCancellation(task);
     }
+
     task.status = TaskStatus.CANCELLED;
     this.removeFromQueue(taskId);
-    return tr;u;e;
+    return true;
   }
-  // /    注册智能体  public registerAgent(agentStatus: AgentStatus);: void  {
+
+  // 注册智能体
+  public registerAgent(agentStatus: AgentStatus): void {
     this.agents.set(agentStatus.type, agentStatus);
-    }
-  // /    更新智能体状态  public updateAgentStatus(agentType: AgentType,
-    updates: Partial<AgentStatus />/  );: void  {
-    const agent = this.agents.get(agentTyp;e;);
+  }
+
+  // 更新智能体状态
+  public updateAgentStatus(
+    agentType: AgentType,
+    updates: Partial<AgentStatus>
+  ): void {
+    const agent = this.agents.get(agentType);
     if (agent) {
       Object.assign(agent, updates);
       agent.lastHeartbeat = Date.now();
     }
   }
-  // /    智能体心跳  public agentHeartbeat(agentType: AgentType,
-    status: Partial<AgentStatus />/  );: void  {
+
+  // 智能体心跳
+  public agentHeartbeat(
+    agentType: AgentType,
+    status: Partial<AgentStatus>
+  ): void {
     this.updateAgentStatus(agentType, {
       ...status,
       lastHeartbeat: Date.now(),
       isOnline: true
     });
   }
-  // /    任务完成通知  public notifyTaskCompleted(taskId: string, result: unknown);: void  {
-    const task = this.tasks.get(taskI;d;);
+
+  // 任务完成通知
+  public notifyTaskCompleted(taskId: string, result: unknown): void {
+    const task = this.tasks.get(taskId);
     if (!task) {
       return;
     }
+
     task.status = TaskStatus.COMPLETED;
     task.result = result;
     task.metadata.completedAt = Date.now();
+
     if (task.metadata.startedAt) {
       task.metadata.actualDuration =
         task.metadata.completedAt - task.metadata.startedAt;
     }
-    // 更新智能体性能统计 *     this.updateAgentPerformance( */
+
+    // 更新智能体性能统计
+    this.updateAgentPerformance(
       task.assignedAgent!,
       true,
       task.metadata.actualDuration || 0
     );
-    // 检查是否有依赖此任务的其他任务 *     this.checkDependentTasks(taskId); */
-    }
-  // /    任务失败通知  public notifyTaskFailed(taskId: string, error: unknown);: void  {
-    const task = this.tasks.get(taskI;d;);
+
+    // 检查是否有依赖此任务的其他任务
+    this.checkDependentTasks(taskId);
+  }
+
+  // 任务失败通知
+  public notifyTaskFailed(taskId: string, error: unknown): void {
+    const task = this.tasks.get(taskId);
     if (!task) {
       return;
     }
+
     task.status = TaskStatus.FAILED;
     task.error = error;
     task.metadata.completedAt = Date.now();
-    // 更新智能体性能统计 *     this.updateAgentPerformance(task.assignedAgent!, false, 0); */
-    // 尝试重新分配任务 *     if (task.priority >= TaskPriority.HIGH) { */
-      task.status = TaskStatus.PENDING;
-      task.assignedAgent = undefined;
-      this.taskQueue.push(task);
-      this.sortTaskQueue();
+
+    if (task.metadata.startedAt) {
+      task.metadata.actualDuration =
+        task.metadata.completedAt - task.metadata.startedAt;
     }
-    }
-  // /    请求智能体协作  public async requestCollaboration(fromAgent: AgentType,
+
+    // 更新智能体性能统计
+    this.updateAgentPerformance(
+      task.assignedAgent!,
+      false,
+      task.metadata.actualDuration || 0
+    );
+
+    // 尝试重新分配任务或寻找替代方案
+    this.handleTaskFailure(task);
+  }
+
+  // 请求智能体协作
+  public async requestCollaboration(
+    fromAgent: AgentType,
     toAgent: AgentType,
     taskId: string,
     requestType: CollaborationRequest["requestType"],
-    data: unknown;);: Promise<string>  {
-    const requestId = this.generateRequestId;(;)
-    const request: CollaborationRequest = {,
+    data: unknown
+  ): Promise<string> {
+    const requestId = this.generateRequestId();
+    const request: CollaborationRequest = {
       id: requestId,
       fromAgent,
       toAgent,
@@ -230,428 +316,400 @@ export class AgentCoordinator {;
       timestamp: Date.now(),
       status: "PENDING"
     };
+
     this.collaborationRequests.set(requestId, request);
-    // 通知目标智能体 *     await this.notifyAgentCollaborationRequest(reques;t;) */
-    `
-    );
-    return request;I;d;
+    
+    // 通知目标智能体
+    await this.notifyAgentCollaborationRequest(request);
+    
+    return requestId;
   }
-  // /    响应协作请求  public respondToCollaboration(requestId: string,
+
+  // 响应协作请求
+  public respondToCollaboration(
+    requestId: string,
     accepted: boolean,
     responseData?: unknown
-  );: void  {
-    const request = this.collaborationRequests.get(requestI;d;);
+  ): void {
+    const request = this.collaborationRequests.get(requestId);
     if (!request) {
       return;
     }
+
     request.status = accepted ? "ACCEPTED" : "REJECTED";
-    if (accepted && responseData) {
-      request.data = { ...request.data, response: responseData};
-    }
-    // 通知发起智能体 *     this.notifyAgentCollaborationResponse(request, accepted, responseData); */
-    }
-  // /    获取智能体状态  public getAgentStatus(agentType: AgentType);: AgentStatus | null  {
-    return this.agents.get(agentTyp;e;); || null;
+    
+    // 通知请求方智能体
+    this.notifyAgentCollaborationResponse(request, accepted, responseData);
   }
-  // /    获取所有智能体状态  public getAllAgentStatuses();: Map<AgentType, AgentStatus /> {/    return new Map(this.agent;s;);
+
+  // 私有方法实现
+  private generateTaskId(): string {
+    return `task_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
-  // /    获取任务队列状态  public getQueueStatus();: { pending: number,
-    inProgress: number,
-    completed: number,
-    failed: number} {
-    const pending = this.taskQueue.leng;t;h;
-    let inProgress = ;0;
-    let completed = ;0;
-    let failed = ;0;
-    for (const task of this.tasks.values();) {
-      switch (task.status) {
-        case TaskStatus.IN_PROGRESS:
-          inProgress++;
-          break;
-        case TaskStatus.COMPLETED:
-          completed++;
-          break;
-        case TaskStatus.FAILED:
-          failed++;
-          break;
+
+  private generateRequestId(): string {
+    return `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  }
+
+  private sortTaskQueue(): void {
+    this.taskQueue.sort((a, b) => {
+      // 优先级高的在前
+      if (a.priority !== b.priority) {
+        return b.priority - a.priority;
       }
-    }
-    return { pending, inProgress, completed, faile;d ;};
+      // 创建时间早的在前
+      return a.metadata.createdAt - b.metadata.createdAt;
+    });
   }
-  private async processTaskQueue();: Promise<void> {
-    if (this.taskQueue.length === 0) {
-      return;
-    }
-    const availableTasks = this.taskQueue.filter(;
-      (tas;k;); =>
-        task.status === TaskStatus.PENDING && this.areDependenciesMet(task);
+
+  private async processTaskQueue(): Promise<void> {
+    const availableTasks = this.taskQueue.filter(
+      task => task.status === TaskStatus.PENDING && this.areDependenciesMet(task)
     );
+
     for (const task of availableTasks) {
-      const assignedAgent = await this.assignTask(t;a;s;k;);
+      const assignedAgent = await this.assignTask(task);
       if (assignedAgent) {
         task.assignedAgent = assignedAgent;
         task.status = TaskStatus.ASSIGNED;
         task.metadata.assignedAt = Date.now();
-        // 从队列中移除 *         this.removeFromQueue(task.id); */
-        // 通知智能体开始任务 *         await this.notifyAgentTaskAssignment(tas;k;); */
+        
+        // 从队列中移除
+        this.removeFromQueue(task.id);
+        
+        // 通知智能体
+        await this.notifyAgentTaskAssignment(task);
       }
     }
   }
-  private async assignTask(task: Task): Promise<AgentType | null />  {
-    return performanceMonitor.measureAsync(
-      "task_assignment",
-      PerformanceCategory.AGENT,
-      async ;(;) => {
-  // 性能监控
-  const performanceMonitor = usePerformanceMonitor('AgentCoordinator', {
-    trackRender: true,
-    trackMemory: false,
-    warnThreshold: 100, // ms ;};);
-        // 应用协调规则 *         for (const rule of this.coordinationRules) { */
-          if (rule.condition(task, this.agents);) {
-            const assignedAgent = rule.action(task, this.agent;s;);
-            if (assignedAgent && this.isAgentAvailable(assignedAgent, task);) {
-              return assignedAge;n;t;
-            }
-          }
+
+  private async assignTask(task: Task): Promise<AgentType | null> {
+    // 应用协调规则
+    for (const rule of this.coordinationRules.sort((a, b) => b.priority - a.priority)) {
+      if (rule.condition(task, this.agents)) {
+        const assignedAgent = rule.action(task, this.agents);
+        if (assignedAgent && this.isAgentAvailable(assignedAgent)) {
+          return assignedAgent;
         }
-        // 默认分配逻辑：基于能力和负载 *         return this.findBestAgent(tas;k;); */
       }
+    }
+
+    // 如果没有规则匹配，使用默认分配策略
+    return this.defaultTaskAssignment(task);
+  }
+
+  private defaultTaskAssignment(task: Task): AgentType | null {
+    const availableAgents = Array.from(this.agents.entries())
+      .filter(([_, agent]) => this.isAgentAvailable(agent.type))
+      .map(([type, agent]) => ({ type, agent }));
+
+    if (availableAgents.length === 0) {
+      return null;
+    }
+
+    // 根据任务类型和智能体能力进行匹配
+    const suitableAgents = availableAgents.filter(({ agent }) =>
+      agent.capabilities.some(cap => cap.type === task.type)
     );
-  }
-  private findBestAgent(task: Task);: AgentType | null  {
-    let bestAgent: AgentType | null = null;
-    let bestScore = ;-;1;
-    for (const [agentType, agentStatus] of this.agents.entries();) {
-      if (!this.isAgentAvailable(agentType, task);) {
-        continue;
-      }
-      const capability = agentStatus.capabilities.find(;
-        (ca;p;); => cap.type === task.type
-      );
-      if (!capability) {
-        continue;
-      }
-      // 计算分配分数：能力熟练度 - 当前负载 *       const score = capability.proficiency - agentStatus.currentLo;a;d; */
-      if (score > bestScore) {
-        bestScore = score;
-        bestAgent = agentType;
-      }
+
+    if (suitableAgents.length === 0) {
+      // 如果没有完全匹配的，选择负载最低的
+      return availableAgents.reduce((min, current) =>
+        current.agent.currentLoad < min.agent.currentLoad ? current : min
+      ).type;
     }
-    return bestAge;n;t;
+
+    // 选择最适合的智能体（考虑熟练度和当前负载）
+    return suitableAgents.reduce((best, current) => {
+      const currentCapability = current.agent.capabilities.find(cap => cap.type === task.type)!;
+      const bestCapability = best.agent.capabilities.find(cap => cap.type === task.type)!;
+      
+      const currentScore = currentCapability.proficiency * (1 - current.agent.currentLoad);
+      const bestScore = bestCapability.proficiency * (1 - best.agent.currentLoad);
+      
+      return currentScore > bestScore ? current : best;
+    }).type;
   }
-  private isAgentAvailable(agentType: AgentType, task: Task);: boolean  {
-    const agent = this.agents.get(agentTyp;e;);
+
+  private isAgentAvailable(agentType: AgentType): boolean {
+    const agent = this.agents.get(agentType);
     if (!agent || !agent.isOnline) {
-      return fal;s;e;
+      return false;
     }
-    // 检查负载 *     if (agent.currentLoad >= 1.0) { */
-      return fal;s;e;
-    }
-    // 检查并发任务限制 *     const capability = agent.capabilities.find((ca;p;); => cap.type === task.type); */
-    if (
-      capability &&
-      agent.activeTasks.length >= capability.maxConcurrentTasks
-    ) {
-      return fal;s;e;
-    }
-    return tr;u;e;
+
+    // 检查是否超过最大并发任务数
+    const maxTasks = Math.max(...agent.capabilities.map(cap => cap.maxConcurrentTasks));
+    return agent.activeTasks.length < maxTasks;
   }
-  private areDependenciesMet(task: Task);: boolean  {
+
+  private areDependenciesMet(task: Task): boolean {
     if (!task.dependencies || task.dependencies.length === 0) {
-      return tr;u;e;
+      return true;
     }
-    return task.dependencies.every((depI;d;); => {
-      const depTask = this.tasks.get(depI;d;);
-      return depTask && depTask.status === TaskStatus.COMPLET;E;D;
+
+    return task.dependencies.every(depId => {
+      const depTask = this.tasks.get(depId);
+      return depTask && depTask.status === TaskStatus.COMPLETED;
     });
   }
-  private sortTaskQueue();: void {
-    this.taskQueue.sort((a, b); => {
-      // 首先按优先级排序 *       if (a.priority !== b.priority) { */
-        return b.priority - a.priori;t;y;
-      }
-      // 然后按创建时间排序 *       return a.metadata.createdAt - b.metadata.created;A;t; */
-    });
+
+  private removeFromQueue(taskId: string): void {
+    this.taskQueue = this.taskQueue.filter(task => task.id !== taskId);
   }
-  private removeFromQueue(taskId: string);: void  {
-    const index = this.taskQueue.findIndex((tas;k;); => task.id === taskId);
-    if (index > -1) {
-      this.taskQueue.splice(index, 1);
-    }
-  }
-  private checkDependentTasks(completedTaskId: string);: void  {
-    for (const task of this.taskQueue) {
-      if (task.dependencies?.includes(completedTaskId);) {
-        // 重新检查是否可以分配 *         if (this.areDependenciesMet(task);) { */
-          }
+
+  private monitorAgentHealth(): void {
+    const now = Date.now();
+    const healthTimeout = 30000; // 30秒
+
+    for (const [agentType, agent] of this.agents.entries()) {
+      if (now - agent.lastHeartbeat > healthTimeout) {
+        agent.isOnline = false;
+        // 重新分配该智能体的任务
+        this.reassignAgentTasks(agentType);
       }
     }
   }
-  private updateAgentPerformance(agentType: AgentType,
-    success: boolean,
-    duration: number;);: void  {
-    const agent = this.agents.get(agentTyp;e;);
-    if (!agent) retu;r;n;
-    const perf = agent.performan;c;e;
-    const totalTasks = perf.totalTasksCompleted ;+ ;1;
-    // 更新成功率 *     perf.successRate = */
-      (perf.successRate * perf.totalTasksCompleted + (success ? 1 : 0)) // totalTasks;
-    // 更新平均响应时间 *     if (success && duration > 0) { */
-      perf.averageResponseTime =
-        (perf.averageResponseTime * perf.totalTasksCompleted + duration) // totalTasks;
+
+  private reassignAgentTasks(agentType: AgentType): void {
+    const tasksToReassign = Array.from(this.tasks.values()).filter(
+      task => task.assignedAgent === agentType && 
+              (task.status === TaskStatus.ASSIGNED || task.status === TaskStatus.IN_PROGRESS)
+    );
+
+    for (const task of tasksToReassign) {
+      task.status = TaskStatus.PENDING;
+      task.assignedAgent = undefined;
+      this.taskQueue.push(task);
     }
-    perf.totalTasksCompleted = totalTasks;
+
+    this.sortTaskQueue();
   }
-  private monitorAgentHealth();: void {
-    const now = Date.now;(;);
-    const healthCheckThreshold = 300;0;0; // 30秒 *  */
-    for (const [agentType, agent] of this.agents.entries();) {
-      if (now - agent.lastHeartbeat > healthCheckThreshold) {
-        agent.isOnline = false
-        console.warn(`⚠️ Agent ${agentType} appears to be offline`);
-        // 重新分配该智能体的任务 *         this.reassignAgentTasks(agentType); */
+
+  private optimizeTaskDistribution(): void {
+    // 检查负载均衡
+    const agents = Array.from(this.agents.values()).filter(agent => agent.isOnline);
+    if (agents.length < 2) return;
+
+    const avgLoad = agents.reduce((sum, agent) => sum + agent.currentLoad, 0) / agents.length;
+    const threshold = 0.3; // 负载差异阈值
+
+    for (const agent of agents) {
+      if (agent.currentLoad > avgLoad + threshold) {
+        // 尝试将一些任务转移给负载较低的智能体
+        this.redistributeTasks(agent.type);
       }
     }
   }
-  private reassignAgentTasks(agentType: AgentType);: void  {
-    for (const task of this.tasks.values();) {
-      if (
-        task.assignedAgent === agentType &&
-        task.status === TaskStatus.IN_PROGRESS
-      ) {
+
+  private redistributeTasks(overloadedAgentType: AgentType): void {
+    const overloadedAgent = this.agents.get(overloadedAgentType);
+    if (!overloadedAgent) return;
+
+    const tasksToRedistribute = overloadedAgent.activeTasks
+      .map(taskId => this.tasks.get(taskId))
+      .filter(task => task && task.status === TaskStatus.ASSIGNED)
+      .slice(0, Math.ceil(overloadedAgent.activeTasks.length * 0.2)); // 重分配20%的任务
+
+    for (const task of tasksToRedistribute) {
+      if (task) {
         task.status = TaskStatus.PENDING;
         task.assignedAgent = undefined;
         this.taskQueue.push(task);
-        }
+      }
     }
+
     this.sortTaskQueue();
   }
-  private optimizeTaskDistribution();: void {
-    // 检查负载均衡 *     const onlineAgents = Array.from(this.agents.values;(;);).filter( */
-      (agent); => agent.isOnline
-    );
-    if (onlineAgents.length === 0) retu;r;n;
-    const avgLoad =
-      onlineAgents.reduce((sum, agen;t;); => sum + agent.currentLoad, 0) // onlineAgents.length;
-    const overloadedAgents = onlineAgents.filter(;
-      (agen;t;); => agent.currentLoad > avgLoad + 0.3
-    );
-    const underloadedAgents = onlineAgents.filter(;
-      (agen;t;); => agent.currentLoad < avgLoad - 0.3
-    );
-    if (overloadedAgents.length > 0 && underloadedAgents.length > 0) {
-      // 这里可以实现更复杂的负载均衡逻辑 *     } */
+
+  private updateAgentPerformance(
+    agentType: AgentType,
+    success: boolean,
+    duration: number
+  ): void {
+    const agent = this.agents.get(agentType);
+    if (!agent) return;
+
+    const perf = agent.performance;
+    const totalTasks = perf.totalTasksCompleted + 1;
+    
+    // 更新成功率
+    perf.successRate = (perf.successRate * perf.totalTasksCompleted + (success ? 1 : 0)) / totalTasks;
+    
+    // 更新平均响应时间
+    perf.averageResponseTime = (perf.averageResponseTime * perf.totalTasksCompleted + duration) / totalTasks;
+    
+    // 更新完成任务数
+    perf.totalTasksCompleted = totalTasks;
   }
-  private async notifyAgentTaskAssignment(task: Task);: Promise<void>  {
-    try {
-      // 这里应该调用具体智能体的API来分配任务 *        *// 更新智能体状态* *       const agent = this.agents.get(task.assignedAgent;!;); * *//
-      if (agent) {
-        agent.activeTasks.push(task.id);
-        agent.currentLoad = Math.min(1.0, agent.currentLoad + 0.1);
-      }
-      task.status = TaskStatus.IN_PROGRESS;
-      task.metadata.startedAt = Date.now();
-    } catch (error) {
-      await errorHandler.handleError(error as Error, {
-        agentId: task.assignedAgent,
-        requestId: task.id};);
-    }
-  }
-  private notifyAgentTaskCancellation(task: Task);: void  {
-    // 更新智能体状态 *     const agent = this.agents.get(task.assignedAgent;!;); */
-    if (agent) {
-      const index = agent.activeTasks.indexOf(task.i;d;);
-      if (index > -1) {
-        agent.activeTasks.splice(index, 1);
-        agent.currentLoad = Math.max(0, agent.currentLoad - 0.1);
+
+  private checkDependentTasks(completedTaskId: string): void {
+    const dependentTasks = Array.from(this.tasks.values()).filter(
+      task => task.dependencies?.includes(completedTaskId) && task.status === TaskStatus.PENDING
+    );
+
+    for (const task of dependentTasks) {
+      if (this.areDependenciesMet(task)) {
+        // 将任务重新加入队列
+        if (!this.taskQueue.includes(task)) {
+          this.taskQueue.push(task);
+        }
       }
     }
+
+    this.sortTaskQueue();
   }
-  private async notifyAgentCollaborationRequest(request: CollaborationRequest;);: Promise<void>  {
-    // 这里应该调用具体智能体的API来通知协作请求 *   } */
-  private notifyAgentCollaborationResponse(request: CollaborationRequest,
+
+  private handleTaskFailure(task: Task): void {
+    // 记录失败原因
+    errorHandler.logError(ErrorType.TASK_EXECUTION_ERROR, {
+      taskId: task.id,
+      agentType: task.assignedAgent,
+      error: task.error
+    });
+
+    // 如果是关键任务，尝试重新分配
+    if (task.priority >= TaskPriority.HIGH) {
+      task.status = TaskStatus.PENDING;
+      task.assignedAgent = undefined;
+      this.taskQueue.push(task);
+      this.sortTaskQueue();
+    }
+  }
+
+  private async notifyAgentTaskAssignment(task: Task): Promise<void> {
+    // 实际实现中，这里会通过消息队列或直接调用通知智能体
+    console.log(`Task ${task.id} assigned to ${task.assignedAgent}`);
+  }
+
+  private notifyAgentTaskCancellation(task: Task): void {
+    // 实际实现中，这里会通知智能体取消任务
+    console.log(`Task ${task.id} cancelled for ${task.assignedAgent}`);
+  }
+
+  private async notifyAgentCollaborationRequest(request: CollaborationRequest): Promise<void> {
+    // 实际实现中，这里会通知目标智能体有协作请求
+    console.log(`Collaboration request ${request.id} sent to ${request.toAgent}`);
+  }
+
+  private notifyAgentCollaborationResponse(
+    request: CollaborationRequest,
     accepted: boolean,
     responseData?: unknown
-  ): void  {
-    `
-    );
-    // 这里应该调用具体智能体的API来通知协作响应 *   } */
-  private setupDefaultRules();: void {
-    // 紧急任务优先分配给在线的智能体 *     this.coordinationRules.push({ */
-      id: "emergency_priority",
-      name: "紧急任务优先处理",
-      condition: (task); => task.priority === TaskPriority.EMERGENCY,
-      action: (task, agents) => {
-        for (const [agentType, agent] of agents.entries();) {
-          if (agent.isOnline && agent.currentLoad < 0.8) {
-            return agentTy;p;e;
-          }
-        }
-        return nu;l;l;
-      },
-      priority: 1
-    })
-    // 健康咨询分配给小艾 *     this.coordinationRules.push({ */
-      id: "health_consultation_to_xiaoai",
-      name: "健康咨询分配给小艾",
-      condition: (task); => task.type === TaskType.HEALTH_CONSULTATION,
-      action: (task, agents) => {
-        const xiaoai = agents.get(AgentType.XIAOA;I;);
-        return xiaoai?.isOnline ? AgentType.XIAOAI : nu;l;l;
-      },
-      priority: 2
-    })
-    // 诊断任务分配给小克 *     this.coordinationRules.push({ */
+  ): void {
+    // 实际实现中，这里会通知请求方智能体协作响应
+    console.log(`Collaboration request ${request.id} ${accepted ? 'accepted' : 'rejected'} by ${request.toAgent}`);
+  }
+
+  private setupDefaultRules(): void {
+    // 紧急任务优先分配给小艾
+    this.coordinationRules.push({
+      id: "emergency_to_xiaoai",
+      name: "紧急任务分配给小艾",
+      condition: (task) => task.priority === TaskPriority.EMERGENCY,
+      action: () => AgentType.XIAOAI,
+      priority: 100
+    });
+
+    // 诊断任务优先分配给小克
+    this.coordinationRules.push({
       id: "diagnosis_to_xiaoke",
       name: "诊断任务分配给小克",
-      condition: (task); => task.type === TaskType.DIAGNOSIS,
-      action: (task, agents) => {
-        const xiaoke = agents.get(AgentType.XIAOK;E;);
-        return xiaoke?.isOnline ? AgentType.XIAOKE : nu;l;l;
-      },
-      priority: 2
-    })
-    // 生活方式指导分配给索儿 *     this.coordinationRules.push({ */
+      condition: (task) => task.type === TaskType.DIAGNOSIS,
+      action: () => AgentType.XIAOKE,
+      priority: 90
+    });
+
+    // 健康咨询分配给老克
+    this.coordinationRules.push({
+      id: "consultation_to_laoke",
+      name: "健康咨询分配给老克",
+      condition: (task) => task.type === TaskType.HEALTH_CONSULTATION,
+      action: () => AgentType.LAOKE,
+      priority: 80
+    });
+
+    // 生活指导分配给索儿
+    this.coordinationRules.push({
       id: "lifestyle_to_soer",
-      name: "生活方式指导分配给索儿",
-      condition: (task); => task.type === TaskType.LIFESTYLE_GUIDANCE,
-      action: (task, agents) => {
-        const soer = agents.get(AgentType.SOE;R;);
-        return soer?.isOnline ? AgentType.SOER : nu;l;l;
-      },
-      priority: 2
+      name: "生活指导分配给索儿",
+      condition: (task) => task.type === TaskType.LIFESTYLE_GUIDANCE,
+      action: () => AgentType.SOER,
+      priority: 80
     });
   }
+
   private initializeAgents(): void {
-    // 初始化小艾 *     this.registerAgent({ */
-      id: "xiaoai_001",
-      type: AgentType.XIAOAI,
-      isOnline: false,
-      currentLoad: 0,
-      capabilities: [{,
-          type: TaskType.HEALTH_CONSULTATION,
-          proficiency: 0.9,
-          maxConcurrentTasks: 5,
-          averageProcessingTime: 2000,
-          specializations: ["健康咨询", "用户交互", "聊天管理"]
-        },
-        {
-          type: TaskType.USER_INTERACTION,
-          proficiency: 0.95,
-          maxConcurrentTasks: 10,
-          averageProcessingTime: 1000,
-          specializations: ["多语言交互", "情感识别", "个性化服务"]
-        }
-      ],
-      activeTasks: [],
-      lastHeartbeat: 0,
-      performance: {
-        successRate: 0.95,
-        averageResponseTime: 1500,
-        totalTasksCompleted: 0
+    // 初始化四个智能体的基本状态
+    const agentConfigs = [
+      {
+        type: AgentType.XIAOAI,
+        capabilities: [
+          { type: TaskType.USER_INTERACTION, proficiency: 0.95, maxConcurrentTasks: 10, averageProcessingTime: 1000, specializations: ["语音交互", "无障碍服务"] },
+          { type: TaskType.EMERGENCY_RESPONSE, proficiency: 0.90, maxConcurrentTasks: 5, averageProcessingTime: 500, specializations: ["紧急响应"] }
+        ]
+      },
+      {
+        type: AgentType.XIAOKE,
+        capabilities: [
+          { type: TaskType.DIAGNOSIS, proficiency: 0.92, maxConcurrentTasks: 8, averageProcessingTime: 3000, specializations: ["中医诊断", "四诊合参"] },
+          { type: TaskType.DATA_ANALYSIS, proficiency: 0.88, maxConcurrentTasks: 6, averageProcessingTime: 2000, specializations: ["健康数据分析"] }
+        ]
+      },
+      {
+        type: AgentType.LAOKE,
+        capabilities: [
+          { type: TaskType.HEALTH_CONSULTATION, proficiency: 0.94, maxConcurrentTasks: 12, averageProcessingTime: 2500, specializations: ["健康咨询", "康复指导"] },
+          { type: TaskType.KNOWLEDGE_SHARING, proficiency: 0.91, maxConcurrentTasks: 8, averageProcessingTime: 1500, specializations: ["健康教育"] }
+        ]
+      },
+      {
+        type: AgentType.SOER,
+        capabilities: [
+          { type: TaskType.LIFESTYLE_GUIDANCE, proficiency: 0.89, maxConcurrentTasks: 10, averageProcessingTime: 2000, specializations: ["生活方式指导", "运动健康"] },
+          { type: TaskType.DATA_ANALYSIS, proficiency: 0.85, maxConcurrentTasks: 6, averageProcessingTime: 1800, specializations: ["生活数据分析"] }
+        ]
       }
-    })
-    // 初始化小克 *     this.registerAgent({ */
-      id: "xiaoke_001",
-      type: AgentType.XIAOKE,
-      isOnline: false,
-      currentLoad: 0,
-      capabilities: [{,
-          type: TaskType.DIAGNOSIS,
-          proficiency: 0.95,
-          maxConcurrentTasks: 3,
-          averageProcessingTime: 5000,
-          specializations: ["中医诊断", "四诊合参", "辨证论治"]
-        },
-        {
-          type: TaskType.DATA_ANALYSIS,
-          proficiency: 0.85,
-          maxConcurrentTasks: 2,
-          averageProcessingTime: 3000,
-          specializations: ["健康数据分析", "趋势预测"]
+    ];
+
+    for (const config of agentConfigs) {
+      const agentStatus: AgentStatus = {
+        id: `agent_${config.type.toLowerCase()}`,
+        type: config.type,
+        isOnline: false,
+        currentLoad: 0,
+        capabilities: config.capabilities,
+        activeTasks: [],
+        lastHeartbeat: 0,
+        performance: {
+          successRate: 0.95,
+          averageResponseTime: 2000,
+          totalTasksCompleted: 0
         }
-      ],
-      activeTasks: [],
-      lastHeartbeat: 0,
-      performance: {
-        successRate: 0.92,
-        averageResponseTime: 4000,
-        totalTasksCompleted: 0
-      }
-    })
-    // 初始化老克 *     this.registerAgent({ */
-      id: "laoke_001",
-      type: AgentType.LAOKE,
-      isOnline: false,
-      currentLoad: 0,
-      capabilities: [{,
-          type: TaskType.KNOWLEDGE_SHARING,
-          proficiency: 0.98,
-          maxConcurrentTasks: 2,
-          averageProcessingTime: 3000,
-          specializations: ["资深咨询", "复杂病例", "知识传授"]
-        },
-        {
-          type: TaskType.EMERGENCY_RESPONSE,
-          proficiency: 0.9,
-          maxConcurrentTasks: 1,
-          averageProcessingTime: 1000,
-          specializations: ["紧急处理", "危机干预"]
-        }
-      ],
-      activeTasks: [],
-      lastHeartbeat: 0,
-      performance: {
-        successRate: 0.98,
-        averageResponseTime: 2500,
-        totalTasksCompleted: 0
-      }
-    })
-    // 初始化索儿 *     this.registerAgent({ */
-      id: "soer_001",
-      type: AgentType.SOER,
-      isOnline: false,
-      currentLoad: 0,
-      capabilities: [{,
-          type: TaskType.LIFESTYLE_GUIDANCE,
-          proficiency: 0.92,
-          maxConcurrentTasks: 4,
-          averageProcessingTime: 2500,
-          specializations: ["生活方式指导", "健康计划", "行为改变"]
-        },
-        {
-          type: TaskType.DATA_ANALYSIS,
-          proficiency: 0.8,
-          maxConcurrentTasks: 2,
-          averageProcessingTime: 3500,
-          specializations: ["生活数据分析", "习惯追踪"]
-        }
-      ],
-      activeTasks: [],
-      lastHeartbeat: 0,
-      performance: {
-        successRate: 0.94,
-        averageResponseTime: 2800,
-        totalTasksCompleted: 0
-      }
-    });
+      };
+
+      this.agents.set(config.type, agentStatus);
+    }
   }
-  private generateTaskId(): string {
-    return `task_${Date.now()}_${Math.random().toString(36).substr(2, 9);};`;
-  }
-  private generateRequestId(): string {
-    return `req_${Date.now()}_${Math.random().toString(36).substr(2, 9);};`;
+
+  // 获取系统状态
+  public getSystemStatus() {
+    return {
+      isRunning: this.isRunning,
+      totalAgents: this.agents.size,
+      onlineAgents: Array.from(this.agents.values()).filter(agent => agent.isOnline).length,
+      totalTasks: this.tasks.size,
+      queuedTasks: this.taskQueue.length,
+      activeTasks: Array.from(this.tasks.values()).filter(task => 
+        task.status === TaskStatus.IN_PROGRESS || task.status === TaskStatus.ASSIGNED
+      ).length,
+      completedTasks: Array.from(this.tasks.values()).filter(task => 
+        task.status === TaskStatus.COMPLETED
+      ).length,
+      pendingCollaborations: Array.from(this.collaborationRequests.values()).filter(req => 
+        req.status === "PENDING"
+      ).length
+    };
   }
 }
-// 导出单例实例 * export const agentCoordinator = AgentCoordinator.getInstance;(;); */;
-// 便捷函数 * export const submitTask = ;(; */;
-  type: TaskType,
-  priority: TaskPriority,
-  requesterUserId: string,
-  data: unknown,
-  options?: unknown
-) =>
-  agentCoordinator.submitTask(type, priority, requesterUserId, data, options);
-export const getTaskStatus = (taskId: string) ;=;>;agentCoordinator.getTaskStatus(taskId);
-export const cancelTask = (taskId: string) ;=;>;agentCoordinator.cancelTask(taskId);
+
+export default AgentCoordinator;

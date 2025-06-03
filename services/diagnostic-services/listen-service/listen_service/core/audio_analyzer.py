@@ -10,15 +10,17 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict, List, Tuple, Optional
 
 import librosa
-import numpy as np
-import soundfile as sf
 import structlog
 import torch
 import webrtcvad
 from sklearn.preprocessing import StandardScaler
+import numpy as np
+import scipy.signal
+from scipy.stats import skew, kurtosis
+from enum import Enum
 
 from ..config.settings import get_settings
 from ..models.audio_models import (
@@ -32,6 +34,12 @@ from ..utils.performance import async_timer
 
 logger = structlog.get_logger(__name__)
 
+class AudioType(str, Enum):
+    """音频类型"""
+    VOICE = "voice"
+    BREATHING = "breathing"
+    COUGH = "cough"
+    HEARTBEAT = "heartbeat"
 
 @dataclass
 class AudioProcessingConfig:
@@ -47,6 +55,39 @@ class AudioProcessingConfig:
     enable_gpu: bool = True
     batch_size: int = 32
 
+@dataclass
+class VoiceAnalysisResult:
+    """语音分析结果"""
+    pitch_mean: float  # 平均音调
+    pitch_std: float   # 音调标准差
+    volume_mean: float # 平均音量
+    volume_std: float  # 音量标准差
+    voice_quality: str # 声音质量
+    emotional_state: str # 情绪状态
+    energy_level: str  # 能量水平
+    tcm_diagnosis: str # 中医诊断
+    confidence: float
+
+@dataclass
+class BreathingAnalysisResult:
+    """呼吸音分析结果"""
+    breathing_rate: float  # 呼吸频率
+    breath_depth: str      # 呼吸深度
+    breath_rhythm: str     # 呼吸节律
+    breath_quality: str    # 呼吸质量
+    abnormal_sounds: List[str]  # 异常音
+    tcm_diagnosis: str     # 中医诊断
+    confidence: float
+
+@dataclass
+class CoughAnalysisResult:
+    """咳嗽分析结果"""
+    cough_type: str        # 咳嗽类型
+    cough_frequency: int   # 咳嗽频率
+    cough_intensity: str   # 咳嗽强度
+    sputum_indication: str # 痰液指征
+    tcm_diagnosis: str     # 中医诊断
+    confidence: float
 
 class AudioAnalyzer:
     """

@@ -2,10 +2,7 @@
 
 """望诊服务客户端集成"""
 
-
 import grpc
-from xiaoai_service.protos import look_service_pb2 as look_pb
-from xiaoai_service.protos import look_service_pb2_grpc as look_grpc
 
 # 使用loguru logger
 

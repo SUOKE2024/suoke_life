@@ -7,17 +7,14 @@
 """
 
 import asyncio
-import re
 from typing import Dict, List, Any, Optional, Tuple, Set
 from dataclasses import dataclass, field
 from enum import Enum
 import jieba
-import jieba.posseg as pseg
 from loguru import logger
 
 from ..observability.metrics import MetricsCollector
 from ..tcm.tcm_models import ConstitutionType, SyndromeType
-
 
 class OptimizationStrategy(str, Enum):
     """优化策略"""
@@ -27,7 +24,6 @@ class OptimizationStrategy(str, Enum):
     TCM_ENHANCEMENT = "tcm_enhancement"          # 中医增强
     SEMANTIC_ENRICHMENT = "semantic_enrichment"  # 语义丰富
     CONTEXT_INJECTION = "context_injection"     # 上下文注入
-
 
 class QueryType(str, Enum):
     """查询类型"""
@@ -39,7 +35,6 @@ class QueryType(str, Enum):
     HEALTH_GUIDANCE = "health_guidance"          # 健康指导
     GENERAL_TCM = "general_tcm"                  # 一般中医
     LIFESTYLE_ADVICE = "lifestyle_advice"        # 生活建议
-
 
 @dataclass
 class QueryAnalysis:
@@ -56,7 +51,6 @@ class QueryAnalysis:
     confidence: float = 0.0
     complexity_score: float = 0.0
 
-
 @dataclass
 class OptimizedQuery:
     """优化后的查询"""
@@ -68,7 +62,6 @@ class OptimizedQuery:
     optimization_strategies: List[OptimizationStrategy] = field(default_factory=list)
     confidence_boost: float = 0.0
     metadata: Dict[str, Any] = field(default_factory=dict)
-
 
 class TCMTermDictionary:
     """中医术语词典"""
@@ -197,7 +190,6 @@ class TCMTermDictionary:
         keywords.update(basic_terms)
         
         return keywords
-
 
 class QueryAnalyzer:
     """查询分析器"""
@@ -444,7 +436,6 @@ class QueryAnalyzer:
             score += 0.2
         
         return min(score, 1.0)
-
 
 class QueryOptimizer:
     """查询优化器"""

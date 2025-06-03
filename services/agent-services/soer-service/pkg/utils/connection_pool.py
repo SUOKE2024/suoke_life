@@ -6,8 +6,6 @@ import logging
 from contextlib import asynccontextmanager
 from typing import Any, AsyncContextManager
 
-import motor.motor_asyncio
-import redis.asyncio as redis
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.pool import QueuePool
 

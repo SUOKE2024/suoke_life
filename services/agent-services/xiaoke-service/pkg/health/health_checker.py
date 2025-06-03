@@ -17,10 +17,8 @@ from typing import Any
 import aiohttp
 import aioredis
 import asyncpg
-import motor.motor_asyncio
 
 logger = logging.getLogger(__name__)
-
 
 class HealthStatus(Enum):
     """健康状态枚举"""
@@ -30,14 +28,12 @@ class HealthStatus(Enum):
     UNHEALTHY = "unhealthy"
     UNKNOWN = "unknown"
 
-
 class CheckType(Enum):
     """检查类型枚举"""
 
     LIVENESS = "liveness"  # 存活检查
     READINESS = "readiness"  # 就绪检查
     STARTUP = "startup"  # 启动检查
-
 
 @dataclass
 class HealthCheckConfig:
@@ -50,7 +46,6 @@ class HealthCheckConfig:
     success_threshold: int = 1  # 成功阈值
     enabled: bool = True  # 是否启用
 
-
 @dataclass
 class HealthCheckResult:
     """健康检查结果"""
@@ -62,7 +57,6 @@ class HealthCheckResult:
     timestamp: datetime = field(default_factory=datetime.now)
     duration: float = 0.0  # 检查耗时（秒）
     error: str | None = None
-
 
 class HealthChecker(ABC):
     """健康检查器抽象基类"""
@@ -212,7 +206,6 @@ class HealthChecker(ABC):
             },
         }
 
-
 class DatabaseHealthChecker(HealthChecker):
     """数据库健康检查器"""
 
@@ -334,7 +327,6 @@ class DatabaseHealthChecker(HealthChecker):
                 error=str(e),
             )
 
-
 class RedisHealthChecker(HealthChecker):
     """Redis健康检查器"""
 
@@ -390,7 +382,6 @@ class RedisHealthChecker(HealthChecker):
                 message=f"Redis连接失败: {e!s}",
                 error=str(e),
             )
-
 
 class HTTPHealthChecker(HealthChecker):
     """HTTP服务健康检查器"""
@@ -459,7 +450,6 @@ class HTTPHealthChecker(HealthChecker):
                 message=f"HTTP检查失败: {e!s}",
                 error=str(e),
             )
-
 
 class CustomHealthChecker(HealthChecker):
     """自定义健康检查器"""
@@ -530,7 +520,6 @@ class CustomHealthChecker(HealthChecker):
                 message=f"自定义检查异常: {e!s}",
                 error=str(e),
             )
-
 
 class HealthCheckManager:
     """健康检查管理器"""
@@ -789,10 +778,8 @@ class HealthCheckManager:
 
         logger.info("健康检查已停止")
 
-
 # 全局健康检查管理器实例
 _health_check_manager: HealthCheckManager | None = None
-
 
 def get_health_check_manager() -> HealthCheckManager:
     """获取健康检查管理器实例"""
@@ -802,7 +789,6 @@ def get_health_check_manager() -> HealthCheckManager:
         _health_check_manager = HealthCheckManager()
 
     return _health_check_manager
-
 
 async def close_health_check_manager():
     """关闭健康检查管理器"""

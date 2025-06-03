@@ -9,10 +9,7 @@ import logging
 from dataclasses import dataclass
 from typing import Any
 
-import numpy as np
-
 logger = logging.getLogger(__name__)
-
 
 @dataclass
 class PulseTypeResult:
@@ -23,7 +20,6 @@ class PulseTypeResult:
     description: str
     characteristics: list[str]
 
-
 @dataclass
 class TCMPatternResult:
     """中医证型识别结果"""
@@ -33,7 +29,6 @@ class TCMPatternResult:
     description: str
     related_conditions: list[str]
 
-
 @dataclass
 class OrganConditionResult:
     """脏腑状态评估结果"""
@@ -42,7 +37,6 @@ class OrganConditionResult:
     condition: str
     severity: float
     description: str
-
 
 class PulseAnalyzer:
     """脉象分析器"""

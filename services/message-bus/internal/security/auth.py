@@ -1,18 +1,13 @@
 """
 安全机制模块，提供认证和授权功能
 """
-import os
-import json
 import time
 import logging
 import grpc
 import jwt
-import requests
 from typing import Dict, Any, Optional, Callable, Awaitable, List
 from jwt.exceptions import PyJWTError
-import asyncio
 
-from config.settings import Settings
 from internal.observability.metrics import request_counter
 
 logger = logging.getLogger(__name__)

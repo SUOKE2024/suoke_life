@@ -7,7 +7,6 @@ Milvus向量数据库连接实现
 
 import time
 from typing import List, Dict, Any, Optional, Tuple
-import numpy as np
 from pymilvus import (
     connections,
     utility,
@@ -19,7 +18,6 @@ from pymilvus import (
 from loguru import logger
 
 from ..model.document import Document
-
 
 class MilvusRepository:
     """

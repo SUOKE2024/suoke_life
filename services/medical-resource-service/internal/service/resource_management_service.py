@@ -3,10 +3,7 @@
 负责中医师、现代医疗机构、设备、药材等各类医疗资源的统一管理
 """
 
-import asyncio
-import json
 import logging
-import math
 import uuid
 from collections import defaultdict, deque
 from dataclasses import dataclass, field
@@ -14,14 +11,9 @@ from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, List, Optional, Set, Tuple
 
-import numpy as np
-import pandas as pd
-from geopy.distance import geodesic
-
 from ..domain.models import ConstitutionType, ResourceType
 
 logger = logging.getLogger(__name__)
-
 
 class ResourceCategory(Enum):
     """资源类别"""
@@ -37,7 +29,6 @@ class ResourceCategory(Enum):
     DIAGNOSTIC_SERVICE = "diagnostic_service"  # 诊断服务
     TREATMENT_SERVICE = "treatment_service"  # 治疗服务
 
-
 class ResourceStatus(Enum):
     """资源状态"""
 
@@ -49,7 +40,6 @@ class ResourceStatus(Enum):
     SUSPENDED = "suspended"  # 暂停服务
     RETIRED = "retired"  # 已退役
 
-
 class QualityLevel(Enum):
     """质量等级"""
 
@@ -59,7 +49,6 @@ class QualityLevel(Enum):
     STANDARD = "standard"  # 标准 (70-79分)
     BASIC = "basic"  # 基础 (60-69分)
     POOR = "poor"  # 较差 (<60分)
-
 
 class SpecialtyType(Enum):
     """专科类型"""
@@ -84,7 +73,6 @@ class SpecialtyType(Enum):
     NEPHROLOGY = "nephrology"  # 肾脏科
     RHEUMATOLOGY = "rheumatology"  # 风湿科
 
-
 class CertificationLevel(Enum):
     """认证等级"""
 
@@ -95,7 +83,6 @@ class CertificationLevel(Enum):
     ATTENDING_DOCTOR = "attending_doctor"  # 主治医师
     RESIDENT_DOCTOR = "resident_doctor"  # 住院医师
     CERTIFIED_PRACTITIONER = "certified_practitioner"  # 执业医师
-
 
 @dataclass
 class ResourceLocation:
@@ -111,7 +98,6 @@ class ResourceLocation:
     landmark: Optional[str] = None
     accessibility: Dict[str, bool] = field(default_factory=dict)  # 无障碍设施
 
-
 @dataclass
 class ResourceSchedule:
     """资源时间安排"""
@@ -126,7 +112,6 @@ class ResourceSchedule:
     is_recurring: bool = False
     recurrence_pattern: Optional[str] = None
 
-
 @dataclass
 class ResourceCapability:
     """资源能力"""
@@ -139,7 +124,6 @@ class ResourceCapability:
     experience_years: Optional[int] = None
     success_rate: Optional[float] = None
     patient_satisfaction: Optional[float] = None
-
 
 @dataclass
 class ResourceMetrics:
@@ -157,7 +141,6 @@ class ResourceMetrics:
     revenue: float
     last_updated: datetime = field(default_factory=datetime.now)
 
-
 @dataclass
 class ResourceReview:
     """资源评价"""
@@ -173,7 +156,6 @@ class ResourceReview:
     helpful_votes: int = 0
     categories: List[str] = field(default_factory=list)
 
-
 @dataclass
 class ResourceCost:
     """资源成本"""
@@ -186,7 +168,6 @@ class ResourceCost:
     insurance_covered: bool = False
     discount_available: bool = False
     payment_methods: List[str] = field(default_factory=list)
-
 
 @dataclass
 class MedicalResource:
@@ -208,7 +189,6 @@ class MedicalResource:
     tags: List[str] = field(default_factory=list)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
-
 @dataclass
 class TCMDoctor(MedicalResource):
     """中医师资源"""
@@ -227,7 +207,6 @@ class TCMDoctor(MedicalResource):
     follow_up_fee: float
     languages: List[str] = field(default_factory=lambda: ["中文"])
 
-
 @dataclass
 class ModernDoctor(MedicalResource):
     """现代医生资源"""
@@ -245,7 +224,6 @@ class ModernDoctor(MedicalResource):
     procedure_fees: Dict[str, float]
     insurance_accepted: List[str]
 
-
 @dataclass
 class MedicalFacility(MedicalResource):
     """医疗机构资源"""
@@ -262,7 +240,6 @@ class MedicalFacility(MedicalResource):
     public_transport_access: bool
     website: Optional[str] = None
 
-
 @dataclass
 class MedicalEquipment(MedicalResource):
     """医疗设备资源"""
@@ -278,7 +255,6 @@ class MedicalEquipment(MedicalResource):
     max_daily_usage: int
     operator_requirements: List[str]
     safety_certifications: List[str]
-
 
 @dataclass
 class HerbalMedicine(MedicalResource):
@@ -299,7 +275,6 @@ class HerbalMedicine(MedicalResource):
     price_per_unit: float
     unit: str  # kg, g, piece
 
-
 @dataclass
 class AgriculturalProduct(MedicalResource):
     """农产品资源"""
@@ -317,7 +292,6 @@ class AgriculturalProduct(MedicalResource):
     seasonal_availability: List[str]
     price_per_unit: float
     minimum_order: int
-
 
 class ResourceManagementService:
     """

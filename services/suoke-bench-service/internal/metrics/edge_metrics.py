@@ -3,11 +3,8 @@
 from dataclasses import dataclass
 from typing import Any
 
-import numpy as np
-
 from .agent_metrics import MetricResult
 from .metrics import Metric
-
 
 @dataclass
 class DeviceInfo:
@@ -22,7 +19,6 @@ class DeviceInfo:
     storage_size: int  # 存储大小(MB)
     battery_capacity: int  # 电池容量(mAh)
 
-
 @dataclass
 class ModelInfo:
     """模型信息数据类。"""
@@ -33,7 +29,6 @@ class ModelInfo:
     model_size: int  # 模型大小(MB)
     quantization: str | None  # 量化方式
     optimization: list[str]  # 优化方法
-
 
 @dataclass
 class PerformanceMetrics:
@@ -47,7 +42,6 @@ class PerformanceMetrics:
     network_io: float  # 网络IO(MB/s)
     temperature: float  # 温度(°C)
 
-
 @dataclass
 class InferenceMetrics:
     """推理性能指标数据类。"""
@@ -57,7 +51,6 @@ class InferenceMetrics:
     accuracy: float  # 准确率
     initialization_time: float  # 初始化时间(ms)
     memory_footprint: float  # 内存占用(MB)
-
 
 class EdgePerformanceMetric(Metric):
     """端侧性能评测指标。"""

@@ -23,7 +23,6 @@ from .cache_manager import get_cache_manager
 # 设备访问相关库
 try:
     import cv2
-    import numpy as np
     CV2AVAILABLE = True
 except ImportError:
     CV2AVAILABLE = False
@@ -40,7 +39,6 @@ except ImportError:
 
 try:
     import pyautogui
-    from PIL import Image
     SCREENSHOTAVAILABLE = True
 except ImportError:
     SCREENSHOTAVAILABLE = False

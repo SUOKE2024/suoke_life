@@ -1,20 +1,21 @@
-import React from 'react';
-import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor';
-import { securityManager } from "./securityManager";/;
-// 智能体类型定义 * export type AgentType = "xiaoai" | "xiaoke" | "laoke" | "soe;r"; */;
-// 智能体角色定义 * export interface AgentRole { id: AgentType, */;
+import React from "react";
+import { securityManager } from "../../placeholder";./////    securityManager";"
+//////
+// 智能体类型定义 * export type AgentType = "xiaoai" | "xiaoke" | "laoke" | "soe;"////
+r"; /////    "
+// 智能体角色定义 * export interface AgentRole { id: AgentType, ////
   name: string,
   description: string,
   capabilities: string[],
   specialties: string[],
-  personality: {communication_style: string,
-    empathy_level: number,
+  personality: {communication_style: string,;
+    empathy_level: number,;
     expertise_confidence: number};
 }
-// 协作任务类型 * export interface CollaborationTask { id: string, */;
+// 协作任务类型 * export interface CollaborationTask { id: string, ////
   type:   | "health_diagnosis"| "treatment_plan"| "lifestyle_advice",
-    | "emergency_response"
-  priority: "low" | "medium" | "high" | "critical",
+    | "emergency_response";
+  priority: "low" | "medium" | "high" | "critical",;
   requiredAgents: AgentType[];
   currentAgent?: AgentType,
   status: "pending" | "in_progress" | "completed" | "failed",
@@ -34,57 +35,57 @@ export interface AgentRecommendation { agent: AgentType,
   confidence: number,
   reasoning: string,
   supporting_data: unknown}
-// 智能体状态 * export interface AgentStatus { agent: AgentType, */;
+// 智能体状态 * export interface AgentStatus { agent: AgentType, ////
   online: boolean,
   busy: boolean,
   currentTasks: string[],
-  performance: {response_time: number,
-    accuracy: number,
+  performance: {response_time: number,;
+    accuracy: number,;
     user_satisfaction: number};
   lastUpdate: number}
-// 协作决策引擎 * class CollaborationDecisionEngine { */
+// 协作决策引擎 * class CollaborationDecisionEngine { ////
   private static instance: CollaborationDecisionEngine;
-  static getInstance();: CollaborationDecisionEngine {
+  static getInstance(): CollaborationDecisionEngine {
     if (!CollaborationDecisionEngine.instance) {
       CollaborationDecisionEngine.instance = new CollaborationDecisionEngine();
     }
-    return CollaborationDecisionEngine.instan;c;e;
+    return CollaborationDecisionEngine.instance;
   }
-  // 分析任务并分配智能体 *   analyzeTaskAndAssignAgents(taskData: unknown);: AgentType[]  { */
+  // 分析任务并分配智能体 //////     analyzeTaskAndAssignAgents(taskData: unknown): AgentType[]  {
     const requiredAgents: AgentType[] = [];
-    // 基于任务类型和内容分析需要的智能体 *     if (taskData.type === "health_diagnosis") { */
-      requiredAgents.push("xiaoai") // 小艾负责初步诊断 *  */
+    // 基于任务类型和内容分析需要的智能体 //////     if (taskData.type === "health_diagnosis") {
+      requiredAgents.push("xiaoai") // 小艾负责初步诊断 //////
       if (taskData.symptoms?.includes("chronic") || taskData.age > 60) {
-        requiredAgents.push("laoke") // 老克负责慢性病和老年健康 *       } */
+        requiredAgents.push("laoke") // 老克负责慢性病和老年健康 //////     }
       if (taskData.needsMedicalIntervention) {
-        requiredAgents.push("xiaoke") // 小克负责医疗服务 *       } */
+        requiredAgents.push("xiaoke") // 小克负责医疗服务 //////     }
       if (taskData.lifestyle_factors) {
-        requiredAgents.push("soer"); // 索儿负责生活方式建议 *       } */
+        requiredAgents.push("soer") // 索儿负责生活方式建议 //////     }
     }
-    return requiredAgen;t;s;
+    return requiredAgent;s;
   }
-  // 协调智能体决策 *   async coordinateDecision(task: CollaborationTask, */
-    agentRecommendations: AgentRecommendation[];);: Promise<CollaborationResult />  {
-    // 计算共识度 *     const consensus = this.calculateConsensus(agentRecommendation;s;); */
-    // 综合置信度 *     const overallConfidence = */;
+  // 协调智能体决策 //////     async coordinateDecision(task: CollaborationTask,
+    agentRecommendations: AgentRecommendation[]);: Promise<CollaborationResult /////    >  {
+    // 计算共识度 //////     const consensus = this.calculateConsensus(agentRecommendations;);
+    // 综合置信度 //////     const overallConfidence =
       this.calculateOverallConfidence(agentRecommendation;s;);
-    // 生成最终推荐 *     const finalRecommendations = */;
+    // 生成最终推荐 //////     const finalRecommendations =
       this.synthesizeRecommendations(agentRecommendation;s;);
-    // 生成推理说明 *     const reasoning = this.generateReasoning(agentRecommendations, consensu;s;); */
+    // 生成推理说明 //////     const reasoning = this.generateReasoning(agentRecommendations, consensus;);
     return {
       consensus: consensus > 0.7,
       recommendations: finalRecommendations,
       confidence: overallConfidence,
-      reasonin;g
+      reasonin;g;
     ;};
   }
   private calculateConsensus(recommendations: AgentRecommendation[]);: number  {
     if (recommendations.length < 2) {
       return 1;.;0;
     }
-    // 简化的共识计算：基于推荐相似度 *     let totalSimilarity = ;0; */
-    let comparisons = ;0;
-    for (let i = ;0; i < recommendations.length; i++) {
+    // 简化的共识计算：基于推荐相似度 //////     let totalSimilarity = 0;
+    let comparisons = 0;
+    for (let i = 0; i < recommendations.length; i++) {
       for (let j = i ;+ ;1; j < recommendations.length; j++) {
         const similarity = this.calculateRecommendationSimilarity(;
           recommendations[i],
@@ -94,29 +95,29 @@ export interface AgentRecommendation { agent: AgentType,
         comparisons++;
       }
     }
-    return comparisons > 0 ? totalSimilarity / comparisons : 1;.;0;/  }
+    return comparisons > 0 ? totalSimilarity / comparisons : 1;.;0;/////      }
   private calculateRecommendationSimilarity(rec1: AgentRecommendation,
     rec2: AgentRecommendation;): number  {
-    // 简化的相似度计算 *     const keywords1 = rec1.recommendation.toLowerCase().split(" ;";) */
+    // 简化的相似度计算 //////     const keywords1 = rec1.recommendation.toLowerCase().split(" ";)
     const keywords2 = rec2.recommendation.toLowerCase().split(" ;";);
     const commonKeywords = keywords1.filter((wor;d;); => keywords2.includes(word););
     const totalKeywords = new Set([...keywords1, ...keywords2]).si;z;e;
-    return commonKeywords.length / totalKeywor;d;s;/  }
+    return commonKeywords.length / totalKeywor;d;s;/////      }
   private calculateOverallConfidence(recommendations: AgentRecommendation[];);: number  {
     if (recommendations.length === 0) {
       return 0;
     }
     const totalConfidence = recommendations.reduce(;
       (sum, re;c;); => sum + rec.confidence,
-      0
+      0;
     );
-    return totalConfidence / recommendations.leng;t;h;/  }
+    return totalConfidence / recommendations.leng;t;h;/////      }
   private synthesizeRecommendations(recommendations: AgentRecommendation[];);: AgentRecommendation[]  {
-    // 按置信度排序并返回最佳推荐 *     return recommendations */;
+    // 按置信度排序并返回最佳推荐 //////     return recommendations;
       .sort((a, ;b;); => b.confidence - a.confidence)
-      .slice(0, 3); // 返回前3个最佳推荐 *   } */
+      .slice(0, 3); // 返回前3个最佳推荐 //////     }
   private generateReasoning(recommendations: AgentRecommendation[],
-    consensus: number;);: string  {
+    consensus: number);: string  {
     const agentNames = recommendations;
       .map((r); => this.getAgentName(r.agent))
       .join("、")
@@ -137,23 +138,24 @@ export interface AgentRecommendation { agent: AgentType,
     return names[agen;t;];
   }
 }
-// 智能体协作管理器 * export class AgentCollaborationSystem {; */;
+// 智能体协作管理器 * export class AgentCollaborationSystem {////  ;
+ /////    ;
   private static instance: AgentCollaborationSystem;
-  private agents: Map<AgentType, AgentRole /> = new Map();/  private agentStatuses: Map<AgentType, AgentStatus /> = new Map();/  private activeTasks: Map<string, CollaborationTask> = new Map();
+  private agents: Map<AgentType, AgentRole /> = new Map();/  private agentStatuses: Map<AgentType, AgentStatus /> = new Map();/////      private activeTasks: Map<string, CollaborationTask> = new Map();
   private decisionEngine: CollaborationDecisionEngine;
   private collaborationHistory: CollaborationTask[] = [];
   private constructor() {
     this.decisionEngine = CollaborationDecisionEngine.getInstance();
     this.initializeAgents();
   }
-  static getInstance();: AgentCollaborationSystem {
+  static getInstance(): AgentCollaborationSystem {
     if (!AgentCollaborationSystem.instance) {
       AgentCollaborationSystem.instance = new AgentCollaborationSystem();
     }
-    return AgentCollaborationSystem.instan;c;e;
+    return AgentCollaborationSystem.instance;
   }
-  // 初始化智能体 *   private initializeAgents();: void { */
-    // 小艾 - AI健康诊断助手 *     this.agents.set("xiaoai", { */
+  // 初始化智能体 //////     private initializeAgents(): void {
+    // 小艾 - AI健康诊断助手 //////     this.agents.set("xiaoai", {
       id: "xiaoai",
       name: "小艾",
       description: "AI健康诊断助手，专注于症状分析和初步诊断",
@@ -167,10 +169,9 @@ export interface AgentRecommendation { agent: AgentType,
       personality: {
         communication_style: "专业、温和、详细",
         empathy_level: 0.8,
-        expertise_confidence: 0.9,
-      }
-    })
-    // 小克 - 医疗服务管理助手 *     this.agents.set("xiaoke", { */
+        expertise_confidence: 0.9}
+    });
+    // 小克 - 医疗服务管理助手 //////     this.agents.set("xiaoke", {
       id: "xiaoke",
       name: "小克",
       description: "医疗服务管理助手，负责医疗资源协调和服务管理",
@@ -184,10 +185,9 @@ export interface AgentRecommendation { agent: AgentType,
       personality: {
         communication_style: "高效、准确、负责",
         empathy_level: 0.7,
-        expertise_confidence: 0.85,
-      }
-    })
-    // 老克 - 慢性病和老年健康专家 *     this.agents.set("laoke", { */
+        expertise_confidence: 0.85}
+    });
+    // 老克 - 慢性病和老年健康专家 //////     this.agents.set("laoke", {
       id: "laoke",
       name: "老克",
       description: "慢性病和老年健康专家，专注于长期健康管理",
@@ -201,10 +201,9 @@ export interface AgentRecommendation { agent: AgentType,
       personality: {
         communication_style: "耐心、细致、经验丰富",
         empathy_level: 0.9,
-        expertise_confidence: 0.95,
-      }
-    })
-    // 索儿 - 生活方式和养生顾问 *     this.agents.set("soer", { */
+        expertise_confidence: 0.95}
+    });
+    // 索儿 - 生活方式和养生顾问 //////     this.agents.set("soer", {
       id: "soer",
       name: "索儿",
       description: "生活方式和养生顾问，专注于健康生活指导",
@@ -218,10 +217,9 @@ export interface AgentRecommendation { agent: AgentType,
       personality: {
         communication_style: "亲切、鼓励、实用",
         empathy_level: 0.85,
-        expertise_confidence: 0.8,
-      }
+        expertise_confidence: 0.8}
     });
-    // 初始化智能体状态 *     this.agents.forEach((agent, agentType); => { */
+    // 初始化智能体状态 //////     this.agents.forEach((agent, agentType) => {}
       this.agentStatuses.set(agentType, {
         agent: agentType,
         online: true,
@@ -230,74 +228,72 @@ export interface AgentRecommendation { agent: AgentType,
         performance: {
           response_time: 1000 + Math.random(); * 2000,
           accuracy: 0.85 + Math.random(); * 0.1,
-          user_satisfaction: 0.8 + Math.random(); * 0.15
+          user_satisfaction: 0.8 + Math.random(); * 0.15;
         },
         lastUpdate: Date.now()});
-    })
+    });
   }
-  // 创建协作任务 *   async createCollaborationTask(type: CollaborationTask["type"], */
+  // 创建协作任务 //////     async createCollaborationTask(type: CollaborationTask["type"],
     data: unknown,
-    priority: CollaborationTask["priority"] = "medium";);: Promise<string>  {
-    const taskId = this.generateTaskId;(;);
-    // 分析任务并确定需要的智能体 *     const requiredAgents = this.decisionEngine.analyzeTaskAndAssignAgents({ */
+    priority: CollaborationTask["priority"] = "medium");: Promise<string>  {
+    const taskId = this.generateTaskId;
+    // 分析任务并确定需要的智能体 //////     const requiredAgents = this.decisionEngine.analyzeTaskAndAssignAgents({
       type,
       ...data;};)
-    const task: CollaborationTask = {,;
+    const task: CollaborationTask = {;
       id: taskId,
       type,
       priority,
       requiredAgents,
       status: "pending",
       data,
-      timeline: [{,
+      timeline: [{
           timestamp: Date.now(),
-          agent: "xiaoai", // 默认由小艾发起 *           action: "task_created", */
+          agent: "xiaoai", // 默认由小艾发起 //////     action: "task_created",
           data: { type, priority }
         }
       ]
-    };
+    }
     this.activeTasks.set(taskId, task)
-    // 记录安全事件 *     securityManager.logSecurityEvent({ */
+    // 记录安全事件 //////     securityManager.logSecurityEvent({
       type: "data_access",
       details: { action: "collaboration_task_created", taskId, type },
-      severity: "low",
-    });
-    // 开始执行任务 *     await this.executeTask(taskI;d;); */
+      severity: "low"});
+    // 开始执行任务 //////     await this.executeTask(taskId;);
     return task;I;d;
   }
-  // 执行协作任务 *   private async executeTask(taskId: string);: Promise<void>  { */
+  // 执行协作任务 //////     private async executeTask(taskId: string): Promise<void>  {
     const task = this.activeTasks.get(taskI;d;);
     if (!task) {
-      return
+      return;
     }
     try {
       task.status = "in_progress";
-      // 收集各智能体的推荐 *       const recommendations: AgentRecommendation[] = []; */
+      // 收集各智能体的推荐 //////     const recommendations: AgentRecommendation[] = []
       for (const agentType of task.requiredAgents) {
         const recommendation = await this.getAgentRecommendation(;
           agentType,
-          t;a;s;k
+          t;a;s;k;
         ;);
         if (recommendation) {
           recommendations.push(recommendation);
         }
       }
-      // 协调决策 *       const result = await this.decisionEngine.coordinateDecision( */;
+      // 协调决策 //////     const result = await this.decisionEngine.coordinateDecision(
         task,
-        recommendati;o;n;s
+        recommendati;o;n;s;
       ;);
-      task.result = result
-      task.status = "completed"
+      task.result = result;
+task.status = "completed"
       task.timeline.push({
         timestamp: Date.now(),
         agent: "xiaoai",
         action: "task_completed",
         data: { consensus: result.consensus, confidence: result.confidence}
       });
-      // 保存到历史记录 *       this.collaborationHistory.push({ ...task }); */
-      // 移除活跃任务 *       this.activeTasks.delete(taskId) */
+      // 保存到历史记录 //////     this.collaborationHistory.push({ ...task })
+      // 移除活跃任务 //////     this.activeTasks.delete(taskId)
     } catch (error) {
-      console.error("任务执行失败:", error)
       task.status = "failed"
       task.timeline.push({
         timestamp: Date.now(),
@@ -307,14 +303,14 @@ export interface AgentRecommendation { agent: AgentType,
       });
     }
   }
-  // 获取智能体推荐 *   private async getAgentRecommendation(agentType: AgentType, */
-    task: CollaborationTask;);: Promise<AgentRecommendation | null />  {
+  // 获取智能体推荐 //////     private async getAgentRecommendation(agentType: AgentType,
+    task: CollaborationTask);: Promise<AgentRecommendation | null /////    >  {
     const agent = this.agents.get(agentTyp;e;);
     if (!agent) {
       return nu;l;l;
     }
-    // 模拟智能体分析和推荐生成 *     await this.simulateProcessingTime(agentTyp;e;); */
-    const recommendation = this.generateMockRecommendation(agent, tas;k;)
+    // 模拟智能体分析和推荐生成 //////     await this.simulateProcessingTime(agentType;);
+    const recommendation = this.generateMockRecommendation(agent, tas;k;);
     task.timeline.push({
       timestamp: Date.now(),
       agent: agentType,
@@ -323,26 +319,26 @@ export interface AgentRecommendation { agent: AgentType,
     });
     return recommendati;o;n;
   }
-  // 生成模拟推荐（在实际应用中会调用真实的AI服务） *   private generateMockRecommendation(agent: AgentRole, */
-    task: CollaborationTask;);: AgentRecommendation  {
+  // 生成模拟推荐（在实际应用中会调用真实的AI服务） //////     private generateMockRecommendation(agent: AgentRole,
+    task: CollaborationTask);: AgentRecommendation  {
     const baseConfidence = agent.personality.expertise_confiden;c;e;
-    const confidence = baseConfidence * (0.8 + Math.random;(;); * 0.2);
+    const confidence = baseConfidence * (0.8 + Math.random * 0.2);
     let recommendation = ";";
-    let reasoning = ";"
+    let reasoning = ";";
     switch (agent.id) {
       case "xiaoai":
         recommendation = "基于症状分析，建议进行进一步检查并关注生活方式调整"
         reasoning = "通过多模态数据分析，发现潜在健康风险指标";
-        break
-      case "xiaoke":
+        break;
+case "xiaoke":
         recommendation = "建议预约专科医生进行详细检查，制定个性化治疗方案"
         reasoning = "基于医疗服务管理经验，推荐最适合的医疗资源";
-        break
-      case "laoke":
+        break;
+case "laoke":
         recommendation = "重点关注慢性病预防，建立长期健康监测计划"
         reasoning = "结合年龄和健康历史，制定预防性健康管理策略";
-        break
-      case "soer":
+        break;
+case "soer":
         recommendation = "调整饮食结构，增加适量运动，改善睡眠质量"
         reasoning = "从生活方式角度提供全面的健康改善建议";
         break;
@@ -357,37 +353,37 @@ export interface AgentRecommendation { agent: AgentType,
         analysis_time: Date.now()}
     ;};
   }
-  // 模拟处理时间 *   private async simulateProcessingTime(agentType: AgentType);: Promise<void>  { */
+  // 模拟处理时间 //////     private async simulateProcessingTime(agentType: AgentType): Promise<void>  {
     const status = this.agentStatuses.get(agentTyp;e;);
-    const processingTime = status?.performance.response_time || 20;0;0;
-    return new Promise((resolv;e;); => {
+    const processingTime = status?.performance.response_time || 20;
+    return new Promise((resolv;e;); => {}
       setTimeout(resolve, processingTime * (0.5 + Math.random();));
     });
   }
-  // 获取任务状态 *   getTaskStatus(taskId: string);: CollaborationTask | null  { */
-    // 记录渲染性能
-    performanceMonitor.recordRender();
+  // 获取任务状态 //////     getTaskStatus(taskId: string): CollaborationTask | null  {
+    //////     记录渲染性能
+performanceMonitor.recordRender();
     return (
       this.activeTasks.get(taskI;d;); ||
       this.collaborationHistory.find((task); => task.id === taskId) ||
-      null
+      null;
     );
   }
-  // 获取智能体状态 *   getAgentStatus(agentType: AgentType);: AgentStatus | null  { */
+  // 获取智能体状态 //////     getAgentStatus(agentType: AgentType): AgentStatus | null  {
     return this.agentStatuses.get(agentTyp;e;); || null;
   }
-  // 获取所有智能体状态 *   getAllAgentStatuses();: AgentStatus[] { */
-    return Array.from(this.agentStatuses.values;(;););
+  // 获取所有智能体状态 //////     getAllAgentStatuses(): AgentStatus[] {
+    return Array.from(this.agentStatuses.values);
   }
-  // 获取协作历史 *   getCollaborationHistory(limit: number = 10);: CollaborationTask[]  { */
+  // 获取协作历史 //////     getCollaborationHistory(limit: number = 10): CollaborationTask[]  {
     return this.collaborationHistory;
       .sort(;
-        (a, ;b;); =>
+        (a, ;b;); => {}
           (b.timeline[0]?.timestamp || 0) - (a.timeline[0]?.timestamp || 0)
       )
       .slice(0, limit);
   }
-  // 获取协作统计 *   getCollaborationStats();: { totalTasks: number, */
+  // 获取协作统计 //////     getCollaborationStats(): { totalTasks: number,
     completedTasks: number,
     averageConfidence: number,
     consensusRate: number} {
@@ -395,25 +391,25 @@ export interface AgentRecommendation { agent: AgentType,
       (tas;k;) => task.status === "completed"
     );
     const totalTasks = this.collaborationHistory.leng;t;h;
-    const averageConfidence =
+    const averageConfidence =;
       completedTasks.length > 0;
         ? completedTasks.reduce(;
             (sum, tas;k;); => sum + (task.result?.confidence || 0),
-            0
-          ) / completedTasks.length/        : 0;
-    const consensusRate =
+            0;
+          ) / completedTasks.length/////            : 0;
+    const consensusRate =;
       completedTasks.length > 0;
-        ? completedTasks.filter((tas;k;); => task.result?.consensus).length // completedTasks.length
+        ? completedTasks.filter((tas;k;); => task.result?.consensus).length //////     completedTasks.length;
         : 0;
     return {
       totalTasks,
       completedTasks: completedTasks.length,
       averageConfidence,
-      consensusRat;e
+      consensusRat;e;
     ;};
   }
-  // 生成任务ID *   private generateTaskId(): string { */
-    return `collab_${Date.now()}_${Math.random().toString(36).substr(2, 9);};`;
+  // 生成任务ID //////     private generateTaskId(): string {
+    return `collab_${Date.now()}_${Math.random().toString(36).substr(2, 9)};`;
   }
 }
-// 导出单例实例 * export const agentCollaborationSystem = AgentCollaborationSystem.getInstance;(;); */;
+// 导出单例实例 * export const agentCollaborationSystem = AgentCollaborationSystem.getInstance ////   ;

@@ -4,14 +4,11 @@
 使用 Pydantic Settings 进行类型安全的配置管理。
 """
 
-from __future__ import annotations
-
 from functools import lru_cache
 from typing import Any
 
 from pydantic import BaseModel, Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
-
 
 class DatabaseConfig(BaseModel):
     """数据库配置"""
@@ -23,7 +20,6 @@ class DatabaseConfig(BaseModel):
     pool_timeout: int = Field(default=30, description="连接池超时时间")
     pool_recycle: int = Field(default=3600, description="连接回收时间")
 
-
 class RedisConfig(BaseModel):
     """Redis配置"""
 
@@ -32,7 +28,6 @@ class RedisConfig(BaseModel):
     retry_on_timeout: bool = Field(default=True, description="超时重试")
     socket_timeout: float = Field(default=5.0, description="Socket超时时间")
     socket_connect_timeout: float = Field(default=5.0, description="连接超时时间")
-
 
 class GRPCConfig(BaseModel):
     """gRPC服务配置"""
@@ -45,7 +40,6 @@ class GRPCConfig(BaseModel):
     enable_reflection: bool = Field(default=True, description="启用gRPC反射")
     enable_health_check: bool = Field(default=True, description="启用健康检查")
 
-
 class HTTPConfig(BaseModel):
     """HTTP服务配置"""
 
@@ -54,7 +48,6 @@ class HTTPConfig(BaseModel):
     reload: bool = Field(default=False, description="开发模式自动重载")
     workers: int = Field(default=1, description="工作进程数")
     access_log: bool = Field(default=True, description="访问日志")
-
 
 class MonitoringConfig(BaseModel):
     """监控配置"""
@@ -66,7 +59,6 @@ class MonitoringConfig(BaseModel):
     enable_logging: bool = Field(default=True, description="启用结构化日志")
     log_level: str = Field(default="INFO", description="日志级别")
 
-
 class MazeConfig(BaseModel):
     """迷宫配置"""
 
@@ -77,7 +69,6 @@ class MazeConfig(BaseModel):
     challenge_node_density: float = Field(default=0.05, description="挑战节点密度")
     max_user_mazes: int = Field(default=10, description="用户最大迷宫数量")
 
-
 class AIConfig(BaseModel):
     """AI配置"""
 
@@ -86,7 +77,6 @@ class AIConfig(BaseModel):
     model_name: str = Field(default="gpt-3.5-turbo", description="默认模型名称")
     max_tokens: int = Field(default=1000, description="最大令牌数")
     temperature: float = Field(default=0.7, description="生成温度")
-
 
 class SecurityConfig(BaseModel):
     """安全配置"""
@@ -97,7 +87,6 @@ class SecurityConfig(BaseModel):
     cors_origins: list[str] = Field(default=["*"], description="CORS允许的源")
     cors_methods: list[str] = Field(default=["*"], description="CORS允许的方法")
     cors_headers: list[str] = Field(default=["*"], description="CORS允许的头部")
-
 
 class Settings(BaseSettings):
     """应用设置"""
@@ -208,7 +197,6 @@ class Settings(BaseSettings):
                 },
             },
         }
-
 
 @lru_cache
 def get_settings() -> Settings:

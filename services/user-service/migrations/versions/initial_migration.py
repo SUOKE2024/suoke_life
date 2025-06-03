@@ -5,16 +5,13 @@ Create Date: 2025-05-19
 
 """
 from alembic import op
-import sqlalchemy as sa
 from sqlalchemy.dialects.postgresql import UUID, JSONB
-import uuid
 
 # revision identifier, used by Alembic
 revision = '001'
 down_revision = None
 branch_labels = None
 depends_on = None
-
 
 def upgrade():
     """升级数据库结构"""
@@ -67,7 +64,6 @@ def upgrade():
     
     # 创建UUID扩展（如果不存在）
     op.execute('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";')
-
 
 def downgrade():
     """回滚数据库结构"""

@@ -8,7 +8,6 @@ import asyncio
 import signal
 from typing import Optional
 
-import grpc
 from grpc import aio
 
 from ..core.config import Settings
@@ -16,7 +15,6 @@ from ..core.logging import get_logger
 from .gateway_service import GatewayService
 
 logger = get_logger(__name__)
-
 
 class GRPCServer:
     """gRPC 服务器"""
@@ -78,7 +76,6 @@ class GRPCServer:
         """等待服务器终止"""
         if self.server:
             await self.server.wait_for_termination()
-
 
 async def run_grpc_server(settings: Settings) -> None:
     """运行 gRPC 服务器"""

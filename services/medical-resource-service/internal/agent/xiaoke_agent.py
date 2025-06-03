@@ -3,17 +3,11 @@
 负责医疗资源的智能管理和协调
 """
 
-import asyncio
 import logging
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
-
-import numpy as np
-import pandas as pd
-from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.preprocessing import StandardScaler
 
 from ..domain.models import (
     Appointment,
@@ -32,7 +26,6 @@ from .learning_module import LearningModule
 
 logger = logging.getLogger(__name__)
 
-
 class AgentState(Enum):
     """智能体状态"""
 
@@ -41,7 +34,6 @@ class AgentState(Enum):
     SCHEDULING = "scheduling"
     LEARNING = "learning"
     OPTIMIZING = "optimizing"
-
 
 @dataclass
 class ConstitutionAnalysis:
@@ -54,7 +46,6 @@ class ConstitutionAnalysis:
     recommendations: List[str]
     constitution_scores: Dict[str, float]
 
-
 @dataclass
 class ScheduleOptimization:
     """调度优化结果"""
@@ -63,7 +54,6 @@ class ScheduleOptimization:
     message: str
     suggestions: List[Dict[str, Any]]
     expected_improvement: float
-
 
 class XiaokeAgent:
     """

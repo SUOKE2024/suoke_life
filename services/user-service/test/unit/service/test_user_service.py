@@ -2,17 +2,14 @@
 用户服务的单元测试
 测试用户服务的核心功能
 """
-import asyncio
 import datetime
 import os
 import sys
-import unittest
 import uuid
 from typing import List, Optional, Dict, Any
 from unittest.mock import MagicMock, AsyncMock, patch, PropertyMock
 
 import pytest
-from pydantic import ValidationError
 
 # 确保能够导入内部模块
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../")))
@@ -22,7 +19,6 @@ from internal.model.user import UserCreate, UserUpdate, UserProfileUpdate
 from internal.repository.sqlite_user_repository import SQLiteUserRepository
 from internal.service.user_service import UserService
 from internal.repository.exceptions import UserNotFoundError, UserAlreadyExistsError
-
 
 @pytest.fixture
 def mock_user_repo():
@@ -167,12 +163,10 @@ def mock_user_repo():
     
     return mock_repo
 
-
 @pytest.fixture
 def user_service(mock_user_repo):
     """创建用户服务实例"""
     return UserService(mock_user_repo)
-
 
 class TestUserService:
     """用户服务测试类"""
@@ -565,7 +559,6 @@ class TestUserService:
         # 验证方法调用
         mock_user_repo.get_user_by_id.assert_called_once_with(user_id)
         mock_user_repo.update_user.assert_not_called()
-
 
 if __name__ == "__main__":
     pytest.main(["-v", "test_user_service.py"]) 

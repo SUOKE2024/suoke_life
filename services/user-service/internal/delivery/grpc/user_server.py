@@ -4,8 +4,6 @@
 该模块实现了用户服务的gRPC接口。
 """
 import logging
-from datetime import datetime
-from typing import Dict, List
 from uuid import UUID
 
 import grpc
@@ -22,7 +20,6 @@ from internal.service.user_service import UserService
 from protobuf.suoke.user.v1 import user_pb2, user_pb2_grpc
 
 logger = logging.getLogger(__name__)
-
 
 class UserServicer(user_pb2_grpc.UserServiceServicer):
     """用户服务gRPC实现"""

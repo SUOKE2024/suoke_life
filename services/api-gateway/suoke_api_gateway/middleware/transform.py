@@ -23,13 +23,11 @@ from ..core.logging import get_logger
 
 logger = get_logger(__name__)
 
-
 class TransformType(Enum):
     """转换类型"""
     REQUEST = "request"
     RESPONSE = "response"
     BOTH = "both"
-
 
 class ContentType(Enum):
     """内容类型"""
@@ -38,7 +36,6 @@ class ContentType(Enum):
     FORM = "application/x-www-form-urlencoded"
     TEXT = "text/plain"
     BINARY = "application/octet-stream"
-
 
 class Transformer(ABC):
     """转换器基类"""
@@ -60,7 +57,6 @@ class Transformer(ABC):
     def should_transform_response(self, request: Request, response: Response) -> bool:
         """判断是否应该转换响应"""
         return True
-
 
 class JSONFieldMapper(Transformer):
     """JSON 字段映射转换器"""
@@ -168,7 +164,6 @@ class JSONFieldMapper(Transformer):
         content_type = response.headers.get('content-type', '')
         return 'application/json' in content_type
 
-
 class DataValidator(Transformer):
     """数据验证转换器"""
     
@@ -218,7 +213,6 @@ class DataValidator(Transformer):
             logger.warning("Failed to validate response", error=str(e))
             return body
 
-
 class ContentCompressor(Transformer):
     """内容压缩转换器"""
     
@@ -263,7 +257,6 @@ class ContentCompressor(Transformer):
         # 检查客户端是否支持压缩
         accept_encoding = request.headers.get('accept-encoding', '')
         return self.compression_type in accept_encoding
-
 
 class FormatConverter(Transformer):
     """格式转换器"""
@@ -323,7 +316,6 @@ class FormatConverter(Transformer):
         if content_type == ContentType.JSON:
             return json.loads(content_str)
         elif content_type == ContentType.XML:
-            import xml.etree.ElementTree as ET
             return self._xml_to_dict(ET.fromstring(content_str))
         elif content_type == ContentType.FORM:
             from urllib.parse import parse_qs
@@ -375,7 +367,6 @@ class FormatConverter(Transformer):
     
     def _dict_to_xml(self, data: Dict[str, Any], root_name: str = 'root') -> str:
         """字典转 XML"""
-        import xml.etree.ElementTree as ET
         
         def build_element(parent, key, value):
             if isinstance(value, dict):
@@ -399,7 +390,6 @@ class FormatConverter(Transformer):
             build_element(root, key, value)
         
         return ET.tostring(root, encoding='unicode')
-
 
 class TransformMiddleware(BaseHTTPMiddleware):
     """转换中间件"""
@@ -505,7 +495,6 @@ class TransformMiddleware(BaseHTTPMiddleware):
                 logger.info("Transformer removed", transformer=transformer_class.__name__)
                 return True
         return False
-
 
 def create_transform_middleware(
     transformers: Optional[List[Transformer]] = None,

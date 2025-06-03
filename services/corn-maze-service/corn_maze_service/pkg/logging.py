@@ -4,10 +4,7 @@
 使用 structlog 提供结构化日志记录功能。
 """
 
-from __future__ import annotations
-
 import logging
-import logging.config
 from typing import Any
 
 import structlog
@@ -15,13 +12,11 @@ from structlog.types import EventDict, Processor
 
 from corn_maze_service.config import get_settings
 
-
 def add_correlation_id(_logger: Any, _method_name: str, event_dict: EventDict) -> EventDict:
     """添加关联ID到日志事件"""
     # 这里可以从上下文中获取请求ID或追踪ID
     # event_dict["correlation_id"] = get_correlation_id()
     return event_dict
-
 
 def add_service_info(_logger: Any, _method_name: str, event_dict: EventDict) -> EventDict:
     """添加服务信息到日志事件"""
@@ -30,7 +25,6 @@ def add_service_info(_logger: Any, _method_name: str, event_dict: EventDict) -> 
     event_dict["version"] = settings.app_version
     event_dict["environment"] = settings.environment
     return event_dict
-
 
 def setup_logging() -> None:
     """设置结构化日志"""
@@ -69,7 +63,6 @@ def setup_logging() -> None:
         logger_factory=structlog.WriteLoggerFactory(),
         cache_logger_on_first_use=True,
     )
-
 
 def get_logger(name: str) -> Any:
     """获取结构化日志记录器"""

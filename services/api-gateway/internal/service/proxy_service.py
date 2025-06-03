@@ -8,8 +8,6 @@
 import asyncio
 import json
 import logging
-import time
-import traceback
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import aiohttp
@@ -22,7 +20,6 @@ from pkg.utils.cache import Cache, CacheManager
 from pkg.utils.circuit_breaker import CircuitBreaker, CircuitBreakerRegistry
 
 logger = logging.getLogger(__name__)
-
 
 class ProxyService:
     """

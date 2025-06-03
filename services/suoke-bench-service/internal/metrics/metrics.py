@@ -5,11 +5,9 @@
 import logging
 from typing import Any
 
-import numpy as np
 from sklearn.metrics import accuracy_score, f1_score
 
 logger = logging.getLogger(__name__)
-
 
 class Metric:
     """指标基类"""
@@ -63,7 +61,6 @@ class Metric:
         else:
             return value <= self.threshold
 
-
 class AccuracyMetric(Metric):
     """准确率指标"""
 
@@ -103,7 +100,6 @@ class AccuracyMetric(Metric):
         except Exception as e:
             logger.error(f"计算准确率出错: {str(e)}")
             return 0.0
-
 
 class F1Metric(Metric):
     """F1分数指标"""
@@ -148,7 +144,6 @@ class F1Metric(Metric):
         except Exception as e:
             logger.error(f"计算F1分数出错: {str(e)}")
             return 0.0
-
 
 class AgreementRateMetric(Metric):
     """辨证一致率指标"""
@@ -196,7 +191,6 @@ class AgreementRateMetric(Metric):
                 agreement_count += 1
 
         return agreement_count / total_count if total_count > 0 else 0.0
-
 
 class ROUGEMetric(Metric):
     """ROUGE评分指标"""
@@ -292,7 +286,6 @@ class ROUGEMetric(Metric):
 
         return dp[m][n]
 
-
 class LatencyMetric(Metric):
     """延迟指标"""
 
@@ -332,7 +325,6 @@ class LatencyMetric(Metric):
             logger.error(f"计算延迟出错: {str(e)}")
             return 0.0
 
-
 class MemoryUsageMetric(Metric):
     """内存使用指标"""
 
@@ -365,7 +357,6 @@ class MemoryUsageMetric(Metric):
         except Exception as e:
             logger.error(f"计算内存使用出错: {str(e)}")
             return 0.0
-
 
 class TaskSuccessRateMetric(Metric):
     """任务成功率指标"""
@@ -400,7 +391,6 @@ class TaskSuccessRateMetric(Metric):
         except Exception as e:
             logger.error(f"计算任务成功率出错: {str(e)}")
             return 0.0
-
 
 class MetricRegistry:
     """指标注册表"""
@@ -448,7 +438,6 @@ class MetricRegistry:
         if metric:
             return metric.compute(predictions, references)
         return None
-
 
 # 全局指标注册表
 METRIC_REGISTRY = MetricRegistry()

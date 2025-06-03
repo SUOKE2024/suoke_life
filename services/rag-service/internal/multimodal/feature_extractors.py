@@ -1,7 +1,6 @@
 import io
 from typing import List, Optional
 from PIL import Image
-import numpy as np
 
 # 图片OCR
 try:

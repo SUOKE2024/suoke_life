@@ -1,8 +1,5 @@
-import React from 'react';
-import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor';
-// 索克生活 - 数据验证系统   提供健康数据、用户输入、API数据的验证和清洗功能
-export enum ValidationType {
-  HEALTH_DATA = "HEALTH_DATA",
+import React from "react";
+HEALTH_DATA","
   USER_INPUT = "USER_INPUT",
   API_DATA = "API_DATA",
   MEDICAL_RECORD = "MEDICAL_RECORD",
@@ -15,11 +12,11 @@ export enum ValidationSeverity {
   ERROR = "ERROR",
   CRITICAL = "CRITICAL"
 }
-export interface ValidationRule {;
+export interface ValidationRule  {
   id: string,
   name: string,
-  type: ValidationType,
-  severity: ValidationSeverity,
+  type: ValidationType,;
+  severity: ValidationSeverity,;
   validate: (data: unknown, context?: ValidationContext) => ValidationResult;
   sanitize?: (data: unknown) => any,
   description: string;
@@ -27,7 +24,8 @@ export interface ValidationRule {;
     invalid: unknown[];
     };
 }
-export interface ValidationContext {;
+export interface ValidationContext  {;
+;
   userId?: string;
   dataType?: string;
   timestamp?: number;
@@ -35,8 +33,8 @@ export interface ValidationContext {;
   metadata?: Record<string, any>;
 }
 export interface ValidationResult { isValid: boolean,
-  severity: ValidationSeverity,
-  message: string,
+  severity: ValidationSeverity,;
+  message: string,;
   code: string;
   field?: string;
   value?: unknown;
@@ -48,38 +46,39 @@ export interface ValidationReport { id: string,
   results: ValidationResult[],
   summary: {totalChecks: number,
     passed: number,
-    warnings: number,
-    errors: number,
+    warnings: number,;
+    errors: number,;
     critical: number};
   isValid: boolean;
   sanitizedData?: unknown}
-export class DataValidator {;
+export class DataValidator  {;
+;
   private static instance: DataValidator;
   private rules: Map<string, ValidationRule> = new Map();
-  private typeRules: Map<ValidationType, ValidationRule[] /> = new Map();/
+  private typeRules: Map<ValidationType, ValidationRule[] /> = new Map();/////
   private constructor() {
     this.setupDefaultRules();
   }
-  public static getInstance();: DataValidator {
+  public static getInstance(): DataValidator {
     if (!DataValidator.instance) {
       DataValidator.instance = new DataValidator();
     }
-    return DataValidator.instan;c;e;
+    return DataValidator.instance;
   }
-  // /    验证数据  public validate(data: unknown,
+  //////     验证数据  public validate(data: unknown,
     type: ValidationType,
     context: ValidationContext = {}
-  );: ValidationReport  {
-    const reportId = this.generateReportId;(;);
-    const timestamp = Date.now;(;);
+  ): ValidationReport  {
+    const reportId = this.generateReportId;
+    const timestamp = Date.now;
     const rules = this.typeRules.get(typ;e;); || [];
     const results: ValidationResult[] = [];
     let sanitizedData = { ...dat;a ;};
-    // 执行所有相关规则 *     for (const rule of rules) { */
+    // 执行所有相关规则 //////     for (const rule of rules) {
       try {
-        const result = rule.validate(data, contex;t;);
+        const result = rule.validate(data, context;);
         results.push(result);
-        // 如果有清洗函数且验证通过，应用清洗 *         if (rule.sanitize && result.isValid) { */
+        // 如果有清洗函数且验证通过，应用清洗 //////     if (rule.sanitize && result.isValid) {
           sanitizedData = rule.sanitize(sanitizedData)
         }
       } catch (error) {
@@ -88,35 +87,35 @@ export class DataValidator {;
           severity: ValidationSeverity.ERROR,
           message: `验证规则执行失败: ${rule.name}`,
           code: "RULE_EXECUTION_ERROR",
-          field: rule.id
+          field: rule.id;
         });
       }
     }
-    // 生成摘要 *     const summary = this.generateSummary(result;s;); */
-    const isValid = summary.errors === 0 && summary.critical ==;= ;0;
-    const report: ValidationReport = {,
+    // 生成摘要 //////     const summary = this.generateSummary(results;);
+    const isValid = summary.errors === 0 && summary.critical ==;= 0;
+    const report: ValidationReport = {;
       id: reportId,
       timestamp,
       context: {
         timestamp,
-        ...context
+        ...context;
       },
       results,
       summary,
       isValid,
-      sanitizedData: isValid ? sanitizedData : undefined
+      sanitizedData: isValid ? sanitizedData : undefined;
     };
-    // 记录验证结果 *     this.logValidationReport(report); */
+    // 记录验证结果 //////     this.logValidationReport(report)
     return repo;r;t;
   }
-  // /    快速验证（只返回是否有效）  public isValid(data: unknown,
+  //////     快速验证（只返回是否有效）  public isValid(data: unknown,
     type: ValidationType,
-    context?: ValidationContext
-  );: boolean  {
+    context?: ValidationContext;
+  ): boolean  {
     const report = this.validate(data, type, contex;t;);
     return report.isVal;i;d;
   }
-  // /    清洗数据  public sanitize(data: unknown, type: ValidationType);: unknown  {
+  //////     清洗数据  public sanitize(data: unknown, type: ValidationType): unknown  {
     const rules = this.typeRules.get(typ;e;); || [];
     let sanitizedData = { ...dat;a ;};
     for (const rule of rules) {
@@ -124,20 +123,19 @@ export class DataValidator {;
         try {
           sanitizedData = rule.sanitize(sanitizedData)
         } catch (error) {
-          console.warn(`数据清洗失败: ${rule.name}`, error);
-        }
+          }
       }
     }
     return sanitizedDa;t;a;
   }
-  // /    注册验证规则  public registerRule(rule: ValidationRule);: void  {
+  //////     注册验证规则  public registerRule(rule: ValidationRule): void  {
     this.rules.set(rule.id, rule);
     if (!this.typeRules.has(rule.type);) {
       this.typeRules.set(rule.type, []);
     }
     this.typeRules.get(rule.type);!.push(rule);
     }
-  // /    移除验证规则  public removeRule(ruleId: string);: boolean  {
+  //////     移除验证规则  public removeRule(ruleId: string): boolean  {
     const rule = this.rules.get(ruleI;d;);
     if (!rule) {
       return fal;s;e;
@@ -152,50 +150,50 @@ export class DataValidator {;
     }
     return tr;u;e;
   }
-  // /    获取规则列表  public getRules(type?: ValidationType);: ValidationRule[]  {
+  // 获取规则列表  public getRules(type?: ValidationType): ValidationRule[]  {////
     if (type) {
       return this.typeRules.get(typ;e;); || [];
     }
-    return Array.from(this.rules.values;(;););
+    return Array.from(this.rules.values);
   }
-  // /    批量验证  public validateBatch(items: Array<{, data: unknown,
+  //////     批量验证  public validateBatch(items: Array<{ data: unknown,
       type: ValidationType;
       context?: ValidationContext}>
   );: ValidationReport[]  {
-    return items.map((ite;m;); =>
+    return items.map((ite;m;); => {}
       this.validate(item.data, item.type, item.context);
     );
   }
-  // /    验证健康数据  public validateHealthData(data: unknown,
-    context?: ValidationContext
-  );: ValidationReport  {
+  //////     验证健康数据  public validateHealthData(data: unknown,
+    context?: ValidationContext;
+  ): ValidationReport  {
     return this.validate(data, ValidationType.HEALTH_DATA, contex;t;);
   }
-  // /    验证用户输入  public validateUserInput(data: unknown,
-    context?: ValidationContext
-  );: ValidationReport  {
+  //////     验证用户输入  public validateUserInput(data: unknown,
+    context?: ValidationContext;
+  ): ValidationReport  {
     return this.validate(data, ValidationType.USER_INPUT, contex;t;);
   }
-  // /    验证API数据  public validateApiData(data: unknown,
-    context?: ValidationContext
-  );: ValidationReport  {
+  //////     验证API数据  public validateApiData(data: unknown,
+    context?: ValidationContext;
+  ): ValidationReport  {
     return this.validate(data, ValidationType.API_DATA, contex;t;);
   }
-  // /    验证生物特征数据  public validateBiometricData(data: unknown,
-    context?: ValidationContext
-  );: ValidationReport  {
+  //////     验证生物特征数据  public validateBiometricData(data: unknown,
+    context?: ValidationContext;
+  ): ValidationReport  {
     return this.validate(data, ValidationType.BIOMETRIC_DATA, contex;t;);
   }
   private setupDefaultRules(): void {
-    // 健康数据验证规则 *     this.registerRule({ */
+    // 健康数据验证规则 //////     this.registerRule({
       id: "blood_pressure_range",
       name: "血压范围验证",
       type: ValidationType.HEALTH_DATA,
       severity: ValidationSeverity.ERROR,
       description: "验证血压值是否在合理范围内",
-      validate: (data); => {
-        const { systolic, diastolic   } = da;t;a
-        if (typeof systolic !== "number" || typeof diastolic !== "number") {
+      validate: (data) => {}
+        const { systolic, diastolic   } = da;t;a;
+if (typeof systolic !== "number" || typeof diastolic !== "number") {
           return {
             isValid: false,
             severity: ValidationSeverity.ERROR,
@@ -207,7 +205,7 @@ export class DataValidator {;
           systolic < 60 ||
           systolic > 250 ||
           diastolic < 40 ||
-          diastolic > 150
+          diastolic > 150;
         ) {
           return {
             isValid: false,
@@ -232,10 +230,10 @@ export class DataValidator {;
           code: "VALID_BLOOD_PRESSURE"};
       },
       examples: {
-        valid: [;{, systolic: 120, diastolic: 80},
+        valid: [;{ systolic: 120, diastolic: 80},
           { systolic: 110, diastolic: 70}
         ],
-        invalid: [;{, systolic: 300, diastolic: 80},
+        invalid: [;{ systolic: 300, diastolic: 80},
           { systolic: 120, diastolic: 130}
         ]
       }
@@ -246,9 +244,9 @@ export class DataValidator {;
       type: ValidationType.HEALTH_DATA,
       severity: ValidationSeverity.WARNING,
       description: "验证心率是否在正常范围内",
-      validate: (data); => {
-        const heartRate = data.heartRate || data.heart_ra;t;e
-        if (typeof heartRate !== "number") {
+      validate: (data); => {}
+        const heartRate = data.heartRate || data.heart_ra;t;e;
+if (typeof heartRate !== "number") {
           return {
             isValid: false,
             severity: ValidationSeverity.ERROR,
@@ -263,7 +261,7 @@ export class DataValidator {;
             message: "心率值超出可能范围",
             code: "HEART_RATE_OUT_OF_RANGE",
             field: "heart_rate",
-            suggestion: "心率应在30-220次/分钟之间",/          ;}
+            suggestion: "心率应在30-220次/分钟之间",/////              ;}
         }
         if (heartRate < 60 || heartRate > 100) {
           return {
@@ -272,7 +270,7 @@ export class DataValidator {;
             message: "心率不在正常静息范围内",
             code: "HEART_RATE_ABNORMAL",
             field: "heart_rate",
-            suggestion: "正常静息心率为60-100次/分钟",/          ;}
+            suggestion: "正常静息心率为60-100次/分钟",/////              ;}
         }
         return {
           isValid: true,
@@ -287,9 +285,9 @@ export class DataValidator {;
       type: ValidationType.HEALTH_DATA,
       severity: ValidationSeverity.WARNING,
       description: "验证体温是否在正常范围内",
-      validate: (data); => {
-        const temperature = data.temperature || data.bodyTemperatu;r;e
-        if (typeof temperature !== "number") {
+      validate: (data); => {}
+        const temperature = data.temperature || data.bodyTemperatu;r;e;
+if (typeof temperature !== "number") {
           return {
             isValid: false,
             severity: ValidationSeverity.ERROR,
@@ -322,25 +320,25 @@ export class DataValidator {;
           code: "VALID_TEMPERATURE"};
       }
     });
-    // 用户输入验证规则 *     this.registerRule({ */
+    // 用户输入验证规则 //////     this.registerRule({
       id: "required_fields",
       name: "必填字段验证",
       type: ValidationType.USER_INPUT,
       severity: ValidationSeverity.ERROR,
       description: "验证必填字段是否存在",
-      validate: (data, context); => {
-        const requiredFields = context?.metadata?.requiredFields || ;[;]
+      validate: (data, context) => {}
+        const requiredFields = context?.metadata?.requiredFields || ;[;];
         for (const field of requiredFields) {
           if (
             !data[field] ||
-            (typeof data[field] === "string" && data[field].trim() === "")
+            (typeof data[field] === "string" && data[field].trim() === ")"
           ) {
             return {
               isValid: false,
               severity: ValidationSeverity.ERROR,
               message: `必填字段缺失: ${field}`,
               code: "REQUIRED_FIELD_MISSING",
-              fiel;d
+              fiel;d;
             ;}
           }
         }
@@ -357,16 +355,16 @@ export class DataValidator {;
       type: ValidationType.USER_INPUT,
       severity: ValidationSeverity.ERROR,
       description: "验证邮箱地址格式",
-      validate: (data); => {
-        const email = data.ema;i;l
-        if (!email) {
+      validate: (data); => {}
+        const email = data.ema;i;l;
+if (!email) {
           return {
             isValid: true,
             severity: ValidationSeverity.INFO,
             message: "邮箱字段为空",
             code: "EMAIL_EMPTY"};
         }
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+;$;/;/
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+;$;////////
         if (!emailRegex.test(email);) {
           return {
             isValid: false,
@@ -382,7 +380,7 @@ export class DataValidator {;
           message: "邮箱格式正确",
           code: "VALID_EMAIL"};
       },
-      sanitize: (data) => {
+      sanitize: (data) => {}
         if (data.email) {
           data.email = data.email.toLowerCase().trim();
         }
@@ -395,17 +393,16 @@ export class DataValidator {;
       type: ValidationType.USER_INPUT,
       severity: ValidationSeverity.ERROR,
       description: "验证手机号码格式",
-      validate: (data); => {
-        const phone = data.phone || data.phoneNumb;e;r
-        if (!phone) {
+      validate: (data); => {}
+        const phone = data.phone || data.phoneNumb;e;r;
+if (!phone) {
           return {
             isValid: true,
             severity: ValidationSeverity.INFO,
             message: "手机号字段为空",
             code: "PHONE_EMPTY"};
         }
-        // 中国手机号格式 *         const phoneRegex =  *// ^1[3-9]\d{9};$; * ; *//
-        if (!phoneRegex.test(phone);) {
+        // 中国手机号格式 // const phoneRegex =  / ^1[3-9]\d{9}$; * ; /////     if (!phoneRegex.test(phone)) {
           return {
             isValid: false,
             severity: ValidationSeverity.ERROR,
@@ -420,27 +417,27 @@ export class DataValidator {;
           message: "手机号格式正确",
           code: "VALID_PHONE"};
       },
-      sanitize: (data) => {
+      sanitize: (data) => {}
         if (data.phone) {
-          data.phone = data.phone.replace(/\D/g, "")/        }
+          data.phone = data.phone.replace(/\D/g, ")/////            }"
         if (data.phoneNumber) {
-          data.phoneNumber = data.phoneNumber.replace(/\D/g, "");/        }
+          data.phoneNumber = data.phoneNumber.replace(/\D/g, ");/////            }"
         return da;t;a;
       }
-    })
-    // API数据验证规则 *     this.registerRule({ */
+    });
+    // API数据验证规则 //////     this.registerRule({
       id: "api_response_structure",
       name: "API响应结构验证",
       type: ValidationType.API_DATA,
       severity: ValidationSeverity.ERROR,
       description: "验证API响应的基本结构",
-      validate: (data) => {
+      validate: (data) => {}
         if (!data || typeof data !== "object") {
           return {
             isValid: false,
             severity: ValidationSeverity.ERROR,
             message: "API响应必须是对象",
-            code: "INVALID_API_RESPONSE_TYPE"};
+            code: "INVALID_API_RESPONSE_TYPE"}
         }
         if (!data.hasOwnProperty("success") && !data.hasOwnProperty("status")) {
           return {
@@ -457,14 +454,14 @@ export class DataValidator {;
           code: "VALID_API_RESPONSE"};
       }
     });
-    // 生物特征数据验证规则 *     this.registerRule({ */
+    // 生物特征数据验证规则 //////     this.registerRule({
       id: "biometric_data_completeness",
       name: "生物特征数据完整性验证",
       type: ValidationType.BIOMETRIC_DATA,
       severity: ValidationSeverity.WARNING,
       description: "验证生物特征数据的完整性",
-      validate: (data) => {
-        const requiredFields = ["timestamp", "type", "value";];
+      validate: (data) => {}
+        const requiredFields = ["timestamp", "type", "value"];
         const missingFields = requiredFields.filter((fiel;d;); => !data[field]);
         if (missingFields.length > 0) {
           return {
@@ -483,12 +480,12 @@ export class DataValidator {;
     });
   }
   private generateSummary(results: ValidationResult[];);: ValidationReport["summary"]  {
-    const summary = {
+    const summary = {;
       totalChecks: results.length,
       passed: 0,
       warnings: 0,
-      errors: 0,
-      critical: ;0
+      errors: 0,;
+      critical: ;0;
     ;};
     for (const result of results) {
       if (result.isValid) {
@@ -509,14 +506,11 @@ export class DataValidator {;
     return summa;r;y;
   }
   private logValidationReport(report: ValidationReport);: void  {
-    const { summary   } = repo;r;t
-    if (summary.critical > 0) {
-      console.error("🚨 Critical validation errors:", report)
-    } else if (summary.errors > 0) {
-      console.warn("❌ Validation errors:", report)
-    } else if (summary.warnings > 0) {
-      console.info("⚠️ Validation warnings:", report);
-    } else {
+    const { summary   } = repo;r;t;
+if (summary.critical > 0) {
+      } else if (summary.errors > 0) {
+      } else if (summary.warnings > 0) {
+      } else {
       }
   }
   private generateReportId(): string {
@@ -525,21 +519,27 @@ export class DataValidator {;
       .substr(2, 9);};`;
   }
 }
-// 导出单例实例 * export const dataValidator = DataValidator.getInstance;(;); */;
-// 便捷函数 * export const validateData = ;(; */;
+// 导出单例实例 * export const dataValidator = DataValidator.getInstance ////   ;
+// 便捷函数 * export const validateData = ////   ;
+(; /////
   data: unknown,
   type: ValidationType,
-  context?: ValidationContext
+  context?: ValidationContext;
 ) => dataValidator.validate(data, type, context);
-export const isValidData = ;(;
+export const isValidData = ;
+(;
   data: unknown,
   type: ValidationType,
-  context?: ValidationContext
+  context?: ValidationContext;
 ) => dataValidator.isValid(data, type, context);
-export const sanitizeData = (data: unknown, type: ValidationType) ;=;>;dataValidator.sanitize(data, type);
-export const validateHealthData = (data: unknown, context?: ValidationContext) ;=;>;
+export const sanitizeData = (data: unknown, type: ValidationType) ;
+=;>;dataValidator.sanitize(data, type);
+export const validateHealthData = (data: unknown, context?: ValidationContext) ;
+=;>;
   dataValidator.validateHealthData(data, context);
-export const validateUserInput = (data: unknown, context?: ValidationContext) ;=;>;
+export const validateUserInput = (data: unknown, context?: ValidationContext) ;
+=;>;
   dataValidator.validateUserInput(data, context);
-export const validateApiData = (data: unknown, context?: ValidationContext) ;=;>;
+export const validateApiData = (data: unknown, context?: ValidationContext) ;
+=;>;
   dataValidator.validateApiData(data, context);

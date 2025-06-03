@@ -9,10 +9,7 @@ import gc
 import logging
 from concurrent.futures import ThreadPoolExecutor
 
-import numpy as np
-import onnxruntime as ort
 import torch
-import torch.nn.functional as F
 from torch import nn
 
 logger = logging.getLogger(__name__)
@@ -76,7 +73,6 @@ class OptimizedModalityEncoder(nn.Module):
     def forward(self, x):
         return self.encoder(x)
 
-
 class OptimizedTongueImageEncoder(OptimizedModalityEncoder):
     """优化的舌象图像编码器"""
 
@@ -121,7 +117,6 @@ class OptimizedTongueImageEncoder(OptimizedModalityEncoder):
     def forward(self, x):
         x = self.cnn(x)
         return self.fc(x)
-
 
 class OptimizedMultimodalFusionModule(nn.Module):
     """优化的多模态融合模块"""
@@ -276,7 +271,6 @@ class OptimizedMultimodalFusionModule(nn.Module):
             'memory_usage': sum(v['fused_features'].numel() * 4 for v in self.feature_cache.values())
         }
 
-
 class OptimizedCrossModalAttention(nn.Module):
     """优化的跨模态注意力机制"""
 
@@ -344,7 +338,6 @@ class OptimizedCrossModalAttention(nn.Module):
 
         # 返回平均池化结果
         return out.mean(dim=1)
-
 
 class ModelOptimizer:
     """模型优化器"""
@@ -421,7 +414,6 @@ class ModelOptimizer:
         except Exception as e:
             logger.error(f"移动端优化失败: {e}")
             return model
-
 
 # 全局优化器实例
 modeloptimizer = ModelOptimizer()

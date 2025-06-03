@@ -7,7 +7,6 @@
 import asyncio
 import time
 import logging
-import numpy as np
 import sys
 import os
 from datetime import datetime
@@ -32,7 +31,6 @@ from services.common.hybrid_architecture import (
 # 配置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
-
 
 class MidTermImplementationTester:
     """中期实施任务测试器"""
@@ -586,12 +584,10 @@ class MidTermImplementationTester:
         except Exception as e:
             logger.error(f"系统清理失败: {e}")
 
-
 async def main():
     """主函数"""
     tester = MidTermImplementationTester()
     await tester.run_all_tests()
-
 
 if __name__ == "__main__":
     asyncio.run(main())

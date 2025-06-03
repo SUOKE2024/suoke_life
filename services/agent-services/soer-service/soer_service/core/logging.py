@@ -5,13 +5,11 @@
 """
 
 import logging
-import logging.config
 import sys
 from typing import Any
 
 import structlog
 from pythonjsonlogger.jsonlogger import JsonFormatter
-
 
 def setup_logging(log_level: str = "INFO") -> None:
     """
@@ -126,7 +124,6 @@ def setup_logging(log_level: str = "INFO") -> None:
         wrapper_class=structlog.stdlib.BoundLogger,
         cache_logger_on_first_use=True,
     )
-
 
 def get_logger(name: str) -> structlog.BoundLogger:
     """

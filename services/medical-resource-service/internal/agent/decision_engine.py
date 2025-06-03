@@ -3,19 +3,12 @@
 基于规则和机器学习的智能决策系统
 """
 
-import asyncio
-import json
 import logging
 from collections import defaultdict, deque
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
-
-import numpy as np
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.preprocessing import StandardScaler
 
 from ..domain.models import (
     Appointment,
@@ -29,7 +22,6 @@ from ..domain.models import (
 
 logger = logging.getLogger(__name__)
 
-
 class DecisionType(Enum):
     """决策类型"""
 
@@ -42,7 +34,6 @@ class DecisionType(Enum):
     WELLNESS_TOURISM = "wellness_tourism"  # 养生旅游
     PREVENTIVE_CARE = "preventive_care"  # 预防保健
 
-
 class DecisionStrategy(Enum):
     """决策策略"""
 
@@ -53,7 +44,6 @@ class DecisionStrategy(Enum):
     MULTI_CRITERIA = "multi_criteria"  # 多准则决策
     FUZZY_LOGIC = "fuzzy_logic"  # 模糊逻辑
 
-
 class ConfidenceLevel(Enum):
     """置信度等级"""
 
@@ -62,7 +52,6 @@ class ConfidenceLevel(Enum):
     MEDIUM = "medium"  # 0.4-0.6
     HIGH = "high"  # 0.6-0.8
     VERY_HIGH = "very_high"  # 0.8-1.0
-
 
 @dataclass
 class DecisionContext:
@@ -79,7 +68,6 @@ class DecisionContext:
     user_preferences: Dict[str, Any]
     timestamp: datetime = field(default_factory=datetime.now)
 
-
 @dataclass
 class DecisionRule:
     """决策规则"""
@@ -95,7 +83,6 @@ class DecisionRule:
     last_used: Optional[datetime] = None
     usage_count: int = 0
     success_rate: float = 0.0
-
 
 @dataclass
 class DecisionResult:
@@ -115,7 +102,6 @@ class DecisionResult:
     timestamp: datetime = field(default_factory=datetime.now)
     execution_time_ms: float = 0.0
 
-
 @dataclass
 class DecisionFeedback:
     """决策反馈"""
@@ -127,7 +113,6 @@ class DecisionFeedback:
     side_effects: List[str]
     user_comments: str
     timestamp: datetime = field(default_factory=datetime.now)
-
 
 class DecisionEngine:
     """

@@ -2,7 +2,6 @@
 
 from io import BytesIO
 
-import numpy as np
 from PIL import Image
 
 from ..core.config import settings
@@ -10,7 +9,6 @@ from ..core.logging import get_logger
 from ..exceptions import ImageProcessingError, ValidationError
 
 logger = get_logger(__name__)
-
 
 def validate_image(
     image_data: bytes,
@@ -72,7 +70,6 @@ def validate_image(
             raise
         raise ImageProcessingError(f"Failed to validate image: {str(e)}")
 
-
 def resize_image(
     image_data: bytes,
     target_size: tuple[int, int],
@@ -123,7 +120,6 @@ def resize_image(
     except Exception as e:
         raise ImageProcessingError(f"Failed to resize image: {str(e)}")
 
-
 def convert_image_format(
     image_data: bytes,
     target_format: str = "JPEG",
@@ -169,7 +165,6 @@ def convert_image_format(
     except Exception as e:
         raise ImageProcessingError(f"Failed to convert image format: {str(e)}")
 
-
 def extract_image_features(image_data: bytes) -> dict[str, float]:
     """Extract basic image features.
 
@@ -211,7 +206,6 @@ def extract_image_features(image_data: bytes) -> dict[str, float]:
     except Exception as e:
         logger.error("Failed to extract image features", error=str(e))
         raise ImageProcessingError(f"Feature extraction failed: {e}") from e
-
 
 def create_thumbnail(
     image_data: bytes,

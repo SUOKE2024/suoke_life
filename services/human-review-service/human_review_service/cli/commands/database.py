@@ -8,7 +8,6 @@ Database Management Commands
 import asyncio
 import sys
 from datetime import datetime
-from pathlib import Path
 
 import click
 import structlog
@@ -16,18 +15,15 @@ from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn
 from sqlalchemy import text
 
-from ...core.config import settings
 from ...core.database import close_database, get_engine, init_database
 
 logger = structlog.get_logger(__name__)
 console = Console()
 
-
 @click.group()
 def db():
     """数据库管理命令"""
     pass
-
 
 @db.command()
 @click.option("--force", is_flag=True, help="强制重新初始化（删除现有数据）")
@@ -62,7 +58,6 @@ def init(force: bool):
     except KeyboardInterrupt:
         console.print("\n[yellow]操作已取消[/yellow]")
         sys.exit(1)
-
 
 @db.command()
 def status():
@@ -104,7 +99,6 @@ def status():
         console.print("\n[yellow]操作已取消[/yellow]")
         sys.exit(1)
 
-
 @db.command()
 @click.option("--output", "-o", type=click.Path(), help="备份文件路径")
 def backup(output: str):
@@ -118,7 +112,6 @@ def backup(output: str):
     # 这里应该实现实际的备份逻辑
     # 由于这需要依赖具体的数据库类型，这里只是示例
     console.print("[yellow]⚠️ 备份功能需要根据具体数据库类型实现[/yellow]")
-
 
 @db.command()
 @click.argument("backup_file", type=click.Path(exists=True))
@@ -135,7 +128,6 @@ def restore(backup_file: str, force: bool):
     # 这里应该实现实际的恢复逻辑
     console.print("[yellow]⚠️ 恢复功能需要根据具体数据库类型实现[/yellow]")
 
-
 @db.command()
 def migrate():
     """执行数据库迁移"""
@@ -143,7 +135,6 @@ def migrate():
 
     # 这里应该集成Alembic或其他迁移工具
     console.print("[yellow]⚠️ 迁移功能需要集成Alembic实现[/yellow]")
-
 
 @db.command()
 @click.option("--table", help="指定表名（可选）")
@@ -183,7 +174,6 @@ def reset(table: str):
     except KeyboardInterrupt:
         console.print("\n[yellow]操作已取消[/yellow]")
         sys.exit(1)
-
 
 @db.command()
 def seed():

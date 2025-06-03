@@ -6,7 +6,6 @@
 
 from datetime import datetime, date
 from typing import Dict, List, Optional, Tuple
-import math
 
 from .data import (
     BAGUA_DATA,
@@ -17,7 +16,6 @@ from .data import (
     BAGUA_HEALTH_METHODS,
     BAGUA_TIME_MAP
 )
-
 
 class BaguaCalculator:
     """八卦配属计算器"""

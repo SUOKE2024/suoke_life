@@ -5,11 +5,9 @@
 """
 
 import pytest
-import numpy as np
 from unittest.mock import MagicMock, patch
 
 import sys
-import os
 from pathlib import Path
 
 # 添加项目根目录到Python路径
@@ -55,7 +53,6 @@ def generate_test_pulse_data(n_samples=5000):
     # 组合所有信号
     signal = baseline + main_wave + noise
     return signal.tolist()
-
 
 class TestPulseProcessor:
     """脉诊处理器测试类"""

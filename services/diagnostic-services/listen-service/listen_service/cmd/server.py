@@ -21,7 +21,6 @@ from ..utils.logging import setup_logging
 
 logger = structlog.get_logger(__name__)
 
-
 @click.group()
 @click.option("--log-level", default="INFO", help="日志级别")
 @click.option("--log-format", default="json", help="日志格式 (json/console/plain)")
@@ -42,7 +41,6 @@ def cli(ctx, log_level, log_format, log_file):
     ctx.obj["log_level"] = log_level
     ctx.obj["log_format"] = log_format
     ctx.obj["log_file"] = log_file
-
 
 @cli.command()
 @click.option("--host", default="0.0.0.0", help="监听主机")
@@ -80,7 +78,6 @@ def grpc(ctx, host, port, cache_backend, redis_url):
     except Exception as e:
         logger.error("gRPC服务器启动失败", error=str(e), exc_info=True)
         sys.exit(1)
-
 
 @cli.command()
 @click.option("--host", default="0.0.0.0", help="监听主机")
@@ -133,7 +130,6 @@ def rest(ctx, host, port, workers, cache_backend, redis_url, reload):
         logger.error("REST API服务器启动失败", error=str(e), exc_info=True)
         sys.exit(1)
 
-
 @cli.command()
 @click.option("--grpc-host", default="0.0.0.0", help="gRPC监听主机")
 @click.option("--grpc-port", default=50051, help="gRPC监听端口")
@@ -182,7 +178,6 @@ def hybrid(ctx, grpc_host, grpc_port, rest_host, rest_port, cache_backend, redis
         logger.error("混合服务器启动失败", error=str(e), exc_info=True)
         sys.exit(1)
 
-
 @cli.command()
 @click.option("--cache-backend", default="memory", help="缓存后端 (memory/redis)")
 @click.option("--redis-url", default="redis://localhost:6379", help="Redis连接URL")
@@ -195,7 +190,6 @@ def test_components(cache_backend, redis_url):
     except Exception as e:
         logger.error("组件测试失败", error=str(e), exc_info=True)
         sys.exit(1)
-
 
 async def _run_grpc_server(server: ListenServiceGRPCServer, host: str, port: int):
     """运行gRPC服务器"""
@@ -211,7 +205,6 @@ async def _run_grpc_server(server: ListenServiceGRPCServer, host: str, port: int
 
     # 启动服务器
     await server.start_server(host, port)
-
 
 async def _run_hybrid_server(
     audio_analyzer: AudioAnalyzer,
@@ -281,7 +274,6 @@ async def _run_hybrid_server(
         logger.error("混合服务器运行异常", error=str(e), exc_info=True)
         raise
 
-
 async def _test_components(cache_backend: str, redis_url: str):
     """测试组件功能"""
     logger.info("开始组件测试")
@@ -311,7 +303,6 @@ async def _test_components(cache_backend: str, redis_url: str):
     audio_analyzer = AudioAnalyzer(cache=cache)
 
     # 创建测试音频数据
-    import numpy as np
 
     test_audio = (np.random.randn(16000) * 32767).astype(np.int16).tobytes()
 
@@ -354,7 +345,6 @@ async def _test_components(cache_backend: str, redis_url: str):
             return
 
     logger.info("所有组件测试通过")
-
 
 if __name__ == "__main__":
     cli()

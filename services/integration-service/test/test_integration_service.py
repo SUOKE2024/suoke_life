@@ -5,13 +5,11 @@ Integration Service Basic Tests
 import asyncio
 import pytest
 import httpx
-from datetime import datetime, date
 
 # 测试配置
 BASE_URL = "http://localhost:8003"
 TEST_USER_ID = "test_user_001"
 TEST_TOKEN = "mock_token"
-
 
 class TestIntegrationService:
     """Integration Service 测试类"""
@@ -79,7 +77,6 @@ class TestIntegrationService:
             assert "data" in data
             assert isinstance(data["data"], list)
 
-
 async def test_basic_functionality():
     """基本功能测试"""
     print("开始测试 Integration Service...")
@@ -123,7 +120,6 @@ async def test_basic_functionality():
         except Exception as e:
             print(f"✗ 平台列表异常: {str(e)}")
 
-
 def run_tests():
     """运行测试"""
     print("=" * 50)
@@ -138,7 +134,6 @@ def run_tests():
     print("=" * 50)
     print("测试完成")
     print("=" * 50)
-
 
 if __name__ == "__main__":
     run_tests() 

@@ -17,8 +17,6 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from typing import Any
 
-import redis.asyncio as redis
-
 logger = logging.getLogger(__name__)
 
 @dataclass
@@ -41,7 +39,6 @@ class CacheConfig:
     # 预热配置
     enableprewarming: bool = True
     prewarmingbatch_size: int = 100
-
 
 class LRUCache:
     """LRU内存缓存实现"""
@@ -108,7 +105,6 @@ class LRUCache:
             'hit_rate': hitrate,
             'memory_usage': sum(len(str(v)) for v in self.cache.values())
         }
-
 
 class SmartCacheManager:
     """智能缓存管理器"""
@@ -475,7 +471,6 @@ class SmartCacheManager:
         self.executor.shutdown(wait=True)
         logger.info("缓存管理器已关闭")
 
-
 # 全局缓存管理器实例
 cache_manager = None
 
@@ -491,7 +486,6 @@ async def get_cache_manager(config: CacheConfig | None = None) -> SmartCacheMana
         await _cache_manager.initialize()
 
     return _cache_manager
-
 
 # 缓存装饰器
 def cached(namespace: str, ttl: int | None = None,

@@ -12,19 +12,15 @@
 - 特殊人群营养管理
 """
 
-import asyncio
 import logging
 from datetime import datetime, date, time, timedelta
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Dict, List, Optional, Any, Tuple, Union
-import json
-import numpy as np
 from collections import defaultdict, Counter
 
 from ..observability.metrics import MetricsCollector
 from ..observability.tracing import trace_operation, SpanKind
-
 
 class NutrientType(str, Enum):
     """营养素类型"""
@@ -34,7 +30,6 @@ class NutrientType(str, Enum):
     MINERAL = "mineral"                     # 矿物质
     AMINO_ACID = "amino_acid"               # 氨基酸
     FATTY_ACID = "fatty_acid"               # 脂肪酸
-
 
 class FoodCategory(str, Enum):
     """食物类别"""
@@ -47,7 +42,6 @@ class FoodCategory(str, Enum):
     NUTS_SEEDS = "nuts_seeds"               # 坚果种子类
     BEVERAGES = "beverages"                 # 饮品类
 
-
 class TCMFoodNature(str, Enum):
     """中医食物性质"""
     HOT = "hot"                             # 热性
@@ -56,7 +50,6 @@ class TCMFoodNature(str, Enum):
     COOL = "cool"                           # 凉性
     COLD = "cold"                           # 寒性
 
-
 class TCMFoodFlavor(str, Enum):
     """中医食物味道"""
     SWEET = "sweet"                         # 甘味
@@ -64,7 +57,6 @@ class TCMFoodFlavor(str, Enum):
     BITTER = "bitter"                       # 苦味
     SPICY = "spicy"                         # 辛味
     SALTY = "salty"                         # 咸味
-
 
 class NutritionalStatus(str, Enum):
     """营养状态"""
@@ -78,7 +70,6 @@ class NutritionalStatus(str, Enum):
     OVERWEIGHT = "overweight"                # 超重
     OBESE = "obese"                          # 肥胖
 
-
 class DietaryGoal(str, Enum):
     """膳食目标"""
     WEIGHT_LOSS = "weight_loss"             # 减重
@@ -88,7 +79,6 @@ class DietaryGoal(str, Enum):
     DISEASE_MANAGEMENT = "disease_management" # 疾病管理
     SPORTS_PERFORMANCE = "sports_performance" # 运动表现
 
-
 class MealType(str, Enum):
     """餐次类型"""
     BREAKFAST = "breakfast"                 # 早餐
@@ -97,7 +87,6 @@ class MealType(str, Enum):
     AFTERNOON_SNACK = "afternoon_snack"     # 下午加餐
     DINNER = "dinner"                       # 晚餐
     EVENING_SNACK = "evening_snack"         # 晚间加餐
-
 
 @dataclass
 class Nutrient:
@@ -111,7 +100,6 @@ class Nutrient:
     upper_limit: Optional[float] = None
     functions: List[str] = field(default_factory=list)
     food_sources: List[str] = field(default_factory=list)
-
 
 @dataclass
 class Food:
@@ -128,7 +116,6 @@ class Food:
     tcm_nature: Optional[TCMFoodNature] = None
     tcm_flavor: List[TCMFoodFlavor] = field(default_factory=list)
     tcm_effects: List[str] = field(default_factory=list)
-
 
 @dataclass
 class NutritionalAssessment:
@@ -151,7 +138,6 @@ class NutritionalAssessment:
     def __post_init__(self):
         self.bmi = self.weight / ((self.height / 100) ** 2)
 
-
 @dataclass
 class MealPlan:
     """膳食计划"""
@@ -169,7 +155,6 @@ class MealPlan:
     status: str = "active"
     created_date: datetime = field(default_factory=datetime.now)
 
-
 @dataclass
 class FoodIntake:
     """食物摄入记录"""
@@ -182,7 +167,6 @@ class FoodIntake:
     meal_time: Optional[time] = None
     notes: Optional[str] = None
     recorded_at: datetime = field(default_factory=datetime.now)
-
 
 @dataclass
 class NutritionGoal:
@@ -197,7 +181,6 @@ class NutritionGoal:
     is_achieved: bool = False
     strategies: List[str] = field(default_factory=list)
     created_date: date = field(default_factory=date.today)
-
 
 class NutritionDatabase:
     """营养数据库"""
@@ -220,7 +203,6 @@ class NutritionDatabase:
             "chicken": {"energy_kcal": 165, "protein": 31, "carbohydrate": 0, "fat": 3.6},
             "broccoli": {"energy_kcal": 34, "protein": 2.8, "carbohydrate": 7, "fat": 0.4}
         }
-
 
 class NutritionalAssessor:
     """营养评估器"""
@@ -270,7 +252,6 @@ class NutritionalAssessor:
             priority_nutrients=["protein", "fiber", "vitamin_c"],
             recommendations=recommendations
         )
-
 
 class MealPlanGenerator:
     """膳食计划生成器"""
@@ -325,7 +306,6 @@ class MealPlanGenerator:
                 "therapeutic_foods": []
             }
         )
-
 
 class IntelligentNutritionEngine:
     """智能营养管理引擎"""
@@ -876,7 +856,6 @@ class IntelligentNutritionEngine:
             self.logger.error(f"获取协同推荐失败: {e}")
             return {"error": str(e)}
 
-
 def initialize_nutrition_engine(
     config: Dict[str, Any],
     metrics_collector: Optional[MetricsCollector] = None
@@ -886,10 +865,8 @@ def initialize_nutrition_engine(
     engine = IntelligentNutritionEngine(config, metrics_collector)
     return engine
 
-
 # 全局引擎实例
 _nutrition_engine: Optional[IntelligentNutritionEngine] = None
-
 
 def get_nutrition_engine() -> Optional[IntelligentNutritionEngine]:
     """获取营养引擎实例"""

@@ -1,33 +1,34 @@
-import { colors, spacing } from "../../constants/theme"/import { useHealthData } from "../../hooks"/import { TabItem } from "../components/TabSelector"/import { ScreenHeader, HealthCard, TabSelector } from "../components"/importReact,{ useState, useMemo } from "react";
-import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor'/  View,;
+import React from "react";
+import { colors, spacing } from "../../constants/theme";/import { useHealthData } from "../../hooks";/import { TabItem } from "../components/TabSelector";/import { ScreenHeader, HealthCard, TabSelector } from "../components";/////    importReact,{ useState, useMemo } from "react";
+import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/////      View,";
   StyleSheet,
   ScrollView,
   RefreshControl,
-  { Dimensions } from "react-native"
+  { Dimensions } from ";react-native"
   HealthTrendChart,
   HealthPathwayVisualizer,
   AgentEmotionFeedback,
-  { ResponsiveContainer } from "../../components"/const { width   } = Dimensions.get("window;";);
-const cardWidth = useMemo((); => useMemo((); => useMemo((); => useMemo(
-  (); =>
+  { ResponsiveContainer } from "../../components";/////    const { width   } = Dimensions.get("window;";);
+const cardWidth = useMemo((); => useMemo((); => useMemo((); => useMemo(;
+  (); => {}
     useMemo(
-      (); => useMemo((); => (width - spacing.xl * 2 - spacing.md) / 2, []),/      []
+      (); => useMemo((); => (width - spacing.xl * 2 - spacing.md) / 2, []),/////          []
     ),
   []
 ), []);
-export const HealthDashboard: React.FC = () => {
-  // 性能监控 *   const performanceMonitor = usePerformanceMonitor('HealthDashboard', { */
-    trackRender: true,
-    trackMemory: true,
-    warnThreshold: 50, // ms *   ;};); */
-  const { healthData, loading, refreshData   } = useHealthData;(;)
+export const HealthDashboard: React.FC  = () => {}
+  // 性能监控 //////     const performanceMonitor = usePerformanceMonitor("HealthDashboard', { "'
+    trackRender: true,;
+    trackMemory: true,;
+    warnThreshold: 50, // ms //////     };);
+  const { healthData, loading, refreshData   } = useHealthData;(;);
   const [selectedTab, setSelectedTab] = useState<string>("all;";);
-  // 标签页配置 *   const tabs: TabItem[] = [{, id: "all", label: "全部"}, */
+  // 标签页配置 //////     const tabs: TabItem[] = [{ id: "all", label: "全部"},
     { id: "vital", label: "生命体征"},
     { id: "activity", label: "运动"},
     { id: "sleep", label: "睡眠"}
-  ];
-  // 根据选中的标签过滤数据 *   const getFilteredData = useMemo((); => useMemo((); => useMemo((); => useCallback((); => {, []), []))) */
+  ]
+  // 根据选中的标签过滤数据 //////     const getFilteredData = useMemo(() => useMemo((); => useMemo((); => useCallback((); => {[]), [])))}
     switch (selectedTab) {
       case "vital":
         return healthData.filter((item: unknow;n;); =>["心率", "血压", "血糖"].includes(item.title);
@@ -42,93 +43,93 @@ export const HealthDashboard: React.FC = () => {
         return healthDa;t;a;
     }
   };
-  const filteredData = useMemo((); => useMemo((); => useMemo((); => getFilteredData(), []);))
-  // 处理卡片点击 *   const handleCardPress = useMemo((); => useMemo((); => useMemo((); => useCallback((data: unknown); => {, []), []);)) */
-    // 这里可以导航到详细页面 *   }; */
-  // 记录渲染性能 *  */
+  const filteredData = useMemo((); => useMemo((); => useMemo((); => getFilteredData(), []);));
+  // 处理卡片点击 //////     const handleCardPress = useMemo(() => useMemo((); => useMemo((); => useCallback((data: unknown); => {[]), []);))}
+    // 这里可以导航到详细页面 //////     }
+  // 记录渲染性能 //////
   performanceMonitor.recordRender()
   return (
-    <ResponsiveContainer style={styles.container} />/      {// 头部 }/      <ScreenHeader,
+    <ResponsiveContainer style={styles.container} />/      {// 头部 }/////          <ScreenHeader,
         title="健康数据"
         subtitle="实时监控您的健康状态"
         showBackButton={true}
         rightIcon="chart-line"
-        onRightPress={() = /> {/          }}
-      />/      {// 路径可视化 }/      <HealthPathwayVisualizer
-        currentStage={
+        onRightPress={() = /> {/////              }}
+      />/      {// 路径可视化 }/////          <HealthPathwayVisualizer;
+currentStage={
           selectedTab === "vital"
             ? "inspection"
             : selectedTab === "activity"
             ? "regulation"
             : "health-preservation"
         }
-        onStagePress={(stage: string) = /> {/          // 可扩展：联动AI接口或页面跳转 *           }} */
-      />/      {// 趋势图表 }/      <HealthTrendChart
-        title={
+        onStagePress={(stage: string) = /> {/          // 可扩展：联动AI接口或页面跳转 //////     }}
+      />/      {// 趋势图表 }/////          <HealthTrendChart;
+title={
           selectedTab === "vital"
             ? "体温趋势"
             : selectedTab === "activity"
             ? "步数趋势"
             : "健康趋势"};
-        data={filteredData.map((d: unknow;n;) = /> ({, date: d.date, value: d.value}))}/        unit={
+        data={filteredData.map((d: unknow;n;) = /> ({ date: d.date, value: d.value}))}/////            unit={
           selectedTab === "vital" ? "℃" : selectedTab === "activity" ? "步" : ""
-        } />/      {// 情感反馈 }/      <AgentEmotionFeedback
-        onFeedback={(type: string) = /> {/          // 可扩展：将反馈通过事件总线上传后端 *           }} */
-      />/      {// 原有内容 }/      <View style={styles.tabContainer} />/        <TabSelector
-          tabs={tabs}
+        } />/      {// 情感反馈 }/////          <AgentEmotionFeedback;
+onFeedback={(type: string) = /> {/          // 可扩展：将反馈通过事件总线上传后端 //////     }}
+      />/      {// 原有内容 }/      <View style={styles.tabContainer} />/////            <TabSelector;
+tabs={tabs}
           selectedTabId={selectedTab}
-          onTabPress={setSelectedTab} />/      </View>/      <ScrollView
-        style={styles.scrollView}
+          onTabPress={setSelectedTab} />/      </View>/////          <ScrollView;
+style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         refreshControl={
-          <RefreshControl
-            refreshing={loading}
+          <RefreshControl;
+refreshing={loading}
             onRefresh={refreshData}
             colors={[colors.primary]}
-            tintColor={colors.primary} />/        }
+            tintColor={colors.primary} />/////            }
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.cardsContainer} />/          {filteredData.map((data: unknown, index: number) => (
-            <HealthCard
-              key={data.id}
+        <View style={styles.cardsContainer} />/////              {filteredData.map((data: unknown, index: number) => (
+            <HealthCard;
+key={data.id}
               data={data}
               onPress={handleCardPress}
               style={
                 [
                   styles.card,
                   { width: cardWidth},
-                  index % 2 === 0 ? styles.leftCard : styles.rightCard
-                ] as any
+                  index % 2 === 0 ? styles.leftCard : styles.rightCard;
+                ] as any;
               }
               size="medium"
               showTrend={true}
-              showDescription={false} />/          ))}
-        </View>/      </ScrollView>/    </ResponsiveContainer>/  );
+              showDescription={false} />/////              ))}
+        </View>/      </ScrollView>/    </ResponsiveContainer>/////      );
 };
-const styles = useMemo((); => useMemo((); => useMemo((); => useMemo(
-  (); =>
+const styles = useMemo((); => useMemo((); => useMemo((); => useMemo(;
+  (); => {}
     useMemo(
-      (); =>
+      (); => {}
         useMemo(
-          () =>
+          () => {}
             StyleSheet.create({
               container: {
                 flex: 1,
-                backgroundColor: colors.background
+                backgroundColor: colors.background;
               },
               tabContainer: {
                 paddingHorizontal: spacing.md,
                 paddingVertical: spacing.sm,
                 backgroundColor: colors.surface,
                 borderBottomWidth: 1,
-                borderBottomColor: colors.border
+                borderBottomColor: colors.border;
               },
               scrollView: { flex: 1  },
               scrollContent: { paddingVertical: spacing.md  },
               cardsContainer: {
                 flexDirection: "row",
                 flexWrap: "wrap",
-                paddingHorizontal: spacing.md
+                paddingHorizontal: spacing.md;
               },
               card: { marginBottom: spacing.md  },
               leftCard: { marginRight: spacing.md  },

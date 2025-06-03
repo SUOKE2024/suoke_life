@@ -7,14 +7,12 @@ Reviewer Management Commands
 
 import asyncio
 import sys
-from typing import List, Optional
 
 import click
 import structlog
 from rich.console import Console
 from rich.table import Table
 
-from ...core.config import settings
 from ...core.database import get_session
 from ...core.models import ReviewerCreate, ReviewerStatus, ReviewerUpdate
 from ...core.service import HumanReviewService
@@ -22,12 +20,10 @@ from ...core.service import HumanReviewService
 logger = structlog.get_logger(__name__)
 console = Console()
 
-
 @click.group()
 def reviewer():
     """审核员管理命令"""
     pass
-
 
 @reviewer.command()
 @click.option("--name", required=True, help="审核员姓名")
@@ -73,7 +69,6 @@ def create(name: str, email: str, specialties: str, max_tasks: int):
     except KeyboardInterrupt:
         console.print("\n[yellow]操作已取消[/yellow]")
         sys.exit(1)
-
 
 @reviewer.command()
 @click.argument("reviewer_id")
@@ -130,7 +125,6 @@ def show(reviewer_id: str):
     except KeyboardInterrupt:
         console.print("\n[yellow]操作已取消[/yellow]")
         sys.exit(1)
-
 
 @reviewer.command()
 @click.option(
@@ -201,7 +195,6 @@ def list(status: str, specialty: str, available: bool, limit: int):
         console.print("\n[yellow]操作已取消[/yellow]")
         sys.exit(1)
 
-
 @reviewer.command()
 @click.argument("reviewer_id")
 @click.option("--name", help="更新姓名")
@@ -252,7 +245,6 @@ def update(reviewer_id: str, name: str, email: str, specialties: str, max_tasks:
         console.print("\n[yellow]操作已取消[/yellow]")
         sys.exit(1)
 
-
 @reviewer.command()
 @click.argument("reviewer_id")
 def activate(reviewer_id: str):
@@ -281,7 +273,6 @@ def activate(reviewer_id: str):
         console.print("\n[yellow]操作已取消[/yellow]")
         sys.exit(1)
 
-
 @reviewer.command()
 @click.argument("reviewer_id")
 def deactivate(reviewer_id: str):
@@ -309,7 +300,6 @@ def deactivate(reviewer_id: str):
     except KeyboardInterrupt:
         console.print("\n[yellow]操作已取消[/yellow]")
         sys.exit(1)
-
 
 @reviewer.command()
 @click.argument("reviewer_id")
@@ -356,7 +346,6 @@ def performance(reviewer_id: str, days: int):
     except KeyboardInterrupt:
         console.print("\n[yellow]操作已取消[/yellow]")
         sys.exit(1)
-
 
 @reviewer.command()
 @click.argument("reviewer_id")

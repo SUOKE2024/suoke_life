@@ -11,7 +11,6 @@ from enum import Enum
 from typing import Any, Dict, List, Optional
 
 import aiohttp
-import redis.asyncio as redis
 from pydantic import BaseModel
 
 from ..core.config import Settings
@@ -19,14 +18,12 @@ from ..core.logging import get_logger
 
 logger = get_logger(__name__)
 
-
 class HealthStatus(Enum):
     """健康状态枚举"""
     HEALTHY = "healthy"
     UNHEALTHY = "unhealthy"
     DEGRADED = "degraded"
     UNKNOWN = "unknown"
-
 
 class HealthCheckResult(BaseModel):
     """健康检查结果"""
@@ -37,14 +34,12 @@ class HealthCheckResult(BaseModel):
     timestamp: float
     details: Optional[Dict[str, Any]] = None
 
-
 class HealthSummary(BaseModel):
     """健康状态摘要"""
     status: HealthStatus
     checks: List[HealthCheckResult]
     timestamp: float
     duration: float
-
 
 class HealthChecker(ABC):
     """健康检查器基类"""
@@ -57,7 +52,6 @@ class HealthChecker(ABC):
     async def check(self) -> HealthCheckResult:
         """执行健康检查"""
         pass
-
 
 class DatabaseHealthChecker(HealthChecker):
     """数据库健康检查器"""
@@ -100,7 +94,6 @@ class DatabaseHealthChecker(HealthChecker):
                 timestamp=time.time(),
                 details={"error": str(e)},
             )
-
 
 class RedisHealthChecker(HealthChecker):
     """Redis健康检查器"""
@@ -149,7 +142,6 @@ class RedisHealthChecker(HealthChecker):
                 timestamp=time.time(),
                 details={"error": str(e)},
             )
-
 
 class HTTPHealthChecker(HealthChecker):
     """HTTP服务健康检查器"""
@@ -220,7 +212,6 @@ class HTTPHealthChecker(HealthChecker):
                 details={"error": str(e), "url": self.url},
             )
 
-
 class DiskSpaceHealthChecker(HealthChecker):
     """磁盘空间健康检查器"""
     
@@ -285,7 +276,6 @@ class DiskSpaceHealthChecker(HealthChecker):
                 details={"error": str(e)},
             )
 
-
 class MemoryHealthChecker(HealthChecker):
     """内存健康检查器"""
     
@@ -346,7 +336,6 @@ class MemoryHealthChecker(HealthChecker):
                 timestamp=time.time(),
                 details={"error": str(e)},
             )
-
 
 class HealthManager:
     """健康检查管理器"""
@@ -447,7 +436,6 @@ class HealthManager:
             timestamp=self.last_check_time,
             duration=0.0,  # 历史结果不计算持续时间
         )
-
 
 def create_default_health_manager(settings: Settings) -> HealthManager:
     """创建默认的健康检查管理器"""

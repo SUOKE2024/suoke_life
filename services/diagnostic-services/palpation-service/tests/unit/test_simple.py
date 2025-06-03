@@ -4,7 +4,6 @@
 
 import pytest
 from datetime import datetime
-from unittest.mock import patch, MagicMock
 
 from palpation_service.config import settings, get_settings
 from palpation_service.models import (
@@ -19,7 +18,6 @@ from palpation_service.models import (
     AnalysisType,
     Gender
 )
-
 
 class TestBasicConfiguration:
     """基本配置测试"""
@@ -54,7 +52,6 @@ class TestBasicConfiguration:
         # 权重总和应该接近1.0
         total_weight = sum(weights.values())
         assert abs(total_weight - 1.0) < 0.01
-
 
 class TestBasicModels:
     """基本数据模型测试"""
@@ -147,7 +144,6 @@ class TestBasicModels:
                 data_points=[]
             )
 
-
 class TestEnums:
     """枚举类型测试"""
     
@@ -186,7 +182,6 @@ class TestEnums:
         assert Gender.FEMALE == "female"
         assert Gender.OTHER == "other"
 
-
 class TestUtilities:
     """工具函数测试"""
     
@@ -221,12 +216,10 @@ class TestUtilities:
         assert "uvicorn" in log_config["loggers"]
         assert "sqlalchemy" in log_config["loggers"]
 
-
 def test_basic_import():
     """测试基本导入功能"""
     from palpation_service import __version__
     assert __version__ == "1.0.0"
-
 
 def test_config_access():
     """测试配置访问"""

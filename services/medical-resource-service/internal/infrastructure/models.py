@@ -4,9 +4,7 @@
 """
 
 import uuid
-from datetime import date, datetime
 from enum import Enum as PyEnum
-from typing import Any, Dict, List, Optional
 
 from sqlalchemy import (
     JSON,
@@ -29,7 +27,6 @@ from sqlalchemy.sql import func
 
 from .database import Base
 
-
 class ConstitutionType(PyEnum):
     """体质类型"""
 
@@ -43,7 +40,6 @@ class ConstitutionType(PyEnum):
     QI_STAGNATION = "气郁质"
     SPECIAL_DIATHESIS = "特禀质"
 
-
 class ResourceType(PyEnum):
     """资源类型"""
 
@@ -56,7 +52,6 @@ class ResourceType(PyEnum):
     WELLNESS_DESTINATION = "养生目的地"
     TREATMENT_PROGRAM = "治疗方案"
 
-
 class AppointmentStatus(PyEnum):
     """预约状态"""
 
@@ -67,7 +62,6 @@ class AppointmentStatus(PyEnum):
     CANCELLED = "已取消"
     NO_SHOW = "未到场"
 
-
 class QualityLevel(PyEnum):
     """质量等级"""
 
@@ -76,7 +70,6 @@ class QualityLevel(PyEnum):
     AVERAGE = "一般"
     POOR = "较差"
     UNACCEPTABLE = "不可接受"
-
 
 # 医疗资源表
 class MedicalResource(Base):
@@ -131,7 +124,6 @@ class MedicalResource(Base):
         Index("idx_resource_quality", "quality_level"),
     )
 
-
 # 医生资源表
 class DoctorResource(Base):
     """医生资源表"""
@@ -163,7 +155,6 @@ class DoctorResource(Base):
 
     # 关系
     resource = relationship("MedicalResource", foreign_keys=[id])
-
 
 # 预约表
 class Appointment(Base):
@@ -228,7 +219,6 @@ class Appointment(Base):
         ),
     )
 
-
 # 质量评估表
 class QualityAssessment(Base):
     """质量评估表"""
@@ -273,7 +263,6 @@ class QualityAssessment(Base):
         Index("idx_quality_level", "quality_level"),
     )
 
-
 # 中医知识表
 class TCMKnowledge(Base):
     """中医知识表"""
@@ -317,7 +306,6 @@ class TCMKnowledge(Base):
         Index("idx_tcm_title", "title"),
         Index("idx_tcm_reliability", "reliability_score"),
     )
-
 
 # 食疗方案表
 class FoodTherapy(Base):
@@ -366,7 +354,6 @@ class FoodTherapy(Base):
         Index("idx_food_therapy_name", "name"),
         Index("idx_food_therapy_rating", "rating"),
     )
-
 
 # 养生目的地表
 class WellnessDestination(Base):
@@ -418,7 +405,6 @@ class WellnessDestination(Base):
         Index("idx_wellness_rating", "rating"),
         Index("idx_wellness_available", "is_available"),
     )
-
 
 # 用户健康档案表
 class UserHealthProfile(Base):

@@ -5,11 +5,6 @@ Basic Functionality Tests
 测试核心模块的基本功能
 """
 
-from datetime import datetime
-from uuid import uuid4
-
-import pytest
-
 from ..core.models import (
     ReviewDecision,
     ReviewerCreate,
@@ -20,7 +15,6 @@ from ..core.models import (
     ReviewType,
 )
 from ..core.service import HumanReviewService
-
 
 class TestBasicFunctionality:
     """基础功能测试"""

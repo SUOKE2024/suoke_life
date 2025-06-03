@@ -15,16 +15,12 @@ import asyncio
 import json
 import hashlib
 import time
-from datetime import datetime, timedelta
 from typing import Dict, List, Any, Optional
-from unittest.mock import Mock, patch, AsyncMock
 
-import aiohttp
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import rsa, padding
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 import secrets
-
 
 class HealthDataProofIntegrationTest:
     """健康数据存证全链路集成测试类"""
@@ -638,7 +634,6 @@ class HealthDataProofIntegrationTest:
         except Exception as e:
             return {"recovery_successful": False, "error": str(e)}
 
-
 # 测试运行器
 @pytest.mark.asyncio
 async def test_health_data_proof_integration():
@@ -688,7 +683,6 @@ async def test_health_data_proof_integration():
     except Exception as e:
         print(f"\n❌ 测试失败: {str(e)}")
         raise
-
 
 if __name__ == "__main__":
     # 运行测试

@@ -27,14 +27,12 @@ except ImportError:
     HAS_CONSUL = False
 
 try:
-    import etcd3
 
     HAS_ETCD = True
 except ImportError:
     HAS_ETCD = False
 
 logger = logging.getLogger(__name__)
-
 
 @dataclass
 class ConfigChange:
@@ -46,14 +44,12 @@ class ConfigChange:
     operation: str  # create, update, delete
     timestamp: float
 
-
 class ConfigFormat(Enum):
     """配置格式枚举"""
 
     JSON = "json"
     YAML = "yaml"
     TEXT = "text"
-
 
 @dataclass
 class ConfigItem:
@@ -67,7 +63,6 @@ class ConfigItem:
     updated_at: datetime
     description: str = ""
     tags: list[str] = None
-
 
 class ConfigCenter:
     """配置中心主类"""
@@ -550,7 +545,6 @@ class ConfigCenter:
 
         logger.info("ConfigCenter shutdown complete")
 
-
 # 服务配置管理器
 class ServiceConfig:
     """服务配置管理器"""
@@ -587,10 +581,8 @@ class ServiceConfig:
             output_file, self.config_prefix, config_format
         )
 
-
 # 全局配置中心实例
 _config_center = None
-
 
 def get_config_center(
     consul_host: str = "localhost",
@@ -602,7 +594,6 @@ def get_config_center(
     if _config_center is None:
         _config_center = ConfigCenter(consul_host, consul_port, environment)
     return _config_center
-
 
 # 使用示例
 if __name__ == "__main__":

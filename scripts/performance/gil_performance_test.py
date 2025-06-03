@@ -6,18 +6,13 @@ GIL性能影响测试脚本
 
 import asyncio
 import time
-import threading
 import multiprocessing
 import psutil
-import numpy as np
-import pandas as pd
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 from typing import List, Dict, Any
 import json
 import pickle
 import zlib
-from pathlib import Path
-
 
 class GILPerformanceTester:
     """GIL性能测试器"""
@@ -282,7 +277,6 @@ class GILPerformanceTester:
         else:
             print("\n✅ 当前GIL影响在可接受范围内")
 
-
 def main():
     """主函数"""
     tester = GILPerformanceTester()
@@ -300,7 +294,6 @@ def main():
     print("\n💡 优化建议:")
     for i, recommendation in enumerate(report['recommendations'], 1):
         print(f"  {i}. {recommendation}")
-
 
 if __name__ == "__main__":
     main() 

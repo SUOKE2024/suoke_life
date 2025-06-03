@@ -4,8 +4,6 @@
 提供测试所需的 fixtures 和配置。
 """
 
-from __future__ import annotations
-
 import asyncio
 from typing import TYPE_CHECKING
 from unittest.mock import AsyncMock, MagicMock
@@ -25,7 +23,6 @@ from suoke_blockchain_service.main import create_app
 if TYPE_CHECKING:
     from collections.abc import AsyncGenerator, Generator
 
-
 class TestBase(DeclarativeBase):
     """测试数据库模型基类"""
 
@@ -39,14 +36,12 @@ class TestBase(DeclarativeBase):
         }
     )
 
-
 @pytest.fixture(scope="session")
 def event_loop() -> Generator[asyncio.AbstractEventLoop]:
     """创建事件循环"""
     loop = asyncio.new_event_loop()
     yield loop
     loop.close()
-
 
 @pytest.fixture
 def test_settings() -> Settings:
@@ -56,7 +51,6 @@ def test_settings() -> Settings:
         debug=True,
         environment="test",
     )
-
 
 @pytest_asyncio.fixture
 async def test_db_engine():
@@ -78,7 +72,6 @@ async def test_db_engine():
     # 清理
     await engine.dispose()
 
-
 @pytest_asyncio.fixture
 async def test_db_session(test_db_engine) -> AsyncGenerator[AsyncSession]:
     """测试数据库会话"""
@@ -91,7 +84,6 @@ async def test_db_session(test_db_engine) -> AsyncGenerator[AsyncSession]:
     async with session_factory() as session:
         yield session
 
-
 @pytest.fixture
 def test_app():
     """测试应用"""
@@ -99,19 +91,16 @@ def test_app():
     app = create_app()
     return app
 
-
 @pytest.fixture
 def test_client(test_app) -> TestClient:
     """同步测试客户端"""
     return TestClient(test_app)
-
 
 @pytest_asyncio.fixture
 async def async_test_client(test_app) -> AsyncGenerator[AsyncClient]:
     """异步测试客户端"""
     async with AsyncClient(app=test_app, base_url="http://test") as client:
         yield client
-
 
 @pytest.fixture
 def mock_blockchain_client():
@@ -121,7 +110,6 @@ def mock_blockchain_client():
     mock_client.get_block_number.return_value = 12345
     mock_client.get_balance.return_value = 1000000000000000000  # 1 ETH in wei
     return mock_client
-
 
 @pytest.fixture
 def mock_redis_client():
@@ -133,7 +121,6 @@ def mock_redis_client():
     mock_client.delete.return_value = 1
     return mock_client
 
-
 @pytest.fixture
 def mock_grpc_server():
     """模拟 gRPC 服务器"""
@@ -143,14 +130,12 @@ def mock_grpc_server():
     mock_server.wait_for_termination.return_value = None
     return mock_server
 
-
 @pytest.fixture(autouse=True)
 def setup_test_environment(monkeypatch):
     """设置测试环境"""
     # 设置测试环境变量
     monkeypatch.setenv("ENVIRONMENT", "test")
     monkeypatch.setenv("DEBUG", "true")
-
 
 @pytest.fixture
 def sample_health_data():
@@ -167,7 +152,6 @@ def sample_health_data():
         }
     }
 
-
 @pytest.fixture
 def sample_zkp_proof():
     """示例零知识证明"""
@@ -177,13 +161,11 @@ def sample_zkp_proof():
         "verification_key": "0xfedcba0987654321"
     }
 
-
 # 测试标记
 pytest.mark.unit = pytest.mark.unit
 pytest.mark.integration = pytest.mark.integration
 pytest.mark.blockchain = pytest.mark.blockchain
 pytest.mark.slow = pytest.mark.slow
-
 
 # 测试工具函数
 def assert_valid_uuid(uuid_string: str) -> None:
@@ -194,12 +176,10 @@ def assert_valid_uuid(uuid_string: str) -> None:
     except ValueError:
         pytest.fail(f"'{uuid_string}' is not a valid UUID")
 
-
 def assert_valid_ethereum_address(address: str) -> None:
     """断言字符串是有效的以太坊地址"""
     if not address.startswith("0x") or len(address) != 42:
         pytest.fail(f"'{address}' is not a valid Ethereum address")
-
 
 def assert_valid_transaction_hash(tx_hash: str) -> None:
     """断言字符串是有效的交易哈希"""

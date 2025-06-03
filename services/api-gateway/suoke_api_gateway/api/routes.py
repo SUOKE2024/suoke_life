@@ -5,7 +5,6 @@ API 路由定义
 """
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
-from fastapi.responses import JSONResponse
 
 from ..core.config import get_settings
 from ..core.logging import get_logger
@@ -20,7 +19,6 @@ api_router = APIRouter()
 # 包含子路由
 api_router.include_router(gateway_router, prefix="/gateway", tags=["gateway"])
 api_router.include_router(management_router, prefix="/management", tags=["management"])
-
 
 @api_router.get("/")
 async def api_root():
@@ -37,7 +35,6 @@ async def api_root():
             "metrics": "/metrics",
         }
     }
-
 
 @api_router.get("/info")
 async def api_info(request: Request):

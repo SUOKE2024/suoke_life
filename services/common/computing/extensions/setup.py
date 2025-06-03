@@ -4,9 +4,7 @@
 """
 
 from setuptools import setup, Extension
-import numpy as np
 import platform
-import os
 
 # 获取NumPy头文件路径
 numpy_include = np.get_include()

@@ -9,7 +9,6 @@ import logging
 import os
 import signal
 import sys
-from cmd.server.api import router as api_router
 from cmd.server.grpc_service import SuokeBenchGrpcService
 from concurrent import futures
 from datetime import datetime
@@ -48,7 +47,6 @@ logger = logging.getLogger(__name__)
 grpc_server: grpc.Server | None = None
 config: BenchConfig | None = None
 
-
 # 创建FastAPI应用
 app = FastAPI(
     title="SuokeBench API",
@@ -66,7 +64,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 # 请求监控中间件
 @app.middleware("http")
@@ -104,14 +101,12 @@ async def monitor_requests(request: Request, call_next):
         logger.error(f"请求处理出错: {request.method} {request.url.path} - {str(e)}")
         raise HTTPException(status_code=500, detail="内部服务器错误") from e
 
-
 # 注册API路由
 app.include_router(api_router)
 
 # 静态文件服务
 app.mount("/static", StaticFiles(directory="internal/evaluation/static"), name="static")
 app.mount("/reports", StaticFiles(directory="data/reports"), name="reports")
-
 
 # Web界面路由
 @app.get("/", tags=["UI"])
@@ -128,14 +123,12 @@ async def root():
         "health": "/health"
     }
 
-
 @app.get("/ui", tags=["UI"])
 async def ui():
     """
     Web界面
     """
     return FileResponse("internal/evaluation/static/index.html")
-
 
 @app.get("/health", tags=["监控"])
 async def health_check():
@@ -160,7 +153,6 @@ async def health_check():
         logger.error(f"健康检查失败: {e}")
         raise HTTPException(status_code=503, detail="服务不健康") from e
 
-
 @app.get("/metrics", tags=["监控"])
 async def metrics_endpoint():
     """
@@ -173,7 +165,6 @@ async def metrics_endpoint():
     except Exception as e:
         logger.error(f"指标导出失败: {e}")
         raise HTTPException(status_code=500, detail="指标导出失败")
-
 
 @app.get("/cache/stats", tags=["缓存"])
 async def cache_stats():
@@ -188,7 +179,6 @@ async def cache_stats():
         logger.error(f"获取缓存统计失败: {e}")
         raise HTTPException(status_code=500, detail="获取缓存统计失败")
 
-
 @app.post("/cache/clear", tags=["缓存"])
 async def clear_cache():
     """
@@ -202,7 +192,6 @@ async def clear_cache():
     except Exception as e:
         logger.error(f"清空缓存失败: {e}")
         raise HTTPException(status_code=500, detail="清空缓存失败")
-
 
 @retry(max_attempts=3, base_delay=1.0)
 def start_grpc_server(port: int = 50051, workers: int = 4) -> grpc.Server:
@@ -236,7 +225,6 @@ def start_grpc_server(port: int = 50051, workers: int = 4) -> grpc.Server:
     logger.info(f"gRPC服务启动在端口 {port}")
 
     return server
-
 
 def initialize_services():
     """初始化各种服务组件"""
@@ -276,7 +264,6 @@ def initialize_services():
 
     logger.info("服务组件初始化完成")
 
-
 def signal_handler(signum, frame):
     """信号处理器"""
     logger.info(f"收到信号 {signum}，开始优雅关闭...")
@@ -301,7 +288,6 @@ def signal_handler(signum, frame):
 
     logger.info("服务已优雅关闭")
     sys.exit(0)
-
 
 def main():
     """
@@ -357,7 +343,6 @@ def main():
     except Exception as e:
         logger.error(f"服务启动失败: {e}")
         sys.exit(1)
-
 
 if __name__ == "__main__":
     import time

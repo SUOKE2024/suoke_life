@@ -5,7 +5,7 @@
   MemberBenefit,
   SettingSection,
   HealthStats,
-  { ActivityRecord } from "../types/profile"//  *  模拟用户数据 *// export const USER_PROFILE: UserProfile = {,
+  { ActivityRecord } from "../types/profile";// // 模拟用户数据 /////     export const USER_PROFILE: UserProfile = {
   id: "user_001",
   name: "张小明",
   avatar: "👤",
@@ -23,7 +23,9 @@
   location: "北京市朝阳区",
   bio: "热爱健康生活，追求身心平衡的都市白领"
 };
-// 智能体交互记录 * export const AGENT_INTERACTIONS: AgentInteraction[] = [;{, */
+;
+// 智能体交互记录 * export const AGENT_INTERACTIONS: AgentInteraction[] = [////   ;
+{
     id: "xiaoai",
     agentName: "小艾",
     agentType: "xiaoai",
@@ -72,7 +74,8 @@
     lastTopics: ["生活规划", "情绪管理", "社交建议"]
   }
 ];
-// 健康成就 * export const HEALTH_ACHIEVEMENTS: HealthAchievement[] = [;{, */
+// 健康成就 * export const HEALTH_ACHIEVEMENTS: HealthAchievement[] = [////   ;
+{
     id: "early_bird",
     title: "早起达人",
     description: "连续7天早起打卡",
@@ -81,7 +84,7 @@
     unlocked: true,
     unlockedDate: "2024-01-10",
     category: "lifestyle",
-    points: 100
+    points: 100;
   },
   {
     id: "health_explorer",
@@ -92,7 +95,7 @@
     unlocked: true,
     unlockedDate: "2024-01-05",
     category: "health",
-    points: 150
+    points: 150;
   },
   {
     id: "wisdom_seeker",
@@ -104,7 +107,7 @@
     progress: 7,
     target: 10,
     category: "learning",
-    points: 200
+    points: 200;
   },
   {
     id: "life_master",
@@ -116,7 +119,7 @@
     progress: 15,
     target: 30,
     category: "lifestyle",
-    points: 300
+    points: 300;
   },
   {
     id: "social_butterfly",
@@ -127,7 +130,7 @@
     unlocked: true,
     unlockedDate: "2024-01-12",
     category: "social",
-    points: 120
+    points: 120;
   },
   {
     id: "consistency_champion",
@@ -139,10 +142,11 @@
     progress: 15,
     target: 30,
     category: "lifestyle",
-    points: 500
+    points: 500;
   }
 ];
-// 会员特权 * export const MEMBER_BENEFITS: MemberBenefit[] = [;{, */
+// 会员特权 * export const MEMBER_BENEFITS: MemberBenefit[] = [////   ;
+{
     id: "priority_diagnosis",
     title: "优先诊断",
     description: "享受优先诊断服务",
@@ -185,10 +189,11 @@
     validUntil: "2024-12-31"
   }
 ];
-// 设置分组 * export const SETTINGS_SECTIONS: SettingSection[] = [;{, */
+// 设置分组 * export const SETTINGS_SECTIONS: SettingSection[] = [////   ;
+{
     id: "account",
     title: "账户设置",
-    items: [{,
+    items: [{
         id: "profile",
         title: "个人资料",
         subtitle: "编辑个人信息",
@@ -214,7 +219,7 @@
   {
     id: "preferences",
     title: "偏好设置",
-    items: [{,
+    items: [{
         id: "notifications",
         title: "通知设置",
         subtitle: "管理推送通知",
@@ -241,13 +246,13 @@
   {
     id: "health",
     title: "健康设置",
-    items: [{,
+    items: [{
         id: "health_sync",
         title: "健康数据同步",
         subtitle: "同步设备健康数据",
         icon: "sync",
         type: "switch",
-        value: true
+        value: true;
       },
       {
         id: "reminder",
@@ -255,7 +260,7 @@
         subtitle: "设置健康提醒",
         icon: "alarm",
         type: "switch",
-        value: true
+        value: true;
       },
       {
         id: "backup",
@@ -269,7 +274,7 @@
   {
     id: "support",
     title: "帮助与支持",
-    items: [{,
+    items: [{
         id: "help",
         title: "帮助中心",
         subtitle: "常见问题解答",
@@ -295,7 +300,7 @@
   {
     id: "advanced",
     title: "高级设置",
-    items: [{,
+    items: [{
         id: "developer",
         title: "开发者选项",
         subtitle: "调试和开发工具",
@@ -315,12 +320,12 @@
         subtitle: "安全退出账户",
         icon: "logout",
         type: "action",
-        dangerous: true
+        dangerous: true;
       }
     ]
   }
 ];
-// 健康统计 * export const HEALTH_STATS: HealthStats = {, */
+// 健康统计 * export const HEALTH_STATS: HealthStats = { ////
   totalDiagnosis: 24,
   consecutiveDays: 15,
   healthScore: 85,
@@ -329,7 +334,9 @@
   weeklyProgress: 5,
   monthlyTrend: "up"
 };
-// 活动记录 * export const ACTIVITY_RECORDS: ActivityRecord[] = [;{, */
+;
+// 活动记录 * export const ACTIVITY_RECORDS: ActivityRecord[] = [////   ;
+{
     id: "activity_001",
     type: "diagnosis",
     title: "完成五诊检测",

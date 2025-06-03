@@ -1,37 +1,36 @@
-import React from 'react';
-import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor';
-import { AlgorithmConfig } from "./config/AlgorithmConfig"/import { TCMKnowledgeBase } from "./knowledge/TCMKnowledgeBase"/import { QualityController } from "./quality/QualityController"/import { PerformanceMonitor } from "./monitoring/PerformanceMonitor";/;
+import React from "react";
+import { AlgorithmConfig } from "../../placeholder";./config/AlgorithmConfig";/import { TCMKnowledgeBase } from "./knowledge/TCMKnowledgeBase";/import { QualityController } from "./quality/QualityController";/import { PerformanceMonitor } from "./monitoring/////    PerformanceMonitor";"
+//////
   CalculationDiagnosisAlgorithm,
   CalculationData as CalcData,
-  { CalculationResult as CalcResult } from "./modules/CalculationDiagnosisAlgorithm"/  LookingDiagnosisAlgorithm,
+  { CalculationResult as CalcResult } from "./modules/CalculationDiagnosisAlgorithm";/////      LookingDiagnosisAlgorithm,
   LookingData as LookData,
-  { LookingResult as LookResult } from "./modules/LookingDiagnosisAlgorithm"/  ListeningDiagnosisAlgorithm,
+  { LookingResult as LookResult } from "./modules/LookingDiagnosisAlgorithm";/////      ListeningDiagnosisAlgorithm,
   ListeningData as ListenData,
-  { ListeningResult as ListenResult } from "./modules/ListeningDiagnosisAlgorithm"/  InquiryDiagnosisAlgorithm,
+  { ListeningResult as ListenResult } from "./modules/ListeningDiagnosisAlgorithm";/////      InquiryDiagnosisAlgorithm,
   InquiryData as InqData,
-  { InquiryResult as InqResult } from "./modules/InquiryDiagnosisAlgorithm"/  PalpationDiagnosisAlgorithm,
+  { InquiryResult as InqResult } from "./modules/InquiryDiagnosisAlgorithm";/////      PalpationDiagnosisAlgorithm,
   PalpationData as PalpData,
-  { PalpationResult as PalpResult } from "./modules/PalpationDiagnosisAlgorithm"/  DiagnosisFusionAlgorithm,
+  { PalpationResult as PalpResult } from "./modules/PalpationDiagnosisAlgorithm";/////      DiagnosisFusionAlgorithm,
   FusionInput,
-  { FusionResult } from "./modules/DiagnosisFusionAlgorithm";//
- * 中医五诊算法引擎
+  { FusionResult } from "./modules/DiagnosisFusionAlgorithm";// * 中医五诊算法引擎////
  *
  * 整合望、闻、问、切、算五种诊法的核心引擎
  * 提供完整的中医诊断分析能力
  *
  * @author 索克生活技术团队
- * @version 1.0.0
- */
-// 基础类型定义 * export interface UserProfile { age: number, */,
+ * @version 1.0.0;
+// 基础类型定义 * export interface UserProfile { age: number, ,////
   gender: "male" | "female" | "other",
   height: number,
   weight: number,
   occupation: string,
   medicalHistory: string[],
   allergies: string[],
-  medications: string[];
+  medications: string[]
   }
-export interface DiagnosisInput {;
+export interface DiagnosisInput  {;
+;
   userProfile?: UserProfile;
   lookingData?: LookData;
   listeningData?: ListenData;
@@ -48,16 +47,16 @@ export interface ImageData { data: ArrayBuffer,
 export interface SessionContext { sessionId: string,
   timestamp: number,
   environment: {temperature: number,
-    humidity: number,
-    season: string,
+    humidity: number,;
+    season: string,;
     timeOfDay: string};
   previousSessions?: string[];
 }
 export interface DiagnosisResult { sessionId: string,
   userId: string,
   timestamp: number,
-  confidence: number,
-  overallAssessment: string,
+  confidence: number,;
+  overallAssessment: string,;
   diagnosisResults: {looking?: LookingResult;
     calculation?: CalculationResult};
   fusionResult: FusionResult,
@@ -89,67 +88,68 @@ export enum ProcessingStatus {
   FAILED = "failed",
   CANCELLED = "cancelled"
 }
-// 中医五诊算法核心引擎export class FiveDiagnosisEngine {;
+//////     中医五诊算法核心引擎export class FiveDiagnosisEngine {;
+;
   private config: AlgorithmConfig;
   private knowledgeBase: TCMKnowledgeBase;
   private qualityController: QualityController;
   private performanceMonitor: PerformanceMonitor;
-  // 运行时状态 *   private isInitialized: boolean = false; */
+  // 运行时状态 //////     private isInitialized: boolean = false;
   private sessionCount: number = 0;
   private lastMaintenanceTime: number = Date.now();
   private eventListeners: Map<string, Function[]> = new Map();
-  // 算法模块 *   private calculationAlgorithm!: CalculationDiagnosisAlgorithm; */
+  // 算法模块 //////     private calculationAlgorithm!: CalculationDiagnosisAlgorithm;
   private lookingAlgorithm!: LookingDiagnosisAlgorithm;
   private listeningAlgorithm!: ListeningDiagnosisAlgorithm;
   private inquiryAlgorithm!: InquiryDiagnosisAlgorithm;
   private palpationAlgorithm!: PalpationDiagnosisAlgorithm;
   private fusionAlgorithm!: DiagnosisFusionAlgorithm;
-  constructor(config?: Partial<AlgorithmConfig />) {/    // 初始化配置 *     this.config = new AlgorithmConfig(config); */
-    // 初始化知识库 *     this.knowledgeBase = new TCMKnowledgeBase(this.config.knowledgeBase); */
-    // 初始化质量控制器 *     this.qualityController = new QualityController(this.config.qualityControl); */
-    // 初始化性能监控器 *     this.performanceMonitor = new PerformanceMonitor(this.config.monitoring); */
+  constructor(config?: Partial<AlgorithmConfig />) {/    // 初始化配置 //////     this.config = new AlgorithmConfig(config)
+    // 初始化知识库 //////     this.knowledgeBase = new TCMKnowledgeBase(this.config.knowledgeBase)
+    // 初始化质量控制器 //////     this.qualityController = new QualityController(this.config.qualityControl)
+    // 初始化性能监控器 //////     this.performanceMonitor = new PerformanceMonitor(this.config.monitoring)
     this.initializeEngine();
   }
-  // /    初始化引擎  private async initializeEngine(): Promise<void> {
+  //////     初始化引擎  private async initializeEngine(): Promise<void> {
     try {
-      this.emit("engine:initializing");
-      // 等待知识库加载完成 *       await this.waitForKnowledgeBase;(;); */
-      this.isInitialized = true
-      this.emit("engine:initialized");
-      // 初始化算法模块 *       this.initializeAlgorithms() */
+      this.emit("engine:initializing")
+      // 等待知识库加载完成 //////     await this.waitForKnowledgeBase;
+      this.isInitialized = true;
+this.emit("engine:initialized");
+      // 初始化算法模块 //////     this.initializeAlgorithms()
     } catch (error) {
       this.emit("engine:initialization_failed", { error });
-      throw err;o;r;
+      throw error;
     }
   }
-  // /    等待知识库加载完成  private async waitForKnowledgeBase();: Promise<void> {
-    // 简化实现，实际应该等待知识库加载完成 *     return new Promise((resolv;e;); => setTimeout(resolve, 100);); */
+  //////     等待知识库加载完成  private async waitForKnowledgeBase(): Promise<void> {
+    // 简化实现，实际应该等待知识库加载完成 //////     return new Promise((resolve;); => setTimeout(resolve, 100););
   }
-  // /    初始化算法模块  private initializeAlgorithms();: void {
+  //////     初始化算法模块  private initializeAlgorithms(): void {
     try {
-      // 初始化各诊法算法 *       this.calculationAlgorithm = new CalculationDiagnosisAlgorithm( */
+      // 初始化各诊法算法 //////     this.calculationAlgorithm = new CalculationDiagnosisAlgorithm(
         this.config.calculation,
-        this.knowledgeBase
-      );
+        this.knowledgeBase;
+      )
       this.lookingAlgorithm = new LookingDiagnosisAlgorithm(
         this.config.looking,
-        this.knowledgeBase
+        this.knowledgeBase;
       );
       this.listeningAlgorithm = new ListeningDiagnosisAlgorithm(
         this.config.listening,
-        this.knowledgeBase
+        this.knowledgeBase;
       );
       this.inquiryAlgorithm = new InquiryDiagnosisAlgorithm(
         this.config.inquiry,
-        this.knowledgeBase
+        this.knowledgeBase;
       );
       this.palpationAlgorithm = new PalpationDiagnosisAlgorithm(
         this.config.palpation,
-        this.knowledgeBase
+        this.knowledgeBase;
       );
       this.fusionAlgorithm = new DiagnosisFusionAlgorithm(
         this.config.fusion,
-        this.knowledgeBase
+        this.knowledgeBase;
       )
       this.emit("algorithms:initialized", {
         algorithms: ["calculation",
@@ -159,114 +159,109 @@ export enum ProcessingStatus {
           "palpation",
           "fusion"
         ]
-      })
+      });
     } catch (error) {
-      this.emit("algorithms:error", { error, stage: "initialization"})
+      this.emit("algorithms:error", { error, stage: "initialization"});
       throw new Error(`算法模块初始化失败: ${error};`;);
     }
   }
-  // /    执行五诊分析  public async analyze(input: DiagnosisInput): Promise<DiagnosisResult />  {
+  // 执行五诊分析  public async analyze(input: DiagnosisInput): Promise<DiagnosisResult /////    >  {
     if (!this.isInitialized) {
-      throw new Error("引擎尚未初始化完成;";);
+      throw new Error("引擎尚未初始化完成";);
     }
     const sessionId = input.session;I;d;
-    const startTime = Date.now;(;);
+    const startTime = Date.now;
     try {
       this.sessionCount++
       this.emit("diagnosis:started", { sessionId, userId: input.userId});
-      // 数据验证 *       await this.validateInput(inpu;t;); */
-      // 数据标准化 *       await this.normalizeInput(inpu;t;); */
-      // 执行各诊法分析 *       const diagnosisResults: unknown = {} */
-      // 望诊分析 *       if (input.lookingData) { */
+      // 数据验证 //////     await this.validateInput(input;);
+      // 数据标准化 //////     await this.normalizeInput(input;);
+      // 执行各诊法分析 //////     const diagnosisResults: unknown = {}
+      // 望诊分析 //////     if (input.lookingData) {
         this.emit("algorithm:progress", {
           stage: "looking_analysis",
-          progress: 0.3,
-        });
+          progress: 0.3});
         diagnosisResults.looking = await this.lookingAlgorithm.analyze(
           input.lookingData,
-          input.userProfil;e
+          input.userProfil;e;
         ;)
       }
-      // 闻诊分析 *       if (input.listeningData) { */
+      // 闻诊分析 //////     if (input.listeningData) {
         this.emit("algorithm:progress", {
           stage: "listening_analysis",
-          progress: 0.4,
-        });
+          progress: 0.4});
         diagnosisResults.listening = await this.listeningAlgorithm.analyze(
           input.listeningData,
-          input.userProfil;e
+          input.userProfil;e;
         ;)
       }
-      // 问诊分析 *       if (input.inquiryData) { */
+      // 问诊分析 //////     if (input.inquiryData) {
         this.emit("algorithm:progress", {
           stage: "inquiry_analysis",
-          progress: 0.5,
-        });
+          progress: 0.5});
         diagnosisResults.inquiry = await this.inquiryAlgorithm.analyze(
           input.inquiryData,
-          input.userProfil;e
+          input.userProfil;e;
         ;)
       }
-      // 切诊分析 *       if (input.palpationData) { */
+      // 切诊分析 //////     if (input.palpationData) {
         this.emit("algorithm:progress", {
           stage: "palpation_analysis",
-          progress: 0.6,
-        });
+          progress: 0.6});
         diagnosisResults.palpation = await this.palpationAlgorithm.analyze(
           input.palpationData,
-          input.userProfil;e
+          input.userProfil;e;
         ;)
       }
-      // 算诊分析 *       if (input.calculationData) { */
+      // 算诊分析 //////     if (input.calculationData) {
         this.emit("algorithm:progress", {
           stage: "calculation_analysis",
-          progress: 0.7,
-        });
+          progress: 0.7});
         diagnosisResults.calculation = await this.calculationAlgorithm.analyze(
           input.calculationData,
-          input.userProfil;e
+          input.userProfil;e;
         ;);
       }
-      // 执行融合分析 *       const fusionResult = await this.performFusionAnalysis( */;
+      // 执行融合分析 //////     const fusionResult = await this.performFusionAnalysis(
         diagnosisResults,
-        in;p;u;t
+        in;p;u;t;
       ;);
-      // 执行辨证分析 *       const syndromeAnalysis = await this.performSyndromeAnalysis(fusionRes;u;l;t;); */
-      // 执行体质分析 *       const constitutionAnalysis = await this.performConstitutionAnalysis( */;
+      // 执行辨证分析 //////     const syndromeAnalysis = await this.performSyndromeAnalysis(fusionResu;l;t;);
+      // 执行体质分析 //////     const constitutionAnalysis = await this.performConstitutionAnalysis(
         fusionResult,
-        input.userProf;i;l;e
+        input.userProf;i;l;e;
       ;);
-      // 生成治疗建议 *       const treatmentRecommendation = */
+      // 生成治疗建议 //////     const treatmentRecommendation =
         await this.generateTreatmentRecommendation(
           syndromeAnalysis,
           constitutionAnalysis,
-          input.userProf;i;l;e
+          input.userProf;i;l;e;
         ;);
-      // 质量控制 *       const qualityReport = await this.qualityController.validate({ */
+      // 质量控制 //////     const qualityReport = await this.qualityController.validate({
         input,
         diagnosisResults,
         fusionResult,
         syndromeAnalysis,
         constitutionAnalysis,
-        treatmentRecommendati;o;n
+        treatmentRecommendati;o;n;
       ;};);
-      // 性能监控 *       const responseTime = Date.now;(;); - startTime */
+      // 性能监控 //////     const responseTime = Date.now - startTime;
       this.performanceMonitor.recordResponseTime(
         responseTime,
         "full_diagnosis"
-      );
-      // 计算整体置信度 *       const confidence = this.calculateOverallConfidence( */
+      )
+      // 计算整体置信度 //////     const confidence = this.calculateOverallConfidence(
         diagnosisResults,
         fusionResult,
-        qualityRepor;t
+        qualityRepor;t;
       ;);
-      // 生成综合评估 *       const overallAssessment = await this.generateOverallAssessment( */
+      // 生成综合评估 //////     const overallAssessment = await this.generateOverallAssessment(
         diagnosisResults,
         fusionResult,
         syndromeAnalysis,
-        constitutionAnaly;s;i;s
+        constitutionAnaly;s;i;s;
       ;);
-      const result: DiagnosisResult = {
+      const result: DiagnosisResult = {;
         sessionId,
         userId: input.userId,
         timestamp: Date.now(),
@@ -281,86 +276,85 @@ export enum ProcessingStatus {
         performanceMetrics: this.performanceMonitor.getMetrics()};
       this.sessionCount--
       this.emit("diagnosis:completed", { sessionId, result });
-      return resu;l;t;
+      return result;
     } catch (error) {
       this.sessionCount--
       this.emit("diagnosis:failed", { sessionId, error });
-      throw err;o;r;
+      throw error;
     }
   }
-  // /    验证输入数据  private async validateInput(input: DiagnosisInput): Promise<void>  {
+  //////     验证输入数据  private async validateInput(input: DiagnosisInput): Promise<void>  {
     if (!input.sessionId) {
-      throw new Error("缺少会话ID;";)
+      throw new Error("缺少会话ID";)
     }
     if (!input.userId) {
       throw new Error("缺少用户ID;";);
     }
-    // 检查是否至少有一种诊法数据 *     const hasData = !!(input.lookingData || input.calculationDat;a;) */
+    // 检查是否至少有一种诊法数据 //////     const hasData = !!(input.lookingData || input.calculationData;)
     if (!hasData) {
       throw new Error("至少需要提供一种诊法的数据;";)
     }
-    // 验证图像数据格式 *     if (input.lookingData?.tongueImage) { */
-      await this.validateImageData(input.lookingData.tongueImage, "tongue;";);
+    // 验证图像数据格式 // if (input.lookingData?.tongueImage) { ////
+      await this.validateImageData(input.lookingData.tongueImage, "tongue";);
     }
-    // 验证计算数据格式 *     if (input.calculationData) { */
-      await this.validateCalculationData(input.calculationDat;a;);
-    }
-  }
-  // /    标准化输入数据  private async normalizeInput(input: DiagnosisInput);: Promise<void>  {
-    // 标准化图像数据 *     if (input.lookingData) { */
-      await this.normalizeLookingData(input.lookingDat;a;);
-    }
-    // 标准化计算数据 *     if (input.calculationData) { */
-      await this.normalizeCalculationData(input.calculationDat;a;);
+    // 验证计算数据格式 //////     if (input.calculationData) {
+      await this.validateCalculationData(input.calculationData;);
     }
   }
-  // /    执行融合分析  private async performFusionAnalysis(diagnosisResults: unknown,
-    input: DiagnosisInput;);: Promise<FusionResult />  {
-    // 使用融合算法模块 *     const fusionInput: FusionInput = {, */
+  //////     标准化输入数据  private async normalizeInput(input: DiagnosisInput): Promise<void>  {
+    // 标准化图像数据 //////     if (input.lookingData) {
+      await this.normalizeLookingData(input.lookingData;);
+    }
+    // 标准化计算数据 //////     if (input.calculationData) {
+      await this.normalizeCalculationData(input.calculationData;);
+    }
+  }
+  //////     执行融合分析  private async performFusionAnalysis(diagnosisResults: unknown,
+    input: DiagnosisInput);: Promise<FusionResult /////    >  {
+    // 使用融合算法模块 //////     const fusionInput: FusionInput = {
       lookingResult: diagnosisResults.looking,
       listeningResult: diagnosisResults.listening,
       inquiryResult: diagnosisResults.inquiry,
       palpationResult: diagnosisResults.palpation,
       calculationResult: diagnosisResults.calculation,
-      userProfile: input.userProfile,
-    };
+      userProfile: input.userProfile}
     return await this.fusionAlgorithm.analyze(fusionIn;p;u;t;);
   }
-  // /    执行辨证分析  private async performSyndromeAnalysis(fusionResult: FusionResult;): Promise<any>  {
-    // 简化实现 *     return { */
+  //////     执行辨证分析  private async performSyndromeAnalysis(fusionResult: FusionResult): Promise<any>  {
+    // 简化实现 //////     return {
       primarySyndrome: "气虚证",
       confidence: 0.7,
-      analysis: "基于融合结果的辨证分析"};
+      analysis: "基于融合结果的辨证分析"}
   }
-  // /    执行体质分析  private async performConstitutionAnalysis(fusionResult: FusionResult,
-    userProfile?: UserProfile
-  );: Promise<any>  {
-    // 简化实现 *     return { */
+  //////     执行体质分析  private async performConstitutionAnalysis(fusionResult: FusionResult,
+    userProfile?: UserProfile;
+  ): Promise<any>  {
+    // 简化实现 //////     return {
       primaryType: "平和质",
       confidence: 0.8,
-      analysis: "体质分析结果"};
+      analysis: "体质分析结果"}
   }
-  // /    生成治疗建议  private async generateTreatmentRecommendation(syndromeAnalysis: unknown,
+  //////     生成治疗建议  private async generateTreatmentRecommendation(syndromeAnalysis: unknown,
     constitutionAnalysis: unknown,
-    userProfile?: UserProfile
-  );: Promise<any>  {
-    // 简化实现 *     return { */
+    userProfile?: UserProfile;
+  ): Promise<any>  {
+    // 简化实现 //////     return {
       treatments: ["四君子汤"],
       lifestyle: ["规律作息", "适度运动"],
       diet: ["健脾益气食物"],
-      analysis: "基于辨证和体质的治疗建议"};
+      analysis: "基于辨证和体质的治疗建议"}
   }
-  // /    计算整体置信度  private calculateOverallConfidence(diagnosisResults: unknown,
+  //////     计算整体置信度  private calculateOverallConfidence(diagnosisResults: unknown,
     fusionResult: FusionResult,
-    qualityReport: unknown;);: number  {
-    const weights = {
+    qualityReport: unknown);: number  {
+    const weights = {;
       looking: 0.4,
       calculation: 0.3,
-      fusion: 0.2,
-      quality: 0.;1
+      fusion: 0.2,;
+      quality: 0.;1;
     ;};
-    let totalWeight = ;0;
-    let weightedSum = ;0;
+    let totalWeight = 0;
+    let weightedSum = 0;
     if (diagnosisResults.looking) {
       weightedSum += diagnosisResults.looking.confidence * weights.looking;
       totalWeight += weights.looking;
@@ -376,11 +370,11 @@ export enum ProcessingStatus {
       weightedSum += qualityReport.score * weights.quality;
       totalWeight += weights.quality;
     }
-    return totalWeight > 0 ? weightedSum / totalWeight : 0;.;5;/  }
-  // /    生成综合评估  private async generateOverallAssessment(diagnosisResults: unknown,
+    return totalWeight > 0 ? weightedSum / totalWeight : 0;.;5;/////      }
+  //////     生成综合评估  private async generateOverallAssessment(diagnosisResults: unknown,
     fusionResult: FusionResult,
     syndromeAnalysis: unknown,
-    constitutionAnalysis: unknown;);: Promise<string>  {
+    constitutionAnalysis: unknown);: Promise<string>  {
     const assessmentParts: string[] = [];
     if (syndromeAnalysis?.primarySyndrome) {
       assessmentParts.push(`主要证候：${syndromeAnalysis.primarySyndrome}`)
@@ -391,31 +385,31 @@ export enum ProcessingStatus {
     assessmentParts.push(
       `综合置信度：${(fusionResult.confidence * 100).toFixed(1)}%`
     );
-    // 记录渲染性能
-    performanceMonitor.recordRender();
+    //////     记录渲染性能
+performanceMonitor.recordRender();
     return (
       assessmentParts.join("，;";) + "。建议结合专业医师意见进行进一步诊疗。"
     );
   }
-  // 辅助方法 *   private async validateImageData(imageData: ImageData, */
-    type: string;);: Promise<void>  {
-    // 实现图像数据验证逻辑 *   } */
-  private async validateCalculationData(calcData: CalcData);: Promise<void>  {
-    // 实现计算数据验证逻辑 *   } */
-  private async normalizeLookingData(data: LookData);: Promise<void>  {
-    // 实现望诊数据标准化逻辑 *   } */
-  private async normalizeCalculationData(data: CalcData);: Promise<void>  {
-    // 实现计算数据标准化逻辑 *   } */
-  // /    获取引擎状态  public getStatus(): unknown {
+  // 辅助方法 //////     private async validateImageData(imageData: ImageData,
+    type: string);: Promise<void>  {
+    // 实现图像数据验证逻辑 //////     }
+  private async validateCalculationData(calcData: CalcData): Promise<void>  {
+    // 实现计算数据验证逻辑 //////     }
+  private async normalizeLookingData(data: LookData): Promise<void>  {
+    // 实现望诊数据标准化逻辑 //////     }
+  private async normalizeCalculationData(data: CalcData): Promise<void>  {
+    // 实现计算数据标准化逻辑 //////     }
+  //////     获取引擎状态  public getStatus(): unknown {
     return {
       isRunning: this.isInitialized,
       sessionCount: this.sessionCount,
       algorithmVersion: this.config.version,
       knowledgeBaseVersion: "1.0.0",
-      lastMaintenanceTime: this.lastMaintenanceTim;e
+      lastMaintenanceTime: this.lastMaintenanceTime;
     ;};
   }
-  // /    事件处理  public on(event: string, callback: Function);: void  {
+  //////     事件处理  public on(event: string, callback: Function): void  {
     if (!this.eventListeners.has(event);) {
       this.eventListeners.set(event, []);
     }
@@ -424,16 +418,15 @@ export enum ProcessingStatus {
   public emit(event: string, data?: unknown);: void  {
     const listeners = this.eventListeners.get(even;t;);
     if (listeners) {
-      listeners.forEach((callback); => {
+      listeners.forEach((callback); => {}
         try {
           callback(data)
         } catch (error) {
-          console.error(`事件处理错误 [${event}]:`, error);
-        }
+          }
       });
     }
   }
-  // /    清理资源  public async cleanup();: Promise<void> {
+  //////     清理资源  public async cleanup(): Promise<void> {
     this.sessionCount = 0;
     this.eventListeners.clear()
     this.emit("engine: cleanup_completed")}

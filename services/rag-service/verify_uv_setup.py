@@ -6,7 +6,6 @@ RAG Service UV 配置验证脚本
 
 import sys
 import subprocess
-import os
 from pathlib import Path
 import tomllib
 

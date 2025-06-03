@@ -18,8 +18,6 @@ from prometheus_fastapi_instrumentator import Instrumentator
 
 from app.api.grpc.generated import knowledge_pb2_grpc
 from app.api.grpc.knowledge_service import MedKnowledgeServicer
-from app.api.rest.health import router as health_router
-from app.api.rest.router import router as api_router
 from app.core.config import get_settings
 from app.core.container import lifespan_context
 from app.core.logger import get_logger
@@ -39,7 +37,6 @@ logger = get_logger()
 
 # gRPC服务器
 grpc_server = None
-
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -65,7 +62,6 @@ async def lifespan(app: FastAPI):
         # 停止gRPC服务器
         await stop_grpc_server()
         logger.info("索克生活-医学知识服务已关闭")
-
 
 # 创建FastAPI应用
 app = FastAPI(
@@ -132,7 +128,6 @@ if settings.metrics and settings.metrics.enabled:
 app.include_router(health_router)
 app.include_router(api_router)
 
-
 # 自定义Swagger UI路由
 @app.get("/api/docs", include_in_schema=False)
 async def custom_swagger_ui_html():
@@ -142,7 +137,6 @@ async def custom_swagger_ui_html():
         swagger_js_url="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.0/swagger-ui-bundle.js",
         swagger_css_url="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.0/swagger-ui.css",
     )
-
 
 @app.get("/", include_in_schema=False)
 async def root():
@@ -155,7 +149,6 @@ async def root():
         "health": "/api/v1/health",
         "metrics": "/metrics",
     }
-
 
 async def start_grpc_server(knowledge_service):
     """启动gRPC服务器"""
@@ -183,7 +176,6 @@ async def start_grpc_server(knowledge_service):
         logger.error(f"gRPC服务器启动失败: {e}")
         raise
 
-
 async def stop_grpc_server():
     """停止gRPC服务器"""
     global grpc_server
@@ -195,7 +187,6 @@ async def stop_grpc_server():
         except Exception as e:
             logger.error(f"停止gRPC服务器失败: {e}")
 
-
 def handle_sigterm(*args):
     """处理SIGTERM信号"""
     logger.info("收到SIGTERM信号,准备关闭服务")
@@ -203,10 +194,8 @@ def handle_sigterm(*args):
     asyncio.create_task(stop_grpc_server())
     sys.exit(0)
 
-
 # 注册信号处理
 signal.signal(signal.SIGTERM, handle_sigterm)
-
 
 if __name__ == "__main__":
     import uvicorn

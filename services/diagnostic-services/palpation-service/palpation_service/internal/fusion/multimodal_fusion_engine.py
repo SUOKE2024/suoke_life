@@ -14,13 +14,11 @@ from datetime import datetime
 from enum import Enum
 from typing import Any
 
-import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.ensemble import IsolationForest
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
 logger = logging.getLogger(__name__)
-
 
 class ModalityType(Enum):
     """模态类型枚举"""
@@ -30,7 +28,6 @@ class ModalityType(Enum):
     SKIN = "skin"  # 皮肤触诊
     COMPREHENSIVE = "comprehensive"  # 综合
 
-
 class FusionStrategy(Enum):
     """融合策略枚举"""
 
@@ -38,7 +35,6 @@ class FusionStrategy(Enum):
     LATE_FUSION = "late"  # 晚期融合
     HYBRID_FUSION = "hybrid"  # 混合融合
     ATTENTION_FUSION = "attention"  # 注意力融合
-
 
 @dataclass
 class ModalityData:
@@ -51,7 +47,6 @@ class ModalityData:
     timestamp: datetime = field(default_factory=datetime.now)
     quality_score: float = 1.0
     metadata: dict[str, Any] = field(default_factory=dict)
-
 
 @dataclass
 class FusionResult:
@@ -66,7 +61,6 @@ class FusionResult:
     fusion_strategy: FusionStrategy
     processing_time: float
     timestamp: datetime
-
 
 class MultimodalFusionEngine:
     """多模态数据融合引擎"""

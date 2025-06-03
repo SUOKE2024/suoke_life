@@ -5,11 +5,9 @@
 """
 
 import time
-from typing import Any, Dict, Optional
 
 import httpx
 from fastapi import APIRouter, HTTPException, Request, Response, status
-from fastapi.responses import StreamingResponse
 
 from ..core.logging import get_logger
 from ..services.service_registry import ServiceRegistry
@@ -17,7 +15,6 @@ from ..services.service_registry import ServiceRegistry
 logger = get_logger(__name__)
 
 gateway_router = APIRouter()
-
 
 @gateway_router.api_route(
     "/{service_name}/{path:path}",
@@ -149,7 +146,6 @@ async def proxy_request(
             detail="Gateway error"
         )
 
-
 @gateway_router.get("/services")
 async def list_services(request: Request):
     """列出所有可用服务"""
@@ -176,7 +172,6 @@ async def list_services(request: Request):
         }
     
     return result
-
 
 @gateway_router.get("/services/{service_name}/health")
 async def get_service_health(service_name: str, request: Request):

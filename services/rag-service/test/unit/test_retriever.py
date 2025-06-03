@@ -7,12 +7,10 @@
 
 import unittest
 from unittest.mock import AsyncMock, MagicMock, patch
-import asyncio
 import pytest
 
 from services.rag_service.internal.retriever.hybrid_retriever import HybridRetriever
 from services.rag_service.internal.model.document import Document
-
 
 class TestHybridRetriever(unittest.TestCase):
     """混合检索器单元测试类"""
@@ -210,7 +208,6 @@ class TestHybridRetriever(unittest.TestCase):
         await self.retriever.close()
         # 验证依赖组件的关闭方法被调用
         self.mock_vector_db.close.assert_called_once()
-
 
 if __name__ == "__main__":
     unittest.main() 

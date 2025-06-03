@@ -1,14 +1,10 @@
 import asyncio
 import logging
 import time
-import signal
 import grpc
 from concurrent import futures
-from typing import Optional, Dict, Any, List
-import json
 
 from internal.service.message_service import MessageService
-from internal.security.auth import AuthInterceptor
 from internal.observability.metrics import (
     message_counter, message_publish_latency, api_requests, api_request_latency
 )

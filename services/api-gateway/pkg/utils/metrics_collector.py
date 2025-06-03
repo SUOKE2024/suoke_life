@@ -6,7 +6,6 @@
 集成Prometheus指标、OpenTelemetry追踪和自定义业务指标
 """
 
-import asyncio
 import logging
 import time
 from dataclasses import dataclass, field
@@ -28,7 +27,6 @@ from opentelemetry.instrumentation.aiohttp_client import AioHttpClientInstrument
 
 logger = logging.getLogger(__name__)
 
-
 @dataclass
 class MetricsConfig:
     """指标配置"""
@@ -40,7 +38,6 @@ class MetricsConfig:
     service_version: str = "1.0.0"
     export_interval: int = 30
     custom_metrics_enabled: bool = True
-
 
 @dataclass
 class RequestMetrics:
@@ -55,7 +52,6 @@ class RequestMetrics:
     service_name: Optional[str] = None
     client_ip: Optional[str] = None
     user_agent: Optional[str] = None
-
 
 class PrometheusMetrics:
     """Prometheus指标收集器"""
@@ -180,7 +176,6 @@ class PrometheusMetrics:
             'version': '1.0.0'
         })
 
-
 class OpenTelemetryMetrics:
     """OpenTelemetry指标收集器"""
     
@@ -252,7 +247,6 @@ class OpenTelemetryMetrics:
                 span.set_status(trace.Status(trace.StatusCode.ERROR, str(e)))
                 raise
 
-
 class CustomMetrics:
     """自定义业务指标"""
     
@@ -299,7 +293,6 @@ class CustomMetrics:
         """获取时间序列数据"""
         series = self._time_series.get(name, deque())
         return list(series)[-limit:]
-
 
 class MetricsCollector:
     """
@@ -464,7 +457,6 @@ class MetricsCollector:
             }
         }
 
-
 class MetricsMiddleware:
     """指标收集中间件"""
     
@@ -542,22 +534,18 @@ class MetricsMiddleware:
                 
                 raise
 
-
 # 全局指标收集器实例
 _metrics_collector: Optional[MetricsCollector] = None
-
 
 def get_metrics_collector() -> Optional[MetricsCollector]:
     """获取全局指标收集器"""
     return _metrics_collector
-
 
 def initialize_metrics(config: MetricsConfig) -> MetricsCollector:
     """初始化指标收集器"""
     global _metrics_collector
     _metrics_collector = MetricsCollector(config)
     return _metrics_collector
-
 
 def setup_instrumentation(app):
     """设置自动化仪表"""

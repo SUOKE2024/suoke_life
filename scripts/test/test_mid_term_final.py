@@ -7,8 +7,6 @@
 import asyncio
 import time
 import logging
-import numpy as np
-import multiprocessing
 from datetime import datetime
 from typing import Dict, Any, List
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
@@ -18,7 +16,6 @@ import psutil
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-
 def normalize_data(data: np.ndarray) -> np.ndarray:
     """优化的标准化函数（无JIT）"""
     mean = np.mean(data)
@@ -27,7 +24,6 @@ def normalize_data(data: np.ndarray) -> np.ndarray:
         return ((data - mean) / std).astype(data.dtype)
     else:
         return data.copy()
-
 
 def calculate_syndrome_scores(symptoms: np.ndarray, weights: np.ndarray) -> np.ndarray:
     """优化的证候评分函数（无JIT）"""
@@ -51,7 +47,6 @@ def calculate_syndrome_scores(symptoms: np.ndarray, weights: np.ndarray) -> np.n
 
     total = np.sum(scores)
     return scores / total if total > 0 else scores
-
 
 class OptimizedTaskScheduler:
     """优化的任务调度器"""
@@ -137,7 +132,6 @@ class OptimizedTaskScheduler:
             "pending_tasks": len(self.tasks) - len(self.completed_tasks),
             "agent_stats": self.agent_stats.copy()
         }
-
 
 class OptimizedSharedMemoryProcessor:
     """优化的共享内存处理器"""
@@ -278,7 +272,6 @@ class OptimizedSharedMemoryProcessor:
             "usage_percentage": (self.total_memory / self.max_memory) * 100,
             "processing_stats": self.processing_stats.copy()
         }
-
 
 class OptimizedHybridArchitecture:
     """优化的混合架构"""
@@ -437,7 +430,6 @@ class OptimizedHybridArchitecture:
             "current_cpu_percent": psutil.cpu_percent(),
             "current_memory_percent": psutil.virtual_memory().percent
         }
-
 
 class FinalMidTermTester:
     """最终中期实施任务测试器"""
@@ -1013,12 +1005,10 @@ class FinalMidTermTester:
         print("🎊 中期实施任务圆满完成！")
         print("="*100)
 
-
 async def main():
     """主函数"""
     tester = FinalMidTermTester()
     await tester.run_all_tests()
-
 
 if __name__ == "__main__":
     asyncio.run(main())

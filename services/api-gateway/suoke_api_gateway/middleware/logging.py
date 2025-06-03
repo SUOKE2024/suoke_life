@@ -6,7 +6,6 @@
 
 import time
 import uuid
-from typing import Optional
 
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -14,7 +13,6 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from ..core.logging import get_logger, log_request_response
 
 logger = get_logger(__name__)
-
 
 class LoggingMiddleware(BaseHTTPMiddleware):
     """日志记录中间件"""

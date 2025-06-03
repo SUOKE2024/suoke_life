@@ -18,8 +18,6 @@ from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any
 
-import numpy as np
-import pandas as pd
 from loguru import logger
 from scipy import signal
 
@@ -28,14 +26,12 @@ from services.common.governance.circuit_breaker import CircuitBreakerConfig
 from services.common.governance.rate_limiter import RateLimitConfig, rate_limit
 from services.common.observability.tracing import SpanKind, trace
 
-
 class PulsePosition(Enum):
     """脉位"""
 
     FLOATING = "floating"  # 浮脉
     DEEP = "deep"  # 沉脉
     MIDDLE = "middle"  # 中脉
-
 
 class PulseRate(Enum):
     """脉率"""
@@ -44,14 +40,12 @@ class PulseRate(Enum):
     NORMAL = "normal"  # 正常 (60-100次/分)
     RAPID = "rapid"  # 数脉 (>100次/分)
 
-
 class PulseStrength(Enum):
     """脉力"""
 
     WEAK = "weak"  # 虚脉
     STRONG = "strong"  # 实脉
     MODERATE = "moderate"  # 中等
-
 
 class PulseRhythm(Enum):
     """脉律"""
@@ -60,7 +54,6 @@ class PulseRhythm(Enum):
     IRREGULAR = "irregular"  # 不齐脉
     INTERMITTENT = "intermittent"  # 结脉
     MISSED = "missed"  # 代脉
-
 
 class PulseShape(Enum):
     """脉形"""
@@ -72,7 +65,6 @@ class PulseShape(Enum):
     SLIPPERY = "slippery"  # 滑脉
     ROUGH = "rough"  # 涩脉
 
-
 @dataclass
 class PulseDataPoint:
     """脉象数据点"""
@@ -81,7 +73,6 @@ class PulseDataPoint:
     amplitude: float
     pressure: float
     channel: int = 0  # 传感器通道
-
 
 @dataclass
 class PulseAnalysisRequest:
@@ -95,7 +86,6 @@ class PulseAnalysisRequest:
     metadata: dict[str, Any] = field(default_factory=dict)
     timestamp: datetime = field(default_factory=datetime.now)
 
-
 @dataclass
 class PulseFeature:
     """脉象特征"""
@@ -105,7 +95,6 @@ class PulseFeature:
     confidence: float
     channel: int = 0
     time_range: tuple[float, float] | None = None
-
 
 @dataclass
 class PalpationResult:
@@ -120,7 +109,6 @@ class PalpationResult:
     processing_time_ms: float
     recommendations: list[str]
 
-
 @dataclass
 class BatchPulseRequest:
     """批量脉象分析请求"""
@@ -129,7 +117,6 @@ class BatchPulseRequest:
     requests: list[PulseAnalysisRequest]
     priority: int = 1
     created_at: datetime = field(default_factory=datetime.now)
-
 
 class EnhancedPalpationService:
     """增强版切诊服务"""

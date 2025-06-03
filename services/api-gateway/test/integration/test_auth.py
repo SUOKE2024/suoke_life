@@ -5,8 +5,6 @@
 认证中间件集成测试
 """
 
-import base64
-import json
 import os
 import sys
 import time
@@ -16,7 +14,6 @@ from typing import Dict, List, Optional, Tuple
 import jwt
 import pytest
 from fastapi import Depends, FastAPI, HTTPException, Security, status, Request
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from fastapi.testclient import TestClient
 
 # 添加项目根目录到Python路径
@@ -26,12 +23,10 @@ from internal.delivery.rest.middleware import AuthMiddleware, setup_middlewares
 from internal.model.config import AuthConfig, JwtConfig, MiddlewareConfig
 from pkg.utils.auth import JWTManager, TokenPayload
 
-
 # 测试密钥
 TEST_SECRET_KEY = "test_secret_key_for_auth_integration_tests"
 TEST_ALGORITHM = "HS256"
 TEST_EXPIRE_MINUTES = 30
-
 
 @pytest.fixture
 def jwt_manager():
@@ -43,7 +38,6 @@ def jwt_manager():
         refresh_expire_minutes=60 * 24
     )
     return JWTManager(config)
-
 
 @pytest.fixture
 def auth_config():
@@ -64,14 +58,12 @@ def auth_config():
         )
     )
 
-
 @pytest.fixture
 def middleware_config(auth_config):
     """创建中间件配置"""
     return MiddlewareConfig(
         auth=auth_config
     )
-
 
 @pytest.fixture
 def test_app(middleware_config):
@@ -114,12 +106,10 @@ def test_app(middleware_config):
     
     return app
 
-
 @pytest.fixture
 def client(test_app):
     """创建测试客户端"""
     return TestClient(test_app)
-
 
 def create_token(user_id: str, roles: List[str] = None, expired: bool = False) -> str:
     """创建测试令牌"""
@@ -143,7 +133,6 @@ def create_token(user_id: str, roles: List[str] = None, expired: bool = False) -
     
     token = jwt.encode(payload, TEST_SECRET_KEY, algorithm=TEST_ALGORITHM)
     return token
-
 
 class TestAuthMiddleware:
     """认证中间件测试"""

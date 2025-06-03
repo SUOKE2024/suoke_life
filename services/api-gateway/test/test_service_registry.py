@@ -11,15 +11,12 @@ import unittest
 from unittest.mock import AsyncMock, MagicMock, Mock, patch
 
 import pytest
-from fastapi import FastAPI
-from fastapi.testclient import TestClient
 
 # 添加项目根目录到Python路径
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from internal.model.config import GatewayConfig, ServiceConfig, ServiceEndpointConfig, ServiceDiscoveryConfig
 from internal.service.service_registry import ServiceRegistry, ConsulServiceRegistry, KubernetesServiceRegistry
-
 
 class TestServiceRegistry:
     """服务注册表测试类"""
@@ -438,7 +435,6 @@ async def test_service_registry_health_check():
         assert "healthy1.example.com" in service_addresses
         assert "healthy2.example.com" in service_addresses
         assert "unhealthy.example.com" not in service_addresses
-
 
 if __name__ == "__main__":
     unittest.main() 

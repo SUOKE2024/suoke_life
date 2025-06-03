@@ -9,11 +9,9 @@ import logging
 import time
 from typing import Any
 
-import motor.motor_asyncio
 import pymongo
 
 logger = logging.getLogger(__name__)
-
 
 class SessionRepository:
     """会话存储库类，负责会话数据的存储和查询"""

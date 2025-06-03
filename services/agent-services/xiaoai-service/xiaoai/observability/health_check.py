@@ -16,11 +16,9 @@ from dataclasses import dataclass, field
 import psutil
 
 # 导入Proto生成的类
-from ...api.grpc import xiaoai_service_pb2 as service_pb
 
 # 设置日志
 logger = logging.getLogger(__name__)
-
 
 @dataclass
 class HealthStatus:
@@ -30,7 +28,6 @@ class HealthStatus:
     dependencies: dict[str, 'DependencyStatus'] = field(default_factory=dict)
     lastcheck_time: float = 0
 
-
 @dataclass
 class DependencyStatus:
     """依赖服务状态数据类"""
@@ -39,7 +36,6 @@ class DependencyStatus:
     latencyms: float = 0
     errormessage: str = ""
     lastcheck_time: float = 0
-
 
 class HealthChecker:
     """健康检查器实现"""
@@ -229,10 +225,8 @@ class HealthChecker:
 
         return response
 
-
 # 单例模式
 health_checker = None
-
 
 def get_health_checker() -> HealthChecker:
     """
@@ -246,7 +240,6 @@ def get_health_checker() -> HealthChecker:
         HealthChecker()
 
     return _health_checker
-
 
 async def check_look_service_health() -> DependencyStatus:
     """检查望诊服务健康状态"""
@@ -270,7 +263,6 @@ async def check_look_service_health() -> DependencyStatus:
             last_check_time=time.time()
         )
 
-
 async def check_listen_service_health() -> DependencyStatus:
     """检查闻诊服务健康状态"""
     from internal.integration.listen_service_client import get_listen_service_client
@@ -292,7 +284,6 @@ async def check_listen_service_health() -> DependencyStatus:
             error_message=str(e),
             last_check_time=time.time()
         )
-
 
 async def check_inquiry_service_health() -> DependencyStatus:
     """检查问诊服务健康状态"""
@@ -316,7 +307,6 @@ async def check_inquiry_service_health() -> DependencyStatus:
             last_check_time=time.time()
         )
 
-
 async def check_palpation_service_health() -> DependencyStatus:
     """检查切诊服务健康状态"""
 
@@ -337,7 +327,6 @@ async def check_palpation_service_health() -> DependencyStatus:
             error_message=str(e),
             last_check_time=time.time()
         )
-
 
 async def setup_health_checker():
     """设置健康检查器并注册所有依赖服务检查"""

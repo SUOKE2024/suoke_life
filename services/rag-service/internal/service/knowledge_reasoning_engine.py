@@ -5,7 +5,6 @@
 知识图谱推理引擎 - 基于中医理论的智能推理和决策支持系统
 """
 
-import asyncio
 import json
 import uuid
 from typing import Dict, List, Any, Optional, Tuple, Set, Union
@@ -13,11 +12,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from datetime import datetime, timedelta
 from loguru import logger
-import networkx as nx
-import numpy as np
 from collections import defaultdict, deque
-import re
-
 
 class ReasoningType(Enum):
     """推理类型"""
@@ -30,7 +25,6 @@ class ReasoningType(Enum):
     LIFESTYLE_GUIDANCE = "lifestyle_guidance"              # 生活指导
     PROGNOSIS_PREDICTION = "prognosis_prediction"          # 预后预测
 
-
 class ConfidenceLevel(Enum):
     """置信度级别"""
     VERY_LOW = "very_low"      # 很低 (0-0.2)
@@ -38,7 +32,6 @@ class ConfidenceLevel(Enum):
     MEDIUM = "medium"          # 中等 (0.4-0.6)
     HIGH = "high"              # 高 (0.6-0.8)
     VERY_HIGH = "very_high"    # 很高 (0.8-1.0)
-
 
 class EvidenceType(Enum):
     """证据类型"""
@@ -52,7 +45,6 @@ class EvidenceType(Enum):
     MEDICAL_HISTORY = "medical_history"    # 病史
     LAB_RESULT = "lab_result"             # 检验结果
 
-
 @dataclass
 class Evidence:
     """证据"""
@@ -64,7 +56,6 @@ class Evidence:
     timestamp: datetime
     source: str
     metadata: Dict[str, Any] = field(default_factory=dict)
-
 
 @dataclass
 class ReasoningRule:
@@ -79,7 +70,6 @@ class ReasoningRule:
     priority: int = 1
     enabled: bool = True
     metadata: Dict[str, Any] = field(default_factory=dict)
-
 
 @dataclass
 class ReasoningResult:
@@ -97,7 +87,6 @@ class ReasoningResult:
     timestamp: datetime = field(default_factory=datetime.now)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
-
 @dataclass
 class KnowledgeNode:
     """知识节点"""
@@ -106,7 +95,6 @@ class KnowledgeNode:
     name: str
     properties: Dict[str, Any] = field(default_factory=dict)
     relationships: Dict[str, List[str]] = field(default_factory=dict)
-
 
 @dataclass
 class KnowledgeRelation:
@@ -117,7 +105,6 @@ class KnowledgeRelation:
     relation_type: str
     properties: Dict[str, Any] = field(default_factory=dict)
     weight: float = 1.0
-
 
 class KnowledgeReasoningEngine:
     """知识图谱推理引擎"""

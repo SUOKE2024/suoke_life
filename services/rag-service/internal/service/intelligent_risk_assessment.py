@@ -5,29 +5,23 @@
 智能风险评估引擎 - 提供健康风险评估、疾病预测、风险分层、预防建议
 """
 
-import asyncio
 import time
-import json
-import numpy as np
 from typing import Dict, List, Any, Optional, Tuple, Union, Set
 from dataclasses import dataclass, field
 from enum import Enum
 from datetime import datetime, timedelta
 from loguru import logger
-import pandas as pd
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
 from sklearn.calibration import CalibratedClassifierCV
-import joblib
 import warnings
 warnings.filterwarnings('ignore')
 
 from ..observability.metrics import MetricsCollector
 from ..observability.tracing import trace_operation, SpanKind
-
 
 class RiskLevel(str, Enum):
     """风险级别"""
@@ -37,7 +31,6 @@ class RiskLevel(str, Enum):
     HIGH = "high"               # 高风险
     VERY_HIGH = "very_high"     # 极高风险
     CRITICAL = "critical"       # 危急风险
-
 
 class RiskCategory(str, Enum):
     """风险类别"""
@@ -54,14 +47,12 @@ class RiskCategory(str, Enum):
     OSTEOPOROSIS = "osteoporosis"               # 骨质疏松
     INFECTIOUS_DISEASE = "infectious_disease"   # 感染性疾病
 
-
 class RiskTimeframe(str, Enum):
     """风险时间框架"""
     SHORT_TERM = "short_term"       # 短期（1-6个月）
     MEDIUM_TERM = "medium_term"     # 中期（6个月-2年）
     LONG_TERM = "long_term"         # 长期（2-10年）
     LIFETIME = "lifetime"           # 终生
-
 
 class RiskFactorType(str, Enum):
     """风险因子类型"""
@@ -72,7 +63,6 @@ class RiskFactorType(str, Enum):
     GENETIC = "genetic"                 # 遗传因素
     CLINICAL = "clinical"               # 临床因素
 
-
 class InterventionType(str, Enum):
     """干预类型"""
     LIFESTYLE = "lifestyle"             # 生活方式
@@ -81,7 +71,6 @@ class InterventionType(str, Enum):
     MONITORING = "monitoring"           # 监测
     EDUCATION = "education"             # 健康教育
     SURGERY = "surgery"                 # 手术治疗
-
 
 @dataclass
 class RiskFactor:
@@ -97,7 +86,6 @@ class RiskFactor:
     last_updated: datetime = field(default_factory=datetime.now)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
-
 @dataclass
 class RiskScore:
     """风险评分"""
@@ -111,7 +99,6 @@ class RiskScore:
     calculated_at: datetime = field(default_factory=datetime.now)
     model_version: str = "1.0"
     metadata: Dict[str, Any] = field(default_factory=dict)
-
 
 @dataclass
 class RiskPrediction:
@@ -127,7 +114,6 @@ class RiskPrediction:
     created_at: datetime = field(default_factory=datetime.now)
     expires_at: Optional[datetime] = None
     metadata: Dict[str, Any] = field(default_factory=dict)
-
 
 @dataclass
 class PreventionRecommendation:
@@ -150,7 +136,6 @@ class PreventionRecommendation:
     evidence_level: str = "moderate"            # 证据级别
     created_at: datetime = field(default_factory=datetime.now)
 
-
 @dataclass
 class RiskAssessmentProfile:
     """风险评估档案"""
@@ -165,7 +150,6 @@ class RiskAssessmentProfile:
     risk_preferences: Dict[str, Any]            # 风险偏好
     created_at: datetime = field(default_factory=datetime.now)
     updated_at: datetime = field(default_factory=datetime.now)
-
 
 class RiskCalculator:
     """风险计算器"""
@@ -370,7 +354,6 @@ class RiskCalculator:
         count_factor = min(factor_count / 10.0, 1.0)  # 10个因子为满分
         
         return avg_confidence * count_factor
-
 
 class PredictiveModel:
     """预测模型"""
@@ -842,7 +825,6 @@ class PredictiveModel:
             logger.error(f"生成风险轨迹失败: {e}")
             return []
 
-
 class PreventionEngine:
     """预防引擎"""
     
@@ -1151,7 +1133,6 @@ class PreventionEngine:
                 unique_recommendations.append(rec)
         
         return unique_recommendations
-
 
 class IntelligentRiskAssessment:
     """智能风险评估引擎"""
@@ -1530,7 +1511,6 @@ class IntelligentRiskAssessment:
             logger.error(f"获取评估统计失败: {e}")
             return {}
 
-
 def initialize_risk_assessment(
     config: Dict[str, Any],
     metrics_collector: Optional[MetricsCollector] = None
@@ -1538,10 +1518,8 @@ def initialize_risk_assessment(
     """初始化智能风险评估引擎"""
     return IntelligentRiskAssessment(config, metrics_collector)
 
-
 # 全局实例
 _risk_assessment_instance: Optional[IntelligentRiskAssessment] = None
-
 
 def get_risk_assessment() -> Optional[IntelligentRiskAssessment]:
     """获取风险评估引擎实例"""

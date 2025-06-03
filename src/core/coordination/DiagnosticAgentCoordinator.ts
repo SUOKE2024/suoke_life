@@ -1,10 +1,10 @@
-import { EventEmitter } from 'events';
-import { Logger } from '../monitoring/Logger';
-import { MetricsCollector } from '../monitoring/MetricsCollector';
-import { ErrorHandler } from '../error/ErrorHandler';
+import { EventEmitter } from "events";
+import { Logger } from "../monitoring/Logger";
+import { MetricsCollector } from "../monitoring/MetricsCollector";
+import { ErrorHandler } from "../error/ErrorHandler";
 
 export interface DiagnosticResult {
-  serviceType: 'calculation' | 'look' | 'listen' | 'inquiry' | 'palpation';
+  serviceType: "calculation" | "look" | "listen" | "inquiry" | "palpation";
   timestamp: number;
   data: any;
   confidence: number;
@@ -16,7 +16,7 @@ export interface DiagnosticResult {
 }
 
 export interface AgentResponse {
-  agentType: 'xiaoai' | 'xiaoke' | 'laoke' | 'soer';
+  agentType: "xiaoai" | "xiaoke" | "laoke" | "soer";
   timestamp: number;
   analysis: any;
   recommendations: any[];
@@ -35,7 +35,7 @@ export interface CoordinationSession {
   diagnosticResults: DiagnosticResult[];
   agentResponses: AgentResponse[];
   consensusResult?: any;
-  status: 'active' | 'completed' | 'failed';
+  status: "active" | "completed" | "failed";
 }
 
 export class DiagnosticAgentCoordinator extends EventEmitter {
@@ -47,7 +47,7 @@ export class DiagnosticAgentCoordinator extends EventEmitter {
 
   constructor() {
     super();
-    this.logger = new Logger('DiagnosticAgentCoordinator');
+    this.logger = new Logger("DiagnosticAgentCoordinator");
     this.metrics = new MetricsCollector();
     this.errorHandler = new ErrorHandler();
     this.activeSessions = new Map();
@@ -66,17 +66,17 @@ export class DiagnosticAgentCoordinator extends EventEmitter {
         startTime: Date.now(),
         diagnosticResults: [],
         agentResponses: [],
-        status: 'active'
+        status: "active"
       };
 
       this.activeSessions.set(id, session);
       this.logger.info(`协同会话已启动: ${id}`, { userId });
-      this.metrics.incrementCounter('coordination_sessions_started');
+      this.metrics.incrementCounter("coordination_sessions_started");
+      this.emit("sessionStarted", { sessionId: id, userId });
 
-      this.emit('sessionStarted', { sessionId: id, userId });
       return id;
     } catch (error) {
-      this.errorHandler.handleError(error, 'startCoordinationSession');
+      this.errorHandler.handleError(error, "startCoordinationSession");
       throw error;
     }
   }
@@ -93,14 +93,13 @@ export class DiagnosticAgentCoordinator extends EventEmitter {
 
       session.diagnosticResults.push(result);
       this.logger.info(`收到诊断结果: ${result.serviceType}`, { sessionId, confidence: result.confidence });
-      this.metrics.incrementCounter('diagnostic_results_received', { service: result.serviceType });
-
-      this.emit('diagnosticResultReceived', { sessionId, result });
+      this.metrics.incrementCounter("diagnostic_results_received", { service: result.serviceType });
+      this.emit("diagnosticResultReceived", { sessionId, result });
 
       // 检查是否可以触发智能体分析
       await this.checkForAgentTrigger(sessionId);
     } catch (error) {
-      this.errorHandler.handleError(error, 'receiveDiagnosticResult');
+      this.errorHandler.handleError(error, "receiveDiagnosticResult");
       throw error;
     }
   }
@@ -117,14 +116,13 @@ export class DiagnosticAgentCoordinator extends EventEmitter {
 
       session.agentResponses.push(response);
       this.logger.info(`收到智能体响应: ${response.agentType}`, { sessionId, confidence: response.confidence });
-      this.metrics.incrementCounter('agent_responses_received', { agent: response.agentType });
-
-      this.emit('agentResponseReceived', { sessionId, response });
+      this.metrics.incrementCounter("agent_responses_received", { agent: response.agentType });
+      this.emit("agentResponseReceived", { sessionId, response });
 
       // 检查是否可以生成共识结果
       await this.checkForConsensus(sessionId);
     } catch (error) {
-      this.errorHandler.handleError(error, 'receiveAgentResponse');
+      this.errorHandler.handleError(error, "receiveAgentResponse");
       throw error;
     }
   }
@@ -138,9 +136,8 @@ export class DiagnosticAgentCoordinator extends EventEmitter {
 
     // 当收集到足够的诊断数据时，触发智能体分析
     const diagnosticTypes = new Set(session.diagnosticResults.map(r => r.serviceType));
-    
     if (diagnosticTypes.size >= 3) { // 至少3种诊断类型
-      this.emit('triggerAgentAnalysis', {
+      this.emit("triggerAgentAnalysis", {
         sessionId,
         diagnosticResults: session.diagnosticResults
       });
@@ -157,15 +154,12 @@ export class DiagnosticAgentCoordinator extends EventEmitter {
     // 当收集到足够的智能体响应时，计算共识
     if (session.agentResponses.length >= 2) { // 至少2个智能体响应
       const consensus = await this.calculateConsensus(session);
-      
       if (consensus.confidence >= this.consensusThreshold) {
         session.consensusResult = consensus;
-        session.status = 'completed';
-        
+        session.status = "completed";
         this.logger.info(`达成共识`, { sessionId, confidence: consensus.confidence });
-        this.metrics.incrementCounter('consensus_reached');
-        
-        this.emit('consensusReached', {
+        this.metrics.incrementCounter("consensus_reached");
+        this.emit("consensusReached", {
           sessionId,
           consensus: consensus.result,
           confidence: consensus.confidence
@@ -205,15 +199,14 @@ export class DiagnosticAgentCoordinator extends EventEmitter {
     });
 
     const confidence = totalWeight / responses.length;
-
+    
     // 生成最终共识结果
     const finalResult: any = {};
     Object.keys(consensusData).forEach(key => {
       const items = consensusData[key];
-      const weightedAvg = items.reduce((sum: number, item: any) => 
+      const weightedAvg = items.reduce((sum: number, item: any) =>
         sum + (item.value * item.weight), 0) / items.reduce((sum: number, item: any) => 
         sum + item.weight, 0);
-      
       finalResult[key] = {
         value: weightedAvg,
         sources: items.map((item: any) => item.agent),
@@ -240,55 +233,12 @@ export class DiagnosticAgentCoordinator extends EventEmitter {
   async endSession(sessionId: string): Promise<void> {
     const session = this.activeSessions.get(sessionId);
     if (session) {
-      session.status = 'completed';
+      session.status = "completed";
       this.activeSessions.delete(sessionId);
       this.logger.info(`协同会话已结束: ${sessionId}`);
-      this.metrics.incrementCounter('coordination_sessions_ended');
-      this.emit('sessionEnded', { sessionId });
+      this.metrics.incrementCounter("coordination_sessions_ended");
+      this.emit("sessionEnded", { sessionId });
     }
-  }
-
-  /**
-   * 验证诊断结果一致性
-   */
-  async validateDiagnosticConsistency(sessionId: string): Promise<{
-    isConsistent: boolean;
-    inconsistencies: string[];
-    confidence: number;
-  }> {
-    const session = this.activeSessions.get(sessionId);
-    if (!session) {
-      throw new Error(`会话不存在: ${sessionId}`);
-    }
-
-    const inconsistencies: string[] = [];
-    let consistencyScore = 1.0;
-
-    // 检查诊断结果之间的一致性
-    const results = session.diagnosticResults;
-    
-    // 时间一致性检查
-    const timeSpan = Math.max(...results.map(r => r.timestamp)) - Math.min(...results.map(r => r.timestamp));
-    if (timeSpan > 30 * 60 * 1000) { // 超过30分钟
-      inconsistencies.push('诊断时间跨度过大');
-      consistencyScore *= 0.9;
-    }
-
-    // 置信度一致性检查
-    const confidences = results.map(r => r.confidence);
-    const avgConfidence = confidences.reduce((a, b) => a + b, 0) / confidences.length;
-    const confidenceVariance = confidences.reduce((sum, conf) => sum + Math.pow(conf - avgConfidence, 2), 0) / confidences.length;
-    
-    if (confidenceVariance > 0.1) { // 置信度差异过大
-      inconsistencies.push('诊断置信度差异过大');
-      consistencyScore *= 0.8;
-    }
-
-    return {
-      isConsistent: inconsistencies.length === 0,
-      inconsistencies,
-      confidence: consistencyScore
-    };
   }
 
   /**
@@ -299,21 +249,33 @@ export class DiagnosticAgentCoordinator extends EventEmitter {
   }
 
   /**
-   * 获取协同统计信息
+   * 获取活跃会话数量
    */
-  getCoordinationStats(): {
-    activeSessions: number;
-    totalSessions: number;
-    averageConsensusTime: number;
-    consensusRate: number;
-  } {
-    return {
-      activeSessions: this.activeSessions.size,
-      totalSessions: this.metrics.getCounter('coordination_sessions_started') || 0,
-      averageConsensusTime: this.metrics.getGauge('average_consensus_time') || 0,
-      consensusRate: this.metrics.getGauge('consensus_rate') || 0
-    };
+  getActiveSessionCount(): number {
+    return this.activeSessions.size;
+  }
+
+  /**
+   * 清理过期会话
+   */
+  async cleanupExpiredSessions(maxAge: number = 3600000): Promise<void> {
+    const now = Date.now();
+    const expiredSessions: string[] = [];
+
+    for (const [sessionId, session] of this.activeSessions.entries()) {
+      if (now - session.startTime > maxAge) {
+        expiredSessions.push(sessionId);
+      }
+    }
+
+    for (const sessionId of expiredSessions) {
+      await this.endSession(sessionId);
+    }
+
+    if (expiredSessions.length > 0) {
+      this.logger.info(`清理了${expiredSessions.length}个过期会话`);
+    }
   }
 }
 
-export default DiagnosticAgentCoordinator; 
+export default DiagnosticAgentCoordinator;

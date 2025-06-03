@@ -2,11 +2,8 @@
 
 """切诊服务客户端集成"""
 
-
 import grpc
 from google.protobuf.any_pb2 import Any
-from xiaoai_service.protos import palpation_service_pb2 as palpation_pb
-from xiaoai_service.protos import palpation_service_pb2_grpc as palpation_grpc
 
 # 使用loguru logger
 

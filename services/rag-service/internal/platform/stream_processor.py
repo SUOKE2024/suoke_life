@@ -8,17 +8,14 @@
 import asyncio
 import time
 import uuid
-import json
 from typing import Dict, List, Any, Optional, Callable, AsyncGenerator, Union
 from dataclasses import dataclass, field
 from enum import Enum
 from collections import deque
-import weakref
 from loguru import logger
 
 from ..observability.metrics import MetricsCollector
 from ..observability.tracing import trace_operation, SpanKind
-
 
 class EventType(str, Enum):
     """事件类型"""
@@ -31,7 +28,6 @@ class EventType(str, Enum):
     USER_FEEDBACK = "user_feedback"     # 用户反馈
     BATCH_COMPLETE = "batch_complete"   # 批处理完成
 
-
 class EventPriority(int, Enum):
     """事件优先级"""
     LOW = 1
@@ -40,7 +36,6 @@ class EventPriority(int, Enum):
     CRITICAL = 4
     EMERGENCY = 5
 
-
 class StreamState(str, Enum):
     """流状态"""
     IDLE = "idle"                       # 空闲
@@ -48,7 +43,6 @@ class StreamState(str, Enum):
     BACKPRESSURE = "backpressure"      # 背压
     ERROR = "error"                     # 错误
     SHUTDOWN = "shutdown"               # 关闭
-
 
 @dataclass
 class StreamEvent:
@@ -77,7 +71,6 @@ class StreamEvent:
             "max_retries": self.max_retries
         }
 
-
 @dataclass
 class ProcessingResult:
     """处理结果"""
@@ -98,7 +91,6 @@ class ProcessingResult:
             "processing_time": self.processing_time,
             "metadata": self.metadata
         }
-
 
 class EventHandler:
     """事件处理器基类"""
@@ -122,7 +114,6 @@ class EventHandler:
         logger.error(f"事件处理失败: {self.name} - {error}")
         self.error_count += 1
         return event.retry_count < event.max_retries
-
 
 class RAGQueryHandler(EventHandler):
     """RAG查询处理器"""
@@ -177,7 +168,6 @@ class RAGQueryHandler(EventHandler):
                 processing_time=processing_time,
                 metadata={"handler": self.name}
             )
-
 
 class DataUpdateHandler(EventHandler):
     """数据更新处理器"""
@@ -235,7 +225,6 @@ class DataUpdateHandler(EventHandler):
                 metadata={"handler": self.name}
             )
 
-
 class CacheInvalidationHandler(EventHandler):
     """缓存失效处理器"""
     
@@ -285,7 +274,6 @@ class CacheInvalidationHandler(EventHandler):
                 processing_time=processing_time,
                 metadata={"handler": self.name}
             )
-
 
 class EventQueue:
     """事件队列"""
@@ -338,7 +326,6 @@ class EventQueue:
     async def is_empty(self) -> bool:
         """检查队列是否为空"""
         return self.total_size == 0
-
 
 class BackpressureController:
     """背压控制器"""
@@ -393,7 +380,6 @@ class BackpressureController:
         if self.backpressure_active:
             return 0.1  # 100ms延迟
         return 0.0
-
 
 class StreamProcessor:
     """流处理器"""
@@ -619,7 +605,6 @@ class StreamProcessor:
             "handlers": handler_stats
         }
 
-
 class StreamingRAGProcessor:
     """流式RAG处理器"""
     
@@ -671,10 +656,8 @@ class StreamingRAGProcessor:
         
         yield {"status": "completed", "correlation_id": correlation_id}
 
-
 # 全局流处理器实例
 _stream_processor: Optional[StreamProcessor] = None
-
 
 def initialize_stream_processor(
     metrics_collector: Optional[MetricsCollector] = None,
@@ -686,11 +669,9 @@ def initialize_stream_processor(
     _stream_processor = StreamProcessor(metrics_collector, max_workers, max_queue_size)
     return _stream_processor
 
-
 def get_stream_processor() -> Optional[StreamProcessor]:
     """获取流处理器实例"""
     return _stream_processor
-
 
 # 便捷的事件提交函数
 async def submit_user_query(
@@ -716,7 +697,6 @@ async def submit_user_query(
     
     return await _stream_processor.submit_event(event)
 
-
 async def submit_data_update(
     operation: str,
     document_id: str,
@@ -739,7 +719,6 @@ async def submit_data_update(
     )
     
     return await _stream_processor.submit_event(event)
-
 
 async def submit_cache_invalidation(
     cache_keys: Optional[List[str]] = None,

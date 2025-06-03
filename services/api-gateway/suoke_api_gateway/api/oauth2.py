@@ -8,7 +8,6 @@ OAuth2/OIDC API 端点
 """
 
 from typing import Dict, Any, Optional
-from urllib.parse import unquote
 
 from fastapi import APIRouter, HTTPException, Depends, Form, Query, Request
 from fastapi.responses import RedirectResponse, JSONResponse, HTMLResponse
@@ -22,7 +21,6 @@ logger = get_logger(__name__)
 router = APIRouter(prefix="/oauth2", tags=["oauth2"])
 security = HTTPBearer(auto_error=False)
 
-
 @router.get("/.well-known/openid_configuration")
 async def openid_configuration(
     oauth2_provider: OAuth2Provider = Depends(get_oauth2_provider),
@@ -34,7 +32,6 @@ async def openid_configuration(
     """
     return oauth2_provider.get_openid_configuration()
 
-
 @router.get("/jwks")
 async def jwks(
     oauth2_provider: OAuth2Provider = Depends(get_oauth2_provider),
@@ -45,7 +42,6 @@ async def jwks(
     返回用于验证 JWT 令牌的公钥。
     """
     return oauth2_provider.get_jwks()
-
 
 @router.get("/authorize")
 async def authorize(
@@ -112,7 +108,6 @@ async def authorize(
     except Exception as e:
         logger.error("Authorization request failed", error=str(e))
         raise HTTPException(status_code=500, detail="Internal server error")
-
 
 @router.get("/authorize/consent")
 async def authorization_consent_page(
@@ -202,7 +197,6 @@ async def authorization_consent_page(
     
     return HTMLResponse(content=html_content)
 
-
 @router.post("/authorize/approve")
 async def approve_authorization(
     response_type: str = Form(...),
@@ -241,7 +235,6 @@ async def approve_authorization(
     
     return RedirectResponse(url=result["redirect_url"])
 
-
 @router.post("/authorize/deny")
 async def deny_authorization(
     redirect_uri: str = Form(...),
@@ -257,7 +250,6 @@ async def deny_authorization(
     
     error_url = f"{redirect_uri}?{urlencode(error_params)}"
     return RedirectResponse(url=error_url)
-
 
 @router.post("/token")
 async def token_endpoint(
@@ -332,7 +324,6 @@ async def token_endpoint(
         logger.error("Token request failed", error=str(e))
         raise HTTPException(status_code=500, detail="Internal server error")
 
-
 @router.get("/userinfo")
 async def userinfo_endpoint(
     credentials: Optional[HTTPAuthorizationCredentials] = Depends(security),
@@ -361,7 +352,6 @@ async def userinfo_endpoint(
     except Exception as e:
         logger.error("Userinfo request failed", error=str(e))
         raise HTTPException(status_code=500, detail="Internal server error")
-
 
 @router.post("/revoke")
 async def revoke_token(
@@ -406,7 +396,6 @@ async def revoke_token(
     except Exception as e:
         logger.error("Token revocation failed", error=str(e))
         raise HTTPException(status_code=500, detail="Internal server error")
-
 
 @router.get("/introspect")
 async def introspect_token(
@@ -461,7 +450,6 @@ async def introspect_token(
         logger.error("Token introspection failed", error=str(e))
         raise HTTPException(status_code=500, detail="Internal server error")
 
-
 @router.get("/clients")
 async def list_clients(
     oauth2_provider: OAuth2Provider = Depends(get_oauth2_provider),
@@ -496,7 +484,6 @@ async def list_clients(
         logger.error("Failed to list OAuth2 clients", error=str(e))
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @router.get("/stats")
 async def oauth2_stats(
     oauth2_provider: OAuth2Provider = Depends(get_oauth2_provider),
@@ -518,7 +505,6 @@ async def oauth2_stats(
     except Exception as e:
         logger.error("Failed to get OAuth2 stats", error=str(e))
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @router.post("/cleanup")
 async def cleanup_expired_tokens(

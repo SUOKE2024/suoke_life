@@ -10,7 +10,6 @@ API 版本管理中间件
 import re
 from enum import Enum
 from typing import Dict, List, Optional, Tuple
-from urllib.parse import urlparse, parse_qs
 
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -20,7 +19,6 @@ from ..core.logging import get_logger
 
 logger = get_logger(__name__)
 
-
 class VersionStrategy(Enum):
     """版本控制策略"""
     URL_PATH = "url_path"          # /v1/users, /v2/users
@@ -28,7 +26,6 @@ class VersionStrategy(Enum):
     HEADER = "header"              # Accept: application/vnd.api+json;version=1
     SUBDOMAIN = "subdomain"        # v1.api.example.com
     CUSTOM_HEADER = "custom_header" # X-API-Version: v1
-
 
 class VersionInfo:
     """版本信息"""
@@ -92,7 +89,6 @@ class VersionInfo:
     
     def __ge__(self, other) -> bool:
         return not self < other
-
 
 class VersionMatcher:
     """版本匹配器"""
@@ -161,7 +157,6 @@ class VersionMatcher:
         # 简单的通配符匹配
         pattern = pattern.replace('*', '.*')
         return bool(re.match(pattern, route))
-
 
 class APIVersioningMiddleware(BaseHTTPMiddleware):
     """API 版本管理中间件"""
@@ -404,7 +399,6 @@ class APIVersioningMiddleware(BaseHTTPMiddleware):
                 supported_version.deprecation_date = deprecation_date
                 supported_version.sunset_date = sunset_date
                 break
-
 
 def create_versioning_middleware(
     strategy: VersionStrategy = VersionStrategy.URL_PATH,

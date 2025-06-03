@@ -4,18 +4,15 @@
 包含所有微服务的完整集成验证
 """
 
-import asyncio
 import json
 import logging
 import time
 from datetime import datetime
 from http.server import HTTPServer, BaseHTTPRequestHandler
-from socketserver import ThreadingMixIn
 from threading import Thread
 from urllib.parse import urlparse, parse_qs
 import uuid
 import hashlib
-import base64
 
 # 配置日志
 logging.basicConfig(

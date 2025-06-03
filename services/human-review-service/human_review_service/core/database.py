@@ -5,7 +5,6 @@ Database Connection and Session Management
 管理 PostgreSQL 数据库连接、会话和事务
 """
 
-import asyncio
 import os
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
@@ -28,7 +27,6 @@ logger = structlog.get_logger(__name__)
 # 全局数据库引擎和会话工厂
 _engine: AsyncEngine | None = None
 _session_factory: async_sessionmaker[AsyncSession] | None = None
-
 
 def create_engine() -> AsyncEngine:
     """
@@ -71,7 +69,6 @@ def create_engine() -> AsyncEngine:
     logger.info("Database engine created successfully")
     return engine
 
-
 def create_session_factory(engine: AsyncEngine) -> async_sessionmaker[AsyncSession]:
     """
     创建会话工厂
@@ -89,7 +86,6 @@ def create_session_factory(engine: AsyncEngine) -> async_sessionmaker[AsyncSessi
         autoflush=True,
         autocommit=False,
     )
-
 
 async def init_database() -> None:
     """
@@ -151,7 +147,6 @@ async def init_database() -> None:
         logger.error("Failed to initialize database", error=str(e))
         raise DatabaseError(f"Database initialization failed: {e}") from e
 
-
 async def close_database() -> None:
     """
     关闭数据库连接
@@ -170,7 +165,6 @@ async def close_database() -> None:
 
     logger.info("Database connection closed")
 
-
 async def create_tables() -> None:
     """
     创建数据库表
@@ -184,7 +178,6 @@ async def create_tables() -> None:
         await conn.run_sync(Base.metadata.create_all)
 
     logger.info("Database tables created successfully")
-
 
 async def drop_tables() -> None:
     """
@@ -203,7 +196,6 @@ async def drop_tables() -> None:
 
     logger.warning("All database tables dropped")
 
-
 def get_engine() -> AsyncEngine:
     """
     获取数据库引擎
@@ -218,7 +210,6 @@ def get_engine() -> AsyncEngine:
         raise RuntimeError("Database not initialized. Call init_database() first.")
     return _engine
 
-
 def get_session_factory() -> async_sessionmaker[AsyncSession]:
     """
     获取会话工厂
@@ -232,7 +223,6 @@ def get_session_factory() -> async_sessionmaker[AsyncSession]:
     if _session_factory is None:
         raise RuntimeError("Database not initialized. Call init_database() first.")
     return _session_factory
-
 
 @asynccontextmanager
 async def get_session() -> AsyncGenerator[AsyncSession, None]:
@@ -257,7 +247,6 @@ async def get_session() -> AsyncGenerator[AsyncSession, None]:
         finally:
             await session.close()
 
-
 async def get_session_dependency() -> AsyncGenerator[AsyncSession, None]:
     """
     FastAPI 依赖注入用的会话获取函数
@@ -267,7 +256,6 @@ async def get_session_dependency() -> AsyncGenerator[AsyncSession, None]:
     """
     async with get_session() as session:
         yield session
-
 
 class DatabaseHealthCheck:
     """数据库健康检查"""
@@ -355,7 +343,6 @@ class DatabaseHealthCheck:
             logger.error("Failed to get database info", error=str(e))
             return {"status": "unhealthy", "error": str(e)}
 
-
 # 数据库事务装饰器
 def transactional(func):
     """
@@ -380,7 +367,6 @@ def transactional(func):
 
     return wrapper
 
-
 # 数据库迁移辅助函数
 async def run_migrations() -> None:
     """
@@ -396,7 +382,6 @@ async def run_migrations() -> None:
     except Exception as e:
         logger.error("Database migrations failed", error=str(e))
         raise
-
 
 # 数据库备份和恢复（生产环境使用）
 class DatabaseBackup:

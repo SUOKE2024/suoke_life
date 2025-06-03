@@ -15,13 +15,11 @@ from typing import Any
 
 from loguru import logger
 from PIL import Image
-import speech_recognition as sr
 
 from ..common.base import BaseService
 from ..common.cache import cached
 from ..common.exceptions import InquiryServiceError
 from ..common.metrics import counter, memory_optimized, timer
-
 
 class InputType(Enum):
     """输入类型"""
@@ -32,7 +30,6 @@ class InputType(Enum):
     VIDEO = "video"
     DOCUMENT = "document"
 
-
 class ProcessingStatus(Enum):
     """处理状态"""
 
@@ -40,7 +37,6 @@ class ProcessingStatus(Enum):
     PROCESSING = "processing"
     COMPLETED = "completed"
     FAILED = "failed"
-
 
 @dataclass
 class InputData:
@@ -51,7 +47,6 @@ class InputData:
     content: str | bytes
     metadata: dict[str, Any] = field(default_factory=dict)
     timestamp: datetime = field(default_factory=datetime.now)
-
 
 @dataclass
 class ProcessingResult:
@@ -66,7 +61,6 @@ class ProcessingResult:
     error_message: str = ""
     metadata: dict[str, Any] = field(default_factory=dict)
 
-
 @dataclass
 class VoiceAnalysis:
     """语音分析结果"""
@@ -79,7 +73,6 @@ class VoiceAnalysis:
     confidence: float = 0.0
     language: str = "zh-CN"
 
-
 @dataclass
 class ImageAnalysis:
     """图像分析结果"""
@@ -90,7 +83,6 @@ class ImageAnalysis:
     text_content: str = ""
     quality_score: float = 0.0
     confidence: float = 0.0
-
 
 class MultimodalProcessor(BaseService):
     """多模态输入处理器"""

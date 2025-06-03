@@ -19,9 +19,7 @@ from pathlib import Path
 from typing import Any
 
 import aiofiles
-import aiofiles.os
 import etcd3
-import redis.asyncio as redis
 import yaml
 from pydantic import BaseModel, ValidationError
 from watchdog.events import FileSystemEventHandler

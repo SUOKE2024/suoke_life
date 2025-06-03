@@ -4,8 +4,6 @@
 包含经络时间对应关系、穴位开合时间等数据
 """
 
-from typing import Dict, List, Tuple
-
 # 十二经络子午流注时间表
 MERIDIAN_TIME_MAP = {
     "肺经": {

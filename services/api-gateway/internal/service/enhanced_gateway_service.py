@@ -14,7 +14,6 @@ from typing import Dict, Any, List, Optional, Callable
 from dataclasses import dataclass
 from enum import Enum
 import aiohttp
-from urllib.parse import urlparse
 
 # 导入通用组件
 from services.common.governance.circuit_breaker import (

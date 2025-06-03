@@ -11,7 +11,6 @@ from uuid import uuid4
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
 from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_LATEST
 from starlette.responses import Response
 
@@ -42,14 +41,12 @@ settings = get_settings()
 sessions_db: Dict[str, Dict[str, Any]] = {}
 sensor_data_db: Dict[str, list] = {}
 
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """应用生命周期管理"""
     logger.info("触诊服务启动中...")
     yield
     logger.info("触诊服务关闭中...")
-
 
 def create_app() -> FastAPI:
     """创建FastAPI应用"""
@@ -247,7 +244,6 @@ def create_app() -> FastAPI:
 
     return app
 
-
 def main():
     """主函数"""
     import uvicorn
@@ -265,7 +261,6 @@ def main():
         log_level="info" if not settings.service.debug else "debug",
         reload=settings.service.debug,
     )
-
 
 if __name__ == "__main__":
     main() 

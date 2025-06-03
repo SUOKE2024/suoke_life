@@ -11,11 +11,8 @@ from datetime import datetime
 from typing import Any
 
 import jinja2
-import pandas as pd
-import plotly.graph_objects as go
 
 logger = logging.getLogger(__name__)
-
 
 class ReportGenerator:
     """评测报告生成器"""

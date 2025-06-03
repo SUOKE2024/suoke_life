@@ -3,7 +3,6 @@ suoke-bench-service 主入口文件
 """
 
 import uvicorn
-from fastapi import FastAPI
 from suoke_bench_service.api.main import create_app
 
 def main():

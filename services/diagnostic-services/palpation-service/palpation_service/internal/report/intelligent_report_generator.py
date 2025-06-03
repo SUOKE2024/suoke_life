@@ -17,13 +17,9 @@ from enum import Enum
 from pathlib import Path
 from typing import Any
 
-import matplotlib.pyplot as plt
-import numpy as np
-import seaborn as sns
 from jinja2 import Environment, FileSystemLoader, Template
 
 logger = logging.getLogger(__name__)
-
 
 class ReportType(Enum):
     """报告类型枚举"""
@@ -33,7 +29,6 @@ class ReportType(Enum):
     PROFESSIONAL = "professional"  # 专业报告
     SUMMARY = "summary"  # 摘要报告
 
-
 class ReportFormat(Enum):
     """报告格式枚举"""
 
@@ -42,7 +37,6 @@ class ReportFormat(Enum):
     JSON = "json"
     MARKDOWN = "markdown"
 
-
 class Language(Enum):
     """语言枚举"""
 
@@ -50,7 +44,6 @@ class Language(Enum):
     ZH_TW = "zh_tw"  # 繁体中文
     EN_US = "en_us"  # 英语
     JA_JP = "ja_jp"  # 日语
-
 
 @dataclass
 class ReportSection:
@@ -61,7 +54,6 @@ class ReportSection:
     charts: list[str] = field(default_factory=list)  # 图表的base64编码
     importance: int = 1  # 重要性等级 1-5
     recommendations: list[str] = field(default_factory=list)
-
 
 @dataclass
 class HealthReport:
@@ -80,7 +72,6 @@ class HealthReport:
     recommendations: list[str]
     follow_up_date: datetime | None = None
     metadata: dict[str, Any] = field(default_factory=dict)
-
 
 class IntelligentReportGenerator:
     """智能报告生成器"""

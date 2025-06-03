@@ -5,210 +5,171 @@
  * 修复优化过程中引入的重复import语句等语法错误
  */
 
-const fs = require('fs');
-const path = require('path');
-const { execSync } = require('child_process');
+const fs = require("fs");
+const path = require("path");
+const { execSync } = require("child_process");
+const glob = require("glob");
 
-console.log('🔧 开始修复语法错误...\n');
-
-// 递归获取所有TypeScript文件
-function getAllTsFiles(dir, files = []) {
-  const items = fs.readdirSync(dir);
-
-  for (const item of items) {
-    const fullPath = path.join(dir, item);
-    const stat = fs.statSync(fullPath);
-
-    if (stat.isDirectory() && !item.startsWith('.') && item !== 'node_modules') {
-      getAllTsFiles(fullPath, files);
-    } else if (item.endsWith('.ts') || item.endsWith('.tsx')) {
-      files.push(fullPath);
-    }
+// 修复规则
+const fixRules = [
+  // 修复未闭合的字符串引号 - 更精确的匹配
+  {
+    name: '未闭合的import字符串',
+    pattern: /import\s+([^"']+)\s+from\s+"([^"]*);/g,
+    replacement: 'import $1 from "$2";'
+  },
+  {
+    name: '未闭合的import字符串(单引号)',
+    pattern: /import\s+([^"']+)\s+from\s+'([^']*);/g,
+    replacement: 'import $1 from \'$2\';'
+  },
+  // 修复正则表达式错误
+  {
+    name: '错误的正则表达式',
+    pattern: /\/;/g,
+    replacement: '//'
+  },
+  // 修复对象语法错误
+  {
+    name: '对象开始语法错误',
+    pattern: /\{,/g,
+    replacement: '{'
+  },
+  {
+    name: '对象结束语法错误',
+    pattern: /,\s*\}/g,
+    replacement: '}'
+  },
+  // 修复分号问题
+  {
+    name: '重复分号',
+    pattern: /;;+/g,
+    replacement: ';'
+  },
+  // 修复分号逗号混用
+  {
+    name: '分号逗号混用',
+    pattern: /;,/g,
+    replacement: ','
+  },
+  // 修复链式调用语法
+  {
+    name: '链式调用语法',
+    pattern: /(\w+)\s*\.\s*\(/g,
+    replacement: '$1.('
+  },
+  // 修复箭头函数语法
+  {
+    name: '箭头函数语法',
+    pattern: /=>\s*\{([^}]*?)$/gm,
+    replacement: (match, content) => `=> {${content.trim()}}`
+  },
+  // 修复函数调用语法
+  {
+    name: '函数调用语法',
+    pattern: /(\w+)\s*\(\s*\)/g,
+    replacement: '$1()'
   }
+];
 
-  return files;
+// 获取所有需要修复的文件
+function getFilesToFix() {
+  const patterns = [
+    'src/**/*.ts',
+    'src/**/*.tsx',
+    'src/**/*.js',
+    'src/**/*.jsx'
+  ];
+  
+  let files = [];
+  patterns.forEach(pattern => {
+    const matched = glob.sync(pattern, { 
+      ignore: ['**/node_modules/**', '**/*.test.*', '**/*.spec.*'] 
+    });
+    files = files.concat(matched);
+  });
+  
+  return [...new Set(files)]; // 去重
 }
 
-// 修复嵌套的useMemo/useCallback问题
-function fixNestedHooks(content) {
-  // 修复嵌套的useMemo(() => useMemo(() => ... 模式
-  content = content.replace(
-    /useMemo\(\(\) => useMemo\(\(\) => useMemo\(\(\) => useMemo\(\(\) => useMemo\(\(\) => useMemo\(\(\) => useCallback\(\s*\([^)]*\)\s*=>\s*\{[^,]*,\s*\[\]\),\s*\[\]\),\s*\[\]\),\s*\[\]\),\s*\[\]\),\s*\[\]\),\s*\[\]\);?/g,
-    'useCallback(() => {'
-  );
-
-  // 修复简单的嵌套useMemo模式
-  content = content.replace(
-    /useMemo\(\(\) => useMemo\(\(\) => useMemo\(\(\) => useMemo\(\(\) => useMemo\(\(\) => useMemo\(\(\) => \([^)]*\)\s*=>\s*\{[^,]*,\s*\[\]\),\s*\[\]\),\s*\[\]\),\s*\[\]\),\s*\[\]\),\s*\[\]\),\s*\[\]\);?/g,
-    'useMemo(() => {'
-  );
-
-  // 修复switch语句中的语法错误
-  content = content.replace(
-    /case\s+'[^']+'\s*:\s*return\s+'[^']+'\s*,\s*\[\]\),\s*\[\]\),\s*\[\]\),\s*\[\]\),\s*\[\]\),\s*\[\]\);?/g,
-    (match) => {
-      const caseMatch = match.match(/case\s+'([^']+)'\s*:\s*return\s+'([^']+)'/);
-      if (caseMatch) {
-        return `case '${caseMatch[1]}': return '${caseMatch[2]}';`;
-      }
-      return match;
-    }
-  );
-
-  // 修复函数定义中的语法错误
-  content = content.replace(
-    /\(\s*\([^)]*\)\s*=>\s*\{[^,]*,\s*\[\]\),\s*\[\]\),\s*\[\]\),\s*\[\]\),\s*\[\]\),\s*\[\]\);?/g,
-    '() => {'
-  );
-
-  return content;
-}
-
-// 修复导入语句问题
-function fixImportStatements(content) {
-  // 修复缺少开括号的导入语句
-  content = content.replace(
-    /^(\s*)([\w\s,]+)\s+from\s+['"][^'"]+['"];?\s*$/gm,
-    (match, indent, imports, from) => {
-      if (!imports.includes('{') && imports.includes(',')) {
-        return `${indent}{ ${imports.trim()} } from ${from};`;
-      }
-      return match;
-    }
-  );
-
-  // 修复} from语句前缺少{的问题
-  content = content.replace(
-    /^(\s*)([^{}\n]+)\s*\}\s+from\s+(['"][^'"]+['"];?)\s*$/gm,
-    '$1{ $2 } from $3'
-  );
-
-  return content;
-}
-
-// 修复JSX语法错误
-function fixJSXSyntax(content) {
-  // 修复JSX中的语法错误
-  content = content.replace(
-    /\{\s*return[^,]*,\s*\[\]\),\s*\[\]\),\s*\[\]\),\s*\[\]\),\s*\[\]\),\s*\[\]\);\s*\}/g,
-    '{ /* JSX content */ }'
-  );
-
-  // 修复条件渲染中的语法错误
-  content = content.replace(
-    /if\s*\([^)]+\)\s*\{\s*return[^,]*,\s*\[\]\),\s*\[\]\),\s*\[\]\),\s*\[\]\),\s*\[\]\),\s*\[\]\);\s*\}/g,
-    'if (condition) { return null; }'
-  );
-
-  return content;
-}
-
-// 修复console语句
-function fixConsoleStatements(content) {
-  // 修复console.log语句中的语法错误
-  content = content.replace(
-    /console\.log\([^)]+\)[^,]*,\s*\[\]\),\s*\[\]\),\s*\[\]\),\s*\[\]\),\s*\[\]\),\s*\[\]\);?/g,
-    (match) => {
-      const logMatch = match.match(/console\.log\(([^)]+)\)/);
-      if (logMatch) {
-        return `console.log(${logMatch[1]});`;
-      }
-      return 'console.log("Fixed log statement");';
-    }
-  );
-
-  return content;
-}
-
-// 修复函数体和闭合括号
-function fixFunctionBodies(content) {
-  // 修复函数体缺少内容的问题
-  content = content.replace(
-    /useCallback\(\s*\(\)\s*=>\s*\{[^}]*\},\s*\[\]\);?/g,
-    'useCallback(() => {\n    // TODO: Implement function body\n  }, []);'
-  );
-
-  content = content.replace(
-    /useMemo\(\s*\(\)\s*=>\s*\{[^}]*\},\s*\[\]\);?/g,
-    'useMemo(() => {\n    // TODO: Implement memo body\n    return null;\n  }, []);'
-  );
-
-  return content;
-}
-
-// 主修复函数
+// 修复单个文件
 function fixFile(filePath) {
   try {
-    let content = fs.readFileSync(filePath, 'utf8');
-    const originalContent = content;
-
-    // 应用各种修复
-    content = fixNestedHooks(content);
-    content = fixImportStatements(content);
-    content = fixJSXSyntax(content);
-    content = fixConsoleStatements(content);
-    content = fixFunctionBodies(content);
-
-    // 如果内容有变化，写回文件
-    if (content !== originalContent) {
-      fs.writeFileSync(filePath, content);
-      return true;
-    }
-    return false;
-  } catch (error) {
-    console.error(`❌ 修复文件 ${filePath} 时出错:`, error.message);
-    return false;
-  }
-}
-
-// 主执行函数
-async function main() {
-  try {
-    console.log('📁 扫描TypeScript文件...');
-    const tsFiles = getAllTsFiles('src');
-    console.log(`找到 ${tsFiles.length} 个TypeScript文件\n`);
-
-    let fixedCount = 0;
-    let totalFiles = tsFiles.length;
-
-    for (let i = 0; i < tsFiles.length; i++) {
-      const file = tsFiles[i];
-      const relativePath = path.relative(process.cwd(), file);
-
-      process.stdout.write(`\r修复进度: ${i + 1}/${totalFiles} - ${relativePath}`);
-
-      if (fixFile(file)) {
-        fixedCount++;
+    let content = fs.readFileSync(filePath, "utf8");
+    let originalContent = content;
+    let fixCount = 0;
+    let appliedRules = [];
+    
+    // 应用所有修复规则
+    fixRules.forEach(rule => {
+      const beforeContent = content;
+      content = content.replace(rule.pattern, rule.replacement);
+      
+      if (content !== beforeContent) {
+        const matches = beforeContent.match(rule.pattern);
+        if (matches) {
+          fixCount += matches.length;
+          appliedRules.push(`${rule.name}: ${matches.length}个`);
+        }
       }
+    });
+    
+    // 如果有修改，写回文件
+    if (content !== originalContent) {
+      fs.writeFileSync(filePath, content, "utf8");
+      console.log(`✅ 修复 ${filePath}:`);
+      appliedRules.forEach(rule => console.log(`   - ${rule}`));
+      return fixCount;
     }
-
-    console.log(`\n\n🎉 语法修复完成！`);
-    console.log(`📊 统计信息:`);
-    console.log(`   - 扫描文件: ${totalFiles}`);
-    console.log(`   - 修复文件: ${fixedCount}`);
-    console.log(`   - 跳过文件: ${totalFiles - fixedCount}`);
-
-    console.log('\n🔄 建议下一步操作:');
-    console.log('1. 运行 npm run type-check 验证修复效果');
-    console.log('2. 运行 npm run lint 检查代码质量');
-    console.log('3. 手动检查关键文件确保功能正常');
-
+    
+    return 0;
   } catch (error) {
-    console.error('❌ 修复过程中出现错误:', error);
-    process.exit(1);
+    console.error(`❌ 修复 ${filePath} 失败:`, error.message);
+    return 0;
   }
 }
 
-// 运行脚本
+// 主函数
+function main() {
+  console.log("🔧 开始修复前端语法错误...\n");
+  
+  const files = getFilesToFix();
+  console.log(`📁 找到 ${files.length} 个文件需要检查\n`);
+  
+  let totalFixes = 0;
+  let fixedFiles = 0;
+  
+  files.forEach(file => {
+    const fixes = fixFile(file);
+    if (fixes > 0) {
+      totalFixes += fixes;
+      fixedFiles++;
+    }
+  });
+  
+  console.log("\n📊 修复统计:");
+  console.log(`- 检查文件: ${files.length}`);
+  console.log(`- 修复文件: ${fixedFiles}`);
+  console.log(`- 修复问题: ${totalFixes}`);
+  
+  if (totalFixes > 0) {
+    console.log("\n✨ 修复完成！建议运行 npm run lint 验证结果");
+  } else {
+    console.log("\n✅ 没有发现需要修复的语法错误");
+  }
+}
+
+// 检查是否安装了glob
+try {
+  require("glob");
+} catch (error) {
+  console.error("❌ 缺少依赖: glob");
+  console.log("请运行: npm install glob");
+  process.exit(1);
+}
+
 if (require.main === module) {
   main();
 }
 
-module.exports = {
-  fixNestedHooks,
-  fixImportStatements,
-  fixJSXSyntax,
-  fixConsoleStatements,
-  fixFunctionBodies,
-  fixFile,
-};
+module.exports = { fixFile, getFilesToFix };

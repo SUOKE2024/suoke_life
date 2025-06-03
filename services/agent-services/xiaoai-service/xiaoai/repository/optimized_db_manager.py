@@ -14,8 +14,6 @@ from enum import Enum
 from typing import Any
 
 import asyncpg
-import motor.motor_asyncio
-import redis.asyncio as redis
 from pymongo import ReadPreference, WriteConcern
 
 logger = logging.getLogger(__name__)

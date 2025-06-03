@@ -10,24 +10,19 @@ import asyncio
 import json
 import logging
 import time
-import uuid
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional, Set, Callable, Union, Tuple
 from collections import OrderedDict, defaultdict
-import hashlib
 import threading
-import weakref
 
 logger = logging.getLogger(__name__)
-
 
 class CacheLevel(Enum):
     """缓存级别"""
     L1_MEMORY = "l1_memory"      # 内存缓存
     L2_REDIS = "l2_redis"        # Redis缓存
     L3_DISK = "l3_disk"          # 磁盘缓存
-
 
 class EvictionPolicy(Enum):
     """淘汰策略"""
@@ -37,7 +32,6 @@ class EvictionPolicy(Enum):
     TTL = "ttl"                  # 基于过期时间
     RANDOM = "random"            # 随机淘汰
 
-
 class CacheType(Enum):
     """缓存类型"""
     MESSAGE = "message"          # 消息缓存
@@ -45,7 +39,6 @@ class CacheType(Enum):
     USER = "user"                # 用户缓存
     ROUTING = "routing"          # 路由缓存
     METADATA = "metadata"        # 元数据缓存
-
 
 @dataclass
 class CacheEntry:
@@ -87,7 +80,6 @@ class CacheEntry:
             'metadata': self.metadata
         }
 
-
 @dataclass
 class CacheConfig:
     """缓存配置"""
@@ -122,7 +114,6 @@ class CacheConfig:
     # 监控配置
     enable_metrics: bool = True
     stats_interval: float = 60.0
-
 
 class CacheStats:
     """缓存统计"""
@@ -206,7 +197,6 @@ class CacheStats:
             self.errors = 0
             self.total_size = 0
             self.entry_count = 0
-
 
 class LRUCache:
     """LRU缓存实现"""
@@ -365,7 +355,6 @@ class LRUCache:
                 'stats': self.stats.get_stats()
             }
 
-
 class RedisCache:
     """Redis缓存实现"""
     
@@ -501,7 +490,6 @@ class RedisCache:
         except Exception as e:
             logger.error(f"获取Redis信息失败: {e}")
             return {'stats': self.stats.get_stats()}
-
 
 class MultiLevelCache:
     """多级缓存"""
@@ -777,7 +765,6 @@ class MultiLevelCache:
         
         return stats
 
-
 class CacheManager:
     """
     缓存管理器
@@ -949,7 +936,6 @@ class CacheManager:
             'cache_types': [t.value for t in self.caches.keys()],
             'stats': self.get_cache_stats()
         }
-
 
 class CacheManagerFactory:
     """缓存管理器工厂"""

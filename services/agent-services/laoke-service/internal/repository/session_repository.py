@@ -10,7 +10,6 @@ import uuid
 from datetime import UTC, datetime, timedelta
 from typing import Any
 
-import motor.motor_asyncio
 from pymongo.errors import PyMongoError
 
 from pkg.utils.config import Config

@@ -3,7 +3,6 @@ a2a-agent-network 主入口文件
 """
 
 import uvicorn
-from fastapi import FastAPI
 from a2a_agent_network.api.main import create_app
 
 def main():

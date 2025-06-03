@@ -8,7 +8,6 @@
 import os
 import sys
 import time
-from typing import List
 
 import pytest
 from fastapi import FastAPI
@@ -20,7 +19,6 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../.
 from internal.delivery.rest.middleware import RateLimitMiddleware, setup_middlewares
 from internal.model.config import MiddlewareConfig, RateLimitConfig
 
-
 @pytest.fixture
 def rate_limit_config():
     """创建速率限制配置"""
@@ -31,14 +29,12 @@ def rate_limit_config():
         by_endpoint=False
     )
 
-
 @pytest.fixture
 def middleware_config(rate_limit_config):
     """创建中间件配置"""
     return MiddlewareConfig(
         rate_limit=rate_limit_config
     )
-
 
 @pytest.fixture
 def test_app(middleware_config):
@@ -59,12 +55,10 @@ def test_app(middleware_config):
     
     return app
 
-
 @pytest.fixture
 def client(test_app):
     """创建测试客户端"""
     return TestClient(test_app)
-
 
 class TestRateLimitMiddleware:
     """速率限制中间件测试"""

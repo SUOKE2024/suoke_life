@@ -9,19 +9,16 @@ import asyncio
 import time
 import json
 import hashlib
-import os
 from typing import Dict, List, Any, Optional, Callable, Union, Tuple
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-import pickle
 import threading
 from loguru import logger
 
 from ..observability.metrics import MetricsCollector
 from ..observability.tracing import trace_operation, SpanKind
 from .ab_testing import ABTestingFramework, Experiment
-
 
 class ModelType(str, Enum):
     """模型类型"""
@@ -34,7 +31,6 @@ class ModelType(str, Enum):
     TCM_HERB = "tcm_herb"                  # 中药推荐模型
     MULTIMODAL = "multimodal"              # 多模态模型
 
-
 class ModelStatus(str, Enum):
     """模型状态"""
     LOADING = "loading"                     # 加载中
@@ -44,7 +40,6 @@ class ModelStatus(str, Enum):
     DEPRECATED = "deprecated"               # 已弃用
     ARCHIVED = "archived"                   # 已归档
 
-
 class DeploymentStrategy(str, Enum):
     """部署策略"""
     BLUE_GREEN = "blue_green"               # 蓝绿部署
@@ -52,7 +47,6 @@ class DeploymentStrategy(str, Enum):
     ROLLING = "rolling"                     # 滚动部署
     IMMEDIATE = "immediate"                 # 立即部署
     SCHEDULED = "scheduled"                 # 定时部署
-
 
 @dataclass
 class ModelMetadata:
@@ -89,7 +83,6 @@ class ModelMetadata:
             "dependencies": self.dependencies
         }
 
-
 @dataclass
 class ModelInstance:
     """模型实例"""
@@ -110,7 +103,6 @@ class ModelInstance:
     def record_error(self):
         """记录错误"""
         self.error_count += 1
-
 
 @dataclass
 class DeploymentPlan:
@@ -137,7 +129,6 @@ class DeploymentPlan:
             "health_check_interval": self.health_check_interval
         }
 
-
 class ModelLoader:
     """模型加载器"""
     
@@ -163,7 +154,6 @@ class ModelLoader:
         )
         
         return model_object
-
 
 class ModelRegistry:
     """模型注册表"""
@@ -275,7 +265,6 @@ class ModelRegistry:
             self._save_registry()
             logger.info(f"删除模型: {name}:{version or 'all'}")
             return True
-
 
 class ModelManager:
     """模型管理器"""
@@ -826,10 +815,8 @@ class ModelManager:
             "models": model_stats
         }
 
-
 # 全局模型管理器实例
 _model_manager: Optional[ModelManager] = None
-
 
 def initialize_model_manager(
     model_storage_path: str = "models",
@@ -840,7 +827,6 @@ def initialize_model_manager(
     global _model_manager
     _model_manager = ModelManager(model_storage_path, metrics_collector, ab_testing)
     return _model_manager
-
 
 def get_model_manager() -> Optional[ModelManager]:
     """获取模型管理器实例"""

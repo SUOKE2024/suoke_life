@@ -6,20 +6,14 @@ RAG服务API集成测试
 """
 
 import os
-import json
 import pytest
-from typing import Dict, Any, List
-import asyncio
 from unittest.mock import patch, MagicMock
 
-import aiohttp
 from aiohttp.test_utils import TestClient, TestServer
-from aiohttp import web
 
 # 导入应用创建模块（需要根据实际项目结构调整）
 from services.rag_service.cmd.server import create_app
 from services.rag_service.internal.model.document import Document
-
 
 @pytest.fixture
 async def test_client() -> TestClient:
@@ -74,7 +68,6 @@ async def test_client() -> TestClient:
         # 清理
         await client.close()
 
-
 @pytest.mark.asyncio
 async def test_health_endpoint(test_client: TestClient):
     """测试健康检查端点"""
@@ -85,7 +78,6 @@ async def test_health_endpoint(test_client: TestClient):
     assert "status" in data
     assert data["status"] in ["up", "down", "degraded"]
 
-
 @pytest.mark.asyncio
 async def test_liveness_endpoint(test_client: TestClient):
     """测试存活检查端点"""
@@ -94,7 +86,6 @@ async def test_liveness_endpoint(test_client: TestClient):
     
     data = await resp.json()
     assert data["status"] == "up"
-
 
 @pytest.mark.asyncio
 async def test_retrieve_endpoint(test_client: TestClient):
@@ -123,7 +114,6 @@ async def test_retrieve_endpoint(test_client: TestClient):
     assert "content" in doc
     assert "score" in doc
 
-
 @pytest.mark.asyncio
 async def test_query_endpoint(test_client: TestClient):
     """测试查询端点"""
@@ -144,7 +134,6 @@ async def test_query_endpoint(test_client: TestClient):
     assert "references" in data
     assert isinstance(data["references"], list)
 
-
 @pytest.mark.asyncio
 async def test_invalid_request(test_client: TestClient):
     """测试无效请求处理"""
@@ -156,13 +145,11 @@ async def test_invalid_request(test_client: TestClient):
     resp = await test_client.post("/api/v1/query", json={"query": ""})
     assert resp.status == 400
 
-
 @pytest.mark.asyncio
 async def test_not_found_route(test_client: TestClient):
     """测试未找到路由处理"""
     resp = await test_client.get("/api/v1/nonexistent")
     assert resp.status == 404
-
 
 if __name__ == "__main__":
     pytest.main(["-xvs", __file__]) 

@@ -6,18 +6,12 @@
 """
 
 import re
-import json
-import asyncio
 from typing import Dict, List, Any, Optional, Tuple, Set
 from dataclasses import dataclass, field
 from enum import Enum
 from loguru import logger
 import jieba
-import jieba.posseg as pseg
 from datetime import datetime, timedelta
-
-from ..model.document import Document
-
 
 class QueryType(Enum):
     """查询类型枚举"""
@@ -32,7 +26,6 @@ class QueryType(Enum):
     FOLLOW_UP = "follow_up"                      # 随访跟进
     GENERAL_CHAT = "general_chat"                # 一般聊天
 
-
 class QueryIntent(Enum):
     """查询意图枚举"""
     INFORMATION_SEEKING = "information_seeking"   # 信息寻求
@@ -43,14 +36,12 @@ class QueryIntent(Enum):
     COMPARISON = "comparison"                    # 比较分析
     RECOMMENDATION = "recommendation"            # 推荐建议
 
-
 class QueryComplexity(Enum):
     """查询复杂度枚举"""
     SIMPLE = "simple"        # 简单查询
     MODERATE = "moderate"    # 中等复杂度
     COMPLEX = "complex"      # 复杂查询
     EXPERT = "expert"        # 专家级查询
-
 
 @dataclass
 class QueryContext:
@@ -65,7 +56,6 @@ class QueryContext:
     current_concerns: List[str] = field(default_factory=list)
     follow_up_questions: List[str] = field(default_factory=list)
     last_interaction: Optional[datetime] = None
-
 
 @dataclass
 class QueryAnalysis:
@@ -85,7 +75,6 @@ class QueryAnalysis:
     suggested_agent: Optional[str] = None
     requires_clarification: bool = False
     clarification_questions: List[str] = field(default_factory=list)
-
 
 class IntelligentQueryProcessor:
     """智能查询处理器"""

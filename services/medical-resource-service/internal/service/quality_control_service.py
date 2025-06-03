@@ -4,7 +4,6 @@
 """
 
 import asyncio
-import json
 import logging
 import statistics
 from collections import defaultdict, deque
@@ -13,12 +12,7 @@ from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
-import numpy as np
-import pandas as pd
-from sklearn.metrics import mean_absolute_error, mean_squared_error
-
 logger = logging.getLogger(__name__)
-
 
 class QualityLevel(Enum):
     """质量等级"""
@@ -28,7 +22,6 @@ class QualityLevel(Enum):
     AVERAGE = "average"  # 一般 (70-79分)
     POOR = "poor"  # 较差 (60-69分)
     UNACCEPTABLE = "unacceptable"  # 不可接受 (<60分)
-
 
 class QualityMetricType(Enum):
     """质量指标类型"""
@@ -42,7 +35,6 @@ class QualityMetricType(Enum):
     SAFETY = "safety"  # 安全性
     COMPLIANCE = "compliance"  # 合规性
 
-
 class FeedbackType(Enum):
     """反馈类型"""
 
@@ -51,7 +43,6 @@ class FeedbackType(Enum):
     COMPLAINT = "complaint"  # 投诉反馈
     SUGGESTION = "suggestion"  # 建议反馈
     TESTIMONIAL = "testimonial"  # 推荐反馈
-
 
 @dataclass
 class QualityMetric:
@@ -67,7 +58,6 @@ class QualityMetric:
     timestamp: datetime
     measurement_period: timedelta
     metadata: Dict[str, Any] = field(default_factory=dict)
-
 
 @dataclass
 class ServiceResult:
@@ -86,7 +76,6 @@ class ServiceResult:
     feedback: Optional[Dict[str, Any]] = None
     follow_up_required: bool = False
 
-
 @dataclass
 class UserFeedback:
     """用户反馈"""
@@ -104,7 +93,6 @@ class UserFeedback:
     is_verified: bool = False
     response: Optional[str] = None
 
-
 @dataclass
 class QualityReport:
     """质量报告"""
@@ -120,7 +108,6 @@ class QualityReport:
     issues: List[Dict[str, Any]]
     recommendations: List[str]
     generated_at: datetime = field(default_factory=datetime.now)
-
 
 @dataclass
 class QualityAlert:
@@ -138,7 +125,6 @@ class QualityAlert:
     is_resolved: bool = False
     resolution_time: Optional[datetime] = None
 
-
 @dataclass
 class ImprovementPlan:
     """改进计划"""
@@ -154,7 +140,6 @@ class ImprovementPlan:
     status: str
     progress: float = 0.0
     actual_completion_date: Optional[datetime] = None
-
 
 class QualityControlService:
     """

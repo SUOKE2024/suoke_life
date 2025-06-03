@@ -11,7 +11,6 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any
 
-import numpy as np
 import structlog
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
@@ -25,14 +24,12 @@ from ..utils.performance import async_timer
 
 logger = structlog.get_logger(__name__)
 
-
 class TCMAnalysisMethod(str, Enum):
     """中医分析方法"""
 
     TRADITIONAL = "traditional"  # 传统理论分析
     ML_ENHANCED = "ml_enhanced"  # 机器学习增强
     HYBRID = "hybrid"  # 混合方法
-
 
 @dataclass
 class TCMFeatureWeights:
@@ -76,7 +73,6 @@ class TCMFeatureWeights:
                 "voice_quality": 0.3,
             },
         )
-
 
 class TCMFeatureExtractor:
     """
@@ -335,7 +331,6 @@ class TCMFeatureExtractor:
         """获取分析统计"""
         return self.analysis_stats.copy()
 
-
 class ConstitutionAnalyzer:
     """体质分析器"""
 
@@ -476,7 +471,6 @@ class ConstitutionAnalyzer:
             logger.warning("机器学习体质分析失败", error=str(e))
             return {"type": "平和质", "confidence": 0.5}
 
-
 class EmotionAnalyzer:
     """情绪分析器"""
 
@@ -585,7 +579,6 @@ class EmotionAnalyzer:
         except Exception as e:
             logger.warning("机器学习情绪分析失败", error=str(e))
             return {"state": "平静", "confidence": 0.5}
-
 
 class OrganAnalyzer:
     """脏腑分析器"""

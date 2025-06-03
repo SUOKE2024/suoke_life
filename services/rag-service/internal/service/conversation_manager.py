@@ -4,7 +4,6 @@
 支持多轮对话、上下文管理、对话状态跟踪和智能体协同
 """
 
-import asyncio
 import json
 import uuid
 from datetime import datetime, timedelta
@@ -13,9 +12,7 @@ from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass, asdict
 from collections import defaultdict, deque
 
-import redis.asyncio as redis
 from loguru import logger
-
 
 class ConversationState(Enum):
     """对话状态"""
@@ -24,7 +21,6 @@ class ConversationState(Enum):
     COMPLETED = "completed"
     ESCALATED = "escalated"
     WAITING_INPUT = "waiting_input"
-
 
 class MessageType(Enum):
     """消息类型"""
@@ -35,14 +31,12 @@ class MessageType(Enum):
     RECOMMENDATION = "recommendation"
     WARNING = "warning"
 
-
 class AgentType(Enum):
     """智能体类型"""
     XIAOAI = "xiaoai"  # 小艾 - AI助手
     XIAOKE = "xiaoke"  # 小克 - 专业诊断
     LAOKE = "laoke"    # 老克 - 资深专家
     SOER = "soer"      # 索儿 - 健康管理
-
 
 @dataclass
 class Message:
@@ -61,7 +55,6 @@ class Message:
             self.timestamp = datetime.now()
         if self.metadata is None:
             self.metadata = {}
-
 
 @dataclass
 class ConversationContext:
@@ -84,7 +77,6 @@ class ConversationContext:
         if self.conversation_history is None:
             self.conversation_history = []
 
-
 @dataclass
 class Conversation:
     """对话会话"""
@@ -102,7 +94,6 @@ class Conversation:
     def __post_init__(self):
         if self.expires_at is None:
             self.expires_at = self.created_at + timedelta(hours=24)
-
 
 class ConversationManager:
     """智能对话管理器"""

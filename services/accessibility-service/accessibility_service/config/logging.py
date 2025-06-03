@@ -3,7 +3,6 @@ Logging configuration for accessibility service.
 """
 
 import logging
-import logging.config
 from typing import Any
 
 from pydantic import Field, validator
@@ -12,7 +11,6 @@ try:
     from pydantic_settings import BaseSettings
 except ImportError:
     from pydantic import BaseSettings
-
 
 class LoggingConfig(BaseSettings):
     """Logging configuration settings."""

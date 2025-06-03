@@ -4,13 +4,10 @@
 定义网关处理的请求和响应数据结构。
 """
 
-from __future__ import annotations
-
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Union
 
 from pydantic import BaseModel, Field
-
 
 class GatewayRequest(BaseModel):
     """网关请求模型"""
@@ -34,7 +31,6 @@ class GatewayRequest(BaseModel):
             bytes: lambda v: v.decode('utf-8', errors='ignore'),
         }
 
-
 class GatewayResponse(BaseModel):
     """网关响应模型"""
     
@@ -52,7 +48,6 @@ class GatewayResponse(BaseModel):
             bytes: lambda v: v.decode('utf-8', errors='ignore'),
         }
 
-
 class RouteInfo(BaseModel):
     """路由信息模型"""
     
@@ -65,8 +60,7 @@ class RouteInfo(BaseModel):
     timeout: int = Field(default=30, description="超时时间(秒)")
     retry_count: int = Field(default=3, description="重试次数")
     cache_ttl: Optional[int] = Field(default=None, description="缓存TTL(秒)")
-    
-    
+
 class LoadBalancerInfo(BaseModel):
     """负载均衡信息模型"""
     
@@ -75,14 +69,12 @@ class LoadBalancerInfo(BaseModel):
     failure_threshold: int = Field(default=3, description="失败阈值")
     recovery_threshold: int = Field(default=2, description="恢复阈值")
 
-
 class CircuitBreakerInfo(BaseModel):
     """熔断器信息模型"""
     
     failure_threshold: int = Field(default=5, description="失败阈值")
     recovery_timeout: int = Field(default=60, description="恢复超时(秒)")
     expected_exception: Optional[str] = Field(default=None, description="预期异常类型")
-
 
 class MetricsInfo(BaseModel):
     """指标信息模型"""
@@ -93,8 +85,7 @@ class MetricsInfo(BaseModel):
     p95_response_time: float = Field(default=0.0, description="95分位响应时间")
     p99_response_time: float = Field(default=0.0, description="99分位响应时间")
     cache_hit_rate: float = Field(default=0.0, description="缓存命中率")
-    
-    
+
 class HealthCheckResult(BaseModel):
     """健康检查结果模型"""
     

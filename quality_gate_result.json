@@ -1,0 +1,52 @@
+{
+  "overall_passed": false,
+  "timestamp": "2025-06-02 20:28:54",
+  "checks": {
+    "语法错误检查": {
+      "passed": false,
+      "count": 112905,
+      "threshold": 0,
+      "details": {
+        "python_errors": 0,
+        "typescript_errors": 112905
+      }
+    },
+    "代码复杂度检查": {
+      "passed": false,
+      "count": 11,
+      "threshold": 5
+    },
+    "重复代码检查": {
+      "passed": true,
+      "count": 0,
+      "threshold": 5
+    },
+    "Console.log检查": {
+      "passed": false,
+      "count": 7,
+      "threshold": 0
+    },
+    "未使用导入检查": {
+      "passed": true,
+      "count": 0,
+      "threshold": 0
+    },
+    "代码格式检查": {
+      "passed": false,
+      "issues_found": true
+    },
+    "测试覆盖率检查": {
+      "passed": true,
+      "coverage": 100,
+      "threshold": 80,
+      "test_files": 893,
+      "source_files": 0
+    },
+    "安全漏洞检查": {
+      "passed": true,
+      "issues_count": 0,
+      "threshold": 0
+    }
+  },
+  "quality_score": 50
+}

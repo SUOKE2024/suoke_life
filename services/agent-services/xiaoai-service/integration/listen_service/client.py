@@ -2,10 +2,7 @@
 
 """闻诊服务客户端集成"""
 
-
 import grpc
-from xiaoai_service.protos import listen_service_pb2 as listen_pb
-from xiaoai_service.protos import listen_service_pb2_grpc as listen_grpc
 
 # 使用loguru logger
 

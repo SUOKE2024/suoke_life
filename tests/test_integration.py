@@ -6,15 +6,10 @@
 
 import asyncio
 import pytest
-import numpy as np
-from pathlib import Path
 from unittest.mock import AsyncMock, patch
-import tempfile
-import json
 import time
 
 from listen_service.core.audio_analyzer import AudioAnalyzer
-from listen_service.core.tcm_analyzer import TCMFeatureExtractor
 from listen_service.models.audio_models import (
     AudioMetadata, AudioFormat, AnalysisRequest, VoiceFeatures
 )
@@ -25,7 +20,6 @@ from listen_service.utils.cache import AudioCache, MemoryCache
 from listen_service.utils.performance import performance_monitor
 from listen_service.delivery.rest_api import create_rest_app
 from listen_service.delivery.grpc_server import ListenServiceGRPCServer
-
 
 class TestEndToEndWorkflow:
     """端到端工作流测试"""
@@ -136,7 +130,6 @@ class TestEndToEndWorkflow:
         emotion_scores_sum = sum(tcm_diagnosis.emotion_scores.values())
         assert abs(emotion_scores_sum - 1.0) < 0.01  # 概率和应该接近1
 
-
 class TestCacheIntegration:
     """缓存集成测试"""
 
@@ -216,7 +209,6 @@ class TestCacheIntegration:
         assert result2.success
         assert result2.cache_hit is False  # 缓存已过期，应该重新计算
 
-
 class TestConcurrencyIntegration:
     """并发集成测试"""
 
@@ -279,7 +271,6 @@ class TestConcurrencyIntegration:
             assert diagnosis.confidence_score > 0
             assert diagnosis.constitution_type is not None
             assert diagnosis.emotion_state is not None
-
 
 class TestErrorHandlingIntegration:
     """错误处理集成测试"""
@@ -364,7 +355,6 @@ class TestErrorHandlingIntegration:
         result = await audio_analyzer.analyze_audio(request)
         assert result.success  # 分析应该成功，即使缓存失败
 
-
 class TestPerformanceIntegration:
     """性能集成测试"""
 
@@ -435,7 +425,6 @@ class TestPerformanceIntegration:
 
         # 内存增长应该在合理范围内（小于100MB）
         assert memory_increase < 100 * 1024 * 1024, f"Memory increased by {memory_increase / 1024 / 1024:.2f} MB"
-
 
 class TestDataConsistency:
     """数据一致性测试"""
@@ -512,7 +501,6 @@ class TestDataConsistency:
             # 置信度应该相近
             confidence_diff = abs(diagnosis.confidence_score - base_diagnosis.confidence_score)
             assert confidence_diff < 0.1, f"Confidence score inconsistent in diagnosis {i}"
-
 
 @pytest.mark.integration
 class TestFullSystemIntegration:

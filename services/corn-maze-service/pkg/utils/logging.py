@@ -5,13 +5,11 @@
 """
 
 import logging
-import logging.handlers
 from pathlib import Path
 import sys
 from typing import Any
 
 from pkg.utils.config import get_value
-
 
 def setup_logging(_config: dict[str, Any] | None = None) -> None:
     """
@@ -72,7 +70,6 @@ def setup_logging(_config: dict[str, Any] | None = None) -> None:
 
     logging.getLogger(__name__).info(f"日志系统初始化完成, 级别: {level_name}")
 
-
 def get_logger(name: str) -> logging.Logger:
     """
     获取命名日志记录器
@@ -84,7 +81,6 @@ def get_logger(name: str) -> logging.Logger:
         logging.Logger: 日志记录器
     """
     return logging.getLogger(name)
-
 
 class RequestLogger:
     """请求日志记录器"""

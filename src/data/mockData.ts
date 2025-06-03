@@ -1,5 +1,7 @@
-import { ChatChannel, Contact, ChatMessage } from "../types/chat";/;
-// 模拟聊天频道数据 * export const MOCK_CHAT_CHANNELS: ChatChannel[] = [;{, */
+import { ChatChannel, Contact, ChatMessage } from "../types/////    chat";
+//////     模拟聊天频道数据
+export const MOCK_CHAT_CHANNELS: ChatChannel[] = [;
+  {
     id: "xiaoai",
     name: "小艾",
     type: "agent",
@@ -92,7 +94,9 @@ import { ChatChannel, Contact, ChatMessage } from "../types/chat";/;
     specialization: "普通用户"
   }
 ];
-// 模拟联系人数据 * export const MOCK_CONTACTS: Contact[] = [;{, */
+//////     模拟联系人数据
+export const MOCK_CONTACTS: Contact[] = [;
+  {
     id: "xiaoai",
     name: "小艾",
     type: "agent",
@@ -158,20 +162,23 @@ import { ChatChannel, Contact, ChatMessage } from "../types/chat";/;
     lastSeen: "45分钟前"
   }
 ];
-// 模拟聊天消息数据 * export const MOCK_MESSAGES: Record<string, ChatMessage[]> = {; */;
-  xiaoai: [{,
+//////     模拟聊天消息数据
+export const MOCK_MESSAGES: Record<string, ChatMessage[]> = {
+  xiaoai: [
+    {
       id: "msg_1",
       channelId: "xiaoai",
       senderId: "xiaoai",
       senderName: "小艾",
       senderAvatar: "🤖",
       content: "您好！我是小艾，您的健康助手。有什么可以帮助您的吗？",
-      timestamp: new Date().toISOString(),
-      type: "text",
-      isRead: true
+      timestamp: new Date().toISOString(),;
+      type: "text",;
+      isRead: true;
     }
   ],
-  xiaoke: [{,
+  xiaoke: [
+    {
       id: "msg_2",
       channelId: "xiaoke",
       senderId: "xiaoke",
@@ -180,10 +187,11 @@ import { ChatChannel, Contact, ChatMessage } from "../types/chat";/;
       content: "我可以为您提供专业的医疗服务和健康管理",
       timestamp: new Date(Date.now() - 5 * 60 * 1000).toISOString(),
       type: "text",
-      isRead: false
+      isRead: false;
     }
   ],
-  laoke: [{,
+  laoke: [
+    {
       id: "msg_3",
       channelId: "laoke",
       senderId: "laoke",
@@ -192,23 +200,12 @@ import { ChatChannel, Contact, ChatMessage } from "../types/chat";/;
       content: "中医养生之道，在于顺应自然，调和阴阳",
       timestamp: new Date(Date.now() - 10 * 60 * 1000).toISOString(),
       type: "text",
-      isRead: true
-    }
-  ],
-  soer: [{,
-      id: "msg_4",
-      channelId: "soer",
-      senderId: "soer",
-      senderName: "索儿",
-      senderAvatar: "👧",
-      content: "今天的生活安排我来帮您规划吧！",
-      timestamp: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
-      type: "text",
-      isRead: false
+      isRead: true;
     }
   ]
 };
-// 智能体配置 * export const AGENT_CONFIGS = ;{; */
+//////     智能体配置
+export const AGENT_CONFIGS = {
   xiaoai: {
     name: "小艾",
     avatar: "🤖",
@@ -235,6 +232,6 @@ import { ChatChannel, Contact, ChatMessage } from "../types/chat";/;
     avatar: "👧",
     color: "#FF2D92",
     description: "生活方式指导",
-    capabilities: ["生活规划", "习惯养成", "目标设定", "进度跟踪"]
-  }
+    capabilities: ["生活规划", "习惯养成", "目标设定", "进度跟踪"];
+  };
 } as const;

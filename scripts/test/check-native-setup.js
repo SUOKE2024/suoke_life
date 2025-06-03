@@ -5,10 +5,10 @@
  * 检查iOS/Android开发环境设置
  */
 
-const fs = require('fs');
-const path = require('path');
-const { execSync } = require('child_process');
-const colors = require('colors');
+const fs = require("fs);
+const path = require(")path");
+const { execSync } = require(child_process");
+const colors = require("colors);
 
 // 检查结果
 let checkResults = {
@@ -23,12 +23,11 @@ let checkResults = {
  * 日志工具
  */
 const logger = {
-  info: (msg) => console.log(`ℹ️  ${msg}`.blue),
-  success: (msg) => console.log(`✅ ${msg}`.green),
-  error: (msg) => console.log(`❌ ${msg}`.red),
-  warn: (msg) => console.log(`⚠️  ${msg}`.yellow),
-  check: (msg) => console.log(`🔍 ${msg}`.cyan)
-};
+  info: (msg) => ,
+  success: (msg) => ,
+  error: (msg) => ,
+  warn: (msg) => ,
+  check: (msg) => };
 
 /**
  * 执行命令并返回结果
@@ -36,9 +35,9 @@ const logger = {
 function execCommand(command, options = {}) {
   try {
     const result = execSync(command, {
-      encoding: 'utf8',
-      stdio: 'pipe',
-      ...options
+      encoding: ")utf8",
+      stdio: pipe",
+      ...options;
     });
     return { success: true, output: result.trim() };
   } catch (error) {
@@ -88,13 +87,13 @@ function checkCommand(command, description) {
  * 检查Node.js和npm
  */
 function checkNodeEnvironment() {
-  logger.check('检查Node.js环境...');
+  logger.check("检查Node.js环境...);
 
   // 检查Node.js版本
-  const nodeResult = execCommand('node --version');
+const nodeResult = execCommand("node --version");
   if (nodeResult.success) {
-    const nodeVersion = nodeResult.output.replace('v', '');
-    const majorVersion = parseInt(nodeVersion.split('.')[0]);
+    const nodeVersion = nodeResult.output.replace(v", ");
+    const majorVersion = parseInt(nodeVersion.split(".")[0]);
 
     if (majorVersion >= 18) {
       checkResults.passed++;
@@ -106,20 +105,20 @@ function checkNodeEnvironment() {
     }
   } else {
     checkResults.failed++;
-    checkResults.issues.push('Node.js未安装');
-    logger.error('Node.js未安装');
+    checkResults.issues.push(Node.js未安装");
+    logger.error("Node.js未安装);
   }
   checkResults.total++;
 
   // 检查npm版本
-  const npmResult = execCommand('npm --version');
+const npmResult = execCommand("npm --version");
   if (npmResult.success) {
     checkResults.passed++;
     logger.success(`npm版本: ${npmResult.output} ✓`);
   } else {
     checkResults.failed++;
-    checkResults.issues.push('npm不可用');
-    logger.error('npm不可用');
+    checkResults.issues.push(npm不可用");
+    logger.error("npm不可用);
   }
   checkResults.total++;
 }
@@ -128,46 +127,46 @@ function checkNodeEnvironment() {
  * 检查React Native环境
  */
 function checkReactNativeEnvironment() {
-  logger.check('检查React Native环境...');
+  logger.check("检查React Native环境...");
 
   // 检查React Native CLI
-  checkResults.total++;
-  const rnResult = execCommand('npx react-native --version');
+checkResults.total++;
+  const rnResult = execCommand(npx react-native --version");
   if (rnResult.success) {
     checkResults.passed++;
-    logger.success(`React Native CLI: ${rnResult.output.split('\n')[0]} ✓`);
+    logger.success(`React Native CLI: ${rnResult.output.split("\n)[0]} ✓`);
   } else {
     checkResults.failed++;
-    checkResults.issues.push('React Native CLI不可用');
-    logger.error('React Native CLI: npx react-native 命令不可用');
+    checkResults.issues.push("React Native CLI不可用");
+    logger.error(React Native CLI: npx react-native 命令不可用");
   }
 
   // 检查Watchman
-  if (process.platform === 'darwin') {
-    checkCommand('watchman', 'Watchman');
+if (process.platform === "darwin) {
+    checkCommand("watchman", Watchman");
   }
 
   // 检查Metro
-  const metroConfig = checkFileExists('metro.config.js', 'Metro配置文件');
+const metroConfig = checkFileExists("metro.config.js, "Metro配置文件");
 
   // 检查package.json
-  const packageJson = checkFileExists('package.json', 'package.json');
+const packageJson = checkFileExists(package.json", "package.json);
   if (packageJson) {
     try {
-      const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
-      if (pkg.dependencies && pkg.dependencies['react-native']) {
+      const pkg = JSON.parse(fs.readFileSync("package.json", utf8"));
+      if (pkg.dependencies && pkg.dependencies["react-native]) {
         checkResults.passed++;
-        logger.success(`React Native版本: ${pkg.dependencies['react-native']}`);
+        logger.success(`React Native版本: ${pkg.dependencies["react-native"]}`);
       } else {
         checkResults.failed++;
-        checkResults.issues.push('package.json中缺少react-native依赖');
-        logger.error('package.json中缺少react-native依赖');
+        checkResults.issues.push(package.json中缺少react-native依赖");
+        logger.error("package.json中缺少react-native依赖);
       }
       checkResults.total++;
     } catch (error) {
       checkResults.failed++;
-      checkResults.issues.push('package.json格式错误');
-      logger.error('package.json格式错误');
+      checkResults.issues.push("package.json格式错误");
+      logger.error(package.json格式错误");
       checkResults.total++;
     }
   }
@@ -177,41 +176,41 @@ function checkReactNativeEnvironment() {
  * 检查iOS环境
  */
 function checkIOSEnvironment() {
-  if (process.platform !== 'darwin') {
-    logger.warn('跳过iOS环境检查 (非macOS系统)');
+  if (process.platform !== "darwin) {
+    logger.warn("跳过iOS环境检查 (非macOS系统)");
     return;
   }
 
-  logger.check('检查iOS开发环境...');
+  logger.check(检查iOS开发环境...");
 
   // 检查Xcode
-  const xcodeResult = execCommand('xcode-select -p');
+const xcodeResult = execCommand("xcode-select -p);
   if (xcodeResult.success) {
     checkResults.passed++;
     logger.success(`Xcode路径: ${xcodeResult.output}`);
   } else {
     checkResults.failed++;
-    checkResults.issues.push('Xcode未安装或未配置');
-    logger.error('Xcode未安装或未配置');
+    checkResults.issues.push("Xcode未安装或未配置");
+    logger.error(Xcode未安装或未配置");
   }
   checkResults.total++;
 
   // 检查CocoaPods
-  checkCommand('pod', 'CocoaPods');
+checkCommand("pod, "CocoaPods");
 
   // 检查iOS项目文件
-  checkFileExists('ios/SuokeLife.xcworkspace', 'iOS工作空间');
-  checkFileExists('ios/Podfile', 'Podfile');
-  checkFileExists('ios/Podfile.lock', 'Podfile.lock');
+checkFileExists(ios/SuokeLife.xcworkspace", "iOS工作空间);
+  checkFileExists("ios/Podfile", Podfile");
+  checkFileExists("ios/Podfile.lock, "Podfile.lock");
 
   // 检查iOS模拟器
-  const simulatorResult = execCommand('xcrun simctl list devices available');
+const simulatorResult = execCommand(xcrun simctl list devices available");
   if (simulatorResult.success) {
     checkResults.passed++;
-    logger.success('iOS模拟器可用');
+    logger.success("iOS模拟器可用);
   } else {
     checkResults.warnings++;
-    logger.warn('iOS模拟器状态未知');
+    logger.warn("iOS模拟器状态未知");
   }
   checkResults.total++;
 }
@@ -220,45 +219,45 @@ function checkIOSEnvironment() {
  * 检查Android环境
  */
 function checkAndroidEnvironment() {
-  logger.check('检查Android开发环境...');
+  logger.check(检查Android开发环境...");
 
   // 检查ANDROID_HOME环境变量
-  const androidHome = process.env.ANDROID_HOME;
+const androidHome = process.env.ANDROID_HOME;
   if (androidHome && fs.existsSync(androidHome)) {
     checkResults.passed++;
     logger.success(`ANDROID_HOME: ${androidHome}`);
   } else {
     checkResults.failed++;
-    checkResults.issues.push('ANDROID_HOME环境变量未设置或路径不存在');
-    logger.error('ANDROID_HOME环境变量未设置或路径不存在');
+    checkResults.issues.push("ANDROID_HOME环境变量未设置或路径不存在);
+    logger.error("ANDROID_HOME环境变量未设置或路径不存在");
   }
   checkResults.total++;
 
   // 检查adb
-  checkCommand('adb', 'Android Debug Bridge (adb)');
+checkCommand(adb", "Android Debug Bridge (adb));
 
   // 检查Java
-  const javaResult = execCommand('java -version');
+const javaResult = execCommand("java -version");
   if (javaResult.success) {
     checkResults.passed++;
-    logger.success('Java运行时环境可用');
+    logger.success(Java运行时环境可用");
   } else {
     checkResults.failed++;
-    checkResults.issues.push('Java运行时环境不可用');
-    logger.error('Java运行时环境不可用');
+    checkResults.issues.push("Java运行时环境不可用);
+    logger.error("Java运行时环境不可用");
   }
   checkResults.total++;
 
   // 检查Android项目文件
-  checkFileExists('android/build.gradle', 'Android根build.gradle');
-  checkFileExists('android/app/build.gradle', 'Android应用build.gradle');
-  checkFileExists('android/gradle.properties', 'gradle.properties');
+checkFileExists(android/build.gradle", "Android根build.gradle);
+  checkFileExists("android/app/build.gradle", Android应用build.gradle");
+  checkFileExists("android/gradle.properties, "gradle.properties");
 
   // 检查Android设备/模拟器
-  const devicesResult = execCommand('adb devices');
+const devicesResult = execCommand(adb devices");
   if (devicesResult.success) {
-    const devices = devicesResult.output.split('\n').filter(line =>
-      line.includes('\tdevice') || line.includes('\temulator')
+    const devices = devicesResult.output.split("\n).filter(line =>
+      line.includes("\tdevice") || line.includes(\temulator");
     );
 
     if (devices.length > 0) {
@@ -266,11 +265,11 @@ function checkAndroidEnvironment() {
       logger.success(`Android设备/模拟器: ${devices.length}个可用`);
     } else {
       checkResults.warnings++;
-      logger.warn('没有连接的Android设备或模拟器');
+      logger.warn("没有连接的Android设备或模拟器);
     }
   } else {
     checkResults.warnings++;
-    logger.warn('无法检查Android设备状态');
+    logger.warn("无法检查Android设备状态");
   }
   checkResults.total++;
 }
@@ -279,28 +278,28 @@ function checkAndroidEnvironment() {
  * 检查项目依赖
  */
 function checkProjectDependencies() {
-  logger.check('检查项目依赖...');
+  logger.check(检查项目依赖...");
 
   // 检查node_modules
-  if (fs.existsSync('node_modules')) {
+if (fs.existsSync("node_modules)) {
     checkResults.passed++;
-    logger.success('node_modules目录存在');
+    logger.success("node_modules目录存在");
   } else {
     checkResults.failed++;
-    checkResults.issues.push('node_modules目录不存在，请运行 npm install');
-    logger.error('node_modules目录不存在，请运行 npm install');
+    checkResults.issues.push(node_modules目录不存在，请运行 npm install");
+    logger.error("node_modules目录不存在，请运行 npm install);
   }
   checkResults.total++;
 
   // 检查iOS依赖
-  if (process.platform === 'darwin' && fs.existsSync('ios/Pods')) {
+if (process.platform === "darwin" && fs.existsSync(ios/Pods")) {
     checkResults.passed++;
-    logger.success('iOS Pods依赖已安装');
-  } else if (process.platform === 'darwin') {
+    logger.success("iOS Pods依赖已安装);
+  } else if (process.platform === "darwin") {
     checkResults.warnings++;
-    logger.warn('iOS Pods依赖未安装，请运行 cd ios && pod install');
+    logger.warn(iOS Pods依赖未安装，请运行 cd ios && pod install");
   }
-  if (process.platform === 'darwin') {
+  if (process.platform === "darwin) {
     checkResults.total++;
   }
 }
@@ -313,26 +312,18 @@ function generateFixSuggestions() {
     return;
   }
 
-  console.log('\n' + '='.repeat(60));
-  logger.info('🔧 修复建议:');
+  );
+  logger.info("🔧 修复建议:);
 
   checkResults.issues.forEach((issue, index) => {
-    console.log(`${index + 1}. ${issue}`);
-
     // 提供具体的修复建议
-    if (issue.includes('Node.js')) {
-      console.log('   💡 请访问 https://nodejs.org 下载最新版本');
-    } else if (issue.includes('ANDROID_HOME')) {
-      console.log('   💡 请运行: ./scripts/setup-android-env.sh');
-    } else if (issue.includes('Xcode')) {
-      console.log('   💡 请从App Store安装Xcode');
-    } else if (issue.includes('CocoaPods')) {
-      console.log('   💡 请运行: sudo gem install cocoapods');
-    } else if (issue.includes('node_modules')) {
-      console.log('   💡 请运行: npm install');
-    } else if (issue.includes('Pods')) {
-      console.log('   💡 请运行: cd ios && pod install');
-    }
+if (issue.includes("Node.js")) {
+      } else if (issue.includes("ANDROID_HOME)) {
+      } else if (issue.includes(Xcode")) {
+      } else if (issue.includes("CocoaPods")) {
+      } else if (issue.includes("node_modules)) {
+      } else if (issue.includes(Pods")) {
+      }
   });
 }
 
@@ -340,35 +331,28 @@ function generateFixSuggestions() {
  * 主检查流程
  */
 function runNativeSetupCheck() {
-  logger.info('🚀 开始索克生活 APP 原生项目配置检查');
+  logger.info("🚀 开始索克生活 APP 原生项目配置检查");
 
-  console.log('\n' + '='.repeat(60));
+  );
 
   // 执行所有检查
-  checkNodeEnvironment();
+checkNodeEnvironment();
   checkReactNativeEnvironment();
   checkIOSEnvironment();
   checkAndroidEnvironment();
   checkProjectDependencies();
 
   // 输出检查结果
-  console.log('\n' + '='.repeat(60));
-  logger.info('📊 检查结果统计:');
-  console.log(`   总计: ${checkResults.total} 项检查`);
-  console.log(`   通过: ${checkResults.passed} 项`.green);
-  console.log(`   失败: ${checkResults.failed} 项`.red);
-  console.log(`   警告: ${checkResults.warnings} 项`.yellow);
-
+);
+  logger.info("📊 检查结果统计:);
   const successRate = ((checkResults.passed / checkResults.total) * 100).toFixed(1);
-  console.log(`\n🎯 配置完成度: ${successRate}%`);
-
   // 生成修复建议
-  generateFixSuggestions();
+generateFixSuggestions();
 
   if (checkResults.failed === 0) {
-    logger.success('🎉 原生项目配置检查通过！可以开始开发');
+    logger.success("🎉 原生项目配置检查通过！可以开始开发");
   } else {
-    logger.error('💥 发现配置问题，请根据建议进行修复');
+    logger.error(💥 发现配置问题，请根据建议进行修复");
     process.exit(1);
   }
 }

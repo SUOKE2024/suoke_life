@@ -11,14 +11,12 @@ import unittest
 import pytest
 import asyncio
 from unittest.mock import MagicMock, patch, AsyncMock
-from typing import Dict, Any, List
 
 # 将项目根目录添加到路径中
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from internal.service.rag_service import RagService
 from internal.model.document import Document, DocumentReference, RetrieveResult, GenerateResult, QueryResult
-
 
 @pytest.mark.asyncio
 class TestRagService:
@@ -381,7 +379,6 @@ class TestRagService:
         service.milvus_repository.close.assert_called_once()
         service.cache_service.close.assert_called_once()
         assert service.is_initialized is False
-
 
 if __name__ == '__main__':
     asyncio.run(unittest.main()) 

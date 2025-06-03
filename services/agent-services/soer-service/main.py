@@ -6,7 +6,6 @@
 LIFE频道版主，提供生活健康管理、陪伴服务和数据整合分析
 """
 
-import asyncio
 import uvicorn
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
@@ -28,11 +27,9 @@ from soer_service.delivery.api.devices import devices_router
 from soer_service.observability.monitoring import setup_monitoring
 from soer_service.platform.lifecycle import AgentLifecycleManager
 
-
 # 全局变量
 soer_agent: SoerAgent = None
 lifecycle_manager: AgentLifecycleManager = None
-
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -73,7 +70,6 @@ async def lifespan(app: FastAPI):
             await lifecycle_manager.cleanup()
         logger.info("🔄 索儿智能体服务已停止")
 
-
 def create_app() -> FastAPI:
     """创建FastAPI应用"""
     settings = get_settings()
@@ -105,17 +101,14 @@ def create_app() -> FastAPI:
     
     return app
 
-
 def get_soer_agent() -> SoerAgent:
     """获取索儿智能体实例"""
     if soer_agent is None:
         raise HTTPException(status_code=503, detail="索儿智能体服务未就绪")
     return soer_agent
 
-
 # 创建应用实例
 app = create_app()
-
 
 @app.get("/")
 async def root():
@@ -134,12 +127,10 @@ async def root():
         ]
     }
 
-
 @app.get("/agent/status")
 async def get_agent_status(agent: SoerAgent = Depends(get_soer_agent)):
     """获取智能体状态"""
     return await agent.get_status()
-
 
 @app.post("/agent/message")
 async def send_message(
@@ -159,7 +150,6 @@ async def send_message(
         logger.error(f"处理消息失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @app.post("/agent/analyze-health-data")
 async def analyze_health_data(
     request: dict,
@@ -177,7 +167,6 @@ async def analyze_health_data(
     except Exception as e:
         logger.error(f"健康数据分析失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @app.post("/agent/create-lifestyle-plan")
 async def create_lifestyle_plan(
@@ -197,7 +186,6 @@ async def create_lifestyle_plan(
         logger.error(f"创建生活方式计划失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @app.post("/agent/companion-chat")
 async def companion_chat(
     request: dict,
@@ -215,7 +203,6 @@ async def companion_chat(
     except Exception as e:
         logger.error(f"陪伴聊天失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @app.post("/agent/coordinate-devices")
 async def coordinate_devices(
@@ -235,7 +222,6 @@ async def coordinate_devices(
         logger.error(f"设备协调失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
 def main():
     """主函数"""
     settings = get_settings()
@@ -250,7 +236,6 @@ def main():
         log_level="info" if settings.debug else "warning",
         access_log=settings.debug
     )
-
 
 if __name__ == "__main__":
     main() 

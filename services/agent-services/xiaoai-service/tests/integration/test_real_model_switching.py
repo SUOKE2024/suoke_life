@@ -135,7 +135,6 @@ async def test_config_based_switching():
                 config = ConfigLoader(config_info['file'])
 
                 # 临时替换全局配置
-                import pkg.utils.config_loader
                 original_get_config = pkg.utils.config_loader.get_config
                 pkg.utils.config_loader.get_config = lambda path=None: config
 

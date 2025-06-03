@@ -7,10 +7,8 @@
 
 import json
 import logging
-import logging.handlers
 import sys
 from pathlib import Path
-
 
 def setup_logger(
     name: str,
@@ -71,7 +69,6 @@ def setup_logger(
 
     return logger
 
-
 class JsonFormatter(logging.Formatter):
     """JSON格式日志格式化器"""
 
@@ -119,7 +116,6 @@ class JsonFormatter(logging.Formatter):
 
         return json.dumps(log_data)
 
-
 def log_request(logger, request_id, method, endpoint, payload=None):
     """记录API请求"""
     logger.info(
@@ -132,7 +128,6 @@ def log_request(logger, request_id, method, endpoint, payload=None):
         },
     )
 
-
 def log_response(logger, request_id, status_code, response_body=None):
     """记录API响应"""
     logger.info(
@@ -143,7 +138,6 @@ def log_response(logger, request_id, status_code, response_body=None):
             "response": response_body,
         },
     )
-
 
 def log_error(logger, request_id, error_message, exception=None):
     """记录错误信息"""

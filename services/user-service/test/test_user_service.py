@@ -1,15 +1,11 @@
 """
 用户服务单元测试模块
 """
-import asyncio
-import os
 import uuid
 from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
-from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
-from passlib.hash import pbkdf2_sha256
 
 from internal.model.user import (DeviceInfo, User, UserHealthSummary, UserResponse,
                           UserRole, UserStatus, VerifyUserResponse)
@@ -18,7 +14,6 @@ from internal.repository.sqlite_user_repository import (DeviceAlreadyBoundError,
                                                  UserAlreadyExistsError,
                                                  UserNotFoundError)
 from internal.service.user_service import UserService
-
 
 class MockUserRepository:
     """用户仓库模拟实现"""
@@ -188,18 +183,15 @@ class MockUserRepository:
         
         return self.devices.get(user_id_str, [])
 
-
 @pytest.fixture
 def mock_user_repository():
     """用户仓库模拟fixture"""
     return MockUserRepository()
 
-
 @pytest.fixture
 def user_service(mock_user_repository):
     """用户服务fixture"""
     return UserService(mock_user_repository)
-
 
 @pytest.mark.asyncio
 async def test_create_user(user_service, mock_user_repository):
@@ -233,7 +225,6 @@ async def test_create_user(user_service, mock_user_repository):
     assert len(users) == 1
     assert users[0].username == "testuser"
 
-
 @pytest.mark.asyncio
 async def test_create_user_already_exists(user_service, mock_user_repository):
     """测试创建已存在的用户"""
@@ -252,7 +243,6 @@ async def test_create_user_already_exists(user_service, mock_user_repository):
     # 尝试创建同名用户
     with pytest.raises(UserAlreadyExistsError):
         await user_service.create_user(request)
-
 
 @pytest.mark.asyncio
 async def test_get_user(user_service, mock_user_repository):
@@ -277,13 +267,11 @@ async def test_get_user(user_service, mock_user_repository):
     assert user.username == "testuser"
     assert user.email == "test@example.com"
 
-
 @pytest.mark.asyncio
 async def test_get_user_not_found(user_service):
     """测试获取不存在的用户"""
     with pytest.raises(UserNotFoundError):
         await user_service.get_user(str(uuid.uuid4()))
-
 
 @pytest.mark.asyncio
 async def test_update_user(user_service, mock_user_repository):
@@ -319,7 +307,6 @@ async def test_update_user(user_service, mock_user_repository):
     assert updated_user.full_name == "Updated User"
     assert updated_user.metadata == {"country": "USA"}
 
-
 @pytest.mark.asyncio
 async def test_update_user_not_found(user_service):
     """测试更新不存在的用户"""
@@ -331,7 +318,6 @@ async def test_update_user_not_found(user_service):
     
     with pytest.raises(UserNotFoundError):
         await user_service.update_user(str(uuid.uuid4()), update_request)
-
 
 @pytest.mark.asyncio
 async def test_delete_user(user_service, mock_user_repository):
@@ -355,13 +341,11 @@ async def test_delete_user(user_service, mock_user_repository):
     assert result is True
     assert len(mock_user_repository.users) == 0
 
-
 @pytest.mark.asyncio
 async def test_delete_user_not_found(user_service):
     """测试删除不存在的用户"""
     with pytest.raises(UserNotFoundError):
         await user_service.delete_user(str(uuid.uuid4()))
-
 
 @pytest.mark.asyncio
 async def test_update_user_preferences(user_service, mock_user_repository):
@@ -390,7 +374,6 @@ async def test_update_user_preferences(user_service, mock_user_repository):
     # 验证结果
     assert updated_user.user_id == created_user.user_id
     assert updated_user.preferences == {"theme": "dark", "language": "zh-CN"}
-
 
 @pytest.mark.asyncio
 async def test_bind_device(user_service, mock_user_repository):
@@ -429,7 +412,6 @@ async def test_bind_device(user_service, mock_user_repository):
     assert devices.devices[0].device_name == "My Phone"
     assert devices.devices[0].device_metadata == {"os": "Android", "model": "Pixel 6"}
 
-
 @pytest.mark.asyncio
 async def test_unbind_device(user_service, mock_user_repository):
     """测试解绑设备"""
@@ -461,7 +443,6 @@ async def test_unbind_device(user_service, mock_user_repository):
     # 验证设备已解绑
     devices = await user_service.get_user_devices(created_user.user_id)
     assert len(devices.devices) == 0
-
 
 @pytest.mark.asyncio
 async def test_get_user_health_summary(user_service, mock_user_repository):

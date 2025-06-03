@@ -14,9 +14,6 @@ from pathlib import Path
 project_root = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(project_root))
 
-from api.grpc import palpation_service_pb2 as pb2
-from api.grpc import palpation_service_pb2_grpc as pb2_grpc
-
 def test_health_check():
     """测试健康检查接口"""
     print("测试健康检查接口...")
@@ -91,7 +88,6 @@ def test_pulse_session():
         
         def generate_pulse_data():
             """生成模拟脉搏数据"""
-            import numpy as np
             
             positions = [
                 pb2.PulsePosition.CUN_LEFT,
