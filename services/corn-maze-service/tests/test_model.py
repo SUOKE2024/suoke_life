@@ -4,204 +4,276 @@
 模型单元测试
 """
 
-from datetime import datetime
-from pathlib import Path
-import sys
-import unittest
+from datetime import UTC, datetime
+from uuid import uuid4
 
-# 添加项目根目录到Python路径
-sys.path.insert(0, str(Path(__file__).parent.parent.resolve()))
+import pytest
 
-from internal.model.knowledge import KnowledgeNode
-from internal.model.maze import Maze
-from internal.model.progress import UserProgress
-from internal.model.template import MazeTemplate
-
-
-class TestModels(unittest.TestCase):
-    """模型测试类"""
-
-    def test_maze_model(self):
-        """测试迷宫模型"""
-        now = datetime.now()
-
-        # 创建测试数据
-        maze_data = {
-            "maze_id": "test_maze_1",
-            "user_id": "user123",
-            "maze_type": "四季养生",
-            "size_x": 5,
-            "size_y": 5,
-            "cells": [
-                {"x": 0, "y": 0, "type": "START", "cell_id": "0,0"},
-                {"x": 1, "y": 0, "type": "PATH", "cell_id": "1,0"}
-            ],
-            "start_position": {"x": 0, "y": 0},
-            "goal_position": {"x": 4, "y": 4},
-            "knowledge_nodes": [
-                {"node_id": "k1", "title": "测试知识点"}
-            ],
-            "challenges": [
-                {"challenge_id": "c1", "title": "测试挑战"}
-            ],
-            "created_at": now,
-            "difficulty": 3,
-            "status": "可用",
-            "is_public": True,
-            "description": "测试迷宫",
-            "tags": ["测试", "养生"]
-        }
-
-        # 创建模型实例
-        maze = Maze.from_dict(maze_data)
-
-        # 验证属性
-        self.assertEqual(maze.maze_id, "test_maze_1")
-        self.assertEqual(maze.user_id, "user123")
-        self.assertEqual(maze.maze_type, "四季养生")
-        self.assertEqual(maze.size_x, 5)
-        self.assertEqual(maze.size_y, 5)
-        self.assertEqual(len(maze.cells), 2)
-        self.assertEqual(maze.start_position["x"], 0)
-        self.assertEqual(maze.goal_position["x"], 4)
-        self.assertEqual(len(maze.knowledge_nodes), 1)
-        self.assertEqual(len(maze.challenges), 1)
-        self.assertEqual(maze.created_at, now)
-        self.assertEqual(maze.difficulty, 3)
-        self.assertEqual(maze.status, "可用")
-        self.assertTrue(maze.is_public)
-        self.assertEqual(maze.description, "测试迷宫")
-        self.assertEqual(maze.tags, ["测试", "养生"])
-
-        # 测试to_dict方法
-        maze_dict = maze.to_dict()
-        self.assertEqual(maze_dict["maze_id"], "test_maze_1")
-        self.assertEqual(maze_dict["user_id"], "user123")
-        self.assertEqual(maze_dict["size_x"], 5)
-        self.assertEqual(maze_dict["is_public"], True)
-        self.assertEqual(maze_dict["tags"], ["测试", "养生"])
-
-    def test_knowledge_node_model(self):
-        """测试知识节点模型"""
-        # 创建测试数据
-        node_data = {
-            "node_id": "k1",
-            "title": "春季养生",
-            "content": "春季养生内容...",
-            "category": "四季养生",
-            "difficulty_level": "2",
-            "related_tags": ["春季", "养生"]
-        }
-
-        # 创建模型实例
-        node = KnowledgeNode(**node_data)
-
-        # 验证属性
-        self.assertEqual(node.node_id, "k1")
-        self.assertEqual(node.title, "春季养生")
-        self.assertEqual(node.content, "春季养生内容...")
-        self.assertEqual(node.category, "四季养生")
-        self.assertEqual(node.difficulty_level, "2")
-        self.assertEqual(node.related_tags, ["春季", "养生"])
-
-        # 测试to_dict方法
-        node_dict = node.to_dict()
-        self.assertEqual(node_dict["node_id"], "k1")
-        self.assertEqual(node_dict["title"], "春季养生")
-        self.assertEqual(node_dict["related_tags"], ["春季", "养生"])
-
-    def test_user_progress_model(self):
-        """测试用户进度模型"""
-        now = datetime.now()
-
-        # 创建测试数据
-        progress_data = {
-            "user_id": "user123",
-            "maze_id": "maze123",
-            "current_position": {"x": 2, "y": 3},
-            "visited_cells": ["0,0", "1,0", "2,0", "2,1", "2,2", "2,3"],
-            "completed_challenges": ["c1"],
-            "acquired_knowledge": ["k1", "k2"],
-            "status": "进行中",
-            "steps_taken": 12,
-            "start_time": now,
-            "last_active_time": now,
-            "score": 150
-        }
-
-        # 创建模型实例
-        progress = UserProgress.from_dict(progress_data)
-
-        # 验证属性
-        self.assertEqual(progress.user_id, "user123")
-        self.assertEqual(progress.maze_id, "maze123")
-        self.assertEqual(progress.current_position["x"], 2)
-        self.assertEqual(progress.current_position["y"], 3)
-        self.assertEqual(len(progress.visited_cells), 6)
-        self.assertEqual(len(progress.completed_challenges), 1)
-        self.assertEqual(len(progress.acquired_knowledge), 2)
-        self.assertEqual(progress.status, "进行中")
-        self.assertEqual(progress.steps_taken, 12)
-        self.assertEqual(progress.start_time, now)
-        self.assertEqual(progress.last_active_time, now)
-        self.assertEqual(progress.score, 150)
-
-        # 测试to_dict方法
-        progress_dict = progress.to_dict()
-        self.assertEqual(progress_dict["user_id"], "user123")
-        self.assertEqual(progress_dict["maze_id"], "maze123")
-        self.assertEqual(progress_dict["steps_taken"], 12)
-        self.assertEqual(progress_dict["completed_challenges"], ["c1"])
-
-    def test_maze_template_model(self):
-        """测试迷宫模板模型"""
-        # 创建测试数据
-        template_data = {
-            "template_id": "t1",
-            "name": "春季养生迷宫",
-            "description": "这是一个春季养生主题的迷宫模板",
-            "maze_type": "四季养生",
-            "difficulty": 2,
-            "size_x": 10,
-            "size_y": 10,
-            "cells": [
-                {"x": 0, "y": 0, "type": "START", "cell_id": "0,0"},
-                {"x": 9, "y": 9, "type": "GOAL", "cell_id": "9,9"}
-            ],
-            "start_position": {"x": 0, "y": 0},
-            "goal_position": {"x": 9, "y": 9},
-            "knowledge_node_count": 5,
-            "challenge_count": 3,
-            "tags": ["春季", "养生", "初级"],
-            "preview_image_url": "http://example.com/preview.png"
-        }
-
-        # 创建模型实例
-        template = MazeTemplate.from_dict(template_data)
-
-        # 验证属性
-        self.assertEqual(template.template_id, "t1")
-        self.assertEqual(template.name, "春季养生迷宫")
-        self.assertEqual(template.description, "这是一个春季养生主题的迷宫模板")
-        self.assertEqual(template.maze_type, "四季养生")
-        self.assertEqual(template.difficulty, 2)
-        self.assertEqual(template.size_x, 10)
-        self.assertEqual(template.size_y, 10)
-        self.assertEqual(len(template.cells), 2)
-        self.assertEqual(template.start_position["x"], 0)
-        self.assertEqual(template.goal_position["y"], 9)
-        self.assertEqual(template.knowledge_node_count, 5)
-        self.assertEqual(template.challenge_count, 3)
-        self.assertEqual(template.tags, ["春季", "养生", "初级"])
-        self.assertEqual(template.preview_image_url, "http://example.com/preview.png")
-
-        # 测试to_dict方法
-        template_dict = template.to_dict()
-        self.assertEqual(template_dict["template_id"], "t1")
-        self.assertEqual(template_dict["name"], "春季养生迷宫")
-        self.assertEqual(template_dict["knowledge_node_count"], 5)
-        self.assertEqual(template_dict["tags"], ["春季", "养生", "初级"])
+from corn_maze_service.internal.model.maze import (
+    Maze,
+    MazeDifficulty,
+    MazeNode,
+    MazeProgress,
+    MazeTheme,
+    NodeType,
+    ProgressStatus,
+    UserMaze,
+)
 
 
-if __name__ == "__main__":
-    unittest.main()
+class TestMazeModels:
+    """迷宫模型测试类"""
+
+    def test_maze_node_model(self):
+        """测试迷宫节点模型"""
+        node = MazeNode(
+            x=1,
+            y=2,
+            node_type=NodeType.KNOWLEDGE,
+            content={"title": "测试知识点", "description": "测试内容"},
+            connections=[(0, 2), (2, 2)]
+        )
+
+        assert node.x == 1
+        assert node.y == 2
+        assert node.node_type == NodeType.KNOWLEDGE
+        assert node.content["title"] == "测试知识点"
+        assert not node.is_visited
+        assert len(node.connections) == 2
+
+    def test_maze_model_creation(self):
+        """测试迷宫模型创建"""
+        creator_id = uuid4()
+        size = 5
+
+        # 创建节点矩阵
+        nodes = []
+        for y in range(size):
+            row = []
+            for x in range(size):
+                if x == 0 and y == 0:
+                    node_type = NodeType.START
+                elif x == size-1 and y == size-1:
+                    node_type = NodeType.END
+                else:
+                    node_type = NodeType.PATH
+
+                node = MazeNode(x=x, y=y, node_type=node_type)
+                row.append(node)
+            nodes.append(row)
+
+        maze = Maze(
+            name="测试迷宫",
+            description="用于测试的迷宫",
+            size=size,
+            theme=MazeTheme.HEALTH,
+            difficulty=MazeDifficulty.NORMAL,
+            creator_id=creator_id,
+            nodes=nodes,
+            start_position=(0, 0),
+            end_position=(size-1, size-1)
+        )
+
+        assert maze.name == "测试迷宫"
+        assert maze.size == size
+        assert maze.theme == MazeTheme.HEALTH
+        assert maze.difficulty == MazeDifficulty.NORMAL
+        assert maze.creator_id == creator_id
+        assert maze.start_position == (0, 0)
+        assert maze.end_position == (size-1, size-1)
+        assert len(maze.nodes) == size
+        assert len(maze.nodes[0]) == size
+
+    def test_maze_model_validation(self):
+        """测试迷宫模型验证"""
+        creator_id = uuid4()
+
+        # 测试无效的节点矩阵大小
+        with pytest.raises(ValueError):
+            Maze(
+                name="测试迷宫",
+                size=3,
+                theme=MazeTheme.HEALTH,
+                difficulty=MazeDifficulty.EASY,
+                creator_id=creator_id,
+                nodes=[[MazeNode(x=0, y=0, node_type=NodeType.START)]],  # 1x1 矩阵，但size=3
+                start_position=(0, 0),
+                end_position=(2, 2)
+            )
+
+        # 测试无效的位置坐标
+        nodes = []
+        for y in range(3):
+            row = []
+            for x in range(3):
+                node = MazeNode(x=x, y=y, node_type=NodeType.PATH)
+                row.append(node)
+            nodes.append(row)
+
+        with pytest.raises(ValueError):
+            Maze(
+                name="测试迷宫",
+                size=3,
+                theme=MazeTheme.HEALTH,
+                difficulty=MazeDifficulty.EASY,
+                creator_id=creator_id,
+                nodes=nodes,
+                start_position=(5, 5),  # 超出边界
+                end_position=(2, 2)
+            )
+
+    def test_maze_node_operations(self):
+        """测试迷宫节点操作"""
+        creator_id = uuid4()
+        size = 5  # 使用最小允许的大小
+
+        # 创建节点矩阵
+        nodes = []
+        for y in range(size):
+            row = []
+            for x in range(size):
+                node = MazeNode(x=x, y=y, node_type=NodeType.PATH)
+                row.append(node)
+            nodes.append(row)
+
+        maze = Maze(
+            name="测试迷宫",
+            size=size,
+            theme=MazeTheme.HEALTH,
+            difficulty=MazeDifficulty.EASY,
+            creator_id=creator_id,
+            nodes=nodes,
+            start_position=(0, 0),
+            end_position=(size-1, size-1)
+        )
+
+        # 测试获取节点
+        node = maze.get_node(1, 1)
+        assert node is not None
+        assert node.x == 1
+        assert node.y == 1
+
+        # 测试获取超出边界的节点
+        node = maze.get_node(5, 5)
+        assert node is None
+
+        # 测试设置节点
+        new_node = MazeNode(x=1, y=1, node_type=NodeType.KNOWLEDGE)
+        maze.set_node(1, 1, new_node)
+        retrieved_node = maze.get_node(1, 1)
+        assert retrieved_node.node_type == NodeType.KNOWLEDGE
+
+        # 测试获取相邻节点
+        neighbors = maze.get_neighbors(2, 2)
+        assert len(neighbors) == 4  # 中心位置有4个邻居
+
+        # 测试边角位置的邻居
+        corner_neighbors = maze.get_neighbors(0, 0)
+        assert len(corner_neighbors) == 2  # 角落位置只有2个邻居
+
+    def test_user_maze_model(self):
+        """测试用户迷宫关联模型"""
+        user_id = uuid4()
+        maze_id = uuid4()
+
+        user_maze = UserMaze(
+            user_id=user_id,
+            maze_id=maze_id,
+            can_edit=True,
+            can_share=True
+        )
+
+        assert user_maze.user_id == user_id
+        assert user_maze.maze_id == maze_id
+        assert user_maze.can_edit is True
+        assert user_maze.can_share is True
+        assert user_maze.last_accessed_at is None
+
+    def test_maze_progress_model(self):
+        """测试迷宫进度模型"""
+        user_id = uuid4()
+        maze_id = uuid4()
+
+        progress = MazeProgress(
+            user_id=user_id,
+            maze_id=maze_id,
+            current_position=(1, 2),
+            visited_nodes=[(0, 0), (0, 1), (1, 1), (1, 2)],
+            collected_items=["health_tip_1", "knowledge_point_2"]
+        )
+
+        assert progress.user_id == user_id
+        assert progress.maze_id == maze_id
+        assert progress.status == ProgressStatus.NOT_STARTED
+        assert progress.current_position == (1, 2)
+        assert len(progress.visited_nodes) == 4
+        assert len(progress.collected_items) == 2
+        assert progress.steps_count == 0
+        assert progress.score == 0
+
+        # 测试添加访问节点
+        progress.add_visited_node(2, 2)
+        assert len(progress.visited_nodes) == 5
+        assert progress.steps_count == 1
+        assert (2, 2) in progress.visited_nodes
+
+        # 测试重复添加相同节点
+        progress.add_visited_node(2, 2)
+        assert len(progress.visited_nodes) == 5  # 不应该增加
+        assert progress.steps_count == 1  # 步数也不应该增加
+
+        # 测试完成迷宫
+        progress.start_time = datetime.now(UTC)
+        progress.complete_maze()
+        assert progress.status == ProgressStatus.COMPLETED
+        assert progress.end_time is not None
+        assert progress.total_time is not None
+
+        # 测试放弃迷宫
+        progress2 = MazeProgress(
+            user_id=user_id,
+            maze_id=maze_id,
+            current_position=(0, 0)
+        )
+        progress2.abandon_maze()
+        assert progress2.status == ProgressStatus.ABANDONED
+
+        # 测试计算得分
+        progress.knowledge_gained = ["tip1", "tip2", "tip3"]
+        progress.achievements = ["first_step", "explorer"]
+        progress.hints_used = 2
+        score = progress.calculate_score()
+
+        # 基础分数 + 知识奖励 + 成就奖励 - 提示惩罚
+        expected_score = len(progress.visited_nodes) * 10 + len(progress.knowledge_gained) * 50 + len(progress.achievements) * 100 - progress.hints_used * 5
+        assert score == expected_score
+        assert progress.score == expected_score
+
+    def test_enum_values(self):
+        """测试枚举值"""
+        # 测试迷宫主题
+        assert MazeTheme.HEALTH == "health"
+        assert MazeTheme.NUTRITION == "nutrition"
+        assert MazeTheme.TCM == "tcm"
+        assert MazeTheme.BALANCE == "balance"
+
+        # 测试迷宫难度
+        assert MazeDifficulty.EASY == "easy"
+        assert MazeDifficulty.NORMAL == "normal"
+        assert MazeDifficulty.HARD == "hard"
+        assert MazeDifficulty.EXPERT == "expert"
+
+        # 测试节点类型
+        assert NodeType.START == "start"
+        assert NodeType.END == "end"
+        assert NodeType.PATH == "path"
+        assert NodeType.WALL == "wall"
+        assert NodeType.KNOWLEDGE == "knowledge"
+        assert NodeType.CHALLENGE == "challenge"
+        assert NodeType.TREASURE == "treasure"
+
+        # 测试进度状态
+        assert ProgressStatus.NOT_STARTED == "not_started"
+        assert ProgressStatus.IN_PROGRESS == "in_progress"
+        assert ProgressStatus.COMPLETED == "completed"
+        assert ProgressStatus.ABANDONED == "abandoned"

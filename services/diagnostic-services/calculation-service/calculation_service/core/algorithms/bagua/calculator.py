@@ -94,6 +94,178 @@ class BaguaCalculator:
         
         return "坎"  # 默认值
     
+    def analyze_personal_bagua(self, birth_info: Dict) -> Dict:
+        """
+        个人八卦分析（兼容测试）
+        
+        Args:
+            birth_info: 出生信息
+            
+        Returns:
+            个人八卦分析结果
+        """
+        birth_dt = datetime(
+            year=birth_info["year"],
+            month=birth_info["month"],
+            day=birth_info["day"],
+            hour=birth_info.get("hour", 12)
+        )
+        
+        # 获取本命卦
+        benming_gua = self.calculate_benming_gua(birth_info)
+        
+        # 获取八卦信息
+        bagua_info = BAGUA_DATA.get(benming_gua, {})
+        organ_info = BAGUA_ORGAN_MAP.get(benming_gua, {})
+        
+        # 健康分析
+        health_analysis = self._analyze_personal_health(benming_gua, birth_info.get("gender", "男"))
+        
+        # 调理建议
+        treatment_advice = BAGUA_HEALTH_METHODS.get(benming_gua, {})
+        
+        # 方位指导
+        direction_guidance = self._get_personal_direction_guidance(benming_gua)
+        
+        return {
+            "本命卦": benming_gua,
+            "卦象信息": {
+                "卦象": bagua_info.get("卦象", ""),
+                "五行": bagua_info.get("五行", ""),
+                "方位": bagua_info.get("方位", ""),
+                "特性": bagua_info.get("特性", [])
+            },
+            "卦象特点": bagua_info.get("特性", []),  # 添加卦象特点字段
+            "健康分析": health_analysis,
+            "脏腑对应": {
+                "主脏": organ_info.get("主脏", ""),
+                "主腑": organ_info.get("主腑", ""),
+                "对应部位": organ_info.get("对应部位", [])
+            },
+            "调理建议": treatment_advice,
+            "方位指导": direction_guidance,
+            "个性化建议": self._generate_personal_advice(benming_gua, birth_info)
+        }
+    
+    def calculate_benming_gua(self, year_or_birth_info, gender=None) -> str:
+        """
+        计算本命卦（兼容测试）
+        
+        Args:
+            year_or_birth_info: 年份或出生信息字典
+            gender: 性别（当第一个参数是年份时使用）
+            
+        Returns:
+            本命卦名称
+        """
+        if isinstance(year_or_birth_info, dict):
+            # 字典格式
+            birth_info = year_or_birth_info
+            year = birth_info["year"]
+            gender = birth_info.get("gender", "男")
+        else:
+            # 分别传递参数格式
+            year = year_or_birth_info
+            gender = gender if gender is not None else "男"
+        
+        year_last_two = year % 100
+        
+        if gender == "男":
+            remainder = (100 - year_last_two) % 9
+        else:  # 女性
+            remainder = (year_last_two - 4) % 9
+        
+        if remainder == 0:
+            remainder = 9
+        
+        # 根据余数确定卦
+        bagua_map = {
+            1: "坎", 2: "坤", 3: "震", 4: "巽",
+            5: "坤", 6: "乾", 7: "兑", 8: "艮", 9: "离"
+        }
+        
+        return bagua_map.get(remainder, "坎")
+    
+    def _analyze_personal_health(self, benming_gua: str, gender: str) -> Dict:
+        """分析个人健康状况"""
+        bagua_info = BAGUA_DATA.get(benming_gua, {})
+        organ_info = BAGUA_ORGAN_MAP.get(benming_gua, {})
+        
+        # 基于八卦的健康特点
+        health_features = []
+        if benming_gua in ["乾", "兑"]:
+            health_features.extend(["呼吸系统较强", "肺功能良好", "皮肤状态佳"])
+        elif benming_gua in ["震", "巽"]:
+            health_features.extend(["肝胆功能活跃", "神经系统敏感", "情绪变化较大"])
+        elif benming_gua == "离":
+            health_features.extend(["心血管系统活跃", "精神状态良好", "易上火"])
+        elif benming_gua in ["坤", "艮"]:
+            health_features.extend(["脾胃功能稳定", "消化能力强", "体质偏实"])
+        elif benming_gua == "坎":
+            health_features.extend(["肾功能较强", "生殖系统健康", "耐寒能力强"])
+        
+        # 易患疾病
+        disease_tendency = BAGUA_DISEASE_PREDICTION.get(benming_gua, {}).get("易患疾病", [])
+        
+        # 预防建议
+        prevention_advice = BAGUA_DISEASE_PREDICTION.get(benming_gua, {}).get("预防建议", [])
+        
+        return {
+            "健康特点": health_features,
+            "易患疾病": disease_tendency,
+            "预防建议": prevention_advice,
+            "重点关注": organ_info.get("对应部位", [])
+        }
+    
+    def _get_personal_direction_guidance(self, benming_gua: str) -> Dict:
+        """获取个人方位指导"""
+        bagua_info = BAGUA_DATA.get(benming_gua, {})
+        
+        # 吉方和凶方
+        favorable_direction = bagua_info.get("方位", "")
+        unfavorable_directions = []
+        
+        # 根据八卦相对关系确定不利方位
+        opposite_bagua = BAGUA_RELATIONS.get("相对", {}).get(benming_gua, "")
+        if opposite_bagua:
+            opposite_info = BAGUA_DATA.get(opposite_bagua, {})
+            unfavorable_directions.append(opposite_info.get("方位", ""))
+        
+        return {
+            "吉方": favorable_direction,
+            "凶方": unfavorable_directions,
+            "居住建议": f"宜居住在{favorable_direction}方位，避免{unfavorable_directions}方位",
+            "办公建议": f"办公桌宜面向{favorable_direction}方",
+            "睡眠建议": f"床头宜朝{favorable_direction}方"
+        }
+    
+    def _generate_personal_advice(self, benming_gua: str, birth_info: Dict) -> List[str]:
+        """生成个性化建议"""
+        advice = []
+        
+        # 基于八卦的基本建议
+        bagua_methods = BAGUA_HEALTH_METHODS.get(benming_gua, {})
+        advice.extend(bagua_methods.get("养生方法", []))
+        
+        # 基于性别的建议
+        gender = birth_info.get("gender", "男")
+        if gender == "男":
+            advice.append("注重阳气的培养和保护")
+        else:
+            advice.append("注重阴血的滋养和调理")
+        
+        # 基于年龄的建议（简化）
+        current_year = datetime.now().year
+        age = current_year - birth_info["year"]
+        if age < 30:
+            advice.append("年轻时期，注重基础体质的建立")
+        elif age < 50:
+            advice.append("中年时期，注重工作与健康的平衡")
+        else:
+            advice.append("中老年时期，注重养生保健")
+        
+        return list(set(advice))  # 去重
+    
     def analyze_bagua_health(self, birth_datetime: datetime, current_datetime: datetime = None) -> Dict:
         """
         八卦健康分析
@@ -469,3 +641,15 @@ class BaguaCalculator:
             advice.append("可以相互促进健康发展")
         
         return advice 
+    
+    def analyze_bagua(self, birth_info: Dict) -> Dict:
+        """
+        八卦分析（兼容测试）
+        
+        Args:
+            birth_info: 出生信息
+            
+        Returns:
+            八卦分析结果
+        """
+        return self.analyze_personal_bagua(birth_info)

@@ -151,7 +151,8 @@ class TestComprehensiveCalculator:
     def setup_method(self):
         self.calculator = ComprehensiveCalculator()
     
-    def test_comprehensive_analysis(self):
+    @pytest.mark.asyncio
+    async def test_comprehensive_analysis(self):
         """测试综合分析"""
         birth_info = {
             "year": 1990,
@@ -164,19 +165,24 @@ class TestComprehensiveCalculator:
         
         analysis_date = datetime(2024, 5, 15)
         
-        result = self.calculator.comprehensive_analysis(
+        result = await self.calculator.comprehensive_analysis(
             birth_info=birth_info,
             analysis_date=analysis_date
         )
         
-        assert "个人信息" in result
-        assert "分析时间" in result
-        assert "子午流注分析" in result
-        assert "体质分析" in result
-        assert "八卦分析" in result
-        assert "运气分析" in result
-        assert "综合建议" in result
-        assert "调养重点" in result
+        assert "birth_info" in result
+        assert "analysis_metadata" in result
+        assert "individual_analyses" in result
+        assert "comprehensive_analysis" in result
+        assert "confidence_metrics" in result
+        assert "recommendations" in result
+        
+        # 检查各个分析是否存在
+        individual_analyses = result["individual_analyses"]
+        assert "ziwu" in individual_analyses
+        assert "constitution" in individual_analyses
+        assert "bagua" in individual_analyses
+        assert "wuyun_liuqi" in individual_analyses
     
     def test_generate_health_advice(self):
         """测试健康建议生成"""

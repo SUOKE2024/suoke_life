@@ -11,6 +11,7 @@ from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field, field_validator
 
+
 class MazeTheme(str, Enum):
     """迷宫主题枚举"""
     HEALTH = "health"

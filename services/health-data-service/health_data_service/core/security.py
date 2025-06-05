@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 """
-安全模块
+安全认证模块
 
-提供零知识证明、数据加密、哈希验证等安全功能。
+提供JWT令牌生成、验证、密码哈希、权限控制等安全功能。
 """
 
 import hashlib
 import hmac
 import secrets
 import json
-from typing import Dict, Any, Optional, Tuple, List
+from typing import Dict, Any, Optional, Tuple, List, Union
 from dataclasses import dataclass, asdict
-from datetime import datetime
+from datetime import datetime, timedelta
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import rsa, padding
@@ -19,12 +19,47 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 import base64
 import logging
 
+import bcrypt
+from fastapi import HTTPException, status
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from jose import JWTError, jwt
+from passlib.context import CryptContext
+from pydantic import BaseModel
+
 from .config import get_settings
 
 logger = logging.getLogger(__name__)
 
+settings = get_settings()
 
-@dataclass
+# 密码上下文
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+# HTTP Bearer认证
+security = HTTPBearer()
+
+
+class TokenData(BaseModel):
+    """令牌数据模型"""
+    user_id: Optional[int] = None
+    username: Optional[str] = None
+    email: Optional[str] = None
+    scopes: list[str] = []
+
+
+class Token(BaseModel):
+    """令牌响应模型"""
+    access_token: str
+    refresh_token: str
+    token_type: str = "bearer"
+    expires_in: int
+
+
+class RefreshTokenRequest(BaseModel):
+    """刷新令牌请求"""
+    refresh_token: str
+
+
 class HealthDataProof:
     """健康数据零知识证明"""
     proof: Dict[str, Any]
@@ -36,7 +71,6 @@ class HealthDataProof:
     validity: bool = True
 
 
-@dataclass
 class EncryptedData:
     """加密数据"""
     encrypted_data: str
@@ -473,6 +507,210 @@ class ZKProofManager:
         except Exception as e:
             logger.error(f"证明内容验证失败: {e}")
             return False
+
+
+class SecurityManager:
+    """安全管理器"""
+
+    def __init__(self):
+        self.settings = settings
+        self.algorithm = self.settings.security.algorithm
+        self.secret_key = self.settings.security.secret_key
+        self.access_token_expire_minutes = self.settings.security.access_token_expire_minutes
+        self.refresh_token_expire_days = self.settings.security.refresh_token_expire_days
+
+    def create_access_token(
+        self, 
+        data: Dict[str, Any], 
+        expires_delta: Optional[timedelta] = None
+    ) -> str:
+        """创建访问令牌"""
+        to_encode = data.copy()
+        
+        if expires_delta:
+            expire = datetime.utcnow() + expires_delta
+        else:
+            expire = datetime.utcnow() + timedelta(minutes=self.access_token_expire_minutes)
+        
+        to_encode.update({"exp": expire, "type": "access"})
+        encoded_jwt = jwt.encode(to_encode, self.secret_key, algorithm=self.algorithm)
+        return encoded_jwt
+
+    def create_refresh_token(
+        self, 
+        data: Dict[str, Any], 
+        expires_delta: Optional[timedelta] = None
+    ) -> str:
+        """创建刷新令牌"""
+        to_encode = data.copy()
+        
+        if expires_delta:
+            expire = datetime.utcnow() + expires_delta
+        else:
+            expire = datetime.utcnow() + timedelta(days=self.refresh_token_expire_days)
+        
+        to_encode.update({"exp": expire, "type": "refresh"})
+        encoded_jwt = jwt.encode(to_encode, self.secret_key, algorithm=self.algorithm)
+        return encoded_jwt
+
+    def verify_token(self, token: str, token_type: str = "access") -> TokenData:
+        """验证令牌"""
+        try:
+            payload = jwt.decode(token, self.secret_key, algorithms=[self.algorithm])
+            
+            # 检查令牌类型
+            if payload.get("type") != token_type:
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Invalid token type",
+                    headers={"WWW-Authenticate": "Bearer"},
+                )
+            
+            user_id: int = payload.get("sub")
+            username: str = payload.get("username")
+            email: str = payload.get("email")
+            scopes: list = payload.get("scopes", [])
+            
+            if user_id is None:
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Could not validate credentials",
+                    headers={"WWW-Authenticate": "Bearer"},
+                )
+            
+            return TokenData(
+                user_id=user_id,
+                username=username,
+                email=email,
+                scopes=scopes
+            )
+            
+        except JWTError:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Could not validate credentials",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+
+    def create_token_pair(self, user_data: Dict[str, Any]) -> Token:
+        """创建令牌对（访问令牌和刷新令牌）"""
+        access_token = self.create_access_token(data=user_data)
+        refresh_token = self.create_refresh_token(data=user_data)
+        
+        return Token(
+            access_token=access_token,
+            refresh_token=refresh_token,
+            expires_in=self.access_token_expire_minutes * 60
+        )
+
+    def refresh_access_token(self, refresh_token: str) -> Token:
+        """使用刷新令牌获取新的访问令牌"""
+        token_data = self.verify_token(refresh_token, token_type="refresh")
+        
+        user_data = {
+            "sub": token_data.user_id,
+            "username": token_data.username,
+            "email": token_data.email,
+            "scopes": token_data.scopes
+        }
+        
+        return self.create_token_pair(user_data)
+
+    @staticmethod
+    def hash_password(password: str) -> str:
+        """哈希密码"""
+        return pwd_context.hash(password)
+
+    @staticmethod
+    def verify_password(plain_password: str, hashed_password: str) -> bool:
+        """验证密码"""
+        return pwd_context.verify(plain_password, hashed_password)
+
+    @staticmethod
+    def generate_random_token(length: int = 32) -> str:
+        """生成随机令牌"""
+        return secrets.token_urlsafe(length)
+
+    def validate_password_strength(self, password: str) -> bool:
+        """验证密码强度"""
+        if len(password) < self.settings.security.password_min_length:
+            return False
+        
+        if self.settings.security.password_require_uppercase and not any(c.isupper() for c in password):
+            return False
+        
+        if self.settings.security.password_require_lowercase and not any(c.islower() for c in password):
+            return False
+        
+        if self.settings.security.password_require_numbers and not any(c.isdigit() for c in password):
+            return False
+        
+        if self.settings.security.password_require_symbols and not any(c in "!@#$%^&*()_+-=[]{}|;:,.<>?" for c in password):
+            return False
+        
+        return True
+
+
+# 全局安全管理器实例
+security_manager = SecurityManager()
+
+
+class PermissionChecker:
+    """权限检查器"""
+
+    def __init__(self, required_scopes: list[str] = None):
+        self.required_scopes = required_scopes or []
+
+    def __call__(self, credentials: HTTPAuthorizationCredentials = security) -> TokenData:
+        """检查权限"""
+        token_data = security_manager.verify_token(credentials.credentials)
+        
+        # 检查所需权限
+        if self.required_scopes:
+            for scope in self.required_scopes:
+                if scope not in token_data.scopes:
+                    raise HTTPException(
+                        status_code=status.HTTP_403_FORBIDDEN,
+                        detail=f"Not enough permissions. Required scope: {scope}",
+                    )
+        
+        return token_data
+
+
+# 常用权限检查器
+require_auth = PermissionChecker()
+require_admin = PermissionChecker(["admin"])
+require_health_data_read = PermissionChecker(["health_data:read"])
+require_health_data_write = PermissionChecker(["health_data:write"])
+require_health_data_delete = PermissionChecker(["health_data:delete"])
+
+
+def get_current_user(credentials: HTTPAuthorizationCredentials = security) -> TokenData:
+    """获取当前用户"""
+    return security_manager.verify_token(credentials.credentials)
+
+
+def get_current_active_user(current_user: TokenData = require_auth) -> TokenData:
+    """获取当前活跃用户"""
+    return current_user
+
+
+def check_user_access(user_id: int, current_user: TokenData) -> bool:
+    """检查用户访问权限"""
+    # 用户只能访问自己的数据，除非是管理员
+    if current_user.user_id == user_id or "admin" in current_user.scopes:
+        return True
+    return False
+
+
+def require_user_access(user_id: int, current_user: TokenData = require_auth) -> TokenData:
+    """要求用户访问权限"""
+    if not check_user_access(user_id, current_user):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not enough permissions to access this user's data",
+        )
+    return current_user
 
 
 # 全局实例

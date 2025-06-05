@@ -9,7 +9,18 @@ from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
-# ConstitutionType import removed
+# 定义体质类型
+class ConstitutionType(Enum):
+    """体质类型"""
+    BALANCED = "balanced"  # 平和质
+    QI_DEFICIENCY = "qi_deficiency"  # 气虚质
+    YANG_DEFICIENCY = "yang_deficiency"  # 阳虚质
+    YIN_DEFICIENCY = "yin_deficiency"  # 阴虚质
+    PHLEGM_DAMPNESS = "phlegm_dampness"  # 痰湿质
+    DAMP_HEAT = "damp_heat"  # 湿热质
+    BLOOD_STASIS = "blood_stasis"  # 血瘀质
+    QI_STAGNATION = "qi_stagnation"  # 气郁质
+    SPECIAL_CONSTITUTION = "special_constitution"  # 特禀质
 
 logger = logging.getLogger(__name__)
 
@@ -50,6 +61,18 @@ class FoodTaste(Enum):
     BITTER = "bitter"  # 苦味
     SPICY = "spicy"  # 辛味
     SALTY = "salty"  # 咸味
+
+class FoodProperty(Enum):
+    """食物属性"""
+    
+    NOURISHING = "nourishing"  # 滋补
+    DETOXIFYING = "detoxifying"  # 解毒
+    WARMING = "warming"  # 温补
+    COOLING = "cooling"  # 清热
+    MOISTENING = "moistening"  # 润燥
+    DRYING = "drying"  # 燥湿
+    STRENGTHENING = "strengthening"  # 强身
+    CALMING = "calming"  # 安神
 
 class AgricultureType(Enum):
     """农业类型"""

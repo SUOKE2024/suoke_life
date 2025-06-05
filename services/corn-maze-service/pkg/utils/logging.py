@@ -11,6 +11,7 @@ from typing import Any
 
 from pkg.utils.config import get_value
 
+
 def setup_logging(_config: dict[str, Any] | None = None) -> None:
     """
     配置日志系统

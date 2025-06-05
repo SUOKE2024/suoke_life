@@ -29,14 +29,15 @@ from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import JSONResponse
 from loguru import logger
-from prometheus_client import Counter
-from prometheus_client import Histogram
-from prometheus_client import generate_latest
+from health_data_service.core.monitoring import get_health_status, get_metrics, record_request_metrics
+from health_data_service.core.docs import setup_docs
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from health_data_service.api.routes import health_data_router
+from health_data_service.api.routes.auth import auth_router
 from health_data_service.core.config import settings
 from health_data_service.core.database import get_database
+from health_data_service.core.cache import get_cache_manager
 from health_data_service.core.exceptions import DatabaseError
 from health_data_service.core.exceptions import NotFoundError
 from health_data_service.core.exceptions import ValidationError
@@ -48,28 +49,11 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Prometheus 指标
-REQUEST_COUNT = Counter(
-    'health_data_requests_total',
-    'Total number of requests',
-    ['method', 'endpoint', 'status']
-)
-
-REQUEST_DURATION = Histogram(
-    'health_data_request_duration_seconds',
-    'Request duration in seconds',
-    ['method', 'endpoint']
-)
-
-ERROR_COUNT = Counter(
-    'health_data_errors_total',
-    'Total number of errors',
-    ['error_type']
-)
+# 监控中间件
 
 
-class PrometheusMiddleware(BaseHTTPMiddleware):
-    """Prometheus 监控中间件"""
+class MonitoringMiddleware(BaseHTTPMiddleware):
+    """监控中间件"""
 
     async def dispatch(self, request: Request, call_next: Callable[[Request], Awaitable[Response]]) -> Response:
         start_time = time.time()
@@ -77,15 +61,12 @@ class PrometheusMiddleware(BaseHTTPMiddleware):
         response = await call_next(request)
 
         duration = time.time() - start_time
-        REQUEST_COUNT.labels(
+        record_request_metrics(
             method=request.method,
             endpoint=request.url.path,
-            status=response.status_code
-        ).inc()
-        REQUEST_DURATION.labels(
-            method=request.method,
-            endpoint=request.url.path
-        ).observe(duration)
+            status_code=response.status_code,
+            duration=duration
+        )
 
         return response
 
@@ -106,6 +87,16 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
     except Exception as e:
         logger.error(f"数据库连接初始化失败: {e}")
         sys.exit(1)
+
+    # 初始化缓存连接
+    try:
+        cache_manager = await get_cache_manager()
+        await cache_manager.ping()
+        logger.info("缓存连接初始化成功")
+    except Exception as e:
+        logger.error(f"缓存连接初始化失败: {e}")
+        # 缓存不是必需的，只记录警告
+        logger.warning("缓存服务不可用，将在无缓存模式下运行")
 
     yield
 
@@ -138,7 +129,7 @@ app.add_middleware(
     TrustedHostMiddleware,
     allowed_hosts=settings.ALLOWED_HOSTS,
 )
-app.add_middleware(PrometheusMiddleware)
+app.add_middleware(MonitoringMiddleware)
 
 
 @app.exception_handler(ValidationError)
@@ -205,18 +196,28 @@ async def root() -> dict[str, str]:
 async def health_check() -> dict[str, Any]:
     """健康检查端点"""
     try:
-        # 检查数据库连接
-        db_gen = get_database()
-        _ = await db_gen.__anext__()
-        # 这里应该执行一个简单的查询来测试连接
-        # await db.execute(text("SELECT 1"))
-        await db_gen.aclose()
-
-        return {
-            "status": "healthy",
-            "timestamp": time.time(),
-            "database": "connected",
+        health_status = await get_health_status()
+        
+        status_code = 200
+        if health_status.status == "unhealthy":
+            status_code = 503
+        elif health_status.status == "degraded":
+            status_code = 200  # 降级但仍可用
+        
+        # 为了兼容测试，返回平铺结构
+        result = {
+            "status": health_status.status,
+            "timestamp": health_status.timestamp.isoformat(),
         }
+        
+        # 将checks中的内容平铺到根级别
+        for check_name, check_result in health_status.checks.items():
+            result[check_name] = check_result
+        
+        # 添加details
+        result.update(health_status.details)
+        
+        return result
     except Exception as e:
         logger.error(f"健康检查失败: {e}")
         raise HTTPException(status_code=503, detail="服务不可用") from e
@@ -225,13 +226,15 @@ async def health_check() -> dict[str, Any]:
 @app.get("/metrics")
 async def metrics() -> Response:
     """Prometheus 指标端点"""
-    metrics_data = generate_latest()
-    # generate_latest() 总是返回 bytes
-    metrics_content = metrics_data.decode('utf-8')
+    metrics_content = get_metrics()
     return Response(metrics_content, media_type="text/plain")
 
 
+# 设置API文档
+setup_docs(app)
+
 # 包含路由
+app.include_router(auth_router, prefix="/api/v1")
 app.include_router(health_data_router, prefix="/api/v1", tags=["health-data"])
 
 

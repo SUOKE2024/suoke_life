@@ -159,4 +159,9 @@ async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
     """获取数据库会话的依赖注入函数"""
     db_manager = get_db_manager()
     async for session in db_manager.get_async_session():
+        yield session
+
+async def get_db() -> AsyncGenerator[AsyncSession, None]:
+    """获取数据库会话的依赖注入函数（别名）"""
+    async for session in get_db_session():
         yield session 

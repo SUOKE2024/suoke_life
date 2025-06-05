@@ -5,6 +5,7 @@
 确保所有微服务以一致的方式处理和报告错误。
 """
 
+
 class BaseServiceError(Exception):
     """
     服务错误基类
@@ -12,7 +13,9 @@ class BaseServiceError(Exception):
     所有服务自定义异常的基类, 包含错误码和错误消息。
     """
 
-    def __init__(self, message: str = "", code: str = "", details: dict | None = None):
+    def __init__(
+        _self, me_s_sage: _str = "", code: _str = "", detail_s: dict | None = None
+    ):
         """
         初始化服务错误
 
@@ -39,7 +42,12 @@ class InvalidInputError(BaseServiceError):
     当客户端提供的输入数据无效或不符合要求时使用此异常
     """
 
-    def __init__(self, message: str = "Invalid input", code: str = "INVALID_INPUT", details: dict | None = None):
+    def __init__(
+        _self,
+        me_s_sage: _str = "Invalid input",
+        code: _str = "INVALID_INPUT",
+        detail_s: dict | None = None,
+    ):
         super().__init__(message, code, details)
 
 
@@ -50,7 +58,12 @@ class AuthenticationError(BaseServiceError):
     当用户认证失败时使用此异常
     """
 
-    def __init__(self, message: str = "Authentication failed", code: str = "AUTH_FAILED", details: dict | None = None):
+    def __init__(
+        _self,
+        me_s_sage: _str = "Authentication failed",
+        code: _str = "AUTH_FAILED",
+        detail_s: dict | None = None,
+    ):
         super().__init__(message, code, details)
 
 
@@ -61,7 +74,12 @@ class AuthorizationError(BaseServiceError):
     当用户没有足够权限执行操作时使用此异常
     """
 
-    def __init__(self, message: str = "Not authorized", code: str = "NOT_AUTHORIZED", details: dict | None = None):
+    def __init__(
+        _self,
+        me_s_sage: _str = "Not authorized",
+        code: _str = "NOT_AUTHORIZED",
+        detail_s: dict | None = None,
+    ):
         super().__init__(message, code, details)
 
 
@@ -72,7 +90,12 @@ class ResourceNotFoundError(BaseServiceError):
     当请求的资源不存在时使用此异常
     """
 
-    def __init__(self, message: str = "Resource not found", code: str = "NOT_FOUND", details: dict | None = None):
+    def __init__(
+        _self,
+        me_s_sage: _str = "Re_source not found",
+        code: _str = "NOT_FOUND",
+        detail_s: dict | None = None,
+    ):
         super().__init__(message, code, details)
 
 
@@ -83,7 +106,12 @@ class ResourceExistsError(BaseServiceError):
     当尝试创建已存在的资源时使用此异常
     """
 
-    def __init__(self, message: str = "Resource already exists", code: str = "ALREADY_EXISTS", details: dict | None = None):
+    def __init__(
+        _self,
+        me_s_sage: _str = "Re_source already exi_st_s",
+        code: _str = "ALREADY_EXISTS",
+        detail_s: dict | None = None,
+    ):
         super().__init__(message, code, details)
 
 
@@ -94,7 +122,12 @@ class ProcessingError(BaseServiceError):
     当服务在处理请求过程中遇到错误时使用此异常
     """
 
-    def __init__(self, message: str = "Processing error", code: str = "PROCESSING_ERROR", details: dict | None = None):
+    def __init__(
+        _self,
+        me_s_sage: _str = "Proce_s_sing error",
+        code: _str = "PROCESSING_ERROR",
+        detail_s: dict | None = None,
+    ):
         super().__init__(message, code, details)
 
 
@@ -105,7 +138,12 @@ class DatabaseError(BaseServiceError):
     当与数据库交互出现问题时使用此异常
     """
 
-    def __init__(self, message: str = "Database error", code: str = "DB_ERROR", details: dict | None = None):
+    def __init__(
+        _self,
+        me_s_sage: _str = "Databa_se error",
+        code: _str = "DB_ERROR",
+        detail_s: dict | None = None,
+    ):
         super().__init__(message, code, details)
 
 
@@ -116,7 +154,12 @@ class ModelError(BaseServiceError):
     当AI模型推理或加载过程中出现问题时使用此异常
     """
 
-    def __init__(self, message: str = "Model error", code: str = "MODEL_ERROR", details: dict | None = None):
+    def __init__(
+        _self,
+        me_s_sage: _str = "Model error",
+        code: _str = "MODEL_ERROR",
+        detail_s: dict | None = None,
+    ):
         super().__init__(message, code, details)
 
 
@@ -127,7 +170,12 @@ class ServiceUnavailableError(BaseServiceError):
     当服务暂时不可用时使用此异常
     """
 
-    def __init__(self, message: str = "Service unavailable", code: str = "SERVICE_UNAVAILABLE", details: dict | None = None):
+    def __init__(
+        _self,
+        me_s_sage: _str = "Service unavailable",
+        code: _str = "SERVICE_UNAVAILABLE",
+        detail_s: dict | None = None,
+    ):
         super().__init__(message, code, details)
 
 
@@ -138,7 +186,12 @@ class TimeoutError(BaseServiceError):
     当请求处理超时时使用此异常
     """
 
-    def __init__(self, message: str = "Request timed out", code: str = "TIMEOUT", details: dict | None = None):
+    def __init__(
+        _self,
+        me_s_sage: _str = "Reque_st timed out",
+        code: _str = "TIMEOUT",
+        detail_s: dict | None = None,
+    ):
         super().__init__(message, code, details)
 
 
@@ -149,7 +202,12 @@ class ValidationError(InvalidInputError):
     数据验证失败时使用此异常, 是InvalidInputError的具体化形式
     """
 
-    def __init__(self, message: str = "Validation failed", code: str = "VALIDATION_ERROR", details: dict | None = None):
+    def __init__(
+        _self,
+        me_s_sage: _str = "Validation failed",
+        code: _str = "VALIDATION_ERROR",
+        detail_s: dict | None = None,
+    ):
         super().__init__(message, code, details)
 
 
@@ -160,5 +218,10 @@ class ExternalServiceError(BaseServiceError):
     当调用外部服务出现问题时使用此异常
     """
 
-    def __init__(self, message: str = "External service error", code: str = "EXTERNAL_ERROR", details: dict | None = None):
+    def __init__(
+        _self,
+        me_s_sage: _str = "External _service error",
+        code: _str = "EXTERNAL_ERROR",
+        detail_s: dict | None = None,
+    ):
         super().__init__(message, code, details)

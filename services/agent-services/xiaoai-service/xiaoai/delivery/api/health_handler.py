@@ -17,7 +17,10 @@ from ...integration.device_manager import get_device_manager
 
 logger = logging.getLogger(__name__)
 
-def create_health_router(getagent_manager_func: Callable[[], AgentManager]) -> APIRouter:
+
+def create_health_router(
+    getagent_manager_func: Callable[[], AgentManager],
+) -> APIRouter:
     """创建健康检查路由器"""
     router = APIRouter(prefix="/api/v1/health", tags=["健康检查"])
 
@@ -25,24 +28,28 @@ def create_health_router(getagent_manager_func: Callable[[], AgentManager]) -> A
     async def basic_health_check():
         """基础健康检查"""
         try:
-            return JSONResponse(content={
-                "status": "healthy",
-                "service": "xiaoai-service",
-                "timestamp": int(time.time()),
-                "version": "1.0.0"
-            })
+            return JSONResponse(
+                content={
+                    "status": "healthy",
+                    "service": "xiaoai-service",
+                    "timestamp": int(time.time()),
+                    "version": "1.0.0",
+                }
+            )
         except Exception as e:
             logger.error(f"基础健康检查失败: {e}")
-            raise HTTPException(status_code=500, detail=f"健康检查失败: {e!s}") from e
+            raise HTTPException(status_code =500, detail=f"健康检查失败: {e!s}") from e
 
     @router.get("/detailed")
-    async def detailed_health_check(agentmgr: AgentManager = Depends(getagent_manager_func)):
+    async def detailed_health_check(
+        agentmgr: AgentManager = Depends(getagent_manager_func),
+    ):
         """详细健康检查"""
         try:
             # 获取系统资源信息
             cpupercent = psutil.cpu_percent(interval=1)
             memory = psutil.virtual_memory()
-            disk = psutil.disk_usage('/')
+            disk = psutil.disk_usage("/")
 
             # 获取设备状态
             await get_device_manager()
@@ -52,7 +59,7 @@ def create_health_router(getagent_manager_func: Callable[[], AgentManager]) -> A
             agentstatus = {
                 "available": agent_mgr is not None,
                 "active_sessions": len(agent_mgr.activesessions) if agent_mgr else 0,
-                "initialized": agent_mgr.initialized if agent_mgr else False
+                "initialized": agent_mgr.initialized if agent_mgr else False,
             }
 
             healthdata = {
@@ -65,33 +72,34 @@ def create_health_router(getagent_manager_func: Callable[[], AgentManager]) -> A
                         "total": memory.total,
                         "available": memory.available,
                         "percent": memory.percent,
-                        "used": memory.used
+                        "used": memory.used,
                     },
                     "disk": {
                         "total": disk.total,
                         "free": disk.free,
                         "used": disk.used,
-                        "percent": (disk.used / disk.total) * 100
-                    }
+                        "percent": (disk.used / disk.total) * 100,
+                    },
                 },
                 "devices": devicestatus,
                 "agent": agentstatus,
                 "performance": {
                     "response_time_ms": "< 100ms",
                     "cache_enabled": True,
-                    "parallel_processing": True
-                }
+                    "parallel_processing": True,
+                },
             }
 
             # 判断整体健康状态
-            if cpu_percent > 90 or memory.percent > 90:
-                health_data["status"] = "degraded"
+            if cpu_percent > 90 or memory.percent > 90: health_data["status"] = "degraded"
 
             return JSONResponse(content=healthdata)
 
         except Exception as e:
             logger.error(f"详细健康检查失败: {e}")
-            raise HTTPException(status_code=500, detail=f"详细健康检查失败: {e!s}") from e
+            raise HTTPException(
+                status_code =500, detail=f"详细健康检查失败: {e!s}"
+            ) from e
 
     @router.get("/readiness")
     async def readiness_check(agentmgr: AgentManager = Depends(getagent_manager_func)):
@@ -120,31 +128,27 @@ def create_health_router(getagent_manager_func: Callable[[], AgentManager]) -> A
                 components["device_manager"] = "error"
                 ready = False
 
-
             return JSONResponse(
                 content={
                     "ready": ready,
                     "components": components,
-                    "timestamp": int(time.time())
+                    "timestamp": int(time.time()),
                 },
-                status_code=status_code
+                status_code =status_code,
             )
 
         except Exception as e:
             logger.error(f"就绪检查失败: {e}")
-            raise HTTPException(status_code=500, detail=f"就绪检查失败: {e!s}") from e
+            raise HTTPException(status_code =500, detail=f"就绪检查失败: {e!s}") from e
 
     @router.get("/liveness")
     async def liveness_check():
         """存活检查"""
         try:
             # 简单的存活检查
-            return JSONResponse(content={
-                "alive": True,
-                "timestamp": int(time.time())
-            })
+            return JSONResponse(content={"alive": True, "timestamp": int(time.time())})
         except Exception as e:
             logger.error(f"存活检查失败: {e}")
-            raise HTTPException(status_code=500, detail=f"存活检查失败: {e!s}") from e
+            raise HTTPException(status_code =500, detail=f"存活检查失败: {e!s}") from e
 
     return router

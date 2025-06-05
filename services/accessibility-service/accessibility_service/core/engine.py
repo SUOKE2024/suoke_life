@@ -62,7 +62,7 @@ class AccessibilityEngine:
 
     async def analyze(self, request: AccessibilityRequest) -> AccessibilityResponse:
         """Perform accessibility analysis."""
-        start_time = datetime.utcnow()
+        start_time = datetime.now(datetime.UTC)
 
         try:
             logger.info(f"Starting accessibility analysis for user {request.user_id}")
@@ -83,7 +83,7 @@ class AccessibilityEngine:
             total_issues, critical_issues = self._count_issues(analyses)
 
             # Calculate processing time
-            processing_time = (datetime.utcnow() - start_time).total_seconds()
+            processing_time = (datetime.now(datetime.UTC) - start_time).total_seconds()
 
             # Create response
             response = AccessibilityResponse(
@@ -105,7 +105,7 @@ class AccessibilityEngine:
 
         except Exception as e:
             logger.error(f"Analysis failed for user {request.user_id}: {e}")
-            processing_time = (datetime.utcnow() - start_time).total_seconds()
+            processing_time = (datetime.now(datetime.UTC) - start_time).total_seconds()
 
             # Return error response
             return AccessibilityResponse(
@@ -199,7 +199,7 @@ class AccessibilityEngine:
 
     async def _perform_visual_analysis(self, request: AccessibilityRequest) -> AccessibilityAnalysis:
         """Perform visual accessibility analysis."""
-        start_time = datetime.utcnow()
+        start_time = datetime.now(datetime.UTC)
 
         try:
             # Extract visual data
@@ -209,7 +209,7 @@ class AccessibilityEngine:
             result = await self._visual_service.analyze(visual_data, request.context)
 
             # Convert to AccessibilityAnalysis
-            processing_time = (datetime.utcnow() - start_time).total_seconds()
+            processing_time = (datetime.now(datetime.UTC) - start_time).total_seconds()
 
             return AccessibilityAnalysis(
                 type=AccessibilityType.VISUAL,
@@ -227,7 +227,7 @@ class AccessibilityEngine:
 
     async def _perform_audio_analysis(self, request: AccessibilityRequest) -> AccessibilityAnalysis:
         """Perform audio accessibility analysis."""
-        start_time = datetime.utcnow()
+        start_time = datetime.now(datetime.UTC)
 
         try:
             # Extract audio data
@@ -237,7 +237,7 @@ class AccessibilityEngine:
             result = await self._audio_service.analyze(audio_data, request.context)
 
             # Convert to AccessibilityAnalysis
-            processing_time = (datetime.utcnow() - start_time).total_seconds()
+            processing_time = (datetime.now(datetime.UTC) - start_time).total_seconds()
 
             return AccessibilityAnalysis(
                 type=AccessibilityType.AUDIO,
@@ -255,7 +255,7 @@ class AccessibilityEngine:
 
     async def _perform_motor_analysis(self, request: AccessibilityRequest) -> AccessibilityAnalysis:
         """Perform motor accessibility analysis."""
-        start_time = datetime.utcnow()
+        start_time = datetime.now(datetime.UTC)
 
         try:
             # Extract motor data
@@ -265,7 +265,7 @@ class AccessibilityEngine:
             result = await self._motor_service.analyze(motor_data, request.context)
 
             # Convert to AccessibilityAnalysis
-            processing_time = (datetime.utcnow() - start_time).total_seconds()
+            processing_time = (datetime.now(datetime.UTC) - start_time).total_seconds()
 
             return AccessibilityAnalysis(
                 type=AccessibilityType.MOTOR,
@@ -283,7 +283,7 @@ class AccessibilityEngine:
 
     async def _perform_cognitive_analysis(self, request: AccessibilityRequest) -> AccessibilityAnalysis:
         """Perform cognitive accessibility analysis."""
-        start_time = datetime.utcnow()
+        start_time = datetime.now(datetime.UTC)
 
         try:
             # Extract cognitive data
@@ -293,7 +293,7 @@ class AccessibilityEngine:
             result = await self._cognitive_service.analyze(cognitive_data, request.context)
 
             # Convert to AccessibilityAnalysis
-            processing_time = (datetime.utcnow() - start_time).total_seconds()
+            processing_time = (datetime.now(datetime.UTC) - start_time).total_seconds()
 
             return AccessibilityAnalysis(
                 type=AccessibilityType.COGNITIVE,

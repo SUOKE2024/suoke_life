@@ -21,10 +21,12 @@ export { default as ThemeToggle } from "./////    ThemeToggle";
 export { default as AccessibilityPanel } from "./////    AccessibilityPanel";
 // UI * UX优化组件 ////
 export { default as EnhancedButton } from "./////    EnhancedButton";
-;
 export { default as PerformanceMonitor } from "./////    PerformanceMonitor";
 //////     用户体验增强组件
-export { UserExperienceEnhancer, useUserExperience } from "./////    UserExperienceEnhancer";
+export {
+  UserExperienceEnhancer,
+  useUserExperience,
+} from "./////    UserExperienceEnhancer";
 //////     导出类型
 export type { TextProps } from "./////    Text";
 export type { ButtonProps } from "./////    Button";
@@ -42,7 +44,7 @@ export type { ModalProps } from "./////    Modal";
 export type { AgentAvatarProps } from "./////    AgentAvatar";
 export type { DividerProps } from "./////    Divider";
 // UI * UX优化组件类型 ////
-export type { EnhancedButtonProps } from "./////    EnhancedButton"
+export type { EnhancedButtonProps } from "./////    EnhancedButton";
 // UI组件统一导出文件   索克生活APP - UI/////    UX优化组件;
 //////     增强按钮组件;
 export { EnhancedButton } from "./////    EnhancedButton";

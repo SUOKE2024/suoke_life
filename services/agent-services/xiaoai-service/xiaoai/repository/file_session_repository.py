@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""
-文件会话存储库
-基于文件系统的会话存储实现, 用于开发环境
-"""
+""""""
+
+# , 
+""""""
 
 import asyncio
 import json
@@ -17,296 +17,290 @@ from ..utils.metrics import track_db_metrics
 
 logger = logging.getLogger(__name__)
 
-class FileSessionRepository:
-    """基于文件的会话存储库, 用于开发环境"""
 
-    def __init__(self):
-        """初始化文件会话存储库"""
-        self.config = get_config()
-        self.metrics = get_metrics_collector()
+# class FileSessionRepository:
+#     """, """"""
 
-        # 获取文件存储配置
-        self.config.get_section('file_storage')
-        self.enabled = file_storage_config.get('enabled', True)
-        self.basepath = file_storage_config.get('base_path', 'data')
-        self.sessionfile = file_storage_config.get('session_file', 'data/sessions.json')
+#     def __init__(self):
+#         """""""""
+#         self.config = get_config()
+#         self.metrics = get_metrics_collector()
 
-        # 获取会话配置
-        self.config.get_section('conversation')
-        self.sessiontimeout = conversation_config.get('session_timeout_minutes', 30) * 60  # 转换为秒
+        # 
+#         self.config.get_section("file_storage")
+#         self.enabled = file_storage_config.get("enabled", True)
+#         self.basepath = file_storage_config.get("base_path", "data")
+#         self.sessionfile = file_storage_config.get("session_file", "data/sessions.json")
 
-        # 确保目录存在
-        self._ensure_directories()
+        # 
+#         self.config.get_section("conversation")
+#         self.sessiontimeout = (
+#             conversation_config.get("session_timeout_minutes", 30) * 60
+#         )  # 
 
-        # 初始化会话数据
-        self.sessions = self._load_sessions()
+        # 
+#         self._ensure_directories()
 
-        # 文件锁, 防止并发写入冲突
-        self.file_lock = asyncio.Lock()
+        # 
+#         self.sessions = self._load_sessions()
 
-        logger.info("文件会话存储库初始化成功, 会话文件: %s", self.sessionfile)
+        # , 
+#         self.file_lock = asyncio.Lock()
 
-    def _ensure_directories(self):
-        """确保必要的目录存在"""
-        try:
-            # 创建基础目录
-            Path(self.basepath).mkdir(parents=True, exist_ok=True)
+#         logger.info(", : %s", self.sessionfile)
 
-            # 创建会话文件的父目录
-            Path(self.sessionfile)
-            session_file_path.parent.mkdir(parents=True, exist_ok=True)
+#     def _ensure_directories(self):
+#         """""""""
+#         try:
+            # 
+#             Path(self.basepath).mkdir(parents=True, exist_ok =True)
 
-            logger.debug("目录创建成功")
-        except Exception as e:
-            logger.error("创建目录失败: %s", str(e))
-            raise
+            # 
+#             Path(self.sessionfile)
+#             session_file_path.parent.mkdir(parents=True, exist_ok =True)
 
-    def _load_sessions(self) -> dict[str, dict[str, Any]]:
-        """从文件加载会话数据"""
-        try:
-            if os.path.exists(self.sessionfile):
-                with open(self.sessionfile, encoding='utf-8') as f:
-                    data = json.load(f)
-                    logger.info("从文件加载会话数据成功, 会话数: %d", len(data))
-                    return data
-            else:
-                logger.info("会话文件不存在, 创建新的会话存储")
-                return {}
-        except Exception as e:
-            logger.error("加载会话文件失败: %s", str(e))
-            return {}
+#             logger.debug("")
+#         except Exception as e:
+#             logger.error(": %s", str(e))
+#             raise
 
-    async def _save_sessions(self):
-        """保存会话数据到文件"""
-        async with self._file_lock:
-            try:
-                # 创建临时文件, 原子性写入
-                tempfile = self.session_file + '.tmp'
-                with open(tempfile, 'w', encoding='utf-8') as f:
-                    json.dump(self.sessions, f, ensure_ascii=False, indent=2)
+#     def _load_sessions(self) -> dict[str, dict[str, Any]]:
+#         """""""""
+#         try:
+#             if os.path.exists(self.sessionfile):
+#                 with open(self.sessionfile, encoding="utf-8") as f:
+#                     data = json.load(f)
+#                     logger.info(", : %d", len(data))
+#                     return data
+#             else:
+#                 logger.info(", ")
+#                 return {}
+#         except Exception as e:
+#             logger.error(": %s", str(e))
+#             return {}
 
-                # 原子性替换
-                os.replace(tempfile, self.sessionfile)
-                logger.debug("会话数据保存成功")
+#             async def _save_sessions(self):
+#         """""""""
+#             async with self._file_lock: try:
+                # , 
+#                 tempfile = self.session_file + ".tmp"
+#                 with open(tempfile, "w", encoding="utf-8") as f:
+#                     json.dump(self.sessions, f, ensure_ascii =False, indent=2)
 
-            except Exception as e:
-                logger.error("保存会话文件失败: %s", str(e))
-                # 清理临时文件
-                tempfile = self.session_file + '.tmp'
-                if os.path.exists(tempfile):
-                    os.remove(tempfile)
-                raise
+                # 
+#                     os.replace(tempfile, self.sessionfile)
+#                     logger.debug("")
 
-    @track_db_metrics(db_type="file", operation="query")
-    async def get_session(self, session_id: str) -> dict[str, Any] | None:
-        """
-        获取会话数据
+#             except Exception as e:
+#                 logger.error(": %s", str(e))
+                # 
+#                 tempfile = self.session_file + ".tmp"
+#                 if os.path.exists(tempfile):
+#                     os.remove(tempfile)
+#                     raise
 
-        Args:
-            session_id: 会话ID
+#                     @track_db_metrics(db_type ="file", operation="query")
+#                     async def get_session(self, session_id: str) -> dict[str, Any] | None:
+#         """"""
+                    
 
-        Returns:
-            Optional[Dict[str, Any]]: 会话数据, 如果不存在则返回None
-        """
-        try:
-            self.sessions.get(sessionid)
-            if session_data:
-                logger.debug("找到会话, 会话ID: %s", sessionid)
-                return session_data.copy()  # 返回副本, 避免外部修改
+#                     Args: session_id: ID
 
-            logger.debug("未找到会话, 会话ID: %s", sessionid)
-            return None
+#                     Returns:
+#                     Optional[Dict[str, Any]]: , None
+#         """"""
+#         try:
+#             self.sessions.get(sessionid)
+#             if session_data: logger.debug(", ID: %s", sessionid):
+#                 return session_data.copy()  # , 
 
-        except Exception as e:
-            logger.error("获取会话失败, 会话ID: %s, 错误: %s", sessionid, str(e))
-            return None
+#                 logger.debug(", ID: %s", sessionid)
+#                 return None
 
-    @track_db_metrics(db_type="file", operation="query")
-    async def get_user_sessions(self, user_id: str, limit: int = 10) -> list[dict[str, Any]]:
-        """
-        获取用户的所有会话
+#         except Exception as e:
+#             logger.error(", ID: %s, : %s", sessionid, str(e))
+#             return None
 
-        Args:
-            user_id: 用户ID
-            limit: 返回结果数量限制
+#             @track_db_metrics(db_type ="file", operation="query")
+#             async def get_user_sessions(
+#             self, user_id: str, limit: int = 10
+#             ) -> list[dict[str, Any]]:
+#         """"""
+            
 
-        Returns:
-            List[Dict[str, Any]]: 会话数据列表
-        """
-        try:
-            # 筛选用户的会话
-            for _session_id, session_data in self.sessions.items():
-                if session_data.get('user_id') == user_id:
-                    user_sessions.append(session_data.copy())
+#             Args: user_id: ID
+#             limit: 
 
-            # 按最后活跃时间排序
-            user_sessions.sort(key=lambda x: x.get('last_active', 0), reverse=True)
+#             Returns:
+#             List[Dict[str, Any]]: 
+#         """"""
+#         try:
+            # 
+#             for _session_id, session_data in self.sessions.items():
+#                 if session_data.get("user_id") == user_id: user_sessions.append(session_data.copy()):
 
-            # 限制返回数量
-            result = user_sessions[:limit]
+            # 
+#                     user_sessions.sort(key=lambda x: x.get("last_active", 0), reverse=True)
 
-            logger.info("获取用户会话成功, 用户ID: %s, 会话数: %d", userid, len(result))
-            return result
+            # 
+#                     result = user_sessions[:limit]
 
-        except Exception as e:
-            logger.error("获取用户会话失败, 用户ID: %s, 错误: %s", userid, str(e))
-            return []
+#                     logger.info(", ID: %s, : %d", userid, len(result))
+#                     return result
 
-    @track_db_metrics(db_type="file", operation="insert_update")
-    async def save_session(self, session_data: dict[str, Any]) -> bool:
-        """
-        保存会话数据
+#         except Exception as e:
+#             logger.error(", ID: %s, : %s", userid, str(e))
+#             return []
 
-        Args:
-            session_data: 会话数据
+#             @track_db_metrics(db_type ="file", operation="insert_update")
+#             async def save_session(self, session_data: dict[str, Any]) -> bool:
+#         """"""
+            
 
-        Returns:
-            bool: 是否保存成功
-        """
-        try:
-            sessionid = session_data.get('session_id')
-            if not session_id:
-                logger.error("会话数据缺少session_id")
-                return False
+#             Args: session_data: 
 
-            # 更新最后活跃时间
-            session_data['last_active'] = int(time.time())
+#             Returns:
+#             bool: 
+#         """"""
+#         try:
+#             sessionid = session_data.get("session_id")
+#             if not session_id: logger.error("session_id"):
+#                 return False
 
-            # 保存到内存
-            self.sessions[session_id] = session_data.copy()
+            # 
+#                 session_data["last_active"] = int(time.time())
 
-            # 异步保存到文件
-            await self._save_sessions()
+            # 
+#                 self.sessions[session_id] = session_data.copy()
 
-            logger.debug("会话保存成功, 会话ID: %s", sessionid)
-            return True
+            # 
+#                 await self._save_sessions()
 
-        except Exception as e:
-            logger.error("保存会话失败, 错误: %s", str(e))
-            return False
+#                 logger.debug(", ID: %s", sessionid)
+#                 return True
 
-    @track_db_metrics(db_type="file", operation="update")
-    async def update_session_metadata(self, session_id: str, metadata: dict[str, Any]) -> bool:
-        """
-        更新会话元数据
+#         except Exception as e:
+#             logger.error(", : %s", str(e))
+#             return False
 
-        Args:
-            session_id: 会话ID
-            metadata: 要更新的元数据
+#             @track_db_metrics(db_type ="file", operation="update")
+#             async def update_session_metadata(
+#             self, session_id: str, metadata: dict[str, Any]
+#             ) -> bool:
+#         """"""
+            
 
-        Returns:
-            bool: 是否更新成功
-        """
-        try:
-            if session_id not in self.sessions:
-                logger.warning("未找到要更新的会话, 会话ID: %s", sessionid)
-                return False
+#             Args: session_id: ID
+#             metadata: 
 
-            # 更新元数据和最后活跃时间
-            self.sessions[session_id]['metadata'] = metadata
-            self.sessions[session_id]['last_active'] = int(time.time())
+#             Returns:
+#             bool: 
+#         """"""
+#         try:
+#             if session_id not in self.sessions:
+#                 logger.warning(", ID: %s", sessionid)
+#                 return False
 
-            # 异步保存到文件
-            await self._save_sessions()
+            # 
+#                 self.sessions[session_id]["metadata"] = metadata
+#                 self.sessions[session_id]["last_active"] = int(time.time())
 
-            logger.debug("会话元数据更新成功, 会话ID: %s", sessionid)
-            return True
+            # 
+#                 await self._save_sessions()
 
-        except Exception as e:
-            logger.error("更新会话元数据失败, 会话ID: %s, 错误: %s", sessionid, str(e))
-            return False
+#                 logger.debug(", ID: %s", sessionid)
+#                 return True
 
-    @track_db_metrics(db_type="file", operation="delete")
-    async def delete_session(self, session_id: str) -> bool:
-        """
-        删除会话
+#         except Exception as e:
+#             logger.error(", ID: %s, : %s", sessionid, str(e))
+#             return False
 
-        Args:
-            session_id: 会话ID
+#             @track_db_metrics(db_type ="file", operation="delete")
+#             async def delete_session(self, session_id: str) -> bool:
+#         """"""
+            
 
-        Returns:
-            bool: 是否删除成功
-        """
-        try:
-            if session_id in self.sessions:
-                del self.sessions[session_id]
+#             Args: session_id: ID
 
-                # 异步保存到文件
-                await self._save_sessions()
+#             Returns:
+#             bool: 
+#         """"""
+#         try:
+#             if session_id in self.sessions:
+#                 del self.sessions[session_id]
 
-                logger.info("会话删除成功, 会话ID: %s", sessionid)
-                return True
+                # 
+#                 await self._save_sessions()
 
-            logger.warning("未找到要删除的会话, 会话ID: %s", sessionid)
-            return False
+#                 logger.info(", ID: %s", sessionid)
+#                 return True
 
-        except Exception as e:
-            logger.error("删除会话失败, 会话ID: %s, 错误: %s", sessionid, str(e))
-            return False
+#                 logger.warning(", ID: %s", sessionid)
+#                 return False
 
-    @track_db_metrics(db_type="file", operation="delete")
-    async def clean_inactive_sessions(self, max_age_seconds: int | None = None) -> int:
-        """
-        清理不活跃的会话
+#         except Exception as e:
+#             logger.error(", ID: %s, : %s", sessionid, str(e))
+#             return False
 
-        Args:
-            max_age_seconds: 会话最大不活跃时长(秒), 默认使用配置的超时时间
+#             @track_db_metrics(db_type ="file", operation="delete")
+#             async def clean_inactive__se_s_sion_s(
+#             _self, max_age__second_s: int | None = None
+#             ) -> int:
+#         """"""
+            
 
-        Returns:
-            int: 清理的会话数量
-        """
-        try:
-            # 使用配置的超时时间或指定的最大年龄
-            # 计算截止时间
-            int(time.time()) - max_age
+#             Args: max_age_seconds: (), 
 
-            # 找到过期的会话
-            expiredsessions = []
-            for sessionid, session_data in self.sessions.items():
-                session_data.get('last_active', 0)
-                if last_active < cutoff_time:
-                    expired_sessions.append(sessionid)
+#             Returns:
+#             int: 
+#         """"""
+#         try:
+            # 
+            # 
+#             int(time.time()) - max_age
 
-            # 删除过期会话
-            for session_id in expired_sessions:
-                del self.sessions[session_id]
+            # 
+#             expiredsessions = []
+#             for sessionid, session_data in self.sessions.items(): session_data.get("last_active", 0):
+#                 if last_active < cutoff_time: expired_sessions.append(sessionid):
 
-            # 如果有删除, 保存到文件
-            if expired_sessions:
-                await self._save_sessions()
+            # 
+#             for session_id in expired_sessions: del self.sessions[session_id]:
 
-            deletedcount = len(expiredsessions)
-            logger.info("清理过期会话成功, 删除会话数: %d", deletedcount)
-            return deleted_count
+            # , 
+#             if expired_sessions: await self._save_sessions():
 
-        except Exception as e:
-            logger.error("清理过期会话失败, 错误: %s", str(e))
-            return 0
+#                 deletedcount = len(expiredsessions)
+#                 logger.info(", : %d", deletedcount)
+#                 return deleted_count
 
-    @track_db_metrics(db_type="file", operation="count")
-    async def count_active_sessions(self, max_age_seconds: int | None = None) -> int:
-        """
-        计算活跃会话数量
+#         except Exception as e:
+#             logger.error(", : %s", str(e))
+#             return 0
 
-        Args:
-            max_age_seconds: 会话最大不活跃时长(秒), 默认使用配置的超时时间
+#             @track_db_metrics(db_type ="file", operation="count")
+#             async def count_active__se_s_sion_s(
+#             _self, max_age__second_s: int | None = None
+#             ) -> int:
+#         """"""
+            
 
-        Returns:
-            int: 活跃会话数量
-        """
-        try:
-            # 使用配置的超时时间或指定的最大年龄
-            # 计算截止时间
-            int(time.time()) - max_age
+#             Args: max_age_seconds: (), 
 
-            # 计算活跃会话数
-            for session_data in self.sessions.values():
-                session_data.get('last_active', 0)
-                if last_active >= cutoff_time:
-                    active_count += 1
+#             Returns:
+#             int: 
+#         """"""
+#         try:
+            # 
+            # 
+#             int(time.time()) - max_age
 
-            return active_count
+            # 
+#             for session_data in self.sessions.values(): session_data.get("last_active", 0):
+#                 if last_active >= cutoff_time: active_count += 1:
 
-        except Exception as e:
-            logger.error("计数活跃会话失败, 错误: %s", str(e))
-            return 0
+#                     return active_count
+
+#         except Exception as e:
+#             logger.error(", : %s", str(e))
+#             return 0

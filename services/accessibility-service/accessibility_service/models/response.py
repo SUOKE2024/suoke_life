@@ -2,7 +2,7 @@
 Response-related data models.
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 from typing import Any
 
@@ -35,7 +35,7 @@ class ServiceResponse(BaseModel):
 
     status: ResponseStatus = Field(..., description="Response status")
     message: str = Field(..., description="Response message")
-    timestamp: datetime = Field(default_factory=datetime.utcnow)
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     request_id: str | None = Field(None, description="Request identifier")
 
     # Metadata

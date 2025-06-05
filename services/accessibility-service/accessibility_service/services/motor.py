@@ -38,7 +38,7 @@ class MotorAccessibilityService:
             await self.initialize()
 
         logger.info(f"Starting motor analysis for user {request.user_id}")
-        start_time = datetime.utcnow()
+        start_time = datetime.now(datetime.UTC)
 
         try:
             await asyncio.sleep(0.4)
@@ -52,7 +52,7 @@ class MotorAccessibilityService:
                 keyboard_accessible=True,
                 touch_accessible=True,
                 voice_control_compatible=False,
-                processing_time=(datetime.utcnow() - start_time).total_seconds(),
+                processing_time=(datetime.now(datetime.UTC) - start_time).total_seconds(),
                 confidence_score=0.87
             )
 

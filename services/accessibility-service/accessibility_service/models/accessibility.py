@@ -2,11 +2,11 @@
 Accessibility-related data models.
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 from typing import Any
 
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 
 
 class AccessibilityType(str, Enum):
@@ -29,7 +29,7 @@ class SeverityLevel(str, Enum):
 class AccessibilityRequest(BaseModel):
     """Request for accessibility analysis."""
 
-    user_id: str = Field(..., description="User identifier")
+    user_id: str = Field(..., min_length=1, description="User identifier")
     session_id: str | None = Field(None, description="Session identifier")
     accessibility_types: list[AccessibilityType] = Field(
         default=[AccessibilityType.MULTIMODAL],
@@ -51,9 +51,10 @@ class AccessibilityRequest(BaseModel):
     detailed_analysis: bool = Field(True, description="Whether to perform detailed analysis")
     real_time: bool = Field(False, description="Whether this is real-time analysis")
 
-    timestamp: datetime = Field(default_factory=datetime.utcnow)
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
-    @validator('accessibility_types')
+    @field_validator('accessibility_types')
+    @classmethod
     def validate_accessibility_types(cls, v):
         """Validate accessibility types."""
         if not v:
@@ -81,7 +82,7 @@ class AccessibilityIssue(BaseModel):
 
     # Metadata
     confidence: float = Field(..., ge=0.0, le=1.0, description="Confidence score")
-    detected_at: datetime = Field(default_factory=datetime.utcnow)
+    detected_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
 class AccessibilityAnalysis(BaseModel):
@@ -105,7 +106,7 @@ class AccessibilityAnalysis(BaseModel):
     processing_time: float = Field(..., description="Processing time in seconds")
     analysis_model_version: str | None = Field(None, description="Model version used")
 
-    timestamp: datetime = Field(default_factory=datetime.utcnow)
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
 class AccessibilityRecommendation(BaseModel):
@@ -132,7 +133,7 @@ class AccessibilityRecommendation(BaseModel):
 
     # Metadata
     confidence: float = Field(..., ge=0.0, le=1.0, description="Confidence score")
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
 class AccessibilityResponse(BaseModel):
@@ -159,17 +160,18 @@ class AccessibilityResponse(BaseModel):
     status: str = Field(..., description="Response status")
 
     # Metadata
-    timestamp: datetime = Field(default_factory=datetime.utcnow)
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     version: str = Field(default="1.0.0", description="API version")
 
-    @validator('overall_score')
-    def validate_overall_score(cls, v, values):
+    @field_validator('overall_score')
+    @classmethod
+    def validate_overall_score(cls, v, info):
         """Validate overall score consistency."""
-        if 'analyses' in values and values['analyses']:
+        if info.data and 'analyses' in info.data and info.data['analyses']:
             # Calculate weighted average if analyses exist
-            total_weight = len(values['analyses'])
+            total_weight = len(info.data['analyses'])
             if total_weight > 0:
-                calculated_score = sum(analysis.score for analysis in values['analyses']) / total_weight
+                calculated_score = sum(analysis.score for analysis in info.data['analyses']) / total_weight
                 # Allow some tolerance for rounding
                 if abs(v - calculated_score) > 1.0:
                     raise ValueError("Overall score inconsistent with individual analysis scores")
@@ -195,6 +197,132 @@ class AccessibilityProfile(BaseModel):
     improvement_tracking: dict[str, Any] = Field(default_factory=dict, description="Improvement tracking")
 
     # Metadata
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     version: int = Field(default=1, description="Profile version")
+
+
+class VisualAnalysis(BaseModel):
+    """Visual analysis results for accessibility."""
+    
+    accessibility_score: float = Field(..., ge=0.0, le=100.0, description="Visual accessibility score")
+    issues: list[str] = Field(default_factory=list, description="Identified visual issues")
+    recommendations: list[str] = Field(default_factory=list, description="Visual improvement recommendations")
+    
+    # Scene analysis
+    scene_description: str = Field(..., description="Description of the visual scene")
+    detected_objects: list[dict[str, Any]] = Field(default_factory=list, description="Detected objects in scene")
+    navigation_guidance: str = Field(default="", description="Navigation guidance for blind users")
+    
+    # Text analysis
+    extracted_text: str = Field(default="", description="Text extracted from image")
+    text_accessibility: dict[str, Any] = Field(default_factory=dict, description="Text accessibility metrics")
+    
+    # Barrier analysis
+    barriers: list[str] = Field(default_factory=list, description="Identified accessibility barriers")
+    depth_info: dict[str, Any] = Field(default_factory=dict, description="Depth and spatial information")
+    
+    # Metadata
+    processing_time: float = Field(..., description="Processing time in seconds")
+    model_version: str = Field(default="1.0.0", description="Model version used")
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+class AudioAnalysis(BaseModel):
+    """Audio analysis results for accessibility."""
+    
+    accessibility_score: float = Field(..., ge=0.0, le=100.0, description="Audio accessibility score")
+    issues: list[str] = Field(default_factory=list, description="Identified audio issues")
+    recommendations: list[str] = Field(default_factory=list, description="Audio improvement recommendations")
+    
+    # Speech analysis
+    transcribed_text: str = Field(default="", description="Transcribed speech content")
+    speech_clarity: float = Field(default=0.0, ge=0.0, le=1.0, description="Speech clarity score")
+    language_detected: str = Field(default="", description="Detected language")
+    
+    # Audio quality
+    quality_metrics: dict[str, Any] = Field(default_factory=dict, description="Audio quality metrics")
+    noise_analysis: dict[str, Any] = Field(default_factory=dict, description="Background noise analysis")
+    
+    # Accessibility features
+    sound_events: list[dict[str, Any]] = Field(default_factory=list, description="Detected sound events")
+    frequency_analysis: dict[str, Any] = Field(default_factory=dict, description="Frequency spectrum analysis")
+    
+    # Metadata
+    processing_time: float = Field(..., description="Processing time in seconds")
+    model_version: str = Field(default="1.0.0", description="Model version used")
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+class MotorAnalysis(BaseModel):
+    """Motor analysis results for accessibility."""
+    
+    accessibility_score: float = Field(..., ge=0.0, le=100.0, description="Motor accessibility score")
+    issues: list[str] = Field(default_factory=list, description="Identified motor issues")
+    recommendations: list[str] = Field(default_factory=list, description="Motor improvement recommendations")
+    
+    # Click targets and touch
+    click_target_size: float = Field(..., description="Average click target size in pixels")
+    min_target_size: float = Field(default=44.0, description="Minimum recommended target size")
+    target_spacing: float = Field(default=8.0, description="Spacing between targets")
+    
+    # Navigation methods
+    keyboard_navigation_score: float = Field(..., ge=0.0, le=100.0, description="Keyboard navigation score")
+    keyboard_accessible: bool = Field(default=True, description="Fully keyboard accessible")
+    touch_accessible: bool = Field(default=True, description="Touch accessible")
+    voice_control_compatible: bool = Field(default=False, description="Voice control compatible")
+    
+    # Gesture complexity
+    gesture_complexity_score: float = Field(..., ge=0.0, le=100.0, description="Gesture complexity score")
+    complex_gestures: list[dict[str, Any]] = Field(
+        default_factory=list,
+        description="Complex gestures that may be difficult"
+    )
+    
+    # Timing and delays
+    timeout_warnings: bool = Field(default=True, description="Has timeout warnings")
+    adjustable_timing: bool = Field(default=False, description="Timing is adjustable")
+    
+    # Metadata
+    processing_time: float = Field(..., description="Processing time in seconds")
+    model_version: str = Field(default="1.0.0", description="Model version used")
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+class CognitiveAnalysis(BaseModel):
+    """Cognitive analysis results for accessibility."""
+    
+    accessibility_score: float = Field(..., ge=0.0, le=100.0, description="Cognitive accessibility score")
+    issues: list[str] = Field(default_factory=list, description="Identified cognitive issues")
+    recommendations: list[str] = Field(default_factory=list, description="Cognitive improvement recommendations")
+    
+    # Content complexity
+    complexity_score: float = Field(..., ge=0.0, le=100.0, description="Content complexity score")
+    reading_level: str = Field(..., description="Reading level (e.g., 'Grade 8')")
+    sentence_complexity: float = Field(default=0.0, ge=0.0, le=100.0, description="Sentence complexity score")
+    
+    # Attention and focus
+    attention_load_score: float = Field(..., ge=0.0, le=100.0, description="Cognitive attention load score")
+    distracting_elements: list[dict[str, Any]] = Field(
+        default_factory=list,
+        description="Elements that may be distracting"
+    )
+    
+    # Structure and organization
+    has_clear_structure: bool = Field(default=True, description="Has clear content structure")
+    has_consistent_navigation: bool = Field(default=True, description="Has consistent navigation")
+    has_breadcrumbs: bool = Field(default=False, description="Has breadcrumb navigation")
+    
+    # Error handling and help
+    has_error_prevention: bool = Field(default=False, description="Has error prevention features")
+    has_help_system: bool = Field(default=False, description="Has help system available")
+    error_messages_clear: bool = Field(default=True, description="Error messages are clear")
+    
+    # Memory and processing
+    memory_load_score: float = Field(default=0.0, ge=0.0, le=100.0, description="Memory load score")
+    processing_time_adequate: bool = Field(default=True, description="Processing time is adequate")
+    
+    # Metadata
+    processing_time: float = Field(..., description="Processing time in seconds")
+    model_version: str = Field(default="1.0.0", description="Model version used")
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))

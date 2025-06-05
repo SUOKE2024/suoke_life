@@ -1,15 +1,13 @@
 [build-system]
-requires = ["setuptools>=70.0.0", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
 
 [project]
 name = "health-data-service"
-version = "0.1.0"
-description = "索克生活健康数据服务 - 基于AI的健康数据管理和分析服务"
+version = "1.0.0"
+description = "索克生活健康数据服务 - 提供健康数据管理、处理和分析功能"
 readme = "README.md"
-authors = [
-    {name = "Song Xu", email = "song.xu@icloud.com"}
-]
+authors = ["Suoke Life Team <dev@suoke.life>"]
 maintainers = [
     {name = "Song Xu", email = "song.xu@icloud.com"}
 ]
@@ -63,6 +61,16 @@ dependencies = [
     # 日志和监控
     "loguru>=0.7.2",
     "prometheus-client>=0.19.0",
+    # gRPC支持
+    "grpcio>=1.59.3",
+    "grpcio-tools>=1.59.3",
+    "protobuf>=4.25.1",
+    # 异步任务
+    "celery[redis]>=5.3.4",
+    # 时间处理
+    "python-dateutil>=2.8.2",
+    # 数据验证
+    "marshmallow>=3.20.1",
     # 性能和优化
     "orjson>=3.9.10",
     "tenacity>=8.2.3",
@@ -71,6 +79,8 @@ dependencies = [
     # 异步支持
     "uvloop>=0.19.0 ; sys_platform != 'win32'",
     "greenlet>=3.2.2",
+    # 类型检查
+    "typing-extensions>=4.8.0",
 ]
 
 [dependency-groups]
@@ -250,3 +260,5 @@ exclude_lines = [
     "class .*\\bProtocol\\):",
     "@(abc\\.)?abstractmethod",
 ]
+
+

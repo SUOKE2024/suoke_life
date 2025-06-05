@@ -4,7 +4,7 @@ Database configuration for accessibility service.
 
 from typing import Any
 
-from pydantic import Field, validator
+from pydantic import Field, field_validator
 
 try:
     from pydantic_settings import BaseSettings
@@ -18,46 +18,47 @@ class DatabaseConfig(BaseSettings):
     # Database connection
     database_url: str = Field(
         default="sqlite:///./accessibility.db",
-        env="DATABASE_URL",
+        json_schema_extra={"env": "DATABASE_URL"},
         description="Database connection URL"
     )
 
     # Connection pool settings
-    pool_size: int = Field(default=5, env="DB_POOL_SIZE", description="Connection pool size")
-    max_overflow: int = Field(default=10, env="DB_MAX_OVERFLOW", description="Max overflow connections")
-    pool_timeout: int = Field(default=30, env="DB_POOL_TIMEOUT", description="Pool timeout in seconds")
-    pool_recycle: int = Field(default=3600, env="DB_POOL_RECYCLE", description="Pool recycle time in seconds")
+    pool_size: int = Field(default=5, json_schema_extra={"env": "DB_POOL_SIZE"}, description="Connection pool size")
+    max_overflow: int = Field(default=10, json_schema_extra={"env": "DB_MAX_OVERFLOW"}, description="Max overflow connections")
+    pool_timeout: int = Field(default=30, json_schema_extra={"env": "DB_POOL_TIMEOUT"}, description="Pool timeout in seconds")
+    pool_recycle: int = Field(default=3600, json_schema_extra={"env": "DB_POOL_RECYCLE"}, description="Pool recycle time in seconds")
 
     # Query settings
-    echo: bool = Field(default=False, env="DB_ECHO", description="Echo SQL queries")
-    echo_pool: bool = Field(default=False, env="DB_ECHO_POOL", description="Echo pool events")
+    echo: bool = Field(default=False, json_schema_extra={"env": "DB_ECHO"}, description="Echo SQL queries")
+    echo_pool: bool = Field(default=False, json_schema_extra={"env": "DB_ECHO_POOL"}, description="Echo pool events")
 
     # Migration settings
     migration_directory: str = Field(
         default="migrations",
-        env="DB_MIGRATION_DIR",
+        json_schema_extra={"env": "DB_MIGRATION_DIR"},
         description="Migration directory"
     )
 
     # Backup settings
-    backup_enabled: bool = Field(default=True, env="DB_BACKUP_ENABLED", description="Enable database backups")
-    backup_interval: int = Field(default=86400, env="DB_BACKUP_INTERVAL", description="Backup interval in seconds")
-    backup_retention: int = Field(default=7, env="DB_BACKUP_RETENTION", description="Backup retention in days")
+    backup_enabled: bool = Field(default=True, json_schema_extra={"env": "DB_BACKUP_ENABLED"}, description="Enable database backups")
+    backup_interval: int = Field(default=86400, json_schema_extra={"env": "DB_BACKUP_INTERVAL"}, description="Backup interval in seconds")
+    backup_retention: int = Field(default=7, json_schema_extra={"env": "DB_BACKUP_RETENTION"}, description="Backup retention in days")
 
     # Performance settings
-    query_timeout: int = Field(default=30, env="DB_QUERY_TIMEOUT", description="Query timeout in seconds")
+    query_timeout: int = Field(default=30, json_schema_extra={"env": "DB_QUERY_TIMEOUT"}, description="Query timeout in seconds")
     slow_query_threshold: float = Field(
         default=1.0,
-        env="DB_SLOW_QUERY_THRESHOLD",
+        json_schema_extra={"env": "DB_SLOW_QUERY_THRESHOLD"},
         description="Slow query threshold in seconds"
     )
 
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
-        case_sensitive = False
-
-    @validator('database_url')
+    model_config = {
+        "env_file": ".env",
+        "env_file_encoding": "utf-8",
+        "case_sensitive": False,
+    }
+    @field_validator('database_url')
+    @classmethod
     def validate_database_url(cls, v):
         """Validate database URL format."""
         if not v:
@@ -72,7 +73,8 @@ class DatabaseConfig(BaseSettings):
 
         return v
 
-    @validator('pool_size')
+    @field_validator('pool_size')
+    @classmethod
     def validate_pool_size(cls, v):
         """Validate pool size."""
         if v < 1:

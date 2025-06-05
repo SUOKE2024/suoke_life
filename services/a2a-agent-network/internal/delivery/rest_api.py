@@ -57,6 +57,101 @@ def create_rest_api(app: Flask, agent_manager: AgentManager) -> None:
             logger.error(f"获取智能体信息失败: {e}")
             return jsonify({"success": False, "error": str(e)}), 500
 
+    @app.route("/api/v1/agents/register", methods=["POST"])
+    @cross_origin()
+    def register_agent() -> Response | tuple[Response, int]:
+        """注册智能体"""
+        try:
+            data = request.get_json()
+            if not data:
+                return jsonify({"success": False, "error": "请求数据不能为空"}), 400
+
+            # 验证必需字段
+            required_fields = ["id", "name", "url"]
+            for field in required_fields:
+                if field not in data:
+                    return (
+                        jsonify({"success": False, "error": f"缺少必需字段: {field}"}),
+                        400,
+                    )
+
+            # 创建智能体对象
+            from ..model.agent import AgentInfo, AgentCapability, AgentStatus
+            
+            capabilities = []
+            for cap_data in data.get("capabilities", []):
+                capability = AgentCapability(
+                    name=cap_data.get("name", ""),
+                    description=cap_data.get("description", ""),
+                    enabled=cap_data.get("enabled", True),
+                    parameters=cap_data.get("parameters", {}),
+                )
+                capabilities.append(capability)
+
+            agent = AgentInfo(
+                id=data["id"],
+                name=data["name"],
+                description=data.get("description", ""),
+                version=data.get("version", "1.0.0"),
+                url=data["url"],
+                capabilities=capabilities,
+                status=AgentStatus.OFFLINE,
+                last_heartbeat=None,
+                metadata=data.get("metadata", {}),
+            )
+
+            # 注册智能体
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            try:
+                success = loop.run_until_complete(agent_manager.register_agent(agent))
+            finally:
+                loop.close()
+
+            if success:
+                return jsonify({
+                    "success": True,
+                    "message": "智能体注册成功",
+                    "agent_id": data["id"],
+                })
+            else:
+                return jsonify({
+                    "success": False,
+                    "message": "智能体注册失败",
+                }), 400
+
+        except Exception as e:
+            logger.error(f"智能体注册异常: {e}")
+            return jsonify({"success": False, "error": str(e)}), 500
+
+    @app.route("/api/v1/agents/<agent_id>/deregister", methods=["DELETE"])
+    @cross_origin()
+    def deregister_agent(agent_id: str) -> Response | tuple[Response, int]:
+        """注销智能体"""
+        try:
+            # 注销智能体
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            try:
+                success = loop.run_until_complete(agent_manager.deregister_agent(agent_id))
+            finally:
+                loop.close()
+
+            if success:
+                return jsonify({
+                    "success": True,
+                    "message": "智能体注销成功",
+                })
+            else:
+                return jsonify({
+                    "success": False,
+                    "message": "智能体注销失败或不存在",
+                }), 404
+
+        except Exception as e:
+            logger.error(f"智能体注销异常: {e}")
+            return jsonify({"success": False, "error": str(e)}), 500
+
     @app.route("/api/v1/agents/<agent_id>", methods=["GET"])
     @cross_origin()
     def get_agent(agent_id: str) -> Response | tuple[Response, int]:

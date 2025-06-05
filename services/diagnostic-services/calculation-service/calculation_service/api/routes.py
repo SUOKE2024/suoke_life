@@ -31,7 +31,7 @@ class PersonalInfo(BaseModel):
     birth_month: int = Field(..., description="出生月份", ge=1, le=12)
     birth_day: int = Field(..., description="出生日期", ge=1, le=31)
     birth_hour: int = Field(..., description="出生时辰", ge=0, le=23)
-    gender: str = Field(..., description="性别", regex="^(男|女)$")
+    gender: str = Field(..., description="性别", pattern="^(男|女)$")
     name: Optional[str] = Field(None, description="姓名")
 
 

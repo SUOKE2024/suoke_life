@@ -2,7 +2,7 @@
 
 from functools import lru_cache
 from typing import Optional, List
-from pydantic import Field, validator
+from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -143,7 +143,8 @@ class Settings(BaseSettings):
     cors_methods: List[str] = Field(default=["*"], description="CORS允许的方法")
     cors_headers: List[str] = Field(default=["*"], description="CORS允许的头部")
     
-    @validator("environment")
+    @field_validator("environment")
+    @classmethod
     def validate_environment(cls, v: str) -> str:
         """验证环境配置"""
         allowed = ["development", "testing", "staging", "production"]

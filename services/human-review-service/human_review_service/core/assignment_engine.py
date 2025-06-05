@@ -128,7 +128,7 @@ class AssignmentEngine:
         # 执行查询
         result = await session.execute(select(ReviewerDB).where(and_(*conditions)))
 
-        return result.scalars().all()
+        return list(result.scalars())
 
     async def _calculate_assignment_score(
         self,

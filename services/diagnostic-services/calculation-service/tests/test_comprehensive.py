@@ -167,7 +167,8 @@ class TestCalculationService:
         assert "司天" in yunqi
         assert "在泉" in yunqi
     
-    def test_comprehensive_analysis(self, sample_birth_info, comprehensive_calculator):
+    @pytest.mark.asyncio
+    async def test_comprehensive_analysis(self, sample_birth_info, comprehensive_calculator):
         """测试综合算诊分析"""
         analysis_options = {
             "include_ziwu": True,
@@ -176,28 +177,37 @@ class TestCalculationService:
             "include_wuyun_liuqi": True
         }
         
-        result = comprehensive_calculator.comprehensive_analysis(
+        result = await comprehensive_calculator.comprehensive_analysis(
             sample_birth_info,
-            analysis_options
+            analysis_date=None,
+            include_ziwu=analysis_options["include_ziwu"],
+            include_constitution=analysis_options["include_constitution"],
+            include_bagua=analysis_options["include_bagua"],
+            include_wuyun_liuqi=analysis_options["include_wuyun_liuqi"]
         )
         
-        assert "个人信息" in result
-        assert "分析时间" in result
-        assert "子午流注分析" in result
-        assert "体质分析" in result
-        assert "八卦分析" in result
-        assert "运气分析" in result
-        assert "综合建议" in result
-        assert "调养重点" in result
-        assert "注意事项" in result
+        assert "birth_info" in result
+        assert "analysis_metadata" in result
+        assert "individual_analyses" in result
+        assert "comprehensive_analysis" in result
+        assert "confidence_metrics" in result
+        assert "recommendations" in result
+        
+        # 检查个别分析结果
+        individual_analyses = result["individual_analyses"]
+        assert "ziwu" in individual_analyses
+        assert "constitution" in individual_analyses
+        assert "bagua" in individual_analyses
+        assert "wuyun_liuqi" in individual_analyses
         
         # 测试健康风险评估
-        risk_assessment = comprehensive_calculator.assess_health_risks(result)
+        risk_assessment = await comprehensive_calculator.assess_health_risks(result)
         assert "风险等级" in risk_assessment
         assert "主要风险" in risk_assessment
         assert "预防建议" in risk_assessment
     
-    def test_result_formatting(self, sample_birth_info, comprehensive_calculator):
+    @pytest.mark.asyncio
+    async def test_result_formatting(self, sample_birth_info, comprehensive_calculator):
         """测试结果格式化"""
         analysis_options = {
             "include_ziwu": True,
@@ -206,9 +216,13 @@ class TestCalculationService:
             "include_wuyun_liuqi": False
         }
         
-        result = comprehensive_calculator.comprehensive_analysis(
+        result = await comprehensive_calculator.comprehensive_analysis(
             sample_birth_info,
-            analysis_options
+            analysis_date=None,
+            include_ziwu=analysis_options["include_ziwu"],
+            include_constitution=analysis_options["include_constitution"],
+            include_bagua=analysis_options["include_bagua"],
+            include_wuyun_liuqi=analysis_options["include_wuyun_liuqi"]
         )
         
         formatted_result = format_analysis_result(result)

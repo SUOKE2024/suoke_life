@@ -15,11 +15,11 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 import pytest
 
-from corn_maze_service.config import Settings, get_settings
-from corn_maze_service.constants import MAZE_END_X, MAZE_END_Y
+from corn_maze_service.config import Settings
+
+# from corn_maze_service.constants import MAZE_END_X, MAZE_END_Y
 from corn_maze_service.internal.delivery.http import create_app
 from corn_maze_service.internal.model.maze import Maze, MazeNode, NodeType
-from corn_maze_service.pkg.logging import setup_logging
 
 # 添加项目根目录到Python路径
 project_root = Path(__file__).parent.parent
@@ -42,7 +42,7 @@ def temp_dir() -> Generator[Path]:
 def settings():
     """测试设置"""
     return Settings(
-        environment="test",
+        environment="testing",
         database={"url": "sqlite:///:memory:"},
         redis={"url": "redis://localhost:6379/1"},
     )
@@ -50,7 +50,8 @@ def settings():
 @pytest.fixture
 def mock_settings(settings: Settings) -> Generator[Settings]:
     """模拟设置"""
-    original_get_settings = get_settings
+    import corn_maze_service.config
+    original_get_settings = corn_maze_service.config.get_settings
 
     def _get_test_settings():
         return settings
@@ -66,7 +67,7 @@ def mock_settings(settings: Settings) -> Generator[Settings]:
 @pytest.fixture
 def app(mock_settings: Settings) -> FastAPI:
     """创建测试应用"""
-    setup_logging()
+    # 在测试环境中跳过日志设置
     return create_app(mock_settings)
 
 @pytest.fixture
@@ -90,13 +91,19 @@ async def db_session():
 @pytest.fixture
 def sample_maze():
     """示例迷宫"""
+    from uuid import uuid4
+
+    from corn_maze_service.internal.model.maze import MazeDifficulty, MazeTheme
+
     # 创建一个简单的3x3迷宫
+    size = 3
     nodes = []
-    for x in range(3):
-        for y in range(3):
+    for y in range(size):
+        row = []
+        for x in range(size):
             if x == 0 and y == 0:
                 node_type = NodeType.START
-            elif x == MAZE_END_X and y == MAZE_END_Y:
+            elif x == size-1 and y == size-1:
                 node_type = NodeType.END
             elif (x + y) % 2 == 0:
                 node_type = NodeType.PATH
@@ -106,24 +113,22 @@ def sample_maze():
             node = MazeNode(
                 x=x,
                 y=y,
-                type=node_type,
+                node_type=node_type,
                 connections=[]
             )
-            nodes.append(node)
+            row.append(node)
+        nodes.append(row)
 
     maze = Maze(
-        id="test-maze-1",
         name="测试迷宫",
         description="用于测试的简单迷宫",
-        theme="health",
-        difficulty="easy",
-        size_x=3,
-        size_y=3,
+        theme=MazeTheme.HEALTH,
+        difficulty=MazeDifficulty.EASY,
+        size=size,
+        creator_id=uuid4(),
         nodes=nodes,
-        start_x=0,
-        start_y=0,
-        end_x=MAZE_END_X,
-        end_y=MAZE_END_Y
+        start_position=(0, 0),
+        end_position=(size-1, size-1)
     )
 
     return maze

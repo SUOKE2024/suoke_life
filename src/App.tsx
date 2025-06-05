@@ -14,13 +14,13 @@ import { log } from "./services/Logger";
 const App: React.FC = () => {
   // 性能监控
   const performanceMonitor = usePerformanceMonitor({
-    componentName: 'App',
+    componentName: "App",
     enableMemoryMonitoring: false,
-    threshold: 50 // ms
+    threshold: 50, // ms
   });
 
   log.debug("App 正在渲染...");
-  
+
   // 记录渲染性能
   performanceMonitor.recordRender();
 

@@ -1,44 +1,44 @@
-//////     react-native-device-info.js   索克生活APP - 自动生成的类型安全文件     @description TODO: 添加文件描述 @author 索克生活开发团队;   @version 1.0.0;
+// react-native-device-info.js - 索克生活APP Mock文件
 export default {
-  getUniqueId: jest.fn(() => Promise.resolve("mock-unique-id)),"
+  getUniqueId: jest.fn(() => Promise.resolve("mock-unique-id")),
   getDeviceId: jest.fn(() => "mock-device-id"),
-  getSystemName: jest.fn(() => iOS"),"
-  getSystemVersion: jest.fn(() => "14.0),"
+  getSystemName: jest.fn(() => "iOS"),
+  getSystemVersion: jest.fn(() => "14.0"),
   getModel: jest.fn(() => "iPhone"),
-  getBrand: jest.fn(() => Apple"),"
-  getBuildNumber: jest.fn(() => "1),"
+  getBrand: jest.fn(() => "Apple"),
+  getBuildNumber: jest.fn(() => "1"),
   getVersion: jest.fn(() => "1.0.0"),
-  getReadableVersion: jest.fn(() => 1.0.0.1"),"
-  getDeviceName: jest.fn(() => Promise.resolve("Test Device)),"
+  getReadableVersion: jest.fn(() => "1.0.0.1"),
+  getDeviceName: jest.fn(() => Promise.resolve("Test Device")),
   getUserAgent: jest.fn(() => Promise.resolve("Test User Agent")),
-  getManufacturer: jest.fn(() => Promise.resolve(Apple")),"
-  getSerialNumber: jest.fn(() => Promise.resolve("mock-serial)),"
+  getManufacturer: jest.fn(() => Promise.resolve("Apple")),
+  getSerialNumber: jest.fn(() => Promise.resolve("mock-serial")),
   getAndroidId: jest.fn(() => Promise.resolve("mock-android-id")),
-  getIpAddress: jest.fn(() => Promise.resolve(192.168.1.1")),"
-  getMacAddress: jest.fn(() => Promise.resolve("00:00:00:00:00:00)),"
+  getIpAddress: jest.fn(() => Promise.resolve("192.168.1.1")),
+  getMacAddress: jest.fn(() => Promise.resolve("00:00:00:00:00:00")),
   getDeviceType: jest.fn(() => "Handset"),
   isTablet: jest.fn(() => false),
   isEmulator: jest.fn(() => Promise.resolve(false)),
   hasNotch: jest.fn(() => false),
   hasDynamicIsland: jest.fn(() => false),
-  getDeviceToken: jest.fn(() => Promise.resolve(mock-device-token")),"
+  getDeviceToken: jest.fn(() => Promise.resolve("mock-device-token")),
   getBatteryLevel: jest.fn(() => Promise.resolve(0.8)),
   isLocationEnabled: jest.fn(() => Promise.resolve(true)),
   isHeadphonesConnected: jest.fn(() => Promise.resolve(false)),
   getAvailableLocationProviders: jest.fn(() => Promise.resolve({})),
-  getInstallReferrer: jest.fn(() => Promise.resolve("mock-referrer)),"
+  getInstallReferrer: jest.fn(() => Promise.resolve("mock-referrer")),
   getFirstInstallTime: jest.fn(() => Promise.resolve(1234567890)),
   getLastUpdateTime: jest.fn(() => Promise.resolve(1234567890)),
   getPhoneNumber: jest.fn(() => Promise.resolve("123-456-7890")),
-  getCarrier: jest.fn(() => Promise.resolve(Test Carrier")),"
+  getCarrier: jest.fn(() => Promise.resolve("Test Carrier")),
   getTotalMemory: jest.fn(() => Promise.resolve(4000000000)),
   getUsedMemory: jest.fn(() => Promise.resolve(2000000000)),
   getTotalDiskCapacity: jest.fn(() => Promise.resolve(64000000000)),
-  getFreeDiskStorage: jest.fn(() => Promise.resolve(32000000000)),;
-  getPowerState: jest.fn(() => Promise.resolve({;
-    batteryLevel: 0.8,;
-    batteryState: "unplugged,";
-    lowPowerMode: false;
+  getFreeDiskStorage: jest.fn(() => Promise.resolve(32000000000)),
+  getPowerState: jest.fn(() => Promise.resolve({
+    batteryLevel: 0.8,
+    batteryState: "unplugged",
+    lowPowerMode: false
   })),
   isBatteryCharging: jest.fn(() => Promise.resolve(false)),
   isAirplaneMode: jest.fn(() => Promise.resolve(false)),
@@ -47,19 +47,19 @@ export default {
   isMouseConnected: jest.fn(() => Promise.resolve(false)),
   isKeyboardConnected: jest.fn(() => Promise.resolve(false)),
   getBootloader: jest.fn(() => Promise.resolve("mock-bootloader")),
-  getDisplay: jest.fn(() => Promise.resolve(mock-display")),"
-  getFingerprint: jest.fn(() => Promise.resolve("mock-fingerprint)),"
+  getDisplay: jest.fn(() => Promise.resolve("mock-display")),
+  getFingerprint: jest.fn(() => Promise.resolve("mock-fingerprint")),
   getHardware: jest.fn(() => Promise.resolve("mock-hardware")),
-  getHost: jest.fn(() => Promise.resolve(mock-host")),"
-  getProduct: jest.fn(() => Promise.resolve("mock-product)),"
+  getHost: jest.fn(() => Promise.resolve("mock-host")),
+  getProduct: jest.fn(() => Promise.resolve("mock-product")),
   getTags: jest.fn(() => Promise.resolve("mock-tags")),
-  getType: jest.fn(() => Promise.resolve(mock-type")),"
-  getBaseOs: jest.fn(() => Promise.resolve("mock-base-os)),"
+  getType: jest.fn(() => Promise.resolve("mock-type")),
+  getBaseOs: jest.fn(() => Promise.resolve("mock-base-os")),
   getPreviewSdkInt: jest.fn(() => Promise.resolve(0)),
   getSecurityPatch: jest.fn(() => Promise.resolve("2021-01-01")),
-  getCodename: jest.fn(() => Promise.resolve(mock-codename")),"
-  getIncremental: jest.fn(() => Promise.resolve('mock-incremental')),
+  getCodename: jest.fn(() => Promise.resolve("mock-codename")),
+  getIncremental: jest.fn(() => Promise.resolve("mock-incremental")),
   supported32BitAbis: jest.fn(() => Promise.resolve([])),
   supported64BitAbis: jest.fn(() => Promise.resolve([])),
   supportedAbis: jest.fn(() => Promise.resolve([]))
-};
+}; 

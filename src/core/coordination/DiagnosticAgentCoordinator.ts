@@ -57,7 +57,10 @@ export class DiagnosticAgentCoordinator extends EventEmitter {
   /**
    * 启动诊断-智能体协同会话
    */
-  async startCoordinationSession(userId: string, sessionId?: string): Promise<string> {
+  async startCoordinationSession(
+    userId: string,
+    sessionId?: string
+  ): Promise<string> {
     try {
       const id = sessionId || this.generateSessionId();
       const session: CoordinationSession = {
@@ -66,7 +69,7 @@ export class DiagnosticAgentCoordinator extends EventEmitter {
         startTime: Date.now(),
         diagnosticResults: [],
         agentResponses: [],
-        status: "active"
+        status: "active",
       };
 
       this.activeSessions.set(id, session);
@@ -84,7 +87,10 @@ export class DiagnosticAgentCoordinator extends EventEmitter {
   /**
    * 接收诊断服务结果
    */
-  async receiveDiagnosticResult(sessionId: string, result: DiagnosticResult): Promise<void> {
+  async receiveDiagnosticResult(
+    sessionId: string,
+    result: DiagnosticResult
+  ): Promise<void> {
     try {
       const session = this.activeSessions.get(sessionId);
       if (!session) {
@@ -92,8 +98,13 @@ export class DiagnosticAgentCoordinator extends EventEmitter {
       }
 
       session.diagnosticResults.push(result);
-      this.logger.info(`收到诊断结果: ${result.serviceType}`, { sessionId, confidence: result.confidence });
-      this.metrics.incrementCounter("diagnostic_results_received", { service: result.serviceType });
+      this.logger.info(`收到诊断结果: ${result.serviceType}`, {
+        sessionId,
+        confidence: result.confidence,
+      });
+      this.metrics.incrementCounter("diagnostic_results_received", {
+        service: result.serviceType,
+      });
       this.emit("diagnosticResultReceived", { sessionId, result });
 
       // 检查是否可以触发智能体分析
@@ -107,7 +118,10 @@ export class DiagnosticAgentCoordinator extends EventEmitter {
   /**
    * 接收智能体响应
    */
-  async receiveAgentResponse(sessionId: string, response: AgentResponse): Promise<void> {
+  async receiveAgentResponse(
+    sessionId: string,
+    response: AgentResponse
+  ): Promise<void> {
     try {
       const session = this.activeSessions.get(sessionId);
       if (!session) {
@@ -115,8 +129,13 @@ export class DiagnosticAgentCoordinator extends EventEmitter {
       }
 
       session.agentResponses.push(response);
-      this.logger.info(`收到智能体响应: ${response.agentType}`, { sessionId, confidence: response.confidence });
-      this.metrics.incrementCounter("agent_responses_received", { agent: response.agentType });
+      this.logger.info(`收到智能体响应: ${response.agentType}`, {
+        sessionId,
+        confidence: response.confidence,
+      });
+      this.metrics.incrementCounter("agent_responses_received", {
+        agent: response.agentType,
+      });
       this.emit("agentResponseReceived", { sessionId, response });
 
       // 检查是否可以生成共识结果
@@ -132,14 +151,17 @@ export class DiagnosticAgentCoordinator extends EventEmitter {
    */
   private async checkForAgentTrigger(sessionId: string): Promise<void> {
     const session = this.activeSessions.get(sessionId);
-    if (!session) return;
+    if (!session) {return;}
 
     // 当收集到足够的诊断数据时，触发智能体分析
-    const diagnosticTypes = new Set(session.diagnosticResults.map(r => r.serviceType));
-    if (diagnosticTypes.size >= 3) { // 至少3种诊断类型
+    const diagnosticTypes = new Set(
+      session.diagnosticResults.map((r) => r.serviceType)
+    );
+    if (diagnosticTypes.size >= 3) {
+      // 至少3种诊断类型
       this.emit("triggerAgentAnalysis", {
         sessionId,
-        diagnosticResults: session.diagnosticResults
+        diagnosticResults: session.diagnosticResults,
       });
     }
   }
@@ -149,20 +171,24 @@ export class DiagnosticAgentCoordinator extends EventEmitter {
    */
   private async checkForConsensus(sessionId: string): Promise<void> {
     const session = this.activeSessions.get(sessionId);
-    if (!session) return;
+    if (!session) {return;}
 
     // 当收集到足够的智能体响应时，计算共识
-    if (session.agentResponses.length >= 2) { // 至少2个智能体响应
+    if (session.agentResponses.length >= 2) {
+      // 至少2个智能体响应
       const consensus = await this.calculateConsensus(session);
       if (consensus.confidence >= this.consensusThreshold) {
         session.consensusResult = consensus;
         session.status = "completed";
-        this.logger.info(`达成共识`, { sessionId, confidence: consensus.confidence });
+        this.logger.info(`达成共识`, {
+          sessionId,
+          confidence: consensus.confidence,
+        });
         this.metrics.incrementCounter("consensus_reached");
         this.emit("consensusReached", {
           sessionId,
           consensus: consensus.result,
-          confidence: consensus.confidence
+          confidence: consensus.confidence,
         });
       }
     }
@@ -171,52 +197,58 @@ export class DiagnosticAgentCoordinator extends EventEmitter {
   /**
    * 计算智能体共识
    */
-  private async calculateConsensus(session: CoordinationSession): Promise<{ result: any; confidence: number }> {
+  private async calculateConsensus(
+    session: CoordinationSession
+  ): Promise<{ result: any; confidence: number }> {
     const responses = session.agentResponses;
-    
+
     // 简化的共识算法：基于置信度加权平均
     let totalWeight = 0;
     let weightedSum = 0;
     const consensusData: any = {};
 
-    responses.forEach(response => {
+    responses.forEach((response) => {
       totalWeight += response.confidence;
       weightedSum += response.confidence;
-      
+
       // 合并分析结果
       if (response.analysis) {
-        Object.keys(response.analysis).forEach(key => {
+        Object.keys(response.analysis).forEach((key) => {
           if (!consensusData[key]) {
             consensusData[key] = [];
           }
           consensusData[key].push({
             value: response.analysis[key],
             weight: response.confidence,
-            agent: response.agentType
+            agent: response.agentType,
           });
         });
       }
     });
 
     const confidence = totalWeight / responses.length;
-    
+
     // 生成最终共识结果
     const finalResult: any = {};
-    Object.keys(consensusData).forEach(key => {
+    Object.keys(consensusData).forEach((key) => {
       const items = consensusData[key];
-      const weightedAvg = items.reduce((sum: number, item: any) =>
-        sum + (item.value * item.weight), 0) / items.reduce((sum: number, item: any) => 
-        sum + item.weight, 0);
+      const weightedAvg =
+        items.reduce(
+          (sum: number, item: any) => sum + item.value * item.weight,
+          0
+        ) / items.reduce((sum: number, item: any) => sum + item.weight, 0);
       finalResult[key] = {
         value: weightedAvg,
         sources: items.map((item: any) => item.agent),
-        confidence: items.reduce((sum: number, item: any) => sum + item.weight, 0) / items.length
+        confidence:
+          items.reduce((sum: number, item: any) => sum + item.weight, 0) /
+          items.length,
       };
     });
 
     return {
       result: finalResult,
-      confidence
+      confidence,
     };
   }
 

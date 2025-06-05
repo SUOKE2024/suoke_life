@@ -23,18 +23,64 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 from geopy.distance import geodesic
 from loguru import logger
 
-# 导入通用组件
-from services.common.governance.circuit_breaker import (
-    CircuitBreaker,
-    CircuitBreakerConfig,
-    get_circuit_breaker,
-)
-from services.common.governance.rate_limiter import (
-    RateLimitConfig,
-    get_rate_limiter,
-    rate_limit,
-)
-from services.common.observability.tracing import SpanKind, get_tracer, trace
+# 导入通用组件 - 临时模拟实现
+try:
+    from services.common.governance.circuit_breaker import (
+        CircuitBreaker,
+        CircuitBreakerConfig,
+        get_circuit_breaker,
+    )
+    from services.common.governance.rate_limiter import (
+        RateLimitConfig,
+        get_rate_limiter,
+        rate_limit,
+    )
+    from services.common.observability.tracing import SpanKind, get_tracer, trace
+except ImportError:
+    # 模拟实现，用于独立运行
+    from functools import wraps
+    from enum import Enum
+    
+    class SpanKind(Enum):
+        SERVER = "server"
+        CLIENT = "client"
+    
+    def trace(service_name: str = "", kind: SpanKind = SpanKind.SERVER):
+        def decorator(func):
+            @wraps(func)
+            async def wrapper(*args, **kwargs):
+                return await func(*args, **kwargs)
+            return wrapper
+        return decorator
+    
+    def rate_limit(name: str = "", tokens: int = 1):
+        def decorator(func):
+            @wraps(func)
+            async def wrapper(*args, **kwargs):
+                return await func(*args, **kwargs)
+            return wrapper
+        return decorator
+    
+    class CircuitBreaker:
+        def __init__(self, *args, **kwargs):
+            pass
+    
+    class CircuitBreakerConfig:
+        def __init__(self, *args, **kwargs):
+            pass
+    
+    def get_circuit_breaker(*args, **kwargs):
+        return CircuitBreaker()
+    
+    class RateLimitConfig:
+        def __init__(self, *args, **kwargs):
+            pass
+    
+    def get_rate_limiter(*args, **kwargs):
+        return None
+    
+    def get_tracer(*args, **kwargs):
+        return None
 
 class ResourceType(Enum):
     """资源类型"""

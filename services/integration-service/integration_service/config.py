@@ -5,7 +5,8 @@
 from pathlib import Path
 
 import yaml
-from pydantic import BaseSettings, Field
+from pydantic_settings import BaseSettings
+from pydantic import Field
 
 
 class Settings(BaseSettings):
@@ -17,6 +18,7 @@ class Settings(BaseSettings):
     debug: bool = Field(default=False, env="DEBUG")
     host: str = Field(default="0.0.0.0", env="HOST")
     port: int = Field(default=8090, env="PORT")
+    allowed_hosts: list[str] = Field(default=["*"], env="ALLOWED_HOSTS")
 
     # 数据库配置
     database_url: str = Field(

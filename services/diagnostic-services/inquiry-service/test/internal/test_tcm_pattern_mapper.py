@@ -208,7 +208,6 @@ class TestPatternMapper(unittest.TestCase):
                 body_part="胸胁",
                 severity=SymptomSeverity.MODERATE,
                 duration=SymptomDuration.CHRONIC,
-                duration_value=30,
                 confidence=0.9,
             ),
             Symptom(
@@ -230,9 +229,11 @@ class TestPatternMapper(unittest.TestCase):
         # 验证结果
         self.assertIsNotNone(result)
         self.assertTrue(len(result.patterns) > 0)
-        self.assertEqual(result.primary_pattern.name, "肝郁脾虚证")
+        # 主要证型是第一个证型
+        primary_pattern = result.patterns[0]
+        self.assertEqual(primary_pattern.name, "肝郁脾虚证")
         self.assertGreater(result.confidence, 0.7)
-        self.assertTrue(len(result.analysis) > 0)
+        self.assertTrue(len(result.interpretation) > 0)
 
 
 if __name__ == "__main__":

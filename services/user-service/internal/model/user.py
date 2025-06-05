@@ -6,7 +6,7 @@ from enum import Enum
 from typing import Dict, List, Optional, Union, Set
 from uuid import UUID
 
-from pydantic import BaseModel, Field, SecretStr, EmailStr, validator, root_validator
+from pydantic import BaseModel, Field, SecretStr, EmailStr, field_validator, model_validator
 
 
 class UserStatus(str, Enum):
@@ -197,7 +197,8 @@ class UserHealthSummary(BaseModel):
             UUID: lambda v: str(v),
         }
     
-    @validator('constitution_scores')
+    @field_validator('constitution_scores')
+    @classmethod
     def validate_constitution_scores(cls, v):
         """验证体质评分"""
         for constitution_type, score in v.items():
@@ -211,17 +212,19 @@ class UserHealthSummary(BaseModel):
         
         return v
     
-    @root_validator
+    @model_validator(mode='before')
+    @classmethod
     def calculate_bmi(cls, values):
         """计算BMI"""
-        height = values.get('height')
-        weight = values.get('weight')
-        
-        if height and weight and height > 0:
-            # 身高单位是cm，需要转换为m
-            height_in_meters = height / 100
-            bmi = weight / (height_in_meters * height_in_meters)
-            values['bmi'] = round(bmi, 2)
+        if isinstance(values, dict):
+            height = values.get('height')
+            weight = values.get('weight')
+            
+            if height and weight and height > 0:
+                # 身高单位是cm，需要转换为m
+                height_in_meters = height / 100
+                bmi = weight / (height_in_meters * height_in_meters)
+                values['bmi'] = round(bmi, 2)
         
         return values
 
@@ -250,7 +253,8 @@ class CreateUserRequest(BaseModel):
     birth_date: Optional[datetime] = None
     metadata: Dict[str, str] = Field(default_factory=dict)
     
-    @validator('username')
+    @field_validator('username')
+    @classmethod
     def username_alphanumeric(cls, v):
         if not v.isalnum():
             raise ValueError('用户名只能包含字母和数字')
@@ -269,7 +273,8 @@ class UpdateUserRequest(BaseModel):
     status: Optional[UserStatus] = None
     metadata: Optional[Dict[str, str]] = None
     
-    @validator('username')
+    @field_validator('username')
+    @classmethod
     def username_alphanumeric(cls, v):
         if v is not None and not v.isalnum():
             raise ValueError('用户名只能包含字母和数字')
@@ -281,7 +286,8 @@ class UpdatePasswordRequest(BaseModel):
     current_password: SecretStr
     new_password: SecretStr = Field(..., min_length=8)
     
-    @validator('new_password')
+    @field_validator('new_password')
+    @classmethod
     def password_strength(cls, v):
         """检查密码强度"""
         password = v.get_secret_value()
@@ -326,7 +332,8 @@ class UpdateUserHealthRequest(BaseModel):
     chronic_conditions: Optional[List[HealthCondition]] = None
     medications: Optional[List[str]] = None
     
-    @validator('constitution_scores')
+    @field_validator('constitution_scores')
+    @classmethod
     def validate_constitution_scores(cls, v):
         if v is None:
             return v
@@ -398,9 +405,32 @@ class UserResponse(BaseModel):
         }
 
 
+class VerifyUserRequest(BaseModel):
+    """用户验证请求"""
+    user_id: UUID
+    token: Optional[str] = None
+    permissions: Optional[List[str]] = None
+
+
 class VerifyUserResponse(BaseModel):
     """用户验证响应"""
     is_valid: bool
     user_id: Optional[UUID] = None
     roles: List[UserRole] = Field(default_factory=list)
-    permissions: Optional[Set[str]] = None 
+    permissions: Optional[Set[str]] = None
+
+
+class UserHealthSummaryResponse(BaseModel):
+    """用户健康摘要响应"""
+    user_id: str
+    health_score: int = Field(default=60, ge=0, le=100)
+    dominant_constitution: Optional[ConstitutionType] = None
+    constitution_scores: Dict[str, float] = Field(default_factory=dict)
+    recent_metrics: List[HealthMetric] = Field(default_factory=list)
+    last_assessment_date: Optional[datetime] = None
+
+    class Config:
+        json_encoders = {
+            datetime: lambda v: v.isoformat(),
+            UUID: lambda v: str(v)
+        } 

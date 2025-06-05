@@ -58,7 +58,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     
     # 初始化Redis
     redis_manager = RedisManager(settings.redis)
-    await redis_manager.initialize()
+    await redis_manager.connect()
     app.state.redis_manager = redis_manager
     
     logger.info("认证服务启动完成")
@@ -69,7 +69,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     logger.info("正在关闭认证服务")
     
     # 关闭Redis连接
-    await redis_manager.close()
+    await redis_manager.disconnect()
     
     # 关闭数据库连接
     await db_manager.close()
@@ -121,7 +121,7 @@ def setup_middleware(app: FastAPI, settings) -> None:
     # 信任主机中间件
     app.add_middleware(
         TrustedHostMiddleware,
-        allowed_hosts=["*"] if settings.debug else ["localhost", "127.0.0.1"]
+        allowed_hosts=["*"] if settings.debug or settings.is_testing else ["localhost", "127.0.0.1", "testserver"]
     )
     
     # CORS中间件
@@ -137,7 +137,7 @@ def setup_middleware(app: FastAPI, settings) -> None:
     app.add_middleware(SecurityMiddleware)
     app.add_middleware(LoggingMiddleware)
     
-    if settings.enable_metrics:
+    if settings.monitoring.enabled:
         app.add_middleware(MetricsMiddleware)
 
 

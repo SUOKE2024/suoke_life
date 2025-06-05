@@ -3,7 +3,7 @@
 from functools import lru_cache
 from typing import Any, Dict, List, Optional
 
-from pydantic import Field, PostgresDsn, RedisDsn, validator
+from pydantic import Field, PostgresDsn, RedisDsn, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class DatabaseSettings(BaseSettings):
@@ -74,7 +74,8 @@ class EmailSettings(BaseSettings):
     retry_delay: int = Field(default=60, description="重试延迟(秒)")
     rate_limit: int = Field(default=100, description="每小时发送限制")
     
-    @validator("provider")
+    @field_validator("provider")
+    @classmethod
     def validate_provider(cls, v: str) -> str:
         """验证邮件服务提供商"""
         allowed = ["smtp", "sendgrid", "aws_ses"]
@@ -85,7 +86,7 @@ class EmailSettings(BaseSettings):
 class JWTSettings(BaseSettings):
     """JWT配置"""
     
-    secret_key: str = Field(description="JWT密钥")
+    secret_key: str = Field(default="test-secret-key-for-testing-only-not-for-production", description="JWT密钥")
     algorithm: str = Field(default="HS256", description="JWT算法")
     access_token_expire_minutes: int = Field(default=60, description="访问令牌过期时间(分钟)")
     refresh_token_expire_days: int = Field(default=7, description="刷新令牌过期时间(天)")
@@ -184,23 +185,34 @@ class Settings(BaseSettings):
     cors_headers: List[str] = Field(default=["*"], description="CORS允许的头部")
     
     # OAuth配置
-    oauth_providers: Dict[str, Dict[str, Any]] = Field(
-        default_factory=lambda: {
-            "google": {
-                "client_id": "",
-                "client_secret": "",
-                "redirect_uri": "",
-            },
-            "wechat": {
-                "app_id": "",
-                "app_secret": "",
-                "redirect_uri": "",
-            },
-        },
-        description="OAuth提供商配置"
-    )
+    base_url: str = Field(default="http://localhost:8000", description="应用基础URL")
     
-    @validator("environment")
+    # Google OAuth
+    google_client_id: str = Field(default="", description="Google OAuth客户端ID")
+    google_client_secret: str = Field(default="", description="Google OAuth客户端密钥")
+    
+    # GitHub OAuth
+    github_client_id: str = Field(default="", description="GitHub OAuth客户端ID")
+    github_client_secret: str = Field(default="", description="GitHub OAuth客户端密钥")
+    
+    # 微信OAuth
+    wechat_app_id: str = Field(default="", description="微信应用ID")
+    wechat_app_secret: str = Field(default="", description="微信应用密钥")
+    
+    # QQ OAuth
+    qq_app_id: str = Field(default="", description="QQ应用ID")
+    qq_app_key: str = Field(default="", description="QQ应用密钥")
+    
+    # 微博OAuth
+    weibo_app_key: str = Field(default="", description="微博应用密钥")
+    weibo_app_secret: str = Field(default="", description="微博应用密钥")
+    
+    # OAuth通用配置
+    oauth_state_expire_minutes: int = Field(default=10, description="OAuth状态参数过期时间(分钟)")
+    oauth_callback_timeout_seconds: int = Field(default=300, description="OAuth回调超时时间(秒)")
+    
+    @field_validator("environment")
+    @classmethod
     def validate_environment(cls, v: str) -> str:
         """验证环境配置"""
         allowed = ["development", "testing", "staging", "production"]

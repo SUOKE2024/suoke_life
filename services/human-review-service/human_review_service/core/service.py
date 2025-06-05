@@ -148,6 +148,36 @@ class HumanReviewService:
 
         return task
 
+    async def create_task(
+        self, session: AsyncSession, review_data: ReviewTaskCreate
+    ) -> ReviewTask:
+        """
+        创建审核任务（别名方法，用于测试兼容性）
+
+        Args:
+            session: 数据库会话
+            review_data: 审核任务数据
+
+        Returns:
+            创建的审核任务
+        """
+        return await self.submit_review(review_data, session)
+
+    async def get_task(
+        self, session: AsyncSession, task_id: str
+    ) -> Optional[ReviewTask]:
+        """
+        获取审核任务（别名方法，用于测试兼容性）
+
+        Args:
+            session: 数据库会话
+            task_id: 任务ID
+
+        Returns:
+            审核任务或None
+        """
+        return await self.get_review_task(task_id, session)
+
     async def get_review_task(
         self, task_id: str, session: AsyncSession
     ) -> Optional[ReviewTask]:
@@ -603,18 +633,23 @@ class HumanReviewService:
         self, reviewer_data: ReviewerCreate, session: AsyncSession
     ) -> Reviewer:
         """创建审核员"""
-        db_reviewer = ReviewerDB(**reviewer_data.model_dump())
-        session.add(db_reviewer)
-        await session.commit()
-        await session.refresh(db_reviewer)
+        try:
+            db_reviewer = ReviewerDB(**reviewer_data.model_dump())
+            session.add(db_reviewer)
+            await session.commit()
+            await session.refresh(db_reviewer)
 
-        logger.info(
-            "Reviewer created",
-            reviewer_id=reviewer_data.reviewer_id,
-            name=reviewer_data.name,
-        )
+            logger.info(
+                "Reviewer created",
+                reviewer_id=reviewer_data.reviewer_id,
+                name=reviewer_data.name,
+            )
 
-        return Reviewer.model_validate(db_reviewer)
+            return Reviewer.model_validate(db_reviewer)
+        except Exception as e:
+            await session.rollback()
+            logger.error(f"Failed to create reviewer: {e}")
+            raise
 
     async def get_reviewer(
         self, reviewer_id: str, session: AsyncSession
@@ -718,6 +753,68 @@ class HumanReviewService:
         result = await session.execute(query)
         db_tasks = result.scalars().all()
         return [ReviewTask.model_validate(task) for task in db_tasks]
+
+    async def list_tasks(
+        self,
+        session: AsyncSession,
+        filters: Optional[Dict[str, Any]] = None,
+        limit: int = 50,
+        offset: int = 0,
+    ) -> List[ReviewTask]:
+        """
+        列出审核任务（别名方法，用于测试兼容性）
+
+        Args:
+            session: 数据库会话
+            filters: 过滤条件
+            limit: 限制数量
+            offset: 偏移量
+
+        Returns:
+            审核任务列表
+        """
+        return await self.list_review_tasks(filters, limit, offset, session)
+
+    async def update_task(
+        self, session: AsyncSession, task_id: str, update_data: ReviewTaskUpdate
+    ) -> Optional[ReviewTask]:
+        """
+        更新审核任务（别名方法，用于测试兼容性）
+
+        Args:
+            session: 数据库会话
+            task_id: 任务ID
+            update_data: 更新数据
+
+        Returns:
+            更新后的审核任务
+        """
+        return await self.update_review_task(task_id, update_data, session)
+
+    async def delete_task(self, session: AsyncSession, task_id: str) -> bool:
+        """
+        删除审核任务
+
+        Args:
+            session: 数据库会话
+            task_id: 任务ID
+
+        Returns:
+            是否删除成功
+        """
+        result = await session.execute(
+            select(ReviewTaskDB).filter(ReviewTaskDB.task_id == task_id)
+        )
+        db_task = result.scalar_one_or_none()
+
+        if not db_task:
+            return False
+
+        await session.delete(db_task)
+        await session.commit()
+
+        logger.info("Review task deleted", task_id=task_id)
+        return True
 
     async def update_review_task(
         self, task_id: str, update_data: ReviewTaskUpdate, session: AsyncSession

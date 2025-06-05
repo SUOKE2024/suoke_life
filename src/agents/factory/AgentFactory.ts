@@ -1,9 +1,9 @@
-import { AgentType, AgentCapability, AgentContext } from '../types';
-import { AgentBase } from '../base/AgentBase';
-import { XiaoaiAgentImpl } from '../xiaoai/XiaoaiAgentImpl';
-import { XiaokeAgentImpl } from '../xiaoke/XiaokeAgentImpl';
-import { LaokeAgentImpl } from '../laoke/LaokeAgentImpl';
-import { SoerAgentImpl } from '../soer/SoerAgentImpl';
+import { AgentType, AgentCapability, AgentContext } from "../types";
+import { AgentBase } from "../base/AgentBase";
+import { XiaoaiAgentImpl } from "../xiaoai/XiaoaiAgentImpl";
+import { XiaokeAgentImpl } from "../xiaoke/XiaokeAgentImpl";
+import { LaokeAgentImpl } from "../laoke/LaokeAgentImpl";
+import { SoerAgentImpl } from "../soer/SoerAgentImpl";
 
 /**
  * 智能体配置接口
@@ -60,17 +60,17 @@ export class AgentFactory {
   public async createAgent(config: AgentConfig): Promise<AgentInstance> {
     try {
       const agentId = this.generateAgentId(config.agentType);
-      
+
       // 尝试从池中获取
       const pooledAgent = this.getFromPool(config.agentType);
       let agent: AgentBase;
 
       if (pooledAgent) {
         agent = pooledAgent;
-        this.log('info', `从池中获取智能体: ${config.agentType}`);
+        this.log("info", `从池中获取智能体: ${config.agentType}`);
       } else {
         agent = await this.instantiateAgent(config.agentType);
-        this.log('info', `创建新智能体实例: ${config.agentType}`);
+        this.log("info", `创建新智能体实例: ${config.agentType}`);
       }
 
       // 配置智能体
@@ -86,15 +86,15 @@ export class AgentFactory {
         config,
         createdAt: new Date(),
         lastUsed: new Date(),
-        isActive: true
+        isActive: true,
       };
 
       this.agentInstances.set(agentId, instance);
-      
-      this.log('info', `智能体实例创建成功: ${agentId}`);
+
+      this.log("info", `智能体实例创建成功: ${agentId}`);
       return instance;
     } catch (error) {
-      this.log('error', '智能体创建失败', error);
+      this.log("error", "智能体创建失败", error);
       throw error;
     }
   }
@@ -113,7 +113,10 @@ export class AgentFactory {
   /**
    * 根据类型创建或获取智能体
    */
-  public async getOrCreateAgent(agentType: AgentType, config?: Partial<AgentConfig>): Promise<AgentInstance> {
+  public async getOrCreateAgent(
+    agentType: AgentType,
+    config?: Partial<AgentConfig>
+  ): Promise<AgentInstance> {
     // 查找现有的活跃实例
     const existingInstance = this.findActiveInstance(agentType);
     if (existingInstance) {
@@ -127,7 +130,7 @@ export class AgentFactory {
       enableLogging: true,
       maxConcurrentTasks: 5,
       timeout: 30000,
-      ...config
+      ...config,
     };
 
     return this.createAgent(fullConfig);
@@ -136,18 +139,23 @@ export class AgentFactory {
   /**
    * 批量创建智能体
    */
-  public async createAgentBatch(configs: AgentConfig[]): Promise<AgentInstance[]> {
-    const promises = configs.map(config => this.createAgent(config));
+  public async createAgentBatch(
+    configs: AgentConfig[]
+  ): Promise<AgentInstance[]> {
+    const promises = configs.map((config) => this.createAgent(config));
     return Promise.all(promises);
   }
 
   /**
    * 释放智能体实例
    */
-  public async releaseAgent(agentId: string, returnToPool: boolean = true): Promise<void> {
+  public async releaseAgent(
+    agentId: string,
+    returnToPool: boolean = true
+  ): Promise<void> {
     const instance = this.agentInstances.get(agentId);
     if (!instance) {
-      this.log('warn', `智能体实例不存在: ${agentId}`);
+      this.log("warn", `智能体实例不存在: ${agentId}`);
       return;
     }
 
@@ -158,17 +166,17 @@ export class AgentFactory {
       // 如果需要返回池中且池未满
       if (returnToPool && this.canReturnToPool(instance.type)) {
         await this.returnToPool(instance.agent, instance.type);
-        this.log('info', `智能体返回池中: ${agentId}`);
+        this.log("info", `智能体返回池中: ${agentId}`);
       } else {
         // 关闭智能体
         await instance.agent.shutdown();
-        this.log('info', `智能体已关闭: ${agentId}`);
+        this.log("info", `智能体已关闭: ${agentId}`);
       }
 
       // 从实例映射中移除
       this.agentInstances.delete(agentId);
     } catch (error) {
-      this.log('error', `释放智能体失败: ${agentId}`, error);
+      this.log("error", `释放智能体失败: ${agentId}`, error);
       throw error;
     }
   }
@@ -177,7 +185,9 @@ export class AgentFactory {
    * 获取所有活跃实例
    */
   public getActiveInstances(): AgentInstance[] {
-    return Array.from(this.agentInstances.values()).filter(instance => instance.isActive);
+    return Array.from(this.agentInstances.values()).filter(
+      (instance) => instance.isActive
+    );
   }
 
   /**
@@ -185,10 +195,10 @@ export class AgentFactory {
    */
   public getStatistics(): any {
     const instances = Array.from(this.agentInstances.values());
-    const activeCount = instances.filter(i => i.isActive).length;
+    const activeCount = instances.filter((i) => i.isActive).length;
     const typeStats = new Map<AgentType, number>();
 
-    instances.forEach(instance => {
+    instances.forEach((instance) => {
       const count = typeStats.get(instance.type) || 0;
       typeStats.set(instance.type, count + 1);
     });
@@ -199,15 +209,20 @@ export class AgentFactory {
       inactiveInstances: instances.length - activeCount,
       typeDistribution: Object.fromEntries(typeStats),
       poolSizes: Object.fromEntries(
-        Array.from(this.agentPool.entries()).map(([type, agents]) => [type, agents.length])
-      )
+        Array.from(this.agentPool.entries()).map(([type, agents]) => [
+          type,
+          agents.length,
+        ])
+      ),
     };
   }
 
   /**
    * 清理非活跃实例
    */
-  public async cleanupInactiveInstances(maxIdleTime: number = 300000): Promise<void> {
+  public async cleanupInactiveInstances(
+    maxIdleTime: number = 300000
+  ): Promise<void> {
     const now = new Date();
     const instancesToCleanup: string[] = [];
 
@@ -218,7 +233,7 @@ export class AgentFactory {
       }
     }
 
-    this.log('info', `清理 ${instancesToCleanup.length} 个非活跃实例`);
+    this.log("info", `清理 ${instancesToCleanup.length} 个非活跃实例`);
 
     for (const id of instancesToCleanup) {
       await this.releaseAgent(id, false);
@@ -229,30 +244,35 @@ export class AgentFactory {
    * 关闭工厂
    */
   public async shutdown(): Promise<void> {
-    this.log('info', '智能体工厂正在关闭...');
+    this.log("info", "智能体工厂正在关闭...");
 
     // 关闭所有实例
-    const shutdownPromises = Array.from(this.agentInstances.keys()).map(id => 
+    const shutdownPromises = Array.from(this.agentInstances.keys()).map((id) =>
       this.releaseAgent(id, false)
     );
     await Promise.all(shutdownPromises);
 
     // 清空池
     for (const [type, agents] of this.agentPool) {
-      const poolShutdownPromises = agents.map(agent => agent.shutdown());
+      const poolShutdownPromises = agents.map((agent) => agent.shutdown());
       await Promise.all(poolShutdownPromises);
     }
     this.agentPool.clear();
 
-    this.log('info', '智能体工厂已关闭');
+    this.log("info", "智能体工厂已关闭");
   }
 
   /**
    * 初始化智能体池
    */
   private initializeAgentPools(): void {
-    const agentTypes = [AgentType.XIAOAI, AgentType.XIAOKE, AgentType.LAOKE, AgentType.SOER];
-    agentTypes.forEach(type => {
+    const agentTypes = [
+      AgentType.XIAOAI,
+      AgentType.XIAOKE,
+      AgentType.LAOKE,
+      AgentType.SOER,
+    ];
+    agentTypes.forEach((type) => {
       this.agentPool.set(type, []);
     });
   }
@@ -278,7 +298,10 @@ export class AgentFactory {
   /**
    * 配置智能体
    */
-  private async configureAgent(agent: AgentBase, config: AgentConfig): Promise<void> {
+  private async configureAgent(
+    agent: AgentBase,
+    config: AgentConfig
+  ): Promise<void> {
     // 这里可以根据配置设置智能体的各种参数
     // 由于当前AgentBase没有配置方法，这里只是占位
     if (config.customSettings) {
@@ -297,7 +320,10 @@ export class AgentFactory {
   /**
    * 返回智能体到池中
    */
-  private async returnToPool(agent: AgentBase, agentType: AgentType): Promise<void> {
+  private async returnToPool(
+    agent: AgentBase,
+    agentType: AgentType
+  ): Promise<void> {
     const pool = this.agentPool.get(agentType);
     if (pool && pool.length < this.maxPoolSize) {
       // 重置智能体状态
@@ -340,23 +366,27 @@ export class AgentFactory {
   /**
    * 记录日志
    */
-  private log(level: 'info' | 'warn' | 'error', message: string, data?: any): void {
+  private log(
+    level: "info" | "warn" | "error",
+    message: string,
+    data?: any
+  ): void {
     const timestamp = new Date().toISOString();
     const logMessage = `[${timestamp}] [AgentFactory] [${level.toUpperCase()}] ${message}`;
-    
+
     switch (level) {
-      case 'info':
-        console.log(logMessage, data || '');
+      case "info":
+        console.log(logMessage, data || "");
         break;
-      case 'warn':
-        console.warn(logMessage, data || '');
+      case "warn":
+        console.warn(logMessage, data || "");
         break;
-      case 'error':
-        console.error(logMessage, data || '');
+      case "error":
+        console.error(logMessage, data || "");
         break;
     }
   }
 }
 
 // 导出工厂单例
-export const agentFactory = AgentFactory.getInstance(); 
+export const agentFactory = AgentFactory.getInstance();

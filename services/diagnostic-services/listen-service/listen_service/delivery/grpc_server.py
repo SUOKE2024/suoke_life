@@ -17,7 +17,7 @@ from ..core.audio_analyzer import AudioAnalyzer
 from ..core.tcm_analyzer import TCMFeatureExtractor
 from ..models.audio_models import (
     AnalysisRequest,
-    AnalysisResponse,
+    AudioAnalysisResponse,
     AudioFormat,
     AudioMetadata,
 )
@@ -59,7 +59,7 @@ class ListenServiceGRPCServer:
         logger.info("gRPC服务器初始化完成")
 
     @async_timer
-    async def AnalyzeAudio(self, request, context) -> AnalysisResponse:
+    async def AnalyzeAudio(self, request, context) -> AudioAnalysisResponse:
         """
         分析音频接口
 
@@ -400,7 +400,7 @@ class ListenServiceGRPCServer:
 
         return hashlib.sha256(audio_data).hexdigest()[:16]
 
-    def _convert_to_grpc_response(self, analysis_result: AnalysisResponse) -> Any:
+    def _convert_to_grpc_response(self, analysis_result: AudioAnalysisResponse) -> Any:
         """转换为gRPC响应格式"""
         # 这里需要根据实际的protobuf定义来转换
         # 暂时返回字典格式

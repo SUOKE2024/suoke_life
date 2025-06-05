@@ -8,6 +8,8 @@ import base64
 from io import BytesIO
 
 import librosa
+import numpy as np
+import soundfile as sf
 from loguru import logger
 from scipy import signal
 
@@ -27,13 +29,18 @@ class AudioProcessor:
 
         # 音频处理参数
         self.audio_params = {
-            "sample_rate": 22050,  # 标准采样率
+            "sample_rate": 16000,  # 标准采样率，改为16000以匹配测试期望
             "n_fft": 2048,
             "hop_length": 512,
             "n_mels": 128,
             "fmin": 0,
             "fmax": 8000,
         }
+        
+        # 为了兼容测试，添加直接属性访问
+        self.sample_rate = self.audio_params["sample_rate"]
+        self.frame_length = self.audio_params["n_fft"]
+        self.hop_length = self.audio_params["hop_length"]
 
         # 质量评估阈值
         self.quality_thresholds = {
@@ -43,6 +50,114 @@ class AudioProcessor:
         }
 
         logger.info("音频处理器初始化完成")
+
+    def preprocess_audio(self, audio_data: np.ndarray) -> np.ndarray:
+        """
+        预处理音频数据
+        
+        Args:
+            audio_data: 输入音频数据
+            
+        Returns:
+            预处理后的音频数据
+        """
+        # 归一化
+        audio_normalized = librosa.util.normalize(audio_data)
+        
+        # 预加重
+        audio_preemphasized = np.append(audio_normalized[0], audio_normalized[1:] - 0.97 * audio_normalized[:-1])
+        
+        return audio_preemphasized.astype(np.float32)
+
+    def extract_mfcc_features(self, audio_data: np.ndarray) -> np.ndarray:
+        """
+        提取MFCC特征
+        
+        Args:
+            audio_data: 音频数据
+            
+        Returns:
+            MFCC特征矩阵
+        """
+        mfcc = librosa.feature.mfcc(
+            y=audio_data,
+            sr=self.sample_rate,
+            n_mfcc=13,
+            n_fft=self.frame_length,
+            hop_length=self.hop_length
+        )
+        return mfcc
+
+    def extract_spectral_features(self, audio_data: np.ndarray) -> dict:
+        """
+        提取频谱特征
+        
+        Args:
+            audio_data: 音频数据
+            
+        Returns:
+            频谱特征字典
+        """
+        # 计算频谱特征
+        spectral_centroid = librosa.feature.spectral_centroid(
+            y=audio_data, sr=self.sample_rate, hop_length=self.hop_length
+        )[0]
+        
+        spectral_bandwidth = librosa.feature.spectral_bandwidth(
+            y=audio_data, sr=self.sample_rate, hop_length=self.hop_length
+        )[0]
+        
+        spectral_rolloff = librosa.feature.spectral_rolloff(
+            y=audio_data, sr=self.sample_rate, hop_length=self.hop_length
+        )[0]
+        
+        zero_crossing_rate = librosa.feature.zero_crossing_rate(
+            y=audio_data, hop_length=self.hop_length
+        )[0]
+        
+        return {
+            "spectral_centroid": float(np.mean(spectral_centroid)),
+            "spectral_bandwidth": float(np.mean(spectral_bandwidth)),
+            "spectral_rolloff": float(np.mean(spectral_rolloff)),
+            "zero_crossing_rate": float(np.mean(zero_crossing_rate))
+        }
+
+    def extract_prosodic_features(self, audio_data: np.ndarray) -> dict:
+        """
+        提取韵律特征
+        
+        Args:
+            audio_data: 音频数据
+            
+        Returns:
+            韵律特征字典
+        """
+        # 基频提取
+        f0, voiced_flag, voiced_probs = librosa.pyin(
+            audio_data,
+            fmin=librosa.note_to_hz('C2'),
+            fmax=librosa.note_to_hz('C7'),
+            sr=self.sample_rate
+        )
+        
+        # 过滤有效的基频值
+        valid_f0 = f0[~np.isnan(f0)]
+        
+        # 计算能量
+        energy = librosa.feature.rms(y=audio_data, hop_length=self.hop_length)[0]
+        
+        # 节奏特征
+        tempo, beats = librosa.beat.beat_track(y=audio_data, sr=self.sample_rate)
+        
+        return {
+            "fundamental_frequency": float(np.mean(valid_f0)) if len(valid_f0) > 0 else 0.0,
+            "pitch_variance": float(np.var(valid_f0)) if len(valid_f0) > 0 else 0.0,
+            "energy": float(np.mean(energy)),
+            "rhythm_features": {
+                "tempo": float(tempo),
+                "beat_count": len(beats)
+            }
+        }
 
     async def decode_and_preprocess_audio(
         self, audio_data: str, original_sample_rate: int

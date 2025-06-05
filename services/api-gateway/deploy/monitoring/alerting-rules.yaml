@@ -1,0 +1,372 @@
+# 索克生活 API 网关 - 监控告警规则
+# Monitoring and Alerting Rules for Suoke Life API Gateway
+
+groups:
+  # 服务可用性告警
+  - name: suoke-api-gateway-availability
+    rules:
+      - alert: APIGatewayDown
+        expr: up{job="suoke-api-gateway"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: api-gateway
+          team: platform
+        annotations:
+          summary: "API网关服务不可用"
+          description: "API网关实例 {{ $labels.instance }} 已经下线超过1分钟"
+          runbook_url: "https://docs.suoke.life/runbooks/api-gateway-down"
+          
+      - alert: APIGatewayHighErrorRate
+        expr: rate(http_requests_total{job="suoke-api-gateway",status=~"5.."}[5m]) / rate(http_requests_total{job="suoke-api-gateway"}[5m]) > 0.05
+        for: 2m
+        labels:
+          severity: critical
+          service: api-gateway
+          team: platform
+        annotations:
+          summary: "API网关错误率过高"
+          description: "API网关错误率为 {{ $value | humanizePercentage }}，超过5%阈值"
+          runbook_url: "https://docs.suoke.life/runbooks/high-error-rate"
+          
+      - alert: APIGatewayHighLatency
+        expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job="suoke-api-gateway"}[5m])) > 2
+        for: 3m
+        labels:
+          severity: warning
+          service: api-gateway
+          team: platform
+        annotations:
+          summary: "API网关响应延迟过高"
+          description: "API网关95%分位延迟为 {{ $value }}s，超过2s阈值"
+          runbook_url: "https://docs.suoke.life/runbooks/high-latency"
+
+  # 资源使用告警
+  - name: suoke-api-gateway-resources
+    rules:
+      - alert: APIGatewayHighCPU
+        expr: rate(process_cpu_seconds_total{job="suoke-api-gateway"}[5m]) * 100 > 80
+        for: 5m
+        labels:
+          severity: warning
+          service: api-gateway
+          team: platform
+        annotations:
+          summary: "API网关CPU使用率过高"
+          description: "API网关实例 {{ $labels.instance }} CPU使用率为 {{ $value }}%"
+          runbook_url: "https://docs.suoke.life/runbooks/high-cpu"
+          
+      - alert: APIGatewayHighMemory
+        expr: process_resident_memory_bytes{job="suoke-api-gateway"} / 1024 / 1024 / 1024 > 1.5
+        for: 5m
+        labels:
+          severity: warning
+          service: api-gateway
+          team: platform
+        annotations:
+          summary: "API网关内存使用过高"
+          description: "API网关实例 {{ $labels.instance }} 内存使用为 {{ $value }}GB"
+          runbook_url: "https://docs.suoke.life/runbooks/high-memory"
+          
+      - alert: APIGatewayDiskSpaceLow
+        expr: (node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"}) * 100 < 20
+        for: 5m
+        labels:
+          severity: warning
+          service: api-gateway
+          team: platform
+        annotations:
+          summary: "API网关磁盘空间不足"
+          description: "API网关实例 {{ $labels.instance }} 磁盘剩余空间为 {{ $value }}%"
+          runbook_url: "https://docs.suoke.life/runbooks/low-disk-space"
+
+  # 连接和网络告警
+  - name: suoke-api-gateway-network
+    rules:
+      - alert: APIGatewayHighConnectionCount
+        expr: sum(rate(http_requests_total{job="suoke-api-gateway"}[1m])) > 1000
+        for: 2m
+        labels:
+          severity: warning
+          service: api-gateway
+          team: platform
+        annotations:
+          summary: "API网关连接数过高"
+          description: "API网关每分钟请求数为 {{ $value }}，超过1000阈值"
+          runbook_url: "https://docs.suoke.life/runbooks/high-connections"
+          
+      - alert: APIGatewayRateLimitTriggered
+        expr: rate(rate_limit_exceeded_total{job="suoke-api-gateway"}[5m]) > 10
+        for: 1m
+        labels:
+          severity: info
+          service: api-gateway
+          team: platform
+        annotations:
+          summary: "API网关限流触发"
+          description: "API网关限流每5分钟触发 {{ $value }} 次"
+          runbook_url: "https://docs.suoke.life/runbooks/rate-limit-triggered"
+          
+      - alert: APIGatewayCircuitBreakerOpen
+        expr: circuit_breaker_state{job="suoke-api-gateway"} == 1
+        for: 0m
+        labels:
+          severity: critical
+          service: api-gateway
+          team: platform
+        annotations:
+          summary: "API网关熔断器开启"
+          description: "API网关服务 {{ $labels.service_name }} 的熔断器已开启"
+          runbook_url: "https://docs.suoke.life/runbooks/circuit-breaker-open"
+
+  # 缓存和存储告警
+  - name: suoke-api-gateway-cache
+    rules:
+      - alert: APIGatewayCacheHitRateLow
+        expr: rate(cache_hits_total{job="suoke-api-gateway"}[5m]) / (rate(cache_hits_total{job="suoke-api-gateway"}[5m]) + rate(cache_misses_total{job="suoke-api-gateway"}[5m])) < 0.7
+        for: 5m
+        labels:
+          severity: warning
+          service: api-gateway
+          team: platform
+        annotations:
+          summary: "API网关缓存命中率过低"
+          description: "API网关缓存命中率为 {{ $value | humanizePercentage }}，低于70%"
+          runbook_url: "https://docs.suoke.life/runbooks/low-cache-hit-rate"
+          
+      - alert: APIGatewayRedisConnectionFailed
+        expr: redis_connected_clients{job="suoke-api-gateway"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: api-gateway
+          team: platform
+        annotations:
+          summary: "API网关Redis连接失败"
+          description: "API网关无法连接到Redis服务器"
+          runbook_url: "https://docs.suoke.life/runbooks/redis-connection-failed"
+
+  # 安全告警
+  - name: suoke-api-gateway-security
+    rules:
+      - alert: APIGatewayHighFailedAuthRate
+        expr: rate(auth_failures_total{job="suoke-api-gateway"}[5m]) > 10
+        for: 2m
+        labels:
+          severity: warning
+          service: api-gateway
+          team: security
+        annotations:
+          summary: "API网关认证失败率过高"
+          description: "API网关每5分钟认证失败 {{ $value }} 次，可能存在暴力破解攻击"
+          runbook_url: "https://docs.suoke.life/runbooks/high-auth-failures"
+          
+      - alert: APIGatewaySuspiciousActivity
+        expr: rate(suspicious_requests_total{job="suoke-api-gateway"}[5m]) > 5
+        for: 1m
+        labels:
+          severity: critical
+          service: api-gateway
+          team: security
+        annotations:
+          summary: "API网关检测到可疑活动"
+          description: "API网关每5分钟检测到 {{ $value }} 次可疑请求"
+          runbook_url: "https://docs.suoke.life/runbooks/suspicious-activity"
+          
+      - alert: APIGatewaySecurityViolation
+        expr: increase(security_violations_total{job="suoke-api-gateway"}[1m]) > 0
+        for: 0m
+        labels:
+          severity: critical
+          service: api-gateway
+          team: security
+        annotations:
+          summary: "API网关安全违规"
+          description: "API网关检测到安全违规事件"
+          runbook_url: "https://docs.suoke.life/runbooks/security-violation"
+
+  # 业务指标告警
+  - name: suoke-api-gateway-business
+    rules:
+      - alert: APIGatewayLowThroughput
+        expr: rate(http_requests_total{job="suoke-api-gateway"}[5m]) < 10
+        for: 10m
+        labels:
+          severity: info
+          service: api-gateway
+          team: platform
+        annotations:
+          summary: "API网关吞吐量过低"
+          description: "API网关每5分钟处理请求数为 {{ $value }}，低于正常水平"
+          runbook_url: "https://docs.suoke.life/runbooks/low-throughput"
+          
+      - alert: APIGatewayServiceUnavailable
+        expr: probe_success{job="suoke-api-gateway-probe"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: api-gateway
+          team: platform
+        annotations:
+          summary: "API网关服务探测失败"
+          description: "API网关健康检查探测失败"
+          runbook_url: "https://docs.suoke.life/runbooks/service-unavailable"
+
+  # 依赖服务告警
+  - name: suoke-api-gateway-dependencies
+    rules:
+      - alert: APIGatewayUpstreamServiceDown
+        expr: up{job=~"user-service|auth-service|diagnostic-service"} == 0
+        for: 2m
+        labels:
+          severity: critical
+          service: api-gateway
+          team: platform
+        annotations:
+          summary: "API网关上游服务不可用"
+          description: "上游服务 {{ $labels.job }} 不可用，可能影响API网关功能"
+          runbook_url: "https://docs.suoke.life/runbooks/upstream-service-down"
+          
+      - alert: APIGatewayUpstreamHighLatency
+        expr: histogram_quantile(0.95, rate(upstream_request_duration_seconds_bucket{job="suoke-api-gateway"}[5m])) > 5
+        for: 3m
+        labels:
+          severity: warning
+          service: api-gateway
+          team: platform
+        annotations:
+          summary: "API网关上游服务延迟过高"
+          description: "上游服务 {{ $labels.upstream_service }} 95%分位延迟为 {{ $value }}s"
+          runbook_url: "https://docs.suoke.life/runbooks/upstream-high-latency"
+
+  # Kubernetes相关告警
+  - name: suoke-api-gateway-kubernetes
+    rules:
+      - alert: APIGatewayPodCrashLooping
+        expr: rate(kube_pod_container_status_restarts_total{container="api-gateway"}[15m]) > 0
+        for: 5m
+        labels:
+          severity: critical
+          service: api-gateway
+          team: platform
+        annotations:
+          summary: "API网关Pod重启循环"
+          description: "API网关Pod {{ $labels.pod }} 在过去15分钟内重启了 {{ $value }} 次"
+          runbook_url: "https://docs.suoke.life/runbooks/pod-crash-looping"
+          
+      - alert: APIGatewayPodNotReady
+        expr: kube_pod_status_ready{condition="false", pod=~"suoke-api-gateway-.*"} == 1
+        for: 5m
+        labels:
+          severity: warning
+          service: api-gateway
+          team: platform
+        annotations:
+          summary: "API网关Pod未就绪"
+          description: "API网关Pod {{ $labels.pod }} 未就绪超过5分钟"
+          runbook_url: "https://docs.suoke.life/runbooks/pod-not-ready"
+          
+      - alert: APIGatewayHPAScalingIssue
+        expr: kube_hpa_status_current_replicas{hpa="suoke-api-gateway-hpa"} != kube_hpa_status_desired_replicas{hpa="suoke-api-gateway-hpa"}
+        for: 10m
+        labels:
+          severity: warning
+          service: api-gateway
+          team: platform
+        annotations:
+          summary: "API网关HPA扩缩容异常"
+          description: "API网关HPA当前副本数 {{ $labels.current_replicas }} 与期望副本数 {{ $labels.desired_replicas }} 不匹配"
+          runbook_url: "https://docs.suoke.life/runbooks/hpa-scaling-issue"
+
+  # 日志告警
+  - name: suoke-api-gateway-logs
+    rules:
+      - alert: APIGatewayHighErrorLogRate
+        expr: rate(log_entries_total{job="suoke-api-gateway",level="error"}[5m]) > 5
+        for: 2m
+        labels:
+          severity: warning
+          service: api-gateway
+          team: platform
+        annotations:
+          summary: "API网关错误日志过多"
+          description: "API网关每5分钟产生 {{ $value }} 条错误日志"
+          runbook_url: "https://docs.suoke.life/runbooks/high-error-logs"
+          
+      - alert: APIGatewayLogVolumeHigh
+        expr: rate(log_entries_total{job="suoke-api-gateway"}[5m]) > 100
+        for: 5m
+        labels:
+          severity: info
+          service: api-gateway
+          team: platform
+        annotations:
+          summary: "API网关日志量过大"
+          description: "API网关每5分钟产生 {{ $value }} 条日志，可能影响存储"
+          runbook_url: "https://docs.suoke.life/runbooks/high-log-volume"
+
+# 告警路由配置
+route:
+  group_by: ['alertname', 'service']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 1h
+  receiver: 'default'
+  routes:
+    - match:
+        severity: critical
+      receiver: 'critical-alerts'
+      group_wait: 0s
+      repeat_interval: 5m
+    - match:
+        severity: warning
+      receiver: 'warning-alerts'
+      repeat_interval: 30m
+    - match:
+        team: security
+      receiver: 'security-alerts'
+      group_wait: 0s
+      repeat_interval: 5m
+
+# 告警接收器配置
+receivers:
+  - name: 'default'
+    webhook_configs:
+      - url: 'http://alertmanager-webhook:9093/webhook'
+        
+  - name: 'critical-alerts'
+    slack_configs:
+      - api_url: '${SLACK_WEBHOOK_URL}'
+        channel: '#alerts-critical'
+        title: '🚨 Critical Alert - {{ .GroupLabels.service }}'
+        text: '{{ range .Alerts }}{{ .Annotations.summary }}\n{{ .Annotations.description }}{{ end }}'
+    email_configs:
+      - to: 'oncall@suoke.life'
+        subject: '🚨 Critical Alert - {{ .GroupLabels.service }}'
+        body: '{{ range .Alerts }}{{ .Annotations.summary }}\n{{ .Annotations.description }}{{ end }}'
+        
+  - name: 'warning-alerts'
+    slack_configs:
+      - api_url: '${SLACK_WEBHOOK_URL}'
+        channel: '#alerts-warning'
+        title: '⚠️ Warning Alert - {{ .GroupLabels.service }}'
+        text: '{{ range .Alerts }}{{ .Annotations.summary }}\n{{ .Annotations.description }}{{ end }}'
+        
+  - name: 'security-alerts'
+    slack_configs:
+      - api_url: '${SLACK_WEBHOOK_URL}'
+        channel: '#security-alerts'
+        title: '🔒 Security Alert - {{ .GroupLabels.service }}'
+        text: '{{ range .Alerts }}{{ .Annotations.summary }}\n{{ .Annotations.description }}{{ end }}'
+    email_configs:
+      - to: 'security@suoke.life'
+        subject: '🔒 Security Alert - {{ .GroupLabels.service }}'
+        body: '{{ range .Alerts }}{{ .Annotations.summary }}\n{{ .Annotations.description }}{{ end }}'
+
+# 抑制规则
+inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['service', 'instance'] 

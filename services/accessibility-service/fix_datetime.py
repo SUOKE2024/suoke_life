@@ -1,0 +1,74 @@
+#!/usr/bin/env python3
+"""
+批量修复 datetime.utcnow() 弃用警告的脚本
+"""
+
+import os
+import re
+from pathlib import Path
+
+def fix_datetime_file(file_path):
+    """修复单个文件中的 datetime.utcnow() 弃用语法"""
+    print(f"修复文件: {file_path}")
+    
+    with open(file_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+    
+    original_content = content
+    
+    # 1. 修复 datetime.utcnow() 为 datetime.now(datetime.UTC)
+    content = re.sub(
+        r'datetime\.utcnow\(\)',
+        r'datetime.now(datetime.UTC)',
+        content
+    )
+    
+    # 2. 确保导入了 datetime
+    if 'datetime.now(datetime.UTC)' in content and 'from datetime import datetime' not in content:
+        # 检查是否有其他 datetime 导入
+        if 'import datetime' in content:
+            # 替换为 from datetime import datetime
+            content = re.sub(
+                r'import datetime',
+                r'from datetime import datetime',
+                content,
+                count=1
+            )
+        elif 'from datetime import' in content and 'datetime' not in content:
+            # 添加 datetime 到现有导入
+            content = re.sub(
+                r'from datetime import ([^\\n]+)',
+                r'from datetime import \\1, datetime',
+                content,
+                count=1
+            )
+    
+    if content != original_content:
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.write(content)
+        print(f"  ✓ 已修复 {file_path}")
+        return True
+    else:
+        print(f"  - 无需修复 {file_path}")
+        return False
+
+def main():
+    """主函数"""
+    print("开始修复 datetime.utcnow() 弃用警告...")
+    
+    # 查找所有 Python 文件
+    python_files = []
+    for root, dirs, files in os.walk('accessibility_service'):
+        for file in files:
+            if file.endswith('.py'):
+                python_files.append(os.path.join(root, file))
+    
+    fixed_count = 0
+    for file_path in python_files:
+        if fix_datetime_file(file_path):
+            fixed_count += 1
+    
+    print(f"\\n修复完成！共修复了 {fixed_count} 个文件。")
+
+if __name__ == "__main__":
+    main() 

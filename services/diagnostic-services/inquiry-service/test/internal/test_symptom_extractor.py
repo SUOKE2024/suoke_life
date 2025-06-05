@@ -79,7 +79,12 @@ class TestSymptomExtractor:
     def symptom_extractor(self):
         """创建症状提取器实例"""
         config = {
-            "llm": {"use_mock_mode": True, "model_type": "test", "timeout_seconds": 10},
+            "llm": {
+                "use_mock_mode": True, 
+                "use_llm_extraction": True,
+                "model_type": "test", 
+                "timeout_seconds": 10
+            },
             "symptom_extraction": {"confidence_threshold": 0.6, "max_symptoms": 10},
         }
         return SymptomExtractor(config)

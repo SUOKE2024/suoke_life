@@ -10,6 +10,10 @@ import time
 from typing import Any
 
 import pymongo
+try:
+    import motor.motor_asyncio
+except ImportError:
+    motor = None
 
 logger = logging.getLogger(__name__)
 
@@ -48,10 +52,14 @@ class SessionRepository:
     def _init_db_connection(self):
         """初始化数据库连接"""
         try:
-            # 检查是否使用内存模式
-            if self.db_type == "memory":
-                logger.info("使用内存数据库模式")
+            # 检查是否使用内存模式或motor不可用
+            if self.db_type == "memory" or motor is None:
+                if motor is None:
+                    logger.warning("motor库未安装，自动切换到内存模式")
+                else:
+                    logger.info("使用内存数据库模式")
                 self.sessions = {}
+                self.db_type = "memory"  # 确保后续逻辑使用内存模式
                 return
 
             # 创建MongoDB连接

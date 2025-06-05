@@ -1,260 +1,111 @@
-# 中医证型数据
-# 包含常见中医证型及其描述、分类和相关症状
-
-# 肝系证型
-- id: "liver_qi_stagnation"
-  name: "肝气郁结"
-  name_zh: "肝气郁结"
-  description: "肝失疏泄，气机郁滞，以情志不畅、胸胁胀痛、性情急躁易怒为主要表现。"
-  categories:
-    yin_yang: "yang"
-    deficiency_excess: "excess"
-    cold_heat: "mixed"
-    exterior_interior: "interior"
-    affected_organs: ["liver", "gallbladder"]
-  key_symptoms: ["胸胁胀痛", "情绪不稳", "易怒", "叹息", "嗳气", "消化不良"]
-  secondary_symptoms: ["口苦", "头痛", "眩晕", "失眠", "经前乳房胀痛", "月经不调"]
-  tongue_diagnosis: "舌质淡红或偏红，苔薄白或薄黄，舌体可见瘀点，舌边有齿痕"
-  pulse_diagnosis: "弦"
-  treatment_principles: "疏肝解郁，理气和胃"
-  recommended_formulas: ["柴胡疏肝散", "逍遥散", "香附子顺气散"]
-  recommended_herbs: ["柴胡", "香附", "郁金", "白芍", "川芎", "陈皮"]
-
-- id: "liver_fire_blazing"
-  name: "肝火上炎"
-  name_zh: "肝火上炎"
-  description: "肝气郁久化火，火热上炎，以头痛眩晕、面红目赤、急躁易怒为主要表现。"
-  categories:
-    yin_yang: "yang"
-    deficiency_excess: "excess"
-    cold_heat: "heat"
-    exterior_interior: "interior"
-    affected_organs: ["liver", "gallbladder"]
-  key_symptoms: ["头痛", "眩晕", "面红目赤", "急躁易怒", "口苦咽干", "耳鸣"]
-  secondary_symptoms: ["失眠多梦", "小便短赤", "便秘", "吐血", "衄血", "牙龈肿痛"]
-  tongue_diagnosis: "舌质红，苔黄，舌尖红"
-  pulse_diagnosis: "弦数"
-  treatment_principles: "清肝泻火，平肝息风"
-  recommended_formulas: ["龙胆泻肝汤", "清肝散", "黛蛤散"]
-  recommended_herbs: ["龙胆草", "栀子", "黄芩", "夏枯草", "菊花", "钩藤"]
-
-- id: "liver_yang_hyperactivity"
-  name: "肝阳上亢"
-  name_zh: "肝阳上亢"
-  description: "肝阴亏虚，阴不制阳，肝阳上亢，以头痛眩晕、烦躁易怒、面红目赤、耳鸣为主要表现。"
-  categories:
-    yin_yang: "yang"
-    deficiency_excess: "mixed"
-    cold_heat: "heat"
-    exterior_interior: "interior"
-    affected_organs: ["liver", "kidney"]
-  key_symptoms: ["头痛眩晕", "面红目赤", "烦躁易怒", "耳鸣", "失眠多梦", "腰膝酸软"]
-  secondary_symptoms: ["五心烦热", "口干咽燥", "梦遗滑精", "舌红少苔", "脉弦细数"]
-  tongue_diagnosis: "舌质红，苔少，舌体瘦"
-  pulse_diagnosis: "弦细数"
-  treatment_principles: "平肝潜阳，滋养肝肾"
-  recommended_formulas: ["天麻钩藤饮", "镇肝熄风汤", "杞菊地黄丸"]
-  recommended_herbs: ["天麻", "钩藤", "石决明", "牡蛎", "白芍", "菊花"]
-
-# 脾系证型
-- id: "spleen_qi_deficiency"
-  name: "脾气虚"
-  name_zh: "脾气虚"
-  description: "脾失健运，水谷精微输布失常，以食欲不振、腹胀、大便溏薄、倦怠乏力为主要表现。"
-  categories:
-    yin_yang: "yin"
-    deficiency_excess: "deficiency"
-    cold_heat: "cold"
-    exterior_interior: "interior"
-    affected_organs: ["spleen", "stomach"]
-  key_symptoms: ["食欲不振", "腹胀", "大便溏薄", "倦怠乏力", "面色萎黄", "消化不良"]
-  secondary_symptoms: ["四肢不温", "胃脘胀满", "少气懒言", "便溏肢冷", "水肿"]
-  tongue_diagnosis: "舌淡，苔白"
-  pulse_diagnosis: "濡缓"
-  treatment_principles: "健脾益气，运化水湿"
-  recommended_formulas: ["四君子汤", "参苓白术散", "补中益气汤"]
-  recommended_herbs: ["人参", "白术", "茯苓", "甘草", "党参", "黄芪"]
-
-- id: "spleen_yang_deficiency"
-  name: "脾阳虚"
-  name_zh: "脾阳虚"
-  description: "脾阳不足，温煦失司，运化失健，以腹痛喜温、肢冷便溏、脘腹冷痛为主要表现。"
-  categories:
-    yin_yang: "yin"
-    deficiency_excess: "deficiency"
-    cold_heat: "cold"
-    exterior_interior: "interior"
-    affected_organs: ["spleen", "stomach"]
-  key_symptoms: ["腹痛喜温", "肢冷便溏", "脘腹冷痛", "面色苍白", "畏寒肢冷", "食欲不振"]
-  secondary_symptoms: ["吐清水", "腹泻五更泄", "浮肿", "少气懒言", "舌淡胖"]
-  tongue_diagnosis: "舌质淡，苔白滑，舌体胖嫩有齿痕"
-  pulse_diagnosis: "沉迟无力"
-  treatment_principles: "温补脾阳，健运中焦"
-  recommended_formulas: ["理中汤", "附子理中汤", "四神丸"]
-  recommended_herbs: ["干姜", "党参", "白术", "炙甘草", "制附子", "肉桂"]
-
-- id: "damp_encumbering_spleen"
-  name: "湿困脾阳"
-  name_zh: "湿困脾阳"
-  description: "湿邪困阻，脾阳不振，以脘腹胀满、食欲不振、肢体困重、大便溏薄为主要表现。"
-  categories:
-    yin_yang: "yin"
-    deficiency_excess: "mixed"
-    cold_heat: "cold"
-    exterior_interior: "interior"
-    affected_organs: ["spleen", "stomach"]
-  key_symptoms: ["脘腹胀满", "食欲不振", "肢体困重", "大便溏薄", "口粘腻", "身重"]
-  secondary_symptoms: ["恶心", "呕吐", "口淡无味", "倦怠乏力", "水肿", "小便不利"]
-  tongue_diagnosis: "舌体胖大，舌苔白腻或黄腻"
-  pulse_diagnosis: "缓滞或濡"
-  treatment_principles: "健脾化湿，温运脾阳"
-  recommended_formulas: ["平胃散", "藿香正气散", "苓桂术甘汤"]
-  recommended_herbs: ["苍术", "厚朴", "陈皮", "藿香", "白术", "茯苓"]
-
-# 肺系证型
-- id: "lung_qi_deficiency"
-  name: "肺气虚"
-  name_zh: "肺气虚"
-  description: "肺气不足，宣降失调，以气短、咳嗽无力、声低息微、易感冒为主要表现。"
-  categories:
-    yin_yang: "yin"
-    deficiency_excess: "deficiency"
-    cold_heat: "cold"
-    exterior_interior: "interior"
-    affected_organs: ["lung"]
-  key_symptoms: ["气短", "咳嗽无力", "声低息微", "易感冒", "自汗", "懒言"]
-  secondary_symptoms: ["畏风", "鼻塞", "面色苍白", "倦怠乏力", "舌淡苔薄"]
-  tongue_diagnosis: "舌淡，苔薄白"
-  pulse_diagnosis: "虚弱"
-  treatment_principles: "补肺益气"
-  recommended_formulas: ["玉屏风散", "生脉散", "补肺汤"]
-  recommended_herbs: ["黄芪", "白术", "防风", "人参", "麦冬", "五味子"]
-
-- id: "wind_cold_attacking_lung"
-  name: "风寒袭肺"
-  name_zh: "风寒袭肺"
-  description: "风寒之邪侵袭肺脏，肺气失宣，以恶寒发热、无汗、鼻塞流清涕、咳嗽痰白为主要表现。"
-  categories:
-    yin_yang: "yang"
-    deficiency_excess: "excess"
-    cold_heat: "cold"
-    exterior_interior: "exterior"
-    affected_organs: ["lung"]
-  key_symptoms: ["恶寒发热", "无汗", "鼻塞流清涕", "咳嗽痰白", "头痛身痛", "喉痒"]
-  secondary_symptoms: ["口不渴", "苔薄白", "脉浮紧", "声音嘶哑", "鼻痒"]
-  tongue_diagnosis: "舌质淡红，苔薄白"
-  pulse_diagnosis: "浮紧"
-  treatment_principles: "辛温解表，宣肺止咳"
-  recommended_formulas: ["麻黄汤", "止嗽散", "桂枝汤"]
-  recommended_herbs: ["麻黄", "杏仁", "桂枝", "甘草", "荆芥", "防风"]
-
-# 肾系证型
-- id: "kidney_yang_deficiency"
-  name: "肾阳虚"
-  name_zh: "肾阳虚"
-  description: "肾阳不足，温煦失职，以腰膝冷痛、畏寒肢冷、性功能减退、小便清长为主要表现。"
-  categories:
-    yin_yang: "yin"
-    deficiency_excess: "deficiency"
-    cold_heat: "cold"
-    exterior_interior: "interior"
-    affected_organs: ["kidney"]
-  key_symptoms: ["腰膝冷痛", "畏寒肢冷", "性功能减退", "小便清长", "神疲乏力", "面色苍白"]
-  secondary_symptoms: ["耳鸣", "健忘", "浮肿", "大便溏", "夜尿多", "舌淡苔白"]
-  tongue_diagnosis: "舌淡胖，苔白滑，舌体有齿痕"
-  pulse_diagnosis: "沉细"
-  treatment_principles: "温补肾阳，壮元固本"
-  recommended_formulas: ["右归丸", "金匮肾气丸", "济生肾气丸"]
-  recommended_herbs: ["熟地黄", "山茱萸", "制附子", "肉桂", "鹿角胶", "杜仲"]
-
-- id: "kidney_yin_deficiency"
-  name: "肾阴虚"
-  name_zh: "肾阴虚"
-  description: "肾阴不足，阴虚内热，以腰膝酸软、五心烦热、失眠多梦、耳鸣耳聋为主要表现。"
-  categories:
-    yin_yang: "yin"
-    deficiency_excess: "deficiency"
-    cold_heat: "heat"
-    exterior_interior: "interior"
-    affected_organs: ["kidney", "liver"]
-  key_symptoms: ["腰膝酸软", "五心烦热", "失眠多梦", "耳鸣耳聋", "盗汗", "咽干"]
-  secondary_symptoms: ["头晕目眩", "健忘", "遗精", "潮热", "口干咽燥", "舌红少苔"]
-  tongue_diagnosis: "舌红少苔或无苔"
-  pulse_diagnosis: "细数"
-  treatment_principles: "滋补肾阴，潜阳息风"
-  recommended_formulas: ["六味地黄丸", "知柏地黄丸", "左归丸"]
-  recommended_herbs: ["熟地黄", "山茱萸", "山药", "牡丹皮", "泽泻", "茯苓"]
-
-# 心系证型
-- id: "heart_blood_deficiency"
-  name: "心血虚"
-  name_zh: "心血虚"
-  description: "心血不足，心神失养，以心悸怔忡、失眠多梦、面色淡白、健忘为主要表现。"
-  categories:
-    yin_yang: "yin"
-    deficiency_excess: "deficiency"
-    cold_heat: "mixed"
-    exterior_interior: "interior"
-    affected_organs: ["heart", "spleen"]
-  key_symptoms: ["心悸怔忡", "失眠多梦", "面色淡白", "健忘", "心慌气短", "舌淡"]
-  secondary_symptoms: ["头晕目眩", "唇甲色淡", "乏力", "虚烦", "盗汗", "脉细"]
-  tongue_diagnosis: "舌淡，苔薄白"
-  pulse_diagnosis: "细弱"
-  treatment_principles: "补心养血，宁心安神"
-  recommended_formulas: ["归脾汤", "炙甘草汤", "天王补心丹"]
-  recommended_herbs: ["当归", "龙眼肉", "酸枣仁", "人参", "黄芪", "远志"]
-
-- id: "heart_yin_deficiency"
-  name: "心阴虚"
-  name_zh: "心阴虚"
-  description: "心阴不足，虚热内扰，以心悸怔忡、失眠盗汗、五心烦热、口舌生疮为主要表现。"
-  categories:
-    yin_yang: "yin"
-    deficiency_excess: "deficiency"
-    cold_heat: "heat"
-    exterior_interior: "interior"
-    affected_organs: ["heart", "kidney"]
-  key_symptoms: ["心悸怔忡", "失眠盗汗", "五心烦热", "口舌生疮", "心烦易怒", "健忘"]
-  secondary_symptoms: ["头晕目眩", "低热", "口干咽燥", "潮热盗汗", "舌红少苔", "脉细数"]
-  tongue_diagnosis: "舌红少苔或光剥"
-  pulse_diagnosis: "细数"
-  treatment_principles: "滋阴清热，养心安神"
-  recommended_formulas: ["天王补心丹", "黄连阿胶汤", "知柏地黄丸"]
-  recommended_herbs: ["生地黄", "麦门冬", "天门冬", "黄连", "阿胶", "五味子"]
-
-# 综合证型
-- id: "qi_stagnation_blood_stasis"
-  name: "气滞血瘀"
-  name_zh: "气滞血瘀"
-  description: "气机郁滞，血行不畅，以胸胁疼痛、痛处固定、舌质紫暗或有瘀点、舌下络脉怒张为主要表现。"
-  categories:
-    yin_yang: "mixed"
-    deficiency_excess: "excess"
-    cold_heat: "mixed"
-    exterior_interior: "interior"
-    affected_organs: ["liver", "heart"]
-  key_symptoms: ["胸胁疼痛", "痛处固定", "舌质紫暗", "舌下络脉怒张", "月经血色紫暗有块", "胸闷胁痛"]
-  secondary_symptoms: ["脘腹胀痛", "便秘", "口干苦", "肌肤甲错", "情绪抑郁", "痛如针刺"]
-  tongue_diagnosis: "舌紫暗或有瘀点，舌下络脉怒张"
-  pulse_diagnosis: "弦涩"
-  treatment_principles: "疏肝理气，活血化瘀"
-  recommended_formulas: ["血府逐瘀汤", "膈下逐瘀汤", "桃红四物汤"]
-  recommended_herbs: ["柴胡", "赤芍", "川芎", "桃仁", "红花", "三棱"]
-
-- id: "qi_and_blood_deficiency"
-  name: "气血两虚"
-  name_zh: "气血两虚"
-  description: "气血同时不足，以面色萎黄、头晕乏力、心悸气短、唇甲色淡为主要表现。"
-  categories:
-    yin_yang: "yin"
-    deficiency_excess: "deficiency"
-    cold_heat: "cold"
-    exterior_interior: "interior"
-    affected_organs: ["heart", "spleen", "lung"]
-  key_symptoms: ["面色萎黄", "头晕乏力", "心悸气短", "唇甲色淡", "倦怠乏力", "食欲不振"]
-  secondary_symptoms: ["自汗", "怕冷", "月经量少色淡", "眼花", "健忘", "入睡困难"]
-  tongue_diagnosis: "舌淡，苔薄白"
-  pulse_diagnosis: "细弱"
-  treatment_principles: "益气养血"
-  recommended_formulas: ["八珍汤", "归脾汤", "十全大补汤"]
-  recommended_herbs: ["人参", "白术", "茯苓", "当归", "熟地黄", "黄芪", "阿胶"] 
+气虚证:
+  aliases:
+  - 气不足
+  - 元气虚弱
+  category: 虚证
+  common_herbs:
+  - 人参
+  - 黄芪
+  - 白术
+  - 山药
+  common_symptoms:
+  - 疲劳
+  - 气短
+  - 自汗
+  - 声音低弱
+  - 面色萎黄
+  description: 气虚证是指人体内气的不足所导致的一系列症状，表现为疲劳、气短、自汗等
+  dietary_advice:
+  - 多吃补气食物如山药、大枣
+  - 避免生冷寒凉食物
+  id: qi_deficiency
+  lifestyle_advice:
+  - 适量运动，避免过度劳累
+  - 保证充足睡眠
+  name: 气虚证
+  pathogenesis: 过度劳累、久病耗气、饮食失调等导致气的生成不足或消耗过度
+  treatment_principle: 补气健脾
+湿热证:
+  aliases:
+  - 湿热内蕴
+  - 湿热困脾
+  category: 实证
+  common_herbs:
+  - 黄连
+  - 黄芩
+  - 茵陈
+  - 滑石
+  common_symptoms:
+  - 口苦
+  - 身重
+  - 小便黄赤
+  - 大便黏滞
+  - 舌苔黄腻
+  description: 湿热证是指湿邪与热邪相合，蕴结体内所表现的证候
+  dietary_advice:
+  - 清淡饮食
+  - 多吃清热利湿食物如冬瓜、薏米
+  id: damp_heat
+  lifestyle_advice:
+  - 保持环境干燥
+  - 规律作息
+  - 适量运动
+  name: 湿热证
+  pathogenesis: 饮食不节、环境潮湿、情志不畅等导致湿热内生
+  treatment_principle: 清热利湿
+阳虚证:
+  aliases:
+  - 阳气不足
+  - 虚寒证
+  category: 虚证
+  common_herbs:
+  - 附子
+  - 肉桂
+  - 干姜
+  - 巴戟天
+  common_symptoms:
+  - 畏寒
+  - 肢冷
+  - 腰膝酸软
+  - 夜尿频多
+  - 便溏
+  description: 阳虚证是指机体阳气不足，温煦功能减退所表现的证候
+  dietary_advice:
+  - 多吃温热食物如羊肉、生姜
+  - 避免寒凉食物
+  id: yang_deficiency
+  lifestyle_advice:
+  - 注意保暖
+  - 适当晒太阳
+  - 避免过度房劳
+  name: 阳虚证
+  pathogenesis: 先天不足、久病耗阳、年老体衰等导致阳气虚损
+  treatment_principle: 温补阳气
+阴虚证:
+  aliases:
+  - 阴液不足
+  - 虚热证
+  category: 虚证
+  common_herbs:
+  - 生地黄
+  - 麦冬
+  - 玄参
+  - 百合
+  common_symptoms:
+  - 口干
+  - 潮热
+  - 盗汗
+  - 五心烦热
+  - 便秘
+  description: 阴虚证是指机体阴液不足，滋润、宁静功能减退所表现的证候
+  dietary_advice:
+  - 多吃滋阴食物如银耳、百合
+  - 避免辛辣刺激食物
+  id: yin_deficiency
+  lifestyle_advice:
+  - 避免熬夜
+  - 保持心情平和
+  - 适量饮水
+  name: 阴虚证
+  pathogenesis: 热病伤阴、久病耗阴、情志内伤等导致阴液亏损
+  treatment_principle: 滋阴降火

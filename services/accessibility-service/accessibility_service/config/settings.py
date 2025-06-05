@@ -5,7 +5,7 @@ Configuration settings for accessibility service.
 from functools import lru_cache
 from typing import Any
 
-from pydantic import Field, validator
+from pydantic import Field, field_validator
 
 try:
     from pydantic_settings import BaseSettings
@@ -17,63 +17,63 @@ class Settings(BaseSettings):
     """Application settings."""
 
     # Application
-    app_name: str = Field(default="accessibility-service", env="APP_NAME")
-    app_version: str = Field(default="1.0.0", env="APP_VERSION")
-    debug: bool = Field(default=False, env="DEBUG")
-    environment: str = Field(default="development", env="ENVIRONMENT")
+    app_name: str = Field(default="accessibility-service", json_schema_extra={"env": "APP_NAME"}, )
+    app_version: str = Field(default="1.0.0", json_schema_extra={"env": "APP_VERSION"}, )
+    debug: bool = Field(default=False, json_schema_extra={"env": "DEBUG"}, )
+    environment: str = Field(default="development", json_schema_extra={"env": "ENVIRONMENT"}, )
 
     # Server
-    host: str = Field(default="0.0.0.0", env="HOST")
-    port: int = Field(default=8080, env="PORT")
-    workers: int = Field(default=1, env="WORKERS")
+    host: str = Field(default="0.0.0.0", json_schema_extra={"env": "HOST"}, )
+    port: int = Field(default=8080, json_schema_extra={"env": "PORT"}, )
+    workers: int = Field(default=1, json_schema_extra={"env": "WORKERS"}, )
 
     # Database
-    database_url: str = Field(default="sqlite:///./accessibility.db", env="DATABASE_URL")
-    database_echo: bool = Field(default=False, env="DATABASE_ECHO")
+    database_url: str = Field(default="sqlite:///./accessibility.db", json_schema_extra={"env": "DATABASE_URL"}, )
+    database_echo: bool = Field(default=False, json_schema_extra={"env": "DATABASE_ECHO"}, )
 
     # Redis
-    redis_url: str = Field(default="redis://localhost:6379/0", env="REDIS_URL")
-    redis_password: str | None = Field(default=None, env="REDIS_PASSWORD")
+    redis_url: str = Field(default="redis://localhost:6379/0", json_schema_extra={"env": "REDIS_URL"}, )
+    redis_password: str | None = Field(default=None, json_schema_extra={"env": "REDIS_PASSWORD"}, )
 
     # Security
-    secret_key: str = Field(default="your-secret-key-here", env="SECRET_KEY")
-    access_token_expire_minutes: int = Field(default=30, env="ACCESS_TOKEN_EXPIRE_MINUTES")
+    secret_key: str = Field(default="your-secret-key-here", json_schema_extra={"env": "SECRET_KEY"}, )
+    access_token_expire_minutes: int = Field(default=30, json_schema_extra={"env": "ACCESS_TOKEN_EXPIRE_MINUTES"}, )
 
     # AI/ML Models
-    model_cache_dir: str = Field(default="./models", env="MODEL_CACHE_DIR")
-    visual_model_name: str = Field(default="resnet50", env="VISUAL_MODEL_NAME")
-    audio_model_name: str = Field(default="wav2vec2", env="AUDIO_MODEL_NAME")
-    nlp_model_name: str = Field(default="bert-base-uncased", env="NLP_MODEL_NAME")
+    model_cache_dir: str = Field(default="./models", json_schema_extra={"env": "MODEL_CACHE_DIR"}, )
+    visual_model_name: str = Field(default="resnet50", json_schema_extra={"env": "VISUAL_MODEL_NAME"}, )
+    audio_model_name: str = Field(default="wav2vec2", json_schema_extra={"env": "AUDIO_MODEL_NAME"}, )
+    nlp_model_name: str = Field(default="bert-base-uncased", json_schema_extra={"env": "NLP_MODEL_NAME"}, )
 
     # Processing
-    max_file_size: int = Field(default=10 * 1024 * 1024, env="MAX_FILE_SIZE")  # 10MB
-    max_processing_time: int = Field(default=300, env="MAX_PROCESSING_TIME")  # 5 minutes
-    batch_size: int = Field(default=32, env="BATCH_SIZE")
+    max_file_size: int = Field(default=10 * 1024 * 1024, json_schema_extra={"env": "MAX_FILE_SIZE"}, )  # 10MB
+    max_processing_time: int = Field(default=300, json_schema_extra={"env": "MAX_PROCESSING_TIME"}, )  # 5 minutes
+    batch_size: int = Field(default=32, json_schema_extra={"env": "BATCH_SIZE"}, )
 
     # Accessibility Analysis
-    visual_analysis_enabled: bool = Field(default=True, env="VISUAL_ANALYSIS_ENABLED")
-    audio_analysis_enabled: bool = Field(default=True, env="AUDIO_ANALYSIS_ENABLED")
-    motor_analysis_enabled: bool = Field(default=True, env="MOTOR_ANALYSIS_ENABLED")
-    cognitive_analysis_enabled: bool = Field(default=True, env="COGNITIVE_ANALYSIS_ENABLED")
+    visual_analysis_enabled: bool = Field(default=True, json_schema_extra={"env": "VISUAL_ANALYSIS_ENABLED"}, )
+    audio_analysis_enabled: bool = Field(default=True, json_schema_extra={"env": "AUDIO_ANALYSIS_ENABLED"}, )
+    motor_analysis_enabled: bool = Field(default=True, json_schema_extra={"env": "MOTOR_ANALYSIS_ENABLED"}, )
+    cognitive_analysis_enabled: bool = Field(default=True, json_schema_extra={"env": "COGNITIVE_ANALYSIS_ENABLED"}, )
 
     # Thresholds
-    accessibility_score_threshold: float = Field(default=70.0, env="ACCESSIBILITY_SCORE_THRESHOLD")
-    confidence_threshold: float = Field(default=0.8, env="CONFIDENCE_THRESHOLD")
+    accessibility_score_threshold: float = Field(default=70.0, json_schema_extra={"env": "ACCESSIBILITY_SCORE_THRESHOLD"}, )
+    confidence_threshold: float = Field(default=0.8, json_schema_extra={"env": "CONFIDENCE_THRESHOLD"}, )
 
     # Logging
-    log_level: str = Field(default="INFO", env="LOG_LEVEL")
-    log_format: str = Field(default="json", env="LOG_FORMAT")
-    log_file: str | None = Field(default=None, env="LOG_FILE")
+    log_level: str = Field(default="INFO", json_schema_extra={"env": "LOG_LEVEL"}, )
+    log_format: str = Field(default="json", json_schema_extra={"env": "LOG_FORMAT"}, )
+    log_file: str | None = Field(default=None, json_schema_extra={"env": "LOG_FILE"}, )
 
     # Monitoring
-    metrics_enabled: bool = Field(default=True, env="METRICS_ENABLED")
-    metrics_port: int = Field(default=9090, env="METRICS_PORT")
-    health_check_interval: int = Field(default=30, env="HEALTH_CHECK_INTERVAL")
+    metrics_enabled: bool = Field(default=True, json_schema_extra={"env": "METRICS_ENABLED"}, )
+    metrics_port: int = Field(default=9090, json_schema_extra={"env": "METRICS_PORT"}, )
+    health_check_interval: int = Field(default=30, json_schema_extra={"env": "HEALTH_CHECK_INTERVAL"}, )
 
     # External Services
-    api_gateway_url: str | None = Field(default=None, env="API_GATEWAY_URL")
-    auth_service_url: str | None = Field(default=None, env="AUTH_SERVICE_URL")
-    user_service_url: str | None = Field(default=None, env="USER_SERVICE_URL")
+    api_gateway_url: str | None = Field(default=None, json_schema_extra={"env": "API_GATEWAY_URL"}, )
+    auth_service_url: str | None = Field(default=None, json_schema_extra={"env": "AUTH_SERVICE_URL"}, )
+    user_service_url: str | None = Field(default=None, json_schema_extra={"env": "USER_SERVICE_URL"}, )
 
     # Feature Flags
     feature_flags: dict[str, bool] = Field(
@@ -83,20 +83,22 @@ class Settings(BaseSettings):
             "experimental_models": False,
             "detailed_reporting": True,
         },
-        env="FEATURE_FLAGS"
+        json_schema_extra={"env": "FEATURE_FLAGS"}, 
     )
 
     # Rate Limiting
-    rate_limit_enabled: bool = Field(default=True, env="RATE_LIMIT_ENABLED")
-    rate_limit_requests: int = Field(default=100, env="RATE_LIMIT_REQUESTS")
-    rate_limit_window: int = Field(default=3600, env="RATE_LIMIT_WINDOW")  # 1 hour
+    rate_limit_enabled: bool = Field(default=True, json_schema_extra={"env": "RATE_LIMIT_ENABLED"}, )
+    rate_limit_requests: int = Field(default=100, json_schema_extra={"env": "RATE_LIMIT_REQUESTS"}, )
+    rate_limit_window: int = Field(default=3600, json_schema_extra={"env": "RATE_LIMIT_WINDOW"}, )  # 1 hour
 
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
-        case_sensitive = False
+    model_config = {
+        "env_file": ".env",
+        "env_file_encoding": "utf-8",
+        "case_sensitive": False
+    }
 
-    @validator('environment')
+    @field_validator('environment')
+    @classmethod
     def validate_environment(cls, v):
         """Validate environment setting."""
         allowed_environments = ['development', 'staging', 'production', 'testing']
@@ -104,7 +106,8 @@ class Settings(BaseSettings):
             raise ValueError(f"Environment must be one of: {allowed_environments}")
         return v
 
-    @validator('log_level')
+    @field_validator('log_level')
+    @classmethod
     def validate_log_level(cls, v):
         """Validate log level setting."""
         allowed_levels = ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']
@@ -112,14 +115,16 @@ class Settings(BaseSettings):
             raise ValueError(f"Log level must be one of: {allowed_levels}")
         return v.upper()
 
-    @validator('accessibility_score_threshold')
+    @field_validator('accessibility_score_threshold')
+    @classmethod
     def validate_score_threshold(cls, v):
         """Validate accessibility score threshold."""
         if not 0 <= v <= 100:
             raise ValueError("Accessibility score threshold must be between 0 and 100")
         return v
 
-    @validator('confidence_threshold')
+    @field_validator('confidence_threshold')
+    @classmethod
     def validate_confidence_threshold(cls, v):
         """Validate confidence threshold."""
         if not 0 <= v <= 1:

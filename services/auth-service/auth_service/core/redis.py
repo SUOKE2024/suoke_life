@@ -4,7 +4,7 @@ import json
 import pickle
 from datetime import timedelta
 from typing import Any, Dict, List, Optional, Union
-import aioredis
+import redis.asyncio as redis
 import structlog
 
 from auth_service.config.settings import RedisSettings, get_settings
@@ -17,19 +17,19 @@ class RedisManager:
     
     def __init__(self, settings: RedisSettings):
         self.settings = settings
-        self._pool: Optional[aioredis.ConnectionPool] = None
-        self._redis: Optional[aioredis.Redis] = None
+        self._pool: Optional[redis.ConnectionPool] = None
+        self._redis: Optional[redis.Redis] = None
     
     async def connect(self) -> None:
         """连接Redis"""
         try:
-            self._pool = aioredis.ConnectionPool.from_url(
+            self._pool = redis.ConnectionPool.from_url(
                 self.settings.url,
                 max_connections=self.settings.max_connections,
                 retry_on_timeout=True,
                 health_check_interval=30
             )
-            self._redis = aioredis.Redis(connection_pool=self._pool)
+            self._redis = redis.Redis(connection_pool=self._pool)
             
             # 测试连接
             await self._redis.ping()
@@ -48,7 +48,7 @@ class RedisManager:
         logger.info("Redis disconnected")
     
     @property
-    def redis(self) -> aioredis.Redis:
+    def redis(self) -> redis.Redis:
         """获取Redis客户端"""
         if not self._redis:
             raise RuntimeError("Redis not connected")
@@ -266,6 +266,11 @@ def get_redis() -> RedisManager:
     if not _redis_manager:
         raise RuntimeError("Redis not initialized")
     return _redis_manager
+
+
+def get_redis_manager() -> RedisManager:
+    """获取Redis管理器（别名）"""
+    return get_redis()
 
 
 def get_cache() -> CacheService:

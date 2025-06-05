@@ -1,0 +1,294 @@
+#!/usr/bin/env python3
+"""
+学习路径测试
+测试老克智能体的学习路径规划功能
+"""
+
+import pytest
+import asyncio
+from unittest.mock import Mock, patch, AsyncMock
+from datetime import datetime, timedelta
+import json
+
+class TestLearningPath:
+    """学习路径测试类"""
+    
+    def test_learning_path_generation(self):
+        """测试学习路径生成"""
+        user_profile = {
+            "user_id": "user_001",
+            "current_level": "初级",
+            "target_level": "高级",
+            "interests": ["人工智能", "机器学习"],
+            "available_time": "2小时/天",
+            "preferred_style": "实践导向",
+            "deadline": "3个月"
+        }
+        
+        expected_path = {
+            "path_id": "path_001",
+            "title": "AI机器学习进阶路径",
+            "total_duration": "90天",
+            "difficulty_progression": ["初级", "中级", "高级"],
+            "milestones": [
+                {
+                    "milestone_id": "m1",
+                    "title": "AI基础概念掌握",
+                    "target_date": "2024-01-15",
+                    "completion_criteria": ["完成5个基础课程", "通过测试评估"]
+                },
+                {
+                    "milestone_id": "m2", 
+                    "title": "机器学习算法理解",
+                    "target_date": "2024-02-15",
+                    "completion_criteria": ["实现3个算法", "完成项目作业"]
+                },
+                {
+                    "milestone_id": "m3",
+                    "title": "深度学习项目实战",
+                    "target_date": "2024-03-15",
+                    "completion_criteria": ["完成端到端项目", "技能认证"]
+                }
+            ],
+            "estimated_completion": "2024-03-20"
+        }
+        
+        # 验证学习路径
+        assert expected_path["total_duration"] == "90天"
+        assert len(expected_path["milestones"]) == 3
+        assert all("completion_criteria" in milestone for milestone in expected_path["milestones"])
+    
+    def test_personalized_curriculum(self):
+        """测试个性化课程安排"""
+        learning_preferences = {
+            "learning_style": "视觉学习者",
+            "pace": "快速",
+            "focus_areas": ["实践项目", "理论基础"],
+            "time_slots": ["晚上7-9点", "周末上午"],
+            "difficulty_preference": "循序渐进"
+        }
+        
+        expected_curriculum = [
+            {
+                "week": 1,
+                "theme": "AI基础理论",
+                "courses": [
+                    {
+                        "course_id": "ai_basics_001",
+                        "title": "人工智能概述",
+                        "type": "视频+图表",
+                        "duration": "45分钟",
+                        "difficulty": "初级",
+                        "practical_component": True
+                    },
+                    {
+                        "course_id": "math_foundations_001",
+                        "title": "数学基础回顾",
+                        "type": "交互式练习",
+                        "duration": "60分钟", 
+                        "difficulty": "初级",
+                        "practical_component": True
+                    }
+                ],
+                "weekly_project": "搭建第一个AI应用"
+            },
+            {
+                "week": 2,
+                "theme": "机器学习入门",
+                "courses": [
+                    {
+                        "course_id": "ml_intro_001",
+                        "title": "机器学习算法概览",
+                        "type": "可视化演示",
+                        "duration": "50分钟",
+                        "difficulty": "初级",
+                        "practical_component": True
+                    }
+                ],
+                "weekly_project": "实现线性回归算法"
+            }
+        ]
+        
+        # 验证个性化课程
+        assert len(expected_curriculum) == 2
+        assert all(week["theme"] for week in expected_curriculum)
+        assert all(course["practical_component"] for week in expected_curriculum for course in week["courses"])
+    
+    def test_progress_tracking(self):
+        """测试学习进度跟踪"""
+        progress_data = {
+            "user_id": "user_001",
+            "path_id": "path_001",
+            "start_date": "2024-01-01",
+            "current_milestone": "m2",
+            "overall_progress": 0.65,
+            "completed_courses": [
+                {
+                    "course_id": "ai_basics_001",
+                    "completion_date": "2024-01-05",
+                    "score": 92,
+                    "time_spent": "48分钟"
+                },
+                {
+                    "course_id": "math_foundations_001", 
+                    "completion_date": "2024-01-08",
+                    "score": 88,
+                    "time_spent": "65分钟"
+                }
+            ],
+            "current_streak": 15,
+            "weekly_goals": {
+                "target_hours": 14,
+                "completed_hours": 12,
+                "achievement_rate": 0.86
+            }
+        }
+        
+        # 验证进度跟踪
+        assert progress_data["overall_progress"] >= 0.6
+        assert len(progress_data["completed_courses"]) == 2
+        assert all(course["score"] >= 80 for course in progress_data["completed_courses"])
+        assert progress_data["current_streak"] >= 10
+    
+    def test_adaptive_difficulty(self):
+        """测试自适应难度调整"""
+        performance_history = [
+            {"course_id": "c1", "score": 95, "time_ratio": 0.8, "difficulty": "初级"},
+            {"course_id": "c2", "score": 92, "time_ratio": 0.7, "difficulty": "初级"},
+            {"course_id": "c3", "score": 88, "time_ratio": 0.9, "difficulty": "中级"},
+            {"course_id": "c4", "score": 85, "time_ratio": 1.1, "difficulty": "中级"}
+        ]
+        
+        expected_adjustment = {
+            "current_level": "中级",
+            "recommended_next_level": "中级偏高",
+            "confidence_score": 0.82,
+            "adjustment_reason": "用户在中级课程表现稳定，可适当增加难度",
+            "suggested_actions": [
+                "增加实践项目复杂度",
+                "引入更多理论深度",
+                "提供挑战性练习"
+            ]
+        }
+        
+        # 验证难度调整
+        assert expected_adjustment["confidence_score"] >= 0.8
+        assert "中级" in expected_adjustment["recommended_next_level"]
+        assert len(expected_adjustment["suggested_actions"]) >= 3
+    
+    def test_learning_analytics(self):
+        """测试学习分析功能"""
+        analytics_report = {
+            "user_id": "user_001",
+            "analysis_period": "last_30_days",
+            "learning_patterns": {
+                "most_active_time": "晚上8-10点",
+                "preferred_content_type": "视频教程",
+                "average_session_duration": "45分钟",
+                "completion_rate": 0.78,
+                "retention_rate": 0.85
+            },
+            "strengths": [
+                "理论理解能力强",
+                "实践动手能力好",
+                "学习持续性佳"
+            ],
+            "improvement_areas": [
+                "数学基础需要加强",
+                "代码调试技能待提升"
+            ],
+            "recommendations": [
+                "增加数学专项练习",
+                "参与编程实战项目",
+                "加入学习小组讨论"
+            ]
+        }
+        
+        # 验证学习分析
+        assert analytics_report["learning_patterns"]["completion_rate"] >= 0.7
+        assert analytics_report["learning_patterns"]["retention_rate"] >= 0.8
+        assert len(analytics_report["strengths"]) >= 3
+        assert len(analytics_report["recommendations"]) >= 3
+    
+    def test_milestone_achievement(self):
+        """测试里程碑达成"""
+        milestone_completion = {
+            "milestone_id": "m1",
+            "title": "AI基础概念掌握",
+            "completion_date": "2024-01-15",
+            "achievement_details": {
+                "required_courses": 5,
+                "completed_courses": 5,
+                "required_score": 80,
+                "average_score": 89,
+                "bonus_achievements": [
+                    "提前完成",
+                    "高分通过",
+                    "额外练习完成"
+                ]
+            },
+            "next_milestone": {
+                "milestone_id": "m2",
+                "title": "机器学习算法理解", 
+                "estimated_start": "2024-01-16",
+                "preparation_suggestions": [
+                    "复习线性代数",
+                    "准备Python环境",
+                    "阅读推荐资料"
+                ]
+            }
+        }
+        
+        # 验证里程碑达成
+        assert milestone_completion["achievement_details"]["completed_courses"] == milestone_completion["achievement_details"]["required_courses"]
+        assert milestone_completion["achievement_details"]["average_score"] >= milestone_completion["achievement_details"]["required_score"]
+        assert len(milestone_completion["achievement_details"]["bonus_achievements"]) >= 2
+    
+    def test_collaborative_learning(self):
+        """测试协作学习功能"""
+        study_group = {
+            "group_id": "group_001",
+            "name": "AI学习小组",
+            "members": [
+                {
+                    "user_id": "user_001",
+                    "role": "组长",
+                    "expertise": ["机器学习", "Python"],
+                    "contribution_score": 95
+                },
+                {
+                    "user_id": "user_002", 
+                    "role": "成员",
+                    "expertise": ["数据分析", "统计学"],
+                    "contribution_score": 88
+                },
+                {
+                    "user_id": "user_003",
+                    "role": "成员", 
+                    "expertise": ["深度学习", "TensorFlow"],
+                    "contribution_score": 92
+                }
+            ],
+            "group_activities": [
+                {
+                    "activity_type": "项目协作",
+                    "title": "图像分类项目",
+                    "participants": 3,
+                    "completion_status": "进行中"
+                },
+                {
+                    "activity_type": "知识分享",
+                    "title": "算法讲解会",
+                    "participants": 3,
+                    "completion_status": "已完成"
+                }
+            ]
+        }
+        
+        # 验证协作学习
+        assert len(study_group["members"]) == 3
+        assert all(member["contribution_score"] >= 80 for member in study_group["members"])
+        assert len(study_group["group_activities"]) >= 2
+
+if __name__ == "__main__":
+    pytest.main([__file__, "-v"])

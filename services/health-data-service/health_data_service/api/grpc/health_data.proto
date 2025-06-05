@@ -1,0 +1,300 @@
+syntax = "proto3";
+
+package health_data;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+// 健康数据服务
+service HealthDataService {
+  // 创建健康数据
+  rpc CreateHealthData(CreateHealthDataRequest) returns (HealthDataResponse);
+  
+  // 获取健康数据
+  rpc GetHealthData(GetHealthDataRequest) returns (HealthDataResponse);
+  
+  // 更新健康数据
+  rpc UpdateHealthData(UpdateHealthDataRequest) returns (HealthDataResponse);
+  
+  // 删除健康数据
+  rpc DeleteHealthData(DeleteHealthDataRequest) returns (DeleteHealthDataResponse);
+  
+  // 列出健康数据
+  rpc ListHealthData(ListHealthDataRequest) returns (ListHealthDataResponse);
+  
+  // 获取用户健康数据
+  rpc GetUserHealthData(GetUserHealthDataRequest) returns (ListHealthDataResponse);
+  
+  // 创建生命体征
+  rpc CreateVitalSigns(CreateVitalSignsRequest) returns (VitalSignsResponse);
+  
+  // 获取用户生命体征
+  rpc GetUserVitalSigns(GetUserVitalSignsRequest) returns (ListVitalSignsResponse);
+  
+  // 创建中医诊断
+  rpc CreateTCMDiagnosis(CreateTCMDiagnosisRequest) returns (TCMDiagnosisResponse);
+  
+  // 获取用户中医诊断
+  rpc GetUserTCMDiagnosis(GetUserTCMDiagnosisRequest) returns (ListTCMDiagnosisResponse);
+  
+  // 获取用户健康统计
+  rpc GetUserHealthStats(GetUserHealthStatsRequest) returns (UserHealthStatsResponse);
+  
+  // 健康检查
+  rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse);
+}
+
+// 数据类型枚举
+enum DataType {
+  DATA_TYPE_UNSPECIFIED = 0;
+  VITAL_SIGNS = 1;
+  BLOOD_TEST = 2;
+  URINE_TEST = 3;
+  IMAGING = 4;
+  SYMPTOMS = 5;
+  MEDICATION = 6;
+  EXERCISE = 7;
+  SLEEP = 8;
+  DIET = 9;
+  MOOD = 10;
+}
+
+// 数据来源枚举
+enum DataSource {
+  DATA_SOURCE_UNSPECIFIED = 0;
+  MANUAL = 1;
+  DEVICE = 2;
+  HOSPITAL = 3;
+  THIRD_PARTY = 4;
+  AI_ANALYSIS = 5;
+}
+
+// 健康数据消息
+message HealthData {
+  int32 id = 1;
+  int32 user_id = 2;
+  DataType data_type = 3;
+  DataSource data_source = 4;
+  google.protobuf.Struct raw_data = 5;
+  google.protobuf.Struct processed_data = 6;
+  string device_id = 7;
+  string location = 8;
+  repeated string tags = 9;
+  float quality_score = 10;
+  float confidence_score = 11;
+  bool is_validated = 12;
+  bool is_anomaly = 13;
+  google.protobuf.Timestamp recorded_at = 14;
+  google.protobuf.Timestamp created_at = 15;
+  google.protobuf.Timestamp updated_at = 16;
+}
+
+// 生命体征消息
+message VitalSigns {
+  int32 id = 1;
+  int32 user_id = 2;
+  int32 heart_rate = 3;
+  int32 blood_pressure_systolic = 4;
+  int32 blood_pressure_diastolic = 5;
+  float body_temperature = 6;
+  int32 respiratory_rate = 7;
+  float oxygen_saturation = 8;
+  float weight = 9;
+  float height = 10;
+  float bmi = 11;
+  string device_id = 12;
+  string notes = 13;
+  google.protobuf.Timestamp recorded_at = 14;
+  google.protobuf.Timestamp created_at = 15;
+  google.protobuf.Timestamp updated_at = 16;
+}
+
+// 中医诊断消息
+message TCMDiagnosis {
+  int32 id = 1;
+  int32 user_id = 2;
+  string diagnosis_type = 3;
+  google.protobuf.Struct diagnosis_data = 4;
+  google.protobuf.Struct standardized_data = 5;
+  float quality_score = 6;
+  int32 practitioner_id = 7;
+  int32 clinic_id = 8;
+  string session_id = 9;
+  string notes = 10;
+  google.protobuf.Timestamp recorded_at = 11;
+  google.protobuf.Timestamp created_at = 12;
+  google.protobuf.Timestamp updated_at = 13;
+}
+
+// 创建健康数据请求
+message CreateHealthDataRequest {
+  int32 user_id = 1;
+  DataType data_type = 2;
+  DataSource data_source = 3;
+  google.protobuf.Struct raw_data = 4;
+  string device_id = 5;
+  string location = 6;
+  repeated string tags = 7;
+  google.protobuf.Timestamp recorded_at = 8;
+}
+
+// 获取健康数据请求
+message GetHealthDataRequest {
+  int32 id = 1;
+}
+
+// 更新健康数据请求
+message UpdateHealthDataRequest {
+  int32 id = 1;
+  google.protobuf.Struct processed_data = 2;
+  float quality_score = 3;
+  float confidence_score = 4;
+  bool is_validated = 5;
+  bool is_anomaly = 6;
+  repeated string tags = 7;
+}
+
+// 删除健康数据请求
+message DeleteHealthDataRequest {
+  int32 id = 1;
+}
+
+// 列出健康数据请求
+message ListHealthDataRequest {
+  int32 user_id = 1;
+  string data_type = 2;
+  int32 skip = 3;
+  int32 limit = 4;
+}
+
+// 获取用户健康数据请求
+message GetUserHealthDataRequest {
+  int32 user_id = 1;
+  string data_type = 2;
+  int32 skip = 3;
+  int32 limit = 4;
+}
+
+// 创建生命体征请求
+message CreateVitalSignsRequest {
+  int32 user_id = 1;
+  int32 heart_rate = 2;
+  int32 blood_pressure_systolic = 3;
+  int32 blood_pressure_diastolic = 4;
+  float body_temperature = 5;
+  int32 respiratory_rate = 6;
+  float oxygen_saturation = 7;
+  float weight = 8;
+  float height = 9;
+  string device_id = 10;
+  string notes = 11;
+  google.protobuf.Timestamp recorded_at = 12;
+}
+
+// 获取用户生命体征请求
+message GetUserVitalSignsRequest {
+  int32 user_id = 1;
+  int32 skip = 2;
+  int32 limit = 3;
+}
+
+// 创建中医诊断请求
+message CreateTCMDiagnosisRequest {
+  int32 user_id = 1;
+  string diagnosis_type = 2;
+  google.protobuf.Struct diagnosis_data = 3;
+  google.protobuf.Struct standardized_data = 4;
+  float quality_score = 5;
+  int32 practitioner_id = 6;
+  int32 clinic_id = 7;
+  string session_id = 8;
+  string notes = 9;
+  google.protobuf.Timestamp recorded_at = 10;
+}
+
+// 获取用户中医诊断请求
+message GetUserTCMDiagnosisRequest {
+  int32 user_id = 1;
+  string diagnosis_type = 2;
+  int32 skip = 3;
+  int32 limit = 4;
+}
+
+// 获取用户健康统计请求
+message GetUserHealthStatsRequest {
+  int32 user_id = 1;
+}
+
+// 健康检查请求
+message HealthCheckRequest {}
+
+// 健康数据响应
+message HealthDataResponse {
+  bool success = 1;
+  string message = 2;
+  HealthData data = 3;
+}
+
+// 删除健康数据响应
+message DeleteHealthDataResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// 健康数据列表响应
+message ListHealthDataResponse {
+  bool success = 1;
+  string message = 2;
+  repeated HealthData items = 3;
+  int32 total = 4;
+  int32 skip = 5;
+  int32 limit = 6;
+}
+
+// 生命体征响应
+message VitalSignsResponse {
+  bool success = 1;
+  string message = 2;
+  VitalSigns data = 3;
+}
+
+// 生命体征列表响应
+message ListVitalSignsResponse {
+  bool success = 1;
+  string message = 2;
+  repeated VitalSigns items = 3;
+  int32 total = 4;
+  int32 skip = 5;
+  int32 limit = 6;
+}
+
+// 中医诊断响应
+message TCMDiagnosisResponse {
+  bool success = 1;
+  string message = 2;
+  TCMDiagnosis data = 3;
+}
+
+// 中医诊断列表响应
+message ListTCMDiagnosisResponse {
+  bool success = 1;
+  string message = 2;
+  repeated TCMDiagnosis items = 3;
+  int32 total = 4;
+  int32 skip = 5;
+  int32 limit = 6;
+}
+
+// 用户健康统计响应
+message UserHealthStatsResponse {
+  bool success = 1;
+  string message = 2;
+  google.protobuf.Struct stats = 3;
+}
+
+// 健康检查响应
+message HealthCheckResponse {
+  bool healthy = 1;
+  string status = 2;
+  google.protobuf.Timestamp timestamp = 3;
+} 

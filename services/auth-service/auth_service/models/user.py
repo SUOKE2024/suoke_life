@@ -125,7 +125,7 @@ class User(BaseModel):
     )
     
     # 元数据
-    metadata: Mapped[Optional[dict]] = mapped_column(
+    user_metadata: Mapped[Optional[dict]] = mapped_column(
         JSONB,
         comment="用户元数据"
     )

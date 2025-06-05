@@ -10,6 +10,7 @@ from typing import Any
 from pydantic import BaseModel, Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+
 class DatabaseConfig(BaseModel):
     """数据库配置"""
 

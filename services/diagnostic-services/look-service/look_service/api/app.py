@@ -18,7 +18,7 @@ from ..middleware import (
     SecurityMiddleware,
 )
 from .routes import api_router
-from .models import FHIRObservationResponse, LookDiagnosisRequest
+from .models import FHIRObservationResponse, LookDiagnosisRequest, LookDiagnosisResult
 
 logger = get_logger(__name__)
 
@@ -137,3 +137,123 @@ def setup_middleware(app: FastAPI) -> None:
     app.add_middleware(LoggingMiddleware)
 
     logger.info("Middleware configured")
+
+
+def look_diagnosis_algorithm(data: LookDiagnosisRequest) -> LookDiagnosisResult:
+    """
+    望诊分析算法（占位符实现）
+    
+    Args:
+        data: 望诊请求数据
+        
+    Returns:
+        望诊分析结果
+    """
+    from datetime import datetime
+    import uuid
+    
+    # 这是一个占位符实现，实际应该调用真正的望诊算法
+    result = LookDiagnosisResult(
+        analysis_id=str(uuid.uuid4()),
+        user_id=data.user_id,
+        timestamp=datetime.now(),
+        image_type=data.image_type,
+        overall_score=75.0,
+        health_status="正常",
+        recommendations=["保持良好作息", "均衡饮食"]
+    )
+    
+    # 根据分析类型添加具体分析结果
+    if "complexion" in data.analysis_type:
+        from .models import ComplexionAnalysis
+        result.complexion = ComplexionAnalysis(
+            color_type="正常",
+            confidence=0.8,
+            characteristics=["面色红润"],
+            health_implications=["气血充足"]
+        )
+    
+    if "tongue" in data.analysis_type:
+        from .models import TongueAnalysis
+        result.tongue = TongueAnalysis(
+            tongue_body={"color": "淡红", "texture": "正常"},
+            tongue_coating={"color": "薄白", "texture": "润泽"},
+            overall_assessment="舌象正常",
+            confidence=0.75
+        )
+    
+    return result
+
+
+def to_fhir_observation_look(user_id: str, result: LookDiagnosisResult) -> dict:
+    """
+    将望诊结果转换为FHIR Observation格式
+    
+    Args:
+        user_id: 用户ID
+        result: 望诊分析结果
+        
+    Returns:
+        FHIR Observation格式的数据
+    """
+    components = []
+    
+    # 添加面色分析组件
+    if result.complexion:
+        components.append({
+            "code": {
+                "coding": [{
+                    "system": "http://suoke.life/fhir/CodeSystem/tcm-look",
+                    "code": "complexion",
+                    "display": "面色"
+                }]
+            },
+            "valueCodeableConcept": {
+                "coding": [{
+                    "system": "http://suoke.life/fhir/CodeSystem/tcm-complexion",
+                    "code": result.complexion.color_type.lower(),
+                    "display": result.complexion.color_type
+                }]
+            }
+        })
+    
+    # 添加舌诊分析组件
+    if result.tongue:
+        components.append({
+            "code": {
+                "coding": [{
+                    "system": "http://suoke.life/fhir/CodeSystem/tcm-look",
+                    "code": "tongue",
+                    "display": "舌诊"
+                }]
+            },
+            "valueString": result.tongue.overall_assessment
+        })
+    
+    return {
+        "resourceType": "Observation",
+        "id": result.analysis_id,
+        "status": "final",
+        "category": [{
+            "coding": [{
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "survey",
+                "display": "Survey"
+            }]
+        }],
+        "code": {
+            "coding": [{
+                "system": "http://suoke.life/fhir/CodeSystem/tcm-observation",
+                "code": "look-diagnosis",
+                "display": "中医望诊"
+            }]
+        },
+        "subject": {
+            "reference": f"Patient/{user_id}"
+        },
+        "effectiveDateTime": result.timestamp.isoformat(),
+        "component": components,
+        "note": [{
+            "text": f"健康状态: {result.health_status}, 评分: {result.overall_score}"
+        }]
+    }

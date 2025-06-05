@@ -10,6 +10,8 @@ import os
 import re
 from typing import Any
 
+from internal.llm.llm_client import LLMClient
+
 logger = logging.getLogger(__name__)
 
 
@@ -77,6 +79,12 @@ class SymptomExtractor:
         if self.model_path and os.path.exists(self.model_path):
             self._load_model()
 
+        # LLM客户端（用于高级症状提取）
+        self.llm_client = None
+        llm_config = config.get("llm", {})
+        if llm_config.get("use_llm_extraction", False) or llm_config.get("use_mock_mode", False):
+            self.llm_client = LLMClient(llm_config)
+
         logger.info("症状提取器初始化完成")
 
     def _load_symptoms_map(self) -> dict:
@@ -124,7 +132,7 @@ class SymptomExtractor:
                 ],
                 "limbs": ["关节痛", "肌肉酸痛", "肢体麻木", "腿软", "手脚冰凉", "抽筋"],
                 "senses": ["视力下降", "听力下降", "耳鸣", "嗅觉减退", "味觉改变"],
-                "sleep": ["失眠", "多梦", "易醒", "嗜睡", "睡眠不深"],
+                "sleep": ["失眠", "多梦", "易醒", "嗜睡", "睡眠不深", "睡眠", "醒来", "睡不好"],
                 "mental": ["焦虑", "抑郁", "烦躁", "易怒", "情绪波动", "记忆力下降"],
                 "energy": ["疲劳", "乏力", "精神不振", "体力下降", "懒言"],
             },
@@ -281,8 +289,16 @@ class SymptomExtractor:
             Dict: 包含提取的症状、身体部位、时间因素和置信度
         """
         try:
+            # 如果有LLM客户端，使用LLM提取
+            if self.llm_client is not None:
+                (
+                    symptoms,
+                    body_locations,
+                    temporal_factors,
+                    confidence,
+                ) = await self._extract_with_llm(text)
             # 如果有NER模型，使用模型提取
-            if self.model is not None:
+            elif self.model is not None:
                 (
                     symptoms,
                     body_locations,
@@ -314,12 +330,74 @@ class SymptomExtractor:
 
         except Exception as e:
             logger.error(f"提取症状失败: {e!s}")
+            # 如果是LLM相关错误，重新抛出异常
+            if "LLM" in str(e) or "generate" in str(e):
+                raise e
+            # 其他错误返回默认结果
             return {
                 "symptoms": [],
                 "body_locations": [],
                 "temporal_factors": [],
                 "confidence_score": 0.0,
             }
+
+    async def _extract_with_llm(
+        self, text: str
+    ) -> tuple[list[dict], list[dict], list[dict], float]:
+        """使用LLM提取症状"""
+        try:
+            # 构建提示词
+            prompt = f"""
+请从以下文本中提取症状信息，并以JSON格式返回：
+
+文本：{text}
+
+请返回以下格式的JSON：
+{{
+    "symptoms": [
+        {{
+            "symptom_name": "症状名称",
+            "severity": "MILD/MODERATE/SEVERE",
+            "onset_time": 时间戳,
+            "duration": 持续时间(秒),
+            "description": "详细描述",
+            "confidence": 置信度(0-1)
+        }}
+    ],
+    "body_locations": [
+        {{
+            "location_name": "身体部位",
+            "associated_symptoms": ["相关症状"],
+            "side": "left/right/bilateral/central"
+        }}
+    ],
+    "temporal_factors": [
+        {{
+            "factor_type": "时间类型",
+            "description": "时间描述",
+            "symptoms_affected": ["受影响的症状"]
+        }}
+    ],
+    "confidence_score": 总体置信度
+}}
+"""
+
+            # 调用LLM
+            response = await self.llm_client.generate(prompt)
+            
+            # 解析JSON响应
+            result = json.loads(response)
+            
+            return (
+                result.get("symptoms", []),
+                result.get("body_locations", []),
+                result.get("temporal_factors", []),
+                result.get("confidence_score", 0.0)
+            )
+            
+        except Exception as e:
+            logger.error(f"LLM症状提取失败: {e}")
+            raise e
 
     async def _extract_with_model(
         self, text: str
@@ -653,7 +731,8 @@ class SymptomExtractor:
         if total_items > 0:
             confidence = min(0.9, 0.6 + (total_items / 15.0) * 0.3)
         else:
-            confidence = 0.5
+            # 如果没有提取到任何信息，置信度为0
+            confidence = 0.0
 
         return symptoms, body_locations, temporal_factors, confidence
 

@@ -11,6 +11,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any
 
+import numpy as np
 import structlog
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC

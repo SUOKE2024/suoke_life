@@ -134,3 +134,52 @@ class KnowledgeGraphService:
         except Exception as e:
             logger.error(f"获取相关实体失败: {e}")
             return []
+
+    # 为测试兼容性添加的方法别名和新方法
+    async def get_visualization_data(
+        self,
+        limit: int = 100,
+        relationship_types: list[str] | None = None,
+    ) -> dict[str, Any]:
+        """获取可视化数据 (测试兼容性别名)"""
+        return await self.get_graph_visualization_data(limit, None, relationship_types)
+
+    async def find_paths(
+        self, source_id: str, target_id: str, max_depth: int = 4
+    ) -> list[list[dict[str, Any]]]:
+        """查找路径 (测试兼容性别名)"""
+        result = await self.find_path_between_nodes(source_id, target_id, max_depth)
+        return result.get("paths", [])
+
+    async def execute_cypher(
+        self, query: str, params: dict[str, Any] | None = None
+    ) -> list[dict[str, Any]]:
+        """执行Cypher查询 (测试兼容性别名)"""
+        return await self.execute_cypher_query(query, params)
+
+    async def get_entity_subgraph(
+        self, entity_type: str, entity_id: str, depth: int = 2, relationship_types: list[str] | None = None
+    ) -> dict[str, Any]:
+        """获取实体子图 (测试兼容性别名)"""
+        return await self.get_knowledge_subgraph(entity_type, entity_id, depth, 50)
+
+    async def get_shortest_path(
+        self, source_id: str, target_id: str, relationship_types: list[str] | None = None
+    ) -> list[dict[str, Any]]:
+        """获取最短路径"""
+        try:
+            result = await self.repository.get_shortest_path(source_id, target_id, relationship_types)
+            return result
+        except Exception as e:
+            logger.error(f"获取最短路径失败: {e}")
+            return []
+
+    async def get_common_neighbors(
+        self, node1_id: str, node2_id: str, relationship_types: list[str] | None = None
+    ) -> list[dict[str, Any]]:
+        """获取共同邻居"""
+        try:
+            return await self.repository.get_common_neighbors(node1_id, node2_id, relationship_types)
+        except Exception as e:
+            logger.error(f"获取共同邻居失败: {e}")
+            return []

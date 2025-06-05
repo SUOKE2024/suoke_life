@@ -4,7 +4,7 @@
 该模块实现了用户服务的核心业务逻辑。
 """
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional, Tuple
 from uuid import UUID
 
@@ -400,7 +400,9 @@ class UserService:
             return BindDeviceResponse(
                 success=True,
                 binding_id=binding_id,
-            binding_time=datetime.now(datetime.timezone.utc)
+                binding_time=datetime.now(timezone.utc),
+                device_id=request.device_id,
+                device_type=request.device_type
             )
         except (UserNotFoundError, DeviceAlreadyBoundError) as e:
             logger.error(f"绑定设备失败: {e}")
@@ -452,7 +454,8 @@ class UserService:
             
             return UserDevicesResponse(
                 user_id=user_id,
-                devices=devices
+                devices=devices,
+                total=len(devices)
             )
         except UserNotFoundError as e:
             logger.error(f"获取用户设备列表失败: {e}")

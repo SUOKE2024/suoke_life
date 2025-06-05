@@ -23,12 +23,17 @@ from auth_service.schemas.user import (
 
 router = APIRouter()
 security = HTTPBearer()
-auth_service = AuthService()
+
+
+def get_auth_service() -> AuthService:
+    """获取认证服务实例"""
+    return AuthService()
 
 
 async def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(security),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    auth_service: AuthService = Depends(get_auth_service)
 ):
     """获取当前用户"""
     payload = auth_service.verify_token(credentials.credentials)
@@ -54,7 +59,8 @@ async def get_current_user(
 @router.post("/", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 async def create_user(
     request: UserCreateRequest,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    auth_service: AuthService = Depends(get_auth_service)
 ):
     """创建用户"""
     user_repo = UserRepository(db)
@@ -193,7 +199,8 @@ async def update_current_user(
 async def change_password(
     request: ChangePasswordRequest,
     current_user = Depends(get_current_user),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    auth_service: AuthService = Depends(get_auth_service)
 ):
     """修改密码"""
     # 验证当前密码

@@ -18,6 +18,41 @@ def format_analysis_result(result: Dict[str, Any]) -> Dict[str, Any]:
     Returns:
         格式化后的结果
     """
+    # 处理新格式的综合分析结果
+    if "analysis_metadata" in result and "individual_analyses" in result:
+        metadata = result["analysis_metadata"]
+        individual_analyses = result["individual_analyses"]
+        birth_info = result.get("birth_info", {})
+        recommendations = result.get("recommendations", {})
+        
+        formatted_result = {
+            "分析概要": {
+                "分析时间": metadata.get("analysis_date", ""),
+                "个人信息": birth_info,
+                "分析类型": metadata.get("included_analyses", [])
+            },
+            "详细分析": {},
+            "综合建议": recommendations,
+            "调养重点": recommendations.get("lifestyle_adjustments", []),
+            "注意事项": recommendations.get("monitoring_advice", [])
+        }
+        
+        # 格式化各项分析结果
+        if "ziwu" in individual_analyses and "error" not in individual_analyses["ziwu"]:
+            formatted_result["详细分析"]["子午流注"] = _format_ziwu_result(individual_analyses["ziwu"])
+        
+        if "constitution" in individual_analyses and "error" not in individual_analyses["constitution"]:
+            formatted_result["详细分析"]["体质分析"] = _format_constitution_result(individual_analyses["constitution"])
+        
+        if "bagua" in individual_analyses and "error" not in individual_analyses["bagua"]:
+            formatted_result["详细分析"]["八卦分析"] = _format_bagua_result(individual_analyses["bagua"])
+        
+        if "wuyun_liuqi" in individual_analyses and "error" not in individual_analyses["wuyun_liuqi"]:
+            formatted_result["详细分析"]["运气分析"] = _format_wuyun_result(individual_analyses["wuyun_liuqi"])
+        
+        return formatted_result
+    
+    # 处理旧格式的结果（向后兼容）
     formatted_result = {
         "分析概要": {
             "分析时间": result.get("分析时间", ""),

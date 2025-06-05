@@ -25,16 +25,25 @@ from auth_service.schemas.auth import (
 
 router = APIRouter()
 security = HTTPBearer()
-auth_service = AuthService()
-settings = get_settings()
-email_service = EmailService(settings.email)
+
+
+def get_auth_service() -> AuthService:
+    """获取认证服务实例"""
+    return AuthService()
+
+
+def get_email_service() -> EmailService:
+    """获取邮件服务实例"""
+    settings = get_settings()
+    return EmailService(settings.email)
 
 
 @router.post("/password-reset")
 async def request_password_reset(
     request: PasswordResetRequest,
     db: AsyncSession = Depends(get_db),
-    redis = Depends(get_redis)
+    redis = Depends(get_redis),
+    email_service: EmailService = Depends(get_email_service)
 ):
     """请求密码重置"""
     user_repo = UserRepository(db)
@@ -77,7 +86,8 @@ async def request_password_reset(
 async def confirm_password_reset(
     request: PasswordResetConfirmRequest,
     db: AsyncSession = Depends(get_db),
-    redis = Depends(get_redis)
+    redis = Depends(get_redis),
+    auth_service: AuthService = Depends(get_auth_service)
 ):
     """确认密码重置"""
     try:
@@ -139,7 +149,8 @@ async def confirm_password_reset(
 async def request_email_verification(
     request: EmailVerificationRequest,
     db: AsyncSession = Depends(get_db),
-    redis = Depends(get_redis)
+    redis = Depends(get_redis),
+    email_service: EmailService = Depends(get_email_service)
 ):
     """请求邮箱验证"""
     user_repo = UserRepository(db)
@@ -193,7 +204,8 @@ async def request_email_verification(
 async def confirm_email_verification(
     request: EmailVerificationConfirmRequest,
     db: AsyncSession = Depends(get_db),
-    redis = Depends(get_redis)
+    redis = Depends(get_redis),
+    email_service: EmailService = Depends(get_email_service)
 ):
     """确认邮箱验证"""
     try:
@@ -259,7 +271,8 @@ async def confirm_email_verification(
 @router.post("/sessions/cleanup")
 async def cleanup_expired_sessions(
     credentials: HTTPAuthorizationCredentials = Depends(security),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    auth_service: AuthService = Depends(get_auth_service)
 ):
     """清理过期会话（管理员功能）"""
     # 验证令牌
@@ -290,7 +303,8 @@ async def cleanup_expired_sessions(
 async def terminate_session(
     session_id: str,
     credentials: HTTPAuthorizationCredentials = Depends(security),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    auth_service: AuthService = Depends(get_auth_service)
 ):
     """终止指定会话"""
     # 验证令牌
@@ -329,7 +343,8 @@ async def terminate_session(
 async def get_login_attempts(
     credentials: HTTPAuthorizationCredentials = Depends(security),
     db: AsyncSession = Depends(get_db),
-    limit: int = 50
+    limit: int = 50,
+    auth_service: AuthService = Depends(get_auth_service)
 ):
     """获取登录尝试记录（管理员功能）"""
     # 验证令牌
@@ -360,7 +375,8 @@ async def get_login_attempts(
 async def unlock_user_account(
     user_id: str,
     credentials: HTTPAuthorizationCredentials = Depends(security),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    auth_service: AuthService = Depends(get_auth_service)
 ):
     """解锁用户账户（管理员功能）"""
     # 验证令牌
@@ -390,7 +406,8 @@ async def unlock_user_account(
 @router.get("/security-settings")
 async def get_security_settings(
     credentials: HTTPAuthorizationCredentials = Depends(security),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    auth_service: AuthService = Depends(get_auth_service)
 ):
     """获取安全设置"""
     # 验证令牌

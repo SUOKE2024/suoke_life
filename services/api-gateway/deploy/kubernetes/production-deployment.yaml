@@ -1,0 +1,265 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: suoke-api-gateway
+  namespace: suoke-services
+  labels:
+    app: suoke-api-gateway
+    version: v1.0.0
+    component: gateway
+    part-of: suoke-life
+    managed-by: kubernetes
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+    description: "Suoke Life API Gateway - Production Deployment"
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: suoke-api-gateway
+      version: v1.0.0
+  template:
+    metadata:
+      labels:
+        app: suoke-api-gateway
+        version: v1.0.0
+        component: gateway
+        part-of: suoke-life
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: suoke-api-gateway
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+      - name: api-gateway
+        image: suoke/api-gateway:v1.0.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        - name: grpc
+          containerPort: 50051
+          protocol: TCP
+        - name: metrics
+          containerPort: 9090
+          protocol: TCP
+        env:
+        - name: ENVIRONMENT
+          value: "production"
+        - name: CONFIG_FILE
+          value: "/app/config/production.yaml"
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: suoke-database-secret
+              key: url
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: suoke-redis-secret
+              key: url
+        - name: JWT_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: suoke-jwt-secret
+              key: secret-key
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "1000m"
+          limits:
+            memory: "2Gi"
+            cpu: "2000m"
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1000
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        volumeMounts:
+        - name: config
+          mountPath: /app/config
+          readOnly: true
+        - name: logs
+          mountPath: /var/log/suoke
+        - name: tmp
+          mountPath: /tmp
+      volumes:
+      - name: config
+        configMap:
+          name: suoke-api-gateway-config
+      - name: logs
+        emptyDir: {}
+      - name: tmp
+        emptyDir: {}
+      nodeSelector:
+        kubernetes.io/arch: amd64
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - suoke-api-gateway
+              topologyKey: kubernetes.io/hostname
+      terminationGracePeriodSeconds: 30
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: suoke-api-gateway
+  namespace: suoke-services
+  labels:
+    app: suoke-api-gateway
+    component: gateway
+    part-of: suoke-life
+spec:
+  type: LoadBalancer
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+    protocol: TCP
+  - name: https
+    port: 443
+    targetPort: http
+    protocol: TCP
+  - name: grpc
+    port: 50051
+    targetPort: grpc
+    protocol: TCP
+  selector:
+    app: suoke-api-gateway
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: suoke-api-gateway-hpa
+  namespace: suoke-services
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: suoke-api-gateway
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: suoke-api-gateway-pdb
+  namespace: suoke-services
+  labels:
+    app: suoke-api-gateway
+    component: gateway
+    part-of: suoke-life
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: suoke-api-gateway
+
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: suoke-api-gateway-netpol
+  namespace: suoke-services
+  labels:
+    app: suoke-api-gateway
+    component: gateway
+    part-of: suoke-life
+spec:
+  podSelector:
+    matchLabels:
+      app: suoke-api-gateway
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: ingress-nginx
+    - namespaceSelector:
+        matchLabels:
+          name: istio-system
+    - podSelector:
+        matchLabels:
+          app: prometheus
+    ports:
+    - protocol: TCP
+      port: 8080
+    - protocol: TCP
+      port: 9090
+  - from: []  # 允许所有入站流量到gRPC端口
+    ports:
+    - protocol: TCP
+      port: 50051
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: suoke-services
+    ports:
+    - protocol: TCP
+      port: 8080
+    - protocol: TCP
+      port: 50051
+  - to: []  # 允许所有出站流量（DNS、外部API等）
+    ports:
+    - protocol: TCP
+      port: 53
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 443
+    - protocol: TCP
+      port: 80

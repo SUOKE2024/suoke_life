@@ -203,7 +203,7 @@ class AccessibilityService:
         status = {
             "service": "accessibility-service",
             "version": "1.0.0",
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(datetime.UTC).isoformat(),
             "initialized": self._initialized,
             "platform": self.platform_checker.get_platform_info(),
             "sub_services": {}

@@ -1,0 +1,16 @@
+from app.services.ai_service import AIService
+
+async def get_ai_service() -> AIService:
+    """获取AI服务实例"""
+    container = await get_container()
+    knowledge_service = await get_knowledge_service()
+    graph_service = await get_knowledge_graph_service()
+    cache_service = await get_cache_service()
+    metrics_service = await get_metrics_service()
+    
+    return AIService(
+        knowledge_service=knowledge_service,
+        graph_service=graph_service,
+        cache_service=cache_service,
+        metrics_service=metrics_service
+    ) 

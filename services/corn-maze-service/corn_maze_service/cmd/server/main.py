@@ -6,18 +6,17 @@ Corn Maze Service 主入口
 
 import asyncio
 from collections.abc import AsyncGenerator
-from concurrent.futures import ThreadPoolExecutor
 from contextlib import asynccontextmanager
 import signal
 import sys
 from typing import Any
 
 from fastapi import FastAPI
-from grpc_health.v1 import health_pb2_grpc
-from grpc_reflection.v1alpha import reflection
+from grpc import aio as grpc_aio
 import uvicorn
 
 from corn_maze_service.config import get_settings
+from corn_maze_service.internal.delivery.grpc import create_grpc_server
 from corn_maze_service.internal.delivery.http import create_app
 from corn_maze_service.pkg.logging import get_logger, setup_logging
 
@@ -44,45 +43,10 @@ class GracefulShutdown:
         """添加任务"""
         self.tasks.append(task)
 
-async def create_grpc_server() -> grpc_aio.Server:
-    """创建 gRPC 服务器"""
-    settings = get_settings()
-
-    server = grpc_aio.server(
-        ThreadPoolExecutor(max_workers=settings.grpc.max_workers),
-        options=[
-            ("grpc.max_receive_message_length", settings.grpc.max_receive_message_length),
-            ("grpc.max_send_message_length", settings.grpc.max_send_message_length),
-        ]
-    )
-
-    # 注册服务
-    # TODO: 当 protobuf 文件生成后，取消注释以下代码
-    # corn_maze_servicer = CornMazeServicer()
-    # corn_maze_pb2_grpc.add_CornMazeServiceServicer_to_server(corn_maze_servicer, server)
-
-    # 健康检查
-    if settings.grpc.enable_health_check:
-        health_servicer = health_pb2_grpc.HealthServicer()
-        health_pb2_grpc.add_HealthServicer_to_server(health_servicer, server)
-
-    # gRPC 反射
-    if settings.grpc.enable_reflection:
-        service_names = [
-            # "corn_maze.v1.CornMazeService",
-            reflection.SERVICE_NAME,
-        ]
-        if settings.grpc.enable_health_check:
-            service_names.append("grpc.health.v1.Health")
-
-        reflection.enable_server_reflection(service_names, server)
-
-    # 监听端口
-    listen_addr = f"{settings.grpc.host}:{settings.grpc.port}"
-    server.add_insecure_port(listen_addr)
-
-    logger.info("gRPC server configured", address=listen_addr)
-    return server
+async def setup_grpc_server() -> grpc_aio.Server:
+    """设置 gRPC 服务器"""
+    # 使用我们实现的 gRPC 服务器创建函数
+    return await create_grpc_server()
 
 async def start_grpc_server(server: grpc_aio.Server) -> None:
     """启动 gRPC 服务器"""
@@ -165,7 +129,7 @@ async def main() -> None:
 
     try:
         # 创建 gRPC 服务器
-        grpc_server = await create_grpc_server()
+        grpc_server = await setup_grpc_server()
 
         # 启动所有服务
         tasks: list[asyncio.Task[Any]] = [

@@ -21,7 +21,7 @@ const AppNavigator: React.FC = () => {
         // 这里可以检查AsyncStorage中的token或其他认证信息
         // const token = await AsyncStorage.getItem("authToken")
         // setIsAuthenticated(!!token)
-        
+
         // 暂时设置为未认证状态，显示欢迎页面
         setIsAuthenticated(false);
       } catch (error) {
@@ -44,7 +44,7 @@ const AppNavigator: React.FC = () => {
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
-        animationEnabled: true
+        animationEnabled: true,
       }}
     >
       {isAuthenticated || isDemoMode ? (
@@ -54,7 +54,7 @@ const AppNavigator: React.FC = () => {
             name="Main"
             component={MainNavigator}
             options={{
-              animationTypeForReplace: "push"
+              animationTypeForReplace: "push",
             }}
           />
           <Stack.Screen
@@ -68,13 +68,13 @@ const AppNavigator: React.FC = () => {
                       {
                         translateX: current.progress.interpolate({
                           inputRange: [0, 1],
-                          outputRange: [layouts.screen.width, 0]
-                        })
-                      }
-                    ]
-                  }
+                          outputRange: [layouts.screen.width, 0],
+                        }),
+                      },
+                    ],
+                  },
                 };
-              }
+              },
             }}
           />
         </>
@@ -85,7 +85,7 @@ const AppNavigator: React.FC = () => {
             name="Auth"
             component={AuthNavigator}
             options={{
-              animationTypeForReplace: 'pop'
+              animationTypeForReplace: "pop",
             }}
           />
           <Stack.Screen
@@ -99,13 +99,13 @@ const AppNavigator: React.FC = () => {
                       {
                         translateX: current.progress.interpolate({
                           inputRange: [0, 1],
-                          outputRange: [layouts.screen.width, 0]
-                        })
-                      }
-                    ]
-                  }
+                          outputRange: [layouts.screen.width, 0],
+                        }),
+                      },
+                    ],
+                  },
                 };
-              }
+              },
             }}
           />
         </>

@@ -7,7 +7,9 @@ from .calculation_exceptions import (
     InvalidBirthInfoError,
     InvalidTimeError,
     AlgorithmError,
-    DataNotFoundError
+    DataNotFoundError,
+    ConfigurationError,
+    ValidationError
 )
 
 __all__ = [
@@ -15,5 +17,7 @@ __all__ = [
     "InvalidBirthInfoError", 
     "InvalidTimeError",
     "AlgorithmError",
-    "DataNotFoundError"
+    "DataNotFoundError",
+    "ConfigurationError",
+    "ValidationError"
 ] 

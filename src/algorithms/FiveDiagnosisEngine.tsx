@@ -1,36 +1,56 @@
 import React from "react";
-import { AlgorithmConfig } from "../../placeholder";./config/AlgorithmConfig";/import { TCMKnowledgeBase } from "./knowledge/TCMKnowledgeBase";/import { QualityController } from "./quality/QualityController";/import { PerformanceMonitor } from "./monitoring/////    PerformanceMonitor";"
-//////
-  CalculationDiagnosisAlgorithm,
+import AlgorithmConfig from "./config/AlgorithmConfig";
+import TCMKnowledgeBase from "./knowledge/TCMKnowledgeBase";
+import QualityController from "./quality/QualityController";
+import PerformanceMonitor from "./monitoring/PerformanceMonitor";
+import CalculationDiagnosisAlgorithm, {
   CalculationData as CalcData,
-  { CalculationResult as CalcResult } from "./modules/CalculationDiagnosisAlgorithm";/////      LookingDiagnosisAlgorithm,
+  CalculationResult as CalcResult,
+} from "./modules/CalculationDiagnosisAlgorithm";
+import LookingDiagnosisAlgorithm, {
   LookingData as LookData,
-  { LookingResult as LookResult } from "./modules/LookingDiagnosisAlgorithm";/////      ListeningDiagnosisAlgorithm,
+  LookingResult as LookResult,
+} from "./modules/LookingDiagnosisAlgorithm";
+import ListeningDiagnosisAlgorithm, {
   ListeningData as ListenData,
-  { ListeningResult as ListenResult } from "./modules/ListeningDiagnosisAlgorithm";/////      InquiryDiagnosisAlgorithm,
+  ListeningResult as ListenResult,
+} from "./modules/ListeningDiagnosisAlgorithm";
+import InquiryDiagnosisAlgorithm, {
   InquiryData as InqData,
-  { InquiryResult as InqResult } from "./modules/InquiryDiagnosisAlgorithm";/////      PalpationDiagnosisAlgorithm,
+  InquiryResult as InqResult,
+} from "./modules/InquiryDiagnosisAlgorithm";
+import PalpationDiagnosisAlgorithm, {
   PalpationData as PalpData,
-  { PalpationResult as PalpResult } from "./modules/PalpationDiagnosisAlgorithm";/////      DiagnosisFusionAlgorithm,
+  PalpationResult as PalpResult,
+} from "./modules/PalpationDiagnosisAlgorithm";
+import DiagnosisFusionAlgorithm, {
   FusionInput,
-  { FusionResult } from "./modules/DiagnosisFusionAlgorithm";// * 中医五诊算法引擎////
+  FusionResult,
+} from "./modules/DiagnosisFusionAlgorithm";
+
+/**
+ * 中医五诊算法引擎
  *
  * 整合望、闻、问、切、算五种诊法的核心引擎
  * 提供完整的中医诊断分析能力
  *
  * @author 索克生活技术团队
- * @version 1.0.0;
-// 基础类型定义 * export interface UserProfile { age: number, ,////
-  gender: "male" | "female" | "other",
-  height: number,
-  weight: number,
-  occupation: string,
-  medicalHistory: string[],
-  allergies: string[],
-  medications: string[]
-  }
-export interface DiagnosisInput  {;
-;
+ * @version 1.0.0
+ */
+
+// 基础类型定义
+export interface UserProfile {
+  age: number;
+  gender: "male" | "female" | "other";
+  height: number;
+  weight: number;
+  occupation: string;
+  medicalHistory: string[];
+  allergies: string[];
+  medications: string[];
+}
+
+export interface DiagnosisInput {
   userProfile?: UserProfile;
   lookingData?: LookData;
   listeningData?: ListenData;
@@ -38,397 +58,437 @@ export interface DiagnosisInput  {;
   palpationData?: PalpData;
   calculationData?: CalcData;
   timestamp?: number;
-  sessionId: string,
-  userId: string}
-export interface ImageData { data: ArrayBuffer,
-  format: string,
-  width: number,
-  height: number}
-export interface SessionContext { sessionId: string,
-  timestamp: number,
-  environment: {temperature: number,
-    humidity: number,;
-    season: string,;
-    timeOfDay: string};
+  sessionId: string;
+  userId: string;
+}
+
+export interface ImageData {
+  data: ArrayBuffer;
+  format: string;
+  width: number;
+  height: number;
+}
+
+export interface SessionContext {
+  sessionId: string;
+  timestamp: number;
+  environment: {
+    temperature: number;
+    humidity: number;
+    season: string;
+    timeOfDay: string;
+  };
   previousSessions?: string[];
 }
-export interface DiagnosisResult { sessionId: string,
-  userId: string,
-  timestamp: number,
-  confidence: number,;
-  overallAssessment: string,;
-  diagnosisResults: {looking?: LookingResult;
-    calculation?: CalculationResult};
-  fusionResult: FusionResult,
-  syndromeAnalysis: unknown,
-  constitutionAnalysis: unknown,
-  treatmentRecommendation: unknown,
-  qualityReport: unknown,
-  performanceMetrics: unknown}
-export interface LookingResult { confidence: number,
-  features: unknown[],
-  analysis: string}
-export interface CalculationResult { confidence: number,
-  fiveElements: unknown,
-  analysis: string}
-export interface LocalFusionResult { confidence: number,
-  fusedFeatures: unknown[],
-  analysis: string}
+
+export interface DiagnosisResult {
+  sessionId: string;
+  userId: string;
+  timestamp: number;
+  confidence: number;
+  overallAssessment: string;
+  diagnosisResults: {
+    looking?: LookingResult;
+    calculation?: CalculationResult;
+  };
+  fusionResult: FusionResult;
+  syndromeAnalysis: unknown;
+  constitutionAnalysis: unknown;
+  treatmentRecommendation: unknown;
+  qualityReport: unknown;
+  performanceMetrics: unknown;
+}
+
+export interface LookingResult {
+  confidence: number;
+  features: unknown[];
+  analysis: string;
+}
+
+export interface CalculationResult {
+  confidence: number;
+  fiveElements: unknown;
+  analysis: string;
+}
+
+export interface LocalFusionResult {
+  confidence: number;
+  fusedFeatures: unknown[];
+  analysis: string;
+}
+
 export enum DiagnosisType {
   LOOKING = "looking",
   LISTENING = "listening",
   INQUIRY = "inquiry",
   PALPATION = "palpation",
-  CALCULATION = "calculation"
+  CALCULATION = "calculation",
 }
+
 export enum ProcessingStatus {
   PENDING = "pending",
   PROCESSING = "processing",
   COMPLETED = "completed",
   FAILED = "failed",
-  CANCELLED = "cancelled"
+  CANCELLED = "cancelled",
 }
-//////     中医五诊算法核心引擎export class FiveDiagnosisEngine {;
-;
+
+/**
+ * 中医五诊算法核心引擎
+ */
+export class FiveDiagnosisEngine {
   private config: AlgorithmConfig;
   private knowledgeBase: TCMKnowledgeBase;
   private qualityController: QualityController;
   private performanceMonitor: PerformanceMonitor;
-  // 运行时状态 //////     private isInitialized: boolean = false;
+
+  // 运行时状态
+  private isInitialized: boolean = false;
   private sessionCount: number = 0;
   private lastMaintenanceTime: number = Date.now();
   private eventListeners: Map<string, Function[]> = new Map();
-  // 算法模块 //////     private calculationAlgorithm!: CalculationDiagnosisAlgorithm;
+
+  // 算法模块
+  private calculationAlgorithm!: CalculationDiagnosisAlgorithm;
   private lookingAlgorithm!: LookingDiagnosisAlgorithm;
   private listeningAlgorithm!: ListeningDiagnosisAlgorithm;
   private inquiryAlgorithm!: InquiryDiagnosisAlgorithm;
   private palpationAlgorithm!: PalpationDiagnosisAlgorithm;
   private fusionAlgorithm!: DiagnosisFusionAlgorithm;
-  constructor(config?: Partial<AlgorithmConfig />) {/    // 初始化配置 //////     this.config = new AlgorithmConfig(config)
-    // 初始化知识库 //////     this.knowledgeBase = new TCMKnowledgeBase(this.config.knowledgeBase)
-    // 初始化质量控制器 //////     this.qualityController = new QualityController(this.config.qualityControl)
-    // 初始化性能监控器 //////     this.performanceMonitor = new PerformanceMonitor(this.config.monitoring)
+
+  constructor(config?: Partial<AlgorithmConfig>) {
+    // 初始化配置
+    this.config = new AlgorithmConfig(config);
+    // 初始化知识库
+    this.knowledgeBase = new TCMKnowledgeBase(this.config.knowledgeBase);
+    // 初始化质量控制器
+    this.qualityController = new QualityController(this.config.qualityControl);
+    // 初始化性能监控器
+    this.performanceMonitor = new PerformanceMonitor(this.config.monitoring);
     this.initializeEngine();
   }
-  //////     初始化引擎  private async initializeEngine(): Promise<void> {
+
+  /**
+   * 初始化引擎
+   */
+  private async initializeEngine(): Promise<void> {
     try {
-      this.emit("engine:initializing")
-      // 等待知识库加载完成 //////     await this.waitForKnowledgeBase;
+      this.emit("engine:initializing");
+      // 等待知识库加载完成
+      await this.waitForKnowledgeBase();
       this.isInitialized = true;
-this.emit("engine:initialized");
-      // 初始化算法模块 //////     this.initializeAlgorithms()
+      this.emit("engine:initialized");
+      // 初始化算法模块
+      this.initializeAlgorithms();
     } catch (error) {
       this.emit("engine:initialization_failed", { error });
       throw error;
     }
   }
-  //////     等待知识库加载完成  private async waitForKnowledgeBase(): Promise<void> {
-    // 简化实现，实际应该等待知识库加载完成 //////     return new Promise((resolve;); => setTimeout(resolve, 100););
+
+  /**
+   * 等待知识库加载完成
+   */
+  private async waitForKnowledgeBase(): Promise<void> {
+    // 简化实现，实际应该等待知识库加载完成
+    return new Promise((resolve) => setTimeout(resolve, 100));
   }
-  //////     初始化算法模块  private initializeAlgorithms(): void {
+
+  /**
+   * 初始化算法模块
+   */
+  private initializeAlgorithms(): void {
     try {
-      // 初始化各诊法算法 //////     this.calculationAlgorithm = new CalculationDiagnosisAlgorithm(
+      // 初始化各诊法算法
+      this.calculationAlgorithm = new CalculationDiagnosisAlgorithm(
         this.config.calculation,
-        this.knowledgeBase;
-      )
+        this.knowledgeBase
+      );
       this.lookingAlgorithm = new LookingDiagnosisAlgorithm(
         this.config.looking,
-        this.knowledgeBase;
+        this.knowledgeBase
       );
       this.listeningAlgorithm = new ListeningDiagnosisAlgorithm(
         this.config.listening,
-        this.knowledgeBase;
+        this.knowledgeBase
       );
       this.inquiryAlgorithm = new InquiryDiagnosisAlgorithm(
         this.config.inquiry,
-        this.knowledgeBase;
+        this.knowledgeBase
       );
       this.palpationAlgorithm = new PalpationDiagnosisAlgorithm(
         this.config.palpation,
-        this.knowledgeBase;
+        this.knowledgeBase
       );
       this.fusionAlgorithm = new DiagnosisFusionAlgorithm(
         this.config.fusion,
-        this.knowledgeBase;
-      )
+        this.knowledgeBase
+      );
+
       this.emit("algorithms:initialized", {
-        algorithms: ["calculation",
+        algorithms: [
+          "calculation",
           "looking",
           "listening",
           "inquiry",
           "palpation",
-          "fusion"
-        ]
+          "fusion",
+        ],
       });
     } catch (error) {
-      this.emit("algorithms:error", { error, stage: "initialization"});
-      throw new Error(`算法模块初始化失败: ${error};`;);
+      this.emit("algorithms:error", { error, stage: "initialization" });
+      throw new Error(`算法模块初始化失败: ${error}`);
     }
   }
-  // 执行五诊分析  public async analyze(input: DiagnosisInput): Promise<DiagnosisResult /////    >  {
+
+  // 执行五诊分析
+  public async analyze(input: DiagnosisInput): Promise<DiagnosisResult> {
     if (!this.isInitialized) {
-      throw new Error("引擎尚未初始化完成";);
+      throw new Error("引擎尚未初始化完成");
     }
-    const sessionId = input.session;I;d;
-    const startTime = Date.now;
+
+    const sessionId = input.sessionId;
+    const startTime = Date.now();
+
     try {
-      this.sessionCount++
-      this.emit("diagnosis:started", { sessionId, userId: input.userId});
-      // 数据验证 //////     await this.validateInput(input;);
-      // 数据标准化 //////     await this.normalizeInput(input;);
-      // 执行各诊法分析 //////     const diagnosisResults: unknown = {}
-      // 望诊分析 //////     if (input.lookingData) {
+      this.sessionCount++;
+      this.emit("diagnosis:started", { sessionId, userId: input.userId });
+
+      // 数据验证
+      await this.validateInput(input);
+
+      // 数据标准化
+      await this.normalizeInput(input);
+
+      // 执行各诊法分析
+      const diagnosisResults: any = {};
+
+      // 望诊分析
+      if (input.lookingData) {
         this.emit("algorithm:progress", {
           stage: "looking_analysis",
-          progress: 0.3});
+          progress: 0.3,
+        });
         diagnosisResults.looking = await this.lookingAlgorithm.analyze(
           input.lookingData,
-          input.userProfil;e;
-        ;)
+          input.userProfile
+        );
       }
-      // 闻诊分析 //////     if (input.listeningData) {
+
+      // 闻诊分析
+      if (input.listeningData) {
         this.emit("algorithm:progress", {
           stage: "listening_analysis",
-          progress: 0.4});
+          progress: 0.4,
+        });
         diagnosisResults.listening = await this.listeningAlgorithm.analyze(
           input.listeningData,
-          input.userProfil;e;
-        ;)
+          input.userProfile
+        );
       }
-      // 问诊分析 //////     if (input.inquiryData) {
+
+      // 问诊分析
+      if (input.inquiryData) {
         this.emit("algorithm:progress", {
           stage: "inquiry_analysis",
-          progress: 0.5});
+          progress: 0.5,
+        });
         diagnosisResults.inquiry = await this.inquiryAlgorithm.analyze(
           input.inquiryData,
-          input.userProfil;e;
-        ;)
+          input.userProfile
+        );
       }
-      // 切诊分析 //////     if (input.palpationData) {
+
+      // 切诊分析
+      if (input.palpationData) {
         this.emit("algorithm:progress", {
           stage: "palpation_analysis",
-          progress: 0.6});
+          progress: 0.6,
+        });
         diagnosisResults.palpation = await this.palpationAlgorithm.analyze(
           input.palpationData,
-          input.userProfil;e;
-        ;)
+          input.userProfile
+        );
       }
-      // 算诊分析 //////     if (input.calculationData) {
+
+      // 算诊分析
+      if (input.calculationData) {
         this.emit("algorithm:progress", {
           stage: "calculation_analysis",
-          progress: 0.7});
+          progress: 0.7,
+        });
         diagnosisResults.calculation = await this.calculationAlgorithm.analyze(
           input.calculationData,
-          input.userProfil;e;
-        ;);
+          input.userProfile
+        );
       }
-      // 执行融合分析 //////     const fusionResult = await this.performFusionAnalysis(
+
+      // 融合分析
+      this.emit("algorithm:progress", {
+        stage: "fusion_analysis",
+        progress: 0.8,
+      });
+
+      const fusionInput: FusionInput = {
         diagnosisResults,
-        in;p;u;t;
-      ;);
-      // 执行辨证分析 //////     const syndromeAnalysis = await this.performSyndromeAnalysis(fusionResu;l;t;);
-      // 执行体质分析 //////     const constitutionAnalysis = await this.performConstitutionAnalysis(
-        fusionResult,
-        input.userProf;i;l;e;
-      ;);
-      // 生成治疗建议 //////     const treatmentRecommendation =
-        await this.generateTreatmentRecommendation(
-          syndromeAnalysis,
-          constitutionAnalysis,
-          input.userProf;i;l;e;
-        ;);
-      // 质量控制 //////     const qualityReport = await this.qualityController.validate({
-        input,
-        diagnosisResults,
-        fusionResult,
-        syndromeAnalysis,
-        constitutionAnalysis,
-        treatmentRecommendati;o;n;
-      ;};);
-      // 性能监控 //////     const responseTime = Date.now - startTime;
-      this.performanceMonitor.recordResponseTime(
-        responseTime,
-        "full_diagnosis"
-      )
-      // 计算整体置信度 //////     const confidence = this.calculateOverallConfidence(
-        diagnosisResults,
-        fusionResult,
-        qualityRepor;t;
-      ;);
-      // 生成综合评估 //////     const overallAssessment = await this.generateOverallAssessment(
-        diagnosisResults,
-        fusionResult,
-        syndromeAnalysis,
-        constitutionAnaly;s;i;s;
-      ;);
-      const result: DiagnosisResult = {;
+        userProfile: input.userProfile,
+        sessionContext: {
+          sessionId,
+          timestamp: Date.now(),
+          environment: {
+            temperature: 25,
+            humidity: 60,
+            season: "spring",
+            timeOfDay: "morning",
+          },
+        },
+      };
+
+      const fusionResult = await this.fusionAlgorithm.analyze(fusionInput);
+
+      // 生成最终结果
+      const result: DiagnosisResult = {
         sessionId,
         userId: input.userId,
         timestamp: Date.now(),
-        confidence,
-        overallAssessment,
+        confidence: fusionResult.confidence,
+        overallAssessment: fusionResult.analysis,
         diagnosisResults,
         fusionResult,
-        syndromeAnalysis,
-        constitutionAnalysis,
-        treatmentRecommendation,
-        qualityReport,
-        performanceMetrics: this.performanceMonitor.getMetrics()};
-      this.sessionCount--
+        syndromeAnalysis: {},
+        constitutionAnalysis: {},
+        treatmentRecommendation: {},
+        qualityReport: {},
+        performanceMetrics: {
+          processingTime: Date.now() - startTime,
+          algorithmsUsed: Object.keys(diagnosisResults),
+        },
+      };
+
       this.emit("diagnosis:completed", { sessionId, result });
       return result;
     } catch (error) {
-      this.sessionCount--
       this.emit("diagnosis:failed", { sessionId, error });
       throw error;
     }
   }
-  //////     验证输入数据  private async validateInput(input: DiagnosisInput): Promise<void>  {
+
+  // 数据验证
+  private async validateInput(input: DiagnosisInput): Promise<void> {
     if (!input.sessionId) {
-      throw new Error("缺少会话ID";)
+      throw new Error("缺少会话ID");
     }
     if (!input.userId) {
-      throw new Error("缺少用户ID;";);
+      throw new Error("缺少用户ID");
     }
-    // 检查是否至少有一种诊法数据 //////     const hasData = !!(input.lookingData || input.calculationData;)
-    if (!hasData) {
-      throw new Error("至少需要提供一种诊法的数据;";)
+
+    // 验证各诊法数据
+    if (input.lookingData) {
+      await this.validateLookingData(input.lookingData);
     }
-    // 验证图像数据格式 // if (input.lookingData?.tongueImage) { ////
-      await this.validateImageData(input.lookingData.tongueImage, "tongue";);
+    if (input.listeningData) {
+      await this.validateListeningData(input.listeningData);
     }
-    // 验证计算数据格式 //////     if (input.calculationData) {
-      await this.validateCalculationData(input.calculationData;);
+    if (input.inquiryData) {
+      await this.validateInquiryData(input.inquiryData);
+    }
+    if (input.palpationData) {
+      await this.validatePalpationData(input.palpationData);
+    }
+    if (input.calculationData) {
+      await this.validateCalculationData(input.calculationData);
     }
   }
-  //////     标准化输入数据  private async normalizeInput(input: DiagnosisInput): Promise<void>  {
-    // 标准化图像数据 //////     if (input.lookingData) {
-      await this.normalizeLookingData(input.lookingData;);
+
+  // 数据标准化
+  private async normalizeInput(input: DiagnosisInput): Promise<void> {
+    if (input.lookingData) {
+      await this.normalizeLookingData(input.lookingData);
     }
-    // 标准化计算数据 //////     if (input.calculationData) {
-      await this.normalizeCalculationData(input.calculationData;);
+    if (input.listeningData) {
+      await this.normalizeListeningData(input.listeningData);
+    }
+    if (input.inquiryData) {
+      await this.normalizeInquiryData(input.inquiryData);
+    }
+    if (input.palpationData) {
+      await this.normalizePalpationData(input.palpationData);
+    }
+    if (input.calculationData) {
+      await this.normalizeCalculationData(input.calculationData);
     }
   }
-  //////     执行融合分析  private async performFusionAnalysis(diagnosisResults: unknown,
-    input: DiagnosisInput);: Promise<FusionResult /////    >  {
-    // 使用融合算法模块 //////     const fusionInput: FusionInput = {
-      lookingResult: diagnosisResults.looking,
-      listeningResult: diagnosisResults.listening,
-      inquiryResult: diagnosisResults.inquiry,
-      palpationResult: diagnosisResults.palpation,
-      calculationResult: diagnosisResults.calculation,
-      userProfile: input.userProfile}
-    return await this.fusionAlgorithm.analyze(fusionIn;p;u;t;);
+
+  // 各诊法数据验证方法
+  private async validateLookingData(lookData: LookData): Promise<void> {
+    // 实现望诊数据验证逻辑
   }
-  //////     执行辨证分析  private async performSyndromeAnalysis(fusionResult: FusionResult): Promise<any>  {
-    // 简化实现 //////     return {
-      primarySyndrome: "气虚证",
-      confidence: 0.7,
-      analysis: "基于融合结果的辨证分析"}
+
+  private async validateListeningData(listenData: ListenData): Promise<void> {
+    // 实现闻诊数据验证逻辑
   }
-  //////     执行体质分析  private async performConstitutionAnalysis(fusionResult: FusionResult,
-    userProfile?: UserProfile;
-  ): Promise<any>  {
-    // 简化实现 //////     return {
-      primaryType: "平和质",
-      confidence: 0.8,
-      analysis: "体质分析结果"}
+
+  private async validateInquiryData(inqData: InqData): Promise<void> {
+    // 实现问诊数据验证逻辑
   }
-  //////     生成治疗建议  private async generateTreatmentRecommendation(syndromeAnalysis: unknown,
-    constitutionAnalysis: unknown,
-    userProfile?: UserProfile;
-  ): Promise<any>  {
-    // 简化实现 //////     return {
-      treatments: ["四君子汤"],
-      lifestyle: ["规律作息", "适度运动"],
-      diet: ["健脾益气食物"],
-      analysis: "基于辨证和体质的治疗建议"}
+
+  private async validatePalpationData(palpData: PalpData): Promise<void> {
+    // 实现切诊数据验证逻辑
   }
-  //////     计算整体置信度  private calculateOverallConfidence(diagnosisResults: unknown,
-    fusionResult: FusionResult,
-    qualityReport: unknown);: number  {
-    const weights = {;
-      looking: 0.4,
-      calculation: 0.3,
-      fusion: 0.2,;
-      quality: 0.;1;
-    ;};
-    let totalWeight = 0;
-    let weightedSum = 0;
-    if (diagnosisResults.looking) {
-      weightedSum += diagnosisResults.looking.confidence * weights.looking;
-      totalWeight += weights.looking;
-    }
-    if (diagnosisResults.calculation) {
-      weightedSum +=
-        diagnosisResults.calculation.confidence * weights.calculation;
-      totalWeight += weights.calculation;
-    }
-    weightedSum += fusionResult.confidence * weights.fusion;
-    totalWeight += weights.fusion;
-    if (qualityReport?.score) {
-      weightedSum += qualityReport.score * weights.quality;
-      totalWeight += weights.quality;
-    }
-    return totalWeight > 0 ? weightedSum / totalWeight : 0;.;5;/////      }
-  //////     生成综合评估  private async generateOverallAssessment(diagnosisResults: unknown,
-    fusionResult: FusionResult,
-    syndromeAnalysis: unknown,
-    constitutionAnalysis: unknown);: Promise<string>  {
-    const assessmentParts: string[] = [];
-    if (syndromeAnalysis?.primarySyndrome) {
-      assessmentParts.push(`主要证候：${syndromeAnalysis.primarySyndrome}`)
-    }
-    if (constitutionAnalysis?.primaryType) {
-      assessmentParts.push(`体质类型：${constitutionAnalysis.primaryType}`)
-    }
-    assessmentParts.push(
-      `综合置信度：${(fusionResult.confidence * 100).toFixed(1)}%`
-    );
-    //////     记录渲染性能
-performanceMonitor.recordRender();
-    return (
-      assessmentParts.join("，;";) + "。建议结合专业医师意见进行进一步诊疗。"
-    );
+
+  private async validateCalculationData(calcData: CalcData): Promise<void> {
+    // 实现算诊数据验证逻辑
   }
-  // 辅助方法 //////     private async validateImageData(imageData: ImageData,
-    type: string);: Promise<void>  {
-    // 实现图像数据验证逻辑 //////     }
-  private async validateCalculationData(calcData: CalcData): Promise<void>  {
-    // 实现计算数据验证逻辑 //////     }
-  private async normalizeLookingData(data: LookData): Promise<void>  {
-    // 实现望诊数据标准化逻辑 //////     }
-  private async normalizeCalculationData(data: CalcData): Promise<void>  {
-    // 实现计算数据标准化逻辑 //////     }
-  //////     获取引擎状态  public getStatus(): unknown {
-    return {
-      isRunning: this.isInitialized,
-      sessionCount: this.sessionCount,
-      algorithmVersion: this.config.version,
-      knowledgeBaseVersion: "1.0.0",
-      lastMaintenanceTime: this.lastMaintenanceTime;
-    ;};
+
+  // 各诊法数据标准化方法
+  private async normalizeLookingData(data: LookData): Promise<void> {
+    // 实现望诊数据标准化逻辑
   }
-  //////     事件处理  public on(event: string, callback: Function): void  {
-    if (!this.eventListeners.has(event);) {
+
+  private async normalizeListeningData(data: ListenData): Promise<void> {
+    // 实现闻诊数据标准化逻辑
+  }
+
+  private async normalizeInquiryData(data: InqData): Promise<void> {
+    // 实现问诊数据标准化逻辑
+  }
+
+  private async normalizePalpationData(data: PalpData): Promise<void> {
+    // 实现切诊数据标准化逻辑
+  }
+
+  private async normalizeCalculationData(data: CalcData): Promise<void> {
+    // 实现算诊数据标准化逻辑
+  }
+
+  // 事件系统
+  private emit(event: string, data?: any): void {
+    const listeners = this.eventListeners.get(event) || [];
+    listeners.forEach((listener) => {
+      try {
+        listener(data);
+      } catch (error) {
+        console.error(`事件监听器执行失败: ${event}`, error);
+      }
+    });
+  }
+
+  public on(event: string, listener: Function): void {
+    if (!this.eventListeners.has(event)) {
       this.eventListeners.set(event, []);
     }
-    this.eventListeners.get(event);!.push(callback);
+    this.eventListeners.get(event)!.push(listener);
   }
-  public emit(event: string, data?: unknown);: void  {
-    const listeners = this.eventListeners.get(even;t;);
+
+  public off(event: string, listener: Function): void {
+    const listeners = this.eventListeners.get(event);
     if (listeners) {
-      listeners.forEach((callback); => {}
-        try {
-          callback(data)
-        } catch (error) {
-          }
-      });
+      const index = listeners.indexOf(listener);
+      if (index > -1) {
+        listeners.splice(index, 1);
+      }
     }
   }
-  //////     清理资源  public async cleanup(): Promise<void> {
-    this.sessionCount = 0;
-    this.eventListeners.clear()
-    this.emit("engine: cleanup_completed")}
 }
+
 export default FiveDiagnosisEngine;

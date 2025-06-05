@@ -2,11 +2,11 @@
 Analysis-related data models for accessibility service.
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 from typing import Any
 
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 
 
 class AnalysisStatus(str, Enum):
@@ -35,7 +35,7 @@ class BaseAnalysis(BaseModel):
     confidence_score: float = Field(..., ge=0.0, le=1.0, description="Confidence score")
 
     # Metadata
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     completed_at: datetime | None = Field(None, description="Completion timestamp")
 
     # Error information (if failed)
@@ -222,6 +222,16 @@ class ComprehensiveAnalysis(BaseAnalysis):
     )
     compliance_percentage: float = Field(default=0.0, ge=0.0, le=100.0, description="Compliance percentage")
 
+    @field_validator('compliance_percentage', mode='before')
+    @classmethod
+    def validate_compliance_percentage(cls, v):
+        """Validate compliance percentage."""
+        if v is None:
+            return 0.0
+        if not 0 <= v <= 100:
+            raise ValueError("Compliance percentage must be between 0 and 100")
+        return v
+
 
 class AnalysisReport(BaseModel):
     """Detailed analysis report."""
@@ -232,7 +242,7 @@ class AnalysisReport(BaseModel):
 
     # Report metadata
     report_type: str = Field(default="comprehensive", description="Type of report")
-    generated_at: datetime = Field(default_factory=datetime.utcnow)
+    generated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     version: str = Field(default="1.0.0", description="Report version")
 
     # Executive summary
@@ -249,10 +259,3 @@ class AnalysisReport(BaseModel):
     # Historical comparison (if available)
     previous_score: float | None = Field(None, description="Previous accessibility score")
     improvement_percentage: float | None = Field(None, description="Improvement percentage")
-
-    @validator('compliance_percentage', check_fields=False)
-    def validate_compliance_percentage(cls, v):
-        """Validate compliance percentage."""
-        if not 0 <= v <= 100:
-            raise ValueError("Compliance percentage must be between 0 and 100")
-        return v

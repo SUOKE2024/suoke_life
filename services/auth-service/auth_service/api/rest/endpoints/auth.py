@@ -26,7 +26,11 @@ from auth_service.schemas.auth import (
 
 router = APIRouter()
 security = HTTPBearer()
-auth_service = AuthService()
+
+
+def get_auth_service() -> AuthService:
+    """获取认证服务实例"""
+    return AuthService()
 
 
 def get_client_ip(request: Request) -> str:
@@ -46,7 +50,8 @@ def get_user_agent(request: Request) -> str:
 async def login(
     request: LoginRequest,
     http_request: Request,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    auth_service: AuthService = Depends(get_auth_service)
 ):
     """用户登录"""
     # 获取客户端信息
@@ -112,7 +117,8 @@ async def login(
 @router.post("/refresh", response_model=RefreshTokenResponse)
 async def refresh_token(
     request: RefreshTokenRequest,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    auth_service: AuthService = Depends(get_auth_service)
 ):
     """刷新访问令牌"""
     session_repo = SessionRepository(db)
@@ -163,7 +169,8 @@ async def refresh_token(
 async def logout(
     request: LogoutRequest,
     credentials: HTTPAuthorizationCredentials = Depends(security),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    auth_service: AuthService = Depends(get_auth_service)
 ):
     """用户登出"""
     # 验证令牌
@@ -192,7 +199,8 @@ async def logout(
 @router.post("/mfa/setup", response_model=MFASetupResponse)
 async def setup_mfa(
     credentials: HTTPAuthorizationCredentials = Depends(security),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    auth_service: AuthService = Depends(get_auth_service)
 ):
     """设置MFA"""
     # 验证令牌
@@ -231,7 +239,8 @@ async def setup_mfa(
 async def verify_mfa(
     request: MFAVerifyRequest,
     credentials: HTTPAuthorizationCredentials = Depends(security),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    auth_service: AuthService = Depends(get_auth_service)
 ):
     """验证MFA"""
     # 验证令牌
@@ -268,7 +277,8 @@ async def verify_mfa(
 @router.get("/sessions", response_model=SessionListResponse)
 async def get_user_sessions(
     credentials: HTTPAuthorizationCredentials = Depends(security),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    auth_service: AuthService = Depends(get_auth_service)
 ):
     """获取用户会话列表"""
     # 验证令牌

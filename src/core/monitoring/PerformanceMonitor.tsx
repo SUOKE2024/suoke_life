@@ -10,7 +10,7 @@ export interface PerformanceMetric {
   timestamp: number;
   category: PerformanceCategory;
   tags?: Record<string, string>;
-  threshold?: { 
+  threshold?: {
     warning: number;
     critical: number;
   };
@@ -24,7 +24,7 @@ export enum PerformanceCategory {
   AGENT = "AGENT",
   DATABASE = "DATABASE",
   USER_INTERACTION = "USER_INTERACTION",
-  BUSINESS_LOGIC = "BUSINESS_LOGIC"
+  BUSINESS_LOGIC = "BUSINESS_LOGIC",
 }
 
 export interface PerformanceReport {
@@ -113,7 +113,7 @@ export class PerformanceMonitor {
       timestamp: Date.now(),
       category,
       tags,
-      threshold: this.getThreshold(name)
+      threshold: this.getThreshold(name),
     };
 
     // 存储指标
@@ -149,14 +149,14 @@ export class PerformanceMonitor {
       const duration = performance.now() - startTime;
       this.recordMetric(name, duration, category, "ms", {
         ...tags,
-        status: "success"
+        status: "success",
       });
       return result;
     } catch (error) {
       const duration = performance.now() - startTime;
       this.recordMetric(name, duration, category, "ms", {
         ...tags,
-        status: "error"
+        status: "error",
       });
       throw error;
     }
@@ -175,14 +175,14 @@ export class PerformanceMonitor {
       const duration = performance.now() - startTime;
       this.recordMetric(name, duration, category, "ms", {
         ...tags,
-        status: "success"
+        status: "success",
       });
       return result;
     } catch (error) {
       const duration = performance.now() - startTime;
       this.recordMetric(name, duration, category, "ms", {
         ...tags,
-        status: "error"
+        status: "error",
       });
       throw error;
     }
@@ -246,10 +246,10 @@ export class PerformanceMonitor {
         criticalCount,
         averageResponseTime,
         memoryUsage: this.getCurrentMemoryUsage(),
-        cpuUsage: this.getCurrentCpuUsage()
+        cpuUsage: this.getCurrentCpuUsage(),
       },
       recommendations,
-      trends
+      trends,
     };
 
     return report;
@@ -258,7 +258,13 @@ export class PerformanceMonitor {
   // 私有方法实现
   private setupDefaultThresholds(): void {
     // 设置默认阈值
-    this.setThreshold("api_response", PerformanceCategory.NETWORK, 1000, 3000, "ms");
+    this.setThreshold(
+      "api_response",
+      PerformanceCategory.NETWORK,
+      1000,
+      3000,
+      "ms"
+    );
     this.setThreshold("memory_usage", PerformanceCategory.MEMORY, 80, 95, "%");
     this.setThreshold("cpu_usage", PerformanceCategory.CPU, 70, 90, "%");
   }
@@ -275,44 +281,62 @@ export class PerformanceMonitor {
       metricName,
       warning,
       critical,
-      unit
+      unit,
     });
   }
 
-  private getThreshold(metricName: string): { warning: number; critical: number } | undefined {
+  private getThreshold(
+    metricName: string
+  ): { warning: number; critical: number } | undefined {
     const threshold = this.thresholds.get(metricName);
-    return threshold ? { warning: threshold.warning, critical: threshold.critical } : undefined;
+    return threshold
+      ? { warning: threshold.warning, critical: threshold.critical }
+      : undefined;
   }
 
   private checkThreshold(metric: PerformanceMetric): void {
     if (metric.threshold) {
       if (metric.value >= metric.threshold.critical) {
-        console.warn(`Critical performance issue: ${metric.name} = ${metric.value}${metric.unit}`);
+        console.warn(
+          `Critical performance issue: ${metric.name} = ${metric.value}${metric.unit}`
+        );
       } else if (metric.value >= metric.threshold.warning) {
-        console.warn(`Performance warning: ${metric.name} = ${metric.value}${metric.unit}`);
+        console.warn(
+          `Performance warning: ${metric.name} = ${metric.value}${metric.unit}`
+        );
       }
     }
   }
 
   private notifyListeners(metric: PerformanceMetric): void {
-    this.listeners.forEach(listener => {
+    this.listeners.forEach((listener) => {
       try {
         listener(metric);
       } catch (error) {
-        console.error('Error in performance metric listener:', error);
+        console.error("Error in performance metric listener:", error);
       }
     });
   }
 
   private collectSystemMetrics(): void {
     // 收集系统指标的实现
-    this.recordMetric("memory_usage", this.getCurrentMemoryUsage(), PerformanceCategory.MEMORY, "%");
-    this.recordMetric("cpu_usage", this.getCurrentCpuUsage(), PerformanceCategory.CPU, "%");
+    this.recordMetric(
+      "memory_usage",
+      this.getCurrentMemoryUsage(),
+      PerformanceCategory.MEMORY,
+      "%"
+    );
+    this.recordMetric(
+      "cpu_usage",
+      this.getCurrentCpuUsage(),
+      PerformanceCategory.CPU,
+      "%"
+    );
   }
 
   private getCurrentMemoryUsage(): number {
     // 获取当前内存使用率的实现
-    if (typeof performance !== 'undefined' && (performance as any).memory) {
+    if (typeof performance !== "undefined" && (performance as any).memory) {
       const memory = (performance as any).memory;
       return (memory.usedJSHeapSize / memory.totalJSHeapSize) * 100;
     }
@@ -324,24 +348,28 @@ export class PerformanceMonitor {
     return Math.random() * 100; // 实际实现需要使用系统API
   }
 
-  private analyzeTrends(timeRangeMs: number): { improving: string[]; degrading: string[]; stable: string[] } {
+  private analyzeTrends(timeRangeMs: number): {
+    improving: string[];
+    degrading: string[];
+    stable: string[];
+  } {
     // 趋势分析的实现
     return {
       improving: [],
       degrading: [],
-      stable: []
+      stable: [],
     };
   }
 
   private generateRecommendations(metrics: PerformanceMetric[]): string[] {
     // 生成优化建议的实现
     const recommendations: string[] = [];
-    
+
     // 分析指标并生成建议
-    const highMemoryMetrics = metrics.filter(m => 
-      m.category === PerformanceCategory.MEMORY && m.value > 80
+    const highMemoryMetrics = metrics.filter(
+      (m) => m.category === PerformanceCategory.MEMORY && m.value > 80
     );
-    
+
     if (highMemoryMetrics.length > 0) {
       recommendations.push("考虑优化内存使用，清理不必要的对象引用");
     }
@@ -363,13 +391,13 @@ export class PerformanceMonitor {
 
   public getMetrics(category?: PerformanceCategory): PerformanceMetric[] {
     const allMetrics: PerformanceMetric[] = [];
-    
+
     for (const [key, metricHistory] of this.metrics.entries()) {
       if (!category || key.startsWith(category)) {
         allMetrics.push(...metricHistory);
       }
     }
-    
+
     return allMetrics.sort((a, b) => b.timestamp - a.timestamp);
   }
 
@@ -384,14 +412,10 @@ export const PerformanceMonitorComponent: React.FC = () => {
   const performanceMonitor = usePerformanceMonitor({
     trackRender: true,
     trackMemory: false,
-    warnThreshold: 100 // ms
+    warnThreshold: 100, // ms
   });
 
-  return (
-    <div>
-      {/* 性能监控UI组件 */}
-    </div>
-  );
+  return <div>{/* 性能监控UI组件 */}</div>;
 };
 
 export default PerformanceMonitor;

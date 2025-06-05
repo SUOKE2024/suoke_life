@@ -6,6 +6,7 @@
 
 from dataclasses import dataclass
 from datetime import datetime
+from enum import Enum
 
 
 @dataclass
@@ -66,3 +67,66 @@ class InquirySummary:
     potential_risks: list[str]
     confidence: float
     created_at: datetime
+
+
+class SymptomSeverity(Enum):
+    """症状严重程度"""
+    MILD = "mild"
+    MODERATE = "moderate"
+    SEVERE = "severe"
+
+
+class SymptomDuration(Enum):
+    """症状持续时间"""
+    ACUTE = "acute"  # 急性（<1周）
+    SUBACUTE = "subacute"  # 亚急性（1-4周）
+    CHRONIC = "chronic"  # 慢性（>4周）
+
+
+@dataclass
+class Symptom:
+    """症状"""
+    name: str
+    confidence: float
+    severity: SymptomSeverity = SymptomSeverity.MILD
+    duration: SymptomDuration = SymptomDuration.ACUTE
+    description: str = ""
+    body_part: str = ""
+    onset_time: datetime = None
+    location: str = ""
+    metadata: dict = None
+    
+    def __post_init__(self):
+        if self.metadata is None:
+            self.metadata = {}
+
+
+@dataclass
+class TCMPattern:
+    """中医证型"""
+    name: str
+    score: float
+    category: str = ""
+    description: str = ""
+    key_symptoms: list = None
+    recommendations: list = None
+    confidence: float = 0.0
+    
+    def __post_init__(self):
+        if self.key_symptoms is None:
+            self.key_symptoms = []
+        if self.recommendations is None:
+            self.recommendations = []
+
+
+@dataclass
+class TCMPatternMappingResult:
+    """中医证型映射结果"""
+    patterns: list[TCMPattern]
+    confidence: float
+    interpretation: str = ""
+    metadata: dict = None
+    
+    def __post_init__(self):
+        if self.metadata is None:
+            self.metadata = {}

@@ -14,6 +14,9 @@ import time
 
 import grpc
 import pytest
+import pytest_asyncio
+from api.grpc import inquiry_service_pb2 as pb2
+from api.grpc import inquiry_service_pb2_grpc as pb2_grpc
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
@@ -22,6 +25,8 @@ from internal.dialogue.dialogue_manager import DialogueManager
 from internal.llm.llm_client import LLMClient
 from internal.llm.symptom_extractor import SymptomExtractor
 from internal.llm.tcm_pattern_mapper import TCMPatternMapper
+from internal.llm.health_risk_assessor import HealthRiskAssessor
+from internal.knowledge.tcm_knowledge_base import TCMKnowledgeBase
 from internal.repository.session_repository import SessionRepository
 from internal.repository.user_repository import UserRepository
 
@@ -45,13 +50,16 @@ class TestGRPCService:
             },
             "symptom_extraction": {"confidence_threshold": 0.6, "max_symptoms": 10},
             "tcm_pattern_mapping": {"confidence_threshold": 0.6, "max_patterns": 5},
+            "database": {
+                "type": "memory",  # 使用内存数据库进行测试
+            },
             "server": {
                 "port": 50099,  # 测试专用端口
                 "max_workers": 2,
             },
         }
 
-    @pytest.fixture
+    @pytest_asyncio.fixture
     async def service_components(self, config):
         """创建服务组件"""
         # 初始化存储库
@@ -67,6 +75,12 @@ class TestGRPCService:
         # 初始化TCM证型映射器
         tcm_pattern_mapper = TCMPatternMapper(config)
 
+        # 初始化健康风险评估器
+        health_risk_assessor = HealthRiskAssessor(config)
+
+        # 初始化TCM知识库
+        tcm_knowledge_base = TCMKnowledgeBase(config)
+
         # 初始化对话管理器
         dialogue_manager = DialogueManager(
             llm_client=llm_client,
@@ -75,12 +89,12 @@ class TestGRPCService:
             config=config,
         )
 
-        return dialogue_manager, symptom_extractor, tcm_pattern_mapper, llm_client
+        return dialogue_manager, symptom_extractor, tcm_pattern_mapper, health_risk_assessor, tcm_knowledge_base, llm_client
 
-    @pytest.fixture
+    @pytest_asyncio.fixture
     async def grpc_service(self, config, service_components):
         """创建gRPC服务"""
-        dialogue_manager, symptom_extractor, tcm_pattern_mapper, llm_client = (
+        dialogue_manager, symptom_extractor, tcm_pattern_mapper, health_risk_assessor, tcm_knowledge_base, llm_client = (
             service_components
         )
 
@@ -89,6 +103,8 @@ class TestGRPCService:
             dialogue_manager=dialogue_manager,
             symptom_extractor=symptom_extractor,
             tcm_pattern_mapper=tcm_pattern_mapper,
+            health_risk_assessor=health_risk_assessor,
+            tcm_knowledge_base=tcm_knowledge_base,
             config=config,
         )
 
@@ -113,7 +129,7 @@ class TestGRPCService:
         # 关闭服务器
         await server.stop(0)
 
-    @pytest.fixture
+    @pytest_asyncio.fixture
     async def grpc_channel(self, grpc_service):
         """创建gRPC通道"""
         server, server_address = grpc_service
@@ -133,7 +149,7 @@ class TestGRPCService:
         # 关闭通道
         await channel.close()
 
-    @pytest.fixture
+    @pytest_asyncio.fixture
     async def grpc_stub(self, grpc_channel):
         """创建gRPC存根"""
         return pb2_grpc.InquiryServiceStub(grpc_channel)

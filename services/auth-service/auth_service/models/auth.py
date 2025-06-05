@@ -102,7 +102,7 @@ class LoginAttempt(BaseModel):
     )
     
     # 元数据
-    metadata: Mapped[Optional[dict]] = mapped_column(
+    extra_metadata: Mapped[Optional[dict]] = mapped_column(
         JSONB,
         comment="额外元数据"
     )
@@ -167,7 +167,7 @@ class MFADevice(BaseModel):
     )
     
     # 元数据
-    metadata: Mapped[Optional[dict]] = mapped_column(
+    device_metadata: Mapped[Optional[dict]] = mapped_column(
         JSONB,
         comment="设备元数据"
     )
@@ -238,7 +238,7 @@ class OAuthAccount(BaseModel):
     )
     
     # 元数据
-    metadata: Mapped[Optional[dict]] = mapped_column(
+    oauth_metadata: Mapped[Optional[dict]] = mapped_column(
         JSONB,
         comment="OAuth元数据"
     )

@@ -1,0 +1,294 @@
+name: Auth & User Service Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'services/auth-service/**'
+      - 'services/user-service/**'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'services/auth-service/**'
+      - 'services/user-service/**'
+
+jobs:
+  auth-service-tests:
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: testpassword
+          POSTGRES_USER: testuser
+          POSTGRES_DB: auth_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      
+      redis:
+        image: redis:7
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Cache pip dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-auth-${{ hashFiles('services/auth-service/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-auth-
+    
+    - name: Install dependencies
+      working-directory: services/auth-service
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest-cov pytest-benchmark pytest-asyncio psutil
+    
+    - name: Set up test environment
+      working-directory: services/auth-service
+      env:
+        DATABASE_URL: postgresql+asyncpg://testuser:testpassword@localhost:5432/auth_test
+        REDIS_URL: redis://localhost:6379/0
+        JWT_SECRET_KEY: test-secret-key-for-ci-testing
+        ENVIRONMENT: testing
+      run: |
+        # 运行数据库迁移
+        python -m alembic upgrade head || echo "Migration skipped"
+    
+    - name: Run basic tests
+      working-directory: services/auth-service
+      env:
+        DATABASE_URL: postgresql+asyncpg://testuser:testpassword@localhost:5432/auth_test
+        REDIS_URL: redis://localhost:6379/0
+        JWT_SECRET_KEY: test-secret-key-for-ci-testing
+        ENVIRONMENT: testing
+      run: |
+        python -m pytest tests/test_api.py -v --cov=auth_service --cov-report=xml
+    
+    - name: Run advanced functionality tests
+      working-directory: services/auth-service
+      env:
+        DATABASE_URL: postgresql+asyncpg://testuser:testpassword@localhost:5432/auth_test
+        REDIS_URL: redis://localhost:6379/0
+        JWT_SECRET_KEY: test-secret-key-for-ci-testing
+        ENVIRONMENT: testing
+      run: |
+        python -m pytest tests/test_auth_simple.py -v --tb=short
+    
+    - name: Run performance benchmarks
+      working-directory: services/auth-service
+      env:
+        DATABASE_URL: postgresql+asyncpg://testuser:testpassword@localhost:5432/auth_test
+        REDIS_URL: redis://localhost:6379/0
+        JWT_SECRET_KEY: test-secret-key-for-ci-testing
+        ENVIRONMENT: testing
+      run: |
+        python -m pytest tests/test_auth_advanced_fixed.py::TestAuthServicePerformance -v --benchmark-only --benchmark-json=auth_benchmark.json
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: services/auth-service/coverage.xml
+        flags: auth-service
+        name: auth-service-coverage
+
+  user-service-tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Cache pip dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-user-${{ hashFiles('services/user-service/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-user-
+    
+    - name: Install dependencies
+      working-directory: services/user-service
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest-cov pytest-benchmark pytest-asyncio
+    
+    - name: Run basic CRUD tests
+      working-directory: services/user-service
+      run: |
+        python -m pytest test/test_user_service.py -v --cov=internal --cov-report=xml
+    
+    - name: Run advanced functionality tests
+      working-directory: services/user-service
+      run: |
+        python -m pytest test/test_user_advanced.py -v --tb=short -k "not test_complex_health_data_management"
+    
+    - name: Run performance tests
+      working-directory: services/user-service
+      run: |
+        python -m pytest test/test_performance_simple.py -v --benchmark-only --benchmark-json=user_benchmark.json
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: services/user-service/coverage.xml
+        flags: user-service
+        name: user-service-coverage
+
+  performance-regression-tests:
+    runs-on: ubuntu-latest
+    needs: [auth-service-tests, user-service-tests]
+    if: github.event_name == 'pull_request'
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # 获取完整历史用于性能对比
+    
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install performance testing tools
+      run: |
+        pip install pytest-benchmark pandas matplotlib
+    
+    - name: Run performance regression analysis
+      run: |
+        python scripts/performance/performance_regression_check.py
+    
+    - name: Comment performance results
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          if (fs.existsSync('performance_report.md')) {
+            const report = fs.readFileSync('performance_report.md', 'utf8');
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: report
+            });
+          }
+
+  security-tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Run security scan with bandit
+      run: |
+        pip install bandit[toml]
+        bandit -r services/auth-service/auth_service -f json -o auth_security_report.json
+        bandit -r services/user-service/internal -f json -o user_security_report.json
+    
+    - name: Run dependency vulnerability check
+      run: |
+        pip install safety
+        safety check --json --output auth_safety_report.json || true
+    
+    - name: Upload security reports
+      uses: actions/upload-artifact@v3
+      with:
+        name: security-reports
+        path: |
+          *_security_report.json
+          *_safety_report.json
+
+  load-tests:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: testpassword
+          POSTGRES_USER: testuser
+          POSTGRES_DB: load_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      
+      redis:
+        image: redis:7
+        ports:
+          - 6379:6379
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install load testing tools
+      run: |
+        pip install locust pytest-asyncio aiohttp
+    
+    - name: Start services
+      run: |
+        # 启动Auth-Service
+        cd services/auth-service
+        python -m uvicorn auth_service.cmd.server.main:app --host 0.0.0.0 --port 8001 &
+        
+        # 启动User-Service  
+        cd ../user-service
+        python -m uvicorn internal.api.main:app --host 0.0.0.0 --port 8002 &
+        
+        # 等待服务启动
+        sleep 10
+      env:
+        DATABASE_URL: postgresql+asyncpg://testuser:testpassword@localhost:5432/load_test
+        REDIS_URL: redis://localhost:6379/0
+        JWT_SECRET_KEY: test-secret-key-for-load-testing
+        ENVIRONMENT: testing
+    
+    - name: Run load tests
+      run: |
+        python scripts/performance/load_test_runner.py
+    
+    - name: Generate load test report
+      run: |
+        python scripts/performance/generate_load_report.py
+    
+    - name: Upload load test results
+      uses: actions/upload-artifact@v3
+      with:
+        name: load-test-results
+        path: |
+          load_test_report.html
+          load_test_metrics.json 

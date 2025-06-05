@@ -7,6 +7,8 @@ from fastapi.testclient import TestClient
 
 def test_health_check_simple():
     """测试简单的健康检查"""
+    from app.api.rest.health import router as health_router
+    
     # 创建一个简单的FastAPI应用
     app = FastAPI()
     app.include_router(health_router, prefix="/api/v1")

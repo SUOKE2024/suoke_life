@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""
-小艾服务HTTP API服务器
-提供RESTful接口, 支持设备访问和多模态交互
-"""
+""""""
+# HTTP API
+RESTful, 
+""""""
 
 import argparse
 import asyncio
@@ -11,243 +11,247 @@ import os
 import signal
 import sys
 
-# 添加项目根目录到路径
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(_file__), '../..')))
+# 
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(_file__), "../..")))
 
-# FastAPI相关导入
+# FastAPI
 import uvicorn
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import JSONResponse
 
-# 导入核心组件
+# 
 from internal.agent.agent_manager import AgentManager
 
 from ..utils.config_manager import get_config_manager
 from ..utils.metrics import get_metrics_collector
 
-# 设置日志
+# 
 logger = logging.getLogger(__name__)
 
-# 全局状态管理
-class AppState:
-    """应用状态管理"""
-    def __init__(self):
-        self.agentmanager: AgentManager | None = None
-        self.isshutting_down: bool = False
-        self.startuptime: float = 0.0
 
-    async def initialize(self):
-        """初始化应用状态"""
-        import time
-        time.time()
+# 
+# class AppState:
+#     """""""""
 
-        try:
-            # 初始化智能体管理器
-            self.agentmanager = AgentManager()
-            await self.agent_manager.initialize()
+#     def __init__(self):
+#         self.agentmanager: AgentManager | None = None
+#         self.isshutting_down: bool = False
+#         self.startuptime: float = 0.0
 
-            self.startuptime = time.time() - start_time
-            logger.info(f"应用状态初始化完成, 耗时: {self.startup_time:.2f}秒")
+#         async def initialize(self):
+#         """""""""
+#         import time
 
-        except Exception as e:
-            logger.error(f"应用状态初始化失败: {e}")
-            raise
+#         time.time()
 
-    async def cleanup(self):
-        """清理应用状态"""
-        self.isshutting_down = True
+#         try:
+            # 
+#             self.agentmanager = AgentManager()
+#             await self.agent_manager.initialize()
 
-        if self.agent_manager:
-            try:
-                await self.agent_manager.close()
-                logger.info("智能体管理器已关闭")
-            except Exception as e:
-                logger.error(f"关闭智能体管理器失败: {e}")
+#             self.startuptime = time.time() - start_time
+#             logger.info(f", : {self.startup_time:.2f}")
 
-# 全局应用状态
-appstate = AppState()
+#         except Exception as e:
+#             logger.error(f": {e}")
+#             raise
 
-def create_app() -> FastAPI:
-    """创建FastAPI应用"""
-    # 获取配置
-    config = get_config_manager()
-    config.get_section('http_server', {})
+#             async def cleanup(self):
+#         """""""""
+#             self.isshutting_down = True
 
-    # 创建FastAPI应用
-    app = FastAPI(
-        title="小艾智能体服务",
-        description="提供多模态健康咨询和设备访问功能",
-        version="1.0.0",
-        docs_url="/docs",
-        redoc_url="/redoc",
-        openapi_url="/openapi.json"
-    )
+#         if self.agent_manager: try:
+#                 await self.agent_manager.close()
+#                 logger.info("")
+#             except Exception as e:
+#                 logger.error(f": {e}")
 
-    # 添加中间件
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=app_config.get('cors_origins', ["*"]),
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
 
-    app.add_middleware(GZipMiddleware, minimum_size=1000)
+# 
+#                 appstate = AppState()
 
-    return app
 
-async def get_agent_manager() -> AgentManager:
-    """获取智能体管理器依赖"""
-    if app_state.agent_manager is None:
-        raise HTTPException(status_code=503, detail="智能体管理器未初始化")
+# def create_app() -> FastAPI:
+#     """FastAPI""""""
+    # 
+#     config = get_config_manager()
+#     config.get_section("http_server", {})
 
-    if app_state.is_shutting_down:
-        raise HTTPException(status_code=503, detail="服务正在关闭")
+    # FastAPI
+#     app = FastAPI(
+#         title="",
+#         description="",
+#         version="1.0.0",
+#         docs_url ="/docs",
+#         redoc_url ="/redoc",
+#         openapi_url ="/openapi.json",
+#     )
 
-    return app_state.agent_manager
+    # 
+#     app.add_middleware(
+#         CORSMiddleware,
+#         allow_origins =app_config.get("cors_origins", ["*"]),
+#         allow_credentials =True,
+#         allow_methods =["*"],
+#         allow_headers =["*"],
+#     )
 
-def setup_routes(app: FastAPI):
-    """设置路由"""
+#     app.add_middleware(GZipMiddleware, minimum_size =1000)
 
-    from internal.delivery.api.chat_handler import create_chat_router
-    from internal.delivery.api.device_handler import create_device_router
-    from internal.delivery.api.health_handler import create_health_router
-    from internal.delivery.api.network_handler import create_network_router
+#     return app
 
-    # 添加路由, 传入依赖函数
-    app.include_router(create_device_router(getagent_manager))
-    app.include_router(create_chat_router(getagent_manager))
-    app.include_router(create_health_router(getagent_manager))
-    app.include_router(create_network_router(getagent_manager))
 
-    # 添加根路由
-    @app.get("/")
-    async def root():
-        """根路径"""
-        return {
-            "service": "小艾智能体服务",
-            "version": "1.0.0",
-            "status": "运行中",
-            "startup_time": f"{app_state.startup_time:.2f}s",
-            "features": [
-                "多模态健康咨询",
-                "设备访问(摄像头、麦克风、屏幕)",
-                "无障碍服务集成",
-                "语音识别与合成",
-                "图像分析",
-                "屏幕阅读"
-            ]
-        }
+#     async def get_agent_manager() -> AgentManager:
+#     """""""""
+#     if app_state.agent_manager is None:
+#         raise HTTPException(status_code =503, detail="")
 
-    @app.get("/api/v1/status")
-    async def get_service_status(agentmgr: AgentManager = Depends(getagent_manager)):
-        """获取服务状态"""
-        try:
-            # 获取设备状态
-            devicestatus = await agent_mgr.get_device_status()
+#     if app_state.is_shutting_down: raise HTTPException(status_code =503, detail=""):
 
-            # 获取指标
-            metrics = get_metrics_collector()
+#         return app_state.agent_manager
 
-            return JSONResponse(content={
-                "success": True,
-                "data": {
-                    "service": "xiaoai-service",
-                    "status": "healthy",
-                    "startup_time": f"{app_state.startup_time:.2f}s",
-                    "devices": devicestatus,
-                    "active_sessions": len(agent_mgr.activesessions),
-                    "metrics": {
-                        "total_requests": metrics.get_total_requests(),
-                        "active_connections": metrics.get_active_connections()
-                    }
-                }
-            })
 
-        except Exception as e:
-            logger.error(f"获取服务状态失败: {e}")
-            raise HTTPException(status_code=500, detail=f"获取服务状态失败: {e!s}") from e
+# def setup_routes(app: FastAPI):
+#     """""""""
 
-def handle_shutdown_signal(signum, frame):
-    """处理关闭信号"""
-    if app_state.is_shutting_down:
-        logger.warning("已经在关闭中, 忽略重复信号")
-        return
+#     from internal.delivery.api.chat_handler import create_chat_router
+#     from internal.delivery.api.device_handler import create_device_router
+#     from internal.delivery.api.health_handler import create_health_router
+#     from internal.delivery.api.network_handler import create_network_router
 
-    signal.Signals(signum).name
-    logger.info(f"收到信号 {signal_name}, 开始优雅关闭...")
+    # , 
+#     app.include_router(create_device_router(getagent_manager))
+#     app.include_router(create_chat_router(getagent_manager))
+#     app.include_router(create_health_router(getagent_manager))
+#     app.include_router(create_network_router(getagent_manager))
 
-    # 启动异步关闭
-    asyncio.create_task(app_state.cleanup())
+    # 
+#     @app.get("/")
+#     async def root():
+#         """""""""
+#         return {
+#     "service": "",
+#     "version": "1.0.0",
+#     "status": "",
+#     "startup_time": f"{app_state.startup_time:.2f}s",
+#     "features": [
+#     "",
+#     "()",
+#     "",
+#     "",
+#     "",
+#     "",
+#     ],
+#         }
 
-async def main():
-    """主函数"""
-    parser = argparse.ArgumentParser(description='启动小艾HTTP API服务')
-    parser.add_argument('--config-dir', help='配置目录路径')
-    parser.add_argument('--env', help='环境 (development, staging, production)')
-    parser.add_argument('--host', default='0.0.0.0', help='监听主机')
-    parser.add_argument('--port', type=int, default=8000, help='监听端口')
-    args = parser.parse_args()
+#     @app.get("/api/v1/status")
+#     async def get_service_status(agentmgr: AgentManager = Depends(getagent_manager)):
+#         """""""""
+#         try:
+            # 
+#             devicestatus = await agent_mgr.get_device_status()
 
-    # 设置环境变量
-    if args.config_dir:
-        os.environ["XIAOAI_CONFIG_DIR"] = args.config_dir
-    if args.env:
-        os.environ["ENV"] = args.env
+            # 
+#             metrics = get_metrics_collector()
 
-    # 获取配置
-    config = get_config_manager()
+#             return JSONResponse(
+#                 content={
+#             "success": True,
+#             "data": {
+#             "service": "xiaoai-service",
+#             "status": "healthy",
+#             "startup_time": f"{app_state.startup_time:.2f}s",
+#             "devices": devicestatus,
+#             "active_sessions": len(agent_mgr.activesessions),
+#             "metrics": {
+#             "total_requests": metrics.get_total_requests(),
+#             "active_connections": metrics.get_active_connections(),
+#             },
+#             },
+#                 }
+#             )
 
-    # 配置日志
-    logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s [%(levelname)s] %(name)s: %(message)s'
-    )
+#         except Exception as e:
+#             logger.error(f": {e}")
+#             raise HTTPException(
+#                 status_code =500, detail=f": {e!s}"
+#             ) from e
 
-    # 注册信号处理程序
-    signal.signal(signal.SIGINT, handleshutdown_signal)
-    signal.signal(signal.SIGTERM, handleshutdown_signal)
 
-    try:
-        # 初始化应用状态
-        await app_state.initialize()
+# def handle_shutdown_signal(signum, frame):
+#     """""""""
+#     if app_state.is_shutting_down: logger.warning(", "):
+#         return
 
-        # 创建应用
-        app = create_app()
+#         signal.Signals(signum).name
+#         logger.info(f" {signal_name}, ...")
 
-        # 设置路由
-        setup_routes(app)
+    # 
+#         asyncio.create_task(app_state.cleanup())
 
-        # 获取服务器配置
-        config.get_section('http_server', {})
-        host = args.host or http_config.get('host', '0.0.0.0')
-        port = args.port or http_config.get('port', 8000)
 
-        logger.info(f"启动HTTP API服务器, 地址: {host}:{port}")
+#         async def main():
+#     """""""""
+#         parser = argparse.ArgumentParser(description="HTTP API")
+#         parser.add_argument("--config-dir", help="")
+#         parser.add_argument("--env", help=" (development, staging, production)")
+#         parser.add_argument("--host", default="0.0.0.0", help="")
+#         parser.add_argument("--port", type=int, default=8000, help="")
+#         args = parser.parse_args()
 
-        # 启动服务器
-        configuvicorn = uvicorn.Config(
-            app,
-            host=host,
-            port=port,
-            log_level="info",
-            access_log=True,
-            loop="asyncio"
-        )
+    # 
+#     if args.config_dir: os.environ["XIAOAI_CONFIG_DIR"] = args.config_dir:
+#     if args.env:
+#         os.environ["ENV"] = args.env
 
-        server = uvicorn.Server(configuvicorn)
-        await server.serve()
+    # 
+#         config = get_config_manager()
 
-    except Exception as e:
-        logger.error(f"HTTP服务器启动失败: {e!s}", exc_info=True)
-        sys.exit(1)
+    # 
+#         logging.basicConfig(
+#         level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+#         )
 
-    finally:
-        # 确保清理
-        await app_state.cleanup()
+    # 
+#         signal.signal(signal.SIGINT, handleshutdown_signal)
+#         signal.signal(signal.SIGTERM, handleshutdown_signal)
 
-if __name__ == "__main__":
-    # 运行主函数
-    asyncio.run(main())
+#     try:
+        # 
+#         await app_state.initialize()
+
+        # 
+#         app = create_app()
+
+        # 
+#         setup_routes(app)
+
+        # 
+#         config.get_section("http_server", {})
+#         host = args.host or http_config.get("host", "0.0.0.0")
+#         port = args.port or http_config.get("port", 8000)
+
+#         logger.info(f"HTTP API, : {host}:{port}")
+
+        # 
+#         configuvicorn = uvicorn.Config(
+#             app, host=host, port=port, log_level ="info", access_log =True, loop="asyncio"
+#         )
+
+#         server = uvicorn.Server(configuvicorn)
+#         await server.serve()
+
+#     except Exception as e:
+#         logger.error(f"HTTP: {e!s}", exc_info =True)
+#         sys.exit(1)
+
+#     finally:
+        # 
+#         await app_state.cleanup()
+
+
+# if __name__ == "__main__":
+    # 
+#     asyncio.run(main())

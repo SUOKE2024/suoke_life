@@ -9,7 +9,6 @@ alembic==1.12.1
 
 # Redis
 redis[hiredis]==5.0.1
-aioredis==2.0.1
 
 # 认证和安全
 python-jose[cryptography]==3.3.0

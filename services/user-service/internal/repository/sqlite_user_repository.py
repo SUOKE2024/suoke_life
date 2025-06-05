@@ -8,7 +8,7 @@ import logging
 import os
 import sqlite3
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Optional, Tuple, Any
 from uuid import UUID
 
@@ -140,7 +140,7 @@ class SQLiteUserRepository:
             
             # 准备用户数据
             user_id = user_id or uuid.uuid4()
-            now = datetime.now(datetime.timezone.utc).isoformat()
+            now = datetime.now(timezone.utc).isoformat()
             metadata = metadata or {}
             roles = [UserRole.USER.value]
             preferences = {}
@@ -321,7 +321,7 @@ class SQLiteUserRepository:
             
             # 更新时间戳
             update_fields.append('updated_at = ?')
-            now = datetime.now(datetime.timezone.utc).isoformat()
+            now = datetime.now(timezone.utc).isoformat()
             params.append(now)
             
             # 执行更新
@@ -559,7 +559,7 @@ class SQLiteUserRepository:
                 raise UserNotFoundError(f"用户ID '{user_id}' 不存在")
             
             # 更新偏好设置
-            now = datetime.now(datetime.timezone.utc).isoformat()
+            now = datetime.now(timezone.utc).isoformat()
             cursor.execute('''
             UPDATE users SET preferences = ?, updated_at = ? WHERE user_id = ?
             ''', (json.dumps(preferences), now, str(user_id)))
@@ -615,7 +615,7 @@ class SQLiteUserRepository:
             
             # 生成绑定ID
             binding_id = str(uuid.uuid4())
-            now = datetime.now(datetime.timezone.utc).isoformat()
+            now = datetime.now(timezone.utc).isoformat()
             
             # 插入设备记录
             cursor.execute('''

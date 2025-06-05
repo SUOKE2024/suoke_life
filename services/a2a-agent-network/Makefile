@@ -64,6 +64,17 @@ type-check: ## 类型检查
 	@echo "$(BLUE)执行类型检查...$(RESET)"
 	mypy internal cmd pkg
 
+# 代码生成
+generate-grpc: ## 生成 gRPC 代码
+	@echo "$(BLUE)生成 gRPC 代码...$(RESET)"
+	mkdir -p api/grpc/generated
+	python -m grpc_tools.protoc \
+		--python_out=api/grpc/generated \
+		--grpc_python_out=api/grpc/generated \
+		--proto_path=api/grpc \
+		api/grpc/agent_service.proto
+	@echo "$(GREEN)gRPC 代码生成完成!$(RESET)"
+
 security: ## 安全检查
 	@echo "$(BLUE)执行安全检查...$(RESET)"
 	bandit -r internal cmd pkg

@@ -18,6 +18,9 @@ from prometheus_fastapi_instrumentator import Instrumentator
 
 from app.api.grpc.generated import knowledge_pb2_grpc
 from app.api.grpc.knowledge_service import MedKnowledgeServicer
+from app.api.rest import health, router as knowledge_router
+from app.api.rest.graph import router as graph_router
+from app.api import ai
 from app.core.config import get_settings
 from app.core.container import lifespan_context
 from app.core.logger import get_logger
@@ -125,8 +128,10 @@ if settings.metrics and settings.metrics.enabled:
     instrumentator.instrument(app).expose(app)
 
 # 注册路由
-app.include_router(health_router)
-app.include_router(api_router)
+app.include_router(health.router)
+app.include_router(knowledge_router.router)
+app.include_router(graph_router)
+app.include_router(ai.router)
 
 # 自定义Swagger UI路由
 @app.get("/api/docs", include_in_schema=False)

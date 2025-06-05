@@ -44,8 +44,7 @@ __license__ = "MIT"
 logger = logging.getLogger(__name__)
 
 # 类型检查时的导入
-if TYPE_CHECKING:
-    from .four_diagnosis.coordinator.coordinator import (
+if TYPE_CHECKING: from .four_diagnosis.coordinator.coordinator import (
         FourDiagnosisCoordinator,
     )
 
@@ -58,10 +57,11 @@ XiaoAIService: type[_XiaoaiServiceImpl] | None = None
 
 def _lazy_import_agent_manager() -> type[_AgentManager]:
     """延迟导入 AgentManager"""
-    global _AgentManager
+    global _AgentManager  # noqa: PLW0602
     if _AgentManager is None:
         try:
             from .agent.agent_manager import AgentManager
+
             AgentManager = AgentManager
         except ImportError as e:
             logger.warning(f"Failed to import AgentManager: {e}")
@@ -74,10 +74,11 @@ def _lazy_import_agent_manager() -> type[_AgentManager]:
 
 def _lazy_import_service_impl() -> type[_XiaoAIServiceImpl]:
     """延迟导入 XiaoAIServiceImpl"""
-    global _XiaoAIServiceImpl
+    global _XiaoAIServiceImpl  # noqa: PLW0602
     if _XiaoAIServiceImpl is None:
         try:
             from .delivery.xiaoai_service_impl import XiaoAIServiceImpl
+
             XiaoAIServiceImpl = XiaoAIServiceImpl
         except ImportError as e:
             logger.warning(f"Failed to import XiaoAIServiceImpl: {e}")
@@ -90,10 +91,11 @@ def _lazy_import_service_impl() -> type[_XiaoAIServiceImpl]:
 
 def _lazy_import_coordinator() -> type[_FourDiagnosisCoordinator]:
     """延迟导入 FourDiagnosisCoordinator"""
-    global _FourDiagnosisCoordinator
+    global _FourDiagnosisCoordinator  # noqa: PLW0602
     if _FourDiagnosisCoordinator is None:
         try:
             from .four_diagnosis.coordinator.coordinator import FourDiagnosisCoordinator
+
             FourDiagnosisCoordinator = FourDiagnosisCoordinator
         except ImportError as e:
             logger.warning(f"Failed to import FourDiagnosisCoordinator: {e}")
@@ -106,10 +108,11 @@ def _lazy_import_coordinator() -> type[_FourDiagnosisCoordinator]:
 
 def _lazy_import_service() -> type[_XiaoaiServiceImpl]:
     """延迟导入 XiaoAIService"""
-    global _XiaoaiServiceImpl
+    global _XiaoaiServiceImpl  # noqa: PLW0602
     if _XiaoaiServiceImpl is None:
         try:
             from .service.xiaoai_service_impl import XiaoaiServiceImpl
+
             XiaoaiServiceImpl = XiaoaiServiceImpl
         except ImportError as e:
             logger.warning(f"Failed to import XiaoAIService: {e}")

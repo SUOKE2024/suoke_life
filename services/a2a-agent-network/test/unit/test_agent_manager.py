@@ -69,8 +69,10 @@ class TestAgentManager:
     async def test_start_and_stop(self, agent_manager):
         """测试启动和停止"""
         with patch("aiohttp.ClientSession") as mock_session:
-            mock_session.return_value.__aenter__.return_value = Mock()
-            mock_session.return_value.__aexit__.return_value = AsyncMock()
+            # 创建一个mock session对象
+            mock_session_instance = AsyncMock()
+            mock_session_instance.close = AsyncMock()
+            mock_session.return_value = mock_session_instance
 
             await agent_manager.start()
             assert agent_manager.session is not None
@@ -82,21 +84,22 @@ class TestAgentManager:
     @pytest.mark.asyncio
     async def test_health_check_success(self, agent_manager):
         """测试健康检查成功"""
-        with patch("aiohttp.ClientSession") as mock_session:
-            # 模拟成功的健康检查响应
-            mock_response = Mock()
-            mock_response.status = 200
-            mock_response.__aenter__.return_value = mock_response
-            mock_response.__aexit__.return_value = AsyncMock()
+        # 创建一个mock response
+        mock_response = AsyncMock()
+        mock_response.status = 200
+        
+        # 创建一个mock session，直接mock get方法返回的context manager
+        mock_session = AsyncMock()
+        mock_session.get.return_value.__aenter__ = AsyncMock(return_value=mock_response)
+        mock_session.get.return_value.__aexit__ = AsyncMock(return_value=None)
+        
+        agent_manager.session = mock_session
 
-            mock_session.return_value.get.return_value = mock_response
-            agent_manager.session = mock_session.return_value
+        health_check = await agent_manager._perform_health_check("xiaoai")
 
-            health_check = await agent_manager._perform_health_check("xiaoai")
-
-            assert health_check.agent_id == "xiaoai"
-            assert health_check.status == AgentStatus.ONLINE
-            assert agent_manager.agents["xiaoai"].status == AgentStatus.ONLINE
+        assert health_check.agent_id == "xiaoai"
+        assert health_check.status == AgentStatus.ONLINE
+        assert agent_manager.agents["xiaoai"].status == AgentStatus.ONLINE
 
     @pytest.mark.asyncio
     async def test_health_check_failure(self, agent_manager):
@@ -116,19 +119,21 @@ class TestAgentManager:
     @pytest.mark.asyncio
     async def test_send_request_success(self, agent_manager):
         """测试发送请求成功"""
-        with patch("aiohttp.ClientSession") as mock_session:
-            # 设置智能体为在线状态
-            agent_manager.agents["xiaoai"].status = AgentStatus.ONLINE
+        # 设置智能体为在线状态
+        agent_manager.agents["xiaoai"].status = AgentStatus.ONLINE
 
+        with patch("aiohttp.ClientSession.post") as mock_post:
             # 模拟成功的请求响应
-            mock_response = Mock()
+            mock_response = AsyncMock()
             mock_response.status = 200
             mock_response.json = AsyncMock(return_value={"result": "success"})
-            mock_response.__aenter__.return_value = mock_response
-            mock_response.__aexit__.return_value = AsyncMock()
-
-            mock_session.return_value.post.return_value = mock_response
-            agent_manager.session = mock_session.return_value
+            mock_response.__aenter__ = AsyncMock(return_value=mock_response)
+            mock_response.__aexit__ = AsyncMock(return_value=None)
+            
+            mock_post.return_value = mock_response
+            
+            # 创建session
+            agent_manager.session = AsyncMock()
 
             request = AgentRequest(
                 agent_id="xiaoai",
@@ -239,8 +244,11 @@ class TestAgentManager:
         assert status["online_agents"] == 1
         assert status["offline_agents"] == 1
         assert status["network_health"] == 0.5
-        assert status["agents"]["xiaoai"] == "online"
-        assert status["agents"]["xiaoke"] == "offline"
+        assert len(status["agents"]) == 2
+        # 检查agents列表中的状态
+        agent_statuses = {agent["id"]: agent["status"] for agent in status["agents"]}
+        assert agent_statuses["xiaoai"] == "online"
+        assert agent_statuses["xiaoke"] == "offline"
 
 
 if __name__ == "__main__":

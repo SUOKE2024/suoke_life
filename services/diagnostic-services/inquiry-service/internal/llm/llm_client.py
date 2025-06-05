@@ -73,6 +73,30 @@ class LLMClient:
             f"LLM客户端初始化完成，模型类型: {self.model_type}, 使用Mock模式: {self.use_mock_mode}"
         )
 
+    async def generate(self, prompt: str, **kwargs) -> str:
+        """
+        生成文本响应（兼容测试）
+        
+        Args:
+            prompt: 输入提示词
+            **kwargs: 其他参数
+            
+        Returns:
+            生成的文本响应
+        """
+        if self.use_mock_mode:
+            return self._get_fallback_response(prompt)
+        
+        # 构建请求
+        request = {
+            "history": [{"role": "user", "content": prompt}],
+            "user_profile": kwargs.get("user_profile", {})
+        }
+        
+        # 调用主要生成方法
+        response = await self.generate_response(request)
+        return response.get("response_text", "")
+
     def _load_system_prompt(self) -> str:
         """加载系统提示词"""
         try:

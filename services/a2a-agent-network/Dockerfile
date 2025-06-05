@@ -37,7 +37,7 @@ COPY . .
 RUN mkdir -p logs config
 
 # 设置权限
-RUN chmod +x cmd/server/main.py
+RUN chmod +x app/server/main.py
 
 # 健康检查
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
@@ -50,4 +50,4 @@ EXPOSE 5000 5001
 ENV PATH="/app/.venv/bin:$PATH"
 
 # 启动命令
-CMD ["python", "cmd/server/main.py"] 
+CMD ["python", "app/server/main.py"] 

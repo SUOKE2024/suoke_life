@@ -1,0 +1,1037 @@
+"""
+智能预约服务
+提供智能预约调度、冲突解决、动态定价等功能
+"""
+
+import asyncio
+import logging
+from datetime import datetime, timedelta
+from typing import Dict, List, Optional, Any, Tuple
+from dataclasses import dataclass, field
+from enum import Enum
+import uuid
+import json
+import math
+
+logger = logging.getLogger(__name__)
+
+
+class AppointmentStatus(Enum):
+    """预约状态"""
+    PENDING = "待确认"
+    CONFIRMED = "已确认"
+    CANCELLED = "已取消"
+    COMPLETED = "已完成"
+    NO_SHOW = "未到诊"
+    RESCHEDULED = "已改期"
+
+
+class AppointmentType(Enum):
+    """预约类型"""
+    CONSULTATION = "门诊咨询"
+    FOLLOW_UP = "复诊"
+    EMERGENCY = "急诊"
+    HEALTH_CHECK = "健康检查"
+    THERAPY = "治疗"
+    SURGERY = "手术"
+
+
+class PriorityLevel(Enum):
+    """优先级"""
+    LOW = "低"
+    NORMAL = "普通"
+    HIGH = "高"
+    URGENT = "紧急"
+    EMERGENCY = "急诊"
+
+
+class NotificationType(Enum):
+    """通知类型"""
+    SMS = "短信"
+    EMAIL = "邮件"
+    PUSH = "推送"
+    PHONE = "电话"
+
+
+@dataclass
+class TimeSlot:
+    """时间段"""
+    start_time: datetime
+    end_time: datetime
+    is_available: bool = True
+    is_reserved: bool = False
+    appointment_id: Optional[str] = None
+
+
+@dataclass
+class DoctorSchedule:
+    """医生排班"""
+    doctor_id: str
+    date: datetime
+    time_slots: List[TimeSlot]
+    max_appointments: int
+    current_appointments: int = 0
+    is_working_day: bool = True
+    special_notes: str = ""
+
+
+@dataclass
+class AppointmentRequest:
+    """预约请求"""
+    request_id: str
+    patient_id: str
+    doctor_id: str
+    appointment_type: AppointmentType
+    preferred_date: datetime
+    preferred_time_range: Tuple[datetime, datetime]
+    symptoms: List[str]
+    urgency_level: PriorityLevel
+    special_requirements: List[str] = field(default_factory=list)
+    contact_info: Dict[str, str] = field(default_factory=dict)
+    insurance_info: Dict[str, str] = field(default_factory=dict)
+    created_at: datetime = field(default_factory=datetime.now)
+
+
+@dataclass
+class Appointment:
+    """预约信息"""
+    appointment_id: str
+    patient_id: str
+    doctor_id: str
+    appointment_type: AppointmentType
+    scheduled_time: datetime
+    duration_minutes: int
+    status: AppointmentStatus
+    priority: PriorityLevel
+    
+    # 预约详情
+    symptoms: List[str] = field(default_factory=list)
+    diagnosis: str = ""
+    treatment_plan: str = ""
+    notes: str = ""
+    
+    # 费用信息
+    consultation_fee: float = 0.0
+    additional_fees: Dict[str, float] = field(default_factory=dict)
+    total_cost: float = 0.0
+    payment_status: str = "pending"
+    
+    # 预约历史
+    created_at: datetime = field(default_factory=datetime.now)
+    confirmed_at: Optional[datetime] = None
+    completed_at: Optional[datetime] = None
+    cancelled_at: Optional[datetime] = None
+    
+    # 提醒设置
+    reminder_settings: Dict[str, Any] = field(default_factory=dict)
+    
+    # 评价信息
+    rating: Optional[float] = None
+    review: str = ""
+    review_date: Optional[datetime] = None
+
+
+@dataclass
+class WaitlistEntry:
+    """候补列表条目"""
+    entry_id: str
+    patient_id: str
+    doctor_id: str
+    preferred_date_range: Tuple[datetime, datetime]
+    appointment_type: AppointmentType
+    priority: PriorityLevel
+    created_at: datetime = field(default_factory=datetime.now)
+    notification_preferences: List[NotificationType] = field(default_factory=list)
+
+
+@dataclass
+class AppointmentConflict:
+    """预约冲突"""
+    conflict_id: str
+    appointment_ids: List[str]
+    conflict_type: str  # time_overlap, resource_conflict, etc.
+    severity: str  # low, medium, high
+    resolution_suggestions: List[str]
+    auto_resolvable: bool = False
+
+
+@dataclass
+class AppointmentAnalytics:
+    """预约分析"""
+    date_range: Tuple[datetime, datetime]
+    total_appointments: int
+    confirmed_appointments: int
+    cancelled_appointments: int
+    no_show_rate: float
+    average_wait_time: float
+    peak_hours: List[int]
+    doctor_utilization: Dict[str, float]
+    revenue_analysis: Dict[str, float]
+
+
+class IntelligentAppointmentService:
+    """智能预约服务"""
+
+    def __init__(self, config: Dict[str, Any]):
+        """
+        初始化智能预约服务
+
+        Args:
+            config: 配置信息
+        """
+        self.config = config
+        
+        # 数据存储
+        self.appointments: Dict[str, Appointment] = {}
+        self.doctor_schedules: Dict[str, Dict[str, DoctorSchedule]] = {}  # doctor_id -> date -> schedule
+        self.waitlist: Dict[str, WaitlistEntry] = {}
+        self.conflicts: Dict[str, AppointmentConflict] = {}
+        
+        # 配置参数
+        self.scheduling_config = {
+            "default_appointment_duration": 30,  # 分钟
+            "buffer_time_between_appointments": 10,  # 分钟
+            "max_daily_appointments_per_doctor": 20,
+            "working_hours": {
+                "start": 9,  # 9:00
+                "end": 17,   # 17:00
+                "lunch_break": (12, 13)  # 12:00-13:00
+            },
+            "advance_booking_days": 30,
+            "cancellation_deadline_hours": 24,
+            "auto_reminder_hours": [24, 2],  # 提前24小时和2小时提醒
+            "dynamic_pricing": {
+                "enabled": True,
+                "peak_hour_multiplier": 1.5,
+                "urgent_appointment_multiplier": 2.0,
+                "last_minute_discount": 0.8
+            }
+        }
+        
+        # 智能调度算法配置
+        self.ai_config = {
+            "optimization_weights": {
+                "patient_preference": 0.3,
+                "doctor_availability": 0.25,
+                "urgency_level": 0.2,
+                "resource_utilization": 0.15,
+                "travel_time": 0.1
+            },
+            "conflict_resolution": {
+                "auto_resolve_minor_conflicts": True,
+                "reschedule_tolerance_hours": 2,
+                "priority_override_enabled": True
+            },
+            "learning_enabled": True,
+            "prediction_models": {
+                "no_show_prediction": True,
+                "duration_prediction": True,
+                "demand_forecasting": True
+            }
+        }
+        
+        # 初始化示例数据
+        self._initialize_sample_schedules()
+
+    def _initialize_sample_schedules(self):
+        """初始化示例排班数据"""
+        # 为接下来30天创建示例排班
+        sample_doctor_ids = ["doc1", "doc2", "doc3"]
+        
+        for doctor_id in sample_doctor_ids:
+            self.doctor_schedules[doctor_id] = {}
+            
+            for days_ahead in range(30):
+                date = datetime.now().date() + timedelta(days=days_ahead)
+                date_str = date.strftime("%Y-%m-%d")
+                
+                # 跳过周末
+                if date.weekday() >= 5:
+                    continue
+                
+                # 创建时间段
+                time_slots = self._generate_time_slots(date)
+                
+                schedule = DoctorSchedule(
+                    doctor_id=doctor_id,
+                    date=datetime.combine(date, datetime.min.time()),
+                    time_slots=time_slots,
+                    max_appointments=self.scheduling_config["max_daily_appointments_per_doctor"],
+                    is_working_day=True
+                )
+                
+                self.doctor_schedules[doctor_id][date_str] = schedule
+
+    def _generate_time_slots(self, date: datetime.date) -> List[TimeSlot]:
+        """生成时间段"""
+        slots = []
+        working_hours = self.scheduling_config["working_hours"]
+        duration = self.scheduling_config["default_appointment_duration"]
+        buffer_time = self.scheduling_config["buffer_time_between_appointments"]
+        
+        current_time = datetime.combine(date, datetime.min.time().replace(hour=working_hours["start"]))
+        end_time = datetime.combine(date, datetime.min.time().replace(hour=working_hours["end"]))
+        lunch_start, lunch_end = working_hours["lunch_break"]
+        
+        while current_time < end_time:
+            # 跳过午休时间
+            if lunch_start <= current_time.hour < lunch_end:
+                current_time = current_time.replace(hour=lunch_end, minute=0)
+                continue
+            
+            slot_end = current_time + timedelta(minutes=duration)
+            
+            if slot_end.hour <= working_hours["end"]:
+                slot = TimeSlot(
+                    start_time=current_time,
+                    end_time=slot_end,
+                    is_available=True
+                )
+                slots.append(slot)
+            
+            current_time += timedelta(minutes=duration + buffer_time)
+        
+        return slots
+
+    async def create_appointment_request(self, request_data: Dict[str, Any]) -> str:
+        """
+        创建预约请求
+
+        Args:
+            request_data: 预约请求数据
+
+        Returns:
+            请求ID
+        """
+        try:
+            logger.info(f"创建预约请求，患者ID: {request_data.get('patient_id')}")
+            
+            request_id = str(uuid.uuid4())
+            
+            # 解析时间范围
+            preferred_date = datetime.fromisoformat(request_data["preferred_date"])
+            time_range_start = datetime.fromisoformat(request_data["time_range_start"])
+            time_range_end = datetime.fromisoformat(request_data["time_range_end"])
+            
+            request = AppointmentRequest(
+                request_id=request_id,
+                patient_id=request_data["patient_id"],
+                doctor_id=request_data["doctor_id"],
+                appointment_type=AppointmentType(request_data["appointment_type"]),
+                preferred_date=preferred_date,
+                preferred_time_range=(time_range_start, time_range_end),
+                symptoms=request_data.get("symptoms", []),
+                urgency_level=PriorityLevel(request_data.get("urgency_level", PriorityLevel.NORMAL.value)),
+                special_requirements=request_data.get("special_requirements", []),
+                contact_info=request_data.get("contact_info", {}),
+                insurance_info=request_data.get("insurance_info", {})
+            )
+            
+            # 智能调度
+            appointment = await self._intelligent_scheduling(request)
+            
+            if appointment:
+                logger.info(f"预约创建成功，预约ID: {appointment.appointment_id}")
+                return appointment.appointment_id
+            else:
+                # 加入候补列表
+                waitlist_id = await self._add_to_waitlist(request)
+                logger.info(f"已加入候补列表，候补ID: {waitlist_id}")
+                return waitlist_id
+            
+        except Exception as e:
+            logger.error(f"创建预约请求失败: {e}")
+            raise
+
+    async def _intelligent_scheduling(self, request: AppointmentRequest) -> Optional[Appointment]:
+        """智能调度算法"""
+        try:
+            # 获取医生排班
+            doctor_id = request.doctor_id
+            if doctor_id not in self.doctor_schedules:
+                logger.warning(f"医生 {doctor_id} 没有排班信息")
+                return None
+            
+            # 查找最佳时间段
+            best_slot = await self._find_optimal_time_slot(request)
+            
+            if not best_slot:
+                logger.info("未找到合适的时间段")
+                return None
+            
+            # 创建预约
+            appointment_id = str(uuid.uuid4())
+            
+            # 计算费用
+            total_cost = await self._calculate_appointment_cost(request, best_slot[0])
+            
+            appointment = Appointment(
+                appointment_id=appointment_id,
+                patient_id=request.patient_id,
+                doctor_id=request.doctor_id,
+                appointment_type=request.appointment_type,
+                scheduled_time=best_slot[0],
+                duration_minutes=self.scheduling_config["default_appointment_duration"],
+                status=AppointmentStatus.PENDING,
+                priority=request.urgency_level,
+                symptoms=request.symptoms,
+                consultation_fee=total_cost,
+                total_cost=total_cost,
+                reminder_settings=self._create_default_reminder_settings()
+            )
+            
+            # 保存预约
+            self.appointments[appointment_id] = appointment
+            
+            # 更新排班
+            await self._update_schedule_with_appointment(appointment, best_slot[1], best_slot[2])
+            
+            # 发送确认通知
+            await self._send_appointment_confirmation(appointment)
+            
+            return appointment
+            
+        except Exception as e:
+            logger.error(f"智能调度失败: {e}")
+            return None
+
+    async def _find_optimal_time_slot(self, request: AppointmentRequest) -> Optional[Tuple[datetime, str, TimeSlot]]:
+        """查找最优时间段"""
+        doctor_schedules = self.doctor_schedules.get(request.doctor_id, {})
+        
+        candidates = []
+        
+        # 搜索范围：从偏好日期开始的7天内
+        search_start = request.preferred_date.date()
+        search_end = search_start + timedelta(days=7)
+        
+        current_date = search_start
+        while current_date <= search_end:
+            date_str = current_date.strftime("%Y-%m-%d")
+            
+            if date_str in doctor_schedules:
+                schedule = doctor_schedules[date_str]
+                
+                for slot in schedule.time_slots:
+                    if slot.is_available and not slot.is_reserved:
+                        # 检查是否在偏好时间范围内
+                        if self._is_time_in_preferred_range(slot.start_time, request.preferred_time_range):
+                            score = await self._calculate_slot_score(slot, request)
+                            candidates.append((slot.start_time, date_str, slot, score))
+            
+            current_date += timedelta(days=1)
+        
+        if not candidates:
+            return None
+        
+        # 按评分排序，选择最佳时间段
+        candidates.sort(key=lambda x: x[3], reverse=True)
+        best_candidate = candidates[0]
+        
+        return (best_candidate[0], best_candidate[1], best_candidate[2])
+
+    def _is_time_in_preferred_range(self, slot_time: datetime, preferred_range: Tuple[datetime, datetime]) -> bool:
+        """检查时间是否在偏好范围内"""
+        start_time, end_time = preferred_range
+        slot_time_only = slot_time.time()
+        start_time_only = start_time.time()
+        end_time_only = end_time.time()
+        
+        return start_time_only <= slot_time_only <= end_time_only
+
+    async def _calculate_slot_score(self, slot: TimeSlot, request: AppointmentRequest) -> float:
+        """计算时间段评分"""
+        weights = self.ai_config["optimization_weights"]
+        score = 0.0
+        
+        # 时间偏好匹配分数
+        time_preference_score = self._calculate_time_preference_score(slot, request)
+        score += time_preference_score * weights["patient_preference"]
+        
+        # 紧急程度分数
+        urgency_score = self._calculate_urgency_score(slot, request)
+        score += urgency_score * weights["urgency_level"]
+        
+        # 医生可用性分数
+        availability_score = 1.0  # 如果能找到这个时间段，说明医生可用
+        score += availability_score * weights["doctor_availability"]
+        
+        # 资源利用率分数
+        utilization_score = await self._calculate_utilization_score(slot, request)
+        score += utilization_score * weights["resource_utilization"]
+        
+        return score
+
+    def _calculate_time_preference_score(self, slot: TimeSlot, request: AppointmentRequest) -> float:
+        """计算时间偏好分数"""
+        preferred_start, preferred_end = request.preferred_time_range
+        slot_time = slot.start_time.time()
+        preferred_start_time = preferred_start.time()
+        preferred_end_time = preferred_end.time()
+        
+        # 如果在偏好时间范围内，给高分
+        if preferred_start_time <= slot_time <= preferred_end_time:
+            return 1.0
+        
+        # 计算距离偏好时间的差距
+        preferred_center = datetime.combine(datetime.today(), preferred_start_time) + \
+                          (datetime.combine(datetime.today(), preferred_end_time) - 
+                           datetime.combine(datetime.today(), preferred_start_time)) / 2
+        slot_datetime = datetime.combine(datetime.today(), slot_time)
+        
+        time_diff_hours = abs((slot_datetime - preferred_center).total_seconds()) / 3600
+        
+        # 距离越远，分数越低
+        return max(0, 1.0 - time_diff_hours / 8.0)  # 8小时外分数为0
+
+    def _calculate_urgency_score(self, slot: TimeSlot, request: AppointmentRequest) -> float:
+        """计算紧急程度分数"""
+        if request.urgency_level == PriorityLevel.EMERGENCY:
+            # 急诊优先最近的时间
+            time_diff = (slot.start_time - datetime.now()).total_seconds() / 3600
+            return max(0, 1.0 - time_diff / 24.0)  # 24小时内分数递减
+        elif request.urgency_level == PriorityLevel.URGENT:
+            time_diff = (slot.start_time - datetime.now()).total_seconds() / 3600
+            return max(0, 1.0 - time_diff / 72.0)  # 72小时内分数递减
+        else:
+            return 0.5  # 普通预约给中等分数
+
+    async def _calculate_utilization_score(self, slot: TimeSlot, request: AppointmentRequest) -> float:
+        """计算资源利用率分数"""
+        # 简单的利用率计算：优先填充工作日的中间时段
+        hour = slot.start_time.hour
+        
+        if 10 <= hour <= 16:  # 工作日中间时段
+            return 0.8
+        elif 9 <= hour <= 17:  # 正常工作时间
+            return 0.6
+        else:
+            return 0.3
+
+    async def _calculate_appointment_cost(self, request: AppointmentRequest, scheduled_time: datetime) -> float:
+        """计算预约费用"""
+        base_fee = 200.0  # 基础费用
+        
+        if not self.scheduling_config["dynamic_pricing"]["enabled"]:
+            return base_fee
+        
+        multiplier = 1.0
+        
+        # 紧急预约加价
+        if request.urgency_level in [PriorityLevel.URGENT, PriorityLevel.EMERGENCY]:
+            multiplier *= self.scheduling_config["dynamic_pricing"]["urgent_appointment_multiplier"]
+        
+        # 高峰时段加价
+        hour = scheduled_time.hour
+        if hour in [9, 10, 14, 15, 16]:  # 高峰时段
+            multiplier *= self.scheduling_config["dynamic_pricing"]["peak_hour_multiplier"]
+        
+        # 最后时刻预约折扣
+        time_until_appointment = (scheduled_time - datetime.now()).total_seconds() / 3600
+        if time_until_appointment < 24:
+            multiplier *= self.scheduling_config["dynamic_pricing"]["last_minute_discount"]
+        
+        return base_fee * multiplier
+
+    def _create_default_reminder_settings(self) -> Dict[str, Any]:
+        """创建默认提醒设置"""
+        return {
+            "enabled": True,
+            "methods": [NotificationType.SMS.value, NotificationType.EMAIL.value],
+            "advance_hours": self.scheduling_config["auto_reminder_hours"],
+            "custom_message": ""
+        }
+
+    async def _update_schedule_with_appointment(self, appointment: Appointment, date_str: str, slot: TimeSlot):
+        """更新排班信息"""
+        doctor_id = appointment.doctor_id
+        
+        if doctor_id in self.doctor_schedules and date_str in self.doctor_schedules[doctor_id]:
+            schedule = self.doctor_schedules[doctor_id][date_str]
+            
+            # 标记时间段为已预约
+            slot.is_available = False
+            slot.appointment_id = appointment.appointment_id
+            
+            # 更新当前预约数
+            schedule.current_appointments += 1
+
+    async def _send_appointment_confirmation(self, appointment: Appointment):
+        """发送预约确认通知"""
+        # 这里可以集成短信、邮件等通知服务
+        logger.info(f"发送预约确认通知，预约ID: {appointment.appointment_id}")
+
+    async def _add_to_waitlist(self, request: AppointmentRequest) -> str:
+        """添加到候补列表"""
+        entry_id = str(uuid.uuid4())
+        
+        # 计算候补的日期范围
+        start_date = request.preferred_date
+        end_date = start_date + timedelta(days=14)  # 2周内
+        
+        entry = WaitlistEntry(
+            entry_id=entry_id,
+            patient_id=request.patient_id,
+            doctor_id=request.doctor_id,
+            preferred_date_range=(start_date, end_date),
+            appointment_type=request.appointment_type,
+            priority=request.urgency_level,
+            notification_preferences=[NotificationType.SMS, NotificationType.EMAIL]
+        )
+        
+        self.waitlist[entry_id] = entry
+        
+        logger.info(f"患者 {request.patient_id} 已加入候补列表")
+        return entry_id
+
+    async def confirm_appointment(self, appointment_id: str) -> bool:
+        """
+        确认预约
+
+        Args:
+            appointment_id: 预约ID
+
+        Returns:
+            是否成功
+        """
+        try:
+            if appointment_id not in self.appointments:
+                raise ValueError("预约不存在")
+            
+            appointment = self.appointments[appointment_id]
+            appointment.status = AppointmentStatus.CONFIRMED
+            appointment.confirmed_at = datetime.now()
+            
+            logger.info(f"预约 {appointment_id} 已确认")
+            return True
+            
+        except Exception as e:
+            logger.error(f"确认预约失败: {e}")
+            return False
+
+    async def cancel_appointment(self, appointment_id: str, reason: str = "") -> bool:
+        """
+        取消预约
+
+        Args:
+            appointment_id: 预约ID
+            reason: 取消原因
+
+        Returns:
+            是否成功
+        """
+        try:
+            if appointment_id not in self.appointments:
+                raise ValueError("预约不存在")
+            
+            appointment = self.appointments[appointment_id]
+            
+            # 检查取消时限
+            time_until_appointment = (appointment.scheduled_time - datetime.now()).total_seconds() / 3600
+            cancellation_deadline = self.scheduling_config["cancellation_deadline_hours"]
+            
+            if time_until_appointment < cancellation_deadline:
+                logger.warning(f"预约 {appointment_id} 取消时间过晚，可能产生费用")
+            
+            appointment.status = AppointmentStatus.CANCELLED
+            appointment.cancelled_at = datetime.now()
+            appointment.notes += f" 取消原因: {reason}"
+            
+            # 释放时间段
+            await self._release_time_slot(appointment)
+            
+            # 检查候补列表
+            await self._process_waitlist_for_doctor(appointment.doctor_id)
+            
+            logger.info(f"预约 {appointment_id} 已取消")
+            return True
+            
+        except Exception as e:
+            logger.error(f"取消预约失败: {e}")
+            return False
+
+    async def _release_time_slot(self, appointment: Appointment):
+        """释放时间段"""
+        doctor_id = appointment.doctor_id
+        date_str = appointment.scheduled_time.strftime("%Y-%m-%d")
+        
+        if doctor_id in self.doctor_schedules and date_str in self.doctor_schedules[doctor_id]:
+            schedule = self.doctor_schedules[doctor_id][date_str]
+            
+            for slot in schedule.time_slots:
+                if slot.appointment_id == appointment.appointment_id:
+                    slot.is_available = True
+                    slot.appointment_id = None
+                    schedule.current_appointments -= 1
+                    break
+
+    async def _process_waitlist_for_doctor(self, doctor_id: str):
+        """处理医生的候补列表"""
+        # 查找该医生的候补条目
+        relevant_entries = [entry for entry in self.waitlist.values() if entry.doctor_id == doctor_id]
+        
+        # 按优先级和创建时间排序
+        relevant_entries.sort(key=lambda x: (x.priority.value, x.created_at))
+        
+        for entry in relevant_entries:
+            # 尝试为候补患者安排预约
+            request = AppointmentRequest(
+                request_id=str(uuid.uuid4()),
+                patient_id=entry.patient_id,
+                doctor_id=entry.doctor_id,
+                appointment_type=entry.appointment_type,
+                preferred_date=entry.preferred_date_range[0],
+                preferred_time_range=(
+                    entry.preferred_date_range[0].replace(hour=9),
+                    entry.preferred_date_range[0].replace(hour=17)
+                ),
+                symptoms=[],
+                urgency_level=entry.priority
+            )
+            
+            appointment = await self._intelligent_scheduling(request)
+            if appointment:
+                # 从候补列表中移除
+                del self.waitlist[entry.entry_id]
+                
+                # 发送通知
+                await self._send_waitlist_notification(entry, appointment)
+                break
+
+    async def _send_waitlist_notification(self, entry: WaitlistEntry, appointment: Appointment):
+        """发送候补通知"""
+        logger.info(f"候补患者 {entry.patient_id} 获得预约机会，预约ID: {appointment.appointment_id}")
+
+    async def reschedule_appointment(
+        self, 
+        appointment_id: str, 
+        new_preferred_date: datetime,
+        new_time_range: Tuple[datetime, datetime]
+    ) -> bool:
+        """
+        改期预约
+
+        Args:
+            appointment_id: 预约ID
+            new_preferred_date: 新的偏好日期
+            new_time_range: 新的时间范围
+
+        Returns:
+            是否成功
+        """
+        try:
+            if appointment_id not in self.appointments:
+                raise ValueError("预约不存在")
+            
+            appointment = self.appointments[appointment_id]
+            
+            # 释放原时间段
+            await self._release_time_slot(appointment)
+            
+            # 创建新的预约请求
+            request = AppointmentRequest(
+                request_id=str(uuid.uuid4()),
+                patient_id=appointment.patient_id,
+                doctor_id=appointment.doctor_id,
+                appointment_type=appointment.appointment_type,
+                preferred_date=new_preferred_date,
+                preferred_time_range=new_time_range,
+                symptoms=appointment.symptoms,
+                urgency_level=appointment.priority
+            )
+            
+            # 查找新时间段
+            new_slot = await self._find_optimal_time_slot(request)
+            
+            if new_slot:
+                # 更新预约信息
+                appointment.scheduled_time = new_slot[0]
+                appointment.status = AppointmentStatus.RESCHEDULED
+                
+                # 更新排班
+                await self._update_schedule_with_appointment(appointment, new_slot[1], new_slot[2])
+                
+                logger.info(f"预约 {appointment_id} 已改期到 {new_slot[0]}")
+                return True
+            else:
+                # 如果找不到新时间段，恢复原预约
+                logger.warning(f"预约 {appointment_id} 改期失败，未找到合适时间段")
+                return False
+            
+        except Exception as e:
+            logger.error(f"改期预约失败: {e}")
+            return False
+
+    async def get_appointment_details(self, appointment_id: str) -> Optional[Appointment]:
+        """获取预约详情"""
+        return self.appointments.get(appointment_id)
+
+    async def get_patient_appointments(self, patient_id: str) -> List[Appointment]:
+        """获取患者的所有预约"""
+        return [apt for apt in self.appointments.values() if apt.patient_id == patient_id]
+
+    async def get_doctor_appointments(self, doctor_id: str, date: datetime = None) -> List[Appointment]:
+        """获取医生的预约"""
+        appointments = [apt for apt in self.appointments.values() if apt.doctor_id == doctor_id]
+        
+        if date:
+            target_date = date.date()
+            appointments = [apt for apt in appointments if apt.scheduled_time.date() == target_date]
+        
+        return sorted(appointments, key=lambda x: x.scheduled_time)
+
+    async def detect_conflicts(self) -> List[AppointmentConflict]:
+        """检测预约冲突"""
+        conflicts = []
+        
+        # 按医生和日期分组检查
+        doctor_appointments = {}
+        for appointment in self.appointments.values():
+            if appointment.status in [AppointmentStatus.CONFIRMED, AppointmentStatus.PENDING]:
+                doctor_id = appointment.doctor_id
+                date = appointment.scheduled_time.date()
+                
+                if doctor_id not in doctor_appointments:
+                    doctor_appointments[doctor_id] = {}
+                if date not in doctor_appointments[doctor_id]:
+                    doctor_appointments[doctor_id][date] = []
+                
+                doctor_appointments[doctor_id][date].append(appointment)
+        
+        # 检查时间重叠
+        for doctor_id, dates in doctor_appointments.items():
+            for date, appointments in dates.items():
+                for i, apt1 in enumerate(appointments):
+                    for apt2 in appointments[i+1:]:
+                        if self._check_time_overlap(apt1, apt2):
+                            conflict = AppointmentConflict(
+                                conflict_id=str(uuid.uuid4()),
+                                appointment_ids=[apt1.appointment_id, apt2.appointment_id],
+                                conflict_type="time_overlap",
+                                severity="high",
+                                resolution_suggestions=[
+                                    "重新安排其中一个预约",
+                                    "调整预约时长",
+                                    "联系患者协商时间"
+                                ],
+                                auto_resolvable=False
+                            )
+                            conflicts.append(conflict)
+                            self.conflicts[conflict.conflict_id] = conflict
+        
+        return conflicts
+
+    def _check_time_overlap(self, apt1: Appointment, apt2: Appointment) -> bool:
+        """检查两个预约是否时间重叠"""
+        start1 = apt1.scheduled_time
+        end1 = start1 + timedelta(minutes=apt1.duration_minutes)
+        start2 = apt2.scheduled_time
+        end2 = start2 + timedelta(minutes=apt2.duration_minutes)
+        
+        return start1 < end2 and start2 < end1
+
+    async def resolve_conflict(self, conflict_id: str, resolution_method: str) -> bool:
+        """
+        解决冲突
+
+        Args:
+            conflict_id: 冲突ID
+            resolution_method: 解决方法
+
+        Returns:
+            是否成功
+        """
+        try:
+            if conflict_id not in self.conflicts:
+                raise ValueError("冲突不存在")
+            
+            conflict = self.conflicts[conflict_id]
+            
+            if resolution_method == "reschedule_first":
+                # 重新安排第一个预约
+                first_appointment_id = conflict.appointment_ids[0]
+                appointment = self.appointments[first_appointment_id]
+                
+                # 查找新时间段
+                new_time = appointment.scheduled_time + timedelta(hours=1)
+                success = await self.reschedule_appointment(
+                    first_appointment_id,
+                    new_time,
+                    (new_time, new_time + timedelta(hours=2))
+                )
+                
+                if success:
+                    del self.conflicts[conflict_id]
+                    logger.info(f"冲突 {conflict_id} 已解决")
+                    return True
+            
+            return False
+            
+        except Exception as e:
+            logger.error(f"解决冲突失败: {e}")
+            return False
+
+    async def send_appointment_reminders(self):
+        """发送预约提醒"""
+        now = datetime.now()
+        reminder_hours = self.scheduling_config["auto_reminder_hours"]
+        
+        for appointment in self.appointments.values():
+            if appointment.status != AppointmentStatus.CONFIRMED:
+                continue
+            
+            time_until_appointment = (appointment.scheduled_time - now).total_seconds() / 3600
+            
+            for reminder_hour in reminder_hours:
+                # 检查是否需要发送提醒
+                if abs(time_until_appointment - reminder_hour) < 0.5:  # 30分钟误差范围
+                    await self._send_reminder(appointment, reminder_hour)
+
+    async def _send_reminder(self, appointment: Appointment, hours_before: int):
+        """发送单个提醒"""
+        logger.info(f"发送预约提醒，预约ID: {appointment.appointment_id}，提前 {hours_before} 小时")
+
+    async def complete_appointment(self, appointment_id: str, notes: str = "") -> bool:
+        """
+        完成预约
+
+        Args:
+            appointment_id: 预约ID
+            notes: 诊疗记录
+
+        Returns:
+            是否成功
+        """
+        try:
+            if appointment_id not in self.appointments:
+                raise ValueError("预约不存在")
+            
+            appointment = self.appointments[appointment_id]
+            appointment.status = AppointmentStatus.COMPLETED
+            appointment.completed_at = datetime.now()
+            appointment.notes += f" 诊疗记录: {notes}"
+            
+            logger.info(f"预约 {appointment_id} 已完成")
+            return True
+            
+        except Exception as e:
+            logger.error(f"完成预约失败: {e}")
+            return False
+
+    async def rate_appointment(self, appointment_id: str, rating: float, review: str = "") -> bool:
+        """
+        评价预约
+
+        Args:
+            appointment_id: 预约ID
+            rating: 评分 (1-5)
+            review: 评价内容
+
+        Returns:
+            是否成功
+        """
+        try:
+            if appointment_id not in self.appointments:
+                raise ValueError("预约不存在")
+            
+            appointment = self.appointments[appointment_id]
+            appointment.rating = rating
+            appointment.review = review
+            appointment.review_date = datetime.now()
+            
+            logger.info(f"预约 {appointment_id} 已评价，评分: {rating}")
+            return True
+            
+        except Exception as e:
+            logger.error(f"评价预约失败: {e}")
+            return False
+
+    async def get_appointment_analytics(self, start_date: datetime, end_date: datetime) -> AppointmentAnalytics:
+        """
+        获取预约分析数据
+
+        Args:
+            start_date: 开始日期
+            end_date: 结束日期
+
+        Returns:
+            预约分析数据
+        """
+        try:
+            # 筛选时间范围内的预约
+            appointments_in_range = [
+                apt for apt in self.appointments.values()
+                if start_date <= apt.scheduled_time <= end_date
+            ]
+            
+            total_appointments = len(appointments_in_range)
+            confirmed_appointments = len([apt for apt in appointments_in_range if apt.status == AppointmentStatus.CONFIRMED])
+            cancelled_appointments = len([apt for apt in appointments_in_range if apt.status == AppointmentStatus.CANCELLED])
+            no_show_appointments = len([apt for apt in appointments_in_range if apt.status == AppointmentStatus.NO_SHOW])
+            
+            # 计算爽约率
+            no_show_rate = no_show_appointments / total_appointments if total_appointments > 0 else 0
+            
+            # 计算平均等待时间
+            wait_times = []
+            for apt in appointments_in_range:
+                if apt.created_at and apt.scheduled_time:
+                    wait_time = (apt.scheduled_time - apt.created_at).total_seconds() / 3600 / 24  # 天数
+                    wait_times.append(wait_time)
+            
+            average_wait_time = sum(wait_times) / len(wait_times) if wait_times else 0
+            
+            # 分析高峰时段
+            hour_counts = {}
+            for apt in appointments_in_range:
+                hour = apt.scheduled_time.hour
+                hour_counts[hour] = hour_counts.get(hour, 0) + 1
+            
+            peak_hours = sorted(hour_counts.keys(), key=lambda h: hour_counts[h], reverse=True)[:3]
+            
+            # 医生利用率
+            doctor_utilization = {}
+            for apt in appointments_in_range:
+                doctor_id = apt.doctor_id
+                if doctor_id not in doctor_utilization:
+                    doctor_utilization[doctor_id] = 0
+                doctor_utilization[doctor_id] += 1
+            
+            # 收入分析
+            total_revenue = sum(apt.total_cost for apt in appointments_in_range if apt.status == AppointmentStatus.COMPLETED)
+            average_revenue_per_appointment = total_revenue / confirmed_appointments if confirmed_appointments > 0 else 0
+            
+            revenue_analysis = {
+                "total_revenue": total_revenue,
+                "average_revenue_per_appointment": average_revenue_per_appointment,
+                "revenue_by_type": {}
+            }
+            
+            analytics = AppointmentAnalytics(
+                date_range=(start_date, end_date),
+                total_appointments=total_appointments,
+                confirmed_appointments=confirmed_appointments,
+                cancelled_appointments=cancelled_appointments,
+                no_show_rate=no_show_rate,
+                average_wait_time=average_wait_time,
+                peak_hours=peak_hours,
+                doctor_utilization=doctor_utilization,
+                revenue_analysis=revenue_analysis
+            )
+            
+            return analytics
+            
+        except Exception as e:
+            logger.error(f"获取预约分析数据失败: {e}")
+            raise
+
+    async def get_service_status(self) -> Dict[str, Any]:
+        """获取服务状态"""
+        return {
+            "total_appointments": len(self.appointments),
+            "active_appointments": len([apt for apt in self.appointments.values() 
+                                      if apt.status in [AppointmentStatus.CONFIRMED, AppointmentStatus.PENDING]]),
+            "waitlist_size": len(self.waitlist),
+            "conflicts_count": len(self.conflicts),
+            "service_status": "healthy"
+        } 

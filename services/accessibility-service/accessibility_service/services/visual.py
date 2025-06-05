@@ -51,7 +51,7 @@ class VisualAccessibilityService:
 
         logger.info(f"Starting visual analysis for user {request.user_id}")
 
-        start_time = datetime.utcnow()
+        start_time = datetime.now(datetime.UTC)
 
         try:
             # Simulate visual analysis processing
@@ -88,7 +88,7 @@ class VisualAccessibilityService:
                     "Increase font size for small text elements",
                     "Use clear, readable fonts"
                 ],
-                processing_time=(datetime.utcnow() - start_time).total_seconds(),
+                processing_time=(datetime.now(datetime.UTC) - start_time).total_seconds(),
                 confidence_score=0.92
             )
 

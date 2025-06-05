@@ -6,8 +6,10 @@
 
 import pytest
 import asyncio
+import numpy as np
 
-from listen_service.core.audio_analyzer import AudioAnalyzer, AudioProcessor
+from listen_service.core.audio_analyzer import AudioAnalyzer
+from listen_service.core.audio_processor import AudioProcessor
 from listen_service.models.audio_models import (
     AudioMetadata, AudioFormat, AnalysisRequest, VoiceFeatures
 )

@@ -37,7 +37,7 @@ class HealthData(BaseModel):
     data_type = Column(SQLEnum(HealthDataType), nullable=False, index=True)
     value = Column(Float, nullable=True)
     unit = Column(String(20), nullable=True)
-    metadata = Column(JSON, nullable=True)
+    extra_data = Column(JSON, nullable=True)
     source_id = Column(String(100), nullable=True)  # 第三方平台的数据ID
 
     # 关联关系

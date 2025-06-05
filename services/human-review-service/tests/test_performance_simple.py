@@ -37,14 +37,14 @@ class TestCacheManagerBasic:
         """测试缓存设置和获取"""
         # Mock Redis操作
         cache_manager.redis_client = AsyncMock()
-        cache_manager.redis_client.set = AsyncMock()
+        cache_manager.redis_client.setex = AsyncMock()
         cache_manager.redis_client.get = AsyncMock(return_value=b'"test_value"')
 
         await cache_manager.set("test_key", "test_value")
         result = await cache_manager.get("test_key")
 
-        cache_manager.redis_client.set.assert_called_once()
-        cache_manager.redis_client.get.assert_called_once_with("test_key")
+        cache_manager.redis_client.setex.assert_called_once()
+        cache_manager.redis_client.get.assert_called_once_with("human_review_service:test_key")
         assert result == "test_value"
 
     @pytest.mark.asyncio
@@ -55,7 +55,7 @@ class TestCacheManagerBasic:
 
         result = await cache_manager.exists("test_key")
 
-        cache_manager.redis_client.exists.assert_called_once_with("test_key")
+        cache_manager.redis_client.exists.assert_called_once_with("human_review_service:test_key")
         assert result is True
 
     @pytest.mark.asyncio
@@ -66,7 +66,7 @@ class TestCacheManagerBasic:
 
         result = await cache_manager.delete("test_key")
 
-        cache_manager.redis_client.delete.assert_called_once_with("test_key")
+        cache_manager.redis_client.delete.assert_called_once_with("human_review_service:test_key")
         assert result is True
 
 
@@ -172,7 +172,7 @@ class TestPerformanceIntegrationBasic:
         """测试缓存和监控基础集成"""
         # Mock Redis操作
         cache_manager.redis_client = AsyncMock()
-        cache_manager.redis_client.set = AsyncMock()
+        cache_manager.redis_client.setex = AsyncMock()
         cache_manager.redis_client.get = AsyncMock(return_value=b'"test_value"')
 
         # 测试缓存操作
@@ -180,7 +180,7 @@ class TestPerformanceIntegrationBasic:
         result = await cache_manager.get("integration_test")
 
         assert result == "test_value"
-        cache_manager.redis_client.set.assert_called_once()
+        cache_manager.redis_client.setex.assert_called_once()
         cache_manager.redis_client.get.assert_called_once()
 
     def test_performance_monitoring_basic(self, performance_monitor):
@@ -199,7 +199,7 @@ class TestPerformanceIntegrationBasic:
         if hasattr(connection_optimizer, 'optimize_pool_size'):
             # Mock数据库连接统计
             with patch.object(connection_optimizer, 'get_connection_stats', return_value={'active': 5, 'idle': 3}):
-                result = await connection_optimizer.optimize_pool_size()
+                result = await connection_optimizer.optimize_pool_size(current_load=0.5)
                 assert result is not None
 
     def test_performance_metrics_collection(self, performance_monitor):

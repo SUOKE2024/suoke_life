@@ -178,6 +178,17 @@ def setup_routes(app: FastAPI) -> None:
             "checks": checks,
         }
 
+    # 存活检查端点
+    @app.get("/live", tags=["Health"])
+    async def liveness_check():
+        """存活检查端点"""
+        return {
+            "status": "alive",
+            "service": settings.app_name,
+            "version": settings.app_version,
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+        }
+
     logger.info("Routes configured")
 
 

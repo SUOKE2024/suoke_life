@@ -1,0 +1,388 @@
+# 索克生活 API 网关 - 生产环境配置
+# Production Configuration for Suoke Life API Gateway
+
+# 应用基础配置
+app:
+  name: "Suoke API Gateway"
+  version: "1.0.0"
+  environment: "production"
+  debug: false
+  
+# 服务器配置
+server:
+  host: "0.0.0.0"
+  port: 8080
+  workers: 4  # 根据CPU核心数调整
+  worker_class: "uvicorn.workers.UvicornWorker"
+  max_requests: 10000  # 每个worker处理的最大请求数
+  max_requests_jitter: 1000  # 随机抖动
+  timeout: 30
+  keepalive: 5
+  
+# 性能优化配置
+performance:
+  # 连接池配置
+  connection_pool:
+    max_connections: 100
+    max_keepalive_connections: 20
+    keepalive_expiry: 5.0
+    
+  # 超时配置
+  timeouts:
+    connect: 5.0
+    read: 30.0
+    write: 30.0
+    pool: 10.0
+    
+  # 并发配置
+  concurrency:
+    max_concurrent_requests: 1000
+    semaphore_limit: 100
+    
+# 数据库配置
+database:
+  url: "${DATABASE_URL}"
+  pool_size: 20
+  max_overflow: 30
+  pool_timeout: 30
+  pool_recycle: 3600
+  pool_pre_ping: true
+  echo: false
+  
+# Redis配置
+redis:
+  url: "${REDIS_URL}"
+  max_connections: 50
+  retry_on_timeout: true
+  socket_timeout: 5
+  socket_connect_timeout: 5
+  socket_keepalive: true
+  socket_keepalive_options: {}
+  health_check_interval: 30
+  
+# JWT配置
+jwt:
+  secret_key: "${JWT_SECRET_KEY}"
+  algorithm: "HS256"
+  access_token_expire_minutes: 30
+  refresh_token_expire_days: 7
+  issuer: "suoke-api-gateway"
+  audience: "suoke-services"
+  
+# CORS配置
+cors:
+  allow_origins: 
+    - "https://app.suoke.life"
+    - "https://admin.suoke.life"
+    - "https://api.suoke.life"
+  allow_credentials: true
+  allow_methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"]
+  allow_headers: 
+    - "Authorization"
+    - "Content-Type"
+    - "X-Requested-With"
+    - "X-Request-ID"
+    - "X-Correlation-ID"
+  expose_headers:
+    - "X-Request-ID"
+    - "X-Response-Time"
+    - "X-Cache-Status"
+  max_age: 86400
+  
+# 限流配置
+rate_limit:
+  enabled: true
+  storage_url: "${REDIS_URL}/1"
+  default_rate: "1000/minute"
+  burst_rate: "2000/minute"
+  
+  # 不同端点的限流配置
+  endpoints:
+    "/api/auth/login": "10/minute"
+    "/api/auth/register": "5/minute"
+    "/api/auth/reset-password": "3/minute"
+    "/api/upload": "100/hour"
+    "/api/search": "500/minute"
+    
+  # 不同用户类型的限流
+  user_types:
+    anonymous: "100/minute"
+    authenticated: "1000/minute"
+    premium: "5000/minute"
+    admin: "unlimited"
+    
+# 缓存配置
+cache:
+  enabled: true
+  type: "redis"
+  redis_url: "${REDIS_URL}/2"
+  ttl: 300  # 5分钟默认TTL
+  max_size: 10000
+  
+  # 缓存策略配置
+  strategies:
+    default:
+      ttl: 300
+      max_size: 1000
+    static_content:
+      ttl: 3600  # 1小时
+      max_size: 5000
+    user_data:
+      ttl: 900   # 15分钟
+      max_size: 2000
+    search_results:
+      ttl: 600   # 10分钟
+      max_size: 1000
+      
+  # 缓存键前缀
+  key_prefix: "suoke:gateway:cache"
+  
+# 监控配置
+monitoring:
+  enabled: true
+  
+  # Prometheus配置
+  prometheus:
+    enabled: true
+    port: 9090
+    path: "/metrics"
+    
+  # 健康检查配置
+  health_check:
+    enabled: true
+    path: "/health"
+    interval: 30
+    timeout: 10
+    
+  # 链路追踪配置
+  tracing:
+    enabled: true
+    service_name: "suoke-api-gateway"
+    jaeger_endpoint: "${JAEGER_ENDPOINT}"
+    sampling_rate: 0.1  # 10% 采样率
+    
+  # 指标配置
+  metrics:
+    request_duration_buckets: [0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5, 5.0, 10.0]
+    request_size_buckets: [1024, 4096, 16384, 65536, 262144, 1048576, 4194304]
+    response_size_buckets: [1024, 4096, 16384, 65536, 262144, 1048576, 4194304]
+    
+# 日志配置
+logging:
+  level: "INFO"
+  format: "json"
+  
+  # 日志输出配置
+  handlers:
+    console:
+      enabled: true
+      level: "INFO"
+      format: "json"
+    file:
+      enabled: true
+      level: "INFO"
+      format: "json"
+      filename: "/var/log/suoke/api-gateway.log"
+      max_size: "100MB"
+      backup_count: 10
+      
+  # 日志过滤配置
+  filters:
+    - name: "health_check"
+      path: "/health"
+      enabled: false  # 不记录健康检查日志
+    - name: "metrics"
+      path: "/metrics"
+      enabled: false  # 不记录指标请求日志
+      
+  # 敏感信息脱敏
+  sanitize:
+    headers:
+      - "Authorization"
+      - "X-API-Key"
+      - "Cookie"
+    query_params:
+      - "password"
+      - "token"
+      - "secret"
+    body_fields:
+      - "password"
+      - "secret_key"
+      - "private_key"
+      
+# 安全配置
+security:
+  # 安全头部
+  headers:
+    x_frame_options: "DENY"
+    x_content_type_options: "nosniff"
+    x_xss_protection: "1; mode=block"
+    strict_transport_security: "max-age=31536000; includeSubDomains"
+    content_security_policy: "default-src 'self'"
+    referrer_policy: "strict-origin-when-cross-origin"
+    
+  # 请求大小限制
+  max_request_size: "10MB"
+  max_header_size: "8KB"
+  max_query_params: 100
+  
+  # IP白名单/黑名单
+  ip_whitelist: []
+  ip_blacklist: []
+  
+  # 请求验证
+  validate_content_type: true
+  validate_user_agent: true
+  
+# 服务发现配置
+service_discovery:
+  enabled: true
+  type: "consul"  # 或 "kubernetes"
+  
+  consul:
+    host: "${CONSUL_HOST:localhost}"
+    port: 8500
+    token: "${CONSUL_TOKEN}"
+    datacenter: "dc1"
+    
+  kubernetes:
+    namespace: "suoke-services"
+    label_selector: "app.kubernetes.io/part-of=suoke-life"
+    
+# 负载均衡配置
+load_balancer:
+  strategy: "weighted_round_robin"  # round_robin, weighted_round_robin, least_connections, random
+  health_check_interval: 30
+  health_check_timeout: 10
+  max_retries: 3
+  retry_delay: 1.0
+  
+# 熔断器配置
+circuit_breaker:
+  enabled: true
+  failure_threshold: 5
+  recovery_timeout: 60
+  half_open_max_calls: 3
+  
+# 重试配置
+retry:
+  enabled: true
+  max_attempts: 3
+  backoff_strategy: "exponential"  # linear, exponential, fixed
+  base_delay: 1.0
+  max_delay: 30.0
+  jitter: true
+  
+  # 可重试的HTTP状态码
+  retryable_status_codes: [502, 503, 504]
+  
+  # 可重试的异常类型
+  retryable_exceptions:
+    - "ConnectionError"
+    - "TimeoutError"
+    - "HTTPError"
+    
+# gRPC配置
+grpc:
+  enabled: true
+  host: "0.0.0.0"
+  port: 50051
+  max_workers: 10
+  max_receive_message_length: 4194304  # 4MB
+  max_send_message_length: 4194304     # 4MB
+  reflection: false  # 生产环境关闭反射
+  
+  # gRPC健康检查
+  health_check:
+    enabled: true
+    service_name: "suoke.gateway.v1.GatewayService"
+    
+# WebSocket配置
+websocket:
+  enabled: true
+  max_connections: 1000
+  ping_interval: 20
+  ping_timeout: 10
+  close_timeout: 10
+  
+# 服务配置
+services:
+  # 用户服务
+  user_service:
+    name: "user-service"
+    host: "${USER_SERVICE_HOST:user-service}"
+    port: 8080
+    health_check_path: "/health"
+    timeout: 30
+    retry_count: 3
+    weight: 1
+    
+  # 认证服务
+  auth_service:
+    name: "auth-service"
+    host: "${AUTH_SERVICE_HOST:auth-service}"
+    port: 8080
+    health_check_path: "/health"
+    timeout: 30
+    retry_count: 3
+    weight: 1
+    
+  # 诊断服务
+  diagnostic_service:
+    name: "diagnostic-service"
+    host: "${DIAGNOSTIC_SERVICE_HOST:diagnostic-service}"
+    port: 8080
+    health_check_path: "/health"
+    timeout: 60  # 诊断服务可能需要更长时间
+    retry_count: 2
+    weight: 1
+    
+  # 健康数据服务
+  health_data_service:
+    name: "health-data-service"
+    host: "${HEALTH_DATA_SERVICE_HOST:health-data-service}"
+    port: 8080
+    health_check_path: "/health"
+    timeout: 30
+    retry_count: 3
+    weight: 1
+    
+  # RAG服务
+  rag_service:
+    name: "rag-service"
+    host: "${RAG_SERVICE_HOST:rag-service}"
+    port: 8080
+    health_check_path: "/health"
+    timeout: 45
+    retry_count: 2
+    weight: 1
+    
+# 环境变量配置
+environment_variables:
+  required:
+    - "DATABASE_URL"
+    - "REDIS_URL"
+    - "JWT_SECRET_KEY"
+  optional:
+    - "JAEGER_ENDPOINT"
+    - "CONSUL_HOST"
+    - "CONSUL_TOKEN"
+    
+# 资源限制
+resources:
+  memory:
+    limit: "2Gi"
+    request: "1Gi"
+  cpu:
+    limit: "2000m"
+    request: "1000m"
+    
+# 自动扩缩容配置
+autoscaling:
+  enabled: true
+  min_replicas: 2
+  max_replicas: 10
+  target_cpu_utilization: 70
+  target_memory_utilization: 80
+  scale_up_stabilization: 60    # 秒
+  scale_down_stabilization: 300 # 秒 

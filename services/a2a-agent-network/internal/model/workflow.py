@@ -5,7 +5,7 @@ Workflow Data Models
 """
 
 from enum import Enum
-from typing import Any
+from typing import Any, Optional
 
 from pydantic import BaseModel, Field
 
@@ -31,17 +31,83 @@ class StepStatus(str, Enum):
     SKIPPED = "skipped"
 
 
+class StepType(str, Enum):
+    """步骤类型枚举"""
+
+    ACTION = "action"           # 普通动作步骤
+    CONDITION = "condition"     # 条件分支步骤
+    LOOP = "loop"              # 循环步骤
+    PARALLEL = "parallel"      # 并行步骤
+    WAIT = "wait"              # 等待步骤
+
+
+class ConditionOperator(str, Enum):
+    """条件操作符枚举"""
+
+    EQUALS = "eq"              # 等于
+    NOT_EQUALS = "ne"          # 不等于
+    GREATER_THAN = "gt"        # 大于
+    GREATER_EQUAL = "ge"       # 大于等于
+    LESS_THAN = "lt"           # 小于
+    LESS_EQUAL = "le"          # 小于等于
+    CONTAINS = "contains"      # 包含
+    NOT_CONTAINS = "not_contains"  # 不包含
+    IN = "in"                  # 在列表中
+    NOT_IN = "not_in"          # 不在列表中
+    EXISTS = "exists"          # 存在
+    NOT_EXISTS = "not_exists"  # 不存在
+
+
+class ConditionRule(BaseModel):
+    """条件规则模型"""
+
+    field: str = Field(..., description="字段路径，如 'context.user.age'")
+    operator: ConditionOperator = Field(..., description="操作符")
+    value: Any = Field(..., description="比较值")
+    description: str = Field("", description="条件描述")
+
+
+class LoopConfig(BaseModel):
+    """循环配置模型"""
+
+    type: str = Field(..., description="循环类型: 'for', 'while', 'foreach'")
+    condition: Optional[ConditionRule] = Field(None, description="循环条件（while循环）")
+    max_iterations: int = Field(100, description="最大迭代次数")
+    iteration_variable: str = Field("iteration", description="迭代变量名")
+    collection_path: Optional[str] = Field(None, description="集合路径（foreach循环）")
+    break_on_error: bool = Field(True, description="出错时是否中断循环")
+
+
 class WorkflowStep(BaseModel):
     """工作流步骤模型"""
 
     id: str = Field(..., description="步骤ID")
     name: str = Field(..., description="步骤名称")
-    agent: str = Field(..., description="执行智能体")
-    action: str = Field(..., description="执行动作")
+    type: StepType = Field(StepType.ACTION, description="步骤类型")
+    agent: Optional[str] = Field(None, description="执行智能体")
+    action: Optional[str] = Field(None, description="执行动作")
     description: str = Field("", description="步骤描述")
     timeout: int = Field(60, description="超时时间(秒)")
     retry_count: int = Field(1, description="重试次数")
-    condition: str | None = Field(None, description="执行条件")
+    
+    # 条件执行
+    condition: Optional[ConditionRule] = Field(None, description="执行条件")
+    
+    # 条件分支
+    if_steps: list[str] = Field(default_factory=list, description="条件为真时执行的步骤")
+    else_steps: list[str] = Field(default_factory=list, description="条件为假时执行的步骤")
+    
+    # 循环配置
+    loop_config: Optional[LoopConfig] = Field(None, description="循环配置")
+    loop_steps: list[str] = Field(default_factory=list, description="循环体步骤")
+    
+    # 并行执行
+    parallel_steps: list[str] = Field(default_factory=list, description="并行执行的步骤")
+    
+    # 等待配置
+    wait_duration: Optional[int] = Field(None, description="等待时间(秒)")
+    wait_condition: Optional[ConditionRule] = Field(None, description="等待条件")
+    
     parameters: dict[str, Any] = Field(default_factory=dict, description="步骤参数")
     dependencies: list[str] = Field(default_factory=list, description="依赖步骤")
 

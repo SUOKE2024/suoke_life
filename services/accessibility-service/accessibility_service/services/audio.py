@@ -38,7 +38,7 @@ class AudioAccessibilityService:
             await self.initialize()
 
         logger.info(f"Starting audio analysis for user {request.user_id}")
-        start_time = datetime.utcnow()
+        start_time = datetime.now(datetime.UTC)
 
         try:
             await asyncio.sleep(0.3)  # Simulate processing
@@ -52,7 +52,7 @@ class AudioAccessibilityService:
                 has_captions=True,
                 has_transcript=False,
                 has_audio_description=False,
-                processing_time=(datetime.utcnow() - start_time).total_seconds(),
+                processing_time=(datetime.now(datetime.UTC) - start_time).total_seconds(),
                 confidence_score=0.89
             )
 

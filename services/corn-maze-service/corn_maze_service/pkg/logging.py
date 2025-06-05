@@ -5,12 +5,14 @@
 """
 
 import logging
+import logging.config
 from typing import Any
 
 import structlog
 from structlog.types import EventDict, Processor
 
 from corn_maze_service.config import get_settings
+
 
 def add_correlation_id(_logger: Any, _method_name: str, event_dict: EventDict) -> EventDict:
     """添加关联ID到日志事件"""

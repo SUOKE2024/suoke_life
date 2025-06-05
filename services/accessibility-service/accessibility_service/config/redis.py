@@ -4,7 +4,7 @@ Redis configuration for accessibility service.
 
 from typing import Any
 
-from pydantic import Field, validator
+from pydantic import Field, field_validator
 
 try:
     from pydantic_settings import BaseSettings
@@ -18,86 +18,89 @@ class RedisConfig(BaseSettings):
     # Connection settings
     redis_url: str = Field(
         default="redis://localhost:6379/0",
-        env="REDIS_URL",
+        json_schema_extra={"env": "REDIS_URL"},
         description="Redis connection URL"
     )
-    host: str = Field(default="localhost", env="REDIS_HOST", description="Redis host")
-    port: int = Field(default=6379, env="REDIS_PORT", description="Redis port")
-    database: int = Field(default=0, env="REDIS_DB", description="Redis database number")
+    host: str = Field(default="localhost", json_schema_extra={"env": "REDIS_HOST"}, description="Redis host")
+    port: int = Field(default=6379, json_schema_extra={"env": "REDIS_PORT"}, description="Redis port")
+    database: int = Field(default=0, json_schema_extra={"env": "REDIS_DB"}, description="Redis database number")
 
     # Authentication
-    password: str | None = Field(default=None, env="REDIS_PASSWORD", description="Redis password")
-    username: str | None = Field(default=None, env="REDIS_USERNAME", description="Redis username")
+    password: str | None = Field(default=None, json_schema_extra={"env": "REDIS_PASSWORD"}, description="Redis password")
+    username: str | None = Field(default=None, json_schema_extra={"env": "REDIS_USERNAME"}, description="Redis username")
 
     # Connection pool settings
-    max_connections: int = Field(default=50, env="REDIS_MAX_CONNECTIONS", description="Maximum connections")
-    retry_on_timeout: bool = Field(default=True, env="REDIS_RETRY_ON_TIMEOUT", description="Retry on timeout")
+    max_connections: int = Field(default=50, json_schema_extra={"env": "REDIS_MAX_CONNECTIONS"}, description="Maximum connections")
+    retry_on_timeout: bool = Field(default=True, json_schema_extra={"env": "REDIS_RETRY_ON_TIMEOUT"}, description="Retry on timeout")
     health_check_interval: int = Field(
         default=30,
-        env="REDIS_HEALTH_CHECK_INTERVAL",
+        json_schema_extra={"env": "REDIS_HEALTH_CHECK_INTERVAL"},
         description="Health check interval in seconds"
     )
 
     # Timeout settings
-    socket_timeout: float = Field(default=5.0, env="REDIS_SOCKET_TIMEOUT", description="Socket timeout in seconds")
+    socket_timeout: float = Field(default=5.0, json_schema_extra={"env": "REDIS_SOCKET_TIMEOUT"}, description="Socket timeout in seconds")
     socket_connect_timeout: float = Field(
         default=5.0,
-        env="REDIS_CONNECT_TIMEOUT",
+        json_schema_extra={"env": "REDIS_CONNECT_TIMEOUT"},
         description="Connection timeout in seconds"
     )
 
     # SSL/TLS settings
-    ssl_enabled: bool = Field(default=False, env="REDIS_SSL_ENABLED", description="Enable SSL/TLS")
-    ssl_cert_reqs: str | None = Field(default=None, env="REDIS_SSL_CERT_REQS", description="SSL certificate requirements")
-    ssl_ca_certs: str | None = Field(default=None, env="REDIS_SSL_CA_CERTS", description="SSL CA certificates path")
-    ssl_certfile: str | None = Field(default=None, env="REDIS_SSL_CERTFILE", description="SSL certificate file")
-    ssl_keyfile: str | None = Field(default=None, env="REDIS_SSL_KEYFILE", description="SSL key file")
+    ssl_enabled: bool = Field(default=False, json_schema_extra={"env": "REDIS_SSL_ENABLED"}, description="Enable SSL/TLS")
+    ssl_cert_reqs: str | None = Field(default=None, json_schema_extra={"env": "REDIS_SSL_CERT_REQS"}, description="SSL certificate requirements")
+    ssl_ca_certs: str | None = Field(default=None, json_schema_extra={"env": "REDIS_SSL_CA_CERTS"}, description="SSL CA certificates path")
+    ssl_certfile: str | None = Field(default=None, json_schema_extra={"env": "REDIS_SSL_CERTFILE"}, description="SSL certificate file")
+    ssl_keyfile: str | None = Field(default=None, json_schema_extra={"env": "REDIS_SSL_KEYFILE"}, description="SSL key file")
 
     # Caching settings
-    default_ttl: int = Field(default=3600, env="REDIS_DEFAULT_TTL", description="Default TTL in seconds")
-    key_prefix: str = Field(default="accessibility:", env="REDIS_KEY_PREFIX", description="Key prefix")
+    default_ttl: int = Field(default=3600, json_schema_extra={"env": "REDIS_DEFAULT_TTL"}, description="Default TTL in seconds")
+    key_prefix: str = Field(default="accessibility:", json_schema_extra={"env": "REDIS_KEY_PREFIX"}, description="Key prefix")
 
     # Specific cache configurations
     analysis_cache_ttl: int = Field(
         default=7200,
-        env="REDIS_ANALYSIS_CACHE_TTL",
+        json_schema_extra={"env": "REDIS_ANALYSIS_CACHE_TTL"},
         description="Analysis results cache TTL in seconds"
     )
     user_cache_ttl: int = Field(
         default=1800,
-        env="REDIS_USER_CACHE_TTL",
+        json_schema_extra={"env": "REDIS_USER_CACHE_TTL"},
         description="User data cache TTL in seconds"
     )
     session_cache_ttl: int = Field(
         default=3600,
-        env="REDIS_SESSION_CACHE_TTL",
+        json_schema_extra={"env": "REDIS_SESSION_CACHE_TTL"},
         description="Session cache TTL in seconds"
     )
 
     # Performance settings
-    decode_responses: bool = Field(default=True, env="REDIS_DECODE_RESPONSES", description="Decode responses")
-    encoding: str = Field(default="utf-8", env="REDIS_ENCODING", description="Character encoding")
+    decode_responses: bool = Field(default=True, json_schema_extra={"env": "REDIS_DECODE_RESPONSES"}, description="Decode responses")
+    encoding: str = Field(default="utf-8", json_schema_extra={"env": "REDIS_ENCODING"}, description="Character encoding")
 
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
-        case_sensitive = False
-
-    @validator('port')
+    model_config = {
+        "env_file": ".env",
+        "env_file_encoding": "utf-8",
+        "case_sensitive": False,
+    }
+    @field_validator('port')
+    @classmethod
     def validate_port(cls, v):
         """Validate Redis port."""
         if not 1 <= v <= 65535:
             raise ValueError("Port must be between 1 and 65535")
         return v
 
-    @validator('database')
+    @field_validator('database')
+    @classmethod
     def validate_database(cls, v):
         """Validate Redis database number."""
         if not 0 <= v <= 15:
             raise ValueError("Database number must be between 0 and 15")
         return v
 
-    @validator('max_connections')
+    @field_validator('max_connections')
+    @classmethod
     def validate_max_connections(cls, v):
         """Validate max connections."""
         if v < 1:

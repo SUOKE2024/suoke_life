@@ -229,18 +229,30 @@ class ConstitutionCalculator:
             # 根据日主五行确定基本体质
             return f"{day_wuxing}质体质"
     
-    def analyze_constitution(self, birth_datetime: datetime) -> Dict:
+    def analyze_constitution(self, birth_datetime) -> Dict:
         """
         综合体质分析
         
         Args:
-            birth_datetime: 出生时间
+            birth_datetime: 出生时间（datetime对象或dict）
             
         Returns:
             体质分析结果
         """
+        # 处理输入参数
+        if isinstance(birth_datetime, dict):
+            # 如果是dict，转换为datetime对象
+            birth_dt = datetime(
+                year=birth_datetime["year"],
+                month=birth_datetime["month"],
+                day=birth_datetime["day"],
+                hour=birth_datetime.get("hour", 12)  # 默认中午12点
+            )
+        else:
+            birth_dt = birth_datetime
+        
         # 计算八字
-        bazi = self.get_bazi(birth_datetime)
+        bazi = self.get_bazi(birth_dt)
         
         # 分析五行强弱
         wuxing_strength = self.analyze_wuxing_strength(bazi)
@@ -252,7 +264,7 @@ class ConstitutionCalculator:
         constitution_info = CONSTITUTION_DATA.get(constitution_type, {})
         
         # 分析季节影响
-        birth_month = birth_datetime.month
+        birth_month = birth_dt.month
         birth_season = self._get_season(birth_month)
         season_influence = self._analyze_season_influence(constitution_type, birth_season)
         
@@ -266,30 +278,67 @@ class ConstitutionCalculator:
         balance_analysis = self._analyze_wuxing_balance(wuxing_strength)
         
         return {
-            "出生时间": birth_datetime.strftime("%Y年%m月%d日 %H时"),
-            "八字": {
+            "出生时间": birth_dt.strftime("%Y年%m月%d日 %H时"),
+            "八字信息": {
                 "年柱": bazi["年柱"],
                 "月柱": bazi["月柱"], 
                 "日柱": bazi["日柱"],
                 "时柱": bazi["时柱"]
             },
+            "体质类型": constitution_type,  # 提升到顶层
+            "体质分析": {
+                "体质类型": constitution_type,
+                "体质特征": constitution_info.get("体质特征", []),
+                "易患疾病": constitution_info.get("易患疾病", []),
+                "养生原则": constitution_info.get("养生原则", [])
+            },
+            "五行强弱": wuxing_strength,
             "五行分析": {
-                "五行强弱": wuxing_strength,
                 "平衡状态": balance_analysis,
                 "日主": f"{bazi['日干']}({TIANGAN_WUXING[bazi['日干']]})"
             },
-            "体质类型": constitution_type,
-            "体质特征": constitution_info.get("体质特征", []),
-            "易患疾病": constitution_info.get("易患疾病", []),
-            "养生原则": constitution_info.get("养生原则", []),
+            "调理建议": treatment_advice,
             "饮食宜忌": constitution_info.get("饮食宜忌", {}),
             "季节影响": season_influence,
-            "调理方案": treatment_advice,
             "疾病易感性": disease_tendency,
             "个性化建议": self._generate_personalized_advice(
                 constitution_type, wuxing_strength, birth_season
-            )
+            ),
+            "养生要点": constitution_info.get("养生原则", [])
         }
+    
+    def calculate_bazi(self, year_or_birth_info, month=None, day=None, hour=None) -> Dict:
+        """
+        计算八字（兼容测试）
+        
+        Args:
+            year_or_birth_info: 年份或出生信息字典
+            month: 月份（当第一个参数是年份时使用）
+            day: 日期（当第一个参数是年份时使用）
+            hour: 小时（当第一个参数是年份时使用）
+            
+        Returns:
+            八字信息
+        """
+        if isinstance(year_or_birth_info, dict):
+            # 字典格式
+            birth_info = year_or_birth_info
+            birth_dt = datetime(
+                year=birth_info["year"],
+                month=birth_info["month"],
+                day=birth_info["day"],
+                hour=birth_info.get("hour", 12)
+            )
+        else:
+            # 分别传递参数格式
+            birth_dt = datetime(
+                year=year_or_birth_info,
+                month=month,
+                day=day,
+                hour=hour if hour is not None else 12
+            )
+        
+        return self.get_bazi(birth_dt)
     
     def _get_season(self, month: int) -> str:
         """根据月份确定季节"""

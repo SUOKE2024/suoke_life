@@ -10,12 +10,26 @@ from fastapi.testclient import TestClient
 from unittest.mock import AsyncMock, Mock, patch
 
 from human_review_service.api.main import create_app
+from human_review_service.core.database import init_database
 
 
 @pytest.fixture
 def app():
     """创建测试应用"""
-    return create_app(skip_lifespan=True)
+    # 模拟数据库初始化
+    with patch('human_review_service.core.database.get_session_factory') as mock_factory, \
+         patch('human_review_service.core.database.get_session_dependency') as mock_dep:
+        
+        mock_session = AsyncMock()
+        mock_factory.return_value = lambda: mock_session
+        
+        # 模拟数据库依赖
+        async def mock_session_dep():
+            yield mock_session
+        mock_dep.return_value = mock_session_dep()
+        
+        app = create_app(skip_lifespan=True)
+        yield app
 
 
 @pytest.fixture

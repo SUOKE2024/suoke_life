@@ -20,7 +20,7 @@ interface PerformanceMonitor {
 export const usePerformanceMonitor = (
   options: PerformanceMonitorOptions = {}
 ): PerformanceMonitor => {
-  const componentName = options.componentName || 'Unknown';
+  const componentName = options.componentName || "Unknown";
 
   const recordRender = useCallback(() => {
     if (options.trackRender) {
@@ -32,20 +32,22 @@ export const usePerformanceMonitor = (
   const recordMemory = useCallback(() => {
     if (options.trackMemory || options.enableMemoryMonitoring) {
       // TODO: 实际的内存监控逻辑
-      console.log(`[Performance] ${componentName} memory check at ${Date.now()}`);
+      console.log(
+        `[Performance] ${componentName} memory check at ${Date.now()}`
+      );
     }
   }, [componentName, options.trackMemory, options.enableMemoryMonitoring]);
 
   const getMetrics = useCallback(() => {
     return {
       componentName,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
   }, [componentName]);
 
   return {
     recordRender,
     recordMemory,
-    getMetrics
+    getMetrics,
   };
 };

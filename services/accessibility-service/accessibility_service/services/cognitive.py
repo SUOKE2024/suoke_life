@@ -38,7 +38,7 @@ class CognitiveAccessibilityService:
             await self.initialize()
 
         logger.info(f"Starting cognitive analysis for user {request.user_id}")
-        start_time = datetime.utcnow()
+        start_time = datetime.now(datetime.UTC)
 
         try:
             await asyncio.sleep(0.6)
@@ -52,7 +52,7 @@ class CognitiveAccessibilityService:
                 has_clear_structure=True,
                 has_consistent_navigation=True,
                 has_error_prevention=False,
-                processing_time=(datetime.utcnow() - start_time).total_seconds(),
+                processing_time=(datetime.now(datetime.UTC) - start_time).total_seconds(),
                 confidence_score=0.85
             )
 

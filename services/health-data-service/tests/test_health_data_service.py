@@ -78,7 +78,7 @@ class TestHealthDataService:
         }
 
         with patch('health_data_service.services.health_data_service.health_data_repo') as mock_repo:
-            mock_repo.create_health_data.return_value = mock_record
+            mock_repo.create_health_data = AsyncMock(return_value=mock_record)
             
             with patch.object(health_data_service, '_get_db_manager', return_value=AsyncMock()):
                 result = await health_data_service.create(sample_create_request)
@@ -125,7 +125,7 @@ class TestHealthDataService:
         }
 
         with patch('health_data_service.services.health_data_service.health_data_repo') as mock_repo:
-            mock_repo.get_health_data_by_id.return_value = mock_record
+            mock_repo.get_health_data_by_id = AsyncMock(return_value=mock_record)
             
             with patch.object(health_data_service, '_get_db_manager', return_value=AsyncMock()):
                 result = await health_data_service.get_by_id(1)
@@ -138,7 +138,7 @@ class TestHealthDataService:
     async def test_get_health_data_by_id_not_found(self, health_data_service):
         """测试根据ID获取健康数据不存在"""
         with patch('health_data_service.services.health_data_service.health_data_repo') as mock_repo:
-            mock_repo.get_health_data_by_id.return_value = None
+            mock_repo.get_health_data_by_id = AsyncMock(return_value=None)
             
             with patch.object(health_data_service, '_get_db_manager', return_value=AsyncMock()):
                 result = await health_data_service.get_by_id(999)
@@ -150,7 +150,7 @@ class TestHealthDataService:
         """测试成功更新健康数据"""
         update_request = UpdateHealthDataRequest(
             processed_data={"normalized_heart_rate": 72},
-            quality_score=85.0,
+            quality_score=0.85,
             is_validated=True
         )
 
@@ -178,30 +178,30 @@ class TestHealthDataService:
         updated_record = existing_record.copy()
         updated_record.update({
             "processed_data": {"normalized_heart_rate": 72},
-            "quality_score": 85.0,
+            "quality_score": 0.85,
             "is_validated": True,
             "updated_at": datetime.now(),
         })
 
         with patch('health_data_service.services.health_data_service.health_data_repo') as mock_repo:
-            mock_repo.get_health_data_by_id.return_value = existing_record
-            mock_repo.update_health_data.return_value = updated_record
+            mock_repo.get_health_data_by_id = AsyncMock(return_value=existing_record)
+            mock_repo.update_health_data = AsyncMock(return_value=updated_record)
             
             with patch.object(health_data_service, '_get_db_manager', return_value=AsyncMock()):
                 result = await health_data_service.update(1, update_request)
 
                 assert result is not None
                 assert result.processed_data == {"normalized_heart_rate": 72}
-                assert result.quality_score == 85.0
+                assert result.quality_score == 0.85
                 assert result.is_validated is True
 
     @pytest.mark.asyncio
     async def test_update_health_data_not_found(self, health_data_service):
         """测试更新不存在的健康数据"""
-        update_request = UpdateHealthDataRequest(quality_score=85.0)
+        update_request = UpdateHealthDataRequest(quality_score=0.85)
 
         with patch('health_data_service.services.health_data_service.health_data_repo') as mock_repo:
-            mock_repo.get_health_data_by_id.return_value = None
+            mock_repo.get_health_data_by_id = AsyncMock(return_value=None)
             
             with patch.object(health_data_service, '_get_db_manager', return_value=AsyncMock()):
                 with pytest.raises(NotFoundError):
@@ -230,8 +230,8 @@ class TestHealthDataService:
         }
 
         with patch('health_data_service.services.health_data_service.health_data_repo') as mock_repo:
-            mock_repo.get_health_data_by_id.return_value = existing_record
-            mock_repo.delete_health_data.return_value = True
+            mock_repo.get_health_data_by_id = AsyncMock(return_value=existing_record)
+            mock_repo.delete_health_data = AsyncMock(return_value=True)
             
             with patch.object(health_data_service, '_get_db_manager', return_value=AsyncMock()):
                 result = await health_data_service.delete(1)
@@ -242,7 +242,7 @@ class TestHealthDataService:
     async def test_delete_health_data_not_found(self, health_data_service):
         """测试删除不存在的健康数据"""
         with patch('health_data_service.services.health_data_service.health_data_repo') as mock_repo:
-            mock_repo.get_health_data_by_id.return_value = None
+            mock_repo.get_health_data_by_id = AsyncMock(return_value=None)
             
             with patch.object(health_data_service, '_get_db_manager', return_value=AsyncMock()):
                 with pytest.raises(NotFoundError):
@@ -273,7 +273,7 @@ class TestHealthDataService:
         ]
 
         with patch('health_data_service.services.health_data_service.health_data_repo') as mock_repo:
-            mock_repo.get_health_data_by_user.return_value = mock_records
+            mock_repo.get_health_data_by_user = AsyncMock(return_value=mock_records)
             
             with patch.object(health_data_service, '_get_db_manager', return_value=AsyncMock()):
                 result, total = await health_data_service.list(user_id=1)
@@ -285,8 +285,9 @@ class TestHealthDataService:
     @pytest.mark.asyncio
     async def test_list_health_data_missing_user_id(self, health_data_service):
         """测试获取健康数据列表缺少用户ID"""
-        with pytest.raises(ValidationError):
-            await health_data_service.list()
+        with patch.object(health_data_service, '_get_db_manager', return_value=AsyncMock()):
+            with pytest.raises(ValidationError):
+                await health_data_service.list()
 
 
 class TestVitalSignsService:
@@ -303,9 +304,9 @@ class TestVitalSignsService:
         return CreateVitalSignsRequest(
             user_id=1,
             heart_rate=72,
-            systolic_bp=120,
-            diastolic_bp=80,
-            temperature=36.5,
+            blood_pressure_systolic=120,
+            blood_pressure_diastolic=80,
+            body_temperature=36.5,
             weight=70.0,
             height=175.0
         )
@@ -334,7 +335,7 @@ class TestVitalSignsService:
         }
 
         with patch('health_data_service.services.health_data_service.vital_signs_repo') as mock_repo:
-            mock_repo.create_vital_signs.return_value = mock_record
+            mock_repo.create_vital_signs = AsyncMock(return_value=mock_record)
             
             with patch.object(vital_signs_service, '_get_db_manager', return_value=AsyncMock()):
                 result = await vital_signs_service.create(sample_create_request)
@@ -342,8 +343,8 @@ class TestVitalSignsService:
                 assert result.id == 1
                 assert result.user_id == 1
                 assert result.heart_rate == 72
-                assert result.systolic_bp == 120
-                assert result.diastolic_bp == 80
+                assert result.blood_pressure_systolic == 120
+                assert result.blood_pressure_diastolic == 80
                 assert result.bmi == 22.86
 
     @pytest.mark.asyncio
@@ -372,7 +373,7 @@ class TestVitalSignsService:
         ]
 
         with patch('health_data_service.services.health_data_service.vital_signs_repo') as mock_repo:
-            mock_repo.get_vital_signs_by_user.return_value = mock_records
+            mock_repo.get_vital_signs_by_user = AsyncMock(return_value=mock_records)
             
             with patch.object(vital_signs_service, '_get_db_manager', return_value=AsyncMock()):
                 result, total = await vital_signs_service.list(user_id=1)
@@ -410,7 +411,7 @@ class TestTCMDiagnosisService:
         }
 
         with patch('health_data_service.services.health_data_service.tcm_diagnosis_repo') as mock_repo:
-            mock_repo.create_tcm_diagnosis.return_value = mock_record
+            mock_repo.create_tcm_diagnosis = AsyncMock(return_value=mock_record)
             
             with patch.object(tcm_diagnosis_service, '_get_db_manager', return_value=AsyncMock()):
                 result = await tcm_diagnosis_service.create_tcm_diagnosis(
@@ -445,7 +446,7 @@ class TestTCMDiagnosisService:
         ]
 
         with patch('health_data_service.services.health_data_service.tcm_diagnosis_repo') as mock_repo:
-            mock_repo.get_tcm_diagnosis_by_user.return_value = mock_records
+            mock_repo.get_tcm_diagnosis_by_user = AsyncMock(return_value=mock_records)
             
             with patch.object(tcm_diagnosis_service, '_get_db_manager', return_value=AsyncMock()):
                 result = await tcm_diagnosis_service.get_tcm_diagnosis_by_user(user_id=1)

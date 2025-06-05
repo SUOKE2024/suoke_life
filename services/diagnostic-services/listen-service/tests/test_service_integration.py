@@ -8,6 +8,8 @@ import pytest
 import grpc
 import tempfile
 import os
+import numpy as np
+import soundfile as sf
 
 from listen_service.delivery.grpc_server import ListenServiceGRPCServer
 from listen_service.core.audio_analyzer import AudioAnalyzer
@@ -38,12 +40,12 @@ class TestListenServiceIntegration:
         os.remove(test_wav_path)
         os.rmdir(temp_dir)
     
-    @pytest.fixture(scope="class")
-    def grpc_server(self):
+    @pytest.fixture(scope="function")
+    async def grpc_server(self):
         """启动测试 gRPC 服务器"""
         # 创建组件
         cache = AudioCache(MemoryCache())
-        audio_analyzer = AudioAnalyzer(cache=cache)
+        audio_analyzer = AudioAnalyzer(cache_enabled=True)
         tcm_analyzer = TCMFeatureExtractor()
         
         # 创建服务器
@@ -55,12 +57,12 @@ class TestListenServiceIntegration:
         
         # 启动服务器
         port = 50099  # 测试端口
-        server.start(host="localhost", port=port)
+        await server.start_server(host="localhost", port=port)
         
         yield server, port
         
         # 停止服务器
-        server.stop()
+        await server.stop_server()
     
     @pytest.fixture
     def grpc_client(self, grpc_server):

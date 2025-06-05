@@ -7,6 +7,7 @@ import json
 import pickle
 from typing import Any
 
+import redis
 from pydantic import BaseModel
 
 from app.core.logger import get_logger
@@ -241,6 +242,20 @@ class CacheKeys:
 
     WESTERN_DISEASE_LIST = "western_diseases:list"
     WESTERN_DISEASE_DETAIL = "western_disease:{disease_id}"
+    WESTERN_DISEASE_BY_SYNDROME = "western_diseases:syndrome"
+
+    # 预防医学证据相关
+    PREVENTION_EVIDENCE_LIST = "prevention_evidence:list"
+    PREVENTION_EVIDENCE_DETAIL = "prevention_evidence:{evidence_id}"
+
+    # 中西医结合治疗相关
+    INTEGRATED_TREATMENT_LIST = "integrated_treatments:list"
+    INTEGRATED_TREATMENT_DETAIL = "integrated_treatment:{treatment_id}"
+
+    # 生活方式干预相关
+    LIFESTYLE_INTERVENTION_LIST = "lifestyle_interventions:list"
+    LIFESTYLE_INTERVENTION_DETAIL = "lifestyle_intervention:{intervention_id}"
+    LIFESTYLE_INTERVENTION_BY_CONSTITUTION = "lifestyle_interventions:constitution"
 
     # 统计信息
     API_STATS = "api:stats:{endpoint}"

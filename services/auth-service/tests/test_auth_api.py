@@ -9,7 +9,7 @@ from sqlalchemy.orm import sessionmaker
 
 from auth_service.main import app
 from auth_service.core.database import get_db
-from auth_service.models.base import Base
+from auth_service.models.base import BaseModel
 
 
 # 测试数据库配置
@@ -47,10 +47,10 @@ def event_loop():
 async def setup_database():
     """设置测试数据库"""
     async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+        await conn.run_sync(BaseModel.metadata.create_all)
     yield
     async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.drop_all)
+        await conn.run_sync(BaseModel.metadata.drop_all)
 
 
 @pytest.fixture

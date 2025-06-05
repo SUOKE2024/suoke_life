@@ -2,11 +2,11 @@
 User-related data models.
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 from typing import Any
 
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 
 
 class UserRole(str, Enum):
@@ -49,18 +49,20 @@ class User(BaseModel):
     )
 
     # Metadata
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     last_login: datetime | None = Field(None, description="Last login timestamp")
 
-    @validator('email')
+    @field_validator('email')
+    @classmethod
     def validate_email(cls, v):
         """Validate email format."""
         if '@' not in v:
             raise ValueError('Invalid email format')
         return v.lower()
 
-    @validator('username')
+    @field_validator('username')
+    @classmethod
     def validate_username(cls, v):
         """Validate username."""
         if len(v) < 3:
@@ -102,8 +104,8 @@ class UserProfile(BaseModel):
     last_analysis: datetime | None = Field(None, description="Last analysis timestamp")
 
     # Metadata
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
 class UserPreferences(BaseModel):
@@ -137,10 +139,11 @@ class UserPreferences(BaseModel):
     high_contrast: bool = Field(default=False, description="High contrast mode")
 
     # Metadata
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
-    @validator('theme')
+    @field_validator('theme')
+    @classmethod
     def validate_theme(cls, v):
         """Validate theme preference."""
         allowed_themes = ['light', 'dark', 'auto']
@@ -148,7 +151,8 @@ class UserPreferences(BaseModel):
             raise ValueError(f'Theme must be one of: {allowed_themes}')
         return v
 
-    @validator('font_size')
+    @field_validator('font_size')
+    @classmethod
     def validate_font_size(cls, v):
         """Validate font size preference."""
         allowed_sizes = ['small', 'medium', 'large', 'extra-large']

@@ -15,6 +15,17 @@ from .websocket import router as websocket_router
 # 创建主路由器
 router = APIRouter()
 
+# 根端点
+@router.get("/", tags=["Root"])
+async def root():
+    """API根端点"""
+    return {
+        "message": "human-review-service is running",
+        "service": "Human Review Service",
+        "version": "1.0.0",
+        "status": "active"
+    }
+
 # 注册子路由
 router.include_router(reviews_router, prefix="/tasks", tags=["Tasks"])
 router.include_router(reviewers_router, prefix="/reviewers", tags=["Reviewers"])

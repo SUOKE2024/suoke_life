@@ -100,8 +100,10 @@ class TestInquirySession(unittest.TestCase):
         # 获取最近3条消息
         recent_history = self.session.get_conversation_history(max_messages=3)
         self.assertEqual(len(recent_history), 3)
-        self.assertEqual(recent_history[0]["content"], "用户问题2")
-        self.assertEqual(recent_history[1]["content"], "助手回复2")
+        # 最近3条消息应该是：助手回复1、用户问题2、助手回复2
+        self.assertEqual(recent_history[0]["content"], "助手回复1")
+        self.assertEqual(recent_history[1]["content"], "用户问题2")
+        self.assertEqual(recent_history[2]["content"], "助手回复2")
 
         # 检查格式
         self.assertIn("role", recent_history[0])

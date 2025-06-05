@@ -199,9 +199,8 @@ class PatternMapper:
 
         result = TCMPatternMappingResult(
             patterns=tcm_patterns,
-            primary_pattern=primary_pattern,
             confidence=confidence,
-            analysis=analysis,
+            interpretation=analysis,
         )
 
         self.logger.info(

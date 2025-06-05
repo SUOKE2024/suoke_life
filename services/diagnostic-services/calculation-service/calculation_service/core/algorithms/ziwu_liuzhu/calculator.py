@@ -132,6 +132,74 @@ class ZiwuLiuzhuCalculator:
         
         return {"疾病": disease, "建议": "请咨询专业医师确定最佳治疗时间"}
     
+    def get_best_treatment_times(self, disease: str) -> List[Dict]:
+        """
+        获取疾病的最佳治疗时间（兼容测试）
+        
+        Args:
+            disease: 疾病名称
+            
+        Returns:
+            最佳治疗时间信息列表
+        """
+        result = self.get_optimal_treatment_time(disease)
+        # 将单个结果包装成列表格式
+        return [result] if result else []
+    
+    def analyze_current_time(self, dt: Optional[datetime] = None) -> Dict:
+        """
+        分析当前时间（兼容测试）
+        
+        Args:
+            dt: 指定时间，默认为当前时间
+            
+        Returns:
+            当前时间分析结果
+        """
+        if dt is None:
+            dt = datetime.now()
+        
+        shichen = self.get_current_shichen(dt)
+        meridian_info = self.get_current_meridian(dt)
+        
+        # 生成调养建议
+        meridian_name = meridian_info.get("经络", "")
+        advice = self._get_meridian_health_advice(meridian_name, shichen)
+        
+        return {
+            "当前时辰": shichen,
+            "当前经络": meridian_name,
+            "经络特点": meridian_info.get("脏腑信息", {}),
+            "最佳治疗时间": meridian_info.get("最佳针灸时间", ""),
+            "气血状态": meridian_info.get("气血状态", ""),
+            "主治疾病": meridian_info.get("主治疾病", []),
+            "禁忌时间": meridian_info.get("禁忌时间", ""),
+            "调养建议": advice,
+            "分析时间": dt.strftime("%Y-%m-%d %H:%M:%S")
+        }
+    
+    def get_meridian_schedule(self) -> Dict:
+        """
+        获取经络时间表（兼容测试）
+        
+        Returns:
+            经络时间表
+        """
+        schedule = {}
+        
+        for meridian, info in MERIDIAN_TIME_MAP.items():
+            shichen = info["时辰"]
+            schedule[shichen] = {
+                "经络": meridian,
+                "时间": info["时间"],
+                "气血": info["气血"],
+                "主治": info["主治"],
+                "最佳针灸时间": info["最佳针灸时间"],
+                "禁忌时间": info["禁忌时间"]
+            }
+        
+        return schedule
+    
     def calculate_lingui_bafa(self, dt: Optional[datetime] = None) -> Dict:
         """
         计算灵龟八法穴位开合

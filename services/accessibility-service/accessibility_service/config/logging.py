@@ -5,7 +5,7 @@ Logging configuration for accessibility service.
 import logging
 from typing import Any
 
-from pydantic import Field, validator
+from pydantic import Field, field_validator
 
 try:
     from pydantic_settings import BaseSettings
@@ -16,87 +16,88 @@ class LoggingConfig(BaseSettings):
     """Logging configuration settings."""
 
     # Basic logging settings
-    log_level: str = Field(default="INFO", env="LOG_LEVEL", description="Logging level")
-    log_format: str = Field(default="json", env="LOG_FORMAT", description="Log format (json or text)")
+    log_level: str = Field(default="INFO", json_schema_extra={"env": "LOG_LEVEL"}, description="Logging level")
+    log_format: str = Field(default="json", json_schema_extra={"env": "LOG_FORMAT"}, description="Log format (json or text)")
 
     # File logging
-    log_file: str | None = Field(default=None, env="LOG_FILE", description="Log file path")
+    log_file: str | None = Field(default=None, json_schema_extra={"env": "LOG_FILE"}, description="Log file path")
     log_file_max_size: int = Field(
         default=10 * 1024 * 1024,  # 10MB
-        env="LOG_FILE_MAX_SIZE",
+        json_schema_extra={"env": "LOG_FILE_MAX_SIZE"},
         description="Maximum log file size in bytes"
     )
     log_file_backup_count: int = Field(
         default=5,
-        env="LOG_FILE_BACKUP_COUNT",
+        json_schema_extra={"env": "LOG_FILE_BACKUP_COUNT"},
         description="Number of backup log files to keep"
     )
 
     # Console logging
-    console_enabled: bool = Field(default=True, env="LOG_CONSOLE_ENABLED", description="Enable console logging")
-    console_level: str = Field(default="INFO", env="LOG_CONSOLE_LEVEL", description="Console log level")
+    console_enabled: bool = Field(default=True, json_schema_extra={"env": "LOG_CONSOLE_ENABLED"}, description="Enable console logging")
+    console_level: str = Field(default="INFO", json_schema_extra={"env": "LOG_CONSOLE_LEVEL"}, description="Console log level")
 
     # Structured logging
-    structured_logging: bool = Field(default=True, env="LOG_STRUCTURED", description="Enable structured logging")
-    include_timestamp: bool = Field(default=True, env="LOG_INCLUDE_TIMESTAMP", description="Include timestamp")
-    include_level: bool = Field(default=True, env="LOG_INCLUDE_LEVEL", description="Include log level")
-    include_logger_name: bool = Field(default=True, env="LOG_INCLUDE_LOGGER", description="Include logger name")
-    include_module: bool = Field(default=True, env="LOG_INCLUDE_MODULE", description="Include module name")
-    include_function: bool = Field(default=False, env="LOG_INCLUDE_FUNCTION", description="Include function name")
-    include_line_number: bool = Field(default=False, env="LOG_INCLUDE_LINE", description="Include line number")
+    structured_logging: bool = Field(default=True, json_schema_extra={"env": "LOG_STRUCTURED"}, description="Enable structured logging")
+    include_timestamp: bool = Field(default=True, json_schema_extra={"env": "LOG_INCLUDE_TIMESTAMP"}, description="Include timestamp")
+    include_level: bool = Field(default=True, json_schema_extra={"env": "LOG_INCLUDE_LEVEL"}, description="Include log level")
+    include_logger_name: bool = Field(default=True, json_schema_extra={"env": "LOG_INCLUDE_LOGGER"}, description="Include logger name")
+    include_module: bool = Field(default=True, json_schema_extra={"env": "LOG_INCLUDE_MODULE"}, description="Include module name")
+    include_function: bool = Field(default=False, json_schema_extra={"env": "LOG_INCLUDE_FUNCTION"}, description="Include function name")
+    include_line_number: bool = Field(default=False, json_schema_extra={"env": "LOG_INCLUDE_LINE"}, description="Include line number")
 
     # Request logging
     request_logging_enabled: bool = Field(
         default=True,
-        env="LOG_REQUESTS_ENABLED",
+        json_schema_extra={"env": "LOG_REQUESTS_ENABLED"},
         description="Enable request logging"
     )
-    request_log_body: bool = Field(default=False, env="LOG_REQUEST_BODY", description="Log request body")
-    request_log_headers: bool = Field(default=False, env="LOG_REQUEST_HEADERS", description="Log request headers")
+    request_log_body: bool = Field(default=False, json_schema_extra={"env": "LOG_REQUEST_BODY"}, description="Log request body")
+    request_log_headers: bool = Field(default=False, json_schema_extra={"env": "LOG_REQUEST_HEADERS"}, description="Log request headers")
 
     # Performance logging
     performance_logging_enabled: bool = Field(
         default=True,
-        env="LOG_PERFORMANCE_ENABLED",
+        json_schema_extra={"env": "LOG_PERFORMANCE_ENABLED"},
         description="Enable performance logging"
     )
     slow_request_threshold: float = Field(
         default=1.0,
-        env="LOG_SLOW_REQUEST_THRESHOLD",
+        json_schema_extra={"env": "LOG_SLOW_REQUEST_THRESHOLD"},
         description="Slow request threshold in seconds"
     )
 
     # Error logging
-    error_logging_enabled: bool = Field(default=True, env="LOG_ERRORS_ENABLED", description="Enable error logging")
+    error_logging_enabled: bool = Field(default=True, json_schema_extra={"env": "LOG_ERRORS_ENABLED"}, description="Enable error logging")
     error_include_traceback: bool = Field(
         default=True,
-        env="LOG_ERROR_TRACEBACK",
+        json_schema_extra={"env": "LOG_ERROR_TRACEBACK"},
         description="Include traceback in error logs"
     )
 
     # External logging services
-    sentry_enabled: bool = Field(default=False, env="SENTRY_ENABLED", description="Enable Sentry logging")
-    sentry_dsn: str | None = Field(default=None, env="SENTRY_DSN", description="Sentry DSN")
-    sentry_environment: str = Field(default="development", env="SENTRY_ENVIRONMENT", description="Sentry environment")
+    sentry_enabled: bool = Field(default=False, json_schema_extra={"env": "SENTRY_ENABLED"}, description="Enable Sentry logging")
+    sentry_dsn: str | None = Field(default=None, json_schema_extra={"env": "SENTRY_DSN"}, description="Sentry DSN")
+    sentry_environment: str = Field(default="development", json_schema_extra={"env": "SENTRY_ENVIRONMENT"}, description="Sentry environment")
 
     # Log filtering
     filter_sensitive_data: bool = Field(
         default=True,
-        env="LOG_FILTER_SENSITIVE",
+        json_schema_extra={"env": "LOG_FILTER_SENSITIVE"},
         description="Filter sensitive data from logs"
     )
     sensitive_fields: list = Field(
         default_factory=lambda: ["password", "token", "secret", "key", "authorization"],
-        env="LOG_SENSITIVE_FIELDS",
+        json_schema_extra={"env": "LOG_SENSITIVE_FIELDS"},
         description="Fields to filter from logs"
     )
 
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
-        case_sensitive = False
-
-    @validator('log_level', 'console_level')
+    model_config = {
+        "env_file": ".env",
+        "env_file_encoding": "utf-8",
+        "case_sensitive": False,
+    }
+    @field_validator('log_level', 'console_level')
+    @classmethod
     def validate_log_level(cls, v):
         """Validate log level."""
         valid_levels = ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']
@@ -104,7 +105,8 @@ class LoggingConfig(BaseSettings):
             raise ValueError(f"Log level must be one of: {valid_levels}")
         return v.upper()
 
-    @validator('log_format')
+    @field_validator('log_format')
+    @classmethod
     def validate_log_format(cls, v):
         """Validate log format."""
         valid_formats = ['json', 'text', 'structured']

@@ -8,7 +8,7 @@ import {
   Image,
   TextInput,
   Platform,
-  StatusBar
+  StatusBar,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
@@ -36,7 +36,10 @@ type MainTabParamList = {
   Profile: undefined;
 };
 
-type HomeScreenNavigationProp = NativeStackNavigationProp<MainTabParamList, "Home">;
+type HomeScreenNavigationProp = NativeStackNavigationProp<
+  MainTabParamList,
+  "Home"
+>;
 
 const HomeScreen: React.FC = () => {
   const navigation = useNavigation<HomeScreenNavigationProp>();
@@ -57,7 +60,7 @@ const HomeScreen: React.FC = () => {
         unread: 1,
         type: "agent",
         isOnline: true,
-        tag: "健康助手"
+        tag: "健康助手",
       },
       {
         id: "xiaoke",
@@ -68,7 +71,7 @@ const HomeScreen: React.FC = () => {
         unread: 0,
         type: "agent",
         isOnline: true,
-        tag: "中医辨证"
+        tag: "中医辨证",
       },
       {
         id: "laoke",
@@ -79,7 +82,7 @@ const HomeScreen: React.FC = () => {
         unread: 2,
         type: "agent",
         isOnline: false,
-        tag: "健康顾问"
+        tag: "健康顾问",
       },
       {
         id: "soer",
@@ -90,7 +93,7 @@ const HomeScreen: React.FC = () => {
         unread: 0,
         type: "agent",
         isOnline: true,
-        tag: "生活教练"
+        tag: "生活教练",
       },
       // 名医
       {
@@ -101,7 +104,7 @@ const HomeScreen: React.FC = () => {
         time: "周二",
         unread: 0,
         type: "doctor",
-        tag: "中医内科"
+        tag: "中医内科",
       },
       {
         id: "doctor2",
@@ -111,7 +114,7 @@ const HomeScreen: React.FC = () => {
         time: "上周",
         unread: 0,
         type: "doctor",
-        tag: "针灸专家"
+        tag: "针灸专家",
       },
       // 用户
       {
@@ -121,7 +124,7 @@ const HomeScreen: React.FC = () => {
         message: "[王医生]: 分享了一篇养生文章",
         time: "周三",
         unread: 3,
-        type: "user"
+        type: "user",
       },
       {
         id: "user2",
@@ -130,16 +133,17 @@ const HomeScreen: React.FC = () => {
         message: "[妈妈]: 今天按时吃药了吗？",
         time: "3/15",
         unread: 0,
-        type: "user"
-      }
+        type: "user",
+      },
     ];
     setChatList(mockChatList);
   }, []);
 
   // 过滤聊天列表
-  const filteredChatList = chatList.filter(chat =>
-    chat.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    chat.message.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredChatList = chatList.filter(
+    (chat) =>
+      chat.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      chat.message.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   // 处理聊天项点击
@@ -168,7 +172,7 @@ const HomeScreen: React.FC = () => {
           <View
             style={[
               styles.onlineIndicator,
-              { backgroundColor: item.isOnline ? "#4CAF50" : "#9E9E9E" }
+              { backgroundColor: item.isOnline ? "#4CAF50" : "#9E9E9E" },
             ]}
           />
         )}
@@ -208,7 +212,7 @@ const HomeScreen: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#f6f6f6" />
-      
+
       {/* 头部 */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>索克生活</Text>

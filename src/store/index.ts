@@ -13,14 +13,14 @@ const authReducer = (state = { isAuthenticated: false }, action: any) => {
 };
 export const store = configureStore({
   reducer: {
-    auth: authReducer
+    auth: authReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: ['persist/PERSIST']
-      }
-    })
+        ignoredActions: ["persist/PERSIST"],
+      },
+    }),
 });
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

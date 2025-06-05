@@ -1,0 +1,294 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "A2A智能体网络 - 概览",
+    "tags": ["a2a", "agent", "network", "overview"],
+    "style": "dark",
+    "timezone": "browser",
+    "refresh": "30s",
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "panels": [
+      {
+        "id": 1,
+        "title": "智能体状态概览",
+        "type": "stat",
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 0
+        },
+        "targets": [
+          {
+            "expr": "sum(agent_status{status=\"active\"})",
+            "legendFormat": "活跃智能体",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "工作流执行状态",
+        "type": "piechart",
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 0
+        },
+        "targets": [
+          {
+            "expr": "sum by (status) (workflow_executions_total)",
+            "legendFormat": "{{status}}",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "智能体请求率",
+        "type": "graph",
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 0,
+          "y": 8
+        },
+        "targets": [
+          {
+            "expr": "rate(agent_requests_total[5m])",
+            "legendFormat": "{{agent_id}}",
+            "refId": "A"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "请求/秒",
+            "show": true
+          },
+          {
+            "show": true
+          }
+        ],
+        "xAxis": {
+          "show": true
+        },
+        "lines": true,
+        "fill": 1,
+        "linewidth": 2,
+        "points": false,
+        "pointradius": 2,
+        "bars": false,
+        "stack": false,
+        "percentage": false,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "nullPointMode": "null"
+      },
+      {
+        "id": 4,
+        "title": "智能体响应时间",
+        "type": "graph",
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 12,
+          "y": 8
+        },
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(agent_response_time_seconds_bucket[5m]))",
+            "legendFormat": "P95",
+            "refId": "A"
+          },
+          {
+            "expr": "histogram_quantile(0.50, rate(agent_response_time_seconds_bucket[5m]))",
+            "legendFormat": "P50",
+            "refId": "B"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "响应时间 (秒)",
+            "show": true
+          },
+          {
+            "show": true
+          }
+        ],
+        "xAxis": {
+          "show": true
+        },
+        "lines": true,
+        "fill": 1,
+        "linewidth": 2,
+        "points": false,
+        "pointradius": 2,
+        "bars": false,
+        "stack": false,
+        "percentage": false,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "nullPointMode": "null"
+      },
+      {
+        "id": 5,
+        "title": "错误率",
+        "type": "singlestat",
+        "gridPos": {
+          "h": 8,
+          "w": 6,
+          "x": 0,
+          "y": 17
+        },
+        "targets": [
+          {
+            "expr": "rate(agent_requests_total{status=\"error\"}[5m]) / rate(agent_requests_total[5m]) * 100",
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "valueName": "current",
+        "format": "percent",
+        "thresholds": "5,10",
+        "colorBackground": true,
+        "colors": ["#299c46", "#e24d42", "#d44a3a"],
+        "sparkline": {
+          "show": true,
+          "full": false,
+          "lineColor": "rgb(31, 120, 193)",
+          "fillColor": "rgba(31, 118, 189, 0.18)"
+        },
+        "gauge": {
+          "show": false,
+          "minValue": 0,
+          "maxValue": 100,
+          "thresholdMarkers": true
+        }
+      },
+      {
+        "id": 6,
+        "title": "活跃工作流数量",
+        "type": "singlestat",
+        "gridPos": {
+          "h": 8,
+          "w": 6,
+          "x": 6,
+          "y": 17
+        },
+        "targets": [
+          {
+            "expr": "sum(workflow_executions{status=\"running\"})",
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "valueName": "current",
+        "format": "short",
+        "thresholds": "50,100",
+        "colorBackground": false,
+        "colors": ["#299c46", "#e24d42", "#d44a3a"],
+        "sparkline": {
+          "show": true,
+          "full": false,
+          "lineColor": "rgb(31, 120, 193)",
+          "fillColor": "rgba(31, 118, 189, 0.18)"
+        }
+      },
+      {
+        "id": 7,
+        "title": "系统资源使用率",
+        "type": "graph",
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 17
+        },
+        "targets": [
+          {
+            "expr": "process_resident_memory_bytes / 1024 / 1024",
+            "legendFormat": "内存使用 (MB)",
+            "refId": "A"
+          },
+          {
+            "expr": "rate(process_cpu_seconds_total[5m]) * 100",
+            "legendFormat": "CPU使用率 (%)",
+            "refId": "B"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "使用量",
+            "show": true
+          },
+          {
+            "show": true
+          }
+        ],
+        "xAxis": {
+          "show": true
+        },
+        "lines": true,
+        "fill": 1,
+        "linewidth": 2,
+        "points": false,
+        "pointradius": 2,
+        "bars": false,
+        "stack": false,
+        "percentage": false,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "nullPointMode": "null"
+      }
+    ],
+    "templating": {
+      "list": [
+        {
+          "name": "agent",
+          "type": "query",
+          "query": "label_values(agent_requests_total, agent_id)",
+          "refresh": 1,
+          "includeAll": true,
+          "multi": true
+        }
+      ]
+    },
+    "annotations": {
+      "list": [
+        {
+          "name": "Deployments",
+          "datasource": "prometheus",
+          "enable": true,
+          "expr": "changes(up[1m]) > 0",
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "titleFormat": "Deployment"
+        }
+      ]
+    }
+  }
+} 

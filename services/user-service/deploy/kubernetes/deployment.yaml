@@ -5,98 +5,79 @@ metadata:
   namespace: suoke-life
   labels:
     app: user-service
-    tier: backend
-    part-of: suoke-life
+    version: v1
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: user-service
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
+      version: v1
   template:
     metadata:
       labels:
         app: user-service
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/path: "/metrics"
-        prometheus.io/port: "8000"
+        version: v1
     spec:
       containers:
       - name: user-service
-        image: ${IMAGE_REGISTRY}/suoke-life/user-service:${IMAGE_TAG}
-        imagePullPolicy: Always
+        image: suoke-life/user-service:latest
         ports:
-        - name: http
-          containerPort: 8000
-        - name: grpc
-          containerPort: 50051
-        resources:
-          requests:
-            cpu: 100m
-            memory: 256Mi
-          limits:
-            cpu: 500m
-            memory: 512Mi
+        - containerPort: 8000
+          name: http
         env:
-        - name: USER_DB_PATH
-          value: /data/user_service.db
-        - name: ENVIRONMENT
+        - name: DATABASE_URL
           valueFrom:
-            configMapKeyRef:
-              name: suoke-environment
-              key: environment
-        - name: USER_SERVICE_VERSION
+            secretKeyRef:
+              name: user-service-secrets
+              key: database-url
+        - name: REDIS_URL
           valueFrom:
-            configMapKeyRef:
-              name: user-service-config
-              key: version
+            secretKeyRef:
+              name: user-service-secrets
+              key: redis-url
         - name: JWT_SECRET_KEY
           valueFrom:
             secretKeyRef:
               name: user-service-secrets
-              key: jwt-secret
-        - name: PYTHONUNBUFFERED
-          value: "1"
-        volumeMounts:
-        - name: config-volume
-          mountPath: /app/config
-        - name: data-volume
-          mountPath: /data
-        startupProbe:
-          httpGet:
-            path: /health
-            port: http
-          initialDelaySeconds: 10
-          periodSeconds: 5
-          timeoutSeconds: 2
-          failureThreshold: 6
-        readinessProbe:
-          httpGet:
-            path: /health
-            port: http
-          periodSeconds: 10
-          timeoutSeconds: 2
-          successThreshold: 1
-          failureThreshold: 3
+              key: jwt-secret-key
+        - name: ENVIRONMENT
+          value: "production"
+        - name: LOG_LEVEL
+          value: "INFO"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
         livenessProbe:
           httpGet:
             path: /health
-            port: http
-          periodSeconds: 30
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
           timeoutSeconds: 5
           failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        volumeMounts:
+        - name: config
+          mountPath: /app/config
+          readOnly: true
       volumes:
-      - name: config-volume
+      - name: config
         configMap:
           name: user-service-config
-      - name: data-volume
-        persistentVolumeClaim:
-          claimName: user-service-data
+      imagePullSecrets:
+      - name: registry-secret
+
 ---
 apiVersion: v1
 kind: Service
@@ -109,13 +90,56 @@ spec:
   selector:
     app: user-service
   ports:
-  - name: http
-    port: 80
-    targetPort: http
-  - name: grpc
-    port: 50051
-    targetPort: grpc
+  - port: 80
+    targetPort: 8000
+    protocol: TCP
+    name: http
   type: ClusterIP
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: user-service-config
+  namespace: suoke-life
+data:
+  config.yaml: |
+    server:
+      host: "0.0.0.0"
+      port: 8000
+      workers: 4
+    
+    database:
+      pool_size: 20
+      max_overflow: 30
+      pool_timeout: 30
+      pool_recycle: 3600
+    
+    redis:
+      max_connections: 100
+      retry_on_timeout: true
+      socket_timeout: 5
+    
+    logging:
+      level: INFO
+      format: json
+    
+    monitoring:
+      enabled: true
+      metrics_port: 9090
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: user-service-secrets
+  namespace: suoke-life
+type: Opaque
+data:
+  # Base64编码的密钥，实际部署时需要替换
+  database-url: cG9zdGdyZXNxbDovL3VzZXI6cGFzc3dvcmRAcG9zdGdyZXM6NTQzMi9kYg==
+  redis-url: cmVkaXM6Ly9yZWRpczozNjM3OS9kYg==
+  jwt-secret-key: c3VwZXItc2VjcmV0LWp3dC1rZXk=
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -148,63 +172,6 @@ spec:
             name: user-service
             port:
               name: http
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: user-service-config
-  namespace: suoke-life
-data:
-  version: "1.0.0"
-  config.yaml: |
-    server:
-      host: "0.0.0.0"
-      port: 8000
-      expose_docs: false
-      cors:
-        enabled: true
-        origins:
-          - "https://app.suoke.life"
-          - "https://suoke.life"
-    
-    grpc:
-      enabled: true
-      port: 50051
-    
-    database:
-      path: "/data/user_service.db"
-      audit_log_path: "/data/user_audit_logs.db"
-      pool_size: 20
-      timeout: 30
-    
-    security:
-      rbac:
-        enabled: true
-        excluded_paths:
-          - "/health"
-          - "/metrics"
-          - "/docs"
-          - "/redoc"
-          - "/openapi.json"
-      rate_limit:
-        enabled: true
-    
-    logging:
-      level: "INFO"
-      log_to_file: true
-      log_dir: "/data/logs"
-      rotation:
-        max_bytes: 10485760  # 10MB
-        backup_count: 10
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: user-service-secrets
-  namespace: suoke-life
-type: Opaque
-data:
-  jwt-secret: c2Vj{{ "cmV0LXBhc3N3b3JkLWZvci1kZXYtZW52aXJvbm1lbnQtb25seS1jaGFuZ2UtaW4tcHJvZHVjdGlvbg==" | b64encode | b64encode }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

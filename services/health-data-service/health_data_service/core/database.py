@@ -10,9 +10,9 @@ import contextlib
 from typing import AsyncGenerator, Optional, Any, Dict, List
 from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, DateTime, JSON, Float, Boolean, Text
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
-from sqlalchemy.pool import QueuePool
+from sqlalchemy.pool import QueuePool, NullPool
 from datetime import datetime
 import logging
 
@@ -125,14 +125,10 @@ class DatabaseManager:
     async def initialize(self):
         """初始化数据库连接"""
         try:
-            # 创建异步引擎
+            # 创建异步引擎 - 异步引擎使用NullPool
             self._async_engine = create_async_engine(
                 self.settings.database.postgres_url,
-                poolclass=QueuePool,
-                pool_size=self.settings.database.pool_size,
-                max_overflow=self.settings.database.max_overflow,
-                pool_timeout=self.settings.database.pool_timeout,
-                pool_recycle=self.settings.database.pool_recycle,
+                poolclass=NullPool,  # 异步引擎使用NullPool
                 echo=self.settings.debug,
             )
             

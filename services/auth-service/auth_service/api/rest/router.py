@@ -7,6 +7,12 @@ from auth_service.api.rest.endpoints import auth, users, security
 # 创建API路由器
 api_router = APIRouter()
 
+# 根路径端点
+@api_router.get("/")
+async def api_info():
+    """API信息端点"""
+    return {"message": "auth-service is running", "version": "1.0.0"}
+
 # 健康检查路由
 @api_router.get("/health")
 async def health_check():

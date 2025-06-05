@@ -87,7 +87,7 @@ class IntegrationService:
 
         # Create integrated response
         response = AccessibilityResponse(
-            request_id=f"req_{int(datetime.utcnow().timestamp())}",
+            request_id=f"req_{int(datetime.now(datetime.UTC).timestamp())}",
             user_id=request.user_id if request else "unknown",
             session_id=request.session_id if request else None,
             overall_score=overall_score,

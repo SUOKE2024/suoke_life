@@ -7,6 +7,7 @@ from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 from typing import Any
 
+import redis
 from neo4j import AsyncGraphDatabase
 
 from app.core.config import get_settings
@@ -179,11 +180,13 @@ def get_container() -> Container:
     return _container
 
 @asynccontextmanager
-async def lifespan_context() -> AsyncGenerator[Container]:
+async def lifespan_context(app: Any = None) -> AsyncGenerator[Container, None]:
     """应用生命周期上下文管理器"""
     container = get_container()
     try:
         await container.initialize()
+        if app is not None:
+            app.state.container = container
         yield container
     finally:
         await container.cleanup()

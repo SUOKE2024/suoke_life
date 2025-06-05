@@ -427,3 +427,41 @@ class WuyunLiuqiCalculator:
         ])
         
         return focus 
+    
+    def analyze_wuyun_liuqi(self, year: int) -> Dict:
+        """
+        五运六气分析（兼容测试）
+        
+        Args:
+            year: 年份
+            
+        Returns:
+            五运六气分析结果
+        """
+        # 使用指定年份的1月1日进行分析
+        analysis_date = datetime(year, 1, 1)
+        return self.analyze_current_period(analysis_date)
+    
+    def calculate_yunqi(self, year: int) -> Dict:
+        """
+        计算运气（兼容测试）
+        
+        Args:
+            year: 年份
+            
+        Returns:
+            运气计算结果
+        """
+        wuyun_info = self.get_wuyun(year)
+        sitian_info = self.get_sitian_zaiquan(year)
+        
+        return {
+            "年份": year,
+            "五运": wuyun_info,
+            "主运": wuyun_info.get("运", ""),  # 添加主运字段
+            "客运": sitian_info.get("司天", ""),  # 添加客运字段（司天作为客运）
+            "司天": sitian_info.get("司天", ""),  # 添加司天字段
+            "在泉": sitian_info.get("在泉", ""),  # 添加在泉字段
+            "司天在泉": sitian_info,
+            "年运特点": f"{wuyun_info.get('运', '')}运{wuyun_info.get('运势', '')}，{sitian_info.get('司天', '')}司天"
+        }

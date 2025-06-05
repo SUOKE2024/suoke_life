@@ -849,20 +849,3 @@ class KnowledgeService:
         except Exception as e:
             logger.error(f"获取体质相关生活方式干预失败: {e}")
             return LifestyleInterventionListResponse(data=[], total=0, limit=limit, offset=offset)
-
-    # 五诊相关知识
-    if '五诊' in query or '望闻问切算' in query:
-        knowledge_items.extend([
-            {
-                'id': 'tcm_5d_001',
-                'title': '中医五诊概述',
-                'content': '中医五诊包括望、闻、问、切、算五种诊断方法，是中医诊断学的核心内容。',
-                'category': '中医诊断',
-                'tags': ['五诊', '诊断方法'],
-                'confidence': 0.95
-            },
-            {
-                'id': 'tcm_5d_002', 
-                'title': '算诊在五诊中的作用',
-                'content': '算诊是基于易学、天文历法的计算诊断方法，是传统五诊的重要补充。',
-                'category': '中医诊断',

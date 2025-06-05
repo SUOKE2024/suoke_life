@@ -584,6 +584,14 @@ class AudioCache:
             logger.error("清空缓存失败", error=str(e))
             return False
 
+    async def get(self, key: str) -> Any | None:
+        """通用获取方法，兼容AudioAnalyzer"""
+        return await self.backend.get(key)
+
+    async def set(self, key: str, value: Any, ttl: int | None = None) -> bool:
+        """通用设置方法，兼容AudioAnalyzer"""
+        return await self.backend.set(key, value, ttl)
+
 # 缓存装饰器
 def cache_result(
     cache_instance: AudioCache,

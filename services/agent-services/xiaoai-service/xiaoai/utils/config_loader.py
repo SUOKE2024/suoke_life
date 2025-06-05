@@ -1,208 +1,203 @@
 #!/usr/bin/env python3
-"""
-配置加载器工具
-用于加载服务的配置信息
-"""
+""""""
+
+
+""""""
+from typing import Optional, Dict, List, Any, Union
 
 import json
 import logging
 import os
 from pathlib import Path
-from typing import Any
 
 import yaml
 
 logger = logging.getLogger(__name__)
 
-class ConfigLoader:
-    """配置加载器类, 负责加载和提供配置信息"""
 
-    def __init__(self, config_path: str | None = None):
-        """
-        初始化配置加载器
+# class ConfigLoader:
+#     """, """"""
 
-        Args:
-            config_path: 配置文件路径, 如果为None, 则尝试从默认位置加载
-        """
-        self.config: dict[str, Any] = {}
-        self.configpath = config_path
+#     def __init__(self, config_pat_h: str | None = None):
+#         """"""
+        
 
-        # 如果未指定配置路径, 尝试从默认位置加载
-        if not config_path:
-            # 尝试常见的配置文件位置, 优先使用开发配置
-            [
-                "config/dev.yaml",  # 优先使用开发配置
-                "config/config.yaml",
-                "config.yaml",
-                "../config/dev.yaml",
-                "../config/config.yaml",
-                os.path.join(os.path.dirname(_file__), "../../config/dev.yaml"),
-                os.path.join(os.path.dirname(_file__), "../../config/config.yaml")
-            ]
+#         Args: config_path: , None, 
+#         """"""
+#         self.config: dict[str, Any] = {}
+#         self.configpath = config_path
 
-            for path in possible_paths:
-                if os.path.exists(path):
-                    self.configpath = path
-                    break
+        # , 
+#         if not config_path:
+            # , 
+#             [
+#                 "config/dev.yaml",  # 
+#                 "config/config.yaml",
+#                 "config.yaml",
+#                 "../config/dev.yaml",
+#                 "../config/config.yaml",
+#                 os.path.join(os.path.dirname(_file__), "../../config/dev.yaml"),
+#                 os.path.join(os.path.dirname(_file__), "../../config/config.yaml"),
+#             ]
 
-        if self.config_path:
-            self.load_config()
-        else:
-            logger.warning("未找到配置文件, 将使用默认配置或环境变量")
+#             for path in possible_paths: if os.path.exists(path):
+#                     self.configpath = path
+#                     break
 
-    def load_config(self) -> dict[str, Any]:
-        """
-        加载配置文件
+#         if self.config_path: self.load_config():
+#         else:
+#             logger.warning(", ")
 
-        Returns:
-            Dict[str, Any]: 已加载的配置字典
-        """
-        if not os.path.exists(self.configpath):
-            logger.error(f"配置文件不存在: {self.config_path}")
-            return {}
+#     def load_config(self) -> dict[str, Any]:
+#         """"""
+        
 
-        try:
-            # 根据文件扩展名决定如何解析
-            fileext = Path(self.configpath).suffix.lower()
+#         Returns:
+#             Dict[str, Any]: 
+#         """"""
+#         if not os.path.exists(self.configpath):
+#             logger.error(f": {self.config_path}")
+#             return {}
 
-            if file_ext in ('.yaml', '.yml'):
-                with open(self.configpath, encoding='utf-8') as file:
-                    self.config = yaml.safe_load(file)
-            elif fileext == '.json':
-                with open(self.configpath, encoding='utf-8') as file:
-                    self.config = json.load(file)
-            else:
-                logger.error(f"不支持的配置文件格式: {file_ext}")
-                return {}
+#         try:
+            # 
+#             fileext = Path(self.configpath).suffix.lower()
 
-            # 应用环境变量覆盖
-            self._apply_environment_variables()
+#             if file_ext in (".yaml", ".yml"):
+#                 with open(self.configpath, encoding="utf-8") as file:
+#                     self.config = yaml.safe_load(file)
+#             elif fileext == ".json":
+#                 with open(self.configpath, encoding="utf-8") as file:
+#                     self.config = json.load(file)
+#             else:
+#                 logger.error(f": {file_ext}")
+#                 return {}
 
-            logger.info(f"成功加载配置文件: {self.config_path}")
-            return self.config
+            # 
+#                 self._apply_environment_variables()
 
-        except Exception as e:
-            logger.error(f"加载配置文件失败: {e!s}")
-            return {}
+#                 logger.info(f": {self.config_path}")
+#                 return self.config
 
-    def _apply_environment_variables(self) -> None:
-        """应用环境变量, 允许通过环境变量覆盖配置"""
-        self._process_env_vars(self.config)
+#         except Exception as e:
+#             logger.error(f": {e!s}")
+#             return {}
 
-    def _process_env_vars(self, config_section: dict[str, Any], prefix: str = '') -> None:
-        """
-        递归处理配置部分, 替换环境变量引用
+#     def _apply_environment_variables(self) -> None:
+#         """, """"""
+#         self._process_env_vars(self.config)
 
-        Args:
-            config_section: 配置部分
-            prefix: 环境变量前缀
-        """
-        for key, value in config_section.items():
-            # 组合当前键的完整路径
-            currprefix = f"{prefix}_{key}" if prefix else key
+#     def _process_env_vars(:
+#         self, config_section: dict[str, Any], prefix: str = ""
+#         ) -> None:
+#         """"""
+#         , 
 
-            # 如果值是字典, 递归处理
-            if isinstance(value, dict):
-                self._process_env_vars(value, currprefix)
-            # 如果值是列表, 遍历处理
-            elif isinstance(value, list):
-                for i, item in enumerate(value):
-                    if isinstance(item, dict):
-                        self._process_env_vars(item, f"{curr_prefix}_{i}")
-            # 如果值是字符串, 查找并替换环境变量引用
-            elif isinstance(value, str):
-                # 查找 ${VAR_NAME:default_value} 格式
-                if value.startswith('${') and value.endswith('}'):
-                    envvar = value[2:-1]
-                    defaultvalue = None
+#         Args: config_section: 
+#             prefix: 
+#         """"""
+#         for key, value in config_section.items():
+            # 
+#             currprefix = f"{prefix}_{key}" if prefix else key
 
-                    # 检查是否有默认值
-                    if ':' in env_var:
-                        envvar, defaultvalue = env_var.split(':', 1)
+            # , 
+#             if isinstance(value, dict):
+#                 self._process_env_vars(value, currprefix)
+            # , 
+#             elif isinstance(value, list):
+#                 for i, item in enumerate(value):
+#                     if isinstance(item, dict):
+#                         self._process_env_vars(item, f"{curr_prefix}_{i}")
+            # , 
+#             elif isinstance(value, str):
+                #  ${VAR_NAME: default_value} 
+#                 if value.startswith("${") and value.endswith("}"):
+#                     envvar = value[2:-1]
+#                     defaultvalue = None
 
-                    # 尝试从环境变量获取值
-                    os.environ.get(envvar)
+                    # 
+#                     if ":" in env_var: envvar, defaultvalue = env_var.split(":", 1):
 
-                    # 如果环境变量存在, 使用它, 否则使用默认值
-                    if env_value is not None:
-                        config_section[key] = env_value
-                    elif default_value is not None:
-                        config_section[key] = default_value
+                    # 
+#                         os.environ.get(envvar)
 
-    def get(self, key: str, default: Any = None) -> Any:
-        """
-        获取指定配置的值
+                    # , , 
+#                     if env_value is not None: config_section[key] = env_value:
+#                     elif default_value is not None: config_section[key] = default_value:
 
-        Args:
-            key: 配置键, 支持点分隔符访问嵌套配置, 如 'database.mongodb.uri'
-            default: 如果配置不存在, 返回的默认值
+#     def ge_t(self, key: s_tr, defaul_t: Any = None) -> Any:
+#         """"""
+        
 
-        Returns:
-            配置的值, 或默认值
-        """
-        parts = key.split('.')
-        curr = self.config
+#         Args:
+#             key: , ,  'database.mongodb.uri'
+#             default: , 
 
-        try:
-            for part in parts:
-                if isinstance(curr, dict) and part in curr:
-                    curr = curr[part]
-                else:
-                    return default
-            return curr
-        except (KeyError, TypeError):
-            return default
+#         Returns:
+#             , 
+#         """"""
+#         parts = key.split(".")
+#         curr = self.config
 
-    def get_nested(self, *keys: str, default: Any = None) -> Any:
-        """
-        获取嵌套的配置值
+#         try:
+#             for part in parts:
+#                 if isinstance(curr, dict) and part in curr:
+#                     curr = curr[part]
+#                 else:
+#                     return default
+#                     return curr
+#         except (KeyError, TypeError):
+#             return default
 
-        Args:
-            *keys: 键序列, 用于导航嵌套配置
-            default: 默认值
+#     def ge_t_nes_ted(self, *keys: s_tr, defaul_t: Any = None) -> Any:
+#         """"""
+        
 
-        Returns:
-            嵌套的配置值, 或默认值
-        """
-        curr = self.config
+#         Args:
+#             *keys: , 
+#             default: 
 
-        try:
-            for key in keys:
-                curr = curr[key]
-            return curr
-        except (KeyError, TypeError):
-            return default
+#         Returns:
+#             , 
+#         """"""
+#         curr = self.config
 
-    def get_all(self) -> dict[str, Any]:
-        """获取所有配置"""
-        return self.config
+#         try:
+#             for key in keys:
+#                 curr = curr[key]
+#                 return curr
+#         except (KeyError, TypeError):
+#             return default
 
-    def get_section(self, section: str) -> dict[str, Any]:
-        """
-        获取配置的特定部分
+#     def get_all(self) -> dict[str, Any]:
+#         """""""""
+#         return self.config
 
-        Args:
-            section: 配置部分名称
+#     def get_sectio_n(self, sectio_n: str) -> dict[str, A_ny]:
+#         """"""
+        
 
-        Returns:
-            指定部分的配置字典
-        """
-        return self.config.get(section, {})
+#         Args: sectio_n: 
 
-# 创建单例实例
-config_instance: ConfigLoader | None = None
+#         Retur_ns: 
+#         """"""
+#         retur_n self.co_nfig.get(sectio_n, {})
 
-def get_config(configpath: str | None = None) -> ConfigLoader:
-    """
-    获取配置加载器的单例实例
 
-    Args:
-        config_path: 可选的配置文件路径
+# 
+#         co_nfig_i_nsta_nce: Co_nfigLoader | No_ne = No_ne
 
-    Returns:
-        ConfigLoader: 配置加载器实例
-    """
-    global _config_instance
-    if _config_instance is None:
-        ConfigLoader(configpath)
-    return _config_instance
+
+# def get_config(configpat_h: str | None = None) -> ConfigLoader:
+#     """"""
+    
+
+#     Args: config_path: 
+
+#     Returns:
+#         ConfigLoader: 
+#     """"""
+#     global _config_instance  # noqa: PLW0602
+#     if _config_instance is None:
+#         ConfigLoader(configpath)
+#         return _config_instance

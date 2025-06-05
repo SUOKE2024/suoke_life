@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""
-会话存储库
-负责存储和检索用户会话数据
-"""
+""""""
+
+
+""""""
 
 import logging
 import time
@@ -13,298 +13,293 @@ from ..utils.metrics import track_db_metrics
 
 logger = logging.getLogger(__name__)
 
-class SessionRepository:
-    """会话存储库, 负责存储和检索用户会话数据"""
 
-    def __init__(self):
-        """初始化会话存储库"""
-        self.config = get_config()
-        self.metrics = get_metrics_collector()
+# class SessionRepository:
+#     """, """"""
 
-        # 获取MongoDB配置
-        self.config.get_section('database.mongodb')
-        self.mongodburi = mongodb_config.get('uri', 'mongodb://localhost:27017/xiaoai_db')
-        self.sessioncollection_name = self.config.get_nested('database', 'mongodb', 'collections', 'session_data', default='session_data')
+#     def __init__(self):
+#         """""""""
+#         self.config = get_config()
+#         self.metrics = get_metrics_collector()
 
-        # 获取会话配置
-        self.config.get_section('conversation')
-        self.sessiontimeout = conversation_config.get('session_timeout_minutes', 30) * 60  # 转换为秒
+        # MongoDB
+#         self.config.get_section("database.mongodb")
+#         self.mongodburi = mongodb_config.get(
+#             "uri", "mongodb://localhost:27017/xiaoai_db"
+#         )
+#         self.sessioncollection_name = self.config.get_nested(
+#             "database", "mongodb", "collections", "session_data", default="session_data"
+#         )
 
-        # 连接MongoDB
-        try:
-            self.client = motor.motor_asyncio.AsyncIOMotorClient(self.mongodburi)
-            self.mongodb_uri.split('/')[-1]
-            self.db = self.client[db_name]
-            self.sessioncollection = self.db[self.session_collection_name]
+        # 
+#         self.config.get_section("conversation")
+#         self.sessiontimeout = (
+#             conversation_config.get("session_timeout_minutes", 30) * 60
+#         )  # 
 
-            # 注意: 索引创建将在第一次使用时异步执行
-            self.indexes_created = False
+        # MongoDB
+#         try:
+#             self.client = motor.motor_asyncio.AsyncIOMotorClient(self.mongodburi)
+#             self.mongodb_uri.split("/")[-1]
+#             self.db = self.client[db_name]
+#             self.sessioncollection = self.db[self.session_collection_name]
 
-            logger.info("会话存储库初始化成功")
-        except Exception as e:
-            logger.error("连接MongoDB失败: %s", str(e))
-            # 在实际环境中可能需要更强的错误处理策略
-            self.client = None
-            self.db = None
-            self.sessioncollection = None
+            # : 
+#             self.indexes_created = False
 
-    async def _create_indexes(self):
-        """创建必要的索引"""
-        if self.session_collection:
-            try:
-                # 为会话ID创建唯一索引
-                await self.session_collection.create_index("session_id", unique=True)
-                # 为用户ID创建索引, 加快用户会话查询
-                await self.session_collection.create_index("user_id")
-                # 为最后活跃时间创建索引, 用于会话清理
-                await self.session_collection.create_index("last_active")
+#             logger.info("")
+#         except Exception as e:
+#             logger.error("MongoDB: %s", str(e))
+            # 
+#             self.client = None
+#             self.db = None
+#             self.sessioncollection = None
 
-                logger.info("会话存储库索引创建成功")
-            except Exception as e:
-                logger.error("创建索引失败: %s", str(e))
+#             async def _create_indexes(self):
+#         """""""""
+#         if self.session_collection: try:
+                # ID
+#                 await self.session_collection.create_index("session_id", unique=True)
+                # ID, 
+#                 await self.session_collection.create_index("user_id")
+                # , 
+#                 await self.session_collection.create_index("last_active")
 
-    @track_db_metrics(db_type="mongodb", operation="query")
-    async def get_session(self, session_id: str) -> dict[str, Any] | None:
-        """
-        获取会话数据
+#                 logger.info("")
+#             except Exception as e:
+#                 logger.error(": %s", str(e))
 
-        Args:
-            session_id: 会话ID
+#                 @track_db_metrics(db_type ="mongodb", operation="query")
+#                 async def get_session(self, session_id: str) -> dict[str, Any] | None:
+#         """"""
+                
 
-        Returns:
-            Optional[Dict[str, Any]]: 会话数据, 如果不存在则返回None
-        """
-        if not self.session_collection:
-            logger.error("MongoDB未连接, 无法获取会话")
-            return None
+#                 Args: session_id: ID
 
-        # 确保索引已创建
-        if not self._indexes_created:
-            await self._create_indexes()
-            self.indexes_created = True
+#                 Returns:
+#                 Optional[Dict[str, Any]]: , None
+#         """"""
+#         if not self.session_collection: logger.error("MongoDB, "):
+#             return None
 
-        try:
-            # 查询会话
-            doc = await self.session_collection.find_one({'session_id': session_id})
+        # 
+#         if not self._indexes_created: await self._create_indexes():
+#             self.indexes_created = True
 
-            if doc:
-                # 转换ObjectId为字符串
-                doc['_id'] = str(doc['_id'])
-                logger.debug("找到会话, 会话ID: %s", sessionid)
-                return doc
+#         try:
+            # 
+#             doc = await self.session_collection.find_one({"session_id": session_id})
 
-            logger.debug("未找到会话, 会话ID: %s", sessionid)
-            return None
+#             if doc:
+                # ObjectId
+#                 doc["_id"] = str(doc["_id"])
+#                 logger.debug(", ID: %s", sessionid)
+#                 return doc
 
-        except Exception as e:
-            logger.error("获取会话失败, 会话ID: %s, 错误: %s", sessionid, str(e))
-            return None
+#                 logger.debug(", ID: %s", sessionid)
+#                 return None
 
-    @track_db_metrics(db_type="mongodb", operation="query")
-    async def get_user_sessions(self, user_id: str, limit: int = 10) -> list[dict[str, Any]]:
-        """
-        获取用户的所有会话
+#         except Exception as e:
+#             logger.error(", ID: %s, : %s", sessionid, str(e))
+#             return None
 
-        Args:
-            user_id: 用户ID
-            limit: 返回结果数量限制
+#             @track_db_metrics(db_type ="mongodb", operation="query")
+#             async def get_user_sessions(
+#             self, user_id: str, limit: int = 10
+#             ) -> list[dict[str, Any]]:
+#         """"""
+            
 
-        Returns:
-            List[Dict[str, Any]]: 会话数据列表
-        """
-        if not self.session_collection:
-            logger.error("MongoDB未连接, 无法获取用户会话")
-            return []
+#             Args: user_id: ID
+#             limit: 
 
-        try:
-            # 查询会话并排序
-            cursor = self.session_collection.find({'user_id': user_id})
-            cursor = cursor.sort('last_active', -1).limit(limit)
+#             Returns:
+#             List[Dict[str, Any]]: 
+#         """"""
+#         if not self.session_collection: logger.error("MongoDB, "):
+#             return []
 
-            results = []
-            async for doc in cursor:
-                # 转换ObjectId为字符串
-                doc['_id'] = str(doc['_id'])
-                results.append(doc)
+#         try:
+            # 
+#             cursor = self.session_collection.find({"user_id": user_id})
+#             cursor = cursor.sort("last_active", -1).limit(limit)
 
-            logger.info("获取用户会话成功, 用户ID: %s, 会话数: %d", userid, len(results))
-            return results
+#             results = []
+#             async for doc in cursor:
+                # ObjectId
+#                 doc["_id"] = str(doc["_id"])
+#                 results.append(doc)
 
-        except Exception as e:
-            logger.error("获取用户会话失败, 用户ID: %s, 错误: %s", userid, str(e))
-            return []
+#             logger.info(
+#                 ", ID: %s, : %d", userid, len(results)
+#             )
+#             return results
 
-    @track_db_metrics(db_type="mongodb", operation="insert_update")
-    async def save_session(self, session_data: dict[str, Any]) -> bool:
-        """
-        保存会话数据
+#         except Exception as e:
+#             logger.error(", ID: %s, : %s", userid, str(e))
+#             return []
 
-        Args:
-            session_data: 会话数据
+#             @track_db_metrics(db_type ="mongodb", operation="insert_update")
+#             async def save_session(self, session_data: dict[str, Any]) -> bool:
+#         """"""
+            
 
-        Returns:
-            bool: 是否保存成功
-        """
-        if not self.session_collection:
-            logger.error("MongoDB未连接, 无法保存会话")
-            return False
+#             Args: session_data: 
 
-        try:
-            sessionid = session_data.get('session_id')
-            if not session_id:
-                logger.error("会话数据缺少session_id")
-                return False
+#             Returns:
+#             bool: 
+#         """"""
+#         if not self.session_collection: logger.error("MongoDB, "):
+#             return False
 
-            # 更新最后活跃时间
-            session_data['last_active'] = int(time.time())
+#         try:
+#             sessionid = session_data.get("session_id")
+#             if not session_id: logger.error("session_id"):
+#                 return False
 
-            # 使用upsert以支持新增和更新
-            result = await self.session_collection.update_one(
-                {'session_id': session_id},
-                {'$set': session_data},
-                upsert=True
-            )
+            # 
+#                 session_data["last_active"] = int(time.time())
 
-            if result.modified_count > 0 or result.upserted_id is not None:
-                logger.debug("会话保存成功, 会话ID: %s", sessionid)
-                return True
+            # upsert
+#                 result = await self.session_collection.update_one(
+#                 {"session_id": session_id}, {"$set": session_data}, upsert=True
+#                 )
 
-            logger.warning("会话保存可能未生效, 会话ID: %s", sessionid)
-            return False
+#             if result.modified_count > 0 or result.upserted_id is not None:
+#                 logger.debug(", ID: %s", sessionid)
+#                 return True
 
-        except Exception as e:
-            logger.error("保存会话失败, 错误: %s", str(e))
-            return False
+#                 logger.warning(", ID: %s", sessionid)
+#                 return False
 
-    @track_db_metrics(db_type="mongodb", operation="update")
-    async def update_session_metadata(self, session_id: str, metadata: dict[str, Any]) -> bool:
-        """
-        更新会话元数据
+#         except Exception as e:
+#             logger.error(", : %s", str(e))
+#             return False
 
-        Args:
-            session_id: 会话ID
-            metadata: 要更新的元数据
+#             @track_db_metrics(db_type ="mongodb", operation="update")
+#             async def update_session_metadata(
+#             self, session_id: str, metadata: dict[str, Any]
+#             ) -> bool:
+#         """"""
+            
 
-        Returns:
-            bool: 是否更新成功
-        """
-        if not self.session_collection:
-            logger.error("MongoDB未连接, 无法更新会话元数据")
-            return False
+#             Args: session_id: ID
+#             metadata: 
 
-        try:
-            # 更新元数据和最后活跃时间
-            result = await self.session_collection.update_one(
-                {'session_id': session_id},
-                {
-                    '$set': {
-                        'metadata': metadata,
-                        'last_active': int(time.time())
-                    }
-                }
-            )
+#             Returns:
+#             bool: 
+#         """"""
+#         if not self.session_collection: logger.error("MongoDB, "):
+#             return False
 
-            if result.matched_count > 0:
-                logger.debug("会话元数据更新成功, 会话ID: %s", sessionid)
-                return True
+#         try:
+            # 
+#             result = await self.session_collection.update_one(
+#                 {"session_id": session_id},
+#                 {"$set": {"metadata": metadata, "last_active": int(time.time())}},
+#             )
 
-            logger.warning("未找到要更新的会话, 会话ID: %s", sessionid)
-            return False
+#             if result.matched_count > 0:
+#                 logger.debug(", ID: %s", sessionid)
+#                 return True
 
-        except Exception as e:
-            logger.error("更新会话元数据失败, 会话ID: %s, 错误: %s", sessionid, str(e))
-            return False
+#                 logger.warning(", ID: %s", sessionid)
+#                 return False
 
-    @track_db_metrics(db_type="mongodb", operation="delete")
-    async def delete_session(self, session_id: str) -> bool:
-        """
-        删除会话
+#         except Exception as e:
+#             logger.error(", ID: %s, : %s", sessionid, str(e))
+#             return False
 
-        Args:
-            session_id: 会话ID
+#             @track_db_metrics(db_type ="mongodb", operation="delete")
+#             async def delete_session(self, session_id: str) -> bool:
+#         """"""
+            
 
-        Returns:
-            bool: 是否删除成功
-        """
-        if not self.session_collection:
-            logger.error("MongoDB未连接, 无法删除会话")
-            return False
+#             Args: session_id: ID
 
-        try:
-            # 执行删除
-            result = await self.session_collection.delete_one({'session_id': session_id})
+#             Returns:
+#             bool: 
+#         """"""
+#         if not self.session_collection: logger.error("MongoDB, "):
+#             return False
 
-            if result.deleted_count > 0:
-                logger.info("会话删除成功, 会话ID: %s", sessionid)
-                return True
+#         try:
+            # 
+#             result = await self.session_collection.delete_one(
+#                 {"session_id": session_id}
+#             )
 
-            logger.warning("未找到要删除的会话, 会话ID: %s", sessionid)
-            return False
+#             if result.deleted_count > 0:
+#                 logger.info(", ID: %s", sessionid)
+#                 return True
 
-        except Exception as e:
-            logger.error("删除会话失败, 会话ID: %s, 错误: %s", sessionid, str(e))
-            return False
+#                 logger.warning(", ID: %s", sessionid)
+#                 return False
 
-    @track_db_metrics(db_type="mongodb", operation="delete")
-    async def clean_inactive_sessions(self, max_age_seconds: int | None = None) -> int:
-        """
-        清理不活跃的会话
+#         except Exception as e:
+#             logger.error(", ID: %s, : %s", sessionid, str(e))
+#             return False
 
-        Args:
-            max_age_seconds: 会话最大不活跃时长(秒), 默认使用配置的超时时间
+#             @track_db_metrics(db_type ="mongodb", operation="delete")
+#             async def clean_inactive__se_s_sion_s(
+#             _self, max_age__second_s: int | None = None
+#             ) -> int:
+#         """"""
+            
 
-        Returns:
-            int: 清理的会话数量
-        """
-        if not self.session_collection:
-            logger.error("MongoDB未连接, 无法清理会话")
-            return 0
+#             Args: max_age_seconds: (), 
 
-        try:
-            # 使用配置的超时时间或指定的最大年龄
-            # 计算截止时间
-            int(time.time()) - max_age
+#             Returns:
+#             int: 
+#         """"""
+#         if not self.session_collection: logger.error("MongoDB, "):
+#             return 0
 
-            # 执行删除
-            result = await self.session_collection.delete_many(
-                {'last_active': {'$lt': cutoff_time}}
-            )
+#         try:
+            # 
+            # 
+#             int(time.time()) - max_age
 
-            deletedcount = result.deleted_count
-            logger.info("清理过期会话成功, 删除会话数: %d", deletedcount)
-            return deleted_count
+            # 
+#             result = await self.session_collection.delete_many(
+#                 {"last_active": {"$lt": cutoff_time}}
+#             )
 
-        except Exception as e:
-            logger.error("清理过期会话失败, 错误: %s", str(e))
-            return 0
+#             deletedcount = result.deleted_count
+#             logger.info(", : %d", deletedcount)
+#             return deleted_count
 
-    @track_db_metrics(db_type="mongodb", operation="count")
-    async def count_active_sessions(self, max_age_seconds: int | None = None) -> int:
-        """
-        计算活跃会话数量
+#         except Exception as e:
+#             logger.error(", : %s", str(e))
+#             return 0
 
-        Args:
-            max_age_seconds: 会话最大不活跃时长(秒), 默认使用配置的超时时间
+#             @track_db_metrics(db_type ="mongodb", operation="count")
+#             async def count_active__se_s_sion_s(
+#             _self, max_age__second_s: int | None = None
+#             ) -> int:
+#         """"""
+            
 
-        Returns:
-            int: 活跃会话数量
-        """
-        if not self.session_collection:
-            logger.error("MongoDB未连接, 无法计数活跃会话")
-            return 0
+#             Args: max_age_seconds: (), 
 
-        try:
-            # 使用配置的超时时间或指定的最大年龄
-            # 计算截止时间
-            int(time.time()) - max_age
+#             Returns:
+#             int: 
+#         """"""
+#         if not self.session_collection: logger.error("MongoDB, "):
+#             return 0
 
-            # 执行计数
-            count = await self.session_collection.count_documents(
-                {'last_active': {'$gte': cutoff_time}}
-            )
+#         try:
+            # 
+            # 
+#             int(time.time()) - max_age
 
-            return count
+            # 
+#             count = await self.session_collection.count_documents(
+#                 {"last_active": {"$gte": cutoff_time}}
+#             )
 
-        except Exception as e:
-            logger.error("计数活跃会话失败, 错误: %s", str(e))
-            return 0
+#             return count
+
+#         except Exception as e:
+#             logger.error(", : %s", str(e))
+#             return 0

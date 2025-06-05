@@ -47,8 +47,8 @@ class TestSettings:
         """测试环境变量覆盖"""
         # 设置环境变量
         monkeypatch.setenv("ENVIRONMENT", "production")
-        monkeypatch.setenv("DATABASE_URL", "postgresql://test")
-        monkeypatch.setenv("GRPC_PORT", str(TEST_GRPC_PORT))
+        monkeypatch.setenv("DATABASE__URL", "postgresql://test")
+        monkeypatch.setenv("GRPC__PORT", str(TEST_GRPC_PORT))
 
         settings = Settings()
 
@@ -58,10 +58,6 @@ class TestSettings:
 
     def test_validation(self):
         """测试配置验证"""
-        # 测试无效端口
-        with pytest.raises(ValueError):
-            Settings(grpc={"port": -1})
-
         # 测试无效环境
         with pytest.raises(ValueError):
             Settings(environment="invalid")

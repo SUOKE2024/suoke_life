@@ -1,4 +1,9 @@
-import { AgentType, AgentCapability, AgentResponse, AgentContext } from '../types';
+import {
+  AgentType,
+  AgentCapability,
+  AgentResponse,
+  AgentContext,
+} from "../types";
 
 /**
  * 智能体基础抽象类
@@ -10,12 +15,12 @@ export abstract class AgentBase {
   protected description: string;
   protected capabilities: AgentCapability[];
   protected isInitialized: boolean = false;
-  protected version: string = '1.0.0';
+  protected version: string = "1.0.0";
 
   constructor() {
     this.agentType = AgentType.XIAOAI; // 默认值，子类会覆盖
-    this.name = '';
-    this.description = '';
+    this.name = "";
+    this.description = "";
     this.capabilities = [];
   }
 
@@ -27,7 +32,10 @@ export abstract class AgentBase {
   /**
    * 处理用户消息
    */
-  abstract processMessage(message: string, context: AgentContext): Promise<AgentResponse>;
+  abstract processMessage(
+    message: string,
+    context: AgentContext
+  ): Promise<AgentResponse>;
 
   /**
    * 获取智能体健康状态
@@ -92,32 +100,40 @@ export abstract class AgentBase {
    * 验证上下文
    */
   protected validateContext(context: AgentContext): boolean {
-    return context && typeof context.userId === 'string';
+    return context && typeof context.userId === "string";
   }
 
   /**
    * 生成响应ID
    */
   protected generateResponseId(): string {
-    return `${this.agentType}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `${this.agentType}_${Date.now()}_${Math.random()
+      .toString(36)
+      .substr(2, 9)}`;
   }
 
   /**
    * 记录日志
    */
-  protected log(level: 'info' | 'warn' | 'error', message: string, data?: any): void {
+  protected log(
+    level: "info" | "warn" | "error",
+    message: string,
+    data?: any
+  ): void {
     const timestamp = new Date().toISOString();
-    const logMessage = `[${timestamp}] [${this.agentType}] [${level.toUpperCase()}] ${message}`;
-    
+    const logMessage = `[${timestamp}] [${
+      this.agentType
+    }] [${level.toUpperCase()}] ${message}`;
+
     switch (level) {
-      case 'info':
-        console.log(logMessage, data || '');
+      case "info":
+        console.log(logMessage, data || "");
         break;
-      case 'warn':
-        console.warn(logMessage, data || '');
+      case "warn":
+        console.warn(logMessage, data || "");
         break;
-      case 'error':
-        console.error(logMessage, data || '');
+      case "error":
+        console.error(logMessage, data || "");
         break;
     }
   }
@@ -125,17 +141,21 @@ export abstract class AgentBase {
   /**
    * 创建标准错误响应
    */
-  protected createErrorResponse(message: string, error?: any, context?: AgentContext): AgentResponse {
+  protected createErrorResponse(
+    message: string,
+    error?: any,
+    context?: AgentContext
+  ): AgentResponse {
     return {
       success: false,
       response: message,
       error: error?.message || error,
-      context: context || { userId: 'unknown' },
+      context: context || { userId: "unknown" },
       metadata: {
         agentType: this.agentType,
         timestamp: new Date().toISOString(),
-        responseId: this.generateResponseId()
-      }
+        responseId: this.generateResponseId(),
+      },
     };
   }
 
@@ -143,8 +163,8 @@ export abstract class AgentBase {
    * 创建标准成功响应
    */
   protected createSuccessResponse(
-    message: string, 
-    data?: any, 
+    message: string,
+    data?: any,
     context?: AgentContext,
     metadata?: any
   ): AgentResponse {
@@ -152,13 +172,13 @@ export abstract class AgentBase {
       success: true,
       response: message,
       data,
-      context: context || { userId: 'unknown' },
+      context: context || { userId: "unknown" },
       metadata: {
         agentType: this.agentType,
         timestamp: new Date().toISOString(),
         responseId: this.generateResponseId(),
-        ...metadata
-      }
+        ...metadata,
+      },
     };
   }
-} 
+}

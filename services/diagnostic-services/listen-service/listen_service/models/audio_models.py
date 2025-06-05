@@ -158,6 +158,44 @@ class BatchAnalysisResult:
 
 
 @dataclass
+class AudioAnalysisResponse:
+    """音频分析响应"""
+
+    request_id: str
+    success: bool
+    result: ListenResult | None = None
+    error_message: str | None = None
+    processing_time_ms: float = 0.0
+    timestamp: datetime = field(default_factory=datetime.now)
+    
+    @property
+    def voice_features(self) -> VoiceFeatures | None:
+        """兼容性属性：获取语音特征"""
+        return self.result.voice_features if self.result else None
+    
+    @property
+    def processing_time(self) -> float:
+        """兼容性属性：获取处理时间（秒）"""
+        return self.processing_time_ms / 1000.0
+
+
+@dataclass
+class SoundFeatures:
+    """通用声音特征"""
+
+    fundamental_frequency: float
+    harmonics: list[float]
+    spectral_centroid: float
+    spectral_bandwidth: float
+    spectral_rolloff: float
+    zero_crossing_rate: float
+    energy: float
+    mfcc: list[float]
+    chroma: list[float]
+    tonnetz: list[float]
+
+
+@dataclass
 class AnalysisRequest:
     """通用分析请求"""
 

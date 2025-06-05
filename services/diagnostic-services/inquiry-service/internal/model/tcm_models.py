@@ -51,6 +51,71 @@ class TCMPattern:
 
 
 @dataclass
+class DetailedTCMPattern:
+    """详细中医证型"""
+    
+    id: str
+    name: str
+    english_name: str
+    category: str
+    description: str
+    main_symptoms: list[str]
+    secondary_symptoms: list[str]
+    dietary_recommendations: list[str]
+    lifestyle_recommendations: list[str]
+    confidence: float = 0.0
+    matched_symptoms: list[str] = None
+    rule_id: str = None
+    
+    def __post_init__(self):
+        if self.matched_symptoms is None:
+            self.matched_symptoms = []
+
+
+@dataclass
+class SymptomTCMMapping:
+    """症状中医映射"""
+    
+    symptom_name: str
+    tcm_interpretations: list[dict]
+    pattern_associations: dict[str, float]
+    confidence: float = 0.0
+    
+    def __post_init__(self):
+        if not self.tcm_interpretations:
+            self.tcm_interpretations = []
+        if not self.pattern_associations:
+            self.pattern_associations = {}
+
+
+@dataclass
+class TCMDiagnosisRule:
+    """中医诊断规则"""
+    
+    rule_id: str
+    pattern_name: str
+    required_symptoms: list[str]
+    supporting_symptoms: dict[str, float]
+    exclusion_symptoms: list[str]
+    minimum_required_count: int
+    minimum_supporting_score: float
+    tongue_rules: dict = None
+    pulse_rules: dict = None
+    
+    def __post_init__(self):
+        if not self.required_symptoms:
+            self.required_symptoms = []
+        if not self.supporting_symptoms:
+            self.supporting_symptoms = {}
+        if not self.exclusion_symptoms:
+            self.exclusion_symptoms = []
+        if self.tongue_rules is None:
+            self.tongue_rules = {}
+        if self.pulse_rules is None:
+            self.pulse_rules = {}
+
+
+@dataclass
 class Constitution:
     """体质类型"""
 

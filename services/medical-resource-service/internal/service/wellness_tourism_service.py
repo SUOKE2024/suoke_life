@@ -1,0 +1,864 @@
+"""
+山水养生服务
+提供养生旅游规划、环境评估、活动推荐等功能
+"""
+
+import asyncio
+import logging
+from datetime import datetime, timedelta
+from typing import Dict, List, Optional, Any, Tuple
+from dataclasses import dataclass, field
+from enum import Enum
+import uuid
+import json
+import math
+
+logger = logging.getLogger(__name__)
+
+
+class WellnessType(Enum):
+    """养生类型"""
+    MOUNTAIN_THERAPY = "山地疗养"
+    WATER_THERAPY = "水疗养生"
+    FOREST_BATHING = "森林浴"
+    HOT_SPRING = "温泉养生"
+    MEDITATION_RETREAT = "冥想静修"
+    TCM_WELLNESS = "中医养生"
+    YOGA_RETREAT = "瑜伽静修"
+    HIKING_THERAPY = "徒步疗法"
+
+
+class EnvironmentQuality(Enum):
+    """环境质量等级"""
+    EXCELLENT = "优秀"
+    GOOD = "良好"
+    MODERATE = "中等"
+    POOR = "较差"
+
+
+class SeasonSuitability(Enum):
+    """季节适宜性"""
+    SPRING = "春季"
+    SUMMER = "夏季"
+    AUTUMN = "秋季"
+    WINTER = "冬季"
+    ALL_YEAR = "四季皆宜"
+
+
+@dataclass
+class Location:
+    """地理位置"""
+    latitude: float
+    longitude: float
+    address: str = ""
+    city: str = ""
+    province: str = ""
+    altitude: float = 0.0  # 海拔高度
+
+
+@dataclass
+class EnvironmentData:
+    """环境数据"""
+    air_quality_index: float  # 空气质量指数
+    temperature_range: Tuple[float, float]  # 温度范围
+    humidity: float  # 湿度
+    noise_level: float  # 噪音水平
+    vegetation_coverage: float  # 植被覆盖率
+    water_quality: float  # 水质指数
+    negative_ion_concentration: float  # 负离子浓度
+    uv_index: float  # 紫外线指数
+
+
+@dataclass
+class WellnessActivity:
+    """养生活动"""
+    activity_id: str
+    name: str
+    description: str
+    wellness_type: WellnessType
+    duration_hours: float
+    difficulty_level: int  # 1-5级
+    max_participants: int
+    equipment_needed: List[str] = field(default_factory=list)
+    health_benefits: List[str] = field(default_factory=list)
+    contraindications: List[str] = field(default_factory=list)
+    cost_per_person: float = 0.0
+
+
+@dataclass
+class WellnessDestination:
+    """养生目的地"""
+    destination_id: str
+    name: str
+    description: str
+    location: Location
+    wellness_types: List[WellnessType]
+    environment_data: EnvironmentData
+    activities: List[WellnessActivity]
+    facilities: List[str]
+    accommodation_options: List[Dict[str, Any]]
+    best_seasons: List[SeasonSuitability]
+    constitution_suitability: List[str]  # 适合的体质类型
+    rating: float = 0.0
+    review_count: int = 0
+    price_range: Tuple[float, float] = (0.0, 0.0)
+    is_available: bool = True
+
+
+@dataclass
+class WellnessRequest:
+    """养生需求请求"""
+    request_id: str
+    user_id: str
+    constitution_type: str
+    health_goals: List[str]
+    preferred_wellness_types: List[WellnessType]
+    budget_range: Tuple[float, float]
+    duration_days: int
+    preferred_location: Optional[Location] = None
+    max_distance_km: float = 100.0
+    preferred_seasons: List[SeasonSuitability] = field(default_factory=list)
+    special_requirements: List[str] = field(default_factory=list)
+    group_size: int = 1
+    created_at: datetime = field(default_factory=datetime.now)
+
+
+@dataclass
+class WellnessRecommendation:
+    """养生推荐"""
+    destination: WellnessDestination
+    match_score: float
+    recommended_activities: List[WellnessActivity]
+    suggested_duration: int  # 建议停留天数
+    estimated_cost: float
+    health_benefits: List[str]
+    travel_plan: Dict[str, Any]
+    reasons: List[str] = field(default_factory=list)
+
+
+@dataclass
+class WellnessPlan:
+    """养生计划"""
+    plan_id: str
+    user_id: str
+    recommendations: List[WellnessRecommendation]
+    total_duration: int
+    total_cost: float
+    itinerary: List[Dict[str, Any]]
+    health_objectives: List[str]
+    created_at: datetime = field(default_factory=datetime.now)
+
+
+class WellnessTourismService:
+    """山水养生服务"""
+
+    def __init__(self, config: Dict[str, Any]):
+        """
+        初始化山水养生服务
+
+        Args:
+            config: 配置信息
+        """
+        self.config = config
+        self.destinations: Dict[str, WellnessDestination] = {}
+        self.activities: Dict[str, WellnessActivity] = {}
+        
+        # 配置参数
+        self.matching_config = {
+            "score_weights": {
+                "constitution_match": 0.25,
+                "wellness_type_match": 0.20,
+                "environment_quality": 0.20,
+                "location_distance": 0.15,
+                "cost_suitability": 0.10,
+                "season_suitability": 0.10
+            },
+            "max_recommendations": 10,
+            "min_match_score": 0.6
+        }
+        
+        # 体质与养生类型的匹配关系
+        self.constitution_wellness_mapping = {
+            "平和质": [WellnessType.MOUNTAIN_THERAPY, WellnessType.FOREST_BATHING, WellnessType.HIKING_THERAPY],
+            "气虚质": [WellnessType.HOT_SPRING, WellnessType.MEDITATION_RETREAT, WellnessType.TCM_WELLNESS],
+            "阳虚质": [WellnessType.HOT_SPRING, WellnessType.MOUNTAIN_THERAPY, WellnessType.TCM_WELLNESS],
+            "阴虚质": [WellnessType.WATER_THERAPY, WellnessType.FOREST_BATHING, WellnessType.MEDITATION_RETREAT],
+            "痰湿质": [WellnessType.HIKING_THERAPY, WellnessType.MOUNTAIN_THERAPY, WellnessType.YOGA_RETREAT],
+            "湿热质": [WellnessType.WATER_THERAPY, WellnessType.FOREST_BATHING, WellnessType.MOUNTAIN_THERAPY],
+            "血瘀质": [WellnessType.HIKING_THERAPY, WellnessType.YOGA_RETREAT, WellnessType.HOT_SPRING],
+            "气郁质": [WellnessType.MEDITATION_RETREAT, WellnessType.FOREST_BATHING, WellnessType.YOGA_RETREAT],
+            "特禀质": [WellnessType.FOREST_BATHING, WellnessType.MEDITATION_RETREAT, WellnessType.TCM_WELLNESS]
+        }
+
+        # 初始化示例数据
+        self._initialize_sample_data()
+
+    def _initialize_sample_data(self):
+        """初始化示例数据"""
+        # 示例养生目的地
+        destinations_data = [
+            {
+                "destination_id": str(uuid.uuid4()),
+                "name": "黄山云海养生度假村",
+                "description": "位于黄山风景区的高端养生度假村，拥有绝佳的山景和清新的空气",
+                "location": Location(30.1394, 118.1675, "安徽省黄山市", "黄山市", "安徽省", 1864.0),
+                "wellness_types": [WellnessType.MOUNTAIN_THERAPY, WellnessType.FOREST_BATHING, WellnessType.TCM_WELLNESS],
+                "environment_data": EnvironmentData(
+                    air_quality_index=25.0,
+                    temperature_range=(15.0, 25.0),
+                    humidity=65.0,
+                    noise_level=30.0,
+                    vegetation_coverage=85.0,
+                    water_quality=95.0,
+                    negative_ion_concentration=3000.0,
+                    uv_index=3.0
+                ),
+                "facilities": ["中医理疗中心", "瑜伽馆", "温泉", "有机餐厅", "冥想花园"],
+                "best_seasons": [SeasonSuitability.SPRING, SeasonSuitability.AUTUMN],
+                "constitution_suitability": ["平和质", "气虚质", "阳虚质"],
+                "rating": 4.8,
+                "price_range": (800.0, 2000.0)
+            },
+            {
+                "destination_id": str(uuid.uuid4()),
+                "name": "九寨沟水疗养生中心",
+                "description": "依托九寨沟纯净水源的水疗养生中心，提供专业的水疗服务",
+                "location": Location(33.2197, 103.9249, "四川省阿坝州九寨沟县", "九寨沟县", "四川省", 2000.0),
+                "wellness_types": [WellnessType.WATER_THERAPY, WellnessType.MEDITATION_RETREAT, WellnessType.FOREST_BATHING],
+                "environment_data": EnvironmentData(
+                    air_quality_index=20.0,
+                    temperature_range=(10.0, 20.0),
+                    humidity=70.0,
+                    noise_level=25.0,
+                    vegetation_coverage=90.0,
+                    water_quality=98.0,
+                    negative_ion_concentration=4000.0,
+                    uv_index=4.0
+                ),
+                "facilities": ["水疗中心", "藏式SPA", "冥想室", "有机农场", "观景台"],
+                "best_seasons": [SeasonSuitability.SUMMER, SeasonSuitability.AUTUMN],
+                "constitution_suitability": ["阴虚质", "湿热质", "气郁质"],
+                "rating": 4.9,
+                "price_range": (1000.0, 2500.0)
+            },
+            {
+                "destination_id": str(uuid.uuid4()),
+                "name": "峨眉山禅修养生院",
+                "description": "千年古刹旁的禅修养生院，提供传统中医养生和禅修体验",
+                "location": Location(29.5525, 103.4840, "四川省乐山市峨眉山市", "峨眉山市", "四川省", 1000.0),
+                "wellness_types": [WellnessType.MEDITATION_RETREAT, WellnessType.TCM_WELLNESS, WellnessType.YOGA_RETREAT],
+                "environment_data": EnvironmentData(
+                    air_quality_index=30.0,
+                    temperature_range=(12.0, 22.0),
+                    humidity=75.0,
+                    noise_level=20.0,
+                    vegetation_coverage=80.0,
+                    water_quality=90.0,
+                    negative_ion_concentration=2500.0,
+                    uv_index=2.0
+                ),
+                "facilities": ["禅修堂", "中医诊所", "素食餐厅", "茶艺馆", "药膳厨房"],
+                "best_seasons": [SeasonSuitability.ALL_YEAR],
+                "constitution_suitability": ["气郁质", "阴虚质", "特禀质"],
+                "rating": 4.7,
+                "price_range": (600.0, 1500.0)
+            }
+        ]
+
+        # 创建目的地对象
+        for dest_data in destinations_data:
+            activities = self._create_activities_for_destination(dest_data)
+            destination = WellnessDestination(
+                destination_id=dest_data["destination_id"],
+                name=dest_data["name"],
+                description=dest_data["description"],
+                location=dest_data["location"],
+                wellness_types=dest_data["wellness_types"],
+                environment_data=dest_data["environment_data"],
+                activities=activities,
+                facilities=dest_data["facilities"],
+                accommodation_options=self._create_accommodation_options(),
+                best_seasons=dest_data["best_seasons"],
+                constitution_suitability=dest_data["constitution_suitability"],
+                rating=dest_data["rating"],
+                price_range=dest_data["price_range"]
+            )
+            self.destinations[destination.destination_id] = destination
+
+    def _create_activities_for_destination(self, dest_data: Dict) -> List[WellnessActivity]:
+        """为目的地创建活动"""
+        activities = []
+        
+        activity_templates = {
+            WellnessType.MOUNTAIN_THERAPY: {
+                "name": "山地疗养徒步",
+                "description": "在清新的山间空气中进行有氧徒步，促进身心健康",
+                "duration_hours": 3.0,
+                "difficulty_level": 2,
+                "health_benefits": ["改善心肺功能", "缓解压力", "增强体质"],
+                "cost_per_person": 100.0
+            },
+            WellnessType.WATER_THERAPY: {
+                "name": "天然水疗体验",
+                "description": "利用天然水源进行水疗，促进血液循环和新陈代谢",
+                "duration_hours": 2.0,
+                "difficulty_level": 1,
+                "health_benefits": ["促进血液循环", "缓解肌肉疲劳", "改善睡眠"],
+                "cost_per_person": 200.0
+            },
+            WellnessType.FOREST_BATHING: {
+                "name": "森林浴冥想",
+                "description": "在森林中进行深度呼吸和冥想，吸收负离子",
+                "duration_hours": 2.5,
+                "difficulty_level": 1,
+                "health_benefits": ["净化肺部", "缓解焦虑", "提升免疫力"],
+                "cost_per_person": 80.0
+            },
+            WellnessType.MEDITATION_RETREAT: {
+                "name": "禅修静心课程",
+                "description": "专业导师指导的禅修课程，学习正念冥想技巧",
+                "duration_hours": 4.0,
+                "difficulty_level": 2,
+                "health_benefits": ["减轻压力", "提高专注力", "改善情绪"],
+                "cost_per_person": 150.0
+            },
+            WellnessType.TCM_WELLNESS: {
+                "name": "中医养生调理",
+                "description": "根据个人体质进行中医诊断和养生调理",
+                "duration_hours": 1.5,
+                "difficulty_level": 1,
+                "health_benefits": ["调理体质", "预防疾病", "延缓衰老"],
+                "cost_per_person": 300.0
+            }
+        }
+        
+        for wellness_type in dest_data["wellness_types"]:
+            if wellness_type in activity_templates:
+                template = activity_templates[wellness_type]
+                activity = WellnessActivity(
+                    activity_id=str(uuid.uuid4()),
+                    name=template["name"],
+                    description=template["description"],
+                    wellness_type=wellness_type,
+                    duration_hours=template["duration_hours"],
+                    difficulty_level=template["difficulty_level"],
+                    max_participants=20,
+                    health_benefits=template["health_benefits"],
+                    cost_per_person=template["cost_per_person"]
+                )
+                activities.append(activity)
+                self.activities[activity.activity_id] = activity
+        
+        return activities
+
+    def _create_accommodation_options(self) -> List[Dict[str, Any]]:
+        """创建住宿选项"""
+        return [
+            {
+                "type": "标准间",
+                "price_per_night": 400.0,
+                "capacity": 2,
+                "amenities": ["空调", "WiFi", "24小时热水", "有机早餐"]
+            },
+            {
+                "type": "豪华套房",
+                "price_per_night": 800.0,
+                "capacity": 4,
+                "amenities": ["空调", "WiFi", "24小时热水", "有机早餐", "私人阳台", "迷你吧"]
+            },
+            {
+                "type": "养生别墅",
+                "price_per_night": 1500.0,
+                "capacity": 6,
+                "amenities": ["空调", "WiFi", "24小时热水", "有机早餐", "私人花园", "专属管家", "私人温泉"]
+            }
+        ]
+
+    async def find_wellness_destinations(self, request: WellnessRequest) -> List[WellnessRecommendation]:
+        """
+        查找适合的养生目的地
+
+        Args:
+            request: 养生需求请求
+
+        Returns:
+            养生推荐列表
+        """
+        try:
+            logger.info(f"开始查找养生目的地，用户ID: {request.user_id}")
+            
+            recommendations = []
+            
+            for destination in self.destinations.values():
+                if not destination.is_available:
+                    continue
+                
+                # 计算匹配分数
+                match_score = await self._calculate_destination_match_score(destination, request)
+                
+                if match_score >= self.matching_config["min_match_score"]:
+                    # 生成推荐活动
+                    recommended_activities = await self._recommend_activities(destination, request)
+                    
+                    # 计算预估费用
+                    estimated_cost = await self._calculate_estimated_cost(
+                        destination, recommended_activities, request.duration_days, request.group_size
+                    )
+                    
+                    # 生成旅行计划
+                    travel_plan = await self._generate_travel_plan(destination, request)
+                    
+                    # 提取健康益处
+                    health_benefits = await self._extract_health_benefits(destination, recommended_activities)
+                    
+                    # 生成推荐理由
+                    reasons = await self._generate_recommendation_reasons(destination, request, match_score)
+                    
+                    recommendation = WellnessRecommendation(
+                        destination=destination,
+                        match_score=match_score,
+                        recommended_activities=recommended_activities,
+                        suggested_duration=request.duration_days,
+                        estimated_cost=estimated_cost,
+                        health_benefits=health_benefits,
+                        travel_plan=travel_plan,
+                        reasons=reasons
+                    )
+                    
+                    recommendations.append(recommendation)
+            
+            # 按匹配分数排序
+            recommendations.sort(key=lambda x: x.match_score, reverse=True)
+            
+            # 限制返回数量
+            max_recommendations = self.matching_config["max_recommendations"]
+            recommendations = recommendations[:max_recommendations]
+            
+            logger.info(f"找到 {len(recommendations)} 个养生目的地推荐")
+            return recommendations
+            
+        except Exception as e:
+            logger.error(f"查找养生目的地失败: {e}")
+            raise
+
+    async def _calculate_destination_match_score(
+        self, destination: WellnessDestination, request: WellnessRequest
+    ) -> float:
+        """计算目的地匹配分数"""
+        weights = self.matching_config["score_weights"]
+        total_score = 0.0
+        
+        # 体质匹配分数
+        constitution_score = 1.0 if request.constitution_type in destination.constitution_suitability else 0.3
+        total_score += constitution_score * weights["constitution_match"]
+        
+        # 养生类型匹配分数
+        wellness_type_score = 0.0
+        if request.preferred_wellness_types:
+            matching_types = set(request.preferred_wellness_types) & set(destination.wellness_types)
+            wellness_type_score = len(matching_types) / len(request.preferred_wellness_types)
+        else:
+            # 如果用户没有指定偏好，根据体质推荐
+            recommended_types = self.constitution_wellness_mapping.get(request.constitution_type, [])
+            matching_types = set(recommended_types) & set(destination.wellness_types)
+            wellness_type_score = len(matching_types) / max(len(recommended_types), 1)
+        
+        total_score += wellness_type_score * weights["wellness_type_match"]
+        
+        # 环境质量分数
+        env_score = await self._calculate_environment_score(destination.environment_data)
+        total_score += env_score * weights["environment_quality"]
+        
+        # 位置距离分数
+        distance_score = 1.0
+        if request.preferred_location:
+            distance_km = self._calculate_distance(request.preferred_location, destination.location)
+            if distance_km <= request.max_distance_km:
+                distance_score = 1.0 - (distance_km / request.max_distance_km)
+            else:
+                distance_score = 0.0
+        
+        total_score += distance_score * weights["location_distance"]
+        
+        # 费用适宜性分数
+        cost_score = await self._calculate_cost_suitability_score(destination, request)
+        total_score += cost_score * weights["cost_suitability"]
+        
+        # 季节适宜性分数
+        season_score = await self._calculate_season_suitability_score(destination, request)
+        total_score += season_score * weights["season_suitability"]
+        
+        return min(total_score, 1.0)
+
+    async def _calculate_environment_score(self, env_data: EnvironmentData) -> float:
+        """计算环境质量分数"""
+        # 空气质量分数 (AQI越低越好，0-50为优秀)
+        air_score = max(0, (50 - env_data.air_quality_index) / 50)
+        
+        # 植被覆盖率分数
+        vegetation_score = env_data.vegetation_coverage / 100
+        
+        # 水质分数
+        water_score = env_data.water_quality / 100
+        
+        # 负离子浓度分数 (>1000为良好)
+        ion_score = min(1.0, env_data.negative_ion_concentration / 3000)
+        
+        # 噪音水平分数 (越低越好，<40dB为优秀)
+        noise_score = max(0, (40 - env_data.noise_level) / 40)
+        
+        # 综合环境分数
+        env_score = (air_score * 0.3 + vegetation_score * 0.2 + water_score * 0.2 + 
+                    ion_score * 0.2 + noise_score * 0.1)
+        
+        return min(env_score, 1.0)
+
+    def _calculate_distance(self, loc1: Location, loc2: Location) -> float:
+        """计算两点间距离（公里）"""
+        # 使用Haversine公式计算球面距离
+        R = 6371  # 地球半径（公里）
+        
+        lat1_rad = math.radians(loc1.latitude)
+        lat2_rad = math.radians(loc2.latitude)
+        delta_lat = math.radians(loc2.latitude - loc1.latitude)
+        delta_lon = math.radians(loc2.longitude - loc1.longitude)
+        
+        a = (math.sin(delta_lat / 2) ** 2 + 
+             math.cos(lat1_rad) * math.cos(lat2_rad) * math.sin(delta_lon / 2) ** 2)
+        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+        
+        return R * c
+
+    async def _calculate_cost_suitability_score(
+        self, destination: WellnessDestination, request: WellnessRequest
+    ) -> float:
+        """计算费用适宜性分数"""
+        min_budget, max_budget = request.budget_range
+        dest_min_price, dest_max_price = destination.price_range
+        
+        # 计算预估总费用（住宿 + 活动）
+        estimated_daily_cost = (dest_min_price + dest_max_price) / 2
+        estimated_total_cost = estimated_daily_cost * request.duration_days * request.group_size
+        
+        if estimated_total_cost <= max_budget:
+            if estimated_total_cost >= min_budget:
+                return 1.0  # 完全符合预算
+            else:
+                return 0.8  # 低于预算，但仍可接受
+        else:
+            # 超出预算，根据超出程度给分
+            excess_ratio = (estimated_total_cost - max_budget) / max_budget
+            return max(0, 1.0 - excess_ratio)
+
+    async def _calculate_season_suitability_score(
+        self, destination: WellnessDestination, request: WellnessRequest
+    ) -> float:
+        """计算季节适宜性分数"""
+        current_season = self._get_current_season()
+        
+        if SeasonSuitability.ALL_YEAR in destination.best_seasons:
+            return 1.0
+        
+        if current_season in destination.best_seasons:
+            return 1.0
+        
+        if request.preferred_seasons:
+            matching_seasons = set(request.preferred_seasons) & set(destination.best_seasons)
+            if matching_seasons:
+                return 0.8
+        
+        return 0.3
+
+    def _get_current_season(self) -> SeasonSuitability:
+        """获取当前季节"""
+        month = datetime.now().month
+        if month in [3, 4, 5]:
+            return SeasonSuitability.SPRING
+        elif month in [6, 7, 8]:
+            return SeasonSuitability.SUMMER
+        elif month in [9, 10, 11]:
+            return SeasonSuitability.AUTUMN
+        else:
+            return SeasonSuitability.WINTER
+
+    async def _recommend_activities(
+        self, destination: WellnessDestination, request: WellnessRequest
+    ) -> List[WellnessActivity]:
+        """推荐活动"""
+        recommended = []
+        
+        # 根据用户偏好和体质推荐活动
+        preferred_types = request.preferred_wellness_types or \
+                         self.constitution_wellness_mapping.get(request.constitution_type, [])
+        
+        for activity in destination.activities:
+            if activity.wellness_type in preferred_types:
+                recommended.append(activity)
+        
+        # 如果推荐活动不足，添加其他适合的活动
+        if len(recommended) < 3:
+            for activity in destination.activities:
+                if activity not in recommended:
+                    recommended.append(activity)
+                    if len(recommended) >= 3:
+                        break
+        
+        return recommended
+
+    async def _calculate_estimated_cost(
+        self, destination: WellnessDestination, activities: List[WellnessActivity], 
+        duration_days: int, group_size: int
+    ) -> float:
+        """计算预估费用"""
+        # 住宿费用（选择中等价位）
+        accommodation_cost = 0.0
+        if destination.accommodation_options:
+            mid_option = destination.accommodation_options[len(destination.accommodation_options) // 2]
+            accommodation_cost = mid_option["price_per_night"] * duration_days * group_size
+        
+        # 活动费用
+        activity_cost = sum(activity.cost_per_person for activity in activities) * group_size
+        
+        # 餐饮费用（估算）
+        meal_cost = 150.0 * duration_days * group_size
+        
+        # 其他费用（估算）
+        other_cost = 100.0 * duration_days * group_size
+        
+        return accommodation_cost + activity_cost + meal_cost + other_cost
+
+    async def _generate_travel_plan(
+        self, destination: WellnessDestination, request: WellnessRequest
+    ) -> Dict[str, Any]:
+        """生成旅行计划"""
+        plan = {
+            "destination": destination.name,
+            "duration": f"{request.duration_days}天{request.duration_days-1}夜",
+            "group_size": request.group_size,
+            "daily_schedule": []
+        }
+        
+        # 生成每日行程
+        for day in range(1, request.duration_days + 1):
+            daily_activities = []
+            
+            if day == 1:
+                daily_activities.append({
+                    "time": "09:00-12:00",
+                    "activity": "抵达目的地，办理入住",
+                    "description": "熟悉环境，休息调整"
+                })
+                daily_activities.append({
+                    "time": "14:00-16:00",
+                    "activity": "体质评估和养生咨询",
+                    "description": "专业中医师进行体质分析，制定个性化养生方案"
+                })
+            elif day == request.duration_days:
+                daily_activities.append({
+                    "time": "09:00-11:00",
+                    "activity": "总结回顾和健康建议",
+                    "description": "整理养生体验，获得后续健康建议"
+                })
+                daily_activities.append({
+                    "time": "14:00-16:00",
+                    "activity": "办理退房，返程",
+                    "description": "结束愉快的养生之旅"
+                })
+            else:
+                # 中间天数安排主要活动
+                if destination.activities:
+                    activity = destination.activities[(day - 2) % len(destination.activities)]
+                    daily_activities.append({
+                        "time": "09:00-12:00",
+                        "activity": activity.name,
+                        "description": activity.description
+                    })
+                
+                daily_activities.append({
+                    "time": "14:00-17:00",
+                    "activity": "自由活动时间",
+                    "description": "可选择其他养生项目或休息放松"
+                })
+            
+            plan["daily_schedule"].append({
+                "day": day,
+                "date": (datetime.now() + timedelta(days=day-1)).strftime("%Y-%m-%d"),
+                "activities": daily_activities
+            })
+        
+        return plan
+
+    async def _extract_health_benefits(
+        self, destination: WellnessDestination, activities: List[WellnessActivity]
+    ) -> List[str]:
+        """提取健康益处"""
+        benefits = set()
+        
+        # 从活动中提取健康益处
+        for activity in activities:
+            benefits.update(activity.health_benefits)
+        
+        # 根据环境数据添加益处
+        env_data = destination.environment_data
+        if env_data.air_quality_index < 50:
+            benefits.add("改善呼吸系统健康")
+        if env_data.negative_ion_concentration > 2000:
+            benefits.add("增强免疫力")
+        if env_data.vegetation_coverage > 80:
+            benefits.add("缓解视觉疲劳")
+        if env_data.noise_level < 40:
+            benefits.add("改善睡眠质量")
+        
+        return list(benefits)
+
+    async def _generate_recommendation_reasons(
+        self, destination: WellnessDestination, request: WellnessRequest, match_score: float
+    ) -> List[str]:
+        """生成推荐理由"""
+        reasons = []
+        
+        # 体质匹配
+        if request.constitution_type in destination.constitution_suitability:
+            reasons.append(f"非常适合{request.constitution_type}体质的养生需求")
+        
+        # 环境优势
+        env_data = destination.environment_data
+        if env_data.air_quality_index < 30:
+            reasons.append("空气质量优秀，有利于呼吸系统健康")
+        if env_data.negative_ion_concentration > 3000:
+            reasons.append("负离子浓度高，有助于身心放松")
+        if env_data.vegetation_coverage > 85:
+            reasons.append("植被覆盖率高，环境清幽宜人")
+        
+        # 设施优势
+        if "中医理疗中心" in destination.facilities:
+            reasons.append("配备专业中医理疗设施")
+        if "温泉" in destination.facilities:
+            reasons.append("天然温泉资源，有助于身体调理")
+        
+        # 评分优势
+        if destination.rating >= 4.5:
+            reasons.append(f"用户评分高达{destination.rating}分，口碑优秀")
+        
+        # 匹配度
+        if match_score >= 0.8:
+            reasons.append("综合匹配度极高，强烈推荐")
+        elif match_score >= 0.7:
+            reasons.append("综合匹配度良好，值得考虑")
+        
+        return reasons
+
+    async def create_wellness_plan(self, request: WellnessRequest) -> WellnessPlan:
+        """
+        创建养生计划
+
+        Args:
+            request: 养生需求请求
+
+        Returns:
+            完整的养生计划
+        """
+        try:
+            logger.info(f"开始创建养生计划，用户ID: {request.user_id}")
+            
+            # 获取推荐目的地
+            recommendations = await self.find_wellness_destinations(request)
+            
+            if not recommendations:
+                raise ValueError("未找到合适的养生目的地")
+            
+            # 计算总费用
+            total_cost = sum(rec.estimated_cost for rec in recommendations[:3])  # 取前3个推荐
+            
+            # 生成综合行程
+            itinerary = await self._generate_comprehensive_itinerary(recommendations[:3], request)
+            
+            # 提取健康目标
+            health_objectives = await self._extract_health_objectives(recommendations, request)
+            
+            plan = WellnessPlan(
+                plan_id=str(uuid.uuid4()),
+                user_id=request.user_id,
+                recommendations=recommendations,
+                total_duration=request.duration_days,
+                total_cost=total_cost,
+                itinerary=itinerary,
+                health_objectives=health_objectives
+            )
+            
+            logger.info(f"养生计划创建成功，计划ID: {plan.plan_id}")
+            return plan
+            
+        except Exception as e:
+            logger.error(f"创建养生计划失败: {e}")
+            raise
+
+    async def _generate_comprehensive_itinerary(
+        self, recommendations: List[WellnessRecommendation], request: WellnessRequest
+    ) -> List[Dict[str, Any]]:
+        """生成综合行程"""
+        itinerary = []
+        
+        for i, rec in enumerate(recommendations):
+            itinerary.append({
+                "option": i + 1,
+                "destination": rec.destination.name,
+                "duration": rec.suggested_duration,
+                "cost": rec.estimated_cost,
+                "highlights": rec.health_benefits[:3],
+                "travel_plan": rec.travel_plan
+            })
+        
+        return itinerary
+
+    async def _extract_health_objectives(
+        self, recommendations: List[WellnessRecommendation], request: WellnessRequest
+    ) -> List[str]:
+        """提取健康目标"""
+        objectives = set(request.health_goals)
+        
+        # 根据体质添加目标
+        constitution_objectives = {
+            "气虚质": ["增强体质", "提升精力", "改善免疫力"],
+            "阳虚质": ["温阳补气", "改善循环", "增强抵抗力"],
+            "阴虚质": ["滋阴润燥", "改善睡眠", "缓解焦虑"],
+            "痰湿质": ["化痰除湿", "减重塑形", "改善代谢"],
+            "湿热质": ["清热利湿", "改善皮肤", "调节情绪"],
+            "血瘀质": ["活血化瘀", "改善循环", "缓解疼痛"],
+            "气郁质": ["疏肝解郁", "缓解压力", "改善情绪"],
+            "特禀质": ["调节过敏", "增强适应性", "改善体质"]
+        }
+        
+        if request.constitution_type in constitution_objectives:
+            objectives.update(constitution_objectives[request.constitution_type])
+        
+        return list(objectives)
+
+    async def get_destination_details(self, destination_id: str) -> Optional[WellnessDestination]:
+        """获取目的地详情"""
+        return self.destinations.get(destination_id)
+
+    async def get_activity_details(self, activity_id: str) -> Optional[WellnessActivity]:
+        """获取活动详情"""
+        return self.activities.get(activity_id)
+
+    async def update_destination_rating(self, destination_id: str, rating: float, review_text: str = ""):
+        """更新目的地评分"""
+        if destination_id in self.destinations:
+            destination = self.destinations[destination_id]
+            # 简单的评分更新算法
+            total_score = destination.rating * destination.review_count + rating
+            destination.review_count += 1
+            destination.rating = total_score / destination.review_count
+            
+            logger.info(f"目的地 {destination.name} 评分已更新: {destination.rating}")
+
+    async def get_service_stats(self) -> Dict[str, Any]:
+        """获取服务统计信息"""
+        return {
+            "total_destinations": len(self.destinations),
+            "total_activities": len(self.activities),
+            "wellness_types": [wt.value for wt in WellnessType],
+            "average_rating": sum(d.rating for d in self.destinations.values()) / len(self.destinations) if self.destinations else 0,
+            "service_status": "healthy"
+        } 

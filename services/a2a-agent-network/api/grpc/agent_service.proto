@@ -1,1 +1,306 @@
- 
+syntax = "proto3";
+
+package a2a.agent.v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+option go_package = "github.com/suoke-life/a2a-agent-network/api/grpc/v1";
+
+// 智能体网络服务
+service AgentNetworkService {
+  // 健康检查
+  rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse);
+  
+  // 智能体管理
+  rpc ListAgents(ListAgentsRequest) returns (ListAgentsResponse);
+  rpc GetAgent(GetAgentRequest) returns (GetAgentResponse);
+  rpc GetAgentMetrics(GetAgentMetricsRequest) returns (GetAgentMetricsResponse);
+  rpc ExecuteAgentAction(ExecuteAgentActionRequest) returns (ExecuteAgentActionResponse);
+  
+  // 工作流管理
+  rpc ListWorkflows(ListWorkflowsRequest) returns (ListWorkflowsResponse);
+  rpc ExecuteWorkflow(ExecuteWorkflowRequest) returns (ExecuteWorkflowResponse);
+  rpc GetWorkflowExecution(GetWorkflowExecutionRequest) returns (GetWorkflowExecutionResponse);
+  rpc CancelWorkflowExecution(CancelWorkflowExecutionRequest) returns (CancelWorkflowExecutionResponse);
+  rpc GetWorkflowProgress(GetWorkflowProgressRequest) returns (GetWorkflowProgressResponse);
+  
+  // 网络状态
+  rpc GetNetworkStatus(GetNetworkStatusRequest) returns (GetNetworkStatusResponse);
+  
+  // 实时流
+  rpc StreamAgentEvents(StreamAgentEventsRequest) returns (stream AgentEvent);
+  rpc StreamWorkflowEvents(StreamWorkflowEventsRequest) returns (stream WorkflowEvent);
+}
+
+// 健康检查
+message HealthCheckRequest {}
+
+message HealthCheckResponse {
+  string status = 1;
+  google.protobuf.Timestamp timestamp = 2;
+  string service = 3;
+}
+
+// 智能体相关消息
+message Agent {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string version = 4;
+  AgentStatus status = 5;
+  string url = 6;
+  repeated AgentCapability capabilities = 7;
+  google.protobuf.Timestamp last_heartbeat = 8;
+  google.protobuf.Struct metadata = 9;
+}
+
+message AgentCapability {
+  string name = 1;
+  string description = 2;
+  bool enabled = 3;
+  google.protobuf.Struct parameters = 4;
+}
+
+enum AgentStatus {
+  AGENT_STATUS_UNSPECIFIED = 0;
+  AGENT_STATUS_ONLINE = 1;
+  AGENT_STATUS_OFFLINE = 2;
+  AGENT_STATUS_BUSY = 3;
+  AGENT_STATUS_ERROR = 4;
+}
+
+message AgentMetrics {
+  string agent_id = 1;
+  int64 request_count = 2;
+  int64 success_count = 3;
+  int64 error_count = 4;
+  double avg_response_time = 5;
+  google.protobuf.Timestamp last_request_time = 6;
+  double uptime = 7;
+}
+
+// 智能体列表
+message ListAgentsRequest {}
+
+message ListAgentsResponse {
+  repeated Agent agents = 1;
+  int32 total = 2;
+}
+
+// 获取智能体
+message GetAgentRequest {
+  string agent_id = 1;
+}
+
+message GetAgentResponse {
+  Agent agent = 1;
+}
+
+// 获取智能体指标
+message GetAgentMetricsRequest {
+  string agent_id = 1;
+}
+
+message GetAgentMetricsResponse {
+  AgentMetrics metrics = 1;
+}
+
+// 执行智能体动作
+message ExecuteAgentActionRequest {
+  string agent_id = 1;
+  string action = 2;
+  google.protobuf.Struct parameters = 3;
+  string user_id = 4;
+  string request_id = 5;
+  int32 timeout = 6;
+}
+
+message ExecuteAgentActionResponse {
+  bool success = 1;
+  google.protobuf.Struct data = 2;
+  string error = 3;
+  double execution_time = 4;
+  google.protobuf.Timestamp timestamp = 5;
+}
+
+// 工作流相关消息
+message WorkflowDefinition {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string version = 4;
+  int32 timeout = 5;
+  int32 retry_count = 6;
+  repeated WorkflowStep steps = 7;
+  google.protobuf.Struct metadata = 8;
+  repeated string tags = 9;
+}
+
+message WorkflowStep {
+  string id = 1;
+  string name = 2;
+  string agent = 3;
+  string action = 4;
+  string description = 5;
+  int32 timeout = 6;
+  int32 retry_count = 7;
+  string condition = 8;
+  google.protobuf.Struct parameters = 9;
+  repeated string dependencies = 10;
+}
+
+enum WorkflowStatus {
+  WORKFLOW_STATUS_UNSPECIFIED = 0;
+  WORKFLOW_STATUS_PENDING = 1;
+  WORKFLOW_STATUS_RUNNING = 2;
+  WORKFLOW_STATUS_COMPLETED = 3;
+  WORKFLOW_STATUS_FAILED = 4;
+  WORKFLOW_STATUS_CANCELLED = 5;
+  WORKFLOW_STATUS_PAUSED = 6;
+}
+
+enum StepStatus {
+  STEP_STATUS_UNSPECIFIED = 0;
+  STEP_STATUS_PENDING = 1;
+  STEP_STATUS_RUNNING = 2;
+  STEP_STATUS_COMPLETED = 3;
+  STEP_STATUS_FAILED = 4;
+  STEP_STATUS_SKIPPED = 5;
+}
+
+message StepExecution {
+  string step_id = 1;
+  StepStatus status = 2;
+  string agent_id = 3;
+  google.protobuf.Timestamp start_time = 4;
+  google.protobuf.Timestamp end_time = 5;
+  double execution_time = 6;
+  google.protobuf.Struct result = 7;
+  string error = 8;
+  int32 retry_count = 9;
+}
+
+message WorkflowExecution {
+  string execution_id = 1;
+  string workflow_id = 2;
+  string workflow_name = 3;
+  WorkflowStatus status = 4;
+  string user_id = 5;
+  google.protobuf.Timestamp start_time = 6;
+  google.protobuf.Timestamp end_time = 7;
+  double execution_time = 8;
+  repeated StepExecution steps = 9;
+  google.protobuf.Struct context = 10;
+  google.protobuf.Struct result = 11;
+  string error = 12;
+  google.protobuf.Struct metadata = 13;
+}
+
+// 工作流列表
+message ListWorkflowsRequest {}
+
+message ListWorkflowsResponse {
+  repeated WorkflowDefinition workflows = 1;
+  int32 total = 2;
+}
+
+// 执行工作流
+message ExecuteWorkflowRequest {
+  string workflow_id = 1;
+  string user_id = 2;
+  google.protobuf.Struct parameters = 3;
+  google.protobuf.Struct context = 4;
+  int32 priority = 5;
+  int32 timeout = 6;
+}
+
+message ExecuteWorkflowResponse {
+  string execution_id = 1;
+  WorkflowStatus status = 2;
+  google.protobuf.Struct result = 3;
+  string error = 4;
+  double execution_time = 5;
+  int32 steps_completed = 6;
+  int32 total_steps = 7;
+}
+
+// 获取工作流执行
+message GetWorkflowExecutionRequest {
+  string execution_id = 1;
+}
+
+message GetWorkflowExecutionResponse {
+  WorkflowExecution execution = 1;
+}
+
+// 取消工作流执行
+message CancelWorkflowExecutionRequest {
+  string execution_id = 1;
+}
+
+message CancelWorkflowExecutionResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// 获取工作流进度
+message GetWorkflowProgressRequest {
+  string execution_id = 1;
+}
+
+message WorkflowProgress {
+  int32 total_steps = 1;
+  int32 completed_steps = 2;
+  int32 failed_steps = 3;
+  int32 running_steps = 4;
+  double progress_percentage = 5;
+}
+
+message GetWorkflowProgressResponse {
+  string execution_id = 1;
+  WorkflowStatus status = 2;
+  WorkflowProgress progress = 3;
+  repeated StepExecution current_steps = 4;
+}
+
+// 网络状态
+message GetNetworkStatusRequest {}
+
+message NetworkStatus {
+  int32 total_agents = 1;
+  int32 online_agents = 2;
+  int32 offline_agents = 3;
+  double network_health = 4;
+  map<string, AgentStatus> agents = 5;
+  google.protobuf.Timestamp last_updated = 6;
+}
+
+message GetNetworkStatusResponse {
+  NetworkStatus status = 1;
+}
+
+// 事件流
+message StreamAgentEventsRequest {
+  repeated string agent_ids = 1; // 空表示所有智能体
+}
+
+message AgentEvent {
+  string agent_id = 1;
+  string event_type = 2; // status_change, request_received, request_completed, etc.
+  google.protobuf.Struct data = 3;
+  google.protobuf.Timestamp timestamp = 4;
+}
+
+message StreamWorkflowEventsRequest {
+  repeated string workflow_ids = 1; // 空表示所有工作流
+  string user_id = 2; // 可选，过滤特定用户的工作流
+}
+
+message WorkflowEvent {
+  string execution_id = 1;
+  string workflow_id = 2;
+  string event_type = 3; // started, step_started, step_completed, step_failed, completed, failed, cancelled
+  google.protobuf.Struct data = 4;
+  google.protobuf.Timestamp timestamp = 5;
+} 

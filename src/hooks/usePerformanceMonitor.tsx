@@ -17,7 +17,11 @@ interface UsePerformanceMonitorOptions {
 export const usePerformanceMonitor = (
   options: UsePerformanceMonitorOptions
 ) => {
-  const { componentName, enableMemoryMonitoring = false, threshold = 16 } = options;
+  const {
+    componentName,
+    enableMemoryMonitoring = false,
+    threshold = 16,
+  } = options;
   const renderStartTime = useRef<number>(0);
   const [metrics, setMetrics] = useState<PerformanceMetrics | null>(null);
 
@@ -29,7 +33,7 @@ export const usePerformanceMonitor = (
     const renderTime = performance.now() - renderStartTime.current;
     const newMetrics: PerformanceMetrics = {
       renderTime,
-      componentName
+      componentName,
     };
 
     // 获取内存使用情况（如果支持）
@@ -41,15 +45,18 @@ export const usePerformanceMonitor = (
 
     // 如果渲染时间超过阈值，记录警告
     if (renderTime > threshold) {
-      log.warn(`组件 ${componentName} 渲染时间过长: ${renderTime.toFixed(2)}ms`, {
-        renderTime,
-        threshold,
-        memoryUsage: newMetrics.memoryUsage
-      });
+      log.warn(
+        `组件 ${componentName} 渲染时间过长: ${renderTime.toFixed(2)}ms`,
+        {
+          renderTime,
+          threshold,
+          memoryUsage: newMetrics.memoryUsage,
+        }
+      );
     }
 
     // 在开发环境记录性能指标
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === "development") {
       log.debug(`组件 ${componentName} 性能指标`, newMetrics);
     }
   });
@@ -67,6 +74,8 @@ export const withPerformanceMonitor = <P extends object>(
     return <WrappedComponent {...props} />;
   };
 
-  WithPerformanceMonitor.displayName = `withPerformanceMonitor(${WrappedComponent.displayName || WrappedComponent.name})`;
+  WithPerformanceMonitor.displayName = `withPerformanceMonitor(${
+    WrappedComponent.displayName || WrappedComponent.name
+  })`;
   return WithPerformanceMonitor;
 };

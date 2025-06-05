@@ -1,8 +1,15 @@
-import { AgentType, AgentCapability, AgentResponse, AgentContext, AgentCollaborationMessage, AgentDecisionResult } from './types';
-import { XiaoaiAgentImpl } from './xiaoai/XiaoaiAgentImpl';
-import { XiaokeAgentImpl } from './xiaoke/XiaokeAgentImpl';
-import { LaokeAgentImpl } from './laoke/LaokeAgentImpl';
-import { SoerAgentImpl } from './soer/SoerAgentImpl';
+import {
+  AgentType,
+  AgentCapability,
+  AgentResponse,
+  AgentContext,
+  AgentCollaborationMessage,
+  AgentDecisionResult,
+} from "./types";
+import { XiaoaiAgentImpl } from "./xiaoai/XiaoaiAgentImpl";
+import { XiaokeAgentImpl } from "./xiaoke/XiaokeAgentImpl";
+import { LaokeAgentImpl } from "./laoke/LaokeAgentImpl";
+import { SoerAgentImpl } from "./soer/SoerAgentImpl";
 
 /**
  * 智能体协调器
@@ -14,7 +21,7 @@ export class AgentCoordinator {
   private isInitialized: boolean = false;
 
   constructor() {
-    this.log('info', '智能体协调器创建');
+    this.log("info", "智能体协调器创建");
   }
 
   /**
@@ -22,7 +29,7 @@ export class AgentCoordinator {
    */
   async initialize(): Promise<void> {
     try {
-      this.log('info', '开始初始化智能体协调器...');
+      this.log("info", "开始初始化智能体协调器...");
 
       // 创建所有智能体实例
       const xiaoai = new XiaoaiAgentImpl();
@@ -35,7 +42,7 @@ export class AgentCoordinator {
         xiaoai.initialize(),
         xiaoke.initialize(),
         laoke.initialize(),
-        soer.initialize()
+        soer.initialize(),
       ]);
 
       // 注册智能体
@@ -45,9 +52,9 @@ export class AgentCoordinator {
       this.agents.set(AgentType.SOER, soer);
 
       this.isInitialized = true;
-      this.log('info', '智能体协调器初始化完成');
+      this.log("info", "智能体协调器初始化完成");
     } catch (error) {
-      this.log('error', '智能体协调器初始化失败', error);
+      this.log("error", "智能体协调器初始化失败", error);
       throw error;
     }
   }
@@ -55,30 +62,49 @@ export class AgentCoordinator {
   /**
    * 协调处理用户任务
    */
-  async coordinateTask(message: string, context: AgentContext): Promise<AgentResponse> {
+  async coordinateTask(
+    message: string,
+    context: AgentContext
+  ): Promise<AgentResponse> {
     if (!this.isInitialized) {
-      throw new Error('智能体协调器尚未初始化');
+      throw new Error("智能体协调器尚未初始化");
     }
 
     try {
       // 分析任务类型和所需智能体
       const taskAnalysis = await this.analyzeTask(message, context);
-      
+
       // 根据任务类型选择协作模式
       switch (taskAnalysis.collaborationMode) {
-        case 'single':
-          return await this.handleSingleAgentTask(taskAnalysis, message, context);
-        case 'sequential':
-          return await this.handleSequentialCollaboration(taskAnalysis, message, context);
-        case 'parallel':
-          return await this.handleParallelCollaboration(taskAnalysis, message, context);
-        case 'consensus':
-          return await this.handleConsensusCollaboration(taskAnalysis, message, context);
+        case "single":
+          return await this.handleSingleAgentTask(
+            taskAnalysis,
+            message,
+            context
+          );
+        case "sequential":
+          return await this.handleSequentialCollaboration(
+            taskAnalysis,
+            message,
+            context
+          );
+        case "parallel":
+          return await this.handleParallelCollaboration(
+            taskAnalysis,
+            message,
+            context
+          );
+        case "consensus":
+          return await this.handleConsensusCollaboration(
+            taskAnalysis,
+            message,
+            context
+          );
         default:
           return await this.handleDefaultTask(message, context);
       }
     } catch (error) {
-      this.log('error', '任务协调失败', error);
+      this.log("error", "任务协调失败", error);
       throw error;
     }
   }
@@ -86,78 +112,105 @@ export class AgentCoordinator {
   /**
    * 分析任务类型和协作需求
    */
-  private async analyzeTask(message: string, context: AgentContext): Promise<any> {
+  private async analyzeTask(
+    message: string,
+    context: AgentContext
+  ): Promise<any> {
     const keywords = message.toLowerCase();
-    
+
     // 健康诊断类任务 - 需要多智能体协作
-    if (keywords.includes('诊断') || keywords.includes('症状') || keywords.includes('健康分析')) {
+    if (
+      keywords.includes("诊断") ||
+      keywords.includes("症状") ||
+      keywords.includes("健康分析")
+    ) {
       return {
-        type: 'health_diagnosis',
+        type: "health_diagnosis",
         primaryAgent: AgentType.XIAOAI,
         supportingAgents: [AgentType.XIAOKE, AgentType.LAOKE, AgentType.SOER],
-        collaborationMode: 'sequential',
-        priority: 'high'
+        collaborationMode: "sequential",
+        priority: "high",
       };
     }
 
     // 生活方式优化 - 需要索儿主导，其他支持
-    if (keywords.includes('生活方式') || keywords.includes('习惯') || keywords.includes('改善')) {
+    if (
+      keywords.includes("生活方式") ||
+      keywords.includes("习惯") ||
+      keywords.includes("改善")
+    ) {
       return {
-        type: 'lifestyle_optimization',
+        type: "lifestyle_optimization",
         primaryAgent: AgentType.SOER,
         supportingAgents: [AgentType.XIAOAI, AgentType.LAOKE],
-        collaborationMode: 'sequential',
-        priority: 'medium'
+        collaborationMode: "sequential",
+        priority: "medium",
       };
     }
 
     // 知识学习类 - 老克主导
-    if (keywords.includes('学习') || keywords.includes('知识') || keywords.includes('教育')) {
+    if (
+      keywords.includes("学习") ||
+      keywords.includes("知识") ||
+      keywords.includes("教育")
+    ) {
       return {
-        type: 'knowledge_learning',
+        type: "knowledge_learning",
         primaryAgent: AgentType.LAOKE,
         supportingAgents: [AgentType.XIAOAI],
-        collaborationMode: 'single',
-        priority: 'medium'
+        collaborationMode: "single",
+        priority: "medium",
       };
     }
 
     // 服务推荐类 - 小克主导
-    if (keywords.includes('推荐') || keywords.includes('服务') || keywords.includes('预约')) {
+    if (
+      keywords.includes("推荐") ||
+      keywords.includes("服务") ||
+      keywords.includes("预约")
+    ) {
       return {
-        type: 'service_recommendation',
+        type: "service_recommendation",
         primaryAgent: AgentType.XIAOKE,
         supportingAgents: [AgentType.XIAOAI, AgentType.SOER],
-        collaborationMode: 'sequential',
-        priority: 'medium'
+        collaborationMode: "sequential",
+        priority: "medium",
       };
     }
 
     // 紧急情况 - 需要所有智能体协作
-    if (keywords.includes('紧急') || keywords.includes('急救') || keywords.includes('危险')) {
+    if (
+      keywords.includes("紧急") ||
+      keywords.includes("急救") ||
+      keywords.includes("危险")
+    ) {
       return {
-        type: 'emergency',
+        type: "emergency",
         primaryAgent: AgentType.XIAOAI,
         supportingAgents: [AgentType.XIAOKE, AgentType.LAOKE, AgentType.SOER],
-        collaborationMode: 'parallel',
-        priority: 'critical'
+        collaborationMode: "parallel",
+        priority: "critical",
       };
     }
 
     // 默认单智能体处理
     return {
-      type: 'general',
+      type: "general",
       primaryAgent: this.selectPrimaryAgent(context),
       supportingAgents: [],
-      collaborationMode: 'single',
-      priority: 'low'
+      collaborationMode: "single",
+      priority: "low",
     };
   }
 
   /**
    * 处理单智能体任务
    */
-  private async handleSingleAgentTask(taskAnalysis: any, message: string, context: AgentContext): Promise<AgentResponse> {
+  private async handleSingleAgentTask(
+    taskAnalysis: any,
+    message: string,
+    context: AgentContext
+  ): Promise<AgentResponse> {
     const agent = this.agents.get(taskAnalysis.primaryAgent);
     if (!agent) {
       throw new Error(`智能体 ${taskAnalysis.primaryAgent} 不可用`);
@@ -169,9 +222,13 @@ export class AgentCoordinator {
   /**
    * 处理顺序协作任务
    */
-  private async handleSequentialCollaboration(taskAnalysis: any, message: string, context: AgentContext): Promise<AgentResponse> {
+  private async handleSequentialCollaboration(
+    taskAnalysis: any,
+    message: string,
+    context: AgentContext
+  ): Promise<AgentResponse> {
     const results: AgentResponse[] = [];
-    
+
     // 主智能体处理
     const primaryAgent = this.agents.get(taskAnalysis.primaryAgent);
     const primaryResult = await primaryAgent.processMessage(message, context);
@@ -184,9 +241,9 @@ export class AgentCoordinator {
         const supportContext = {
           ...context,
           previousResults: results,
-          collaborationMode: 'supporting'
+          collaborationMode: "supporting",
         };
-        
+
         const supportResult = await agent.processMessage(
           `协作支持: ${message}`,
           supportContext
@@ -202,7 +259,11 @@ export class AgentCoordinator {
   /**
    * 处理并行协作任务
    */
-  private async handleParallelCollaboration(taskAnalysis: any, message: string, context: AgentContext): Promise<AgentResponse> {
+  private async handleParallelCollaboration(
+    taskAnalysis: any,
+    message: string,
+    context: AgentContext
+  ): Promise<AgentResponse> {
     const agentPromises: Promise<AgentResponse>[] = [];
 
     // 主智能体处理
@@ -215,15 +276,17 @@ export class AgentCoordinator {
       if (agent) {
         const supportContext = {
           ...context,
-          collaborationMode: 'parallel_supporting'
+          collaborationMode: "parallel_supporting",
         };
-        agentPromises.push(agent.processMessage(`并行协作: ${message}`, supportContext));
+        agentPromises.push(
+          agent.processMessage(`并行协作: ${message}`, supportContext)
+        );
       }
     }
 
     // 等待所有结果
     const results = await Promise.all(agentPromises);
-    
+
     // 整合结果
     return this.integrateCollaborationResults(results, taskAnalysis);
   }
@@ -231,12 +294,19 @@ export class AgentCoordinator {
   /**
    * 处理共识协作任务
    */
-  private async handleConsensusCollaboration(taskAnalysis: any, message: string, context: AgentContext): Promise<AgentResponse> {
+  private async handleConsensusCollaboration(
+    taskAnalysis: any,
+    message: string,
+    context: AgentContext
+  ): Promise<AgentResponse> {
     const decisions: AgentDecisionResult[] = [];
 
     // 所有相关智能体提供决策意见
-    const allAgents = [taskAnalysis.primaryAgent, ...taskAnalysis.supportingAgents];
-    
+    const allAgents = [
+      taskAnalysis.primaryAgent,
+      ...taskAnalysis.supportingAgents,
+    ];
+
     for (const agentType of allAgents) {
       const agent = this.agents.get(agentType);
       if (agent) {
@@ -247,7 +317,7 @@ export class AgentCoordinator {
 
     // 基于共识算法整合决策
     const consensusResult = this.buildConsensus(decisions);
-    
+
     return {
       success: true,
       response: consensusResult.decision,
@@ -255,26 +325,29 @@ export class AgentCoordinator {
         consensusConfidence: consensusResult.confidence,
         participatingAgents: allAgents,
         individualDecisions: decisions,
-        reasoning: consensusResult.reasoning
+        reasoning: consensusResult.reasoning,
       },
       context,
       metadata: {
-        collaborationType: 'consensus',
+        collaborationType: "consensus",
         agentCount: allAgents.length,
-        timestamp: new Date().toISOString()
-      }
+        timestamp: new Date().toISOString(),
+      },
     };
   }
 
   /**
    * 处理默认任务
    */
-  private async handleDefaultTask(message: string, context: AgentContext): Promise<AgentResponse> {
+  private async handleDefaultTask(
+    message: string,
+    context: AgentContext
+  ): Promise<AgentResponse> {
     const primaryAgent = this.selectPrimaryAgent(context);
     const agent = this.agents.get(primaryAgent);
-    
+
     if (!agent) {
-      throw new Error('没有可用的智能体');
+      throw new Error("没有可用的智能体");
     }
 
     return await agent.processMessage(message, context);
@@ -286,11 +359,11 @@ export class AgentCoordinator {
   private selectPrimaryAgent(context: AgentContext): AgentType {
     // 根据当前频道选择主要智能体
     switch (context.currentChannel) {
-      case 'suoke':
+      case "suoke":
         return AgentType.XIAOKE;
-      case 'explore':
+      case "explore":
         return AgentType.LAOKE;
-      case 'life':
+      case "life":
         return AgentType.SOER;
       default:
         return AgentType.XIAOAI;
@@ -300,7 +373,10 @@ export class AgentCoordinator {
   /**
    * 整合协作结果
    */
-  private integrateCollaborationResults(results: AgentResponse[], taskAnalysis: any): AgentResponse {
+  private integrateCollaborationResults(
+    results: AgentResponse[],
+    taskAnalysis: any
+  ): AgentResponse {
     const primaryResult = results[0];
     const supportingResults = results.slice(1);
 
@@ -309,27 +385,40 @@ export class AgentCoordinator {
       response: primaryResult.response,
       data: {
         primaryResult: primaryResult.data,
-        supportingResults: supportingResults.map(r => r.data),
+        supportingResults: supportingResults.map((r) => r.data),
         collaborationSummary: this.generateCollaborationSummary(results),
         taskType: taskAnalysis.type,
-        collaborationMode: taskAnalysis.collaborationMode
+        collaborationMode: taskAnalysis.collaborationMode,
       },
       context: primaryResult.context,
       metadata: {
         ...primaryResult.metadata,
         collaborationType: taskAnalysis.collaborationMode,
-        participatingAgents: [taskAnalysis.primaryAgent, ...taskAnalysis.supportingAgents],
-        totalExecutionTime: results.reduce((sum, r) => sum + (r.metadata?.executionTime || 0), 0)
-      }
+        participatingAgents: [
+          taskAnalysis.primaryAgent,
+          ...taskAnalysis.supportingAgents,
+        ],
+        totalExecutionTime: results.reduce(
+          (sum, r) => sum + (r.metadata?.executionTime || 0),
+          0
+        ),
+      },
     };
   }
 
   /**
    * 获取智能体决策
    */
-  private async getAgentDecision(agent: any, message: string, context: AgentContext): Promise<AgentDecisionResult> {
-    const response = await agent.processMessage(`决策请求: ${message}`, context);
-    
+  private async getAgentDecision(
+    agent: any,
+    message: string,
+    context: AgentContext
+  ): Promise<AgentDecisionResult> {
+    const response = await agent.processMessage(
+      `决策请求: ${message}`,
+      context
+    );
+
     return {
       decision: response.response,
       confidence: response.metadata?.confidence || 0.5,
@@ -338,8 +427,8 @@ export class AgentCoordinator {
       recommendedActions: [],
       metadata: {
         agentType: agent.getAgentType(),
-        executionTime: response.metadata?.executionTime
-      }
+        executionTime: response.metadata?.executionTime,
+      },
     };
   }
 
@@ -357,7 +446,7 @@ export class AgentCoordinator {
     return {
       decision: decisions[0].decision, // 简化：选择第一个决策
       confidence: weightedDecision,
-      reasoning: decisions.flatMap(d => d.reasoning)
+      reasoning: decisions.flatMap((d) => d.reasoning),
     };
   }
 
@@ -365,7 +454,7 @@ export class AgentCoordinator {
    * 生成协作摘要
    */
   private generateCollaborationSummary(results: AgentResponse[]): string {
-    const successCount = results.filter(r => r.success).length;
+    const successCount = results.filter((r) => r.success).length;
     return `协作完成，${successCount}/${results.length} 个智能体成功响应`;
   }
 
@@ -374,16 +463,19 @@ export class AgentCoordinator {
    */
   async getAllAgentStatus(): Promise<Map<AgentType, any>> {
     const statusMap = new Map();
-    
+
     for (const [agentType, agent] of this.agents) {
       try {
         const status = await agent.getHealthStatus();
         statusMap.set(agentType, status);
       } catch (error) {
-        statusMap.set(agentType, { status: 'error', error: error instanceof Error ? error.message : String(error) });
+        statusMap.set(agentType, {
+          status: "error",
+          error: error instanceof Error ? error.message : String(error),
+        });
       }
     }
-    
+
     return statusMap;
   }
 
@@ -391,35 +483,41 @@ export class AgentCoordinator {
    * 关闭协调器
    */
   async shutdown(): Promise<void> {
-    this.log('info', '智能体协调器正在关闭...');
-    
+    this.log("info", "智能体协调器正在关闭...");
+
     // 关闭所有智能体
-    const shutdownPromises = Array.from(this.agents.values()).map(agent => agent.shutdown());
+    const shutdownPromises = Array.from(this.agents.values()).map((agent) =>
+      agent.shutdown()
+    );
     await Promise.all(shutdownPromises);
-    
+
     this.agents.clear();
     this.collaborationHistory = [];
     this.isInitialized = false;
-    
-    this.log('info', '智能体协调器已关闭');
+
+    this.log("info", "智能体协调器已关闭");
   }
 
   /**
    * 记录日志
    */
-  private log(level: 'info' | 'warn' | 'error', message: string, data?: any): void {
+  private log(
+    level: "info" | "warn" | "error",
+    message: string,
+    data?: any
+  ): void {
     const timestamp = new Date().toISOString();
     const logMessage = `[${timestamp}] [AgentCoordinator] [${level.toUpperCase()}] ${message}`;
-    
+
     switch (level) {
-      case 'info':
-        console.log(logMessage, data || '');
+      case "info":
+        console.log(logMessage, data || "");
         break;
-      case 'warn':
-        console.warn(logMessage, data || '');
+      case "warn":
+        console.warn(logMessage, data || "");
         break;
-      case 'error':
-        console.error(logMessage, data || '');
+      case "error":
+        console.error(logMessage, data || "");
         break;
     }
   }

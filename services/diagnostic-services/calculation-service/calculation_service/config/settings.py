@@ -4,7 +4,7 @@
 
 from typing import List
 from functools import lru_cache
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     """应用配置"""

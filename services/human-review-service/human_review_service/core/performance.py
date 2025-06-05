@@ -466,6 +466,15 @@ class ConnectionPoolOptimizer:
             "connection_timeouts": 0
         }
 
+    def get_connection_stats(self) -> Dict[str, int]:
+        """获取连接统计信息"""
+        return {
+            "active": 5,  # 模拟活跃连接数
+            "idle": 3,    # 模拟空闲连接数
+            "total": 8,   # 总连接数
+            "max_pool_size": 20,  # 最大池大小
+        }
+
     async def optimize_pool_size(self, current_load: float) -> Dict[str, int]:
         """根据当前负载优化连接池大小"""
         base_pool_size = settings.database.pool_size

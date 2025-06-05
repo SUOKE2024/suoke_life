@@ -46,6 +46,10 @@ class AgentManager:
         # 初始化智能体配置
         self._load_agent_configs()
 
+        # 动态注册相关
+        self._registration_callbacks: list[callable] = []
+        self._deregistration_callbacks: list[callable] = []
+
         logger.info("智能体管理器初始化完成")
 
     def _load_agent_configs(self) -> None:
@@ -114,6 +118,7 @@ class AgentManager:
         # 关闭 HTTP 会话
         if self.session:
             await self.session.close()
+            self.session = None
 
         logger.info("智能体管理器已停止")
 
@@ -347,3 +352,138 @@ class AgentManager:
                 for agent in self.agents.values()
             ],
         }
+
+    async def register_agent(self, agent: AgentInfo) -> bool:
+        """
+        动态注册智能体
+
+        Args:
+            agent: 智能体信息
+
+        Returns:
+            是否注册成功
+        """
+        try:
+            # 验证智能体信息
+            if not agent.id or not agent.url:
+                logger.error(f"智能体信息不完整: {agent.id}")
+                return False
+
+            # 检查是否已存在
+            if agent.id in self.agents:
+                logger.warning(f"智能体已存在，将更新信息: {agent.id}")
+
+            # 测试连接
+            if not await self._test_agent_connection(agent):
+                logger.error(f"无法连接到智能体: {agent.id} ({agent.url})")
+                return False
+
+            # 注册智能体
+            self.agents[agent.id] = agent
+            
+            # 初始化指标
+            self.agent_metrics[agent.id] = AgentMetrics(
+                agent_id=agent.id,
+                request_count=0,
+                success_count=0,
+                error_count=0,
+                avg_response_time=0.0,
+                last_request_time=None,
+                uptime=0.0,
+            )
+
+            # 触发注册回调
+            for callback in self._registration_callbacks:
+                try:
+                    await callback(agent)
+                except Exception as e:
+                    logger.error(f"注册回调执行失败: {e}")
+
+            logger.info(f"智能体注册成功: {agent.id}")
+            return True
+
+        except Exception as e:
+            logger.error(f"智能体注册失败: {agent.id}, 错误: {e}")
+            return False
+
+    async def deregister_agent(self, agent_id: str) -> bool:
+        """
+        注销智能体
+
+        Args:
+            agent_id: 智能体ID
+
+        Returns:
+            是否注销成功
+        """
+        try:
+            if agent_id not in self.agents:
+                logger.warning(f"智能体不存在: {agent_id}")
+                return False
+
+            agent = self.agents[agent_id]
+
+            # 触发注销回调
+            for callback in self._deregistration_callbacks:
+                try:
+                    await callback(agent)
+                except Exception as e:
+                    logger.error(f"注销回调执行失败: {e}")
+
+            # 移除智能体
+            del self.agents[agent_id]
+            
+            # 清理指标
+            if agent_id in self.agent_metrics:
+                del self.agent_metrics[agent_id]
+
+            logger.info(f"智能体注销成功: {agent_id}")
+            return True
+
+        except Exception as e:
+            logger.error(f"智能体注销失败: {agent_id}, 错误: {e}")
+            return False
+
+    def add_registration_callback(self, callback: callable) -> None:
+        """
+        添加智能体注册回调
+
+        Args:
+            callback: 回调函数，接收 Agent 参数
+        """
+        self._registration_callbacks.append(callback)
+
+    def add_deregistration_callback(self, callback: callable) -> None:
+        """
+        添加智能体注销回调
+
+        Args:
+            callback: 回调函数，接收 Agent 参数
+        """
+        self._deregistration_callbacks.append(callback)
+
+    async def _test_agent_connection(self, agent: AgentInfo) -> bool:
+        """
+        测试智能体连接
+
+        Args:
+            agent: 智能体信息
+
+        Returns:
+            是否连接成功
+        """
+        try:
+            async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=5)) as session:
+                # 尝试健康检查端点
+                health_url = f"{agent.url.rstrip('/')}/health"
+                async with session.get(health_url) as response:
+                    if response.status == 200:
+                        return True
+                    
+                # 如果健康检查失败，尝试根路径
+                async with session.get(agent.url) as response:
+                    return response.status < 500
+
+        except Exception as e:
+            logger.debug(f"智能体连接测试失败: {agent.id}, 错误: {e}")
+            return False

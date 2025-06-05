@@ -47,6 +47,16 @@ class DatabaseSettings(BaseSettings):
         """获取同步数据库连接URL"""
         return f"postgresql://{self.user}:{self.password}@{self.host}:{self.port}/{self.name}"
 
+    @property
+    def postgres_url(self) -> str:
+        """获取PostgreSQL连接URL（兼容性属性）"""
+        return self.url
+
+    @property
+    def postgres_sync_url(self) -> str:
+        """获取PostgreSQL同步连接URL（兼容性属性）"""
+        return self.sync_url
+
 
 class RedisSettings(BaseSettings):
     """Redis配置"""
@@ -104,6 +114,11 @@ class SecuritySettings(BaseSettings):
     )
     refresh_token_expire_days: int = Field(
         default=7, description="刷新令牌过期时间(天)"
+    )
+
+    # 加密配置
+    encryption_key: Optional[str] = Field(
+        default=None, description="数据加密密钥"
     )
 
     # 密码配置
@@ -252,3 +267,8 @@ class Settings(BaseSettings):
 
 # 全局设置实例
 settings = Settings()
+
+
+def get_settings() -> Settings:
+    """获取设置实例"""
+    return settings

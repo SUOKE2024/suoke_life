@@ -24,20 +24,24 @@ _all__ = [
     "run_worker",
 ]
 
+
 # 延迟导入以提高启动速度
 def main() -> None:
     """主命令行入口点"""
     from .main import main as _main
+
     _main()
 
 
 def run_server() -> None:
     """服务器启动入口点"""
     from .server import run_server as _run_server
+
     _run_server()
 
 
 def run_worker() -> None:
     """工作进程启动入口点"""
     from .worker import run_worker as _run_worker
+
     _run_worker()
