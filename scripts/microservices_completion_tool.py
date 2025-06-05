@@ -57,7 +57,6 @@ class MicroserviceCompletionTool:
             "human-review-service",
             "integration-service",
             "suoke-bench-service",
-            "a2a-agent-network",
             "agent-services/xiaoai-service",
             "agent-services/xiaoke-service", 
             "agent-services/laoke-service",

@@ -348,8 +348,16 @@ export class EnvironmentManager  {;
           saltRounds: parseInt(process.env.SALT_ROUNDS || "12")},
         blockchain: {
           network: process.env.BLOCKCHAIN_NETWORK || "testnet",
-          privateKey: process.env.BLOCKCHAIN_PRIVATE_KEY || ","
-          contractAddress: process.env.BLOCKCHAIN_CONTRACT_ADDRESS || "}"
+          privateKey: process.env.BLOCKCHAIN_PRIVATE_KEY || "",
+          contractAddress: process.env.BLOCKCHAIN_CONTRACT_ADDRESS || "0x742d35Cc6634C0532925a3b8D4C9db96c4b4d8b1",
+          serviceUrl: process.env.BLOCKCHAIN_SERVICE_URL || "http://localhost:8007",
+          gasLimit: parseInt(process.env.BLOCKCHAIN_GAS_LIMIT || "500000"),
+          gasPrice: process.env.BLOCKCHAIN_GAS_PRICE || "20000000000",
+          ipfsGateway: process.env.IPFS_GATEWAY_URL || "https://ipfs.io/ipfs/",
+          zkpCircuitPath: process.env.ZKP_CIRCUIT_PATH || "/circuits/",
+          enableZKP: process.env.ENABLE_ZKP === "true",
+          enableEncryption: process.env.ENABLE_ENCRYPTION !== "false"
+        }
       },
       performance: {
         connectionPool: {

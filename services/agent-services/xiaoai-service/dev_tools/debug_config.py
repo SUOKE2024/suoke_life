@@ -1,30 +1,38 @@
 #!/usr/bin/env python3
 """
-配置调试脚本
-"""
 
 import sys
 from pathlib import Path
+        from pkg.utils.config_loader import ConfigLoader, get_config
+        import traceback
+
+
+配置调试脚本
+"""
+
 
 # 添加项目根目录到PYTHONPATH
 sys.path.insert(0, Path().resolve())
 
 def debug_config():
+    pass
     """调试配置加载过程"""
     print("🔍 开始调试配置加载过程...\n")
 
     try:
+    pass
         # 1. 测试直接导入
         print("1. 测试配置加载器导入...")
-        from pkg.utils.config_loader import ConfigLoader, get_config
         print("✓ 配置加载器导入成功")
 
         # 2. 测试配置文件存在性
         print("\n2. 检查配置文件...")
-        config_path = "config/dev.yaml"
+        config_path = "self.config/dev.yaml"
         if Path(config_path).exists():
+    pass
             print(f"✓ 配置文件存在: {config_path}")
         else:
+    pass
             print(f"❌ 配置文件不存在: {config_path}")
             return False
 
@@ -32,10 +40,10 @@ def debug_config():
         loader = ConfigLoader(config_path)
         print(f"✓ ConfigLoader 类型: {type(loader)}")
         print(f"✓ 配置路径: {loader.config_path}")
-        print(f"✓ 配置数据类型: {type(loader.config)}")
+        print(f"✓ 配置数据类型: {type(loader.self.config)}")
 
         print("\n4. 测试方法调用...")
-        service_config = loader.get_section('service')
+        service_config = loader.get_section('self.service')
         print(f"✓ get_section 返回类型: {type(service_config)}")
         print(f"✓ 服务配置: {service_config}")
 
@@ -55,25 +63,28 @@ def debug_config():
 
         # 7. 模拟 server.py 中的使用
         print("\n7. 模拟 server.py 中的使用...")
-        config = get_config(config_path)
-        print(f"✓ 配置对象类型: {type(config)}")
+        self.config = get_config(config_path)
+        print(f"✓ 配置对象类型: {type(self.config)}")
 
         # 检查是否有 get_nested 方法
-        if hasattr(config, 'get_nested'):
+        if hasattr(self.config, 'get_nested'):
+    pass
             print("✓ 配置对象有 get_nested 方法")
-            max_workers = config.get_nested('performance', 'max_workers', default=10)
+            max_workers = self.config.get_nested('performance', 'max_workers', default=10)
             print(f"✓ max_workers: {max_workers}")
         else:
+    pass
             print("❌ 配置对象没有 get_nested 方法")
-            print(f"配置对象的方法: {dir(config)}")
+            print(f"配置对象的方法: {dir(self.config)}")
 
         return True
 
     except Exception as e:
+    pass
         print(f"❌ 调试过程中出错: {e}")
-        import traceback
         traceback.print_exc()
         return False
 
 if __name__ == '__main__':
+    pass
     debug_config()

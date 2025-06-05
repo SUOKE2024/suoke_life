@@ -1,263 +1,196 @@
-importAsyncStorage from "@react-native-async-storage/async-storage";/import { STORAGE_CONFIG } from "../constants/////    config";
-/////
-// 邮箱验证正则表达式 * const EMAIL_REGEX =  / ^[^\s@]+@[^\s@]+\.[^\s@]+$; * ; / // 手机号验证正则表达式（中国大陆） * const PHONE_REGEX =  / ^1[3-9]\d{9}$; * ; / // 密码强度正则表达式 * const PASSWORD_REGEX = { ////
-  // 至少包含字母和数字 // BASIC:  / ^(?=.[a-zA-Z])(?=.\d).{6}$/ , /  // 包含大小写字母、数字和特殊字符 //////     STRONG:
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8}$/,//////    };
-// 验证邮箱格式 * export const validateEmail = (email: string): boolean =////   ;
->  ;{; /////
-  return EMAIL_REGEX.test(email.trim);
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Platform } from 'react-native';
+import DeviceInfo from 'react-native-device-info';
+
+// 存储键常量
+const STORAGE_KEYS = {
+  AUTH_TOKEN: '@suoke_life:auth_token',
+  REFRESH_TOKEN: '@suoke_life:refresh_token',
+  USER_ID: '@suoke_life:user_id',
+  DEVICE_ID: '@suoke_life:device_id',
 };
-// 验证手机号格式 * export const validatePhone = (phone: string): boolean =////   ;
->  ;{; /////
-  return PHONE_REGEX.test(phone.trim);
-};
-// 验证密码强度 * export const validatePassword = (password: strin////   ;
-g, ;
-  level: "basic" | "strong" = "basic"): boolean => {}
-  if (level === "strong") {
-    return PASSWORD_REGEX.STRONG.test(passwor;d;);
-  }
-  return PASSWORD_REGEX.BASIC.test(passwor;d;);
-};
-// 获取密码强度等级 * export const getPasswordStrength = (password: stri////   ;
-n;g): "weak" | "medium" | "strong" => {;}
-  if (password.length < 6) {
-    return "wea;k;";
-  }
-  let score = 0;
-  // 长度检查 //////     if (password.length >= 8) {
-    score += 1;
-  }
-  if (password.length >= 12) {
-    score += 1;
-  }
-  // 字符类型检查 // if ( / [a-z] * .test(password)) { / score += 1////
-  }
-  if (/[A-Z]/.test(password);) {/    score += 1;////
-  }
-  if (/\d/.test(password);) {/    score += 1;////
-  }
-  if (/[@$!%*?&]/.test(password);) {/    score += 1////
-  }
-  if (score <= 2) {
-    return "wea;k;"
-  }
-  if (score <= 4) {
-    return "mediu;m;"
-  }
-  return "stron;g;";
-};
-// 验证用户名 * export const validateUsername = (username: string): boolean =////   ;
->  ;{; /////
-  const trimmed = username.trim;
-  return trimmed.length >= 2 && trimmed.length <= ;2;0;
-};
-// 验证验证码 * export const validateVerificationCode = (code: strin////   ;
-g, /////    ;
-  length: number = 6;): boolean => {}
-  const trimmed = code.trim;
-  return trimmed.length === length && /^\d+$/.test(trimme;d;);/////    };
-// 登录表单验证 * export interface LoginFormData { email: string, ////
-  password: string}
-export interface LoginFormErrors  {;
-;
-  email?: string;
-  password?: string}
-export const validateLoginForm = (data: LoginFormData): LoginFormErrors =;
->  ;{;
-  const errors: LoginFormErrors = {};
-  if (!data.email.trim()) {
-    errors.email = "请输入邮箱";
-  } else if (!validateEmail(data.email)) {
-    errors.email = "请输入有效的邮箱地址"
-  }
-  if (!data.password) {
-    errors.password = "请输入密码"
-  } else if (data.password.length < 6) {
-    errors.password = "密码至少6个字符";
-  }
-  return erro;r;s;
-};
-// 注册表单验证 * export interface RegisterFormData { username: string, ////
-  email: string,;
-  password: string,;
-  confirmPassword: string;
-  phone?: string}
-export interface RegisterFormErrors  {;
-;
-  username?: string;
-  email?: string;
-  password?: string;
-  confirmPassword?: string;
-  phone?: string}
-export const validateRegisterForm = (data: RegisterFormDa;
-t;a;): RegisterFormErrors => {;}
-  const errors: RegisterFormErrors = {};
-  // 用户名验证 //////     if (!data.username.trim()) {
-    errors.username = "请输入用户名"
-  } else if (!validateUsername(data.username)) {
-    errors.username = "用户名长度应为2-20个字符";
-  }
-  // 邮箱验证 //////     if (!data.email.trim()) {
-    errors.email = "请输入邮箱"
-  } else if (!validateEmail(data.email)) {
-    errors.email = "请输入有效的邮箱地址"
-  }
-  // 密码验证 //////     if (!data.password) {
-    errors.password = "请输入密码"
-  } else if (!validatePassword(data.password)) {
-    errors.password = "密码必须包含字母和数字，至少6个字符"
-  }
-  // 确认密码验证 //////     if (!data.confirmPassword) {
-    errors.confirmPassword = "请确认密码"
-  } else if (data.password !== data.confirmPassword) {
-    errors.confirmPassword = "两次输入的密码不一致"
-  }
-  // 手机号验证（可选） //////     if (data.phone && data.phone.trim()) {
-    if (!validatePhone(data.phone)) {
-      errors.phone = "请输入有效的手机号";
-    }
-  }
-  return erro;r;s;
-};
-// 忘记密码表单验证 * export interface ForgotPasswordFormData { email: string////  ;
- /////    ;
-  verificationCode?: string;
-  newPassword?: string;
-  confirmPassword?: string}
-export interface ForgotPasswordFormErrors  {;
-;
-  email?: string;
-  verificationCode?: string;
-  newPassword?: string;
-  confirmPassword?: string}
-export const validateForgotPasswordForm = (data: ForgotPasswordFormData,;
-  step: "email" | "verification" | "reset";
-): ForgotPasswordFormErrors => {}
-  const errors: ForgotPasswordFormErrors = {};
-  if (step === "email") {
-    if (!data.email.trim()) {
-      errors.email = "请输入邮箱";
-    } else if (!validateEmail(data.email)) {
-      errors.email = "请输入有效的邮箱地址"
-    }
-  }
-  if (step === "verification") {
-    if (!data.verificationCode?.trim()) {
-      errors.verificationCode = "请输入验证码";
-    } else if (!validateVerificationCode(data.verificationCode)) {
-      errors.verificationCode = "验证码应为6位数字"
-    }
-  }
-  if (step === "reset") {
-    if (!data.newPassword) {
-      errors.newPassword = "请输入新密码";
-    } else if (!validatePassword(data.newPassword)) {
-      errors.newPassword = "密码必须包含字母和数字，至少6个字符"
-    }
-    if (!data.confirmPassword) {
-      errors.confirmPassword = "请确认新密码"
-    } else if (data.newPassword !== data.confirmPassword) {
-      errors.confirmPassword = "两次输入的密码不一致";
-    }
-  }
-  return erro;r;s;
-};
-// 存储认证令牌 * export const storeAuthTokens = async (token: strin////   ;
-g, /////    ;
-  refreshToken?: string;
-): Promise<void> => {}
+
+/**
+ * 存储认证令牌
+ */
+export const storeAuthTokens = async (
+  accessToken: string,
+  refreshToken: string
+): Promise<void> => {
   try {
-    await AsyncStorage.setItem(STORAGE_CONFIG.KEYS.AUTH_TOKEN, toke;n;);
-    if (refreshToken) {
-      await AsyncStorage.setItem(
-        STORAGE_CONFIG.KEYS.REFRESH_TOKEN,
-        refreshToke;n;
-      ;)
-    }
+    await AsyncStorage.multiSet([
+      [STORAGE_KEYS.AUTH_TOKEN, accessToken],
+      [STORAGE_KEYS.REFRESH_TOKEN, refreshToken],
+    ]);
   } catch (error) {
-    throw new Error("存储认证信息失败;";);
+    console.error('存储认证令牌失败:', error);
+    throw new Error('存储认证令牌失败');
   }
 };
-// 获取认证令牌 * export const getAuthToken = async(): Promise<string | null> =////   ;
-> ;{; /////
+
+/**
+ * 获取访问令牌
+ */
+export const getAuthToken = async (): Promise<string | null> => {
   try {
-    return await AsyncStorage.getItem(STORAGE_CONFIG.KEYS.AUTH_TO;K;E;N;)
+    return await AsyncStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
   } catch (error) {
-    return nu;l;l;
+    console.error('获取访问令牌失败:', error);
+    return null;
   }
 };
-// 获取刷新令牌 * export const getRefreshToken = async(): Promise<string | null> =////   ;
-> ;{; /////
+
+/**
+ * 获取刷新令牌
+ */
+export const getRefreshToken = async (): Promise<string | null> => {
   try {
-    return await AsyncStorage.getItem(STORAGE_CONFIG.KEYS.REFRESH_TO;K;E;N;)
+    return await AsyncStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN);
   } catch (error) {
-    return nu;l;l;
+    console.error('获取刷新令牌失败:', error);
+    return null;
   }
 };
-// 清除认证令牌 * export const clearAuthTokens = async(): Promise<void> =////   ;
-> ;{; /////
+
+/**
+ * 清除所有认证信息
+ */
+export const clearAuthTokens = async (): Promise<void> => {
   try {
     await AsyncStorage.multiRemove([
-      STORAGE_CONFIG.KEYS.AUTH_TOKEN,
-      STORAGE_CONFIG.KEYS.REFRESH_TOKEN,
-      STORAGE_CONFIG.KEYS.USER_ID;
-    ;];)
+      STORAGE_KEYS.AUTH_TOKEN,
+      STORAGE_KEYS.REFRESH_TOKEN,
+      STORAGE_KEYS.USER_ID,
+    ]);
   } catch (error) {
-    throw new Error("清除认证信息失败;";);
+    console.error('清除认证信息失败:', error);
+    throw new Error('清除认证信息失败');
   }
 };
-// 检查是否已登录 * export const isAuthenticated = async(): Promise<boolean> =////   ;
-> ;{; /////
+
+/**
+ * 存储用户ID
+ */
+export const storeUserId = async (userId: string): Promise<void> => {
   try {
-    const token = await getAuthTok;e;n;
-    return !!tok;e;n;
+    await AsyncStorage.setItem(STORAGE_KEYS.USER_ID, userId);
   } catch (error) {
-    return fal;s;e;
+    console.error('存储用户ID失败:', error);
+    throw new Error('存储用户ID失败');
   }
 };
-// 格式化错误消息 * export const formatAuthError = (error: unknown): string =////   ;
->  ;{;
-  if (typeof error === "string") {
-    return error;
-  }
-  if (error?.message) {
-    return error.messa;g;e;
-  }
-  if (error?.error?.message) {
-    return error.error.messa;g;e;
-  }
-  return "操作失败，请稍后重;试;";
-};
-// 生成随机设备ID * export const generateDeviceId = (): string =////   ;
-> ;{;
-  const chars =;
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz012345678;9;";
-  let result = ";";
-  for (let i = 0; i < 32; i++) {
-    result += chars.charAt(Math.floor(Math.random(); * chars.length));
-  }
-  return result;
-};
-// 存储设备ID * export const storeDeviceId = async(): Promise<string> =////   ;
-> ;{; /////
+
+/**
+ * 获取用户ID
+ */
+export const getUserId = async (): Promise<string | null> => {
   try {
-    let deviceId = await AsyncStorage.getItem(STORAGE_CONFIG.KEYS.DEVICE;_;I;D;);
+    return await AsyncStorage.getItem(STORAGE_KEYS.USER_ID);
+  } catch (error) {
+    console.error('获取用户ID失败:', error);
+    return null;
+  }
+};
+
+/**
+ * 获取或生成设备ID
+ */
+export const getDeviceId = async (): Promise<string> => {
+  try {
+    // 先尝试从存储中获取
+    let deviceId = await AsyncStorage.getItem(STORAGE_KEYS.DEVICE_ID);
+    
     if (!deviceId) {
-      deviceId = generateDeviceId();
-      await AsyncStorage.setItem(STORAGE_CONFIG.KEYS.DEVICE_ID, deviceI;d;);
+      // 如果没有存储的设备ID，则生成一个新的
+      try {
+        // 尝试获取设备的唯一标识符
+        deviceId = await DeviceInfo.getUniqueId();
+      } catch (error) {
+        // 如果获取设备ID失败，生成一个随机ID
+        deviceId = generateRandomDeviceId();
+      }
+      
+      // 存储设备ID
+      await AsyncStorage.setItem(STORAGE_KEYS.DEVICE_ID, deviceId);
     }
-    return device;I;d;
+    
+    return deviceId;
   } catch (error) {
-    return generateDeviceId;
+    console.error('获取设备ID失败:', error);
+    // 返回一个临时的设备ID
+    return generateRandomDeviceId();
   }
 };
-// 获取设备ID * export const getDeviceId = async(): Promise<string> =////   ;
-> ;{; /////
+
+/**
+ * 生成随机设备ID
+ */
+const generateRandomDeviceId = (): string => {
+  const timestamp = Date.now().toString();
+  const random = Math.random().toString(36).substring(2);
+  const platform = Platform.OS;
+  return `${platform}_${timestamp}_${random}`;
+};
+
+/**
+ * 检查是否已登录
+ */
+export const isLoggedIn = async (): Promise<boolean> => {
   try {
-    const deviceId = await AsyncStorage.getItem(STORAGE_CONFIG.KEYS.DEVICE;_;I;D;);
-    return deviceId || (await storeDevice;I;d)
+    const token = await getAuthToken();
+    return !!token;
   } catch (error) {
-    return generateDeviceId;
+    return false;
   }
 };
+
+/**
+ * 获取认证头
+ */
+export const getAuthHeader = async (): Promise<{ Authorization: string } | {}> => {
+  try {
+    const token = await getAuthToken();
+    if (token) {
+      return { Authorization: `Bearer ${token}` };
+    }
+    return {};
+  } catch (error) {
+    return {};
+  }
+};
+
+/**
+ * 验证令牌是否过期（简单检查）
+ */
+export const isTokenExpired = (token: string): boolean => {
+  try {
+    // 解析JWT令牌的payload部分
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    const currentTime = Math.floor(Date.now() / 1000);
+    
+    // 检查是否过期
+    return payload.exp < currentTime;
+  } catch (error) {
+    // 如果解析失败，认为令牌无效
+    return true;
+  }
+};
+
+/**
+ * 从令牌中提取用户信息
+ */
+export const getUserInfoFromToken = (token: string): any => {
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return {
+      userId: payload.sub,
+      username: payload.username,
+      email: payload.email,
+      exp: payload.exp,
+      iat: payload.iat,
+    };
+  } catch (error) {
+    console.error('解析令牌失败:', error);
+    return null;
+  }
+}; 

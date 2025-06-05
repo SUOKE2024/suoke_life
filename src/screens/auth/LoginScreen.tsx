@@ -1,422 +1,485 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
-  StyleSheet,
-  ScrollView,
+  TextInput,
   TouchableOpacity,
+  StyleSheet,
   Alert,
+  ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
-  ActivityIndicator,
-  Animated,
-  Keyboard} from "../../placeholder";react-native";"
-import { SafeAreaView } from "react-native-safe-area-context";";"
-import { useNavigation } from "@react-navigation/////    native";
-import { NativeStackNavigationProp } from "../../placeholder";@react-navigation/////    native-stack";"
-import { Button } from ../../components/ui/////    Button";"
-import { Input } from "../../components/////    ui";
-import { colors, typography, spacing, borderRadius, shadows } from "../../placeholder";../../constants/////    theme";"
-type AuthStackParamList = {
-  Welcome: undefine;d;
-  Login: undefined;
-  Register: undefined;
-  ForgotPassword: undefined;
-  Demo: undefined;
-};
-type LoginScreenNavigationProp = NativeStackNavigationProp<AuthStackParamList, Login";>;"
-const LoginScreen: React.FC  = () => {;}
-  const navigation = useNavigation<LoginScreenNavigationProp>();
-  const [formData, setFormData] = useState({;
-    email: ","
-    password: ","
-    rememberMe: true});
+  ScrollView,
+} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { authService } from '../../services/authService';
+import { userService } from '../../services/userService';
+import { isLoggedIn } from '../../utils/authUtils';
+
+interface LoginFormData {
+  email: string;
+  password: string;
+  rememberMe: boolean;
+}
+
+interface LoginFormErrors {
+  email?: string;
+  password?: string;
+  general?: string;
+}
+
+const LoginScreen: React.FC = () => {
+  const navigation = useNavigation();
+  const [formData, setFormData] = useState<LoginFormData>({
+    email: '',
+    password: '',
+    rememberMe: false,
+  });
+  const [errors, setErrors] = useState<LoginFormErrors>({});
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState<{[key: string]: string}>({});
-  const [keyboardVisible, setKeyboardVisible] = useState(false);
-  const buttonScale = new Animated.Value(1);
-  useEffect(() => {}
-    const keyboardDidShowListener = Keyboard.addListener(;
-      keyboardDidShow","
-      () => {;}
-        setKeyboardVisible(true);
-      }
-    );
-    const keyboardDidHideListener = Keyboard.addListener(;
-      "keyboardDidHide,"
-      () => {;}
-        setKeyboardVisible(false);
-      }
-    );
-    return() => {}
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
+  const [showPassword, setShowPassword] = useState(false);
+
+  // 检查是否已登录
+  useEffect(() => {
+    checkAuthStatus();
   }, []);
-  const handleInputChange = (field: string, value: string) => {;}
-    setFormData(prev => ({ ...prev, [field]: value }));
-    //////     清除对应字段的错误
-if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: " }));"
+
+  const checkAuthStatus = async () => {
+    try {
+      const loggedIn = await isLoggedIn();
+      if (loggedIn) {
+        // 验证token有效性
+        const isValid = await authService.checkAuthStatus();
+        if (isValid) {
+          navigation.navigate('Main' as never);
+        }
+      }
+    } catch (error) {
+      console.log('检查认证状态失败:', error);
     }
   };
-  const toggleRememberMe = () => {;}
-    setFormData(prev => ({ ...prev, rememberMe: !prev.rememberMe }));
-  };
-  const validateForm = () => {;}
-    const newErrors: {[key: string]: string} = {};
+
+  // 表单验证
+  const validateForm = (): boolean => {
+    const newErrors: LoginFormErrors = {};
+
+    // 邮箱验证
     if (!formData.email.trim()) {
-      newErrors.email = 请输入邮箱或手机号";"
-    } else if (formData.email.includes("@)) {"
-      //////     邮箱验证
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$//////
-      if (!emailRegex.test(formData.email)) {
-        newErrors.email = "请输入有效的邮箱地址";
-      }
-    } else {
-      //////     手机号验证
-const phoneRegex = /^1[3-9]\d{9}$//////
-      if (!phoneRegex.test(formData.email)) {
-        newErrors.email = 请输入有效的手机号";"
-      }
+      newErrors.email = '请输入邮箱';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = '请输入有效的邮箱地址';
     }
-    if (!formData.password.trim()) {
-      newErrors.password = "请输入密码;"
+
+    // 密码验证
+    if (!formData.password) {
+      newErrors.password = '请输入密码';
     } else if (formData.password.length < 6) {
-      newErrors.password = "密码至少需要6位字符";
+      newErrors.password = '密码至少6个字符';
     }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-  const handleLogin = async() => {;}
-    if (!validateForm()) {;
+
+  // 处理登录
+  const handleLogin = async () => {
+    if (!validateForm()) {
       return;
     }
-    Keyboard.dismiss();
+
     setLoading(true);
-    //////     按钮动画
-Animated.sequence([
-      Animated.timing(buttonScale, {
-        toValue: 0.95,
-        duration: 100,
-        useNativeDriver: true}),
-      Animated.timing(buttonScale, {
-        toValue: 1,
-        duration: 100,
-        useNativeDriver: true});
-    ]).start();
+    setErrors({});
+
     try {
-      //////     TODO: 实现实际的登录逻辑
-      //////     这里应该调用认证服务
-await new Promise(resolve => setTimeout(resolve, 1500)); //////     模拟网络请求
-      //////     模拟登录成功，应用应该跳转到主应用
-Alert.alert(登录成功", "欢迎回到索克生活！, [
-        { text: "确定", onPress: () => {}
-          //////     TODO: 导航到主应用
-}}
-      ]);
-    } catch (error) {
-      Alert.alert("登录失败, "用户名或密码错误，请重试");"
+      // 调用认证服务登录
+      const loginResponse = await authService.login({
+        email: formData.email,
+        password: formData.password,
+        rememberMe: formData.rememberMe,
+      });
+
+      // 获取用户信息
+      const userInfo = await userService.getCurrentUser();
+      
+      // 更新最后活跃时间
+      await userService.updateLastActive();
+
+      Alert.alert(
+        '登录成功',
+        `欢迎回来，${userInfo.username || userInfo.email}！`,
+        [
+          {
+            text: '确定',
+            onPress: () => navigation.navigate('Main' as never),
+          },
+        ]
+      );
+    } catch (error: any) {
+      console.error('登录失败:', error);
+      setErrors({
+        general: error.message || '登录失败，请检查邮箱和密码',
+      });
     } finally {
       setLoading(false);
     }
   };
-  const handleForgotPassword = () => {;}
-    navigation.navigate(ForgotPassword");"
+
+  // 处理忘记密码
+  const handleForgotPassword = () => {
+    navigation.navigate('ForgotPassword' as never);
   };
-  const handleRegister = () => {;}
-    navigation.navigate("Register);"
+
+  // 处理注册
+  const handleRegister = () => {
+    navigation.navigate('Register' as never);
   };
-  const handleBack = () => {;}
-    navigation.goBack();
+
+  // 处理第三方登录
+  const handleSocialLogin = async (provider: string) => {
+    Alert.alert('提示', `${provider}登录功能即将上线`);
   };
-  const handleDemoMode = () => {;}
-    //////     进入演示模式
-Alert.alert(
-      "进入演示模式",
-      您将以访客身份体验索克生活的核心功能，无需注册账号。","
-      [
-        { text: "取消, style: "cancel" },"
-        {
-          text: 进入", "
-          onPress: () => {}
-            //////     导航到演示页面
-//////     navigation.navigate("Demo")
-          }
-        }
-      ]
-    );
-  };
+
   return (
-    <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView;
-style={styles.keyboardAvoid}
-        behavior={Platform.OS === ios" ? "padding : "height"}
-      >
-        <ScrollView;
-style={styles.scrollView}
-          contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="handled"
-        >
-          {/* 头部区域 }////
-          <View style={styles.header}>
-            <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-              <Text style={styles.backButtonText}>←</////    Text>
-            </////    TouchableOpacity>
-            <View style={styles.logoContainer}>
-              <View style={styles.logoPlaceholder}>
-                <Text style={styles.logoText}>索克</////    Text>
-              </////    View>
-            </////    View>
-            <Text style={styles.title}>欢迎回来</////    Text>
-            <Text style={styles.subtitle}>登录您的索克生活账户</////    Text>
-          </////    View>
-          {/* 表单区域 }////
-          <View style={styles.formSection}>
-            <View style={styles.inputContainer}>
-              <Input;
-label="邮箱/////    手机号"
-                value={formData.email}
-                onChangeText={(value) => handleInputChange(email", value)}"
-                placeholder="请输入邮箱或手机号"
-                type="email"
-                error={!!errors.email}
-                errorMessage={errors.email}
-                autoCapitalize="none"
-                keyboardType="email-address"
-              /////    >
-            </////    View>
-            <View style={styles.inputContainer}>
-              <Input;
-label="密码"
-                value={formData.password}
-                onChangeText={(value) => handleInputChange("password, value)}"
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.header}>
+          <Text style={styles.title}>索克生活</Text>
+          <Text style={styles.subtitle}>智能健康管理平台</Text>
+        </View>
+
+        <View style={styles.form}>
+          {/* 邮箱输入 */}
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>邮箱</Text>
+            <TextInput
+              style={[styles.input, errors.email && styles.inputError]}
+              placeholder="请输入邮箱"
+              value={formData.email}
+              onChangeText={(text) =>
+                setFormData({ ...formData, email: text })
+              }
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoCorrect={false}
+              editable={!loading}
+            />
+            {errors.email && (
+              <Text style={styles.errorText}>{errors.email}</Text>
+            )}
+          </View>
+
+          {/* 密码输入 */}
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>密码</Text>
+            <View style={styles.passwordContainer}>
+              <TextInput
+                style={[
+                  styles.passwordInput,
+                  errors.password && styles.inputError,
+                ]}
                 placeholder="请输入密码"
-                type="password"
-                error={!!errors.password}
-                errorMessage={errors.password}
-                secureTextEntry;
-              /////    >
-            </////    View>
-            <View style={styles.rememberForgotRow}>
-              <TouchableOpacity style={styles.rememberMe} onPress={toggleRememberMe}>
-                <View style={[ ///  >
-                  styles.checkbox,
-                  formData.rememberMe ? styles.checkboxChecked : {}
-                ]}>
-                  {formData.rememberMe && <Text style={styles.checkmark}>✓</////    Text>}
-                </////    View>
-                <Text style={styles.rememberMeText}>记住我</////    Text>
-              </////    TouchableOpacity>
-              <TouchableOpacity onPress={handleForgotPassword}>
-                <Text style={styles.forgotPasswordText}>忘记密码？</////    Text>
-              </////    TouchableOpacity>
-            </////    View>
-            <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
-              <Button;
-title={loading ? "登录中..." : "登录"}
-                variant="primary"
-                size="large"
-                fullWidth;
-loading={loading}
-                onPress={handleLogin}
-                style={styles.loginButton}
-              /////    >
-            </////    Animated.View>
-            <TouchableOpacity;
-style={styles.demoButton}
-              onPress={handleDemoMode}
+                value={formData.password}
+                onChangeText={(text) =>
+                  setFormData({ ...formData, password: text })
+                }
+                secureTextEntry={!showPassword}
+                autoCapitalize="none"
+                autoCorrect={false}
+                editable={!loading}
+              />
+              <TouchableOpacity
+                style={styles.eyeButton}
+                onPress={() => setShowPassword(!showPassword)}
+              >
+                <Text style={styles.eyeText}>
+                  {showPassword ? '隐藏' : '显示'}
+                </Text>
+              </TouchableOpacity>
+            </View>
+            {errors.password && (
+              <Text style={styles.errorText}>{errors.password}</Text>
+            )}
+          </View>
+
+          {/* 记住我 */}
+          <View style={styles.rememberContainer}>
+            <TouchableOpacity
+              style={styles.checkbox}
+              onPress={() =>
+                setFormData({
+                  ...formData,
+                  rememberMe: !formData.rememberMe,
+                })
+              }
             >
-              <Text style={styles.demoButtonText}>体验演示模式</////    Text>
-            </////    TouchableOpacity>
-          </////    View>
-          {/* 其他登录方式 }////
-          {!keyboardVisible && (
-            <View style={styles.alternativeSection}>
-              <View style={styles.dividerContainer}>
-                <View style={styles.divider} /////    >
-                <Text style={styles.dividerText}>其他登录方式</////    Text>
-                <View style={styles.divider} /////    >
-              </////    View>
-              <View style={styles.socialButtons}>
-                <TouchableOpacity style={styles.socialButton}>
-                  <Text style={styles.socialButtonText}>📱</////    Text>
-                  <Text style={styles.socialButtonLabel}>微信登录</////    Text>
-                </////    TouchableOpacity>
-                <TouchableOpacity style={styles.socialButton}>
-                  <Text style={styles.socialButtonText}>📞</////    Text>
-                  <Text style={styles.socialButtonLabel}>短信登录</////    Text>
-                </////    TouchableOpacity>
-                <TouchableOpacity style={styles.socialButton}>
-                  <Text style={styles.socialButtonText}>👤</////    Text>
-                  <Text style={styles.socialButtonLabel}>扫码登录</////    Text>
-                </////    TouchableOpacity>
-              </////    View>
-            </////    View>
+              <View
+                style={[
+                  styles.checkboxInner,
+                  formData.rememberMe && styles.checkboxChecked,
+                ]}
+              />
+            </TouchableOpacity>
+            <Text style={styles.rememberText}>记住我</Text>
+          </View>
+
+          {/* 通用错误信息 */}
+          {errors.general && (
+            <Text style={styles.generalError}>{errors.general}</Text>
           )}
-          {/* 注册提示 }////
-          <View style={styles.registerSection}>
-            <Text style={styles.registerText}>
-              还没有账户？
-              <Text style={styles.registerLink} onPress={handleRegister}>
-                {" 立即注册"}
-              </////    Text>
-            </////    Text>
-          </////    View>
-        </////    ScrollView>
-      </////    KeyboardAvoidingView>
-    </////    SafeAreaView>
+
+          {/* 登录按钮 */}
+          <TouchableOpacity
+            style={[styles.loginButton, loading && styles.loginButtonDisabled]}
+            onPress={handleLogin}
+            disabled={loading}
+          >
+            {loading ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text style={styles.loginButtonText}>登录</Text>
+            )}
+          </TouchableOpacity>
+
+          {/* 忘记密码 */}
+          <TouchableOpacity
+            style={styles.forgotButton}
+            onPress={handleForgotPassword}
+          >
+            <Text style={styles.forgotText}>忘记密码？</Text>
+          </TouchableOpacity>
+
+          {/* 分割线 */}
+          <View style={styles.divider}>
+            <View style={styles.dividerLine} />
+            <Text style={styles.dividerText}>或</Text>
+            <View style={styles.dividerLine} />
+          </View>
+
+          {/* 第三方登录 */}
+          <View style={styles.socialContainer}>
+            <TouchableOpacity
+              style={styles.socialButton}
+              onPress={() => handleSocialLogin('微信')}
+            >
+              <Text style={styles.socialButtonText}>微信登录</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.socialButton}
+              onPress={() => handleSocialLogin('支付宝')}
+            >
+              <Text style={styles.socialButtonText}>支付宝登录</Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* 注册链接 */}
+          <View style={styles.registerContainer}>
+            <Text style={styles.registerText}>还没有账号？</Text>
+            <TouchableOpacity onPress={handleRegister}>
+              <Text style={styles.registerLink}>立即注册</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
-const styles = StyleSheet.create({;
+
+const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background},
-  keyboardAvoid: {
-    flex: 1},
-  scrollView: {
-    flex: 1},
-  scrollContent: {
+    backgroundColor: '#f5f5f5',
+  },
+  scrollContainer: {
     flexGrow: 1,
-    paddingHorizontal: spacing.lg},
-;
-  //////     头部区域
-header: {
-    alignItems: "center",
-    paddingTop: spacing.lg,
-    paddingBottom: spacing.xl},
-  backButton: {
-    position: absolute","
-    left: 0,
-    top: spacing.lg,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.gray100,
-    justifyContent: "center,"
-    alignItems: "center"},
-  backButtonText: {
-    fontSize: typography.fontSize.xl,
-    color: colors.textPrimary},
-  logoContainer: {
-    marginBottom: spacing.lg},
-  logoPlaceholder: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: colors.primary,
-    justifyContent: center","
-    alignItems: "center,"
-    ...shadows.md},
-  logoText: {
-    fontSize: typography.fontSize.xl,
-    fontWeight: "700",
-    color: colors.white,
-    fontFamily: typography.fontFamily.bold},
+    justifyContent: 'center',
+    padding: 20,
+  },
+  header: {
+    alignItems: 'center',
+    marginBottom: 40,
+  },
   title: {
-    fontSize: typography.fontSize[3xl"],"
-    fontWeight: "700,"
-    color: colors.textPrimary,
-    marginBottom: spacing.sm,
-    fontFamily: typography.fontFamily.bold},
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#2c3e50',
+    marginBottom: 8,
+  },
   subtitle: {
-    fontSize: typography.fontSize.base,
-    color: colors.textSecondary,
-    textAlign: "center",
-    fontFamily: typography.fontFamily.regular},
-  //////     表单区域
-formSection: {
-    paddingVertical: spacing.lg},
+    fontSize: 16,
+    color: '#7f8c8d',
+  },
+  form: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 24,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
   inputContainer: {
-    marginBottom: spacing.lg},
-  rememberForgotRow: {
-    flexDirection: row","
-    justifyContent: "space-between,"
-    alignItems: "center",
-    marginBottom: spacing.xl},
-  rememberMe: {
-    flexDirection: row","
-    alignItems: "center},"
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#2c3e50',
+    marginBottom: 8,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+    backgroundColor: '#f9f9f9',
+  },
+  inputError: {
+    borderColor: '#e74c3c',
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  passwordInput: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+    backgroundColor: '#f9f9f9',
+  },
+  eyeButton: {
+    position: 'absolute',
+    right: 12,
+    padding: 4,
+  },
+  eyeText: {
+    color: '#3498db',
+    fontSize: 14,
+  },
+  errorText: {
+    color: '#e74c3c',
+    fontSize: 14,
+    marginTop: 4,
+  },
+  rememberContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
   checkbox: {
     width: 20,
     height: 20,
+    borderWidth: 2,
+    borderColor: '#ddd',
     borderRadius: 4,
-    borderWidth: 1,
-    borderColor: colors.border,
-    marginRight: spacing.xs,
-    justifyContent: "center",
-    alignItems: center"},"
+    marginRight: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  checkboxInner: {
+    width: 12,
+    height: 12,
+    borderRadius: 2,
+  },
   checkboxChecked: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary},
-  checkmark: {
-    color: colors.white,
-    fontSize: 12,
-    fontWeight: "bold},"
-  rememberMeText: {
-    fontSize: typography.fontSize.sm,
-    color: colors.textSecondary},
-  forgotPassword: {
-    alignSelf: "flex-end"},
-  forgotPasswordText: {
-    fontSize: typography.fontSize.sm,
-    color: colors.primary,
-    fontFamily: typography.fontFamily.medium},
+    backgroundColor: '#3498db',
+  },
+  rememberText: {
+    fontSize: 14,
+    color: '#7f8c8d',
+  },
+  generalError: {
+    color: '#e74c3c',
+    fontSize: 14,
+    textAlign: 'center',
+    marginBottom: 16,
+    padding: 8,
+    backgroundColor: '#fdf2f2',
+    borderRadius: 4,
+  },
   loginButton: {
-    marginBottom: spacing.md},
-  demoButton: {
-    paddingVertical: spacing.md,
-    alignItems: center"},"
-  demoButtonText: {
-    fontSize: typography.fontSize.sm,
-    color: colors.textSecondary,
-    textDecorationLine: "underline},"
-  //////     其他登录方式
-alternativeSection: {
-    paddingVertical: spacing.lg},
-  dividerContainer: {
-    flexDirection: "row",
-    alignItems: center","
-    marginBottom: spacing.lg},
+    backgroundColor: '#3498db',
+    borderRadius: 8,
+    padding: 16,
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  loginButtonDisabled: {
+    backgroundColor: '#bdc3c7',
+  },
+  loginButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  forgotButton: {
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  forgotText: {
+    color: '#3498db',
+    fontSize: 14,
+  },
   divider: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: colors.border},
+    backgroundColor: '#ddd',
+  },
   dividerText: {
-    fontSize: typography.fontSize.sm,
-    color: colors.textSecondary,
-    marginHorizontal: spacing.md,
-    fontFamily: typography.fontFamily.regular},
-  socialButtons: {
-    flexDirection: "row,"
-    justifyContent: "space-between"},
+    marginHorizontal: 16,
+    color: '#7f8c8d',
+    fontSize: 14,
+  },
+  socialContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 24,
+  },
   socialButton: {
     flex: 1,
-    backgroundColor: colors.surface,
-    borderRadius: borderRadius.md,
-    padding: spacing.md,
-    alignItems: center","
-    marginHorizontal: spacing.xs,
-    ...shadows.sm},
+    backgroundColor: '#f8f9fa',
+    borderRadius: 8,
+    padding: 12,
+    alignItems: 'center',
+    marginHorizontal: 4,
+    borderWidth: 1,
+    borderColor: '#ddd',
+  },
   socialButtonText: {
-    fontSize: typography.fontSize.xl,
-    marginBottom: spacing.xs},
-  socialButtonLabel: {
-    fontSize: typography.fontSize.sm,
-    color: colors.textSecondary,
-    fontFamily: typography.fontFamily.regular},
-  //////     注册提示
-registerSection: {
-    alignItems: "center,"
-    paddingVertical: spacing.xl},
+    color: '#2c3e50',
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  registerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   registerText: {
-    fontSize: typography.fontSize.base,
-    color: colors.textSecondary,
-    fontFamily: typography.fontFamily.regular},
+    color: '#7f8c8d',
+    fontSize: 14,
+  },
   registerLink: {
-    color: colors.primary,
-    fontWeight: "600',"' */
-    fontFamily: typography.fontFamily.medium}}); *///
-export default LoginScreen; *///
-  */////
+    color: '#3498db',
+    fontSize: 14,
+    fontWeight: '600',
+    marginLeft: 4,
+  },
+});
+
+export default LoginScreen; 

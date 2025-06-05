@@ -2,20 +2,25 @@
 
 # """""""""
 
-import logging
-import time
-import uuid
-from dataclasses import dataclass, field
 
 # Proto
 
-logger = logging.getLogger(__name__)
+from logging import logging
+from os import os
+from time import time
+from dataclasses import dataclass
+from uuid import uuid4
+from loguru import logger
+import self.logging
+
+
+
+self.logger = self.logging.getLogger(__name__)
 
 
 # @dataclass
-# class Feature:
+    pass
 #     """""""""
-#     from typing import Optional, Dict, List, Any, Union
 
 #     name: str
 #     value: str
@@ -25,7 +30,7 @@ logger = logging.getLogger(__name__)
 
 
 #     @dataclass
-# class ConflictInfo:
+    pass
 #     """""""""
 
 #     featurename: str
@@ -35,118 +40,92 @@ logger = logging.getLogger(__name__)
 
 
 #     @dataclass
-# class FusionContext:
+    pass
 #     """""""""
 
 #     userid: str
 #     sessionid: str
 #     diagnosisresults: list[diagnosis_pb.SingleDiagnosisResult]
-#     features: dict[str, list[Feature]] = field(default_factory =dict)
-#     conflicts: list[ConflictInfo] = field(default_factory =list)
-#     creationtime: int = field(default_factory =lambda: int(time.time()))
 
 
-# class MultimodalFusionEngine:
+    pass
 #     """""""""
 
-#     def __init__(:
-#         self, min_confidence_threshold: float = 0.5, useearly_fusion: bool = True
+    pass
 #         ):
+    pass
 #         """"""
-        
 
-#         Args: min_confidence_threshold: , 
-#             use_early_fusion: 
+
+#         Args: min_confidence_threshold: ,
+#             use_early_fusion:
+    pass
 #         """"""
-#         self.minconfidence_threshold = min_confidence_threshold
-#         self.useearly_fusion = use_early_fusion
 
-        # 
-#         self.featureweights = {
-            # 
 #             "face_color": 0.8,
 #             "face_region": 0.7,
-            # 
 #             "tongue_color": 0.9,
 #             "tongue_shape": 0.8,
 #             "coating_color": 0.85,
 #             "coating_distribution": 0.8,
-            # 
 #             "voice_quality": 0.75,
 #             "voice_strength": 0.7,
-            # 
 #             "pulse_pattern": 0.9,
 #             "pulse_strength": 0.85,
 #             "pulse_rhythm": 0.8,
-            # 
 #             "symptom": 0.95,
 #             "chief_complaint": 1.0,
 #         }
 
-#         async def fuse_diagnostic_data(
-#         self,
+#         self,:
 #         userid: str,
 #         sessionid: str,
 #         diagnosisresults: list[diagnosis_pb.SingleDiagnosisResult],
 #         ) -> diagnosis_pb.FusionResult:
+    pass
 #         """"""
-        
 
-#         Args: user_id: ID
-#             session_id: ID
-#             diagnosis_results: 
 
+#         Args: context.user_id: ID
+#             context.session_id: ID
+#             diagnosis_results:
+    pass
 #         Returns:
-            
+    pass
 #         """"""
-        # 
-#         fusioncontext = FusionContext(
-#             user_id =userid, session_id =sessionid, diagnosis_results =diagnosis_results
+#             context.user_id =userid, context.session_id =sessionid, diagnosis_results =diagnosis_results
 #         )
 
-        # 
 #         self._extract_features(fusioncontext)
 
-        # 
 #         self._resolve_conflicts(fusioncontext)
 
-        # 
-#         fusedfeatures = self._fuse_features(fusioncontext)
 
-        # 
 #         diagnosis_pb.FusionResult(
 #             fusion_id =str(uuid.uuid4()),
-#             user_id =userid,
-#             session_id =sessionid,
+#             context.user_id =userid,
+#             context.session_id =sessionid,
 #             created_at =int(time.time()),
 #         )
 
-        # 
 #         fusion_result.fused_features.CopyFrom(fusedfeatures)
 
-        # 
-#         fusion_result.fusionconfidence = self._calculate_fusion_confidence(
 #             fusioncontext
 #         )
 
-#         return fusion_result
 
-#     def _extract_features(self, context: FusionContext) -> None:
+    pass
 #         """"""
-        
+
 
 #         Args:
-#             context: 
+    pass
+#             context:
+    pass
 #         """"""
-        # 
-#         for result in context.diagnosis_results:
-            # 
-#             for feature_pb in result.features:
-                # 
-#                 if feature_pb.confidence < self.min_confidence_threshold: continue:
-
-                # 
-#                     feature = Feature(
+    pass
+    pass
+    pass
 #                     name=feature_pb.featurename,
 #                     value=feature_pb.featurevalue,
 #                     confidence=feature_pb.confidence,
@@ -154,33 +133,27 @@ logger = logging.getLogger(__name__)
 #                     category=feature_pb.category,
 #                     )
 
-                # 
-#                 if feature.name not in context.features:
-#                     context.features[feature.name] = []
+    pass
 
-#                     context.features[feature.name].append(feature)
 
-#     def _resolve_conflicts(self, context: FusionContext) -> None:
+    pass
 #         """"""
-        
+
 
 #         Args:
-#             context: 
+    pass
+#             context:
+    pass
 #         """"""
-        # 
-#         for featurename, features in context.features.items():
-            # , 
-#             if len(features) <= 1:
+    pass
+# ,
+    pass
 #                 continue
 
-            # 
-#                 values = {feature.value for feature in features}
 
-            # , 
-#             if len(values) > 1:
-                # 
-#                 conflictingvalues = []
-#                 for feature in features: conflicting_values.append(:
+# ,:
+    pass
+    pass
 #                         {
 #                     "value": feature.value,
 #                     "source": feature.source,
@@ -188,218 +161,169 @@ logger = logging.getLogger(__name__)
 #                         }
 #                     )
 
-                # 
-#                     resolvedvalue, resolutionmethod = self._resolve_feature_conflict(
 #                     featurename, features
 #                     )
 
-                # 
-#                     conflict = ConflictInfo(
 #                     feature_name =featurename,
 #                     values=conflictingvalues,
 #                     resolved_value =resolvedvalue,
 #                     resolution_method =resolution_method,
 #                     )
 
-#                     context.conflicts.append(conflict)
 
-#     def _resolve_feature_conflict(:
+    pass
 #         self, feature_name: str, features: list[Feature]
 #         ) -> tuple[str, str]:
+    pass
 #         """"""
-        
 
-#         Args: feature_name: 
-#             features: 
 
+#         Args: feature_name:
+    pass
+#             features:
+    pass
 #         Returns:
-            
+    pass
 #         """"""
-        # 
-#         if self._can_resolve_by_confidence(features):
-            # 
+    pass
 #             max(features, key=lambda f: f.confidence)
-#             return best_feature.value, "confidence_based"
 
-        # 
-#         if self._can_resolve_by_majority(features):
-            # 
-#             for feature in features:
-#                 if feature.value not in value_counts: value_counts[feature.value] = 0:
-#                     value_counts[feature.value] += 1
+    pass
+    pass
+    pass
 
-            # 
-#                     majorityvalue = max(value_counts.keys(), key=lambda k: value_counts[k])
-#                     return majorityvalue, "majority_vote"
 
-        # 
-#         if self._can_resolve_by_source_priority(features):
-            # :  >  >  > 
+    pass
+# :  >  >  >
 
-            # 
 #             max(features, key=lambda f: priority_map.get(f.source, 0))
-#             return best_feature.value, "source_priority"
 
-        # , 
-#             return self._resolve_by_weighted_vote(featurename, features), "weighted_vote"
+# ,
 
-#     def _can_resolve_by_confidence(self, features: list[Feature]) -> bool:
+    pass
 #         """"""
-        
+
 
 #         Args:
-#             features: 
-
+    pass
+#             features:
+    pass
 #         Returns:
-            
+    pass
 #         """"""
-        # 
-#         maxconfidence = max(feature.confidence for feature in features)
 
-        # 
-#         maxconfidence_count = sum(
-#             1 for feature in features if feature.confidence == maxconfidence
 #         )
 
-        # , 
-#         return maxconfidence_count == 1
-
-#     def _can_resolve_by_majority(self, features: list[Feature]) -> bool:
+# ,
+:
+    pass
 #         """"""
-        
+
 
 #         Args:
-#             features: 
-
+    pass
+#             features:
+    pass
 #         Returns:
-            
+    pass
 #         """"""
-        # 
-#         for feature in features:
-#             if feature.value not in value_counts: value_counts[feature.value] = 0:
-#                 value_counts[feature.value] += 1
+    pass
+    pass
 
-        # 
-#                 maxcount = max(value_counts.values())
 
-        # 
-#                 maxcount_values = sum(1 for count in value_counts.values() if count == maxcount)
 
-        # , 
-#                 return maxcount_values == 1
-
-#     def _can_resolve_by_source_priority(self, features: list[Feature]) -> bool:
+# ,
+:
+    pass
 #         """"""
-        
+
 
 #         Args:
-#             features: 
-
+    pass
+#             features:
+    pass
 #         Returns:
-            
+    pass
 #         """"""
-        # :  >  >  > 
+# :  >  >  >
 
-        # 
-#         maxpriority = max(priority_map.get(feature.source, 0) for feature in features)
 
-        # 
-#         maxpriority_count = sum(
-#             1
-#             for feature in features:
-#             if priority_map.get(feature.source, 0) == maxpriority:
+#             1:
+    pass
+    pass
 #                 )
 
-        # , 
-#                 return maxpriority_count == 1
+# ,
 
-#     def _resolve_by_weighted_vote(:
+    pass
 #         self, feature_name: str, features: list[Feature]
 #         ) -> str:
+    pass
 #         """"""
-        
 
-#         Args: feature_name: 
-#             features: 
 
+#         Args: feature_name:
+    pass
+#             features:
+    pass
 #         Returns:
-            
+    pass
 #         """"""
-        # 
-#         category = features[0].category if features else ""
 
-        # 
-#         weightkey = category if category in self.feature_weights else feature_name
-#         weight = self.feature_weights.get(weightkey, 0.5)
-
-        # 
-#         for feature in features:
-#             if feature.value not in value_scores: value_scores[feature.value] = 0:
-
-            # :  *  * 
-#             if feature.source in {:
+:
+    pass
+    pass
+# :  *  *
+    pass
 #                 "inquiry_service",
 #                 "palpation_service",
 #                 "look_service",
 #                 "listen_service",
 #                 }:
+    pass
 #                 pass
 
-#                 score = source_weight * weight * feature.confidence
-#                 value_scores[feature.value] += score
 
-        # 
 #                 max(value_scores.keys(), key=lambda k: value_scores[k])
-#                 return best_value
 
-#     def _fuse_features(self, context: FusionContext) -> diagnosis_pb.FusedFeatures:
+    pass
 #         """"""
-        
+
 
 #         Args:
-#             context: 
-
+    pass
+#             context:
+    pass
 #         Returns:
-            
+    pass
 #         """"""
 #         diagnosis_pb.FusedFeatures()
 
-        # 
-#         for featurename, features in context.features.items():
-            # , 
-#             if not features:
+    pass
+# ,
+    pass
 #                 continue
 
-            # , , 
-#                 value = features[0].value
-#             for conflict in context.conflicts:
-#                 if conflict.featurename == feature_name: value = conflict.resolved_value:
+# , ,
+    pass
+    pass
 #                     break
 
-            # 
-#                     confidence = self._calculate_feature_confidence(features)
 
-            # 
-#                     diagfeature = diagnosis_pb.DiagnosticFeature(
 #                     feature_name =featurename,
 #                     feature_value =value,
 #                     confidence=confidence,
-#                     source=",".join({feature.source for feature in features}),
 #                     category=features[0].category,
 #                     )
 
-            # 
-#                     fused_features.features.append(diagfeature)
-
-        # 
-#         for conflict in context.conflicts:
-#             conflictresolution = diagnosis_pb.ConflictResolution(
+:
+    pass
 #                 feature_name =conflict.featurename,
 #                 resolved_value =conflict.resolvedvalue,
 #                 resolution_method =conflict.resolution_method,
 #             )
 
-#             for value_info in conflict.values: conflict_resolution.values.append(:
+    pass
 #                     diagnosis_pb.ConflictingValue(
 #                 value=value_info["value"],
 #                 source=value_info["source"],
@@ -407,110 +331,86 @@ logger = logging.getLogger(__name__)
 #                     )
 #                 )
 
-#                 fused_features.conflicts.append(conflictresolution)
 
-#                 return fused_features
 
-#     def _calculate_feature_confidence(self, features: list[Feature]) -> float:
+    pass
 #         """"""
-        
+
 
 #         Args:
-#             features: 
-
+    pass
+#             features:
+    pass
 #         Returns:
-            
+    pass
 #         """"""
-        # , 0
-#         if not features:
-#             return 0.0
+# , 0
+    pass
 
-        # , 
-#         if len(features) == 1:
-#             return features[0].confidence
+# ,
+    pass
 
-        # , 
-        # : , 
-#             sum(feature.confidence for feature in features)
-#             max(feature.confidence for feature in features)
+# ,
+# : ,
 
-        # , 
-#             alpha = 0.7  # 
+# ,
 #             alpha * max_confidence + (1 - alpha) * (total_confidence / len(features))
 
-        # , 
-#             uniquesources = {feature.source for feature in features}
+# ,
 #             min(1.0, len(uniquesources) / 4.0)  # 4
 
-        # , , 
-#             fusionconfidence = weighted_confidence * (1 + source_diversity_factor * 0.3)
+# , ,
 
-        # 1.0
-#             return min(fusionconfidence, 1.0)
-
-#     def _calculate_fusion_confidence(self, context: FusionContext) -> float:
+# 1.0
+:
+    pass
 #         """"""
-        
+
 
 #         Args:
-#             context: 
-
+    pass
+#             context:
+    pass
 #         Returns:
-            
+    pass
 #         """"""
-        # 
-#         featureconfidences = []
-#         for features in context.features.values():
-#             confidence = self._calculate_feature_confidence(features)
-#             feature_confidences.append(confidence)
+    pass
 
-        # , 0
-#         if not feature_confidences: return 0.0:
-
-        # 
+# , 0
+    pass
 #             sum(featureconfidences) / len(featureconfidences)
 
-        # 
-#             len(context.conflicts) / len(context.features) if context.features else 0
 
-        # , 
+# ,
 #             avg_confidence * (1 - conflict_rate * 0.5)
 
-#             return fusion_confidence
 
-#             async def apply_early_fusion(
 #             self, fusion_context: FusionContext
 #             ) -> diagnosis_pb.FusionResult:
+    pass
 #         """"""
-            
 
-#             Args: fusion_context: 
 
+#             Args: fusion_context:
+    pass
 #             Returns:
-            
+    pass
 #         """"""
-        # 
-        # 
-        # 
 
-        # 
 
 #             pass
 
-#             async def apply_late_fusion(
 #             self, fusion_context: FusionContext
 #             ) -> diagnosis_pb.FusionResult:
+    pass
 #         """"""
-            
 
-#             Args: fusion_context: 
 
+#             Args: fusion_context:
+    pass
 #             Returns:
-            
+    pass
 #         """"""
-        # 
-        # 
 
-        # 
 
 #             pass

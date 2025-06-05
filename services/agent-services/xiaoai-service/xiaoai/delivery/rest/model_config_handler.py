@@ -1,85 +1,66 @@
 #!/usr/bin/env python3
 """"""
-#  REST API 
+#  REST API
 
 """"""
 
-import logging
-from datetime import datetime
-from enum import Enum
-from typing import Any
 
-from fastapi import APIRouter, Body, Depends, HTTPException, Query, status
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from pydantic import BaseModel, Field, validator
 
-# from internal.agent.model_config_manager import (
 #     ConfigScope,
 #     ModelConfig,
 #     ModelProvider,
 # )
-from internal.agent.model_factory import get_model_factory
 
-from ..utils.auth import verify_token
-from ..utils.metrics import get_metrics_collector
-from ..utils.validation import validate_api_key_format
+from logging import logging
+from os import os
+from sys import sys
+from time import time
+from datetime import datetime
+from typing import List
+from typing import Any
+from enum import Enum
+from pydantic import BaseModel
+from pydantic import Field
+from loguru import logger
+import self.logging
+from fastapi import APIRouter
+from fastapi.self.security import HTTPBearer
+from ..utils.self.metrics import get_metrics_collector
 
-logger = logging.getLogger(__name__)
-
-# 
-security = HTTPBearer()
-
-# 
-router = APIRouter(prefix="/api/v1/models", tags=[""])
-
-# 
-metrics = get_metrics_collector()
 
 
-# class ModelProviderEnum(str, Enum):
+self.logger = self.logging.getLogger(__name__)
+
+self.security = HTTPBearer()
+
+self.router = APIRouter(prefix="/self.api/v1/models", tags=[""])
+
+self.metrics = get_metrics_collector()
+
+
+    pass
 #     """""""""
 
-#     OPENAI = "openai"
-#     ZHIPU = "zhipu"
-#     BAIDU = "baidu"
-#     LOCAL = "local"
-#     ANTHROPIC = "anthropic"
-#     GOOGLE = "google"
-#     CUSTOM = "custom"
 
 
-# class ModelConfigRequest(BaseModel):
+    pass
 #     """""""""
 
-#     modelid: str = Field(..., description="ID", min_length =1, max_length =100)
-#     provider: ModelProviderEnum = Field(..., description="")
-#     apikey: str | None = Field(None, description="API", max_length =500)
-#     apibase: str | None = Field(None, description="APIURL", max_length =500)
-#     modelname: str = Field(..., description="", min_length =1, max_length =100)
-#     maxtokens: int = Field(2048, description="token", ge=1, le=32768)
-#     temperature: float = Field(0.7, description="", ge=0.0, le=2.0)
-#     enabled: bool = Field(True, description="")
-#     priority: int = Field(1, description="", ge=1, le=100)
-#     ratelimit: int = Field(60, description="", ge=1, le=10000)
-#     timeout: int = Field(30, description="()", ge=5, le=300)
-#     extraparams: dict[str, Any] = Field(default_factory =dict, description="")
 
-#     @validator("api_key")
-#     def validate_api_key(cls, v, values):
+#     @self.validator("api_key")
+    pass
 #         """API""""""
-#         if v and not validate_api_key_format(v, values.get("provider")):
+    pass
 #             raise ValueError("API")
-#             return v
 
-#             @validator("api_base")
-#     def validate_api_base(cls, v):
+#             @self.validator("api_base")
+    pass
 #         """APIURL""""""
-#         if v and not (v.startswith("http://") or v.startswith("https://")):
+    pass
 #             raise ValueError("APIURLhttp://https://")
-#             return v
 
 
-# class ModelConfigResponse(BaseModel):
+    pass
 #     """""""""
 
 #     modelid: str
@@ -95,10 +76,10 @@ metrics = get_metrics_collector()
 #     extraparams: dict[str, Any]
 #     createdat: datetime
 #     updatedat: datetime
-#     hasapi_key: bool  # , 
+#     hasapi_key: bool  # ,
 
 
-# class ModelListResponse(BaseModel):
+    pass
 #     """""""""
 
 #     models: list[ModelConfigResponse]
@@ -107,7 +88,7 @@ metrics = get_metrics_collector()
 #     pagesize: int
 
 
-# class ModelHealthResponse(BaseModel):
+    pass
 #     """""""""
 
 #     modelid: str
@@ -119,7 +100,7 @@ metrics = get_metrics_collector()
 #     lasterror: str | None
 
 
-# class ModelValidationResponse(BaseModel):
+    pass
 #     """""""""
 
 #     valid: bool
@@ -127,63 +108,58 @@ metrics = get_metrics_collector()
 #     warnings: list[str]
 
 
-# def get_current_user_id(:
-#     credentials: HTTPAuthorizationCredentials = Depends(security),
+    pass
 #     ) -> str:
+    pass
 #     """ID""""""
-#     try: verify_token(credentials.credentials)
-#         return user_info.get("user_id", "anonymous")
 #     except Exception as e:
-#         logger.warning(f"Token: {e}")
+    pass
 #         raise HTTPException(
 #             status_code =status.HTTP_401UNAUTHORIZED, detail=""
-#         ) from e
 
 
-# def convert_config_to_response(config: ModelConfig) -> ModelConfigResponse:
+    pass
 #     """ModelConfig""""""
-#     return ModelConfigResponse(
-#         model_id =config.modelid,
-#         provider=config.provider.value,
-#         api_base =config.apibase,
-#         model_name =config.modelname,
-#         max_tokens =config.maxtokens,
-#         temperature=config.temperature,
-#         enabled=config.enabled,
-#         priority=config.priority,
-#         rate_limit =config.ratelimit,
-#         timeout=config.timeout,
-#         extra_params =config.extraparams,
-#         created_at =config.createdat,
-#         updated_at =config.updatedat,
-#         has_api_key =bool(config.apikey),
+#         model_id =self.config.modelid,
+#         provider=self.config.provider.value,
+#         api_base =self.config.apibase,
+#         model_name =self.config.modelname,
+#         max_tokens =self.config.maxtokens,
+#         temperature=self.config.temperature,
+#         enabled=self.config.enabled,
+#         priority=self.config.priority,
+#         rate_limit =self.config.ratelimit,
+#         timeout=self.config.timeout,
+#         extra_params =self.config.extraparams,
+#         created_at =self.config.createdat,
+#         updated_at =self.config.updatedat,
+#         has_api_key =bool(self.config.apikey),
 #     )
 
 
-#     @router.post("/configs", response_model =dict[str, Any], summary="")
-#     async def add_user_model_config(
-#     configrequest: ModelConfigRequest, userid: str = Depends(getcurrent_user_id):
+#     @self.router.post("/configs", response_model =dict[str, Any], summary="")
+    pass
 #     ):
+    pass
 #     """"""
-    
 
-#     - **model_id**: 
+
+#     - **model_id**:
+    pass
 #     - **provider**: (openai, zhipu, baidu, local)
 #     - **api_key**: API()
-#     - **model_name**: 
-#     - ****: 
+#     - **model_name**:
+    pass
+#     - ****:
+    pass
 #     """"""
 #     try:
-        # 
-#         metrics.increment_counter(
+    pass
+#         self.metrics.increment_counter(
 #             "model_config_add_request", tags={"provider": config_request.provider}
 #         )
 
-        # 
-#         factory = await get_model_factory()
 
-        # 
-#         modelconfig = ModelConfig(
 #             model_id =config_request.modelid,
 #             provider=ModelProvider(config_request.provider),
 #             api_key =config_request.apikey,
@@ -198,20 +174,18 @@ metrics = get_metrics_collector()
 #             extra_params =config_request.extra_params,
 #         )
 
-        # 
-#         success = await factory.add_user_model_config(userid, modelconfig)
 
-#         if success:
-#             metrics.increment_counter(
+    pass
+#             self.metrics.increment_counter(
 #                 "model_config_add_success", tags={"provider": config_request.provider}
 #             )
-#             return {
 #                 "success": True,
 #                 "message": "",
 #                 "model_id": config_request.model_id,
 #             }
 #         else:
-#             metrics.increment_counter(
+    pass
+#             self.metrics.increment_counter(
 #                 "model_config_add_failure", tags={"provider": config_request.provider}
 #             )
 #             raise HTTPException(
@@ -219,131 +193,111 @@ metrics = get_metrics_collector()
 #             )
 
 #     except HTTPException:
+    pass
 #         raise
 #     except Exception as e:
-#         logger.error(f": {e}")
-#         metrics.increment_counter(
+    pass
+#         self.metrics.increment_counter(
 #             "model_config_add_error", tags={"provider": config_request.provider}
 #         )
 #         raise HTTPException(
 #             status_code =status.HTTP_500INTERNAL_SERVER_ERROR,
 #             detail=f": {e!s}",
-#         ) from e
 
 
-#         @router.get(
+#         @self.router.get(
 #         "/configs", response_model =ModelListResponse, summary=""
 #         )
-#         async def get_user_model_configs(
-#         page: int = Query(1, ge=1, description=""),
-#         pagesize: int = Query(10, ge=1, le=100, description=""),
-#         enabledonly: bool = Query(False, description=""),
-#         userid: str = Depends(getcurrent_user_id),
 #         ):
+    pass
 #     """"""
-        
+
 
 #         - **page**: (1)
 #         - **page_size**: (1-100)
-#         - **enabled_only**: 
+#         - **enabled_only**:
+    pass
 #     """"""
 #     try:
-        # 
-#         factory = await get_model_factory()
+    pass
 
-        # 
-#         configs = await factory.get_user_model_configs(userid)
 
-        # 
-#         if enabled_only: configs = [config for config in configs if config.enabled]:
-
-        # 
-#             total = len(configs)
+    pass
 #             (page - 1) * page_size
 #             start_idx + page_size
 #             configs[start_idx: end_idx]
 
-        # 
-#             responseconfigs = [
-#             convert_config_to_response(config) for config in page_configs
 #             ]
 
-#             return ModelListResponse(
 #             models=responseconfigs, total=total, page=page, page_size =page_size
 #             )
-
+:
 #     except Exception as e:
-#         logger.error(f": {e}")
+    pass
 #         raise HTTPException(
 #             status_code =status.HTTP_500INTERNAL_SERVER_ERROR,
 #             detail=f": {e!s}",
-#         ) from e
 
 
-#         @router.get(
+#         @self.router.get(
 #         "/configs/{model_id}",
 #         response_model =ModelConfigResponse,
 #         summary="",
 #         )
-#         async def get_user_model_config(
-#         modelid: str, userid: str = Depends(getcurrent_user_id):
+    pass
 #         ):
+    pass
 #     """"""
-        
 
-#         - **model_id**: 
+
+#         - **model_id**:
+    pass
 #     """"""
 #     try:
-        # 
-#         await get_model_config_manager()
+    pass
 
-        # 
-#         config = await config_manager.get_config(modelid, ConfigScope.USER, userid)
 
-#         if not config:
+    pass
 #             raise HTTPException(
 #                 status_code =status.HTTP_404NOT_FOUND,
 #                 detail=f": {model_id}",
 #             )
 
-#             return convert_config_to_response(config)
 
 #     except HTTPException:
+    pass
 #         raise
 #     except Exception as e:
-#         logger.error(f": {e}")
+    pass
 #         raise HTTPException(
 #             status_code =status.HTTP_500INTERNAL_SERVER_ERROR,
 #             detail=f": {e!s}",
-#         ) from e
 
 
-#         @router.put(
+#         @self.router.put(
 #         "/configs/{model_id}", response_model =dict[str, Any], summary=""
 #         )
-#         async def update_user_model_config(
 #         modelid: str,
 #         configrequest: ModelConfigRequest,
-#         userid: str = Depends(getcurrent_user_id),
 #         ):
+    pass
 #     """"""
-        
 
-#         - **model_id**: 
-#         - ****: 
+
+#         - **model_id**:
+    pass
+#         - ****:
+    pass
 #     """"""
 #     try:
-        # model_id
-#         if model_id != config_request.model_id: raise HTTPException(:
+    pass
+# model_id
+    pass
 #                 status_code =status.HTTP_400BAD_REQUEST,
 #                 detail="URLmodel_idmodel_id",
 #             )
 
-        # 
-#             factory = await get_model_factory()
 
-        # 
-#             modelconfig = ModelConfig(
 #             model_id =config_request.modelid,
 #             provider=ModelProvider(config_request.provider),
 #             api_key =config_request.apikey,
@@ -358,21 +312,19 @@ metrics = get_metrics_collector()
 #             extra_params =config_request.extra_params,
 #             )
 
-        # 
-#             success = await factory.add_user_model_config(userid, modelconfig)
 
-#         if success:
-#             metrics.increment_counter(
+    pass
+#             self.metrics.increment_counter(
 #                 "model_config_update_success",
 #                 tags={"provider": config_request.provider},
 #             )
-#             return {
 #                 "success": True,
 #                 "message": "",
 #                 "model_id": model_id,
 #             }
 #         else:
-#             metrics.increment_counter(
+    pass
+#             self.metrics.increment_counter(
 #                 "model_config_update_failure",
 #                 tags={"provider": config_request.provider},
 #             )
@@ -381,83 +333,79 @@ metrics = get_metrics_collector()
 #             )
 
 #     except HTTPException:
+    pass
 #         raise
 #     except Exception as e:
-#         logger.error(f": {e}")
-#         metrics.increment_counter(
+    pass
+#         self.metrics.increment_counter(
 #             "model_config_update_error", tags={"provider": config_request.provider}
 #         )
 #         raise HTTPException(
 #             status_code =status.HTTP_500INTERNAL_SERVER_ERROR,
 #             detail=f": {e!s}",
-#         ) from e
 
 
-#         @router.delete(
+#         @self.router.delete(
 #         "/configs/{model_id}", response_model =dict[str, Any], summary=""
 #         )
-#         async def delete_user_model_config(
-#         modelid: str, userid: str = Depends(getcurrent_user_id):
+    pass
 #         ):
+    pass
 #     """"""
-        
 
-#         - **model_id**: 
+
+#         - **model_id**:
+    pass
 #     """"""
 #     try:
-        # 
-#         factory = await get_model_factory()
+    pass
 
-        # 
-#         success = await factory.remove_user_model_config(userid, modelid)
 
-#         if success:
-#             metrics.increment_counter("model_config_delete_success")
-#             return {
+    pass
+#             self.metrics.increment_counter("model_config_delete_success")
 #                 "success": True,
 #                 "message": "",
 #                 "model_id": model_id,
 #             }
 #         else:
-#             metrics.increment_counter("model_config_delete_failure")
+    pass
+#             self.metrics.increment_counter("model_config_delete_failure")
 #             raise HTTPException(
 #                 status_code =status.HTTP_404NOT_FOUND,
 #                 detail=f": {model_id}",
 #             )
 
 #     except HTTPException:
+    pass
 #         raise
 #     except Exception as e:
-#         logger.error(f": {e}")
-#         metrics.increment_counter("model_config_delete_error")
+    pass
+#         self.metrics.increment_counter("model_config_delete_error")
 #         raise HTTPException(
 #             status_code =status.HTTP_500INTERNAL_SERVER_ERROR,
 #             detail=f": {e!s}",
-#         ) from e
 
 
-#         @router.post(
+#         @self.router.post(
 #         "/configs/{model_id}/validate",
 #         response_model =ModelValidationResponse,
 #         summary="",
 #         )
-#         async def validate_model_config(
 #         modelid: str,
 #         configrequest: ModelConfigRequest,
-#         userid: str = Depends(getcurrent_user_id),
 #         ):
+    pass
 #     """"""
-        
 
-#         - **model_id**: 
-#         - ****: 
+
+#         - **model_id**:
+    pass
+#         - ****:
+    pass
 #     """"""
 #     try:
-        # 
-#         await get_model_config_manager()
+    pass
 
-        # 
-#         modelconfig = ModelConfig(
 #             model_id =config_request.modelid,
 #             provider=ModelProvider(config_request.provider),
 #             api_key =config_request.apikey,
@@ -472,65 +420,51 @@ metrics = get_metrics_collector()
 #             extra_params =config_request.extra_params,
 #         )
 
-        # 
-#         await config_manager.validate_config(modelconfig)
 
-#         return ModelValidationResponse(
 #             valid=validation_result["valid"],
 #             errors=validation_result["errors"],
 #             warnings=validation_result["warnings"],
 #         )
 
 #     except Exception as e:
-#         logger.error(f": {e}")
+    pass
 #         raise HTTPException(
 #             status_code =status.HTTP_500INTERNAL_SERVER_ERROR,
 #             detail=f": {e!s}",
-#         ) from e
 
 
-#         @router.get(
+#         @self.router.get(
 #         "/available", response_model =list[dict[str, Any]], summary=""
 #         )
-#         async def get_available_models(userid: str = Depends(getcurrent_user_id)):
+    pass
 #     """"""
 #         ()
 #     """"""
 #     try:
-        # 
-#         factory = await get_model_factory()
+    pass
 
-        # 
-#         models = factory.get_available_models(userid)
 
-#         return models
 
 #     except Exception as e:
-#         logger.error(f": {e}")
+    pass
 #         raise HTTPException(
 #             status_code =status.HTTP_500INTERNAL_SERVER_ERROR,
 #             detail=f": {e!s}",
-#         ) from e
 
 
-#         @router.get(
+#         @self.router.get(
 #         "/health", response_model =dict[str, ModelHealthResponse], summary=""
 #         )
-#         async def get_model_health_status(userid: str = Depends(getcurrent_user_id)):
+    pass
 #     """"""
-        
+
 #     """"""
 #     try:
-        # 
-#         factory = await get_model_factory()
+    pass
 
-        # 
 #         factory.get_model_health_status()
 
-        # 
-#         response = {}
-#         for modelkey, status in health_status.items():
-#             response[model_key] = ModelHealthResponse(
+    pass
 #                 model_id =modelkey,
 #                 provider=model_key.split("_")[0],
 #                 is_healthy =status["is_healthy"],
@@ -540,76 +474,64 @@ metrics = get_metrics_collector()
 #                 last_error =status["last_error"],
 #             )
 
-#             return response
 
 #     except Exception as e:
-#         logger.error(f": {e}")
+    pass
 #         raise HTTPException(
 #             status_code =status.HTTP_500INTERNAL_SERVER_ERROR,
 #             detail=f": {e!s}",
-#         ) from e
 
 
-#         @router.post("/test/{model_id}", response_model =dict[str, Any], summary="")
-#         async def test_model_connection(
+#         @self.router.post("/test/{model_id}", response_model =dict[str, Any], summary="")
 #         modelid: str,
-#         testmessage: str = Body(..., description=""),
-#         userid: str = Depends(getcurrent_user_id),
 #         ):
+    pass
 #     """"""
-        
 
-#         - **model_id**: 
-#         - **test_message**: 
+
+#         - **model_id**:
+    pass
+#         - **test_message**:
+    pass
 #     """"""
 #     try:
-        # 
-#         factory = await get_model_factory()
+    pass
 
-        # 
-#         messages = [
 #             {"role": "system", "content": ", "},
 #             {"role": "user", "content": test_message},
 #         ]
 
-        # 
-#         starttime = datetime.utcnow()
-#         response, metadata = await factory.generate_chat_completion(
-#             model=modelid,
+#             self.model=modelid,
 #             messages=messages,
 #             temperature=0.7,
 #             max_tokens =100,
-#             user_id =user_id,
+#             context.user_id =context.context.get("user_id", ""),
 #         )
 #         datetime.utcnow()
 
-#         responsetime = (end_time - starttime).total_seconds()
 
-#         return {
 #             "success": True,
 #             "response": response,
-#             "metadata": metadata,
+#             "self.metadata": self.metadata,
 #             "response_time": responsetime,
 #             "timestamp": end_time.isoformat(),
 #         }
 
 #     except Exception as e:
-#         logger.error(f": {e}")
-#         return {
+    pass
 #             "success": False,
 #             "error": str(e),
 #             "timestamp": datetime.utcnow().isoformat(),
 #         }
 
 
-#         @router.get(
+#         @self.router.get(
 #         "/providers", response_model =list[dict[str, Any]], summary=""
 #         )
-#         async def get_supported_providers():
+    pass
 #     """"""
-        
+
 #     """"""
-#         providers = [
 #         {
 #             "provider": "openai",
 #             "name": "OpenAI",
@@ -659,4 +581,3 @@ metrics = get_metrics_collector()
 #         },
 #         ]
 
-#         return providers

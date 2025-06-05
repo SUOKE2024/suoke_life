@@ -1,306 +1,239 @@
 #!/usr/bin/env python3
 """"""
 
-# , 
+# ,
 """"""
 
-import asyncio
-import json
-import logging
-import os
-import time
-from pathlib import Path
+
+from asyncio import asyncio
+from logging import logging
+from json import json
+from os import os
+from time import time
+from typing import Optional
+from typing import List
+from typing import Dict
 from typing import Any
-
-from ..utils.config_loader import get_config
-from ..utils.metrics import track_db_metrics
-
-logger = logging.getLogger(__name__)
+from pathlib import Path
+from loguru import logger
+import self.logging
 
 
-# class FileSessionRepository:
+
+self.logger = self.logging.getLogger(__name__)
+
+
+    pass
 #     """, """"""
 
-#     def __init__(self):
+    pass
 #         """""""""
-#         self.config = get_config()
-#         self.metrics = get_metrics_collector()
 
-        # 
-#         self.config.get_section("file_storage")
-#         self.enabled = file_storage_config.get("enabled", True)
-#         self.basepath = file_storage_config.get("base_path", "data")
-#         self.sessionfile = file_storage_config.get("session_file", "data/sessions.json")
+#         self.self.config.get_section("file_storage")
 
-        # 
-#         self.config.get_section("conversation")
-#         self.sessiontimeout = (
+#         self.self.config.get_section("conversation")
 #             conversation_config.get("session_timeout_minutes", 30) * 60
-#         )  # 
+#         )  #
 
-        # 
 #         self._ensure_directories()
 
-        # 
-#         self.sessions = self._load_sessions()
 
-        # , 
-#         self.file_lock = asyncio.Lock()
+# ,
 
-#         logger.info(", : %s", self.sessionfile)
 
-#     def _ensure_directories(self):
+    pass
 #         """""""""
-#         try:
-            # 
+    pass
 #             Path(self.basepath).mkdir(parents=True, exist_ok =True)
 
-            # 
 #             Path(self.sessionfile)
 #             session_file_path.parent.mkdir(parents=True, exist_ok =True)
 
-#             logger.debug("")
 #         except Exception as e:
-#             logger.error(": %s", str(e))
+    pass
 #             raise
 
-#     def _load_sessions(self) -> dict[str, dict[str, Any]]:
+    pass
 #         """""""""
-#         try:
-#             if os.path.exists(self.sessionfile):
+    pass
+    pass
 #                 with open(self.sessionfile, encoding="utf-8") as f:
-#                     data = json.load(f)
-#                     logger.info(", : %d", len(data))
-#                     return data
+    pass
 #             else:
-#                 logger.info(", ")
-#                 return {}
+    pass
 #         except Exception as e:
-#             logger.error(": %s", str(e))
-#             return {}
+    pass
 
-#             async def _save_sessions(self):
+    pass
 #         """""""""
-#             async with self._file_lock: try:
-                # , 
-#                 tempfile = self.session_file + ".tmp"
+    pass
+# ,
 #                 with open(tempfile, "w", encoding="utf-8") as f:
+    pass
 #                     json.dump(self.sessions, f, ensure_ascii =False, indent=2)
 
-                # 
 #                     os.replace(tempfile, self.sessionfile)
-#                     logger.debug("")
 
 #             except Exception as e:
-#                 logger.error(": %s", str(e))
-                # 
-#                 tempfile = self.session_file + ".tmp"
-#                 if os.path.exists(tempfile):
+    pass
+    pass
 #                     os.remove(tempfile)
 #                     raise
 
-#                     @track_db_metrics(db_type ="file", operation="query")
-#                     async def get_session(self, session_id: str) -> dict[str, Any] | None:
+#                     @track_db_metrics(db_type ="file", operation="self.query")
+    pass
 #         """"""
-                    
 
-#                     Args: session_id: ID
+
+#                     Args: context.session_id: ID
 
 #                     Returns:
+    pass
 #                     Optional[Dict[str, Any]]: , None
 #         """"""
-#         try:
+    pass
 #             self.sessions.get(sessionid)
-#             if session_data: logger.debug(", ID: %s", sessionid):
-#                 return session_data.copy()  # , 
+    pass
 
-#                 logger.debug(", ID: %s", sessionid)
-#                 return None
 
 #         except Exception as e:
-#             logger.error(", ID: %s, : %s", sessionid, str(e))
-#             return None
+    pass
 
-#             @track_db_metrics(db_type ="file", operation="query")
-#             async def get_user_sessions(
-#             self, user_id: str, limit: int = 10
+#             @track_db_metrics(db_type ="file", operation="self.query")
 #             ) -> list[dict[str, Any]]:
+    pass
 #         """"""
-            
 
-#             Args: user_id: ID
-#             limit: 
 
+#             Args: context.user_id: ID
+#             limit:
+    pass
 #             Returns:
-#             List[Dict[str, Any]]: 
+    pass
+#             List[Dict[str, Any]]:
+    pass
 #         """"""
-#         try:
-            # 
-#             for _session_id, session_data in self.sessions.items():
-#                 if session_data.get("user_id") == user_id: user_sessions.append(session_data.copy()):
+    pass
+    pass
+    pass
+#                     user_sessions.self.sort(key=lambda x: x.get("last_active", 0), reverse=True)
 
-            # 
-#                     user_sessions.sort(key=lambda x: x.get("last_active", 0), reverse=True)
 
-            # 
-#                     result = user_sessions[:limit]
-
-#                     logger.info(", ID: %s, : %d", userid, len(result))
-#                     return result
 
 #         except Exception as e:
-#             logger.error(", ID: %s, : %s", userid, str(e))
-#             return []
+    pass
 
 #             @track_db_metrics(db_type ="file", operation="insert_update")
-#             async def save_session(self, session_data: dict[str, Any]) -> bool:
+    pass
 #         """"""
-            
 
-#             Args: session_data: 
 
+#             Args: session_data:
+    pass
 #             Returns:
-#             bool: 
+    pass
+#             bool:
+    pass
 #         """"""
-#         try:
-#             sessionid = session_data.get("session_id")
-#             if not session_id: logger.error("session_id"):
-#                 return False
+    pass
+    pass
 
-            # 
-#                 session_data["last_active"] = int(time.time())
 
-            # 
-#                 self.sessions[session_id] = session_data.copy()
 
-            # 
-#                 await self._save_sessions()
 
-#                 logger.debug(", ID: %s", sessionid)
-#                 return True
 
 #         except Exception as e:
-#             logger.error(", : %s", str(e))
-#             return False
+    pass
 
-#             @track_db_metrics(db_type ="file", operation="update")
-#             async def update_session_metadata(
-#             self, session_id: str, metadata: dict[str, Any]
+#             @track_db_metrics(db_type ="file", operation="self.update")
+#             self, context.session_id: str, self.metadata: dict[str, Any]
 #             ) -> bool:
+    pass
 #         """"""
-            
 
-#             Args: session_id: ID
-#             metadata: 
 
+#             Args: context.session_id: ID
+#             self.metadata:
+    pass
 #             Returns:
-#             bool: 
+    pass
+#             bool:
+    pass
 #         """"""
-#         try:
-#             if session_id not in self.sessions:
-#                 logger.warning(", ID: %s", sessionid)
-#                 return False
+    pass
+    pass
 
-            # 
-#                 self.sessions[session_id]["metadata"] = metadata
-#                 self.sessions[session_id]["last_active"] = int(time.time())
 
-            # 
-#                 await self._save_sessions()
 
-#                 logger.debug(", ID: %s", sessionid)
-#                 return True
 
 #         except Exception as e:
-#             logger.error(", ID: %s, : %s", sessionid, str(e))
-#             return False
+    pass
 
 #             @track_db_metrics(db_type ="file", operation="delete")
-#             async def delete_session(self, session_id: str) -> bool:
+    pass
 #         """"""
-            
 
-#             Args: session_id: ID
+
+#             Args: context.session_id: ID
 
 #             Returns:
-#             bool: 
+    pass
+#             bool:
+    pass
 #         """"""
-#         try:
-#             if session_id in self.sessions:
-#                 del self.sessions[session_id]
+    pass
+    pass
+#                 del self.sessions[context.context.get("session_id", "")]
 
-                # 
-#                 await self._save_sessions()
 
-#                 logger.info(", ID: %s", sessionid)
-#                 return True
 
-#                 logger.warning(", ID: %s", sessionid)
-#                 return False
 
 #         except Exception as e:
-#             logger.error(", ID: %s, : %s", sessionid, str(e))
-#             return False
+    pass
 
 #             @track_db_metrics(db_type ="file", operation="delete")
-#             async def clean_inactive__se_s_sion_s(
-#             _self, max_age__second_s: int | None = None
 #             ) -> int:
+    pass
 #         """"""
-            
 
-#             Args: max_age_seconds: (), 
+
+#             Args: max_age_seconds: (),
 
 #             Returns:
-#             int: 
+    pass
+#             int:
+    pass
 #         """"""
-#         try:
-            # 
-            # 
+    pass
 #             int(time.time()) - max_age
 
-            # 
-#             expiredsessions = []
-#             for sessionid, session_data in self.sessions.items(): session_data.get("last_active", 0):
-#                 if last_active < cutoff_time: expired_sessions.append(sessionid):
-
-            # 
-#             for session_id in expired_sessions: del self.sessions[session_id]:
-
-            # , 
-#             if expired_sessions: await self._save_sessions():
-
-#                 deletedcount = len(expiredsessions)
-#                 logger.info(", : %d", deletedcount)
-#                 return deleted_count
+    pass
+    pass
+    pass
+# ,
+    pass
 
 #         except Exception as e:
-#             logger.error(", : %s", str(e))
-#             return 0
+    pass
 
 #             @track_db_metrics(db_type ="file", operation="count")
-#             async def count_active__se_s_sion_s(
-#             _self, max_age__second_s: int | None = None
 #             ) -> int:
+    pass
 #         """"""
-            
 
-#             Args: max_age_seconds: (), 
+
+#             Args: max_age_seconds: (),
 
 #             Returns:
-#             int: 
+    pass
+#             int:
+    pass
 #         """"""
-#         try:
-            # 
-            # 
+    pass
 #             int(time.time()) - max_age
 
-            # 
-#             for session_data in self.sessions.values(): session_data.get("last_active", 0):
-#                 if last_active >= cutoff_time: active_count += 1:
-
-#                     return active_count
+    pass
+    pass
 
 #         except Exception as e:
-#             logger.error(", : %s", str(e))
-#             return 0
+    pass

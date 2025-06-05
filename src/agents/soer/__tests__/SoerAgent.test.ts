@@ -3,7 +3,7 @@ describe("SoerAgent", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-  describe(SoerAgentImpl", () => {"
+  describe("SoerAgentImpl", () => {
     it("should work with valid inputs", () => {
       // Add test cases
 const result = SoerAgentImpl(/* valid params   */);

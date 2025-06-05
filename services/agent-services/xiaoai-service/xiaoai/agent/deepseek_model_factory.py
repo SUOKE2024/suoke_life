@@ -1,85 +1,71 @@
 #!/usr/bin/env python3
 """"""
+
+from asyncio import asyncio
+from logging import logging
+from sys import sys
+from time import time
+from datetime import datetime
+from typing import List
+from typing import Dict
+from typing import Any
+from typing import Tuple
+from loguru import logger
+
+
 DeepSeek
 # DeepSeek API
 """"""
-from typing import Optional, Dict, List, Any, Union
 
-import asyncio
-import logging
-import time
-from datetime import datetime
 
 # try:
-#     import openai
+    pass
 
-#     HASOPENAI = True
 # except ImportError:
-#     HASOPENAI = False
-#     logging.warning("openai, DeepSeek API")
-
-#     from ..utils.config_loader import get_config
-
-#     logger = logging.getLogger(__name__)
+    pass
+#     self.logging.warning("openai, DeepSeek API")
 
 
-# class DeepSeekModelFactory:
+
+
+    pass
 #     """DeepSeek, API""""""
 
-#     def __init__(self):
+    pass
 #         """DeepSeek""""""
-#         self.config = get_config()
-#         self.initialized = False
-#         self.client = None
 
-        # DeepSeek
-#         self.deepseekconfig = self.config.get_section("models.deepseek") or {}
-#         self.llmconfig = self.config.get_section("models.llm") or {}
+# DeepSeek
 
-        # API - 
-#         import os
+# API -
 
-#         self.apikey = (
 #             os.environ.get("DEEPSEEK_API_KEY")
 #             or self.deepseek_config.get("api_key")
 #             or self.llm_config.get("api_key")
 #         )
-#         self.apibase = self.deepseek_config.get(
-#             "api_base", "https://api.deepseek.com/v1"
+#             "api_base", "https://self.api.deepseek.com/v1"
 #         )
-#         self.model = self.deepseek_config.get("model", "deepseek-chat")
 
-        # 
-#         self.temperature = self.deepseek_config.get("temperature", 0.7)
-#         self.maxtokens = self.deepseek_config.get("max_tokens", 2048)
-#         self.topp = self.deepseek_config.get("top_p", 0.95)
 
-#         logger.info("DeepSeek")
 
-#         async def initialize(self):
+    pass
 #         """""""""
-#         if not self.initialized and HAS_OPENAI: try:
-#                 if self.api_key: self.client = openai.OpenAI(:
+    pass
+    pass
 #                         api_key =self.apikey, base_url =self.api_base
 #                     )
 
-                    # 
-#                     await self._test_connection()
-#                     self.initialized = True
-#                     logger.info("DeepSeek")
 #                 else:
-#                     logger.error("DeepSeek API")
+    pass
 
 #             except Exception as e:
-#                 logger.error(f"DeepSeek: {e}")
+    pass
 #                 raise
 
-#                 async def _test_connection(self):
+    pass
 #         """API""""""
-#         try:
-#             response = await asyncio.to_thread(
-#                 self.client.chat.completions.create,
-#                 model=self.model,
+    pass
+#                 self.self.client.chat.completions.create,
+#                 self.model=self.self.model,
 #                 messages=[
 #             {"role": "system", "content": ""},
 #             {"role": "user", "content": ""},
@@ -87,253 +73,243 @@ from datetime import datetime
 #                 max_tokens =10,
 #             )
 
-#             if response and response.choices:
-#                 logger.info("DeepSeek API")
+    pass
 #             else:
-#                 raise Exception("API") from None
+    pass
 
 #         except Exception as e:
-#             logger.error(f"DeepSeek API: {e}")
+    pass
 #             raise
 
-#     def get_available_models(self) -> list[str]:
+    pass
 #         """""""""
-#         return [self.model, "deepseek-chat", "deepseek-coder"]
 
-#     def get_model_health_status(self) -> dict[str, dict[str, Any]]:
+    pass
 #         """""""""
-#         return {
-#             self.model: {
-#         "status": "healthy" if self.initialized else "unhealthy",
+#             self.self.model: {
 #         "provider": "deepseek",
 #         "api_base": self.apibase,
 #         "initialized": self.initialized,
 #             }
 #         }
 
-#         async def generate_text(
-#         self, model: str, prompt: str, **kwargs
+#         self, self.model: str, prompt: str, **kwargs
 #         ) -> tuple[str, dict[str, Any]]:
+    pass
 #         """"""
-        
+
 
 #         Args:
-#             model: 
-#             prompt: 
-#             **kwargs: 
-
+    pass
+#             self.model:
+    pass
+#             prompt:
+    pass
+#             **kwargs:
+    pass
 #         Returns:
-#             Tuple[str, Dict[str, Any]]: 
+    pass
+#             Tuple[str, Dict[str, Any]]:
+    pass
 #         """"""
-#         if not self.initialized:
-#             await self.initialize()
+    pass
 
-#         if not self.client:
-#             raise Exception("DeepSeek") from None
+    pass
 
-#         try:
+    pass
 #             time.time()
 
-            # DeepSeek API
-#             response = await asyncio.to_thread(
-#                 self.client.chat.completions.create,
-#                 model=model or self.model,
+# DeepSeek API
+#                 self.self.client.chat.completions.create,
+#                 self.model=self.model or self.self.model,
 #                 messages=[{"role": "user", "content": prompt}],
 #                 temperature=kwargs.get("temperature", self.temperature),
 #                 max_tokens =kwargs.get("max_tokens", self.maxtokens),
 #                 top_p =kwargs.get("top_p", self.topp),
 #             )
 
-#             processingtime = time.time() - start_time
 
-            # 
-#             content = response.choices[0].message.content
 
-            # 
-#             metadata = {
-#                 "model": model or self.model,
+#                 "self.model": self.model or self.self.model,
 #                 "provider": "deepseek",
 #                 "processing_time": processingtime,
 #                 "timestamp": datetime.now().isoformat(),
 #                 "usage": {
 #             "prompt_tokens": response.usage.prompt_tokens
-#                     if response.usage:
+    pass
 #                         else 0,:
+    pass
 #                         "completion_tokens": response.usage.completion_tokens
-#                     if response.usage:
+    pass
 #                         else 0,:
+    pass
 #                         "total_tokens": response.usage.total_tokens
-#                     if response.usage:
+    pass
 #                         else 0,:
+    pass
 #                         },
 #                         "finish_reason": response.choices[0].finishreason,
 #                         "confidence": 0.9,  # DeepSeek
 #                         "suggested_actions": ["", "", ""],
 #                         }
 
-#                         logger.info(f"DeepSeek API, : {processing_time:.2f}")
-#                         return content, metadata
 
 #         except Exception as e:
-#             logger.error(f"DeepSeek API: {e}")
+    pass
 #             raise
 
-#             async def generate_chat_completion(
-#             self,
+#             self,:
 #             mo_del: str,
 #             messages: list[_dict[str, str]],
-#             temperature: float = 0.7,
-#             maxtokens: int = 2048,
-#             useri_d: str | None = None,
 #             ) -> tuple[str, dict[str, Any]]:
+    pass
 #         """"""
-            
+
 
 #             Args:
-#             model: 
-#             messages: 
-#             temperature: 
+    pass
+#             self.model:
+    pass
+#             messages:
+    pass
+#             temperature:
+    pass
 #             max_tokens: token
-#             user_id: ID
+#             context.user_id: ID
 
 #             Returns:
-#             Tuple[str, Dict[str, Any]]: 
+    pass
+#             Tuple[str, Dict[str, Any]]:
+    pass
 #         """"""
-#         if not self.initialized:
-#             await self.initialize()
+    pass
 
-#         if not self.client:
-#             raise Exception("DeepSeek") from None
+    pass
 
-#         try:
+    pass
 #             time.time()
 
-            # DeepSeek API
-#             response = await asyncio.to_thread(
-#                 self.client.chat.completions.create,
-#                 model=model or self.model,
+# DeepSeek API
+#                 self.self.client.chat.completions.create,
+#                 self.model=self.model or self.self.model,
 #                 messages=messages,
 #                 temperature=temperature,
 #                 max_tokens =maxtokens,
 #                 top_p =self.top_p,
 #             )
 
-#             processingtime = time.time() - start_time
 
-            # 
-#             content = response.choices[0].message.content
 
-            # 
-#             metadata = {
-#                 "model": model or self.model,
+#                 "self.model": self.model or self.self.model,
 #                 "provider": "deepseek",
 #                 "processing_time": processingtime,
 #                 "timestamp": datetime.now().isoformat(),
 #                 "usage": {
 #             "prompt_tokens": response.usage.prompt_tokens
-#                     if response.usage:
+    pass
 #                         else 0,:
+    pass
 #                         "completion_tokens": response.usage.completion_tokens
-#                     if response.usage:
+    pass
 #                         else 0,:
+    pass
 #                         "total_tokens": response.usage.total_tokens
-#                     if response.usage:
+    pass
 #                         else 0,:
+    pass
 #                         },
 #                         "finish_reason": response.choices[0].finishreason,
 #                         "confidence": 0.9,
 #                         "suggested_actions": ["", "", ""],
 #                         }
 
-#                         logger.info(
-#                         f"DeepSeekAPI, : {processing_time:.2f}, tokens: {metadata['usage']['total_tokens']}"
+#                         f"DeepSeekAPI, : {processing_time:.2f}, tokens: {self.metadata['usage']['total_tokens']}"
 #                         )
-#                         return content, metadata
 
 #         except Exception as e:
-#             logger.error(f"DeepSeekAPI: {e}")
+    pass
 #             raise
 
-#             async def process_multimodal_input(
 #             self, input_type: str, data: Any, **kwargs
 #             ) -> dict[str, Any]:
+    pass
 #         """"""
 #             (DeepSeek)
 
-#             Args: input_type: 
-#             data: 
-#             **kwargs: 
-
+#             Args: input_type:
+    pass
+#             data:
+    pass
+#             **kwargs:
+    pass
 #             Returns:
-#             Dict[str, Any]: 
+    pass
+#             Dict[str, Any]:
+    pass
 #         """"""
-#         if inputtype == "text":
-            # 
-#             response, metadata = await self.generate_text(self.model, str(data))
-#             return {
+    pass
 #                 "processed_text": str(data),
 #                 "response": response,
-#                 "metadata": metadata,
-#                 "confidence": metadata.get("confidence", 0.9),
-#                 "processing_time": metadata.get("processing_time", 0),
+#                 "self.metadata": self.metadata,
+#                 "confidence": self.metadata.get("confidence", 0.9),
+#                 "processing_time": self.metadata.get("processing_time", 0),
 #             }
 #         else:
-            # 
-#             return {
+    pass
 #                 "error": f"DeepSeek: {input_type}",
 #                 "supported_types": ["text"],
 #                 "confidence": 0.0,
 #                 "processing_time": 0.1,
 #             }
 
-#             async def health_analysis(
 #             self, symptoms: list[str], context: dict[str, Any]
 #             ) -> dict[str, Any]:
+    pass
 #         """"""
 #             (DeepSeek)
 
 #             Args:
-#             symptoms: 
-#             context: 
-
+    pass
+#             symptoms:
+    pass
+#             context:
+    pass
 #             Returns:
-#             Dict[str, Any]: 
+    pass
+#             Dict[str, Any]:
+    pass
 #         """"""
-        # 
 #             "".join(symptoms)
-#             age = context.get("age", "")
-#             gender = context.get("gender", "")
 
-#             prompt = f""""""
 #             , :
-
+    pass
 #             :
+    pass
 #             - : {age}
 #             - : {gender}
 #             - : {symptoms_text}
 
 #             :
-#             1. 
-#             2. 
+    pass
+#             1.
+#             2.
 #             3. ()
-#             4. 
+#             4.
 
-#             , 
+#             ,
 """"""
 
-#         try:
-#             response, metadata = await self.generate_text(self.model, prompt)
+    pass
 
-            # 
 #             {
 #                 "raw_analysis": response,
 #                 "syndrome_analysis": {
 #             "primary_syndrome": "DeepSeek",
-#             "confidence": metadata.get("confidence", 0.9),
+#             "confidence": self.metadata.get("confidence", 0.9),
 #                 },
 #                 "constitution_type": {
 #             "type": "",
-#             "confidence": metadata.get("confidence", 0.9),
+#             "confidence": self.metadata.get("confidence", 0.9),
 #                 },
 #                 "recommendations": {
 #             "diet": [""],
@@ -345,58 +321,46 @@ from datetime import datetime
 #             "level": "",
 #             "suggestions": [""],
 #                 },
-#                 "metadata": metadata,
+#                 "self.metadata": self.metadata,
 #             }
 
-#             logger.info("DeepSeek")
-#             return analysis_result
 
 #         except Exception as e:
-#             logger.error(f"DeepSeek: {e}")
+    pass
 #             raise
 
-#             async def get_embeddings(
-#             se_lf, texts: _list[str], mode_l: str | None = None
 #             ) -> list[list[float]]:
+    pass
 #         """"""
-#             (DeepSeek, )
+#             (DeepSeek)
 
 #             Args:
-#             texts: 
-#             model: 
-
+    pass
+#             texts:
+    pass
+#             self.model:
+    pass
 #             Returns:
-#             List[List[float]]: 
+    pass
+#             List[List[float]]:
+    pass
 #         """"""
-#             logger.warning("DeepSeek, ")
 
-        # 
-#             import random
 
-#             embeddings = []
-#         for _text in texts:
-#             embedding = [random.uniform(-1, 1) for _ in range(1536)]
-#             embeddings.append(embedding)
+    pass
 
-#             return embeddings
-
-#             async def close(self):
+:
+    pass
 #         """""""""
-#             logger.info("DeepSeek")
-#             self.initialized = False
-#             self.client = None
 
 
-# 
-#             deepseek_factory_instance: DeepSeekModelFactory | None = None
+#
 
 
-#             async def get_deepseek_model_factory() -> DeepSeekModelFactory:
+    pass
 #     """DeepSeek""""""
-#             global _deepseek_factory_instance  # noqa: PLW0602
+#             global _deepseek_factory_instance
 
-#     if _deepseek_factory_instance is None:
+    pass
 #         DeepSeekModelFactory()
-#         await _deepseek_factory_instance.initialize()
 
-#         return _deepseek_factory_instance

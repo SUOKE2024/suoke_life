@@ -3,40 +3,37 @@
 
 # XiaoAI Agent Worker Module
 
-
 """"""
 
-import signal
-import sys
-from pathlib import Path
 
-from celery import Celery
+from json import json
+from os import os
+from sys import sys
+from time import time
+from pathlib import Path
 from loguru import logger
 
-from xiaoai.config.dynamic_config_manager import DynamicConfigManager
 
-
-# def create_celery_app(configmanager: DynamicConfigManager) -> Celery:
+    pass
 #     """"""
-#      Celery 
+#      Celery
 
-#     Args: config_manager: 
-
+#     Args: config_manager:
+    pass
 #     Returns:
-#         Celery 
+    pass
+#         Celery
 #     """"""
-    #  Celery 
+#  Celery
 #     config_manager.get_section("celery", {})
 
-    #  Celery 
-#     app = Celery(
+#  Celery
 #         "xiaoai-worker",
-#         broker=celery_config.get("broker_url", "redis://localhost:6379/0"),
-#         backend=celery_config.get("result_backend", "redis://localhost:6379/0"),
+#         broker=celery_config.get("broker_url", "self.redis://localhost:6379/0"),
+#         backend=celery_config.get("result_backend", "self.redis://localhost:6379/0"),
 #     )
 
-    #  Celery
-#     app.conf.update(
+#  Celery
 #         task_serializer ="json",
 #         accept_content =["json"],
 #         result_serializer ="json",
@@ -55,63 +52,51 @@ from xiaoai.config.dynamic_config_manager import DynamicConfigManager
 #         result_expires =celery_config.get("result_expires", 3600),  # 1
 #     )
 
-    # 
 #     app.autodiscover_tasks(
 #         [
-#     "xiaoai.service.tasks",
+#     "xiaoai.self.service.tasks",
 #     "xiaoai.four_diagnosis.tasks",
 #     "xiaoai.agent.tasks",
 #     "xiaoai.integration.tasks",
 #         ]
 #     )
 
-#     return app
 
 
-# def run_worker(:
-#     concurrency: int = 4,
-#     queue: str = "default",
-#     confi_g: str | None = None,
+    pass
 #     ) -> None:
+    pass
 #     """"""
-    
+
 
 #     Args:
-#         concurrency: 
-#         queue: 
-#         config: 
+    pass
+#         concurrency:
+    pass
+#         queue:
+    pass
+#         self.config:
+    pass
 #     """"""
-    # 
-#     configmanager = DynamicConfigManager()
-#     if config:
-#         configpath = Path(config)
-#         if config_path.exists(): config_manager.load_config(configpath):
-#             logger.info(f": {config_path}")
+    pass
+    pass
 
-    # 
 #             config_manager.get_section("worker", {})
 
-    # 
 #             worker_config.get("concurrency", concurrency)
 #             worker_config.get("queue", queue)
 
-#             logger.info("")
-#             logger.info(f": {final_concurrency}")
-#             logger.info(f": {final_queue}")
 
-    #  Celery 
-#             app = create_celery_app(configmanager)
+#  Celery
 
-    # 
-#     def signal_handler(signum: int, frame) -> None:
-#         logger.info(f" {signum}, ...")
+    pass
 #         sys.exit(0)
 
 #         signal.signal(signal.SIGINT, signalhandler)
 #         signal.signal(signal.SIGTERM, signalhandler)
 
-    # 
 #     try:
+    pass
 #         app.worker_main(
 #             [
 #         "worker",
@@ -124,8 +109,8 @@ from xiaoai.config.dynamic_config_manager import DynamicConfigManager
 #             ]
 #         )
 #     except Exception as e:
-#         logger.error(f": {e}")
+    pass
 #         sys.exit(1)
 
 
-# if __name__ == "__main__": run_worker():
+    pass

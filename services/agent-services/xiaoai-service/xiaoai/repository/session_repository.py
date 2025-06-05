@@ -1,305 +1,239 @@
 #!/usr/bin/env python3
 """"""
 
-
 """"""
 
-import logging
-import time
+
+from asyncio import asyncio
+from logging import logging
+from os import os
+from time import time
+from typing import Optional
+from typing import List
+from typing import Dict
 from typing import Any
-
-from ..utils.config_loader import get_config
-from ..utils.metrics import track_db_metrics
-
-logger = logging.getLogger(__name__)
+from loguru import logger
+import self.logging
 
 
-# class SessionRepository:
+
+self.logger = self.logging.getLogger(__name__)
+
+
+    pass
 #     """, """"""
 
-#     def __init__(self):
+    pass
 #         """""""""
-#         self.config = get_config()
-#         self.metrics = get_metrics_collector()
 
-        # MongoDB
-#         self.config.get_section("database.mongodb")
-#         self.mongodburi = mongodb_config.get(
+# MongoDB
+#         self.self.config.get_section("database.mongodb")
 #             "uri", "mongodb://localhost:27017/xiaoai_db"
 #         )
-#         self.sessioncollection_name = self.config.get_nested(
 #             "database", "mongodb", "collections", "session_data", default="session_data"
 #         )
 
-        # 
-#         self.config.get_section("conversation")
-#         self.sessiontimeout = (
+#         self.self.config.get_section("conversation")
 #             conversation_config.get("session_timeout_minutes", 30) * 60
-#         )  # 
+#         )  #
 
-        # MongoDB
-#         try:
-#             self.client = motor.motor_asyncio.AsyncIOMotorClient(self.mongodburi)
+# MongoDB
+    pass
 #             self.mongodb_uri.split("/")[-1]
-#             self.db = self.client[db_name]
-#             self.sessioncollection = self.db[self.session_collection_name]
 
-            # : 
-#             self.indexes_created = False
+# :
+    pass
 
-#             logger.info("")
 #         except Exception as e:
-#             logger.error("MongoDB: %s", str(e))
-            # 
-#             self.client = None
-#             self.db = None
-#             self.sessioncollection = None
+    pass
 
-#             async def _create_indexes(self):
+    pass
 #         """""""""
-#         if self.session_collection: try:
-                # ID
-#                 await self.session_collection.create_index("session_id", unique=True)
-                # ID, 
-#                 await self.session_collection.create_index("user_id")
-                # , 
-#                 await self.session_collection.create_index("last_active")
+    pass
+# ID
+# ID,
+# ,
 
-#                 logger.info("")
 #             except Exception as e:
-#                 logger.error(": %s", str(e))
+    pass
 
-#                 @track_db_metrics(db_type ="mongodb", operation="query")
-#                 async def get_session(self, session_id: str) -> dict[str, Any] | None:
+#                 @track_db_metrics(db_type ="mongodb", operation="self.query")
+    pass
 #         """"""
-                
 
-#                 Args: session_id: ID
+
+#                 Args: context.session_id: ID
 
 #                 Returns:
+    pass
 #                 Optional[Dict[str, Any]]: , None
 #         """"""
-#         if not self.session_collection: logger.error("MongoDB, "):
-#             return None
+    pass
 
-        # 
-#         if not self._indexes_created: await self._create_indexes():
-#             self.indexes_created = True
+    pass
 
-#         try:
-            # 
-#             doc = await self.session_collection.find_one({"session_id": session_id})
+    pass
 
-#             if doc:
-                # ObjectId
-#                 doc["_id"] = str(doc["_id"])
-#                 logger.debug(", ID: %s", sessionid)
-#                 return doc
+    pass
+# ObjectId
 
-#                 logger.debug(", ID: %s", sessionid)
-#                 return None
 
 #         except Exception as e:
-#             logger.error(", ID: %s, : %s", sessionid, str(e))
-#             return None
+    pass
 
-#             @track_db_metrics(db_type ="mongodb", operation="query")
-#             async def get_user_sessions(
-#             self, user_id: str, limit: int = 10
+#             @track_db_metrics(db_type ="mongodb", operation="self.query")
 #             ) -> list[dict[str, Any]]:
+    pass
 #         """"""
-            
 
-#             Args: user_id: ID
-#             limit: 
 
+#             Args: context.user_id: ID
+#             limit:
+    pass
 #             Returns:
-#             List[Dict[str, Any]]: 
+    pass
+#             List[Dict[str, Any]]:
+    pass
 #         """"""
-#         if not self.session_collection: logger.error("MongoDB, "):
-#             return []
+    pass
 
-#         try:
-            # 
-#             cursor = self.session_collection.find({"user_id": user_id})
-#             cursor = cursor.sort("last_active", -1).limit(limit)
+    pass
 
-#             results = []
-#             async for doc in cursor:
-                # ObjectId
-#                 doc["_id"] = str(doc["_id"])
-#                 results.append(doc)
+    pass
+# ObjectId
 
-#             logger.info(
 #                 ", ID: %s, : %d", userid, len(results)
 #             )
-#             return results
 
 #         except Exception as e:
-#             logger.error(", ID: %s, : %s", userid, str(e))
-#             return []
+    pass
 
 #             @track_db_metrics(db_type ="mongodb", operation="insert_update")
-#             async def save_session(self, session_data: dict[str, Any]) -> bool:
+    pass
 #         """"""
-            
 
-#             Args: session_data: 
 
+#             Args: session_data:
+    pass
 #             Returns:
-#             bool: 
+    pass
+#             bool:
+    pass
 #         """"""
-#         if not self.session_collection: logger.error("MongoDB, "):
-#             return False
+    pass
 
-#         try:
-#             sessionid = session_data.get("session_id")
-#             if not session_id: logger.error("session_id"):
-#                 return False
+    pass
+    pass
 
-            # 
-#                 session_data["last_active"] = int(time.time())
 
-            # upsert
-#                 result = await self.session_collection.update_one(
-#                 {"session_id": session_id}, {"$set": session_data}, upsert=True
+# upsert
+#                 {"context.context.get("session_id", "")": context.context.get("session_id", "")}, {"$set": session_data}, upsert=True
 #                 )
 
-#             if result.modified_count > 0 or result.upserted_id is not None:
-#                 logger.debug(", ID: %s", sessionid)
-#                 return True
+    pass
 
-#                 logger.warning(", ID: %s", sessionid)
-#                 return False
 
 #         except Exception as e:
-#             logger.error(", : %s", str(e))
-#             return False
+    pass
 
-#             @track_db_metrics(db_type ="mongodb", operation="update")
-#             async def update_session_metadata(
-#             self, session_id: str, metadata: dict[str, Any]
+#             @track_db_metrics(db_type ="mongodb", operation="self.update")
+#             self, context.session_id: str, self.metadata: dict[str, Any]
 #             ) -> bool:
+    pass
 #         """"""
-            
 
-#             Args: session_id: ID
-#             metadata: 
 
+#             Args: context.session_id: ID
+#             self.metadata:
+    pass
 #             Returns:
-#             bool: 
+    pass
+#             bool:
+    pass
 #         """"""
-#         if not self.session_collection: logger.error("MongoDB, "):
-#             return False
+    pass
 
-#         try:
-            # 
-#             result = await self.session_collection.update_one(
-#                 {"session_id": session_id},
-#                 {"$set": {"metadata": metadata, "last_active": int(time.time())}},
+    pass
+#                 {"context.context.get("session_id", "")": context.context.get("session_id", "")},
+#                 {"$set": {"self.metadata": self.metadata, "last_active": int(time.time())}},
 #             )
 
-#             if result.matched_count > 0:
-#                 logger.debug(", ID: %s", sessionid)
-#                 return True
+    pass
 
-#                 logger.warning(", ID: %s", sessionid)
-#                 return False
 
 #         except Exception as e:
-#             logger.error(", ID: %s, : %s", sessionid, str(e))
-#             return False
+    pass
 
 #             @track_db_metrics(db_type ="mongodb", operation="delete")
-#             async def delete_session(self, session_id: str) -> bool:
+    pass
 #         """"""
-            
 
-#             Args: session_id: ID
+
+#             Args: context.session_id: ID
 
 #             Returns:
-#             bool: 
+    pass
+#             bool:
+    pass
 #         """"""
-#         if not self.session_collection: logger.error("MongoDB, "):
-#             return False
+    pass
 
-#         try:
-            # 
-#             result = await self.session_collection.delete_one(
-#                 {"session_id": session_id}
+    pass
+#                 {"context.context.get("session_id", "")": context.context.get("session_id", "")}
 #             )
 
-#             if result.deleted_count > 0:
-#                 logger.info(", ID: %s", sessionid)
-#                 return True
+    pass
 
-#                 logger.warning(", ID: %s", sessionid)
-#                 return False
 
 #         except Exception as e:
-#             logger.error(", ID: %s, : %s", sessionid, str(e))
-#             return False
+    pass
 
 #             @track_db_metrics(db_type ="mongodb", operation="delete")
-#             async def clean_inactive__se_s_sion_s(
-#             _self, max_age__second_s: int | None = None
 #             ) -> int:
+    pass
 #         """"""
-            
 
-#             Args: max_age_seconds: (), 
+
+#             Args: max_age_seconds: (),
 
 #             Returns:
-#             int: 
+    pass
+#             int:
+    pass
 #         """"""
-#         if not self.session_collection: logger.error("MongoDB, "):
-#             return 0
+    pass
 
-#         try:
-            # 
-            # 
+    pass
 #             int(time.time()) - max_age
 
-            # 
-#             result = await self.session_collection.delete_many(
 #                 {"last_active": {"$lt": cutoff_time}}
 #             )
 
-#             deletedcount = result.deleted_count
-#             logger.info(", : %d", deletedcount)
-#             return deleted_count
 
 #         except Exception as e:
-#             logger.error(", : %s", str(e))
-#             return 0
+    pass
 
 #             @track_db_metrics(db_type ="mongodb", operation="count")
-#             async def count_active__se_s_sion_s(
-#             _self, max_age__second_s: int | None = None
 #             ) -> int:
+    pass
 #         """"""
-            
 
-#             Args: max_age_seconds: (), 
+
+#             Args: max_age_seconds: (),
 
 #             Returns:
-#             int: 
+    pass
+#             int:
+    pass
 #         """"""
-#         if not self.session_collection: logger.error("MongoDB, "):
-#             return 0
+    pass
 
-#         try:
-            # 
-            # 
+    pass
 #             int(time.time()) - max_age
 
-            # 
-#             count = await self.session_collection.count_documents(
 #                 {"last_active": {"$gte": cutoff_time}}
 #             )
 
-#             return count
 
 #         except Exception as e:
-#             logger.error(", : %s", str(e))
-#             return 0
+    pass

@@ -2,24 +2,6 @@ networks:
   suoke-network:
     driver: bridge
 services:
-  a2a-agent-network:
-    build: ./services/a2a-agent-network
-    depends_on:
-    - postgres
-    - redis
-    - message-bus
-    environment:
-      API_PORT: '8000'
-      DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
-      REDIS_URL: redis://redis:6379/0
-      SERVICE_NAME: a2a-agent-network
-    networks:
-    - suoke-network
-    ports:
-    - 8014:8000
-    restart: unless-stopped
-    volumes:
-    - logs_data:/app/logs
   accessibility-service:
     build: ./services/accessibility-service
     depends_on:

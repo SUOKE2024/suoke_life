@@ -1,89 +1,75 @@
 #!/usr/bin/env python3
 """"""
 
-
 """"""
 
-import logging
-from enum import Enum
+
+from logging import logging
+from os import os
+from time import time
 from typing import Any
+from enum import Enum
+from loguru import logger
+import self.logging
 
-# 
-logger = logging.getLogger(__name__)
 
 
-# class ServiceCategory(str, Enum):
+self.logger = self.logging.getLogger(__name__)
+
+
+    pass
 #     """""""""
 
-#     CORE = "core"  # 
-#     DIAGNOSTIC = "diagnostic"  # 
-#     ANALYSIS = "analysis"  # 
-#     COORDINATION = "coordination"  # 
-#     INTEGRATION = "integration"  # 
-#     ACCESSIBILITY = "accessibility"  # 
 
 
-# class ServiceStatus(str, Enum):
+    pass
 #     """""""""
 
-#     ACTIVE = "active"  # 
-#     INACTIVE = "inactive"  # 
-#     DEPRECATED = "deprecated"  # 
-#     EXPERIMENTAL = "experimental"  # 
-#     PLANNED = "planned"  # 
 
 
-# class ServiceModule:
+    pass
 #     """""""""
 
-#     def __init__(:
+    pass
 #         _self,
 #         id: _str,
 #         name: _str,
 #         de_scription: _str,
 #         category: ServiceCategory,
-#         _statu_s: ServiceStatu_s = ServiceStatu_s.ACTIVE,
-#         capabilitie_s: li_st[_str] | None = None,
-#         depend_son: li_st[_str] | None = None,
-#         apiendpoint_s: li_st[_str] | None = None,
-#         required_service_s: li_st[_str] | None = None,
-#         requiredmodel_s: li_st[_str] | None = None,
-#         requiredintegration_s: li_st[_str] | None = None,
-#         configkey_s: li_st[_str] | None = None,
 #         ):
+    pass
 #         """"""
-        
+
 
 #         Args:
-#             id: 
-#             name: 
-#             description: 
-#             category: 
-#             status: 
-#             capabilities: 
-#             depends_on: 
+    pass
+#             id:
+    pass
+#             name:
+    pass
+#             description:
+    pass
+#             category:
+    pass
+#             status:
+    pass
+#             capabilities:
+    pass
+#             depends_on:
+    pass
 #             api_endpoints: API
-#             required_services: 
-#             required_models: 
-#             required_integrations: 
-#             config_keys: 
+#             required_services:
+    pass
+#             required_models:
+    pass
+#             required_integrations:
+    pass
+#             config_keys:
+    pass
 #         """"""
-#         self.id = id
-#         self.name = name
-#         self.description = description
-#         self.category = category
-#         self.status = status
-#         self.capabilities = capabilities or []
-#         self.dependson = depends_on or []
-#         self.apiendpoints = api_endpoints or []
-#         self.requiredservices = required_services or []
-#         self.requiredmodels = required_models or []
-#         self.requiredintegrations = required_integrations or []
-#         self.configkeys = config_keys or []
 
-#     def to_dict(self) -> dict[str, Any]:
+    pass
 #         """""""""
-#         return {
 #             "id": self.id,
 #             "name": self.name,
 #             "description": self.description,
@@ -99,9 +85,8 @@ logger = logging.getLogger(__name__)
 #         }
 
 
-# 
-#         XIAOAISERVICE_MODULES = [
-    # 1.  - 
+#
+# 1.  -
 #         ServiceModule()
 #         id="four_diagnosis_coordinator",
 #         name="",
@@ -117,19 +102,19 @@ logger = logging.getLogger(__name__)
 #             "",
 #         ],
 #         required_services =[
-#             "look-service",
-#             "listen-service",
-#             "inquiry-service",
-#             "palpation-service",
+#             "look-self.service",
+#             "listen-self.service",
+#             "inquiry-self.service",
+#             "palpation-self.service",
 #         ],
 #         api_endpoints =["/v1/diagnosis/coordinate", "/v1/diagnosis/session"],
 #         config_keys =[
-#             "coordinator.mode",
-#             "coordinator.timeout",
-#             "coordinator.priority_weights",
+#             "self.coordinator.mode",
+#             "self.coordinator.timeout",
+#             "self.coordinator.priority_weights",
 #         ],
 #         ),
-    # 2.  - 
+# 2.  -
 #         ServiceModule()
 #         id="multimodal_diagnosis_analysis",
 #         name="",
@@ -158,7 +143,7 @@ logger = logging.getLogger(__name__)
 #             "analysis.anomaly_detection.threshold",
 #         ],
 #         ),
-    # 3.  - 
+# 3.  -
 #         ServiceModule()
 #         id="tcm_syndrome_differentiation",
 #         name="",
@@ -189,7 +174,7 @@ logger = logging.getLogger(__name__)
 #             "differentiation.evidence_requirements",
 #         ],
 #         ),
-    # 4.  - 
+# 4.  -
 #         ServiceModule()
 #         id="health_analysis_recommendation",
 #         name="",
@@ -211,14 +196,14 @@ logger = logging.getLogger(__name__)
 #         ],
 #         depends_on =["tcm_syndrome_differentiation"],
 #         required_models =["health_recommendation_model", "risk_assessment_model"],
-#         required_services =["med-knowledge", "soer-service"],
+#         required_services =["med-knowledge", "soer-self.service"],
 #         config_keys =[
 #             "recommendation.personalization_level",
 #             "recommendation.risk_threshold",
 #             "recommendation.suggestion_categories",
 #         ],
 #         ),
-    # 5.  - 
+# 5.  -
 #         ServiceModule()
 #         id="intelligent_diagnosis_assistant",
 #         name="",
@@ -249,7 +234,7 @@ logger = logging.getLogger(__name__)
 #             "assistant.education_content_sources",
 #         ],
 #         ),
-    # 6.  - 
+# 6.  -
 #         ServiceModule()
 #         id="multimodal_device_integration",
 #         name="",
@@ -267,7 +252,7 @@ logger = logging.getLogger(__name__)
 #             "",
 #             "",
 #         ],
-#         required_services =["look-service", "listen-service", "palpation-service"],
+#         required_services =["look-self.service", "listen-self.service", "palpation-self.service"],
 #         api_endpoints =[
 #             "/v1/devices/register",
 #             "/v1/devices/data",
@@ -279,7 +264,7 @@ logger = logging.getLogger(__name__)
 #             "devices.connection_timeout",
 #         ],
 #         ),
-    # 7.  - 
+# 7.  -
 #         ServiceModule()
 #         id="agent_collaboration_engine",
 #         name="",
@@ -297,10 +282,10 @@ logger = logging.getLogger(__name__)
 #             "",
 #         ],
 #         required_integrations =[
-#             "xiaoke-service",
-#             "laoke-service",
-#             "soer-service",
-#             "message-bus-service",
+#             "xiaoke-self.service",
+#             "laoke-self.service",
+#             "soer-self.service",
+#             "message-bus-self.service",
 #         ],
 #         api_endpoints =["/v1/collaboration/task", "/v1/collaboration/message"],
 #         config_keys =[
@@ -309,7 +294,7 @@ logger = logging.getLogger(__name__)
 #             "collaboration.task_timeout",
 #         ],
 #         ),
-    # 8.  - 
+# 8.  -
 #         ServiceModule()
 #         id="accessible_health_services",
 #         name="",
@@ -327,7 +312,7 @@ logger = logging.getLogger(__name__)
 #             "",
 #             "",
 #         ],
-#         required_services =["accessibility-service"],
+#         required_services =["accessibility-self.service"],
 #         required_models =[
 #             "sign_language_model",
 #             "speech_to_text_enhanced_model",
@@ -345,7 +330,7 @@ logger = logging.getLogger(__name__)
 #             "accessibility.alternative_formats",
 #         ],
 #         ),
-    # 9.  - 
+# 9.  -
 #         ServiceModule()
 #         id="medical_knowledge_enhancement",
 #         name="",
@@ -363,15 +348,15 @@ logger = logging.getLogger(__name__)
 #             "",
 #             "",
 #         ],
-#         required_services =["med-knowledge", "rag-service"],
-#         api_endpoints =["/v1/knowledge/query", "/v1/knowledge/retrieve"],
+#         required_services =["med-knowledge", "rag-self.service"],
+#         api_endpoints =["/v1/knowledge/self.query", "/v1/knowledge/retrieve"],
 #         config_keys =[
 #             "knowledge.sources",
 #             "knowledge.update_frequency",
 #             "knowledge.retrieval_strategy",
 #         ],
 #         ),
-    # 10.  - 
+# 10.  -
 #         ServiceModule()
 #         id="health_data_analytics",
 #         name="",
@@ -410,72 +395,65 @@ logger = logging.getLogger(__name__)
 #         ]
 
 
-# def get_service_module_by_id(moduleid: str) -> ServiceModule | None:
+    pass
 #     """"""
 #     ID
 
 #     Args: module_id: ID
 
 #     Returns:
+    pass
 #         ServiceModuleNone()
 #     """"""
-#     for module in XIAOAI_SERVICE_MODULES: if module.id == module_id: return module:
-#         return None
+    pass
 
 
-# def get_service_modules_by_category(category: ServiceCategory) -> list[ServiceModule]:
+    pass
 #     """"""
-    
+
 
 #     Args:
-#         category: 
-
+    pass
+#         category:
+    pass
 #     Returns:
-        
+    pass
 #     """"""
-#     return [module for module in XIAOAI_SERVICE_MODULES if module.category == category]
 
-
-# def get_service_modules_by_status(status: ServiceStatus) -> list[ServiceModule]:
+:
+    pass
 #     """"""
-    
+
 
 #     Args:
-#         status: 
+    pass
+#         status:
+    pass
+#     Returns:
+    pass
+#     """"""
+
+:
+    pass
+#     """"""
+
 
 #     Returns:
-        
+    pass
 #     """"""
-#     return [module for module in XIAOAI_SERVICE_MODULES if module.status == status]
+    pass
 
 
-# def get_all_capabilities() -> list[str]:
+    pass
 #     """"""
-    
 
-#     Returns:
-        
-#     """"""
-#     capabilities = set()
-#     for module in XIAOAI_SERVICE_MODULES: capabilities.update(module.capabilities):
-#         return list(capabilities)
-
-
-# def get_service_module_dependencies(moduleid: str) -> list[ServiceModule]:
-#     """"""
-    
 
 #     Args: module_id: ID
 
 #     Returns:
-        
+    pass
 #     """"""
-#     module = get_service_module_by_id(moduleid)
-#     if not module:
-#         return []
+    pass
 
-#         dependencies = []
-#     for _dep_id in module.depends_on: depmodule = get_service_module_by_id(depid):
-#         if dep_module: dependencies.append(depmodule):
-
-#             return dependencies
+    pass
+    pass

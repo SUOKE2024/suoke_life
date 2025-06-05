@@ -1,9 +1,15 @@
 //////     services 统一导出文件   索克生活APP - 架构优化
 //////     基础服务导出
-export { default as agentService } from "./////    agentService";
-export { default as authService } from "./////    authService";
-export { default as enhancedApiClient } from "./////    enhancedApiClient";
-export { default as realTimeSync } from "./////    realTimeSync";
+export { default as agentService } from "./agentService";
+export { default as authService } from "./authService";
+export { default as enhancedApiClient } from "./enhancedApiClient";
+export { default as realTimeSync } from "./realTimeSync";
+export { ragService } from "./ragService";
+export { messageBusService } from "./messageBusService";
+export { cornMazeService, CornMazeService, createCornMazeService } from "./cornMazeService";
+export { benchmarkService, BenchmarkService } from "./benchmarkService";
+export { benchmarkStreamingService, BenchmarkStreamingService } from "./benchmarkStreamingService";
+
 // UI * UX优化服务完整导出 ////
 export { UIUXOptimizationService,
   AnimationManager,
@@ -15,7 +21,8 @@ export { UIUXOptimizationService,
   defaultPerformanceConfig,
   defaultVisualEffectConfig,
   defaultResponsiveConfig,
-  { defaultThemeConfig } from "./////    uiUxOptimizationService"
+  defaultThemeConfig } from "./uiUxOptimizationService";
+
 // UI * UX优化服务类型导出 ////
 export type { AnimationConfig,
   AdvancedAnimationType,
@@ -24,5 +31,48 @@ export type { AnimationConfig,
   PerformanceWarningLevel,
   InteractionFeedback,
   VisualEffectConfig,
-  ResponsiveConfig,;
-  { ThemeConfig } from "./////    uiUxOptimizationService";
+  ResponsiveConfig,
+  ThemeConfig } from "./uiUxOptimizationService";
+
+// RAG服务相关类型导出
+export type {
+  RAGQueryRequest,
+  RAGQueryResponse,
+  StreamResponse,
+  TCMAnalysisRequest,
+  TCMAnalysisResponse,
+  HerbRecommendationRequest,
+  HerbRecommendationResponse,
+  DocumentIndexRequest
+} from "./ragService";
+
+// 消息总线服务相关类型导出
+export type {
+  Message,
+  Topic,
+  PublishRequest,
+  PublishResponse,
+  CreateTopicRequest,
+  CreateTopicResponse,
+  Subscription,
+  MessageBusConfig
+} from "./messageBusService";
+
+// 基准测试服务相关类型导出
+export type {
+  BenchmarkConfig,
+  BenchmarkTask,
+  BenchmarkResult,
+  ModelPrediction,
+  ModelConfig,
+  Plugin,
+  BenchmarkStatus,
+  HealthStatus
+} from "./benchmarkService";
+
+// 基准测试流式服务相关类型导出
+export type {
+  StreamEvent,
+  StreamConfig,
+  EventListener
+} from "./benchmarkStreamingService";

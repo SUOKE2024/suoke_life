@@ -9,13 +9,15 @@ import {
   Alert,
   Dimensions,
 } from "react-native";
-import { AgentType, AgentHealthStatus } from "../../agents/types";
+import { AgentType, AgentStatus, AgentHealthStatus } from "../../types/agents";
 import {
   getAgentStatus,
   getAgentMetrics,
   AgentSystemUtils,
 } from "../../agents";
 import { AgentMetrics } from "../../agents/AgentManager";
+import { agentService } from '../../services/agentService';
+import { agentCoordinationService, AgentInfo } from '../../services/agentCoordinationService';
 
 /**
  * 智能体监控属性
@@ -162,6 +164,20 @@ const StatusCard: React.FC<StatusCardProps> = ({
   );
 };
 
+interface AgentMonitorState {
+  agents: AgentInfo[];
+  metrics: Map<string, AgentMetrics>;
+  collaborationStats: {
+    total: number;
+    active: number;
+    completed: number;
+    failed: number;
+    averageDuration: number;
+  };
+  isLoading: boolean;
+  lastUpdate: Date;
+}
+
 /**
  * 智能体监控组件
  * 显示智能体系统的健康状态和性能指标
@@ -171,213 +187,279 @@ export const AgentMonitor: React.FC<AgentMonitorProps> = ({
   onAgentError,
   style,
 }) => {
-  const [agentStatuses, setAgentStatuses] = useState<
-    Map<AgentType, AgentHealthStatus>
-  >(new Map());
-  const [agentMetrics, setAgentMetrics] = useState<
-    Map<AgentType, AgentMetrics>
-  >(new Map());
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
-  const [systemOverview, setSystemOverview] = useState<any>(null);
+  const [state, setState] = useState<AgentMonitorState>({
+    agents: [],
+    metrics: new Map(),
+    collaborationStats: {
+      total: 0,
+      active: 0,
+      completed: 0,
+      failed: 0,
+      averageDuration: 0,
+    },
+    isLoading: true,
+    lastUpdate: new Date(),
+  });
+
+  const [refreshing, setRefreshing] = useState(false);
 
   /**
-   * 获取智能体状态
+   * 加载智能体数据
    */
-  const fetchAgentStatuses = useCallback(async () => {
+  const loadAgentData = useCallback(async () => {
     try {
-      const statuses = (await getAgentStatus()) as Map<
-        AgentType,
-        AgentHealthStatus
-      >;
-      const metrics = (await getAgentMetrics()) as Map<AgentType, AgentMetrics>;
+      setState(prev => ({ ...prev, isLoading: true }));
 
-      setAgentStatuses(statuses);
-      setAgentMetrics(metrics);
-      setLastUpdate(new Date());
+      // 获取智能体列表
+      const agents = agentCoordinationService.getAgents();
+      
+      // 获取协作统计
+      const collaborationStats = agentCoordinationService.getCollaborationStats();
 
-      // 检查错误状态
-      for (const [agentType, status] of statuses) {
-        if (status.status === "unhealthy" && onAgentError) {
-          onAgentError(agentType, `智能体 ${agentType} 状态异常`);
+      // 获取每个智能体的性能指标
+      const metricsMap = new Map<string, AgentMetrics>();
+      
+      for (const agent of agents) {
+        try {
+          const metrics = await agentService.getAgentMetrics(agent.id);
+          metricsMap.set(agent.id, {
+            responseTime: metrics.responseTime,
+            successRate: metrics.successRate,
+            activeConnections: metrics.activeConnections,
+            load: agent.load,
+            uptime: Date.now() - agent.lastHeartbeat.getTime(),
+          });
+        } catch (error) {
+          // 如果获取指标失败，使用默认值
+          metricsMap.set(agent.id, {
+            responseTime: 0,
+            successRate: 0,
+            activeConnections: 0,
+            load: agent.load,
+            uptime: 0,
+          });
         }
       }
 
-      // 生成系统概览
-      generateSystemOverview(statuses, metrics);
-    } catch (error) {
-      console.error("获取智能体状态失败:", error);
+      setState(prev => ({
+        ...prev,
+        agents,
+        metrics: metricsMap,
+        collaborationStats,
+        isLoading: false,
+        lastUpdate: new Date(),
+      }));
+
+    } catch (error: any) {
+      console.error('加载智能体数据失败:', error);
+      Alert.alert('错误', '加载智能体数据失败: ' + error.message);
+      setState(prev => ({ ...prev, isLoading: false }));
     }
-  }, [onAgentError]);
-
-  /**
-   * 生成系统概览
-   */
-  const generateSystemOverview = useCallback(
-    (
-      statuses: Map<AgentType, AgentHealthStatus>,
-      metrics: Map<AgentType, AgentMetrics>
-    ) => {
-      const totalAgents = statuses.size;
-      const healthyAgents = Array.from(statuses.values()).filter(
-        (s) => s.status === "healthy"
-      ).length;
-      const totalTasks = Array.from(metrics.values()).reduce(
-        (sum, m) => sum + m.tasksProcessed,
-        0
-      );
-      const avgResponseTime =
-        Array.from(statuses.values()).reduce(
-          (sum, s) => sum + s.responseTime,
-          0
-        ) / totalAgents;
-      const avgSuccessRate =
-        Array.from(metrics.values()).reduce(
-          (sum, m) => sum + m.successRate,
-          0
-        ) / totalAgents;
-
-      setSystemOverview({
-        totalAgents,
-        healthyAgents,
-        totalTasks,
-        avgResponseTime: Math.round(avgResponseTime),
-        avgSuccessRate: (avgSuccessRate * 100).toFixed(1),
-        systemHealth: healthyAgents / totalAgents,
-      });
-    },
-    []
-  );
+  }, []);
 
   /**
    * 刷新数据
    */
-  const handleRefresh = useCallback(async () => {
-    setIsRefreshing(true);
-    await fetchAgentStatuses();
-    setIsRefreshing(false);
-  }, [fetchAgentStatuses]);
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await loadAgentData();
+    setRefreshing(false);
+  }, [loadAgentData]);
 
   /**
-   * 重启智能体
+   * 获取状态颜色
    */
-  const handleAgentRestart = useCallback(
-    (agentType: AgentType) => {
-      Alert.alert(
-        "重启智能体",
-        `确定要重启 ${AgentSystemUtils.getAgentRole(agentType).name} 吗？`,
-        [
-          { text: "取消", style: "cancel" },
-          {
-            text: "确定",
-            onPress: async () => {
-              try {
-                // 这里应该调用重启API
-                console.log(`重启智能体: ${agentType}`);
-                await fetchAgentStatuses();
-              } catch (error) {
-                Alert.alert("错误", "重启失败，请稍后再试");
-              }
-            },
-          },
-        ]
-      );
-    },
-    [fetchAgentStatuses]
-  );
+  const getStatusColor = (status: string): string => {
+    switch (status) {
+      case 'active':
+        return '#4CAF50';
+      case 'busy':
+        return '#FF9800';
+      case 'inactive':
+        return '#9E9E9E';
+      case 'error':
+        return '#F44336';
+      default:
+        return '#9E9E9E';
+    }
+  };
 
   /**
-   * 渲染系统概览
+   * 获取健康状态颜色
    */
-  const renderSystemOverview = useCallback(() => {
-    if (!systemOverview) {return null;}
+  const getHealthColor = (load: number): string => {
+    if (load < 0.3) return '#4CAF50'; // 绿色 - 健康
+    if (load < 0.7) return '#FF9800'; // 橙色 - 警告
+    return '#F44336'; // 红色 - 危险
+  };
 
-    const healthColor =
-      systemOverview.systemHealth > 0.8
-        ? "#4CAF50"
-        : systemOverview.systemHealth > 0.5
-        ? "#FF9800"
-        : "#F44336";
+  /**
+   * 格式化时间
+   */
+  const formatDuration = (ms: number): string => {
+    const seconds = Math.floor(ms / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    
+    if (hours > 0) {
+      return `${hours}h ${minutes % 60}m`;
+    } else if (minutes > 0) {
+      return `${minutes}m ${seconds % 60}s`;
+    } else {
+      return `${seconds}s`;
+    }
+  };
 
+  /**
+   * 格式化百分比
+   */
+  const formatPercentage = (value: number): string => {
+    return `${(value * 100).toFixed(1)}%`;
+  };
+
+  /**
+   * 渲染智能体卡片
+   */
+  const renderAgentCard = (agent: AgentInfo) => {
+    const metrics = state.metrics.get(agent.id);
+    
     return (
-      <View style={styles.overviewCard}>
-        <Text style={styles.overviewTitle}>系统概览</Text>
-        <View style={styles.overviewGrid}>
-          <View style={styles.overviewItem}>
-            <Text style={styles.overviewValue}>
-              {systemOverview.healthyAgents}/{systemOverview.totalAgents}
-            </Text>
-            <Text style={styles.overviewLabel}>健康智能体</Text>
+      <View key={agent.id} style={styles.agentCard}>
+        <View style={styles.agentHeader}>
+          <View style={styles.agentInfo}>
+            <Text style={styles.agentName}>{agent.name}</Text>
+            <Text style={styles.agentType}>{agent.type}</Text>
           </View>
-          <View style={styles.overviewItem}>
-            <Text style={styles.overviewValue}>
-              {systemOverview.totalTasks}
-            </Text>
-            <Text style={styles.overviewLabel}>总处理任务</Text>
-          </View>
-          <View style={styles.overviewItem}>
-            <Text style={styles.overviewValue}>
-              {systemOverview.avgResponseTime}ms
-            </Text>
-            <Text style={styles.overviewLabel}>平均响应时间</Text>
-          </View>
-          <View style={styles.overviewItem}>
-            <Text style={styles.overviewValue}>
-              {systemOverview.avgSuccessRate}%
-            </Text>
-            <Text style={styles.overviewLabel}>平均成功率</Text>
-          </View>
+          <View style={[styles.statusIndicator, { backgroundColor: getStatusColor(agent.status) }]} />
         </View>
-        <View
-          style={[styles.healthIndicator, { backgroundColor: healthColor }]}
-        >
-          <Text style={styles.healthText}>
-            系统健康度: {(systemOverview.systemHealth * 100).toFixed(0)}%
-          </Text>
+
+        <View style={styles.metricsContainer}>
+          <View style={styles.metricRow}>
+            <Text style={styles.metricLabel}>负载:</Text>
+            <View style={styles.loadBar}>
+              <View 
+                style={[
+                  styles.loadFill, 
+                  { 
+                    width: `${agent.load * 100}%`,
+                    backgroundColor: getHealthColor(agent.load)
+                  }
+                ]} 
+              />
+            </View>
+            <Text style={styles.metricValue}>{formatPercentage(agent.load)}</Text>
+          </View>
+
+          {metrics && (
+            <>
+              <View style={styles.metricRow}>
+                <Text style={styles.metricLabel}>响应时间:</Text>
+                <Text style={styles.metricValue}>{metrics.responseTime}ms</Text>
+              </View>
+
+              <View style={styles.metricRow}>
+                <Text style={styles.metricLabel}>成功率:</Text>
+                <Text style={styles.metricValue}>{formatPercentage(metrics.successRate)}</Text>
+              </View>
+
+              <View style={styles.metricRow}>
+                <Text style={styles.metricLabel}>活跃连接:</Text>
+                <Text style={styles.metricValue}>{metrics.activeConnections}</Text>
+              </View>
+
+              <View style={styles.metricRow}>
+                <Text style={styles.metricLabel}>运行时间:</Text>
+                <Text style={styles.metricValue}>{formatDuration(metrics.uptime)}</Text>
+              </View>
+            </>
+          )}
+        </View>
+
+        <View style={styles.capabilitiesContainer}>
+          <Text style={styles.capabilitiesTitle}>能力:</Text>
+          <View style={styles.capabilitiesList}>
+            {agent.capabilities.slice(0, 3).map((capability, index) => (
+              <View key={index} style={styles.capabilityTag}>
+                <Text style={styles.capabilityText}>{capability}</Text>
+              </View>
+            ))}
+            {agent.capabilities.length > 3 && (
+              <Text style={styles.moreCapabilities}>+{agent.capabilities.length - 3}</Text>
+            )}
+          </View>
         </View>
       </View>
     );
-  }, [systemOverview]);
+  };
 
+  /**
+   * 渲染协作统计
+   */
+  const renderCollaborationStats = () => {
+    const { collaborationStats } = state;
+    
+    return (
+      <View style={styles.statsContainer}>
+        <Text style={styles.statsTitle}>协作统计</Text>
+        <View style={styles.statsGrid}>
+          <View style={styles.statItem}>
+            <Text style={styles.statValue}>{collaborationStats.total}</Text>
+            <Text style={styles.statLabel}>总计</Text>
+          </View>
+          <View style={styles.statItem}>
+            <Text style={[styles.statValue, { color: '#4CAF50' }]}>{collaborationStats.active}</Text>
+            <Text style={styles.statLabel}>活跃</Text>
+          </View>
+          <View style={styles.statItem}>
+            <Text style={[styles.statValue, { color: '#2196F3' }]}>{collaborationStats.completed}</Text>
+            <Text style={styles.statLabel}>完成</Text>
+          </View>
+          <View style={styles.statItem}>
+            <Text style={[styles.statValue, { color: '#F44336' }]}>{collaborationStats.failed}</Text>
+            <Text style={styles.statLabel}>失败</Text>
+          </View>
+        </View>
+        <View style={styles.averageDuration}>
+          <Text style={styles.statLabel}>平均协作时长: </Text>
+          <Text style={styles.statValue}>{formatDuration(collaborationStats.averageDuration)}</Text>
+        </View>
+      </View>
+    );
+  };
+
+  // 组件挂载时加载数据
   useEffect(() => {
-    // 初始加载
-    fetchAgentStatuses();
-
+    loadAgentData();
+    
     // 设置定时刷新
-    const interval = setInterval(fetchAgentStatuses, refreshInterval);
-
+    const interval = setInterval(loadAgentData, 30000); // 30秒刷新一次
+    
     return () => clearInterval(interval);
-  }, [fetchAgentStatuses, refreshInterval]);
+  }, [loadAgentData]);
 
   return (
-    <ScrollView
+    <ScrollView 
       style={[styles.container, style]}
       refreshControl={
-        <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
     >
-      {/* 系统概览 */}
-      {renderSystemOverview()}
-
-      {/* 智能体状态卡片 */}
-      <View style={styles.agentsContainer}>
-        <Text style={styles.sectionTitle}>智能体状态</Text>
-        {Array.from(agentStatuses.entries()).map(([agentType, status]) => (
-          <StatusCard
-            key={agentType}
-            agentType={agentType}
-            status={status}
-            metrics={agentMetrics.get(agentType)}
-            onRestart={() => handleAgentRestart(agentType)}
-          />
-        ))}
+      <View style={styles.header}>
+        <Text style={styles.title}>智能体监控</Text>
+        <Text style={styles.lastUpdate}>
+          最后更新: {state.lastUpdate.toLocaleTimeString()}
+        </Text>
       </View>
 
-      {/* 最后更新时间 */}
-      <View style={styles.footer}>
-        <Text style={styles.lastUpdateText}>
-          最后更新: {lastUpdate.toLocaleString()}
-        </Text>
+      {renderCollaborationStats()}
+
+      <View style={styles.agentsContainer}>
+        <Text style={styles.sectionTitle}>智能体状态</Text>
+        {state.isLoading ? (
+          <Text style={styles.loadingText}>加载中...</Text>
+        ) : (
+          state.agents.map(renderAgentCard)
+        )}
       </View>
     </ScrollView>
   );
@@ -390,164 +472,170 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f5f5f5",
   },
-  overviewCard: {
-    backgroundColor: "#fff",
-    margin: 15,
-    padding: 20,
-    borderRadius: 12,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+  header: {
+    padding: 16,
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
   },
-  overviewTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#333",
-    marginBottom: 15,
-  },
-  overviewGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-  },
-  overviewItem: {
-    width: "48%",
-    alignItems: "center",
-    marginBottom: 15,
-  },
-  overviewValue: {
+  title: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#007AFF",
+    color: "#333",
   },
-  overviewLabel: {
+  lastUpdate: {
     fontSize: 12,
     color: "#666",
-    marginTop: 5,
+    marginTop: 4,
   },
-  healthIndicator: {
-    padding: 10,
+  statsContainer: {
+    margin: 16,
+    padding: 16,
+    backgroundColor: "#fff",
     borderRadius: 8,
-    alignItems: "center",
-    marginTop: 10,
+    elevation: 2,
   },
-  healthText: {
-    color: "#fff",
+  statsTitle: {
+    fontSize: 18,
     fontWeight: "bold",
+    marginBottom: 12,
+    color: "#333",
+  },
+  statsGrid: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginBottom: 12,
+  },
+  statItem: {
+    alignItems: "center",
+  },
+  statValue: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  statLabel: {
+    fontSize: 12,
+    color: "#666",
+    marginTop: 4,
+  },
+  averageDuration: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: "#e0e0e0",
   },
   agentsContainer: {
-    paddingHorizontal: 15,
+    margin: 16,
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: "bold",
+    marginBottom: 12,
     color: "#333",
-    marginBottom: 15,
   },
-  statusCard: {
+  agentCard: {
     backgroundColor: "#fff",
-    padding: 15,
-    borderRadius: 12,
-    marginBottom: 15,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 12,
+    elevation: 2,
   },
-  cardHeader: {
+  agentHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 15,
+    marginBottom: 12,
+  },
+  agentInfo: {
+    flex: 1,
   },
   agentName: {
     fontSize: 16,
     fontWeight: "bold",
     color: "#333",
   },
-  agentTitle: {
+  agentType: {
     fontSize: 12,
     color: "#666",
     marginTop: 2,
   },
   statusIndicator: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 15,
-  },
-  statusText: {
-    color: "#fff",
-    fontSize: 12,
-    fontWeight: "bold",
+    width: 12,
+    height: 12,
+    borderRadius: 6,
   },
   metricsContainer: {
-    marginBottom: 15,
+    marginBottom: 12,
   },
   metricRow: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 8,
   },
   metricLabel: {
     fontSize: 14,
     color: "#666",
+    flex: 1,
   },
   metricValue: {
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: "500",
     color: "#333",
   },
+  loadBar: {
+    flex: 2,
+    height: 8,
+    backgroundColor: "#e0e0e0",
+    borderRadius: 4,
+    marginHorizontal: 8,
+    overflow: "hidden",
+  },
+  loadFill: {
+    height: "100%",
+    borderRadius: 4,
+  },
   capabilitiesContainer: {
-    marginBottom: 15,
+    borderTopWidth: 1,
+    borderTopColor: "#e0e0e0",
+    paddingTop: 12,
   },
   capabilitiesTitle: {
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: "500",
     color: "#333",
     marginBottom: 8,
   },
   capabilitiesList: {
     flexDirection: "row",
     flexWrap: "wrap",
+    alignItems: "center",
   },
   capabilityTag: {
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "#e3f2fd",
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
-    fontSize: 12,
-    color: "#666",
     marginRight: 8,
     marginBottom: 4,
   },
-  restartButton: {
-    backgroundColor: "#FF9800",
-    paddingVertical: 8,
-    paddingHorizontal: 15,
-    borderRadius: 8,
-    alignSelf: "flex-start",
-    marginBottom: 10,
-  },
-  restartButtonText: {
-    color: "#fff",
-    fontSize: 14,
-    fontWeight: "bold",
-  },
-  lastCheck: {
+  capabilityText: {
     fontSize: 12,
-    color: "#999",
-    textAlign: "right",
+    color: "#1976d2",
   },
-  footer: {
-    padding: 20,
-    alignItems: "center",
-  },
-  lastUpdateText: {
+  moreCapabilities: {
     fontSize: 12,
-    color: "#999",
+    color: "#666",
+    fontStyle: "italic",
+  },
+  loadingText: {
+    textAlign: "center",
+    color: "#666",
+    fontSize: 16,
+    marginTop: 20,
   },
 });
 

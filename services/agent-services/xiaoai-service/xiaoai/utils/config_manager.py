@@ -2,172 +2,153 @@
 
 """"""
 
-
 """"""
-from typing import Optional, Dict, List, Any, Union
 
-import json
-import logging
-import os
-import threading
-import time
+
+from logging import logging
+from json import json
+from os import os
+from time import time
+from typing import List
+from typing import Dict
+from typing import Any
 from dataclasses import dataclass
+from loguru import logger
+import self.logging
 
-import yaml
 
-# 
-logger = logging.getLogger(__name__)
+
+self.logger = self.logging.getLogger(__name__)
 
 
 # @dataclass
-# class ConfigSource:
+    pass
 #     """""""""
 
 #     type: str  # 'file', 'env', 'default'
-#     path: str | None = None  # ()
-#     key: str | None = None  # ()
 
 
-# class ConfigManager:
+    pass
 #     """""""""
 
-#     def __init__(:
-#         self, configdir: str = "config", en_v: str | None = None, watchinterval: int = 30
+    pass
 #         ):
+    pass
 #         """"""
-        
 
-#         Args: config_dir: 
+
+#         Args: config_dir:
+    pass
 #             env:  (development, staging, production), ENV
 #             watch_interval: ()
 #         """"""
-#         self.configdir = config_dir
-#         self.env = env or os.environ.get("ENV", "development")
-#         self.watchinterval = watch_interval
 
-        # 
-#         self.configdata: dict[str, Any] = {}
-#         self.configsources: dict[str, ConfigSource] = {}
 
-        # 
-#         self.lastmodified_times: dict[str, float] = {}
-#         self.watchthread = None
-#         self.running = False
 
-        # 
 #         self.start_watching()
 
-#         logger.info(f": ={self.env}, ={self.config_dir}")
 
-#     def load_config(self, reload: bool = False) -> dict[str, Any]:
+    pass
 #         """"""
-        
+
 
 #         Args:
-#             reload: 
-
+    pass
+#             self.reload:
+    pass
 #         Returns:
-#             Dict[str, Any]: 
+    pass
+#             Dict[str, Any]:
+    pass
 #         """"""
-#         if not self.config_data or reload:
+    pass
 #             self._load_default_config()
 #             self._load_common_config()
 #             self._load_env_config()
 #             self._load_env_vars()
 #             self._track_file_changes()
 
-#             return self.config_data
 
-#     def ge_t(self, key: s_tr, defaul_t: Any = None) -> Any:
+    pass
 #         """"""
-        
+
 #         ,  "database.host"
 
 #         Args:
-#             key: 
-#             default: , 
+    pass
+#             key:
+    pass
+#             default: ,
 
 #         Returns:
-#             Any: 
+    pass
+#             Any:
+    pass
 #         """"""
-        # 
-#         if not self.config_data: self.load_config():
-
-        # , 
-#         if "." in key:
-#             parts = key.split(".")
-#             current = self.config_data
-#             for part in parts:
-#                 if isinstance(current, dict) and part in current:
-#                     current = current[part]
+    pass
+# ,
+    pass
+    pass
+    pass
 #                 else:
-#                     return default
-#                     return current
+    pass
 
-        # 
-#                     return self.config_data.get(key, default)
 
-#     def ge_t_sec_tion(self, sec_tion: s_tr, defaul_t: Any = None) -> Any:
+    pass
 #         """"""
-        
+
 
 #         Args:
-#             section: 
-#             default: , 
+    pass
+#             section:
+    pass
+#             default: ,
 
 #         Returns:
-#             Any: 
+    pass
+#             Any:
+    pass
 #         """"""
-#         return self.get(section, default)
 
-#     def s_et(self, k_ey: str, valu_e: Any, sourc_e: ConfigSourc_e | None = None) -> None:
+    pass
 #         """"""
-        
+
 
 #         Args:
-#             key: 
-#             value: 
-#             source: 
+    pass
+#             key:
+    pass
+#             value:
+    pass
+#             source:
+    pass
 #         """"""
-        # , 
-#         if "." in key:
-#             parts = key.split(".")
-#             current = self.config_data
+# ,
+    pass
 
-            # 
-#             for part in parts[:-1]:
-#                 if part not in current:
-#                     current[part] = {}
-#                     current = current[part]
+    pass
+    pass
 
-            # 
-#                     current[parts[-1]] = value
 
-            # 
-#             if source:
-#                 self.config_sources[key] = source
+    pass
 
 #         else:
-            # 
-#             self.config_data[key] = value
+    pass
 
-            # 
-#             if source:
-#                 self.config_sources[key] = source
+    pass
 
-#     def _load_default_config(self) -> None:
+    pass
 #         """""""""
-#         defaultconfig = {
-#             "app": {"name": "xiaoai-service", "version": "1.0.0"},
+#             "app": {"name": "xiaoai-self.service", "version": "1.0.0"},
 #             "paths": {
-#         "prompts": "config/prompts",
-#         "rules": "config/rules",
+#         "prompts": "self.config/prompts",
+#         "rules": "self.config/rules",
 #         "logs": "logs",
 #             },
 #             "server": {"host": "0.0.0.0", "port": 50051, "workers": 4},
-#             "logging": {
+#             "self.logging": {
 #         "level": "INFO",
-#         "format": "%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+#         "self.format": "%(asctime)s [%(levelname)s] %(name)s: %(message)s",
 #             },
 #             "diagnostic_services": {
 #         "look_service": {"host": "localhost", "port": 50052},
@@ -225,266 +206,225 @@ logger = logging.getLogger(__name__)
 #             },
 #         }
 
-        # 
 #         self._merge_config(defaultconfig)
 
-        # 
-#         for key in self._flatten_dict(defaultconfig):
-#             self.config_sources[key] = ConfigSource(type="default")
+    pass
 
-#     def _load_common_config(self) -> None:
+    pass
 #         """""""""
-#         commonfile = os.path.join(self.configdir, "config.yaml")
 #         self._load_yaml_config(commonfile, "common")
 
-#     def _load_env_config(self) -> None:
+    pass
 #         """""""""
-#         envfile = os.path.join(self.configdir, f"config.{self.env}.yaml")
 #         self._load_yaml_config(envfile, self.env)
 
-#     def _load_yaml_config(self, file_path: str, label: str) -> None:
+    pass
 #         """"""
 #         YAML
 
-#         Args: file_path: 
-#             label: , 
+#         Args: file_path:
+    pass
+#             label: ,
 #         """"""
-#         if not os.path.exists(filepath):
-#             logger.info(f"{label} : {file_path}")
+    pass
 #             return
 
-#         try:
+    pass
 #             with open(filepath, encoding="utf-8") as file:
-#                 configdata = yaml.safe_load(file)
+    pass
 
-#                 if not config_data: logger.warning(f"{label} : {file_path}"):
+    pass
 #                     return
 
-                # 
 #                     self._merge_config(configdata)
 
-                # 
-#                 for key in self._flatten_dict(configdata):
-#                     self.config_sources[key] = ConfigSource(
+    pass
 #                         type="file",
 #                         path=filepath,
 #                     )
 
-                # 
-#                     self.last_modified_times[file_path] = os.path.getmtime(filepath)
 
-#                     logger.info(f" {label} : {file_path}")
 
 #         except Exception as e:
-#             logger.error(f" {label} : {e!s}")
+    pass
 
-#     def _load_env_vars(self) -> None:
+    pass
 #         """""""""
-        # 
-#         prefix = "XIAOAI_"
 
-        # 
-#         for key, value in os.environ.items():
-#             if key.startswith(prefix):
-                # , 
-#                 configkey = key[len(prefix) :].lower()
+    pass
+    pass
+# ,
 
-                # 
-#                 configkey = config_key.replace("__", ".")
 
-                # 
-#                 parsedvalue = self._parse_value(value)
 
-                # 
 #                 self.set(configkey, parsedvalue, ConfigSource(type="env", key=key))
 
-#                 logger.debug(
 #                     f": {key} -> {config_key}={parsed_value}"
 #                 )
 
-#     def _parse_value(self, value: str) -> Any:
+    pass
 #         """"""
-        
-        
+
 
 #         Args:
-#             value: 
-
+    pass
+#             value:
+    pass
 #         Returns:
-#             Any: 
+    pass
+#             Any:
+    pass
 #         """"""
-        # , 
-#         if value == "":
-#             return ""
+# ,
+    pass
 
-        # JSON
-#         try:
-#             return json.loads(value)
+# JSON
+    pass
 #         except json.JSONDecodeError:
+    pass
 #             pass
 
-        # 
-#         if value.lower() in ("true", "yes", "on", "1"):
-#             return True
-#         elif value.lower() in ("false", "no", "off", "0"):
-#             return False
+    pass
+    pass
 
-        # 
-#         try:
-#             return int(value)
+    pass
 #         except ValueError:
+    pass
 #             pass
 
-        # 
-#         try:
-#             return float(value)
+    pass
 #         except ValueError:
+    pass
 #             pass
 
-        # 
-#             return value
 
-#     def _merge_config(self, new_config: dict[str, Any]) -> None:
+    pass
 #         """"""
-        
 
-#         Args: new_config: 
+
+#         Args: new_config:
+    pass
 #         """"""
-#         self.configdata = self._deep_merge(self.configdata, newconfig)
 
-#     def _deep_merge(:
+    pass
 #         self, base: dict[str, Any], override: dict[str, Any]
 #         ) -> dict[str, Any]:
+    pass
 #         """"""
-        
+
 
 #         Args:
-#             base: 
-#             override: 
-
+    pass
+#             base:
+    pass
+#             override:
+    pass
 #         Returns:
-#             Dict[str, Any]: 
+    pass
+#             Dict[str, Any]:
+    pass
 #         """"""
-#         result = base.copy()
 
-#         for key, value in override.items():
-            # , 
-#             if (:
+    pass
+# ,
+    pass
 #                 key in result
 #                 and isinstance(result[key], dict)
 #                 and isinstance(value, dict)
 #                 ):
-#                 result[key] = self._deep_merge(result[key], value)
+    pass
 #             else:
-                # 
-#                 result[key] = value
+    pass
 
-#                 return result
 
-#     def _flatten_dict(self, d: dict[str, Any], parentkey: str = "") -> list[str]:
+    pass
 #         """"""
-        
+
 
 #         Args:
-#             d: 
-#             parent_key: 
-
+    pass
+#             d:
+    pass
+#             parent_key:
+    pass
 #         Returns:
-#             List[str]: 
+    pass
+#             List[str]:
+    pass
 #         """"""
-#         items = []
 
-#         for k, v in d.items():
-#             newkey = f"{parent_key}.{k}" if parent_key else k
-
-#             if isinstance(v, dict):
-#                 items.extend(self._flatten_dict(v, newkey))
+    pass
+:
+    pass
 #             else:
-#                 items.append(newkey)
+    pass
 
-#                 return items
 
-#     def _track_file_changes(self) -> None:
+    pass
 #         """""""""
-#         commonfile = os.path.join(self.configdir, "config.yaml")
-#         os.path.join(self.configdir, f"config.{self.env}.yaml")
+#         os.path.join(self.configdir, f"self.config.{self.env}.yaml")
 
-#         for file_path in [commonfile, env_file]:
-#             if os.path.exists(filepath):
-#                 self.last_modified_times[file_path] = os.path.getmtime(filepath)
+    pass
+    pass
 
-#     def start_watching(self) -> None:
+    pass
 #         """""""""
-#         if self.watch_interval <= 0 or self.running:
+    pass
 #             return
 
-#             self.running = True
-#             self.watchthread = threading.Thread(target=self.watch_config_files, daemon=True)
-#             self.watch_thread.start()
+#             self.watch_thread.self.start()
 
-#             logger.info(f",  {self.watch_interval} ")
 
-#     def stop_watching(self) -> None:
+    pass
 #         """""""""
-#         self.running = False
 
-#         if self.watch_thread: self.watch_thread.join(timeout=1):
-#             self.watchthread = None
+    pass
 
-#             logger.info("")
 
-#     def _watch_config_files(self) -> None:
+    pass
 #         """""""""
-#         while self.running:
-#             try:
-                # 
-
-#                 for filepath, last_modified in self.last_modified_times.items():
-#                     if os.path.exists(filepath):
+    pass
+    pass
+    pass
+    pass
 #                         os.path.getmtime(filepath)
 
-#                         if current_modified > last_modified: logger.info(f": {file_path}"):
-
-                # 
-#                 if reload_needed: self.load_config(reload=True):
-#                     logger.info("")
+    pass
+    pass
 
 #             except Exception as e:
-#                 logger.error(f": {e!s}")
+    pass
 
-            # 
 #                 time.sleep(self.watchinterval)
 
 
-# 
-#                 config_manager = None
+#
 
 
-# def get_config_manager() -> ConfigManager:
+    pass
 #     """"""
-    
+
 
 #     Returns:
-#         ConfigManager: 
+    pass
+#         ConfigManager:
+    pass
 #     """"""
-#     global _config_manager  # noqa: PLW0602
-#     if _config_manager is None:
-        # 
-#         configdir = os.environ.get("XIAOAI_CONFIG_DIR", "config")
-#         env = os.environ.get("ENV", "development")
+#     global _config_manager
+    pass
 
 #         ConfigManager(config_dir =configdir, env=env)
 #         _config_manager.load_config()
 
-#         return _config_manager
 
 
-# def get_config() -> ConfigManager:
+    pass
 #     """"""
-    
+
 #     API
 
 #     Returns:
-#         ConfigManager: 
+    pass
+#         ConfigManager:
+    pass
 #     """"""
-#     return get_config_manager()

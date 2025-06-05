@@ -1,81 +1,61 @@
-//////     API客户端服务   简化版本，用于基本的HTTP请求
-import { ApiResponse } from "../////    types";
-class ApiClient {
-  private baseURL: string";"
-constructor(baseURL: string = ";https://////     api.suokelife.com") {
+// API客户端
+export interface ApiResponse<T = any> {
+  data: T;
+  status: number;
+  statusText: string;
+}
+
+export class ApiClient {
+  private baseURL: string;
+  private timeout: number;
+
+  constructor(baseURL: string = '', timeout: number = 30000) {
     this.baseURL = baseURL;
+    this.timeout = timeout;
   }
-  async get<T>(endpoint: string): Promise<ApiResponse<T>> {
-    try {
-      //////     模拟API调用
-//////     返回模拟响应
-return {
-        success: true,
-        data: {} as T,
-        message: Success;""
-      ;}
-    } catch (error: any) {
-      return {
-        success: false,
-        error: {
-          message: error.message || "Request failed,"
-          code: "API_ERROR"}
-      ;}
+
+  async get<T = any>(url: string): Promise<ApiResponse<T>> {
+    const response = await fetch(`${this.baseURL}${url}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      signal: AbortSignal.timeout(this.timeout)
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
+
+    const data = await response.json();
+    return {
+      data,
+      status: response.status,
+      statusText: response.statusText
+    };
   }
-  async post<T>(endpoint: string, data?: any): Promise<ApiResponse<T>> {
-    try {
-      //////     模拟API调用
-//////     返回模拟响应
-return {
-        success: true,
-        data: {} as T,
-        message: Success;""
-      ;}
-    } catch (error: any) {
-      return {
-        success: false,
-        error: {
-          message: error.message || "Request failed,"
-          code: "API_ERROR"}
-      ;}
+
+  async post<T = any>(url: string, body?: any): Promise<ApiResponse<T>> {
+    const response = await fetch(`${this.baseURL}${url}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: body ? JSON.stringify(body) : undefined,
+      signal: AbortSignal.timeout(this.timeout)
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
-  }
-  async put<T>(endpoint: string, data?: any): Promise<ApiResponse<T>> {
-    try {
-      //////     模拟API调用
-//////     返回模拟响应
-return {
-        success: true,
-        data: {} as T,
-        message: Success;""
-      ;}
-    } catch (error: any) {
-      return {
-        success: false,
-        error: {
-          message: error.message || "Request failed,"
-          code: "API_ERROR"}
-      ;}
-    }
-  }
-  async delete<T>(endpoint: string): Promise<ApiResponse<T>> {
-    try {
-      //////     模拟API调用
-//////     返回模拟响应
-return {
-        success: true,
-        data: {} as T,
-        message: Success;""
-      ;}
-    } catch (error: any) {
-      return {
-        success: false,
-        error: {
-          message: error.message || "Request failed,"
-          code: "API_ERROR'}"'
-      ;};
-    }
+
+    const data = await response.json();
+    return {
+      data,
+      status: response.status,
+      statusText: response.statusText
+    };
   }
 }
-export const apiClient = new ApiClient;
+
+export const apiClient = new ApiClient(); 

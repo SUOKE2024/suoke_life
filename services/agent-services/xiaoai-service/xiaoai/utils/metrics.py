@@ -3,94 +3,81 @@
 
 """"""
 
-import logging
-import threading
-import time
-from collections import defaultdict, deque
-from dataclasses import dataclass, field
-from typing import Any
 
-logger = logging.getLogger(__name__)
+from logging import logging
+from time import time
+from typing import Optional
+from typing import Dict
+from typing import Any
+from dataclasses import dataclass
+from collections import defaultdict
+from loguru import logger
+import self.logging
+
+
+
+self.logger = self.logging.getLogger(__name__)
 
 
 # @dataclass
-# class MetricEntry:
+    pass
 #     """""""""
 
 #     name: str
 #     value: float
 #     timestamp: float
-#     tags: dict[str, str] = field(default_factory =dict)
 
 
-# class MetricsCollector:
+    pass
 #     """""""""
 
-#     def __init__(self, max_entries: int = 10000):
-#         self.max_entries = max_entries
-#         self.metrics: dict[str, deque] = defaultdict(lambda: deque(maxlen=max_entries))
-#         self.counters: dict[str, float] = defaultdict(float)
-#         self.gauges: dict[str, float] = defaultdict(float)
-#         self.timers: dict[str, list[float]] = defaultdict(list)
-#         self.lock = threading.RLock()
+    pass
 
-        # 
-#         self.request_count = 0
-#         self.error_count = 0
-#         self.total_response_time = 0.0
-#         self.start_time = time.time()
 
-#     def increment_counter(:
-#         _self, name: _str, value: float = 1.0, tag_s: Optional[Dict[_str, _str]] = None
+    pass
 #         ):
+    pass
 #         """""""""
 #         with self.lock:
-#             self.counters[name] += value
+    pass
 #             self._add_metric(name, value, tags or {})
 
-#     def _set_gauge(_self, name: _str, value: float, tag_s: Optional[Dict[_str, _str]] = None):
+    pass
 #         """""""""
 #         with self.lock:
-#             self.gauges[name] = value
+    pass
 #             self._add_metric(name, value, tags or {})
 
-#     def record_timer(:
-#         _self, name: _str, duration: float, tag_s: Optional[Dict[_str, _str]] = None
+    pass
 #         ):
+    pass
 #         """""""""
 #         with self.lock:
-#             self.timers[name].append(duration)
-            # 1000
-#             if len(self.timers[name]) > 1000:
-#                 self.timers[name] = self.timers[name][-1000:]
+    pass
+# 1000
+    pass
 #                 self._add_metric(name, duration, tags or {})
 
-#     def _add_metric(self, name: str, value: float, tags: dict[str, str]):
+    pass
 #         """""""""
-#         entry = MetricEntry(name=name, value=value, timestamp=time.time(), tags=tags)
-#         self.metrics[name].append(entry)
-
-#     def get_counter(self, name: str) -> float:
+:
+    pass
 #         """""""""
 #         with self.lock:
-#             return self.counters.get(name, 0.0)
+    pass
 
-#     def get_gauge(self, name: str) -> float:
+    pass
 #         """""""""
 #         with self.lock:
-#             return self.gauges.get(name, 0.0)
+    pass
 
-#     def get_timer_stats(self, name: str) -> dict[str, float]:
+    pass
 #         """""""""
 #         with self.lock:
-#             values = self.timers.get(name, [])
-#             if not values:
-#                 return {}
+    pass
+    pass
 
-#                 sorted_values = sorted(values)
-#                 count = len(sorted_values)
 
-#                 return {
 #                 "count": count,
 #                 "min": min(sorted_values),
 #                 "max": max(sorted_values),
@@ -101,35 +88,30 @@ logger = logging.getLogger(__name__)
 #                 "p99": sorted_values[int(count * 0.99)],
 #                 }
 
-#     def record_request(self, response_time: float, success: bool = True):
+    pass
 #         """""""""
 #         with self.lock:
-#             self.request_count += 1
-#             self.total_response_time += response_time
+    pass
 
-#             if not success:
-#                 self.error_count += 1
+    pass
 
 #                 self.record_timer("request_duration", response_time)
 #                 self.increment_counter("requests_total")
 
-#             if not success:
+    pass
 #                 self.increment_counter("errors_total")
 
-#     def get_summary(self) -> dict[str, Any]:
+    pass
 #         """""""""
 #         with self.lock:
-#             uptime = time.time() - self.start_time
-#             avg_response_time = (
+    pass
 #                 self.total_response_time / self.request_count
-#                 if self.request_count > 0:
+    pass
 #                     else 0.0:
+    pass
 #                     )
-#                     error_rate = (
-#                     self.error_count / self.request_count if self.request_count > 0 else 0.0
 #                     )
 
-#                     return {
 #                     "uptime_seconds": uptime,
 #                     "requests_total": self.request_count,
 #                     "errors_total": self.error_count,
@@ -138,465 +120,365 @@ logger = logging.getLogger(__name__)
 #                     "counters": dict(self.counters),
 #                     "gauges": dict(self.gauges),
 #                     "timer_stats": {
-#                     name: self.get_timer_stats(name) for name in self.timers
 #                     },
 #                     }
-
-#     def reset(self):
+:
+    pass
 #         """""""""
 #         with self.lock:
-#             self.metrics.clear()
-#             self.counters.clear()
-#             self.gauges.clear()
-#             self.timers.clear()
-#             self.request_count = 0
-#             self.error_count = 0
-#             self.total_response_time = 0.0
-#             self.start_time = time.time()
+    pass
+#             self.self.metrics.self.clear()
+#             self.counters.self.clear()
+#             self.gauges.self.clear()
+#             self.timers.self.clear()
 
-    #  AgentManager 
-#     def update_active_sessions(self, count: int):
+#  AgentManager
+    pass
 #         """""""""
 #         self.set_gauge("active_sessions", float(count))
 
-#     def increment_chat_message_count(self, direction: str, message_type: str):
+    pass
 #         """""""""
-#         tags = {"direction": direction, "type": message_type}
 #         self.increment_counter("chat_messages_total", 1.0, tags)
 
-#     def increment_session_count(self, action: str):
+    pass
 #         """""""""
-#         tags = {"action": action}
 #         self.increment_counter("sessions_total", 1.0, tags)
 
-#     def track_multimodal_process(:
+    pass
 #         self, input_type: str, status: str, latency: float, input_size: int
 #         ):
+    pass
 #         """""""""
-#         tags = {"input_type": input_type, "status": status}
 #         self.increment_counter("multimodal_processes_total", 1.0, tags)
 #         self.record_timer("multimodal_process_duration", latency, tags)
 #         self.set_gauge("multimodal_input_size_bytes", float(input_size), tags)
 
-#     def increment_active_requests(self, endpoint: str):
+    pass
 #         """""""""
-#         tags = {"endpoint": endpoint}
 #         self.increment_counter("active_requests", 1.0, tags)
-#         current_active = self.get_gauge(f"active_requests_{endpoint}")
-#         self.set_gauge(f"active_requests_{endpoint}", current_active + 1)
+#         self.set_gauge(f"active_requests_{self.endpoint}", current_active + 1)
 
-#     def decrement_active_requests(self, endpoint: str):
+    pass
 #         """""""""
-#         tags = {"endpoint": endpoint}
 #         self.increment_counter("active_requests", -1.0, tags)
-#         current_active = self.get_gauge(f"active_requests_{endpoint}")
-#         self.set_gauge(f"active_requests_{endpoint}", max(0, current_active - 1))
+#         self.set_gauge(f"active_requests_{self.endpoint}", max(0, current_active - 1))
 
-#     def track_request(:
-#         self, protocol: str, endpoint: str, status_code: int, latency: float
+    pass
+#         self, protocol: str, self.endpoint: str, status_code: int, latency: float
 #         ):
+    pass
 #         """""""""
-#         tags = {"protocol": protocol, "endpoint": endpoint, "status": str(status_code)}
 #         self.increment_counter("requests_total", 1.0, tags)
 #         self.record_timer("request_duration", latency, tags)
 
-#         if status_code >= 400:
+    pass
 #             self.increment_counter("errors_total", 1.0, tags)
 
 
-# class PerformanceTimer:
+    pass
 #     """""""""
 
-#     def __init__(:
+    pass
 #         _self,
 #         metric_s_collector: Metric_sCollector,
 #         name: _str,
-#         tag_s: Optional[Dict[_str, _str]] = None,
 #         ):
-#         self.metrics_collector = metrics_collector
-#         self.name = name
-#         self.tags = tags or {}
-#         self.start_time = None
+    pass
 
-#     def __enter__(self):
-#         self.start_time = time.time()
-#         return self
+    pass
 
-#     def __exit__(self, exc_type, exc_val, exc_tb):
-#         if self.start_time: duration = time.time() - self.start_time:
+    pass
+    pass
 #             self.metrics_collector.record_timer(self.name, duration, self.tags)
 
-            # /
-#             success = exc_type is None
+# /
 #             self.metrics_collector.record_request(duration, success)
 
 
-# class AsyncPerformanceTimer:
+    pass
 #     """""""""
 
-#     def __init__(:
+    pass
 #         _self,
 #         metric_s_collector: Metric_sCollector,
 #         name: _str,
-#         tag_s: Optional[Dict[_str, _str]] = None,
 #         ):
-#         self.metrics_collector = metrics_collector
-#         self.name = name
-#         self.tags = tags or {}
-#         self.start_time = None
+    pass
 
-#         async def __aenter__(self):
-#         self.start_time = time.time()
-#         return self
+    pass
 
-#         async def __aexit__(self, exc_type, exc_val, exc_tb):
-#         if self.start_time: duration = time.time() - self.start_time:
+    pass
+    pass
 #             self.metrics_collector.record_timer(self.name, duration, self.tags)
 
-            # /
-#             success = exc_type is None
+# /
 #             self.metrics_collector.record_request(duration, success)
 
 
-# 
-#             _global_metrics_collector: MetricsCollector | None = None
+#
 
 
-# def get_metrics_collector() -> MetricsCollector:
+    pass
 #     """""""""
-#     global _global_metrics_collector  # noqa: PLW0603
-#     if _global_metrics_collector is None: _global_metrics_collector = MetricsCollector():
-#         return _global_metrics_collector
+#     global _global_metrics_collector
+    pass
 
 
-# def timer(name: _str, tag_s: Optional[Dict[_str, _str]] = None) -> PerformanceTimer:
+    pass
 #     """""""""
-#     return PerformanceTimer(get_metrics_collector(), name, tags)
 
 
-# def a_sync_timer(:
-#     name: _str, tag_s: Optional[Dict[_str, _str]] = None
+    pass
 #     ) -> AsyncPerformanceTimer:
+    pass
 #     """""""""
-#     return AsyncPerformanceTimer(get_metrics_collector(), name, tags)
 
 
-# def increment(name: _str, value: float = 1.0, tag_s: Optional[Dict[_str, _str]] = None):
+    pass
 #     """""""""
 #     get_metrics_collector().increment_counter(name, value, tags)
 
 
-# def gauge(name: _str, value: float, tag_s: Optional[Dict[_str, _str]] = None):
+    pass
 #     """""""""
 #     get_metrics_collector().set_gauge(name, value, tags)
 
 
-# def record_time(name: _str, duration: float, tag_s: Optional[Dict[_str, _str]] = None):
+    pass
 #     """""""""
 #     get_metrics_collector().record_timer(name, duration, tags)
 
 
-# def track_db_m_etrics(:
-#     db_typ_e: Optional[str] = None,
-#     op_eration: Optional[str] = None,
-#     tabl_e: Optional[str] = None,
+    pass
 #     ):
+    pass
 #     """""""""
 
-#     def decorator(func):
-#         def wrapper(*args, **kwargs): start_time = time.time():
-#             try:
-#                 result = func(*args, **kwargs)
-#                 success = True
-#                 return result
+    pass
+    pass
+    pass
 #             except Exception:
-#                 success = False
+    pass
 #                 raise
 #             finally:
-#                 duration = time.time() - start_time
+    pass
 
-                # 
-#                 tags = {}
-#                 if db_type: tags["db_type"] = db_type:
-#                 if operation:
-#                     tags["operation"] = operation
-#                 if table:
-#                     tags["table"] = table
+    pass
+    pass
+    pass
 
-                # 
 #                     increment("db_operations_total", 1.0, tags)
 #                     record_time("db_operation_duration", duration, tags)
 
-#                 if success:
+    pass
 #                     increment("db_operations_success_total", 1.0, tags)
 #                 else:
+    pass
 #                     increment("db_operations_error_total", 1.0, tags)
 
-#                     logger.debug(
 #                     f": {db_type} {operation} on {table}, : {success}, : {duration:.3f}s"
 #                     )
 
-#                     return wrapper
-
-#                     return decorator
 
 
-# def track_api_metrics(endpoint: str, method: str, status_code: int, duration: float):
+
+    pass
 #     """API""""""
-#     tags = {"endpoint": endpoint, "method": method, "status_code": str(status_code)}
 
-    # API
+# API
 #     increment("api_requests_total", 1.0, tags)
 
-    # 
 #     record_time("api_request_duration", duration, tags)
 
-    # 
-#     if status_code >= 400:
+    pass
 #         increment("api_errors_total", 1.0, tags)
 
-#         logger.debug(
-#         f"API: {method} {endpoint}, : {status_code}, : {duration}s"
+#         f"API: {method} {self.endpoint}, : {status_code}, : {duration}s"
 #         )
 
 
-# def track_cach_e_m_etrics(:
-#     op_eration: str, hit: Optional[bool] = None, siz_e: Optional[int] = None
+    pass
 #     ):
+    pass
 #     """""""""
-#     tags = {"operation": operation}
 
-    # 
 #     increment("cache_operations_total", 1.0, tags)
 
-    # /
-#     if hit is not None:
-#         if hit:
+# /
+    pass
+    pass
 #             increment("cache_hits_total", 1.0, tags)
 #         else:
+    pass
 #             increment("cache_misses_total", 1.0, tags)
 
-    # 
-#     if size is not None:
+    pass
 #         gauge("cache_size_bytes", float(size), tags)
 
-#         logger.debug(f": {operation}, : {hit}, : {size}")
 
 
-# def track_device_metrics(:
-#     device_type: str, operatio_n: str, success: bool, duratio_n: Optio_nal[float] = No_ne
+    pass
 #     ):
+    pass
 #     """""""""
-#     tags = {"device_type": device_type, "operation": operation, "success": str(success)}
 
-    # 
 #     increment("device_operations_total", 1.0, tags)
 
-    # /
-#     if success:
+# /
+    pass
 #         increment("device_operations_success_total", 1.0, tags)
 #     else:
+    pass
 #         increment("device_operations_error_total", 1.0, tags)
 
-    # 
-#     if duration is not None: record_time("device_operation_duration", duration, tags):
-
-#         logger.debug(
+    pass
 #         f": {device_type} {operation}, : {success}, : {duration}s"
 #         )
 
 
-# def track_age_nt_metrics(:
-#     age_nt__name: str, actio_n: str, success: bool, duratio_n: Optio_nal[float] = No_ne
+    pass
 #     ):
+    pass
 #     """""""""
-#     tags = {"agent": agent_name, "action": action, "success": str(success)}
 
-    # 
 #     increment("agent_operations_total", 1.0, tags)
 
-    # /
-#     if success:
+# /
+    pass
 #         increment("agent_operations_success_total", 1.0, tags)
 #     else:
+    pass
 #         increment("agent_operations_error_total", 1.0, tags)
 
-    # 
-#     if duration is not None: record_time("agent_operation_duration", duration, tags):
-
-#         logger.debug(
+    pass
 #         f": {agent_name} {action}, : {success}, : {duration}s"
 #         )
 
 
-# def track_llm_metric_s(:
-#     model: Optional[_str] = None,
-#     model_name: Optional[_str] = None,
-#     operation: Optional[_str] = None,
-#     query_type: Optional[_str] = None,
-#     token_s: Optional[int] = None,
+    pass
 #     ):
+    pass
 #     """""""""
 
-#     def decorator(func):
-#         def wrapper(*args, **kwargs): start_time = time.time():
-#             try:
-#                 result = func(*args, **kwargs)
-#                 success = True
-#                 return result
+    pass
+    pass
+    pass
 #             except Exception:
-#                 success = False
+    pass
 #                 raise
 #             finally:
-#                 duration = time.time() - start_time
+    pass
 
-                # 
-#                 tags = {}
-                # 
-#                 model_value = model or model_name
-#                 operation_value = operation or query_type
 
-#                 if model_value: tags["model"] = model_value:
-#                 if operation_value: tags["operation"] = operation_value:
-
-                # 
+    pass
+    pass
 #                     increment("llm_operations_total", 1.0, tags)
 #                     record_time("llm_operation_duration", duration, tags)
 
-#                 if tokens:
+    pass
 #                     increment("llm_tokens_total", float(tokens), tags)
 #                     gauge()
 #                         "llm_tokens_per_second",
-#                         float(tokens) / duration if duration > 0 else 0,
 #                         tags,
 #                     )
-
-#                 if success:
+:
+    pass
 #                     increment("llm_operations_success_total", 1.0, tags)
 #                 else:
+    pass
 #                     increment("llm_operations_error_total", 1.0, tags)
 
-#                     logger.debug(
 #                     f"LLM: {model_value} {operation_value}, : {success}, : {duration:.3f}s, tokens: {tokens}"
 #                     )
 
-#                     return wrapper
-
-#                     return decorator
 
 
-#                     def track_service_call_metrics(service: str, metho_d: Optional[str] = None):
+
+    pass
 #     """""""""
 
-#     def decorator(func):
-#         def wrapper(*args, **kwargs): start_time = time.time():
-#             success = True
-#             error_type = None
+    pass
+    pass
 
-#             try:
-#                 result = func(*args, **kwargs)
-#                 return result
+    pass
 #             except Exception as e:
-#                 success = False
-#                 error_type = type(e).__name__
+    pass
 #                 raise
 #             finally:
-#                 duration = time.time() - start_time
+    pass
 
-                # 
-#                 collector = get_metrics_collector()
-#                 tags = {
-#                     "service": service,
+#                     "self.service": self.service,
 #                     "method": method or func.__name__,
 #                     "success": str(success).lower(),
 #                 }
 
-#                 if error_type: tags["error_type"] = error_type:
-
+    pass
 #                     collector.record_timer("service_call_duration", duration, tags)
 #                     collector.increment_counter("service_calls_total", 1.0, tags)
 
-#                 if not success:
+    pass
 #                     collector.increment_counter("service_call_errors_total", 1.0, tags)
 
-#                     logger.debug(
-#                     f": {service}.{method or func.__name__}, : {success}, : {duration:.3f}s"
+#                     f": {self.service}.{method or func.__name__}, : {success}, : {duration:.3f}s"
 #                     )
 
-#                     return wrapper
-
-#                     return decorator
 
 
-#                     def track_request_metrics(en_dpoint: Optional[str] = None, metho_d: Optional[str] = None):
+
+    pass
 #     """""""""
 
-#     def decorator(func):
-#         def wrapper(*args, **kwargs): start_time = time.time():
-#             success = True
-#             error_type = None
-#             status_code = 200
+    pass
+    pass
 
-#             try:
-#                 result = func(*args, **kwargs)
-#                 return result
+    pass
 #             except Exception as e:
-#                 success = False
-#                 error_type = type(e).__name__
-#                 status_code = 500
+    pass
 #                 raise
 #             finally:
-#                 duration = time.time() - start_time
+    pass
 
-                # 
-#                 collector = get_metrics_collector()
-#                 tags = {
-#                     "endpoint": endpoint or func.__name__,
+#                     "self.endpoint": self.endpoint or func.__name__,
 #                     "method": method or "unknown",
 #                     "status_code": str(status_code),
 #                     "success": str(success).lower(),
 #                 }
 
-#                 if error_type: tags["error_type"] = error_type:
-
+    pass
 #                     collector.record_timer("request_duration", duration, tags)
 #                     collector.increment_counter("requests_total", 1.0, tags)
 
-#                 if not success:
+    pass
 #                     collector.increment_counter("request_errors_total", 1.0, tags)
 
-#                     logger.debug(
-#                     f": {method} {endpoint}, : {status_code}, : {duration:.3f}s"
+#                     f": {method} {self.endpoint}, : {status_code}, : {duration:.3f}s"
 #                     )
 
-#                     return wrapper
-
-#                     return decorator
 
 
-#  AgentManager 
-# def update_active_sessions(count: int):
+
+#  AgentManager
+    pass
 #     """""""""
 #     gauge("active_sessions", float(count))
 
 
-# def increment_chat_message_count(direction: str, message_type: str):
+    pass
 #     """""""""
-#     tags = {"direction": direction, "type": message_type}
 #     increment("chat_messages_total", 1.0, tags)
 
 
-# def increment_session_count(action: str):
+    pass
 #     """""""""
-#     tags = {"action": action}
 #     increment("sessions_total", 1.0, tags)
 
 
-# def track_multimodal_process(:
+    pass
 #     input_type: str, status: str, latency: float, input_size: int
 #     ):
+    pass
 #     """""""""
-#     tags = {"input_type": input_type, "status": status}
 #     increment("multimodal_processes_total", 1.0, tags)
 #     record_time("multimodal_process_duration", latency, tags)
 #     gauge("multimodal_input_size_bytes", float(input_size), tags)

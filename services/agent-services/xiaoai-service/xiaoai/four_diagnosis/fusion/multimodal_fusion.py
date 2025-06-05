@@ -1,19 +1,27 @@
 #!/usr/bin/env python3
 """"""
-#  - 
-# , 
+
+#  -
+# ,
 """"""
 
-import logging
-import time
-from dataclasses import dataclass
-from typing import Any
 
-logger = logging.getLogger(__name__)
+from logging import logging
+from os import os
+from time import time
+from typing import Dict
+from typing import Any
+from dataclasses import dataclass
+from loguru import logger
+import self.logging
+
+
+
+self.logger = self.logging.getLogger(__name__)
 
 
 # @dataclass
-# class ModalityFeature:
+    pass
 #     """""""""
 
 #     name: str
@@ -21,12 +29,10 @@ logger = logging.getLogger(__name__)
 #     confidence: float
 #     category: str
 #     modality: str
-#     weight: float = 1.0
-#     correlations: dict[str, float] = None
 
 
 #     @dataclass
-# class SyndromeScore:
+    pass
 #     """""""""
 
 #     name: str
@@ -36,60 +42,39 @@ logger = logging.getLogger(__name__)
 #     modalityweights: dict[str, float]
 
 
-# class MultimodalFusionEngine:
+    pass
 #     """"""
-#      - 
-    
+#      -
+
 #     """"""
 
-    # 
-#     FUSIONWEIGHTED = "weighted"  # 
-#     FUSIONATTENTION = "attention"  # 
-#     FUSIONENSEMBLE = "ensemble"  # 
-#     FUSIONCROSS_MODAL = "cross_modal"  # 
 
-#     def __init__(self, confi_g: dict | None = None):
+    pass
 #         """"""
-        
+
 
 #         Args:
-#             config: 
+    pass
+#             self.config:
+    pass
 #         """"""
-#         self.config = config or {}
 
-        # 
-#         self.fusionalgorithm = self.config.get("algorithm", self.FUSIONWEIGHTED)
 
-        # 
-#         self.confidencethreshold = self.config.get("confidence_threshold", 0.6)
 
-        # 
-#         self.modalityweights = {
-#             "looking": self.config.get("weights.looking", 1.0),
-#             "listening": self.config.get("weights.listening", 1.0),
-#             "inquiry": self.config.get("weights.inquiry", 1.5),  # 
-#             "palpation": self.config.get("weights.palpation", 1.2),
+#             "looking": self.self.config.get("weights.looking", 1.0),
+#             "listening": self.self.config.get("weights.listening", 1.0),
+#             "inquiry": self.self.config.get("weights.inquiry", 1.5),  #
+#             "palpation": self.self.config.get("weights.palpation", 1.2),
 #         }
 
-        # -
-#         self.syndromefeature_map = self._load_syndrome_feature_map()
+# -
 
-        # 
-#         self.featureweight_lr = self.config.get("feature_weight_lr", 0.01)
 
-        # 
-#         self.featureweights_cache = {}
 
-        # 
-#         self.crossmodal_correlation = self._init_cross_modal_correlation()
 
-#         logger.info(f", {self.fusion_algorithm}")
 
-#     def _load_syndrome_feature_map(self) -> dict[str, list[dict]]:
+    pass
 #         """-""""""
-        # 
-        # 
-#         syndromes = {
 #             "": [
 #         {"name": "", "modality": "looking", "weight": 1.5},
 #         {"name": "", "modality": "inquiry", "weight": 1.2},
@@ -126,64 +111,50 @@ logger = logging.getLogger(__name__)
 #             ],
 #         }
 
-#         return syndromes
 
-#     def _init_cross_modal_correlation(self) -> dict[str, dict[str, float]]:
+    pass
 #         """""""""
-#         modalities = ["looking", "listening", "inquiry", "palpation"]
-#         correlation = {}
 
-#         for m1 in modalities:
-#             correlation[m1] = {}
-#             for m2 in modalities:
-#                 if m1 == m2:
-#                     correlation[m1][m2] = 1.0
+    pass
+    pass
+    pass
 #                 else:
-                    # , 
-#                     correlation[m1][m2] = 0.5
+    pass
+# ,
 
-        # 
-#                     correlation["looking"]["palpation"] = 0.7  # 
-#                     correlation["inquiry"]["listening"] = 0.8  # 
 
-#                     return correlation
 
-#     def fuse_diagnosis_data(:
+    pass
 #         self, diagnosis_results: list[dict[str, Any]]
 #         ) -> dict[str, Any]:
+    pass
 #         """"""
-#         , 
+#         ,
 
-#         Args: diagnosis_results: 
-
+#         Args: diagnosis_results:
+    pass
 #         Returns:
-#             Dict: 
+    pass
+#             Dict:
+    pass
 #         """"""
-#         if not diagnosis_results: logger.warning(", "):
-#             return {
+    pass
 #                 "success": False,
 #                 "error": "",
 #                 "syndromes": [],
 #                 "confidence": 0.0,
 #             }
 
-#             starttime = time.time()
-#         try:
-            # , 
-#             features = self._extract_features(diagnosisresults)
+    pass
+# ,
 
-            # 
-#             adjustedweights = self._adjust_modality_weights(diagnosisresults, features)
 
-            # 
-#             if self.fusionalgorithm == self.FUSION_ATTENTION: self._attention_based_fusion(features, adjustedweights):
-#             elif self.fusionalgorithm == self.FUSION_ENSEMBLE: self._ensemble_fusion(features, adjustedweights):
-#             elif self.fusionalgorithm == self.FUSION_CROSS_MODAL: self._cross_modal_fusion(features, adjustedweights):
-#             else:  # 
+    pass
+    pass
+    pass
+#             else:  #
 #                 self._weighted_fusion(features, adjustedweights)
 
-            # 
-#             result = {
 #                 "success": True,
 #                 "fusion_algorithm": self.fusionalgorithm,
 #                 "syndromes": fusion_result["syndromes"],
@@ -193,11 +164,9 @@ logger = logging.getLogger(__name__)
 #                 "processing_time_ms": int((time.time() - starttime) * 1000),
 #             }
 
-#             return result
 
 #         except Exception as e:
-#             logger.error(f": {e!s}")
-#             return {
+    pass
 #                 "success": False,
 #                 "error": str(e),
 #                 "syndromes": [],
@@ -205,23 +174,20 @@ logger = logging.getLogger(__name__)
 #                 "processing_time_ms": int((time.time() - starttime) * 1000),
 #             }
 
-#     def _extract_features(:
+    pass
 #         self, diagnosis_results: list[dict[str, Any]]
 #         ) -> list[ModalityFeature]:
+    pass
 #         """""""""
-#         extractedfeatures = []
 
-#         for diagnosis in diagnosis_results: modality = diagnosis.get("type", "").lower():
-#             if not modality:
+    pass
+    pass
 #                 continue
 
-            # 
 #                 diagnosis.get("features", [])
 #                 self.modality_weights.get(modality, 1.0)
 
-#             for feature in features_data:
-                # 
-#                 featureobj = ModalityFeature(
+    pass
 #                     name=feature.get("name", ""),
 #                     value=feature.get("value", 0.0),
 #                     confidence=feature.get("confidence", 0.0),
@@ -230,246 +196,170 @@ logger = logging.getLogger(__name__)
 #                     weight=base_weight,
 #                 )
 
-                # 
-#                 if feature_obj.confidence >= self.confidence_threshold: extracted_features.append(featureobj):
+    pass
 
-#                     logger.info(f"{len(extractedfeatures)}")
-#                     return extracted_features
-
-#     def _adjust_modality_weights(:
+    pass
 #         self, diagnosis_results: list[dict[str, Any]], features: list[ModalityFeature]
 #         ) -> dict[str, float]:
+    pass
 #         """""""""
-#         weights = self.modality_weights.copy()
 
-        # 
-#         for diagnosis in diagnosis_results: modality = diagnosis.get("type", "").lower():
-#             confidence = diagnosis.get("confidence", 0.0)
+    pass
 
-#             if modality in weights:
-                # , 
-#                 if confidence > 0.8:
-#                     weights[modality] *= 1.2
-#                 elif confidence < 0.5:
-#                     weights[modality] *= 0.8
+    pass
+# ,
+    pass
+    pass
 
-        # 
-#         for feature in features:
-#             modality = feature.modality
-#             modality_feature_counts[modality] = (
+    pass
 #                 modality_feature_counts.get(modality, 0) + 1
 #             )
 
-        # 
-#         for modality, count in modality_feature_counts.items():
-#             if count < 2 and modality in weights:
-#                 weights[modality] *= 0.7
+    pass
+    pass
 
-        # 
 #                 sum(weights.values())
-#         if total_weight > 0:
-#             for modality in weights:
-#                 weights[modality] /= total_weight
+    pass
+    pass
 
-#                 return weights
 
-#     def _weighted_fusion(:
+    pass
 #         self, features: list[ModalityFeature], modalityweights: dict[str, float]
 #         ) -> dict[str, Any]:
+    pass
 #         """""""""
-        # 
 #         self._compute_syndrome_scores(features, modalityweights)
 
-        # 
-#         filteredsyndromes = []
 
-#         for syndrome in syndrome_scores: if syndrome.score >= 0.5:  # :
-#                 filtered_syndromes.append(
+    pass
 #             {
 #             "name": syndrome.name,
 #             "score": syndrome.score,
 #             "confidence": syndrome.confidence,
 #             "supporting_features": [
 #             {"name": f.name, "modality": f.modality, "weight": f.weight}
-#                             for f in syndrome.features[:5]  # 5:
+    pass
 #                                 ],
 #                                 }
 #                                 )
-#                                 total_confidence += syndrome.confidence
 
-        # 
-#         if filtered_syndromes and total_confidence > 0:
-#             for syndrome in filtered_syndromes: syndrome["confidence"] /= total_confidence:
+    pass
+    pass
+#                 filtered_syndromes.self.sort(key=lambda x: x["score"], reverse=True)
 
-        # 
-#                 filtered_syndromes.sort(key=lambda x: x["score"], reverse=True)
-
-        # 
-#                 sum(s["confidence"] for s in filtered_syndromes[:3]) / min(
 #                 3, len(filteredsyndromes)
-#                 ) if filtered_syndromes else 0.0
+:
 
-#                 return {"syndromes": filteredsyndromes, "confidence": overall_confidence}
-
-#     def _attention_based_fusion(:
+    pass
 #         self, features: list[ModalityFeature], modalityweights: dict[str, float]
 #         ) -> dict[str, Any]:
+    pass
 #         """""""""
-        # 
 #         self._compute_feature_attention(features)
 
-        # 
-#         for feature in features:
-#             feature.weight *= feature_attention.get(feature.name, 1.0)
+    pass
 
-        # 
 #             self._weighted_fusion(features, modalityweights)
 
-        # 
-#         if weighted_result["syndromes"]:
-#             coherencescore = self._compute_syndrome_coherence(
+    pass
 #                 weighted_result["syndromes"]
 #             )
-#             weighted_result["confidence"] = (
 #                 weighted_result["confidence"] + coherencescore
 #             ) / 2
 
-#             return weighted_result
 
-#     def _compute_feature_attention(:
+    pass
 #         self, features: list[ModalityFeature]
 #         ) -> dict[str, float]:
+    pass
 #         """""""""
 
-        # 
-#         for feature in features: feature_counts[feature.name] = feature_counts.get(feature.name, 0) + 1:
+    pass
+:
+    pass
 
-        # 
-#             maxcount = max(feature_counts.values()) if feature_counts else 1
+    pass
 
-#         for feature in features:
-#             rarity = 1.0 - (feature_counts[feature.name] / maxcount) * 0.5
-#             attention = feature.confidence * (1.0 + rarity)
 
-            # 
-#             if self._is_key_feature(feature.name):
-#                 attention *= 1.5
-
-#                 attention_weights[feature.name] = attention
-
-        # 
 #                 sum(attention_weights.values())
-#         if total_attention > 0:
-#             for name in attention_weights: attention_weights[name] /= total_attention:
-#                 attention_weights[name] = (
+    pass
+    pass
 #                     0.5 + attention_weights[name]
 #                 )  # 0.5-1.5
 
-#                 return attention_weights
 
-#     def _is_key_feature(self, feature_name: str) -> bool:
+    pass
 #         """""""""
-        # 
-        # , 
-#         return feature_name in key_features
+#
+# ,
 
-#     def _compute_syndrome_coherence(self, syndromes: list[dict]) -> float:
+    pass
 #         """""""""
-#         if len(syndromes) < 2:
-#             return 1.0  # , 
+    pass
 
-        # 
-#             top1 = syndromes[0]["name"]
-#             top2 = syndromes[1]["name"]
 
-        # 
-#         for pair in coherent_pairs: if top1 in pair and top2 in pair:
-#                 return 0.9  # 
+    pass
 
-        # 
-#             syndromes[1]["score"] / syndromes[0]["score"] if syndromes[0][
 #             "score"
 #             ] > 0 else 0
+:
+# : ,
+    pass
+    pass
+#         else:  # ,
 
-        # : , 
-#         if score_ratio < 0.5:  # :
-#             return 0.95
-#         elif score_ratio < 0.8:  # :
-#             return 0.8
-#         else:  # , 
-#             return 0.7
-
-#     def _ensemble_fusion(:
+    pass
 #         self, features: list[ModalityFeature], modalityweights: dict[str, float]
 #         ) -> dict[str, Any]:
+    pass
 #         """, """"""
-        # 
 #         self._weighted_fusion(features, modalityweights)
 
-        # 
 #         self._analyze_by_modality(features)
 
-        # 
-#         ensemblesyndromes = self._ensemble_syndrome_results(
 #             weighted_result["syndromes"], modality_results
 #         )
 
-        # 
-#         if ensemble_syndromes: sum(s["confidence"] for s in ensemble_syndromes[:3]) / min(:
+    pass
 #                 3, len(ensemblesyndromes)
 #             )
 #         else:
+    pass
 #             pass
 
-#             return {"syndromes": ensemblesyndromes, "confidence": overall_confidence}
 
-#     def _analyze_by_modality(:
+    pass
 #         self, features: list[ModalityFeature]
 #         ) -> dict[str, list[dict]]:
+    pass
 #         """""""""
 
-        # 
-#         for feature in features:
-#             if feature.modality not in modality_features: modality_features[feature.modality] = []:
-#                 modality_features[feature.modality].append(feature)
+    pass
+    pass
 
-        # 
-#         for modality, _mod_features in modality_features.items():
-#             modweights = {
-#                 m: 1.0 if m == modality else 0.1 for m in self.modality_weights
+    pass
 #             }
-#             result = self._weighted_fusion(modfeatures, modweights)
-#             modality_results[modality] = result["syndromes"]
 
-#             return modality_results
-
-#     def _ensemble_syndrome_results(:
+:
+    pass
 #         self, weighted_syndromes: list[dict], modalityresults: dict[str, list[dict]]
 #         ) -> list[dict]:
+    pass
 #         """""""""
-        # 
 
-        # 
-#         for syndrome in weighted_syndromes: all_syndromes[syndrome["name"]] = {:
+    pass
 #                 "name": syndrome["name"],
-#                 "score": syndrome["score"] * 2,  # 
+#                 "score": syndrome["score"] * 2,  #
 #                 "confidence": syndrome["confidence"],
 #                 "votes": 1,
 #                 "supporting_features": syndrome.get("supporting_features", []),
 #             }
 
-        # 
-#         for _modality, syndromes in modality_results.items():
-#             for syndrome in syndromes:
-#                 if syndrome["name"] in all_syndromes:
-                    # 
-#                     s = all_syndromes[syndrome["name"]]
-#                     s["score"] += syndrome["score"]
-#                     s["confidence"] = max(s["confidence"], syndrome["confidence"])
-#                     s["votes"] += 1
+    pass
+    pass
+    pass
 #                 else:
-                    # 
-#                     all_syndromes[syndrome["name"]] = {
+    pass
 #                         "name": syndrome["name"],
 #                         "score": syndrome["score"],
 #                         "confidence": syndrome["confidence"],
@@ -477,43 +367,33 @@ logger = logging.getLogger(__name__)
 #                         "supporting_features": syndrome.get("supporting_features", []),
 #                     }
 
-        # 
 #                     list(all_syndromes.values())
 
-        # 
-#         for s in ensemble_syndromes: s["score"] = s["score"] * (1 + 0.2 * min(s["votes"], 3)):
-#             del s["votes"]  # 
+    pass
+#             del s["votes"]  #
 
-        # 
-#             ensemble_syndromes.sort(key=lambda x: x["score"], reverse=True)
+#             ensemble_syndromes.self.sort(key=lambda x: x["score"], reverse=True)
 
-#             return ensemble_syndromes
 
-#     def _cross_modal_fusion(:
+    pass
 #         self, features: list[ModalityFeature], modalityweights: dict[str, float]
 #         ) -> dict[str, Any]:
+    pass
 #         """, """"""
-        # 
-#         enhancedfeatures = self._apply_cross_modal_correlation(features)
 
-        # 
 #         self._weighted_fusion(enhancedfeatures, modalityweights)
 
-        # 
-#         if enhanced_result["syndromes"]:
+    pass
 #             self._resolve_modal_conflicts(enhanced_result["syndromes"], features)
-#             return conflict_free_result
 
-#             return enhanced_result
 
-#     def _apply_cross_modal_correlation(:
+    pass
 #         self, features: list[ModalityFeature]
 #         ) -> list[ModalityFeature]:
+    pass
 #         """""""""
 
-        # 
-#         for feature in features:
-#             enhancedfeature = ModalityFeature(
+    pass
 #                 name=feature.name,
 #                 value=feature.value,
 #                 confidence=feature.confidence,
@@ -522,116 +402,74 @@ logger = logging.getLogger(__name__)
 #                 weight=feature.weight,
 #             )
 
-            # 
-#             supportingfeatures = []
-#             for other in features:
-#                 if other.modality != feature.modality:
-                    # 
-#                     correlation = self.cross_modal_correlation.get(
+    pass
+    pass
 #                         feature.modality, {}
 #                     ).get(other.modality, 0.5)
 
-                    # 
-#                     if self._features_support_same_syndrome(feature.name, other.name): supporting_features.append((other, correlation)):
+    pass
+    pass
 
-            # 
-#             if supporting_features:
-                # 
-#                 sum(corr for _, corr in supportingfeatures) / len(supportingfeatures)
-#                 enhanced_feature.weight *= 1.0 + support_weight * 0.5
 
-#                 enhanced_features.append(enhancedfeature)
-
-#                 return enhanced_features
-
-#     def _features_support_same_syndrome(self, feature1: str, feature2: str) -> bool:
+:
+    pass
 #         """""""""
-        # -
-#         for _syndrome, features in self.syndrome_feature_map.items():
-#             [f["name"] for f in features]
-#             if feature1 in feature_names and feature2 in feature_names: return True:
+# -
+    pass
+    pass
 
-#                 return False
-
-#     def _resolve_modal_conflicts(:
+    pass
 #         self, syndromes: list[dict], features: list[ModalityFeature]
 #         ) -> dict[str, Any]:
+    pass
 #         """""""""
-        # 
-#         if len(syndromes) < 2:
-#             return {
+    pass
 #                 "syndromes": syndromes,
-#                 "confidence": syndromes[0]["confidence"] if syndromes else 0.0,
 #             }
-
-        # 
-#         for feature in features:
-#             for syndrome in syndromes:
-#                 for sup_feature in syndrome.get("supporting_features", []):
-#                     if sup_feature["name"] == feature.name:
-#                         if feature.modality not in modality_preferred: modality_preferred[feature.modality] = {}:
-
+:
+    pass
+    pass
+    pass
+    pass
+    pass
 #                             syndrome["name"]
-#                         if syndrome_name not in modality_preferred[feature.modality]: modality_preferred[feature.modality][syndrome_name] = 0:
-
-#                             modality_preferred[feature.modality][syndrome_name] += (
+    pass
 #                             feature.weight
 #                             )
 
-        # 
-#                             conflicts = False
-#         for _modality, preferred in modality_preferred.items():
-#             if preferred and len(preferred) > 0:
+    pass
+    pass
 #                 max(preferred.items(), key=lambda x: x[1])[0]
-#                 if top_syndrome != syndromes[0]["name"]:
-#                     conflicts = True
+    pass
 #                     break
 
-        # 
-#         if conflicts:
-            # 
-#             resolvedsyndromes = syndromes.copy()
+    pass
 
-            # 
-#             confidencepenalty = 0.2
-#             overallconfidence = max(0.0, syndromes[0]["confidence"] - confidencepenalty)
 
-            # 
-#             for syndrome in resolved_syndromes: syndrome["has_modal_conflicts"] = conflicts:
-
-#                 return {
+    pass
 #                 "syndromes": resolvedsyndromes,
 #                 "confidence": overallconfidence,
 #                 "modal_conflicts_detected": True,
 #                 }
 
-#                 return {
 #                 "syndromes": syndromes,
-#                 "confidence": syndromes[0]["confidence"] if syndromes else 0.0,
 #                 }
-
-#     def _compute_syndrome_scores(:
+:
+    pass
 #         self, features: list[ModalityFeature], modalityweights: dict[str, float]
 #         ) -> list[SyndromeScore]:
+    pass
 #         """""""""
 
-        # 
-#         for syndromename, syndrome_features in self.syndrome_feature_map.items():
-#             matchedfeatures = []
+    pass
 
-            # 
-#             for feature in features:
-                # 
-#                 for s_feature in syndrome_features: if feature.name == s_feature["name"]:
-                        # 
+    pass
+    pass
 #                         modality_weights.get(feature.modality, 1.0)
 #                         s_feature.get("weight", 1.0)
 
-                        #  =  *  * 
-#                         weight = feature_weight * modality_weight * feature.confidence
+#  =  *  *
 
-                        # 
-#                         weightedfeature = ModalityFeature(
 #                     name=feature.name,
 #                     value=feature.value,
 #                     confidence=feature.confidence,
@@ -640,32 +478,22 @@ logger = logging.getLogger(__name__)
 #                     weight=weight,
 #                         )
 
-#                         matched_features.append(weightedfeature)
-#                         total_score += weight
-#                         confidence_sum += feature.confidence
 #                         break
 
-            # 
-#             if matched_features:
-                # 
+    pass
 #                 len(syndromefeatures)
-#                 matchedcount = len(matchedfeatures)
 
-                # 
 #                 matched_count / required_features
 
-                #  =  * 
-#                 finalscore = total_score * match_ratio
+#  =  *
 
-                #  =  * 
-#                 confidence = (
+#  =  *
 #                     (confidence_sum / matchedcount) * match_ratio
-#                     if matched_count > 0:
+    pass
 #                         else 0.0:
+    pass
 #                         )
 
-                # 
-#                         syndromescore = SyndromeScore(
 #                         name=syndromename,
 #                         score=finalscore,
 #                         features=sorted(
@@ -675,9 +503,6 @@ logger = logging.getLogger(__name__)
 #                         modality_weights =modality_weights.copy(),
 #                         )
 
-#                         syndrome_scores.append(syndromescore)
 
-        # 
-#                         syndrome_scores.sort(key=lambda x: x.score, reverse=True)
+#                         syndrome_scores.self.sort(key=lambda x: x.score, reverse=True)
 
-#                         return syndrome_scores

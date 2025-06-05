@@ -1,55 +1,50 @@
-//////     智能体协调服务 - 管理多个智能体之间的协作
-export interface AgentInfo {;
+import { AgentType, AgentCollaboration, AgentMessage, AgentResponse, MessageType } from '../types/agents';
+import { apiClient } from './apiClient';
+
+export interface CoordinationRequest {
+  initiatorAgent: AgentType;
+  targetAgents: AgentType[];
+  task: string;
+  priority: 'low' | 'normal' | 'high' | 'urgent';
+  data?: any;
+  timeout?: number;
+}
+
+export interface CoordinationResult {
+  collaborationId: string;
+  status: 'success' | 'partial' | 'failed';
+  responses: AgentResponse[];
+  errors?: string[];
+  duration: number;
+}
+
+export interface AgentInfo {
   id: string;
   name: string;
-  type: "xiaoai" | "xiaoke" | "laoke" | "soer";
+  type: AgentType;
   status: "active" | "inactive" | "busy" | "error";
   capabilities: string[];
   load: number;
   lastHeartbeat: Date;
 }
-export interface TaskRequest {;
-  id: string;
-  type: string;
-  priority: "low" | "medium" | "high" | "urgent";
-  data: unknown;
-  requiredCapabilities: string[];
-  deadline?: Date;
-  userId?: string;
-}
-export interface TaskAssignment {;
-  taskId: string;
-  agentId: string;
-  assignedAt: Date;
-  estimatedCompletion: Date;
-  status: "assigned" | "in_progress" | "completed" | "failed";
-}
-export interface CoordinationEvent {;
-  id: string;
-  type: "task_assigned" | "task_completed" | "agent_status_changed" | "conflict_detected";
-  timestamp: Date;
-  data: unknown;
-}
-/**////
- * 智能体协调服务
- * 负责管理多个智能体之间的协作和任务分配
-export class AgentCoordinationService {;
+
+class AgentCoordinationService {
+  private activeCollaborations: Map<string, AgentCollaboration> = new Map();
   private agents: Map<string, AgentInfo> = new Map();
-  private tasks: Map<string, TaskRequest> = new Map();
-  private assignments: Map<string, TaskAssignment> = new Map();
-  private eventHistory: CoordinationEvent[] = [];
-  private eventListeners: Array<(event: CoordinationEvent) => void> = [];
+
   constructor() {
     this.initializeDefaultAgents();
-    this.startHeartbeatMonitoring();
   }
-  //////     初始化默认智能体
-private initializeDefaultAgents(): void {
-    const defaultAgents: AgentInfo[] = [;
+
+  /**
+   * 初始化默认智能体
+   */
+  private initializeDefaultAgents(): void {
+    const defaultAgents: AgentInfo[] = [
       {
         id: "xiaoai-001",
         name: "小艾",
-        type: "xiaoai",
+        type: AgentType.XIAOAI,
         status: "active",
         capabilities: ["health_consultation", "voice_interaction", "four_diagnosis"],
         load: 0.2,
@@ -58,7 +53,7 @@ private initializeDefaultAgents(): void {
       {
         id: "xiaoke-001",
         name: "小克",
-        type: "xiaoke",
+        type: AgentType.XIAOKE,
         status: "active",
         capabilities: ["data_analysis", "health_monitoring", "report_generation"],
         load: 0.1,
@@ -67,7 +62,7 @@ private initializeDefaultAgents(): void {
       {
         id: "laoke-001",
         name: "老克",
-        type: "laoke",
+        type: AgentType.LAOKE,
         status: "active",
         capabilities: ["knowledge_management", "education", "tcm_knowledge"],
         load: 0.15,
@@ -76,259 +71,300 @@ private initializeDefaultAgents(): void {
       {
         id: "soer-001",
         name: "索儿",
-        type: "soer",
+        type: AgentType.SOER,
         status: "active",
         capabilities: ["lifestyle_management", "eco_services", "community"],
         load: 0.05,
         lastHeartbeat: new Date()
       }
     ];
+
     for (const agent of defaultAgents) {
       this.agents.set(agent.id, agent);
     }
   }
-  //////     注册智能体
-async registerAgent(agent: AgentInfo): Promise<boolean> {
+
+  /**
+   * 启动智能体协作
+   */
+  async initiateCollaboration(request: CoordinationRequest): Promise<CoordinationResult> {
+    const startTime = Date.now();
+    const collaborationId = this.generateCollaborationId();
+
     try {
-      this.agents.set(agent.id, agent);
-      const event: CoordinationEvent = {;
-        id: `event-${Date.now()}`,
-        type: "agent_status_changed",
-        timestamp: new Date(),
-        data: { agentId: agent.id, status: "registered" }
+      const collaboration: AgentCollaboration = {
+        id: collaborationId,
+        initiatorAgent: request.initiatorAgent,
+        participantAgents: request.targetAgents,
+        collaborationType: this.determineCollaborationType(request.task),
+        status: 'pending',
+        startTime: new Date(),
       };
-      this.emitEvent(event);
-      return true;
-    } catch (error) {
-      return false;
+
+      this.activeCollaborations.set(collaborationId, collaboration);
+
+      const responses = await this.sendCollaborationRequests(request, collaborationId);
+
+      collaboration.status = this.determineOverallStatus(responses);
+      collaboration.endTime = new Date();
+      collaboration.result = responses;
+
+      return {
+        collaborationId,
+        status: collaboration.status === 'completed' ? 'success' : 
+                collaboration.status === 'failed' ? 'failed' : 'partial',
+        responses,
+        duration: Date.now() - startTime,
+      };
+
+    } catch (error: any) {
+      return {
+        collaborationId,
+        status: 'failed',
+        responses: [],
+        errors: [error.message],
+        duration: Date.now() - startTime,
+      };
     }
   }
-  //////     注销智能体
-async unregisterAgent(agentId: string): Promise<boolean> {
-    try {
-      const agent = this.agents.get(agentId);
-      if (!agent) {
-        return false;
-      }
-      this.agents.delete(agentId);
-      const event: CoordinationEvent = {;
-        id: `event-${Date.now()}`,
-        type: "agent_status_changed",
-        timestamp: new Date(),
-        data: { agentId, status: "unregistered" }
-      };
-      this.emitEvent(event);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  }
-  //////     提交任务
-async submitTask(task: TaskRequest): Promise<string> {
-    try {
-      this.tasks.set(task.id, task);
-      //////     自动分配任务
-const assignment = await this.assignTask(task);
-      if (assignment) {
-        this.assignments.set(task.id, assignment);
-        const event: CoordinationEvent = {;
-          id: `event-${Date.now()}`,
-          type: "task_assigned",
+
+  /**
+   * 发送协作请求到多个智能体
+   */
+  private async sendCollaborationRequests(
+    request: CoordinationRequest, 
+    collaborationId: string
+  ): Promise<AgentResponse[]> {
+    const promises = request.targetAgents.map(async (agentType) => {
+      try {
+        const message: AgentMessage = {
+          id: this.generateMessageId(),
+          fromAgent: request.initiatorAgent,
+          toAgent: agentType,
+          userId: 'system',
+          sessionId: collaborationId,
+          messageType: MessageType.COMMAND,
+          content: {
+            task: request.task,
+            data: request.data,
+            priority: request.priority,
+          },
           timestamp: new Date(),
-          data: { taskId: task.id, agentId: assignment.agentId }
+          priority: request.priority,
         };
-        this.emitEvent(event);
+
+        const response = await this.sendMessageToAgent(agentType, message);
+        return response;
+      } catch (error: any) {
+        return {
+          id: this.generateMessageId(),
+          agentType,
+          messageId: '',
+          userId: 'system',
+          sessionId: collaborationId,
+          content: { error: error.message },
+          responseType: 'error' as const,
+          timestamp: new Date(),
+          processingTime: 0,
+        };
       }
-      return task.id;
-    } catch (error) {
-      throw error;
+    });
+
+    return Promise.all(promises);
+  }
+
+  /**
+   * 向特定智能体发送消息
+   */
+  private async sendMessageToAgent(agentType: AgentType, message: AgentMessage): Promise<AgentResponse> {
+    const endpoint = this.getAgentEndpoint(agentType);
+    
+    try {
+      const response: any = await apiClient.post(`${endpoint}/collaborate`, {
+        message,
+        timeout: 30000,
+      });
+
+      if (!response.success || !response.data) {
+        throw new Error(response.error?.message || `智能体 ${agentType} 协作失败`);
+      }
+
+      return response.data;
+    } catch (error: any) {
+      throw new Error(`智能体 ${agentType} 通信失败: ${error.message}`);
     }
   }
-  //////     分配任务
-private async assignTask(task: TaskRequest): Promise<TaskAssignment | null> {
-    //////     找到最适合的智能体
-const suitableAgent = this.findBestAgent(task);
-    if (!suitableAgent) {
-      return null;
-    }
-    const assignment: TaskAssignment = {;
-      taskId: task.id,
-      agentId: suitableAgent.id,
-      assignedAt: new Date(),
-      estimatedCompletion: new Date(Date.now() + 30 * 60 * 1000), //////     30分钟后
-status: "assigned"
+
+  /**
+   * 获取智能体端点
+   */
+  private getAgentEndpoint(agentType: AgentType): string {
+    const endpoints = {
+      [AgentType.XIAOAI]: '/agents/xiaoai',
+      [AgentType.XIAOKE]: '/agents/xiaoke',
+      [AgentType.LAOKE]: '/agents/laoke',
+      [AgentType.SOER]: '/agents/soer',
     };
-    //////     更新智能体负载
-suitableAgent.load += 0.1;
-    this.agents.set(suitableAgent.id, suitableAgent);
-    return assignment;
+    return endpoints[agentType];
   }
-  //////     找到最佳智能体
-private findBestAgent(task: TaskRequest): AgentInfo | null {
-    let bestAgent: AgentInfo | null = null;
-    let bestScore = -1;
-    for (const agent of this.agents.values()) {
-      if (agent.status !== "active") {
-        continue;
-      }
-      //////     检查能力匹配
-const capabilityMatch = task.requiredCapabilities.every(cap =>;
-        agent.capabilities.includes(cap);
-      );
-      if (!capabilityMatch) {
-        continue;
-      }
-      //////     计算分数（负载越低分数越高）
-      const score = 1 - agent.load;
-      if (score > bestScore) {
-        bestScore = score;
-        bestAgent = agent;
-      }
-    }
-    return bestAgent;
-  }
-  //////     更新任务状态
-async updateTaskStatus(
-    taskId: string,
-    status: TaskAssignment['status'],
-    result?: unknown;
-  ): Promise<boolean> {
-    try {
-      const assignment = this.assignments.get(taskId);
-      if (!assignment) {
-        return false;
-      }
-      assignment.status = status;
-      this.assignments.set(taskId, assignment);
-      //////     如果任务完成，减少智能体负载
-if (status === "completed" || status === "failed") {
-        const agent = this.agents.get(assignment.agentId);
-        if (agent) {
-          agent.load = Math.max(0, agent.load - 0.1);
-          this.agents.set(agent.id, agent);
-        }
-        const event: CoordinationEvent = {;
-          id: `event-${Date.now()}`,
-          type: "task_completed",
-          timestamp: new Date(),
-          data: { taskId, status, result }
-        };
-        this.emitEvent(event);
-      }
-      return true;
-    } catch (error) {
-      return false;
+
+  /**
+   * 确定协作类型
+   */
+  private determineCollaborationType(task: string): AgentCollaboration['collaborationType'] {
+    if (task.includes('诊断') || task.includes('四诊')) {
+      return 'consultation';
+    } else if (task.includes('数据') || task.includes('信息')) {
+      return 'data_sharing';
+    } else if (task.includes('任务') || task.includes('执行')) {
+      return 'task_delegation';
+    } else {
+      return 'knowledge_exchange';
     }
   }
-  //////     获取智能体列表
-getAgents(): AgentInfo[] {
+
+  /**
+   * 确定整体状态
+   */
+  private determineOverallStatus(responses: AgentResponse[]): AgentCollaboration['status'] {
+    const errorCount = responses.filter(r => r.responseType === 'error').length;
+    
+    if (errorCount === 0) {
+      return 'completed';
+    } else if (errorCount === responses.length) {
+      return 'failed';
+    } else {
+      return 'active';
+    }
+  }
+
+  /**
+   * 四诊协调专用方法
+   */
+  async coordinateFourDiagnosis(userId: string, sessionId: string): Promise<CoordinationResult> {
+    return this.initiateCollaboration({
+      initiatorAgent: AgentType.XIAOAI,
+      targetAgents: [AgentType.XIAOAI],
+      task: '四诊协调统筹',
+      priority: 'high',
+      data: {
+        userId,
+        sessionId,
+        diagnosisType: 'comprehensive',
+      },
+    });
+  }
+
+  /**
+   * 健康管理协调
+   */
+  async coordinateHealthManagement(userId: string, healthData: any): Promise<CoordinationResult> {
+    return this.initiateCollaboration({
+      initiatorAgent: AgentType.SOER,
+      targetAgents: [AgentType.SOER, AgentType.XIAOAI],
+      task: '健康管理协调',
+      priority: 'normal',
+      data: {
+        userId,
+        healthData,
+        managementType: 'lifestyle',
+      },
+    });
+  }
+
+  /**
+   * 知识查询协调
+   */
+  async coordinateKnowledgeQuery(query: string, userId: string): Promise<CoordinationResult> {
+    return this.initiateCollaboration({
+      initiatorAgent: AgentType.LAOKE,
+      targetAgents: [AgentType.LAOKE, AgentType.XIAOAI],
+      task: '知识查询协调',
+      priority: 'normal',
+      data: {
+        query,
+        userId,
+        queryType: 'knowledge_retrieval',
+      },
+    });
+  }
+
+  /**
+   * 服务管理协调
+   */
+  async coordinateServiceManagement(serviceRequest: any, userId: string): Promise<CoordinationResult> {
+    return this.initiateCollaboration({
+      initiatorAgent: AgentType.XIAOKE,
+      targetAgents: [AgentType.XIAOKE],
+      task: '服务管理协调',
+      priority: 'normal',
+      data: {
+        serviceRequest,
+        userId,
+        managementType: 'service_subscription',
+      },
+    });
+  }
+
+  /**
+   * 获取所有智能体信息
+   */
+  getAgents(): AgentInfo[] {
     return Array.from(this.agents.values());
   }
-  //////     获取活跃智能体
-getActiveAgents(): AgentInfo[] {
-    return this.getAgents().filter(agent => agent.status === "active");
+
+  /**
+   * 获取活跃智能体
+   */
+  getActiveAgents(): AgentInfo[] {
+    return Array.from(this.agents.values()).filter(agent => agent.status === 'active');
   }
-  //////     获取任务状态
-getTaskStatus(taskId: string): TaskAssignment | null {
-    return this.assignments.get(taskId) || null;
-  }
-  //////     获取智能体负载统计
-getLoadStatistics(): { agentId: string; name: string; load: number; }[] {
-    return this.getAgents().map(agent => ({
-      agentId: agent.id,
-      name: agent.name,
-      load: agent.load;
-    }));
-  }
-  //////     开始心跳监控
-private startHeartbeatMonitoring(): void {
-    setInterval(() => {}
-      const now = new Date();
-      for (const [agentId, agent] of this.agents.entries()) {
-        const timeSinceHeartbeat = now.getTime() - agent.lastHeartbeat.getTime();
-        //////     如果超过5分钟没有心跳，标记为不活跃
-if (timeSinceHeartbeat > 5 * 60 * 1000 && agent.status === "active") {
-          agent.status = "inactive";
-          this.agents.set(agentId, agent);
-          const event: CoordinationEvent = {;
-            id: `event-${Date.now()}`,
-            type: "agent_status_changed",
-            timestamp: new Date(),
-            data: { agentId, status: "inactive", reason: "heartbeat_timeout" }
-          };
-          this.emitEvent(event);
-        }
-      }
-    }, 60000); //////     每分钟检查一次
-  }
-  //////     更新智能体心跳
-async updateHeartbeat(agentId: string): Promise<boolean> {
-    const agent = this.agents.get(agentId);
-    if (!agent) {
-      return false;
-    }
-    agent.lastHeartbeat = new Date();
-    if (agent.status === "inactive") {
-      agent.status = "active";
-    }
-    this.agents.set(agentId, agent);
-    return true;
-  }
-  //////     添加事件监听器
-addEventListener(listener: (event: CoordinationEvent) => void): void {
-    this.eventListeners.push(listener);
-  }
-  //////     移除事件监听器
-removeEventListener(listener: (event: CoordinationEvent) => void): void {
-    const index = this.eventListeners.indexOf(listener);
-    if (index > -1) {
-      this.eventListeners.splice(index, 1);
-    }
-  }
-  //////     发出事件
-private emitEvent(event: CoordinationEvent): void {
-    this.eventHistory.push(event);
-    //////     保持事件历史在合理范围内
-if (this.eventHistory.length > 1000) {
-      this.eventHistory = this.eventHistory.slice(-500);
-    }
-    //////     通知所有监听器
-for (const listener of this.eventListeners) {
-      try {
-        listener(event);
-      } catch (error) {
-        }
-    }
-  }
-  //////     获取事件历史
-getEventHistory(limit: number = 100): CoordinationEvent[] {
-    return this.eventHistory.slice(-limit);
-  }
-  //////     获取系统状态
-getSystemStatus(): {
-    totalAgents: number;
-    activeAgents: number;
-    totalTasks: number;
-    completedTasks: number;
-    averageLoad: number;
+
+  /**
+   * 获取协作统计信息
+   */
+  getCollaborationStats(): {
+    total: number;
+    active: number;
+    completed: number;
+    failed: number;
+    averageDuration: number;
   } {
-    const agents = this.getAgents();
-    const activeAgents = this.getActiveAgents();
-    const assignments = Array.from(this.assignments.values());
-    const completedTasks = assignments.filter(a => a.status === "completed");
-    const averageLoad = agents.length > 0;
-      ? agents.reduce((sum, agent) => sum + agent.load, 0) /////     agents.length ;
+    const collaborations = Array.from(this.activeCollaborations.values());
+    const completed = collaborations.filter(c => c.status === 'completed');
+    const failed = collaborations.filter(c => c.status === 'failed');
+    const active = collaborations.filter(c => c.status === 'active' || c.status === 'pending');
+
+    const averageDuration = completed.length > 0 
+      ? completed.reduce((sum, c) => {
+          const duration = c.endTime ? c.endTime.getTime() - c.startTime.getTime() : 0;
+          return sum + duration;
+        }, 0) / completed.length
       : 0;
+
     return {
-      totalAgents: agents.length,
-      activeAgents: activeAgents.length,
-      totalTasks: this.tasks.size,
-      completedTasks: completedTasks.length,
-      averageLoad;
+      total: collaborations.length,
+      active: active.length,
+      completed: completed.length,
+      failed: failed.length,
+      averageDuration,
     };
   }
+
+  /**
+   * 生成协作ID
+   */
+  private generateCollaborationId(): string {
+    return `collab_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  }
+
+  /**
+   * 生成消息ID
+   */
+  private generateMessageId(): string {
+    return `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  }
 }
-//////     导出单例实例
+
 export const agentCoordinationService = new AgentCoordinationService();
-export default agentCoordinationService;
-  */////
+export default agentCoordinationService; 

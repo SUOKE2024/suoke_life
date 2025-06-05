@@ -188,11 +188,66 @@ class Settings(BaseSettings):
     def remove_service(self, name: str) -> None:
         """移除服务配置"""
         self.services.pop(name, None)
+    
+    def setup_default_services(self) -> None:
+        """设置默认服务配置"""
+        default_services = {
+            "message-bus": ServiceConfig(
+                name="message-bus",
+                host="localhost",
+                port=8004,
+                health_check_path="/health",
+                timeout=30,
+                retry_count=3
+            ),
+            "auth": ServiceConfig(
+                name="auth",
+                host="localhost", 
+                port=8001,
+                health_check_path="/health"
+            ),
+            "user": ServiceConfig(
+                name="user",
+                host="localhost",
+                port=8006, 
+                health_check_path="/health"
+            ),
+            "health-data": ServiceConfig(
+                name="health-data",
+                host="localhost",
+                port=8002,
+                health_check_path="/health"
+            ),
+            "blockchain": ServiceConfig(
+                name="blockchain",
+                host="localhost",
+                port=8003,
+                health_check_path="/health"
+            ),
+            "rag": ServiceConfig(
+                name="rag",
+                host="localhost",
+                port=8005,
+                health_check_path="/health"
+            ),
+            "med-knowledge": ServiceConfig(
+                name="med-knowledge",
+                host="localhost",
+                port=8007,
+                health_check_path="/health"
+            )
+        }
+        
+        for service_name, config in default_services.items():
+            if service_name not in self.services:
+                self.services[service_name] = config
 
 @lru_cache()
 def get_settings() -> Settings:
     """获取应用程序设置（单例模式）"""
-    return Settings()
+    settings = Settings()
+    settings.setup_default_services()
+    return settings
 
 def load_config_from_file(config_path: Union[str, Path]) -> Dict[str, Any]:
     """从文件加载配置"""

@@ -1,122 +1,103 @@
 #!/usr/bin/env python3
 """"""
+
+from logging import logging
+from os import os
+from time import time
+from typing import Any
+from fastapi import HTTPException
+from fastapi import Depends
+from pydantic import BaseModel
+from pydantic import Field
+from loguru import logger
+import self.logging
+
+
+
 API
 HTTP
 """"""
 
-import logging
-import time
-from collections.abc import Callable
-from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException
-from fastapi.responses import JSONResponse
-from pydantic import BaseModel, Field
-
-from ...agent.agent_manager import AgentManager
-
-logger = logging.getLogger(__name__)
+self.logger = self.logging.getLogger(__name__)
 
 
-# class ChatRequest(BaseModel):
+    pass
 #     """""""""
 
-#     userid: str = Field(..., description="ID")
-#     message: str = Field(..., description="")
-#     sessionid: str | None = Field(None, description="ID")
-#     contextsize: int | None = Field(None, description="")
 
 
-# class MultimodalRequest(BaseModel):
+    pass
 #     """""""""
 
-#     userid: str = Field(..., description="ID")
-#     inputdata: dict[str, Any] = Field(..., description="")
-#     sessionid: str | None = Field(None, description="ID")
 
 
-# def create_chat_router(getagent_manager_func: Callable[[], AgentManager]) -> APIRouter:
+    pass
 #     """""""""
-#     router = APIRouter(prefix="/api/v1/chat", tags=[""])
 
-#     @router.post("/message")
-#     async def send_message(
-#         request: ChatRequest, agent_mgr: AgentManager = Depends(getagent_manager_func):
+#     @self.router.post("/message")
+    pass
 #     ):
+    pass
 #         """""""""
-#         try:
-#             if not agent_mgr: raise HTTPException(status_code =503, detail="") from e:
-
-            # 
-#                 result = await agent_mgr.chat(
-#                 user_id =request.userid,
+    pass
+    pass
+#                 context.user_id =request.userid,
 #                 message=request.message,
-#                 session_id =request.sessionid,
+#                 context.session_id =request.sessionid,
 #                 context_size =request.context_size,
 #                 )
 
-#                 return JSONResponse(
 #                 content={"success": True, "data": result, "timestamp": int(time.time())}
 #                 )
 
 #         except Exception as e:
-#             logger.error(f": {e}")
+    pass
 #             raise HTTPException(
 #                 status_code =500, detail=f": {e!s}"
-#             ) from e
 
-#             @router.post("/multimodal")
-#             async def process_multimodal(
+#             @self.router.post("/multimodal")
 #             request: MultimodalRequest,
-#             agent_mgr: AgentManager = Depends(getagent_manager_func),
 #             ):
+    pass
 #         """""""""
-#         try:
-#             if not agent_mgr: raise HTTPException(status_code =503, detail="") from e:
-
-            # 
-#                 result = await agent_mgr.process_multimodal_input(
-#                 user_id =request.userid,
+    pass
+    pass
+#                 context.user_id =request.userid,
 #                 input_data =request.inputdata,
-#                 session_id =request.session_id,
+#                 context.session_id =request.context.context.get("session_id", ""),
 #                 )
 
-#                 return JSONResponse(
 #                 content={"success": True, "data": result, "timestamp": int(time.time())}
 #                 )
 
 #         except Exception as e:
-#             logger.error(f": {e}")
+    pass
 #             raise HTTPException(
 #                 status_code =500, detail=f": {e!s}"
-#             ) from e
 
-#             @router.get("/sessions/{user_id}")
-#             async def get_user_sessions(
-#             userid: str, agent_mgr: AgentManager = Depends(getagent_manager_func):
+#             @self.router.get("/sessions/{context.context.get("user_id", "")}")
+    pass
 #             ):
+    pass
 #         """""""""
-#         try:
-#             if not agent_mgr: raise HTTPException(status_code =503, detail="") from e:
-
-            # 
-#                 usersessions = [
+    pass
+    pass
 #                 {
-#                     "session_id": sessionid,
-#                     "user_id": session_data.get("user_id"),
+#                     "context.context.get("session_id", "")": sessionid,
+#                     "context.context.get("user_id", "")": session_data.get("context.context.get("user_id", "")"),
 #                     "created_at": session_data.get("created_at"),
 #                     "last_active": session_data.get("last_active"),
 #                     "message_count": len(session_data.get("history", [])),
 #                 }
-#                 for sessionid, session_data in agent_mgr.active_sessions.items():
-#                 if session_data.get("user_id") == user_id:
+    pass
+    pass
 #                     ]
 
-#                     return JSONResponse(
 #                     content={
 #                     "success": True,
 #                     "data": {
-#                         "user_id": userid,
+#                         "context.context.get("user_id", "")": userid,
 #                         "sessions": usersessions,
 #                         "total_count": len(usersessions),
 #                     },
@@ -125,62 +106,47 @@ logger = logging.getLogger(__name__)
 #                     )
 
 #         except Exception as e:
-#             logger.error(f": {e}")
+    pass
 #             raise HTTPException(
 #                 status_code =500, detail=f": {e!s}"
-#             ) from e
 
-#             @router.delete("/sessions/{session_id}")
-#             async def close_session(
-#             sessionid: str, agent_mgr: AgentManager = Depends(getagent_manager_func):
+#             @self.router.delete("/sessions/{context.context.get("session_id", "")}")
+    pass
 #             ):
+    pass
 #         """""""""
-#         try:
-#             if not agent_mgr: raise HTTPException(status_code =503, detail="") from e:
+    pass
+    pass
 
-            # 
-#                 success = await agent_mgr.close_session(sessionid)
-
-#                 return JSONResponse(
 #                 content={
 #                     "success": success,
-#                     "data": {"session_id": sessionid, "closed": success},
+#                     "data": {"context.context.get("session_id", "")": sessionid, "closed": success},
 #                     "timestamp": int(time.time()),
 #                 }
 #                 )
 
 #         except Exception as e:
-#             logger.error(f": {e}")
-#             raise HTTPException(status_code =500, detail=f": {e!s}") from e
+    pass
 
-#             @router.post("/accessibility/content")
-#             async def generate_accessible_content(
+#             @self.router.post("/accessibility/content")
 #             userid: str,
 #             content: str,
-#             contenttype: str = "health_advice",
-#             targetformat: str = "audio",
-#             agentmgr: AgentManager = Depends(getagent_manager_func),
 #             ):
+    pass
 #         """""""""
-#         try:
-#             if not agent_mgr: raise HTTPException(status_code =503, detail="") from e:
-
-            # 
-#                 result = await agent_mgr.generate_accessible_content(
+    pass
+    pass
 #                 content=content,
-#                 user_id =userid,
+#                 context.user_id =userid,
 #                 content_type =contenttype,
 #                 target_format =target_format,
 #                 )
 
-#                 return JSONResponse(
 #                 content={"success": True, "data": result, "timestamp": int(time.time())}
 #                 )
 
 #         except Exception as e:
-#             logger.error(f": {e}")
+    pass
 #             raise HTTPException(
 #                 status_code =500, detail=f": {e!s}"
-#             ) from e
 
-#             return router

@@ -73,7 +73,6 @@ class MicroservicesManager:
             "human-review-service": {"port": 8011, "dependencies": ["auth-service"]},
             "integration-service": {"port": 8012, "dependencies": ["message-bus"]},
             "suoke-bench-service": {"port": 8013, "dependencies": []},
-            "a2a-agent-network": {"port": 8014, "dependencies": ["message-bus"]},
             "agent-services/xiaoai-service": {"port": 8015, "dependencies": ["rag-service", "health-data-service"]},
             "agent-services/xiaoke-service": {"port": 8016, "dependencies": ["rag-service", "health-data-service"]},
             "agent-services/laoke-service": {"port": 8017, "dependencies": ["rag-service", "health-data-service"]},

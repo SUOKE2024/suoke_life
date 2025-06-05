@@ -1,203 +1,187 @@
 #!/usr/bin/env python3
 """"""
 
-
 """"""
-from typing import Optional, Dict, List, Any, Union
 
-import json
-import logging
-import os
+
+from logging import logging
+from json import json
+from os import os
+from typing import Dict
+from typing import Any
 from pathlib import Path
-
-import yaml
-
-logger = logging.getLogger(__name__)
+from loguru import logger
+import self.logging
 
 
-# class ConfigLoader:
+
+self.logger = self.logging.getLogger(__name__)
+
+
+    pass
 #     """, """"""
 
-#     def __init__(self, config_pat_h: str | None = None):
+    pass
 #         """"""
-        
 
-#         Args: config_path: , None, 
+
+#         Args: config_path: , None,
 #         """"""
-#         self.config: dict[str, Any] = {}
-#         self.configpath = config_path
 
-        # , 
-#         if not config_path:
-            # , 
+# ,
+    pass
+# ,
 #             [
-#                 "config/dev.yaml",  # 
-#                 "config/config.yaml",
-#                 "config.yaml",
-#                 "../config/dev.yaml",
-#                 "../config/config.yaml",
-#                 os.path.join(os.path.dirname(_file__), "../../config/dev.yaml"),
-#                 os.path.join(os.path.dirname(_file__), "../../config/config.yaml"),
+#                 "self.config/dev.yaml",  #
+#                 "self.config/self.config.yaml",
+#                 "self.config.yaml",
+#                 "../self.config/dev.yaml",
+#                 "../self.config/self.config.yaml",
+#                 os.path.join(os.path.dirname(_file__), "../../self.config/dev.yaml"),
+#                 os.path.join(os.path.dirname(_file__), "../../self.config/self.config.yaml"),
 #             ]
 
-#             for path in possible_paths: if os.path.exists(path):
-#                     self.configpath = path
+    pass
 #                     break
 
-#         if self.config_path: self.load_config():
+    pass
 #         else:
-#             logger.warning(", ")
+    pass
 
-#     def load_config(self) -> dict[str, Any]:
+    pass
 #         """"""
-        
+
 
 #         Returns:
-#             Dict[str, Any]: 
+    pass
+#             Dict[str, Any]:
+    pass
 #         """"""
-#         if not os.path.exists(self.configpath):
-#             logger.error(f": {self.config_path}")
-#             return {}
+    pass
 
-#         try:
-            # 
-#             fileext = Path(self.configpath).suffix.lower()
+    pass
 
-#             if file_ext in (".yaml", ".yml"):
+    pass
 #                 with open(self.configpath, encoding="utf-8") as file:
-#                     self.config = yaml.safe_load(file)
-#             elif fileext == ".json":
+    pass
+    pass
 #                 with open(self.configpath, encoding="utf-8") as file:
-#                     self.config = json.load(file)
+    pass
 #             else:
-#                 logger.error(f": {file_ext}")
-#                 return {}
+    pass
 
-            # 
 #                 self._apply_environment_variables()
 
-#                 logger.info(f": {self.config_path}")
-#                 return self.config
 
 #         except Exception as e:
-#             logger.error(f": {e!s}")
-#             return {}
+    pass
 
-#     def _apply_environment_variables(self) -> None:
+    pass
 #         """, """"""
-#         self._process_env_vars(self.config)
+#         self._process_env_vars(self.self.config)
 
-#     def _process_env_vars(:
-#         self, config_section: dict[str, Any], prefix: str = ""
+    pass
 #         ) -> None:
+    pass
 #         """"""
-#         , 
+#         ,
 
-#         Args: config_section: 
-#             prefix: 
+#         Args: config_section:
+    pass
+#             prefix:
+    pass
 #         """"""
-#         for key, value in config_section.items():
-            # 
-#             currprefix = f"{prefix}_{key}" if prefix else key
+    pass
 
-            # , 
-#             if isinstance(value, dict):
+# ,:
+    pass
 #                 self._process_env_vars(value, currprefix)
-            # , 
-#             elif isinstance(value, list):
-#                 for i, item in enumerate(value):
-#                     if isinstance(item, dict):
+# ,
+    pass
+    pass
+    pass
 #                         self._process_env_vars(item, f"{curr_prefix}_{i}")
-            # , 
-#             elif isinstance(value, str):
-                #  ${VAR_NAME: default_value} 
-#                 if value.startswith("${") and value.endswith("}"):
-#                     envvar = value[2:-1]
-#                     defaultvalue = None
+# ,
+    pass
+#  ${VAR_NAME: default_value}
+    pass
 
-                    # 
-#                     if ":" in env_var: envvar, defaultvalue = env_var.split(":", 1):
-
-                    # 
+    pass
 #                         os.environ.get(envvar)
 
-                    # , , 
-#                     if env_value is not None: config_section[key] = env_value:
-#                     elif default_value is not None: config_section[key] = default_value:
-
-#     def ge_t(self, key: s_tr, defaul_t: Any = None) -> Any:
+# , ,
+    pass
+    pass
+    pass
 #         """"""
-        
+
 
 #         Args:
+    pass
 #             key: , ,  'database.mongodb.uri'
-#             default: , 
+#             default: ,
 
 #         Returns:
-#             , 
+    pass
+#             ,
 #         """"""
-#         parts = key.split(".")
-#         curr = self.config
 
-#         try:
-#             for part in parts:
-#                 if isinstance(curr, dict) and part in curr:
-#                     curr = curr[part]
+    pass
+    pass
+    pass
 #                 else:
-#                     return default
-#                     return curr
+    pass
 #         except (KeyError, TypeError):
-#             return default
+    pass
 
-#     def ge_t_nes_ted(self, *keys: s_tr, defaul_t: Any = None) -> Any:
+    pass
 #         """"""
-        
+
 
 #         Args:
-#             *keys: , 
-#             default: 
-
+    pass
+#             *keys: ,
+#             default:
+    pass
 #         Returns:
-#             , 
+    pass
+#             ,
 #         """"""
-#         curr = self.config
 
-#         try:
-#             for key in keys:
-#                 curr = curr[key]
-#                 return curr
+    pass
+    pass
 #         except (KeyError, TypeError):
-#             return default
+    pass
 
-#     def get_all(self) -> dict[str, Any]:
+    pass
 #         """""""""
-#         return self.config
 
-#     def get_sectio_n(self, sectio_n: str) -> dict[str, A_ny]:
+    pass
 #         """"""
-        
 
-#         Args: sectio_n: 
 
-#         Retur_ns: 
+#         Args: sectio_n:
+    pass
+#         Retur_ns:
+    pass
 #         """"""
 #         retur_n self.co_nfig.get(sectio_n, {})
 
 
-# 
-#         co_nfig_i_nsta_nce: Co_nfigLoader | No_ne = No_ne
+#
 
 
-# def get_config(configpat_h: str | None = None) -> ConfigLoader:
+    pass
 #     """"""
-    
 
-#     Args: config_path: 
 
+#     Args: config_path:
+    pass
 #     Returns:
-#         ConfigLoader: 
+    pass
+#         ConfigLoader:
+    pass
 #     """"""
-#     global _config_instance  # noqa: PLW0602
-#     if _config_instance is None:
+#     global _config_instance
+    pass
 #         ConfigLoader(configpath)
-#         return _config_instance

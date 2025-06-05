@@ -1,20 +1,14 @@
 import React from "react";
 //////     索克生活四智能体系统类型定义   基于README.md第1013-1063行的智能体描述
 //////     智能体类型枚举
-export enum AgentType {;
-;
-}
-;
-}
+export enum AgentType {
   XIAOAI = "xiaoai", //////     小艾 - 首页聊天频道版主 & 四诊协调智能体
-XIAOKE = "xiaoke", //////     小克 - SUOKE频道版主 & 服务管理智能体
-LAOKE = "laoke", //////     老克 - 探索频道版主 & 知识传播智能体
-SOER = "soer", //////     索儿 - LIFE频道版主 & 生活健康管理智能体
+  XIAOKE = "xiaoke", //////     小克 - SUOKE频道版主 & 服务管理智能体
+  LAOKE = "laoke", //////     老克 - 探索频道版主 & 知识传播智能体
+  SOER = "soer", //////     索儿 - LIFE频道版主 & 生活健康管理智能体
 }
 //////     智能体状态枚举
 export enum AgentStatus {
-}
-}
   INITIALIZING = "initializing",
   ACTIVE = "active",
   BUSY = "busy",
@@ -25,8 +19,6 @@ export enum AgentStatus {
 }
 //////     智能体健康状态枚举
 export enum AgentHealthStatus {
-}
-}
   HEALTHY = "healthy",
   WARNING = "warning",
   CRITICAL = "critical",
@@ -34,8 +26,6 @@ export enum AgentHealthStatus {
 }
 //////     消息类型枚举
 export enum MessageType {
-}
-}
   TEXT = "text",
   VOICE = "voice",
   IMAGE = "image",
@@ -47,21 +37,20 @@ export enum MessageType {
 }
 //////     基础智能体接口
 export interface Agent {
-}
-}
   id: string,
   name: string,
   type: AgentType,
   description: string,
   channel: string,
-  role: string,;
-  capabilities: string[],;
-  technicalFeatures: Record<string, boolean>;
+  role: string,
+  capabilities: string[],
+  technicalFeatures: Record<string, boolean>,
   status: AgentStatus,
   healthStatus: AgentHealthStatus,
   version: string,
   createdAt: Date,
-  lastActivity: Date}
+  lastActivity: Date
+}
 //////     小艾智能体接口 - 首页聊天频道版主 & 四诊协调智能体
 export interface XiaoaiAgent extends Agent {
   type: AgentType.XIAOAI,
@@ -76,15 +65,15 @@ export interface XiaoaiAgent extends Agent {
     "emergency_response", //////     紧急情况响应
     "patient_education", //////     患者教育与健康科普
     "appointment_scheduling" //////     预约挂号与就医引导
-  ];
-  technicalFeatures: {;
-    realTimeVoiceProcessing: boolean; //////     实时语音处理,
-    multiLanguageSupport: boolean //////     多语言支持,
-    dialectRecognition: boolean //////     方言识别,
-    tcmDiagnosisAI: boolean //////     中医诊断AI,
-    accessibilityCompliance: boolean //////     无障碍标准合规,
-    emergencyProtocols: boolean //////     紧急情况处理协议,
-    patientPrivacyProtection: boolean //////     患者隐私保护,
+  ],
+  technicalFeatures: {
+    realTimeVoiceProcessing: boolean, //////     实时语音处理,
+    multiLanguageSupport: boolean, //////     多语言支持,
+    dialectRecognition: boolean, //////     方言识别,
+    tcmDiagnosisAI: boolean, //////     中医诊断AI,
+    accessibilityCompliance: boolean, //////     无障碍标准合规,
+    emergencyProtocols: boolean, //////     紧急情况处理协议,
+    patientPrivacyProtection: boolean, //////     患者隐私保护,
     medicalKnowledgeBase: boolean //////     医学知识库集成
   }
 }
@@ -102,15 +91,15 @@ export interface XiaokeAgent extends Agent {
     "customer_service", //////     客户服务
     "inventory_management", //////     库存管理
     "quality_assurance" //////     质量保证
-  ];
-  technicalFeatures: {;
-    subscriptionManagement: boolean; //////     订阅管理系统,
-    agriculturalDataAnalysis: boolean //////     农业数据分析,
-    supplyChainTracking: boolean //////     供应链追踪,
-    blockchainTraceability: boolean //////     区块链溯源,
-    apiGatewayIntegration: boolean //////     API网关集成,
-    paymentGatewaySupport: boolean //////     支付网关支持,
-    inventoryOptimization: boolean //////     库存优化,
+  ],
+  technicalFeatures: {
+    subscriptionManagement: boolean, //////     订阅管理系统,
+    agriculturalDataAnalysis: boolean, //////     农业数据分析,
+    supplyChainTracking: boolean, //////     供应链追踪,
+    blockchainTraceability: boolean, //////     区块链溯源,
+    apiGatewayIntegration: boolean, //////     API网关集成,
+    paymentGatewaySupport: boolean, //////     支付网关支持,
+    inventoryOptimization: boolean, //////     库存优化,
     qualityControlSystems: boolean //////     质量控制系统
   }
 }
@@ -128,15 +117,15 @@ export interface LaokeAgent extends Agent {
     "storytelling", //////     故事讲述
     "knowledge_graph_navigation", //////     知识图谱导航
     "personalized_learning_paths" //////     个性化学习路径
-  ];
-  technicalFeatures: {;
-    knowledgeGraphProcessing: boolean; //////     知识图谱处理,
-    naturalLanguageGeneration: boolean //////     自然语言生成,
-    interactiveLearningPlatforms: boolean //////     互动学习平台,
-    gameEngineIntegration: boolean //////     游戏引擎集成,
-    contentManagementSystems: boolean //////     内容管理系统,
-    researchDatabaseAccess: boolean //////     研究数据库访问,
-    culturalDataPreservation: boolean //////     文化数据保存,
+  ],
+  technicalFeatures: {
+    knowledgeGraphProcessing: boolean, //////     知识图谱处理,
+    naturalLanguageGeneration: boolean, //////     自然语言生成,
+    interactiveLearningPlatforms: boolean, //////     互动学习平台,
+    gameEngineIntegration: boolean, //////     游戏引擎集成,
+    contentManagementSystems: boolean, //////     内容管理系统,
+    researchDatabaseAccess: boolean, //////     研究数据库访问,
+    culturalDataPreservation: boolean, //////     文化数据保存,
     personalizedRecommendations: boolean //////     个性化推荐
   }
 }
@@ -154,134 +143,157 @@ export interface SoerAgent extends Agent {
     "sleep_optimization", //////     睡眠优化
     "stress_management", //////     压力管理
     "social_wellness_coordination" //////     社交健康协调
-  ];
-  technicalFeatures: {;
-    iotSensorIntegration: boolean; //////     IoT传感器集成,
-    healthDataAnalytics: boolean //////     健康数据分析,
-    emotionalAISupport: boolean //////     情感AI支持,
-    personalizedWellnessPlans: boolean //////     个性化健康计划,
-    habitTrackingAlgorithms: boolean //////     习惯追踪算法,
-    nutritionDatabaseAccess: boolean //////     营养数据库访问,
-    fitnessAppIntegration: boolean //////     健身应用集成,
-    sleepPatternAnalysis: boolean //////     睡眠模式分析,
-    stressDetectionSystems: boolean //////     压力检测系统,
+  ],
+  technicalFeatures: {
+    iotSensorIntegration: boolean, //////     IoT传感器集成,
+    healthDataAnalytics: boolean, //////     健康数据分析,
+    emotionalAISupport: boolean, //////     情感AI支持,
+    personalizedWellnessPlans: boolean, //////     个性化健康计划,
+    habitTrackingAlgorithms: boolean, //////     习惯追踪算法,
+    nutritionDatabaseAccess: boolean, //////     营养数据库访问,
+    fitnessAppIntegration: boolean, //////     健身应用集成,
+    sleepPatternAnalysis: boolean, //////     睡眠模式分析,
+    stressDetectionSystems: boolean, //////     压力检测系统,
     socialWellnessMetrics: boolean //////     社交健康指标
   }
 }
 //////     智能体消息接口
 export interface AgentMessage {
-}
-};
-  id: string,;
-  fromAgent: AgentType;
-  toAgent?: AgentType;
-userId: string,
+  id: string,
+  fromAgent: AgentType,
+  toAgent?: AgentType,
+  userId: string,
   sessionId: string,
   messageType: MessageType,
   content: unknown,
   timestamp: Date,
-  priority: "low" | "normal" | "high" | "urgent";
-  metadata?: Record<string, any>;
+  priority: "low" | "normal" | "high" | "urgent",
+  metadata?: Record<string, any>
 }
 //////     智能体响应接口
 export interface AgentResponse {
-}
-}
   id: string,
   agentType: AgentType,
   messageId: string,
   userId: string,
   sessionId: string,
   content: unknown,
-  responseType: "text" | "voice" | "action" | "data" | "error",;
-  timestamp: Date,;
-  processingTime: number;
-  confidence?: number;
-  metadata?: Record<string, any>;
+  responseType: "text" | "voice" | "action" | "data" | "error",
+  timestamp: Date,
+  processingTime: number,
+  confidence?: number,
+  metadata?: Record<string, any>
 }
 //////     智能体协作接口
 export interface AgentCollaboration {
-}
-}
   id: string,
-  primaryAgent: AgentType,
-  supportingAgents: AgentType[],
-  task: string,;
-  status: "pending" | "in_progress" | "completed" | "failed",;
-  startTime: Date;
-  endTime?: Date;
-  result?: unknown;
-  metadata?: Record<string, any>;
+  initiatorAgent: AgentType,
+  participantAgents: AgentType[],
+  collaborationType: "consultation" | "data_sharing" | "task_delegation" | "knowledge_exchange",
+  status: "pending" | "active" | "completed" | "failed",
+  startTime: Date,
+  endTime?: Date,
+  result?: unknown
 }
 //////     智能体事件接口
 export interface AgentEvent {
-}
-}
   id: string,
   agentType: AgentType,
-  eventType: string,
-  data: unknown,;
-  timestamp: Date,;
-  severity: "info" | "warning" | "error" | "critical";
-  metadata?: Record<string, any>;
+  eventType: "status_change" | "error" | "collaboration_request" | "task_completion",
+  timestamp: Date,
+  data: unknown,
+  severity: "info" | "warning" | "error" | "critical"
 }
 //////     API响应接口
-export interface ApiResponse<T>  {;
-;
-  success: boolean;
-  data?: T;
+export interface ApiResponse<T> {
+  success: boolean,
+  data?: T,
   error?: {
     code: string,
-    message: string;
-    details?: unknown};
+    message: string,
+    details?: unknown
+  },
   timestamp: Date,
-  requestId: string;
-  agentType?: AgentType}
+  requestId: string,
+  agentType?: AgentType
+}
 //////     智能体配置接口
 export interface AgentConfiguration {
-}
-};
-  agentType: AgentType,;
-  settings: Record<string, any>;
-  features: Record<string, boolean>;
-  limits: {
-    maxConcurrentTasks: number,
-    maxResponseTime: number,
-    maxRetries: number};
-  endpoints: {
-    primary: string;
-    fallback?: string;
-    health: string};
+  agentType: AgentType,
+  settings: Record<string, any>,
+  capabilities: string[],
+  technicalFeatures: Record<string, boolean>,
+  resourceLimits: {
+    maxConcurrentSessions: number,
+    maxMemoryUsage: number,
+    maxCpuUsage: number
+  },
+  lastUpdated: Date
 }
 //////     智能体性能指标接口
 export interface AgentMetrics {
-}
-}
   agentType: AgentType,
-  totalRequests: number,
-  successfulRequests: number,
-  failedRequests: number,
-  averageResponseTime: number,
-  uptime: number,
-  lastActivity: Date,
-  errorRate: number,
-  throughput: number}
-//////     智能体健康检查接口
-export interface AgentHealthCheck {
-}
-}
-  agentType: AgentType,
-  status: AgentHealthStatus,
   timestamp: Date,
-  checks: {
-    connectivity: boolean,
+  performance: {
     responseTime: number,
-    memoryUsage: number,;
-    cpuUsage: number,;
-    errorRate: number};
-  issues?: string[];
-  recommendations?: string[];
+    throughput: number,
+    errorRate: number,
+    successRate: number
+  },
+  resources: {
+    cpuUsage: number,
+    memoryUsage: number,
+    networkUsage: number
+  },
+  sessions: {
+    active: number,
+    total: number,
+    averageDuration: number
+  }
+}
+//////     四诊聚合结果接口
+export interface FourDiagnosisAggregationResult {
+  sessionId: string,
+  userId: string,
+  timestamp: Date,
+  diagnosisResults: {
+    looking: {
+      faceColor: string,
+      tongueImage: string,
+      bodyPosture: string,
+      confidence: number
+    },
+    listening: {
+      voiceQuality: string,
+      breathingPattern: string,
+      heartRate: number,
+      confidence: number
+    },
+    inquiry: {
+      symptoms: string[],
+      medicalHistory: string[],
+      lifestyle: Record<string, any>,
+      confidence: number
+    },
+    palpation: {
+      pulseType: string,
+      pulseRate: number,
+      bodyTemperature: number,
+      confidence: number
+    }
+  },
+  syndromeAnalysis: {
+    primarySyndrome: string,
+    secondarySyndromes: string[],
+    confidence: number,
+    recommendations: string[]
+  },
+  overallAssessment: {
+    healthScore: number,
+    riskLevel: "low" | "medium" | "high",
+    urgency: "routine" | "priority" | "urgent",
+    followUpRequired: boolean
+  }
 }
 //////     导出所有类型
-export type AnyAgent = XiaoaiAgent | XiaokeAgent | LaokeAgent | SoerAg;e;
-n;t;
+export type AnyAgent = XiaoaiAgent | XiaokeAgent | LaokeAgent | SoerAgent;

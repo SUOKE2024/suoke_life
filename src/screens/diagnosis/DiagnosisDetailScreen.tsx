@@ -1,633 +1,826 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  Dimensions,
+  Animated,
+  Share,
   Alert,
-  ActivityIndicator,
-  Image} from "../../placeholder";react-native";"
-import { SafeAreaView } from "react-native-safe-area-context";";"
-import { useNavigation, useRoute } from "@react-navigation/////    native";
-import Icon from "../../placeholder";react-native-vector-icons/////    MaterialCommunityIcons";"
-import { colors, spacing } from ../../constants/////    theme";"
-interface DiagnosisStep {
-  id: string;
-  name: string;
-  description: string;
-  icon: string;
-  status: "pending | "in-progress" | completed" | "skipped;"
-  result?: string;
-  confidence?: number;
-  duration?: string;
+  Platform
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { FiveDiagnosisResult } from '../../services/fiveDiagnosisService';
+// import { usePerformanceMonitor } from '../../hooks/usePerformanceMonitor';
+
+const { width: screenWidth } = Dimensions.get('window');
+
+interface RouteParams {
+  result: FiveDiagnosisResult;
 }
-interface DiagnosisResult {
-  id: string;
-  syndrome: string;
-  confidence: number;
-  description: string;
-  recommendations: string[];
-  severity: "mild" | moderate" | "severe;
-}
-interface DiagnosisDetailParams {
-  diagnosisType: "look" | listen" | "inquiry | "palpation" | comprehensive";"
-  patientId?: string;
-}
-const DiagnosisDetailScreen: React.FC  = () => {;}
+
+// 证型颜色映射
+const SYNDROME_COLORS: Record<string, string> = {
+  '气虚证': '#4CAF50',
+  '血虚证': '#F44336',
+  '阴虚证': '#2196F3',
+  '阳虚证': '#FF9800',
+  '气滞证': '#9C27B0',
+  '血瘀证': '#795548',
+  '痰湿证': '#607D8B',
+  '湿热证': '#FF5722'
+};
+
+// 体质类型图标
+const CONSTITUTION_ICONS: Record<string, string> = {
+  '平和质': '😊',
+  '气虚质': '😴',
+  '阳虚质': '🥶',
+  '阴虚质': '🔥',
+  '痰湿质': '💧',
+  '湿热质': '🌡️',
+  '血瘀质': '🩸',
+  '气郁质': '😔',
+  '特禀质': '🤧'
+};
+
+export default function DiagnosisDetailScreen() {
   const navigation = useNavigation();
   const route = useRoute();
-  const params = route.params as DiagnosisDetailParams;
-  const [steps, setSteps] = useState<DiagnosisStep[]>([]);
-  const [currentStep, setCurrentStep] = useState(0);
-  const [results, setResults] = useState<DiagnosisResult[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [isCompleted, setIsCompleted] = useState(false);
-  useEffect(() => {}
-    initializeDiagnosis();
+  const { result } = route.params as RouteParams;
+
+  const [activeTab, setActiveTab] = useState<'overview' | 'details' | 'recommendations'>('overview');
+  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set());
+
+  // 动画值
+  const fadeAnimation = useRef(new Animated.Value(0)).current;
+  const slideAnimation = useRef(new Animated.Value(50)).current;
+
+  // 性能监控
+  // const performanceMonitor = usePerformanceMonitor('DiagnosisDetailScreen');
+
+  useEffect(() => {
+    // 页面加载动画
+    Animated.parallel([
+      Animated.timing(fadeAnimation, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true
+      }),
+             Animated.timing(slideAnimation, {
+         toValue: 0,
+         duration: 500,
+         useNativeDriver: false
+       })
+    ]).start();
   }, []);
-  const initializeDiagnosis = () => {;}
-    const diagnosisSteps = getDiagnosisSteps(params.diagnosisType);
-    setSteps(diagnosisSteps);
-  };
-  const getDiagnosisSteps = (type: string): DiagnosisStep[] => {;}
-    switch (type) {
-      case "look:"
-        return [
-          {
-            id: "face-observation",
-            name: 面部观察","
-            description: "观察面色、神态、表情,"
-            icon: "face-recognition",
-            status: pending""
-          },
-          {
-            id: "tongue-observation,"
-            name: "舌诊",
-            description: 观察舌质、舌苔","
-            icon: "mouth,"
-            status: "pending"
-          },
-          {
-            id: body-observation","
-            name: "形体观察,"
-            description: "观察体型、姿态、动作",
-            icon: human","
-            status: "pending"
-          };
-        ];
-      case "listen":
-        return [
-          {
-            id: voice-analysis","
-            name: "声音分析,"
-            description: "分析语音、语调、音量",
-            icon: microphone","
-            status: "pending"
-          },
-          {
-            id: "breathing-analysis",
-            name: 呼吸音分析","
-            description: "听诊呼吸音,"
-            icon: "lungs",
-            status: pending""
-          },
-          {
-            id: "cough-analysis,"
-            name: "咳嗽音分析",
-            description: 分析咳嗽特征","
-            icon: "cough,"
-            status: "pending"
-          }
-        ];
-      case inquiry":"
-        return [
-          {
-            id: "symptom-inquiry,"
-            name: "症状询问",
-            description: 询问主要症状和不适","
-            icon: "comment-question,"
-            status: "pending"
-          },
-          {
-            id: history-inquiry","
-            name: "病史询问,"
-            description: "了解既往病史",
-            icon: history","
-            status: "pending"
-          },
-          {
-            id: "lifestyle-inquiry",
-            name: 生活习惯询问","
-            description: "了解饮食、作息等,"
-            icon: "food-apple",
-            status: pending""
-          }
-        ];
-      case "palpation:"
-        return [
-          {
-            id: "pulse-diagnosis",
-            name: 脉诊","
-            description: "触诊脉象,"
-            icon: "heart-pulse",
-            status: pending""
-          },
-          {
-            id: "acupoint-palpation,"
-            name: "穴位触诊",
-            description: 触诊相关穴位","
-            icon: "hand-pointing-up,"
-            status: "pending"
-          },
-          {
-            id: abdomen-palpation","
-            name: "腹部触诊,"
-            description: "触诊腹部",
-            icon: stomach","
-            status: "pending"
-          }
-        ];
-      default:
-        return [
-          {
-            id: "comprehensive-analysis",
-            name: 综合分析","
-            description: "整合四诊信息,"
-            icon: "brain",
-            status: pending""
-          }
-        ];
+
+  // 切换展开状态
+  const toggleSection = (sectionId: string) => {
+    const newExpanded = new Set(expandedSections);
+    if (newExpanded.has(sectionId)) {
+      newExpanded.delete(sectionId);
+    } else {
+      newExpanded.add(sectionId);
     }
+    setExpandedSections(newExpanded);
   };
-  const startDiagnosis = async() => {;}
-    setLoading(true);
+
+  // 分享诊断结果
+  const shareResult = async () => {
     try {
-      //////     模拟诊断过程
-for (let i = 0; i < steps.length; i++) {
-        setCurrentStep(i);
-        setSteps(prev => prev.map((step, index) => {}
-          index === i ? { ...step, status: "in-progress } : step"
-        ));
-        //////     模拟诊断时间
-await new Promise(resolve => setTimeout(resolve, 2000));
-        //////     模拟诊断结果
-const mockResult = generateMockResult(steps[i]);
-        setSteps(prev => prev.map((step, index) => {}
-          index === i ? {
-            ...step,
-            status: "completed",
-            result: mockResult.result,
-            confidence: mockResult.confidence,
-            duration: mockResult.duration;
-          } : step;
-        ));
-      }
-      //////     生成最终诊断结果
-const finalResults = generateFinalResults();
-      setResults(finalResults);
-      setIsCompleted(true);
+      const shareContent = `
+索克生活 - 五诊检测报告
+
+🏥 主要证型: ${result.primarySyndrome.name}
+🎯 置信度: ${Math.round(result.overallConfidence * 100)}%
+🧬 体质类型: ${result.constitutionType.type}
+
+📊 数据质量: ${Math.round(result.qualityMetrics.dataQuality * 100)}%
+🔬 结果可靠性: ${Math.round(result.qualityMetrics.resultReliability * 100)}%
+📈 完整性: ${Math.round(result.qualityMetrics.completeness * 100)}%
+
+🕐 检测时间: ${new Date(result.timestamp).toLocaleString()}
+
+通过索克生活App获取您的专属健康报告
+      `.trim();
+
+      await Share.share({
+        message: shareContent,
+        title: '五诊检测报告'
+      });
     } catch (error) {
-      Alert.alert("错误, "诊断过程中出现错误，请重试");"
-    } finally {
-      setLoading(false);
+      console.error('分享失败:', error);
+      Alert.alert('分享失败', '无法分享诊断结果，请稍后重试');
     }
   };
-  const generateMockResult = (step: DiagnosisStep) => {;}
-    const results = {;
-      face-observation": {"
-        result: "面色微黄，神态疲倦，眼神略显无力,"
-        confidence: 85,
-        duration: "2分钟"
-      },
-      tongue-observation": {"
-        result: "舌质淡红，舌苔薄白，舌体略胖,"
-        confidence: 90,
-        duration: "1分钟"
-      },
-      voice-analysis": {"
-        result: "声音低沉，语速较慢，音量偏小,"
-        confidence: 78,
-        duration: "3分钟"
-      },
-      pulse-diagnosis": {"
-        result: "脉象细弱，节律规整，脉率68次/////    分,"
-        confidence: 92,
-        duration: "5分钟"
-      };
-    };
-    return results[step.id as keyof typeof results] || {
-      result: 检查正常","
-      confidence: 80,
-      duration: "2分钟"
-    };
+
+  // 保存报告
+  const saveReport = () => {
+    Alert.alert(
+      '保存报告',
+      '报告已保存到您的健康档案中',
+      [{ text: '确定', style: 'default' }]
+    );
   };
-  const generateFinalResults = (): DiagnosisResult[] => {;}
-    return [
-      {
-        id: "1",
-        syndrome: 脾气虚证","
-        confidence: 87,
-        description: "脾气虚弱，运化失常，气血生化不足,"
-        recommendations: [
-          "健脾益气，调理脾胃",
-          适量运动，增强体质","
-          "规律作息，避免过度劳累,"
-          "饮食清淡，易消化为主"
-        ],
-        severity: mild""
-      },
-      {
-        id: "2,"
-        syndrome: "气血不足",
-        confidence: 75,
-        description: 气血亏虚，脏腑功能减退","
-        recommendations: [
-          "补气养血，调理气血,"
-          "加强营养，多食补血食物",
-          适当休息，避免熬夜""
-        ],
-        severity: "mild"
-      };
-    ];
+
+  // 预约咨询
+  const bookConsultation = () => {
+    Alert.alert(
+      '预约咨询',
+      '是否要预约专业中医师进行详细咨询？',
+      [
+        { text: '取消', style: 'cancel' },
+        { 
+          text: '预约', 
+          style: 'default',
+          onPress: () => {
+            // 这里应该导航到预约页面
+            Alert.alert('功能开发中', '预约功能正在开发中，敬请期待');
+          }
+        }
+      ]
+    );
   };
-  const getSeverityColor = (severity: DiagnosisResult["severity"]) => {;}
-    switch (severity) {
-      case mild":;"
-        return colors.success;
-      case "moderate:"
-        return colors.warning;
-      case "severe":
-        return colors.error;
-      default:
-        return colors.textSecondary;
-    }
-  };
-  const getSeverityText = (severity: DiagnosisResult[severity"]) => {;}"
-    switch (severity) {
-      case "mild:;"
-        return "轻度";
-      case moderate":"
-        return "中度;"
-      case "severe":
-        return 重度";"
-      default:
-        return "未知;"
-    }
-  };
-  const getStepStatusIcon = (status: DiagnosisStep["status"]) => {;}
-    switch (status) {
-      case completed":;"
-        return "check-circle;"
-      case "in-progress":
-        return clock";"
-      case "pending:"
-        return "circle-outline";
-      case skipped":"
-        return "close-circle;"
-      default:
-        return "circle-outline";
-    }
-  };
-  const getStepStatusColor = (status: DiagnosisStep[status"]) => {;}"
-    switch (status) {
-      case "completed:;"
-        return colors.success;
-      case "in-progress":
-        return colors.primary;
-      case pending":"
-        return colors.textSecondary;
-      case "skipped:"
-        return colors.error;
-      default:
-        return colors.textSecondary;
-    }
-  };
-  const renderStep = (step: DiagnosisStep, index: number) => (;
-    <View key={step.id} style={styles.stepCard}>
-      <View style={styles.stepHeader}>
-        <View style={styles.stepIcon}>
-          <Icon name={step.icon} size={24} color={colors.primary} /////    >
-        </////    View>
-        <View style={styles.stepInfo}>
-          <Text style={styles.stepName}>{step.name}</////    Text>
-          <Text style={styles.stepDescription}>{step.description}</////    Text>
-        </////    View>
-        <View style={styles.stepStatus}>;
-          <Icon;
-name={getStepStatusIcon(step.status)}
-            size={24}
-            color={getStepStatusColor(step.status)}
-          /////    >
-        </////    View>
-      </////    View>
-      {step.result && (
-        <View style={styles.stepResult}>
-          <Text style={styles.resultLabel}>检查结果:</////    Text>
-          <Text style={styles.resultText}>{step.result}</////    Text>
-          {step.confidence && (
-            <View style={styles.confidenceContainer}>
-              <Text style={styles.confidenceLabel}>可信度: </////    Text>
-              <Text style={styles.confidenceValue}>{step.confidence}%</////    Text>
-            </////    View>
-          )}
-          {step.duration && (
-            <Text style={styles.durationText}>用时: {step.duration}</////    Text>
-          )}
-        </////    View>
-      )}
-    </////    View>
+
+  // 渲染标签栏
+  const renderTabBar = () => (
+    <View style={styles.tabBar}>
+      {[
+        { key: 'overview', title: '概览' },
+        { key: 'details', title: '详情' },
+        { key: 'recommendations', title: '建议' }
+      ].map(tab => (
+        <TouchableOpacity
+          key={tab.key}
+          style={[
+            styles.tabItem,
+            activeTab === tab.key && styles.tabItemActive
+          ]}
+          onPress={() => setActiveTab(tab.key as any)}
+        >
+          <Text style={[
+            styles.tabText,
+            activeTab === tab.key && styles.tabTextActive
+          ]}>
+            {tab.title}
+          </Text>
+        </TouchableOpacity>
+      ))}
+    </View>
   );
-  const renderResult = (result: DiagnosisResult) => (;
-    <View key={result.id} style={styles.resultCard}>
-      <View style={styles.resultHeader}>
-        <Text style={styles.syndromeName}>{result.syndrome}</////    Text>
-        <View style={[styles.severityBadge, { backgroundColor: getSeverityColor(result.severity) }]}>
-          <Text style={styles.severityText}>{getSeverityText(result.severity)}</////    Text>
-        </////    View>
-      </////    View>
-      <View style={styles.confidenceBar}>
-        <Text style={styles.confidenceLabel}>可信度</////    Text>
-        <View style={styles.progressBar}>;
-          <View;
-style={[
-              styles.progressFill,
-              {
-                width: `${result.confidence}%`,
-                backgroundColor: result.confidence > 80 ? colors.success : result.confidence > 60 ? colors.warning : colors.error;
-              }
-            ]}
-          /////    >
-        </////    View>
-        <Text style={styles.confidenceValue}>{result.confidence}%</////    Text>
-      </////    View>
-      <Text style={styles.resultDescription}>{result.description}</////    Text>
-      <View style={styles.recommendationsSection}>
-        <Text style={styles.recommendationsTitle}>调理建议:</////    Text>
-        {result.recommendations.map((recommendation, index) => (
-          <View key={index} style={styles.recommendationItem}>
-            <Icon name="check" size={16} color={colors.success} /////    >
-            <Text style={styles.recommendationText}>{recommendation}</////    Text>
-          </////    View>
-        ))}
-      </////    View>
-    </////    View>
+
+  // 渲染概览页面
+  const renderOverview = () => (
+    <View style={styles.tabContent}>
+      {/* 主要诊断结果 */}
+      <View style={styles.resultCard}>
+        <View style={styles.cardHeader}>
+          <Text style={styles.cardTitle}>诊断结果</Text>
+          <View style={[
+            styles.confidenceBadge,
+            { backgroundColor: getConfidenceColor(result.overallConfidence) }
+          ]}>
+            <Text style={styles.confidenceText}>
+              {Math.round(result.overallConfidence * 100)}%
+            </Text>
+          </View>
+        </View>
+        
+        <View style={styles.syndromeContainer}>
+          <View style={[
+            styles.syndromeIndicator,
+            { backgroundColor: SYNDROME_COLORS[result.primarySyndrome.name] || '#6c757d' }
+          ]} />
+          <View style={styles.syndromeInfo}>
+            <Text style={styles.syndromeName}>
+              {result.primarySyndrome.name}
+            </Text>
+            <Text style={styles.syndromeDescription}>
+              {result.primarySyndrome.description}
+            </Text>
+          </View>
+        </View>
+      </View>
+
+      {/* 体质分析 */}
+      <View style={styles.resultCard}>
+        <Text style={styles.cardTitle}>体质分析</Text>
+        <View style={styles.constitutionContainer}>
+          <Text style={styles.constitutionIcon}>
+            {CONSTITUTION_ICONS[result.constitutionType.type] || '🧬'}
+          </Text>
+          <View style={styles.constitutionInfo}>
+            <Text style={styles.constitutionType}>
+              {result.constitutionType.type}
+            </Text>
+            <View style={styles.characteristicsContainer}>
+              {result.constitutionType.characteristics.slice(0, 3).map((char, index) => (
+                <View key={index} style={styles.characteristicTag}>
+                  <Text style={styles.characteristicText}>{char}</Text>
+                </View>
+              ))}
+            </View>
+          </View>
+        </View>
+      </View>
+
+      {/* 质量指标 */}
+      <View style={styles.resultCard}>
+        <Text style={styles.cardTitle}>检测质量</Text>
+        <View style={styles.qualityMetrics}>
+          {[
+            { label: '数据质量', value: result.qualityMetrics.dataQuality },
+            { label: '结果可靠性', value: result.qualityMetrics.resultReliability },
+            { label: '完整性', value: result.qualityMetrics.completeness }
+          ].map((metric, index) => (
+            <View key={index} style={styles.metricItem}>
+              <Text style={styles.metricLabel}>{metric.label}</Text>
+              <View style={styles.metricBar}>
+                <View 
+                  style={[
+                    styles.metricFill,
+                    { 
+                      width: `${metric.value * 100}%`,
+                      backgroundColor: getQualityColor(metric.value)
+                    }
+                  ]} 
+                />
+              </View>
+              <Text style={styles.metricValue}>
+                {Math.round(metric.value * 100)}%
+              </Text>
+            </View>
+          ))}
+        </View>
+      </View>
+    </View>
   );
+
+  // 渲染详情页面
+  const renderDetails = () => (
+    <View style={styles.tabContent}>
+      {/* 五诊结果详情 */}
+      {Object.entries(result.diagnosticResults).map(([method, data]) => {
+        if (!data) return null;
+        
+        const isExpanded = expandedSections.has(method);
+        
+        return (
+          <View key={method} style={styles.resultCard}>
+            <TouchableOpacity 
+              style={styles.expandableHeader}
+              onPress={() => toggleSection(method)}
+            >
+              <Text style={styles.cardTitle}>
+                {getMethodDisplayName(method)}
+              </Text>
+              <Text style={styles.expandIcon}>
+                {isExpanded ? '▼' : '▶'}
+              </Text>
+            </TouchableOpacity>
+            
+            {isExpanded && (
+              <View style={styles.expandableContent}>
+                {renderMethodDetails(method, data)}
+              </View>
+            )}
+          </View>
+        );
+      })}
+
+      {/* 融合分析 */}
+      <View style={styles.resultCard}>
+        <TouchableOpacity 
+          style={styles.expandableHeader}
+          onPress={() => toggleSection('fusion')}
+        >
+          <Text style={styles.cardTitle}>融合分析</Text>
+          <Text style={styles.expandIcon}>
+            {expandedSections.has('fusion') ? '▼' : '▶'}
+          </Text>
+        </TouchableOpacity>
+        
+        {expandedSections.has('fusion') && (
+          <View style={styles.expandableContent}>
+            <Text style={styles.sectionSubtitle}>证据强度</Text>
+            {Object.entries(result.fusionAnalysis.evidenceStrength).map(([method, strength]) => (
+              <View key={method} style={styles.evidenceItem}>
+                <Text style={styles.evidenceMethod}>
+                  {getMethodDisplayName(method)}
+                </Text>
+                <View style={styles.evidenceBar}>
+                  <View 
+                    style={[
+                      styles.evidenceFill,
+                      { width: `${strength * 100}%` }
+                    ]} 
+                  />
+                </View>
+                <Text style={styles.evidenceValue}>
+                  {Math.round(strength * 100)}%
+                </Text>
+              </View>
+            ))}
+            
+            {result.fusionAnalysis.riskFactors.length > 0 && (
+              <>
+                <Text style={styles.sectionSubtitle}>风险因素</Text>
+                {result.fusionAnalysis.riskFactors.map((factor, index) => (
+                  <View key={index} style={styles.riskFactorItem}>
+                    <Text style={styles.riskFactorText}>⚠️ {factor}</Text>
+                  </View>
+                ))}
+              </>
+            )}
+          </View>
+        )}
+      </View>
+    </View>
+  );
+
+  // 渲染建议页面
+  const renderRecommendations = () => (
+    <View style={styles.tabContent}>
+      {Object.entries(result.healthRecommendations).map(([category, recommendations]) => {
+        if (!recommendations || recommendations.length === 0) return null;
+        
+        return (
+          <View key={category} style={styles.resultCard}>
+            <Text style={styles.cardTitle}>
+              {getRecommendationCategoryName(category)}
+            </Text>
+            {recommendations.map((recommendation, index) => (
+              <View key={index} style={styles.recommendationItem}>
+                <Text style={styles.recommendationIcon}>
+                  {getRecommendationIcon(category)}
+                </Text>
+                <Text style={styles.recommendationText}>
+                  {recommendation}
+                </Text>
+              </View>
+            ))}
+          </View>
+        );
+      })}
+    </View>
+  );
+
+  // 渲染方法详情
+  const renderMethodDetails = (method: string, data: any) => {
+    // 这里应该根据不同的诊断方法渲染不同的详情
+    // 暂时使用通用格式
+    return (
+      <View>
+        {data.confidence && (
+          <View style={styles.detailItem}>
+            <Text style={styles.detailLabel}>置信度</Text>
+            <Text style={styles.detailValue}>
+              {Math.round(data.confidence * 100)}%
+            </Text>
+          </View>
+        )}
+        
+        {data.overallAssessment && (
+          <View style={styles.detailItem}>
+            <Text style={styles.detailLabel}>总体评估</Text>
+            <Text style={styles.detailValue}>{data.overallAssessment}</Text>
+          </View>
+        )}
+        
+        {data.analysisId && (
+          <View style={styles.detailItem}>
+            <Text style={styles.detailLabel}>分析ID</Text>
+            <Text style={styles.detailValue}>{data.analysisId}</Text>
+          </View>
+        )}
+      </View>
+    );
+  };
+
+  // 辅助函数
+  const getConfidenceColor = (confidence: number): string => {
+    if (confidence >= 0.8) return '#28a745';
+    if (confidence >= 0.6) return '#ffc107';
+    return '#dc3545';
+  };
+
+  const getQualityColor = (quality: number): string => {
+    if (quality >= 0.8) return '#28a745';
+    if (quality >= 0.6) return '#ffc107';
+    return '#dc3545';
+  };
+
+  const getMethodDisplayName = (method: string): string => {
+    const names: Record<string, string> = {
+      looking: '望诊',
+      listening: '闻诊',
+      inquiry: '问诊',
+      palpation: '切诊',
+      calculation: '算诊'
+    };
+    return names[method] || method;
+  };
+
+  const getRecommendationCategoryName = (category: string): string => {
+    const names: Record<string, string> = {
+      lifestyle: '生活方式建议',
+      diet: '饮食建议',
+      exercise: '运动建议',
+      treatment: '治疗建议',
+      prevention: '预防建议'
+    };
+    return names[category] || category;
+  };
+
+  const getRecommendationIcon = (category: string): string => {
+    const icons: Record<string, string> = {
+      lifestyle: '🏠',
+      diet: '🍎',
+      exercise: '🏃',
+      treatment: '💊',
+      prevention: '🛡️'
+    };
+    return icons[category] || '📝';
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      {/* 头部 }////
+      {/* 头部 */}
       <View style={styles.header}>
-        <TouchableOpacity;
-style={styles.backButton}
+        <TouchableOpacity 
+          style={styles.backButton}
           onPress={() => navigation.goBack()}
         >
-          <Icon name="arrow-left" size={24} color={colors.textPrimary} /////    >
-        </////    TouchableOpacity>
-        <View style={styles.headerInfo}>
-          <Text style={styles.headerTitle}>
-            {params.diagnosisType === "look" ? 望诊" :"
-             params.diagnosisType === "listen ? "闻诊" :"
-             params.diagnosisType === inquiry" ? "问诊 :
-             params.diagnosisType === "palpation" ? 切诊" : "综合诊断}
-          </////    Text>
-          <Text style={styles.headerSubtitle}>中医四诊详细检查</////    Text>
-        </////    View>
-        <TouchableOpacity style={styles.helpButton}>
-          <Icon name="help-circle" size={24} color={colors.textSecondary} /////    >
-        </////    TouchableOpacity>
-      </////    View>
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {/* 诊断步骤 }////
-        <View style={styles.stepsSection}>
-          <Text style={styles.sectionTitle}>诊断步骤</////    Text>
-          {steps.map(renderStep)}
-        </////    View>
-        {/* 开始诊断按钮 }////
-        {!isCompleted && !loading && (
-          <View style={styles.actionSection}>
-            <TouchableOpacity;
-style={styles.startButton}
-              onPress={startDiagnosis}
-            >
-              <Icon name="play" size={20} color={colors.white} /////    >
-              <Text style={styles.startButtonText}>开始诊断</////    Text>
-            </////    TouchableOpacity>
-          </////    View>
-        )}
-        {/* 加载状态 }////
-        {loading && (
-          <View style={styles.loadingSection}>
-            <ActivityIndicator size="large" color={colors.primary} /////    >
-            <Text style={styles.loadingText}>
-              正在进行 {steps[currentStep]?.name}...
-            </////    Text>
-          </////    View>
-        )}
-        {/* 诊断结果 }////
-        {isCompleted && results.length > 0 && (
-          <View style={styles.resultsSection}>
-            <Text style={styles.sectionTitle}>诊断结果</////    Text>
-            {results.map(renderResult)}
-            <TouchableOpacity style={styles.saveButton}>
-              <Icon name="content-save" size={20} color={colors.primary} /////    >
-              <Text style={styles.saveButtonText}>保存诊断报告</////    Text>
-            </////    TouchableOpacity>
-          </////    View>
-        )}
-      </////    ScrollView>
-    </////    SafeAreaView>
+          <Text style={styles.backButtonText}>←</Text>
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>诊断报告</Text>
+        <TouchableOpacity 
+          style={styles.shareButton}
+          onPress={shareResult}
+        >
+          <Text style={styles.shareButtonText}>分享</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* 标签栏 */}
+      {renderTabBar()}
+
+      {/* 内容区域 */}
+      <Animated.View 
+        style={[
+          styles.content,
+          {
+            opacity: fadeAnimation,
+            transform: [{ translateY: slideAnimation }]
+          }
+        ]}
+      >
+        <ScrollView 
+          style={styles.scrollView}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContent}
+        >
+          {activeTab === 'overview' && renderOverview()}
+          {activeTab === 'details' && renderDetails()}
+          {activeTab === 'recommendations' && renderRecommendations()}
+        </ScrollView>
+      </Animated.View>
+
+      {/* 底部操作栏 */}
+      <View style={styles.bottomActions}>
+        <TouchableOpacity 
+          style={styles.actionButton}
+          onPress={saveReport}
+        >
+          <Text style={styles.actionButtonText}>保存报告</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={[styles.actionButton, styles.primaryActionButton]}
+          onPress={bookConsultation}
+        >
+          <Text style={[styles.actionButtonText, styles.primaryActionButtonText]}>
+            预约咨询
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
-};
-const styles = StyleSheet.create({;
+}
+
+const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background},
+    backgroundColor: '#f8f9fa'
+  },
   header: {
-    flexDirection: "row",
-    alignItems: center","
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    backgroundColor: colors.surface,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    backgroundColor: '#ffffff',
     borderBottomWidth: 1,
-    borderBottomColor: colors.border},
+    borderBottomColor: '#e9ecef'
+  },
   backButton: {
-    padding: spacing.sm,
-    marginRight: spacing.sm},
-  headerInfo: {
-    flex: 1},
+    padding: 8
+  },
+  backButtonText: {
+    fontSize: 24,
+    color: '#007AFF'
+  },
   headerTitle: {
     fontSize: 18,
-    fontWeight: "600,"
-    color: colors.textPrimary},
-  headerSubtitle: {
-    fontSize: 14,
-    color: colors.textSecondary},
-  helpButton: {
-    padding: spacing.sm},
+    fontWeight: '600',
+    color: '#1a1a1a'
+  },
+  shareButton: {
+    padding: 8
+  },
+  shareButtonText: {
+    fontSize: 16,
+    color: '#007AFF'
+  },
+  tabBar: {
+    flexDirection: 'row',
+    backgroundColor: '#ffffff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e9ecef'
+  },
+  tabItem: {
+    flex: 1,
+    paddingVertical: 15,
+    alignItems: 'center'
+  },
+  tabItemActive: {
+    borderBottomWidth: 2,
+    borderBottomColor: '#007AFF'
+  },
+  tabText: {
+    fontSize: 16,
+    color: '#6c757d'
+  },
+  tabTextActive: {
+    color: '#007AFF',
+    fontWeight: '600'
+  },
   content: {
-    flex: 1},
-  stepsSection: {
-    padding: spacing.lg},
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: "600",
-    color: colors.textPrimary,
-    marginBottom: spacing.md},
-  stepCard: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: spacing.md,
-    marginBottom: spacing.md,
-    borderWidth: 1,
-    borderColor: colors.border},
-  stepHeader: {
-    flexDirection: row","
-    alignItems: "center},"
-  stepIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.primaryLight,
-    justifyContent: "center",
-    alignItems: center","
-    marginRight: spacing.md},
-  stepInfo: {
-    flex: 1},
-  stepName: {
-    fontSize: 16,
-    fontWeight: "600,"
-    color: colors.textPrimary,
-    marginBottom: 4},
-  stepDescription: {
-    fontSize: 14,
-    color: colors.textSecondary},
-  stepStatus: {
-    marginLeft: spacing.md},
-  stepResult: {
-    marginTop: spacing.md,
-    paddingTop: spacing.md,
-    borderTopWidth: 1,
-    borderTopColor: colors.border},
-  resultLabel: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: colors.textPrimary,
-    marginBottom: spacing.xs},
-  resultText: {
-    fontSize: 14,
-    color: colors.textSecondary,
-    lineHeight: 20,
-    marginBottom: spacing.sm},
-  confidenceContainer: {
-    flexDirection: row","
-    alignItems: "center,"
-    marginBottom: spacing.xs},
-  confidenceLabel: {
-    fontSize: 12,
-    color: colors.textSecondary},
-  confidenceValue: {
-    fontSize: 12,
-    fontWeight: "600",
-    color: colors.primary},
-  durationText: {
-    fontSize: 12,
-    color: colors.textSecondary},
-  actionSection: {
-    padding: spacing.lg},
-  startButton: {
-    flexDirection: row","
-    alignItems: "center,"
-    justifyContent: "center",
-    backgroundColor: colors.primary,
-    paddingVertical: spacing.md,
-    borderRadius: 12},
-  startButtonText: {
-    fontSize: 16,
-    fontWeight: 600","
-    color: colors.white,
-    marginLeft: spacing.sm},
-  loadingSection: {
-    padding: spacing.xl,
-    alignItems: "center},"
-  loadingText: {
-    fontSize: 16,
-    color: colors.textSecondary,
-    marginTop: spacing.md},
-  resultsSection: {
-    padding: spacing.lg},
+    flex: 1
+  },
+  scrollView: {
+    flex: 1
+  },
+  scrollContent: {
+    padding: 20
+  },
+  tabContent: {
+    // 内容样式
+  },
   resultCard: {
-    backgroundColor: colors.surface,
+    backgroundColor: '#ffffff',
     borderRadius: 12,
-    padding: spacing.md,
-    marginBottom: spacing.md,
-    borderWidth: 1,
-    borderColor: colors.border},
-  resultHeader: {
-    flexDirection: "row",
-    justifyContent: space-between","
-    alignItems: "center,"
-    marginBottom: spacing.md},
-  syndromeName: {
+    padding: 20,
+    marginBottom: 15,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3
+  },
+  cardHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 15
+  },
+  cardTitle: {
     fontSize: 18,
-    fontWeight: "600",
-    color: colors.textPrimary},
-  severityBadge: {
+    fontWeight: '600',
+    color: '#1a1a1a'
+  },
+  confidenceBadge: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20
+  },
+  confidenceText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#ffffff'
+  },
+  syndromeContainer: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  syndromeIndicator: {
+    width: 8,
+    height: 60,
+    borderRadius: 4,
+    marginRight: 15
+  },
+  syndromeInfo: {
+    flex: 1
+  },
+  syndromeName: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#1a1a1a',
+    marginBottom: 5
+  },
+  syndromeDescription: {
+    fontSize: 16,
+    color: '#6c757d',
+    lineHeight: 24
+  },
+  constitutionContainer: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  constitutionIcon: {
+    fontSize: 40,
+    marginRight: 15
+  },
+  constitutionInfo: {
+    flex: 1
+  },
+  constitutionType: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#1a1a1a',
+    marginBottom: 10
+  },
+  characteristicsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap'
+  },
+  characteristicTag: {
+    backgroundColor: '#e9ecef',
     paddingHorizontal: 8,
     paddingVertical: 4,
-    borderRadius: 12},
-  severityText: {
-    fontSize: 12,
-    color: colors.white,
-    fontWeight: 600"},"
-  confidenceBar: {
-    flexDirection: "row,"
-    alignItems: "center",
-    marginBottom: spacing.md},
-  progressBar: {
-    flex: 1,
-    height: 6,
-    backgroundColor: colors.gray200,
-    borderRadius: 3,
-    marginHorizontal: spacing.sm},
-  progressFill: {
-    height: 100%","
-    borderRadius: 3},
-  resultDescription: {
-    fontSize: 14,
-    color: colors.textSecondary,
-    lineHeight: 20,
-    marginBottom: spacing.md},
-  recommendationsSection: {
-    marginTop: spacing.sm},
-  recommendationsTitle: {
-    fontSize: 16,
-    fontWeight: "600,"
-    color: colors.textPrimary,
-    marginBottom: spacing.sm},
-  recommendationItem: {
-    flexDirection: "row",
-    alignItems: flex-start","
-    marginBottom: spacing.xs},
-  recommendationText: {
-    fontSize: 14,
-    color: colors.textSecondary,
-    marginLeft: spacing.sm,
-    flex: 1,
-    lineHeight: 20},
-  saveButton: {
-    flexDirection: "row,"
-    alignItems: "center",
-    justifyContent: center","
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.primary,
-    paddingVertical: spacing.md,
     borderRadius: 12,
-    marginTop: spacing.md},
-  saveButtonText: {
+    marginRight: 8,
+    marginBottom: 4
+  },
+  characteristicText: {
+    fontSize: 12,
+    color: '#6c757d'
+  },
+  qualityMetrics: {
+    // 质量指标样式
+  },
+  metricItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12
+  },
+  metricLabel: {
+    fontSize: 14,
+    color: '#6c757d',
+    width: 80
+  },
+  metricBar: {
+    flex: 1,
+    height: 8,
+    backgroundColor: '#e9ecef',
+    borderRadius: 4,
+    marginHorizontal: 12,
+    overflow: 'hidden'
+  },
+  metricFill: {
+    height: '100%',
+    borderRadius: 4
+  },
+  metricValue: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#1a1a1a',
+    width: 40,
+    textAlign: 'right'
+  },
+  expandableHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  expandIcon: {
+    fontSize: 16,
+    color: '#6c757d'
+  },
+  expandableContent: {
+    marginTop: 15,
+    paddingTop: 15,
+    borderTopWidth: 1,
+    borderTopColor: '#e9ecef'
+  },
+  sectionSubtitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: colors.primary,; */
-    marginLeft: spacing.sm}}); *///
-export default DiagnosisDetailScreen; *///
-  */////
+    color: '#1a1a1a',
+    marginBottom: 10,
+    marginTop: 15
+  },
+  detailItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 8
+  },
+  detailLabel: {
+    fontSize: 14,
+    color: '#6c757d'
+  },
+  detailValue: {
+    fontSize: 14,
+    color: '#1a1a1a',
+    fontWeight: '500'
+  },
+  evidenceItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8
+  },
+  evidenceMethod: {
+    fontSize: 14,
+    color: '#6c757d',
+    width: 60
+  },
+  evidenceBar: {
+    flex: 1,
+    height: 6,
+    backgroundColor: '#e9ecef',
+    borderRadius: 3,
+    marginHorizontal: 12,
+    overflow: 'hidden'
+  },
+  evidenceFill: {
+    height: '100%',
+    backgroundColor: '#007AFF',
+    borderRadius: 3
+  },
+  evidenceValue: {
+    fontSize: 12,
+    color: '#1a1a1a',
+    width: 35,
+    textAlign: 'right'
+  },
+  riskFactorItem: {
+    marginBottom: 8
+  },
+  riskFactorText: {
+    fontSize: 14,
+    color: '#dc3545'
+  },
+  recommendationItem: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 12
+  },
+  recommendationIcon: {
+    fontSize: 16,
+    marginRight: 10,
+    marginTop: 2
+  },
+  recommendationText: {
+    flex: 1,
+    fontSize: 14,
+    color: '#1a1a1a',
+    lineHeight: 20
+  },
+  bottomActions: {
+    flexDirection: 'row',
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    backgroundColor: '#ffffff',
+    borderTopWidth: 1,
+    borderTopColor: '#e9ecef'
+  },
+  actionButton: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#6c757d',
+    alignItems: 'center',
+    marginRight: 10
+  },
+  primaryActionButton: {
+    backgroundColor: '#007AFF',
+    borderColor: '#007AFF',
+    marginRight: 0
+  },
+  actionButtonText: {
+    fontSize: 16,
+    color: '#6c757d',
+    fontWeight: '500'
+  },
+  primaryActionButtonText: {
+    color: '#ffffff'
+  }
+});

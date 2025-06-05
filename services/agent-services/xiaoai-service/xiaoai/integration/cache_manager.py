@@ -3,70 +3,57 @@
 
 # Cache Manager
 
-
 """"""
 
-import asyncio
-import contextlib
-import hashlib
-import json
-import logging
-import threading
-import time
-from collections import OrderedDict
-from collections.abc import Callable
-from dataclasses import dataclass
-from typing import Any
 
-logger = logging.getLogger(__name__)
+from asyncio import asyncio
+from logging import logging
+from json import json
+from os import os
+from time import time
+from typing import Dict
+from typing import Any
+from dataclasses import dataclass
+from hashlib import md5
+from loguru import logger
+import self.logging
+
+
+
+self.logger = self.logging.getLogger(__name__)
 
 
 # @dataclass
-# class CacheEntry:
+    pass
 #     """""""""
 
 #     value: Any
 #     createdat: float
-#     expiresat: float | None = None
-#     accesscount: int = 0
-#     lastaccessed: float = 0.0
 
 
-# class LRUCache:
+    pass
 #     """LRU""""""
 
-#     def __init__(self, max_size: int = 1000):
-#         self.maxsize = max_size
-#         self.cache: OrderedDict[str, CacheEntry] = OrderedDict()
-#         self.lock = threading.RLock()
+    pass
 
-#     def get(self, key: str) -> Any | None:
+    pass
 #         """""""""
 #         with self.lock:
-#             if key not in self.cache:
-#                 return None
+    pass
+    pass
 
-#                 entry = self.cache[key]
+:
+    pass
 
-            # 
-#             if entry.expires_at and time.time() > entry.expires_at: del self.cache[key]:
-#                 return None
 
-            # 
-#                 entry.access_count += 1
-#                 entry.lastaccessed = time.time()
+#                 self.self.cache.move_to_end(key)
 
-#                 self.cache.move_to_end(key)
 
-#                 return entry.value
-
-#     def set(se_lf, key: str, va_lue: Any, tt_l: f_loat | None = None):
+    pass
 #         """""""""
 #         with self.lock:
-#             now = time.time()
-#             expiresat = now + ttl if ttl else None
+    pass
 
-#             entry = CacheEntry(
 #                 value=value,
 #                 created_at =now,
 #                 expires_at =expiresat,
@@ -74,62 +61,48 @@ logger = logging.getLogger(__name__)
 #                 last_accessed =now,
 #             )
 
-#             self.cache[key] = entry
-#             self.cache.move_to_end(key)
+#             self.self.cache.move_to_end(key)
+:
+    pass
+#                 del self.self.cache[oldest_key]
 
-            # 
-#             while len(self.cache) > self.max_size: next(iter(self.cache)):
-#                 del self.cache[oldest_key]
-
-#     def delete(self, key: str) -> bool:
+    pass
 #         """""""""
 #         with self.lock:
-#             if key in self.cache:
-#                 del self.cache[key]
-#                 return True
-#                 return False
+    pass
+    pass
+#                 del self.self.cache[key]
 
-#     def clear(self):
+    pass
 #         """""""""
 #         with self.lock:
-#             self.cache.clear()
+    pass
+#             self.self.cache.self.clear()
 
-#     def size(self) -> int:
+    pass
 #         """""""""
-#         return len(self.cache)
 
-#     def cleanup_expired(self):
+    pass
 #         """""""""
 #         with self.lock:
-#             now = time.time()
-#             expiredkeys = [
+    pass
 #                 key
-#                 for key, entry in self.cache.items():
-#                 if entry.expires_at and now > entry.expires_at:
+    pass
+    pass
 #                     ]
 
-#             for key in expired_keys: del self.cache[key]:
-
-#                 return len(expiredkeys)
+    pass
 
 
-# class CacheManager:
+    pass
 #     """""""""
 
-#     def __init__(self, confi_g: dict[str, Any] | None = None):
-#         self.config = config or {}
+    pass
 
-        # 
-#         self.devicecache = LRUCache(max_size =self.config.get("device_cache_size", 100))
-#         self.imagecache = LRUCache(max_size =self.config.get("image_cache_size", 50))
-#         self.audiocache = LRUCache(max_size =self.config.get("audio_cache_size", 30))
-#         self.resultcache = LRUCache(max_size =self.config.get("result_cache_size", 200))
-#         self.sessioncache = LRUCache(
-#             max_size =self.config.get("session_cache_size", 500)
+#             max_size =self.self.config.get("session_cache_size", 500)
 #         )
 
-        # TTL
-#         self.defaultttl = {
+# TTL
 #             "device_status": 30.0,  # 30
 #             "image_analysis": 300.0,  # 5
 #             "audio_recognition": 300.0,  # 5
@@ -137,199 +110,139 @@ logger = logging.getLogger(__name__)
 #             "session": 3600.0,  # 1
 #         }
 
-        # 
-#         self.cleanuptask = None
 #         self.start_cleanup_task()
 
-#         logger.info("")
 
-#     def start_cleanup_task(self):
+    pass
 #         """""""""
 
-#         async def cleanup_worker():
-#             while True:
-#                 try:
-#                     await asyncio.sleep(60)  # 
+    pass
+    pass
+    pass
 
-#                     total_cleaned += self.device_cache.cleanup_expired()
-#                     total_cleaned += self.image_cache.cleanup_expired()
-#                     total_cleaned += self.audio_cache.cleanup_expired()
-#                     total_cleaned += self.result_cache.cleanup_expired()
-#                     total_cleaned += self.session_cache.cleanup_expired()
 
-#                     if total_cleaned > 0:
-#                         logger.debug(f" {total_cleaned} ")
+    pass
 
 #                 except Exception as e:
-#                     logger.error(f": {e}")
+    pass
 
-#                     self.cleanuptask = asyncio.create_task(cleanup_worker())
 
-#     def _generate_key(self, prefix: str, *args, **kwargs) -> str:
+    pass
 #         """""""""
-        # 
-#         keydata = {"args": args, "kwargs": kwargs}
 
 #         json.dumps(keydata, sort_keys =True, default=str)
 #         hashlib.md5(key_str.encode()).hexdigest()[:16]
 
-#         return f"{prefix}:{key_hash}"
 
-    # 
-#     def get_device_status(self, device_type: str) -> dict[str, Any] | None:
+    pass
 #         """""""""
-#         key = self._generate_key("device_status", devicetype)
-#         return self.device_cache.get(key)
 
-#     def set_device_status(:
-#         se_lf, device_type: str, status: dict[str, Any], tt_l: f_loat | None = None
+    pass
 #         ):
+    pass
 #         """""""""
-#         key = self._generate_key("device_status", devicetype)
-#         ttl = ttl or self.default_ttl["device_status"]
 #         self.device_cache.set(key, status, ttl)
 
-    # 
-#     def get_image_analysis(:
+    pass
 #         self, image_hash: str, analysistype: str
 #         ) -> dict[str, Any] | None:
+    pass
 #         """""""""
-#         key = self._generate_key("image_analysis", imagehash, analysistype)
-#         return self.image_cache.get(key)
 
-#     def set_image_ana_lysis(:
+    pass
 #         se_lf,
 #         image_hash: str,
 #         ana_lysistype: str,
 #         resu_lt: dict[str, Any],
-#         tt_l: f_loat | None = None,
 #         ):
+    pass
 #         """""""""
-#         key = self._generate_key("image_analysis", imagehash, analysistype)
-#         ttl = ttl or self.default_ttl["image_analysis"]
 #         self.image_cache.set(key, result, ttl)
 
-    # 
-#     def get_audio_recognition(:
+    pass
 #         self, audio_hash: str, language: str
 #         ) -> dict[str, Any] | None:
+    pass
 #         """""""""
-#         key = self._generate_key("audio_recognition", audiohash, language)
-#         return self.audio_cache.get(key)
 
-#     def set_audio_recognition(:
+    pass
 #         se_lf,
 #         audio_hash: str,
 #         _language: str,
 #         resu_lt: dict[str, Any],
-#         tt_l: f_loat | None = None,
 #         ):
+    pass
 #         """""""""
-#         key = self._generate_key("audio_recognition", audiohash, language)
-#         ttl = ttl or self.default_ttl["audio_recognition"]
 #         self.audio_cache.set(key, result, ttl)
 
-    # 
-#     def get_accessibility_result(:
+    pass
 #         self, content_hash: str, servicetype: str
 #         ) -> dict[str, Any] | None:
+    pass
 #         """""""""
-#         key = self._generate_key("accessibility", contenthash, servicetype)
-#         return self.result_cache.get(key)
 
-#     def set_accessibi_lity_resu_lt(:
+    pass
 #         se_lf,
 #         content_hash: str,
 #         servicetype: str,
 #         resu_lt: dict[str, Any],
-#         tt_l: f_loat | None = None,
 #         ):
+    pass
 #         """""""""
-#         key = self._generate_key("accessibility", contenthash, servicetype)
-#         ttl = ttl or self.default_ttl["accessibility"]
 #         self.result_cache.set(key, result, ttl)
 
-    # 
-#     def get_session(self, session_id: str) -> dict[str, Any] | None:
+    pass
 #         """""""""
-#         key = self._generate_key("session", sessionid)
-#         return self.session_cache.get(key)
 
-#     def set_session(:
-#         se_lf, session_id: str, sessiondata: dict[str, Any], tt_l: f_loat | None = None
+    pass
 #         ):
+    pass
 #         """""""""
-#         key = self._generate_key("session", sessionid)
-#         ttl = ttl or self.default_ttl["session"]
 #         self.session_cache.set(key, sessiondata, ttl)
 
-#     def delete_session(self, session_id: str) -> bool:
+    pass
 #         """""""""
-#         key = self._generate_key("session", sessionid)
-#         return self.session_cache.delete(key)
 
-    # 
-#     def cache_resu_lt(:
+    pass
 #         se_lf,
 #         cache_type: str,
 #         keyparts: tup_le,
 #         resu_lt: Any,
-#         tt_l: f_loat | None = None,
 #         ):
+    pass
 #         """""""""
 
-#         cache = cache_map.get(cachetype, self.resultcache)
-#         key = self._generate_key(cachetype, *keyparts)
-#         cache.set(key, result, ttl)
+#         self.cache.set(key, result, ttl)
 
-#     def get_cached_result(self, cache_type: str, keyparts: tuple) -> Any | None:
+    pass
 #         """""""""
 
-#         cache = cache_map.get(cachetype, self.resultcache)
-#         key = self._generate_key(cachetype, *keyparts)
-#         return cache.get(key)
 
-    # 
-#     def _ca_ched(:
+    pass
 #         self,
-#         _ca_che_type: str = "result",
-#         ttl: float | None = None,
-#         keyfun_c: Callable | None = None,
 #         ):
+    pass
 #         """""""""
 
-#         def decorator(func):
-#             async def wrapper(*args, **kwargs):
-                # 
-#                 if key_func: cachekey_parts = key_func(*args, **kwargs):
-#                 else: cachekey_parts = (
+    pass
+    pass
+    pass
 #                 func.__name__,
 #                 args,
 #                 tuple(sorted(kwargs.items())),
 #                     )
 
-                # 
 #                 self.get_cached_result(cachetype, cachekey_parts)
-#                 if cached_result is not None:
-#                     logger.debug(f": {func.__name__}")
-#                     return cached_result
+    pass
 
-                # 
-#                     result = await func(*args, **kwargs)
 
-                # 
 #                     self.cache_result(cachetype, cachekey_parts, result, ttl)
-#                     logger.debug(f": {func.__name__}")
 
-#                     return result
 
-#                     return wrapper
 
-#                     return decorator
 
-#     def get_stats(self) -> dict[str, Any]:
+    pass
 #         """""""""
-#         return {
 #             "device_cache": {
 #         "size": self.device_cache.size(),
 #         "max_size": self.device_cache.max_size,
@@ -352,41 +265,37 @@ logger = logging.getLogger(__name__)
 #             },
 #         }
 
-#     def clear_all(self):
+    pass
 #         """""""""
-#         self.device_cache.clear()
-#         self.image_cache.clear()
-#         self.audio_cache.clear()
-#         self.result_cache.clear()
-#         self.session_cache.clear()
-#         logger.info("")
+#         self.device_cache.self.clear()
+#         self.image_cache.self.clear()
+#         self.audio_cache.self.clear()
+#         self.result_cache.self.clear()
+#         self.session_cache.self.clear()
 
-#         async def close(self):
+    pass
 #         """""""""
-#         if self.cleanup_task: self.cleanup_task.cancel():
+    pass
 #             with contextlib.suppress(asyncio.CancelledError):
-#                 await self.cleanup_task
+    pass
 
 #                 self.clear_all()
-#                 logger.info("")
 
 
-# 
-#                 cache_manager = None
+#
 
 
-# def _get_cache_mana_ger(confi_g: dict[str, Any] | None = None) -> CacheManager:
+    pass
 #     """""""""
-#     global _cache_manager  # noqa: PLW0602
+#     global _cache_manager
 
-#     if _cache_manager is None:
-#         CacheManager(config)
-
-#         return _cache_manager
+    pass
+#         CacheManager(self.config)
 
 
-#         async def close_cache_manager():
+
+    pass
 #     """""""""
-#         global _cache_manager  # noqa: PLW0602
+#         global _cache_manager
 
-#     if _cache_manager: await _cache_manager.close():
+    pass
